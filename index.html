@@ -177,8 +177,10 @@ i.hand.hr{background:var(--c1)} i.hand.hl{background:var(--c0)}
 .gcol sup{font-size:.62rem;color:var(--muted);margin-left:1px}
 .now sup{font-size:.68rem;color:var(--muted);margin-left:1px}
 .chart .sec h3{font-size:.8rem;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.04em}
-.chart .line{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.chart .bar{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;min-height:48px;min-width:60px;font-weight:800;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left}
+.chart .line{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:6px}
+.chart .bar{font-size:clamp(.8rem,3.4vw,1rem)}
+.chart .bar span{display:block;line-height:1.25;white-space:nowrap}
+.chart .bar{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 8px;min-height:48px;min-width:0;justify-content:flex-start!important;font-weight:800;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left}
 .chart .bar small{font-weight:700;font-size:.72rem;color:var(--muted)}
 .chart .bar.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .chart .bar.on small{color:inherit;opacity:.85}
@@ -207,6 +209,61 @@ ol.steps li{margin:3px 0}
 .legend{display:flex;gap:4px 10px;flex-wrap:wrap;justify-content:center;font-size:.82rem;color:var(--muted);margin-top:16px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle}
 
+/* ---- labels and groups ---- */
+.lbl{margin:12px 0 6px;font-size:.84rem;font-weight:700;color:var(--muted)}
+.lbl:first-child{margin-top:0}
+.group-h{font-size:1rem;margin:22px 0 2px;padding-top:14px;border-top:1px solid var(--line)}
+.sub-h{font-size:.95rem;margin:18px 0 6px}
+details.more{margin-top:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0 12px}
+details.more summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;list-style-position:inside}
+details.more[open]{padding-bottom:12px}
+details.more .two{margin-top:-4px}
+
+/* ---- play: the song being practised ---- */
+.songcard{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px 10px 14px;margin-bottom:4px}
+.songcard-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.songcard-t .lbl{margin:0 0 1px;font-size:.78rem}
+.songcard-t b{font-size:1.05rem;line-height:1.25;overflow-wrap:anywhere}
+.songcard-t small{color:var(--muted);font-size:.8rem;margin-top:2px}
+.songcard .btn{flex:none;min-height:44px;padding:8px 14px}
+
+/* ---- songs library ---- */
+.coll{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.coll .chip{border-radius:10px}
+.lib-list > .small{margin:0 0 8px;max-width:70ch}
+.song-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.song-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:2px 10px;align-items:center;width:100%;text-align:left;
+  border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 6px;min-height:56px}
+.song-item .num{font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.song-item .st{display:flex;flex-direction:column;min-width:0}
+.song-item .st b{font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.song-item .st small{color:var(--muted);font-size:.8rem;line-height:1.3}
+.song-item .sm{font-size:.78rem;color:var(--muted);text-align:right;line-height:1.3;white-space:nowrap}
+.song-item .sm em{font-style:normal;font-weight:700}
+.song-item[aria-current="true"]{background:var(--chip)}
+.back{border:0;background:transparent;color:var(--c0);font-weight:700;padding:8px 0;min-height:44px}
+.song-pre{margin:4px 0 0}
+.song-t{font-size:1.5rem;font-weight:800;letter-spacing:-.01em;line-height:1.15;margin:2px 0 4px}
+.song-en{margin:0;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.facts div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.facts .wide{grid-column:1/-1}
+.facts dt{font-size:.78rem;color:var(--muted);font-weight:700}
+.facts dd{margin:2px 0 0;font-weight:700}
+.note{background:var(--chip);border-radius:12px;padding:10px 14px;margin:12px 0;max-width:70ch}
+.cchips{display:flex;flex-wrap:wrap;gap:6px}
+.cchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;min-height:40px;font-weight:700}
+.src{margin-top:18px}
+.lib-detail .chart .bar{cursor:pointer}
+.lib:not(.detail-open) .lib-detail{display:none}
+.lib.detail-open .lib-list{display:none}
+
+/* ---- guide ---- */
+.guide-seg{margin-bottom:14px}
+.learn-pane .panel:first-child{margin-top:0}
+ol.steps.big li{margin:8px 0;color:var(--ink)}
+ol.steps.big li strong{font-weight:800}
+
 /* ---- interaction feedback ---- */
 @media (prefers-reduced-motion:no-preference){
   .key{transition:background-color 80ms}
@@ -218,7 +275,8 @@ ol.steps li{margin:3px 0}
   .btn:not(.ghost):not(:disabled):hover{filter:brightness(1.12)}
   .tabs button:not([aria-selected="true"]):hover{color:var(--ink)}
   .gcol:not(.ghead):not(.on):hover,.chart .bar:not(.on):hover{border-color:var(--muted)}
-  .sym:hover{background:var(--chip)}
+  .sym:hover,.song-item:not([aria-current]):hover{background:var(--chip)}
+  .cchip:hover,.back:hover{border-color:var(--muted);text-decoration:underline}
 }
 @media (pointer:coarse){
   .chip,.inc label{min-height:44px}
@@ -258,6 +316,13 @@ ol.steps li{margin:3px 0}
   .split > .side.sticky{position:sticky;top:24px}
   .stage{margin-top:22px}
   #quiz{max-width:680px;margin:0 auto}
+  .lib{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:0 36px;align-items:start}
+  .lib .lib-list,.lib .lib-detail{display:block!important}
+  .lib-list{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;padding-right:4px}
+  .back{display:none}
+  .song-t{font-size:1.9rem}
+  .learn-pane{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;align-items:start}
+  .learn-pane .panel{margin-top:0}
   .sym-panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
   .sym-panels .panel{margin-top:0;height:100%}
   #symList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;align-items:start}
@@ -273,18 +338,21 @@ ol.steps li{margin:3px 0}
   <nav class="tabs" role="tablist" aria-label="Sections">
     <button role="tab" data-tab="learn" aria-selected="true">Chords</button>
     <button role="tab" data-tab="scales" aria-selected="false">Scales</button>
+    <button role="tab" data-tab="songs" aria-selected="false">Songs</button>
     <button role="tab" data-tab="play" aria-selected="false">Play</button>
     <button role="tab" data-tab="quiz" aria-selected="false">Quiz</button>
-    <button role="tab" data-tab="symbols" aria-selected="false">Symbols</button>
+    <button role="tab" data-tab="guide" aria-selected="false">Guide</button>
   </nav>
   </header>
 
   <!-- CHORDS -->
   <section id="learn" class="split">
    <div class="primary">
-    <div class="roots" id="rootRow" role="group" aria-label="Root note"></div>
-    <div class="groups" id="groupRow" role="group" aria-label="Chord family"></div>
-    <div class="types" id="typeRow"></div>
+    <p class="lbl" id="lblRoot">Root note</p>
+    <div class="roots" id="rootRow" role="group" aria-labelledby="lblRoot"></div>
+    <p class="lbl" id="lblFam">Chord family</p>
+    <div class="groups" id="groupRow" role="group" aria-labelledby="lblFam"></div>
+    <div class="types" id="typeRow" role="group" aria-label="Chord type"></div>
     <div class="stage">
       <button class="step" id="down" aria-label="Down a semitone">‹</button>
       <div class="name"><span id="lName"></span><span class="sub" id="lSub"></span><span class="ru" id="lRu"></span></div>
@@ -308,8 +376,10 @@ ol.steps li{margin:3px 0}
   <!-- SCALES -->
   <section id="scales" class="split" hidden>
    <div class="primary">
-    <div class="roots" id="sRootRow" role="group" aria-label="Root note"></div>
-    <div class="types" id="sTypeRow"></div>
+    <p class="lbl" id="lblSRoot">Root note</p>
+    <div class="roots" id="sRootRow" role="group" aria-labelledby="lblSRoot"></div>
+    <p class="lbl" id="lblSType">Scale</p>
+    <div class="types" id="sTypeRow" role="group" aria-labelledby="lblSType"></div>
     <div class="stage">
       <button class="step" id="sDown" aria-label="Down a semitone">‹</button>
       <div class="name"><span id="sName"></span><span class="sub" id="sSub"></span></div>
@@ -352,25 +422,46 @@ ol.steps li{margin:3px 0}
    </aside>
   </section>
 
+  <!-- SONGS -->
+  <section id="songs" hidden>
+    <div class="coll" id="songColl" role="tablist" aria-label="Collections"></div>
+    <div class="lib">
+      <div class="lib-list">
+        <p class="small" id="songCollNote"></p>
+        <ol class="song-list" id="songList"></ol>
+      </div>
+      <div class="lib-detail" id="songDetail" aria-live="polite"></div>
+    </div>
+  </section>
+
   <!-- PLAY -->
   <section id="play" class="split" hidden>
    <div class="primary">
-    <label class="field">Song or progression<select id="pProg"></select></label>
-    <div class="roots" id="pKeyRow" role="group" aria-label="Key" style="margin-top:10px"></div>
+    <div class="songcard">
+      <div class="songcard-t"><span class="lbl">Practising</span><b id="pSongName"></b><small id="pSongMeta"></small></div>
+      <button class="btn ghost" id="pChange">Change song</button>
+    </div>
+    <p class="lbl" id="lblKey">Key</p>
+    <div class="roots" id="pKeyRow" role="group" aria-labelledby="lblKey"></div>
     <div class="seg" id="pColor" style="margin-top:10px">
       <button class="chip" data-color="tri">Triads</button>
       <button class="chip" data-color="sev">7ths</button>
       <button class="chip" data-color="nin">9ths</button>
     </div>
+    <h2 class="group-h">Accompaniment</h2>
     <div class="two">
-      <label class="field">Accompaniment<select id="pStyle"></select></label>
+      <label class="field">Pattern<select id="pStyle"></select></label>
       <label class="field">Tempo <span id="pBpmL"></span><input type="range" id="pBpm" min="40" max="160" step="2"></label>
     </div>
-    <div class="two">
-      <label class="field"><span><i class="hand hr"></i>Right hand</span><select id="pRH"></select></label>
-      <label class="field"><span><i class="hand hl"></i>Left hand</span><select id="pLH"></select></label>
-    </div>
-    <div class="seg" role="group" aria-label="Hands" style="margin-top:12px">
+    <details class="more" id="pHandsMore">
+      <summary>Choose each hand separately</summary>
+      <div class="two">
+        <label class="field"><span><i class="hand hr"></i>Right hand</span><select id="pRH"></select></label>
+        <label class="field"><span><i class="hand hl"></i>Left hand</span><select id="pLH"></select></label>
+      </div>
+    </details>
+    <h2 class="group-h">Practice</h2>
+    <div class="seg" role="group" aria-label="Hands">
       <button class="chip" data-hands="both">Both hands</button>
       <button class="chip" data-hands="rh">Right hand</button>
       <button class="chip" data-hands="lh">Left hand</button>
@@ -449,9 +540,14 @@ ol.steps li{margin:3px 0}
     </div>
   </section>
 
-  <!-- SYMBOLS -->
-  <section id="symbols" hidden>
-   <div class="sym-panels">
+  <!-- GUIDE -->
+  <section id="guide" hidden>
+   <div class="seg guide-seg" role="group" aria-label="Guide sections">
+     <button class="chip" data-guide="sym">Chord symbols</button>
+     <button class="chip" data-guide="dict">Chord dictionary</button>
+     <button class="chip" data-guide="learn">Learning a song</button>
+   </div>
+   <div class="sym-panels" data-pane="sym">
     <div class="panel">
       <h2>Reading chord symbols</h2>
       <p><strong>Left part = triad, right part = extras.</strong> C is major, Cm or C− is minor, C° or Cdim is diminished, C+ or Caug is augmented.</p>
@@ -485,10 +581,32 @@ ol.steps li{margin:3px 0}
       <p class="small">Careful: the same notes can have two names. D F A C is Dm7, but also F6 with D in the bass.</p>
     </div>
    </div>
-    <div id="symList"></div>
+    <div id="symList" data-pane="dict"></div>
+    <div class="learn-pane" data-pane="learn">
+      <div class="panel">
+        <h2>Learning an accompaniment, step by step</h2>
+        <p>Adapted from the advice at the end of the songbook «Боже, спасибо» (Надежда Боброва).</p>
+        <ol class="steps big">
+          <li><strong>Get to know the song.</strong> Read the melody and words in the score, and listen to a recording.</li>
+          <li><strong>Split the accompaniment into sections:</strong> intro, verse, the link into the chorus, chorus, the link between verses, ending.</li>
+          <li><strong>Find the chords in each section</strong> and notice the texture: held chords, bass and chord, broken chords or figuration.</li>
+          <li><strong>Learn each section on its own.</strong> Write fingering into the hard places and count aloud. Hands separately, then together. Repeat the hard spots. Read the words and find where each section peaks. Balance the hands and keep the bass line smooth.</li>
+          <li><strong>Practise the joins</strong> between sections until they don't stop the flow.</li>
+          <li><strong>Play the whole accompaniment</strong> from start to end.</li>
+          <li><strong>Record yourself</strong> (audio or video) and listen back. Sing along with the recording: is there time to breathe between phrases? Does the playing suit the words?</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h2>How this app helps</h2>
+        <p><strong>Songs</strong> shows each song's sections and chords. Tap a bar to hear it.</p>
+        <p><strong>Play</strong> takes one song at a time: step through it note by note, play one hand while the app plays the other, then both hands at a slow tempo.</p>
+        <p><strong>Chords</strong> and <strong>Scales</strong> are for the chords and keys a song uses that you don't know yet.</p>
+        <div class="actions"><button class="btn" id="gToSongs">Open the songs</button></div>
+      </div>
+    </div>
   </section>
 
-  <div class="legend" aria-label="Colour key">
+  <div class="legend" id="legend" aria-label="Colour key">
     <span><i class="r0"></i>root</span><span><i class="r1"></i>3rd</span><span><i class="r2"></i>5th</span><span><i class="r3"></i>7th</span><span><i class="r4"></i>9th / 2</span><span><i class="r5"></i>11th / 4</span><span><i class="r6"></i>13th / 6</span>
   </div>
 </main>
@@ -614,8 +732,9 @@ const store={get(){try{return JSON.parse(localStorage.getItem('piano-v3'))||{};}
 const S=Object.assign({root:7,type:'m9',group:'nin',tab:'learn',qmode:'build',incG:['sev','nin'],incS:['major','natural','harmonic'],ok:0,all:0,streak:0,best:0,
   sroot:0,stype:'major',sshow:'deg',srhythm:'even',sbpm:88,ssize:3,
   prog:'hgta',pkey:0,color:'tri',pat:'song',rhO:'',lhO:'',pbpm:72,hands:'both',pmode:'listen',melody:false,metro:false,countin:false,plabel:'n',
-  linv:0,lboth:false,shand:'rh'},store.get());
+  linv:0,lboth:false,shand:'rh',coll:'bz',song:'',guide:'sym'},store.get());
 if(!T[S.type]){S.type='m9';S.group='nin';}
+if(S.tab==='symbols') S.tab='guide';
 const save=()=>store.set(S);
 const $=id=>document.getElementById(id);
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
@@ -625,7 +744,8 @@ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;save();showTab();});
 function showTab(){
   document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
-  ['learn','scales','play','quiz','symbols'].forEach(t=>$(t).hidden=t!==S.tab);
+  ['learn','scales','songs','play','quiz','guide'].forEach(t=>$(t).hidden=t!==S.tab);
+  $('legend').hidden=!['learn','scales','quiz'].includes(S.tab);
   if(S.tab!=='play') stopLoop();
   if(S.tab==='quiz'&&!Q.ch) newQ();
   window.scrollTo(0,0);
@@ -952,8 +1072,84 @@ const SONGS={
     info:'A waltz-style bass–chord alternation: bass on beat 1, chord on beats 2 and 3.',
     sec:[['Verse',['G G7 C G','G G D D7','G G7 C G','Em D G G']]]}
 };
+/* ---- «Боже, спасибо»: songbook with piano accompaniments by Надежда Боброва. Chords as printed in the score ---- */
+const BZ_SRC='From the songbook «Боже, спасибо», piano accompaniments by Надежда Боброва.';
+const BZ=[
+  {n:1,p:5,t:'Боже, спасибо',en:'Thank you, God',by:'Words and music: Вадим Калацей (Russian text: Н. Боброва)',key:11,minor:1,meter:'12/8',id:'bz1',derived:1},
+  {n:2,p:8,t:'Ты ждал света утра',en:'You waited for the morning light',by:'Author unknown',key:1,minor:1,meter:'6/8',id:'bz2'},
+  {n:3,p:11,t:'Помолись за меня, моя мама',en:'Pray for me, my mother',by:'Words and music: А. Гусев',key:0,minor:1,meter:'12/8',id:'bz3'},
+  {n:4,p:14,t:'Как лань желает',en:'As the deer longs (Psalm 42)',by:'Ю. Пастернак',key:0,minor:1,meter:'3/4',note:'The score has finger numbers for both hands but no chord symbols.'},
+  {n:5,p:16,t:'Мир, душа, храни',en:'Still, my soul, be still',by:'Keith Getty, Kristyn Getty, Stuart Townend',key:7,minor:0,meter:'4/4',id:'bz5'},
+  {n:6,p:18,t:'Синее небо меня так манит',en:'The blue sky calls to me',by:'Words and music: Л. Н. Курс',key:7,minor:1,meter:'12/8',id:'bz6'},
+  {n:7,p:21,t:'Объятья неба',en:'Heaven’s embrace',by:'Words: Екатерина Лихачёва · Music: Олег Кирилков',key:3,minor:1,meter:'4/4',note:'Tempo ♩ = 70. The score has no chord symbols.'},
+  {n:8,p:24,t:'Есть Тот, Чьею силой Вселенная дышит',en:'There is One whose power keeps the universe alive',by:'Words: А. Кетлер, А. В. Зименс · Music: А. В. Зименс',key:7,minor:1,meter:'3/4',id:'bz8'},
+  {n:9,p:27,t:'Он дарит свет',en:'He gives light',by:'Words and music: Павел Пысларь',key:2,minor:1,meter:'4/4'},
+  {n:10,p:30,t:'Белоснежные одежды',en:'Snow-white robes',by:'Words: Л. Татаренко · Music: М. Мельничук',key:2,minor:1,meter:'4/4 and 2/4',id:'bz10'},
+  {n:11,p:32,t:'Жатва',en:'Harvest',by:'Words: Владимир Тарасенко · Music: Надежда Боброва',key:2,minor:1,meter:'2/4'},
+  {n:12,p:34,t:'Ты поспеши к Нему',en:'Hurry to Him',by:'Words and music: Екатерина Лихачёва',key:4,minor:1,meter:'4/4',id:'bz12'},
+  {n:13,p:36,t:'Он избит, обезображен, умирает на кресте',en:'Stricken, smitten and afflicted',by:'Words: Thomas Kelly · Music: Geistliche Volkslieder',key:5,minor:1,meter:'3/4',id:'bz13'},
+  {n:14,p:38,t:'Я верую!',en:'I believe!',by:'Words and music: Павел Пысларь',key:4,minor:1,meter:'4/4'},
+  {n:15,p:43,t:'Ты Христос, умирая',en:'Christ, as You were dying',by:'Words: Vera Võlegžanina · Music: Edvard Vedzis',key:9,minor:1,meter:'12/8',id:'bz15'},
+  {n:16,p:46,t:'Благодать со креста',en:'Grace from the cross',by:'Words and music: Павел Пысларь · Accompaniment: Яков Винс',key:8,minor:1,meter:'4/4',id:'bz16'},
+  {n:17,p:50,t:'Сколько раз Мне тебя прощать',en:'How many times must I forgive you',by:'Words: Владимир Шариков · Music: Виктор Лобода',key:0,minor:1,meter:'4/4',id:'bz17'},
+  {n:18,p:54,t:'Что же ты стоишь',en:'Why are you standing still?',by:'Words and music: Евгений Гудухин · Harmony: Яков Винс',key:7,minor:1,meter:'4/4',id:'bz18'},
+  {n:19,p:58,t:'Где обрести покой',en:'Where can the weary find rest',by:'В. Стрелков, В. Лунгу · Accompaniment: Яков Винс, Надежда Боброва',key:10,minor:1,meter:'4/4'},
+  {n:20,p:62,t:'Забывая прошлое',en:'Forgetting the past',by:'Words and music: Карен Карагян',key:4,minor:0,meter:'4/4',note:'Form: verse 1, chorus, verse 2, chorus, bridge, chorus. The score has no chord symbols.'}
+];
+const V='Verse · Куплет', CH='Chorus · Припев', IN='Intro · Вступление', EN='Ending · Окончание';
+Object.assign(SONGS,{
+  bz1:{g:'bz',key:11,mode:'minor',bpb:4,bpm:56,pat:'r1',
+    info:'The score prints no chord symbols for this song. These chords were read from the bass line, so check them against the score.',
+    sec:[[IN,['Bm Bm']],[V,['Bm A G-Em F#7','Bm A G-Em F#7']],[CH,['Em-A F#7 Bm-A G','Em-A F#7 Bm-A G','Em-A F#7']],[EN,['Bm A G-Em F#7','Bm']]]},
+  bz2:{g:'bz',key:1,mode:'minor',bpb:2,bpm:58,pat:'r1',
+    sec:[[V,['C#m C#m F#m F#m/D#','G# G# C#m C#m','C#m C#m F#m F#m/D#','G# G# C#m C#m']],
+         [CH,['C#m C# F#m F#m','B B E E','A A F#m F#m/D#','G# G# C#m G#']],
+         ['Last chorus · Припев',['C#m C# F#m F#m','B B E E','A A F#m F#m/D#','G# G# C#m C#m']]]},
+  bz3:{g:'bz',key:0,mode:'minor',bpb:4,bpm:56,pat:'r1',
+    sec:[[V,['Cm Fm G Cm-G','Cm Fm G Cm']],[CH,['C7 Fm Bb Eb-G','Cm Fm G Cm']]]},
+  bz5:{g:'bz',key:7,mode:'major',bpb:4,bpm:72,pat:'r4',
+    sec:[[V,['G C Em-G/B C@1-C/E@1-Dsus4@1-D/F#@1','G C Em-G/B C@1-C/E@1-Dsus4@1-D/F#@1']],
+         [CH,['Em-D/F# G Am-Em C@2-Dsus4@1-D7@1','Em-D/F# G Am-Em C-D','Em C-D']],[EN,['G']]]},
+  bz6:{g:'bz',key:7,mode:'minor',bpb:4,bpm:56,pat:'r1',
+    sec:[[V,['Gm-Gm/Bb Cm-Cm/A Gm/D-D7 D7','Gm-Gm/Bb Cm-Cm/A Gm/D-D7 D7']],[CH,['Gm Cm-Cm/A D7 D7','Gm Cm-Cm/A Gm/D-D7 Gm']]]},
+  bz8:{g:'bz',key:7,mode:'minor',bpb:3,bpm:100,pat:'r2',
+    sec:[[V,['Gm D/F# Cm/Eb Gm/D','Cm Gm/Bb A D','Gm G G C7','Cm Gm D7 Gm']],
+         [CH,['G7 G7 G7 Cm','F F F Bb','Cm D Gm Eb','Cm D G G']],['Last ending · 2-я вольта',['Ab D G G']]]},
+  bz10:{g:'bz',key:2,mode:'minor',bpb:4,bpm:76,pat:'r4',
+    info:'The chorus is in 2/4: each bar is half as long as a verse bar.',
+    sec:[[V,['Dm C Gm Gm/E@2-Asus4@1-A7@1','Dm@1-Edim@1-Dm/F@2 F#dim-Gm Gm/E-Dm/F Gm/E-Asus4','A7@2']],
+         ['Chorus · Припев (2/4)',['Dm@1-Edim@1 Dm/F@1-F#dim@1 Gm@2 Gm@2','C@2 C@2 F@2 Asus4@1-A7@1','Dm@1-Edim@1 Dm/F@1-F#dim@1 Gm@2 Edim@2','Asus4@2 A@2']],
+         [EN,['Dm Dm']]]},
+  bz12:{g:'bz',key:4,mode:'minor',bpb:4,bpm:76,pat:'r4',
+    info:'The score writes B as H (German style): H7 = B7, Hsus4 = Bsus4.',
+    sec:[[V,['Em Am@1-Am/F#@1-Bsus4@1-B7@1 Em Am@1-Am/F#@1-Bsus4@1-B7@1','Em-Em/D C-B C-Am Am/F#@2-Bsus4@1-B7@1']],
+         [CH,['Em-Em/D Am-B7 Em-Em/G Am/F#-B7','C Am Am/F#@2-Bsus4@1-B7@1 Em','Em']]]},
+  bz13:{g:'bz',key:5,mode:'minor',bpb:3,bpm:88,pat:'r2',
+    info:'A hymn in 3/4. The Csus4 → C7 at the end of each line is the sound of the cadence: hold the sus4 and let it fall to the 3rd.',
+    sec:[[V,['Fm Cm/Eb Db@1-Bbm@1-Csus4@.5-C7@.5 Fm','Fm Cm/Eb Db@1-Bbm@1-Csus4@.5-C7@.5 Fm',
+             'Ab@2-Adim@1 Bbm@2-Edim@1 Fm@2-Bdim@1 Csus4@2-C7@1','Fm Gdim Fm/Ab@1-Bbm@1-Csus4@.5-C7@.5 Fm']]]},
+  bz15:{g:'bz',key:9,mode:'minor',bpb:4,bpm:56,pat:'r1',
+    sec:[[V,['Am7-F/A G-Em/G F-Bdim Esus4-E7','Am7-F/A G-Em/G F-Bdim Esus4-E7']],
+         [CH,['Am G Dm-Bdim Esus4-E7','Am G Dm-Bdim Esus4-E7']],[EN,['Am-F/A G-Em/G F-Bdim Esus4-E7']]]},
+  bz16:{g:'bz',key:8,mode:'minor',bpb:4,bpm:72,pat:'r4',
+    info:'The last chorus moves up a half step from G♯ minor to A minor. D♯/G is D♯ major over F𝄪, written G in the score. Hdim7 = Bdim7.',
+    sec:[[V,['G#m C#m/G# D#/G G#m-G#m/F#','E-G#m/D# C#m-C#m/A# D#sus4-D# G#m','G#m C#m/A# D#/G G#m-G#m/F#','E-G#m/D# C#m-C#m/A# D#sus4-D#7 G#m-D#7']],
+         [CH,['G#m-G#m/F# C#m/E@2-C#m@1-C#m/A#@1 D#sus4-D# G#m-G#m/F#','E-G#m/D# C#m-C#m/A# D#sus4-D#7 G#m-A#dim7','D#sus4-D#7']],
+         ['Last chorus in A minor · Припев',['G#m-E Am-Am/G Dm-Dm/F Bdim7-E/G#','E Am-Am/G Dm/F-Bdim7 Esus4-E7','Am-Am/G F-Am/E Dm-Dm/B Esus4-E7','Am']]]},
+  bz17:{g:'bz',key:0,mode:'minor',bpb:4,bpm:72,pat:'r4',
+    info:'Fm/D is an F minor chord over D in the bass, the same notes as Dm7♭5.',
+    sec:[[V,['Cm Fm/D-G Fm/D@2-Gsus4@1-G7@1 Cm','Cm Bbm@1-C7@1-Fm@2 Fm/D-Cm/Eb Fm@1-G7@1-Cm@2','Fm-G Cm Fm-Bb Eb-C/E','Fm-G Cm-Ab Fm@1-Fm/D@1-G@2 Bbm-C7','Fm-G Cm-Ab Fm/D-G Cm']],
+         ['Verse 4 and ending · 4-й куплет',['Cm Fm/D-G Fm/D@2-Gsus4@1-G7@1 Cm','Cm Bbm@1-C7@1-Fm@2 Fm/D-Cm/Eb Fm@1-G7@1-Ab@2','Fm/D-Cm/Eb Fm-G7 Cm Cm','Cm Fm/D-G Cm']]]},
+  bz18:{g:'bz',key:7,mode:'minor',bpb:4,bpm:72,pat:'r4',
+    info:'Bar 7 of the verse is printed "C♯/A" in the score: C♯–E–G over A, which is A7. Gm/H = Gm/B.',
+    sec:[[V,['Gm Cm6/G D7/F# Gm-Gm/F','Eb-Bb/D Cm-Cm6 A7/C#-A7 Dsus4-D7','Gm Cm6/A D7 Gm-Gm/F','Eb-Gm/Bb Cm A7/C#-A7 Dsus4-D7']],
+         [CH,['Gm-Gm/Bb Cm-Cm/B Cm/Bb-Cm/A D7@2-Eb/C@1-D7@1','Gm-Cm6/A D7/F#-Gm G7@1-G7/B@1-Cm@1-Cm/A@1 D7',
+              'Gm-Gm/Bb Gm-Gm/B Cm/Bb-Cm/A D7@2-Cm/Eb@1-D7@1','Gm@2-Cm@1-Cm/A@1 D7-Gm G7@2-Cm@1-Cm6/A@1 D7','Gm Gm']],
+         [EN,['Gm Cm/A F#dim7 Gm']]]}
+});
+BZ.forEach(b=>{if(b.id) Object.assign(SONGS[b.id],{name:b.t,sub:b.en,meter:b.meter,bz:b,src:`${BZ_SRC} Song ${b.n}, page ${b.p}. ${b.by}.`});});
 const ITEMS={...SONGS}; Object.entries(PROGS).forEach(([k,p])=>ITEMS[k]={...p,g:'prog'});
-const IGROUPS=[['book','Called to Play for Him — songs'],['ex','Called to Play — exercises'],['hymn','Hymns with melody'],['prog','Progressions']];
+const IGROUPS=[['bz','«Боже, спасибо» — songbook'],['book','Called to Play for Him — songs'],['ex','Called to Play — exercises'],['hymn','Hymns with melody'],['prog','Progressions']];
 
 /* ---- methods: code in the chart → accompaniment ---- */
 const METH={'1':'M1','2':'M2','3':'M3','4':'M4','5':'M5',t1:'t1',t2:'t2',t3:'t3',t4:'t4',t5:'t5','3ch':'c3',inv:'inv','5.1':'p51','5.2':'p52','5.3':'p53','6u':'s6u','6d':'s6d'};
@@ -1107,13 +1303,13 @@ function parseSong(sg,shift){
   }));
   return {bars,segs,total:beat,bpb,sharp,labels:sg.sec.map(s=>s[0])};
 }
-function progChords(){
-  const p=cur(), color=p.color?S.color:p.def, [kl]=rootFor(S.pkey,p.mode==='minor');
+function progChords(p=cur(),pkey=S.pkey,color=p.color?S.color:p.def){
+  const [kl]=rootFor(pkey,p.mode==='minor');
   let beat=0;
   return p.ch.map(([deg,fam,beats,bassOff])=>{
-    const key=fam[color], pc=(S.pkey+deg)%12;
+    const key=fam[color], pc=(pkey+deg)%12;
     const st=[0,1,1,2,2,3,4,4,5,5,6,6][deg];
-    const sp=spellAt(kl,S.pkey,st,deg);
+    const sp=spellAt(kl,pkey,st,deg);
     const l=LET.indexOf(sp.name[0]), a=sp.name.includes('♭')?-1:sp.name.includes('#')?1:0;
     const notes=build(l,a,key); let name=cname(notes,key);
     let bass=pc;
@@ -1413,7 +1609,8 @@ function optList(obj,groups,sel,extra=''){
 function renderPlay(){
   const sg=cur(), minor=sg.mode==='minor', codes=hasCodes(sg), mel=!!sg.mel;
   if(S.pat==='song'&&!codes) S.pat=sg.pat||sg.style||'M1';
-  $('pProg').innerHTML=IGROUPS.map(([g,lab])=>`<optgroup label="${lab}">${Object.entries(ITEMS).filter(([,x])=>x.g===g).map(([k,x])=>`<option value="${k}" ${k===S.prog?'selected':''}>${x.name}${x.sub?' ('+x.sub+')':''}</option>`).join('')}</optgroup>`).join('');
+  $('pSongName').textContent=sg.name;
+  $('pSongMeta').textContent=[sg.sub,(IGROUPS.find(g=>g[0]===sg.g)||[])[1]].filter(Boolean).join(' · ');
   Object.values(PAT).forEach(p=>p.dis=p.mel&&!mel);
   $('pStyle').innerHTML=optList(PAT,PGROUPS,S.pat,codes?`<option value="song" ${S.pat==='song'?'selected':''}>As written in the song (method on each chord)</option>`:'');
   Object.values(RHP).forEach(p=>p.dis=p.mel&&!mel);
@@ -1457,7 +1654,7 @@ function renderChart(){
     else if(bar.line!==cl){ html+='</div><div class="line">'; cl=bar.line; }
     const codes=[...new Set(bar.segs.map(s=>s.meth).filter(Boolean))].map(m=>MLAB[m]||m).join(' ');
     const bt=bar.beats!==PL.bpb?bar.beats+' beat'+(bar.beats>1?'s':''):'';
-    html+=`<button class="bar" data-b="${bar.i}">${bar.segs.map(s=>s.name).join(' – ')}<small>${[codes,bt].filter(Boolean).join(' · ')||'&nbsp;'}</small></button>`;
+    html+=`<button class="bar" data-b="${bar.i}">${bar.segs.map(s=>`<span>${s.name}</span>`).join('')}<small>${[codes,bt].filter(Boolean).join(' · ')||'&nbsp;'}</small></button>`;
   });
   $('pChart').innerHTML=html+'</div></div>';
   $('pChart').querySelectorAll('.bar').forEach(b=>b.onclick=()=>jumpBar(+b.dataset.b));
@@ -1484,11 +1681,12 @@ $('pPrev').onclick=()=>{const i=(pos-1+PL.groups.length)%PL.groups.length; showG
 $('pBarNext').onclick=()=>{const b=(PL.groups[pos].bar+1)%PL.bars.length; jumpBar(b);};
 $('pRestart').onclick=()=>turnGo(0);
 $('pHear').onclick=()=>soundGroup(pos,()=>true);
-$('pProg').onchange=e=>{
-  S.prog=e.target.value; const sg=cur();
+function pickSong(id){
+  S.prog=id; const sg=cur();
   S.pkey=sg.key||0; S.pat=hasCodes(sg)?'song':(sg.pat||sg.style||'M1'); if(sg.def) S.color=sg.def; if(sg.bpm) S.pbpm=sg.bpm;
   S.rhO=''; S.lhO=''; pos=0; save(); renderPlay();
-};
+}
+$('pChange').onclick=()=>{const g=cur().g; S.coll=g; S.song=S.prog; S.tab='songs'; save(); renderSongs(); showTab();};
 $('pStyle').onchange=e=>{S.pat=e.target.value;save();renderPlay();};
 $('pRH').onchange=e=>{S.rhO=e.target.value;save();renderPlay();};
 $('pLH').onchange=e=>{S.lhO=e.target.value;save();renderPlay();};
@@ -1584,7 +1782,101 @@ function renderSymbols(){
   $('symList').querySelectorAll('.sym').forEach(b=>b.onclick=()=>{S.type=b.dataset.k;S.group=T[S.type].g;S.tab='learn';save();renderLearn();showTab();playLearn();});
 }
 
-renderLearn(); renderScales(); renderPlay(); renderInc(); renderSymbols(); renderStats(); showTab();
+/* ================= SONGS: the library ================= */
+const COLLS=[['bz','«Боже, спасибо»'],['book','Called to Play'],['ex','Exercises'],['hymn','Hymns'],['prog','Progressions']];
+const COLL_NOTE={
+  bz:'20 songs with piano accompaniments by Надежда Боброва. Songs whose score prints chord symbols can be played in Play.',
+  book:'Songs from "Called to Play for Him", level 1, with the book\'s playing method marked on each chord.',
+  ex:'Lesson exercises from "Called to Play for Him".',
+  hymn:'Hymns with the melody written in, for the melody-based accompaniment types.',
+  prog:'Common chord progressions to practise in every key.'
+};
+const keyName=(pc,minor)=>{const [l,a]=rootFor(pc,minor); return nm(l,a)+(minor?' minor':' major');};
+function libItems(coll){
+  if(coll==='bz') return BZ.map(b=>({id:b.id||'bzx'+b.n,num:b.n,title:b.t,sub:b.en,key:keyName(b.key,b.minor),meter:b.meter,play:!!b.id,bz:b}));
+  return Object.entries(ITEMS).filter(([,x])=>x.g===coll).map(([k,x],i)=>({id:k,num:i+1,title:x.name,sub:x.sub||'',key:keyName(x.key||0,x.mode==='minor'),meter:(x.bpb===3?'3/4':'4/4'),play:true}));
+}
+function libChart(id){
+  const sg=ITEMS[id];
+  if(sg.g==='prog'){
+    const chs=progChords(sg,sg.key,sg.def||'tri');
+    return {labels:['Progression'],bars:chs.map((c,i)=>({i,sec:0,line:0,segs:[c],beats:c.beats})),bpb:4};
+  }
+  return parseSong(sg,0);
+}
+function hearSeg(seg,when=0){
+  const lb=seg.bass+(seg.bass>=7?36:48);
+  playBlock([lb,...voiceLead(null,rhPcs(seg))],when);
+}
+let libChartCache=null;
+function renderSongs(){
+  if(!COLLS.some(c=>c[0]===S.coll)) S.coll='bz';
+  chipRow($('songColl'),COLLS,v=>v===S.coll,v=>{S.coll=v;S.song='';save();renderSongs();});
+  $('songColl').querySelectorAll('.chip').forEach(b=>b.setAttribute('role','tab'));
+  const items=libItems(S.coll), wide=matchMedia('(min-width:1024px)').matches;
+  if(S.song&&!items.some(x=>x.id===S.song)) S.song='';
+  if(!S.song&&wide) S.song=items[0].id;
+  $('songCollNote').textContent=COLL_NOTE[S.coll];
+  $('songList').innerHTML=items.map(x=>`<li><button class="song-item" data-id="${x.id}" ${x.id===S.song?'aria-current="true"':''}>
+    <span class="num">${x.num}</span>
+    <span class="st"><b>${x.title}</b>${x.sub?`<small>${x.sub}</small>`:''}</span>
+    <span class="sm">${x.key} · ${x.meter}${x.play?'':'<br><em>no chords</em>'}</span></button></li>`).join('');
+  $('songList').querySelectorAll('.song-item').forEach(b=>b.onclick=()=>{S.song=b.dataset.id;save();renderSongs();
+    if(!matchMedia('(min-width:1024px)').matches) window.scrollTo(0,0);});
+  $('songs').querySelector('.lib').classList.toggle('detail-open',!!S.song);
+  const it=items.find(x=>x.id===S.song);
+  $('songDetail').innerHTML=it?songDetail(it):'';
+  if(!it) return;
+  $('songBack').onclick=()=>{S.song='';save();renderSongs();window.scrollTo(0,0);};
+  const go=$('songPlay'); if(go) go.onclick=()=>{pickSong(it.id);S.tab='play';save();showTab();};
+  const sc=$('songScale'); if(sc) sc.onclick=()=>{S.sroot=it.bz.key;S.stype=it.bz.minor?'natural':'major';S.tab='scales';save();renderScales();showTab();};
+  $('songDetail').querySelectorAll('.chart .bar').forEach(b=>b.onclick=()=>{
+    const bar=libChartCache.bars[+b.dataset.b], beat=60/((ITEMS[it.id]&&ITEMS[it.id].bpm)||72);
+    let t=0; bar.segs.forEach(seg=>{hearSeg(seg,t); t+=Math.max(.45,seg.beats*beat*.5);});
+    $('songDetail').querySelectorAll('.chart .bar').forEach(x=>x.classList.toggle('on',x===b));
+  });
+  $('songDetail').querySelectorAll('.cchip').forEach(b=>b.onclick=()=>hearSeg(libChartCache.segsBy[b.dataset.n]));
+}
+function songDetail(it){
+  const sg=ITEMS[it.id], bz=it.bz;
+  let h=`<button class="back" id="songBack">‹ All songs</button>
+    <p class="small song-pre">${bz?`Song ${bz.n} · page ${bz.p}`:COLLS.find(c=>c[0]===S.coll)[1]}</p>
+    <h2 class="song-t">${it.title}</h2>${it.sub?`<p class="song-en">${it.sub}</p>`:''}
+    <dl class="facts"><div><dt>Key</dt><dd>${it.key}</dd></div><div><dt>Meter</dt><dd>${it.meter}</dd></div>
+    ${bz?`<div class="wide"><dt>Credits</dt><dd>${bz.by}</dd></div>`:''}</dl>`;
+  if(!it.play){
+    h+=`<p class="note">${bz.note||'The score has no chord symbols for this song, so it can\'t be played in Play yet.'} Learn it from the score; start with the scale and chords of the key.</p>
+      <div class="actions"><button class="btn" id="songScale">Practise ${it.key} in Scales</button></div>`;
+  } else {
+    if(sg.info) h+=`<p class="note">${sg.info}</p>`;
+    h+=`<div class="actions"><button class="btn" id="songPlay">Practise in Play</button></div>`;
+    const P=libChart(it.id); libChartCache=P; P.segsBy={};
+    const segs=P.bars.flatMap(b=>b.segs); segs.forEach(sg2=>{if(!P.segsBy[sg2.name]) P.segsBy[sg2.name]=sg2;});
+    h+=`<h3 class="sub-h">Chords in this song</h3><div class="cchips">${Object.keys(P.segsBy).map(n=>`<button class="cchip" data-n="${n}">${n}</button>`).join('')}</div>`;
+    h+=`<h3 class="sub-h">Chord chart</h3><p class="small">Tap a bar to hear it.</p><div class="chart">`;
+    let cs=-1, cl=-1;
+    P.bars.forEach(bar=>{
+      if(bar.sec!==cs){ if(cs>=0) h+='</div></div>'; h+=`<div class="sec"><h3>${P.labels[bar.sec]}</h3><div class="line">`; cs=bar.sec; cl=bar.line; }
+      else if(bar.line!==cl){ h+='</div><div class="line">'; cl=bar.line; }
+      const bt=bar.beats!==P.bpb?bar.beats+' beat'+(bar.beats>1?'s':''):'';
+      h+=`<button class="bar" data-b="${bar.i}">${bar.segs.map(x=>`<span>${x.name}</span>`).join('')}<small>${bt||'&nbsp;'}</small></button>`;
+    });
+    h+='</div></div></div>';
+  }
+  if(bz) h+=`<p class="small src">${BZ_SRC} The words and the full accompaniment are in the book.</p>`;
+  return h;
+}
+addEventListener('resize',()=>{if(S.tab==='songs') renderSongs();});
+
+/* ================= GUIDE ================= */
+function renderGuide(){
+  document.querySelectorAll('[data-guide]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.guide===S.guide));
+  document.querySelectorAll('#guide [data-pane]').forEach(p=>p.hidden=p.dataset.pane!==S.guide);
+}
+document.querySelectorAll('[data-guide]').forEach(b=>b.onclick=()=>{S.guide=b.dataset.guide;save();renderGuide();});
+$('gToSongs').onclick=()=>{S.tab='songs';save();renderSongs();showTab();};
+
+renderLearn(); renderScales(); renderPlay(); renderInc(); renderSymbols(); renderSongs(); renderGuide(); renderStats(); showTab();
 </script>
 </body>
 </html>
