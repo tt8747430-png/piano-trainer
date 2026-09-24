@@ -1,0 +1,9 @@
+node_modules
+dist
+dev-dist
+coverage
+.vercel
+.env*.local
+.superpowers/
+.DS_Store
+*.tsbuildinfo
