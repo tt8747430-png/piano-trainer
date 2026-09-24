@@ -1,0 +1,102 @@
+/*
+ * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name
+ * what a colour is for. Components use roles through Tailwind utilities, never primitives.
+ * The values carry the legacy app's palette until Phase 3 chooses the visual direction.
+ */
+:root {
+  --p-slate-50: #eef1f5;
+  --p-white: #ffffff;
+  --p-ink-900: #161a22;
+  --p-gray-600: #525b69;
+  --p-gray-200: #d6dce5;
+  --p-gray-100: #e3e8ef;
+  --p-navy-800: #22314f;
+  --p-red-600: #c4322a;
+  --p-green-700: #0b7a56;
+  --p-blue-600: #2b59c3;
+  --p-rose-600: #c22e60;
+  --p-steel-500: #5f6b7e;
+  --p-ochre-700: #8f6100;
+  --p-violet-600: #7445c4;
+  --p-teal-700: #0a7493;
+
+  --p-night-990: #0d1016;
+  --p-night-950: #11141a;
+  --p-night-900: #1a1f28;
+  --p-night-800: #252c38;
+  --p-night-700: #2c3340;
+  --p-mist-100: #e8ecf2;
+  --p-mist-400: #a3adbc;
+  --p-periwinkle-300: #a9bdff;
+  --p-red-400: #ff6a5e;
+  --p-green-400: #3ccb97;
+  --p-blue-400: #6e95ff;
+  --p-rose-400: #ff6f9c;
+  --p-steel-300: #a3aec0;
+  --p-ochre-300: #f2b632;
+  --p-violet-300: #b794ff;
+  --p-teal-300: #4cc7ea;
+
+  --radius: 0.75rem;
+
+  --background: var(--p-slate-50);
+  --foreground: var(--p-ink-900);
+  --card: var(--p-white);
+  --card-foreground: var(--p-ink-900);
+  --popover: var(--p-white);
+  --popover-foreground: var(--p-ink-900);
+  --primary: var(--p-navy-800);
+  --primary-foreground: var(--p-white);
+  --secondary: var(--p-gray-100);
+  --secondary-foreground: var(--p-ink-900);
+  --muted: var(--p-gray-100);
+  --muted-foreground: var(--p-gray-600);
+  --accent: var(--p-gray-100);
+  --accent-foreground: var(--p-ink-900);
+  --destructive: var(--p-red-600);
+  --success: var(--p-green-700);
+  --border: var(--p-gray-200);
+  --input: var(--p-gray-200);
+  --ring: var(--p-blue-600);
+
+  /* Chord-tone roles (spec §8): shared by the keyboard, the legend and the chart. */
+  --role-root: var(--p-blue-600);
+  --role-3rd: var(--p-rose-600);
+  --role-5th: var(--p-steel-500);
+  --role-7th: var(--p-ochre-700);
+  --role-9th: var(--p-green-700);
+  --role-11th: var(--p-violet-600);
+  --role-13th: var(--p-teal-700);
+  --on-role: var(--p-white);
+}
+
+[data-theme='dark'] {
+  --background: var(--p-night-950);
+  --foreground: var(--p-mist-100);
+  --card: var(--p-night-900);
+  --card-foreground: var(--p-mist-100);
+  --popover: var(--p-night-900);
+  --popover-foreground: var(--p-mist-100);
+  --primary: var(--p-periwinkle-300);
+  --primary-foreground: var(--p-night-950);
+  --secondary: var(--p-night-800);
+  --secondary-foreground: var(--p-mist-100);
+  --muted: var(--p-night-800);
+  --muted-foreground: var(--p-mist-400);
+  --accent: var(--p-night-800);
+  --accent-foreground: var(--p-mist-100);
+  --destructive: var(--p-red-400);
+  --success: var(--p-green-400);
+  --border: var(--p-night-700);
+  --input: var(--p-night-700);
+  --ring: var(--p-blue-400);
+
+  --role-root: var(--p-blue-400);
+  --role-3rd: var(--p-rose-400);
+  --role-5th: var(--p-steel-300);
+  --role-7th: var(--p-ochre-300);
+  --role-9th: var(--p-green-400);
+  --role-11th: var(--p-violet-300);
+  --role-13th: var(--p-teal-300);
+  --on-role: var(--p-night-990);
+}
