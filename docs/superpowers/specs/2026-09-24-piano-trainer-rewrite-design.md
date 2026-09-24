@@ -47,7 +47,9 @@ end-to-end tests, and pre-commit hooks. Each can follow as its own effort.
 
 ## 2. Stack and tooling
 
-Versions follow memory-palaces so the two repos share habits.
+Versions follow memory-palaces so the two repos share habits, and majors are pinned as memory-palaces proved them
+(TypeScript 6, Vitest 4, jsdom 29, jest-dom 6, eslint-plugin-boundaries 6) even where newer majors exist; bumping
+one is its own change.
 
 - **App:** React 19, Vite 8, TypeScript 6.
 - **Routing:** TanStack Router, with typed routes and typed, validated search params.
@@ -422,8 +424,10 @@ direction must meet:
   label, hand), selected and wrong keys, `onKeyPress`. Keys are buttons with note-name labels for screen readers.
 
 **i18n:**
-- **Interface strings** are in namespaces `common, path, songs, piece, player, theory, quiz, settings`, one JSON file
-  per namespace per locale in `shared/i18n/locales/{en,ru}/`. A test fails if the two locales' key sets differ.
+- **Interface strings** are in namespaces `common, path, songs, piece, player, theory, quiz, settings`, one
+  TypeScript module per namespace per locale in `shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed
+  against English's shape, so a missing or extra key fails `tsc`; a test also checks parity and that no string is
+  empty.
 - **Content text** is `LocalText { en, ru }` (§4.2), read through `localText(text, locale)`. A test fails if any
   `LocalText` in content has an empty language. Claude drafts the Russian during Phase 2; the owner reviews it in
   Phase 4.

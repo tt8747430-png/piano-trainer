@@ -1,0 +1,94 @@
+# CLAUDE.md
+
+## Answer style
+
+Concise. Answer first. No preamble, no recap.
+
+Piano Trainer: an offline-first PWA for learning songs, chords and scales at the piano. React 19 + Vite + strict
+TypeScript, **Feature-Sliced Design** (lint-enforced), English + Russian, deployed on Vercel. Design:
+[spec](docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md). The old single-file app is
+`legacy/index.html`: a reading reference, never imported, deleted at the Phase 4 switch-over.
+
+## Skills — before writing code
+
+- `tdd` → every module, test first (red → green → refactor).
+- `vite-react-best-practices` / `vercel-react-best-practices` → performance, bundle, Vite SPA
+  ([CODE_STYLE](docs/CODE_STYLE.md) §7).
+- `vercel-composition-patterns` → component APIs (§4).
+- `shadcn` → anything in `src/shared/ui/primitives` (add with the CLI, never by hand).
+- `impeccable` → visual design work (Phase 3 chooses the direction).
+- `vercel:knowledge-update` → before touching `vercel.ts` or anything Vercel.
+- **Not applicable:** React Native, Next.js and Angular skills.
+
+Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superpowers/specs/`, plans in
+`docs/superpowers/plans/`.
+
+## Change rules
+
+- **Latest stable dependencies, no legacy in code.** Pinned majors: TypeScript 6, Vitest 4, jsdom 29, jest-dom 6,
+  eslint-plugin-boundaries 6, and `@vite-pwa/assets-generator` 1 (the range `vite-plugin-pwa` accepts). Bumping
+  one is its own change.
+- **Saved data keeps working.** Persisted stores (`pt-settings`, later `pt-progress`) carry a `version`; a shape
+  change ships a `migrate` and a sanitising `merge`, never a reset.
+- **Staged is deliberate.** Never `git checkout`/`restore`/`stash`/`reset` the owner's work unprompted.
+- **New code copies the nearest slice's shape.** Writes → a feature command. Reads → selectors. Pure logic →
+  `shared/lib` or `entities/*/model` with a colocated test.
+- **Complete, not placeholder.** Every UI string in both `en` and `ru`. Loading, empty, error and offline states.
+- **Verify before claiming done:** `npm run typecheck && npm run lint && npm run test`; after touching startup,
+  routing, the PWA or config, also `npm run build`.
+
+## Commands
+
+`dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` / `test:watch` / `test:cov`
+(90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from
+`public/favicon.svg`).
+One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run -t "saves a new language"`.
+**Never `npm run format`** on the whole repo: `npx prettier --write <files you touched>`.
+
+## Architecture — FSD (lint-enforced)
+
+`app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above
+(`eslint-plugin-boundaries`). Another slice only through its `index.ts` (`no-restricted-imports` refuses deep paths;
+`src/app/architecture.test.ts` proves both). `@` → `src`.
+
+- **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`),
+  `App.tsx` (the provider stack), `providers/` (`LocaleSync`, `ThemeProvider`, `UpdatePrompt`), `RouteError`,
+  layouts. From Phase 2, `composition-root.ts` → `createServices()` (audio + MIDI).
+- **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`.
+- **widgets/<x>/**: composite UI tied to screens (`app-nav`, `theory-nav`).
+- **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`).
+- **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
+  `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
+  `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `index.ts`.
+- **shared/**: `lib` (`cn`, `safeLocalStorage`, `createStoreContext`; from Phase 2 `music`, `arrangement`,
+  `schedule`, `services`), `api` (ports + adapters), `ui` (design system; shadcn in `ui/primitives`), `i18n`, `test`.
+
+**State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
+else → component state.
+**Theme:** `index.html`'s `#theme-boot` script paints `data-theme` before first paint from `pt-settings`;
+`ThemeProvider` keeps it. `src/app/theme-boot.test.ts` holds the two together.
+
+## Read before you touch
+
+- **Any UI** → [CODE_STYLE](docs/CODE_STYLE.md).
+- **Naming anything** → [UBIQUITOUS_LANGUAGE](docs/UBIQUITOUS_LANGUAGE.md). "Piece" in code, "Song" or "Exercise"
+  in the UI. A "Skill" is a quiz-rated chord quality or scale kind, nothing else.
+- **Why it is this way** → [docs/adr](docs/adr).
+- **Music logic** (from Phase 2) → CODE_STYLE §8 and spec §4.
+
+## Conventions
+
+- Strict TS: `noUncheckedIndexedAccess`, `noUnusedLocals/Parameters`, `verbatimModuleSyntax` → `import type`.
+  No `any`.
+- Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
+  Setup: `src/shared/test/setup.ts` (jest-dom, a light `matchMedia` stub, cleanup, English). A test that needs no
+  DOM opts into `// @vitest-environment node`. Whole-app tests: `renderApp(path, { locale })` from
+  `src/app/testing/render-app.tsx`. OS theme: `stubMatchMedia`.
+- Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
+- i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
+  so a missing key fails `tsc`.
+
+## Agent skills
+
+Issues and specs → `.scratch/<feature-slug>/` ([issue tracker](docs/agents/issue-tracker.md)). Labels:
+[triage-labels](docs/agents/triage-labels.md). Domain docs: [domain](docs/agents/domain.md).
