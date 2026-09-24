@@ -1,15 +1,35 @@
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import type { Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
+import { THEME_COLORS } from './src/shared/config/theme-colors.ts'
 
 const fromRoot = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+
+/** The browser toolbar's colour for each OS scheme; ThemeProvider repaints both for a chosen theme. */
+function themeColorMeta(): Plugin {
+  return {
+    name: 'theme-color-meta',
+    transformIndexHtml: () =>
+      (['light', 'dark'] as const).map((scheme) => ({
+        tag: 'meta',
+        attrs: {
+          name: 'theme-color',
+          media: `(prefers-color-scheme: ${scheme})`,
+          content: THEME_COLORS[scheme],
+        },
+        injectTo: 'head',
+      })),
+  }
+}
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    themeColorMeta(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
@@ -22,8 +42,8 @@ export default defineConfig({
         display: 'standalone',
         start_url: '/',
         scope: '/',
-        theme_color: '#22314f',
-        background_color: '#eef1f5',
+        theme_color: THEME_COLORS.light,
+        background_color: THEME_COLORS.light,
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
