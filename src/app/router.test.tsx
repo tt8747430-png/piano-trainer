@@ -54,6 +54,11 @@ describe('the app shell', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
   })
 
+  it('calls a piece a song on screen', async () => {
+    renderApp('/songs/bz5')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Song' })).toBeInTheDocument()
+  })
+
   it('offers Path, Songs and Theory in the main navigation, marking the current one', async () => {
     renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })

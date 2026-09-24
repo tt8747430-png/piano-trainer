@@ -1,1 +1,1 @@
-export const piece = { title: 'Piece' } as const
+export const piece = { title: 'Song' } as const

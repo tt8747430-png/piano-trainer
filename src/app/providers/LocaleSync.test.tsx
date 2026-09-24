@@ -1,20 +1,12 @@
-import { act, render, waitFor } from '@testing-library/react'
+import { act, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { createSettingsStore, type Locale, SettingsStoreProvider } from '@/entities/settings'
+import type { Locale } from '@/entities/settings'
 import { setLocale } from '@/features/set-preference'
 import { i18n } from '@/shared/i18n'
-import { createMemoryStorage } from '@/shared/lib'
+import { renderWithSettings } from '../testing/render-with-settings'
 import { LocaleSync } from './LocaleSync'
 
-function renderWith(locale: Locale) {
-  const store = createSettingsStore({ storage: createMemoryStorage(), languages: [locale] })
-  render(
-    <SettingsStoreProvider store={store}>
-      <LocaleSync />
-    </SettingsStoreProvider>,
-  )
-  return store
-}
+const renderWith = (locale: Locale) => renderWithSettings(<LocaleSync />, { locale }).settingsStore
 
 describe('LocaleSync', () => {
   it('puts i18next and <html lang> on the saved language', async () => {
@@ -28,5 +20,12 @@ describe('LocaleSync', () => {
     act(() => setLocale(store, 'ru'))
     await waitFor(() => expect(i18n.language).toBe('ru'))
     expect(document.documentElement.lang).toBe('ru')
+  })
+
+  it('names the page in the saved language', () => {
+    const store = renderWith('ru')
+    expect(document.title).toBe('Тренажёр фортепиано')
+    act(() => setLocale(store, 'en'))
+    expect(document.title).toBe('Piano Trainer')
   })
 })
