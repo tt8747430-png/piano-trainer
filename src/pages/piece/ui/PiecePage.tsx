@@ -4,7 +4,7 @@ import { ScreenTitle } from '@/shared/ui'
 
 export function PiecePage() {
   const { t } = useTranslation('piece')
-  const { pieceId } = useParams({ strict: false })
+  const { pieceId } = useParams({ from: '/shell/songs/$pieceId' })
   return (
     <>
       <ScreenTitle>{t('title')}</ScreenTitle>
