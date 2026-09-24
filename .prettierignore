@@ -1,0 +1,12 @@
+legacy
+dist
+dev-dist
+coverage
+package-lock.json
+.superpowers
+.agents
+.claude
+.codex
+skills-lock.json
+docs/superpowers
+public
