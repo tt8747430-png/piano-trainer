@@ -1,10 +1,10 @@
-# Every push to main and every pull request: typecheck, lint (including the layer rules),
+# Every push, to any branch, and every pull request: typecheck, lint (including the layer rules),
 # tests with the coverage gate, and a production build. Nothing merges red.
 name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
 
 permissions:

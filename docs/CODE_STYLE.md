@@ -118,8 +118,9 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
 
 ## 11. Build and deploy
 
-- The Vercel config is `vercel.ts` (`@vercel/config`, a `config` export): SPA rewrite; `/assets/*` immutable;
-  `index.html`, `sw.js` and the manifest revalidate. Read `vercel:knowledge-update` before changing it.
+- The Vercel config is `vercel.ts` (`@vercel/config`, a `config` export, which is what Vercel's build reads): the
+  SPA rewrite for every path but `/assets/`; `/assets/*` immutable; `index.html`, `sw.js` and the manifest
+  revalidate. `vercel.test.ts` pins all of it. Read `vercel:knowledge-update` before changing it.
 - Check a production build with `npm run build && npm run preview`: it catches lazy-chunk, asset and
   service-worker problems `dev` hides.
 - A `VITE_` variable is public. Never put a secret in one.
