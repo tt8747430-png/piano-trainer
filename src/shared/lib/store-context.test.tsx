@@ -40,7 +40,7 @@ describe('createStoreContext', () => {
   it('names the missing provider when used outside one', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     expect(() => renderHook(() => useStoreApi())).toThrow(
-      'useCounterStore must be used inside <CounterStoreProvider>',
+      'The Counter store was read outside <CounterStoreProvider>',
     )
   })
 })

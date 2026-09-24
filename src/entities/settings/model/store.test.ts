@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
 
-const saved = (storage: Storage, state: unknown, version = 1) =>
+/** Puts settings in storage as an earlier session would have saved them. */
+const writeSaved = (storage: Storage, state: unknown, version = 1) =>
   storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ state, version }))
 
 describe('createSettingsStore', () => {
@@ -23,7 +24,7 @@ describe('createSettingsStore', () => {
 
   it('restores what was saved', () => {
     const storage = createMemoryStorage()
-    saved(storage, { theme: 'light', locale: 'ru' })
+    writeSaved(storage, { theme: 'light', locale: 'ru' })
     expect(createSettingsStore({ storage, languages: ['en'] }).getState()).toEqual({
       theme: 'light',
       locale: 'ru',
@@ -32,7 +33,7 @@ describe('createSettingsStore', () => {
 
   it('keeps valid saved fields and defaults the ones it does not recognise', () => {
     const storage = createMemoryStorage()
-    saved(storage, { theme: 'sepia', locale: 'ru', extra: true })
+    writeSaved(storage, { theme: 'sepia', locale: 'ru', extra: true })
     expect(createSettingsStore({ storage, languages: ['en'] }).getState()).toEqual({
       theme: 'system',
       locale: 'ru',
@@ -50,7 +51,7 @@ describe('createSettingsStore', () => {
 
   it('keeps a theme saved by an older version', () => {
     const storage = createMemoryStorage()
-    saved(storage, { theme: 'dark' }, 0)
+    writeSaved(storage, { theme: 'dark' }, 0)
     expect(createSettingsStore({ storage, languages: ['en'] }).getState().theme).toBe('dark')
   })
 

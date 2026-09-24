@@ -15,7 +15,7 @@ export function createStoreContext<State>(name: string) {
 
   function useStoreApi(): StoreApi<State> {
     const store = use(Context)
-    if (!store) throw new Error(`use${name}Store must be used inside <${name}StoreProvider>`)
+    if (!store) throw new Error(`The ${name} store was read outside <${name}StoreProvider>`)
     return store
   }
 

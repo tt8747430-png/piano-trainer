@@ -1,23 +1,14 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { createSettingsStore, type Locale, SettingsStoreProvider } from '@/entities/settings'
-import { createMemoryStorage } from '@/shared/lib'
+import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { SettingsPage } from './SettingsPage'
 
-function renderPage(locale: Locale = 'en') {
-  const store = createSettingsStore({ storage: createMemoryStorage(), languages: [locale] })
-  render(
-    <SettingsStoreProvider store={store}>
-      <SettingsPage />
-    </SettingsStoreProvider>,
-  )
-  return store
-}
+const renderPage = () => renderWithSettings(<SettingsPage />).settingsStore
 
 describe('SettingsPage', () => {
   it('shows the saved language and theme as chosen', () => {
-    renderPage('en')
+    renderPage()
     expect(screen.getByRole('radio', { name: 'English' })).toBeChecked()
     expect(screen.getByRole('radio', { name: 'System' })).toBeChecked()
   })
