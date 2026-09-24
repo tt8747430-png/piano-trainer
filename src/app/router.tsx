@@ -7,8 +7,11 @@ import {
   type RouterHistory,
 } from '@tanstack/react-router'
 import { NotFoundPage } from '@/pages/not-found'
+import { AppShell } from './AppShell'
+import { FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
+import { ShellLayout } from './ShellLayout'
 import { TheoryLayout } from './TheoryLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched.
@@ -17,36 +20,46 @@ const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const theoryScreens = () => import('./routes/theory-screens')
 
-const rootRoute = createRootRoute({ component: RootLayout, notFoundComponent: NotFoundPage })
+/** An unknown address keeps the main navigation, so the learner is never stranded. */
+function NotFoundScreen() {
+  return (
+    <AppShell>
+      <NotFoundPage />
+    </AppShell>
+  )
+}
 
-const pathRoute = createRoute({
+const rootRoute = createRootRoute({ component: RootLayout, notFoundComponent: NotFoundScreen })
+
+// Screens reached from the main navigation.
+const shellRoute = createRoute({
   getParentRoute: () => rootRoute,
+  id: 'shell',
+  component: ShellLayout,
+})
+const pathRoute = createRoute({
+  getParentRoute: () => shellRoute,
   path: '/',
   component: lazyRouteComponent(homeScreens, 'PathPage'),
 })
 const settingsRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => shellRoute,
   path: '/settings',
   component: lazyRouteComponent(homeScreens, 'SettingsPage'),
 })
 const songsRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => shellRoute,
   path: '/songs',
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
 const pieceRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-const playerRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/play/$pieceId',
-  component: lazyRouteComponent(playerScreens, 'PlayerPage'),
-})
 
 const theoryRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => shellRoute,
   path: '/theory',
   component: TheoryLayout,
 })
@@ -78,13 +91,27 @@ const quizRoute = createRoute({
   component: lazyRouteComponent(theoryScreens, 'TheoryQuizPage'),
 })
 
+// Screens that take the whole screen, with their own way back.
+const fullScreenRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: 'full-screen',
+  component: FullScreenLayout,
+})
+const playerRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/play/$pieceId',
+  component: lazyRouteComponent(playerScreens, 'PlayerPage'),
+})
+
 const routeTree = rootRoute.addChildren([
-  pathRoute,
-  settingsRoute,
-  songsRoute,
-  pieceRoute,
-  playerRoute,
-  theoryRoute.addChildren([theoryIndexRoute, chordsRoute, scalesRoute, symbolsRoute, quizRoute]),
+  shellRoute.addChildren([
+    pathRoute,
+    settingsRoute,
+    songsRoute,
+    pieceRoute,
+    theoryRoute.addChildren([theoryIndexRoute, chordsRoute, scalesRoute, symbolsRoute, quizRoute]),
+  ]),
+  fullScreenRoute.addChildren([playerRoute]),
 ])
 
 export function createAppRouter(history?: RouterHistory) {

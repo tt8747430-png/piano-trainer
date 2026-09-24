@@ -1,5 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { safeLocalStorage } from '@/shared/lib'
@@ -25,9 +25,9 @@ async function open(path: string) {
 }
 
 describe('routes', () => {
-  it.each(ROUTES)('%s opens %s', async (path, routeId) => {
+  it.each(ROUTES)('%s opens %s', async (path, route) => {
     const router = await open(path)
-    expect(router.state.matches.at(-1)?.routeId).toBe(routeId)
+    expect(router.state.matches.at(-1)?.fullPath).toBe(route)
   })
 
   it('sends /theory to Chords', async () => {
@@ -126,5 +126,29 @@ describe('the app shell', () => {
     renderApp('/settings')
     await user.click(await screen.findByRole('radio', { name: 'Dark' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
+  })
+})
+
+describe('the Player', () => {
+  it('opens full-screen, without the main navigation', async () => {
+    renderApp('/play/bz5')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument()
+  })
+
+  it('goes back to where the learner came from', async () => {
+    const user = userEvent.setup()
+    const { router } = renderApp('/')
+    await screen.findByRole('heading', { level: 1, name: 'Path' })
+    await act(() => router.navigate({ to: '/play/$pieceId', params: { pieceId: 'bz5' } }))
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+  })
+
+  it('goes back to its song when it was opened directly', async () => {
+    const user = userEvent.setup()
+    const { router } = renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
   })
 })
