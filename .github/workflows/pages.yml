@@ -1,13 +1,15 @@
-# Checks the site and deploys it to GitHub Pages.
-# Pull requests only run the checks; pushes to main also deploy.
-name: Deploy to GitHub Pages
+# Serves the legacy single-file app (legacy/index.html) on GitHub Pages until the
+# new app takes production on Vercel (spec §11, Phase 4). Pull requests only run
+# the check; pushes to main also deploy.
+name: Deploy legacy app to GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths-ignore: ["**.md", "LICENSE"]
+    paths: ['legacy/**', '.github/workflows/pages.yml']
   pull_request:
     branches: [main]
+    paths: ['legacy/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -33,22 +35,19 @@ jobs:
         run: |
           node -e '
             const fs = require("fs");
-            const html = fs.readFileSync("index.html", "utf8");
+            const html = fs.readFileSync("legacy/index.html", "utf8");
             const re = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;
             let m, i = 0;
             while ((m = re.exec(html))) fs.writeFileSync(`${process.env.RUNNER_TEMP}/inline-${i++}.js`, m[1]);
-            if (!i) { console.error("No inline scripts found in index.html"); process.exit(1); }
+            if (!i) { console.error("No inline scripts found in legacy/index.html"); process.exit(1); }
             console.log(`Found ${i} inline script(s)`);
           '
           for f in "$RUNNER_TEMP"/inline-*.js; do node --check "$f"; done
 
       - name: Stage site files
-        # Publish only tracked site files, not repo tooling or docs.
         run: |
           mkdir _site
-          git ls-files -z \
-            | grep -zvE '^(\.github/|\.git|LICENSE$)|\.md$' \
-            | xargs -0 cp --parents -t _site
+          cp legacy/index.html _site/index.html
           echo "Publishing:" && find _site -type f | sort
 
       - name: Upload Pages artifact

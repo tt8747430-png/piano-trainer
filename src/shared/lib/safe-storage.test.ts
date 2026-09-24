@@ -1,0 +1,77 @@
+import { describe, expect, it, vi } from 'vitest'
+import { createMemoryStorage, safeLocalStorage } from './safe-storage'
+
+const blockWrites = () =>
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
+  })
+
+describe('safeLocalStorage', () => {
+  it('reads and writes the real localStorage when the browser allows it', () => {
+    const storage = safeLocalStorage()
+    storage.setItem('k', 'v')
+    expect(localStorage.getItem('k')).toBe('v')
+    expect(storage.getItem('k')).toBe('v')
+  })
+
+  it('falls back to memory when localStorage cannot be written at all', () => {
+    blockWrites()
+    const storage = safeLocalStorage()
+    storage.setItem('k', 'v')
+    expect(storage.getItem('k')).toBe('v')
+  })
+
+  it('loses a write instead of throwing when storage starts failing later', () => {
+    const storage = safeLocalStorage()
+    blockWrites()
+    expect(() => storage.setItem('k', 'v')).not.toThrow()
+    expect(storage.getItem('k')).toBeNull()
+  })
+
+  it('passes every Storage operation through to localStorage while it works', () => {
+    const storage = safeLocalStorage()
+    storage.setItem('a', '1')
+    storage.setItem('b', '2')
+    expect(storage.length).toBe(2)
+    expect([storage.key(0), storage.key(1)].sort()).toEqual(['a', 'b'])
+    storage.removeItem('a')
+    expect(localStorage.getItem('a')).toBeNull()
+    storage.clear()
+    expect(localStorage.length).toBe(0)
+  })
+
+  it('swallows a failing key, remove or clear instead of throwing', () => {
+    const storage = safeLocalStorage()
+    const denied = () => {
+      throw new DOMException('Access denied', 'SecurityError')
+    }
+    vi.spyOn(Storage.prototype, 'key').mockImplementation(denied)
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(denied)
+    vi.spyOn(Storage.prototype, 'clear').mockImplementation(denied)
+    expect(storage.key(0)).toBeNull()
+    expect(() => storage.removeItem('k')).not.toThrow()
+    expect(() => storage.clear()).not.toThrow()
+  })
+
+  it('answers null instead of throwing when a read fails', () => {
+    const storage = safeLocalStorage()
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Access denied', 'SecurityError')
+    })
+    expect(storage.getItem('k')).toBeNull()
+  })
+})
+
+describe('createMemoryStorage', () => {
+  it('behaves like Storage', () => {
+    const storage = createMemoryStorage()
+    storage.setItem('a', '1')
+    storage.setItem('b', '2')
+    expect(storage.length).toBe(2)
+    expect(storage.key(0)).toBe('a')
+    storage.removeItem('a')
+    expect(storage.getItem('a')).toBeNull()
+    storage.clear()
+    expect(storage.length).toBe(0)
+  })
+})
