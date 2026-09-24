@@ -75,7 +75,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}', '*.test.ts'],
     alias: {
       // vite-plugin-pwa's virtual module does not exist outside a Vite build.
-      'virtual:pwa-register/react': fromRoot('./src/shared/test/pwa-register-stub.ts'),
+      'virtual:pwa-register/react': fromRoot('./src/shared/test/pwa-register.ts'),
     },
     coverage: {
       provider: 'v8',

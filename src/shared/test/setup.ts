@@ -3,9 +3,11 @@ import { cleanup } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { i18n } from '@/shared/i18n'
 import { stubMatchMedia } from './match-media'
+import { stubServiceWorker } from './pwa-register'
 
 beforeEach(() => {
   stubMatchMedia({ dark: false })
+  stubServiceWorker({ waiting: false })
 })
 
 // `globals: false` means Testing Library cannot register its own cleanup.
