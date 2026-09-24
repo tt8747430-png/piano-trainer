@@ -1,0 +1,74 @@
+# Checks the site and deploys it to GitHub Pages.
+# Pull requests only run the checks; pushes to main also deploy.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "LICENSE"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deployment at a time and never cancel one mid-flight;
+# superseded pull request checks are cancelled.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pages-pr-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check inline scripts for syntax errors
+        run: |
+          node -e '
+            const fs = require("fs");
+            const html = fs.readFileSync("index.html", "utf8");
+            const re = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;
+            let m, i = 0;
+            while ((m = re.exec(html))) fs.writeFileSync(`${process.env.RUNNER_TEMP}/inline-${i++}.js`, m[1]);
+            if (!i) { console.error("No inline scripts found in index.html"); process.exit(1); }
+            console.log(`Found ${i} inline script(s)`);
+          '
+          for f in "$RUNNER_TEMP"/inline-*.js; do node --check "$f"; done
+
+      - name: Stage site files
+        # Publish only tracked site files, not repo tooling or docs.
+        run: |
+          mkdir _site
+          git ls-files -z \
+            | grep -zvE '^(\.github/|\.git|LICENSE$)|\.md$' \
+            | xargs -0 cp --parents -t _site
+          echo "Publishing:" && find _site -type f | sort
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
