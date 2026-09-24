@@ -8,10 +8,20 @@ import globals from 'globals'
 
 // Feature-Sliced Design: a layer imports from its own layer or the layers below it.
 const FSD_LAYERS = ['app', 'pages', 'widgets', 'features', 'entities', 'shared']
-const fsdDependencyRules = FSD_LAYERS.map((from) => ({
-  from: { type: from },
-  allow: FSD_LAYERS.slice(FSD_LAYERS.indexOf(from)).map((type) => ({ to: { type } })),
-}))
+const SLICED_LAYERS = ['pages', 'widgets', 'features', 'entities']
+const fsdDependencyRules = [
+  ...FSD_LAYERS.map((from) => ({
+    from: { type: from },
+    allow: FSD_LAYERS.slice(FSD_LAYERS.indexOf(from)).map((type) => ({ to: { type } })),
+  })),
+  // Another slice only through its index.ts, whatever the import path (boundaries does not check a
+  // slice's imports of its own files). Rules are last-match-wins, so this narrows the ones above.
+  {
+    disallow: { to: { type: SLICED_LAYERS, internalPath: '!index.ts' } },
+    message:
+      'Import another slice through its index.ts (e.g. @/entities/settings), never a deep path. See CLAUDE.md → Architecture.',
+  },
+]
 
 export default defineConfig(
   globalIgnores([
@@ -63,18 +73,6 @@ export default defineConfig(
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-      ],
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['@/pages/*/**', '@/widgets/*/**', '@/features/*/**', '@/entities/*/**'],
-              message:
-                'Import another slice through its index.ts (e.g. @/entities/settings), never a deep path. See CLAUDE.md → Architecture.',
-            },
-          ],
-        },
       ],
       'boundaries/dependencies': ['error', { default: 'disallow', rules: fsdDependencyRules }],
     },

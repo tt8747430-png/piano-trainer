@@ -47,9 +47,9 @@ One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest ru
 
 ## Architecture — FSD (lint-enforced)
 
-`app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above
-(`eslint-plugin-boundaries`). Another slice only through its `index.ts` (`no-restricted-imports` refuses deep paths;
-`src/app/architecture.test.ts` proves both). `@` → `src`.
+`app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above; another
+slice only through its `index.ts`, by alias or relative path alike. `eslint-plugin-boundaries` enforces both, and
+`src/app/architecture.test.ts` proves it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`),
   `App.tsx` (the provider stack), `providers/` (`LocaleSync`, `ThemeProvider`, `UpdatePrompt`), `RouteError`,
