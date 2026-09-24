@@ -13,8 +13,10 @@ afterEach(async () => {
   cleanup()
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
+  await i18n.changeLanguage('en')
+  // Tests in the node environment (`@vitest-environment node`) have no DOM to reset.
+  if (typeof document === 'undefined') return
   localStorage.clear()
   delete document.documentElement.dataset.theme
   document.documentElement.lang = 'en'
-  await i18n.changeLanguage('en')
 })
