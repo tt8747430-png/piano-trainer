@@ -1,15 +1,26 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
 import { Button } from './button'
 
 describe('Button', () => {
-  it('renders a button painted from the primary role by default', () => {
-    render(<Button>Play</Button>)
-    expect(screen.getByRole('button', { name: 'Play' }).className).toContain('bg-primary')
+  it('is a button that reports a press', async () => {
+    const onClick = vi.fn()
+    const user = userEvent.setup()
+    render(<Button onClick={onClick}>Play</Button>)
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(onClick).toHaveBeenCalledOnce()
   })
 
-  it('takes its look from a variant, not from ad-hoc classes', () => {
-    render(<Button variant="ghost">Later</Button>)
-    expect(screen.getByRole('button', { name: 'Later' }).className).not.toContain('bg-primary')
+  it('ignores presses while disabled', async () => {
+    const onClick = vi.fn()
+    const user = userEvent.setup()
+    render(
+      <Button disabled onClick={onClick}>
+        Play
+      </Button>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(onClick).not.toHaveBeenCalled()
   })
 })

@@ -11,9 +11,7 @@ export function RouteError({ reload = () => window.location.reload() }: RouteErr
   return (
     <div role="alert">
       <ScreenTitle>{t('errors.title')}</ScreenTitle>
-      <Button className="min-h-11" onClick={reload}>
-        {t('errors.reload')}
-      </Button>
+      <Button onClick={reload}>{t('errors.reload')}</Button>
     </div>
   )
 }

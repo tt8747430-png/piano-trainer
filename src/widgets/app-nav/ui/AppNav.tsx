@@ -14,7 +14,7 @@ export function AppNav() {
   return (
     <nav
       aria-label={t('nav.label')}
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] lg:top-0 lg:right-auto lg:w-24 lg:border-t-0 lg:border-r lg:pt-4"
+      className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-card pb-safe lg:top-0 lg:right-auto lg:w-24 lg:border-t-0 lg:border-r lg:pt-4"
     >
       <ul className="flex lg:flex-col lg:gap-2">
         {ITEMS.map(({ to, label, icon: Icon, exact }) => (

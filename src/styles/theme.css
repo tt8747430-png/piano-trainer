@@ -2,9 +2,6 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme inline {
-  --font-sans:
-    'Bricolage Grotesque Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -60,6 +57,14 @@
     outline: 3px solid var(--color-ring);
     outline-offset: 2px;
   }
+}
+
+/* Clear the notch and the home indicator: named utilities, not arbitrary values in markup. */
+@utility pt-safe {
+  padding-top: max(--spacing(4), env(safe-area-inset-top));
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @media (prefers-reduced-motion: reduce) {
