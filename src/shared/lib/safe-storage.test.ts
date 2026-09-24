@@ -28,6 +28,31 @@ describe('safeLocalStorage', () => {
     expect(storage.getItem('k')).toBeNull()
   })
 
+  it('passes every Storage operation through to localStorage while it works', () => {
+    const storage = safeLocalStorage()
+    storage.setItem('a', '1')
+    storage.setItem('b', '2')
+    expect(storage.length).toBe(2)
+    expect([storage.key(0), storage.key(1)].sort()).toEqual(['a', 'b'])
+    storage.removeItem('a')
+    expect(localStorage.getItem('a')).toBeNull()
+    storage.clear()
+    expect(localStorage.length).toBe(0)
+  })
+
+  it('swallows a failing key, remove or clear instead of throwing', () => {
+    const storage = safeLocalStorage()
+    const denied = () => {
+      throw new DOMException('Access denied', 'SecurityError')
+    }
+    vi.spyOn(Storage.prototype, 'key').mockImplementation(denied)
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(denied)
+    vi.spyOn(Storage.prototype, 'clear').mockImplementation(denied)
+    expect(storage.key(0)).toBeNull()
+    expect(() => storage.removeItem('k')).not.toThrow()
+    expect(() => storage.clear()).not.toThrow()
+  })
+
   it('answers null instead of throwing when a read fails', () => {
     const storage = safeLocalStorage()
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
