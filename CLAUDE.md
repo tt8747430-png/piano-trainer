@@ -52,21 +52,25 @@ slice only through its `index.ts`, by alias or relative path alike. `eslint-plug
 `src/app/architecture.test.ts` proves it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`),
-  `App.tsx` (the provider stack), `providers/` (`LocaleSync`, `ThemeProvider`, `UpdatePrompt`), `RouteError`,
-  layouts. From Phase 2, `composition-root.ts` → `createServices()` (audio + MIDI).
+  `App.tsx` (the provider stack), `providers/` (`LocaleSync`, `ThemeProvider`), the layouts (`RootLayout`;
+  `ShellLayout` → `AppShell` for screens with the main navigation; `FullScreenLayout` for the Player;
+  `TheoryLayout`), `update-prompt/`, `RouteError`, `testing/`. From Phase 2, `composition-root.ts` →
+  `createServices()` (audio + MIDI).
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `theory-nav`).
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
   `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
   `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `index.ts`.
-- **shared/**: `lib` (`cn`, `safeLocalStorage`, `createStoreContext`; from Phase 2 `music`, `arrangement`,
-  `schedule`, `services`), `api` (ports + adapters), `ui` (design system; shadcn in `ui/primitives`), `i18n`, `test`.
+- **shared/**: `lib` (`cn`, `safeLocalStorage`, `createStoreContext`, `useMediaQuery`; from Phase 2 `music`,
+  `arrangement`, `schedule`, `services`), `config` (`THEME_COLORS`), `api` (ports + adapters), `ui` (design
+  system; shadcn in `ui/primitives`), `i18n`, `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
 **Theme:** `index.html`'s `#theme-boot` script paints `data-theme` before first paint from `pt-settings`;
-`ThemeProvider` keeps it. `src/app/theme-boot.test.ts` holds the two together.
+`ThemeProvider` keeps it and colours the browser toolbar from `THEME_COLORS`. `src/app/theme-boot.test.ts` holds
+the script to the store.
 
 ## Read before you touch
 
@@ -81,9 +85,11 @@ else → component state.
 - Strict TS: `noUncheckedIndexedAccess`, `noUnusedLocals/Parameters`, `verbatimModuleSyntax` → `import type`.
   No `any`.
 - Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
-  Setup: `src/shared/test/setup.ts` (jest-dom, a light `matchMedia` stub, cleanup, English). A test that needs no
-  DOM opts into `// @vitest-environment node`. Whole-app tests: `renderApp(path, { locale })` from
-  `src/app/testing/render-app.tsx`. OS theme: `stubMatchMedia`.
+  Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
+  scheme, `stubServiceWorker` for a waiting version). Only a test the DOM gets in the way of opts into
+  `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
+  `renderWithSettings(ui, { locale, theme })`; the whole app: `renderApp(path, { locale })`; both in
+  `src/app/testing/`.
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
   so a missing key fails `tsc`.

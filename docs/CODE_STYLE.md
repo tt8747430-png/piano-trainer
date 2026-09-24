@@ -62,7 +62,11 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`). A coloured key always also shows its
   degree or finger label, so colour is never the only cue.
 - Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
-  `aria-label`. Minimum target 44px (`min-h-11`, `size-11`).
+  `aria-label`. Minimum target 44px (`min-h-11`, `size-11`); every `Button` size already meets it, so the CLI's
+  smaller sizes are removed from `ui/primitives/button.tsx`.
+- Clear the notch and the home indicator with `pt-safe` / `pb-safe` (`theme.css`), not arbitrary values.
+- Colours CSS cannot reach (the browser toolbar, the manifest) come from `THEME_COLORS` (`shared/config`), which a
+  test holds to `--background`: a repaint changes `tokens.css` and `THEME_COLORS` together.
 - Mobile-first: the base style is the phone; layer up with `sm:` and `lg:`.
 - Motion animates `transform` and `opacity` only, and must mean something. `prefers-reduced-motion` is honoured
   globally in `theme.css`.
@@ -81,8 +85,9 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
   `matchMedia`).
 - Never define a component inside a component. Hoist static JSX and lookup maps to module scope.
 - `memo` deliberately: a list row under a busy parent, with stable props.
-- Every screen is a lazy route (`lazyRouteComponent` over an `app/routes/*-screens.ts` module, one chunk each), so
-  the first paint carries only the shell.
+- Every route's screen is lazy (`lazyRouteComponent` over an `app/routes/*-screens.ts` module; each module is one
+  chunk of the screens that load together), so the first paint carries only the shell. The fallback screens (not
+  found, `RouteError`) stay eager: they must render even when a chunk fails to load.
 - A ternary, not `cond && <X />` (a `0` renders).
 - `startTransition` or `useDeferredValue` for expensive, non-urgent updates (search, filters).
 
@@ -102,9 +107,10 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
 - **Test first** (`tdd` skill). A test names behaviour a learner or caller can observe ("saves a new language"),
   not an implementation detail.
 - Components: Testing Library, by role and accessible name; `userEvent.setup()` for interaction. No snapshots.
-- Ports are replaced by **fakes** (`createMemoryStorage()`, from Phase 2 `FakeAudio` and `FakeMidi`), not by
-  mocking modules.
-- Whole-app behaviour: `renderApp(path, { locale })` from `src/app/testing/render-app.tsx`.
+- Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`; from Phase 2
+  `FakeAudio` and `FakeMidi`), not by mocking modules.
+- A component under the settings store: `renderWithSettings(ui, { locale, theme })`; whole-app behaviour:
+  `renderApp(path, { locale })`; both in `src/app/testing/`.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
 
 ## 10. Copy and i18n

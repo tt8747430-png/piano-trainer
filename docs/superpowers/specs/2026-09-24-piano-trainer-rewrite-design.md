@@ -109,7 +109,7 @@ src/
     api/audio/        AudioOutput port, WebAudio adapter, fake
     api/midi/         MidiInput port, Web MIDI adapter, fake
     ui/               design system: shadcn primitives, PianoKeyboard, AppScreen, Sheet, …
-    i18n/             i18next setup + locales/{en,ru}/<namespace>.json + localText()
+    i18n/             i18next setup + locales/{en,ru}/<namespace>.ts + localText()
     config/  test/
 ```
 
@@ -377,8 +377,8 @@ carried over (the copy rule of §8).
   Example: `/theory/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=turn`.
 - **Saved stores** (zustand `persist` → `localStorage`, each with a `version` and a `migrate`, so future changes to
   their shape keep learners' progress):
-  - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: from
-    `navigator.language`), `practice: { fingerNumbers, melody, metronome, countIn }`,
+  - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: the first of
+    `navigator.languages` the app speaks, else English), `practice: { fingerNumbers, melody, metronome, countIn }`,
     `quiz: { families: ChordFamily[], scales: ScaleKind[] }`.
   - `progress` (`pt-progress`): `learned: Record<StepId, isoDate>`, `lastPractised: { pieceId, at } | null`,
     `answers: Record<SkillId, { correct: boolean; at: isoDate }[]>` (the last 5 per skill),

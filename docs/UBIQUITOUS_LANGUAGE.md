@@ -51,7 +51,7 @@ differently, the UI column says how.
 | **Level**    | 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced: a Step's place on the Path        | difficulty, grade         |
 | **Path**     | Every Step in order, level by level; the one source of levels                              | course, curriculum        |
 | **Step**     | One entry on the Path: a Piece, a chord family or a scale kind (`piece:bz5`, `chords:sev`) | lesson, item, task        |
-| **Learned**  | A Step the learner marked, or that marked itself after a passed Check                      | done, completed, mastered |
+| **Learned**  | A Step the learner marked, or a chord or scale Step marked once every Skill in it is Known | done, completed, mastered |
 | **Continue** | The one suggestion on the Path screen: what to do next                                     | resume, next up           |
 
 ## Theory gaps
@@ -62,7 +62,10 @@ differently, the UI column says how.
 | **Evidence**              | The last 5 quiz answers on a Skill                                                            | history, attempts   |
 | **Known / Gap / Unknown** | A Skill's rating: 4 of the last 5 right including the latest / tried, not known / never tried | mastered, weak, new |
 | **Check**                 | A short quiz scoped to some Skills (a Piece's chords, a Step's family)                        | test, exam          |
-| **My gaps**               | The quiz mode that asks Gap Skills first                                                      | review, weak spots  |
+| **Build chord**           | The quiz mode that names a chord for the learner to play                                      | exercise, drill     |
+| **Name chord**            | The quiz mode that plays a chord for the learner to name                                      | exercise, drill     |
+| **Build scale**           | The quiz mode that names a scale for the learner to play                                      | exercise, drill     |
+| **My gaps**               | The quiz scope that asks Gap Skills first, then Unknown Skills from Pieces the learner opened | review, weak spots  |
 
 ## Settings and app
 
