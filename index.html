@@ -3,7 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#22314f" />
     <title>Piano Trainer</title>
+    <script id="theme-boot">
+      ;(function () {
+        // Paint the saved theme before first paint, so a dark-mode learner never sees a white
+        // flash. Mirrors resolveTheme (src/app/providers/resolve-theme.ts) and reads what
+        // createSettingsStore saves under 'pt-settings'; src/app/theme-boot.test.ts holds them.
+        var theme = 'system'
+        try {
+          var saved = JSON.parse(localStorage.getItem('pt-settings') || 'null')
+          var chosen = saved && saved.state && saved.state.theme
+          if (chosen === 'light' || chosen === 'dark') theme = chosen
+        } catch (_) {}
+        if (theme === 'system') {
+          try {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          } catch (_) {
+            theme = 'light'
+          }
+        }
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
