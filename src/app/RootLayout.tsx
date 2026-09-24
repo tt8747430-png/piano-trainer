@@ -1,5 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import { AppNav } from '@/widgets/app-nav'
+import { UpdatePrompt } from './providers/UpdatePrompt'
 
 export function RootLayout() {
   return (
@@ -8,6 +9,7 @@ export function RootLayout() {
         <Outlet />
       </main>
       <AppNav />
+      <UpdatePrompt />
     </>
   )
 }
