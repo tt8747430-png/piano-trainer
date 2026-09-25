@@ -1,6 +1,6 @@
 import { useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { ScreenTitle } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 import { BackButton } from './BackButton'
 
 export function PlayerPage() {
@@ -8,10 +8,7 @@ export function PlayerPage() {
   const { pieceId } = useParams({ from: '/full-screen/play/$pieceId' })
   return (
     <>
-      <div className="flex items-start gap-1">
-        <BackButton pieceId={pieceId} />
-        <ScreenTitle>{t('title')}</ScreenTitle>
-      </div>
+      <ScreenHeader title={t('title')} back={<BackButton pieceId={pieceId} />} />
       <p className="text-muted-foreground">{pieceId}</p>
     </>
   )

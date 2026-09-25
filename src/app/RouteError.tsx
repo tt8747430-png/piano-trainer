@@ -1,7 +1,7 @@
 import type { ErrorComponentProps } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
-import { ScreenTitle } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 
 type RouteErrorProps = Partial<ErrorComponentProps> & { reload?: () => void }
 
@@ -10,7 +10,7 @@ export function RouteError({ reload = () => window.location.reload() }: RouteErr
   const { t } = useTranslation('common')
   return (
     <div role="alert">
-      <ScreenTitle>{t('errors.title')}</ScreenTitle>
+      <ScreenHeader title={t('errors.title')} />
       <Button onClick={reload}>{t('errors.reload')}</Button>
     </div>
   )

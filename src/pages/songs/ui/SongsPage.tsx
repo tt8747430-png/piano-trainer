@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { ScreenTitle } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 
 export function SongsPage() {
   const { t } = useTranslation('songs')
-  return <ScreenTitle>{t('title')}</ScreenTitle>
+  return <ScreenHeader title={t('title')} />
 }

@@ -10,7 +10,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setLocale, setTheme } from '@/features/set-preference'
-import { ScreenTitle } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 import { ChoiceGroup } from './ChoiceGroup'
 
 const LOCALE_LABEL = {
@@ -32,7 +32,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <ScreenTitle>{t('title')}</ScreenTitle>
+      <ScreenHeader title={t('title')} />
       <div className="flex flex-col gap-6">
         <ChoiceGroup
           legend={t('language.label')}

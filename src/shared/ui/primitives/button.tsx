@@ -26,8 +26,9 @@ const buttonVariants = cva(
         default:
           'h-11 gap-2 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
         lg: 'h-12 gap-2 px-5 text-base has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
-        icon: 'size-11',
-        'icon-lg': 'size-12',
+        // Icons in icon-only buttons are 20px (spec §2.3); text buttons keep 16px beside the label.
+        icon: "size-11 [&_svg:not([class*='size-'])]:size-5",
+        'icon-lg': "size-12 [&_svg:not([class*='size-'])]:size-5",
         pill: 'h-14 gap-2 rounded-full px-6 text-lg has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5',
         // The Player's one round Play/Stop, 72px.
         play: "size-18 rounded-full [&_svg:not([class*='size-'])]:size-7",

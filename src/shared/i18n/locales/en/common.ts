@@ -11,4 +11,21 @@ export const common = {
   errors: { title: 'Something went wrong', reload: 'Reload' },
   notFound: { title: 'Page not found', toSongs: 'Go to Songs' },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
+  close: 'Close',
+  level: 'Level {{level}}',
+  levelName: { 1: 'Beginner', 2: 'Elementary', 3: 'Intermediate', 4: 'Advanced' },
+  rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
+  roles: {
+    root: 'Root',
+    '3rd': '3rd',
+    '5th': '5th',
+    '7th': '7th',
+    '9th': '9th',
+    '11th': '11th',
+    '13th': '13th',
+  },
+  hands: { both: 'Both hands', rh: 'Right hand', lh: 'Left hand' },
+  // A piano key's name: its note and octave.
+  note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
+  keyboard: 'Keyboard',
 } as const
