@@ -1,6 +1,6 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
-import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
+import type { Audible, Hands } from '@/shared/lib/schedule'
 
 /** Listen: the app plays. Step: the learner moves through it. Your turn: the app waits for the notes. */
 export const PRACTICE_MODES = ['listen', 'step', 'turn'] as const
@@ -44,7 +44,12 @@ export type PracticeEvent =
   | { readonly type: 'restart' }
 
 /** The hands Your turn waits for: the audible ones, never the doubled tune. */
-export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), melody: false })
+const PRACTISED: Readonly<Record<Hands, Audible>> = {
+  both: { rh: true, lh: true, melody: false },
+  rh: { rh: true, lh: false, melody: false },
+  lh: { rh: false, lh: true, melody: false },
+}
+export const practisedHands = (hands: Hands): Audible => PRACTISED[hands]
 
 /** What the app plays in Your turn: the hands not practised, and the tune. */
 export function accompanyingHands(hands: Hands): Audible {

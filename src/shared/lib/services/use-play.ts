@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { PLAY_DELAY } from '@/shared/api/audio'
-import { placeChord, type Chord } from '@/shared/lib/music'
-import { chordSounds, type Sound } from '@/shared/lib/schedule'
+import { placeChord, type Chord, type Midi } from '@/shared/lib/music'
+import { chordSounds, keySound, type Sound } from '@/shared/lib/schedule'
 import { useServices } from './use-services'
 
 /**
@@ -17,6 +17,18 @@ export function usePlay(): (sounds: readonly Sound[]) => number {
       const at = audio.now() + PLAY_DELAY
       audio.play(sounds, at)
       return at
+    },
+    [audio],
+  )
+}
+
+/** Sounds one key on top of whatever sounds: a tap on the keyboard never cuts anything off. */
+export function useSoundKey(): (key: Midi) => void {
+  const { audio } = useServices()
+  return useCallback(
+    (key) => {
+      void audio.unlock()
+      audio.play([keySound(key)])
     },
     [audio],
   )

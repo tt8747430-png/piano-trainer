@@ -11,6 +11,7 @@ import {
   CHORD_QUALITIES,
   chordRootSpelling,
   lastInversion,
+  note,
   noteParam,
   pitchClassOf,
   SCALE_KINDS,
@@ -56,7 +57,7 @@ export function validateSongsSearch(input: Input<SongsFilter>): SongsFilter {
 export type ChordsStepId = `chords:${ChordFamily}`
 export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = {
-  root: 'C',
+  root: noteParam(note('C')),
   quality: 'maj',
   inversion: 0,
   hands: 'rh',
@@ -81,7 +82,7 @@ export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
 export type ScaleStepId = `scale:${ScaleKind}`
 export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
-  root: 'C',
+  root: noteParam(note('C')),
   kind: 'major',
   view: 'degrees',
   rhythm: 'even',

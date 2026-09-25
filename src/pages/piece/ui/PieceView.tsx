@@ -3,19 +3,23 @@ import { Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, useSectionHeading, type Piece } from '@/entities/piece'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import { LearnedToggle } from '@/features/mark-learned'
-import { arrangePiece, ownChoice } from '@/features/practice'
+import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
-import { ButtonLink } from '@/shared/ui'
+import { ButtonLink, Pinned } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceSkills } from '@/widgets/piece-skills'
 import { PieceFacts } from './PieceFacts'
 
-/** A piece with a chart: its facts, its chords, the chart to tap and hear, Practise and the learned toggle. */
+/**
+ * A piece with a chart: its facts, Practise and the learned toggle, its chords, and the chart to
+ * tap and hear, under a pinned keyboard that shows what sounds.
+ */
 export function PieceView({ piece }: { piece: Piece }) {
-  const { t } = useTranslation('piece')
+  const { t } = useTranslation(['piece', 'common'])
   const heading = useSectionHeading()
   const play = usePlay()
   const locale = useLocale()
@@ -34,7 +38,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />}
         >
           <Play data-icon="inline-start" />
-          {t('practise')}
+          {t('piece:practise')}
         </ButtonLink>
         <LearnedToggle
           step={`piece:${piece.id}`}
@@ -44,7 +48,14 @@ export function PieceView({ piece }: { piece: Piece }) {
       </div>
       <PieceSkills piece={piece} performance={performance} />
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-bold">{t('chart')}</h2>
+        <h2 className="text-xl font-bold">{t('piece:chart')}</h2>
+        <Pinned>
+          <LiveKeyboard
+            label={t('common:keyboard')}
+            range={playerRange(performance)}
+            className="h-32"
+          />
+        </Pinned>
         <ChordChart
           performance={performance}
           headings={headings}

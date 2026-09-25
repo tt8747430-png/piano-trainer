@@ -27,9 +27,22 @@ const SUBDIVISIONS: Readonly<Record<number, string>> = {
   8: '⅔',
 }
 
+/** The beat, from 0, that a tick so far into its bar falls on. */
+const beatAt = (ticksIntoBar: number): number => Math.floor(ticksIntoBar / TICKS_PER_BEAT)
+
 export function beatLabel(ticksIntoBar: number): string {
-  const beat = Math.floor(ticksIntoBar / TICKS_PER_BEAT) + 1
-  return `${beat}${SUBDIVISIONS[ticksIntoBar % TICKS_PER_BEAT] ?? '·'}`
+  return `${beatAt(ticksIntoBar) + 1}${SUBDIVISIONS[ticksIntoBar % TICKS_PER_BEAT] ?? '·'}`
+}
+
+/** The beat a beat group falls on, from 0, and how many beats its bar has (a short bar's rounded up). */
+export function beatInBar(
+  performance: Performance,
+  beatGroup: number,
+): { beat: number; beats: number } | null {
+  const group = performance.beatGroups[beatGroup]
+  const bar = group ? performance.bars[group.bar] : undefined
+  if (!group || !bar) return null
+  return { beat: beatAt(group.tick - bar.startTick), beats: Math.ceil(bar.beats) }
 }
 
 /** The note grid: each beat group of a bar, its notes high to low by hand. */

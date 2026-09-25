@@ -1,10 +1,11 @@
-import { useCanGoBack, useRouter, useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pathSteps, useStepTitle } from '@/entities/path'
 import { useProgressStoreApi } from '@/entities/progress'
 import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
+import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
 import { QuizBoard } from '@/widgets/quiz-board'
@@ -12,8 +13,7 @@ import { CheckResult } from './CheckResult'
 
 function CheckFlow({ plan }: { plan: CheckPlan }) {
   const { t } = useTranslation(['quiz', 'common'])
-  const router = useRouter()
-  const canGoBack = useCanGoBack()
+  const navigate = useNavigate()
   const store = useProgressStoreApi()
   const stepTitle = useStepTitle()
   const step = pathSteps().find((s) => s.id === plan.of)
@@ -23,7 +23,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
     () => plan.marks !== null && store.getState().learned[plan.marks] !== undefined,
   )
   const [done, setDone] = useState(false)
-  const close = () => (canGoBack ? router.history.back() : void router.navigate({ to: '/' }))
+  const close = useGoBack(() => void navigate({ to: '/' }))
   const answered = quiz.state.asked - (quiz.state.result ? 0 : 1)
 
   return (
@@ -50,7 +50,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
           onDone={close}
         />
       ) : (
-        <QuizBoard quiz={quiz} onDone={() => setDone(true)} />
+        <QuizBoard quiz={quiz} onFinish={() => setDone(true)} />
       )}
     </div>
   )

@@ -5,6 +5,7 @@ import {
   audibleHands,
   beatGroupSounds,
   schedule,
+  TEMPO_RANGE,
   untilNextBeatGroup,
   type NoteSound,
   type Sound,
@@ -158,5 +159,11 @@ describe('a tempo', () => {
   it.each([0, -60, Number.NaN])('refuses %s', (tempo) => {
     expect(() => schedule(perform('C'), { tempo, hands: ALL })).toThrow(RangeError)
     expect(() => untilNextBeatGroup(perform('C'), 0, { tempo })).toThrow(RangeError)
+  })
+})
+
+describe('TEMPO_RANGE', () => {
+  it('runs from 40 to 160 beats per minute', () => {
+    expect(TEMPO_RANGE).toEqual({ min: 40, max: 160 })
   })
 })

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
 import { pitchClass } from '@/shared/lib/music'
+import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { playerRange, practiceMarks } from './marks'
 import { spellPerformedNote } from './note-names'
@@ -9,9 +10,24 @@ const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
 const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'M1' })
 
+const BOTH = audibleHands('both')
+
 describe('practiceMarks', () => {
+  it('marks only the hands asked for', () => {
+    const group = performance.beatGroups[0]
+    const played = (group?.notes ?? []).map((index) => performance.notes[index])
+    const left = played.filter((n) => n?.hand === 'lh').map((n) => n?.midi)
+    expect(left.length).toBeGreaterThan(0)
+    const marks = practiceMarks(performance, 0, {
+      hands: { rh: false, lh: true, melody: false },
+      fingers: false,
+    })
+    expect([...marks.keys()].sort()).toEqual([...left].sort())
+    expect([...marks.values()].every((mark) => mark.tone === 'lh')).toBe(true)
+  })
+
   it('marks the beat group’s notes by hand, labelled with note names', () => {
-    const marks = practiceMarks(performance, 0, { fingers: false })
+    const marks = practiceMarks(performance, 0, { hands: BOTH, fingers: false })
     const group = performance.beatGroups[0]
     expect(marks.size).toBeGreaterThan(0)
     for (const index of group?.notes ?? []) {
@@ -28,6 +44,7 @@ describe('practiceMarks', () => {
     const first = performance.notes[group?.notes[0] ?? -1]
     if (!first) throw new Error('empty group')
     const marks = practiceMarks(performance, 0, {
+      hands: BOTH,
       fingers: false,
       received: [pitchClass(first.midi)],
     })

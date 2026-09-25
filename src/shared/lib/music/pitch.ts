@@ -6,6 +6,11 @@ export type Midi = number & { readonly __brand: 'Midi' }
 
 export const pitchClass = (n: number): PitchClass => (((n % 12) + 12) % 12) as PitchClass
 
+/** The 12 notes from C: a row of roots or tonics to choose from. */
+export const PITCH_CLASSES: readonly PitchClass[] = Array.from({ length: 12 }, (_, n) =>
+  pitchClass(n),
+)
+
 export function midi(n: number): Midi {
   if (!Number.isInteger(n) || n < 0 || n > 127) {
     throw new RangeError(`A MIDI note is a whole number 0–127, not ${n}`)

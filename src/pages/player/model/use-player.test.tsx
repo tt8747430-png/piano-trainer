@@ -6,7 +6,7 @@ import { pieceById } from '@/entities/piece'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createMemoryStorage } from '@/shared/lib'
-import { midi } from '@/shared/lib/music'
+import { note, noteParam } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import type { PlayerSearch } from './player-search'
 import { usePlayer } from './use-player'
@@ -42,21 +42,37 @@ describe('usePlayer', () => {
   })
 
   it('arranges the piece in the key the URL names', () => {
-    const { result } = setup({ hands: 'both', mode: 'listen', key: 'A' })
+    const { result } = setup({ hands: 'both', mode: 'listen', key: noteParam(note('A')) })
     expect(result.current.performance.chords[0]?.symbol).toBe('A')
   })
 
   it('writes a Setup change to the URL, leaving out the piece’s own choice', () => {
-    const { result, setSearch } = setup({ hands: 'both', mode: 'listen', key: 'A' })
-    act(() => result.current.change({ key: 'G' }))
+    const { result, setSearch } = setup({ hands: 'both', mode: 'listen', key: noteParam(note('A')) })
+    act(() => result.current.change({ key: noteParam(note('G')) }))
     expect(setSearch).toHaveBeenLastCalledWith({ key: undefined })
     act(() => result.current.setMode('step'))
     expect(setSearch).toHaveBeenLastCalledWith({ mode: 'step' })
   })
 
-  it('sounds a tapped key outside Your turn', () => {
-    const { result, audio } = setup({ hands: 'both', mode: 'step' })
-    act(() => result.current.tapKey(midi(60)))
-    expect(audio.played).toHaveLength(1)
+  it('marks the hands the learner hears', () => {
+    const { result } = setup({ hands: 'lh', mode: 'listen' })
+    const tones = [...result.current.marks.values()].map((mark) => mark.tone)
+    expect(tones.length).toBeGreaterThan(0)
+    expect(tones.every((tone) => tone === 'lh')).toBe(true)
+  })
+
+  it('keeps the marked keys in view', () => {
+    const { result } = setup({ hands: 'both', mode: 'step' })
+    const keys = [...result.current.marks.keys()]
+    expect(result.current.inView).toEqual({ from: Math.min(...keys), to: Math.max(...keys) })
+  })
+
+  it('takes a tapped key as an answer in Your turn, and leaves the sound to the keyboard', () => {
+    const { result, audio } = setup({ hands: 'both', mode: 'turn' })
+    const [key] = result.current.marks.keys()
+    if (key === undefined) throw new Error('nothing to play')
+    act(() => result.current.tapKey(key))
+    expect(result.current.practice.state.received).toContain(key % 12)
+    expect(audio.played.flatMap((play) => play.sounds)).toEqual([])
   })
 })

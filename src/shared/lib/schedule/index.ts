@@ -3,6 +3,7 @@ export {
   audibleHands,
   beatGroupSounds,
   schedule,
+  TEMPO_RANGE,
   untilNextBeatGroup,
   type Audible,
   type ClickSound,
@@ -16,10 +17,10 @@ export {
 export {
   barSounds,
   chordSounds,
+  keySound,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
   scaleRun,
-  type KeyCue,
   type PracticeRhythm,
-  type ScaleRun,
 } from './sounds'
+export { keysSoundingAt, keyWindows, type KeyWindow } from './sounding'

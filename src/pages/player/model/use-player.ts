@@ -2,11 +2,11 @@ import { useCallback, useEffect, useMemo } from 'react'
 import type { Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
-import { useHeldKeys } from '@/features/connect-midi'
 import {
   arrangePiece,
   playerRange,
   practiceMarks,
+  practisedHands,
   usePractice,
   type Practice,
   type PracticeChoice,
@@ -14,8 +14,8 @@ import {
 } from '@/features/practice'
 import { recordPractised } from '@/features/record-practised'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { KeyRange, Midi } from '@/shared/lib/music'
-import { audibleHands, beatGroupSounds, chordSounds } from '@/shared/lib/schedule'
+import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
+import { audibleHands, beatGroupSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
 import type { KeyMark } from '@/shared/ui'
 import type { SetupChange } from '@/widgets/player-setup'
@@ -28,16 +28,19 @@ export interface Player {
   readonly range: KeyRange
   readonly tempo: number
   readonly practice: Practice
-  /** The current beat group's keys, by hand, labelled with fingers or note names. */
+  /**
+   * The current beat group's keys in the hands heard (in Your turn, the hands practised), by hand,
+   * labelled with fingers or note names.
+   */
   readonly marks: ReadonlyMap<Midi, KeyMark>
-  /** Keys held down on the MIDI keyboard. */
-  readonly held: ReadonlySet<Midi>
+  /** The marked keys, for the keyboard to keep in sight. */
+  readonly inView: KeyRange | undefined
   readonly feedback: TurnFeedback | null
   change(change: SetupChange): void
   setMode(mode: PracticeMode): void
   /** Your turn's "Hear these notes": the current beat group, both hands. */
   hear(): void
-  /** A key tapped on the screen: an answer in Your turn, its sound in Listen and Step. */
+  /** A key tapped on the screen: an answer in Your turn. The keyboard sounds every tap itself. */
   tapKey(key: Midi): void
 }
 
@@ -49,7 +52,6 @@ export function usePlayer(
 ): Player {
   const toggles = useSettings(selectPractice)
   const progress = useProgressStoreApi()
-  const held = useHeldKeys()
   const play = usePlay()
   const { key, pattern, rh, lh, voicing } = search
   const choice = useMemo(
@@ -71,21 +73,23 @@ export function usePlayer(
   const { state, press } = practice
   const turn = state.mode === 'turn'
   const received = turn ? state.received : undefined
+  const hands = turn ? practisedHands(search.hands) : audibleHands(search.hands)
   // Stable while the beat group is, so the keyboard's memoised keys re-render only when theirs change.
   const marks = useMemo(
     () =>
       practiceMarks(performance, state.beatGroup, {
+        hands,
         fingers: toggles.fingerNumbers,
         ...(received ? { received } : {}),
       }),
-    [performance, state.beatGroup, toggles.fingerNumbers, received],
+    [performance, state.beatGroup, hands, toggles.fingerNumbers, received],
   )
+  const inView = useMemo(() => rangeOf([...marks.keys()]), [marks])
   const tapKey = useCallback(
     (tapped: Midi) => {
       if (turn) press(tapped)
-      else play(chordSounds([tapped], { arpeggio: false }))
     },
-    [turn, press, play],
+    [turn, press],
   )
 
   return {
@@ -95,7 +99,7 @@ export function usePlayer(
     tempo,
     practice,
     marks,
-    held,
+    inView,
     feedback: turnFeedback(performance, state),
     change: (setup) => setSearch(searchPatch(piece, setup)),
     setMode: (mode) => setSearch({ mode }),

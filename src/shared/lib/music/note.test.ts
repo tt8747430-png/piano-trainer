@@ -126,7 +126,8 @@ describe('noteParam and noteFromParam', () => {
     expect(noteParam(note('F', 1))).toBe('F#')
   })
 
-  it('refuse a param that is not a note', () => {
-    expect(() => noteFromParam('H')).toThrow(RangeError)
+  it('read only a param noteParam wrote', () => {
+    // @ts-expect-error Text from anywhere else is not a NoteParam: a URL's goes through readNote first.
+    expect(noteFromParam('Bb')).toEqual(note('B', -1))
   })
 })

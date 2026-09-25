@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol, type Midi } from '@/shared/lib/music'
 import { audibleHands } from './schedule'
-import { barSounds, chordSounds, PRACTICE_RHYTHMS, scaleRun } from './sounds'
+import { barSounds, chordSounds, keySound, PRACTICE_RHYTHMS, scaleRun } from './sounds'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
@@ -52,27 +52,34 @@ describe('chordSounds', () => {
 describe('scaleRun', () => {
   it('goes up and back down in even eighth notes', () => {
     const run = scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'rh' })
-    expect(run.cues.map((cue) => cue.midi)).toEqual([
+    expect(run.map((sound) => sound.midi)).toEqual([
       60, 62, 64, 65, 67, 69, 71, 72, 71, 69, 67, 65, 64, 62, 60,
     ])
-    expect(run.cues[1]?.at).toBeCloseTo(0.5)
-    expect(run.end).toBeCloseTo(15 * 0.5)
+    expect(run[1]?.at).toBeCloseTo(0.5)
+    expect(run.at(-1)?.at).toBeCloseTo(14 * 0.5)
   })
 
   it('repeats the rhythm’s lengths', () => {
     const run = scaleRun(C_MAJOR, { rhythm: 'long-short', tempo: 60, hands: 'rh' })
-    expect(run.cues.slice(0, 3).map((cue) => cue.at)).toEqual([0, 0.75, 1])
+    expect(run.slice(0, 3).map((sound) => sound.at)).toEqual([0, 0.75, 1])
     expect(PRACTICE_RHYTHMS['long-short']).toEqual([1.5, 0.5])
   })
 
   it('plays the left hand an octave lower, and both hands together', () => {
-    expect(scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'lh' }).sounds[0]?.midi).toBe(48)
+    expect(scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'lh' })[0]?.midi).toBe(48)
     const both = scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'both' })
     expect(
-      both.sounds
+      both
         .filter((s) => s.at === 0)
         .map((s) => s.midi)
         .sort(),
     ).toEqual([48, 60])
+  })
+})
+
+describe('keySound', () => {
+  it('sounds one key now, as a tap on it', () => {
+    expect(keySound(midi(66))).toMatchObject({ kind: 'note', midi: 66, at: 0 })
+    expect(keySound(midi(66)).duration).toBeGreaterThan(0.5)
   })
 })

@@ -17,6 +17,7 @@ export function barSounds(
 
 const BLOCK = { duration: 1.6, velocity: 0.18 } as const
 const ARPEGGIO = { gap: 0.22, duration: 1.4, velocity: 0.2 } as const
+const TAP = { duration: 1.2, velocity: 0.2 } as const
 
 /** A chord struck at once or rolled upwards: the explorers' Play and Arpeggio. */
 export function chordSounds(
@@ -33,6 +34,9 @@ export function chordSounds(
       velocity: options.arpeggio ? ARPEGGIO.velocity : BLOCK.velocity,
     }))
 }
+
+/** One key, now: what a tap on a key sounds. */
+export const keySound = (key: Midi): NoteSound => ({ kind: 'note', midi: key, at: 0, ...TAP })
 
 export const PRACTICE_RHYTHM_IDS = [
   'even',
@@ -52,18 +56,6 @@ export const PRACTICE_RHYTHMS: Readonly<Record<PracticeRhythm, readonly number[]
   'short-short-short-long': [2 / 3, 2 / 3, 2 / 3, 2],
 }
 
-/** The shown key that sounds from `at` seconds into a run, for lighting it. */
-export interface KeyCue {
-  readonly midi: Midi
-  readonly at: number
-}
-
-export interface ScaleRun {
-  readonly sounds: readonly NoteSound[]
-  readonly cues: readonly KeyCue[]
-  readonly end: number
-}
-
 const OCTAVES_BY_HANDS: Readonly<Record<Hands, readonly number[]>> = {
   rh: [0],
   lh: [-12],
@@ -74,18 +66,16 @@ const OCTAVES_BY_HANDS: Readonly<Record<Hands, readonly number[]>> = {
 export function scaleRun(
   notes: readonly Midi[],
   options: { readonly rhythm: PracticeRhythm; readonly tempo: number; readonly hands: Hands },
-): ScaleRun {
+): NoteSound[] {
   const lengths = PRACTICE_RHYTHMS[options.rhythm]
   const eighth = 60 / options.tempo / 2
   const upAndDown = [...notes, ...notes.slice(0, -1).reverse()]
   const offsets = OCTAVES_BY_HANDS[options.hands]
   const velocity = offsets.length > 1 ? 0.16 : 0.2
   const sounds: NoteSound[] = []
-  const cues: KeyCue[] = []
   let at = 0
   upAndDown.forEach((note, i) => {
     const length = (lengths[i % lengths.length] ?? 1) * eighth
-    cues.push({ midi: note, at })
     for (const offset of offsets) {
       sounds.push({
         kind: 'note',
@@ -97,5 +87,5 @@ export function scaleRun(
     }
     at += length
   })
-  return { sounds, cues, end: at }
+  return sounds
 }

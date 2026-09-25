@@ -2,9 +2,10 @@ import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceById, pieceKey, useSectionHeading, type Piece } from '@/entities/piece'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import { PRACTICE_MODES } from '@/features/practice'
 import { keyName } from '@/shared/lib/music'
-import { PianoKeyboard, Segmented } from '@/shared/ui'
+import { Segmented } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PlayerSetup } from '@/widgets/player-setup'
 import { usePlayer } from '../model/use-player'
@@ -82,14 +83,12 @@ function Player({ piece }: { piece: Piece }) {
           <Transport practice={practice} onHear={player.hear} />
         </div>
       </div>
-      <PianoKeyboard
+      <LiveKeyboard
         label={t('common:keyboard')}
         range={player.range}
+        inView={player.inView}
         marks={player.marks}
-        pressed={player.held}
         wrong={state.wrong === null ? undefined : new Set([state.wrong])}
-        minWhiteWidth={28}
-        centre={[...player.marks.keys()][0] ?? null}
         onKeyPress={player.tapKey}
         className="mt-auto max-h-80 min-h-48 flex-1 landscape-phone:mt-0 landscape-phone:max-h-none landscape-phone:min-h-0 landscape-phone:flex-none landscape-phone:h-2/5"
       />

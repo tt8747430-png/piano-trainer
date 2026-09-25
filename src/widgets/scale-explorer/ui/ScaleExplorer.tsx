@@ -1,35 +1,30 @@
 import { useTranslation } from 'react-i18next'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import {
   keyboardRange,
-  MIDDLE_C,
-  midi,
+  MIDDLE_OCTAVES,
   noteFromParam,
   noteName,
   noteParam,
-  pitchClass,
+  PITCH_CLASSES,
   pitchClassOf,
   placeScale,
   SCALE_KINDS,
   scaleFingering,
   scaleRootSpelling,
   spellScale,
-  type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { PRACTICE_RHYTHM_IDS, scaleRun } from '@/shared/lib/schedule'
-import { usePlay, useServices } from '@/shared/lib/services'
-import { ChipRow, PianoKeyboard, Segmented, type KeyMark } from '@/shared/ui'
+import { PRACTICE_RHYTHM_IDS, scaleRun, TEMPO_RANGE } from '@/shared/lib/schedule'
+import { usePlay } from '@/shared/lib/services'
+import { ChipRow, Pinned, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import type { ScaleView } from '../model/scale-view'
-import { useLitKey } from '../model/use-lit-key'
 import { FingeringTable } from './FingeringTable'
 import { ScaleChords } from './ScaleChords'
 import { ScaleFacts } from './ScaleFacts'
 
-const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
-/** Two octaves from middle C: a scale from B still fits without the keyboard jumping. */
-const AT_LEAST: KeyRange = { from: MIDDLE_C, to: midi(83) }
 const LABELS = ['degrees', 'rh', 'lh'] as const
 
 /** Any scale on any root: degrees or fingers on the keys, the fingering, practice, its chords, its relative. */
@@ -42,8 +37,6 @@ export function ScaleExplorer({
 }) {
   const { t } = useTranslation(['theory', 'common'])
   const play = usePlay()
-  const { audio } = useServices()
-  const { lit, light } = useLitKey()
   const root = noteFromParam(scale.root)
   const tones = spellScale(root, scale.kind)
   const placed = placeScale(root, scale.kind)
@@ -61,14 +54,10 @@ export function ScaleExplorer({
     ]),
   )
 
-  const playRun = () => {
-    const run = scaleRun(
-      placed.map((key) => key.midi),
-      { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands },
-    )
-    const at = play(run.sounds)
-    light(run.cues, Math.max(0, at - audio.now()), run.end)
-  }
+  const run = scaleRun(
+    placed.map((key) => key.midi),
+    { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands },
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,16 +79,17 @@ export function ScaleExplorer({
         options={SCALE_KINDS.map((kind) => ({ value: kind, label: t(`theory:scaleKind.${kind}`) }))}
         onChange={(kind) => onChange({ kind })}
       />
-      <PianoKeyboard
-        label={t('common:keyboard')}
-        range={keyboardRange(
-          placed.map((key) => key.midi),
-          AT_LEAST,
-        )}
-        marks={marks}
-        lit={lit === null ? undefined : new Set([lit])}
-        className="h-44"
-      />
+      <Pinned>
+        <LiveKeyboard
+          label={t('common:keyboard')}
+          range={keyboardRange(
+            run.map((sound) => sound.midi),
+            MIDDLE_OCTAVES,
+          )}
+          marks={marks}
+          className="h-44"
+        />
+      </Pinned>
       <Segmented
         label={t('theory:view.label')}
         value={scale.view}
@@ -117,8 +107,8 @@ export function ScaleExplorer({
           onChange={(rhythm) => onChange({ rhythm })}
         />
         <Slider
-          min={40}
-          max={160}
+          min={TEMPO_RANGE.min}
+          max={TEMPO_RANGE.max}
           step={4}
           value={scale.tempo}
           onValueChange={(tempo) => onChange({ tempo })}
@@ -141,7 +131,7 @@ export function ScaleExplorer({
           ]}
           onChange={(hands) => onChange({ hands })}
         />
-        <Button size="pill" onClick={playRun}>
+        <Button size="pill" onClick={() => play(run)}>
           {t('theory:playUpDown')}
         </Button>
       </section>

@@ -1,9 +1,10 @@
-import { useCanGoBack, useRouter } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { ChevronDown, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
 import { MidiButton } from '@/features/connect-midi'
 import { useLocale } from '@/shared/i18n'
+import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
 
 /**
@@ -21,12 +22,10 @@ export function PlayerTopBar({
 }) {
   const { t } = useTranslation(['player', 'common'])
   const locale = useLocale()
-  const router = useRouter()
-  const canGoBack = useCanGoBack()
-  const close = () =>
-    canGoBack
-      ? router.history.back()
-      : void router.navigate({ to: '/songs/$pieceId', params: { pieceId: piece.id } })
+  const navigate = useNavigate()
+  const close = useGoBack(
+    () => void navigate({ to: '/songs/$pieceId', params: { pieceId: piece.id } }),
+  )
   return (
     <header className="flex items-center gap-3">
       <RoundButton label={t('common:close')} icon={X} onClick={close} />

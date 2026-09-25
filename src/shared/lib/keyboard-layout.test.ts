@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { keyboardLayout } from './keyboard-layout'
+import { keyboardLayout, spanOf } from './keyboard-layout'
 import { midi } from './music'
 
 describe('keyboardLayout', () => {
@@ -19,5 +19,23 @@ describe('keyboardLayout', () => {
     const { keys } = keyboardLayout({ from: midi(61), to: midi(70) })
     expect(keys[0]?.midi).toBe(60)
     expect(keys.at(-1)?.midi).toBe(71)
+  })
+})
+
+describe('spanOf', () => {
+  const twoOctaves = keyboardLayout({ from: midi(48), to: midi(71) }).keys
+
+  it('places a range on a laid-out keyboard in percent, with its white keys counted', () => {
+    expect(spanOf(twoOctaves, { from: midi(60), to: midi(71) })).toEqual({
+      left: 50,
+      right: 100,
+      whites: 7,
+    })
+  })
+
+  it('reaches from a black key’s own edge', () => {
+    const span = spanOf(twoOctaves, { from: midi(61), to: midi(64) })
+    expect(span.left).toBeCloseTo(50 + (100 / 14) * 0.69)
+    expect(span.whites).toBe(2)
   })
 })

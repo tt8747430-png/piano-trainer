@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import type { PracticeState } from '@/features/practice'
-import { TICKS_PER_BEAT, type Performance } from '@/shared/lib/arrangement'
+import { beatInBar, type PracticeState } from '@/features/practice'
+import type { Performance } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import type { TurnFeedback } from '../model/turn-feedback'
@@ -19,7 +19,7 @@ function feedbackLine(feedback: TurnFeedback, t: TFunction<'player'>): string {
   }
 }
 
-/** The chord now at display size, the next one, the bar's beats, and Your turn's feedback line. */
+/** The chord now at display size, the next one, the bar's beats with the current one filled, and Your turn's feedback line. */
 export function NowPanel({
   performance,
   state,
@@ -35,9 +35,7 @@ export function NowPanel({
   const group = performance.beatGroups[state.beatGroup]
   const chord = group ? performance.chords[group.chord] : undefined
   const next = group ? performance.chords[group.chord + 1] : undefined
-  const bar = group ? performance.bars[group.bar] : undefined
-  const beat = group && bar ? Math.floor((group.tick - bar.startTick) / TICKS_PER_BEAT) : 0
-  const beats = bar ? Math.ceil(bar.beats) : 0
+  const { beat, beats } = beatInBar(performance, state.beatGroup) ?? { beat: 0, beats: 0 }
   return (
     <section className="flex flex-col gap-3 landscape-phone:gap-1">
       <div className="flex items-end justify-between gap-4">
@@ -55,7 +53,7 @@ export function NowPanel({
         {Array.from({ length: beats }, (_, i) => (
           <span
             key={i}
-            className={cn('h-1.5 w-6 rounded-full', i <= beat ? 'bg-primary' : 'bg-border')}
+            className={cn('h-1.5 w-6 rounded-full', i === beat ? 'bg-primary' : 'bg-border')}
           />
         ))}
       </div>

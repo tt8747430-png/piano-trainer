@@ -1,3 +1,4 @@
+import type { Midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
@@ -10,6 +11,10 @@ export interface AudioOutput {
   stop(): void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
+  /** The keys sounding now, whatever played them: the same set until they change. */
+  sounding(): ReadonlySet<Midi>
+  /** Calls `onChange` each time the keys sounding change; returns what stops it. */
+  onSounding(onChange: () => void): () => void
 }
 
 /** How long after now sounds start when no time is given: enough to schedule them all. */

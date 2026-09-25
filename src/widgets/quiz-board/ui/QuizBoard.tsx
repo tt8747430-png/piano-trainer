@@ -1,17 +1,24 @@
 import { Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
 import { noteName } from '@/shared/lib/music'
-import { PianoKeyboard, RoundButton } from '@/shared/ui'
+import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** One question at a time: the prompt, the keyboard, the answer, and one action. */
-export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void }) {
+/**
+ * One question at a time: the prompt, the keyboard, the answer, and one action. After the last
+ * question of a bounded quiz, Next calls `onFinish`.
+ */
+export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => void }) {
   const { t } = useTranslation(['quiz', 'theory', 'common'])
   const { question, selected, result } = quiz.state
   if (!question) return null
 
   const building = question.mode !== 'name-chord'
+  // Building a chord or scale: keys are chosen until the answer is checked.
+  const choosing = building && !result
+  const next = quiz.finished ? onFinish : quiz.next
   const scaleName =
     question.mode === 'build-scale'
       ? `${noteName(question.root)} ${t(`theory:scaleName.${question.kind}`)}`
@@ -38,17 +45,17 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
         ) : null}
       </div>
 
-      <PianoKeyboard
+      <LiveKeyboard
         label={t('common:keyboard')}
         range={quizKeyboardRange(question)}
         className="h-44"
-        selectable={building && !result}
-        selected={building && !result ? new Set(selected) : undefined}
+        selectable={choosing}
+        selected={choosing ? new Set(selected) : undefined}
         lit={building ? undefined : new Set(targetKeys(question))}
         marks={answer?.marks}
         outlined={answer?.outlined}
         wrong={answer?.wrong}
-        onKeyPress={building && !result ? quiz.toggleKey : undefined}
+        onKeyPress={choosing ? quiz.toggleKey : undefined}
       />
 
       <p aria-live="polite" className="min-h-7 text-lg font-semibold">
@@ -69,7 +76,7 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
         </div>
       ) : null}
 
-      {!result && building ? (
+      {choosing ? (
         <div className="flex gap-3">
           {selected.length > 0 ? (
             <Button variant="soft" size="pill" onClick={quiz.clear}>
@@ -87,18 +94,10 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
         </div>
       ) : null}
 
-      {result ? (
-        quiz.finished ? (
-          onDone ? (
-            <Button size="pill" onClick={onDone}>
-              {t('quiz:done')}
-            </Button>
-          ) : null
-        ) : (
-          <Button size="pill" onClick={quiz.next}>
-            {t('quiz:next')}
-          </Button>
-        )
+      {result && next ? (
+        <Button size="pill" onClick={next}>
+          {t('quiz:next')}
+        </Button>
       ) : null}
     </section>
   )

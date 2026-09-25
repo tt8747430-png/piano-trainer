@@ -1,5 +1,13 @@
-export { midi, pitchClass, type Midi, type PitchClass } from './pitch'
-export { MIDDLE_C, isBlackKey, keyboardRange, type KeyRange } from './keyboard'
+export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
+export {
+  MIDDLE_C,
+  MIDDLE_OCTAVES,
+  PIANO,
+  isBlackKey,
+  keyboardRange,
+  rangeOf,
+  type KeyRange,
+} from './keyboard'
 export {
   LETTERS,
   midiOf,
@@ -14,6 +22,7 @@ export {
   sameNote,
   type Accidental,
   type Letter,
+  type NoteParam,
   type SpelledNote,
 } from './note'
 export { intervalBetween, spellAbove, type Interval } from './interval'

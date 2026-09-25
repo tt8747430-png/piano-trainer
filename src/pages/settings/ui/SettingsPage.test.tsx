@@ -2,7 +2,6 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { createFakeAudio } from '@/shared/api/audio'
 
 describe('Settings', () => {
   it('shows the saved language and theme as chosen', async () => {
@@ -45,7 +44,7 @@ describe('Settings', () => {
   })
 
   it('says in one line when the browser cannot connect a keyboard', async () => {
-    renderApp('/settings', { services: { audio: createFakeAudio(), midi: null } })
+    renderApp('/settings', { webMidi: false })
     expect(
       await screen.findByText('This browser can’t connect a MIDI keyboard.'),
     ).toBeInTheDocument()

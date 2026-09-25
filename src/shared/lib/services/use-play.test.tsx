@@ -1,11 +1,12 @@
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
 import { midi, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
-import { usePlay, usePlayChord } from './use-play'
+import { usePlay, usePlayChord, useSoundKey } from './use-play'
+import { useSoundingKeys } from './use-sounding-keys'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
@@ -15,7 +16,7 @@ function setup<T>(hook: () => T) {
     <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
   )
   const { result } = renderHook(hook, { wrapper })
-  return { audio, current: result.current }
+  return { audio, result, current: result.current }
 }
 
 const keysPlayed = (sounds: readonly Sound[]) =>
@@ -51,5 +52,27 @@ describe('usePlayChord', () => {
     const { audio, current: playChord } = setup(usePlayChord)
     playChord({ root: note('C'), quality: 'maj' }, { inversion: 1 })
     expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([64, 67, 72])
+  })
+})
+
+describe('useSoundKey', () => {
+  it('sounds a tapped key on top of what sounds, cutting nothing off', () => {
+    const { audio, current: soundKey } = setup(useSoundKey)
+    soundKey(midi(66))
+    expect(audio.unlocks).toBe(1)
+    expect(audio.stops).toBe(0)
+    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([66])
+  })
+})
+
+describe('useSoundingKeys', () => {
+  it('follows the keys sounding as the clock moves', () => {
+    const { audio, result } = setup(() => ({ play: usePlay(), sounding: useSoundingKeys() }))
+    act(() => void result.current.play([NOTE]))
+    expect(result.current.sounding.size).toBe(0)
+    act(() => audio.setNow(0.5))
+    expect([...result.current.sounding]).toEqual([60])
+    act(() => audio.setNow(2))
+    expect(result.current.sounding.size).toBe(0)
   })
 })

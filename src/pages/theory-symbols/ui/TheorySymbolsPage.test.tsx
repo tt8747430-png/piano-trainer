@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -24,5 +24,18 @@ describe('Theory → Symbols', () => {
     expect(
       await screen.findByRole('heading', { name: 'Naming any chord in 7 steps' }),
     ).toBeInTheDocument()
+  })
+
+  it('shows the chord Hear plays going down on its keyboard', async () => {
+    const user = userEvent.setup()
+    const { audio } = renderApp('/theory/symbols')
+    const triads = await screen.findByRole('region', { name: 'Triads' })
+    const minor = within(triads).getByRole('listitem', { name: 'Minor triad' })
+    await user.click(within(minor).getByRole('button', { name: 'Hear' }))
+    act(() => audio.setNow((audio.played[0]?.at ?? 0) + 0.05))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    for (const name of ['C4', 'D sharp 4', 'G4'])
+      expect(within(keyboard).getByRole('button', { name })).toHaveAttribute('data-down')
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
   })
 })

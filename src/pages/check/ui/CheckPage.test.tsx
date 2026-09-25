@@ -21,9 +21,10 @@ describe('Check', () => {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
       await user.click(screen.getByRole('button', { name: 'Check' }))
-      await user.click(screen.getByRole('button', { name: i < 5 ? 'Next' : 'Done' }))
+      await user.click(screen.getByRole('button', { name: 'Next' }))
     }
     expect(await screen.findByText('0 of 6')).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Done' })).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Open in Scales' })).toBeInTheDocument()
   })
 
@@ -41,10 +42,7 @@ describe('Check', () => {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
       await user.click(screen.getByRole('button', { name: 'Check' }))
-      const next =
-        screen.queryByRole('button', { name: 'Next' }) ??
-        screen.getByRole('button', { name: 'Done' })
-      await user.click(next)
+      await user.click(screen.getByRole('button', { name: 'Next' }))
     }
     expect(screen.getByText('Triads is now marked learned.')).toBeInTheDocument()
   })

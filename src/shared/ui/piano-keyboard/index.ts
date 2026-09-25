@@ -1,1 +1,2 @@
-export { PianoKeyboard, type KeyMark, type KeyTone } from './PianoKeyboard'
+export { PianoKeyboard } from './PianoKeyboard'
+export type { KeyMark, KeyStates, KeyTone } from './key-look'

@@ -32,7 +32,8 @@
   --color-key-white: var(--key-white);
   --color-key-white-edge: var(--key-white-edge);
   --color-key-black: var(--key-black);
-  --color-key-pressed: var(--key-pressed);
+  --color-key-down: var(--key-down);
+  --color-key-shade: var(--key-shade);
   --color-key-mark: var(--key-mark);
   --color-on-key-mark: var(--on-key-mark);
   --color-key-mark-black: var(--key-mark-black);

@@ -20,6 +20,9 @@ const AUDIBLE: Readonly<Record<Hands, Audible>> = {
 
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
 
+/** The tempos a learner can choose, in beats per minute. */
+export const TEMPO_RANGE = { min: 40, max: 160 } as const
+
 export interface NoteSound {
   readonly kind: 'note'
   readonly midi: Midi

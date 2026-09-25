@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, pitchClass } from './pitch'
+import { midi, PITCH_CLASSES, pitchClass } from './pitch'
 
 describe('pitchClass', () => {
   it('wraps any integer into one octave', () => {
@@ -18,5 +18,11 @@ describe('midi', () => {
 
   it.each([128, -1, 60.5, Number.NaN])('refuses %s', (n) => {
     expect(() => midi(n)).toThrow(RangeError)
+  })
+})
+
+describe('PITCH_CLASSES', () => {
+  it('lists the 12 notes from C', () => {
+    expect(PITCH_CLASSES).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
   })
 })

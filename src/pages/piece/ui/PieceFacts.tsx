@@ -1,15 +1,21 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, SourceLine, pieceKey, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
+import { useGoBack } from '@/shared/lib'
 import { keyName, noteName, noteParam } from '@/shared/lib/music'
-import { ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
 
-/** A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale. */
+/**
+ * A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale.
+ * Back returns where the learner came from (Path, Songs), or to Songs.
+ */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'common', 'theory'])
   const locale = useLocale()
+  const navigate = useNavigate()
+  const back = useGoBack(() => void navigate({ to: '/songs' }))
   const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = key.mode === 'minor' ? 'natural' : 'major'
@@ -17,7 +23,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
     <div className="flex flex-col gap-3">
       <ScreenHeader
         title={primary}
-        back={<RoundLink label={t('common:back')} icon={ArrowLeft} render={<Link to="/songs" />} />}
+        back={<RoundButton label={t('common:back')} icon={ArrowLeft} onClick={back} />}
       />
       {secondary ? <p className="-mt-3 text-lg text-muted-foreground">{secondary}</p> : null}
       {entry.credits ? <Credits credits={entry.credits} /> : null}

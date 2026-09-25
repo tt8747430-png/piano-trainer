@@ -171,6 +171,24 @@ describe('the Player', () => {
   })
 })
 
+describe('a Piece', () => {
+  it('goes back to where the learner came from', async () => {
+    const user = userEvent.setup()
+    const { router } = renderApp('/')
+    await screen.findByRole('heading', { level: 1, name: 'Path' })
+    await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+  })
+
+  it('goes back to Songs when it was opened directly', async () => {
+    const user = userEvent.setup()
+    const { router } = renderApp('/songs/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
+  })
+})
+
 describe('routes that name a piece', () => {
   it('show not found for a piece that is not there', async () => {
     renderApp('/songs/nothing')

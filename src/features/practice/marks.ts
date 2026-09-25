@@ -1,4 +1,4 @@
-import type { Performance } from '@/shared/lib/arrangement'
+import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import {
   keyboardRange,
   midi,
@@ -7,19 +7,27 @@ import {
   type Midi,
   type PitchClass,
 } from '@/shared/lib/music'
+import type { Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import { spellPerformedNote } from './note-names'
 
-/** The Player's keyboard: the beat group's notes by hand, the tune under them. */
+/**
+ * The Player's keyboard: the beat group's notes in the hands asked for (the ones heard, or in Your
+ * turn the ones practised), by hand, the tune under them.
+ */
 export function practiceMarks(
   performance: Performance,
   beatGroup: number,
-  options: { readonly fingers: boolean; readonly received?: readonly PitchClass[] },
+  options: {
+    readonly hands: Audible
+    readonly fingers: boolean
+    readonly received?: readonly PitchClass[]
+  },
 ): Map<Midi, KeyMark> {
   const marks = new Map<Midi, KeyMark>()
   const notes = (performance.beatGroups[beatGroup]?.notes ?? [])
     .map((index) => performance.notes[index])
-    .filter((n) => n !== undefined)
+    .filter((n): n is PerformanceNote => n !== undefined && options.hands[n.hand])
     // The tune first, so a hand playing the same key wins it.
     .sort((a, b) => Number(b.hand === 'melody') - Number(a.hand === 'melody'))
   for (const played of notes) {

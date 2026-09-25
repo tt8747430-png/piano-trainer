@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isBlackKey, keyboardRange, MIDDLE_C } from './keyboard'
+import { isBlackKey, keyboardRange, MIDDLE_C, MIDDLE_OCTAVES, PIANO, rangeOf } from './keyboard'
 import { midi } from './pitch'
 
 const ONE_OCTAVE = { from: midi(60), to: midi(71) }
@@ -40,5 +40,25 @@ describe('keyboardRange', () => {
 
   it('names middle C', () => {
     expect(MIDDLE_C).toBe(60)
+  })
+})
+
+describe('the ranges every keyboard starts from', () => {
+  it('has all 88 keys on the piano, A0 to C8', () => {
+    expect(PIANO).toEqual({ from: 21, to: 108 })
+  })
+
+  it('shows the two octaves up from middle C in the explorers', () => {
+    expect(MIDDLE_OCTAVES).toEqual({ from: MIDDLE_C, to: 83 })
+  })
+})
+
+describe('rangeOf', () => {
+  it('runs from the lowest key to the highest', () => {
+    expect(rangeOf([midi(67), midi(55), midi(60)])).toEqual({ from: 55, to: 67 })
+  })
+
+  it('has no range for no keys', () => {
+    expect(rangeOf([])).toBeUndefined()
   })
 })

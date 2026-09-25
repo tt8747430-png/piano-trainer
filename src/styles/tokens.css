@@ -9,7 +9,6 @@
   --p-sage-100: #e8ede9;
   --p-sage-200: #dce3de;
   --p-sage-300: #d3dad5;
-  --p-sage-400: #c9d6cf;
   --p-mint-200: #d3e6de;
   --p-teal-950: #1f4d41;
   --p-teal-800: #2d6657;
@@ -34,7 +33,6 @@
   --p-night-900: #171e1b;
   --p-night-850: #1f2824;
   --p-night-800: #2a3430;
-  --p-night-600: #5a6a63;
   --p-night-500: #7d8a84;
   --p-mist-50: #e9eeea;
   --p-mist-100: #e6ede9;
@@ -97,7 +95,9 @@
   --key-white: var(--p-white);
   --key-white-edge: var(--p-sage-300);
   --key-black: var(--p-ink-900);
-  --key-pressed: var(--p-sage-400);
+  /* A key down: sounding now or held on a MIDI keyboard. A coloured key keeps its colour under the shade. */
+  --key-down: var(--p-teal-300);
+  --key-shade: color-mix(in oklab, var(--p-ink-950) 30%, transparent);
   /* A scale's note on a key: a band across its lower part, deep on white keys, light on black. */
   --key-mark: var(--p-teal-800);
   --on-key-mark: var(--p-white);
@@ -143,5 +143,6 @@
   --key-white: var(--p-mist-50);
   --key-white-edge: var(--p-night-500);
   --key-black: var(--p-night-990);
-  --key-pressed: var(--p-night-600);
+  --key-down: var(--p-teal-800);
+  --key-shade: color-mix(in oklab, var(--p-night-990) 45%, transparent);
 }

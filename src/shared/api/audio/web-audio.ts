@@ -1,5 +1,6 @@
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLookahead } from './lookahead'
+import { createSoundingKeys } from './sounding'
 import { PLAY_DELAY, type AudioOutput } from './types'
 
 /** The piano voice: a triangle with two sine partials, through a closing low-pass filter. */
@@ -60,13 +61,20 @@ const playClick: Render<ClickSound> = (context, click, at, ended) => {
 const browserContext = (): AudioContext | null =>
   typeof AudioContext === 'function' ? new AudioContext() : null
 
+const animationFrame = (look: () => void) => void requestAnimationFrame(look)
+
 /**
  * The WebAudio adapter. No AudioContext exists before the first unlock or play, and none at all
- * where the browser has none: then every call does nothing.
+ * where the browser has none: then every call does nothing. The keys sounding are followed on the
+ * audio clock every animation frame while a note sounds.
  */
 export function createWebAudioOutput({
   createContext = browserContext,
-}: { createContext?: () => AudioContext | null } = {}): AudioOutput {
+  frame = animationFrame,
+}: {
+  createContext?: () => AudioContext | null
+  frame?: (look: () => void) => void
+} = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<GainNode>()
 
@@ -86,7 +94,9 @@ export function createWebAudioOutput({
     voices.add(gain)
   }
 
-  const lookahead = createLookahead({ now: () => context?.currentTime ?? 0, render })
+  const now = () => context?.currentTime ?? 0
+  const lookahead = createLookahead({ now, render })
+  const keys = createSoundingKeys({ now, frame })
 
   return {
     async unlock() {
@@ -97,10 +107,13 @@ export function createWebAudioOutput({
       const audio = openContext()
       if (!audio) return
       if (audio.state === 'suspended') void audio.resume()
-      lookahead.add(sounds, at ?? audio.currentTime + PLAY_DELAY)
+      const start = at ?? audio.currentTime + PLAY_DELAY
+      lookahead.add(sounds, start)
+      keys.add(sounds, start)
     },
     stop() {
       lookahead.clear()
+      keys.clear()
       if (!context) return
       for (const gain of voices) {
         gain.gain.cancelScheduledValues(0)
@@ -109,6 +122,8 @@ export function createWebAudioOutput({
       }
       voices.clear()
     },
-    now: () => context?.currentTime ?? 0,
+    now,
+    sounding: keys.current,
+    onSounding: keys.subscribe,
   }
 }

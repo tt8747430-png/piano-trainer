@@ -1,9 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { COLLECTIONS } from '@/entities/piece'
-import type { FakeAudio } from '@/shared/api/audio'
 
 describe('Piece', () => {
   it('titles a song in English over its printed title, with credits and source', async () => {
@@ -24,11 +23,20 @@ describe('Piece', () => {
     ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
   })
 
-  it('plays a bar when it is tapped', async () => {
+  it('plays a tapped bar, and shows its notes going down on the keyboard', async () => {
     const user = userEvent.setup()
-    const { services } = renderApp('/songs/bz5')
+    const { audio } = renderApp('/songs/bz5')
     await user.click(await screen.findByRole('button', { name: /^Bar 1: G$/ }))
-    expect((services.audio as FakeAudio).played).toHaveLength(1)
+    expect(audio.played).toHaveLength(1)
+    act(() => audio.setNow((audio.played[0]?.at ?? 0) + 0.05))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const down = within(keyboard)
+      .getAllByRole('button')
+      .filter((key) => key.hasAttribute('data-down'))
+      .map((key) => key.getAttribute('aria-label'))
+    expect(down.length).toBeGreaterThan(0)
+    // G major: G, B and D in any octave.
+    expect(down.every((name) => /^[GBD]\d$/.test(name ?? ''))).toBe(true)
   })
 
   it('offers Practise before the chords and the chart, in the first screenful', async () => {

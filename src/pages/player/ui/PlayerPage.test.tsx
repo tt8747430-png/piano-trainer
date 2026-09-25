@@ -2,8 +2,6 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import type { FakeAudio } from '@/shared/api/audio'
-import type { FakeMidi } from '@/shared/api/midi'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 
 describe('Player', () => {
@@ -25,33 +23,32 @@ describe('Player', () => {
 
   it('steps through beat by beat, sounding each', async () => {
     const user = userEvent.setup()
-    const { router, services } = renderApp('/play/bz5')
+    const { router, audio } = renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Step' }))
     expect(router.state.location.search).toMatchObject({ mode: 'step' })
     await user.click(screen.getByRole('button', { name: 'Next' }))
-    expect((services.audio as FakeAudio).played.length).toBeGreaterThan(0)
+    expect(audio.played.length).toBeGreaterThan(0)
   })
 
   it('plays a pass in Listen and stops it', async () => {
     const user = userEvent.setup()
-    const { services } = renderApp('/play/bz5')
+    const { audio } = renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect((services.audio as FakeAudio).played).toHaveLength(1)
+    expect(audio.played).toHaveLength(1)
     await user.click(screen.getByRole('button', { name: 'Stop' }))
-    expect((services.audio as FakeAudio).stops).toBeGreaterThan(0)
+    expect(audio.stops).toBeGreaterThan(0)
   })
 
   it('waits in Your turn, says a wrong key and takes the right ones from MIDI', async () => {
     const user = userEvent.setup()
     // The song's pattern opens with the left hand alone, so the left hand has notes to play at once.
-    const { services } = renderApp('/play/bz5?mode=turn&hands=lh')
+    const { midi: midiKeyboard } = renderApp('/play/bz5?mode=turn&hands=lh')
     const prompt = await screen.findByText(/^Play /)
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     // C sharp is outside G major's first chord (G B D).
     await user.click(within(keyboard).getByRole('button', { name: 'C sharp 4' }))
     expect(await screen.findByText(/^Not C#/)).toBeInTheDocument()
-    const midiKeyboard = services.midi as FakeMidi
     act(() => {
       for (const name of notes) {
         const spelled = parseNoteName(name)

@@ -82,7 +82,9 @@ const CLICK: Sound = { kind: 'click', at: 0, accent: true }
 function setUp() {
   const context = new FakeContext()
   const createContext = vi.fn(() => context as unknown as AudioContext)
-  return { context, createContext, audio: createWebAudioOutput({ createContext }) }
+  const frames: (() => void)[] = []
+  const frame = (look: () => void) => void frames.push(look)
+  return { context, createContext, frames, audio: createWebAudioOutput({ createContext, frame }) }
 }
 
 describe('createWebAudioOutput', () => {
@@ -137,6 +139,17 @@ describe('createWebAudioOutput', () => {
     expect(voices).toHaveLength(2)
   })
 
+  it('follows the keys sounding on the audio clock, frame by frame', () => {
+    const { context, frames, audio } = setUp()
+    audio.onSounding(() => {})
+    audio.play([A4], 0)
+    context.currentTime = 0.1
+    frames.shift()?.()
+    expect([...audio.sounding()]).toEqual([69])
+    audio.stop()
+    expect(audio.sounding().size).toBe(0)
+  })
+
   it('does nothing, and throws nothing, where the browser has no audio', async () => {
     const createContext = vi.fn(() => null)
     const audio = createWebAudioOutput({ createContext })
@@ -144,6 +157,7 @@ describe('createWebAudioOutput', () => {
     expect(() => audio.play([A4])).not.toThrow()
     expect(() => audio.stop()).not.toThrow()
     expect(audio.now()).toBe(0)
+    expect(audio.sounding().size).toBe(0)
     expect(createContext).toHaveBeenCalledOnce()
   })
 })

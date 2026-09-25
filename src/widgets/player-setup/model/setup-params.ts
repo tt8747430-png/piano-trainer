@@ -1,10 +1,11 @@
 import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
 import type { Voicing } from '@/entities/piece'
+import type { NoteParam } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
 
 /** The Setup sheet's choices as the Player's URL holds them: an absent one is the piece's own. */
 export interface SetupParams {
-  readonly key?: string
+  readonly key?: NoteParam
   readonly tempo?: number
   readonly hands: Hands
   readonly pattern?: PatternId | 'chart'

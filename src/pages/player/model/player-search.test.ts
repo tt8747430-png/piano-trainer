@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { hasMethodCodes, PIECES, pieceById } from '@/entities/piece'
 import { ownChoice } from '@/features/practice'
-import { note } from '@/shared/lib/music'
+import { note, noteParam } from '@/shared/lib/music'
 import { resolveChoice, searchPatch } from './player-search'
 
 function piece(id: string) {
@@ -18,7 +18,7 @@ describe('resolveChoice', () => {
   })
 
   it('takes the key, figures and melody the learner chose', () => {
-    expect(resolveChoice(bz5, { key: 'A', rh: 't1', lh: 'o' }, true)).toMatchObject({
+    expect(resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true)).toMatchObject({
       tonic: note('A'),
       rh: 't1',
       lh: 'o',
@@ -27,7 +27,7 @@ describe('resolveChoice', () => {
   })
 
   it('spells a key for the piece’s mode', () => {
-    expect(resolveChoice(bz5, { key: 'A#' }, false).tonic).toEqual(note('B', -1))
+    expect(resolveChoice(bz5, { key: noteParam(note('A', 1)) }, false).tonic).toEqual(note('B', -1))
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {
@@ -44,14 +44,14 @@ describe('resolveChoice', () => {
 
 describe('searchPatch', () => {
   it('writes a choice equal to the piece’s own as absent', () => {
-    expect(searchPatch(bz5, { key: 'G' })).toEqual({ key: undefined })
+    expect(searchPatch(bz5, { key: noteParam(note('G')) })).toEqual({ key: undefined })
     expect(searchPatch(bz5, { tempo: bz5.tempo })).toEqual({ tempo: undefined })
     expect(searchPatch(bz5, { pattern: ownChoice(bz5).pattern })).toEqual({ pattern: undefined })
     expect(searchPatch(twofive, { voicing: 'sevenths' })).toEqual({ voicing: undefined })
   })
 
   it('keeps a choice that differs', () => {
-    expect(searchPatch(bz5, { key: 'A', hands: 'lh' })).toEqual({ key: 'A', hands: 'lh' })
+    expect(searchPatch(bz5, { key: noteParam(note('A')), hands: 'lh' })).toEqual({ key: 'A', hands: 'lh' })
     expect(searchPatch(bz5, { tempo: 96 })).toEqual({ tempo: 96 })
   })
 })

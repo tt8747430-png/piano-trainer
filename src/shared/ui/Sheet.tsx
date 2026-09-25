@@ -1,6 +1,9 @@
 import type { ComponentProps, ReactNode } from 'react'
 import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from './primitives/drawer'
 
+/** What opens a sheet, and what closes it from inside: the drawer's own parts, named for the sheet. */
+export { DrawerClose as SheetClose, DrawerTrigger as SheetTrigger } from './primitives/drawer'
+
 /** The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. */
 export function Sheet(props: ComponentProps<typeof Drawer>) {
   return <Drawer showSwipeHandle {...props} />

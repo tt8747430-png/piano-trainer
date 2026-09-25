@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest'
-import type { Sound } from '@/shared/lib/schedule'
+import { describe, expect, it, vi } from 'vitest'
+import { midi } from '@/shared/lib/music'
+import { chordSounds, type Sound } from '@/shared/lib/schedule'
 import { createFakeAudio } from './fake-audio'
 
 const CLICK: Sound = { kind: 'click', at: 0, accent: false }
@@ -22,5 +23,19 @@ describe('createFakeAudio', () => {
     expect(audio.now()).toBe(5)
     audio.play([CLICK])
     expect(audio.played[0]?.at).toBeCloseTo(5.1)
+  })
+
+  it('knows which keys sound as the test moves its clock, and forgets them on stop', () => {
+    const audio = createFakeAudio()
+    const onChange = vi.fn()
+    audio.onSounding(onChange)
+    audio.play(chordSounds([midi(60), midi(64)], { arpeggio: true }), 0)
+    audio.setNow(0.1)
+    expect([...audio.sounding()]).toEqual([60])
+    audio.setNow(0.3)
+    expect([...audio.sounding()]).toEqual([60, 64])
+    audio.stop()
+    expect(audio.sounding().size).toBe(0)
+    expect(onChange).toHaveBeenCalledTimes(3)
   })
 })

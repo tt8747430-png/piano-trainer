@@ -1,8 +1,7 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import type { FakeAudio } from '@/shared/api/audio'
 
 describe('Theory → Chords', () => {
   it('shows C major by default, its keys labelled by degree', async () => {
@@ -15,11 +14,36 @@ describe('Theory → Chords', () => {
 
   it('opens a deep link and moves through the URL, sounding each choice', async () => {
     const user = userEvent.setup()
-    const { router, services } = renderApp('/theory/chords?root=G&quality=d7')
+    const { router, audio } = renderApp('/theory/chords?root=G&quality=d7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
     expect(router.state.location.search).toMatchObject({ root: 'G', quality: 'm7' })
-    expect((services.audio as FakeAudio).played.length).toBeGreaterThan(0)
+    expect(audio.played.length).toBeGreaterThan(0)
+  })
+
+  it('rolls an arpeggio, its keys going down one by one', async () => {
+    const user = userEvent.setup()
+    const { audio } = renderApp('/theory/chords')
+    await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
+    const start = audio.played.at(-1)?.at ?? 0
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const [c4, e4, g4] = ['C4', 'E4', 'G4'].map((name) =>
+      within(keyboard).getByRole('button', { name }),
+    )
+    act(() => audio.setNow(start + 0.05))
+    expect(c4).toHaveAttribute('data-down')
+    expect(e4).not.toHaveAttribute('data-down')
+    act(() => audio.setNow(start + 0.5))
+    expect(e4).toHaveAttribute('data-down')
+    expect(g4).toHaveAttribute('data-down')
+  })
+
+  it('sounds a tapped key', async () => {
+    const user = userEvent.setup()
+    const { audio } = renderApp('/theory/chords')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
+    expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 69 }])
   })
 
   it('offers only the inversions the chord has', async () => {

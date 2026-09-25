@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import {
   CHORD_FAMILIES,
@@ -7,27 +8,22 @@ import {
   chordSymbol,
   keyboardRange,
   lastInversion,
-  MIDDLE_C,
-  midi,
+  MIDDLE_OCTAVES,
   noteFromParam,
   noteName,
   noteParam,
-  pitchClass,
+  PITCH_CLASSES,
   placeChord,
   qualitiesIn,
   qualitySuffix,
   spellChord,
-  type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
 import { usePlayChord } from '@/shared/lib/services'
-import { ChipRow, PianoKeyboard, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
+import { ChipRow, Pinned, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ChordView } from '../model/chord-view'
 
-const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
-/** Two octaves from middle C: the keyboard grows past them only for a chord that needs it. */
-const AT_LEAST: KeyRange = { from: MIDDLE_C, to: midi(83) }
 /** Root position and the first three inversions, with the name each has on screen. */
 const INVERSIONS = [
   { value: 0, name: 'root' },
@@ -103,15 +99,17 @@ export function ChordExplorer({
         }))}
         onChange={(quality) => change({ quality, inversion: 0 })}
       />
-      <PianoKeyboard
-        label={t('common:keyboard')}
-        range={keyboardRange(
-          keys.map((key) => key.midi),
-          AT_LEAST,
-        )}
-        marks={marks}
-        className="h-44"
-      />
+      <Pinned>
+        <LiveKeyboard
+          label={t('common:keyboard')}
+          range={keyboardRange(
+            keys.map((key) => key.midi),
+            MIDDLE_OCTAVES,
+          )}
+          marks={marks}
+          className="h-44"
+        />
+      </Pinned>
       <RoleLegend roles={[...new Set(tones.map((tone) => tone.role))]} />
       <ol className="flex flex-wrap gap-2">
         {tones.map((tone) => (
