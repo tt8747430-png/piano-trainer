@@ -3,7 +3,8 @@ import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
 import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 
 /** Listen: the app plays. Step: the learner moves through it. Your turn: the app waits for the notes. */
-export type PracticeMode = 'listen' | 'step' | 'turn'
+export const PRACTICE_MODES = ['listen', 'step', 'turn'] as const
+export type PracticeMode = (typeof PRACTICE_MODES)[number]
 export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
 export interface PracticeState {

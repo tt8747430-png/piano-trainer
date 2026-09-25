@@ -2,3 +2,4 @@ export { LEVELS, isStepId, stepIdOf, type Level, type PathStep, type StepId } fr
 export { levelOf, pathSteps, type PlacedStep } from './model/selectors'
 export { skillsOfStep, stepOfSkill } from './model/skills'
 export { PATH } from './content/path'
+export { useStepTitle, type StepKind, type StepTitle } from './ui/use-step-title'

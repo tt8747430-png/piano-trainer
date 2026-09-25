@@ -2,6 +2,7 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { COLLECTIONS } from '@/entities/piece'
 import { safeLocalStorage } from '@/shared/lib'
 import { createAppRouter } from './router'
 import { renderApp } from './testing/render-app'
@@ -156,5 +157,19 @@ describe('the Player', () => {
     const { router } = renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
+  })
+})
+
+describe('routes that name a piece', () => {
+  it('show not found for a piece that is not there', async () => {
+    renderApp('/songs/nothing')
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+  })
+
+  it('show not found for a listing in the Player', async () => {
+    const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
+    if (!listing) throw new Error('the catalogue has no listing')
+    renderApp(`/play/${listing.id}`)
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

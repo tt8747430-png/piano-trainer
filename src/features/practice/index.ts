@@ -1,6 +1,7 @@
 export {
   accompanyingHands,
   initialPractice,
+  PRACTICE_MODES,
   practiceReducer,
   practisedHands,
   type Outcome,

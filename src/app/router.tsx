@@ -3,15 +3,30 @@ import {
   createRoute,
   createRouter,
   lazyRouteComponent,
+  notFound,
   redirect,
+  stripSearchParams,
   type RouterHistory,
 } from '@tanstack/react-router'
+import { entryById, pieceById } from '@/entities/piece'
 import { NotFoundPage } from '@/pages/not-found'
 import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
+import {
+  CHORDS_DEFAULTS,
+  PLAYER_DEFAULTS,
+  QUIZ_DEFAULTS,
+  SCALES_DEFAULTS,
+  SONGS_DEFAULTS,
+  validateChordsSearch,
+  validatePlayerSearch,
+  validateQuizSearch,
+  validateScalesSearch,
+  validateSongsSearch,
+} from './routes/search'
 import { ShellLayout } from './ShellLayout'
 import { TheoryLayout } from './TheoryLayout'
 
@@ -51,11 +66,16 @@ const settingsRoute = createRoute({
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
+  validateSearch: validateSongsSearch,
+  search: { middlewares: [stripSearchParams(SONGS_DEFAULTS)] },
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
 const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
+  beforeLoad: ({ params }) => {
+    if (!entryById(params.pieceId)) throw notFound()
+  },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
@@ -74,11 +94,15 @@ const theoryIndexRoute = createRoute({
 const chordsRoute = createRoute({
   getParentRoute: () => theoryRoute,
   path: 'chords',
+  validateSearch: validateChordsSearch,
+  search: { middlewares: [stripSearchParams(CHORDS_DEFAULTS)] },
   component: lazyRouteComponent(theoryScreens, 'TheoryChordsPage'),
 })
 const scalesRoute = createRoute({
   getParentRoute: () => theoryRoute,
   path: 'scales',
+  validateSearch: validateScalesSearch,
+  search: { middlewares: [stripSearchParams(SCALES_DEFAULTS)] },
   component: lazyRouteComponent(theoryScreens, 'TheoryScalesPage'),
 })
 const symbolsRoute = createRoute({
@@ -89,6 +113,8 @@ const symbolsRoute = createRoute({
 const quizRoute = createRoute({
   getParentRoute: () => theoryRoute,
   path: 'quiz',
+  validateSearch: validateQuizSearch,
+  search: { middlewares: [stripSearchParams(QUIZ_DEFAULTS)] },
   component: lazyRouteComponent(theoryScreens, 'TheoryQuizPage'),
 })
 
@@ -101,6 +127,11 @@ const fullScreenRoute = createRoute({
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',
+  validateSearch: validatePlayerSearch,
+  search: { middlewares: [stripSearchParams(PLAYER_DEFAULTS)] },
+  beforeLoad: ({ params }) => {
+    if (!pieceById(params.pieceId)) throw notFound()
+  },
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
 })
 
