@@ -2,6 +2,7 @@ export {
   audibleHands,
   beatGroupSounds,
   schedule,
+  secondsFor,
   secondsPerTick,
   type Audible,
   type ClickSound,

@@ -74,8 +74,9 @@ function checkedTempo(tempo: number): number {
 
 export const secondsPerTick = (tempo: number): number => 60 / checkedTempo(tempo) / TICKS_PER_BEAT
 
-/** Ticks to seconds, multiplying before dividing so whole beats come out exact. */
-const secondsFor = (ticks: Tick, tempo: number): number => (ticks * 60) / (tempo * TICKS_PER_BEAT)
+/** Ticks to seconds at a tempo, multiplying before dividing so whole beats come out exact. */
+export const secondsFor = (ticks: Tick, tempo: number): number =>
+  (ticks * 60) / (checkedTempo(tempo) * TICKS_PER_BEAT)
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 

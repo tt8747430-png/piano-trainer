@@ -31,6 +31,7 @@ describe('the practice machine', () => {
     it('follows the music to the beat group it reached', () => {
       const state = run(initialPractice(ONE_BAR, 'listen', 'both'), { type: 'play' })
       expect(run(state, { type: 'reach', beatGroup: 2 }).beatGroup).toBe(2)
+      expect(run(state, { type: 'reach', beatGroup: 0 })).toBe(state)
     })
 
     it('wraps around at both ends', () => {

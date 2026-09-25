@@ -8,3 +8,4 @@ export {
   type PracticeMode,
   type PracticeState,
 } from './practice-machine'
+export { usePractice, type Practice, type PracticeSetup } from './use-practice'

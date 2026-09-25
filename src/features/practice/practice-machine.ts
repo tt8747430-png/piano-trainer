@@ -146,10 +146,10 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
       return state.mode === 'listen' ? { ...state, playing: true } : state
     case 'stop':
       return state.playing ? { ...state, playing: false } : state
-    case 'reach':
-      return state.mode === 'listen' && isBeatGroup(state, event.beatGroup)
-        ? { ...state, beatGroup: event.beatGroup }
-        : state
+    case 'reach': {
+      const moves = event.beatGroup !== state.beatGroup && isBeatGroup(state, event.beatGroup)
+      return state.mode === 'listen' && moves ? { ...state, beatGroup: event.beatGroup } : state
+    }
     case 'next':
       return next(state)
     case 'prev':

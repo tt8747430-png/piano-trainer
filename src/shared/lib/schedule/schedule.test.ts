@@ -5,6 +5,7 @@ import {
   audibleHands,
   beatGroupSounds,
   schedule,
+  secondsFor,
   secondsPerTick,
   type NoteSound,
   type Sound,
@@ -150,6 +151,14 @@ describe('beatGroupSounds', () => {
   it('has nothing for a beat group that does not exist', () => {
     const performance = arrange(chart('C'), { key: note('C'), pattern: BEATS })
     expect(beatGroupSounds(performance, 99, { tempo: 60, hands: ALL })).toEqual([])
+  })
+})
+
+describe('secondsFor', () => {
+  it('turns ticks into seconds at a tempo, whole beats exactly', () => {
+    expect(secondsFor(12, 60)).toBe(1)
+    expect(secondsFor(12, 72)).toBe(60 / 72)
+    expect(() => secondsFor(12, 0)).toThrow(RangeError)
   })
 })
 
