@@ -53,27 +53,40 @@ slice only through its `index.ts`, by alias or relative path alike. Inside share
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
 it. `@` → `src`.
 
-- **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`),
-  `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`), `composition-root.ts` →
-  `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`, `ThemeProvider`,
-  `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` for screens with the main navigation;
-  `FullScreenLayout` for the Player; `TheoryLayout`), `update-prompt/`, `RouteError`, `testing/`.
-- **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`.
-- **widgets/<x>/**: composite UI tied to screens (`app-nav`, `theory-nav`).
-- **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned`,
-  `record-answer`, `record-practised`, `reset-progress`), and the machines: `practice` (the pure
-  `practice-machine` and `usePractice`, which drives it with audio, MIDI and the clock) and `quiz`.
+- **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`; `notFound()`
+  for an unknown piece or check), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
+  `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
+  lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
+  `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
+  `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the floating tab bar;
+  `FullScreenLayout` for the Player and the Check; `TheoryLayout`), `RoutePending`, `update-prompt/`, `RouteError`,
+  `testing/`.
+- **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
+  (`pages/player/model/use-player.ts`), which is its test surface.
+- **widgets/<x>/**: composite UI tied to screens (`app-nav`, `theory-nav`, `continue-card`, `path-levels`,
+  `piece-list`, `chord-chart`, `piece-skills`, `player-setup`, `chord-explorer`, `scale-explorer`, `step-panel`,
+  `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+- **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
+  `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
+  control, held keys), and the machines: `practice` (the pure `practice-machine`, `usePractice`, which drives it with
+  audio, MIDI and the clock, and the Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and
+  `quiz` (the machine, check plans, the theory quizzes, My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
   `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
-  `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `index.ts`. Content:
+  `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `ui/` (only the
+  entity's own data shown: a piece's titles, credits and section headings; a step's title and `ExplorerLink`),
+  `index.ts`. Content:
   `piece` (51 pieces, 7 listings, chart and progression parsers), `pattern` (39 patterns), `path`. Saved state:
   `settings` (`pt-settings`, version 2), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
-  an answer or a mark changes in `model/changes.ts`).
-- **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`; and
-  with barrels of their own: `music` the theory kernel, `arrangement` (`arrange`, a chart → a Performance),
-  `schedule` (a Performance → sounds in seconds, and Listen's loop), `services` (`ServicesProvider`,
-  `useServices`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
-  fakes), `ui` (design system; shadcn in `ui/primitives`), `i18n` (with `LocalText`), `test`.
+  an answer or a mark changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
+- **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
+  `keyboardLayout`, the search-param readers, `foldText`; and with barrels of their own: `music` the theory kernel
+  (with the keyboard's range and `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance),
+  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord, a scale run), `services`
+  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayChord`)), `config` (`THEME_COLORS`), `api` (the `audio` and
+  `midi` ports, their browser adapters and fakes), `ui` (the kit: `PianoKeyboard`, `ScreenHeader`, `RoundButton`,
+  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet`, `RoleLegend`, `RatingMark`, `LevelMark`; shadcn in
+  `ui/primitives`), `i18n` (`Locale`, `useLocale`, `LocalText`), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
@@ -99,7 +112,7 @@ the script to the store.
   scheme, `stubServiceWorker` for a waiting version). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `renderApp(path, { locale })`; both in
-  `src/app/testing/`.
+  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
   so a missing key fails `tsc`.

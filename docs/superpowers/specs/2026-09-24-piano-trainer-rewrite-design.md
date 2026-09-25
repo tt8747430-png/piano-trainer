@@ -4,6 +4,8 @@
   the owner's review · **Date:** 2026-09-24
 - **Amended** 2026-09-25 with the Phase 2 plan's refinements (listed and argued in
   `docs/superpowers/plans/2026-09-24-phase-2-core.md`, "Deliberate refinements of the spec").
+- **Amended** 2026-09-25 by the Phase 3 screens design (`2026-09-25-phase-3-screens-design.md`), which lists its
+  refinements in §11.
 - **Reference project:** `~/projectsGIT/memory-palaces` (Mindscape). Its `CLAUDE.md` and `docs/CODE_STYLE.md` are
   the model for this repo's standards, and are adapted here rather than copied wholesale.
 

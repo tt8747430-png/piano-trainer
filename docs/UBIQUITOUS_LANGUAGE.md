@@ -22,37 +22,40 @@ differently, the UI column says how.
 
 ## Music
 
-| Term                       | Means                                                                                                     | Avoid                |
-| -------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
-| **Pitch class**            | One of the 12 notes, whatever the octave (0–11)                                                           | note number          |
-| **Spelled note**           | A note with its letter and accidental (E♭, not D♯)                                                        | note-name string     |
-| **Chord quality**          | The kind of chord: `maj`, `m7`, `hd`, … (33)                                                              | chord type (in code) |
-| **Chord family**           | A group of qualities: triads; 6th & add; 7ths; 9ths & more; altered 7ths                                  | chord group          |
-| **Chord symbol**           | The written name, `F#m7b5/C`                                                                              | chord name           |
-| **Chord tone**             | One note of a chord, with its **Role** (root, 3rd, 5th, 7th, 9th, 11th, 13th) and **Degree** label (`♭3`) | chord note           |
-| **Tone**                   | A spelled note measured from a root, with its Role and Degree label: a Chord tone, or one note of a scale | scale note           |
-| **Key**                    | A tonic and a mode (G major, G♯ minor)                                                                    | tonality (in code)   |
-| **Transpose**              | Move to another tonic by the interval between tonics, letters kept                                        | shift                |
-| **Voicing**                | How much of each chord a Progression plays: triads, sevenths or ninths                                    | colour               |
-| **Inversion**              | Which chord tone is lowest                                                                                | position             |
-| **Scale kind**             | major; natural, harmonic or melodic minor; major or minor pentatonic; blues                               | scale type, mode     |
-| **Degree** (progression)   | A Roman numeral from the tonic on the major scale (`ii`, `♭VII`)                                          | step                 |
-| **Function** (progression) | How a degree's chord grows with the Voicing: `maj`, `min`, `dom`, `domb9`, `hd`, or fixed `=quality`      | chord role           |
+| Term                       | Means                                                                                                               | Avoid                             |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **Pitch class**            | One of the 12 notes, whatever the octave (0–11)                                                                     | note number                       |
+| **Spelled note**           | A note with its letter and accidental (E♭, not D♯)                                                                  | note-name string                  |
+| **Chord quality**          | The kind of chord: `maj`, `m7`, `hd`, … (33)                                                                        | chord type (in code)              |
+| **Chord family**           | A group of qualities: triads; 6th & add; 7ths; 9ths & more; altered 7ths                                            | chord group                       |
+| **Chord symbol**           | The written name, `F#m7b5/C`                                                                                        | chord name                        |
+| **Chord tone**             | One note of a chord, with its **Role** (root, 3rd, 5th, 7th, 9th, 11th, 13th) and **Degree** label (`♭3`)           | chord note                        |
+| **Tone**                   | A spelled note measured from a root, with its Role and Degree label: a Chord tone, or one note of a scale           | scale note                        |
+| **Key**                    | A tonic and a mode (G major, G♯ minor)                                                                              | tonality (in code)                |
+| **Transpose**              | Move to another tonic by the interval between tonics, letters kept                                                  | shift                             |
+| **Voicing**                | How much of each chord a Progression plays: triads, sevenths or ninths                                              | colour                            |
+| **Inversion**              | Which chord tone is lowest                                                                                          | position                          |
+| **Placed tone**            | A Tone at a key on the keyboard, as the explorers and the quiz place chords and scales (`placeChord`, `placeScale`) | voicing (that is a Progression's) |
+| **Scale gap**              | The step between neighbouring notes of a scale: W, H or W+H (Т, П, Т+П in Russian)                                  | step (a Step is on the Path)      |
+| **Scale kind**             | major; natural, harmonic or melodic minor; major or minor pentatonic; blues                                         | scale type, mode                  |
+| **Degree** (progression)   | A Roman numeral from the tonic on the major scale (`ii`, `♭VII`)                                                    | step                              |
+| **Function** (progression) | How a degree's chord grows with the Voicing: `maj`, `min`, `dom`, `domb9`, `hd`, or fixed `=quality`                | chord role                        |
 
 ## Practice
 
-| Term                          | Means                                                                                  | Avoid                   |
-| ----------------------------- | -------------------------------------------------------------------------------------- | ----------------------- |
-| **Pattern**                   | A named accompaniment style for the right and left hand                                | rhythm, style (in code) |
-| **Figure**                    | One hand's part of a Pattern: fixed events, or a right hand playing the tune           | part, RHP/LHP           |
-| **Practice toggle**           | One of the Setup's saved switches: finger numbers, melody, metronome, count-in         | option, flag            |
-| **Performance**               | Everything `arrange` produces for a Piece: bars, beats, notes on a timeline            | playback, song data     |
-| **Tick**                      | The domain's unit of time: 12 per beat                                                 | step (as time)          |
-| **Beat group**                | Notes sharing an onset: what Step mode walks through                                   | chord (as time), group  |
-| **Pass**                      | One play-through from a beat group to the end; Listen loops passes                     | run, cycle              |
-| **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound   | player loop, engine     |
-| **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes | auto, manual            |
-| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles                    | options, settings       |
+| Term                          | Means                                                                                                                  | Avoid                   |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| **Pattern**                   | A named accompaniment style for the right and left hand                                                                | rhythm, style (in code) |
+| **Figure**                    | One hand's part of a Pattern: fixed events, or a right hand playing the tune                                           | part, RHP/LHP           |
+| **Practice toggle**           | One of the Setup's saved switches: finger numbers, melody, metronome, count-in                                         | option, flag            |
+| **Performance**               | Everything `arrange` produces for a Piece: bars, beats, notes on a timeline                                            | playback, song data     |
+| **Tick**                      | The domain's unit of time: 12 per beat                                                                                 | step (as time)          |
+| **Beat group**                | Notes sharing an onset: what Step mode walks through                                                                   | chord (as time), group  |
+| **Pass**                      | One play-through from a beat group to the end; Listen loops passes                                                     | run, cycle              |
+| **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound                                   | player loop, engine     |
+| **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes                                 | auto, manual            |
+| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles (Russian UI: «Параметры»; «Настройки» is Settings) | options, settings       |
+| **Note grid**                 | The Player's columns of the current bar's notes, by beat and hand                                                      | piano roll, tab         |
 
 ## Path and progress
 
@@ -66,16 +69,18 @@ differently, the UI column says how.
 
 ## Theory gaps
 
-| Term                      | Means                                                                                         | Avoid               |
-| ------------------------- | --------------------------------------------------------------------------------------------- | ------------------- |
-| **Skill**                 | Something rated from quiz answers: one chord quality or one scale kind (`chord:m7`)           | ability, topic      |
-| **Evidence**              | The last 5 quiz answers on a Skill                                                            | history, attempts   |
-| **Known / Gap / Unknown** | A Skill's rating: 4 of the last 5 right including the latest / tried, not known / never tried | mastered, weak, new |
-| **Check**                 | A short quiz scoped to some Skills (a Piece's chords, a Step's family)                        | test, exam          |
-| **Build chord**           | The quiz mode that names a chord for the learner to play                                      | exercise, drill     |
-| **Name chord**            | The quiz mode that plays a chord for the learner to name                                      | exercise, drill     |
-| **Build scale**           | The quiz mode that names a scale for the learner to play                                      | exercise, drill     |
-| **My gaps**               | The quiz scope that asks Gap Skills first, then Unknown Skills from Pieces the learner opened | review, weak spots  |
+| Term                      | Means                                                                                                                                    | Avoid               |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| **Skill**                 | Something rated from quiz answers: one chord quality or one scale kind (`chord:m7`)                                                      | ability, topic      |
+| **Evidence**              | The last 5 quiz answers on a Skill                                                                                                       | history, attempts   |
+| **Known / Gap / Unknown** | A Skill's rating: 4 of the last 5 right including the latest / tried, not known / never tried                                            | mastered, weak, new |
+| **Check**                 | A short quiz scoped to some Skills (a Piece's chords, a Step's family)                                                                   | test, exam          |
+| **Build chord**           | The quiz mode that names a chord for the learner to play                                                                                 | exercise, drill     |
+| **Name chord**            | The quiz mode that plays a chord for the learner to name                                                                                 | exercise, drill     |
+| **Build scale**           | The quiz mode that names a scale for the learner to play                                                                                 | exercise, drill     |
+| **My gaps**               | The quiz scope that asks Gap Skills first, then Unknown Skills from Pieces the learner opened                                            | review, weak spots  |
+| **Theory quiz**           | One of Theory → Quiz's open-ended quizzes: Build chord, Name chord or Build scale over the chosen Skills, or My gaps; a Check is bounded | tab                 |
+| **Explorer**              | Theory → Chords or Scales: any chord or scale on any root, placed on the keyboard                                                        | viewer, browser     |
 
 ## Settings and app
 

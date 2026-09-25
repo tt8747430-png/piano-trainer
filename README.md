@@ -21,7 +21,7 @@ npm run build && npm run preview   # the production build, with the service work
 
 - How code is organised and written: [CLAUDE.md](CLAUDE.md), [docs/CODE_STYLE.md](docs/CODE_STYLE.md).
 - The words we use: [docs/UBIQUITOUS_LANGUAGE.md](docs/UBIQUITOUS_LANGUAGE.md).
-- Decisions and why: [docs/adr](docs/adr).
+- Decisions and why: [docs/adr](docs/adr); the visual world in [ADR 0007](docs/adr/0007-visual-world-from-reference-apps.md).
 - Every push and pull request runs typecheck, lint, tests with coverage and the build
   (`.github/workflows/ci.yml`). Vercel builds a preview of each pull request.
 
