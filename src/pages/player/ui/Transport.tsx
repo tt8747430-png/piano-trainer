@@ -9,12 +9,13 @@ export function Transport({ practice, onHear }: { practice: Practice; onHear: ()
   const { t } = useTranslation('player')
   const { mode, playing } = practice.state
   return (
-    <div className="flex items-center justify-center gap-4 pb-2">
+    <div className="flex items-center justify-center gap-4 pb-2 landscape-phone:pb-0">
       {mode === 'listen' ? (
         <>
           <RoundButton label={t('restart')} icon={RotateCcw} onClick={practice.restart} />
           <Button
             size="play"
+            className="landscape-phone:size-14"
             aria-label={playing ? t('stop') : t('play')}
             onClick={playing ? practice.stop : practice.play}
           >

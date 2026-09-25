@@ -20,7 +20,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
       <Link
         to="/songs/$pieceId"
         params={{ pieceId: entry.id }}
-        className="flex min-h-16 items-center gap-3 rounded-2xl px-1 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
+        className="flex min-h-16 items-center gap-3 rounded-2xl px-1 py-3 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
       >
         <span className="w-7 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
           {entry.source?.number ?? ''}

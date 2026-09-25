@@ -5,9 +5,6 @@ import { i18n } from '@/shared/i18n'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
 
-// jsdom lays nothing out, so it has no scrollIntoView; the chart strip calls it on every bar.
-if (typeof Element !== 'undefined') Element.prototype.scrollIntoView = () => {}
-
 beforeEach(() => {
   stubMatchMedia({ dark: false })
   stubServiceWorker({ waiting: false })

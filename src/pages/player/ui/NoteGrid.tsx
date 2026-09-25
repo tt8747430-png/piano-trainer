@@ -29,7 +29,7 @@ export function NoteGrid({
     <div
       role="group"
       aria-label={t('grid.label', { n: bar + 1 })}
-      className="-mx-4 flex overflow-x-auto px-4 scrollbar-none"
+      className="-mx-4 flex overflow-x-auto px-4 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
     >
       {columns.map((column) => (
         <button
@@ -38,15 +38,18 @@ export function NoteGrid({
           aria-current={column.beatGroup === current ? 'step' : undefined}
           onClick={() => onJump(column.beatGroup)}
           className={cn(
-            'flex min-w-14 shrink-0 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-sm transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring',
+            'flex min-w-16 shrink-0 flex-col items-center gap-1 rounded-2xl px-2 py-3 landscape-phone:py-1 transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring',
             column.beatGroup === current ? 'bg-muted' : 'hover:bg-muted/60',
           )}
         >
-          <span className="text-xs font-semibold text-muted-foreground">{column.beat}</span>
+          <span className="text-sm font-semibold text-muted-foreground">{column.beat}</span>
           {hands.map((hand) => (
             <span
               key={hand}
-              className={cn('flex flex-col items-center font-semibold', HAND_TEXT[hand])}
+              className={cn(
+                'flex flex-col items-center text-lg font-bold landscape-phone:text-base',
+                HAND_TEXT[hand],
+              )}
             >
               {column.notes[hand].map((n, i) => (
                 <span key={i}>

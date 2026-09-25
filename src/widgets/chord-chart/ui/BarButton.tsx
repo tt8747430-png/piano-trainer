@@ -28,7 +28,7 @@ export function BarButton({
       aria-current={current ? 'step' : undefined}
       onClick={onClick}
       className={cn(
-        'relative flex min-h-18 min-w-24 shrink-0 flex-col items-start justify-end gap-0.5 border-l-2 border-foreground/80 px-2.5 pt-5 pb-2 text-left transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
+        'relative flex min-h-18 min-w-24 shrink-0 flex-col items-start justify-end gap-0.5 border-l-2 border-foreground/80 px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
         current ? 'bg-muted text-primary' : 'hover:bg-muted/60',
       )}
     >

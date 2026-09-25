@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isMethodCode, METHODS } from '@/entities/pattern'
 import { barLength, type Meter } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
@@ -22,18 +23,23 @@ export function ChordChart({
   current?: number | null
   onBar: (bar: number) => void
 }) {
+  const { t } = useTranslation('piece')
   const locale = useLocale()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const strip = useRef<HTMLDivElement>(null)
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
 
+  // The strip scrolls itself to centre the current bar; scrollIntoView would scroll every
+  // scrollable ancestor too, the Player's own layout included.
   useEffect(() => {
-    if (layout !== 'strip' || current === null) return
-    buttons.current[current]?.scrollIntoView({
-      inline: 'center',
-      block: 'nearest',
+    const row = strip.current
+    const bar = current === null ? undefined : buttons.current[current]
+    if (!row || !bar || row.scrollWidth <= row.clientWidth) return
+    row.scrollTo({
+      left: bar.offsetLeft - (row.clientWidth - bar.offsetWidth) / 2,
       behavior: reduceMotion ? 'auto' : 'smooth',
     })
-  }, [layout, current, reduceMotion])
+  }, [current, reduceMotion])
 
   const barOf = (index: number) => {
     const bar = performance.bars[index]
@@ -70,7 +76,12 @@ export function ChordChart({
 
   if (layout === 'strip') {
     return (
-      <div className="-mx-4 flex snap-x overflow-x-auto border-y border-border bg-card px-4 scrollbar-none">
+      <div
+        ref={strip}
+        role="group"
+        aria-label={t('chart')}
+        className="relative -mx-4 flex snap-x scroll-px-4 overflow-x-auto border-y border-border bg-card px-4 scrollbar-none landscape-phone:mx-0 landscape-phone:rounded-2xl landscape-phone:border landscape-phone:px-0"
+      >
         {sections.flatMap(({ heading, lines }) =>
           lines.flat().map((index, i) => (
             <div key={index} className="flex shrink-0 snap-center flex-col">

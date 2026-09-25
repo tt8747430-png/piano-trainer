@@ -37,15 +37,22 @@ function Player({ piece }: { piece: Piece }) {
 
   return (
     <div className="flex flex-1 flex-col gap-4 pt-2 landscape-phone:min-h-0 landscape-phone:gap-2 landscape-phone:pt-1">
+      {/* Upright the parts stack; on a phone on its side they share two columns: the top bar, the
+          chord now and the transport on the left; the modes, the chart strip and the note grid on
+          the right. */}
       <div className="contents landscape-phone:grid landscape-phone:min-h-0 landscape-phone:flex-1 landscape-phone:grid-cols-2 landscape-phone:content-start landscape-phone:gap-x-4 landscape-phone:gap-y-2 landscape-phone:overflow-y-auto">
-        <PlayerTopBar piece={piece} summary={summary} onSetup={() => setSetupOpen(true)} />
-        <Segmented
-          label={t('player:modes.label')}
-          value={search.mode}
-          options={PRACTICE_MODES.map((m) => ({ value: m, label: t(`player:modes.${m}`) }))}
-          onChange={player.setMode}
-        />
-        <div className="landscape-phone:col-span-2">
+        <div className="landscape-phone:col-start-1 landscape-phone:row-start-1">
+          <PlayerTopBar piece={piece} summary={summary} onSetup={() => setSetupOpen(true)} />
+        </div>
+        <div className="landscape-phone:col-start-2 landscape-phone:row-start-1">
+          <Segmented
+            label={t('player:modes.label')}
+            value={search.mode}
+            options={PRACTICE_MODES.map((m) => ({ value: m, label: t(`player:modes.${m}`) }))}
+            onChange={player.setMode}
+          />
+        </div>
+        <div className="landscape-phone:col-start-2 landscape-phone:row-start-2">
           <ChordChart
             performance={performance}
             headings={headings}
@@ -55,13 +62,15 @@ function Player({ piece }: { piece: Piece }) {
             onBar={practice.jumpToBar}
           />
         </div>
-        <NowPanel
-          performance={performance}
-          state={state}
-          feedback={player.feedback}
-          onAgain={practice.restart}
-        />
-        <div className="landscape-phone:row-span-2">
+        <div className="landscape-phone:col-start-1 landscape-phone:row-start-2">
+          <NowPanel
+            performance={performance}
+            state={state}
+            feedback={player.feedback}
+            onAgain={practice.restart}
+          />
+        </div>
+        <div className="landscape-phone:col-start-2 landscape-phone:row-start-3">
           <NoteGrid
             performance={performance}
             bar={bar}
@@ -69,7 +78,7 @@ function Player({ piece }: { piece: Piece }) {
             onJump={practice.jumpToBeatGroup}
           />
         </div>
-        <div className="order-last landscape-phone:order-none">
+        <div className="order-last landscape-phone:col-start-1 landscape-phone:row-start-3">
           <Transport practice={practice} onHear={player.hear} />
         </div>
       </div>
@@ -82,7 +91,7 @@ function Player({ piece }: { piece: Piece }) {
         minWhiteWidth={28}
         centre={[...player.marks.keys()][0] ?? null}
         onKeyPress={player.tapKey}
-        className="mt-auto h-48 landscape-phone:mt-0 landscape-phone:h-1/2"
+        className="mt-auto h-48 landscape-phone:mt-0 landscape-phone:h-2/5"
       />
       <PlayerSetup
         open={setupOpen}

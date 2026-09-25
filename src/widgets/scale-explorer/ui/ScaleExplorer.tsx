@@ -54,7 +54,7 @@ export function ScaleExplorer({
     placed.map((key, i) => [
       key.midi,
       {
-        tone: key.tone.role,
+        tone: 'scale',
         label:
           scale.view === 'degrees' ? key.tone.degree : fingers ? String(fingers[i] ?? '·') : '–',
       },

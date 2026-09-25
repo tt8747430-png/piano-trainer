@@ -23,7 +23,7 @@ export function ChipRow<V extends OptionValue>({
       }}
       variant="chip"
       spacing={2}
-      className="-mx-4 flex w-auto snap-x overflow-x-auto px-4 pb-1 scrollbar-none"
+      className="-mx-4 flex w-auto snap-x scroll-px-4 overflow-x-auto px-4 pb-1 scrollbar-none"
     >
       {options.map((option) => (
         <ToggleGroupItem

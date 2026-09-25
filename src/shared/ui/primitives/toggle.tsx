@@ -13,7 +13,7 @@ const toggleVariants = cva(
         chip: 'rounded-full bg-card px-4 text-foreground ring-1 ring-border hover:bg-muted data-pressed:bg-primary data-pressed:text-primary-foreground data-pressed:ring-primary',
         // A segment of a pill segmented control.
         segment:
-          'flex-1 rounded-xl px-3 text-muted-foreground hover:text-foreground data-pressed:bg-card data-pressed:text-foreground data-pressed:shadow-sm',
+          'flex-1 rounded-xl px-2 text-center text-sm leading-tight whitespace-normal text-muted-foreground hover:text-foreground data-pressed:bg-card data-pressed:text-foreground data-pressed:shadow-sm',
       },
       size: {
         default: 'h-11 min-w-11 px-3',

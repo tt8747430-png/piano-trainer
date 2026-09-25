@@ -39,9 +39,11 @@ export function NowPanel({
   const beat = group && bar ? Math.floor((group.tick - bar.startTick) / TICKS_PER_BEAT) : 0
   const beats = bar ? Math.ceil(bar.beats) : 0
   return (
-    <section className="flex flex-col gap-3">
+    <section className="flex flex-col gap-3 landscape-phone:gap-1">
       <div className="flex items-end justify-between gap-4">
-        <p className="text-6xl font-extrabold tracking-tight">{chord?.symbol ?? '–'}</p>
+        <p className="text-6xl font-extrabold tracking-tight landscape-phone:text-4xl">
+          {chord?.symbol ?? '–'}
+        </p>
         {next ? (
           <p className="text-right text-sm text-muted-foreground">
             {t('nextChord')}

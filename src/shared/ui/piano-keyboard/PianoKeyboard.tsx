@@ -11,17 +11,26 @@ import {
 } from '@/shared/lib/music'
 import { ROLE_BG } from '../role-classes'
 
-export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody'
+/** A chord tone's role, a hand in the Player, or a scale's note (the palette law keeps roles on chord tones). */
+export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody' | 'scale'
 export interface KeyMark {
   readonly tone: KeyTone
   readonly label?: string
 }
 
-const TONE_BG: Readonly<Record<KeyTone, string>> = {
-  ...ROLE_BG,
-  rh: 'bg-hand-rh',
-  lh: 'bg-hand-lh',
-  melody: 'bg-hand-melody',
+/** A marked key's face: role and hand colours carry white labels; a scale's keys sit on the soft surface. */
+const TONE_FACE: Readonly<Record<KeyTone, string>> = {
+  root: cn(ROLE_BG.root, 'text-on-role'),
+  '3rd': cn(ROLE_BG['3rd'], 'text-on-role'),
+  '5th': cn(ROLE_BG['5th'], 'text-on-role'),
+  '7th': cn(ROLE_BG['7th'], 'text-on-role'),
+  '9th': cn(ROLE_BG['9th'], 'text-on-role'),
+  '11th': cn(ROLE_BG['11th'], 'text-on-role'),
+  '13th': cn(ROLE_BG['13th'], 'text-on-role'),
+  rh: 'bg-hand-rh text-on-role',
+  lh: 'bg-hand-lh text-on-role',
+  melody: 'bg-hand-melody text-on-role',
+  scale: 'bg-secondary text-secondary-foreground',
 }
 
 interface KeyProps {
@@ -45,7 +54,7 @@ interface KeyProps {
 function faceOf(props: KeyProps): string {
   if (props.wrong) return 'bg-destructive text-on-role'
   if (props.lit) return 'bg-primary text-primary-foreground'
-  if (props.mark) return cn(TONE_BG[props.mark.tone], 'text-on-role')
+  if (props.mark) return TONE_FACE[props.mark.tone]
   if (props.selected) return 'bg-primary text-primary-foreground'
   if (props.pressed) return 'bg-key-pressed'
   return props.black ? 'bg-key-black' : 'bg-key-white'
