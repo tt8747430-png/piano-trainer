@@ -44,6 +44,63 @@ export const theory = {
   about: { formula: 'Formula', gaps: 'Structure', relative: 'Relative' },
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
+  symbols: {
+    howToRead: 'How to read chord symbols',
+    hear: 'Hear',
+    open: 'Open',
+    reading: {
+      title: 'Reading chord symbols',
+      items: {
+        a: {
+          lead: 'Left part = triad, right part = extras.',
+          rest: 'C is major, Cm or C− is minor, C° or Cdim is diminished, C+ or Caug is augmented.',
+        },
+        b: {
+          lead: 'Numbers are steps of the major scale built on the chord’s own root,',
+          rest: 'whatever key the song is in.',
+        },
+        c: {
+          lead: '7 means a minor 7th. Maj7, M7 or Δ means a major 7th.',
+          rest: 'Cm(maj7) is a minor chord with a major 7th.',
+        },
+        d: { lead: '6 is always a major 6th,', rest: 'also in Cm6.' },
+        e: { lead: 'sus means no 3rd.', rest: 'sus2 uses the 2nd instead, sus4 the 4th.' },
+        f: { lead: 'Slash chords:', rest: 'C/D means a C chord over a D bass note.' },
+        g: { lead: 'Alterations combine freely,', rest: 'for example C7(♭9#5).' },
+      },
+    },
+    numbers: {
+      title: 'Chord numbers: 2 or 9? 6 or 13?',
+      items: {
+        a: {
+          lead: 'The same note has two numbers:',
+          rest: '2 = 9, 4 = 11, 6 = 13. 8, 10, 12 and 14 never appear: they are 1, 3, 5 and 7 again.',
+        },
+        b: {
+          lead: 'add, 2, 4 or 6 adds only that note:',
+          rest: 'C2 = Cadd2 = Cadd9 = C D E G. C6 = C E G A.',
+        },
+        c: { lead: 'A number above 7 includes everything below it:', rest: 'C9 = C E G B♭ D.' },
+        d: {
+          lead: '13 chords usually leave out the 11,',
+          rest: 'which clashes with the major 3rd. C13 = C E G B♭ D A.',
+        },
+      },
+    },
+    naming: {
+      title: 'Naming any chord in 7 steps',
+      steps: {
+        order: 'Put the notes in letter order, then stack them in thirds (every other letter).',
+        core: 'Find the three notes that form the core triad.',
+        quality: 'Decide its quality: major, minor, diminished, augmented or sus4.',
+        sixthOrSeventh: 'Is there a 4th note that works as the 6th or 7th?',
+        ninth: 'Is there a 5th note that works as the 9th (or ♭9, #9)?',
+        eleventh: 'Is there a 6th note that works as the 11th (or #11)?',
+        thirteenth: 'Is there a 7th note that works as the 13th (or ♭13)?',
+      },
+      careful: 'The same notes can have two names: D F A C is Dm7, and also F6 over D.',
+    },
+  },
   family: {
     tri: 'Triads',
     six: '6th & add',
