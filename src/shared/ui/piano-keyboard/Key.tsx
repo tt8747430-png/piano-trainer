@@ -60,11 +60,11 @@ function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey 
         height: `${geometry.height}%`,
       }}
     >
-      {/* A coloured key going down keeps its colour under a shade. */}
+      {/* A coloured key going down keeps its colour under a tint. */}
       <span
         aria-hidden
         className={cn(
-          'absolute inset-0 bg-key-shade opacity-0 transition-opacity duration-80 ease-out',
+          'absolute inset-0 bg-key-down-tint opacity-0 transition-opacity duration-80 ease-out',
           look.down && !plain ? 'opacity-100' : null,
         )}
       />

@@ -16,6 +16,7 @@ import {
   placeChord,
   qualitiesIn,
   qualitySuffix,
+  rangeOf,
   spellChord,
   type Midi,
 } from '@/shared/lib/music'
@@ -48,6 +49,7 @@ export function ChordExplorer({
     bothHands: chord.hands === 'both',
   })
   const keys = [...placed.lh, ...placed.rh]
+  const midis = keys.map((key) => key.midi)
   const tones = spellChord(root, chord.quality)
   const family = chordFamily(chord.quality)
   const marks = new Map<Midi, KeyMark>(
@@ -102,10 +104,8 @@ export function ChordExplorer({
       <Pinned>
         <LiveKeyboard
           label={t('common:keyboard')}
-          range={keyboardRange(
-            keys.map((key) => key.midi),
-            MIDDLE_OCTAVES,
-          )}
+          range={keyboardRange(midis, MIDDLE_OCTAVES)}
+          inView={rangeOf(midis)}
           marks={marks}
           className="h-44"
         />

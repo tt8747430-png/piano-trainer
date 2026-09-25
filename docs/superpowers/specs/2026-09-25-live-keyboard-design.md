@@ -21,8 +21,8 @@
   select the key, Your turn takes it as an answer.
 - **A key that sounds goes down**, whoever plays it: the app (a chord, an arpeggio, a scale run, a bar, Listen,
   Your turn's other hand, a tap) or a MIDI keyboard held down. A plain key turns `--key-down` (a soft teal, light and
-  dark), a coloured key (a role, a hand, a quiz's teal) keeps its colour and takes `--key-shade`, a shade laid over
-  it, so the meaning of the colour survives. The label stays on top. So an arpeggio goes down key by key and rings
+  dark), a coloured key (a role, a hand, a quiz's teal) keeps its colour under `--key-down-tint` (deeper by day,
+  brighter by night, so the label keeps its contrast), so the meaning of the colour survives. The label stays on top. So an arpeggio goes down key by key and rings
   out, a scale run walks the keys, the Player's marked keys pulse as they sound and a held bass stays down after the
   marks have moved on.
 - **One tab stop.** The keyboard is a group with one key in the tab order; the arrow keys move along the keys,
@@ -53,7 +53,7 @@
   a chord, a bar or a run started from a button.
 - **`PianoKeyboard`** (`shared/ui`, presentational) takes `range`, `inView`, `marks`, `lit` (Name chord's chord),
   `selected`, `outlined`, `wrong`, `down` and a **required** `onKeyPress`: a key that does nothing cannot be drawn.
-  A pure `keyLook` decides each key's face (fill, shade, outline, band) from those sets, with its own test, so the key
+  A pure `keyLook` decides each key's face (fill, down, outline, band) from those sets, with its own test, so the key
   takes one look instead of six flags; its geometry comes from `keyboardLayout(PIANO)`, worked out once.
 - **`LiveKeyboard`** (new feature slice `features/live-keyboard`) is the keyboard every screen uses: it adds `down`
   (sounding keys and keys held on MIDI) and sounds a tapped key before the caller's own `onKeyPress`. The Player no
@@ -123,7 +123,7 @@ one Next then Done; Piece Back returns to the Path.
 
 ## 6. Changes to the screens spec
 
-§2.1 (`--key-down` replaces `--key-pressed`; `--key-shade`; the scale band `--key-mark*`), §2.4 (`PianoKeyboard`'s
+§2.1 (`--key-down` replaces `--key-pressed`; `--key-down-tint`; the scale band `--key-mark*`), §2.4 (`PianoKeyboard`'s
 props; `Pinned`; `SheetTrigger`/`SheetClose`; `input-group`; no `item`, `separator`), §4.3 (the pinned keyboard;
 Practise's place; Back), §4.4 (marks by hands; down keys; close; Setup pages; pips), §4.5 (pinned keyboards; Symbols'
 keyboard), §4.6 (Next opens the result), §8 (one tab stop), and §11 gains the refinements above.

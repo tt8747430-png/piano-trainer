@@ -95,9 +95,12 @@
   --key-white: var(--p-white);
   --key-white-edge: var(--p-sage-300);
   --key-black: var(--p-ink-900);
-  /* A key down: sounding now or held on a MIDI keyboard. A coloured key keeps its colour under the shade. */
+  /*
+   * A key down: sounding now or held on a MIDI keyboard. A coloured key keeps its colour under a
+   * tint, deeper by day and brighter by night, so its label keeps its contrast either way.
+   */
   --key-down: var(--p-teal-300);
-  --key-shade: color-mix(in oklab, var(--p-ink-950) 30%, transparent);
+  --key-down-tint: color-mix(in oklab, var(--p-ink-950) 38%, transparent);
   /* A scale's note on a key: a band across its lower part, deep on white keys, light on black. */
   --key-mark: var(--p-teal-800);
   --on-key-mark: var(--p-white);
@@ -144,5 +147,5 @@
   --key-white-edge: var(--p-night-500);
   --key-black: var(--p-night-990);
   --key-down: var(--p-teal-800);
-  --key-shade: color-mix(in oklab, var(--p-night-990) 45%, transparent);
+  --key-down-tint: color-mix(in oklab, var(--p-mist-50) 45%, transparent);
 }

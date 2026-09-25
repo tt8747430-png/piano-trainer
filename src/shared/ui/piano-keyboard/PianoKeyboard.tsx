@@ -45,7 +45,10 @@ export function PianoKeyboard({
   label: string
   /** The keys that fill the keyboard's width; the rest of the piano scrolls in beside them. */
   range: KeyRange
-  /** Keys to keep in sight as they change: the keyboard scrolls when one of them is out of it. */
+  /**
+   * Keys to keep in sight: the keyboard opens centred on them (else on its range) and scrolls to
+   * them whenever one is out of sight.
+   */
   inView?: KeyRange
   /** The keys are toggles (a quiz's keys to choose), and say whether they are chosen. */
   selectable?: boolean
@@ -84,13 +87,17 @@ export function PianoKeyboard({
   return (
     <div
       ref={scroller}
-      className={cn('@container overflow-x-auto overscroll-x-contain scrollbar-none', className)}
+      className={cn(
+        '@container flex overflow-x-auto overscroll-x-contain scrollbar-none',
+        className,
+      )}
     >
+      {/* A flex item, so the keys take the keyboard's height however that height is set. */}
       <div
         role="group"
         aria-label={label}
         onKeyDown={onKeyDown}
-        className="relative h-full"
+        className="relative shrink-0"
         style={{
           width: `calc(${PIANO_KEYS.whites} * clamp(${MIN_WHITE_PX}px, 100cqw / ${span.whites}, ${MAX_WHITE_PX}px))`,
         }}

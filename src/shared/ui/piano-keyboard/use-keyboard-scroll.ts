@@ -11,8 +11,8 @@ function centre(element: HTMLElement, left: number, right: number, behavior: Scr
 }
 
 /**
- * The keyboard's scrolling: its range opens in the middle and moves there again when it changes;
- * `inView` is scrolled to whenever part of it is out of sight.
+ * The keyboard's scrolling: it opens centred on `inView` (else on its range), and centres it again
+ * when the range changes; `inView` is scrolled to whenever part of it is out of sight.
  */
 export function useKeyboardScroll(
   scroller: RefObject<HTMLElement | null>,
@@ -22,17 +22,23 @@ export function useKeyboardScroll(
 ) {
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const opened = useRef(false)
-  const { left, right } = range
+  const viewFrom = inView?.from
+  const viewTo = inView?.to
+  // Read when the range changes, not followed: following is the next effect's.
+  const latestView = useRef(inView)
+  useLayoutEffect(() => {
+    latestView.current = inView
+  })
 
   useLayoutEffect(() => {
     const element = scroller.current
     if (!element) return
-    centre(element, left, right, opened.current && !reduceMotion ? 'smooth' : 'instant')
+    const target = latestView.current ? spanOf(keys, latestView.current) : range
+    const behavior = opened.current && !reduceMotion ? 'smooth' : 'instant'
+    centre(element, target.left, target.right, behavior)
     opened.current = true
-  }, [scroller, left, right, reduceMotion])
+  }, [scroller, keys, range, reduceMotion])
 
-  const viewFrom = inView?.from
-  const viewTo = inView?.to
   useEffect(() => {
     const element = scroller.current
     if (!element || viewFrom === undefined || viewTo === undefined) return

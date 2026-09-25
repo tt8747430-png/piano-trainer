@@ -10,6 +10,7 @@ import {
   PITCH_CLASSES,
   pitchClassOf,
   placeScale,
+  rangeOf,
   SCALE_KINDS,
   scaleFingering,
   scaleRootSpelling,
@@ -60,6 +61,7 @@ export function ScaleExplorer({
     placed.map((key) => key.midi),
     { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands },
   )
+  const runKeys = run.map((sound) => sound.midi)
 
   return (
     <div className="flex flex-col gap-6">
@@ -82,10 +84,8 @@ export function ScaleExplorer({
       <Pinned>
         <LiveKeyboard
           label={t('common:keyboard')}
-          range={keyboardRange(
-            run.map((sound) => sound.midi),
-            MIDDLE_OCTAVES,
-          )}
+          range={keyboardRange(runKeys, MIDDLE_OCTAVES)}
+          inView={rangeOf(runKeys)}
           marks={marks}
           className="h-44"
         />
