@@ -23,4 +23,17 @@ describe('Button', () => {
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(onClick).not.toHaveBeenCalled()
   })
+
+  it('offers a round surface button and a mint soft button, both at least 44px', () => {
+    render(
+      <>
+        <Button variant="surface" size="icon" aria-label="Settings" />
+        <Button variant="soft">Arpeggio</Button>
+        <Button size="pill">Next</Button>
+      </>,
+    )
+    expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full', 'size-11')
+    expect(screen.getByRole('button', { name: 'Arpeggio' })).toHaveClass('bg-secondary', 'h-11')
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('h-14', 'rounded-full')
+  })
 })
