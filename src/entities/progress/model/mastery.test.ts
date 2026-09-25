@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { SkillId } from '@/shared/lib/music'
-import { countAnswer, latestEvidence, rate, stepCompletedBy } from './mastery'
+import {
+  countAnswer,
+  knownCount,
+  latestEvidence,
+  rate,
+  ratingOf,
+  skillsToCheck,
+  stepCompletedBy,
+} from './mastery'
 import { EMPTY_PROGRESS, type Answer, type ProgressState } from './types'
 
 /** Answers from a string: 1 right, 0 wrong, oldest first. */
@@ -94,5 +102,30 @@ describe('stepCompletedBy', () => {
     const before = withAnswers({ 'scale:blues': '000' })
     const after = withAnswers({ 'scale:blues': '0001' })
     expect(stepCompletedBy(before, after, 'scale:blues')).toBeNull()
+  })
+})
+
+describe('ratingOf', () => {
+  it('rates a skill from the saved answers, and a skill never answered as unknown', () => {
+    const answers = { 'chord:min': [{ correct: false, at: '2026-09-01' }] }
+    expect(ratingOf(answers, 'chord:min')).toBe('gap')
+    expect(ratingOf(answers, 'chord:dim')).toBe('unknown')
+  })
+})
+
+describe('skillsToCheck and knownCount', () => {
+  const right = (n: number) =>
+    Array.from({ length: n }, () => ({ correct: true, at: '2026-09-01' }))
+  const answers = { 'chord:maj': right(5), 'chord:min': [{ correct: false, at: '2026-09-01' }] }
+
+  it('keeps gaps and unknowns in the order given', () => {
+    expect(skillsToCheck(['chord:maj', 'chord:min', 'chord:dim'], answers)).toEqual([
+      'chord:min',
+      'chord:dim',
+    ])
+  })
+
+  it('counts the known ones', () => {
+    expect(knownCount(['chord:maj', 'chord:min', 'chord:dim'], answers)).toBe(1)
   })
 })

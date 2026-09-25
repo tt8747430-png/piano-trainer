@@ -6,10 +6,18 @@ export {
   type QuizAnswer,
   type QuizStats,
 } from './model/types'
-export { EVIDENCE_SIZE, rate, type Rating } from './model/mastery'
+export {
+  EVIDENCE_SIZE,
+  knownCount,
+  rate,
+  ratingOf,
+  skillsToCheck,
+  type Rating,
+} from './model/mastery'
 export { withAnswer, withLearned } from './model/changes'
 export { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from './model/store'
 export {
+  selectAllAnswers,
   selectAnswers,
   selectIsLearned,
   selectLastPractised,
@@ -17,5 +25,6 @@ export {
   selectPractised,
   selectQuizStats,
   selectRating,
+  selectSuggestedStep,
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'

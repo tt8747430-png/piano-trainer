@@ -1,24 +1,38 @@
-import type { StepId } from '@/entities/path'
+import { pathSteps, type PlacedStep, type StepId } from '@/entities/path'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
-import { rate, type Rating } from './mastery'
+import { NO_ANSWERS, ratingOf, type Rating } from './mastery'
 import type { Answer, ProgressState, QuizStats } from './types'
-
-/** One array for every skill with no evidence, so a subscriber never sees a new reference. */
-const NO_ANSWERS: readonly Answer[] = []
 
 export const selectLearned = (state: ProgressState) => state.learned
 export const selectPractised = (state: ProgressState) => state.practised
 export const selectQuizStats = (state: ProgressState): QuizStats => state.quiz
 
+export const selectAllAnswers = (state: ProgressState) => state.answers
+
+/** The pieces opened in the Player, the most recent first. */
+function practisedByRecency(practised: ProgressState['practised']): PieceId[] {
+  return Object.entries(practised)
+    .map(([id, date]) => ({ id, at: Date.parse(date ?? '') }))
+    .sort((a, b) => b.at - a.at)
+    .map(({ id }) => id)
+}
+
 /** The piece opened in the Player most recently, or null. */
-export function selectLastPractised(state: ProgressState): PieceId | null {
-  let latest: { id: PieceId; at: number } | null = null
-  for (const [id, date] of Object.entries(state.practised)) {
-    const at = Date.parse(date ?? '')
-    if (!latest || at > latest.at) latest = { id, at }
-  }
-  return latest?.id ?? null
+export const selectLastPractised = (state: ProgressState): PieceId | null =>
+  practisedByRecency(state.practised)[0] ?? null
+
+/**
+ * Continue (spec §5): the most recently practised piece still on the path, while it is not learned;
+ * else the first unlearned step in path order; null when everything is learned.
+ */
+export function selectSuggestedStep(state: ProgressState): PlacedStep | null {
+  const steps = pathSteps()
+  const onPath = practisedByRecency(state.practised)
+    .map((id) => steps.find((placed) => placed.id === `piece:${id}`))
+    .find((placed) => placed !== undefined)
+  if (onPath && state.learned[onPath.id] === undefined) return onPath
+  return steps.find((placed) => state.learned[placed.id] === undefined) ?? null
 }
 
 export const selectIsLearned =
@@ -34,4 +48,4 @@ export const selectAnswers =
 export const selectRating =
   (skill: SkillId) =>
   (state: ProgressState): Rating =>
-    rate(selectAnswers(skill)(state))
+    ratingOf(state.answers, skill)

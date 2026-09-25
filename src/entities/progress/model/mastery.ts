@@ -20,6 +20,22 @@ export function rate(answers: readonly Answer[]): Rating {
   return right >= KNOWN_AT && evidence.at(-1)?.correct ? 'known' : 'gap'
 }
 
+/** One array for every skill with no evidence, so a subscriber never sees a new reference. */
+export const NO_ANSWERS: readonly Answer[] = []
+
+/** A skill's rating from all saved answers: the one place a missing skill reads as no evidence. */
+export const ratingOf = (answers: ProgressState['answers'], skill: SkillId): Rating =>
+  rate(answers[skill] ?? NO_ANSWERS)
+
+/** The skills a check should ask about: gaps and unknowns, in the order given. */
+export const skillsToCheck = (
+  skills: readonly SkillId[],
+  answers: ProgressState['answers'],
+): SkillId[] => skills.filter((skill) => ratingOf(answers, skill) !== 'known')
+
+export const knownCount = (skills: readonly SkillId[], answers: ProgressState['answers']): number =>
+  skills.filter((skill) => ratingOf(answers, skill) === 'known').length
+
 export function countAnswer(stats: QuizStats, correct: boolean): QuizStats {
   const streak = correct ? stats.streak + 1 : 0
   return {
@@ -31,7 +47,7 @@ export function countAnswer(stats: QuizStats, correct: boolean): QuizStats {
 }
 
 const allKnown = (state: ProgressState, skills: readonly SkillId[]) =>
-  skills.every((skill) => rate(state.answers[skill] ?? []) === 'known')
+  skills.every((skill) => ratingOf(state.answers, skill) === 'known')
 
 /** The step this answer completed: the skill's step, when every skill of it is Known after and was not before. */
 export function stepCompletedBy(
