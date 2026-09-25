@@ -59,8 +59,10 @@ The floating tab bar is `--card` at 72% (`bg-card/72`) over a backdrop blur, so 
 - **Hands** (the Player's keys, the note grid): `--hand-rh` `#1E7F69` / `#5CCCB0`, `--hand-lh` `#C2552B` /
   `#FF8A5C`, `--hand-melody` `#7A4FC4` / `#B99BFF`. They never appear in the explorers, where roles colour the keys.
 - **Keyboard:** `--key-white` `#FFFFFF`/`#E9EEEA`, `--key-white-edge` `#D3DAD5`/`#7D8A84`, `--key-black`
-  `#1E2321`/`#050706`, `--key-pressed` (a key held on MIDI or tapped) `#C9D6CF`/`#5A6A63`, `--key-wrong` =
-  `--destructive`.
+  `#1E2321`/`#050706`, `--key-down` (a key sounding or held on MIDI) `#8CCBB8`/`#2D6657`, `--key-down-tint` (over a
+  coloured key that is down: ink at 38% by day, mist at 45% by night, so its label keeps its contrast), a wrong key
+  `--destructive`, and a scale's band: `--key-mark` deep teal on white keys, `--key-mark-black` light teal on black
+  ones, with `--on-key-mark*` labels (live-keyboard design, 2026-09-25).
 - `THEME_COLORS` (`shared/config`) becomes `{ light: '#F3F6F3', dark: '#0D1210' }`, held to `--background` by its
   test as now.
 - **App icon:** repainted in the world (a deep-teal tile, white keys, one key in the right hand's teal), and
@@ -95,15 +97,16 @@ The floating tab bar is `--card` at 72% (`bg-card/72`) over a backdrop blur, so 
 
 **shadcn primitives added with the CLI** (`shared/ui/primitives`, base-nova, then restyled only through tokens and
 variants): `drawer` (bottom sheets, swipe to close), `popover`, `toggle-group` + `toggle` (segmented controls and
-chip rows), `switch`, `slider`, `input`, `alert-dialog`, `separator`, `progress`, `item` (list rows), `empty`,
-`spinner`. `button` gains the variants the world needs (`soft` mint, `surface` round white) and keeps only ≥44px
-sizes.
+chip rows), `switch`, `slider`, `input`, `input-group` (the Songs search field; `textarea` comes with it),
+`alert-dialog`, `progress`, `empty`, `spinner`. `item` (list rows) and `separator` were added and then removed: the
+rows are the kit's own. `button` gains the variants the world needs (`soft` mint, `surface` round white) and keeps
+only ≥44px sizes.
 
 **App-wide presentational components** (`shared/ui`):
 
 | Component       | What it is                                                                                  |
 | --------------- | ------------------------------------------------------------------------------------------- |
-| `PianoKeyboard` | The one keyboard (master spec §8): a `range` (`KeyRange`), `marks` per key (`{ tone: role | hand, label }`), `pressed` (held on MIDI), `lit` (sounding now, teal), `selected` (a quiz's chosen keys, filled teal), `outlined`, `wrong`, `onKeyPress`; keys are buttons named by note ("F sharp 3") with `aria-pressed` where they are selectable; black keys over white by geometry from a pure `keyboardLayout(range)` (`shared/lib`); optional horizontal scroll with a `centre` MIDI kept in view |
+| `PianoKeyboard` | The one keyboard (master spec §8): the whole piano (A0–C8), scrolling sideways; its `range` fills the width with white keys 28–48px wide; it opens centred on `inView` (else the range) and scrolls to `inView` when a key of it is out of sight. `marks` per key (`{ tone: role \| hand \| scale, label }`), `lit` (Name chord's chord, teal), `selected` (a quiz's chosen keys, teal), `outlined`, `wrong`, `down` (sounding or held on MIDI) and a required `onKeyPress`: a key that does nothing cannot be drawn. Keys are buttons named by note ("F sharp 3"), one tab stop with the arrow keys, Home and End walking the rest, `aria-pressed` where selectable; a pure `keyLook` decides each face; black keys over white by geometry from `keyboardLayout` (`shared/lib`). Screens use it through `LiveKeyboard` (live-keyboard design) |
 | `ScreenHeader`  | Large title, optional leading back button and trailing actions; replaces `ScreenTitle`      |
 | `RoundButton`   | A 44px round icon button with a required `label` (the `surface` Button variant, composed)   |
 | `Segmented`     | A pill segmented control over `ToggleGroup` (one value, required; a string or a number)     |
@@ -111,7 +114,8 @@ sizes.
 | `RoleLegend`    | The roles present in a chord or scale: dot + name                                          |
 | `RatingMark`    | Known (teal check), gap (amber dot), unknown (hollow ring), each with a hidden text name    |
 | `LevelMark`     | Four pips, the level filled, with "Level 2" as its accessible name                          |
-| `Sheet`         | The app's bottom sheet: a `Drawer` that always shows its swipe handle; `SheetContent` is its panel (title, scrolling body, optional footer); triggers are the primitive's `DrawerTrigger` |
+| `Sheet`         | The app's bottom sheet: a `Drawer` that always shows its swipe handle; `SheetContent` is its panel (title, scrolling body, optional footer); `SheetTrigger` and `SheetClose` are the drawer's parts under the kit's names |
+| `Pinned`        | Holds a keyboard at the top of the screen, on the page's background and clear of the notch, while the page scrolls under it |
 
 ## 3. Layout and navigation
 
@@ -159,7 +163,7 @@ leaves the screen instead of undoing a tap.
 
 ### 4.3 Piece `/songs/$pieceId`
 
-- Back button; the title block (as in Songs), credits (role label + names as printed), the source ("«Боже, спасибо»,
+- Back button (back where the learner came from, Path or Songs; to Songs when the Piece was opened directly); the title block (as in Songs), credits (role label + names as printed), the source ("«Боже, спасибо»,
   No. 5, p. 16"), chips for key and meter, the note.
 - **Chords in this song** (in this exercise, in this progression: the row names the piece's kind): one chip per skill
   (quality suffix; the full name and the rating in words as accessible name) with its `RatingMark`;
@@ -167,8 +171,11 @@ leaves the screen instead of undoing a tap.
   opens `/check?of=piece:<id>`.
 - **Chart:** by section (heading assembled by i18n from kind, number, label, last, detail); bars line by line as the
   chart has them: bar numbers, chord symbols, method code labels under a bar when the chart names them, the beat count
-  under a bar that is not the meter's length. **Tap a bar to hear it** (the piece's own arrangement at its tempo).
-- Footer: **Practise** (full-width primary, opens `/play/$pieceId`) and the learned toggle with text. A toggle is
+  under a bar that is not the meter's length. **Tap a bar to hear it** (the piece's own arrangement at its tempo): a
+  keyboard pinned at the top of the chart (the piece's range) shows its notes going down as they sound, and follows them.
+- **Practise** (primary pill, opens `/play/$pieceId`) and the learned toggle with text sit under the title block, before
+  the chords and the chart, so the one action is in the first screenful whatever the chart's length (refined from a
+  footer, §11). A toggle is
   named for the state it switches, so it reads "Learned", pressed or not ("Mark as learned" would be wrong once
   pressed). The key's scale is a link in the title block (`/theory/scales?root=G&kind=major`).
 - A listing: the title block, credits, source, key and meter, the note, one line "No chart yet", and the scale link.
@@ -186,30 +193,33 @@ leaves the screen instead of undoing a tap.
 | `rh` `lh` | a right- / left-hand figure id; absent = the pattern's own | absent                                    |
 | `voicing` | `triads` `sevenths` `ninths` (progressions that allow it)  | the piece's default                       |
 
-- **Top bar:** close `RoundButton` (back to the Piece), the title with the **setup summary** beneath ("G · 72 BPM ·
+- **Top bar:** close `RoundButton` (back where the learner came from; to the Piece when the Player was opened directly), the title with the **setup summary** beneath ("G · 72 BPM ·
   Both hands", a button that opens the Setup sheet), and, where Web MIDI exists, a MIDI `RoundButton` whose dot shows
   the status and whose popover connects and names the devices.
 - **Mode switch:** `Segmented` Listen · Step · Your turn.
 - **Chart strip:** one scrolling row of the same lead-sheet bars as the Piece (section names above the first bar of a
   section); the current bar is shaded and scrolled to the centre; tapping a bar jumps there.
 - **Now panel:** the current chord at 64px, "Next" and the next chord beside it, and the bar's beats as pips with the
-  current one filled. Your turn adds the feedback line: what to play ("Play D F# A"), a correct tick, "Not F", or
+  current one filled (only the current one). Your turn adds the feedback line: what to play ("Play D F# A"), a correct tick, "Not F", or
   "Finished" with **Again**.
 - **Note grid:** the current bar's beat groups as columns (beat label 1 e & a, ⅓ ⅔), notes named with octave and
-  spelled from their chord, right hand over left hand (and the tune when the melody plays), in hand colours; the
-  current column shaded; tapping a column jumps there.
-- **Keyboard (the hero):** the performance's range rounded out to C…B; white keys at least 28px wide, scrolling
-  horizontally when that does not fit, keeping the current notes in view. The current beat group's notes are marked
-  in hand colours, labelled with finger numbers when that switch is on, else with note names. Your turn: expected keys
-  marked, received ones filled, a wrong key flashes `--key-wrong`; taps and MIDI both count. In Listen and Step a
-  tapped key sounds its note: a key is a button, and a button that does nothing is a dead end. MIDI keys held show as
-  pressed.
+  spelled from their chord, right hand over left hand (and the tune when the melody plays), in hand colours, each row
+  named in a pinned first column (RH, LH, Tune) and lined up across the beats; the current column shaded; tapping a
+  column jumps there.
+- **Keyboard (the hero):** the whole piano, the performance's range rounded out to C…B filling the width (white keys
+  28–48px, scrolling when that does not fit), keeping the current notes in view. The current beat group's notes are
+  marked in hand colours, labelled with finger numbers when that switch is on, else with note names: in Listen and
+  Step the hands heard, in Your turn the hands practised. Your turn: expected keys marked, received ones labelled ✓, a
+  wrong key flashes red; taps and MIDI both count. Every key that sounds goes down (the marked notes pulse as they
+  sound, a held bass stays down, Your turn's other hand shows as it plays), and so does a key held on MIDI. A tapped key
+  sounds its note in every mode, on top of what plays.
 - **Transport** (the primary action, bottom): Listen: Restart (round) · a 72px round **Play/Stop**; Step:
   Back (round) · **Next** (pill) · Next bar (round); Your turn: Restart (round) · **Hear these notes** (pill).
 - **Setup sheet:** Key (`ChipRow` of 12 tonics named for the piece's mode), Tempo (`Slider` 40–160 with the value),
-  Hands (`Segmented`), Pattern (a row opening a nested sheet: "From the chart" when the chart has method codes, then
+  Hands (`Segmented`), Pattern (a row opening a page of the sheet: "From the chart" when the chart has method codes, then
   the four groups of patterns with their names and descriptions, melody patterns disabled with "Needs a melody" on a
-  piece without one), Right hand and Left hand (rows opening nested sheets: "The pattern's own" + the figures),
+  piece without one), Right hand and Left hand (rows opening pages of the sheet: "The pattern's own" + the figures; a page, not a sheet over
+  the sheet, §11),
   Voicing (`Segmented`, progressions that allow it), and the saved switches: Finger numbers, Melody (pieces with a
   melody), Metronome, Count-in.
 - Opening the Player records the piece as practised (`recordPractised`). A listing or unknown id: not-found.
@@ -225,7 +235,7 @@ adds the **step panel** at the top of Chords and Scales: the step's title, **Che
 **Chords** `?root&quality&inversion&hands&step` (defaults C, `maj`, 0, `rh`):
 chord symbol at display size with its full name; `ChipRow` roots (named by `chordRootSpelling` for the quality);
 `ChipRow` families; `ChipRow` qualities of the family (suffix labels; full names as accessible names); the keyboard
-(roles coloured, degree labels) with the `RoleLegend`; the tones named in order ("G 1 · B 3 · D 5 · F ♭7"); inversion
+(roles coloured, degree labels; pinned while the page scrolls, opened centred on the chord) with the `RoleLegend`; the tones named in order ("G 1 · B 3 · D 5 · F ♭7"); inversion
 `Segmented` (Root, 1st, 2nd, 3rd for four-note chords); hands `Segmented` (Right hand · Both hands, adding the root in
 the left hand); **Play** (primary, block) and **Arpeggio** (soft). Choosing a root, family, quality, inversion or
 hands sounds the chord.
@@ -234,14 +244,14 @@ hands sounds the chord.
 scale name ("E♭ harmonic minor"); `ChipRow` roots and kinds; the keyboard over one octave plus the top note, labelled
 by degree or by the chosen hand's fingers (`view` `Segmented`: Degrees · RH fingers · LH fingers); the fingering table
 (Note / RH / LH) or one line when no standard fingering exists; **practice**: rhythm (`ChipRow` of the five rhythms),
-tempo `Slider` 40–160, hands `Segmented` (Right · Left · Together), **Play up and down** (primary), which lights each
-key as it sounds; **chords in this scale** (7-note scales): Triads · 7ths `Segmented` and a chip per chord with its
+tempo `Slider` 40–160, hands `Segmented` (Right · Left · Together), **Play up and down** (primary), each key going down
+on the pinned keyboard as it sounds (the keyboard holds the left hand's octave too); **chords in this scale** (7-note scales): Triads · 7ths `Segmented` and a chip per chord with its
 Roman numeral, tapping sounds it; **about**: formula, structure (W H W+H; Т П Т+П in Russian), and the relative major
 or minor as a link.
 
 **Symbols** (no params): a **How to read chord symbols** row opening a sheet with the reading notes (legacy Guide's
-three panels, in both languages; the app's one reference text, the exception CODE_STYLE §10 records), then the chord
-dictionary: per family a heading and one reference card per quality
+three panels, in both languages; the app's one reference text, the exception CODE_STYLE §10 records), then a keyboard
+pinned above the chord dictionary, where each **Hear** shows its chord on C going down, then the dictionary: per family a heading and one reference card per quality
 (symbol spellings "Cm, C−", full name, formula "1 ♭3 5", notes on C) with text actions **Hear** and **Open** (the
 Chords explorer on that quality).
 
@@ -259,7 +269,7 @@ whole quiz.
   select, selected keys filled teal; after Check the answer's keys shown with roles, missing ones outlined, extra ones
   red; Name chord lights the chord it plays); Name chord: four answer buttons in a 2×2
   grid; the feedback line ("Right" / "It's C7 · dominant 7th"); one full-width action: **Check** (disabled with no
-  keys), then **Next**. Clear sits beside Check while keys are selected.
+  keys), then **Next** (after a Check's last question, Next opens the result). Clear sits beside Check while keys are selected.
 - **Check** `/check?of=<step id>`, full screen: close button, a `Progress` bar of answered / length, the board, then
   the **result**: "5 of 6" at display size, the scope's skills with their `RatingMark`, each gap opening the explorer
   on it, a line when the check just marked its step learned, and **Done** (back). Scopes: `piece:<id>` → the piece's
@@ -281,22 +291,26 @@ keyboard (status line + Connect; or one line saying this browser cannot connect 
 New code by layer. Pure logic has a colocated test and lives where CLAUDE.md puts it.
 
 **shared/lib**
-- `music/keyboard.ts` — `MIDDLE_C`, `isBlackKey`, `KeyRange` and `keyboardRange(keys, least)` (the least range grown to
-  whole octaves as far as the keys need).
+- `music/keyboard.ts` — `MIDDLE_C`, `PIANO` (A0–C8), `MIDDLE_OCTAVES`, `isBlackKey`, `KeyRange`, `rangeOf(keys)` and
+  `keyboardRange(keys, least)` (the least range grown to whole octaves as far as the keys need).
 - `music/place.ts` — `placeChord(root, quality, { inversion, bothHands })`: the explorers' **placed tones** (right hand
   from middle C, the first inversions' tones an octave up, the root an octave below in the left hand);
   `lastInversion(quality)`, the one rule for which inversions a chord has; `placeScale(root, kind)`, root to root
   from middle C. ("Voicing" stays the progressions' triads, sevenths or ninths.)
 - `music/scale.ts` — `scaleGaps(kind)` (`W H W+H`) and `relativeScale(root, kind)` (major ↔ natural minor; the
   harmonic and melodic minors' relative major).
-- `music/note.ts` — `noteParam(note)` / `noteFromParam(param)`: URL spelling with ASCII `b` and `#`.
-- `keyboard-layout.ts` — `keyboardLayout(range)`: each key's place, width and length in percent.
+- `music/note.ts` — `noteParam(note)` / `noteFromParam(param)`: URL spelling with ASCII `b` and `#`, as a branded
+  `NoteParam` only `noteParam` makes.
+- `keyboard-layout.ts` — `keyboardLayout(range)`: each key's place, width and length in percent; `spanOf(keys, range)`.
 - `schedule/` — `barSounds(performance, bar, options)` (a bar on its own), `chordSounds(midis, { arpeggio })`, and
-  `scaleRun(notes, { rhythm, tempo, hands })` with `PRACTICE_RHYTHMS` → sounds plus a cue per note for lighting keys.
+  `scaleRun(notes, { rhythm, tempo, hands })` with `PRACTICE_RHYTHMS` → sounds; `keySound(key)` (a tap);
+  `TEMPO_RANGE`; `keyWindows`/`keysSoundingAt` (which keys sound when, for the audio port's sounding keys).
 - `search-params.ts` — `valueOr`, `wholeIn(raw, min, max, fallback)`, `readNote` for the validators.
 - `fold-text.ts` — search normalisation (case, diacritics, ё → е).
-- `services/use-play.ts` — `usePlay()`: unlocks audio and plays sounds; `usePlayChord()`: a chord placed as the
-  explorers place it, struck or rolled. The explorers', the chart's and the dictionary's one way to sound.
+- `services/use-play.ts` — `usePlay()`: unlocks audio and plays sounds, cutting off what sounded; `usePlayChord()`: a
+  chord placed as the explorers place it, struck or rolled; `useSoundKey()`: one key on top of what sounds (a tap).
+  `use-sounding-keys.ts` — `useSoundingKeys()`, the keys the audio port is sounding now.
+- `use-go-back.ts` — `useGoBack(fallback)`: back through the history, or `fallback` when opened directly.
 
 **shared/i18n** — `Locale` and `LOCALES` move here from `entities/settings` (the lowest layer that knows languages;
 `LocalText` is keyed by them), with `useLocale()`, the locale i18next speaks now.
@@ -314,6 +328,8 @@ New code by layer. Pure logic has a colocated test and lives where CLAUDE.md put
 
 **features**
 - `mark-learned/ui/LearnedToggle.tsx` — the round check (and a text variant for the Piece footer and the step panel).
+- `live-keyboard/` (live-keyboard design) — `LiveKeyboard`: the keyboard every screen shows, its keys down while the
+  app sounds them or MIDI holds them, a tapped key sounding before its screen's own meaning.
 - `connect-midi/` (new) — `useMidiConnection()`, `MidiControl` (status line + Connect) and `MidiButton`, used by
   Settings and the Player; `useHeldKeys()`.
 - `practice/` (beside the machine, as the slice already lays out) — `PRACTICE_MODES`, `defaultPattern(piece)`,
@@ -371,7 +387,8 @@ Every new string in `en` and `ru` in its namespace: `common` (nav, actions, rati
 
 ## 8. Accessibility
 
-Keys are buttons with note names; selectable keys use `aria-pressed`; coloured keys always carry a label. Segmented
+Keys are buttons with note names, one tab stop per keyboard with the arrow keys, Home and End walking the keys;
+selectable keys use `aria-pressed`; coloured keys always carry a label. Segmented
 controls and chip rows are `ToggleGroup`s (arrow keys move, one tab stop). Sheets trap focus and have titles. The
 Your-turn feedback and quiz feedback lines are `aria-live="polite"`. Every icon-only button has a label. Targets ≥44px
 except white keys in a scrolling keyboard (≥28px wide, 3× as tall), where MIDI is the primary input.
@@ -413,3 +430,15 @@ README, and ADR 0007 for the visual world. Then `npm run typecheck && npm run li
 10. **The Player writes a choice equal to the piece's own as absent** (§6's defaults stripped from the URL, for the
     params whose default depends on the piece).
 11. **In Listen and Step a tapped key sounds its note** (§5 names taps only for Your turn).
+12. **Every keyboard plays and shows what sounds** (live-keyboard design, 2026-09-25): the whole piano, scrolling; a
+    tapped key sounds on every screen; a key goes down as the app sounds it or MIDI holds it. Chords, Scales, Symbols
+    and the Piece pin their keyboard; Symbols and the Piece gain one.
+13. **The Player marks the hands heard, and in Your turn the hands practised** (§4.4 marked every hand).
+14. **Practise sits under the title block** instead of in a footer, so it is in the first screenful whatever the
+    chart's length.
+15. **Back and close go where the learner came from**, falling back to Songs (the Piece), the Piece (the Player) or
+    the Path (the Check) when the screen was opened directly.
+16. **The Setup sheet's lists open as its pages**, never as a sheet over a sheet.
+17. **A Check ends with Next, then the result's Done** (one action per step, no two Dones in a row).
+18. **The scale band** (`--key-mark*`) marks a scale's notes: the keys keep their white and black, so the keyboard's
+    pattern still reads.

@@ -68,7 +68,8 @@ it. `@` → `src`.
   `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
-  control, held keys), and the machines: `practice` (the pure `practice-machine`, `usePractice`, which drives it with
+  control, held keys), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows: keys go down as they sound or
+  are held on MIDI, and a tapped key sounds), and the machines: `practice` (the pure `practice-machine`, `usePractice`, which drives it with
   audio, MIDI and the clock, and the Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and
   `quiz` (the machine, check plans, the theory quizzes, My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
@@ -80,13 +81,14 @@ it. `@` → `src`.
   `settings` (`pt-settings`, version 2), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
   an answer or a mark changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
-  `keyboardLayout`, the search-param readers, `foldText`; and with barrels of their own: `music` the theory kernel
-  (with the keyboard's range and `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance),
-  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord, a scale run), `services`
-  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayChord`)), `config` (`THEME_COLORS`), `api` (the `audio` and
-  `midi` ports, their browser adapters and fakes), `ui` (the kit: `PianoKeyboard`, `ScreenHeader`, `RoundButton`,
-  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet`, `RoleLegend`, `RatingMark`, `LevelMark`; shadcn in
-  `ui/primitives`), `i18n` (`Locale`, `useLocale`, `LocalText`), `test`.
+  `useGoBack`, `keyboardLayout`, the search-param readers, `foldText`; and with barrels of their own: `music` the theory kernel
+  (with the piano's ranges and `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance),
+  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord, a scale run, a tap, which keys sound
+  when), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayChord`, `useSoundKey`, `useSoundingKeys`)),
+  `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and fakes; the audio port
+  knows which keys it is sounding), `ui` (the kit: `PianoKeyboard`, `Pinned`, `ScreenHeader`, `RoundButton`,
+  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` with its trigger and close, `RoleLegend`, `RatingMark`,
+  `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`, `useLocale`, `useScaleName`, `LocalText`), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
@@ -111,8 +113,9 @@ the script to the store.
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
   scheme, `stubServiceWorker` for a waiting version). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
-  `renderWithSettings(ui, { locale, theme })`; the whole app: `renderApp(path, { locale })`; both in
-  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
+  `renderWithSettings(ui, { locale, theme })`; the whole app: `renderApp(path, { locale, webMidi })`, which returns
+  its fake `audio` and `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that
+  sound); both in `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
   so a missing key fails `tsc`.

@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T19:47:32+00:00",
+  "title": "Design System: Piano Trainer",
+  "extensions": {
+    "colorMeta": {
+      "deep-teal": {
+        "role": "primary",
+        "displayName": "Deep Teal",
+        "canonical": "#2D6657",
+        "tonalRamp": [
+          "#0F2A23",
+          "#1F4D41",
+          "#2D6657",
+          "#3F7D6C",
+          "#5C9A88",
+          "#8CCBB8",
+          "#BFE3D7",
+          "#E3F2EC"
+        ]
+      },
+      "mint-soft": {
+        "role": "secondary",
+        "displayName": "Mint Soft",
+        "canonical": "#D3E6DE",
+        "tonalRamp": [
+          "#1E3A32",
+          "#35594D",
+          "#557A6D",
+          "#789C8F",
+          "#9DBDB1",
+          "#BFD9CE",
+          "#D3E6DE",
+          "#EDF5F1"
+        ]
+      },
+      "sage-ground": {
+        "role": "neutral",
+        "displayName": "Sage Ground",
+        "canonical": "#F3F6F3",
+        "tonalRamp": [
+          "#0D1210",
+          "#1F2824",
+          "#2A3430",
+          "#5E6964",
+          "#97A59F",
+          "#DCE3DE",
+          "#E8EDE9",
+          "#F3F6F3"
+        ]
+      },
+      "amber-attention": {
+        "role": "tertiary",
+        "displayName": "Gap Amber",
+        "canonical": "#9A5A0B",
+        "tonalRamp": [
+          "#3D2404",
+          "#6B3F08",
+          "#9A5A0B",
+          "#C07A1E",
+          "#E7A64B",
+          "#F2C98D",
+          "#F8E2C1",
+          "#FDF3E4"
+        ]
+      },
+      "key-down-mint": {
+        "role": "neutral",
+        "displayName": "Key Down",
+        "canonical": "#8CCBB8"
+      }
+    },
+    "typographyMeta": {
+      "chord-display": {
+        "displayName": "Chord display",
+        "purpose": "The chord now: the Player and the Chords explorer."
+      },
+      "large-title": {
+        "displayName": "Large title",
+        "purpose": "Each screen's header."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section headings, a chord in a chart."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Row titles, feedback lines."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Everything read in passing."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Segments, beat labels, key labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "raised",
+        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "Round buttons and a selected segment, with a 1px hairline ring."
+      },
+      {
+        "name": "floating",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "The floating tab bar, over a 24px backdrop blur."
+      },
+      {
+        "name": "popover",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "purpose": "The MIDI popover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "The one curve: sheets, popovers, the chart strip."
+      },
+      {
+        "name": "key",
+        "value": "80ms",
+        "purpose": "A key going down or up."
+      },
+      {
+        "name": "state",
+        "value": "200ms",
+        "purpose": "Hover and selection changes."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "landscape-phone",
+        "value": "(orientation: landscape) and (max-height: 500px)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The screen's one action.",
+      "html": "<button class=\"ds-btn-primary\">Practise</button>",
+      "css": ".ds-btn-primary{background:var(--primary,#2D6657);color:var(--primary-foreground,#fff);height:56px;padding:0 24px;border:0;border-radius:9999px;font:600 17px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s cubic-bezier(.22,1,.36,1),transform .2s}.ds-btn-primary:hover{background:color-mix(in oklab,#2D6657 80%,transparent)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+    },
+    {
+      "name": "Soft Button",
+      "kind": "button",
+      "refersTo": "button-soft",
+      "description": "The second action beside the primary one.",
+      "html": "<button class=\"ds-btn-soft\">Arpeggio</button>",
+      "css": ".ds-btn-soft{background:#D3E6DE;color:#1F4D41;height:56px;padding:0 24px;border:0;border-radius:9999px;font:600 17px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s}.ds-btn-soft:hover{background:color-mix(in oklab,#D3E6DE 80%,transparent)}.ds-btn-soft:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+    },
+    {
+      "name": "Round Button",
+      "kind": "button",
+      "refersTo": "button-round",
+      "description": "A 44px icon button, always labelled.",
+      "html": "<button class=\"ds-btn-round\" aria-label=\"Close\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M18 6 6 18M6 6l12 12\"/></svg></button>",
+      "css": ".ds-btn-round{display:grid;place-items:center;width:44px;height:44px;border-radius:9999px;border:0;background:#fff;color:#131816;box-shadow:0 0 0 1px #DCE3DE,0 1px 3px rgb(0 0 0 / .1);transition:background .2s}.ds-btn-round:hover{background:#E8EDE9}.ds-btn-round:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "One choice in a scrolling row; selected is deep teal.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">C</button><button class=\"ds-chip\" aria-pressed=\"false\">D♭</button><button class=\"ds-chip\" aria-pressed=\"false\">D</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{height:44px;min-width:44px;padding:0 16px;border:0;border-radius:9999px;background:#fff;color:#131816;box-shadow:0 0 0 1px #DCE3DE;font:600 16px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s}.ds-chip:hover{background:#E8EDE9}.ds-chip[aria-pressed=true]{background:#2D6657;color:#fff;box-shadow:0 0 0 1px #2D6657}.ds-chip:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+    },
+    {
+      "name": "Segmented",
+      "kind": "custom",
+      "refersTo": "segmented-track",
+      "description": "One value from a few, on a sunken track.",
+      "html": "<div class=\"ds-seg\"><button aria-pressed=\"true\">Listen</button><button aria-pressed=\"false\">Step</button><button aria-pressed=\"false\">Your turn</button></div>",
+      "css": ".ds-seg{display:flex;gap:4px;padding:4px;border-radius:18px;background:#E8EDE9}.ds-seg button{flex:1;height:44px;border:0;border-radius:14px;background:transparent;color:#5E6964;font:600 14px/1.25 'Onest Variable',system-ui,sans-serif;transition:color .2s}.ds-seg button:hover{color:#131816}.ds-seg button[aria-pressed=true]{background:#fff;color:#131816;box-shadow:0 1px 3px rgb(0 0 0 / .1)}"
+    },
+    {
+      "name": "Continue Card",
+      "kind": "card",
+      "refersTo": "continue-card",
+      "description": "The one suggestion on the Path.",
+      "html": "<article class=\"ds-continue\"><h3>Still, my soul, be still</h3><p>G major</p><button>Continue</button></article>",
+      "css": ".ds-continue{background:#D3E6DE;color:#1F4D41;border-radius:26px;padding:20px;font-family:'Onest Variable',system-ui,sans-serif}.ds-continue h3{margin:0;font:700 22px/1.2 inherit}.ds-continue p{margin:4px 0 16px}.ds-continue button{width:100%;height:56px;border:0;border-radius:9999px;background:#2D6657;color:#fff;font:600 17px/1 inherit}"
+    },
+    {
+      "name": "Keyboard",
+      "kind": "custom",
+      "refersTo": "key-white",
+      "description": "The one keyboard: chord tones in role colours with their degrees; a key that sounds goes down.",
+      "html": "<div class=\"ds-keys\"><span class=\"w root\">1</span><span class=\"w\"></span><span class=\"w third down\">3</span><span class=\"w\"></span><span class=\"w fifth\">5</span><span class=\"b\" style=\"left:24px\"></span><span class=\"b\" style=\"left:60px\"></span><span class=\"b\" style=\"left:132px\"></span></div>",
+      "css": ".ds-keys{position:relative;display:flex;height:120px}.ds-keys .w{width:36px;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;background:#fff;border:1px solid #D3DAD5;border-top:0;border-radius:0 0 9px 9px;font:700 14px 'Onest Variable',system-ui;color:#fff;box-sizing:border-box}.ds-keys .root{background:#2E5BD0}.ds-keys .third{background:#CC3363}.ds-keys .fifth{background:#5B6878}.ds-keys .down{box-shadow:inset 0 0 0 999px color-mix(in oklab,#131816 38%,transparent)}.ds-keys .b{position:absolute;top:0;width:22px;height:62%;background:#1E2321;border-radius:0 0 6px 6px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Music Stand",
+    "overview": "Everything is designed to be read from a phone propped on a piano's music stand, glanced at between chords with both hands on the keys. The labelled keyboard is the hero: it is on every screen that sounds anything, it plays when tapped, and every key the app sounds goes down on it as it sounds. Around it the screens are calm and native-feeling: a sage ground, white raised surfaces, a mint soft surface for what to do next, and one deep-teal action per screen.",
+    "keyCharacteristics": [
+      "One keyboard component everywhere: the whole piano, scrolling, one tab stop.",
+      "One deep-teal action per screen.",
+      "Chord symbols set heavy and large; numerals tabular.",
+      "Round 44px icon buttons, pill segmented controls, chips in a scrolling row, a floating glass tab bar.",
+      "Bottom sheets of switches and lists, never a sheet over a sheet."
+    ],
+    "rules": [
+      {
+        "name": "The Palette Law",
+        "body": "Role colours appear on chord tones only; hand colours only in the Player; attention only as the dot of a gap.",
+        "section": "colors"
+      },
+      {
+        "name": "The Key Goes Down Rule",
+        "body": "A key that sounds goes down, whoever plays it: a plain key turns Key Down mint; a coloured key keeps its colour under a tint, deeper by day and brighter by night.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Tempo, bar numbers, counts and key labels use tabular figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Glow Rule",
+        "body": "No coloured glow, no gradient, no glassmorphism beyond the tab bar.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do give each screen exactly one deep-teal primary action.",
+      "Do show every sound on a keyboard: a key that sounds goes down.",
+      "Do label every coloured key with its degree, finger or note.",
+      "Do keep targets at 44px and focus rings visible.",
+      "Do set numerals that change in place in tabular figures."
+    ],
+    "donts": [
+      "Don't colour chrome with a chord role or a hand colour.",
+      "Don't draw a key that does nothing: every key sounds.",
+      "Don't stack a sheet over a sheet.",
+      "Don't write how-to paragraphs.",
+      "Don't use cream, gradients or coloured glow."
+    ]
+  }
+}

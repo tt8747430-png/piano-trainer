@@ -43,19 +43,21 @@ differently, the UI column says how.
 
 ## Practice
 
-| Term                          | Means                                                                                                                  | Avoid                   |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| **Pattern**                   | A named accompaniment style for the right and left hand                                                                | rhythm, style (in code) |
-| **Figure**                    | One hand's part of a Pattern: fixed events, or a right hand playing the tune                                           | part, RHP/LHP           |
-| **Practice toggle**           | One of the Setup's saved switches: finger numbers, melody, metronome, count-in                                         | option, flag            |
-| **Performance**               | Everything `arrange` produces for a Piece: bars, beats, notes on a timeline                                            | playback, song data     |
-| **Tick**                      | The domain's unit of time: 12 per beat                                                                                 | step (as time)          |
-| **Beat group**                | Notes sharing an onset: what Step mode walks through                                                                   | chord (as time), group  |
-| **Pass**                      | One play-through from a beat group to the end; Listen loops passes                                                     | run, cycle              |
-| **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound                                   | player loop, engine     |
-| **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes                                 | auto, manual            |
-| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles (Russian UI: «Параметры»; «Настройки» is Settings) | options, settings       |
-| **Note grid**                 | The Player's columns of the current bar's notes, by beat and hand                                                      | piano roll, tab         |
+| Term                          | Means                                                                                                                              | Avoid                       |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **Pattern**                   | A named accompaniment style for the right and left hand                                                                            | rhythm, style (in code)     |
+| **Figure**                    | One hand's part of a Pattern: fixed events, or a right hand playing the tune                                                       | part, RHP/LHP               |
+| **Practice toggle**           | One of the Setup's saved switches: finger numbers, melody, metronome, count-in                                                     | option, flag                |
+| **Performance**               | Everything `arrange` produces for a Piece: bars, beats, notes on a timeline                                                        | playback, song data         |
+| **Tick**                      | The domain's unit of time: 12 per beat                                                                                             | step (as time)              |
+| **Beat group**                | Notes sharing an onset: what Step mode walks through                                                                               | chord (as time), group      |
+| **Pass**                      | One play-through from a beat group to the end; Listen loops passes                                                                 | run, cycle                  |
+| **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound                                               | player loop, engine         |
+| **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes                                             | auto, manual                |
+| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles (Russian UI: «Параметры»; «Настройки» is Settings)             | options, settings           |
+| **Note grid**                 | The Player's columns of the current bar's notes, by beat and hand                                                                  | piano roll, tab             |
+| **Live keyboard**             | The keyboard every screen shows (`LiveKeyboard`): the whole piano, scrolling; a tapped key sounds; a key goes down while it sounds | static keyboard, piano roll |
+| **Down** (a key)              | A key sounding now or held on a MIDI keyboard, drawn pressed; Name chord's shown chord is **lit**, not down                        | active, playing             |
 
 ## Path and progress
 

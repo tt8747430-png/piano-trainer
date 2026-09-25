@@ -20,8 +20,11 @@ A container wires data to presentational children. One job each.
 - **One exported component per file, named for the file.** Private helpers may stay.
 - A page composes widgets and `shared/ui`, with little markup of its own.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard),
-  `ScreenHeader`, `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` / `SheetContent`,
-  `RoleLegend`, `RatingMark`, `LevelMark`.
+  `Pinned`, `ScreenHeader`, `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` /
+  `SheetTrigger` / `SheetContent` / `SheetClose`, `RoleLegend`, `RatingMark`, `LevelMark`.
+- **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when tapped and goes
+  down while it sounds or MIDI holds it. `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end.
+  Anything that plays sound on a screen shows it on that screen's keyboard (pin it when the page scrolls away from it).
 - A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
   `SetupParams`); `app/routes/search.ts` imports it with `import type`.
 
@@ -130,7 +133,8 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates
-  an `AudioContext` or calls `requestMIDIAccess`.
+  an `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar from a
+  button); `useSoundKey` adds a tap on top; what sounds is the port's to know (`useSoundingKeys`).
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
 - **The explorers place tones with `placeChord` / `placeScale`,** and a chord's inversions are `lastInversion`'s:
   the validator, the segments and the keyboard all ask it.
@@ -149,7 +153,8 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
 - **A screen's test sits beside its page** (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through
   `renderApp`, so routing, search params and stores are real. Test files are outside the layer rules.
 - jsdom lays nothing out: Base UI keeps a slider's thumb hidden until it measures the track (query it with
-  `{ hidden: true }`), and `setup.ts` gives `scrollIntoView` a no-op for the chart strip.
+  `{ hidden: true }`), and scrolling code checks `scrollWidth` before it scrolls, so it does nothing there.
+- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down`.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
 
 ## 10. Copy and i18n
