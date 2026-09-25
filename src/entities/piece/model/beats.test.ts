@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readBeats, ticksIn } from './beats'
+import { barLength, readBeats, ticksIn } from './beats'
 
 describe('ticksIn', () => {
   it.each([
@@ -27,5 +27,14 @@ describe('readBeats', () => {
 
   it.each(['', ' ', '0', '-1', 'two'])('reads %j as no beats', (text) => {
     expect(readBeats(text)).toBeNull()
+  })
+})
+
+describe('barLength', () => {
+  it('writes a short bar in the meter’s own unit', () => {
+    expect(barLength(2, '4/4')).toBe('2/4')
+    expect(barLength(1.5, '4/4')).toBe('3/8')
+    expect(barLength(1, '6/8')).toBe('3/8')
+    expect(barLength(3, '12/8')).toBe('9/8')
   })
 })

@@ -1,7 +1,20 @@
 import type { LocaleResources } from '../../types'
 
 export const piece: LocaleResources['piece'] = {
-  title: 'Песня',
+  chords: {
+    song: 'Аккорды песни',
+    exercise: 'Аккорды упражнения',
+    progression: 'Аккорды последовательности',
+  },
+  checkChords: 'Проверить эти аккорды',
+  chart: 'Аккорды по тактам',
+  barLabel: 'Такт {{n}}',
+  progression: 'Последовательность',
+  practise: 'Играть',
+  noChart: 'Аккордов пока нет',
+  scaleOf: 'Гамма: {{scale}}',
+  key: 'Тональность',
+  meter: 'Размер',
   credit: {
     authors: 'Авторы',
     'words-and-music': 'Слова и музыка',

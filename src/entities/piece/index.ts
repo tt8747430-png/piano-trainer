@@ -27,6 +27,7 @@ export {
   type Voicing,
 } from './model/types'
 export { ContentError, type ContentPosition } from './model/content-error'
+export { barLength } from './model/beats'
 export { chartOf, hasMethodCodes, melodyOf } from './model/chart'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
 export { entryById, pieceById } from './model/selectors'

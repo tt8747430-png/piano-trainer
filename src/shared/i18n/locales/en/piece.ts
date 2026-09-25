@@ -1,5 +1,19 @@
 export const piece = {
-  title: 'Song',
+  // The chords row names the piece by its kind.
+  chords: {
+    song: 'Chords in this song',
+    exercise: 'Chords in this exercise',
+    progression: 'Chords in this progression',
+  },
+  checkChords: 'Check these chords',
+  chart: 'Chart',
+  barLabel: 'Bar {{n}}',
+  progression: 'Progression',
+  practise: 'Practise',
+  noChart: 'No chart yet',
+  scaleOf: 'Scale: {{scale}}',
+  key: 'Key',
+  meter: 'Meter',
   credit: {
     authors: 'Authors',
     'words-and-music': 'Words and music',
