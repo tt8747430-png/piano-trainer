@@ -1,45 +1,66 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { renderWithSettings } from '@/app/testing/render-with-settings'
-import { SettingsPage } from './SettingsPage'
+import { renderApp } from '@/app/testing/render-app'
+import { createFakeAudio } from '@/shared/api/audio'
 
-const renderPage = () => renderWithSettings(<SettingsPage />).settingsStore
-
-describe('SettingsPage', () => {
-  it('shows the saved language and theme as chosen', () => {
-    renderPage()
-    expect(screen.getByRole('radio', { name: 'English' })).toBeChecked()
-    expect(screen.getByRole('radio', { name: 'System' })).toBeChecked()
+describe('Settings', () => {
+  it('shows the saved language and theme as chosen', async () => {
+    renderApp('/settings')
+    expect(await screen.findByRole('button', { name: 'English' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('groups each choice under its own heading', () => {
-    renderPage()
-    const language = screen.getByRole('group', { name: 'Language' })
+  it('groups each choice under its own heading', async () => {
+    renderApp('/settings')
+    const language = await screen.findByRole('group', { name: 'Language' })
     expect(
       within(language)
-        .getAllByRole('radio')
-        .map((radio) => radio.getAttribute('value')),
-    ).toEqual(['en', 'ru'])
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual(['English', 'Русский'])
     const theme = screen.getByRole('group', { name: 'Theme' })
     expect(
       within(theme)
-        .getAllByRole('radio')
-        .map((radio) => radio.getAttribute('value')),
-    ).toEqual(['system', 'light', 'dark'])
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual(['System', 'Light', 'Dark'])
   })
 
   it('saves a new language', async () => {
     const user = userEvent.setup()
-    const store = renderPage()
-    await user.click(screen.getByRole('radio', { name: 'Русский' }))
-    expect(store.getState().locale).toBe('ru')
+    const { settingsStore } = renderApp('/settings')
+    await user.click(await screen.findByRole('button', { name: 'Русский' }))
+    expect(settingsStore.getState().locale).toBe('ru')
   })
 
   it('saves a new theme', async () => {
     const user = userEvent.setup()
-    const store = renderPage()
-    await user.click(screen.getByRole('radio', { name: 'Dark' }))
-    expect(store.getState().theme).toBe('dark')
+    const { settingsStore } = renderApp('/settings')
+    await user.click(await screen.findByRole('button', { name: 'Dark' }))
+    expect(settingsStore.getState().theme).toBe('dark')
+  })
+
+  it('says in one line when the browser cannot connect a keyboard', async () => {
+    renderApp('/settings', { services: { audio: createFakeAudio(), midi: null } })
+    expect(
+      await screen.findByText('This browser can’t connect a MIDI keyboard.'),
+    ).toBeInTheDocument()
+  })
+
+  it('resets progress only after confirming, then closes the dialog', async () => {
+    const user = userEvent.setup()
+    const { progressStore } = renderApp('/settings')
+    act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
+    await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(progressStore.getState().learned['chords:tri']).toBeDefined()
+    await user.click(screen.getByRole('button', { name: 'Reset progress' }))
+    await user.click(await screen.findByRole('button', { name: 'Reset' }))
+    expect(progressStore.getState().learned).toEqual({})
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
   })
 })

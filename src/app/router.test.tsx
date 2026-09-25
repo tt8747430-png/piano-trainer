@@ -131,7 +131,7 @@ describe('the app shell', () => {
   it('relabels the app as soon as the learner switches to Russian', async () => {
     const user = userEvent.setup()
     renderApp('/settings')
-    await user.click(await screen.findByRole('radio', { name: 'Русский' }))
+    await user.click(await screen.findByRole('button', { name: 'Русский' }))
     const nav = await screen.findByRole('navigation', { name: 'Основная навигация' })
     expect(within(nav).getByRole('link', { name: 'Путь' })).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('ru')
@@ -140,7 +140,7 @@ describe('the app shell', () => {
   it('repaints the app as soon as the learner picks a theme', async () => {
     const user = userEvent.setup()
     renderApp('/settings')
-    await user.click(await screen.findByRole('radio', { name: 'Dark' }))
+    await user.click(await screen.findByRole('button', { name: 'Dark' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
 })
