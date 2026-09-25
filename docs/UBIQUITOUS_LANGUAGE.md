@@ -49,6 +49,8 @@ differently, the UI column says how.
 | **Performance**               | Everything `arrange` produces for a Piece: bars, beats, notes on a timeline            | playback, song data     |
 | **Tick**                      | The domain's unit of time: 12 per beat                                                 | step (as time)          |
 | **Beat group**                | Notes sharing an onset: what Step mode walks through                                   | chord (as time), group  |
+| **Pass**                      | One play-through from a beat group to the end; Listen loops passes                     | run, cycle              |
+| **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound   | player loop, engine     |
 | **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes | auto, manual            |
 | **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles                    | options, settings       |
 

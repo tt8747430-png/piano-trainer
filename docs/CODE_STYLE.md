@@ -30,8 +30,8 @@ A container wires data to presentational children. One job each.
 ## 3. Complex state → a reducer or a machine
 
 - Several values changing together, or distinct phases → a pure reducer or discriminated-union machine outside the
-  component, with its own tests (from Phase 2: `features/practice/practice-machine.ts`,
-  `features/quiz/quiz-machine.ts`). The component dispatches.
+  component, with its own tests (`features/practice/practice-machine.ts`, `features/quiz/quiz-machine.ts`). The
+  component dispatches.
 - A page with many acts exposes **one** hook, `pages/<x>/model/use-<thing>.ts`. That hook is the test surface
   (`renderHook`), not the page.
 - **A confirmation or multi-step flow is one union value, never a flag each**
@@ -95,6 +95,14 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
 
 - **Spelling comes from letter steps + semitones,** never from a table of sharp or flat names. That is what keeps
   C♭, E♯, F𝄪 and 𝄫7 right. Name tables are for display only where no key exists.
+- **Transpose by interval, keeping letters:** `transposeNote(note, fromTonic, toTonic)` applies the interval from
+  the old tonic to the note to the new tonic, so D in G is E♭ in A♭. A root that would need a double accidental
+  takes its plain spelling; chord tones and slash basses are then spelled from the root. Never move by semitones and
+  then choose sharps or flats.
+- **The kernel is fenced:** `shared/lib/music` imports nothing outside itself, `shared/lib/arrangement` only music,
+  and neither imports a package (lint).
+- **`arrangement` exports only `arrange`** (plus `parseFigure` and its types). Voice leading, the chord context and
+  fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds exist only in `shared/lib/schedule` and the audio adapter.
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates
   an `AudioContext` or calls `requestMIDIAccess`.
@@ -107,8 +115,8 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
 - **Test first** (`tdd` skill). A test names behaviour a learner or caller can observe ("saves a new language"),
   not an implementation detail.
 - Components: Testing Library, by role and accessible name; `userEvent.setup()` for interaction. No snapshots.
-- Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`; from Phase 2
-  `FakeAudio` and `FakeMidi`), not by mocking modules.
+- Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`,
+  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules.
 - A component under the settings store: `renderWithSettings(ui, { locale, theme })`; whole-app behaviour:
   `renderApp(path, { locale })`; both in `src/app/testing/`.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
@@ -119,7 +127,8 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
   errors get one short line.
 - Every interface string goes through i18next, in **both** `en` and `ru`
   (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English).
-- Content text a learner reads is `LocalText { en, ru }` (from Phase 2). Credits stay as printed.
+- Content text a learner reads is `LocalText { en, ru }`, read through `localText(text, locale)`. Credits stay as
+  printed ([CONTENT](CONTENT.md)).
 - Note and chord names are the same in both languages (B, not H).
 
 ## 11. Build and deploy

@@ -25,4 +25,4 @@ npm run build && npm run preview   # the production build, with the service work
 - Every push and pull request runs typecheck, lint, tests with coverage and the build
   (`.github/workflows/ci.yml`). Vercel builds a preview of each pull request.
 
-How to add a song arrives with the content format in Phase 2 (`docs/CONTENT.md`).
+- How to add a song, a progression, a pattern or a path step: [docs/CONTENT.md](docs/CONTENT.md).
