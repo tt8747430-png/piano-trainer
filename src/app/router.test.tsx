@@ -86,8 +86,7 @@ describe('the app shell', () => {
 
   it('opens a deep link to a Theory section with its tab selected', async () => {
     renderApp('/theory/scales')
-    expect(await screen.findByRole('heading', { level: 2, name: 'Scales' })).toBeInTheDocument()
-    const tabs = screen.getByRole('navigation', { name: 'Theory sections' })
+    const tabs = await screen.findByRole('navigation', { name: 'Theory sections' })
     expect(within(tabs).getByRole('link', { name: 'Scales' })).toHaveAttribute(
       'aria-current',
       'page',

@@ -18,6 +18,32 @@ export const theory = {
   checkYourself: 'Check yourself',
   // The chip label of the major triad, whose suffix is empty.
   major: 'M',
+  scaleLabel: 'Scale',
+  view: { label: 'Show', degrees: 'Degrees', rh: 'RH fingers', lh: 'LH fingers' },
+  fingering: {
+    note: 'Note',
+    rh: 'RH',
+    lh: 'LH',
+    none: 'No standard fingering is taught for this scale.',
+  },
+  practice: 'Practice',
+  rhythmLabel: 'Rhythm',
+  rhythm: {
+    even: 'Even',
+    'long-short': 'Long, short',
+    'short-long': 'Short, long',
+    'long-short-short-short': 'Long, 3 short',
+    'short-short-short-long': '3 short, long',
+  },
+  tempo: 'Tempo',
+  bpm: '{{tempo}} BPM',
+  together: 'Together',
+  playUpDown: 'Play up and down',
+  chordsIn: 'Chords in this scale',
+  chordSize: { triads: 'Triads', sevenths: '7ths' },
+  about: { formula: 'Formula', gaps: 'Structure', relative: 'Relative' },
+  // A scale's structure in whole and half steps.
+  gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   family: {
     tri: 'Triads',
     six: '6th & add',
