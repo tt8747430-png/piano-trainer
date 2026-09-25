@@ -1,5 +1,6 @@
 export { cn } from './cn'
 export { isOneOf } from './is-one-of'
+export { keyboardLayout, type KeyGeometry } from './keyboard-layout'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject, type Saved } from './saved'
 export { createStoreContext } from './store-context'

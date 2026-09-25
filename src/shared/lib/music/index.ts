@@ -1,4 +1,5 @@
 export { midi, pitchClass, type Midi, type PitchClass } from './pitch'
+export { MIDDLE_C, isBlackKey, keyboardRange, type KeyRange } from './keyboard'
 export {
   LETTERS,
   midiOf,
