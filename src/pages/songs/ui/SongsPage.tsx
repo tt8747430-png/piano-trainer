@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LEVELS, levelOf, pathSteps, type Level } from '@/entities/path'
+import { LEVELS, levelOf, pathSteps, pieceStepId, type Level } from '@/entities/path'
 import { COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { ChipRow, ScreenHeader } from '@/shared/ui'
@@ -13,9 +13,8 @@ import { songsView } from '../model/songs-view'
 import { SearchField } from './SearchField'
 
 const levelOfEntry = (entry: Entry) =>
-  entry.kind === 'listing' ? undefined : levelOf(`piece:${entry.id}`)
+  entry.kind === 'listing' ? undefined : levelOf(pieceStepId(entry.id))
 const LEVELS_ON_PATH = LEVELS.filter((level) => pathSteps().some((s) => s.level === level))
-const NO_FILTER: SongsFilter = { q: '', collection: 'all', level: 'any' }
 
 export function SongsPage() {
   const { t } = useTranslation(['songs', 'common'])
@@ -25,6 +24,8 @@ export function SongsPage() {
   const query = useDeferredValue(search.q)
   const set = (change: Partial<SongsFilter>) =>
     void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+  // No search at all: the route fills its defaults.
+  const clear = () => void navigate({ search: {}, replace: true })
   const groups = songsView(COLLECTIONS, { ...search, q: query }, levelOfEntry).map((g) => ({
     id: g.collection.id,
     heading: search.collection === 'all' ? localText(g.collection.name, locale) : null,
@@ -66,7 +67,7 @@ export function SongsPage() {
             <EmptyTitle>{t('songs:empty')}</EmptyTitle>
           </EmptyHeader>
           <EmptyContent>
-            <Button variant="soft" onClick={() => set(NO_FILTER)}>
+            <Button variant="soft" onClick={clear}>
               {t('songs:clearFilters')}
             </Button>
           </EmptyContent>

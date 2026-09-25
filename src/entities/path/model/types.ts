@@ -14,10 +14,13 @@ export type PathStep =
 
 export type StepId = `piece:${PieceId}` | `chords:${ChordFamily}` | `scale:${ScaleKind}`
 
+/** A piece's step: what its learned mark and its Check are kept under. */
+export const pieceStepId = (id: PieceId): StepId => `piece:${id}`
+
 export function stepIdOf(step: PathStep): StepId {
   switch (step.kind) {
     case 'piece':
-      return `piece:${step.pieceId}`
+      return pieceStepId(step.pieceId)
     case 'chords':
       return `chords:${step.family}`
     case 'scale':

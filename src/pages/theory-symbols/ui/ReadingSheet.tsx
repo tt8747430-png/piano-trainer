@@ -1,10 +1,9 @@
 import { BookOpenText, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Sheet, SheetContent } from '@/shared/ui'
-import { DrawerTrigger } from '@/shared/ui/primitives/drawer'
+import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 
-const READING = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] as const
-const NUMBERS = ['a', 'b', 'c', 'd'] as const
+const READING = ['triad', 'numbers', 'sevenths', 'sixth', 'sus', 'slash', 'alterations'] as const
+const NUMBERS = ['twoNames', 'addOnly', 'upTo', 'thirteenth'] as const
 const STEPS = [
   'order',
   'core',
@@ -23,11 +22,11 @@ export function ReadingSheet() {
   const { t } = useTranslation('theory')
   return (
     <Sheet>
-      <DrawerTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl bg-card px-4 text-left font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring">
+      <SheetTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl bg-card px-4 text-left font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring">
         <BookOpenText aria-hidden className="size-5 text-primary" />
         <span className="flex-1">{t('symbols.howToRead')}</span>
         <ChevronRight aria-hidden className="size-5 text-muted-foreground" />
-      </DrawerTrigger>
+      </SheetTrigger>
       <SheetContent title={t('symbols.howToRead')}>
         <article className="flex flex-col gap-6 pb-4 text-base leading-relaxed">
           <section className="flex flex-col gap-2">

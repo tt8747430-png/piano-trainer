@@ -1,7 +1,7 @@
 import type { SearchSchemaInput } from '@tanstack/react-router'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
-import { COLLECTIONS, VOICINGS, type CollectionId } from '@/entities/piece'
+import { isCollectionId, VOICINGS, type CollectionId } from '@/entities/piece'
 import { PRACTICE_MODES } from '@/features/practice'
 import { THEORY_QUIZZES, type TheoryQuiz } from '@/features/quiz'
 import type { PlayerSearch } from '@/pages/player'
@@ -19,7 +19,7 @@ import {
   type ChordFamily,
   type ScaleKind,
 } from '@/shared/lib/music'
-import { PRACTICE_RHYTHM_IDS, type Hands } from '@/shared/lib/schedule'
+import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
 import type { ScaleView } from '@/widgets/scale-explorer'
 
@@ -37,7 +37,8 @@ const isHands = isOneOf<Hands>(['both', 'rh', 'lh'])
 const isQuality = isOneOf(CHORD_QUALITIES)
 const isScaleKind = isOneOf(SCALE_KINDS)
 const isVoicing = isOneOf(VOICINGS)
-const isCollection = isOneOf<CollectionId | 'all'>([...COLLECTIONS.map((c) => c.id), 'all'])
+const isCollection = (value: unknown): value is CollectionId | 'all' =>
+  value === 'all' || isCollectionId(value)
 const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
 const isPlayerPattern = (value: unknown): value is PatternId | 'chart' =>
   value === 'chart' || isPatternId(value)
@@ -103,7 +104,7 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     kind,
     view: valueOr(isScaleLabels, raw.view, SCALES_DEFAULTS.view),
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
-    tempo: wholeIn(raw.tempo, 40, 160, SCALES_DEFAULTS.tempo),
+    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
     chords: valueOr(isChordSize, raw.chords, SCALES_DEFAULTS.chords),
     step: isScaleStep(raw.step) ? raw.step : undefined,
@@ -136,7 +137,7 @@ export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
   const key = readNote(raw.key)
   return {
     key: key ? noteParam(key) : undefined,
-    tempo: wholeIn(raw.tempo, 40, 160, undefined),
+    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
     hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
     mode: valueOr(isOneOf(PRACTICE_MODES), raw.mode, PLAYER_DEFAULTS.mode),
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,

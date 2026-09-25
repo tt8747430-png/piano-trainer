@@ -10,10 +10,13 @@ export interface PlacedStep {
 const STEPS: readonly PlacedStep[] = LEVELS.flatMap((level) =>
   PATH[level].map((step) => ({ id: stepIdOf(step), level, step })),
 )
-const LEVEL_BY_ID = new Map(STEPS.map(({ id, level }) => [id, level]))
+const BY_ID = new Map(STEPS.map((placed) => [placed.id, placed]))
 
 /** Every step, level by level, in path order; the same array on every call. */
 export const pathSteps = (): readonly PlacedStep[] => STEPS
 
+/** A step on the path; undefined for a step the path no longer has. */
+export const stepById = (id: StepId): PlacedStep | undefined => BY_ID.get(id)
+
 /** A step's level; undefined for a step the path no longer has. */
-export const levelOf = (id: StepId): Level | undefined => LEVEL_BY_ID.get(id)
+export const levelOf = (id: StepId): Level | undefined => BY_ID.get(id)?.level

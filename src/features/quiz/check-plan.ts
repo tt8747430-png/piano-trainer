@@ -1,4 +1,4 @@
-import { pathSteps, skillsOfStep, type StepId } from '@/entities/path'
+import { skillsOfStep, stepById, type StepId } from '@/entities/path'
 import { chordRootsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
 import type { QuizConfig } from './quiz-machine'
@@ -17,7 +17,7 @@ const LEAST = 6
 
 /** A Check's questions (spec §4.6): a piece's chords, a chord family in turn, or a scale. */
 export function checkPlan(of: StepId): CheckPlan | null {
-  const placed = pathSteps().find((s) => s.id === of)
+  const placed = stepById(of)
   if (!placed) return null
   const { step } = placed
   if (step.kind === 'piece') {

@@ -2,7 +2,7 @@ import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 import { Spinner } from '@/shared/ui/primitives/spinner'
-import { useMidiConnection, type MidiConnection } from '../use-midi-connection'
+import { isMidiConnected, useMidiConnection, type MidiConnection } from '../use-midi-connection'
 
 function statusLine(connection: MidiConnection, t: TFunction<'common'>): string | null {
   switch (connection.kind) {
@@ -24,13 +24,12 @@ export function MidiControl() {
   const { t } = useTranslation('common')
   const { connection, connect } = useMidiConnection()
   const line = statusLine(connection, t)
-  const connected = connection.kind === 'ready' && connection.status.state === 'connected'
   return (
     <div className="flex flex-col gap-3">
       <p aria-live="polite" className="text-muted-foreground empty:hidden">
         {line}
       </p>
-      {connection.kind === 'unsupported' || connected ? null : (
+      {connection.kind === 'unsupported' || isMidiConnected(connection) ? null : (
         <Button
           variant="soft"
           onClick={connect}

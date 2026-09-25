@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  noteName,
   noteParam,
   relativeScale,
   scaleGaps,
@@ -10,6 +9,7 @@ import {
   type SpelledNote,
   type Tone,
 } from '@/shared/lib/music'
+import { useScaleName } from '@/shared/i18n'
 import { ButtonLink } from '@/shared/ui'
 
 function Fact({ term, children }: { term: string; children: ReactNode }) {
@@ -32,6 +32,7 @@ export function ScaleFacts({
   tones: readonly Tone[]
 }) {
   const { t } = useTranslation('theory')
+  const scaleName = useScaleName()
   const relative = relativeScale(root, kind)
   return (
     <dl className="flex flex-col gap-2">
@@ -59,7 +60,7 @@ export function ScaleFacts({
               />
             }
           >
-            {`${noteName(relative.root)} ${t(`scaleName.${relative.kind}`)}`}
+            {scaleName(relative.root, relative.kind)}
           </ButtonLink>
         </Fact>
       ) : null}

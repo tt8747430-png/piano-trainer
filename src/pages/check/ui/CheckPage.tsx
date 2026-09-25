@@ -2,8 +2,8 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pathSteps, useStepTitle } from '@/entities/path'
-import { useProgressStoreApi } from '@/entities/progress'
+import { stepById, useStepTitle } from '@/entities/path'
+import { selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
 import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
@@ -16,11 +16,11 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const navigate = useNavigate()
   const store = useProgressStoreApi()
   const stepTitle = useStepTitle()
-  const step = pathSteps().find((s) => s.id === plan.of)
+  const step = stepById(plan.of)
   const title = step ? stepTitle(step.step).primary : ''
   const quiz = useQuiz(plan.config)
   const [learnedBefore] = useState(
-    () => plan.marks !== null && store.getState().learned[plan.marks] !== undefined,
+    () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),
   )
   const [done, setDone] = useState(false)
   const close = useGoBack(() => void navigate({ to: '/' }))

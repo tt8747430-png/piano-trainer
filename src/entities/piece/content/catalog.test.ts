@@ -5,7 +5,9 @@ import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { chordSymbol, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import {
   BOOKS,
+  COLLECTION_IDS,
   COLLECTIONS,
+  isCollectionId,
   PIECES,
   VOICINGS,
   chartOf,
@@ -18,6 +20,14 @@ import {
 } from '../index'
 
 const ENTRIES = COLLECTIONS.flatMap((collection) => collection.entries)
+
+describe('the collections', () => {
+  it('are the ones COLLECTION_IDS names, in its order', () => {
+    expect(COLLECTIONS.map((collection) => collection.id)).toEqual(COLLECTION_IDS)
+    expect(isCollectionId('hymns')).toBe(true)
+    expect(isCollectionId('psalms')).toBe(false)
+  })
+})
 const LISTINGS = ENTRIES.filter((entry) => !isPiece(entry))
 /** What would make a performance wrong to play: notes off the piano or outside the piece, a root
  *  spelled with two accidentals, a bar where nothing starts. Plain loops: 24,000 of these run. */

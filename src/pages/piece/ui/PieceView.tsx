@@ -2,7 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, useSectionHeading, type Piece } from '@/entities/piece'
+import { pieceStepId } from '@/entities/path'
+import { entryTitles, usePieceHeadings, type Piece } from '@/entities/piece'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { LearnedToggle } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
@@ -20,11 +21,10 @@ import { PieceFacts } from './PieceFacts'
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'common'])
-  const heading = useSectionHeading()
   const play = usePlay()
   const locale = useLocale()
   const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
-  const headings = piece.kind === 'progression' ? [t('progression')] : piece.sections.map(heading)
+  const headings = usePieceHeadings(piece)
   const hearBar = (bar: number) =>
     play(barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }))
 
@@ -41,7 +41,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           {t('piece:practise')}
         </ButtonLink>
         <LearnedToggle
-          step={`piece:${piece.id}`}
+          step={pieceStepId(piece.id)}
           title={entryTitles(piece, locale).primary}
           variant="text"
         />

@@ -1,5 +1,6 @@
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
+import { isOneOf } from '@/shared/lib'
 import { parseKey, type Key, type Letter } from '@/shared/lib/music'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
@@ -113,8 +114,16 @@ export interface Listing extends EntryCommon {
 
 export type Entry = Piece | Listing
 
-export type CollectionId =
-  'bozhe-spasibo' | 'called-to-play' | 'exercises' | 'hymns' | 'progressions'
+/** The collections, in the order Songs lists them; the content holds each to its place here. */
+export const COLLECTION_IDS = [
+  'bozhe-spasibo',
+  'called-to-play',
+  'exercises',
+  'hymns',
+  'progressions',
+] as const
+export type CollectionId = (typeof COLLECTION_IDS)[number]
+export const isCollectionId = isOneOf(COLLECTION_IDS)
 export interface Collection {
   readonly id: CollectionId
   readonly name: LocalText

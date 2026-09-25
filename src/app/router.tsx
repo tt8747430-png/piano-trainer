@@ -8,8 +8,6 @@ import {
   stripSearchParams,
   type RouterHistory,
 } from '@tanstack/react-router'
-import { entryById, pieceById } from '@/entities/piece'
-import { checkPlan } from '@/features/quiz'
 import { NotFoundPage } from '@/pages/not-found'
 import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
@@ -32,7 +30,9 @@ import {
 import { ShellLayout } from './ShellLayout'
 import { TheoryLayout } from './TheoryLayout'
 
-// Each screen module becomes one chunk, loaded when one of its routes is first matched.
+// Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
+// that names content asks its screens module whether it is there, so the content stays in that
+// chunk and out of the first paint.
 const homeScreens = () => import('./routes/home-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
@@ -75,7 +75,8 @@ const songsRoute = createRoute({
 const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
-  beforeLoad: ({ params }) => {
+  beforeLoad: async ({ params }) => {
+    const { entryById } = await songsScreens()
     if (!entryById(params.pieceId)) throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
@@ -131,7 +132,8 @@ const playerRoute = createRoute({
   path: '/play/$pieceId',
   validateSearch: validatePlayerSearch,
   search: { middlewares: [stripSearchParams(PLAYER_DEFAULTS)] },
-  beforeLoad: ({ params }) => {
+  beforeLoad: async ({ params }) => {
+    const { pieceById } = await playerScreens()
     if (!pieceById(params.pieceId)) throw notFound()
   },
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
@@ -141,7 +143,8 @@ const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
   validateSearch: validateCheckSearch,
-  beforeLoad: ({ search }) => {
+  beforeLoad: async ({ search }) => {
+    const { checkPlan } = await theoryScreens()
     if (!search.of || !checkPlan(search.of)) throw notFound()
   },
   component: lazyRouteComponent(theoryScreens, 'CheckPage'),

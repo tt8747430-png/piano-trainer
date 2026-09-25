@@ -2,7 +2,7 @@ import { Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
-import { noteName } from '@/shared/lib/music'
+import { useScaleName } from '@/shared/i18n'
 import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -12,6 +12,7 @@ import { Button } from '@/shared/ui/primitives/button'
  */
 export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => void }) {
   const { t } = useTranslation(['quiz', 'theory', 'common'])
+  const nameScale = useScaleName()
   const { question, selected, result } = quiz.state
   if (!question) return null
 
@@ -19,10 +20,7 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
   // Building a chord or scale: keys are chosen until the answer is checked.
   const choosing = building && !result
   const next = quiz.finished ? onFinish : quiz.next
-  const scaleName =
-    question.mode === 'build-scale'
-      ? `${noteName(question.root)} ${t(`theory:scaleName.${question.kind}`)}`
-      : ''
+  const scaleName = question.mode === 'build-scale' ? nameScale(question.root, question.kind) : ''
   const answerName =
     question.mode === 'build-scale'
       ? scaleName

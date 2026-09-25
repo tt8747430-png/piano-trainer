@@ -36,27 +36,26 @@ export function CheckResult({
         {plan.skills.map((skillId) => {
           const skill = skillOf(skillId)
           const rating = ratingOf(answers, skillId)
-          const name =
+          // A chord opens in Chords, a scale in Scales.
+          const { name, explorer, open } =
             skill.kind === 'chord'
-              ? t(`theory:quality.${skill.quality}`)
-              : t(`theory:scaleKind.${skill.scale}`)
+              ? {
+                  name: t(`theory:quality.${skill.quality}`),
+                  explorer: <Link to="/theory/chords" search={{ quality: skill.quality }} />,
+                  open: t('openChords'),
+                }
+              : {
+                  name: t(`theory:scaleKind.${skill.scale}`),
+                  explorer: <Link to="/theory/scales" search={{ kind: skill.scale }} />,
+                  open: t('openScales'),
+                }
           return (
             <li key={skillId} className="flex min-h-14 items-center gap-3 px-4">
               <RatingMark rating={rating} />
               <span className="flex-1">{name}</span>
               {rating === 'known' ? null : (
-                <ButtonLink
-                  variant="link"
-                  className="px-0"
-                  render={
-                    skill.kind === 'chord' ? (
-                      <Link to="/theory/chords" search={{ quality: skill.quality }} />
-                    ) : (
-                      <Link to="/theory/scales" search={{ kind: skill.scale }} />
-                    )
-                  }
-                >
-                  {skill.kind === 'chord' ? t('openChords') : t('openScales')}
+                <ButtonLink variant="link" className="px-0" render={explorer}>
+                  {open}
                 </ButtonLink>
               )}
             </li>

@@ -11,9 +11,8 @@ import {
 import type { QuizMode } from '@/features/quiz'
 import { setQuizFamilies, setQuizScales } from '@/features/set-preference'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { DrawerClose, DrawerTrigger } from '@/shared/ui/primitives/drawer'
 import { Switch } from '@/shared/ui/primitives/switch'
 
 const toggled = <T,>(list: readonly T[], item: T, on: boolean): T[] =>
@@ -52,10 +51,10 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
 
   return (
     <Sheet open={open} onOpenChange={openWith}>
-      <DrawerTrigger render={<Button variant="soft" />}>
+      <SheetTrigger render={<Button variant="soft" />}>
         <SlidersHorizontal data-icon="inline-start" />
         {t('quiz:choice.open')}
-      </DrawerTrigger>
+      </SheetTrigger>
       <SheetContent
         title={t('quiz:choice.open')}
         footer={
@@ -92,7 +91,7 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
             setDraft((d) => ({ ...d, scales: toggled(d.scales, kind, on) })),
           ),
         )}
-        <DrawerClose className="sr-only">{t('common:close')}</DrawerClose>
+        <SheetClose className="sr-only">{t('common:close')}</SheetClose>
       </SheetContent>
     </Sheet>
   )

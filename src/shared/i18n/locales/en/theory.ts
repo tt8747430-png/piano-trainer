@@ -51,37 +51,37 @@ export const theory = {
     reading: {
       title: 'Reading chord symbols',
       items: {
-        a: {
+        triad: {
           lead: 'Left part = triad, right part = extras.',
           rest: 'C is major, Cm or C− is minor, C° or Cdim is diminished, C+ or Caug is augmented.',
         },
-        b: {
+        numbers: {
           lead: 'Numbers are steps of the major scale built on the chord’s own root,',
           rest: 'whatever key the song is in.',
         },
-        c: {
+        sevenths: {
           lead: '7 means a minor 7th. Maj7, M7 or Δ means a major 7th.',
           rest: 'Cm(maj7) is a minor chord with a major 7th.',
         },
-        d: { lead: '6 is always a major 6th,', rest: 'also in Cm6.' },
-        e: { lead: 'sus means no 3rd.', rest: 'sus2 uses the 2nd instead, sus4 the 4th.' },
-        f: { lead: 'Slash chords:', rest: 'C/D means a C chord over a D bass note.' },
-        g: { lead: 'Alterations combine freely,', rest: 'for example C7(♭9#5).' },
+        sixth: { lead: '6 is always a major 6th,', rest: 'also in Cm6.' },
+        sus: { lead: 'sus means no 3rd.', rest: 'sus2 uses the 2nd instead, sus4 the 4th.' },
+        slash: { lead: 'Slash chords:', rest: 'C/D means a C chord over a D bass note.' },
+        alterations: { lead: 'Alterations combine freely,', rest: 'for example C7(♭9#5).' },
       },
     },
     numbers: {
       title: 'Chord numbers: 2 or 9? 6 or 13?',
       items: {
-        a: {
+        twoNames: {
           lead: 'The same note has two numbers:',
           rest: '2 = 9, 4 = 11, 6 = 13. 8, 10, 12 and 14 never appear: they are 1, 3, 5 and 7 again.',
         },
-        b: {
+        addOnly: {
           lead: 'add, 2, 4 or 6 adds only that note:',
           rest: 'C2 = Cadd2 = Cadd9 = C D E G. C6 = C E G A.',
         },
-        c: { lead: 'A number above 7 includes everything below it:', rest: 'C9 = C E G B♭ D.' },
-        d: {
+        upTo: { lead: 'A number above 7 includes everything below it:', rest: 'C9 = C E G B♭ D.' },
+        thirteenth: {
           lead: '13 chords usually leave out the 11,',
           rest: 'which clashes with the major 3rd. C13 = C E G B♭ D A.',
         },

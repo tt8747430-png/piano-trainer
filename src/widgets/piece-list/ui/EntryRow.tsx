@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { levelOf } from '@/entities/path'
+import { levelOf, pieceStepId } from '@/entities/path'
 import { entryTitles, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
@@ -13,8 +13,9 @@ export function EntryRow({ entry }: { entry: Entry }) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
-  const learned = useProgress(selectIsLearned(`piece:${entry.id}`))
-  const level = entry.kind === 'listing' ? undefined : levelOf(`piece:${entry.id}`)
+  const step = pieceStepId(entry.id)
+  const learned = useProgress(selectIsLearned(step))
+  const level = entry.kind === 'listing' ? undefined : levelOf(step)
   return (
     <li>
       <Link

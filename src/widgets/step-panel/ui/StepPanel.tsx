@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { pathSteps, useStepTitle, type StepId } from '@/entities/path'
+import { stepById, useStepTitle, type StepId } from '@/entities/path'
 import { LearnedToggle } from '@/features/mark-learned'
 import { ButtonLink } from '@/shared/ui'
 
@@ -8,7 +8,7 @@ import { ButtonLink } from '@/shared/ui'
 export function StepPanel({ step }: { step: StepId }) {
   const { t } = useTranslation('theory')
   const stepTitle = useStepTitle()
-  const placed = pathSteps().find((s) => s.id === step)
+  const placed = stepById(step)
   if (!placed) return null
   const title = stepTitle(placed.step).primary
   return (

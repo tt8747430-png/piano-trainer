@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { isStepId, stepIdOf } from './types'
+import { isStepId, pieceStepId, stepIdOf } from './types'
 
 describe('step ids', () => {
+  it('name a piece’s step', () => {
+    expect(pieceStepId('bz5')).toBe('piece:bz5')
+  })
+
   it('are derived from the step', () => {
     expect(stepIdOf({ kind: 'piece', pieceId: 'bz5' })).toBe('piece:bz5')
     expect(stepIdOf({ kind: 'chords', family: 'sev' })).toBe('chords:sev')

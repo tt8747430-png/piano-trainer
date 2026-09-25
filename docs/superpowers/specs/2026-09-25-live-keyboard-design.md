@@ -93,7 +93,7 @@
 | Practise not in the footer                         | Kept above the chart, beside the learned toggle: the one primary action must not sit under a long chart. Recorded in the screens spec §11 |
 | Keys that do nothing                               | §1: every key plays                                                                                |
 | Note grid tells hands by colour only               | A pinned first column names the rows (RH, LH, Tune); rows line up across beats on a subgrid        |
-| `item`, `separator`, `textarea` unused             | Deleted. The rows are the kit's own; `input-group` (Songs search) is recorded in §2.4             |
+| `item`, `separator`, `textarea` unused             | `item` and `separator` (used only by `item`) deleted: the rows are the kit's own. `textarea` stays: `input-group` (Songs search), recorded in §2.4, is built on it |
 | The scale band is not in the spec                  | Recorded in §2.1 and §2.4                                                                          |
 | Beat pips fill up to the beat                      | Only the current beat is filled                                                                    |
 | Player close goes back in history                  | Kept (the router test holds it) and recorded: back where the learner came from, else the Piece     |

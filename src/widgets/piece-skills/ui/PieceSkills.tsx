@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { pieceStepId } from '@/entities/path'
 import { skillsOfPiece, type Piece } from '@/entities/piece'
 import { ratingOf, selectAllAnswers, useProgress } from '@/entities/progress'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -45,7 +46,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
       <ButtonLink
         variant="link"
         className="self-start px-0"
-        render={<Link to="/check" search={{ of: `piece:${piece.id}` }} />}
+        render={<Link to="/check" search={{ of: pieceStepId(piece.id) }} />}
       >
         {t('piece:checkChords')}
       </ButtonLink>

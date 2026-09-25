@@ -1,9 +1,10 @@
 import { act, render, renderHook, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { i18n } from '@/shared/i18n'
+import { pieceById } from '../model/selectors'
 import { Credits } from './Credits'
 import { SourceLine } from './SourceLine'
-import { useSectionHeading } from './use-section-heading'
+import { usePieceHeadings, useSectionHeading } from './use-section-heading'
 
 describe('section headings', () => {
   it('assembles kind, number, last and detail in the learner’s language', () => {
@@ -36,6 +37,20 @@ describe('section headings', () => {
         lines: [],
       }),
     ).toBe('4-й куплет и окончание')
+  })
+})
+
+describe('a piece’s headings', () => {
+  it('head a song’s sections in order, and a progression as one', () => {
+    const bz5 = pieceById('bz5')
+    const twofive = pieceById('twofive')
+    if (!bz5 || !twofive) throw new Error('missing piece')
+    expect(renderHook(() => usePieceHeadings(bz5)).result.current).toEqual([
+      'Verse',
+      'Chorus',
+      'Ending',
+    ])
+    expect(renderHook(() => usePieceHeadings(twofive)).result.current).toEqual(['Progression'])
   })
 })
 

@@ -5,6 +5,7 @@ import { barLength, type Meter } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { cn, useMediaQuery } from '@/shared/lib'
+import { chartSections } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
 /** A Chart's bars with their numbers and chords, by section: line by line to read, or one strip to follow. */
@@ -65,14 +66,8 @@ export function ChordChart({
     )
   }
 
-  const sections = headings.map((heading, section) => ({
-    heading,
-    lines: [
-      ...new Set(performance.bars.flatMap((b) => (b.section === section ? [b.line] : []))),
-    ].map((line) =>
-      performance.bars.flatMap((b, i) => (b.section === section && b.line === line ? [i] : [])),
-    ),
-  }))
+  const bars = chartSections(performance)
+  const sections = headings.map((heading, section) => ({ heading, lines: bars[section] ?? [] }))
 
   if (layout === 'strip') {
     return (

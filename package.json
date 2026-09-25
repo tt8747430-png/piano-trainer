@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": [
+    "*.css",
+    "./src/main.tsx",
+    "./src/shared/i18n/index.ts"
+  ],
   "description": "Piano Trainer: learn songs, chords and scales at the piano. Installable, offline, English and Russian.",
   "engines": {
     "node": "24.x"

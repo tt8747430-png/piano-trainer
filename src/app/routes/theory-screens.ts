@@ -1,3 +1,4 @@
+export { checkPlan } from '@/features/quiz'
 export { CheckPage } from '@/pages/check'
 export { TheoryChordsPage } from '@/pages/theory-chords'
 export { TheoryQuizPage } from '@/pages/theory-quiz'

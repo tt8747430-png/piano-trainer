@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { LiveKeyboard } from '@/features/live-keyboard'
+import { useScaleName } from '@/shared/i18n'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -37,6 +38,7 @@ export function ScaleExplorer({
 }) {
   const { t } = useTranslation(['theory', 'common'])
   const play = usePlay()
+  const scaleName = useScaleName()
   const root = noteFromParam(scale.root)
   const tones = spellScale(root, scale.kind)
   const placed = placeScale(root, scale.kind)
@@ -61,9 +63,7 @@ export function ScaleExplorer({
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-4xl font-extrabold tracking-tight">
-        {`${noteName(root)} ${t(`theory:scaleName.${scale.kind}`)}`}
-      </h2>
+      <h2 className="text-4xl font-extrabold tracking-tight">{scaleName(root, scale.kind)}</h2>
       <ChipRow
         label={t('theory:root')}
         value={scale.root}

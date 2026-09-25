@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Button } from '@/shared/ui/primitives/button'
-import { useMidiConnection } from '../use-midi-connection'
+import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 import { MidiControl } from './MidiControl'
 
 /** The Player's MIDI button: a dot shows the status; the popover connects. Hidden without Web MIDI. */
@@ -11,7 +11,6 @@ export function MidiButton() {
   const { t } = useTranslation('common')
   const { connection } = useMidiConnection()
   if (connection.kind === 'unsupported') return null
-  const connected = connection.kind === 'ready' && connection.status.state === 'connected'
   return (
     <Popover>
       <PopoverTrigger
@@ -24,7 +23,7 @@ export function MidiButton() {
           aria-hidden
           className={cn(
             'absolute top-2 right-2 size-2 rounded-full',
-            connected ? 'bg-primary' : 'bg-border',
+            isMidiConnected(connection) ? 'bg-primary' : 'bg-border',
           )}
         />
       </PopoverTrigger>

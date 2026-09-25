@@ -1,49 +1,37 @@
+import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
+import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   PLAYER_DEFAULTS,
   QUIZ_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
-  validateCheckSearch,
-  validateChordsSearch,
-  validatePlayerSearch,
-  validateQuizSearch,
-  validateScalesSearch,
-  validateSongsSearch,
 } from './search'
 
-/** What the router hands a validator: anything a URL can hold. */
-const raw = (search: Record<string, unknown>) => search as never
+/** What a route reads from a URL, however it was typed, kept or edited. */
+async function searchAt(url: string) {
+  const router = createAppRouter(createMemoryHistory({ initialEntries: [url] }))
+  await router.load()
+  return router.state.matches.at(-1)?.search
+}
 
 describe('search params', () => {
-  it('fill every default for an empty URL', () => {
-    expect(validateSongsSearch(raw({}))).toEqual(SONGS_DEFAULTS)
-    expect(validateChordsSearch(raw({}))).toEqual(CHORDS_DEFAULTS)
-    expect(validateScalesSearch(raw({}))).toEqual(SCALES_DEFAULTS)
-    expect(validateQuizSearch(raw({}))).toEqual(QUIZ_DEFAULTS)
-    expect(validatePlayerSearch(raw({}))).toEqual(PLAYER_DEFAULTS)
-    expect(validateCheckSearch(raw({}))).toEqual({})
+  it('fill every default for an empty URL', async () => {
+    expect(await searchAt('/songs')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/theory/chords')).toEqual(CHORDS_DEFAULTS)
+    expect(await searchAt('/theory/scales')).toEqual(SCALES_DEFAULTS)
+    expect(await searchAt('/theory/quiz')).toEqual(QUIZ_DEFAULTS)
+    expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
   })
 
-  it('keep what is valid', () => {
+  it('keep what is valid', async () => {
     expect(
-      validateChordsSearch(
-        raw({ root: 'Bb', quality: 'm7', inversion: 2, hands: 'both', step: 'chords:sev' }),
-      ),
+      await searchAt('/theory/chords?root=Bb&quality=m7&inversion=2&hands=both&step=chords:sev'),
     ).toEqual({ root: 'Bb', quality: 'm7', inversion: 2, hands: 'both', step: 'chords:sev' })
     expect(
-      validatePlayerSearch(
-        raw({
-          key: 'A',
-          tempo: 96,
-          hands: 'lh',
-          mode: 'turn',
-          pattern: 'chart',
-          rh: 't1',
-          lh: 'o',
-          voicing: 'ninths',
-        }),
+      await searchAt(
+        '/play/bz5?key=A&tempo=96&hands=lh&mode=turn&pattern=chart&rh=t1&lh=o&voicing=ninths',
       ),
     ).toEqual({
       key: 'A',
@@ -55,43 +43,37 @@ describe('search params', () => {
       lh: 'o',
       voicing: 'ninths',
     })
-    expect(validateSongsSearch(raw({ q: 'душа', collection: 'hymns', level: 1 }))).toEqual({
+    expect(await searchAt('/songs?q=душа&collection=hymns&level=1')).toEqual({
       q: 'душа',
       collection: 'hymns',
       level: 1,
     })
-    expect(validateScalesSearch(raw({ root: 'Eb', kind: 'harmonic', chords: 4 }))).toMatchObject({
+    expect(await searchAt('/theory/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
       root: 'Eb',
       kind: 'harmonic',
       chords: 4,
     })
+    expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
   })
 
-  it('drop anything stale or hand-edited back to its default, without clamping', () => {
+  it('drop anything stale or hand-edited back to its default, without clamping', async () => {
     expect(
-      validatePlayerSearch(
-        raw({
-          key: 'H',
-          tempo: 999,
-          mode: 'dance',
-          pattern: 'waltz',
-          rh: 'zz',
-          voicing: 'elevenths',
-        }),
-      ),
+      await searchAt('/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&voicing=elevenths'),
     ).toEqual(PLAYER_DEFAULTS)
+    expect(await searchAt('/theory/chords?quality=maj13&inversion=7&step=scale:major')).toEqual(
+      CHORDS_DEFAULTS,
+    )
+    expect(await searchAt('/theory/chords?quality=maj&inversion=3')).toMatchObject({
+      inversion: 0,
+    })
     expect(
-      validateChordsSearch(raw({ quality: 'maj13', inversion: 7, step: 'scale:major' })),
-    ).toEqual(CHORDS_DEFAULTS)
-    expect(validateChordsSearch(raw({ quality: 'maj', inversion: 3 })).inversion).toBe(0)
-    expect(
-      validateScalesSearch(raw({ kind: 'dorian', tempo: 10, chords: 5, step: 'chords:tri' })),
+      await searchAt('/theory/scales?kind=dorian&tempo=10&chords=5&step=chords:tri'),
     ).toEqual(SCALES_DEFAULTS)
-    expect(validateCheckSearch(raw({ of: 'nothing:here' }))).toEqual({})
+    expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)
   })
 
-  it('spell a root the way its explorer names it', () => {
-    expect(validateChordsSearch(raw({ root: 'A#', quality: 'maj' })).root).toBe('Bb')
-    expect(validatePlayerSearch(raw({ key: 'B♭' })).key).toBe('Bb')
+  it('spell a root the way its explorer names it', async () => {
+    expect(await searchAt('/theory/chords?root=A%23&quality=maj')).toMatchObject({ root: 'Bb' })
+    expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })
   })
 })

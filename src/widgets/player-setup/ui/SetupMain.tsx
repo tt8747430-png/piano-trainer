@@ -11,14 +11,13 @@ import {
 import type { PracticeChoice } from '@/features/practice'
 import { setPracticeToggle } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
-import { noteName, noteParam, pitchClass, tonicSpelling } from '@/shared/lib/music'
-import type { Hands } from '@/shared/lib/schedule'
+import { noteName, noteParam, PITCH_CLASSES, tonicSpelling } from '@/shared/lib/music'
+import { TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
 import { ChipRow, Segmented } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { SetupChange } from '../model/setup-params'
 
-const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
 const HANDS = ['both', 'rh', 'lh'] as const
 
 export type SetupPage = 'pattern' | 'rh' | 'lh'
@@ -30,14 +29,15 @@ export function SetupMain({
   tempo,
   hands,
   onChange,
-  open,
+  onOpenPage,
 }: {
   piece: Piece
   choice: PracticeChoice
   tempo: number
   hands: Hands
   onChange: (change: SetupChange) => void
-  open: (page: SetupPage) => void
+  /** Opens one of the sheet's lists as its page. */
+  onOpenPage: (page: SetupPage) => void
 }) {
   const { t } = useTranslation(['player', 'common'])
   const locale = useLocale()
@@ -52,7 +52,7 @@ export function SetupMain({
   const row = (label: string, value: string, page: SetupPage) => (
     <button
       type="button"
-      onClick={() => open(page)}
+      onClick={() => onOpenPage(page)}
       className="flex min-h-14 w-full items-center gap-3 border-b border-border text-left transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset"
     >
       <span className="flex-1 text-lg">{label}</span>
@@ -80,8 +80,8 @@ export function SetupMain({
         />
       </div>
       <Slider
-        min={40}
-        max={160}
+        min={TEMPO_RANGE.min}
+        max={TEMPO_RANGE.max}
         step={1}
         value={tempo}
         onValueChange={(next) => onChange({ tempo: next })}

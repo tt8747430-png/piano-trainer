@@ -1,5 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
@@ -25,7 +25,24 @@ import type { SetupChange } from '../model/setup-params'
 import { ChoiceList } from './ChoiceList'
 import { SetupMain, type SetupPage } from './SetupMain'
 
-/** Everything about how the Player plays, in one sheet; the lists open as its pages. */
+/** One of the sheet's lists, as a page of it, with the way back to the first page. */
+function ListPage({ onBack, children }: { onBack: () => void; children: ReactNode }) {
+  const { t } = useTranslation('player')
+  return (
+    <div className="flex flex-col gap-4">
+      <Button variant="ghost" className="-ml-3 self-start" onClick={onBack}>
+        <ChevronLeft data-icon="inline-start" />
+        {t('back')}
+      </Button>
+      {children}
+    </div>
+  )
+}
+
+/**
+ * Everything about how the Player plays, in one sheet; the pattern and figure lists open as its
+ * pages, so a sheet never opens over a sheet.
+ */
 export function PlayerSetup({
   open,
   onOpenChange,
@@ -52,12 +69,7 @@ export function PlayerSetup({
     onChange(change)
     setPage('main')
   }
-  const back = (
-    <Button variant="ghost" className="-ml-3 self-start" onClick={() => setPage('main')}>
-      <ChevronLeft data-icon="inline-start" />
-      {t('back')}
-    </Button>
-  )
+  const toMain = () => setPage('main')
 
   return (
     <Sheet
@@ -75,12 +87,11 @@ export function PlayerSetup({
             tempo={tempo}
             hands={hands}
             onChange={onChange}
-            open={setPage}
+            onOpenPage={setPage}
           />
         ) : null}
         {page === 'pattern' ? (
-          <div className="flex flex-col gap-4">
-            {back}
+          <ListPage onBack={toMain}>
             {hasMethodCodes(piece) ? (
               <ChoiceList<PatternId | 'chart'>
                 items={[
@@ -110,11 +121,10 @@ export function PlayerSetup({
                 />
               </section>
             ))}
-          </div>
+          </ListPage>
         ) : null}
         {page === 'rh' ? (
-          <div className="flex flex-col gap-4">
-            {back}
+          <ListPage onBack={toMain}>
             <ChoiceList<RightFigureId | null>
               items={[
                 { value: null, label: t('ownFigure') },
@@ -129,11 +139,10 @@ export function PlayerSetup({
               value={choice.rh}
               onChoose={(rh) => choose({ rh: rh ?? undefined })}
             />
-          </div>
+          </ListPage>
         ) : null}
         {page === 'lh' ? (
-          <div className="flex flex-col gap-4">
-            {back}
+          <ListPage onBack={toMain}>
             <ChoiceList<LeftFigureId | null>
               items={[
                 { value: null, label: t('ownFigure') },
@@ -145,7 +154,7 @@ export function PlayerSetup({
               value={choice.lh}
               onChoose={(lh) => choose({ lh: lh ?? undefined })}
             />
-          </div>
+          </ListPage>
         ) : null}
       </SheetContent>
     </Sheet>

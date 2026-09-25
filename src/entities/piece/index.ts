@@ -1,4 +1,5 @@
 export {
+  COLLECTION_IDS,
   CREDIT_ROLES,
   METERS,
   SECTION_KINDS,
@@ -6,6 +7,7 @@ export {
   beatsPerBar,
   defineListing,
   definePiece,
+  isCollectionId,
   isPiece,
   pieceKey,
   type BookId,
@@ -34,5 +36,5 @@ export { entryById, pieceById } from './model/selectors'
 export { entryTitles, type EntryTitles } from './model/titles'
 export { Credits } from './ui/Credits'
 export { SourceLine } from './ui/SourceLine'
-export { useSectionHeading } from './ui/use-section-heading'
+export { usePieceHeadings } from './ui/use-section-heading'
 export { BOOKS, COLLECTIONS, PIECES } from './content'

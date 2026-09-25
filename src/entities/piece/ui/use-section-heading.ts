@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale } from '@/shared/i18n'
-import type { Section } from '../model/types'
+import type { Piece, Section } from '../model/types'
 
 /** A section's heading in the learner's language: "Verse 4 and ending", "Последний припев в ля миноре". */
 export function useSectionHeading(): (section: Section) => string {
@@ -23,4 +23,11 @@ export function useSectionHeading(): (section: Section) => string {
     },
     [t, locale],
   )
+}
+
+/** The headings a piece's chart is shown under: a song's sections in order, a progression's one. */
+export function usePieceHeadings(piece: Piece): string[] {
+  const { t } = useTranslation('piece')
+  const heading = useSectionHeading()
+  return piece.kind === 'progression' ? [t('progression')] : piece.sections.map(heading)
 }

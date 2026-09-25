@@ -2,9 +2,9 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, SourceLine, pieceKey, type Entry } from '@/entities/piece'
-import { localText, useLocale } from '@/shared/i18n'
+import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { useGoBack } from '@/shared/lib'
-import { keyName, noteName, noteParam } from '@/shared/lib/music'
+import { keyName, noteParam } from '@/shared/lib/music'
 import { ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
 
 /**
@@ -12,8 +12,9 @@ import { ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
  * Back returns where the learner came from (Path, Songs), or to Songs.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
-  const { t } = useTranslation(['piece', 'common', 'theory'])
+  const { t } = useTranslation(['piece', 'common'])
   const locale = useLocale()
+  const scaleName = useScaleName()
   const navigate = useNavigate()
   const back = useGoBack(() => void navigate({ to: '/songs' }))
   const { primary, secondary } = entryTitles(entry, locale)
@@ -46,9 +47,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
           <Link to="/theory/scales" search={{ root: noteParam(key.tonic), kind: scaleKind }} />
         }
       >
-        {t('piece:scaleOf', {
-          scale: `${noteName(key.tonic)} ${t(`theory:scaleName.${scaleKind}`)}`,
-        })}
+        {t('piece:scaleOf', { scale: scaleName(key.tonic, scaleKind) })}
       </ButtonLink>
     </div>
   )

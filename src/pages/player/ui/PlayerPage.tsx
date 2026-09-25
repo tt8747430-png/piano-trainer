@@ -1,7 +1,7 @@
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceById, pieceKey, useSectionHeading, type Piece } from '@/entities/piece'
+import { pieceById, pieceKey, usePieceHeadings, type Piece } from '@/entities/piece'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { PRACTICE_MODES } from '@/features/practice'
 import { keyName } from '@/shared/lib/music'
@@ -15,10 +15,9 @@ import { PlayerTopBar } from './PlayerTopBar'
 import { Transport } from './Transport'
 
 function Player({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'piece', 'common'])
+  const { t } = useTranslation(['player', 'common'])
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const navigate = useNavigate({ from: '/play/$pieceId' })
-  const heading = useSectionHeading()
   const [setupOpen, setSetupOpen] = useState(false)
   const player = usePlayer(
     piece,
@@ -28,8 +27,7 @@ function Player({ piece }: { piece: Piece }) {
   const { practice, performance } = player
   const { state } = practice
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
-  const headings =
-    piece.kind === 'progression' ? [t('piece:progression')] : piece.sections.map(heading)
+  const headings = usePieceHeadings(piece)
   const summary = t('player:summary', {
     key: keyName({ tonic: player.choice.tonic, mode: pieceKey(piece).mode }),
     tempo: player.tempo,

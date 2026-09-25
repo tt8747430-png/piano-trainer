@@ -8,6 +8,10 @@ export type MidiConnection =
   | { readonly kind: 'connecting' }
   | { readonly kind: 'ready'; readonly status: MidiStatus }
 
+/** Whether a keyboard is connected now. */
+export const isMidiConnected = (connection: MidiConnection): boolean =>
+  connection.kind === 'ready' && connection.status.state === 'connected'
+
 const NO_UNSUBSCRIBE = () => {}
 
 /** The MIDI keyboard's connection, following the port's status as keyboards come and go. */
