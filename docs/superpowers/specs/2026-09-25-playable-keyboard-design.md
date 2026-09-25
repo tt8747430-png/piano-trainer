@@ -1,87 +1,109 @@
 # The playable keyboard: design
 
-- **Status:** decided 2026-09-25. Sub-project 1 of the roadmap (`2026-09-25-next-features-roadmap-design.md`). The
-  owner asked for "a more adaptable keyboard: switch the full mode or not the full mode keyboard, or switch between
-  GarageBand's glissando or scroll mode; the keyboard look should be improved". Everything below is Claude's
-  decision, argued where it is not obvious.
+- **Status:** agreed 2026-09-26. Sub-project 1 of the roadmap (`2026-09-25-next-features-roadmap-design.md`, §3.1
+  holds the decisions from the grilling session). What the session left to Claude is decided here and argued.
 - **Builds on:** the live-keyboard design (`2026-09-25-live-keyboard-design.md`): the whole piano on every keyboard,
   every key sounding, a key going down while it sounds or is held on MIDI. All of that stands.
-- **References:** GarageBand's keyboard (Scroll · Glissando · Pitch; octave down, reset, up; small, medium and large
-  keys; one or two rows), Flowkey's keys under a dark rail, the owner's reference trainer (steinway.web.app: every key
-  named, the computer keyboard playing an octave with its letters on the keys).
+- **References:** GarageBand's keyboard (Scroll · Glissando; octave buttons; small, medium and large keys), Flowkey's
+  keys under a dark rail, The Ultimate Piano's learn view (a scale's keys coloured whole, labelled "♭3 E♭", finger
+  numbers in circles under the keys), the owner's reference trainer (every key named; the computer keyboard playing
+  an octave).
 
-## 1. What the learner sees
+## 1. The faults this fixes
 
-### 1.1 The keys look like a piano's
+Found in the code, behind what the owner saw:
 
-- The keys hang from a dark **rail** across the keyboard's top (`--key-rail`, the piano's fascia), which casts a short
-  shadow onto them.
-- White keys stand apart by a 1px gap of **key bed** (`--key-bed`) instead of an outline. Each has a faint shade
-  under the rail and a **lip** at its front edge (`--key-lip`, the key's thickness, 6px).
-- Black keys are shaded toward the player and end in a lighter **front slope** (`--key-black-slope`).
+| Seen                                         | Cause                                                                                              |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Touch and click feel late                    | A key plays on `click`, which fires when the finger lifts, and a tap then waits `PLAY_DELAY` (100 ms) on the audio clock |
+| A scale's keys "half coloured, cut in two"   | A scale's note is a band over the lower 40% of the key                                             |
+| An arpeggio shows every key coloured, the sounding one only dimmed | Its notes ring 1.4 s and start 0.22 s apart, so all are sounding at once and all wear the same down tint |
+| No Stop after Play                           | Play buttons only start sound                                                                      |
+| Keys stubby on one screen, tall on another   | Every screen sets a fixed height (`h-32`, `h-44`) whatever the keys' width                         |
+
+## 2. What the learner sees
+
+### 2.1 A piano's keys, in a piano's proportions
+
+- The keys hang from a dark **rail** (`--key-rail`, 28px, the piano's fascia), which casts a short shadow onto them
+  and holds the keyboard's buttons (§2.5).
+- White keys stand apart by a 1px gap of **key bed** (`--key-bed`) instead of an outline, with a faint shade under
+  the rail and a **lip** at the front edge (`--key-lip`, the key's thickness, 6px). Black keys are shaded toward the
+  player and end in a lighter **front slope** (`--key-black-slope`).
+- **Proportions:** the keys are 4.2 times as long as a white key is wide, within 96px and 40% of the screen's height,
+  so a phone's Fit keys are about 120px long and a laptop's about 200px; no screen sets a fixed height any more. The
+  Player's keyboard, which shares a screen with the sheet, takes the height its layout gives it.
 - **Down is physical as well as coloured:** a key going down drops 2px and its lip (a black key's slope) shortens,
-  over the colour change the live-keyboard design gave it (`--key-down`, or `--key-down-tint` over a coloured key).
-  With `prefers-reduced-motion` the drop is immediate, as every transition is (theme.css).
-- Light and dark: the keys stay piano-coloured in both themes (as now), and the rail and bed stay dark.
-- **DESIGN.md's No Glow Rule** gains one exception: the keys' shading (the rail's shadow, a key's shade, lip and
-  slope) draws a material, never a colour, and appears nowhere but on keys. This is Mindscape's printed-card exception
-  in this app's terms: chrome follows the tokens, a material may have depth.
+  over the colour change the live-keyboard design gave it. Under `prefers-reduced-motion` the drop is immediate.
+- Light and dark: the keys stay piano-coloured, the rail and bed stay dark.
+- DESIGN.md's **No Glow Rule** gains one exception: the keys' shading (the rail's shadow, a key's shade, lip and
+  slope) draws a material, never a colour, and appears nowhere but on keys.
 
-### 1.2 Note names
+### 2.2 A key plays the instant it is touched
 
-A saved choice, **Note names**: **C** (default: every C carries its octave, "C4", as GarageBand marks its Cs),
-**All** (every key its name, black keys too, as the reference trainer does), **None**. A mark's own label (a degree,
-a finger, ✓) always wins over a note name on its key, so a coloured key still carries its meaning. Names sit at the
-bottom of a key in `--on-key-white` / `--on-key-black`, smaller than a mark's label.
+- **Scroll** (default): a key sounds and goes down on `pointerdown`. A swipe moves the keyboard; only the key it
+  started on sounds (a finger that moves past a small slop is scrolling, and no later key plays).
+- **Glissando:** every key a finger crosses sounds, each once per entry, several fingers at once. The keys take the
+  finger from the page (`touch-action: none`), so the keyboard stays where it is and moves by ‹ › (§2.5), a trackpad
+  or the mouse wheel. On a pinned keyboard the page scrolls from anywhere but the keys.
+- A touched key goes down on screen at once, before its sound is heard, and its sound starts at the audio clock's
+  now, not after `PLAY_DELAY` (a tap is one note: there is nothing to schedule ahead).
+- The keyboard is still one tab stop; Enter and Space play the focused key.
+- GarageBand's third mode, Pitch (portamento), is not taken: a piano has none.
 
-### 1.3 Key size: the "full mode"
+### 2.3 What a key carries
+
+- **Note names** (a saved choice): **C** (default: every C, "C4"), **All** (every key, black keys too), **None**.
+  A mark's own label (a degree, ✓) always wins on its key.
+- **Finger numbers** sit in circles in a row under the keys, each under its key: a white circle under a white key,
+  a light-teal one under a black key (The Ultimate Piano's info bar). The row is there only while fingers are shown
+  (the Scales page's fingering, the Player's Finger numbers switch), so a key keeps its degree or note name on it.
+- **A scale's notes colour the whole key**: the tonic deep teal (`--key-tonic`) with a white label, the other notes
+  light teal (`--key-scale`) with an ink label, on white and black keys alike, each labelled with its degree. The band
+  goes. (Scales are not chord tones, so the palette law keeps role colours off them.)
+- **Letters** of the computer keyboard (§2.6) on the keys it plays, while it can play.
+
+### 2.4 The key sounding now stands out
+
+On the explorers' keyboards (Chords, Scales, Symbols, the Piece's chart), while the app plays, the key struck last
+stands out: it keeps its full colour and is down, and the other marked keys, still ringing or not yet played, go
+**quiet** (their colour at a low strength, their label kept). A block chord's keys are struck together, so all stand
+out; an arpeggio walks key by key; a scale run walks note by note. When nothing sounds, every mark is full again. The
+Player and the quiz board do not do this: their marks mean "play these", and must stay visible while the learner
+plays them.
+
+### 2.5 The rail: ‹ ›, the options button
+
+- **‹ ›** at the rail's two ends move the keyboard an octave down or up. They show only in **Glissando**, where a swipe
+  plays instead of scrolling.
+- **The options button** at the rail's right end opens a popover with the keyboard's four choices (Keys, Swipe, Note
+  names, Keyboard map) and **Play from the computer keyboard**. They are saved for every keyboard in the app, so the
+  keyboard the learner adjusts is the one they meet on the next screen, and they are also in Settings (§2.8).
+- The buttons are drawn 28px within the rail and answer to 44px, the extra reaching upward outside the keyboard,
+  never over a key.
+
+### 2.6 Key size
 
 A saved choice, **Keys**:
 
-| Size            | White keys                                           | For                                               |
-| --------------- | ---------------------------------------------------- | ------------------------------------------------- |
-| **Fit** (default) | The screen's range fills the width, 28–48px each (today) | Every screen as designed                          |
-| **Large**       | 56px each; the keyboard scrolls                      | Fingers on a phone: about an octave in view        |
-| **Whole piano** | All 52 white keys fill the width; nothing scrolls    | Seeing all 88 keys at once (on a phone, to look, not to tap) |
+| Size              | White keys                                          | For                                          |
+| ----------------- | --------------------------------------------------- | -------------------------------------------- |
+| **Fit** (default) | The screen's range fills the width, 28–48px each    | Every screen as designed                     |
+| **Large**         | 56px each; the keyboard scrolls                     | Fingers on a phone: about an octave in view  |
+| **Whole piano**   | All 52 white keys fill the width; nothing scrolls   | All 88 keys at once (on a phone, to look)    |
 
-Whichever size, the keyboard keeps the keys that matter in view (`inView`, the range), as today.
+The keys that matter stay in view (`inView`, the range) at every size. **Whole piano** hides ‹ › (nothing to move).
 
-### 1.4 Swipe: Scroll or Glissando
+### 2.7 The keyboard map
 
-A saved choice, **Swipe**:
+A saved choice, off by default (**Keyboard map**): a thin strip over the rail drawing all 88 keys small, with a frame
+around the stretch in view; tap or drag it to move there, or step it an octave at a time with the arrow keys (a slider
+named "Keys in view", its value read as "C3 to B4"). Keys marked or down show as dots, so a note out of sight is not
+lost. Hidden with **Whole piano**.
 
-- **Scroll** (default, today's behaviour): a swipe moves the keyboard; a tap plays a key when the finger lifts
-  without moving.
-- **Glissando:** a key plays the moment a finger touches it, and a swipe plays every key it crosses, each once per
-  entry, several fingers at once, as GarageBand's glissando does. A swipe that starts on the keys no longer scrolls
-  the keyboard or the page (the keys take the finger, `touch-action: none`); the keyboard moves by its navigator strip
-  (§1.5), a trackpad or the mouse wheel.
-- GarageBand's third mode, Pitch (portamento), is not taken: a piano has none.
+### 2.8 The computer keyboard is a piano
 
-### 1.5 The toolbar: navigator, options, full screen
-
-Every keyboard carries one 44px row above its keys:
-
-- **The navigator strip** (flexible width): all 88 keys drawn small, with a frame around the stretch in view; tap or
-  drag it to move the keyboard there, or use the arrow keys an octave at a time (it is a slider named "Keys in view",
-  its value read as "C3 to B4"). Keys that are marked or down show as dots in the strip, so a note out of sight is
-  never lost. With **Whole piano** everything is in view, so the strip is hidden and the row keeps its buttons.
-- **Keyboard options** (a round button, a popover): Keys, Swipe, Note names (each a `Segmented`) and **Play from the
-  computer keyboard** (a switch, §1.7). They change the saved choices for every keyboard in the app, so the keyboard
-  the learner adjusts is the one they meet on the next screen.
-- **Full screen** (a round button): the same keyboard fills the screen (§1.6).
-
-### 1.6 Full screen
-
-A full-screen dialog holding the same keyboard, with the same marks, the same keys down and the same meaning of a tap
-(a quiz's selection, Your turn's answer), under a header with its name and a close button (Escape closes too). The
-keys take all the height the toolbar leaves. The screen underneath keeps going: Listen keeps playing and its keys go
-down here. On a phone on its side this is the whole screen of keys.
-
-### 1.7 The computer keyboard is a piano
-
-With **Play from the computer keyboard** on, a computer's keys play the keyboard, GarageBand's Musical Typing layout,
-read by physical key (`KeyboardEvent.code`), so ЙЦУКЕН, AZERTY and QWERTY play the same notes:
+With **Play from the computer keyboard** on (default on where the primary pointer is fine, off on touch screens):
 
 ```
  W E   T Y U   O P          C♯ D♯   F♯ G♯ A♯   C♯ D♯
@@ -89,23 +111,27 @@ A S D F G H J K L ; '      C  D  E  F  G  A  B  C  D  E  F
 Z X: an octave down, an octave up
 ```
 
-- Typing starts on middle C's octave; Z and X move it, never past the piano's ends.
-- A typed key does exactly what a tap does: it sounds and goes down, then means what the screen makes it mean.
-- While typing is on, the keys it plays carry their letters (Latin, as printed on Russian keyboards too), and the
-  keyboard scrolls to show the typing octave when it moves.
-- Typing is ignored while the focus is in a text field, with Ctrl, Cmd or Alt held (shortcuts stay shortcuts), and on
-  a key held down (no auto-repeat).
-- **One keyboard types at a time:** the one opened last, so the full-screen keyboard types while it is open and the
-  screen's own keyboard types again when it closes.
-- The switch defaults to on where the primary pointer is fine (a computer) and off on touch screens; the learner's
-  choice then stands.
+- Read by physical key (`KeyboardEvent.code`), so ЙЦУКЕН, AZERTY and QWERTY play the same notes. Typing starts on
+  middle C's octave; Z and X move it, never past the piano's ends.
+- A typed key does exactly what a tap does: it sounds and goes down, then means what the screen makes it mean (a
+  quiz's selection, Wait mode's answer).
+- The keys it plays carry their letters (Latin, as printed on Russian keyboards too), and the keyboard scrolls to the
+  typing octave when it moves.
+- Ignored while the focus is in a text field, with Ctrl, Cmd or Alt held, and on auto-repeat.
+- One keyboard types at a time: the one mounted last.
 
-### 1.8 Settings
+### 2.9 Stop on every Play
 
-Settings gains a **Keyboard** group between Theme and MIDI keyboard: Keys, Swipe, Note names (`Segmented` each) and
-Play from the computer keyboard (`Switch`), the same four choices as the options popover.
+A button that plays turns into **Stop** while its sound plays, and back when it ends or is stopped: Chords' Play and
+Arpeggio, Scales' Play up and down, Symbols' Hear, the Piece's tapped bar (the playing bar shows as playing; tapping
+it again stops it). Starting another sound turns the first button back, since the second cuts the first off.
 
-## 2. Saved state
+### 2.10 Settings
+
+A **Keyboard** group between Theme and MIDI keyboard: Keys, Swipe, Note names (`Segmented` each), Keyboard map and
+Play from the computer keyboard (`Switch` each), the popover's five controls.
+
+## 3. Saved state
 
 `pt-settings` goes to **version 3** with a `keyboard` group:
 
@@ -114,106 +140,114 @@ interface KeyboardPrefs {
   size: 'fit' | 'large' | 'piano'
   swipe: 'scroll' | 'glissando'
   names: 'c' | 'all' | 'none'
+  map: boolean
   typing: boolean
 }
 ```
 
-Defaults: `fit`, `scroll`, `c`, and `typing` from `(pointer: fine)` when the store is created (as `detectLocale`
-reads the browser's languages). The sanitising `merge` keeps each saved field that is still valid and takes the
-default otherwise, so a version-2 save gains the group and nothing else changes; `migrate` passes the saved state on,
-as it does now. `#theme-boot` reads only `theme`, so it is untouched (its test stays green).
+Defaults: `fit`, `scroll`, `c`, `false`, and `typing` from `(pointer: fine)` when the store is created (as
+`detectLocale` reads the browser's languages; `createSettingsStore` takes it as an argument, so tests choose it). The
+sanitising `merge` keeps each saved field that is still valid and takes its default otherwise, so a version-2 save
+gains the group and nothing else changes; `migrate` passes the saved state on, as now. `#theme-boot` reads only
+`theme`, so it is untouched.
 
-## 3. How it is built
+## 4. How it is built
 
-### 3.1 Pure logic (`shared/lib`)
+### 4.1 Pure logic
 
-- `keyboard-layout.ts` gains `keyAt(keys, x, y)`: the key under a point given in fractions of the keyboard's width
-  and height; a black key wins where it covers a white one. Glissando hit-tests with it from the pointer's position
-  and the keyboard's box, so it needs no `elementFromPoint` and is tested without a browser.
-- `typing-keys.ts`: `TYPING_KEYS` (physical code → semitones above the typing C, and the letter shown),
-  `typedKey(code, typingC)`, `moveTypingOctave(typingC, by)` (bounded by the piano) and `typingLetters(typingC)`.
-- `navigator.ts` (beside the keyboard in `shared/ui/piano-keyboard`, pure): the frame from a scroll position and the
-  scroll position from a point on the strip, and the value text's range.
+- `shared/lib/keyboard-layout.ts`: `keyAt(keys, x, y)`, the key under a point in fractions of the keyboard (a black
+  key wins where it covers a white one). Glissando hit-tests with it from the pointer's position and the keys' box,
+  so it needs no `elementFromPoint` and is tested without a browser.
+- `shared/lib/typing-keys.ts`: `TYPING_KEYS` (physical code → semitones above the typing C, and its letter),
+  `typedKey(code, typingC)`, `moveTypingOctave(typingC, by)` (bounded by the piano), `typingLetters(typingC)`.
+- `shared/lib/schedule/sounding.ts`: `keysStruckAt(windows, time)`, the sounding keys struck last (the open windows
+  with the latest start), beside `keysSoundingAt`.
+- `shared/ui/piano-keyboard/key-look.ts`: the look gains the note name, the letter, the finger, `quiet`, and the scale
+  fills (`tonic`, `scale`) replacing the band.
+- `shared/ui/piano-keyboard/navigator.ts`: the map's frame from a scroll position, a scroll position from a point on
+  it, and its value text's range.
 
-### 3.2 The keyboard (`shared/ui/piano-keyboard`, presentational)
+### 4.2 The audio port
 
-- `PianoKeyboard` gains `size`, `swipe`, `names` and `letters` (the typing letters by key), and takes `children`:
-  the toolbar's trailing actions, a slot rather than a flag per button (CODE_STYLE §4). It renders the toolbar row
-  (`KeyboardNavigator` + children) over the keys, and owns the scroller the navigator moves.
-- `KeyboardNavigator`: the strip, a slider over the scroller (reads its scroll position on `scroll`, passive).
-- `use-glissando.ts`: pointer handlers on the keys' group for Glissando (a key per pointer, pressed on entry, pointer
-  capture so a swipe keeps playing past the edge). In Glissando a click from a pointer is ignored (it already played
-  on touch) and a keyboard click (Enter, Space: `detail === 0`) still plays.
-- `keyLook` gains the note name and letter under a mark's label; `Key` draws the rail's shadow, lip, slope and the
-  drop; the width formula follows `size`.
-- New key tokens in `tokens.css`, both themes: `--key-rail`, `--key-bed`, `--key-lip`, `--key-black-slope`,
-  `--on-key-white`, `--on-key-black`; exposed in `theme.css`.
+`AudioOutput` gains `struck(): ReadonlySet<Midi>` (the same set until it changes, notified through `onSounding`),
+from `keysStruckAt` over the same log as `sounding()`; both adapters implement it. `useSoundKey` plays a tap at
+`audio.now()`. A new `usePlayback()` (`shared/lib/services`) plays a sound under an id and says which id is playing
+until its last note ends or `stop()` is called, reading the port's clock when its sounding keys change: the Stop
+buttons' one source.
 
-### 3.3 `features/live-keyboard`
+### 4.3 The keyboard (`shared/ui/piano-keyboard`, presentational)
 
-- `LiveKeyboard` reads the four choices from the settings store, passes them on, and fills the toolbar's slot with
-  **KeyboardOptions** (the popover) and **the full-screen button**. It renders `FullScreenKeyboard` (a `Dialog`) with
-  its own props when opened.
-- `use-typing.ts`: the one-keyboard-types rule (a stack of the mounted keyboards that want to type, the last one
-  typing), the `keydown` listener on `window` for the owner only, the typing octave (component state; not saved).
-- The popover and the Settings group write through `setKeyboardPrefs` (`features/set-preference`), one command with a
-  partial update, as the other preferences have.
+- `PianoKeyboard` gains `size`, `swipe`, `names`, `letters`, `quiet`, and `children`: the rail's trailing controls, a
+  slot rather than a flag per button (CODE_STYLE §4). It renders the map (when asked), the rail with ‹ › in Glissando,
+  the keys, and the finger row under them. It keeps a local set of keys pressed by pointers, drawn down at once.
+- `use-glissando.ts` and `use-scroll-press.ts`: pointer handling for each swipe; `KeyboardMap` (the strip);
+  `FingerRow`.
+- Height: the keys' box is `clamp(96px, 4.2 × white-key width, 40dvh)` in container units; the Player overrides it.
 
-### 3.4 Elsewhere
+### 4.4 `features/live-keyboard`
 
-- `entities/settings`: `KeyboardPrefs`, `KEYBOARD_SIZES`, `SWIPES`, `NOTE_NAMES`, `DEFAULT_KEYBOARD`, the sanitiser,
-  `selectKeyboard`; `SETTINGS_VERSION` 3.
-- `shared/ui/primitives/dialog.tsx`: added with the shadcn CLI (base-nova), then sized as the kit's other
-  primitives are.
-- Screens keep their keys' heights; the toolbar adds its row above them (the pinned keyboards, the quiz board, the
-  Player's keyboard).
-- Settings page: the Keyboard group.
+- `LiveKeyboard` reads the keyboard's choices from the settings store, adds `down` (sounding and held) and `quiet`
+  (with `spotlight`, from the port's struck keys), and fills the rail's slot with `KeyboardOptions` (the popover).
+- `use-typing.ts`: one keyboard types at a time (a stack of the mounted keyboards that may type; the last one types),
+  the `keydown` listener on `window` for that one only, the typing octave (component state, not saved).
+- The popover and the Settings group write through `setKeyboardPrefs` (`features/set-preference`), one command with
+  a partial update.
 
-## 4. i18n
+### 4.5 Screens
 
-`common`: the toolbar (Keys in view, Keyboard options, Full screen, Close), the value text ("{{from}} to {{to}}"),
-the four choices and their options (Keys: Fit, Large, Whole piano / «По ширине», «Крупные», «Весь рояль»; Swipe:
-Scroll, Glissando / «Прокрутка», «Глиссандо»; Note names: C, All, None / C, «Все», «Нет», since note names are the
-same in both languages; Play from the computer
-keyboard / «Играть с клавиатуры компьютера») and the octave keys' hint ("Z X · octave" / «Z X · октава»), shown as
-keys beside the switch. `settings`: the group's title.
+- Chords, Scales, Symbols and the Piece pass `spotlight`; their Play buttons use `usePlayback`.
+- Scales: keys are labelled by degree; its Degrees · RH fingers · LH fingers switch becomes **Fingers: None · Right
+  hand · Left hand**, the fingers in the row under the keys (the URL's `view` keeps its values `degrees`, `rh`,
+  `lh`).
+- Player: with Finger numbers on, the keys keep their note names and the fingers go in the row.
+- Every screen drops its fixed keyboard height.
+- Settings: the Keyboard group.
 
-## 5. States and edge cases
+## 5. i18n
 
-| Situation                                        | Behaviour                                                                  |
-| ------------------------------------------------ | -------------------------------------------------------------------------- |
-| Whole piano on a phone                           | Every key shows; taps work but keys are narrow; the strip is hidden        |
-| Glissando on a pinned keyboard                   | A swipe on the keys plays; the page scrolls from anywhere but the keys     |
-| A swipe leaves the keys and comes back           | Each key it enters plays once per entry                                    |
-| Two fingers                                      | Each plays its own keys                                                    |
-| Typing while a text field is focused             | Nothing plays; the field types                                             |
-| Typing at the piano's ends                       | Z or X past an end does nothing; keys past C8 do not play                  |
-| A sheet open over the Player                     | The Player's keyboard still types (the sheet has no keyboard of its own)   |
-| Full screen open, then the screen changes route  | The dialog closes with its screen                                          |
-| A saved `keyboard` group with an unknown value   | That field takes its default; the others stand                             |
+`common`: the rail and map (Octave down, Octave up, Keyboard options, Keys in view, "{{from}} to {{to}}"), the five
+choices and their options (Keys: Fit, Large, Whole piano / «По ширине», «Крупные», «Весь рояль»; Swipe: Scroll,
+Glissando / «Прокрутка», «Глиссандо»; Note names: C, All, None / C, «Все», «Нет»; Keyboard map / «Карта клавиатуры»;
+Play from the computer keyboard / «Играть с клавиатуры компьютера») and the octave keys' hint ("Z X · octave" /
+«Z X · октава»), Stop. `settings`: the group's title. `theory`: Fingers, None.
 
-## 6. Accessibility
+## 6. States and edge cases
 
-The keys stay one tab stop with the arrow keys, Home and End (live-keyboard design). The navigator is a slider with a
-name and a value text. The options popover's controls are the kit's `Segmented` and `Switch`, named by their labels.
-Full screen is a dialog with a title and a close button, trapping focus. Letters and note names are `aria-hidden`:
-each key is already named by its note.
+| Situation                                           | Behaviour                                                                    |
+| --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| A swipe in Scroll                                   | The first key sounds; the keyboard scrolls; no other key sounds              |
+| A swipe leaves the keys in Glissando and comes back | Each key it enters sounds once per entry                                     |
+| Two fingers in Glissando                            | Each plays its own keys                                                      |
+| Whole piano on a phone                              | Every key shows; taps work; ‹ › and the map hidden                           |
+| Typing while a text field is focused                | Nothing plays; the field types                                               |
+| Z or X past the piano's end                         | Nothing moves                                                                |
+| Play, then Arpeggio                                 | Play turns back; Arpeggio shows Stop                                         |
+| A tap on a marked key while the explorer is silent  | The tapped key stands out for as long as it rings                            |
+| A saved `keyboard` group with an unknown value      | That field takes its default; the others stand                               |
 
-## 7. Testing
+## 7. Accessibility
 
-Test first (CODE_STYLE §9). Unit: `keyAt` (white, black over white, the edges), `typedKey` / `moveTypingOctave` /
-`typingLetters` (the layout, the piano's ends), the navigator's math, `keyLook` with names and letters, the settings
-sanitiser (a version-2 save, unknown values, the typing default). Components: Glissando (a pointer swipe presses each
-key once per entry, two pointers, a pointer click does not press twice, Enter still presses), Scroll (a click
-presses), the navigator (arrow keys move an octave; the value text), the options popover (changes the saved choices),
-full screen (opens, a tap reaches the screen's meaning, Escape closes, it types while open), typing (a code plays its
-key, Z and X move, ignored in a text field, with a modifier or on repeat; only the last keyboard types). Screen:
-Settings' Keyboard group. jsdom lays nothing out, so a test gives the keys' group its box (`getBoundingClientRect`)
-where a pointer's position matters.
+The keys stay one tab stop with the arrow keys, Home and End. ‹ › and the options button are labelled buttons with
+44px targets. The map is a slider with a name and a value text. Letters, note names and finger numbers are
+`aria-hidden`: each key is already named by its note. A Play button that turns into Stop changes its name with it.
 
-## 8. Records
+## 8. Testing
 
-DESIGN.md (the keys' look, the toolbar, the No Glow Rule's exception), CODE_STYLE §1 (the keyboard's toolbar and
-choices) and §5 (the key tokens), the glossary (**Scroll**, **Glissando**, **Navigator strip**, **Typing keys**,
-**Full-screen keyboard**), ADR 0009 (the keyboard is an instrument: its look is a material, a swipe scrolls or plays
-by the learner's choice, typing reads physical keys), CLAUDE.md's architecture line for `live-keyboard`.
+Test first. Unit: `keyAt` (white, black over white, the edges), the typing keys (the layout, the piano's ends),
+`keysStruckAt` (a block chord, an arpeggio, a run), the navigator's math, `keyLook` (names, letters, fingers, quiet,
+the scale fills), the settings sanitiser (a version-2 save, unknown values, the typing default). Adapters: `struck()`
+in the fake and the WebAudio adapter. Hooks: `usePlayback` (playing until the last note ends, `stop`, a second sound
+takes over). Components: Scroll (a pointer press plays at once; a moved pointer plays nothing more), Glissando (a swipe
+presses each key once per entry, two pointers, a pointer's click does not play twice, Enter still plays), ‹ ›, the
+map, the options popover (changes the saved choices), typing (a code plays its key, Z and X move, ignored in a text
+field, with a modifier or on repeat; only the last keyboard types), the finger row, spotlight (an arpeggio's keys go
+quiet but the struck one). Screens: Chords' Play becomes Stop and back; Scales' fingers under the keys; Settings'
+Keyboard group. jsdom lays nothing out, so a test gives the keys' group its box where a pointer's position matters.
+
+## 9. Records
+
+DESIGN.md (the keys, the rail, the finger row, the scale fills, spotlight, the No Glow Rule's exception), CODE_STYLE
+§1 (the keyboard's choices, spotlight, `usePlayback`) and §5 (the key tokens), the glossary (**Rail**, **Keyboard
+map**, **Typing keys**, **Spotlight**, **Finger row**), ADR 0009 (the keyboard is an instrument: its look is a
+material, a key plays on touch, a swipe scrolls or plays by the learner's choice, typing reads physical keys),
+CLAUDE.md's `live-keyboard` line.

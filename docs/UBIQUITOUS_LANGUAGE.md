@@ -7,7 +7,9 @@ differently, the UI column says how.
 
 | Term            | Means                                                                                      | UI                            | Avoid                      |
 | --------------- | ------------------------------------------------------------------------------------------ | ----------------------------- | -------------------------- |
-| **Piece**       | Anything that opens in the Player: a song, an exercise or a progression (`kind`)           | Song / Exercise / Progression | item, track, tune          |
+| **Piece**       | Anything that opens in the Player: a song, a study or a progression (`kind`)               | Song / Study / Progression    | item, track, tune          |
+| **Study**       | A Piece written to practise a technique: the method books' lesson pieces (Called to Play)  | Study («Этюд»)                | exercise (that is Practice's) |
+| **Exercise**    | A line of notes generated from a rule in any key, practised in Practice: a scale from any note, Barry Harris's 6th-diminished scale | Exercise («Упражнение») | drill, study (a Study is a Piece) |
 | **Listing**     | A songbook entry with no chart yet; shown in Songs, never opened in the Player             | Song, "no chart yet"          | stub, placeholder          |
 | **Collection**  | An ordered group of Pieces and Listings from one source («Боже, спасибо», Called to Play…) | Collection                    | book, category             |
 | **Book**        | A printed songbook or method that a Source cites; not a Collection                         | the book's title              | collection                 |
@@ -31,13 +33,15 @@ differently, the UI column says how.
 | **Chord symbol**           | The written name, `F#m7b5/C`                                                                                        | chord name                        |
 | **Chord tone**             | One note of a chord, with its **Role** (root, 3rd, 5th, 7th, 9th, 11th, 13th) and **Degree** label (`♭3`)           | chord note                        |
 | **Tone**                   | A spelled note measured from a root, with its Role and Degree label: a Chord tone, or one note of a scale           | scale note                        |
-| **Key**                    | A tonic and a mode (G major, G♯ minor)                                                                              | tonality (in code)                |
+| **Key**                    | A tonic, major or minor (G major, G♯ minor); a song is written in one. Its major or minor is not a Mode              | tonality (in code), mode          |
 | **Transpose**              | Move to another tonic by the interval between tonics, letters kept                                                  | shift                             |
-| **Voicing**                | How much of each chord a Progression plays: triads, sevenths or ninths                                              | colour                            |
+| **Chord size**             | How much of each chord a Progression plays: triads, sevenths or ninths                                              | voicing (that is the notes' layout), colour |
+| **Voicing**                | How a chord's notes are laid out under the hands: shell, rootless, drop 2, quartal, upper structure                 | chord size, shape                 |
 | **Inversion**              | Which chord tone is lowest                                                                                          | position                          |
-| **Placed tone**            | A Tone at a key on the keyboard, as the explorers and the quiz place chords and scales (`placeChord`, `placeScale`) | voicing (that is a Progression's) |
+| **Placed tone**            | A Tone at a key on the keyboard, as the explorers and the quiz place chords and scales (`placeChord`, `placeScale`) | voicing (a Voicing is a layout type) |
 | **Scale gap**              | The step between neighbouring notes of a scale: W, H or W+H (Т, П, Т+П in Russian)                                  | step (a Step is on the Path)      |
-| **Scale kind**             | major; natural, harmonic or melodic minor; major or minor pentatonic; blues                                         | scale type, mode                  |
+| **Scale kind**             | major; natural, harmonic or melodic minor; the Modes; major or minor pentatonic; blues                              | scale type                        |
+| **Mode**                   | A church mode: Dorian, Phrygian, Lydian, Mixolydian or Locrian, a Scale kind (Ionian is major, Aeolian natural minor) | key (a Key is major or minor)     |
 | **Degree** (progression)   | A Roman numeral from the tonic on the major scale (`ii`, `♭VII`)                                                    | step                              |
 | **Function** (progression) | How a degree's chord grows with the Voicing: `maj`, `min`, `dom`, `domb9`, `hd`, or fixed `=quality`                | chord role                        |
 
@@ -53,11 +57,13 @@ differently, the UI column says how.
 | **Beat group**                | Notes sharing an onset: what Step mode walks through                                                                               | chord (as time), group      |
 | **Pass**                      | One play-through from a beat group to the end; Listen loops passes                                                                 | run, cycle                  |
 | **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound                                               | player loop, engine         |
-| **Listen / Step / Your turn** | The Player's modes: the app plays / you move through it / the app waits for your notes                                             | auto, manual                |
+| **Listen / Step / Wait mode** | How the Player goes: the app plays at a tempo (50%, 75%, 100% or any) / you move through it by ‹ › / the app waits for your notes | auto, manual, Your turn     |
 | **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles (Russian UI: «Параметры»; «Настройки» is Settings)             | options, settings           |
 | **Note grid**                 | The Player's columns of the current bar's notes, by beat and hand                                                                  | piano roll, tab             |
 | **Live keyboard**             | The keyboard every screen shows (`LiveKeyboard`): the whole piano, scrolling; a tapped key sounds; a key goes down while it sounds | static keyboard, piano roll |
 | **Down** (a key)              | A key sounding now or held on a MIDI keyboard, drawn pressed; Name chord's shown chord is **lit**, not down                        | active, playing             |
+| **Scroll** (swipe)            | The keyboard's default swipe: a key sounds the moment it is touched, and a swipe moves the keyboard (only the first key sounds)    | pan mode                    |
+| **Glissando** (swipe)         | The other swipe: every key a finger crosses sounds; the keyboard stays where it is and moves an octave at a time by its ‹ › buttons | slide mode, glide           |
 
 ## Path and progress
 
