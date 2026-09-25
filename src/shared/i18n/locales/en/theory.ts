@@ -7,6 +7,17 @@ export const theory = {
     symbols: 'Symbols',
     quiz: 'Quiz',
   },
+  root: 'Root',
+  familyLabel: 'Chord family',
+  qualityLabel: 'Chord',
+  inversionLabel: 'Inversion',
+  inversion: { root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  handsLabel: 'Hands',
+  play: 'Play',
+  arpeggio: 'Arpeggio',
+  checkYourself: 'Check yourself',
+  // The chip label of the major triad, whose suffix is empty.
+  major: 'M',
   family: {
     tri: 'Triads',
     six: '6th & add',
