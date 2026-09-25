@@ -132,3 +132,15 @@ export function rootSpelling(pc: PitchClass, preferSharps: boolean): SpelledNote
 
 export const sameNote = (a: SpelledNote, b: SpelledNote): boolean =>
   a.letter === b.letter && a.accidental === b.accidental
+
+/** A note as a URL writes it, ASCII `b` and `#` (`Bb`, `F#`); noteFromParam reads it back. */
+export const noteParam = (spelled: SpelledNote): string =>
+  spelled.letter +
+  (spelled.accidental < 0 ? 'b'.repeat(-spelled.accidental) : '#'.repeat(spelled.accidental))
+
+/** A note written by noteParam. A URL's params are validated first, so anything else is a bug. */
+export function noteFromParam(param: string): SpelledNote {
+  const spelled = parseNoteName(param)
+  if (!spelled) throw new RangeError(`${param} is not a note`)
+  return spelled
+}

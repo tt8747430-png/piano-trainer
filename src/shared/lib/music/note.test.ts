@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   midiOf,
   note,
+  noteFromParam,
   noteName,
+  noteParam,
   parseNoteName,
   pitchClassOf,
   plainSpelling,
@@ -112,5 +114,19 @@ describe('midiOf', () => {
   it('refuses a key off the keyboard', () => {
     expect(midiOf(note('G'), 9)).toBe(127)
     expect(() => midiOf(note('G', 1), 9)).toThrow(RangeError)
+  })
+})
+
+describe('noteParam and noteFromParam', () => {
+  it('write a note for a URL with ASCII accidentals and read it back', () => {
+    for (const spelled of [note('B', -1), note('F', 1), note('C'), note('E', -2)]) {
+      expect(noteFromParam(noteParam(spelled))).toEqual(spelled)
+    }
+    expect(noteParam(note('B', -1))).toBe('Bb')
+    expect(noteParam(note('F', 1))).toBe('F#')
+  })
+
+  it('refuse a param that is not a note', () => {
+    expect(() => noteFromParam('H')).toThrow(RangeError)
   })
 })

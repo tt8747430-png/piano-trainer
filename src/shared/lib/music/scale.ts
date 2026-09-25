@@ -55,3 +55,39 @@ export function spellScale(root: SpelledNote, kind: ScaleKind): Tone[] {
     name === 'blue' ? blueNote(root) : toneAbove(root, INTERVALS[name]),
   )
 }
+
+/** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
+export type ScaleGap = 'H' | 'W' | 'W+H'
+const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }
+
+/** The gaps between neighbouring notes up to the octave: W, H, or W+H. */
+export function scaleGaps(kind: ScaleKind): ScaleGap[] {
+  const semitones = [...scaleIntervals(kind).map((interval) => interval.semitones), 12]
+  return semitones.slice(1).map((above, i) => {
+    const size = above - (semitones[i] ?? 0)
+    const gap = GAP_BY_SEMITONES[size]
+    if (!gap) throw new RangeError(`${kind} has a gap of ${size} semitones`)
+    return gap
+  })
+}
+
+/** Each scale's relative: which kind, on which of its degrees (index into its notes). */
+const RELATIVES: Partial<Record<ScaleKind, { readonly kind: ScaleKind; readonly degree: number }>> =
+  {
+    major: { kind: 'natural', degree: 5 },
+    natural: { kind: 'major', degree: 2 },
+    harmonic: { kind: 'major', degree: 2 },
+    melodic: { kind: 'major', degree: 2 },
+    pent: { kind: 'mpent', degree: 4 },
+    mpent: { kind: 'pent', degree: 1 },
+  }
+
+/** The relative major or minor, spelled from the scale's own notes; none for the blues. */
+export function relativeScale(
+  root: SpelledNote,
+  kind: ScaleKind,
+): { root: SpelledNote; kind: ScaleKind } | null {
+  const relative = RELATIVES[kind]
+  const tone = relative ? spellScale(root, kind)[relative.degree] : undefined
+  return relative && tone ? { root: tone.note, kind: relative.kind } : null
+}

@@ -4,6 +4,8 @@ import { pitchClass } from './pitch'
 import {
   SCALE_KINDS,
   isMinorScale,
+  relativeScale,
+  scaleGaps,
   scaleIntervals,
   scaleRootSpelling,
   spellScale,
@@ -88,5 +90,30 @@ describe('scaleRootSpelling', () => {
       'mpent',
       'blues',
     ])
+  })
+})
+
+describe('scaleGaps', () => {
+  it('names the gaps between neighbouring notes up to the octave', () => {
+    expect(scaleGaps('major')).toEqual(['W', 'W', 'H', 'W', 'W', 'W', 'H'])
+    expect(scaleGaps('harmonic')).toEqual(['W', 'H', 'W', 'W', 'H', 'W+H', 'H'])
+    expect(scaleGaps('blues')).toEqual(['W+H', 'W', 'H', 'H', 'W+H', 'W'])
+  })
+})
+
+describe('relativeScale', () => {
+  it('pairs a major scale with the natural minor on its 6th', () => {
+    expect(relativeScale(note('E', -1), 'major')).toEqual({ root: note('C'), kind: 'natural' })
+  })
+
+  it('gives the minors their relative major on the 3rd', () => {
+    expect(relativeScale(note('A'), 'natural')).toEqual({ root: note('C'), kind: 'major' })
+    expect(relativeScale(note('G', 1), 'harmonic')).toEqual({ root: note('B'), kind: 'major' })
+  })
+
+  it('pairs the pentatonics, and has none for the blues', () => {
+    expect(relativeScale(note('C'), 'pent')).toEqual({ root: note('A'), kind: 'mpent' })
+    expect(relativeScale(note('A'), 'mpent')).toEqual({ root: note('C'), kind: 'pent' })
+    expect(relativeScale(note('C'), 'blues')).toBeNull()
   })
 })

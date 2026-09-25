@@ -4,7 +4,9 @@ export {
   LETTERS,
   midiOf,
   note,
+  noteFromParam,
   noteName,
+  noteParam,
   parseNoteName,
   pitchClassOf,
   plainSpelling,
@@ -46,11 +48,15 @@ export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 export {
   SCALE_KINDS,
   isMinorScale,
+  relativeScale,
+  scaleGaps,
   scaleIntervals,
   scaleRootSpelling,
   spellScale,
+  type ScaleGap,
   type ScaleKind,
 } from './scale'
+export { lastInversion, placeChord, placeScale, type PlacedChord, type PlacedTone } from './place'
 export { scaleFingering, type Finger, type Hand } from './fingering'
 export { diatonicChords, type DiatonicChord } from './diatonic'
 export {
