@@ -70,7 +70,8 @@ export function createWebAudioOutput({
   let context: AudioContext | null | undefined
   const voices = new Set<GainNode>()
 
-  const contextNow = (): AudioContext | null => {
+  /** The AudioContext, created on first use; null where the browser has none. */
+  const openContext = (): AudioContext | null => {
     if (context === undefined) context = createContext()
     return context
   }
@@ -89,11 +90,11 @@ export function createWebAudioOutput({
 
   return {
     async unlock() {
-      const audio = contextNow()
+      const audio = openContext()
       if (audio?.state === 'suspended') await audio.resume()
     },
     play(sounds, at) {
-      const audio = contextNow()
+      const audio = openContext()
       if (!audio) return
       if (audio.state === 'suspended') void audio.resume()
       lookahead.add(sounds, at ?? audio.currentTime + PLAY_DELAY)

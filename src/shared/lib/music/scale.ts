@@ -1,4 +1,4 @@
-import type { Interval } from './interval'
+import { INTERVALS, type IntervalName, type Interval } from './interval'
 import { rootSpelling, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
@@ -14,38 +14,22 @@ export const SCALE_KINDS = [
 ] as const
 export type ScaleKind = (typeof SCALE_KINDS)[number]
 
-/** Each degree label and the interval above the root it names. */
-const DEGREES = {
-  '1': { steps: 0, semitones: 0 },
-  '2': { steps: 1, semitones: 2 },
-  '♭3': { steps: 2, semitones: 3 },
-  '3': { steps: 2, semitones: 4 },
-  '4': { steps: 3, semitones: 5 },
-  '#4': { steps: 3, semitones: 6 },
-  '♭5': { steps: 4, semitones: 6 },
-  '5': { steps: 4, semitones: 7 },
-  '♭6': { steps: 5, semitones: 8 },
-  '6': { steps: 5, semitones: 9 },
-  '♭7': { steps: 6, semitones: 10 },
-  '7': { steps: 6, semitones: 11 },
-} as const satisfies Record<string, Interval>
-
-/** A degree, or the blues' blue note: ♭5, or #4 where that needs fewer accidentals. */
-type ScaleDegree = keyof typeof DEGREES | 'blue'
+/** A scale's intervals, or the blues' blue note: ♭5, or #4 where that needs fewer accidentals. */
+type ScaleInterval = IntervalName | 'blue'
 
 interface ScaleEntry {
-  readonly degrees: readonly ScaleDegree[]
+  readonly intervals: readonly ScaleInterval[]
   readonly minor: boolean
 }
 
 const SCALES: Readonly<Record<ScaleKind, ScaleEntry>> = {
-  major: { degrees: ['1', '2', '3', '4', '5', '6', '7'], minor: false },
-  natural: { degrees: ['1', '2', '♭3', '4', '5', '♭6', '♭7'], minor: true },
-  harmonic: { degrees: ['1', '2', '♭3', '4', '5', '♭6', '7'], minor: true },
-  melodic: { degrees: ['1', '2', '♭3', '4', '5', '6', '7'], minor: true },
-  pent: { degrees: ['1', '2', '3', '5', '6'], minor: false },
-  mpent: { degrees: ['1', '♭3', '4', '5', '♭7'], minor: true },
-  blues: { degrees: ['1', '♭3', '4', 'blue', '5', '♭7'], minor: true },
+  major: { intervals: ['r', 'M2', 'M3', 'P4', 'P5', 'M6', 'M7'], minor: false },
+  natural: { intervals: ['r', 'M2', 'm3', 'P4', 'P5', 'm6', 'm7'], minor: true },
+  harmonic: { intervals: ['r', 'M2', 'm3', 'P4', 'P5', 'm6', 'M7'], minor: true },
+  melodic: { intervals: ['r', 'M2', 'm3', 'P4', 'P5', 'M6', 'M7'], minor: true },
+  pent: { intervals: ['r', 'M2', 'M3', 'P5', 'M6'], minor: false },
+  mpent: { intervals: ['r', 'm3', 'P4', 'P5', 'm7'], minor: true },
+  blues: { intervals: ['r', 'm3', 'P4', 'blue', 'P5', 'm7'], minor: true },
 }
 
 export const isMinorScale = (kind: ScaleKind): boolean => SCALES[kind].minor
@@ -55,15 +39,19 @@ export const scaleRootSpelling = (pc: PitchClass, kind: ScaleKind): SpelledNote 
   rootSpelling(pc, isMinorScale(kind))
 
 function blueNote(root: SpelledNote): Tone {
-  const flatFive = toneAbove(root, DEGREES['♭5'], '♭5')
-  const sharpFour = toneAbove(root, DEGREES['#4'], '#4')
+  const flatFive = toneAbove(root, INTERVALS.d5)
+  const sharpFour = toneAbove(root, INTERVALS.A4)
   const fewer = Math.abs(sharpFour.note.accidental) < Math.abs(flatFive.note.accidental)
   return fewer ? sharpFour : flatFive
 }
 
+/** The scale's intervals above its root, the blues' blue note as ♭5. */
+export const scaleIntervals = (kind: ScaleKind): readonly Interval[] =>
+  SCALES[kind].intervals.map((name) => INTERVALS[name === 'blue' ? 'd5' : name])
+
 /** The scale's notes from the root up, each spelled by letter steps from the root. */
 export function spellScale(root: SpelledNote, kind: ScaleKind): Tone[] {
-  return SCALES[kind].degrees.map((degree) =>
-    degree === 'blue' ? blueNote(root) : toneAbove(root, DEGREES[degree], degree),
+  return SCALES[kind].intervals.map((name) =>
+    name === 'blue' ? blueNote(root) : toneAbove(root, INTERVALS[name]),
   )
 }

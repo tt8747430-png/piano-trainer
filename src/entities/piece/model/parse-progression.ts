@@ -3,30 +3,25 @@ import {
   type Chart,
   type ChartBar,
   type ChartChord,
+  type Tick,
 } from '@/shared/lib/arrangement'
 import {
   CHORD_QUALITIES,
+  scaleIntervals,
   spellAbove,
   spellChord,
   type Chord,
   type ChordQuality,
   type ChordRole,
-  type Interval,
 } from '@/shared/lib/music'
+import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
 import { ContentError } from './content-error'
 import { beatsPerBar, pieceKey, VOICINGS, type ProgressionPiece, type Voicing } from './types'
 
-/** Roman numerals measured on the major scale from the tonic, in letter steps and semitones. */
-const DEGREES = new Map<string, Interval>([
-  ['I', { steps: 0, semitones: 0 }],
-  ['II', { steps: 1, semitones: 2 }],
-  ['III', { steps: 2, semitones: 4 }],
-  ['IV', { steps: 3, semitones: 5 }],
-  ['V', { steps: 4, semitones: 7 }],
-  ['VI', { steps: 5, semitones: 9 }],
-  ['VII', { steps: 6, semitones: 11 }],
-])
+/** Roman numerals name the degrees of the major scale from the tonic. */
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+const MAJOR_SCALE = scaleIntervals('major')
 
 const CHROMATIC = new Map([
   ['', 0],
@@ -53,14 +48,14 @@ const BASS_ROLES = new Map<string, ChordRole>([
 
 const BARS_PER_LINE = 4
 
-const isQuality = (value: string): value is ChordQuality =>
-  (CHORD_QUALITIES as readonly string[]).includes(value)
+const isQuality = isOneOf(CHORD_QUALITIES)
 
 const TOKEN = /^([b♭#♯]?)([ivIV]+):([^:]+):([^/]+)(?:\/(.))?$/
 
-interface WrittenChord {
+/** A chord and how long it lasts, before it is packed into bars. */
+interface TimedChord {
   readonly chord: Chord
-  readonly ticks: number
+  readonly ticks: Tick
 }
 
 /** `degree:function:beats[/3|/5|/7]`, e.g. `♭VII:dom:2` or `i:min:2/3`. */
@@ -69,10 +64,11 @@ function readChord(
   piece: ProgressionPiece,
   voicing: Voicing,
   fail: (problem: string) => never,
-): WrittenChord {
+): TimedChord {
   const [, chromatic = '', numeral = '', written = '', beatsText = '', bassText] =
     TOKEN.exec(token) ?? fail(`cannot read the chord "${token}"`)
-  const degree = DEGREES.get(numeral.toUpperCase()) ?? fail(`unknown degree in "${token}"`)
+  const degree =
+    MAJOR_SCALE[NUMERALS.indexOf(numeral.toUpperCase())] ?? fail(`unknown degree in "${token}"`)
   const fixed = written.startsWith('=') ? written.slice(1) : null
   const quality =
     fixed === null
@@ -96,7 +92,7 @@ function readChord(
 }
 
 /** Fills bars of the meter in order, a chord longer than the room left tied into the next bar. */
-function packIntoBars(chords: readonly WrittenChord[], meterTicks: number): ChartBar[] {
+function packIntoBars(chords: readonly TimedChord[], meterTicks: Tick): ChartBar[] {
   const bars: ChartBar[] = []
   let current: ChartChord[] = []
   let room = meterTicks

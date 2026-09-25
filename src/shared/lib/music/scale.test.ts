@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { note, noteName, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
-import { SCALE_KINDS, isMinorScale, scaleRootSpelling, spellScale, type ScaleKind } from './scale'
+import {
+  SCALE_KINDS,
+  isMinorScale,
+  scaleIntervals,
+  scaleRootSpelling,
+  spellScale,
+  type ScaleKind,
+} from './scale'
 
 const names = (root: SpelledNote, kind: ScaleKind) =>
   spellScale(root, kind).map((tone) => noteName(tone.note))
@@ -45,6 +52,22 @@ describe('spellScale', () => {
     expect(tones.map((tone) => tone.degree).join(' ')).toBe('1 2 ♭3 4 5 ♭6 ♭7')
     expect(tones[2]?.role).toBe('3rd')
     expect(tones[5]?.role).toBe('13th')
+  })
+})
+
+describe('scaleIntervals', () => {
+  it.each([
+    ['major', [0, 2, 4, 5, 7, 9, 11]],
+    ['natural', [0, 2, 3, 5, 7, 8, 10]],
+    ['blues', [0, 3, 5, 6, 7, 10]],
+  ] as const)('measures %s from its root', (kind, semitones) => {
+    expect(scaleIntervals(kind).map((interval) => interval.semitones)).toEqual(semitones)
+  })
+
+  it('climbs one letter a degree in a seven-note scale', () => {
+    expect(scaleIntervals('harmonic').map((interval) => interval.steps)).toEqual([
+      0, 1, 2, 3, 4, 5, 6,
+    ])
   })
 })
 

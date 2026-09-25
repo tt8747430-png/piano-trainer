@@ -1,3 +1,4 @@
+import type { QuizAnswer } from '@/entities/progress'
 import {
   CHORD_QUALITIES,
   chordFamily,
@@ -116,12 +117,14 @@ function nameOptions(
   random: () => number,
 ): readonly string[] {
   const family = chordFamily(question.quality)
-  const inScope = scope.skills.flatMap((id) => {
-    const skill = skillOf(id)
-    return skill.kind === 'chord' && skill.quality !== question.quality ? [skill.quality] : []
-  })
+  const inScope = new Set(
+    scope.skills.flatMap((id) => {
+      const skill = skillOf(id)
+      return skill.kind === 'chord' && skill.quality !== question.quality ? [skill.quality] : []
+    }),
+  )
   const sameFamily = shuffled(
-    inScope.filter((quality) => chordFamily(quality) === family),
+    [...inScope].filter((quality) => chordFamily(quality) === family),
     random,
   )
   const others = shuffled(
@@ -239,7 +242,7 @@ export function quizReducer(state: QuizState, event: QuizEvent): QuizState {
 }
 
 /** The answer to record as evidence, once the question is answered. */
-export function answerOf(state: QuizState): { skill: SkillId; correct: boolean } | null {
+export function answerOf(state: QuizState): QuizAnswer | null {
   return state.question && state.result
     ? { skill: state.question.skill, correct: state.result.correct }
     : null

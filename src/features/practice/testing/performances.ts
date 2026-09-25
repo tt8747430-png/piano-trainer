@@ -27,10 +27,10 @@ const chart = (...bars: string[][]): Chart => ({
 })
 
 /** One bar, C then G: beat groups at 0, 12, 24, 36; the left hand plays at 0 and 24 only. */
-export const ONE_BAR: Performance = arrange(chart(['C', 'G']), { key: note('C'), pattern: BEATS })
+export const ONE_BAR: Performance = arrange(chart(['C', 'G']), { tonic: note('C'), pattern: BEATS })
 
 /** Two bars, C and G: eight beat groups, four to a bar. */
 export const TWO_BARS: Performance = arrange(chart(['C'], ['G']), {
-  key: note('C'),
+  tonic: note('C'),
   pattern: BEATS,
 })

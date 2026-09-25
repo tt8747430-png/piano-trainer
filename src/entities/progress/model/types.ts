@@ -8,6 +8,12 @@ export interface Answer {
   readonly at: string
 }
 
+/** A quiz answer as the quiz gives it: the skill it was on, and whether it was right. */
+export interface QuizAnswer {
+  readonly skill: SkillId
+  readonly correct: boolean
+}
+
 export interface QuizStats {
   readonly correct: number
   readonly total: number

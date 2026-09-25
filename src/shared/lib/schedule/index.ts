@@ -1,9 +1,9 @@
+export { advanceLoop, beatGroupAt, startLoop, type Loop, type Pass } from './loop'
 export {
   audibleHands,
   beatGroupSounds,
   schedule,
-  secondsFor,
-  secondsPerTick,
+  untilNextBeatGroup,
   type Audible,
   type ClickSound,
   type Cue,

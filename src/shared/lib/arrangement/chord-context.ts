@@ -3,6 +3,7 @@ import {
   pitchClass,
   pitchClassOf,
   qualityIntervals,
+  scaleIntervals,
   type ChordQuality,
   type Finger,
   type Hand,
@@ -24,11 +25,11 @@ export interface ChordContext {
   readonly minor: boolean
   readonly pitchClasses: readonly PitchClass[]
   /** The root in the right hand's register, G3–F♯4. */
-  readonly root: number
+  readonly root: Midi
   /** The bass in the left hand's register, G1–F♯2. */
-  readonly bass: number
+  readonly bass: Midi
   /** The close triad from `root`. */
-  readonly triad: readonly number[]
+  readonly triad: readonly Midi[]
   /** The chord voice-led from the previous one. */
   readonly voiced: readonly Midi[]
   /** The key the piece is played in, for its I, IV and V triads. */
@@ -52,7 +53,7 @@ export function chordContext(
   const third = within(chord.tones[1]?.semitones, 4)
   const fifth = within(chord.tones[2]?.semitones, 7)
   const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
-  const root = 55 + pitchClass(chord.root - 7)
+  const root = midi(55 + pitchClass(chord.root - 7))
   const voiced = voiceLead(previous, rightHandPitchClasses(chord.tones))
   return {
     third,
@@ -62,8 +63,8 @@ export function chordContext(
     minor: third === 3,
     pitchClasses: chord.tones.map((tone) => tone.pitchClass),
     root,
-    bass: chord.bass + (chord.bass >= 7 ? 24 : 36),
-    triad: [root, root + third, root + fifth],
+    bass: midi(chord.bass + (chord.bass >= 7 ? 24 : 36)),
+    triad: [root, root + third, root + fifth].map(midi),
     voiced,
     key,
   }
@@ -94,8 +95,10 @@ function degreeAbove(degree: number, context: ChordContext): number {
   return (steps[(degree - 1) % 7] ?? 0) + 12 * Math.floor((degree - 1) / 7)
 }
 
-const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11]
-const MINOR_SCALE = [0, 2, 3, 5, 7, 8, 10]
+const semitonesOf = (kind: 'major' | 'natural') =>
+  scaleIntervals(kind).map((interval) => interval.semitones)
+const MAJOR_SCALE = semitonesOf('major')
+const MINOR_SCALE = semitonesOf('natural')
 
 /** `steps` up the chord's major or minor scale from its root. */
 function scaleStepAbove(steps: number, context: ChordContext): number {
@@ -152,7 +155,7 @@ const rightPair = (span: number): readonly Finger[] =>
  * Fingers for 2–4 notes played together, lowest first, in the order the notes were given; nothing for
  * a single note or more than four.
  */
-export function autoFingers(midis: readonly number[], hand: Hand): (Finger | undefined)[] {
+export function autoFingers(midis: readonly Midi[], hand: Hand): (Finger | undefined)[] {
   const byPitch = midis.map((m, i) => ({ m, i })).sort((a, b) => a.m - b.m)
   const span = (byPitch.at(-1)?.m ?? 0) - (byPitch[0]?.m ?? 0)
   const fingers =

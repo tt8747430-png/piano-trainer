@@ -42,7 +42,14 @@ export {
   type ChordQuality,
 } from './chord'
 export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
-export { SCALE_KINDS, isMinorScale, scaleRootSpelling, spellScale, type ScaleKind } from './scale'
+export {
+  SCALE_KINDS,
+  isMinorScale,
+  scaleIntervals,
+  scaleRootSpelling,
+  spellScale,
+  type ScaleKind,
+} from './scale'
 export { scaleFingering, type Finger, type Hand } from './fingering'
 export { diatonicChords, type DiatonicChord } from './diatonic'
 export {

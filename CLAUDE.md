@@ -67,12 +67,13 @@ it. `@` → `src`.
   `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
   `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `index.ts`. Content:
   `piece` (51 pieces, 7 listings, chart and progression parsers), `pattern` (39 patterns), `path`. Saved state:
-  `settings` (`pt-settings`, version 2), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`).
-- **shared/**: `lib` (`cn`, `safeLocalStorage`, `createStoreContext`, `useMediaQuery`; and with barrels of their
-  own: `music` the theory kernel, `arrangement` (`arrange`, a chart → a Performance), `schedule` (a Performance →
-  sounds in seconds), `services` (`ServicesProvider`, `useServices`)), `config` (`THEME_COLORS`), `api` (the
-  `audio` and `midi` ports, their browser adapters and fakes), `ui` (design system; shadcn in `ui/primitives`),
-  `i18n` (with `LocalText`), `test`.
+  `settings` (`pt-settings`, version 2), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
+  an answer or a mark changes in `model/changes.ts`).
+- **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`; and
+  with barrels of their own: `music` the theory kernel, `arrangement` (`arrange`, a chart → a Performance),
+  `schedule` (a Performance → sounds in seconds, and Listen's loop), `services` (`ServicesProvider`,
+  `useServices`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
+  fakes), `ui` (design system; shadcn in `ui/primitives`), `i18n` (with `LocalText`), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.

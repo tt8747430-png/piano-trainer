@@ -1,4 +1,5 @@
 import type { LocalText } from '@/shared/i18n'
+import { isOneOf } from '@/shared/lib'
 import {
   parseFigure,
   type EventFigure,
@@ -160,11 +161,6 @@ export interface MethodEntry {
   readonly pattern: PatternId
   readonly label: LocalText
 }
-
-const isOneOf =
-  <T extends string>(ids: readonly T[]) =>
-  (value: unknown): value is T =>
-    typeof value === 'string' && (ids as readonly string[]).includes(value)
 
 export const isPatternId = isOneOf(PATTERN_IDS)
 export const isRightFigureId = isOneOf(RIGHT_FIGURE_IDS)

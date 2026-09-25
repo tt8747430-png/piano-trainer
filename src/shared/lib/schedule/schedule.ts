@@ -41,8 +41,6 @@ export interface ScheduleOptions {
   readonly hands: Audible
   /** Where in the piece the pass begins; 0 by default. */
   readonly fromTick?: Tick
-  /** When the pass begins, in seconds; 0 by default. A loop's next pass starts at the last one's end. */
-  readonly startAt?: number
   readonly countIn?: boolean
   readonly metronome?: boolean
 }
@@ -72,27 +70,25 @@ function checkedTempo(tempo: number): number {
   return tempo
 }
 
-export const secondsPerTick = (tempo: number): number => 60 / checkedTempo(tempo) / TICKS_PER_BEAT
-
 /** Ticks to seconds at a tempo, multiplying before dividing so whole beats come out exact. */
-export const secondsFor = (ticks: Tick, tempo: number): number =>
+const secondsFor = (ticks: Tick, tempo: number): number =>
   (ticks * 60) / (checkedTempo(tempo) * TICKS_PER_BEAT)
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
-/** One pass through the piece from `fromTick`: its notes, clicks and cues in seconds. */
+/** One pass through the piece from `fromTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
-  const { hands, fromTick = 0, startAt = 0 } = options
+  const { hands, fromTick = 0 } = options
   const tempo = checkedTempo(options.tempo)
   const beat = secondsFor(TICKS_PER_BEAT, tempo)
   const countIn: Sound[] = options.countIn
     ? Array.from({ length: performance.beatsPerBar }, (_, k) => ({
         kind: 'click',
-        at: startAt + k * beat,
+        at: k * beat,
         accent: k === 0,
       }))
     : []
-  const musicStart = startAt + countIn.length * beat
+  const musicStart = countIn.length * beat
   const at = (tick: Tick) => musicStart + secondsFor(tick - fromTick, tempo)
 
   const played: Sound[] = performance.notes
@@ -147,4 +143,15 @@ export function beatGroupSounds(
       },
     ]
   })
+}
+
+/** How long Your turn gives a beat group: until the next one sounds, or one beat for the last. */
+export function untilNextBeatGroup(
+  performance: Performance,
+  beatGroup: number,
+  options: { readonly tempo: number },
+): number {
+  const tick = performance.beatGroups[beatGroup]?.tick ?? 0
+  const next = performance.beatGroups[beatGroup + 1]?.tick ?? tick + TICKS_PER_BEAT
+  return secondsFor(next - tick, options.tempo)
 }

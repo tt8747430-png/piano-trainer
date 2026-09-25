@@ -1,4 +1,6 @@
 export { cn } from './cn'
+export { isOneOf } from './is-one-of'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
+export { isRecord, savedObject, type Saved } from './saved'
 export { createStoreContext } from './store-context'
 export { useMediaQuery } from './use-media-query'

@@ -1,6 +1,6 @@
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore, type StoreApi } from 'zustand/vanilla'
-import { safeLocalStorage } from '@/shared/lib'
+import { safeLocalStorage, savedObject } from '@/shared/lib'
 import {
   DEFAULT_PRACTICE,
   DEFAULT_QUIZ_CHOICE,
@@ -42,11 +42,6 @@ export function createSettingsStore({
     }),
   )
 }
-
-type Saved<T> = Partial<Record<keyof T, unknown>>
-
-const savedObject = <T>(value: unknown): Saved<T> =>
-  (typeof value === 'object' && value !== null ? value : {}) as Saved<T>
 
 /** A toggle is on only when saved as true; anything else is off. */
 function practiceToggles(value: unknown): PracticeToggles {

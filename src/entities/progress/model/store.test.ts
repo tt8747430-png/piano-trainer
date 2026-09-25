@@ -64,13 +64,23 @@ describe('createProgressStore', () => {
     })
   })
 
+  it('raises a count below one it must hold, rather than lose the stats', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { quiz: { correct: 6, total: 5, streak: 3, best: 2 } })
+    expect(createProgressStore({ storage }).getState().quiz).toEqual({
+      correct: 6,
+      total: 6,
+      streak: 3,
+      best: 3,
+    })
+  })
+
   it.each([
     { correct: -1, total: 5, streak: 0, best: 0 },
     { correct: 1.5, total: 5, streak: 0, best: 0 },
-    { correct: 6, total: 5, streak: 0, best: 0 },
     { correct: 1, total: 5 },
     'lots',
-  ])('starts the quiz stats over when they cannot be right: %j', (quiz) => {
+  ])('starts the quiz stats over when they cannot be read: %j', (quiz) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { quiz })
     expect(createProgressStore({ storage }).getState().quiz).toEqual(EMPTY_PROGRESS.quiz)

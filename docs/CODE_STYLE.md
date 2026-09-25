@@ -101,9 +101,10 @@ and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `
   then choose sharps or flats.
 - **The kernel is fenced:** `shared/lib/music` imports nothing outside itself, `shared/lib/arrangement` only music,
   and neither imports a package (lint).
-- **`arrangement` exports only `arrange`** (plus `parseFigure` and its types). Voice leading, the chord context and
-  fingering are internal and tested through `arrange`.
-- Domain time is **ticks** (12 per beat). Seconds exist only in `shared/lib/schedule` and the audio adapter.
+- **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the
+  chord context and fingering are internal and tested through `arrange`.
+- Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
+  Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates
   an `AudioContext` or calls `requestMIDIAccess`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.

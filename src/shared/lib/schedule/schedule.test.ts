@@ -5,8 +5,7 @@ import {
   audibleHands,
   beatGroupSounds,
   schedule,
-  secondsFor,
-  secondsPerTick,
+  untilNextBeatGroup,
   type NoteSound,
   type Sound,
 } from './schedule'
@@ -33,7 +32,7 @@ const BEATS = {
 } as const
 const perform = (...symbols: string[]): Performance =>
   arrange(chart(...symbols), {
-    key: note('C'),
+    tonic: note('C'),
     pattern: BLOCK,
     melody: [{ midi: midi(72), startTick: 0, durationTicks: 48 }],
     doubleMelody: true,
@@ -101,20 +100,8 @@ describe('schedule', () => {
     expect(notes(sounds).map((sound) => sound.midi)).toEqual([60, 64, 67, 84])
   })
 
-  it('offsets every sound, cue and the end by startAt', () => {
-    const { sounds, cues, end } = schedule(perform('C'), {
-      tempo: 60,
-      hands: ALL,
-      startAt: 10,
-      metronome: true,
-    })
-    expect(Math.min(...sounds.map((sound) => sound.at))).toBe(10)
-    expect(cues).toEqual([{ beatGroup: 0, at: 10 }])
-    expect(end).toBe(14)
-  })
-
   it('cues each beat group from the start tick', () => {
-    const performance = arrange(chart('C', 'F'), { key: note('C'), pattern: BEATS })
+    const performance = arrange(chart('C', 'F'), { tonic: note('C'), pattern: BEATS })
     const { cues } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 48 })
     expect(cues).toEqual([
       { beatGroup: 4, at: 0 },
@@ -138,7 +125,7 @@ describe('schedule', () => {
 
 describe('beatGroupSounds', () => {
   it('sounds one beat group now, long enough to hear', () => {
-    const performance = arrange(chart('C'), { key: note('C'), pattern: BEATS })
+    const performance = arrange(chart('C'), { tonic: note('C'), pattern: BEATS })
     const sounds = beatGroupSounds(performance, 1, { tempo: 60, hands: audibleHands('rh') })
     expect(sounds.map((sound) => sound.midi)).toEqual([60, 64, 67])
     expect(sounds.every((sound) => sound.at === 0 && sound.duration === 1)).toBe(true)
@@ -149,25 +136,27 @@ describe('beatGroupSounds', () => {
   })
 
   it('has nothing for a beat group that does not exist', () => {
-    const performance = arrange(chart('C'), { key: note('C'), pattern: BEATS })
+    const performance = arrange(chart('C'), { tonic: note('C'), pattern: BEATS })
     expect(beatGroupSounds(performance, 99, { tempo: 60, hands: ALL })).toEqual([])
   })
 })
 
-describe('secondsFor', () => {
-  it('turns ticks into seconds at a tempo, whole beats exactly', () => {
-    expect(secondsFor(12, 60)).toBe(1)
-    expect(secondsFor(12, 72)).toBe(60 / 72)
-    expect(() => secondsFor(12, 0)).toThrow(RangeError)
+describe('untilNextBeatGroup', () => {
+  const performance = arrange(chart('C', 'F'), { tonic: note('C'), pattern: BEATS })
+
+  it('lasts until the next beat group sounds, whole beats exactly', () => {
+    expect(untilNextBeatGroup(performance, 0, { tempo: 60 })).toBe(1)
+    expect(untilNextBeatGroup(performance, 3, { tempo: 72 })).toBe(60 / 72)
+  })
+
+  it('gives the last beat group one beat', () => {
+    expect(untilNextBeatGroup(performance, 7, { tempo: 120 })).toBe(0.5)
   })
 })
 
-describe('secondsPerTick', () => {
-  it('divides a beat into 12 ticks', () => {
-    expect(secondsPerTick(60)).toBeCloseTo(1 / 12)
-  })
-
-  it.each([0, -60, Number.NaN])('refuses the tempo %s', (tempo) => {
-    expect(() => secondsPerTick(tempo)).toThrow(RangeError)
+describe('a tempo', () => {
+  it.each([0, -60, Number.NaN])('refuses %s', (tempo) => {
+    expect(() => schedule(perform('C'), { tempo, hands: ALL })).toThrow(RangeError)
+    expect(() => untilNextBeatGroup(perform('C'), 0, { tempo })).toThrow(RangeError)
   })
 })

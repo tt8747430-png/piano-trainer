@@ -5,7 +5,7 @@ import { ContentError } from './content-error'
 import type { ChartPiece } from './types'
 
 /** `C#5`: a note name and a one-digit octave, or null when that is no key on the keyboard. */
-function keyOf(pitch: string): Midi | null {
+function readPitch(pitch: string): Midi | null {
   const written = /^(.+?)(\d)$/.exec(pitch)
   const spelled = written?.[1] ? parseNoteName(written[1]) : null
   if (!written || !spelled) return null
@@ -27,11 +27,11 @@ export function parseMelody(piece: ChartPiece): Melody | undefined {
     const [pitch = '', beatsText = '', ...extra] = token.split('/')
     const beats = readBeats(beatsText)
     const durationTicks = beats === null ? null : ticksIn(beats)
-    const key = pitch === 'r' ? null : keyOf(pitch)
-    if (extra.length > 0 || durationTicks === null || (pitch !== 'r' && key === null)) {
+    const midi = pitch === 'r' ? null : readPitch(pitch)
+    if (extra.length > 0 || durationTicks === null || (pitch !== 'r' && midi === null)) {
       throw new ContentError(piece.id, { note: i + 1 }, `cannot read the note "${token}"`)
     }
-    if (key !== null) notes.push({ midi: key, startTick: tick, durationTicks })
+    if (midi !== null) notes.push({ midi, startTick: tick, durationTicks })
     tick += durationTicks
   })
   return notes
