@@ -70,3 +70,67 @@ describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
     expect(broken).toContain('boundaries/dependencies')
   })
 })
+
+describe('the music kernel and the arrangement engine (eslint)', { timeout: 60_000 }, () => {
+  it.each(['@/shared/lib', '../cn', '@/entities/settings'])(
+    'refuse music importing %s: it stays inside itself',
+    async (source) => {
+      const broken = await rulesBrokenBy(
+        'src/shared/lib/music/example.ts',
+        `import * as outside from '${source}'\nexport const example = outside\n`,
+      )
+      expect(broken).toContain('boundaries/dependencies')
+    },
+  )
+
+  it('let music import its own files', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/music/example.ts',
+      "import { pitchClass } from './pitch'\nexport const example = pitchClass\n",
+    )
+    expect(broken).toEqual([])
+  })
+
+  it('refuse music importing a package', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/music/example.ts',
+      "import { useState } from 'react'\nexport const example = useState\n",
+    )
+    expect(broken).toContain('no-restricted-imports')
+  })
+
+  it('let arrangement import the music kernel', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/arrangement/example.ts',
+      "import { pitchClass } from '@/shared/lib/music/pitch'\nexport const example = pitchClass\n",
+    )
+    expect(broken).toEqual([])
+  })
+
+  it('refuse arrangement importing the rest of shared', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/arrangement/example.ts',
+      "import { cn } from '@/shared/lib'\nexport const example = cn\n",
+    )
+    expect(broken).toContain('boundaries/dependencies')
+  })
+
+  it('refuse arrangement importing a package', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/arrangement/example.ts',
+      "import { createStore } from 'zustand'\nexport const example = createStore\n",
+    )
+    expect(broken).toContain('no-restricted-imports')
+  })
+
+  it.each(['src/entities/settings/model/example.ts', 'src/shared/lib/example.ts'])(
+    'let %s use the kernel',
+    async (file) => {
+      const broken = await rulesBrokenBy(
+        file,
+        "import { pitchClass } from '@/shared/lib/music/pitch'\nexport const example = pitchClass\n",
+      )
+      expect(broken).not.toContain('boundaries/dependencies')
+    },
+  )
+})
