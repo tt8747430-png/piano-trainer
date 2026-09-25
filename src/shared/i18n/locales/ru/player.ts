@@ -1,7 +1,6 @@
 import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
-  title: 'Плеер',
   setup: 'Параметры',
   summary: '{{key}} · {{tempo}} уд/мин · {{hands}}',
   key: 'Тональность',

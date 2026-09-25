@@ -25,6 +25,9 @@ import type { ScaleView } from '@/widgets/scale-explorer'
 /**
  * What the router hands a validator. Links may pass any subset of the params; each validator reads
  * the input as `Record<string, unknown>`, because a URL can hold anything in any of them.
+ *
+ * Every validator writes each of its params, an invalid optional one as `undefined`: the router lays
+ * a route's search over the raw one from the URL, so a param left out would let the raw value through.
  */
 type Input<S> = Partial<S> & SearchSchemaInput
 type Raw = Readonly<Record<string, unknown>>
@@ -70,7 +73,7 @@ export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
     quality,
     inversion: wholeIn(raw.inversion, 0, lastInversion(quality), CHORDS_DEFAULTS.inversion),
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
-    ...(isChordsStep(raw.step) ? { step: raw.step } : {}),
+    step: isChordsStep(raw.step) ? raw.step : undefined,
   }
 }
 
@@ -102,7 +105,7 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     tempo: wholeIn(raw.tempo, 40, 160, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
     chords: valueOr(isChordSize, raw.chords, SCALES_DEFAULTS.chords),
-    ...(isScaleStep(raw.step) ? { step: raw.step } : {}),
+    step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
 
@@ -122,7 +125,7 @@ export interface CheckSearch {
 }
 export function validateCheckSearch(input: Input<CheckSearch>): CheckSearch {
   const raw: Raw = input
-  return isStepId(raw.of) ? { of: raw.of } : {}
+  return { of: isStepId(raw.of) ? raw.of : undefined }
 }
 
 // Player: key, tempo, pattern and voicing default to the piece's own, so their absence is the default.
@@ -130,15 +133,14 @@ export const PLAYER_DEFAULTS: PlayerSearch = { hands: 'both', mode: 'listen' }
 export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
   const raw: Raw = input
   const key = readNote(raw.key)
-  const tempo = wholeIn(raw.tempo, 40, 160, undefined)
   return {
-    ...(key ? { key: noteParam(key) } : {}),
-    ...(tempo === undefined ? {} : { tempo }),
+    key: key ? noteParam(key) : undefined,
+    tempo: wholeIn(raw.tempo, 40, 160, undefined),
     hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
     mode: valueOr(isOneOf(PRACTICE_MODES), raw.mode, PLAYER_DEFAULTS.mode),
-    ...(isPlayerPattern(raw.pattern) ? { pattern: raw.pattern } : {}),
-    ...(isRightFigureId(raw.rh) ? { rh: raw.rh } : {}),
-    ...(isLeftFigureId(raw.lh) ? { lh: raw.lh } : {}),
-    ...(isVoicing(raw.voicing) ? { voicing: raw.voicing } : {}),
+    pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
+    rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
+    lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
+    voicing: isVoicing(raw.voicing) ? raw.voicing : undefined,
   }
 }

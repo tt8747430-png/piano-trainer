@@ -32,6 +32,20 @@ describe('routes', () => {
     expect(router.state.matches.at(-1)?.fullPath).toBe(route)
   })
 
+  it.each([
+    [
+      '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&voicing=elevenths',
+      ['key', 'tempo', 'pattern', 'rh', 'lh', 'voicing'],
+    ],
+    ['/theory/chords?step=scale:major', ['step']],
+    ['/theory/scales?step=chords:tri', ['step']],
+    ['/check?of=chords:tri&x=1', []],
+  ] as const)('keeps a stale optional param in %s from the screen', async (path, dropped) => {
+    const router = await open(path)
+    const search: Record<string, unknown> = router.state.matches.at(-1)?.search ?? {}
+    for (const param of dropped) expect(search[param]).toBeUndefined()
+  })
+
   it('waits for a slow screen with a spinner, not a blank page', async () => {
     const router = await open('/')
     expect(router.options.defaultPendingComponent).toBeDefined()
@@ -134,7 +148,9 @@ describe('the app shell', () => {
 describe('the Player', () => {
   it('opens full-screen, without the main navigation', async () => {
     renderApp('/play/bz5')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
+    ).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument()
   })
 
@@ -143,14 +159,14 @@ describe('the Player', () => {
     const { router } = renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Path' })
     await act(() => router.navigate({ to: '/play/$pieceId', params: { pieceId: 'bz5' } }))
-    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
   })
 
   it('goes back to its song when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
   })
 })

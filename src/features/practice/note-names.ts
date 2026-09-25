@@ -1,5 +1,11 @@
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { keyPrefersSharps, noteName, pitchClass, rootSpelling } from '@/shared/lib/music'
+import {
+  keyPrefersSharps,
+  noteName,
+  pitchClass,
+  rootSpelling,
+  type PitchClass,
+} from '@/shared/lib/music'
 
 export interface NoteName {
   readonly name: string
@@ -18,3 +24,9 @@ export function spellPerformedNote(performance: Performance, played: Performance
 }
 
 export const noteLabel = ({ name, octave }: NoteName): string => `${name}${octave}`
+
+/** A pitch class named from the chord it belongs to, else from the key: Your turn's "Play D F# A". */
+export function spellPitchClass(performance: Performance, chord: number, pc: PitchClass): string {
+  const tone = performance.chords[chord]?.tones.find((t) => t.pitchClass === pc)
+  return noteName(tone?.note ?? rootSpelling(pc, keyPrefersSharps(performance.key)))
+}

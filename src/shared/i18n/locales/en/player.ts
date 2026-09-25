@@ -1,5 +1,4 @@
 export const player = {
-  title: 'Player',
   setup: 'Setup',
   summary: '{{key}} · {{tempo}} BPM · {{hands}}',
   key: 'Key',
