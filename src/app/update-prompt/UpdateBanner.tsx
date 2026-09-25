@@ -6,7 +6,7 @@ export function UpdateBanner({ onUpdate, onLater }: { onUpdate: () => void; onLa
   return (
     <div
       role="status"
-      className="fixed inset-x-4 bottom-20 z-20 mx-auto flex max-w-md items-center gap-2 rounded-xl border border-border bg-card p-3 shadow-lg lg:bottom-4"
+      className="fixed inset-x-4 bottom-28 z-40 mx-auto flex max-w-md items-center gap-2 rounded-3xl bg-card p-3 shadow-lg ring-1 ring-border lg:bottom-4"
     >
       <p className="flex-1 font-medium">{t('update.available')}</p>
       <Button variant="ghost" onClick={onLater}>

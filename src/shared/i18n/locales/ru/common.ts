@@ -14,6 +14,7 @@ export const common: LocaleResources['common'] = {
   notFound: { title: 'Страница не найдена', toSongs: 'К песням' },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
+  loading: 'Загрузка',
   level: 'Уровень {{level}}',
   levelName: { 1: 'Начальный', 2: 'Базовый', 3: 'Средний', 4: 'Продвинутый' },
   rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },

@@ -11,6 +11,7 @@ import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
+import { RoutePending } from './RoutePending'
 import { ShellLayout } from './ShellLayout'
 import { TheoryLayout } from './TheoryLayout'
 
@@ -120,6 +121,8 @@ export function createAppRouter(history?: RouterHistory) {
     history,
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
+    defaultPendingComponent: RoutePending,
+    defaultPendingMs: 300,
   })
 }
 

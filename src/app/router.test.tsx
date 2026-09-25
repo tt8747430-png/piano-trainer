@@ -30,6 +30,12 @@ describe('routes', () => {
     expect(router.state.matches.at(-1)?.fullPath).toBe(route)
   })
 
+  it('waits for a slow screen with a spinner, not a blank page', async () => {
+    const router = await open('/')
+    expect(router.options.defaultPendingComponent).toBeDefined()
+    expect(router.options.defaultPendingMs).toBe(300)
+  })
+
   it('sends /theory to Chords', async () => {
     const router = await open('/theory')
     expect(router.state.location.pathname).toBe('/theory/chords')

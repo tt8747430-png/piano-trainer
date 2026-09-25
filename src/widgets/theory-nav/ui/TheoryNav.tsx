@@ -11,13 +11,13 @@ const TABS = [
 export function TheoryNav() {
   const { t } = useTranslation('theory')
   return (
-    <nav aria-label={t('tabs.label')} className="mb-4">
-      <ul className="flex gap-1 rounded-xl bg-muted p-1">
+    <nav aria-label={t('tabs.label')} className="mb-5">
+      <ul className="flex gap-1 rounded-2xl bg-muted p-1">
         {TABS.map(({ to, label }) => (
           <li key={to} className="flex-1">
             <Link
               to={to}
-              className="flex min-h-11 items-center justify-center rounded-lg px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:bg-card data-[status=active]:text-foreground data-[status=active]:shadow-sm"
+              className="flex h-11 items-center justify-center rounded-xl px-2 text-sm font-semibold text-muted-foreground transition-colors duration-200 ease-out hover:text-foreground data-[status=active]:bg-card data-[status=active]:text-foreground data-[status=active]:shadow-sm"
             >
               {t(label)}
             </Link>

@@ -12,6 +12,7 @@ export const common = {
   notFound: { title: 'Page not found', toSongs: 'Go to Songs' },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   close: 'Close',
+  loading: 'Loading',
   level: 'Level {{level}}',
   levelName: { 1: 'Beginner', 2: 'Elementary', 3: 'Intermediate', 4: 'Advanced' },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
