@@ -34,8 +34,8 @@ import {
 } from './types'
 
 export interface ArrangeOptions {
-  /** The tonic to play in; the chart's mode stays. */
-  readonly key: SpelledNote
+  /** The tonic to transpose to; the chart's mode stays. */
+  readonly tonic: SpelledNote
   /** Every chord's pattern… */
   readonly pattern: Pattern
   /** …unless its method code is here: the chart's own plan. */
@@ -138,9 +138,9 @@ function transposeChord(chord: Chord, from: SpelledNote, to: SpelledNote): Chord
 /** The tune moves the short way, −5 to +6 semitones, and is read in time order. */
 function transposeMelody(melody: Melody, from: SpelledNote, to: SpelledNote): MelodyNote[] {
   const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
-  const shift = up > 6 ? up - 12 : up
+  const semitones = up > 6 ? up - 12 : up
   return melody
-    .map((n) => ({ ...n, midi: midi(n.midi + shift) }))
+    .map((n) => ({ ...n, midi: midi(n.midi + semitones) }))
     .sort((a, b) => a.startTick - b.startTick)
 }
 
@@ -156,6 +156,10 @@ function patternFor(method: string | undefined, options: ArrangeOptions, hasMelo
 /** A right hand that plays the tune plays its fallback when there is no tune. */
 const playable = (figure: Figure, hasMelody: boolean): Figure =>
   figure.kind === 'melody' && !hasMelody ? figure.withoutMelody : figure
+
+/** What the right hand plays in a bar: `ends` plays the tune in a line's first and last bars only. */
+const inBar = (figure: Figure, atLineEnd: boolean): Figure =>
+  figure.kind === 'melody' && figure.use === 'ends' && !atLineEnd ? figure.between : figure
 
 /** Where a stretch of a chord sits in pattern time and on the timeline. */
 interface Window {
@@ -261,9 +265,9 @@ function playTune(
 
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
-  const key: Key = { tonic: options.key, mode: chart.key.mode }
+  const key: Key = { tonic: options.tonic, mode: chart.key.mode }
   const melody = options.melody?.length
-    ? transposeMelody(options.melody, chart.key.tonic, options.key)
+    ? transposeMelody(options.melody, chart.key.tonic, options.tonic)
     : null
   const layout = layOut(chart)
   const meterTicks = chart.beatsPerBar * TICKS_PER_BEAT
@@ -273,7 +277,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   let previous: readonly Midi[] | null = null
 
   layout.chords.forEach((placed, index) => {
-    const chord = transposeChord(placed.chord, chart.key.tonic, options.key)
+    const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
     const tones = spellChord(chord.root, chord.quality)
     const context = chordContext(
       { root: pitchClassOf(chord.root), bass: pitchClassOf(chord.bass ?? chord.root), tones },
@@ -283,7 +287,10 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     previous = context.voiced
     const { method } = placed.chord
     const pattern: EventPattern | MelodyPattern = patternFor(method, options, melody !== null)
-    const rh = playable(options.rh ?? pattern.rh, melody !== null)
+    const rh = inBar(
+      playable(options.rh ?? pattern.rh, melody !== null),
+      layout.lineEnds.has(placed.bar),
+    )
     const lh = options.lh ?? pattern.lh
     playsTune.push(rh.kind === 'melody')
     chords.push({
@@ -308,8 +315,6 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       const window: Window = { from, to: from + length, at, chord: index }
       if (rh.kind === 'events')
         notes.push(...playFigure(rh, context, 'rh', window, chart.beatsPerBar))
-      else if (rh.use === 'ends' && !layout.lineEnds.has(placed.bar))
-        notes.push(...playFigure(rh.between, context, 'rh', window, chart.beatsPerBar))
       else if (melody) notes.push(...playTune(rh, melody, context, window))
       notes.push(...playFigure(lh, context, 'lh', window, chart.beatsPerBar))
       at += length

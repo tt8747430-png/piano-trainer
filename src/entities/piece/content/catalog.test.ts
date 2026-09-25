@@ -89,12 +89,18 @@ describe('the catalog', () => {
       const { mode } = pieceKey(piece)
       const problems: string[] = []
       for (let pc = 0; pc < 12; pc++) {
-        const key = tonicSpelling(pitchClass(pc), mode)
+        const tonic = tonicSpelling(pitchClass(pc), mode)
         for (const { pattern, methods } of accompaniments(piece)) {
-          const performance = arrange(chart, { key, pattern, methods, melody, doubleMelody: true })
+          const performance = arrange(chart, {
+            tonic,
+            pattern,
+            methods,
+            melody,
+            doubleMelody: true,
+          })
           problems.push(
             ...problemsIn(performance).map(
-              (problem) => `${noteName(key)} ${pattern.id}: ${problem}`,
+              (problem) => `${noteName(tonic)} ${pattern.id}: ${problem}`,
             ),
           )
         }
@@ -109,7 +115,7 @@ describe('the catalog', () => {
       if (!melody) continue
       const last = melody.at(-1)
       const chart = arrange(chartOf(piece), {
-        key: pieceKey(piece).tonic,
+        tonic: pieceKey(piece).tonic,
         pattern: PATTERNS.block.pattern,
       })
       expect((last?.startTick ?? 0) + (last?.durationTicks ?? 0), piece.id).toBeLessThanOrEqual(

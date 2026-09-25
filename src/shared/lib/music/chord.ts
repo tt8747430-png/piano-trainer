@@ -1,4 +1,4 @@
-import type { Interval } from './interval'
+import { INTERVALS, type IntervalName, type Interval } from './interval'
 import { noteName, pitchClassOf, rootSpelling, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
@@ -7,47 +7,13 @@ import { toneAbove, type Tone } from './tone'
 export const CHORD_FAMILIES = ['tri', 'six', 'sev', 'nin', 'alt'] as const
 export type ChordFamily = (typeof CHORD_FAMILIES)[number]
 
-/** An interval above a chord's root, with the degree label it is written with. */
-interface ChordInterval extends Interval {
-  readonly degree: string
-}
-
-const interval = (steps: number, semitones: number, degree: string): ChordInterval => ({
-  steps,
-  semitones,
-  degree,
-})
-
-// Named as musicians abbreviate them: M major, m minor, P perfect, d diminished, A augmented.
-const INTERVALS = {
-  r: interval(0, 0, '1'),
-  M2: interval(1, 2, '2'),
-  m3: interval(2, 3, '♭3'),
-  M3: interval(2, 4, '3'),
-  P4: interval(3, 5, '4'),
-  d5: interval(4, 6, '♭5'),
-  P5: interval(4, 7, '5'),
-  A5: interval(4, 8, '#5'),
-  M6: interval(5, 9, '6'),
-  d7: interval(6, 9, '𝄫7'),
-  m7: interval(6, 10, '♭7'),
-  M7: interval(6, 11, '7'),
-  m9: interval(1, 13, '♭9'),
-  M9: interval(1, 14, '9'),
-  A9: interval(1, 15, '#9'),
-  P11: interval(3, 17, '11'),
-  A11: interval(3, 18, '#11'),
-  m13: interval(5, 20, '♭13'),
-  M13: interval(5, 21, '13'),
-} as const satisfies Record<string, ChordInterval>
-
 interface QualityEntry {
   readonly family: ChordFamily
   /** Written after the root in a chord symbol: `m7♭5`, `°7`, '' for major. */
   readonly suffix: string
   /** Other ways the suffix is written, all read by the chord-symbol parser. */
   readonly aliases: readonly string[]
-  readonly intervals: readonly (keyof typeof INTERVALS)[]
+  readonly intervals: readonly IntervalName[]
   /** A root on C♯/D♭ or G♯/A♭ is named sharp: minor-flavoured chords read better that way. */
   readonly prefersSharps?: boolean
 }
@@ -257,10 +223,7 @@ export const chordRootSpelling = (pc: PitchClass, quality: ChordQuality): Spelle
 
 /** The chord's tones from the root up, each spelled by letter steps from the root. */
 export function spellChord(root: SpelledNote, quality: ChordQuality): Tone[] {
-  return entry(quality).intervals.map((name) => {
-    const { degree, ...steps } = INTERVALS[name]
-    return toneAbove(root, steps, degree)
-  })
+  return entry(quality).intervals.map((name) => toneAbove(root, INTERVALS[name]))
 }
 
 export const chordSymbol = (chord: Chord): string =>

@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { TICKS_PER_BEAT, type Performance } from '@/shared/lib/arrangement'
+import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi } from '@/shared/lib/music'
-import { audibleHands, beatGroupSounds, secondsFor, type Hands } from '@/shared/lib/schedule'
+import {
+  audibleHands,
+  beatGroupSounds,
+  untilNextBeatGroup,
+  type Hands,
+} from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import {
   accompanyingHands,
@@ -37,13 +42,6 @@ export interface Practice {
 
 /** After a right answer in Your turn, the app plays the other hand and moves on this much later. */
 const CORRECT_PAUSE_MS = 150
-
-/** Until the next beat group sounds; one beat after the last. */
-function untilNextBeatGroup(performance: Performance, beatGroup: number, tempo: number): number {
-  const tick = performance.beatGroups[beatGroup]?.tick ?? 0
-  const next = performance.beatGroups[beatGroup + 1]?.tick ?? tick + TICKS_PER_BEAT
-  return secondsFor(next - tick, tempo) * 1000
-}
 
 /**
  * Connects the practice machine to time, audio and MIDI. The machine decides; this hook plays what
@@ -84,14 +82,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     const from = state.performance.beatGroups[latest.current.state.beatGroup]
     return startTransport(
       audio,
-      {
-        performance: state.performance,
-        fromTick: from?.tick ?? 0,
-        tempo,
-        hands: audibleHands(state.hands),
-        countIn,
-        metronome,
-      },
+      state.performance,
+      { fromTick: from?.tick ?? 0, tempo, hands: audibleHands(state.hands), countIn, metronome },
       (beatGroup) => dispatch({ type: 'reach', beatGroup }),
     )
   }, [audio, state.playing, state.performance, state.hands, tempo, metronome, countIn, passRequest])
@@ -107,7 +99,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     const delay =
       state.outcome === 'correct'
         ? CORRECT_PAUSE_MS
-        : untilNextBeatGroup(state.performance, state.beatGroup, tempo)
+        : untilNextBeatGroup(state.performance, state.beatGroup, { tempo }) * 1000
     const timer = setTimeout(() => dispatch({ type: 'next' }), delay)
     return () => clearTimeout(timer)
   }, [audio, state, tempo])

@@ -1,3 +1,4 @@
+import { isOneOf } from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@/shared/lib/music'
 
 export const THEMES = ['system', 'light', 'dark'] as const
@@ -44,8 +45,8 @@ export const canonicalFamilies = (values: readonly unknown[]): ChordFamily[] =>
 export const canonicalScales = (values: readonly unknown[]): ScaleKind[] =>
   SCALE_KINDS.filter((kind) => values.includes(kind))
 
-export const isTheme = (value: unknown): value is Theme => THEMES.includes(value as Theme)
-export const isLocale = (value: unknown): value is Locale => LOCALES.includes(value as Locale)
+export const isTheme = isOneOf(THEMES)
+export const isLocale = isOneOf(LOCALES)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

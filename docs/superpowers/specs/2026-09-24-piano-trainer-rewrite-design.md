@@ -272,7 +272,7 @@ Elementary, Intermediate, Advanced), an ordered list of `PathStep`s:
 
 ```ts
 arrange(chart: Chart, options: {
-  key: SpelledNote                        // transpose target
+  tonic: SpelledNote                      // the tonic to transpose to; the chart's mode stays
   pattern: Pattern                        // every chord's pattern…
   methods?: Record<string, Pattern>       // …unless its method code is here: the chart's own plan
   rh?: Figure                             // the Player's right-hand choice, over every pattern
@@ -286,7 +286,8 @@ The Player's per-hand choice is a figure for each hand (what a pattern is built 
 because `arrangement` cannot import the method table from `entities/pattern`.
 
 A `Performance` has:
-- `bars`: start tick, beats, section, chord symbols.
+- `bars`: start tick, beats, section, line, and the indexes of their chords in `chords`.
+- `chords`: each chord as played, with its symbol, tones, start tick, bar and the pattern that played it.
 - `beatGroups`: note groups sharing an onset, which is what Step mode walks through.
 - `notes: { midi, hand: 'rh' | 'lh' | 'melody', finger?, startTick, durationTicks, chord }[]`.
 
@@ -299,10 +300,12 @@ when it is parsed into a `Chart` (§4.2).
 
 ### 4.4 Sound and input
 
-- `shared/lib/schedule`: `schedule(performance, { tempo, hands, fromTick, startAt, countIn, metronome })` → the
-  audible notes in seconds, plus clicks, and a cue per beat group. Pure and tested; loop passes are computed here,
-  not with `setTimeout` arithmetic in a component. (The melody toggle belongs to `arrange`: it changes which notes
-  exist.)
+- `shared/lib/schedule`: `schedule(performance, { tempo, hands, fromTick, countIn, metronome })` → one pass: the
+  audible notes in seconds from its start, plus clicks, and a cue per beat group. Pure and tested; loop passes are
+  computed here, not with `setTimeout` arithmetic in a component: `startLoop(performance, options, start)` queues
+  the first pass on the audio clock, `advanceLoop(loop, time)` queues the whole piece again half a second before
+  the last pass ends, and `beatGroupAt(loop, time)` says what is sounding. `untilNextBeatGroup` times Your turn.
+  (The melody toggle belongs to `arrange`: it changes which notes exist.)
 - `shared/api/audio`:
   - **Port:** `AudioOutput { unlock(), play(sounds: Sound[], at?), stop(), now() }`.
   - **WebAudio adapter:** keeps the legacy synth voice (layered oscillators, a low-pass filter, a gain envelope) and

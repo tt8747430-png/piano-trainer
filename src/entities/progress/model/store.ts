@@ -2,7 +2,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore, type StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/path'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
-import { safeLocalStorage } from '@/shared/lib'
+import { isRecord, safeLocalStorage, savedObject } from '@/shared/lib'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
@@ -31,11 +31,6 @@ export function createProgressStore({
     }),
   )
 }
-
-type Unknown<T> = Partial<Record<keyof T, unknown>>
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 const isDate = (value: unknown): value is string =>
   typeof value === 'string' && !Number.isNaN(Date.parse(value))
@@ -69,20 +64,21 @@ function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
   return answers.length > 0 ? latestEvidence(answers) : undefined
 }
 
-/** Counts that cannot all be true start over; a best below the streak is raised to it. */
+/**
+ * Stats that cannot be read start over. Counts that contradict each other are raised, never lost: the
+ * total to the right answers, the best to the streak.
+ */
 function quizStats(value: unknown): QuizStats {
-  if (!isRecord(value)) return NO_QUIZ_STATS
-  const { correct, total, streak, best } = value as Unknown<QuizStats>
+  const { correct, total, streak, best } = savedObject<QuizStats>(value)
   if (!isCount(correct) || !isCount(total) || !isCount(streak) || !isCount(best)) {
     return NO_QUIZ_STATS
   }
-  if (correct > total) return NO_QUIZ_STATS
-  return { correct, total, streak, best: Math.max(best, streak) }
+  return { correct, total: Math.max(total, correct), streak, best: Math.max(best, streak) }
 }
 
 /** Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. */
 function sanitize(persisted: unknown): ProgressState {
-  const saved: Unknown<ProgressState> = isRecord(persisted) ? persisted : {}
+  const saved = savedObject<ProgressState>(persisted)
   return {
     learned: kept<StepId, string>(saved.learned, isStepId, dateOrNothing),
     practised: kept(saved.practised, isPieceKey, dateOrNothing),

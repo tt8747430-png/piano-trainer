@@ -1,4 +1,5 @@
 import type { PieceId } from '@/entities/piece'
+import { isOneOf } from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@/shared/lib/music'
 
 /** 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced. */
@@ -24,7 +25,8 @@ export function stepIdOf(step: PathStep): StepId {
   }
 }
 
-const includes = (list: readonly string[], value: string) => list.includes(value)
+const isChordFamily = isOneOf(CHORD_FAMILIES)
+const isScaleKind = isOneOf(SCALE_KINDS)
 
 /** Whether a value is written as a step id. A piece id is only checked for being there: a saved
  *  one may name a piece a later version removed. */
@@ -37,9 +39,9 @@ export function isStepId(value: unknown): value is StepId {
     case 'piece':
       return name !== ''
     case 'chords':
-      return includes(CHORD_FAMILIES, name)
+      return isChordFamily(name)
     case 'scale':
-      return includes(SCALE_KINDS, name)
+      return isScaleKind(name)
     default:
       return false
   }

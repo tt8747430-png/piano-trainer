@@ -1,4 +1,4 @@
-import { spellAbove, type Interval } from './interval'
+import { spellAbove, type LabelledInterval } from './interval'
 import { pitchClassOf, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 
@@ -19,7 +19,7 @@ export interface Tone {
 /** A tone's role follows its letter distance from the root: 2 steps is a 3rd, 1 step a 9th. */
 const ROLE_BY_STEPS: readonly ChordRole[] = ['root', '9th', '3rd', '11th', '5th', '13th', '7th']
 
-export function toneAbove(root: SpelledNote, interval: Interval, degree: string): Tone {
+export function toneAbove(root: SpelledNote, interval: LabelledInterval): Tone {
   const spelled = spellAbove(root, interval)
   const role = ROLE_BY_STEPS[interval.steps % 7]
   if (!role) throw new RangeError(`${interval.steps} is not a count of letter steps`)
@@ -28,6 +28,6 @@ export function toneAbove(root: SpelledNote, interval: Interval, degree: string)
     pitchClass: pitchClassOf(spelled),
     semitones: interval.semitones,
     role,
-    degree,
+    degree: interval.degree,
   }
 }

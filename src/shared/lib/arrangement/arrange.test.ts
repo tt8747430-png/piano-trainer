@@ -79,7 +79,7 @@ const pitchClassesAt = (performance: Performance, hand: NoteHand, tick: number) 
 
 describe('arrange', () => {
   it('plays a whole-note C over its root', () => {
-    const performance = arrange(chart([['C']]), { key: C, pattern: BLOCK })
+    const performance = arrange(chart([['C']]), { tonic: C, pattern: BLOCK })
     expect(performance.notes).toEqual([
       { midi: 36, hand: 'lh', startTick: 0, durationTicks: 48, velocity: 0.2, chord: 0 },
       {
@@ -118,7 +118,7 @@ describe('arrange', () => {
 
   it('puts bars and chords end to end', () => {
     const performance = arrange(chart([['C', 'F@2-G@2', 'Am@2-G@1-F@1']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
     })
     expect(performance.chords.map((chord) => chord.startTick)).toEqual([0, 48, 72, 96, 120, 132])
@@ -128,14 +128,14 @@ describe('arrange', () => {
   })
 
   it('starts a short chord where it sits in the bar', () => {
-    const performance = arrange(chart([['C@2-F@1-G@1']]), { key: C, pattern: BEATS })
+    const performance = arrange(chart([['C@2-F@1-G@1']]), { tonic: C, pattern: BEATS })
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36])
     expect(pitchClassesAt(performance, 'rh', 24)).toEqual(new Set([5, 9, 0]))
     expect(pitchClassesAt(performance, 'rh', 36)).toEqual(new Set([7, 11, 2]))
   })
 
   it('repeats the pattern through a chord longer than the meter', () => {
-    const performance = arrange(chart([['C@8']]), { key: C, pattern: BEATS })
+    const performance = arrange(chart([['C@8']]), { tonic: C, pattern: BEATS })
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48, 60, 72, 84])
     expect(performance.totalTicks).toBe(96)
   })
@@ -146,7 +146,7 @@ describe('arrange', () => {
       rh: figure('4/4 C,12/4 C', { inThree: parseFigure('4/4 C,8/4 C') }),
       lh: figure('0/4 L1'),
     }
-    const performance = arrange(chart([['C']], { beatsPerBar: 3 }), { key: C, pattern: waltz })
+    const performance = arrange(chart([['C']], { beatsPerBar: 3 }), { tonic: C, pattern: waltz })
     expect(onsets(performance, 'rh')).toEqual([12, 24])
     expect(onsets(performance, 'lh')).toEqual([0])
     expect(performance.bars[0]?.beats).toBe(3)
@@ -155,7 +155,7 @@ describe('arrange', () => {
 
   it('clips a figure to a two-beat meter', () => {
     const performance = arrange(chart([['C']], { beatsPerBar: 2 }), {
-      key: C,
+      tonic: C,
       pattern: pattern('halves', '0/8 C,8/8 C', '0/8 L1'),
     })
     expect(onsets(performance, 'rh')).toEqual([0])
@@ -163,7 +163,7 @@ describe('arrange', () => {
   })
 
   it('leads the voices to the nearest chord', () => {
-    const performance = arrange(chart([['C', 'F', 'G', 'C']]), { key: C, pattern: BLOCK })
+    const performance = arrange(chart([['C', 'F', 'G', 'C']]), { tonic: C, pattern: BLOCK })
     const hands = [0, 48, 96, 144].map((tick) => midisAt(performance, 'rh', tick))
     expect(hands).toEqual([
       [60, 64, 67],
@@ -182,7 +182,7 @@ describe('arrange', () => {
         chordSymbol({ root: chordRootSpelling(pitchClass(pc), quality), quality }),
       ),
     )
-    const performance = arrange(chart([symbols]), { key: C, pattern: BLOCK })
+    const performance = arrange(chart([symbols]), { tonic: C, pattern: BLOCK })
     for (const n of notesOf(performance, 'rh')) {
       expect(n.midi).toBeGreaterThanOrEqual(52)
       expect(n.midi).toBeLessThanOrEqual(79)
@@ -190,7 +190,7 @@ describe('arrange', () => {
   })
 
   it('fingers what the figure does not', () => {
-    const block = arrange(chart([['C']]), { key: C, pattern: BEATS })
+    const block = arrange(chart([['C']]), { tonic: C, pattern: BEATS })
     expect(
       notesOf(block, 'rh')
         .slice(0, 3)
@@ -198,7 +198,7 @@ describe('arrange', () => {
     ).toEqual([1, 3, 5])
     expect(notesOf(block, 'lh').map((n) => n.finger)).toEqual([5, 1])
     const written = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: pattern('written', '0/2 1^1,2/2 3^2', '0/16 L1'),
     })
     expect(notesOf(written, 'rh').map((n) => n.finger)).toEqual([1, 2])
@@ -210,7 +210,7 @@ describe('arrange', () => {
       '0/2 v1,2/2 v4,4/2 s2+s7,6/2 _7+_b7+_6,8/2 3+5+8+10,10/2 T1,12/2 T8,14/2 U',
       '0/4 L1+L3+L5+L10',
     )
-    const major = arrange(chart([['C']]), { key: C, pattern: tokens })
+    const major = arrange(chart([['C']]), { tonic: C, pattern: tokens })
     expect([0, 6, 12, 18, 24, 30, 36, 42].map((tick) => midisAt(major, 'rh', tick))).toEqual([
       [60],
       [72],
@@ -222,10 +222,10 @@ describe('arrange', () => {
       [64, 67],
     ])
     expect(midisAt(major, 'lh', 0)).toEqual([36, 40, 43, 52])
-    const minor = arrange(chart([['Am']]), { key: C, pattern: tokens })
+    const minor = arrange(chart([['Am']]), { tonic: C, pattern: tokens })
     expect(midisAt(minor, 'rh', 12)).toEqual([60, 69])
     const seventh = arrange(chart([['G7']]), {
-      key: C,
+      tonic: C,
       pattern: pattern('seventh', '0/16 7', '0/16 L7'),
     })
     expect(midisAt(seventh, 'rh', 0)).toEqual([65])
@@ -238,7 +238,7 @@ describe('arrange', () => {
     ['1+8', [1, 5]],
   ])('fingers two right-hand notes by their span: %s', (tones, fingers) => {
     const performance = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: pattern('pair', `0/16 ${tones}`, '0/16 L1'),
     })
     expect(notesOf(performance, 'rh').map((n) => n.finger)).toEqual(fingers)
@@ -250,15 +250,15 @@ describe('arrange', () => {
       rh: figure('0/16 C', { onMajor: parseFigure('0/16 T') }),
       lh: figure('0/16 L1'),
     }
-    const major = arrange(chart([['G']]), { key: C, pattern: variant })
+    const major = arrange(chart([['G']]), { tonic: C, pattern: variant })
     expect(midisAt(major, 'rh', 0)).toEqual([55, 59, 62])
-    const minor = arrange(chart([['Am']]), { key: C, pattern: variant })
+    const minor = arrange(chart([['Am']]), { tonic: C, pattern: variant })
     expect(midisAt(minor, 'rh', 0)).toEqual([60, 64, 69])
   })
 
   it('rolls a chord one tick per note', () => {
     const performance = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: pattern('rolled', '0/16 T2~', '0/16 L1'),
     })
     expect(notesOf(performance, 'rh').map((n) => [n.startTick, n.durationTicks])).toEqual([
@@ -270,7 +270,7 @@ describe('arrange', () => {
 
   it('plays each chord with its method code’s pattern', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       methods: { t1: BEATS },
     })
@@ -283,7 +283,7 @@ describe('arrange', () => {
 
   it('lets a hand override replace every chord’s figure', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       methods: { t1: BEATS },
       rh: figure('0/8 C'),
@@ -303,14 +303,14 @@ describe('arrange', () => {
   }
 
   it('falls back to the plain pattern, both hands, without a melody', () => {
-    const performance = arrange(chart([['C']]), { key: C, pattern: TUNE_PATTERN })
+    const performance = arrange(chart([['C']]), { tonic: C, pattern: TUNE_PATTERN })
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36])
     expect(midisAt(performance, 'lh', 0)).toEqual([36])
     expect(performance.chords[0]?.pattern).toBe('plain')
   })
 
   it('plays a chosen melody figure’s fallback without a melody', () => {
-    const performance = arrange(chart([['C']]), { key: C, pattern: BEATS, rh: DOUBLE })
+    const performance = arrange(chart([['C']]), { tonic: C, pattern: BEATS, rh: DOUBLE })
     expect(onsets(performance, 'rh')).toEqual([0])
     expect(midisAt(performance, 'rh', 0)).toEqual([60, 64, 67])
     expect(midisAt(performance, 'lh', 0)).toEqual([36, 48])
@@ -321,13 +321,18 @@ describe('arrange', () => {
 
   it('doubles the tune an octave up', () => {
     const melody = tune([64, 0, 24], [62, 24, 24])
-    const doubled = arrange(chart([['C']]), { key: C, pattern: BLOCK, melody, doubleMelody: true })
+    const doubled = arrange(chart([['C']]), {
+      tonic: C,
+      pattern: BLOCK,
+      melody,
+      doubleMelody: true,
+    })
     expect(notesOf(doubled, 'melody')).toEqual([
       { midi: 76, hand: 'melody', startTick: 0, durationTicks: 24, velocity: 0.15, chord: 0 },
       { midi: 74, hand: 'melody', startTick: 24, durationTicks: 24, velocity: 0.15, chord: 0 },
     ])
     const alreadyPlayed = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       rh: DOUBLE,
       melody,
@@ -345,7 +350,7 @@ describe('arrange', () => {
       withoutMelody: figure('0/16 C'),
     }
     const long = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       rh: harmony,
       melody: tune([64, 0, 48]),
@@ -353,7 +358,7 @@ describe('arrange', () => {
     expect(midisAt(long, 'rh', 0)).toEqual([55, 60, 64])
     expect(notesOf(long, 'rh').map((n) => n.velocity)).toEqual([0.11, 0.11, 0.19])
     const short = arrange(chart([['C']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       rh: harmony,
       melody: tune([64, 0, 6]),
@@ -369,7 +374,7 @@ describe('arrange', () => {
       withoutMelody: figure('0/16 C'),
     }
     const performance = arrange(chart([['C', 'F', 'G']]), {
-      key: C,
+      tonic: C,
       pattern: BLOCK,
       rh: ends,
       melody: tune([67, 0, 48], [71, 48, 48], [72, 96, 48]),
@@ -379,12 +384,29 @@ describe('arrange', () => {
     expect(midisAt(performance, 'rh', 96)).toEqual([72])
   })
 
+  it('doubles the tune where a line’s middle plays the figure between its ends', () => {
+    const ends: MelodyFigure = {
+      kind: 'melody',
+      use: 'ends',
+      between: figure('0/8 C'),
+      withoutMelody: figure('0/16 C'),
+    }
+    const performance = arrange(chart([['C', 'F', 'G']]), {
+      tonic: C,
+      pattern: BLOCK,
+      rh: ends,
+      melody: tune([67, 0, 48], [71, 48, 48], [72, 96, 48]),
+      doubleMelody: true,
+    })
+    expect(notesOf(performance, 'melody').map((n) => [n.midi, n.startTick])).toEqual([[83, 48]])
+  })
+
   it.each([
     ['D/F#', 'G', note('A', -1), 'E♭/G'],
     ['D#/G', 'G#m', note('A', 1), 'E#/G𝄪'],
     ['A#dim7', 'C', note('C', 1), 'B°7'],
   ])('transposes %s in %s to %j as %s', (symbol, key, to, expected) => {
-    const performance = arrange(chart([[symbol]], { key }), { key: to, pattern: BLOCK })
+    const performance = arrange(chart([[symbol]], { key }), { tonic: to, pattern: BLOCK })
     expect(performance.chords[0]?.symbol).toBe(expected)
     expect(performance.key.tonic).toEqual(to)
     expect(performance.key.mode).toBe(key.endsWith('m') ? 'minor' : 'major')
@@ -395,7 +417,7 @@ describe('arrange', () => {
     [note('D'), 62],
   ])('moves the tune the short way to %j', (to: SpelledNote, expected) => {
     const performance = arrange(chart([['C']]), {
-      key: to,
+      tonic: to,
       pattern: BLOCK,
       melody: tune([60, 0, 48]),
       doubleMelody: true,
@@ -404,7 +426,7 @@ describe('arrange', () => {
   })
 
   it('groups notes by onset, with the bar and the chord sounding', () => {
-    const performance = arrange(chart([['C@2-G@2']]), { key: C, pattern: BEATS })
+    const performance = arrange(chart([['C@2-G@2']]), { tonic: C, pattern: BEATS })
     expect(performance.beatGroups.map(({ tick, bar, chord }) => ({ tick, bar, chord }))).toEqual([
       { tick: 0, bar: 0, chord: 0 },
       { tick: 12, bar: 0, chord: 0 },
@@ -436,7 +458,7 @@ describe('arrange', () => {
   ])('voices the key triads of %s', (key, triads) => {
     const tonic = parseKey(key)?.tonic ?? C
     const performance = arrange(chart([[key]], { key }), {
-      key: tonic,
+      tonic,
       pattern: pattern('flow', '0/4 Ka,4/4 Kb,8/4 Kc', '0/16 L1'),
     })
     expect([0, 12, 24].map((tick) => pitchClassesAt(performance, 'rh', tick))).toEqual(

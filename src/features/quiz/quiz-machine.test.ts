@@ -114,6 +114,17 @@ describe('createQuestion', () => {
     const family = ['Am7', 'A7', 'Am7♭5'].filter((symbol) => symbol !== question.symbol)
     for (const symbol of family) expect(others).toContain(symbol)
   })
+
+  it('offers four different chords when the scope names a skill twice', () => {
+    const scope = config(
+      ['chord:m7', 'chord:maj7', 'chord:maj7'],
+      { roots: [pitchClass(2)], ordered: true },
+      'name-chord',
+    )
+    const question = createQuestion(scope, { index: 0, random: scripted(0.1, 0.5, 0.8, 0.3) })
+    if (question.mode !== 'name-chord') throw new Error('expected a Name chord question')
+    expect(new Set(question.options).size).toBe(4)
+  })
 })
 
 describe('quizReducer', () => {
