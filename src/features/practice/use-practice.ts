@@ -48,6 +48,10 @@ function untilNextBeatGroup(performance: Performance, beatGroup: number, tempo: 
 /**
  * Connects the practice machine to time, audio and MIDI. The machine decides; this hook plays what
  * it decides, follows the audio clock in Listen, and moves Your turn on (spec §4.5).
+ *
+ * A new `performance` object is a new piece to practise: it reconfigures the machine and starts a
+ * playing pass again. Hand in the same object while the arrangement is unchanged (`useMemo` over
+ * `arrange`), never a fresh one each render.
  */
 export function usePractice(performance: Performance, setup: PracticeSetup): Practice {
   const { audio, midi } = useServices()
