@@ -16,7 +16,12 @@ export const common: LocaleResources['common'] = {
   close: 'Закрыть',
   loading: 'Загрузка',
   level: 'Уровень {{level}}',
-  levelName: { 1: 'Начальный', 2: 'Базовый', 3: 'Средний', 4: 'Продвинутый' },
+  levelName: {
+    beginner: 'Начальный',
+    elementary: 'Базовый',
+    intermediate: 'Средний',
+    advanced: 'Продвинутый',
+  },
   rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },
   roles: {
     root: 'Основной тон',

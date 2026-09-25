@@ -14,7 +14,12 @@ export const common = {
   close: 'Close',
   loading: 'Loading',
   level: 'Level {{level}}',
-  levelName: { 1: 'Beginner', 2: 'Elementary', 3: 'Intermediate', 4: 'Advanced' },
+  levelName: {
+    beginner: 'Beginner',
+    elementary: 'Elementary',
+    intermediate: 'Intermediate',
+    advanced: 'Advanced',
+  },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
   roles: {
     root: 'Root',
