@@ -1,0 +1,27 @@
+export { arrange, type ArrangeOptions } from './arrange'
+export { parseFigure } from './figure'
+export {
+  TICKS_PER_BEAT,
+  type BeatGroup,
+  type Chart,
+  type ChartBar,
+  type ChartChord,
+  type ChartSection,
+  type EventFigure,
+  type EventPattern,
+  type Figure,
+  type FigureEvent,
+  type FigureTone,
+  type FigureToken,
+  type Melody,
+  type MelodyFigure,
+  type MelodyNote,
+  type MelodyPattern,
+  type NoteHand,
+  type Pattern,
+  type Performance,
+  type PerformanceBar,
+  type PerformanceNote,
+  type PerformedChord,
+  type Tick,
+} from './types'
