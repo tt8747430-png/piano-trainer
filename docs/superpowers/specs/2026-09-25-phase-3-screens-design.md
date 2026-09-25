@@ -141,8 +141,8 @@ from controls **replace** the history entry, so Back leaves the screen instead o
 
 ### 4.2 Songs `/songs?q&collection&level`
 
-- Header "Songs"; a search `Input` (magnifier, clear button); a `ChipRow` of collections ("All" + 5) and a `ChipRow`
-  of levels present on the path ("Any level" + each). Search is case- and diacritic-insensitive, treats ё as е, and
+- Header "Songs"; a search `Input` (magnifier, clear button); a `ChipRow` of collections ("All" + 5) and, once the
+  path has more than one level (Phase 4), a `ChipRow` of its levels ("Any level" + each); a one-choice filter is noise. Search is case- and diacritic-insensitive, treats ё as е, and
   matches the title, the English title and credit names; it runs on a deferred value.
 - Rows grouped by collection (a collection heading when not filtered): songbook number if any, the title (English:
   `titleEn` over the original; Russian: `title`), key · meter, `LevelMark`, and a learned check (read-only mark). A
@@ -281,29 +281,31 @@ New code by layer. Pure logic has a colocated test and lives where CLAUDE.md put
 **shared/ui** — §2.4, with `piano-keyboard/layout.ts` (pure geometry, tested).
 
 **entities**
-- `path/model/suggest.ts` — `suggestStep({ learned, practised })` (the Continue rule over plain records).
-- `progress/model/mastery.ts` — `skillsToCheck(skills, answers)` (gap or unknown).
+- `progress/model/selectors.ts` — `selectSuggestedStep` (the Continue rule; progress already depends on the path) and
+  `selectAllAnswers`; `mastery.ts` — `skillsToCheck(skills, answers)` (gap or unknown) and `knownCount`.
+- `path/ui/use-step-title.ts` — a step's name in the learner's language (family, scale kind or the piece's titles).
 - `piece/ui/` — `EntryTitle`, `Credits`, `SectionHeading`, `SourceLine` (entity UI: the title rules of master spec §8).
 
 **features**
 - `mark-learned/ui/LearnedToggle.tsx` — the round check (and a text variant for the Piece footer).
 - `connect-midi/` (new) — `useMidiStatus()` and `MidiControl` (status line + Connect), used by Settings and the Player.
-- `practice/model/` — `defaultChoice(piece)`, `arrangePiece(piece, choice)` (chart or progression at a voicing,
+- `practice/` (beside the machine, as the slice already lays out) — `defaultPattern(piece)`, `arrangePiece(piece, choice)` (chart or progression at a voicing,
   tonic, pattern or the chart's methods, figures, melody), `spellPerformedNote`, `barColumns(performance, bar)`
   (the note grid), `keyboardRange(performance)`.
-- `quiz/model/` — `checkScope(of)` (scope, length, mode per §4.6), `myGaps(answers, practisedPieces)`; `use-quiz.ts`
+- `quiz/` — `checkPlan(of)` (scope, length, mode per §4.6), `myGaps(answers, practised)`, the quiz keyboard's keys;
+  `use-quiz.ts`
   — `useQuiz(config)`: drives the machine, draws questions with `Math.random`, records answers with `recordAnswer`,
   sounds Name chord questions.
 
 **widgets:** `app-nav`, `theory-nav` (restyled), `continue-card`, `path-levels`, `piece-list`, `chord-chart`
 (`sheet` and `strip` layouts over a Performance), `piece-skills`, `player-setup`, `chord-explorer`,
-`scale-explorer`, `step-panel`, `quiz-board`, `quiz-choice`.
+`scale-explorer`, `step-panel`, `quiz-board`, `quiz-choice`. Screen tests run the whole app (`renderApp`) from `src/app/screens/`.
 
-**pages:** each page composes widgets and owns its `model/search.ts` (the route's `validateSearch`) and, where it has
-many acts, one `model/use-<thing>.ts` hook (CODE_STYLE §3). The Player's subparts (top bar, now panel, note grid,
-transport) sit beside `PlayerPage` in `pages/player/ui/`.
+**pages:** each page composes widgets; pure page logic sits in its `model/` (`songs-view.ts`, `resolve-choice.ts`).
+The Player's subparts (top bar, now panel, note grid, transport) sit beside `PlayerPage` in `pages/player/ui/`.
 
-**app:** `router.tsx` gains `validateSearch` + `stripSearchParams` per route, `notFound()` from the Piece, Player and
+**app:** `routes/search.ts` holds every route's `validateSearch` and defaults (the router may not import a page's
+`index.ts`, or the page would leave its lazy chunk); `router.tsx` gains `validateSearch` + `stripSearchParams` per route, `notFound()` from the Piece, Player and
 Check routes' `beforeLoad` for ids that are not there, the `/check` route in the full-screen group (in the
 `theory-screens` chunk, with the quiz board), and `defaultPendingComponent`.
 
