@@ -7,10 +7,12 @@ system, Path, Songs, Piece, the Player with its Setup sheet, Theory (Chords, Sca
 Settings, rendering what Phase 2 built.
 
 **Architecture:** Tokens and fonts first, then the shadcn primitives and an app-wide kit in `shared/ui` (the
-`PianoKeyboard` above all). Pure logic the screens need (search params, voicings, scale runs, the Continue rule,
-the arrangement choice, check scopes) lands in `shared/lib`, `entities/*/model` and `features/*/model` with tests
-first. Screens are thin pages composing widgets; each route validates its search params with a page-owned
-`validateSearch`.
+`PianoKeyboard` above all). Pure logic the screens need (search params, keyboard geometry, placed chords and scales,
+scale runs, the Continue rule, the arrangement choice, check scopes) lands in `shared/lib`, `entities/*/model` and the
+features with tests first. Screens are thin pages composing widgets. Every route's `validateSearch` lives in
+`app/routes/search.ts`: the router may not import a page or widget, or its code would leave its lazy chunk (a build
+proved it). Each schema is typed against the view type its lowest consumer owns (a widget's `ChordView`, a page
+model's `SongsFilter`), which `search.ts` imports with `import type`, so the types never join the main chunk.
 
 **Tech Stack:** React 19, TypeScript 6, Vite 8, TanStack Router 1.170 (code-based), Tailwind v4, shadcn base-nova on
 Base UI 1.8, lucide-react, zustand 5, i18next, Vitest 4 + Testing Library. New packages: `@fontsource-variable/onest`,
@@ -26,17 +28,30 @@ contract: `.impeccable/surfaces/src-app.md`. Approved comp: `.impeccable/mocks/d
 - Pinned majors unchanged: TypeScript 6, Vitest 4, jsdom 29, jest-dom 6, eslint-plugin-boundaries 6.
 - Layers `app → pages → widgets → features → entities → shared`; another slice only through its `index.ts`.
 - **Tokens only** (CODE_STYLE §5): semantic utilities (`bg-card`, `text-muted-foreground`, `bg-role-3rd`,
-  `bg-hand-rh`); no raw colours, no primitives, no arbitrary values (`p-[13px]`), no `dark:` in app code.
+  `bg-hand-rh`); no raw colours, no primitives, no arbitrary values (`p-[13px]`, `h-[62%]`), no `dark:` in app code.
+  Sizes come from the spacing scale, radii from the theme's scale (`rounded-xs` … `rounded-4xl`), and anything else
+  from a named utility in `theme.css` (`pt-safe`, `scrollbar-none`). A value computed at run time (a key's place on
+  the keyboard) is an inline `style`, never a class.
 - **Palette law:** role colours only on chord tones (keys, legend, chord-chip edges); hand colours only in the Player.
+- **Interactive elements** (CODE_STYLE §5): hover, a `focus-visible` ring, a transition, and a disabled look;
+  targets at least 44px (`min-h-11`, `size-11`), text links included. A text link is the kit's
+  `<Button variant="link" render={<Link … />} nativeButton={false}>`, which already has all of that. A raw `<button>`
+  (a key, a bar, a row in a sheet) spells all four out.
 - shadcn primitives are added with `npx shadcn@latest add`, then edited only to meet this plan (44px targets, variants,
   no `"use client"` lines).
-- Every UI string in `en` **and** `ru` (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`); Russian is typed against
-  English. Note and chord names are the same in both (B, `#`, `♭`).
-- Search params: a page-owned `validateSearch(input: Partial<S> & SearchSchemaInput): S` that returns defaults for
-  anything invalid; `search: { middlewares: [stripSearchParams(DEFAULTS)] }`; control changes navigate with
-  `replace: true`.
+- Every UI string in `en` **and** `ru` (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`); a Russian module is typed
+  `LocaleResources['<namespace>']`, as the existing ones are. Note and chord names are the same in both (B, `#`, `♭`).
+- Search params: `app/routes/search.ts` holds each route's `validateSearch(input: Partial<S> & SearchSchemaInput): S`
+  and its defaults. It returns the default for anything invalid, and `S` is imported with `import type` from the slice
+  that owns the view. `search: { middlewares: [stripSearchParams(DEFAULTS)] }`. Control changes navigate with
+  `replace: true`. The Player writes a choice equal to the piece's own as absent, so its URL carries only what differs.
 - Selectors return stable values; lists subscribe to one slice (`selectAllAnswers`) and derive in render.
-- Tests colocated, `globals: false`, by role and name, fakes not module mocks (CODE_STYLE §9). Test first.
+- Tests colocated, `globals: false`, by role and name, fakes not module mocks (CODE_STYLE §9). Test first. A screen's
+  test sits beside its page (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through `renderApp` from
+  `@/app/testing/render-app`. The layer rules skip test files (`boundaries/ignore` covers `*.test.*`), as
+  `SettingsPage.test.tsx` already shows. A component under the settings store is tested with `renderWithSettings`.
+- No `eslint-disable` comments, no `!` non-null assertions, no `as` casts in app code. The code blocks below are the
+  code to write. Where a detail depends on what a CLI produces, the step says what to check and what to do either way.
 - Prettier on touched files only: `npx prettier --write <files>`. Never `npm run format`.
 - Verify before each commit: `npm run typecheck && npm run lint && npm run test`; after touching startup, routing, the
   PWA or config also `npm run build`.
@@ -46,19 +61,22 @@ contract: `.impeccable/surfaces/src-app.md`. Approved comp: `.impeccable/mocks/d
 
 ## Review Focus
 
-1. **Stale or hand-edited URLs** (`/play/bz5?key=H&tempo=999&mode=x&pattern=r5`, `/theory/chords?inversion=7`) →
-   every param falls back to its default, a melody pattern on a piece without a melody still plays (`r4`), nothing
-   throws. Pinned by: Task 6 (validators), Task 14 (`arrangePiece`), Task 24 (Player search).
+1. **Stale or hand-edited URLs** (`/play/bz5?key=H&tempo=999&mode=x&pattern=r5`, `/theory/chords?inversion=7`,
+   `/theory/chords?quality=maj&inversion=3`) → every invalid param falls back to its default (no clamping), a melody
+   pattern on a piece without a melody still plays (`r4`), nothing throws. Pinned by: Task 7 (the validator helpers),
+   Task 16 (every route's validator), Task 14 (`arrangePiece`), Task 26 (the Player's search).
 2. **Saved progress naming a piece a later version removed** (`practised: { gone: … }`, `learned: { 'piece:gone': … }`)
    → Continue and My gaps skip it; counts ignore it. Pinned by: Task 10 (`selectSuggestedStep`), Task 15 (`myGaps`).
 3. **Quick repeated taps** on chords, bars and explorer chips → the previous sound stops before the next plays; no
-   pile-up. Pinned by: Task 9 (`usePlay`).
+   pile-up. Pinned by: Task 9 (`usePlay`, `usePlayChord`).
 4. **Switching language on an open screen** → titles, section headings, chord names and credits switch at once.
-   Pinned by: Task 11 (`entryTitles`, `useSectionHeading`), Task 18 (Piece in Russian).
+   Pinned by: Task 11 (`entryTitles`, `useSectionHeading`), Task 24 (the Piece in Russian).
 5. **A chord wider than the default keyboard** (Name chord on B13, a B♭ root in the explorer) → the keyboard range grows
-   to hold every tone. Pinned by: Task 4 (`rangeFor`), Task 15 (`quizKeyboardRange`).
+   to hold every tone. Pinned by: Task 4 (`keyboardRange`), Task 15 (`quizKeyboardRange`).
 6. **MIDI that changes under the learner** (unplugged during Your turn, permission denied) → the status line follows,
-   taps on the screen keep working. Pinned by: Task 13, Task 24.
+   taps on the screen keep working. Pinned by: Task 13, Task 26.
+7. **Choosing the piece's own key, tempo or pattern in the Setup sheet** → the param leaves the URL instead of being
+   written (`/play/bz5`, not `/play/bz5?key=G`). Pinned by: Task 26 (`searchPatch`).
 
 ---
 
@@ -66,35 +84,42 @@ contract: `.impeccable/surfaces/src-app.md`. Approved comp: `.impeccable/mocks/d
 
 ```
 package.json                                   modify — fonts (Task 1), shadcn deps (Task 2)
-index.html public/favicon.svg public/*.png     modify — theme colour, sage icon (Task 1)
-src/main.tsx                                   modify — font CSS imports (Task 1)
-src/styles/tokens.css theme.css                rewrite / modify (Task 1; landscape-phone variant Task 26)
+public/favicon.svg public/*.png                modify — the sage icon (Task 1)
+src/styles/index.css tokens.css theme.css      font imports / rewrite / modify, the landscape-phone variant (Task 1)
 src/shared/config/theme-colors.ts (+test)      modify (Task 1)
 
 src/shared/ui/primitives/                      toggle toggle-group switch slider popover drawer input alert-dialog
                                                separator progress item empty spinner; button variants (Task 2)
-src/shared/ui/                                 ScreenHeader RoundButton Segmented ChipRow RoleLegend RatingMark
+src/shared/ui/                                 ScreenHeader RoundButton Segmented ChipRow option RoleLegend RatingMark
                                                LevelMark Sheet role-classes (Task 3); piano-keyboard/ (Task 4)
+src/shared/lib/music/keyboard.ts               isBlackKey MIDDLE_C keyboardRange (Task 4)
+src/shared/lib/keyboard-layout.ts              keyboardLayout: the keys' geometry (Task 4)
 src/app/                                       AppShell FullScreenLayout TheoryLayout RouteError RoutePending
                                                UpdateBanner (Task 5); routes/search.ts + router (Task 16, 18)
-src/app/screens/*.test.tsx                     screen integration tests (Tasks 17–27)
 src/widgets/app-nav theory-nav                 restyle (Task 5)
 src/pages/not-found                            restyle (Task 5)
 
-src/shared/lib/music/voicing.ts scale.ts note.ts   (Task 6)
-src/shared/lib/search-params.ts fold-text.ts   (Task 7)
+src/shared/lib/music/place.ts scale.ts note.ts placeChord placeScale lastInversion; scaleGaps relativeScale;
+                                               noteParam noteFromParam (Task 6)
+src/shared/lib/search-params.ts fold-text.ts   valueOr wholeIn readNote; foldText matchesQuery (Task 7)
 src/shared/lib/schedule/sounds.ts              barSounds chordSounds scaleRun PRACTICE_RHYTHMS (Task 8)
-src/shared/lib/services/use-play.ts            (Task 9)
-src/entities/progress/model/                   selectSuggestedStep selectAllAnswers skillsToCheck knownCount (Task 10)
-src/shared/i18n/use-language.ts                (Task 11)
+src/shared/lib/services/use-play.ts            usePlay usePlayChord (Task 9)
+src/entities/progress/model/                   selectSuggestedStep selectAllAnswers ratingOf skillsToCheck knownCount
+                                               (Task 10)
+src/shared/i18n/locale.ts use-locale.ts        LOCALES Locale (moved from entities/settings) useLocale (Task 11)
 src/entities/piece/model/titles.ts ui/         entryTitles; Credits SourceLine useSectionHeading (Task 11);
                                                barLength (Task 24)
 src/features/mark-learned/ui/LearnedToggle     (Task 12)
 src/shared/api/midi current()                  (Task 13)
 src/features/connect-midi/                     useMidiConnection MidiControl MidiButton (Task 13); useHeldKeys (Task 26)
-src/features/practice/                         choice arrange-piece note-names bar-columns marks (Task 14)
-src/features/quiz/                             check-plan my-gaps quiz-keys use-quiz (Task 15)
-src/entities/path/ui/use-step-title.ts         (Task 16)
+src/features/practice/                         choice arrange-piece ownChoice note-names bar-columns marks (Task 14)
+src/features/quiz/                             check-plan my-gaps quiz-keys theory-quizzes use-quiz (Task 15)
+src/entities/path/ui/                          use-step-title explorer-link (Task 16)
+view types owned by their slices               widgets/chord-explorer/model/chord-view.ts,
+                                               widgets/scale-explorer/model/scale-view.ts,
+                                               widgets/player-setup/model/setup-params.ts,
+                                               pages/songs/model/songs-filter.ts,
+                                               pages/player/model/player-search.ts (Task 16)
 
 src/widgets/quiz-board quiz-choice             (Task 17)   src/pages/theory-quiz
 src/pages/check                                (Task 18)
@@ -105,8 +130,9 @@ src/widgets/continue-card path-levels          (Task 22)   src/pages/path
 src/widgets/piece-list                         (Task 23)   src/pages/songs (+ model/songs-view.ts)
 src/widgets/chord-chart piece-skills           (Task 24)   src/pages/piece
 src/widgets/player-setup                       (Task 25)
-src/pages/player (+ model/resolve-choice.ts)   (Task 26)
+src/pages/player (+ model/player-search.ts turn-feedback.ts use-player.ts)   (Task 26)
 src/pages/settings                             (Task 27)
+src/pages/<x>/ui/<X>Page.test.tsx              each screen's test, beside its page (Tasks 17–27)
 CLAUDE.md docs/CODE_STYLE.md docs/UBIQUITOUS_LANGUAGE.md README.md docs/adr/0007-…   (Task 28)
 DESIGN.md                                      (Task 29, by the impeccable documenter)
 ```
@@ -116,14 +142,15 @@ DESIGN.md                                      (Task 29, by the impeccable docum
 ### Task 1: Tokens, fonts and the sage icon
 
 **Files:**
-- Modify: `package.json` (install), `src/main.tsx`, `src/styles/tokens.css` (rewrite), `src/styles/theme.css`,
+- Modify: `package.json` (install), `src/styles/index.css`, `src/styles/tokens.css` (rewrite), `src/styles/theme.css`,
   `src/shared/config/theme-colors.ts`, `public/favicon.svg`, regenerated `public/*.png`
 - Test: `src/shared/config/theme-colors.test.ts` (existing, must stay green), `src/shared/lib/cn.test.ts`
 
 **Interfaces:**
-- Produces: utilities `bg-attention text-attention bg-glass bg-hand-rh bg-hand-lh bg-hand-melody text-hand-*
+- Produces: utilities `bg-attention text-attention bg-thumb bg-hand-rh bg-hand-lh bg-hand-melody text-hand-*
   bg-key-white border-key-white-edge bg-key-black bg-key-pressed`, the retuned `role-*`, `font-sans` = Onest,
-  `ease-out` = the one curve, utilities `pt-safe pb-safe bottom-safe`.
+  `ease-out` = the one curve, the radius scale `rounded-xs` (6px) `sm` (9) `md` (12) `lg` (14) `xl` (16) `2xl` (18)
+  `3xl` (26) `4xl` (28), utilities `pt-safe pb-safe bottom-safe scrollbar-none`, the variant `landscape-phone:`.
 
 - [ ] **Step 1: Install the fonts**
 
@@ -135,7 +162,7 @@ npm install @fontsource-variable/onest @fontsource/noto-music
 
 Run: `grep -rn "success\|accent" src --include=*.tsx --include=*.ts --include=*.css | grep -v "accent-foreground\|primitives"`
 Expected: only `tokens.css`/`theme.css` definitions and `src/pages/settings/ui/ChoiceGroup.tsx` (`accent-primary`,
-`hover:bg-accent`; the file is deleted in Task 26). `--success` goes; `--accent` stays (shadcn primitives hover with it).
+`hover:bg-accent`; the file is deleted in Task 27). `--success` goes; `--accent` stays (shadcn primitives hover with it).
 
 - [ ] **Step 3: Rewrite `src/styles/tokens.css`**
 
@@ -218,7 +245,8 @@ Expected: only `tokens.css`/`theme.css` definitions and `src/pages/settings/ui/C
   --border: var(--p-sage-200);
   --input: var(--p-sage-200);
   --ring: var(--p-teal-800);
-  --glass: rgb(255 255 255 / 0.72);
+  /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
+  --thumb: var(--p-white);
 
   /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip's edge. */
   --role-root: var(--p-role-blue);
@@ -261,7 +289,7 @@ Expected: only `tokens.css`/`theme.css` definitions and `src/pages/settings/ui/C
   --border: var(--p-night-800);
   --input: var(--p-night-800);
   --ring: var(--p-teal-300);
-  --glass: rgb(23 30 27 / 0.72);
+  --thumb: var(--p-mist-100);
 
   --role-root: var(--p-role-blue-300);
   --role-3rd: var(--p-role-rose-300);
@@ -289,7 +317,7 @@ In the `@theme inline` block, delete `--color-success`, and add after `--color-r
 
 ```css
   --color-attention: var(--attention);
-  --color-glass: var(--glass);
+  --color-thumb: var(--thumb);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -303,15 +331,26 @@ In the `@theme inline` block, delete `--color-success`, and add after `--color-r
   --font-sans: 'Onest Variable', 'Noto Music', system-ui, sans-serif;
 ```
 
-Replace the four `--radius-*` lines with (the same names, so `cn()` needs no registration):
+Replace the four `--radius-*` lines with the spec's radii (§2.3) on Tailwind's own names, so `cn()` needs no
+registration:
 
 ```css
-  --radius-sm: calc(var(--radius) - 6px);
+  /* Black keys 6 · white keys 9 · primitives 12–16 · buttons 18 · cards 26 · sheets 28. */
+  --radius-xs: calc(var(--radius) - 10px);
+  --radius-sm: calc(var(--radius) - 7px);
   --radius-md: calc(var(--radius) - 4px);
   --radius-lg: calc(var(--radius) - 2px);
   --radius-xl: var(--radius);
   --radius-2xl: calc(var(--radius) + 2px);
   --radius-3xl: calc(var(--radius) + 10px);
+  --radius-4xl: calc(var(--radius) + 12px);
+```
+
+After the `@custom-variant dark` line add the one variant the screens need beyond Tailwind's:
+
+```css
+/* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px));
 ```
 
 After the `@theme inline` block add a plain `@theme` block that retunes Tailwind's own names (known to `cn()`):
@@ -352,16 +391,27 @@ After `@utility pb-safe` add:
 @utility bottom-safe {
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
+
+/* A row that scrolls sideways past the screen's edge, without a scrollbar in the way. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 ```
 
-- [ ] **Step 5: Import the fonts in `src/main.tsx`**
+- [ ] **Step 5: Import the fonts in `src/styles/index.css`**
 
-Add as the first imports (before `./styles/index.css`):
+The styles' entry holds every stylesheet, fonts included. Right after `@import 'tailwindcss' source(none);` add:
 
-```ts
-import '@fontsource-variable/onest/wght.css'
-import '@fontsource/noto-music/music-400.css'
+```css
+@import '@fontsource-variable/onest/wght.css';
+@import '@fontsource/noto-music/music-400.css';
 ```
+
+Tailwind's Vite plugin inlines the package CSS and rebases its `url()`s, so Vite emits the woff2 files (Step 8
+checks the build lists them).
 
 - [ ] **Step 6: Point `THEME_COLORS` at the new background and run its test red → green**
 
@@ -372,8 +422,8 @@ Expected: FAIL (`#eef1f5` ≠ `#f3f6f3`). Then set:
 export const THEME_COLORS = { light: '#f3f6f3', dark: '#0d1210' } as const
 ```
 
-Run again. Expected: PASS. Also check `index.html` for a hard-coded `theme-color` or background and update it the
-same way (the theme-boot test holds the script to the store; keep that test green).
+Run again. Expected: PASS. Nothing else carries the old colour: `vite.config.ts` writes the `theme-color` meta
+tags and the manifest's colours from `THEME_COLORS`, and `index.html` has none of its own.
 
 - [ ] **Step 7: Repaint the icon in the world's colours and regenerate the PNGs**
 
@@ -399,8 +449,8 @@ Run: `npm run typecheck && npm run lint && npm run test && npm run build`
 Expected: all green; the build output lists `onest-*.woff2` and `noto-music-music-*.woff2` assets.
 
 ```bash
-npx prettier --write src/styles/tokens.css src/styles/theme.css src/main.tsx src/shared/config/theme-colors.ts
-git add -A package.json package-lock.json index.html public src/main.tsx src/styles src/shared/config
+npx prettier --write src/styles src/shared/config/theme-colors.ts
+git add -A package.json package-lock.json public src/styles src/shared/config
 git commit -m "Paint the app in the sage world with Onest and a music-symbol fallback
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -418,8 +468,9 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Produces: `Button` variants `default outline secondary soft surface ghost destructive link`, sizes `default lg icon
   icon-lg pill play`; `toggleVariants` variants `default outline chip segment`, one size `default` (h-11); `Switch` 32×52;
-  `Slider` with a 24px thumb; the rest as the registry ships them (`Drawer*`, `Popover*`, `AlertDialog*`, `Item*`,
-  `Empty*`, `Progress`, `Input`, `Separator`, `Spinner`).
+  `Slider` generic over its value (one number, one thumb) with a 24px thumb; the rest as the registry ships them
+  (`Drawer*` with `showSwipeHandle`, `Popover*`, `AlertDialog*`, `Item*`, `Empty*`, `Progress`, `Input`, `Separator`,
+  `Spinner`).
 
 - [ ] **Step 1: Add the primitives**
 
@@ -433,7 +484,9 @@ Expected: the files land in `src/shared/ui/primitives/`; imports use `cn` and `@
 
 Read every added file. Remove each `"use client"` line (a Vite SPA has no server components). Check each `Button`
 use inside them names only sizes this project has (`default lg icon icon-lg pill`); replace `size="sm"` with
-`size="default"`. Replace any icon library other than lucide.
+`size="default"`. Replace any icon library other than lucide. Then read `git diff src/styles package.json`: keep
+what the primitives need to animate (an import such as `tw-animate-css`), and remove any colour variables or `@theme`
+entries the CLI wrote, because `tokens.css` and `theme.css` own every colour.
 
 - [ ] **Step 3: Write the failing button test for the new variants**
 
@@ -463,7 +516,7 @@ In `buttonVariants`: change the base class `rounded-lg` to `rounded-2xl` and `te
 `text-base font-semibold`; add to `variant`:
 
 ```ts
-        soft: 'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_6%)]',
+        soft: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary/80',
         surface:
           'rounded-full bg-card text-foreground shadow-sm ring-1 ring-border hover:bg-muted aria-expanded:bg-muted',
 ```
@@ -488,13 +541,13 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        default: 'rounded-xl bg-transparent hover:bg-muted aria-pressed:bg-muted data-[pressed]:bg-muted',
+        default: 'rounded-xl bg-transparent hover:bg-muted data-pressed:bg-muted',
         outline: 'rounded-xl border border-input bg-transparent hover:bg-muted',
         // A choice in a scrolling row: roots, families, keys.
-        chip: 'rounded-full bg-card px-4 text-foreground ring-1 ring-border hover:bg-muted data-[pressed]:bg-primary data-[pressed]:text-primary-foreground data-[pressed]:ring-primary',
+        chip: 'rounded-full bg-card px-4 text-foreground ring-1 ring-border hover:bg-muted data-pressed:bg-primary data-pressed:text-primary-foreground data-pressed:ring-primary',
         // A segment of a pill segmented control.
         segment:
-          'flex-1 rounded-xl px-3 text-muted-foreground hover:text-foreground data-[pressed]:bg-card data-[pressed]:text-foreground data-[pressed]:shadow-sm',
+          'flex-1 rounded-xl px-3 text-muted-foreground hover:text-foreground data-pressed:bg-card data-pressed:text-foreground data-pressed:shadow-sm',
       },
       size: {
         default: 'h-11 min-w-11 px-3',
@@ -505,15 +558,38 @@ const toggleVariants = cva(
 )
 ```
 
-(Base UI marks a pressed toggle with `data-pressed` and `aria-pressed`; confirm the attribute name in
-`node_modules/@base-ui/react/toggle` and use the one it sets.)
+(Base UI 1.8 marks a pressed toggle with `data-pressed` and sets `aria-pressed`; Tailwind v4 reads `data-pressed:` as
+the attribute's presence.)
 
 - [ ] **Step 6: Size the switch and slider for fingers**
 
-`switch.tsx`: default size `h-8 w-13`, thumb `size-7`, checked translate `translate-x-5`, keep the `after:-inset-*`
-hit area. `slider.tsx`: track `data-horizontal:h-1.5`; thumb `size-6 border-0 bg-white shadow-md ring-0` with
-`after:-inset-2.5` (a 44px hit area); always pass `value` as an array from callers (the registry's single-value
-fallback renders two thumbs).
+`switch.tsx`: replace the registry's arbitrary sizes (`data-[size=default]:h-[18.4px] data-[size=default]:w-[32px]`,
+the `sm` pair and the `translate-x-[calc(…)]` pair) with `h-8 w-13`, a thumb of `size-7` and a checked
+`translate-x-5`; drop the `sm` size; keep the thumb's token colours and the `after:-inset-*` hit area.
+
+`slider.tsx`: the registry draws one thumb per value, but falls back to a range's two thumbs (`[min, max]`) when
+`value` is a single number. The screens set one tempo, so make the slider generic over its value and give a single
+number one thumb:
+
+```tsx
+function Slider<Value extends number | readonly number[]>({
+  className,
+  defaultValue,
+  value,
+  min = 0,
+  max = 100,
+  ...props
+}: SliderPrimitive.Root.Props<Value>) {
+  const values = Array.isArray(value)
+    ? value
+    : Array.isArray(defaultValue)
+      ? defaultValue
+      : [value ?? defaultValue ?? min]
+```
+
+and render `values.length` thumbs. Track `data-horizontal:h-1.5`; thumb
+`size-6 border-0 bg-thumb shadow-md ring-1 ring-border` with `after:-inset-2.5` (a 44px hit area). A caller then
+writes `value={tempo}` and `onValueChange={(tempo) => …}` with `tempo: number`.
 
 - [ ] **Step 7: Verify and commit**
 
@@ -534,26 +610,31 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create: `src/shared/ui/{ScreenHeader,RoundButton,Segmented,ChipRow,RoleLegend,RatingMark,LevelMark,Sheet}.tsx`,
-  `src/shared/ui/role-classes.ts`, `src/shared/ui/kit.test.tsx`
+  `src/shared/ui/option.ts`, `src/shared/ui/role-classes.ts`, `src/shared/ui/kit.test.tsx`
 - Modify: `src/shared/ui/index.ts`; `src/shared/i18n/locales/{en,ru}/common.ts`; every `ScreenTitle` /
   `SectionTitle` user (Path, Settings, Player, Theory layout, RouteError, NotFound) — switch to `ScreenHeader`;
   delete `ScreenTitle.tsx` and `SectionTitle.tsx`
 
 **Interfaces:**
-- Consumes: `Button`, `buttonVariants` (Task 2), `ToggleGroup`, `ToggleGroupItem`, `Drawer*`.
+- Consumes: `Button`, `buttonVariants` (Task 2), `ToggleGroup`, `ToggleGroupItem`, `Drawer`, `DrawerContent`,
+  `DrawerHeader`, `DrawerTitle`, `DrawerFooter`.
 - Produces:
   - `ScreenHeader({ title, back?, actions? }: { title: ReactNode; back?: ReactNode; actions?: ReactNode })` — renders
     the `h1`.
   - `RoundButton({ label, icon, render?, ...ButtonProps })` — `aria-label={label}`; `render` makes it a link.
-  - `Segmented<V extends string>({ label, value, options, onChange }: { label: string; value: V; options: readonly
-    { value: V; label: string }[]; onChange: (value: V) => void })`
-  - `ChipRow<V extends string>({ label, value, options, onChange })` — same props; `options[i].title?` for an
-    accessible name different from the visible label.
-  - `ROLE_BG: Record<ChordRole, string>`, `ROLE_TEXT: Record<ChordRole, string>` (complete class strings).
+  - `OptionValue = string | number`; `Option<V extends OptionValue> = { value: V; label: string; title?: string }`
+    (`title`: an accessible name other than the visible label).
+  - `Segmented<V extends OptionValue>({ label, value, options, onChange }: { label: string; value: V; options: readonly
+    Option<V>[]; onChange: (value: V) => void })` — numbers go in and come out as numbers; the kit alone turns them
+    into the toggles' strings.
+  - `ChipRow<V extends OptionValue>({ label, value, options, onChange })` — the same props.
+  - `ROLE_BG: Record<ChordRole, string>` (complete class strings, for the keys, the legend and the tone chips).
   - `RoleLegend({ roles }: { roles: readonly ChordRole[] })`
   - `RatingMark({ rating }: { rating: 'known' | 'gap' | 'unknown' })`
   - `LevelMark({ level }: { level: 1 | 2 | 3 | 4 })`
-  - `Sheet` (= `Drawer`), `SheetTrigger`, `SheetClose`, `SheetContent({ title, children, footer? })`
+  - `Sheet(props: DrawerProps)` — the app's bottom sheet: a `Drawer` that always shows its swipe handle.
+    `SheetContent({ title, children, footer? })` — the sheet's panel: centred, 28px top corners, a title, a body that
+    scrolls, an optional footer. Triggers and close buttons are the primitives' `DrawerTrigger` / `DrawerClose`.
 
 - [ ] **Step 1: Add the common strings**
 
@@ -561,7 +642,6 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ```ts
   close: 'Close',
-  more: 'More',
   level: 'Level {{level}}',
   levelName: { 1: 'Beginner', 2: 'Elementary', 3: 'Intermediate', 4: 'Advanced' },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
@@ -575,7 +655,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
     '13th': '13th',
   },
   hands: { both: 'Both hands', rh: 'Right hand', lh: 'Left hand' },
-  key: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
+  // A piano key's name: its note and octave.
+  note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
   keyboard: 'Keyboard',
 ```
 
@@ -583,7 +664,6 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ```ts
   close: 'Закрыть',
-  more: 'Ещё',
   level: 'Уровень {{level}}',
   levelName: { 1: 'Начальный', 2: 'Базовый', 3: 'Средний', 4: 'Продвинутый' },
   rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },
@@ -597,7 +677,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
     '13th': 'Терцдецима',
   },
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
-  key: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
+  note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
 ```
 
@@ -655,6 +735,18 @@ describe('Segmented', () => {
     render(<Segmented label="Mode" value="step" options={MODES} onChange={onChange} />)
     await user.click(screen.getByRole('button', { name: 'Step' }))
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('hands a number back as a number', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const inversions = [
+      { value: 0, label: 'Root' },
+      { value: 1, label: '1st' },
+    ]
+    render(<Segmented label="Inversion" value={0} options={inversions} onChange={onChange} />)
+    await user.click(screen.getByRole('button', { name: '1st' }))
+    expect(onChange).toHaveBeenCalledWith(1)
   })
 })
 
@@ -719,16 +811,6 @@ export const ROLE_BG: Readonly<Record<ChordRole, string>> = {
   '11th': 'bg-role-11th',
   '13th': 'bg-role-13th',
 }
-
-export const ROLE_TEXT: Readonly<Record<ChordRole, string>> = {
-  root: 'text-role-root',
-  '3rd': 'text-role-3rd',
-  '5th': 'text-role-5th',
-  '7th': 'text-role-7th',
-  '9th': 'text-role-9th',
-  '11th': 'text-role-11th',
-  '13th': 'text-role-13th',
-}
 ```
 
 `src/shared/ui/ScreenHeader.tsx`:
@@ -785,20 +867,42 @@ export function RoundButton({
 }
 ```
 
-`src/shared/ui/Segmented.tsx`:
+`src/shared/ui/option.ts` — what a segmented control and a chip row share:
 
-```tsx
-import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
+```ts
+/** A choice's value: an id, a note, or a number such as an inversion or a level. */
+export type OptionValue = string | number
 
-export interface Option<V extends string> {
+export interface Option<V extends OptionValue> {
   readonly value: V
   readonly label: string
   /** The accessible name, when the label alone is not enough (`7` → "Dominant 7th"). */
   readonly title?: string
 }
 
+/** A toggle's value is a string; this is the one place an option's value becomes one. */
+export const toggleValue = (value: OptionValue): string => String(value)
+
+/**
+ * The option a toggle group's change picked: the one newly pressed. Pressing the chosen toggle
+ * again picks nothing, so one option stays chosen.
+ */
+export const pickedOption = <V extends OptionValue>(
+  options: readonly Option<V>[],
+  current: V,
+  pressed: readonly string[],
+): Option<V> | undefined =>
+  options.find((option) => option.value !== current && pressed.includes(toggleValue(option.value)))
+```
+
+`src/shared/ui/Segmented.tsx`:
+
+```tsx
+import { pickedOption, toggleValue, type Option, type OptionValue } from './option'
+import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
+
 /** One choice of a few, always one chosen: a pill segmented control. */
-export function Segmented<V extends string>({
+export function Segmented<V extends OptionValue>({
   label,
   value,
   options,
@@ -812,17 +916,21 @@ export function Segmented<V extends string>({
   return (
     <ToggleGroup
       aria-label={label}
-      value={[value]}
-      onValueChange={(next: unknown[]) => {
-        const chosen = options.find((option) => option.value !== value && next.includes(option.value))
-        if (chosen) onChange(chosen.value)
+      value={[toggleValue(value)]}
+      onValueChange={(pressed) => {
+        const picked = pickedOption(options, value, pressed)
+        if (picked) onChange(picked.value)
       }}
       variant="segment"
       spacing={0}
       className="flex w-full gap-1 rounded-2xl bg-muted p-1"
     >
       {options.map((option) => (
-        <ToggleGroupItem key={option.value} value={option.value} aria-label={option.title}>
+        <ToggleGroupItem
+          key={toggleValue(option.value)}
+          value={toggleValue(option.value)}
+          aria-label={option.title}
+        >
           {option.label}
         </ToggleGroupItem>
       ))}
@@ -834,11 +942,11 @@ export function Segmented<V extends string>({
 `src/shared/ui/ChipRow.tsx`:
 
 ```tsx
+import { pickedOption, toggleValue, type Option, type OptionValue } from './option'
 import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
-import type { Option } from './Segmented'
 
 /** One choice of many in a row that scrolls sideways past the screen's edge. */
-export function ChipRow<V extends string>({
+export function ChipRow<V extends OptionValue>({
   label,
   value,
   options,
@@ -852,19 +960,19 @@ export function ChipRow<V extends string>({
   return (
     <ToggleGroup
       aria-label={label}
-      value={[value]}
-      onValueChange={(next: unknown[]) => {
-        const chosen = options.find((option) => option.value !== value && next.includes(option.value))
-        if (chosen) onChange(chosen.value)
+      value={[toggleValue(value)]}
+      onValueChange={(pressed) => {
+        const picked = pickedOption(options, value, pressed)
+        if (picked) onChange(picked.value)
       }}
       variant="chip"
       spacing={2}
-      className="-mx-4 flex w-auto snap-x overflow-x-auto px-4 pb-1 [scrollbar-width:none]"
+      className="-mx-4 flex w-auto snap-x overflow-x-auto px-4 pb-1 scrollbar-none"
     >
       {options.map((option) => (
         <ToggleGroupItem
-          key={option.value}
-          value={option.value}
+          key={toggleValue(option.value)}
+          value={toggleValue(option.value)}
           aria-label={option.title}
           className="snap-start"
         >
@@ -875,6 +983,9 @@ export function ChipRow<V extends string>({
   )
 }
 ```
+
+(Base UI's `ToggleGroup` is generic over its string values and hands `onValueChange` a `string[]` here, so the
+callback needs no annotation.)
 
 `src/shared/ui/RoleLegend.tsx`:
 
@@ -905,11 +1016,12 @@ export function RoleLegend({ roles }: { roles: readonly ChordRole[] }) {
 ```tsx
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 
 const LOOK = {
-  known: 'bg-primary text-primary-foreground',
-  gap: 'bg-attention',
-  unknown: 'ring-2 ring-inset ring-border',
+  known: 'size-4 bg-primary text-primary-foreground',
+  gap: 'size-2.5 bg-attention',
+  unknown: 'size-2.5 ring-2 ring-inset ring-border',
 } as const
 
 /** Known (a check), a gap (an amber dot) or not checked yet (a ring), named in words. */
@@ -917,10 +1029,7 @@ export function RatingMark({ rating }: { rating: 'known' | 'gap' | 'unknown' }) 
   const { t } = useTranslation('common')
   return (
     <span className="inline-flex items-center">
-      <span
-        aria-hidden
-        className={`inline-grid place-items-center rounded-full ${rating === 'known' ? 'size-4' : 'size-2.5'} ${LOOK[rating]}`}
-      >
+      <span aria-hidden className={cn('inline-grid place-items-center rounded-full', LOOK[rating])}>
         {rating === 'known' ? <Check className="size-3" strokeWidth={3} /> : null}
       </span>
       <span className="sr-only">{t(`rating.${rating}`)}</span>
@@ -929,26 +1038,29 @@ export function RatingMark({ rating }: { rating: 'known' | 'gap' | 'unknown' }) 
 }
 ```
 
-(Use `cn()` instead of the template string if the linter or a reviewer prefers; both are complete class strings.)
-
 `src/shared/ui/LevelMark.tsx`:
 
 ```tsx
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
-const PIPS = [1, 2, 3, 4] as const
+/** Four pips rising in height, 6 to 12px. */
+const PIPS = [
+  { pip: 1, height: 'h-1.5' },
+  { pip: 2, height: 'h-2' },
+  { pip: 3, height: 'h-2.5' },
+  { pip: 4, height: 'h-3' },
+] as const
 
 /** A level as four pips, the first `level` filled. */
 export function LevelMark({ level }: { level: 1 | 2 | 3 | 4 }) {
   const { t } = useTranslation('common')
   return (
     <span role="img" aria-label={t('level', { level })} className="inline-flex items-end gap-0.5">
-      {PIPS.map((pip) => (
+      {PIPS.map(({ pip, height }) => (
         <span
           key={pip}
-          className={cn('w-1 rounded-full', pip <= level ? 'bg-primary' : 'bg-border')}
-          style={{ height: `${4 + pip * 2}px` }}
+          className={cn('w-1 rounded-full', height, pip <= level ? 'bg-primary' : 'bg-border')}
         />
       ))}
     </span>
@@ -959,22 +1071,15 @@ export function LevelMark({ level }: { level: 1 | 2 | 3 | 4 }) {
 `src/shared/ui/Sheet.tsx`:
 
 ```tsx
-import type { ReactNode } from 'react'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from './primitives/drawer'
+import type { ComponentProps, ReactNode } from 'react'
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from './primitives/drawer'
 
-export const Sheet = Drawer
-export const SheetTrigger = DrawerTrigger
-export const SheetClose = DrawerClose
+/** The app's bottom sheet: a drawer from the bottom that always shows its swipe handle. */
+export function Sheet(props: ComponentProps<typeof Drawer>) {
+  return <Drawer showSwipeHandle {...props} />
+}
 
-/** A bottom sheet: grab handle, title, a body that scrolls, and an optional footer. */
+/** The sheet's panel: a title, a body that scrolls, and an optional footer. */
 export function SheetContent({
   title,
   children,
@@ -985,8 +1090,7 @@ export function SheetContent({
   footer?: ReactNode
 }) {
   return (
-    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-3xl bg-card">
-      <div aria-hidden className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-border" />
+    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card">
       <DrawerHeader className="px-5 pt-3 text-left">
         <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
       </DrawerHeader>
@@ -997,23 +1101,26 @@ export function SheetContent({
 }
 ```
 
+(The registry's `DrawerContent` draws the handle when its `Drawer` has `showSwipeHandle`, and rounds only its top
+corners for a drawer that swipes down, so `rounded-t-4xl` sets the sheet's 28px.)
+
 `src/shared/ui/index.ts`:
 
 ```ts
 export { ChipRow } from './ChipRow'
 export { LevelMark } from './LevelMark'
+export type { Option, OptionValue } from './option'
 export { RatingMark } from './RatingMark'
-export { ROLE_BG, ROLE_TEXT } from './role-classes'
+export { ROLE_BG } from './role-classes'
 export { RoleLegend } from './RoleLegend'
 export { RoundButton } from './RoundButton'
 export { ScreenHeader } from './ScreenHeader'
-export { Segmented, type Option } from './Segmented'
-export { Sheet, SheetClose, SheetContent, SheetTrigger } from './Sheet'
+export { Segmented } from './Segmented'
+export { Sheet, SheetContent } from './Sheet'
 ```
 
 Run: `npx vitest run src/shared/ui/kit.test.tsx`
-Expected: PASS. If Base UI's `onValueChange` types its argument differently, type the parameter as its declared type
-and keep the `includes` check.
+Expected: PASS.
 
 - [ ] **Step 4: Replace `ScreenTitle` and `SectionTitle` everywhere**
 
@@ -1039,87 +1146,152 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ### Task 4: `PianoKeyboard`
 
+The keyboard's pure parts are logic, so they live where CLAUDE.md puts logic, under the coverage gate: which keys are
+black and what range holds a set of keys in the music kernel, and the keys' geometry in `shared/lib`. `shared/ui`
+keeps only the component.
+
 **Files:**
-- Create: `src/shared/ui/piano-keyboard/layout.ts`, `layout.test.ts`, `PianoKeyboard.tsx`, `PianoKeyboard.test.tsx`,
-  `index.ts`
-- Modify: `src/shared/ui/index.ts`
+- Create: `src/shared/lib/music/keyboard.ts`, `keyboard.test.ts`, `src/shared/lib/keyboard-layout.ts`,
+  `keyboard-layout.test.ts`, `src/shared/ui/piano-keyboard/{PianoKeyboard.tsx,PianoKeyboard.test.tsx,index.ts}`
+- Modify: `src/shared/lib/music/index.ts`, `src/shared/lib/index.ts`, `src/shared/ui/index.ts`
 
 **Interfaces:**
 - Produces:
-  - `isBlackKey(midi: number): boolean`
-  - `keyboardLayout(from: Midi, to: Midi): { keys: KeyGeometry[]; whites: number }` with
-    `KeyGeometry = { midi: Midi; black: boolean; left: number; width: number }` (percent of the width). `from` is
-    moved down and `to` up to white keys.
-  - `rangeFor(midis: readonly Midi[], fallback: { from: Midi; to: Midi }): { from: Midi; to: Midi }` — the lowest C
-    at or below the lowest note to the highest B at or above the highest; the fallback when empty.
-  - `KeyTone = ChordRole | 'rh' | 'lh' | 'melody' | 'selected'`; `KeyMark = { tone: KeyTone; label?: string }`
-  - `PianoKeyboard(props: { label: string; from: Midi; to: Midi; marks?: ReadonlyMap<Midi, KeyMark>;
-    pressed?: ReadonlySet<Midi>; outlined?: ReadonlySet<Midi>; wrong?: ReadonlySet<Midi>; selectable?: boolean;
-    selected?: ReadonlySet<Midi>; onKeyPress?: (midi: Midi) => void; minWhiteWidth?: number; centre?: Midi | null;
-    className?: string })`
+  - music: `MIDDLE_C: Midi` (60); `isBlackKey(key: Midi): boolean`; `KeyRange = { from: Midi; to: Midi }`;
+    `keyboardRange(keys: readonly Midi[], least: KeyRange): KeyRange` — `least`, grown as far as the keys need: down
+    to the C at or below the lowest key, up to the B at or above the highest. Every key fits, and the keyboard never
+    shrinks below `least`, so it does not jump while a chord changes inside it.
+  - shared/lib: `keyboardLayout(range: KeyRange): { keys: KeyGeometry[]; whites: number }` with
+    `KeyGeometry = { midi: Midi; black: boolean; left: number; width: number; height: number }` (percent of the
+    keyboard's width and height). A range that starts or ends on a black key widens to the white key beside it.
+  - `KeyTone = ChordRole | 'rh' | 'lh' | 'melody'`; `KeyMark = { tone: KeyTone; label?: string }`
+  - `PianoKeyboard(props: { label: string; range: KeyRange; marks?: ReadonlyMap<Midi, KeyMark>;
+    pressed?: ReadonlySet<Midi>; lit?: ReadonlySet<Midi>; outlined?: ReadonlySet<Midi>; wrong?: ReadonlySet<Midi>;
+    selectable?: boolean; selected?: ReadonlySet<Midi>; onKeyPress?: (midi: Midi) => void; minWhiteWidth?: number;
+    centre?: Midi | null; className?: string })`. A key's face, strongest first: wrong (red), lit (teal: the key
+    sounding now, fading in over 80ms), marked (its role or hand colour, with its label), selected (teal: a quiz
+    key chosen), pressed (held on MIDI), plain. `outlined` rings a key whatever its face.
 
-- [ ] **Step 1: Write the failing layout tests**
+- [ ] **Step 1: Write the failing kernel and layout tests**
 
-`layout.test.ts`:
+`src/shared/lib/music/keyboard.test.ts`:
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { midi } from '@/shared/lib/music'
-import { isBlackKey, keyboardLayout, rangeFor } from './layout'
+import { isBlackKey, keyboardRange, MIDDLE_C } from './keyboard'
+import { midi } from './pitch'
 
-describe('keyboardLayout', () => {
-  it('lays one octave out as 7 white keys with 5 black keys between them', () => {
-    const { keys, whites } = keyboardLayout(midi(60), midi(71))
-    expect(whites).toBe(7)
-    expect(keys.filter((key) => key.black).map((key) => key.midi)).toEqual([61, 63, 66, 68, 70])
-    const c = keys.find((key) => key.midi === 60)
-    const cSharp = keys.find((key) => key.midi === 61)
-    expect(c).toMatchObject({ left: 0, width: 100 / 7, black: false })
-    expect(cSharp?.left).toBeCloseTo(100 / 7 - (100 / 7) * 0.31)
-    expect(cSharp?.width).toBeCloseTo((100 / 7) * 0.62)
-  })
+const ONE_OCTAVE = { from: midi(60), to: midi(71) }
 
-  it('widens a range that starts or ends on a black key to the white keys beside it', () => {
-    const { keys } = keyboardLayout(midi(61), midi(70))
-    expect(keys[0]?.midi).toBe(60)
-    expect(keys.at(-1)?.midi).toBe(70)
-    expect(keys.filter((key) => !key.black).at(-1)?.midi).toBe(71)
-  })
-
-  it('knows the black keys', () => {
-    expect([60, 61, 62, 63, 64, 65, 66].map(isBlackKey)).toEqual([
+describe('isBlackKey', () => {
+  it('knows the black keys in any octave', () => {
+    expect([60, 61, 62, 63, 64, 65, 66].map((key) => isBlackKey(midi(key)))).toEqual([
       false, true, false, true, false, false, true,
     ])
+    expect(isBlackKey(midi(46))).toBe(true)
   })
 })
 
-describe('rangeFor', () => {
-  it('runs from the C below the lowest note to the B above the highest', () => {
-    expect(rangeFor([midi(62), midi(79)], { from: midi(60), to: midi(71) })).toEqual({
-      from: 60,
-      to: 83,
-    })
+describe('keyboardRange', () => {
+  it('runs from the C below the lowest key to the B above the highest', () => {
+    expect(keyboardRange([midi(62), midi(79)], ONE_OCTAVE)).toEqual({ from: 60, to: 83 })
   })
 
-  it('falls back when there are no notes', () => {
-    expect(rangeFor([], { from: midi(48), to: midi(71) })).toEqual({ from: 48, to: 71 })
+  it('never shrinks below the least range, so the keyboard does not jump', () => {
+    expect(keyboardRange([midi(64), midi(67)], ONE_OCTAVE)).toEqual(ONE_OCTAVE)
+    expect(keyboardRange([], ONE_OCTAVE)).toEqual(ONE_OCTAVE)
+  })
+
+  it('keeps a least range that does not end on a B while the keys fit inside it', () => {
+    const least = { from: midi(60), to: midi(76) }
+    expect(keyboardRange([midi(60), midi(64), midi(67)], least)).toEqual(least)
+  })
+
+  it('grows downwards for a low left hand', () => {
+    expect(keyboardRange([midi(43), midi(67)], ONE_OCTAVE)).toEqual({ from: 36, to: 71 })
+  })
+
+  it('names middle C', () => {
+    expect(MIDDLE_C).toBe(60)
   })
 })
 ```
 
-Run: `npx vitest run src/shared/ui/piano-keyboard/layout.test.ts`
-Expected: FAIL.
-
-- [ ] **Step 2: Implement `layout.ts`**
+`src/shared/lib/keyboard-layout.test.ts`:
 
 ```ts
-import { midi, type Midi } from '@/shared/lib/music'
+import { describe, expect, it } from 'vitest'
+import { keyboardLayout } from './keyboard-layout'
+import { midi } from './music'
+
+describe('keyboardLayout', () => {
+  it('lays one octave out as 7 white keys with 5 shorter black keys between them', () => {
+    const { keys, whites } = keyboardLayout({ from: midi(60), to: midi(71) })
+    expect(whites).toBe(7)
+    expect(keys.filter((key) => key.black).map((key) => key.midi)).toEqual([61, 63, 66, 68, 70])
+    const c = keys.find((key) => key.midi === 60)
+    const cSharp = keys.find((key) => key.midi === 61)
+    expect(c).toMatchObject({ left: 0, width: 100 / 7, height: 100, black: false })
+    expect(cSharp?.left).toBeCloseTo(100 / 7 - (100 / 7) * 0.31)
+    expect(cSharp?.width).toBeCloseTo((100 / 7) * 0.62)
+    expect(cSharp?.height).toBe(62)
+  })
+
+  it('widens a range that starts or ends on a black key to the white keys beside it', () => {
+    const { keys } = keyboardLayout({ from: midi(61), to: midi(70) })
+    expect(keys[0]?.midi).toBe(60)
+    expect(keys.at(-1)?.midi).toBe(71)
+  })
+})
+```
+
+Run: `npx vitest run src/shared/lib/music/keyboard.test.ts src/shared/lib/keyboard-layout.test.ts`
+Expected: FAIL.
+
+- [ ] **Step 2: Implement them**
+
+`src/shared/lib/music/keyboard.ts`:
+
+```ts
+import { midi, pitchClass, type Midi } from './pitch'
+
+export const MIDDLE_C: Midi = midi(60)
 
 const BLACK = new Set([1, 3, 6, 8, 10])
-/** A black key sits over the gap between two white keys, 62% as wide as a white key. */
-const BLACK_WIDTH = 0.62
 
-export const isBlackKey = (key: number): boolean => BLACK.has(((key % 12) + 12) % 12)
+export const isBlackKey = (key: Midi): boolean => BLACK.has(pitchClass(key))
+
+/** A stretch of the keyboard, both ends included. */
+export interface KeyRange {
+  readonly from: Midi
+  readonly to: Midi
+}
+
+/**
+ * `least`, grown as far as the keys need: down to the C at or below the lowest key, up to the B at
+ * or above the highest. Keys inside `least` leave it as it is.
+ */
+export function keyboardRange(keys: readonly Midi[], least: KeyRange): KeyRange {
+  if (keys.length === 0) return least
+  const low = Math.min(...keys)
+  const high = Math.max(...keys)
+  return {
+    from: midi(Math.min(least.from, low - pitchClass(low))),
+    to: midi(Math.max(least.to, high + 11 - pitchClass(high))),
+  }
+}
+```
+
+Export `MIDDLE_C, isBlackKey, keyboardRange, type KeyRange` from `src/shared/lib/music/index.ts`.
+
+`src/shared/lib/keyboard-layout.ts`:
+
+```ts
+import { isBlackKey, midi, type KeyRange, type Midi } from '@/shared/lib/music'
+
+/** A black key sits over the gap between two white keys, 62% as wide and 62% as long. */
+const BLACK_WIDTH = 0.62
+const BLACK_HEIGHT = 62
 
 export interface KeyGeometry {
   readonly midi: Midi
@@ -1127,43 +1299,35 @@ export interface KeyGeometry {
   /** Percent of the keyboard's width. */
   readonly left: number
   readonly width: number
+  /** Percent of the keyboard's height. */
+  readonly height: number
 }
 
-/** Every key from `from` to `to` (widened to white keys), placed in percent of the width. */
-export function keyboardLayout(from: Midi, to: Midi): { keys: KeyGeometry[]; whites: number } {
-  let low: number = from
-  let high: number = to
-  while (isBlackKey(low)) low--
-  while (isBlackKey(high)) high++
+/** Every key of the range (widened to white keys), placed in percent of the keyboard. */
+export function keyboardLayout(range: KeyRange): { keys: KeyGeometry[]; whites: number } {
+  let low: number = range.from
+  let high: number = range.to
+  while (isBlackKey(midi(low))) low--
+  while (isBlackKey(midi(high))) high++
   const whiteKeys: number[] = []
-  for (let key = low; key <= high; key++) if (!isBlackKey(key)) whiteKeys.push(key)
+  for (let key = low; key <= high; key++) if (!isBlackKey(midi(key))) whiteKeys.push(key)
   const width = 100 / whiteKeys.length
   const keys: KeyGeometry[] = []
   for (let key = low; key <= high; key++) {
-    if (!isBlackKey(key)) {
-      keys.push({ midi: midi(key), black: false, left: whiteKeys.indexOf(key) * width, width })
+    if (isBlackKey(midi(key))) {
+      const left = (whiteKeys.indexOf(key - 1) + 1) * width - (width * BLACK_WIDTH) / 2
+      keys.push({ midi: midi(key), black: true, left, width: width * BLACK_WIDTH, height: BLACK_HEIGHT })
     } else {
-      const below = whiteKeys.indexOf(key - 1)
-      const left = (below + 1) * width - (width * BLACK_WIDTH) / 2
-      keys.push({ midi: midi(key), black: true, left, width: width * BLACK_WIDTH })
+      keys.push({ midi: midi(key), black: false, left: whiteKeys.indexOf(key) * width, width, height: 100 })
     }
   }
   return { keys, whites: whiteKeys.length }
 }
-
-/** From the C at or below the lowest note to the B at or above the highest; the fallback if none. */
-export function rangeFor(
-  keys: readonly Midi[],
-  fallback: { from: Midi; to: Midi },
-): { from: Midi; to: Midi } {
-  if (keys.length === 0) return fallback
-  const low = Math.min(...keys)
-  const high = Math.max(...keys)
-  return { from: midi(low - (low % 12)), to: midi(high + 11 - (high % 12)) }
-}
 ```
 
-Run the layout tests. Expected: PASS.
+Add `export { keyboardLayout, type KeyGeometry } from './keyboard-layout'` to `src/shared/lib/index.ts`.
+
+Run the two test files. Expected: PASS.
 
 - [ ] **Step 3: Write the failing component tests**
 
@@ -1177,11 +1341,11 @@ import { midi, type Midi } from '@/shared/lib/music'
 import { type KeyMark, PianoKeyboard } from './PianoKeyboard'
 
 const C4 = midi(60)
-const B4 = midi(71)
+const ONE_OCTAVE = { from: C4, to: midi(71) }
 
 describe('PianoKeyboard', () => {
   it('is a labelled group of keys named by note', () => {
-    render(<PianoKeyboard label="Keyboard" from={C4} to={B4} />)
+    render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} />)
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     const names = within(keyboard).getAllByRole('button').map((key) => key.getAttribute('aria-label'))
     expect(names).toEqual([
@@ -1193,33 +1357,40 @@ describe('PianoKeyboard', () => {
   it('reports a pressed key', async () => {
     const user = userEvent.setup()
     const onKeyPress = vi.fn()
-    render(<PianoKeyboard label="Keyboard" from={C4} to={B4} onKeyPress={onKeyPress} />)
+    render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} onKeyPress={onKeyPress} />)
     await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
     expect(onKeyPress).toHaveBeenCalledWith(66)
   })
 
   it('shows a mark with its label and colour', () => {
     const marks = new Map<Midi, KeyMark>([[midi(62), { tone: 'root', label: '1' }]])
-    render(<PianoKeyboard label="Keyboard" from={C4} to={B4} marks={marks} />)
+    render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} marks={marks} />)
     const d = screen.getByRole('button', { name: 'D4' })
     expect(d).toHaveTextContent('1')
     expect(d).toHaveClass('bg-role-root')
   })
 
-  it('makes keys toggles when they are selectable', () => {
-    render(
-      <PianoKeyboard label="Keyboard" from={C4} to={B4} selectable selected={new Set([C4])} />,
-    )
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveAttribute('aria-pressed', 'true')
+  it('makes keys toggles when they are selectable, and fills the selected ones teal', () => {
+    render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} selectable selected={new Set([C4])} />)
+    const c = screen.getByRole('button', { name: 'C4' })
+    expect(c).toHaveAttribute('aria-pressed', 'true')
+    expect(c).toHaveClass('bg-primary')
     expect(screen.getByRole('button', { name: 'D4' })).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it('lights the key sounding now over its mark', () => {
+    const marks = new Map<Midi, KeyMark>([[C4, { tone: 'root', label: '1' }]])
+    render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} marks={marks} lit={new Set([C4])} />)
+    const c = screen.getByRole('button', { name: 'C4' })
+    expect(c).toHaveClass('bg-primary')
+    expect(c).toHaveTextContent('1')
   })
 
   it('shows a wrong key and an outlined one', () => {
     render(
       <PianoKeyboard
         label="Keyboard"
-        from={C4}
-        to={B4}
+        range={ONE_OCTAVE}
         wrong={new Set([midi(64)])}
         outlined={new Set([midi(67)])}
       />,
@@ -1236,14 +1407,20 @@ Expected: FAIL.
 - [ ] **Step 4: Implement `PianoKeyboard.tsx`**
 
 ```tsx
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ChordRole, Midi } from '@/shared/lib/music'
-import { cn } from '@/shared/lib'
+import { cn, keyboardLayout, useMediaQuery } from '@/shared/lib'
+import {
+  isBlackKey,
+  pitchClass,
+  plainSpelling,
+  type ChordRole,
+  type KeyRange,
+  type Midi,
+} from '@/shared/lib/music'
 import { ROLE_BG } from '../role-classes'
-import { keyboardLayout } from './layout'
 
-export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody' | 'selected'
+export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody'
 export interface KeyMark {
   readonly tone: KeyTone
   readonly label?: string
@@ -1254,19 +1431,19 @@ const TONE_BG: Readonly<Record<KeyTone, string>> = {
   rh: 'bg-hand-rh',
   lh: 'bg-hand-lh',
   melody: 'bg-hand-melody',
-  selected: 'bg-primary',
 }
-
-const LETTERS = ['C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'G', 'A', 'A', 'B'] as const
 
 interface KeyProps {
   readonly midi: Midi
   readonly black: boolean
+  /** Percent of the keyboard, from keyboardLayout. */
   readonly left: number
   readonly width: number
+  readonly height: number
   readonly name: string
   readonly mark: KeyMark | undefined
   readonly pressed: boolean
+  readonly lit: boolean
   readonly outlined: boolean
   readonly wrong: boolean
   readonly selectable: boolean
@@ -1274,37 +1451,37 @@ interface KeyProps {
   readonly onKeyPress: ((midi: Midi) => void) | undefined
 }
 
+function faceOf(props: KeyProps): string {
+  if (props.wrong) return 'bg-destructive text-on-role'
+  if (props.lit) return 'bg-primary text-primary-foreground'
+  if (props.mark) return cn(TONE_BG[props.mark.tone], 'text-on-role')
+  if (props.selected) return 'bg-primary text-primary-foreground'
+  if (props.pressed) return 'bg-key-pressed'
+  return props.black ? 'bg-key-black' : 'bg-key-white'
+}
+
 const Key = memo(function Key(props: KeyProps) {
-  const { black, mark } = props
-  const face = props.wrong
-    ? 'bg-destructive text-on-role'
-    : mark
-      ? cn(TONE_BG[mark.tone], 'text-on-role')
-      : props.pressed
-        ? 'bg-key-pressed'
-        : black
-          ? 'bg-key-black'
-          : 'bg-key-white'
+  const { onKeyPress } = props
   return (
     <button
       type="button"
       aria-label={props.name}
-      data-midi={props.midi}
       aria-pressed={props.selectable ? props.selected : undefined}
-      onClick={props.onKeyPress ? () => props.onKeyPress?.(props.midi) : undefined}
+      onClick={onKeyPress ? () => onKeyPress(props.midi) : undefined}
       className={cn(
-        'absolute top-0 flex items-end justify-center transition-colors duration-100 ease-out outline-none focus-visible:z-20 focus-visible:ring-3 focus-visible:ring-ring',
-        black
-          ? 'z-10 h-[62%] rounded-b-md pb-1.5'
-          : 'h-full rounded-b-lg border border-t-0 border-key-white-edge pb-2.5',
-        face,
-        props.outlined && 'ring-3 ring-primary ring-inset',
+        'absolute top-0 flex items-end justify-center transition-colors duration-80 ease-out outline-none focus-visible:z-20 focus-visible:ring-3 focus-visible:ring-ring',
+        props.black
+          ? 'z-10 rounded-b-xs pb-1.5'
+          : 'rounded-b-sm border border-t-0 border-key-white-edge pb-2.5',
+        onKeyPress ? 'hover:brightness-95 active:brightness-90' : null,
+        faceOf(props),
+        props.outlined ? 'ring-3 ring-primary ring-inset' : null,
       )}
-      style={{ left: `${props.left}%`, width: `${props.width}%` }}
+      style={{ left: `${props.left}%`, width: `${props.width}%`, height: `${props.height}%` }}
     >
-      {mark?.label ? (
+      {props.mark?.label ? (
         <span aria-hidden className="text-sm font-bold tabular-nums">
-          {mark.label}
+          {props.mark.label}
         </span>
       ) : null}
     </button>
@@ -1314,10 +1491,10 @@ const Key = memo(function Key(props: KeyProps) {
 /** The one keyboard (spec §8): keys are buttons named by note; marks colour and label them. */
 export function PianoKeyboard({
   label,
-  from,
-  to,
+  range,
   marks,
   pressed,
+  lit,
   outlined,
   wrong,
   selectable = false,
@@ -1328,10 +1505,12 @@ export function PianoKeyboard({
   className,
 }: {
   label: string
-  from: Midi
-  to: Midi
+  range: KeyRange
   marks?: ReadonlyMap<Midi, KeyMark>
+  /** Keys held down on the MIDI keyboard. */
   pressed?: ReadonlySet<Midi>
+  /** The key sounding now: a scale run's current note, Name chord's chord. */
+  lit?: ReadonlySet<Midi>
   outlined?: ReadonlySet<Midi>
   /** Keys shown red: a wrong key in Your turn, the extra keys of a quiz answer. */
   wrong?: ReadonlySet<Midi>
@@ -1345,7 +1524,9 @@ export function PianoKeyboard({
   className?: string
 }) {
   const { t } = useTranslation('common')
-  const { keys, whites } = keyboardLayout(from, to)
+  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const { from, to } = range
+  const { keys, whites } = useMemo(() => keyboardLayout({ from, to }), [from, to])
   const scroller = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -1353,17 +1534,20 @@ export function PianoKeyboard({
     const key = keys.find((k) => k.midi === centre)
     if (!element || !key || element.scrollWidth <= element.clientWidth) return
     const middle = ((key.left + key.width / 2) / 100) * element.scrollWidth
-    element.scrollTo({ left: middle - element.clientWidth / 2, behavior: 'smooth' })
-  }, [centre, keys])
+    element.scrollTo({
+      left: middle - element.clientWidth / 2,
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    })
+  }, [centre, keys, reduceMotion])
 
   const nameOf = (key: Midi) => {
+    const spelled = plainSpelling(pitchClass(key), true)
     const octave = Math.floor(key / 12) - 1
-    const letter = LETTERS[key % 12] ?? 'C'
-    return t(isSharp(key) ? 'key.sharp' : 'key.natural', { letter, octave })
+    return t(isBlackKey(key) ? 'note.sharp' : 'note.natural', { letter: spelled.letter, octave })
   }
 
   return (
-    <div ref={scroller} className={cn('overflow-x-auto [scrollbar-width:none]', className)}>
+    <div ref={scroller} className={cn('overflow-x-auto scrollbar-none', className)}>
       <div
         role="group"
         aria-label={label}
@@ -1377,9 +1561,11 @@ export function PianoKeyboard({
             black={key.black}
             left={key.left}
             width={key.width}
+            height={key.height}
             name={nameOf(key.midi)}
             mark={marks?.get(key.midi)}
             pressed={pressed?.has(key.midi) ?? false}
+            lit={lit?.has(key.midi) ?? false}
             outlined={outlined?.has(key.midi) ?? false}
             wrong={wrong?.has(key.midi) ?? false}
             selectable={selectable}
@@ -1391,30 +1577,30 @@ export function PianoKeyboard({
     </div>
   )
 }
-
-const isSharp = (key: number) => [1, 3, 6, 8, 10].includes(key % 12)
 ```
+
+`Key` is memoised deliberately (CODE_STYLE §7): a Player keyboard has up to 50 keys under a parent that re-renders
+every beat group, and only the keys whose face changed need to. Its props are numbers, booleans, a mark and the
+caller's `onKeyPress`; the Player hands in `usePractice`'s stable `press`, so a beat re-renders only its keys.
 
 `index.ts`:
 
 ```ts
-export { isBlackKey, keyboardLayout, rangeFor, type KeyGeometry } from './layout'
 export { PianoKeyboard, type KeyMark, type KeyTone } from './PianoKeyboard'
 ```
 
-and export them from `src/shared/ui/index.ts`. The `h-[62%]` is a geometry ratio, not a spacing value; if the lint or
-review rejects it, add `--keyboard-black-height: 62%` to `theme.css` as `@utility h-black-key` and use that.
+and export them from `src/shared/ui/index.ts`.
 
-Run both keyboard test files. Expected: PASS. (`useTranslation` works without a provider: the i18n instance is
-initialised by the test setup.)
+Run the keyboard tests. Expected: PASS. (`useTranslation` works without a provider: the test setup initialises the
+i18n instance. `useMediaQuery` reads the `stubMatchMedia` fake.)
 
 - [ ] **Step 5: Verify and commit**
 
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/shared/ui
-git add -A src/shared/ui
+npx prettier --write src/shared/ui src/shared/lib
+git add -A src/shared/ui src/shared/lib
 git commit -m "Draw one keyboard for every screen, keys named by note and marked by role or hand
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -1461,7 +1647,7 @@ import { Spinner } from '@/shared/ui/primitives/spinner'
 export function RoutePending() {
   const { t } = useTranslation('common')
   return (
-    <div role="status" aria-label={t('loading')} className="grid min-h-[50dvh] place-items-center">
+    <div role="status" aria-label={t('loading')} className="grid min-h-96 place-items-center">
       <Spinner />
     </div>
   )
@@ -1469,7 +1655,7 @@ export function RoutePending() {
 ```
 
 Add `loading: 'Loading'` / `loading: 'Загрузка'` to `common`. In `createAppRouter` add
-`defaultPendingComponent: RoutePending, defaultPendingMs: 300`. (`min-h-[50dvh]`: if lint objects, use `min-h-96`.)
+`defaultPendingComponent: RoutePending, defaultPendingMs: 300`.
 
 Run the test. Expected: PASS.
 
@@ -1494,7 +1680,7 @@ export function AppNav() {
       aria-label={t('nav.label')}
       className="fixed inset-x-0 bottom-safe z-30 flex justify-center px-4 lg:inset-y-0 lg:right-auto lg:left-0 lg:block lg:w-24 lg:px-0"
     >
-      <ul className="flex gap-1 rounded-full bg-glass p-1.5 shadow-lg ring-1 ring-border backdrop-blur-xl lg:h-full lg:flex-col lg:gap-2 lg:rounded-none lg:bg-card lg:px-2 lg:pt-6 lg:shadow-none lg:ring-0 lg:backdrop-blur-none">
+      <ul className="flex gap-1 rounded-full bg-card/72 p-1.5 shadow-lg ring-1 ring-border backdrop-blur-xl lg:h-full lg:flex-col lg:gap-2 lg:rounded-none lg:bg-card lg:px-2 lg:pt-6 lg:shadow-none lg:ring-0 lg:backdrop-blur-none">
         {ITEMS.map(({ to, label, icon: Icon, exact }) => (
           <li key={to}>
             <Link
@@ -1514,7 +1700,9 @@ export function AppNav() {
 ```
 
 `AppShell.tsx`: `<main className="mx-auto max-w-2xl px-4 pt-safe pb-32 lg:pb-10">`.
-`FullScreenLayout.tsx`: `<main className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 pt-safe pb-safe">`.
+`FullScreenLayout.tsx`: `<main className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 pt-safe pb-safe
+landscape-phone:h-dvh landscape-phone:overflow-y-auto">`. On a landscape phone the main has a definite height, so the
+Player can give its keyboard the lower half (Task 26).
 `UpdateBanner.tsx`: `bottom-28 lg:bottom-4`, `rounded-3xl`, `shadow-lg`.
 
 - [ ] **Step 4: Theory's section switch as segmented links (`TheoryNav.tsx`)**
@@ -1551,9 +1739,11 @@ import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primit
 export function NotFoundPage() {
   const { t } = useTranslation('common')
   return (
-    <Empty className="min-h-[60dvh]">
+    <Empty className="min-h-96">
       <EmptyHeader>
-        <EmptyTitle render={<h1 />}>{t('notFound.title')}</EmptyTitle>
+        <EmptyTitle>
+          <h1 className="text-xl font-bold">{t('notFound.title')}</h1>
+        </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>
         <Button render={<Link to="/songs" />} nativeButton={false}>
@@ -1565,9 +1755,8 @@ export function NotFoundPage() {
 }
 ```
 
-(If the registry's `EmptyTitle` is a plain `div` without `render`, render `<h1 className="text-xl font-bold">`
-inside `EmptyHeader` instead; the router test finds the heading by name.) `RouteError.tsx` gets the same `Empty`
-shape inside `role="alert"`, keeping its title and Reload button.
+(The registry's `EmptyTitle` is a plain `div`, so the heading is an `h1` inside it; the router test finds it by
+name.) `RouteError.tsx` gets the same `Empty` shape inside `role="alert"`, keeping its title and Reload button.
 
 - [ ] **Step 6: Verify and commit**
 
@@ -1583,66 +1772,90 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 ---
-### Task 6: Kernel additions — explorer voicing, scale steps, relatives, URL spelling
+### Task 6: Kernel additions — placed chords and scales, scale gaps, relatives, URL spelling
+
+The glossary's **Voicing** is how much of each chord a progression plays, so the explorers' "where the keys go" gets
+its own name: a **placed tone** is a Tone at a key (Task 28 adds it to the glossary). The W/H names are **scale gaps**,
+because **Step** is a path entry.
 
 **Files:**
-- Create: `src/shared/lib/music/voicing.ts`, `voicing.test.ts`
+- Create: `src/shared/lib/music/place.ts`, `place.test.ts`
 - Modify: `src/shared/lib/music/scale.ts`, `scale.test.ts`, `note.ts`, `note.test.ts`, `index.ts`
 
 **Interfaces:**
 - Produces:
-  - `chordVoicing(root: SpelledNote, quality: ChordQuality, options: { inversion: number; bothHands: boolean }):
-    ChordVoicing` with `ChordVoicing = { rh: readonly PlacedTone[]; lh: readonly PlacedTone[] }`,
-    `PlacedTone = { tone: Tone; midi: Midi }`. The right hand starts on the root at or above middle C; each inversion
-    moves the lowest tone up an octave (at most 3); `bothHands` adds the root an octave below in the left hand.
-  - `ScaleStep = 'H' | 'W' | 'W+H'`; `scaleSteps(kind: ScaleKind): ScaleStep[]`
+  - `PlacedTone = { tone: Tone; midi: Midi }`; `PlacedChord = { rh: readonly PlacedTone[]; lh: readonly PlacedTone[] }`
+  - `lastInversion(quality: ChordQuality): number` — the explorer offers root position and at most three inversions:
+    `min(tones − 1, 3)`. The one rule for which inversions a chord has (the explorer's segments, the URL's validator,
+    `placeChord`).
+  - `placeChord(root: SpelledNote, quality: ChordQuality, options: { inversion: number; bothHands: boolean }):
+    PlacedChord` — the right hand from the root at or above middle C, the first `inversion` tones an octave up; for
+    both hands, the root an octave below in the left hand. An inversion the chord does not have is a `RangeError`
+    (params are validated before they get here).
+  - `placeScale(root: SpelledNote, kind: ScaleKind): PlacedTone[]` — the scale from the root at or above middle C up to
+    the root an octave higher, as the keyboard and the fingering table show it.
+  - `ScaleGap = 'H' | 'W' | 'W+H'`; `scaleGaps(kind: ScaleKind): ScaleGap[]`
   - `relativeScale(root: SpelledNote, kind: ScaleKind): { root: SpelledNote; kind: ScaleKind } | null`
-  - `noteParam(note: SpelledNote): string` — `Bb`, `F#`, read back by `parseNoteName`.
+  - `noteParam(note: SpelledNote): string` — `Bb`, `F#`; `noteFromParam(param: string): SpelledNote` — reads one back,
+    a `RangeError` for anything else.
 
 - [ ] **Step 1: Write the failing tests**
 
-`voicing.test.ts`:
+`place.test.ts`:
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { chordVoicing } from './voicing'
 import { note } from './note'
+import { lastInversion, placeChord, placeScale } from './place'
 
 const keys = (placed: readonly { midi: number }[]) => placed.map((p) => p.midi)
 
-describe('chordVoicing', () => {
+describe('placeChord', () => {
   it('plays C major from middle C in root position', () => {
-    const voicing = chordVoicing(note('C'), 'maj', { inversion: 0, bothHands: false })
-    expect(keys(voicing.rh)).toEqual([60, 64, 67])
-    expect(voicing.lh).toEqual([])
+    const placed = placeChord(note('C'), 'maj', { inversion: 0, bothHands: false })
+    expect(keys(placed.rh)).toEqual([60, 64, 67])
+    expect(placed.lh).toEqual([])
   })
 
-  it('moves the lowest tone up an octave for each inversion', () => {
-    expect(keys(chordVoicing(note('C'), 'maj', { inversion: 1, bothHands: false }).rh)).toEqual([
+  it('moves the lowest tones up an octave for each inversion', () => {
+    expect(keys(placeChord(note('C'), 'maj', { inversion: 1, bothHands: false }).rh)).toEqual([
       64, 67, 72,
     ])
-    expect(keys(chordVoicing(note('C'), 'maj', { inversion: 2, bothHands: false }).rh)).toEqual([
+    expect(keys(placeChord(note('C'), 'maj', { inversion: 2, bothHands: false }).rh)).toEqual([
       67, 72, 76,
     ])
-    expect(keys(chordVoicing(note('G'), 'd7', { inversion: 3, bothHands: false }).rh)).toEqual([
+    expect(keys(placeChord(note('G'), 'd7', { inversion: 3, bothHands: false }).rh)).toEqual([
       77, 79, 83, 86,
     ])
   })
 
-  it('keeps to the inversions a chord has, and at most the third', () => {
-    expect(keys(chordVoicing(note('C'), 'maj', { inversion: 5, bothHands: false }).rh)).toEqual([
-      67, 72, 76,
-    ])
-    expect(
-      keys(chordVoicing(note('C'), 'm69', { inversion: 4, bothHands: false }).rh),
-    ).toEqual(keys(chordVoicing(note('C'), 'm69', { inversion: 3, bothHands: false }).rh))
+  it('refuses an inversion the chord does not have', () => {
+    expect(() => placeChord(note('C'), 'maj', { inversion: 3, bothHands: false })).toThrow(RangeError)
   })
 
   it('adds the root an octave below in the left hand for both hands', () => {
-    const voicing = chordVoicing(note('B', -1), 'maj7', { inversion: 0, bothHands: true })
-    expect(keys(voicing.lh)).toEqual([58])
-    expect(voicing.lh[0]?.tone.role).toBe('root')
-    expect(voicing.rh.map((p) => p.tone.degree)).toEqual(['1', '3', '5', '7'])
+    const placed = placeChord(note('B', -1), 'maj7', { inversion: 0, bothHands: true })
+    expect(keys(placed.lh)).toEqual([58])
+    expect(placed.lh[0]?.tone.role).toBe('root')
+    expect(placed.rh.map((p) => p.tone.degree)).toEqual(['1', '3', '5', '7'])
+  })
+})
+
+describe('lastInversion', () => {
+  it('offers as many inversions as the chord has tones after its root, at most three', () => {
+    expect(lastInversion('maj')).toBe(2)
+    expect(lastInversion('d7')).toBe(3)
+    expect(lastInversion('m69')).toBe(3)
+  })
+})
+
+describe('placeScale', () => {
+  it('runs from the root at or above middle C to the root an octave up', () => {
+    expect(keys(placeScale(note('C'), 'major'))).toEqual([60, 62, 64, 65, 67, 69, 71, 72])
+    const eFlat = placeScale(note('E', -1), 'harmonic')
+    expect(eFlat[0]?.midi).toBe(63)
+    expect(eFlat.at(-1)?.tone.degree).toBe('1')
+    expect(eFlat.at(-1)?.midi).toBe(75)
   })
 })
 ```
@@ -1650,11 +1863,11 @@ describe('chordVoicing', () => {
 Append to `scale.test.ts`:
 
 ```ts
-describe('scaleSteps', () => {
-  it('names the steps up to the octave', () => {
-    expect(scaleSteps('major')).toEqual(['W', 'W', 'H', 'W', 'W', 'W', 'H'])
-    expect(scaleSteps('harmonic')).toEqual(['W', 'H', 'W', 'W', 'H', 'W+H', 'H'])
-    expect(scaleSteps('blues')).toEqual(['W+H', 'W', 'H', 'H', 'W+H', 'W'])
+describe('scaleGaps', () => {
+  it('names the gaps between neighbouring notes up to the octave', () => {
+    expect(scaleGaps('major')).toEqual(['W', 'W', 'H', 'W', 'W', 'W', 'H'])
+    expect(scaleGaps('harmonic')).toEqual(['W', 'H', 'W', 'W', 'H', 'W+H', 'H'])
+    expect(scaleGaps('blues')).toEqual(['W+H', 'W', 'H', 'H', 'W+H', 'W'])
   })
 })
 
@@ -1676,89 +1889,112 @@ describe('relativeScale', () => {
 })
 ```
 
-(import `relativeScale`, `scaleSteps` from `./scale` and `note` from `./note` at the top of the file.)
+(and add `relativeScale, scaleGaps` to its `./scale` import; `note` is already imported.)
 
 Append to `note.test.ts`:
 
 ```ts
-describe('noteParam', () => {
-  it('writes a note for a URL with ASCII accidentals that parseNoteName reads back', () => {
+describe('noteParam and noteFromParam', () => {
+  it('write a note for a URL with ASCII accidentals and read it back', () => {
     for (const spelled of [note('B', -1), note('F', 1), note('C'), note('E', -2)]) {
-      expect(parseNoteName(noteParam(spelled))).toEqual(spelled)
+      expect(noteFromParam(noteParam(spelled))).toEqual(spelled)
     }
     expect(noteParam(note('B', -1))).toBe('Bb')
     expect(noteParam(note('F', 1))).toBe('F#')
   })
+
+  it('refuse a param that is not a note', () => {
+    expect(() => noteFromParam('H')).toThrow(RangeError)
+  })
 })
 ```
+
+(and add `noteFromParam, noteParam` to its `./note` import.)
 
 Run: `npx vitest run src/shared/lib/music`
 Expected: FAIL (missing exports).
 
 - [ ] **Step 2: Implement**
 
-`voicing.ts`:
+`place.ts`:
 
 ```ts
-import { spellChord, type ChordQuality } from './chord'
+import { qualityIntervals, spellChord, type ChordQuality } from './chord'
+import { MIDDLE_C } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
 import { midi, type Midi } from './pitch'
+import { spellScale, type ScaleKind } from './scale'
 import type { Tone } from './tone'
 
+/** A tone at a key on the keyboard. */
 export interface PlacedTone {
   readonly tone: Tone
   readonly midi: Midi
 }
 
-export interface ChordVoicing {
+/** A chord's keys, by hand. */
+export interface PlacedChord {
   readonly rh: readonly PlacedTone[]
   readonly lh: readonly PlacedTone[]
 }
 
-const MIDDLE_C = 60
-/** The explorer offers root position and the first three inversions. */
-const LAST_INVERSION = 3
+/** The explorer offers root position and at most the first three inversions. */
+const MOST_INVERSIONS = 3
+
+/** The last inversion the explorer offers for a chord: one per tone after the root, at most three. */
+export const lastInversion = (quality: ChordQuality): number =>
+  Math.min(qualityIntervals(quality).length - 1, MOST_INVERSIONS)
 
 /**
- * A chord as the Chords explorer shows it: the right hand from the root at or above middle C, each
- * inversion moving the lowest tone up an octave, and for both hands the root an octave below.
+ * A chord as the explorers place it: the right hand from the root at or above middle C, the first
+ * `inversion` tones an octave up (a chord's tones rise in formula order, so these are its lowest),
+ * and for both hands the root an octave below in the left hand.
  */
-export function chordVoicing(
+export function placeChord(
   root: SpelledNote,
   quality: ChordQuality,
   options: { readonly inversion: number; readonly bothHands: boolean },
-): ChordVoicing {
-  const tones = spellChord(root, quality)
+): PlacedChord {
+  const last = lastInversion(quality)
+  if (!Number.isInteger(options.inversion) || options.inversion < 0 || options.inversion > last) {
+    throw new RangeError(`${quality} has inversions 0–${last}, not ${options.inversion}`)
+  }
   const base = MIDDLE_C + pitchClassOf(root)
-  const placed = tones.map((tone) => ({ tone, key: base + tone.semitones }))
-  const inversion = Math.max(0, Math.min(options.inversion, tones.length - 1, LAST_INVERSION))
-  for (let k = 0; k < inversion; k++) {
-    placed.sort((a, b) => a.key - b.key)
-    const lowest = placed[0]
-    if (lowest) lowest.key += 12
-  }
-  placed.sort((a, b) => a.key - b.key)
-  const first = tones[0]
+  const tones = spellChord(root, quality)
   return {
-    rh: placed.map(({ tone, key }) => ({ tone, midi: midi(key) })),
-    lh: options.bothHands && first ? [{ tone: first, midi: midi(base - 12) }] : [],
+    rh: tones
+      .map((tone, i) => ({ tone, midi: midi(base + tone.semitones + (i < options.inversion ? 12 : 0)) }))
+      .sort((a, b) => a.midi - b.midi),
+    lh: options.bothHands ? tones.slice(0, 1).map((tone) => ({ tone, midi: midi(base - 12) })) : [],
   }
+}
+
+/** A scale as the keyboard shows it: from the root at or above middle C to the root an octave up. */
+export function placeScale(root: SpelledNote, kind: ScaleKind): PlacedTone[] {
+  const base = MIDDLE_C + pitchClassOf(root)
+  const tones = spellScale(root, kind)
+  return [
+    ...tones.map((tone) => ({ tone, midi: midi(base + tone.semitones) })),
+    ...tones.slice(0, 1).map((tone) => ({ tone, midi: midi(base + 12) })),
+  ]
 }
 ```
 
 `scale.ts` — add:
 
 ```ts
-export type ScaleStep = 'H' | 'W' | 'W+H'
-const STEP_NAMES: Readonly<Record<number, ScaleStep>> = { 1: 'H', 2: 'W', 3: 'W+H' }
+/** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
+export type ScaleGap = 'H' | 'W' | 'W+H'
+const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }
 
-/** The steps between neighbouring notes up to the octave: W, H, or W+H for three semitones. */
-export function scaleSteps(kind: ScaleKind): ScaleStep[] {
+/** The gaps between neighbouring notes up to the octave: W, H, or W+H. */
+export function scaleGaps(kind: ScaleKind): ScaleGap[] {
   const semitones = [...scaleIntervals(kind).map((interval) => interval.semitones), 12]
   return semitones.slice(1).map((above, i) => {
-    const step = STEP_NAMES[above - (semitones[i] ?? 0)]
-    if (!step) throw new RangeError(`${kind} has a step of ${above - (semitones[i] ?? 0)}`)
-    return step
+    const size = above - (semitones[i] ?? 0)
+    const gap = GAP_BY_SEMITONES[size]
+    if (!gap) throw new RangeError(`${kind} has a gap of ${size} semitones`)
+    return gap
   })
 }
 
@@ -1786,14 +2022,21 @@ export function relativeScale(
 `note.ts` — add:
 
 ```ts
-/** A note as a URL writes it, ASCII `b` and `#` (`Bb`, `F#`); parseNoteName reads it back. */
+/** A note as a URL writes it, ASCII `b` and `#` (`Bb`, `F#`); noteFromParam reads it back. */
 export const noteParam = (spelled: SpelledNote): string =>
   spelled.letter +
   (spelled.accidental < 0 ? 'b'.repeat(-spelled.accidental) : '#'.repeat(spelled.accidental))
+
+/** A note written by noteParam. A URL's params are validated first, so anything else is a bug. */
+export function noteFromParam(param: string): SpelledNote {
+  const spelled = parseNoteName(param)
+  if (!spelled) throw new RangeError(`${param} is not a note`)
+  return spelled
+}
 ```
 
-`index.ts` — export `noteParam` from `./note`, `relativeScale, scaleSteps, type ScaleStep` from `./scale`, and
-`export { chordVoicing, type ChordVoicing, type PlacedTone } from './voicing'`.
+`index.ts` — export `noteFromParam, noteParam` from `./note`, `relativeScale, scaleGaps, type ScaleGap` from
+`./scale`, and `export { lastInversion, placeChord, placeScale, type PlacedChord, type PlacedTone } from './place'`.
 
 Run: `npx vitest run src/shared/lib/music`
 Expected: PASS.
@@ -1805,7 +2048,7 @@ Run: `npm run typecheck && npm run lint && npm run test`
 ```bash
 npx prettier --write src/shared/lib/music
 git add src/shared/lib/music
-git commit -m "Voice explorer chords, name scale steps and relatives, spell notes for URLs
+git commit -m "Place chords and scales on the keys, name scale gaps and relatives, spell notes for URLs
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -1821,8 +2064,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Produces:
   - `valueOr<T>(is: (value: unknown) => value is T, raw: unknown, fallback: T): T`
-  - `wholeIn(raw: unknown, min: number, max: number, fallback: number): number`
-  - `noteIn(raw: unknown, fallback: string): string` — a note with at most one accidental, re-written by `noteParam`
+  - `wholeIn<F>(raw: unknown, min: number, max: number, fallback: F): number | F` — `fallback` may be `undefined`,
+    for a param whose default depends on the piece
+  - `readNote(raw: unknown): SpelledNote | null` — a note with at most one sharp or flat, written as a URL writes it
+    (`Bb`, `F#`) or with `♭`; null for anything else
   - `foldText(text: string): string`; `matchesQuery(fields: readonly string[], query: string): boolean`
 
 - [ ] **Step 1: Write the failing tests**
@@ -1832,7 +2077,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```ts
 import { describe, expect, it } from 'vitest'
 import { isOneOf } from './is-one-of'
-import { noteIn, valueOr, wholeIn } from './search-params'
+import { note } from './music'
+import { readNote, valueOr, wholeIn } from './search-params'
 
 const isMode = isOneOf(['listen', 'step', 'turn'] as const)
 
@@ -1855,17 +2101,21 @@ describe('wholeIn', () => {
       expect(wholeIn(raw, 40, 160, 80)).toBe(80)
     }
   })
+
+  it('falls back to nothing when the default is not known here', () => {
+    expect(wholeIn('fast', 40, 160, undefined)).toBeUndefined()
+  })
 })
 
-describe('noteIn', () => {
-  it('reads a note with at most one sharp or flat, written the URL way', () => {
-    expect(noteIn('Bb', 'C')).toBe('Bb')
-    expect(noteIn('B♭', 'C')).toBe('Bb')
-    expect(noteIn('F#', 'C')).toBe('F#')
+describe('readNote', () => {
+  it('reads a note with at most one sharp or flat', () => {
+    expect(readNote('Bb')).toEqual(note('B', -1))
+    expect(readNote('B♭')).toEqual(note('B', -1))
+    expect(readNote('F#')).toEqual(note('F', 1))
   })
 
-  it('falls back for a double accidental, H, lower case or not a note', () => {
-    for (const raw of ['Ebb', 'H', 'c', '', 7]) expect(noteIn(raw, 'C')).toBe('C')
+  it('reads nothing from a double accidental, H, lower case or not a note', () => {
+    for (const raw of ['Ebb', 'H', 'c', '', 7]) expect(readNote(raw)).toBeNull()
   })
 })
 ```
@@ -1904,24 +2154,24 @@ Expected: FAIL.
 `search-params.ts`:
 
 ```ts
-import { noteParam, parseNoteName } from '@/shared/lib/music'
+import { parseNoteName, type SpelledNote } from '@/shared/lib/music'
 
 /** `raw` when the guard accepts it, else the fallback: the one rule for a search param. */
 export const valueOr = <T>(is: (value: unknown) => value is T, raw: unknown, fallback: T): T =>
   is(raw) ? raw : fallback
 
 /** A whole number from min to max, as a number or as text; else the fallback. */
-export function wholeIn(raw: unknown, min: number, max: number, fallback: number): number {
+export function wholeIn<F>(raw: unknown, min: number, max: number, fallback: F): number | F {
   const value = typeof raw === 'string' && raw.trim() !== '' ? Number(raw) : raw
   return typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max
     ? value
     : fallback
 }
 
-/** A note with at most one sharp or flat, written back the URL way (`Bb`); else the fallback. */
-export function noteIn(raw: unknown, fallback: string): string {
+/** A note with at most one sharp or flat (a URL offers no double accidental); null for anything else. */
+export function readNote(raw: unknown): SpelledNote | null {
   const note = typeof raw === 'string' ? parseNoteName(raw) : null
-  return note && Math.abs(note.accidental) <= 1 ? noteParam(note) : fallback
+  return note && Math.abs(note.accidental) <= 1 ? note : null
 }
 ```
 
@@ -1943,7 +2193,7 @@ Add to `src/shared/lib/index.ts`:
 
 ```ts
 export { foldText, matchesQuery } from './fold-text'
-export { noteIn, valueOr, wholeIn } from './search-params'
+export { readNote, valueOr, wholeIn } from './search-params'
 ```
 
 Run the two test files. Expected: PASS.
@@ -1975,10 +2225,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   - `chordSounds(keys: readonly Midi[], options: { arpeggio: boolean }): NoteSound[]`
   - `PRACTICE_RHYTHMS: Record<PracticeRhythm, readonly number[]>`, `PRACTICE_RHYTHM_IDS: readonly PracticeRhythm[]`,
     `PracticeRhythm = 'even' | 'long-short' | 'short-long' | 'long-short-short-short' | 'short-short-short-long'`
-  - `scaleRun(keys: readonly Midi[], options: { rhythm: PracticeRhythm; tempo: number; hands: Hands }): ScaleRun`
-    with `ScaleRun = { sounds: readonly NoteSound[]; steps: readonly { key: Midi; at: number }[]; end: number }`.
-    `keys` are the scale's keys ascending including the octave, as the keyboard shows them; the run goes up and back
-    down in eighth notes; `steps` name the shown key sounding at each time.
+  - `scaleRun(notes: readonly Midi[], options: { rhythm: PracticeRhythm; tempo: number; hands: Hands }): ScaleRun`
+    with `ScaleRun = { sounds: readonly NoteSound[]; cues: readonly Cue[]; end: number }` and
+    `Cue = { midi: Midi; at: number }`. `notes` are the scale's keys ascending including the octave, as the keyboard
+    shows them; the run goes up and back down in eighth notes; each cue names the shown key sounding from `at`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2040,16 +2290,16 @@ describe('chordSounds', () => {
 describe('scaleRun', () => {
   it('goes up and back down in even eighth notes', () => {
     const run = scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'rh' })
-    expect(run.steps.map((s) => s.key)).toEqual([
+    expect(run.cues.map((cue) => cue.midi)).toEqual([
       60, 62, 64, 65, 67, 69, 71, 72, 71, 69, 67, 65, 64, 62, 60,
     ])
-    expect(run.steps[1]?.at).toBeCloseTo(0.5)
+    expect(run.cues[1]?.at).toBeCloseTo(0.5)
     expect(run.end).toBeCloseTo(15 * 0.5)
   })
 
   it('repeats the rhythm’s lengths', () => {
     const run = scaleRun(C_MAJOR, { rhythm: 'long-short', tempo: 60, hands: 'rh' })
-    expect(run.steps.slice(0, 3).map((s) => s.at)).toEqual([0, 0.75, 1])
+    expect(run.cues.slice(0, 3).map((cue) => cue.at)).toEqual([0, 0.75, 1])
     expect(PRACTICE_RHYTHMS['long-short']).toEqual([1.5, 0.5])
   })
 
@@ -2114,10 +2364,15 @@ export const PRACTICE_RHYTHMS = {
 export type PracticeRhythm = keyof typeof PRACTICE_RHYTHMS
 export const PRACTICE_RHYTHM_IDS = Object.keys(PRACTICE_RHYTHMS) as readonly PracticeRhythm[]
 
+/** The shown key that sounds from `at` seconds into a run, for lighting it. */
+export interface Cue {
+  readonly midi: Midi
+  readonly at: number
+}
+
 export interface ScaleRun {
   readonly sounds: readonly NoteSound[]
-  /** The shown key sounding at each time, for lighting it. */
-  readonly steps: readonly { readonly key: Midi; readonly at: number }[]
+  readonly cues: readonly Cue[]
   readonly end: number
 }
 
@@ -2129,24 +2384,24 @@ const OCTAVES_BY_HANDS: Readonly<Record<Hands, readonly number[]>> = {
 
 /** A scale up and back down in eighth notes, in a practice rhythm, for one hand or both. */
 export function scaleRun(
-  keys: readonly Midi[],
+  notes: readonly Midi[],
   options: { readonly rhythm: PracticeRhythm; readonly tempo: number; readonly hands: Hands },
 ): ScaleRun {
   const lengths = PRACTICE_RHYTHMS[options.rhythm]
   const eighth = 60 / options.tempo / 2
-  const path = [...keys, ...keys.slice(0, -1).reverse()]
+  const upAndDown = [...notes, ...notes.slice(0, -1).reverse()]
   const offsets = OCTAVES_BY_HANDS[options.hands]
   const velocity = offsets.length > 1 ? 0.16 : 0.2
   const sounds: NoteSound[] = []
-  const steps: { key: Midi; at: number }[] = []
+  const cues: Cue[] = []
   let at = 0
-  path.forEach((key, i) => {
+  upAndDown.forEach((note, i) => {
     const length = (lengths[i % lengths.length] ?? 1) * eighth
-    steps.push({ key, at })
+    cues.push({ midi: note, at })
     for (const offset of offsets) {
       sounds.push({
         kind: 'note',
-        midi: midi(key + offset),
+        midi: midi(note + offset),
         at,
         duration: Math.max(0.25, length * 1.1),
         velocity,
@@ -2154,7 +2409,7 @@ export function scaleRun(
     }
     at += length
   })
-  return { sounds, steps, end: at }
+  return { sounds, cues, end: at }
 }
 ```
 
@@ -2167,6 +2422,7 @@ export {
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
   scaleRun,
+  type Cue,
   type PracticeRhythm,
   type ScaleRun,
 } from './sounds'
@@ -2188,42 +2444,50 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 9: `usePlay`
+### Task 9: `usePlay` and `usePlayChord`
 
 **Files:**
 - Create: `src/shared/lib/services/use-play.ts`, `use-play.test.tsx`
 - Modify: `src/shared/lib/services/index.ts`
 
 **Interfaces:**
-- Produces: `usePlay(): (sounds: readonly Sound[]) => number` — unlocks audio, stops what sounds, plays from just after
-  now, and returns that start time on the audio clock.
+- Consumes: `placeChord`, `type Chord` (music); `chordSounds` (Task 8).
+- Produces:
+  - `usePlay(): (sounds: readonly Sound[]) => number` — unlocks audio, stops what sounds, plays from just after now,
+    and returns that start time on the audio clock.
+  - `usePlayChord(): (chord: Chord, options?: { inversion?: number; bothHands?: boolean; arpeggio?: boolean }) =>
+    void` — a chord placed as the explorers place it, struck or rolled: the one way the Chords explorer, a scale's
+    chords and the chord dictionary sound a chord.
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Write the failing tests**
 
 ```tsx
 import { renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
-import { midi } from '@/shared/lib/music'
+import { midi, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
-import { usePlay } from './use-play'
+import { usePlay, usePlayChord } from './use-play'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
-function setup() {
+function setup<T>(hook: () => T) {
   const audio = createFakeAudio()
   const wrapper = ({ children }: { children: ReactNode }) => (
     <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
   )
-  const { result } = renderHook(() => usePlay(), { wrapper })
-  return { audio, play: result.current }
+  const { result } = renderHook(hook, { wrapper })
+  return { audio, current: result.current }
 }
+
+const keysPlayed = (sounds: readonly Sound[]) =>
+  sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))
 
 describe('usePlay', () => {
   it('unlocks audio and plays from just after now', () => {
-    const { audio, play } = setup()
+    const { audio, current: play } = setup(usePlay)
     audio.setNow(2)
     const at = play([NOTE])
     expect(audio.unlocks).toBe(1)
@@ -2232,11 +2496,25 @@ describe('usePlay', () => {
   })
 
   it('cuts off what was sounding before the next tap sounds', () => {
-    const { audio, play } = setup()
+    const { audio, current: play } = setup(usePlay)
     play([NOTE])
     play([NOTE])
     expect(audio.stops).toBe(2)
     expect(audio.played).toHaveLength(2)
+  })
+})
+
+describe('usePlayChord', () => {
+  it('strikes a chord from middle C, with the root below for both hands', () => {
+    const { audio, current: playChord } = setup(usePlayChord)
+    playChord({ root: note('C'), quality: 'maj' }, { bothHands: true })
+    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([48, 60, 64, 67])
+  })
+
+  it('plays an inversion', () => {
+    const { audio, current: playChord } = setup(usePlayChord)
+    playChord({ root: note('C'), quality: 'maj' }, { inversion: 1 })
+    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([64, 67, 72])
   })
 })
 ```
@@ -2249,7 +2527,8 @@ Expected: FAIL.
 ```ts
 import { useCallback } from 'react'
 import { PLAY_DELAY } from '@/shared/api/audio'
-import type { Sound } from '@/shared/lib/schedule'
+import { placeChord, type Chord } from '@/shared/lib/music'
+import { chordSounds, type Sound } from '@/shared/lib/schedule'
 import { useServices } from './use-services'
 
 /**
@@ -2269,9 +2548,27 @@ export function usePlay(): (sounds: readonly Sound[]) => number {
     [audio],
   )
 }
+
+export interface ChordPlaying {
+  readonly inversion?: number
+  readonly bothHands?: boolean
+  readonly arpeggio?: boolean
+}
+
+/** Sounds a chord as the explorers place it (`placeChord`), struck at once or rolled upwards. */
+export function usePlayChord(): (chord: Chord, options?: ChordPlaying) => void {
+  const play = usePlay()
+  return useCallback(
+    (chord, { inversion = 0, bothHands = false, arpeggio = false } = {}) => {
+      const placed = placeChord(chord.root, chord.quality, { inversion, bothHands })
+      play(chordSounds([...placed.lh, ...placed.rh].map((tone) => tone.midi), { arpeggio }))
+    },
+    [play],
+  )
+}
 ```
 
-Export `usePlay` from `services/index.ts`. Run the test. Expected: PASS.
+Export `usePlay, usePlayChord, type ChordPlaying` from `services/index.ts`. Run the test. Expected: PASS.
 
 - [ ] **Step 3: Commit**
 
@@ -2280,7 +2577,7 @@ Run: `npm run typecheck && npm run lint && npm run test`
 ```bash
 npx prettier --write src/shared/lib/services
 git add src/shared/lib/services
-git commit -m "Play a sound now, cutting off the one before
+git commit -m "Play a sound or a chord now, cutting off the one before
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -2296,9 +2593,13 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Consumes: `pathSteps(): readonly PlacedStep[]` (entities/path).
 - Produces:
+  - `ratingOf(answers: ProgressState['answers'], skill: SkillId): Rating` — the one way to rate a skill from the saved
+    answers. `selectRating`, the step-completion rule, `skillsToCheck`, `knownCount`, My gaps, the Check's result and
+    the Piece's chords all use it. `NO_ANSWERS` moves from `selectors.ts` to `mastery.ts` beside it.
   - `selectAllAnswers(state): ProgressState['answers']`
   - `selectSuggestedStep(state): PlacedStep | null` — the most recently practised piece still on the path, if not
-    learned; else the first unlearned step in path order; else null. Returns the path's own objects (stable).
+    learned; else the first unlearned step in path order; else null. Returns the path's own objects (stable). It and
+    `selectLastPractised` read the practised pieces through one `practisedByRecency`.
   - `skillsToCheck(skills: readonly SkillId[], answers: ProgressState['answers']): SkillId[]` (gap or unknown)
   - `knownCount(skills: readonly SkillId[], answers: ProgressState['answers']): number`
 
@@ -2351,6 +2652,14 @@ describe('selectSuggestedStep', () => {
 Append to `mastery.test.ts`:
 
 ```ts
+describe('ratingOf', () => {
+  it('rates a skill from the saved answers, and a skill never answered as unknown', () => {
+    const answers = { 'chord:min': [{ correct: false, at: '2026-09-01' }] }
+    expect(ratingOf(answers, 'chord:min')).toBe('gap')
+    expect(ratingOf(answers, 'chord:dim')).toBe('unknown')
+  })
+})
+
 describe('skillsToCheck and knownCount', () => {
   const right = (n: number) => Array.from({ length: n }, () => ({ correct: true, at: '2026-09-01' }))
   const answers = { 'chord:maj': right(5), 'chord:min': [{ correct: false, at: '2026-09-01' }] }
@@ -2368,15 +2677,63 @@ describe('skillsToCheck and knownCount', () => {
 })
 ```
 
+(add `knownCount, ratingOf, skillsToCheck` to its `./mastery` import.)
+
 Run: `npx vitest run src/entities/progress`
 Expected: FAIL.
 
 - [ ] **Step 2: Implement**
 
-`selectors.ts` — add (import `pathSteps, type PlacedStep` from `@/entities/path`):
+`mastery.ts` — add below `rate`, and route `allKnown` through `ratingOf`:
+
+```ts
+/** One array for every skill with no evidence, so a subscriber never sees a new reference. */
+export const NO_ANSWERS: readonly Answer[] = []
+
+/** A skill's rating from all saved answers: the one place a missing skill reads as no evidence. */
+export const ratingOf = (answers: ProgressState['answers'], skill: SkillId): Rating =>
+  rate(answers[skill] ?? NO_ANSWERS)
+
+/** The skills a check should ask about: gaps and unknowns, in the order given. */
+export const skillsToCheck = (
+  skills: readonly SkillId[],
+  answers: ProgressState['answers'],
+): SkillId[] => skills.filter((skill) => ratingOf(answers, skill) !== 'known')
+
+export const knownCount = (skills: readonly SkillId[], answers: ProgressState['answers']): number =>
+  skills.filter((skill) => ratingOf(answers, skill) === 'known').length
+
+const allKnown = (state: ProgressState, skills: readonly SkillId[]) =>
+  skills.every((skill) => ratingOf(state.answers, skill) === 'known')
+```
+
+`selectors.ts` — import `NO_ANSWERS, ratingOf` from `./mastery` (deleting its own `NO_ANSWERS`), import
+`pathSteps, type PlacedStep` from `@/entities/path`, and write:
 
 ```ts
 export const selectAllAnswers = (state: ProgressState) => state.answers
+
+export const selectAnswers =
+  (skill: SkillId) =>
+  (state: ProgressState): readonly Answer[] =>
+    state.answers[skill] ?? NO_ANSWERS
+
+export const selectRating =
+  (skill: SkillId) =>
+  (state: ProgressState): Rating =>
+    ratingOf(state.answers, skill)
+
+/** The pieces opened in the Player, the most recent first. */
+function practisedByRecency(practised: ProgressState['practised']): PieceId[] {
+  return Object.entries(practised)
+    .map(([id, date]) => ({ id, at: Date.parse(date ?? '') }))
+    .sort((a, b) => b.at - a.at)
+    .map(({ id }) => id)
+}
+
+/** The piece opened in the Player most recently, or null. */
+export const selectLastPractised = (state: ProgressState): PieceId | null =>
+  practisedByRecency(state.practised)[0] ?? null
 
 /**
  * Continue (spec §5): the most recently practised piece still on the path, while it is not learned;
@@ -2384,33 +2741,18 @@ export const selectAllAnswers = (state: ProgressState) => state.answers
  */
 export function selectSuggestedStep(state: ProgressState): PlacedStep | null {
   const steps = pathSteps()
-  let latest: { step: PlacedStep; at: number } | null = null
-  for (const [pieceId, date] of Object.entries(state.practised)) {
-    const step = steps.find((s) => s.step.kind === 'piece' && s.step.pieceId === pieceId)
-    const at = Date.parse(date ?? '')
-    if (step && (!latest || at > latest.at)) latest = { step, at }
-  }
-  if (latest && state.learned[latest.step.id] === undefined) return latest.step
-  return steps.find((s) => state.learned[s.id] === undefined) ?? null
+  const onPath = practisedByRecency(state.practised)
+    .map((id) => steps.find((placed) => placed.id === `piece:${id}`))
+    .find((placed) => placed !== undefined)
+  if (onPath && state.learned[onPath.id] === undefined) return onPath
+  return steps.find((placed) => state.learned[placed.id] === undefined) ?? null
 }
 ```
 
-`mastery.ts` — add:
+(`selectLastPractised`'s existing tests keep passing: the same answer through one reading of `practised`.)
 
-```ts
-const NONE: readonly Answer[] = []
-
-/** The skills a check should ask about: gaps and unknowns, in the order given. */
-export const skillsToCheck = (
-  skills: readonly SkillId[],
-  answers: ProgressState['answers'],
-): SkillId[] => skills.filter((skill) => rate(answers[skill] ?? NONE) !== 'known')
-
-export const knownCount = (skills: readonly SkillId[], answers: ProgressState['answers']): number =>
-  skills.filter((skill) => rate(answers[skill] ?? NONE) === 'known').length
-```
-
-Export all four from `src/entities/progress/index.ts`. Run the tests. Expected: PASS.
+Export `ratingOf, skillsToCheck, knownCount` (mastery) and `selectAllAnswers, selectSuggestedStep` (selectors) from
+`src/entities/progress/index.ts`. Run the tests. Expected: PASS.
 
 - [ ] **Step 3: Commit**
 
@@ -2419,7 +2761,7 @@ Run: `npm run typecheck && npm run lint && npm run test`
 ```bash
 npx prettier --write src/entities/progress
 git add src/entities/progress
-git commit -m "Suggest the step to continue and name the skills a check should ask
+git commit -m "Suggest the step to continue, and rate and count skills in one place
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -2428,20 +2770,49 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ### Task 11: Piece titles, credits, source and section headings
 
+The glossary's word for the interface language is **Locale**, and the type already exists in `entities/settings`.
+The screens need it below entities (a `LocalText` is read in a locale), so it moves down to `shared/i18n`, the lowest
+layer that knows languages, and `entities/settings` uses it from there. There is still one type, and it has the
+glossary's name.
+
 **Files:**
-- Create: `src/shared/i18n/use-language.ts`, `src/entities/piece/model/titles.ts`, `titles.test.ts`,
-  `src/entities/piece/ui/{Credits,SourceLine}.tsx`, `src/entities/piece/ui/use-section-heading.ts`,
+- Create: `src/shared/i18n/locale.ts`, `src/shared/i18n/use-locale.ts`, `src/entities/piece/model/titles.ts`,
+  `titles.test.ts`, `src/entities/piece/ui/{Credits,SourceLine}.tsx`, `src/entities/piece/ui/use-section-heading.ts`,
   `src/entities/piece/ui/piece-ui.test.tsx`
-- Modify: `src/shared/i18n/index.ts`, `src/shared/i18n/locales/{en,ru}/piece.ts`, `src/entities/piece/index.ts`
+- Modify: `src/shared/i18n/{index.ts,local-text.ts}`, `src/shared/i18n/locales/{en,ru}/piece.ts`,
+  `src/entities/piece/index.ts`; `src/entities/settings/model/{types.ts,selectors.ts}`, `src/entities/settings/index.ts`
+  and the importers of `Locale` (`src/app/testing/{render-app,render-with-settings}.tsx`,
+  `src/app/providers/LocaleSync.test.tsx`, `src/features/set-preference/set-locale.ts`,
+  `src/pages/settings/ui/SettingsPage.tsx`)
 
 **Interfaces:**
 - Produces:
-  - `useLanguage(): Language` with `Language = keyof LocalText` (`'en' | 'ru'`), following i18next's language.
-  - `entryTitles(entry: { title: string; titleEn?: string }, language: Language): { primary: string; secondary?: string }`
+  - `LOCALES = ['en', 'ru'] as const`, `Locale` (moved from `entities/settings`); `LocalText = Readonly<Record<Locale,
+    string>>`; `useLocale(): Locale`, the language the interface speaks now (i18next's, which `LocaleSync` keeps on
+    the saved setting before paint).
+  - `entryTitles(entry: { title: string; titleEn?: string }, locale: Locale): { primary: string; secondary?: string }`
   - `Credits({ credits }: { credits: readonly Credit[] })`, `SourceLine({ source }: { source: Source })`
   - `useSectionHeading(): (section: Section) => string`
 
-- [ ] **Step 1: Add the piece strings**
+- [ ] **Step 1: Move `Locale` down to `shared/i18n`**
+
+`src/shared/i18n/locale.ts`:
+
+```ts
+/** The interface languages; English is the fallback. */
+export const LOCALES = ['en', 'ru'] as const
+export type Locale = (typeof LOCALES)[number]
+```
+
+`local-text.ts` types `LocalText` as `Readonly<Record<Locale, string>>` (the same `{ en, ru }`) and
+`localText(text: LocalText, locale: Locale)`. `index.ts` exports `LOCALES, type Locale` from `./locale`.
+`entities/settings/model/types.ts` deletes its own `LOCALES`/`Locale` and imports them from `@/shared/i18n/locale`,
+the side-effect-free module (the index also starts i18next). `selectors.ts` imports `type Locale` from there too.
+`entities/settings/index.ts` stops exporting them, and each importer listed above imports `type Locale` (and
+`SettingsPage.tsx` `LOCALES`) from `@/shared/i18n`. Run: `npm run typecheck && npx vitest run src/entities/settings
+src/app src/features/set-preference src/pages/settings`. Expected: green, with no behaviour changed.
+
+- [ ] **Step 2: Add the piece strings**
 
 `en/piece.ts`:
 
@@ -2478,7 +2849,7 @@ export const piece = {
 `ru/piece.ts`:
 
 ```ts
-export const piece = {
+export const piece: LocaleResources['piece'] = {
   title: 'Песня',
   credit: {
     authors: 'Авторы',
@@ -2504,13 +2875,13 @@ export const piece = {
     part: 'Часть',
     partLabelled: 'Часть {{label}}',
   },
-} as const satisfies DeepStrings<typeof import('../en/piece').piece>
+}
 ```
 
-(Match the existing Russian modules' typing pattern exactly; if they type through `LocaleResources` in `ru/index.ts`
-instead, drop the `satisfies`.)
+(the module keeps its `import type { LocaleResources } from '../../types'` and its
+`export const piece: LocaleResources['piece'] = {` line, as every Russian module does.)
 
-- [ ] **Step 2: Write the failing tests**
+- [ ] **Step 3: Write the failing tests**
 
 `titles.test.ts`:
 
@@ -2541,13 +2912,11 @@ describe('entryTitles', () => {
 
 ```tsx
 import { act, render, renderHook, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { i18n } from '@/shared/i18n'
 import { Credits } from './Credits'
 import { SourceLine } from './SourceLine'
 import { useSectionHeading } from './use-section-heading'
-
-afterEach(() => act(() => void i18n.changeLanguage('en')))
 
 describe('section headings', () => {
   it('assembles kind, number, last and detail in the learner’s language', () => {
@@ -2586,29 +2955,34 @@ describe('credits and source', () => {
 Run: `npx vitest run src/entities/piece/model/titles.test.ts src/entities/piece/ui`
 Expected: FAIL.
 
-- [ ] **Step 3: Implement**
+- [ ] **Step 4: Implement**
 
-`src/shared/i18n/use-language.ts`:
+`src/shared/i18n/use-locale.ts`:
 
 ```ts
 import { useTranslation } from 'react-i18next'
-import type { LocalText } from './local-text'
+import { isOneOf } from '@/shared/lib'
+import { LOCALES, type Locale } from './locale'
 
-export type Language = keyof LocalText
+const isLocale = isOneOf(LOCALES)
 
-/** The language the interface speaks now; LocaleSync keeps i18next on the saved setting. */
-export function useLanguage(): Language {
+/**
+ * The locale the interface speaks now. It follows i18next rather than the settings store, so text
+ * from `t()` and from `localText()` always agree; LocaleSync moves i18next before paint.
+ */
+export function useLocale(): Locale {
   const { i18n } = useTranslation()
-  return i18n.resolvedLanguage === 'ru' ? 'ru' : 'en'
+  const language = i18n.resolvedLanguage
+  return isLocale(language) ? language : 'en'
 }
 ```
 
-Export `useLanguage, type Language` from `src/shared/i18n/index.ts`.
+Export `useLocale` from `src/shared/i18n/index.ts`.
 
 `src/entities/piece/model/titles.ts`:
 
 ```ts
-import type { Language } from '@/shared/i18n'
+import type { Locale } from '@/shared/i18n'
 
 export interface EntryTitles {
   readonly primary: string
@@ -2619,9 +2993,9 @@ export interface EntryTitles {
 /** English shows the English title over the printed one; Russian shows the printed title (spec §8). */
 export function entryTitles(
   entry: { readonly title: string; readonly titleEn?: string },
-  language: Language,
+  locale: Locale,
 ): EntryTitles {
-  return language === 'en' && entry.titleEn
+  return locale === 'en' && entry.titleEn
     ? { primary: entry.titleEn, secondary: entry.title }
     : { primary: entry.title }
 }
@@ -2632,13 +3006,13 @@ export function entryTitles(
 ```ts
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import type { Section } from '../model/types'
 
 /** A section's heading in the learner's language: "Verse 4 and ending", "Последний припев в ля миноре". */
 export function useSectionHeading(): (section: Section) => string {
   const { t } = useTranslation('piece')
-  const language = useLanguage()
+  const locale = useLocale()
   return useCallback(
     (section) => {
       const base =
@@ -2651,9 +3025,9 @@ export function useSectionHeading(): (section: Section) => string {
               : section.kind === 'part' && section.label
                 ? t('section.partLabelled', { label: section.label })
                 : t(`section.${section.kind}`)
-      return section.detail ? `${base} ${localText(section.detail, language)}` : base
+      return section.detail ? `${base} ${localText(section.detail, locale)}` : base
     },
-    [t, language],
+    [t, locale],
   )
 }
 ```
@@ -2668,20 +3042,20 @@ import type { Credit } from '../model/types'
 export function Credits({ credits }: { credits: readonly Credit[] }) {
   const { t } = useTranslation('piece')
   return (
-    <dl className="flex flex-col gap-0.5 text-sm">
+    <div className="flex flex-col gap-0.5 text-sm">
       {credits.map((credit, i) =>
         credit.role === 'unknown' ? (
-          <dd key={i} className="text-muted-foreground">
+          <p key={i} className="text-muted-foreground">
             {t('credit.unknown')}
-          </dd>
+          </p>
         ) : (
-          <div key={i} className="flex flex-wrap gap-x-1.5">
-            <dt className="text-muted-foreground">{t(`credit.${credit.role}`)}:</dt>
-            <dd>{credit.names}</dd>
-          </div>
+          <p key={i} className="flex flex-wrap gap-x-1.5">
+            <span className="text-muted-foreground">{t(`credit.${credit.role}`)}:</span>
+            <span>{credit.names}</span>
+          </p>
         ),
       )}
-    </dl>
+    </div>
   )
 }
 ```
@@ -2708,14 +3082,14 @@ export function SourceLine({ source }: { source: Source }) {
 Export from `src/entities/piece/index.ts`: `entryTitles, type EntryTitles` (model) and `Credits, SourceLine,
 useSectionHeading` (ui). Run the tests. Expected: PASS.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/shared/i18n src/entities/piece
-git add src/shared/i18n src/entities/piece
-git commit -m "Title, credit and head a piece in the learner's language
+npx prettier --write src/shared/i18n src/entities src/app/testing src/app/providers src/features/set-preference src/pages/settings
+git add src/shared/i18n src/entities src/app src/features/set-preference src/pages/settings
+git commit -m "Title, credit and head a piece in the learner's locale
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -2726,12 +3100,13 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create: `src/features/mark-learned/ui/LearnedToggle.tsx`, `LearnedToggle.test.tsx`
-- Modify: `src/features/mark-learned/index.ts`, `src/shared/i18n/locales/{en,ru}/common.ts`,
-  `src/entities/progress/index.ts` (if `createProgressStore` test helpers are needed)
+- Modify: `src/features/mark-learned/index.ts`, `src/shared/i18n/locales/{en,ru}/common.ts`
 
 **Interfaces:**
 - Consumes: `markLearned`, `unmarkLearned`, `useProgress`, `useProgressStoreApi`, `selectIsLearned`, `recordAnswer`.
 - Produces: `LearnedToggle({ step, title, variant }: { step: StepId; title: string; variant?: 'icon' | 'text' })`.
+  A toggle is named for the state it switches, and `aria-pressed` says whether it is on, so the text variant reads
+  "Learned", pressed or not. An action label ("Mark as learned") would be wrong once the step is learned.
 
 - [ ] **Step 1: Strings** — `common.learned`:
   en `{ toggle: '{{title}}: learned', done: 'Learned' }`; ru `{ toggle: '{{title}}: выучено', done: 'Выучено' }`.
@@ -2836,7 +3211,7 @@ export function LearnedToggle({
       aria-pressed={learned}
       aria-label={t('learned.toggle', { title })}
       onClick={toggle}
-      className="grid size-11 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring"
+      className="grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
     >
       {check}
     </button>
@@ -3104,12 +3479,13 @@ export function useMidiConnection(): { connection: MidiConnection; connect: () =
 `ui/MidiControl.tsx`:
 
 ```tsx
+import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 import { Spinner } from '@/shared/ui/primitives/spinner'
 import { useMidiConnection, type MidiConnection } from '../use-midi-connection'
 
-function statusLine(connection: MidiConnection, t: (key: string, o?: object) => string) {
+function statusLine(connection: MidiConnection, t: TFunction<'common'>): string | null {
   switch (connection.kind) {
     case 'unsupported':
       return t('midi.unsupported')
@@ -3154,8 +3530,6 @@ export function MidiControl() {
   )
 }
 ```
-
-(Type `t` through `TFunction<'common'>` from i18next rather than the loose signature if typecheck asks.)
 
 `ui/MidiButton.tsx`:
 
@@ -3227,13 +3601,16 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Modify: `src/features/practice/index.ts`
 
 **Interfaces:**
-- Consumes: `chartOf`, `melodyOf`, `hasMethodCodes`, `Piece`, `Voicing` (piece); `PATTERNS`, `METHOD_PATTERNS`,
-  `RIGHT_FIGURES`, `LEFT_FIGURES`, `PatternId`, `RightFigureId`, `LeftFigureId` (pattern); `arrange`; `rangeFor`,
-  `KeyMark` (shared/ui).
+- Consumes: `chartOf`, `melodyOf`, `hasMethodCodes`, `pieceKey`, `Piece`, `Voicing` (piece); `PATTERNS`,
+  `METHOD_PATTERNS`, `RIGHT_FIGURES`, `LEFT_FIGURES`, `PatternId`, `RightFigureId`, `LeftFigureId` (pattern);
+  `arrange`; `keyboardRange` (music); `type KeyMark` (shared/ui).
 - Produces:
   - `PracticeChoice = { tonic: SpelledNote; pattern: PatternId | 'chart'; rh: RightFigureId | null; lh:
     LeftFigureId | null; voicing: Voicing | null; melody: boolean }`
   - `defaultPattern(piece: Piece): PatternId | 'chart'`
+  - `ownChoice(piece: Piece): PracticeChoice` — the piece as written: its tonic, its default pattern, the pattern's
+    own figures, its own voicing, no doubled melody. The one place this default is written (the Piece screen, the
+    Player's search and every test start from it).
   - `arrangePiece(piece: Piece, choice: PracticeChoice): Performance`
   - `spellPerformedNote(performance: Performance, note: PerformanceNote): { name: string; octave: number }`,
     `noteLabel(name: { name: string; octave: number }): string` (`F#3`)
@@ -3243,7 +3620,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   - `practiceMarks(performance: Performance, beatGroup: number, options: { fingers: boolean; received?:
     readonly PitchClass[] }): Map<Midi, KeyMark>` — the beat group's notes by hand; label = finger when asked and
     known, else the note name; a received pitch class is labelled `✓`.
-  - `playerRange(performance: Performance): { from: Midi; to: Midi }`
+  - `playerRange(performance: Performance): KeyRange` — every note of the performance, and at least C3–B4 so a
+    short piece still shows two octaves
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -3251,70 +3629,72 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { hasMethodCodes, PIECES, pieceById } from '@/entities/piece'
+import { hasMethodCodes, PIECES, pieceById, pieceKey } from '@/entities/piece'
 import { note } from '@/shared/lib/music'
-import { arrangePiece, defaultPattern } from './arrange-piece'
-import type { PracticeChoice } from './choice'
+import { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
 
 const piece = (id: string) => {
   const found = pieceById(id)
   if (!found) throw new Error(id)
   return found
 }
-const choice = (overrides: Partial<PracticeChoice> = {}): PracticeChoice => ({
-  tonic: note('G'),
-  pattern: 'r4',
-  rh: null,
-  lh: null,
-  voicing: null,
-  melody: false,
-  ...overrides,
+const bz5 = piece('bz5')
+
+describe('ownChoice', () => {
+  it('plays a piece as written', () => {
+    expect(ownChoice(bz5)).toEqual({
+      tonic: pieceKey(bz5).tonic,
+      pattern: 'r4',
+      rh: null,
+      lh: null,
+      voicing: null,
+      melody: false,
+    })
+  })
 })
 
 describe('arrangePiece', () => {
   it('plays a piece in its own key and in another', () => {
-    const bz5 = piece('bz5')
-    expect(arrangePiece(bz5, choice()).chords[0]?.symbol).toBe('G')
-    expect(arrangePiece(bz5, choice({ tonic: note('A') })).chords[0]?.symbol).toBe('A')
+    expect(arrangePiece(bz5, ownChoice(bz5)).chords[0]?.symbol).toBe('G')
+    expect(arrangePiece(bz5, { ...ownChoice(bz5), tonic: note('A') }).chords[0]?.symbol).toBe('A')
   })
 
   it('follows the chart’s own methods when asked', () => {
     const withCodes = PIECES.find((p) => hasMethodCodes(p))
     if (!withCodes) throw new Error('no piece names its methods')
     expect(defaultPattern(withCodes)).toBe('chart')
-    const patterns = new Set(
-      arrangePiece(withCodes, choice({ tonic: note('C'), pattern: 'chart' })).chords.map((c) => c.pattern),
-    )
+    expect(ownChoice(withCodes).pattern).toBe('chart')
+    const patterns = new Set(arrangePiece(withCodes, ownChoice(withCodes)).chords.map((c) => c.pattern))
     expect(patterns.size).toBeGreaterThan(0)
     expect([...patterns].every((id) => typeof id === 'string')).toBe(true)
   })
 
   it('falls back to r4 for a melody pattern on a piece without a melody', () => {
-    const performance = arrangePiece(piece('bz5'), choice({ pattern: 'r5' }))
+    const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'r5' })
     expect(performance.chords.every((c) => c.pattern === 'r4')).toBe(true)
   })
 
   it('grows a progression’s chords with the voicing that it lets the learner choose', () => {
     const twofive = piece('twofive')
     const symbols = (voicing: 'triads' | 'ninths') =>
-      arrangePiece(twofive, choice({ tonic: note('C'), pattern: 'jazz', voicing })).chords.map((c) => c.symbol)
+      arrangePiece(twofive, { ...ownChoice(twofive), voicing }).chords.map((c) => c.symbol)
     expect(symbols('triads')[0]).toBe('Dm')
     expect(symbols('ninths')[0]).toBe('Dm9')
   })
 })
 ```
 
-(Check `PIECES` is exported by `@/entities/piece` — it is (`BOOKS, COLLECTIONS, PIECES`). Check the exact symbols
-the kernel writes for D minor 9 before asserting; adjust the literal if the kernel spells it otherwise.)
-
 `bar-columns.test.ts`:
 
 ```ts
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
-import { note } from '@/shared/lib/music'
-import { arrangePiece } from './arrange-piece'
+import { arrangePiece, ownChoice } from './arrange-piece'
 import { barColumns, beatLabel } from './bar-columns'
+
+const bz5 = pieceById('bz5')
+if (!bz5) throw new Error('bz5')
+const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'M1' })
 
 describe('beatLabel', () => {
   it('counts beats and names their subdivisions', () => {
@@ -3324,16 +3704,6 @@ describe('beatLabel', () => {
 
 describe('barColumns', () => {
   it('lists each beat group of a bar with its notes, high to low, by hand', () => {
-    const bz5 = pieceById('bz5')
-    if (!bz5) throw new Error('bz5')
-    const performance = arrangePiece(bz5, {
-      tonic: note('G'),
-      pattern: 'M1',
-      rh: null,
-      lh: null,
-      voicing: null,
-      melody: false,
-    })
     const columns = barColumns(performance, 0)
     expect(columns[0]?.beat).toBe('1')
     expect(columns.every((column) => performance.beatGroups[column.beatGroup]?.bar === 0)).toBe(true)
@@ -3343,9 +3713,6 @@ describe('barColumns', () => {
   })
 
   it('is empty for a bar the piece does not have', () => {
-    const bz5 = pieceById('bz5')
-    if (!bz5) throw new Error('bz5')
-    const performance = arrangePiece(bz5, { tonic: note('G'), pattern: 'M1', rh: null, lh: null, voicing: null, melody: false })
     expect(barColumns(performance, 999)).toEqual([])
   })
 })
@@ -3356,14 +3723,14 @@ describe('barColumns', () => {
 ```ts
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
-import { note, pitchClass } from '@/shared/lib/music'
-import { arrangePiece } from './arrange-piece'
+import { pitchClass } from '@/shared/lib/music'
+import { arrangePiece, ownChoice } from './arrange-piece'
 import { playerRange, practiceMarks } from './marks'
 import { spellPerformedNote } from './note-names'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
-const performance = arrangePiece(bz5, { tonic: note('G'), pattern: 'M1', rh: null, lh: null, voicing: null, melody: false })
+const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'M1' })
 
 describe('practiceMarks', () => {
   it('marks the beat group’s notes by hand, labelled with note names', () => {
@@ -3436,13 +3803,23 @@ import {
   RIGHT_FIGURES,
   type PatternId,
 } from '@/entities/pattern'
-import { chartOf, hasMethodCodes, melodyOf, type Piece } from '@/entities/piece'
+import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
 
 /** The chart's own methods when it names them, else the piece's pattern. */
 export const defaultPattern = (piece: Piece): PatternId | 'chart' =>
   hasMethodCodes(piece) ? 'chart' : piece.pattern
+
+/** The piece as written: its key, its default pattern and voicing, no figures swapped, no doubled melody. */
+export const ownChoice = (piece: Piece): PracticeChoice => ({
+  tonic: pieceKey(piece).tonic,
+  pattern: defaultPattern(piece),
+  rh: null,
+  lh: null,
+  voicing: null,
+  melody: false,
+})
 
 /** A piece as the Player plays it: the learner's key, pattern, hands' figures, voicing and melody. */
 export function arrangePiece(piece: Piece, choice: PracticeChoice): Performance {
@@ -3546,8 +3923,15 @@ export function barColumns(performance: Performance, bar: number): NoteColumn[] 
 
 ```ts
 import type { Performance } from '@/shared/lib/arrangement'
-import { midi, pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
-import { rangeFor, type KeyMark } from '@/shared/ui'
+import {
+  keyboardRange,
+  midi,
+  pitchClass,
+  type KeyRange,
+  type Midi,
+  type PitchClass,
+} from '@/shared/lib/music'
+import type { KeyMark } from '@/shared/ui'
 import { spellPerformedNote } from './note-names'
 
 /** The Player's keyboard: the beat group's notes by hand, the tune under them. */
@@ -3573,18 +3957,19 @@ export function practiceMarks(
   return marks
 }
 
-const DEFAULT_RANGE = { from: midi(48), to: midi(71) }
+/** Two octaves around middle C: the least the Player shows. */
+const AT_LEAST: KeyRange = { from: midi(48), to: midi(71) }
 
 /** Every note of the piece on the keyboard, from a C to a B. */
-export const playerRange = (performance: Performance) =>
-  rangeFor(
+export const playerRange = (performance: Performance): KeyRange =>
+  keyboardRange(
     performance.notes.map((n) => n.midi),
-    DEFAULT_RANGE,
+    AT_LEAST,
   )
 ```
 
 Export all of them from `src/features/practice/index.ts`
-(`type PracticeChoice`, `arrangePiece`, `defaultPattern`, `spellPerformedNote`, `noteLabel`, `type NoteName`,
+(`type PracticeChoice`, `arrangePiece`, `defaultPattern`, `ownChoice`, `spellPerformedNote`, `noteLabel`, `type NoteName`,
 `barColumns`, `beatLabel`, `type NoteColumn`, `type PlayedNote`, `practiceMarks`, `playerRange`).
 
 Run: `npx vitest run src/features/practice`
@@ -3608,19 +3993,25 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create in `src/features/quiz/`: `check-plan.ts`, `check-plan.test.ts`, `my-gaps.ts`, `my-gaps.test.ts`,
-  `quiz-keys.ts`, `quiz-keys.test.ts`, `use-quiz.ts`, `use-quiz.test.tsx`
+  `quiz-keys.ts`, `quiz-keys.test.ts`, `theory-quizzes.ts`, `theory-quizzes.test.ts`, `use-quiz.ts`,
+  `use-quiz.test.tsx`
 - Modify: `src/features/quiz/index.ts`
 
 **Interfaces:**
-- Consumes: `quizReducer`, `createQuestion`, `answerOf`, `isFinished`, `INITIAL_QUIZ`, `QuizConfig`, `Question`
-  (quiz machine); `recordAnswer`; `usePlay`; `chordSounds`; `chordVoicing`, `spellScale`; `pathSteps`,
-  `skillsOfStep`; `pieceById`, `skillsOfPiece`, `chordRootsOfPiece`; `rate`, `ProgressState`; `rangeFor`, `KeyMark`.
+- Consumes: `quizReducer`, `createQuestion`, `answerOf`, `isFinished`, `INITIAL_QUIZ`, `QuizConfig`, `QuizMode`,
+  `Question` (quiz machine); `recordAnswer`; `usePlay`; `chordSounds`; `placeChord`, `placeScale`, `keyboardRange`,
+  `MIDDLE_C`; `pathSteps`, `skillsOfStep`; `pieceById`, `skillsOfPiece`, `chordRootsOfPiece`; `ratingOf`,
+  `ProgressState`; `QuizChoice`; `type KeyMark`.
 - Produces:
   - `CheckPlan = { of: StepId; skills: readonly SkillId[]; config: QuizConfig; length: number; marks: StepId |
     null }`; `checkPlan(of: StepId): CheckPlan | null`
   - `myGaps(answers: ProgressState['answers'], practised: ProgressState['practised']): SkillId[]`
-  - `QUIZ_RANGE = { from: 60, to: 76 }`; `targetKeys(question: Question): Midi[]`;
-    `quizKeyboardRange(question: Question | null): { from: Midi; to: Midi }`;
+  - `THEORY_QUIZZES = ['build-chord', 'name-chord', 'build-scale', 'gaps'] as const`, `TheoryQuiz`;
+    `theoryQuizConfig(quiz: TheoryQuiz, choice: QuizChoice, gaps: readonly SkillId[]): QuizConfig` — the quizzes
+    Theory → Quiz offers and what each asks. The page's segments and the URL's validator share this one list.
+  - `QUIZ_RANGE: KeyRange` (middle C to the E above the next C); `targetKeys(question: Question): Midi[]`;
+    `quizKeyboardRange(question: Question | null): KeyRange` (the quiz range, grown to hold the answer);
+    `questionSounds(question: Question): NoteSound[]` (the answer, struck; a scale rolled);
     `answerKeys(question: Question, selected: readonly Midi[]): { marks: Map<Midi, KeyMark>; outlined: Set<Midi>;
     wrong: Set<Midi> }`
   - `Quiz = { state: QuizState; finished: boolean; toggleKey(key: Midi): void; clear(): void; check(): void;
@@ -3697,11 +4088,44 @@ describe('myGaps', () => {
 })
 ```
 
+`theory-quizzes.test.ts`:
+
+```ts
+import { describe, expect, it } from 'vitest'
+import { DEFAULT_QUIZ_CHOICE } from '@/entities/settings'
+import { chordSkill, qualitiesIn, scaleSkill } from '@/shared/lib/music'
+import { theoryQuizConfig } from './theory-quizzes'
+
+describe('theoryQuizConfig', () => {
+  it('builds or names the chosen families’ chords', () => {
+    const chords = DEFAULT_QUIZ_CHOICE.families.flatMap((family) => qualitiesIn(family)).map(chordSkill)
+    expect(theoryQuizConfig('build-chord', DEFAULT_QUIZ_CHOICE, [])).toEqual({
+      chordMode: 'build-chord',
+      scope: { skills: chords },
+    })
+    expect(theoryQuizConfig('name-chord', DEFAULT_QUIZ_CHOICE, []).chordMode).toBe('name-chord')
+  })
+
+  it('builds the chosen scales', () => {
+    expect(theoryQuizConfig('build-scale', DEFAULT_QUIZ_CHOICE, []).scope.skills).toEqual(
+      DEFAULT_QUIZ_CHOICE.scales.map(scaleSkill),
+    )
+  })
+
+  it('asks My gaps in their order', () => {
+    expect(theoryQuizConfig('gaps', DEFAULT_QUIZ_CHOICE, ['scale:blues', 'chord:m7']).scope).toEqual({
+      skills: ['scale:blues', 'chord:m7'],
+      ordered: true,
+    })
+  })
+})
+```
+
 `quiz-keys.test.ts`:
 
 ```ts
 import { describe, expect, it } from 'vitest'
-import { chordSkill, chordSymbol, midi, note, spellChord } from '@/shared/lib/music'
+import { chordSkill, chordSymbol, midi, note, scaleSkill, spellChord, spellScale } from '@/shared/lib/music'
 import type { Question } from './quiz-machine'
 import { answerKeys, QUIZ_RANGE, quizKeyboardRange, targetKeys } from './quiz-keys'
 
@@ -3729,6 +4153,18 @@ describe('quiz keys', () => {
       expect(key).toBeGreaterThanOrEqual(from)
       expect(key).toBeLessThanOrEqual(to)
     }
+  })
+
+  it('shows a high scale whole, so the answer is on the keys after Check', () => {
+    const root = note('B')
+    const question: Question = {
+      mode: 'build-scale',
+      skill: scaleSkill('major'),
+      root,
+      kind: 'major',
+      notes: spellScale(root, 'major'),
+    }
+    expect(quizKeyboardRange(question).to).toBeGreaterThanOrEqual(Math.max(...targetKeys(question)))
   })
 
   it('shows the answer: right keys by role, missing ones outlined, extra ones wrong', () => {
@@ -3805,7 +4241,7 @@ export function checkPlan(of: StepId): CheckPlan | null {
 
 ```ts
 import { pieceById, skillsOfPiece } from '@/entities/piece'
-import { rate, type ProgressState } from '@/entities/progress'
+import { ratingOf, type ProgressState } from '@/entities/progress'
 import { SKILLS, type SkillId } from '@/shared/lib/music'
 
 /** My gaps (spec §4.6 ③): gap skills first, then unknown skills of pieces the learner has opened. */
@@ -3813,7 +4249,6 @@ export function myGaps(
   answers: ProgressState['answers'],
   practised: ProgressState['practised'],
 ): SkillId[] {
-  const ratingOf = (skill: SkillId) => rate(answers[skill] ?? [])
   const used = new Set(
     Object.keys(practised).flatMap((id) => {
       const piece = pieceById(id)
@@ -3821,9 +4256,41 @@ export function myGaps(
     }),
   )
   return [
-    ...SKILLS.filter((skill) => ratingOf(skill) === 'gap'),
-    ...SKILLS.filter((skill) => used.has(skill) && ratingOf(skill) === 'unknown'),
+    ...SKILLS.filter((skill) => ratingOf(answers, skill) === 'gap'),
+    ...SKILLS.filter((skill) => used.has(skill) && ratingOf(answers, skill) === 'unknown'),
   ]
+}
+```
+
+`theory-quizzes.ts`:
+
+```ts
+import type { QuizChoice } from '@/entities/settings'
+import { chordSkill, qualitiesIn, scaleSkill, type SkillId } from '@/shared/lib/music'
+import type { QuizConfig } from './quiz-machine'
+
+/** The open-ended quizzes Theory → Quiz offers: the three modes over the chosen skills, and My gaps. */
+export const THEORY_QUIZZES = ['build-chord', 'name-chord', 'build-scale', 'gaps'] as const
+export type TheoryQuiz = (typeof THEORY_QUIZZES)[number]
+
+/** What a Theory quiz asks (spec §4.5): the chosen families' chords or scales, or My gaps in order. */
+export function theoryQuizConfig(
+  quiz: TheoryQuiz,
+  choice: QuizChoice,
+  gaps: readonly SkillId[],
+): QuizConfig {
+  switch (quiz) {
+    case 'build-scale':
+      return { chordMode: 'build-chord', scope: { skills: choice.scales.map(scaleSkill) } }
+    case 'gaps':
+      return { chordMode: 'build-chord', scope: { skills: gaps, ordered: true } }
+    case 'build-chord':
+    case 'name-chord':
+      return {
+        chordMode: quiz,
+        scope: { skills: choice.families.flatMap((family) => qualitiesIn(family)).map(chordSkill) },
+      }
+  }
 }
 ```
 
@@ -3831,39 +4298,45 @@ export function myGaps(
 
 ```ts
 import {
-  chordVoicing,
+  keyboardRange,
+  MIDDLE_C,
   midi,
   pitchClass,
-  pitchClassOf,
-  spellScale,
+  placeChord,
+  placeScale,
+  type KeyRange,
   type Midi,
   type Tone,
 } from '@/shared/lib/music'
-import { rangeFor, type KeyMark } from '@/shared/ui'
+import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
+import type { KeyMark } from '@/shared/ui'
 import type { Question } from './quiz-machine'
 
-/** Middle C to the E above the next C: room to build any chord or scale, any octave counting. */
-export const QUIZ_RANGE = { from: midi(60), to: midi(76) }
+/** Middle C to the E above the next C: room to build most chords and scales, any octave counting. */
+export const QUIZ_RANGE: KeyRange = { from: MIDDLE_C, to: midi(76) }
 
 const tonesOf = (question: Question): readonly Tone[] =>
   question.mode === 'build-scale' ? question.notes : question.tones
 
-/** The question's answer on the keyboard: a chord voiced from middle C, a scale up from its root. */
+/** The question's answer on the keyboard: a chord placed from middle C, a scale up from its root. */
 export function targetKeys(question: Question): Midi[] {
-  if (question.mode === 'build-scale') {
-    const base = 60 + pitchClassOf(question.root)
-    return spellScale(question.root, question.kind).map((tone) => midi(base + tone.semitones))
-  }
-  return chordVoicing(question.root, question.quality, { inversion: 0, bothHands: false }).rh.map(
-    (placed) => placed.midi,
-  )
+  const placed =
+    question.mode === 'build-scale'
+      ? placeScale(question.root, question.kind)
+      : placeChord(question.root, question.quality, { inversion: 0, bothHands: false }).rh
+  return placed.map((tone) => tone.midi)
 }
 
-/** Building keeps the quiz range; naming shows the chord whole, however wide. */
-export function quizKeyboardRange(question: Question | null): { from: Midi; to: Midi } {
-  if (!question || question.mode !== 'name-chord') return QUIZ_RANGE
-  return rangeFor(targetKeys(question), QUIZ_RANGE)
-}
+/**
+ * The quiz range, grown to hold the question's answer, so a wide chord shows whole and the keys
+ * outlined after Check are on the keyboard.
+ */
+export const quizKeyboardRange = (question: Question | null): KeyRange =>
+  question ? keyboardRange(targetKeys(question), QUIZ_RANGE) : QUIZ_RANGE
+
+/** The answer, sounded: a chord struck, a scale rolled upwards. */
+export const questionSounds = (question: Question): NoteSound[] =>
+  chordSounds(targetKeys(question), { arpeggio: question.mode === 'build-scale' })
 
 /** After Check: the right keys by role, the missing tones outlined where the answer has them, extras wrong. */
 export function answerKeys(
@@ -3953,33 +4426,47 @@ describe('useQuiz', () => {
     act(() => result.current.next())
     expect(result.current.state.asked).toBe(2)
   })
+
+  it('sounds a Name chord question as it is shown, and again on request', () => {
+    const { result, audio } = setup({ ...ONLY_C_MAJOR, chordMode: 'name-chord' })
+    expect(audio.played).toHaveLength(1)
+    act(() => result.current.hear())
+    expect(audio.played).toHaveLength(2)
+  })
 })
 ```
+
+(The first test toggles three keys inside one `act`, before React re-renders: the hook must read the machine's
+latest state, not the last render's.)
 
 Run: `npx vitest run src/features/quiz/use-quiz.test.tsx`
 Expected: FAIL.
 
 - [ ] **Step 4: Implement `use-quiz.ts`**
 
+The machine's state lives in a ref that only the hook's actions write, so several events before a re-render each
+see the one before, and an answer is recorded exactly once, on the event that produced it. React state mirrors the
+ref for rendering. The actions are plain functions that read `config` and `random` from the current render, so
+nothing needs memoising and no dependency list needs silencing. A Name chord question sounds from an effect keyed on
+the question: sounding is the outside world, and a new question is exactly when it should happen.
+
 ```ts
-import { useEffect, useMemo, useReducer, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useProgressStoreApi } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
 import type { Midi } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
+import { questionSounds } from './quiz-keys'
 import {
   answerOf,
   createQuestion,
   INITIAL_QUIZ,
   isFinished,
   quizReducer,
-  type Question,
   type QuizConfig,
   type QuizEvent,
   type QuizState,
 } from './quiz-machine'
-import { targetKeys } from './quiz-keys'
 
 export interface Quiz {
   readonly state: QuizState
@@ -3995,74 +4482,64 @@ export interface Quiz {
 
 /**
  * Drives the quiz machine: draws questions, records each answer once as evidence, sounds Name
- * chord questions and every answer. A new config needs a new `key` on the caller.
+ * chord questions as they are shown and every answer once given. A new config needs a new `key`
+ * on the caller.
  */
 export function useQuiz(config: QuizConfig, options: { random?: () => number } = {}): Quiz {
   const random = options.random ?? Math.random
   const store = useProgressStoreApi()
   const play = usePlay()
-  const [state, dispatch] = useReducer(quizReducer, undefined, () =>
+  const [state, setState] = useState(() =>
     quizReducer(INITIAL_QUIZ, { type: 'ask', question: createQuestion(config, { index: 0, random }) }),
   )
-  const latest = useRef(state)
-  useEffect(() => {
-    latest.current = state
-  })
+  const machine = useRef(state)
+  const { question } = state
 
-  const sound = (question: Question | null, arpeggio = false) => {
-    if (question) play(chordSounds(targetKeys(question), { arpeggio }))
+  // Name chord is asked by ear: a question sounds when it is shown.
+  useEffect(() => {
+    if (question?.mode === 'name-chord') play(questionSounds(question))
+  }, [question, play])
+
+  const send = (event: QuizEvent) => {
+    const before = machine.current
+    const after = quizReducer(before, event)
+    if (after === before) return
+    machine.current = after
+    setState(after)
+    const answer = before.result ? null : answerOf(after)
+    if (!answer || !after.question) return
+    recordAnswer(store, answer, new Date())
+    if (after.question.mode !== 'name-chord') play(questionSounds(after.question))
   }
 
-  // Name chord is asked by ear: the first question sounds as soon as it is shown.
-  useEffect(() => {
-    if (latest.current.question?.mode === 'name-chord') sound(latest.current.question)
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, for the first question
-  }, [])
-
-  const actions = useMemo(() => {
-    const act = (event: QuizEvent) => {
-      const current = latest.current
-      const next = quizReducer(current, event)
-      if (next === current) return
-      latest.current = next
-      dispatch(event)
-      if (!current.result && next.result) {
-        const answer = answerOf(next)
-        if (answer) recordAnswer(store, answer, new Date())
-        if (next.question?.mode !== 'name-chord')
-          sound(next.question, next.question?.mode === 'build-scale')
-      }
-    }
-    return {
-      toggleKey: (key: Midi) => act({ type: 'toggleKey', midi: key }),
-      clear: () => act({ type: 'clear' }),
-      check: () => act({ type: 'check' }),
-      choose: (symbol: string) => act({ type: 'choose', symbol }),
-      next() {
-        const current = latest.current
-        if (!current.result || isFinished(current, config.scope)) return
-        const question = createQuestion(config, {
-          index: current.asked,
-          random,
-          previous: current.question,
-        })
-        act({ type: 'ask', question })
-        if (question.mode === 'name-chord') sound(question)
-      },
-      hear: () => sound(latest.current.question),
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- config and random are fixed per key
-  }, [store, play])
-
-  return { state, finished: isFinished(state, config.scope), ...actions }
+  return {
+    state,
+    finished: isFinished(state, config.scope),
+    toggleKey: (key) => send({ type: 'toggleKey', midi: key }),
+    clear: () => send({ type: 'clear' }),
+    check: () => send({ type: 'check' }),
+    choose: (symbol) => send({ type: 'choose', symbol }),
+    next() {
+      const current = machine.current
+      if (!current.result || isFinished(current, config.scope)) return
+      send({
+        type: 'ask',
+        question: createQuestion(config, { index: current.asked, random, previous: current.question }),
+      })
+    },
+    hear() {
+      const current = machine.current.question
+      if (current) play(questionSounds(current))
+    },
+  }
 }
 ```
 
-Check: the machine's `ask` counts `asked` (so `asked` after the first question is 1 and the next index is 1). If
-`createQuestion`'s `index` expects the zero-based number of the question being asked, `current.asked` is right.
+`createQuestion`'s `index` is the zero-based number of the question being asked, and the machine's `ask` counts
+`asked`. After the first question `asked` is 1, the index of the second.
 
-Export from `src/features/quiz/index.ts`: `checkPlan, type CheckPlan`, `myGaps`,
-`answerKeys, QUIZ_RANGE, quizKeyboardRange, targetKeys`, `useQuiz, type Quiz`.
+Export from `src/features/quiz/index.ts`: `checkPlan, type CheckPlan`, `myGaps`, `THEORY_QUIZZES, theoryQuizConfig,
+type TheoryQuiz`, `answerKeys, QUIZ_RANGE, questionSounds, quizKeyboardRange, targetKeys`, `useQuiz, type Quiz`.
 
 Run: `npx vitest run src/features/quiz`
 Expected: PASS.
@@ -4074,7 +4551,7 @@ Run: `npm run typecheck && npm run lint && npm run test`
 ```bash
 npx prettier --write src/features/quiz
 git add src/features/quiz
-git commit -m "Plan checks, find my gaps and drive the quiz with evidence and sound
+git commit -m "Plan checks and theory quizzes, find my gaps, and drive the quiz with evidence and sound
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -4083,14 +4560,24 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 16: Names for steps, chords and scales; every route's search params
 
 The explorers, the Check, Songs and the Player link to each other, so every route learns its search params here,
-before any screen needs them. The validators live in the app layer (`src/app/routes/search.ts`): a page's `index.ts`
-may not be imported by the router, or the page would leave its lazy chunk.
+before any screen needs them. The validators live in the app layer (`src/app/routes/search.ts`): the router may not
+import a page or a widget, or that screen's code would move into the main chunk. A build proved it: a const the
+router imported from a page's `index.ts` pulled the page's component in with it. The router does import the
+entities and features that guards and validators need (the catalogue, the path, check plans, the practice modes).
+
+Each schema is the view type of the slice that uses it, so nothing is declared twice. The owners are the Chords
+explorer's `ChordView`, the Scales explorer's `ScaleView`, the Setup sheet's `SetupParams`, the Songs page's
+`SongsFilter`, and the Player page's `PlayerSearch`. `search.ts` imports each with `import type`, which the compiler
+erases, so no screen code reaches the main chunk. The owning slices get their type modules here, before their UI.
 
 **Files:**
-- Create: `src/entities/path/ui/use-step-title.ts`, `src/entities/path/ui/use-step-title.test.tsx`,
-  `src/app/routes/search.ts`, `src/app/routes/search.test.ts`
-- Modify: `src/entities/path/index.ts`, `src/shared/i18n/locales/{en,ru}/{theory,path}.ts`, `src/app/router.tsx`,
-  `src/app/router.test.tsx`
+- Create: `src/entities/path/ui/{use-step-title.ts,use-step-title.test.tsx}`;
+  `src/widgets/chord-explorer/{index.ts,model/chord-view.ts}`, `src/widgets/scale-explorer/{index.ts,model/scale-view.ts}`,
+  `src/widgets/player-setup/{index.ts,model/setup-params.ts}`, `src/pages/songs/model/songs-filter.ts`,
+  `src/pages/player/model/player-search.ts`; `src/app/routes/search.ts`, `src/app/routes/search.test.ts`
+- Modify: `src/entities/path/index.ts`, `src/features/practice/{practice-machine.ts,index.ts}` (`PRACTICE_MODES`),
+  `src/pages/songs/index.ts`, `src/pages/player/index.ts`, `src/shared/i18n/locales/{en,ru}/{theory,path}.ts`,
+  `src/app/router.tsx`, `src/app/router.test.tsx`
 
 **Interfaces:**
 - Produces:
@@ -4098,16 +4585,20 @@ may not be imported by the router, or the page would leave its lazy chunk.
     `useStepTitle(): (step: PathStep) => { primary: string; secondary?: string; kind: StepKind }`
   - theory strings: `family.<ChordFamily>`, `quality.<ChordQuality>` (full names), `scaleKind.<ScaleKind>` (chip
     labels), `scaleName.<ScaleKind>` (after a note: "E♭ harmonic minor")
-  - validators and defaults: `validateSongsSearch`, `SONGS_DEFAULTS`, `SongsSearch = { q: string; collection:
-    CollectionId | 'all'; level: Level | 'any' }`; `validateChordsSearch`, `CHORDS_DEFAULTS`, `ChordsSearch = { root:
-    string; quality: ChordQuality; inversion: number; hands: 'rh' | 'both'; step?: ChordsStepId }`;
-    `validateScalesSearch`, `SCALES_DEFAULTS`, `ScalesSearch = { root: string; kind: ScaleKind; view: 'degrees' |
-    'rh' | 'lh'; rhythm: PracticeRhythm; tempo: number; hands: Hands; chords: 3 | 4; step?: ScaleStepId }`;
-    `validateQuizSearch`, `QUIZ_DEFAULTS`, `QuizSearch = { mode: QuizTab }` with `QuizTab = 'build-chord' |
-    'name-chord' | 'build-scale' | 'gaps'`; `validateCheckSearch`, `CheckSearch = { of?: StepId }`;
-    `validatePlayerSearch`, `PLAYER_DEFAULTS`, `PlayerSearch = { key?: string; tempo?: number; hands: Hands; mode:
-    PracticeMode; pattern?: PatternId | 'chart'; rh?: RightFigureId; lh?: LeftFigureId; voicing?: Voicing }`
-    (absent = the piece's own).
+  - view types: `ChordView = { root: string; quality: ChordQuality; inversion: number; hands: 'rh' | 'both' }`;
+    `ScaleView = { root: string; kind: ScaleKind; view: 'degrees' | 'rh' | 'lh'; rhythm: PracticeRhythm; tempo:
+    number; hands: Hands; chords: 3 | 4 }`; `SetupParams = { key?: string; tempo?: number; hands: Hands; pattern?:
+    PatternId | 'chart'; rh?: RightFigureId; lh?: LeftFigureId; voicing?: Voicing }` (absent = the piece's own) and
+    `SetupChange = Partial<SetupParams>`; `SongsFilter = { q: string; collection: CollectionId | 'all'; level: Level |
+    'any' }`; `PlayerSearch = SetupParams & { mode: PracticeMode }`. A `root` or `key` is a note as a URL writes it
+    (`Bb`, `F#`).
+  - `PRACTICE_MODES = ['listen', 'step', 'turn'] as const`; `PracticeMode` becomes `(typeof PRACTICE_MODES)[number]`.
+  - validators and defaults (`app/routes/search.ts`): `validateSongsSearch`, `SONGS_DEFAULTS`;
+    `validateChordsSearch`, `CHORDS_DEFAULTS`, `ChordsSearch = ChordView & { step?: ChordsStepId }`;
+    `validateScalesSearch`, `SCALES_DEFAULTS`, `ScalesSearch = ScaleView & { step?: ScaleStepId }`;
+    `validateQuizSearch`, `QUIZ_DEFAULTS`, `QuizSearch = { mode: TheoryQuiz }`; `validateCheckSearch`,
+    `CheckSearch = { of?: StepId }`; `validatePlayerSearch`, `PLAYER_DEFAULTS`. An invalid value takes its default,
+    with no clamping. A root is spelled the way its explorer names it (`A#` major is `Bb`).
   - route ids used by pages: `/shell/songs`, `/shell/songs/$pieceId`, `/shell/theory/chords`,
     `/shell/theory/scales`, `/shell/theory/quiz`, `/full-screen/play/$pieceId`; `notFound()` for an unknown entry at
     `/songs/$pieceId` and for anything but a piece at `/play/$pieceId`.
@@ -4254,11 +4745,9 @@ exercise: 'Упражнение', song: 'Песня', progression: 'Послед
 
 ```tsx
 import { act, renderHook } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { i18n } from '@/shared/i18n'
 import { useStepTitle } from './use-step-title'
-
-afterEach(() => act(() => void i18n.changeLanguage('en')))
 
 describe('useStepTitle', () => {
   it('names a chord step by its family, a scale step by its kind', () => {
@@ -4286,6 +4775,8 @@ describe('useStepTitle', () => {
 })
 ```
 
+(The test setup puts i18next back on English after every test.)
+
 Run: `npx vitest run src/entities/path/ui`
 Expected: FAIL.
 
@@ -4295,7 +4786,7 @@ Expected: FAIL.
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, pieceById } from '@/entities/piece'
-import { useLanguage } from '@/shared/i18n'
+import { useLocale } from '@/shared/i18n'
 import type { PathStep } from '../model/types'
 
 export type StepKind = 'chords' | 'scale' | 'exercise' | 'song' | 'progression'
@@ -4306,10 +4797,10 @@ export interface StepTitle {
   readonly kind: StepKind
 }
 
-/** A step's name in the learner's language, and what kind of step it is. */
+/** A step's name in the learner's locale, and what kind of step it is. */
 export function useStepTitle(): (step: PathStep) => StepTitle {
   const { t } = useTranslation('theory')
-  const language = useLanguage()
+  const locale = useLocale()
   return useCallback(
     (step) => {
       switch (step.kind) {
@@ -4320,18 +4811,110 @@ export function useStepTitle(): (step: PathStep) => StepTitle {
         case 'piece': {
           const piece = pieceById(step.pieceId)
           if (!piece) return { primary: step.pieceId, kind: 'song' }
-          return { ...entryTitles(piece, language), kind: piece.kind }
+          return { ...entryTitles(piece, locale), kind: piece.kind }
         }
       }
     },
-    [t, language],
+    [t, locale],
   )
 }
 ```
 
 Export `useStepTitle, type StepKind, type StepTitle` from `src/entities/path/index.ts`. Run the test. Expected: PASS.
 
-- [ ] **Step 4: Write the failing validator tests**
+- [ ] **Step 4: The view types, in the slices that own them**
+
+`src/widgets/chord-explorer/model/chord-view.ts`:
+
+```ts
+import type { ChordQuality } from '@/shared/lib/music'
+
+/** What the Chords explorer shows. `root` is a note as a URL writes it (`Bb`). */
+export interface ChordView {
+  readonly root: string
+  readonly quality: ChordQuality
+  readonly inversion: number
+  readonly hands: 'rh' | 'both'
+}
+```
+
+`src/widgets/scale-explorer/model/scale-view.ts`:
+
+```ts
+import type { ScaleKind } from '@/shared/lib/music'
+import type { Hands, PracticeRhythm } from '@/shared/lib/schedule'
+
+/** What the Scales explorer shows: the scale, how its keys are labelled, and how it is practised. */
+export interface ScaleView {
+  readonly root: string
+  readonly kind: ScaleKind
+  /** The keys' labels: degrees, or one hand's fingers. */
+  readonly view: 'degrees' | 'rh' | 'lh'
+  readonly rhythm: PracticeRhythm
+  readonly tempo: number
+  readonly hands: Hands
+  /** Triads or 7th chords in "chords in this scale". */
+  readonly chords: 3 | 4
+}
+```
+
+`src/widgets/player-setup/model/setup-params.ts`:
+
+```ts
+import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
+import type { Voicing } from '@/entities/piece'
+import type { Hands } from '@/shared/lib/schedule'
+
+/** The Setup sheet's choices as the Player's URL holds them: an absent one is the piece's own. */
+export interface SetupParams {
+  readonly key?: string
+  readonly tempo?: number
+  readonly hands: Hands
+  readonly pattern?: PatternId | 'chart'
+  readonly rh?: RightFigureId
+  readonly lh?: LeftFigureId
+  readonly voicing?: Voicing
+}
+
+/** What one control in the sheet changes; a field set to `undefined` goes back to the piece's own. */
+export type SetupChange = Partial<SetupParams>
+```
+
+`src/pages/songs/model/songs-filter.ts`:
+
+```ts
+import type { Level } from '@/entities/path'
+import type { CollectionId } from '@/entities/piece'
+
+/** What narrows the Songs list: the search, one collection, one level. */
+export interface SongsFilter {
+  readonly q: string
+  readonly collection: CollectionId | 'all'
+  readonly level: Level | 'any'
+}
+```
+
+`src/pages/player/model/player-search.ts`:
+
+```ts
+import type { PracticeMode } from '@/features/practice'
+import type { SetupParams } from '@/widgets/player-setup'
+
+/** The Player's URL: the setup, and the mode it practises in. */
+export type PlayerSearch = SetupParams & { readonly mode: PracticeMode }
+```
+
+Each slice's `index.ts` exports its type (`export type { ChordView } from './model/chord-view'` and so on; the two
+page slices add theirs beside their page). In `features/practice/practice-machine.ts`, write the modes once:
+
+```ts
+export const PRACTICE_MODES = ['listen', 'step', 'turn'] as const
+export type PracticeMode = (typeof PRACTICE_MODES)[number]
+```
+
+and export `PRACTICE_MODES` from `features/practice/index.ts`.
+
+- [ ] **Step 5: Write the failing validator tests**
 
 `src/app/routes/search.test.ts`:
 
@@ -4378,74 +4961,84 @@ describe('search params', () => {
       collection: 'hymns',
       level: 1,
     })
+    expect(validateScalesSearch(raw({ root: 'Eb', kind: 'harmonic', chords: 4 }))).toMatchObject({
+      root: 'Eb',
+      kind: 'harmonic',
+      chords: 4,
+    })
   })
 
-  it('drop anything stale or hand-edited back to its default', () => {
+  it('drop anything stale or hand-edited back to its default, without clamping', () => {
     expect(
       validatePlayerSearch(raw({ key: 'H', tempo: 999, mode: 'dance', pattern: 'waltz', rh: 'zz', voicing: 'elevenths' })),
     ).toEqual(PLAYER_DEFAULTS)
-    expect(validateChordsSearch(raw({ quality: 'maj13', inversion: 7, step: 'scale:major' }))).toEqual({
-      ...CHORDS_DEFAULTS,
-      inversion: 3,
-    })
+    expect(validateChordsSearch(raw({ quality: 'maj13', inversion: 7, step: 'scale:major' }))).toEqual(
+      CHORDS_DEFAULTS,
+    )
+    expect(validateChordsSearch(raw({ quality: 'maj', inversion: 3 })).inversion).toBe(0)
     expect(validateScalesSearch(raw({ kind: 'dorian', tempo: 10, chords: 5, step: 'chords:tri' }))).toEqual(
       SCALES_DEFAULTS,
     )
     expect(validateCheckSearch(raw({ of: 'nothing:here' }))).toEqual({})
   })
+
+  it('spell a root the way its explorer names it', () => {
+    expect(validateChordsSearch(raw({ root: 'A#', quality: 'maj' })).root).toBe('Bb')
+    expect(validatePlayerSearch(raw({ key: 'B♭' })).key).toBe('Bb')
+  })
 })
 ```
-
-(`inversion: 7` clamps to 3, the last inversion there is; any other invalid value takes the default.)
 
 Run: `npx vitest run src/app/routes/search.test.ts`
 Expected: FAIL.
 
-- [ ] **Step 5: Implement `src/app/routes/search.ts`**
+- [ ] **Step 6: Implement `src/app/routes/search.ts`**
 
 ```ts
 import type { SearchSchemaInput } from '@tanstack/react-router'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
+import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
+import { COLLECTIONS, VOICINGS, type CollectionId } from '@/entities/piece'
+import { PRACTICE_MODES } from '@/features/practice'
+import { THEORY_QUIZZES, type TheoryQuiz } from '@/features/quiz'
+import type { PlayerSearch } from '@/pages/player'
+import type { SongsFilter } from '@/pages/songs'
+import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
-  isLeftFigureId,
-  isPatternId,
-  isRightFigureId,
-  type LeftFigureId,
-  type PatternId,
-  type RightFigureId,
-} from '@/entities/pattern'
-import { COLLECTIONS, VOICINGS, type CollectionId, type Voicing } from '@/entities/piece'
-import type { PracticeMode } from '@/features/practice'
-import { isOneOf, noteIn, valueOr, wholeIn } from '@/shared/lib'
-import {
-  CHORD_FAMILIES,
   CHORD_QUALITIES,
+  chordRootSpelling,
+  lastInversion,
+  noteParam,
+  pitchClassOf,
   SCALE_KINDS,
+  scaleRootSpelling,
   type ChordFamily,
-  type ChordQuality,
   type ScaleKind,
 } from '@/shared/lib/music'
-import { PRACTICE_RHYTHM_IDS, type Hands, type PracticeRhythm } from '@/shared/lib/schedule'
+import { PRACTICE_RHYTHM_IDS, type Hands } from '@/shared/lib/schedule'
+import type { ChordView } from '@/widgets/chord-explorer'
+import type { ScaleView } from '@/widgets/scale-explorer'
 
+/**
+ * What the router hands a validator. Links may pass any subset of the params; each validator reads
+ * the input as `Record<string, unknown>`, because a URL can hold anything in any of them.
+ */
 type Input<S> = Partial<S> & SearchSchemaInput
-const fieldsOf = <S>(input: Input<S>): Record<string, unknown> => input as Record<string, unknown>
+type Raw = Readonly<Record<string, unknown>>
 
-const isHands = isOneOf(['both', 'rh', 'lh'] as const)
+const isHands = isOneOf<Hands>(['both', 'rh', 'lh'])
 const isQuality = isOneOf(CHORD_QUALITIES)
 const isScaleKind = isOneOf(SCALE_KINDS)
-const isCollection = isOneOf([...COLLECTIONS.map((c) => c.id), 'all'] as const)
-const isLevel = (value: unknown): value is Level | 'any' =>
-  value === 'any' || (LEVELS as readonly unknown[]).includes(value)
+const isVoicing = isOneOf(VOICINGS)
+const isCollection = isOneOf<CollectionId | 'all'>([...COLLECTIONS.map((c) => c.id), 'all'])
+const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
+const isPlayerPattern = (value: unknown): value is PatternId | 'chart' =>
+  value === 'chart' || isPatternId(value)
 
 // Songs
-export interface SongsSearch {
-  readonly q: string
-  readonly collection: CollectionId | 'all'
-  readonly level: Level | 'any'
-}
-export const SONGS_DEFAULTS: SongsSearch = { q: '', collection: 'all', level: 'any' }
-export function validateSongsSearch(input: Input<SongsSearch>): SongsSearch {
-  const raw = fieldsOf(input)
+export const SONGS_DEFAULTS: SongsFilter = { q: '', collection: 'all', level: 'any' }
+export function validateSongsSearch(input: Input<SongsFilter>): SongsFilter {
+  const raw: Raw = input
   return {
     q: typeof raw.q === 'string' ? raw.q : SONGS_DEFAULTS.q,
     collection: valueOr(isCollection, raw.collection, SONGS_DEFAULTS.collection),
@@ -4455,42 +5048,27 @@ export function validateSongsSearch(input: Input<SongsSearch>): SongsSearch {
 
 // Theory → Chords
 export type ChordsStepId = `chords:${ChordFamily}`
-export interface ChordsSearch {
-  readonly root: string
-  readonly quality: ChordQuality
-  readonly inversion: number
-  readonly hands: 'rh' | 'both'
-  readonly step?: ChordsStepId
-}
+export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = { root: 'C', quality: 'maj', inversion: 0, hands: 'rh' }
+const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
 const isChordsStep = (value: unknown): value is ChordsStepId =>
-  typeof value === 'string' &&
-  value.startsWith('chords:') &&
-  (CHORD_FAMILIES as readonly string[]).includes(value.slice('chords:'.length))
+  isStepId(value) && value.startsWith('chords:')
 export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
-  const raw = fieldsOf(input)
-  const inversion = wholeIn(raw.inversion, 0, Number.MAX_SAFE_INTEGER, CHORDS_DEFAULTS.inversion)
+  const raw: Raw = input
+  const quality = valueOr(isQuality, raw.quality, CHORDS_DEFAULTS.quality)
+  const root = readNote(raw.root)
   return {
-    root: noteIn(raw.root, CHORDS_DEFAULTS.root),
-    quality: valueOr(isQuality, raw.quality, CHORDS_DEFAULTS.quality),
-    inversion: Math.min(inversion, 3),
-    hands: valueOr(isOneOf(['rh', 'both'] as const), raw.hands, CHORDS_DEFAULTS.hands),
+    root: root ? noteParam(chordRootSpelling(pitchClassOf(root), quality)) : CHORDS_DEFAULTS.root,
+    quality,
+    inversion: wholeIn(raw.inversion, 0, lastInversion(quality), CHORDS_DEFAULTS.inversion),
+    hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     ...(isChordsStep(raw.step) ? { step: raw.step } : {}),
   }
 }
 
 // Theory → Scales
 export type ScaleStepId = `scale:${ScaleKind}`
-export interface ScalesSearch {
-  readonly root: string
-  readonly kind: ScaleKind
-  readonly view: 'degrees' | 'rh' | 'lh'
-  readonly rhythm: PracticeRhythm
-  readonly tempo: number
-  readonly hands: Hands
-  readonly chords: 3 | 4
-  readonly step?: ScaleStepId
-}
+export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
   root: 'C',
   kind: 'major',
@@ -4500,78 +5078,70 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   hands: 'rh',
   chords: 3,
 }
+const isScaleLabels = isOneOf<ScaleView['view']>(['degrees', 'rh', 'lh'])
+const isChordSize = isOneOf<ScaleView['chords']>([3, 4])
 const isScaleStep = (value: unknown): value is ScaleStepId =>
-  typeof value === 'string' && value.startsWith('scale:') && isScaleKind(value.slice('scale:'.length))
+  isStepId(value) && value.startsWith('scale:')
 export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
-  const raw = fieldsOf(input)
+  const raw: Raw = input
+  const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
+  const root = readNote(raw.root)
   return {
-    root: noteIn(raw.root, SCALES_DEFAULTS.root),
-    kind: valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind),
-    view: valueOr(isOneOf(['degrees', 'rh', 'lh'] as const), raw.view, SCALES_DEFAULTS.view),
+    root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
+    kind,
+    view: valueOr(isScaleLabels, raw.view, SCALES_DEFAULTS.view),
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, 40, 160, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
-    chords: raw.chords === 4 ? 4 : 3,
+    chords: valueOr(isChordSize, raw.chords, SCALES_DEFAULTS.chords),
     ...(isScaleStep(raw.step) ? { step: raw.step } : {}),
   }
 }
 
 // Theory → Quiz
-export const QUIZ_TABS = ['build-chord', 'name-chord', 'build-scale', 'gaps'] as const
-export type QuizTab = (typeof QUIZ_TABS)[number]
 export interface QuizSearch {
-  readonly mode: QuizTab
+  readonly mode: TheoryQuiz
 }
 export const QUIZ_DEFAULTS: QuizSearch = { mode: 'build-chord' }
-export const validateQuizSearch = (input: Input<QuizSearch>): QuizSearch => ({
-  mode: valueOr(isOneOf(QUIZ_TABS), fieldsOf(input).mode, QUIZ_DEFAULTS.mode),
-})
+export function validateQuizSearch(input: Input<QuizSearch>): QuizSearch {
+  const raw: Raw = input
+  return { mode: valueOr(isOneOf(THEORY_QUIZZES), raw.mode, QUIZ_DEFAULTS.mode) }
+}
 
 // Check
 export interface CheckSearch {
   readonly of?: StepId
 }
 export function validateCheckSearch(input: Input<CheckSearch>): CheckSearch {
-  const of = fieldsOf(input).of
-  return isStepId(of) ? { of } : {}
+  const raw: Raw = input
+  return isStepId(raw.of) ? { of: raw.of } : {}
 }
 
-// Player
-export interface PlayerSearch {
-  readonly key?: string
-  readonly tempo?: number
-  readonly hands: Hands
-  readonly mode: PracticeMode
-  readonly pattern?: PatternId | 'chart'
-  readonly rh?: RightFigureId
-  readonly lh?: LeftFigureId
-  readonly voicing?: Voicing
-}
+// Player: key, tempo, pattern and voicing default to the piece's own, so their absence is the default.
 export const PLAYER_DEFAULTS: PlayerSearch = { hands: 'both', mode: 'listen' }
-const NO_TEMPO = -1
 export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
-  const raw = fieldsOf(input)
-  const key = noteIn(raw.key, '')
-  const tempo = wholeIn(raw.tempo, 40, 160, NO_TEMPO)
-  const pattern = raw.pattern === 'chart' || isPatternId(raw.pattern) ? raw.pattern : undefined
+  const raw: Raw = input
+  const key = readNote(raw.key)
+  const tempo = wholeIn(raw.tempo, 40, 160, undefined)
   return {
-    ...(key ? { key } : {}),
-    ...(tempo === NO_TEMPO ? {} : { tempo }),
+    ...(key ? { key: noteParam(key) } : {}),
+    ...(tempo === undefined ? {} : { tempo }),
     hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
-    mode: valueOr(isOneOf(['listen', 'step', 'turn'] as const), raw.mode, PLAYER_DEFAULTS.mode),
-    ...(pattern ? { pattern } : {}),
+    mode: valueOr(isOneOf(PRACTICE_MODES), raw.mode, PLAYER_DEFAULTS.mode),
+    ...(isPlayerPattern(raw.pattern) ? { pattern: raw.pattern } : {}),
     ...(isRightFigureId(raw.rh) ? { rh: raw.rh } : {}),
     ...(isLeftFigureId(raw.lh) ? { lh: raw.lh } : {}),
-    ...(isOneOf(VOICINGS)(raw.voicing) ? { voicing: raw.voicing } : {}),
+    ...(isVoicing(raw.voicing) ? { voicing: raw.voicing } : {}),
   }
 }
 ```
 
-(`isStepId` accepts `piece:gone`; the Check route rejects it in `beforeLoad` through `checkPlan`, Task 18.)
+(`isStepId` accepts `piece:gone`; the Check route rejects it in `beforeLoad` through `checkPlan`, Task 18. The Player's
+key is spelled for the piece's mode by `resolveChoice`, Task 26, which knows the piece.)
 
 Run the tests. Expected: PASS.
 
-- [ ] **Step 6: Wire the router**
+- [ ] **Step 7: Wire the router**
 
 In `src/app/router.tsx` import the validators, defaults, `stripSearchParams`, `notFound`, and
 `entryById, pieceById` from `@/entities/piece`, and give each route its search:
@@ -4630,15 +5200,16 @@ describe('routes that name a piece', () => {
 
 (import `COLLECTIONS` from `@/entities/piece`.)
 
-- [ ] **Step 7: Verify and commit**
+- [ ] **Step 8: Verify and commit**
 
 Run: `npm run typecheck && npm run lint && npm run test && npm run build`
-Expected: all green; the build's main chunk does not contain page components (check `dist/assets` names: the
-screens stay in their `*-screens` chunks).
+Expected: all green, and the screens still build into their own `*-screens` chunks. The router reaches pages and
+widgets only through types: `grep -n "from '@/\(pages\|widgets\)" src/app/routes/search.ts src/app/router.tsx` lists
+only `import type` lines, which the compiler erases, and the not-found page, which is eager by design.
 
 ```bash
-npx prettier --write src/entities/path src/app src/shared/i18n/locales
-git add src/entities/path src/app src/shared/i18n
+npx prettier --write src/entities/path src/widgets src/pages/songs src/pages/player src/features/practice src/app src/shared/i18n/locales
+git add src/entities/path src/widgets src/pages/songs src/pages/player src/features/practice src/app src/shared/i18n
 git commit -m "Name steps, chords and scales, and let every route read its search params
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -4650,25 +5221,28 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create: `src/widgets/quiz-board/{index.ts,ui/QuizBoard.tsx,ui/QuizBoard.test.tsx}`,
-  `src/widgets/quiz-choice/{index.ts,ui/QuizChoiceSheet.tsx,ui/QuizChoiceSheet.test.tsx}`
-- Modify: `src/pages/theory-quiz/ui/TheoryQuizPage.tsx`; create `src/app/screens/theory-quiz.test.tsx`;
-  `src/shared/i18n/locales/{en,ru}/quiz.ts`
+  `src/widgets/quiz-choice/{index.ts,ui/QuizChoiceSheet.tsx,ui/QuizChoiceSheet.test.tsx}`,
+  `src/pages/theory-quiz/ui/TheoryQuizPage.test.tsx`
+- Modify: `src/pages/theory-quiz/ui/TheoryQuizPage.tsx`, `src/shared/i18n/locales/{en,ru}/quiz.ts`
 
 **Interfaces:**
-- Consumes: `useQuiz`, `Quiz`, `answerKeys`, `quizKeyboardRange`, `targetKeys`, `myGaps` (Task 15); `PianoKeyboard`,
-  `Segmented`, `Sheet*`; `selectQuizChoice`, `useSettings`, `useSettingsStoreApi`, `DEFAULT_QUIZ_CHOICE`;
-  `setQuizFamilies`, `setQuizScales`; `selectQuizStats`, `selectAllAnswers`, `selectPractised`; `QUIZ_TABS`,
-  `QuizTab` (app routes are not importable from pages — define the same four tab names in the page).
+- Consumes: `useQuiz`, `Quiz`, `answerKeys`, `quizKeyboardRange`, `targetKeys`, `myGaps`, `THEORY_QUIZZES`,
+  `theoryQuizConfig`, `TheoryQuiz`, `QuizMode` (Task 15); `PianoKeyboard`, `Segmented`, `Sheet`, `SheetContent`;
+  `DrawerTrigger`, `DrawerClose`; `selectQuizChoice`, `useSettings`, `useSettingsStoreApi`, `DEFAULT_QUIZ_CHOICE`;
+  `setQuizFamilies`, `setQuizScales`; `selectQuizStats`, `useProgressStoreApi`.
 - Produces: `QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })` — when the quiz is finished and
-  answered, its action button says Done and calls `onDone`; `QuizChoiceSheet()` — the trigger button and sheet.
+  answered, its action button says Done and calls `onDone`; `QuizChoiceSheet({ mode }: { mode: QuizMode })` — the
+  trigger button and the sheet; Apply is disabled while the list the current mode asks from (chord families for the
+  chord modes, scales for Build scale) is empty.
 
 - [ ] **Step 1: Strings**
+
+The placeholder's `title` goes: the Theory header and its Quiz tab name the screen.
 
 `en/quiz.ts`:
 
 ```ts
 export const quiz = {
-  title: 'Quiz',
   modes: {
     label: 'Quiz mode',
     'build-chord': 'Build chord',
@@ -4711,8 +5285,7 @@ export const quiz = {
 `ru/quiz.ts`:
 
 ```ts
-export const quiz = {
-  title: 'Тест',
+export const quiz: LocaleResources['quiz'] = {
   modes: {
     label: 'Режим теста',
     'build-chord': 'Построить аккорд',
@@ -4749,21 +5322,21 @@ export const quiz = {
   marked: '«{{title}}» отмечено как выученное.',
   openChords: 'Открыть в аккордах',
   openScales: 'Открыть в гаммах',
-} as const
+}
 ```
 
-(Keep the `ru` module's typing pattern as the other Russian modules do.)
+(keeping the module's `import type { LocaleResources } from '../../types'`, as every Russian module does.)
 
 - [ ] **Step 2: Write the failing board tests**
 
 `QuizBoard.test.tsx` (renders the board around a real `useQuiz` with a fixed random):
 
 ```tsx
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { createProgressStore, ProgressStoreProvider } from '@/entities/progress'
-import { targetKeys, useQuiz, type QuizConfig } from '@/features/quiz'
+import { useQuiz, type QuizConfig } from '@/features/quiz'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createMemoryStorage } from '@/shared/lib'
 import { pitchClass } from '@/shared/lib/music'
@@ -4790,13 +5363,16 @@ function renderBoard(config: QuizConfig) {
 const C = [pitchClass(0)]
 
 describe('QuizBoard', () => {
-  it('asks to build a chord and answers a right build', async () => {
+  it('asks to build a chord, fills the chosen keys and answers a right build', async () => {
     const user = userEvent.setup()
     renderBoard({ chordMode: 'build-chord', scope: { skills: ['chord:maj'], roots: C } })
     expect(screen.getByRole('heading', { name: 'Build C' })).toBeInTheDocument()
     const check = screen.getByRole('button', { name: 'Check' })
     expect(check).toBeDisabled()
-    for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')
+    for (const name of ['E4', 'G4']) await user.click(within(keyboard).getByRole('button', { name }))
     await user.click(check)
     expect(screen.getByText('Right')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
@@ -4815,8 +5391,7 @@ describe('QuizBoard', () => {
     renderBoard({ chordMode: 'name-chord', scope: { skills: ['chord:d7'], roots: C } })
     expect(screen.getByRole('heading', { name: 'Which chord is this?' })).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
-    await user.click(screen.getByRole('button', { name: 'C7' }))
-    expect(answers).toBeInTheDocument()
+    await user.click(within(answers).getByRole('button', { name: 'C7' }))
     expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
@@ -4827,8 +5402,6 @@ describe('QuizBoard', () => {
 })
 ```
 
-(`targetKeys` is imported to keep the test honest if the default keyboard range changes; drop the import if unused.)
-
 Run: `npx vitest run src/widgets/quiz-board`
 Expected: FAIL.
 
@@ -4838,9 +5411,8 @@ Expected: FAIL.
 import { Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
-import { cn } from '@/shared/lib'
-import { noteName, type Midi } from '@/shared/lib/music'
-import { PianoKeyboard, RoundButton, type KeyMark } from '@/shared/ui'
+import { noteName } from '@/shared/lib/music'
+import { PianoKeyboard, RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** One question at a time: the prompt, the keyboard, the answer, and one action. */
@@ -4849,7 +5421,6 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
   const { question, selected, result } = quiz.state
   if (!question) return null
 
-  const { from, to } = quizKeyboardRange(question)
   const building = question.mode !== 'name-chord'
   const scaleName =
     question.mode === 'build-scale'
@@ -4865,15 +5436,8 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
       : question.mode === 'name-chord'
         ? t('quiz:prompt.nameChord')
         : t('quiz:prompt.buildScale', { scale: scaleName })
-
-  let marks: ReadonlyMap<Midi, KeyMark> | undefined
-  let outlined: ReadonlySet<Midi> | undefined
-  let wrong: ReadonlySet<Midi> | undefined
-  if (result && building) ({ marks, outlined, wrong } = answerKeys(question, selected))
-  else if (!building)
-    marks = new Map(
-      targetKeys(question).map((key) => [key, { tone: 'selected' } satisfies KeyMark]),
-    )
+  // Building shows the chosen keys, then the answer on them; naming shows the chord it plays.
+  const answer = result && building ? answerKeys(question, selected) : null
 
   return (
     <section className="flex flex-col gap-5">
@@ -4886,14 +5450,14 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
 
       <PianoKeyboard
         label={t('common:keyboard')}
-        from={from}
-        to={to}
+        range={quizKeyboardRange(question)}
         className="h-44"
         selectable={building && !result}
-        selected={new Set(selected)}
-        marks={marks}
-        outlined={outlined}
-        wrong={wrong}
+        selected={building && !result ? new Set(selected) : undefined}
+        lit={building ? undefined : new Set(targetKeys(question))}
+        marks={answer?.marks}
+        outlined={answer?.outlined}
+        wrong={answer?.wrong}
         onKeyPress={building && !result ? quiz.toggleKey : undefined}
       />
 
@@ -4918,7 +5482,7 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
               {t('quiz:clear')}
             </Button>
           ) : null}
-          <Button size="pill" className={cn('flex-1')} disabled={selected.length === 0} onClick={quiz.check}>
+          <Button size="pill" className="flex-1" disabled={selected.length === 0} onClick={quiz.check}>
             {t('quiz:check')}
           </Button>
         </div>
@@ -4942,51 +5506,52 @@ export function QuizBoard({ quiz, onDone }: { quiz: Quiz; onDone?: () => void })
 }
 ```
 
-(`className={cn('flex-1')}` → just `className="flex-1"`; layout classes on a primitive are allowed.) Run the tests.
-Expected: PASS. If the Name-chord test finds the options by a different accessible name (e.g. `C7` spelled `C7`),
-use the symbol the kernel writes.
+Run the tests. Expected: PASS.
 
-- [ ] **Step 4: Write the failing choice-sheet test, then implement**
+- [ ] **Step 4: Write the failing choice-sheet tests, then implement**
 
-`QuizChoiceSheet.test.tsx` (widgets may not import `app`, so the test builds its own settings store):
+`QuizChoiceSheet.test.tsx`:
 
 ```tsx
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
-import { createMemoryStorage } from '@/shared/lib'
+import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { QuizChoiceSheet } from './QuizChoiceSheet'
-
-function renderSheet() {
-  const store = createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] })
-  render(
-    <SettingsStoreProvider store={store}>
-      <QuizChoiceSheet />
-    </SettingsStoreProvider>,
-  )
-  return store
-}
 
 describe('QuizChoiceSheet', () => {
   it('saves the chosen families and scales on Apply', async () => {
     const user = userEvent.setup()
-    const store = renderSheet()
+    const { settingsStore } = renderWithSettings(<QuizChoiceSheet mode="build-chord" />)
     await user.click(screen.getByRole('button', { name: 'Chords and scales' }))
     await user.click(screen.getByRole('switch', { name: 'Triads' }))
     await user.click(screen.getByRole('button', { name: 'Apply' }))
-    expect(store.getState().quiz.families).toEqual(['tri', 'sev', 'nin'])
+    expect(settingsStore.getState().quiz.families).toEqual(['tri', 'sev', 'nin'])
   })
 
-  it('cannot apply an empty choice', async () => {
+  it('cannot apply without anything for the current mode to ask', async () => {
     const user = userEvent.setup()
-    renderSheet()
+    renderWithSettings(<QuizChoiceSheet mode="build-chord" />)
     await user.click(screen.getByRole('button', { name: 'Chords and scales' }))
     await user.click(screen.getByRole('button', { name: 'Clear all' }))
     expect(screen.getByRole('button', { name: 'Apply' })).toBeDisabled()
   })
+
+  it('lets a chord quiz apply with no scales chosen, keeping the saved scales', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = renderWithSettings(<QuizChoiceSheet mode="name-chord" />)
+    const scales = settingsStore.getState().quiz.scales
+    await user.click(screen.getByRole('button', { name: 'Chords and scales' }))
+    for (const name of ['Major', 'Natural minor', 'Harmonic minor']) {
+      await user.click(screen.getByRole('switch', { name }))
+    }
+    await user.click(screen.getByRole('button', { name: 'Apply' }))
+    expect(settingsStore.getState().quiz.scales).toEqual(scales)
+  })
 })
 ```
+
+(The saved choice never becomes empty: `setQuizScales` refuses an empty list, spec §7.)
 
 `QuizChoiceSheet.tsx`:
 
@@ -5001,18 +5566,24 @@ import {
   useSettingsStoreApi,
   type QuizChoice,
 } from '@/entities/settings'
+import type { QuizMode } from '@/features/quiz'
 import { setQuizFamilies, setQuizScales } from '@/features/set-preference'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { DrawerClose, DrawerTrigger } from '@/shared/ui/primitives/drawer'
 import { Switch } from '@/shared/ui/primitives/switch'
 
 const toggled = <T,>(list: readonly T[], item: T, on: boolean): T[] =>
   on ? [...list, item] : list.filter((x) => x !== item)
 
+/** What a mode asks from: chord families for building or naming chords, scales for Build scale. */
+const asksFrom = (mode: QuizMode, choice: QuizChoice): readonly unknown[] =>
+  mode === 'build-scale' ? choice.scales : choice.families
+
 /** Which chord families and scales the open-ended quiz asks: switches, then Apply. */
-export function QuizChoiceSheet() {
-  const { t } = useTranslation(['quiz', 'theory'])
+export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
+  const { t } = useTranslation(['quiz', 'theory', 'common'])
   const store = useSettingsStoreApi()
   const saved = useSettings(selectQuizChoice)
   const [open, setOpen] = useState(false)
@@ -5036,18 +5607,14 @@ export function QuizChoiceSheet() {
 
   return (
     <Sheet open={open} onOpenChange={openWith}>
-      <SheetTrigger render={<Button variant="soft" />}>
+      <DrawerTrigger render={<Button variant="soft" />}>
         <SlidersHorizontal data-icon="inline-start" />
         {t('quiz:choice.open')}
-      </SheetTrigger>
+      </DrawerTrigger>
       <SheetContent
         title={t('quiz:choice.open')}
         footer={
-          <Button
-            size="pill"
-            onClick={apply}
-            disabled={draft.families.length === 0 || draft.scales.length === 0}
-          >
+          <Button size="pill" onClick={apply} disabled={asksFrom(mode, draft).length === 0}>
             {t('quiz:choice.apply')}
           </Button>
         }
@@ -5072,16 +5639,17 @@ export function QuizChoiceSheet() {
             setDraft((d) => ({ ...d, scales: toggled(d.scales, kind, on) })),
           ),
         )}
-        <SheetClose className="sr-only">{t('common:close')}</SheetClose>
+        <DrawerClose className="sr-only">{t('common:close')}</DrawerClose>
       </SheetContent>
     </Sheet>
   )
 }
 ```
 
-(`min-h-13` is 52px on Tailwind v4's spacing scale.) Run the sheet tests. Expected: PASS. If Base UI's drawer needs
-pointer APIs jsdom lacks, add the smallest stub to `src/shared/test/setup.ts` (e.g. `Element.prototype.setPointerCapture`)
-with a comment naming why.
+(`min-h-13` is 52px on Tailwind v4's spacing scale. The close button is for screen readers; everyone else swipes the
+sheet down or taps outside it.) Run the sheet tests. Expected: PASS. If Base UI's drawer calls a pointer API that
+jsdom lacks, the test fails with that API's name: add the smallest stub for it to `src/shared/test/setup.ts`, with a
+comment naming the API and why jsdom needs it.
 
 - [ ] **Step 5: The Theory → Quiz page**
 
@@ -5089,61 +5657,79 @@ with a comment naming why.
 
 ```tsx
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectAllAnswers, selectPractised, selectQuizStats, useProgress } from '@/entities/progress'
+import { selectQuizStats, useProgress, useProgressStoreApi } from '@/entities/progress'
 import { selectQuizChoice, useSettings } from '@/entities/settings'
-import { myGaps, useQuiz, type QuizConfig } from '@/features/quiz'
-import { chordSkill, qualitiesIn, scaleSkill } from '@/shared/lib/music'
+import {
+  myGaps,
+  THEORY_QUIZZES,
+  theoryQuizConfig,
+  useQuiz,
+  type QuizConfig,
+  type QuizMode,
+  type TheoryQuiz,
+} from '@/features/quiz'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { QuizBoard } from '@/widgets/quiz-board'
 import { QuizChoiceSheet } from '@/widgets/quiz-choice'
 
-const TABS = ['build-chord', 'name-chord', 'build-scale', 'gaps'] as const
-type Tab = (typeof TABS)[number]
-
 function Quiz({ config }: { config: QuizConfig }) {
   return <QuizBoard quiz={useQuiz(config)} />
+}
+
+/** A mode over the chosen families or scales; a new choice starts it again. */
+function ChoiceQuiz({ mode }: { mode: QuizMode }) {
+  const choice = useSettings(selectQuizChoice)
+  const config = theoryQuizConfig(mode, choice, [])
+  return <Quiz key={config.scope.skills.join(',')} config={config} />
+}
+
+/**
+ * My gaps, read once when the tab opens: an answer that turns a gap known must not restart the
+ * quiz under the learner.
+ */
+function GapsQuiz({ onWholeQuiz }: { onWholeQuiz: () => void }) {
+  const { t } = useTranslation('quiz')
+  const progress = useProgressStoreApi()
+  const choice = useSettings(selectQuizChoice)
+  const [gaps] = useState(() => {
+    const { answers, practised } = progress.getState()
+    return myGaps(answers, practised)
+  })
+  if (gaps.length === 0) {
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <p className="text-lg">{t('gaps.none')}</p>
+        <Button variant="soft" onClick={onWholeQuiz}>
+          {t('gaps.whole')}
+        </Button>
+      </div>
+    )
+  }
+  return <Quiz config={theoryQuizConfig('gaps', choice, gaps)} />
 }
 
 export function TheoryQuizPage() {
   const { t } = useTranslation('quiz')
   const { mode } = useSearch({ from: '/shell/theory/quiz' })
   const navigate = useNavigate({ from: '/theory/quiz' })
-  const choice = useSettings(selectQuizChoice)
-  const answers = useProgress(selectAllAnswers)
-  const practised = useProgress(selectPractised)
   const stats = useProgress(selectQuizStats)
-  const setMode = (next: Tab) => void navigate({ search: { mode: next }, replace: true })
-
-  const skills =
-    mode === 'build-scale'
-      ? choice.scales.map(scaleSkill)
-      : mode === 'gaps'
-        ? myGaps(answers, practised)
-        : choice.families.flatMap((family) => qualitiesIn(family)).map(chordSkill)
-  const config: QuizConfig = {
-    chordMode: mode === 'name-chord' ? 'name-chord' : 'build-chord',
-    scope: mode === 'gaps' ? { skills, ordered: true } : { skills },
-  }
+  const setMode = (next: TheoryQuiz) => void navigate({ search: { mode: next }, replace: true })
 
   return (
     <div className="flex flex-col gap-6">
       <Segmented
         label={t('modes.label')}
         value={mode}
-        options={TABS.map((tab) => ({ value: tab, label: t(`modes.${tab}`) }))}
+        options={THEORY_QUIZZES.map((quiz) => ({ value: quiz, label: t(`modes.${quiz}`) }))}
         onChange={setMode}
       />
-      {skills.length === 0 ? (
-        <div className="flex flex-col items-start gap-3">
-          <p className="text-lg">{t('gaps.none')}</p>
-          <Button variant="soft" onClick={() => setMode('build-chord')}>
-            {t('gaps.whole')}
-          </Button>
-        </div>
+      {mode === 'gaps' ? (
+        <GapsQuiz onWholeQuiz={() => setMode('build-chord')} />
       ) : (
-        <Quiz key={`${mode}:${skills.join(',')}`} config={config} />
+        <ChoiceQuiz key={mode} mode={mode} />
       )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <dl className="flex gap-5 text-sm text-muted-foreground">
@@ -5162,27 +5748,21 @@ export function TheoryQuizPage() {
             <dd className="inline font-semibold text-foreground tabular-nums">{stats.best}</dd>
           </div>
         </dl>
-        {mode === 'gaps' ? null : <QuizChoiceSheet />}
+        {mode === 'gaps' ? null : <QuizChoiceSheet mode={mode} />}
       </div>
     </div>
   )
 }
 ```
 
-Note: `myGaps` builds a new array every render, so the `key` string (not the array) decides when the quiz restarts;
-a new evidence answer can change My gaps' scope and restart it — to keep the current question, freeze the gaps
-scope when the tab opens: `const [gapsScope] = useState(() => myGaps(...))` inside a small `GapsQuiz` component
-keyed on the tab. Do that.
-
-Screen tests run the whole app through `renderApp`, which lives in `app`; a page may not import `app`, so they sit
-in `src/app/screens/` as integration tests (every screen task below does the same):
+The screen's test sits beside the page and runs the whole app through `renderApp`:
 
 ```tsx
-// src/app/screens/theory-quiz.test.tsx
+// src/pages/theory-quiz/ui/TheoryQuizPage.test.tsx
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../testing/render-app'
+import { renderApp } from '@/app/testing/render-app'
 
 describe('Theory → Quiz', () => {
   it('switches modes through the URL', async () => {
@@ -5220,8 +5800,8 @@ avoid depending on the random draw.)
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/widgets/quiz-board src/widgets/quiz-choice src/pages/theory-quiz src/app/screens src/shared/i18n/locales
-git add src/widgets src/pages/theory-quiz src/app/screens src/shared
+npx prettier --write src/widgets/quiz-board src/widgets/quiz-choice src/pages/theory-quiz src/shared/i18n/locales
+git add src/widgets src/pages/theory-quiz src/shared
 git commit -m "Build the quiz board and the Theory quiz with its choice sheet and My gaps
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -5232,25 +5812,25 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 18: The Check
 
 **Files:**
-- Create: `src/pages/check/{index.ts,ui/CheckPage.tsx,ui/CheckResult.tsx}`, `src/app/screens/check.test.tsx`
+- Create: `src/pages/check/{index.ts,ui/CheckPage.tsx,ui/CheckResult.tsx,ui/CheckPage.test.tsx}`
 - Modify: `src/app/router.tsx`, `src/app/routes/theory-screens.ts`, `src/app/router.test.tsx` (route list)
 
 **Interfaces:**
 - Consumes: `checkPlan`, `useQuiz`, `QuizBoard`, `validateCheckSearch`, `useStepTitle`, `RatingMark`,
-  `selectAllAnswers`, `selectIsLearned`, `rate`, `Progress` primitive, `skillOf`.
+  `selectAllAnswers`, `selectIsLearned`, `ratingOf`, `Progress` primitive, `skillOf`.
 - Produces: route `/check` (id `/full-screen/check`), `CheckPage`.
 
-- [ ] **Step 1: Write the failing integration tests**
+- [ ] **Step 1: Write the failing screen tests**
 
-`src/app/screens/check.test.tsx`:
+`src/pages/check/ui/CheckPage.test.tsx`:
 
 ```tsx
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
 import { recordAnswer } from '@/features/record-answer'
 import { chordSkill, qualitiesIn } from '@/shared/lib/music'
-import { renderApp } from '../testing/render-app'
 
 describe('Check', () => {
   it('checks a piece’s chords in six questions with a progress bar', async () => {
@@ -5299,7 +5879,7 @@ describe('Check', () => {
 })
 ```
 
-Run: `npx vitest run src/app/screens/check.test.tsx`
+Run: `npx vitest run src/pages/check`
 Expected: FAIL.
 
 - [ ] **Step 2: Implement**
@@ -5390,14 +5970,13 @@ export function CheckPage() {
 ```tsx
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { rate, selectAllAnswers, selectIsLearned, useProgress, type ProgressState } from '@/entities/progress'
+import { ratingOf, selectAllAnswers, selectIsLearned, useProgress } from '@/entities/progress'
 import type { CheckPlan } from '@/features/quiz'
-import { skillOf, type SkillId } from '@/shared/lib/music'
+import { skillOf } from '@/shared/lib/music'
 import { RatingMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-const NONE = [] as const
-
+/** The score, each skill's rating with a way to the explorer for a gap, and whether the step is now learned. */
 export function CheckResult({
   plan,
   correct,
@@ -5414,7 +5993,6 @@ export function CheckResult({
   const { t } = useTranslation(['quiz', 'theory'])
   const answers = useProgress(selectAllAnswers)
   const learned = useProgress(selectIsLearned(plan.marks ?? plan.of))
-  const ratingOf = (skill: SkillId, all: ProgressState['answers']) => rate(all[skill] ?? NONE)
 
   return (
     <section className="flex flex-1 flex-col gap-6">
@@ -5427,21 +6005,28 @@ export function CheckResult({
       <ul className="flex flex-col divide-y divide-border rounded-3xl bg-card ring-1 ring-border">
         {plan.skills.map((skillId) => {
           const skill = skillOf(skillId)
-          const rating = ratingOf(skillId, answers)
+          const rating = ratingOf(answers, skillId)
           const name =
             skill.kind === 'chord' ? t(`theory:quality.${skill.quality}`) : t(`theory:scaleKind.${skill.scale}`)
           return (
             <li key={skillId} className="flex min-h-14 items-center gap-3 px-4">
               <RatingMark rating={rating} />
               <span className="flex-1">{name}</span>
-              {rating === 'known' ? null : skill.kind === 'chord' ? (
-                <Link to="/theory/chords" search={{ quality: skill.quality }} className="font-semibold text-primary">
-                  {t('openChords')}
-                </Link>
-              ) : (
-                <Link to="/theory/scales" search={{ kind: skill.scale }} className="font-semibold text-primary">
-                  {t('openScales')}
-                </Link>
+              {rating === 'known' ? null : (
+                <Button
+                  variant="link"
+                  className="px-0"
+                  nativeButton={false}
+                  render={
+                    skill.kind === 'chord' ? (
+                      <Link to="/theory/chords" search={{ quality: skill.quality }} />
+                    ) : (
+                      <Link to="/theory/scales" search={{ kind: skill.scale }} />
+                    )
+                  }
+                >
+                  {skill.kind === 'chord' ? t('openChords') : t('openScales')}
+                </Button>
               )}
             </li>
           )
@@ -5477,18 +6062,18 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 19: The Chords explorer and the step panel
 
 **Files:**
-- Create: `src/widgets/chord-explorer/{index.ts,ui/ChordExplorer.tsx}`, `src/widgets/step-panel/{index.ts,ui/StepPanel.tsx}`,
-  `src/app/screens/theory-chords.test.tsx`
-- Modify: `src/pages/theory-chords/ui/TheoryChordsPage.tsx`, `src/shared/i18n/locales/{en,ru}/theory.ts`
+- Create: `src/widgets/chord-explorer/ui/ChordExplorer.tsx`, `src/widgets/step-panel/{index.ts,ui/StepPanel.tsx}`,
+  `src/pages/theory-chords/ui/TheoryChordsPage.test.tsx`
+- Modify: `src/widgets/chord-explorer/index.ts`, `src/pages/theory-chords/ui/TheoryChordsPage.tsx`,
+  `src/shared/i18n/locales/{en,ru}/theory.ts`
 
 **Interfaces:**
-- Consumes: `chordVoicing`, `chordRootSpelling`, `chordSymbol`, `qualitiesIn`, `chordFamily`, `CHORD_FAMILIES`,
-  `qualitySuffix`, `noteParam`, `parseNoteName`, `pitchClassOf`, `pitchClass`; `chordSounds`; `usePlay`;
-  `PianoKeyboard`, `ChipRow`, `Segmented`, `RoleLegend`, `rangeFor`, `ROLE_BG`; `LearnedToggle`; `useStepTitle`.
+- Consumes: `ChordView` (Task 16); `placeChord`, `lastInversion`, `chordRootSpelling`, `chordSymbol`, `qualitiesIn`,
+  `chordFamily`, `CHORD_FAMILIES`, `qualitySuffix`, `spellChord`, `noteParam`, `noteFromParam`, `keyboardRange`;
+  `usePlayChord`; `PianoKeyboard`, `ChipRow`, `Segmented`, `RoleLegend`, `ROLE_BG`; `LearnedToggle`; `useStepTitle`.
 - Produces:
-  - `ChordView = { root: string; quality: ChordQuality; inversion: number; hands: 'rh' | 'both' }`;
-    `ChordExplorer({ view, onChange }: { view: ChordView; onChange: (patch: Partial<ChordView>) => void })` — every
-    change also sounds the new chord.
+  - `ChordExplorer({ chord, onChange }: { chord: ChordView; onChange: (change: Partial<ChordView>) => void })` —
+    every change also sounds the new chord.
   - `StepPanel({ step }: { step: StepId })`
 
 - [ ] **Step 1: Strings** — `theory`: `root: 'Root'`, `familyLabel: 'Chord family'`, `qualityLabel: 'Chord'`,
@@ -5498,16 +6083,16 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   `inversionLabel: 'Обращение'`, `inversion: { 0: 'Основной', 1: '1-е', 2: '2-е', 3: '3-е' }`, `handsLabel: 'Руки'`,
   `play: 'Сыграть'`, `arpeggio: 'Арпеджио'`, `checkYourself: 'Проверить себя'`, `major: 'M'`.
 
-- [ ] **Step 2: Write the failing integration tests**
+- [ ] **Step 2: Write the failing screen tests**
 
-`src/app/screens/theory-chords.test.tsx`:
+`src/pages/theory-chords/ui/TheoryChordsPage.test.tsx`:
 
 ```tsx
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
 import type { FakeAudio } from '@/shared/api/audio'
-import { renderApp } from '../testing/render-app'
 
 describe('Theory → Chords', () => {
   it('shows C major by default, its keys labelled by degree', async () => {
@@ -5527,22 +6112,24 @@ describe('Theory → Chords', () => {
     expect((services.audio as FakeAudio).played.length).toBeGreaterThan(0)
   })
 
+  it('offers only the inversions the chord has', async () => {
+    renderApp('/theory/chords?quality=maj')
+    const inversions = await screen.findByRole('group', { name: 'Inversion' })
+    expect(within(inversions).getAllByRole('button').map((b) => b.textContent)).toEqual(['Root', '1st', '2nd'])
+  })
+
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
     const { progressStore } = renderApp('/theory/chords?quality=maj7&step=chords:sev')
-    expect(await screen.findByRole('link', { name: 'Check yourself' })).toHaveAttribute(
-      'href',
-      '/check?of=chords%3Asev',
-    )
+    const check = await screen.findByRole('link', { name: 'Check yourself' })
+    expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
     await user.click(screen.getByRole('button', { name: 'Learned' }))
     expect(progressStore.getState().learned['chords:sev']).toBeDefined()
   })
 })
 ```
 
-(The router writes `of=chords%3Asev` or `of=chords:sev`; assert with `toMatch(/of=chords(%3A|:)sev/)` if needed.)
-
-Run: `npx vitest run src/app/screens/theory-chords.test.tsx`
+Run: `npx vitest run src/pages/theory-chords`
 Expected: FAIL.
 
 - [ ] **Step 3: Implement the widgets and the page**
@@ -5579,97 +6166,81 @@ export function StepPanel({ step }: { step: StepId }) {
 
 ```tsx
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import {
   CHORD_FAMILIES,
   chordFamily,
   chordRootSpelling,
   chordSymbol,
-  chordVoicing,
+  keyboardRange,
+  lastInversion,
+  MIDDLE_C,
   midi,
+  noteFromParam,
   noteName,
   noteParam,
-  parseNoteName,
   pitchClass,
-  pitchClassOf,
+  placeChord,
   qualitiesIn,
   qualitySuffix,
   spellChord,
-  type ChordQuality,
+  type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
-import { cn } from '@/shared/lib'
-import {
-  ChipRow,
-  PianoKeyboard,
-  rangeFor,
-  ROLE_BG,
-  RoleLegend,
-  Segmented,
-  type KeyMark,
-} from '@/shared/ui'
+import { usePlayChord } from '@/shared/lib/services'
+import { ChipRow, PianoKeyboard, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-
-export interface ChordView {
-  readonly root: string
-  readonly quality: ChordQuality
-  readonly inversion: number
-  readonly hands: 'rh' | 'both'
-}
+import type { ChordView } from '../model/chord-view'
 
 const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
-const AT_LEAST = { from: midi(60), to: midi(83) }
-
-function voicingOf(view: ChordView) {
-  const pc = pitchClassOf(parseNoteName(view.root) ?? { letter: 'C', accidental: 0 })
-  const root = chordRootSpelling(pc, view.quality)
-  const voicing = chordVoicing(root, view.quality, {
-    inversion: view.inversion,
-    bothHands: view.hands === 'both',
-  })
-  return { pc, root, voicing, keys: [...voicing.lh, ...voicing.rh].map((p) => p.midi) }
-}
+/** Two octaves from middle C: the keyboard grows past them only for a chord that needs it. */
+const AT_LEAST: KeyRange = { from: MIDDLE_C, to: midi(83) }
+const INVERSIONS = [0, 1, 2, 3] as const
 
 /** Any chord on any root: its keys by role and degree, inversions, one hand or two, played. */
 export function ChordExplorer({
-  view,
+  chord,
   onChange,
 }: {
-  view: ChordView
-  onChange: (patch: Partial<ChordView>) => void
+  chord: ChordView
+  onChange: (change: Partial<ChordView>) => void
 }) {
   const { t } = useTranslation(['theory', 'common'])
-  const play = usePlay()
-  const { root, voicing, keys } = voicingOf(view)
-  const tones = spellChord(root, view.quality)
-  const family = chordFamily(view.quality)
-  const lowest = Math.min(...keys)
-  const highest = Math.max(...keys)
-  const range = rangeFor([midi(Math.min(lowest, AT_LEAST.from)), midi(Math.max(highest, AT_LEAST.to))], AT_LEAST)
+  const playChord = usePlayChord()
+  const root = noteFromParam(chord.root)
+  const placed = placeChord(root, chord.quality, {
+    inversion: chord.inversion,
+    bothHands: chord.hands === 'both',
+  })
+  const keys = [...placed.lh, ...placed.rh]
+  const tones = spellChord(root, chord.quality)
+  const family = chordFamily(chord.quality)
   const marks = new Map<Midi, KeyMark>(
-    [...voicing.lh, ...voicing.rh].map((p) => [p.midi, { tone: p.tone.role, label: p.tone.degree }]),
+    keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
   )
-  const sound = (next: ChordView, arpeggio = false) =>
-    play(chordSounds(voicingOf(next).keys, { arpeggio }))
-  const change = (patch: Partial<ChordView>) => {
-    onChange(patch)
-    sound({ ...view, ...patch })
+  const sound = (view: ChordView, arpeggio = false) =>
+    playChord(
+      { root: noteFromParam(view.root), quality: view.quality },
+      { inversion: view.inversion, bothHands: view.hands === 'both', arpeggio },
+    )
+  const change = (next: Partial<ChordView>) => {
+    onChange(next)
+    sound({ ...chord, ...next })
   }
 
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-6xl font-extrabold tracking-tight">
-          {chordSymbol({ root, quality: view.quality })}
+          {chordSymbol({ root, quality: chord.quality })}
         </h2>
-        <p className="text-right text-muted-foreground">{t(`theory:quality.${view.quality}`)}</p>
+        <p className="text-right text-muted-foreground">{t(`theory:quality.${chord.quality}`)}</p>
       </div>
       <ChipRow
         label={t('theory:root')}
-        value={noteParam(root)}
+        value={chord.root}
         options={PITCH_CLASSES.map((pc) => {
-          const spelled = chordRootSpelling(pc, view.quality)
+          const spelled = chordRootSpelling(pc, chord.quality)
           return { value: noteParam(spelled), label: noteName(spelled) }
         })}
         onChange={(value) => change({ root: value })}
@@ -5678,11 +6249,14 @@ export function ChordExplorer({
         label={t('theory:familyLabel')}
         value={family}
         options={CHORD_FAMILIES.map((f) => ({ value: f, label: t(`theory:family.${f}`) }))}
-        onChange={(f) => change({ quality: qualitiesIn(f)[0] ?? view.quality, inversion: 0 })}
+        onChange={(next) => {
+          const [first] = qualitiesIn(next)
+          if (first) change({ quality: first, inversion: 0 })
+        }}
       />
       <ChipRow
         label={t('theory:qualityLabel')}
-        value={view.quality}
+        value={chord.quality}
         options={qualitiesIn(family).map((q) => ({
           value: q,
           label: qualitySuffix(q) || t('theory:major'),
@@ -5692,8 +6266,10 @@ export function ChordExplorer({
       />
       <PianoKeyboard
         label={t('common:keyboard')}
-        from={range.from}
-        to={range.to}
+        range={keyboardRange(
+          keys.map((key) => key.midi),
+          AT_LEAST,
+        )}
         marks={marks}
         className="h-44"
       />
@@ -5704,7 +6280,12 @@ export function ChordExplorer({
             key={tone.degree}
             className="flex items-center gap-2 rounded-full bg-card py-1 pr-3 pl-1 ring-1 ring-border"
           >
-            <span className={cn('grid size-7 place-items-center rounded-full text-sm font-bold text-on-role', ROLE_BG[tone.role])}>
+            <span
+              className={cn(
+                'grid size-7 place-items-center rounded-full text-sm font-bold text-on-role',
+                ROLE_BG[tone.role],
+              )}
+            >
               {tone.degree}
             </span>
             <span className="font-semibold">{noteName(tone.note)}</span>
@@ -5713,16 +6294,16 @@ export function ChordExplorer({
       </ol>
       <Segmented
         label={t('theory:inversionLabel')}
-        value={String(Math.min(view.inversion, tones.length - 1, 3))}
-        options={[0, 1, 2, 3].slice(0, Math.min(tones.length, 4)).map((n) => ({
-          value: String(n),
-          label: t(`theory:inversion.${n as 0 | 1 | 2 | 3}`),
+        value={chord.inversion}
+        options={INVERSIONS.filter((n) => n <= lastInversion(chord.quality)).map((n) => ({
+          value: n,
+          label: t(`theory:inversion.${n}`),
         }))}
-        onChange={(value) => change({ inversion: Number(value) })}
+        onChange={(inversion) => change({ inversion })}
       />
       <Segmented
         label={t('theory:handsLabel')}
-        value={view.hands}
+        value={chord.hands}
         options={[
           { value: 'rh', label: t('common:hands.rh') },
           { value: 'both', label: t('common:hands.both') },
@@ -5730,10 +6311,10 @@ export function ChordExplorer({
         onChange={(hands) => change({ hands })}
       />
       <div className="flex gap-3">
-        <Button size="pill" className="flex-1" onClick={() => sound(view)}>
+        <Button size="pill" className="flex-1" onClick={() => sound(chord)}>
           {t('theory:play')}
         </Button>
-        <Button size="pill" variant="soft" className="flex-1" onClick={() => sound(view, true)}>
+        <Button size="pill" variant="soft" className="flex-1" onClick={() => sound(chord, true)}>
           {t('theory:arpeggio')}
         </Button>
       </div>
@@ -5742,9 +6323,7 @@ export function ChordExplorer({
 }
 ```
 
-(Write `lowest`/`highest` through `rangeFor(keys, AT_LEAST)` merged with `AT_LEAST` if that reads more simply: the
-range must hold every key and at least C4–B5, so the keyboard does not jump as roots change. Replace
-`{ letter: 'C', accidental: 0 }` with `note('C')`.)
+Add `export { ChordExplorer } from './ui/ChordExplorer'` to `src/widgets/chord-explorer/index.ts`.
 
 `TheoryChordsPage.tsx`:
 
@@ -5754,22 +6333,22 @@ import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
 
 export function TheoryChordsPage() {
-  const search = useSearch({ from: '/shell/theory/chords' })
+  const { step, ...chord } = useSearch({ from: '/shell/theory/chords' })
   const navigate = useNavigate({ from: '/theory/chords' })
-  const onChange = (patch: Partial<ChordView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true })
+  const onChange = (change: Partial<ChordView>) =>
+    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
   return (
     <div className="flex flex-col gap-6">
-      {search.step ? <StepPanel step={search.step} /> : null}
-      <ChordExplorer view={search} onChange={onChange} />
+      {step ? <StepPanel step={step} /> : null}
+      <ChordExplorer chord={chord} onChange={onChange} />
     </div>
   )
 }
 ```
 
-Run the tests. Expected: PASS. (The old placeholder heading "Chords" at level 2 in the router test for the tab — the
-test `opens a deep link to a Theory section with its tab selected` looks for a level-2 heading "Scales"; update that
-test to assert the tab only, since the explorers' level-2 headings are chord and scale names now.)
+Run the tests. Expected: PASS. The router test `opens a deep link to a Theory section with its tab selected` looks for
+a level-2 heading "Scales" from the old placeholder; the explorers' level-2 headings are chord and scale names now,
+so that test asserts the selected tab only.
 
 - [ ] **Step 4: Verify and commit**
 
@@ -5788,17 +6367,18 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 20: The Scales explorer
 
 **Files:**
-- Create: `src/widgets/scale-explorer/{index.ts,ui/ScaleExplorer.tsx,ui/FingeringTable.tsx,ui/ScaleChords.tsx,model/use-lit-key.ts}`,
-  `src/app/screens/theory-scales.test.tsx`
-- Modify: `src/pages/theory-scales/ui/TheoryScalesPage.tsx`, `src/shared/i18n/locales/{en,ru}/theory.ts`
+- Create: `src/widgets/scale-explorer/{ui/ScaleExplorer.tsx,ui/FingeringTable.tsx,ui/ScaleChords.tsx,ui/ScaleFacts.tsx,
+  model/use-lit-key.ts}`, `src/pages/theory-scales/ui/TheoryScalesPage.test.tsx`
+- Modify: `src/widgets/scale-explorer/index.ts`, `src/pages/theory-scales/ui/TheoryScalesPage.tsx`,
+  `src/shared/i18n/locales/{en,ru}/theory.ts`
 
 **Interfaces:**
-- Consumes: `spellScale`, `scaleRootSpelling`, `scaleFingering`, `scaleSteps`, `relativeScale`, `diatonicChords`,
-  `chordSymbol`, `chordVoicing`, `noteName`, `noteParam`, `parseNoteName`, `pitchClassOf`, `SCALE_KINDS`;
-  `scaleRun`, `PRACTICE_RHYTHM_IDS`, `chordSounds`; `usePlay`, `useServices`; kit.
-- Produces: `ScaleView = { root: string; kind: ScaleKind; view: 'degrees' | 'rh' | 'lh'; rhythm: PracticeRhythm;
-  tempo: number; hands: Hands; chords: 3 | 4 }`; `ScaleExplorer({ view, onChange })`;
-  `useLitKey(): { lit: Midi | null; light(steps, startsIn: number): void }`.
+- Consumes: `ScaleView` (Task 16); `placeScale`, `spellScale`, `scaleRootSpelling`, `scaleFingering`, `scaleGaps`,
+  `relativeScale`, `diatonicChords`, `chordSymbol`, `noteName`, `noteParam`, `noteFromParam`, `pitchClassOf`,
+  `keyboardRange`, `SCALE_KINDS`; `scaleRun`, `PRACTICE_RHYTHM_IDS`, `type Cue`; `usePlay`, `usePlayChord`,
+  `useServices`; kit.
+- Produces: `ScaleExplorer({ scale, onChange }: { scale: ScaleView; onChange: (change: Partial<ScaleView>) => void })`;
+  `useLitKey(): { lit: Midi | null; light(cues: readonly Cue[], startsIn: number, end: number): void }`.
 
 - [ ] **Step 1: Strings** — `theory`:
 
@@ -5822,7 +6402,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   playUpDown: 'Play up and down',
   chordsIn: 'Chords in this scale',
   chordSize: { 3: 'Triads', 4: '7ths' },
-  about: { formula: 'Formula', steps: 'Steps', relative: 'Relative' },
+  about: { formula: 'Formula', gaps: 'Structure', relative: 'Relative' },
+  gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   // ru
   scaleLabel: 'Гамма',
   view: { label: 'Показать', degrees: 'Ступени', rh: 'Аппликатура ПР', lh: 'Аппликатура ЛР' },
@@ -5842,22 +6423,25 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   playUpDown: 'Вверх и вниз',
   chordsIn: 'Аккорды гаммы',
   chordSize: { 3: 'Трезвучия', 4: 'Септаккорды' },
-  about: { formula: 'Формула', steps: 'Шаги', relative: 'Параллельная' },
+  about: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная' },
+  gap: { W: 'Т', H: 'П', 'W+H': 'Т+П' },
 ```
 
-- [ ] **Step 2: Write the failing integration tests**
+(A scale's structure is written in whole and half steps: W and H in English, тон and полутон, Т and П, in Russian.)
 
-`src/app/screens/theory-scales.test.tsx`:
+- [ ] **Step 2: Write the failing screen tests**
+
+`src/pages/theory-scales/ui/TheoryScalesPage.test.tsx`:
 
 ```tsx
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
 import type { FakeAudio } from '@/shared/api/audio'
-import { renderApp } from '../testing/render-app'
 
 describe('Theory → Scales', () => {
-  it('spells E♭ harmonic minor with its C♭ and names its steps', async () => {
+  it('spells E♭ harmonic minor with its C♭ and names its structure', async () => {
     renderApp('/theory/scales?root=Eb&kind=harmonic')
     expect(await screen.findByRole('heading', { level: 2, name: 'E♭ harmonic minor' })).toBeInTheDocument()
     expect(screen.getByRole('table')).toHaveTextContent('C♭')
@@ -5888,13 +6472,13 @@ describe('Theory → Scales', () => {
       expect((services.audio as FakeAudio).played).toHaveLength(1)
       act(() => vi.advanceTimersByTime(150))
       const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-      expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('ring-primary')
+      expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')
     })
   })
 })
 ```
 
-Run: `npx vitest run src/app/screens/theory-scales.test.tsx`
+Run: `npx vitest run src/pages/theory-scales`
 Expected: FAIL.
 
 - [ ] **Step 3: Implement**
@@ -5904,27 +6488,28 @@ Expected: FAIL.
 ```ts
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Midi } from '@/shared/lib/music'
+import type { Cue } from '@/shared/lib/schedule'
 
 /** The key sounding now in a scale run, lit in time with the audio; cleared when the run ends. */
 export function useLitKey(): {
   lit: Midi | null
-  light: (steps: readonly { key: Midi; at: number }[], startsIn: number, end: number) => void
+  light: (cues: readonly Cue[], startsIn: number, end: number) => void
 } {
   const [lit, setLit] = useState<Midi | null>(null)
   const timers = useRef<number[]>([])
-  const clear = () => {
+  const clear = useCallback(() => {
     for (const timer of timers.current) window.clearTimeout(timer)
     timers.current = []
-  }
-  useEffect(() => clear, [])
+  }, [])
+  useEffect(() => clear, [clear])
   const light = useCallback(
-    (steps: readonly { key: Midi; at: number }[], startsIn: number, end: number) => {
+    (cues: readonly Cue[], startsIn: number, end: number) => {
       clear()
-      for (const step of steps)
-        timers.current.push(window.setTimeout(() => setLit(step.key), (startsIn + step.at) * 1000))
+      for (const cue of cues)
+        timers.current.push(window.setTimeout(() => setLit(cue.midi), (startsIn + cue.at) * 1000))
       timers.current.push(window.setTimeout(() => setLit(null), (startsIn + end) * 1000))
     },
-    [],
+    [clear],
   )
   return { lit, light }
 }
@@ -5934,7 +6519,7 @@ export function useLitKey(): {
 
 ```tsx
 import { useTranslation } from 'react-i18next'
-import type { Finger, Tone } from '@/shared/lib/music'
+import type { Finger } from '@/shared/lib/music'
 
 /** Note, RH and LH fingers for one octave; one line where no fingering is taught. */
 export function FingeringTable({
@@ -5974,17 +6559,16 @@ export function FingeringTable({
 }
 ```
 
-(Drop the unused `Tone` import.)
-
 `ui/ScaleChords.tsx`:
 
 ```tsx
 import { useTranslation } from 'react-i18next'
-import { chordSymbol, chordVoicing, diatonicChords, type Tone } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { chordSymbol, diatonicChords, type Tone } from '@/shared/lib/music'
+import { usePlayChord } from '@/shared/lib/services'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+
+const SIZES = [3, 4] as const
 
 /** The triads or 7th chords on each degree, with Roman numerals; a tap sounds one. */
 export function ScaleChords({
@@ -5997,7 +6581,7 @@ export function ScaleChords({
   onSize: (size: 3 | 4) => void
 }) {
   const { t } = useTranslation('theory')
-  const play = usePlay()
+  const playChord = usePlayChord()
   const chords = diatonicChords(scale, size)
   if (chords.length === 0) return null
   return (
@@ -6005,12 +6589,9 @@ export function ScaleChords({
       <h3 className="text-xl font-bold">{t('chordsIn')}</h3>
       <Segmented
         label={t('chordsIn')}
-        value={String(size)}
-        options={[
-          { value: '3', label: t('chordSize.3') },
-          { value: '4', label: t('chordSize.4') },
-        ]}
-        onChange={(value) => onSize(value === '4' ? 4 : 3)}
+        value={size}
+        options={SIZES.map((n) => ({ value: n, label: t(`chordSize.${n}`) }))}
+        onChange={onSize}
       />
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
         {chords.map(({ roman, chord }) => (
@@ -6018,16 +6599,7 @@ export function ScaleChords({
             key={roman}
             variant="outline"
             className="h-16 flex-col gap-0"
-            onClick={() =>
-              play(
-                chordSounds(
-                  chordVoicing(chord.root, chord.quality, { inversion: 0, bothHands: false }).rh.map(
-                    (p) => p.midi,
-                  ),
-                  { arpeggio: false },
-                ),
-              )
-            }
+            onClick={() => playChord(chord)}
           >
             <span className="text-lg font-bold">{chordSymbol(chord)}</span>
             <span className="text-sm text-muted-foreground">{roman}</span>
@@ -6039,146 +6611,208 @@ export function ScaleChords({
 }
 ```
 
-`ui/ScaleExplorer.tsx`:
+`ui/ScaleFacts.tsx` — the formula, the structure and the relative:
 
 ```tsx
 import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  midi,
-  note,
   noteName,
   noteParam,
-  parseNoteName,
+  relativeScale,
+  scaleGaps,
+  type ScaleKind,
+  type SpelledNote,
+  type Tone,
+} from '@/shared/lib/music'
+import { Button } from '@/shared/ui/primitives/button'
+
+function Fact({ term, children }: { term: string; children: ReactNode }) {
+  return (
+    <div className="flex items-baseline gap-4">
+      <dt className="w-28 shrink-0 text-muted-foreground">{term}</dt>
+      <dd className="font-semibold">{children}</dd>
+    </div>
+  )
+}
+
+/** What a scale is made of, and its relative major or minor. */
+export function ScaleFacts({
+  root,
+  kind,
+  tones,
+}: {
+  root: SpelledNote
+  kind: ScaleKind
+  tones: readonly Tone[]
+}) {
+  const { t } = useTranslation('theory')
+  const relative = relativeScale(root, kind)
+  return (
+    <dl className="flex flex-col gap-2">
+      <Fact term={t('about.formula')}>{tones.map((tone) => tone.degree).join(' ')}</Fact>
+      <Fact term={t('about.gaps')}>{scaleGaps(kind).map((gap) => t(`gap.${gap}`)).join(' ')}</Fact>
+      {relative ? (
+        <Fact term={t('about.relative')}>
+          <Button
+            variant="link"
+            className="px-0"
+            nativeButton={false}
+            render={
+              <Link
+                to="/theory/scales"
+                search={(prev) => ({ ...prev, root: noteParam(relative.root), kind: relative.kind })}
+                replace
+              />
+            }
+          >
+            {`${noteName(relative.root)} ${t(`scaleName.${relative.kind}`)}`}
+          </Button>
+        </Fact>
+      ) : null}
+    </dl>
+  )
+}
+```
+
+`ui/ScaleExplorer.tsx`:
+
+```tsx
+import { useTranslation } from 'react-i18next'
+import {
+  keyboardRange,
+  MIDDLE_C,
+  midi,
+  noteFromParam,
+  noteName,
+  noteParam,
   pitchClass,
   pitchClassOf,
-  relativeScale,
+  placeScale,
   SCALE_KINDS,
   scaleFingering,
   scaleRootSpelling,
-  scaleSteps,
   spellScale,
+  type KeyRange,
   type Midi,
-  type ScaleKind,
 } from '@/shared/lib/music'
-import { PRACTICE_RHYTHM_IDS, scaleRun, type Hands, type PracticeRhythm } from '@/shared/lib/schedule'
+import { PRACTICE_RHYTHM_IDS, scaleRun } from '@/shared/lib/schedule'
 import { usePlay, useServices } from '@/shared/lib/services'
-import { ChipRow, PianoKeyboard, rangeFor, Segmented, type KeyMark } from '@/shared/ui'
+import { ChipRow, PianoKeyboard, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider } from '@/shared/ui/primitives/slider'
+import type { ScaleView } from '../model/scale-view'
 import { useLitKey } from '../model/use-lit-key'
 import { FingeringTable } from './FingeringTable'
 import { ScaleChords } from './ScaleChords'
-
-export interface ScaleView {
-  readonly root: string
-  readonly kind: ScaleKind
-  readonly view: 'degrees' | 'rh' | 'lh'
-  readonly rhythm: PracticeRhythm
-  readonly tempo: number
-  readonly hands: Hands
-  readonly chords: 3 | 4
-}
+import { ScaleFacts } from './ScaleFacts'
 
 const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
-const AT_LEAST = { from: midi(60), to: midi(83) }
+/** Two octaves from middle C: a scale from B still fits without the keyboard jumping. */
+const AT_LEAST: KeyRange = { from: MIDDLE_C, to: midi(83) }
+const LABELS = ['degrees', 'rh', 'lh'] as const
 
 /** Any scale on any root: degrees or fingers on the keys, the fingering, practice, its chords, its relative. */
 export function ScaleExplorer({
-  view,
+  scale,
   onChange,
 }: {
-  view: ScaleView
-  onChange: (patch: Partial<ScaleView>) => void
+  scale: ScaleView
+  onChange: (change: Partial<ScaleView>) => void
 }) {
   const { t } = useTranslation(['theory', 'common'])
   const play = usePlay()
   const { audio } = useServices()
   const { lit, light } = useLitKey()
-  const pc = pitchClassOf(parseNoteName(view.root) ?? note('C'))
-  const root = scaleRootSpelling(pc, view.kind)
-  const tones = spellScale(root, view.kind)
-  const base = 60 + pc
-  const keys: Midi[] = [...tones.map((tone) => midi(base + tone.semitones)), midi(base + 12)]
-  const rh = scaleFingering(pc, view.kind, 'rh')
-  const lh = scaleFingering(pc, view.kind, 'lh')
-  const fingers = view.view === 'rh' ? rh : view.view === 'lh' ? lh : null
+  const root = noteFromParam(scale.root)
+  const tones = spellScale(root, scale.kind)
+  const placed = placeScale(root, scale.kind)
+  const rh = scaleFingering(pitchClassOf(root), scale.kind, 'rh')
+  const lh = scaleFingering(pitchClassOf(root), scale.kind, 'lh')
+  const fingers = scale.view === 'rh' ? rh : scale.view === 'lh' ? lh : null
   const marks = new Map<Midi, KeyMark>(
-    keys.map((key, i) => {
-      const tone = tones[i % tones.length]
-      const label = view.view === 'degrees' ? tone?.degree : fingers ? String(fingers[i] ?? '·') : '–'
-      return [key, { tone: tone?.role ?? 'root', label }]
-    }),
+    placed.map((key, i) => [
+      key.midi,
+      {
+        tone: key.tone.role,
+        label: scale.view === 'degrees' ? key.tone.degree : fingers ? String(fingers[i] ?? '·') : '–',
+      },
+    ]),
   )
-  const range = rangeFor(keys, AT_LEAST)
-  const name = `${noteName(root)} ${t(`theory:scaleName.${view.kind}`)}`
-  const relative = relativeScale(root, view.kind)
 
   const playRun = () => {
-    const run = scaleRun(keys, { rhythm: view.rhythm, tempo: view.tempo, hands: view.hands })
+    const run = scaleRun(
+      placed.map((key) => key.midi),
+      { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands },
+    )
     const at = play(run.sounds)
-    light(run.steps, Math.max(0, at - audio.now()), run.end)
+    light(run.cues, Math.max(0, at - audio.now()), run.end)
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-4xl font-extrabold tracking-tight">{name}</h2>
+      <h2 className="text-4xl font-extrabold tracking-tight">
+        {`${noteName(root)} ${t(`theory:scaleName.${scale.kind}`)}`}
+      </h2>
       <ChipRow
         label={t('theory:root')}
-        value={noteParam(root)}
-        options={PITCH_CLASSES.map((p) => {
-          const spelled = scaleRootSpelling(p, view.kind)
+        value={scale.root}
+        options={PITCH_CLASSES.map((pc) => {
+          const spelled = scaleRootSpelling(pc, scale.kind)
           return { value: noteParam(spelled), label: noteName(spelled) }
         })}
         onChange={(value) => onChange({ root: value })}
       />
       <ChipRow
         label={t('theory:scaleLabel')}
-        value={view.kind}
+        value={scale.kind}
         options={SCALE_KINDS.map((kind) => ({ value: kind, label: t(`theory:scaleKind.${kind}`) }))}
         onChange={(kind) => onChange({ kind })}
       />
       <PianoKeyboard
         label={t('common:keyboard')}
-        from={range.from < AT_LEAST.from ? range.from : AT_LEAST.from}
-        to={range.to > AT_LEAST.to ? range.to : AT_LEAST.to}
+        range={keyboardRange(
+          placed.map((key) => key.midi),
+          AT_LEAST,
+        )}
         marks={marks}
-        outlined={lit === null ? undefined : new Set([lit])}
+        lit={lit === null ? undefined : new Set([lit])}
         className="h-44"
       />
       <Segmented
         label={t('theory:view.label')}
-        value={view.view}
-        options={(['degrees', 'rh', 'lh'] as const).map((v) => ({ value: v, label: t(`theory:view.${v}`) }))}
-        onChange={(v) => onChange({ view: v })}
+        value={scale.view}
+        options={LABELS.map((labels) => ({ value: labels, label: t(`theory:view.${labels}`) }))}
+        onChange={(view) => onChange({ view })}
       />
-      <FingeringTable notes={keys.map((_, i) => noteName((tones[i % tones.length] ?? tones[0])!.note))} rh={rh} lh={lh} />
+      <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
 
       <section className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-border">
         <h3 className="text-xl font-bold">{t('theory:practice')}</h3>
         <ChipRow
           label={t('theory:rhythmLabel')}
-          value={view.rhythm}
+          value={scale.rhythm}
           options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`theory:rhythm.${r}`) }))}
           onChange={(rhythm) => onChange({ rhythm })}
         />
         <label className="flex flex-col gap-3">
           <span className="flex justify-between">
             {t('theory:tempo')}
-            <span className="font-semibold tabular-nums">{t('theory:bpm', { tempo: view.tempo })}</span>
+            <span className="font-semibold tabular-nums">{t('theory:bpm', { tempo: scale.tempo })}</span>
           </span>
           <Slider
             min={40}
             max={160}
             step={4}
-            value={[view.tempo]}
-            onValueChange={(value) => onChange({ tempo: Array.isArray(value) ? (value[0] ?? view.tempo) : value })}
+            value={scale.tempo}
+            onValueChange={(tempo) => onChange({ tempo })}
             aria-label={t('theory:tempo')}
           />
         </label>
         <Segmented
           label={t('theory:handsLabel')}
-          value={view.hands}
+          value={scale.hands}
           options={[
             { value: 'rh', label: t('common:hands.rh') },
             { value: 'lh', label: t('common:hands.lh') },
@@ -6191,40 +6825,16 @@ export function ScaleExplorer({
         </Button>
       </section>
 
-      <ScaleChords scale={tones} size={view.chords} onSize={(chords) => onChange({ chords })} />
-
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
-        <dt className="text-muted-foreground">{t('theory:about.formula')}</dt>
-        <dd className="font-semibold">{tones.map((tone) => tone.degree).join(' ')}</dd>
-        <dt className="text-muted-foreground">{t('theory:about.steps')}</dt>
-        <dd className="font-semibold">{scaleSteps(view.kind).join(' ')}</dd>
-        {relative ? (
-          <>
-            <dt className="text-muted-foreground">{t('theory:about.relative')}</dt>
-            <dd>
-              <Link
-                to="/theory/scales"
-                search={(prev) => ({ ...prev, root: noteParam(relative.root), kind: relative.kind })}
-                replace
-                className="font-semibold text-primary underline-offset-4 hover:underline"
-              >
-                {`${noteName(relative.root)} ${t(`theory:scaleName.${relative.kind}`)}`}
-              </Link>
-            </dd>
-          </>
-        ) : null}
-      </dl>
+      <ScaleChords scale={tones} size={scale.chords} onSize={(chords) => onChange({ chords })} />
+      <ScaleFacts root={root} kind={scale.kind} tones={tones} />
     </div>
   )
 }
 ```
 
-(Tidy two things while writing it: compute the fingering-table note names as `keys.map((_, i) => noteName((tones[i]
-?? tones[0]).note))` with a guard instead of the non-null assertion, and pass `range.from/to` directly after merging
-with `AT_LEAST` in one `rangeFor([...keys, AT_LEAST.from, AT_LEAST.to], AT_LEAST)` call.)
-
-`TheoryScalesPage.tsx` mirrors the Chords page: `useSearch({ from: '/shell/theory/scales' })`, a `StepPanel` for
-`step`, and `ScaleExplorer` with `onChange` navigating with `replace: true`.
+Add `export { ScaleExplorer } from './ui/ScaleExplorer'` to `src/widgets/scale-explorer/index.ts`.
+`TheoryScalesPage.tsx` mirrors the Chords page: `const { step, ...scale } = useSearch({ from: '/shell/theory/scales' })`,
+a `StepPanel` for `step`, and `<ScaleExplorer scale={scale} onChange={…} />` navigating with `replace: true`.
 
 Run the tests. Expected: PASS.
 
@@ -6233,8 +6843,8 @@ Run the tests. Expected: PASS.
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/widgets/scale-explorer src/pages/theory-scales src/app src/shared/i18n/locales
-git add src/widgets src/pages/theory-scales src/app src/shared
+npx prettier --write src/widgets/scale-explorer src/pages/theory-scales src/shared/i18n/locales
+git add src/widgets src/pages/theory-scales src/shared
 git commit -m "Explore every scale with its fingering, practice rhythms, chords and relative
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -6246,11 +6856,15 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Modify: `src/pages/theory-symbols/ui/TheorySymbolsPage.tsx`, `src/shared/i18n/locales/{en,ru}/theory.ts`
-- Create: `src/pages/theory-symbols/ui/{QualityRow,ReadingSheet}.tsx`, `src/app/screens/theory-symbols.test.tsx`
+- Create: `src/pages/theory-symbols/ui/{QualityRow,ReadingSheet}.tsx`, `src/pages/theory-symbols/ui/TheorySymbolsPage.test.tsx`
 
 **Interfaces:**
-- Consumes: `CHORD_FAMILIES`, `qualitiesIn`, `qualitySpellings`, `spellChord`, `chordVoicing`, `noteName`,
-  `note`; `chordSounds`; `usePlay`; `Sheet*`.
+- Consumes: `CHORD_FAMILIES`, `qualitiesIn`, `qualitySpellings`, `spellChord`, `noteName`, `note`; `usePlayChord`;
+  `Sheet`, `SheetContent`, `DrawerTrigger`.
+
+The reading notes are the one piece of reference text in the app: master spec §5 carries the legacy Guide's
+chord-symbol notes into Symbols, behind one row. They explain music notation, not how to use the app, and Task 28
+records them in CODE_STYLE §10 as the exception to "no how-to paragraphs".
 
 - [ ] **Step 1: Strings** — `theory.symbols`:
 
@@ -6337,14 +6951,14 @@ symbols: {
 },
 ```
 
-- [ ] **Step 2: Write the failing integration test**
+- [ ] **Step 2: Write the failing screen test**
 
 ```tsx
-// src/app/screens/theory-symbols.test.tsx
+// src/pages/theory-symbols/ui/TheorySymbolsPage.test.tsx
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../testing/render-app'
+import { renderApp } from '@/app/testing/render-app'
 
 describe('Theory → Symbols', () => {
   it('lists every quality by family with its spellings, formula and notes on C', async () => {
@@ -6375,16 +6989,8 @@ Run it. Expected: FAIL.
 ```tsx
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import {
-  chordVoicing,
-  note,
-  noteName,
-  qualitySpellings,
-  spellChord,
-  type ChordQuality,
-} from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { note, noteName, qualitySpellings, spellChord, type ChordQuality } from '@/shared/lib/music'
+import { usePlayChord } from '@/shared/lib/services'
 import { Button } from '@/shared/ui/primitives/button'
 
 const C = note('C')
@@ -6392,16 +6998,9 @@ const C = note('C')
 /** One quality in the dictionary: how it is written, what it is, and on C. */
 export function QualityRow({ quality }: { quality: ChordQuality }) {
   const { t } = useTranslation('theory')
-  const play = usePlay()
+  const playChord = usePlayChord()
   const name = t(`quality.${quality}`)
   const tones = spellChord(C, quality)
-  const hear = () =>
-    play(
-      chordSounds(
-        chordVoicing(C, quality, { inversion: 0, bothHands: true }).rh.map((p) => p.midi),
-        { arpeggio: false },
-      ),
-    )
   return (
     <li aria-label={name} className="flex flex-col gap-1 px-4 py-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -6414,7 +7013,7 @@ export function QualityRow({ quality }: { quality: ChordQuality }) {
         {tones.map((tone) => noteName(tone.note)).join(' ')}
       </p>
       <div className="flex gap-2">
-        <Button variant="link" className="px-0" onClick={hear}>
+        <Button variant="link" className="px-0" onClick={() => playChord({ root: C, quality })}>
           {t('symbols.hear')}
         </Button>
         <Button
@@ -6431,30 +7030,34 @@ export function QualityRow({ quality }: { quality: ChordQuality }) {
 }
 ```
 
-(`qualitySpellings` returns the suffix first, then its aliases; check it includes `''` for major so the first spelling
-reads `C`.)
+(`qualitySpellings` returns the suffix first, then its aliases; the major triad's suffix is `''`, so its first
+spelling reads `C`.)
 
 `ReadingSheet.tsx`:
 
 ```tsx
 import { BookOpenText, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Sheet, SheetContent } from '@/shared/ui'
+import { DrawerTrigger } from '@/shared/ui/primitives/drawer'
 
 const READING = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] as const
 const NUMBERS = ['a', 'b', 'c', 'd'] as const
 const STEPS = [1, 2, 3, 4, 5, 6, 7] as const
 
-/** The legacy Guide's reading notes, behind one row (spec §8: help behind an info control). */
+/**
+ * The legacy Guide's chord-symbol reading notes, behind one row (master spec §5): the app's one
+ * reference text, recorded as the exception in CODE_STYLE §10.
+ */
 export function ReadingSheet() {
   const { t } = useTranslation('theory')
   return (
     <Sheet>
-      <SheetTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl bg-card px-4 text-left font-semibold ring-1 ring-border">
+      <DrawerTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl bg-card px-4 text-left font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring">
         <BookOpenText aria-hidden className="size-5 text-primary" />
         <span className="flex-1">{t('symbols.howToRead')}</span>
         <ChevronRight aria-hidden className="size-5 text-muted-foreground" />
-      </SheetTrigger>
+      </DrawerTrigger>
       <SheetContent title={t('symbols.howToRead')}>
         <article className="flex flex-col gap-6 pb-4 text-base leading-relaxed">
           <section className="flex flex-col gap-2">
@@ -6524,8 +7127,8 @@ Run the test. Expected: PASS.
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/pages/theory-symbols src/app/screens src/shared/i18n/locales
-git add src/pages/theory-symbols src/app/screens src/shared
+npx prettier --write src/pages/theory-symbols src/shared/i18n/locales
+git add src/pages/theory-symbols src/shared
 git commit -m "Show the chord dictionary and the reading notes in Theory → Symbols
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -6535,31 +7138,37 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 22: Path — Continue and the levels
 
 **Files:**
-- Create: `src/widgets/continue-card/{index.ts,ui/ContinueCard.tsx}`, `src/widgets/path-levels/{index.ts,ui/PathLevels.tsx,ui/StepRow.tsx}`,
-  `src/app/screens/path.test.tsx`
-- Modify: `src/pages/path/ui/PathPage.tsx`, `src/shared/i18n/locales/{en,ru}/path.ts`
+- Create: `src/entities/path/ui/ExplorerLink.tsx`, `src/widgets/continue-card/{index.ts,ui/ContinueCard.tsx}`,
+  `src/widgets/path-levels/{index.ts,ui/PathLevels.tsx,ui/StepRow.tsx}`, `src/pages/path/ui/PathPage.test.tsx`
+- Modify: `src/entities/path/index.ts`, `src/pages/path/ui/PathPage.tsx`, `src/shared/i18n/locales/{en,ru}/path.ts`
 
 **Interfaces:**
 - Consumes: `selectSuggestedStep`, `selectAllAnswers`, `selectLearned`, `skillsToCheck`, `knownCount` (progress);
   `pathSteps`, `LEVELS`, `skillsOfStep`, `useStepTitle`, `StepKind`; `pieceById`, `pieceKey`, `skillsOfPiece`;
   `keyName`, `qualitiesIn`; `LearnedToggle`; kit.
-- Produces: `ContinueCard()`, `PathLevels()`.
+- Produces: `ExplorerLink({ step, ...anchorProps }: { step: ExplorerStep })` with `ExplorerStep` a chord or scale step:
+  the one place a step's explorer link is written (spec §4.1), `/theory/chords?quality=<first of family>&step=chords:<family>`
+  or `/theory/scales?kind=<kind>&step=scale:<kind>`. It passes anchor props through, so it also serves as a `Button`'s
+  `render`. The Continue card and the step rows differ only in where a piece opens (the Player, the Piece screen).
+  Also `ContinueCard()`, `PathLevels()`.
 
 - [ ] **Step 1: Strings** — `path`: en `continue: 'Continue'`, `allLearned: 'Everything on the path is learned.'`,
   `toSongs: 'Open Songs'`, `toCheck: 'Chords to check: {{count}}'`, `known: '{{known}} of {{total}} known'`,
   `progress: '{{learned}} of {{total}}'`; ru `continue: 'Продолжить'`, `allLearned: 'Весь путь пройден.'`,
-  `toSongs: 'Открыть песни'`, `toCheck: 'Проверить аккорды: {{count}}'`, `known: 'Знаю {{known}} из {{total}}'`,
-  `progress: '{{learned}} из {{total}}'`.
+  `toSongs: 'Открыть песни'`, `toCheck: 'Аккордов на проверку: {{count}}'`, `known: 'Знаю {{known}} из {{total}}'`,
+  `progress: '{{learned}} из {{total}}'`. The gap line puts the count after a colon: English writes "2 chords" but
+  "1 chord", and Russian has three plural forms. Plural keys cannot be typed against English, and the count after a
+  colon reads right in both languages for any number (spec §4.1).
 
-- [ ] **Step 2: Write the failing integration tests**
+- [ ] **Step 2: Write the failing screen tests**
 
-`src/app/screens/path.test.tsx`:
+`src/pages/path/ui/PathPage.test.tsx`:
 
 ```tsx
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../testing/render-app'
+import { renderApp } from '@/app/testing/render-app'
 
 describe('Path', () => {
   it('suggests the first step on a first run', async () => {
@@ -6590,12 +7199,15 @@ describe('Path', () => {
     expect(within(level).getByText(`1 of ${total}`)).toBeInTheDocument()
   })
 
-  it('opens a song from its row', async () => {
+  it('opens a song from its row, and a chord step in its explorer', async () => {
     renderApp('/')
     const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
     expect(within(level).getByRole('link', { name: /Still, my soul, be still/ })).toHaveAttribute(
       'href',
       '/songs/bz5',
+    )
+    expect(within(level).getByRole('link', { name: /^Triads/ }).getAttribute('href')).toMatch(
+      /^\/theory\/chords\?.*step=chords(%3A|:)tri/,
     )
   })
 })
@@ -6605,6 +7217,39 @@ Run it. Expected: FAIL.
 
 - [ ] **Step 3: Implement**
 
+`src/entities/path/ui/ExplorerLink.tsx`:
+
+```tsx
+import { Link } from '@tanstack/react-router'
+import type { ComponentProps } from 'react'
+import { qualitiesIn } from '@/shared/lib/music'
+import type { PathStep } from '../model/types'
+
+export type ExplorerStep = Exclude<PathStep, { readonly kind: 'piece' }>
+
+/** A chord or scale step's way into its explorer (spec §4.1), with the step panel open. */
+export function ExplorerLink({
+  step,
+  ...props
+}: { step: ExplorerStep } & Omit<ComponentProps<'a'>, 'href'>) {
+  if (step.kind === 'scale') {
+    return (
+      <Link to="/theory/scales" search={{ kind: step.scale, step: `scale:${step.scale}` }} {...props} />
+    )
+  }
+  const [quality] = qualitiesIn(step.family)
+  return (
+    <Link
+      to="/theory/chords"
+      search={{ ...(quality ? { quality } : {}), step: `chords:${step.family}` }}
+      {...props}
+    />
+  )
+}
+```
+
+Export `ExplorerLink, type ExplorerStep` from `src/entities/path/index.ts`.
+
 `ContinueCard.tsx`:
 
 ```tsx
@@ -6612,26 +7257,26 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useStepTitle, type PathStep } from '@/entities/path'
+import { ExplorerLink, useStepTitle, type PathStep } from '@/entities/path'
 import { pieceById, pieceKey, skillsOfPiece } from '@/entities/piece'
 import { selectAllAnswers, selectSuggestedStep, skillsToCheck, useProgress } from '@/entities/progress'
-import { keyName, qualitiesIn } from '@/shared/lib/music'
+import { keyName } from '@/shared/lib/music'
 import { Button } from '@/shared/ui/primitives/button'
 
+/** The card's one action: a piece opens in the Player, a chord or scale step in its explorer. */
 function ContinueButton({ step, label }: { step: PathStep; label: string }) {
-  const to =
-    step.kind === 'piece' ? (
-      <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} />
-    ) : step.kind === 'chords' ? (
-      <Link
-        to="/theory/chords"
-        search={{ quality: qualitiesIn(step.family)[0] ?? 'maj', step: `chords:${step.family}` }}
-      />
-    ) : (
-      <Link to="/theory/scales" search={{ kind: step.scale, step: `scale:${step.scale}` }} />
-    )
   return (
-    <Button size="pill" render={to} nativeButton={false}>
+    <Button
+      size="pill"
+      nativeButton={false}
+      render={
+        step.kind === 'piece' ? (
+          <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} />
+        ) : (
+          <ExplorerLink step={step} />
+        )
+      }
+    >
       <Play data-icon="inline-start" />
       {label}
     </Button>
@@ -6676,14 +7321,15 @@ export function ContinueCard() {
         <p className="mt-1">{detail}</p>
       </div>
       {toCheck > 0 ? (
-        <Link
-          to="/check"
-          search={{ of: suggested.id }}
-          className="flex min-h-11 items-center gap-2 self-start font-semibold"
+        <Button
+          variant="link"
+          className="self-start px-0 text-secondary-foreground"
+          nativeButton={false}
+          render={<Link to="/check" search={{ of: suggested.id }} />}
         >
           <span aria-hidden className="size-2 rounded-full bg-attention" />
           {t('toCheck', { count: toCheck })}
-        </Link>
+        </Button>
       ) : null}
       <ContinueButton step={suggested.step} label={t('continue')} />
     </section>
@@ -6703,11 +7349,11 @@ import {
   Repeat2,
   type LucideIcon,
 } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { skillsOfStep, useStepTitle, type PlacedStep, type StepKind } from '@/entities/path'
+import { ExplorerLink, skillsOfStep, useStepTitle, type PlacedStep, type StepKind } from '@/entities/path'
 import { knownCount, type ProgressState } from '@/entities/progress'
 import { LearnedToggle } from '@/features/mark-learned'
-import { qualitiesIn } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
 
 const ICON: Readonly<Record<StepKind, LucideIcon>> = {
@@ -6724,7 +7370,10 @@ const TILE: Readonly<Record<StepKind, string>> = {
   song: 'bg-muted text-primary',
   progression: 'bg-muted text-primary',
 }
+const ROW_LINK =
+  'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring'
 
+/** A step on the Path: what it is, how far along it is, and its learned toggle. A piece opens its Piece screen. */
 export function StepRow({ placed, answers }: { placed: PlacedStep; answers: ProgressState['answers'] }) {
   const { t } = useTranslation('path')
   const title = useStepTitle()(placed.step)
@@ -6738,7 +7387,7 @@ export function StepRow({ placed, answers }: { placed: PlacedStep; answers: Prog
   ]
     .filter(Boolean)
     .join(' · ')
-  const body = (
+  const body: ReactNode = (
     <>
       <span className={cn('grid size-12 shrink-0 place-items-center rounded-2xl', TILE[title.kind])}>
         <Icon aria-hidden className="size-5" />
@@ -6749,34 +7398,22 @@ export function StepRow({ placed, answers }: { placed: PlacedStep; answers: Prog
       </span>
     </>
   )
-  const linkClass =
-    'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring'
   return (
     <li className="flex items-center gap-2">
       {step.kind === 'piece' ? (
-        <Link to="/songs/$pieceId" params={{ pieceId: step.pieceId }} className={linkClass}>
-          {body}
-        </Link>
-      ) : step.kind === 'chords' ? (
-        <Link
-          to="/theory/chords"
-          search={{ quality: qualitiesIn(step.family)[0] ?? 'maj', step: placed.id as `chords:${typeof step.family}` }}
-          className={linkClass}
-        >
+        <Link to="/songs/$pieceId" params={{ pieceId: step.pieceId }} className={ROW_LINK}>
           {body}
         </Link>
       ) : (
-        <Link to="/theory/scales" search={{ kind: step.scale, step: `scale:${step.scale}` }} className={linkClass}>
+        <ExplorerLink step={step} className={ROW_LINK}>
           {body}
-        </Link>
+        </ExplorerLink>
       )}
       <LearnedToggle step={placed.id} title={title.primary} />
     </li>
   )
 }
 ```
-
-(Write the chords `step` as `` `chords:${step.family}` `` rather than a cast.)
 
 `PathLevels.tsx`:
 
@@ -6854,8 +7491,8 @@ Run the tests. Expected: PASS.
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/widgets/continue-card src/widgets/path-levels src/pages/path src/app/screens src/shared/i18n/locales
-git add src/widgets src/pages/path src/app/screens src/shared
+npx prettier --write src/entities/path src/widgets/continue-card src/widgets/path-levels src/pages/path src/shared/i18n/locales
+git add src/entities/path src/widgets src/pages/path src/shared
 git commit -m "Show the Path: Continue in one tap, then each level's steps with their learned checks
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -6867,14 +7504,16 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Files:**
 - Create: `src/pages/songs/model/songs-view.ts`, `songs-view.test.ts`, `src/pages/songs/ui/SearchField.tsx`,
-  `src/widgets/piece-list/{index.ts,ui/PieceList.tsx,ui/EntryRow.tsx}`, `src/app/screens/songs.test.tsx`
+  `src/widgets/piece-list/{index.ts,ui/PieceList.tsx,ui/EntryRow.tsx}`, `src/pages/songs/ui/SongsPage.test.tsx`
 - Modify: `src/pages/songs/ui/SongsPage.tsx`, `src/shared/i18n/locales/{en,ru}/songs.ts`
 
 **Interfaces:**
-- Consumes: `COLLECTIONS`, `entryTitles`, `pieceKey`, `Entry`, `Collection`; `levelOf`, `pathSteps`, `LEVELS`;
-  `selectIsLearned`; `matchesQuery`; `useLanguage`, `localText`; kit; `Empty*`, `Input`.
-- Produces: `songsView(collections, filter, levelOfEntry): { collection: Collection; entries: Entry[] }[]`;
-  `PieceList({ groups }: { groups: readonly { title: string; entries: readonly Entry[] }[] })`.
+- Consumes: `SongsFilter` (Task 16); `COLLECTIONS`, `entryTitles`, `pieceKey`, `Entry`, `Collection`; `levelOf`,
+  `pathSteps`, `LEVELS`; `selectIsLearned`; `matchesQuery`; `useLocale`, `localText`; kit; `Empty*`, `Input`.
+- Produces: `songsView(collections, filter: SongsFilter, levelOfEntry): { collection: Collection; entries: Entry[] }[]`;
+  `PieceList({ groups }: { groups: readonly PieceGroup[] })` with `PieceGroup = { id: string; heading: string | null;
+  entries: readonly Entry[] }`. A group has a heading only while the list shows every collection: once the learner
+  keeps one, its chip names it (spec §4.2).
 
 - [ ] **Step 1: Strings** — `songs`: en `{ title: 'Songs', search: 'Search songs', clearSearch: 'Clear search',
   collections: 'Collections', all: 'All', levels: 'Levels', anyLevel: 'Any level', noChart: 'No chart yet', learned:
@@ -6928,14 +7567,9 @@ Run it. Expected: FAIL. Then implement `songs-view.ts`:
 
 ```ts
 import type { Level } from '@/entities/path'
-import type { Collection, CollectionId, Entry } from '@/entities/piece'
+import type { Collection, Entry } from '@/entities/piece'
 import { matchesQuery } from '@/shared/lib'
-
-export interface SongsFilter {
-  readonly q: string
-  readonly collection: CollectionId | 'all'
-  readonly level: Level | 'any'
-}
+import type { SongsFilter } from './songs-filter'
 
 const searchable = (entry: Entry): string[] => [
   entry.title,
@@ -6967,13 +7601,13 @@ Run it. Expected: PASS.
 
 - [ ] **Step 3: Write the failing screen test**
 
-`src/app/screens/songs.test.tsx`:
+`src/pages/songs/ui/SongsPage.test.tsx`:
 
 ```tsx
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../testing/render-app'
+import { renderApp } from '@/app/testing/render-app'
 
 describe('Songs', () => {
   it('lists the collections, marking listings with no chart', async () => {
@@ -6998,17 +7632,16 @@ describe('Songs', () => {
     expect(await screen.findByRole('heading', { level: 2, name: '«Боже, спасибо»' })).toBeInTheDocument()
   })
 
-  it('keeps one collection', async () => {
+  it('keeps one collection, which its chip names instead of a heading', async () => {
     const user = userEvent.setup()
     renderApp('/songs')
     const collections = await screen.findByRole('group', { name: 'Collections' })
     await user.click(within(collections).getByRole('button', { name: 'Hymns' }))
-    expect(screen.queryByRole('heading', { level: 2, name: '«Боже, спасибо»' })).not.toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: /Silent Night/ })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
   })
 })
 ```
-
-(Use the collection names as the content writes them; check `hymns/index.ts` for the English name.)
 
 Run it. Expected: FAIL.
 
@@ -7023,14 +7656,15 @@ import { useTranslation } from 'react-i18next'
 import { levelOf } from '@/entities/path'
 import { entryTitles, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
-import { useLanguage } from '@/shared/i18n'
+import { useLocale } from '@/shared/i18n'
 import { keyName } from '@/shared/lib/music'
 import { LevelMark } from '@/shared/ui'
 
+/** A song or listing in the list: its number, titles, key and meter or "no chart yet", level and learned mark. */
 export function EntryRow({ entry }: { entry: Entry }) {
   const { t } = useTranslation('songs')
-  const language = useLanguage()
-  const { primary, secondary } = entryTitles(entry, language)
+  const locale = useLocale()
+  const { primary, secondary } = entryTitles(entry, locale)
   const learned = useProgress(selectIsLearned(`piece:${entry.id}`))
   const level = entry.kind === 'listing' ? undefined : levelOf(`piece:${entry.id}`)
   return (
@@ -7038,7 +7672,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
       <Link
         to="/songs/$pieceId"
         params={{ pieceId: entry.id }}
-        className="flex min-h-16 items-center gap-3 rounded-2xl px-1 outline-none focus-visible:ring-3 focus-visible:ring-ring"
+        className="flex min-h-16 items-center gap-3 rounded-2xl px-1 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
       >
         <span className="w-7 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
           {entry.source?.number ?? ''}
@@ -7071,13 +7705,22 @@ export function EntryRow({ entry }: { entry: Entry }) {
 import type { Entry } from '@/entities/piece'
 import { EntryRow } from './EntryRow'
 
-/** Songs by collection, each collection under its heading. */
-export function PieceList({ groups }: { groups: readonly { title: string; entries: readonly Entry[] }[] }) {
+export interface PieceGroup {
+  readonly id: string
+  /** The collection's name, or null when the list shows one collection its chip already names. */
+  readonly heading: string | null
+  readonly entries: readonly Entry[]
+}
+
+/** Songs by collection, each under its heading while more than one collection shows. */
+export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
   return (
     <div className="flex flex-col gap-8">
       {groups.map((group) => (
-        <section key={group.title} className="flex flex-col gap-1">
-          <h2 className="text-xl font-bold text-primary">{group.title}</h2>
+        <section key={group.id} className="flex flex-col gap-1">
+          {group.heading === null ? null : (
+            <h2 className="text-xl font-bold text-primary">{group.heading}</h2>
+          )}
           <ul className="flex flex-col">
             {group.entries.map((entry) => (
               <EntryRow key={entry.id} entry={entry} />
@@ -7097,6 +7740,7 @@ import { Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/primitives/input'
 
+/** The Songs search: a search box with a clear button while it holds text. */
 export function SearchField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const { t } = useTranslation('songs')
   return (
@@ -7115,7 +7759,7 @@ export function SearchField({ value, onChange }: { value: string; onChange: (val
           type="button"
           aria-label={t('clearSearch')}
           onClick={() => onChange('')}
-          className="absolute top-1/2 right-1 grid size-11 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground"
+          className="absolute top-1/2 right-1 grid size-11 -translate-y-1/2 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring"
         >
           <X aria-hidden className="size-5" />
         </button>
@@ -7133,27 +7777,30 @@ import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LEVELS, levelOf, pathSteps, type Level } from '@/entities/path'
 import { COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import { ChipRow, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { PieceList } from '@/widgets/piece-list'
+import type { SongsFilter } from '../model/songs-filter'
 import { songsView } from '../model/songs-view'
 import { SearchField } from './SearchField'
 
 const levelOfEntry = (entry: Entry) => (entry.kind === 'listing' ? undefined : levelOf(`piece:${entry.id}`))
 const LEVELS_ON_PATH = LEVELS.filter((level) => pathSteps().some((s) => s.level === level))
+const NO_FILTER: SongsFilter = { q: '', collection: 'all', level: 'any' }
 
 export function SongsPage() {
   const { t } = useTranslation(['songs', 'common'])
-  const language = useLanguage()
+  const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
   const query = useDeferredValue(search.q)
-  const set = (patch: Partial<typeof search>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true })
+  const set = (change: Partial<SongsFilter>) =>
+    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
   const groups = songsView(COLLECTIONS, { ...search, q: query }, levelOfEntry).map((g) => ({
-    title: localText(g.collection.name, language),
+    id: g.collection.id,
+    heading: search.collection === 'all' ? localText(g.collection.name, locale) : null,
     entries: g.entries,
   }))
 
@@ -7166,19 +7813,19 @@ export function SongsPage() {
         value={search.collection}
         options={[
           { value: 'all', label: t('songs:all') },
-          ...COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, language) })),
+          ...COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
         ]}
         onChange={(collection) => set({ collection })}
       />
       {LEVELS_ON_PATH.length > 1 ? (
-        <ChipRow
+        <ChipRow<Level | 'any'>
           label={t('songs:levels')}
-          value={String(search.level)}
+          value={search.level}
           options={[
             { value: 'any', label: t('songs:anyLevel') },
-            ...LEVELS_ON_PATH.map((level) => ({ value: String(level), label: t('common:level', { level }) })),
+            ...LEVELS_ON_PATH.map((level) => ({ value: level, label: t('common:level', { level }) })),
           ]}
-          onChange={(value) => set({ level: value === 'any' ? 'any' : (Number(value) as Level) })}
+          onChange={(level) => set({ level })}
         />
       ) : null}
       {groups.length > 0 ? (
@@ -7189,7 +7836,7 @@ export function SongsPage() {
             <EmptyTitle>{t('songs:empty')}</EmptyTitle>
           </EmptyHeader>
           <EmptyContent>
-            <Button variant="soft" onClick={() => set({ q: '', collection: 'all', level: 'any' })}>
+            <Button variant="soft" onClick={() => set(NO_FILTER)}>
               {t('songs:clearFilters')}
             </Button>
           </EmptyContent>
@@ -7201,16 +7848,15 @@ export function SongsPage() {
 ```
 
 The level row shows only when the path has more than one level (until Phase 4 it has one; a one-choice filter is
-noise). Replace the `as Level` with a guard (`LEVELS.find((l) => String(l) === value) ?? 'any'`). Run the tests.
-Expected: PASS.
+noise). Run the tests. Expected: PASS.
 
 - [ ] **Step 5: Verify and commit**
 
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/pages/songs src/widgets/piece-list src/app/screens src/shared/i18n/locales
-git add src/pages/songs src/widgets/piece-list src/app/screens src/shared
+npx prettier --write src/pages/songs src/widgets/piece-list src/shared/i18n/locales
+git add src/pages/songs src/widgets/piece-list src/shared
 git commit -m "List songs by collection with search, filters and learned marks
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -7225,23 +7871,30 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   `src/pages/piece/ui/PiecePage.tsx`, `src/shared/i18n/locales/{en,ru}/piece.ts`, `src/app/router.test.tsx`
 - Create: `src/widgets/chord-chart/{index.ts,ui/ChordChart.tsx,ui/BarButton.tsx}`,
   `src/widgets/piece-skills/{index.ts,ui/PieceSkills.tsx}`, `src/pages/piece/ui/{PieceView,ListingView,PieceFacts}.tsx`,
-  `src/app/screens/piece.test.tsx`
+  `src/pages/piece/ui/PiecePage.test.tsx`
+- Modify: `src/shared/test/setup.ts` (jsdom has no `scrollIntoView`)
 
 **Interfaces:**
 - Produces:
   - `barLength(beats: number, meter: Meter): string` — `2/4` for two beats in 4/4, `3/8` for a dotted-quarter beat
     in 6/8, `3/8` for 1½ beats in 4/4.
   - `ChordChart({ performance, headings, meter, layout, current, onBar }: { performance: Performance; headings:
-    readonly string[]; meter: Meter; layout: 'sheet' | 'strip'; current?: number | null; onBar: (bar: number) =>
-    void })` — bar buttons named "Bar 4: C C/E Dsus4 D/F#", the current one `aria-current="step"`.
+    readonly string[]; meter: Meter; layout: 'lines' | 'strip'; current?: number | null; onBar: (bar: number) =>
+    void })` — a Chart's bars: `lines` lays them out by section and line as the chart has them (the Piece), `strip`
+    in one row that scrolls (the Player). Bar buttons are named "Bar 4: C C/E Dsus4 D/F#", the current one
+    `aria-current="step"`.
   - `PieceSkills({ piece, performance }: { piece: Piece; performance: Performance })`
 
-- [ ] **Step 1: Strings** — `piece` gains: en `chords: 'Chords in this song'`, `checkChords: 'Check these chords'`,
-  `chart: 'Chart'`, `barLabel: 'Bar {{n}}'`, `progression: 'Progression'`, `practise: 'Practise'`, `noChart: 'No
-  chart yet'`, `scaleOf: 'Scale: {{scale}}'`, `key: 'Key'`, `meter: 'Meter'`; ru `chords: 'Аккорды в песне'`,
+- [ ] **Step 1: Strings** — `piece` gains: en `chords: { song: 'Chords in this song', exercise: 'Chords in this
+  exercise', progression: 'Chords in this progression' }` (the row names the piece by its kind, as the glossary's UI
+  column does), `checkChords: 'Check these chords'`, `chart: 'Chart'`, `barLabel: 'Bar {{n}}'`, `progression:
+  'Progression'`, `practise: 'Practise'`, `noChart: 'No chart yet'`, `scaleOf: 'Scale: {{scale}}'`, `key: 'Key'`,
+  `meter: 'Meter'`; ru `chords: { song: 'Аккорды песни', exercise: 'Аккорды упражнения', progression: 'Аккорды
+  последовательности' }`,
   `checkChords: 'Проверить эти аккорды'`, `chart: 'Аккорды по тактам'`, `barLabel: 'Такт {{n}}'`, `progression:
   'Последовательность'`, `practise: 'Играть'`, `noChart: 'Аккордов пока нет'`, `scaleOf: 'Гамма: {{scale}}'`, `key:
-  'Тональность'`, `meter: 'Размер'`.
+  'Тональность'`, `meter: 'Размер'`. The placeholder's `title` ('Song' / 'Песня') goes: the screen's heading is the
+  piece's own title now.
 
 - [ ] **Step 2: `barLength`, test first**
 
@@ -7272,16 +7925,15 @@ export function barLength(beats: number, meter: Meter): string {
 
 - [ ] **Step 3: Write the failing screen tests**
 
-`src/app/screens/piece.test.tsx`:
+`src/pages/piece/ui/PiecePage.test.tsx`:
 
 ```tsx
-import { act, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
 import { COLLECTIONS } from '@/entities/piece'
 import type { FakeAudio } from '@/shared/api/audio'
-import { i18n } from '@/shared/i18n'
-import { renderApp } from '../testing/render-app'
 
 describe('Piece', () => {
   it('titles a song in English over its printed title, with credits and source', async () => {
@@ -7319,7 +7971,11 @@ describe('Piece', () => {
     renderApp('/songs/bz5', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Мир, душа, храни' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 3, name: 'Куплет' })).toBeInTheDocument()
-    act(() => void i18n.changeLanguage('en'))
+  })
+
+  it('names the chords row by the piece’s kind', async () => {
+    renderApp('/songs/twofive')
+    expect(await screen.findByRole('region', { name: 'Chords in this progression' })).toBeInTheDocument()
   })
 
   it('shows a listing without a chart', async () => {
@@ -7332,16 +7988,26 @@ describe('Piece', () => {
 ```
 
 In `router.test.tsx`, replace `calls a piece a song on screen` (the page title is the song's now) with the Piece
-test above, and drop its `Song` heading expectation. Run the piece tests. Expected: FAIL.
+test above, and drop its `Song` heading expectation. The chart strip scrolls its current bar into view, and jsdom
+has no layout, so no `scrollIntoView`: add to `src/shared/test/setup.ts`, beside the other fakes,
+
+```ts
+// jsdom lays nothing out, so it has no scrollIntoView; the chart strip calls it on every bar.
+if (typeof Element !== 'undefined') Element.prototype.scrollIntoView = () => {}
+```
+
+Run the piece tests. Expected: FAIL.
 
 - [ ] **Step 4: Implement the chart**
 
 `BarButton.tsx`:
 
 ```tsx
+import type { Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
+/** One bar of a chart: its number, its chords, and under them its method labels or short length. */
 export function BarButton({
   number,
   symbols,
@@ -7356,7 +8022,7 @@ export function BarButton({
   notes: readonly string[]
   current: boolean
   onClick: () => void
-  ref?: React.Ref<HTMLButtonElement>
+  ref?: Ref<HTMLButtonElement>
 }) {
   const { t } = useTranslation('piece')
   return (
@@ -7387,20 +8053,18 @@ export function BarButton({
 }
 ```
 
-(Import `type Ref` from `react` instead of the `React.` namespace.)
-
 `ChordChart.tsx`:
 
 ```tsx
 import { useEffect, useRef } from 'react'
 import { isMethodCode, METHODS } from '@/entities/pattern'
 import { barLength, type Meter } from '@/entities/piece'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { cn } from '@/shared/lib'
+import { cn, useMediaQuery } from '@/shared/lib'
 import { BarButton } from './BarButton'
 
-/** A lead sheet: bars with numbers and chord symbols, by section; a sheet to read or a strip to follow. */
+/** A Chart's bars with their numbers and chords, by section: line by line to read, or one strip to follow. */
 export function ChordChart({
   performance,
   headings,
@@ -7412,22 +8076,22 @@ export function ChordChart({
   performance: Performance
   headings: readonly string[]
   meter: Meter
-  layout: 'sheet' | 'strip'
+  layout: 'lines' | 'strip'
   current?: number | null
   onBar: (bar: number) => void
 }) {
-  const language = useLanguage()
+  const locale = useLocale()
+  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
 
   useEffect(() => {
     if (layout !== 'strip' || current === null) return
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    buttons.current[current]?.scrollIntoView?.({
+    buttons.current[current]?.scrollIntoView({
       inline: 'center',
       block: 'nearest',
-      behavior: reduce ? 'auto' : 'smooth',
+      behavior: reduceMotion ? 'auto' : 'smooth',
     })
-  }, [layout, current])
+  }, [layout, current, reduceMotion])
 
   const barOf = (index: number) => {
     const bar = performance.bars[index]
@@ -7435,7 +8099,7 @@ export function ChordChart({
     const chords = bar.chords.map((i) => performance.chords[i]).filter((c) => c !== undefined)
     const methods = [...new Set(chords.map((c) => c.method).filter((m) => m !== undefined))]
       .filter(isMethodCode)
-      .map((code) => localText(METHODS[code].label, language))
+      .map((code) => localText(METHODS[code].label, locale))
     const notes = bar.beats === performance.beatsPerBar ? methods : [...methods, barLength(bar.beats, meter)]
     return (
       <BarButton
@@ -7461,7 +8125,7 @@ export function ChordChart({
 
   if (layout === 'strip') {
     return (
-      <div className="-mx-4 flex snap-x overflow-x-auto border-y border-border bg-card px-4 [scrollbar-width:none]">
+      <div className="-mx-4 flex snap-x overflow-x-auto border-y border-border bg-card px-4 scrollbar-none">
         {sections.flatMap(({ heading, lines }) =>
           lines.flat().map((index, i) => (
             <div key={index} className="flex shrink-0 snap-center flex-col">
@@ -7502,58 +8166,59 @@ import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { skillsOfPiece, type Piece } from '@/entities/piece'
-import { rate, selectAllAnswers, useProgress } from '@/entities/progress'
+import { ratingOf, selectAllAnswers, useProgress } from '@/entities/progress'
 import type { Performance } from '@/shared/lib/arrangement'
 import { noteParam, qualitySuffix, skillOf } from '@/shared/lib/music'
 import { RatingMark } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 
-const NONE = [] as const
-
-/** The chord qualities a song uses, each with its rating; a check of them all. */
+/** The chord qualities a piece uses, each with its rating and a way into the explorer; a check of them all. */
 export function PieceSkills({ piece, performance }: { piece: Piece; performance: Performance }) {
-  const { t } = useTranslation(['piece', 'theory'])
+  const { t } = useTranslation(['piece', 'theory', 'common'])
   const headingId = useId()
   const answers = useProgress(selectAllAnswers)
   const skills = skillsOfPiece(piece)
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-3">
       <h2 id={headingId} className="text-xl font-bold">
-        {t('piece:chords')}
+        {t(`piece:chords.${piece.kind}`)}
       </h2>
       <ul className="flex flex-wrap gap-2">
         {skills.map((id) => {
           const skill = skillOf(id)
           if (skill.kind !== 'chord') return null
+          const rating = ratingOf(answers, id)
           const first = performance.chords.find((c) => c.quality === skill.quality)
           return (
             <li key={id}>
               <Link
                 to="/theory/chords"
                 search={{ quality: skill.quality, ...(first ? { root: noteParam(first.root) } : {}) }}
-                aria-label={`${t(`theory:quality.${skill.quality}`)}`}
-                className="flex h-11 items-center gap-2 rounded-full bg-card px-4 font-semibold ring-1 ring-border hover:bg-muted"
+                aria-label={`${t(`theory:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}
+                className="flex h-11 items-center gap-2 rounded-full bg-card px-4 font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
               >
                 {qualitySuffix(skill.quality) || t('theory:major')}
-                <RatingMark rating={rate(answers[id] ?? NONE)} />
+                <RatingMark rating={rating} />
               </Link>
             </li>
           )
         })}
       </ul>
-      <Link
-        to="/check"
-        search={{ of: `piece:${piece.id}` }}
-        className="self-start font-semibold text-primary underline-offset-4 hover:underline"
+      <Button
+        variant="link"
+        className="self-start px-0"
+        nativeButton={false}
+        render={<Link to="/check" search={{ of: `piece:${piece.id}` }} />}
       >
         {t('piece:checkChords')}
-      </Link>
+      </Button>
     </section>
   )
 }
 ```
 
-(An `aria-label` hides the rating from the name; drop it and let the link's text plus `RatingMark`'s hidden word name
-it — "m7 Gap" — or keep the label and add the rating word to it. Choose the second: `aria-label={`${name}, ${t(`common:rating.${rating}`)}`}`.)
+(A chip's name is the quality's full name and its rating in words, "Minor 7th, Gap": the visible suffix alone would
+name it "m7".)
 
 - [ ] **Step 5: Implement the page**
 
@@ -7564,14 +8229,16 @@ import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, SourceLine, pieceKey, type Entry } from '@/entities/piece'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import { keyName, noteName, noteParam } from '@/shared/lib/music'
 import { RoundButton, ScreenHeader } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 
+/** A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale. */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'common', 'theory'])
-  const language = useLanguage()
-  const { primary, secondary } = entryTitles(entry, language)
+  const locale = useLocale()
+  const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = key.mode === 'minor' ? 'natural' : 'major'
   return (
@@ -7593,14 +8260,15 @@ export function PieceFacts({ entry }: { entry: Entry }) {
           <dd className="font-semibold">{entry.meter}</dd>
         </div>
       </dl>
-      {entry.note ? <p className="max-w-prose text-lg">{localText(entry.note, language)}</p> : null}
-      <Link
-        to="/theory/scales"
-        search={{ root: noteParam(key.tonic), kind: scaleKind }}
-        className="self-start font-semibold text-primary underline-offset-4 hover:underline"
+      {entry.note ? <p className="max-w-prose text-lg">{localText(entry.note, locale)}</p> : null}
+      <Button
+        variant="link"
+        className="self-start px-0"
+        nativeButton={false}
+        render={<Link to="/theory/scales" search={{ root: noteParam(key.tonic), kind: scaleKind }} />}
       >
         {t('piece:scaleOf', { scale: `${noteName(key.tonic)} ${t(`theory:scaleName.${scaleKind}`)}` })}
-      </Link>
+      </Button>
     </div>
   )
 }
@@ -7613,35 +8281,24 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceKey, useSectionHeading, type Piece } from '@/entities/piece'
+import { entryTitles, useSectionHeading, type Piece } from '@/entities/piece'
 import { LearnedToggle } from '@/features/mark-learned'
-import { arrangePiece, defaultPattern } from '@/features/practice'
+import { arrangePiece, ownChoice } from '@/features/practice'
+import { useLocale } from '@/shared/i18n'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
 import { Button } from '@/shared/ui/primitives/button'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceSkills } from '@/widgets/piece-skills'
 import { PieceFacts } from './PieceFacts'
-import { entryTitles } from '@/entities/piece'
-import { useLanguage } from '@/shared/i18n'
 
+/** A piece with a chart: its facts, its chords, the chart to tap and hear, Practise and the learned toggle. */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
   const heading = useSectionHeading()
   const play = usePlay()
-  const language = useLanguage()
-  const performance = useMemo(
-    () =>
-      arrangePiece(piece, {
-        tonic: pieceKey(piece).tonic,
-        pattern: defaultPattern(piece),
-        rh: null,
-        lh: null,
-        voicing: null,
-        melody: false,
-      }),
-    [piece],
-  )
+  const locale = useLocale()
+  const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
   const headings = piece.kind === 'progression' ? [t('progression')] : piece.sections.map(heading)
   const hearBar = (bar: number) =>
     play(barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }))
@@ -7652,22 +8309,33 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceSkills piece={piece} performance={performance} />
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('chart')}</h2>
-        <ChordChart performance={performance} headings={headings} meter={piece.meter} layout="sheet" onBar={hearBar} />
+        <ChordChart
+          performance={performance}
+          headings={headings}
+          meter={piece.meter}
+          layout="lines"
+          onBar={hearBar}
+        />
       </section>
       <div className="flex flex-wrap items-center gap-3">
-        <Button size="pill" className="flex-1" render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />} nativeButton={false}>
+        <Button
+          size="pill"
+          className="flex-1"
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />}
+          nativeButton={false}
+        >
           <Play data-icon="inline-start" />
           {t('practise')}
         </Button>
-        <LearnedToggle step={`piece:${piece.id}`} title={entryTitles(piece, language).primary} variant="text" />
+        <LearnedToggle step={`piece:${piece.id}`} title={entryTitles(piece, locale).primary} variant="text" />
       </div>
     </div>
   )
 }
 ```
 
-(Merge the two `@/entities/piece` imports.) `ListingView.tsx`: `<PieceFacts entry={listing} />` then
-`<p className="text-lg font-semibold">{t('noChart')}</p>`. `PiecePage.tsx`:
+`ListingView.tsx`: `<PieceFacts entry={listing} />` then `<p className="text-lg font-semibold">{t('noChart')}</p>`.
+`PiecePage.tsx`:
 
 ```tsx
 import { useParams } from '@tanstack/react-router'
@@ -7690,7 +8358,7 @@ Run the piece tests. Expected: PASS.
 Run: `npm run typecheck && npm run lint && npm run test`
 
 ```bash
-npx prettier --write src/entities/piece src/widgets/chord-chart src/widgets/piece-skills src/pages/piece src/app src/shared/i18n/locales
+npx prettier --write src/entities/piece src/widgets/chord-chart src/widgets/piece-skills src/pages/piece src/app src/shared/i18n/locales src/shared/test
 git add src/entities/piece src/widgets src/pages/piece src/app src/shared
 git commit -m "Show a song: its chords and their ratings, the chart to tap and hear, Practise
 
@@ -7702,21 +8370,21 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 25: The Setup sheet
 
 **Files:**
-- Create: `src/widgets/player-setup/{index.ts,ui/PlayerSetup.tsx,ui/SetupMain.tsx,ui/ChoiceList.tsx,ui/PlayerSetup.test.tsx}`
-- Modify: `src/shared/i18n/locales/{en,ru}/player.ts`
+- Create: `src/widgets/player-setup/ui/{PlayerSetup.tsx,SetupMain.tsx,ChoiceList.tsx,PlayerSetup.test.tsx}`
+- Modify: `src/widgets/player-setup/index.ts`, `src/shared/i18n/locales/{en,ru}/player.ts`
 
 **Interfaces:**
-- Consumes: `PATTERN_GROUPS`, `PATTERN_GROUP_NAMES`, `PATTERNS`, `patternsIn`, `needsMelody`, `RIGHT_FIGURE_IDS`,
-  `RIGHT_FIGURES`, `LEFT_FIGURE_IDS`, `LEFT_FIGURES`; `hasMethodCodes`, `melodyOf`, `pieceKey`, `VOICINGS`;
-  `selectPractice`, `useSettings`, `useSettingsStoreApi`, `PRACTICE_TOGGLES`; `setPracticeToggle`; `PracticeChoice`;
-  `tonicSpelling`, `noteName`, `noteParam`; kit, `Slider`, `Switch`.
-- Produces: `SetupChange = { key?: string; tempo?: number; hands?: Hands; pattern?: PatternId | 'chart'; rh?:
-  RightFigureId; lh?: LeftFigureId; voicing?: Voicing }` (a key set to `undefined` returns it to the piece's own);
-  `PlayerSetup({ open, onOpenChange, piece, choice, tempo, hands, onChange }: { open: boolean; onOpenChange: (open:
-  boolean) => void; piece: Piece; choice: PracticeChoice; tempo: number; hands: Hands; onChange: (change:
-  SetupChange) => void })`.
+- Consumes: `SetupParams`, `SetupChange` (Task 16); `PATTERN_GROUPS`, `PATTERN_GROUP_NAMES`, `PATTERNS`, `patternsIn`,
+  `needsMelody`, `RIGHT_FIGURE_IDS`, `RIGHT_FIGURES`, `LEFT_FIGURE_IDS`, `LEFT_FIGURES`; `hasMethodCodes`, `melodyOf`,
+  `pieceKey`, `VOICINGS`; `selectPractice`, `useSettings`, `useSettingsStoreApi`, `PRACTICE_TOGGLES`;
+  `setPracticeToggle`; `PracticeChoice`; `tonicSpelling`, `noteName`, `noteParam`; kit, `Slider`, `Switch`,
+  `DrawerTrigger`.
+- Produces: `PlayerSetup({ open, onOpenChange, piece, choice, tempo, hands, onChange }: { open: boolean;
+  onOpenChange: (open: boolean) => void; piece: Piece; choice: PracticeChoice; tempo: number; hands: Hands; onChange:
+  (change: SetupChange) => void })`. A figure list's first row, "The pattern's own", has the value `null`, and choosing
+  it sends `{ rh: undefined }` (or `lh`), which the Player writes as the param's absence.
 
-- [ ] **Step 1: Strings** — `player`:
+- [ ] **Step 1: Strings** — `player` (the Setup is «Параметры» in Russian: «Настройки» is the Settings screen):
 
 ```ts
 // en
@@ -7754,10 +8422,10 @@ export const player = {
   again: 'Again',
   grid: { label: 'Notes in bar {{n}}', rh: 'RH', lh: 'LH', melody: 'Tune' },
 } as const
-// ru
-export const player = {
+// ru (typed `LocaleResources['player']`, as every Russian module is)
+export const player: LocaleResources['player'] = {
   title: 'Плеер',
-  setup: 'Настройки',
+  setup: 'Параметры',
   summary: '{{key}} · {{tempo}} уд/мин · {{hands}}',
   key: 'Тональность',
   tempo: 'Темп',
@@ -7788,7 +8456,7 @@ export const player = {
   finished: 'Конец',
   again: 'Ещё раз',
   grid: { label: 'Ноты в такте {{n}}', rh: 'ПР', lh: 'ЛР', melody: 'Мелодия' },
-} as const
+}
 ```
 
 - [ ] **Step 2: Write the failing tests**
@@ -7796,29 +8464,36 @@ export const player = {
 `PlayerSetup.test.tsx`:
 
 ```tsx
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { PATTERNS } from '@/entities/pattern'
-import { pieceById, pieceKey } from '@/entities/piece'
-import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
-import type { PracticeChoice } from '@/features/practice'
-import { createMemoryStorage } from '@/shared/lib'
+import { melodyOf, pieceById } from '@/entities/piece'
+import { ownChoice } from '@/features/practice'
 import { PlayerSetup } from './PlayerSetup'
 
-const bz5 = pieceById('bz5')
-if (!bz5) throw new Error('bz5')
-const CHOICE: PracticeChoice = { tonic: pieceKey(bz5).tonic, pattern: 'r4', rh: null, lh: null, voicing: null, melody: false }
+function piece(id: string) {
+  const found = pieceById(id)
+  if (!found) throw new Error(id)
+  return found
+}
+const bz5 = piece('bz5')
 
 function renderSetup() {
-  const settings = createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] })
   const onChange = vi.fn()
-  render(
-    <SettingsStoreProvider store={settings}>
-      <PlayerSetup open onOpenChange={() => {}} piece={bz5!} choice={CHOICE} tempo={72} hands="both" onChange={onChange} />
-    </SettingsStoreProvider>,
+  const { settingsStore } = renderWithSettings(
+    <PlayerSetup
+      open
+      onOpenChange={() => {}}
+      piece={bz5}
+      choice={ownChoice(bz5)}
+      tempo={72}
+      hands="both"
+      onChange={onChange}
+    />,
   )
-  return { onChange, settings }
+  return { onChange, settingsStore }
 }
 
 describe('PlayerSetup', () => {
@@ -7837,23 +8512,30 @@ describe('PlayerSetup', () => {
   it('chooses a pattern from its group, and keeps melody patterns from a song without a melody', async () => {
     const user = userEvent.setup()
     const { onChange } = renderSetup()
+    expect(melodyOf(bz5)).toBeUndefined()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(screen.getByRole('button', { name: new RegExp(PATTERNS.r5.name.en) })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: new RegExp(PATTERNS.ballad.name.en) }))
     expect(onChange).toHaveBeenCalledWith({ pattern: 'ballad' })
   })
 
-  it('saves the switches in settings', async () => {
+  it('goes back to the pattern’s own figure', async () => {
     const user = userEvent.setup()
-    const { settings } = renderSetup()
+    const { onChange } = renderSetup()
+    await user.click(screen.getByRole('button', { name: /^Right hand/ }))
+    await user.click(screen.getByRole('button', { name: /The pattern’s own/ }))
+    expect(onChange).toHaveBeenCalledWith({ rh: undefined })
+  })
+
+  it('saves the switches in settings, and shows Melody only for a piece with one', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = renderSetup()
     await user.click(screen.getByRole('switch', { name: 'Metronome' }))
-    expect(settings.getState().practice.metronome).toBe(true)
+    expect(settingsStore.getState().practice.metronome).toBe(true)
     expect(screen.queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
   })
 })
 ```
-
-(bz5 has no melody, so its Melody switch is not shown; check with `melodyOf(bz5)` before relying on it.)
 
 Run it. Expected: FAIL.
 
@@ -7864,15 +8546,16 @@ Run it. Expected: FAIL.
 ```tsx
 import { Check } from 'lucide-react'
 
-export interface ChoiceItem<V extends string> {
+export interface ChoiceItem<V> {
   readonly value: V
   readonly label: string
   readonly description?: string
+  /** Why the choice is not open to this piece; shown instead of the description, and the row is disabled. */
   readonly disabledNote?: string
 }
 
-/** A list of choices in a sheet page: one chosen, some disabled with the reason. */
-export function ChoiceList<V extends string>({
+/** A list of choices on a sheet's page: one chosen, some disabled with the reason. */
+export function ChoiceList<V>({
   items,
   value,
   onChoose,
@@ -7884,17 +8567,17 @@ export function ChoiceList<V extends string>({
   return (
     <ul className="flex flex-col">
       {items.map((item) => (
-        <li key={item.value}>
+        <li key={item.label}>
           <button
             type="button"
             disabled={item.disabledNote !== undefined}
             aria-pressed={item.value === value}
             onClick={() => onChoose(item.value)}
-            className="flex min-h-14 w-full items-center gap-3 border-b border-border py-2 text-left disabled:opacity-50"
+            className="flex min-h-14 w-full items-center gap-3 border-b border-border py-2 text-left transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset disabled:pointer-events-none disabled:opacity-50"
           >
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">{item.label}</span>
-              {item.description || item.disabledNote ? (
+              {item.disabledNote || item.description ? (
                 <span className="block text-sm text-muted-foreground">
                   {item.disabledNote ?? item.description}
                 </span>
@@ -7914,8 +8597,8 @@ export function ChoiceList<V extends string>({
 ```tsx
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { hasMethodCodes, melodyOf, pieceKey, VOICINGS, type Piece } from '@/entities/piece'
 import { LEFT_FIGURES, PATTERNS, RIGHT_FIGURES } from '@/entities/pattern'
+import { melodyOf, pieceKey, VOICINGS, type Piece } from '@/entities/piece'
 import {
   PRACTICE_TOGGLES,
   selectPractice,
@@ -7924,16 +8607,20 @@ import {
 } from '@/entities/settings'
 import type { PracticeChoice } from '@/features/practice'
 import { setPracticeToggle } from '@/features/set-preference'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import { noteName, noteParam, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
 import { ChipRow, Segmented } from '@/shared/ui'
 import { Slider } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
-import type { SetupChange } from './PlayerSetup'
+import type { SetupChange } from '../model/setup-params'
 
 const PITCH_CLASSES = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
+const HANDS = ['both', 'rh', 'lh'] as const
 
+export type SetupPage = 'pattern' | 'rh' | 'lh'
+
+/** The Setup sheet's first page: everything but the pattern and figure lists, which open as their own pages. */
 export function SetupMain({
   piece,
   choice,
@@ -7947,21 +8634,21 @@ export function SetupMain({
   tempo: number
   hands: Hands
   onChange: (change: SetupChange) => void
-  open: (page: 'pattern' | 'rh' | 'lh') => void
+  open: (page: SetupPage) => void
 }) {
   const { t } = useTranslation(['player', 'common'])
-  const language = useLanguage()
+  const locale = useLocale()
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
   const { mode } = pieceKey(piece)
   const hasMelody = melodyOf(piece) !== undefined
   const patternName =
-    choice.pattern === 'chart' ? t('player:fromChart') : localText(PATTERNS[choice.pattern].name, language)
-  const row = (label: string, value: string, page: 'pattern' | 'rh' | 'lh') => (
+    choice.pattern === 'chart' ? t('player:fromChart') : localText(PATTERNS[choice.pattern].name, locale)
+  const row = (label: string, value: string, page: SetupPage) => (
     <button
       type="button"
       onClick={() => open(page)}
-      className="flex min-h-14 w-full items-center gap-3 border-b border-border text-left"
+      className="flex min-h-14 w-full items-center gap-3 border-b border-border text-left transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset"
     >
       <span className="flex-1 text-lg">{label}</span>
       <span className="truncate text-muted-foreground">{value}</span>
@@ -7989,20 +8676,28 @@ export function SetupMain({
           min={40}
           max={160}
           step={1}
-          value={[tempo]}
-          onValueChange={(value) => onChange({ tempo: Array.isArray(value) ? (value[0] ?? tempo) : value })}
+          value={tempo}
+          onValueChange={(next) => onChange({ tempo: next })}
         />
       </label>
       <Segmented
         label={t('player:hands')}
         value={hands}
-        options={(['both', 'rh', 'lh'] as const).map((h) => ({ value: h, label: t(`common:hands.${h}`) }))}
+        options={HANDS.map((h) => ({ value: h, label: t(`common:hands.${h}`) }))}
         onChange={(next) => onChange({ hands: next })}
       />
       <div>
         {row(t('player:pattern'), patternName, 'pattern')}
-        {row(t('player:rh'), choice.rh ? localText(RIGHT_FIGURES[choice.rh].name, language) : t('player:ownFigure'), 'rh')}
-        {row(t('player:lh'), choice.lh ? localText(LEFT_FIGURES[choice.lh].name, language) : t('player:ownFigure'), 'lh')}
+        {row(
+          t('player:rh'),
+          choice.rh ? localText(RIGHT_FIGURES[choice.rh].name, locale) : t('player:ownFigure'),
+          'rh',
+        )}
+        {row(
+          t('player:lh'),
+          choice.lh ? localText(LEFT_FIGURES[choice.lh].name, locale) : t('player:ownFigure'),
+          'lh',
+        )}
       </div>
       {piece.kind === 'progression' && piece.voicing.choosable ? (
         <Segmented
@@ -8024,13 +8719,10 @@ export function SetupMain({
           </label>
         ))}
       </div>
-      {hasMethodCodes(piece) ? null : null}
     </div>
   )
 }
 ```
-
-(Delete the last empty line — `hasMethodCodes` is used by `PlayerSetup` for the pattern list, not here.)
 
 `PlayerSetup.tsx`:
 
@@ -8041,40 +8733,28 @@ import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
   LEFT_FIGURES,
+  needsMelody,
   PATTERN_GROUP_NAMES,
   PATTERN_GROUPS,
   PATTERNS,
   patternsIn,
   RIGHT_FIGURE_IDS,
   RIGHT_FIGURES,
-  needsMelody,
   type LeftFigureId,
   type PatternId,
   type RightFigureId,
 } from '@/entities/pattern'
-import { hasMethodCodes, melodyOf, type Piece, type Voicing } from '@/entities/piece'
+import { hasMethodCodes, melodyOf, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
-import { localText, useLanguage } from '@/shared/i18n'
+import { localText, useLocale } from '@/shared/i18n'
 import type { Hands } from '@/shared/lib/schedule'
 import { Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import type { SetupChange } from '../model/setup-params'
 import { ChoiceList } from './ChoiceList'
-import { SetupMain } from './SetupMain'
+import { SetupMain, type SetupPage } from './SetupMain'
 
-export interface SetupChange {
-  readonly key?: string
-  readonly tempo?: number
-  readonly hands?: Hands
-  readonly pattern?: PatternId | 'chart'
-  readonly rh?: RightFigureId
-  readonly lh?: LeftFigureId
-  readonly voicing?: Voicing
-}
-
-type Page = 'main' | 'pattern' | 'rh' | 'lh'
-const OWN = 'own'
-
-/** Everything about how the Player plays, in one sheet; lists open as its pages. */
+/** Everything about how the Player plays, in one sheet; the lists open as its pages. */
 export function PlayerSetup({
   open,
   onOpenChange,
@@ -8093,10 +8773,10 @@ export function PlayerSetup({
   onChange: (change: SetupChange) => void
 }) {
   const { t } = useTranslation('player')
-  const language = useLanguage()
-  const [page, setPage] = useState<Page>('main')
+  const locale = useLocale()
+  const [page, setPage] = useState<SetupPage | 'main'>('main')
   const noMelody = melodyOf(piece) === undefined ? t('needsMelody') : undefined
-  const title = page === 'main' ? t('setup') : page === 'pattern' ? t('pattern') : t(page)
+  const title = page === 'main' ? t('setup') : t(page)
   const choose = (change: SetupChange) => {
     onChange(change)
     setPage('main')
@@ -8118,13 +8798,20 @@ export function PlayerSetup({
     >
       <SheetContent title={title}>
         {page === 'main' ? (
-          <SetupMain piece={piece} choice={choice} tempo={tempo} hands={hands} onChange={onChange} open={setPage} />
+          <SetupMain
+            piece={piece}
+            choice={choice}
+            tempo={tempo}
+            hands={hands}
+            onChange={onChange}
+            open={setPage}
+          />
         ) : null}
         {page === 'pattern' ? (
           <div className="flex flex-col gap-4">
             {back}
             {hasMethodCodes(piece) ? (
-              <ChoiceList
+              <ChoiceList<PatternId | 'chart'>
                 items={[{ value: 'chart', label: t('fromChart'), description: t('fromChartDescription') }]}
                 value={choice.pattern}
                 onChoose={() => choose({ pattern: 'chart' })}
@@ -8133,15 +8820,18 @@ export function PlayerSetup({
             {PATTERN_GROUPS.map((group) => (
               <section key={group} className="flex flex-col gap-1">
                 <h3 className="text-sm font-semibold text-muted-foreground">
-                  {localText(PATTERN_GROUP_NAMES[group], language)}
+                  {localText(PATTERN_GROUP_NAMES[group], locale)}
                 </h3>
                 <ChoiceList<PatternId | 'chart'>
-                  items={patternsIn(group).map((id) => ({
-                    value: id,
-                    label: localText(PATTERNS[id].name, language),
-                    ...(PATTERNS[id].description ? { description: localText(PATTERNS[id].description!, language) } : {}),
-                    ...(needsMelody(id) && noMelody ? { disabledNote: noMelody } : {}),
-                  }))}
+                  items={patternsIn(group).map((id) => {
+                    const { name, description } = PATTERNS[id]
+                    return {
+                      value: id,
+                      label: localText(name, locale),
+                      ...(description ? { description: localText(description, locale) } : {}),
+                      ...(needsMelody(id) && noMelody ? { disabledNote: noMelody } : {}),
+                    }
+                  })}
                   value={choice.pattern}
                   onChoose={(pattern) => choose({ pattern })}
                 />
@@ -8152,30 +8842,30 @@ export function PlayerSetup({
         {page === 'rh' ? (
           <div className="flex flex-col gap-4">
             {back}
-            <ChoiceList<RightFigureId | typeof OWN>
+            <ChoiceList<RightFigureId | null>
               items={[
-                { value: OWN, label: t('ownFigure') },
+                { value: null, label: t('ownFigure') },
                 ...RIGHT_FIGURE_IDS.map((id) => ({
                   value: id,
-                  label: localText(RIGHT_FIGURES[id].name, language),
+                  label: localText(RIGHT_FIGURES[id].name, locale),
                   ...(RIGHT_FIGURES[id].figure.kind === 'melody' && noMelody ? { disabledNote: noMelody } : {}),
                 })),
               ]}
-              value={choice.rh ?? OWN}
-              onChoose={(value) => choose({ rh: value === OWN ? undefined : value })}
+              value={choice.rh}
+              onChoose={(rh) => choose({ rh: rh ?? undefined })}
             />
           </div>
         ) : null}
         {page === 'lh' ? (
           <div className="flex flex-col gap-4">
             {back}
-            <ChoiceList<LeftFigureId | typeof OWN>
+            <ChoiceList<LeftFigureId | null>
               items={[
-                { value: OWN, label: t('ownFigure') },
-                ...LEFT_FIGURE_IDS.map((id) => ({ value: id, label: localText(LEFT_FIGURES[id].name, language) })),
+                { value: null, label: t('ownFigure') },
+                ...LEFT_FIGURE_IDS.map((id) => ({ value: id, label: localText(LEFT_FIGURES[id].name, locale) })),
               ]}
-              value={choice.lh ?? OWN}
-              onChoose={(value) => choose({ lh: value === OWN ? undefined : value })}
+              value={choice.lh}
+              onChoose={(lh) => choose({ lh: lh ?? undefined })}
             />
           </div>
         ) : null}
@@ -8185,8 +8875,8 @@ export function PlayerSetup({
 }
 ```
 
-(Replace the `description!` assertion with a local `const description = PATTERNS[id].description`. `ChoiceList`'s
-button text includes the description, so tests find patterns by a regex on the name.) Run the tests. Expected: PASS.
+Export `PlayerSetup` from `src/widgets/player-setup/index.ts` beside its types. (`ChoiceList`'s button text includes
+the description, so tests find patterns by a regex on the name.) Run the tests. Expected: PASS.
 
 - [ ] **Step 4: Verify and commit**
 
@@ -8204,42 +8894,62 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ### Task 26: The Player
 
+The Player has many acts (the setup, the modes, taps, MIDI, hearing notes), so, per CODE_STYLE §3, it exposes one
+hook, `pages/player/model/use-player.ts`, and that hook is the test surface. The URL comes in as arguments (the
+search and a way to change it) rather than from router hooks, so `renderHook` can drive it. The URL ↔ choice mapping
+and Your turn's feedback are pure modules beside it.
+
 **Files:**
-- Create: `src/pages/player/model/resolve-choice.ts`, `resolve-choice.test.ts`,
-  `src/pages/player/ui/{PlayerTopBar,NowPanel,NoteGrid,Transport}.tsx`, `src/features/connect-midi/use-held-keys.ts`,
-  `use-held-keys.test.tsx`, `src/app/screens/player.test.tsx`
-- Modify: `src/pages/player/ui/PlayerPage.tsx`, `src/features/practice/note-names.ts` (+`spellPitchClass`),
-  `src/features/connect-midi/index.ts`, `src/features/practice/index.ts`, `src/styles/theme.css`
+- Create: `src/pages/player/model/{player-search.test.ts,turn-feedback.ts,turn-feedback.test.ts,use-player.ts,
+  use-player.test.tsx}`, `src/pages/player/ui/{PlayerTopBar,NowPanel,NoteGrid,Transport}.tsx`,
+  `src/pages/player/ui/PlayerPage.test.tsx`, `src/features/connect-midi/{use-held-keys.ts,use-held-keys.test.tsx}`,
+  `src/features/practice/note-names.test.ts`
+- Modify: `src/pages/player/model/player-search.ts` (Task 16 made the type), `src/pages/player/ui/PlayerPage.tsx`,
+  `src/features/practice/note-names.ts` (+`spellPitchClass`), `src/features/connect-midi/index.ts`,
+  `src/features/practice/index.ts`, `src/shared/i18n/locales/{en,ru}/player.ts` (the placeholder's `title` goes: the
+  top bar shows the piece's title)
 - Delete: `src/pages/player/ui/BackButton.tsx`
 
 **Interfaces:**
 - Consumes: everything of Tasks 14, 24, 25; `usePractice`, `recordPractised`, `MidiButton`.
-- Produces: `resolveChoice(piece, search: { key?: string; pattern?: PatternId | 'chart'; rh?: RightFigureId; lh?:
-  LeftFigureId; voicing?: Voicing }, melody: boolean): PracticeChoice`; `useHeldKeys(): ReadonlySet<Midi>`;
-  `spellPitchClass(performance, chord: number, pc: PitchClass): string`; the `landscape-phone` variant.
+- Produces:
+  - `resolveChoice(piece: Piece, search: ArrangementParams, melody: boolean): PracticeChoice` with
+    `ArrangementParams = Pick<SetupParams, 'key' | 'pattern' | 'rh' | 'lh' | 'voicing'>` (the params that decide the
+    arrangement; hands and tempo do not re-arrange the piece) — the URL read against its
+    piece: an absent choice is the piece's own, a key is spelled for the piece's mode, `chart` on a chart without
+    method codes is the piece's pattern, a voicing counts only on a progression that lets it be chosen.
+  - `searchPatch(piece: Piece, change: SetupChange): SetupChange` — its inverse for one change: a key, tempo,
+    pattern or voicing equal to the piece's own becomes `undefined`, so the URL carries only what differs (spec §4).
+  - `TurnFeedback = { kind: 'play'; notes: readonly string[] } | { kind: 'right' } | { kind: 'not'; note: string } |
+    { kind: 'finished' }`; `turnFeedback(performance: Performance, state: PracticeState): TurnFeedback | null`.
+  - `usePlayer(piece: Piece, search: PlayerSearch, setSearch: (patch: Partial<PlayerSearch>) => void): Player` with
+    `Player = { choice; performance; range; tempo; practice; marks; held; feedback; change(change: SetupChange): void;
+    setMode(mode: PracticeMode): void; hear(): void; tapKey(key: Midi): void }`. Opening records the piece as
+    practised. `tapKey` is Your turn's answer, and in Listen and Step it sounds the key (spec §4.4).
+  - `useHeldKeys(): ReadonlySet<Midi>`; `spellPitchClass(performance, chord: number, pc: PitchClass): string`.
 
-- [ ] **Step 1: `resolveChoice`, test first**
+- [ ] **Step 1: `resolveChoice`, `searchPatch` and `turnFeedback`, tests first**
+
+`player-search.test.ts`:
 
 ```ts
-// resolve-choice.test.ts
 import { describe, expect, it } from 'vitest'
-import { hasMethodCodes, PIECES, pieceById, pieceKey } from '@/entities/piece'
+import { hasMethodCodes, PIECES, pieceById } from '@/entities/piece'
+import { ownChoice } from '@/features/practice'
 import { note } from '@/shared/lib/music'
-import { resolveChoice } from './resolve-choice'
+import { resolveChoice, searchPatch } from './player-search'
 
-const bz5 = pieceById('bz5')!
-const twofive = pieceById('twofive')!
+function piece(id: string) {
+  const found = pieceById(id)
+  if (!found) throw new Error(id)
+  return found
+}
+const bz5 = piece('bz5')
+const twofive = piece('twofive')
 
 describe('resolveChoice', () => {
-  it('plays the piece as written by default', () => {
-    expect(resolveChoice(bz5, {}, false)).toEqual({
-      tonic: pieceKey(bz5).tonic,
-      pattern: hasMethodCodes(bz5) ? 'chart' : bz5.pattern,
-      rh: null,
-      lh: null,
-      voicing: null,
-      melody: false,
-    })
+  it('plays the piece as written when the URL chooses nothing', () => {
+    expect(resolveChoice(bz5, {}, false)).toEqual(ownChoice(bz5))
   })
 
   it('takes the key, figures and melody the learner chose', () => {
@@ -8251,59 +8961,159 @@ describe('resolveChoice', () => {
     })
   })
 
+  it('spells a key for the piece’s mode', () => {
+    expect(resolveChoice(bz5, { key: 'A#' }, false).tonic).toEqual(note('B', -1))
+  })
+
   it('plays the piece’s own pattern when the chart names no methods', () => {
-    const plain = PIECES.find((p) => !hasMethodCodes(p))!
+    const plain = PIECES.find((p) => !hasMethodCodes(p))
+    if (!plain) throw new Error('every piece names its methods')
     expect(resolveChoice(plain, { pattern: 'chart' }, false).pattern).toBe(plain.pattern)
   })
 
   it('lets only a progression that allows it change its voicing', () => {
-    expect(resolveChoice(twofive, { voicing: 'ninths' }, false).voicing).toBe(
-      twofive.kind === 'progression' && twofive.voicing.choosable ? 'ninths' : null,
-    )
+    expect(resolveChoice(twofive, { voicing: 'ninths' }, false).voicing).toBe('ninths')
     expect(resolveChoice(bz5, { voicing: 'ninths' }, false).voicing).toBeNull()
+  })
+})
+
+describe('searchPatch', () => {
+  it('writes a choice equal to the piece’s own as absent', () => {
+    expect(searchPatch(bz5, { key: 'G' })).toEqual({ key: undefined })
+    expect(searchPatch(bz5, { tempo: bz5.tempo })).toEqual({ tempo: undefined })
+    expect(searchPatch(bz5, { pattern: ownChoice(bz5).pattern })).toEqual({ pattern: undefined })
+    expect(searchPatch(twofive, { voicing: 'sevenths' })).toEqual({ voicing: undefined })
+  })
+
+  it('keeps a choice that differs', () => {
+    expect(searchPatch(bz5, { key: 'A', hands: 'lh' })).toEqual({ key: 'A', hands: 'lh' })
+    expect(searchPatch(bz5, { tempo: 96 })).toEqual({ tempo: 96 })
   })
 })
 ```
 
-(Use guards instead of `!` if lint forbids non-null assertions.) Implement:
+`turn-feedback.test.ts`:
 
 ```ts
-import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
-import { hasMethodCodes, pieceKey, type Piece, type Voicing } from '@/entities/piece'
-import { defaultPattern, type PracticeChoice } from '@/features/practice'
-import { parseNoteName } from '@/shared/lib/music'
+import { describe, expect, it } from 'vitest'
+import { pieceById } from '@/entities/piece'
+import { arrangePiece, initialPractice, ownChoice } from '@/features/practice'
+import { midi } from '@/shared/lib/music'
+import { turnFeedback } from './turn-feedback'
 
-/** The Player's URL read against its piece: absent choices are the piece's own. */
+const bz5 = pieceById('bz5')
+if (!bz5) throw new Error('bz5')
+const performance = arrangePiece(bz5, ownChoice(bz5))
+const turn = initialPractice(performance, 'turn', 'rh')
+
+describe('turnFeedback', () => {
+  it('says nothing outside Your turn', () => {
+    expect(turnFeedback(performance, initialPractice(performance, 'listen', 'both'))).toBeNull()
+  })
+
+  it('names the notes to play, spelled from their chord', () => {
+    const feedback = turnFeedback(performance, turn)
+    expect(feedback?.kind).toBe('play')
+    // The first bar is G: the right hand plays some of G B D.
+    if (feedback?.kind === 'play') expect(feedback.notes.every((n) => ['G', 'B', 'D'].includes(n))).toBe(true)
+  })
+
+  it('names a wrong key, and says when a group is right or the piece is finished', () => {
+    expect(turnFeedback(performance, { ...turn, outcome: 'wrong', wrong: midi(61) })).toEqual({
+      kind: 'not',
+      note: 'C#',
+    })
+    expect(turnFeedback(performance, { ...turn, outcome: 'correct' })).toEqual({ kind: 'right' })
+    expect(turnFeedback(performance, { ...turn, outcome: 'finished' })).toEqual({ kind: 'finished' })
+  })
+})
+```
+
+Run: `npx vitest run src/pages/player/model`
+Expected: FAIL. Implement `player-search.ts` (beside Task 16's `PlayerSearch` type):
+
+```ts
+import { hasMethodCodes, pieceKey, type Piece } from '@/entities/piece'
+import { ownChoice, type PracticeChoice, type PracticeMode } from '@/features/practice'
+import { noteFromParam, noteParam, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
+import type { SetupChange, SetupParams } from '@/widgets/player-setup'
+
+/** The Player's URL: the setup, and the mode it practises in. */
+export type PlayerSearch = SetupParams & { readonly mode: PracticeMode }
+
+/** The params that decide the arrangement; hands and tempo play the same arrangement differently. */
+export type ArrangementParams = Pick<SetupParams, 'key' | 'pattern' | 'rh' | 'lh' | 'voicing'>
+
+/** The Player's URL read against its piece: what the URL leaves out is the piece's own. */
 export function resolveChoice(
   piece: Piece,
-  search: {
-    readonly key?: string
-    readonly pattern?: PatternId | 'chart'
-    readonly rh?: RightFigureId
-    readonly lh?: LeftFigureId
-    readonly voicing?: Voicing
-  },
+  search: ArrangementParams,
   melody: boolean,
 ): PracticeChoice {
-  const pattern =
-    search.pattern === 'chart' && !hasMethodCodes(piece) ? piece.pattern : (search.pattern ?? defaultPattern(piece))
+  const own = ownChoice(piece)
+  const { mode } = pieceKey(piece)
+  const chartWithoutMethods = search.pattern === 'chart' && !hasMethodCodes(piece)
   return {
-    tonic: (search.key ? parseNoteName(search.key) : null) ?? pieceKey(piece).tonic,
-    pattern,
+    tonic: search.key ? tonicSpelling(pitchClassOf(noteFromParam(search.key)), mode) : own.tonic,
+    pattern: search.pattern === undefined || chartWithoutMethods ? own.pattern : search.pattern,
     rh: search.rh ?? null,
     lh: search.lh ?? null,
     voicing: piece.kind === 'progression' && piece.voicing.choosable ? (search.voicing ?? null) : null,
     melody,
   }
 }
+
+/** A Setup change as the URL writes it: a key, tempo, pattern or voicing equal to the piece's own is left out. */
+export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
+  const own = ownChoice(piece)
+  const ownVoicing = piece.kind === 'progression' ? piece.voicing.default : undefined
+  const unlessOwn = <V>(value: V, ownValue: V): V | undefined => (value === ownValue ? undefined : value)
+  return {
+    ...change,
+    ...('key' in change ? { key: unlessOwn(change.key, noteParam(own.tonic)) } : {}),
+    ...('tempo' in change ? { tempo: unlessOwn(change.tempo, piece.tempo) } : {}),
+    ...('pattern' in change ? { pattern: unlessOwn(change.pattern, own.pattern) } : {}),
+    ...('voicing' in change ? { voicing: unlessOwn(change.voicing, ownVoicing) } : {}),
+  }
+}
 ```
 
-Run the test. Expected: PASS.
+`turn-feedback.ts`:
+
+```ts
+import { spellPitchClass, type PracticeState } from '@/features/practice'
+import type { Performance } from '@/shared/lib/arrangement'
+import { pitchClass } from '@/shared/lib/music'
+
+/** What Your turn's feedback line says (spec §4.4). */
+export type TurnFeedback =
+  | { readonly kind: 'play'; readonly notes: readonly string[] }
+  | { readonly kind: 'right' }
+  | { readonly kind: 'not'; readonly note: string }
+  | { readonly kind: 'finished' }
+
+/** Your turn's line now: the notes to play, a wrong key, right, or finished. Nothing outside Your turn. */
+export function turnFeedback(performance: Performance, state: PracticeState): TurnFeedback | null {
+  if (state.mode !== 'turn') return null
+  if (state.outcome === 'finished') return { kind: 'finished' }
+  if (state.outcome === 'correct') return { kind: 'right' }
+  const group = performance.beatGroups[state.beatGroup]
+  if (!group) return null
+  if (state.outcome === 'wrong' && state.wrong !== null) {
+    return { kind: 'not', note: spellPitchClass(performance, group.chord, pitchClass(state.wrong)) }
+  }
+  return state.expected.length > 0
+    ? { kind: 'play', notes: state.expected.map((pc) => spellPitchClass(performance, group.chord, pc)) }
+    : null
+}
+```
+
+`spellPitchClass` comes in Step 2; write both steps' code before running. Run the model tests. Expected: PASS.
 
 - [ ] **Step 2: `useHeldKeys` and `spellPitchClass`, tests first**
 
 ```tsx
-// use-held-keys.test.tsx
+// src/features/connect-midi/use-held-keys.test.tsx
 import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
@@ -8329,7 +9139,28 @@ describe('useHeldKeys', () => {
 ```
 
 ```ts
-// use-held-keys.ts
+// src/features/practice/note-names.test.ts
+import { describe, expect, it } from 'vitest'
+import { pieceById } from '@/entities/piece'
+import { pitchClass } from '@/shared/lib/music'
+import { arrangePiece, ownChoice } from './arrange-piece'
+import { spellPitchClass } from './note-names'
+
+const bz5 = pieceById('bz5')
+if (!bz5) throw new Error('bz5')
+const performance = arrangePiece(bz5, ownChoice(bz5))
+
+describe('spellPitchClass', () => {
+  it('names a pitch class from the chord it belongs to, else from the key', () => {
+    const g = performance.chords.findIndex((chord) => chord.symbol === 'G')
+    expect(spellPitchClass(performance, g, pitchClass(11))).toBe('B')
+    expect(spellPitchClass(performance, g, pitchClass(1))).toBe('C#')
+  })
+})
+```
+
+```ts
+// src/features/connect-midi/use-held-keys.ts
 import { useEffect, useState } from 'react'
 import type { Midi } from '@/shared/lib/music'
 import { useServices } from '@/shared/lib/services'
@@ -8356,8 +9187,7 @@ export function useHeldKeys(): ReadonlySet<Midi> {
 }
 ```
 
-Add to `note-names.ts` (with a test in `bar-columns.test.ts` or a new `note-names.test.ts`: the F♯ of a D chord
-spells `F#`, a pitch outside the chord spells from the key):
+Add to `note-names.ts`:
 
 ```ts
 /** A pitch class named from the chord it belongs to, else from the key: Your turn's "Play D F# A". */
@@ -8367,28 +9197,195 @@ export function spellPitchClass(performance: Performance, chord: number, pc: Pit
 }
 ```
 
-Export `useHeldKeys` and `spellPitchClass` from their slices. Run the tests. Expected: PASS.
+Export `useHeldKeys` from `features/connect-midi` and `spellPitchClass` from `features/practice`. Run:
+`npx vitest run src/features/connect-midi src/features/practice src/pages/player/model`. Expected: PASS.
 
-- [ ] **Step 3: The landscape variant**
+- [ ] **Step 3: `usePlayer`, test first**
 
-`src/styles/theme.css`, after the `@custom-variant dark` line:
+`use-player.test.tsx`:
 
-```css
-/* A phone on its side on the music stand: short and wide. */
-@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px));
+```tsx
+import { act, renderHook } from '@testing-library/react'
+import type { ReactNode } from 'react'
+import { describe, expect, it, vi } from 'vitest'
+import { createProgressStore, ProgressStoreProvider } from '@/entities/progress'
+import { pieceById } from '@/entities/piece'
+import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
+import { createFakeAudio } from '@/shared/api/audio'
+import { createMemoryStorage } from '@/shared/lib'
+import { midi } from '@/shared/lib/music'
+import { ServicesProvider } from '@/shared/lib/services'
+import type { PlayerSearch } from './player-search'
+import { usePlayer } from './use-player'
+
+const bz5 = pieceById('bz5')
+if (!bz5) throw new Error('bz5')
+
+function setup(search: PlayerSearch) {
+  const storage = createMemoryStorage()
+  const settings = createSettingsStore({ storage, languages: ['en'] })
+  const progress = createProgressStore({ storage })
+  const audio = createFakeAudio()
+  const setSearch = vi.fn()
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <SettingsStoreProvider store={settings}>
+      <ProgressStoreProvider store={progress}>
+        <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+      </ProgressStoreProvider>
+    </SettingsStoreProvider>
+  )
+  const hook = renderHook(() => usePlayer(bz5, search, setSearch), { wrapper })
+  return { ...hook, progress, audio, setSearch }
+}
+
+describe('usePlayer', () => {
+  it('records the piece as practised when it opens', () => {
+    const { progress } = setup({ hands: 'both', mode: 'listen' })
+    expect(progress.getState().practised.bz5).toBeDefined()
+  })
+
+  it('arranges the piece in the key the URL names', () => {
+    const { result } = setup({ hands: 'both', mode: 'listen', key: 'A' })
+    expect(result.current.performance.chords[0]?.symbol).toBe('A')
+  })
+
+  it('writes a Setup change to the URL, leaving out the piece’s own choice', () => {
+    const { result, setSearch } = setup({ hands: 'both', mode: 'listen', key: 'A' })
+    act(() => result.current.change({ key: 'G' }))
+    expect(setSearch).toHaveBeenLastCalledWith({ key: undefined })
+    act(() => result.current.setMode('step'))
+    expect(setSearch).toHaveBeenLastCalledWith({ mode: 'step' })
+  })
+
+  it('sounds a tapped key outside Your turn', () => {
+    const { result, audio } = setup({ hands: 'both', mode: 'step' })
+    act(() => result.current.tapKey(midi(60)))
+    expect(audio.played).toHaveLength(1)
+  })
+})
 ```
 
-- [ ] **Step 4: Write the failing Player tests**
+Run: `npx vitest run src/pages/player/model/use-player.test.tsx`
+Expected: FAIL. Implement `use-player.ts`:
 
-`src/app/screens/player.test.tsx`:
+```ts
+import { useCallback, useEffect, useMemo } from 'react'
+import type { Piece } from '@/entities/piece'
+import { useProgressStoreApi } from '@/entities/progress'
+import { selectPractice, useSettings } from '@/entities/settings'
+import { useHeldKeys } from '@/features/connect-midi'
+import {
+  arrangePiece,
+  playerRange,
+  practiceMarks,
+  usePractice,
+  type Practice,
+  type PracticeChoice,
+  type PracticeMode,
+} from '@/features/practice'
+import { recordPractised } from '@/features/record-practised'
+import type { Performance } from '@/shared/lib/arrangement'
+import type { KeyRange, Midi } from '@/shared/lib/music'
+import { audibleHands, beatGroupSounds, chordSounds } from '@/shared/lib/schedule'
+import { usePlay } from '@/shared/lib/services'
+import type { KeyMark } from '@/shared/ui'
+import type { SetupChange } from '@/widgets/player-setup'
+import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
+import { turnFeedback, type TurnFeedback } from './turn-feedback'
+
+export interface Player {
+  readonly choice: PracticeChoice
+  readonly performance: Performance
+  readonly range: KeyRange
+  readonly tempo: number
+  readonly practice: Practice
+  /** The current beat group's keys, by hand, labelled with fingers or note names. */
+  readonly marks: ReadonlyMap<Midi, KeyMark>
+  /** Keys held down on the MIDI keyboard. */
+  readonly held: ReadonlySet<Midi>
+  readonly feedback: TurnFeedback | null
+  change(change: SetupChange): void
+  setMode(mode: PracticeMode): void
+  /** Your turn's "Hear these notes": the current beat group, both hands. */
+  hear(): void
+  /** A key tapped on the screen: an answer in Your turn, its sound in Listen and Step. */
+  tapKey(key: Midi): void
+}
+
+/** The Player's one hook (CODE_STYLE §3): the URL and the saved switches in, everything the screen shows out. */
+export function usePlayer(
+  piece: Piece,
+  search: PlayerSearch,
+  setSearch: (patch: Partial<PlayerSearch>) => void,
+): Player {
+  const toggles = useSettings(selectPractice)
+  const progress = useProgressStoreApi()
+  const held = useHeldKeys()
+  const play = usePlay()
+  const { key, pattern, rh, lh, voicing } = search
+  const choice = useMemo(
+    () => resolveChoice(piece, { key, pattern, rh, lh, voicing }, toggles.melody),
+    [piece, key, pattern, rh, lh, voicing, toggles.melody],
+  )
+  const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
+  const range = useMemo(() => playerRange(performance), [performance])
+  const tempo = search.tempo ?? piece.tempo
+  const practice = usePractice(performance, {
+    mode: search.mode,
+    hands: search.hands,
+    tempo,
+    metronome: toggles.metronome,
+    countIn: toggles.countIn,
+  })
+  useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
+
+  const { state, press } = practice
+  const turn = state.mode === 'turn'
+  const tapKey = useCallback(
+    (tapped: Midi) => {
+      if (turn) press(tapped)
+      else play(chordSounds([tapped], { arpeggio: false }))
+    },
+    [turn, press, play],
+  )
+
+  return {
+    choice,
+    performance,
+    range,
+    tempo,
+    practice,
+    marks: practiceMarks(performance, state.beatGroup, {
+      fingers: toggles.fingerNumbers,
+      ...(turn ? { received: state.received } : {}),
+    }),
+    held,
+    feedback: turnFeedback(performance, state),
+    change: (setup) => setSearch(searchPatch(piece, setup)),
+    setMode: (mode) => setSearch({ mode }),
+    hear() {
+      play(beatGroupSounds(performance, state.beatGroup, { tempo, hands: audibleHands('both') }))
+    },
+    tapKey,
+  }
+}
+```
+
+(The memo lists each param `resolveChoice` reads, so a new search object with the same values, or a change of hands or
+tempo, keeps the same performance object, as `usePractice` asks.) Run the test. Expected: PASS.
+
+- [ ] **Step 4: Write the failing Player screen tests**
+
+`src/pages/player/ui/PlayerPage.test.tsx`:
 
 ```tsx
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
 import type { FakeAudio } from '@/shared/api/audio'
 import type { FakeMidi } from '@/shared/api/midi'
-import { renderApp } from '../testing/render-app'
+import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 
 describe('Player', () => {
   it('opens a song with its setup summary and records it as practised', async () => {
@@ -8426,35 +9423,35 @@ describe('Player', () => {
     const { services } = renderApp('/play/bz5?mode=turn&hands=rh')
     const prompt = await screen.findByText(/^Play /)
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    // A key outside G major's first chord (G B D):
-    await user.click(within(keyboard).getAllByRole('button', { name: /^C sharp/ })[0]!)
+    // C sharp is outside G major's first chord (G B D).
+    await user.click(within(keyboard).getByRole('button', { name: 'C sharp 4' }))
     expect(await screen.findByText(/^Not C#/)).toBeInTheDocument()
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
-    const midi = services.midi as FakeMidi
+    const midiKeyboard = services.midi as FakeMidi
     act(() => {
       for (const name of notes) {
-        const key = within(keyboard).getAllByRole('button', { name: new RegExp(`^${name.replace('#', ' sharp')} ?\\d`) })[0]
-        const n = Number(key?.getAttribute('data-midi'))
-        midi.press(n as never)
+        const spelled = parseNoteName(name)
+        if (!spelled) throw new Error(name)
+        midiKeyboard.press(midi(60 + pitchClassOf(spelled)))
       }
     })
     expect(await screen.findByText('Right')).toBeInTheDocument()
   })
 
-  it('changes the key through the Setup sheet', async () => {
+  it('changes the key through the Setup sheet, and back to the piece’s own', async () => {
     const user = userEvent.setup()
     const { router } = renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: /G · 72 BPM/ }))
     await user.click(await screen.findByRole('button', { name: 'A' }))
     expect(router.state.location.search).toMatchObject({ key: 'A' })
     expect(await screen.findByRole('button', { name: /A · 72 BPM/ })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'G' }))
+    expect(router.state.location.search).not.toHaveProperty('key')
   })
 })
 ```
 
-(The Your-turn test needs each key's MIDI number: give `PianoKeyboard`'s key buttons `data-midi={midi}` in Task 4's
-component — add it now if Task 4 did not — and simplify the lookup to the expected pitch classes: press
-`60 + pc` for each name through `parseNoteName` + `pitchClassOf`. Any octave counts.)
+(Your turn counts pitch classes in any octave, so pressing each named note from middle C answers the group.)
 
 Run it. Expected: FAIL.
 
@@ -8468,9 +9465,10 @@ import { ChevronDown, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
 import { MidiButton } from '@/features/connect-midi'
-import { useLanguage } from '@/shared/i18n'
+import { useLocale } from '@/shared/i18n'
 import { RoundButton } from '@/shared/ui'
 
+/** Close, the title with the setup summary that opens the Setup sheet, and the MIDI button. */
 export function PlayerTopBar({
   piece,
   summary,
@@ -8481,7 +9479,7 @@ export function PlayerTopBar({
   onSetup: () => void
 }) {
   const { t } = useTranslation(['player', 'common'])
-  const language = useLanguage()
+  const locale = useLocale()
   return (
     <header className="flex items-center gap-3">
       <RoundButton
@@ -8489,41 +9487,60 @@ export function PlayerTopBar({
         icon={X}
         render={<Link to="/songs/$pieceId" params={{ pieceId: piece.id }} />}
       />
-      <div className="min-w-0 flex-1 text-center">
-        <h1 className="truncate text-lg font-bold">{entryTitles(piece, language).primary}</h1>
+      <div className="flex min-w-0 flex-1 flex-col items-center">
+        <h1 className="max-w-full truncate text-lg font-bold">{entryTitles(piece, locale).primary}</h1>
         <button
           type="button"
           onClick={onSetup}
-          className="inline-flex min-h-8 items-center gap-1 text-muted-foreground hover:text-foreground"
+          className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 text-muted-foreground transition-colors duration-200 ease-out outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring"
         >
           {summary}
           <ChevronDown aria-hidden className="size-4" />
         </button>
       </div>
-      <MidiButton />
+      {/* The MIDI button, or its empty place where the browser has no Web MIDI, so the title stays centred. */}
+      <div className="flex size-11 shrink-0 items-center justify-center">
+        <MidiButton />
+      </div>
     </header>
   )
 }
 ```
 
-(Where Web MIDI is missing `MidiButton` renders nothing; keep the title centred with an invisible 44px spacer then.)
-
 `NowPanel.tsx`:
 
 ```tsx
+import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { spellPitchClass, type PracticeState } from '@/features/practice'
+import type { PracticeState } from '@/features/practice'
 import { TICKS_PER_BEAT, type Performance } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
+import type { TurnFeedback } from '../model/turn-feedback'
 
+function feedbackLine(feedback: TurnFeedback, t: TFunction<'player'>): string {
+  switch (feedback.kind) {
+    case 'play':
+      return t('playThese', { notes: feedback.notes.join(' ') })
+    case 'not':
+      return t('notThat', { note: feedback.note })
+    case 'right':
+      return t('right')
+    case 'finished':
+      return t('finished')
+  }
+}
+
+/** The chord now at display size, the next one, the bar's beats, and Your turn's feedback line. */
 export function NowPanel({
   performance,
   state,
+  feedback,
   onAgain,
 }: {
   performance: Performance
   state: PracticeState
+  feedback: TurnFeedback | null
   onAgain: () => void
 }) {
   const { t } = useTranslation('player')
@@ -8533,18 +9550,6 @@ export function NowPanel({
   const bar = group ? performance.bars[group.bar] : undefined
   const beat = group && bar ? Math.floor((group.tick - bar.startTick) / TICKS_PER_BEAT) : 0
   const beats = bar ? Math.ceil(bar.beats) : 0
-  const feedback =
-    state.mode !== 'turn'
-      ? null
-      : state.outcome === 'finished'
-        ? t('finished')
-        : state.outcome === 'correct'
-          ? t('right')
-          : state.outcome === 'wrong' && state.wrong !== null && group
-            ? t('notThat', { note: spellPitchClass(performance, group.chord, (state.wrong % 12) as never) })
-            : group && state.expected.length > 0
-              ? t('playThese', { notes: state.expected.map((pc) => spellPitchClass(performance, group.chord, pc)).join(' ') })
-              : null
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-end justify-between gap-4">
@@ -8561,12 +9566,15 @@ export function NowPanel({
           <span key={i} className={cn('h-1.5 w-6 rounded-full', i <= beat ? 'bg-primary' : 'bg-border')} />
         ))}
       </div>
-      {feedback ? (
-        <div className="flex items-center gap-3">
-          <p aria-live="polite" className={cn('text-lg font-semibold', state.outcome === 'wrong' && 'text-destructive')}>
-            {feedback}
+      {state.mode === 'turn' ? (
+        <div className="flex min-h-11 items-center gap-3">
+          <p
+            aria-live="polite"
+            className={cn('text-lg font-semibold', feedback?.kind === 'not' && 'text-destructive')}
+          >
+            {feedback ? feedbackLine(feedback, t) : null}
           </p>
-          {state.outcome === 'finished' ? (
+          {feedback?.kind === 'finished' ? (
             <Button variant="soft" onClick={onAgain}>
               {t('again')}
             </Button>
@@ -8578,7 +9586,7 @@ export function NowPanel({
 }
 ```
 
-(Use `pitchClass(state.wrong)` from the kernel instead of `% 12 as never`.)
+(The live region stays in the page for the whole of Your turn, so a screen reader announces each new line.)
 
 `NoteGrid.tsx`:
 
@@ -8593,6 +9601,7 @@ const HAND_TEXT: Readonly<Record<NoteHand, string>> = {
   lh: 'text-hand-lh',
   melody: 'text-hand-melody',
 }
+const HANDS_HIGH_TO_LOW = ['melody', 'rh', 'lh'] as const
 
 /** The current bar's notes by beat and hand; a column jumps there. */
 export function NoteGrid({
@@ -8608,9 +9617,13 @@ export function NoteGrid({
 }) {
   const { t } = useTranslation('player')
   const columns = barColumns(performance, bar)
-  const hands = (['melody', 'rh', 'lh'] as const).filter((hand) => columns.some((c) => c.notes[hand].length > 0))
+  const hands = HANDS_HIGH_TO_LOW.filter((hand) => columns.some((c) => c.notes[hand].length > 0))
   return (
-    <div role="group" aria-label={t('grid.label', { n: bar + 1 })} className="-mx-4 flex overflow-x-auto px-4 [scrollbar-width:none]">
+    <div
+      role="group"
+      aria-label={t('grid.label', { n: bar + 1 })}
+      className="-mx-4 flex overflow-x-auto px-4 scrollbar-none"
+    >
       {columns.map((column) => (
         <button
           key={column.beatGroup}
@@ -8618,7 +9631,7 @@ export function NoteGrid({
           aria-current={column.beatGroup === current ? 'step' : undefined}
           onClick={() => onJump(column.beatGroup)}
           className={cn(
-            'flex min-w-14 shrink-0 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-sm',
+            'flex min-w-14 shrink-0 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-sm transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring',
             column.beatGroup === current ? 'bg-muted' : 'hover:bg-muted/60',
           )}
         >
@@ -8649,6 +9662,7 @@ import type { Practice } from '@/features/practice'
 import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
+/** The primary action, by mode: Play or Stop; Back, Next and Next bar; or Hear these notes. */
 export function Transport({ practice, onHear }: { practice: Practice; onHear: () => void }) {
   const { t } = useTranslation('player')
   const { mode, playing } = practice.state
@@ -8657,7 +9671,11 @@ export function Transport({ practice, onHear }: { practice: Practice; onHear: ()
       {mode === 'listen' ? (
         <>
           <RoundButton label={t('restart')} icon={RotateCcw} onClick={practice.restart} />
-          <Button size="play" aria-label={playing ? t('stop') : t('play')} onClick={playing ? practice.stop : practice.play}>
+          <Button
+            size="play"
+            aria-label={playing ? t('stop') : t('play')}
+            onClick={playing ? practice.stop : practice.play}
+          >
             {playing ? <Square aria-hidden /> : <Play aria-hidden />}
           </Button>
           <span aria-hidden className="size-11" />
@@ -8684,115 +9702,104 @@ export function Transport({ practice, onHear }: { practice: Practice; onHear: ()
 }
 ```
 
-`PlayerPage.tsx`:
+`PlayerPage.tsx`. On a phone held upright the parts stack, with the transport under the keyboard in thumb's reach.
+On a landscape phone (spec §4.4) the parts above the keyboard share two columns: the top bar beside the mode switch,
+the chart strip across both, the now panel and transport on the left, the note grid on the right. The keyboard takes
+the lower half at full width. One DOM order serves both: the parts' wrapper is `display: contents` upright and a
+grid on its side, and the transport moves after the keyboard with `order-last` only upright.
 
 ```tsx
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { keyName, pieceById, pieceKey, useSectionHeading, type Piece } from '@/entities/piece'
-import { useProgressStoreApi } from '@/entities/progress'
-import { selectPractice, useSettings } from '@/entities/settings'
-import { useHeldKeys } from '@/features/connect-midi'
-import { arrangePiece, playerRange, practiceMarks, usePractice } from '@/features/practice'
-import { recordPractised } from '@/features/record-practised'
-import { audibleHands, beatGroupSounds, chordSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { pieceById, pieceKey, useSectionHeading, type Piece } from '@/entities/piece'
+import { PRACTICE_MODES } from '@/features/practice'
+import { keyName } from '@/shared/lib/music'
 import { PianoKeyboard, Segmented } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
-import { PlayerSetup, type SetupChange } from '@/widgets/player-setup'
-import { resolveChoice } from '../model/resolve-choice'
+import { PlayerSetup } from '@/widgets/player-setup'
+import { usePlayer } from '../model/use-player'
 import { NoteGrid } from './NoteGrid'
 import { NowPanel } from './NowPanel'
 import { PlayerTopBar } from './PlayerTopBar'
 import { Transport } from './Transport'
 
 function Player({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'common'])
+  const { t } = useTranslation(['player', 'piece', 'common'])
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const navigate = useNavigate({ from: '/play/$pieceId' })
-  const toggles = useSettings(selectPractice)
-  const progress = useProgressStoreApi()
   const heading = useSectionHeading()
-  const held = useHeldKeys()
-  const play = usePlay()
   const [setupOpen, setSetupOpen] = useState(false)
-  const set = (change: SetupChange | { mode: typeof search.mode }) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
-
-  const { key, pattern, rh, lh, voicing } = search
-  const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, voicing }, toggles.melody),
-    [piece, key, pattern, rh, lh, voicing, toggles.melody],
+  const player = usePlayer(piece, search, (patch) =>
+    void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true }),
   )
-  const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
-  const range = useMemo(() => playerRange(performance), [performance])
-  const tempo = search.tempo ?? piece.tempo
-  const practice = usePractice(performance, {
-    mode: search.mode,
-    hands: search.hands,
-    tempo,
-    metronome: toggles.metronome,
-    countIn: toggles.countIn,
-  })
-  useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
-
+  const { practice, performance } = player
   const { state } = practice
-  const group = performance.beatGroups[state.beatGroup]
-  const marks = practiceMarks(performance, state.beatGroup, {
-    fingers: toggles.fingerNumbers,
-    ...(state.mode === 'turn' ? { received: state.received } : {}),
-  })
+  const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
   const headings = piece.kind === 'progression' ? [t('piece:progression')] : piece.sections.map(heading)
   const summary = t('player:summary', {
-    key: keyName({ tonic: choice.tonic, mode: pieceKey(piece).mode }),
-    tempo,
+    key: keyName({ tonic: player.choice.tonic, mode: pieceKey(piece).mode }),
+    tempo: player.tempo,
     hands: t(`common:hands.${search.hands}`),
   })
 
   return (
-    <div className="flex flex-1 flex-col gap-4 pt-2 landscape-phone:gap-2">
-      <PlayerTopBar piece={piece} summary={summary} onSetup={() => setSetupOpen(true)} />
-      <Segmented
-        label={t('player:modes.label')}
-        value={search.mode}
-        options={(['listen', 'step', 'turn'] as const).map((m) => ({ value: m, label: t(`player:modes.${m}`) }))}
-        onChange={(mode) => set({ mode })}
-      />
-      <ChordChart
-        performance={performance}
-        headings={headings}
-        meter={piece.meter}
-        layout="strip"
-        current={group?.bar ?? 0}
-        onBar={practice.jumpToBar}
-      />
-      <NowPanel performance={performance} state={state} onAgain={practice.restart} />
-      <NoteGrid performance={performance} bar={group?.bar ?? 0} current={state.beatGroup} onJump={practice.jumpToBeatGroup} />
+    <div className="flex flex-1 flex-col gap-4 pt-2 landscape-phone:min-h-0 landscape-phone:gap-2 landscape-phone:pt-1">
+      <div className="contents landscape-phone:grid landscape-phone:min-h-0 landscape-phone:flex-1 landscape-phone:grid-cols-2 landscape-phone:content-start landscape-phone:gap-x-4 landscape-phone:gap-y-2 landscape-phone:overflow-y-auto">
+        <PlayerTopBar piece={piece} summary={summary} onSetup={() => setSetupOpen(true)} />
+        <Segmented
+          label={t('player:modes.label')}
+          value={search.mode}
+          options={PRACTICE_MODES.map((m) => ({ value: m, label: t(`player:modes.${m}`) }))}
+          onChange={player.setMode}
+        />
+        <div className="landscape-phone:col-span-2">
+          <ChordChart
+            performance={performance}
+            headings={headings}
+            meter={piece.meter}
+            layout="strip"
+            current={bar}
+            onBar={practice.jumpToBar}
+          />
+        </div>
+        <NowPanel
+          performance={performance}
+          state={state}
+          feedback={player.feedback}
+          onAgain={practice.restart}
+        />
+        <div className="landscape-phone:row-span-2">
+          <NoteGrid
+            performance={performance}
+            bar={bar}
+            current={state.beatGroup}
+            onJump={practice.jumpToBeatGroup}
+          />
+        </div>
+        <div className="order-last landscape-phone:order-none">
+          <Transport practice={practice} onHear={player.hear} />
+        </div>
+      </div>
       <PianoKeyboard
         label={t('common:keyboard')}
-        from={range.from}
-        to={range.to}
-        marks={marks}
-        pressed={held}
+        range={player.range}
+        marks={player.marks}
+        pressed={player.held}
         wrong={state.wrong === null ? undefined : new Set([state.wrong])}
         minWhiteWidth={28}
-        centre={[...marks.keys()][0] ?? null}
-        onKeyPress={state.mode === 'turn' ? practice.press : (k) => play(chordSounds([k], { arpeggio: false }))}
-        className="mt-auto h-48 landscape-phone:h-36"
-      />
-      <Transport
-        practice={practice}
-        onHear={() => play(beatGroupSounds(performance, state.beatGroup, { tempo, hands: audibleHands('both') }))}
+        centre={[...player.marks.keys()][0] ?? null}
+        onKeyPress={player.tapKey}
+        className="mt-auto h-48 landscape-phone:mt-0 landscape-phone:h-1/2"
       />
       <PlayerSetup
         open={setupOpen}
         onOpenChange={setSetupOpen}
         piece={piece}
-        choice={choice}
-        tempo={tempo}
+        choice={player.choice}
+        tempo={player.tempo}
         hands={search.hands}
-        onChange={set}
+        onChange={player.change}
       />
     </div>
   )
@@ -8805,20 +9812,16 @@ export function PlayerPage() {
 }
 ```
 
-Check `keyName` is exported by the music kernel (it is: `keyName(key)`); import it from `@/shared/lib/music`, not
-the piece entity. A landscape phone lays the parts out in two rows: give the container
-`landscape-phone:grid landscape-phone:grid-cols-[1fr_1fr]` with the chart strip and keyboard spanning both columns,
-the now panel and transport in the left column and the note grid in the right (adjust in the visual finish, Task 29).
-
-Delete `BackButton.tsx`. Run the Player tests. Expected: PASS.
+(The route's `beforeLoad` already sends an unknown id or a listing to not-found, so `piece` is always there; the
+`null` branch only satisfies the type.) Delete `BackButton.tsx`. Run the Player tests. Expected: PASS.
 
 - [ ] **Step 6: Verify and commit**
 
 Run: `npm run typecheck && npm run lint && npm run test && npm run build`
 
 ```bash
-npx prettier --write src/pages/player src/features/connect-midi src/features/practice src/styles/theme.css src/app/screens
-git add -A src/pages/player src/features src/styles src/app/screens
+npx prettier --write src/pages/player src/features/connect-midi src/features/practice src/shared/i18n/locales
+git add -A src/pages/player src/features src/shared/i18n
 git commit -m "Build the Player: modes, the chart strip, the now panel, the note grid, the keyboard and transport
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -8834,7 +9837,9 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Delete: `src/pages/settings/ui/ChoiceGroup.tsx`
 
 **Interfaces:**
-- Consumes: `setLocale`, `setTheme`, `resetProgress`, `MidiControl`, `Segmented`, `AlertDialog*`.
+- Consumes: `setLocale`, `setTheme`, `resetProgress(store: ProgressStore)`, `MidiControl`, `Segmented`,
+  `AlertDialog*` (the registry's `AlertDialogAction` is a `Button`, so it takes `variant` and does not close the
+  dialog by itself; the page holds the dialog's open state, a lone toggle).
 
 - [ ] **Step 1: Strings** — `settings` gains en `midi: 'MIDI keyboard'`, `progress: { label: 'Progress', reset:
   'Reset progress', title: 'Reset progress?', body: 'Learned steps, practised songs and quiz answers on this device
@@ -8845,10 +9850,12 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - [ ] **Step 2: Update the tests first**
 
 In `SettingsPage.test.tsx` and `router.test.tsx`, language and theme are segmented buttons now:
-`getByRole('button', { name: 'Русский' })` with `aria-pressed`. Add:
+`getByRole('button', { name: 'Русский' })` with `aria-pressed`. Add to `SettingsPage.test.tsx` (it needs the progress
+store, so it runs the app through `renderApp`, imported from `@/app/testing/render-app` beside the file's
+`renderWithSettings`):
 
 ```tsx
-  it('resets progress only after confirming', async () => {
+  it('resets progress only after confirming, then closes the dialog', async () => {
     const user = userEvent.setup()
     const { progressStore } = renderApp('/settings')
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
@@ -8858,32 +9865,32 @@ In `SettingsPage.test.tsx` and `router.test.tsx`, language and theme are segment
     await user.click(screen.getByRole('button', { name: 'Reset progress' }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))
     expect(progressStore.getState().learned).toEqual({})
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
   })
 ```
 
-(put it in `src/app/screens/settings.test.tsx` with `renderApp`). Run: expected FAIL.
+(import `act` and `waitFor` from `@testing-library/react`.) Run: expected FAIL.
 
 - [ ] **Step 3: Implement**
 
 ```tsx
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import {
-  LOCALES,
   selectLocale,
   selectTheme,
   THEMES,
   useSettings,
   useSettingsStoreApi,
-  type Locale,
   type Theme,
 } from '@/entities/settings'
 import { MidiControl } from '@/features/connect-midi'
 import { resetProgress } from '@/features/reset-progress'
 import { setLocale, setTheme } from '@/features/set-preference'
+import { LOCALES, type Locale } from '@/shared/i18n'
 import { RoundButton, ScreenHeader, Segmented } from '@/shared/ui'
 import {
   AlertDialog,
@@ -8919,6 +9926,11 @@ export function SettingsPage() {
   const progress = useProgressStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
+  const [confirming, setConfirming] = useState(false)
+  const reset = () => {
+    resetProgress(progress)
+    setConfirming(false)
+  }
   return (
     <div className="flex flex-col gap-8">
       <ScreenHeader
@@ -8945,7 +9957,7 @@ export function SettingsPage() {
         <MidiControl />
       </Group>
       <Group title={t('settings:progress.label')}>
-        <AlertDialog>
+        <AlertDialog open={confirming} onOpenChange={setConfirming}>
           <AlertDialogTrigger render={<Button variant="destructive" className="self-start" />}>
             {t('settings:progress.reset')}
           </AlertDialogTrigger>
@@ -8956,7 +9968,7 @@ export function SettingsPage() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t('settings:progress.cancel')}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={() => resetProgress(progress)}>
+              <AlertDialogAction variant="destructive" onClick={reset}>
                 {t('settings:progress.confirm')}
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -8968,9 +9980,7 @@ export function SettingsPage() {
 }
 ```
 
-(Check `resetProgress`'s signature in `src/features/reset-progress/reset-progress.ts` and the registry's
-`AlertDialogAction` props — if it has no `variant`, pass `render={<Button variant="destructive" />}`.) Delete
-`ChoiceGroup.tsx`. Run the tests. Expected: PASS.
+Delete `ChoiceGroup.tsx`. Run the tests. Expected: PASS.
 
 - [ ] **Step 4: Verify and commit**
 
@@ -8993,20 +10003,43 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` (status line)
 - Create: `docs/adr/0007-visual-world-from-reference-apps.md`
 
-- [ ] **Step 1: CLAUDE.md** — in Architecture: `shared/ui` lists the kit (`PianoKeyboard`, `ScreenHeader`,
-  `RoundButton`, `Segmented`, `ChipRow`, `Sheet`, `RoleLegend`, `RatingMark`, `LevelMark`); `app/routes/search.ts`
-  holds every route's `validateSearch` (pages may not be imported by the router); screen tests live in
-  `src/app/screens/` and run the app through `renderApp`; widgets list gains `continue-card path-levels piece-list
-  chord-chart piece-skills player-setup chord-explorer scale-explorer step-panel quiz-board quiz-choice`; features
-  gain `connect-midi`; the `/check` route. Keep it concise, in its own voice.
+- [ ] **Step 1: CLAUDE.md** — in Architecture, keep its own voice and length:
+  - **shared/**: `ui` lists the kit (`PianoKeyboard`, `ScreenHeader`, `RoundButton`, `Segmented`, `ChipRow`, `Sheet`,
+    `RoleLegend`, `RatingMark`, `LevelMark`); `lib` gains `keyboard-layout`, `search-params`, `fold-text`, and `music`
+    gains `keyboard` and `place` (placed chords and scales); `services` gains `usePlay`/`usePlayChord`; `i18n` owns
+    `Locale` and `useLocale`.
+  - **entities/**: an entity may have `ui/` for UI that is only its own data shown (a piece's titles, credits, source
+    and section headings; a step's title and `ExplorerLink`). `progress` gains `ratingOf` and `selectSuggestedStep`.
+  - **features/**: `connect-midi` (new); `practice` gains `ownChoice`, the note grid and marks; `quiz` gains check
+    plans, the theory quizzes, My gaps and `useQuiz`.
+  - **widgets/**: `continue-card path-levels piece-list chord-chart piece-skills player-setup chord-explorer
+    scale-explorer step-panel quiz-board quiz-choice`, each owning its view type in `model/` where a route reads it.
+  - **pages/**: a page with many acts has one hook in `model/` (`pages/player/model/use-player.ts`).
+  - **app/**: `routes/search.ts` holds every route's `validateSearch` and defaults, typed with `import type` from the
+    slice that owns each view (the router imports no page or widget code, which would leave its lazy chunk); the
+    `/check` route.
+  - Conventions: a screen's test sits beside its page and runs the app through `renderApp`.
 
-- [ ] **Step 2: CODE_STYLE.md** — §5: the new roles (`attention` for gaps only, `hand-*` for the Player only, `key-*`,
-  `glass`), the palette law, the type scale on Tailwind's own names, `ease-out` as the one curve, `landscape-phone`;
-  §1: the kit; §9: screen tests in `src/app/screens`.
+- [ ] **Step 2: CODE_STYLE.md**
+  - §1: a row "Entity UI (only the entity's own data, shown) → `entities/<x>/ui/`", and the kit.
+  - §5: the new roles (`attention` for gaps only, `hand-*` for the Player only, `key-*`, `thumb`), the palette law,
+    the radius scale on Tailwind's names (`xs` 6 · `sm` 9 · `md` 12 · `lg` 14 · `xl` 16 · `2xl` 18 · `3xl` 26 ·
+    `4xl` 28), the type scale on Tailwind's names, `ease-out` as the one curve, the `landscape-phone:` variant, the
+    `scrollbar-none` utility, and text links as `Button variant="link"` rendering a `Link`.
+  - §9: a screen's test sits beside its page (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through
+    `renderApp`; test files are outside the layer rules.
+  - §10: after "No how-to paragraphs", the one exception: Theory → Symbols' reading notes (master spec §5), reference
+    text about chord symbols behind one row, not instructions for the app.
 
-- [ ] **Step 3: Glossary** — add **Check** (a bounded quiz over one scope: a song's chords, a chord family, a scale;
-  avoid "test", "exam"), **Continue** (the suggested next step), **Setup sheet**; make sure every UI word used in the
-  new strings maps to a glossary term.
+- [ ] **Step 3: Glossary** — add, in its tables' shape:
+  - Music: **Placed tone** — a Tone at a key on the keyboard, as the explorers and the quiz place chords and scales
+    (`placeChord`, `placeScale`); avoid "voicing" (that is a Progression's triads, sevenths or ninths). **Scale gap** —
+    the step between neighbouring notes of a scale: W, H or W+H (Т, П, Т+П in Russian); avoid "step" (a Step is on the
+    Path).
+  - Theory gaps: **Theory quiz** — one of the open-ended quizzes in Theory → Quiz (Build chord, Name chord, Build
+    scale over the chosen skills, or My gaps), as against a **Check**, which is bounded; avoid "tab".
+  - Practice: the **Setup** row notes its Russian UI word, «Параметры»; «Настройки» is Settings.
+  Check, Continue and Setup are already there. Make sure every UI word in the new strings maps to a glossary term.
 
 - [ ] **Step 4: ADR 0007** — context (the owner's references), decision (the sage world, Onest, the kit, the
   references' patterns adopted and refused), consequences (tokens changed wholesale; DESIGN.md records the system).

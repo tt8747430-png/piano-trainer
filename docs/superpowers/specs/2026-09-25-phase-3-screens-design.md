@@ -48,7 +48,9 @@ Two layers stay (primitives `--p-*` → semantic roles). The legacy palette is r
 | `--destructive`        | `#B3261E` | `#FF8A80` | reset progress, a wrong key                                  |
 | `--border` / `--input` | `#DCE3DE` | `#2A3430` | hairlines                                                    |
 | `--ring`               | `#2D6657` | `#8CCBB8` | focus                                                        |
-| `--glass`              | `rgb(255 255 255 / .72)` | `rgb(23 30 27 / .72)` | the floating tab bar, over a backdrop blur |
+| `--thumb`              | `#FFFFFF` | `#E6EDE9` | a slider's thumb                                             |
+
+The floating tab bar is `--card` at 72% (`bg-card/72`) over a backdrop blur, so it needs no colour of its own.
 
 - **Chord roles** keep their seven tokens (`--role-root` … `--role-13th`, `--on-role`), retuned to sit beside teal:
   root `#2E5BD0`, 3rd `#CC3363`, 5th `#5B6878`, 7th `#A86A00`, 9th `#0E8F5B`, 11th `#7847C8`, 13th `#0A83AD`
@@ -61,6 +63,8 @@ Two layers stay (primitives `--p-*` → semantic roles). The legacy palette is r
   `--destructive`.
 - `THEME_COLORS` (`shared/config`) becomes `{ light: '#F3F6F3', dark: '#0D1210' }`, held to `--background` by its
   test as now.
+- **App icon:** repainted in the world (a deep-teal tile, white keys, one key in the right hand's teal), and
+  `npm run icons` regenerates the PNGs, so no asset in the old palette ships.
 
 ### 2.2 Type
 
@@ -77,8 +81,9 @@ Two layers stay (primitives `--p-*` → semantic roles). The legacy palette is r
 
 ### 2.3 Shape, depth, motion
 
-- Radii: chips and pills full; buttons 18px (`rounded-2xl`); cards and the Continue card 26px; sheets 28px top;
-  keys 9px (white) and 6px (black) at the bottom only.
+- Radii, on Tailwind's names (`--radius` 16px): chips and pills full; buttons 18px (`rounded-2xl`); cards and the
+  Continue card 26px (`rounded-3xl`); sheets 28px top (`rounded-t-4xl`); keys 9px white (`rounded-b-sm`) and 6px black
+  (`rounded-b-xs`), at the bottom only. The primitives' 12–16px sit between (`md` `lg` `xl`).
 - Depth: round buttons and chips sit on a 1px `--border` ring plus a 1–2px soft shadow; the tab bar and sheets carry
   one soft offset shadow. No coloured glow.
 - Motion: one curve, `cubic-bezier(.22, 1, .36, 1)` (exponential ease-out), 200–450ms. Sheets and popovers rise and
@@ -98,15 +103,15 @@ sizes.
 
 | Component       | What it is                                                                                  |
 | --------------- | ------------------------------------------------------------------------------------------- |
-| `PianoKeyboard` | The one keyboard (master spec §8): `from`/`to` MIDI range, `marks` per key (`{ tone: role | hand, label }`), `pressed`, `wrong`, `lit`, `onKeyPress`; keys are buttons named by note ("F sharp 3") with `aria-pressed` where they are selectable; black keys over white by geometry from a pure `keyboardLayout(from, to)`; optional horizontal scroll with a `centre` MIDI kept in view |
+| `PianoKeyboard` | The one keyboard (master spec §8): a `range` (`KeyRange`), `marks` per key (`{ tone: role | hand, label }`), `pressed` (held on MIDI), `lit` (sounding now, teal), `selected` (a quiz's chosen keys, filled teal), `outlined`, `wrong`, `onKeyPress`; keys are buttons named by note ("F sharp 3") with `aria-pressed` where they are selectable; black keys over white by geometry from a pure `keyboardLayout(range)` (`shared/lib`); optional horizontal scroll with a `centre` MIDI kept in view |
 | `ScreenHeader`  | Large title, optional leading back button and trailing actions; replaces `ScreenTitle`      |
 | `RoundButton`   | A 44px round icon button with a required `label` (the `surface` Button variant, composed)   |
-| `Segmented`     | A pill segmented control over `ToggleGroup` (one value, required)                           |
+| `Segmented`     | A pill segmented control over `ToggleGroup` (one value, required; a string or a number)     |
 | `ChipRow`       | A scrolling row of toggle chips over `ToggleGroup` (roots, families, qualities, keys)       |
 | `RoleLegend`    | The roles present in a chord or scale: dot + name                                          |
 | `RatingMark`    | Known (teal check), gap (amber dot), unknown (hollow ring), each with a hidden text name    |
 | `LevelMark`     | Four pips, the level filled, with "Level 2" as its accessible name                          |
-| `Sheet`         | The app's bottom sheet: `Drawer` with the grab handle, a title and a scrolling body         |
+| `Sheet`         | The app's bottom sheet: a `Drawer` that always shows its swipe handle; `SheetContent` is its panel (title, scrolling body, optional footer); triggers are the primitive's `DrawerTrigger` |
 
 ## 3. Layout and navigation
 
@@ -122,15 +127,18 @@ sizes.
 ## 4. Screens
 
 URL search params follow master spec §6: what the learner is looking at lives in the URL, validated per route; an
-invalid value falls back to its default silently; defaults are stripped from the URL (`stripSearchParams`); changes
-from controls **replace** the history entry, so Back leaves the screen instead of undoing a tap.
+invalid value falls back to its default silently (no clamping: `inversion=7` is root position); defaults are stripped
+from the URL (`stripSearchParams`), and the Player, whose key, tempo, pattern and voicing default to the piece's own,
+writes a choice equal to the piece's own as absent; changes from controls **replace** the history entry, so Back
+leaves the screen instead of undoing a tap.
 
 ### 4.1 Path `/`
 
 - Header "Path" + settings button.
 - **Continue card** (mint): the suggested step's title (and the original title beneath for a song in English), key or
-  kind, the gap line when the suggested piece has gaps or unknowns (amber dot, "2 chords to check", links to its
-  Check), and a full-width **Continue** button (the screen's one primary action) that opens the Player for a piece, or
+  kind, the gap line when the suggested piece has gaps or unknowns (amber dot, "Chords to check: 2", links to its
+  Check; the count follows a colon because "2 chords" / "1 chord" and Russian's three plural forms cannot be typed
+  against English, and a colon reads right for any count in both), and a full-width **Continue** button (the screen's one primary action) that opens the Player for a piece, or
   the explorer for a chord or scale step. Rule (master spec §5): the last-practised piece if not learned, else the first
   unlearned step in path order. Everything learned: the card says so in one line and offers Songs.
 - **Levels:** per level a heading "Level 1 · Beginner" with "4 of 9" and the step rows: a kind tile (chords, scale,
@@ -153,14 +161,16 @@ from controls **replace** the history entry, so Back leaves the screen instead o
 
 - Back button; the title block (as in Songs), credits (role label + names as printed), the source ("«Боже, спасибо»,
   No. 5, p. 16"), chips for key and meter, the note.
-- **Chords in this song:** one chip per skill (quality suffix, full name as accessible name) with its `RatingMark`;
+- **Chords in this song** (in this exercise, in this progression: the row names the piece's kind): one chip per skill
+  (quality suffix; the full name and the rating in words as accessible name) with its `RatingMark`;
   each opens `/theory/chords?quality=<q>&root=<first root it has in the piece>`. **Check these chords** (text button)
   opens `/check?of=piece:<id>`.
-- **Chart:** by section (heading assembled by i18n from kind, number, label, last, detail); bars as a lead sheet:
-  bar numbers, chord symbols, method code labels under a bar when the chart names them, the beat count under a bar
-  that is not the meter's length. **Tap a bar to hear it** (the piece's own arrangement at its tempo).
-- Footer: **Practise** (full-width primary, opens `/play/$pieceId`), **Mark as learned** (learned toggle with text),
-  and a link to the key's scale (`/theory/scales?root=G&kind=major`).
+- **Chart:** by section (heading assembled by i18n from kind, number, label, last, detail); bars line by line as the
+  chart has them: bar numbers, chord symbols, method code labels under a bar when the chart names them, the beat count
+  under a bar that is not the meter's length. **Tap a bar to hear it** (the piece's own arrangement at its tempo).
+- Footer: **Practise** (full-width primary, opens `/play/$pieceId`) and the learned toggle with text. A toggle is
+  named for the state it switches, so it reads "Learned", pressed or not ("Mark as learned" would be wrong once
+  pressed). The key's scale is a link in the title block (`/theory/scales?root=G&kind=major`).
 - A listing: the title block, credits, source, key and meter, the note, one line "No chart yet", and the scale link.
 - Unknown id: the not-found screen.
 
@@ -191,7 +201,8 @@ from controls **replace** the history entry, so Back leaves the screen instead o
 - **Keyboard (the hero):** the performance's range rounded out to C…B; white keys at least 28px wide, scrolling
   horizontally when that does not fit, keeping the current notes in view. The current beat group's notes are marked
   in hand colours, labelled with finger numbers when that switch is on, else with note names. Your turn: expected keys
-  marked, received ones filled, a wrong key flashes `--key-wrong`; taps and MIDI both count. MIDI keys held show as
+  marked, received ones filled, a wrong key flashes `--key-wrong`; taps and MIDI both count. In Listen and Step a
+  tapped key sounds its note: a key is a button, and a button that does nothing is a dead end. MIDI keys held show as
   pressed.
 - **Transport** (the primary action, bottom): Listen: Restart (round) · a 72px round **Play/Stop**; Step:
   Back (round) · **Next** (pill) · Next bar (round); Your turn: Restart (round) · **Hear these notes** (pill).
@@ -225,10 +236,12 @@ by degree or by the chosen hand's fingers (`view` `Segmented`: Degrees · RH fin
 (Note / RH / LH) or one line when no standard fingering exists; **practice**: rhythm (`ChipRow` of the five rhythms),
 tempo `Slider` 40–160, hands `Segmented` (Right · Left · Together), **Play up and down** (primary), which lights each
 key as it sounds; **chords in this scale** (7-note scales): Triads · 7ths `Segmented` and a chip per chord with its
-Roman numeral, tapping sounds it; **about**: formula, steps (W H W+H), and the relative major or minor as a link.
+Roman numeral, tapping sounds it; **about**: formula, structure (W H W+H; Т П Т+П in Russian), and the relative major
+or minor as a link.
 
 **Symbols** (no params): a **How to read chord symbols** row opening a sheet with the reading notes (legacy Guide's
-three panels, in both languages), then the chord dictionary: per family a heading and one reference card per quality
+three panels, in both languages; the app's one reference text, the exception CODE_STYLE §10 records), then the chord
+dictionary: per family a heading and one reference card per quality
 (symbol spellings "Cm, C−", full name, formula "1 ♭3 5", notes on C) with text actions **Hear** and **Open** (the
 Chords explorer on that quality).
 
@@ -242,8 +255,9 @@ whole quiz.
 ### 4.6 Quiz board and Check `/check?of`
 
 - **Quiz board** (widget, shared by Quiz and Check): the prompt ("Build Cm7", "Which chord is this?" + Play again,
-  "Build E♭ harmonic minor"); the keyboard (build modes: tap to select, selected keys filled teal; after Check the
-  answer's keys shown with roles, missing ones outlined, extra ones red); Name chord: four answer buttons in a 2×2
+  "Build E♭ harmonic minor"); the keyboard, over middle C to E5 and grown to hold the answer (build modes: tap to
+  select, selected keys filled teal; after Check the answer's keys shown with roles, missing ones outlined, extra ones
+  red; Name chord lights the chord it plays); Name chord: four answer buttons in a 2×2
   grid; the feedback line ("Right" / "It's C7 · dominant 7th"); one full-width action: **Check** (disabled with no
   keys), then **Next**. Clear sits beside Check while keys are selected.
 - **Check** `/check?of=<step id>`, full screen: close button, a `Progress` bar of answered / length, the board, then
@@ -267,50 +281,69 @@ keyboard (status line + Connect; or one line saying this browser cannot connect 
 New code by layer. Pure logic has a colocated test and lives where CLAUDE.md puts it.
 
 **shared/lib**
-- `music/voicing.ts` — `chordVoicing(root, quality, { inversion, bothHands })`: the explorer's placed tones
-  (right hand from middle C, the root an octave below in the left hand).
-- `music/scale.ts` — `scaleSteps(kind)` (`W H W+H`) and `relativeScale(root, kind)` (major ↔ natural minor; the
+- `music/keyboard.ts` — `MIDDLE_C`, `isBlackKey`, `KeyRange` and `keyboardRange(keys, least)` (the least range grown to
+  whole octaves as far as the keys need).
+- `music/place.ts` — `placeChord(root, quality, { inversion, bothHands })`: the explorers' **placed tones** (right hand
+  from middle C, the first inversions' tones an octave up, the root an octave below in the left hand);
+  `lastInversion(quality)`, the one rule for which inversions a chord has; `placeScale(root, kind)`, root to root
+  from middle C. ("Voicing" stays the progressions' triads, sevenths or ninths.)
+- `music/scale.ts` — `scaleGaps(kind)` (`W H W+H`) and `relativeScale(root, kind)` (major ↔ natural minor; the
   harmonic and melodic minors' relative major).
-- `music/note.ts` — `noteParam(note)` / URL spelling with ASCII `b` and `#`.
+- `music/note.ts` — `noteParam(note)` / `noteFromParam(param)`: URL spelling with ASCII `b` and `#`.
+- `keyboard-layout.ts` — `keyboardLayout(range)`: each key's place, width and length in percent.
 - `schedule/` — `barSounds(performance, bar, options)` (a bar on its own), `chordSounds(midis, { arpeggio })`, and
-  `scaleRun(tones, { rhythm, tempo, hands })` with `PRACTICE_RHYTHMS` → sounds plus a cue per note for lighting keys.
-- `search-params.ts` — `oneOf`, `wholeIn(min, max)`, `noteIn` validators for `validateSearch`.
+  `scaleRun(notes, { rhythm, tempo, hands })` with `PRACTICE_RHYTHMS` → sounds plus a cue per note for lighting keys.
+- `search-params.ts` — `valueOr`, `wholeIn(raw, min, max, fallback)`, `readNote` for the validators.
 - `fold-text.ts` — search normalisation (case, diacritics, ё → е).
-- `services/use-play.ts` — `usePlay()`: unlocks audio and plays sounds; the explorers' and chart's one way to sound.
+- `services/use-play.ts` — `usePlay()`: unlocks audio and plays sounds; `usePlayChord()`: a chord placed as the
+  explorers place it, struck or rolled. The explorers', the chart's and the dictionary's one way to sound.
 
-**shared/ui** — §2.4, with `piano-keyboard/layout.ts` (pure geometry, tested).
+**shared/i18n** — `Locale` and `LOCALES` move here from `entities/settings` (the lowest layer that knows languages;
+`LocalText` is keyed by them), with `useLocale()`, the locale i18next speaks now.
+
+**shared/ui** — §2.4.
 
 **entities**
-- `progress/model/selectors.ts` — `selectSuggestedStep` (the Continue rule; progress already depends on the path) and
-  `selectAllAnswers`; `mastery.ts` — `skillsToCheck(skills, answers)` (gap or unknown) and `knownCount`.
-- `path/ui/use-step-title.ts` — a step's name in the learner's language (family, scale kind or the piece's titles).
-- `piece/ui/` — `EntryTitle`, `Credits`, `SectionHeading`, `SourceLine` (entity UI: the title rules of master spec §8).
+- `progress/model` — `ratingOf(answers, skill)`, the one way a skill is rated from saved answers; `selectSuggestedStep`
+  (the Continue rule; progress already depends on the path) and `selectAllAnswers`; `skillsToCheck(skills, answers)`
+  (gap or unknown) and `knownCount`.
+- `path/ui/` — `useStepTitle` (a step's name in the learner's locale: family, scale kind or the piece's titles) and
+  `ExplorerLink` (where a chord or scale step opens, §4.1).
+- `piece/ui/` — `Credits`, `SourceLine`, `useSectionHeading`, and `model/titles.ts` `entryTitles` (the title rules of
+  master spec §8).
 
 **features**
-- `mark-learned/ui/LearnedToggle.tsx` — the round check (and a text variant for the Piece footer).
-- `connect-midi/` (new) — `useMidiStatus()` and `MidiControl` (status line + Connect), used by Settings and the Player.
-- `practice/` (beside the machine, as the slice already lays out) — `defaultPattern(piece)`, `arrangePiece(piece, choice)` (chart or progression at a voicing,
-  tonic, pattern or the chart's methods, figures, melody), `spellPerformedNote`, `barColumns(performance, bar)`
-  (the note grid), `keyboardRange(performance)`.
-- `quiz/` — `checkPlan(of)` (scope, length, mode per §4.6), `myGaps(answers, practised)`, the quiz keyboard's keys;
-  `use-quiz.ts`
-  — `useQuiz(config)`: drives the machine, draws questions with `Math.random`, records answers with `recordAnswer`,
-  sounds Name chord questions.
+- `mark-learned/ui/LearnedToggle.tsx` — the round check (and a text variant for the Piece footer and the step panel).
+- `connect-midi/` (new) — `useMidiConnection()`, `MidiControl` (status line + Connect) and `MidiButton`, used by
+  Settings and the Player; `useHeldKeys()`.
+- `practice/` (beside the machine, as the slice already lays out) — `PRACTICE_MODES`, `defaultPattern(piece)`,
+  `ownChoice(piece)` (the piece as written), `arrangePiece(piece, choice)` (chart or progression at a voicing, tonic,
+  pattern or the chart's methods, figures, melody), `spellPerformedNote`, `spellPitchClass`, `barColumns(performance,
+  bar)` (the note grid), `practiceMarks`, `playerRange(performance)`.
+- `quiz/` — `checkPlan(of)` (scope, length, mode per §4.6), `myGaps(answers, practised)`, `THEORY_QUIZZES` and
+  `theoryQuizConfig` (what each Theory quiz asks), the quiz keyboard's keys and sounds; `use-quiz.ts` — `useQuiz(config)`:
+  drives the machine, draws questions with `Math.random`, records answers with `recordAnswer`, sounds Name chord
+  questions.
 
-**widgets:** `app-nav`, `theory-nav` (restyled), `continue-card`, `path-levels`, `piece-list`, `chord-chart`
-(`sheet` and `strip` layouts over a Performance), `piece-skills`, `player-setup`, `chord-explorer`,
-`scale-explorer`, `step-panel`, `quiz-board`, `quiz-choice`. Screen tests run the whole app (`renderApp`) from `src/app/screens/`.
+**widgets:** `app-nav`, `theory-nav` (restyled), `continue-card`, `path-levels`, `piece-list`, `chord-chart` (`lines`
+and `strip` layouts over a Performance), `piece-skills`, `player-setup`, `chord-explorer`, `scale-explorer`,
+`step-panel`, `quiz-board`, `quiz-choice`. A widget whose view a route's URL holds owns that view's type in `model/`
+(`ChordView`, `ScaleView`, the Setup's `SetupParams`).
 
-**pages:** each page composes widgets; pure page logic sits in its `model/` (`songs-view.ts`, `resolve-choice.ts`).
-The Player's subparts (top bar, now panel, note grid, transport) sit beside `PlayerPage` in `pages/player/ui/`.
+**pages:** each page composes widgets; pure page logic sits in its `model/` (`songs-filter.ts`, `songs-view.ts`;
+the Player's `player-search.ts`, `turn-feedback.ts` and its one hook, `use-player.ts`, per CODE_STYLE §3). The
+Player's subparts (top bar, now panel, note grid, transport) sit beside `PlayerPage` in `pages/player/ui/`. Each
+screen's test sits beside its page and runs the whole app through `renderApp` (tests are outside the layer rules).
 
-**app:** `routes/search.ts` holds every route's `validateSearch` and defaults (the router may not import a page's
-`index.ts`, or the page would leave its lazy chunk); `router.tsx` gains `validateSearch` + `stripSearchParams` per route, `notFound()` from the Piece, Player and
-Check routes' `beforeLoad` for ids that are not there, the `/check` route in the full-screen group (in the
-`theory-screens` chunk, with the quiz board), and `defaultPendingComponent`.
+**app:** `routes/search.ts` holds every route's `validateSearch` and defaults. It types each schema with `import type`
+from the slice that owns the view, and imports no page or widget code at run time: the router may not pull a screen out
+of its lazy chunk, and a build showed that importing a page's `index.ts` does. `router.tsx` gains `validateSearch` +
+`stripSearchParams` per route, `notFound()` from the Piece, Player and Check routes' `beforeLoad` for ids that are not
+there, the `/check` route in the full-screen group (in the `theory-screens` chunk, with the quiz board), and
+`defaultPendingComponent`.
 
-**Styles:** `tokens.css` (§2.1), `theme.css` (font stack, type scale utilities, radii, the one easing), `index.css`
-imports the two font CSS files.
+**Styles:** `tokens.css` (§2.1), `theme.css` (font stack, type scale, radii, the one easing, `scrollbar-none`, the
+`landscape-phone` variant), `index.css` imports the two font CSS files.
 
 ## 6. i18n
 
@@ -345,7 +378,8 @@ except white keys in a scrolling keyboard (≥28px wide, 3× as tall), where MID
 
 ## 9. Testing
 
-Master spec §9 applies. Unit tests first for every pure module in §5. Component tests (Testing Library, fakes) for:
+Master spec §9 applies. Unit tests first for every pure module in §5, and `renderHook` tests for `useQuiz` and the
+Player's `usePlayer`. Component tests (Testing Library, fakes) for:
 PianoKeyboard (names, taps, marks); the learned toggle, including a quiz answer that marks a chord step; the Continue
 card's choice and gap line; Songs search and filters; the Piece screen's chords row, check link and bar tap (FakeAudio
 records the bar); the Player's mode switch, Setup sheet changing the URL, and Your-turn feedback from taps and
@@ -356,7 +390,8 @@ and not-found. `renderApp` covers routing; no snapshots.
 
 Per the direction contract: after the screens are built, one batched screenshot round (phone 390 and desktop 1440,
 light and dark), fixes, a second round, the impeccable detector, the shipped finish reviewer, and the documenter
-writing `DESIGN.md`. Then `npm run typecheck && npm run lint && npm run test && npm run build`.
+writing `DESIGN.md`. The repo's own records follow the code: CLAUDE.md's architecture, CODE_STYLE, the glossary, the
+README, and ADR 0007 for the visual world. Then `npm run typecheck && npm run lint && npm run test && npm run build`.
 
 ## 11. Refinements of the master spec
 
@@ -373,3 +408,8 @@ writing `DESIGN.md`. Then `npm run typecheck && npm run lint && npm run test && 
    in Settings (§7 already asks for a one-line status in the Connect control).
 7. **Search-param changes replace history** (§6's "the back button works" now means Back leaves the screen).
 8. **Hand colours are their own tokens** (§8 listed role tokens only).
+9. **The Continue card's gap line reads "Chords to check: 2"** (§4.6 ④ wrote "2 chords to check"): the plural forms
+   Russian needs cannot be typed against English, and the count after a colon reads right in both languages.
+10. **The Player writes a choice equal to the piece's own as absent** (§6's defaults stripped from the URL, for the
+    params whose default depends on the piece).
+11. **In Listen and Step a tapped key sounds its note** (§5 names taps only for Your turn).
