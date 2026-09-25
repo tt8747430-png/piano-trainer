@@ -13,3 +13,13 @@ export {
   type ScheduleOptions,
   type Sound,
 } from './schedule'
+export {
+  barSounds,
+  chordSounds,
+  PRACTICE_RHYTHM_IDS,
+  PRACTICE_RHYTHMS,
+  scaleRun,
+  type KeyCue,
+  type PracticeRhythm,
+  type ScaleRun,
+} from './sounds'
