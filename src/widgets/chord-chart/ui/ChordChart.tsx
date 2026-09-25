@@ -87,7 +87,7 @@ export function ChordChart({
             <div key={index} className="flex shrink-0 snap-center flex-col">
               <span
                 className={cn(
-                  'h-5 px-2.5 pt-1 text-xs font-semibold text-muted-foreground',
+                  'h-5 px-2.5 pt-1 text-xs font-semibold text-muted-foreground landscape-phone:hidden',
                   i > 0 && 'invisible',
                 )}
               >

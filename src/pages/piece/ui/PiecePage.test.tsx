@@ -31,6 +31,13 @@ describe('Piece', () => {
     expect((services.audio as FakeAudio).played).toHaveLength(1)
   })
 
+  it('offers Practise before the chords and the chart, in the first screenful', async () => {
+    renderApp('/songs/bz5')
+    const practise = await screen.findByRole('link', { name: 'Practise' })
+    const chords = screen.getByRole('region', { name: 'Chords in this song' })
+    expect(practise.compareDocumentPosition(chords) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('opens the Player and marks the song learned', async () => {
     const user = userEvent.setup()
     const { progressStore } = renderApp('/songs/bz5')

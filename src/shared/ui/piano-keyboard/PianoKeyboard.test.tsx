@@ -46,12 +46,16 @@ describe('PianoKeyboard', () => {
     expect(d).toHaveClass('bg-role-root')
   })
 
-  it('shows a scale’s keys on the soft surface, keeping role colours for chord tones', () => {
-    const marks = new Map<Midi, KeyMark>([[midi(62), { tone: 'scale', label: '2' }]])
+  it('keeps a scale’s keys white or black, their degree in a teal badge', () => {
+    const marks = new Map<Midi, KeyMark>([
+      [midi(62), { tone: 'scale', label: '2' }],
+      [midi(63), { tone: 'scale', label: '♭3' }],
+    ])
     render(<PianoKeyboard label="Keyboard" range={ONE_OCTAVE} marks={marks} />)
     const d = screen.getByRole('button', { name: 'D4' })
-    expect(d).toHaveClass('bg-secondary', 'text-secondary-foreground')
-    expect(d).not.toHaveClass('text-on-role')
+    expect(d).toHaveClass('bg-key-white')
+    expect(within(d).getByText('2')).toHaveClass('bg-key-mark', 'text-on-key-mark')
+    expect(screen.getByRole('button', { name: 'D sharp 4' })).toHaveClass('bg-key-black')
   })
 
   it('makes keys toggles when they are selectable, and fills the selected ones teal', () => {

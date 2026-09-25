@@ -4,6 +4,7 @@ export const player: LocaleResources['player'] = {
   setup: 'Параметры',
   summary: '{{key}} · {{tempo}} уд/мин · {{hands}}',
   key: 'Тональность',
+  keyOf: { major: '{{tonic}} мажор', minor: '{{tonic}} минор' },
   tempo: 'Темп',
   bpm: '{{tempo}} уд/мин',
   hands: 'Руки',

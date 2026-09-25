@@ -62,15 +62,23 @@ export function SetupMain({
   )
   return (
     <div className="flex flex-col gap-5">
-      <ChipRow
-        label={t('player:key')}
-        value={noteParam(choice.tonic)}
-        options={PITCH_CLASSES.map((pc) => {
-          const tonic = tonicSpelling(pc, mode)
-          return { value: noteParam(tonic), label: noteName(tonic) }
-        })}
-        onChange={(key) => onChange({ key })}
-      />
+      <div className="flex flex-col gap-3">
+        <div className="flex justify-between text-lg">
+          {t('player:key')}
+          <span className="font-semibold">
+            {t(`player:keyOf.${mode}`, { tonic: noteName(choice.tonic) })}
+          </span>
+        </div>
+        <ChipRow
+          label={t('player:key')}
+          value={noteParam(choice.tonic)}
+          options={PITCH_CLASSES.map((pc) => {
+            const tonic = tonicSpelling(pc, mode)
+            return { value: noteParam(tonic), label: noteName(tonic) }
+          })}
+          onChange={(key) => onChange({ key })}
+        />
+      </div>
       <Slider
         min={40}
         max={160}

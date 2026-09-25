@@ -18,8 +18,11 @@ export interface KeyMark {
   readonly label?: string
 }
 
-/** A marked key's face: role and hand colours carry white labels; a scale's keys sit on the soft surface. */
-const TONE_FACE: Readonly<Record<KeyTone, string>> = {
+/**
+ * A marked key's face: role and hand colours carry the label on them. A scale's note keeps its
+ * white or black key and wears a band instead (`ScaleBand`), so the keyboard's pattern still reads.
+ */
+const TONE_FACE: Readonly<Record<Exclude<KeyTone, 'scale'>, string>> = {
   root: cn(ROLE_BG.root, 'text-on-role'),
   '3rd': cn(ROLE_BG['3rd'], 'text-on-role'),
   '5th': cn(ROLE_BG['5th'], 'text-on-role'),
@@ -30,7 +33,6 @@ const TONE_FACE: Readonly<Record<KeyTone, string>> = {
   rh: 'bg-hand-rh text-on-role',
   lh: 'bg-hand-lh text-on-role',
   melody: 'bg-hand-melody text-on-role',
-  scale: 'bg-secondary text-secondary-foreground',
 }
 
 interface KeyProps {
@@ -54,7 +56,7 @@ interface KeyProps {
 function faceOf(props: KeyProps): string {
   if (props.wrong) return 'bg-destructive text-on-role'
   if (props.lit) return 'bg-primary text-primary-foreground'
-  if (props.mark) return TONE_FACE[props.mark.tone]
+  if (props.mark && props.mark.tone !== 'scale') return TONE_FACE[props.mark.tone]
   if (props.selected) return 'bg-primary text-primary-foreground'
   if (props.pressed) return 'bg-key-pressed'
   return props.black ? 'bg-key-black' : 'bg-key-white'
@@ -79,7 +81,19 @@ const Key = memo(function Key(props: KeyProps) {
       )}
       style={{ left: `${props.left}%`, width: `${props.width}%`, height: `${props.height}%` }}
     >
-      {props.mark?.label ? (
+      {props.mark?.tone === 'scale' ? (
+        <span
+          aria-hidden
+          className={cn(
+            'absolute inset-x-0 bottom-0 grid h-2/5 place-items-center text-sm font-bold tabular-nums',
+            props.black
+              ? 'rounded-b-xs bg-key-mark-black text-on-key-mark-black'
+              : 'rounded-b-sm bg-key-mark text-on-key-mark',
+          )}
+        >
+          {props.mark.label}
+        </span>
+      ) : props.mark?.label ? (
         <span aria-hidden className="text-sm font-bold tabular-nums">
           {props.mark.label}
         </span>

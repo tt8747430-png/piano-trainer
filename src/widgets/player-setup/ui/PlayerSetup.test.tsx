@@ -31,6 +31,11 @@ function renderSetup() {
 }
 
 describe('PlayerSetup', () => {
+  it('names the key row with the key the piece is played in', () => {
+    renderSetup()
+    expect(screen.getByText('G major')).toBeInTheDocument()
+  })
+
   it('changes the key, hands and tempo', async () => {
     const user = userEvent.setup()
     const { onChange } = renderSetup()

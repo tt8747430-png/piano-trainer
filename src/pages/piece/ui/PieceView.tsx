@@ -27,17 +27,6 @@ export function PieceView({ piece }: { piece: Piece }) {
   return (
     <div className="flex flex-col gap-8 pb-4">
       <PieceFacts entry={piece} />
-      <PieceSkills piece={piece} performance={performance} />
-      <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-bold">{t('chart')}</h2>
-        <ChordChart
-          performance={performance}
-          headings={headings}
-          meter={piece.meter}
-          layout="lines"
-          onBar={hearBar}
-        />
-      </section>
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink
           size="pill"
@@ -53,6 +42,17 @@ export function PieceView({ piece }: { piece: Piece }) {
           variant="text"
         />
       </div>
+      <PieceSkills piece={piece} performance={performance} />
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xl font-bold">{t('chart')}</h2>
+        <ChordChart
+          performance={performance}
+          headings={headings}
+          meter={piece.meter}
+          layout="lines"
+          onBar={hearBar}
+        />
+      </section>
     </div>
   )
 }

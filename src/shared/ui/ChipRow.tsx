@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import { useMediaQuery } from '@/shared/lib'
 import { pickedOption, toggleValue, type Option, type OptionValue } from './option'
 import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
 
@@ -13,8 +15,27 @@ export function ChipRow<V extends OptionValue>({
   options: readonly Option<V>[]
   onChange: (value: V) => void
 }) {
+  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const row = useRef<HTMLDivElement>(null)
+  const arrived = useRef(false)
+
+  // The chosen chip is in view when the row appears and after every choice; the row scrolls itself,
+  // never the page around it.
+  useEffect(() => {
+    const element = row.current
+    const chosen = element?.querySelector<HTMLElement>('[data-pressed]')
+    const instant = !arrived.current || reduceMotion
+    arrived.current = true
+    if (!element || !chosen || element.scrollWidth <= element.clientWidth) return
+    element.scrollTo({
+      left: chosen.offsetLeft - (element.clientWidth - chosen.offsetWidth) / 2,
+      behavior: instant ? 'auto' : 'smooth',
+    })
+  }, [value, reduceMotion])
+
   return (
     <ToggleGroup
+      ref={row}
       aria-label={label}
       value={[toggleValue(value)]}
       onValueChange={(pressed) => {
@@ -23,7 +44,7 @@ export function ChipRow<V extends OptionValue>({
       }}
       variant="chip"
       spacing={2}
-      className="-mx-4 flex w-auto snap-x scroll-px-4 overflow-x-auto px-4 pb-1 scrollbar-none"
+      className="relative -mx-4 flex w-auto snap-x scroll-px-4 overflow-x-auto px-4 pb-1 scrollbar-none"
     >
       {options.map((option) => (
         <ToggleGroupItem

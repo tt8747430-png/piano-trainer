@@ -68,7 +68,7 @@ export function ChordExplorer({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-6xl font-extrabold tracking-tight">
           {chordSymbol({ root, quality: chord.quality })}
@@ -131,23 +131,25 @@ export function ChordExplorer({
           </li>
         ))}
       </ol>
-      <Segmented
-        label={t('theory:inversionLabel')}
-        value={chord.inversion}
-        options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
-          ({ value, name }) => ({ value, label: t(`theory:inversion.${name}`) }),
-        )}
-        onChange={(inversion) => change({ inversion })}
-      />
-      <Segmented
-        label={t('theory:handsLabel')}
-        value={chord.hands}
-        options={[
-          { value: 'rh', label: t('common:hands.rh') },
-          { value: 'both', label: t('common:hands.both') },
-        ]}
-        onChange={(hands) => change({ hands })}
-      />
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Segmented
+          label={t('theory:inversionLabel')}
+          value={chord.inversion}
+          options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
+            ({ value, name }) => ({ value, label: t(`theory:inversion.${name}`) }),
+          )}
+          onChange={(inversion) => change({ inversion })}
+        />
+        <Segmented
+          label={t('theory:handsLabel')}
+          value={chord.hands}
+          options={[
+            { value: 'rh', label: t('common:hands.rh') },
+            { value: 'both', label: t('common:hands.both') },
+          ]}
+          onChange={(hands) => change({ hands })}
+        />
+      </div>
       <div className="flex gap-3">
         <Button size="pill" className="flex-1" onClick={() => sound(chord)}>
           {t('theory:play')}

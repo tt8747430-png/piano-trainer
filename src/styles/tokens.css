@@ -98,6 +98,11 @@
   --key-white-edge: var(--p-sage-300);
   --key-black: var(--p-ink-900);
   --key-pressed: var(--p-sage-400);
+  /* A scale's note on a key: a band across its lower part, deep on white keys, light on black. */
+  --key-mark: var(--p-teal-800);
+  --on-key-mark: var(--p-white);
+  --key-mark-black: var(--p-teal-300);
+  --on-key-mark-black: var(--p-ink-950);
 }
 
 [data-theme='dark'] {

@@ -2,6 +2,7 @@ export const player = {
   setup: 'Setup',
   summary: '{{key}} · {{tempo}} BPM · {{hands}}',
   key: 'Key',
+  keyOf: { major: '{{tonic}} major', minor: '{{tonic}} minor' },
   tempo: 'Tempo',
   bpm: '{{tempo}} BPM',
   hands: 'Hands',

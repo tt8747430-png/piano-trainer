@@ -91,7 +91,7 @@ function Player({ piece }: { piece: Piece }) {
         minWhiteWidth={28}
         centre={[...player.marks.keys()][0] ?? null}
         onKeyPress={player.tapKey}
-        className="mt-auto h-48 landscape-phone:mt-0 landscape-phone:h-2/5"
+        className="mt-auto max-h-80 min-h-48 flex-1 landscape-phone:mt-0 landscape-phone:max-h-none landscape-phone:min-h-0 landscape-phone:flex-none landscape-phone:h-2/5"
       />
       <PlayerSetup
         open={setupOpen}
