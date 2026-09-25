@@ -30,4 +30,5 @@ export const common: LocaleResources['common'] = {
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
+  learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
 }

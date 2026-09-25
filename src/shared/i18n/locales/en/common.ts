@@ -29,4 +29,5 @@ export const common = {
   // A piano key's name: its note and octave.
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
   keyboard: 'Keyboard',
+  learned: { toggle: '{{title}}: learned', done: 'Learned' },
 } as const
