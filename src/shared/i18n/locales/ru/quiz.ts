@@ -1,3 +1,40 @@
 import type { LocaleResources } from '../../types'
 
-export const quiz: LocaleResources['quiz'] = { title: 'Тест' }
+export const quiz: LocaleResources['quiz'] = {
+  modes: {
+    label: 'Режим теста',
+    'build-chord': 'Построить аккорд',
+    'name-chord': 'Назвать аккорд',
+    'build-scale': 'Построить гамму',
+    gaps: 'Мои пробелы',
+  },
+  prompt: {
+    buildChord: 'Постройте {{symbol}}',
+    nameChord: 'Какой это аккорд?',
+    buildScale: 'Постройте: {{scale}}',
+  },
+  playAgain: 'Ещё раз',
+  answers: 'Ответы',
+  check: 'Проверить',
+  clear: 'Сбросить',
+  next: 'Дальше',
+  done: 'Готово',
+  right: 'Верно',
+  itWas: 'Это {{answer}}',
+  stats: { correct: 'Верно', streak: 'Подряд', best: 'Рекорд' },
+  choice: {
+    open: 'Аккорды и гаммы',
+    families: 'Группы аккордов',
+    scales: 'Гаммы',
+    common: 'Основные',
+    clear: 'Снять все',
+    apply: 'Применить',
+  },
+  gaps: { none: 'Пробелов пока нет.', whole: 'Весь тест' },
+  checkTitle: 'Проверка: {{title}}',
+  progress: 'Вопрос {{n}} из {{total}}',
+  score: '{{correct}} из {{total}}',
+  marked: '«{{title}}» отмечено как выученное.',
+  openChords: 'Открыть в аккордах',
+  openScales: 'Открыть в гаммах',
+}
