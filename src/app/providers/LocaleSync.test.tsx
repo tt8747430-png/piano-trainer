@@ -1,8 +1,7 @@
 import { act, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import type { Locale } from '@/entities/settings'
 import { setLocale } from '@/features/set-preference'
-import { i18n } from '@/shared/i18n'
+import { i18n, type Locale } from '@/shared/i18n'
 import { renderWithSettings } from '../testing/render-with-settings'
 import { LocaleSync } from './LocaleSync'
 

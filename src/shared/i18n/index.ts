@@ -28,3 +28,5 @@ void i18n.use(initReactI18next).init({
 export { i18n }
 export type { LocaleResources } from './types'
 export { localText, type LocalText } from './local-text'
+export { isLocale, LOCALES, type Locale } from './locale'
+export { useLocale } from './use-locale'

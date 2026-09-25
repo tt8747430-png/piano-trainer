@@ -1,12 +1,10 @@
 export {
   DEFAULT_PRACTICE,
   DEFAULT_QUIZ_CHOICE,
-  LOCALES,
   PRACTICE_TOGGLES,
   THEMES,
   canonicalFamilies,
   canonicalScales,
-  type Locale,
   type PracticeToggle,
   type PracticeToggles,
   type QuizChoice,

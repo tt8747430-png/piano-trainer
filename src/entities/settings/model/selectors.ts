@@ -1,4 +1,5 @@
-import type { Locale, PracticeToggles, QuizChoice, SettingsState, Theme } from './types'
+import type { Locale } from '@/shared/i18n/locale'
+import type { PracticeToggles, QuizChoice, SettingsState, Theme } from './types'
 
 export const selectTheme = (state: SettingsState): Theme => state.theme
 export const selectLocale = (state: SettingsState): Locale => state.locale

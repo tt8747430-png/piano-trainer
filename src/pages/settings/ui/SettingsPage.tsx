@@ -1,7 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import {
-  type Locale,
-  LOCALES,
   selectLocale,
   selectTheme,
   type Theme,
@@ -10,6 +8,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setLocale, setTheme } from '@/features/set-preference'
+import { LOCALES, type Locale } from '@/shared/i18n'
 import { ScreenHeader } from '@/shared/ui'
 import { ChoiceGroup } from './ChoiceGroup'
 

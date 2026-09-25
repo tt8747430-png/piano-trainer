@@ -1,1 +1,27 @@
-export const piece = { title: 'Song' } as const
+export const piece = {
+  title: 'Song',
+  credit: {
+    authors: 'Authors',
+    'words-and-music': 'Words and music',
+    words: 'Words',
+    music: 'Music',
+    'russian-text': 'Russian text',
+    harmony: 'Harmony',
+    accompaniment: 'Accompaniment',
+    unknown: 'Author unknown',
+  },
+  source: { number: 'No. {{n}}', page: 'p. {{n}}' },
+  section: {
+    intro: 'Intro',
+    verse: 'Verse',
+    verseNumbered: 'Verse {{n}}',
+    chorus: 'Chorus',
+    lastChorus: 'Last chorus',
+    ending: 'Ending',
+    lastEnding: 'Last ending',
+    practice: 'Exercise',
+    hymn: 'Hymn',
+    part: 'Part',
+    partLabelled: 'Part {{label}}',
+  },
+} as const

@@ -1,12 +1,8 @@
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
-import {
-  createSettingsStore,
-  type Locale,
-  SettingsStoreProvider,
-  type Theme,
-} from '@/entities/settings'
+import { createSettingsStore, SettingsStoreProvider, type Theme } from '@/entities/settings'
 import { setTheme } from '@/features/set-preference'
+import type { Locale } from '@/shared/i18n'
 import { createMemoryStorage } from '@/shared/lib'
 
 /** `ui` under a fresh in-memory settings store, in the given language and theme. */

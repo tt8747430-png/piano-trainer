@@ -1,11 +1,9 @@
+import { isLocale, type Locale } from '@/shared/i18n/locale'
 import { isOneOf } from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@/shared/lib/music'
 
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
-
-export const LOCALES = ['en', 'ru'] as const
-export type Locale = (typeof LOCALES)[number]
 
 /** The Setup's saved switches. */
 export const PRACTICE_TOGGLES = ['fingerNumbers', 'melody', 'metronome', 'countIn'] as const
@@ -46,7 +44,6 @@ export const canonicalScales = (values: readonly unknown[]): ScaleKind[] =>
   SCALE_KINDS.filter((kind) => values.includes(kind))
 
 export const isTheme = isOneOf(THEMES)
-export const isLocale = isOneOf(LOCALES)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

@@ -1,5 +1,6 @@
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore, type StoreApi } from 'zustand/vanilla'
+import { isLocale } from '@/shared/i18n/locale'
 import { safeLocalStorage, savedObject } from '@/shared/lib'
 import {
   DEFAULT_PRACTICE,
@@ -8,7 +9,6 @@ import {
   canonicalFamilies,
   canonicalScales,
   detectLocale,
-  isLocale,
   isTheme,
   type PracticeToggles,
   type QuizChoice,
