@@ -2,7 +2,7 @@ import { midi, pitchClass, type Midi, type PitchClass, type Tone } from '@/share
 
 /** A right-hand voicing starts on one of the 13 notes from E3 up to E4, so it lies within 52–75. */
 const LOWEST_BASE = 52
-const BASES = Array.from({ length: 13 }, (_, i) => LOWEST_BASE + i)
+const HIGHEST_BASE = 64
 const MIDDLE_C = 60
 
 const ascending = (a: number, b: number) => a - b
@@ -12,20 +12,30 @@ const voicingFrom = (base: number, pcs: readonly PitchClass[]): number[] =>
   pcs.map((pc) => base + pitchClass(pc - base)).sort(ascending)
 
 /** How far the voices move from the previous voicing (voice by voice), or how far from middle C. */
-function distance(voicing: readonly number[], previous: readonly number[] | null): number {
-  if (!previous?.length) return Math.abs((voicing[0] ?? MIDDLE_C) - MIDDLE_C)
-  const before = [...previous].sort(ascending)
+function distance(voicing: readonly number[], before: readonly number[] | null): number {
+  if (!before) return Math.abs((voicing[0] ?? MIDDLE_C) - MIDDLE_C)
   const lastVoice = before.length - 1
-  return voicing.reduce((sum, m, i) => sum + Math.abs(m - (before[Math.min(i, lastVoice)] ?? m)), 0)
+  let moved = 0
+  voicing.forEach((m, i) => {
+    moved += Math.abs(m - (before[Math.min(i, lastVoice)] ?? m))
+  })
+  return moved
 }
 
-/** The voicing of `pcs` that moves least from `previous`: the first found on a tie. */
+/** The voicing of `pcs` that moves least from `previous`: the lowest such on a tie. */
 export function voiceLead(previous: readonly Midi[] | null, pcs: readonly PitchClass[]): Midi[] {
-  const nearest = BASES.reduce<number[] | null>((best, base) => {
+  const before = previous?.length ? [...previous].sort(ascending) : null
+  let nearest: number[] = []
+  let shortest = Infinity
+  for (let base = LOWEST_BASE; base <= HIGHEST_BASE; base++) {
     const voicing = voicingFrom(base, pcs)
-    return best && distance(best, previous) <= distance(voicing, previous) ? best : voicing
-  }, null)
-  return (nearest ?? []).map(midi)
+    const moved = distance(voicing, before)
+    if (moved < shortest) {
+      shortest = moved
+      nearest = voicing
+    }
+  }
+  return nearest.map(midi)
 }
 
 /**

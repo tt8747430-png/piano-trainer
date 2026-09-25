@@ -31,7 +31,8 @@ export interface ChordContext {
   readonly triad: readonly number[]
   /** The chord voice-led from the previous one. */
   readonly voiced: readonly Midi[]
-  readonly keyTriads: Readonly<Record<'I' | 'IV' | 'V', readonly Midi[]>>
+  /** The key the piece is played in, for its I, IV and V triads. */
+  readonly key: Key
 }
 
 export interface ContextChord {
@@ -48,20 +49,11 @@ export function chordContext(
   previous: readonly Midi[] | null,
   key: Key,
 ): ChordContext {
-  const keyTonic = pitchClassOf(key.tonic)
   const third = within(chord.tones[1]?.semitones, 4)
   const fifth = within(chord.tones[2]?.semitones, 7)
   const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
   const root = 55 + pitchClass(chord.root - 7)
   const voiced = voiceLead(previous, rightHandPitchClasses(chord.tones))
-  const keyTriad = (degree: number, quality: ChordQuality) =>
-    voiceLead(
-      voiced,
-      qualityIntervals(quality).map((interval) =>
-        pitchClass(keyTonic + degree + interval.semitones),
-      ),
-    )
-  const tonicQuality = key.mode === 'minor' ? 'min' : 'maj'
   return {
     third,
     fifth,
@@ -73,12 +65,20 @@ export function chordContext(
     bass: chord.bass + (chord.bass >= 7 ? 24 : 36),
     triad: [root, root + third, root + fifth],
     voiced,
-    keyTriads: {
-      I: keyTriad(0, tonicQuality),
-      IV: keyTriad(5, tonicQuality),
-      V: keyTriad(7, 'maj'),
-    },
+    key,
   }
+}
+
+const KEY_TRIAD_DEGREES = { I: 0, IV: 5, V: 7 } as const
+
+/** The key's I, IV or V triad (minor I and IV in a minor key), voice-led from the chord. */
+function keyTriad(triad: keyof typeof KEY_TRIAD_DEGREES, context: ChordContext): Midi[] {
+  const quality: ChordQuality = triad === 'V' || context.key.mode === 'major' ? 'maj' : 'min'
+  const root = pitchClassOf(context.key.tonic) + KEY_TRIAD_DEGREES[triad]
+  return voiceLead(
+    context.voiced,
+    qualityIntervals(quality).map((interval) => pitchClass(root + interval.semitones)),
+  )
 }
 
 /** The lowest note moved up an octave, `times` times. */
@@ -120,7 +120,7 @@ export function tokenMidis(token: FigureToken, context: ChordContext): Midi[] {
         return [voice + 12 * Math.floor(token.index / count)]
       }
       case 'key-triad':
-        return context.keyTriads[token.triad]
+        return keyTriad(token.triad, context)
       case 'bass-degree':
         return [context.bass + degreeAbove(token.degree, context)]
       case 'scale-degree':
