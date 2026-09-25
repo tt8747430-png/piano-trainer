@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,800;1,7..72,400&display=block" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFBF9; --ink:#1A1714; --rubric:#C3301E; --muted:#6B645C; --hair:#DCD6CD;
+  --role-root:#2F5BD3; --role-3rd:#C8315F; --role-5th:#5D6A7C;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#8d8a83;display:flex;gap:28px;padding:24px;font-family:'Literata',serif;color:var(--ink)}
+.phone{width:390px;height:844px;background:var(--paper);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.status{height:44px}
+.rub{color:var(--rubric);font-variant:small-caps;letter-spacing:.08em;font-weight:600;font-size:15px;text-transform:lowercase}
+.top{display:flex;align-items:flex-end;justify-content:space-between;padding:6px 20px 14px;border-bottom:1px solid var(--hair)}
+h1{font-weight:800;font-size:38px;line-height:1;letter-spacing:-.01em}
+.open{padding:18px 20px 20px;display:grid;grid-template-columns:40px 1fr;column-gap:10px;border-bottom:1px solid var(--hair)}
+.margin{color:var(--rubric);font-weight:800;font-size:40px;line-height:1;text-align:right}
+.open h2{font-size:27px;line-height:1.1;font-weight:800}
+.open .orig{font-style:italic;color:var(--muted);font-size:16px;margin-top:4px}
+.open .meta{font-size:14px;color:var(--muted);margin-top:8px}
+.actions{grid-column:2;display:flex;align-items:center;gap:14px;margin-top:16px}
+.btn{height:50px;padding:0 26px;background:var(--ink);color:var(--paper);border-radius:25px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px}
+.link{color:var(--rubric);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.lvl{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 6px}
+.lvl .n{color:var(--muted);font-size:14px;font-style:italic}
+.row{display:grid;grid-template-columns:40px 1fr 24px;column-gap:10px;padding:9px 20px;align-items:baseline}
+.row .margin{font-size:20px}
+.row .t{font-size:17px;font-weight:600;line-height:1.2}
+.row .k{font-style:italic;color:var(--muted);font-size:14px}
+.row.done .t{color:var(--muted);font-weight:400}
+.tick{color:var(--rubric);font-size:18px;font-weight:800}
+.ring{width:14px;height:14px;border:1.5px solid var(--hair);border-radius:50%}
+.nav{margin-top:auto;display:flex;border-top:1px solid var(--hair);padding:12px 0 28px}
+.nav div{flex:1;text-align:center;font-size:15px;color:var(--muted)}
+.nav .on{color:var(--rubric);font-weight:800}
+.ptop{display:flex;align-items:center;gap:6px;padding:0 12px 6px}
+.ptop .title{font-weight:800;font-size:20px;line-height:1.1}
+.setup{padding:0 20px;font-size:15px;color:var(--muted)}
+.setup b{color:var(--ink)}
+.modes{margin:12px 20px 0;display:flex;gap:18px;border-bottom:1px solid var(--hair)}
+.modes div{padding:8px 0;font-size:16px;color:var(--muted)}
+.modes .on{color:var(--ink);font-weight:800;box-shadow:inset 0 -2px 0 var(--rubric)}
+.sheet{padding:16px 20px 0}
+.line{display:flex;align-items:baseline;gap:14px;margin-top:6px}
+.chordnow{font-size:112px;font-weight:800;line-height:.95;letter-spacing:-.03em}
+.chordnext{font-size:44px;font-weight:400;color:var(--muted)}
+.barinfo{font-size:14px;color:var(--muted);margin-top:4px;font-style:italic}
+.chart{padding:14px 20px 0;display:grid;grid-template-columns:repeat(4,1fr);border-top:0}
+.chart div{border-left:1px solid var(--ink);padding:4px 6px;font-weight:600;font-size:16px;white-space:nowrap}
+.chart .cur{background:rgba(195,48,30,.08);color:var(--rubric)}
+.kbwrap{margin:22px 8px 0;height:170px;position:relative}
+.wk{position:absolute;top:0;height:170px;background:#fff;border:1px solid #CFC8BD;border-radius:0 0 5px 5px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.bk{position:absolute;top:0;height:104px;background:var(--ink);border-radius:0 0 3px 3px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
+.wk span,.bk span{font-weight:800;font-size:14px;color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.r-root{background:var(--role-root)!important}.r-3rd{background:var(--role-3rd)!important}.r-5th{background:var(--role-5th)!important}
+.transport{margin-top:auto;padding:12px 20px 30px;display:flex;gap:12px;align-items:center}
+.circle{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center}
+.transport .btn{flex:1;justify-content:center;height:56px;border-radius:28px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"></div>
+  <div class="top"><h1>Path</h1><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A1714" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.5"/></svg></div>
+  <div class="open">
+    <div class="margin">5</div>
+    <div>
+      <div class="rub">continue</div>
+      <h2>Still, my soul, be still</h2>
+      <div class="orig">Мир, душа, храни</div>
+      <div class="meta">Song · G major · 4/4</div>
+    </div>
+    <div class="actions"><div class="btn"><svg width="14" height="16" viewBox="0 0 18 20"><path d="M2 1l15 9-15 9z" fill="#FCFBF9"/></svg>Play</div><div class="link">2 chords to check</div></div>
+  </div>
+  <div class="lvl"><div class="rub">i · beginner</div><div class="n">4 of 9</div></div>
+  <div class="row done"><div class="margin">1</div><div><div class="t">Triads</div><div class="k">Chords</div></div><div class="tick">✓</div></div>
+  <div class="row done"><div class="margin">2</div><div><div class="t">Major scale</div><div class="k">Scale</div></div><div class="tick">✓</div></div>
+  <div class="row done"><div class="margin">3</div><div><div class="t">Lesson 3: C – Dm – G – C</div><div class="k">Exercise</div></div><div class="tick">✓</div></div>
+  <div class="row"><div class="margin">4</div><div><div class="t">Lesson 5: Am – Dm – E – Am</div><div class="k">Exercise</div></div><div class="ring"></div></div>
+  <div class="row"><div class="margin">5</div><div><div class="t">Still, my soul, be still</div><div class="k">Song · Мир, душа, храни</div></div><div class="ring"></div></div>
+  <div class="row"><div class="margin">6</div><div><div class="t">Silent Night</div><div class="k">Song</div></div><div class="ring"></div></div>
+  <div class="nav"><div class="on">Path</div><div>Songs</div><div>Theory</div></div>
+</div>
+<div class="phone">
+  <div class="status"></div>
+  <div class="ptop"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1A1714" stroke-width="2"><path d="M14 17l-5-5 5-5"/></svg><div class="title">Still, my soul, be still</div></div>
+  <div class="setup"><b>G</b> · 72 bpm · both hands ▾</div>
+  <div class="modes"><div>Listen</div><div class="on">Step</div><div>Your turn</div></div>
+  <div class="sheet">
+    <div class="rub">verse · bar 4 of 12</div>
+    <div class="line"><div class="chordnow">D/F#</div><div class="chordnext">G</div></div>
+    <div class="barinfo">beat 4 of 4</div>
+  </div>
+  <div class="chart"><div>G</div><div>C</div><div>Em G/B</div><div class="cur">D/F#</div></div>
+  <div class="kbwrap" data-kb></div>
+  <div class="transport"><div class="circle">‹</div><div class="btn">Next beat</div><div class="circle">»</div></div>
+</div>
+<script src="keyboard.js"></script>
+</body>
+</html>

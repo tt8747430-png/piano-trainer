@@ -7,3 +7,10 @@ coverage
 .superpowers/
 .DS_Store
 *.tsbuildinfo
+# Impeccable: per-machine settings and working files (surfaces/ and mocks/decision/ are kept)
+.impeccable/config.local.json
+.impeccable/questions/
+.impeccable/tmp/
+.impeccable/build/
+.impeccable/review/
+.impeccable/hook.cache.json

@@ -42,6 +42,7 @@ export default defineConfig(
     '.agents',
     '.claude',
     '.codex',
+    '.impeccable',
   ]),
   {
     files: ['**/*.{ts,tsx}'],

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@500;700;800&family=Sofia+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+<style>
+:root{
+  --wall:#E7E7E2; --oak:#2A201A; --oak-2:#3A2D25; --card:#FBFBF8; --ink:#171411; --muted:#6D675F;
+  --brass:#B38B3F; --brass-lit:#D9B25F; --rail:#C9C3B6;
+  --role-root:#2F5BD3; --role-3rd:#C8315F; --role-5th:#5D6A7C;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#8d8a83;display:flex;gap:28px;padding:24px;font-family:'Sofia Sans',sans-serif;color:var(--ink)}
+.phone{width:390px;height:844px;background:var(--wall);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.cond{font-family:'Sofia Sans Extra Condensed',sans-serif}
+.status{height:44px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px}
+.placard{font-family:'Sofia Sans Extra Condensed';font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--brass)}
+h1{font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:44px;line-height:.9;text-transform:uppercase;letter-spacing:.01em}
+.gear{width:44px;height:44px;display:grid;place-items:center;border-radius:10px}
+.board{background:var(--oak);color:#F4F1EA;margin:0 12px;border-radius:8px;padding:14px 14px 16px;box-shadow:inset 0 0 0 2px var(--oak-2)}
+.board .placard{color:var(--brass-lit)}
+.now{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-top:10px;align-items:stretch}
+.num{background:var(--card);color:var(--ink);font-family:'Sofia Sans Extra Condensed';font-weight:800;border-radius:3px;display:grid;place-items:center;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.now .num{width:86px;height:104px;font-size:92px;line-height:1}
+.now h2{font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:30px;line-height:1;text-transform:uppercase}
+.now .orig{font-size:14px;color:#BDB5A8;margin-top:4px}
+.now .meta{font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:15px;letter-spacing:.08em;color:#BDB5A8;margin-top:8px;text-transform:uppercase}
+.play{margin-top:14px;display:flex;gap:10px;align-items:center}
+.btn{height:52px;border-radius:6px;background:var(--brass-lit);color:var(--oak);font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:24px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;flex:1}
+.gapline{font-size:14px;color:var(--brass-lit);font-weight:600;white-space:nowrap}
+.lvl{display:flex;align-items:end;justify-content:space-between;margin:22px 16px 6px}
+.lvl .placard{font-size:15px}
+.count{font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:22px;background:var(--oak);color:#F4F1EA;padding:2px 8px;border-radius:3px}
+.rows{margin:0 16px}
+.row{display:grid;grid-template-columns:44px 1fr 28px;gap:12px;align-items:center;min-height:56px;border-bottom:2px solid var(--rail)}
+.row .num{width:44px;height:44px;font-size:30px;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.row .t{font-weight:600;font-size:16px;line-height:1.15}
+.row .k{font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.row.done .num{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--rail)}
+.row.done .t{color:var(--muted)}
+.row.cur .num{background:var(--oak);color:#F4F1EA;box-shadow:none}
+.pin{width:18px;height:18px;border-radius:50%;justify-self:center}
+.pin.on{background:var(--brass);box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+.pin.off{box-shadow:inset 0 0 0 2px var(--rail)}
+.nav{margin-top:auto;display:flex;border-top:2px solid var(--rail);padding:8px 0 26px;background:var(--wall)}
+.nav div{flex:1;text-align:center;font-family:'Sofia Sans Extra Condensed';font-weight:700;letter-spacing:.12em;font-size:14px;text-transform:uppercase;color:var(--muted);padding-top:8px}
+.nav .on{color:var(--ink);box-shadow:inset 0 3px 0 var(--brass)}
+/* player */
+.ptop{display:flex;align-items:center;gap:6px;padding:0 12px 8px}
+.ptop .title{font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:22px;text-transform:uppercase;line-height:1}
+.setup{margin:0 16px;display:flex;gap:6px}
+.setup span{font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:3px;padding:4px 9px}
+.modes{margin:12px 16px 0;display:flex;background:var(--oak);border-radius:6px;padding:4px;gap:4px}
+.modes div{flex:1;text-align:center;font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#BDB5A8;padding:9px 0;border-radius:3px}
+.modes .on{background:var(--card);color:var(--ink)}
+.chordboard{margin:12px 12px 0;padding:14px}
+.slots{display:flex;gap:10px;align-items:flex-end;margin-top:8px}
+.big{flex:1;height:150px;font-size:128px;letter-spacing:-.01em}
+.next{width:78px;height:96px;font-size:60px;opacity:.55}
+.counters{display:flex;gap:8px;margin-top:12px}
+.counter{display:flex;align-items:baseline;gap:6px}
+.counter b{font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:26px;background:var(--card);color:var(--ink);padding:0 7px;border-radius:3px}
+.counter small{font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:13px;letter-spacing:.12em;color:#BDB5A8;text-transform:uppercase}
+.strip{margin:14px 16px 0;display:flex;gap:6px}
+.strip div{flex:1;border:1.5px solid var(--rail);border-radius:3px;padding:6px 4px;font-family:'Sofia Sans Extra Condensed';font-weight:700;font-size:17px;text-align:center;color:var(--muted);white-space:nowrap;overflow:hidden}
+.strip .cur{flex:2.4;border-color:var(--ink);color:var(--ink);background:var(--card)}
+.kbwrap{margin:16px 8px 0;height:170px;position:relative;border-top:6px solid var(--oak);border-radius:2px}
+.wk{position:absolute;top:0;height:170px;background:var(--card);border:1px solid #BDB7AC;border-radius:0 0 4px 4px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.bk{position:absolute;top:0;height:104px;background:var(--oak);border-radius:0 0 3px 3px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
+.wk span,.bk span{font-family:'Sofia Sans Extra Condensed';font-weight:800;font-size:17px;color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.r-root{background:var(--role-root)!important}.r-3rd{background:var(--role-3rd)!important}.r-5th{background:var(--role-5th)!important}
+.transport{margin-top:auto;padding:12px 16px 30px;display:flex;gap:10px}
+.transport .sq{width:64px;height:60px;border-radius:6px;border:2px solid var(--ink);display:grid;place-items:center}
+.transport .btn{height:60px;font-size:26px}
+</style>
+</head>
+<body>
+<!-- PATH -->
+<div class="phone">
+  <div class="status"></div>
+  <div class="top">
+    <div><div class="placard">Piano Trainer</div><h1>Path</h1></div>
+    <div class="gear"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#171411" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
+  </div>
+  <div class="board">
+    <div class="placard">Continue</div>
+    <div class="now">
+      <div class="num">5</div>
+      <div>
+        <h2>Still, my soul, be still</h2>
+        <div class="orig">Мир, душа, храни</div>
+        <div class="meta">Song · G · 4/4</div>
+      </div>
+    </div>
+    <div class="play">
+      <div class="btn"><svg width="18" height="20" viewBox="0 0 18 20"><path d="M2 1l15 9-15 9z" fill="#2A201A"/></svg>Play</div>
+      <div class="gapline">2 chords to check →</div>
+    </div>
+  </div>
+  <div class="lvl"><div class="placard">Level 1 · Beginner</div><div class="count">4/9</div></div>
+  <div class="rows">
+    <div class="row done"><div class="num">1</div><div><div class="t">Triads</div><div class="k">Chords</div></div><div class="pin on"></div></div>
+    <div class="row done"><div class="num">2</div><div><div class="t">Major scale</div><div class="k">Scale</div></div><div class="pin on"></div></div>
+    <div class="row done"><div class="num">3</div><div><div class="t">Lesson 3: C – Dm – G – C</div><div class="k">Exercise</div></div><div class="pin on"></div></div>
+    <div class="row"><div class="num">4</div><div><div class="t">Lesson 5: Am – Dm – E – Am</div><div class="k">Exercise</div></div><div class="pin off"></div></div>
+    <div class="row cur"><div class="num">5</div><div><div class="t">Still, my soul, be still</div><div class="k">Song · Мир, душа, храни</div></div><div class="pin off"></div></div>
+    <div class="row"><div class="num">6</div><div><div class="t">Silent Night</div><div class="k">Song</div></div><div class="pin off"></div></div>
+  </div>
+  <div class="nav"><div class="on">Path</div><div>Songs</div><div>Theory</div></div>
+</div>
+<!-- PLAYER -->
+<div class="phone">
+  <div class="status"></div>
+  <div class="ptop">
+    <div class="gear"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#171411" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div><div class="placard">Song · Verse</div><div class="title">Still, my soul, be still</div></div>
+  </div>
+  <div class="setup"><span>Key G</span><span>72 BPM</span><span>Both hands</span><span>▾</span></div>
+  <div class="modes"><div>Listen</div><div class="on">Step</div><div>Your turn</div></div>
+  <div class="board chordboard">
+    <div class="placard">Now · Next</div>
+    <div class="slots"><div class="num big">D/F#</div><div class="num next">G</div></div>
+    <div class="counters"><div class="counter"><small>Bar</small><b>4/12</b></div><div class="counter"><small>Beat</small><b>4</b></div></div>
+  </div>
+  <div class="strip"><div>G</div><div>C</div><div>Em G/B</div><div class="cur">C C/E Dsus4 D/F#</div></div>
+  <div class="kbwrap" data-kb></div>
+  <div class="transport">
+    <div class="sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#171411" stroke-width="2.6"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="btn">Next beat</div>
+    <div class="sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#171411" stroke-width="2.6"><path d="M5 18l6-6-6-6M13 18l6-6-6-6"/></svg></div>
+  </div>
+</div>
+<script src="keyboard.js"></script>
+</body>
+</html>

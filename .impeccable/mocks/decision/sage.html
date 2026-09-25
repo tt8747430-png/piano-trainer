@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=block" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6F3; --surface:#FFFFFF; --sunken:#E8EDE9; --ink:#131816; --muted:#626D68; --line:#DCE3DE;
+  --primary:#2D6657; --on-primary:#FFFFFF; --soft:#D3E6DE; --soft-ink:#1F4D41; --attention:#B86E12;
+  --key:#FFFFFF; --key-edge:#D3DAD5; --black:#1E2321;
+  --role-root:#2E5BD0; --role-3rd:#CC3363; --role-5th:#5B6878; --role-7th:#A86A00; --role-9th:#0E8F5B; --role-11th:#7847C8; --role-13th:#0A83AD;
+}
+.dark{
+  --bg:#0D1210; --surface:#171E1B; --sunken:#1F2824; --ink:#E6EDE9; --muted:#97A59F; --line:#2A3430;
+  --primary:#8CCBB8; --on-primary:#0D1210; --soft:#1E3A32; --soft-ink:#BFE3D7; --attention:#E7A64B;
+  --key:#E9EEEA; --key-edge:#7D8A84; --black:#050706;
+  --role-root:#6F95FF; --role-3rd:#FF6F9D; --role-5th:#A6B1C0; --role-7th:#F0B43C;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#9AA39E;display:flex;gap:26px;padding:24px;font-family:'Onest',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.phone{width:390px;height:844px;background:var(--bg);color:var(--ink);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.status{height:50px;flex:none}
+.round{width:44px;height:44px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(20,30,25,.08),0 0 0 1px var(--line);display:grid;place-items:center;color:var(--ink);flex:none}
+.head{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 14px}
+h1{font-size:34px;font-weight:700;letter-spacing:-.02em}
+/* continue */
+.cont{margin:0 16px;background:var(--soft);border-radius:26px;padding:20px 20px 18px;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+.cont h2{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.15;color:var(--ink)}
+.cont .sub{color:var(--soft-ink);opacity:.8;font-size:15px;margin-top:3px}
+.cont .gap{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:15px;font-weight:600;color:var(--soft-ink)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--attention)}
+.btn{height:54px;border-radius:18px;background:var(--primary);color:var(--on-primary);font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn svg{width:18px;height:18px;fill:currentColor;stroke:none}
+.cont .btn{margin-top:16px}
+.lvl{display:flex;align-items:baseline;justify-content:space-between;padding:26px 20px 8px}
+.lvl h3{font-size:22px;font-weight:700;color:var(--primary);letter-spacing:-.01em}
+.lvl span{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.row{display:grid;grid-template-columns:48px 1fr 30px;gap:14px;align-items:center;padding:8px 20px}
+.tile{width:48px;height:48px;border-radius:14px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center}
+.tile.song{background:var(--sunken);color:var(--primary)}
+.row .t{font-size:17px;font-weight:600;line-height:1.2}
+.row .s{font-size:14px;color:var(--muted);margin-top:2px}
+.check{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.check.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.check.on svg{width:16px;height:16px;stroke-width:3}
+.tabbar{position:absolute;left:50%;transform:translateX(-50%);bottom:26px;display:flex;gap:4px;padding:6px;border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(18px);box-shadow:0 8px 28px rgba(20,35,28,.14),0 0 0 1px rgba(20,35,28,.06)}
+.tabbar div{width:96px;height:56px;border-radius:999px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:600;color:var(--ink)}
+.tabbar .on{background:rgba(45,102,87,.12);color:var(--primary)}
+.tabbar svg{width:22px;height:22px}
+/* player */
+.ptop{display:flex;align-items:center;gap:10px;padding:2px 16px 12px}
+.ptitle{flex:1;text-align:center;min-width:0}
+.ptitle b{display:block;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptitle span{display:inline-flex;align-items:center;gap:4px;font-size:14px;color:var(--muted);margin-top:2px}
+.seg{margin:0 16px;background:var(--sunken);border-radius:14px;padding:3px;display:flex}
+.seg div{flex:1;height:38px;border-radius:11px;display:grid;place-items:center;font-size:15px;font-weight:600;color:var(--muted)}
+.seg .on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.lead{margin:16px 0 0;display:flex;overflow:hidden;padding-left:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.bar{flex:none;width:112px;height:74px;border-left:1.5px solid var(--ink);padding:8px 8px 0 8px;position:relative}
+.bar small{position:absolute;top:4px;left:6px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar b{display:block;margin-top:16px;font-size:20px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.bar.cur{background:var(--sunken)}
+.bar.cur b{color:var(--primary)}
+.now{display:flex;align-items:flex-end;justify-content:space-between;padding:18px 20px 0}
+.now .c{font-size:64px;font-weight:800;letter-spacing:-.035em;line-height:.9}
+.now .n{text-align:right;color:var(--muted);font-size:14px}
+.now .n b{display:block;font-size:26px;color:var(--ink);font-weight:700}
+.beats{display:flex;gap:6px;padding:12px 20px 0}.beats i{width:22px;height:5px;border-radius:3px;background:var(--line)}.beats i.on{background:var(--primary)}
+.kb{position:relative;height:178px;margin:18px 6px 0}
+.wk{position:absolute;top:0;height:178px;padding:0 1px}
+.wk div{height:100%;background:var(--key);border:1px solid var(--key-edge);border-top:0;border-radius:0 0 9px 9px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px}
+.bk{position:absolute;top:0;height:108px;background:var(--black);border-radius:0 0 6px 6px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:7px}
+.lab{font-size:14px;font-weight:700;color:#fff;min-width:24px;height:24px;border-radius:12px;display:grid;place-items:center;padding:0 5px}
+.r-root{background:var(--role-root)!important}.r-3rd{background:var(--role-3rd)!important}.r-5th{background:var(--role-5th)!important}.r-7th{background:var(--role-7th)!important}
+.wk .r-root,.wk .r-3rd,.wk .r-5th,.wk .r-7th{border-color:transparent}
+.transport{margin-top:auto;padding:0 20px 34px;display:flex;align-items:center;justify-content:center;gap:18px}
+.transport .round{width:56px;height:56px}
+.big{height:64px;flex:1;border-radius:32px;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:700}
+/* chords */
+.theoryseg{margin:0 16px 18px}
+.chordname{padding:0 20px;display:flex;align-items:baseline;justify-content:space-between}
+.chordname b{font-size:56px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.chordname span{color:var(--muted);font-size:16px}
+.chips{display:flex;gap:8px;padding:14px 16px 0;overflow:hidden}
+.chip{flex:none;height:40px;min-width:44px;padding:0 14px;border-radius:20px;background:var(--surface);box-shadow:0 0 0 1px var(--line);display:grid;place-items:center;font-size:15px;font-weight:600}
+.chip.on{background:var(--primary);color:var(--on-primary);box-shadow:none}
+.legend{display:flex;gap:14px;padding:12px 20px 0;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.actions{display:flex;gap:10px;padding:18px 16px 0}
+.actions .btn{flex:1}
+.btn.soft{background:var(--soft);color:var(--soft-ink)}
+/* sheet */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:560px;background:var(--surface);border-radius:28px 28px 0 0;padding:10px 20px 30px}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+.sheet h3{font-size:20px;font-weight:700;margin-bottom:14px}
+.field{display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid var(--line);font-size:16px}
+.field span{color:var(--muted)}
+.keys{display:flex;gap:6px;flex-wrap:wrap;padding:6px 0 12px;border-bottom:1px solid var(--line)}
+.keys div{width:44px;height:36px;border-radius:10px;background:var(--sunken);display:grid;place-items:center;font-size:14px;font-weight:600}
+.keys .on{background:var(--primary);color:var(--on-primary)}
+.slider{height:6px;border-radius:3px;background:var(--sunken);position:relative;margin:4px 0}
+.slider i{position:absolute;left:0;top:0;bottom:0;width:26%;border-radius:3px;background:var(--primary)}
+.slider b{position:absolute;left:26%;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.toggle{width:52px;height:32px;border-radius:16px;background:var(--sunken);position:relative}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle.on{background:var(--primary)}.toggle.on::after{left:23px}
+</style>
+</head>
+<body>
+<!-- PATH -->
+<div class="phone">
+  <div class="status"></div>
+  <div class="head"><h1>Path</h1><div class="round"><svg class="i" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+  <div class="cont">
+    <h2>Still, my soul, be still</h2>
+    <div class="sub">Мир, душа, храни · G major</div>
+    <div class="gap"><i class="dot"></i>2 chords to check</div>
+    <div class="btn"><svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>Continue</div>
+  </div>
+  <div class="lvl"><h3>Level 1 · Beginner</h3><span>4 of 9</span></div>
+  <div class="row"><div class="tile"><svg class="i" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M2 12h20M6 12v4M10 12v4M14 12v4M18 12v4"/></svg></div><div><div class="t">Triads</div><div class="s">Chords · 6 of 6 known</div></div><div class="check on"><svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></div>
+  <div class="row"><div class="tile"><svg class="i" viewBox="0 0 24 24"><path d="M6 20v-4M12 20V10M18 20V4"/></svg></div><div><div class="t">Major scale</div><div class="s">Scale</div></div><div class="check on"><svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></div>
+  <div class="row"><div class="tile song"><svg class="i" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></div><div><div class="t">Lesson 5: Am – Dm – E – Am</div><div class="s">Exercise</div></div><div class="check"></div></div>
+  <div class="row"><div class="tile song"><svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div><div class="t">Still, my soul, be still</div><div class="s">Song · Мир, душа, храни</div></div><div class="check"></div></div>
+  <div class="row"><div class="tile"><svg class="i" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M2 12h20M6 12v4M10 12v4M14 12v4M18 12v4"/></svg></div><div><div class="t">7th chords</div><div class="s">Chords · 2 of 5 known</div></div><div class="check"></div></div>
+  <div class="tabbar">
+    <div class="on"><svg class="i" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Path</div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>Theory</div>
+  </div>
+</div>
+
+<!-- PLAYER -->
+<div class="phone">
+  <div class="status"></div>
+  <div class="ptop">
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+    <div class="ptitle"><b>Still, my soul, be still</b><span>G · 72 BPM · Both hands <svg class="i" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></div>
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg></div>
+  </div>
+  <div class="seg"><div>Listen</div><div class="on">Step</div><div>Your turn</div></div>
+  <div class="lead">
+    <div class="bar"><small>1</small><b>G</b></div>
+    <div class="bar"><small>2</small><b>C</b></div>
+    <div class="bar"><small>3</small><b>Em G/B</b></div>
+    <div class="bar cur"><small>4</small><b>C C/E D/F#</b></div>
+  </div>
+  <div class="now"><div class="c">D/F#</div><div class="n">Next<b>G</b></div></div>
+  <div class="beats"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  <div class="kb" data-kb></div>
+  <div class="transport">
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></div>
+    <div class="big">Next <svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="m9 18 6-6-6-6"/></svg></div>
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><path d="M19 5v14"/></svg></div>
+  </div>
+</div>
+
+<!-- CHORDS -->
+<div class="phone">
+  <div class="status"></div>
+  <div class="head"><h1>Theory</h1></div>
+  <div class="seg theoryseg"><div class="on">Chords</div><div>Scales</div><div>Symbols</div><div>Quiz</div></div>
+  <div class="chordname"><b>G7</b><span>Dominant 7th</span></div>
+  <div class="chips"><div class="chip">E</div><div class="chip">F</div><div class="chip">F#</div><div class="chip on">G</div><div class="chip">A♭</div><div class="chip">A</div><div class="chip">B♭</div></div>
+  <div class="chips"><div class="chip">Triads</div><div class="chip">6 & add</div><div class="chip on">7ths</div><div class="chip">9ths +</div><div class="chip">Altered</div></div>
+  <div class="chips"><div class="chip">Maj7</div><div class="chip">m7</div><div class="chip on">7</div><div class="chip">m7♭5</div><div class="chip">°7</div><div class="chip">m(maj7)</div></div>
+  <div class="kb" data-kb2 style="height:170px"></div>
+  <div class="legend"><span><i class="r-root"></i>Root</span><span><i class="r-3rd"></i>3rd</span><span><i class="r-5th"></i>5th</span><span><i class="r-7th"></i>7th</span></div>
+  <div class="actions"><div class="btn"><svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>Play</div><div class="btn soft">Arpeggio</div></div>
+  <div class="tabbar">
+    <div><svg class="i" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Path</div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</div>
+    <div class="on"><svg class="i" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>Theory</div>
+  </div>
+</div>
+
+<!-- SETUP SHEET, DARK -->
+<div class="phone dark">
+  <div class="status"></div>
+  <div class="ptop">
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+    <div class="ptitle"><b>Still, my soul, be still</b><span>G · 72 BPM · Both hands</span></div>
+    <div class="round"><svg class="i" viewBox="0 0 24 24"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg></div>
+  </div>
+  <div class="seg"><div class="on">Listen</div><div>Step</div><div>Your turn</div></div>
+  <div class="now"><div class="c">G</div><div class="n">Next<b>C</b></div></div>
+  <div class="scrim"></div>
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3>Setup</h3>
+    <div class="field">Key<span>G major</span></div>
+    <div class="keys"><div>F</div><div>F#</div><div class="on">G</div><div>A♭</div><div>A</div><div>B♭</div><div>B</div></div>
+    <div class="field" style="border:0;min-height:40px">Tempo<span>72 BPM</span></div>
+    <div class="slider"><i></i><b></b></div>
+    <div class="field" style="margin-top:8px">Pattern<span>R4 · Chords and bass ›</span></div>
+    <div class="field">Finger numbers<div class="toggle on"></div></div>
+    <div class="field">Metronome<div class="toggle"></div></div>
+    <div class="field">Count-in<div class="toggle on"></div></div>
+  </div>
+</div>
+<script>
+function draw(el, marks, h) {
+  const whites = [], blacks = []
+  for (let m = 48; m <= 71; m++) ([1, 3, 6, 8, 10].includes(m % 12) ? blacks : whites).push(m)
+  const w = 100 / whites.length
+  let html = ''
+  whites.forEach((m, i) => {
+    const mk = marks[m]
+    html += `<div class="wk" style="left:${i * w}%;width:${w}%"><div class="${mk ? 'r-' + mk[0] : ''}">${mk ? `<span class="lab">${mk[1]}</span>` : ''}</div></div>`
+  })
+  blacks.forEach((m) => {
+    const i = whites.indexOf(m - 1), mk = marks[m]
+    html += `<div class="bk ${mk ? 'r-' + mk[0] : ''}" style="left:${(i + 1) * w - w * 0.31}%;width:${w * 0.62}%">${mk ? `<span class="lab">${mk[1]}</span>` : ''}</div>`
+  })
+  el.innerHTML = html
+}
+draw(document.querySelector('[data-kb]'), { 54: ['3rd', '3'], 62: ['root', '1'], 66: ['3rd', '3'], 69: ['5th', '5'] })
+draw(document.querySelector('[data-kb2]'), { 55: ['root', '1'], 59: ['3rd', '3'], 62: ['5th', '5'], 65: ['7th', '♭7'] })
+</script>
+</body>
+</html>

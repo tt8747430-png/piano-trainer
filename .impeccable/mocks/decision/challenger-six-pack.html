@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700;800&display=block" rel="stylesheet">
+<style>
+:root{
+  --panel:#0E0F0F; --face:#171919; --mark:#F0F0EA; --dim:#8A8F8C; --radium:#7CF5B0; --amber:#FFB547; --hair:#2A2D2C;
+  --role-root:#5B8BFF; --role-3rd:#FF6B9A; --role-5th:#A6B0BF;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#8d8a83;display:flex;gap:28px;padding:24px;font-family:'Exo 2',sans-serif;color:var(--mark)}
+.phone{width:390px;height:844px;background:var(--panel);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.status{height:44px}
+.plac{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.top{display:flex;justify-content:space-between;align-items:center;padding:0 18px 12px}
+h1{font-size:28px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.cont{margin:0 14px;background:var(--face);border-radius:18px;padding:16px;display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;box-shadow:inset 0 0 0 1px var(--hair)}
+.dial{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#101212 60%,#0b0c0c 61%);box-shadow:inset 0 0 0 2px #333;position:relative;display:grid;place-items:center}
+.dial b{font-size:40px;font-weight:800}
+.dial small{position:absolute;bottom:18px;font-size:10px;letter-spacing:.2em;color:var(--dim)}
+.arc{position:absolute;inset:6px;border-radius:50%;background:conic-gradient(var(--radium) 0 160deg,transparent 160deg);-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+.cont h2{font-size:21px;font-weight:700;line-height:1.1}
+.cont .o{color:var(--dim);font-size:13px;margin-top:3px}
+.go{grid-column:1/3;display:flex;gap:10px;align-items:center}
+.btn{flex:1;height:52px;border-radius:26px;background:var(--radium);color:#062;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:8px;font-size:16px}
+.caution{color:var(--amber);font-size:13px;font-weight:700;letter-spacing:.04em}
+.lvl{display:flex;justify-content:space-between;align-items:center;margin:20px 18px 8px}
+.bar{height:4px;background:var(--hair);border-radius:2px;margin:0 18px 6px}.bar i{display:block;width:44%;height:100%;background:var(--radium);border-radius:2px}
+.row{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--hair)}
+.lamp{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 2px #3a3d3c}
+.lamp.on{background:var(--radium);box-shadow:0 0 10px var(--radium)}
+.row .t{font-size:16px;font-weight:500}
+.row .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.row.done .t{color:var(--dim)}
+.nav{margin-top:auto;display:flex;border-top:1px solid var(--hair);padding:12px 0 28px}
+.nav div{flex:1;text-align:center;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.nav .on{color:var(--radium)}
+.ptop{display:flex;align-items:center;gap:8px;padding:0 14px 10px}
+.ptop .title{font-size:18px;font-weight:700}
+.modes{margin:0 14px;display:flex;border-radius:12px;box-shadow:inset 0 0 0 1px var(--hair);padding:3px}
+.modes div{flex:1;text-align:center;padding:9px 0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:700;border-radius:9px}
+.modes .on{background:var(--face);color:var(--radium);box-shadow:inset 0 0 0 1px #333}
+.six{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 14px 0}
+.g{background:var(--face);border-radius:50%;aspect-ratio:1;display:grid;place-items:center;position:relative;box-shadow:inset 0 0 0 2px #2d302f}
+.g b{font-size:24px;font-weight:800}
+.g small{position:absolute;bottom:14%;font-size:9px;letter-spacing:.2em;color:var(--dim);font-weight:700}
+.g.main{grid-column:2;grid-row:1/3;border-radius:22px;aspect-ratio:auto}
+.g.main b{font-size:56px;color:var(--radium);text-shadow:0 0 18px rgba(124,245,176,.35)}
+.g.main .nx{position:absolute;top:12%;font-size:14px;color:var(--dim);letter-spacing:.1em}
+.beats{display:flex;gap:5px}.beats i{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 2px #3a3d3c}.beats i.on{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.kbwrap{margin:20px 8px 0;height:160px;position:relative}
+.wk{position:absolute;top:0;height:160px;background:#D9DAD5;border:1px solid #0E0F0F;border-radius:0 0 5px 5px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.bk{position:absolute;top:0;height:98px;background:#050606;border:1px solid #333;border-radius:0 0 3px 3px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
+.wk span,.bk span{font-weight:800;font-size:13px;color:#0E0F0F;width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.r-root{background:var(--role-root)!important;box-shadow:0 0 14px var(--role-root)}.r-3rd{background:var(--role-3rd)!important;box-shadow:0 0 14px var(--role-3rd)}.r-5th{background:var(--role-5th)!important}
+.transport{margin-top:auto;padding:12px 16px 30px;display:flex;gap:10px}
+.transport .sq{width:60px;height:56px;border-radius:28px;box-shadow:inset 0 0 0 1.5px #444;display:grid;place-items:center;color:var(--mark)}
+.transport .btn{height:56px;border-radius:28px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"></div>
+  <div class="top"><div><div class="plac">Piano Trainer</div><h1>Path</h1></div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A8F8C" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.5"/></svg></div>
+  <div class="cont">
+    <div class="dial"><div class="arc"></div><b>4/9</b><small>LEVEL 1</small></div>
+    <div><div class="plac">Continue</div><h2>Still, my soul, be still</h2><div class="o">Мир, душа, храни · G · 4/4</div></div>
+    <div class="go"><div class="btn">▶ Play</div><div class="caution">2 chords<br>to check</div></div>
+  </div>
+  <div class="lvl"><div class="plac">Level 1 · Beginner</div><div class="plac" style="color:var(--mark)">4 / 9</div></div>
+  <div class="bar"><i></i></div>
+  <div class="row done"><div class="lamp on"></div><div><div class="t">Triads</div><div class="k">Chords</div></div></div>
+  <div class="row done"><div class="lamp on"></div><div><div class="t">Major scale</div><div class="k">Scale</div></div></div>
+  <div class="row done"><div class="lamp on"></div><div><div class="t">Lesson 3: C – Dm – G – C</div><div class="k">Exercise</div></div></div>
+  <div class="row"><div class="lamp"></div><div><div class="t">Lesson 5: Am – Dm – E – Am</div><div class="k">Exercise</div></div></div>
+  <div class="row"><div class="lamp"></div><div><div class="t">Still, my soul, be still</div><div class="k">Song</div></div></div>
+  <div class="row"><div class="lamp"></div><div><div class="t">Silent Night</div><div class="k">Song</div></div></div>
+  <div class="nav"><div class="on">Path</div><div>Songs</div><div>Theory</div></div>
+</div>
+<div class="phone">
+  <div class="status"></div>
+  <div class="ptop"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F0F0EA" stroke-width="2"><path d="M14 17l-5-5 5-5"/></svg><div><div class="plac">G · 72 BPM · Both hands ▾</div><div class="title">Still, my soul, be still</div></div></div>
+  <div class="modes"><div>Listen</div><div class="on">Step</div><div>Your turn</div></div>
+  <div class="six">
+    <div class="g"><b>G</b><small>KEY</small></div>
+    <div class="g main"><span class="nx">NEXT · G</span><b>D/F#</b><small>CHORD</small></div>
+    <div class="g"><b>72</b><small>BPM</small></div>
+    <div class="g"><b>4<span style="color:var(--dim);font-size:15px">/12</span></b><small>BAR</small></div>
+    <div class="g"><div class="beats"><i></i><i></i><i></i><i class="on"></i></div><small>BEAT</small></div>
+  </div>
+  <div class="kbwrap" data-kb></div>
+  <div class="transport"><div class="sq">‹</div><div class="btn">Next beat</div><div class="sq">»</div></div>
+</div>
+<script src="keyboard.js"></script>
+</body>
+</html>

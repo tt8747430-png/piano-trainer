@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=block" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F6F8; --card:#FFFFFF; --ink:#0F172A; --muted:#64748B; --line:#E2E8F0; --accent:#4F46E5; --accent-soft:#EEF2FF; --ok:#10B981;
+  --role-root:#2F5BD3; --role-3rd:#C8315F; --role-5th:#5D6A7C;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#8d8a83;display:flex;gap:28px;padding:24px;font-family:'Manrope',sans-serif;color:var(--ink)}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:34px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.status{height:44px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:4px 20px 16px}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em}
+.card{background:var(--card);border-radius:20px;margin:0 16px;padding:18px;box-shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06)}
+.eyebrow{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+.card h2{font-size:22px;font-weight:800;margin-top:6px;line-height:1.15}
+.card .o{color:var(--muted);font-size:14px;margin-top:2px}
+.chips{display:flex;gap:6px;margin-top:10px}
+.chip{background:var(--bg);border-radius:99px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--muted)}
+.btn{margin-top:16px;height:52px;border-radius:14px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px}
+.hint{margin-top:10px;font-size:14px;color:var(--accent);font-weight:600;text-align:center}
+.lvl{display:flex;justify-content:space-between;align-items:center;margin:22px 20px 8px}
+.lvl b{font-size:17px}.lvl span{color:var(--muted);font-size:14px;font-weight:600}
+.prog{height:8px;background:var(--line);border-radius:99px;margin:0 20px 10px}.prog i{display:block;width:44%;height:100%;background:var(--ok);border-radius:99px}
+.list{background:var(--card);margin:0 16px;border-radius:18px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.ico{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:15px;color:var(--accent);font-weight:800}
+.row .t{font-weight:700;font-size:15px}.row .k{font-size:12px;color:var(--muted)}
+.chk{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
+.chk.on{background:var(--ok);border-color:var(--ok)}
+.nav{margin-top:auto;display:flex;background:var(--card);padding:12px 0 28px;box-shadow:0 -1px 0 var(--line)}
+.nav div{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.nav .on{color:var(--accent)}
+.ptop{display:flex;align-items:center;gap:10px;padding:0 16px 10px}
+.ptop .title{font-weight:800;font-size:18px}
+.pill{margin:0 16px;background:var(--card);border-radius:14px;padding:10px 14px;font-size:14px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between}
+.seg{margin:12px 16px 0;background:#E9ECF1;border-radius:12px;padding:4px;display:flex}
+.seg div{flex:1;text-align:center;padding:8px 0;font-size:14px;font-weight:700;color:var(--muted);border-radius:9px}
+.seg .on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.now{margin:14px 16px 0;background:var(--card);border-radius:20px;padding:18px;display:flex;justify-content:space-between;align-items:center}
+.now b{font-size:72px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.now .nx{text-align:right;color:var(--muted);font-weight:600;font-size:14px}
+.now .nx strong{display:block;font-size:30px;color:var(--ink)}
+.bars{margin:12px 16px 0;display:flex;gap:6px}
+.bars div{flex:1;background:var(--card);border-radius:10px;padding:8px 4px;text-align:center;font-weight:700;font-size:14px;color:var(--muted)}
+.bars .cur{background:var(--accent);color:#fff}
+.kbwrap{margin:18px 10px 0;height:160px;position:relative}
+.wk{position:absolute;top:0;height:160px;background:#fff;border:1px solid #D5DBE4;border-radius:0 0 8px 8px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.bk{position:absolute;top:0;height:98px;background:#1E293B;border-radius:0 0 6px 6px;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
+.wk span,.bk span{font-weight:800;font-size:13px;color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.r-root{background:var(--role-root)!important}.r-3rd{background:var(--role-3rd)!important}.r-5th{background:var(--role-5th)!important}
+.transport{margin-top:auto;padding:12px 16px 30px;display:flex;gap:10px}
+.transport .sq{width:56px;height:56px;border-radius:16px;background:var(--card);display:grid;place-items:center;font-weight:800}
+.transport .btn{flex:1;margin:0;height:56px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"></div>
+  <div class="top"><h1>Path</h1><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.5"/></svg></div>
+  <div class="card">
+    <div class="eyebrow">Continue</div>
+    <h2>Still, my soul, be still</h2><div class="o">Мир, душа, храни</div>
+    <div class="chips"><span class="chip">Song</span><span class="chip">G major</span><span class="chip">4/4</span></div>
+    <div class="btn">▶ Play</div>
+    <div class="hint">2 chords to check →</div>
+  </div>
+  <div class="lvl"><b>Level 1 · Beginner</b><span>4/9</span></div>
+  <div class="prog"><i></i></div>
+  <div class="list">
+    <div class="row"><div class="ico">♪</div><div><div class="t">Triads</div><div class="k">Chords</div></div><div class="chk on"></div></div>
+    <div class="row"><div class="ico">♪</div><div><div class="t">Major scale</div><div class="k">Scale</div></div><div class="chk on"></div></div>
+    <div class="row"><div class="ico">♪</div><div><div class="t">Lesson 3: C – Dm – G – C</div><div class="k">Exercise</div></div><div class="chk on"></div></div>
+    <div class="row"><div class="ico">♪</div><div><div class="t">Lesson 5: Am – Dm – E – Am</div><div class="k">Exercise</div></div><div class="chk"></div></div>
+    <div class="row"><div class="ico">♪</div><div><div class="t">Silent Night</div><div class="k">Song</div></div><div class="chk"></div></div>
+  </div>
+  <div class="nav"><div class="on">Path</div><div>Songs</div><div>Theory</div></div>
+</div>
+<div class="phone">
+  <div class="status"></div>
+  <div class="ptop"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2"><path d="M14 17l-5-5 5-5"/></svg><div class="title">Still, my soul, be still</div></div>
+  <div class="pill"><span>G · 72 BPM · Both hands</span><span>⌄</span></div>
+  <div class="seg"><div>Listen</div><div class="on">Step</div><div>Your turn</div></div>
+  <div class="now"><b>D/F#</b><div class="nx">Next<strong>G</strong>Bar 4 of 12</div></div>
+  <div class="bars"><div>G</div><div>C</div><div>Em G/B</div><div class="cur">D/F#</div></div>
+  <div class="kbwrap" data-kb></div>
+  <div class="transport"><div class="sq">‹</div><div class="btn">Next beat</div><div class="sq">»</div></div>
+</div>
+<script src="keyboard.js"></script>
+</body>
+</html>
