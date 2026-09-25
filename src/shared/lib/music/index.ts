@@ -1,6 +1,7 @@
 export { midi, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
   LETTERS,
+  midiOf,
   note,
   noteName,
   parseNoteName,

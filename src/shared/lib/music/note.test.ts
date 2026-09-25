@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  midiOf,
   note,
   noteName,
   parseNoteName,
@@ -94,5 +95,22 @@ describe('sameNote', () => {
   it('compares letter and accidental, not pitch', () => {
     expect(sameNote(note('E', -1), note('E', -1))).toBe(true)
     expect(sameNote(note('E', -1), note('D', 1))).toBe(false)
+  })
+})
+
+describe('midiOf', () => {
+  it.each([
+    [note('C'), 4, 60],
+    [note('A'), 4, 69],
+    [note('C', 1), 5, 73],
+    [note('B', 1), 3, 60],
+    [note('C', -1), 4, 59],
+  ])('%j in octave %i is key %i', (spelled, octave, key) => {
+    expect(midiOf(spelled, octave)).toBe(key)
+  })
+
+  it('refuses a key off the keyboard', () => {
+    expect(midiOf(note('G'), 9)).toBe(127)
+    expect(() => midiOf(note('G', 1), 9)).toThrow(RangeError)
   })
 })

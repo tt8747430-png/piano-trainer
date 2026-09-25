@@ -1,4 +1,4 @@
-import { pitchClass, type PitchClass } from './pitch'
+import { midi, pitchClass, type Midi, type PitchClass } from './pitch'
 
 export const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const
 export type Letter = (typeof LETTERS)[number]
@@ -57,6 +57,10 @@ export const naturalPitch = (letter: Letter): number => NATURAL_PITCHES[letter]
 
 export const pitchClassOf = (spelled: SpelledNote): PitchClass =>
   pitchClass(naturalPitch(spelled.letter) + spelled.accidental)
+
+/** The key a spelled note names in an octave, in scientific pitch: C4 is middle C (60), B♯3 is 60 too. */
+export const midiOf = (spelled: SpelledNote, octave: number): Midi =>
+  midi(12 * (octave + 1) + naturalPitch(spelled.letter) + spelled.accidental)
 
 export const noteName = (spelled: SpelledNote): string =>
   spelled.letter + ACCIDENTAL_SIGNS[spelled.accidental]
