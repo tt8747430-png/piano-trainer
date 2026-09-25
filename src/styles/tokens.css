@@ -1,73 +1,103 @@
 /*
- * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name
- * what a colour is for. Components use roles through Tailwind utilities, never primitives.
- * The values carry the legacy app's palette until Phase 3 chooses the visual direction.
+ * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name what a
+ * colour is for. Components use roles through Tailwind utilities, never primitives. The world is
+ * the owner's reference apps (PRODUCT.md): a sage ground, deep teal actions, mint soft surfaces.
  */
 :root {
-  --p-slate-50: #eef1f5;
   --p-white: #ffffff;
-  --p-ink-900: #161a22;
-  --p-gray-600: #525b69;
-  --p-gray-200: #d6dce5;
-  --p-gray-100: #e3e8ef;
-  --p-navy-800: #22314f;
-  --p-red-600: #c4322a;
-  --p-green-700: #0b7a56;
-  --p-blue-600: #2b59c3;
-  --p-rose-600: #c22e60;
-  --p-steel-500: #5f6b7e;
-  --p-ochre-700: #8f6100;
-  --p-violet-600: #7445c4;
-  --p-teal-700: #0a7493;
+  --p-sage-50: #f3f6f3;
+  --p-sage-100: #e8ede9;
+  --p-sage-200: #dce3de;
+  --p-sage-300: #d3dad5;
+  --p-sage-400: #c9d6cf;
+  --p-mint-200: #d3e6de;
+  --p-teal-950: #1f4d41;
+  --p-teal-800: #2d6657;
+  --p-teal-600: #1e7f69;
+  --p-ink-950: #131816;
+  --p-ink-900: #1e2321;
+  --p-slate-600: #5e6964;
+  --p-amber-800: #9a5a0b;
+  --p-red-700: #b3261e;
+  --p-terracotta-600: #c2552b;
+  --p-plum-600: #7a4fc4;
+  --p-role-blue: #2e5bd0;
+  --p-role-rose: #cc3363;
+  --p-role-steel: #5b6878;
+  --p-role-ochre: #a86a00;
+  --p-role-green: #0e8f5b;
+  --p-role-violet: #7847c8;
+  --p-role-cyan: #0a83ad;
 
-  --p-night-990: #0d1016;
-  --p-night-950: #11141a;
-  --p-night-900: #1a1f28;
-  --p-night-800: #252c38;
-  --p-night-700: #2c3340;
-  --p-mist-100: #e8ecf2;
-  --p-mist-400: #a3adbc;
-  --p-periwinkle-300: #a9bdff;
-  --p-red-400: #ff6a5e;
-  --p-green-400: #3ccb97;
-  --p-blue-400: #6e95ff;
-  --p-rose-400: #ff6f9c;
-  --p-steel-300: #a3aec0;
-  --p-ochre-300: #f2b632;
-  --p-violet-300: #b794ff;
-  --p-teal-300: #4cc7ea;
+  --p-night-990: #050706;
+  --p-night-950: #0d1210;
+  --p-night-900: #171e1b;
+  --p-night-850: #1f2824;
+  --p-night-800: #2a3430;
+  --p-night-600: #5a6a63;
+  --p-night-500: #7d8a84;
+  --p-mist-50: #e9eeea;
+  --p-mist-100: #e6ede9;
+  --p-mist-400: #97a59f;
+  --p-teal-900: #1e3a32;
+  --p-teal-300: #8ccbb8;
+  --p-teal-400: #5cccb0;
+  --p-mint-100: #bfe3d7;
+  --p-amber-300: #e7a64b;
+  --p-red-300: #ff8a80;
+  --p-terracotta-300: #ff8a5c;
+  --p-plum-300: #b99bff;
+  --p-role-blue-300: #6f95ff;
+  --p-role-rose-300: #ff6f9d;
+  --p-role-steel-300: #a6b1c0;
+  --p-role-ochre-300: #f0b43c;
+  --p-role-green-300: #3ccb97;
+  --p-role-violet-300: #b794ff;
+  --p-role-cyan-300: #4cc7ea;
 
-  --radius: 0.75rem;
+  --radius: 1rem;
 
-  --background: var(--p-slate-50);
-  --foreground: var(--p-ink-900);
+  --background: var(--p-sage-50);
+  --foreground: var(--p-ink-950);
   --card: var(--p-white);
-  --card-foreground: var(--p-ink-900);
+  --card-foreground: var(--p-ink-950);
   --popover: var(--p-white);
-  --popover-foreground: var(--p-ink-900);
-  --primary: var(--p-navy-800);
+  --popover-foreground: var(--p-ink-950);
+  --primary: var(--p-teal-800);
   --primary-foreground: var(--p-white);
-  --secondary: var(--p-gray-100);
-  --secondary-foreground: var(--p-ink-900);
-  --muted: var(--p-gray-100);
-  --muted-foreground: var(--p-gray-600);
-  --accent: var(--p-gray-100);
-  --accent-foreground: var(--p-ink-900);
-  --destructive: var(--p-red-600);
-  --success: var(--p-green-700);
-  --border: var(--p-gray-200);
-  --input: var(--p-gray-200);
-  --ring: var(--p-blue-600);
+  --secondary: var(--p-mint-200);
+  --secondary-foreground: var(--p-teal-950);
+  --muted: var(--p-sage-100);
+  --muted-foreground: var(--p-slate-600);
+  --accent: var(--p-sage-100);
+  --accent-foreground: var(--p-ink-950);
+  --attention: var(--p-amber-800);
+  --destructive: var(--p-red-700);
+  --border: var(--p-sage-200);
+  --input: var(--p-sage-200);
+  --ring: var(--p-teal-800);
+  /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
+  --thumb: var(--p-white);
 
-  /* Chord-tone roles (spec §8): shared by the keyboard, the legend and the chart. */
-  --role-root: var(--p-blue-600);
-  --role-3rd: var(--p-rose-600);
-  --role-5th: var(--p-steel-500);
-  --role-7th: var(--p-ochre-700);
-  --role-9th: var(--p-green-700);
-  --role-11th: var(--p-violet-600);
-  --role-13th: var(--p-teal-700);
+  /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip's edge. */
+  --role-root: var(--p-role-blue);
+  --role-3rd: var(--p-role-rose);
+  --role-5th: var(--p-role-steel);
+  --role-7th: var(--p-role-ochre);
+  --role-9th: var(--p-role-green);
+  --role-11th: var(--p-role-violet);
+  --role-13th: var(--p-role-cyan);
   --on-role: var(--p-white);
+
+  /* The Player's hands; never in the explorers. */
+  --hand-rh: var(--p-teal-600);
+  --hand-lh: var(--p-terracotta-600);
+  --hand-melody: var(--p-plum-600);
+
+  --key-white: var(--p-white);
+  --key-white-edge: var(--p-sage-300);
+  --key-black: var(--p-ink-900);
+  --key-pressed: var(--p-sage-400);
 }
 
 [data-theme='dark'] {
@@ -77,26 +107,36 @@
   --card-foreground: var(--p-mist-100);
   --popover: var(--p-night-900);
   --popover-foreground: var(--p-mist-100);
-  --primary: var(--p-periwinkle-300);
+  --primary: var(--p-teal-300);
   --primary-foreground: var(--p-night-950);
-  --secondary: var(--p-night-800);
-  --secondary-foreground: var(--p-mist-100);
-  --muted: var(--p-night-800);
+  --secondary: var(--p-teal-900);
+  --secondary-foreground: var(--p-mint-100);
+  --muted: var(--p-night-850);
   --muted-foreground: var(--p-mist-400);
-  --accent: var(--p-night-800);
+  --accent: var(--p-night-850);
   --accent-foreground: var(--p-mist-100);
-  --destructive: var(--p-red-400);
-  --success: var(--p-green-400);
-  --border: var(--p-night-700);
-  --input: var(--p-night-700);
-  --ring: var(--p-blue-400);
+  --attention: var(--p-amber-300);
+  --destructive: var(--p-red-300);
+  --border: var(--p-night-800);
+  --input: var(--p-night-800);
+  --ring: var(--p-teal-300);
+  --thumb: var(--p-mist-100);
 
-  --role-root: var(--p-blue-400);
-  --role-3rd: var(--p-rose-400);
-  --role-5th: var(--p-steel-300);
-  --role-7th: var(--p-ochre-300);
-  --role-9th: var(--p-green-400);
-  --role-11th: var(--p-violet-300);
-  --role-13th: var(--p-teal-300);
+  --role-root: var(--p-role-blue-300);
+  --role-3rd: var(--p-role-rose-300);
+  --role-5th: var(--p-role-steel-300);
+  --role-7th: var(--p-role-ochre-300);
+  --role-9th: var(--p-role-green-300);
+  --role-11th: var(--p-role-violet-300);
+  --role-13th: var(--p-role-cyan-300);
   --on-role: var(--p-night-990);
+
+  --hand-rh: var(--p-teal-400);
+  --hand-lh: var(--p-terracotta-300);
+  --hand-melody: var(--p-plum-300);
+
+  --key-white: var(--p-mist-50);
+  --key-white-edge: var(--p-night-500);
+  --key-black: var(--p-night-990);
+  --key-pressed: var(--p-night-600);
 }

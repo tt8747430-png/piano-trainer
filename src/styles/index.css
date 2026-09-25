@@ -1,4 +1,6 @@
 @import 'tailwindcss' source(none);
+@import '@fontsource-variable/onest/wght.css';
+@import '@fontsource/noto-music/music-400.css';
 @source '../../index.html';
 @source '../';
 
