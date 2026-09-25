@@ -1,9 +1,13 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { cn } from 'cn'
 
-/** One number draws one thumb; an array draws a thumb per value. */
+/**
+ * One number draws one thumb; an array draws a thumb per value. Children (a `SliderLabel`, the
+ * value) come before the track, and the label names every thumb.
+ */
 function Slider<Value extends number | readonly number[]>({
   className,
+  children,
   defaultValue,
   value,
   min = 0,
@@ -27,6 +31,7 @@ function Slider<Value extends number | readonly number[]>({
       thumbAlignment="edge"
       {...props}
     >
+      {children}
       <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
         <SliderPrimitive.Track
           data-slot="slider-track"
@@ -49,4 +54,8 @@ function Slider<Value extends number | readonly number[]>({
   )
 }
 
-export { Slider }
+function SliderLabel({ className, ...props }: SliderPrimitive.Label.Props) {
+  return <SliderPrimitive.Label data-slot="slider-label" className={cn(className)} {...props} />
+}
+
+export { Slider, SliderLabel }

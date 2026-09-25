@@ -20,7 +20,7 @@ import { PRACTICE_RHYTHM_IDS, scaleRun } from '@/shared/lib/schedule'
 import { usePlay, useServices } from '@/shared/lib/services'
 import { ChipRow, PianoKeyboard, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Slider } from '@/shared/ui/primitives/slider'
+import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import type { ScaleView } from '../model/scale-view'
 import { useLitKey } from '../model/use-lit-key'
 import { FingeringTable } from './FingeringTable'
@@ -116,22 +116,21 @@ export function ScaleExplorer({
           options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`theory:rhythm.${r}`) }))}
           onChange={(rhythm) => onChange({ rhythm })}
         />
-        <label className="flex flex-col gap-3">
-          <span className="flex justify-between">
-            {t('theory:tempo')}
+        <Slider
+          min={40}
+          max={160}
+          step={4}
+          value={scale.tempo}
+          onValueChange={(tempo) => onChange({ tempo })}
+          className="flex flex-col gap-3"
+        >
+          <div className="flex justify-between">
+            <SliderLabel>{t('theory:tempo')}</SliderLabel>
             <span className="font-semibold tabular-nums">
               {t('theory:bpm', { tempo: scale.tempo })}
             </span>
-          </span>
-          <Slider
-            min={40}
-            max={160}
-            step={4}
-            value={scale.tempo}
-            onValueChange={(tempo) => onChange({ tempo })}
-            aria-label={t('theory:tempo')}
-          />
-        </label>
+          </div>
+        </Slider>
         <Segmented
           label={t('theory:handsLabel')}
           value={scale.hands}
