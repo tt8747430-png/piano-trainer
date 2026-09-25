@@ -1,2 +1,5 @@
 export { setLocale } from './set-locale'
+export { setPracticeToggle } from './set-practice-toggle'
+export { setQuizFamilies } from './set-quiz-families'
+export { setQuizScales } from './set-quiz-scales'
 export { setTheme } from './set-theme'

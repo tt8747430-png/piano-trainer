@@ -2,6 +2,8 @@
 
 - **Status:** revised after the two-axis review (document quality + fidelity to the owner's intent), awaiting
   the owner's review · **Date:** 2026-09-24
+- **Amended** 2026-09-25 with the Phase 2 plan's refinements (listed and argued in
+  `docs/superpowers/plans/2026-09-24-phase-2-core.md`, "Deliberate refinements of the spec").
 - **Reference project:** `~/projectsGIT/memory-palaces` (Mindscape). Its `CLAUDE.md` and `docs/CODE_STYLE.md` are
   the model for this repo's standards, and are adapted here rather than copied wholesale.
 
@@ -98,8 +100,8 @@ src/
               theory-quiz · settings · not-found
   widgets/    app-nav · path-levels · continue-card · piece-list · chord-chart · piece-skills ·
               player · player-setup · chord-explorer · scale-explorer · quiz-board
-  features/   mark-learned · practice · quiz · record-answer · connect-midi · set-preference ·
-              reset-progress
+  features/   mark-learned · practice · quiz · record-answer · record-practised · connect-midi ·
+              set-preference · reset-progress
   entities/   piece · pattern · path · progress · settings
   shared/
     lib/music/        theory kernel (§4.1). No imports outside itself.
@@ -139,24 +141,28 @@ melodic minor, major and minor pentatonic, blues), `ChordRole` (root, 3rd, 5th, 
 
 Public interface:
 
-- `spellChord(root: SpelledNote, quality) → ChordTone[]`, where each tone has its spelled note, pitch class,
-  semitones above the root, `role`, and degree label (`1 ♭3 5 ♭7 9`).
-- `chordSymbol(root, quality) → string`, and `parseChordSymbol('F#m7b5/C') → { root, quality, bass? }`. It throws a
-  `ChordSymbolError` naming the symbol when it does not recognise one.
-- `spellScale(root, kind) → ScaleNote[]` (spelled note + degree).
+- `spellChord(root: SpelledNote, quality) → Tone[]`, where each tone has its spelled note, pitch class, semitones
+  above the root, `role`, and degree label (`1 ♭3 5 ♭7 9`).
+- `chordSymbol({ root, quality, bass? }) → string`, and `parseChordSymbol('F#m7b5/C') → { root, quality, bass? }`.
+  It throws a `ChordSymbolError` naming the symbol when it does not recognise one.
+- `spellScale(root, kind) → Tone[]`: the same `Tone` as a chord's, so the keyboard marks either the same way.
 - `scaleFingering(root, kind, hand) → Finger[] | null`, where `null` means no standard fingering is taught.
 - `diatonicChords(scale, size: 3 | 4) → { roman, chord }[]`.
-- `transpose(note, semitones, preferSharps)` and `keySignaturePrefersSharps(key)`.
+- `transposeNote(note, fromTonic, toTonic)`: the interval from the old tonic to the note, applied to the new tonic,
+  so letters are kept (a root that would need a double accidental takes its plain spelling). `keyPrefersSharps(key)`.
 - `rootSpelling(pitchClass, preferSharps) → SpelledNote`.
 
 **Rule:** spelling is derived from **letter steps + semitones**, never looked up from a sharp or flat name table.
 That is what keeps E♭ harmonic minor's C♭, G♯ harmonic minor's F𝄪 and a diminished 7th's 𝄫7 right. Name tables
-are only for display where no key context exists.
+are only for display where no key context exists. The blues scale is spelled from its minor-key root (C♯, F♯, G♯
+on those black keys, where legacy wrote D♭, G♭, A♭), its blue note as ♭5, or ♯4 when that needs fewer accidentals.
 
 ### 4.2 Content: pieces, patterns, the path
 
 `LocalText = { en: string; ru: string }` is the type of every piece of content text a learner reads: notes,
-collection names, pattern names and descriptions, section details. Credits stay as printed (they are names).
+collection names, pattern names and descriptions, section details. A credit is `{ role, names }`: the names stay as
+printed, and the role (words, music, words and music, Russian text, harmony, accompaniment, or none) is shown
+through an interface string in the learner's language. `{ role: 'unknown' }` stands for "Author unknown".
 
 **A Piece** is anything that opens in the player: `kind: 'song' | 'exercise' | 'progression'`. Pieces are code,
 one file per piece, under `entities/piece/content/<collection>/<id>.ts`. Each collection has an `index.ts` with its
@@ -172,7 +178,7 @@ export default definePiece({
   kind: 'song',
   title: 'Мир, душа, храни',
   titleEn: 'Still, my soul, be still',
-  credits: 'Keith Getty, Kristyn Getty, Stuart Townend',
+  credits: [{ role: 'authors', names: 'Keith Getty, Kristyn Getty, Stuart Townend' }],
   source: { book: 'bozhe-spasibo', number: 5, page: 16 },
   key: 'G',
   meter: '4/4',
@@ -266,46 +272,58 @@ Elementary, Intermediate, Advanced), an ordered list of `PathStep`s:
 
 ```ts
 arrange(chart: Chart, options: {
-  key: SpelledNote                                               // transpose target
-  pattern: Pattern | { rh: Pattern; lh: Pattern } | 'from-chart' // 'from-chart' honours per-bar method codes
+  key: SpelledNote                        // transpose target
+  pattern: Pattern                        // every chord's pattern…
+  methods?: Record<string, Pattern>       // …unless its method code is here: the chart's own plan
+  rh?: Figure                             // the Player's right-hand choice, over every pattern
+  lh?: EventFigure                        // the Player's left-hand choice
   melody?: Melody
+  doubleMelody?: boolean                  // the melody toggle: the tune an octave up
 }) → Performance
 ```
 
+The Player's per-hand choice is a figure for each hand (what a pattern is built from), and `methods` is passed in
+because `arrangement` cannot import the method table from `entities/pattern`.
+
 A `Performance` has:
 - `bars`: start tick, beats, section, chord symbols.
-- `beats`: note groups sharing an onset, which is what Step mode walks through.
+- `beatGroups`: note groups sharing an onset, which is what Step mode walks through.
 - `notes: { midi, hand: 'rh' | 'lh' | 'melody', finger?, startTick, durationTicks, chord }[]`.
 
 Timing is **12 ticks per beat**, so both 16ths (3 ticks) and triplet 8ths (4 ticks) are whole numbers. Voice
 leading (the nearest voicing in range), pattern expansion (including 3/4 and major-key variants), inversion and
 automatic fingering are internal; none of them is part of the interface. A pattern that needs a melody
-(`r5`–`r7`) falls back to `r4` when the piece has none, as the legacy app does. Voicing is not an option here: a
-progression's voicing is applied when it is parsed into a `Chart` (§4.2).
+(`r5`–`r7`) falls back to `r4`, both hands, when the piece has none, as the legacy app does; a melody figure chosen
+for the right hand falls back to the `r4` figure. Voicing is not an option here: a progression's voicing is applied
+when it is parsed into a `Chart` (§4.2).
 
 ### 4.4 Sound and input
 
-- `shared/lib/schedule`: `schedule(performance, { tempo, fromTick, metronome, countIn, hands, melody })` → the
-  audible notes in seconds, plus clicks. Pure and tested; loop passes are computed here, not with `setTimeout`
-  arithmetic in a component.
+- `shared/lib/schedule`: `schedule(performance, { tempo, hands, fromTick, startAt, countIn, metronome })` → the
+  audible notes in seconds, plus clicks, and a cue per beat group. Pure and tested; loop passes are computed here,
+  not with `setTimeout` arithmetic in a component. (The melody toggle belongs to `arrange`: it changes which notes
+  exist.)
 - `shared/api/audio`:
-  - **Port:** `AudioOutput { unlock(), play(notes: TimedNote[], at?), stop(), now() }`.
+  - **Port:** `AudioOutput { unlock(), play(sounds: Sound[], at?), stop(), now() }`.
   - **WebAudio adapter:** keeps the legacy synth voice (layered oscillators, a low-pass filter, a gain envelope) and
     schedules with lookahead.
   - **`FakeAudio`:** records calls.
   - `unlock()` runs on the first user gesture, because browsers start audio suspended.
-- `shared/api/midi`: port `MidiInput { connect(): Promise<Status>, onNote(cb) }`, a Web MIDI adapter and a
-  `FakeMidi`. On browsers without Web MIDI (Safari, iOS) `createServices` returns `midi: null`.
+- `shared/api/midi`: port `MidiInput { connect(): Promise<Status>, onNote(cb), onStatus(cb) }`, a Web MIDI adapter
+  and a `FakeMidi`. On browsers without Web MIDI (Safari, iOS) `createServices` returns `midi: null`.
 
 ### 4.5 Practice and quiz machines
 
 - `features/practice/practice-machine.ts`: a pure reducer over a Performance. Modes: **Listen** (the app plays),
   **Step** (move beat by beat or bar by bar), **Your turn** (the app waits for the notes of the practised hand from
-  MIDI or keyboard taps, and plays the other hand). State includes the position, the expected and received notes,
-  and the last outcome (`correct | wrong | waiting`). Events: `play`, `stop`, `next`, `prev`, `nextBar`, `jumpToBar`,
-  `noteOn`, `restart`. `usePractice(performance, services)` connects it to `schedule`, audio and MIDI.
+  MIDI or keyboard taps, and plays the other hand). State includes the beat group, the expected and received notes,
+  and the last outcome (`correct | wrong | waiting | finished`). Events: `configure`, `play`, `stop`, `reach` (the
+  music arrived at a beat group), `next`, `prev`, `nextBar`, `jumpToBar`, `jumpToBeatGroup`, `noteOn`, `restart`.
+  `usePractice(performance, setup)` connects it to `schedule`, audio and MIDI, reaching them through
+  `useServices()`.
 - `features/quiz/quiz-machine.ts`: a pure reducer for **Build chord**, **Name chord** and **Build scale**. It takes
-  a **scope** `{ skills: SkillId[], roots?: PitchClass[], length?: number }`, so the open-ended Theory quiz, a
+  a **scope** `{ skills: SkillId[], roots?: PitchClass[], length?: number, ordered?: boolean }` (`ordered` asks
+  the skills in list order, as My gaps needs), so the open-ended Theory quiz, a
   piece's check, a path step's check and "My gaps" are the same machine with different scopes. Question generation
   takes an injected random source, so tests are deterministic. Each answer goes through
   `features/record-answer` into `progress`.
@@ -331,11 +349,11 @@ explaining.
    these chords** runs a 6-question quiz scoped to them, using the piece's own roots. Afterwards, each gap links to
    the Chords explorer focused on that quality.
 2. **Path chord steps:** a step opens the Chords explorer focused on its family (`?step=chords:sev`) with **Check
-   yourself**, a quiz scoped to the family. When every quality in the family rates known, the step is marked
-   learned automatically. The learner can still mark or unmark it by hand. Scale steps work the same way with
-   Build scale.
+   yourself**, a quiz scoped to the family. The answer that makes every quality in the family Known marks the step
+   learned automatically. The learner can still mark or unmark it by hand, and an unmark stays until a quality
+   slips and comes back. Scale steps work the same way with Build scale.
 3. **Theory → Quiz → My gaps:** a scope of gap skills first, then unknown skills used by pieces the learner has
-   opened in the Player. If there are none, it offers the whole quiz instead.
+   opened in the Player (`progress.practised`). If there are none, it offers the whole quiz instead.
 4. **Continue card:** when the suggested piece has gaps or unknowns, the card gets one extra line
    ("2 chords to check") that opens that piece's check. Nothing else is added.
 
@@ -355,9 +373,9 @@ header. The Player is full-screen with a back control.
 
 **Progress rules:**
 
-- **Continue** suggests the last-practised piece if it is not learned, else the first unlearned step in path order
-  (level 1 first, then each level's list order).
-- `lastPractised` is set when the Player opens a piece.
+- **Continue** suggests the last-practised piece (the latest in `practised`) if it is not learned, else the first
+  unlearned step in path order (level 1 first, then each level's list order).
+- `practised[pieceId]` is set to now when the Player opens a piece.
 - A step is marked or unmarked as learned from:
   - the check on its Path row (a toggle button);
   - the Piece screen;
@@ -380,9 +398,9 @@ carried over (the copy rule of §8).
   - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: the first of
     `navigator.languages` the app speaks, else English), `practice: { fingerNumbers, melody, metronome, countIn }`,
     `quiz: { families: ChordFamily[], scales: ScaleKind[] }`.
-  - `progress` (`pt-progress`): `learned: Record<StepId, isoDate>`, `lastPractised: { pieceId, at } | null`,
-    `answers: Record<SkillId, { correct: boolean; at: isoDate }[]>` (the last 5 per skill),
-    `quiz: { correct, total, streak, best }`.
+  - `progress` (`pt-progress`): `learned: Record<StepId, isoDate>`, `practised: Record<PieceId, isoDate>` (each
+    piece's last opening in the Player), `answers: Record<SkillId, { correct: boolean; at: isoDate }[]>` (the last 5
+    per skill), `quiz: { correct, total, streak, best }`.
 - **Nothing is imported from the legacy app.** It kept no data worth carrying over.
 - **Theme:** an inline boot script sets `data-theme` to `light` or `dark` before first paint. For `system` it
   resolves `prefers-color-scheme` and keeps following changes. A dark-mode user never sees a white flash.
@@ -432,7 +450,7 @@ direction must meet:
   `LocalText` in content has an empty language. Claude drafts the Russian during Phase 2; the owner reviews it in
   Phase 4.
 - **Titles and credits:** English shows `titleEn` with the original `title` beneath, and Russian shows `title`.
-  Credits are shown as printed.
+  Credit names are shown as printed; their roles are interface strings in both languages.
 - **Note and chord names** are international in both locales (B, not H; `#` and `♭`).
 
 **Offline:** vite-plugin-pwa precaches the app, fonts and icons. The app has no runtime network dependency. An

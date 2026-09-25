@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { detectLocale, isLocale, isTheme } from './types'
+import { canonicalFamilies, canonicalScales, detectLocale, isLocale, isTheme } from './types'
 
 describe('detectLocale', () => {
   it.each([
@@ -22,5 +22,15 @@ describe('guards', () => {
     expect(isLocale('ru')).toBe(true)
     expect(isLocale('fr')).toBe(false)
     expect(isLocale(undefined)).toBe(false)
+  })
+})
+
+describe('canonical lists', () => {
+  it('keep the known families once each, in table order', () => {
+    expect(canonicalFamilies(['nin', 'bogus', 'tri', 'nin', 3])).toEqual(['tri', 'nin'])
+  })
+
+  it('keep the known scales once each, in table order', () => {
+    expect(canonicalScales(['blues', 'major', 'constructor'])).toEqual(['major', 'blues'])
   })
 })

@@ -27,3 +27,4 @@ void i18n.use(initReactI18next).init({
 
 export { i18n }
 export type { LocaleResources } from './types'
+export { localText, type LocalText } from './local-text'
