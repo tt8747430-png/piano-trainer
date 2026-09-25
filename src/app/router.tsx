@@ -9,6 +9,7 @@ import {
   type RouterHistory,
 } from '@tanstack/react-router'
 import { entryById, pieceById } from '@/entities/piece'
+import { checkPlan } from '@/features/quiz'
 import { NotFoundPage } from '@/pages/not-found'
 import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
@@ -21,6 +22,7 @@ import {
   QUIZ_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
+  validateCheckSearch,
   validateChordsSearch,
   validatePlayerSearch,
   validateQuizSearch,
@@ -135,6 +137,16 @@ const playerRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
 })
 
+const checkRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/check',
+  validateSearch: validateCheckSearch,
+  beforeLoad: ({ search }) => {
+    if (!search.of || !checkPlan(search.of)) throw notFound()
+  },
+  component: lazyRouteComponent(theoryScreens, 'CheckPage'),
+})
+
 const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     pathRoute,
@@ -143,7 +155,7 @@ const routeTree = rootRoute.addChildren([
     pieceRoute,
     theoryRoute.addChildren([theoryIndexRoute, chordsRoute, scalesRoute, symbolsRoute, quizRoute]),
   ]),
-  fullScreenRoute.addChildren([playerRoute]),
+  fullScreenRoute.addChildren([playerRoute, checkRoute]),
 ])
 
 export function createAppRouter(history?: RouterHistory) {

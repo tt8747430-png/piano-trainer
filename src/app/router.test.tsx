@@ -17,6 +17,7 @@ const ROUTES = [
   ['/theory/symbols', '/theory/symbols'],
   ['/theory/quiz', '/theory/quiz'],
   ['/settings', '/settings'],
+  ['/check?of=chords:tri', '/check'],
 ] as const
 
 async function open(path: string) {
