@@ -75,6 +75,22 @@ describe('createWebMidiInput', () => {
     expect(statuses).toEqual([{ state: 'no-device' }, { state: 'connected', devices: ['a'] }])
     expect(heard).toHaveBeenCalledOnce()
   })
+
+  it('has no status before it is connected, then keeps the last one', async () => {
+    const access = new FakeAccess()
+    const midi = withAccess(access)
+    expect(midi.current()).toBeNull()
+    await midi.connect()
+    expect(midi.current()).toEqual({ state: 'no-device' })
+    access.plugIn(new FakeInput('a', 'Piano'))
+    expect(midi.current()).toEqual({ state: 'connected', devices: ['Piano'] })
+  })
+
+  it('keeps a refused permission as its status', async () => {
+    const midi = createWebMidiInput(() => Promise.reject(new DOMException('no', 'SecurityError')))
+    await midi.connect()
+    expect(midi.current()).toEqual({ state: 'denied' })
+  })
 })
 
 describe('hasWebMidi', () => {

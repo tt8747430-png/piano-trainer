@@ -18,4 +18,6 @@ export interface MidiInput {
   connect(): Promise<MidiStatus>
   onNote(listener: (event: NoteEvent) => void): () => void
   onStatus(listener: (status: MidiStatus) => void): () => void
+  /** The last status, or null before any connect(). */
+  current(): MidiStatus | null
 }

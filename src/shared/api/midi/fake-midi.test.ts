@@ -31,4 +31,13 @@ describe('createFakeMidi', () => {
     expect(statuses).toEqual([{ state: 'no-device' }])
     expect(await fake.connect()).toEqual({ state: 'no-device' })
   })
+
+  it('has no status before it is connected, then keeps the last one', async () => {
+    const keyboard = createFakeMidi()
+    expect(keyboard.current()).toBeNull()
+    await keyboard.connect()
+    expect(keyboard.current()).toEqual({ state: 'connected', devices: ['Keyboard'] })
+    keyboard.setStatus({ state: 'no-device' })
+    expect(keyboard.current()).toEqual({ state: 'no-device' })
+  })
 })

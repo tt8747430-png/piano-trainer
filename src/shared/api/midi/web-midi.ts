@@ -16,6 +16,11 @@ export function createWebMidiInput(
 ): MidiInput {
   const notes = createListeners<NoteEvent>()
   const statuses = createListeners<MidiStatus>()
+  let current: MidiStatus | null = null
+  const report = (status: MidiStatus) => {
+    current = status
+    statuses.emit(status)
+  }
 
   const handleMessage = (event: MIDIMessageEvent) => {
     const note = event.data ? parseMidiMessage(event.data) : null
@@ -33,14 +38,15 @@ export function createWebMidiInput(
       let status: MidiStatus
       try {
         const access = await requestAccess()
-        access.onstatechange = () => statuses.emit(hook(access))
+        access.onstatechange = () => report(hook(access))
         status = hook(access)
       } catch {
         status = { state: 'denied' }
       }
-      statuses.emit(status)
+      report(status)
       return status
     },
+    current: () => current,
     onNote: notes.add,
     onStatus: statuses.add,
   }

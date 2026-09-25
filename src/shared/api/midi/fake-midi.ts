@@ -12,18 +12,24 @@ export interface FakeMidi extends MidiInput {
 export function createFakeMidi(
   status: MidiStatus = { state: 'connected', devices: ['Keyboard'] },
 ): FakeMidi {
-  let current = status
+  let current: MidiStatus | null = null
   const notes = createListeners<NoteEvent>()
   const statuses = createListeners<MidiStatus>()
+  const report = (next: MidiStatus) => {
+    current = next
+    statuses.emit(next)
+  }
   return {
-    connect: async () => current,
+    async connect() {
+      const next = current ?? status
+      report(next)
+      return next
+    },
+    current: () => current,
     onNote: notes.add,
     onStatus: statuses.add,
     press: (midi) => notes.emit({ midi, on: true, velocity: 100 }),
     release: (midi) => notes.emit({ midi, on: false, velocity: 0 }),
-    setStatus(next) {
-      current = next
-      statuses.emit(next)
-    },
+    setStatus: report,
   }
 }
