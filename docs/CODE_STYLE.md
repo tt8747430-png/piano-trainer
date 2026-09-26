@@ -22,14 +22,16 @@ A container wires data to presentational children. One job each.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
   `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `RoundButton` /
   `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`,
-  `RoleLegend`, `RatingMark`, `LevelMark`.
+  `RatingMark`, `LevelMark`.
 - **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
   clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
-  play (`useSoundKey`), so its key is down while pressed, not while it rings. It follows the **keyboard settings**
+  play (`useSoundKey`), so its key is down while pressed, not while it rings, and for at least the shortest press
+  (`usePresses` in `shared/lib`, which every hand's keys go through). It follows the **keyboard settings**
   (key size, swipe, note names, the map, typing), saved for every keyboard and set from the rail's settings button or
   Settings (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The
-  explorers, Symbols and a Piece's chart pass `spotlight`: while any key is down, only the keys down show their marks
-  (an arpeggio's key alone, a chord's together); the Player and the quiz do not, since their marks mean "play these".
+  explorers, Symbols and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
+  arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key sounding
+  is down there.
   `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
   it on that screen's keyboard (pin it when the page scrolls away from it).
 - **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
@@ -77,19 +79,28 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - **Stack with `flex`/`grid` and `gap-*`,** not `space-x-*`/`space-y-*`. Equal width and height → `size-*`.
 - **Dark mode is the token remap under `[data-theme='dark']`.** App code writes no `dark:` classes. `dark:` is bound
   to `data-theme` only so shadcn primitives follow the app's setting rather than the OS.
-- **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`). A coloured key always also shows its
-  degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord tones (keys,
-  the legend, a chord chip's edge); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`) only in the Player;
-  `--attention` only for a gap or "to check" (the dot, never the text beside it). The keys have their own roles
-  (`--key-white`, `--key-black` and their inks `--on-key-white`, `--on-key-black`; a key down is `--key-down` with
-  `--on-key-down`, a coloured one under `--key-down-tint`; a scale's `--key-tonic` and `--key-scale` with their inks),
-  their material (`--key-rail`, `--key-bed`, `--key-shade`, `--key-lip`, `--key-sheen`: the No Glow Rule's one
-  exception, on keys only), and a slider's thumb `--thumb`.
+- **The world is a labelled picture book** (ADR 0010): seven paints at one lightness, each with a pale wash. What
+  each colour does is a token: `--primary` (yellow) the one action, `--selected` what is chosen and where you are,
+  `--learned` learned, on and connected, `--link` links and `--ring` focus, `--attention` a gap, `--destructive` a
+  wrong key or a reset, `--border` the brown line round every card and control, `--hairline` a divider.
+- **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
+  also shows its degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord
+  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`, each with its `-wash`)
+  only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
+  paints (`--paint-*` midtone fills with `--on-paint`, `--paint-*-deep` for an icon on paper) name places and kinds of
+  step, never a chord tone; a hand's colour as text is `--hand-*-ink`. The keys have their own
+  roles: a mark is its wash while its key is quiet and its full colour while it sounds (`--key-scale` and
+  `--key-scale-down`, `--key-tonic` and `--key-tonic-down`, a role or hand and its `-wash`), a plain key sounding is
+  `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail`, `--key-bed`, `--key-shade`,
+  `--key-lip`, `--key-sheen` (the No Glow Rule's one exception, on keys only); a slider's thumb is `--thumb`.
+- **Two faces:** Onest for reading; Balsamiq Sans Bold (`font-display`) for titles (every `h1`–`h3`), chord symbols,
+  buttons, segments and the tabs. Only its 700 ships and faux bold is off, so a lettered element needs no weight
+  class.
 - **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
   token, a utility or a named constant.
-- **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 12 · `lg` 14
-  · `xl` 16 · `2xl` 18 · `3xl` 26 · `4xl` 28 (black keys, white keys, primitives, buttons, cards, sheets); type
-  `text-lg` 17 · `xl` 22 · `4xl` 34 · `6xl` 64 (headline, title, large title, chord display); `ease-out` is the one
+- **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11
+  · `xl` 12 · `2xl` 12 · `3xl` 14 · `4xl` 20 (black keys, white keys, primitives, chips, buttons, cards, sheets); type
+  `text-lg` 17 · `xl` 22 · `4xl` 34 (headline, title, large title), Tailwind's `7xl` 72 for the chord display; `ease-out` is the one
   curve. Numerals that change in place are `tabular-nums`.
 - Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
   `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,
@@ -177,9 +188,10 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   pointer's position or a scroll matters, `src/shared/test/layout.ts` lays out what the test needs: `stubBox(element,
 box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })` gives every element scroll metrics
   and a `scrollTo` that moves and fires `scroll`, returning each position scrolled to.
-- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down` (and, under
-  spotlight, whether a marked key still wears its mark's class). A pointer on the keys: `fireEvent.pointerDown` on a key
-  and `pointerMove` on the keys' group, whose box `stubBox` gives.
+- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down`. A pointer
+  on the keys: `fireEvent.pointerDown` on a key and `pointerMove` on the keys' group, whose box `stubBox` gives. A key a
+  hand let go stays down for the shortest press: a test that reads it up again uses fake timers and moves them on by
+  `SHORTEST_PRESS_MS`.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
 
 ## 10. Copy and i18n

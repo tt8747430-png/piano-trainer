@@ -58,7 +58,7 @@ it. `@` → `src`.
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
   lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
-  `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the floating tab bar;
+  `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
   `FullScreenLayout` for the Player and the Check; `TheoryLayout`), `RoutePending`, `update-prompt/`, `RouteError`,
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
@@ -84,17 +84,18 @@ it. `@` → `src`.
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
-  `useGoBack`, `keyboardLayout` with `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the
-  keyboard settings' options), `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param
-  readers, `foldText`; and with barrels of their own: `music` the theory kernel (with the piano's ranges and
-  `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance), `schedule` (a Performance → sounds in
-  seconds, Listen's loop, a bar, a chord as the explorers place it, a scale run, a tap, which keys sound when and which
-  were struck last), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop),
-  `useSoundKey` (a tap, a hand's play), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi`
-  ports, their browser adapters and fakes; the audio port knows which keys it is sounding and whether a play still
-  sounds), `ui` (the kit: `PianoKeyboard` with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`,
-  `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` with its trigger and close, `RoleLegend`, `RatingMark`, `LevelMark`;
-  shadcn in `ui/primitives`), `i18n` (`Locale`, `useLocale`, `useScaleName`, `LocalText`), `test`.
+  `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
+  `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
+  `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
+  barrels of their own: `music` the theory kernel (with the piano's ranges and `placeChord`/`placeScale`), `arrangement`
+  (`arrange`, a chart → a Performance), `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord as
+  the explorers place it, a scale run, a tap, which keys sound when and which were struck last), `services`
+  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKey` (a tap, a hand's
+  play), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
+  fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
+  with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet`
+  with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`,
+  `useLocale`, `useScaleName`, `LocalText`), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.

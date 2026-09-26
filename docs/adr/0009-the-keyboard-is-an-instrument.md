@@ -17,16 +17,23 @@ keyboard height. The references (GarageBand, Flowkey, The Ultimate Piano) treat 
 - **A key plays on touch, at the audio clock's now.** `pointerdown` plays; the pointer's own `click` does not play
   again, and a click no pointer made (Enter, Space, a screen reader) plays once. A tap is one note, with nothing to
   schedule ahead.
-- **A key a hand plays is down while the hand holds it.** A tap or a typed key is a hand's play
-  (`PlayOptions.byHand`): the port sounds it without counting it among the keys it shows, and the keyboard shows it
-  pressed until the finger lifts or the key is let go, however long the sound rings.
+- **A key a hand plays is down while the hand holds it, and for at least the shortest press.** A tap or a typed key
+  is a hand's play (`PlayOptions.byHand`): the port sounds it without counting it among the keys it shows, and the
+  keyboard shows it pressed until the finger lifts or the key is let go, however long the sound rings, but never for
+  less than 150 ms (`usePresses`), since a trackpad's tap lifts in the frame it lands and would never show (the
+  owner's second look). MIDI keys go through the same presses.
 - **The keys hold still under a finger; the rail scrolls them.** A key that plays never lets the keyboard scroll away
   (the keys take the finger from the page, in both swipes). Scroll (the default) plays only the key touched; Glissando
   plays every key a finger slides onto, hit-tested from the keys' layout (`keyAt`) rather than the DOM. The rail runs
   the piano's length inside the scroller, its controls held in view, so a swipe on it scrolls natively; ‹ › move the
   keys an octave, since a mouse cannot swipe.
-- **Spotlight hides, it does not dim.** While any key is down, only the keys down show their marks; with nothing down,
-  every mark is back (revised after the owner's review: dimmed marks read as noise).
+- **Spotlight keeps every mark.** The keys the app puts down are the ones struck last, and every mark stays; a key
+  played stands out by going down, and turns its mark's full colour (a plain key turns Key Down; the colours are
+  ADR 0010's). (Revised twice after the owner's reviews: first dimmed marks read as noise, so they were hidden; then
+  hidden marks lost the scale while it was played, where The Ultimate Piano keeps them pale and deepens the key
+  played.)
+- **The focused key keeps its place.** It never rises over its neighbours; a ring in two tones outlines the face a
+  finger touches.
 - **Typing reads physical keys** (`KeyboardEvent.code`), so every layout plays the same notes; it never plays from a
   text field, with a modifier held, or on auto-repeat.
 - **The audio port hands back a play's handle and says whether it still sounds** (`isPlaying`), and which keys were
