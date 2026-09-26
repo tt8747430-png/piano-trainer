@@ -14,7 +14,6 @@ describe('keyLook', () => {
       fill: 'white',
       down: false,
       outlined: false,
-      quiet: false,
     })
     expect(keyLook(CS4, {}, UNNAMED).fill).toBe('black')
   })
@@ -58,12 +57,6 @@ describe('keyLook', () => {
 
   it('carries a typing key’s letter', () => {
     expect(keyLook(C4, {}, { namedKeys: 'none', letters: new Map([[C4, 'A']]) }).letter).toBe('A')
-  })
-
-  it('holds back only a marked key', () => {
-    const quiet = new Set([C4, midi(62)])
-    expect(keyLook(C4, { marks: root, quiet }, UNNAMED).quiet).toBe(true)
-    expect(keyLook(midi(62), { marks: root, quiet }, UNNAMED).quiet).toBe(false)
   })
 
   it('puts a key down over whatever it shows', () => {

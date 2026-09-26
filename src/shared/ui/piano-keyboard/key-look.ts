@@ -32,8 +32,6 @@ export interface KeyStates {
   readonly wrong?: ReadonlySet<Midi>
   /** Keys down: sounding now, or held on a MIDI keyboard. */
   readonly down?: ReadonlySet<Midi>
-  /** Marked keys held back while others are struck (spotlight). */
-  readonly quiet?: ReadonlySet<Midi>
 }
 
 /** What a key may carry besides its marks: its note's name, and a letter of the computer keyboard. */
@@ -50,12 +48,11 @@ export interface KeyLabel {
   readonly text: string
 }
 
-/** One key's face: its fill, whether it is down, outlined or quiet, its label and its letter. */
+/** One key's face: its fill, whether it is down or outlined, its label and its letter. */
 export interface KeyLook {
   readonly fill: KeyFill
   readonly down: boolean
   readonly outlined: boolean
-  readonly quiet: boolean
   readonly label?: KeyLabel
   readonly letter?: string
 }
@@ -91,7 +88,6 @@ export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
     fill: fillOf(key, states, mark),
     down: states.down?.has(key) ?? false,
     outlined: states.outlined?.has(key) ?? false,
-    quiet: mark !== undefined && (states.quiet?.has(key) ?? false),
     ...(label ? { label } : {}),
     ...(letter ? { letter } : {}),
   }
@@ -102,7 +98,6 @@ export const sameLook = (a: KeyLook, b: KeyLook): boolean =>
   a.fill === b.fill &&
   a.down === b.down &&
   a.outlined === b.outlined &&
-  a.quiet === b.quiet &&
   a.label?.kind === b.label?.kind &&
   a.label?.text === b.label?.text &&
   a.letter === b.letter

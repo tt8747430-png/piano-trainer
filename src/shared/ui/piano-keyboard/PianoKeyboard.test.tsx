@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -94,14 +94,38 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
   })
 
-  it('shows the typing letters on their keys, and a quiet key held back', () => {
-    renderKeyboard({
-      letters: new Map([[C4, 'A']]),
-      marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'root', label: '1' }]]),
-      quiet: new Set([midi(62)]),
-    })
+  it('shows the typing letters on their keys', () => {
+    renderKeyboard({ letters: new Map([[C4, 'A']]) })
     expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
-    expect(screen.getByRole('button', { name: 'D4' })).toHaveAttribute('data-quiet')
+  })
+
+  it('with spotlight, shows only the marks of the keys down, and every mark when none is', () => {
+    const marks = new Map<Midi, KeyMark>([
+      [C4, { tone: 'root', label: '1' }],
+      [midi(64), { tone: '3rd', label: '3' }],
+    ])
+    const { rerender } = renderKeyboard({ spotlight: true, marks, down: new Set([midi(64)]) })
+    const [c, e] = ['C4', 'E4'].map((name) => screen.getByRole('button', { name }))
+    expect(e).toHaveClass('bg-role-3rd')
+    expect(c).toHaveClass('bg-key-white')
+    expect(c).not.toHaveTextContent('1')
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} spotlight marks={marks} />)
+    expect(c).toHaveClass('bg-role-root')
+    expect(c).toHaveTextContent('1')
+  })
+
+  it('with spotlight, shows only the key a finger holds while it holds it', () => {
+    const marks = new Map<Midi, KeyMark>([
+      [C4, { tone: 'root', label: '1' }],
+      [midi(64), { tone: '3rd', label: '3' }],
+    ])
+    renderKeyboard({ spotlight: true, marks })
+    const c = screen.getByRole('button', { name: 'C4' })
+    const e = screen.getByRole('button', { name: 'E4' })
+    fireEvent.pointerDown(e, { pointerId: 1, pointerType: 'touch' })
+    expect(c).toHaveClass('bg-key-white')
+    fireEvent.pointerUp(e, { pointerId: 1, pointerType: 'touch' })
+    expect(c).toHaveClass('bg-role-root')
   })
 
   it('makes keys toggles when they are selectable, and fills the selected ones teal', () => {

@@ -65,26 +65,34 @@ describe('LiveKeyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
   })
 
-  it('with spotlight, puts down only the key struck last and holds the other marks back', () => {
+  it('with spotlight, shows only the key struck last, and every mark again when all is quiet', () => {
     const { audio } = setUp({ spotlight: true, marks: C_MAJOR })
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: true }), 0))
     act(() => audio.setNow(0.5))
     const [c, e, g] = ['C4', 'E4', 'G4'].map((name) => screen.getByRole('button', { name }))
     expect(g).toHaveAttribute('data-down')
-    expect(g).not.toHaveAttribute('data-quiet')
+    expect(g).toHaveClass('bg-role-root')
     for (const key of [c, e]) {
       expect(key).not.toHaveAttribute('data-down')
-      expect(key).toHaveAttribute('data-quiet')
+      expect(key).toHaveClass('bg-key-white')
     }
     act(() => audio.setNow(3))
-    expect(c).not.toHaveAttribute('data-quiet')
+    expect(c).toHaveClass('bg-role-root')
   })
 
-  it('without spotlight, puts every sounding key down and holds nothing back', () => {
+  it('with spotlight, shows a chord’s keys together when they are struck together', () => {
+    const { audio } = setUp({ spotlight: true, marks: C_MAJOR })
+    act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: false }), 0))
+    act(() => audio.setNow(0.5))
+    for (const name of ['C4', 'E4', 'G4'])
+      expect(screen.getByRole('button', { name })).toHaveClass('bg-role-root')
+  })
+
+  it('without spotlight, puts every sounding key down and keeps every mark', () => {
     const { audio } = setUp({ marks: C_MAJOR })
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: true }), 0))
     act(() => audio.setNow(0.5))
     expect(screen.getByRole('button', { name: 'E4' })).toHaveAttribute('data-down')
-    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-quiet')
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-role-root')
   })
 })

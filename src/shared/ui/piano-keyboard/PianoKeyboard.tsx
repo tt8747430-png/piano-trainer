@@ -77,6 +77,7 @@ export function PianoKeyboard({
   selectable = false,
   keySize = 'fit',
   swipe = 'scroll',
+  spotlight = false,
   namedKeys = 'c',
   map = false,
   letters,
@@ -94,6 +95,12 @@ export function PianoKeyboard({
   selectable?: boolean
   keySize?: KeySize
   swipe?: Swipe
+  /**
+   * While any key is down, only the keys down show their marks: an arpeggio's or a run's key
+   * alone, a chord's keys together, a finger's key while it holds it. With nothing down, every
+   * mark shows.
+   */
+  spotlight?: boolean
   /** Which keys carry their note's name: every C (the default), every key, or none. */
   namedKeys?: NamedKeys
   /** The keyboard map in the rail. */
@@ -131,6 +138,13 @@ export function PianoKeyboard({
         ? states.down
         : new Set([...(states.down ?? []), ...pointers.pressed]),
     [states.down, pointers.pressed],
+  )
+  const shown = useMemo(
+    () =>
+      spotlight && states.marks && down && down.size > 0
+        ? new Map([...states.marks].filter(([key]) => down.has(key)))
+        : states.marks,
+    [spotlight, states.marks, down],
   )
   const dots = useMemo(
     () => new Set([...(states.marks?.keys() ?? []), ...(down ?? [])]),
@@ -215,7 +229,7 @@ export function PianoKeyboard({
                 key={key.midi}
                 geometry={key}
                 name={nameOf(key.midi)}
-                look={keyLook(key.midi, { ...states, down }, { namedKeys, letters })}
+                look={keyLook(key.midi, { ...states, marks: shown, down }, { namedKeys, letters })}
                 chosen={selectable ? (states.selected?.has(key.midi) ?? false) : undefined}
                 tabStop={key.midi === tabStop}
                 onPointerPress={pointers.pointerDown}

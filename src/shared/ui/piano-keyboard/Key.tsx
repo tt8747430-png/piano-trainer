@@ -56,7 +56,6 @@ function KeyButton({
       type="button"
       data-midi={geometry.midi}
       data-down={look.down ? '' : undefined}
-      data-quiet={look.quiet ? '' : undefined}
       aria-label={name}
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
@@ -67,7 +66,6 @@ function KeyButton({
         'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
         black ? 'z-10 rounded-b-xs' : 'rounded-b-sm border-r border-key-bed',
         look.down && plain ? 'bg-key-down text-on-key-down' : FILL[look.fill],
-        look.quiet ? (black ? 'text-on-key-black' : 'text-on-key-white') : null,
         look.down ? 'translate-y-0.5' : null,
         look.outlined ? 'ring-3 ring-primary ring-inset' : null,
       )}
@@ -77,15 +75,6 @@ function KeyButton({
         height: `${geometry.height}%`,
       }}
     >
-      {/* Quiet: the key's colour at a low strength, under a veil of the plain key. */}
-      <span
-        aria-hidden
-        className={cn(
-          'absolute inset-0 opacity-0 transition-opacity duration-80 ease-out',
-          black ? 'bg-key-black' : 'bg-key-white',
-          look.quiet ? 'opacity-70' : null,
-        )}
-      />
       {/* A coloured key going down keeps its colour under a tint. */}
       <span
         aria-hidden
