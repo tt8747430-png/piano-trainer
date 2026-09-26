@@ -6,7 +6,8 @@
   Each sub-project gets its own spec, plan and build. Revised 2026-09-26 after the owner tried the keyboard and asked
   for the key's chords (§1, items 8 and 9): the keyboard's fixes (§3.1), and the key's chords placed in
   sub-projects 2 and 4 (§3.8). Then two owner decisions: studies and progressions leave Songs (§3.9), and a lighter
-  palette after The Ultimate Piano's learn view (§3.10).
+  palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
+  typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11).
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
@@ -87,7 +88,7 @@ deleting `legacy/`). Its levelling moves into sub-project 6.
 - **Key sizes** Fit · Large · Whole piano, not a start octave and an octave count (the owner left it to Claude: Fit
   asks nothing of the learner; a chosen stretch suits teaching diagrams, not playing).
 - **The keyboard map** (a strip of all 88 keys framing the part in view) is off by default, with a setting.
-- **Controls** live in Settings, plus a small settings button in the keys' dark rail, with no extra row: the screen
+- **Controls** live in Settings, plus a small settings button in the keys' rail, with no extra row: the screen
   is small and every control must earn its space, what matters while playing first.
 - **The computer keyboard plays**, on by default on computers, off on phones.
 - **Finger numbers** sit in circles under the keys; a key carries its degree or note name.
@@ -233,7 +234,7 @@ Decided by the owner with the building session, recorded here at its request.
 - Where each lands (the Scales page's Chords mode, Practice's exercises, the key pages) and when is for sub-projects
   2, 4 and 7's specs; the Path keeps its steps that name them, pointing to their new place.
 
-### 3.10 A new world: the labelled picture book (owner, 2026-09-26 and 27; built, ADR 0010)
+### 3.10 A new world: the labelled picture book (owner, 2026-09-26 and 27; built, ADRs 0010 and 0011)
 
 Decided by the owner with the building session. **It replaces ADR 0007's colours** (the sage world with deep-teal
 actions): the owner found the green look and the keys "very strident and heavy".
@@ -251,7 +252,13 @@ actions): the owner found the green look and the keys "very strident and heavy".
 - Built, it read loud; the owner asked for calmer colours and better typography and sent Apple's colour and
   typography guidelines and Material's colour system. The book was **printed quietly** (ADR 0011): faded paints, a
   soft 1px line, honey on the one action only, a neutral "chosen", a monochrome nav, a `prefers-contrast: more`
-  layer, and Literata in place of Balsamiq Sans for titles and chords.
+  layer, and Literata in place of Balsamiq Sans for titles and chords (§9.11 has what was taken from each guide).
+- **The app icon** (owner, 2026-09-27): after rounds of flat keyboards, the owner chose **Piano Pro & Drum's** icon
+  from a page of piano app icons: three chunky keys seen from above, each outlined, black keys raised between them,
+  one key played in honey, on a warm charcoal ground with a glow, a shadow under the keys and three small diamonds.
+  Apple's app-icon guidance shaped the files: a rounded tile where nothing else shapes it (a tab, a desktop install),
+  square and edge to edge for the home screens, which cut their own shape (`public/favicon.svg`,
+  `pwa-assets.config.ts`).
 - Every colour rule the app already keeps still holds: colour is never the only cue, role colours stay on chord tones
   only, WCAG AA contrast in both themes, dark as a first-class palette.
 
@@ -375,6 +382,13 @@ scores and edit them"; MusicXML: "music xml but for now it is only planned as co
 **On the second look** (§1, items 8 and 9, recorded by the building session): taps that never show, spotlight hiding
 marks, the focused key's ring, the degree numbers, Symbols repeating Chords, the key's chords as a Diatonic mode, the
 chords that hold a note, practising the key's chords with a song's patterns.
+
+**On colour, type and the icon (2026-09-27, §3.10):** "i need more calm colors and better typography"; "look also at
+these guides" (Apple's Color and Typography, Material's colour system); "improve the icon"; "i like the more keys
+icon"; "the e key is looking weird"; "look at these icons and you can completely refactor our icon" (a page of piano
+app icons) with Apple's App icons guide; "why is it square"; "not good, i like the piano pro and drum music icon";
+"good but improve the outlines the shapes and the contrast, the individual keys are not distincted very good"; "the
+lover part of the keys a little little bit closer".
 
 ## 8. The grilling session, question by question
 
@@ -618,6 +632,29 @@ for modes as keys (§3.3), popularity statistics (the app has no corpus).
 | Take                                                                                              | Later                                           | Not for this app                                                                 |
 | ------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------- |
 | Chord detection; speed training; passing chords; the chord explorer's relationships; scales by ear; note reading with a range; practice with levels | Live score; toggle mode (teaching diagrams); MusicXML import; recording from MIDI | Audio and YouTube players; streaming overlay; image export; cloud library; branding; kids' icons; the AI practice coach (needs a network); PDF scores; `.mscz` |
+
+### 9.11 Apple's and Material's guidelines, and the icon references (owner, 2026-09-27)
+
+Sent for the calmer palette, the type and the icon; applied in ADR 0011 and recorded in DESIGN.md.
+
+- **Apple, Color:** never one colour for two meanings; colour the background of one control, not many; a monochrome
+  tab bar over colourful content; light, dark and increased-contrast variants of every custom colour; colours look
+  brighter in the dark. **Taken:** brick means only the root and the right hand, "chosen" is neutral (an umber chip, a
+  card thumb on a segmented track), honey fills the one action alone, the nav is monochrome, a
+  `prefers-contrast: more` layer, the white keys and the action a step softer by night.
+- **Apple, Typography:** few typefaces, a sans and a serif made to go together (SF and New York); a fixed set of text
+  styles (large title 34, titles 28, 22 and 20, headline and body 17); optical sizes; no light weights; text that
+  follows the reader's size. **Taken:** Onest for reading and every control, Literata (optical sizes, Cyrillic) at 600
+  for titles and chords, the scale 17 · 20 · 22 · 28 · 34 · 44 · 72 in rem.
+- **Material, the colour system:** "on" colours for what sits on a fill; tonal steps of each hue; section colours
+  used sparingly. **Taken:** each chrome paint as its wash with its deep shade on it (`--on-paint-*`); a step's kind
+  tints its tile and the Continue card's band.
+- **Apple, App icons:** one simple idea centred, few shapes, no drawn effects, no copied interface; square artwork
+  the system masks; a background that stands out and is never black. **Taken:** the icon's files (§3.10); not taken:
+  a flat, effect-free drawing, since the owner chose a reference with depth.
+- **The icon references** (a page of piano app icons): Go! Piano, Simply Piano, The Piano Pro, MWM's Piano, Piano
+  Pro & Drum and others. The owner chose **Piano Pro & Drum's**: three chunky keys in perspective, one coloured, on a
+  dark ground with small floating diamonds.
 
 ## 10. Catalogues
 
@@ -875,7 +912,9 @@ Descending · Harmonic, each played and shown going down on the keyboard (Clefs'
   control** for two to five options; a **switch** for on or off; a **sheet** for settings changed less often; a
   **popover** anchored to its button for a few quick choices (the Player's tempo and hands, the keyboard's settings).
   Never a wall of chips or tiles. The HIG pages to read: pop-up and pull-down buttons, segmented controls, sheets,
-  popovers, toolbars, tab bars, layout, typography, colour, accessibility.
+  popovers, toolbars, tab bars, layout, accessibility. Colour, typography and app icons were read and applied on
+  2026-09-27 (§9.11, ADR 0011): a spec keeps their rules (one meaning per colour, colour on one control, a neutral
+  "chosen", both themes and increased contrast, Onest on every control).
 - **One primary action per screen**, in the thumb zone; destructive actions out of the resting thumb arc, confirmed.
 - **44px targets** (44pt, Apple's minimum), 8px between them; a control's footprint includes its focus ring, press
   and drop; icon-only buttons have labels.
