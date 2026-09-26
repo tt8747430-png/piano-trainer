@@ -89,6 +89,8 @@
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* No rubber band or pull-to-refresh: the app's pages end where they end. */
+    overscroll-behavior: none;
   }
   html[data-theme='dark'] {
     color-scheme: dark;
@@ -96,6 +98,30 @@
   body {
     @apply bg-background font-sans text-foreground antialiased;
     -webkit-tap-highlight-color: transparent;
+    /* An app, not a document: a long press selects nothing and opens no callout… */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  /* …except where the learner types. */
+  input,
+  textarea,
+  [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img {
+    -webkit-user-drag: none;
+  }
+  /* A control answers the first tap: no double-tap zoom waiting behind it. */
+  button,
+  a,
+  label,
+  summary,
+  [role='button'],
+  [role='tab'] {
+    touch-action: manipulation;
   }
   ::selection {
     background: color-mix(in oklab, var(--color-primary) 22%, transparent);

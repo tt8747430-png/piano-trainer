@@ -2,11 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual"
+    />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <meta name="description" content="Learn songs, chords and scales at the piano." />
+    <!-- The installed app, to Android and to iOS (which still reads only its own spelling), under a
+       black status bar: the web view starts below it, so no inset is needed at the top. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Piano" />
     <title>Piano Trainer</title>
     <script id="theme-boot">
       ;(function () {
@@ -27,6 +36,21 @@
           }
         }
         document.documentElement.dataset.theme = theme
+      })()
+    </script>
+    <script id="standalone-boot">
+      ;(function () {
+        // The installed app is an app: no pinch or double-tap zoom, which fights the keys and the
+        // swipes. A browser tab keeps its zoom. src/app/standalone-boot.test.ts holds this.
+        try {
+          var installed =
+            window.matchMedia('(display-mode: standalone)').matches ||
+            window.matchMedia('(display-mode: fullscreen)').matches ||
+            window.navigator.standalone === true
+          var viewport = document.querySelector('meta[name="viewport"]')
+          if (installed && viewport)
+            viewport.content = viewport.content + ', maximum-scale=1, user-scalable=no'
+        } catch (_) {}
       })()
     </script>
   </head>
