@@ -19,6 +19,7 @@ export function ExplorerKeyboard({
         range={keyboardRange(keys, MIDDLE_OCTAVES)}
         inView={rangeOf(keys)}
         marks={marks}
+        spotlight
       />
     </Pinned>
   )

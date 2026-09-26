@@ -74,6 +74,13 @@ describe('search params', () => {
     expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)
   })
 
+  it('read the Scales fingers, none by default, and ignore an old link’s view', async () => {
+    expect(SCALES_DEFAULTS.fingers).toBe('none')
+    expect(await searchAt('/theory/scales?fingers=rh')).toMatchObject({ fingers: 'rh' })
+    expect(await searchAt('/theory/scales?fingers=x')).toMatchObject({ fingers: 'none' })
+    expect(await searchAt('/theory/scales?view=rh')).toMatchObject({ fingers: 'none' })
+  })
+
   it('spell a root the way its explorer names it', async () => {
     expect(await searchAt('/theory/chords?root=A%23&quality=maj')).toMatchObject({ root: 'Bb' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })

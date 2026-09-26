@@ -85,13 +85,13 @@ export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
   root: noteParam(note('C')),
   kind: 'major',
-  view: 'degrees',
+  fingers: 'none',
   rhythm: 'even',
   tempo: 80,
   hands: 'rh',
   chords: 3,
 }
-const isScaleLabels = isOneOf<ScaleView['view']>(['degrees', 'rh', 'lh'])
+const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
 const isScaleChords = isOneOf<ScaleView['chords']>([3, 4])
 const isScaleStep = (value: unknown): value is ScaleStepId =>
   isStepId(value) && value.startsWith('scale:')
@@ -102,7 +102,7 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
   return {
     root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
     kind,
-    view: valueOr(isScaleLabels, raw.view, SCALES_DEFAULTS.view),
+    fingers: valueOr(isScaleFingers, raw.fingers, SCALES_DEFAULTS.fingers),
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),

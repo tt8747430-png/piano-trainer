@@ -12,7 +12,7 @@ export function TheorySymbolsPage() {
     <div className="flex flex-col gap-8">
       <ReadingSheet />
       <Pinned>
-        <LiveKeyboard range={MIDDLE_OCTAVES} />
+        <LiveKeyboard range={MIDDLE_OCTAVES} spotlight />
       </Pinned>
       {CHORD_FAMILIES.map((family) => (
         <section key={family} aria-label={t(`family.${family}`)} className="flex flex-col gap-3">

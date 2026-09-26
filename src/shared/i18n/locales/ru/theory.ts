@@ -20,7 +20,7 @@ export const theory: LocaleResources['theory'] = {
   checkYourself: 'Проверить себя',
   major: 'M',
   scaleLabel: 'Гамма',
-  view: { label: 'Показать', degrees: 'Ступени', rh: 'Аппликатура ПР', lh: 'Аппликатура ЛР' },
+  fingers: { label: 'Аппликатура', none: 'Нет' },
   fingering: {
     note: 'Нота',
     rh: 'ПР',

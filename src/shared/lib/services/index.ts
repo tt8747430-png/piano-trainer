@@ -1,6 +1,6 @@
 export type { Services } from './types'
 export { ServicesProvider } from './ServicesProvider'
 export { useServices } from './use-services'
-export { usePlay, usePlayChord, useSoundKey } from './use-play'
+export { usePlay, useSoundKey } from './use-play'
 export { usePlayback, type Playback } from './use-playback'
 export { useSoundingKeys } from './use-sounding-keys'

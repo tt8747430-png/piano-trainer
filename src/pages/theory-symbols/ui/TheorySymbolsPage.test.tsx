@@ -38,4 +38,15 @@ describe('Theory → Symbols', () => {
       expect(within(keyboard).getByRole('button', { name })).toHaveAttribute('data-down')
     expect(within(keyboard).getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
   })
+
+  it('turns Hear into Stop while the chord sounds', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/theory/symbols')
+    const triads = await screen.findByRole('region', { name: 'Triads' })
+    const minor = within(triads).getByRole('listitem', { name: 'Minor triad' })
+    await user.click(within(minor).getByRole('button', { name: 'Hear' }))
+    expect(within(minor).getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 2))
+    expect(within(minor).getByRole('button', { name: 'Hear' })).toBeInTheDocument()
+  })
 })

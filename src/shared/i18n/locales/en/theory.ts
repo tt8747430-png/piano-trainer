@@ -19,7 +19,7 @@ export const theory = {
   // The chip label of the major triad, whose suffix is empty.
   major: 'M',
   scaleLabel: 'Scale',
-  view: { label: 'Show', degrees: 'Degrees', rh: 'RH fingers', lh: 'LH fingers' },
+  fingers: { label: 'Fingers', none: 'None' },
   fingering: {
     note: 'Note',
     rh: 'RH',

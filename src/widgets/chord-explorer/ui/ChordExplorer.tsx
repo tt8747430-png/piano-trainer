@@ -1,3 +1,4 @@
+import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
@@ -17,7 +18,8 @@ import {
   spellChord,
   type Midi,
 } from '@/shared/lib/music'
-import { usePlayChord } from '@/shared/lib/services'
+import { placedChordSounds } from '@/shared/lib/schedule'
+import { usePlay, usePlayback } from '@/shared/lib/services'
 import { ChipRow, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ChordView } from '../model/chord-view'
@@ -39,7 +41,8 @@ export function ChordExplorer({
   onChange: (change: Partial<ChordView>) => void
 }) {
   const { t } = useTranslation(['theory', 'common'])
-  const playChord = usePlayChord()
+  const play = usePlay()
+  const playback = usePlayback<'chord' | 'arpeggio'>()
   const root = noteFromParam(chord.root)
   const placed = placeChord(root, chord.quality, {
     inversion: chord.inversion,
@@ -51,14 +54,15 @@ export function ChordExplorer({
   const marks = new Map<Midi, KeyMark>(
     keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
   )
-  const sound = (view: ChordView, arpeggio = false) =>
-    playChord(
+  const soundsOf = (view: ChordView, arpeggio: boolean) =>
+    placedChordSounds(
       { root: noteFromParam(view.root), quality: view.quality },
       { inversion: view.inversion, bothHands: view.hands === 'both', arpeggio },
     )
+  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   const change = (next: Partial<ChordView>) => {
     onChange(next)
-    sound({ ...chord, ...next })
+    play(soundsOf({ ...chord, ...next }, false))
   }
 
   return (
@@ -137,11 +141,34 @@ export function ChordExplorer({
         />
       </div>
       <div className="flex gap-3">
-        <Button size="pill" className="flex-1" onClick={() => sound(chord)}>
-          {t('theory:play')}
+        <Button
+          size="pill"
+          className="flex-1"
+          onClick={() => playback.toggle('chord', soundsOf(chord, false))}
+        >
+          {playback.playing === 'chord' ? (
+            <>
+              <Square data-icon="inline-start" />
+              {t('common:stop')}
+            </>
+          ) : (
+            t('theory:play')
+          )}
         </Button>
-        <Button size="pill" variant="soft" className="flex-1" onClick={() => sound(chord, true)}>
-          {t('theory:arpeggio')}
+        <Button
+          size="pill"
+          variant="soft"
+          className="flex-1"
+          onClick={() => playback.toggle('arpeggio', soundsOf(chord, true))}
+        >
+          {playback.playing === 'arpeggio' ? (
+            <>
+              <Square data-icon="inline-start" />
+              {t('common:stop')}
+            </>
+          ) : (
+            t('theory:arpeggio')
+          )}
         </Button>
       </div>
     </div>

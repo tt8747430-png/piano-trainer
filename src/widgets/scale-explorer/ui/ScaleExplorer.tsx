@@ -1,3 +1,4 @@
+import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { useScaleName } from '@/shared/i18n'
@@ -15,7 +16,7 @@ import {
   type Midi,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, scaleRun, TEMPO_RANGE } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { usePlayback } from '@/shared/lib/services'
 import { ChipRow, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
@@ -24,9 +25,14 @@ import { FingeringTable } from './FingeringTable'
 import { ScaleChords } from './ScaleChords'
 import { ScaleFacts } from './ScaleFacts'
 
-const LABELS = ['degrees', 'rh', 'lh'] as const
+/** The Fingers choice: none, or a hand's, with the name each has on screen. */
+const FINGERS = [
+  { value: 'none', label: 'theory:fingers.none' },
+  { value: 'rh', label: 'common:hands.rh' },
+  { value: 'lh', label: 'common:hands.lh' },
+] as const
 
-/** Any scale on any root: degrees or fingers on the keys, the fingering, practice, its chords, its relative. */
+/** Any scale on any root: its degrees on the keys and a hand's fingers under them, the fingering, practice, its chords, its relative. */
 export function ScaleExplorer({
   scale,
   onChange,
@@ -35,23 +41,26 @@ export function ScaleExplorer({
   onChange: (change: Partial<ScaleView>) => void
 }) {
   const { t } = useTranslation(['theory', 'common'])
-  const play = usePlay()
+  const playback = usePlayback<'run'>()
   const scaleName = useScaleName()
   const root = noteFromParam(scale.root)
   const tones = spellScale(root, scale.kind)
   const placed = placeScale(root, scale.kind)
   const rh = scaleFingering(pitchClassOf(root), scale.kind, 'rh')
   const lh = scaleFingering(pitchClassOf(root), scale.kind, 'lh')
-  const fingers = scale.view === 'rh' ? rh : scale.view === 'lh' ? lh : null
+  const fingering = scale.fingers === 'rh' ? rh : scale.fingers === 'lh' ? lh : null
   const marks = new Map<Midi, KeyMark>(
-    placed.map((key, i) => [
-      key.midi,
-      {
-        tone: 'scale',
-        label:
-          scale.view === 'degrees' ? key.tone.degree : fingers ? String(fingers[i] ?? '·') : '–',
-      },
-    ]),
+    placed.map((key, i) => {
+      const finger = fingering?.[i]
+      return [
+        key.midi,
+        {
+          tone: key.tone.role === 'root' ? 'tonic' : 'scale',
+          label: key.tone.degree,
+          ...(finger === undefined ? {} : { finger }),
+        },
+      ]
+    }),
   )
 
   const run = scaleRun(
@@ -79,12 +88,14 @@ export function ScaleExplorer({
         onChange={(kind) => onChange({ kind })}
       />
       <ExplorerKeyboard keys={runKeys} marks={marks} />
-      <Segmented
-        label={t('theory:view.label')}
-        value={scale.view}
-        options={LABELS.map((labels) => ({ value: labels, label: t(`theory:view.${labels}`) }))}
-        onChange={(view) => onChange({ view })}
-      />
+      {rh && lh ? (
+        <Segmented
+          label={t('theory:fingers.label')}
+          value={scale.fingers}
+          options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
+          onChange={(fingers) => onChange({ fingers })}
+        />
+      ) : null}
       <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
 
       <section className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-border">
@@ -120,8 +131,15 @@ export function ScaleExplorer({
           ]}
           onChange={(hands) => onChange({ hands })}
         />
-        <Button size="pill" onClick={() => play(run)}>
-          {t('theory:playUpDown')}
+        <Button size="pill" onClick={() => playback.toggle('run', run)}>
+          {playback.playing === 'run' ? (
+            <>
+              <Square data-icon="inline-start" />
+              {t('common:stop')}
+            </>
+          ) : (
+            t('theory:playUpDown')
+          )}
         </Button>
       </section>
 

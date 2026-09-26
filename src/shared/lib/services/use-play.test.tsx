@@ -2,10 +2,10 @@ import { renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
-import { midi, note } from '@/shared/lib/music'
+import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
-import { usePlay, usePlayChord, useSoundKey } from './use-play'
+import { usePlay, useSoundKey } from './use-play'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
@@ -37,20 +37,6 @@ describe('usePlay', () => {
     play([NOTE])
     expect(audio.stops).toBe(2)
     expect(audio.played).toHaveLength(2)
-  })
-})
-
-describe('usePlayChord', () => {
-  it('strikes a chord from middle C, with the root below for both hands', () => {
-    const { audio, current: playChord } = setup(usePlayChord)
-    playChord({ root: note('C'), quality: 'maj' }, { bothHands: true })
-    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([48, 60, 64, 67])
-  })
-
-  it('plays an inversion', () => {
-    const { audio, current: playChord } = setup(usePlayChord)
-    playChord({ root: note('C'), quality: 'maj' }, { inversion: 1 })
-    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([64, 67, 72])
   })
 })
 

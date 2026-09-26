@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { PLAY_DELAY, type PlayHandle } from '@/shared/api/audio'
-import type { Chord, Midi } from '@/shared/lib/music'
-import { keySound, placedChordSounds, type ChordPlaying, type Sound } from '@/shared/lib/schedule'
+import type { Midi } from '@/shared/lib/music'
+import { keySound, type Sound } from '@/shared/lib/schedule'
 import { useServices } from './use-services'
 
 /** Sounds something now, cutting off what was sounding: a chord, a bar, a scale run. Returns its play. */
@@ -26,16 +26,5 @@ export function useSoundKey(): (key: Midi) => void {
       audio.play([keySound(key)], audio.now())
     },
     [audio],
-  )
-}
-
-/** Sounds a chord as the explorers place it (`placeChord`), struck at once or rolled upwards. */
-export function usePlayChord(): (chord: Chord, options?: ChordPlaying) => void {
-  const play = usePlay()
-  return useCallback(
-    (chord, options) => {
-      play(placedChordSounds(chord, options))
-    },
-    [play],
   )
 }

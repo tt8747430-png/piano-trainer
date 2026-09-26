@@ -21,7 +21,7 @@ describe('Theory → Chords', () => {
     expect(audio.played.length).toBeGreaterThan(0)
   })
 
-  it('rolls an arpeggio, its keys going down one by one', async () => {
+  it('rolls an arpeggio, the key struck last down alone, the others quiet', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/theory/chords')
     await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
@@ -34,8 +34,35 @@ describe('Theory → Chords', () => {
     expect(c4).toHaveAttribute('data-down')
     expect(e4).not.toHaveAttribute('data-down')
     act(() => audio.setNow(start + 0.5))
-    expect(e4).toHaveAttribute('data-down')
     expect(g4).toHaveAttribute('data-down')
+    for (const key of [c4, e4]) {
+      expect(key).not.toHaveAttribute('data-down')
+      expect(key).toHaveAttribute('data-quiet')
+    }
+    act(() => audio.setNow(start + 3))
+    expect(keyboard.querySelector('[data-quiet]')).toBeNull()
+  })
+
+  it('turns Play into Stop while the chord sounds, and back when it ends', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/theory/chords')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    const start = audio.played.at(-1)?.at ?? 0
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    act(() => audio.setNow(start + 1.7))
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+  })
+
+  it('stops the chord on Stop, and Arpeggio takes over from Play', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/theory/chords')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await user.click(screen.getByRole('button', { name: 'Arpeggio' }))
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+    const stops = audio.stops
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(audio.stops).toBe(stops + 1)
+    expect(screen.getByRole('button', { name: 'Arpeggio' })).toBeInTheDocument()
   })
 
   it('sounds a tapped key', async () => {
