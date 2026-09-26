@@ -13,7 +13,7 @@ describe('Theory → Scales', () => {
     expect(screen.getByText('W H W W H W+H H')).toBeInTheDocument()
   })
 
-  it('colours the scale’s keys whole: the tonic deep, the others light', async () => {
+  it('colours the scale’s keys whole: the tonic in yellow’s wash, the others in sky’s', async () => {
     await renderApp('/theory/scales')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -40,15 +40,15 @@ describe('Theory → Scales', () => {
     expect(screen.getByRole('button', { name: 'Play up and down' })).toBeInTheDocument()
   })
 
-  it('shows only a chord of the scale while it sounds, the rest of the scale hidden', async () => {
+  it('keeps the scale on the keys while a chord of it sounds, the chord’s keys down', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/theory/scales')
     await user.click(await screen.findByRole('button', { name: /^Dm/ }))
     act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 0.2))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveAttribute('data-down')
-    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-white')
-    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveClass('bg-key-white')
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveClass('bg-key-scale')
   })
 
   it('presses a chord of the scale while it sounds', async () => {

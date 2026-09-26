@@ -48,7 +48,7 @@ export function ChordChart({
     })
   }, [current, reduceMotion])
 
-  const barOf = (index: number) => {
+  const barOf = (index: number, fill = false) => {
     const bar = performance.bars[index]
     if (!bar) return null
     const chords = bar.chords.map((i) => performance.chords[i]).filter((c) => c !== undefined)
@@ -69,12 +69,15 @@ export function ChordChart({
         current={current === index}
         pressed={playing === undefined ? undefined : playing === index}
         onClick={() => onBar(index)}
+        fill={fill}
       />
     )
   }
 
   const bars = chartSections(performance)
   const sections = headings.map((heading, section) => ({ heading, lines: bars[section] ?? [] }))
+  /** The longest line's bars: every line's bars are as wide as its, so bars line up down the chart. */
+  const longest = Math.max(1, ...sections.flatMap(({ lines }) => lines.map((line) => line.length)))
 
   if (layout === 'strip') {
     return (
@@ -108,8 +111,15 @@ export function ChordChart({
         <section key={section} className="flex flex-col gap-2">
           <h3 className="text-lg font-bold">{heading}</h3>
           {lines.map((bars, line) => (
-            <div key={line} className="flex flex-wrap border-r-2 border-foreground/80">
-              {bars.map(barOf)}
+            <div
+              key={line}
+              className="grid border-r-2 border-foreground/80"
+              style={{
+                gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
+                width: `${(bars.length / longest) * 100}%`,
+              }}
+            >
+              {bars.map((index) => barOf(index, true))}
             </div>
           ))}
         </section>

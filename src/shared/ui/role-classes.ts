@@ -10,3 +10,14 @@ export const ROLE_BG: Readonly<Record<ChordRole, string>> = {
   '11th': 'bg-role-11th',
   '13th': 'bg-role-13th',
 }
+
+/** Each role's pale wash: a chord tone's key while it is quiet. */
+export const ROLE_WASH: Readonly<Record<ChordRole, string>> = {
+  root: 'bg-role-root-wash',
+  '3rd': 'bg-role-3rd-wash',
+  '5th': 'bg-role-5th-wash',
+  '7th': 'bg-role-7th-wash',
+  '9th': 'bg-role-9th-wash',
+  '11th': 'bg-role-11th-wash',
+  '13th': 'bg-role-13th-wash',
+}

@@ -22,7 +22,7 @@ export function SheetContent({
   return (
     <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card">
       <DrawerHeader className="px-5 pt-3 text-left">
-        <DrawerTitle className="text-xl font-bold">{title}</DrawerTitle>
+        <DrawerTitle className="font-display text-2xl font-bold">{title}</DrawerTitle>
       </DrawerHeader>
       <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-5 pb-6">{children}</div>
       {footer ? <DrawerFooter className="px-5 pb-safe">{footer}</DrawerFooter> : null}

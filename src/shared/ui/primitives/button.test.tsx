@@ -24,7 +24,7 @@ describe('Button', () => {
     expect(onClick).not.toHaveBeenCalled()
   })
 
-  it('offers a round surface button and a mint soft button, both at least 44px', () => {
+  it('offers a round surface button, a paper soft button and a pill, all at least 44px', () => {
     render(
       <>
         <Button variant="surface" size="icon" aria-label="Settings" />
@@ -33,7 +33,7 @@ describe('Button', () => {
       </>,
     )
     expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full', 'size-11')
-    expect(screen.getByRole('button', { name: 'Arpeggio' })).toHaveClass('bg-secondary', 'h-11')
-    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('h-14', 'rounded-full')
+    expect(screen.getByRole('button', { name: 'Arpeggio' })).toHaveClass('bg-card', 'h-11')
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('h-14', 'rounded-2xl')
   })
 })

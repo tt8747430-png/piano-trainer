@@ -12,7 +12,6 @@ export {
 } from './piano-keyboard'
 export { RatingMark } from './RatingMark'
 export { ROLE_BG } from './role-classes'
-export { RoleLegend } from './RoleLegend'
 export { RoundButton } from './RoundButton'
 export { RoundLink } from './RoundLink'
 export { ScreenHeader } from './ScreenHeader'

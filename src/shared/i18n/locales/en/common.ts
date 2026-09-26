@@ -21,15 +21,6 @@ export const common = {
     advanced: 'Advanced',
   },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
-  roles: {
-    root: 'Root',
-    '3rd': '3rd',
-    '5th': '5th',
-    '7th': '7th',
-    '9th': '9th',
-    '11th': '11th',
-    '13th': '13th',
-  },
   hands: { both: 'Both hands', rh: 'Right hand', lh: 'Left hand' },
   // A piano key's name: its note and octave.
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },

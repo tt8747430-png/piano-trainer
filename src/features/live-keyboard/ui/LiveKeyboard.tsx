@@ -12,7 +12,8 @@ import { KeyboardSettingsButton } from './KeyboardSettingsButton'
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds before it does whatever else the screen makes it mean. Unless the
  * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
- * the keys down are the ones struck last, and only they show their marks while any key is down.
+ * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
+ * chord's keys together, every mark kept.
  */
 export function LiveKeyboard({
   onKeyPress,
@@ -25,7 +26,7 @@ export function LiveKeyboard({
 > & {
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
-  /** The explorers' keyboards: only the keys struck last show, alone or together. */
+  /** The explorers' keyboards: the keys struck last go down, alone or together. */
   spotlight?: boolean
 }) {
   const { typing, ...settings } = useSettings(selectKeyboard)
@@ -52,7 +53,6 @@ export function LiveKeyboard({
       {...settings}
       inView={typed.inView}
       down={down}
-      spotlight={spotlight}
       letters={typed.letters}
       onKeyPress={play}
     >

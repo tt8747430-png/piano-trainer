@@ -18,6 +18,7 @@ function ContinueButton({ step, label }: { step: PathStep; label: string }) {
   return (
     <ButtonLink
       size="pill"
+      className="lg:min-w-64"
       render={
         step.kind === 'piece' ? (
           <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} />
@@ -42,9 +43,9 @@ export function ContinueCard() {
 
   if (!suggested) {
     return (
-      <section className="flex flex-col items-start gap-3 rounded-3xl bg-secondary p-5 text-secondary-foreground">
-        <p className="text-lg font-semibold">{t('allLearned')}</p>
-        <ButtonLink variant="surface" render={<Link to="/songs" />}>
+      <section className="flex flex-col items-start gap-3 rounded-3xl border-2 border-border bg-card p-5">
+        <p className="font-display text-2xl">{t('allLearned')}</p>
+        <ButtonLink variant="outline" render={<Link to="/songs" />}>
           {t('toSongs')}
         </ButtonLink>
       </section>
@@ -61,25 +62,32 @@ export function ContinueCard() {
   return (
     <section
       aria-labelledby={headingId}
-      className="flex flex-col gap-4 rounded-3xl bg-secondary p-5 text-secondary-foreground shadow-sm"
+      className="overflow-hidden rounded-3xl border-2 border-border bg-card"
     >
-      <div>
-        <h2 id={headingId} className="text-xl font-bold text-balance text-foreground">
-          {title.primary}
-        </h2>
-        <p className="mt-1">{detail}</p>
+      {/* The book's header band: the card's own title, lettered on its paint. */}
+      <h2
+        id={headingId}
+        className="border-b-2 border-border bg-paint-sky px-5 py-3 text-3xl text-balance text-on-paint"
+      >
+        {title.primary}
+      </h2>
+      {/* On a laptop the card runs the page's width: what the step is on the left, Continue on the right. */}
+      <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+        <div className="flex flex-col gap-2">
+          <p className="text-lg">{detail}</p>
+          {toCheck > 0 ? (
+            <ButtonLink
+              variant="link"
+              className="self-start px-0"
+              render={<Link to="/check" search={{ of: suggested.id }} />}
+            >
+              <span aria-hidden className="size-2 rounded-full bg-attention" />
+              {t('toCheck', { count: toCheck })}
+            </ButtonLink>
+          ) : null}
+        </div>
+        <ContinueButton step={suggested.step} label={t('continue')} />
       </div>
-      {toCheck > 0 ? (
-        <ButtonLink
-          variant="link"
-          className="self-start px-0 text-secondary-foreground"
-          render={<Link to="/check" search={{ of: suggested.id }} />}
-        >
-          <span aria-hidden className="size-2 rounded-full bg-attention" />
-          {t('toCheck', { count: toCheck })}
-        </ButtonLink>
-      ) : null}
-      <ContinueButton step={suggested.step} label={t('continue')} />
     </section>
   )
 }

@@ -39,7 +39,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
           className="flex-1"
         />
       </header>
-      <h1 className="text-xl font-bold">{t('quiz:checkTitle', { title })}</h1>
+      <h1 className="text-2xl">{t('quiz:checkTitle', { title })}</h1>
       {done ? (
         <CheckResult
           plan={plan}

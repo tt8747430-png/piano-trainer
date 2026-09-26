@@ -1,8 +1,9 @@
 import { isBlackKey, midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 
-/** A black key sits over the gap between two white keys, 62% as wide and 62% as long. */
+/** A black key sits over the gap between two white keys, 62% as wide… */
 const BLACK_WIDTH = 0.62
-const BLACK_HEIGHT = 62
+/** …and 62% as long, in percent of the keys' height: below it, a white key's face is whole. */
+export const BLACK_HEIGHT = 62
 
 export interface KeyGeometry {
   readonly midi: Midi

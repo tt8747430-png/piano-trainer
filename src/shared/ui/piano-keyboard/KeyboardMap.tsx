@@ -102,7 +102,7 @@ export function KeyboardMap({
         <div className="absolute inset-x-0 top-0 h-4 overflow-hidden rounded-xs bg-key-white">
           {BLACK_KEYS}
           <span
-            className="absolute inset-y-0 rounded-xs ring-2 ring-primary ring-inset"
+            className="absolute inset-y-0 rounded-xs ring-2 ring-key-focus-halo ring-inset"
             style={{ left: `${frame.left * 100}%`, width: `${frame.width * 100}%` }}
           />
         </div>

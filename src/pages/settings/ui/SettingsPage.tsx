@@ -16,6 +16,7 @@ import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
 import { setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
+import { cn } from '@/shared/lib'
 import { RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
 import {
   AlertDialog,
@@ -40,11 +41,22 @@ const THEME_LABEL = {
   dark: 'theme.dark',
 } as const satisfies Record<Theme, string>
 
-function Group({ title, children }: { title: string; children: ReactNode }) {
+/** A group of settings, boxed as the book boxes a thing: its title in a band across the top. */
+function Group({
+  title,
+  children,
+  className,
+}: {
+  title: string
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-sm font-semibold text-muted-foreground">{title}</h2>
-      {children}
+    <section
+      className={cn('overflow-hidden rounded-3xl border-2 border-border bg-card', className)}
+    >
+      <h2 className="border-b-2 border-border bg-muted px-5 py-2 text-xl">{title}</h2>
+      <div className="flex flex-col gap-3 p-5">{children}</div>
     </section>
   )
 }
@@ -61,11 +73,13 @@ export function SettingsPage() {
     setConfirming(false)
   }
   return (
-    <div className="flex flex-col gap-8">
-      <ScreenHeader
-        title={t('settings:title')}
-        back={<RoundLink label={t('common:back')} icon={ArrowLeft} render={<Link to="/" />} />}
-      />
+    <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
+      <div className="lg:col-span-2">
+        <ScreenHeader
+          title={t('settings:title')}
+          back={<RoundLink label={t('common:back')} icon={ArrowLeft} render={<Link to="/" />} />}
+        />
+      </div>
       <Group title={t('settings:language.label')}>
         <Segmented
           label={t('settings:language.label')}
@@ -82,7 +96,7 @@ export function SettingsPage() {
           onChange={(value) => setTheme(settings, value)}
         />
       </Group>
-      <Group title={t('settings:keyboard')}>
+      <Group title={t('settings:keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
         <KeyboardSettingsFields />
       </Group>
       <Group title={t('settings:midi')}>

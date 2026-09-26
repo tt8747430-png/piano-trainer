@@ -17,7 +17,11 @@ export function LevelMark({ level }: { level: 1 | 2 | 3 | 4 }) {
       {PIPS.map(({ pip, height }) => (
         <span
           key={pip}
-          className={cn('w-1 rounded-full', height, pip <= level ? 'bg-primary' : 'bg-border')}
+          className={cn(
+            'w-1 rounded-full',
+            height,
+            pip <= level ? 'bg-paint-yellow-deep' : 'bg-hairline',
+          )}
         />
       ))}
     </span>

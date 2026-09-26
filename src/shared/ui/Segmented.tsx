@@ -23,7 +23,7 @@ export function Segmented<V extends OptionValue>({
       }}
       variant="segment"
       spacing={0}
-      className="flex w-full gap-1 rounded-2xl bg-muted p-1"
+      className="flex w-full gap-1 rounded-2xl border-2 border-border bg-card p-1"
     >
       {options.map((option) => (
         <ToggleGroupItem

@@ -16,7 +16,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
   const skills = skillsOfPiece(piece)
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-3">
-      <h2 id={headingId} className="text-xl font-bold">
+      <h2 id={headingId} className="text-2xl">
         {t(`piece:chords.${piece.kind}`)}
       </h2>
       <ul className="flex flex-wrap gap-2">
@@ -34,7 +34,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
                   ...(first ? { root: noteParam(first.root) } : {}),
                 }}
                 aria-label={`${t(`theory:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}
-                className="flex h-11 items-center gap-2 rounded-full bg-card px-4 font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
+                className="flex h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 font-semibold transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
               >
                 {qualitySuffix(skill.quality) || t('theory:major')}
                 <RatingMark rating={rating} />

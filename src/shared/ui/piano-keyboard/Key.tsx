@@ -1,27 +1,49 @@
 import { memo, type PointerEvent } from 'react'
-import { cn, type KeyGeometry } from '@/shared/lib'
+import { BLACK_HEIGHT, cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-import { ROLE_BG } from '../role-classes'
+import { ROLE_BG, ROLE_WASH } from '../role-classes'
 import { sameLook, type KeyFill, type KeyLook } from './key-look'
 
-const FILL: Readonly<Record<KeyFill, string>> = {
+const LABEL_INK = 'text-on-role'
+
+/** A key at rest: plain, or a mark's pale wash (the book's paint before the key is played). */
+const REST: Readonly<Record<KeyFill, string>> = {
   white: 'bg-key-white text-on-key-white',
   black: 'bg-key-black text-on-key-black',
   lit: 'bg-primary text-primary-foreground',
   selected: 'bg-primary text-primary-foreground',
-  wrong: 'bg-destructive text-on-role',
-  root: cn(ROLE_BG.root, 'text-on-role'),
-  '3rd': cn(ROLE_BG['3rd'], 'text-on-role'),
-  '5th': cn(ROLE_BG['5th'], 'text-on-role'),
-  '7th': cn(ROLE_BG['7th'], 'text-on-role'),
-  '9th': cn(ROLE_BG['9th'], 'text-on-role'),
-  '11th': cn(ROLE_BG['11th'], 'text-on-role'),
-  '13th': cn(ROLE_BG['13th'], 'text-on-role'),
-  rh: 'bg-hand-rh text-on-role',
-  lh: 'bg-hand-lh text-on-role',
-  melody: 'bg-hand-melody text-on-role',
+  wrong: 'bg-destructive text-destructive-foreground',
+  root: cn(ROLE_WASH.root, LABEL_INK),
+  '3rd': cn(ROLE_WASH['3rd'], LABEL_INK),
+  '5th': cn(ROLE_WASH['5th'], LABEL_INK),
+  '7th': cn(ROLE_WASH['7th'], LABEL_INK),
+  '9th': cn(ROLE_WASH['9th'], LABEL_INK),
+  '11th': cn(ROLE_WASH['11th'], LABEL_INK),
+  '13th': cn(ROLE_WASH['13th'], LABEL_INK),
+  rh: cn('bg-hand-rh-wash', LABEL_INK),
+  lh: cn('bg-hand-lh-wash', LABEL_INK),
+  melody: cn('bg-hand-melody-wash', LABEL_INK),
   tonic: 'bg-key-tonic text-on-key-tonic',
   scale: 'bg-key-scale text-on-key-scale',
+}
+
+/** A key that sounds or is held: a plain key turns Key Down, a mark its full paint. */
+const DOWN: Readonly<Record<KeyFill, string>> = {
+  ...REST,
+  white: 'bg-key-down text-on-key-down',
+  black: 'bg-key-down text-on-key-down',
+  root: cn(ROLE_BG.root, LABEL_INK),
+  '3rd': cn(ROLE_BG['3rd'], LABEL_INK),
+  '5th': cn(ROLE_BG['5th'], LABEL_INK),
+  '7th': cn(ROLE_BG['7th'], LABEL_INK),
+  '9th': cn(ROLE_BG['9th'], LABEL_INK),
+  '11th': cn(ROLE_BG['11th'], LABEL_INK),
+  '13th': cn(ROLE_BG['13th'], LABEL_INK),
+  rh: cn('bg-hand-rh', LABEL_INK),
+  lh: cn('bg-hand-lh', LABEL_INK),
+  melody: cn('bg-hand-melody', LABEL_INK),
+  tonic: 'bg-key-tonic-down text-on-key-tonic',
+  scale: 'bg-key-scale-down text-on-key-scale',
 }
 
 interface KeyProps {
@@ -50,7 +72,6 @@ function KeyButton({
   onFocusKey,
 }: KeyProps) {
   const { black } = geometry
-  const plain = look.fill === 'white' || look.fill === 'black'
   return (
     <button
       type="button"
@@ -63,11 +84,11 @@ function KeyButton({
       onClick={(event) => onClickPress(geometry.midi, event.detail)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
-        'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
+        'group absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95',
         black ? 'z-10 rounded-b-xs' : 'rounded-b-sm border-r border-key-bed',
-        look.down && plain ? 'bg-key-down text-on-key-down' : FILL[look.fill],
+        (look.down ? DOWN : REST)[look.fill],
         look.down ? 'translate-y-0.5' : null,
-        look.outlined ? 'ring-3 ring-primary ring-inset' : null,
+        look.outlined ? 'ring-3 ring-ring ring-inset' : null,
       )}
       style={{
         left: `${geometry.left}%`,
@@ -75,14 +96,6 @@ function KeyButton({
         height: `${geometry.height}%`,
       }}
     >
-      {/* A coloured key going down keeps its colour under a tint. */}
-      <span
-        aria-hidden
-        className={cn(
-          'absolute inset-0 bg-key-down-tint opacity-0 transition-opacity duration-80 ease-out',
-          look.down && !plain ? 'opacity-100' : null,
-        )}
-      />
       {/* The key's front: a white key's lip, a black key's slope, shortened while the key is down. */}
       <span
         aria-hidden
@@ -91,6 +104,18 @@ function KeyButton({
           black ? 'h-2 bg-key-sheen' : 'h-1.5 bg-key-lip',
           look.down ? 'scale-y-33' : null,
         )}
+      />
+      {/*
+        The focus ring, on the face a finger touches (a black key whole, a white key below the black
+        keys), so the key keeps its place under its neighbours.
+      */}
+      <span
+        aria-hidden
+        className={cn(
+          'absolute inset-x-1 bottom-2 hidden rounded-xs border-2 border-key-focus-halo ring-2 ring-key-focus group-focus-visible:block',
+          black ? 'top-1' : null,
+        )}
+        style={black ? undefined : { top: `calc(${BLACK_HEIGHT}% + 0.25rem)` }}
       />
       {look.letter ? (
         <span aria-hidden className="relative text-xs font-semibold opacity-70">

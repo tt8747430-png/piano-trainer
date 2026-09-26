@@ -23,7 +23,7 @@ export function MidiButton() {
           aria-hidden
           className={cn(
             'absolute top-2 right-2 size-2 rounded-full',
-            isMidiConnected(connection) ? 'bg-primary' : 'bg-border',
+            isMidiConnected(connection) ? 'bg-learned' : 'bg-border',
           )}
         />
       </PopoverTrigger>

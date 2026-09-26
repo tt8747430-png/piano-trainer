@@ -1,0 +1,106 @@
+{
+  "title": "Choose the visual world",
+  "question": "The bold end, as you asked. Two re-rolls so far: what has been missing? Write it in Steer and the next hand aims at it, or pick a card.",
+  "options": [
+    {
+      "id": "challenger-cloud-edge",
+      "label": "Iridescent Cloud Edge",
+      "kicker": "THE ROLL",
+      "lineage": "a cloud's edge diffracting sunlight into pastel bands",
+      "thesis": "White and slate everywhere; colour lives only in thin pastel bands, and on the keys, where the music is.",
+      "palette": ["#FAFCFE", "#3B434D", "#ACE7CC", "#FAB5BF", "#C1B4EC", "#C4576D"],
+      "materials": ["cloud-white ground", "slate ink", "a narrow mint, rose and lilac fringe", "rose for what is active"],
+      "viewport": "Laptop: step or song in a wide column, choices beside it, the keyboard full width below, its marks in pastel bands; phone: one column, keyboard at the thumb.",
+      "risk": "Pastels can wash out on a sunny music stand; the played key has to go deep, not stay pastel. The source marks the active band violet; here it is rose, since violet was turned down.",
+      "raised": [
+        { "from": "challenger-quote-grammar", "raise": "Every place says its literal name, so wayfinding is reading." },
+        { "from": "challenger-pc98", "raise": "Regions never move: navigation swaps what is in them, the keyboard stays put." },
+        { "from": "challenger-nixie", "raise": "The key that sounds is the only warm, deep thing on the screen." },
+        { "from": "challenger-datamatics", "raise": "Numbers (bars, tempos, counts) sit in tabular columns at an even density." }
+      ],
+      "hero": "https://impeccable.style/worlds/cards/clouds-storms-auroras-iridescent-cloud-edge-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/clouds-storms-auroras-iridescent-cloud-edge.webp"
+    },
+    {
+      "id": "challenger-busytown",
+      "label": "Busytown Cutaway",
+      "verdict": "competitive",
+      "lineage": "Richard Scarry's labelled cross-section picture books",
+      "thesis": "A cheerful labelled world: every key, chord and control wears its small printed name.",
+      "palette": ["#FAFAF7", "#C4452F", "#F2B632", "#4F9A3E", "#5EA6D6", "#6B4A2E"],
+      "materials": ["gouache flats", "warm brown outline", "small printed labels on everything"],
+      "viewport": "The keyboard drawn as a labelled cutaway, each chord a small building on the road of the song.",
+      "case": "Fuses cleanly on clarity (the labelled keyboard is already the app's teacher); loses on audience, who are adults at church, not children.",
+      "risk": "Reads as a children's app to adult accompanists.",
+      "hero": "https://impeccable.style/worlds/cards/graphic-worlds-publishing-busytown-cross-section-hero.webp"
+    },
+    {
+      "id": "challenger-quote-grammar",
+      "label": "Industrial Quotes",
+      "verdict": "declined",
+      "lineage": "industrial streetwear labels",
+      "thesis": "Labels in straight quotes, hazard stripes, orange tags.",
+      "palette": ["#FFFFFF", "#111111", "#FF6A13"],
+      "materials": ["white cotton", "black nylon", "zip-tie orange"],
+      "viewport": "Crate-stencilled labels on a stockroom grid.",
+      "case": "Fuses poorly: streetwear irony is foreign to a church music room.",
+      "risk": "Loud where the task wants calm.",
+      "kept": "Every place says its literal name.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-industrial-quote-grammar-hero.webp"
+    },
+    {
+      "id": "challenger-pc98",
+      "label": "Sixteen Colours",
+      "verdict": "declined",
+      "lineage": "1990s Japanese PC-98 screens",
+      "thesis": "A locked sixteen-colour set, dithered, on a fixed pixel grid.",
+      "palette": ["#000000", "#FFFFFF", "#5555FF", "#FF5555", "#55FF55"],
+      "materials": ["pixel dither", "bitmap type"],
+      "viewport": "Fixed frame, a text window docked low.",
+      "case": "Fuses poorly: pixel nostalgia hurts reading at arm's length.",
+      "risk": "Retro novelty.",
+      "kept": "Regions that never move.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-pc98-sixteen-color-field-hero.webp"
+    },
+    {
+      "id": "challenger-nixie",
+      "label": "Nixie Counter",
+      "verdict": "declined",
+      "lineage": "laboratory nixie-tube counters",
+      "thesis": "Orange digits glowing in glass on black steel.",
+      "palette": ["#121212", "#FF7A1A", "#8A8F96"],
+      "materials": ["glass tubes", "blackened steel"],
+      "viewport": "Banks of glowing digits.",
+      "case": "Fuses poorly: a dark lab instrument, not a daylit piano.",
+      "risk": "Dark-only mood.",
+      "kept": "The lit thing is the only warm accent.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-nixie-laboratory-counter-hero.webp"
+    },
+    {
+      "id": "challenger-datamatics",
+      "label": "Datamatics",
+      "verdict": "declined",
+      "lineage": "Ryoji Ikeda's black-and-white data fields",
+      "thesis": "Pure black and white bar fields and dense numbers.",
+      "palette": ["#000000", "#FFFFFF"],
+      "materials": ["barcode bars", "monospace numerics"],
+      "viewport": "A wall of bars with numbers in the margin.",
+      "case": "Fuses poorly: no colour for chord tones or scales, strobing.",
+      "risk": "Cold and hard to learn from.",
+      "kept": "Numbers in tabular columns.",
+      "hero": "https://impeccable.style/worlds/cards/ikeda-datamatics-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": false },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "What Flowkey, Simply Piano and Skoove ship: white screens, one friendly brand colour, plain keys lit in it.",
+    "palette": ["#FFFFFF", "#0F172A", "#1FA7A0", "#2563EB"],
+    "materials": ["clean white cards", "one brand colour", "plain keys"],
+    "viewport": "The layout a learner expects from those three, at their level of craft.",
+    "risk": "Indistinguishable from them by design."
+  },
+  "steer": true
+}

@@ -10,6 +10,7 @@ export {
   type Swipe,
 } from './keyboard-choices'
 export {
+  BLACK_HEIGHT,
   keyAt,
   keyboardLayout,
   PIANO_LAYOUT,
@@ -41,3 +42,4 @@ export {
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
 export { useMediaQuery } from './use-media-query'
+export { SHORTEST_PRESS_MS, usePresses } from './use-presses'

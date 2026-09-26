@@ -14,7 +14,7 @@ export function RailButton({
       type="button"
       aria-label={label}
       className={cn(
-        'relative flex size-11 shrink-0 items-end justify-center rounded-sm pb-1 text-on-key-black transition-opacity duration-80 ease-out outline-none hover:opacity-80 focus-visible:ring-3 focus-visible:ring-ring',
+        'relative flex size-11 shrink-0 items-end justify-center rounded-sm pb-1 text-on-key-black transition-opacity duration-80 ease-out outline-none hover:opacity-80 focus-visible:ring-3 focus-visible:ring-key-focus-halo',
         className,
       )}
       {...props}

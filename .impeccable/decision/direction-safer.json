@@ -1,0 +1,49 @@
+{
+  "title": "Choose the visual world",
+  "question": "The familiar end, as you asked: three calm directions and the category standard. Pick one, or steer.",
+  "options": [
+    {
+      "id": "safer-learn-view",
+      "label": "Periwinkle and Coral",
+      "lineage": "The Ultimate Piano's learn view, which you sent, retuned from violet to blue",
+      "thesis": "Your reference's key grammar in a blue-and-coral pair: opposite hues that sit together.",
+      "palette": ["#F4F7FA", "#171D26", "#3A65B8", "#B8CAF6", "#5375CD", "#F8C3B1", "#E4734F"],
+      "materials": ["cool white ground", "one calm blue action", "periwinkle scale, coral tonic, pale at rest and full when played"],
+      "viewport": "Laptop: step or song in a wide column, choices beside it, the keyboard the full width below; phone: one column, keyboard at the thumb.",
+      "risk": "Closest to the violet you turned down; the blue and the coral have to carry it."
+    },
+    {
+      "id": "safer-engraved",
+      "label": "Engraved Score",
+      "lineage": "printed sheet music: white paper, black engraving, a publisher's red",
+      "thesis": "The app reads like the page on the music stand: ink on white, one red for what you play.",
+      "palette": ["#FAFAF9", "#151618", "#C2C4C7", "#C13D34", "#F8D5CF"],
+      "materials": ["paper white", "engraved ink", "staff-line hairlines", "one spot red"],
+      "viewport": "Same wide layout; hairline rules instead of boxes, the chord set large like a title.",
+      "risk": "Austere; chord tones lose their many colours and are told apart by label and one red."
+    },
+    {
+      "id": "safer-songbook",
+      "label": "Songbook Cloth",
+      "lineage": "the cloth-bound church songbook: navy cloth, brick and gold stamping",
+      "thesis": "The songbook's cover colours: navy for action, brick and gold for what the keys mean, on a light page.",
+      "palette": ["#F7F5F1", "#19355E", "#B65937", "#C99D4E", "#BCD4EA"],
+      "materials": ["book-cloth navy", "stamped gold", "brick", "a light warm page"],
+      "viewport": "Same wide layout; the Path and Songs read like a songbook's contents page.",
+      "risk": "Warm and bookish; kept off cream, it still leans traditional."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": false },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "What Flowkey, Simply Piano and Skoove ship: white screens, one friendly brand colour, plain keys lit in it.",
+    "palette": ["#FFFFFF", "#0F172A", "#1FA7A0", "#2563EB"],
+    "materials": ["clean white cards", "one brand colour", "plain keys"],
+    "viewport": "The layout a learner expects from those three, at their level of craft.",
+    "risk": "Indistinguishable from them by design."
+  },
+  "steer": true,
+  "followup": false
+}

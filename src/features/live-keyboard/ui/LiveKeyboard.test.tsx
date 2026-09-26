@@ -1,7 +1,8 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setKeyboard } from '@/features/set-preference'
+import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
@@ -10,6 +11,8 @@ import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 const C_MAJOR = new Map<Midi, KeyMark>(
   [60, 64, 67].map((key) => [midi(key), { tone: 'root', label: '1' }]),
 )
+
+afterEach(() => vi.useRealTimers())
 
 describe('LiveKeyboard', () => {
   it('sounds a tapped key on top of what plays, then does what the screen asks', async () => {
@@ -30,12 +33,14 @@ describe('LiveKeyboard', () => {
     expect(audio.played.at(-1)?.at).toBe(2)
   })
 
-  it('puts a tapped key down while it is pressed, and up the moment it lifts', () => {
+  it('puts a tapped key down while it is pressed, and up once it lifts, however long it rings', () => {
+    vi.useFakeTimers()
     const { audio } = setUp()
     const key = screen.getByRole('button', { name: 'F sharp 4' })
     fireEvent.pointerDown(key, { pointerId: 1, pointerType: 'touch' })
     expect(key).toHaveAttribute('data-down')
     fireEvent.pointerUp(key, { pointerId: 1, pointerType: 'touch' })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     act(() => audio.setNow(0.3))
     expect(key).not.toHaveAttribute('data-down')
   })
@@ -51,9 +56,11 @@ describe('LiveKeyboard', () => {
   })
 
   it('puts down the keys held on a MIDI keyboard', () => {
+    vi.useFakeTimers()
     const { midiKeyboard } = setUp()
     act(() => midiKeyboard.press(midi(67)))
     expect(screen.getByRole('button', { name: 'G4' })).toHaveAttribute('data-down')
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     act(() => midiKeyboard.release(midi(67)))
     expect(screen.getByRole('button', { name: 'G4' })).not.toHaveAttribute('data-down')
   })
@@ -65,27 +72,24 @@ describe('LiveKeyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
   })
 
-  it('with spotlight, shows only the key struck last, and every mark again when all is quiet', () => {
+  it('with spotlight, puts down only the key struck last, every mark kept', () => {
     const { audio } = setUp({ spotlight: true, marks: C_MAJOR })
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: true }), 0))
     act(() => audio.setNow(0.5))
     const [c, e, g] = ['C4', 'E4', 'G4'].map((name) => screen.getByRole('button', { name }))
     expect(g).toHaveAttribute('data-down')
-    expect(g).toHaveClass('bg-role-root')
     for (const key of [c, e]) {
       expect(key).not.toHaveAttribute('data-down')
-      expect(key).toHaveClass('bg-key-white')
+      expect(key).toHaveClass('bg-role-root-wash')
     }
-    act(() => audio.setNow(3))
-    expect(c).toHaveClass('bg-role-root')
   })
 
-  it('with spotlight, shows a chord’s keys together when they are struck together', () => {
+  it('with spotlight, puts a chord’s keys down together when they are struck together', () => {
     const { audio } = setUp({ spotlight: true, marks: C_MAJOR })
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: false }), 0))
     act(() => audio.setNow(0.5))
     for (const name of ['C4', 'E4', 'G4'])
-      expect(screen.getByRole('button', { name })).toHaveClass('bg-role-root')
+      expect(screen.getByRole('button', { name })).toHaveAttribute('data-down')
   })
 
   it('without spotlight, puts every sounding key down and keeps every mark', () => {

@@ -9,12 +9,15 @@ import { LiveKeyboard } from './LiveKeyboard'
 export function ExplorerKeyboard({
   keys,
   marks,
+  className,
 }: {
   keys: readonly Midi[]
   marks: ReadonlyMap<Midi, KeyMark>
+  /** Where it sits in the explorer's layout (a laptop's full-width row). */
+  className?: string
 }) {
   return (
-    <Pinned>
+    <Pinned className={className}>
       <LiveKeyboard
         range={keyboardRange(keys, MIDDLE_OCTAVES)}
         inView={rangeOf(keys)}

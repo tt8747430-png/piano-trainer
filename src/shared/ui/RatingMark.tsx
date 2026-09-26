@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
 const LOOK = {
-  known: 'size-4 bg-primary text-primary-foreground',
+  known: 'size-4 bg-learned text-learned-foreground',
   gap: 'size-2.5 bg-attention',
   unknown: 'size-2.5 ring-2 ring-inset ring-border',
 } as const

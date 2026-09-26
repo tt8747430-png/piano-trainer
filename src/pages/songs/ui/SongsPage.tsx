@@ -33,32 +33,34 @@ export function SongsPage() {
   }))
 
   return (
-    <div className="flex flex-col gap-5">
-      <ScreenHeader title={t('songs:title')} />
-      <SearchField value={search.q} onChange={(q) => set({ q })} />
-      <ChipRow<CollectionId | 'all'>
-        label={t('songs:collections')}
-        value={search.collection}
-        options={[
-          { value: 'all', label: t('songs:all') },
-          ...COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
-        ]}
-        onChange={(collection) => set({ collection })}
-      />
-      {LEVELS_ON_PATH.length > 1 ? (
-        <ChipRow<Level | 'any'>
-          label={t('songs:levels')}
-          value={search.level}
+    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
+      <div className="flex flex-col gap-5 lg:sticky lg:top-8">
+        <ScreenHeader title={t('songs:title')} />
+        <SearchField value={search.q} onChange={(q) => set({ q })} />
+        <ChipRow<CollectionId | 'all'>
+          label={t('songs:collections')}
+          value={search.collection}
           options={[
-            { value: 'any', label: t('songs:anyLevel') },
-            ...LEVELS_ON_PATH.map((level) => ({
-              value: level,
-              label: t('common:level', { level }),
-            })),
+            { value: 'all', label: t('songs:all') },
+            ...COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
           ]}
-          onChange={(level) => set({ level })}
+          onChange={(collection) => set({ collection })}
         />
-      ) : null}
+        {LEVELS_ON_PATH.length > 1 ? (
+          <ChipRow<Level | 'any'>
+            label={t('songs:levels')}
+            value={search.level}
+            options={[
+              { value: 'any', label: t('songs:anyLevel') },
+              ...LEVELS_ON_PATH.map((level) => ({
+                value: level,
+                label: t('common:level', { level }),
+              })),
+            ]}
+            onChange={(level) => set({ level })}
+          />
+        ) : null}
+      </div>
       {groups.length > 0 ? (
         <PieceList groups={groups} />
       ) : (

@@ -2,29 +2,42 @@ import { Link } from '@tanstack/react-router'
 import { BookOpen, Music, Route } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+/** Each place in its own paint, as the book colours every building. */
 const ITEMS = [
-  { to: '/', label: 'nav.path', icon: Route, exact: true },
-  { to: '/songs', label: 'nav.songs', icon: Music, exact: false },
-  { to: '/theory', label: 'nav.theory', icon: BookOpen, exact: false },
+  { to: '/', label: 'nav.path', icon: Route, exact: true, paint: 'text-paint-grass-deep' },
+  { to: '/songs', label: 'nav.songs', icon: Music, exact: false, paint: 'text-paint-yellow-deep' },
+  {
+    to: '/theory',
+    label: 'nav.theory',
+    icon: BookOpen,
+    exact: false,
+    paint: 'text-paint-sky-deep',
+  },
 ] as const
 
-/** A floating glass pill on phones; a left rail from 1024px. */
+/** A bar docked along the bottom on phones; a lettered sidebar from 1024px. */
 export function AppNav() {
   const { t } = useTranslation('common')
   return (
     <nav
       aria-label={t('nav.label')}
-      className="fixed inset-x-0 bottom-safe z-30 flex justify-center px-4 lg:inset-y-0 lg:right-auto lg:left-0 lg:block lg:w-24 lg:px-0"
+      className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-border bg-card pb-safe lg:inset-y-0 lg:right-auto lg:w-60 lg:border-t-0 lg:border-r-2 lg:pb-0"
     >
-      <ul className="flex gap-1 rounded-full bg-card/72 p-1.5 shadow-lg ring-1 ring-border backdrop-blur-xl lg:h-full lg:flex-col lg:gap-2 lg:rounded-none lg:bg-card lg:px-2 lg:pt-6 lg:shadow-none lg:ring-0 lg:backdrop-blur-none">
-        {ITEMS.map(({ to, label, icon: Icon, exact }) => (
-          <li key={to}>
+      <p aria-hidden className="hidden px-6 pt-8 pb-6 font-display text-3xl leading-none lg:block">
+        {t('appName')}
+      </p>
+      <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 lg:max-w-none lg:flex-col lg:gap-1 lg:px-3 lg:pt-0">
+        {ITEMS.map(({ to, label, icon: Icon, exact, paint }) => (
+          <li key={to} className="flex-1 lg:flex-none">
             <Link
               to={to}
               activeOptions={{ exact }}
-              className="flex h-14 w-24 flex-col items-center justify-center gap-0.5 rounded-full text-xs font-semibold text-foreground transition-colors duration-200 ease-out hover:text-primary data-[status=active]:bg-primary/12 data-[status=active]:text-primary lg:w-20 lg:rounded-2xl"
+              className="group flex h-14 flex-col items-center justify-center gap-0.5 rounded-xl font-display text-base text-foreground transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring data-[status=active]:bg-selected data-[status=active]:text-selected-foreground lg:h-12 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-xl"
             >
-              <Icon aria-hidden className="size-5" />
+              <Icon
+                aria-hidden
+                className={`size-6 ${paint} group-data-[status=active]:text-selected-foreground`}
+              />
               {t(label)}
             </Link>
           </li>

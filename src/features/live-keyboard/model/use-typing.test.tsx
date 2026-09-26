@@ -1,7 +1,8 @@
 import { act, createEvent, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setKeyboard } from '@/features/set-preference'
+import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { stubScrolling } from '@/shared/test/layout'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 
@@ -10,6 +11,8 @@ function typingKeyboard(onKeyPress = vi.fn()) {
   act(() => setKeyboard(set.settingsStore, { typing: true }))
   return { ...set, onKeyPress }
 }
+
+afterEach(() => vi.useRealTimers())
 
 describe('typing on the computer keyboard', () => {
   it('plays the key a letter stands for, as a tap does, and letters the keys it plays', async () => {
@@ -22,20 +25,36 @@ describe('typing on the computer keyboard', () => {
   })
 
   it('holds a typed key down until it is let go', () => {
-    const { audio } = typingKeyboard()
+    vi.useFakeTimers()
+    typingKeyboard()
     const c4 = screen.getByRole('button', { name: 'C4' })
     fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    act(() => vi.advanceTimersByTime(1000))
     expect(c4).toHaveAttribute('data-down')
     fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
-    act(() => audio.setNow(0.3))
+    expect(c4).not.toHaveAttribute('data-down')
+  })
+
+  it('holds a quick keystroke down for the shortest press', () => {
+    vi.useFakeTimers()
+    typingKeyboard()
+    const c4 = screen.getByRole('button', { name: 'C4' })
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
+    expect(c4).toHaveAttribute('data-down')
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     expect(c4).not.toHaveAttribute('data-down')
   })
 
   it('lets every typed key go when the window loses the focus', () => {
+    vi.useFakeTimers()
     typingKeyboard()
     fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    fireEvent.keyDown(window, { code: 'KeyD', key: 'd' })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     act(() => void window.dispatchEvent(new Event('blur')))
     expect(screen.getByRole('button', { name: 'C4' })).not.toHaveAttribute('data-down')
+    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
   })
 
   it('moves an octave up with X', async () => {

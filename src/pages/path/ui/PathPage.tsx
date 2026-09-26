@@ -8,7 +8,7 @@ import { PathLevels } from '@/widgets/path-levels'
 export function PathPage() {
   const { t } = useTranslation(['path', 'common'])
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <ScreenHeader
           title={t('path:title')}

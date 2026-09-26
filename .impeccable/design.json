@@ -1,133 +1,840 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-25T19:47:32+00:00",
+  "generatedAt": "2026-09-26T22:39:00+00:00",
   "title": "Design System: Piano Trainer",
   "extensions": {
     "colorMeta": {
-      "deep-teal": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#FBF7EF",
+        "tonalRamp": [
+          "#4B4A48",
+          "#7E7C78",
+          "#B0ADA7",
+          "#DDD9D2",
+          "#FBF7EF",
+          "#FCFAF5",
+          "#FDFCF9",
+          "#FEFEFD"
+        ]
+      },
+      "paper-card": {
+        "role": "neutral",
+        "displayName": "Card Paper",
+        "canonical": "#FFFCF7",
+        "tonalRamp": [
+          "#4C4C4A",
+          "#807E7C",
+          "#B2B0AD",
+          "#E0DED9",
+          "#FFFCF7",
+          "#FFFDFA",
+          "#FFFEFC",
+          "#FFFFFE"
+        ]
+      },
+      "sand-sunken": {
+        "role": "neutral",
+        "displayName": "Sand",
+        "canonical": "#F3EADB",
+        "tonalRamp": [
+          "#494642",
+          "#7A756E",
+          "#AAA499",
+          "#D6CEC1",
+          "#F3EADB",
+          "#F7F1E8",
+          "#FAF7F1",
+          "#FDFCFA"
+        ]
+      },
+      "sand-hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#EADCC9",
+        "tonalRamp": [
+          "#46423C",
+          "#756E64",
+          "#A49A8D",
+          "#CEC2B1",
+          "#EADCC9",
+          "#F1E8DC",
+          "#F7F1E9",
+          "#FCFAF7"
+        ]
+      },
+      "brown-ink": {
+        "role": "neutral",
+        "displayName": "Brown Ink",
+        "canonical": "#3F2816",
+        "tonalRamp": [
+          "#130C07",
+          "#20140B",
+          "#2C1C0F",
+          "#372313",
+          "#3F2816",
+          "#827368",
+          "#B2A9A2",
+          "#E2DFDC"
+        ]
+      },
+      "brown-ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Brown",
+        "canonical": "#735F4F",
+        "tonalRamp": [
+          "#221C18",
+          "#3A3028",
+          "#504237",
+          "#655446",
+          "#735F4F",
+          "#A4978D",
+          "#C7BFB9",
+          "#EAE7E5"
+        ]
+      },
+      "brown-line": {
+        "role": "neutral",
+        "displayName": "Brown Line",
+        "canonical": "#6D4D37",
+        "tonalRamp": [
+          "#211710",
+          "#36261C",
+          "#4C3626",
+          "#604430",
+          "#6D4D37",
+          "#A08B7D",
+          "#C5B8AF",
+          "#E9E4E1"
+        ]
+      },
+      "school-bus-yellow": {
         "role": "primary",
-        "displayName": "Deep Teal",
-        "canonical": "#2D6657",
+        "displayName": "School-Bus Yellow",
+        "canonical": "#EEB737",
         "tonalRamp": [
-          "#0F2A23",
-          "#1F4D41",
-          "#2D6657",
-          "#3F7D6C",
-          "#5C9A88",
-          "#8CCBB8",
-          "#BFE3D7",
-          "#E3F2EC"
+          "#473710",
+          "#775C1C",
+          "#A78026",
+          "#D1A130",
+          "#EEB737",
+          "#F4D07D",
+          "#F8E2AF",
+          "#FCF4E1"
         ]
       },
-      "mint-soft": {
+      "brick-deep": {
         "role": "secondary",
-        "displayName": "Mint Soft",
-        "canonical": "#D3E6DE",
+        "displayName": "Brick Deep (selected)",
+        "canonical": "#B94834",
         "tonalRamp": [
-          "#1E3A32",
-          "#35594D",
-          "#557A6D",
-          "#789C8F",
-          "#9DBDB1",
-          "#BFD9CE",
-          "#D3E6DE",
-          "#EDF5F1"
+          "#381610",
+          "#5C241A",
+          "#823224",
+          "#A33F2E",
+          "#B94834",
+          "#D2887B",
+          "#E3B6AE",
+          "#F4E4E1"
         ]
       },
-      "sage-ground": {
-        "role": "neutral",
-        "displayName": "Sage Ground",
-        "canonical": "#F3F6F3",
+      "sky-mist": {
+        "role": "secondary",
+        "displayName": "Sky Mist",
+        "canonical": "#D8EBFB",
         "tonalRamp": [
-          "#0D1210",
-          "#1F2824",
-          "#2A3430",
-          "#5E6964",
-          "#97A59F",
-          "#DCE3DE",
-          "#E8EDE9",
-          "#F3F6F3"
+          "#41464B",
+          "#6C767E",
+          "#97A4B0",
+          "#BECFDD",
+          "#D8EBFB",
+          "#E6F2FC",
+          "#EFF7FD",
+          "#F9FCFE"
         ]
       },
-      "amber-attention": {
+      "sky-deep": {
         "role": "tertiary",
-        "displayName": "Gap Amber",
-        "canonical": "#9A5A0B",
+        "displayName": "Deep Sky (link, focus)",
+        "canonical": "#0F68A2",
         "tonalRamp": [
-          "#3D2404",
-          "#6B3F08",
-          "#9A5A0B",
-          "#C07A1E",
-          "#E7A64B",
-          "#F2C98D",
-          "#F8E2C1",
-          "#FDF3E4"
+          "#041F31",
+          "#083451",
+          "#0A4971",
+          "#0D5C8F",
+          "#0F68A2",
+          "#639DC3",
+          "#9FC3DA",
+          "#DBE8F1"
         ]
       },
-      "key-down-mint": {
+      "grass-deep": {
+        "role": "tertiary",
+        "displayName": "Grass Deep (learned)",
+        "canonical": "#417230",
+        "tonalRamp": [
+          "#14220E",
+          "#203918",
+          "#2E5022",
+          "#39642A",
+          "#417230",
+          "#84A378",
+          "#B3C7AC",
+          "#E2EAE0"
+        ]
+      },
+      "ochre-deep": {
+        "role": "tertiary",
+        "displayName": "Ochre Deep (gap)",
+        "canonical": "#976200",
+        "tonalRamp": [
+          "#2D1D00",
+          "#4C3100",
+          "#6A4500",
+          "#855600",
+          "#976200",
+          "#BB9959",
+          "#D5C099",
+          "#EFE7D9"
+        ]
+      },
+      "crimson": {
+        "role": "tertiary",
+        "displayName": "Crimson (wrong, destructive)",
+        "canonical": "#A82133",
+        "tonalRamp": [
+          "#320A0F",
+          "#54101A",
+          "#761724",
+          "#941D2D",
+          "#A82133",
+          "#C66F7A",
+          "#DCA6AD",
+          "#F2DEE0"
+        ]
+      },
+      "white": {
         "role": "neutral",
-        "displayName": "Key Down",
-        "canonical": "#8CCBB8"
+        "displayName": "White",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#4C4C4C",
+          "#808080",
+          "#B2B2B2",
+          "#E0E0E0",
+          "#FFFFFF",
+          "#FFFFFF",
+          "#FFFFFF",
+          "#FFFFFF"
+        ]
+      },
+      "paint-brick": {
+        "role": "tertiary",
+        "displayName": "Gouache Brick",
+        "canonical": "#E17F6C",
+        "tonalRamp": [
+          "#442620",
+          "#704036",
+          "#9E594C",
+          "#C6705F",
+          "#E17F6C",
+          "#ECAC9F",
+          "#F3CCC4",
+          "#FAECE9"
+        ]
+      },
+      "paint-yellow": {
+        "role": "tertiary",
+        "displayName": "Gouache Yellow",
+        "canonical": "#EEB737",
+        "tonalRamp": [
+          "#473710",
+          "#775C1C",
+          "#A78026",
+          "#D1A130",
+          "#EEB737",
+          "#F4D07D",
+          "#F8E2AF",
+          "#FCF4E1"
+        ]
+      },
+      "paint-grass": {
+        "role": "tertiary",
+        "displayName": "Gouache Grass",
+        "canonical": "#78B065",
+        "tonalRamp": [
+          "#24351E",
+          "#3C5832",
+          "#547B47",
+          "#6A9B59",
+          "#78B065",
+          "#A7CC9B",
+          "#C9DFC1",
+          "#EBF3E8"
+        ]
+      },
+      "paint-sky": {
+        "role": "tertiary",
+        "displayName": "Gouache Sky",
+        "canonical": "#5FA5DE",
+        "tonalRamp": [
+          "#1C3243",
+          "#30526F",
+          "#42749B",
+          "#5491C3",
+          "#5FA5DE",
+          "#97C4EA",
+          "#BFDBF2",
+          "#E7F2FA"
+        ]
+      },
+      "paint-lilac": {
+        "role": "tertiary",
+        "displayName": "Gouache Lilac",
+        "canonical": "#A98ED9",
+        "tonalRamp": [
+          "#332B41",
+          "#54476C",
+          "#766398",
+          "#957DBF",
+          "#A98ED9",
+          "#C7B6E6",
+          "#DDD2F0",
+          "#F2EEF9"
+        ]
+      },
+      "paint-sand": {
+        "role": "tertiary",
+        "displayName": "Gouache Sand",
+        "canonical": "#C79263",
+        "tonalRamp": [
+          "#3C2C1E",
+          "#644932",
+          "#8B6645",
+          "#AF8057",
+          "#C79263",
+          "#DBB89A",
+          "#E9D3C1",
+          "#F7EFE8"
+        ]
+      },
+      "paint-teal": {
+        "role": "tertiary",
+        "displayName": "Gouache Teal",
+        "canonical": "#50B0B0",
+        "tonalRamp": [
+          "#183535",
+          "#285858",
+          "#387B7B",
+          "#469B9B",
+          "#50B0B0",
+          "#8DCCCC",
+          "#B9DFDF",
+          "#E5F3F3"
+        ]
+      },
+      "wash-brick": {
+        "role": "tertiary",
+        "displayName": "Brick Wash",
+        "canonical": "#F6C8BE",
+        "tonalRamp": [
+          "#4A3C39",
+          "#7B645F",
+          "#AC8C85",
+          "#D8B0A7",
+          "#F6C8BE",
+          "#F9DBD5",
+          "#FBE9E5",
+          "#FEF7F5"
+        ]
+      },
+      "wash-yellow": {
+        "role": "tertiary",
+        "displayName": "Yellow Wash",
+        "canonical": "#EFD093",
+        "tonalRamp": [
+          "#483E2C",
+          "#78684A",
+          "#A79267",
+          "#D2B781",
+          "#EFD093",
+          "#F5E0B9",
+          "#F9ECD4",
+          "#FDF8EF"
+        ]
+      },
+      "wash-grass": {
+        "role": "tertiary",
+        "displayName": "Grass Wash",
+        "canonical": "#C3DDBA",
+        "tonalRamp": [
+          "#3A4238",
+          "#626E5D",
+          "#889B82",
+          "#ACC2A4",
+          "#C3DDBA",
+          "#D8E9D2",
+          "#E7F1E3",
+          "#F6FAF5"
+        ]
+      },
+      "wash-sky": {
+        "role": "tertiary",
+        "displayName": "Sky Wash",
+        "canonical": "#B7D9F7",
+        "tonalRamp": [
+          "#37414A",
+          "#5C6C7C",
+          "#8098AD",
+          "#A1BFD9",
+          "#B7D9F7",
+          "#D0E6FA",
+          "#E2F0FC",
+          "#F4F9FE"
+        ]
+      },
+      "wash-lilac": {
+        "role": "tertiary",
+        "displayName": "Lilac Wash",
+        "canonical": "#D9CDF4",
+        "tonalRamp": [
+          "#413E49",
+          "#6C667A",
+          "#9890AB",
+          "#BFB4D7",
+          "#D9CDF4",
+          "#E6DEF8",
+          "#F0EBFB",
+          "#F9F8FD"
+        ]
+      },
+      "wash-sand": {
+        "role": "tertiary",
+        "displayName": "Sand Wash",
+        "canonical": "#EFCDB0",
+        "tonalRamp": [
+          "#483E35",
+          "#786658",
+          "#A7907B",
+          "#D2B49B",
+          "#EFCDB0",
+          "#F5DECC",
+          "#F9EBDF",
+          "#FDF8F3"
+        ]
+      },
+      "wash-teal": {
+        "role": "tertiary",
+        "displayName": "Teal Wash",
+        "canonical": "#AAE0DF",
+        "tonalRamp": [
+          "#334343",
+          "#557070",
+          "#779D9C",
+          "#96C5C4",
+          "#AAE0DF",
+          "#C8EBEA",
+          "#DDF3F2",
+          "#F2FAFA"
+        ]
+      },
+      "key-bed": {
+        "role": "neutral",
+        "displayName": "Key Bed",
+        "canonical": "#A88C77",
+        "tonalRamp": [
+          "#322A24",
+          "#54463C",
+          "#766253",
+          "#947B69",
+          "#A88C77",
+          "#C6B4A7",
+          "#DCD1C9",
+          "#F2EEEB"
+        ]
+      },
+      "key-rail": {
+        "role": "neutral",
+        "displayName": "Key Rail",
+        "canonical": "#6A4630",
+        "tonalRamp": [
+          "#20150E",
+          "#352318",
+          "#4A3122",
+          "#5D3E2A",
+          "#6A4630",
+          "#9E8778",
+          "#C3B5AC",
+          "#E9E3E0"
+        ]
+      },
+      "key-black": {
+        "role": "neutral",
+        "displayName": "Key Black",
+        "canonical": "#362820",
+        "tonalRamp": [
+          "#100C0A",
+          "#1B1410",
+          "#261C16",
+          "#30231C",
+          "#362820",
+          "#7C736E",
+          "#AFA9A6",
+          "#E1DFDE"
+        ]
+      },
+      "dusk-ground": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Ground",
+        "canonical": "#1B150F",
+        "tonalRamp": [
+          "#080604",
+          "#0E0A08",
+          "#130F0A",
+          "#18120D",
+          "#1B150F",
+          "#6B6763",
+          "#A4A19F",
+          "#DDDCDB"
+        ]
+      },
+      "dusk-card": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Card",
+        "canonical": "#271F18",
+        "tonalRamp": [
+          "#0C0907",
+          "#14100C",
+          "#1B1611",
+          "#221B15",
+          "#271F18",
+          "#736D69",
+          "#A9A5A3",
+          "#DFDDDC"
+        ]
+      },
+      "dusk-sunken": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Sunken",
+        "canonical": "#332921",
+        "tonalRamp": [
+          "#0F0C0A",
+          "#1A1410",
+          "#241D17",
+          "#2D241D",
+          "#332921",
+          "#7A746F",
+          "#ADA9A6",
+          "#E0DFDE"
+        ]
+      },
+      "dusk-hairline": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Hairline",
+        "canonical": "#473A30",
+        "tonalRamp": [
+          "#15110E",
+          "#241D18",
+          "#322922",
+          "#3E332A",
+          "#473A30",
+          "#877F78",
+          "#B5B0AC",
+          "#E3E1E0"
+        ]
+      },
+      "dusk-ink": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Ink",
+        "canonical": "#F2EADD",
+        "tonalRamp": [
+          "#494642",
+          "#79756E",
+          "#A9A49B",
+          "#D5CEC2",
+          "#F2EADD",
+          "#F7F1E9",
+          "#FAF7F1",
+          "#FDFCFA"
+        ]
+      },
+      "dusk-ink-soft": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Ink Soft",
+        "canonical": "#C0AE9A",
+        "tonalRamp": [
+          "#3A342E",
+          "#60574D",
+          "#867A6C",
+          "#A99988",
+          "#C0AE9A",
+          "#D6CABD",
+          "#E6DFD7",
+          "#F6F3F0"
+        ]
+      },
+      "dusk-line": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Line",
+        "canonical": "#9C8067",
+        "tonalRamp": [
+          "#2F261F",
+          "#4E4034",
+          "#6D5A48",
+          "#89715B",
+          "#9C8067",
+          "#BFAC9C",
+          "#D7CCC2",
+          "#F0ECE8"
+        ]
+      },
+      "dusk-key-white": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Key White",
+        "canonical": "#ECE7DE",
+        "tonalRamp": [
+          "#474543",
+          "#76746F",
+          "#A5A29B",
+          "#D0CBC3",
+          "#ECE7DE",
+          "#F3EFEA",
+          "#F7F5F2",
+          "#FCFBFA"
+        ]
+      },
+      "dusk-key-black": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Key Black",
+        "canonical": "#1E130E",
+        "tonalRamp": [
+          "#090604",
+          "#0F0A07",
+          "#150D0A",
+          "#1A110C",
+          "#1E130E",
+          "#6D6662",
+          "#A5A19F",
+          "#DDDCDB"
+        ]
+      },
+      "dusk-key-bed": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Key Bed",
+        "canonical": "#755E4D",
+        "tonalRamp": [
+          "#231C17",
+          "#3A2F26",
+          "#524236",
+          "#675344",
+          "#755E4D",
+          "#A5968B",
+          "#C8BFB8",
+          "#EAE7E4"
+        ]
+      },
+      "dusk-key-rail": {
+        "role": "neutral",
+        "displayName": "Night: Dusk Key Rail",
+        "canonical": "#482F1F",
+        "tonalRamp": [
+          "#160E09",
+          "#241810",
+          "#322116",
+          "#3F291B",
+          "#482F1F",
+          "#88786D",
+          "#B6ACA5",
+          "#E4E0DD"
+        ]
+      },
+      "brick-light": {
+        "role": "tertiary",
+        "displayName": "Night: Brick Light",
+        "canonical": "#EA8470",
+        "tonalRamp": [
+          "#462822",
+          "#754238",
+          "#A45C4E",
+          "#CE7463",
+          "#EA8470",
+          "#F1AFA2",
+          "#F7CEC6",
+          "#FCEDEA"
+        ]
+      },
+      "sky-light": {
+        "role": "tertiary",
+        "displayName": "Night: Sky Light",
+        "canonical": "#86BEEE",
+        "tonalRamp": [
+          "#283947",
+          "#435F77",
+          "#5E85A7",
+          "#76A7D1",
+          "#86BEEE",
+          "#B0D5F4",
+          "#CFE5F8",
+          "#EDF5FC"
+        ]
+      },
+      "grass-light": {
+        "role": "tertiary",
+        "displayName": "Night: Grass Light",
+        "canonical": "#8EC27D",
+        "tonalRamp": [
+          "#2B3A26",
+          "#47613E",
+          "#638858",
+          "#7DAB6E",
+          "#8EC27D",
+          "#B6D7AA",
+          "#D2E7CB",
+          "#EEF6EC"
+        ]
+      },
+      "ochre-light": {
+        "role": "tertiary",
+        "displayName": "Night: Ochre Light",
+        "canonical": "#E4AC59",
+        "tonalRamp": [
+          "#44341B",
+          "#72562C",
+          "#A0783E",
+          "#C9974E",
+          "#E4AC59",
+          "#EDC993",
+          "#F4DEBD",
+          "#FBF3E6"
+        ]
+      },
+      "crimson-light": {
+        "role": "tertiary",
+        "displayName": "Night: Crimson Light",
+        "canonical": "#EF7E80",
+        "tonalRamp": [
+          "#482626",
+          "#783F40",
+          "#A7585A",
+          "#D26F71",
+          "#EF7E80",
+          "#F5ABAC",
+          "#F9CBCC",
+          "#FDECEC"
+        ]
+      },
+      "sky-night": {
+        "role": "tertiary",
+        "displayName": "Night: Sky Night",
+        "canonical": "#1A3B55",
+        "tonalRamp": [
+          "#08121A",
+          "#0D1E2A",
+          "#12293C",
+          "#17344B",
+          "#1A3B55",
+          "#6A8090",
+          "#A3B1BB",
+          "#DDE2E6"
+        ]
+      },
+      "sky-night-ink": {
+        "role": "tertiary",
+        "displayName": "Night: Sky Night Ink",
+        "canonical": "#C9E2F7",
+        "tonalRamp": [
+          "#3C444A",
+          "#64717C",
+          "#8D9EAD",
+          "#B1C7D9",
+          "#C9E2F7",
+          "#DCECFA",
+          "#E9F3FC",
+          "#F7FBFE"
+        ]
       }
     },
     "typographyMeta": {
       "chord-display": {
-        "displayName": "Chord display",
-        "purpose": "The chord now: the Player and the Chords explorer."
+        "displayName": "Chord Display",
+        "purpose": "The chord in the Chords explorer and the Player's chord now."
       },
       "large-title": {
-        "displayName": "Large title",
-        "purpose": "Each screen's header."
+        "displayName": "Large Title",
+        "purpose": "Each screen's header (48px from 1024px)."
       },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Section headings, a chord in a chart."
+      "card-title": {
+        "displayName": "Card Title",
+        "purpose": "The Continue card's band, the Player's next chord, the sidebar's name."
       },
-      "headline": {
-        "displayName": "Headline",
-        "purpose": "Row titles, feedback lines."
+      "section-title": {
+        "displayName": "Section Title",
+        "purpose": "Section headings, sheet titles, chords in a chart."
+      },
+      "button-label": {
+        "displayName": "Button",
+        "purpose": "Buttons, tabs and segments, hand-lettered."
+      },
+      "row-title": {
+        "displayName": "Row Title",
+        "purpose": "Step and piece rows."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Everything read in passing."
+        "purpose": "Everything read; notes at most 65ch."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Segments, beat labels, key labels."
+        "purpose": "Row subtitles, bar numbers, method notes."
+      },
+      "key-label": {
+        "displayName": "Key Label",
+        "purpose": "A degree, finger or note on a key; tabular."
       }
     },
     "shadows": [
       {
-        "name": "raised",
-        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-        "purpose": "Round buttons and a selected segment, with a 1px hairline ring."
-      },
-      {
-        "name": "floating",
-        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        "purpose": "The floating tab bar, over a 24px backdrop blur."
-      },
-      {
         "name": "popover",
-        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-        "purpose": "The MIDI popover."
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent)",
+        "purpose": "The MIDI and keyboard-settings popovers; also the slider thumb (with a 1px line ring)."
+      },
+      {
+        "name": "floating-banner",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "The update banner."
+      },
+      {
+        "name": "key-rail-shade",
+        "value": "linear-gradient(to bottom, color-mix(in oklab, #3F2816 10%, transparent), transparent) 8px tall",
+        "purpose": "The rail's shade on the keys; keys only."
+      },
+      {
+        "name": "key-lip",
+        "value": "6px of color-mix(in oklab, #3F2816 6%, transparent) at a white key's foot; 8px of white at 14% on a black key",
+        "purpose": "The keys' front edge, shortened to a third while down; keys only."
       }
     ],
     "motion": [
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "The one curve: sheets, popovers, the chart strip."
+        "purpose": "The one easing: 200ms on colour changes, 80ms on keys."
       },
       {
-        "name": "key",
+        "name": "key-press",
         "value": "80ms",
-        "purpose": "A key going down or up."
+        "purpose": "A key's 2px drop and lip shortening."
       },
       {
-        "name": "state",
-        "value": "200ms",
-        "purpose": "Hover and selection changes."
+        "name": "shortest-press",
+        "value": "150ms",
+        "purpose": "A key stays down at least this long, so the lightest tap shows."
+      },
+      {
+        "name": "sheet-overlay",
+        "value": "450ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "A sheet's dimmed page."
       }
     ],
     "breakpoints": [
@@ -150,104 +857,134 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The screen's one action.",
-      "html": "<button class=\"ds-btn-primary\">Practise</button>",
-      "css": ".ds-btn-primary{background:var(--primary,#2D6657);color:var(--primary-foreground,#fff);height:56px;padding:0 24px;border:0;border-radius:9999px;font:600 17px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s cubic-bezier(.22,1,.36,1),transform .2s}.ds-btn-primary:hover{background:color-mix(in oklab,#2D6657 80%,transparent)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+      "description": "The screen's one action: yellow, drawn in the brown line, lettered in Balsamiq.",
+      "html": "<button class=\"ds-btn-primary\">Continue</button>",
+      "css": ".ds-btn-primary{height:44px;padding:0 16px;border:2px solid var(--border,#6D4D37);border-radius:12px;background:var(--primary,#EEB737);color:var(--primary-foreground,#3F2816);font-family:'Balsamiq Sans','Onest Variable',system-ui,sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:filter .2s cubic-bezier(0.22,1,0.36,1),transform .2s cubic-bezier(0.22,1,0.36,1)}.ds-btn-primary:hover{filter:brightness(.95)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
       "name": "Soft Button",
       "kind": "button",
       "refersTo": "button-soft",
-      "description": "The second action beside the primary one.",
+      "description": "A second action beside the yellow one: paper, drawn in the line.",
       "html": "<button class=\"ds-btn-soft\">Arpeggio</button>",
-      "css": ".ds-btn-soft{background:#D3E6DE;color:#1F4D41;height:56px;padding:0 24px;border:0;border-radius:9999px;font:600 17px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s}.ds-btn-soft:hover{background:color-mix(in oklab,#D3E6DE 80%,transparent)}.ds-btn-soft:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+      "css": ".ds-btn-soft{height:44px;padding:0 16px;border:2px solid var(--border,#6D4D37);border-radius:12px;background:var(--card,#FFFCF7);color:var(--foreground,#3F2816);font-family:'Balsamiq Sans','Onest Variable',system-ui,sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:background .2s cubic-bezier(0.22,1,0.36,1)}.ds-btn-soft:hover{background:var(--muted,#F3EADB)}.ds-btn-soft:active{transform:translateY(1px)}.ds-btn-soft:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
       "name": "Round Button",
       "kind": "button",
       "refersTo": "button-round",
-      "description": "A 44px icon button, always labelled.",
-      "html": "<button class=\"ds-btn-round\" aria-label=\"Close\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M18 6 6 18M6 6l12 12\"/></svg></button>",
-      "css": ".ds-btn-round{display:grid;place-items:center;width:44px;height:44px;border-radius:9999px;border:0;background:#fff;color:#131816;box-shadow:0 0 0 1px #DCE3DE,0 1px 3px rgb(0 0 0 / .1);transition:background .2s}.ds-btn-round:hover{background:#E8EDE9}.ds-btn-round:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+      "description": "A 44px labelled icon button: close, back, settings, MIDI.",
+      "html": "<button class=\"ds-btn-round\" aria-label=\"Settings\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1\"/></svg></button>",
+      "css": ".ds-btn-round{display:inline-grid;place-items:center;width:44px;height:44px;border:2px solid var(--border,#6D4D37);border-radius:9999px;background:var(--card,#FFFCF7);color:var(--foreground,#3F2816);cursor:pointer;transition:background .2s cubic-bezier(0.22,1,0.36,1)}.ds-btn-round:hover{background:var(--muted,#F3EADB)}.ds-btn-round:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
-      "name": "Chip",
+      "name": "Chip Row",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "One choice in a scrolling row; selected is deep teal.",
-      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">C</button><button class=\"ds-chip\" aria-pressed=\"false\">D♭</button><button class=\"ds-chip\" aria-pressed=\"false\">D</button></div>",
-      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{height:44px;min-width:44px;padding:0 16px;border:0;border-radius:9999px;background:#fff;color:#131816;box-shadow:0 0 0 1px #DCE3DE;font:600 16px/1 'Onest Variable',system-ui,sans-serif;transition:background .2s}.ds-chip:hover{background:#E8EDE9}.ds-chip[aria-pressed=true]{background:#2D6657;color:#fff;box-shadow:0 0 0 1px #2D6657}.ds-chip:focus-visible{outline:3px solid #2D6657;outline-offset:2px}"
+      "description": "One choice of many; the chosen chip is brick deep.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Triads</button><button class=\"ds-chip\" aria-pressed=\"false\">6th &amp; add</button><button class=\"ds-chip\" aria-pressed=\"false\">7th chords</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px;flex-wrap:wrap}.ds-chip{height:44px;padding:0 16px;border:2px solid var(--border,#6D4D37);border-radius:12px;background:var(--card,#FFFCF7);color:var(--foreground,#3F2816);font-family:'Onest Variable',system-ui,sans-serif;font-weight:600;font-size:16px;cursor:pointer;transition:all .2s cubic-bezier(0.22,1,0.36,1)}.ds-chip:hover{background:var(--muted,#F3EADB)}.ds-chip[aria-pressed=true]{background:var(--selected,#B94834);border-color:var(--selected,#B94834);color:var(--selected-foreground,#FFFFFF)}.ds-chip:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
       "name": "Segmented",
-      "kind": "custom",
+      "kind": "chip",
       "refersTo": "segmented-track",
-      "description": "One value from a few, on a sunken track.",
-      "html": "<div class=\"ds-seg\"><button aria-pressed=\"true\">Listen</button><button aria-pressed=\"false\">Step</button><button aria-pressed=\"false\">Your turn</button></div>",
-      "css": ".ds-seg{display:flex;gap:4px;padding:4px;border-radius:18px;background:#E8EDE9}.ds-seg button{flex:1;height:44px;border:0;border-radius:14px;background:transparent;color:#5E6964;font:600 14px/1.25 'Onest Variable',system-ui,sans-serif;transition:color .2s}.ds-seg button:hover{color:#131816}.ds-seg button[aria-pressed=true]{background:#fff;color:#131816;box-shadow:0 1px 3px rgb(0 0 0 / .1)}"
+      "description": "One value from a few, in a lined paper track; the chosen segment brick deep.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"true\">Root</button><button aria-pressed=\"false\">1st</button><button aria-pressed=\"false\">2nd</button></div>",
+      "css": ".ds-seg{display:flex;gap:4px;padding:4px;border:2px solid var(--border,#6D4D37);border-radius:12px;background:var(--card,#FFFCF7);max-width:320px}.ds-seg button{flex:1;height:44px;border:0;border-radius:9px;background:transparent;color:var(--muted-foreground,#735F4F);font-family:'Balsamiq Sans','Onest Variable',system-ui,sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all .2s cubic-bezier(0.22,1,0.36,1)}.ds-seg button:hover{color:var(--foreground,#3F2816)}.ds-seg button[aria-pressed=true]{background:var(--selected,#B94834);color:var(--selected-foreground,#FFFFFF)}.ds-seg button:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
       "name": "Continue Card",
       "kind": "card",
-      "refersTo": "continue-card",
-      "description": "The one suggestion on the Path.",
-      "html": "<article class=\"ds-continue\"><h3>Still, my soul, be still</h3><p>G major</p><button>Continue</button></article>",
-      "css": ".ds-continue{background:#D3E6DE;color:#1F4D41;border-radius:26px;padding:20px;font-family:'Onest Variable',system-ui,sans-serif}.ds-continue h3{margin:0;font:700 22px/1.2 inherit}.ds-continue p{margin:4px 0 16px}.ds-continue button{width:100%;height:56px;border:0;border-radius:9999px;background:#2D6657;color:#fff;font:600 17px/1 inherit}"
+      "refersTo": "continue-band",
+      "description": "The one suggestion: title lettered on a sky band, then the yellow pill Continue.",
+      "html": "<section class=\"ds-continue\"><h2>Triads</h2><div><p>Chords</p><button>Continue</button></div></section>",
+      "css": ".ds-continue{max-width:360px;overflow:hidden;border:2px solid var(--border,#6D4D37);border-radius:14px;background:var(--card,#FFFCF7);color:var(--foreground,#3F2816)}.ds-continue h2{margin:0;padding:12px 20px;border-bottom:2px solid var(--border,#6D4D37);background:var(--paint-sky,#5FA5DE);color:var(--on-paint,#3F2816);font-family:'Balsamiq Sans',system-ui,sans-serif;font-weight:700;font-size:30px}.ds-continue div{padding:20px;display:flex;flex-direction:column;gap:16px}.ds-continue p{margin:0;font-family:'Onest Variable',system-ui,sans-serif;font-size:17px}.ds-continue button{height:56px;border:2px solid var(--border,#6D4D37);border-radius:12px;background:var(--primary,#EEB737);color:var(--primary-foreground,#3F2816);font-family:'Balsamiq Sans',system-ui,sans-serif;font-weight:700;font-size:22px;cursor:pointer}.ds-continue button:hover{filter:brightness(.95)}.ds-continue button:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
     },
     {
-      "name": "Keyboard",
+      "name": "Docked Nav",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "The bar docked on phones: icons in their paints' deep shades, the current place brick deep.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\" href=\"#\">Path</a><a href=\"#\">Songs</a><a href=\"#\">Theory</a></nav>",
+      "css": ".ds-nav{display:flex;gap:4px;padding:6px 8px;border-top:2px solid var(--border,#6D4D37);background:var(--card,#FFFCF7);max-width:390px}.ds-nav a{flex:1;height:56px;display:grid;place-items:center;border-radius:12px;color:var(--foreground,#3F2816);text-decoration:none;font-family:'Balsamiq Sans',system-ui,sans-serif;font-weight:700;font-size:16px;transition:background .2s cubic-bezier(0.22,1,0.36,1)}.ds-nav a:hover{background:var(--muted,#F3EADB)}.ds-nav a[aria-current=page]{background:var(--selected,#B94834);color:var(--selected-foreground,#FFFFFF)}.ds-nav a:focus-visible{outline:3px solid var(--ring,#0F68A2);outline-offset:2px}"
+    },
+    {
+      "name": "Keyboard (octave)",
       "kind": "custom",
       "refersTo": "key-white",
-      "description": "The one keyboard: chord tones in role colours with their degrees; a key that sounds goes down.",
-      "html": "<div class=\"ds-keys\"><span class=\"w root\">1</span><span class=\"w\"></span><span class=\"w third down\">3</span><span class=\"w\"></span><span class=\"w fifth\">5</span><span class=\"b\" style=\"left:24px\"></span><span class=\"b\" style=\"left:60px\"></span><span class=\"b\" style=\"left:132px\"></span></div>",
-      "css": ".ds-keys{position:relative;display:flex;height:120px}.ds-keys .w{width:36px;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;background:#fff;border:1px solid #D3DAD5;border-top:0;border-radius:0 0 9px 9px;font:700 14px 'Onest Variable',system-ui;color:#fff;box-sizing:border-box}.ds-keys .root{background:#2E5BD0}.ds-keys .third{background:#CC3363}.ds-keys .fifth{background:#5B6878}.ds-keys .down{box-shadow:inset 0 0 0 999px color-mix(in oklab,#131816 38%,transparent)}.ds-keys .b{position:absolute;top:0;width:22px;height:62%;background:#1E2321;border-radius:0 0 6px 6px}"
+      "description": "The signature: paper keys on a wooden rail; marks pale at rest, full paint when down, a plain key down sky.",
+      "html": "<div class=\"ds-kb\"><div class=\"ds-rail\"></div><div class=\"ds-keys\"><span class=\"w root\">1</span><span class=\"w\"></span><span class=\"w third down\">3</span><span class=\"w\"></span><span class=\"w fifth\">5</span><span class=\"w\"></span><span class=\"w\"></span><i style=\"left:9%\"></i><i style=\"left:23%\"></i><i style=\"left:52%\"></i><i style=\"left:66%\"></i><i style=\"left:80%\"></i></div></div>",
+      "css": ".ds-kb{width:336px}.ds-rail{height:28px;background:var(--key-rail,#6A4630);border-radius:9px 9px 0 0}.ds-keys{position:relative;display:flex;height:150px;background:var(--key-bed,#A88C77)}.ds-keys .w{flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;margin-right:1px;border-radius:0 0 9px 9px;background:var(--key-white,#FFFCF7);color:var(--on-key-white,#3F2816);font:700 14px 'Onest Variable',system-ui,sans-serif;transition:transform 80ms cubic-bezier(0.22,1,0.36,1)}.ds-keys .w:hover{filter:brightness(.95)}.ds-keys .root{background:var(--role-root-wash,#F6C8BE)}.ds-keys .fifth{background:var(--role-5th-wash,#C3DDBA)}.ds-keys .third.down{background:var(--role-3rd,#5FA5DE);transform:translateY(2px)}.ds-keys i{position:absolute;top:0;width:8.5%;height:62%;background:var(--key-black,#362820);border-radius:0 0 6px 6px}"
     }
   ],
   "narrative": {
-    "northStar": "The Music Stand",
-    "overview": "Everything is designed to be read from a phone propped on a piano's music stand, glanced at between chords with both hands on the keys. The labelled keyboard is the hero: it is on every screen that sounds anything, it plays when tapped, and every key the app sounds goes down on it as it sounds. Around it the screens are calm and native-feeling: a sage ground, white raised surfaces, a mint soft surface for what to do next, and one deep-teal action per screen.",
+    "northStar": "The Labelled Picture Book",
+    "overview": "The app is drawn as a Busytown cross-section (ADR 0010): the keyboard and the chart are cut open, and every key, chord and control wears its printed name. Paper is the ground, a warm brown line runs round every card, control and key, and colour comes from one set of seven gouache paints at one even lightness, so any two sit together. Titles, chord symbols, buttons and tabs are hand-lettered in Balsamiq Sans Bold; everything read in passing is Onest. By night the paper turns to dusk brown and the paints keep their lightness.\n\nEverything is still read from a phone propped on a piano's music stand, glanced at between chords with both hands on the keys. The labelled keyboard is the hero: it is on every screen that sounds anything, it plays when tapped, and every key the app sounds goes down on it (ADR 0009). Density is low and targets are 44px at least. Colour carries meaning: yellow is the one action, brick red is what is chosen or where you are, grass is learned, deep sky is a link and focus, amber is a gap, crimson is wrong; the other paints name places and kinds of step.\n\nThe book lends its colour, line and labelling only. Not taken: characters, animals or mascots; a kicker label above a heading; streaks as pressure, upsells, locked content, stock photos; the dark neon piano app and the sage wellness app.",
     "keyCharacteristics": [
-      "One keyboard component everywhere: the whole piano, scrolling, one tab stop.",
-      "One deep-teal action per screen.",
-      "Chord symbols set heavy and large; numerals tabular.",
-      "Round 44px icon buttons, pill segmented controls, chips in a scrolling row, a floating glass tab bar.",
-      "Bottom sheets of switches and lists, never a sheet over a sheet."
+      "Paper ground, a 2px brown line round every card and control, a 1px line of key bed between the keys.",
+      "One school-bus-yellow action per screen, drawn in the brown line with brown lettering on it.",
+      "Brick red fills only what is chosen or where you are: a chip, a segment, the current tab.",
+      "Seven gouache paints at one lightness, each with a pale wash; a key's mark is its wash at rest and its paint when down.",
+      "Balsamiq Sans Bold for titles, chord symbols, buttons and tabs; Onest for reading.",
+      "One keyboard component everywhere, the whole piano on a painted wooden rail."
     ],
     "rules": [
       {
         "name": "The Palette Law",
-        "body": "Role colours appear on chord tones only; hand colours only in the Player; attention only as the dot of a gap.",
+        "body": "Role colours appear on chord tones only; hand colours only in the Player; the book's paints on the chrome name a place or a kind of step and are never a chord tone. Brick red on the chrome means chosen, nothing else.",
         "section": "colors"
       },
       {
-        "name": "The Key Goes Down Rule",
-        "body": "A key that sounds goes down, whoever plays it: a plain key turns Key Down mint; a coloured key keeps its colour under a tint, deeper by day and brighter by night.",
+        "name": "The Wash And Paint Rule",
+        "body": "A mark is its pale wash at rest and its full paint when its key sounds; a plain key down turns sky. Every mark stays while keys go down, and its label stays on it: colour is never the only cue.",
         "section": "colors"
       },
       {
-        "name": "The Tabular Numbers Rule",
-        "body": "Tempo, bar numbers, counts and key labels use tabular figures.",
+        "name": "The One Yellow Rule",
+        "body": "Each screen has exactly one yellow action. A second action beside it is paper drawn in the line (soft), never a second yellow.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Weight Rule",
+        "body": "Balsamiq Sans ships in one weight and `font-synthesis-weight` is off: never ask it for a lighter or heavier weight, and never let the browser fake one.",
         "section": "typography"
       },
       {
-        "name": "The No Glow Rule",
-        "body": "No coloured glow, no gradient, no glassmorphism beyond the tab bar.",
+        "name": "The Tabular Numbers Rule",
+        "body": "Tempo, bar numbers, counts, key labels and finger numbers are tabular, so a number that changes in place never shifts its neighbours.",
+        "section": "typography"
+      },
+      {
+        "name": "The Equal Columns Rule",
+        "body": "A chart's lines are grids of equal columns, each line as wide as its bars' share of the longest line, so bars line up down the chart; a bar is parted by a 2px line and each line closes with one.",
+        "section": "layout"
+      },
+      {
+        "name": "The Drawn Not Lifted Rule",
+        "body": "A surface separates by its line, never by a shadow. One exception, on keys only: the keys' material. The rail casts an 8px shade of ink at 10% onto the keys, a white key ends in a 6px lip of ink at 6%, a black key in an 8px slope of white at 14%. They draw a piano and appear nowhere else.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do give each screen exactly one deep-teal primary action.",
-      "Do show every sound on a keyboard: a key that sounds goes down.",
+      "Do give each screen exactly one yellow action, drawn in the brown line with brown lettering.",
+      "Do draw every card and control in the 2px brown line on paper.",
+      "Do show every sound on a keyboard: a key that sounds goes down, a mark from its wash to its full paint.",
       "Do label every coloured key with its degree, finger or note.",
-      "Do keep targets at 44px and focus rings visible.",
+      "Do letter titles, chord symbols, buttons and tabs in Balsamiq Sans Bold, and read everything else in Onest.",
+      "Do keep targets at 44px and focus rings visible (3px, deep sky).",
       "Do set numerals that change in place in tabular figures."
     ],
     "donts": [
-      "Don't colour chrome with a chord role or a hand colour.",
+      "Don't draw characters, animals or mascots: the book lends its colour, line and labelling only.",
+      "Don't put a kicker or eyebrow label above a heading; the heading and the labels on the things themselves are enough.",
+      "Don't use brick red on the chrome for anything but what is chosen or where you are.",
+      "Don't colour chrome with a chord role or a hand colour, or put a chrome paint on a chord tone.",
+      "Don't lift a surface with a shadow; draw it with the line (only popovers, the update banner and the slider thumb float).",
+      "Don't ask Balsamiq Sans for any weight but 700.",
       "Don't draw a key that does nothing: every key sounds.",
-      "Don't stack a sheet over a sheet.",
-      "Don't write how-to paragraphs.",
-      "Don't use cream, gradients or coloured glow."
+      "Don't stack a sheet over a sheet; open a list as a page of the sheet.",
+      "Don't write how-to paragraphs; the labelled keyboard and the layout teach."
     ]
   }
 }

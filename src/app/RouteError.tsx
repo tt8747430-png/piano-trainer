@@ -12,7 +12,7 @@ export function RouteError({ reload = () => window.location.reload() }: RouteErr
     <Empty role="alert" className="min-h-96">
       <EmptyHeader>
         <EmptyTitle>
-          <h1 className="text-xl font-bold">{t('errors.title')}</h1>
+          <h1 className="text-3xl">{t('errors.title')}</h1>
         </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>

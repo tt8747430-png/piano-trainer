@@ -1,166 +1,207 @@
 /*
  * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name what a
- * colour is for. Components use roles through Tailwind utilities, never primitives. The world is
- * the owner's reference apps (PRODUCT.md): a sage ground, deep teal actions, mint soft surfaces.
+ * colour is for. Components use roles through Tailwind utilities, never primitives. The world
+ * (DESIGN.md, ADR 0010) is a labelled picture-book cross-section: paper, a warm brown line round
+ * every shape, and seven gouache flats at one even lightness, so they sit together; each has a pale
+ * wash for a key at rest and its full colour for a key that sounds.
  */
 :root {
   --p-white: #ffffff;
-  --p-sage-50: #f3f6f3;
-  --p-sage-100: #e8ede9;
-  --p-sage-200: #dce3de;
-  --p-sage-300: #d3dad5;
-  --p-mint-200: #d3e6de;
-  --p-teal-950: #1f4d41;
-  --p-teal-800: #2d6657;
-  --p-teal-600: #1e7f69;
-  --p-ink-950: #131816;
-  --p-ink-900: #1e2321;
-  --p-slate-600: #5e6964;
-  --p-amber-800: #9a5a0b;
-  --p-red-700: #b3261e;
-  --p-terracotta-600: #c2552b;
-  --p-plum-600: #7a4fc4;
-  --p-role-blue: #2e5bd0;
-  --p-role-rose: #cc3363;
-  --p-role-steel: #5b6878;
-  --p-role-ochre: #a86a00;
-  --p-role-green: #0e8f5b;
-  --p-role-violet: #7847c8;
-  --p-role-cyan: #0a83ad;
+  --p-paper: #fbf7ef;
+  --p-paper-card: #fffcf7;
+  --p-sand-100: #f3eadb;
+  --p-sand-200: #eadcc9;
+  --p-ink: #3f2816;
+  --p-ink-soft: #735f4f;
+  --p-line: #6d4d37;
+  --p-bed: #a88c77;
+  --p-rail: #6a4630;
+  --p-black-key: #362820;
+  /* The gouache set: full, and the wash of each. */
+  --p-brick: #e17f6c;
+  --p-brick-wash: #f6c8be;
+  --p-yellow: #eeb737;
+  --p-yellow-wash: #efd093;
+  --p-grass: #78b065;
+  --p-grass-wash: #c3ddba;
+  --p-sky: #5fa5de;
+  --p-sky-wash: #b7d9f7;
+  --p-lilac: #a98ed9;
+  --p-lilac-wash: #d9cdf4;
+  --p-sand: #c79263;
+  --p-sand-wash: #efcdb0;
+  --p-teal: #50b0b0;
+  --p-teal-wash: #aae0df;
+  --p-brick-deep: #b94834;
+  --p-sky-deep: #0f68a2;
+  --p-sky-mist: #d8ebfb;
+  --p-grass-deep: #417230;
+  --p-ochre-deep: #976200;
+  --p-crimson: #a82133;
 
-  --p-night-990: #050706;
-  --p-night-950: #0d1210;
-  --p-night-900: #171e1b;
-  --p-night-850: #1f2824;
-  --p-night-800: #2a3430;
-  --p-night-500: #7d8a84;
-  --p-mist-50: #e9eeea;
-  --p-mist-100: #e6ede9;
-  --p-mist-400: #97a59f;
-  --p-teal-900: #1e3a32;
-  --p-teal-300: #8ccbb8;
-  --p-teal-400: #5cccb0;
-  --p-mint-100: #bfe3d7;
-  --p-amber-300: #e7a64b;
-  --p-red-300: #ff8a80;
-  --p-terracotta-300: #ff8a5c;
-  --p-plum-300: #b99bff;
-  --p-role-blue-300: #6f95ff;
-  --p-role-rose-300: #ff6f9d;
-  --p-role-steel-300: #a6b1c0;
-  --p-role-ochre-300: #f0b43c;
-  --p-role-green-300: #3ccb97;
-  --p-role-violet-300: #b794ff;
-  --p-role-cyan-300: #4cc7ea;
+  --p-dusk-950: #1b150f;
+  --p-dusk-900: #271f18;
+  --p-dusk-850: #332921;
+  --p-dusk-800: #473a30;
+  --p-dusk-ink: #f2eadd;
+  --p-dusk-muted: #c0ae9a;
+  --p-dusk-line: #9c8067;
+  --p-dusk-key: #ece7de;
+  --p-dusk-black-key: #1e130e;
+  --p-dusk-bed: #755e4d;
+  --p-dusk-rail: #482f1f;
+  --p-brick-light: #ea8470;
+  --p-sky-light: #86beee;
+  --p-grass-light: #8ec27d;
+  --p-ochre-light: #e4ac59;
+  --p-crimson-light: #ef7e80;
+  --p-sky-night: #1a3b55;
+  --p-sky-night-ink: #c9e2f7;
 
-  --radius: 1rem;
+  --radius: 0.75rem;
 
-  --background: var(--p-sage-50);
-  --foreground: var(--p-ink-950);
-  --card: var(--p-white);
-  --card-foreground: var(--p-ink-950);
-  --popover: var(--p-white);
-  --popover-foreground: var(--p-ink-950);
-  --primary: var(--p-teal-800);
-  --primary-foreground: var(--p-white);
-  --secondary: var(--p-mint-200);
-  --secondary-foreground: var(--p-teal-950);
-  --muted: var(--p-sage-100);
-  --muted-foreground: var(--p-slate-600);
-  --accent: var(--p-sage-100);
-  --accent-foreground: var(--p-ink-950);
-  --attention: var(--p-amber-800);
-  --destructive: var(--p-red-700);
-  --border: var(--p-sage-200);
-  --input: var(--p-sage-200);
-  --ring: var(--p-teal-800);
+  --background: var(--p-paper);
+  --foreground: var(--p-ink);
+  --card: var(--p-paper-card);
+  --card-foreground: var(--p-ink);
+  --popover: var(--p-paper-card);
+  --popover-foreground: var(--p-ink);
+  /* The one action: school-bus yellow with the brown ink on it. */
+  --primary: var(--p-yellow);
+  --primary-foreground: var(--p-ink);
+  /* What is chosen or where you are: a chip, a segment, the tab. */
+  --selected: var(--p-brick-deep);
+  --selected-foreground: var(--p-white);
+  --secondary: var(--p-sky-mist);
+  --secondary-foreground: var(--p-sky-deep);
+  --muted: var(--p-sand-100);
+  --muted-foreground: var(--p-ink-soft);
+  --accent: var(--p-sand-100);
+  --accent-foreground: var(--p-ink);
+  --link: var(--p-sky-deep);
+  /*
+   * The book's paints in the chrome, naming places and kinds of step (never a chord tone, and never
+   * brick, which is what is active): each is a
+   * midtone fill, the same by night, with the brown ink on it; its deep shade is an icon on paper.
+   */
+  --paint-sand: var(--p-sand);
+  --paint-yellow: var(--p-yellow);
+  --paint-grass: var(--p-grass);
+  --paint-sky: var(--p-sky);
+  --paint-lilac: var(--p-lilac);
+  --on-paint: var(--p-ink);
+  --paint-yellow-deep: var(--p-ochre-deep);
+  --paint-grass-deep: var(--p-grass-deep);
+  --paint-sky-deep: var(--p-sky-deep);
+  --paint-lilac-deep: color-mix(in oklab, var(--p-lilac) 55%, var(--p-ink));
+  /* Learned, known, on, connected: the book's grass. */
+  --learned: var(--p-grass-deep);
+  --learned-foreground: var(--p-white);
+  --attention: var(--p-ochre-deep);
+  --destructive: var(--p-crimson);
+  --destructive-foreground: var(--p-white);
+  /* The book's line: round every card, control and key. */
+  --border: var(--p-line);
+  --input: var(--p-line);
+  --hairline: var(--p-sand-200);
+  --ring: var(--p-sky-deep);
   /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
   --thumb: var(--p-white);
 
-  /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip's edge. */
-  --role-root: var(--p-role-blue);
-  --role-3rd: var(--p-role-rose);
-  --role-5th: var(--p-role-steel);
-  --role-7th: var(--p-role-ochre);
-  --role-9th: var(--p-role-green);
-  --role-11th: var(--p-role-violet);
-  --role-13th: var(--p-role-cyan);
-  --on-role: var(--p-white);
+  /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip. */
+  --role-root: var(--p-brick);
+  --role-3rd: var(--p-sky);
+  --role-5th: var(--p-grass);
+  --role-7th: var(--p-yellow);
+  --role-9th: var(--p-lilac);
+  --role-11th: var(--p-sand);
+  --role-13th: var(--p-teal);
+  --role-root-wash: var(--p-brick-wash);
+  --role-3rd-wash: var(--p-sky-wash);
+  --role-5th-wash: var(--p-grass-wash);
+  --role-7th-wash: var(--p-yellow-wash);
+  --role-9th-wash: var(--p-lilac-wash);
+  --role-11th-wash: var(--p-sand-wash);
+  --role-13th-wash: var(--p-teal-wash);
+  --on-role: var(--p-ink);
 
   /* The Player's hands; never in the explorers. */
-  --hand-rh: var(--p-teal-600);
-  --hand-lh: var(--p-terracotta-600);
-  --hand-melody: var(--p-plum-600);
+  --hand-rh: var(--p-brick);
+  --hand-lh: var(--p-lilac);
+  --hand-melody: var(--p-grass);
+  --hand-rh-wash: var(--p-brick-wash);
+  --hand-lh-wash: var(--p-lilac-wash);
+  --hand-melody-wash: var(--p-grass-wash);
+  /* A hand's colour as text (the note grid): deep enough to read on paper. */
+  --hand-rh-ink: var(--p-brick-deep);
+  --hand-lh-ink: var(--paint-lilac-deep);
+  --hand-melody-ink: var(--p-grass-deep);
 
-  --key-white: var(--p-white);
-  --key-black: var(--p-ink-900);
   /*
-   * The keys' material (DESIGN.md's No Glow Rule's one exception): the bed between the white keys,
-   * the rail's shade on them, a white key's lip and a black key's sheen.
+   * The keys, drawn as in the book: paper keys, the brown line between them, a warm black, hung
+   * from a painted wooden rail. The keys stay the same by night; only their paper softens.
    */
-  --key-bed: var(--p-ink-900);
-  /* The rail the keys hang from: the piano's fascia, holding the keyboard's buttons and map. */
-  --key-rail: var(--p-ink-950);
-  --key-shade: color-mix(in oklab, var(--p-ink-950) 22%, transparent);
-  --key-lip: color-mix(in oklab, var(--p-ink-950) 12%, transparent);
-  --key-sheen: color-mix(in oklab, var(--p-white) 16%, transparent);
-  /* A label's ink on a plain key, and on a plain key down. */
-  --on-key-white: var(--p-ink-950);
+  --key-white: var(--p-paper-card);
+  --key-black: var(--p-black-key);
+  --key-bed: var(--p-bed);
+  --key-rail: var(--p-rail);
+  --key-shade: color-mix(in oklab, var(--p-ink) 10%, transparent);
+  --key-lip: color-mix(in oklab, var(--p-ink) 6%, transparent);
+  --key-sheen: color-mix(in oklab, var(--p-white) 14%, transparent);
+  --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
-  --on-key-down: var(--p-ink-950);
-  /*
-   * A key down: sounding now or held on a MIDI keyboard. A coloured key keeps its colour under a
-   * tint, deeper by day and brighter by night, so its label keeps its contrast either way.
-   */
-  --key-down: var(--p-teal-300);
-  --key-down-tint: color-mix(in oklab, var(--p-ink-950) 38%, transparent);
-  /* A scale's notes colour whole keys: the tonic deep, the others light; the same by night, as the keys. */
-  --key-tonic: var(--p-teal-800);
-  --on-key-tonic: var(--p-white);
-  --key-scale: var(--p-teal-300);
-  --on-key-scale: var(--p-ink-950);
+  /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. */
+  --key-down: var(--p-sky);
+  --on-key-down: var(--p-ink);
+  --key-scale: var(--p-sky-wash);
+  --key-scale-down: var(--p-sky);
+  --on-key-scale: var(--p-ink);
+  --key-tonic: var(--p-yellow-wash);
+  --key-tonic-down: var(--p-yellow);
+  --on-key-tonic: var(--p-ink);
+  /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
+  --key-focus: var(--p-ink);
+  --key-focus-halo: var(--p-white);
 }
 
 [data-theme='dark'] {
-  --background: var(--p-night-950);
-  --foreground: var(--p-mist-100);
-  --card: var(--p-night-900);
-  --card-foreground: var(--p-mist-100);
-  --popover: var(--p-night-900);
-  --popover-foreground: var(--p-mist-100);
-  --primary: var(--p-teal-300);
-  --primary-foreground: var(--p-night-950);
-  --secondary: var(--p-teal-900);
-  --secondary-foreground: var(--p-mint-100);
-  --muted: var(--p-night-850);
-  --muted-foreground: var(--p-mist-400);
-  --accent: var(--p-night-850);
-  --accent-foreground: var(--p-mist-100);
-  --attention: var(--p-amber-300);
-  --destructive: var(--p-red-300);
-  --border: var(--p-night-800);
-  --input: var(--p-night-800);
-  --ring: var(--p-teal-300);
-  --thumb: var(--p-mist-100);
+  --background: var(--p-dusk-950);
+  --foreground: var(--p-dusk-ink);
+  --card: var(--p-dusk-900);
+  --card-foreground: var(--p-dusk-ink);
+  --popover: var(--p-dusk-900);
+  --popover-foreground: var(--p-dusk-ink);
+  --primary-foreground: var(--p-dusk-950);
+  --selected: var(--p-brick-light);
+  --selected-foreground: var(--p-dusk-950);
+  --secondary: var(--p-sky-night);
+  --secondary-foreground: var(--p-sky-night-ink);
+  --muted: var(--p-dusk-850);
+  --muted-foreground: var(--p-dusk-muted);
+  --accent: var(--p-dusk-850);
+  --accent-foreground: var(--p-dusk-ink);
+  --link: var(--p-sky-light);
+  --paint-yellow-deep: var(--p-ochre-light);
+  --paint-grass-deep: var(--p-grass-light);
+  --paint-sky-deep: var(--p-sky-light);
+  --paint-lilac-deep: var(--p-lilac);
+  --learned: var(--p-grass-light);
+  --learned-foreground: var(--p-dusk-950);
+  --attention: var(--p-ochre-light);
+  --destructive: var(--p-crimson-light);
+  --destructive-foreground: var(--p-dusk-950);
+  --border: var(--p-dusk-line);
+  --input: var(--p-dusk-line);
+  --hairline: var(--p-dusk-800);
+  --ring: var(--p-sky-light);
+  --thumb: var(--p-dusk-ink);
 
-  --role-root: var(--p-role-blue-300);
-  --role-3rd: var(--p-role-rose-300);
-  --role-5th: var(--p-role-steel-300);
-  --role-7th: var(--p-role-ochre-300);
-  --role-9th: var(--p-role-green-300);
-  --role-11th: var(--p-role-violet-300);
-  --role-13th: var(--p-role-cyan-300);
-  --on-role: var(--p-night-990);
+  --hand-rh-ink: var(--p-brick-light);
+  --hand-melody-ink: var(--p-grass-light);
 
-  --hand-rh: var(--p-teal-400);
-  --hand-lh: var(--p-terracotta-300);
-  --hand-melody: var(--p-plum-300);
-
-  --key-white: var(--p-mist-50);
-  --key-black: var(--p-night-990);
-  --key-bed: var(--p-night-990);
-  --key-rail: var(--p-night-990);
-  --key-down: var(--p-teal-800);
-  --on-key-down: var(--p-mist-50);
-  --key-down-tint: color-mix(in oklab, var(--p-mist-50) 45%, transparent);
+  /* By night the keys keep their paper, a shade softer; the marks do not change. */
+  --key-white: var(--p-dusk-key);
+  --key-black: var(--p-dusk-black-key);
+  --key-bed: var(--p-dusk-bed);
+  --key-rail: var(--p-dusk-rail);
 }

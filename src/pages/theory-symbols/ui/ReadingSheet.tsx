@@ -22,8 +22,8 @@ export function ReadingSheet() {
   const { t } = useTranslation('theory')
   return (
     <Sheet>
-      <SheetTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl bg-card px-4 text-left font-semibold ring-1 ring-border transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring">
-        <BookOpenText aria-hidden className="size-5 text-primary" />
+      <SheetTrigger className="flex min-h-14 w-full items-center gap-3 rounded-3xl border-2 border-border bg-card px-4 text-left font-semibold transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring">
+        <BookOpenText aria-hidden className="size-5 text-link" />
         <span className="flex-1">{t('symbols.howToRead')}</span>
         <ChevronRight aria-hidden className="size-5 text-muted-foreground" />
       </SheetTrigger>

@@ -26,13 +26,13 @@ export function CheckResult({
 
   return (
     <section className="flex flex-1 flex-col gap-6">
-      <p className="text-6xl font-extrabold tracking-tight tabular-nums">
+      <p className="font-display text-7xl tabular-nums">
         {t('score', { correct, total: plan.length })}
       </p>
       {plan.marks && learned && newlyLearned ? (
-        <p className="text-lg font-semibold text-primary">{t('marked', { title })}</p>
+        <p className="text-lg font-semibold text-learned">{t('marked', { title })}</p>
       ) : null}
-      <ul className="flex flex-col divide-y divide-border rounded-3xl bg-card ring-1 ring-border">
+      <ul className="flex flex-col divide-y-2 divide-hairline rounded-3xl border-2 border-border bg-card">
         {plan.skills.map((skillId) => {
           const skill = skillOf(skillId)
           const rating = ratingOf(answers, skillId)

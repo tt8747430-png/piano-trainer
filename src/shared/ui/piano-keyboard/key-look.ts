@@ -22,7 +22,7 @@ export interface KeyMark {
 /** What the keyboard shows on its keys, key by key. */
 export interface KeyStates {
   readonly marks?: ReadonlyMap<Midi, KeyMark>
-  /** Keys shown teal: the chord a Name chord question plays. */
+  /** Keys shown in the action's yellow: the chord a Name chord question plays. */
   readonly lit?: ReadonlySet<Midi>
   /** A quiz's chosen keys. */
   readonly selected?: ReadonlySet<Midi>

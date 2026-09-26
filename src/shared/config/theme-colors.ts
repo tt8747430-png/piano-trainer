@@ -4,4 +4,4 @@
  * page background is repeated here, and theme-colors.test.ts holds it to `--background` in
  * src/styles/tokens.css.
  */
-export const THEME_COLORS = { light: '#f3f6f3', dark: '#0d1210' } as const
+export const THEME_COLORS = { light: '#fbf7ef', dark: '#1b150f' } as const

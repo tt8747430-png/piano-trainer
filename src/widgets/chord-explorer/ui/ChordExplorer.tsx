@@ -20,7 +20,7 @@ import {
 } from '@/shared/lib/music'
 import { placedChordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChipRow, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
+import { ChipRow, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ChordView } from '../model/chord-view'
 
@@ -66,110 +66,115 @@ export function ChordExplorer({
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="text-6xl font-extrabold tracking-tight">
-          {chordSymbol({ root, quality: chord.quality })}
-        </h2>
-        <p className="text-right text-muted-foreground">{t(`theory:quality.${chord.quality}`)}</p>
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10 lg:gap-y-6">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-7xl">{chordSymbol({ root, quality: chord.quality })}</h2>
+          <p className="text-right text-muted-foreground">{t(`theory:quality.${chord.quality}`)}</p>
+        </div>
+        <ChipRow
+          label={t('theory:root')}
+          value={chord.root}
+          options={PITCH_CLASSES.map((pc) => {
+            const spelled = chordRootSpelling(pc, chord.quality)
+            return { value: noteParam(spelled), label: noteName(spelled) }
+          })}
+          onChange={(value) => change({ root: value })}
+        />
+        <ChipRow
+          label={t('theory:familyLabel')}
+          value={family}
+          options={CHORD_FAMILIES.map((f) => ({ value: f, label: t(`theory:family.${f}`) }))}
+          onChange={(next) => {
+            const [first] = qualitiesIn(next)
+            if (first) change({ quality: first, inversion: 0 })
+          }}
+        />
+        <ChipRow
+          label={t('theory:qualityLabel')}
+          value={chord.quality}
+          options={qualitiesIn(family).map((q) => ({
+            value: q,
+            label: qualitySuffix(q) || t('theory:major'),
+            title: t(`theory:quality.${q}`),
+          }))}
+          onChange={(quality) => change({ quality, inversion: 0 })}
+        />
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <Segmented
+            label={t('theory:inversionLabel')}
+            value={chord.inversion}
+            options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
+              ({ value, name }) => ({ value, label: t(`theory:inversion.${name}`) }),
+            )}
+            onChange={(inversion) => change({ inversion })}
+          />
+          <Segmented
+            label={t('theory:handsLabel')}
+            value={chord.hands}
+            options={[
+              { value: 'rh', label: t('common:hands.rh') },
+              { value: 'both', label: t('common:hands.both') },
+            ]}
+            onChange={(hands) => change({ hands })}
+          />
+        </div>
       </div>
-      <ChipRow
-        label={t('theory:root')}
-        value={chord.root}
-        options={PITCH_CLASSES.map((pc) => {
-          const spelled = chordRootSpelling(pc, chord.quality)
-          return { value: noteParam(spelled), label: noteName(spelled) }
-        })}
-        onChange={(value) => change({ root: value })}
+      <ExplorerKeyboard
+        keys={keys.map((key) => key.midi)}
+        marks={marks}
+        className="lg:order-first lg:col-span-2"
       />
-      <ChipRow
-        label={t('theory:familyLabel')}
-        value={family}
-        options={CHORD_FAMILIES.map((f) => ({ value: f, label: t(`theory:family.${f}`) }))}
-        onChange={(next) => {
-          const [first] = qualitiesIn(next)
-          if (first) change({ quality: first, inversion: 0 })
-        }}
-      />
-      <ChipRow
-        label={t('theory:qualityLabel')}
-        value={chord.quality}
-        options={qualitiesIn(family).map((q) => ({
-          value: q,
-          label: qualitySuffix(q) || t('theory:major'),
-          title: t(`theory:quality.${q}`),
-        }))}
-        onChange={(quality) => change({ quality, inversion: 0 })}
-      />
-      <ExplorerKeyboard keys={keys.map((key) => key.midi)} marks={marks} />
-      <RoleLegend roles={[...new Set(tones.map((tone) => tone.role))]} />
-      <ol className="flex flex-wrap gap-2">
-        {tones.map((tone) => (
-          <li
-            key={tone.degree}
-            className="flex items-center gap-2 rounded-full bg-card py-1 pr-3 pl-1 ring-1 ring-border"
-          >
-            <span
-              className={cn(
-                'grid size-7 place-items-center rounded-full text-sm font-bold text-on-role',
-                ROLE_BG[tone.role],
-              )}
+      <div className="flex flex-col gap-4">
+        <ol className="flex flex-wrap gap-2">
+          {tones.map((tone) => (
+            <li
+              key={tone.degree}
+              className="flex items-center gap-2 rounded-xl border-2 border-border bg-card py-1 pr-3 pl-1"
             >
-              {tone.degree}
-            </span>
-            <span className="font-semibold">{noteName(tone.note)}</span>
-          </li>
-        ))}
-      </ol>
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <Segmented
-          label={t('theory:inversionLabel')}
-          value={chord.inversion}
-          options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
-            ({ value, name }) => ({ value, label: t(`theory:inversion.${name}`) }),
-          )}
-          onChange={(inversion) => change({ inversion })}
-        />
-        <Segmented
-          label={t('theory:handsLabel')}
-          value={chord.hands}
-          options={[
-            { value: 'rh', label: t('common:hands.rh') },
-            { value: 'both', label: t('common:hands.both') },
-          ]}
-          onChange={(hands) => change({ hands })}
-        />
-      </div>
-      <div className="flex gap-3">
-        <Button
-          size="pill"
-          className="flex-1"
-          onClick={() => playback.toggle('chord', soundsOf(chord, false))}
-        >
-          {playback.playing === 'chord' ? (
-            <>
-              <Square data-icon="inline-start" />
-              {t('common:stop')}
-            </>
-          ) : (
-            t('theory:play')
-          )}
-        </Button>
-        <Button
-          size="pill"
-          variant="soft"
-          className="flex-1"
-          onClick={() => playback.toggle('arpeggio', soundsOf(chord, true))}
-        >
-          {playback.playing === 'arpeggio' ? (
-            <>
-              <Square data-icon="inline-start" />
-              {t('common:stop')}
-            </>
-          ) : (
-            t('theory:arpeggio')
-          )}
-        </Button>
+              <span
+                className={cn(
+                  'grid size-7 place-items-center rounded-lg text-sm font-bold text-on-role',
+                  ROLE_BG[tone.role],
+                )}
+              >
+                {tone.degree}
+              </span>
+              <span className="font-semibold">{noteName(tone.note)}</span>
+            </li>
+          ))}
+        </ol>
+        <div className="flex gap-3">
+          <Button
+            size="pill"
+            className="flex-1"
+            onClick={() => playback.toggle('chord', soundsOf(chord, false))}
+          >
+            {playback.playing === 'chord' ? (
+              <>
+                <Square data-icon="inline-start" />
+                {t('common:stop')}
+              </>
+            ) : (
+              t('theory:play')
+            )}
+          </Button>
+          <Button
+            size="pill"
+            variant="soft"
+            className="flex-1"
+            onClick={() => playback.toggle('arpeggio', soundsOf(chord, true))}
+          >
+            {playback.playing === 'arpeggio' ? (
+              <>
+                <Square data-icon="inline-start" />
+                {t('common:stop')}
+              </>
+            ) : (
+              t('theory:arpeggio')
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   )

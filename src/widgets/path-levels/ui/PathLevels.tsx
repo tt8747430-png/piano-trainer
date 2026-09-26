@@ -27,12 +27,12 @@ export function PathLevels() {
         return (
           <section key={level} aria-label={name} className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between gap-3">
-              <h2 className="text-xl font-bold text-primary">{name}</h2>
+              <h2 className="text-2xl">{name}</h2>
               <span className="text-muted-foreground tabular-nums">
                 {t('path:progress', { learned: done, total: inLevel.length })}
               </span>
             </div>
-            <ul className="flex flex-col gap-1">
+            <ul className="flex flex-col divide-y-2 divide-hairline rounded-3xl border-2 border-border bg-card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2">
               {inLevel.map((placed) => (
                 <StepRow key={placed.id} placed={placed} answers={answers} />
               ))}

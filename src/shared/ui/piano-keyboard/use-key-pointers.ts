@@ -1,16 +1,15 @@
-import { useCallback, useRef, useState, type PointerEvent, type RefObject } from 'react'
-import { keyAt, PIANO_LAYOUT, type Swipe } from '@/shared/lib'
+import { useCallback, useRef, type PointerEvent, type RefObject } from 'react'
+import { keyAt, PIANO_LAYOUT, usePresses, type Swipe } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-
-const NONE: ReadonlySet<Midi> = new Set()
 
 /**
  * A key plays the instant a pointer touches it, and the keys never scroll under it (they take the
  * finger from the page). Scroll: that key only, down until the finger lifts. Glissando: every key a
- * pointer enters plays, once per entry, each pointer on its own. No capture is needed: a touch or
- * pen is captured by the key it went down on, so its moves and its lift reach the group; a mouse
- * released outside is forgotten at its next move. A pointer's own click never plays again; any
- * other click (Enter, Space, a screen reader) plays once.
+ * pointer enters plays, once per entry, each pointer on its own. A key is down at least the
+ * shortest press, so a tap as light as a trackpad's shows. No capture is needed: a touch or pen is
+ * captured by the key it went down on, so its moves and its lift reach the group; a mouse released
+ * outside is forgotten at its next move. A pointer's own click never plays again; any other click
+ * (Enter, Space, a screen reader) plays once.
  */
 export function useKeyPointers({
   swipe,
@@ -24,28 +23,34 @@ export function useKeyPointers({
 }) {
   /** Each pointer down on the keys, and the key it is on (null between keys, in Glissando). */
   const pointers = useRef(new Map<number, Midi | null>())
-  const [pressed, setPressed] = useState<ReadonlySet<Midi>>(NONE)
+  const presses = usePresses<number>()
+  const { press, release } = presses
   /** The key a pointer went down on: the pointer's click that follows belongs to that press. */
   const pointerKey = useRef<Midi | null>(null)
 
-  const show = useCallback(() => {
-    const down = [...pointers.current.values()].filter((key) => key !== null)
-    setPressed(down.length === 0 ? NONE : new Set(down))
-  }, [])
+  /** The pointer is on `key` (or between keys): its press moves there. */
+  const moveTo = useCallback(
+    (pointerId: number, key: Midi | null) => {
+      pointers.current.set(pointerId, key)
+      if (key === null) release(pointerId)
+      else press(pointerId, key)
+    },
+    [press, release],
+  )
 
   const forget = (pointerId: number) => {
-    if (pointers.current.delete(pointerId)) show()
+    if (!pointers.current.delete(pointerId)) return
+    release(pointerId)
   }
 
   const pointerDown = useCallback(
     (key: Midi, event: PointerEvent<HTMLElement>) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return
       pointerKey.current = key
-      pointers.current.set(event.pointerId, key)
-      show()
+      moveTo(event.pointerId, key)
       onPress(key)
     },
-    [onPress, show],
+    [onPress, moveTo],
   )
 
   // A click no pointer made (Enter, Space, a screen reader) has no click count: it always plays.
@@ -71,8 +76,7 @@ export function useKeyPointers({
         (event.clientY - box.top) / box.height,
       )
       if (key === pointers.current.get(event.pointerId)) return
-      pointers.current.set(event.pointerId, key)
-      show()
+      moveTo(event.pointerId, key)
       if (key !== null) onPress(key)
     },
     onPointerLeave(event: PointerEvent<HTMLElement>) {
@@ -82,8 +86,7 @@ export function useKeyPointers({
         return
       }
       // A mouse between the keys and the page: coming back, the key it enters plays.
-      pointers.current.set(event.pointerId, null)
-      show()
+      moveTo(event.pointerId, null)
     },
     onPointerUp: (event: PointerEvent<HTMLElement>) => forget(event.pointerId),
     onPointerCancel(event: PointerEvent<HTMLElement>) {
@@ -103,5 +106,5 @@ export function useKeyPointers({
     },
   }
 
-  return { pressed, pointerDown, click, group }
+  return { pressed: presses.keys, pointerDown, click, group }
 }

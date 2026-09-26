@@ -1,0 +1,142 @@
+{
+  "title": "Choose the visual world",
+  "question": "Piano Trainer's new colours and shape. Keep the assigned direction, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Chancel Glass",
+      "kicker": "THE ROLL",
+      "lineage": "leaded stained-glass windows of the church the songs are sung in",
+      "thesis": "The keyboard is a window: every musical meaning is one pane from a single set of glass, lit when it sounds.",
+      "palette": ["#F4F3F0", "#2A2C31", "#2F5DA8", "#B8324B", "#D39A2E", "#2E8B6A", "#7456A6"],
+      "materials": ["jewel glass panes, pale when unlit and full when lit", "lead cames as hairline structure", "limestone-grey ground"],
+      "viewport": "Laptop: the step or song fills a wide left column and the keyboard runs the full width below; phone: one column, the keyboard pinned at the thumb.",
+      "risk": "Tips into church kitsch if lead outlines go everywhere; the leading stays hairline structure only.",
+      "raised": [
+        { "from": "challenger-club-sleeve", "raise": "One accent owns the chrome, committed: cobalt on every primary action, nothing else coloured outside the keys." },
+        { "from": "challenger-botanical-folio", "raise": "Every keyboard keeps one scale and one ground on every screen, like plates on one baseline." },
+        { "from": "challenger-drawcord-cape", "raise": "One control opens the rest: each screen shows its few choices, one Options sheet holds the others." },
+        { "from": "challenger-tensegrity", "raise": "Rest, sounding and held are three distinct key states, never a tint of one another." },
+        { "from": "challenger-six-pack", "raise": "Amber and red are reserved for a gap and a wrong key; no chrome carries a warning hue." }
+      ],
+      "wireframe": { "cols": 12, "rows": 10, "regions": [
+        { "label": "nav", "x": 0, "y": 0, "w": 2, "h": 10 },
+        { "label": "step / song", "x": 2, "y": 0, "w": 6, "h": 6, "accent": true },
+        { "label": "choices", "x": 8, "y": 0, "w": 4, "h": 6 },
+        { "label": "keyboard, full width", "x": 2, "y": 6, "w": 10, "h": 4, "accent": true }
+      ] }
+    },
+    {
+      "id": "model-pick",
+      "label": "Ebony, Ivory and Felt",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "the upright piano itself: its keys, fallboard felt, brass and case",
+      "thesis": "The app is made of the instrument: ivory keys, ebony type, the felt's wine as the one action.",
+      "palette": ["#F5F2EC", "#1B1A1D", "#7A2335", "#B08D57", "#5A3E2B"],
+      "materials": ["ivory and ebony", "fallboard felt", "brass pedal"],
+      "viewport": "Same wide layout; the keyboard reads as the piano's own keys under a felt-lined rail.",
+      "risk": "The direction most piano apps land near: warm, familiar, at risk of old-fashioned.",
+      "wireframe": { "cols": 12, "rows": 10, "regions": [
+        { "label": "nav", "x": 0, "y": 0, "w": 2, "h": 10 },
+        { "label": "step / song", "x": 2, "y": 0, "w": 6, "h": 6, "accent": true },
+        { "label": "choices", "x": 8, "y": 0, "w": 4, "h": 6 },
+        { "label": "keyboard, full width", "x": 2, "y": 6, "w": 10, "h": 4, "accent": true }
+      ] }
+    },
+    {
+      "id": "challenger-type-specimen",
+      "label": "Chord Specimen",
+      "verdict": "competitive",
+      "lineage": "interactive type specimens",
+      "thesis": "The chord set like a specimen: huge on near-white paper, tiny labels, one accent.",
+      "palette": ["#FAFAF8", "#111111", "#E4572E"],
+      "materials": ["paper white", "ink black", "one foundry accent"],
+      "viewport": "The current chord at display size owns the top; the keyboard and choices sit small beneath.",
+      "case": "Fuses cleanly on clarity (the chord read from the music stand); loses on audience, who do not know specimens.",
+      "risk": "Austere; colour meaning on the keys has only one accent to live with.",
+      "hero": "https://impeccable.style/worlds/cards/variable-font-specimen-hero.webp"
+    },
+    {
+      "id": "challenger-club-sleeve",
+      "label": "Flash Scrawl Sleeve",
+      "verdict": "declined",
+      "lineage": "French house label sleeves",
+      "thesis": "Marker scrawl over flash photography.",
+      "palette": ["#111111", "#39FF14", "#FFFFFF"],
+      "materials": ["flash photo", "fluorescent marker"],
+      "viewport": "A defaced photo with a scrawled logo.",
+      "case": "Fuses poorly: church accompanists at the piano do not identify with club nights.",
+      "risk": "Unreadable at arm's length.",
+      "kept": "One accent colour, committed totally.",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-flash-scrawl-club-sleeve-hero.webp"
+    },
+    {
+      "id": "challenger-botanical-folio",
+      "label": "Botanical Folio",
+      "verdict": "declined",
+      "lineage": "botanical plates in sequence",
+      "thesis": "One plant through its seasons on fixed-scale plates.",
+      "palette": ["#F3EBDD", "#2F5D3A", "#B3261E", "#5C4A3A"],
+      "materials": ["engraved plates", "sepia rules"],
+      "viewport": "Five plates on one baseline.",
+      "case": "Fuses poorly: a seasons metaphor does not carry chords and songs.",
+      "risk": "Cream and engraving: the bookish rut.",
+      "kept": "Every plate at the same scale and ground.",
+      "hero": "https://impeccable.style/worlds/cards/editorial-sequence-montage-botanical-folio-season-hero.webp"
+    },
+    {
+      "id": "challenger-drawcord-cape",
+      "label": "Drawcord Cape",
+      "verdict": "declined",
+      "lineage": "transforming fashion garments",
+      "thesis": "One pull turns a flat plane into shape.",
+      "palette": ["#111111", "#C9A227", "#4A4F57"],
+      "materials": ["black silk", "gold cord"],
+      "viewport": "A black semicircle gathered by one cord.",
+      "case": "Fuses poorly: no link to the piano or the church.",
+      "risk": "Dark and theatrical at a practice piano.",
+      "kept": "One control that opens the rest.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-drawcord-transforming-cape-hero.webp"
+    },
+    {
+      "id": "challenger-tensegrity",
+      "label": "Tensegrity Column",
+      "verdict": "declined",
+      "lineage": "kinetic tension sculpture",
+      "thesis": "Rods and red cord held in balance.",
+      "palette": ["#E6E4DF", "#1D1D1F", "#C8102E", "#9A9A9A"],
+      "materials": ["carbon rods", "red cord"],
+      "viewport": "A force diagram of struts.",
+      "case": "Fuses poorly: engineering labels read cold to a beginner.",
+      "risk": "Technical and unfriendly.",
+      "kept": "Slack, balanced and stressed states drawn distinctly.",
+      "hero": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-tensegrity-breathing-column-hero.webp"
+    },
+    {
+      "id": "challenger-six-pack",
+      "label": "Night Instruments",
+      "verdict": "declined",
+      "lineage": "aircraft night instrument panels",
+      "thesis": "Six calm dials on a black panel.",
+      "palette": ["#0B0B0C", "#F2F2F2", "#5BE37D", "#F2A900"],
+      "materials": ["matte panel", "luminous markings"],
+      "viewport": "Six gauges in two rows.",
+      "case": "Fuses poorly: a dark cockpit is not a daylit church hall.",
+      "risk": "Night-only mood.",
+      "kept": "Caution colours used for caution only.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-night-flight-six-pack-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": false },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "What piano-learning apps ship: white screens, one friendly brand blue, plain keys lit in that blue.",
+    "palette": ["#FFFFFF", "#0F172A", "#3B82F6", "#22C55E"],
+    "materials": ["clean white cards", "one brand colour"],
+    "viewport": "The arrangement a learner expects from Flowkey or Simply Piano, at full craft.",
+    "risk": "Indistinguishable from the competition by design."
+  },
+  "steer": true
+}

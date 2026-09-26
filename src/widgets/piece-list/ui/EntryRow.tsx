@@ -41,7 +41,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
         <span className="grid size-6 shrink-0 place-items-center">
           {learned ? (
             <>
-              <Check aria-hidden className="size-5 text-primary" strokeWidth={3} />
+              <Check aria-hidden className="size-5 text-learned" strokeWidth={3} />
               <span className="sr-only">{t('learned')}</span>
             </>
           ) : null}

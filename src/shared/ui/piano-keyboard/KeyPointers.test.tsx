@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { stubBox } from '@/shared/test/layout'
 import { PianoKeyboard } from './PianoKeyboard'
@@ -27,14 +28,33 @@ function setUp(props: Partial<ComponentProps<typeof PianoKeyboard>> = {}) {
   return { onKeyPress, keys, key }
 }
 
+/** Past the shortest press: a key let go is up again. */
+const pastTheShortestPress = () => act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+
+afterEach(() => vi.useRealTimers())
+
 describe('touching the keys', () => {
   it('plays a key the instant a pointer touches it, and draws it down until it lifts', () => {
+    vi.useFakeTimers()
     const { onKeyPress, key } = setUp()
     fireEvent.pointerDown(key('F sharp 4'), touch(1, 270, 30))
     expect(onKeyPress).toHaveBeenCalledExactlyOnceWith(66)
     expect(key('F sharp 4')).toHaveAttribute('data-down')
+    act(() => vi.advanceTimersByTime(1000))
+    expect(key('F sharp 4')).toHaveAttribute('data-down')
     fireEvent.pointerUp(key('F sharp 4'), touch(1, 270, 30))
     expect(key('F sharp 4')).not.toHaveAttribute('data-down')
+  })
+
+  it('draws a tap down for the shortest press, however soon it lifts (a trackpad’s tap)', () => {
+    vi.useFakeTimers()
+    const mouse = { pointerId: 1, pointerType: 'mouse', clientX: x(23), clientY: 90 }
+    const { key } = setUp()
+    fireEvent.pointerDown(key('C4'), { ...mouse, button: 0, buttons: 1 })
+    fireEvent.pointerUp(key('C4'), { ...mouse, button: 0, buttons: 0 })
+    expect(key('C4')).toHaveAttribute('data-down')
+    pastTheShortestPress()
+    expect(key('C4')).not.toHaveAttribute('data-down')
   })
 
   it.each(['scroll', 'glissando'] as const)(
@@ -84,11 +104,13 @@ describe('touching the keys', () => {
   )
 
   it('in Scroll, plays nothing more as the pointer moves, and lifts a press the browser cancels', () => {
+    vi.useFakeTimers()
     const { onKeyPress, keys, key } = setUp()
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))
     fireEvent.pointerMove(keys, touch(1, x(25)))
     expect(onKeyPress).toHaveBeenCalledExactlyOnceWith(60)
     fireEvent.pointerCancel(keys, touch(1, x(25)))
+    pastTheShortestPress()
     expect(key('C4')).not.toHaveAttribute('data-down')
   })
 
@@ -101,10 +123,13 @@ describe('touching the keys', () => {
   })
 
   it('in Glissando, leaves the key it started on plain once the finger moves on', () => {
+    vi.useFakeTimers()
     const { keys, key } = setUp({ swipe: 'glissando' })
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))
     fireEvent.pointerMove(keys, touch(1, x(24)))
+    pastTheShortestPress()
     expect(key('C4')).not.toHaveAttribute('data-down')
+    expect(key('D4')).toHaveAttribute('data-down')
     // The browser keeps :active on the key a pointer went down on for the whole swipe: a key's
     // pressed look is its own down state, never the browser's.
     expect([...key('C4').classList].filter((name) => name.startsWith('active:'))).toEqual([])
@@ -120,11 +145,13 @@ describe('touching the keys', () => {
   })
 
   it('in Glissando, forgets a mouse released outside the keys', () => {
+    vi.useFakeTimers()
     const { onKeyPress, keys, key } = setUp({ swipe: 'glissando' })
     const mouse = { pointerId: 1, pointerType: 'mouse', clientY: 90 }
     fireEvent.pointerDown(key('C4'), { ...mouse, button: 0, buttons: 1, clientX: x(23) })
     fireEvent.pointerMove(keys, { ...mouse, buttons: 0, clientX: x(24) })
     expect(onKeyPress).toHaveBeenCalledExactlyOnceWith(60)
+    pastTheShortestPress()
     expect(key('C4')).not.toHaveAttribute('data-down')
   })
 })

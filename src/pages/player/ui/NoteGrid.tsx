@@ -4,9 +4,9 @@ import type { NoteHand, Performance } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 
 const HAND_TEXT: Readonly<Record<NoteHand, string>> = {
-  rh: 'text-hand-rh',
-  lh: 'text-hand-lh',
-  melody: 'text-hand-melody',
+  rh: 'text-hand-rh-ink',
+  lh: 'text-hand-lh-ink',
+  melody: 'text-hand-melody-ink',
 }
 const HANDS_HIGH_TO_LOW = ['melody', 'rh', 'lh'] as const
 

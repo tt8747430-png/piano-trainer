@@ -9,7 +9,7 @@ export function NotFoundPage() {
     <Empty className="min-h-96">
       <EmptyHeader>
         <EmptyTitle>
-          <h1 className="text-xl font-bold">{t('notFound.title')}</h1>
+          <h1 className="text-3xl">{t('notFound.title')}</h1>
         </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>

@@ -37,7 +37,7 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
   return (
     <section className="flex flex-col gap-5">
       <div className="flex items-center gap-3">
-        <h2 className="min-w-0 flex-1 text-4xl font-bold tracking-tight text-balance">{prompt}</h2>
+        <h2 className="min-w-0 flex-1 text-4xl text-balance">{prompt}</h2>
         {question.mode === 'name-chord' ? (
           <RoundButton
             label={quiz.hearing ? t('common:stop') : t('quiz:playAgain')}

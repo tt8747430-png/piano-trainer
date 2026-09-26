@@ -70,81 +70,88 @@ export function ScaleExplorer({
   const runKeys = run.map((sound) => sound.midi)
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-4xl font-extrabold tracking-tight">{scaleName(root, scale.kind)}</h2>
-      <ChipRow
-        label={t('theory:root')}
-        value={scale.root}
-        options={PITCH_CLASSES.map((pc) => {
-          const spelled = scaleRootSpelling(pc, scale.kind)
-          return { value: noteParam(spelled), label: noteName(spelled) }
-        })}
-        onChange={(value) => onChange({ root: value })}
-      />
-      <ChipRow
-        label={t('theory:scaleLabel')}
-        value={scale.kind}
-        options={SCALE_KINDS.map((kind) => ({ value: kind, label: t(`theory:scaleKind.${kind}`) }))}
-        onChange={(kind) => onChange({ kind })}
-      />
-      <ExplorerKeyboard keys={runKeys} marks={marks} />
-      {rh && lh ? (
-        <Segmented
-          label={t('theory:fingers.label')}
-          value={scale.fingers}
-          options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
-          onChange={(fingers) => onChange({ fingers })}
-        />
-      ) : null}
-      <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
-
-      <section className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-border">
-        <h3 className="text-xl font-bold">{t('theory:practice')}</h3>
+    <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
+      <div className="flex flex-col gap-6">
+        <h2 className="text-5xl">{scaleName(root, scale.kind)}</h2>
         <ChipRow
-          label={t('theory:rhythmLabel')}
-          value={scale.rhythm}
-          options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`theory:rhythm.${r}`) }))}
-          onChange={(rhythm) => onChange({ rhythm })}
+          label={t('theory:root')}
+          value={scale.root}
+          options={PITCH_CLASSES.map((pc) => {
+            const spelled = scaleRootSpelling(pc, scale.kind)
+            return { value: noteParam(spelled), label: noteName(spelled) }
+          })}
+          onChange={(value) => onChange({ root: value })}
         />
-        <Slider
-          min={TEMPO_RANGE.min}
-          max={TEMPO_RANGE.max}
-          step={4}
-          value={scale.tempo}
-          onValueChange={(tempo) => onChange({ tempo })}
-          className="flex flex-col gap-3"
-        >
-          <div className="flex justify-between">
-            <SliderLabel>{t('theory:tempo')}</SliderLabel>
-            <span className="font-semibold tabular-nums">
-              {t('theory:bpm', { tempo: scale.tempo })}
-            </span>
-          </div>
-        </Slider>
-        <Segmented
-          label={t('theory:handsLabel')}
-          value={scale.hands}
-          options={[
-            { value: 'rh', label: t('common:hands.rh') },
-            { value: 'lh', label: t('common:hands.lh') },
-            { value: 'both', label: t('theory:together') },
-          ]}
-          onChange={(hands) => onChange({ hands })}
+        <ChipRow
+          label={t('theory:scaleLabel')}
+          value={scale.kind}
+          options={SCALE_KINDS.map((kind) => ({
+            value: kind,
+            label: t(`theory:scaleKind.${kind}`),
+          }))}
+          onChange={(kind) => onChange({ kind })}
         />
-        <Button size="pill" onClick={() => playback.toggle('run', run)}>
-          {playback.playing === 'run' ? (
-            <>
-              <Square data-icon="inline-start" />
-              {t('common:stop')}
-            </>
-          ) : (
-            t('theory:playUpDown')
-          )}
-        </Button>
-      </section>
+        {rh && lh ? (
+          <Segmented
+            label={t('theory:fingers.label')}
+            value={scale.fingers}
+            options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
+            onChange={(fingers) => onChange({ fingers })}
+          />
+        ) : null}
+      </div>
+      <ExplorerKeyboard keys={runKeys} marks={marks} className="lg:order-first lg:col-span-2" />
+      <div className="flex flex-col gap-6">
+        <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
 
-      <ScaleChords scale={tones} size={scale.chords} onSize={(chords) => onChange({ chords })} />
-      <ScaleFacts root={root} kind={scale.kind} tones={tones} />
+        <section className="flex flex-col gap-4 rounded-3xl border-2 border-border bg-card p-5">
+          <h3 className="text-2xl">{t('theory:practice')}</h3>
+          <ChipRow
+            label={t('theory:rhythmLabel')}
+            value={scale.rhythm}
+            options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`theory:rhythm.${r}`) }))}
+            onChange={(rhythm) => onChange({ rhythm })}
+          />
+          <Slider
+            min={TEMPO_RANGE.min}
+            max={TEMPO_RANGE.max}
+            step={4}
+            value={scale.tempo}
+            onValueChange={(tempo) => onChange({ tempo })}
+            className="flex flex-col gap-3"
+          >
+            <div className="flex justify-between">
+              <SliderLabel>{t('theory:tempo')}</SliderLabel>
+              <span className="font-semibold tabular-nums">
+                {t('theory:bpm', { tempo: scale.tempo })}
+              </span>
+            </div>
+          </Slider>
+          <Segmented
+            label={t('theory:handsLabel')}
+            value={scale.hands}
+            options={[
+              { value: 'rh', label: t('common:hands.rh') },
+              { value: 'lh', label: t('common:hands.lh') },
+              { value: 'both', label: t('theory:together') },
+            ]}
+            onChange={(hands) => onChange({ hands })}
+          />
+          <Button size="pill" onClick={() => playback.toggle('run', run)}>
+            {playback.playing === 'run' ? (
+              <>
+                <Square data-icon="inline-start" />
+                {t('common:stop')}
+              </>
+            ) : (
+              t('theory:playUpDown')
+            )}
+          </Button>
+        </section>
+
+        <ScaleChords scale={tones} size={scale.chords} onSize={(chords) => onChange({ chords })} />
+        <ScaleFacts root={root} kind={scale.kind} tones={tones} />
+      </div>
     </div>
   )
 }

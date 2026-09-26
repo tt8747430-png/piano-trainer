@@ -12,6 +12,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-selected: var(--selected);
+  --color-selected-foreground: var(--selected-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -19,15 +21,36 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-attention: var(--attention);
+  --color-link: var(--link);
+  --color-learned: var(--learned);
+  --color-learned-foreground: var(--learned-foreground);
+  --color-hairline: var(--hairline);
+  --color-paint-sand: var(--paint-sand);
+  --color-paint-yellow: var(--paint-yellow);
+  --color-paint-grass: var(--paint-grass);
+  --color-paint-sky: var(--paint-sky);
+  --color-paint-lilac: var(--paint-lilac);
+  --color-on-paint: var(--on-paint);
+  --color-paint-yellow-deep: var(--paint-yellow-deep);
+  --color-paint-grass-deep: var(--paint-grass-deep);
+  --color-paint-sky-deep: var(--paint-sky-deep);
+  --color-paint-lilac-deep: var(--paint-lilac-deep);
   --color-thumb: var(--thumb);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
   --color-hand-melody: var(--hand-melody);
+  --color-hand-rh-wash: var(--hand-rh-wash);
+  --color-hand-lh-wash: var(--hand-lh-wash);
+  --color-hand-melody-wash: var(--hand-melody-wash);
+  --color-hand-rh-ink: var(--hand-rh-ink);
+  --color-hand-lh-ink: var(--hand-lh-ink);
+  --color-hand-melody-ink: var(--hand-melody-ink);
 
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);
@@ -40,13 +63,18 @@
   --color-on-key-black: var(--on-key-black);
   --color-key-down: var(--key-down);
   --color-on-key-down: var(--on-key-down);
-  --color-key-down-tint: var(--key-down-tint);
   --color-key-tonic: var(--key-tonic);
+  --color-key-tonic-down: var(--key-tonic-down);
   --color-on-key-tonic: var(--on-key-tonic);
   --color-key-scale: var(--key-scale);
+  --color-key-scale-down: var(--key-scale-down);
   --color-on-key-scale: var(--on-key-scale);
+  --color-key-focus: var(--key-focus);
+  --color-key-focus-halo: var(--key-focus-halo);
 
   --font-sans: 'Onest Variable', 'Noto Music', system-ui, sans-serif;
+  /* The book's bold hand-lettering (one weight, 700): titles, chord symbols, buttons and the tabs. */
+  --font-display: 'Balsamiq Sans', 'Onest Variable', 'Noto Music', system-ui, sans-serif;
 
   --color-role-root: var(--role-root);
   --color-role-3rd: var(--role-3rd);
@@ -55,17 +83,24 @@
   --color-role-9th: var(--role-9th);
   --color-role-11th: var(--role-11th);
   --color-role-13th: var(--role-13th);
+  --color-role-root-wash: var(--role-root-wash);
+  --color-role-3rd-wash: var(--role-3rd-wash);
+  --color-role-5th-wash: var(--role-5th-wash);
+  --color-role-7th-wash: var(--role-7th-wash);
+  --color-role-9th-wash: var(--role-9th-wash);
+  --color-role-11th-wash: var(--role-11th-wash);
+  --color-role-13th-wash: var(--role-13th-wash);
   --color-on-role: var(--on-role);
 
-  /* Black keys 6 · white keys 9 · primitives 12–16 · buttons 18 · cards 26 · sheets 28. */
-  --radius-xs: calc(var(--radius) - 10px);
-  --radius-sm: calc(var(--radius) - 7px);
-  --radius-md: calc(var(--radius) - 4px);
-  --radius-lg: calc(var(--radius) - 2px);
+  /* The book's soft corners: black keys 6 · white keys 9 · primitives 12 · buttons 12 · cards 14 · sheets 20. */
+  --radius-xs: calc(var(--radius) - 6px);
+  --radius-sm: calc(var(--radius) - 3px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: calc(var(--radius) - 1px);
   --radius-xl: var(--radius);
-  --radius-2xl: calc(var(--radius) + 2px);
-  --radius-3xl: calc(var(--radius) + 10px);
-  --radius-4xl: calc(var(--radius) + 12px);
+  --radius-2xl: var(--radius);
+  --radius-3xl: calc(var(--radius) + 2px);
+  --radius-4xl: calc(var(--radius) + 8px);
 }
 
 /* The type scale and the one easing, on Tailwind's own names so cn() keeps sorting them. */
@@ -76,8 +111,6 @@
   --text-xl--line-height: 1.2;
   --text-4xl: 2.125rem;
   --text-4xl--line-height: 1.1;
-  --text-6xl: 4rem;
-  --text-6xl--line-height: 1;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -87,6 +120,8 @@
   }
   html {
     color-scheme: light;
+    /* The lettering ships in one weight: no element gets a smeared fake bold or fake light. */
+    font-synthesis-weight: none;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     /* No rubber band or pull-to-refresh: the app's pages end where they end. */
@@ -97,6 +132,15 @@
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;
+  }
+  /* Titles are hand-lettered, as in the book; reading text stays Onest. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  body {
     -webkit-tap-highlight-color: transparent;
     /* An app, not a document: a long press selects nothing and opens no callout… */
     -webkit-user-select: none;

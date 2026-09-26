@@ -39,13 +39,11 @@ export function NowPanel({
   return (
     <section className="flex flex-col gap-3 landscape-phone:gap-1">
       <div className="flex items-end justify-between gap-4">
-        <p className="text-6xl font-extrabold tracking-tight landscape-phone:text-4xl">
-          {chord?.symbol ?? '–'}
-        </p>
+        <p className="font-display text-7xl landscape-phone:text-5xl">{chord?.symbol ?? '–'}</p>
         {next ? (
           <p className="text-right text-sm text-muted-foreground">
             {t('nextChord')}
-            <span className="block text-2xl font-bold text-foreground">{next.symbol}</span>
+            <span className="block font-display text-3xl text-foreground">{next.symbol}</span>
           </p>
         ) : null}
       </div>
@@ -53,7 +51,7 @@ export function NowPanel({
         {Array.from({ length: beats }, (_, i) => (
           <span
             key={i}
-            className={cn('h-1.5 w-6 rounded-full', i === beat ? 'bg-primary' : 'bg-border')}
+            className={cn('h-1.5 w-6 rounded-full', i === beat ? 'bg-selected' : 'bg-hairline')}
           />
         ))}
       </div>

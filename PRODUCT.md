@@ -47,11 +47,17 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 The name is **Piano Trainer**. The legacy look (navy on slate, Bricolage Grotesque) is evidence of the subject, free
 to replace.
 
-**Reference products (owner-pinned, 2026-09-25):** the app sits alongside **Clefs** (calm sage palette, round icon
-buttons, a floating tab bar, full-width pill actions, the keyboard as the lower half of a practice screen),
-**Flowkey**'s player (the keyboard as the hero, one big round Play, tempo and hands in small popovers from the toolbar,
-chord symbols over numbered bars), a theory reference app (grouped reference cards with inline actions) and a chord
-trainer (bottom sheets of toggles with "Select common · Clear all" and Apply). Their craft level is the bar. Not
+**The world (owner-chosen, 2026-09-27, ADR 0010):** a **labelled picture book**, Richard Scarry's Busytown
+cross-sections: paper, a warm brown line round every shape, seven gouache paints at one lightness, hand-lettered
+titles and a small printed label on everything. Its colour, line and labelling only: no characters, animals or
+mascots. The keys follow **The Ultimate Piano**'s learn view (owner-sent): a mark pale at rest, full colour when its
+key is played.
+
+**Reference products (owner-pinned, 2026-09-25), for structure and craft:** **Clefs** (round icon buttons, the
+keyboard as the lower half of a practice screen), **Flowkey**'s player (the keyboard as the hero, one big round Play,
+tempo and hands in small popovers from the toolbar, chord symbols over numbered bars), a theory reference app
+(grouped reference cards with inline actions) and a chord trainer (bottom sheets of toggles with "Select common ·
+Clear all" and Apply). Their craft level is the bar; their sage palette and floating tab bar are no longer ours. Not
 taken from them: streaks as pressure, mascots, upsells, locked content, stock photos.
 
 ## Evidence on Hand

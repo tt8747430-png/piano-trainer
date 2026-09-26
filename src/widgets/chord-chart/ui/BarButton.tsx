@@ -14,6 +14,7 @@ export function BarButton({
   current,
   pressed,
   onClick,
+  fill = false,
   ref,
 }: {
   number: number
@@ -24,6 +25,8 @@ export function BarButton({
   /** Pressed while its sound plays, where the bar is a toggle; left out where it is not. */
   pressed?: boolean | undefined
   onClick: () => void
+  /** A cell of a chart's line, as wide as its column; else it keeps its own width, in the scrolling strip. */
+  fill?: boolean
   ref?: Ref<HTMLButtonElement>
 }) {
   const { t } = useTranslation('piece')
@@ -36,8 +39,9 @@ export function BarButton({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        'relative flex min-h-18 min-w-24 shrink-0 flex-col items-start justify-end gap-0.5 border-l-2 border-foreground/80 px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
-        current || pressed ? 'bg-muted text-primary' : 'hover:bg-muted/60',
+        'relative flex min-h-18 flex-col items-start justify-end gap-0.5 border-l-2 border-foreground/80 px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
+        fill ? 'min-w-0 overflow-hidden' : 'min-w-24 shrink-0',
+        current || pressed ? 'bg-secondary text-secondary-foreground' : 'hover:bg-muted/60',
       )}
     >
       {pressed ? <Square aria-hidden className="absolute top-1.5 right-2 size-3" /> : null}
@@ -47,7 +51,7 @@ export function BarButton({
       >
         {number}
       </span>
-      <span aria-hidden className="text-xl font-bold whitespace-nowrap">
+      <span aria-hidden className="font-display text-xl whitespace-nowrap sm:text-2xl">
         {symbols.join(' ')}
       </span>
       {notes.length > 0 ? (

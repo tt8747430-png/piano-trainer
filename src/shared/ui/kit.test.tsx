@@ -6,7 +6,6 @@ import { ButtonLink } from './ButtonLink'
 import { ChipRow } from './ChipRow'
 import { LevelMark } from './LevelMark'
 import { RatingMark } from './RatingMark'
-import { RoleLegend } from './RoleLegend'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { ScreenHeader } from './ScreenHeader'
@@ -123,15 +122,5 @@ describe('marks', () => {
   it('names a level in words', () => {
     render(<LevelMark level={2} />)
     expect(screen.getByRole('img', { name: 'Level 2' })).toBeInTheDocument()
-  })
-
-  it('lists the roles it is given, in that order', () => {
-    render(<RoleLegend roles={['root', '3rd', '5th', '7th']} />)
-    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
-      'Root',
-      '3rd',
-      '5th',
-      '7th',
-    ])
   })
 })

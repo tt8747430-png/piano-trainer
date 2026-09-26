@@ -28,7 +28,7 @@ export function ScaleChords({
   if (chords.length === 0) return null
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-xl font-bold">{t('chordsIn')}</h3>
+      <h3 className="text-2xl">{t('chordsIn')}</h3>
       <Segmented
         label={t('chordsIn')}
         value={size}
@@ -41,13 +41,13 @@ export function ScaleChords({
             key={roman}
             variant="outline"
             aria-pressed={playback.playing === roman}
-            className="relative h-16 flex-col gap-0 aria-pressed:bg-muted aria-pressed:text-primary"
+            className="relative h-16 flex-col gap-0 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
             onClick={() => playback.toggle(roman, placedChordSounds(chord))}
           >
             {playback.playing === roman ? (
               <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" />
             ) : null}
-            <span className="text-lg font-bold">{chordSymbol(chord)}</span>
+            <span className="font-display text-2xl">{chordSymbol(chord)}</span>
             <span className="text-sm text-muted-foreground">{roman}</span>
           </Button>
         ))}

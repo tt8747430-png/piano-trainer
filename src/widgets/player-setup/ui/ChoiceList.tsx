@@ -37,7 +37,7 @@ export function ChoiceList<V>({
                 </span>
               ) : null}
             </span>
-            {item.value === value ? <Check aria-hidden className="size-5 text-primary" /> : null}
+            {item.value === value ? <Check aria-hidden className="size-5 text-selected" /> : null}
           </button>
         </li>
       ))}

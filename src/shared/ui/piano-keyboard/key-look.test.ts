@@ -59,10 +59,19 @@ describe('keyLook', () => {
     expect(keyLook(C4, {}, { namedKeys: 'none', letters: new Map([[C4, 'A']]) }).letter).toBe('A')
   })
 
-  it('puts a key down over whatever it shows', () => {
-    const down = new Set([C4])
+  it('puts a key down over whatever it shows, its mark and label kept', () => {
+    const down = new Set([C4, CS4])
+    const scale = new Map<Midi, KeyMark>([
+      [C4, { tone: 'tonic', label: '1' }],
+      [CS4, { tone: 'scale', label: '♭2' }],
+    ])
     expect(keyLook(C4, { down }, UNNAMED)).toMatchObject({ fill: 'white', down: true })
     expect(keyLook(C4, { marks: root, down }, UNNAMED)).toMatchObject({ fill: 'root', down: true })
+    expect(keyLook(CS4, { marks: scale, down }, UNNAMED)).toMatchObject({
+      fill: 'scale',
+      down: true,
+      label: { kind: 'mark', text: '♭2' },
+    })
   })
 
   it('shows a wrong key over a lit one, a lit one over a mark, a mark over a selection', () => {

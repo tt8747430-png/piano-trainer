@@ -21,7 +21,7 @@ describe('Theory → Chords', () => {
     expect(audio.played.length).toBeGreaterThan(0)
   })
 
-  it('rolls an arpeggio, showing only the key struck last', async () => {
+  it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/theory/chords')
     await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
@@ -36,12 +36,9 @@ describe('Theory → Chords', () => {
     act(() => audio.setNow(start + 0.5))
     expect(g4).toHaveAttribute('data-down')
     expect(g4).toHaveClass('bg-role-5th')
-    for (const key of [c4, e4]) {
-      expect(key).not.toHaveAttribute('data-down')
-      expect(key).toHaveClass('bg-key-white')
-    }
-    act(() => audio.setNow(start + 3))
-    expect(c4).toHaveClass('bg-role-root')
+    for (const key of [c4, e4]) expect(key).not.toHaveAttribute('data-down')
+    expect(c4).toHaveClass('bg-role-root-wash')
+    expect(e4).toHaveClass('bg-role-3rd-wash')
   })
 
   it('turns Play into Stop while the chord sounds, and back when it ends', async () => {
