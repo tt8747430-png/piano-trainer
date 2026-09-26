@@ -33,10 +33,12 @@ export function practiceMarks(
   for (const played of notes) {
     const label = options.received?.includes(pitchClass(played.midi))
       ? '✓'
-      : options.fingers && played.finger
-        ? String(played.finger)
-        : spellPerformedNote(performance, played).name
-    marks.set(played.midi, { tone: played.hand, label })
+      : spellPerformedNote(performance, played).name
+    marks.set(played.midi, {
+      tone: played.hand,
+      label,
+      ...(options.fingers && played.finger ? { finger: played.finger } : {}),
+    })
   }
   return marks
 }

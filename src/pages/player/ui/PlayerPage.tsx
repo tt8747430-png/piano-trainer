@@ -78,7 +78,7 @@ function Player({ piece }: { piece: Piece }) {
           />
         </div>
         <div className="order-last landscape-phone:col-start-1 landscape-phone:row-start-3">
-          <Transport practice={practice} onHear={player.hear} />
+          <Transport practice={practice} hearing={player.hearing} onHear={player.hear} />
         </div>
       </div>
       <LiveKeyboard

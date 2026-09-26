@@ -67,4 +67,15 @@ describe('useQuiz', () => {
     act(() => result.current.hear())
     expect(audio.played).toHaveLength(2)
   })
+
+  it('stops Play again’s sound on a second hear, and says while it plays', () => {
+    const { result, audio } = setup({ ...ONLY_C_MAJOR, chordMode: 'name-chord' })
+    expect(result.current.hearing).toBe(false)
+    act(() => result.current.hear())
+    expect(result.current.hearing).toBe(true)
+    const stops = audio.stops
+    act(() => result.current.hear())
+    expect(audio.stops).toBe(stops + 1)
+    expect(result.current.hearing).toBe(false)
+  })
 })

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useProgressStoreApi } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
 import type { Midi } from '@/shared/lib/music'
-import { usePlay } from '@/shared/lib/services'
+import { usePlay, usePlayback } from '@/shared/lib/services'
 import { questionSounds } from './quiz-keys'
 import {
   answerOf,
@@ -23,8 +23,10 @@ export interface Quiz {
   check(): void
   choose(symbol: string): void
   next(): void
-  /** Sounds the question's chord: Name chord's "Play again". */
+  /** Name chord's "Play again": sounds the question's chord, or stops it while it sounds. */
   hear(): void
+  /** Play again's sound is playing. */
+  readonly hearing: boolean
 }
 
 /**
@@ -36,6 +38,7 @@ export function useQuiz(config: QuizConfig, options: { random?: () => number } =
   const random = options.random ?? Math.random
   const store = useProgressStoreApi()
   const play = usePlay()
+  const playback = usePlayback<'question'>()
   const [state, setState] = useState(() =>
     quizReducer(INITIAL_QUIZ, {
       type: 'ask',
@@ -83,7 +86,8 @@ export function useQuiz(config: QuizConfig, options: { random?: () => number } =
     },
     hear() {
       const current = machine.current.question
-      if (current) play(questionSounds(current))
+      if (current) playback.toggle('question', questionSounds(current))
     },
+    hearing: playback.playing === 'question',
   }
 }

@@ -15,6 +15,7 @@ export function ChordChart({
   meter,
   layout,
   current = null,
+  playing,
   onBar,
 }: {
   performance: Performance
@@ -22,6 +23,11 @@ export function ChordChart({
   meter: Meter
   layout: 'lines' | 'strip'
   current?: number | null
+  /**
+   * The bar sounding, where a tap plays a bar (the Piece): every bar is then a toggle, pressed while
+   * it plays. Left out where a tap moves the cursor (the Player).
+   */
+  playing?: number | null
   onBar: (bar: number) => void
 }) {
   const { t } = useTranslation('piece')
@@ -61,6 +67,7 @@ export function ChordChart({
         symbols={chords.map((c) => c.symbol)}
         notes={notes}
         current={current === index}
+        pressed={playing === undefined ? undefined : playing === index}
         onClick={() => onBar(index)}
       />
     )

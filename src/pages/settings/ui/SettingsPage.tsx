@@ -12,6 +12,7 @@ import {
   type Theme,
 } from '@/entities/settings'
 import { MidiControl } from '@/features/connect-midi'
+import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
 import { setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
@@ -80,6 +81,9 @@ export function SettingsPage() {
           options={THEMES.map((value) => ({ value, label: t(`settings:${THEME_LABEL[value]}`) }))}
           onChange={(value) => setTheme(settings, value)}
         />
+      </Group>
+      <Group title={t('settings:keyboard')}>
+        <KeyboardSettingsFields />
       </Group>
       <Group title={t('settings:midi')}>
         <MidiControl />

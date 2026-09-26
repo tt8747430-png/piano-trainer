@@ -79,4 +79,14 @@ describe('usePlayer', () => {
     expect(result.current.practice.state.received).toContain(key % 12)
     expect(audio.played.flatMap((play) => play.sounds)).toEqual([])
   })
+
+  it('stops Hear these notes on a second hear, and says while they play', () => {
+    const { result, audio } = setup({ hands: 'both', mode: 'wait' })
+    act(() => result.current.hear())
+    expect(result.current.hearing).toBe(true)
+    const stops = audio.stops
+    act(() => result.current.hear())
+    expect(audio.stops).toBe(stops + 1)
+    expect(result.current.hearing).toBe(false)
+  })
 })

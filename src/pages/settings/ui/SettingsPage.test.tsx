@@ -27,6 +27,21 @@ describe('Settings', () => {
         .getAllByRole('button')
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
+    const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 3)).toEqual([
+      'Theme',
+      'Keyboard',
+      'MIDI keyboard',
+    ])
+  })
+
+  it('sets up the keyboard, and saves each change', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const keys = await screen.findByRole('group', { name: 'Keys' })
+    await user.click(within(keys).getByRole('button', { name: 'Large' }))
+    await user.click(screen.getByRole('switch', { name: 'Keyboard map' }))
+    expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', map: true })
   })
 
   it('saves a new language', async () => {

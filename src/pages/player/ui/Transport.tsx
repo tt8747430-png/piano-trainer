@@ -4,8 +4,17 @@ import type { Practice } from '@/features/practice'
 import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** The primary action, by mode: Play or Stop; Back, Next and Next bar; or Hear these notes. */
-export function Transport({ practice, onHear }: { practice: Practice; onHear: () => void }) {
+/** The primary action, by mode: Play or Stop; Back, Next and Next bar; or Hear these notes (or Stop). */
+export function Transport({
+  practice,
+  hearing,
+  onHear,
+}: {
+  practice: Practice
+  /** Hear these notes' sound is playing: the button stops it. */
+  hearing: boolean
+  onHear: () => void
+}) {
   const { t } = useTranslation('player')
   const { mode, playing } = practice.state
   return (
@@ -35,8 +44,8 @@ export function Transport({ practice, onHear }: { practice: Practice; onHear: ()
         <>
           <RoundButton label={t('restart')} icon={RotateCcw} onClick={practice.restart} />
           <Button size="pill" variant="soft" className="flex-1" onClick={onHear}>
-            <Volume2 data-icon="inline-start" />
-            {t('hear')}
+            {hearing ? <Square data-icon="inline-start" /> : <Volume2 data-icon="inline-start" />}
+            {hearing ? t('stop') : t('hear')}
           </Button>
         </>
       )}

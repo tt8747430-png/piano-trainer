@@ -9,7 +9,7 @@ import { LearnedToggle } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { usePlayback } from '@/shared/lib/services'
 import { ButtonLink, Pinned } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceSkills } from '@/widgets/piece-skills'
@@ -21,12 +21,15 @@ import { PieceFacts } from './PieceFacts'
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
-  const play = usePlay()
+  const playback = usePlayback<number>()
   const locale = useLocale()
   const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
   const headings = usePieceHeadings(piece)
-  const hearBar = (bar: number) =>
-    play(barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }))
+  const toggleBar = (bar: number) =>
+    playback.toggle(
+      bar,
+      barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
+    )
 
   return (
     <div className="flex flex-col gap-8 pb-4">
@@ -50,14 +53,15 @@ export function PieceView({ piece }: { piece: Piece }) {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('chart')}</h2>
         <Pinned>
-          <LiveKeyboard range={playerRange(performance)} />
+          <LiveKeyboard range={playerRange(performance)} spotlight />
         </Pinned>
         <ChordChart
           performance={performance}
           headings={headings}
           meter={piece.meter}
           layout="lines"
-          onBar={hearBar}
+          onBar={toggleBar}
+          playing={playback.playing}
         />
       </section>
     </div>

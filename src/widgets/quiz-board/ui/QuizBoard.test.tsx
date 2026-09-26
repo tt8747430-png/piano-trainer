@@ -70,4 +70,13 @@ describe('QuizBoard', () => {
     })
     expect(screen.getByRole('heading', { name: 'Build A harmonic minor' })).toBeInTheDocument()
   })
+
+  it('turns Play again into Stop while the question sounds', async () => {
+    const user = userEvent.setup()
+    renderBoard({ chordMode: 'name-chord', scope: { skills: ['chord:maj'], roots: C } })
+    await user.click(screen.getByRole('button', { name: 'Play again' }))
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument()
+  })
 })

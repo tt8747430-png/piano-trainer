@@ -35,4 +35,13 @@ describe('ChordChart', () => {
     expect(scrollTo).toHaveBeenCalledOnce()
     expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ left: expect.any(Number) }))
   })
+
+  it('makes its bars toggles where a bar plays, and leaves the Player’s bars plain', () => {
+    const props = { performance, headings: ['Verse', 'Chorus'], meter: bz5.meter, onBar: () => {} }
+    const { rerender } = render(<ChordChart {...props} layout="lines" playing={0} />)
+    expect(screen.getByRole('button', { name: /^Bar 1:/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: /^Bar 2:/ })).toHaveAttribute('aria-pressed', 'false')
+    rerender(<ChordChart {...props} layout="strip" current={0} />)
+    expect(screen.getByRole('button', { name: /^Bar 1:/ })).not.toHaveAttribute('aria-pressed')
+  })
 })

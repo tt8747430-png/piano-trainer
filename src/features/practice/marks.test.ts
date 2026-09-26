@@ -26,6 +26,20 @@ describe('practiceMarks', () => {
     expect([...marks.values()].every((mark) => mark.tone === 'lh')).toBe(true)
   })
 
+  it('gives each mark its finger with Finger numbers, the label keeping the note’s name', () => {
+    const fingered = practiceMarks(performance, 0, { hands: BOTH, fingers: true })
+    const plain = practiceMarks(performance, 0, { hands: BOTH, fingers: false })
+    const group = performance.beatGroups[0]
+    for (const index of group?.notes ?? []) {
+      const played = performance.notes[index]
+      if (!played || played.hand === 'melody') continue
+      const mark = fingered.get(played.midi)
+      expect(mark?.label).toBe(spellPerformedNote(performance, played).name)
+      expect(mark?.finger).toBe(played.finger)
+      expect(plain.get(played.midi)?.finger).toBeUndefined()
+    }
+  })
+
   it('marks the beat group’s notes by hand, labelled with note names', () => {
     const marks = practiceMarks(performance, 0, { hands: BOTH, fingers: false })
     const group = performance.beatGroups[0]

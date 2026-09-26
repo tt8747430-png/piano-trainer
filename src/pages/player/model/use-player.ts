@@ -16,7 +16,7 @@ import { recordPractised } from '@/features/record-practised'
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import { audibleHands, beatGroupSounds } from '@/shared/lib/schedule'
-import { usePlay } from '@/shared/lib/services'
+import { usePlayback } from '@/shared/lib/services'
 import type { KeyMark } from '@/shared/ui'
 import type { SetupChange } from '@/widgets/player-setup'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
@@ -38,8 +38,10 @@ export interface Player {
   readonly feedback: WaitFeedback | null
   change(change: SetupChange): void
   setMode(mode: PracticeMode): void
-  /** Wait mode's "Hear these notes": the current beat group, both hands. */
+  /** Wait mode's "Hear these notes": the current beat group, both hands; or stops it while it sounds. */
   hear(): void
+  /** Hear these notes' sound is playing. */
+  readonly hearing: boolean
   /** A key tapped on the screen: an answer in Wait mode. The keyboard sounds every tap itself. */
   tapKey(key: Midi): void
 }
@@ -52,7 +54,7 @@ export function usePlayer(
 ): Player {
   const toggles = useSettings(selectPractice)
   const progress = useProgressStoreApi()
-  const play = usePlay()
+  const playback = usePlayback<'hear'>()
   const { key, pattern, rh, lh, chordSize } = search
   const choice = useMemo(
     () => resolveChoice(piece, { key, pattern, rh, lh, chordSize }, toggles.melody),
@@ -107,8 +109,12 @@ export function usePlayer(
     change: (setup) => setSearch(searchPatch(piece, setup)),
     setMode: (mode) => setSearch({ mode }),
     hear() {
-      play(beatGroupSounds(performance, state.beatGroup, { tempo, hands: audibleHands('both') }))
+      playback.toggle(
+        'hear',
+        beatGroupSounds(performance, state.beatGroup, { tempo, hands: audibleHands('both') }),
+      )
     },
+    hearing: playback.playing === 'hear',
     tapKey,
   }
 }

@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setPracticeToggle } from '@/features/set-preference'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 
 describe('Player', () => {
@@ -71,5 +72,20 @@ describe('Player', () => {
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'G' }))
     expect(router.state.location.search).not.toHaveProperty('key')
+  })
+
+  it('turns Hear these notes into Stop while they sound, in Wait mode', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5?mode=wait')
+    await user.click(await screen.findByRole('button', { name: 'Hear these notes' }))
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+  })
+
+  it('puts the fingers under the keys with Finger numbers, the keys keeping their notes', async () => {
+    const { settingsStore } = await renderApp('/play/bz5?mode=step')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
+    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
+    expect(document.querySelector('[data-slot="finger-row"]')).toBeInTheDocument()
   })
 })

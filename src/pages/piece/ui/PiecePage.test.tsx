@@ -79,4 +79,16 @@ describe('Piece', () => {
     expect(await screen.findByText('No chart yet')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Practise' })).not.toBeInTheDocument()
   })
+
+  it('plays a bar as a toggle: pressed while it plays, a second tap stops it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/songs/bz5')
+    const bar = await screen.findByRole('button', { name: /^Bar 1: G$/ })
+    await user.click(bar)
+    expect(bar).toHaveAttribute('aria-pressed', 'true')
+    const stops = audio.stops
+    await user.click(bar)
+    expect(audio.stops).toBe(stops + 1)
+    expect(bar).toHaveAttribute('aria-pressed', 'false')
+  })
 })

@@ -1,4 +1,4 @@
-import { Volume2 } from 'lucide-react'
+import { Square, Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/primitives/button'
  * question of a bounded quiz, Next calls `onFinish`.
  */
 export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => void }) {
-  const { t } = useTranslation(['quiz', 'theory'])
+  const { t } = useTranslation(['quiz', 'theory', 'common'])
   const nameScale = useScaleName()
   const { question, selected, result } = quiz.state
   if (!question) return null
@@ -39,7 +39,11 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
       <div className="flex items-center gap-3">
         <h2 className="min-w-0 flex-1 text-4xl font-bold tracking-tight text-balance">{prompt}</h2>
         {question.mode === 'name-chord' ? (
-          <RoundButton label={t('quiz:playAgain')} icon={Volume2} onClick={quiz.hear} />
+          <RoundButton
+            label={quiz.hearing ? t('common:stop') : t('quiz:playAgain')}
+            icon={quiz.hearing ? Square : Volume2}
+            onClick={quiz.hear}
+          />
         ) : null}
       </div>
 
