@@ -1,8 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="16" fill="#704fa9"/>
-  <rect x="10" y="15" width="44" height="34" rx="5" fill="#ffffff"/>
-  <path d="M21 15v34M32 15v34M43 15v34" stroke="#ccc8d5" stroke-width="1.5"/>
-  <rect x="17.5" y="15" width="7" height="20" rx="2" fill="#24212b"/>
-  <rect x="28.5" y="15" width="7" height="20" rx="2" fill="#24212b"/>
-  <rect x="39.5" y="15" width="7" height="20" rx="2" fill="#c4b2ee"/>
+  <!-- Three keys seen from above, tapering to the back, each outlined, with a front face and a light
+       bevel; the black keys raised between them, glossy; E played in honey. Warm charcoal ground
+       with a glow behind the keys, a shadow under them, three diamonds. A rounded tile where nothing
+       else shapes it (a tab, a desktop install); pwa-assets.config.ts fills the corners for the home
+       screens. -->
+  <defs>
+    <radialGradient id="ground" cx="32" cy="30" r="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#524539"/>
+      <stop offset="1" stop-color="#1E1815"/>
+    </radialGradient>
+    <linearGradient id="paperTop0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDE7DF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+    <linearGradient id="paperTop1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCD5CB"/><stop offset="1" stop-color="#F4F0EA"/></linearGradient>
+    <linearGradient id="paperFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9BEB1"/><stop offset="1" stop-color="#A39687"/></linearGradient>
+    <linearGradient id="honeyTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4A240"/><stop offset="1" stop-color="#F5CB78"/></linearGradient>
+    <linearGradient id="honeyFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C4852C"/><stop offset="1" stop-color="#9C6520"/></linearGradient>
+    <linearGradient id="blackTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A4E45"/><stop offset="0.5" stop-color="#342C27"/><stop offset="1" stop-color="#211B18"/></linearGradient>
+    <linearGradient id="blackFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A1512"/><stop offset="1" stop-color="#0E0B09"/></linearGradient>
+    <filter id="soft" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <clipPath id="tile"><rect width="64" height="64" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect width="64" height="64" fill="url(#ground)"/>
+    <ellipse cx="32" cy="52.5" rx="23" ry="2.6" fill="#000000" fill-opacity="0.5" filter="url(#soft)"/>
+    <rect x="8" y="11" width="3" height="3" rx="0.6" transform="rotate(45 9.5 12.5)" fill="#FEFDFB" fill-opacity="0.2"/>
+    <rect x="50.1" y="8.1" width="2.8" height="2.8" rx="0.56" transform="rotate(45 51.5 9.5)" fill="#EDC684" fill-opacity="1"/>
+    <rect x="54.5" y="19" width="4" height="4" rx="0.8" transform="rotate(45 56.5 21)" fill="#FEFDFB" fill-opacity="0.22"/>
+    <path d="M14.09 17.87Q14.5 15.5 16.9 15.5L22.17 15.5Q24.57 15.5 24.47 17.9L23.38 44.1Q23.37 44.5 23.37 44.9L23.37 47.5Q23.37 50.5 20.37 50.5L12.5 50.5Q9.5 50.5 9.5 47.5L9.5 44.9Q9.5 44.5 9.57 44.11Z" fill="#140F0C" stroke="#140F0C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M26.81 17.89Q26.97 15.5 29.37 15.5L34.63 15.5Q37.03 15.5 37.19 17.89L38.91 44.1Q38.93 44.5 38.93 44.9L38.93 47.5Q38.93 50.5 35.93 50.5L28.07 50.5Q25.07 50.5 25.07 47.5L25.07 44.9Q25.07 44.5 25.09 44.1Z" fill="#140F0C" stroke="#140F0C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M39.53 17.9Q39.43 15.5 41.83 15.5L47.1 15.5Q49.5 15.5 49.91 17.87L54.43 44.11Q54.5 44.5 54.5 44.9L54.5 47.5Q54.5 50.5 51.5 50.5L43.63 50.5Q40.63 50.5 40.63 47.5L40.63 44.9Q40.63 44.5 40.62 44.1Z" fill="#140F0C" stroke="#140F0C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M9.5 44.8Q9.5 44.5 9.8 44.5L23.07 44.5Q23.37 44.5 23.37 44.8L23.37 47.5Q23.37 50.5 20.37 50.5L12.5 50.5Q9.5 50.5 9.5 47.5Z" fill="url(#paperFace)"/>
+    <path d="M14.09 17.87Q14.5 15.5 16.9 15.5L22.17 15.5Q24.57 15.5 24.47 17.9L23.38 44.2Q23.37 44.5 23.07 44.5L9.8 44.5Q9.5 44.5 9.55 44.2Z" fill="url(#paperTop0)"/>
+    <path d="M10.4 44.95H22.47" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="0.8" stroke-linecap="round"/>
+    <path d="M25.07 44.8Q25.07 44.5 25.37 44.5L38.63 44.5Q38.93 44.5 38.93 44.8L38.93 47.5Q38.93 50.5 35.93 50.5L28.07 50.5Q25.07 50.5 25.07 47.5Z" fill="url(#paperFace)"/>
+    <path d="M26.81 17.89Q26.97 15.5 29.37 15.5L34.63 15.5Q37.03 15.5 37.19 17.89L38.91 44.2Q38.93 44.5 38.63 44.5L25.37 44.5Q25.07 44.5 25.09 44.2Z" fill="url(#paperTop1)"/>
+    <path d="M25.97 44.95H38.03" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="0.8" stroke-linecap="round"/>
+    <path d="M40.63 44.8Q40.63 44.5 40.93 44.5L54.2 44.5Q54.5 44.5 54.5 44.8L54.5 47.5Q54.5 50.5 51.5 50.5L43.63 50.5Q40.63 50.5 40.63 47.5Z" fill="url(#honeyFace)"/>
+    <path d="M39.53 17.9Q39.43 15.5 41.83 15.5L47.1 15.5Q49.5 15.5 49.91 17.87L54.45 44.2Q54.5 44.5 54.2 44.5L40.93 44.5Q40.63 44.5 40.62 44.2Z" fill="url(#honeyTop)"/>
+    <path d="M41.53 44.95H53.6" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="0.8" stroke-linecap="round"/>
+    <path d="M22.65 15.3Q22.77 13.7 24.37 13.7L27.17 13.7Q28.77 13.7 28.73 15.3L28.4 29.7Q28.39 30 28.39 30.3L28.39 31.8Q28.39 33.6 26.39 33.6L23.59 33.6Q21.59 33.6 21.59 31.8L21.59 30.3Q21.59 30 21.61 29.7Z" fill="#0B0807" stroke="#0B0807" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M21.59 30.3Q21.59 30 21.89 30L28.09 30Q28.39 30 28.39 30.3L28.39 31.8Q28.39 33.6 26.39 33.6L23.59 33.6Q21.59 33.6 21.59 31.8Z" fill="url(#blackFace)"/>
+    <path d="M22.65 15.3Q22.77 13.7 24.37 13.7L27.17 13.7Q28.77 13.7 28.73 15.3L28.4 29.7Q28.39 30 28.09 30L21.89 30Q21.59 30 21.61 29.7Z" fill="url(#blackTop)"/>
+    <path d="M23.62 15.5Q23.67 14.9 24.27 14.9L24.27 14.9Q24.87 14.9 24.82 15.5L23.93 28Q23.89 28.6 23.29 28.6L23.29 28.6Q22.69 28.6 22.73 28Z" fill="#FFFFFF" fill-opacity="0.16"/>
+    <path d="M22.39 30.4H27.59" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="0.7" stroke-linecap="round"/>
+    <path d="M35.27 15.3Q35.23 13.7 36.83 13.7L39.63 13.7Q41.23 13.7 41.35 15.3L42.39 29.7Q42.41 30 42.41 30.3L42.41 31.8Q42.41 33.6 40.41 33.6L37.61 33.6Q35.61 33.6 35.61 31.8L35.61 30.3Q35.61 30 35.6 29.7Z" fill="#0B0807" stroke="#0B0807" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M35.61 30.3Q35.61 30 35.91 30L42.11 30Q42.41 30 42.41 30.3L42.41 31.8Q42.41 33.6 40.41 33.6L37.61 33.6Q35.61 33.6 35.61 31.8Z" fill="url(#blackFace)"/>
+    <path d="M35.27 15.3Q35.23 13.7 36.83 13.7L39.63 13.7Q41.23 13.7 41.35 15.3L42.39 29.7Q42.41 30 42.11 30L35.91 30Q35.61 30 35.6 29.7Z" fill="url(#blackTop)"/>
+    <path d="M36.16 15.5Q36.13 14.9 36.73 14.9L36.73 14.9Q37.33 14.9 37.36 15.5L37.88 28Q37.91 28.6 37.31 28.6L37.31 28.6Q36.71 28.6 36.68 28Z" fill="#FFFFFF" fill-opacity="0.16"/>
+    <path d="M36.41 30.4H41.61" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="0.7" stroke-linecap="round"/>
+  </g>
 </svg>

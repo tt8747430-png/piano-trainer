@@ -1,6 +1,7 @@
 # ADR 0010 — The app is a labelled picture book
 
-- **Status:** accepted · **Date:** 2026-09-27 · **Supersedes:** ADR 0007's colours, shapes and tab bar
+- **Status:** accepted, amended by ADR 0011 (its colours in use, its line and its lettering) · **Date:** 2026-09-27 ·
+  **Supersedes:** ADR 0007's colours, shapes and tab bar
 
 ## Context
 

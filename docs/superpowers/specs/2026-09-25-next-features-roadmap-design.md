@@ -248,6 +248,10 @@ actions): the owner found the green look and the keys "very strident and heavy".
 - The Ultimate Piano's key grammar stays: a mark pale at rest, full colour when played.
 - The same change made the app use a laptop's width (a sidebar, screens up to 72rem, two columns) and docked the
   phone's tab bar. Recorded in ADR 0010, DESIGN.md and PRODUCT.md.
+- Built, it read loud; the owner asked for calmer colours and better typography and sent Apple's colour and
+  typography guidelines and Material's colour system. The book was **printed quietly** (ADR 0011): faded paints, a
+  soft 1px line, honey on the one action only, a neutral "chosen", a monochrome nav, a `prefers-contrast: more`
+  layer, and Literata in place of Balsamiq Sans for titles and chords.
 - Every colour rule the app already keeps still holds: colour is never the only cue, role colours stay on chord tones
   only, WCAG AA contrast in both themes, dark as a first-class palette.
 

@@ -17,7 +17,7 @@ export function QualityRow({ quality }: { quality: ChordQuality }) {
   return (
     <li aria-label={name} className="flex flex-col gap-1 px-4 py-3">
       <div className="flex items-baseline justify-between gap-3">
-        <span className="font-display text-2xl">
+        <span className="font-display text-2xl font-semibold">
           {qualitySpellings(quality)
             .map((s) => `C${s}`)
             .join(', ')}

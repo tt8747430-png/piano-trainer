@@ -3,17 +3,17 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from 'cn'
 
 const toggleVariants = cva(
-  "group/toggle inline-flex items-center justify-center gap-1.5 text-base font-semibold whitespace-nowrap transition-all duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/toggle inline-flex items-center justify-center gap-1.5 text-base font-semibold whitespace-nowrap transition-all duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default: 'rounded-xl bg-transparent hover:bg-muted data-pressed:bg-muted',
         outline: 'rounded-xl border border-input bg-transparent hover:bg-muted',
         // A choice in a scrolling row: roots, families, keys.
-        chip: 'rounded-xl border-2 border-border bg-card px-4 text-foreground hover:bg-muted data-pressed:border-selected data-pressed:bg-selected data-pressed:text-selected-foreground',
-        // A segment of a segmented control: the chosen one is filled, as a pressed tab in the book.
+        chip: 'rounded-xl border border-input bg-card px-4 text-foreground hover:bg-muted data-pressed:border-selected data-pressed:bg-selected data-pressed:text-selected-foreground data-pressed:hover:bg-selected',
+        // A segment of a segmented control: the chosen one is a card on the muted track, in the line.
         segment:
-          'flex-1 rounded-lg px-2 text-center font-display text-base leading-tight whitespace-normal text-muted-foreground hover:text-foreground data-pressed:bg-selected data-pressed:text-selected-foreground',
+          'flex-1 rounded-lg border border-transparent px-2 text-center leading-tight whitespace-normal text-muted-foreground hover:text-foreground data-pressed:border-input data-pressed:bg-card data-pressed:text-foreground',
       },
       size: {
         default: 'h-11 min-w-11 px-3',

@@ -25,8 +25,8 @@ export function LearnedToggle({
     <span
       aria-hidden
       className={cn(
-        'grid size-7 shrink-0 place-items-center rounded-full ring-2 transition-colors duration-200 ease-out ring-inset',
-        learned ? 'bg-learned text-learned-foreground ring-learned' : 'ring-border',
+        'grid size-7 shrink-0 place-items-center rounded-full ring-1 transition-colors duration-200 ease-out ring-inset',
+        learned ? 'bg-learned text-learned-foreground ring-learned' : 'ring-input',
       )}
     >
       {learned ? <Check className="size-4" strokeWidth={3} /> : null}

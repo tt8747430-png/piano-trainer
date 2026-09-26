@@ -3,8 +3,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/onest/wght.css';
-@import '@fontsource/balsamiq-sans/latin-700.css';
-@import '@fontsource/balsamiq-sans/cyrillic-700.css';
+@import '@fontsource-variable/literata/opsz.css';
 @import '@fontsource/noto-music/music-400.css';
 @source '../../index.html';
 @source '../';

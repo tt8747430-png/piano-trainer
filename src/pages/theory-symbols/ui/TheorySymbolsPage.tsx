@@ -17,7 +17,7 @@ export function TheorySymbolsPage() {
       {CHORD_FAMILIES.map((family) => (
         <section key={family} aria-label={t(`family.${family}`)} className="flex flex-col gap-3">
           <h2 className="text-2xl">{t(`family.${family}`)}</h2>
-          <ul className="flex flex-col divide-y-2 divide-hairline rounded-3xl border-2 border-border bg-card">
+          <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card">
             {qualitiesIn(family).map((quality) => (
               <QualityRow key={quality} quality={quality} />
             ))}

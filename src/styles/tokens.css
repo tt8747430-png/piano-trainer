@@ -1,62 +1,79 @@
 /*
  * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name what a
  * colour is for. Components use roles through Tailwind utilities, never primitives. The world
- * (DESIGN.md, ADR 0010) is a labelled picture-book cross-section: paper, a warm brown line round
- * every shape, and seven gouache flats at one even lightness, so they sit together; each has a pale
- * wash for a key at rest and its full colour for a key that sounds.
+ * (DESIGN.md, ADR 0010, ADR 0011) is a labelled picture book printed quietly: warm paper, a soft line
+ * round every card and control, and seven paints faded to one even lightness, so any two sit
+ * together; each has a pale wash (a key at rest, a place's tint) and a deep shade (its text and
+ * icons). Colour fills one control per screen, the action; what is chosen is neutral.
  */
 :root {
   --p-white: #ffffff;
-  --p-paper: #fbf7ef;
-  --p-paper-card: #fffcf7;
-  --p-sand-100: #f3eadb;
-  --p-sand-200: #eadcc9;
-  --p-ink: #3f2816;
-  --p-ink-soft: #735f4f;
-  --p-line: #6d4d37;
-  --p-bed: #a88c77;
-  --p-rail: #6a4630;
-  --p-black-key: #362820;
-  /* The gouache set: full, and the wash of each. */
-  --p-brick: #e17f6c;
-  --p-brick-wash: #f6c8be;
-  --p-yellow: #eeb737;
-  --p-yellow-wash: #efd093;
-  --p-grass: #78b065;
-  --p-grass-wash: #c3ddba;
-  --p-sky: #5fa5de;
-  --p-sky-wash: #b7d9f7;
-  --p-lilac: #a98ed9;
-  --p-lilac-wash: #d9cdf4;
-  --p-sand: #c79263;
-  --p-sand-wash: #efcdb0;
-  --p-teal: #50b0b0;
-  --p-teal-wash: #aae0df;
-  --p-brick-deep: #b94834;
-  --p-sky-deep: #0f68a2;
-  --p-sky-mist: #d8ebfb;
-  --p-grass-deep: #417230;
-  --p-ochre-deep: #976200;
-  --p-crimson: #a82133;
+  /* Grouped surfaces: the page a shade darker than the cards on it, so a card needs no heavy line. */
+  --p-paper: #f7f3ee;
+  --p-paper-card: #fefdfb;
+  --p-sand-100: #eee9e2;
+  --p-sand-200: #e5dfd6;
+  --p-line: #dad1c8;
+  --p-control: #908479;
+  --p-ink: #332921;
+  --p-ink-soft: #685e56;
+  --p-umber: #4b4038;
+  --p-bed: #cbc2b9;
+  --p-rail: #dfd8cf;
+  --p-black-key: #332c28;
+  /* The paints, faded to one lightness: full, the wash of each, and the deep shade of some. */
+  --p-brick: #e19e8c;
+  --p-brick-deep: #934c39;
+  --p-yellow: #e8c67d;
+  --p-yellow-wash: #f7e8c4;
+  --p-yellow-deep: #8b682b;
+  --p-grass: #9bc093;
+  --p-grass-wash: #d9ebd5;
+  --p-grass-deep: #4d744e;
+  --p-sky: #85b8dc;
+  --p-sky-wash: #d1e6f7;
+  --p-sky-deep: #356890;
+  --p-sky-mist: #e0effa;
+  --p-sky-mist-ink: #2a597f;
+  --p-lilac: #b8a8d8;
+  --p-lilac-wash: #e6dff6;
+  --p-lilac-deep: #6a5988;
+  --p-sand: #d3ac8a;
+  --p-sand-wash: #f5e0cf;
+  --p-sand-deep: #7d5b40;
+  --p-teal: #82c2c1;
+  /* The one action: honey, the book's yellow a shade quieter. */
+  --p-honey: #edc684;
+  --p-honey-night: #d4b176;
+  --p-ochre: #a8742a;
+  --p-crimson: #a34243;
 
-  --p-dusk-950: #1b150f;
-  --p-dusk-900: #271f18;
-  --p-dusk-850: #332921;
-  --p-dusk-800: #473a30;
-  --p-dusk-ink: #f2eadd;
-  --p-dusk-muted: #c0ae9a;
-  --p-dusk-line: #9c8067;
-  --p-dusk-key: #ece7de;
-  --p-dusk-black-key: #1e130e;
-  --p-dusk-bed: #755e4d;
-  --p-dusk-rail: #482f1f;
-  --p-brick-light: #ea8470;
-  --p-sky-light: #86beee;
-  --p-grass-light: #8ec27d;
-  --p-ochre-light: #e4ac59;
-  --p-crimson-light: #ef7e80;
-  --p-sky-night: #1a3b55;
-  --p-sky-night-ink: #c9e2f7;
+  --p-dusk-950: #191512;
+  --p-dusk-900: #24201c;
+  --p-dusk-850: #2e2924;
+  --p-dusk-800: #37322d;
+  --p-dusk-line: #453e38;
+  --p-dusk-control: #7d7368;
+  --p-dusk-ink: #ede9e1;
+  --p-dusk-muted: #bbb3a8;
+  --p-dusk-key: #d4d0cb;
+  --p-dusk-black-key: #171310;
+  --p-dusk-bed: #787069;
+  --p-dusk-rail: #332c27;
+  --p-dusk-sand: #3c3026;
+  --p-dusk-yellow: #3e3420;
+  --p-dusk-grass: #2b3728;
+  --p-dusk-sky: #253541;
+  --p-dusk-lilac: #352f40;
+  --p-sand-light: #dbb697;
+  --p-yellow-light: #e3c383;
+  --p-grass-light: #8fc090;
+  --p-sky-light: #89b7de;
+  --p-lilac-light: #bdafd9;
+  --p-ochre-light: #e0b26f;
+  --p-crimson-light: #e18885;
+  --p-sky-night: #1f303e;
+  --p-sky-night-ink: #c2dbf1;
 
   --radius: 0.75rem;
 
@@ -66,14 +83,14 @@
   --card-foreground: var(--p-ink);
   --popover: var(--p-paper-card);
   --popover-foreground: var(--p-ink);
-  /* The one action: school-bus yellow with the brown ink on it. */
-  --primary: var(--p-yellow);
+  /* The one action: the only control whose fill is a colour, with the ink on it. */
+  --primary: var(--p-honey);
   --primary-foreground: var(--p-ink);
-  /* What is chosen or where you are: a chip, a segment, the tab. */
-  --selected: var(--p-brick-deep);
-  --selected-foreground: var(--p-white);
+  /* What is chosen: a chip filled in umber, neutral, so colour keeps meaning something. */
+  --selected: var(--p-umber);
+  --selected-foreground: var(--p-paper-card);
   --secondary: var(--p-sky-mist);
-  --secondary-foreground: var(--p-sky-deep);
+  --secondary-foreground: var(--p-sky-mist-ink);
   --muted: var(--p-sand-100);
   --muted-foreground: var(--p-ink-soft);
   --accent: var(--p-sand-100);
@@ -81,28 +98,27 @@
   --link: var(--p-sky-deep);
   /*
    * The book's paints in the chrome, naming places and kinds of step (never a chord tone, and never
-   * brick, which is what is active): each is a
-   * midtone fill, the same by night, with the brown ink on it; its deep shade is an icon on paper.
+   * brick): each is its pale wash, with its deep shade on it for the icon (the on-colour).
    */
-  --paint-sand: var(--p-sand);
-  --paint-yellow: var(--p-yellow);
-  --paint-grass: var(--p-grass);
-  --paint-sky: var(--p-sky);
-  --paint-lilac: var(--p-lilac);
-  --on-paint: var(--p-ink);
-  --paint-yellow-deep: var(--p-ochre-deep);
-  --paint-grass-deep: var(--p-grass-deep);
-  --paint-sky-deep: var(--p-sky-deep);
-  --paint-lilac-deep: color-mix(in oklab, var(--p-lilac) 55%, var(--p-ink));
+  --paint-sand: var(--p-sand-wash);
+  --paint-yellow: var(--p-yellow-wash);
+  --paint-grass: var(--p-grass-wash);
+  --paint-sky: var(--p-sky-wash);
+  --paint-lilac: var(--p-lilac-wash);
+  --on-paint-sand: var(--p-sand-deep);
+  --on-paint-yellow: var(--p-yellow-deep);
+  --on-paint-grass: var(--p-grass-deep);
+  --on-paint-sky: var(--p-sky-deep);
+  --on-paint-lilac: var(--p-lilac-deep);
   /* Learned, known, on, connected: the book's grass. */
   --learned: var(--p-grass-deep);
   --learned-foreground: var(--p-white);
-  --attention: var(--p-ochre-deep);
+  --attention: var(--p-ochre);
   --destructive: var(--p-crimson);
   --destructive-foreground: var(--p-white);
-  /* The book's line: round every card, control and key. */
+  /* The book's line: soft round a card, firm enough round a control to find it (3:1). */
   --border: var(--p-line);
-  --input: var(--p-line);
+  --input: var(--p-control);
   --hairline: var(--p-sand-200);
   --ring: var(--p-sky-deep);
   /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
@@ -116,47 +132,54 @@
   --role-9th: var(--p-lilac);
   --role-11th: var(--p-sand);
   --role-13th: var(--p-teal);
-  --role-root-wash: var(--p-brick-wash);
-  --role-3rd-wash: var(--p-sky-wash);
-  --role-5th-wash: var(--p-grass-wash);
-  --role-7th-wash: var(--p-yellow-wash);
-  --role-9th-wash: var(--p-lilac-wash);
-  --role-11th-wash: var(--p-sand-wash);
-  --role-13th-wash: var(--p-teal-wash);
+  /*
+   * A mark at rest: its paint mixed into the key's own paper, so by day and by night it is a tint of
+   * the key, never brighter than it. One strength for every mark, stepped up by night and under
+   * increased contrast.
+   */
+  --mark-wash: 35%;
+  --role-root-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
+  --role-3rd-wash: color-mix(in oklab, var(--p-sky) var(--mark-wash), var(--key-white));
+  --role-5th-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
+  --role-7th-wash: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
+  --role-9th-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
+  --role-11th-wash: color-mix(in oklab, var(--p-sand) var(--mark-wash), var(--key-white));
+  --role-13th-wash: color-mix(in oklab, var(--p-teal) var(--mark-wash), var(--key-white));
   --on-role: var(--p-ink);
 
   /* The Player's hands; never in the explorers. */
   --hand-rh: var(--p-brick);
   --hand-lh: var(--p-lilac);
   --hand-melody: var(--p-grass);
-  --hand-rh-wash: var(--p-brick-wash);
-  --hand-lh-wash: var(--p-lilac-wash);
-  --hand-melody-wash: var(--p-grass-wash);
-  /* A hand's colour as text (the note grid): deep enough to read on paper. */
+  --hand-rh-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
+  --hand-lh-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
+  --hand-melody-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
+  /* A hand's colour as text (the note grid): its deep shade, to read on paper. */
   --hand-rh-ink: var(--p-brick-deep);
-  --hand-lh-ink: var(--paint-lilac-deep);
+  --hand-lh-ink: var(--p-lilac-deep);
   --hand-melody-ink: var(--p-grass-deep);
 
   /*
-   * The keys, drawn as in the book: paper keys, the brown line between them, a warm black, hung
-   * from a painted wooden rail. The keys stay the same by night; only their paper softens.
+   * The keys: paper keys parted by a soft line, a warm black, hung from a light wooden rail. By
+   * night their paper softens, so the keys never glare in a dim hall.
    */
   --key-white: var(--p-paper-card);
   --key-black: var(--p-black-key);
   --key-bed: var(--p-bed);
   --key-rail: var(--p-rail);
-  --key-shade: color-mix(in oklab, var(--p-ink) 10%, transparent);
-  --key-lip: color-mix(in oklab, var(--p-ink) 6%, transparent);
-  --key-sheen: color-mix(in oklab, var(--p-white) 14%, transparent);
+  --on-key-rail: var(--p-ink);
+  --key-shade: color-mix(in oklab, var(--p-ink) 7%, transparent);
+  --key-lip: color-mix(in oklab, var(--p-ink) 5%, transparent);
+  --key-sheen: color-mix(in oklab, var(--p-white) 12%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
   /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. */
   --key-down: var(--p-sky);
   --on-key-down: var(--p-ink);
-  --key-scale: var(--p-sky-wash);
+  --key-scale: color-mix(in oklab, var(--p-sky) var(--mark-wash), var(--key-white));
   --key-scale-down: var(--p-sky);
   --on-key-scale: var(--p-ink);
-  --key-tonic: var(--p-yellow-wash);
+  --key-tonic: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
   --key-tonic-down: var(--p-yellow);
   --on-key-tonic: var(--p-ink);
   /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
@@ -171,8 +194,10 @@
   --card-foreground: var(--p-dusk-ink);
   --popover: var(--p-dusk-900);
   --popover-foreground: var(--p-dusk-ink);
+  /* By night the action is a step lower, so it never glares in a dim hall. */
+  --primary: var(--p-honey-night);
   --primary-foreground: var(--p-dusk-950);
-  --selected: var(--p-brick-light);
+  --selected: var(--p-dusk-muted);
   --selected-foreground: var(--p-dusk-950);
   --secondary: var(--p-sky-night);
   --secondary-foreground: var(--p-sky-night-ink);
@@ -181,22 +206,29 @@
   --accent: var(--p-dusk-850);
   --accent-foreground: var(--p-dusk-ink);
   --link: var(--p-sky-light);
-  --paint-yellow-deep: var(--p-ochre-light);
-  --paint-grass-deep: var(--p-grass-light);
-  --paint-sky-deep: var(--p-sky-light);
-  --paint-lilac-deep: var(--p-lilac);
+  --paint-sand: var(--p-dusk-sand);
+  --paint-yellow: var(--p-dusk-yellow);
+  --paint-grass: var(--p-dusk-grass);
+  --paint-sky: var(--p-dusk-sky);
+  --paint-lilac: var(--p-dusk-lilac);
+  --on-paint-sand: var(--p-sand-light);
+  --on-paint-yellow: var(--p-yellow-light);
+  --on-paint-grass: var(--p-grass-light);
+  --on-paint-sky: var(--p-sky-light);
+  --on-paint-lilac: var(--p-lilac-light);
   --learned: var(--p-grass-light);
   --learned-foreground: var(--p-dusk-950);
   --attention: var(--p-ochre-light);
   --destructive: var(--p-crimson-light);
   --destructive-foreground: var(--p-dusk-950);
   --border: var(--p-dusk-line);
-  --input: var(--p-dusk-line);
+  --input: var(--p-dusk-control);
   --hairline: var(--p-dusk-800);
   --ring: var(--p-sky-light);
   --thumb: var(--p-dusk-ink);
 
-  --hand-rh-ink: var(--p-brick-light);
+  --hand-rh-ink: var(--p-brick);
+  --hand-lh-ink: var(--p-lilac-light);
   --hand-melody-ink: var(--p-grass-light);
 
   /* By night the keys keep their paper, a shade softer; the marks do not change. */
@@ -204,4 +236,29 @@
   --key-black: var(--p-dusk-black-key);
   --key-bed: var(--p-dusk-bed);
   --key-rail: var(--p-dusk-rail);
+  --on-key-rail: var(--p-dusk-ink);
+  --mark-wash: 50%;
+}
+
+/*
+ * Increased contrast (the OS setting): the quiet lines, secondary text and washes step up, so the
+ * calm default never costs anyone the page.
+ */
+@media (prefers-contrast: more) {
+  :root {
+    --muted-foreground: var(--p-umber);
+    --border: var(--p-control);
+    --input: var(--p-ink);
+    --hairline: var(--p-line);
+    --key-bed: var(--p-control);
+    --mark-wash: 55%;
+  }
+  [data-theme='dark'] {
+    --muted-foreground: var(--p-dusk-ink);
+    --border: var(--p-dusk-control);
+    --input: var(--p-dusk-muted);
+    --hairline: var(--p-dusk-line);
+    --key-bed: var(--p-dusk-control);
+    --mark-wash: 62%;
+  }
 }

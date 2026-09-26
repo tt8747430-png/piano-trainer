@@ -58,6 +58,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // The titles' serif in the scripts the app writes (Latin, Cyrillic); its Greek and
+        // Vietnamese stay on the network, fetched only if a glyph ever needs them.
+        globIgnores: ['**/literata-{greek,greek-ext,vietnamese}-*.woff2'],
         navigateFallback: '/index.html',
         cleanupOutdatedCaches: true,
       },

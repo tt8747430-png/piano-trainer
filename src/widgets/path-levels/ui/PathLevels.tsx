@@ -32,7 +32,7 @@ export function PathLevels() {
                 {t('path:progress', { learned: done, total: inLevel.length })}
               </span>
             </div>
-            <ul className="flex flex-col divide-y-2 divide-hairline rounded-3xl border-2 border-border bg-card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2">
+            <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2">
               {inLevel.map((placed) => (
                 <StepRow key={placed.id} placed={placed} answers={answers} />
               ))}

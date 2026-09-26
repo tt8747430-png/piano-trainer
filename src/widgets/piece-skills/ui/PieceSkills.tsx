@@ -34,7 +34,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
                   ...(first ? { root: noteParam(first.root) } : {}),
                 }}
                 aria-label={`${t(`theory:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}
-                className="flex h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 font-semibold transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
+                className="flex h-11 items-center gap-2 rounded-xl border border-input bg-card px-4 font-semibold transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
               >
                 {qualitySuffix(skill.quality) || t('theory:major')}
                 <RatingMark rating={rating} />

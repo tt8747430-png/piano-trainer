@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib'
 const LOOK = {
   known: 'size-4 bg-learned text-learned-foreground',
   gap: 'size-2.5 bg-attention',
-  unknown: 'size-2.5 ring-2 ring-inset ring-border',
+  unknown: 'size-2.5 ring-1 ring-inset ring-input',
 } as const
 
 /** Known (a check), a gap (an amber dot) or not checked yet (a ring), named in words. */

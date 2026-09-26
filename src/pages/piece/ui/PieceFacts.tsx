@@ -29,11 +29,11 @@ export function PieceFacts({ entry }: { entry: Entry }) {
       {entry.credits ? <Credits credits={entry.credits} /> : null}
       {entry.source ? <SourceLine source={entry.source} /> : null}
       <dl className="flex flex-wrap gap-2">
-        <div className="rounded-lg border-2 border-border bg-card px-3 py-1">
+        <div className="rounded-lg border border-border bg-card px-3 py-1">
           <dt className="sr-only">{t('piece:key')}</dt>
           <dd className="font-semibold">{keyName(key)}</dd>
         </div>
-        <div className="rounded-lg border-2 border-border bg-card px-3 py-1">
+        <div className="rounded-lg border border-border bg-card px-3 py-1">
           <dt className="sr-only">{t('piece:meter')}</dt>
           <dd className="font-semibold">{entry.meter}</dd>
         </div>

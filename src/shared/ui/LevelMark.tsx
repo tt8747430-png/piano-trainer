@@ -20,7 +20,7 @@ export function LevelMark({ level }: { level: 1 | 2 | 3 | 4 }) {
           className={cn(
             'w-1 rounded-full',
             height,
-            pip <= level ? 'bg-paint-yellow-deep' : 'bg-hairline',
+            pip <= level ? 'bg-muted-foreground' : 'bg-hairline',
           )}
         />
       ))}

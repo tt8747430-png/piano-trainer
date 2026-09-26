@@ -1,7 +1,7 @@
 import { pickedOption, toggleValue, type Option, type OptionValue } from './option'
 import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
 
-/** One choice of a few, always one chosen: a pill segmented control. */
+/** One choice of a few, always one chosen: a segmented control, the chosen segment a card on its track. */
 export function Segmented<V extends OptionValue>({
   label,
   value,
@@ -22,8 +22,8 @@ export function Segmented<V extends OptionValue>({
         if (picked) onChange(picked.value)
       }}
       variant="segment"
-      spacing={0}
-      className="flex w-full gap-1 rounded-2xl border-2 border-border bg-card p-1"
+      spacing={1}
+      className="flex w-full rounded-2xl bg-muted p-1"
     >
       {options.map((option) => (
         <ToggleGroupItem

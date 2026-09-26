@@ -26,9 +26,7 @@ export function PlayerTopBar({
     <header className="flex items-center gap-3">
       <RoundButton label={t('common:close')} icon={X} onClick={close} />
       <div className="flex min-w-0 flex-1 flex-col items-center">
-        <h1 className="max-w-full truncate text-lg font-bold">
-          {entryTitles(piece, locale).primary}
-        </h1>
+        <h1 className="max-w-full truncate text-lg">{entryTitles(piece, locale).primary}</h1>
         <button
           type="button"
           onClick={onSetup}

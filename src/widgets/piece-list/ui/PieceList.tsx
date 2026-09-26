@@ -15,7 +15,7 @@ export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
       {groups.map((group) => (
         <section key={group.id} className="flex flex-col gap-2">
           {group.heading === null ? null : <h2 className="text-2xl">{group.heading}</h2>}
-          <ul className="flex flex-col divide-y-2 divide-hairline rounded-3xl border-2 border-border bg-card px-2">
+          <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card px-2">
             {group.entries.map((entry) => (
               <EntryRow key={entry.id} entry={entry} />
             ))}

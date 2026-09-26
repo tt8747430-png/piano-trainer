@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerLink, useStepTitle, type PathStep } from '@/entities/path'
+import { ExplorerLink, STEP_PAINT, useStepTitle, type PathStep } from '@/entities/path'
 import { pieceById, pieceKey, skillsOfPiece } from '@/entities/piece'
 import {
   selectAllAnswers,
@@ -10,6 +10,7 @@ import {
   skillsToCheck,
   useProgress,
 } from '@/entities/progress'
+import { cn } from '@/shared/lib'
 import { keyName } from '@/shared/lib/music'
 import { ButtonLink } from '@/shared/ui'
 
@@ -43,8 +44,8 @@ export function ContinueCard() {
 
   if (!suggested) {
     return (
-      <section className="flex flex-col items-start gap-3 rounded-3xl border-2 border-border bg-card p-5">
-        <p className="font-display text-2xl">{t('allLearned')}</p>
+      <section className="flex flex-col items-start gap-3 rounded-3xl border border-border bg-card p-5">
+        <p className="font-display text-2xl font-semibold">{t('allLearned')}</p>
         <ButtonLink variant="outline" render={<Link to="/songs" />}>
           {t('toSongs')}
         </ButtonLink>
@@ -62,12 +63,15 @@ export function ContinueCard() {
   return (
     <section
       aria-labelledby={headingId}
-      className="overflow-hidden rounded-3xl border-2 border-border bg-card"
+      className="overflow-hidden rounded-3xl border border-border bg-card"
     >
-      {/* The book's header band: the card's own title, lettered on its paint. */}
+      {/* The book's header band: the card's own title, on the wash of its step's paint. */}
       <h2
         id={headingId}
-        className="border-b-2 border-border bg-paint-sky px-5 py-3 text-3xl text-balance text-on-paint"
+        className={cn(
+          'border-b border-border px-5 py-3 text-3xl text-balance',
+          STEP_PAINT[title.kind].fill,
+        )}
       >
         {title.primary}
       </h2>

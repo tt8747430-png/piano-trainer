@@ -35,11 +35,11 @@
   --color-paint-grass: var(--paint-grass);
   --color-paint-sky: var(--paint-sky);
   --color-paint-lilac: var(--paint-lilac);
-  --color-on-paint: var(--on-paint);
-  --color-paint-yellow-deep: var(--paint-yellow-deep);
-  --color-paint-grass-deep: var(--paint-grass-deep);
-  --color-paint-sky-deep: var(--paint-sky-deep);
-  --color-paint-lilac-deep: var(--paint-lilac-deep);
+  --color-on-paint-sand: var(--on-paint-sand);
+  --color-on-paint-yellow: var(--on-paint-yellow);
+  --color-on-paint-grass: var(--on-paint-grass);
+  --color-on-paint-sky: var(--on-paint-sky);
+  --color-on-paint-lilac: var(--on-paint-lilac);
   --color-thumb: var(--thumb);
 
   --color-hand-rh: var(--hand-rh);
@@ -56,6 +56,7 @@
   --color-key-black: var(--key-black);
   --color-key-bed: var(--key-bed);
   --color-key-rail: var(--key-rail);
+  --color-on-key-rail: var(--on-key-rail);
   --color-key-shade: var(--key-shade);
   --color-key-lip: var(--key-lip);
   --color-key-sheen: var(--key-sheen);
@@ -73,8 +74,12 @@
   --color-key-focus-halo: var(--key-focus-halo);
 
   --font-sans: 'Onest Variable', 'Noto Music', system-ui, sans-serif;
-  /* The book's bold hand-lettering (one weight, 700): titles, chord symbols, buttons and the tabs. */
-  --font-display: 'Balsamiq Sans', 'Onest Variable', 'Noto Music', system-ui, sans-serif;
+  /*
+   * The book's typeset titles: Literata, a book serif drawn for screens, variable in weight and
+   * optical size (the browser fits its design to each size), Latin and Cyrillic alike. Titles and
+   * chord symbols only; every control reads in Onest.
+   */
+  --font-display: 'Literata Variable', 'Noto Music', Georgia, serif;
 
   --color-role-root: var(--role-root);
   --color-role-3rd: var(--role-3rd);
@@ -103,14 +108,24 @@
   --radius-4xl: calc(var(--radius) + 8px);
 }
 
-/* The type scale and the one easing, on Tailwind's own names so cn() keeps sorting them. */
+/*
+ * The type scale, one size per text style (headline 17, title 3 20, title 2 22, title 1 28, large
+ * title 34, display 44), in rem so it follows the reader's own text size; and the one easing. On
+ * Tailwind's own names so cn() keeps sorting them.
+ */
 @theme {
   --text-lg: 1.0625rem;
-  --text-lg--line-height: 1.4;
-  --text-xl: 1.375rem;
-  --text-xl--line-height: 1.2;
+  --text-lg--line-height: 1.375;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.25;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 1.2;
   --text-4xl: 2.125rem;
-  --text-4xl--line-height: 1.1;
+  --text-4xl--line-height: 1.15;
+  --text-5xl: 2.75rem;
+  --text-5xl--line-height: 1.1;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -120,7 +135,7 @@
   }
   html {
     color-scheme: light;
-    /* The lettering ships in one weight: no element gets a smeared fake bold or fake light. */
+    /* Both faces carry every weight they are asked for: never a smeared fake bold. */
     font-synthesis-weight: none;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -133,12 +148,12 @@
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
-  /* Titles are hand-lettered, as in the book; reading text stays Onest. */
+  /* Titles are typeset in the book's serif, semibold; reading text and controls stay Onest. */
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 600;
   }
   body {
     -webkit-tap-highlight-color: transparent;

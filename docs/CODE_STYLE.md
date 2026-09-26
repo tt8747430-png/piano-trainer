@@ -79,28 +79,35 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - **Stack with `flex`/`grid` and `gap-*`,** not `space-x-*`/`space-y-*`. Equal width and height → `size-*`.
 - **Dark mode is the token remap under `[data-theme='dark']`.** App code writes no `dark:` classes. `dark:` is bound
   to `data-theme` only so shadcn primitives follow the app's setting rather than the OS.
-- **The world is a labelled picture book** (ADR 0010): seven paints at one lightness, each with a pale wash. What
-  each colour does is a token: `--primary` (yellow) the one action, `--selected` what is chosen and where you are,
-  `--learned` learned, on and connected, `--link` links and `--ring` focus, `--attention` a gap, `--destructive` a
-  wrong key or a reset, `--border` the brown line round every card and control, `--hairline` a divider.
+- **The world is a labelled picture book, printed quietly** (ADR 0010, ADR 0011): seven faded paints at one
+  lightness, each with a pale wash. What each colour does is a token: `--primary` (honey) the one action and the only
+  control filled with a colour, `--selected` (umber, neutral) a chosen chip, `--learned` learned, on and connected,
+  `--link` links and `--ring` focus, `--attention` a gap, `--destructive` a wrong key or a reset, `--border` the soft
+  1px line round a card, `--input` the 1px line round a control (3:1), `--hairline` a divider. A chosen segment or
+  Theory tab is `bg-card` with `border-input` on a `bg-muted` track; the nav's place is `bg-muted`. Every line is 1px
+  (`border`, `divide-y`); only focus rings and the keys' own rings are wider. `tokens.css` holds light, dark and a
+  `prefers-contrast: more` layer: a new role gets all three where it is a line or a secondary ink.
 - **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
   also shows its degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord
   tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`, each with its `-wash`)
   only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
-  paints (`--paint-*` midtone fills with `--on-paint`, `--paint-*-deep` for an icon on paper) name places and kinds of
-  step, never a chord tone; a hand's colour as text is `--hand-*-ink`. The keys have their own
+  paints (`--paint-*`, each paint's wash, with `--on-paint-*` its deep shade for the icon on it) name places and kinds
+  of step, never a chord tone; a hand's colour as text is `--hand-*-ink`. The keys have their own
   roles: a mark is its wash while its key is quiet and its full colour while it sounds (`--key-scale` and
   `--key-scale-down`, `--key-tonic` and `--key-tonic-down`, a role or hand and its `-wash`), a plain key sounding is
-  `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail`, `--key-bed`, `--key-shade`,
+  `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail` (with `--on-key-rail`), `--key-bed`, `--key-shade`,
   `--key-lip`, `--key-sheen` (the No Glow Rule's one exception, on keys only); a slider's thumb is `--thumb`.
-- **Two faces:** Onest for reading; Balsamiq Sans Bold (`font-display`) for titles (every `h1`–`h3`), chord symbols,
-  buttons, segments and the tabs. Only its 700 ships and faux bold is off, so a lettered element needs no weight
-  class.
+- **Two faces:** Onest for reading and every control (buttons, chips, segments, tabs, the nav); Literata
+  (`font-display`, variable in weight and optical size) for titles (every `h1`–`h3`, at 600 from the base layer) and
+  chord symbols. Both faces are variable, so a `font-display` element that is not a heading sets its weight
+  (`font-semibold`); never a serif on a control. Faux bold is off.
 - **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
   token, a utility or a named constant.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11
   · `xl` 12 · `2xl` 12 · `3xl` 14 · `4xl` 20 (black keys, white keys, primitives, chips, buttons, cards, sheets); type
-  `text-lg` 17 · `xl` 22 · `4xl` 34 (headline, title, large title), Tailwind's `7xl` 72 for the chord display; `ease-out` is the one
+  one size per text style, in rem so it follows the reader's text size: `text-lg` 17 · `xl` 20 · `2xl` 22 · `3xl` 28
+  · `4xl` 34 · `5xl` 44 (headline, title 3, title 2, title 1, large title, display), Tailwind's `7xl` 72 for the
+  chord display; `ease-out` is the one
   curve. Numerals that change in place are `tabular-nums`.
 - Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
   `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,

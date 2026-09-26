@@ -47,7 +47,7 @@ export function ScaleChords({
             {playback.playing === roman ? (
               <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" />
             ) : null}
-            <span className="font-display text-2xl">{chordSymbol(chord)}</span>
+            <span className="font-display text-2xl font-semibold">{chordSymbol(chord)}</span>
             <span className="text-sm text-muted-foreground">{roman}</span>
           </Button>
         ))}

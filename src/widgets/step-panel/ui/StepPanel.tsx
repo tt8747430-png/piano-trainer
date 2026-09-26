@@ -13,7 +13,7 @@ export function StepPanel({ step }: { step: StepId }) {
   const title = stepTitle(placed.step).primary
   return (
     <section className="flex flex-wrap items-center gap-3 rounded-3xl bg-secondary p-4 text-secondary-foreground">
-      <h2 className="min-w-0 flex-1 text-lg font-bold">{title}</h2>
+      <h2 className="min-w-0 flex-1 text-lg">{title}</h2>
       <ButtonLink render={<Link to="/check" search={{ of: step }} />}>
         {t('checkYourself')}
       </ButtonLink>

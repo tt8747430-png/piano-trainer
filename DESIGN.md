@@ -1,88 +1,111 @@
 ---
 name: Piano Trainer
-description: A labelled picture book of the piano. Paper, a warm brown line round every shape, seven gouache paints at one lightness, hand-lettered titles and a printed label on every key, chord and control.
+description: A labelled picture book of the piano, printed quietly. Warm paper, a soft 1px line round every card and control, seven paints faded to one even lightness, titles and chord symbols set in a book serif, and a printed label on every key, chord and control.
 colors:
-  paper: '#FBF7EF'
-  paper-card: '#FFFCF7'
-  sand-sunken: '#F3EADB'
-  sand-hairline: '#EADCC9'
-  brown-ink: '#3F2816'
-  brown-ink-soft: '#735F4F'
-  brown-line: '#6D4D37'
-  school-bus-yellow: '#EEB737'
-  brick-deep: '#B94834'
-  sky-mist: '#D8EBFB'
-  sky-deep: '#0F68A2'
-  grass-deep: '#417230'
-  ochre-deep: '#976200'
-  crimson: '#A82133'
+  paper: '#F7F3EE'
+  paper-card: '#FEFDFB'
+  sand-sunken: '#EEE9E2'
+  sand-hairline: '#E5DFD6'
+  soft-line: '#DAD1C8'
+  control-line: '#908479'
+  ink: '#332921'
+  ink-soft: '#685E56'
+  umber: '#4B4038'
+  honey: '#EDC684'
+  honey-night: '#D4B176'
+  sky-mist: '#E0EFFA'
+  sky-mist-ink: '#2A597F'
+  sky-deep: '#356890'
+  grass-deep: '#4D744E'
+  ochre: '#A8742A'
+  crimson: '#A34243'
   white: '#FFFFFF'
-  paint-brick: '#E17F6C'
-  paint-yellow: '#EEB737'
-  paint-grass: '#78B065'
-  paint-sky: '#5FA5DE'
-  paint-lilac: '#A98ED9'
-  paint-sand: '#C79263'
-  paint-teal: '#50B0B0'
-  wash-brick: '#F6C8BE'
-  wash-yellow: '#EFD093'
-  wash-grass: '#C3DDBA'
-  wash-sky: '#B7D9F7'
-  wash-lilac: '#D9CDF4'
-  wash-sand: '#EFCDB0'
-  wash-teal: '#AAE0DF'
-  key-bed: '#A88C77'
-  key-rail: '#6A4630'
-  key-black: '#362820'
-  dusk-ground: '#1B150F'
-  dusk-card: '#271F18'
-  dusk-sunken: '#332921'
-  dusk-hairline: '#473A30'
-  dusk-ink: '#F2EADD'
-  dusk-ink-soft: '#C0AE9A'
-  dusk-line: '#9C8067'
-  dusk-key-white: '#ECE7DE'
-  dusk-key-black: '#1E130E'
-  dusk-key-bed: '#755E4D'
-  dusk-key-rail: '#482F1F'
-  brick-light: '#EA8470'
-  sky-light: '#86BEEE'
-  grass-light: '#8EC27D'
-  ochre-light: '#E4AC59'
-  crimson-light: '#EF7E80'
-  sky-night: '#1A3B55'
-  sky-night-ink: '#C9E2F7'
+  paint-brick: '#E19E8C'
+  paint-yellow: '#E8C67D'
+  paint-grass: '#9BC093'
+  paint-sky: '#85B8DC'
+  paint-lilac: '#B8A8D8'
+  paint-sand: '#D3AC8A'
+  paint-teal: '#82C2C1'
+  wash-yellow: '#F7E8C4'
+  wash-grass: '#D9EBD5'
+  wash-sky: '#D1E6F7'
+  wash-lilac: '#E6DFF6'
+  wash-sand: '#F5E0CF'
+  brick-deep: '#934C39'
+  yellow-deep: '#8B682B'
+  lilac-deep: '#6A5988'
+  sand-deep: '#7D5B40'
+  key-bed: '#CBC2B9'
+  key-rail: '#DFD8CF'
+  key-black: '#332C28'
+  dusk-ground: '#191512'
+  dusk-card: '#24201C'
+  dusk-sunken: '#2E2924'
+  dusk-hairline: '#37322D'
+  dusk-line: '#453E38'
+  dusk-control: '#7D7368'
+  dusk-ink: '#EDE9E1'
+  dusk-muted: '#BBB3A8'
+  dusk-key-white: '#D4D0CB'
+  dusk-key-black: '#171310'
+  dusk-key-bed: '#787069'
+  dusk-key-rail: '#332C27'
+  dusk-sand: '#3C3026'
+  dusk-yellow: '#3E3420'
+  dusk-grass: '#2B3728'
+  dusk-sky: '#253541'
+  dusk-lilac: '#352F40'
+  sand-light: '#DBB697'
+  yellow-light: '#E3C383'
+  grass-light: '#8FC090'
+  sky-light: '#89B7DE'
+  lilac-light: '#BDAFD9'
+  ochre-light: '#E0B26F'
+  crimson-light: '#E18885'
+  sky-night: '#1F303E'
+  sky-night-ink: '#C2DBF1'
 typography:
   chord-display:
-    fontFamily: 'Balsamiq Sans, Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
     fontSize: '72px'
-    fontWeight: 700
+    fontWeight: 600
     lineHeight: 1
-  large-title:
-    fontFamily: 'Balsamiq Sans, Onest Variable, Noto Music, system-ui, sans-serif'
-    fontSize: '34px'
-    fontWeight: 700
+  display:
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontSize: '44px'
+    fontWeight: 600
     lineHeight: 1.1
-  card-title:
-    fontFamily: 'Balsamiq Sans, Onest Variable, Noto Music, system-ui, sans-serif'
-    fontSize: '30px'
-    fontWeight: 700
+  large-title:
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontSize: '34px'
+    fontWeight: 600
+    lineHeight: 1.15
+  title-1:
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontSize: '28px'
+    fontWeight: 600
     lineHeight: 1.2
-  section-title:
-    fontFamily: 'Balsamiq Sans, Onest Variable, Noto Music, system-ui, sans-serif'
-    fontSize: '24px'
-    fontWeight: 700
-    lineHeight: 1.33
-  button-label:
-    fontFamily: 'Balsamiq Sans, Onest Variable, Noto Music, system-ui, sans-serif'
-    fontSize: '17px'
-    fontWeight: 700
-    lineHeight: 1.4
-  row-title:
+  title-2:
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontSize: '22px'
+    fontWeight: 600
+    lineHeight: 1.3
+  title-3:
+    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontSize: '20px'
+    fontWeight: 600
+    lineHeight: 1.25
+  headline:
     fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
     fontSize: '17px'
     fontWeight: 600
-    lineHeight: 1.4
+    lineHeight: 1.375
+  control:
+    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontSize: '16px'
+    fontWeight: 600
+    lineHeight: 1.5
   body:
     fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
     fontSize: '16px'
@@ -91,7 +114,7 @@ typography:
   label:
     fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
     fontSize: '14px'
-    fontWeight: 400
+    fontWeight: 500
     lineHeight: 1.43
   key-label:
     fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
@@ -117,71 +140,86 @@ spacing:
   target: '44px'
 components:
   button-primary:
-    backgroundColor: '{colors.school-bus-yellow}'
-    textColor: '{colors.brown-ink}'
+    backgroundColor: '{colors.honey}'
+    textColor: '{colors.ink}'
+    typography: '{typography.control}'
     rounded: '{rounded.button}'
     height: '44px'
     padding: '0 16px'
   button-primary-pill:
-    backgroundColor: '{colors.school-bus-yellow}'
-    textColor: '{colors.brown-ink}'
+    backgroundColor: '{colors.honey}'
+    textColor: '{colors.ink}'
+    typography: '{typography.headline}'
     rounded: '{rounded.button}'
     height: '56px'
     padding: '0 24px'
   button-soft:
     backgroundColor: '{colors.paper-card}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
+    typography: '{typography.control}'
+    rounded: '{rounded.button}'
+    height: '44px'
+    padding: '0 16px'
+  button-secondary:
+    backgroundColor: '{colors.sky-mist}'
+    textColor: '{colors.sky-mist-ink}'
+    typography: '{typography.control}'
     rounded: '{rounded.button}'
     height: '44px'
     padding: '0 16px'
   button-destructive:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.crimson}'
+    typography: '{typography.control}'
     rounded: '{rounded.button}'
     height: '44px'
     padding: '0 16px'
   button-round:
     backgroundColor: '{colors.paper-card}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
     rounded: '{rounded.pill}'
     size: '44px'
   button-play:
-    backgroundColor: '{colors.school-bus-yellow}'
-    textColor: '{colors.brown-ink}'
+    backgroundColor: '{colors.honey}'
+    textColor: '{colors.ink}'
     rounded: '{rounded.pill}'
     size: '72px'
   chip:
     backgroundColor: '{colors.paper-card}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
+    typography: '{typography.control}'
     rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   chip-selected:
-    backgroundColor: '{colors.brick-deep}'
-    textColor: '{colors.white}'
+    backgroundColor: '{colors.umber}'
+    textColor: '{colors.paper-card}'
+    typography: '{typography.control}'
     rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   segmented-track:
-    backgroundColor: '{colors.paper-card}'
+    backgroundColor: '{colors.sand-sunken}'
     rounded: '{rounded.button}'
     padding: '4px'
   segmented-selected:
-    backgroundColor: '{colors.brick-deep}'
-    textColor: '{colors.white}'
-    rounded: '{rounded.white-key}'
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink}'
+    typography: '{typography.control}'
+    rounded: '{rounded.lg}'
     height: '44px'
   card:
     backgroundColor: '{colors.paper-card}'
     rounded: '{rounded.card}'
     padding: '20px'
   continue-band:
-    backgroundColor: '{colors.paint-sky}'
-    textColor: '{colors.brown-ink}'
+    backgroundColor: '{colors.wash-yellow}'
+    textColor: '{colors.ink}'
+    typography: '{typography.title-1}'
     padding: '12px 20px'
   step-tile:
-    backgroundColor: '{colors.paint-sand}'
-    textColor: '{colors.brown-ink}'
+    backgroundColor: '{colors.wash-sand}'
+    textColor: '{colors.sand-deep}'
     rounded: '{rounded.button}'
     size: '48px'
   sheet:
@@ -190,168 +228,208 @@ components:
     padding: '12px 20px 24px'
   nav-item:
     backgroundColor: '{colors.paper-card}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink-soft}'
+    typography: '{typography.label}'
     rounded: '{rounded.control}'
     height: '56px'
   nav-item-active:
-    backgroundColor: '{colors.brick-deep}'
-    textColor: '{colors.white}'
+    backgroundColor: '{colors.sand-sunken}'
+    textColor: '{colors.ink}'
     rounded: '{rounded.control}'
     height: '56px'
   key-white:
     backgroundColor: '{colors.paper-card}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
+    typography: '{typography.key-label}'
     rounded: '{rounded.white-key}'
   key-black:
     backgroundColor: '{colors.key-black}'
     textColor: '{colors.white}'
     rounded: '{rounded.black-key}'
+  key-rail:
+    backgroundColor: '{colors.key-rail}'
+    textColor: '{colors.ink}'
+    height: '28px'
   key-down:
     backgroundColor: '{colors.paint-sky}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
   key-scale:
     backgroundColor: '{colors.wash-sky}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
   key-scale-down:
     backgroundColor: '{colors.paint-sky}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
   key-tonic:
     backgroundColor: '{colors.wash-yellow}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
   key-tonic-down:
     backgroundColor: '{colors.paint-yellow}'
-    textColor: '{colors.brown-ink}'
+    textColor: '{colors.ink}'
 ---
 
 # Design System: Piano Trainer
 
 ## Overview
 
-**Creative North Star: "The Labelled Picture Book"**
+**Creative North Star: "The Labelled Picture Book", printed quietly**
 
 The app is drawn as a Busytown cross-section (ADR 0010): the keyboard and the chart are cut open, and every key,
-chord and control wears its printed name. Paper is the ground, a warm brown line runs round every card, control and
-key, and colour comes from one set of seven gouache paints at one even lightness, so any two sit together. Titles,
-chord symbols, buttons and tabs are hand-lettered in Balsamiq Sans Bold; everything read in passing is Onest. By night
-the paper turns to dusk brown and the paints keep their lightness.
+chord and control wears its printed name. ADR 0011 reprinted the same book quietly: warm paper for the page and a
+lighter paper for the cards on it, a soft 1px line round every card and control, and seven paints faded to one even
+lightness (OKLCH L 0.76 to 0.84, chroma 0.065 to 0.10), so any two sit together and none shouts. Titles and chord
+symbols are typeset in Literata, a book serif drawn for screens; everything read and every control is Onest. By night
+the paper turns to dusk and the chrome's paints to dusk tints; the keys keep their paper, a shade softer.
 
 Everything is still read from a phone propped on a piano's music stand, glanced at between chords with both hands on
 the keys. The labelled keyboard is the hero: it is on every screen that sounds anything, it plays when tapped, and
 every key the app sounds goes down on it (ADR 0009). Density is low and targets are 44px at least. Colour carries
-meaning: yellow is the one action, brick red is what is chosen or where you are, grass is learned, deep sky is a link
-and focus, amber is a gap, crimson is wrong; the other paints name places and kinds of step.
+meaning, and so is spent sparingly: honey is the one action, grass is learned, deep sky is a link and focus, ochre is
+a gap, crimson is wrong; what is chosen or where you are is neutral, and the other paints name places and kinds of
+step as pale washes.
 
 The book lends its colour, line and labelling only. Not taken: characters, animals or mascots; a kicker label above a
 heading; streaks as pressure, upsells, locked content, stock photos; the dark neon piano app and the sage wellness app.
 
 **Key Characteristics:**
 
-- Paper ground, a 2px brown line round every card and control, a 1px line of key bed between the keys.
-- One school-bus-yellow action per screen, drawn in the brown line with brown lettering on it.
-- Brick red fills only what is chosen or where you are: a chip, a segment, the current tab.
-- Seven gouache paints at one lightness, each with a pale wash; a key's mark is its wash at rest and its paint when down.
-- Balsamiq Sans Bold for titles, chord symbols, buttons and tabs; Onest for reading.
-- One keyboard component everywhere, the whole piano on a painted wooden rail.
+- Grouped surfaces: the page a shade darker than the cards, so a card parts by its surface and a 1px soft line.
+- One honey action per screen, borderless, with the ink on it: the only control filled with a colour.
+- What is chosen is neutral: an umber chip, a card-paper segment on a muted track, a muted fill for the current place.
+- Seven paints at one lightness, each with a pale wash; a key's mark is its wash at rest and its paint when down.
+- Literata 600 for titles and chord symbols; Onest for reading and every control.
+- One keyboard component everywhere, the whole piano hung from a light wooden rail.
 
 ## Colors
 
-Warm paper and brown ink, one yellow action, one brick red for the chosen, and a gouache set at one lightness whose
-paints mean something wherever they appear.
+Warm paper and a warm ink, one honey action, a neutral for the chosen, and a set of paints at one lightness whose
+colours mean something wherever they appear.
 
 ### Primary
 
-- **School-Bus Yellow** (`school-bus-yellow`, the same by night): the one action on a screen (Continue, Play,
-  Practise, Check, Next, Apply), drawn with the brown line and brown ink on it (dusk ground by night). Also the caret,
-  the text selection (22%), a quiz's chosen keys and Name chord's lit keys.
+- **Honey** (`honey`; night `honey-night`, a step lower so it never glares in a dim hall): the one action on a screen
+  (Continue, Play, Practise, Check, Next, Apply), borderless, with the ink on it (`dusk-ground` by night). Also the caret, the text selection (22%), a quiz's chosen
+  keys and Name chord's lit keys.
 
 ### Secondary
 
-- **Brick Deep** (`brick-deep`; night `brick-light` with dusk-ground ink): selected and active only: a pressed chip,
-  the chosen segment, the current tab in the bar or sidebar. Never an action, never a paint on the chrome.
-- **Sky Mist** (`sky-mist`, ink `sky-deep`; night `sky-night`, ink `sky-night-ink`): the current or playing bar of a chart.
+- **Umber** (`umber` with card-paper text; night `dusk-muted` with `dusk-ground` text): what is chosen, as a fill: a
+  pressed chip, the Player's current beat. Never an action and never a colour.
+- **Sky Mist** (`sky-mist`, ink `sky-mist-ink`; night `sky-night`, ink `sky-night-ink`): the current or playing bar
+  of a chart, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
+  focus, where you are.
 
 ### Tertiary: meaning colours
 
 - **Deep Sky** (`sky-deep`; night `sky-light`): links and every focus ring.
 - **Grass Deep** (`grass-deep` with white; night `grass-light` with dusk ground): learned, known, on, connected.
-- **Ochre Deep** (`ochre-deep`; night `ochre-light`): attention, the dot of a gap or a "to check" count; never text.
+- **Ochre** (`ochre`; night `ochre-light`): attention, the dot of a gap or a "to check" count; never text.
 - **Crimson** (`crimson`; night `crimson-light`): wrong and destructive (a wrong key, Reset progress).
 
-### The gouache set
+### The paint set
 
 Seven paints at one lightness (`paint-brick`, `paint-yellow`, `paint-grass`, `paint-sky`, `paint-lilac`,
-`paint-sand`, `paint-teal`), each with a pale wash (`wash-*`). They stay the same by night.
+`paint-sand`, `paint-teal`), each with a pale wash and all but teal with a deep shade (`brick-deep`, `yellow-deep`,
+`grass-deep`, `sky-deep`, `lilac-deep`, `sand-deep`). The paints stay the same by night. A chrome wash is a fixed tint
+(`wash-*`, L about 0.92; dusk tints by night); a key's wash is mixed from its paint into the key's own paper (below).
 
 - **On keys, as chord roles:** root brick, 3rd sky, 5th grass, 7th yellow, 9th lilac, 11th sand, 13th teal: on chord
   tones only (keys, the role legend, a chord's tone chips).
 - **On keys, as the Player's hands:** right brick, left lilac, tune grass; the Player only. As text in the note grid a
-  hand reads in its deep shade (brick deep, lilac mixed 55% into the brown ink, grass deep; lighter by night).
-- **On the chrome, as the book's paints:** sand, yellow, grass, sky and lilac name places and kinds of step: the step
-  tiles (chords sand, scale sky, study grass, song yellow, progression lilac), the Continue card's sky header band.
-  Each is a midtone fill with the brown ink on it. Their deep shades (ochre, grass, sky and lilac deep; lighter by
-  night) colour an icon on paper: the nav's icons (Path grass, Songs yellow, Theory sky) and a level's pips (ochre).
-  Brick is never a chrome paint, because brick is what is active; teal is never on the chrome at all.
+  hand reads in its deep shade (`brick-deep`, `lilac-deep`, `grass-deep`; by night `paint-brick`, `lilac-light`,
+  `grass-light`).
+- **On the chrome, as the book's paints:** sand, yellow, grass, sky and lilac name places and kinds of step, always as
+  their wash with their deep shade on it for the icon (the on-colour): the step tiles (chords sand, scale sky, study
+  grass, song yellow, progression lilac) and the Continue card's sky header band, which carries the ink title. By
+  night each wash is a dusk tint (`dusk-sand`, `dusk-yellow`, `dusk-grass`, `dusk-sky`, `dusk-lilac`) under its light
+  shade (`sand-light`, `yellow-light`, `grass-light`, `sky-light`, `lilac-light`). Brick and teal are never on the
+  chrome.
 
 ### The keys
 
-- **Plain keys:** white keys are the card paper (`paper-card`; night `dusk-key-white`, a shade softer), black keys a
-  warm black (`key-black`; night `dusk-key-black`), parted by a 1px line of key bed (`key-bed`; night `dusk-key-bed`)
-  and hung from a painted wooden rail (`key-rail`; night `dusk-key-rail`). The keys stay paper by night.
-- **Marks:** a mark (a role, a hand, a scale's note) is its pale wash at rest and its full paint when its key is down,
-  always with the brown ink on it. A scale's notes are sky (wash at rest), its tonic yellow; scales are never role
+- **Plain keys:** white keys are the card paper (`paper-card`; night `dusk-key-white`, softer so they never glare in a
+  dim hall), black keys a warm black (`key-black`; night `dusk-key-black`), parted by a 1px line of key bed (`key-bed`;
+  night `dusk-key-bed`) and hung from a light wooden rail (`key-rail` with ink icons; night `dusk-key-rail` with
+  `dusk-ink` icons).
+- **Marks:** a mark (a role, a hand, a scale's note) is its wash at rest and its full paint when its key is down,
+  always with the ink on it. The wash is `color-mix(in oklab, <paint> var(--mark-wash), var(--key-white))`: 35% by day,
+  50% by night (so a resting mark is a tint of the softer key, never brighter than it), 55% and 62% under increased
+  contrast. A scale's notes are sky (wash at rest), its tonic yellow; scales are never role
   coloured.
 - **Down:** a plain key down turns sky (`paint-sky`), white and black alike.
-- **Other faces:** a quiz's chosen key and Name chord's lit key yellow, a wrong key crimson, a missing key outlined
-  in a 3px deep-sky ring inside its edge.
-- **Focus:** a two-tone ring, brown ink outside and white inside, so it shows on any key's colour.
+- **Other faces:** a quiz's chosen key and Name chord's lit key honey, a wrong key crimson, a missing key outlined in a
+  3px deep-sky ring inside its edge.
+- **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key's colour.
 
 ### Neutral
 
-- **Paper** (`paper`; night `dusk-ground`): the page.
-- **Card Paper** (`paper-card`; night `dusk-card`): cards, sheets, popovers, chips, the soft and round buttons, the nav.
-- **Sand** (`sand-sunken`; night `dusk-sunken`): hover and pressed fills, the muted surfaces, slider tracks.
-- **Brown Ink** (`brown-ink`; night `dusk-ink`): text. **Soft Brown** (`brown-ink-soft`; night `dusk-ink-soft`):
-  secondary text.
-- **Brown Line** (`brown-line`; night `dusk-line`): every border, the book's line. **Hairline** (`sand-hairline`;
-  night `dusk-hairline`): dividers between rows inside a card, an unfilled pip.
+- **Paper** (`paper`; night `dusk-ground`): the page, a shade darker than the cards.
+- **Card Paper** (`paper-card`; night `dusk-card`): cards, sheets, popovers, chips, the soft and round buttons, the
+  nav, the chosen segment.
+- **Sand** (`sand-sunken`; night `dusk-sunken`): hover and pressed fills, segment tracks, the current place in the nav,
+  a settings group's header band, slider and switch tracks.
+- **Ink** (`ink`; night `dusk-ink`): text. **Soft Ink** (`ink-soft`; night `dusk-muted`): secondary text, the nav's
+  icons and labels, a level's pips.
+- **Soft Line** (`soft-line`; night `dusk-line`): every card's 1px border, the nav's edge. **Control Line**
+  (`control-line`; night `dusk-control`): every control's 1px border and a chart's barlines, at 3:1 against the card.
+  **Hairline** (`sand-hairline`; night `dusk-hairline`): dividers between rows inside a card, an unfilled pip.
 
 ### Named Rules
 
 **The Palette Law.** Role colours appear on chord tones only; hand colours only in the Player; the book's paints on
-the chrome name a place or a kind of step and are never a chord tone. Brick red on the chrome means chosen, nothing
-else.
+the chrome are washes that name a place or a kind of step, never a chord tone. Brick means only the root tone and the
+right hand: one colour, one meaning.
 
 **The Wash And Paint Rule.** A mark is its pale wash at rest and its full paint when its key sounds; a plain key down
 turns sky. Every mark stays while keys go down, and its label stays on it: colour is never the only cue.
 
-**The One Yellow Rule.** Each screen has exactly one yellow action. A second action beside it is paper drawn in the
-line (soft), never a second yellow.
+**The One Honey Rule.** Each screen has exactly one honey action, and it is the only control whose fill is a colour.
+A second action beside it is card paper in the control line (soft), never a second colour.
+
+**The Neutral Chosen Rule.** What is chosen or where you are is shown in neutrals, never in a paint: a chip fills with
+umber, a segment or a Theory tab becomes a card-paper thumb in the control line on a sand track, the current place in
+the nav fills with sand under a semibold ink label.
+
+**The Increased Contrast Rule.** The quiet default has an answer for the OS's increased-contrast setting: under
+`prefers-contrast: more` secondary text steps up to umber (night `dusk-ink`), the card line to the control line, the
+control line to ink (night `dusk-muted`), the hairline to the soft line, the key bed to the control line and a
+resting mark's wash to 55% of its paint (night 62%). Every calm value ships with its firm one.
 
 ## Typography
 
-**Display Font:** Balsamiq Sans, weight 700 only, Latin and Cyrillic, self-hosted (with Onest behind it)
-**Body Font:** Onest Variable, self-hosted (with Noto Music's music subset behind it for 𝄪 and 𝄫, then system-ui)
+**Display Font:** Literata Variable (weight and optical-size axes, Latin and Cyrillic), self-hosted, with Noto Music
+and Georgia behind it; its Greek and Vietnamese subsets stay out of the PWA precache.
+**Body Font:** Onest Variable, self-hosted (with Noto Music's music subset behind it for 𝄪 and 𝄫, then system-ui).
 
-**Character:** the book's hand-lettering for everything that names (titles, chord symbols, buttons, tabs, segments,
-sheet titles), a clear Cyrillic-first grotesque for everything read. `h1` to `h3` are Balsamiq Sans Bold by default.
+**Character:** a sans and a serif made to work together, as a system face and its book face are. Literata sets what
+names a screen or a chord, at weight 600, and its optical size fits its drawing to each size; Onest carries everything
+read and every control. `h1` to `h3` are Literata 600 by default. The scale follows the text styles of a phone's
+system, in rem, so it grows with the reader's own text size.
 
 ### Hierarchy
 
-- **Chord Display** (Balsamiq 700, 72px, 1): the chord in the Chords explorer and the Player's chord now (48px on a
-  phone on its side).
-- **Large Title** (Balsamiq 700, 34px, 1.1; 48px from 1024px): each screen's header, the scale's name (48px).
-- **Card Title** (Balsamiq 700, 30px): the Continue card's band, the Player's next chord, the sidebar's name.
-- **Section Title** (Balsamiq 700, 24px): section headings, sheet titles, a chord in a chart or a scale's chords.
-- **Button** (Balsamiq 700, 17px; the 56px pill 22px): buttons, tabs, segments (16px).
-- **Row Title** (Onest 600, 17px, 1.4): step and piece rows.
+- **Chord Display** (Literata 600, 72px, 1): the chord in the Chords explorer, the Player's chord now (44px on a phone
+  on its side), a Check's score.
+- **Display** (Literata 600, 44px, 1.1): each screen's title from 1024px, the scale's name.
+- **Large Title** (Literata 600, 34px, 1.15): each screen's title on a phone.
+- **Title 1** (Literata 600, 28px, 1.2): the Continue card's band, the Player's next chord.
+- **Title 2** (Literata 600, 22px, 1.3): level and section headings, sheet titles, the sidebar's name, a chord in the
+  symbols list or a scale's chords, a chart's chord from 640px.
+- **Title 3** (Literata 600, 20px, 1.25): a settings group's title, a chart's chord on a phone.
+- **Headline** (Onest 600, 17px, 1.375): step and piece rows, the pill button's label, the Player's feedback. At
+  this size a heading element (a chart's section, a Symbols group, the Player's piece title) stays Literata 600.
+- **Control** (Onest 600, 16px): buttons, chips, segments and the Theory tabs.
 - **Body** (Onest 400, 16px, 1.5): everything else; notes at most 65ch.
-- **Label** (Onest 400–600, 14px and 12px): row subtitles, bar numbers, method notes. Chips set Onest 600 at 16px.
+- **Label** (Onest 400 to 600, 14px and 12px): row subtitles, bar numbers, method notes; the nav's labels are Onest
+  500 at 14px on a phone and 16px in the sidebar, semibold where you are.
 - **Key Label** (Onest 700, 14px for a mark, 12px for a note name, tabular): the degree, finger or note on a key.
 
 ### Named Rules
 
-**The One Weight Rule.** Balsamiq Sans ships in one weight and `font-synthesis-weight` is off: never ask it for a
-lighter or heavier weight, and never let the browser fake one.
+**The Two Faces Rule.** Literata names (titles, chord symbols); Onest reads and operates. A control, a tab or a label
+on a key is never set in the serif, and a title is never set in the sans.
+
+**The Real Weights Rule.** Both faces are variable and `font-synthesis-weight` is off: ask Literata for 600 and Onest
+for what it carries, and never let the browser fake a bold.
 
 **The Tabular Numbers Rule.** Tempo, bar numbers, counts, key labels and finger numbers are tabular, so a number
 that changes in place never shifts its neighbours.
@@ -359,9 +437,9 @@ that changes in place never shifts its neighbours.
 ## Layout
 
 Phone first. On a phone a shell screen is one column (up to 48rem) with 16px gutters, clears the notch, and scrolls
-over a bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a 240px lettered sidebar
-(the app's name in Balsamiq, then the three places) and the screen takes the width it is given, up to 72rem, with
-40px side padding. The Player and the Check are full screen (up to 72rem) with no navigation.
+over a bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a 240px sidebar (the app's
+name in Literata, then the three places) and the screen takes the width it is given, up to 72rem, with 40px side
+padding. The Player and the Check are full screen (up to 72rem) with no navigation.
 
 From 1024px each screen arranges itself in two columns with a 40px gap, tops aligned:
 
@@ -375,82 +453,92 @@ Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px 
 and a Piece's chart pin their keyboard to the top while the page scrolls.
 
 **The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
-longest line, so bars line up down the chart; a bar is parted by a 2px line and each line closes with one.
+longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one.
 
 ## Elevation & Depth
 
-Flat, drawn with line. Depth is the book's: a 2px brown outline and a paper card on a paper ground; hover and press
-fill with sand or darken a shade (brightness 95%). Shadows appear only on what floats over the page:
+Flat, grouped by surface. Depth is the book's: a card paper on a darker paper, a 1px soft line round it; hover and
+press fill with sand or darken a shade (brightness 95%). Shadows appear only on what floats over the page:
 
 - **Popover** (`shadow-md` with a 1px ring of ink at 10%): the MIDI and keyboard-settings popovers.
-- **Floating banner** (`shadow-lg`): the update banner.
-- **Slider thumb** (`shadow-md` with a 1px line ring).
+- **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
+- **Slider thumb** (`shadow-md` with a 1px soft-line ring).
 
 Bottom sheets rise over a page dimmed to 10% black and need no shadow.
 
-**The Drawn Not Lifted Rule.** A surface separates by its line, never by a shadow. One exception, on keys only: the
-keys' material. The rail casts an 8px shade of ink at 10% onto the keys, a white key ends in a 6px lip of ink at 6%,
-a black key in an 8px slope of white at 14%. They draw a piano and appear nowhere else.
+**The Drawn Not Lifted Rule.** A surface separates by its surface and a 1px soft line, never by a shadow or a heavy
+outline. One exception, on keys only: the keys' material. The rail casts an 8px shade of ink at 7% onto the keys, a
+white key ends in a 6px lip of ink at 5%, a black key in an 8px slope of white at 12%. They draw a piano and appear
+nowhere else.
 
 ## Shapes
 
-Soft book corners from one 12px base: black keys 6px, white keys 9px, small parts 10–11px, buttons, chips, segments
-and step tiles 12px, cards 14px, sheets 20px at the top. Round buttons, Play, rating marks, finger circles and pips are
-fully round. Keys are square at the top and round only at the bottom. Every card and control carries the 2px brown
-line; list rows inside a card part by a 2px hairline.
+Soft book corners from one 12px base: black keys 6px, white keys 9px, small parts 10–11px (a segment's thumb 11px),
+buttons, chips, segment tracks and step tiles 12px, cards 14px, sheets 20px at the top. Round buttons, Play, rating
+marks, the learned toggle, finger circles and pips are fully round. Keys are square at the top and round only at the
+bottom. Every card carries a 1px soft line, every control a 1px control line; list rows inside a card part by a 1px
+hairline.
 
 ## Components
 
 ### Buttons
 
-Lettered, outlined, and sure of themselves.
+Plain, clear, one of them coloured.
 
-- **Shape:** 12px corners, a 2px brown line, Balsamiq 17px; 44px tall, 48px large, a 56px pill for the Continue
-  card's action.
-- **Primary:** yellow, brown lettering; hover darkens to 95%, press nudges down 1px.
-- **Soft / Outline:** card paper in the line, brown lettering: the second action (Arpeggio, Hear these notes).
-- **Destructive:** paper with a crimson line and lettering.
+- **Shape:** 12px corners, Onest 600 16px; 44px tall, 48px large, a 56px pill (17px) for the Continue card's action.
+- **Primary:** honey, borderless, ink label; hover darkens to 95%, press nudges down 1px.
+- **Soft / Outline:** card paper in the 1px control line, ink label: the second action (Arpeggio, Hear these notes).
+- **Secondary:** sky mist with its ink, no line.
+- **Destructive:** card paper with a crimson line and label.
 - **Link:** Onest 600, deep sky, underline on hover.
-- **Round** (44px, paper, the line, 20px icon): close, back, settings, MIDI, Restart; always labelled.
-- **Play** (72px circle): the Player's one Play/Stop.
+- **Round** (44px, card paper, the control line, 20px icon): close, back, settings, MIDI, Restart; always labelled.
+- **Play** (72px circle, honey): the Player's one Play/Stop.
 - **Focus:** a 3px deep-sky ring, 2px outside.
 
 ### Chips and segments
 
-- **Chip** (44px, 12px corners, paper in the 2px line): a row of roots, families, qualities or keys that scrolls past
-  the screen's edge on a phone and wraps from 1024px. Chosen: brick deep with white.
-- **Segmented** (a paper track in the line, 4px inset; the chosen segment brick deep with white, Balsamiq 16px): one
-  value from a few. The Theory tabs use the same track.
+- **Chip** (44px, 12px corners, card paper in the 1px control line, Onest 600 16px): a row of roots, families,
+  qualities or keys that scrolls past the screen's edge on a phone and wraps from 1024px. Chosen: umber with paper
+  text (night: dusk muted with dusk-ground text).
+- **Segmented** (a sand track, 4px inset, 12px corners): one value from a few. Unchosen segments are soft ink with no
+  fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. The Theory
+  tabs are the same track.
+- **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
 
 ### Cards and sheets
 
-- **Card** (card paper, 14px, the 2px line): grouped rows, the practice card.
-- **Continue card:** a card whose title is lettered on a sky header band over a 2px line, then the step's detail and
-  the yellow pill Continue (beside it from 1024px).
-- **Step row:** a 48px tile in its kind's paint with a brown-line outline and an icon, the title in Onest 600, the
-  learned toggle at the end.
-- **Sheet** (card paper, 20px top, swipe handle, lettered title, scrolling body, optional footer): Setup, quiz choice,
+- **Card** (card paper, 14px, the 1px soft line): grouped rows, the practice card, a settings group (its title on a
+  sand band over a 1px line).
+- **Continue card:** a card whose Literata title sits on a header band in its step's wash (a song yellow, a chord
+  step sand, a scale sky: the same paint as its tile, `STEP_PAINT` in `entities/path`) over a 1px line, then the step's detail
+  and the honey pill Continue (beside it from 1024px).
+- **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
+  17px; the learned toggle at the end.
+- **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice,
   reading notes.
 
 ### Marks
 
-- **Rating mark:** known is a 16px grass disc with a check; a gap a 10px ochre dot; not checked a 10px ring of line.
-- **Level mark:** four 4px pips rising 6 to 12px, the first ones ochre, the rest hairline.
+- **Rating mark:** known is a 16px grass disc with a check; a gap a 10px ochre dot; not checked a 10px ring of the
+  control line, 1px.
+- **Learned toggle:** a 28px ring of the control line, 1px, in a 44px target; learned fills it grass with a check.
+- **Level mark:** four 4px pips rising 6 to 12px, the first ones soft ink, the rest hairline.
 
 ### Navigation
 
-A bar docked along the bottom on phones (card paper, a 2px line above it): three places, icon over Balsamiq label, each
-icon in its paint's deep shade; the current place is filled brick deep with white. From 1024px, a 240px sidebar with
-a 2px line on its right, the app's name lettered at the top, the places as 48px rows.
+Monochrome, so the content keeps the colour. A bar docked along the bottom on phones (card paper, a 1px soft line
+above it): three places, a 24px icon over an Onest 500 14px label, both soft ink; the current place fills with sand
+under a semibold ink label. From 1024px, a 240px sidebar with a 1px soft line on its right, "Piano Trainer" in
+Literata 600 22px at the top, the places as 44px rows (20px icon, 16px label).
 
 ### The keyboard (signature)
 
-The whole piano, A0–C8, hung from a painted wooden **rail** and scrolling sideways with no bar. The rail runs the
+The whole piano, A0–C8, hung from a light wooden **rail** and scrolling sideways with no bar. The rail runs the
 piano's length, drawn 28px at the foot of a 44px strip, and a swipe on it scrolls the keys; its controls stay in view,
-44px targets whose icons sit in the drawn rail and never reach over a key: **‹ ›** at its ends move the keys an octave,
-the **keyboard map** between them (off by default) draws all 88 keys small with a frame round the part in view and
-dots under the keys marked or down, and the **settings button** at its right end opens the keyboard settings in a
-popover beside the keyboard, never over it.
+44px targets whose ink icons sit in the drawn rail and never reach over a key, focused with the deep-sky ring: **‹ ›**
+at its ends move the keys an octave, the **keyboard map** between them (off by default) draws all 88 keys small with
+an ink frame round the part in view and dots under the keys marked or down, and the **settings button** at its right
+end opens the keyboard settings in a popover beside the keyboard, never over it.
 
 - **Proportions:** a key is 4.2 times as long as a white key is wide, at least 96px and at most 40% of the screen's
   height; the Player's keyboard takes the height its layout gives it. **Key size:** Fit (the range fills the width,
@@ -463,7 +551,7 @@ popover beside the keyboard, never over it.
   key, a MIDI key) and for at least the shortest press, 150ms, so the lightest tap shows; let go, it is plain again,
   however long its sound rings. The keys hold still under a finger. **Scroll** (the default): only the key a finger
   touched sounds; the keyboard scrolls from its rail. **Glissando:** every key a finger slides onto sounds.
-- **Faces:** plain; a mark's wash with its label; yellow for a quiz's chosen or Name chord's lit keys; crimson for a
+- **Faces:** plain; a mark's wash with its label; honey for a quiz's chosen or Name chord's lit keys; crimson for a
   wrong key; a deep-sky ring inside a missing key; and down over all of them. A wrong key wins over a lit one, a lit
   one over a mark, a mark over a selection. **Note names** (C · All · None) put "C4" on every C, or its name on every
   key, drawn smaller than a mark's label, which always wins. The computer keyboard's letters sit on the keys it plays.
@@ -477,7 +565,7 @@ popover beside the keyboard, never over it.
   the rest. The focused key keeps its place under its neighbours: its two-tone ring outlines the face a finger
   touches (a black key whole, a white key below the black keys).
 - **Every Play becomes Stop** (a square) while its sound plays; in a grid of items (a Piece's bars, a scale's chords)
-  the item is pressed instead, and a second tap stops it.
+  the item is pressed instead (sky mist), and a second tap stops it.
 
 ### Motion
 
@@ -488,11 +576,13 @@ exponential ease-out. Under reduced motion every transition is instant.
 
 ### Do:
 
-- **Do** give each screen exactly one yellow action, drawn in the brown line with brown lettering.
-- **Do** draw every card and control in the 2px brown line on paper.
+- **Do** give each screen exactly one honey action, borderless, with the ink on it.
+- **Do** part cards by surface and a 1px soft line, and draw every control in the 1px control line.
+- **Do** show what is chosen in neutrals: an umber chip, a card-paper segment, a sand fill for the current place.
 - **Do** show every sound on a keyboard: a key that sounds goes down, a mark from its wash to its full paint.
 - **Do** label every coloured key with its degree, finger or note.
-- **Do** letter titles, chord symbols, buttons and tabs in Balsamiq Sans Bold, and read everything else in Onest.
+- **Do** set titles and chord symbols in Literata 600, and everything read or pressed in Onest.
+- **Do** give every quiet value an increased-contrast step under `prefers-contrast: more`.
 - **Do** keep targets at 44px and focus rings visible (3px, deep sky).
 - **Do** set numerals that change in place in tabular figures.
 
@@ -501,11 +591,14 @@ exponential ease-out. Under reduced motion every transition is instant.
 - **Don't** draw characters, animals or mascots: the book lends its colour, line and labelling only.
 - **Don't** put a kicker or eyebrow label above a heading; the heading and the labels on the things themselves are
   enough.
-- **Don't** use brick red on the chrome for anything but what is chosen or where you are.
+- **Don't** fill more than one control on a screen with a colour; a second action is soft.
+- **Don't** show what is chosen in a paint; brick means only the root tone and the right hand.
+- **Don't** colour the navigation; its icons and labels stay soft ink.
 - **Don't** colour chrome with a chord role or a hand colour, or put a chrome paint on a chord tone.
-- **Don't** lift a surface with a shadow; draw it with the line (only popovers, the update banner and the slider
-  thumb float).
-- **Don't** ask Balsamiq Sans for any weight but 700.
+- **Don't** put a chrome paint at full strength on the chrome: a place's tint is its wash, with its deep shade on it.
+- **Don't** set a control, a tab or a key label in the serif.
+- **Don't** draw a 2px line round a card or control, or lift a surface with a shadow (only popovers, the update
+  banner and the slider thumb float).
 - **Don't** draw a key that does nothing: every key sounds.
 - **Don't** stack a sheet over a sheet; open a list as a page of the sheet.
 - **Don't** write how-to paragraphs; the labelled keyboard and the layout teach.

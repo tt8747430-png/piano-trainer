@@ -109,11 +109,11 @@ export function ChordChart({
     <div className="flex flex-col gap-6">
       {sections.map(({ heading, lines }, section) => (
         <section key={section} className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold">{heading}</h3>
+          <h3 className="text-lg">{heading}</h3>
           {lines.map((bars, line) => (
             <div
               key={line}
-              className="grid border-r-2 border-foreground/80"
+              className="grid border-r border-input"
               style={{
                 gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
                 width: `${(bars.length / longest) * 100}%`,

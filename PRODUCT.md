@@ -48,10 +48,16 @@ The name is **Piano Trainer**. The legacy look (navy on slate, Bricolage Grotesq
 to replace.
 
 **The world (owner-chosen, 2026-09-27, ADR 0010):** a **labelled picture book**, Richard Scarry's Busytown
-cross-sections: paper, a warm brown line round every shape, seven gouache paints at one lightness, hand-lettered
-titles and a small printed label on everything. Its colour, line and labelling only: no characters, animals or
-mascots. The keys follow **The Ultimate Piano**'s learn view (owner-sent): a mark pale at rest, full colour when its
+cross-sections: paper, a line round every shape, seven paints at one lightness and a small printed label on
+everything. Its colour, line and labelling only: no characters, animals or mascots. **Printed quietly (owner,
+2026-09-27, ADR 0011):** faded paints, a soft 1px line, colour filling one control per screen, a neutral "chosen",
+titles and chords typeset in a book serif (Literata) with Onest for reading and controls. The keys follow **The Ultimate Piano**'s learn view (owner-sent): a mark pale at rest, full colour when its
 key is played.
+
+**Reference guides (owner-sent, 2026-09-27), for colour and type:** Apple's Human Interface Guidelines on Color
+and Typography, and Material's colour system: one meaning per colour, colour on one control's background, a
+monochrome tab bar, light, dark and increased-contrast variants, few typefaces as a sans and serif pair, fixed text
+styles that follow the reader's text size, "on" colours for what sits on a fill.
 
 **Reference products (owner-pinned, 2026-09-25), for structure and craft:** **Clefs** (round icon buttons, the
 keyboard as the lower half of a practice screen), **Flowkey**'s player (the keyboard as the hero, one big round Play,

@@ -130,7 +130,7 @@ export function ChordExplorer({
           {tones.map((tone) => (
             <li
               key={tone.degree}
-              className="flex items-center gap-2 rounded-xl border-2 border-border bg-card py-1 pr-3 pl-1"
+              className="flex items-center gap-2 rounded-xl border border-border bg-card py-1 pr-3 pl-1"
             >
               <span
                 className={cn(

@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import {
   ExplorerLink,
   skillsOfStep,
+  STEP_PAINT,
   useStepTitle,
   type PlacedStep,
   type StepKind,
@@ -26,14 +27,6 @@ const ICON: Readonly<Record<StepKind, LucideIcon>> = {
   study: Repeat2,
   song: Music,
   progression: ListMusic,
-}
-/** Each kind of step in its own paint, as every object in the book has its colour. */
-const TILE: Readonly<Record<StepKind, string>> = {
-  chords: 'bg-paint-sand text-on-paint',
-  scale: 'bg-paint-sky text-on-paint',
-  study: 'bg-paint-grass text-on-paint',
-  song: 'bg-paint-yellow text-on-paint',
-  progression: 'bg-paint-lilac text-on-paint',
 }
 const ROW_LINK =
   'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring'
@@ -64,8 +57,9 @@ export function StepRow({
     <>
       <span
         className={cn(
-          'grid size-12 shrink-0 place-items-center rounded-2xl border-2 border-border',
-          TILE[title.kind],
+          'grid size-12 shrink-0 place-items-center rounded-2xl',
+          STEP_PAINT[title.kind].fill,
+          STEP_PAINT[title.kind].ink,
         )}
       >
         <Icon aria-hidden className="size-5" />

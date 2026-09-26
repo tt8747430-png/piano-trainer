@@ -39,11 +39,15 @@ export function NowPanel({
   return (
     <section className="flex flex-col gap-3 landscape-phone:gap-1">
       <div className="flex items-end justify-between gap-4">
-        <p className="font-display text-7xl landscape-phone:text-5xl">{chord?.symbol ?? '–'}</p>
+        <p className="font-display text-7xl font-semibold landscape-phone:text-5xl">
+          {chord?.symbol ?? '–'}
+        </p>
         {next ? (
           <p className="text-right text-sm text-muted-foreground">
             {t('nextChord')}
-            <span className="block font-display text-3xl text-foreground">{next.symbol}</span>
+            <span className="block font-display text-3xl font-semibold text-foreground">
+              {next.symbol}
+            </span>
           </p>
         ) : null}
       </div>
