@@ -1,40 +1,38 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
-import { midi } from '@/shared/lib/music'
+import { setKeyboard } from '@/features/set-preference'
+import { midi, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
-import { ServicesProvider } from '@/shared/lib/services'
-import { LiveKeyboard } from './LiveKeyboard'
+import type { KeyMark } from '@/shared/ui'
+import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 
-const ONE_OCTAVE = { from: midi(60), to: midi(71) }
-
-function setUp(onKeyPress?: (key: number) => void) {
-  const audio = createFakeAudio()
-  const midiKeyboard = createFakeMidi()
-  render(
-    <ServicesProvider services={{ audio, midi: midiKeyboard }}>
-      <LiveKeyboard range={ONE_OCTAVE} {...(onKeyPress ? { onKeyPress } : {})} />
-    </ServicesProvider>,
-  )
-  return { audio, midiKeyboard }
-}
+const C_MAJOR = new Map<Midi, KeyMark>(
+  [60, 64, 67].map((key) => [midi(key), { tone: 'root', label: '1' }]),
+)
 
 describe('LiveKeyboard', () => {
   it('sounds a tapped key on top of what plays, then does what the screen asks', async () => {
     const user = userEvent.setup()
     const onKeyPress = vi.fn()
-    const { audio } = setUp(onKeyPress)
+    const { audio } = setUp({ onKeyPress })
     await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
     expect(audio.played.flatMap((play) => play.sounds)).toMatchObject([{ kind: 'note', midi: 66 }])
     expect(audio.stops).toBe(0)
     expect(onKeyPress).toHaveBeenCalledWith(66)
   })
 
+  it('sounds a tapped key at once, from the audio clock’s now', async () => {
+    const user = userEvent.setup()
+    const { audio } = setUp()
+    audio.setNow(2)
+    await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
+    expect(audio.played.at(-1)?.at).toBe(2)
+  })
+
   it('puts down the keys the app sounds, as they sound', () => {
     const { audio } = setUp()
-    act(() => audio.play(chordSounds([midi(60), midi(64)], { arpeggio: true }), 0))
+    act(() => void audio.play(chordSounds([midi(60), midi(64)], { arpeggio: true }), 0))
     act(() => audio.setNow(0.1))
     expect(screen.getByRole('button', { name: 'C4' })).toHaveAttribute('data-down')
     expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
@@ -48,5 +46,35 @@ describe('LiveKeyboard', () => {
     expect(screen.getByRole('button', { name: 'G4' })).toHaveAttribute('data-down')
     act(() => midiKeyboard.release(midi(67)))
     expect(screen.getByRole('button', { name: 'G4' })).not.toHaveAttribute('data-down')
+  })
+
+  it('is set up as the keyboard settings say', () => {
+    const { settingsStore } = setUp()
+    act(() => setKeyboard(settingsStore, { keySize: 'piano', namedKeys: 'none' }))
+    expect(screen.queryByRole('button', { name: 'Octave up' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
+  })
+
+  it('with spotlight, puts down only the key struck last and holds the other marks back', () => {
+    const { audio } = setUp({ spotlight: true, marks: C_MAJOR })
+    act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: true }), 0))
+    act(() => audio.setNow(0.5))
+    const [c, e, g] = ['C4', 'E4', 'G4'].map((name) => screen.getByRole('button', { name }))
+    expect(g).toHaveAttribute('data-down')
+    expect(g).not.toHaveAttribute('data-quiet')
+    for (const key of [c, e]) {
+      expect(key).not.toHaveAttribute('data-down')
+      expect(key).toHaveAttribute('data-quiet')
+    }
+    act(() => audio.setNow(3))
+    expect(c).not.toHaveAttribute('data-quiet')
+  })
+
+  it('without spotlight, puts every sounding key down and holds nothing back', () => {
+    const { audio } = setUp({ marks: C_MAJOR })
+    act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: true }), 0))
+    act(() => audio.setNow(0.5))
+    expect(screen.getByRole('button', { name: 'E4' })).toHaveAttribute('data-down')
+    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-quiet')
   })
 })

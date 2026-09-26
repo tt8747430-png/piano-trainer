@@ -1,6 +1,7 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { createProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { useQuiz, type QuizConfig } from '@/features/quiz'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -16,7 +17,7 @@ function Board({ config }: { config: QuizConfig }) {
 
 function renderBoard(config: QuizConfig) {
   const store = createProgressStore({ storage: createMemoryStorage() })
-  render(
+  renderWithSettings(
     <ProgressStoreProvider store={store}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
         <Board config={config} />

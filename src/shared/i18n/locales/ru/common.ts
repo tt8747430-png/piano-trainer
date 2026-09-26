@@ -40,6 +40,15 @@ export const common: LocaleResources['common'] = {
     octaveUp: 'Октава вверх',
     map: 'Клавиши на экране',
     mapRange: '{{from}} – {{to}}',
+    settings: 'Настройки клавиатуры',
+  },
+  keyboardSettings: {
+    keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
+    swipe: { label: 'Свайп', scroll: 'Прокрутка', glissando: 'Глиссандо' },
+    namedKeys: { label: 'Названия нот', c: 'C', all: 'Все', none: 'Нет' },
+    map: 'Карта клавиатуры',
+    typing: 'Играть с клавиатуры компьютера',
+    typingHint: 'Z X · октава',
   },
   learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
   midi: {

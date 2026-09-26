@@ -40,6 +40,16 @@ export const common = {
     octaveUp: 'Octave up',
     map: 'Keys in view',
     mapRange: '{{from}} to {{to}}',
+    settings: 'Keyboard settings',
+  },
+  // The keyboard settings: in the rail's popover and in Settings.
+  keyboardSettings: {
+    keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
+    swipe: { label: 'Swipe', scroll: 'Scroll', glissando: 'Glissando' },
+    namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },
+    map: 'Keyboard map',
+    typing: 'Play from the computer keyboard',
+    typingHint: 'Z X · octave',
   },
   learned: { toggle: '{{title}}: learned', done: 'Learned' },
   midi: {
