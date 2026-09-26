@@ -182,6 +182,14 @@ describe('PianoKeyboard', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
   })
 
+  it('scrolls from its rail: the rail moves with the keys, its controls kept in view', () => {
+    renderKeyboard({ map: true })
+    const scroller = document.querySelector('[data-slot="keys-scroller"]')
+    expect(scroller).toContainElement(screen.getByRole('button', { name: 'Octave up' }))
+    expect(scroller).toContainElement(screen.getByRole('slider', { name: 'Keys in view' }))
+    expect(scroller).toContainElement(screen.getByRole('group', { name: 'Keyboard' }))
+  })
+
   it('holds the controls it is given in its rail', () => {
     renderKeyboard({ children: <button type="button">Settings</button> })
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()

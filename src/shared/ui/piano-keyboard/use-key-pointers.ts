@@ -5,11 +5,12 @@ import type { Midi } from '@/shared/lib/music'
 const NONE: ReadonlySet<Midi> = new Set()
 
 /**
- * A key plays the instant a pointer touches it. Scroll: that key only; the browser takes a swipe
- * and cancels the press. Glissando: every key a pointer enters plays, once per entry, each pointer
- * on its own. No capture is needed: a touch or pen is captured by the key it went down on, so its
- * moves and its lift reach the group; a mouse released outside is forgotten at its next move. A
- * pointer's own click never plays again; any other click (Enter, Space, a screen reader) plays once.
+ * A key plays the instant a pointer touches it, and the keys never scroll under it (they take the
+ * finger from the page). Scroll: that key only, down until the finger lifts. Glissando: every key a
+ * pointer enters plays, once per entry, each pointer on its own. No capture is needed: a touch or
+ * pen is captured by the key it went down on, so its moves and its lift reach the group; a mouse
+ * released outside is forgotten at its next move. A pointer's own click never plays again; any
+ * other click (Enter, Space, a screen reader) plays once.
  */
 export function useKeyPointers({
   swipe,

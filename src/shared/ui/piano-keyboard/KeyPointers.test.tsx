@@ -57,6 +57,14 @@ describe('touching the keys', () => {
     expect(onKeyPress.mock.calls).toEqual([[60], [60], [62]])
   })
 
+  it.each(['scroll', 'glissando'] as const)(
+    'holds the keys still under a finger, so a key that plays never scrolls (%s)',
+    (swipe) => {
+      const { keys } = setUp({ swipe })
+      expect(keys).toHaveClass('touch-none')
+    },
+  )
+
   it('in Scroll, plays nothing more as the pointer moves, and lifts a press the browser cancels', () => {
     const { onKeyPress, keys, key } = setUp()
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))
