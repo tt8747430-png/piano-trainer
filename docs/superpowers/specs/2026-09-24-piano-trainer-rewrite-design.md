@@ -2,10 +2,10 @@
 
 - **Status:** revised after the two-axis review (document quality + fidelity to the owner's intent), awaiting
   the owner's review · **Date:** 2026-09-24
-- **Amended** 2026-09-25 with the Phase 2 plan's refinements (listed and argued in
-  `docs/superpowers/plans/2026-09-24-phase-2-core.md`, "Deliberate refinements of the spec").
-- **Amended** 2026-09-25 by the Phase 3 screens design (`2026-09-25-phase-3-screens-design.md`), which lists its
-  refinements in §11.
+- **Amended** 2026-09-25 by the Phase 2 plan's refinements and the Phase 3 screens design. Phases 1–3 are built;
+  their plans and the screens design were removed on 2026-09-26 (`git log --diff-filter=D -- docs/superpowers`
+  finds them). What they changed lives in the code, `CLAUDE.md`, `DESIGN.md`, `docs/CODE_STYLE.md`,
+  `docs/CONTENT.md`, the glossary and the ADRs. Phase 4 (§11) is still to come.
 - **Reference project:** `~/projectsGIT/memory-palaces` (Mindscape). Its `CLAUDE.md` and `docs/CODE_STYLE.md` are
   the model for this repo's standards, and are adapted here rather than copied wholesale.
 

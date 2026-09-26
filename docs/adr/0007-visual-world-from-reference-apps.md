@@ -7,8 +7,8 @@
 Phase 3 builds every screen, so it has to choose how the app looks. The legacy app's navy-and-slate palette was
 carried into Phase 1's tokens only as a placeholder. Offered rolled visual directions, the owner chose none and
 pinned four reference products instead (recorded in `PRODUCT.md`): Clefs, Flowkey's player, a theory reference app
-and a chord trainer. The design follows them, argued in `docs/superpowers/specs/2026-09-25-phase-3-screens-design.md`
-§1–§2.
+and a chord trainer. The design follows them, argued in the Phase 3 screens design §1–§2 (removed once built:
+`git log --diff-filter=D -- docs/superpowers/specs`) and recorded in `DESIGN.md`.
 
 ## Decision
 

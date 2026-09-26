@@ -4,8 +4,8 @@
   over the owner's requests and reference material. It splits the work into nine sub-projects, orders them, records
   every decision the session took and the ones the owner left to Claude, and lists what is planned but not built.
   Each sub-project gets its own spec, plan and build.
-- **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`), the screens spec
-  (`2026-09-25-phase-3-screens-design.md`) and the live-keyboard design (`2026-09-25-live-keyboard-design.md`).
+- **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
+  and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
   `docs/MOBILE_DESIGN.md` and `PRODUCT.md`, as the owner asked; §4.5 says what the sub-projects take from them.
 
@@ -37,11 +37,11 @@ per chord; the chords that carry a melody note) and The Jazz Piano Site's lesson
 
 | #   | Sub-project                          | Delivers |
 | --- | ------------------------------------ | -------- |
-| 1   | **The playable keyboard**            | Piano-like keys in real proportions; note names C · All · None; a key sounds the instant it is touched; **Scroll** and **Glissando**; key sizes Fit · Large · Whole piano; the keyboard map (off by default); a small options button in the keys' rail; the computer keyboard as a piano; finger numbers in circles under the keys; a scale's notes colour whole keys; the key sounding now stands out alone; Stop on every Play; a Keyboard group in Settings |
+| 1   | **The playable keyboard**            | Piano-like keys in real proportions; note names C · All · None; a key sounds the instant it is touched; **Scroll** and **Glissando**; key sizes Fit · Large · Whole piano; the keyboard map (off by default); a small settings button in the keys' rail; the computer keyboard as a piano; finger numbers in circles under the keys; a scale's notes colour whole keys; the key sounding now stands out alone; Stop on every Play; a Keyboard group in Settings |
 | 2   | **Navigation and options**           | The tabs **Path · Songs · Learn · Practice**; Theory becomes Learn (the Chords and Scales explorers, the chord dictionary as a reference, the reading notes as the first lesson); the quiz and My gaps move to Practice; every screen's choices become dropdowns and segmented controls with a sheet for the rest, after researching Apple's Human Interface Guidelines |
 | 3   | **Notation and the sheet-music Player** | `shared/lib/notation` and a VexFlow staff (§4.1); the Player in Flowkey's shape (§3.5); the Player can play a fixed score as well as an arrangement; swing; speed training in the loop |
 | 4   | **Scales and chords, deeper**        | The church modes and major and minor blues as scale kinds; **Start on** any note of a scale with fingering *From the thumb* (default) or *As the scale*; the scale's chords as triads, 7ths, 9ths, 11ths and 13ths, in inversions, and *Walk the chords*; the scale as sheet music with the keyboard; a key page for each of the 24 keys and the circle of fifths |
-| 5   | **Learn: lessons, references, tools** | Lessons like The Ultimate Piano's worksheets (a level, a category, live diagrams that play in place), in modules from fundamentals to accompaniment to jazz and gospel (TJPS's shape); references (intervals, available tensions, chord symbols); tools: Progressions, Passing chords, Chord explorer, Reharmonise, and chord detection (the app names what you play) |
+| 5   | **Learn: lessons, references, tools** | Lessons like The Ultimate Piano's worksheets (a level, a category, live diagrams that play in place), in modules from fundamentals to accompaniment to jazz and gospel (TJPS's shape); references (intervals, available tensions, chord symbols); tools: Progressions, Passing chords, Reharmonise, and chord detection (the app names what you play). The Chords and Scales explorers are already Learn's, moved there by 2 |
 | 6   | **The Path as a course**             | A page per level and per step, built like a worksheet that teaches and practises in place, never a redirect; every step levelled 1–4 (master spec §11, Phase 4's first task, moved here) |
 | 7   | **Practice: exercises and trainers** | Every exercise group, researched from primary sources (§3.3); trainers with a ladder of levels plus a custom choice, *run until stopped* or *N exercises*, and progress (streak, average, runs); ear training (intervals, chords, scales), note reading, keys, degrees |
 | 8   | **Patterns**                         | A page per pattern (its idea in a line, each hand in notation over a C chord, heard, on the keys, the songs that use it); a calmer picker; favourites and hiding; an editor for the learner's own patterns. The owner left the design to Claude |
@@ -63,13 +63,14 @@ deleting `legacy/`). Its levelling moves into sub-project 6.
 
 - **Touch:** a key sounds and goes down the instant it is touched. **Scroll** (default): a swipe moves the keyboard,
   and only the key it started on sounds. **Glissando:** every key a finger crosses sounds; the keyboard stays where
-  it is and moves an octave at a time by ‹ ›.
+  it is and moves an octave at a time by ‹ ›, which both swipes show wherever the keys scroll (a mouse cannot
+  swipe).
 - **"Full mode"** is the key size **Whole piano**. A full-screen keyboard is not built now: it waits for recording
   from a MIDI keyboard (§5), where it makes sense.
 - **Key sizes** Fit · Large · Whole piano, not a start octave and an octave count (the owner left it to Claude: Fit
   asks nothing of the learner; a chosen stretch suits teaching diagrams, not playing).
 - **The keyboard map** (a strip of all 88 keys framing the part in view) is off by default, with a setting.
-- **Controls** live in Settings, plus a small options button in the keys' dark rail, with no extra row: the screen
+- **Controls** live in Settings, plus a small settings button in the keys' dark rail, with no extra row: the screen
   is small and every control must earn its space, what matters while playing first.
 - **The computer keyboard plays**, on by default on computers, off on phones.
 - **Finger numbers** sit in circles under the keys; a key carries its degree or note name.
@@ -82,8 +83,10 @@ deleting `legacy/`). Its levelling moves into sub-project 6.
 
 - Four tabs: **Path · Songs · Learn · Practice**. Settings stays behind the gear on Path.
   - **Learn:** lessons, references (Chords, Scales with the modes, Keys with the circle of fifths and key pages,
-    Intervals, Chord symbols, Available tensions), tools (Progressions, Passing chords, Chord explorer, Reharmonise).
-  - **Practice:** exercises and trainers.
+    Intervals, Chord symbols, Available tensions), tools (Progressions, Passing chords, Reharmonise, chord
+    detection). The Chords explorer is the reference, not a tool beside it.
+  - **Practice:** the Theory quiz with My gaps (moved by sub-project 2), then exercises and trainers (sub-project 7),
+    which grow the quiz's modes into ladders of levels.
   - **Songs** holds your own scores (the editor, and later recording), The Ultimate Piano's "Create".
 - **Symbols** goes: its reading notes become a lesson and its dictionary a reference.
 - **Choices are dropdowns**, not rows of chips; segmented controls for two to five options; a sheet (a panel rising
@@ -198,7 +201,8 @@ kernel.
 - A control's footprint includes its states: a pressed key's drop and a focus ring are never clipped; siblings gap by
   at least the ring.
 - Two names for a panel on the page: a card a learner acts on, a note they read. Lessons' callouts are notes.
-- Every gesture has a visible alternative: Glissando's swipe has ‹ ›; the editor's shortcuts have buttons.
+- Every gesture has a visible alternative: the keyboard's swipe has ‹ › and the map; the editor's shortcuts have
+  buttons.
 - One surface owns the finger at a time: Glissando's keys take it from the page.
 - Loading, empty, error and offline states on every surface; one primary action per screen; 44px targets with 8px
   between them; primary actions in the thumb zone; `prefers-reduced-motion` honoured.
