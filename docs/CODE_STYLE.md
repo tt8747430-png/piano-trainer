@@ -71,7 +71,8 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord tones (keys,
   the legend, a chord chip's edge); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`) only in the Player;
   `--attention` only for a gap or "to check" (the dot, never the text beside it). The keys have their own roles
-  (`--key-white`, `--key-white-edge`, `--key-black`, `--key-pressed`), and a slider's thumb `--thumb`.
+  (`--key-white`, `--key-white-edge`, `--key-black`; a key down is `--key-down`, a coloured one under
+  `--key-down-tint`), and a slider's thumb `--thumb`.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 12 · `lg` 14
   · `xl` 16 · `2xl` 18 · `3xl` 26 · `4xl` 28 (black keys, white keys, primitives, buttons, cards, sheets); type
   `text-lg` 17 · `xl` 22 · `4xl` 34 · `6xl` 64 (headline, title, large title, chord display); `ease-out` is the one

@@ -3,7 +3,7 @@ import { isOneOf } from './is-one-of'
 import { note } from './music'
 import { readNote, valueOr, wholeIn } from './search-params'
 
-const isMode = isOneOf(['listen', 'step', 'turn'] as const)
+const isMode = isOneOf(['listen', 'step', 'wait'] as const)
 
 describe('valueOr', () => {
   it('keeps a value the guard accepts and replaces anything else', () => {

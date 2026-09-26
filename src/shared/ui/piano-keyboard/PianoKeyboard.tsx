@@ -31,10 +31,10 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
 
 /**
  * The one keyboard (spec §8): the whole piano, scrolling sideways, its `range` filling the width.
- * Keys are buttons named by note, one of them in the tab order; the arrow keys walk the rest.
+ * A group named "Keyboard" whose keys are buttons named by note, one of them in the tab order; the
+ * arrow keys walk the rest.
  */
 export function PianoKeyboard({
-  label,
   range,
   inView,
   selectable = false,
@@ -42,7 +42,6 @@ export function PianoKeyboard({
   className,
   ...states
 }: KeyStates & {
-  label: string
   /** The keys that fill the keyboard's width; the rest of the piano scrolls in beside them. */
   range: KeyRange
   /**
@@ -95,7 +94,7 @@ export function PianoKeyboard({
       {/* A flex item, so the keys take the keyboard's height however that height is set. */}
       <div
         role="group"
-        aria-label={label}
+        aria-label={t('keyboard')}
         onKeyDown={onKeyDown}
         className="relative shrink-0"
         style={{

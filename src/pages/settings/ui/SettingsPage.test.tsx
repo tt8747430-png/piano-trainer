@@ -5,7 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 
 describe('Settings', () => {
   it('shows the saved language and theme as chosen', async () => {
-    renderApp('/settings')
+    await renderApp('/settings')
     expect(await screen.findByRole('button', { name: 'English' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -14,7 +14,7 @@ describe('Settings', () => {
   })
 
   it('groups each choice under its own heading', async () => {
-    renderApp('/settings')
+    await renderApp('/settings')
     const language = await screen.findByRole('group', { name: 'Language' })
     expect(
       within(language)
@@ -31,20 +31,20 @@ describe('Settings', () => {
 
   it('saves a new language', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = renderApp('/settings')
+    const { settingsStore } = await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Русский' }))
     expect(settingsStore.getState().locale).toBe('ru')
   })
 
   it('saves a new theme', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = renderApp('/settings')
+    const { settingsStore } = await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Dark' }))
     expect(settingsStore.getState().theme).toBe('dark')
   })
 
   it('says in one line when the browser cannot connect a keyboard', async () => {
-    renderApp('/settings', { webMidi: false })
+    await renderApp('/settings', { webMidi: false })
     expect(
       await screen.findByText('This browser can’t connect a MIDI keyboard.'),
     ).toBeInTheDocument()
@@ -52,7 +52,7 @@ describe('Settings', () => {
 
   it('resets progress only after confirming, then closes the dialog', async () => {
     const user = userEvent.setup()
-    const { progressStore } = renderApp('/settings')
+    const { progressStore } = await renderApp('/settings')
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
     await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
     await user.click(screen.getByRole('button', { name: 'Cancel' }))

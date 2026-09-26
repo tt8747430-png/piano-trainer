@@ -9,7 +9,7 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'pop8',
-  voicing: { default: 'sevenths', choosable: true },
+  chordSize: { default: 'sevenths', choosable: true },
   progression:
     'i:min:2 iv:min:2 ♭VII:=sus2:1 ♭VII:dom:1 ♭III:maj:1 I:domb9:1 iv:min:2 i:min:2/3 ii:hd:2 V:=sus4:1 V:domb9:1',
   note: {

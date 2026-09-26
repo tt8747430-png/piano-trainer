@@ -4,6 +4,7 @@ import {
   chordFamily,
   chordRootSpelling,
   chordSymbol,
+  PITCH_CLASSES,
   pitchClass,
   scaleRootSpelling,
   skillOf,
@@ -89,7 +90,6 @@ export const INITIAL_QUIZ: QuizState = {
   correct: 0,
 }
 
-const ALL_ROOTS = Array.from({ length: 12 }, (_, pc) => pitchClass(pc))
 /** A question equal to the last one is drawn again at most this many times. */
 const DRAWS = 8
 const OPTIONS = 4
@@ -144,7 +144,7 @@ function draw(config: QuizConfig, index: number, random: () => number): Question
   const skill = scope.ordered
     ? itemAt(scope.skills, index % scope.skills.length)
     : pick(scope.skills, random)
-  const pc = pick(scope.roots?.length ? scope.roots : ALL_ROOTS, random)
+  const pc = pick(scope.roots?.length ? scope.roots : PITCH_CLASSES, random)
   const target = skillOf(skill)
   if (target.kind === 'scale') {
     const root = scaleRootSpelling(pc, target.scale)

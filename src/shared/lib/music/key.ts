@@ -10,21 +10,20 @@ import {
 } from './note'
 import type { PitchClass } from './pitch'
 
-export type Mode = 'major' | 'minor'
-
+/** A tonic, major or minor. */
 export interface Key {
   readonly tonic: SpelledNote
-  readonly mode: Mode
+  readonly minor: boolean
 }
 
 /** 'G', 'G#m', 'Ebm', 'B♭': a note name, then `m` for minor. */
 export function parseKey(text: string): Key | null {
   const minor = text.endsWith('m')
   const tonic = parseNoteName(minor ? text.slice(0, -1) : text)
-  return tonic ? { tonic, mode: minor ? 'minor' : 'major' } : null
+  return tonic ? { tonic, minor } : null
 }
 
-export const keyName = (key: Key): string => noteName(key.tonic) + (key.mode === 'minor' ? 'm' : '')
+export const keyName = (key: Key): string => noteName(key.tonic) + (key.minor ? 'm' : '')
 
 /** Each letter's place on the circle of fifths, as a major tonic: sharps above 0, flats below. */
 const LETTER_FIFTHS: Readonly<Record<Letter, number>> = {
@@ -39,13 +38,13 @@ const LETTER_FIFTHS: Readonly<Record<Letter, number>> = {
 
 /** Sharps in the key signature (> 0) or flats (< 0). */
 export const keySignature = (key: Key): number =>
-  LETTER_FIFTHS[key.tonic.letter] + 7 * key.tonic.accidental - (key.mode === 'minor' ? 3 : 0)
+  LETTER_FIFTHS[key.tonic.letter] + 7 * key.tonic.accidental - (key.minor ? 3 : 0)
 
 export const keyPrefersSharps = (key: Key): boolean => keySignature(key) > 0
 
 /** The tonic a key on this pitch class is named from: minor keys lean sharp (G♯ minor, D♭ major). */
-export const tonicSpelling = (pc: PitchClass, mode: Mode): SpelledNote =>
-  rootSpelling(pc, mode === 'minor')
+export const tonicSpelling = (pc: PitchClass, minor: boolean): SpelledNote =>
+  rootSpelling(pc, minor)
 
 /**
  * Moves a note from one tonic to another by the interval between them, so its letter moves with the

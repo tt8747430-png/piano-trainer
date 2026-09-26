@@ -19,10 +19,10 @@ const key = (text: string): Key => {
 
 describe('parseKey', () => {
   it.each([
-    ['G', { tonic: note('G'), mode: 'major' }],
-    ['G#m', { tonic: note('G', 1), mode: 'minor' }],
-    ['Ebm', { tonic: note('E', -1), mode: 'minor' }],
-    ['B♭', { tonic: note('B', -1), mode: 'major' }],
+    ['G', { tonic: note('G'), minor: false }],
+    ['G#m', { tonic: note('G', 1), minor: true }],
+    ['Ebm', { tonic: note('E', -1), minor: true }],
+    ['B♭', { tonic: note('B', -1), minor: false }],
   ])('reads %s', (text, expected) => {
     expect(parseKey(text)).toEqual(expected)
   })
@@ -78,8 +78,8 @@ describe('tonicSpelling', () => {
     [8, 'minor', 'G#'],
     [3, 'minor', 'E♭'],
     [10, 'minor', 'B♭'],
-  ] as const)('pc %i in %s → %s', (pc, mode, name) => {
-    expect(noteName(tonicSpelling(pitchClass(pc), mode))).toBe(name)
+  ] as const)('pc %i in %s → %s', (pc, key, name) => {
+    expect(noteName(tonicSpelling(pitchClass(pc), key === 'minor'))).toBe(name)
   })
 })
 

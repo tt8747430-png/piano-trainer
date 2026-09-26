@@ -89,18 +89,18 @@ interface PieceCommon extends EntryCommon {
 }
 
 export interface ChartPiece extends PieceCommon {
-  readonly kind: 'song' | 'exercise'
+  readonly kind: 'song' | 'study'
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
 }
 
-export const VOICINGS = ['triads', 'sevenths', 'ninths'] as const
-export type Voicing = (typeof VOICINGS)[number]
+export const CHORD_SIZES = ['triads', 'sevenths', 'ninths'] as const
+export type ChordSize = (typeof CHORD_SIZES)[number]
 
 export interface ProgressionPiece extends PieceCommon {
   readonly kind: 'progression'
-  readonly voicing: { readonly default: Voicing; readonly choosable: boolean }
+  readonly chordSize: { readonly default: ChordSize; readonly choosable: boolean }
   /** Degree, function and beats per chord: `ii:min:4 V:dom:4 I:maj:8`. */
   readonly progression: string
 }
@@ -118,7 +118,7 @@ export type Entry = Piece | Listing
 export const COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
-  'exercises',
+  'studies',
   'hymns',
   'progressions',
 ] as const

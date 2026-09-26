@@ -4,9 +4,9 @@ import { beatInBar, type PracticeState } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
-import type { TurnFeedback } from '../model/turn-feedback'
+import type { WaitFeedback } from '../model/wait-feedback'
 
-function feedbackLine(feedback: TurnFeedback, t: TFunction<'player'>): string {
+function feedbackLine(feedback: WaitFeedback, t: TFunction<'player'>): string {
   switch (feedback.kind) {
     case 'play':
       return t('playThese', { notes: feedback.notes.join(' ') })
@@ -19,7 +19,7 @@ function feedbackLine(feedback: TurnFeedback, t: TFunction<'player'>): string {
   }
 }
 
-/** The chord now at display size, the next one, the bar's beats with the current one filled, and Your turn's feedback line. */
+/** The chord now at display size, the next one, the bar's beats with the current one filled, and Wait mode's feedback line. */
 export function NowPanel({
   performance,
   state,
@@ -28,7 +28,7 @@ export function NowPanel({
 }: {
   performance: Performance
   state: PracticeState
-  feedback: TurnFeedback | null
+  feedback: WaitFeedback | null
   onAgain: () => void
 }) {
   const { t } = useTranslation('player')
@@ -57,7 +57,7 @@ export function NowPanel({
           />
         ))}
       </div>
-      {state.mode === 'turn' ? (
+      {state.mode === 'wait' ? (
         <div className="flex min-h-11 items-center gap-3">
           <p
             aria-live="polite"

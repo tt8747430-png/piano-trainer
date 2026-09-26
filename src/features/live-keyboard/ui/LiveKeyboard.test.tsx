@@ -15,7 +15,7 @@ function setUp(onKeyPress?: (key: number) => void) {
   const midiKeyboard = createFakeMidi()
   render(
     <ServicesProvider services={{ audio, midi: midiKeyboard }}>
-      <LiveKeyboard label="Keyboard" range={ONE_OCTAVE} {...(onKeyPress ? { onKeyPress } : {})} />
+      <LiveKeyboard range={ONE_OCTAVE} {...(onKeyPress ? { onKeyPress } : {})} />
     </ServicesProvider>,
   )
   return { audio, midiKeyboard }

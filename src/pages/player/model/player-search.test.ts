@@ -18,7 +18,9 @@ describe('resolveChoice', () => {
   })
 
   it('takes the key, figures and melody the learner chose', () => {
-    expect(resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true)).toMatchObject({
+    expect(
+      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true),
+    ).toMatchObject({
       tonic: note('A'),
       rh: 't1',
       lh: 'o',
@@ -36,9 +38,9 @@ describe('resolveChoice', () => {
     expect(resolveChoice(plain, { pattern: 'chart' }, false).pattern).toBe(plain.pattern)
   })
 
-  it('lets only a progression that allows it change its voicing', () => {
-    expect(resolveChoice(twofive, { voicing: 'ninths' }, false).voicing).toBe('ninths')
-    expect(resolveChoice(bz5, { voicing: 'ninths' }, false).voicing).toBeNull()
+  it('lets only a progression that allows it change its chord size', () => {
+    expect(resolveChoice(twofive, { chordSize: 'ninths' }, false).chordSize).toBe('ninths')
+    expect(resolveChoice(bz5, { chordSize: 'ninths' }, false).chordSize).toBeNull()
   })
 })
 
@@ -47,11 +49,14 @@ describe('searchPatch', () => {
     expect(searchPatch(bz5, { key: noteParam(note('G')) })).toEqual({ key: undefined })
     expect(searchPatch(bz5, { tempo: bz5.tempo })).toEqual({ tempo: undefined })
     expect(searchPatch(bz5, { pattern: ownChoice(bz5).pattern })).toEqual({ pattern: undefined })
-    expect(searchPatch(twofive, { voicing: 'sevenths' })).toEqual({ voicing: undefined })
+    expect(searchPatch(twofive, { chordSize: 'sevenths' })).toEqual({ chordSize: undefined })
   })
 
   it('keeps a choice that differs', () => {
-    expect(searchPatch(bz5, { key: noteParam(note('A')), hands: 'lh' })).toEqual({ key: 'A', hands: 'lh' })
+    expect(searchPatch(bz5, { key: noteParam(note('A')), hands: 'lh' })).toEqual({
+      key: 'A',
+      hands: 'lh',
+    })
     expect(searchPatch(bz5, { tempo: 96 })).toEqual({ tempo: 96 })
   })
 })

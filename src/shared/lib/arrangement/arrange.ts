@@ -265,7 +265,7 @@ function playTune(
 
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
-  const key: Key = { tonic: options.tonic, mode: chart.key.mode }
+  const key: Key = { tonic: options.tonic, minor: chart.key.minor }
   const melody = options.melody?.length
     ? transposeMelody(options.melody, chart.key.tonic, options.tonic)
     : null

@@ -34,8 +34,8 @@ describe('routes', () => {
 
   it.each([
     [
-      '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&voicing=elevenths',
-      ['key', 'tempo', 'pattern', 'rh', 'lh', 'voicing'],
+      '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&chordSize=elevenths',
+      ['key', 'tempo', 'pattern', 'rh', 'lh', 'chordSize'],
     ],
     ['/theory/chords?step=scale:major', ['step']],
     ['/theory/scales?step=chords:tri', ['step']],
@@ -72,12 +72,12 @@ describe('routes', () => {
 
 describe('the app shell', () => {
   it('shows the Path screen at /', async () => {
-    renderApp('/')
+    await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
   })
 
   it('offers Path, Songs and Theory in the main navigation, marking the current one', async () => {
-    renderApp('/songs')
+    await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
     expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Theory'])
@@ -85,7 +85,7 @@ describe('the app shell', () => {
   })
 
   it('marks Theory current on every Theory section', async () => {
-    renderApp('/theory/quiz')
+    await renderApp('/theory/quiz')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     expect(within(nav).getByRole('link', { name: 'Theory' })).toHaveAttribute(
       'aria-current',
@@ -94,7 +94,7 @@ describe('the app shell', () => {
   })
 
   it('opens a deep link to a Theory section with its tab selected', async () => {
-    renderApp('/theory/scales')
+    await renderApp('/theory/scales')
     const tabs = await screen.findByRole('navigation', { name: 'Theory sections' })
     expect(within(tabs).getByRole('link', { name: 'Scales' })).toHaveAttribute(
       'aria-current',
@@ -104,19 +104,19 @@ describe('the app shell', () => {
 
   it('reaches Settings from the Path screen', async () => {
     const user = userEvent.setup()
-    renderApp('/')
+    await renderApp('/')
     await user.click(await screen.findByRole('link', { name: 'Settings' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument()
   })
 
   it('shows a not-found screen for an unknown address', async () => {
-    renderApp('/nowhere')
+    await renderApp('/nowhere')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Go to Songs' })).toHaveAttribute('href', '/songs')
   })
 
   it('speaks Russian when the learner chose it', async () => {
-    renderApp('/', { locale: 'ru' })
+    await renderApp('/', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Путь' })).toBeInTheDocument()
   })
 
@@ -124,13 +124,13 @@ describe('the app shell', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('blocked', 'SecurityError')
     })
-    renderApp('/', { storage: safeLocalStorage() })
+    await renderApp('/', { storage: safeLocalStorage() })
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
   })
 
   it('relabels the app as soon as the learner switches to Russian', async () => {
     const user = userEvent.setup()
-    renderApp('/settings')
+    await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Русский' }))
     const nav = await screen.findByRole('navigation', { name: 'Основная навигация' })
     expect(within(nav).getByRole('link', { name: 'Путь' })).toBeInTheDocument()
@@ -139,7 +139,7 @@ describe('the app shell', () => {
 
   it('repaints the app as soon as the learner picks a theme', async () => {
     const user = userEvent.setup()
-    renderApp('/settings')
+    await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Dark' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
@@ -147,7 +147,7 @@ describe('the app shell', () => {
 
 describe('the Player', () => {
   it('opens full-screen, without the main navigation', async () => {
-    renderApp('/play/bz5')
+    await renderApp('/play/bz5')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
     ).toBeInTheDocument()
@@ -156,7 +156,7 @@ describe('the Player', () => {
 
   it('goes back to where the learner came from', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/')
+    const { router } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Path' })
     await act(() => router.navigate({ to: '/play/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Close' }))
@@ -165,16 +165,24 @@ describe('the Player', () => {
 
   it('goes back to its song when it was opened directly', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/play/bz5')
+    const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
+  })
+
+  it('opened directly, leaves the history as it closes, so its song goes back to Songs', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
   })
 })
 
 describe('a Piece', () => {
   it('goes back to where the learner came from', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/')
+    const { router } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Path' })
     await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Back' }))
@@ -183,7 +191,7 @@ describe('a Piece', () => {
 
   it('goes back to Songs when it was opened directly', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/songs/bz5')
+    const { router } = await renderApp('/songs/bz5')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
   })
@@ -191,14 +199,14 @@ describe('a Piece', () => {
 
 describe('routes that name a piece', () => {
   it('show not found for a piece that is not there', async () => {
-    renderApp('/songs/nothing')
+    await renderApp('/songs/nothing')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 
   it('show not found for a listing in the Player', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalogue has no listing')
-    renderApp(`/play/${listing.id}`)
+    await renderApp(`/play/${listing.id}`)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

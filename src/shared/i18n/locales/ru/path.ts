@@ -11,7 +11,7 @@ export const path: LocaleResources['path'] = {
   kind: {
     chords: 'Аккорды',
     scale: 'Гамма',
-    exercise: 'Упражнение',
+    study: 'Этюд',
     song: 'Песня',
     progression: 'Последовательность',
   },

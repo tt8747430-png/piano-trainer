@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import { ChevronDown, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
@@ -22,10 +21,7 @@ export function PlayerTopBar({
 }) {
   const { t } = useTranslation(['player', 'common'])
   const locale = useLocale()
-  const navigate = useNavigate()
-  const close = useGoBack(
-    () => void navigate({ to: '/songs/$pieceId', params: { pieceId: piece.id } }),
-  )
+  const close = useGoBack({ to: '/songs/$pieceId', params: { pieceId: piece.id } })
   return (
     <header className="flex items-center gap-3">
       <RoundButton label={t('common:close')} icon={X} onClick={close} />

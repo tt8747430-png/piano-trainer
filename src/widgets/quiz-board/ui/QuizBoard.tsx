@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/primitives/button'
  * question of a bounded quiz, Next calls `onFinish`.
  */
 export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => void }) {
-  const { t } = useTranslation(['quiz', 'theory', 'common'])
+  const { t } = useTranslation(['quiz', 'theory'])
   const nameScale = useScaleName()
   const { question, selected, result } = quiz.state
   if (!question) return null
@@ -44,7 +44,6 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
       </div>
 
       <LiveKeyboard
-        label={t('common:keyboard')}
         range={quizKeyboardRange(question)}
         className="h-44"
         selectable={choosing}

@@ -148,9 +148,9 @@ describe('usePractice: Step', () => {
   })
 })
 
-describe('usePractice: Your turn', () => {
+describe('usePractice: Wait mode', () => {
   it('waits for the practised hand, then plays the other and moves on', () => {
-    const { result } = renderPractice(ONE_BAR, { mode: 'turn', hands: 'rh' })
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     expect(result.current.state.expected).toEqual([0, 4, 7])
     act(() => result.current.press(midi(60)))
     act(() => keyboard.press(midi(76)))
@@ -165,7 +165,7 @@ describe('usePractice: Your turn', () => {
   })
 
   it('plays through a beat group the practised hand has nothing in', () => {
-    const { result } = renderPractice(ONE_BAR, { mode: 'turn', hands: 'lh' })
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'lh' })
     act(() => result.current.press(midi(48)))
     wait(150)
     expect(result.current.state).toMatchObject({ beatGroup: 1, expected: [] })
@@ -177,7 +177,7 @@ describe('usePractice: Your turn', () => {
   })
 
   it('shows a wrong key and waits', () => {
-    const { result } = renderPractice(ONE_BAR, { mode: 'turn', hands: 'rh' })
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     act(() => result.current.press(midi(61)))
     wait(1000)
     expect(result.current.state).toMatchObject({ outcome: 'wrong', wrong: 61, beatGroup: 0 })
@@ -185,7 +185,7 @@ describe('usePractice: Your turn', () => {
   })
 
   it('plays nothing more once the piece is finished', () => {
-    const { result } = renderPractice(ONE_BAR, { mode: 'turn', hands: 'lh' })
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'lh' })
     act(() => result.current.jumpToBeatGroup(3))
     wait(1000)
     expect(result.current.state.outcome).toBe('finished')
@@ -197,7 +197,7 @@ describe('usePractice: Your turn', () => {
 
 describe('usePractice: unmount', () => {
   it('silences the sound and stops listening to the keyboard', () => {
-    const { result, unmount } = renderPractice(ONE_BAR, { mode: 'turn', hands: 'rh' })
+    const { result, unmount } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     act(() => result.current.press(midi(61)))
     unmount()
     expect(audio.stops).toBe(1)

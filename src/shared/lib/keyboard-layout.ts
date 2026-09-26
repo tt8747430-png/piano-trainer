@@ -47,11 +47,17 @@ export function keyboardLayout(range: KeyRange): { keys: KeyGeometry[]; whites: 
   return { keys, whites: whiteKeys.length }
 }
 
-/** Where a range sits on a laid-out keyboard, in percent of its width, and how many white keys it spans. */
-export function spanOf(
-  keys: readonly KeyGeometry[],
-  range: KeyRange,
-): { left: number; right: number; whites: number } {
+/** Where a stretch of keys sits on a laid-out keyboard. */
+export interface KeySpan {
+  /** Percent of the keyboard's width. */
+  readonly left: number
+  readonly right: number
+  /** The white keys in it. */
+  readonly whites: number
+}
+
+/** Where a range sits on a laid-out keyboard. */
+export function spanOf(keys: readonly KeyGeometry[], range: KeyRange): KeySpan {
   const inRange = keys.filter((key) => key.midi >= range.from && key.midi <= range.to)
   return {
     left: Math.min(...inRange.map((key) => key.left)),

@@ -27,7 +27,7 @@ export const theory: LocaleResources['theory'] = {
     lh: 'ЛР',
     none: 'Для этой гаммы нет принятой аппликатуры.',
   },
-  practice: 'Упражнение',
+  practice: 'Практика',
   rhythmLabel: 'Ритм',
   rhythm: {
     even: 'Ровно',

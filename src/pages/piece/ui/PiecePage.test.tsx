@@ -6,7 +6,7 @@ import { COLLECTIONS } from '@/entities/piece'
 
 describe('Piece', () => {
   it('titles a song in English over its printed title, with credits and source', async () => {
-    renderApp('/songs/bz5')
+    await renderApp('/songs/bz5')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
     ).toBeInTheDocument()
@@ -15,7 +15,7 @@ describe('Piece', () => {
   })
 
   it('lists the song’s chords with their ratings and checks them', async () => {
-    renderApp('/songs/bz5')
+    await renderApp('/songs/bz5')
     const chords = await screen.findByRole('region', { name: 'Chords in this song' })
     expect(within(chords).getAllByRole('link').length).toBeGreaterThan(1)
     expect(
@@ -25,7 +25,7 @@ describe('Piece', () => {
 
   it('plays a tapped bar, and shows its notes going down on the keyboard', async () => {
     const user = userEvent.setup()
-    const { audio } = renderApp('/songs/bz5')
+    const { audio } = await renderApp('/songs/bz5')
     await user.click(await screen.findByRole('button', { name: /^Bar 1: G$/ }))
     expect(audio.played).toHaveLength(1)
     act(() => audio.setNow((audio.played[0]?.at ?? 0) + 0.05))
@@ -40,7 +40,7 @@ describe('Piece', () => {
   })
 
   it('offers Practise before the chords and the chart, in the first screenful', async () => {
-    renderApp('/songs/bz5')
+    await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
     const chords = screen.getByRole('region', { name: 'Chords in this song' })
     expect(practise.compareDocumentPosition(chords) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
@@ -48,7 +48,7 @@ describe('Piece', () => {
 
   it('opens the Player and marks the song learned', async () => {
     const user = userEvent.setup()
-    const { progressStore } = renderApp('/songs/bz5')
+    const { progressStore } = await renderApp('/songs/bz5')
     expect(await screen.findByRole('link', { name: 'Practise' })).toHaveAttribute(
       'href',
       '/play/bz5',
@@ -58,7 +58,7 @@ describe('Piece', () => {
   })
 
   it('reads in Russian, section headings too', async () => {
-    renderApp('/songs/bz5', { locale: 'ru' })
+    await renderApp('/songs/bz5', { locale: 'ru' })
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Мир, душа, храни' }),
     ).toBeInTheDocument()
@@ -66,7 +66,7 @@ describe('Piece', () => {
   })
 
   it('names the chords row by the piece’s kind', async () => {
-    renderApp('/songs/twofive')
+    await renderApp('/songs/twofive')
     expect(
       await screen.findByRole('region', { name: 'Chords in this progression' }),
     ).toBeInTheDocument()
@@ -75,7 +75,7 @@ describe('Piece', () => {
   it('shows a listing without a chart', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalogue has no listing')
-    renderApp(`/songs/${listing.id}`)
+    await renderApp(`/songs/${listing.id}`)
     expect(await screen.findByText('No chart yet')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Practise' })).not.toBeInTheDocument()
   })

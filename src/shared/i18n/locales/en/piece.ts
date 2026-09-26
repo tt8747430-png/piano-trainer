@@ -2,7 +2,7 @@ export const piece = {
   // The chords row names the piece by its kind.
   chords: {
     song: 'Chords in this song',
-    exercise: 'Chords in this exercise',
+    study: 'Chords in this study',
     progression: 'Chords in this progression',
   },
   checkChords: 'Check these chords',
@@ -33,7 +33,7 @@ export const piece = {
     lastChorus: 'Last chorus',
     ending: 'Ending',
     lastEnding: 'Last ending',
-    practice: 'Exercise',
+    practice: 'Practice',
     hymn: 'Hymn',
     part: 'Part',
     partLabelled: 'Part {{label}}',

@@ -38,20 +38,20 @@ export default definePiece({
 })
 ```
 
-| Field                    | What it holds                                                                         |
-| ------------------------ | ------------------------------------------------------------------------------------- |
-| `kind`                   | `'song'` or `'exercise'` (with a chart), `'progression'` (with a progression)         |
-| `title`                  | As printed, in its own language                                                       |
-| `titleEn`                | The English title, only where the printed one is not English                          |
-| `credits`                | See [Credits](#credits)                                                               |
-| `source`                 | `{ book, number?, page? }`; the books are in `content/books.ts`                       |
-| `key`                    | The key it is written in: a letter, `#` or `b`, then `m` for minor (`G`, `F#`, `Ebm`) |
-| `meter`                  | `'2/4'`, `'3/4'`, `'4/4'`, `'6/8'` or `'12/8'`: the piece's main meter                |
-| `tempo`                  | Beats per minute, 40–160 (a compound meter's beat is the dotted quarter)              |
-| `pattern`                | The accompaniment the Player starts with (a pattern id, below)                        |
-| `note`                   | Optional `LocalText`, by the [copy rule](#text)                                       |
-| `sections`, `melody`     | Songs and exercises: the [chart](#the-chart) and an optional [melody](#the-melody)    |
-| `progression`, `voicing` | Progressions: see [Progressions](#progressions)                                       |
+| Field                      | What it holds                                                                         |
+| -------------------------- | ------------------------------------------------------------------------------------- |
+| `kind`                     | `'song'` or `'study'` (with a chart), `'progression'` (with a progression)            |
+| `title`                    | As printed, in its own language                                                       |
+| `titleEn`                  | The English title, only where the printed one is not English                          |
+| `credits`                  | See [Credits](#credits)                                                               |
+| `source`                   | `{ book, number?, page? }`; the books are in `content/books.ts`                       |
+| `key`                      | The key it is written in: a letter, `#` or `b`, then `m` for minor (`G`, `F#`, `Ebm`) |
+| `meter`                    | `'2/4'`, `'3/4'`, `'4/4'`, `'6/8'` or `'12/8'`: the piece's main meter                |
+| `tempo`                    | Beats per minute, 40–160 (a compound meter's beat is the dotted quarter)              |
+| `pattern`                  | The accompaniment the Player starts with (a pattern id, below)                        |
+| `note`                     | Optional `LocalText`, by the [copy rule](#text)                                       |
+| `sections`, `melody`       | Songs and studies: the [chart](#the-chart) and an optional [melody](#the-melody)      |
+| `progression`, `chordSize` | Progressions: see [Progressions](#progressions)                                       |
 
 A chart that names method codes starts the Player on its own plan: each coded chord plays its method's pattern,
 every other chord plays `pattern`.
@@ -105,7 +105,7 @@ lets the tune be doubled and makes the patterns that play it (r5–r7) available
 
 ## Progressions
 
-A progression has no chart; its chords grow with the voicing the learner picks.
+A progression has no chart; its chords grow with the chord size the learner picks.
 
 ```ts
 export default definePiece({
@@ -116,7 +116,7 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'jazz',
-  voicing: { default: 'sevenths', choosable: true },
+  chordSize: { default: 'sevenths', choosable: true },
   progression: 'ii:min:4 V:dom:4 I:maj:8',
   note: { en: 'The basic jazz cadence. With 9ths: m9 → 9 → Maj9.', ru: '…' },
 })
@@ -126,19 +126,19 @@ Each chord is `degree:function:beats`, optionally `/3`, `/5` or `/7`:
 
 - **Degree:** `I`–`VII` in either case, measured on the major scale from the tonic, in minor keys too (`i` is the
   tonic, `♭III` its relative major). `♭`, `b`, `#` or `♯` before it makes a chromatic degree (`♭VII`, `#iv`).
-- **Function:** how the chord grows with the voicing (triads / sevenths / ninths):
+- **Function:** how the chord grows with the chord size (triads / sevenths / ninths):
 
-  | Function   | Triads                                                                         | Sevenths | Ninths |
-  | ---------- | ------------------------------------------------------------------------------ | -------- | ------ |
-  | `maj`      | maj                                                                            | Maj7     | Maj9   |
-  | `min`      | m                                                                              | m7       | m9     |
-  | `dom`      | maj                                                                            | 7        | 9      |
-  | `domb9`    | maj                                                                            | 7        | 7♭9    |
-  | `hd`       | °                                                                              | m7♭5     | m7♭5   |
-  | `=quality` | that quality at every voicing (`V:=b9:4`, `♭VII:=sus2:1`; ids from `chord.ts`) |
+  | Function   | Triads                                                                            | Sevenths | Ninths |
+  | ---------- | --------------------------------------------------------------------------------- | -------- | ------ |
+  | `maj`      | maj                                                                               | Maj7     | Maj9   |
+  | `min`      | m                                                                                 | m7       | m9     |
+  | `dom`      | maj                                                                               | 7        | 9      |
+  | `domb9`    | maj                                                                               | 7        | 7♭9    |
+  | `hd`       | °                                                                                 | m7♭5     | m7♭5   |
+  | `=quality` | that quality at every chord size (`V:=b9:4`, `♭VII:=sus2:1`; ids from `chord.ts`) |
 
-- **Bass:** `/3`, `/5`, `/7` put that chord tone in the bass. It must exist at every voicing the piece allows.
-- **Voicing:** `{ default, choosable }`; `choosable: false` fixes the voicing.
+- **Bass:** `/3`, `/5`, `/7` put that chord tone in the bass. It must exist at every chord size the piece allows.
+- **Chord size:** `{ default, choosable }`; `choosable: false` fixes the chord size.
 
 Chords fill bars of the meter in order, a chord longer than the room left tied into the next bar; lines hold four
 bars. The 12-bar blues (`I:dom:16 IV:dom:8 …`) is twelve 4/4 bars.
@@ -201,7 +201,7 @@ is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
 
 ## What the tests check
 
-- **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses in every voicing it
+- **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
   allows; every piece arranges in all 12 keys with its own accompaniment and each of the 39 patterns, its melody
   doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
   accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both

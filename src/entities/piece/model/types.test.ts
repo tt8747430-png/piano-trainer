@@ -13,11 +13,11 @@ describe('pieceKey', () => {
   it('reads the key a piece is written in', () => {
     expect(pieceKey(testSong(['C'], { key: 'G#m' }))).toEqual({
       tonic: note('G', 1),
-      mode: 'minor',
+      minor: true,
     })
     expect(pieceKey(testSong(['C'], { key: 'Bb' }))).toEqual({
       tonic: note('B', -1),
-      mode: 'major',
+      minor: false,
     })
   })
 })

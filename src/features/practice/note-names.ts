@@ -30,6 +30,6 @@ export function spellPerformedNote(performance: Performance, played: Performance
 
 export const noteLabel = ({ name, octave }: NoteName): string => `${name}${octave}`
 
-/** A pitch class named from the chord it belongs to, else from the key: Your turn's "Play D F# A". */
+/** A pitch class named from the chord it belongs to, else from the key: Wait mode's "Play D F# A". */
 export const spellPitchClass = (performance: Performance, chord: number, pc: PitchClass): string =>
   noteName(spellingOf(performance, chord, pc))

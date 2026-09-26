@@ -2,7 +2,7 @@ import { definePiece } from '../../model/types'
 
 export default definePiece({
   id: 'ex8',
-  kind: 'exercise',
+  kind: 'study',
   title: 'Урок 8: Dm – Gm – A – Dm – D – Gm – A – Dm',
   titleEn: 'Lesson 8: Dm – Gm – A – Dm – D – Gm – A – Dm',
   source: { book: 'called-to-play' },

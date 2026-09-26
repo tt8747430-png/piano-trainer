@@ -15,7 +15,7 @@ import { Segmented } from './Segmented'
 const MODES = [
   { value: 'listen', label: 'Listen' },
   { value: 'step', label: 'Step' },
-  { value: 'turn', label: 'Your turn' },
+  { value: 'wait', label: 'Wait' },
 ] as const
 
 describe('ScreenHeader', () => {
@@ -53,8 +53,8 @@ describe('Segmented', () => {
     const onChange = vi.fn()
     render(<Segmented label="Mode" value="step" options={MODES} onChange={onChange} />)
     expect(screen.getByRole('button', { name: 'Step' })).toHaveAttribute('aria-pressed', 'true')
-    await user.click(screen.getByRole('button', { name: 'Your turn' }))
-    expect(onChange).toHaveBeenCalledWith('turn')
+    await user.click(screen.getByRole('button', { name: 'Wait' }))
+    expect(onChange).toHaveBeenCalledWith('wait')
   })
 
   it('keeps a choice when the chosen segment is pressed again', async () => {

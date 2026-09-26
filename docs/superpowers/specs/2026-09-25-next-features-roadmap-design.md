@@ -39,7 +39,7 @@ per chord; the chords that carry a melody note) and The Jazz Piano Site's lesson
 | --- | ------------------------------------ | -------- |
 | 1   | **The playable keyboard**            | Piano-like keys in real proportions; note names C · All · None; a key sounds the instant it is touched; **Scroll** and **Glissando**; key sizes Fit · Large · Whole piano; the keyboard map (off by default); a small options button in the keys' rail; the computer keyboard as a piano; finger numbers in circles under the keys; a scale's notes colour whole keys; the key sounding now stands out alone; Stop on every Play; a Keyboard group in Settings |
 | 2   | **Navigation and options**           | The tabs **Path · Songs · Learn · Practice**; Theory becomes Learn (the Chords and Scales explorers, the chord dictionary as a reference, the reading notes as the first lesson); the quiz and My gaps move to Practice; every screen's choices become dropdowns and segmented controls with a sheet for the rest, after researching Apple's Human Interface Guidelines |
-| 3   | **Notation and the sheet-music Player** | `shared/lib/notation` and a VexFlow staff (§4.1); the Player in Flowkey's shape (§3.5); the Player can play a fixed score as well as an arrangement; swing; speed training in the loop; **Chord size** replaces the Player's "voicing" |
+| 3   | **Notation and the sheet-music Player** | `shared/lib/notation` and a VexFlow staff (§4.1); the Player in Flowkey's shape (§3.5); the Player can play a fixed score as well as an arrangement; swing; speed training in the loop |
 | 4   | **Scales and chords, deeper**        | The church modes and major and minor blues as scale kinds; **Start on** any note of a scale with fingering *From the thumb* (default) or *As the scale*; the scale's chords as triads, 7ths, 9ths, 11ths and 13ths, in inversions, and *Walk the chords*; the scale as sheet music with the keyboard; a key page for each of the 24 keys and the circle of fifths |
 | 5   | **Learn: lessons, references, tools** | Lessons like The Ultimate Piano's worksheets (a level, a category, live diagrams that play in place), in modules from fundamentals to accompaniment to jazz and gospel (TJPS's shape); references (intervals, available tensions, chord symbols); tools: Progressions, Passing chords, Chord explorer, Reharmonise, and chord detection (the app names what you play) |
 | 6   | **The Path as a course**             | A page per level and per step, built like a worksheet that teaches and practises in place, never a redirect; every step levelled 1–4 (master spec §11, Phase 4's first task, moved here) |
@@ -94,8 +94,8 @@ deleting `legacy/`). Its levelling moves into sub-project 6.
 
 ### 3.3 Scales, exercises and trainers (sub-projects 4 and 7)
 
-- **The church modes are Scale kinds**; a **Key** stays major or minor (a song is written in one). The code's `Mode`
-  (`'major' | 'minor'`, `shared/lib/music/key.ts`) is renamed when the modes arrive.
+- **The church modes are Scale kinds**; a **Key** stays major or minor (a song is written in one). A key in code is
+  `{ tonic, minor }` (`shared/lib/music/key.ts`), so the name `Mode` is free for the church modes.
 - **All the blues scales:** major and minor blues (sub-project 4 checks for any other standard one).
 - **Start on:** any note of the scale; the fingering is a choice, **From the thumb** (default: the thumb on the
   starting note) or **As the scale** (the parent scale's shape, PWJ's modal exercise). The right hand's thumb leads
@@ -136,7 +136,7 @@ Flowkey's shape, agreed:
                     ‹    ( ▶ )    ›
 ```
 
-- **Tempo popover:** **Wait mode** (today's Your turn), 50%, 75%, 100% or any tempo; speed training.
+- **Tempo popover:** **Wait mode**, 50%, 75%, 100% or any tempo; speed training.
 - **Hands popover:** right, left, both.
 - **⚙ sheet:** key, pattern, **Chord size**, swing, finger numbers, melody, metronome, count-in.
 - **Step** is ‹ › beside Play; a **loop** is dragged over bars on the sheet.
@@ -152,9 +152,11 @@ PDFs are not shown: a picture of notes cannot be played along to.
 ### 3.7 Words (the glossary, `docs/UBIQUITOUS_LANGUAGE.md`)
 
 Settled in the session: **Scroll**, **Glissando**, **Key** (a tonic, major or minor), **Mode** (a church mode, a
-Scale kind), **Study** (a method book's lesson piece: the Piece kind `exercise` becomes `study`), **Exercise** (a line
+Scale kind), **Study** (a method book's lesson piece: the Piece kind `study`), **Exercise** (a line
 generated from a rule in any key, in Practice), **Wait mode** (was Your turn), **Chord size** (triads, 7ths, 9ths:
 was the Player's "voicing"), **Voicing** (how a chord's notes are laid out: shell, rootless, drop 2, quartal).
+The code took the words on 2026-09-26: the kind `study` and the collection `studies`, the mode `wait`, `ChordSize`
+and the URL's `chordSize`, and a Key's `minor` in place of its `Mode`.
 
 ## 4. Shared technical decisions
 

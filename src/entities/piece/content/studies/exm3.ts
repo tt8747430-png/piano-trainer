@@ -2,7 +2,7 @@ import { definePiece } from '../../model/types'
 
 export default definePiece({
   id: 'exm3',
-  kind: 'exercise',
+  kind: 'study',
   title: 'Урок 3: новый способ на каждом аккорде (Dm)',
   titleEn: 'Lesson 3: a new method on every chord (Dm)',
   source: { book: 'called-to-play' },

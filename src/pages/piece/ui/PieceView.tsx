@@ -20,7 +20,7 @@ import { PieceFacts } from './PieceFacts'
  * tap and hear, under a pinned keyboard that shows what sounds.
  */
 export function PieceView({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['piece', 'common'])
+  const { t } = useTranslation('piece')
   const play = usePlay()
   const locale = useLocale()
   const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
@@ -38,7 +38,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />}
         >
           <Play data-icon="inline-start" />
-          {t('piece:practise')}
+          {t('practise')}
         </ButtonLink>
         <LearnedToggle
           step={pieceStepId(piece.id)}
@@ -48,13 +48,9 @@ export function PieceView({ piece }: { piece: Piece }) {
       </div>
       <PieceSkills piece={piece} performance={performance} />
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-bold">{t('piece:chart')}</h2>
+        <h2 className="text-xl font-bold">{t('chart')}</h2>
         <Pinned>
-          <LiveKeyboard
-            label={t('common:keyboard')}
-            range={playerRange(performance)}
-            className="h-32"
-          />
+          <LiveKeyboard range={playerRange(performance)} className="h-32" />
         </Pinned>
         <ChordChart
           performance={performance}

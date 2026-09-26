@@ -2,16 +2,16 @@ import { spellPitchClass, type PracticeState } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { pitchClass } from '@/shared/lib/music'
 
-/** What Your turn's feedback line says (spec §4.4). */
-export type TurnFeedback =
+/** What Wait mode's feedback line says (spec §4.4). */
+export type WaitFeedback =
   | { readonly kind: 'play'; readonly notes: readonly string[] }
   | { readonly kind: 'right' }
   | { readonly kind: 'not'; readonly note: string }
   | { readonly kind: 'finished' }
 
-/** Your turn's line now: the notes to play, a wrong key, right, or finished. Nothing outside Your turn. */
-export function turnFeedback(performance: Performance, state: PracticeState): TurnFeedback | null {
-  if (state.mode !== 'turn') return null
+/** Wait mode's line now: the notes to play, a wrong key, right, or finished. Nothing outside Wait mode. */
+export function waitFeedback(performance: Performance, state: PracticeState): WaitFeedback | null {
+  if (state.mode !== 'wait') return null
   if (state.outcome === 'finished') return { kind: 'finished' }
   if (state.outcome === 'correct') return { kind: 'right' }
   const group = performance.beatGroups[state.beatGroup]

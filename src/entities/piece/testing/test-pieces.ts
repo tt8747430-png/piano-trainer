@@ -30,7 +30,7 @@ export function testProgression(
     meter: '4/4',
     tempo: 72,
     pattern: 'block',
-    voicing: { default: 'sevenths', choosable: true },
+    chordSize: { default: 'sevenths', choosable: true },
     progression,
     ...overrides,
   }

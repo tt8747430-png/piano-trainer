@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, SourceLine, pieceKey, type Entry } from '@/entities/piece'
@@ -15,11 +15,10 @@ export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'common'])
   const locale = useLocale()
   const scaleName = useScaleName()
-  const navigate = useNavigate()
-  const back = useGoBack(() => void navigate({ to: '/songs' }))
+  const back = useGoBack({ to: '/songs' })
   const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
-  const scaleKind = key.mode === 'minor' ? 'natural' : 'major'
+  const scaleKind = key.minor ? 'natural' : 'major'
   return (
     <div className="flex flex-col gap-3">
       <ScreenHeader

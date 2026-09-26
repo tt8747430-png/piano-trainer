@@ -37,25 +37,25 @@ export function CheckResult({
           const skill = skillOf(skillId)
           const rating = ratingOf(answers, skillId)
           // A chord opens in Chords, a scale in Scales.
-          const { name, explorer, open } =
+          const { name, explorerLink, openLabel } =
             skill.kind === 'chord'
               ? {
                   name: t(`theory:quality.${skill.quality}`),
-                  explorer: <Link to="/theory/chords" search={{ quality: skill.quality }} />,
-                  open: t('openChords'),
+                  explorerLink: <Link to="/theory/chords" search={{ quality: skill.quality }} />,
+                  openLabel: t('openChords'),
                 }
               : {
                   name: t(`theory:scaleKind.${skill.scale}`),
-                  explorer: <Link to="/theory/scales" search={{ kind: skill.scale }} />,
-                  open: t('openScales'),
+                  explorerLink: <Link to="/theory/scales" search={{ kind: skill.scale }} />,
+                  openLabel: t('openScales'),
                 }
           return (
             <li key={skillId} className="flex min-h-14 items-center gap-3 px-4">
               <RatingMark rating={rating} />
               <span className="flex-1">{name}</span>
               {rating === 'known' ? null : (
-                <ButtonLink variant="link" className="px-0" render={explorer}>
-                  {open}
+                <ButtonLink variant="link" className="px-0" render={explorerLink}>
+                  {openLabel}
                 </ButtonLink>
               )}
             </li>

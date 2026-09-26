@@ -1,16 +1,13 @@
 import { useTranslation } from 'react-i18next'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { useScaleName } from '@/shared/i18n'
 import {
-  keyboardRange,
-  MIDDLE_OCTAVES,
   noteFromParam,
   noteName,
   noteParam,
   PITCH_CLASSES,
   pitchClassOf,
   placeScale,
-  rangeOf,
   SCALE_KINDS,
   scaleFingering,
   scaleRootSpelling,
@@ -19,7 +16,7 @@ import {
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, scaleRun, TEMPO_RANGE } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
-import { ChipRow, Pinned, Segmented, type KeyMark } from '@/shared/ui'
+import { ChipRow, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import type { ScaleView } from '../model/scale-view'
@@ -81,15 +78,7 @@ export function ScaleExplorer({
         options={SCALE_KINDS.map((kind) => ({ value: kind, label: t(`theory:scaleKind.${kind}`) }))}
         onChange={(kind) => onChange({ kind })}
       />
-      <Pinned>
-        <LiveKeyboard
-          label={t('common:keyboard')}
-          range={keyboardRange(runKeys, MIDDLE_OCTAVES)}
-          inView={rangeOf(runKeys)}
-          marks={marks}
-          className="h-44"
-        />
-      </Pinned>
+      <ExplorerKeyboard keys={runKeys} marks={marks} />
       <Segmented
         label={t('theory:view.label')}
         value={scale.view}

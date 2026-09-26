@@ -47,7 +47,11 @@ describe('usePlayer', () => {
   })
 
   it('writes a Setup change to the URL, leaving out the piece’s own choice', () => {
-    const { result, setSearch } = setup({ hands: 'both', mode: 'listen', key: noteParam(note('A')) })
+    const { result, setSearch } = setup({
+      hands: 'both',
+      mode: 'listen',
+      key: noteParam(note('A')),
+    })
     act(() => result.current.change({ key: noteParam(note('G')) }))
     expect(setSearch).toHaveBeenLastCalledWith({ key: undefined })
     act(() => result.current.setMode('step'))
@@ -67,8 +71,8 @@ describe('usePlayer', () => {
     expect(result.current.inView).toEqual({ from: Math.min(...keys), to: Math.max(...keys) })
   })
 
-  it('takes a tapped key as an answer in Your turn, and leaves the sound to the keyboard', () => {
-    const { result, audio } = setup({ hands: 'both', mode: 'turn' })
+  it('takes a tapped key as an answer in Wait mode, and leaves the sound to the keyboard', () => {
+    const { result, audio } = setup({ hands: 'both', mode: 'wait' })
     const [key] = result.current.marks.keys()
     if (key === undefined) throw new Error('nothing to play')
     act(() => result.current.tapKey(key))

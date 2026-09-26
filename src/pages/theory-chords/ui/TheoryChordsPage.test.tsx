@@ -5,7 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 
 describe('Theory → Chords', () => {
   it('shows C major by default, its keys labelled by degree', async () => {
-    renderApp('/theory/chords')
+    await renderApp('/theory/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText('Major triad')).toBeInTheDocument()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
@@ -14,7 +14,7 @@ describe('Theory → Chords', () => {
 
   it('opens a deep link and moves through the URL, sounding each choice', async () => {
     const user = userEvent.setup()
-    const { router, audio } = renderApp('/theory/chords?root=G&quality=d7')
+    const { router, audio } = await renderApp('/theory/chords?root=G&quality=d7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
     expect(router.state.location.search).toMatchObject({ root: 'G', quality: 'm7' })
@@ -23,7 +23,7 @@ describe('Theory → Chords', () => {
 
   it('rolls an arpeggio, its keys going down one by one', async () => {
     const user = userEvent.setup()
-    const { audio } = renderApp('/theory/chords')
+    const { audio } = await renderApp('/theory/chords')
     await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
     const start = audio.played.at(-1)?.at ?? 0
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
@@ -40,14 +40,14 @@ describe('Theory → Chords', () => {
 
   it('sounds a tapped key', async () => {
     const user = userEvent.setup()
-    const { audio } = renderApp('/theory/chords')
+    const { audio } = await renderApp('/theory/chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
     expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 69 }])
   })
 
   it('offers only the inversions the chord has', async () => {
-    renderApp('/theory/chords?quality=maj')
+    await renderApp('/theory/chords?quality=maj')
     const inversions = await screen.findByRole('group', { name: 'Inversion' })
     expect(
       within(inversions)
@@ -58,7 +58,7 @@ describe('Theory → Chords', () => {
 
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
-    const { progressStore } = renderApp('/theory/chords?quality=maj7&step=chords:sev')
+    const { progressStore } = await renderApp('/theory/chords?quality=maj7&step=chords:sev')
     const check = await screen.findByRole('link', { name: 'Check yourself' })
     expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
     await user.click(screen.getByRole('button', { name: 'Learned' }))

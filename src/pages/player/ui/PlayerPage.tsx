@@ -29,7 +29,7 @@ function Player({ piece }: { piece: Piece }) {
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
   const headings = usePieceHeadings(piece)
   const summary = t('player:summary', {
-    key: keyName({ tonic: player.choice.tonic, mode: pieceKey(piece).mode }),
+    key: keyName({ tonic: player.choice.tonic, minor: pieceKey(piece).minor }),
     tempo: player.tempo,
     hands: t(`common:hands.${search.hands}`),
   })
@@ -82,7 +82,6 @@ function Player({ piece }: { piece: Piece }) {
         </div>
       </div>
       <LiveKeyboard
-        label={t('common:keyboard')}
         range={player.range}
         inView={player.inView}
         marks={player.marks}

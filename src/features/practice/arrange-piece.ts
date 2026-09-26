@@ -13,21 +13,21 @@ import type { PracticeChoice } from './choice'
 export const defaultPattern = (piece: Piece): PatternId | 'chart' =>
   hasMethodCodes(piece) ? 'chart' : piece.pattern
 
-/** The piece as written: its key, its default pattern and voicing, no figures swapped, no doubled melody. */
+/** The piece as written: its key, its default pattern and chord size, no figures swapped, no doubled melody. */
 export const ownChoice = (piece: Piece): PracticeChoice => ({
   tonic: pieceKey(piece).tonic,
   pattern: defaultPattern(piece),
   rh: null,
   lh: null,
-  voicing: null,
+  chordSize: null,
   melody: false,
 })
 
-/** A piece as the Player plays it: the learner's key, pattern, hands' figures, voicing and melody. */
+/** A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody. */
 export function arrangePiece(piece: Piece, choice: PracticeChoice): Performance {
   const melody = melodyOf(piece)
   const fromChart = choice.pattern === 'chart'
-  return arrange(chartOf(piece, choice.voicing ?? undefined), {
+  return arrange(chartOf(piece, choice.chordSize ?? undefined), {
     tonic: choice.tonic,
     pattern: PATTERNS[choice.pattern === 'chart' ? piece.pattern : choice.pattern].pattern,
     ...(fromChart ? { methods: METHOD_PATTERNS } : {}),

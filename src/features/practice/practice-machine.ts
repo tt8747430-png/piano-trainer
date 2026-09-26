@@ -1,9 +1,9 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
-import type { Audible, Hands } from '@/shared/lib/schedule'
+import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 
-/** Listen: the app plays. Step: the learner moves through it. Your turn: the app waits for the notes. */
-export const PRACTICE_MODES = ['listen', 'step', 'turn'] as const
+/** Listen: the app plays. Step: the learner moves through it. Wait mode: the app waits for the notes. */
+export const PRACTICE_MODES = ['listen', 'step', 'wait'] as const
 export type PracticeMode = (typeof PRACTICE_MODES)[number]
 export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
@@ -15,7 +15,7 @@ export interface PracticeState {
   readonly beatGroup: number
   /** Listen: the transport runs. */
   readonly playing: boolean
-  /** Your turn: the pitch classes the practised hands play here, lowest first. */
+  /** Wait mode: the pitch classes the practised hands play here, lowest first. */
   readonly expected: readonly PitchClass[]
   readonly received: readonly PitchClass[]
   readonly outcome: Outcome
@@ -43,15 +43,10 @@ export type PracticeEvent =
   | { readonly type: 'noteOn'; readonly midi: Midi }
   | { readonly type: 'restart' }
 
-/** The hands Your turn waits for: the audible ones, never the doubled tune. */
-const PRACTISED: Readonly<Record<Hands, Audible>> = {
-  both: { rh: true, lh: true, melody: false },
-  rh: { rh: true, lh: false, melody: false },
-  lh: { rh: false, lh: true, melody: false },
-}
-export const practisedHands = (hands: Hands): Audible => PRACTISED[hands]
+/** The hands Wait mode waits for: the audible ones, never the doubled tune. */
+export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), melody: false })
 
-/** What the app plays in Your turn: the hands not practised, and the tune. */
+/** What the app plays in Wait mode: the hands not practised, and the tune. */
 export function accompanyingHands(hands: Hands): Audible {
   const practised = practisedHands(hands)
   return { rh: !practised.rh, lh: !practised.lh, melody: true }
@@ -70,12 +65,12 @@ function expectedAt(performance: Performance, beatGroup: number, hands: Hands): 
 const isBeatGroup = (state: PracticeState, beatGroup: number) =>
   Number.isInteger(beatGroup) && beatGroup >= 0 && beatGroup < state.performance.beatGroups.length
 
-/** Arriving at a beat group: in Your turn it sets what is expected and waits. */
+/** Arriving at a beat group: in Wait mode it sets what is expected and waits. */
 function moveTo(state: PracticeState, beatGroup: number): PracticeState {
   return {
     ...state,
     beatGroup,
-    expected: state.mode === 'turn' ? expectedAt(state.performance, beatGroup, state.hands) : [],
+    expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
     outcome: 'waiting',
     wrong: null,
@@ -104,7 +99,7 @@ export function initialPractice(
 function next(state: PracticeState): PracticeState {
   const count = state.performance.beatGroups.length
   if (count === 0) return state
-  if (state.mode !== 'turn') return moveTo(state, (state.beatGroup + 1) % count)
+  if (state.mode !== 'wait') return moveTo(state, (state.beatGroup + 1) % count)
   if (state.beatGroup + 1 < count) return moveTo(state, state.beatGroup + 1)
   return { ...state, expected: [], received: [], outcome: 'finished', wrong: null }
 }
@@ -112,7 +107,7 @@ function next(state: PracticeState): PracticeState {
 function prev(state: PracticeState): PracticeState {
   const count = state.performance.beatGroups.length
   if (count === 0) return state
-  if (state.mode === 'turn') return moveTo(state, Math.max(0, state.beatGroup - 1))
+  if (state.mode === 'wait') return moveTo(state, Math.max(0, state.beatGroup - 1))
   return moveTo(state, (state.beatGroup - 1 + count) % count)
 }
 
@@ -126,7 +121,7 @@ function nextBar(state: PracticeState): PracticeState {
 
 function noteOn(state: PracticeState, key: Midi): PracticeState {
   const done = state.outcome === 'correct' || state.outcome === 'finished'
-  if (state.mode !== 'turn' || done || state.expected.length === 0) return state
+  if (state.mode !== 'wait' || done || state.expected.length === 0) return state
   const pc = pitchClass(key)
   if (!state.expected.includes(pc)) return { ...state, outcome: 'wrong', wrong: key }
   const received = state.received.includes(pc) ? state.received : [...state.received, pc]
@@ -134,7 +129,7 @@ function noteOn(state: PracticeState, key: Midi): PracticeState {
   return { ...state, received, outcome: complete ? 'correct' : 'waiting', wrong: null }
 }
 
-/** Every rule of Listen, Step and Your turn; the practice hook connects it to time and sound. */
+/** Every rule of Listen, Step and Wait mode; the practice hook connects it to time and sound. */
 export function practiceReducer(state: PracticeState, event: PracticeEvent): PracticeState {
   switch (event.type) {
     case 'configure': {

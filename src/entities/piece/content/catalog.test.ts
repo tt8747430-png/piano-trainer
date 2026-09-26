@@ -5,11 +5,11 @@ import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { chordSymbol, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import {
   BOOKS,
+  CHORD_SIZES,
   COLLECTION_IDS,
   COLLECTIONS,
   isCollectionId,
   PIECES,
-  VOICINGS,
   chartOf,
   hasMethodCodes,
   isPiece,
@@ -63,7 +63,7 @@ describe('the catalog', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual([
       'bozhe-spasibo',
       'called-to-play',
-      'exercises',
+      'studies',
       'hymns',
       'progressions',
     ])
@@ -82,11 +82,11 @@ describe('the catalog', () => {
   })
 
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
-    'parses %s in every voicing it allows',
+    'parses %s at every chord size it allows',
     (_id, piece) => {
-      const voicings =
-        piece.kind === 'progression' && piece.voicing.choosable ? VOICINGS : [undefined]
-      for (const voicing of voicings) expect(() => chartOf(piece, voicing)).not.toThrow()
+      const chordSizes =
+        piece.kind === 'progression' && piece.chordSize.choosable ? CHORD_SIZES : [undefined]
+      for (const chordSize of chordSizes) expect(() => chartOf(piece, chordSize)).not.toThrow()
       expect(() => melodyOf(piece)).not.toThrow()
     },
   )
@@ -96,10 +96,10 @@ describe('the catalog', () => {
     (_id, piece) => {
       const chart = chartOf(piece)
       const melody = melodyOf(piece)
-      const { mode } = pieceKey(piece)
+      const { minor } = pieceKey(piece)
       const problems: string[] = []
       for (let pc = 0; pc < 12; pc++) {
-        const tonic = tonicSpelling(pitchClass(pc), mode)
+        const tonic = tonicSpelling(pitchClass(pc), minor)
         for (const { pattern, methods } of accompaniments(piece)) {
           const performance = arrange(chart, {
             tonic,

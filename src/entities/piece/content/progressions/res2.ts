@@ -8,7 +8,7 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'block',
-  voicing: { default: 'ninths', choosable: false },
+  chordSize: { default: 'ninths', choosable: false },
   progression: 'V:=b9:4 I:maj:4',
   note: {
     en: 'Resolving into major, option 2: the ♭9 adds tension and slides down to the 5th of the target.',

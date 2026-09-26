@@ -19,9 +19,9 @@ describe('chartOf', () => {
     expect(firstSymbol(twoFive, 'ninths')).toBe('Dm9')
   })
 
-  it('keeps a fixed voicing whatever is asked', () => {
+  it('keeps a fixed chord size whatever is asked', () => {
     const fixed = testProgression('ii:min:4', {
-      voicing: { default: 'triads', choosable: false },
+      chordSize: { default: 'triads', choosable: false },
     })
     expect(firstSymbol(fixed, 'ninths')).toBe('Dm')
   })

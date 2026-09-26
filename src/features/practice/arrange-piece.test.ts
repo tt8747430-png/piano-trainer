@@ -17,7 +17,7 @@ describe('ownChoice', () => {
       pattern: 'r4',
       rh: null,
       lh: null,
-      voicing: null,
+      chordSize: null,
       melody: false,
     })
   })
@@ -46,10 +46,10 @@ describe('arrangePiece', () => {
     expect(performance.chords.every((c) => c.pattern === 'r4')).toBe(true)
   })
 
-  it('grows a progression’s chords with the voicing that it lets the learner choose', () => {
+  it('grows a progression’s chords with the chord size that it lets the learner choose', () => {
     const twofive = piece('twofive')
-    const symbols = (voicing: 'triads' | 'ninths') =>
-      arrangePiece(twofive, { ...ownChoice(twofive), voicing }).chords.map((c) => c.symbol)
+    const symbols = (chordSize: 'triads' | 'ninths') =>
+      arrangePiece(twofive, { ...ownChoice(twofive), chordSize }).chords.map((c) => c.symbol)
     expect(symbols('triads')[0]).toBe('Dm')
     expect(symbols('ninths')[0]).toBe('Dm9')
   })

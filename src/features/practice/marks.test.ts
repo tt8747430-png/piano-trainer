@@ -39,7 +39,7 @@ describe('practiceMarks', () => {
     }
   })
 
-  it('labels a note already played in Your turn with a tick', () => {
+  it('labels a note already played in Wait mode with a tick', () => {
     const group = performance.beatGroups[0]
     const first = performance.notes[group?.notes[0] ?? -1]
     if (!first) throw new Error('empty group')

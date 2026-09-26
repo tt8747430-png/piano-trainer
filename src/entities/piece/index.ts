@@ -1,9 +1,9 @@
 export {
+  CHORD_SIZES,
   COLLECTION_IDS,
   CREDIT_ROLES,
   METERS,
   SECTION_KINDS,
-  VOICINGS,
   beatsPerBar,
   defineListing,
   definePiece,
@@ -12,6 +12,7 @@ export {
   pieceKey,
   type BookId,
   type ChartPiece,
+  type ChordSize,
   type Collection,
   type CollectionId,
   type Credit,
@@ -26,7 +27,6 @@ export {
   type Section,
   type SectionKind,
   type Source,
-  type Voicing,
 } from './model/types'
 export { ContentError, type ContentPosition } from './model/content-error'
 export { barLength } from './model/beats'

@@ -6,7 +6,7 @@ import { barSounds, chordSounds, keySound, PRACTICE_RHYTHMS, scaleRun } from './
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
-  key: { tonic: note('C'), mode: 'major' },
+  key: { tonic: note('C'), minor: false },
   beatsPerBar: 4,
   sections: [{ lines: [[bar('C'), bar('G')]] }],
 }

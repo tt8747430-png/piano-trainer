@@ -1,14 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import {
   CHORD_FAMILIES,
   chordFamily,
   chordRootSpelling,
   chordSymbol,
-  keyboardRange,
   lastInversion,
-  MIDDLE_OCTAVES,
   noteFromParam,
   noteName,
   noteParam,
@@ -16,12 +14,11 @@ import {
   placeChord,
   qualitiesIn,
   qualitySuffix,
-  rangeOf,
   spellChord,
   type Midi,
 } from '@/shared/lib/music'
 import { usePlayChord } from '@/shared/lib/services'
-import { ChipRow, Pinned, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
+import { ChipRow, ROLE_BG, RoleLegend, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ChordView } from '../model/chord-view'
 
@@ -49,7 +46,6 @@ export function ChordExplorer({
     bothHands: chord.hands === 'both',
   })
   const keys = [...placed.lh, ...placed.rh]
-  const midis = keys.map((key) => key.midi)
   const tones = spellChord(root, chord.quality)
   const family = chordFamily(chord.quality)
   const marks = new Map<Midi, KeyMark>(
@@ -101,15 +97,7 @@ export function ChordExplorer({
         }))}
         onChange={(quality) => change({ quality, inversion: 0 })}
       />
-      <Pinned>
-        <LiveKeyboard
-          label={t('common:keyboard')}
-          range={keyboardRange(midis, MIDDLE_OCTAVES)}
-          inView={rangeOf(midis)}
-          marks={marks}
-          className="h-44"
-        />
-      </Pinned>
+      <ExplorerKeyboard keys={keys.map((key) => key.midi)} marks={marks} />
       <RoleLegend roles={[...new Set(tones.map((tone) => tone.role))]} />
       <ol className="flex flex-wrap gap-2">
         {tones.map((tone) => (

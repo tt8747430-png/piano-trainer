@@ -9,7 +9,7 @@ const BEATS = {
 } as const
 
 const chart = (...bars: string[][]): Chart => ({
-  key: { tonic: note('C'), mode: 'major' },
+  key: { tonic: note('C'), minor: false },
   beatsPerBar: 4,
   sections: [
     {

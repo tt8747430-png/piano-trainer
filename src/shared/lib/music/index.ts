@@ -34,7 +34,6 @@ export {
   tonicSpelling,
   transposeNote,
   type Key,
-  type Mode,
 } from './key'
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
 export {

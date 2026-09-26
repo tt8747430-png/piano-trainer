@@ -69,40 +69,40 @@ describe('the practice machine', () => {
     })
   })
 
-  describe('Your turn', () => {
+  describe('Wait mode', () => {
     it.each([
       ['rh', [0, 4, 7]],
       ['lh', [0]],
       ['both', [0, 4, 7]],
     ] as const)('expects what %s plays', (hands, expected) => {
-      expect(initialPractice(ONE_BAR, 'turn', hands).expected).toEqual(expected)
+      expect(initialPractice(ONE_BAR, 'wait', hands).expected).toEqual(expected)
     })
 
     it('counts a key in any octave, and is right once every note is in', () => {
-      const state = initialPractice(ONE_BAR, 'turn', 'rh')
+      const state = initialPractice(ONE_BAR, 'wait', 'rh')
       const partway = run(state, ...press(64 + 12, 48))
       expect(partway).toMatchObject({ outcome: 'waiting', received: [4, 0] })
       expect(run(partway, ...press(67)).outcome).toBe('correct')
     })
 
     it('shows a wrong key and keeps waiting', () => {
-      const wrong = run(initialPractice(ONE_BAR, 'turn', 'rh'), ...press(62))
+      const wrong = run(initialPractice(ONE_BAR, 'wait', 'rh'), ...press(62))
       expect(wrong).toMatchObject({ outcome: 'wrong', wrong: 62, received: [], beatGroup: 0 })
       expect(run(wrong, ...press(60, 64, 67)).outcome).toBe('correct')
     })
 
     it('ignores keys once the beat group is done', () => {
-      const done = run(initialPractice(ONE_BAR, 'turn', 'rh'), ...press(60, 64, 67))
+      const done = run(initialPractice(ONE_BAR, 'wait', 'rh'), ...press(60, 64, 67))
       expect(run(done, ...press(61))).toBe(done)
     })
 
     it('expects nothing where the practised hand has nothing to play', () => {
-      const state = run(initialPractice(ONE_BAR, 'turn', 'lh'), { type: 'next' })
+      const state = run(initialPractice(ONE_BAR, 'wait', 'lh'), { type: 'next' })
       expect(state).toMatchObject({ beatGroup: 1, expected: [], outcome: 'waiting' })
     })
 
     it('finishes after the last beat group', () => {
-      const last = run(initialPractice(ONE_BAR, 'turn', 'rh'), {
+      const last = run(initialPractice(ONE_BAR, 'wait', 'rh'), {
         type: 'jumpToBeatGroup',
         beatGroup: 3,
       })
@@ -112,11 +112,11 @@ describe('the practice machine', () => {
     })
 
     it('stays at the start going back', () => {
-      expect(run(initialPractice(ONE_BAR, 'turn', 'rh'), { type: 'prev' }).beatGroup).toBe(0)
+      expect(run(initialPractice(ONE_BAR, 'wait', 'rh'), { type: 'prev' }).beatGroup).toBe(0)
     })
 
     it('starts over from the first beat group', () => {
-      const moved = run(initialPractice(TWO_BARS, 'turn', 'rh'), { type: 'nextBar' }, ...press(61))
+      const moved = run(initialPractice(TWO_BARS, 'wait', 'rh'), { type: 'nextBar' }, ...press(61))
       expect(run(moved, { type: 'restart' })).toMatchObject({
         beatGroup: 0,
         expected: [0, 4, 7],
@@ -155,12 +155,12 @@ describe('the practice machine', () => {
       ).toBe(false)
     })
 
-    it('recomputes what Your turn expects', () => {
-      const state = initialPractice(ONE_BAR, 'turn', 'rh')
+    it('recomputes what Wait mode expects', () => {
+      const state = initialPractice(ONE_BAR, 'wait', 'rh')
       const configured = run(state, {
         type: 'configure',
         performance: ONE_BAR,
-        mode: 'turn',
+        mode: 'wait',
         hands: 'lh',
       })
       expect(configured.expected).toEqual([0])
@@ -177,7 +177,7 @@ describe('the practice machine', () => {
   })
 })
 
-describe('the hands of Your turn', () => {
+describe('the hands of Wait mode', () => {
   it.each([
     ['both', { rh: true, lh: true, melody: false }, { rh: false, lh: false, melody: true }],
     ['rh', { rh: true, lh: false, melody: false }, { rh: false, lh: true, melody: true }],

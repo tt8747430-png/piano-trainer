@@ -113,7 +113,7 @@ describe('arrange', () => {
     expect(performance.beatGroups).toEqual([{ tick: 0, bar: 0, chord: 0, notes: [0, 1, 2, 3] }])
     expect(performance.bars).toEqual([{ startTick: 0, beats: 4, section: 0, line: 0, chords: [0] }])
     expect(performance.totalTicks).toBe(48)
-    expect(performance.key).toEqual({ tonic: C, mode: 'major' })
+    expect(performance.key).toEqual({ tonic: C, minor: false })
   })
 
   it('puts bars and chords end to end', () => {
@@ -409,7 +409,7 @@ describe('arrange', () => {
     const performance = arrange(chart([[symbol]], { key }), { tonic: to, pattern: BLOCK })
     expect(performance.chords[0]?.symbol).toBe(expected)
     expect(performance.key.tonic).toEqual(to)
-    expect(performance.key.mode).toBe(key.endsWith('m') ? 'minor' : 'major')
+    expect(performance.key.minor).toBe(key.endsWith('m'))
   })
 
   it.each([

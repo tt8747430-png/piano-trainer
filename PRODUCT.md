@@ -16,7 +16,7 @@ web
 
 ## Product Purpose
 
-Piano Trainer teaches a learner to play songs at the piano. It gives an easy-to-hard path of exercises, chord topics
+Piano Trainer teaches a learner to play songs at the piano. It gives an easy-to-hard path of studies, chord topics
 and songs, a practice player that plays along, steps through or waits for the learner's notes, and theory that finds
 the learner's gaps from quiz answers and routes practice to them. Success: a learner opens it, sees what to play
 next, and gets to the keyboard in one tap; nothing they had in the old app is lost.
@@ -30,16 +30,16 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 ## Operating Context
 
 - **At the piano:** a phone propped on the music stand of an acoustic or digital piano, glanced at while both hands
-  play; or a tablet or laptop beside a MIDI keyboard, where Your turn listens to the keys.
+  play; or a tablet or laptop beside a MIDI keyboard, where Wait mode listens to the keys.
 - Practice is glance-and-play: the learner reads a bar, a chord or a key colour and looks back at the keys.
 - Offline is normal (a church hall, a practice room); the app installs as a PWA.
 
 ## Capabilities and Constraints
 
-- Screens: Path (Continue + levels 1–4), Songs, Piece, Player (Listen · Step · Your turn), Theory (Chords, Scales,
+- Screens: Path (Continue + levels 1–4), Songs, Piece, Player (Listen · Step · Wait), Theory (Chords, Scales,
   Symbols, Quiz with My gaps), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
-- Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song" or "Exercise" in the interface, never "Piece").
+- Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend, sheet-music rendering or audio recording.
 
 ## Brand Commitments

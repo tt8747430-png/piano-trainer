@@ -40,12 +40,12 @@ export interface Practice {
   press(midi: Midi): void
 }
 
-/** After a right answer in Your turn, the app plays the other hand and moves on this much later. */
+/** After a right answer in Wait mode, the app plays the other hand and moves on this much later. */
 const CORRECT_PAUSE_MS = 150
 
 /**
  * Connects the practice machine to time, audio and MIDI. The machine decides; this hook plays what
- * it decides, follows the audio clock in Listen, and moves Your turn on (spec §4.5).
+ * it decides, follows the audio clock in Listen, and moves Wait mode on (spec §4.5).
  *
  * A new `performance` object is a new piece to practise: it reconfigures the machine and starts a
  * playing pass again. Hand in the same object while the arrangement is unchanged (`useMemo` over
@@ -88,10 +88,10 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     )
   }, [audio, state.playing, state.performance, state.hands, tempo, metronome, countIn, passRequest])
 
-  // Your turn: once the practised hand has played (or has nothing to play), the app plays the rest
+  // Wait mode: once the practised hand has played (or has nothing to play), the app plays the rest
   // of the beat group and moves on.
   useEffect(() => {
-    if (state.mode !== 'turn') return
+    if (state.mode !== 'wait') return
     const nothingToPlay = state.outcome === 'waiting' && state.expected.length === 0
     if (state.outcome !== 'correct' && !nothingToPlay) return
     const hands = accompanyingHands(state.hands)
@@ -122,7 +122,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       dispatch(event)
       if (moved === current) return
       if (current.playing) setPassRequest((request) => request + 1)
-      else if (current.mode !== 'turn') {
+      else if (current.mode !== 'wait') {
         const hands = audibleHands(moved.hands)
         audio.play(beatGroupSounds(moved.performance, moved.beatGroup, { tempo: now.tempo, hands }))
       }

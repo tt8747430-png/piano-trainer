@@ -12,8 +12,10 @@ import { createAppRouter } from '../router'
 /**
  * The whole app at `path`, on in-memory storage unless told otherwise, in the given language, with
  * fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a browser without it.
+ * Every screen's code is loaded first, so a test waits on the app and never on the runner importing
+ * a lazy chunk.
  */
-export function renderApp(
+export async function renderApp(
   path: string,
   {
     locale = 'en',
@@ -24,6 +26,7 @@ export function renderApp(
   const settingsStore = createSettingsStore({ storage, languages: [locale] })
   const progressStore = createProgressStore({ storage })
   const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
+  await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   const audio = createFakeAudio()
   const midi = createFakeMidi()
   const view = render(

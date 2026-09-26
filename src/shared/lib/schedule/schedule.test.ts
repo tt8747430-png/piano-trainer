@@ -11,7 +11,7 @@ import {
   type Sound,
 } from './schedule'
 
-const C_MAJOR = { tonic: note('C'), mode: 'major' } as const
+const C_MAJOR = { tonic: note('C'), minor: false } as const
 const oneChordBar = (symbol: string) => ({
   chords: [{ ...parseChordSymbol(symbol), beats: 4 }],
   beats: 4,

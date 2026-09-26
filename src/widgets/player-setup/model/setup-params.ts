@@ -1,5 +1,5 @@
 import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
-import type { Voicing } from '@/entities/piece'
+import type { ChordSize } from '@/entities/piece'
 import type { NoteParam } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
 
@@ -11,7 +11,7 @@ export interface SetupParams {
   readonly pattern?: PatternId | 'chart'
   readonly rh?: RightFigureId
   readonly lh?: LeftFigureId
-  readonly voicing?: Voicing
+  readonly chordSize?: ChordSize
 }
 
 /** What one control in the sheet changes; a field set to `undefined` goes back to the piece's own. */

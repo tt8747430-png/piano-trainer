@@ -16,7 +16,7 @@ export interface KeyStates {
   readonly selected?: ReadonlySet<Midi>
   /** An answer's missing keys. */
   readonly outlined?: ReadonlySet<Midi>
-  /** A wrong key in Your turn, the extra keys of a quiz answer. */
+  /** A wrong key in Wait mode, the extra keys of a quiz answer. */
   readonly wrong?: ReadonlySet<Midi>
   /** Keys down: sounding now, or held on a MIDI keyboard. */
   readonly down?: ReadonlySet<Midi>

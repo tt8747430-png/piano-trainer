@@ -10,7 +10,7 @@ export const path = {
   kind: {
     chords: 'Chords',
     scale: 'Scale',
-    exercise: 'Exercise',
+    study: 'Study',
     song: 'Song',
     progression: 'Progression',
   },

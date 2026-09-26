@@ -14,7 +14,7 @@ export function LiveKeyboard({
   inView,
   ...keyboard
 }: Omit<ComponentProps<typeof PianoKeyboard>, 'down' | 'onKeyPress'> & {
-  /** What a tap means besides its sound: a quiz's choice, Your turn's answer. */
+  /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
 }) {
   const sounding = useSoundingKeys()

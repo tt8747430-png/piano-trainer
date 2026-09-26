@@ -8,7 +8,8 @@ import {
 import type { Midi } from '@/shared/lib/music'
 
 /** Which hands the learner hears: both, or one of them. */
-export type Hands = 'both' | 'rh' | 'lh'
+export const HANDS = ['both', 'rh', 'lh'] as const
+export type Hands = (typeof HANDS)[number]
 export type Audible = Readonly<Record<NoteHand, boolean>>
 
 /** The one table of which hands each choice plays; the doubled tune always sounds. */
@@ -148,7 +149,7 @@ export function beatGroupSounds(
   })
 }
 
-/** How long Your turn gives a beat group: until the next one sounds, or one beat for the last. */
+/** How long Wait mode gives a beat group: until the next one sounds, or one beat for the last. */
 export function untilNextBeatGroup(
   performance: Performance,
   beatGroup: number,

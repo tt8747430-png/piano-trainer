@@ -2,6 +2,7 @@ export { advanceLoop, beatGroupAt, startLoop, type Loop, type Pass } from './loo
 export {
   audibleHands,
   beatGroupSounds,
+  HANDS,
   schedule,
   TEMPO_RANGE,
   untilNextBeatGroup,

@@ -5,7 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 
 describe('Theory → Symbols', () => {
   it('lists every quality by family with its spellings, formula and notes on C', async () => {
-    renderApp('/theory/symbols')
+    await renderApp('/theory/symbols')
     const sevenths = await screen.findByRole('region', { name: '7th chords' })
     const minor7 = within(sevenths).getByRole('listitem', { name: 'Minor 7th' })
     expect(minor7).toHaveTextContent('Cm7')
@@ -19,7 +19,7 @@ describe('Theory → Symbols', () => {
 
   it('opens the reading notes behind one control', async () => {
     const user = userEvent.setup()
-    renderApp('/theory/symbols')
+    await renderApp('/theory/symbols')
     await user.click(await screen.findByRole('button', { name: 'How to read chord symbols' }))
     expect(
       await screen.findByRole('heading', { name: 'Naming any chord in 7 steps' }),
@@ -28,7 +28,7 @@ describe('Theory → Symbols', () => {
 
   it('shows the chord Hear plays going down on its keyboard', async () => {
     const user = userEvent.setup()
-    const { audio } = renderApp('/theory/symbols')
+    const { audio } = await renderApp('/theory/symbols')
     const triads = await screen.findByRole('region', { name: 'Triads' })
     const minor = within(triads).getByRole('listitem', { name: 'Minor triad' })
     await user.click(within(minor).getByRole('button', { name: 'Hear' }))

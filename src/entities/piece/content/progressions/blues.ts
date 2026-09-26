@@ -9,7 +9,7 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'blues',
-  voicing: { default: 'sevenths', choosable: true },
+  chordSize: { default: 'sevenths', choosable: true },
   progression: 'I:dom:16 IV:dom:8 I:dom:8 V:dom:4 IV:dom:4 I:dom:4 V:dom:4',
   note: { en: 'Great with the blues scale on top.', ru: 'Хорошо звучит с блюзовой гаммой сверху.' },
 })

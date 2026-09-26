@@ -3,7 +3,7 @@ import type { LocaleResources } from '../../types'
 export const piece: LocaleResources['piece'] = {
   chords: {
     song: 'Аккорды песни',
-    exercise: 'Аккорды упражнения',
+    study: 'Аккорды этюда',
     progression: 'Аккорды последовательности',
   },
   checkChords: 'Проверить эти аккорды',
@@ -34,7 +34,7 @@ export const piece: LocaleResources['piece'] = {
     lastChorus: 'Последний припев',
     ending: 'Окончание',
     lastEnding: 'Последнее окончание',
-    practice: 'Упражнение',
+    practice: 'Практика',
     hymn: 'Гимн',
     part: 'Часть',
     partLabelled: 'Часть {{label}}',

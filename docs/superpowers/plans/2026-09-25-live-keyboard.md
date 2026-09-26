@@ -31,7 +31,7 @@ test first (`tdd`). Each task ends green on `npm run typecheck && npm run lint &
 
 ## 4. The keyboard
 
-- [x] Tokens: `--key-down` (replaces `--key-pressed`), `--key-shade`.
+- [x] Tokens: `--key-down` (replaces `--key-pressed`), `--key-down-tint`.
 - [x] `piano-keyboard/key-look.ts`: `keyLook(state)` with a test of every precedence.
 - [x] `PianoKeyboard`: the whole piano; `range` fills the width (28–48px white keys, container units); centres the
       range on mount and on change; `inView`; roving tab stop with arrows, Home, End; `down`; `onKeyPress` required.

@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,6 @@ import { CheckResult } from './CheckResult'
 
 function CheckFlow({ plan }: { plan: CheckPlan }) {
   const { t } = useTranslation(['quiz', 'common'])
-  const navigate = useNavigate()
   const store = useProgressStoreApi()
   const stepTitle = useStepTitle()
   const step = stepById(plan.of)
@@ -23,7 +22,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
     () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),
   )
   const [done, setDone] = useState(false)
-  const close = useGoBack(() => void navigate({ to: '/' }))
+  const close = useGoBack({ to: '/' })
   const answered = quiz.state.asked - (quiz.state.result ? 0 : 1)
 
   return (

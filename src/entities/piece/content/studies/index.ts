@@ -9,10 +9,10 @@ import ex7 from './ex7'
 import ex8 from './ex8'
 import ex9 from './ex9'
 
-const exercises: Collection = {
-  id: 'exercises',
-  name: { en: 'Exercises', ru: 'Упражнения' },
+const studies: Collection = {
+  id: 'studies',
+  name: { en: 'Studies', ru: 'Этюды' },
   entries: [ex3, exm1, exm2, exm3, ex5, ex6, ex7, ex8, ex9],
 }
 
-export default exercises
+export default studies

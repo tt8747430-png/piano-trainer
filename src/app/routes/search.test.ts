@@ -31,17 +31,17 @@ describe('search params', () => {
     ).toEqual({ root: 'Bb', quality: 'm7', inversion: 2, hands: 'both', step: 'chords:sev' })
     expect(
       await searchAt(
-        '/play/bz5?key=A&tempo=96&hands=lh&mode=turn&pattern=chart&rh=t1&lh=o&voicing=ninths',
+        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&pattern=chart&rh=t1&lh=o&chordSize=ninths',
       ),
     ).toEqual({
       key: 'A',
       tempo: 96,
       hands: 'lh',
-      mode: 'turn',
+      mode: 'wait',
       pattern: 'chart',
       rh: 't1',
       lh: 'o',
-      voicing: 'ninths',
+      chordSize: 'ninths',
     })
     expect(await searchAt('/songs?q=душа&collection=hymns&level=1')).toEqual({
       q: 'душа',
@@ -58,7 +58,9 @@ describe('search params', () => {
 
   it('drop anything stale or hand-edited back to its default, without clamping', async () => {
     expect(
-      await searchAt('/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&voicing=elevenths'),
+      await searchAt(
+        '/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&chordSize=elevenths',
+      ),
     ).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/theory/chords?quality=maj13&inversion=7&step=scale:major')).toEqual(
       CHORDS_DEFAULTS,
@@ -66,9 +68,9 @@ describe('search params', () => {
     expect(await searchAt('/theory/chords?quality=maj&inversion=3')).toMatchObject({
       inversion: 0,
     })
-    expect(
-      await searchAt('/theory/scales?kind=dorian&tempo=10&chords=5&step=chords:tri'),
-    ).toEqual(SCALES_DEFAULTS)
+    expect(await searchAt('/theory/scales?kind=dorian&tempo=10&chords=5&step=chords:tri')).toEqual(
+      SCALES_DEFAULTS,
+    )
     expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)
   })
 

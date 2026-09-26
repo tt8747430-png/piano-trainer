@@ -17,7 +17,7 @@ import {
 import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
 import { ContentError } from './content-error'
-import { beatsPerBar, pieceKey, VOICINGS, type ProgressionPiece, type Voicing } from './types'
+import { beatsPerBar, CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
@@ -31,8 +31,8 @@ const CHROMATIC = new Map([
   ['♯', 1],
 ])
 
-/** How each function's chord grows with the voicing: triads, sevenths, ninths. */
-const FUNCTIONS = new Map<string, Readonly<Record<Voicing, ChordQuality>>>([
+/** How each function's chord grows with the chord size: triads, sevenths, ninths. */
+const FUNCTIONS = new Map<string, Readonly<Record<ChordSize, ChordQuality>>>([
   ['maj', { triads: 'maj', sevenths: 'maj7', ninths: 'maj9' }],
   ['min', { triads: 'min', sevenths: 'm7', ninths: 'm9' }],
   ['dom', { triads: 'maj', sevenths: 'd7', ninths: 'n9' }],
@@ -62,7 +62,7 @@ interface TimedChord {
 function readChord(
   token: string,
   piece: ProgressionPiece,
-  voicing: Voicing,
+  size: ChordSize,
   fail: (problem: string) => never,
 ): TimedChord {
   const [, chromatic = '', numeral = '', written = '', beatsText = '', bassText] =
@@ -72,7 +72,7 @@ function readChord(
   const fixed = written.startsWith('=') ? written.slice(1) : null
   const quality =
     fixed === null
-      ? (FUNCTIONS.get(written)?.[voicing] ?? fail(`unknown function in "${token}"`))
+      ? (FUNCTIONS.get(written)?.[size] ?? fail(`unknown function in "${token}"`))
       : isQuality(fixed)
         ? fixed
         : fail(`unknown chord quality in "${token}"`)
@@ -87,7 +87,7 @@ function readChord(
   const role = BASS_ROLES.get(bassText) ?? fail(`unknown bass in "${token}"`)
   const bass =
     spellChord(root, quality).find((tone) => tone.role === role)?.note ??
-    fail(`"${token}" has no ${role} for the bass at ${voicing}`)
+    fail(`"${token}" has no ${role} for the bass at ${size}`)
   return { chord: { root, quality, bass }, ticks }
 }
 
@@ -115,15 +115,15 @@ function packIntoBars(chords: readonly TimedChord[], meterTicks: Tick): ChartBar
   return bars
 }
 
-/** Reads a progression at a voicing into a chart of real bars, four to a line. */
-export function parseProgression(piece: ProgressionPiece, voicing: Voicing): Chart {
-  if (!VOICINGS.includes(voicing)) throw new RangeError(`Unknown voicing "${voicing}"`)
+/** Reads a progression at a chord size into a chart of real bars, four to a line. */
+export function parseProgression(piece: ProgressionPiece, size: ChordSize): Chart {
+  if (!CHORD_SIZES.includes(size)) throw new RangeError(`Unknown chord size "${size}"`)
   const meterBeats = beatsPerBar(piece.meter)
   const chords = piece.progression
     .split(/\s+/)
     .filter(Boolean)
     .map((token, i) =>
-      readChord(token, piece, voicing, (problem) => {
+      readChord(token, piece, size, (problem) => {
         throw new ContentError(piece.id, { chord: i + 1 }, problem)
       }),
     )

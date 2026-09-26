@@ -12,13 +12,13 @@ const ONE_OCTAVE = { from: C4, to: midi(71) }
 const renderKeyboard = (props: Partial<ComponentProps<typeof PianoKeyboard>> = {}) =>
   render(
     <>
-      <PianoKeyboard label="Keyboard" range={ONE_OCTAVE} onKeyPress={() => {}} {...props} />
+      <PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} {...props} />
       <button type="button">After</button>
     </>,
   )
 
 describe('PianoKeyboard', () => {
-  it('is a labelled group holding the whole piano, its keys named by note', () => {
+  it('is a group named Keyboard holding the whole piano, its keys named by note', () => {
     renderKeyboard()
     const keys = within(screen.getByRole('group', { name: 'Keyboard' })).getAllByRole('button')
     expect(keys).toHaveLength(88)

@@ -7,7 +7,7 @@ import { chordSkill, qualitiesIn } from '@/shared/lib/music'
 
 describe('Check', () => {
   it('checks a piece’s chords in six questions with a progress bar', async () => {
-    renderApp('/check?of=piece:bz5')
+    await renderApp('/check?of=piece:bz5')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Check: Still, my soul, be still' }),
     ).toBeInTheDocument()
@@ -16,7 +16,7 @@ describe('Check', () => {
 
   it('shows the score and each skill’s rating at the end', async () => {
     const user = userEvent.setup()
-    renderApp('/check?of=scale:blues')
+    await renderApp('/check?of=scale:blues')
     for (let i = 0; i < 6; i++) {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
@@ -30,7 +30,7 @@ describe('Check', () => {
 
   it('says when the check marked its step learned', async () => {
     const user = userEvent.setup()
-    const { progressStore } = renderApp('/check?of=chords:tri')
+    const { progressStore } = await renderApp('/check?of=chords:tri')
     await screen.findByRole('progressbar')
     act(() => {
       for (const quality of qualitiesIn('tri'))
@@ -48,7 +48,7 @@ describe('Check', () => {
   })
 
   it('shows not found for a check of nothing', async () => {
-    renderApp('/check?of=piece:gone')
+    await renderApp('/check?of=piece:gone')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

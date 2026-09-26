@@ -4,7 +4,7 @@ import { chordSymbol } from '@/shared/lib/music'
 import { testProgression } from '../testing/test-pieces'
 import { ContentError } from './content-error'
 import { parseProgression } from './parse-progression'
-import { VOICINGS, type KeyText, type Voicing } from './types'
+import { CHORD_SIZES, type ChordSize, type KeyText } from './types'
 
 const bars = (chart: Chart) =>
   chart.sections.flatMap((section) =>
@@ -14,8 +14,8 @@ const bars = (chart: Chart) =>
       ),
     ),
   )
-const symbols = (progression: string, voicing: Voicing, key: KeyText = 'C') =>
-  bars(parseProgression(testProgression(progression, { key }), voicing)).map((bar) =>
+const symbols = (progression: string, size: ChordSize, key: KeyText = 'C') =>
+  bars(parseProgression(testProgression(progression, { key }), size)).map((bar) =>
     bar.replace(/ \d+$/, ''),
   )
 
@@ -27,8 +27,8 @@ describe('parseProgression', () => {
     ['vii:hd:4', ['B°', 'Bm7♭5', 'Bm7♭5']],
     ['I:maj:4', ['C', 'CMaj7', 'CMaj9']],
     ['V:=b9:4', ['G7♭9', 'G7♭9', 'G7♭9']],
-  ])('grows %s with the voicing', (progression, expected) => {
-    expect(VOICINGS.map((voicing) => symbols(progression, voicing)[0])).toEqual(expected)
+  ])('grows %s with the chord size', (progression, expected) => {
+    expect(CHORD_SIZES.map((size) => symbols(progression, size)[0])).toEqual(expected)
   })
 
   it.each([
@@ -38,8 +38,8 @@ describe('parseProgression', () => {
     ['♭VII:maj:4', 'Dm', 'C'],
     ['♭III:maj:4', 'Dm', 'F'],
   ] as const)('spells the chromatic degree %s in %s as %s', (progression, key, expected) => {
-    const voicing = progression.includes('hd') ? 'sevenths' : 'triads'
-    expect(symbols(progression, voicing, key)[0]).toBe(expected)
+    const size = progression.includes('hd') ? 'sevenths' : 'triads'
+    expect(symbols(progression, size, key)[0]).toBe(expected)
   })
 
   it('reads degrees in any case', () => {

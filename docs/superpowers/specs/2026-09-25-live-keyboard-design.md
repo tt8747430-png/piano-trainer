@@ -13,9 +13,10 @@
 
 - **Every keyboard is a piano.** It holds all 88 keys (A0–C8) and scrolls sideways. Its `range` is the stretch that
   fills the width: white keys are as wide as the range needs to fill it, no narrower than 28px and no wider than 48px,
-  so a small screen scrolls and a wide one shows the neighbouring keys. The keyboard opens centred on its range, and
-  centres it again when the range changes (a chord that needs more room). The Player's keyboard also keeps the
-  current notes in view (`inView`), scrolling only when one of them is out of sight.
+  so a small screen scrolls and a wide one shows the neighbouring keys. The keyboard opens centred on the keys in
+  view (`inView`), else on its range, and centres again when the range changes (a chord that needs more room). It
+  keeps the keys in view in sight, scrolling only when one of them is out of sight: the Player's current notes, the
+  explorers' chord or run, and on any other screen the keys that are down.
 - **Every key plays.** A tapped key sounds its note on every screen, on top of whatever sounds (it never cuts off a
   chord, a run or Listen's transport). Where a tap also means something, it does both: Build chord and Build scale
   select the key, Your turn takes it as an answer.

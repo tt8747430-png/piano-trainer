@@ -1,5 +1,4 @@
-import { ChevronLeft } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
@@ -11,33 +10,18 @@ import {
   patternsIn,
   RIGHT_FIGURE_IDS,
   RIGHT_FIGURES,
-  type LeftFigureId,
   type PatternId,
-  type RightFigureId,
 } from '@/entities/pattern'
 import { hasMethodCodes, melodyOf, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Hands } from '@/shared/lib/schedule'
 import { Sheet, SheetContent } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import type { SetupChange } from '../model/setup-params'
 import { ChoiceList } from './ChoiceList'
+import { FigurePage } from './FigurePage'
+import { ListPage } from './ListPage'
 import { SetupMain, type SetupPage } from './SetupMain'
-
-/** One of the sheet's lists, as a page of it, with the way back to the first page. */
-function ListPage({ onBack, children }: { onBack: () => void; children: ReactNode }) {
-  const { t } = useTranslation('player')
-  return (
-    <div className="flex flex-col gap-4">
-      <Button variant="ghost" className="-ml-3 self-start" onClick={onBack}>
-        <ChevronLeft data-icon="inline-start" />
-        {t('back')}
-      </Button>
-      {children}
-    </div>
-  )
-}
 
 /**
  * Everything about how the Player plays, in one sheet; the pattern and figure lists open as its
@@ -124,37 +108,24 @@ export function PlayerSetup({
           </ListPage>
         ) : null}
         {page === 'rh' ? (
-          <ListPage onBack={toMain}>
-            <ChoiceList<RightFigureId | null>
-              items={[
-                { value: null, label: t('ownFigure') },
-                ...RIGHT_FIGURE_IDS.map((id) => ({
-                  value: id,
-                  label: localText(RIGHT_FIGURES[id].name, locale),
-                  ...(RIGHT_FIGURES[id].figure.kind === 'melody' && noMelody
-                    ? { disabledNote: noMelody }
-                    : {}),
-                })),
-              ]}
-              value={choice.rh}
-              onChoose={(rh) => choose({ rh: rh ?? undefined })}
-            />
-          </ListPage>
+          <FigurePage
+            ids={RIGHT_FIGURE_IDS}
+            figures={RIGHT_FIGURES}
+            value={choice.rh}
+            noMelody={noMelody}
+            onChoose={(rh) => choose({ rh })}
+            onBack={toMain}
+          />
         ) : null}
         {page === 'lh' ? (
-          <ListPage onBack={toMain}>
-            <ChoiceList<LeftFigureId | null>
-              items={[
-                { value: null, label: t('ownFigure') },
-                ...LEFT_FIGURE_IDS.map((id) => ({
-                  value: id,
-                  label: localText(LEFT_FIGURES[id].name, locale),
-                })),
-              ]}
-              value={choice.lh}
-              onChoose={(lh) => choose({ lh: lh ?? undefined })}
-            />
-          </ListPage>
+          <FigurePage
+            ids={LEFT_FIGURE_IDS}
+            figures={LEFT_FIGURES}
+            value={choice.lh}
+            noMelody={noMelody}
+            onChoose={(lh) => choose({ lh })}
+            onBack={toMain}
+          />
         ) : null}
       </SheetContent>
     </Sheet>

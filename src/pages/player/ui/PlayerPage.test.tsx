@@ -6,7 +6,7 @@ import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 
 describe('Player', () => {
   it('opens a song with its setup summary and records it as practised', async () => {
-    const { progressStore } = renderApp('/play/bz5')
+    const { progressStore } = await renderApp('/play/bz5')
     expect(
       await screen.findByRole('button', { name: /G · 72 BPM · Both hands/ }),
     ).toBeInTheDocument()
@@ -15,7 +15,7 @@ describe('Player', () => {
   })
 
   it('reads a stale URL as the piece’s own setup', async () => {
-    renderApp('/play/bz5?key=H&tempo=999&mode=dance')
+    await renderApp('/play/bz5?key=H&tempo=999&mode=dance')
     expect(
       await screen.findByRole('button', { name: /G · 72 BPM · Both hands/ }),
     ).toBeInTheDocument()
@@ -23,7 +23,7 @@ describe('Player', () => {
 
   it('steps through beat by beat, sounding each', async () => {
     const user = userEvent.setup()
-    const { router, audio } = renderApp('/play/bz5')
+    const { router, audio } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Step' }))
     expect(router.state.location.search).toMatchObject({ mode: 'step' })
     await user.click(screen.getByRole('button', { name: 'Next' }))
@@ -32,17 +32,17 @@ describe('Player', () => {
 
   it('plays a pass in Listen and stops it', async () => {
     const user = userEvent.setup()
-    const { audio } = renderApp('/play/bz5')
+    const { audio } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.played).toHaveLength(1)
     await user.click(screen.getByRole('button', { name: 'Stop' }))
     expect(audio.stops).toBeGreaterThan(0)
   })
 
-  it('waits in Your turn, says a wrong key and takes the right ones from MIDI', async () => {
+  it('waits for the notes in Wait mode, says a wrong key and takes the right ones from MIDI', async () => {
     const user = userEvent.setup()
     // The song's pattern opens with the left hand alone, so the left hand has notes to play at once.
-    const { midi: midiKeyboard } = renderApp('/play/bz5?mode=turn&hands=lh')
+    const { midi: midiKeyboard } = await renderApp('/play/bz5?mode=wait&hands=lh')
     const prompt = await screen.findByText(/^Play /)
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
@@ -61,7 +61,7 @@ describe('Player', () => {
 
   it('changes the key through the Setup sheet, and back to the piece’s own', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/play/bz5')
+    const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: /G · 72 BPM/ }))
     await user.click(await screen.findByRole('button', { name: 'A' }))
     expect(router.state.location.search).toMatchObject({ key: 'A' })

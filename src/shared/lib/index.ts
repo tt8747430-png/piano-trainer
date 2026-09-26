@@ -1,7 +1,7 @@
 export { cn } from './cn'
 export { foldText, matchesQuery } from './fold-text'
 export { isOneOf } from './is-one-of'
-export { keyboardLayout, spanOf, type KeyGeometry } from './keyboard-layout'
+export { keyboardLayout, spanOf, type KeyGeometry, type KeySpan } from './keyboard-layout'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject, type Saved } from './saved'
 export { readNote, valueOr, wholeIn } from './search-params'

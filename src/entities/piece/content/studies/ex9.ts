@@ -2,7 +2,7 @@ import { definePiece } from '../../model/types'
 
 export default definePiece({
   id: 'ex9',
-  kind: 'exercise',
+  kind: 'study',
   title: 'Урок 9: сексты вверх и вниз (Dm)',
   titleEn: 'Lesson 9: sixths up and down (Dm)',
   source: { book: 'called-to-play' },

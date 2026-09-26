@@ -15,8 +15,8 @@ differently, the UI column says how.
 | **Book**        | A printed songbook or method that a Source cites; not a Collection                                                                  | the book's title           | collection                        |
 | **Source**      | Where a Piece is printed: its Book, number and page                                                                                 | Source                     | origin, reference                 |
 | **Credit**      | A role (words, music, harmony…) and the names printed for it                                                                        | "Words: …", "Music: …"     | author string, by                 |
-| **Chart**       | A song's or exercise's chords by section, line and bar, in the chart format                                                         | Chords                     | sheet, score, lead sheet          |
-| **Progression** | A Piece written as degrees + functions, whose chords grow with the chosen Voicing                                                   | Progression                | chord flow, sequence              |
+| **Chart**       | A song's or study's chords by section, line and bar, in the chart format                                                            | Chords                     | sheet, score, lead sheet          |
+| **Progression** | A Piece written as degrees + functions, whose chords grow with the chosen Chord size                                                | Progression                | chord flow, sequence              |
 | **Section**     | A labelled part of a Chart: intro, verse, chorus, ending, practice, hymn, part                                                      | Verse, Chorus, …           | block, segment                    |
 | **Bar**         | One measure of a Chart                                                                                                              | Bar                        | measure (in code), segment        |
 | **Method code** | A per-chord playing technique from the source book (`:t1`, `:3ch`)                                                                  | —                          | style code                        |
@@ -43,7 +43,7 @@ differently, the UI column says how.
 | **Scale kind**             | major; natural, harmonic or melodic minor; the Modes; major or minor pentatonic; blues                                | scale type                                  |
 | **Mode**                   | A church mode: Dorian, Phrygian, Lydian, Mixolydian or Locrian, a Scale kind (Ionian is major, Aeolian natural minor) | key (a Key is major or minor)               |
 | **Degree** (progression)   | A Roman numeral from the tonic on the major scale (`ii`, `♭VII`)                                                      | step                                        |
-| **Function** (progression) | How a degree's chord grows with the Voicing: `maj`, `min`, `dom`, `domb9`, `hd`, or fixed `=quality`                  | chord role                                  |
+| **Function** (progression) | How a degree's chord grows with the Chord size: `maj`, `min`, `dom`, `domb9`, `hd`, or fixed `=quality`               | chord role                                  |
 
 ## Practice
 
@@ -58,7 +58,7 @@ differently, the UI column says how.
 | **Pass**                      | One play-through from a beat group to the end; Listen loops passes                                                                  | run, cycle                  |
 | **Transport**                 | Listen's playback: passes queued ahead of the audio clock and followed as they sound                                                | player loop, engine         |
 | **Listen / Step / Wait mode** | How the Player goes: the app plays at a tempo (50%, 75%, 100% or any) / you move through it by ‹ › / the app waits for your notes   | auto, manual, Your turn     |
-| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, voicing and toggles (Russian UI: «Параметры»; «Настройки» is Settings)              | options, settings           |
+| **Setup**                     | The Player's sheet: key, tempo, hands, pattern, chord size and toggles (Russian UI: «Параметры»; «Настройки» is Settings)           | options, settings           |
 | **Note grid**                 | The Player's columns of the current bar's notes, by beat and hand                                                                   | piano roll, tab             |
 | **Live keyboard**             | The keyboard every screen shows (`LiveKeyboard`): the whole piano, scrolling; a tapped key sounds; a key goes down while it sounds  | static keyboard, piano roll |
 | **Down** (a key)              | A key sounding now or held on a MIDI keyboard, drawn pressed; Name chord's shown chord is **lit**, not down                         | active, playing             |

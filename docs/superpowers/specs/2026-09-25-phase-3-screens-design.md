@@ -132,7 +132,7 @@ only ≥44px sizes.
 
 URL search params follow master spec §6: what the learner is looking at lives in the URL, validated per route; an
 invalid value falls back to its default silently (no clamping: `inversion=7` is root position); defaults are stripped
-from the URL (`stripSearchParams`), and the Player, whose key, tempo, pattern and voicing default to the piece's own,
+from the URL (`stripSearchParams`), and the Player, whose key, tempo, pattern and chord size default to the piece's own,
 writes a choice equal to the piece's own as absent; changes from controls **replace** the history entry, so Back
 leaves the screen instead of undoing a tap.
 
@@ -146,7 +146,7 @@ leaves the screen instead of undoing a tap.
   the explorer for a chord or scale step. Rule (master spec §5): the last-practised piece if not learned, else the first
   unlearned step in path order. Everything learned: the card says so in one line and offers Songs.
 - **Levels:** per level a heading "Level 1 · Beginner" with "4 of 9" and the step rows: a kind tile (chords, scale,
-  exercise, song), the title, a subtitle (kind; "Chords · 2 of 5 known" for chord steps from quiz evidence; the
+  study, song), the title, a subtitle (kind; "Chords · 2 of 5 known" for chord steps from quiz evidence; the
   original title for songs), and the **learned toggle** (a round check button, `aria-pressed`). A row opens the
   step: a piece → Piece; chords → `/theory/chords?quality=<first of family>&step=chords:<family>`; a scale →
   `/theory/scales?kind=<kind>&step=scale:<kind>`. Levels without steps (2–4 until Phase 4) are not shown.
@@ -165,7 +165,7 @@ leaves the screen instead of undoing a tap.
 
 - Back button (back where the learner came from, Path or Songs; to Songs when the Piece was opened directly); the title block (as in Songs), credits (role label + names as printed), the source ("«Боже, спасибо»,
   No. 5, p. 16"), chips for key and meter, the note.
-- **Chords in this song** (in this exercise, in this progression: the row names the piece's kind): one chip per skill
+- **Chords in this song** (in this study, in this progression: the row names the piece's kind): one chip per skill
   (quality suffix; the full name and the rating in words as accessible name) with its `RatingMark`;
   each opens `/theory/chords?quality=<q>&root=<first root it has in the piece>`. **Check these chords** (text button)
   opens `/check?of=piece:<id>`.
@@ -181,26 +181,26 @@ leaves the screen instead of undoing a tap.
 - A listing: the title block, credits, source, key and meter, the note, one line "No chart yet", and the scale link.
 - Unknown id: the not-found screen.
 
-### 4.4 Player `/play/$pieceId?key&tempo&hands&mode&pattern&rh&lh&voicing`
+### 4.4 Player `/play/$pieceId?key&tempo&hands&mode&pattern&rh&lh&chordSize`
 
 | Param     | Values                                                     | Default                                   |
 | --------- | ---------------------------------------------------------- | ----------------------------------------- |
-| `key`     | a tonic with at most one accidental (`A`, `Bb`, `F#`); the piece's mode stays | the piece's tonic      |
+| `key`     | a tonic with at most one accidental (`A`, `Bb`, `F#`); the piece's major or minor stays | the piece's tonic      |
 | `tempo`   | whole BPM 40–160                                           | the piece's tempo                         |
 | `hands`   | `both` `rh` `lh`                                           | `both`                                    |
-| `mode`    | `listen` `step` `turn`                                     | `listen`                                  |
+| `mode`    | `listen` `step` `wait`                                     | `listen`                                  |
 | `pattern` | `chart` (the chart's own method codes) or a pattern id     | `chart` when the chart has method codes, else the piece's pattern |
 | `rh` `lh` | a right- / left-hand figure id; absent = the pattern's own | absent                                    |
-| `voicing` | `triads` `sevenths` `ninths` (progressions that allow it)  | the piece's default                       |
+| `chordSize` | `triads` `sevenths` `ninths` (progressions that allow it)  | the piece's default                       |
 
 - **Top bar:** close `RoundButton` (back where the learner came from; to the Piece when the Player was opened directly), the title with the **setup summary** beneath ("G · 72 BPM ·
   Both hands", a button that opens the Setup sheet), and, where Web MIDI exists, a MIDI `RoundButton` whose dot shows
   the status and whose popover connects and names the devices.
-- **Mode switch:** `Segmented` Listen · Step · Your turn.
+- **Mode switch:** `Segmented` Listen · Step · Wait.
 - **Chart strip:** one scrolling row of the same lead-sheet bars as the Piece (section names above the first bar of a
   section); the current bar is shaded and scrolled to the centre; tapping a bar jumps there.
 - **Now panel:** the current chord at 64px, "Next" and the next chord beside it, and the bar's beats as pips with the
-  current one filled (only the current one). Your turn adds the feedback line: what to play ("Play D F# A"), a correct tick, "Not F", or
+  current one filled (only the current one). Wait mode adds the feedback line: what to play ("Play D F# A"), a correct tick, "Not F", or
   "Finished" with **Again**.
 - **Note grid:** the current bar's beat groups as columns (beat label 1 e & a, ⅓ ⅔), notes named with octave and
   spelled from their chord, right hand over left hand (and the tune when the melody plays), in hand colours, each row
@@ -209,18 +209,18 @@ leaves the screen instead of undoing a tap.
 - **Keyboard (the hero):** the whole piano, the performance's range rounded out to C…B filling the width (white keys
   28–48px, scrolling when that does not fit), keeping the current notes in view. The current beat group's notes are
   marked in hand colours, labelled with finger numbers when that switch is on, else with note names: in Listen and
-  Step the hands heard, in Your turn the hands practised. Your turn: expected keys marked, received ones labelled ✓, a
+  Step the hands heard, in Wait mode the hands practised. Wait mode: expected keys marked, received ones labelled ✓, a
   wrong key flashes red; taps and MIDI both count. Every key that sounds goes down (the marked notes pulse as they
-  sound, a held bass stays down, Your turn's other hand shows as it plays), and so does a key held on MIDI. A tapped key
+  sound, a held bass stays down, Wait mode's other hand shows as it plays), and so does a key held on MIDI. A tapped key
   sounds its note in every mode, on top of what plays.
 - **Transport** (the primary action, bottom): Listen: Restart (round) · a 72px round **Play/Stop**; Step:
-  Back (round) · **Next** (pill) · Next bar (round); Your turn: Restart (round) · **Hear these notes** (pill).
+  Back (round) · **Next** (pill) · Next bar (round); Wait mode: Restart (round) · **Hear these notes** (pill).
 - **Setup sheet:** Key (`ChipRow` of 12 tonics named for the piece's mode), Tempo (`Slider` 40–160 with the value),
   Hands (`Segmented`), Pattern (a row opening a page of the sheet: "From the chart" when the chart has method codes, then
   the four groups of patterns with their names and descriptions, melody patterns disabled with "Needs a melody" on a
   piece without one), Right hand and Left hand (rows opening pages of the sheet: "The pattern's own" + the figures; a page, not a sheet over
   the sheet, §11),
-  Voicing (`Segmented`, progressions that allow it), and the saved switches: Finger numbers, Melody (pieces with a
+  Chord size (`Segmented`, progressions that allow it), and the saved switches: Finger numbers, Melody (pieces with a
   melody), Metronome, Count-in.
 - Opening the Player records the piece as practised (`recordPractised`). A listing or unknown id: not-found.
 - **Landscape phones** (height ≤ 500px): the top bar, mode switch and chart strip share two rows, the now panel and
@@ -296,7 +296,7 @@ New code by layer. Pure logic has a colocated test and lives where CLAUDE.md put
 - `music/place.ts` — `placeChord(root, quality, { inversion, bothHands })`: the explorers' **placed tones** (right hand
   from middle C, the first inversions' tones an octave up, the root an octave below in the left hand);
   `lastInversion(quality)`, the one rule for which inversions a chord has; `placeScale(root, kind)`, root to root
-  from middle C. ("Voicing" stays the progressions' triads, sevenths or ninths.)
+  from middle C. (A progression's triads, sevenths or ninths are its **Chord size**.)
 - `music/scale.ts` — `scaleGaps(kind)` (`W H W+H`) and `relativeScale(root, kind)` (major ↔ natural minor; the
   harmonic and melodic minors' relative major).
 - `music/note.ts` — `noteParam(note)` / `noteFromParam(param)`: URL spelling with ASCII `b` and `#`, as a branded
@@ -333,7 +333,7 @@ New code by layer. Pure logic has a colocated test and lives where CLAUDE.md put
 - `connect-midi/` (new) — `useMidiConnection()`, `MidiControl` (status line + Connect) and `MidiButton`, used by
   Settings and the Player; `useHeldKeys()`.
 - `practice/` (beside the machine, as the slice already lays out) — `PRACTICE_MODES`, `defaultPattern(piece)`,
-  `ownChoice(piece)` (the piece as written), `arrangePiece(piece, choice)` (chart or progression at a voicing, tonic,
+  `ownChoice(piece)` (the piece as written), `arrangePiece(piece, choice)` (chart or progression at a chord size, tonic,
   pattern or the chart's methods, figures, melody), `spellPerformedNote`, `spellPitchClass`, `barColumns(performance,
   bar)` (the note grid), `practiceMarks`, `playerRange(performance)`.
 - `quiz/` — `checkPlan(of)` (scope, length, mode per §4.6), `myGaps(answers, practised)`, `THEORY_QUIZZES` and
@@ -380,7 +380,7 @@ Every new string in `en` and `ru` in its namespace: `common` (nav, actions, rati
 | No Web MIDI                                 | MIDI button hidden in the Player; Settings says so in one line                 |
 | MIDI denied / no device                     | The status line says so; taps still work                                      |
 | A melody pattern or figure on a piece without a melody | Shown disabled with "Needs a melody"; a URL naming one falls back (arrange already falls back) |
-| `voicing` on a fixed-voicing progression    | Ignored (chartOf)                                                             |
+| `chordSize` on a progression of one size    | Ignored (chartOf)                                                             |
 | Invalid search param                        | Its default, silently                                                         |
 | Unknown piece, a listing in the Player, unknown `of` | Not-found screen                                                     |
 | A chunk fails to load offline               | `RouteError` (unchanged)                                                      |
@@ -433,7 +433,7 @@ README, and ADR 0007 for the visual world. Then `npm run typecheck && npm run li
 12. **Every keyboard plays and shows what sounds** (live-keyboard design, 2026-09-25): the whole piano, scrolling; a
     tapped key sounds on every screen; a key goes down as the app sounds it or MIDI holds it. Chords, Scales, Symbols
     and the Piece pin their keyboard; Symbols and the Piece gain one.
-13. **The Player marks the hands heard, and in Your turn the hands practised** (§4.4 marked every hand).
+13. **The Player marks the hands heard, and in Wait mode the hands practised** (§4.4 marked every hand).
 14. **Practise sits under the title block** instead of in a footer, so it is in the first screenful whatever the
     chart's length.
 15. **Back and close go where the learner came from**, falling back to Songs (the Piece), the Piece (the Player) or

@@ -6,7 +6,7 @@ import { renderApp } from '@/app/testing/render-app'
 describe('Theory → Quiz', () => {
   it('switches modes through the URL', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp('/theory/quiz')
+    const { router } = await renderApp('/theory/quiz')
     await user.click(await screen.findByRole('button', { name: 'Build scale' }))
     expect(router.state.location.search).toEqual({ mode: 'build-scale' })
     expect(
@@ -16,7 +16,7 @@ describe('Theory → Quiz', () => {
 
   it('says so when there are no gaps and offers the whole quiz', async () => {
     const user = userEvent.setup()
-    renderApp('/theory/quiz?mode=gaps')
+    await renderApp('/theory/quiz?mode=gaps')
     expect(await screen.findByText('No gaps found yet.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Whole quiz' }))
     expect(await screen.findByRole('heading', { name: /^Build / })).toBeInTheDocument()
@@ -24,7 +24,7 @@ describe('Theory → Quiz', () => {
 
   it('counts an answer in the stats', async () => {
     const user = userEvent.setup()
-    const { progressStore } = renderApp('/theory/quiz')
+    const { progressStore } = await renderApp('/theory/quiz')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     await user.click(screen.getByRole('button', { name: 'Check' }))

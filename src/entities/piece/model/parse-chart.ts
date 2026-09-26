@@ -54,7 +54,7 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
   return { chords, beats: chords.reduce((sum, chord) => sum + chord.beats, 0) }
 }
 
-/** Reads a song's or exercise's chart, naming the bar of any mistake in a ContentError. */
+/** Reads a song's or study's chart, naming the bar of any mistake in a ContentError. */
 export function parseChart(piece: ChartPiece): Chart {
   const meterBeats = beatsPerBar(piece.meter)
   const failAt =

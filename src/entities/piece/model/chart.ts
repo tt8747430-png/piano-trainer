@@ -2,13 +2,13 @@ import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import type { Piece, Voicing } from './types'
+import type { ChordSize, Piece } from './types'
 
-/** A piece's chart; a progression at the chosen voicing when it lets the learner choose. */
-export function chartOf(piece: Piece, voicing?: Voicing): Chart {
+/** A piece's chart; a progression at the chosen chord size when it lets the learner choose. */
+export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
   if (piece.kind !== 'progression') return parseChart(piece)
-  const { choosable, default: fixed } = piece.voicing
-  return parseProgression(piece, choosable ? (voicing ?? fixed) : fixed)
+  const { choosable, default: fixed } = piece.chordSize
+  return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
 }
 
 export const melodyOf = (piece: Piece): Melody | undefined =>

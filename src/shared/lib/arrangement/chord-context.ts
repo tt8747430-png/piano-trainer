@@ -74,7 +74,7 @@ const KEY_TRIAD_DEGREES = { I: 0, IV: 5, V: 7 } as const
 
 /** The key's I, IV or V triad (minor I and IV in a minor key), voice-led from the chord. */
 function keyTriad(triad: keyof typeof KEY_TRIAD_DEGREES, context: ChordContext): Midi[] {
-  const quality: ChordQuality = triad === 'V' || context.key.mode === 'major' ? 'maj' : 'min'
+  const quality: ChordQuality = triad === 'V' || !context.key.minor ? 'maj' : 'min'
   const root = pitchClassOf(context.key.tonic) + KEY_TRIAD_DEGREES[triad]
   return voiceLead(
     context.voiced,

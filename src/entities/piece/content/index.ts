@@ -1,9 +1,9 @@
 import { isPiece, type Collection, type Piece } from '../model/types'
 import bozheSpasibo from './bozhe-spasibo'
 import calledToPlay from './called-to-play'
-import exercises from './exercises'
 import hymns from './hymns'
 import progressions from './progressions'
+import studies from './studies'
 
 export { BOOKS } from './books'
 
@@ -11,7 +11,7 @@ export { BOOKS } from './books'
 export const COLLECTIONS: readonly Collection[] = [
   bozheSpasibo,
   calledToPlay,
-  exercises,
+  studies,
   hymns,
   progressions,
 ]

@@ -69,9 +69,10 @@ it. `@` → `src`.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
   control, held keys), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows: keys go down as they sound or
-  are held on MIDI, and a tapped key sounds), and the machines: `practice` (the pure `practice-machine`, `usePractice`, which drives it with
-  audio, MIDI and the clock, and the Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and
-  `quiz` (the machine, check plans, the theory quizzes, My gaps, `useQuiz`).
+  are held on MIDI, and a tapped key sounds; `ExplorerKeyboard`, the explorers' pinned one), and the machines:
+  `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
+  Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and `quiz` (the machine, check plans, the
+  theory quizzes, My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
   `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
   `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `ui/` (only the
@@ -100,8 +101,8 @@ the script to the store.
 
 - **Any UI** → [CODE_STYLE](docs/CODE_STYLE.md).
 - **Content** (a piece, listing, pattern, path step) → [CONTENT](docs/CONTENT.md).
-- **Naming anything** → [UBIQUITOUS_LANGUAGE](docs/UBIQUITOUS_LANGUAGE.md). "Piece" in code, "Song" or "Exercise"
-  in the UI. A "Skill" is a quiz-rated chord quality or scale kind, nothing else.
+- **Naming anything** → [UBIQUITOUS_LANGUAGE](docs/UBIQUITOUS_LANGUAGE.md). "Piece" in code, "Song", "Study" or
+  "Progression" in the UI. A "Skill" is a quiz-rated chord quality or scale kind, nothing else.
 - **Why it is this way** → [docs/adr](docs/adr).
 - **Music logic** → CODE_STYLE §8 and spec §4.
 
@@ -113,9 +114,10 @@ the script to the store.
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
   scheme, `stubServiceWorker` for a waiting version). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
-  `renderWithSettings(ui, { locale, theme })`; the whole app: `renderApp(path, { locale, webMidi })`, which returns
-  its fake `audio` and `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that
-  sound); both in `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
+  `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, webMidi })`, which
+  loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and
+  `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that sound); both in
+  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
   so a missing key fails `tsc`.

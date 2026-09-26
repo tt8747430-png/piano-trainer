@@ -23,14 +23,14 @@ import { cn } from '@/shared/lib'
 const ICON: Readonly<Record<StepKind, LucideIcon>> = {
   chords: KeyboardMusic,
   scale: ChartNoAxesColumnIncreasing,
-  exercise: Repeat2,
+  study: Repeat2,
   song: Music,
   progression: ListMusic,
 }
 const TILE: Readonly<Record<StepKind, string>> = {
   chords: 'bg-primary text-primary-foreground',
   scale: 'bg-primary text-primary-foreground',
-  exercise: 'bg-muted text-primary',
+  study: 'bg-muted text-primary',
   song: 'bg-muted text-primary',
   progression: 'bg-muted text-primary',
 }

@@ -11,7 +11,7 @@ describe('skillsOfPiece', () => {
     ])
   })
 
-  it('reads a progression at its default voicing', () => {
+  it('reads a progression at its default chord size', () => {
     expect(skillsOfPiece(testProgression('ii:min:4 V:dom:4 I:maj:8'))).toEqual([
       'chord:maj7',
       'chord:m7',

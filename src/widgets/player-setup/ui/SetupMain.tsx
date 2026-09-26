@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LEFT_FIGURES, PATTERNS, RIGHT_FIGURES } from '@/entities/pattern'
-import { melodyOf, pieceKey, VOICINGS, type Piece } from '@/entities/piece'
+import { CHORD_SIZES, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import {
   PRACTICE_TOGGLES,
   selectPractice,
@@ -12,13 +12,11 @@ import type { PracticeChoice } from '@/features/practice'
 import { setPracticeToggle } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
 import { noteName, noteParam, PITCH_CLASSES, tonicSpelling } from '@/shared/lib/music'
-import { TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
+import { HANDS, TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
 import { ChipRow, Segmented } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { SetupChange } from '../model/setup-params'
-
-const HANDS = ['both', 'rh', 'lh'] as const
 
 export type SetupPage = 'pattern' | 'rh' | 'lh'
 
@@ -43,7 +41,7 @@ export function SetupMain({
   const locale = useLocale()
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
-  const { mode } = pieceKey(piece)
+  const { minor } = pieceKey(piece)
   const hasMelody = melodyOf(piece) !== undefined
   const patternName =
     choice.pattern === 'chart'
@@ -66,14 +64,16 @@ export function SetupMain({
         <div className="flex justify-between text-lg">
           {t('player:key')}
           <span className="font-semibold">
-            {t(`player:keyOf.${mode}`, { tonic: noteName(choice.tonic) })}
+            {t(minor ? 'player:keyOf.minor' : 'player:keyOf.major', {
+              tonic: noteName(choice.tonic),
+            })}
           </span>
         </div>
         <ChipRow
           label={t('player:key')}
           value={noteParam(choice.tonic)}
           options={PITCH_CLASSES.map((pc) => {
-            const tonic = tonicSpelling(pc, mode)
+            const tonic = tonicSpelling(pc, minor)
             return { value: noteParam(tonic), label: noteName(tonic) }
           })}
           onChange={(key) => onChange({ key })}
@@ -111,12 +111,15 @@ export function SetupMain({
           'lh',
         )}
       </div>
-      {piece.kind === 'progression' && piece.voicing.choosable ? (
+      {piece.kind === 'progression' && piece.chordSize.choosable ? (
         <Segmented
-          label={t('player:voicing')}
-          value={choice.voicing ?? piece.voicing.default}
-          options={VOICINGS.map((v) => ({ value: v, label: t(`player:voicings.${v}`) }))}
-          onChange={(voicing) => onChange({ voicing })}
+          label={t('player:chordSize')}
+          value={choice.chordSize ?? piece.chordSize.default}
+          options={CHORD_SIZES.map((size) => ({
+            value: size,
+            label: t(`player:chordSizes.${size}`),
+          }))}
+          onChange={(chordSize) => onChange({ chordSize })}
         />
       ) : null}
       <div>

@@ -8,7 +8,7 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'block',
-  voicing: { default: 'triads', choosable: false },
+  chordSize: { default: 'triads', choosable: false },
   progression:
     'I:=maj:4 iv:=m7:1 i:=m7:1 v:=m7:1 ii:=m7:1 vi:=m7:4 ♭VI:=maj:1 ♭III:=maj:1 ♭VII:=maj:1 IV:=maj:1',
   note: {
