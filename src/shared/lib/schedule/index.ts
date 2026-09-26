@@ -19,9 +19,11 @@ export {
   barSounds,
   chordSounds,
   keySound,
+  placedChordSounds,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
   scaleRun,
+  type ChordPlaying,
   type PracticeRhythm,
 } from './sounds'
-export { keysSoundingAt, keyWindows, type KeyWindow } from './sounding'
+export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'

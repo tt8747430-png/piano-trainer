@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { keyboardLayout, spanOf } from './keyboard-layout'
+import { keyAt, keyboardLayout, PIANO_LAYOUT, spanOf } from './keyboard-layout'
 import { midi } from './music'
 
 describe('keyboardLayout', () => {
@@ -37,5 +37,28 @@ describe('spanOf', () => {
     const span = spanOf(twoOctaves, { from: midi(61), to: midi(64) })
     expect(span.left).toBeCloseTo(50 + (100 / 14) * 0.69)
     expect(span.whites).toBe(2)
+  })
+})
+
+describe('PIANO_LAYOUT and keyAt', () => {
+  /** The middle of the whole piano's white key `index`, as a fraction of its width: C4 is white key 23. */
+  const whiteMiddle = (index: number) => (index + 0.5) / 52
+
+  it('lays the whole piano out once', () => {
+    expect(PIANO_LAYOUT.keys).toHaveLength(88)
+    expect(PIANO_LAYOUT.whites).toBe(52)
+  })
+
+  it('finds the key under a point: a black key over a white one, a white key below it, nothing outside', () => {
+    expect(keyAt(PIANO_LAYOUT.keys, whiteMiddle(23), 0.9)).toBe(60)
+    expect(keyAt(PIANO_LAYOUT.keys, 24 / 52, 0.3)).toBe(61)
+    expect(keyAt(PIANO_LAYOUT.keys, 24.1 / 52, 0.9)).toBe(62)
+    for (const [x, y] of [
+      [-0.01, 0.5],
+      [1, 0.5],
+      [0.5, 1],
+      [Number.NaN, 0.5],
+    ] as const)
+      expect(keyAt(PIANO_LAYOUT.keys, x, y)).toBeNull()
   })
 })

@@ -1,3 +1,4 @@
+import { noteName, plainSpelling } from './note'
 import { midi, pitchClass, type Midi } from './pitch'
 
 export const MIDDLE_C: Midi = midi(60)
@@ -5,6 +6,13 @@ export const MIDDLE_C: Midi = midi(60)
 const BLACK = new Set([1, 3, 6, 8, 10])
 
 export const isBlackKey = (key: Midi): boolean => BLACK.has(pitchClass(key))
+
+/** A key's octave in scientific pitch: C4 is middle C, B3 the key below it. */
+export const octaveOf = (key: Midi): number => Math.floor(key / 12) - 1
+
+/** A key's name as printed: its note, sharp on a black key, and its octave ("C#4"). */
+export const printedKeyName = (key: Midi): string =>
+  `${noteName(plainSpelling(pitchClass(key), true))}${octaveOf(key)}`
 
 /** A stretch of the keyboard, both ends included. */
 export interface KeyRange {

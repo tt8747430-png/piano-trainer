@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { keysSoundingAt, keyWindows } from './sounding'
+import { keysSoundingAt, keysStruckAt, keyWindows } from './sounding'
+import { chordSounds } from './sounds'
 import type { Sound } from './schedule'
 
 const note = (key: number, at: number, duration: number): Sound => ({
@@ -40,5 +41,21 @@ describe('keysSoundingAt', () => {
   it('keeps a key down while another note on it still sounds', () => {
     const again = keyWindows([note(60, 0, 1), note(60, 0.8, 1)], 0)
     expect([...keysSoundingAt(again, 1.2)]).toEqual([60])
+  })
+})
+
+describe('keysStruckAt', () => {
+  const C_MAJOR = [midi(60), midi(64), midi(67)]
+
+  it('finds the keys struck last: a chord’s together, an arpeggio’s one by one', () => {
+    const block = keyWindows(chordSounds(C_MAJOR, { arpeggio: false }), 0)
+    expect([...keysStruckAt(block, 0.5)]).toEqual([60, 64, 67])
+    const rolled = keyWindows(chordSounds(C_MAJOR, { arpeggio: true }), 0)
+    expect([...keysStruckAt(rolled, -0.1)]).toEqual([])
+    expect([...keysStruckAt(rolled, 0.3)]).toEqual([64])
+    expect([...keysStruckAt(rolled, 0.5)]).toEqual([67])
+    // C has ended, E and G ring: G was struck last.
+    expect([...keysStruckAt(rolled, 1.5)]).toEqual([67])
+    expect([...keysStruckAt(rolled, 3)]).toEqual([])
   })
 })

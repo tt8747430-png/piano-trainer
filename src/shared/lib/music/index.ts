@@ -5,6 +5,8 @@ export {
   PIANO,
   isBlackKey,
   keyboardRange,
+  octaveOf,
+  printedKeyName,
   rangeOf,
   type KeyRange,
 } from './keyboard'

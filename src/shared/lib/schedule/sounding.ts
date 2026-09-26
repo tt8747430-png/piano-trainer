@@ -23,3 +23,11 @@ export function keysSoundingAt(windows: readonly KeyWindow[], time: number): Set
     .map((window) => window.midi)
   return new Set(keys.sort((a, b) => a - b))
 }
+
+/** The keys sounding at `time` that were struck last: the open windows with the latest start. */
+export function keysStruckAt(windows: readonly KeyWindow[], time: number): Set<Midi> {
+  const open = windows.filter((window) => window.from <= time && time < window.to)
+  const latest = Math.max(...open.map((window) => window.from))
+  const keys = open.filter((window) => window.from === latest).map((window) => window.midi)
+  return new Set(keys.sort((a, b) => a - b))
+}

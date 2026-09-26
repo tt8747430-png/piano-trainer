@@ -1,9 +1,10 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, keyboardLayout, spanOf } from '@/shared/lib'
+import { cn, PIANO_LAYOUT, spanOf } from '@/shared/lib'
 import {
   isBlackKey,
   midi,
+  octaveOf,
   PIANO,
   pitchClass,
   plainSpelling,
@@ -14,8 +15,6 @@ import { Key } from './Key'
 import { keyLook, type KeyStates } from './key-look'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
-/** The whole piano, laid out once: every keyboard holds all of it and scrolls. */
-const PIANO_KEYS = keyboardLayout(PIANO)
 /** White keys never narrower than this, so they stay tappable; past it the keyboard scrolls… */
 const MIN_WHITE_PX = 28
 /** …nor wider than this: a wide screen shows the neighbouring keys instead. */
@@ -59,8 +58,8 @@ export function PianoKeyboard({
   const scroller = useRef<HTMLDivElement>(null)
   const [tabStop, setTabStop] = useState<Midi>(range.from)
   const { from, to } = range
-  const span = useMemo(() => spanOf(PIANO_KEYS.keys, { from, to }), [from, to])
-  useKeyboardScroll(scroller, PIANO_KEYS.keys, span, inView)
+  const span = useMemo(() => spanOf(PIANO_LAYOUT.keys, { from, to }), [from, to])
+  useKeyboardScroll(scroller, PIANO_LAYOUT.keys, span, inView)
 
   // Keys hold one handler for good, so they re-render only when their own look changes.
   const latestPress = useRef(onKeyPress)
@@ -71,8 +70,10 @@ export function PianoKeyboard({
 
   const nameOf = (key: Midi) => {
     const spelled = plainSpelling(pitchClass(key), true)
-    const octave = Math.floor(key / 12) - 1
-    return t(isBlackKey(key) ? 'note.sharp' : 'note.natural', { letter: spelled.letter, octave })
+    return t(isBlackKey(key) ? 'note.sharp' : 'note.natural', {
+      letter: spelled.letter,
+      octave: octaveOf(key),
+    })
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -98,10 +99,10 @@ export function PianoKeyboard({
         onKeyDown={onKeyDown}
         className="relative shrink-0"
         style={{
-          width: `calc(${PIANO_KEYS.whites} * clamp(${MIN_WHITE_PX}px, 100cqw / ${span.whites}, ${MAX_WHITE_PX}px))`,
+          width: `calc(${PIANO_LAYOUT.whites} * clamp(${MIN_WHITE_PX}px, 100cqw / ${span.whites}, ${MAX_WHITE_PX}px))`,
         }}
       >
-        {PIANO_KEYS.keys.map((key) => (
+        {PIANO_LAYOUT.keys.map((key) => (
           <Key
             key={key.midi}
             geometry={key}

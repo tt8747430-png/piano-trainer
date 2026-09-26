@@ -1,4 +1,4 @@
-import { isBlackKey, midi, type KeyRange, type Midi } from '@/shared/lib/music'
+import { isBlackKey, midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 
 /** A black key sits over the gap between two white keys, 62% as wide and 62% as long. */
 const BLACK_WIDTH = 0.62
@@ -64,4 +64,20 @@ export function spanOf(keys: readonly KeyGeometry[], range: KeyRange): KeySpan {
     right: Math.max(...inRange.map((key) => key.left + key.width)),
     whites: inRange.filter((key) => !key.black).length,
   }
+}
+
+/** The whole piano laid out once: every keyboard holds all of it and scrolls. */
+export const PIANO_LAYOUT = keyboardLayout(PIANO)
+
+/**
+ * The key under a point given in fractions (0–1) of the keyboard's width and height: a black key
+ * where it covers a white one; nothing outside the keyboard.
+ */
+export function keyAt(keys: readonly KeyGeometry[], x: number, y: number): Midi | null {
+  if (!(x >= 0 && x < 1 && y >= 0 && y < 1)) return null
+  const left = x * 100
+  const top = y * 100
+  const under = (key: KeyGeometry) => left >= key.left && left < key.left + key.width
+  const black = keys.find((key) => key.black && top < key.height && under(key))
+  return (black ?? keys.find((key) => !key.black && under(key)))?.midi ?? null
 }
