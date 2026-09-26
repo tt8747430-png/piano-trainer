@@ -19,12 +19,20 @@ A container wires data to presentational children. One job each.
 - About 200 lines per file. Past it, extract children, or move state into `model/`.
 - **One exported component per file, named for the file.** Private helpers may stay.
 - A page composes widgets and `shared/ui`, with little markup of its own.
-- Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard),
-  `Pinned`, `ScreenHeader`, `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` /
-  `SheetTrigger` / `SheetContent` / `SheetClose`, `RoleLegend`, `RatingMark`, `LevelMark`.
-- **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when tapped and goes
-  down while it sounds or MIDI holds it. `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end.
-  Anything that plays sound on a screen shows it on that screen's keyboard (pin it when the page scrolls away from it).
+- Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
+  `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `RoundButton` /
+  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`,
+  `RoleLegend`, `RatingMark`, `LevelMark`.
+- **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
+  clicked, and goes down while it sounds or MIDI holds it. It follows the **keyboard settings** (key size, swipe, note
+  names, the map, typing), saved for every keyboard and set from the rail's settings button or Settings
+  (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The explorers, Symbols
+  and a Piece's chart pass `spotlight` (the keys struck last stand out alone); the Player and the quiz do not, since
+  their marks mean "play these". `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything
+  that plays sound on a screen shows it on that screen's keyboard (pin it when the page scrolls away from it).
+- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
+  bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by itself
+  (a choice sounding, a quiz's question) has no button and no Stop.
 - A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
   `SetupParams`); `app/routes/search.ts` imports it with `import type`.
 
@@ -71,8 +79,12 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord tones (keys,
   the legend, a chord chip's edge); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`) only in the Player;
   `--attention` only for a gap or "to check" (the dot, never the text beside it). The keys have their own roles
-  (`--key-white`, `--key-white-edge`, `--key-black`; a key down is `--key-down`, a coloured one under
-  `--key-down-tint`), and a slider's thumb `--thumb`.
+  (`--key-white`, `--key-black` and their inks `--on-key-white`, `--on-key-black`; a key down is `--key-down` with
+  `--on-key-down`, a coloured one under `--key-down-tint`; a scale's `--key-tonic` and `--key-scale` with their inks),
+  their material (`--key-rail`, `--key-bed`, `--key-shade`, `--key-lip`, `--key-sheen`: the No Glow Rule's one
+  exception, on keys only), and a slider's thumb `--thumb`.
+- **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
+  token, a utility or a named constant.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 12 · `lg` 14
   · `xl` 16 · `2xl` 18 · `3xl` 26 · `4xl` 28 (black keys, white keys, primitives, buttons, cards, sheets); type
   `text-lg` 17 · `xl` 22 · `4xl` 34 · `6xl` 64 (headline, title, large title, chord display); `ease-out` is the one
@@ -134,8 +146,13 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates
-  an `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar from a
-  button); `useSoundKey` adds a tap on top; what sounds is the port's to know (`useSoundingKeys`).
+  an `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and
+  returns the play's handle; `useSoundKey` adds a tap on top, at the audio clock's now; what sounds, and which keys
+  were struck last, is the port's to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says
+  whether a play still sounds (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the
+  port, `playing` (the id last played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no
+  shared state; another button's sound cuts it off and the port says so. A chord as the explorers place it is
+  `placedChordSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
 - **The explorers place tones with `placeChord` / `placeScale`,** and a chord's inversions are `lastInversion`'s:
   the validator, the segments and the keyboard all ask it.
@@ -154,8 +171,13 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
 - **A screen's test sits beside its page** (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through
   `renderApp`, so routing, search params and stores are real. Test files are outside the layer rules.
 - jsdom lays nothing out: Base UI keeps a slider's thumb hidden until it measures the track (query it with
-  `{ hidden: true }`), and scrolling code checks `scrollWidth` before it scrolls, so it does nothing there.
-- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down`.
+  `{ hidden: true }`), and scrolling code checks `scrollWidth` before it scrolls, so it does nothing there. Where a
+  pointer's position or a scroll matters, `src/shared/test/layout.ts` lays out what the test needs: `stubBox(element,
+box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })` gives every element scroll metrics
+  and a `scrollTo` that moves and fires `scroll`, returning each position scrolled to.
+- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down` (and,
+  under spotlight, `data-quiet`). A pointer on the keys: `fireEvent.pointerDown` on a key and `pointerMove` on the
+  keys' group, whose box `stubBox` gives.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
 
 ## 10. Copy and i18n

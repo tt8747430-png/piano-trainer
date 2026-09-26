@@ -68,8 +68,11 @@ it. `@` → `src`.
   `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
-  control, held keys), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows: keys go down as they sound or
-  are held on MIDI, and a tapped key sounds; `ExplorerKeyboard`, the explorers' pinned one), and the machines:
+  control, held keys), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
+  settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
+  the keys struck last; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
+  Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the explorers' pinned one), and the
+  machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and `quiz` (the machine, check plans, the
   theory quizzes, My gaps, `useQuiz`).
@@ -79,15 +82,18 @@ it. `@` → `src`.
   entity's own data shown: a piece's titles, credits and section headings; a step's title and `ExplorerLink`),
   `index.ts`. Content:
   `piece` (51 pieces, 7 listings, chart and progression parsers), `pattern` (39 patterns), `path`. Saved state:
-  `settings` (`pt-settings`, version 2), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
+  `settings` (`pt-settings`, version 3, with the keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
   an answer or a mark changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
-  `useGoBack`, `keyboardLayout`, the search-param readers, `foldText`; and with barrels of their own: `music` the theory kernel
+  `useGoBack`, `keyboardLayout` with `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the
+  keyboard settings' options), `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param
+  readers, `foldText`; and with barrels of their own: `music` the theory kernel
   (with the piano's ranges and `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance),
-  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord, a scale run, a tap, which keys sound
-  when), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayChord`, `useSoundKey`, `useSoundingKeys`)),
+  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord as the explorers place it, a scale run,
+  a tap, which keys sound when and which were struck last), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKey`,
+  `useSoundingKeys`)),
   `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and fakes; the audio port
-  knows which keys it is sounding), `ui` (the kit: `PianoKeyboard`, `Pinned`, `ScreenHeader`, `RoundButton`,
+  knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard` with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`,
   `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` with its trigger and close, `RoleLegend`, `RatingMark`,
   `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`, `useLocale`, `useScaleName`, `LocalText`), `test`.
 
@@ -117,7 +123,8 @@ the script to the store.
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, webMidi })`, which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and
   `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that sound); both in
-  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`.
+  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`. jsdom lays nothing
+  out: where a pointer's position or a scroll matters, `stubBox` and `stubScrolling` (`src/shared/test/layout.ts`).
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
   so a missing key fails `tsc`.
