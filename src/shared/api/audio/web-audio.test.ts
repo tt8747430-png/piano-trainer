@@ -150,6 +150,14 @@ describe('createWebAudioOutput', () => {
     expect(audio.sounding().size).toBe(0)
   })
 
+  it('hands back a play that plays until it is stopped', () => {
+    const { audio } = setUp()
+    const play = audio.play([A4], 0)
+    expect(audio.isPlaying(play)).toBe(true)
+    audio.stop()
+    expect(audio.isPlaying(play)).toBe(false)
+  })
+
   it('does nothing, and throws nothing, where the browser has no audio', async () => {
     const createContext = vi.fn(() => null)
     const audio = createWebAudioOutput({ createContext })
@@ -158,6 +166,8 @@ describe('createWebAudioOutput', () => {
     expect(() => audio.stop()).not.toThrow()
     expect(audio.now()).toBe(0)
     expect(audio.sounding().size).toBe(0)
+    expect(audio.isPlaying(audio.play([A4]))).toBe(false)
+    expect(audio.struck().size).toBe(0)
     expect(createContext).toHaveBeenCalledOnce()
   })
 })

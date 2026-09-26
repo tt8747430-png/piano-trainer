@@ -4,6 +4,7 @@ import { chordSounds, type Sound } from '@/shared/lib/schedule'
 import { createFakeAudio } from './fake-audio'
 
 const CLICK: Sound = { kind: 'click', at: 0, accent: false }
+const C_MAJOR = [60, 64, 67].map(midi)
 
 describe('createFakeAudio', () => {
   it('records unlocks, plays and stops', async () => {
@@ -37,5 +38,15 @@ describe('createFakeAudio', () => {
     audio.stop()
     expect(audio.sounding().size).toBe(0)
     expect(onChange).toHaveBeenCalledTimes(3)
+  })
+
+  it('hands back each play, playing until its end or a stop, and the keys struck last', () => {
+    const audio = createFakeAudio()
+    const play = audio.play(chordSounds(C_MAJOR, { arpeggio: true }), 0)
+    audio.setNow(0.3)
+    expect([...audio.struck()]).toEqual([64])
+    expect(audio.isPlaying(play)).toBe(true)
+    audio.stop()
+    expect(audio.isPlaying(play)).toBe(false)
   })
 })

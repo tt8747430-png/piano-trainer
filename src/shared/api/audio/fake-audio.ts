@@ -26,7 +26,7 @@ export function createFakeAudio(): FakeAudio {
     play(sounds, at) {
       const start = at ?? clock + PLAY_DELAY
       played.push({ sounds, at: start })
-      keys.add(sounds, start)
+      return keys.add(sounds, start)
     },
     stop() {
       stops++
@@ -34,6 +34,8 @@ export function createFakeAudio(): FakeAudio {
     },
     now: () => clock,
     sounding: keys.current,
+    struck: keys.struck,
+    isPlaying: keys.isPlaying,
     onSounding: keys.subscribe,
     setNow(seconds) {
       clock = seconds

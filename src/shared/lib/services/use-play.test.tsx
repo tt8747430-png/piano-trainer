@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -6,7 +6,6 @@ import { midi, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
 import { usePlay, usePlayChord, useSoundKey } from './use-play'
-import { useSoundingKeys } from './use-sounding-keys'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
@@ -26,10 +25,10 @@ describe('usePlay', () => {
   it('unlocks audio and plays from just after now', () => {
     const { audio, current: play } = setup(usePlay)
     audio.setNow(2)
-    const at = play([NOTE])
+    const handle = play([NOTE])
     expect(audio.unlocks).toBe(1)
-    expect(audio.played).toEqual([{ sounds: [NOTE], at }])
-    expect(at).toBeCloseTo(2.1)
+    expect(audio.played[0]?.at).toBeCloseTo(2.1)
+    expect(audio.isPlaying(handle)).toBe(true)
   })
 
   it('cuts off what was sounding before the next tap sounds', () => {
@@ -63,16 +62,11 @@ describe('useSoundKey', () => {
     expect(audio.stops).toBe(0)
     expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([66])
   })
-})
 
-describe('useSoundingKeys', () => {
-  it('follows the keys sounding as the clock moves', () => {
-    const { audio, result } = setup(() => ({ play: usePlay(), sounding: useSoundingKeys() }))
-    act(() => void result.current.play([NOTE]))
-    expect(result.current.sounding.size).toBe(0)
-    act(() => audio.setNow(0.5))
-    expect([...result.current.sounding]).toEqual([60])
-    act(() => audio.setNow(2))
-    expect(result.current.sounding.size).toBe(0)
+  it('sounds a tap at once, from the audio clock’s now', () => {
+    const { audio, current: soundKey } = setup(useSoundKey)
+    audio.setNow(3)
+    soundKey(midi(60))
+    expect(audio.played.at(-1)?.at).toBe(3)
   })
 })

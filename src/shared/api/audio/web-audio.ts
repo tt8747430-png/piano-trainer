@@ -1,6 +1,6 @@
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLookahead } from './lookahead'
-import { createSoundingKeys } from './sounding'
+import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
 import { PLAY_DELAY, type AudioOutput } from './types'
 
 /** The piano voice: a triangle with two sine partials, through a closing low-pass filter. */
@@ -105,11 +105,11 @@ export function createWebAudioOutput({
     },
     play(sounds, at) {
       const audio = openContext()
-      if (!audio) return
+      if (!audio) return NOTHING_PLAYED
       if (audio.state === 'suspended') void audio.resume()
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
-      keys.add(sounds, start)
+      return keys.add(sounds, start)
     },
     stop() {
       lookahead.clear()
@@ -124,6 +124,8 @@ export function createWebAudioOutput({
     },
     now,
     sounding: keys.current,
+    struck: keys.struck,
+    isPlaying: keys.isPlaying,
     onSounding: keys.subscribe,
   }
 }

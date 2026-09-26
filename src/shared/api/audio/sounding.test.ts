@@ -82,4 +82,45 @@ describe('createSoundingKeys', () => {
     expect(queued).toHaveLength(1)
     stop()
   })
+
+  it('says which keys were struck last, the same set until they change', () => {
+    const { keys, at } = setUp()
+    keys.add(chordSounds(C_MAJOR, { arpeggio: true }), 1)
+    at(1.3)
+    expect([...keys.struck()]).toEqual([64])
+    const struck = keys.struck()
+    at(1.35)
+    expect(keys.struck()).toBe(struck)
+    at(2.45)
+    expect([...keys.struck()]).toEqual([67])
+  })
+
+  it('plays a play until its last note ends', () => {
+    const { keys, at } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    const play = keys.add(chordSounds(C_MAJOR, { arpeggio: true }), 1)
+    expect(keys.isPlaying(play)).toBe(true)
+    at(2.8)
+    expect(keys.isPlaying(play)).toBe(true)
+    onChange.mockClear()
+    at(2.85)
+    expect(keys.isPlaying(play)).toBe(false)
+    expect(onChange).toHaveBeenCalledOnce()
+  })
+
+  it('cuts every play off on clear, and says so before any note sounded', () => {
+    const { keys } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    const play = keys.add(chordSounds(C_MAJOR, { arpeggio: false }), 1)
+    keys.clear()
+    expect(keys.isPlaying(play)).toBe(false)
+    expect(onChange).toHaveBeenCalledOnce()
+  })
+
+  it('never plays a play with no notes', () => {
+    const { keys } = setUp()
+    expect(keys.isPlaying(keys.add([{ kind: 'click', at: 0, accent: true }], 0))).toBe(false)
+  })
 })
