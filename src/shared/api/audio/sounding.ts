@@ -6,12 +6,12 @@ import {
   type KeyWindow,
   type Sound,
 } from '@/shared/lib/schedule'
-import type { PlayHandle } from './types'
+import type { PlayHandle, PlayOptions } from './types'
 
 /** Which keys the audio output is sounding, and which plays still sound: until they end or are stopped. */
 export interface SoundingKeys {
-  /** Notes the output was asked to play from `at` on the clock; returns their play. */
-  add(sounds: readonly Sound[], at: number): PlayHandle
+  /** Notes the output was asked to play from `at` on the clock; returns their play. A hand's play shows no keys. */
+  add(sounds: readonly Sound[], at: number, options?: PlayOptions): PlayHandle
   /** Nothing sounds any more: every play stops playing. */
   clear(): void
   /** The keys sounding at the last look: the same set until they change. */
@@ -70,7 +70,7 @@ export function createSoundingKeys({
   const update = () => look(false)
 
   const follow = () => {
-    if (!frame || looking || windows.length === 0 || listeners.size === 0) return
+    if (!frame || looking || playing.size === 0 || listeners.size === 0) return
     looking = true
     frame(() => {
       looking = false
@@ -80,11 +80,11 @@ export function createSoundingKeys({
   }
 
   return {
-    add(sounds, at) {
+    add(sounds, at, { byHand = false } = {}) {
       const added = keyWindows(sounds, at)
       if (added.length === 0) return NOTHING_PLAYED
       const play: PlayHandle = { until: Math.max(...added.map((window) => window.to)) }
-      windows = [...windows, ...added]
+      if (!byHand) windows = [...windows, ...added]
       playing.add(play)
       update()
       follow()

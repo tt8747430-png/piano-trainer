@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react'
+import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { setKeyboard } from '@/features/set-preference'
@@ -28,6 +28,16 @@ describe('LiveKeyboard', () => {
     audio.setNow(2)
     await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
     expect(audio.played.at(-1)?.at).toBe(2)
+  })
+
+  it('puts a tapped key down while it is pressed, and up the moment it lifts', () => {
+    const { audio } = setUp()
+    const key = screen.getByRole('button', { name: 'F sharp 4' })
+    fireEvent.pointerDown(key, { pointerId: 1, pointerType: 'touch' })
+    expect(key).toHaveAttribute('data-down')
+    fireEvent.pointerUp(key, { pointerId: 1, pointerType: 'touch' })
+    act(() => audio.setNow(0.3))
+    expect(key).not.toHaveAttribute('data-down')
   })
 
   it('puts down the keys the app sounds, as they sound', () => {

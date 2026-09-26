@@ -21,6 +21,23 @@ describe('typing on the computer keyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
   })
 
+  it('holds a typed key down until it is let go', () => {
+    const { audio } = typingKeyboard()
+    const c4 = screen.getByRole('button', { name: 'C4' })
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    expect(c4).toHaveAttribute('data-down')
+    fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
+    act(() => audio.setNow(0.3))
+    expect(c4).not.toHaveAttribute('data-down')
+  })
+
+  it('lets every typed key go when the window loses the focus', () => {
+    typingKeyboard()
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    act(() => void window.dispatchEvent(new Event('blur')))
+    expect(screen.getByRole('button', { name: 'C4' })).not.toHaveAttribute('data-down')
+  })
+
   it('moves an octave up with X', async () => {
     const user = userEvent.setup()
     const { onKeyPress } = typingKeyboard()

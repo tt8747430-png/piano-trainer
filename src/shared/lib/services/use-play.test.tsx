@@ -55,4 +55,11 @@ describe('useSoundKey', () => {
     soundKey(midi(60))
     expect(audio.played.at(-1)?.at).toBe(3)
   })
+
+  it('leaves a tapped key for the hand to show: it is not among the keys sounding', () => {
+    const { audio, current: soundKey } = setup(useSoundKey)
+    soundKey(midi(60))
+    audio.setNow(0.5)
+    expect(audio.sounding().size).toBe(0)
+  })
 })

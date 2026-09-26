@@ -49,4 +49,12 @@ describe('createFakeAudio', () => {
     audio.stop()
     expect(audio.isPlaying(play)).toBe(false)
   })
+
+  it('records a hand’s play without showing its keys', () => {
+    const audio = createFakeAudio()
+    audio.play(chordSounds([midi(60)], { arpeggio: false }), 0, { byHand: true })
+    audio.setNow(0.5)
+    expect(audio.played).toHaveLength(1)
+    expect(audio.sounding().size).toBe(0)
+  })
 })

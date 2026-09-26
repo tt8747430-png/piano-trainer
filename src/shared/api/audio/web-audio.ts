@@ -103,13 +103,13 @@ export function createWebAudioOutput({
       const audio = openContext()
       if (audio?.state === 'suspended') await audio.resume()
     },
-    play(sounds, at) {
+    play(sounds, at, options) {
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
       if (audio.state === 'suspended') void audio.resume()
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
-      return keys.add(sounds, start)
+      return keys.add(sounds, start, options)
     },
     stop() {
       lookahead.clear()

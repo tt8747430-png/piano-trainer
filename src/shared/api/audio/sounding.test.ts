@@ -26,6 +26,8 @@ function setUp({ frames = false } = {}) {
   }
 }
 
+const setUpWithFrames = () => setUp({ frames: true })
+
 describe('createSoundingKeys', () => {
   it('puts keys down as their notes start and lets them up as they end', () => {
     const { keys, at } = setUp()
@@ -122,5 +124,28 @@ describe('createSoundingKeys', () => {
   it('never plays a play with no notes', () => {
     const { keys } = setUp()
     expect(keys.isPlaying(keys.add([{ kind: 'click', at: 0, accent: true }], 0))).toBe(false)
+  })
+
+  it('plays a hand’s play without showing its keys: the hand that holds them shows them', () => {
+    const { keys, at } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    const play = keys.add(chordSounds([midi(60)], { arpeggio: false }), 1, { byHand: true })
+    at(1.5)
+    expect(keys.current().size).toBe(0)
+    expect(keys.struck().size).toBe(0)
+    expect(keys.isPlaying(play)).toBe(true)
+    at(5)
+    expect(keys.isPlaying(play)).toBe(false)
+    expect(onChange).toHaveBeenCalledOnce()
+  })
+
+  it('looks again every frame while only a hand’s play sounds, so its end is heard', () => {
+    const { keys, queued, tick } = setUpWithFrames()
+    keys.subscribe(() => {})
+    const play = keys.add(chordSounds([midi(60)], { arpeggio: false }), 0, { byHand: true })
+    expect(queued).toHaveLength(1)
+    tick(5)
+    expect(keys.isPlaying(play)).toBe(false)
   })
 })

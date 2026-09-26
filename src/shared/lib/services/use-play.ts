@@ -17,13 +17,16 @@ export function usePlay(): (sounds: readonly Sound[]) => PlayHandle {
   )
 }
 
-/** Sounds one key now, on top of whatever sounds: a tap is one note, with nothing to schedule ahead. */
+/**
+ * Sounds one key now, on top of whatever sounds: a tap is one note, with nothing to schedule ahead.
+ * It is a hand's play: the keyboard shows the key while the finger or the typed key holds it.
+ */
 export function useSoundKey(): (key: Midi) => void {
   const { audio } = useServices()
   return useCallback(
     (key) => {
       void audio.unlock()
-      audio.play([keySound(key)], audio.now())
+      audio.play([keySound(key)], audio.now(), { byHand: true })
     },
     [audio],
   )

@@ -42,10 +42,6 @@ export function LiveKeyboard({
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const held = useHeldKeys()
   const soundKey = useSoundKey()
-  const down = useMemo(
-    () => (held.size === 0 ? sounding : new Set([...sounding, ...held])),
-    [sounding, held],
-  )
   const { marks } = keyboard
   const quiet = useMemo(
     () =>
@@ -54,12 +50,20 @@ export function LiveKeyboard({
         : NONE,
     [spotlight, sounding, marks],
   )
-  const downRange = useMemo(() => rangeOf([...down]), [down])
   const play = (key: Midi) => {
     soundKey(key)
     onKeyPress?.(key)
   }
-  const typed = useTyping({ enabled: typing, onKey: play, inView: inView ?? downRange })
+  // The keys the app sounds or MIDI holds lead the view; a tapped or typed key is where the hand already is.
+  const soundingRange = useMemo(() => rangeOf([...sounding, ...held]), [sounding, held])
+  const typed = useTyping({ enabled: typing, onKey: play, inView: inView ?? soundingRange })
+  const down = useMemo(
+    () =>
+      held.size === 0 && typed.held.size === 0
+        ? sounding
+        : new Set([...sounding, ...held, ...typed.held]),
+    [sounding, held, typed.held],
+  )
   return (
     <PianoKeyboard
       {...keyboard}

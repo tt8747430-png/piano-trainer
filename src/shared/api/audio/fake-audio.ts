@@ -23,10 +23,10 @@ export function createFakeAudio(): FakeAudio {
     async unlock() {
       unlocks++
     },
-    play(sounds, at) {
+    play(sounds, at, options) {
       const start = at ?? clock + PLAY_DELAY
       played.push({ sounds, at: start })
-      return keys.add(sounds, start)
+      return keys.add(sounds, start, options)
     },
     stop() {
       stops++
