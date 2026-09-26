@@ -63,7 +63,7 @@ function KeyButton({
       onClick={(event) => onClickPress(geometry.midi, event.detail)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
-        'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
+        'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
         black ? 'z-10 rounded-b-xs' : 'rounded-b-sm border-r border-key-bed',
         look.down && plain ? 'bg-key-down text-on-key-down' : FILL[look.fill],
         look.down ? 'translate-y-0.5' : null,

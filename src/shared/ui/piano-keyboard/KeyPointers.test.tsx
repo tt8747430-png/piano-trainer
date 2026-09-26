@@ -100,6 +100,16 @@ describe('touching the keys', () => {
     expect(key('D4')).toHaveAttribute('data-down')
   })
 
+  it('in Glissando, leaves the key it started on plain once the finger moves on', () => {
+    const { keys, key } = setUp({ swipe: 'glissando' })
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerMove(keys, touch(1, x(24)))
+    expect(key('C4')).not.toHaveAttribute('data-down')
+    // The browser keeps :active on the key a pointer went down on for the whole swipe: a key's
+    // pressed look is its own down state, never the browser's.
+    expect([...key('C4').classList].filter((name) => name.startsWith('active:'))).toEqual([])
+  })
+
   it('in Glissando, plays each pointer’s own keys', () => {
     const { onKeyPress, keys, key } = setUp({ swipe: 'glissando' })
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))
