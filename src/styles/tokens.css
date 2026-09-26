@@ -99,6 +99,8 @@
    * the rail's shade on them, a white key's lip and a black key's sheen.
    */
   --key-bed: var(--p-ink-900);
+  /* The rail the keys hang from: the piano's fascia, holding the keyboard's buttons and map. */
+  --key-rail: var(--p-ink-950);
   --key-shade: color-mix(in oklab, var(--p-ink-950) 22%, transparent);
   --key-lip: color-mix(in oklab, var(--p-ink-950) 12%, transparent);
   --key-sheen: color-mix(in oklab, var(--p-white) 16%, transparent);
@@ -157,6 +159,7 @@
   --key-white: var(--p-mist-50);
   --key-black: var(--p-night-990);
   --key-bed: var(--p-night-990);
+  --key-rail: var(--p-night-990);
   --key-down: var(--p-teal-800);
   --on-key-down: var(--p-mist-50);
   --key-down-tint: color-mix(in oklab, var(--p-mist-50) 45%, transparent);

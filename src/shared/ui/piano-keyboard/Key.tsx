@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, type PointerEvent } from 'react'
 import { cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { ROLE_BG } from '../role-classes'
@@ -32,11 +32,23 @@ interface KeyProps {
   readonly chosen: boolean | undefined
   /** The keyboard's one key in the tab order. */
   readonly tabStop: boolean
-  readonly onPress: (key: Midi) => void
+  /** A pointer went down on the key: it plays at once. */
+  readonly onPointerPress: (key: Midi, event: PointerEvent<HTMLElement>) => void
+  /** A click: it plays unless a pointer's press already did. */
+  readonly onClickPress: (key: Midi) => void
   readonly onFocusKey: (key: Midi) => void
 }
 
-function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey }: KeyProps) {
+function KeyButton({
+  geometry,
+  name,
+  look,
+  chosen,
+  tabStop,
+  onPointerPress,
+  onClickPress,
+  onFocusKey,
+}: KeyProps) {
   const { black } = geometry
   const plain = look.fill === 'white' || look.fill === 'black'
   return (
@@ -48,7 +60,8 @@ function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey 
       aria-label={name}
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
-      onClick={() => onPress(geometry.midi)}
+      onPointerDown={(event) => onPointerPress(geometry.midi, event)}
+      onClick={() => onClickPress(geometry.midi)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
         'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
@@ -118,7 +131,8 @@ export const Key = memo(
     a.name === b.name &&
     a.chosen === b.chosen &&
     a.tabStop === b.tabStop &&
-    a.onPress === b.onPress &&
+    a.onPointerPress === b.onPointerPress &&
+    a.onClickPress === b.onClickPress &&
     a.onFocusKey === b.onFocusKey &&
     sameLook(a.look, b.look),
 )

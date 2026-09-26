@@ -34,6 +34,13 @@ export const common = {
   // A piano key's name: its note and octave.
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
   keyboard: 'Keyboard',
+  // The keyboard's rail: its buttons and its map.
+  rail: {
+    octaveDown: 'Octave down',
+    octaveUp: 'Octave up',
+    map: 'Keys in view',
+    mapRange: '{{from}} to {{to}}',
+  },
   learned: { toggle: '{{title}}: learned', done: 'Learned' },
   midi: {
     label: 'MIDI keyboard',

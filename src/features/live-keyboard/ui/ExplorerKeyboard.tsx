@@ -19,7 +19,6 @@ export function ExplorerKeyboard({
         range={keyboardRange(keys, MIDDLE_OCTAVES)}
         inView={rangeOf(keys)}
         marks={marks}
-        className="h-44"
       />
     </Pinned>
   )

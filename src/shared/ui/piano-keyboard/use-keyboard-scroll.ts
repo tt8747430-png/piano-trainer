@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useRef, type RefObject } from 'react'
-import { spanOf, useMediaQuery, type KeyGeometry, type KeySpan } from '@/shared/lib'
+import { spanOf, useMediaQuery, type KeyGeometry, type KeySize, type KeySpan } from '@/shared/lib'
 import type { KeyRange } from '@/shared/lib/music'
 
 /** Scrolls so `span` sits in the middle of the keyboard. */
@@ -21,14 +21,15 @@ function inSight(element: HTMLElement, span: KeySpan): boolean {
 
 /**
  * The keyboard's scrolling: it opens centred on `inView` (else on `span`, where the range that fills
- * its width sits), and centres again when the range changes; `inView` is scrolled to whenever part
- * of it is out of sight.
+ * its width sits), and centres again when the range or the key size changes; `inView` is scrolled
+ * to whenever part of it is out of sight.
  */
 export function useKeyboardScroll(
   scroller: RefObject<HTMLElement | null>,
   keys: readonly KeyGeometry[],
   span: KeySpan,
   inView: KeyRange | undefined,
+  keySize: KeySize,
 ) {
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const opened = useRef(false)
@@ -42,7 +43,7 @@ export function useKeyboardScroll(
   useLayoutEffect(() => {
     const element = scroller.current
     if (element) centreOnRange(element)
-  }, [scroller, span])
+  }, [scroller, span, keySize])
 
   const viewFrom = inView?.from
   const viewTo = inView?.to

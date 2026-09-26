@@ -87,6 +87,7 @@ function Player({ piece }: { piece: Piece }) {
         marks={player.marks}
         wrong={state.wrong === null ? undefined : new Set([state.wrong])}
         onKeyPress={player.tapKey}
+        height="fill"
         className="mt-auto max-h-80 min-h-48 flex-1 landscape-phone:mt-0 landscape-phone:max-h-none landscape-phone:min-h-0 landscape-phone:flex-none landscape-phone:h-2/5"
       />
       <PlayerSetup

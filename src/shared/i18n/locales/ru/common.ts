@@ -35,6 +35,12 @@ export const common: LocaleResources['common'] = {
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
+  rail: {
+    octaveDown: 'Октава вниз',
+    octaveUp: 'Октава вверх',
+    map: 'Клавиши на экране',
+    mapRange: '{{from}} – {{to}}',
+  },
   learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
   midi: {
     label: 'MIDI-клавиатура',

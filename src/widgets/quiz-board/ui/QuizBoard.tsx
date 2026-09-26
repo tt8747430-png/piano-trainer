@@ -45,7 +45,6 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
 
       <LiveKeyboard
         range={quizKeyboardRange(question)}
-        className="h-44"
         selectable={choosing}
         selected={choosing ? new Set(selected) : undefined}
         lit={building ? undefined : new Set(targetKeys(question))}

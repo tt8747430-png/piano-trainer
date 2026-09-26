@@ -50,7 +50,7 @@ export function PieceView({ piece }: { piece: Piece }) {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('chart')}</h2>
         <Pinned>
-          <LiveKeyboard range={playerRange(performance)} className="h-32" />
+          <LiveKeyboard range={playerRange(performance)} />
         </Pinned>
         <ChordChart
           performance={performance}

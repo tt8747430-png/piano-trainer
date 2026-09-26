@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { midi, type Midi } from '@/shared/lib/music'
+import { stubScrolling } from '@/shared/test/layout'
 import type { KeyMark } from './key-look'
 import { PianoKeyboard } from './PianoKeyboard'
 
@@ -38,6 +39,8 @@ describe('PianoKeyboard', () => {
   it('is one tab stop, from the start of its range, and the arrow keys walk the keys', async () => {
     const user = userEvent.setup()
     renderKeyboard()
+    // The rail's buttons come before the keys, as they stand above them.
+    screen.getByRole('button', { name: 'Octave up' }).focus()
     await user.tab()
     expect(screen.getByRole('button', { name: 'C4' })).toHaveFocus()
     await user.keyboard('{ArrowRight}')
@@ -130,5 +133,54 @@ describe('PianoKeyboard', () => {
     renderKeyboard({ wrong: new Set([midi(64)]), outlined: new Set([midi(67)]) })
     expect(screen.getByRole('button', { name: 'E4' })).toHaveClass('bg-destructive')
     expect(screen.getByRole('button', { name: 'G4' })).toHaveClass('ring-primary')
+  })
+
+  it('has ‹ › that move it an octave, in both swipes', async () => {
+    const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
+    const user = userEvent.setup()
+    const { rerender } = renderKeyboard({ swipe: 'scroll' })
+    const opened = scrolls.at(-1) ?? 0
+    await user.click(screen.getByRole('button', { name: 'Octave up' }))
+    expect(scrolls.at(-1)).toBe(opened + 7 * 28)
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} swipe="glissando" />)
+    await user.click(screen.getByRole('button', { name: 'Octave down' }))
+    expect(scrolls.at(-1)).toBe(opened)
+  })
+
+  it('shows the whole piano with nothing to move: no ‹ ›, no map, no finger row', () => {
+    renderKeyboard({
+      keySize: 'piano',
+      map: true,
+      marks: new Map<Midi, KeyMark>([[C4, { tone: 'tonic', label: '1', finger: 1 }]]),
+    })
+    expect(screen.queryByRole('button', { name: 'Octave up' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('slider', { name: 'Keys in view' })).not.toBeInTheDocument()
+    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
+  })
+
+  it('holds the controls it is given in its rail', () => {
+    renderKeyboard({ children: <button type="button">Settings</button> })
+    expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+  })
+
+  it('puts fingers in circles under their keys, a black key’s above a white key’s', () => {
+    renderKeyboard({
+      marks: new Map<Midi, KeyMark>([
+        [C4, { tone: 'scale', label: 'x', finger: 3 }],
+        [midi(61), { tone: 'scale', label: 'y', finger: 4 }],
+      ]),
+    })
+    const row = document.querySelector('[data-slot="finger-row"]')
+    expect(row).toHaveTextContent('34')
+    expect(screen.getByText('3')).toHaveClass('bottom-0')
+    expect(screen.getByText('4')).toHaveClass('top-0')
+  })
+
+  it('keeps the keys that matter in view when its key size changes', () => {
+    const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
+    const { rerender } = renderKeyboard()
+    const opened = scrolls.length
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} keySize="large" />)
+    expect(scrolls).toHaveLength(opened + 1)
   })
 })

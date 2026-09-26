@@ -3,7 +3,13 @@ export { ChipRow } from './ChipRow'
 export { LevelMark } from './LevelMark'
 export type { Option, OptionValue } from './option'
 export { Pinned } from './Pinned'
-export { PianoKeyboard, type KeyMark, type KeyStates, type KeyTone } from './piano-keyboard'
+export {
+  PianoKeyboard,
+  RailButton,
+  type KeyMark,
+  type KeyStates,
+  type KeyTone,
+} from './piano-keyboard'
 export { RatingMark } from './RatingMark'
 export { ROLE_BG } from './role-classes'
 export { RoleLegend } from './RoleLegend'
