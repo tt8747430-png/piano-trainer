@@ -34,8 +34,8 @@ interface KeyProps {
   readonly tabStop: boolean
   /** A pointer went down on the key: it plays at once. */
   readonly onPointerPress: (key: Midi, event: PointerEvent<HTMLElement>) => void
-  /** A click: it plays unless a pointer's press already did. */
-  readonly onClickPress: (key: Midi) => void
+  /** A click, with its click count (0 for a click no pointer made): it plays unless a pointer's press already did. */
+  readonly onClickPress: (key: Midi, clickCount: number) => void
   readonly onFocusKey: (key: Midi) => void
 }
 
@@ -60,7 +60,7 @@ function KeyButton({
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
       onPointerDown={(event) => onPointerPress(geometry.midi, event)}
-      onClick={() => onClickPress(geometry.midi)}
+      onClick={(event) => onClickPress(geometry.midi, event.detail)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
         'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',

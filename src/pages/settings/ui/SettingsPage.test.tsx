@@ -44,6 +44,13 @@ describe('Settings', () => {
     expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', map: true })
   })
 
+  it('names each keyboard choice as a row of its group, not as a second heading', async () => {
+    await renderApp('/settings')
+    const keys = await screen.findByText('Keys')
+    expect(keys).toHaveClass('text-foreground')
+    expect(keys).not.toHaveClass('text-muted-foreground')
+  })
+
   it('saves a new language', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')

@@ -6,10 +6,11 @@ import { KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
 import { Switch } from '@/shared/ui/primitives/switch'
 
+/** One choice: its name as a row's text (the group around it has the heading), its control under it. */
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-semibold text-muted-foreground">{label}</span>
+      <span className="text-foreground">{label}</span>
       {children}
     </div>
   )

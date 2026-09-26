@@ -25,7 +25,7 @@ export function useKeyPointers({
   /** Each pointer down on the keys, and the key it is on (null between keys, in Glissando). */
   const pointers = useRef(new Map<number, Midi | null>())
   const [pressed, setPressed] = useState<ReadonlySet<Midi>>(NONE)
-  /** The key a pointer went down on: the click that follows belongs to that press. */
+  /** The key a pointer went down on: the pointer's click that follows belongs to that press. */
   const pointerKey = useRef<Midi | null>(null)
 
   const show = useCallback(() => {
@@ -48,9 +48,10 @@ export function useKeyPointers({
     [onPress, show],
   )
 
+  // A click no pointer made (Enter, Space, a screen reader) has no click count: it always plays.
   const click = useCallback(
-    (key: Midi) => {
-      if (pointerKey.current !== key) onPress(key)
+    (key: Midi, clickCount: number) => {
+      if (clickCount === 0 || pointerKey.current !== key) onPress(key)
     },
     [onPress],
   )
@@ -94,6 +95,10 @@ export function useKeyPointers({
       pointerKey.current = null
     },
     onKeyDownCapture() {
+      pointerKey.current = null
+    },
+    // A long press opens the context menu instead of clicking: its press is over.
+    onContextMenu() {
       pointerKey.current = null
     },
   }

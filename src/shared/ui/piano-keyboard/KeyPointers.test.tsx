@@ -57,6 +57,24 @@ describe('touching the keys', () => {
     expect(onKeyPress.mock.calls).toEqual([[60], [60], [62]])
   })
 
+  it('plays a click no pointer made after a long press whose click never came', () => {
+    const { onKeyPress, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.contextMenu(key('C4'))
+    fireEvent.pointerUp(key('C4'), touch(1, x(23)))
+    fireEvent.click(key('C4'))
+    expect(onKeyPress.mock.calls).toEqual([[60], [60]])
+  })
+
+  it('plays a click no pointer made, whatever press came before', () => {
+    const { onKeyPress, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerUp(key('C4'), touch(1, x(23)))
+    // The pointer's own click went elsewhere; a screen reader activates C4.
+    fireEvent.click(key('C4'), { detail: 0 })
+    expect(onKeyPress.mock.calls).toEqual([[60], [60]])
+  })
+
   it.each(['scroll', 'glissando'] as const)(
     'holds the keys still under a finger, so a key that plays never scrolls (%s)',
     (swipe) => {
