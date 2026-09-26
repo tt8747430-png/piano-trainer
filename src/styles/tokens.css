@@ -93,19 +93,30 @@
   --hand-melody: var(--p-plum-600);
 
   --key-white: var(--p-white);
-  --key-white-edge: var(--p-sage-300);
   --key-black: var(--p-ink-900);
+  /*
+   * The keys' material (DESIGN.md's No Glow Rule's one exception): the bed between the white keys,
+   * the rail's shade on them, a white key's lip and a black key's sheen.
+   */
+  --key-bed: var(--p-ink-900);
+  --key-shade: color-mix(in oklab, var(--p-ink-950) 22%, transparent);
+  --key-lip: color-mix(in oklab, var(--p-ink-950) 12%, transparent);
+  --key-sheen: color-mix(in oklab, var(--p-white) 16%, transparent);
+  /* A label's ink on a plain key, and on a plain key down. */
+  --on-key-white: var(--p-ink-950);
+  --on-key-black: var(--p-white);
+  --on-key-down: var(--p-ink-950);
   /*
    * A key down: sounding now or held on a MIDI keyboard. A coloured key keeps its colour under a
    * tint, deeper by day and brighter by night, so its label keeps its contrast either way.
    */
   --key-down: var(--p-teal-300);
   --key-down-tint: color-mix(in oklab, var(--p-ink-950) 38%, transparent);
-  /* A scale's note on a key: a band across its lower part, deep on white keys, light on black. */
-  --key-mark: var(--p-teal-800);
-  --on-key-mark: var(--p-white);
-  --key-mark-black: var(--p-teal-300);
-  --on-key-mark-black: var(--p-ink-950);
+  /* A scale's notes colour whole keys: the tonic deep, the others light; the same by night, as the keys. */
+  --key-tonic: var(--p-teal-800);
+  --on-key-tonic: var(--p-white);
+  --key-scale: var(--p-teal-300);
+  --on-key-scale: var(--p-ink-950);
 }
 
 [data-theme='dark'] {
@@ -144,8 +155,9 @@
   --hand-melody: var(--p-plum-300);
 
   --key-white: var(--p-mist-50);
-  --key-white-edge: var(--p-night-500);
   --key-black: var(--p-night-990);
+  --key-bed: var(--p-night-990);
   --key-down: var(--p-teal-800);
+  --on-key-down: var(--p-mist-50);
   --key-down-tint: color-mix(in oklab, var(--p-mist-50) 45%, transparent);
 }

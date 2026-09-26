@@ -5,8 +5,8 @@ import { ROLE_BG } from '../role-classes'
 import { sameLook, type KeyFill, type KeyLook } from './key-look'
 
 const FILL: Readonly<Record<KeyFill, string>> = {
-  white: 'bg-key-white',
-  black: 'bg-key-black',
+  white: 'bg-key-white text-on-key-white',
+  black: 'bg-key-black text-on-key-black',
   lit: 'bg-primary text-primary-foreground',
   selected: 'bg-primary text-primary-foreground',
   wrong: 'bg-destructive text-on-role',
@@ -20,6 +20,8 @@ const FILL: Readonly<Record<KeyFill, string>> = {
   rh: 'bg-hand-rh text-on-role',
   lh: 'bg-hand-lh text-on-role',
   melody: 'bg-hand-melody text-on-role',
+  tonic: 'bg-key-tonic text-on-key-tonic',
+  scale: 'bg-key-scale text-on-key-scale',
 }
 
 interface KeyProps {
@@ -35,23 +37,25 @@ interface KeyProps {
 }
 
 function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey }: KeyProps) {
+  const { black } = geometry
   const plain = look.fill === 'white' || look.fill === 'black'
   return (
     <button
       type="button"
       data-midi={geometry.midi}
       data-down={look.down ? '' : undefined}
+      data-quiet={look.quiet ? '' : undefined}
       aria-label={name}
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
       onClick={() => onPress(geometry.midi)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
-        'absolute top-0 flex items-end justify-center overflow-hidden transition-colors duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-20 focus-visible:ring-3 focus-visible:ring-ring',
-        geometry.black
-          ? 'z-10 rounded-b-xs pb-1.5'
-          : 'rounded-b-sm border border-t-0 border-key-white-edge pb-2.5',
-        look.down && plain ? 'bg-key-down' : FILL[look.fill],
+        'absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95 active:brightness-90 focus-visible:z-30 focus-visible:ring-3 focus-visible:ring-ring',
+        black ? 'z-10 rounded-b-xs' : 'rounded-b-sm border-r border-key-bed',
+        look.down && plain ? 'bg-key-down text-on-key-down' : FILL[look.fill],
+        look.quiet ? (black ? 'text-on-key-black' : 'text-on-key-white') : null,
+        look.down ? 'translate-y-0.5' : null,
         look.outlined ? 'ring-3 ring-primary ring-inset' : null,
       )}
       style={{
@@ -60,6 +64,15 @@ function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey 
         height: `${geometry.height}%`,
       }}
     >
+      {/* Quiet: the key's colour at a low strength, under a veil of the plain key. */}
+      <span
+        aria-hidden
+        className={cn(
+          'absolute inset-0 opacity-0 transition-opacity duration-80 ease-out',
+          black ? 'bg-key-black' : 'bg-key-white',
+          look.quiet ? 'opacity-70' : null,
+        )}
+      />
       {/* A coloured key going down keeps its colour under a tint. */}
       <span
         aria-hidden
@@ -68,21 +81,29 @@ function KeyButton({ geometry, name, look, chosen, tabStop, onPress, onFocusKey 
           look.down && !plain ? 'opacity-100' : null,
         )}
       />
-      {look.band ? (
+      {/* The key's front: a white key's lip, a black key's slope, shortened while the key is down. */}
+      <span
+        aria-hidden
+        className={cn(
+          'absolute inset-x-0 bottom-0 origin-bottom transition duration-80 ease-out',
+          black ? 'h-2 bg-key-sheen' : 'h-1.5 bg-key-lip',
+          look.down ? 'scale-y-33' : null,
+        )}
+      />
+      {look.letter ? (
+        <span aria-hidden className="relative text-xs font-semibold opacity-70">
+          {look.letter}
+        </span>
+      ) : null}
+      {look.label ? (
         <span
           aria-hidden
           className={cn(
-            'absolute inset-x-0 bottom-0 grid h-2/5 place-items-center text-sm font-bold tabular-nums',
-            geometry.black
-              ? 'rounded-b-xs bg-key-mark-black text-on-key-mark-black'
-              : 'rounded-b-sm bg-key-mark text-on-key-mark',
+            'relative font-bold tabular-nums',
+            look.label.kind === 'name' ? 'text-xs' : 'text-sm',
           )}
         >
-          {look.label}
-        </span>
-      ) : look.label ? (
-        <span aria-hidden className="relative text-sm font-bold tabular-nums">
-          {look.label}
+          {look.label.text}
         </span>
       ) : null}
     </button>

@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, PIANO_LAYOUT, spanOf } from '@/shared/lib'
+import { cn, PIANO_LAYOUT, spanOf, type NamedKeys } from '@/shared/lib'
 import {
   isBlackKey,
   midi,
@@ -37,6 +37,8 @@ export function PianoKeyboard({
   range,
   inView,
   selectable = false,
+  namedKeys = 'c',
+  letters,
   onKeyPress,
   className,
   ...states
@@ -50,6 +52,10 @@ export function PianoKeyboard({
   inView?: KeyRange
   /** The keys are toggles (a quiz's keys to choose), and say whether they are chosen. */
   selectable?: boolean
+  /** Which keys carry their note's name: every C (the default), every key, or none. */
+  namedKeys?: NamedKeys
+  /** The computer keyboard's letters on the keys it plays. */
+  letters?: ReadonlyMap<Midi, string> | undefined
   /** Every key does something: a key that did nothing would be a dead end. */
   onKeyPress: (key: Midi) => void
   className?: string
@@ -97,7 +103,7 @@ export function PianoKeyboard({
         role="group"
         aria-label={t('keyboard')}
         onKeyDown={onKeyDown}
-        className="relative shrink-0"
+        className="relative shrink-0 bg-key-bed"
         style={{
           width: `calc(${PIANO_LAYOUT.whites} * clamp(${MIN_WHITE_PX}px, 100cqw / ${span.whites}, ${MAX_WHITE_PX}px))`,
         }}
@@ -107,13 +113,18 @@ export function PianoKeyboard({
             key={key.midi}
             geometry={key}
             name={nameOf(key.midi)}
-            look={keyLook(key.midi, states)}
+            look={keyLook(key.midi, states, { namedKeys, letters })}
             chosen={selectable ? (states.selected?.has(key.midi) ?? false) : undefined}
             tabStop={key.midi === tabStop}
             onPress={press}
             onFocusKey={setTabStop}
           />
         ))}
+        {/* The rail's shade falling on the keys. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 z-20 h-2 bg-linear-to-b from-key-shade to-transparent"
+        />
       </div>
     </div>
   )

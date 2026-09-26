@@ -68,17 +68,37 @@ describe('PianoKeyboard', () => {
     expect(d).toHaveClass('bg-role-root')
   })
 
-  it('keeps a scale’s keys white or black, their degree in a teal band', () => {
+  it('colours a scale’s keys whole, black keys too, each with its degree', () => {
     renderKeyboard({
       marks: new Map<Midi, KeyMark>([
-        [midi(62), { tone: 'scale', label: '2' }],
+        [C4, { tone: 'tonic', label: '1' }],
         [midi(63), { tone: 'scale', label: '♭3' }],
       ]),
     })
-    const d = screen.getByRole('button', { name: 'D4' })
-    expect(d).toHaveClass('bg-key-white')
-    expect(within(d).getByText('2')).toHaveClass('bg-key-mark', 'text-on-key-mark')
-    expect(screen.getByRole('button', { name: 'D sharp 4' })).toHaveClass('bg-key-black')
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
+    const eFlat = screen.getByRole('button', { name: 'D sharp 4' })
+    expect(eFlat).toHaveClass('bg-key-scale')
+    expect(eFlat).toHaveTextContent('♭3')
+  })
+
+  it('names every C by default, all keys or none when asked', () => {
+    const { rerender } = renderKeyboard()
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('C4')
+    expect(screen.getByRole('button', { name: 'D4' }).textContent).toBe('')
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="all" />)
+    expect(screen.getByRole('button', { name: 'C sharp 4' })).toHaveTextContent('C#')
+    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="none" />)
+    expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
+  })
+
+  it('shows the typing letters on their keys, and a quiet key held back', () => {
+    renderKeyboard({
+      letters: new Map([[C4, 'A']]),
+      marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'root', label: '1' }]]),
+      quiet: new Set([midi(62)]),
+    })
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
+    expect(screen.getByRole('button', { name: 'D4' })).toHaveAttribute('data-quiet')
   })
 
   it('makes keys toggles when they are selectable, and fills the selected ones teal', () => {
