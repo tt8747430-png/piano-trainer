@@ -76,32 +76,34 @@ it. `@` → `src`.
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and `quiz` (the machine, check plans, the
   theory quizzes, My gaps, `useQuiz`).
-- **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React),
-  `model/store.ts` (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`),
-  `model/selectors.ts`, `model/context.ts` (`createStoreContext`), `content/` (authored data), `ui/` (only the
-  entity's own data shown: a piece's titles, credits and section headings; a step's title and `ExplorerLink`),
-  `index.ts`. Content:
-  `piece` (51 pieces, 7 listings, chart and progression parsers), `pattern` (39 patterns), `path`. Saved state:
-  `settings` (`pt-settings`, version 3, with the keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what
-  an answer or a mark changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
+- **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
+  (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
+  (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
+  and section headings; a step's title and `ExplorerLink`), `index.ts`. Content: `piece` (51 pieces, 7 listings, chart
+  and progression parsers), `pattern` (39 patterns), `path`. Saved state: `settings` (`pt-settings`, version 3, with the
+  keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
   `useGoBack`, `keyboardLayout` with `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the
   keyboard settings' options), `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param
-  readers, `foldText`; and with barrels of their own: `music` the theory kernel
-  (with the piano's ranges and `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance),
-  `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord as the explorers place it, a scale run,
-  a tap, which keys sound when and which were struck last), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKey`,
-  `useSoundingKeys`)),
-  `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and fakes; the audio port
-  knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard` with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`,
-  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` with its trigger and close, `RoleLegend`, `RatingMark`,
-  `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`, `useLocale`, `useScaleName`, `LocalText`), `test`.
+  readers, `foldText`; and with barrels of their own: `music` the theory kernel (with the piano's ranges and
+  `placeChord`/`placeScale`), `arrangement` (`arrange`, a chart → a Performance), `schedule` (a Performance → sounds in
+  seconds, Listen's loop, a bar, a chord as the explorers place it, a scale run, a tap, which keys sound when and which
+  were struck last), `services` (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop),
+  `useSoundKey` (a tap, a hand's play), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi`
+  ports, their browser adapters and fakes; the audio port knows which keys it is sounding and whether a play still
+  sounds), `ui` (the kit: `PianoKeyboard` with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`,
+  `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` with its trigger and close, `RoleLegend`, `RatingMark`, `LevelMark`;
+  shadcn in `ui/primitives`), `i18n` (`Locale`, `useLocale`, `useScaleName`, `LocalText`), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
 **Theme:** `index.html`'s `#theme-boot` script paints `data-theme` before first paint from `pt-settings`;
 `ThemeProvider` keeps it and colours the browser toolbar from `THEME_COLORS`. `src/app/theme-boot.test.ts` holds
 the script to the store.
+**Installed app:** `#standalone-boot` locks pinch and double-tap zoom in the installed app only (a tab keeps its
+zoom); `theme.css`'s base keeps text unselectable outside fields, with no callout, no overscroll and no double-tap
+wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
 
 ## Read before you touch
 

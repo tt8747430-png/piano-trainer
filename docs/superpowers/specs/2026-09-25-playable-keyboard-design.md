@@ -4,7 +4,11 @@
   holds the decisions from the grilling session). What the session left to Claude is decided here and argued.
   Revised the same day after the two-axis review of its plan: spotlight redefined (§2.4), ‹ › in both swipes and the
   map inside the rail (§2.5, §2.7), a two-line finger row (§2.3), Stop on every button that plays (§2.9), the port's
-  play handles in place of a shared playback tracker (§4.2), and the names settled (§3, §4).
+  play handles in place of a shared playback tracker (§4.2), and the names settled (§3, §4). Revised again after the
+  owner tried the build: a tapped or typed key is down while held, not while it rings (a hand's play); spotlight
+  hides the other marks instead of dimming them, and counts a finger's key; the keys hold still under a finger in
+  both swipes and the rail, the piano's length, scrolls them; the settings popover sits beside the keyboard. Where
+  §2.2, §2.4 and §2.5 say otherwise, `DESIGN.md` and ADR 0009 hold.
 - **Builds on:** the live keyboard as built (ADR 0008, `DESIGN.md`'s keyboard): the whole piano on every keyboard,
   every key sounding, a key going down while it sounds or is held on MIDI. All of that stands, except that under
   spotlight (§2.4) the keys down are the ones struck last.

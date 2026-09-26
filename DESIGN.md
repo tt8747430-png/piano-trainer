@@ -220,7 +220,8 @@ A sage-tinted neutral world with one deep teal, a mint soft surface, and meaning
 **The Palette Law.** Role colours appear on chord tones only; hand colours only in the Player; attention only as the dot
 of a gap. Chrome is never coloured by a role.
 
-**The Key Goes Down Rule.** A key that sounds goes down, whoever plays it (under spotlight, the key struck last): a plain key turns Key Down mint (#8CCBB8;
+**The Key Goes Down Rule.** A key that sounds goes down, whoever plays it (under spotlight, the key struck last; a
+key a hand plays, while the hand holds it): a plain key turns Key Down mint (#8CCBB8;
 night #2D6657); a coloured key keeps its colour under a tint, deeper by day and brighter by night, so its label keeps
 its contrast. Colour is never the only cue: every coloured key also carries its degree, finger or note label.
 
@@ -301,24 +302,25 @@ A floating glass pill of three items (icon over label), the active one in a soft
 
 ### The keyboard (signature)
 
-The whole piano, A0–C8, hung from a dark **rail** and scrolling sideways with no bar. The rail is drawn 28px at the
-foot of a 44px strip, so its buttons have 44px targets without reaching over a key: **‹ ›** at its ends move the keys
-an octave (in both swipes: a mouse cannot swipe), the **keyboard map** between them (off by default) draws all 88 keys
-small with a frame round the part in view and dots under the keys marked or down, and the **settings button** at its
-right end opens the keyboard settings in a popover.
+The whole piano, A0–C8, hung from a dark **rail** and scrolling sideways with no bar. The rail runs the piano's
+length, drawn 28px at the foot of a 44px strip, and a swipe on it scrolls the keys; its controls stay in view, with
+44px targets that never reach over a key: **‹ ›** at its ends move the keys an octave (a mouse cannot swipe), the
+**keyboard map** between them (off by default) draws all 88 keys small with a frame round the part in view and dots
+under the keys marked or down, and the **settings button** at its right end opens the keyboard settings in a popover
+beside the keyboard, never over it.
 
-- **Proportions:** the keys are 4.2 times as long as a white key is wide, within 96px and 40% of the screen's height
-  (a phone's keys about 120px long, a laptop's about 200px); the Player's keyboard takes the height its layout gives
-  it. **Key size:** Fit (the range fills the width, white keys 28–48px), Large (56px, about an octave on a phone) or
-  Whole piano (all 52 white keys fill the width; no ‹ ›, no map, no finger row). The keys that matter stay in view at
-  every size: it opens centred on them (a chord, a run, the Player's current notes) and centres again when the size
-  changes.
+- **Proportions:** the keys are 4.2 times as long as a white key is wide, within 96px and 40% of the screen's height (a
+  phone's keys about 120px long, a laptop's about 200px); the Player's keyboard takes the height its layout gives it.
+  **Key size:** Fit (the range fills the width, white keys 28–48px), Large (56px, about an octave on a phone) or Whole
+  piano (all 52 white keys fill the width; no ‹ ›, no map, no finger row). The keys that matter stay in view at every
+  size: it opens centred on them (a chord, a run, the Player's current notes) and centres again when the size changes.
 - **Material:** white keys stand apart by a 1px line of key bed and end in a lip; black keys end in a lighter slope.
   **Down** is physical as well as coloured: a key going down drops 2px and its lip or slope shortens to a third;
   under reduced motion, at once.
-- **Touch:** a key sounds and goes down the instant it is touched. **Scroll** (default): a swipe moves the keyboard and
-  only the key it started on sounds. **Glissando:** every key a finger crosses sounds, and the keys take the finger
-  from the page.
+- **Touch:** a key sounds and goes down the instant it is touched, and stays down while it is held (a finger, a typed
+  key): let go, it is plain again, however long its sound rings. The keys hold still under a finger. **Scroll**
+  (default): only the key a finger touched sounds; the keyboard scrolls from its rail. **Glissando:** every key a
+  finger slides onto sounds.
 - **Faces:** plain, a role or hand colour with its label, a scale's whole-key fill (tonic deep, others light) with its
   degree, a quiz's teal selection, Name chord's lit teal, a wrong key red, a missing key outlined; and down, over all
   of them, as a key sounds, is held on MIDI or is pressed. **Note names** (C · All · None) put "C4" on every C, or a
@@ -327,9 +329,10 @@ right end opens the keyboard settings in a popover.
 - **Finger row:** finger numbers in 20px circles under the keys, in two staggered lines as the keys stand: a black
   key's in the upper line (light teal), a white key's in the lower (white, ringed in key bed). Only while a mark
   carries a finger.
-- **Spotlight** (the explorers, Symbols, a Piece's chart): the keys down are the ones struck last, and the other marked
-  keys go quiet (their colour at a low strength under a veil of the plain key, their label kept) until nothing sounds.
-  The Player and the quiz keep every mark full: their marks mean "play these".
+- **Spotlight** (the explorers, Symbols, a Piece's chart): while any key is down, only the keys down wear their marks:
+  an arpeggio's or a run's key alone, a chord's keys together, a finger's key while it holds it; the other marks are
+  hidden (plain keys, no dimming). With nothing down, every mark shows again. The Player and the quiz keep every
+  mark: their marks mean "play these".
 - Keys are buttons named by note ("F sharp 4"), one of them in the tab order, the arrow keys walking the rest; every
   tap sounds. **Every Play becomes Stop** (a square) while its sound plays; in a grid of items (a Piece's bars, a
   scale's chords) the item is pressed instead, and a second tap stops it.

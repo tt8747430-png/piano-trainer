@@ -24,12 +24,14 @@ A container wires data to presentational children. One job each.
   `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`,
   `RoleLegend`, `RatingMark`, `LevelMark`.
 - **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
-  clicked, and goes down while it sounds or MIDI holds it. It follows the **keyboard settings** (key size, swipe, note
-  names, the map, typing), saved for every keyboard and set from the rail's settings button or Settings
-  (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The explorers, Symbols
-  and a Piece's chart pass `spotlight` (the keys struck last stand out alone); the Player and the quiz do not, since
-  their marks mean "play these". `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything
-  that plays sound on a screen shows it on that screen's keyboard (pin it when the page scrolls away from it).
+  clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
+  play (`useSoundKey`), so its key is down while pressed, not while it rings. It follows the **keyboard settings**
+  (key size, swipe, note names, the map, typing), saved for every keyboard and set from the rail's settings button or
+  Settings (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The
+  explorers, Symbols and a Piece's chart pass `spotlight`: while any key is down, only the keys down show their marks
+  (an arpeggio's key alone, a chord's together); the Player and the quiz do not, since their marks mean "play these".
+  `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
+  it on that screen's keyboard (pin it when the page scrolls away from it).
 - **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
   bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by itself
   (a choice sounding, a quiz's question) has no button and no Stop.
@@ -145,14 +147,14 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
-- Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates
-  an `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and
-  returns the play's handle; `useSoundKey` adds a tap on top, at the audio clock's now; what sounds, and which keys
-  were struck last, is the port's to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says
-  whether a play still sounds (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the
-  port, `playing` (the id last played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no
-  shared state; another button's sound cuts it off and the port says so. A chord as the explorers place it is
-  `placedChordSounds`.
+- Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an
+  `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the
+  play's handle; `useSoundKey` adds a tap on top, at the audio clock's now, as a hand's play (`{ byHand: true }`: the
+  port sounds it but leaves it to the key's press to show); what sounds, and which keys were struck last, is the port's
+  to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says whether a play still sounds
+  (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the port, `playing` (the id last
+  played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no shared state; another button's
+  sound cuts it off and the port says so. A chord as the explorers place it is `placedChordSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
 - **The explorers place tones with `placeChord` / `placeScale`,** and a chord's inversions are `lastInversion`'s:
   the validator, the segments and the keyboard all ask it.
@@ -175,9 +177,9 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   pointer's position or a scroll matters, `src/shared/test/layout.ts` lays out what the test needs: `stubBox(element,
 box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })` gives every element scroll metrics
   and a `scrollTo` that moves and fires `scroll`, returning each position scrolled to.
-- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down` (and,
-  under spotlight, `data-quiet`). A pointer on the keys: `fireEvent.pointerDown` on a key and `pointerMove` on the
-  keys' group, whose box `stubBox` gives.
+- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down` (and, under
+  spotlight, whether a marked key still wears its mark's class). A pointer on the keys: `fireEvent.pointerDown` on a key
+  and `pointerMove` on the keys' group, whose box `stubBox` gives.
 - `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
 
 ## 10. Copy and i18n
@@ -203,3 +205,7 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
 - Check a production build with `npm run build && npm run preview`: it catches lazy-chunk, asset and
   service-worker problems `dev` hides.
 - A `VITE_` variable is public. Never put a secret in one.
+- **The installed app is an app:** `index.html`'s `#standalone-boot` locks zoom only when installed (a browser tab
+  keeps its zoom, for accessibility), and `theme.css`'s base layer keeps text unselectable and callout-free outside
+  fields, the page from overscrolling, and controls from waiting on a double tap. A new text field needs nothing:
+  `input`, `textarea` and `[contenteditable]` select again.
