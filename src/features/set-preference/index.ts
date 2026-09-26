@@ -1,3 +1,4 @@
+export { setKeyboard } from './set-keyboard'
 export { setLocale } from './set-locale'
 export { setPracticeToggle } from './set-practice-toggle'
 export { setQuizFamilies } from './set-quiz-families'

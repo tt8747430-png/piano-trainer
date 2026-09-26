@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
-import { DEFAULT_PRACTICE, DEFAULT_QUIZ_CHOICE } from './types'
+import { DEFAULT_PRACTICE, DEFAULT_QUIZ_CHOICE, defaultKeyboard } from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
 const writeSaved = (storage: Storage, state: unknown, version = 2) =>
@@ -13,7 +13,12 @@ const restored = (state: unknown, version = 2) => {
   return createSettingsStore({ storage, languages: ['en'] }).getState()
 }
 
-const DEFAULTS = { practice: DEFAULT_PRACTICE, quiz: DEFAULT_QUIZ_CHOICE }
+// The test setup's matchMedia answers false: no fine pointer, so no typing by default.
+const DEFAULTS = {
+  practice: DEFAULT_PRACTICE,
+  quiz: DEFAULT_QUIZ_CHOICE,
+  keyboard: defaultKeyboard(false),
+}
 
 describe('createSettingsStore', () => {
   it('starts on the system theme, the browser language, no toggles and the default quiz', () => {
@@ -37,7 +42,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 2,
+      version: 3,
     })
   })
 
@@ -47,8 +52,59 @@ describe('createSettingsStore', () => {
       locale: 'ru',
       practice: { fingerNumbers: true, melody: false, metronome: true, countIn: false },
       quiz: { families: ['tri'], scales: ['blues'] },
+      keyboard: {
+        keySize: 'large',
+        swipe: 'glissando',
+        namedKeys: 'none',
+        map: true,
+        typing: true,
+      },
     }
-    expect(restored(saved)).toEqual(saved)
+    expect(restored(saved, 3)).toEqual(saved)
+  })
+
+  it('plays from the computer keyboard by default only where the pointer is fine', () => {
+    const keyboard = (finePointer: boolean) =>
+      createSettingsStore({
+        storage: createMemoryStorage(),
+        languages: ['en'],
+        finePointer,
+      }).getState().keyboard
+    expect(keyboard(true)).toEqual({
+      keySize: 'fit',
+      swipe: 'scroll',
+      namedKeys: 'c',
+      map: false,
+      typing: true,
+    })
+    expect(keyboard(false).typing).toBe(false)
+  })
+
+  it('gives a version-2 save the keyboard’s defaults and keeps the rest', () => {
+    const saved = {
+      theme: 'dark',
+      locale: 'ru',
+      practice: DEFAULT_PRACTICE,
+      quiz: DEFAULT_QUIZ_CHOICE,
+    }
+    expect(restored(saved)).toEqual({ theme: 'dark', locale: 'ru', ...DEFAULTS })
+  })
+
+  it('restores the keyboard settings, an unknown value taking its default alone', () => {
+    const keyboard = {
+      keySize: 'huge',
+      swipe: 'glissando',
+      namedKeys: 'all',
+      map: 'yes',
+      typing: true,
+    }
+    expect(restored({ theme: 'light', locale: 'en', keyboard }, 3).keyboard).toEqual({
+      keySize: 'fit',
+      swipe: 'glissando',
+      namedKeys: 'all',
+      map: false,
+      typing: true,
+    })
   })
 
   it('gives a version 1 save the new defaults, keeping its theme and language', () => {

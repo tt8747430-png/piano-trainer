@@ -1,5 +1,13 @@
 import { isLocale, type Locale } from '@/shared/i18n/locale'
-import { isOneOf } from '@/shared/lib'
+import {
+  isOneOf,
+  KEY_SIZES,
+  NAMED_KEYS,
+  SWIPES,
+  type KeySize,
+  type NamedKeys,
+  type Swipe,
+} from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@/shared/lib/music'
 
 export const THEMES = ['system', 'light', 'dark'] as const
@@ -16,11 +24,23 @@ export interface QuizChoice {
   readonly scales: readonly ScaleKind[]
 }
 
+/** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
+export interface KeyboardSettings {
+  readonly keySize: KeySize
+  readonly swipe: Swipe
+  readonly namedKeys: NamedKeys
+  /** The strip of all 88 keys in the rail. */
+  readonly map: boolean
+  /** The computer keyboard plays the keys. */
+  readonly typing: boolean
+}
+
 export interface SettingsState {
   theme: Theme
   locale: Locale
   practice: PracticeToggles
   quiz: QuizChoice
+  keyboard: KeyboardSettings
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -43,7 +63,19 @@ export const canonicalFamilies = (values: readonly unknown[]): ChordFamily[] =>
 export const canonicalScales = (values: readonly unknown[]): ScaleKind[] =>
   SCALE_KINDS.filter((kind) => values.includes(kind))
 
+/** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
+export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
+  keySize: 'fit',
+  swipe: 'scroll',
+  namedKeys: 'c',
+  map: false,
+  typing: finePointer,
+})
+
 export const isTheme = isOneOf(THEMES)
+export const isKeySize = isOneOf(KEY_SIZES)
+export const isSwipe = isOneOf(SWIPES)
+export const isNamedKeys = isOneOf(NAMED_KEYS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

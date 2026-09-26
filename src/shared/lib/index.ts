@@ -1,6 +1,14 @@
 export { cn } from './cn'
 export { foldText, matchesQuery } from './fold-text'
 export { isOneOf } from './is-one-of'
+export {
+  KEY_SIZES,
+  NAMED_KEYS,
+  SWIPES,
+  type KeySize,
+  type NamedKeys,
+  type Swipe,
+} from './keyboard-choices'
 export { keyboardLayout, spanOf, type KeyGeometry, type KeySpan } from './keyboard-layout'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject, type Saved } from './saved'

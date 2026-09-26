@@ -10,7 +10,11 @@ export function renderWithSettings(
   ui: ReactElement,
   { locale = 'en', theme = 'system' }: { locale?: Locale; theme?: Theme } = {},
 ) {
-  const settingsStore = createSettingsStore({ storage: createMemoryStorage(), languages: [locale] })
+  const settingsStore = createSettingsStore({
+    storage: createMemoryStorage(),
+    languages: [locale],
+    finePointer: false,
+  })
   setTheme(settingsStore, theme)
   const view = render(<SettingsStoreProvider store={settingsStore}>{ui}</SettingsStoreProvider>)
   return { ...view, settingsStore }

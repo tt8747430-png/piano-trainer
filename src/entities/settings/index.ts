@@ -5,6 +5,8 @@ export {
   THEMES,
   canonicalFamilies,
   canonicalScales,
+  defaultKeyboard,
+  type KeyboardSettings,
   type PracticeToggle,
   type PracticeToggles,
   type QuizChoice,
@@ -13,5 +15,11 @@ export {
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
 export { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from './model/store'
-export { selectLocale, selectPractice, selectQuizChoice, selectTheme } from './model/selectors'
+export {
+  selectKeyboard,
+  selectLocale,
+  selectPractice,
+  selectQuizChoice,
+  selectTheme,
+} from './model/selectors'
 export { SettingsStoreProvider, useSettings, useSettingsStoreApi } from './model/context'

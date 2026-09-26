@@ -8,8 +8,13 @@ import {
   PRACTICE_TOGGLES,
   canonicalFamilies,
   canonicalScales,
+  defaultKeyboard,
   detectLocale,
+  isKeySize,
+  isNamedKeys,
+  isSwipe,
   isTheme,
+  type KeyboardSettings,
   type PracticeToggles,
   type QuizChoice,
   type SettingsState,
@@ -17,27 +22,33 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 2
+export const SETTINGS_VERSION = 3
 
 export type SettingsStore = StoreApi<SettingsState>
 
 export function createSettingsStore({
   storage = safeLocalStorage(),
   languages = navigator.languages,
-}: { storage?: Storage; languages?: readonly string[] } = {}): SettingsStore {
+  finePointer = matchMedia('(pointer: fine)').matches,
+}: {
+  storage?: Storage
+  languages?: readonly string[]
+  finePointer?: boolean
+} = {}): SettingsStore {
   const initial: SettingsState = {
     theme: 'system',
     locale: detectLocale(languages),
     practice: DEFAULT_PRACTICE,
     quiz: DEFAULT_QUIZ_CHOICE,
+    keyboard: defaultKeyboard(finePointer),
   }
   return createStore<SettingsState>()(
     persist(() => initial, {
       name: SETTINGS_STORAGE_KEY,
       version: SETTINGS_VERSION,
       storage: createJSONStorage(() => storage),
-      // Every earlier shape is sanitised field by field in `merge`, so migrating is passing it on.
-      migrate: (persisted) => persisted as SettingsState,
+      // The sanitiser turns any earlier shape into this one; `merge` then keeps the current fields.
+      migrate: (persisted) => sanitize(persisted, initial),
       merge: (persisted, current) => sanitize(persisted, current),
     }),
   )
@@ -62,9 +73,21 @@ function quizChoice(value: unknown): QuizChoice {
   }
 }
 
+/** Each saved choice that is still one of its values stands; anything else takes the current one. */
+function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
+  const saved = savedObject<KeyboardSettings>(value)
+  return {
+    keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
+    swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
+    namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
+    map: typeof saved.map === 'boolean' ? saved.map : current.map,
+    typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
+  }
+}
+
 /**
  * Stored JSON is untrusted: keep each field that is still valid, and the current value otherwise.
- * A version-1 save has no practice or quiz fields, so it gains their defaults here.
+ * A version-1 save has no practice or quiz fields, a version-2 save no keyboard: each gains its defaults here.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
@@ -73,5 +96,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     quiz: quizChoice(saved.quiz),
+    keyboard: keyboardSettings(saved.keyboard, current.keyboard),
   }
 }

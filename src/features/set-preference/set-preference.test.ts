@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { createSettingsStore, DEFAULT_QUIZ_CHOICE } from '@/entities/settings'
+import { createSettingsStore, DEFAULT_QUIZ_CHOICE, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
-import { setLocale, setPracticeToggle, setQuizFamilies, setQuizScales, setTheme } from './index'
+import {
+  setKeyboard,
+  setLocale,
+  setPracticeToggle,
+  setQuizFamilies,
+  setQuizScales,
+  setTheme,
+} from './index'
 
 const saved = (storage: Storage) => JSON.parse(storage.getItem('pt-settings') ?? 'null').state
 
@@ -56,5 +63,16 @@ describe('set-preference', () => {
     expect(store.getState().quiz.scales).toEqual(['major', 'blues'])
     setQuizScales(store, [])
     expect(store.getState().quiz.scales).toEqual(['major', 'blues'])
+  })
+
+  it('setKeyboard changes the keyboard settings it is given and saves them, the others kept', () => {
+    const { storage, store } = setUp()
+    setKeyboard(store, { swipe: 'glissando', map: true })
+    expect(store.getState().keyboard).toEqual({
+      ...defaultKeyboard(false),
+      swipe: 'glissando',
+      map: true,
+    })
+    expect(saved(storage).keyboard).toEqual(store.getState().keyboard)
   })
 })

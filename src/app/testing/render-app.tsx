@@ -23,7 +23,7 @@ export async function renderApp(
     webMidi = true,
   }: { locale?: Locale; storage?: Storage; webMidi?: boolean } = {},
 ) {
-  const settingsStore = createSettingsStore({ storage, languages: [locale] })
+  const settingsStore = createSettingsStore({ storage, languages: [locale], finePointer: false })
   const progressStore = createProgressStore({ storage })
   const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
