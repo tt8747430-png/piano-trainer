@@ -8,13 +8,12 @@
   sub-projects 2 and 4 (§3.8). Then two owner decisions: studies and progressions leave Songs (§3.9), and a lighter
   palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11).
-- **Built:** sub-projects 1 and 2. Their specs and plans were removed once built, on 2026-09-27 (`git log
+- **Built:** sub-projects 1, 2 and 3. Their specs and plans were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
   places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3
-  (notation and the sheet-music Player, `2026-09-27-sheet-music-player-design.md`): ADR 0013, `DESIGN.md` (the
-  Player's layout, the sheet), `docs/CODE_STYLE.md` §8 and the glossary (Score, Sheet music, Cursor, Loop, Speed
-  training, Swing, Roll, Listen / Wait mode).
+  (notation and the sheet-music Player): ADR 0013, `DESIGN.md` (the Player's layout, the sheet), `docs/CODE_STYLE.md`
+  §8 and the glossary (Score, Sheet music, Cursor, Loop, Speed training, Swing, Roll, Listen / Wait mode).
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
