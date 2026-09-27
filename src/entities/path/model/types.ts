@@ -6,6 +6,14 @@ import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@
 export const LEVELS = [1, 2, 3, 4] as const
 export type Level = (typeof LEVELS)[number]
 
+/** Each level's name in the interface strings (`common:levelName.*`). */
+export const LEVEL_NAME = {
+  1: 'beginner',
+  2: 'elementary',
+  3: 'intermediate',
+  4: 'advanced',
+} as const satisfies Record<Level, string>
+
 /** One entry on the Path. Steps refer to content and never copy it. */
 export type PathStep =
   | { readonly kind: 'piece'; readonly pieceId: PieceId }

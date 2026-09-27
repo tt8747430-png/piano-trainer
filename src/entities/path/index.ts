@@ -1,4 +1,5 @@
 export {
+  LEVEL_NAME,
   LEVELS,
   isStepId,
   pieceStepId,

@@ -1,15 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { LEVELS, pathSteps, type Level } from '@/entities/path'
+import { LEVEL_NAME, LEVELS, pathSteps } from '@/entities/path'
 import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progress'
 import { StepRow } from './StepRow'
-
-/** Each level's name in the interface strings. */
-const LEVEL_NAME = {
-  1: 'beginner',
-  2: 'elementary',
-  3: 'intermediate',
-  4: 'advanced',
-} as const satisfies Record<Level, string>
 
 /** Levels 1–4 in order, each with its count learned and its steps; empty levels are not shown. */
 export function PathLevels() {
