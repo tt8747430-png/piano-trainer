@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { note } from './note'
-import { lastInversion, placeChord, placeScale } from './place'
+import { lastInversion, placeChord, placeScale, placeScaleChords } from './place'
 
 const keys = (placed: readonly { midi: number }[]) => placed.map((p) => p.midi)
 
@@ -52,5 +52,25 @@ describe('placeScale', () => {
     expect(eFlat[0]?.midi).toBe(63)
     expect(eFlat.at(-1)?.tone.degree).toBe('1')
     expect(eFlat.at(-1)?.midi).toBe(75)
+  })
+})
+
+describe('placeScaleChords', () => {
+  it('stands each triad of C major on its degree’s key, with its numeral', () => {
+    const chords = placeScaleChords(note('C'), 'major', 3)
+    expect(chords.map((c) => c.roman)).toEqual(['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'])
+    expect(chords.map((c) => c.key)).toEqual([60, 62, 64, 65, 67, 69, 71])
+    expect(keys(chords[1]?.tones ?? [])).toEqual([62, 65, 69])
+  })
+
+  it('stacks a 7th chord from its degree’s key, even past the octave', () => {
+    const iii = placeScaleChords(note('A'), 'major', 4)[2]
+    expect(iii?.chord).toEqual({ root: note('C', 1), quality: 'm7' })
+    expect(iii?.key).toBe(73)
+    expect(keys(iii?.tones ?? [])).toEqual([73, 76, 80, 83])
+  })
+
+  it('has none for a scale without seven notes', () => {
+    expect(placeScaleChords(note('C'), 'blues', 3)).toEqual([])
   })
 })

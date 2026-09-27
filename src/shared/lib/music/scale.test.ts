@@ -7,6 +7,7 @@ import {
   relativeScale,
   scaleGaps,
   scaleIntervals,
+  scaleHasChords,
   scaleRootSpelling,
   spellScale,
   type ScaleKind,
@@ -115,5 +116,11 @@ describe('relativeScale', () => {
     expect(relativeScale(note('C'), 'pent')).toEqual({ root: note('A'), kind: 'mpent' })
     expect(relativeScale(note('A'), 'mpent')).toEqual({ root: note('C'), kind: 'pent' })
     expect(relativeScale(note('C'), 'blues')).toBeNull()
+  })
+})
+
+describe('scaleHasChords', () => {
+  it('is true for the seven-note scales and false for the pentatonics and the blues', () => {
+    expect(SCALE_KINDS.filter(scaleHasChords)).toEqual(['major', 'natural', 'harmonic', 'melodic'])
   })
 })

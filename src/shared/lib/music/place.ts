@@ -1,6 +1,7 @@
 import { qualityIntervals, spellChord, type ChordQuality } from './chord'
+import { diatonicChords, type DiatonicChord } from './diatonic'
 import { MIDDLE_C } from './keyboard'
-import { pitchClassOf, type SpelledNote } from './note'
+import { pitchClassOf, sameNote, type SpelledNote } from './note'
 import { midi, type Midi } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
 import type { Tone } from './tone'
@@ -59,4 +60,30 @@ export function placeScale(root: SpelledNote, kind: ScaleKind): PlacedTone[] {
     ...tones.map((tone) => ({ tone, midi: midi(base + tone.semitones) })),
     ...tones.slice(0, 1).map((tone) => ({ tone, midi: midi(base + 12) })),
   ]
+}
+
+/** A chord of a scale where the keyboard shows the scale: on its degree's key, stacked upwards from it. */
+export interface PlacedScaleChord extends DiatonicChord {
+  /** The degree's key, as `placeScale` places it. */
+  readonly key: Midi
+  /** The chord's tones in root position from that key. */
+  readonly tones: readonly PlacedTone[]
+}
+
+/** The triads (3) or 7th chords (4) of a seven-note scale, each on its degree's key. */
+export function placeScaleChords(
+  root: SpelledNote,
+  kind: ScaleKind,
+  size: 3 | 4,
+): PlacedScaleChord[] {
+  const degrees = placeScale(root, kind)
+  return diatonicChords(spellScale(root, kind), size).flatMap((diatonic) => {
+    const degree = degrees.find((placed) => sameNote(placed.tone.note, diatonic.chord.root))
+    if (!degree) return []
+    const tones = spellChord(diatonic.chord.root, diatonic.chord.quality).map((tone) => ({
+      tone,
+      midi: midi(degree.midi + tone.semitones),
+    }))
+    return [{ ...diatonic, key: degree.midi, tones }]
+  })
 }

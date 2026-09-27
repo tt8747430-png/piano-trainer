@@ -50,6 +50,9 @@ export const scaleIntervals = (kind: ScaleKind): readonly Interval[] =>
   SCALES[kind].intervals.map((name) => INTERVALS[name === 'blue' ? 'd5' : name])
 
 /** The scale's notes from the root up, each spelled by letter steps from the root. */
+/** Whether a chord stands on each degree: a scale of seven notes (its numerals run I to VII). */
+export const scaleHasChords = (kind: ScaleKind): boolean => scaleIntervals(kind).length === 7
+
 export function spellScale(root: SpelledNote, kind: ScaleKind): Tone[] {
   return SCALES[kind].intervals.map((name) =>
     name === 'blue' ? blueNote(root) : toneAbove(root, INTERVALS[name]),

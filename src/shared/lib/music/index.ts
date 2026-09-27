@@ -43,6 +43,7 @@ export {
   CHORD_QUALITIES,
   chordBass,
   chordFamily,
+  chordHolds,
   chordRootSpelling,
   chordSymbol,
   qualitiesIn,
@@ -60,13 +61,22 @@ export {
   isMinorScale,
   relativeScale,
   scaleGaps,
+  scaleHasChords,
   scaleIntervals,
   scaleRootSpelling,
   spellScale,
   type ScaleGap,
   type ScaleKind,
 } from './scale'
-export { lastInversion, placeChord, placeScale, type PlacedChord, type PlacedTone } from './place'
+export {
+  lastInversion,
+  placeChord,
+  placeScale,
+  placeScaleChords,
+  type PlacedChord,
+  type PlacedScaleChord,
+  type PlacedTone,
+} from './place'
 export { scaleFingering, type Finger, type Hand } from './fingering'
 export { diatonicChords, type DiatonicChord } from './diatonic'
 export {
