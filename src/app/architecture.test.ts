@@ -134,3 +134,40 @@ describe('the music kernel and the arrangement engine (eslint)', { timeout: 60_0
     },
   )
 })
+
+describe('the notation kernel (eslint)', { timeout: 60_000 }, () => {
+  it('lets notation import the music kernel and its own files', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/notation/example.ts',
+      "import { TICKS_PER_BEAT } from '@/shared/lib/music'\nimport { ticksOf } from './values'\nexport const example = [TICKS_PER_BEAT, ticksOf]\n",
+    )
+    expect(broken).toEqual([])
+  })
+
+  it.each(['@/shared/lib/arrangement', '@/shared/lib', '@/entities/piece'])(
+    'refuses notation importing %s',
+    async (source) => {
+      const broken = await rulesBrokenBy(
+        'src/shared/lib/notation/example.ts',
+        `import * as outside from '${source}'\nexport const example = outside\n`,
+      )
+      expect(broken).toContain('boundaries/dependencies')
+    },
+  )
+
+  it('refuses notation importing a package', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/notation/example.ts',
+      "import { Stave } from 'vexflow/core'\nexport const example = Stave\n",
+    )
+    expect(broken).toContain('no-restricted-imports')
+  })
+
+  it('lets any layer use the notation kernel', async () => {
+    const broken = await rulesBrokenBy(
+      'src/widgets/sheet-music/ui/Example.tsx',
+      "import { notate } from '@/shared/lib/notation'\nexport const example = notate\n",
+    )
+    expect(broken).not.toContain('boundaries/dependencies')
+  })
+})
