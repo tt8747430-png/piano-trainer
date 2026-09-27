@@ -1,0 +1,16 @@
+@import '@vexflow-fonts/bravura/index.css';
+
+/* VexFlow draws in currentColor (engrave.ts): the notes take the ink, the staff's lines and barlines
+   the control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
+   `--color-*` variable exists at runtime. */
+[data-slot='score'] {
+  color: var(--foreground);
+}
+[data-slot='score'] :is(.vf-stave, .vf-stavebarline, .vf-staveconnector) {
+  color: var(--input);
+}
+/* The staff of the hand not heard or practised, in soft ink, without engraving again. */
+[data-slot='score'][data-muted='treble'] .vf-staff-treble,
+[data-slot='score'][data-muted='bass'] .vf-staff-bass {
+  color: var(--muted-foreground);
+}

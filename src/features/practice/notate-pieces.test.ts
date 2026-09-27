@@ -4,6 +4,7 @@ import { melodyOf, PIECES } from '@/entities/piece'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
 import { beatsPerBar, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
+import { engrave } from '@/shared/ui/score/engrave'
 import { arrangePiece, ownChoice } from './arrange-piece'
 
 /** Every voice of every measure fills its bar, its events end to end; one or two voices a staff. */
@@ -57,5 +58,19 @@ describe('notation of the content', () => {
     expectWritten(
       notate(arrange(chartIn(meter), { tonic: note('C'), pattern: PATTERNS[id].pattern })),
     )
+  })
+})
+
+describe('engraving of the content', () => {
+  it.each(PIECES.map((piece) => [piece.id, piece] as const))('engraves %s', (_id, piece) => {
+    const layout = engrave(
+      notate(arrangePiece(piece, ownChoice(piece))),
+      document.createElement('div'),
+      {
+        scale: 1,
+        fingers: true,
+      },
+    )
+    expect(layout.measures.length).toBeGreaterThan(0)
   })
 })

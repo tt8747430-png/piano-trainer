@@ -65,4 +65,14 @@ export const music: LocaleResources['music'] = {
   },
   // Тон и полутон: Т и П.
   gap: { W: 'Т', H: 'П', 'W+H': 'Т+П' },
+  // Ноты: нотный стан плеера.
+  sheet: {
+    label: 'Ноты',
+    loading: 'Загрузка нот',
+    error: 'Ноты не удаётся показать.',
+    bar: 'Такт {{n}}',
+    barChords: 'Такт {{n}}: {{chords}}',
+    loopStart: 'Начало повтора',
+    loopEnd: 'Конец повтора',
+  },
 }

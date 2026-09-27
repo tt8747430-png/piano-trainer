@@ -10,4 +10,12 @@ describe('test setup', () => {
   it('answers prefers-color-scheme with light until a test says otherwise', () => {
     expect(window.matchMedia('(prefers-color-scheme: dark)').matches).toBe(false)
   })
+
+  it('loads fonts at once and measures text by its length, as a canvas does', async () => {
+    await expect(document.fonts.load('30px Bravura')).resolves.toHaveLength(1)
+    const context = document.createElement('canvas').getContext('2d')
+    if (!context) throw new Error('No 2D context')
+    context.font = '20px Onest'
+    expect(context.measureText('abc').width).toBe(36)
+  })
 })

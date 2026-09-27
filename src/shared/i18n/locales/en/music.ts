@@ -65,4 +65,14 @@ export const music = {
   },
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
+  // The sheet music: the Player's staff.
+  sheet: {
+    label: 'Sheet music',
+    loading: 'Loading the music',
+    error: 'The music can’t be shown.',
+    bar: 'Bar {{n}}',
+    barChords: 'Bar {{n}}: {{chords}}',
+    loopStart: 'Loop start',
+    loopEnd: 'Loop end',
+  },
 } as const
