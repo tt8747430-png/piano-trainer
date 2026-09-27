@@ -15,6 +15,10 @@ export const learn = {
   chordLabel: 'Chord',
   // The ways a chord symbol is written on this root.
   written: 'Written',
+  show: { label: 'Show', scale: 'Scale', chords: 'Chords' },
+  keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
+  holds: '{{note}} is in {{chords}}',
+  holdsNone: 'No chord of the scale holds {{note}}',
   chordSize: { label: 'Chord size', triads: 'Triads', sevenths: '7ths' },
   root: 'Root',
   inversionLabel: 'Inversion',

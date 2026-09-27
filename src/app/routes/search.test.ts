@@ -79,4 +79,17 @@ describe('search params', () => {
     expect(await searchAt('/learn/chords?root=A%23&quality=maj')).toMatchObject({ root: 'Bb' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })
   })
+
+  it('read the Scales view, falling back to the scale view where a scale has no chords', async () => {
+    expect(SCALES_DEFAULTS).toMatchObject({ show: 'scale', keysPlay: 'chords' })
+    expect(await searchAt('/learn/scales?show=chords&keysPlay=notes')).toMatchObject({
+      show: 'chords',
+      keysPlay: 'notes',
+    })
+    expect(await searchAt('/learn/scales?kind=blues&show=chords')).toMatchObject({ show: 'scale' })
+    expect(await searchAt('/learn/scales?show=x&keysPlay=x')).toMatchObject({
+      show: 'scale',
+      keysPlay: 'chords',
+    })
+  })
 })

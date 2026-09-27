@@ -14,6 +14,7 @@ import {
   noteParam,
   pitchClassOf,
   SCALE_KINDS,
+  scaleHasChords,
   scaleRootSpelling,
   type ChordFamily,
   type ScaleKind,
@@ -84,12 +85,16 @@ export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
   root: noteParam(note('C')),
   kind: 'major',
+  show: 'scale',
   fingers: 'none',
   rhythm: 'even',
   tempo: 80,
   hands: 'rh',
   chords: 3,
+  keysPlay: 'chords',
 }
+const isScaleShow = isOneOf<ScaleView['show']>(['scale', 'chords'])
+const isKeysPlay = isOneOf<ScaleView['keysPlay']>(['chords', 'notes'])
 const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
 const isScaleChords = isOneOf<ScaleView['chords']>([3, 4])
 const isScaleStep = (value: unknown): value is ScaleStepId =>
@@ -101,11 +106,15 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
   return {
     root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
     kind,
+    show: scaleHasChords(kind)
+      ? valueOr(isScaleShow, raw.show, SCALES_DEFAULTS.show)
+      : SCALES_DEFAULTS.show,
     fingers: valueOr(isScaleFingers, raw.fingers, SCALES_DEFAULTS.fingers),
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
     chords: valueOr(isScaleChords, raw.chords, SCALES_DEFAULTS.chords),
+    keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
