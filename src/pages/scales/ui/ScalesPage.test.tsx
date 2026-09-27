@@ -187,7 +187,7 @@ describe('Learn → Scales', () => {
     const { router } = await renderApp('/learn/scales')
     await user.click(await screen.findByRole('combobox', { name: 'Scale' }))
     expect(await screen.findByText('Modes')).toBeInTheDocument()
-    await user.click(screen.getByRole('option', { name: 'Major blues' }))
+    await user.click(await screen.findByRole('option', { name: 'Major blues' }))
     expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
   })
 
