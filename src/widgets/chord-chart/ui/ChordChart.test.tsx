@@ -16,7 +16,6 @@ const strip = (current: number) => (
   <ChordChart
     performance={performance}
     headings={['Verse', 'Chorus']}
-    meter={bz5.meter}
     layout="strip"
     current={current}
     onBar={() => {}}
@@ -37,7 +36,7 @@ describe('ChordChart', () => {
   })
 
   it('makes its bars toggles where a bar plays, and leaves the Player’s bars plain', () => {
-    const props = { performance, headings: ['Verse', 'Chorus'], meter: bz5.meter, onBar: () => {} }
+    const props = { performance, headings: ['Verse', 'Chorus'], onBar: () => {} }
     const { rerender } = render(<ChordChart {...props} layout="lines" playing={0} />)
     expect(screen.getByRole('button', { name: /^Bar 1:/ })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: /^Bar 2:/ })).toHaveAttribute('aria-pressed', 'false')

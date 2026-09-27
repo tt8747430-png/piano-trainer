@@ -1,10 +1,5 @@
-import {
-  TICKS_PER_BEAT,
-  type NoteHand,
-  type Performance,
-  type PerformanceNote,
-} from '@/shared/lib/arrangement'
-import type { Finger } from '@/shared/lib/music'
+import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
+import { TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
 import { noteLabel, spellPerformedNote } from './note-names'
 
 export interface PlayedNote {

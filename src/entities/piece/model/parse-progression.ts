@@ -1,23 +1,20 @@
+import type { Chart, ChartBar, ChartChord } from '@/shared/lib/arrangement'
 import {
-  TICKS_PER_BEAT,
-  type Chart,
-  type ChartBar,
-  type ChartChord,
-  type Tick,
-} from '@/shared/lib/arrangement'
-import {
+  beatsPerBar,
   CHORD_QUALITIES,
   scaleIntervals,
   spellAbove,
   spellChord,
+  TICKS_PER_BEAT,
   type Chord,
   type ChordQuality,
   type ChordRole,
+  type Tick,
 } from '@/shared/lib/music'
 import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
 import { ContentError } from './content-error'
-import { beatsPerBar, CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
+import { CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
@@ -131,5 +128,5 @@ export function parseProgression(piece: ProgressionPiece, size: ChordSize): Char
   const lines = Array.from({ length: Math.ceil(bars.length / BARS_PER_LINE) }, (_, i) =>
     bars.slice(i * BARS_PER_LINE, (i + 1) * BARS_PER_LINE),
   )
-  return { key: pieceKey(piece), beatsPerBar: meterBeats, sections: [{ lines }] }
+  return { key: pieceKey(piece), meter: piece.meter, sections: [{ lines }] }
 }

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  beatsPerBar,
   CHORD_QUALITIES,
   chordRootSpelling,
   chordSymbol,
@@ -8,6 +9,7 @@ import {
   parseChordSymbol,
   parseKey,
   pitchClass,
+  type Meter,
   type SpelledNote,
 } from '@/shared/lib/music'
 import { arrange } from './arrange'
@@ -38,7 +40,7 @@ const BLOCK = pattern('block', '0/16 C', '0/16 L1')
 const BEATS = pattern('beats', '0/4 C,4/4 C,8/4 C,12/4 C', '0/16 L1+L8')
 
 /** A bar written `C`, `F@2-G@2` or `C:t1`; chords without @beats share what is left equally. */
-function bar(text: string, beatsPerBar: number): ChartBar {
+function bar(text: string, barBeats: number): ChartBar {
   const parts = text.split('-').map((part) => {
     const [head = '', method] = part.split(':')
     const [symbol = '', beats] = head.split('@')
@@ -48,19 +50,22 @@ function bar(text: string, beatsPerBar: number): ChartBar {
   const shared = parts.filter((part) => part.beats === undefined).length
   const chords = parts.map((part) => ({
     ...parseChordSymbol(part.symbol),
-    beats: part.beats ?? (beatsPerBar - given) / shared,
+    beats: part.beats ?? (barBeats - given) / shared,
     ...(part.method ? { method: part.method } : {}),
   }))
   return { chords, beats: chords.reduce((sum, chord) => sum + chord.beats, 0) }
 }
 
-function chart(lines: string[][], { key = 'C', beatsPerBar = 4 } = {}): Chart {
+function chart(
+  lines: string[][],
+  { key = 'C', meter = '4/4' }: { key?: string; meter?: Meter } = {},
+): Chart {
   const parsedKey = parseKey(key)
   if (!parsedKey) throw new Error(`test key ${key}`)
   return {
     key: parsedKey,
-    beatsPerBar,
-    sections: [{ lines: lines.map((line) => line.map((text) => bar(text, beatsPerBar))) }],
+    meter,
+    sections: [{ lines: lines.map((line) => line.map((text) => bar(text, beatsPerBar(meter)))) }],
   }
 }
 
@@ -146,7 +151,7 @@ describe('arrange', () => {
       rh: figure('4/4 C,12/4 C', { inThree: parseFigure('4/4 C,8/4 C') }),
       lh: figure('0/4 L1'),
     }
-    const performance = arrange(chart([['C']], { beatsPerBar: 3 }), { tonic: C, pattern: waltz })
+    const performance = arrange(chart([['C']], { meter: '3/4' }), { tonic: C, pattern: waltz })
     expect(onsets(performance, 'rh')).toEqual([12, 24])
     expect(onsets(performance, 'lh')).toEqual([0])
     expect(performance.bars[0]?.beats).toBe(3)
@@ -154,7 +159,7 @@ describe('arrange', () => {
   })
 
   it('clips a figure to a two-beat meter', () => {
-    const performance = arrange(chart([['C']], { beatsPerBar: 2 }), {
+    const performance = arrange(chart([['C']], { meter: '2/4' }), {
       tonic: C,
       pattern: pattern('halves', '0/8 C,8/8 C', '0/8 L1'),
     })

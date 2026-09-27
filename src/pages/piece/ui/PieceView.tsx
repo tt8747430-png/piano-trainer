@@ -60,7 +60,6 @@ export function PieceView({ piece }: { piece: Piece }) {
         <ChordChart
           performance={performance}
           headings={headings}
-          meter={piece.meter}
           layout="lines"
           onBar={toggleBar}
           playing={playback.playing}

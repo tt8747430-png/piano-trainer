@@ -1,13 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { testSong } from '../testing/test-pieces'
-import { METERS, beatsPerBar, defineListing, isPiece, pieceKey } from './types'
-
-describe('beatsPerBar', () => {
-  it('counts compound meters in dotted quarters', () => {
-    expect(METERS.map(beatsPerBar)).toEqual([2, 3, 4, 2, 4])
-  })
-})
+import { defineListing, isPiece, pieceKey } from './types'
 
 describe('pieceKey', () => {
   it('reads the key a piece is written in', () => {

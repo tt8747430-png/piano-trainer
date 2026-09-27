@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isMethodCode, METHODS } from '@/entities/pattern'
-import { barLength, type Meter } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { cn, useMediaQuery } from '@/shared/lib'
+import { beatsPerBar, timeSignature, timeSignatureText } from '@/shared/lib/music'
 import { chartSections } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
@@ -12,7 +12,6 @@ import { BarButton } from './BarButton'
 export function ChordChart({
   performance,
   headings,
-  meter,
   layout,
   current = null,
   playing,
@@ -20,7 +19,6 @@ export function ChordChart({
 }: {
   performance: Performance
   headings: readonly string[]
-  meter: Meter
   layout: 'lines' | 'strip'
   current?: number | null
   /**
@@ -56,7 +54,9 @@ export function ChordChart({
       .filter(isMethodCode)
       .map((code) => localText(METHODS[code].label, locale))
     const notes =
-      bar.beats === performance.beatsPerBar ? methods : [...methods, barLength(bar.beats, meter)]
+      bar.beats === beatsPerBar(performance.meter)
+        ? methods
+        : [...methods, timeSignatureText(timeSignature(bar.beats, performance.meter))]
     return (
       <BarButton
         key={index}

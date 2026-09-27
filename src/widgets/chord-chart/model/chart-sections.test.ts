@@ -6,7 +6,7 @@ import { chartSections } from './chart-sections'
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const CHART: Chart = {
   key: { tonic: note('C'), minor: false },
-  beatsPerBar: 4,
+  meter: '4/4',
   sections: [
     { lines: [[bar('C'), bar('F')], [bar('G')]] },
     { lines: [[bar('Am'), bar('F'), bar('C')]] },

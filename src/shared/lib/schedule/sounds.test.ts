@@ -14,7 +14,7 @@ import {
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
   key: { tonic: note('C'), minor: false },
-  beatsPerBar: 4,
+  meter: '4/4',
   sections: [{ lines: [[bar('C'), bar('G')]] }],
 }
 const BEATS = {

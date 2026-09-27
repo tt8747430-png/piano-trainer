@@ -18,7 +18,7 @@ const oneChordBar = (symbol: string) => ({
 })
 const chart = (...symbols: string[]): Chart => ({
   key: C_MAJOR,
-  beatsPerBar: 4,
+  meter: '4/4',
   sections: [{ lines: [symbols.map(oneChordBar)] }],
 })
 const BLOCK = {

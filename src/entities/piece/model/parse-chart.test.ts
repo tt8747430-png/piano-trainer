@@ -74,7 +74,7 @@ describe('parseChart', () => {
       }),
     )
     expect(chart.key).toEqual({ tonic: note('E', -1), minor: true })
-    expect(chart.beatsPerBar).toBe(3)
+    expect(chart.meter).toBe('3/4')
     expect(chart.sections.map((section) => section.lines.map((line) => line.length))).toEqual([
       [2, 1],
       [1],

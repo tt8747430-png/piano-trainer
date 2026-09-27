@@ -55,7 +55,6 @@ function Player({ piece }: { piece: Piece }) {
           <ChordChart
             performance={performance}
             headings={headings}
-            meter={piece.meter}
             layout="strip"
             current={bar}
             onBar={practice.jumpToBar}

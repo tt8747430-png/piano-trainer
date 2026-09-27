@@ -1,5 +1,5 @@
-import type { Finger } from '@/shared/lib/music'
-import { TICKS_PER_BEAT, type FigureEvent, type FigureTone, type FigureToken } from './types'
+import { TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
+import type { FigureEvent, FigureTone, FigureToken } from './types'
 
 const FIXED_TOKENS = new Map<string, FigureToken>([
   ['C', { kind: 'chord' }],

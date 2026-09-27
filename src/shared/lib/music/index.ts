@@ -1,5 +1,16 @@
 export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
+  beatsPerBar,
+  isCompound,
+  METERS,
+  TICKS_PER_BEAT,
+  timeSignature,
+  timeSignatureText,
+  type Meter,
+  type Tick,
+  type TimeSignature,
+} from './time'
+export {
   MIDDLE_C,
   MIDDLE_OCTAVES,
   PIANO,

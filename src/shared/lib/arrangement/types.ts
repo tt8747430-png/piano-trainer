@@ -1,8 +1,4 @@
-import type { Chord, Finger, Hand, Key, Midi, Tone } from '@/shared/lib/music'
-
-/** The domain's unit of time: 12 per beat, so 16ths (3) and triplet 8ths (4) are whole. */
-export type Tick = number
-export const TICKS_PER_BEAT = 12
+import type { Chord, Finger, Hand, Key, Meter, Midi, Tick, Tone } from '@/shared/lib/music'
 
 /** A chart as the engine reads it: chords by section, line and bar, in the key it is written in. */
 export interface ChartChord extends Chord {
@@ -19,7 +15,7 @@ export interface ChartSection {
 }
 export interface Chart {
   readonly key: Key
-  readonly beatsPerBar: number
+  readonly meter: Meter
   readonly sections: readonly ChartSection[]
 }
 
@@ -139,7 +135,7 @@ export interface BeatGroup {
 }
 export interface Performance {
   readonly key: Key
-  readonly beatsPerBar: number
+  readonly meter: Meter
   readonly totalTicks: Tick
   readonly bars: readonly PerformanceBar[]
   readonly chords: readonly PerformedChord[]

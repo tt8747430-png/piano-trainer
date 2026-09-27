@@ -1,36 +1,37 @@
 import {
+  beatsPerBar,
   chordBass,
   chordSymbol,
   midi,
   pitchClass,
   pitchClassOf,
   spellChord,
+  TICKS_PER_BEAT,
   transposeNote,
   type Chord,
   type Hand,
   type Key,
   type Midi,
   type SpelledNote,
+  type Tick,
 } from '@/shared/lib/music'
 import { autoFingers, chordContext, tokenMidis, type ChordContext } from './chord-context'
-import {
-  TICKS_PER_BEAT,
-  type BeatGroup,
-  type Chart,
-  type ChartChord,
-  type EventFigure,
-  type EventPattern,
-  type Figure,
-  type Melody,
-  type MelodyFigure,
-  type MelodyNote,
-  type MelodyPattern,
-  type Pattern,
-  type Performance,
-  type PerformanceBar,
-  type PerformanceNote,
-  type PerformedChord,
-  type Tick,
+import type {
+  BeatGroup,
+  Chart,
+  ChartChord,
+  EventFigure,
+  EventPattern,
+  Figure,
+  Melody,
+  MelodyFigure,
+  MelodyNote,
+  MelodyPattern,
+  Pattern,
+  Performance,
+  PerformanceBar,
+  PerformanceNote,
+  PerformedChord,
 } from './types'
 
 export interface ArrangeOptions {
@@ -176,10 +177,10 @@ function playFigure(
   context: ChordContext,
   hand: Hand,
   window: Window,
-  beatsPerBar: number,
+  barBeats: number,
 ): PerformanceNote[] {
   const events =
-    (beatsPerBar === 3 ? figure.inThree : undefined) ??
+    (barBeats === 3 ? figure.inThree : undefined) ??
     (context.major ? figure.onMajor : undefined) ??
     figure.events
   return events.flatMap((event) => {
@@ -270,7 +271,8 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     ? transposeMelody(options.melody, chart.key.tonic, options.tonic)
     : null
   const layout = layOut(chart)
-  const meterTicks = chart.beatsPerBar * TICKS_PER_BEAT
+  const barBeats = beatsPerBar(chart.meter)
+  const meterTicks = barBeats * TICKS_PER_BEAT
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
   const playsTune: boolean[] = []
@@ -313,10 +315,9 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         at === placed.startTick && placed.chord.beats < 2 ? placed.offsetInBar % meterTicks : 0
       const length = Math.min(meterTicks - from, end - at)
       const window: Window = { from, to: from + length, at, chord: index }
-      if (rh.kind === 'events')
-        notes.push(...playFigure(rh, context, 'rh', window, chart.beatsPerBar))
+      if (rh.kind === 'events') notes.push(...playFigure(rh, context, 'rh', window, barBeats))
       else if (melody) notes.push(...playTune(rh, melody, context, window))
-      notes.push(...playFigure(lh, context, 'lh', window, chart.beatsPerBar))
+      notes.push(...playFigure(lh, context, 'lh', window, barBeats))
       at += length
     }
   })
@@ -354,7 +355,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
 
   return {
     key,
-    beatsPerBar: chart.beatsPerBar,
+    meter: chart.meter,
     totalTicks: layout.totalTicks,
     bars: layout.bars,
     chords,

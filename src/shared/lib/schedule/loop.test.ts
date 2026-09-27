@@ -7,7 +7,7 @@ import { audibleHands } from './schedule'
 /** One bar of C, a chord on each beat: four beat groups, four seconds at 60 bpm. */
 const chart: Chart = {
   key: { tonic: note('C'), minor: false },
-  beatsPerBar: 4,
+  meter: '4/4',
   sections: [{ lines: [[{ chords: [{ ...parseChordSymbol('C'), beats: 4 }], beats: 4 }]] }],
 }
 const BEATS = {

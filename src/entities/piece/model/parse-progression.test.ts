@@ -55,7 +55,7 @@ describe('parseProgression', () => {
   it('packs chords into bars of the meter, tying them across bar lines', () => {
     const chart = parseProgression(testProgression('I:maj:8 IV:maj:2 V:maj:2 I:maj:4'), 'triads')
     expect(bars(chart)).toEqual(['C 4', 'C 4', 'F 2 | G 2', 'C 4'])
-    expect(chart.beatsPerBar).toBe(4)
+    expect(chart.meter).toBe('4/4')
   })
 
   it('ties a chord across a bar line in the middle of a bar', () => {

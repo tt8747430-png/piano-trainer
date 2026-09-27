@@ -1,7 +1,6 @@
 export { arrange, type ArrangeOptions } from './arrange'
 export { parseFigure } from './figure'
 export {
-  TICKS_PER_BEAT,
   type BeatGroup,
   type Chart,
   type ChartBar,
@@ -23,5 +22,4 @@ export {
   type PerformanceBar,
   type PerformanceNote,
   type PerformedChord,
-  type Tick,
 } from './types'

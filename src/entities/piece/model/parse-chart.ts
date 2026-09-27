@@ -1,9 +1,9 @@
 import { isMethodCode, type MethodCode } from '@/entities/pattern'
 import type { Chart, ChartBar, ChartChord } from '@/shared/lib/arrangement'
-import { ChordSymbolError, parseChordSymbol, type Chord } from '@/shared/lib/music'
+import { beatsPerBar, ChordSymbolError, parseChordSymbol, type Chord } from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
-import { beatsPerBar, pieceKey, type ChartPiece } from './types'
+import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
 
@@ -64,7 +64,7 @@ export function parseChart(piece: ChartPiece): Chart {
     }
   return {
     key: pieceKey(piece),
-    beatsPerBar: meterBeats,
+    meter: piece.meter,
     sections: piece.sections.map((section, s) => ({
       lines: section.lines.map((line, l) => {
         const bars = line.split(/\s+/).filter(Boolean)

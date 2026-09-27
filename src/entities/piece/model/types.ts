@@ -1,23 +1,10 @@
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
-import { parseKey, type Key, type Letter } from '@/shared/lib/music'
+import { parseKey, type Key, type Letter, type Meter } from '@/shared/lib/music'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
 export type PieceId = string
-
-export const METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const
-export type Meter = (typeof METERS)[number]
-
-/** Compound meters count dotted quarters: 6/8 has two beats, 12/8 four. */
-const BEATS_PER_BAR: Readonly<Record<Meter, number>> = {
-  '2/4': 2,
-  '3/4': 3,
-  '4/4': 4,
-  '6/8': 2,
-  '12/8': 4,
-}
-export const beatsPerBar = (meter: Meter): number => BEATS_PER_BAR[meter]
 
 /** A key as content writes it: `G`, `F#`, `Ebm`. */
 export type KeyText = `${Letter}${'' | '#' | 'b'}${'' | 'm'}`

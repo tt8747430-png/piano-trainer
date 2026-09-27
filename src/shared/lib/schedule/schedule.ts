@@ -1,11 +1,5 @@
-import {
-  TICKS_PER_BEAT,
-  type NoteHand,
-  type Performance,
-  type PerformanceNote,
-  type Tick,
-} from '@/shared/lib/arrangement'
-import type { Midi } from '@/shared/lib/music'
+import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
+import { beatsPerBar, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
 
 /** Which hands the learner hears: both, or one of them. */
 export const HANDS = ['both', 'rh', 'lh'] as const
@@ -86,7 +80,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const tempo = checkedTempo(options.tempo)
   const beat = secondsFor(TICKS_PER_BEAT, tempo)
   const countIn: Sound[] = options.countIn
-    ? Array.from({ length: performance.beatsPerBar }, (_, k) => ({
+    ? Array.from({ length: beatsPerBar(performance.meter) }, (_, k) => ({
         kind: 'click',
         at: k * beat,
         accent: k === 0,
