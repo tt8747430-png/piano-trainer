@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { recordAnswer } from '@/features/record-answer'
-import { chordSkill, qualitiesIn } from '@/shared/lib/music'
+import { scaleSkill } from '@/shared/lib/music'
 
 describe('Check', () => {
   it('checks a piece’s chords in six questions with a progress bar', async () => {
@@ -30,12 +30,11 @@ describe('Check', () => {
 
   it('says when the check marked its step learned', async () => {
     const user = userEvent.setup()
-    const { progressStore } = await renderApp('/check?of=chords:tri')
+    const { progressStore } = await renderApp('/check?of=scale:blues')
     await screen.findByRole('progressbar')
     act(() => {
-      for (const quality of qualitiesIn('tri'))
-        for (let i = 0; i < 4; i++)
-          recordAnswer(progressStore, { skill: chordSkill(quality), correct: true }, new Date())
+      for (let i = 0; i < 4; i++)
+        recordAnswer(progressStore, { skill: scaleSkill('blues'), correct: true }, new Date())
     })
     // Finish the check (answers wrong or right do not matter for the line: the step is now learned).
     while (!screen.queryByText(/is now marked learned/)) {
@@ -44,7 +43,7 @@ describe('Check', () => {
       await user.click(screen.getByRole('button', { name: 'Check' }))
       await user.click(screen.getByRole('button', { name: 'Next' }))
     }
-    expect(screen.getByText('Triads is now marked learned.')).toBeInTheDocument()
+    expect(screen.getByText('Minor blues is now marked learned.')).toBeInTheDocument()
   })
 
   it('shows not found for a check of nothing', async () => {
