@@ -6,6 +6,7 @@ import progressions from './progressions'
 import studies from './studies'
 
 export { BOOKS } from './books'
+export { COMMON_PROGRESSIONS } from './progressions'
 
 /** The collections Songs lists, in order. */
 export const SONG_COLLECTIONS: readonly Collection[] = [bozheSpasibo, calledToPlay, hymns]

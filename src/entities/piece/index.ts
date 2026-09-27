@@ -30,11 +30,19 @@ export {
 export { ContentError, type ContentPosition } from './model/content-error'
 export { chartOf, hasMethodCodes, melodyOf } from './model/chart'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
-export { entryById, pieceById } from './model/selectors'
+export { entriesInKey, entryById, pieceById } from './model/selectors'
 export { shelfOf, type Shelf } from './model/shelf'
 export { entryTitles, type EntryTitles } from './model/titles'
 export { Credits } from './ui/Credits'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
 export { usePieceHeadings } from './ui/use-section-heading'
-export { BOOKS, COLLECTIONS, PIECES, PROGRESSIONS, SONG_COLLECTIONS, STUDIES } from './content'
+export {
+  BOOKS,
+  COLLECTIONS,
+  COMMON_PROGRESSIONS,
+  PIECES,
+  PROGRESSIONS,
+  SONG_COLLECTIONS,
+  STUDIES,
+} from './content'

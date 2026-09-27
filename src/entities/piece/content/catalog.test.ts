@@ -7,6 +7,7 @@ import {
   BOOKS,
   CHORD_SIZES,
   COLLECTION_IDS,
+  COMMON_PROGRESSIONS,
   COLLECTIONS,
   isCollectionId,
   PIECES,
@@ -68,7 +69,30 @@ function accompaniments(piece: Piece) {
 }
 
 describe('the catalog', () => {
-  it('holds 51 pieces and 7 listings in 5 collections, each id once', () => {
+  it('names the key’s common progressions, each a progression in its mode', () => {
+    expect(COMMON_PROGRESSIONS.major.map((piece) => piece.title)).toEqual([
+      'I–IV–V–I',
+      'I–vi–IV–V',
+      'ii–V–I',
+      'I–V–vi–IV',
+    ])
+    expect(COMMON_PROGRESSIONS.minor.map((piece) => piece.title)).toEqual([
+      'i–iv–V–i',
+      'i–VI–III–VII',
+      'iiø–V7♭9–i',
+    ])
+    for (const [mode, pieces] of Object.entries(COMMON_PROGRESSIONS)) {
+      for (const piece of pieces) {
+        expect(piece.kind).toBe('progression')
+        expect(pieceKey(piece).minor).toBe(mode === 'minor')
+      }
+    }
+  })
+
+  it('leaves the Player’s own words free: no piece is called walk', () => {
+    expect(pieceById('walk')).toBeUndefined()
+  })
+  it('holds 54 pieces and 7 listings in 5 collections, each id once', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual([
       'bozhe-spasibo',
       'called-to-play',
@@ -76,8 +100,8 @@ describe('the catalog', () => {
       'studies',
       'progressions',
     ])
-    expect(PIECES).toHaveLength(51)
-    expect(PIECES.filter((piece) => piece.kind === 'progression')).toHaveLength(10)
+    expect(PIECES).toHaveLength(54)
+    expect(PIECES.filter((piece) => piece.kind === 'progression')).toHaveLength(13)
     expect(LISTINGS).toHaveLength(7)
     const ids = ENTRIES.map((entry) => entry.id)
     expect(new Set(ids).size).toBe(ids.length)

@@ -1,5 +1,6 @@
+import { pitchClassOf, type Key } from '@/shared/lib/music'
 import { COLLECTIONS } from '../content'
-import { isPiece, type Entry, type Piece } from './types'
+import { isPiece, pieceKey, type Entry, type Piece } from './types'
 
 const ENTRY_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
@@ -11,4 +12,15 @@ export const entryById = (id: string): Entry | undefined => ENTRY_BY_ID.get(id)
 export function pieceById(id: string): Piece | undefined {
   const entry = entryById(id)
   return entry && isPiece(entry) ? entry : undefined
+}
+
+/** The songs, listings and studies written in a key, in catalog order (a progression is practised in any key). */
+export function entriesInKey(key: Key): Entry[] {
+  const tonic = pitchClassOf(key.tonic)
+  return [...ENTRY_BY_ID.values()].filter((entry) => {
+    const own = pieceKey(entry)
+    return (
+      entry.kind !== 'progression' && own.minor === key.minor && pitchClassOf(own.tonic) === tonic
+    )
+  })
 }
