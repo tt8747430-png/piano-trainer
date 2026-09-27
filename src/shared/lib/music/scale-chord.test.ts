@@ -4,6 +4,7 @@ import { noteName, note } from './note'
 import { pitchClass } from './pitch'
 import { SCALE_KINDS, scaleHasChords, scaleRootSpelling, spellScale } from './scale'
 import {
+  borrowedChords,
   CHORD_NOTES,
   romanFigure,
   scaleChordAt,
@@ -155,5 +156,24 @@ describe('scaleChordAt', () => {
   it('plays a triad or a 7th chord as the scale stacks it', () => {
     expect(scaleChordAt(note('D'), 'dorian', 3, 3)).toEqual({ root: note('G'), quality: 'maj' })
     expect(scaleChordAt(note('D'), 'dorian', 3, 4)).toEqual({ root: note('G'), quality: 'd7' })
+  })
+})
+
+describe('borrowedChords', () => {
+  const written = (chords: readonly { roman: string }[]) => chords.map((chord) => chord.roman)
+  it('borrows ♭III, iv, ♭VI and ♭VII into a major key from its parallel minor', () => {
+    const chords = borrowedChords({ tonic: note('C'), minor: false }, 3)
+    expect(written(chords)).toEqual(['♭III', 'iv', '♭VI', '♭VII'])
+    expect(chords.map((chord) => scaleChordSymbol(chord))).toEqual(['E♭', 'Fm', 'A♭', 'B♭'])
+    expect(
+      borrowedChords({ tonic: note('C'), minor: false }, 4).map((c) => scaleChordSymbol(c)),
+    ).toEqual(['E♭Maj7', 'Fm7', 'A♭Maj7', 'B♭7'])
+  })
+
+  it('borrows the Picardy I, the Neapolitan ♭II, Dorian’s IV and harmonic minor’s V into a minor key', () => {
+    const chords = borrowedChords({ tonic: note('A'), minor: true }, 3)
+    expect(written(chords)).toEqual(['I', '♭II', 'IV', 'V'])
+    expect(chords.map((chord) => chord.from)).toEqual(['major', 'phrygian', 'melodic', 'harmonic'])
+    expect(chords.map((chord) => scaleChordSymbol(chord))).toEqual(['A', 'B♭', 'D', 'E'])
   })
 })

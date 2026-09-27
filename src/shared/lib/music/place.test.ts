@@ -3,6 +3,7 @@ import { note } from './note'
 import {
   lastInversion,
   lastStackInversion,
+  placeBorrowedChords,
   placeChord,
   placeScale,
   placeScaleChords,
@@ -114,5 +115,14 @@ describe('placeScaleChords', () => {
 describe('lastStackInversion', () => {
   it('offers the 3rd, 5th and 7th in the bass at most', () => {
     expect(CHORD_NOTES.map(lastStackInversion)).toEqual([2, 3, 3, 3, 3])
+  })
+})
+
+describe('placeBorrowedChords', () => {
+  it('stands each borrowed chord on its root’s key above the tonic', () => {
+    const chords = placeBorrowedChords({ tonic: note('C'), minor: false }, 3, 0)
+    expect(chords.map((c) => c.key)).toEqual([63, 65, 68, 70])
+    expect(keys(chords[1]?.tones ?? [])).toEqual([65, 68, 72])
+    expect(chords[3]?.numeral).toBe('♭VII')
   })
 })

@@ -1,6 +1,8 @@
 import { intervalBetween, spellAbove } from './interval'
 import {
+  note,
   noteName,
+  noteParam,
   parseNoteName,
   pitchClassOf,
   plainSpelling,
@@ -54,4 +56,27 @@ export function transposeNote(note: SpelledNote, from: SpelledNote, to: SpelledN
   const moved = spellAbove(to, intervalBetween(from, note))
   if (Math.abs(moved.accidental) < 2) return moved
   return plainSpelling(pitchClassOf(moved), moved.accidental > 0)
+}
+
+/** A key as a URL writes it: its tonic's `NoteParam`, then `m` for minor (`Eb`, `C#m`): only keyParam makes one. */
+export type KeyParam = string & { readonly __brand: 'KeyParam' }
+
+export const keyParam = (key: Key): KeyParam =>
+  (noteParam(key.tonic) + (key.minor ? 'm' : '')) as KeyParam
+
+/** The key keyParam wrote. */
+export function keyFromParam(param: KeyParam): Key {
+  const key = parseKey(param)
+  if (!key) throw new RangeError(`keyParam wrote ${param}, which is not a key`)
+  return key
+}
+
+const SHARPS_IN_ORDER: readonly Letter[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B']
+const FLATS_IN_ORDER: readonly Letter[] = ['B', 'E', 'A', 'D', 'G', 'C', 'F']
+
+/** The sharps or flats of a key's signature, in the order they are written: F♯ C♯ G♯ …, B♭ E♭ A♭ …. */
+export function signatureNotes(key: Key): SpelledNote[] {
+  const count = keySignature(key)
+  const letters = count > 0 ? SHARPS_IN_ORDER : FLATS_IN_ORDER
+  return letters.slice(0, Math.abs(count)).map((letter) => note(letter, count > 0 ? 1 : -1))
 }

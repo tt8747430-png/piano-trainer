@@ -41,13 +41,17 @@ export {
 } from './note'
 export { intervalBetween, spellAbove, type Interval } from './interval'
 export {
+  keyFromParam,
   keyName,
+  keyParam,
   keyPrefersSharps,
   keySignature,
   parseKey,
+  signatureNotes,
   tonicSpelling,
   transposeNote,
   type Key,
+  type KeyParam,
 } from './key'
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
 export {
@@ -74,6 +78,7 @@ export {
   isMinorScale,
   modesOfKey,
   relatedScale,
+  relativeKey,
   scaleFamily,
   scaleGaps,
   scaleHasChords,
@@ -91,6 +96,7 @@ export {
 export {
   lastInversion,
   lastStackInversion,
+  placeBorrowedChords,
   placeChord,
   placeScale,
   placeScaleChords,
@@ -110,6 +116,7 @@ export {
   type Hand,
 } from './fingering'
 export {
+  borrowedChords,
   CHORD_NOTES,
   romanFigure,
   scaleChordAt,
@@ -117,6 +124,7 @@ export {
   scaleChords,
   scaleChordSymbol,
   stackSuffix,
+  type BorrowedChord,
   type ChordNotes,
   type ScaleChord,
 } from './scale-chord'
@@ -129,3 +137,12 @@ export {
   type Skill,
   type SkillId,
 } from './skill'
+export {
+  CIRCLE_OF_FIFTHS,
+  circleFunctions,
+  randomKey,
+  sameKey,
+  type CircleFunction,
+  type CirclePlace,
+  type CircleRing,
+} from './circle'

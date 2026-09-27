@@ -8,6 +8,7 @@ import {
   isMinorScale,
   modesOfKey,
   relatedScale,
+  relativeKey,
   scaleGaps,
   scaleHasChords,
   scaleIntervals,
@@ -297,5 +298,18 @@ describe('spellInKey', () => {
   it('spells a note outside the key plainly, in the key’s direction', () => {
     expect(spellInKey(pitchClass(6), major(note('C')))).toEqual(note('G', -1))
     expect(spellInKey(pitchClass(10), major(note('G')))).toEqual(note('A', 1))
+  })
+})
+
+describe('relativeKey', () => {
+  it('pairs a major key with the minor on its 6th, and a minor key with the major on its 3rd', () => {
+    expect(relativeKey({ tonic: note('E', -1), minor: false })).toEqual({
+      tonic: note('C'),
+      minor: true,
+    })
+    expect(relativeKey({ tonic: note('F', 1), minor: true })).toEqual({
+      tonic: note('A'),
+      minor: false,
+    })
   })
 })

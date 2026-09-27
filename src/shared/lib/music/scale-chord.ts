@@ -1,7 +1,8 @@
 import { CHORD_QUALITIES, qualityIntervals, type Chord, type ChordQuality } from './chord'
 import { labelled } from './interval'
-import { noteName, type SpelledNote } from './note'
-import type { PitchClass } from './pitch'
+import type { Key } from './key'
+import { noteName, pitchClassOf, type SpelledNote } from './note'
+import { pitchClass, type PitchClass } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
 import { toneAbove, type Tone } from './tone'
 
@@ -164,4 +165,47 @@ export function scaleChordAt(
       : base?.quality
   if (!base || !quality) throw new RangeError(`${kind} has no chord on degree ${degree}`)
   return { root: base.root, quality }
+}
+
+/** A chord a key borrows from a parallel scale, its numeral marked by how its root differs from the key's own. */
+export interface BorrowedChord extends ScaleChord {
+  readonly from: ScaleKind
+}
+
+/**
+ * The chords a key borrows most (modal mixture): a major key ♭III, iv, ♭VI and ♭VII from its parallel
+ * minor; a minor key the Picardy I from major, the Neapolitan ♭II from Phrygian, IV from melodic minor
+ * (Dorian's) and V from harmonic minor.
+ */
+const BORROWED: Readonly<
+  Record<'major' | 'minor', readonly { readonly degree: number; readonly from: ScaleKind }[]>
+> = {
+  major: [
+    { degree: 2, from: 'natural' },
+    { degree: 3, from: 'natural' },
+    { degree: 5, from: 'natural' },
+    { degree: 6, from: 'natural' },
+  ],
+  minor: [
+    { degree: 0, from: 'major' },
+    { degree: 1, from: 'phrygian' },
+    { degree: 3, from: 'melodic' },
+    { degree: 4, from: 'harmonic' },
+  ],
+}
+const SHIFT_SIGNS = new Map([
+  [1, '#'],
+  [11, '♭'],
+])
+
+/** A key's borrowed chords of `notes` notes, in degree order. */
+export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
+  const own = spellScale(key.tonic, key.minor ? 'natural' : 'major')
+  return BORROWED[key.minor ? 'minor' : 'major'].flatMap(({ degree, from }) => {
+    const chord = scaleChords(key.tonic, from, notes)[degree]
+    const ownRoot = own[degree]
+    if (!chord || !ownRoot) return []
+    const shift = pitchClass(pitchClassOf(chord.root) - pitchClassOf(ownRoot.note))
+    return [{ ...chord, roman: (SHIFT_SIGNS.get(shift) ?? '') + chord.roman, from }]
+  })
 }

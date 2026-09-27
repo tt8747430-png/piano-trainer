@@ -1,10 +1,12 @@
 import { qualityIntervals, spellChord, type ChordQuality } from './chord'
+import type { Key } from './key'
 import { MIDDLE_C } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
-import { midi, type Midi } from './pitch'
+import { midi, pitchClass, type Midi } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
 import type { Tone } from './tone'
 import {
+  borrowedChords,
   romanFigure,
   scaleChords,
   scaleChordSymbol,
@@ -125,4 +127,21 @@ export function placeScaleChords(
     const degree = degrees[chord.degree]
     return degree ? [placeStack(chord, notes, degree.midi, inversion)] : []
   })
+}
+
+/** A key's borrowed chords, each on its root's key above the tonic (at or above middle C), in an inversion. */
+export function placeBorrowedChords(
+  key: Key,
+  notes: ChordNotes,
+  inversion: number,
+): PlacedScaleChord[] {
+  const tonic = MIDDLE_C + pitchClassOf(key.tonic)
+  return borrowedChords(key, notes).map((chord) =>
+    placeStack(
+      chord,
+      notes,
+      midi(tonic + pitchClass(pitchClassOf(chord.root) - pitchClassOf(key.tonic))),
+      inversion,
+    ),
+  )
 }

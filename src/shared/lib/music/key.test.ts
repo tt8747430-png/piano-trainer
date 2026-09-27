@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
+  keyFromParam,
   keyName,
+  keyParam,
   keyPrefersSharps,
   keySignature,
   parseKey,
+  signatureNotes,
   tonicSpelling,
   transposeNote,
   type Key,
@@ -104,5 +107,24 @@ describe('transposeNote', () => {
         expect(transposeNote(root, note('G'), note('G'))).toEqual(root)
       }
     }
+  })
+})
+
+describe('keyParam', () => {
+  it('writes a key as a URL does and reads it back', () => {
+    expect(keyParam({ tonic: note('E', -1), minor: false })).toBe('Eb')
+    expect(keyParam({ tonic: note('C', 1), minor: true })).toBe('C#m')
+    expect(keyFromParam(keyParam({ tonic: note('B', -1), minor: true }))).toEqual({
+      tonic: note('B', -1),
+      minor: true,
+    })
+  })
+})
+
+describe('signatureNotes', () => {
+  it('names a signature’s sharps or flats in the order they are written', () => {
+    expect(signatureNotes(key('Eb')).map(noteName)).toEqual(['B♭', 'E♭', 'A♭'])
+    expect(signatureNotes(key('F#m')).map(noteName)).toEqual(['F#', 'C#', 'G#'])
+    expect(signatureNotes(key('Am'))).toEqual([])
   })
 })

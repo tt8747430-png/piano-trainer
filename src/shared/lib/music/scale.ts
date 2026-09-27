@@ -259,3 +259,10 @@ export function modesOfKey(key: Key): { readonly root: SpelledNote; readonly kin
     return root && kind !== own ? [{ root, kind }] : []
   })
 }
+
+/** A key's relative: the minor on a major key's 6th, the major on a minor key's 3rd. */
+export function relativeKey(key: Key): Key {
+  const related = relatedScale(key.tonic, key.minor ? 'natural' : 'major')
+  if (!related) throw new RangeError('Every major and minor key has a relative')
+  return { tonic: related.root, minor: !key.minor }
+}
