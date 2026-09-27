@@ -5,7 +5,7 @@ import { pieceStepId } from '@/entities/path'
 import { skillsOfPiece, type Piece } from '@/entities/piece'
 import { ratingOf, selectAllAnswers, useProgress } from '@/entities/progress'
 import type { Performance } from '@/shared/lib/arrangement'
-import { noteParam, qualitySuffix, skillOf } from '@/shared/lib/music'
+import { noteParam, qualityParams, qualitySuffix, skillOf } from '@/shared/lib/music'
 import { ButtonLink, RatingMark } from '@/shared/ui'
 
 /** The chord qualities a piece uses, each with its rating and a way into the explorer; a check of them all. */
@@ -30,7 +30,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
               <Link
                 to="/learn/chords"
                 search={{
-                  quality: skill.quality,
+                  ...qualityParams(skill.quality),
                   ...(first ? { root: noteParam(first.root) } : {}),
                 }}
                 aria-label={`${t(`music:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}

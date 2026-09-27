@@ -28,11 +28,9 @@ export {
   barSounds,
   chordSounds,
   keySounds,
-  placedChordSounds,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
   walkSounds,
-  type ChordPlaying,
   type PracticeRhythm,
 } from './sounds'
 export { chordBar } from './chord-bar'

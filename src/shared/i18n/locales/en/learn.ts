@@ -12,7 +12,6 @@ export const learn = {
   },
   chords: 'Chords',
   scales: 'Scales',
-  chordLabel: 'Chord',
   // The ways a chord symbol is written on this root.
   written: 'Written',
   show: { label: 'Show', scale: 'Scale', chords: 'Chords' },
@@ -26,6 +25,24 @@ export const learn = {
     ninths: '9ths',
     elevenths: '11ths',
     thirteenths: '13ths',
+  },
+  // The Chords reference builds a chord part by part.
+  builder: {
+    triad: 'Triad',
+    triads: {
+      maj: 'Major',
+      min: 'Minor',
+      dim: 'Diminished',
+      aug: 'Augmented',
+      sus2: 'Suspended 2nd',
+      sus4: 'Suspended 4th',
+    },
+    sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
+    seventh: '7th',
+    sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
+    added: 'Added tone',
+    alterations: 'Alterations',
+    none: 'None',
   },
   walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
   root: 'Root',

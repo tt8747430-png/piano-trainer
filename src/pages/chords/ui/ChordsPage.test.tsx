@@ -1,25 +1,72 @@
-import { act, screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('Learn → Chords', () => {
-  it('shows C major by default, its keys labelled by degree', async () => {
+  it('shows C major by default, named, its keys labelled by degree', async () => {
     await renderApp('/learn/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Chord' })).toHaveTextContent('Major triad')
+    expect(screen.getByText('Major triad')).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Triad' })).toHaveTextContent('Major')
+    expect(screen.getByRole('combobox', { name: 'Chord size' })).toHaveTextContent('Triad')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
 
-  it('opens a deep link and moves through the URL, sounding each choice', async () => {
+  it('builds a chord part by part through the URL, sounding each choice', async () => {
     const user = userEvent.setup()
-    const { router, audio } = await renderApp('/learn/chords?root=G&quality=d7')
+    const { router, audio } = await renderApp('/learn/chords?root=G&size=7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Chord' }))
-    await user.click(await screen.findByRole('option', { name: 'Minor 7th m7' }))
-    expect(router.state.location.search).toMatchObject({ root: 'G', quality: 'm7' })
-    expect(audio.played.length).toBeGreaterThan(0)
+    await user.click(screen.getByRole('combobox', { name: 'Triad' }))
+    await user.click(await screen.findByRole('option', { name: 'Minor m' }))
+    expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
+    await user.click(await screen.findByRole('option', { name: '11th' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
+    expect(audio.played.length).toBeGreaterThan(1)
+  })
+
+  it('offers a 7th chord its 7th, and a dominant its alterations', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/chords?size=9')
+    await user.click(await screen.findByRole('button', { name: 'Major 7th' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'CMaj9' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
+    const alterations = await screen.findByRole('combobox', { name: 'Alterations' })
+    expect(alterations).toHaveTextContent('None')
+    await user.click(alterations)
+    await user.click(await screen.findByRole('option', { name: '#11' }))
+    expect(router.state.location.search).toMatchObject({ size: 9, alter: 's11' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9#11' })).toBeInTheDocument()
+  })
+
+  it('adds a tone to a triad, and names a chord the table lacks by rule', async () => {
+    await renderApp('/learn/chords?triad=min&added=add9')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm(add9)' })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Added tone' })).toHaveTextContent('add9')
+    const written = screen.getByText('Written')
+    expect(written.parentElement).toHaveTextContent(/^WrittenCm\(add9\)$/)
+  })
+
+  it('writes the chord on a staff', async () => {
+    await renderApp('/learn/chords?triad=dim&size=7&seventh=diminished')
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
+    await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
+  })
+
+  it('stacks a suspended chord only as far as it goes', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/chords?triad=sus4&size=13')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
+    expect((await screen.findAllByRole('option')).map((option) => option.textContent)).toEqual([
+      'Triad',
+      '7th',
+      '9th',
+      '13th',
+    ])
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
@@ -73,7 +120,7 @@ describe('Learn → Chords', () => {
   })
 
   it('offers only the inversions the chord has', async () => {
-    await renderApp('/learn/chords?quality=maj')
+    await renderApp('/learn/chords')
     const inversions = await screen.findByRole('group', { name: 'Inversion' })
     expect(
       within(inversions)
@@ -84,7 +131,7 @@ describe('Learn → Chords', () => {
 
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
-    const { progressStore } = await renderApp('/learn/chords?quality=maj7&step=chords:sev')
+    const { progressStore } = await renderApp('/learn/chords?size=7&seventh=major&step=chords:sev')
     const check = await screen.findByRole('link', { name: 'Check yourself' })
     expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
     await user.click(screen.getByRole('button', { name: 'Learned' }))
@@ -93,15 +140,15 @@ describe('Learn → Chords', () => {
 
   it('chooses the root from its pop-up', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/chords?quality=min')
+    const { router } = await renderApp('/learn/chords?triad=min')
     await user.click(await screen.findByRole('combobox', { name: 'Root' }))
     await user.click(await screen.findByRole('option', { name: 'E' }))
-    expect(router.state.location.search).toMatchObject({ root: 'E', quality: 'min' })
+    expect(router.state.location.search).toMatchObject({ root: 'E', triad: 'min' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
   })
 
   it('writes the chord every way it is written', async () => {
-    await renderApp('/learn/chords?quality=m7')
+    await renderApp('/learn/chords?triad=min&size=7')
     const written = await screen.findByText('Written')
     expect(written.parentElement).toHaveTextContent(/Cm7 · C/)
   })

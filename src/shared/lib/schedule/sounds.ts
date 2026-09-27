@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { placeChord, spellChord, type Chord, type Midi } from '@/shared/lib/music'
+import type { Midi } from '@/shared/lib/music'
 import { schedule, type Audible, type NoteSound, type Sound } from './schedule'
 
 /** One bar on its own at a tempo: what a tap on a bar plays. */
@@ -33,25 +33,6 @@ export function chordSounds(
       duration: options.arpeggio ? ARPEGGIO.duration : BLOCK.duration,
       velocity: options.arpeggio ? ARPEGGIO.velocity : BLOCK.velocity,
     }))
-}
-
-/** How the explorers sound a chord: its inversion, one hand or two, struck at once or rolled. */
-export interface ChordPlaying {
-  readonly inversion?: number
-  readonly bothHands?: boolean
-  readonly arpeggio?: boolean
-}
-
-/** A chord as the explorers place it (`placeChord`), struck at once or rolled upwards. */
-export function placedChordSounds(
-  chord: Chord,
-  { inversion = 0, bothHands = false, arpeggio = false }: ChordPlaying = {},
-): NoteSound[] {
-  const placed = placeChord(spellChord(chord.root, chord.quality), { inversion, bothHands })
-  return chordSounds(
-    [...placed.lh, ...placed.rh].map((tone) => tone.midi),
-    { arpeggio },
-  )
 }
 
 /** The keys a hand plays at once, now: a tap's key, or the chord a key stands for, each softer. */

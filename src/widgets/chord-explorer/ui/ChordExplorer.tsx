@@ -2,28 +2,14 @@ import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
-import {
-  CHORD_FAMILIES,
-  chordRootSpelling,
-  chordSymbol,
-  lastInversion,
-  noteFromParam,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
-  placeChord,
-  qualitiesIn,
-  qualityIntervals,
-  qualitySpellings,
-  qualitySuffix,
-  spellChord,
-  type Midi,
-} from '@/shared/lib/music'
-import { placedChordSounds } from '@/shared/lib/schedule'
+import { lastInversion, noteName, qualitySpellings, type Midi } from '@/shared/lib/music'
+import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { Dropdown, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
+import { ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import type { ChordView } from '../model/chord-view'
+import { changedView, viewChord, type ChordView } from '../model/chord-view'
+import { ChordBuilder } from './ChordBuilder'
+import { ChordSheet } from './ChordSheet'
 
 /** Root position and the first three inversions, with the name each has on screen. */
 const INVERSIONS = [
@@ -33,73 +19,57 @@ const INVERSIONS = [
   { value: 3, name: 'third' },
 ] as const
 
-/** Any chord on any root: its keys by role and degree, inversions, one hand or two, played, and every way it is written. */
+/** The keys a chord's placement strikes, the left hand's first. */
+const keysOf = (view: ChordView): Midi[] => {
+  const { placed } = viewChord(view)
+  return [...placed.lh, ...placed.rh].map((key) => key.midi)
+}
+
+/**
+ * Any chord built part by part on any root: its keys by role and degree, inversions, one hand or
+ * two, played, named, and every way the table writes it.
+ */
 export function ChordExplorer({
   chord,
   onChange,
 }: {
   chord: ChordView
-  onChange: (change: Partial<ChordView>) => void
+  onChange: (view: ChordView) => void
 }) {
   const { t } = useTranslation(['learn', 'music', 'common'])
   const play = usePlay()
   const playback = usePlayback<'chord' | 'arpeggio'>()
-  const root = noteFromParam(chord.root)
-  const tones = spellChord(root, chord.quality)
-  const placed = placeChord(tones, {
-    inversion: chord.inversion,
-    bothHands: chord.hands === 'both',
-  })
+  const { chord: built, placed } = viewChord(chord)
   const keys = [...placed.lh, ...placed.rh]
   const marks = new Map<Midi, KeyMark>(
     keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
   )
-  const soundsOf = (view: ChordView, arpeggio: boolean) =>
-    placedChordSounds(
-      { root: noteFromParam(view.root), quality: view.quality },
-      { inversion: view.inversion, bothHands: view.hands === 'both', arpeggio },
-    )
+  const rootName = noteName(built.root)
+  const symbol = rootName + built.suffix
   // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   const change = (next: Partial<ChordView>) => {
-    onChange(next)
-    play(soundsOf({ ...chord, ...next }, false))
+    const view = changedView(chord, next)
+    onChange(view)
+    play(chordSounds(keysOf(view), { arpeggio: false }))
   }
 
   return (
     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10 lg:gap-y-6">
       <div className="flex flex-col gap-4">
-        <h2 className="text-7xl">{chordSymbol({ root, quality: chord.quality })}</h2>
-        <div className="flex flex-wrap gap-2">
-          <Dropdown
-            label={t('learn:root')}
-            value={chord.root}
-            options={PITCH_CLASSES.map((pc) => {
-              const spelled = chordRootSpelling(pc, qualityIntervals(chord.quality))
-              return { value: noteParam(spelled), label: noteName(spelled) }
-            })}
-            onChange={(value) => change({ root: value })}
-          />
-          <Dropdown
-            label={t('learn:chordLabel')}
-            value={chord.quality}
-            groups={CHORD_FAMILIES.map((family) => ({
-              label: t(`music:family.${family}`),
-              options: qualitiesIn(family).map((quality) => ({
-                value: quality,
-                label: t(`music:quality.${quality}`),
-                detail: qualitySuffix(quality) || t('music:major'),
-              })),
-            }))}
-            onChange={(quality) => change({ quality, inversion: 0 })}
-          />
-        </div>
+        <hgroup>
+          <h2 className="text-7xl">{symbol}</h2>
+          {built.quality ? (
+            <p className="text-muted-foreground">{t(`music:quality.${built.quality}`)}</p>
+          ) : null}
+        </hgroup>
+        <ChordBuilder chord={chord} onChange={change} />
         <div className="flex flex-col gap-4 sm:flex-row">
           <Segmented
             label={t('learn:inversionLabel')}
             value={chord.inversion}
-            options={INVERSIONS.filter(({ value }) => value <= lastInversion(tones.length)).map(
-              ({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }),
-            )}
+            options={INVERSIONS.filter(
+              ({ value }) => value <= lastInversion(built.tones.length),
+            ).map(({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }))}
             onChange={(inversion) => change({ inversion })}
           />
           <Segmented
@@ -119,8 +89,9 @@ export function ChordExplorer({
         className="lg:order-first lg:col-span-2"
       />
       <div className="flex flex-col gap-4">
+        <ChordSheet placed={placed} />
         <ol className="flex flex-wrap gap-2">
-          {tones.map((tone) => (
+          {built.tones.map((tone) => (
             <li
               key={tone.degree}
               className="flex items-center gap-2 rounded-xl border border-border bg-card py-1 pr-3 pl-1"
@@ -141,7 +112,9 @@ export function ChordExplorer({
           <Button
             size="pill"
             className="flex-1"
-            onClick={() => playback.toggle('chord', soundsOf(chord, false))}
+            onClick={() =>
+              playback.toggle('chord', chordSounds(keysOf(chord), { arpeggio: false }))
+            }
           >
             {playback.playing === 'chord' ? (
               <>
@@ -156,7 +129,9 @@ export function ChordExplorer({
             size="pill"
             variant="soft"
             className="flex-1"
-            onClick={() => playback.toggle('arpeggio', soundsOf(chord, true))}
+            onClick={() =>
+              playback.toggle('arpeggio', chordSounds(keysOf(chord), { arpeggio: true }))
+            }
           >
             {playback.playing === 'arpeggio' ? (
               <>
@@ -171,8 +146,8 @@ export function ChordExplorer({
         <p className="flex flex-wrap items-baseline gap-x-4">
           <span className="text-muted-foreground">{t('learn:written')}</span>
           <span className="font-display text-xl font-semibold">
-            {qualitySpellings(chord.quality)
-              .map((suffix) => noteName(root) + suffix)
+            {(built.quality ? qualitySpellings(built.quality) : [built.suffix])
+              .map((suffix) => rootName + suffix)
               .join(' · ')}
           </span>
         </p>

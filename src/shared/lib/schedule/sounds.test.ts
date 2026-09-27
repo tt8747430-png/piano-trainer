@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import { audibleHands } from './schedule'
-import { barSounds, chordSounds, keySounds, placedChordSounds, walkSounds } from './sounds'
+import { barSounds, chordSounds, keySounds, walkSounds } from './sounds'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
@@ -90,18 +90,5 @@ describe('keySounds', () => {
       [69, 0],
     ])
     expect(chord[0]?.velocity).toBeLessThan(keySounds([midi(62)])[0]?.velocity ?? 0)
-  })
-})
-
-describe('placedChordSounds', () => {
-  it('sounds a chord as the explorers place it, struck or rolled', () => {
-    const c = { root: note('C'), quality: 'maj' } as const
-    expect(placedChordSounds(c).map((s) => [s.midi, s.at])).toEqual([
-      [60, 0],
-      [64, 0],
-      [67, 0],
-    ])
-    expect(placedChordSounds(c, { arpeggio: true }).map((s) => s.at)).toEqual([0, 0.22, 0.44])
-    expect(placedChordSounds(c, { bothHands: true }).some((s) => s.midi < 60)).toBe(true)
   })
 })

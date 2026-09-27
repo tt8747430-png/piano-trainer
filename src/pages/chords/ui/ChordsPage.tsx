@@ -12,8 +12,8 @@ export function ChordsPage() {
   const { step, ...chord } = useSearch({ from: '/shell/learn/chords' })
   const navigate = useNavigate({ from: '/learn/chords' })
   const back = useGoBack({ to: '/learn' })
-  const onChange = (change: Partial<ChordView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+  const onChange = (view: ChordView) =>
+    void navigate({ search: (prev) => ({ ...prev, ...view }), replace: true })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader

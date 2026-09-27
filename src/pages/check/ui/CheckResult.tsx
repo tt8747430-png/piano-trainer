@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { ratingOf, selectAllAnswers, selectIsLearned, useProgress } from '@/entities/progress'
 import type { CheckPlan } from '@/features/quiz'
-import { skillOf } from '@/shared/lib/music'
+import { qualityParams, skillOf } from '@/shared/lib/music'
 import { ButtonLink, RatingMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -41,7 +41,7 @@ export function CheckResult({
             skill.kind === 'chord'
               ? {
                   name: t(`music:quality.${skill.quality}`),
-                  explorerLink: <Link to="/learn/chords" search={{ quality: skill.quality }} />,
+                  explorerLink: <Link to="/learn/chords" search={qualityParams(skill.quality)} />,
                   openLabel: t('openChords'),
                 }
               : {

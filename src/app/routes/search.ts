@@ -7,21 +7,27 @@ import type { PlayerSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
+  ADDED_TONES,
+  BUILT_SIZES,
+  buildChord,
+  builtRootSpelling,
   CHORD_NOTES,
-  CHORD_QUALITIES,
-  chordRootSpelling,
   FINGERINGS,
   fingeringsOf,
+  fitParts,
   lastInversion,
   note,
   noteParam,
   ownFingering,
+  partsParams,
   pitchClassOf,
-  qualityIntervals,
+  readAlterations,
   SCALE_KINDS,
   scaleHasChords,
   scaleIntervals,
   scaleRootSpelling,
+  SEVENTHS,
+  TRIADS,
   type ChordFamily,
   type Fingering,
   type ScaleKind,
@@ -41,7 +47,6 @@ type Input<S> = Partial<S> & SearchSchemaInput
 type Raw = Readonly<Record<string, unknown>>
 
 const isHands = isOneOf(HANDS)
-const isQuality = isOneOf(CHORD_QUALITIES)
 const isScaleKind = isOneOf(SCALE_KINDS)
 const isChordSize = isOneOf(CHORD_SIZES)
 const isCollection = (value: unknown): value is CollectionId | 'all' =>
@@ -66,28 +71,37 @@ export type ChordsStepId = `chords:${ChordFamily}`
 export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = {
   root: noteParam(note('C')),
-  quality: 'maj',
+  triad: 'maj',
+  size: 5,
+  seventh: 'minor',
+  added: 'none',
+  alter: '',
   inversion: 0,
   hands: 'rh',
 }
+const isTriad = isOneOf(TRIADS)
+const isBuiltSize = isOneOf(BUILT_SIZES)
+const isSeventh = isOneOf(SEVENTHS)
+const isAddedTone = isOneOf(ADDED_TONES)
 const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
 export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
   const raw: Raw = input
-  const quality = valueOr(isQuality, raw.quality, CHORDS_DEFAULTS.quality)
-  const root = readNote(raw.root)
+  const parts = fitParts({
+    triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
+    size: valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size),
+    seventh: valueOr(isSeventh, raw.seventh, CHORDS_DEFAULTS.seventh),
+    added: valueOr(isAddedTone, raw.added, CHORDS_DEFAULTS.added),
+    alterations: readAlterations(raw.alter),
+  })
+  const read = readNote(raw.root)
+  const root = read ? builtRootSpelling(pitchClassOf(read), parts) : note('C')
+  const notes = buildChord(root, parts).tones.length
   return {
-    root: root
-      ? noteParam(chordRootSpelling(pitchClassOf(root), qualityIntervals(quality)))
-      : CHORDS_DEFAULTS.root,
-    quality,
-    inversion: wholeIn(
-      raw.inversion,
-      0,
-      lastInversion(qualityIntervals(quality).length),
-      CHORDS_DEFAULTS.inversion,
-    ),
+    root: noteParam(root),
+    ...partsParams(parts),
+    inversion: wholeIn(raw.inversion, 0, lastInversion(notes), CHORDS_DEFAULTS.inversion),
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }
