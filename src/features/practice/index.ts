@@ -10,6 +10,17 @@ export {
   type PracticeState,
 } from './practice-machine'
 export { usePractice, type Practice, type PracticeSetup } from './use-practice'
+export {
+  isLoopParam,
+  loopBeatGroups,
+  loopParam,
+  loopTicks,
+  readLoop,
+  type BarRange,
+  type BeatGroupRange,
+  type LoopParam,
+} from './loop'
+export { speedUp } from './speed'
 export { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
 export { barColumns, beatInBar, beatLabel, type NoteColumn, type PlayedNote } from './bar-columns'
 export type { PracticeChoice } from './choice'

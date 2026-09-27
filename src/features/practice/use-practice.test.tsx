@@ -14,6 +14,10 @@ const LISTEN: PracticeSetup = {
   mode: 'listen',
   hands: 'both',
   tempo: 60,
+  ownTempo: 60,
+  speedTraining: false,
+  swing: false,
+  loop: null,
   metronome: false,
   countIn: false,
 }
@@ -136,14 +140,14 @@ describe('usePractice: Listen', () => {
   })
 })
 
-describe('usePractice: Step', () => {
+describe('usePractice: moving', () => {
   it('sounds every beat group moved to, in the audible hands', () => {
-    const { result } = renderPractice(ONE_BAR, { mode: 'step', hands: 'lh' })
-    act(() => result.current.nextBar())
-    act(() => result.current.jumpToBeatGroup(2))
+    const { result } = renderPractice(TWO_BARS, { hands: 'lh' })
+    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(0))
     expect(audio.played.map((play) => keysOf(play.sounds))).toEqual([
-      [36, 48],
       [31, 43],
+      [36, 48],
     ])
   })
 })
@@ -152,6 +156,7 @@ describe('usePractice: Wait mode', () => {
   it('waits for the practised hand, then plays the other and moves on', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     expect(result.current.state.expected).toEqual([0, 4, 7])
+    act(() => result.current.play())
     act(() => result.current.press(midi(60)))
     act(() => keyboard.press(midi(76)))
     expect(audio.played).toHaveLength(0)
@@ -166,6 +171,7 @@ describe('usePractice: Wait mode', () => {
 
   it('plays through a beat group the practised hand has nothing in', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'lh' })
+    act(() => result.current.play())
     act(() => result.current.press(midi(48)))
     wait(150)
     expect(result.current.state).toMatchObject({ beatGroup: 1, expected: [] })
@@ -178,6 +184,7 @@ describe('usePractice: Wait mode', () => {
 
   it('shows a wrong key and waits', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
     act(() => result.current.press(midi(61)))
     wait(1000)
     expect(result.current.state).toMatchObject({ outcome: 'wrong', wrong: 61, beatGroup: 0 })
@@ -186,6 +193,7 @@ describe('usePractice: Wait mode', () => {
 
   it('plays nothing more once the piece is finished', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'lh' })
+    act(() => result.current.play())
     act(() => result.current.jumpToBeatGroup(3))
     wait(1000)
     expect(result.current.state.outcome).toBe('finished')
@@ -195,9 +203,74 @@ describe('usePractice: Wait mode', () => {
   })
 })
 
+describe('usePractice: a loop and speed training', () => {
+  it('loops the passage, and starts again inside it when the loop changes while playing', () => {
+    const { result, rerender } = renderPractice(TWO_BARS)
+    act(() => result.current.play())
+    rerender({ performance: TWO_BARS, setup: { ...LISTEN, loop: { first: 1, last: 1 } } })
+    expect(result.current.state.beatGroup).toBe(4)
+    const pass = audio.played.at(-1)
+    expect(new Set(notesOf(pass?.sounds ?? []).map((sound) => sound.midi % 12))).toEqual(
+      new Set([7, 11, 2]),
+    )
+  })
+
+  it('says the tempo of the pass sounding while speed training plays', () => {
+    const { result } = renderPractice(ONE_BAR, { tempo: 60, ownTempo: 120, speedTraining: true })
+    act(() => result.current.play())
+    clockTo(0.1 + 1)
+    expect(result.current.passTempo).toBe(60)
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2)
+    expect(result.current.passTempo).toBe(66)
+    act(() => result.current.stop())
+    expect(result.current.passTempo).toBeNull()
+  })
+
+  it('starts again from the cursor at the chosen tempo when the hands change mid-training', () => {
+    const training = { ...LISTEN, tempo: 60, ownTempo: 120, speedTraining: true }
+    const { result, rerender } = renderPractice(ONE_BAR, training)
+    act(() => result.current.play())
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2 + 1)
+    expect(result.current.passTempo).toBe(66)
+    const beatGroup = result.current.state.beatGroup
+    rerender({ performance: ONE_BAR, setup: { ...training, hands: 'rh' } })
+    const restarted = audio.played.at(-1)
+    expect(restarted?.at).toBeCloseTo(5.3 + 0.1)
+    expect(notesOf(restarted?.sounds ?? [])[0]?.at).toBe(0)
+    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(12)
+    clockTo(5.3 + 0.1 + 0.5)
+    expect(result.current.passTempo).toBe(60)
+  })
+
+  it('never says the last run’s tempo when played again', () => {
+    const { result } = renderPractice(ONE_BAR, { tempo: 60, ownTempo: 120, speedTraining: true })
+    act(() => result.current.play())
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2)
+    act(() => result.current.stop())
+    act(() => result.current.play())
+    expect(result.current.passTempo).toBeNull()
+  })
+
+  it('goes round a loop in Wait mode', () => {
+    const { result } = renderPractice(TWO_BARS, {
+      mode: 'wait',
+      hands: 'lh',
+      loop: { first: 1, last: 1 },
+    })
+    act(() => result.current.play())
+    act(() => result.current.jumpToBeatGroup(7))
+    wait(1000)
+    expect(result.current.state).toMatchObject({ beatGroup: 4, playing: true })
+  })
+})
+
 describe('usePractice: unmount', () => {
   it('silences the sound and stops listening to the keyboard', () => {
     const { result, unmount } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
     act(() => result.current.press(midi(61)))
     unmount()
     expect(audio.stops).toBe(1)

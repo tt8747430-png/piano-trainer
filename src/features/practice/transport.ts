@@ -4,6 +4,7 @@ import {
   advanceLoop,
   beatGroupAt,
   startLoop,
+  tempoAt,
   type LoopOptions,
   type Pass,
 } from '@/shared/lib/schedule'
@@ -12,20 +13,21 @@ import {
 const FOLLOW_INTERVAL_MS = 25
 
 /**
- * Listen's transport: plays the performance's loop on the audio clock, each pass as the loop queues
- * it, and reports each beat group as it sounds. Returns the function that stops it.
+ * Listen's transport: plays the loop's passes on the audio clock, and reports each beat group as it
+ * sounds and each pass's tempo as it starts. Returns the function that stops it.
  */
 export function startTransport(
   audio: AudioOutput,
   performance: Performance,
   options: LoopOptions,
-  onReach: (beatGroup: number) => void,
+  on: { readonly reach: (beatGroup: number) => void; readonly tempo: (tempo: number) => void },
 ): () => void {
   const play = (pass: Pass) => audio.play(pass.sounds, pass.start)
   let loop = startLoop(performance, options, audio.now() + PLAY_DELAY)
   loop.passes.forEach(play)
 
   let reached: number | null = null
+  let tempo: number | null = null
   const follow = () => {
     const now = audio.now()
     const next = advanceLoop(loop, now)
@@ -34,7 +36,12 @@ export function startTransport(
     const beatGroup = beatGroupAt(loop, now)
     if (beatGroup !== null && beatGroup !== reached) {
       reached = beatGroup
-      onReach(beatGroup)
+      on.reach(beatGroup)
+    }
+    const sounding = tempoAt(loop, now)
+    if (sounding !== null && sounding !== tempo) {
+      tempo = sounding
+      on.tempo(sounding)
     }
   }
   const timer = setInterval(follow, FOLLOW_INTERVAL_MS)

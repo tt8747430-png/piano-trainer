@@ -67,6 +67,10 @@ export function usePlayer(
     mode: search.mode,
     hands: search.hands,
     tempo,
+    ownTempo: piece.tempo,
+    speedTraining: false,
+    swing: false,
+    loop: null,
     metronome: toggles.metronome,
     countIn: toggles.countIn,
   })

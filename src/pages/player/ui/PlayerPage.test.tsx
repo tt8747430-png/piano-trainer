@@ -16,18 +16,17 @@ describe('Player', () => {
   })
 
   it('reads a stale URL as the piece’s own setup', async () => {
-    await renderApp('/play/bz5?key=H&tempo=999&mode=dance')
+    await renderApp('/play/bz5?key=H&tempo=999&mode=step')
     expect(
       await screen.findByRole('button', { name: /G · 72 BPM · Both hands/ }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Listen' })).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('steps through beat by beat, sounding each', async () => {
     const user = userEvent.setup()
-    const { router, audio } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Step' }))
-    expect(router.state.location.search).toMatchObject({ mode: 'step' })
-    await user.click(screen.getByRole('button', { name: 'Next' }))
+    const { audio } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Next' }))
     expect(audio.played.length).toBeGreaterThan(0)
   })
 
@@ -47,6 +46,7 @@ describe('Player', () => {
     const prompt = await screen.findByText(/^Play /)
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    await user.click(screen.getByRole('button', { name: 'Play' }))
     // C sharp is outside G major's first chord (G B D).
     await user.click(within(keyboard).getByRole('button', { name: 'C sharp 4' }))
     expect(await screen.findByText(/^Not C#/)).toBeInTheDocument()
@@ -84,7 +84,7 @@ describe('Player', () => {
   })
 
   it('puts the fingers under the keys with Finger numbers, the keys keeping their notes', async () => {
-    const { settingsStore } = await renderApp('/play/bz5?mode=step')
+    const { settingsStore } = await renderApp('/play/bz5')
     await screen.findByRole('group', { name: 'Keyboard' })
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
     act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))

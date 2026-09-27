@@ -65,7 +65,7 @@ function Player({ piece }: { piece: Piece }) {
             performance={performance}
             state={state}
             feedback={player.feedback}
-            onAgain={practice.restart}
+            onAgain={practice.play}
           />
         </div>
         <div className="lg:col-start-2 lg:row-start-3 landscape-phone:col-start-2 landscape-phone:row-start-3">

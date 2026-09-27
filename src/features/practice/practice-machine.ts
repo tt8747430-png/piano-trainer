@@ -1,9 +1,10 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
 import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
+import type { BeatGroupRange } from './loop'
 
-/** Listen: the app plays. Step: the learner moves through it. Wait mode: the app waits for the notes. */
-export const PRACTICE_MODES = ['listen', 'step', 'wait'] as const
+/** Listen: the app plays at a tempo. Wait mode: the app waits for your notes (spec §2.7). */
+export const PRACTICE_MODES = ['listen', 'wait'] as const
 export type PracticeMode = (typeof PRACTICE_MODES)[number]
 export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
@@ -11,9 +12,11 @@ export interface PracticeState {
   readonly performance: Performance
   readonly mode: PracticeMode
   readonly hands: Hands
+  /** The loop's beat groups; null goes through the whole piece. */
+  readonly loop: BeatGroupRange | null
   /** Where the learner is. */
   readonly beatGroup: number
-  /** Listen: the transport runs. */
+  /** Listen: the transport runs. Wait mode: the app waits for notes. */
   readonly playing: boolean
   /** Wait mode: the pitch classes the practised hands play here, lowest first. */
   readonly expected: readonly PitchClass[]
@@ -29,6 +32,7 @@ export type PracticeEvent =
       readonly performance: Performance
       readonly mode: PracticeMode
       readonly hands: Hands
+      readonly loop: BeatGroupRange | null
     }
   | { readonly type: 'play' }
   | { readonly type: 'stop' }
@@ -36,12 +40,10 @@ export type PracticeEvent =
   | { readonly type: 'reach'; readonly beatGroup: number }
   | { readonly type: 'next' }
   | { readonly type: 'prev' }
-  | { readonly type: 'nextBar' }
   | { readonly type: 'jumpToBar'; readonly bar: number }
   /** The learner tapped a beat group. */
   | { readonly type: 'jumpToBeatGroup'; readonly beatGroup: number }
   | { readonly type: 'noteOn'; readonly midi: Midi }
-  | { readonly type: 'restart' }
 
 /** The hands Wait mode waits for: the audible ones, never the doubled tune. */
 export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), melody: false })
@@ -62,8 +64,14 @@ function expectedAt(performance: Performance, beatGroup: number, hands: Hands): 
   return [...pcs].sort((a, b) => a - b)
 }
 
-const isBeatGroup = (state: PracticeState, beatGroup: number) =>
-  Number.isInteger(beatGroup) && beatGroup >= 0 && beatGroup < state.performance.beatGroups.length
+/** The beat groups the cursor may be on: the loop's, or the whole piece's. */
+const bounds = (state: Pick<PracticeState, 'performance' | 'loop'>): BeatGroupRange =>
+  state.loop ?? { first: 0, last: Math.max(0, state.performance.beatGroups.length - 1) }
+
+const clamp = (state: PracticeState, beatGroup: number) => {
+  const { first, last } = bounds(state)
+  return Math.min(last, Math.max(first, beatGroup))
+}
 
 /** Arriving at a beat group: in Wait mode it sets what is expected and waits. */
 function moveTo(state: PracticeState, beatGroup: number): PracticeState {
@@ -81,11 +89,13 @@ export function initialPractice(
   performance: Performance,
   mode: PracticeMode,
   hands: Hands,
+  loop: BeatGroupRange | null = null,
 ): PracticeState {
   const state: PracticeState = {
     performance,
     mode,
     hands,
+    loop,
     beatGroup: 0,
     playing: false,
     expected: [],
@@ -93,35 +103,29 @@ export function initialPractice(
     outcome: 'waiting',
     wrong: null,
   }
-  return moveTo(state, 0)
+  return moveTo(state, bounds(state).first)
 }
 
+/** On past the end: Listen and a loop go round; Wait mode through the whole piece finishes, stopped. */
 function next(state: PracticeState): PracticeState {
-  const count = state.performance.beatGroups.length
-  if (count === 0) return state
-  if (state.mode !== 'wait') return moveTo(state, (state.beatGroup + 1) % count)
-  if (state.beatGroup + 1 < count) return moveTo(state, state.beatGroup + 1)
-  return { ...state, expected: [], received: [], outcome: 'finished', wrong: null }
+  if (state.performance.beatGroups.length === 0) return state
+  const { first, last } = bounds(state)
+  if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
+  if (state.mode === 'listen' || state.loop) return moveTo(state, first)
+  return { ...state, playing: false, expected: [], received: [], outcome: 'finished', wrong: null }
 }
 
+/** Back past the start: Listen goes round to the end, Wait mode stays. */
 function prev(state: PracticeState): PracticeState {
-  const count = state.performance.beatGroups.length
-  if (count === 0) return state
-  if (state.mode === 'wait') return moveTo(state, Math.max(0, state.beatGroup - 1))
-  return moveTo(state, (state.beatGroup - 1 + count) % count)
-}
-
-/** The first beat group of the next bar, or of the first bar after the last. */
-function nextBar(state: PracticeState): PracticeState {
-  const { beatGroups } = state.performance
-  const bar = beatGroups[state.beatGroup]?.bar ?? -1
-  const target = beatGroups.findIndex((group) => group.bar > bar)
-  return beatGroups.length === 0 ? state : moveTo(state, target < 0 ? 0 : target)
+  if (state.performance.beatGroups.length === 0) return state
+  const { first, last } = bounds(state)
+  if (state.beatGroup > first) return moveTo(state, state.beatGroup - 1)
+  return moveTo(state, state.mode === 'wait' ? first : last)
 }
 
 function noteOn(state: PracticeState, key: Midi): PracticeState {
   const done = state.outcome === 'correct' || state.outcome === 'finished'
-  if (state.mode !== 'wait' || done || state.expected.length === 0) return state
+  if (state.mode !== 'wait' || !state.playing || done || state.expected.length === 0) return state
   const pc = pitchClass(key)
   if (!state.expected.includes(pc)) return { ...state, outcome: 'wrong', wrong: key }
   const received = state.received.includes(pc) ? state.received : [...state.received, pc]
@@ -129,43 +133,51 @@ function noteOn(state: PracticeState, key: Midi): PracticeState {
   return { ...state, received, outcome: complete ? 'correct' : 'waiting', wrong: null }
 }
 
-/** Every rule of Listen, Step and Wait mode; the practice hook connects it to time and sound. */
+/** Every rule of Listen and Wait mode; the practice hook connects it to time and sound. */
 export function practiceReducer(state: PracticeState, event: PracticeEvent): PracticeState {
   switch (event.type) {
     case 'configure': {
-      const count = event.performance.beatGroups.length
       const configured: PracticeState = {
         ...state,
         performance: event.performance,
         mode: event.mode,
         hands: event.hands,
+        loop: event.loop,
         playing: state.playing && event.mode === state.mode,
       }
-      return moveTo(configured, Math.max(0, Math.min(state.beatGroup, count - 1)))
+      // A cursor outside a new loop starts at the loop's start; otherwise it stays, clamped.
+      const { loop } = configured
+      const outside = loop !== null && (state.beatGroup < loop.first || state.beatGroup > loop.last)
+      return moveTo(configured, outside ? loop.first : clamp(configured, state.beatGroup))
     }
     case 'play':
-      return state.mode === 'listen' ? { ...state, playing: true } : state
+      return state.outcome === 'finished'
+        ? { ...moveTo(state, bounds(state).first), playing: true }
+        : { ...state, playing: true }
     case 'stop':
       return state.playing ? { ...state, playing: false } : state
     case 'reach': {
-      const moves = event.beatGroup !== state.beatGroup && isBeatGroup(state, event.beatGroup)
-      return state.mode === 'listen' && moves ? { ...state, beatGroup: event.beatGroup } : state
+      const moves =
+        event.beatGroup !== state.beatGroup &&
+        Number.isInteger(event.beatGroup) &&
+        clamp(state, event.beatGroup) === event.beatGroup
+      return state.mode === 'listen' && state.playing && moves
+        ? { ...state, beatGroup: event.beatGroup }
+        : state
     }
     case 'next':
       return next(state)
     case 'prev':
       return prev(state)
-    case 'nextBar':
-      return nextBar(state)
     case 'jumpToBar': {
       const target = state.performance.beatGroups.findIndex((group) => group.bar === event.bar)
-      return target < 0 ? state : moveTo(state, target)
+      return target < 0 ? state : moveTo(state, clamp(state, target))
     }
     case 'jumpToBeatGroup':
-      return isBeatGroup(state, event.beatGroup) ? moveTo(state, event.beatGroup) : state
+      return event.beatGroup >= 0 && event.beatGroup < state.performance.beatGroups.length
+        ? moveTo(state, clamp(state, event.beatGroup))
+        : state
     case 'noteOn':
       return noteOn(state, event.midi)
-    case 'restart':
-      return moveTo({ ...state, playing: false }, 0)
   }
 }

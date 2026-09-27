@@ -54,8 +54,8 @@ describe('usePlayer', () => {
     })
     act(() => result.current.change({ key: noteParam(note('G')) }))
     expect(setSearch).toHaveBeenLastCalledWith({ key: undefined })
-    act(() => result.current.setMode('step'))
-    expect(setSearch).toHaveBeenLastCalledWith({ mode: 'step' })
+    act(() => result.current.setMode('wait'))
+    expect(setSearch).toHaveBeenLastCalledWith({ mode: 'wait' })
   })
 
   it('marks the hands the learner hears', () => {
@@ -66,7 +66,7 @@ describe('usePlayer', () => {
   })
 
   it('keeps the marked keys in view', () => {
-    const { result } = setup({ hands: 'both', mode: 'step' })
+    const { result } = setup({ hands: 'both', mode: 'listen' })
     const keys = [...result.current.marks.keys()]
     expect(result.current.inView).toEqual({ from: Math.min(...keys), to: Math.max(...keys) })
   })
@@ -75,6 +75,7 @@ describe('usePlayer', () => {
     const { result, audio } = setup({ hands: 'both', mode: 'wait' })
     const [key] = result.current.marks.keys()
     if (key === undefined) throw new Error('nothing to play')
+    act(() => result.current.practice.play())
     act(() => result.current.tapKey(key))
     expect(result.current.practice.state.received).toContain(key % 12)
     expect(audio.played.flatMap((play) => play.sounds)).toEqual([])
