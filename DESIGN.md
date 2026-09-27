@@ -32,7 +32,6 @@ colors:
   wash-sky: '#D1E6F7'
   wash-lilac: '#E6DFF6'
   wash-sand: '#F5E0CF'
-  brick-deep: '#934C39'
   yellow-deep: '#8B682B'
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
@@ -315,9 +314,10 @@ colours mean something wherever they appear.
 ### Secondary
 
 - **Umber** (`umber` with card-paper text; night `dusk-muted` with `dusk-ground` text): what is chosen: the check on
-  a pop-up's chosen item and on a Setup list's, the Player's current beat. Never an action and never a colour.
-- **Sky Mist** (`sky-mist`, ink `sky-mist-ink`; night `sky-night`, ink `sky-night-ink`): the current or playing bar
-  of a chart, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
+  a pop-up's chosen item, a popover's and a Setup list's, the loop's grips on the sheet. Never an action and never a
+  colour.
+- **Sky Mist** (`sky-mist`, ink `sky-mist-ink`; night `sky-night`, ink `sky-night-ink`): the playing bar of a
+  chart, the cursor on the Player's sheet, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
   focus, where you are.
 
 ### Tertiary: meaning colours
@@ -330,15 +330,13 @@ colours mean something wherever they appear.
 ### The paint set
 
 Seven paints at one lightness (`paint-brick`, `paint-yellow`, `paint-grass`, `paint-sky`, `paint-lilac`,
-`paint-sand`, `paint-teal`), each with a pale wash and all but teal with a deep shade (`brick-deep`, `yellow-deep`,
-`grass-deep`, `sky-deep`, `lilac-deep`, `sand-deep`). The paints stay the same by night. A chrome wash is a fixed tint
+`paint-sand`, `paint-teal`), each with a pale wash; the chrome's five have a deep shade for the icon on them
+(`yellow-deep`, `grass-deep`, `sky-deep`, `lilac-deep`, `sand-deep`). The paints stay the same by night. A chrome wash is a fixed tint
 (`wash-*`, L about 0.92; dusk tints by night); a key's wash is mixed from its paint into the key's own paper (below).
 
 - **On keys, as chord roles:** root brick, 3rd sky, 5th grass, 7th yellow, 9th lilac, 11th sand, 13th teal: on chord
   tones only (keys, the role legend, a chord's tone chips).
-- **On keys, as the Player's hands:** right brick, left lilac, tune grass; the Player only. As text in the note grid a
-  hand reads in its deep shade (`brick-deep`, `lilac-deep`, `grass-deep`; by night `paint-brick`, `lilac-light`,
-  `grass-light`).
+- **On keys, as the Player's hands:** right brick, left lilac, tune grass; the Player only.
 - **On the chrome, as the book's paints:** sand, yellow, grass, sky and lilac name places and kinds of step, always as
   their wash with their deep shade on it for the icon (the on-colour): the step tiles (chords sand, scale sky, study
   grass, song yellow, progression lilac) and the Continue card's sky header band, which carries the ink title. By
@@ -409,16 +407,15 @@ system, in rem, so it grows with the reader's own text size.
 
 ### Hierarchy
 
-- **Chord Display** (Literata 600, 72px, 1): the chord in the Chords explorer, the Player's chord now (44px on a phone
-  on its side), a Check's score.
+- **Chord Display** (Literata 600, 72px, 1): the chord in the Chords explorer, a Check's score.
 - **Display** (Literata 600, 44px, 1.1): each screen's title from 1024px, the scale's name.
 - **Large Title** (Literata 600, 34px, 1.15): each screen's title on a phone.
-- **Title 1** (Literata 600, 28px, 1.2): the Continue card's band, the Player's next chord.
+- **Title 1** (Literata 600, 28px, 1.2): the Continue card's band.
 - **Title 2** (Literata 600, 22px, 1.3): level and section headings, sheet titles, the sidebar's name, a lesson's
   chord example, a chart's chord from 640px.
 - **Title 3** (Literata 600, 20px, 1.25): a settings group's title, a chart's chord on a phone.
-- **Headline** (Onest 600, 17px, 1.375): step and piece rows, the pill button's label, the Player's feedback. At
-  this size a heading element (a chart's section, the Player's piece title) stays Literata 600.
+- **Headline** (Onest 600, 17px, 1.375): step and piece rows, the pill button's label, Wait mode's line. At this size
+  a heading element (a chart's section, the Player's piece title) and a chord symbol on the sheet stay Literata 600.
 - **Control** (Onest 600, 16px): buttons, pop-up buttons' values (their labels Onest 400 in soft ink) and segments.
 - **Body** (Onest 400, 16px, 1.5): everything else; notes at most 65ch.
 - **Label** (Onest 400 to 600, 14px and 12px): row subtitles, bar numbers, method notes; the nav's labels are Onest
@@ -441,14 +438,24 @@ that changes in place never shifts its neighbours.
 Phone first. On a phone a shell screen is one column (up to 48rem) with 16px gutters, clears the notch, and scrolls
 over a bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a 240px sidebar (the app's
 name in Literata, then the four places) and the screen takes the width it is given, up to 72rem, with 40px side
-padding. The Player and the Check are full screen (up to 72rem) with no navigation.
+padding. The Player and the Check are full screen (up to 72rem) with no navigation: the viewport's height, scrolling
+inside when their content is taller.
+
+**The Player** (Flowkey's shape) is a toolbar, the keyboard, the sheet, Wait mode's line and the transport, placed by
+the `player-screen` grid. The keyboard takes the height the rest leave (upright 192–320px, from 640px 224–384px), and
+Wait mode's line the height after it, so the transport keeps the bottom:
+
+- **Upright phone:** the toolbar holds ✕, the title (truncated), the loop, MIDI and ⚙ (Setup); the tempo and hands
+  buttons flank ‹ ▶ › at the bottom, in the thumb's reach, the transport's buttons 8px apart.
+- **A phone on its side** (a landscape screen under 500px tall, judged first): one toolbar with the tempo and hands;
+  the keyboard (about 120px on a 390px-tall phone); the sheet at 0.7, with Wait mode's line and ‹ ▶ › in a column at
+  its right, where the right thumb is. Play is 56px there.
+- **From 640px** (tablet, laptop): as on its side, the transport centred under the sheet, the sheet at 1.
 
 From 1024px each screen arranges itself in two columns with a 40px gap, tops aligned:
 
 - **Songs:** the filters in an 18rem column, the list beside it.
 - **Piece:** facts and actions (5 parts) beside the chart (7 parts).
-- **Player:** the now panel (2 parts) beside the chart (3 parts), the keyboard below; on a phone on its side, two
-  columns over the keyboard.
 - **Learn and Practice:** two equal columns of grouped rows (Lessons beside References; the Theory quiz beside the
   studies and progressions).
 - **The Chords and Scales references, Settings:** two equal columns; the Path's steps in two columns inside their
@@ -465,7 +472,7 @@ longest line, so bars line up down the chart; a bar is parted by a 1px control l
 Flat, grouped by surface. Depth is the book's: a card paper on a darker paper, a 1px soft line round it; hover and
 press fill with sand or darken a shade (brightness 95%). Shadows appear only on what floats over the page:
 
-- **Popover** (`shadow-md` with a 1px ring of ink at 10%): the MIDI and keyboard-settings popovers.
+- **Popover** (`shadow-md` with a 1px ring of ink at 10%): the MIDI, keyboard-settings, tempo and hands popovers.
 - **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
 - **Slider thumb** (`shadow-md` with a 1px soft-line ring).
 
@@ -492,20 +499,23 @@ Plain, clear, one of them coloured.
 
 - **Shape:** 12px corners, Onest 600 16px; 44px tall, 48px large, a 56px pill (17px) for the Continue card's action.
 - **Primary:** honey, borderless, ink label; hover darkens to 95%, press nudges down 1px.
-- **Soft / Outline:** card paper in the 1px control line, ink label: the second action (Arpeggio, Hear these notes).
+- **Soft / Outline:** card paper in the 1px control line, ink label: the second action (Arpeggio, the Player's tempo
+  with its gauge, Again).
 - **Secondary:** sky mist with its ink, no line.
 - **Destructive:** card paper with a crimson line and label.
 - **Link:** Onest 600, deep sky, underline on hover.
-- **Round** (44px, card paper, the control line, 20px icon): close, back, settings, MIDI, Restart; always labelled.
-- **Play** (72px circle, honey): the Player's one Play/Stop.
+- **Round** (44px, card paper, the control line, 20px icon): close, back and next, settings, MIDI, the loop (pressed:
+  a sand fill), the hands (one hand, the other mirrored, or both); always labelled.
+- **Play** (72px circle, honey; 56px on a phone on its side): the Player's one Play/Stop.
 - **Focus:** a 3px deep-sky ring, 2px outside.
 
 ### Pop-up buttons and segments
 
 **The Choosing Rule** (Apple's Human Interface Guidelines, read for sub-project 2): five or fewer short nouns are a
 segmented control (one tap, every choice in sight); more, or longer names, a pop-up button that shows its label and
-its value; on or off a switch; settings changed less often a sheet; a popover only beside the keys (the keyboard
-settings, which must not cover them). Never a row of chips or a wall of tiles.
+its value; on or off a switch; settings changed less often a sheet; a popover anchored to its button for a few quick
+choices whose effect shows at once (the keyboard settings, which must not cover the keys; the Player's tempo and
+hands). Never a row of chips or a wall of tiles.
 
 - **Pop-up button** (44px, 12px corners, card paper in the 1px control line): its label in soft ink, its value in ink
   (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
@@ -587,6 +597,28 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
   touches (a black key whole, a white key below the black keys).
 - **Every Play becomes Stop** (a square) while its sound plays; in a grid of items (a Piece's bars, a scale's chords)
   the item is pressed instead (sky mist), and a second tap stops it.
+
+### The sheet (the Player)
+
+The piece as it is played, engraved on a grand staff (VexFlow, the Bravura music font) in one line that scrolls
+sideways, as Flowkey shows it: ADR 0013.
+
+- **Ink:** notes, rests, clefs, beams and ties in ink; the staff's lines and barlines in the control line
+  (`--input`); the staff of the hand not heard or practised in soft ink (hands: right → the bass staff soft). Dark
+  mode and increased contrast follow the tokens.
+- **Labels over it** (real text): each bar's number (Onest 12px, soft ink, tabular) at its start, a section's name
+  after its first bar's number (1 · Verse); each chord symbol at its onset (Literata 600, 17px).
+- **The cursor:** a sky-mist band (28px, 10px corners) behind the notes of the beat group now, moved by transform
+  (ease-out 200ms; at once under reduced motion). The sheet scrolls itself to keep it a quarter in from the left once
+  it leaves the middle half.
+- **Bars:** each bar is a button (a 1px control-line ring on hover): a tap jumps to the beat group nearest it, Enter
+  or Space to the bar's first.
+- **The loop:** a sand band behind its bars, and an umber grip at each end (a 4px line in a 44px slider) dragged over
+  bars or moved by the arrow keys, never past the other end.
+- **Sizes:** 1 CSS px a unit, 0.7 on a phone on its side; a bar is as wide as its notes need (VexFlow's least × 1.4)
+  and its chord symbols need, never under 80 units.
+- **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,
+  and the keys, Play and Wait mode still work.
 
 ### Motion
 

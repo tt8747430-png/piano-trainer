@@ -37,12 +37,13 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 ## Capabilities and Constraints
 
 - Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4, Settings behind its gear),
-  Songs (songs and listings), a Piece, the Player (Listen · Step · Wait), Learn (lessons; the Chords and Scales
+  Songs (songs and listings), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
+  training, swing), Learn (lessons; the Chords and Scales
   references, Scales with its Scale and Chords views), Practice (the Theory quiz with My gaps; studies and
   progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
-- No accounts, sync, backend, sheet-music rendering or audio recording.
+- No accounts, sync, backend or audio recording.
 
 ## Brand Commitments
 

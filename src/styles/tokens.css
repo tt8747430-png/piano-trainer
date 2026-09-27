@@ -23,7 +23,6 @@
   --p-black-key: #332c28;
   /* The paints, faded to one lightness: full, the wash of each, and the deep shade of some. */
   --p-brick: #e19e8c;
-  --p-brick-deep: #934c39;
   --p-yellow: #e8c67d;
   --p-yellow-wash: #f7e8c4;
   --p-yellow-deep: #8b682b;
@@ -154,10 +153,6 @@
   --hand-rh-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
   --hand-lh-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
   --hand-melody-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
-  /* A hand's colour as text (the note grid): its deep shade, to read on paper. */
-  --hand-rh-ink: var(--p-brick-deep);
-  --hand-lh-ink: var(--p-lilac-deep);
-  --hand-melody-ink: var(--p-grass-deep);
 
   /*
    * The keys: paper keys parted by a soft line, a warm black, hung from a light wooden rail. By
@@ -226,10 +221,6 @@
   --hairline: var(--p-dusk-800);
   --ring: var(--p-sky-light);
   --thumb: var(--p-dusk-ink);
-
-  --hand-rh-ink: var(--p-brick);
-  --hand-lh-ink: var(--p-lilac-light);
-  --hand-melody-ink: var(--p-grass-light);
 
   /* By night the keys keep their paper, a shade softer; the marks do not change. */
   --key-white: var(--p-dusk-key);

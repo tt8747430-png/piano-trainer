@@ -49,7 +49,8 @@ One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest ru
 
 `app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above; another
 slice only through its `index.ts`, by alias or relative path alike. Inside shared, the kernel is fenced tighter:
-`shared/lib/music` imports only itself, `shared/lib/arrangement` only music, and neither imports a package.
+`shared/lib/music` imports only itself, `shared/lib/arrangement` and `shared/lib/notation` only music, and none of them
+imports a package.
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
 it. `@` → `src`.
 
@@ -60,12 +61,15 @@ it. `@` → `src`.
   lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
-  `FullScreenLayout` for the Player and the Check), `RoutePending`, `update-prompt/`, `RouteError`,
+  `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `RouteError`,
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
-  (`pages/player/model/use-player.ts`), which is its test surface.
+  (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
-  `chord-chart`, `piece-skills`, `player-setup`, `chord-explorer`, `scale-explorer` (Scale and Chords views; its pure
+  `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the piece's own choices, a slot for how it
+  plays), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
+  `player-screen` areas, the tempo and hands popovers, the loop button, ‹ ▶ ›, Wait mode's line), `sheet-music`
+  (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer`, `scale-explorer` (Scale and Chords views; its pure
   marks and plays in `model/`), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
@@ -75,7 +79,8 @@ it. `@` → `src`.
   Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), and the
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
-  Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and `quiz` (the machine, check plans, the
+  Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
+  `loopBeatGroups`), `speedUp`; Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
@@ -91,13 +96,16 @@ it. `@` → `src`.
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
   barrels of their own: `music` the theory kernel (with the piano's ranges, `placeChord`/`placeScale`/`placeScaleChords` and `chordHolds`), `arrangement`
-  (`arrange`, a chart → a Performance), `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord as
+  (`arrange`, a chart → a Performance: each note's written onset, roll and spelling), `notation` (`notate`, a
+  Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
+  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord as
   the references place it, a scale run, a hand's keys, which keys sound when and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
-  button), `RowLink` and `RowGroup`, `PAINT`, `Sheet` with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`,
+  button), `RowLink` and `RowGroup`, `PAINT`, `Sheet` with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`;
+  `ui/score`, imported by that path only: `ScoreView`, VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,
   `useLocale`, `useScaleName`, `LocalText`; namespaces per place, `music` for the words every screen shares), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
@@ -124,7 +132,7 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
   No `any`.
 - Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
-  scheme, `stubServiceWorker` for a waiting version). Only a test the DOM gets in the way of opts into
+  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, webMidi })`, which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and

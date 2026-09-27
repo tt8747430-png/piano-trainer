@@ -29,7 +29,8 @@ A container wires data to presentational children. One job each.
   with its chevron.
 - **Choosing** (Apple's Human Interface Guidelines): five or fewer short nouns are a `Segmented`; more, or longer
   names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
-  settings changed less often a `Sheet`; a popover only beside the keys. Never a row of chips.
+  settings changed less often a `Sheet`; a popover anchored to its button for a few quick choices whose effect shows
+  at once (the keyboard settings beside the keys, the Player's tempo and hands). Never a row of chips.
 - **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
   clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
   play (`useSoundKeys`), so its key is down while pressed, not while it rings, and for at least the shortest press
@@ -100,7 +101,7 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`, each with its `-wash`)
   only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
   paints (`--paint-*`, each paint's wash, with `--on-paint-*` its deep shade for the icon on it) name places and kinds
-  of step, never a chord tone; a hand's colour as text is `--hand-*-ink`. The keys have their own
+  of step, never a chord tone. The keys have their own
   roles: a mark is its wash while its key is quiet and its full colour while it sounds (`--key-scale` and
   `--key-scale-down`, `--key-tonic` and `--key-tonic-down`, a role or hand and its `-wash`), a plain key sounding is
   `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail` (with `--on-key-rail`), `--key-bed`, `--key-shade`,
@@ -127,7 +128,8 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   named by its `SliderLabel`; a sheet's switch is named by the `<label>` around it, with no second `aria-label`.
 - Clear the notch and the home indicator with `pt-safe` / `pb-safe` / `bottom-safe` (`theme.css`), not arbitrary
   values. A row that scrolls sideways hides its bar with Tailwind's `scrollbar-none`. A phone on its side is the
-  `landscape-phone:` variant (the Player's two columns).
+  `landscape-phone:` variant. A layout of named areas that changes by form factor is one `@utility` in `theme.css`
+  whose children take their place by `data-area` (the Player's `player-screen`), not a wall of arbitrary grid values.
 - Colours CSS cannot reach (the browser toolbar, the manifest) come from `THEME_COLORS` (`shared/config`), which a
   test holds to `--background`: a repaint changes `tokens.css` and `THEME_COLORS` together.
 - Mobile-first: the base style is the phone; layer up with `sm:` and `lg:`.
@@ -167,8 +169,17 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   the old tonic to the note to the new tonic, so D in G is E♭ in A♭. A root that would need a double accidental
   takes its plain spelling; chord tones and slash basses are then spelled from the root. Never move by semitones and
   then choose sharps or flats.
-- **The kernel is fenced:** `shared/lib/music` imports nothing outside itself, `shared/lib/arrangement` only music,
-  and neither imports a package (lint).
+- **The kernel is fenced:** `shared/lib/music` imports nothing outside itself, `shared/lib/arrangement` and
+  `shared/lib/notation` only music, and none of them imports a package (lint).
+- **Time is the kernel's:** `Tick`, `TICKS_PER_BEAT`, `Meter`, `beatsPerBar`, `isCompound` and `timeSignature` live
+  in `shared/lib/music/time.ts`; nothing re-exports them elsewhere.
+- **A Performance is what sounds, and what is written:** each note keeps its written onset and length, its `roll`
+  (how late a rolled chord's note sounds; the schedule sounds it at `startTick + roll`) and its `spelled` note, decided
+  where the chord is voiced; the tune keeps its written spelling. `notate(performance)` (`shared/lib/notation`) writes
+  it as a Score; the Score is never played, and cutting or quantising in `notate` changes only what is written.
+- **Sheet music is `ScoreView`** (`shared/ui/score`, imported by that path, never the kit's barrel, so only the
+  Player's chunk carries VexFlow). It engraves once the music font is in, hands its children the layout (a measure's
+  x and width, an onset's x, `xAtTick`), and every colour is `currentColor` for `score.css` to set from the tokens.
 - **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the
   chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
@@ -194,7 +205,9 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   not an implementation detail.
 - Components: Testing Library, by role and accessible name; `userEvent.setup()` for interaction. No snapshots.
 - Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`,
-  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules.
+  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules. jsdom has no fonts and no canvas: the setup's
+  `stubFonts()` (`src/shared/test/fonts.ts`) gives it `document.fonts` and a canvas that measures text, so VexFlow
+  engraves for real in a test (never mocked); `stubFonts({ loads: false })` is a font that fails.
 - A component under the settings store: `renderWithSettings(ui, { locale, theme })`; whole-app behaviour:
   `renderApp(path, { locale })`; both in `src/app/testing/`.
 - **A screen's test sits beside its page** (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through

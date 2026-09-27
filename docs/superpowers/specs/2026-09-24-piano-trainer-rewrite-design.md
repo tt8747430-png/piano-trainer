@@ -46,9 +46,9 @@ people**. Both need code that can be changed safely and an interface a newcomer 
 
 ### Not in scope
 
-Accounts, sync, a backend, sheet-music rendering, audio recording, new pieces, Playwright
-end-to-end tests, and pre-commit hooks. Each can follow as its own effort. (Written lessons came in with Learn,
-sub-project 2.)
+Accounts, sync, a backend, audio recording, new pieces, Playwright end-to-end tests, and pre-commit hooks. Each can
+follow as its own effort. (Written lessons came in with Learn, sub-project 2; sheet music with the Player, sub-project
+3.)
 
 ## 2. Stack and tooling
 
@@ -374,7 +374,7 @@ the Check are full-screen with a way back. A screen below a place's top has a ba
 | `/`                                          | **Path**: the Continue card (§4.6 ④), then levels 1–4 with progress, then step rows with a learned check                                                                                 |
 | `/songs`                                     | **Songs** (songs and listings only): search; collection and level pop-ups; rows with title (original + translation), key, level, learned check; listings marked "no chart yet"                                      |
 | `/songs/$pieceId`                            | **Piece**: title, credits, key, meter, note; "Chords in this song" + Check (§4.6 ①); the chart by section (tap a bar to hear it); **Practise** as the one primary action; Mark as learned; a link to the key's scale |
-| `/play/$pieceId`                             | **Player**: a one-line setup summary (key · tempo · hands) that opens the **Setup sheet**; the mode switch `Listen · Step · Your turn`; the keyboard with hand colours; the current-bar note grid; a chart strip to jump; the transport (Play, or Back / Next) as the primary action. The Setup sheet holds key, tempo, hands, pattern, per-hand patterns, voicing (progressions that allow it) and the toggles (finger numbers, melody, metronome, count-in) |
+| `/play/$pieceId`                             | **Player** (Flowkey's shape; sub-project 3, ADR 0013): a toolbar of ✕, the title, the **tempo** popover (Wait mode, 50%, 75%, 100% or any tempo, speed training), the **hands** popover, the loop, MIDI and ⚙ (the **Setup sheet**); the keyboard with hand colours; the piece as **sheet music** on a grand staff (chord symbols over numbered bars, a cursor on what sounds, a loop dragged over bars); ‹ Play/Stop › in Listen and Wait mode alike. The Setup sheet holds the piece's own choices (key, pattern, per-hand figures, chord size for progressions that allow it, melody) and how it plays (swing, finger numbers, metronome, count-in) |
 | `/learn`, `/learn/lessons/$lessonId`         | **Learn**: lessons (the first: reading chord symbols, its examples playing on the keys) and references                                                                                     |
 | `/learn/chords` `/learn/scales`              | **The references.** Chords: root and chord pop-ups, inversion, hands, keyboard coloured by chord role, play / arpeggio, the ways the chord is written, and Check yourself when opened from a path step. Scales: root and scale pop-ups; Scale view (degrees, fingering, rhythm practice) or Chords view (each degree's chord on its key, triads or 7ths, keys playing chords or notes and the chords that hold a note) |
 | `/practice`, `/practice/quiz/$quiz`          | **Practice**: the Theory quiz (Build chord, Name chord, Build scale, My gaps; chosen families and scales; stats), and the studies and progressions                                         |
@@ -400,9 +400,10 @@ sub-project 2), and the song-learning advice is not carried over (the copy rule 
 - **URL search params hold what you are looking at.** Validated by the router; an invalid value falls back to the
   default. Shareable, and the back button works.
   - explorers: root, family, quality, scale kind, view, rhythm, tempo, `step`
-  - player: `key`, `tempo` (default: the piece's), `hands`, `mode`, `pattern`, `rh`, `lh`, `voicing`
+  - player: how it goes (`mode` listen · wait, `tempo` 20–160, default the piece's, `speedTraining`, `hands`,
+    `swing`, `loop` as printed bars `3-6`) and the piece's own choices (`key`, `pattern`, `rh`, `lh`, `chordSize`)
 
-  Example: `/learn/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=turn`.
+  Example: `/learn/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=wait&loop=3-6`.
 - **Saved stores** (zustand `persist` → `localStorage`, each with a `version` and a `migrate`, so future changes to
   their shape keep learners' progress):
   - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: the first of
@@ -579,8 +580,9 @@ Each phase gets its own implementation plan (`writing-plans`) and ends green in 
 - **Songs:** all 51 pieces and 7 listings, with credits and notes; tap a bar to hear it; open in the player; jump to
   the key's scale.
 - **Player:** any key; pattern from the chart's method codes or any of the 39; separate RH/LH patterns; triads, 7ths
-  or 9ths for the progressions that allow it; both hands, RH or LH; Listen, Step (beat, bar, back, jump) and Your
-  turn with MIDI or taps; finger numbers; melody; metronome; count-in; 40–160 BPM; loop.
+  or 9ths for the progressions that allow it; both hands, RH or LH; sheet music; Listen and Wait mode with MIDI or
+  taps, ‹ › in either; a loop over bars; speed training; swing; finger numbers; melody; metronome; count-in; 20–160
+  BPM.
 - **Quiz:** Build chord, Name chord, Build scale; chosen families and scales; correct, total, streak and best.
 - **Guide:** the chord-symbol reading notes and the chord dictionary (Theory → Symbols, then Learn's first lesson and
   the Chords reference's Written line since sub-project 2).

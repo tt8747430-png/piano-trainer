@@ -11,7 +11,10 @@
 - **Built:** sub-projects 1 and 2. Their specs and plans were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
-  places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds).
+  places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3
+  (notation and the sheet-music Player, `2026-09-27-sheet-music-player-design.md`): ADR 0013, `DESIGN.md` (the
+  Player's layout, the sheet), `docs/CODE_STYLE.md` §8 and the glossary (Score, Sheet music, Cursor, Loop, Speed
+  training, Swing, Roll, Listen / Wait mode).
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
@@ -322,10 +325,14 @@ kernel.
 | Record from a MIDI keyboard            | Play on a connected keyboard, in a full-screen keyboard, and the notes are written into a score | 9     |
 | Live score                             | What you play written onto a grand staff as you play, the chord named above it              | 3, 5      |
 | Toggle mode                            | Keys stay lit when tapped, finger numbers typed onto them, two colours: teaching diagrams   | 1, 5      |
+| Lyrics under the staff                 | A song's words under its tune on the sheet music, the syllables carried by the melody's notes | a piece that carries its words |
 
 **Not for this app:** audio and YouTube players, streaming overlays, image export, cloud storage, branding, kids'
 icons (they need a network, an account or another audience), PDF scores (see §3.6), MuseScore's own `.mscz` files
-(MuseScore exports MusicXML).
+(MuseScore exports MusicXML); a single staff whose clef follows the range (piano music is read on a grand staff, and
+the sheet mutes the staff not played instead); the metronome's drum grooves and tap tempo (an accompanist practises to
+a click; the tempo popover sets a tempo); a sustain pedal from a MIDI keyboard (the keyboard sounds itself, and the
+app reads only which keys go down).
 
 ## 6. What this changes in the product record
 
@@ -473,7 +480,7 @@ into the app: layouts and ideas are taken, text and printed exercises are not (�
   column; a **loop**: a shaded selection with ‹ › handles at its ends and a round loop button; ✕ removes it.
 - Taken (sub-project 3, §3.5): the toolbar, both popovers, the sheet under the keyboard, chord symbols and bar
   numbers, the cursor, the loop with handles. Not taken: the video (no recordings; the keyboard is the hero).
-  Undecided: lyrics under the staff (§12).
+  Lyrics under the staff: planned, once a piece carries its words (§5).
 
 ### 9.3 The owner's reference trainer (steinway.web.app, «Тренажёр»)
 
@@ -963,14 +970,12 @@ selection outside fields (built by sub-project 1's follow-up, `#standalone-boot`
 
 ## 12. Seen in the references, not yet decided
 
-Each is for the named sub-project's spec to settle (a decision, or "not for this app" with its reason).
+Each is for the named sub-project's spec to settle (a decision, or "not for this app" with its reason). Sub-project 3
+settled its four (its spec §2.9, ADR 0013): lyrics under the staff are planned (§5); a single staff whose clef follows
+the range, the metronome's drum grooves and tap tempo, and a MIDI sustain pedal are not for this app (§5).
 
 | Item                                                                                         | Seen in                          | Sub-project |
 | -------------------------------------------------------------------------------------------- | -------------------------------- | ----------- |
-| Lyrics under the staff                                                                       | Flowkey, the PDF score           | 3           |
-| A single staff whose clef follows the range, beside the grand staff                          | The Ultimate Piano's score       | 3           |
-| The metronome's drum grooves and tap tempo (speed training is decided)                       | The Ultimate Piano               | 3           |
-| A sustain pedal from a MIDI keyboard (CC 64): keys ring while it is held                     | The Ultimate Piano's Foot Pedal  | 3           |
 | Rhythm training                                                                              | Clefs' Exercises                 | 7           |
 | A chord chart generator (a progression's diagrams at once)                                   | The Ultimate Piano               | 5           |
 | A lead-sheet editor with sections and lyrics (ChordPro export)                               | The Ultimate Piano               | 9           |
@@ -988,6 +993,6 @@ Each is for the named sub-project's spec to settle (a decision, or "not for this
 | Keys stubby on one screen, a thin strip on another (the desktop Player)                  | Each screen set a fixed height                                          | 1 (built)         |
 | The Path: 63 steps in one list, all at level 1, rows that open other tabs                 | Levelling left for Phase 4; steps link to Songs or Theory               | 6                 |
 | Theory's Symbols repeats Chords                                                           | The dictionary lists what Chords chooses                                | 2 (built)         |
-| The Player's grid of notes (`Bm · Next · RH/LH · F♯4⁵ …`)                                 | No sheet music                                                          | 3                 |
+| The Player's grid of notes (`Bm · Next · RH/LH · F♯4⁵ …`)                                 | No sheet music                                                          | 3 (built)         |
 | Too many options visible (rows of chips on Chords and Scales; the Setup sheet)            | Every choice laid out at once                                           | 2 (built)         |
 | The Pattern page: a long list of names and paragraphs, nothing to see or hear             | Patterns are only text in the picker                                    | 8                 |

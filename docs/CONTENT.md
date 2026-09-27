@@ -101,7 +101,8 @@ international: B, never H.
 
 `melody: 'E4/1 D4/.5 r/1 | C#5/1.5'`: a note name with its octave (C4 is middle C), a slash, then beats; `r` is a
 rest; `|` may mark bars and is ignored. It is written in the piece's key and is no longer than the chart. A melody
-lets the tune be doubled and makes the patterns that play it (r5–r7) available.
+lets the tune be doubled and makes the patterns that play it (r5–r7) available. Its notes keep the spelling they are
+written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval.
 
 ## Progressions
 
@@ -206,6 +207,8 @@ is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
   doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
   accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both
   languages.
+- **Notation** (`src/features/practice/notate-pieces.test.ts`): every piece is written as sheet music and engraved in
+  its own key and pattern (its tune doubled too), and every pattern in 4/4, 3/4 and 12/8, each voice filling its bar.
 - **Path** (`src/entities/path/content/path.test.ts`): every step names a piece that exists, every piece once, no
   listing, every chord family and scale kind.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
