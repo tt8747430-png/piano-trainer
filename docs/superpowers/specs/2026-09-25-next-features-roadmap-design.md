@@ -8,6 +8,8 @@
   sub-projects 2 and 4 (§3.8). Then two owner decisions: studies and progressions leave Songs (§3.9), and a lighter
   palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11).
+- **Built:** sub-project 1. Its spec and plan were removed on 2026-09-27 (`git log --diff-filter=D --
+  docs/superpowers` finds them); `DESIGN.md`'s keyboard and ADRs 0009 and 0010 record what they decided.
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
