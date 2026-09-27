@@ -8,6 +8,7 @@ import {
   type RouterHistory,
 } from '@tanstack/react-router'
 import { NotFoundPage } from '@/pages/not-found'
+import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
@@ -23,6 +24,8 @@ import {
   validatePlayerSearch,
   validateScalesSearch,
   validateSongsSearch,
+  validateWalkSearch,
+  WALK_DEFAULTS,
 } from './routes/search'
 import { ShellLayout } from './ShellLayout'
 
@@ -162,6 +165,17 @@ const playerRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
 })
 
+const walkRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/play/walk',
+  validateSearch: validateWalkSearch,
+  search: { middlewares: [stripSearchParams(WALK_DEFAULTS)] },
+  beforeLoad: ({ search }) => {
+    if (!scaleHasChords(search.kind)) throw notFound()
+  },
+  component: lazyRouteComponent(playerScreens, 'WalkPlayerPage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -188,7 +202,7 @@ const routeTree = rootRoute.addChildren([
     studyRoute,
     progressionRoute,
   ]),
-  fullScreenRoute.addChildren([playerRoute, checkRoute]),
+  fullScreenRoute.addChildren([playerRoute, walkRoute, checkRoute]),
 ])
 
 export function createAppRouter(history?: RouterHistory) {

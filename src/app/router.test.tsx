@@ -12,6 +12,7 @@ const ROUTES = [
   ['/songs', '/songs'],
   ['/songs/bz5', '/songs/$pieceId'],
   ['/play/bz5', '/play/$pieceId'],
+  ['/play/walk', '/play/walk'],
   ['/learn', '/learn'],
   ['/learn/chords', '/learn/chords'],
   ['/learn/scales', '/learn/scales'],
@@ -199,6 +200,11 @@ describe('a Piece', () => {
 describe('routes that name a piece', () => {
   it('show not found for a piece that is not there', async () => {
     await renderApp('/songs/nothing')
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+  })
+
+  it('shows not found for a walk of a scale without chords', async () => {
+    await renderApp('/play/walk?kind=blues')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 

@@ -3,6 +3,8 @@ import type { LocaleResources } from '../../types'
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
   key: 'Тональность',
+  root: 'Основной тон',
+  walk: { title: 'Аккорды по ступеням: {{scale}}' },
   keyOf: { major: '{{tonic}} мажор', minor: '{{tonic}} минор' },
   tempo: 'Темп',
   bpm: '{{tempo}} уд/мин',

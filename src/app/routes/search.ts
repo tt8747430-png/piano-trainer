@@ -3,7 +3,7 @@ import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
 import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
 import { isLoopParam, PRACTICE_MODES } from '@/features/practice'
-import type { PlayerSearch } from '@/pages/player'
+import type { PlayerSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
@@ -34,6 +34,8 @@ import {
 } from '@/shared/lib/music'
 import { HANDS, PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import type { SetupParams } from '@/widgets/player-setup'
+import type { PracticeView } from '@/widgets/practice-player'
 import type { ScaleView } from '@/widgets/scale-explorer'
 
 /**
@@ -184,9 +186,8 @@ export const PLAYER_DEFAULTS: PlayerSearch = {
   hands: 'both',
   swing: false,
 }
-export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
-  const raw: Raw = input
-  const key = readNote(raw.key)
+/** The Player's own params: how it goes, whatever it plays. */
+function practiceView(raw: Raw): PracticeView {
   return {
     mode: valueOr(isOneOf(PRACTICE_MODES), raw.mode, PLAYER_DEFAULTS.mode),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
@@ -194,10 +195,39 @@ export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
     hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
     swing: raw.swing === true,
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
-    key: key ? noteParam(key) : undefined,
+  }
+}
+
+/** The pattern, figures and chord size a Player's Setup chooses: any source's. */
+function setupFigures(raw: Raw): Omit<SetupParams, 'key'> {
+  return {
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
     rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
     lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
     chordSize: isChordSize(raw.chordSize) ? raw.chordSize : undefined,
+  }
+}
+
+export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
+  const raw: Raw = input
+  const key = readNote(raw.key)
+  return { ...practiceView(raw), key: key ? noteParam(key) : undefined, ...setupFigures(raw) }
+}
+
+// Player → Walk the chords: the scale, then the Player's own params.
+export const WALK_DEFAULTS: WalkSearch = {
+  root: noteParam(note('C')),
+  kind: 'major',
+  ...PLAYER_DEFAULTS,
+}
+export function validateWalkSearch(input: Input<WalkSearch>): WalkSearch {
+  const raw: Raw = input
+  const kind = valueOr(isScaleKind, raw.kind, WALK_DEFAULTS.kind)
+  const root = readNote(raw.root)
+  return {
+    root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : WALK_DEFAULTS.root,
+    kind,
+    ...practiceView(raw),
+    ...setupFigures(raw),
   }
 }

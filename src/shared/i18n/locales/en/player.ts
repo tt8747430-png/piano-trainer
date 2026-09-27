@@ -1,6 +1,8 @@
 export const player = {
   setup: 'Setup',
   key: 'Key',
+  root: 'Root',
+  walk: { title: 'Walk the chords in {{scale}}' },
   keyOf: { major: '{{tonic}} major', minor: '{{tonic}} minor' },
   tempo: 'Tempo',
   bpm: '{{tempo}} BPM',

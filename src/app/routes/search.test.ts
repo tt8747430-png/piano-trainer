@@ -1,7 +1,13 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
 import { createAppRouter } from '../router'
-import { CHORDS_DEFAULTS, PLAYER_DEFAULTS, SCALES_DEFAULTS, SONGS_DEFAULTS } from './search'
+import {
+  CHORDS_DEFAULTS,
+  PLAYER_DEFAULTS,
+  SCALES_DEFAULTS,
+  SONGS_DEFAULTS,
+  WALK_DEFAULTS,
+} from './search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
@@ -16,6 +22,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/chords')).toEqual(CHORDS_DEFAULTS)
     expect(await searchAt('/learn/scales')).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
+    expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -132,6 +139,19 @@ describe('search params', () => {
       added: 'none',
       alter: 'b5',
     })
+  })
+
+  it('read the walk’s scale and the Player’s params, a stale one dropped', async () => {
+    expect(
+      await searchAt('/play/walk?root=A%23&kind=locrian&chordSize=ninths&pattern=pop8&mode=wait'),
+    ).toMatchObject({
+      root: 'A#',
+      kind: 'locrian',
+      chordSize: 'ninths',
+      pattern: 'pop8',
+      mode: 'wait',
+    })
+    expect(await searchAt('/play/walk?root=H&chordSize=elevenths')).toEqual(WALK_DEFAULTS)
   })
 
   it('spell a root the way its explorer names it', async () => {
