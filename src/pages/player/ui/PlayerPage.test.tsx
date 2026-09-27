@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { melodyOf, PIECES } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import { stubFonts } from '@/shared/test/fonts'
@@ -102,6 +103,23 @@ describe('Player', () => {
     expect(router.state.location.search).toMatchObject({ key: 'A' })
     await user.click(screen.getByRole('switch', { name: 'Swing' }))
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
+  })
+
+  it('names the key on the Setup’s pop-up, and shows Melody only for a piece with a tune', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    expect(await screen.findByRole('combobox', { name: 'Key' })).toHaveTextContent('G major')
+    expect(screen.queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
+  })
+
+  it('shows Melody in the Setup of a piece with a tune', async () => {
+    const withTune = PIECES.find((piece) => melodyOf(piece) !== undefined)
+    if (!withTune) throw new Error('no piece has a tune')
+    const user = userEvent.setup()
+    await renderApp(`/play/${withTune.id}`)
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    expect(await screen.findByRole('switch', { name: 'Melody' })).toBeInTheDocument()
   })
 
   it('puts the fingers under the keys with Finger numbers', async () => {

@@ -12,47 +12,47 @@ import {
   RIGHT_FIGURES,
   type PatternId,
 } from '@/entities/pattern'
-import { hasMethodCodes, melodyOf, type Piece } from '@/entities/piece'
-import type { PracticeChoice } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { Sheet, SheetContent } from '@/shared/ui'
-import type { SetupChange } from '../model/setup-params'
+import type { FigureChange, FigureChoice } from '../model/setup-params'
 import { ChoiceList } from './ChoiceList'
 import { FigurePage } from './FigurePage'
 import { ListPage } from './ListPage'
-import { SetupMain, type SetupPage } from './SetupMain'
+import { SetupContext, type SetupPage } from './setup-context'
 
 /**
- * The piece's own choices in one sheet, then how any piece plays (`children`); the pattern and figure
- * lists open as its pages, so a sheet never opens over a sheet.
+ * The Player's Setup sheet. Its first page is `children`, composed by the page: the source's own
+ * choices, `FigureRows`, how it plays. The pattern and figure lists open as the sheet's pages, so a
+ * sheet never opens over a sheet.
  */
 export function PlayerSetup({
   open,
   onOpenChange,
-  piece,
-  choice,
-  onChange,
+  figures,
+  methods,
+  melody,
+  onFigures,
   children,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  piece: Piece
-  choice: PracticeChoice
-  onChange: (change: SetupChange) => void
-  /** How the piece plays, under its own choices on the main page. */
+  figures: FigureChoice
+  /** The chart names its own methods: the pattern list offers "From the chart". */
+  methods: boolean
+  /** There is a tune for a figure that plays it. */
+  melody: boolean
+  onFigures: (change: FigureChange) => void
   children: ReactNode
 }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const [page, setPage] = useState<SetupPage | 'main'>('main')
-  const noMelody = melodyOf(piece) === undefined ? t('needsMelody') : undefined
-  const title = page === 'main' ? t('setup') : t(page)
-  const choose = (change: SetupChange) => {
-    onChange(change)
+  const noMelody = melody ? undefined : t('needsMelody')
+  const choose = (change: FigureChange) => {
+    onFigures(change)
     setPage('main')
   }
   const toMain = () => setPage('main')
-
   return (
     <Sheet
       open={open}
@@ -61,21 +61,20 @@ export function PlayerSetup({
         if (!next) setPage('main')
       }}
     >
-      <SheetContent title={title}>
+      <SheetContent title={page === 'main' ? t('setup') : t(page)}>
         {page === 'main' ? (
-          <div className="flex flex-col gap-5">
-            <SetupMain piece={piece} choice={choice} onChange={onChange} onOpenPage={setPage} />
-            {children}
-          </div>
+          <SetupContext value={{ figures, openPage: setPage }}>
+            <div className="flex flex-col gap-5">{children}</div>
+          </SetupContext>
         ) : null}
         {page === 'pattern' ? (
           <ListPage onBack={toMain}>
-            {hasMethodCodes(piece) ? (
+            {methods ? (
               <ChoiceList<PatternId | 'chart'>
                 items={[
                   { value: 'chart', label: t('fromChart'), description: t('fromChartDescription') },
                 ]}
-                value={choice.pattern}
+                value={figures.pattern}
                 onChoose={() => choose({ pattern: 'chart' })}
               />
             ) : null}
@@ -94,7 +93,7 @@ export function PlayerSetup({
                       ...(needsMelody(id) && noMelody ? { disabledNote: noMelody } : {}),
                     }
                   })}
-                  value={choice.pattern}
+                  value={figures.pattern}
                   onChoose={(pattern) => choose({ pattern })}
                 />
               </section>
@@ -105,7 +104,7 @@ export function PlayerSetup({
           <FigurePage
             ids={RIGHT_FIGURE_IDS}
             figures={RIGHT_FIGURES}
-            value={choice.rh}
+            value={figures.rh}
             noMelody={noMelody}
             onChoose={(rh) => choose({ rh })}
             onBack={toMain}
@@ -115,7 +114,7 @@ export function PlayerSetup({
           <FigurePage
             ids={LEFT_FIGURE_IDS}
             figures={LEFT_FIGURES}
-            value={choice.lh}
+            value={figures.lh}
             noMelody={noMelody}
             onChoose={(lh) => choose({ lh })}
             onBack={toMain}

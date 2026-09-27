@@ -1,82 +1,65 @@
-import { cleanup, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { PATTERNS } from '@/entities/pattern'
-import { melodyOf, PIECES, pieceById, type Piece } from '@/entities/piece'
-import { ownChoice } from '@/features/practice'
+import { FigureRows } from './FigureRows'
+import { MelodySwitch } from './MelodySwitch'
 import { PlayerSetup } from './PlayerSetup'
 
-function piece(id: string) {
-  const found = pieceById(id)
-  if (!found) throw new Error(id)
-  return found
-}
-const bz5 = piece('bz5')
-const withMelody = PIECES.find((p) => melodyOf(p) !== undefined)
-if (!withMelody) throw new Error('no piece has a melody')
-
-function renderSetup(shown: Piece = bz5) {
-  const onChange = vi.fn()
-  const { settingsStore } = renderWithSettings(
+function renderSetup({ methods = false, melody = false } = {}) {
+  const onFigures = vi.fn()
+  const view = renderWithSettings(
     <PlayerSetup
       open
       onOpenChange={() => {}}
-      piece={shown}
-      choice={ownChoice(shown)}
-      onChange={onChange}
+      figures={{ pattern: 'block', rh: null, lh: null }}
+      methods={methods}
+      melody={melody}
+      onFigures={onFigures}
     >
-      <p>How it plays</p>
+      <p>The source’s own choices</p>
+      <FigureRows />
+      <MelodySwitch />
     </PlayerSetup>,
   )
-  return { onChange, settingsStore }
+  return { onFigures, ...view }
 }
 
 describe('PlayerSetup', () => {
-  it('names the key it is played in on the key’s pop-up', () => {
+  it('shows the page’s own choices on its first page, with the figure rows', () => {
     renderSetup()
-    expect(screen.getByRole('combobox', { name: 'Key' })).toHaveTextContent('G major')
+    expect(screen.getByText('The source’s own choices')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Pattern.*Whole notes/ })).toBeInTheDocument()
   })
 
-  it('changes the key, and leaves the tempo and hands to the Player', async () => {
+  it('chooses a pattern from its group, keeping melody patterns from a source without a tune', async () => {
     const user = userEvent.setup()
-    const { onChange } = renderSetup()
-    await user.click(screen.getByRole('combobox', { name: 'Key' }))
-    await user.click(await screen.findByRole('option', { name: 'A major' }))
-    expect(onChange).toHaveBeenCalledWith({ key: 'A' })
-    expect(screen.queryByRole('slider', { hidden: true })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Left hand' })).not.toBeInTheDocument()
-  })
-
-  it('shows how the piece plays under its own choices', () => {
-    renderSetup()
-    expect(screen.getByText('How it plays')).toBeInTheDocument()
-  })
-
-  it('chooses a pattern from its group, and keeps melody patterns from a song without a melody', async () => {
-    const user = userEvent.setup()
-    const { onChange } = renderSetup()
-    expect(melodyOf(bz5)).toBeUndefined()
+    const { onFigures } = renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(screen.getByRole('button', { name: new RegExp(PATTERNS.r5.name.en) })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: new RegExp(PATTERNS.ballad.name.en) }))
-    expect(onChange).toHaveBeenCalledWith({ pattern: 'ballad' })
+    expect(onFigures).toHaveBeenCalledWith({ pattern: 'ballad' })
+  })
+
+  it('offers From the chart only where the chart names its methods', async () => {
+    const user = userEvent.setup()
+    renderSetup({ methods: true })
+    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+    expect(screen.getByRole('button', { name: /From the chart/ })).toBeInTheDocument()
   })
 
   it('goes back to the pattern’s own figure', async () => {
     const user = userEvent.setup()
-    const { onChange } = renderSetup()
+    const { onFigures } = renderSetup()
     await user.click(screen.getByRole('button', { name: /^Right hand.*own/ }))
     await user.click(screen.getByRole('button', { name: /The pattern’s own/ }))
-    expect(onChange).toHaveBeenCalledWith({ rh: undefined })
+    expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('shows Melody only for a piece with one, and saves it in settings', async () => {
-    renderSetup()
-    expect(screen.queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
-    cleanup()
+  it('saves the melody switch in settings', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = renderSetup(withMelody)
+    const { settingsStore } = renderSetup({ melody: true })
     await user.click(screen.getByRole('switch', { name: 'Melody' }))
     expect(settingsStore.getState().practice.melody).toBe(true)
   })
