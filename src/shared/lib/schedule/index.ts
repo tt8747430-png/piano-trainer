@@ -1,4 +1,13 @@
-export { advanceLoop, beatGroupAt, startLoop, type Loop, type Pass } from './loop'
+export {
+  advanceLoop,
+  beatGroupAt,
+  startLoop,
+  tempoAt,
+  type Loop,
+  type LoopOptions,
+  type Pass,
+  type SpeedUp,
+} from './loop'
 export {
   audibleHands,
   beatGroupSounds,
@@ -27,3 +36,4 @@ export {
   type PracticeRhythm,
 } from './sounds'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
+export { swingTick } from './swing'

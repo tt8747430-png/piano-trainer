@@ -188,7 +188,57 @@ describe('a tempo', () => {
 })
 
 describe('TEMPO_RANGE', () => {
-  it('runs from 40 to 160 beats per minute', () => {
-    expect(TEMPO_RANGE).toEqual({ min: 40, max: 160 })
+  it('runs from 20 to 160 beats per minute', () => {
+    expect(TEMPO_RANGE).toEqual({ min: 20, max: 160 })
+  })
+})
+
+describe('schedule: a passage and swing', () => {
+  const performance = arrange(chart('C', 'F'), { tonic: note('C'), pattern: BEATS })
+
+  it('ends a pass where it is told, cutting what would sound past it', () => {
+    const { sounds, cues, end } = schedule(performance, {
+      tempo: 60,
+      hands: ALL,
+      fromTick: 12,
+      toTick: 36,
+    })
+    expect(cues.map((cue) => cue.beatGroup)).toEqual([1, 2])
+    expect(end).toBe(2)
+    const bass = notes(sounds).find((sound) => sound.midi < 48)
+    expect(bass).toBeUndefined()
+  })
+
+  it('cuts a note that would sound past the pass’s end', () => {
+    const { sounds } = schedule(performance, { tempo: 60, hands: ALL, toTick: 36 })
+    const bass = notes(sounds).find((sound) => sound.midi < 48)
+    expect(bass?.duration).toBeCloseTo(3 * 0.95)
+  })
+
+  it('swings the off-beat 8th to two thirds of the beat, the beats kept', () => {
+    const eighths = arrange(chart('C'), {
+      tonic: note('C'),
+      pattern: {
+        id: 'eighths',
+        rh: { kind: 'events', events: parseFigure('0/2 C,2/2 C,4/2 C,6/2 C') },
+        lh: { kind: 'events', events: parseFigure('0/16 L1') },
+      },
+    })
+    const rh = (swing: boolean) => [
+      ...new Set(
+        notes(schedule(eighths, { tempo: 60, hands: audibleHands('rh'), swing }).sounds).map(
+          (s) => s.at,
+        ),
+      ),
+    ]
+    expect(rh(false)).toEqual([0, 0.5, 1, 1.5])
+    expect(rh(true).map((at) => Number(at.toFixed(4)))).toEqual([0, 0.6667, 1, 1.6667])
+  })
+
+  it('never swings a compound meter', () => {
+    const inEighths = arrange({ ...chart('C'), meter: '6/8' }, { tonic: note('C'), pattern: BEATS })
+    expect(schedule(inEighths, { tempo: 60, hands: ALL, swing: true })).toEqual(
+      schedule(inEighths, { tempo: 60, hands: ALL }),
+    )
   })
 })

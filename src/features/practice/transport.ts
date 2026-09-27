@@ -4,8 +4,8 @@ import {
   advanceLoop,
   beatGroupAt,
   startLoop,
+  type LoopOptions,
   type Pass,
-  type ScheduleOptions,
 } from '@/shared/lib/schedule'
 
 /** How often the transport looks at the audio clock. */
@@ -18,7 +18,7 @@ const FOLLOW_INTERVAL_MS = 25
 export function startTransport(
   audio: AudioOutput,
   performance: Performance,
-  options: ScheduleOptions,
+  options: LoopOptions,
   onReach: (beatGroup: number) => void,
 ): () => void {
   const play = (pass: Pass) => audio.play(pass.sounds, pass.start)

@@ -1,5 +1,6 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { beatsPerBar, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import { beatsPerBar, isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
 export const HANDS = ['both', 'rh', 'lh'] as const
@@ -15,8 +16,8 @@ const AUDIBLE: Readonly<Record<Hands, Audible>> = {
 
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
 
-/** The tempos a learner can choose, in beats per minute. */
-export const TEMPO_RANGE = { min: 40, max: 160 } as const
+/** The tempos a learner can choose, in beats per minute: 50% of the slowest piece (56) is 28. */
+export const TEMPO_RANGE = { min: 20, max: 160 } as const
 
 export interface NoteSound {
   readonly kind: 'note'
@@ -39,8 +40,12 @@ export interface ScheduleOptions {
   readonly hands: Audible
   /** Where in the piece the pass begins; 0 by default. */
   readonly fromTick?: Tick
+  /** Where it ends: the piece's end by default. A note sounding past it is cut there. */
+  readonly toTick?: Tick
   readonly countIn?: boolean
   readonly metronome?: boolean
+  /** Off-beat 8ths late, long-short; a compound meter never swings. */
+  readonly swing?: boolean
 }
 
 /** When each beat group sounds, so the Player can follow the music. */
@@ -74,9 +79,9 @@ const secondsFor = (ticks: Tick, tempo: number): number =>
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
-/** One pass through the piece from `fromTick`: its notes, clicks and cues in seconds from its start. */
+/** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
-  const { hands, fromTick = 0 } = options
+  const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
   const beat = secondsFor(TICKS_PER_BEAT, tempo)
   const countIn: Sound[] = options.countIn
@@ -87,35 +92,41 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       }))
     : []
   const musicStart = countIn.length * beat
-  const at = (tick: Tick) => musicStart + secondsFor(tick - fromTick, tempo)
+  const place = options.swing && !isCompound(performance.meter) ? swingTick : (tick: Tick) => tick
+  const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
+  const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
   const played: Sound[] = performance.notes
-    .filter((n) => n.startTick >= fromTick && isAudible(n, hands))
-    .map((n) => ({
-      kind: 'note',
-      midi: n.midi,
-      at: at(n.startTick + n.roll),
-      duration: Math.max(SHORTEST_NOTE, secondsFor(n.durationTicks - n.roll, tempo) * LEGATO),
-      velocity: n.velocity,
-    }))
+    .filter((n) => inPass(n.startTick) && isAudible(n, hands))
+    .map((n) => {
+      const start = n.startTick + n.roll
+      const end = Math.min(n.startTick + n.durationTicks, toTick)
+      return {
+        kind: 'note',
+        midi: n.midi,
+        at: at(start),
+        duration: Math.max(SHORTEST_NOTE, (at(end) - at(start)) * LEGATO),
+        velocity: n.velocity,
+      }
+    })
 
   const metronome: Sound[] = options.metronome
     ? performance.bars.flatMap((bar) =>
         Array.from({ length: Math.ceil(bar.beats) }, (_, k) => k).flatMap((k): Sound[] => {
           const tick = bar.startTick + k * TICKS_PER_BEAT
-          return tick >= fromTick ? [{ kind: 'click', at: at(tick), accent: k === 0 }] : []
+          return inPass(tick) ? [{ kind: 'click', at: at(tick), accent: k === 0 }] : []
         }),
       )
     : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>
-    group.tick >= fromTick ? [{ beatGroup, at: at(group.tick) }] : [],
+    inPass(group.tick) ? [{ beatGroup, at: at(group.tick) }] : [],
   )
 
   return {
     sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
     cues,
-    end: at(performance.totalTicks),
+    end: at(toTick),
   }
 }
 

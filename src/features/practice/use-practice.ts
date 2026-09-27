@@ -83,7 +83,14 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     return startTransport(
       audio,
       state.performance,
-      { fromTick: from?.tick ?? 0, tempo, hands: audibleHands(state.hands), countIn, metronome },
+      {
+        tempo,
+        hands: audibleHands(state.hands),
+        countIn,
+        metronome,
+        range: { from: 0, to: state.performance.totalTicks },
+        fromTick: from?.tick ?? 0,
+      },
       (beatGroup) => dispatch({ type: 'reach', beatGroup }),
     )
   }, [audio, state.playing, state.performance, state.hands, tempo, metronome, countIn, passRequest])
