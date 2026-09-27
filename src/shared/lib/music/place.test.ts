@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { rangeOf } from './keyboard'
 import { note } from './note'
 import {
   lastInversion,
@@ -7,6 +8,7 @@ import {
   placeChord,
   placeScale,
   placeScaleChords,
+  walkChords,
 } from './place'
 import { CHORD_NOTES } from './scale-chord'
 
@@ -124,5 +126,33 @@ describe('placeBorrowedChords', () => {
     expect(chords.map((c) => c.key)).toEqual([63, 65, 68, 70])
     expect(keys(chords[1]?.tones ?? [])).toEqual([65, 68, 72])
     expect(chords[3]?.numeral).toBe('♭VII')
+  })
+})
+
+describe('walkChords', () => {
+  it('goes up the seven chords, the tonic’s an octave up, and back down', () => {
+    const walk = walkChords(placeScaleChords(note('C'), 'major', 3, 0))
+    expect(walk.map((placed) => placed.numeral)).toEqual([
+      'I',
+      'ii',
+      'iii',
+      'IV',
+      'V',
+      'vi',
+      'vii°',
+      'I',
+      'vii°',
+      'vi',
+      'V',
+      'IV',
+      'iii',
+      'ii',
+      'I',
+    ])
+    expect(walk[7]?.tones.map((tone) => tone.midi)).toEqual([72, 76, 79])
+    expect(rangeOf(walk.flatMap((chord) => chord.tones.map((tone) => tone.midi)))).toEqual({
+      from: 60,
+      to: 79,
+    })
   })
 })

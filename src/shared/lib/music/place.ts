@@ -145,3 +145,15 @@ export function placeBorrowedChords(
     ),
   )
 }
+
+/** Walk the chords: the seven up, the tonic's an octave up, and back down to the tonic. */
+export function walkChords(chords: readonly PlacedScaleChord[]): PlacedScaleChord[] {
+  const [tonic] = chords
+  if (!tonic) return []
+  const octave: PlacedScaleChord = {
+    ...tonic,
+    key: midi(tonic.key + 12),
+    tones: tonic.tones.map((tone) => ({ ...tone, midi: midi(tone.midi + 12) })),
+  }
+  return [...chords, octave, ...[...chords].reverse()]
+}

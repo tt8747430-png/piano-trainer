@@ -159,7 +159,8 @@ describe('Learn → Scales', () => {
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E4' }), { pointerId: 1 })
     expect(screen.getByText(/ is in /)).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: '7ths' }))
+    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
+    await user.click(await screen.findByRole('option', { name: '7ths' }))
     expect(screen.queryByText(/ is in /)).not.toBeInTheDocument()
   })
 
@@ -242,5 +243,42 @@ describe('Learn → Scales', () => {
     const sheet = await screen.findByRole('region', { name: 'Sheet music' })
     await waitFor(() => expect(sheet.querySelector('[data-slot="score"] svg')).toBeInTheDocument())
     expect(sheet.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'bass')
+  })
+
+  it('stacks the scale’s chords up to 13ths', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/scales?show=chords')
+    await user.click(await screen.findByRole('combobox', { name: 'Chord size' }))
+    await user.click(await screen.findByRole('option', { name: '13ths' }))
+    expect(router.state.location.search).toMatchObject({ chords: 7 })
+    expect(screen.getByRole('button', { name: /^FMaj13#11/ })).toBeInTheDocument()
+  })
+
+  it('shows the chords in an inversion over their bass, each numeral figured', async () => {
+    await renderApp('/learn/scales?show=chords&inversion=1')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('I⁶C/E')
+    expect(screen.getByRole('button', { name: /^Dm\/F/ })).toBeInTheDocument()
+  })
+
+  it('keeps an inversion the smaller chords have when the size shrinks', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/scales?show=chords&chords=4&inversion=3')
+    await user.click(await screen.findByRole('combobox', { name: 'Chord size' }))
+    await user.click(await screen.findByRole('option', { name: 'Triads' }))
+    expect(router.state.location.search).toMatchObject({ inversion: 2 })
+    expect(router.state.location.search).not.toHaveProperty('chords')
+  })
+
+  it('walks the chords to the tonic’s octave and back, each on the keys as it sounds', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/scales?show=chords&tempo=60')
+    await user.click(await screen.findByRole('button', { name: 'Play up and down' }))
+    const sounds = audio.played.at(-1)?.sounds ?? []
+    expect(notes(sounds).slice(0, 3)).toEqual([60, 64, 67])
+    expect(notes(sounds).slice(21, 24)).toEqual([72, 76, 79])
+    act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 2.1))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveAttribute('data-down')
   })
 })

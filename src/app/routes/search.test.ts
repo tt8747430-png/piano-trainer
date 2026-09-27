@@ -94,6 +94,14 @@ describe('search params', () => {
     })
   })
 
+  it('read the Chords view’s size, inversion and walk, an inversion kept within the size', async () => {
+    expect(
+      await searchAt('/learn/scales?show=chords&chords=6&inversion=2&arpeggio=true'),
+    ).toMatchObject({ chords: 6, inversion: 2, arpeggio: true })
+    expect(await searchAt('/learn/scales?chords=3&inversion=3')).toMatchObject({ inversion: 0 })
+    expect(await searchAt('/learn/scales?kind=blues&chords=6')).toMatchObject({ chords: 3 })
+  })
+
   it('spell a root the way its explorer names it', async () => {
     expect(await searchAt('/learn/chords?root=A%23&quality=maj')).toMatchObject({ root: 'Bb' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })

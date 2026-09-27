@@ -100,6 +100,7 @@ export {
   placeChord,
   placeScale,
   placeScaleChords,
+  walkChords,
   type PlacedChord,
   type PlacedScaleChord,
   type PlacedTone,

@@ -7,11 +7,13 @@ import type { PlayerSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
+  CHORD_NOTES,
   CHORD_QUALITIES,
   chordRootSpelling,
   FINGERINGS,
   fingeringsOf,
   lastInversion,
+  lastStackInversion,
   note,
   noteParam,
   ownFingering,
@@ -97,12 +99,14 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   tempo: 80,
   hands: 'rh',
   chords: 3,
+  inversion: 0,
   keysPlay: 'chords',
+  arpeggio: false,
 }
 const isScaleShow = isOneOf<ScaleView['show']>(['scale', 'chords'])
 const isKeysPlay = isOneOf<ScaleView['keysPlay']>(['chords', 'notes'])
 const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
-const isScaleChords = isOneOf<ScaleView['chords']>([3, 4])
+const isChordNotes = isOneOf(CHORD_NOTES)
 const isScaleStep = (value: unknown): value is ScaleStepId =>
   isStepId(value) && value.startsWith('scale:')
 const isFingering = isOneOf(FINGERINGS)
@@ -120,6 +124,9 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
   const start = wholeIn(raw.start, 1, scaleIntervals(kind).length, SCALES_DEFAULTS.start)
+  const chords = scaleHasChords(kind)
+    ? valueOr(isChordNotes, raw.chords, SCALES_DEFAULTS.chords)
+    : SCALES_DEFAULTS.chords
   return {
     root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
     kind,
@@ -132,8 +139,10 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
-    chords: valueOr(isScaleChords, raw.chords, SCALES_DEFAULTS.chords),
+    chords,
+    inversion: wholeIn(raw.inversion, 0, lastStackInversion(chords), SCALES_DEFAULTS.inversion),
     keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
+    arpeggio: raw.arpeggio === true,
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
