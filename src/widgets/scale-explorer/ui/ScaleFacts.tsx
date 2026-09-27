@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   noteParam,
@@ -10,16 +9,7 @@ import {
   type Tone,
 } from '@/shared/lib/music'
 import { useScaleName } from '@/shared/i18n'
-import { ButtonLink } from '@/shared/ui'
-
-function Fact({ term, children }: { term: string; children: ReactNode }) {
-  return (
-    <div className="flex items-baseline gap-4">
-      <dt className="w-28 shrink-0 text-muted-foreground">{term}</dt>
-      <dd className="font-semibold">{children}</dd>
-    </div>
-  )
-}
+import { ButtonLink, Fact } from '@/shared/ui'
 
 /** What a scale is made of, and the scale it shares its notes with: its relative, or a mode's parent major. */
 export function ScaleFacts({

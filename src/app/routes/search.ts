@@ -15,10 +15,12 @@ import {
   FINGERINGS,
   fingeringsOf,
   fitParts,
+  keyParam,
   lastInversion,
   note,
   noteParam,
   ownFingering,
+  parseKey,
   partsParams,
   pitchClassOf,
   readAlterations,
@@ -27,6 +29,7 @@ import {
   scaleIntervals,
   scaleRootSpelling,
   SEVENTHS,
+  tonicSpelling,
   TRIADS,
   type ChordFamily,
   type Fingering,
@@ -34,6 +37,7 @@ import {
 } from '@/shared/lib/music'
 import { HANDS, PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import type { KeyView } from '@/widgets/key-explorer'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import type { ScaleView } from '@/widgets/scale-explorer'
@@ -167,6 +171,26 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
     arpeggio: raw.arpeggio === true,
     step: isScaleStep(raw.step) ? raw.step : undefined,
+  }
+}
+
+// Learn → Keys
+export const KEYS_DEFAULTS: KeyView = {
+  key: keyParam({ tonic: note('C'), minor: false }),
+  chords: 3,
+  inversion: 0,
+}
+const isKeyChords = isOneOf<KeyView['chords']>([3, 4])
+export function validateKeysSearch(input: Input<KeyView>): KeyView {
+  const raw: Raw = input
+  const key = typeof raw.key === 'string' ? parseKey(raw.key) : null
+  const chords = valueOr(isKeyChords, raw.chords, KEYS_DEFAULTS.chords)
+  return {
+    key: key
+      ? keyParam({ tonic: tonicSpelling(pitchClassOf(key.tonic), key.minor), minor: key.minor })
+      : KEYS_DEFAULTS.key,
+    chords,
+    inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
   }
 }
 

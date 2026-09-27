@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
+  KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
@@ -23,6 +24,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/scales')).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
+    expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -152,6 +154,16 @@ describe('search params', () => {
       mode: 'wait',
     })
     expect(await searchAt('/play/walk?root=H&chordSize=elevenths')).toEqual(WALK_DEFAULTS)
+  })
+
+  it('read a Keys key as the circle spells it, and its chords within their inversions', async () => {
+    expect(await searchAt('/learn/keys?key=Bb&chords=4&inversion=3')).toEqual({
+      key: 'Bb',
+      chords: 4,
+      inversion: 3,
+    })
+    expect(await searchAt('/learn/keys?key=D%23m')).toMatchObject({ key: 'Ebm' })
+    expect(await searchAt('/learn/keys?key=H&chords=5&inversion=3')).toEqual(KEYS_DEFAULTS)
   })
 
   it('spell a root the way its explorer names it', async () => {

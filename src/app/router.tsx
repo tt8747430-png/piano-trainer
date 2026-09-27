@@ -16,11 +16,13 @@ import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
   CHORDS_DEFAULTS,
+  KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
   validateCheckSearch,
   validateChordsSearch,
+  validateKeysSearch,
   validatePlayerSearch,
   validateScalesSearch,
   validateSongsSearch,
@@ -137,6 +139,14 @@ const scalesRoute = createRoute({
   search: { middlewares: [stripSearchParams(SCALES_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'ScalesPage'),
 })
+const keysRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/keys',
+  validateSearch: validateKeysSearch,
+  search: { middlewares: [stripSearchParams(KEYS_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'KeysPage'),
+})
+
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/lessons/$lessonId',
@@ -196,6 +206,7 @@ const routeTree = rootRoute.addChildren([
     learnRoute,
     chordsRoute,
     scalesRoute,
+    keysRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,

@@ -16,6 +16,7 @@ const ROUTES = [
   ['/learn', '/learn'],
   ['/learn/chords', '/learn/chords'],
   ['/learn/scales', '/learn/scales'],
+  ['/learn/keys', '/learn/keys'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
   ['/practice/quiz/build-chord', '/practice/quiz/$quiz'],
   ['/settings', '/settings'],

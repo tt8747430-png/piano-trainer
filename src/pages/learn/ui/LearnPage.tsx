@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
+import { BookOpenText, ChartNoAxesColumnIncreasing, CircleDot, KeyboardMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LESSONS } from '@/entities/lesson'
 import { LEVEL_NAME } from '@/entities/path'
@@ -42,6 +42,14 @@ export function LearnPage() {
               icon={ChartNoAxesColumnIncreasing}
               paint="sky"
               render={<Link to="/learn/scales" />}
+            />
+          </li>
+          <li>
+            <RowLink
+              title={t('learn:keys.title')}
+              icon={CircleDot}
+              paint="lilac"
+              render={<Link to="/learn/keys" />}
             />
           </li>
         </RowGroup>

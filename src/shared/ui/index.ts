@@ -1,6 +1,7 @@
 export { ButtonLink } from './ButtonLink'
 export { ChordButton } from './ChordButton'
 export { Dropdown } from './Dropdown'
+export { Fact } from './Fact'
 export { LazyScoreView } from './LazyScoreView'
 export { LevelMark } from './LevelMark'
 export { MultiDropdown } from './MultiDropdown'
