@@ -577,7 +577,8 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
 - **A mark's caption:** a second, smaller line over a mark's label: in the Scales reference's Chords view each
   degree's key carries its numeral over its chord (`ii` over `Dm`), both 12px, wrapping anywhere on a narrow key.
 - **What a key plays:** a key sounds itself unless the screen makes it more: in Chords view a degree's key plays its
-  chord, stacked from it, and every key of it is down while the hand holds the key.
+  chord, stacked from it, and every key of it is down while the hand holds the key. The keyboard then spans every
+  key the chords play (C4 to F5 for C major's triads), so a chord a key plays is in sight on a phone.
 - **Spotlight** (the references, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
   arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by going
   down, never by hiding the rest.
