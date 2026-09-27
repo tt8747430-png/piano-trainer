@@ -22,7 +22,6 @@ export {
 } from './loop'
 export { speedUp } from './speed'
 export { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
-export { barColumns, beatInBar, beatLabel, type NoteColumn, type PlayedNote } from './bar-columns'
 export type { PracticeChoice } from './choice'
 export { playerRange, practiceMarks } from './marks'
-export { noteLabel, playedNoteName, spellPitchClass, type NoteName } from './note-names'
+export { spellPitchClass } from './note-names'

@@ -47,16 +47,14 @@ describe('resolveChoice', () => {
 describe('searchPatch', () => {
   it('writes a choice equal to the piece’s own as absent', () => {
     expect(searchPatch(bz5, { key: noteParam(note('G')) })).toEqual({ key: undefined })
-    expect(searchPatch(bz5, { tempo: bz5.tempo })).toEqual({ tempo: undefined })
     expect(searchPatch(bz5, { pattern: ownChoice(bz5).pattern })).toEqual({ pattern: undefined })
     expect(searchPatch(twofive, { chordSize: 'sevenths' })).toEqual({ chordSize: undefined })
   })
 
   it('keeps a choice that differs', () => {
-    expect(searchPatch(bz5, { key: noteParam(note('A')), hands: 'lh' })).toEqual({
+    expect(searchPatch(bz5, { key: noteParam(note('A')), rh: 't1' })).toEqual({
       key: 'A',
-      hands: 'lh',
+      rh: 't1',
     })
-    expect(searchPatch(bz5, { tempo: 96 })).toEqual({ tempo: 96 })
   })
 })

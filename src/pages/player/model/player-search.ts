@@ -1,20 +1,14 @@
 import { hasMethodCodes, pieceKey, type Piece } from '@/entities/piece'
-import { ownChoice, type PracticeChoice, type PracticeMode } from '@/features/practice'
+import { ownChoice, type PracticeChoice } from '@/features/practice'
 import { noteFromParam, noteParam, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
+import type { PracticeView } from '@/widgets/practice-player'
 
-/** The Player's URL: the setup, and the mode it practises in. */
-export type PlayerSearch = SetupParams & { readonly mode: PracticeMode }
-
-/** The params that decide the arrangement; hands and tempo play the same arrangement differently. */
-export type ArrangementParams = Pick<SetupParams, 'key' | 'pattern' | 'rh' | 'lh' | 'chordSize'>
+/** The Player's URL: how it goes, and the piece's own choices (spec §2.10). */
+export type PlayerSearch = PracticeView & SetupParams
 
 /** The Player's URL read against its piece: what the URL leaves out is the piece's own. */
-export function resolveChoice(
-  piece: Piece,
-  search: ArrangementParams,
-  melody: boolean,
-): PracticeChoice {
+export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean): PracticeChoice {
   const own = ownChoice(piece)
   const { minor } = pieceKey(piece)
   const chartWithoutMethods = search.pattern === 'chart' && !hasMethodCodes(piece)
@@ -29,7 +23,7 @@ export function resolveChoice(
   }
 }
 
-/** A Setup change as the URL writes it: a key, tempo, pattern or chord size equal to the piece's own is left out. */
+/** A Setup change as the URL writes it: a key, pattern or chord size equal to the piece's own is left out. */
 export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
   const own = ownChoice(piece)
   const ownChordSize = piece.kind === 'progression' ? piece.chordSize.default : undefined
@@ -38,7 +32,6 @@ export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
   return {
     ...change,
     ...('key' in change ? { key: unlessOwn(change.key, noteParam(own.tonic)) } : {}),
-    ...('tempo' in change ? { tempo: unlessOwn(change.tempo, piece.tempo) } : {}),
     ...('pattern' in change ? { pattern: unlessOwn(change.pattern, own.pattern) } : {}),
     ...('chordSize' in change ? { chordSize: unlessOwn(change.chordSize, ownChordSize) } : {}),
   }

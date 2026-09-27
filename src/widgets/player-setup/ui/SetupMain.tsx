@@ -2,51 +2,38 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LEFT_FIGURES, PATTERNS, RIGHT_FIGURES } from '@/entities/pattern'
 import { CHORD_SIZES, melodyOf, pieceKey, type Piece } from '@/entities/piece'
-import {
-  PRACTICE_TOGGLES,
-  selectPractice,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
+import { selectPractice, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import type { PracticeChoice } from '@/features/practice'
 import { setPracticeToggle } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
 import { noteName, noteParam, PITCH_CLASSES, tonicSpelling } from '@/shared/lib/music'
-import { HANDS, TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
 import { Dropdown, Segmented } from '@/shared/ui'
-import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { SetupChange } from '../model/setup-params'
 
 export type SetupPage = 'pattern' | 'rh' | 'lh'
 
-/** The Setup sheet's first page: everything but the pattern and figure lists, which open as their own pages. */
+/** The Setup sheet's first page: the piece's own choices but the pattern and figure lists, which open as their own pages. */
 export function SetupMain({
   piece,
   choice,
-  tempo,
-  hands,
   onChange,
   onOpenPage,
 }: {
   piece: Piece
   choice: PracticeChoice
-  tempo: number
-  hands: Hands
   onChange: (change: SetupChange) => void
   /** Opens one of the sheet's lists as its page. */
   onOpenPage: (page: SetupPage) => void
 }) {
-  const { t } = useTranslation(['player', 'common'])
+  const { t } = useTranslation('player')
   const locale = useLocale()
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
   const { minor } = pieceKey(piece)
   const hasMelody = melodyOf(piece) !== undefined
   const patternName =
-    choice.pattern === 'chart'
-      ? t('player:fromChart')
-      : localText(PATTERNS[choice.pattern].name, locale)
+    choice.pattern === 'chart' ? t('fromChart') : localText(PATTERNS[choice.pattern].name, locale)
   const row = (label: string, value: string, page: SetupPage) => (
     <button
       type="button"
@@ -61,76 +48,52 @@ export function SetupMain({
   return (
     <div className="flex flex-col gap-5">
       <Dropdown
-        label={t('player:key')}
+        label={t('key')}
         value={noteParam(choice.tonic)}
         options={PITCH_CLASSES.map((pc) => {
           const tonic = tonicSpelling(pc, minor)
           return {
             value: noteParam(tonic),
-            label: t(minor ? 'player:keyOf.minor' : 'player:keyOf.major', {
+            label: t(minor ? 'keyOf.minor' : 'keyOf.major', {
               tonic: noteName(tonic),
             }),
           }
         })}
         onChange={(key) => onChange({ key })}
       />
-      <Slider
-        min={TEMPO_RANGE.min}
-        max={TEMPO_RANGE.max}
-        step={1}
-        value={tempo}
-        onValueChange={(next) => onChange({ tempo: next })}
-        className="flex flex-col gap-3"
-      >
-        <div className="flex justify-between text-lg">
-          <SliderLabel>{t('player:tempo')}</SliderLabel>
-          <span className="font-semibold tabular-nums">{t('player:bpm', { tempo })}</span>
-        </div>
-      </Slider>
-      <Segmented
-        label={t('player:hands')}
-        value={hands}
-        options={HANDS.map((h) => ({ value: h, label: t(`common:hands.${h}`) }))}
-        onChange={(next) => onChange({ hands: next })}
-      />
       <div>
-        {row(t('player:pattern'), patternName, 'pattern')}
+        {row(t('pattern'), patternName, 'pattern')}
         {row(
-          t('player:rh'),
-          choice.rh ? localText(RIGHT_FIGURES[choice.rh].name, locale) : t('player:ownFigure'),
+          t('rh'),
+          choice.rh ? localText(RIGHT_FIGURES[choice.rh].name, locale) : t('ownFigure'),
           'rh',
         )}
         {row(
-          t('player:lh'),
-          choice.lh ? localText(LEFT_FIGURES[choice.lh].name, locale) : t('player:ownFigure'),
+          t('lh'),
+          choice.lh ? localText(LEFT_FIGURES[choice.lh].name, locale) : t('ownFigure'),
           'lh',
         )}
       </div>
       {piece.kind === 'progression' && piece.chordSize.choosable ? (
         <Segmented
-          label={t('player:chordSize')}
+          label={t('chordSize')}
           value={choice.chordSize ?? piece.chordSize.default}
           options={CHORD_SIZES.map((size) => ({
             value: size,
-            label: t(`player:chordSizes.${size}`),
+            label: t(`chordSizes.${size}`),
           }))}
           onChange={(chordSize) => onChange({ chordSize })}
         />
       ) : null}
-      <div>
-        {PRACTICE_TOGGLES.filter((toggle) => toggle !== 'melody' || hasMelody).map((toggle) => (
-          <label
-            key={toggle}
-            className="flex min-h-14 items-center justify-between border-b border-border text-lg"
-          >
-            {t(`player:toggles.${toggle}`)}
-            <Switch
-              checked={toggles[toggle]}
-              onCheckedChange={(on) => setPracticeToggle(settings, toggle, on)}
-            />
-          </label>
-        ))}
-      </div>
+      {hasMelody ? (
+        <label className="flex min-h-14 items-center justify-between border-b border-border text-lg">
+          {t('toggles.melody')}
+          <Switch
+            checked={toggles.melody}
+            onCheckedChange={(on) => setPracticeToggle(settings, 'melody', on)}
+          />
+        </label>
+      ) : null}
     </div>
   )
 }

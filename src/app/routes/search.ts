@@ -2,7 +2,7 @@ import type { SearchSchemaInput } from '@tanstack/react-router'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
 import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
-import { PRACTICE_MODES } from '@/features/practice'
+import { isLoopParam, PRACTICE_MODES } from '@/features/practice'
 import type { PlayerSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
@@ -129,15 +129,23 @@ export function validateCheckSearch(input: Input<CheckSearch>): CheckSearch {
 }
 
 // Player: key, tempo, pattern and chord size default to the piece's own, so their absence is the default.
-export const PLAYER_DEFAULTS: PlayerSearch = { hands: 'both', mode: 'listen' }
+export const PLAYER_DEFAULTS: PlayerSearch = {
+  mode: 'listen',
+  speedTraining: false,
+  hands: 'both',
+  swing: false,
+}
 export function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
   const raw: Raw = input
   const key = readNote(raw.key)
   return {
-    key: key ? noteParam(key) : undefined,
-    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
-    hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
     mode: valueOr(isOneOf(PRACTICE_MODES), raw.mode, PLAYER_DEFAULTS.mode),
+    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
+    speedTraining: raw.speedTraining === true,
+    hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
+    swing: raw.swing === true,
+    loop: isLoopParam(raw.loop) ? raw.loop : undefined,
+    key: key ? noteParam(key) : undefined,
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
     rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
     lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,

@@ -1,9 +1,9 @@
-import { screen } from '@testing-library/react'
+import { cleanup, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { PATTERNS } from '@/entities/pattern'
-import { melodyOf, pieceById } from '@/entities/piece'
+import { melodyOf, PIECES, pieceById, type Piece } from '@/entities/piece'
 import { ownChoice } from '@/features/practice'
 import { PlayerSetup } from './PlayerSetup'
 
@@ -13,19 +13,21 @@ function piece(id: string) {
   return found
 }
 const bz5 = piece('bz5')
+const withMelody = PIECES.find((p) => melodyOf(p) !== undefined)
+if (!withMelody) throw new Error('no piece has a melody')
 
-function renderSetup() {
+function renderSetup(shown: Piece = bz5) {
   const onChange = vi.fn()
   const { settingsStore } = renderWithSettings(
     <PlayerSetup
       open
       onOpenChange={() => {}}
-      piece={bz5}
-      choice={ownChoice(bz5)}
-      tempo={72}
-      hands="both"
+      piece={shown}
+      choice={ownChoice(shown)}
       onChange={onChange}
-    />,
+    >
+      <p>How it plays</p>
+    </PlayerSetup>,
   )
   return { onChange, settingsStore }
 }
@@ -36,18 +38,19 @@ describe('PlayerSetup', () => {
     expect(screen.getByRole('combobox', { name: 'Key' })).toHaveTextContent('G major')
   })
 
-  it('changes the key, hands and tempo', async () => {
+  it('changes the key, and leaves the tempo and hands to the Player', async () => {
     const user = userEvent.setup()
     const { onChange } = renderSetup()
     await user.click(screen.getByRole('combobox', { name: 'Key' }))
     await user.click(await screen.findByRole('option', { name: 'A major' }))
     expect(onChange).toHaveBeenCalledWith({ key: 'A' })
-    await user.click(screen.getByRole('button', { name: 'Left hand' }))
-    expect(onChange).toHaveBeenCalledWith({ hands: 'lh' })
-    // Base UI shows the thumb once it has measured the track, which jsdom never lays out.
-    screen.getByRole('slider', { hidden: true }).focus()
-    await user.keyboard('{ArrowRight}')
-    expect(onChange).toHaveBeenCalledWith({ tempo: 73 })
+    expect(screen.queryByRole('slider', { hidden: true })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Left hand' })).not.toBeInTheDocument()
+  })
+
+  it('shows how the piece plays under its own choices', () => {
+    renderSetup()
+    expect(screen.getByText('How it plays')).toBeInTheDocument()
   })
 
   it('chooses a pattern from its group, and keeps melody patterns from a song without a melody', async () => {
@@ -68,11 +71,13 @@ describe('PlayerSetup', () => {
     expect(onChange).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('saves the switches in settings, and shows Melody only for a piece with one', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = renderSetup()
-    await user.click(screen.getByRole('switch', { name: 'Metronome' }))
-    expect(settingsStore.getState().practice.metronome).toBe(true)
+  it('shows Melody only for a piece with one, and saves it in settings', async () => {
+    renderSetup()
     expect(screen.queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
+    cleanup()
+    const user = userEvent.setup()
+    const { settingsStore } = renderSetup(withMelody)
+    await user.click(screen.getByRole('switch', { name: 'Melody' }))
+    expect(settingsStore.getState().practice.melody).toBe(true)
   })
 })

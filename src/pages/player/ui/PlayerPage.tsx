@@ -1,104 +1,109 @@
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceById, pieceKey, usePieceHeadings, type Piece } from '@/entities/piece'
+import { entryTitles, pieceById, usePieceHeadings, type Piece } from '@/entities/piece'
+import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
-import { PRACTICE_MODES } from '@/features/practice'
-import { keyName } from '@/shared/lib/music'
-import { Segmented } from '@/shared/ui'
-import { ChordChart } from '@/widgets/chord-chart'
+import { useLocale } from '@/shared/i18n'
+import { isCompound } from '@/shared/lib/music'
+import { RoundButton } from '@/shared/ui'
 import { PlayerSetup } from '@/widgets/player-setup'
+import {
+  HandsButton,
+  LoopButton,
+  PlayerArea,
+  PlayerScreen,
+  PlayerTitle,
+  PlayerTransport,
+  PlayingFields,
+  TempoButton,
+  WaitLine,
+} from '@/widgets/practice-player'
+import { SheetMusic } from '@/widgets/sheet-music'
+import { useClose } from '../model/use-close'
 import { usePlayer } from '../model/use-player'
-import { NoteGrid } from './NoteGrid'
-import { NowPanel } from './NowPanel'
-import { PlayerTopBar } from './PlayerTopBar'
-import { Transport } from './Transport'
 
 function Player({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'common'])
+  const { t } = useTranslation('player')
+  const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const navigate = useNavigate({ from: '/play/$pieceId' })
   const [setupOpen, setSetupOpen] = useState(false)
-  const player = usePlayer(
+  const close = useClose(piece)
+  const headings = usePieceHeadings(piece)
+  const { choice, performance, player, changeSetup } = usePlayer(
     piece,
     search,
     (patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true }),
   )
-  const { practice, performance } = player
-  const { state } = practice
-  const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
-  const headings = usePieceHeadings(piece)
-  const summary = t('player:summary', {
-    key: keyName({ tonic: player.choice.tonic, minor: pieceKey(piece).minor }),
-    tempo: player.tempo,
-    hands: t(`common:hands.${search.hands}`),
-  })
-
+  const { practice } = player
   return (
-    <div className="flex flex-1 flex-col gap-4 pt-2 landscape-phone:min-h-0 landscape-phone:gap-2 landscape-phone:pt-1">
-      {/* Upright the parts stack; on a phone on its side and on a laptop they share two columns:
-          the top bar, the chord now and the transport on the left; the modes, the chart strip and
-          the note grid on the right. */}
-      <div className="contents lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start lg:gap-x-10 lg:gap-y-4 landscape-phone:grid landscape-phone:min-h-0 landscape-phone:flex-1 landscape-phone:grid-cols-2 landscape-phone:content-start landscape-phone:gap-x-4 landscape-phone:gap-y-2 landscape-phone:overflow-y-auto">
-        <div className="lg:col-start-1 lg:row-start-1 landscape-phone:col-start-1 landscape-phone:row-start-1">
-          <PlayerTopBar piece={piece} summary={summary} onSetup={() => setSetupOpen(true)} />
-        </div>
-        <div className="lg:col-start-2 lg:row-start-1 landscape-phone:col-start-2 landscape-phone:row-start-1">
-          <Segmented
-            label={t('player:modes.label')}
-            value={search.mode}
-            options={PRACTICE_MODES.map((m) => ({ value: m, label: t(`player:modes.${m}`) }))}
-            onChange={player.setMode}
+    <>
+      <PlayerScreen>
+        <PlayerArea area="lead">
+          <PlayerTitle title={entryTitles(piece, locale).primary} onClose={close} />
+        </PlayerArea>
+        <PlayerArea area="tempo" className="flex items-center">
+          <TempoButton
+            mode={search.mode}
+            tempo={player.tempo}
+            shownTempo={player.shownTempo}
+            ownTempo={player.ownTempo}
+            speedTraining={search.speedTraining}
+            onWait={() => player.setMode('wait')}
+            onTempo={player.listenAt}
+            onSpeedTraining={player.setSpeedTraining}
           />
-        </div>
-        <div className="lg:col-start-2 lg:row-start-2 landscape-phone:col-start-2 landscape-phone:row-start-2">
-          <ChordChart
+        </PlayerArea>
+        <PlayerArea area="hands" className="flex items-center justify-end">
+          <HandsButton hands={search.hands} onChange={player.setHands} />
+        </PlayerArea>
+        <PlayerArea area="actions" className="flex items-center justify-end gap-2">
+          <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
+          <MidiButton />
+          <RoundButton label={t('setup')} icon={SlidersHorizontal} onClick={() => setSetupOpen(true)} />
+        </PlayerArea>
+        <PlayerArea area="keys" className="flex">
+          <LiveKeyboard
+            range={player.range}
+            inView={player.inView}
+            marks={player.marks}
+            wrong={player.wrong}
+            onKeyPress={player.tapKey}
+            height="fill"
+            className="min-h-0 flex-1"
+          />
+        </PlayerArea>
+        <PlayerArea area="sheet">
+          <SheetMusic
             performance={performance}
             headings={headings}
-            layout="strip"
-            current={bar}
-            onBar={practice.jumpToBar}
-          />
-        </div>
-        <div className="lg:col-start-1 lg:row-start-2 landscape-phone:col-start-1 landscape-phone:row-start-2">
-          <NowPanel
-            performance={performance}
-            state={state}
-            feedback={player.feedback}
-            onAgain={practice.play}
-          />
-        </div>
-        <div className="lg:col-start-2 lg:row-start-3 landscape-phone:col-start-2 landscape-phone:row-start-3">
-          <NoteGrid
-            performance={performance}
-            bar={bar}
-            current={state.beatGroup}
+            current={practice.state.beatGroup}
+            loop={player.loop}
+            fingers={player.fingers}
+            muted={player.muted}
             onJump={practice.jumpToBeatGroup}
+            onLoopChange={player.setLoop}
           />
-        </div>
-        <div className="order-last lg:col-start-1 lg:row-start-3 landscape-phone:col-start-1 landscape-phone:row-start-3">
-          <Transport practice={practice} hearing={player.hearing} onHear={player.hear} />
-        </div>
-      </div>
-      <LiveKeyboard
-        range={player.range}
-        inView={player.inView}
-        marks={player.marks}
-        wrong={state.wrong === null ? undefined : new Set([state.wrong])}
-        onKeyPress={player.tapKey}
-        height="fill"
-        className="mt-auto max-h-80 min-h-48 flex-1 lg:max-h-96 lg:min-h-64 landscape-phone:mt-0 landscape-phone:max-h-none landscape-phone:min-h-0 landscape-phone:flex-none landscape-phone:h-2/5"
-      />
+        </PlayerArea>
+        <PlayerArea area="status" className="landscape-phone:self-end">
+          {search.mode === 'wait' ? <WaitLine feedback={player.feedback} onAgain={practice.play} /> : null}
+        </PlayerArea>
+        <PlayerArea area="transport" className="self-end pb-2 landscape-phone:self-start landscape-phone:pb-0">
+          <PlayerTransport practice={practice} />
+        </PlayerArea>
+      </PlayerScreen>
       <PlayerSetup
         open={setupOpen}
         onOpenChange={setSetupOpen}
         piece={piece}
-        choice={player.choice}
-        tempo={player.tempo}
-        hands={search.hands}
-        onChange={player.change}
-      />
-    </div>
+        choice={choice}
+        onChange={changeSetup}
+      >
+        <PlayingFields swing={isCompound(piece.meter) ? null : search.swing} onSwing={player.setSwing} />
+      </PlayerSetup>
+    </>
   )
 }
 

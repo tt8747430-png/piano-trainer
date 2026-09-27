@@ -1,124 +1,41 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import type { Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
-import {
-  arrangePiece,
-  playerRange,
-  practiceMarks,
-  practisedHands,
-  usePractice,
-  type Practice,
-  type PracticeChoice,
-  type PracticeMode,
-} from '@/features/practice'
+import { arrangePiece, type PracticeChoice } from '@/features/practice'
 import { recordPractised } from '@/features/record-practised'
 import type { Performance } from '@/shared/lib/arrangement'
-import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
-import { audibleHands, beatGroupSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
-import type { KeyMark } from '@/shared/ui'
 import type { SetupChange } from '@/widgets/player-setup'
+import { usePracticePlayer, type PracticePlayer } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
-import { waitFeedback, type WaitFeedback } from './wait-feedback'
 
 export interface Player {
   readonly choice: PracticeChoice
   readonly performance: Performance
-  readonly range: KeyRange
-  readonly tempo: number
-  readonly practice: Practice
-  /**
-   * The current beat group's keys in the hands heard (in Wait mode, the hands practised), by hand,
-   * labelled with fingers or note names.
-   */
-  readonly marks: ReadonlyMap<Midi, KeyMark>
-  /** The marked keys, for the keyboard to keep in sight. */
-  readonly inView: KeyRange | undefined
-  readonly feedback: WaitFeedback | null
-  change(change: SetupChange): void
-  setMode(mode: PracticeMode): void
-  /** Wait mode's "Hear these notes": the current beat group, both hands; or stops it while it sounds. */
-  hear(): void
-  /** Hear these notes' sound is playing. */
-  readonly hearing: boolean
-  /** A key tapped on the screen: an answer in Wait mode. The keyboard sounds every tap itself. */
-  tapKey(key: Midi): void
+  readonly player: PracticePlayer
+  changeSetup(change: SetupChange): void
 }
 
-/** The Player's one hook (CODE_STYLE §3): the URL and the saved switches in, everything the screen shows out. */
+/** The piece as the Player plays it (spec §2.1): its URL's choices arranged, practised from the widget's hook. */
 export function usePlayer(
   piece: Piece,
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
 ): Player {
-  const toggles = useSettings(selectPractice)
+  const { melody } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
-  const playback = usePlayback<'hear'>()
   const { key, pattern, rh, lh, chordSize } = search
   const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, chordSize }, toggles.melody),
-    [piece, key, pattern, rh, lh, chordSize, toggles.melody],
+    () => resolveChoice(piece, { key, pattern, rh, lh, chordSize }, melody),
+    [piece, key, pattern, rh, lh, chordSize, melody],
   )
   const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
-  const range = useMemo(() => playerRange(performance), [performance])
-  const tempo = search.tempo ?? piece.tempo
-  const practice = usePractice(performance, {
-    mode: search.mode,
-    hands: search.hands,
-    tempo,
-    ownTempo: piece.tempo,
-    speedTraining: false,
-    swing: false,
-    loop: null,
-    metronome: toggles.metronome,
-    countIn: toggles.countIn,
-  })
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
-
-  const { state, press } = practice
-  const waiting = state.mode === 'wait'
-  const received = waiting ? state.received : undefined
-  const hands = useMemo(
-    () => (waiting ? practisedHands(search.hands) : audibleHands(search.hands)),
-    [waiting, search.hands],
-  )
-  // Stable while the beat group is, so the keyboard's memoised keys re-render only when theirs change.
-  const marks = useMemo(
-    () =>
-      practiceMarks(performance, state.beatGroup, {
-        hands,
-        fingers: toggles.fingerNumbers,
-        ...(received ? { received } : {}),
-      }),
-    [performance, state.beatGroup, hands, toggles.fingerNumbers, received],
-  )
-  const inView = useMemo(() => rangeOf([...marks.keys()]), [marks])
-  const tapKey = useCallback(
-    (tapped: Midi) => {
-      if (waiting) press(tapped)
-    },
-    [waiting, press],
-  )
-
+  const player = usePracticePlayer(performance, search, setSearch, piece.tempo)
   return {
     choice,
     performance,
-    range,
-    tempo,
-    practice,
-    marks,
-    inView,
-    feedback: waitFeedback(performance, state),
-    change: (setup) => setSearch(searchPatch(piece, setup)),
-    setMode: (mode) => setSearch({ mode }),
-    hear() {
-      playback.toggle(
-        'hear',
-        beatGroupSounds(performance, state.beatGroup, { tempo, hands: audibleHands('both') }),
-      )
-    },
-    hearing: playback.playing === 'hear',
-    tapKey,
+    player,
+    changeSetup: (change) => setSearch(searchPatch(piece, change)),
   }
 }

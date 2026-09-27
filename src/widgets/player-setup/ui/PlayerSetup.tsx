@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
@@ -15,7 +15,6 @@ import {
 import { hasMethodCodes, melodyOf, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
-import type { Hands } from '@/shared/lib/schedule'
 import { Sheet, SheetContent } from '@/shared/ui'
 import type { SetupChange } from '../model/setup-params'
 import { ChoiceList } from './ChoiceList'
@@ -24,25 +23,24 @@ import { ListPage } from './ListPage'
 import { SetupMain, type SetupPage } from './SetupMain'
 
 /**
- * Everything about how the Player plays, in one sheet; the pattern and figure lists open as its
- * pages, so a sheet never opens over a sheet.
+ * The piece's own choices in one sheet, then how any piece plays (`children`); the pattern and figure
+ * lists open as its pages, so a sheet never opens over a sheet.
  */
 export function PlayerSetup({
   open,
   onOpenChange,
   piece,
   choice,
-  tempo,
-  hands,
   onChange,
+  children,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   piece: Piece
   choice: PracticeChoice
-  tempo: number
-  hands: Hands
   onChange: (change: SetupChange) => void
+  /** How the piece plays, under its own choices on the main page. */
+  children: ReactNode
 }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
@@ -65,14 +63,10 @@ export function PlayerSetup({
     >
       <SheetContent title={title}>
         {page === 'main' ? (
-          <SetupMain
-            piece={piece}
-            choice={choice}
-            tempo={tempo}
-            hands={hands}
-            onChange={onChange}
-            onOpenPage={setPage}
-          />
+          <div className="flex flex-col gap-5">
+            <SetupMain piece={piece} choice={choice} onChange={onChange} onOpenPage={setPage} />
+            {children}
+          </div>
         ) : null}
         {page === 'pattern' ? (
           <ListPage onBack={toMain}>

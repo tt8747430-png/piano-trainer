@@ -4,33 +4,28 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { setPracticeToggle } from '@/features/set-preference'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
+import { stubFonts } from '@/shared/test/fonts'
 
 describe('Player', () => {
-  it('opens a song with its setup summary and records it as practised', async () => {
+  it('opens a song with its title, tempo, hands and sheet music, and records it as practised', async () => {
     const { progressStore } = await renderApp('/play/bz5')
     expect(
-      await screen.findByRole('button', { name: /G · 72 BPM · Both hands/ }),
+      await screen.findByRole('heading', { name: 'Still, my soul, be still' }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Hands: Both hands' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Bar 1: G' })).toBeInTheDocument()
     expect(progressStore.getState().practised.bz5).toBeDefined()
-    expect(screen.getByRole('button', { name: 'Listen' })).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('reads a stale URL as the piece’s own setup', async () => {
-    await renderApp('/play/bz5?key=H&tempo=999&mode=step')
-    expect(
-      await screen.findByRole('button', { name: /G · 72 BPM · Both hands/ }),
-    ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Listen' })).toHaveAttribute('aria-pressed', 'true')
+    const { router } = await renderApp('/play/bz5?key=H&tempo=999&mode=step&loop=9-3&swing=yes')
+    expect(await screen.findByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Loop' })).toHaveAttribute('aria-pressed', 'false')
+    expect(router.state.location.search).toEqual({})
   })
 
-  it('steps through beat by beat, sounding each', async () => {
-    const user = userEvent.setup()
-    const { audio } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Next' }))
-    expect(audio.played.length).toBeGreaterThan(0)
-  })
-
-  it('plays a pass in Listen and stops it', async () => {
+  it('plays in Listen and stops', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
@@ -39,17 +34,36 @@ describe('Player', () => {
     expect(audio.stops).toBeGreaterThan(0)
   })
 
-  it('waits for the notes in Wait mode, says a wrong key and takes the right ones from MIDI', async () => {
+  it('steps with Back and Next, sounding each beat group', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Next' }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(audio.played).toHaveLength(2)
+  })
+
+  it('chooses Wait mode and a speed from the tempo popover', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Tempo: 100%' }))
+    await user.click(await screen.findByRole('button', { name: 'Wait mode' }))
+    expect(router.state.location.search).toMatchObject({ mode: 'wait' })
+    await user.click(screen.getByRole('button', { name: 'Tempo: Wait' }))
+    await user.click(await screen.findByRole('button', { name: '50% speed' }))
+    expect(router.state.location.search).toEqual({ tempo: 36 })
+  })
+
+  it('waits for the notes in Wait mode once playing, says a wrong key, and takes the right ones from MIDI', async () => {
     const user = userEvent.setup()
     // The song's pattern opens with the left hand alone, so the left hand has notes to play at once.
     const { midi: midiKeyboard } = await renderApp('/play/bz5?mode=wait&hands=lh')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
     const prompt = await screen.findByText(/^Play /)
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    await user.click(screen.getByRole('button', { name: 'Play' }))
     // C sharp is outside G major's first chord (G B D).
     await user.click(within(keyboard).getByRole('button', { name: 'C sharp 4' }))
-    expect(await screen.findByText(/^Not C#/)).toBeInTheDocument()
+    expect(await screen.findByText(/^Not C/)).toBeInTheDocument()
     act(() => {
       for (const name of notes) {
         const spelled = parseNoteName(name)
@@ -60,34 +74,50 @@ describe('Player', () => {
     expect(await screen.findByText('Right')).toBeInTheDocument()
   })
 
-  it('changes the key through the Setup sheet, and back to the piece’s own', async () => {
+  it('chooses a hand, muting the other staff', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: /G · 72 BPM/ }))
+    await user.click(await screen.findByRole('button', { name: 'Hands: Both hands' }))
+    await user.click(await screen.findByRole('button', { name: 'Left hand' }))
+    expect(router.state.location.search).toMatchObject({ hands: 'lh' })
+    expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'treble')
+  })
+
+  it('loops the bar the cursor is in, and removes the loop', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Loop' }))
+    expect(router.state.location.search).toMatchObject({ loop: '1-1' })
+    expect(await screen.findByRole('slider', { name: 'Loop end' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Loop' }))
+    expect(router.state.location.search).not.toHaveProperty('loop')
+  })
+
+  it('changes the key and swing in the Setup sheet', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await user.click(await screen.findByRole('combobox', { name: 'Key' }))
     await user.click(await screen.findByRole('option', { name: 'A major' }))
     expect(router.state.location.search).toMatchObject({ key: 'A' })
-    // The summary sits behind the open sheet, out of the accessibility tree until it closes.
-    expect(
-      await screen.findByRole('button', { name: /A · 72 BPM/, hidden: true }),
-    ).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Key' }))
-    await user.click(await screen.findByRole('option', { name: 'G major' }))
-    expect(router.state.location.search).not.toHaveProperty('key')
+    await user.click(screen.getByRole('switch', { name: 'Swing' }))
+    expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
   })
 
-  it('turns Hear these notes into Stop while they sound, in Wait mode', async () => {
-    const user = userEvent.setup()
-    await renderApp('/play/bz5?mode=wait')
-    await user.click(await screen.findByRole('button', { name: 'Hear these notes' }))
-    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
-  })
-
-  it('puts the fingers under the keys with Finger numbers, the keys keeping their notes', async () => {
+  it('puts the fingers under the keys with Finger numbers', async () => {
     const { settingsStore } = await renderApp('/play/bz5')
     await screen.findByRole('group', { name: 'Keyboard' })
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
     act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
     expect(document.querySelector('[data-slot="finger-row"]')).toBeInTheDocument()
+  })
+
+  it('still plays when the music font does not load', async () => {
+    stubFonts({ loads: false })
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/bz5')
+    expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(audio.played).toHaveLength(1)
   })
 })

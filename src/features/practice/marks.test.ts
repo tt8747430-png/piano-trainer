@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
-import { pitchClass } from '@/shared/lib/music'
+import { noteName, pitchClass } from '@/shared/lib/music'
 import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { playerRange, practiceMarks } from './marks'
-import { playedNoteName } from './note-names'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
@@ -34,7 +33,7 @@ describe('practiceMarks', () => {
       const played = performance.notes[index]
       if (!played || played.hand === 'melody') continue
       const mark = fingered.get(played.midi)
-      expect(mark?.label).toBe(playedNoteName(played).name)
+      expect(mark?.label).toBe(noteName(played.spelled))
       expect(mark?.finger).toBe(played.finger)
       expect(plain.get(played.midi)?.finger).toBeUndefined()
     }
@@ -49,7 +48,7 @@ describe('practiceMarks', () => {
       if (!played || played.hand === 'melody') continue
       const mark = marks.get(played.midi)
       expect(mark?.tone).toBe(played.hand)
-      expect(mark?.label).toBe(playedNoteName(played).name)
+      expect(mark?.label).toBe(noteName(played.spelled))
     }
   })
 

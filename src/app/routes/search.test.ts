@@ -24,13 +24,16 @@ describe('search params', () => {
     ).toEqual({ root: 'Bb', quality: 'm7', inversion: 2, hands: 'both', step: 'chords:sev' })
     expect(
       await searchAt(
-        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&pattern=chart&rh=t1&lh=o&chordSize=ninths',
+        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=true&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths',
       ),
     ).toEqual({
       key: 'A',
       tempo: 96,
       hands: 'lh',
       mode: 'wait',
+      speedTraining: true,
+      swing: true,
+      loop: '2-3',
       pattern: 'chart',
       rh: 't1',
       lh: 'o',
@@ -55,6 +58,10 @@ describe('search params', () => {
         '/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&chordSize=elevenths',
       ),
     ).toEqual(PLAYER_DEFAULTS)
+    expect(await searchAt('/play/bz5?mode=step&loop=6-3&swing=yes&tempo=10')).toEqual(
+      PLAYER_DEFAULTS,
+    )
+    expect(await searchAt('/play/bz5?loop=x&speedTraining=1')).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/learn/chords?quality=maj13&inversion=7&step=scale:major')).toEqual(
       CHORDS_DEFAULTS,
     )

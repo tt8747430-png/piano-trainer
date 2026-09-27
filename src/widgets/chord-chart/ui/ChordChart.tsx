@@ -1,52 +1,29 @@
-import { useEffect, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
 import { isMethodCode, METHODS } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { cn, useMediaQuery } from '@/shared/lib'
 import { beatsPerBar, timeSignature, timeSignatureText } from '@/shared/lib/music'
 import { chartSections } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
-/** A Chart's bars with their numbers and chords, by section: line by line to read, or one strip to follow. */
+/**
+ * A Chart's bars with their numbers and chords, by section, line by line; a tap plays a bar, which is
+ * pressed while it sounds.
+ */
 export function ChordChart({
   performance,
   headings,
-  layout,
-  current = null,
   playing,
   onBar,
 }: {
   performance: Performance
   headings: readonly string[]
-  layout: 'lines' | 'strip'
-  current?: number | null
-  /**
-   * The bar sounding, where a tap plays a bar (the Piece): every bar is then a toggle, pressed while
-   * it plays. Left out where a tap moves the cursor (the Player).
-   */
-  playing?: number | null
+  /** The bar sounding, if any. */
+  playing: number | null
   onBar: (bar: number) => void
 }) {
-  const { t } = useTranslation('piece')
   const locale = useLocale()
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  const strip = useRef<HTMLDivElement>(null)
-  const buttons = useRef<(HTMLButtonElement | null)[]>([])
 
-  // The strip scrolls itself to centre the current bar; scrollIntoView would scroll every
-  // scrollable ancestor too, the Player's own layout included.
-  useEffect(() => {
-    const row = strip.current
-    const bar = current === null ? undefined : buttons.current[current]
-    if (!row || !bar || row.scrollWidth <= row.clientWidth) return
-    row.scrollTo({
-      left: bar.offsetLeft - (row.clientWidth - bar.offsetWidth) / 2,
-      behavior: reduceMotion ? 'auto' : 'smooth',
-    })
-  }, [current, reduceMotion])
-
-  const barOf = (index: number, fill = false) => {
+  const barOf = (index: number) => {
     const bar = performance.bars[index]
     if (!bar) return null
     const chords = bar.chords.map((i) => performance.chords[i]).filter((c) => c !== undefined)
@@ -60,16 +37,11 @@ export function ChordChart({
     return (
       <BarButton
         key={index}
-        ref={(element) => {
-          buttons.current[index] = element
-        }}
         number={index + 1}
         symbols={chords.map((c) => c.symbol)}
         notes={notes}
-        current={current === index}
-        pressed={playing === undefined ? undefined : playing === index}
+        pressed={playing === index}
         onClick={() => onBar(index)}
-        fill={fill}
       />
     )
   }
@@ -79,32 +51,6 @@ export function ChordChart({
   /** The longest line's bars: every line's bars are as wide as its, so bars line up down the chart. */
   const longest = Math.max(1, ...sections.flatMap(({ lines }) => lines.map((line) => line.length)))
 
-  if (layout === 'strip') {
-    return (
-      <div
-        ref={strip}
-        role="group"
-        aria-label={t('chart')}
-        className="relative -mx-4 flex snap-x scroll-px-4 overflow-x-auto border-y border-border bg-card px-4 scrollbar-none landscape-phone:mx-0 landscape-phone:rounded-2xl landscape-phone:border landscape-phone:px-0"
-      >
-        {sections.flatMap(({ heading, lines }) =>
-          lines.flat().map((index, i) => (
-            <div key={index} className="flex shrink-0 snap-center flex-col">
-              <span
-                className={cn(
-                  'h-5 px-2.5 pt-1 text-xs font-semibold text-muted-foreground landscape-phone:hidden',
-                  i > 0 && 'invisible',
-                )}
-              >
-                {heading}
-              </span>
-              {barOf(index)}
-            </div>
-          )),
-        )}
-      </div>
-    )
-  }
   return (
     <div className="flex flex-col gap-6">
       {sections.map(({ heading, lines }, section) => (
@@ -119,7 +65,7 @@ export function ChordChart({
                 width: `${(bars.length / longest) * 100}%`,
               }}
             >
-              {bars.map((index) => barOf(index, true))}
+              {bars.map(barOf)}
             </div>
           ))}
         </section>

@@ -14,6 +14,7 @@ const VIEW: PracticeView = { mode: 'listen', speedTraining: false, hands: 'both'
 
 function renderPlayer(view: Partial<PracticeView> = {}) {
   const setView = vi.fn()
+  const audio = createFakeAudio()
   const settingsStore = createSettingsStore({
     storage: createMemoryStorage(),
     languages: ['en'],
@@ -21,15 +22,13 @@ function renderPlayer(view: Partial<PracticeView> = {}) {
   })
   const wrapper = ({ children }: { children: ReactNode }) => (
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
-        {children}
-      </ServicesProvider>
+      <ServicesProvider services={{ audio, midi: createFakeMidi() }}>{children}</ServicesProvider>
     </SettingsStoreProvider>
   )
   const hook = renderHook(() => usePracticePlayer(TWO_BARS, { ...VIEW, ...view }, setView, 72), {
     wrapper,
   })
-  return { ...hook, setView }
+  return { ...hook, setView, audio }
 }
 
 describe('usePracticePlayer', () => {
@@ -67,5 +66,26 @@ describe('usePracticePlayer', () => {
     expect(renderPlayer({ hands: 'rh' }).result.current.muted).toBe('bass')
     expect(renderPlayer({ hands: 'lh' }).result.current.muted).toBe('treble')
     expect(renderPlayer().result.current.muted).toBeUndefined()
+  })
+
+  it('marks the hands the learner hears, and keeps the marked keys in view', () => {
+    const { result } = renderPlayer({ hands: 'lh' })
+    const marks = [...result.current.marks]
+    expect(marks.length).toBeGreaterThan(0)
+    expect(marks.every(([, mark]) => mark.tone === 'lh')).toBe(true)
+    const keys = marks.map(([key]) => key)
+    expect(result.current.inView).toEqual({ from: Math.min(...keys), to: Math.max(...keys) })
+  })
+
+  it('takes a tapped key as an answer in Wait mode once playing, and leaves the sound to the keyboard', () => {
+    const { result, audio } = renderPlayer({ mode: 'wait' })
+    const [key] = result.current.marks.keys()
+    if (key === undefined) throw new Error('nothing to play')
+    act(() => result.current.tapKey(key))
+    expect(result.current.practice.state.received).toEqual([])
+    act(() => result.current.practice.play())
+    act(() => result.current.tapKey(key))
+    expect(result.current.practice.state.received).toContain(key % 12)
+    expect(audio.played.flatMap((play) => play.sounds)).toEqual([])
   })
 })
