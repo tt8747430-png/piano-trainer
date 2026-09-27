@@ -1,6 +1,6 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { midi, placeChord, type Chord, type Midi } from '@/shared/lib/music'
-import { schedule, type Audible, type Hands, type NoteSound, type Sound } from './schedule'
+import { placeChord, type Chord, type Midi } from '@/shared/lib/music'
+import { schedule, type Audible, type NoteSound, type Sound } from './schedule'
 
 /** One bar on its own at a tempo: what a tap on a bar plays. */
 export function barSounds(
@@ -82,36 +82,34 @@ export const PRACTICE_RHYTHMS: Readonly<Record<PracticeRhythm, readonly number[]
   'short-short-short-long': [2 / 3, 2 / 3, 2 / 3, 2],
 }
 
-const OCTAVES_BY_HANDS: Readonly<Record<Hands, readonly number[]>> = {
-  rh: [0],
-  lh: [-12],
-  both: [-12, 0],
-}
+/** A walk's chords: a struck one softer than a rolled one, each note released a little before the next chord. */
+const WALKED = { struck: 0.16, rolled: 0.2, legato: 0.95 } as const
 
-/** A scale up and back down in eighth notes, in a practice rhythm, for one hand or both. */
-export function scaleRun(
-  notes: readonly Midi[],
-  options: { readonly rhythm: PracticeRhythm; readonly tempo: number; readonly hands: Hands },
+/**
+ * Chords one after another, Walk the chords: struck together for two beats each, or rolled upwards
+ * an 8th a note, each chord lasting two beats or as many as its notes need.
+ */
+export function walkSounds(
+  chords: readonly (readonly Midi[])[],
+  options: { readonly arpeggio: boolean; readonly tempo: number },
 ): NoteSound[] {
-  const lengths = PRACTICE_RHYTHMS[options.rhythm]
-  const eighth = 60 / options.tempo / 2
-  const upAndDown = [...notes, ...notes.slice(0, -1).reverse()]
-  const offsets = OCTAVES_BY_HANDS[options.hands]
-  const velocity = offsets.length > 1 ? 0.16 : 0.2
+  const beat = 60 / options.tempo
   const sounds: NoteSound[] = []
   let at = 0
-  upAndDown.forEach((note, i) => {
-    const length = (lengths[i % lengths.length] ?? 1) * eighth
-    for (const offset of offsets) {
+  for (const chord of chords) {
+    const keys = [...chord].sort((a, b) => a - b)
+    const length = (options.arpeggio ? Math.max(2, Math.ceil(keys.length / 2)) : 2) * beat
+    keys.forEach((key, i) => {
+      const offset = options.arpeggio ? (i * beat) / 2 : 0
       sounds.push({
         kind: 'note',
-        midi: midi(note + offset),
-        at,
-        duration: Math.max(0.25, length * 1.1),
-        velocity,
+        midi: key,
+        at: at + offset,
+        duration: (length - offset) * WALKED.legato,
+        velocity: options.arpeggio ? WALKED.rolled : WALKED.struck,
       })
-    }
+    })
     at += length
-  })
+  }
   return sounds
 }

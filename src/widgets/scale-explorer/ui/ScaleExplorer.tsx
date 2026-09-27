@@ -14,10 +14,11 @@ import {
   ownFingering,
   runFingering,
   scaleHasChords,
+  scaleKey,
   scaleRootSpelling,
   spellScale,
 } from '@/shared/lib/music'
-import { scaleRun } from '@/shared/lib/schedule'
+import { runSounds, scaleRun } from '@/shared/lib/schedule'
 import { Dropdown, Segmented } from '@/shared/ui'
 import {
   chordKeyPlays,
@@ -86,7 +87,12 @@ export function ScaleExplorer({
   const rh = runFingering(root, scale.kind, 0, scaleKeys, 'rh', fingering)
   const lh = runFingering(root, scale.kind, 0, scaleKeys, 'lh', fingering)
   const shown = scale.fingers === 'rh' ? rh : scale.fingers === 'lh' ? lh : null
-  const run = scaleRun(scaleKeys, { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands })
+  const run = scaleRun(placed, {
+    rhythm: scale.rhythm,
+    hands: scale.hands,
+    key: scaleKey(root, scale.kind),
+    fingers: { rh, lh },
+  })
 
   return (
     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
@@ -171,7 +177,7 @@ export function ScaleExplorer({
         />
       ) : (
         <ExplorerKeyboard
-          keys={run.map((sound) => sound.midi)}
+          keys={run.notes.map((n) => n.midi)}
           marks={scaleMarks(placed, shown)}
           className="lg:order-first lg:col-span-2"
         />
@@ -188,7 +194,7 @@ export function ScaleExplorer({
         ) : (
           <>
             <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
-            <ScalePractice scale={scale} run={run} onChange={onChange} />
+            <ScalePractice scale={scale} sounds={runSounds(run, scale.tempo)} onChange={onChange} />
           </>
         )}
         <ScaleFacts root={root} kind={scale.kind} tones={tones} />

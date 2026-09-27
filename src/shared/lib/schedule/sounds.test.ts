@@ -1,15 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
-import { midi, note, parseChordSymbol, type Midi } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import { audibleHands } from './schedule'
-import {
-  barSounds,
-  chordSounds,
-  keySounds,
-  placedChordSounds,
-  PRACTICE_RHYTHMS,
-  scaleRun,
-} from './sounds'
+import { barSounds, chordSounds, keySounds, placedChordSounds, walkSounds } from './sounds'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
@@ -23,7 +16,6 @@ const BEATS = {
   lh: { kind: 'events', events: parseFigure('0/16 L1') },
 } as const
 const FIXTURE = arrange(TWO_BARS_CHART, { tonic: note('C'), pattern: BEATS })
-const C_MAJOR: Midi[] = [60, 62, 64, 65, 67, 69, 71, 72].map(midi)
 
 describe('barSounds', () => {
   it('plays only the bar asked for, from its first beat', () => {
@@ -56,31 +48,30 @@ describe('chordSounds', () => {
   })
 })
 
-describe('scaleRun', () => {
-  it('goes up and back down in even eighth notes', () => {
-    const run = scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'rh' })
-    expect(run.map((sound) => sound.midi)).toEqual([
-      60, 62, 64, 65, 67, 69, 71, 72, 71, 69, 67, 65, 64, 62, 60,
+describe('walkSounds', () => {
+  const triads = [
+    [60, 64, 67],
+    [62, 65, 69],
+  ].map((chord) => chord.map(midi))
+
+  it('strikes each chord for two beats', () => {
+    const sounds = walkSounds(triads, { arpeggio: false, tempo: 60 })
+    expect(sounds.map((s) => [s.midi, s.at])).toEqual([
+      [60, 0],
+      [64, 0],
+      [67, 0],
+      [62, 2],
+      [65, 2],
+      [69, 2],
     ])
-    expect(run[1]?.at).toBeCloseTo(0.5)
-    expect(run.at(-1)?.at).toBeCloseTo(14 * 0.5)
   })
 
-  it('repeats the rhythm’s lengths', () => {
-    const run = scaleRun(C_MAJOR, { rhythm: 'long-short', tempo: 60, hands: 'rh' })
-    expect(run.slice(0, 3).map((sound) => sound.at)).toEqual([0, 0.75, 1])
-    expect(PRACTICE_RHYTHMS['long-short']).toEqual([1.5, 0.5])
-  })
-
-  it('plays the left hand an octave lower, and both hands together', () => {
-    expect(scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'lh' })[0]?.midi).toBe(48)
-    const both = scaleRun(C_MAJOR, { rhythm: 'even', tempo: 60, hands: 'both' })
-    expect(
-      both
-        .filter((s) => s.at === 0)
-        .map((s) => s.midi)
-        .sort(),
-    ).toEqual([48, 60])
+  it('rolls each chord upwards an 8th a note, giving a big chord the beats it needs', () => {
+    const thirteenth = [[60, 64, 67, 71, 74, 77, 81].map(midi), triads[1] ?? []]
+    const sounds = walkSounds(thirteenth, { arpeggio: true, tempo: 60 })
+    expect(sounds.slice(0, 3).map((s) => s.at)).toEqual([0, 0.5, 1])
+    // Seven notes an 8th apart take four beats before the next chord.
+    expect(sounds[7]?.at).toBe(4)
   })
 })
 

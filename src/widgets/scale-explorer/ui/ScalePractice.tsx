@@ -10,11 +10,11 @@ import type { ScaleView } from '../model/scale-view'
 /** The scale practised: its rhythm, tempo and hands, and Play up and down, which turns into Stop. */
 export function ScalePractice({
   scale,
-  run,
+  sounds,
   onChange,
 }: {
   scale: ScaleView
-  run: readonly NoteSound[]
+  sounds: readonly NoteSound[]
   onChange: (change: Partial<ScaleView>) => void
 }) {
   const { t } = useTranslation(['learn', 'common'])
@@ -53,7 +53,7 @@ export function ScalePractice({
         ]}
         onChange={(hands) => onChange({ hands })}
       />
-      <Button size="pill" onClick={() => playback.toggle('run', run)}>
+      <Button size="pill" onClick={() => playback.toggle('run', sounds)}>
         {playback.playing === 'run' ? (
           <>
             <Square data-icon="inline-start" />

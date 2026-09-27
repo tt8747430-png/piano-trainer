@@ -31,9 +31,10 @@ export {
   placedChordSounds,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
-  scaleRun,
+  walkSounds,
   type ChordPlaying,
   type PracticeRhythm,
 } from './sounds'
+export { runSounds, scaleRun, type RunOptions } from './run'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { swingTick } from './swing'
