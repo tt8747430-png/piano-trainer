@@ -16,6 +16,7 @@ import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/share
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
+import { SCORE_HEIGHT } from './size'
 import { buildVoice, type BuiltVoice, type VexNote } from './vexflow-notes'
 
 export interface ScoreLayout {
@@ -35,8 +36,6 @@ export interface ScoreLayout {
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
 }
 
-/** The engraving's height in VexFlow units: the treble staff at 0 (lines 40–80), the bass at 90 (130–170). */
-export const SCORE_HEIGHT = 210
 const STAFF_Y: Readonly<Record<StaffId, number>> = { treble: 0, bass: 90 }
 /** A measure's notes are never narrower than this, and are given this much more than their least. */
 const LEAST_NOTES = 80

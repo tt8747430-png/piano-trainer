@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Score, StaffId } from '@/shared/lib/notation'
-import { engrave, SCORE_HEIGHT, type ScoreLayout } from './engrave'
+import { engrave, type ScoreLayout } from './engrave'
 import { loadMusicFonts } from './music-font'
+import { SCORE_HEIGHT } from './size'
 import './score.css'
 
 type Engraving =
