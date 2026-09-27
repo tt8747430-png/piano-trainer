@@ -1,7 +1,7 @@
 import type { SearchSchemaInput } from '@tanstack/react-router'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
-import { CHORD_SIZES, isCollectionId, type CollectionId } from '@/entities/piece'
+import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
 import { PRACTICE_MODES } from '@/features/practice'
 import { THEORY_QUIZZES, type TheoryQuiz } from '@/features/quiz'
 import type { PlayerSearch } from '@/pages/player'
@@ -38,7 +38,7 @@ const isQuality = isOneOf(CHORD_QUALITIES)
 const isScaleKind = isOneOf(SCALE_KINDS)
 const isChordSize = isOneOf(CHORD_SIZES)
 const isCollection = (value: unknown): value is CollectionId | 'all' =>
-  value === 'all' || isCollectionId(value)
+  value === 'all' || isSongCollectionId(value)
 const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
 const isPlayerPattern = (value: unknown): value is PatternId | 'chart' =>
   value === 'chart' || isPatternId(value)

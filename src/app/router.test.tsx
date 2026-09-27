@@ -18,6 +18,9 @@ const ROUTES = [
   ['/theory/quiz', '/theory/quiz'],
   ['/settings', '/settings'],
   ['/check?of=chords:tri', '/check'],
+  ['/practice', '/practice'],
+  ['/practice/studies/ex3', '/practice/studies/$pieceId'],
+  ['/practice/progressions/flow', '/practice/progressions/$pieceId'],
 ] as const
 
 async function open(path: string) {
@@ -76,11 +79,11 @@ describe('the app shell', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
   })
 
-  it('offers Path, Songs and Theory in the main navigation, marking the current one', async () => {
+  it('offers the places in the main navigation, marking the current one', async () => {
     await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Theory'])
+    expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Theory', 'Practice'])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
@@ -208,5 +211,38 @@ describe('routes that name a piece', () => {
     if (!listing) throw new Error('the catalogue has no listing')
     await renderApp(`/play/${listing.id}`)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+  })
+})
+
+describe('shelves', () => {
+  it.each(['/songs/ex3', '/songs/flow', '/practice/studies/bz5', '/practice/progressions/ex3'])(
+    'show not found for a piece on the wrong shelf: %s',
+    async (path) => {
+      await renderApp(path)
+      expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    },
+  )
+
+  it('opens a study on Practice, which the navigation marks', async () => {
+    await renderApp('/practice/studies/ex3')
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
+    expect(within(nav).getByRole('link', { name: 'Practice' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+  })
+
+  it('goes back from a study opened directly to Practice', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/studies/ex3')
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
+  })
+
+  it('closes a progression’s Player, opened directly, to its page on Practice', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/flow')
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/progressions/flow'))
   })
 })

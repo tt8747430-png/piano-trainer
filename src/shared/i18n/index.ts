@@ -10,6 +10,7 @@ export const NAMESPACES = [
   'piece',
   'player',
   'theory',
+  'practice',
   'quiz',
   'settings',
 ] as const

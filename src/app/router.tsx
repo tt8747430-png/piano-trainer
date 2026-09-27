@@ -37,6 +37,7 @@ const homeScreens = () => import('./routes/home-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const theoryScreens = () => import('./routes/theory-screens')
+const practiceScreens = () => import('./routes/practice-screens')
 
 /** An unknown address keeps the main navigation, so the learner is never stranded. */
 function NotFoundScreen() {
@@ -77,7 +78,33 @@ const pieceRoute = createRoute({
   path: '/songs/$pieceId',
   beforeLoad: async ({ params }) => {
     const { entryById } = await songsScreens()
-    if (!entryById(params.pieceId)) throw notFound()
+    const entry = entryById(params.pieceId)
+    if (entry?.kind !== 'song' && entry?.kind !== 'listing') throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'PiecePage'),
+})
+
+// Practice, and the studies and progressions that are practised there.
+const practiceRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice',
+  component: lazyRouteComponent(practiceScreens, 'PracticePage'),
+})
+const studyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/studies/$pieceId',
+  beforeLoad: async ({ params }) => {
+    const { pieceById } = await songsScreens()
+    if (pieceById(params.pieceId)?.kind !== 'study') throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'PiecePage'),
+})
+const progressionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/$pieceId',
+  beforeLoad: async ({ params }) => {
+    const { pieceById } = await songsScreens()
+    if (pieceById(params.pieceId)?.kind !== 'progression') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
@@ -156,6 +183,9 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     songsRoute,
     pieceRoute,
+    practiceRoute,
+    studyRoute,
+    progressionRoute,
     theoryRoute.addChildren([theoryIndexRoute, chordsRoute, scalesRoute, symbolsRoute, quizRoute]),
   ]),
   fullScreenRoute.addChildren([playerRoute, checkRoute]),

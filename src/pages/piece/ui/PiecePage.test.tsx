@@ -66,7 +66,7 @@ describe('Piece', () => {
   })
 
   it('names the chords row by the piece’s kind', async () => {
-    await renderApp('/songs/twofive')
+    await renderApp('/practice/progressions/twofive')
     expect(
       await screen.findByRole('region', { name: 'Chords in this progression' }),
     ).toBeInTheDocument()

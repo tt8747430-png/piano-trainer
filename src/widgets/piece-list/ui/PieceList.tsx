@@ -8,13 +8,21 @@ export interface PieceGroup {
   readonly entries: readonly Entry[]
 }
 
-/** Songs by collection, each under its heading while more than one collection shows. */
+/** Pieces by collection, each under its heading (which names its region) while more than one shows. */
 export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
   return (
     <div className="flex flex-col gap-8 lg:pt-4">
       {groups.map((group) => (
-        <section key={group.id} className="flex flex-col gap-2">
-          {group.heading === null ? null : <h2 className="text-2xl">{group.heading}</h2>}
+        <section
+          key={group.id}
+          aria-labelledby={group.heading === null ? undefined : `pieces-${group.id}`}
+          className="flex flex-col gap-2"
+        >
+          {group.heading === null ? null : (
+            <h2 id={`pieces-${group.id}`} className="text-2xl">
+              {group.heading}
+            </h2>
+          )}
           <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card px-2">
             {group.entries.map((entry) => (
               <EntryRow key={entry.id} entry={entry} />

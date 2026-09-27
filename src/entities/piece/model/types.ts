@@ -114,12 +114,12 @@ export interface Listing extends EntryCommon {
 
 export type Entry = Piece | Listing
 
-/** The collections, in the order Songs lists them; the content holds each to its place here. */
+/** The collections, songs first (in the order Songs lists them), then Practice's. */
 export const COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
-  'studies',
   'hymns',
+  'studies',
   'progressions',
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]

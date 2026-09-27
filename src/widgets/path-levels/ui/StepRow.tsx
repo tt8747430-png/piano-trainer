@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import {
   ChartNoAxesColumnIncreasing,
   KeyboardMusic,
@@ -17,6 +16,7 @@ import {
   type PlacedStep,
   type StepKind,
 } from '@/entities/path'
+import { pieceById, PieceLink } from '@/entities/piece'
 import { knownCount, type ProgressState } from '@/entities/progress'
 import { LearnedToggle } from '@/features/mark-learned'
 import { cn } from '@/shared/lib'
@@ -31,7 +31,7 @@ const ICON: Readonly<Record<StepKind, LucideIcon>> = {
 const ROW_LINK =
   'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring'
 
-/** A step on the Path: what it is, how far along it is, and its learned toggle. A piece opens its Piece screen. */
+/** A step on the Path: what it is, how far along it is, and its learned toggle. A piece opens its page on its shelf. */
 export function StepRow({
   placed,
   answers,
@@ -42,6 +42,7 @@ export function StepRow({
   const { t } = useTranslation('path')
   const title = useStepTitle()(placed.step)
   const { step } = placed
+  const piece = step.kind === 'piece' ? pieceById(step.pieceId) : undefined
   const Icon = ICON[title.kind]
   const skills = skillsOfStep(step)
   const subtitle = [
@@ -72,14 +73,17 @@ export function StepRow({
   )
   return (
     <li className="flex items-center gap-2">
-      {step.kind === 'piece' ? (
-        <Link to="/songs/$pieceId" params={{ pieceId: step.pieceId }} className={ROW_LINK}>
-          {body}
-        </Link>
-      ) : (
+      {step.kind !== 'piece' ? (
         <ExplorerLink step={step} className={ROW_LINK}>
           {body}
         </ExplorerLink>
+      ) : piece ? (
+        <PieceLink entry={piece} className={ROW_LINK}>
+          {body}
+        </PieceLink>
+      ) : (
+        // A step naming a piece that is not there (the path's content test forbids it) leads nowhere.
+        <span className={ROW_LINK}>{body}</span>
       )}
       <LearnedToggle step={placed.id} title={title.primary} />
     </li>

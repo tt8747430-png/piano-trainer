@@ -7,14 +7,17 @@ import studies from './studies'
 
 export { BOOKS } from './books'
 
-/** In the order Songs lists them. */
-export const COLLECTIONS: readonly Collection[] = [
-  bozheSpasibo,
-  calledToPlay,
-  studies,
-  hymns,
-  progressions,
-]
+/** The collections Songs lists, in order. */
+export const SONG_COLLECTIONS: readonly Collection[] = [bozheSpasibo, calledToPlay, hymns]
+
+/** The method books' lesson pieces, on Practice (roadmap §3.9). */
+export const STUDIES: Collection = studies
+
+/** Progressions in one key, on Practice (roadmap §3.9). */
+export const PROGRESSIONS: Collection = progressions
+
+/** Every collection, in `COLLECTION_IDS` order. */
+export const COLLECTIONS: readonly Collection[] = [...SONG_COLLECTIONS, STUDIES, PROGRESSIONS]
 
 /** Every piece that opens in the Player, in catalog order. */
 export const PIECES: readonly Piece[] = COLLECTIONS.flatMap(

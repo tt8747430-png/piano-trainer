@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -33,12 +33,20 @@ describe('Songs', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps one collection, which its chip names instead of a heading', async () => {
+  it('keeps one collection, which its pop-up names instead of a heading', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs')
-    const collections = await screen.findByRole('group', { name: 'Collections' })
-    await user.click(within(collections).getByRole('button', { name: 'Hymns' }))
+    const { router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('combobox', { name: 'Collection' }))
+    await user.click(await screen.findByRole('option', { name: 'Hymns' }))
+    expect(router.state.location.search).toMatchObject({ collection: 'hymns' })
     expect(await screen.findByRole('link', { name: /Silent Night/ })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
+  })
+
+  it('lists songs only: no study or progression', async () => {
+    await renderApp('/songs')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Hymns' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Studies' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Progressions' })).not.toBeInTheDocument()
   })
 })

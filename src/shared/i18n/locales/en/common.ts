@@ -6,6 +6,7 @@ export const common = {
     path: 'Path',
     songs: 'Songs',
     theory: 'Theory',
+    practice: 'Practice',
     settings: 'Settings',
   },
   errors: { title: 'Something went wrong', reload: 'Reload' },

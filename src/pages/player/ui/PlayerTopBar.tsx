@@ -8,7 +8,7 @@ import { RoundButton } from '@/shared/ui'
 
 /**
  * Close, the title with the setup summary that opens the Setup sheet, and the MIDI button. Close
- * goes back where the learner came from, or to the piece when the Player was opened directly.
+ * goes back where the learner came from, or to the piece's page when the Player was opened directly.
  */
 export function PlayerTopBar({
   piece,
@@ -21,7 +21,13 @@ export function PlayerTopBar({
 }) {
   const { t } = useTranslation(['player', 'common'])
   const locale = useLocale()
-  const close = useGoBack({ to: '/songs/$pieceId', params: { pieceId: piece.id } })
+  const params = { pieceId: piece.id }
+  const closeTo = {
+    song: useGoBack({ to: '/songs/$pieceId', params }),
+    study: useGoBack({ to: '/practice/studies/$pieceId', params }),
+    progression: useGoBack({ to: '/practice/progressions/$pieceId', params }),
+  }
+  const close = closeTo[piece.kind]
   return (
     <header className="flex items-center gap-3">
       <RoundButton label={t('common:close')} icon={X} onClick={close} />

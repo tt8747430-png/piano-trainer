@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpen, Music, Route } from 'lucide-react'
+import { BookOpen, Metronome, Music, Route } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 /** The three places. The bar is monochrome: the screens above it carry the colour. */
@@ -7,6 +7,7 @@ const ITEMS = [
   { to: '/', label: 'nav.path', icon: Route, exact: true },
   { to: '/songs', label: 'nav.songs', icon: Music, exact: false },
   { to: '/theory', label: 'nav.theory', icon: BookOpen, exact: false },
+  { to: '/practice', label: 'nav.practice', icon: Metronome, exact: false },
 ] as const
 
 /** A bar docked along the bottom on phones; a titled sidebar from 1024px. */

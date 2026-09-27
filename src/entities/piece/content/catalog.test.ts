@@ -63,8 +63,8 @@ describe('the catalog', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual([
       'bozhe-spasibo',
       'called-to-play',
-      'studies',
       'hymns',
+      'studies',
       'progressions',
     ])
     expect(PIECES).toHaveLength(51)

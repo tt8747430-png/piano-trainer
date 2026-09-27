@@ -9,13 +9,15 @@ import { ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
 
 /**
  * A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale.
- * Back returns where the learner came from (Path, Songs), or to Songs.
+ * Back returns where the learner came from (Path, Songs, Practice), or to the entry's shelf.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'common'])
   const locale = useLocale()
   const scaleName = useScaleName()
-  const back = useGoBack({ to: '/songs' })
+  const toSongs = useGoBack({ to: '/songs' })
+  const toPractice = useGoBack({ to: '/practice' })
+  const back = entry.kind === 'study' || entry.kind === 'progression' ? toPractice : toSongs
   const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = key.minor ? 'natural' : 'major'

@@ -8,6 +8,7 @@ export const common: LocaleResources['common'] = {
     path: 'Путь',
     songs: 'Песни',
     theory: 'Теория',
+    practice: 'Практика',
     settings: 'Настройки',
   },
   errors: { title: 'Что-то пошло не так', reload: 'Перезагрузить' },

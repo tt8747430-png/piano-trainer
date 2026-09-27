@@ -72,6 +72,7 @@ describe('search params', () => {
       SCALES_DEFAULTS,
     )
     expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/songs?collection=studies')).toEqual(SONGS_DEFAULTS)
   })
 
   it('read the Scales fingers, none by default, and ignore an old link’s view', async () => {
