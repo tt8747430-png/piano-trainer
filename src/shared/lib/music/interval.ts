@@ -20,10 +20,34 @@ export interface LabelledInterval extends Interval {
   readonly degree: string
 }
 
-const above = (steps: number, semitones: number, degree: string): LabelledInterval => ({
+/** The semitones of the major or perfect interval over each letter distance: a 2nd 2, a 4th 5, a 7th 11. */
+const PLAIN_SEMITONES = [0, 2, 4, 5, 7, 9, 11]
+const DEGREE_SIGNS = new Map([
+  [-2, '𝄫'],
+  [-1, '♭'],
+  [0, ''],
+  [1, '#'],
+  [2, '𝄪'],
+])
+
+/**
+ * How an interval above a root is written as a degree: its number from the letter steps, past the
+ * octave from 12 semitones on (a 9th, an 11th), and its sign from how far it lies from the major or
+ * perfect interval of that number: `♭3`, `#11`, `𝄫7`.
+ */
+export function degreeLabel(steps: number, semitones: number): string {
+  const compound = semitones >= 12
+  const plain = (PLAIN_SEMITONES[steps % 7] ?? 0) + (compound ? 12 : 0)
+  const sign = DEGREE_SIGNS.get(semitones - plain)
+  if (sign === undefined) throw new RangeError(`${semitones} semitones is no ${steps}-step degree`)
+  return `${sign}${(steps % 7) + 1 + (compound ? 7 : 0)}`
+}
+
+/** An interval of `steps` letters and `semitones`, labelled as its degree. */
+export const labelled = (steps: number, semitones: number): LabelledInterval => ({
   steps,
   semitones,
-  degree,
+  degree: degreeLabel(steps, semitones),
 })
 
 /**
@@ -31,27 +55,29 @@ const above = (steps: number, semitones: number, degree: string): LabelledInterv
  * M major, m minor, P perfect, d diminished, A augmented.
  */
 export const INTERVALS = {
-  r: above(0, 0, '1'),
-  M2: above(1, 2, '2'),
-  m3: above(2, 3, '♭3'),
-  M3: above(2, 4, '3'),
-  P4: above(3, 5, '4'),
-  A4: above(3, 6, '#4'),
-  d5: above(4, 6, '♭5'),
-  P5: above(4, 7, '5'),
-  A5: above(4, 8, '#5'),
-  m6: above(5, 8, '♭6'),
-  M6: above(5, 9, '6'),
-  d7: above(6, 9, '𝄫7'),
-  m7: above(6, 10, '♭7'),
-  M7: above(6, 11, '7'),
-  m9: above(1, 13, '♭9'),
-  M9: above(1, 14, '9'),
-  A9: above(1, 15, '#9'),
-  P11: above(3, 17, '11'),
-  A11: above(3, 18, '#11'),
-  m13: above(5, 20, '♭13'),
-  M13: above(5, 21, '13'),
+  r: labelled(0, 0),
+  m2: labelled(1, 1),
+  M2: labelled(1, 2),
+  A2: labelled(1, 3),
+  m3: labelled(2, 3),
+  M3: labelled(2, 4),
+  P4: labelled(3, 5),
+  A4: labelled(3, 6),
+  d5: labelled(4, 6),
+  P5: labelled(4, 7),
+  A5: labelled(4, 8),
+  m6: labelled(5, 8),
+  M6: labelled(5, 9),
+  d7: labelled(6, 9),
+  m7: labelled(6, 10),
+  M7: labelled(6, 11),
+  m9: labelled(1, 13),
+  M9: labelled(1, 14),
+  A9: labelled(1, 15),
+  P11: labelled(3, 17),
+  A11: labelled(3, 18),
+  m13: labelled(5, 20),
+  M13: labelled(5, 21),
 } as const satisfies Record<string, LabelledInterval>
 export type IntervalName = keyof typeof INTERVALS
 

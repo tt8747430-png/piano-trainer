@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { intervalBetween, spellAbove } from './interval'
+import { degreeLabel, INTERVALS, intervalBetween, spellAbove } from './interval'
 import { note } from './note'
 
 describe('spellAbove', () => {
@@ -25,5 +25,37 @@ describe('intervalBetween', () => {
     [note('C'), note('C'), { steps: 0, semitones: 0 }],
   ])('%j → %j is %j', (from, to, interval) => {
     expect(intervalBetween(from, to)).toEqual(interval)
+  })
+})
+
+describe('degreeLabel', () => {
+  it.each([
+    [0, 0, '1'],
+    [1, 1, '♭2'],
+    [1, 3, '#2'],
+    [2, 3, '♭3'],
+    [2, 4, '3'],
+    [3, 6, '#4'],
+    [4, 6, '♭5'],
+    [6, 9, '𝄫7'],
+    [1, 13, '♭9'],
+    [8, 14, '9'],
+    [3, 16, '♭11'],
+    [10, 18, '#11'],
+    [5, 20, '♭13'],
+    [12, 21, '13'],
+  ])('writes %i letter steps and %i semitones as %s', (steps, semitones, label) => {
+    expect(degreeLabel(steps, semitones)).toBe(label)
+  })
+
+  it('refuses a letter three semitones off its interval', () => {
+    expect(() => degreeLabel(2, 7)).toThrow(RangeError)
+  })
+
+  it('labels the named intervals by the same rule', () => {
+    expect(INTERVALS.m2.degree).toBe('♭2')
+    expect(INTERVALS.A2.degree).toBe('#2')
+    expect(INTERVALS.d7.degree).toBe('𝄫7')
+    expect(INTERVALS.A11.degree).toBe('#11')
   })
 })
