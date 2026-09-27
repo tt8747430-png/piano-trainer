@@ -9,7 +9,7 @@ export function PlayerTransport({ practice }: { practice: Practice }) {
   const { t } = useTranslation('player')
   const { playing } = practice.state
   return (
-    <div className="flex items-center justify-center gap-4 landscape-phone:gap-2">
+    <div className="flex items-center justify-center gap-2 sm:gap-4 landscape-phone:gap-2">
       <RoundButton label={t('back')} icon={ChevronLeft} onClick={practice.prev} />
       <Button
         size="play"

@@ -210,19 +210,22 @@
 }
 
 /* The Player's screen (widgets/practice-player; spec §2.8): its parts placed by `data-area`. Upright,
-   the tempo and hands flank the transport at the bottom, in the thumb's reach; from 640px they join
-   the toolbar and the transport sits under the sheet; on a phone on its side the transport stands
-   right of the sheet, where the right thumb is. */
+   the tempo and hands flank the transport at the bottom, in the thumb's reach, and the toolbar's
+   title and actions span columns of their own, so neither row squeezes the other; from 640px the
+   tempo and hands join the toolbar and the transport sits under the sheet; on a phone on its side
+   the transport stands right of the sheet, where the right thumb is. The keyboard takes the height
+   the rest leave, between its least and most; what is left after it goes to the Wait line's row,
+   so the transport stays at the bottom. */
 @utility player-screen {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  grid-template-rows: auto minmax(12rem, 20rem) auto auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(12rem, 20rem) auto 1fr auto;
   grid-template-areas:
-    'lead lead actions'
-    'keys keys keys'
-    'sheet sheet sheet'
-    'status status status'
-    'tempo transport hands';
+    'lead lead actions actions'
+    'keys keys keys keys'
+    'sheet sheet sheet sheet'
+    'status status status status'
+    'tempo transport transport hands';
   & > [data-area='lead'] {
     grid-area: lead;
   }
@@ -249,7 +252,7 @@
   }
   @variant sm {
     grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto minmax(14rem, 24rem) auto auto 1fr;
+    grid-template-rows: auto minmax(14rem, 24rem) auto 1fr auto;
     grid-template-areas:
       'lead tempo hands actions'
       'keys keys keys keys'

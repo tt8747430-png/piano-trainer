@@ -62,7 +62,11 @@ function Player({ piece }: { piece: Piece }) {
         <PlayerArea area="actions" className="flex items-center justify-end gap-2">
           <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
           <MidiButton />
-          <RoundButton label={t('setup')} icon={SlidersHorizontal} onClick={() => setSetupOpen(true)} />
+          <RoundButton
+            label={t('setup')}
+            icon={SlidersHorizontal}
+            onClick={() => setSetupOpen(true)}
+          />
         </PlayerArea>
         <PlayerArea area="keys" className="flex">
           <LiveKeyboard
@@ -88,9 +92,11 @@ function Player({ piece }: { piece: Piece }) {
           />
         </PlayerArea>
         <PlayerArea area="status" className="landscape-phone:self-end">
-          {search.mode === 'wait' ? <WaitLine feedback={player.feedback} onAgain={practice.play} /> : null}
+          {search.mode === 'wait' ? (
+            <WaitLine feedback={player.feedback} onAgain={practice.play} />
+          ) : null}
         </PlayerArea>
-        <PlayerArea area="transport" className="self-end pb-2 landscape-phone:self-start landscape-phone:pb-0">
+        <PlayerArea area="transport">
           <PlayerTransport practice={practice} />
         </PlayerArea>
       </PlayerScreen>
@@ -101,7 +107,10 @@ function Player({ piece }: { piece: Piece }) {
         choice={choice}
         onChange={changeSetup}
       >
-        <PlayingFields swing={isCompound(piece.meter) ? null : search.swing} onSwing={player.setSwing} />
+        <PlayingFields
+          swing={isCompound(piece.meter) ? null : search.swing}
+          onSwing={player.setSwing}
+        />
       </PlayerSetup>
     </>
   )
