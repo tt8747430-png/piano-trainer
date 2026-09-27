@@ -1,3 +1,4 @@
+export { notate } from './notate'
 export { spellSpan, voiceGrid, type Span, type VoiceGrid } from './rhythm'
 export {
   STAVES,
