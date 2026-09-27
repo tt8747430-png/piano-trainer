@@ -9,9 +9,12 @@ import {
   SVGContext,
   VexFlow,
   type RenderContext,
+  type Voice,
 } from 'vexflow/core'
 import { keySignature, timeSignatureText, type Key, type Tick } from '@/shared/lib/music'
 import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/shared/lib/notation'
+import { chordSymbolWidth } from './chord-symbols'
+import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
 import { buildVoice, type BuiltVoice, type VexNote } from './vexflow-notes'
 
@@ -39,9 +42,10 @@ const STAFF_Y: Readonly<Record<StaffId, number>> = { treble: 0, bass: 90 }
 const LEAST_NOTES = 80
 const SPACING = 1.4
 const NOTE_PADDING = 20
-/** A chord symbol's room: its letters at the 17px serif, and a gap. */
-const CHORD_LETTER = 10
-const CHORD_GAP = 16
+/** The least space in CSS pixels between a chord symbol and the next, or its barline. */
+const CHORD_GAP = 8
+/** How many times a measure is widened, at most, until its chord symbols fit. */
+const WIDEN_PASSES = 6
 const END_MARGIN = 8
 
 let setUp = false
@@ -94,11 +98,65 @@ function staveAt(staff: StaffId, x: number, width: number, built: BuiltMeasure, 
   return stave
 }
 
+/**
+ * Each written onset's x in a formatted measure, in the engraving's units: its leftmost notehead or
+ * rest. A hidden rest and a lone whole-bar rest (centred in its bar) mark none.
+ */
+function onsetsIn(built: BuiltMeasure): Map<Tick, number> {
+  const onsets = new Map<Tick, number>()
+  for (const staff of STAVES) {
+    for (const voice of built.staves[staff]) {
+      if (voice.wholeBar) continue
+      for (const { event, note } of voice.notes) {
+        if (!(note instanceof StaveNote)) continue
+        const x = note.getAbsoluteX()
+        onsets.set(event.tick, Math.min(onsets.get(event.tick) ?? x, x))
+      }
+    }
+  }
+  return onsets
+}
+
+/**
+ * How many times wider a measure's notes must be for each chord symbol to end before the next one, or
+ * before its barline for the last: the most any symbol needs over the room it has, 1 or less when all
+ * fit. The measure is formatted at `width` as it will be engraved, and the symbols measured in their
+ * face; `scale` turns their CSS pixels into the engraving's units.
+ */
+function chordShortfall(
+  built: BuiltMeasure,
+  voices: readonly Voice[],
+  { width, noteStart, key, scale }: { width: number; noteStart: number; key: Key; scale: number },
+): number {
+  const { chords, startTick, ticks } = built.measure
+  if (chords.length === 0) return 0
+  const stave = staveAt('treble', 0, width, built, key).setNoteStartX(noteStart)
+  built.formatter.formatToStave([...voices], stave)
+  // Each note on the trial stave, so its x is read as the engraving will read it (a voice's stave
+  // does not reach its notes until it is drawn).
+  for (const staff of STAVES) {
+    for (const voice of built.staves[staff])
+      for (const { note } of voice.notes) note.setStave(stave)
+  }
+  const points = [...onsetsIn(built)]
+    .map(([tick, x]) => ({ tick, x }))
+    .sort((a, b) => a.tick - b.tick)
+  const barline = { tick: startTick + ticks, x: width }
+  const xOf = (tick: Tick) => xAmong([...points, barline], tick)
+  return Math.max(
+    ...chords.map((chord, i) => {
+      const room = xOf(chords[i + 1]?.tick ?? barline.tick) - xOf(chord.tick)
+      const needs = (chordSymbolWidth(chord.symbol) + CHORD_GAP) / scale
+      return needs / Math.max(room, 1)
+    }),
+  )
+}
+
 function buildMeasure(
   score: Score,
   measure: Measure,
   previous: Measure | undefined,
-  fingers: boolean,
+  { fingers, scale }: { fingers: boolean; scale: number },
 ): BuiltMeasure {
   const build = (staff: StaffId) =>
     measure.staves[staff].map((voice) =>
@@ -121,14 +179,19 @@ function buildMeasure(
       return stave.getNoteStartX() - stave.getX()
     }),
   )
-  const chords = measure.chords.reduce(
-    (sum, chord) => sum + chord.symbol.length * CHORD_LETTER + CHORD_GAP,
-    0,
-  )
-  return {
-    ...probe,
-    width: modifiers + Math.max(LEAST_NOTES, least * SPACING + NOTE_PADDING, chords),
+  // The notes get what they need; then the measure widens until its chord symbols fit over them.
+  let notes = Math.max(LEAST_NOTES, least * SPACING + NOTE_PADDING)
+  for (let pass = 0; pass < WIDEN_PASSES; pass++) {
+    const short = chordShortfall(probe, voices, {
+      width: modifiers + notes,
+      noteStart: modifiers,
+      key: score.key,
+      scale,
+    })
+    if (short <= 1) break
+    notes = Math.max(notes + 1, Math.ceil(notes * short))
   }
+  return { ...probe, width: modifiers + notes }
 }
 
 /** Every tied note joined to the note of its key where its value ends, on its staff. */
@@ -182,7 +245,7 @@ export function engrave(
   setUpVexFlow()
   host.replaceChildren()
   const built = score.measures.map((measure, index) =>
-    buildMeasure(score, measure, score.measures[index - 1], fingers),
+    buildMeasure(score, measure, score.measures[index - 1], { fingers, scale }),
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
   const renderer = new Renderer(host, Renderer.Backends.SVG)
@@ -224,14 +287,10 @@ export function engrave(
         voice.voice.draw(context, staves[staff])
         for (const beam of voice.beams) beam.setContext(context).draw()
         for (const tuplet of voice.tuplets) tuplet.setContext(context).draw()
-        for (const { event, note } of voice.notes) {
-          if (voice.wholeBar || !(note instanceof StaveNote)) continue
-          const at = note.getAbsoluteX() * scale
-          onsets.set(event.tick, Math.min(onsets.get(event.tick) ?? at, at))
-        }
       }
       context.closeGroup()
     }
+    for (const [tick, at] of onsetsIn(measure)) onsets.set(tick, at * scale)
     staffTop = staves.treble.getYForLine(0) * scale
     staffBottom = staves.bass.getYForLine(4) * scale
     measures.push({
