@@ -31,15 +31,16 @@ function renderSetup() {
 }
 
 describe('PlayerSetup', () => {
-  it('names the key row with the key the piece is played in', () => {
+  it('names the key it is played in on the key’s pop-up', () => {
     renderSetup()
-    expect(screen.getByText('G major')).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Key' })).toHaveTextContent('G major')
   })
 
   it('changes the key, hands and tempo', async () => {
     const user = userEvent.setup()
     const { onChange } = renderSetup()
-    await user.click(screen.getByRole('button', { name: 'A' }))
+    await user.click(screen.getByRole('combobox', { name: 'Key' }))
+    await user.click(await screen.findByRole('option', { name: 'A major' }))
     expect(onChange).toHaveBeenCalledWith({ key: 'A' })
     await user.click(screen.getByRole('button', { name: 'Left hand' }))
     expect(onChange).toHaveBeenCalledWith({ hands: 'lh' })

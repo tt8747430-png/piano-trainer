@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
 import { ButtonLink } from './ButtonLink'
-import { ChipRow } from './ChipRow'
 import { Dropdown } from './Dropdown'
 import { LevelMark } from './LevelMark'
 import { RatingMark } from './RatingMark'
@@ -77,42 +76,6 @@ describe('Segmented', () => {
     render(<Segmented label="Inversion" value={0} options={inversions} onChange={onChange} />)
     await user.click(screen.getByRole('button', { name: '1st' }))
     expect(onChange).toHaveBeenCalledWith(1)
-  })
-})
-
-describe('ChipRow', () => {
-  it('names chips by their title when they have one', () => {
-    render(
-      <ChipRow
-        label="Quality"
-        value="d7"
-        options={[
-          { value: 'maj7', label: 'Maj7', title: 'Major 7th' },
-          { value: 'd7', label: '7', title: 'Dominant 7th' },
-        ]}
-        onChange={() => {}}
-      />,
-    )
-    expect(screen.getByRole('button', { name: 'Dominant 7th' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
-    expect(screen.getByRole('group', { name: 'Quality' })).toBeInTheDocument()
-  })
-
-  it('scrolls the chosen chip into view within the row', () => {
-    const roots = ['C', 'D', 'E', 'F', 'G', 'A', 'B'].map((note) => ({ value: note, label: note }))
-    const row = (value: string) => (
-      <ChipRow label="Root" value={value} options={roots} onChange={() => {}} />
-    )
-    const { rerender } = render(row('C'))
-    const group = screen.getByRole('group', { name: 'Root' })
-    // jsdom lays nothing out: give the row a width to scroll in.
-    Object.defineProperties(group, { scrollWidth: { value: 800 }, clientWidth: { value: 300 } })
-    const scrollTo = vi.fn()
-    group.scrollTo = scrollTo
-    rerender(row('G'))
-    expect(scrollTo).toHaveBeenCalledOnce()
   })
 })
 

@@ -3,7 +3,7 @@ import { EntryRow } from './EntryRow'
 
 export interface PieceGroup {
   readonly id: string
-  /** The collection's name, or null when the list shows one collection its chip already names. */
+  /** The collection's name, or null when the list shows one collection its pop-up already names. */
   readonly heading: string | null
   readonly entries: readonly Entry[]
 }

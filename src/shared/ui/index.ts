@@ -1,5 +1,4 @@
 export { ButtonLink } from './ButtonLink'
-export { ChipRow } from './ChipRow'
 export { Dropdown } from './Dropdown'
 export { LevelMark } from './LevelMark'
 export type { Option, OptionGroup, OptionValue } from './option'

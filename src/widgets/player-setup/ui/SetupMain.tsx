@@ -13,7 +13,7 @@ import { setPracticeToggle } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
 import { noteName, noteParam, PITCH_CLASSES, tonicSpelling } from '@/shared/lib/music'
 import { HANDS, TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
-import { ChipRow, Segmented } from '@/shared/ui'
+import { Dropdown, Segmented } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { SetupChange } from '../model/setup-params'
@@ -60,25 +60,20 @@ export function SetupMain({
   )
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-3">
-        <div className="flex justify-between text-lg">
-          {t('player:key')}
-          <span className="font-semibold">
-            {t(minor ? 'player:keyOf.minor' : 'player:keyOf.major', {
-              tonic: noteName(choice.tonic),
-            })}
-          </span>
-        </div>
-        <ChipRow
-          label={t('player:key')}
-          value={noteParam(choice.tonic)}
-          options={PITCH_CLASSES.map((pc) => {
-            const tonic = tonicSpelling(pc, minor)
-            return { value: noteParam(tonic), label: noteName(tonic) }
-          })}
-          onChange={(key) => onChange({ key })}
-        />
-      </div>
+      <Dropdown
+        label={t('player:key')}
+        value={noteParam(choice.tonic)}
+        options={PITCH_CLASSES.map((pc) => {
+          const tonic = tonicSpelling(pc, minor)
+          return {
+            value: noteParam(tonic),
+            label: t(minor ? 'player:keyOf.minor' : 'player:keyOf.major', {
+              tonic: noteName(tonic),
+            }),
+          }
+        })}
+        onChange={(key) => onChange({ key })}
+      />
       <Slider
         min={TEMPO_RANGE.min}
         max={TEMPO_RANGE.max}

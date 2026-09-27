@@ -64,13 +64,15 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: /G · 72 BPM/ }))
-    await user.click(await screen.findByRole('button', { name: 'A' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Key' }))
+    await user.click(await screen.findByRole('option', { name: 'A major' }))
     expect(router.state.location.search).toMatchObject({ key: 'A' })
     // The summary sits behind the open sheet, out of the accessibility tree until it closes.
     expect(
       await screen.findByRole('button', { name: /A · 72 BPM/, hidden: true }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'G' }))
+    await user.click(screen.getByRole('combobox', { name: 'Key' }))
+    await user.click(await screen.findByRole('option', { name: 'G major' }))
     expect(router.state.location.search).not.toHaveProperty('key')
   })
 

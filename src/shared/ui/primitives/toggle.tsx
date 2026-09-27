@@ -9,8 +9,6 @@ const toggleVariants = cva(
       variant: {
         default: 'rounded-xl bg-transparent hover:bg-muted data-pressed:bg-muted',
         outline: 'rounded-xl border border-input bg-transparent hover:bg-muted',
-        // A choice in a scrolling row: roots, families, keys.
-        chip: 'rounded-xl border border-input bg-card px-4 text-foreground hover:bg-muted data-pressed:border-selected data-pressed:bg-selected data-pressed:text-selected-foreground data-pressed:hover:bg-selected',
         // A segment of a segmented control: the chosen one is a card on the muted track, in the line.
         segment:
           'flex-1 rounded-lg border border-transparent px-2 text-center leading-tight whitespace-normal text-muted-foreground hover:text-foreground data-pressed:border-input data-pressed:bg-card data-pressed:text-foreground',

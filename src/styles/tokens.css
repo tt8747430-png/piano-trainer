@@ -86,7 +86,7 @@
   /* The one action: the only control whose fill is a colour, with the ink on it. */
   --primary: var(--p-honey);
   --primary-foreground: var(--p-ink);
-  /* What is chosen: a chip filled in umber, neutral, so colour keeps meaning something. */
+  /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
   --selected: var(--p-umber);
   --selected-foreground: var(--p-paper-card);
   --secondary: var(--p-sky-mist);
