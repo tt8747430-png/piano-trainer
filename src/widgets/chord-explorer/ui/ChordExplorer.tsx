@@ -4,7 +4,6 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import {
   CHORD_FAMILIES,
-  chordFamily,
   chordRootSpelling,
   chordSymbol,
   lastInversion,
@@ -14,13 +13,14 @@ import {
   PITCH_CLASSES,
   placeChord,
   qualitiesIn,
+  qualitySpellings,
   qualitySuffix,
   spellChord,
   type Midi,
 } from '@/shared/lib/music'
 import { placedChordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChipRow, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
+import { Dropdown, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ChordView } from '../model/chord-view'
 
@@ -32,7 +32,7 @@ const INVERSIONS = [
   { value: 3, name: 'third' },
 ] as const
 
-/** Any chord on any root: its keys by role and degree, inversions, one hand or two, played. */
+/** Any chord on any root: its keys by role and degree, inversions, one hand or two, played, and every way it is written. */
 export function ChordExplorer({
   chord,
   onChange,
@@ -40,7 +40,7 @@ export function ChordExplorer({
   chord: ChordView
   onChange: (change: Partial<ChordView>) => void
 }) {
-  const { t } = useTranslation(['theory', 'common'])
+  const { t } = useTranslation(['learn', 'music', 'common'])
   const play = usePlay()
   const playback = usePlayback<'chord' | 'arpeggio'>()
   const root = noteFromParam(chord.root)
@@ -50,7 +50,6 @@ export function ChordExplorer({
   })
   const keys = [...placed.lh, ...placed.rh]
   const tones = spellChord(root, chord.quality)
-  const family = chordFamily(chord.quality)
   const marks = new Map<Midi, KeyMark>(
     keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
   )
@@ -68,49 +67,42 @@ export function ChordExplorer({
   return (
     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10 lg:gap-y-6">
       <div className="flex flex-col gap-4">
-        <div className="flex items-baseline justify-between gap-4">
-          <h2 className="text-7xl">{chordSymbol({ root, quality: chord.quality })}</h2>
-          <p className="text-right text-muted-foreground">{t(`theory:quality.${chord.quality}`)}</p>
+        <h2 className="text-7xl">{chordSymbol({ root, quality: chord.quality })}</h2>
+        <div className="flex flex-wrap gap-2">
+          <Dropdown
+            label={t('learn:root')}
+            value={chord.root}
+            options={PITCH_CLASSES.map((pc) => {
+              const spelled = chordRootSpelling(pc, chord.quality)
+              return { value: noteParam(spelled), label: noteName(spelled) }
+            })}
+            onChange={(value) => change({ root: value })}
+          />
+          <Dropdown
+            label={t('learn:chordLabel')}
+            value={chord.quality}
+            groups={CHORD_FAMILIES.map((family) => ({
+              label: t(`music:family.${family}`),
+              options: qualitiesIn(family).map((quality) => ({
+                value: quality,
+                label: t(`music:quality.${quality}`),
+                detail: qualitySuffix(quality) || t('music:major'),
+              })),
+            }))}
+            onChange={(quality) => change({ quality, inversion: 0 })}
+          />
         </div>
-        <ChipRow
-          label={t('theory:root')}
-          value={chord.root}
-          options={PITCH_CLASSES.map((pc) => {
-            const spelled = chordRootSpelling(pc, chord.quality)
-            return { value: noteParam(spelled), label: noteName(spelled) }
-          })}
-          onChange={(value) => change({ root: value })}
-        />
-        <ChipRow
-          label={t('theory:familyLabel')}
-          value={family}
-          options={CHORD_FAMILIES.map((f) => ({ value: f, label: t(`theory:family.${f}`) }))}
-          onChange={(next) => {
-            const [first] = qualitiesIn(next)
-            if (first) change({ quality: first, inversion: 0 })
-          }}
-        />
-        <ChipRow
-          label={t('theory:qualityLabel')}
-          value={chord.quality}
-          options={qualitiesIn(family).map((q) => ({
-            value: q,
-            label: qualitySuffix(q) || t('theory:major'),
-            title: t(`theory:quality.${q}`),
-          }))}
-          onChange={(quality) => change({ quality, inversion: 0 })}
-        />
         <div className="flex flex-col gap-4 sm:flex-row">
           <Segmented
-            label={t('theory:inversionLabel')}
+            label={t('learn:inversionLabel')}
             value={chord.inversion}
             options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
-              ({ value, name }) => ({ value, label: t(`theory:inversion.${name}`) }),
+              ({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }),
             )}
             onChange={(inversion) => change({ inversion })}
           />
           <Segmented
-            label={t('theory:handsLabel')}
+            label={t('learn:handsLabel')}
             value={chord.hands}
             options={[
               { value: 'rh', label: t('common:hands.rh') },
@@ -156,7 +148,7 @@ export function ChordExplorer({
                 {t('common:stop')}
               </>
             ) : (
-              t('theory:play')
+              t('learn:play')
             )}
           </Button>
           <Button
@@ -171,10 +163,18 @@ export function ChordExplorer({
                 {t('common:stop')}
               </>
             ) : (
-              t('theory:arpeggio')
+              t('learn:arpeggio')
             )}
           </Button>
         </div>
+        <p className="flex flex-wrap items-baseline gap-x-4">
+          <span className="text-muted-foreground">{t('learn:written')}</span>
+          <span className="font-display text-xl font-semibold">
+            {qualitySpellings(chord.quality)
+              .map((suffix) => noteName(root) + suffix)
+              .join(' · ')}
+          </span>
+        </p>
       </div>
     </div>
   )

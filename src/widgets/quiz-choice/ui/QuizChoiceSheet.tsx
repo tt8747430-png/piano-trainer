@@ -24,7 +24,7 @@ const asksFrom = (mode: QuizMode, choice: QuizChoice): readonly unknown[] =>
 
 /** Which chord families and scales the open-ended quiz asks: switches, then Apply. */
 export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
-  const { t } = useTranslation(['quiz', 'theory', 'common'])
+  const { t } = useTranslation(['quiz', 'music', 'common'])
   const store = useSettingsStoreApi()
   const saved = useSettings(selectQuizChoice)
   const [open, setOpen] = useState(false)
@@ -79,7 +79,7 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
           {t('quiz:choice.families')}
         </h3>
         {CHORD_FAMILIES.map((family) =>
-          row(t(`theory:family.${family}`), draft.families.includes(family), (on) =>
+          row(t(`music:family.${family}`), draft.families.includes(family), (on) =>
             setDraft((d) => ({ ...d, families: toggled(d.families, family, on) })),
           ),
         )}
@@ -87,7 +87,7 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
           {t('quiz:choice.scales')}
         </h3>
         {SCALE_KINDS.map((kind) =>
-          row(t(`theory:scaleKind.${kind}`), draft.scales.includes(kind), (on) =>
+          row(t(`music:scaleKind.${kind}`), draft.scales.includes(kind), (on) =>
             setDraft((d) => ({ ...d, scales: toggled(d.scales, kind, on) })),
           ),
         )}

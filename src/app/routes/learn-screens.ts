@@ -1,0 +1,5 @@
+export { lessonById } from '@/entities/lesson'
+export { ChordsPage } from '@/pages/chords'
+export { LearnPage } from '@/pages/learn'
+export { LessonPage } from '@/pages/lesson'
+export { ScalesPage } from '@/pages/scales'

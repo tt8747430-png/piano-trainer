@@ -1,6 +1,5 @@
 export const quiz = {
   modes: {
-    label: 'Quiz mode',
     'build-chord': 'Build chord',
     'name-chord': 'Name chord',
     'build-scale': 'Build scale',

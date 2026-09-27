@@ -27,7 +27,7 @@ import { ScaleFacts } from './ScaleFacts'
 
 /** The Fingers choice: none, or a hand's, with the name each has on screen. */
 const FINGERS = [
-  { value: 'none', label: 'theory:fingers.none' },
+  { value: 'none', label: 'learn:fingers.none' },
   { value: 'rh', label: 'common:hands.rh' },
   { value: 'lh', label: 'common:hands.lh' },
 ] as const
@@ -40,7 +40,7 @@ export function ScaleExplorer({
   scale: ScaleView
   onChange: (change: Partial<ScaleView>) => void
 }) {
-  const { t } = useTranslation(['theory', 'common'])
+  const { t } = useTranslation(['learn', 'music', 'common'])
   const playback = usePlayback<'run'>()
   const scaleName = useScaleName()
   const root = noteFromParam(scale.root)
@@ -74,7 +74,7 @@ export function ScaleExplorer({
       <div className="flex flex-col gap-6">
         <h2 className="text-5xl">{scaleName(root, scale.kind)}</h2>
         <ChipRow
-          label={t('theory:root')}
+          label={t('learn:root')}
           value={scale.root}
           options={PITCH_CLASSES.map((pc) => {
             const spelled = scaleRootSpelling(pc, scale.kind)
@@ -83,17 +83,17 @@ export function ScaleExplorer({
           onChange={(value) => onChange({ root: value })}
         />
         <ChipRow
-          label={t('theory:scaleLabel')}
+          label={t('learn:scaleLabel')}
           value={scale.kind}
           options={SCALE_KINDS.map((kind) => ({
             value: kind,
-            label: t(`theory:scaleKind.${kind}`),
+            label: t(`music:scaleKind.${kind}`),
           }))}
           onChange={(kind) => onChange({ kind })}
         />
         {rh && lh ? (
           <Segmented
-            label={t('theory:fingers.label')}
+            label={t('learn:fingers.label')}
             value={scale.fingers}
             options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
             onChange={(fingers) => onChange({ fingers })}
@@ -105,11 +105,11 @@ export function ScaleExplorer({
         <FingeringTable notes={placed.map((key) => noteName(key.tone.note))} rh={rh} lh={lh} />
 
         <section className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5">
-          <h3 className="text-2xl">{t('theory:practice')}</h3>
+          <h3 className="text-2xl">{t('learn:practice')}</h3>
           <ChipRow
-            label={t('theory:rhythmLabel')}
+            label={t('learn:rhythmLabel')}
             value={scale.rhythm}
-            options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`theory:rhythm.${r}`) }))}
+            options={PRACTICE_RHYTHM_IDS.map((r) => ({ value: r, label: t(`learn:rhythm.${r}`) }))}
             onChange={(rhythm) => onChange({ rhythm })}
           />
           <Slider
@@ -121,19 +121,19 @@ export function ScaleExplorer({
             className="flex flex-col gap-3"
           >
             <div className="flex justify-between">
-              <SliderLabel>{t('theory:tempo')}</SliderLabel>
+              <SliderLabel>{t('learn:tempo')}</SliderLabel>
               <span className="font-semibold tabular-nums">
-                {t('theory:bpm', { tempo: scale.tempo })}
+                {t('learn:bpm', { tempo: scale.tempo })}
               </span>
             </div>
           </Slider>
           <Segmented
-            label={t('theory:handsLabel')}
+            label={t('learn:handsLabel')}
             value={scale.hands}
             options={[
               { value: 'rh', label: t('common:hands.rh') },
               { value: 'lh', label: t('common:hands.lh') },
-              { value: 'both', label: t('theory:together') },
+              { value: 'both', label: t('learn:together') },
             ]}
             onChange={(hands) => onChange({ hands })}
           />
@@ -144,7 +144,7 @@ export function ScaleExplorer({
                 {t('common:stop')}
               </>
             ) : (
-              t('theory:playUpDown')
+              t('learn:playUpDown')
             )}
           </Button>
         </section>

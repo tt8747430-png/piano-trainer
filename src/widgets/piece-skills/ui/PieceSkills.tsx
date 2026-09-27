@@ -10,7 +10,7 @@ import { ButtonLink, RatingMark } from '@/shared/ui'
 
 /** The chord qualities a piece uses, each with its rating and a way into the explorer; a check of them all. */
 export function PieceSkills({ piece, performance }: { piece: Piece; performance: Performance }) {
-  const { t } = useTranslation(['piece', 'theory', 'common'])
+  const { t } = useTranslation(['piece', 'music', 'common'])
   const headingId = useId()
   const answers = useProgress(selectAllAnswers)
   const skills = skillsOfPiece(piece)
@@ -28,15 +28,15 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
           return (
             <li key={id}>
               <Link
-                to="/theory/chords"
+                to="/learn/chords"
                 search={{
                   quality: skill.quality,
                   ...(first ? { root: noteParam(first.root) } : {}),
                 }}
-                aria-label={`${t(`theory:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}
+                aria-label={`${t(`music:quality.${skill.quality}`)}, ${t(`common:rating.${rating}`)}`}
                 className="flex h-11 items-center gap-2 rounded-xl border border-input bg-card px-4 font-semibold transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
               >
-                {qualitySuffix(skill.quality) || t('theory:major')}
+                {qualitySuffix(skill.quality) || t('music:major')}
                 <RatingMark rating={rating} />
               </Link>
             </li>

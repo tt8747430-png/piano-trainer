@@ -45,7 +45,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
         variant="link"
         className="self-start px-0"
         render={
-          <Link to="/theory/scales" search={{ root: noteParam(key.tonic), kind: scaleKind }} />
+          <Link to="/learn/scales" search={{ root: noteParam(key.tonic), kind: scaleKind }} />
         }
       >
         {t('piece:scaleOf', { scale: scaleName(key.tonic, scaleKind) })}

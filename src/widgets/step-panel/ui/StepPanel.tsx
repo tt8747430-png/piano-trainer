@@ -6,7 +6,7 @@ import { ButtonLink } from '@/shared/ui'
 
 /** The path step an explorer was opened from: its check and its learned toggle. */
 export function StepPanel({ step }: { step: StepId }) {
-  const { t } = useTranslation('theory')
+  const { t } = useTranslation('learn')
   const stepTitle = useStepTitle()
   const placed = stepById(step)
   if (!placed) return null

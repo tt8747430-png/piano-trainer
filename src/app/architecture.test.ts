@@ -22,7 +22,7 @@ describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
   it('let a slice import another slice of its own layer through its barrel', async () => {
     const broken = await rulesBrokenBy(
       'src/widgets/app-nav/ui/Example.tsx',
-      "import { TheoryNav } from '@/widgets/theory-nav'\nexport const example = TheoryNav\n",
+      "import { PieceList } from '@/widgets/piece-list'\nexport const example = PieceList\n",
     )
     expect(broken).not.toContain('boundaries/dependencies')
   })

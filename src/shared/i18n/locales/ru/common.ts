@@ -7,7 +7,7 @@ export const common: LocaleResources['common'] = {
     label: 'Основная навигация',
     path: 'Путь',
     songs: 'Песни',
-    theory: 'Теория',
+    learn: 'Обучение',
     practice: 'Практика',
     settings: 'Настройки',
   },

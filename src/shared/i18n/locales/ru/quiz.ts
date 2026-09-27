@@ -2,7 +2,6 @@ import type { LocaleResources } from '../../types'
 
 export const quiz: LocaleResources['quiz'] = {
   modes: {
-    label: 'Режим теста',
     'build-chord': 'Построить аккорд',
     'name-chord': 'Назвать аккорд',
     'build-scale': 'Построить гамму',

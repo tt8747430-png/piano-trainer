@@ -12,10 +12,11 @@ const ROUTES = [
   ['/songs', '/songs'],
   ['/songs/bz5', '/songs/$pieceId'],
   ['/play/bz5', '/play/$pieceId'],
-  ['/theory/chords', '/theory/chords'],
-  ['/theory/scales', '/theory/scales'],
-  ['/theory/symbols', '/theory/symbols'],
-  ['/theory/quiz', '/theory/quiz'],
+  ['/learn', '/learn'],
+  ['/learn/chords', '/learn/chords'],
+  ['/learn/scales', '/learn/scales'],
+  ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
+  ['/practice/quiz/build-chord', '/practice/quiz/$quiz'],
   ['/settings', '/settings'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
@@ -40,8 +41,8 @@ describe('routes', () => {
       '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&chordSize=elevenths',
       ['key', 'tempo', 'pattern', 'rh', 'lh', 'chordSize'],
     ],
-    ['/theory/chords?step=scale:major', ['step']],
-    ['/theory/scales?step=chords:tri', ['step']],
+    ['/learn/chords?step=scale:major', ['step']],
+    ['/learn/scales?step=chords:tri', ['step']],
     ['/check?of=chords:tri&x=1', []],
   ] as const)('keeps a stale optional param in %s from the screen', async (path, dropped) => {
     const router = await open(path)
@@ -55,10 +56,13 @@ describe('routes', () => {
     expect(router.options.defaultPendingMs).toBe(300)
   })
 
-  it('sends /theory to Chords', async () => {
-    const router = await open('/theory')
-    expect(router.state.location.pathname).toBe('/theory/chords')
-  })
+  it.each(['/theory', '/theory/chords', '/learn/lessons/nothing', '/practice/quiz/nothing'])(
+    'shows not found at %s',
+    async (path) => {
+      await renderApp(path)
+      expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    },
+  )
 
   it('keeps every screen a lazy route component, so it loads on demand', async () => {
     // The route tree is module state and a loaded lazy component drops `preload`: only a fresh
@@ -83,26 +87,18 @@ describe('the app shell', () => {
     await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Theory', 'Practice'])
+    expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Learn', 'Practice'])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('marks Theory current on every Theory section', async () => {
-    await renderApp('/theory/quiz')
+  it.each([
+    ['/learn/scales', 'Learn'],
+    ['/learn/lessons/reading-chord-symbols', 'Learn'],
+    ['/practice/quiz/gaps', 'Practice'],
+  ])('marks the place of %s current: %s', async (path, place) => {
+    await renderApp(path)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
-    expect(within(nav).getByRole('link', { name: 'Theory' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
-  })
-
-  it('opens a deep link to a Theory section with its tab selected', async () => {
-    await renderApp('/theory/scales')
-    const tabs = await screen.findByRole('navigation', { name: 'Theory sections' })
-    expect(within(tabs).getByRole('link', { name: 'Scales' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(within(nav).getByRole('link', { name: place })).toHaveAttribute('aria-current', 'page')
   })
 
   it('reaches Settings from the Path screen', async () => {

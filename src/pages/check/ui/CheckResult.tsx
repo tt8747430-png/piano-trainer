@@ -20,7 +20,7 @@ export function CheckResult({
   newlyLearned: boolean
   onDone: () => void
 }) {
-  const { t } = useTranslation(['quiz', 'theory'])
+  const { t } = useTranslation(['quiz', 'music'])
   const answers = useProgress(selectAllAnswers)
   const learned = useProgress(selectIsLearned(plan.marks ?? plan.of))
 
@@ -40,13 +40,13 @@ export function CheckResult({
           const { name, explorerLink, openLabel } =
             skill.kind === 'chord'
               ? {
-                  name: t(`theory:quality.${skill.quality}`),
-                  explorerLink: <Link to="/theory/chords" search={{ quality: skill.quality }} />,
+                  name: t(`music:quality.${skill.quality}`),
+                  explorerLink: <Link to="/learn/chords" search={{ quality: skill.quality }} />,
                   openLabel: t('openChords'),
                 }
               : {
-                  name: t(`theory:scaleKind.${skill.scale}`),
-                  explorerLink: <Link to="/theory/scales" search={{ kind: skill.scale }} />,
+                  name: t(`music:scaleKind.${skill.scale}`),
+                  explorerLink: <Link to="/learn/scales" search={{ kind: skill.scale }} />,
                   openLabel: t('openScales'),
                 }
           return (

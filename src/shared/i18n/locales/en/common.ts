@@ -5,7 +5,7 @@ export const common = {
     label: 'Main navigation',
     path: 'Path',
     songs: 'Songs',
-    theory: 'Theory',
+    learn: 'Learn',
     practice: 'Practice',
     settings: 'Settings',
   },

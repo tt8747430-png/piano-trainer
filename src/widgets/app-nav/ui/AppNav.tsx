@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { BookOpen, Metronome, Music, Route } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-/** The three places. The bar is monochrome: the screens above it carry the colour. */
+/** The four places. The bar is monochrome: the screens above it carry the colour. */
 const ITEMS = [
   { to: '/', label: 'nav.path', icon: Route, exact: true },
   { to: '/songs', label: 'nav.songs', icon: Music, exact: false },
-  { to: '/theory', label: 'nav.theory', icon: BookOpen, exact: false },
+  { to: '/learn', label: 'nav.learn', icon: BookOpen, exact: false },
   { to: '/practice', label: 'nav.practice', icon: Metronome, exact: false },
 ] as const
 

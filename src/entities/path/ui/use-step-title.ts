@@ -14,7 +14,7 @@ export interface StepTitle {
 
 /** A step's name in the learner's locale, and what kind of step it is. */
 export function useStepTitle(): (step: PathStep) => StepTitle {
-  const { t } = useTranslation('theory')
+  const { t } = useTranslation('music')
   const locale = useLocale()
   return useCallback(
     (step) => {

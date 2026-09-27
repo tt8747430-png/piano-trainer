@@ -3,7 +3,6 @@ import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
 import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
 import { PRACTICE_MODES } from '@/features/practice'
-import { THEORY_QUIZZES, type TheoryQuiz } from '@/features/quiz'
 import type { PlayerSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
@@ -54,7 +53,7 @@ export function validateSongsSearch(input: Input<SongsFilter>): SongsFilter {
   }
 }
 
-// Theory → Chords
+// Learn → Chords
 export type ChordsStepId = `chords:${ChordFamily}`
 export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = {
@@ -79,7 +78,7 @@ export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
   }
 }
 
-// Theory → Scales
+// Learn → Scales
 export type ScaleStepId = `scale:${ScaleKind}`
 export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
@@ -109,16 +108,6 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     chords: valueOr(isScaleChords, raw.chords, SCALES_DEFAULTS.chords),
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
-}
-
-// Theory → Quiz
-export interface QuizSearch {
-  readonly mode: TheoryQuiz
-}
-export const QUIZ_DEFAULTS: QuizSearch = { mode: 'build-chord' }
-export function validateQuizSearch(input: Input<QuizSearch>): QuizSearch {
-  const raw: Raw = input
-  return { mode: valueOr(isOneOf(THEORY_QUIZZES), raw.mode, QUIZ_DEFAULTS.mode) }
 }
 
 // Check

@@ -1,13 +1,14 @@
 import type { LocaleResources } from '../../types'
 import { common } from './common'
 import { path } from './path'
+import { learn } from './learn'
+import { music } from './music'
 import { piece } from './piece'
 import { player } from './player'
 import { practice } from './practice'
 import { quiz } from './quiz'
 import { settings } from './settings'
 import { songs } from './songs'
-import { theory } from './theory'
 
 export const ru: LocaleResources = {
   common,
@@ -15,7 +16,8 @@ export const ru: LocaleResources = {
   songs,
   piece,
   player,
-  theory,
+  music,
+  learn,
   practice,
   quiz,
   settings,

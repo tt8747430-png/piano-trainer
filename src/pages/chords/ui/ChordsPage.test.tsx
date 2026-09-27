@@ -3,27 +3,28 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
-describe('Theory → Chords', () => {
+describe('Learn → Chords', () => {
   it('shows C major by default, its keys labelled by degree', async () => {
-    await renderApp('/theory/chords')
+    await renderApp('/learn/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
-    expect(screen.getByText('Major triad')).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Chord' })).toHaveTextContent('Major triad')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
 
   it('opens a deep link and moves through the URL, sounding each choice', async () => {
     const user = userEvent.setup()
-    const { router, audio } = await renderApp('/theory/chords?root=G&quality=d7')
+    const { router, audio } = await renderApp('/learn/chords?root=G&quality=d7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
+    await user.click(screen.getByRole('combobox', { name: 'Chord' }))
+    await user.click(await screen.findByRole('option', { name: 'Minor 7th m7' }))
     expect(router.state.location.search).toMatchObject({ root: 'G', quality: 'm7' })
     expect(audio.played.length).toBeGreaterThan(0)
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/chords')
+    const { audio } = await renderApp('/learn/chords')
     await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
     const start = audio.played.at(-1)?.at ?? 0
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
@@ -43,7 +44,7 @@ describe('Theory → Chords', () => {
 
   it('turns Play into Stop while the chord sounds, and back when it ends', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/chords')
+    const { audio } = await renderApp('/learn/chords')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     const start = audio.played.at(-1)?.at ?? 0
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
@@ -53,7 +54,7 @@ describe('Theory → Chords', () => {
 
   it('stops the chord on Stop, and Arpeggio takes over from Play', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/chords')
+    const { audio } = await renderApp('/learn/chords')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     await user.click(screen.getByRole('button', { name: 'Arpeggio' }))
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
@@ -65,14 +66,14 @@ describe('Theory → Chords', () => {
 
   it('sounds a tapped key', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/chords')
+    const { audio } = await renderApp('/learn/chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
     expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 69 }])
   })
 
   it('offers only the inversions the chord has', async () => {
-    await renderApp('/theory/chords?quality=maj')
+    await renderApp('/learn/chords?quality=maj')
     const inversions = await screen.findByRole('group', { name: 'Inversion' })
     expect(
       within(inversions)
@@ -83,10 +84,31 @@ describe('Theory → Chords', () => {
 
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
-    const { progressStore } = await renderApp('/theory/chords?quality=maj7&step=chords:sev')
+    const { progressStore } = await renderApp('/learn/chords?quality=maj7&step=chords:sev')
     const check = await screen.findByRole('link', { name: 'Check yourself' })
     expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
     await user.click(screen.getByRole('button', { name: 'Learned' }))
     expect(progressStore.getState().learned['chords:sev']).toBeDefined()
+  })
+
+  it('chooses the root from its pop-up', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/chords?quality=min')
+    await user.click(await screen.findByRole('combobox', { name: 'Root' }))
+    await user.click(await screen.findByRole('option', { name: 'E' }))
+    expect(router.state.location.search).toMatchObject({ root: 'E', quality: 'min' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
+  })
+
+  it('writes the chord every way it is written', async () => {
+    await renderApp('/learn/chords?quality=m7')
+    const written = await screen.findByText('Written')
+    expect(written.parentElement).toHaveTextContent(/Cm7 · C/)
+  })
+
+  it('draws its header with a way back to Learn', async () => {
+    await renderApp('/learn/chords')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
   })
 })

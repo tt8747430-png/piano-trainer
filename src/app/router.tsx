@@ -4,7 +4,6 @@ import {
   createRouter,
   lazyRouteComponent,
   notFound,
-  redirect,
   stripSearchParams,
   type RouterHistory,
 } from '@tanstack/react-router'
@@ -17,18 +16,15 @@ import { RoutePending } from './RoutePending'
 import {
   CHORDS_DEFAULTS,
   PLAYER_DEFAULTS,
-  QUIZ_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
   validateCheckSearch,
   validateChordsSearch,
   validatePlayerSearch,
-  validateQuizSearch,
   validateScalesSearch,
   validateSongsSearch,
 } from './routes/search'
 import { ShellLayout } from './ShellLayout'
-import { TheoryLayout } from './TheoryLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
 // that names content asks its screens module whether it is there, so the content stays in that
@@ -36,7 +32,7 @@ import { TheoryLayout } from './TheoryLayout'
 const homeScreens = () => import('./routes/home-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
-const theoryScreens = () => import('./routes/theory-screens')
+const learnScreens = () => import('./routes/learn-screens')
 const practiceScreens = () => import('./routes/practice-screens')
 
 /** An unknown address keeps the main navigation, so the learner is never stranded. */
@@ -90,6 +86,15 @@ const practiceRoute = createRoute({
   path: '/practice',
   component: lazyRouteComponent(practiceScreens, 'PracticePage'),
 })
+const quizRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/quiz/$quiz',
+  beforeLoad: async ({ params }) => {
+    const { isTheoryQuiz } = await practiceScreens()
+    if (!isTheoryQuiz(params.quiz)) throw notFound()
+  },
+  component: lazyRouteComponent(practiceScreens, 'TheoryQuizPage'),
+})
 const studyRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/studies/$pieceId',
@@ -109,43 +114,34 @@ const progressionRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-const theoryRoute = createRoute({
+// Learn: its lessons and references.
+const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/theory',
-  component: TheoryLayout,
-})
-const theoryIndexRoute = createRoute({
-  getParentRoute: () => theoryRoute,
-  path: '/',
-  beforeLoad: () => {
-    throw redirect({ to: '/theory/chords' })
-  },
+  path: '/learn',
+  component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
 const chordsRoute = createRoute({
-  getParentRoute: () => theoryRoute,
-  path: 'chords',
+  getParentRoute: () => shellRoute,
+  path: '/learn/chords',
   validateSearch: validateChordsSearch,
   search: { middlewares: [stripSearchParams(CHORDS_DEFAULTS)] },
-  component: lazyRouteComponent(theoryScreens, 'TheoryChordsPage'),
+  component: lazyRouteComponent(learnScreens, 'ChordsPage'),
 })
 const scalesRoute = createRoute({
-  getParentRoute: () => theoryRoute,
-  path: 'scales',
+  getParentRoute: () => shellRoute,
+  path: '/learn/scales',
   validateSearch: validateScalesSearch,
   search: { middlewares: [stripSearchParams(SCALES_DEFAULTS)] },
-  component: lazyRouteComponent(theoryScreens, 'TheoryScalesPage'),
+  component: lazyRouteComponent(learnScreens, 'ScalesPage'),
 })
-const symbolsRoute = createRoute({
-  getParentRoute: () => theoryRoute,
-  path: 'symbols',
-  component: lazyRouteComponent(theoryScreens, 'TheorySymbolsPage'),
-})
-const quizRoute = createRoute({
-  getParentRoute: () => theoryRoute,
-  path: 'quiz',
-  validateSearch: validateQuizSearch,
-  search: { middlewares: [stripSearchParams(QUIZ_DEFAULTS)] },
-  component: lazyRouteComponent(theoryScreens, 'TheoryQuizPage'),
+const lessonRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/lessons/$lessonId',
+  beforeLoad: async ({ params }) => {
+    const { lessonById } = await learnScreens()
+    if (!lessonById(params.lessonId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonPage'),
 })
 
 // Screens that take the whole screen, with their own way back.
@@ -171,10 +167,10 @@ const checkRoute = createRoute({
   path: '/check',
   validateSearch: validateCheckSearch,
   beforeLoad: async ({ search }) => {
-    const { checkPlan } = await theoryScreens()
+    const { checkPlan } = await practiceScreens()
     if (!search.of || !checkPlan(search.of)) throw notFound()
   },
-  component: lazyRouteComponent(theoryScreens, 'CheckPage'),
+  component: lazyRouteComponent(practiceScreens, 'CheckPage'),
 })
 
 const routeTree = rootRoute.addChildren([
@@ -183,10 +179,14 @@ const routeTree = rootRoute.addChildren([
     settingsRoute,
     songsRoute,
     pieceRoute,
+    learnRoute,
+    chordsRoute,
+    scalesRoute,
+    lessonRoute,
     practiceRoute,
+    quizRoute,
     studyRoute,
     progressionRoute,
-    theoryRoute.addChildren([theoryIndexRoute, chordsRoute, scalesRoute, symbolsRoute, quizRoute]),
   ]),
   fullScreenRoute.addChildren([playerRoute, checkRoute]),
 ])

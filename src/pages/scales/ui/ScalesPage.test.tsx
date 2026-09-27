@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
-describe('Theory → Scales', () => {
+describe('Learn → Scales', () => {
   it('spells E♭ harmonic minor with its C♭ and names its structure', async () => {
-    await renderApp('/theory/scales?root=Eb&kind=harmonic')
+    await renderApp('/learn/scales?root=Eb&kind=harmonic')
     expect(
       await screen.findByRole('heading', { level: 2, name: 'E♭ harmonic minor' }),
     ).toBeInTheDocument()
@@ -14,7 +14,7 @@ describe('Theory → Scales', () => {
   })
 
   it('colours the scale’s keys whole: the tonic in yellow’s wash, the others in sky’s', async () => {
-    await renderApp('/theory/scales')
+    await renderApp('/learn/scales')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveClass('bg-key-scale')
@@ -22,7 +22,7 @@ describe('Theory → Scales', () => {
 
   it('puts a hand’s fingers under the keys, which keep their degrees', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/theory/scales')
+    const { router } = await renderApp('/learn/scales')
     const fingers = await screen.findByRole('group', { name: 'Fingers' })
     await user.click(within(fingers).getByRole('button', { name: 'Right hand' }))
     expect(router.state.location.search).toMatchObject({ fingers: 'rh' })
@@ -33,7 +33,7 @@ describe('Theory → Scales', () => {
 
   it('stops the run on Stop', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/scales')
+    const { audio } = await renderApp('/learn/scales')
     await user.click(await screen.findByRole('button', { name: 'Play up and down' }))
     await user.click(screen.getByRole('button', { name: 'Stop' }))
     expect(audio.stops).toBeGreaterThan(0)
@@ -42,7 +42,7 @@ describe('Theory → Scales', () => {
 
   it('keeps the scale on the keys while a chord of it sounds, the chord’s keys down', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/scales')
+    const { audio } = await renderApp('/learn/scales')
     await user.click(await screen.findByRole('button', { name: /^Dm/ }))
     act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 0.2))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
@@ -53,7 +53,7 @@ describe('Theory → Scales', () => {
 
   it('presses a chord of the scale while it sounds', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/scales')
+    const { audio } = await renderApp('/learn/scales')
     const dm = await screen.findByRole('button', { name: /^Dm/ })
     await user.click(dm)
     expect(dm).toHaveAttribute('aria-pressed', 'true')
@@ -62,13 +62,13 @@ describe('Theory → Scales', () => {
   })
 
   it('links to the relative minor', async () => {
-    await renderApp('/theory/scales?root=G&kind=major')
+    await renderApp('/learn/scales?root=G&kind=major')
     expect(await screen.findByRole('link', { name: 'E natural minor' })).toBeInTheDocument()
   })
 
   it('plays up and down, each key going down as it sounds', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/theory/scales')
+    const { audio } = await renderApp('/learn/scales')
     await user.click(await screen.findByRole('button', { name: 'Play up and down' }))
     const start = audio.played[0]?.at ?? 0
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })

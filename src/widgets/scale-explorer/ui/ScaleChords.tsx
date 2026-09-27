@@ -22,7 +22,7 @@ export function ScaleChords({
   size: 3 | 4
   onSize: (size: 3 | 4) => void
 }) {
-  const { t } = useTranslation('theory')
+  const { t } = useTranslation('learn')
   const playback = usePlayback<string>()
   const chords = diatonicChords(scale, size)
   if (chords.length === 0) return null

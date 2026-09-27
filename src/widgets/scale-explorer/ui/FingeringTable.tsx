@@ -11,7 +11,7 @@ export function FingeringTable({
   rh: readonly Finger[] | null
   lh: readonly Finger[] | null
 }) {
-  const { t } = useTranslation('theory')
+  const { t } = useTranslation('learn')
   if (!rh || !lh) return <p className="text-muted-foreground">{t('fingering.none')}</p>
   const row = (label: string, cells: readonly (string | number)[]) => (
     <tr>
