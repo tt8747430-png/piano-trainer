@@ -3,10 +3,10 @@ import { SKILLS, chordSkill, isSkillId, scaleSkill, skillOf } from './skill'
 
 describe('skills', () => {
   it('are one per chord quality, then one per scale kind', () => {
-    expect(SKILLS).toHaveLength(40)
+    expect(SKILLS).toHaveLength(46)
     expect(SKILLS[0]).toBe('chord:maj')
     expect(SKILLS[33]).toBe('scale:major')
-    expect(new Set(SKILLS).size).toBe(40)
+    expect(new Set(SKILLS).size).toBe(46)
   })
 
   it('read back what they name', () => {

@@ -45,7 +45,6 @@ export {
   keyPrefersSharps,
   keySignature,
   parseKey,
-  spellInKey,
   tonicSpelling,
   transposeNote,
   type Key,
@@ -70,14 +69,22 @@ export {
 } from './chord'
 export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 export {
+  SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
-  relativeScale,
+  modesOfKey,
+  relatedScale,
+  scaleFamily,
   scaleGaps,
   scaleHasChords,
   scaleIntervals,
+  scaleKey,
+  scaleKindsIn,
   scaleRootSpelling,
+  spellInKey,
   spellScale,
+  type RelatedScale,
+  type ScaleFamily,
   type ScaleGap,
   type ScaleKind,
 } from './scale'

@@ -175,6 +175,22 @@ describe('Learn → Scales', () => {
     expect(within(keyboard).getByRole('button', { name: 'E4' })).not.toHaveClass('ring-ring')
   })
 
+  it('says a mode is a mode of its parent major, and links to it', async () => {
+    await renderApp('/learn/scales?root=D&kind=dorian')
+    expect(await screen.findByRole('heading', { level: 2, name: 'D Dorian' })).toBeInTheDocument()
+    expect(screen.getByText('Mode of')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'C major' })).toBeInTheDocument()
+  })
+
+  it('groups the scales in the Scale pop-up', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/scales')
+    await user.click(await screen.findByRole('combobox', { name: 'Scale' }))
+    expect(await screen.findByText('Modes')).toBeInTheDocument()
+    await user.click(screen.getByRole('option', { name: 'Major blues' }))
+    expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
+  })
+
   it('has no Chords view for a scale without seven notes', async () => {
     await renderApp('/learn/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })

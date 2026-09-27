@@ -49,5 +49,5 @@ export const learn: LocaleResources['learn'] = {
   together: 'Вместе',
   playUpDown: 'Вверх и вниз',
   chordsIn: 'Аккорды гаммы',
-  about: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная' },
+  about: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная', modeOf: 'Лад от' },
 }

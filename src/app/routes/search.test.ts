@@ -68,7 +68,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/chords?quality=maj&inversion=3')).toMatchObject({
       inversion: 0,
     })
-    expect(await searchAt('/learn/scales?kind=dorian&tempo=10&chords=5&step=chords:tri')).toEqual(
+    expect(await searchAt('/learn/scales?kind=ionian&tempo=10&chords=9&step=chords:tri')).toEqual(
       SCALES_DEFAULTS,
     )
     expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)

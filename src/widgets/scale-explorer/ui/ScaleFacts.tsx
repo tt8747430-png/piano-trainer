@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   noteParam,
-  relativeScale,
+  relatedScale,
   scaleGaps,
   type ScaleKind,
   type SpelledNote,
@@ -21,7 +21,7 @@ function Fact({ term, children }: { term: string; children: ReactNode }) {
   )
 }
 
-/** What a scale is made of, and its relative major or minor. */
+/** What a scale is made of, and the scale it shares its notes with: its relative, or a mode's parent major. */
 export function ScaleFacts({
   root,
   kind,
@@ -33,7 +33,7 @@ export function ScaleFacts({
 }) {
   const { t } = useTranslation(['learn', 'music'])
   const scaleName = useScaleName()
-  const relative = relativeScale(root, kind)
+  const related = relatedScale(root, kind)
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('learn:about.formula')}>{tones.map((tone) => tone.degree).join(' ')}</Fact>
@@ -42,8 +42,10 @@ export function ScaleFacts({
           .map((gap) => t(`music:gap.${gap}`))
           .join(' ')}
       </Fact>
-      {relative ? (
-        <Fact term={t('learn:about.relative')}>
+      {related ? (
+        <Fact
+          term={t(related.relation === 'parent' ? 'learn:about.modeOf' : 'learn:about.relative')}
+        >
           <ButtonLink
             variant="link"
             className="px-0"
@@ -51,16 +53,12 @@ export function ScaleFacts({
               <Link
                 from="/learn/scales"
                 to="/learn/scales"
-                search={(prev) => ({
-                  ...prev,
-                  root: noteParam(relative.root),
-                  kind: relative.kind,
-                })}
+                search={(prev) => ({ ...prev, root: noteParam(related.root), kind: related.kind })}
                 replace
               />
             }
           >
-            {scaleName(relative.root, relative.kind)}
+            {scaleName(related.root, related.kind)}
           </ButtonLink>
         </Fact>
       ) : null}

@@ -6,14 +6,13 @@ export type Hand = 'rh' | 'lh'
 
 type FingeringTable = 'major' | 'natural' | 'pent' | 'blues'
 
-/** Harmonic and melodic minor are fingered as natural minor; the minor pentatonic has none taught. */
-const TABLE_OF: Readonly<Record<ScaleKind, FingeringTable | null>> = {
+/** Harmonic and melodic minor are fingered as natural minor; a kind missing here has none taught. */
+const TABLE_OF: Readonly<Partial<Record<ScaleKind, FingeringTable>>> = {
   major: 'major',
   natural: 'natural',
   harmonic: 'natural',
   melodic: 'natural',
   pent: 'pent',
-  mpent: null,
   blues: 'blues',
 }
 

@@ -48,5 +48,5 @@ export const learn = {
   together: 'Together',
   playUpDown: 'Play up and down',
   chordsIn: 'Chords in this scale',
-  about: { formula: 'Formula', gaps: 'Structure', relative: 'Relative' },
+  about: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
 } as const

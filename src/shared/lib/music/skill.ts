@@ -15,7 +15,7 @@ const SKILL_BY_ID = new Map<string, Skill>([
   ...SCALE_KINDS.map((scale) => [scaleSkill(scale), { kind: 'scale', scale }] as const),
 ])
 
-/** All 40: the 33 chord qualities, then the 7 scale kinds. */
+/** All 46: the 33 chord qualities, then the 13 scale kinds. */
 export const SKILLS = [...SKILL_BY_ID.keys()] as readonly SkillId[]
 
 export const isSkillId = (value: unknown): value is SkillId =>

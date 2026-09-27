@@ -10,7 +10,8 @@ import {
   pitchClassOf,
   placeScale,
   placeScaleChords,
-  SCALE_KINDS,
+  SCALE_FAMILIES,
+  scaleKindsIn,
   scaleFingering,
   scaleHasChords,
   scaleRootSpelling,
@@ -102,9 +103,12 @@ export function ScaleExplorer({
           <Dropdown
             label={t('learn:scaleLabel')}
             value={scale.kind}
-            options={SCALE_KINDS.map((kind) => ({
-              value: kind,
-              label: t(`music:scaleKind.${kind}`),
+            groups={SCALE_FAMILIES.map((family) => ({
+              label: t(`music:scaleFamily.${family}`),
+              options: scaleKindsIn(family).map((kind) => ({
+                value: kind,
+                label: t(`music:scaleKind.${kind}`),
+              })),
             }))}
             onChange={(kind) => onChange({ kind })}
           />
