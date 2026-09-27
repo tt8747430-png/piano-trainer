@@ -123,7 +123,10 @@ function KeyButton({
         </span>
       ) : null}
       {look.label ? (
-        <span aria-hidden className="relative flex flex-col items-center leading-tight">
+        <span
+          aria-hidden
+          className="relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere"
+        >
           {look.label.caption ? (
             <span className="text-xs font-semibold">{look.label.caption}</span>
           ) : null}

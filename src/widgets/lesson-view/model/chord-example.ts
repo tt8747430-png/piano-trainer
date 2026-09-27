@@ -1,5 +1,4 @@
 import {
-  chordSymbol,
   midi,
   MIDDLE_C,
   parseChordSymbol,
@@ -11,7 +10,6 @@ import type { KeyMark } from '@/shared/ui'
 
 /** A lesson's chord example as the keys show it. */
 export interface ChordExample {
-  readonly name: string
   readonly keys: readonly Midi[]
   readonly marks: ReadonlyMap<Midi, KeyMark>
 }
@@ -29,9 +27,9 @@ export function placeExample(symbol: string): ChordExample {
   )
   const keys = rh.map((placed) => placed.midi)
   const bass = chord.bass
-  if (!bass) return { name: chordSymbol(chord), keys, marks }
+  if (!bass) return { keys, marks }
   const bassKey = midi(MIDDLE_C - 12 + pitchClassOf(bass))
   const asTone = rh.find((placed) => pitchClassOf(placed.tone.note) === pitchClassOf(bass))
   if (asTone) marks.set(bassKey, { tone: asTone.tone.role, label: asTone.tone.degree })
-  return { name: chordSymbol(chord), keys: [bassKey, ...keys], marks }
+  return { keys: [bassKey, ...keys], marks }
 }

@@ -61,4 +61,13 @@ describe('LessonView', () => {
     expect(audio.stops).toBeGreaterThan(0)
     expect(screen.getByRole('button', { name: 'C9' })).toHaveAttribute('aria-pressed', 'false')
   })
+
+  it('writes each example as the lesson does, though the kernel names two of them alike', () => {
+    renderLesson()
+    const numbers = screen.getByRole('heading', { name: 'Chord numbers: 2 or 9? 6 or 13?' })
+    const section = numbers.parentElement ?? document.body
+    for (const name of ['C2', 'Cadd9', 'C6']) {
+      expect(within(section).getByRole('button', { name })).toBeInTheDocument()
+    }
+  })
 })

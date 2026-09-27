@@ -4,7 +4,10 @@ import { usePlayback } from '@/shared/lib/services'
 import { Button } from '@/shared/ui/primitives/button'
 import { placeExample } from '../model/chord-example'
 
-/** A row of chords a lesson names: a tap plays one and shows it on the keys, a second tap stops it. */
+/**
+ * A row of chords a lesson names, each written as the lesson writes it (C2 and Cadd9 are one chord
+ * to the kernel): a tap plays one and shows it on the keys, a second tap stops it.
+ */
 export function ChordExamples({
   symbols,
   onShow,
@@ -30,7 +33,7 @@ export function ChordExamples({
             }}
           >
             {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" /> : null}
-            <span className="font-display text-xl font-semibold">{example.name}</span>
+            <span className="font-display text-xl font-semibold">{symbol}</span>
           </Button>
         )
       })}

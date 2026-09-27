@@ -41,14 +41,14 @@ export function KeyChords({
           })
   return (
     <section aria-label={t('chordsIn')} className="flex flex-col gap-3">
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 lg:grid-cols-4">
         {chords.map(({ roman, chord, tones: placed }) => (
           <Button
             key={roman}
             variant="outline"
             aria-pressed={playback.playing === roman}
             data-holds={holds.has(roman) ? '' : undefined}
-            className="relative h-16 flex-col gap-0 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground data-holds:ring-3 data-holds:ring-ring data-holds:ring-inset"
+            className="relative h-auto min-h-16 flex-col gap-0 px-1 py-2 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground data-holds:ring-3 data-holds:ring-ring data-holds:ring-inset"
             onClick={() =>
               playback.toggle(
                 roman,
@@ -62,7 +62,9 @@ export function KeyChords({
             {playback.playing === roman ? (
               <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" />
             ) : null}
-            <span className="font-display text-2xl font-semibold">{chordSymbol(chord)}</span>
+            <span className="max-w-full font-display text-xl leading-tight font-semibold wrap-anywhere">
+              {chordSymbol(chord)}
+            </span>
             <span className="text-sm text-muted-foreground">{roman}</span>
           </Button>
         ))}

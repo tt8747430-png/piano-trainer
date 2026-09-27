@@ -113,7 +113,7 @@ export function ScaleExplorer({
           />
         ) : null}
         {showChords ? (
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex flex-col gap-4">
             <Segmented
               label={t('learn:chordSize.label')}
               value={scale.chords}
@@ -123,12 +123,21 @@ export function ScaleExplorer({
               }))}
               onChange={(size) => onChange({ chords: size })}
             />
-            <Segmented
-              label={t('learn:keysPlay.label')}
-              value={scale.keysPlay}
-              options={KEYS_PLAY.map((value) => ({ value, label: t(`learn:keysPlay.${value}`) }))}
-              onChange={(keysPlay) => onChange({ keysPlay })}
-            />
+            {/* Its own label on screen: beside Scale · Chords, a bare "Chords · Notes" would read as the same choice. */}
+            <div className="flex items-center gap-3">
+              <span aria-hidden className="shrink-0 text-muted-foreground">
+                {t('learn:keysPlay.label')}
+              </span>
+              <Segmented
+                label={t('learn:keysPlay.label')}
+                value={scale.keysPlay}
+                options={KEYS_PLAY.map((value) => ({
+                  value,
+                  label: t(`learn:keysPlay.${value}`),
+                }))}
+                onChange={(keysPlay) => onChange({ keysPlay })}
+              />
+            </div>
           </div>
         ) : rh && lh ? (
           <Segmented

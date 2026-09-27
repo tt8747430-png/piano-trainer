@@ -106,6 +106,8 @@ describe('Learn → Scales', () => {
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
+    // Two controls say "Chords": the one for what the keys play names itself on screen.
+    expect(screen.getByText('Keys play')).toBeVisible()
   })
 
   it('plays a degree’s chord from its key and holds the chord’s keys down', async () => {
