@@ -9,14 +9,19 @@ import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   CHORD_QUALITIES,
   chordRootSpelling,
+  FINGERINGS,
+  fingeringsOf,
   lastInversion,
   note,
   noteParam,
+  ownFingering,
   pitchClassOf,
   SCALE_KINDS,
   scaleHasChords,
+  scaleIntervals,
   scaleRootSpelling,
   type ChordFamily,
+  type Fingering,
   type ScaleKind,
 } from '@/shared/lib/music'
 import { HANDS, PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
@@ -86,6 +91,7 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   root: noteParam(note('C')),
   kind: 'major',
   show: 'scale',
+  start: 1,
   fingers: 'none',
   rhythm: 'even',
   tempo: 80,
@@ -99,16 +105,29 @@ const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
 const isScaleChords = isOneOf<ScaleView['chords']>([3, 4])
 const isScaleStep = (value: unknown): value is ScaleStepId =>
   isStepId(value) && value.startsWith('scale:')
+const isFingering = isOneOf(FINGERINGS)
+
+/** A fingering the run may take and does not take by itself; else none, so the URL leaves it out. */
+function chosenFingering(kind: ScaleKind, start: number, raw: unknown): Fingering | undefined {
+  return isFingering(raw) &&
+    raw !== ownFingering(kind, start) &&
+    fingeringsOf(kind, start).includes(raw)
+    ? raw
+    : undefined
+}
 export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
   const raw: Raw = input
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
+  const start = wholeIn(raw.start, 1, scaleIntervals(kind).length, SCALES_DEFAULTS.start)
   return {
     root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
     kind,
     show: scaleHasChords(kind)
       ? valueOr(isScaleShow, raw.show, SCALES_DEFAULTS.show)
       : SCALES_DEFAULTS.show,
+    start,
+    fingering: chosenFingering(kind, start - 1, raw.fingering),
     fingers: valueOr(isScaleFingers, raw.fingers, SCALES_DEFAULTS.fingers),
     rhythm: valueOr(isOneOf(PRACTICE_RHYTHM_IDS), raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),

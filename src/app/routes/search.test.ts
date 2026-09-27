@@ -82,6 +82,18 @@ describe('search params', () => {
     expect(await searchAt('/learn/scales?view=rh')).toMatchObject({ fingers: 'none' })
   })
 
+  it('read the Scales start and a chosen fingering, dropping one the run cannot take or takes itself', async () => {
+    expect(await searchAt('/learn/scales?start=3&fingering=scale')).toMatchObject({
+      start: 3,
+      fingering: 'scale',
+    })
+    expect(await searchAt('/learn/scales?start=9')).toMatchObject({ start: 1 })
+    expect(await searchAt('/learn/scales?fingering=scale')).toMatchObject({ fingering: undefined })
+    expect(await searchAt('/learn/scales?kind=blues&start=3&fingering=scale')).toMatchObject({
+      fingering: undefined,
+    })
+  })
+
   it('spell a root the way its explorer names it', async () => {
     expect(await searchAt('/learn/chords?root=A%23&quality=maj')).toMatchObject({ root: 'Bb' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })

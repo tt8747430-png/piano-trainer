@@ -28,8 +28,12 @@ export const learn: LocaleResources['learn'] = {
   arpeggio: 'Арпеджио',
   checkYourself: 'Проверить себя',
   scaleLabel: 'Гамма',
-  fingers: { label: 'Аппликатура', none: 'Нет' },
+  startOn: 'Начать с',
+  fingers: { label: 'Пальцы', none: 'Нет' },
   fingering: {
+    label: 'Аппликатура',
+    thumb: 'От первого пальца',
+    scale: 'Как в гамме',
     note: 'Нота',
     rh: 'ПР',
     lh: 'ЛР',

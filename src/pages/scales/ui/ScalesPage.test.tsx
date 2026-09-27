@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -201,5 +201,46 @@ describe('Learn → Scales', () => {
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(screen.queryByRole('group', { name: 'Show' })).not.toBeInTheDocument()
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('1')
+  })
+
+  it('starts the run on any note, fingered from the thumb there', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp('/learn/scales?fingers=rh')
+    await user.click(await screen.findByRole('combobox', { name: 'Start on' }))
+    await user.click(await screen.findByRole('option', { name: /^E/ }))
+    expect(router.state.location.search).toMatchObject({ start: 3 })
+    const fingering = screen.getByRole('group', { name: 'Fingering' })
+    expect(within(fingering).getByRole('button', { name: 'From the thumb' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+    await user.click(screen.getByRole('button', { name: 'Play up and down' }))
+    expect(notes(audio.played.at(-1)?.sounds ?? [])[0]).toBe(64)
+  })
+
+  it('fingers the run as the scale fingers it', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/scales?start=3&fingers=rh')
+    const fingering = await screen.findByRole('group', { name: 'Fingering' })
+    await user.click(within(fingering).getByRole('button', { name: 'As the scale' }))
+    expect(router.state.location.search).toMatchObject({ start: 3, fingering: 'scale' })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('31234123')
+  })
+
+  it('offers the blues no choice of fingering: as taught from its tonic', async () => {
+    await renderApp('/learn/scales?kind=blues&fingers=rh')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(screen.queryByRole('group', { name: 'Fingering' })).not.toBeInTheDocument()
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('1234123')
+  })
+
+  it('writes the run on a staff, the other hand’s staff muted', async () => {
+    await renderApp('/learn/scales')
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
+    await waitFor(() => expect(sheet.querySelector('[data-slot="score"] svg')).toBeInTheDocument())
+    expect(sheet.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'bass')
   })
 })

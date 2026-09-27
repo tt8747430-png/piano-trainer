@@ -27,8 +27,12 @@ export const learn = {
   arpeggio: 'Arpeggio',
   checkYourself: 'Check yourself',
   scaleLabel: 'Scale',
+  startOn: 'Start on',
   fingers: { label: 'Fingers', none: 'None' },
   fingering: {
+    label: 'Fingering',
+    thumb: 'From the thumb',
+    scale: 'As the scale',
     note: 'Note',
     rh: 'RH',
     lh: 'LH',
