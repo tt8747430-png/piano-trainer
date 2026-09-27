@@ -124,6 +124,17 @@ export const COLLECTION_IDS = [
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]
 export const isCollectionId = isOneOf(COLLECTION_IDS)
+
+/**
+ * The collections Songs lists: ids only, so a URL is checked without loading a piece (the content
+ * holds `SONG_COLLECTIONS` to them).
+ */
+export const SONG_COLLECTION_IDS = [
+  'bozhe-spasibo',
+  'called-to-play',
+  'hymns',
+] as const satisfies readonly CollectionId[]
+export const isSongCollectionId = isOneOf<CollectionId>(SONG_COLLECTION_IDS)
 export interface Collection {
   readonly id: CollectionId
   readonly name: LocalText

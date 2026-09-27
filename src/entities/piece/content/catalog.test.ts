@@ -17,6 +17,9 @@ import {
   pieceById,
   pieceKey,
   type Piece,
+  isSongCollectionId,
+  SONG_COLLECTION_IDS,
+  SONG_COLLECTIONS,
 } from '../index'
 
 const ENTRIES = COLLECTIONS.flatMap((collection) => collection.entries)
@@ -26,6 +29,12 @@ describe('the collections', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual(COLLECTION_IDS)
     expect(isCollectionId('hymns')).toBe(true)
     expect(isCollectionId('psalms')).toBe(false)
+  })
+
+  it('put on Songs the ones SONG_COLLECTION_IDS names, with no content needed to check an id', () => {
+    expect(SONG_COLLECTIONS.map((collection) => collection.id)).toEqual(SONG_COLLECTION_IDS)
+    expect(isSongCollectionId('hymns')).toBe(true)
+    expect(isSongCollectionId('studies')).toBe(false)
   })
 })
 const LISTINGS = ENTRIES.filter((entry) => !isPiece(entry))

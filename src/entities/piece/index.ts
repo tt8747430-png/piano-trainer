@@ -1,6 +1,7 @@
 export {
   CHORD_SIZES,
   COLLECTION_IDS,
+  SONG_COLLECTION_IDS,
   CREDIT_ROLES,
   METERS,
   SECTION_KINDS,
@@ -9,6 +10,7 @@ export {
   definePiece,
   isCollectionId,
   isPiece,
+  isSongCollectionId,
   pieceKey,
   type BookId,
   type ChartPiece,
@@ -32,7 +34,7 @@ export { ContentError, type ContentPosition } from './model/content-error'
 export { barLength } from './model/beats'
 export { chartOf, hasMethodCodes, melodyOf } from './model/chart'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
-export { entryById, isSongCollectionId, pieceById } from './model/selectors'
+export { entryById, pieceById } from './model/selectors'
 export { entryTitles, type EntryTitles } from './model/titles'
 export { Credits } from './ui/Credits'
 export { PieceLink } from './ui/PieceLink'
