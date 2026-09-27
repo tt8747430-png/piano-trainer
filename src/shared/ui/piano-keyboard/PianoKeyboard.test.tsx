@@ -206,4 +206,21 @@ describe('PianoKeyboard', () => {
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} keySize="large" />)
     expect(scrolls).toHaveLength(opened + 1)
   })
+
+  it('draws a mark’s caption over its label', () => {
+    renderKeyboard({
+      marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'scale', label: 'Dm', caption: 'ii' }]]),
+    })
+    expect(screen.getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
+  })
+
+  it('holds down every key a pressed key plays', () => {
+    const chordOnD = (key: Midi): readonly Midi[] =>
+      key === 62 ? [midi(62), midi(65), midi(69)] : [key]
+    renderKeyboard({ keyPlays: chordOnD })
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'D4' }), { pointerId: 1 })
+    expect(screen.getByRole('button', { name: 'F4' })).toHaveAttribute('data-down')
+    expect(screen.getByRole('button', { name: 'A4' })).toHaveAttribute('data-down')
+    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
+  })
 })

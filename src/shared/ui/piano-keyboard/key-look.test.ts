@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { NamedKeys } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
-import { keyLook, type KeyMark, type KeyText } from './key-look'
+import { keyLook, sameLook, type KeyMark, type KeyText } from './key-look'
 
 const C4 = midi(60)
 const CS4 = midi(61)
@@ -88,5 +88,27 @@ describe('keyLook', () => {
       fill: 'white',
       outlined: true,
     })
+  })
+
+  it('carries a mark’s caption on its label: a degree’s numeral over its chord', () => {
+    const marks = new Map<Midi, KeyMark>([
+      [midi(62), { tone: 'scale', label: 'Dm', caption: 'ii' }],
+    ])
+    expect(keyLook(midi(62), { marks }, UNNAMED).label).toEqual({
+      kind: 'mark',
+      text: 'Dm',
+      caption: 'ii',
+    })
+  })
+
+  it('tells two looks apart by their caption', () => {
+    const look = (caption: string) =>
+      keyLook(
+        midi(62),
+        { marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'scale', label: 'Dm', caption }]]) },
+        UNNAMED,
+      )
+    expect(sameLook(look('ii'), look('II'))).toBe(false)
+    expect(sameLook(look('ii'), look('ii'))).toBe(true)
   })
 })

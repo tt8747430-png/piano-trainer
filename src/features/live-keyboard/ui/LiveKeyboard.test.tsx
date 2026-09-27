@@ -99,4 +99,16 @@ describe('LiveKeyboard', () => {
     expect(screen.getByRole('button', { name: 'E4' })).toHaveAttribute('data-down')
     expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-role-root')
   })
+
+  it('sounds what a key plays and holds all of it down while the key is held', () => {
+    const { audio } = setUp({
+      keyPlays: (key) => (key === 62 ? [midi(62), midi(65), midi(69)] : [key]),
+    })
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'D4' }), { pointerId: 1 })
+    const notes = (audio.played.at(-1)?.sounds ?? []).flatMap((sound) =>
+      sound.kind === 'note' ? [sound.midi] : [],
+    )
+    expect(notes).toEqual([62, 65, 69])
+    expect(screen.getByRole('button', { name: 'A4' })).toHaveAttribute('data-down')
+  })
 })

@@ -15,6 +15,8 @@ export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody' | 'tonic' | 'scale'
 export interface KeyMark {
   readonly tone: KeyTone
   readonly label?: string
+  /** A second, smaller line over the label: a degree's numeral over its chord. */
+  readonly caption?: string
   /** A finger number, drawn in the finger row under the keys. */
   readonly finger?: Finger
 }
@@ -46,6 +48,8 @@ export type KeyFill = 'white' | 'black' | 'lit' | 'selected' | 'wrong' | KeyTone
 export interface KeyLabel {
   readonly kind: 'mark' | 'name'
   readonly text: string
+  /** A mark's second line, over its text. */
+  readonly caption?: string
 }
 
 /** One key's face: its fill, whether it is down or outlined, its label and its letter. */
@@ -74,7 +78,9 @@ function nameOf(key: Midi, namedKeys: NamedKeys): string | undefined {
 }
 
 function labelOf(key: Midi, mark: KeyMark | undefined, namedKeys: NamedKeys): KeyLabel | undefined {
-  if (mark?.label) return { kind: 'mark', text: mark.label }
+  if (mark?.label) {
+    return { kind: 'mark', text: mark.label, ...(mark.caption ? { caption: mark.caption } : {}) }
+  }
   const name = nameOf(key, namedKeys)
   return name === undefined ? undefined : { kind: 'name', text: name }
 }
@@ -100,4 +106,5 @@ export const sameLook = (a: KeyLook, b: KeyLook): boolean =>
   a.outlined === b.outlined &&
   a.label?.kind === b.label?.kind &&
   a.label?.text === b.label?.text &&
+  a.label?.caption === b.label?.caption &&
   a.letter === b.letter

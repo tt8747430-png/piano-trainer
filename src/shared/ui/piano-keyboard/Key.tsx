@@ -123,14 +123,18 @@ function KeyButton({
         </span>
       ) : null}
       {look.label ? (
-        <span
-          aria-hidden
-          className={cn(
-            'relative font-bold tabular-nums',
-            look.label.kind === 'name' ? 'text-xs' : 'text-sm',
-          )}
-        >
-          {look.label.text}
+        <span aria-hidden className="relative flex flex-col items-center leading-tight">
+          {look.label.caption ? (
+            <span className="text-xs font-semibold">{look.label.caption}</span>
+          ) : null}
+          <span
+            className={cn(
+              'font-bold tabular-nums',
+              look.label.kind === 'name' || look.label.caption ? 'text-xs' : 'text-sm',
+            )}
+          >
+            {look.label.text}
+          </span>
         </span>
       ) : null}
     </button>

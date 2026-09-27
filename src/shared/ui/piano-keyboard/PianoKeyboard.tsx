@@ -85,6 +85,7 @@ export function PianoKeyboard({
   map = false,
   letters,
   height = 'proportional',
+  keyPlays,
   onKeyPress,
   className,
   children,
@@ -106,6 +107,11 @@ export function PianoKeyboard({
   letters?: ReadonlyMap<Midi, string> | undefined
   /** 'proportional': the keys a piano's length for their width; 'fill': the height it is given (the Player). */
   height?: 'proportional' | 'fill'
+  /**
+   * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
+   * degree's key its chord). All of it is down while the key is held.
+   */
+  keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
   /** Every key does something: a key that did nothing would be a dead end. */
   onKeyPress: (key: Midi) => void
   className?: string
@@ -129,13 +135,11 @@ export function PianoKeyboard({
   const press = useCallback((key: Midi) => latestPress.current(key), [])
   const pointers = useKeyPointers({ swipe, keys, onPress: press })
 
-  const down = useMemo(
-    () =>
-      pointers.pressed.size === 0
-        ? states.down
-        : new Set([...(states.down ?? []), ...pointers.pressed]),
-    [states.down, pointers.pressed],
-  )
+  const down = useMemo(() => {
+    if (pointers.pressed.size === 0) return states.down
+    const pressed = keyPlays ? [...pointers.pressed].flatMap(keyPlays) : pointers.pressed
+    return new Set([...(states.down ?? []), ...pressed])
+  }, [states.down, pointers.pressed, keyPlays])
   const dots = useMemo(
     () => new Set([...(states.marks?.keys() ?? []), ...(down ?? [])]),
     [states.marks, down],

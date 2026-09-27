@@ -7,15 +7,20 @@ import { PianoKeyboard } from '@/shared/ui'
 import { useTyping } from '../model/use-typing'
 import { KeyboardSettingsButton } from './KeyboardSettingsButton'
 
+/** A key plays itself unless the screen says otherwise. */
+const ALONE = (key: Midi): readonly Midi[] => [key]
+
 /**
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds before it does whatever else the screen makes it mean. Unless the
  * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
  * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
- * chord's keys together, every mark kept.
+ * chord's keys together, every mark kept. With `keyPlays`, a key a hand plays may sound more than
+ * itself (a degree's chord), all of it down while the key is held.
  */
 export function LiveKeyboard({
+  keyPlays,
   onKeyPress,
   inView,
   spotlight = false,
@@ -33,8 +38,9 @@ export function LiveKeyboard({
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const held = useHeldKeys()
   const soundKeys = useSoundKeys()
+  const plays = keyPlays ?? ALONE
   const play = (key: Midi) => {
-    soundKeys([key])
+    soundKeys(plays(key))
     onKeyPress?.(key)
   }
   // The keys the app sounds or MIDI holds lead the view; a tapped or typed key is where the hand already is.
@@ -44,8 +50,8 @@ export function LiveKeyboard({
     () =>
       held.size === 0 && typed.held.size === 0
         ? sounding
-        : new Set([...sounding, ...held, ...typed.held]),
-    [sounding, held, typed.held],
+        : new Set([...sounding, ...held, ...[...typed.held].flatMap(plays)]),
+    [sounding, held, typed.held, plays],
   )
   return (
     <PianoKeyboard
@@ -54,6 +60,7 @@ export function LiveKeyboard({
       inView={typed.inView}
       down={down}
       letters={typed.letters}
+      keyPlays={keyPlays}
       onKeyPress={play}
     >
       <KeyboardSettingsButton />
