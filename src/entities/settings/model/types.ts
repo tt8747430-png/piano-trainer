@@ -17,6 +17,12 @@ export type Theme = (typeof THEMES)[number]
 export const PRACTICE_TOGGLES = ['fingerNumbers', 'melody', 'metronome', 'countIn'] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
+/** The Setup's saved switches: how any piece plays (the melody is a piece's own: its setup shows it). */
+export const PLAYING_TOGGLES = [
+  'fingerNumbers',
+  'metronome',
+  'countIn',
+] as const satisfies readonly PracticeToggle[]
 
 /** The chord families and scale kinds the open-ended quiz asks about. */
 export interface QuizChoice {

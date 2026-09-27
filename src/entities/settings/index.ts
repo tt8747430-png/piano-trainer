@@ -1,6 +1,7 @@
 export {
   DEFAULT_PRACTICE,
   DEFAULT_QUIZ_CHOICE,
+  PLAYING_TOGGLES,
   PRACTICE_TOGGLES,
   THEMES,
   canonicalFamilies,
