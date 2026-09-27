@@ -73,9 +73,9 @@ const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
   beforeLoad: async ({ params }) => {
-    const { entryById } = await songsScreens()
+    const { entryById, shelfOf } = await songsScreens()
     const entry = entryById(params.pieceId)
-    if (entry?.kind !== 'song' && entry?.kind !== 'listing') throw notFound()
+    if (!entry || shelfOf(entry.kind) !== 'songs') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })

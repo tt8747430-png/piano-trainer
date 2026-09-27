@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Credits, entryTitles, SourceLine, pieceKey, type Entry } from '@/entities/piece'
+import { Credits, entryTitles, pieceKey, shelfOf, SourceLine, type Entry } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { useGoBack } from '@/shared/lib'
 import { keyName, noteParam } from '@/shared/lib/music'
@@ -17,7 +17,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
   const scaleName = useScaleName()
   const toSongs = useGoBack({ to: '/songs' })
   const toPractice = useGoBack({ to: '/practice' })
-  const back = entry.kind === 'study' || entry.kind === 'progression' ? toPractice : toSongs
+  const back = { songs: toSongs, practice: toPractice }[shelfOf(entry.kind)]
   const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = key.minor ? 'natural' : 'major'
