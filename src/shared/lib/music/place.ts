@@ -52,14 +52,19 @@ export function placeChord(
   }
 }
 
-/** A scale as the keyboard shows it: from the root at or above middle C to the root an octave up. */
-export function placeScale(root: SpelledNote, kind: ScaleKind): PlacedTone[] {
+/**
+ * A scale as the keyboard shows it: from degree `start` (0 the tonic, at or above middle C) up to
+ * that note an octave higher, each tone keeping its degree from the tonic.
+ */
+export function placeScale(root: SpelledNote, kind: ScaleKind, start = 0): PlacedTone[] {
   const base = MIDDLE_C + pitchClassOf(root)
   const tones = spellScale(root, kind)
-  return [
-    ...tones.map((tone) => ({ tone, midi: midi(base + tone.semitones) })),
-    ...tones.slice(0, 1).map((tone) => ({ tone, midi: midi(base + 12) })),
-  ]
+  return Array.from({ length: tones.length + 1 }, (_, i) => {
+    const index = start + i
+    const tone = tones[index % tones.length]
+    if (!tone) throw new RangeError(`${kind} has no degree ${start}`)
+    return { tone, midi: midi(base + tone.semitones + 12 * Math.floor(index / tones.length)) }
+  })
 }
 
 /** A chord of a scale where the keyboard shows the scale: on its degree's key, stacked upwards from it. */

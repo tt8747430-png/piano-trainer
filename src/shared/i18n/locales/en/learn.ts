@@ -32,7 +32,6 @@ export const learn = {
     note: 'Note',
     rh: 'RH',
     lh: 'LH',
-    none: 'No standard fingering is taught for this scale.',
   },
   playScale: 'Play the scale',
   rhythmLabel: 'Rhythm',

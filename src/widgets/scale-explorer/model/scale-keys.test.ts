@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import {
   midi,
   note,
-  pitchClassOf,
   placeScale,
   placeScaleChords,
   scaleFingering,
@@ -22,7 +21,7 @@ const TRIADS = placeScaleChords(C, 'major', 3)
 
 describe('scaleMarks', () => {
   it('marks the tonic and the other degrees, with a hand’s fingers under them', () => {
-    const marks = scaleMarks(placeScale(C, 'major'), scaleFingering(pitchClassOf(C), 'major', 'rh'))
+    const marks = scaleMarks(placeScale(C, 'major'), scaleFingering(C, 'major', 'rh', 0))
     expect(marks.get(midi(60))).toEqual({ tone: 'tonic', label: '1', finger: 1 })
     expect(marks.get(midi(65))).toEqual({ tone: 'scale', label: '4', finger: 1 })
   })

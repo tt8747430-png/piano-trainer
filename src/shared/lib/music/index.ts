@@ -97,7 +97,17 @@ export {
   type PlacedScaleChord,
   type PlacedTone,
 } from './place'
-export { scaleFingering, type Finger, type Hand } from './fingering'
+export {
+  FINGERINGS,
+  fingeringsOf,
+  ownFingering,
+  runFingering,
+  scaleFingering,
+  thumbFingering,
+  type Finger,
+  type Fingering,
+  type Hand,
+} from './fingering'
 export { diatonicChords, type DiatonicChord } from './diatonic'
 export {
   SKILLS,

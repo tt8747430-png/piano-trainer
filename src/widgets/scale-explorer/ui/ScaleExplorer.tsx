@@ -7,12 +7,12 @@ import {
   noteName,
   noteParam,
   PITCH_CLASSES,
-  pitchClassOf,
   placeScale,
   placeScaleChords,
   SCALE_FAMILIES,
   scaleKindsIn,
-  scaleFingering,
+  ownFingering,
+  runFingering,
   scaleHasChords,
   scaleRootSpelling,
   spellScale,
@@ -81,9 +81,10 @@ export function ScaleExplorer({
     [showChords, scale.keysPlay, chords],
   )
   const holding = note === null ? [] : chordsHolding(chords, note)
-  const rh = scaleFingering(pitchClassOf(root), scale.kind, 'rh')
-  const lh = scaleFingering(pitchClassOf(root), scale.kind, 'lh')
-  const fingering = scale.fingers === 'rh' ? rh : scale.fingers === 'lh' ? lh : null
+  const fingering = ownFingering(scale.kind, 0)
+  const rh = runFingering(root, scale.kind, 0, scaleKeys, 'rh', fingering)
+  const lh = runFingering(root, scale.kind, 0, scaleKeys, 'lh', fingering)
+  const shown = scale.fingers === 'rh' ? rh : scale.fingers === 'lh' ? lh : null
   const run = scaleRun(scaleKeys, { rhythm: scale.rhythm, tempo: scale.tempo, hands: scale.hands })
 
   return (
@@ -148,14 +149,14 @@ export function ScaleExplorer({
               />
             </div>
           </div>
-        ) : rh && lh ? (
+        ) : (
           <Segmented
             label={t('learn:fingers.label')}
             value={scale.fingers}
             options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
             onChange={(fingers) => onChange({ fingers })}
           />
-        ) : null}
+        )}
       </div>
       {showChords ? (
         <ExplorerKeyboard
@@ -170,7 +171,7 @@ export function ScaleExplorer({
       ) : (
         <ExplorerKeyboard
           keys={run.map((sound) => sound.midi)}
-          marks={scaleMarks(placed, fingering)}
+          marks={scaleMarks(placed, shown)}
           className="lg:order-first lg:col-span-2"
         />
       )}

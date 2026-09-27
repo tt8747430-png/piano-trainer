@@ -33,7 +33,6 @@ export const learn: LocaleResources['learn'] = {
     note: 'Нота',
     rh: 'ПР',
     lh: 'ЛР',
-    none: 'Для этой гаммы нет принятой аппликатуры.',
   },
   playScale: 'Сыграть гамму',
   rhythmLabel: 'Ритм',

@@ -1,18 +1,17 @@
 import { useTranslation } from 'react-i18next'
 import type { Finger } from '@/shared/lib/music'
 
-/** Note, RH and LH fingers for one octave; one line where no fingering is taught. */
+/** Note, RH and LH fingers for the run's octave. */
 export function FingeringTable({
   notes,
   rh,
   lh,
 }: {
   notes: readonly string[]
-  rh: readonly Finger[] | null
-  lh: readonly Finger[] | null
+  rh: readonly Finger[]
+  lh: readonly Finger[]
 }) {
   const { t } = useTranslation('learn')
-  if (!rh || !lh) return <p className="text-muted-foreground">{t('fingering.none')}</p>
   const row = (label: string, cells: readonly (string | number)[]) => (
     <tr>
       <th scope="row" className="pr-3 text-left text-sm font-semibold text-muted-foreground">

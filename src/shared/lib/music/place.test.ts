@@ -53,6 +53,21 @@ describe('placeScale', () => {
     expect(eFlat.at(-1)?.tone.degree).toBe('1')
     expect(eFlat.at(-1)?.midi).toBe(75)
   })
+
+  it('runs from any degree up an octave, each note keeping its degree from the tonic', () => {
+    const fromE = placeScale(note('C'), 'major', 2)
+    expect(keys(fromE)).toEqual([64, 65, 67, 69, 71, 72, 74, 76])
+    expect(fromE.map((placed) => placed.tone.degree)).toEqual([
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '1',
+      '2',
+      '3',
+    ])
+  })
 })
 
 describe('placeScaleChords', () => {

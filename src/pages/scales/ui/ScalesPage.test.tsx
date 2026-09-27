@@ -191,6 +191,11 @@ describe('Learn → Scales', () => {
     expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
   })
 
+  it('fingers a scale with no taught fingering from the thumb', async () => {
+    await renderApp('/learn/scales?kind=mpent&root=A')
+    expect(await screen.findByRole('table')).toHaveTextContent('RH')
+  })
+
   it('has no Chords view for a scale without seven notes', async () => {
     await renderApp('/learn/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
