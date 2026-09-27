@@ -4,6 +4,7 @@ import {
   parseChordSymbol,
   pitchClassOf,
   placeChord,
+  spellChord,
   type Midi,
 } from '@/shared/lib/music'
 import type { KeyMark } from '@/shared/ui'
@@ -21,7 +22,10 @@ export interface ChordExample {
  */
 export function placeExample(symbol: string): ChordExample {
   const chord = parseChordSymbol(symbol)
-  const { rh } = placeChord(chord.root, chord.quality, { inversion: 0, bothHands: false })
+  const { rh } = placeChord(spellChord(chord.root, chord.quality), {
+    inversion: 0,
+    bothHands: false,
+  })
   const marks = new Map<Midi, KeyMark>(
     rh.map((placed) => [placed.midi, { tone: placed.tone.role, label: placed.tone.degree }]),
   )

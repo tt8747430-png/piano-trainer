@@ -1,4 +1,3 @@
-import { qualityIntervals, spellChord, type ChordQuality } from './chord'
 import type { Key } from './key'
 import { MIDDLE_C } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
@@ -26,37 +25,45 @@ export interface PlacedChord {
   readonly lh: readonly PlacedTone[]
 }
 
-/** The explorer offers root position and at most the first three inversions. */
+/** The explorers offer root position and at most the first three inversions. */
 const MOST_INVERSIONS = 3
 
-/** The last inversion the explorer offers for a chord: one per tone after the root, at most three. */
-export const lastInversion = (quality: ChordQuality): number =>
-  Math.min(qualityIntervals(quality).length - 1, MOST_INVERSIONS)
+/**
+ * The last inversion a chord of `notes` notes is shown in: one per tone after the root, at most
+ * three (the 3rd, 5th or 7th in the bass).
+ */
+export const lastInversion = (notes: number): number => Math.min(notes - 1, MOST_INVERSIONS)
 
 /**
- * A chord as the explorers place it: the right hand from the root at or above middle C, the first
- * `inversion` tones an octave up (a chord's tones rise in formula order, so these are its lowest),
- * and for both hands the root an octave below in the left hand.
+ * A chord's tones from its root's key, its lowest `inversion` tones an octave up (a chord's tones
+ * rise from the root, so these are its lowest), lowest first.
+ */
+function inverted(tones: readonly Tone[], key: Midi, inversion: number): PlacedTone[] {
+  const last = lastInversion(tones.length)
+  if (!Number.isInteger(inversion) || inversion < 0 || inversion > last) {
+    throw new RangeError(
+      `A chord of ${tones.length} notes has inversions 0–${last}, not ${inversion}`,
+    )
+  }
+  return tones
+    .map((tone, i) => ({ tone, midi: midi(key + tone.semitones + (i < inversion ? 12 : 0)) }))
+    .sort((a, b) => a.midi - b.midi)
+}
+
+/**
+ * A chord's tones, from its root up, as the explorers place them: the right hand from the root at or
+ * above middle C in an inversion, and for both hands the root an octave below in the left hand.
  */
 export function placeChord(
-  root: SpelledNote,
-  quality: ChordQuality,
+  tones: readonly Tone[],
   options: { readonly inversion: number; readonly bothHands: boolean },
 ): PlacedChord {
-  const last = lastInversion(quality)
-  if (!Number.isInteger(options.inversion) || options.inversion < 0 || options.inversion > last) {
-    throw new RangeError(`${quality} has inversions 0–${last}, not ${options.inversion}`)
-  }
-  const base = MIDDLE_C + pitchClassOf(root)
-  const tones = spellChord(root, quality)
+  const [root] = tones
+  if (!root) throw new RangeError('A chord has at least its root')
+  const key = midi(MIDDLE_C + root.pitchClass)
   return {
-    rh: tones
-      .map((tone, i) => ({
-        tone,
-        midi: midi(base + tone.semitones + (i < options.inversion ? 12 : 0)),
-      }))
-      .sort((a, b) => a.midi - b.midi),
-    lh: options.bothHands ? tones.slice(0, 1).map((tone) => ({ tone, midi: midi(base - 12) })) : [],
+    rh: inverted(tones, key, options.inversion),
+    lh: options.bothHands ? [{ tone: root, midi: midi(key - 12) }] : [],
   }
 }
 
@@ -74,10 +81,6 @@ export function placeScale(root: SpelledNote, kind: ScaleKind, start = 0): Place
     return { tone, midi: midi(base + tone.semitones + 12 * Math.floor(index / tones.length)) }
   })
 }
-
-/** The last inversion a chord of a scale is shown in: the 3rd, 5th or 7th in the bass, as far as it stacks. */
-export const lastStackInversion = (notes: ChordNotes): number =>
-  Math.min(notes - 1, MOST_INVERSIONS)
 
 /** A chord of a scale on the keyboard: on its root's key, in an inversion, labelled as the keys show it. */
 export interface PlacedScaleChord {
@@ -98,13 +101,7 @@ export function placeStack(
   key: Midi,
   inversion: number,
 ): PlacedScaleChord {
-  const last = lastStackInversion(notes)
-  if (!Number.isInteger(inversion) || inversion < 0 || inversion > last) {
-    throw new RangeError(`A chord of ${notes} notes has inversions 0–${last}, not ${inversion}`)
-  }
-  const tones = chord.tones
-    .map((tone, i) => ({ tone, midi: midi(key + tone.semitones + (i < inversion ? 12 : 0)) }))
-    .sort((a, b) => a.midi - b.midi)
+  const tones = inverted(chord.tones, key, inversion)
   const bass = inversion > 0 ? tones[0]?.tone.note : undefined
   return {
     chord,

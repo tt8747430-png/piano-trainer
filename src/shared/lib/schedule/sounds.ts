@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { placeChord, type Chord, type Midi } from '@/shared/lib/music'
+import { placeChord, spellChord, type Chord, type Midi } from '@/shared/lib/music'
 import { schedule, type Audible, type NoteSound, type Sound } from './schedule'
 
 /** One bar on its own at a tempo: what a tap on a bar plays. */
@@ -47,7 +47,7 @@ export function placedChordSounds(
   chord: Chord,
   { inversion = 0, bothHands = false, arpeggio = false }: ChordPlaying = {},
 ): NoteSound[] {
-  const placed = placeChord(chord.root, chord.quality, { inversion, bothHands })
+  const placed = placeChord(spellChord(chord.root, chord.quality), { inversion, bothHands })
   return chordSounds(
     [...placed.lh, ...placed.rh].map((tone) => tone.midi),
     { arpeggio },

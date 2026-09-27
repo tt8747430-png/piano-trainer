@@ -13,11 +13,11 @@ import {
   FINGERINGS,
   fingeringsOf,
   lastInversion,
-  lastStackInversion,
   note,
   noteParam,
   ownFingering,
   pitchClassOf,
+  qualityIntervals,
   SCALE_KINDS,
   scaleHasChords,
   scaleIntervals,
@@ -78,9 +78,16 @@ export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
   const quality = valueOr(isQuality, raw.quality, CHORDS_DEFAULTS.quality)
   const root = readNote(raw.root)
   return {
-    root: root ? noteParam(chordRootSpelling(pitchClassOf(root), quality)) : CHORDS_DEFAULTS.root,
+    root: root
+      ? noteParam(chordRootSpelling(pitchClassOf(root), qualityIntervals(quality)))
+      : CHORDS_DEFAULTS.root,
     quality,
-    inversion: wholeIn(raw.inversion, 0, lastInversion(quality), CHORDS_DEFAULTS.inversion),
+    inversion: wholeIn(
+      raw.inversion,
+      0,
+      lastInversion(qualityIntervals(quality).length),
+      CHORDS_DEFAULTS.inversion,
+    ),
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }
@@ -140,7 +147,7 @@ export function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
     chords,
-    inversion: wholeIn(raw.inversion, 0, lastStackInversion(chords), SCALES_DEFAULTS.inversion),
+    inversion: wholeIn(raw.inversion, 0, lastInversion(chords), SCALES_DEFAULTS.inversion),
     keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
     arpeggio: raw.arpeggio === true,
     step: isScaleStep(raw.step) ? raw.step : undefined,

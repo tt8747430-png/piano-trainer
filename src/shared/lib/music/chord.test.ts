@@ -88,7 +88,7 @@ describe('spellChord', () => {
 
   it.each(CHORD_QUALITIES)('spells %s on all 12 roots by letter steps and semitones', (quality) => {
     for (let pc = 0; pc < 12; pc++) {
-      const root = chordRootSpelling(pitchClass(pc), quality)
+      const root = chordRootSpelling(pitchClass(pc), qualityIntervals(quality))
       const tones = spellChord(root, quality)
       qualityIntervals(quality).forEach((interval, i) => {
         const tone = tones[i]
@@ -126,8 +126,8 @@ describe('chordBass', () => {
 
 describe('chordRootSpelling', () => {
   it('leans sharp or flat by quality', () => {
-    expect(chordRootSpelling(pitchClass(1), 'min')).toEqual(note('C', 1))
-    expect(chordRootSpelling(pitchClass(1), 'maj')).toEqual(note('D', -1))
+    expect(chordRootSpelling(pitchClass(1), qualityIntervals('min'))).toEqual(note('C', 1))
+    expect(chordRootSpelling(pitchClass(1), qualityIntervals('maj'))).toEqual(note('D', -1))
   })
 })
 

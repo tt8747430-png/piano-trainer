@@ -13,6 +13,7 @@ import {
   PITCH_CLASSES,
   placeChord,
   qualitiesIn,
+  qualityIntervals,
   qualitySpellings,
   qualitySuffix,
   spellChord,
@@ -44,12 +45,12 @@ export function ChordExplorer({
   const play = usePlay()
   const playback = usePlayback<'chord' | 'arpeggio'>()
   const root = noteFromParam(chord.root)
-  const placed = placeChord(root, chord.quality, {
+  const tones = spellChord(root, chord.quality)
+  const placed = placeChord(tones, {
     inversion: chord.inversion,
     bothHands: chord.hands === 'both',
   })
   const keys = [...placed.lh, ...placed.rh]
-  const tones = spellChord(root, chord.quality)
   const marks = new Map<Midi, KeyMark>(
     keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
   )
@@ -73,7 +74,7 @@ export function ChordExplorer({
             label={t('learn:root')}
             value={chord.root}
             options={PITCH_CLASSES.map((pc) => {
-              const spelled = chordRootSpelling(pc, chord.quality)
+              const spelled = chordRootSpelling(pc, qualityIntervals(chord.quality))
               return { value: noteParam(spelled), label: noteName(spelled) }
             })}
             onChange={(value) => change({ root: value })}
@@ -96,7 +97,7 @@ export function ChordExplorer({
           <Segmented
             label={t('learn:inversionLabel')}
             value={chord.inversion}
-            options={INVERSIONS.filter(({ value }) => value <= lastInversion(chord.quality)).map(
+            options={INVERSIONS.filter(({ value }) => value <= lastInversion(tones.length)).map(
               ({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }),
             )}
             onChange={(inversion) => change({ inversion })}

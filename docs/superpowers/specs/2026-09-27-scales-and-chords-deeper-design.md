@@ -244,7 +244,7 @@
   chord's name around its highest natural number, from the tables the stacks use (§2.4; `m11`, `13sus4`, `m(maj11)`,
   `Maj13`), then each alteration in order (`9#11`, `13♭9`, `7♭5♭9`). Every table quality is built by some parts and
   named back as the table names it (a test holds all 36), so nothing the reference showed is lost; the builder makes
-  143 chords, each once (where two parts build one chord, a 7th with a ♭9 and a 9th with its 9th lowered, both name it
+  124 chords, each once (where two parts build one chord, a 7th with a ♭9 and a 9th with its 9th lowered, both name it
   `7♭9`).
 - **One root-spelling rule for every chord:** a root on C♯/D♭ or G♯/A♭ is named sharp when the chord has a minor 3rd
   or a minor 9th. It reproduces the table's hand-set flags on all 36 qualities, and the flags go.

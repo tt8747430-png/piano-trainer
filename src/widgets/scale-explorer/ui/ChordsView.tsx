@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import {
   CHORD_NOTES,
-  lastStackInversion,
+  lastInversion,
   noteFromParam,
   placeScale,
   placeScaleChords,
@@ -73,13 +73,13 @@ export function ChordsView({
               label: t(`learn:chordSize.${SIZE_NAMES[value]}`),
             }))}
             onChange={(next) =>
-              onChange({ chords: next, inversion: Math.min(inversion, lastStackInversion(next)) })
+              onChange({ chords: next, inversion: Math.min(inversion, lastInversion(next)) })
             }
           />
           <Segmented
             label={t('learn:inversionLabel')}
             value={inversion}
-            options={INVERSION_NAMES.slice(0, lastStackInversion(notes) + 1).map((name, value) => ({
+            options={INVERSION_NAMES.slice(0, lastInversion(notes) + 1).map((name, value) => ({
               value,
               label: t(`music:inversion.${name}`),
             }))}

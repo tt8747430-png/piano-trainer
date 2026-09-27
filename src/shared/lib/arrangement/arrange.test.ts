@@ -10,6 +10,7 @@ import {
   parseKey,
   pitchClass,
   plainSpelling,
+  qualityIntervals,
   type Meter,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -200,7 +201,10 @@ describe('arrange', () => {
   it('keeps the right hand in range for every quality on every root', () => {
     const symbols = CHORD_QUALITIES.flatMap((quality) =>
       Array.from({ length: 12 }, (_, pc) =>
-        chordSymbol({ root: chordRootSpelling(pitchClass(pc), quality), quality }),
+        chordSymbol({
+          root: chordRootSpelling(pitchClass(pc), qualityIntervals(quality)),
+          quality,
+        }),
       ),
     )
     const performance = arrange(chart([symbols]), { tonic: C, pattern: BLOCK })

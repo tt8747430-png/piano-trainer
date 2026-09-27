@@ -5,6 +5,7 @@ import {
   pitchClass,
   placeChord,
   placeScale,
+  spellChord,
   type KeyRange,
   type Midi,
   type Tone,
@@ -24,7 +25,8 @@ export function targetKeys(question: Question): Midi[] {
   const placed =
     question.mode === 'build-scale'
       ? placeScale(question.root, question.kind)
-      : placeChord(question.root, question.quality, { inversion: 0, bothHands: false }).rh
+      : placeChord(spellChord(question.root, question.quality), { inversion: 0, bothHands: false })
+          .rh
   return placed.map((tone) => tone.midi)
 }
 

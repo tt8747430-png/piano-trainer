@@ -1,4 +1,4 @@
-import { INTERVALS, type IntervalName, type Interval } from './interval'
+import { INTERVALS, type IntervalName, type LabelledInterval } from './interval'
 import { noteName, pitchClassOf, rootSpelling, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
@@ -14,8 +14,6 @@ interface QualityEntry {
   /** Other ways the suffix is written, all read by the chord-symbol parser. */
   readonly aliases: readonly string[]
   readonly intervals: readonly IntervalName[]
-  /** A root on C♯/D♭ or G♯/A♭ is named sharp: minor-flavoured chords read better that way. */
-  readonly prefersSharps?: boolean
 }
 
 const QUALITIES = {
@@ -25,14 +23,12 @@ const QUALITIES = {
     suffix: 'm',
     aliases: ['−'],
     intervals: ['r', 'm3', 'P5'],
-    prefersSharps: true,
   },
   dim: {
     family: 'tri',
     suffix: '°',
     aliases: ['dim'],
     intervals: ['r', 'm3', 'd5'],
-    prefersSharps: true,
   },
   aug: { family: 'tri', suffix: '+', aliases: ['aug'], intervals: ['r', 'M3', 'A5'] },
   sus2: { family: 'tri', suffix: 'sus2', aliases: [], intervals: ['r', 'M2', 'P5'] },
@@ -43,7 +39,6 @@ const QUALITIES = {
     suffix: 'm6',
     aliases: ['−6'],
     intervals: ['r', 'm3', 'P5', 'M6'],
-    prefersSharps: true,
   },
   s69: { family: 'six', suffix: '6/9', aliases: [], intervals: ['r', 'M3', 'P5', 'M6', 'M9'] },
   m69: {
@@ -51,7 +46,6 @@ const QUALITIES = {
     suffix: 'm6/9',
     aliases: [],
     intervals: ['r', 'm3', 'P5', 'M6', 'M9'],
-    prefersSharps: true,
   },
   add9: {
     family: 'six',
@@ -70,7 +64,6 @@ const QUALITIES = {
     suffix: 'm7',
     aliases: ['−7'],
     intervals: ['r', 'm3', 'P5', 'm7'],
-    prefersSharps: true,
   },
   d7: { family: 'sev', suffix: '7', aliases: ['x'], intervals: ['r', 'M3', 'P5', 'm7'] },
   hd: {
@@ -78,21 +71,18 @@ const QUALITIES = {
     suffix: 'm7♭5',
     aliases: ['ø', 'm7(−5)'],
     intervals: ['r', 'm3', 'd5', 'm7'],
-    prefersSharps: true,
   },
   o7: {
     family: 'sev',
     suffix: '°7',
     aliases: ['dim7'],
     intervals: ['r', 'm3', 'd5', 'd7'],
-    prefersSharps: true,
   },
   mM7: {
     family: 'sev',
     suffix: 'm(maj7)',
     aliases: ['−Δ', 'm(+7)'],
     intervals: ['r', 'm3', 'P5', 'M7'],
-    prefersSharps: true,
   },
   sus7: {
     family: 'sev',
@@ -117,7 +107,6 @@ const QUALITIES = {
     suffix: 'm9',
     aliases: ['−9'],
     intervals: ['r', 'm3', 'P5', 'm7', 'M9'],
-    prefersSharps: true,
   },
   maj9: {
     family: 'nin',
@@ -131,7 +120,6 @@ const QUALITIES = {
     suffix: 'm(maj9)',
     aliases: ['−Δ9', 'm(+9)'],
     intervals: ['r', 'm3', 'P5', 'M7', 'M9'],
-    prefersSharps: true,
   },
   M9s5: {
     family: 'nin',
@@ -144,14 +132,12 @@ const QUALITIES = {
     suffix: 'm9♭5',
     aliases: ['ø9', 'm9(−5)'],
     intervals: ['r', 'm3', 'd5', 'm7', 'M9'],
-    prefersSharps: true,
   },
   m11: {
     family: 'nin',
     suffix: 'm11',
     aliases: ['−11'],
     intervals: ['r', 'm3', 'P5', 'm7', 'M9', 'P11'],
-    prefersSharps: true,
   },
   n13: {
     family: 'nin',
@@ -164,7 +150,6 @@ const QUALITIES = {
     suffix: '7♭9',
     aliases: ['7(−9)'],
     intervals: ['r', 'M3', 'P5', 'm7', 'm9'],
-    prefersSharps: true,
   },
   s9: {
     family: 'alt',
@@ -196,14 +181,12 @@ const QUALITIES = {
     suffix: '7♭9#5',
     aliases: ['7(−9/+5)'],
     intervals: ['r', 'M3', 'A5', 'm7', 'm9'],
-    prefersSharps: true,
   },
   alt: {
     family: 'alt',
     suffix: '7alt',
     aliases: ['alt', '7(−9,+9,+5,−5)'],
     intervals: ['r', 'M3', 'd5', 'A5', 'm7', 'm9', 'A9'],
-    prefersSharps: true,
   },
 } as const satisfies Record<string, QualityEntry>
 
@@ -234,12 +217,34 @@ export const qualitySpellings = (quality: ChordQuality): readonly string[] => [
 export const qualitiesIn = (family: ChordFamily): readonly ChordQuality[] =>
   CHORD_QUALITIES.filter((quality) => chordFamily(quality) === family)
 
-export const qualityIntervals = (quality: ChordQuality): readonly Interval[] =>
+export const qualityIntervals = (quality: ChordQuality): readonly LabelledInterval[] =>
   entry(quality).intervals.map((name) => INTERVALS[name])
 
-/** The root a chord on this pitch class is named from when no key decides. */
-export const chordRootSpelling = (pc: PitchClass, quality: ChordQuality): SpelledNote =>
-  rootSpelling(pc, entry(quality).prefersSharps ?? false)
+/** The table's quality whose intervals are exactly these, from the root up, if one is. */
+export const qualityWithIntervals = (
+  intervals: readonly { readonly semitones: number }[],
+): ChordQuality | undefined =>
+  CHORD_QUALITIES.find((quality) => {
+    const own = entry(quality).intervals
+    return (
+      own.length === intervals.length &&
+      own.every((name, i) => INTERVALS[name].semitones === intervals[i]?.semitones)
+    )
+  })
+
+/**
+ * The root a chord on this pitch class is named from when no key decides: C♯ and G♯ over D♭ and A♭
+ * when the chord has a minor 3rd or a minor 9th, which read better from a sharp root (C♯m, not D♭m
+ * with its F♭).
+ */
+export const chordRootSpelling = (
+  pc: PitchClass,
+  intervals: readonly { readonly degree: string }[],
+): SpelledNote =>
+  rootSpelling(
+    pc,
+    intervals.some(({ degree }) => degree === '♭3' || degree === '♭9'),
+  )
 
 /** The chord's tones from the root up, each spelled by letter steps from the root. */
 export function spellChord(root: SpelledNote, quality: ChordQuality): Tone[] {

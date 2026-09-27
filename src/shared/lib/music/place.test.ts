@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { spellChord, type ChordQuality } from './chord'
 import { rangeOf } from './keyboard'
-import { note } from './note'
+import { note, type SpelledNote } from './note'
 import {
   lastInversion,
-  lastStackInversion,
   placeBorrowedChords,
   placeChord,
   placeScale,
@@ -13,34 +13,35 @@ import {
 import { CHORD_NOTES } from './scale-chord'
 
 const keys = (placed: readonly { midi: number }[]) => placed.map((p) => p.midi)
+const tones = (root: SpelledNote, quality: ChordQuality) => spellChord(root, quality)
 
 describe('placeChord', () => {
   it('plays C major from middle C in root position', () => {
-    const placed = placeChord(note('C'), 'maj', { inversion: 0, bothHands: false })
+    const placed = placeChord(tones(note('C'), 'maj'), { inversion: 0, bothHands: false })
     expect(keys(placed.rh)).toEqual([60, 64, 67])
     expect(placed.lh).toEqual([])
   })
 
   it('moves the lowest tones up an octave for each inversion', () => {
-    expect(keys(placeChord(note('C'), 'maj', { inversion: 1, bothHands: false }).rh)).toEqual([
-      64, 67, 72,
-    ])
-    expect(keys(placeChord(note('C'), 'maj', { inversion: 2, bothHands: false }).rh)).toEqual([
-      67, 72, 76,
-    ])
-    expect(keys(placeChord(note('G'), 'd7', { inversion: 3, bothHands: false }).rh)).toEqual([
-      77, 79, 83, 86,
-    ])
+    expect(
+      keys(placeChord(tones(note('C'), 'maj'), { inversion: 1, bothHands: false }).rh),
+    ).toEqual([64, 67, 72])
+    expect(
+      keys(placeChord(tones(note('C'), 'maj'), { inversion: 2, bothHands: false }).rh),
+    ).toEqual([67, 72, 76])
+    expect(keys(placeChord(tones(note('G'), 'd7'), { inversion: 3, bothHands: false }).rh)).toEqual(
+      [77, 79, 83, 86],
+    )
   })
 
   it('refuses an inversion the chord does not have', () => {
-    expect(() => placeChord(note('C'), 'maj', { inversion: 3, bothHands: false })).toThrow(
+    expect(() => placeChord(tones(note('C'), 'maj'), { inversion: 3, bothHands: false })).toThrow(
       RangeError,
     )
   })
 
   it('adds the root an octave below in the left hand for both hands', () => {
-    const placed = placeChord(note('B', -1), 'maj7', { inversion: 0, bothHands: true })
+    const placed = placeChord(tones(note('B', -1), 'maj7'), { inversion: 0, bothHands: true })
     expect(keys(placed.lh)).toEqual([58])
     expect(placed.lh[0]?.tone.role).toBe('root')
     expect(placed.rh.map((p) => p.tone.degree)).toEqual(['1', '3', '5', '7'])
@@ -49,9 +50,9 @@ describe('placeChord', () => {
 
 describe('lastInversion', () => {
   it('offers as many inversions as the chord has tones after its root, at most three', () => {
-    expect(lastInversion('maj')).toBe(2)
-    expect(lastInversion('d7')).toBe(3)
-    expect(lastInversion('m69')).toBe(3)
+    expect(lastInversion(3)).toBe(2)
+    expect(lastInversion(4)).toBe(3)
+    expect(CHORD_NOTES.map(lastInversion)).toEqual([2, 3, 3, 3, 3])
   })
 })
 
@@ -111,12 +112,6 @@ describe('placeScaleChords', () => {
 
   it('has none for a scale without seven notes', () => {
     expect(placeScaleChords(note('C'), 'blues', 3, 0)).toEqual([])
-  })
-})
-
-describe('lastStackInversion', () => {
-  it('offers the 3rd, 5th and 7th in the bass at most', () => {
-    expect(CHORD_NOTES.map(lastStackInversion)).toEqual([2, 3, 3, 3, 3])
   })
 })
 

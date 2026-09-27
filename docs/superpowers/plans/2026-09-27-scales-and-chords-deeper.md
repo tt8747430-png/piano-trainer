@@ -4668,7 +4668,7 @@ export function chordBar(placed: PlacedChord): TimedMusic {
 - [ ] **Step 9: Run the tests**
 
 Run: `npx vitest run src/shared/lib src/features/quiz src/widgets src/pages/chords src/pages/scales src/app/routes`
-Expected: PASS (every table quality built back from its parts; 143 chords, each once). `npm run typecheck && npm
+Expected: PASS (every table quality built back from its parts; 124 chords, each once). `npm run typecheck && npm
 run lint`.
 
 - [ ] **Step 10: Commit**

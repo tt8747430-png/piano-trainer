@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, chordRootSpelling, qualitySpellings } from './chord'
+import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, qualitySpellings } from './chord'
 import { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
@@ -7,7 +7,7 @@ import { pitchClass } from './pitch'
 describe('parseChordSymbol', () => {
   it.each(CHORD_QUALITIES)('reads every spelling of %s on all 12 roots', (quality) => {
     for (let pc = 0; pc < 12; pc++) {
-      const root = chordRootSpelling(pitchClass(pc), quality)
+      const root = chordRootSpelling(pitchClass(pc), qualityIntervals(quality))
       for (const spelling of qualitySpellings(quality)) {
         expect(parseChordSymbol(noteName(root) + spelling)).toEqual({ root, quality })
       }

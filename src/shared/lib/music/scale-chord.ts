@@ -1,4 +1,5 @@
-import { CHORD_QUALITIES, qualityIntervals, type Chord, type ChordQuality } from './chord'
+import { qualityWithIntervals, type Chord, type ChordQuality } from './chord'
+import { seventhName, triadName } from './chord-name'
 import { labelled } from './interval'
 import type { Key } from './key'
 import { noteName, pitchClassOf, type SpelledNote } from './note'
@@ -25,26 +26,6 @@ export interface ScaleChord {
   readonly quality?: ChordQuality
 }
 
-/** The triads a scale stacks, by their 3rd and 5th: the suffix and the numeral's mark. */
-const TRIADS = new Map([
-  ['4 7', { suffix: '', mark: '' }],
-  ['3 7', { suffix: 'm', mark: '' }],
-  ['3 6', { suffix: '°', mark: '°' }],
-  ['4 8', { suffix: '+', mark: '+' }],
-])
-
-/** The 7th chords, by 3rd, 5th and 7th: what goes before and after the highest number, and the numeral's mark. */
-const SEVENTHS = new Map([
-  ['4 7 11', { lead: 'Maj', trail: '', mark: '' }],
-  ['3 7 10', { lead: 'm', trail: '', mark: '' }],
-  ['4 7 10', { lead: '', trail: '', mark: '' }],
-  ['3 6 10', { lead: 'm', trail: '♭5', mark: 'ø' }],
-  ['3 6 9', { lead: '°', trail: '', mark: '°' }],
-  ['3 7 11', { lead: 'm(maj', trail: ')', mark: '' }],
-  ['4 8 11', { lead: '+Maj', trail: '', mark: '+' }],
-  ['4 8 10', { lead: '', trail: '#5', mark: '+' }],
-])
-
 /** An extension's semitones when it is natural: the major 9th, the perfect 11th, the major 13th. */
 const NATURAL: Readonly<Record<number, number>> = { 9: 14, 11: 17, 13: 21 }
 const ALTERATIONS = new Map([
@@ -53,20 +34,14 @@ const ALTERATIONS = new Map([
 ])
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
 
-function entryOf<V>(table: ReadonlyMap<string, V>, semitones: readonly number[]): V {
-  const entry = table.get(semitones.join(' '))
-  if (!entry) throw new RangeError(`No chord of a scale stacks ${semitones.join(' ')}`)
-  return entry
-}
-
 /**
  * A stack's suffix by one rule: its triad, or its 7th chord carrying the highest natural extension,
  * then each altered extension in order (`m7♭9`, `Maj9#11`, `m11♭9♭13`).
  */
 export function stackSuffix(tones: readonly Tone[]): string {
   const semitones = tones.map((tone) => tone.semitones)
-  if (tones.length === 3) return entryOf(TRIADS, semitones.slice(1, 3)).suffix
-  const seventh = entryOf(SEVENTHS, semitones.slice(1, 4))
+  if (tones.length === 3) return triadName(semitones.slice(1, 3)).suffix
+  const seventh = seventhName(semitones.slice(1, 4))
   let highest = 7
   const altered: string[] = []
   semitones.slice(4).forEach((above, i) => {
@@ -82,19 +57,9 @@ export function stackSuffix(tones: readonly Tone[]): string {
 function numeralMark(tones: readonly Tone[]): string {
   const semitones = tones.map((tone) => tone.semitones)
   return tones.length === 3
-    ? entryOf(TRIADS, semitones.slice(1, 3)).mark
-    : entryOf(SEVENTHS, semitones.slice(1, 4)).mark
+    ? triadName(semitones.slice(1, 3)).mark
+    : seventhName(semitones.slice(1, 4)).mark
 }
-
-/** The table quality whose intervals are exactly these tones, if one is. */
-const qualityOf = (tones: readonly Tone[]): ChordQuality | undefined =>
-  CHORD_QUALITIES.find((quality) => {
-    const intervals = qualityIntervals(quality)
-    return (
-      intervals.length === tones.length &&
-      intervals.every((interval, i) => interval.semitones === tones[i]?.semitones)
-    )
-  })
 
 /**
  * The chords of a seven-note scale, one on each degree, `notes` stacked in thirds: every other note
@@ -111,7 +76,7 @@ export function scaleChords(root: SpelledNote, kind: ScaleKind, notes: ChordNote
       return toneAbove(degreeTone.note, labelled(2 * third, semitones))
     })
     const numeral = NUMERALS[degree] ?? ''
-    const quality = qualityOf(tones)
+    const quality = qualityWithIntervals(tones)
     return {
       degree,
       roman: (tones[1]?.semitones === 3 ? numeral.toLowerCase() : numeral) + numeralMark(tones),

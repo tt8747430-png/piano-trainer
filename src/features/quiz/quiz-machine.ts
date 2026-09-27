@@ -6,6 +6,7 @@ import {
   chordSymbol,
   PITCH_CLASSES,
   pitchClass,
+  qualityIntervals,
   scaleRootSpelling,
   skillOf,
   spellChord,
@@ -156,7 +157,7 @@ function draw(config: QuizConfig, index: number, random: () => number): Question
       notes: spellScale(root, target.scale),
     }
   }
-  const root = chordRootSpelling(pc, target.quality)
+  const root = chordRootSpelling(pc, qualityIntervals(target.quality))
   const chord: ChordQuestion = {
     skill,
     root,
