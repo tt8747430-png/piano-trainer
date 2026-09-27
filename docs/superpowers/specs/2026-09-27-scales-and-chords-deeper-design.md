@@ -66,13 +66,19 @@
 - **Absent, the fingering is the start's own:** starting on the tonic of a kind that has a taught fingering, As the
   scale (today's fingering); from any other note, or for a kind with none of its own, From the thumb. The URL leaves
   it out when it is the own one, as the Player leaves out a piece's own tempo.
-- **Every kind is fingered As the scale:** major, the three minors, major pentatonic and minor blues have taught tables
-  (today's); a mode takes its parent major's, the minor pentatonic its relative major pentatonic's, the major blues its
-  relative minor blues'. "No standard fingering" goes: every scale has fingers.
-- **The tables hold continuing fingers:** one finger per degree as the scale is played in a longer run, the run's ends
-  worked out by one rule (the right hand's top note and the left hand's bottom note take the next finger after their
-  neighbour's: C major's B 4 → C 5). Stored this way, starting anywhere is a lookup, and today's one-octave fingerings
-  come out exactly (a test holds every root of every table to them).
+- **The choice is the seven-note scales'**: major, the three minors (fingered as natural minor, as today) and the
+  modes, which take their parent major's fingering (D Dorian with C major's thumbs on C and F). The pentatonic and
+  blues tables are one-octave shapes (C blues' left hand starts on a stretch, D♭ pentatonic's right hand crosses once),
+  so they cannot be carried from another note: those scales take their taught fingering from their tonic and From the
+  thumb from anywhere else, and the minor pentatonic and major blues, which have none, From the thumb. "No standard
+  fingering" goes: every scale has fingers.
+- **Continuing fingers come from where the taught run puts the thumb:** a right-hand note takes one finger more for
+  each degree it lies above the thumb before it, a left-hand note for each degree below the thumb after it (B♭ major's
+  thumbs are on C and F, so between octaves B♭ is 4, as a two-octave B♭ major is fingered). From the tonic the taught
+  one-octave run is kept exactly, ends included; from another note each note keeps its continuing finger, ends
+  included (PWJ: E to E with C major's fingers, 3 1 2 3 4 1 2 3). The major pentatonic's table gains its octave's
+  finger (the next finger in the hand's direction, a left-hand thumb crossed by 3), so its run has fingers on every
+  key.
 - **From the thumb is computed** (`thumbFingering`): the notes from the thumb split into groups, each starting on the
   thumb and fingered 1 2 3 (4), the last one reaching 5 at most. Of the possible splits the one wins that puts no later
   thumb on a black key, then has the fewest groups, then starts 3 before 4 before 2 (C major's 1 2 3 · 1 2 3 4 5). The
@@ -132,8 +138,9 @@
 
 ### 2.6 Chords view
 
-- **Chord size:** Triads · 7ths · 9ths · 11ths · 13ths (five short nouns: a segmented control). The URL's `chords`
-  counts notes, 3–7.
+- **Chord size:** Triads · 7ths · 9ths · 11ths · 13ths, a pop-up button: five sizes whose Russian names run long
+  (Ундецимаккорды, Терцдецимаккорды) are, by the Choosing Rule, a pop-up's, not a segmented control's. The URL's
+  `chords` counts notes, 3–7; shrinking the size keeps the inversion the smaller chords have.
 - **Inversion:** Root · 1st · 2nd · 3rd, a segmented control with only the inversions the size has.
 - **Keys play:** Chords · Notes, as built. The keyboard spans every key the chords play.
 - **Walk the chords, in place:** a card like the scale's: Block · Arpeggio, the tempo, and Play up and down (the one
@@ -217,7 +224,7 @@
 
 | Layer | New or changed |
 | --- | --- |
-| `shared/lib/music` | `scale.ts` (the kinds, families, blue notes, `scaleKey`, `relatedScale`, the new spelling); `interval.ts` (`degreeLabel`, `m2`, `A2`); `fingering.ts` (continuing tables, `scaleFingering` from any start as the scale, `thumbFingering`, `hasOwnFingering`); `scale-chord.ts` (new: `scaleChords`, `ScaleChord`, `stackSuffix`, `scaleChordSymbol`, `romanFigure`, `lastStackInversion`, `scaleChordAt`, `borrowedChords`); `circle.ts` (new: `CIRCLE_OF_FIFTHS`, `circleFunctions`); `key.ts` (`keyParam`, `keyFromParam`, `signatureNotes`, `parallelKey`); `place.ts` (`placeScale` from a start, `placeScaleChords` over `ScaleChord`s in an inversion); `chord.ts` (three qualities); `diatonic.ts` removed |
+| `shared/lib/music` | `scale.ts` (the kinds, families, blue notes, `scaleKey`, `relatedScale`, the new spelling, `spellInKey` moved here so `key.ts` needs no scale); `interval.ts` (`degreeLabel`, `labelled`, `m2`, `A2`); `fingering.ts` (`scaleFingering` from any start as the scale, `thumbFingering`, `fingeringsOf`, `ownFingering`); `scale-chord.ts` (new: `scaleChords`, `ScaleChord`, `stackSuffix`, `scaleChordSymbol`, `romanFigure`, `lastStackInversion`, `scaleChordAt`, `borrowedChords`); `circle.ts` (new: `CIRCLE_OF_FIFTHS`, `circleFunctions`); `key.ts` (`keyParam`, `keyFromParam`, `signatureNotes`, `parallelKey`); `place.ts` (`placeScale` from a start, `placeScaleChords` over `ScaleChord`s in an inversion); `chord.ts` (three qualities); `diatonic.ts` removed |
 | `shared/lib/schedule` | `scaleRun` in ticks with fingers, `runSounds`, `walkSounds` |
 | `shared/ui` | `ChordButton` (a chord's symbol over its numeral, pressed while it plays, ringed when it holds the note), `LazyScoreView`; `score/size.ts` (the staff's height, shared) |
 | `entities/piece` | three progression pieces; `COMMON_PROGRESSIONS`; `piecesInKey` |
