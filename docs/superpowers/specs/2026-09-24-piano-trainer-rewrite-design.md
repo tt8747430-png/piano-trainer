@@ -138,9 +138,10 @@ src/
 ### 4.1 `shared/lib/music`: the theory kernel
 
 Small types instead of bare numbers and strings: `PitchClass` (0–11), `Midi`, `Letter`,
-`SpelledNote { letter, accidental }` (accidental −2…+2), `Interval`, `ChordQuality` (33 qualities in 5 families:
-triads; 6th & add; 7ths; 9ths & more; altered 7ths), `ChordFamily`, `ScaleKind` (major, natural / harmonic /
-melodic minor, major and minor pentatonic, blues), `ChordRole` (root, 3rd, 5th, 7th, 9th, 11th, 13th).
+`SpelledNote { letter, accidental }` (accidental −2…+2), `Interval`, `ChordQuality` (36 qualities in 5 families:
+triads; 6th & add; 7ths; 9ths & more; altered 7ths), `ChordFamily`, `ScaleKind` (thirteen, in three families since
+ADR 0014: major, natural / harmonic / melodic minor; the five church modes; major and minor pentatonic, major and
+minor blues, the minor blues keeping the id `blues`), `ChordRole` (root, 3rd, 5th, 7th, 9th, 11th, 13th).
 
 Public interface:
 
@@ -336,8 +337,8 @@ when it is parsed into a `Chart` (§4.2).
 
 ### 4.6 Knowledge gaps
 
-- **Skill:** something a learner can know. There are 40: one per chord quality (`chord:m7`) and one per scale kind
-  (`scale:harmonic`).
+- **Skill:** something a learner can know. There are 49 (ADR 0014): one per chord quality (`chord:m7`) and one per
+  scale kind (`scale:harmonic`).
 - **Evidence:** every quiz answer on a skill. The last 5 per skill are saved in `progress` (§6). Mistakes in the
   Player's Your turn are **not** evidence: a wrong note there is as likely rhythm or hand position as theory.
 - **Rating:** `entities/progress/model/mastery.ts` exports `rate(answers) → 'known' | 'gap' | 'unknown'`:

@@ -266,6 +266,16 @@ components:
   key-tonic-down:
     backgroundColor: '{colors.paint-yellow}'
     textColor: '{colors.ink}'
+  circle-key:
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink-soft}'
+    rounded: '{rounded.pill}'
+    size: '44px'
+  circle-key-current:
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.pill}'
+    size: '44px'
 ---
 
 # Design System: Piano Trainer
@@ -460,6 +470,8 @@ From 1024px each screen arranges itself in two columns with a 40px gap, tops ali
   studies and progressions).
 - **The Chords and Scales references, Settings:** two equal columns; the Path's steps in two columns inside their
   card.
+- **The Keys reference:** the circle beside the key's name, signature and facts; the keys across both columns; the
+  key's chords and borrowed chords beside Practise in the Player and In Scales.
 
 Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The references, a lesson
 and a Piece's chart pin their keyboard to the top while the page scrolls.
@@ -521,10 +533,19 @@ hands). Never a row of chips or a wall of tiles.
   (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
   (12px corners, the popover shadow and ring) of 44px items, the chosen one checked in umber; a grouped list (the
   Chord pop-up's five families) names each group in soft ink over a hairline. An item may carry a second word in soft
-  ink ("Minor 7th m7"). Root, Chord, Scale, Rhythm, Collection, Level and the Player's key are pop-ups.
+  ink ("Minor 7th m7"). Root, Scale, Start on, Chord size, Triad, Added tone, Rhythm, Collection, Level and the
+  Player's key are pop-ups.
+- **Pop-up button that checks several** (`MultiDropdown`): the Choosing Rule's pop-up for several of many, never a
+  grid of chips. The button shows its label and every chosen value in order ("♭9 #11"), or None; its list checks each
+  chosen item, and a tap turns one on or off without closing it. The Chords reference's Alterations.
 - **Segmented** (a sand track, 4px inset, 12px corners): one value from a few. Unchosen segments are soft ink with no
   fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. Two
-  segmented controls whose words could be mistaken for each other name themselves on screen ("Keys play").
+  segmented controls whose words could be mistaken for each other name themselves on screen ("Keys play", the
+  Chords reference's "7th"). Fingering, Inversion, Block · Arpeggio and the 7th (labelled by degree, ♭7 · 7 · 𝄫7,
+  each named "Minor 7th" and so on for a screen reader) are segments.
+- **Only what applies is offered:** a choice the thing shown cannot take is left out, never disabled and never
+  explained (the Chords reference's 7th under a triad, Added tone over a 7th chord, Alterations on a minor chord;
+  Fingering for a scale with one).
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
 
 ### Cards and sheets
@@ -585,10 +606,12 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
   key's in the upper line (sky wash), a white key's in the lower (key paper ringed in key bed). Only while a mark
   carries a finger.
 - **A mark's caption:** a second, smaller line over a mark's label: in the Scales reference's Chords view each
-  degree's key carries its numeral over its chord (`ii` over `Dm`), both 12px, wrapping anywhere on a narrow key.
+  degree's key carries its numeral over its chord (`ii` over `Dm`), both 12px, wrapping anywhere on a narrow key; in
+  an inversion the numeral takes its figure and the chord its bass (`I⁶` over `C/E`).
 - **What a key plays:** a key sounds itself unless the screen makes it more: in Chords view a degree's key plays its
   chord, stacked from it, and every key of it is down while the hand holds the key. The keyboard then spans every
-  key the chords play (C4 to F5 for C major's triads), so a chord a key plays is in sight on a phone.
+  key the walk of the chords plays (C4 to G5 for C major's triads, the tonic's chord an octave up included), so a
+  chord a key plays or the walk strikes is in sight on a phone.
 - **Spotlight** (the references, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
   arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by going
   down, never by hiding the rest.
@@ -597,6 +620,16 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
   touches (a black key whole, a white key below the black keys).
 - **Every Play becomes Stop** (a square) while its sound plays; in a grid of items (a Piece's bars, a scale's chords)
   the item is pressed instead (sky mist), and a second tap stops it.
+
+### The circle of fifths (the Keys reference)
+
+The Keys reference's chooser: a square up to 24rem, centred, two rings of twelve wedges (the major keys outside, their
+relative minors inside, C at the top and a fifth a twelfth of the turn clockwise) parted by the soft line. The key
+shown fills its wedge with the tonic's wash and the places of its six other chords the scale's (the keys' own marks:
+the circle is the key's scale drawn round); the rest are card paper. Every key is a 44px round link on its wedge with
+its name (Onest 600 14px) over its numeral where it holds one of the key's chords (ink), or its signature's count
+("3♭") in soft ink; the key shown is card paper in the control line (`aria-current`). The key's name sits in the middle
+in Literata 600 18px. A dice round button in the header takes a random key.
 
 ### The sheet (the Player)
 
@@ -619,6 +652,11 @@ sideways, as Flowkey shows it: ADR 0013.
   and its chord symbols need, never under 80 units.
 - **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,
   and the keys, Play and Wait mode still work.
+- **Outside the Player** a staff is `LazyScoreView`, VexFlow loaded the first time one is on screen: the Scales
+  reference engraves the run from its start note in the scale's key (a mode in its parent's), the other hand's staff
+  soft, finger numbers while Fingers shows a hand; the key page engraves its signature with its scale; the Chords
+  reference writes its chord as a bar of whole notes (the left hand's root on the bass staff) with no key signature,
+  every accidental on its note.
 
 ### Motion
 

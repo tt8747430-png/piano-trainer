@@ -54,9 +54,10 @@ imports a package.
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
 it. `@` → `src`.
 
-- **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; screens are
+- **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
+  references Chords, Scales and Keys (`/learn/keys`); the Player's `/play/$pieceId` and `/play/walk`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
-  quiz or check, and for a piece on the wrong shelf), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
+  quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
   lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
@@ -65,12 +66,17 @@ it. `@` → `src`.
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
+  `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`)
+  and `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) fill; `pages/keys` is the Keys reference.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
-  `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the piece's own choices, a slot for how it
-  plays), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
+  `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup sheet, its first page composed by
+  its page: `PlayerSetup` over `FigureChoice`, `FigureRows`, `ChordSizeField`, `MelodySwitch`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
   `player-screen` areas, the tempo and hands popovers, the loop button, ‹ ▶ ›, Wait mode's line), `sheet-music`
-  (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer`, `scale-explorer` (Scale and Chords views; its pure
-  marks and plays in `model/`), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+  (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
+  chord builder: `ChordBuilder`, `ChordSheet`, `viewChord`, `changedView`), `scale-explorer` (`ScaleExplorer` picks
+  `RunView`, the run from any Start on note, fingered, on a staff, or `ChordsView`, the scale's chords to 13ths in an
+  inversion with the walk card; its pure marks, plays and `scaleRunOf` in `model/`), `key-explorer` (the circle of
+  fifths and a key's facts, signature, chords and borrowed chords), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
@@ -80,14 +86,15 @@ it. `@` → `src`.
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
-  `loopBeatGroups`), `speedUp`; Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
+  `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
+  and its key's common progressions into the Player); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
-  Content: `piece` (51 pieces, 7 listings, chart and progression parsers; `SONG_COLLECTIONS` on Songs, `STUDIES` and
-  `PROGRESSIONS` on Practice), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content:
+  Content: `piece` (54 pieces, 7 listings, chart and progression parsers; `SONG_COLLECTIONS` on Songs, `STUDIES` and
+  `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content:
   sections of text, steps, notes and chords that play). Saved state: `settings` (`pt-settings`, version 3, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
@@ -95,17 +102,24 @@ it. `@` → `src`.
   `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
-  barrels of their own: `music` the theory kernel (with the piano's ranges, `placeChord`/`placeScale`/`placeScaleChords` and `chordHolds`), `arrangement`
+  barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
+  `scaleKey`, `relatedScale`; fingerings from any start, `thumbFingering`; `scale-chord.ts`, a scale's chords stacked
+  to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
+  (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
+  `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
-  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord as
-  the references place it, a scale run, a hand's keys, which keys sound when and which were struck last), `services`
+  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a walk of chords, a scale's
+  run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a hand's keys, which keys sound when
+  and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
-  button), `RowLink` and `RowGroup`, `PAINT`, `Sheet` with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`;
-  `ui/score`, imported by that path only: `ScoreView`, VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,
+  button), `MultiDropdown` (the pop-up that checks several), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
+  `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
+  VexFlow loaded when first shown); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
+  VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,
   `useLocale`, `useScaleName`, `LocalText`; namespaces per place, `music` for the words every screen shares), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything

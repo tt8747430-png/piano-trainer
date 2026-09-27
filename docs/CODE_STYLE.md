@@ -180,6 +180,20 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
 - **Sheet music is `ScoreView`** (`shared/ui/score`, imported by that path, never the kit's barrel, so only the
   Player's chunk carries VexFlow). It engraves once the music font is in, hands its children the layout (a measure's
   x and width, an onset's x, `xAtTick`), and every colour is `currentColor` for `score.css` to set from the tokens.
+  **Outside the Player a staff is `LazyScoreView`** (the kit): it loads `ScoreView` the first time a staff is on
+  screen (`loadScoreView`), keeping the staff's height meanwhile, so a Learn screen's chunk stays without VexFlow;
+  `renderApp` loads it before a test renders.
+- **A run is `scaleRun`** (`shared/lib/schedule`): the notes from the Start on note up an octave and back in the
+  practice rhythm, fingered, in `scaleKey`'s key (a mode in its parent's), as timed music in ticks; `runSounds(run,
+tempo)` sounds it and `notate(run)` writes it.
+- **A scale's chords are stacks, not qualities:** `scaleChords(root, kind, notes)` stacks 3–7 notes in thirds from each
+  degree, named by one rule (`stackSuffix`, over the triad and 7th-chord tables in `chord-name.ts`), carrying the
+  table's `quality` only where the stack is one. A chart of a scale's chords (the walk) takes `scaleChordAt`'s
+  qualities: a 9th only where it is an available tension.
+- **A built chord is `buildChord(root, parts)`** over `ChordParts` (triad, size, 7th, added tone, alterations), fitted
+  by `fitParts` (and `withAlterations` for a choice of several), named by the table where it has the chord and else by
+  the same tables as the stacks. **Every chord's root is spelled by `chordRootSpelling(pc, intervals)`**: sharp on
+  C♯/G♯ under a minor 3rd or minor 9th, the one rule for the table, the builder and the quiz.
 - **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the
   chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
@@ -192,10 +206,12 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says whether a play still sounds
   (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the port, `playing` (the id last
   played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no shared state; another button's
-  sound cuts it off and the port says so. A chord as the references place it is `placedChordSounds`.
+  sound cuts it off and the port says so. A chord's keys sound with `chordSounds(keys, { arpeggio })`, a walk of
+  chords with `walkSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
-- **The references place tones with `placeChord` / `placeScale`** (and a scale's chords with `placeScaleChords`), and a chord's inversions are `lastInversion`'s:
-  the validator, the segments and the keyboard all ask it.
+- **The references place tones with `placeChord(tones, { inversion, bothHands })` / `placeScale(root, kind, start)`**
+  (a scale's chords with `placeScaleChords`, a key's borrowed ones with `placeBorrowedChords`), and a chord of `notes`
+  notes has the inversions `lastInversion(notes)` gives: the validators, the segments and the keyboard all ask it.
 - Content is data validated by tests: a chart that does not parse, an unknown chord symbol, or a missing Russian
   text fails CI.
 

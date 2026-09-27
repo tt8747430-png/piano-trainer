@@ -38,9 +38,13 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 
 - Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4, Settings behind its gear),
   Songs (songs and listings), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
-  training, swing), Learn (lessons; the Chords and Scales
-  references, Scales with its Scale and Chords views), Practice (the Theory quiz with My gaps; studies and
-  progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`.
+  training, swing; a piece, or a scale's chords walked with a song's patterns), Learn (lessons; the references:
+  Chords, which builds any chord from its triad, size, 7th, added tone and alterations, on the keys and a staff;
+  Scales, thirteen kinds with the modes and both blues, its Scale view starting the run on any note, fingered from
+  the thumb or as the scale, on a staff, its Chords view stacking the scale's chords to 13ths in any inversion and
+  walking them; Keys, a page for each of the 24 keys on the circle of fifths), Practice (the Theory quiz with My gaps;
+  studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
+  and ADRs 0012–0014.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.
@@ -71,7 +75,7 @@ taken from them: streaks as pressure, mascots, upsells, locked content, stock ph
 
 ## Evidence on Hand
 
-- 51 pieces, 7 listings, 39 accompaniment patterns and the path, as code under `src/entities/*/content/`.
+- 54 pieces, 7 listings, 39 accompaniment patterns and the path, as code under `src/entities/*/content/`.
 - No testimonials, users, metrics or screenshots of real use. Do not invent any.
 
 ## Product Principles
