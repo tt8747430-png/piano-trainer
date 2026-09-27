@@ -5,7 +5,8 @@
 
 **Goal:** Sub-project 4 of the roadmap: the church modes and major blues, Start on with two fingerings, the scale's run
 as sheet music, the scale's chords stacked to 13ths in inversions, Walk the chords (in place and in the Player), the
-key's common progressions in the Player, and a Keys reference with the circle of fifths.
+key's common progressions in the Player, a Keys reference with the circle of fifths, and the Chords reference as a
+chord builder (the owner's screenshots of 2026-09-27: triad, size, 7th, added tone and alterations).
 
 **Architecture:** The music kernel grows the kinds, fingerings, stacked chords, borrowed chords and the circle as pure
 functions; the schedule writes a run in ticks; the kit gains a chord button and a lazily loaded score view. The Scales
@@ -40,15 +41,23 @@ it).
 
 - **A URL naming a kind without chords in Chords view or the walk** (`/learn/scales?kind=blues&show=chords&chords=6`,
   `/play/walk?kind=pent`): the reference falls back to Scale view with 3-note chords; the walk is not found. Pinned in
-  Task 9's search test and Task 12's route test.
+  Task 9's search test and Task 14's route test.
 - **Changing the chord size past the inversion it had** (7ths in 3rd inversion → triads): the inversion clamps to the
   last one the size has, never a thrown RangeError from `placeScaleChords`. Pinned in Task 9.
 - **A kept `fingering` param that the new kind or start no longer allows** (`fingering=scale` on the blues from its
   3rd): the validator drops it, the run is fingered from the thumb. Pinned in Task 8.
 - **The walk route shadowing a piece** (`/play/walk` beside `/play/$pieceId`): no piece may take the id `walk`.
-  Pinned in Task 10's catalog test.
+  Pinned in Task 12's catalog test.
 - **A key param spelled another way** (`/learn/keys?key=D%23m`, `key=Bb`, `key=H`): read as the circle spells it
-  (E♭ minor, B♭ major) or the default C. Pinned in Task 14.
+  (E♭ minor, B♭ major) or the default C. Pinned in Task 16.
+- **Chord parts that do not fit** (`/learn/chords?triad=sus2&size=13&alter=b9`, a triad changed under a 13th): the
+  size falls to the largest the triad has, the 7th, added tone and alterations it cannot take drop; never a thrown
+  RangeError from `placeChord`. Pinned in Task 10's `fitParts` tests and Task 11's search and view tests.
+- **A ♭5 and a #11 asked for together** (`alter=b5s11`, or #11 chosen while ♭5 is on): they are one key, so one stays
+  (the ♭5 from a URL, the one chosen last from the pop-up). Pinned in Task 10's `withAlterations` test and Task 11's
+  search test.
+- **An old Chords link** (`/learn/chords?quality=m7`, a skill's or a family's link): every way in writes the parts
+  (`qualityParams`); the old param is ignored and the default chord shows. Pinned in Task 11's search test.
 
 ---
 
@@ -3760,7 +3769,1844 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 ---
-### Task 10: The key's common progressions as content
+### Task 10: A chord from its parts, in the kernel
+
+The owner's ask of 2026-09-27 (spec §2.10): a chord builder. The kernel learns to build any chord from its parts and
+name it by the table or by rule; placement takes any tones; one rule spells every chord's root; one `lastInversion`.
+
+**Files:**
+- Create: `src/shared/lib/music/chord-name.ts`, `src/shared/lib/music/chord-parts.ts`,
+  `src/shared/lib/music/chord-parts.test.ts`, `src/shared/lib/schedule/chord-bar.ts`,
+  `src/shared/lib/schedule/chord-bar.test.ts`
+- Modify: `src/shared/lib/music/chord.ts`, `src/shared/lib/music/scale-chord.ts`, `src/shared/lib/music/place.ts`,
+  `src/shared/lib/music/index.ts`, `src/shared/lib/schedule/sounds.ts`, `src/shared/lib/schedule/index.ts`,
+  `src/features/quiz/quiz-keys.ts`, `src/features/quiz/quiz-machine.ts`,
+  `src/widgets/lesson-view/model/chord-example.ts`, `src/widgets/chord-explorer/ui/ChordExplorer.tsx`,
+  `src/app/routes/search.ts`, and every other `lastStackInversion` caller
+  (`src/widgets/scale-explorer/ui/ChordsView.tsx` after Task 9)
+- Test: `src/shared/lib/music/place.test.ts`, `src/shared/lib/music/chord.test.ts`,
+  `src/shared/lib/music/chord-symbol.test.ts`, `src/shared/lib/arrangement/arrange.test.ts`
+
+**Interfaces:**
+- Consumes: `scaleChords`, `stackSuffix`, `placeStack` (Task 4); `CHORD_NOTES`; `TimedMusic` (notation).
+- Produces: `ChordParts { triad, size, seventh, added, alterations }`, `TRIADS`, `BUILT_SIZES` (5 7 9 11 13),
+  `SEVENTHS` (`minor` `major` `diminished`), `ADDED_TONES`, `ALTERATIONS` (`b5` `b9` `s9` `s11` `b13`),
+  `buildChord(root, parts): BuiltChord { root, tones, suffix, quality? }`, `fitParts`, `withAlterations(parts,
+  chosen)`, `sizesOf`, `seventhsOf`, `addedOf`, `alterationsOf`, `triadSuffix`, `SEVENTH_DEGREE`, `ADDED_SYMBOL`,
+  `ALTERATION_SIGN`, `builtRootSpelling(pc, parts)`, `partsOf(quality)`, `qualityParams(quality)`, `PartsParams`,
+  `partsParams`, `partsFromParams`, `readAlterations`; `qualityWithIntervals(intervals)`;
+  `chordRootSpelling(pc, intervals)`; `placeChord(tones, { inversion, bothHands })`; `lastInversion(notes: number)`
+  in place of `lastStackInversion`; `chordBar(placed): TimedMusic`.
+
+- [ ] **Step 1: Write the failing tests** — `chord-parts.test.ts` in full:
+
+```ts
+import { describe, expect, it } from 'vitest'
+import { CHORD_QUALITIES, qualitySuffix } from './chord'
+import {
+  alterationsOf,
+  buildChord,
+  builtRootSpelling,
+  CHORD_PARTS,
+  fitParts,
+  partsFromParams,
+  partsOf,
+  partsParams,
+  readAlterations,
+  sizesOf,
+  withAlterations,
+  type ChordParts,
+} from './chord-parts'
+import { note, noteName } from './note'
+import { pitchClass } from './pitch'
+
+const TRIAD: ChordParts = {
+  triad: 'maj',
+  size: 5,
+  seventh: 'minor',
+  added: 'none',
+  alterations: [],
+}
+const parts = (change: Partial<ChordParts>): ChordParts => ({ ...TRIAD, ...change })
+const built = (change: Partial<ChordParts>, root = note('C')) => {
+  const chord = buildChord(root, parts(change))
+  return `${noteName(chord.root)}${chord.suffix}: ${chord.tones.map((t) => noteName(t.note)).join(' ')}`
+}
+
+describe('buildChord', () => {
+  it.each([
+    [{}, 'C: C E G'],
+    [{ triad: 'sus4' }, 'Csus4: C F G'],
+    [{ added: 'six' }, 'C6: C E G A'],
+    [{ triad: 'min', added: 'sixNine' }, 'Cm6/9: C E♭ G A D'],
+    [{ triad: 'min', added: 'add9' }, 'Cm(add9): C E♭ G D'],
+    [{ added: 'add2' }, 'Cadd2: C D E G'],
+    [{ triad: 'min', added: 'add4' }, 'Cm(add4): C E♭ F G'],
+    [{ triad: 'min', added: 'add11' }, 'Cm(add11): C E♭ G F'],
+    [{ triad: 'sus4', added: 'six' }, 'C6sus4: C F G A'],
+    [{ triad: 'sus4', added: 'add9' }, 'Csus4(add9): C F G D'],
+  ] as const)('builds a triad and its added tone: %o → %s', (change, expected) => {
+    expect(built(change)).toBe(expected)
+  })
+
+  it.each([
+    [{ size: 7 }, 'C7: C E G B♭'],
+    [{ size: 7, seventh: 'major' }, 'CMaj7: C E G B'],
+    [{ triad: 'dim', size: 7, seventh: 'diminished' }, 'C°7: C E♭ G♭ B𝄫'],
+    [{ triad: 'sus2', size: 7, seventh: 'major' }, 'CMaj7sus2: C D G B'],
+    [{ triad: 'sus4', size: 9 }, 'C9sus4: C F G B♭ D'],
+    [{ triad: 'sus4', size: 13 }, 'C13sus4: C F G B♭ D A'],
+    [{ size: 11 }, 'C11: C E G B♭ D F'],
+    [{ triad: 'min', size: 11, seventh: 'major' }, 'Cm(maj11): C E♭ G B D F'],
+    [{ triad: 'dim', size: 11 }, 'Cm11♭5: C E♭ G♭ B♭ D F'],
+    [{ triad: 'min', size: 13 }, 'Cm13: C E♭ G B♭ D F A'],
+    [{ size: 13, seventh: 'major' }, 'CMaj13: C E G B D A'],
+    [{ triad: 'aug', size: 9 }, 'C9#5: C E G# B♭ D'],
+  ] as const)(
+    'stacks a size, the 11th left out of a 13th over a major 3rd: %o → %s',
+    (change, expected) => {
+      expect(built(change)).toBe(expected)
+    },
+  )
+
+  it.each([
+    [{ size: 7, alterations: ['b5'] }, 'C7♭5: C E G♭ B♭'],
+    [{ size: 7, alterations: ['s11'] }, 'C7#11: C E G B♭ F#'],
+    [{ size: 7, alterations: ['b13'] }, 'C7♭13: C E G B♭ A♭'],
+    [{ size: 7, alterations: ['b5', 'b9'] }, 'C7♭5♭9: C E G♭ B♭ D♭'],
+    [{ size: 9, alterations: ['s11'] }, 'C9#11: C E G B♭ D F#'],
+    [{ size: 13, alterations: ['b9'] }, 'C13♭9: C E G B♭ D♭ A'],
+    [{ size: 13, alterations: ['s11'] }, 'C13#11: C E G B♭ D F# A'],
+    [{ size: 13, alterations: ['b9', 'b13'] }, 'C7♭9♭13: C E G B♭ D♭ A♭'],
+    [{ size: 13, seventh: 'major', alterations: ['s11'] }, 'CMaj13#11: C E G B D F# A'],
+    [{ triad: 'aug', size: 7, alterations: ['s9'] }, 'C7#5#9: C E G# B♭ D#'],
+  ] as const)('alters a 7th chord with a major 3rd: %o → %s', (change, expected) => {
+    expect(built(change)).toBe(expected)
+  })
+
+  it('names a chord the table has as the table does, and knows its quality', () => {
+    const b9s5 = buildChord(note('C'), parts({ triad: 'aug', size: 7, alterations: ['b9'] }))
+    expect(b9s5).toMatchObject({ quality: 'b9s5', suffix: '7♭9#5' })
+    const alt = buildChord(
+      note('C'),
+      parts({ triad: 'aug', size: 7, alterations: ['b5', 'b9', 's9'] }),
+    )
+    expect(alt).toMatchObject({ quality: 'alt', suffix: '7alt' })
+    expect(buildChord(note('C'), parts({ size: 9, alterations: ['s11'] })).quality).toBeUndefined()
+  })
+})
+
+describe('partsOf', () => {
+  it('builds every chord of the table back into its quality', () => {
+    for (const quality of CHORD_QUALITIES) {
+      const chord = buildChord(note('C'), partsOf(quality))
+      expect(chord.quality, quality).toBe(quality)
+      expect(chord.suffix).toBe(qualitySuffix(quality))
+    }
+  })
+})
+
+describe('CHORD_PARTS', () => {
+  it('makes each chord once', () => {
+    const suffixes = CHORD_PARTS.map((each) => buildChord(note('C'), each).suffix)
+    expect(new Set(suffixes).size).toBe(suffixes.length)
+  })
+
+  it('holds only parts that fit', () => {
+    for (const each of CHORD_PARTS) expect(fitParts(each)).toEqual(each)
+  })
+})
+
+describe('what a triad and size offer', () => {
+  it('stops a suspension where its own tone would stack again, and the altered triads where dictionaries do', () => {
+    expect(sizesOf('maj')).toEqual([5, 7, 9, 11, 13])
+    expect(sizesOf('sus2')).toEqual([5, 7])
+    expect(sizesOf('sus4')).toEqual([5, 7, 9, 13])
+    expect(sizesOf('dim')).toEqual([5, 7, 9, 11])
+    expect(sizesOf('aug')).toEqual([5, 7, 9])
+  })
+
+  it('alters a dominant every way, a major 7th only by its #11, a minor chord not at all', () => {
+    expect(alterationsOf(parts({ size: 9 }))).toEqual(['b5', 'b9', 's9', 's11', 'b13'])
+    expect(alterationsOf(parts({ triad: 'aug', size: 7 }))).toEqual(['b5', 'b9', 's9', 's11'])
+    expect(alterationsOf(parts({ size: 7, seventh: 'major' }))).toEqual(['s11'])
+    expect(alterationsOf(parts({ triad: 'min', size: 9 }))).toEqual([])
+    expect(alterationsOf(parts({}))).toEqual([])
+  })
+})
+
+describe('fitParts', () => {
+  it('keeps a size the triad has, else the largest below it', () => {
+    expect(fitParts(parts({ triad: 'sus2', size: 13 })).size).toBe(7)
+    expect(fitParts(parts({ triad: 'sus4', size: 11 })).size).toBe(9)
+  })
+
+  it('drops the parts a chord of its size does not have, and the alterations it cannot take', () => {
+    expect(
+      fitParts(parts({ size: 7, added: 'six', seventh: 'major', alterations: ['b9', 's11'] })),
+    ).toEqual(parts({ size: 7, seventh: 'major', alterations: ['s11'] }))
+    expect(fitParts(parts({ seventh: 'major', alterations: ['b9'] }))).toEqual(TRIAD)
+    expect(fitParts(parts({ triad: 'dim', size: 9, seventh: 'diminished' })).seventh).toBe('minor')
+    expect(fitParts(parts({ triad: 'dim', added: 'six' })).added).toBe('none')
+  })
+})
+
+describe('withAlterations', () => {
+  it('keeps a ♭5 or a #11, the one chosen last: they are the same key', () => {
+    const flatFive = parts({ size: 7, alterations: ['b5', 'b9'] })
+    expect(withAlterations(flatFive, ['b5', 'b9', 's11']).alterations).toEqual(['b9', 's11'])
+    expect(withAlterations(flatFive, ['b9']).alterations).toEqual(['b9'])
+    expect(fitParts(parts({ size: 7, alterations: ['b5', 's11'] })).alterations).toEqual(['b5'])
+  })
+})
+
+describe('builtRootSpelling', () => {
+  it('names a root sharp under a minor 3rd or a minor 9th, as the table’s chords', () => {
+    expect(builtRootSpelling(pitchClass(1), parts({ triad: 'min', size: 13 }))).toEqual(
+      note('C', 1),
+    )
+    expect(builtRootSpelling(pitchClass(1), parts({ size: 13, alterations: ['b9'] }))).toEqual(
+      note('C', 1),
+    )
+    expect(builtRootSpelling(pitchClass(1), parts({ triad: 'sus4', size: 9 }))).toEqual(
+      note('D', -1),
+    )
+  })
+})
+
+describe('the parts’ URL params', () => {
+  it('write the alterations as a symbol does, and read back only that', () => {
+    const ninthSharpEleven = parts({ size: 9, alterations: ['b9', 's11'] })
+    expect(partsParams(ninthSharpEleven)).toEqual({
+      triad: 'maj',
+      size: 9,
+      seventh: 'minor',
+      added: 'none',
+      alter: 'b9s11',
+    })
+    expect(partsFromParams(partsParams(ninthSharpEleven))).toEqual(ninthSharpEleven)
+    expect(partsParams(TRIAD).alter).toBe('')
+    expect(readAlterations('b5b9s9')).toEqual(['b5', 'b9', 's9'])
+    expect(readAlterations('s11b9')).toEqual([])
+    expect(readAlterations('b9b9')).toEqual([])
+    expect(readAlterations(7)).toEqual([])
+  })
+})
+```
+
+  `src/shared/lib/schedule/chord-bar.test.ts`:
+
+```ts
+import { describe, expect, it } from 'vitest'
+import { buildChord, note, placeChord } from '@/shared/lib/music'
+import { notate } from '@/shared/lib/notation'
+import { chordBar } from './chord-bar'
+
+const DIMINISHED_7TH = buildChord(note('C'), {
+  triad: 'dim',
+  size: 7,
+  seventh: 'diminished',
+  added: 'none',
+  alterations: [],
+})
+
+describe('chordBar', () => {
+  it('holds the chord for a whole bar, the left hand’s root on the bass staff', () => {
+    const placed = placeChord(DIMINISHED_7TH.tones, { inversion: 0, bothHands: true })
+    const music = chordBar(placed)
+    expect(music.notes.map((n) => [n.midi, n.hand, n.durationTicks])).toEqual([
+      [48, 'lh', 48],
+      [60, 'rh', 48],
+      [63, 'rh', 48],
+      [66, 'rh', 48],
+      [69, 'rh', 48],
+    ])
+    const [measure] = notate(music).measures
+    const [chord] = measure?.staves.treble[0]?.events ?? []
+    expect(chord).toMatchObject({ kind: 'notes', duration: { value: 1 } })
+    expect(chord?.kind === 'notes' ? chord.notes.map((n) => n.accidental) : []).toEqual([
+      null,
+      -1,
+      -1,
+      -2,
+    ])
+    expect(measure?.staves.bass[0]?.events).toMatchObject([
+      { kind: 'notes', notes: [{ midi: 48 }] },
+    ])
+  })
+})
+```
+
+  `place.test.ts`: import `spellChord, type ChordQuality` from `./chord` and `type SpelledNote` from `./note`, drop
+  `lastStackInversion` from the imports and its describe, add after `keys`
+  `const tones = (root: SpelledNote, quality: ChordQuality) => spellChord(root, quality)`, write every
+  `placeChord(note('C'), 'maj', { … })` as `placeChord(tones(note('C'), 'maj'), { … })` (and so for G's `d7` and B♭'s
+  `maj7`), and the `lastInversion` describe as:
+
+```ts
+describe('lastInversion', () => {
+  it('offers as many inversions as the chord has tones after its root, at most three', () => {
+    expect(lastInversion(3)).toBe(2)
+    expect(lastInversion(4)).toBe(3)
+    expect(CHORD_NOTES.map(lastInversion)).toEqual([2, 3, 3, 3, 3])
+  })
+})
+```
+
+  `chord.test.ts`, `chord-symbol.test.ts`, `arrange.test.ts`: each `chordRootSpelling(pitchClass(pc), quality)` becomes
+  `chordRootSpelling(pitchClass(pc), qualityIntervals(quality))`, and `chord.test.ts`'s `'leans sharp or flat by
+  quality'` passes `qualityIntervals('min')` and `qualityIntervals('maj')` (import `qualityIntervals` where missing).
+
+- [ ] **Step 2: Run them to see them fail**
+
+Run: `npx vitest run src/shared/lib/music src/shared/lib/schedule src/shared/lib/arrangement`
+Expected: FAIL (`chord-parts` and `chord-bar` are missing; `placeChord`, `lastInversion` and `chordRootSpelling`
+take the old arguments).
+
+- [ ] **Step 3: One set of naming tables** — `chord-name.ts` (the stacks' triad and 7th-chord tables move here from
+  `scale-chord.ts`, with the suspensions the builder names):
+
+```ts
+/** A triad's suffix and its numeral's mark. */
+export interface TriadName {
+  readonly suffix: string
+  readonly mark: string
+}
+
+/** A 7th chord's name around its highest number (`m` 9, `m` 7 `♭5`, `Maj` 13 `sus4`), and its numeral's mark. */
+export interface SeventhName {
+  readonly lead: string
+  readonly trail: string
+  readonly mark: string
+}
+
+/** The triads, by the semitones of their 3rd (or the tone suspended in its place) and 5th. */
+const TRIADS = new Map<string, TriadName>([
+  ['4 7', { suffix: '', mark: '' }],
+  ['3 7', { suffix: 'm', mark: '' }],
+  ['3 6', { suffix: '°', mark: '°' }],
+  ['4 8', { suffix: '+', mark: '+' }],
+  ['2 7', { suffix: 'sus2', mark: '' }],
+  ['5 7', { suffix: 'sus4', mark: '' }],
+])
+
+/** The 7th chords, by the semitones of their 3rd (or suspended tone), 5th and 7th. */
+const SEVENTHS = new Map<string, SeventhName>([
+  ['4 7 11', { lead: 'Maj', trail: '', mark: '' }],
+  ['3 7 10', { lead: 'm', trail: '', mark: '' }],
+  ['4 7 10', { lead: '', trail: '', mark: '' }],
+  ['3 6 10', { lead: 'm', trail: '♭5', mark: 'ø' }],
+  ['3 6 9', { lead: '°', trail: '', mark: '°' }],
+  ['3 7 11', { lead: 'm(maj', trail: ')', mark: '' }],
+  ['4 8 11', { lead: '+Maj', trail: '', mark: '+' }],
+  ['4 8 10', { lead: '', trail: '#5', mark: '+' }],
+  ['2 7 10', { lead: '', trail: 'sus2', mark: '' }],
+  ['2 7 11', { lead: 'Maj', trail: 'sus2', mark: '' }],
+  ['5 7 10', { lead: '', trail: 'sus4', mark: '' }],
+  ['5 7 11', { lead: 'Maj', trail: 'sus4', mark: '' }],
+])
+
+function named<V>(table: ReadonlyMap<string, V>, semitones: readonly number[]): V {
+  const name = table.get(semitones.join(' '))
+  if (!name) throw new RangeError(`No chord is named by ${semitones.join(' ')}`)
+  return name
+}
+
+/** A triad's name from the semitones of its 3rd and 5th: `m`, `°`, `sus4`. */
+export const triadName = (semitones: readonly number[]): TriadName => named(TRIADS, semitones)
+
+/** A 7th chord's name from the semitones of its 3rd, 5th and 7th. */
+export const seventhName = (semitones: readonly number[]): SeventhName => named(SEVENTHS, semitones)
+```
+
+  `scale-chord.ts`: delete `TRIADS`, `SEVENTHS`, `entryOf` and `qualityOf`; import
+  `{ seventhName, triadName } from './chord-name'` and `{ qualityWithIntervals, type Chord, type ChordQuality } from
+  './chord'`; `stackSuffix` reads `triadName(semitones.slice(1, 3)).suffix` and `seventhName(semitones.slice(1, 4))`,
+  `numeralMark` their `.mark`, and `scaleChords` `const quality = qualityWithIntervals(tones)`.
+
+- [ ] **Step 4: One root-spelling rule** — `chord.ts`: delete `prefersSharps` from `QualityEntry` and from every
+  entry; import `type LabelledInterval` in place of `type Interval`; then:
+
+```ts
+export const qualityIntervals = (quality: ChordQuality): readonly LabelledInterval[] =>
+  entry(quality).intervals.map((name) => INTERVALS[name])
+
+/** The table's quality whose intervals are exactly these, from the root up, if one is. */
+export const qualityWithIntervals = (
+  intervals: readonly { readonly semitones: number }[],
+): ChordQuality | undefined =>
+  CHORD_QUALITIES.find((quality) => {
+    const own = entry(quality).intervals
+    return (
+      own.length === intervals.length &&
+      own.every((name, i) => INTERVALS[name].semitones === intervals[i]?.semitones)
+    )
+  })
+
+/**
+ * The root a chord on this pitch class is named from when no key decides: C♯ and G♯ over D♭ and A♭
+ * when the chord has a minor 3rd or a minor 9th, which read better from a sharp root (C♯m, not D♭m
+ * with its F♭).
+ */
+export const chordRootSpelling = (
+  pc: PitchClass,
+  intervals: readonly { readonly degree: string }[],
+): SpelledNote =>
+  rootSpelling(
+    pc,
+    intervals.some(({ degree }) => degree === '♭3' || degree === '♭9'),
+  )
+```
+
+  The rule reproduces every flag it replaces: `chord-symbol.test.ts` and `chord.test.ts` spell all 36 qualities on all
+  twelve roots with it.
+
+- [ ] **Step 5: Any tones placed** — `place.ts`: drop the `./chord` import; replace `lastInversion`, `placeChord` and
+  `lastStackInversion` with:
+
+```ts
+/** The explorers offer root position and at most the first three inversions. */
+const MOST_INVERSIONS = 3
+
+/**
+ * The last inversion a chord of `notes` notes is shown in: one per tone after the root, at most
+ * three (the 3rd, 5th or 7th in the bass).
+ */
+export const lastInversion = (notes: number): number => Math.min(notes - 1, MOST_INVERSIONS)
+
+/**
+ * A chord's tones from its root's key, its lowest `inversion` tones an octave up (a chord's tones
+ * rise from the root, so these are its lowest), lowest first.
+ */
+function inverted(tones: readonly Tone[], key: Midi, inversion: number): PlacedTone[] {
+  const last = lastInversion(tones.length)
+  if (!Number.isInteger(inversion) || inversion < 0 || inversion > last) {
+    throw new RangeError(
+      `A chord of ${tones.length} notes has inversions 0–${last}, not ${inversion}`,
+    )
+  }
+  return tones
+    .map((tone, i) => ({ tone, midi: midi(key + tone.semitones + (i < inversion ? 12 : 0)) }))
+    .sort((a, b) => a.midi - b.midi)
+}
+
+/**
+ * A chord's tones, from its root up, as the explorers place them: the right hand from the root at or
+ * above middle C in an inversion, and for both hands the root an octave below in the left hand.
+ */
+export function placeChord(
+  tones: readonly Tone[],
+  options: { readonly inversion: number; readonly bothHands: boolean },
+): PlacedChord {
+  const [root] = tones
+  if (!root) throw new RangeError('A chord has at least its root')
+  const key = midi(MIDDLE_C + root.pitchClass)
+  return {
+    rh: inverted(tones, key, options.inversion),
+    lh: options.bothHands ? [{ tone: root, midi: midi(key - 12) }] : [],
+  }
+}
+```
+
+  and `placeStack`'s check and map become `const tones = inverted(chord.tones, key, inversion)`. Every other
+  `lastStackInversion(` in `src` (`grep -rn lastStackInversion src`: the Scales validator in `search.ts`, the Chords
+  view's size change and inversion options) becomes `lastInversion(`, and `index.ts` exports `lastInversion` only.
+
+- [ ] **Step 6: The builder** — `chord-parts.ts`:
+
+```ts
+import { chordRootSpelling, qualitySuffix, qualityWithIntervals, type ChordQuality } from './chord'
+import { seventhName, triadName } from './chord-name'
+import { INTERVALS, type IntervalName, type LabelledInterval } from './interval'
+import type { SpelledNote } from './note'
+import type { PitchClass } from './pitch'
+import { toneAbove, type Tone } from './tone'
+
+/** A chord's base: its 3rd and 5th, or a tone suspended in place of the 3rd. */
+export const TRIADS = ['maj', 'min', 'dim', 'aug', 'sus2', 'sus4'] as const
+export type Triad = (typeof TRIADS)[number]
+
+/** How far a chord stacks, by its highest number: a triad's is its 5th. */
+export const BUILT_SIZES = [5, 7, 9, 11, 13] as const
+export type BuiltSize = (typeof BUILT_SIZES)[number]
+
+/** The 7th over the triad, from a 7th chord up. */
+export const SEVENTHS = ['minor', 'major', 'diminished'] as const
+export type Seventh = (typeof SEVENTHS)[number]
+
+/** A tone a triad adds: the 6th, the 6th and 9th, or a 2nd, 4th, 9th or 11th. */
+export const ADDED_TONES = ['none', 'six', 'sixNine', 'add2', 'add4', 'add9', 'add11'] as const
+export type AddedTone = (typeof ADDED_TONES)[number]
+
+/** The tones a 7th chord with a major 3rd may raise or lower, in the order a symbol writes them. */
+export const ALTERATIONS = ['b5', 'b9', 's9', 's11', 'b13'] as const
+export type Alteration = (typeof ALTERATIONS)[number]
+
+/** A chord as the Chords reference builds it, part by part. */
+export interface ChordParts {
+  readonly triad: Triad
+  readonly size: BuiltSize
+  /** A 7th chord's and up; `minor` below them. */
+  readonly seventh: Seventh
+  /** A triad's; `none` from a 7th chord up. */
+  readonly added: AddedTone
+  /** In `ALTERATIONS` order; only those `alterationsOf` offers. */
+  readonly alterations: readonly Alteration[]
+}
+
+/** A chord built from its parts: its tones from the root up, its suffix, and the table's quality where it is one. */
+export interface BuiltChord {
+  readonly root: SpelledNote
+  readonly tones: readonly Tone[]
+  /** The table's suffix where the table has the chord, else the rule's: `13sus4`, `m(add9)`, `9#11`. */
+  readonly suffix: string
+  readonly quality?: ChordQuality
+}
+
+const TRIAD_INTERVALS: Readonly<Record<Triad, readonly IntervalName[]>> = {
+  maj: ['r', 'M3', 'P5'],
+  min: ['r', 'm3', 'P5'],
+  dim: ['r', 'm3', 'd5'],
+  aug: ['r', 'M3', 'A5'],
+  sus2: ['r', 'M2', 'P5'],
+  sus4: ['r', 'P4', 'P5'],
+}
+const SEVENTH_INTERVAL: Readonly<Record<Seventh, IntervalName>> = {
+  minor: 'm7',
+  major: 'M7',
+  diminished: 'd7',
+}
+const ADDED_INTERVALS: Readonly<Record<AddedTone, readonly IntervalName[]>> = {
+  none: [],
+  six: ['M6'],
+  sixNine: ['M6', 'M9'],
+  add2: ['M2'],
+  add4: ['P4'],
+  add9: ['M9'],
+  add11: ['P11'],
+}
+/** What an alteration puts in, and the natural tone it takes out. */
+const ALTERED: Readonly<
+  Record<Alteration, { readonly adds: IntervalName; readonly takes: IntervalName }>
+> = {
+  b5: { adds: 'd5', takes: 'P5' },
+  b9: { adds: 'm9', takes: 'M9' },
+  s9: { adds: 'A9', takes: 'M9' },
+  s11: { adds: 'A11', takes: 'P11' },
+  b13: { adds: 'm13', takes: 'M13' },
+}
+
+/** The semitones of a triad's 3rd (or suspended tone) and 5th: what names it. */
+const triadSemitones = (triad: Triad): readonly number[] =>
+  TRIAD_INTERVALS[triad].slice(1).map((name) => INTERVALS[name].semitones)
+
+/** A triad's own suffix: '' for major, `m`, `°`, `+`, `sus2`, `sus4`. */
+export const triadSuffix = (triad: Triad): string => triadName(triadSemitones(triad)).suffix
+
+/** How each 7th is written as a degree, as the keys label it: ♭7, 7, 𝄫7. */
+export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {
+  minor: INTERVALS.m7.degree,
+  major: INTERVALS.M7.degree,
+  diminished: INTERVALS.d7.degree,
+}
+
+/** How each part is written in a symbol. */
+export const ADDED_SYMBOL: Readonly<Record<Exclude<AddedTone, 'none'>, string>> = {
+  six: '6',
+  sixNine: '6/9',
+  add2: 'add2',
+  add4: 'add4',
+  add9: 'add9',
+  add11: 'add11',
+}
+export const ALTERATION_SIGN: Readonly<Record<Alteration, string>> = {
+  b5: '♭5',
+  b9: '♭9',
+  s9: '#9',
+  s11: '#11',
+  b13: '♭13',
+}
+
+/**
+ * The sizes a triad stacks to: a suspension stops where its own tone would stack again (a sus2's 2nd
+ * is its 9th; a sus4's 4th is its 11th, so it skips to the 13th), and the diminished and augmented
+ * triads where chord dictionaries stop naming them.
+ */
+const SIZES: Readonly<Record<Triad, readonly BuiltSize[]>> = {
+  maj: [5, 7, 9, 11, 13],
+  min: [5, 7, 9, 11, 13],
+  dim: [5, 7, 9, 11],
+  aug: [5, 7, 9],
+  sus2: [5, 7],
+  sus4: [5, 7, 9, 13],
+}
+export const sizesOf = (triad: Triad): readonly BuiltSize[] => SIZES[triad]
+
+/** The 7ths over a triad at a size: a diminished 7th only over a diminished triad, and only as a 7th chord. */
+export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
+  if (triad !== 'dim') return ['minor', 'major']
+  return size === 7 ? ['minor', 'diminished'] : ['minor']
+}
+
+/** The tones a triad adds: the major and minor triads every one, a sus4 its 6th and 9th, the rest none. */
+const ADDED: Readonly<Record<Triad, readonly AddedTone[]>> = {
+  maj: ADDED_TONES,
+  min: ADDED_TONES,
+  dim: ['none'],
+  aug: ['none'],
+  sus2: ['none'],
+  sus4: ['none', 'six', 'add9'],
+}
+export const addedOf = (triad: Triad): readonly AddedTone[] => ADDED[triad]
+
+/**
+ * The alterations a chord takes, its available tensions: a dominant 7th (a major 3rd under a minor
+ * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its #11; the rest none.
+ */
+export function alterationsOf(parts: ChordParts): readonly Alteration[] {
+  if (parts.size === 5 || (parts.triad !== 'maj' && parts.triad !== 'aug')) return []
+  if (parts.seventh === 'major') return ['s11']
+  return parts.triad === 'aug' ? ALTERATIONS.filter((each) => each !== 'b13') : ALTERATIONS
+}
+
+/** Alterations that land on the same key, the first kept when both are asked for: a ♭5 is a #11. */
+const CLASHES: readonly (readonly [Alteration, Alteration])[] = [['b5', 's11']]
+const clash = (a: Alteration, b: Alteration): boolean =>
+  CLASHES.some(([first, second]) => (first === a && second === b) || (first === b && second === a))
+
+const DEFAULT_SEVENTH: Seventh = 'minor'
+
+/** Parts made to fit one another: a size the triad has (else the largest below), and each other part the chord can take, or its default. */
+export function fitParts(parts: ChordParts): ChordParts {
+  const sizes = sizesOf(parts.triad)
+  const size = sizes.includes(parts.size)
+    ? parts.size
+    : (sizes.filter((each) => each < parts.size).at(-1) ?? 5)
+  const seventh =
+    size > 5 && seventhsOf(parts.triad, size).includes(parts.seventh)
+      ? parts.seventh
+      : DEFAULT_SEVENTH
+  const added = size === 5 && addedOf(parts.triad).includes(parts.added) ? parts.added : 'none'
+  const fitted = { triad: parts.triad, size, seventh, added, alterations: [] }
+  const offered = alterationsOf(fitted)
+  const alterations = ALTERATIONS.filter(
+    (each) => parts.alterations.includes(each) && offered.includes(each),
+  )
+  return {
+    ...fitted,
+    alterations: alterations.filter(
+      (each, i) => !alterations.slice(0, i).some((earlier) => clash(earlier, each)),
+    ),
+  }
+}
+
+/** Parts with the alterations chosen next: one just chosen turns off the one it clashes with (a #11 a ♭5). */
+export function withAlterations(parts: ChordParts, chosen: readonly Alteration[]): ChordParts {
+  const fresh = chosen.filter((each) => !parts.alterations.includes(each))
+  return fitParts({
+    ...parts,
+    alterations: chosen.filter(
+      (each) => fresh.includes(each) || !fresh.some((other) => clash(other, each)),
+    ),
+  })
+}
+
+/**
+ * The intervals parts build, from the root up: the triad; then its added tone, or its 7th and the
+ * natural 9th, 11th and 13th up to the size (the 11th left out of a 13th over a major 3rd, where it
+ * clashes with the 3rd, and a sus4's 11th, which is its 4th); each alteration in place of its natural
+ * tone, or added (a ♭5 under a raised 5th: the altered chord).
+ */
+function builtIntervals(parts: ChordParts): LabelledInterval[] {
+  const names = new Set<IntervalName>(TRIAD_INTERVALS[parts.triad])
+  if (parts.size === 5) {
+    for (const name of ADDED_INTERVALS[parts.added]) names.add(name)
+  } else {
+    const major3rd = names.has('M3')
+    names.add(SEVENTH_INTERVAL[parts.seventh])
+    if (parts.size >= 9) names.add('M9')
+    if (parts.size >= 11 && parts.triad !== 'sus4' && !(parts.size === 13 && major3rd)) {
+      names.add('P11')
+    }
+    if (parts.size === 13) names.add('M13')
+    for (const alteration of parts.alterations) {
+      names.delete(ALTERED[alteration].takes)
+      names.add(ALTERED[alteration].adds)
+    }
+  }
+  return [...names].map((name) => INTERVALS[name]).sort((a, b) => a.semitones - b.semitones)
+}
+
+/** The highest natural extension a 7th chord keeps: the number its symbol carries. */
+function highestNatural(parts: ChordParts): 7 | 9 | 11 | 13 {
+  const has = (alteration: Alteration) => parts.alterations.includes(alteration)
+  if (parts.size === 13 && !has('b13')) return 13
+  if (parts.size === 11 && !has('s11')) return 11
+  if (parts.size >= 9 && !has('b9') && !has('s9')) return 9
+  return 7
+}
+
+/** What a 6th chord writes before and after its `6`. */
+const SIX: Readonly<Partial<Record<Triad, { readonly lead: string; readonly trail: string }>>> = {
+  maj: { lead: '', trail: '' },
+  min: { lead: 'm', trail: '' },
+  sus4: { lead: '', trail: 'sus4' },
+}
+
+/**
+ * A chord's suffix by rule: a triad's, with its added tone (`6`, `m6/9`, `6sus4`, `add9`,
+ * `m(add9)`); a 7th chord's name around its highest natural number (`m11`, `13sus4`, `Maj9`), then each
+ * alteration in order (`9#11`, `7♭5♭9`, `Maj13#11`).
+ */
+function ruleSuffix(parts: ChordParts): string {
+  if (parts.size === 5) {
+    const triad = triadSuffix(parts.triad)
+    if (parts.added === 'none') return triad
+    const six = SIX[parts.triad]
+    if ((parts.added === 'six' || parts.added === 'sixNine') && six) {
+      return `${six.lead}${ADDED_SYMBOL[parts.added]}${six.trail}`
+    }
+    return triad ? `${triad}(${ADDED_SYMBOL[parts.added]})` : ADDED_SYMBOL[parts.added]
+  }
+  const { lead, trail } = seventhName([
+    ...triadSemitones(parts.triad),
+    INTERVALS[SEVENTH_INTERVAL[parts.seventh]].semitones,
+  ])
+  const altered = parts.alterations.map((each) => ALTERATION_SIGN[each]).join('')
+  return `${lead}${highestNatural(parts)}${trail}${altered}`
+}
+
+/** A chord from its parts on a root: its tones spelled by letter steps, named as the table or the rule names it. */
+export function buildChord(root: SpelledNote, parts: ChordParts): BuiltChord {
+  const intervals = builtIntervals(parts)
+  const quality = qualityWithIntervals(intervals)
+  return {
+    root,
+    tones: intervals.map((interval) => toneAbove(root, interval)),
+    suffix: quality ? qualitySuffix(quality) : ruleSuffix(parts),
+    ...(quality ? { quality } : {}),
+  }
+}
+
+/** The root the built chord on this pitch class is named from, by the table's rule. */
+export const builtRootSpelling = (pc: PitchClass, parts: ChordParts): SpelledNote =>
+  chordRootSpelling(pc, builtIntervals(parts))
+
+/** Every subset of a list, fewest first, each in the list's order. */
+const subsetsOf = <T>(list: readonly T[]): T[][] =>
+  list
+    .reduce<T[][]>(
+      (subsets, each) => [...subsets, ...subsets.map((subset) => [...subset, each])],
+      [[]],
+    )
+    .sort((a, b) => a.length - b.length)
+
+/**
+ * Every chord the builder makes, each once, simplest first: by triad, size, 7th and added tone, then
+ * the fewest alterations. Where two parts build the same chord (a 7th with a ♭9 and a 9th with its 9th
+ * lowered), the smaller size is kept.
+ */
+export const CHORD_PARTS: readonly ChordParts[] = (() => {
+  const all = TRIADS.flatMap((triad) =>
+    sizesOf(triad).flatMap((size) =>
+      size === 5
+        ? addedOf(triad).map((added) => ({
+            triad,
+            size,
+            seventh: DEFAULT_SEVENTH,
+            added,
+            alterations: [],
+          }))
+        : seventhsOf(triad, size).flatMap((seventh) => {
+            const parts: ChordParts = { triad, size, seventh, added: 'none', alterations: [] }
+            return subsetsOf(alterationsOf(parts)).map((alterations) =>
+              fitParts({ ...parts, alterations }),
+            )
+          }),
+    ),
+  )
+  const seen = new Set<string>()
+  return all.filter((parts) => {
+    const key = builtIntervals(parts)
+      .map((interval) => interval.semitones)
+      .join(' ')
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+})()
+
+/** The parts that build a table quality: how a chord family's step opens the builder. */
+export function partsOf(quality: ChordQuality): ChordParts {
+  const parts = CHORD_PARTS.find((each) => qualityWithIntervals(builtIntervals(each)) === quality)
+  if (!parts) throw new RangeError(`No parts build ${quality}`)
+  return parts
+}
+
+/** A chord's parts as a URL holds them. */
+export interface PartsParams {
+  readonly triad: Triad
+  readonly size: BuiltSize
+  readonly seventh: Seventh
+  readonly added: AddedTone
+  /** The alterations as a symbol writes them, each once, in order: `b9s11`; '' for none. */
+  readonly alter: string
+}
+
+const ALTER_PARAM = /^(b5)?(b9)?(s9)?(s11)?(b13)?$/
+
+/** The alterations an `alter` param writes, or none when it writes anything else. */
+export function readAlterations(value: unknown): Alteration[] {
+  const match = typeof value === 'string' ? ALTER_PARAM.exec(value) : null
+  return match ? ALTERATIONS.filter((_, i) => match[i + 1] !== undefined) : []
+}
+
+export const partsParams = ({ alterations, ...parts }: ChordParts): PartsParams => ({
+  ...parts,
+  alter: alterations.join(''),
+})
+
+/** The URL params that open the builder on a table quality: a skill's or a chord family's way in. */
+export const qualityParams = (quality: ChordQuality): PartsParams => partsParams(partsOf(quality))
+
+export const partsFromParams = ({ alter, ...params }: PartsParams): ChordParts => ({
+  ...params,
+  alterations: readAlterations(alter),
+})
+```
+
+  `index.ts`: `qualityWithIntervals` joins `./chord`'s exports, and after them:
+
+```ts
+export {
+  ADDED_SYMBOL,
+  ADDED_TONES,
+  addedOf,
+  ALTERATION_SIGN,
+  ALTERATIONS,
+  alterationsOf,
+  BUILT_SIZES,
+  buildChord,
+  builtRootSpelling,
+  fitParts,
+  partsFromParams,
+  partsOf,
+  partsParams,
+  qualityParams,
+  readAlterations,
+  SEVENTH_DEGREE,
+  SEVENTHS,
+  seventhsOf,
+  sizesOf,
+  TRIADS,
+  triadSuffix,
+  withAlterations,
+  type AddedTone,
+  type Alteration,
+  type BuiltChord,
+  type BuiltSize,
+  type ChordParts,
+  type PartsParams,
+  type Seventh,
+  type Triad,
+} from './chord-parts'
+```
+
+- [ ] **Step 7: The chord as it is written** — `src/shared/lib/schedule/chord-bar.ts`:
+
+```ts
+import {
+  note,
+  TICKS_PER_BEAT,
+  type Hand,
+  type PlacedChord,
+  type PlacedTone,
+} from '@/shared/lib/music'
+import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
+
+const WHOLE_BAR = 4 * TICKS_PER_BEAT
+
+const held =
+  (hand: Hand) =>
+  ({ midi, tone }: PlacedTone): TimedNote => ({
+    midi,
+    spelled: tone.note,
+    hand,
+    startTick: 0,
+    durationTicks: WHOLE_BAR,
+    roll: 0,
+  })
+
+/**
+ * A chord as the explorers place it, held for a bar of 4/4 with no key signature (every accidental
+ * on its note): how the Chords reference writes it.
+ */
+export function chordBar(placed: PlacedChord): TimedMusic {
+  return {
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 4 }],
+    notes: [...placed.lh.map(held('lh')), ...placed.rh.map(held('rh'))],
+    chords: [],
+  }
+}
+```
+
+  `schedule/index.ts`: `export { chordBar } from './chord-bar'`.
+
+- [ ] **Step 8: The callers** — `quiz-keys.ts`: `placeChord(spellChord(question.root, question.quality), { inversion: 0,
+  bothHands: false }).rh` (import `spellChord`); `quiz-machine.ts`: `chordRootSpelling(pc,
+  qualityIntervals(target.quality))`; `chord-example.ts`: `placeChord(spellChord(chord.root, chord.quality), {
+  inversion: 0, bothHands: false })`; `sounds.ts`'s `placedChordSounds`: `placeChord(spellChord(chord.root,
+  chord.quality), { inversion, bothHands })`. Until Task 11 builds the Chords reference over parts, it keeps its table
+  quality: `search.ts`'s chords validator spells the root with `chordRootSpelling(pitchClassOf(root),
+  qualityIntervals(quality))` and bounds the inversion by `lastInversion(qualityIntervals(quality).length)`, and
+  `ChordExplorer.tsx` computes `const tones = spellChord(root, chord.quality)` before `placeChord(tones, { … })`, spells
+  the root list with `chordRootSpelling(pc, qualityIntervals(chord.quality))` and offers
+  `INVERSIONS.filter(({ value }) => value <= lastInversion(tones.length))`.
+
+- [ ] **Step 9: Run the tests**
+
+Run: `npx vitest run src/shared/lib src/features/quiz src/widgets src/pages/chords src/pages/scales src/app/routes`
+Expected: PASS (every table quality built back from its parts; 143 chords, each once). `npm run typecheck && npm
+run lint`.
+
+- [ ] **Step 10: Commit**
+
+```bash
+npx prettier --write src/shared/lib/music src/shared/lib/schedule src/shared/lib/arrangement/arrange.test.ts src/features/quiz src/widgets/lesson-view src/widgets/chord-explorer src/widgets/scale-explorer src/app/routes/search.ts
+git add -A src
+git commit -m "Build any chord from its parts, named by the table or by rule; place any tones; spell every root by one rule
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+```
+
+---
+
+### Task 11: The Chords reference builds any chord
+
+The owner's screenshots of a chord builder (spec §2.10): the reference's one pop-up of the table's qualities becomes
+the chord's parts, only what the chord takes offered, the chord written on a staff under the keys.
+
+**Files:**
+- Create: `src/shared/ui/MultiDropdown.tsx`, `src/shared/ui/MultiDropdown.test.tsx`,
+  `src/widgets/chord-explorer/ui/ChordBuilder.tsx`, `src/widgets/chord-explorer/ui/ChordSheet.tsx`,
+  `src/widgets/chord-explorer/model/chord-view.test.ts`
+- Modify: `src/shared/ui/index.ts`, `src/widgets/chord-explorer/model/chord-view.ts`,
+  `src/widgets/chord-explorer/ui/ChordExplorer.tsx`, `src/pages/chords/ui/ChordsPage.tsx`, `src/app/routes/search.ts`,
+  `src/entities/path/ui/ExplorerLink.tsx`, `src/pages/check/ui/CheckResult.tsx`,
+  `src/widgets/piece-skills/ui/PieceSkills.tsx`, `src/shared/lib/schedule/sounds.ts`,
+  `src/shared/lib/schedule/index.ts`, `src/shared/i18n/locales/{en,ru}/learn.ts`
+- Test: `src/shared/lib/schedule/sounds.test.ts`, `src/app/routes/search.test.ts`,
+  `src/pages/chords/ui/ChordsPage.test.tsx`
+
+**Interfaces:**
+- Consumes: Task 10's builder, `placeChord`, `lastInversion`, `chordBar`; `LazyScoreView` (Task 7).
+- Produces: `MultiDropdown<V>({ label, none, value, options, onChange })`; `ChordView` (`PartsParams` with `root`,
+  `inversion`, `hands`); `viewChord(view)`, `changedView(view, change)`.
+
+- [ ] **Step 1: Write the failing tests** — `MultiDropdown.test.tsx`:
+
+```tsx
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import { MultiDropdown } from './MultiDropdown'
+
+const SIGNS = [
+  { value: 'b9', label: '♭9' },
+  { value: 's9', label: '#9' },
+  { value: 's11', label: '#11' },
+] as const
+
+describe('MultiDropdown', () => {
+  it('shows its label and each chosen value, or none', () => {
+    const { rerender } = render(
+      <MultiDropdown
+        label="Alterations"
+        none="None"
+        value={[]}
+        options={SIGNS}
+        onChange={vi.fn()}
+      />,
+    )
+    expect(screen.getByRole('combobox', { name: 'Alterations' })).toHaveTextContent(
+      'AlterationsNone',
+    )
+    rerender(
+      <MultiDropdown
+        label="Alterations"
+        none="None"
+        value={['b9', 's11']}
+        options={SIGNS}
+        onChange={vi.fn()}
+      />,
+    )
+    expect(screen.getByRole('combobox', { name: 'Alterations' })).toHaveTextContent(
+      'Alterations♭9 #11',
+    )
+  })
+
+  it('checks each chosen item, and a tap turns one on or off', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(
+      <MultiDropdown
+        label="Alterations"
+        none="None"
+        value={['b9']}
+        options={SIGNS}
+        onChange={onChange}
+      />,
+    )
+    await user.click(screen.getByRole('combobox', { name: 'Alterations' }))
+    expect(await screen.findByRole('option', { name: '♭9' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    await user.click(screen.getByRole('option', { name: '#11' }))
+    expect(onChange).toHaveBeenLastCalledWith(['b9', 's11'])
+    await user.click(screen.getByRole('option', { name: '♭9' }))
+    expect(onChange).toHaveBeenLastCalledWith([])
+  })
+})
+```
+
+  `chord-view.test.ts`:
+
+```ts
+import { describe, expect, it } from 'vitest'
+import { note, noteParam } from '@/shared/lib/music'
+import { changedView, viewChord, type ChordView } from './chord-view'
+
+const C: ChordView = {
+  root: noteParam(note('C')),
+  triad: 'maj',
+  size: 5,
+  seventh: 'minor',
+  added: 'none',
+  alter: '',
+  inversion: 0,
+  hands: 'rh',
+}
+
+describe('viewChord', () => {
+  it('builds the view’s chord and places its keys', () => {
+    const { chord, placed } = viewChord({ ...C, size: 7, inversion: 1, hands: 'both' })
+    expect(chord.suffix).toBe('7')
+    expect(placed.rh.map((key) => key.midi)).toEqual([64, 67, 70, 72])
+    expect(placed.lh.map((key) => key.midi)).toEqual([48])
+  })
+})
+
+describe('changedView', () => {
+  it('fits the parts to one another', () => {
+    const dominant = { ...C, size: 9 as const, alter: 'b9' }
+    expect(changedView(dominant, { triad: 'min' })).toMatchObject({
+      triad: 'min',
+      size: 9,
+      alter: '',
+    })
+    expect(changedView(dominant, { triad: 'sus2' })).toMatchObject({ size: 7, alter: '' })
+  })
+
+  it('keeps the inversion the smaller chord has', () => {
+    expect(changedView({ ...C, size: 7, inversion: 3 }, { size: 5 }).inversion).toBe(2)
+    expect(changedView({ ...C, size: 7, inversion: 1 }, { size: 5 }).inversion).toBe(1)
+  })
+})
+```
+
+  `search.test.ts`: in `'keep what is valid'` the chords case becomes
+
+```ts
+    expect(
+      await searchAt(
+        '/learn/chords?root=Bb&triad=min&size=9&seventh=major&inversion=2&hands=both&step=chords:sev',
+      ),
+    ).toEqual({
+      root: 'Bb',
+      triad: 'min',
+      size: 9,
+      seventh: 'major',
+      added: 'none',
+      alter: '',
+      inversion: 2,
+      hands: 'both',
+      step: 'chords:sev',
+    })
+    expect(await searchAt('/learn/chords?size=13&alter=b9s11')).toMatchObject({
+      size: 13,
+      alter: 'b9s11',
+    })
+    expect(await searchAt('/learn/chords?triad=min&added=add9')).toMatchObject({
+      triad: 'min',
+      added: 'add9',
+    })
+```
+
+  in `'drop anything stale…'` the two chords cases become
+
+```ts
+    expect(
+      await searchAt(
+        '/learn/chords?triad=maj13&size=6&seventh=7&added=6&alter=x&inversion=7&step=scale:major',
+      ),
+    ).toEqual(CHORDS_DEFAULTS)
+    expect(await searchAt('/learn/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
+    expect(await searchAt('/learn/chords?inversion=3')).toMatchObject({ inversion: 0 })
+```
+
+  and before `'spell a root the way its explorer names it'` (whose chords case becomes
+  `expect(await searchAt('/learn/chords?root=A%23')).toMatchObject({ root: 'Bb' })` and
+  `expect(await searchAt('/learn/chords?root=Db&triad=min')).toMatchObject({ root: 'C#' })`):
+
+```ts
+  it('fit a chord’s parts to one another', async () => {
+    expect(await searchAt('/learn/chords?triad=sus2&size=13&alter=b9')).toMatchObject({
+      size: 7,
+      alter: '',
+    })
+    expect(await searchAt('/learn/chords?size=7&added=six&alter=b5s11')).toMatchObject({
+      added: 'none',
+      alter: 'b5',
+    })
+  })
+
+  it('spell a root the way its explorer names it', async () => {
+    expect(await searchAt('/learn/chords?root=A%23')).toMatchObject({ root: 'Bb' })
+    expect(await searchAt('/learn/chords?root=Db&triad=min')).toMatchObject({ root: 'C#' })
+```
+
+  `ChordsPage.test.tsx` in full:
+
+```tsx
+import { act, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
+
+describe('Learn → Chords', () => {
+  it('shows C major by default, named, its keys labelled by degree', async () => {
+    await renderApp('/learn/chords')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
+    expect(screen.getByText('Major triad')).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Triad' })).toHaveTextContent('Major')
+    expect(screen.getByRole('combobox', { name: 'Chord size' })).toHaveTextContent('Triad')
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+  })
+
+  it('builds a chord part by part through the URL, sounding each choice', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp('/learn/chords?root=G&size=7')
+    expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Triad' }))
+    await user.click(await screen.findByRole('option', { name: 'Minor m' }))
+    expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
+    await user.click(await screen.findByRole('option', { name: '11th' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
+    expect(audio.played.length).toBeGreaterThan(1)
+  })
+
+  it('offers a 7th chord its 7th, and a dominant its alterations', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/chords?size=9')
+    await user.click(await screen.findByRole('button', { name: 'Major 7th' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'CMaj9' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
+    const alterations = await screen.findByRole('combobox', { name: 'Alterations' })
+    expect(alterations).toHaveTextContent('None')
+    await user.click(alterations)
+    await user.click(await screen.findByRole('option', { name: '#11' }))
+    expect(router.state.location.search).toMatchObject({ size: 9, alter: 's11' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9#11' })).toBeInTheDocument()
+  })
+
+  it('adds a tone to a triad, and names a chord the table lacks by rule', async () => {
+    await renderApp('/learn/chords?triad=min&added=add9')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm(add9)' })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Added tone' })).toHaveTextContent('add9')
+    const written = screen.getByText('Written')
+    expect(written.parentElement).toHaveTextContent(/^WrittenCm\(add9\)$/)
+  })
+
+  it('writes the chord on a staff', async () => {
+    await renderApp('/learn/chords?triad=dim&size=7&seventh=diminished')
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
+    await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
+  })
+
+  it('stacks a suspended chord only as far as it goes', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/chords?triad=sus4&size=13')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
+    expect((await screen.findAllByRole('option')).map((option) => option.textContent)).toEqual([
+      'Triad',
+      '7th',
+      '9th',
+      '13th',
+    ])
+  })
+
+  it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/chords')
+    await user.click(await screen.findByRole('button', { name: 'Arpeggio' }))
+    const start = audio.played.at(-1)?.at ?? 0
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const [c4, e4, g4] = ['C4', 'E4', 'G4'].map((name) =>
+      within(keyboard).getByRole('button', { name }),
+    )
+    act(() => audio.setNow(start + 0.05))
+    expect(c4).toHaveAttribute('data-down')
+    expect(e4).not.toHaveAttribute('data-down')
+    act(() => audio.setNow(start + 0.5))
+    expect(g4).toHaveAttribute('data-down')
+    expect(g4).toHaveClass('bg-role-5th')
+    for (const key of [c4, e4]) expect(key).not.toHaveAttribute('data-down')
+    expect(c4).toHaveClass('bg-role-root-wash')
+    expect(e4).toHaveClass('bg-role-3rd-wash')
+  })
+
+  it('turns Play into Stop while the chord sounds, and back when it ends', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/chords')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    const start = audio.played.at(-1)?.at ?? 0
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    act(() => audio.setNow(start + 1.7))
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+  })
+
+  it('stops the chord on Stop, and Arpeggio takes over from Play', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/chords')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await user.click(screen.getByRole('button', { name: 'Arpeggio' }))
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+    const stops = audio.stops
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(audio.stops).toBe(stops + 1)
+    expect(screen.getByRole('button', { name: 'Arpeggio' })).toBeInTheDocument()
+  })
+
+  it('sounds a tapped key', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/chords')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
+    expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 69 }])
+  })
+
+  it('offers only the inversions the chord has', async () => {
+    await renderApp('/learn/chords')
+    const inversions = await screen.findByRole('group', { name: 'Inversion' })
+    expect(
+      within(inversions)
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual(['Root', '1st', '2nd'])
+  })
+
+  it('opened from a path step, offers its check and its learned toggle', async () => {
+    const user = userEvent.setup()
+    const { progressStore } = await renderApp('/learn/chords?size=7&seventh=major&step=chords:sev')
+    const check = await screen.findByRole('link', { name: 'Check yourself' })
+    expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
+    await user.click(screen.getByRole('button', { name: 'Learned' }))
+    expect(progressStore.getState().learned['chords:sev']).toBeDefined()
+  })
+
+  it('chooses the root from its pop-up', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/chords?triad=min')
+    await user.click(await screen.findByRole('combobox', { name: 'Root' }))
+    await user.click(await screen.findByRole('option', { name: 'E' }))
+    expect(router.state.location.search).toMatchObject({ root: 'E', triad: 'min' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
+  })
+
+  it('writes the chord every way it is written', async () => {
+    await renderApp('/learn/chords?triad=min&size=7')
+    const written = await screen.findByText('Written')
+    expect(written.parentElement).toHaveTextContent(/Cm7 · C/)
+  })
+
+  it('draws its header with a way back to Learn', async () => {
+    await renderApp('/learn/chords')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
+  })
+})
+```
+
+- [ ] **Step 2: Run them to see them fail**
+
+Run: `npx vitest run src/shared/ui/MultiDropdown.test.tsx src/widgets/chord-explorer src/app/routes src/pages/chords`
+Expected: FAIL.
+
+- [ ] **Step 3: Several choices behind one pop-up button** — `MultiDropdown.tsx` (the Choosing Rule's pop-up for
+  several of many: Base UI's `select` with `multiple`, a separate component, not a flag on `Dropdown`):
+
+```tsx
+import type { Option, OptionValue } from './option'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './primitives/select'
+
+/**
+ * Several choices of many behind a pop-up button: the button shows its label and the chosen, the
+ * list checks each, a tap on an item turning it on or off. `none` names an empty choice.
+ */
+export function MultiDropdown<V extends OptionValue>({
+  label,
+  none,
+  value,
+  options,
+  onChange,
+  className,
+}: {
+  label: string
+  none: string
+  value: readonly V[]
+  options: readonly Option<V>[]
+  onChange: (value: V[]) => void
+  className?: string
+}) {
+  return (
+    <Select
+      multiple
+      items={options.map((option) => ({ value: option.value, label: option.label }))}
+      value={[...value]}
+      onValueChange={(next: V[]) => onChange(next)}
+    >
+      <SelectTrigger aria-label={label} className={className}>
+        <span aria-hidden className="text-muted-foreground">
+          {label}
+        </span>
+        <SelectValue className="block min-w-0 flex-1 truncate text-left font-semibold">
+          {(chosen: V[]) =>
+            chosen.length === 0
+              ? none
+              : options
+                  .filter((option) => chosen.includes(option.value))
+                  .map((option) => option.label)
+                  .join(' ')
+          }
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent alignItemWithTrigger={false}>
+        {options.map((option) => (
+          <SelectItem key={String(option.value)} value={option.value} aria-label={option.title}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
+```
+
+  `shared/ui/index.ts`: `export { MultiDropdown } from './MultiDropdown'` (after `LevelMark`).
+
+- [ ] **Step 4: The view** — `chord-view.ts` in full:
+
+```ts
+import {
+  buildChord,
+  fitParts,
+  lastInversion,
+  noteFromParam,
+  partsFromParams,
+  partsParams,
+  placeChord,
+  type BuiltChord,
+  type NoteParam,
+  type PartsParams,
+  type PlacedChord,
+} from '@/shared/lib/music'
+
+/** What the Chords reference shows: a chord built part by part on a root, in an inversion, in one hand or two. */
+export interface ChordView extends PartsParams {
+  readonly root: NoteParam
+  readonly inversion: number
+  readonly hands: 'rh' | 'both'
+}
+
+/** The chord a view builds, and its keys. */
+export function viewChord(view: ChordView): { chord: BuiltChord; placed: PlacedChord } {
+  const chord = buildChord(noteFromParam(view.root), partsFromParams(view))
+  const placed = placeChord(chord.tones, {
+    inversion: view.inversion,
+    bothHands: view.hands === 'both',
+  })
+  return { chord, placed }
+}
+
+/**
+ * A view changed: its parts made to fit one another (a size the triad has, a 7th, added tone and
+ * alterations the chord can take), and its inversion one the chord has, else the last.
+ */
+export function changedView(view: ChordView, change: Partial<ChordView>): ChordView {
+  const next = { ...view, ...change }
+  const parts = fitParts(partsFromParams(next))
+  const notes = buildChord(noteFromParam(next.root), parts).tones.length
+  return {
+    ...next,
+    ...partsParams(parts),
+    inversion: Math.min(next.inversion, lastInversion(notes)),
+  }
+}
+```
+
+- [ ] **Step 5: The parts** — `ChordBuilder.tsx`:
+
+```tsx
+import { useTranslation } from 'react-i18next'
+import {
+  ADDED_SYMBOL,
+  addedOf,
+  ALTERATION_SIGN,
+  alterationsOf,
+  builtRootSpelling,
+  noteName,
+  noteParam,
+  partsFromParams,
+  partsParams,
+  PITCH_CLASSES,
+  SEVENTH_DEGREE,
+  seventhsOf,
+  sizesOf,
+  TRIADS,
+  triadSuffix,
+  withAlterations,
+  type BuiltSize,
+} from '@/shared/lib/music'
+import { Dropdown, MultiDropdown, Segmented } from '@/shared/ui'
+import type { ChordView } from '../model/chord-view'
+
+/** Each size's name on screen. */
+const SIZE_NAMES = {
+  5: 'triad',
+  7: 'seventh',
+  9: 'ninth',
+  11: 'eleventh',
+  13: 'thirteenth',
+} as const satisfies Record<BuiltSize, string>
+
+/**
+ * A chord's parts, each a choice: its root, triad and size; then its 7th, the tone a triad adds, or a
+ * dominant's alterations, each only where the chord takes one.
+ */
+export function ChordBuilder({
+  chord,
+  onChange,
+}: {
+  chord: ChordView
+  onChange: (change: Partial<ChordView>) => void
+}) {
+  const { t } = useTranslation(['learn', 'music'])
+  const parts = partsFromParams(chord)
+  const sevenths = seventhsOf(parts.triad, parts.size)
+  const added = addedOf(parts.triad)
+  const alterations = alterationsOf(parts)
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-2">
+        <Dropdown
+          label={t('learn:root')}
+          value={chord.root}
+          options={PITCH_CLASSES.map((pc) => {
+            const spelled = builtRootSpelling(pc, parts)
+            return { value: noteParam(spelled), label: noteName(spelled) }
+          })}
+          onChange={(root) => onChange({ root })}
+        />
+        <Dropdown
+          label={t('learn:builder.triad')}
+          value={parts.triad}
+          options={TRIADS.map((triad) => ({
+            value: triad,
+            label: t(`learn:builder.triads.${triad}`),
+            detail: triadSuffix(triad) || t('music:major'),
+          }))}
+          onChange={(triad) => onChange({ triad })}
+        />
+        <Dropdown
+          label={t('learn:chordSize.label')}
+          value={parts.size}
+          options={sizesOf(parts.triad).map((size) => ({
+            value: size,
+            label: t(`learn:builder.sizes.${SIZE_NAMES[size]}`),
+          }))}
+          onChange={(size) => onChange({ size })}
+        />
+      </div>
+      {parts.size > 5 && sevenths.length > 1 ? (
+        <div className="flex items-center gap-3">
+          <span aria-hidden className="shrink-0 text-muted-foreground">
+            {t('learn:builder.seventh')}
+          </span>
+          <Segmented
+            label={t('learn:builder.seventh')}
+            value={parts.seventh}
+            options={sevenths.map((seventh) => ({
+              value: seventh,
+              label: SEVENTH_DEGREE[seventh],
+              title: t(`learn:builder.sevenths.${seventh}`),
+            }))}
+            onChange={(seventh) => onChange({ seventh })}
+          />
+        </div>
+      ) : null}
+      {parts.size === 5 && added.length > 1 ? (
+        <Dropdown
+          label={t('learn:builder.added')}
+          value={parts.added}
+          options={added.map((tone) => ({
+            value: tone,
+            label: tone === 'none' ? t('learn:builder.none') : ADDED_SYMBOL[tone],
+          }))}
+          onChange={(tone) => onChange({ added: tone })}
+        />
+      ) : null}
+      {alterations.length > 0 ? (
+        <MultiDropdown
+          label={t('learn:builder.alterations')}
+          none={t('learn:builder.none')}
+          value={parts.alterations}
+          options={alterations.map((alteration) => ({
+            value: alteration,
+            label: ALTERATION_SIGN[alteration],
+          }))}
+          onChange={(chosen) => onChange(partsParams(withAlterations(parts, chosen)))}
+        />
+      ) : null}
+    </div>
+  )
+}
+```
+
+  `ChordSheet.tsx`:
+
+```tsx
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { PlacedChord } from '@/shared/lib/music'
+import { notate } from '@/shared/lib/notation'
+import { chordBar } from '@/shared/lib/schedule'
+import { LazyScoreView } from '@/shared/ui'
+
+/** The chord written: a bar of it on a grand staff, as the keys place it. */
+export function ChordSheet({ placed }: { placed: PlacedChord }) {
+  const { t } = useTranslation('music')
+  const score = useMemo(() => notate(chordBar(placed)), [placed])
+  return (
+    <section aria-label={t('sheet.label')}>
+      <LazyScoreView score={score} scale={1} fingers={false} />
+    </section>
+  )
+}
+```
+
+- [ ] **Step 6: The reference** — `ChordExplorer.tsx` in full (on a phone: the symbol and its name, the parts,
+  Inversion and Hands, the keys, the staff, the tones, Play · Arpeggio, Written; on a laptop the keys across both
+  columns, the staff heading the second):
+
+```tsx
+import { Square } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { cn } from '@/shared/lib'
+import { lastInversion, noteName, qualitySpellings, type Midi } from '@/shared/lib/music'
+import { chordSounds } from '@/shared/lib/schedule'
+import { usePlay, usePlayback } from '@/shared/lib/services'
+import { ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import { changedView, viewChord, type ChordView } from '../model/chord-view'
+import { ChordBuilder } from './ChordBuilder'
+import { ChordSheet } from './ChordSheet'
+
+/** Root position and the first three inversions, with the name each has on screen. */
+const INVERSIONS = [
+  { value: 0, name: 'root' },
+  { value: 1, name: 'first' },
+  { value: 2, name: 'second' },
+  { value: 3, name: 'third' },
+] as const
+
+/** The keys a chord's placement strikes, the left hand's first. */
+const keysOf = (view: ChordView): Midi[] => {
+  const { placed } = viewChord(view)
+  return [...placed.lh, ...placed.rh].map((key) => key.midi)
+}
+
+/**
+ * Any chord built part by part on any root: its keys by role and degree, inversions, one hand or
+ * two, played, named, and every way the table writes it.
+ */
+export function ChordExplorer({
+  chord,
+  onChange,
+}: {
+  chord: ChordView
+  onChange: (view: ChordView) => void
+}) {
+  const { t } = useTranslation(['learn', 'music', 'common'])
+  const play = usePlay()
+  const playback = usePlayback<'chord' | 'arpeggio'>()
+  const { chord: built, placed } = viewChord(chord)
+  const keys = [...placed.lh, ...placed.rh]
+  const marks = new Map<Midi, KeyMark>(
+    keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
+  )
+  const rootName = noteName(built.root)
+  const symbol = rootName + built.suffix
+  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
+  const change = (next: Partial<ChordView>) => {
+    const view = changedView(chord, next)
+    onChange(view)
+    play(chordSounds(keysOf(view), { arpeggio: false }))
+  }
+
+  return (
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10 lg:gap-y-6">
+      <div className="flex flex-col gap-4">
+        <hgroup>
+          <h2 className="text-7xl">{symbol}</h2>
+          {built.quality ? (
+            <p className="text-muted-foreground">{t(`music:quality.${built.quality}`)}</p>
+          ) : null}
+        </hgroup>
+        <ChordBuilder chord={chord} onChange={change} />
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <Segmented
+            label={t('learn:inversionLabel')}
+            value={chord.inversion}
+            options={INVERSIONS.filter(
+              ({ value }) => value <= lastInversion(built.tones.length),
+            ).map(({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }))}
+            onChange={(inversion) => change({ inversion })}
+          />
+          <Segmented
+            label={t('learn:handsLabel')}
+            value={chord.hands}
+            options={[
+              { value: 'rh', label: t('common:hands.rh') },
+              { value: 'both', label: t('common:hands.both') },
+            ]}
+            onChange={(hands) => change({ hands })}
+          />
+        </div>
+      </div>
+      <ExplorerKeyboard
+        keys={keys.map((key) => key.midi)}
+        marks={marks}
+        className="lg:order-first lg:col-span-2"
+      />
+      <div className="flex flex-col gap-4">
+        <ChordSheet placed={placed} />
+        <ol className="flex flex-wrap gap-2">
+          {built.tones.map((tone) => (
+            <li
+              key={tone.degree}
+              className="flex items-center gap-2 rounded-xl border border-border bg-card py-1 pr-3 pl-1"
+            >
+              <span
+                className={cn(
+                  'grid size-7 place-items-center rounded-lg text-sm font-bold text-on-role',
+                  ROLE_BG[tone.role],
+                )}
+              >
+                {tone.degree}
+              </span>
+              <span className="font-semibold">{noteName(tone.note)}</span>
+            </li>
+          ))}
+        </ol>
+        <div className="flex gap-3">
+          <Button
+            size="pill"
+            className="flex-1"
+            onClick={() =>
+              playback.toggle('chord', chordSounds(keysOf(chord), { arpeggio: false }))
+            }
+          >
+            {playback.playing === 'chord' ? (
+              <>
+                <Square data-icon="inline-start" />
+                {t('common:stop')}
+              </>
+            ) : (
+              t('learn:play')
+            )}
+          </Button>
+          <Button
+            size="pill"
+            variant="soft"
+            className="flex-1"
+            onClick={() =>
+              playback.toggle('arpeggio', chordSounds(keysOf(chord), { arpeggio: true }))
+            }
+          >
+            {playback.playing === 'arpeggio' ? (
+              <>
+                <Square data-icon="inline-start" />
+                {t('common:stop')}
+              </>
+            ) : (
+              t('learn:arpeggio')
+            )}
+          </Button>
+        </div>
+        <p className="flex flex-wrap items-baseline gap-x-4">
+          <span className="text-muted-foreground">{t('learn:written')}</span>
+          <span className="font-display text-xl font-semibold">
+            {(built.quality ? qualitySpellings(built.quality) : [built.suffix])
+              .map((suffix) => rootName + suffix)
+              .join(' · ')}
+          </span>
+        </p>
+      </div>
+    </div>
+  )
+}
+```
+
+  `ChordsPage.tsx`: `const onChange = (view: ChordView) => void navigate({ search: (prev) => ({ ...prev, ...view }),
+  replace: true })`.
+
+- [ ] **Step 7: The URL** — `search.ts`'s chords block (import `ADDED_TONES`, `BUILT_SIZES`, `buildChord`,
+  `builtRootSpelling`, `fitParts`, `partsParams`, `readAlterations`, `SEVENTHS`, `TRIADS`; drop `CHORD_QUALITIES`,
+  `chordRootSpelling`, `qualityIntervals` and `isQuality`):
+
+```ts
+// Learn → Chords
+export type ChordsStepId = `chords:${ChordFamily}`
+export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
+export const CHORDS_DEFAULTS: ChordsSearch = {
+  root: noteParam(note('C')),
+  triad: 'maj',
+  size: 5,
+  seventh: 'minor',
+  added: 'none',
+  alter: '',
+  inversion: 0,
+  hands: 'rh',
+}
+const isTriad = isOneOf(TRIADS)
+const isBuiltSize = isOneOf(BUILT_SIZES)
+const isSeventh = isOneOf(SEVENTHS)
+const isAddedTone = isOneOf(ADDED_TONES)
+const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
+const isChordsStep = (value: unknown): value is ChordsStepId =>
+  isStepId(value) && value.startsWith('chords:')
+export function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
+  const raw: Raw = input
+  const parts = fitParts({
+    triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
+    size: valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size),
+    seventh: valueOr(isSeventh, raw.seventh, CHORDS_DEFAULTS.seventh),
+    added: valueOr(isAddedTone, raw.added, CHORDS_DEFAULTS.added),
+    alterations: readAlterations(raw.alter),
+  })
+  const read = readNote(raw.root)
+  const root = read ? builtRootSpelling(pitchClassOf(read), parts) : note('C')
+  const notes = buildChord(root, parts).tones.length
+  return {
+    root: noteParam(root),
+    ...partsParams(parts),
+    inversion: wholeIn(raw.inversion, 0, lastInversion(notes), CHORDS_DEFAULTS.inversion),
+    hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
+    step: isChordsStep(raw.step) ? raw.step : undefined,
+  }
+}
+```
+
+  The ways in open a quality's parts: `ExplorerLink.tsx`
+  ``search={{ ...(quality ? qualityParams(quality) : {}), step: `chords:${step.family}` }}``; `CheckResult.tsx` `search={qualityParams(skill.quality)}`; `PieceSkills.tsx`
+  `search={{ ...qualityParams(skill.quality), ...(first ? { root: noteParam(first.root) } : {}) }}` (each imports
+  `qualityParams` from `@/shared/lib/music`).
+
+- [ ] **Step 8: Nothing left of the table's reference** — `sounds.ts`: delete `ChordPlaying` and `placedChordSounds`
+  (import `type Midi` only); `schedule/index.ts` drops both; `sounds.test.ts` drops the `placedChordSounds` describe and
+  import.
+
+- [ ] **Step 9: The words** — `learn.ts` en: delete `chordLabel`; after `chordSize`:
+
+```ts
+  // The Chords reference builds a chord part by part.
+  builder: {
+    triad: 'Triad',
+    triads: {
+      maj: 'Major',
+      min: 'Minor',
+      dim: 'Diminished',
+      aug: 'Augmented',
+      sus2: 'Suspended 2nd',
+      sus4: 'Suspended 4th',
+    },
+    sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
+    seventh: '7th',
+    sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
+    added: 'Added tone',
+    alterations: 'Alterations',
+    none: 'None',
+  },
+```
+
+  ru: delete `chordLabel`; after `chordSize`:
+
+```ts
+  builder: {
+    triad: 'Трезвучие',
+    triads: {
+      maj: 'Мажорное',
+      min: 'Минорное',
+      dim: 'Уменьшенное',
+      aug: 'Увеличенное',
+      sus2: 'С задержанной секундой',
+      sus4: 'С задержанной квартой',
+    },
+    sizes: {
+      triad: 'Трезвучие',
+      seventh: 'Септаккорд',
+      ninth: 'Нонаккорд',
+      eleventh: 'Ундецимаккорд',
+      thirteenth: 'Терцдецимаккорд',
+    },
+    seventh: 'Септима',
+    sevenths: {
+      minor: 'Малая септима',
+      major: 'Большая септима',
+      diminished: 'Уменьшенная септима',
+    },
+    added: 'Добавленный тон',
+    alterations: 'Альтерации',
+    none: 'Нет',
+  },
+```
+
+- [ ] **Step 10: Run the tests**
+
+Run: `npx vitest run src/shared src/widgets src/entities src/pages src/app`
+Expected: PASS. `npm run typecheck && npm run lint`.
+
+- [ ] **Step 11: Commit**
+
+```bash
+npx prettier --write src/shared/ui/MultiDropdown.tsx src/shared/ui/MultiDropdown.test.tsx src/shared/ui/index.ts src/widgets/chord-explorer src/pages/chords src/app/routes/search.ts src/app/routes/search.test.ts src/entities/path/ui/ExplorerLink.tsx src/pages/check/ui/CheckResult.tsx src/widgets/piece-skills/ui/PieceSkills.tsx src/shared/lib/schedule src/shared/i18n/locales/en/learn.ts src/shared/i18n/locales/ru/learn.ts
+git add -A src
+git commit -m "Build any chord in the Chords reference: triad, size, 7th, added tone and alterations, on the keys and a staff
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+```
+
+---
+
+### Task 12: The key's common progressions as content
 
 **Files:**
 - Create: `src/entities/piece/content/progressions/cadence.ts`, `.../mcadence.ts`, `.../minorpop.ts`
@@ -3939,7 +5785,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 11: One Player screen, and a Setup sheet composed by its page
+### Task 13: One Player screen, and a Setup sheet composed by its page
 
 **Files:**
 - Create: `src/pages/player/ui/PlayerLayout.tsx`, `src/pages/player/ui/PieceSetup.tsx`,
@@ -4598,7 +6444,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 12: Walk the chords in the Player
+### Task 14: Walk the chords in the Player
 
 **Files:**
 - Create: `src/features/practice/walk.ts`, `src/features/practice/walk.test.ts`,
@@ -4611,7 +6457,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Interfaces:**
 - Consumes: `scaleChordAt`, `scaleKey`, `scaleHasChords`, `scaleRootSpelling` (kernel), `PlayerSetup`,
-  `FigureRows`, `ChordSizeField` (Task 11), `PlayerLayout` (Task 11), `usePracticePlayer`.
+  `FigureRows`, `ChordSizeField` (Task 13), `PlayerLayout` (Task 13), `usePracticePlayer`.
 - Produces: `WALK = { tempo: 72, pattern: 'block', chordSize: 'triads' }`, `walkChart(root, kind, chordSize): Chart`,
   `arrangeWalk(choice: WalkChoice): Performance`, `interface WalkChoice { root; kind; pattern: PatternId; rh; lh;
   chordSize }` from `@/features/practice`; `type WalkSearch`, `walkChoice(search)`, `walkPatch(change)` in
@@ -5099,7 +6945,7 @@ const walkRoute = createRoute({
 ```
 
   and `fullScreenRoute.addChildren([playerRoute, walkRoute, checkRoute])` (the static `/play/walk` outranks
-  `/play/$pieceId`; Task 10's catalog test keeps the id free).
+  `/play/$pieceId`; Task 12's catalog test keeps the id free).
 
 - [ ] **Step 7: The words** — `player.ts` en: `root: 'Root'`, `walk: { title: 'Walk the chords in {{scale}}' }`; ru:
   `root: 'Основной тон'`, `walk: { title: 'Аккорды по ступеням: {{scale}}' }`.
@@ -5121,7 +6967,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 13: Practise a scale's chords in the Player, from the Chords view
+### Task 15: Practise a scale's chords in the Player, from the Chords view
 
 **Files:**
 - Create: `src/features/practice/ui/PractiseChords.tsx`
@@ -5130,7 +6976,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Test: `src/pages/scales/ui/ScalesPage.test.tsx`
 
 **Interfaces:**
-- Consumes: `COMMON_PROGRESSIONS` (Task 10), `WALK` (Task 12), the `/play/walk` route (Task 12).
+- Consumes: `COMMON_PROGRESSIONS` (Task 12), `WALK` (Task 14), the `/play/walk` route (Task 14).
 - Produces: `PractiseChords({ root: SpelledNote, kind: ScaleKind, notes: ChordNotes })` from `@/features/practice`.
 
 - [ ] **Step 1: Write the failing test** — `ScalesPage.test.tsx`:
@@ -5280,7 +7126,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 ---
-### Task 14: Keys: the circle of fifths and a page for each key
+### Task 16: Keys: the circle of fifths and a page for each key
 
 **Files:**
 - Create: `src/widgets/key-explorer/index.ts`, `src/widgets/key-explorer/model/key-view.ts`,
@@ -5299,8 +7145,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Consumes: `CIRCLE_OF_FIFTHS`, `circleFunctions`, `sameKey`, `randomKey`, `keyParam`, `keyFromParam`,
   `signatureNotes`, `relativeKey`, `modesOfKey`, `placeScaleChords`, `placeBorrowedChords`, `walkChords` (kernel);
-  `scaleRun` (Task 6); `ChordButton`, `LazyScoreView`, `Fact` (kit); `PractiseChords` (Task 13); `entriesInKey`
-  (Task 10); `PieceList` (widget).
+  `scaleRun` (Task 6); `ChordButton`, `LazyScoreView`, `Fact` (kit); `PractiseChords` (Task 15); `entriesInKey`
+  (Task 12); `PieceList` (widget).
 - Produces: `KeyView { key: KeyParam; chords: 3 | 4; inversion: number }`, `KeyExplorer({ view, onChange })`,
   `KEYS_DEFAULTS`, `validateKeysSearch`, the route `/learn/keys`, `KeysPage`.
 
@@ -5731,7 +7577,7 @@ export function KeyFacts({ value }: { value: Key }) {
 ```tsx
 import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { lastStackInversion, type PlacedScaleChord } from '@/shared/lib/music'
+import { lastInversion, type PlacedScaleChord } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ChordButton, Segmented } from '@/shared/ui'
@@ -5814,13 +7660,13 @@ export function KeyChordsSection({
           value={view.chords}
           options={SIZES.map(({ value, name }) => ({ value, label: t(`learn:chordSize.${name}`) }))}
           onChange={(chords) =>
-            onChange({ chords, inversion: Math.min(view.inversion, lastStackInversion(chords)) })
+            onChange({ chords, inversion: Math.min(view.inversion, lastInversion(chords)) })
           }
         />
         <Segmented
           label={t('learn:inversionLabel')}
           value={view.inversion}
-          options={INVERSION_NAMES.slice(0, lastStackInversion(view.chords) + 1).map(
+          options={INVERSION_NAMES.slice(0, lastInversion(view.chords) + 1).map(
             (name, value) => ({ value, label: t(`music:inversion.${name}`) }),
           )}
           onChange={(inversion) => onChange({ inversion })}
@@ -6033,7 +7879,7 @@ export function validateKeysSearch(input: Input<KeyView>): KeyView {
       ? keyParam({ tonic: tonicSpelling(pitchClassOf(key.tonic), key.minor), minor: key.minor })
       : KEYS_DEFAULTS.key,
     chords,
-    inversion: wholeIn(raw.inversion, 0, lastStackInversion(chords), KEYS_DEFAULTS.inversion),
+    inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
   }
 }
 ```
@@ -6126,7 +7972,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 15: The records, and the whole app verified
+### Task 17: The records, and the whole app verified
 
 **Files:**
 - Create: `docs/adr/0014-a-scale-stacks-its-own-chords-and-a-key-is-a-page.md`
@@ -6142,8 +7988,12 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   Player, one layout for any source and a composed Setup sheet; the key's common progressions as content; Keys as one
   page per key with the circle as its chooser, signature counts on the circle, borrowed chords from the parallel
   scales; decided against (Mark other keys, Start on in Chords view, the walk on the reference's staff, generated
-  progressions for modes); consequences (sub-project 5's Reharmonise and chord detection name any stack with
-  `stackSuffix`; sub-project 7's exercises reuse `scaleRun`, `walkChart` and the Player page's layout).
+  progressions for modes); the Chords reference builds any chord from its parts (triad, chord size, 7th, added tone,
+  alterations: the owner's chord-builder screenshots), offering only what the chord takes (the alterations are the
+  available tensions), named by the table where it has the chord and else by the stacks' rule, one root-spelling rule
+  for every chord, and a pop-up that checks several (`MultiDropdown`); consequences (sub-project 5's Reharmonise and
+  chord detection name any stack with `stackSuffix` and any built chord with `buildChord`; sub-project 7's exercises
+  reuse `scaleRun`, `walkChart` and the Player page's layout).
 
 - [ ] **Step 2: DESIGN.md** — under *The keyboard*: Chords view spans every key the walk plays (C4 to G5 for C
   major's triads); a mark's caption carries a figure in an inversion (`I⁶` over `C/E`). A new *The circle of fifths*
@@ -6151,8 +8001,11 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   wash and its other six chords' places in the scale's wash (the keys' own marks), 44px round links with the key's
   name over its numeral or its signature's count (soft ink outside the key), the chosen one card paper in the control
   line, the key's name in Literata in the middle. *The sheet*: the Scales reference and the key page engrave a scale
-  with `LazyScoreView`, the other hand's staff soft. *Pop-up buttons and segments*: Start on and Chord size are
-  pop-ups; Fingering, Inversion and Block · Arpeggio segments. *Layout*: the Keys reference's two columns (the circle
+  with `LazyScoreView`, the other hand's staff soft; the Chords reference writes its chord as a bar under the keys.
+  *Pop-up buttons and segments*: Start on and Chord size are pop-ups; Fingering, Inversion and Block · Arpeggio
+  segments; the Chords reference's Root · Triad · Chord size row, its 7th segment labelled by degree (♭7 · 7 · 𝄫7),
+  its Added tone pop-up and its Alterations pop-up, which checks several (the Choosing Rule's "several of many"),
+  each shown only where the chord takes it. *Layout*: the Keys reference's two columns (the circle
   beside the key's name, signature and facts; the keys across; the chords beside Practise and In Scales).
 
 - [ ] **Step 3: The glossary** — add: **Start on** (the degree a scale's run starts from), **Fingering** (From the
@@ -6162,17 +8015,23 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   chord** (a chord of a parallel scale on a key's degree: ♭VI, iv, the Neapolitan), **Parent scale** (the major scale a
   mode is a mode of), **Circle of fifths**, **Keys** (the reference, a page per key); the Scale kind row lists the
   thirteen kinds and their three families; the chord quality count becomes 36; the Places table's Learn row names
-  Keys; "Scale view / Chords view" mentions the sizes and inversions.
+  Keys; "Scale view / Chords view" mentions the sizes and inversions; **Chord parts** (a chord as the Chords reference
+  builds it: Triad, Chord size, 7th, Added tone, Alterations), **Triad** (the builder's base: major, minor,
+  diminished, augmented, sus2, sus4), **Added tone** (a triad's 6, 6/9, add2, add4, add9, add11), **Alteration** (a
+  dominant's ♭5, ♭9, #9, #11, ♭13; a major 7th's #11); **Chord size** also names a built chord's highest number.
 
 - [ ] **Step 4: CLAUDE.md, CODE_STYLE, PRODUCT, the roadmap** — CLAUDE.md: the router's routes (Learn → Keys,
   `/play/walk`), `pages/keys`, `pages/player` serving a piece or a walk (`PlayerLayout`, `useWalkPlayer`), widgets
   (`key-explorer`; `scale-explorer`'s two views; `player-setup` composed), features (`practice`'s `walkChart`,
   `arrangeWalk`, `PractiseChords`), the kernel (`scale-chord.ts`, `circle.ts`, fingering, the kinds), `schedule`'s
-  `scaleRun` in ticks, the kit (`ChordButton`, `LazyScoreView`, `Fact`), the piece count (54) and progressions.
+  `scaleRun` in ticks and `chordBar`, the kit (`ChordButton`, `LazyScoreView`, `Fact`, `MultiDropdown`), the
+  `chord-explorer` widget as the builder (`ChordBuilder`, `ChordSheet`, `viewChord`, `changedView`), the kernel's
+  `chord-parts.ts` and `chord-name.ts`, the piece count (54) and progressions.
   CODE_STYLE §8: a scale's chords are `scaleChords` stacks named by `stackSuffix`, and a chart's chords from a scale
-  are `scaleChordAt`'s qualities; a run is `scaleRun` in ticks, sounded by `runSounds`; a staff outside the Player is
-  `LazyScoreView`. PRODUCT.md: the screens (Learn's Keys; Scales with Start on, fingerings, the staff, chords to 13ths;
-  the walk in the Player), 54 pieces. The roadmap's status: sub-project 4 built, its records named.
+  are `scaleChordAt`'s qualities; a built chord is `buildChord` over `ChordParts`, placed by `placeChord(tones)`, its
+  root spelled by `chordRootSpelling(pc, intervals)`; a run is `scaleRun` in ticks, sounded by `runSounds`; a staff
+  outside the Player is `LazyScoreView`. PRODUCT.md: the screens (Learn's Keys; Chords as a builder; Scales with Start
+  on, fingerings, the staff, chords to 13ths; the walk in the Player), 54 pieces. The roadmap's status: sub-project 4 built, its records named.
 
 - [ ] **Step 5: Verify the whole app**
 
@@ -6185,7 +8044,7 @@ Expected: every command passes; the build's chunks show VexFlow in its own chunk
 ```bash
 npx prettier --write DESIGN.md PRODUCT.md CLAUDE.md docs/CODE_STYLE.md docs/UBIQUITOUS_LANGUAGE.md docs/adr/0014-a-scale-stacks-its-own-chords-and-a-key-is-a-page.md docs/superpowers/specs/2026-09-25-next-features-roadmap-design.md
 git add -A DESIGN.md PRODUCT.md CLAUDE.md docs
-git commit -m "Record sub-project 4: modes and blues, two fingerings, a scale's chords to 13ths, the walk, Keys; ADR 0014
+git commit -m "Record sub-project 4: modes and blues, two fingerings, a scale's chords to 13ths, the walk, Keys, the chord builder; ADR 0014
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```

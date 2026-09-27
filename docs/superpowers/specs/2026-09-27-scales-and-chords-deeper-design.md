@@ -9,7 +9,8 @@
   the thumb** or **As the scale**; the scale's run as sheet music under the keyboard; the scale's chords stacked as
   triads, 7ths, 9ths, 11ths and 13ths, in inversions, named by rule; **Walk the chords**, in place and in the Player
   with a song's patterns; the key's common progressions opened in the Player in that key; a **Keys** reference: the
-  circle of fifths and a page for each of the 24 keys.
+  circle of fifths and a page for each of the 24 keys; the **Chords reference as a chord builder** (added 2026-09-27
+  on the owner's screenshots, §2.10).
 
 ## 1. What the owner asked (from the roadmap)
 
@@ -210,7 +211,56 @@
 - **The keyboard** is pinned while the page scrolls, marking the key's scale (the tonic yellow), and every chord that
   plays goes down on it.
 
-### 2.10 Decided against
+### 2.10 The Chords reference builds any chord
+
+- **The owner's ask (2026-09-27, with six screenshots of a chord builder):** "improve the chords and scales page… the
+  scales chords should have more possibilities". The screenshots build a chord from a root, an accidental, a quality
+  (Major · Minor · Augmented · Diminished), a structure (Triads · 7ths · 9ths · 11ths · 13ths), a suspension (None ·
+  sus2 · sus4), added tones (add2 · add4 · add6 · add9 · add11 · add13) and an inversion, "invalid combinations
+  filtered out automatically", over a staff, a keyboard and the chord's name.
+- **The table's one pop-up gives way to the chord's parts** (`ChordParts`): **Triad** (Major · Minor · Diminished ·
+  Augmented · Suspended 2nd · Suspended 4th: a suspension is a triad, as the trainers group it, so no "minor sus4" can be
+  asked for); **Chord size** (Triad · 7th · 9th · 11th · 13th); **7th** (♭7 · 7, and 𝄫7 over a diminished triad as a
+  7th chord: a segmented control labelled by degree, as the keys are, each named "Minor 7th" and so on for a screen
+  reader); **Added tone** for a triad (6 · 6/9 · add2 · add4 · add9 · add11: add2 and add4 lie inside the octave, add9
+  and add11 above it, which the keys and the staff show); **Alterations** for a 7th chord with a major 3rd (♭5 · ♭9 ·
+  #9 · #11 · ♭13), a pop-up button whose list checks several: the Choosing Rule's pop-up for several of many
+  (`MultiDropdown`), not a grid of chips. Inversion and Hands stay. The root pop-up already spells each root for the
+  chord, so there is no accidental choice.
+- **Only what the chord takes is offered** (never a disabled choice, never a message): a suspension stops where its own
+  tone would stack again (sus2 at 7ths; sus4 skips the 11th, its 4th); the diminished triad stops at 11ths and takes
+  its 𝄫7 only as a 7th chord; the augmented stops at 9ths; the added tones by triad (all for major and minor, 6 and add9
+  for sus4, none for the rest); the alterations are the available tensions of the owner's table (roadmap §10.3): all on
+  a dominant but ♭13 over a raised 5th (it is that 5th), #11 on a major 7th, none on a minor chord (its ♭9 and ♭13 are
+  the table's "unacceptable"). **A ♭5 and a #11 are one key:** choosing one turns the other off. A change that leaves a
+  part out of reach takes the nearest in reach: the largest size below, the default 7th, no added tone or alteration,
+  the last inversion the chord has.
+- **What a size stacks:** a 7th chord its 7th; a 9th the 9th too; an 11th the 11th; a 13th the 13th, **the 11th left
+  out over a major 3rd** (it clashes with the 3rd a ♭9 above: C13 is C E G B♭ D A, as chord dictionaries and the
+  table's `13` have it; a minor 13th keeps all seven notes). An alteration takes its natural tone's place, or adds its
+  tone above the size (C7#11 and C7♭13 have no 9th).
+- **Named by the table where it has the chord** (its suffix, its name under the symbol, and every way it is written),
+  **else by rule:** a triad's suffix with its added tone (`6`, `m6/9`, `6sus4`, `add9`, `m(add9)`, `sus4(add9)`); a 7th
+  chord's name around its highest natural number, from the tables the stacks use (§2.4; `m11`, `13sus4`, `m(maj11)`,
+  `Maj13`), then each alteration in order (`9#11`, `13♭9`, `7♭5♭9`). Every table quality is built by some parts and
+  named back as the table names it (a test holds all 36), so nothing the reference showed is lost; the builder makes
+  143 chords, each once (where two parts build one chord, a 7th with a ♭9 and a 9th with its 9th lowered, both name it
+  `7♭9`).
+- **One root-spelling rule for every chord:** a root on C♯/D♭ or G♯/A♭ is named sharp when the chord has a minor 3rd
+  or a minor 9th. It reproduces the table's hand-set flags on all 36 qualities, and the flags go.
+- **The chord on a staff:** under the keys, a bar of the chord as a whole note on the grand staff (the left hand's
+  root on the bass staff) with no key signature, so every accidental stands on its note; the Player's `ScoreView`,
+  loaded lazily as in Scale view (`LazyScoreView`). The keys stay the teacher; the staff shows how the chord is written.
+- **The URL names the parts:** `triad`, `size` (5, 7, 9, 11, 13: the highest number), `seventh` (`minor`, `major`,
+  `diminished`), `added`, `alter` (the alterations as a symbol writes them, `b9s11`), with `root`, `inversion` and
+  `hands`. A skill's, a chord family's and a piece's links open their quality's parts (`qualityParams`). The old
+  `quality` param is not read (no backwards compatibility).
+- **Not taken from the screenshots:** the separate accidental pop-up (the root list spells the root), the paragraph
+  explaining the builder (Product Principle 3), the grid of add-tone chips (the Choosing Rule), "add6" and "add13" as
+  names (a 6th chord is `6`; a 13th is a size), and a name like "C Major Triad sus4" (a chord's name is its symbol and,
+  where the table has one, the table's name).
+
+### 2.11 Decided against
 
 - **Mark other keys** (The Ultimate Piano's learn view, roadmap §12): not for this app. The keys outside a scale are the
   unmarked ones; a second mark on them would say nothing new and spend a colour.
@@ -225,8 +275,10 @@
 | Layer | New or changed |
 | --- | --- |
 | `shared/lib/music` | `scale.ts` (the kinds, families, blue notes, `scaleKey`, `relatedScale`, the new spelling, `spellInKey` moved here so `key.ts` needs no scale); `interval.ts` (`degreeLabel`, `labelled`, `m2`, `A2`); `fingering.ts` (`scaleFingering` from any start as the scale, `thumbFingering`, `fingeringsOf`, `ownFingering`); `scale-chord.ts` (new: `scaleChords`, `ScaleChord`, `stackSuffix`, `scaleChordSymbol`, `romanFigure`, `lastStackInversion`, `scaleChordAt`, `borrowedChords`); `circle.ts` (new: `CIRCLE_OF_FIFTHS`, `circleFunctions`); `key.ts` (`keyParam`, `keyFromParam`, `signatureNotes`, `parallelKey`); `place.ts` (`placeScale` from a start, `placeScaleChords` over `ScaleChord`s in an inversion); `chord.ts` (three qualities); `diatonic.ts` removed |
-| `shared/lib/schedule` | `scaleRun` in ticks with fingers, `runSounds`, `walkSounds` |
-| `shared/ui` | `ChordButton` (a chord's symbol over its numeral, pressed while it plays, ringed when it holds the note), `LazyScoreView`; `score/size.ts` (the staff's height, shared) |
+| `shared/lib/music` (the builder) | `chord-parts.ts` (new: `ChordParts`, `buildChord`, `fitParts`, `withAlterations`, the offers, `partsOf`, `qualityParams`, `builtRootSpelling`, the URL params), `chord-name.ts` (new: the triad and 7th-chord naming tables, shared by the stacks and the builder), `chord.ts` (one root-spelling rule over intervals, `qualityWithIntervals`), `place.ts` (`placeChord` over any tones, one `lastInversion`) |
+| `shared/lib/schedule` | `scaleRun` in ticks with fingers, `runSounds`, `walkSounds`, `chordBar`; `placedChordSounds` goes |
+| `shared/ui` | `ChordButton` (a chord's symbol over its numeral, pressed while it plays, ringed when it holds the note), `LazyScoreView`, `MultiDropdown`; `score/size.ts` (the staff's height, shared) |
+| `widgets/chord-explorer` | the builder: `ChordBuilder`, `ChordSheet`, `viewChord`, `changedView` |
 | `entities/piece` | three progression pieces; `COMMON_PROGRESSIONS`; `piecesInKey` |
 | `entities/path` | the six new scale steps |
 | `features/practice` | `walkChart`, `arrangeWalk` |
@@ -243,6 +295,7 @@
 | --- | --- |
 | `/learn/scales` | `root` (C), `kind` (major), `show` (scale), `start` (1), `fingering` (the start's own), `fingers` (none), `rhythm` (even), `tempo` (80), `hands` (rh), `chords` (3), `inversion` (0), `keysPlay` (chords), `arpeggio` (false), `step` |
 | `/learn/keys` | `key` (C), `chords` (3), `inversion` (0) |
+| `/learn/chords` | `root` (C), `triad` (maj), `size` (5), `seventh` (minor), `added` (none), `alter` (none), `inversion` (0), `hands` (rh) |
 | `/play/walk` | `root` (C), `kind` (major), the Player's `mode` `tempo` `speedTraining` `hands` `swing` `loop`, and `pattern` `rh` `lh` `chordSize` (the walk's own when absent) |
 
 An invalid value takes its default; `start` is 1 to the scale's length; `inversion` 0 to `lastStackInversion`; a
@@ -269,15 +322,20 @@ here: the reference's lines name and do not explain.
   C's and A harmonic and melodic minor's), each table quality's suffix reproduced by the rule, figures, inversions,
   borrowed chords, the circle's functions for a major and a minor key, key params.
 - `scaleRun` and `walkChart` in ticks; the walk arranged at each chord size.
+- The builder: every table quality built back from its parts and named as the table names it; an oracle of rule names
+  (triads with added tones, suspended and extended 7th chords, alterations); what each triad and size offers; fitting
+  parts; a ♭5 and a #11 never together; the root-spelling rule; the URL params; the chord on a staff.
 - Screens through `renderApp`: the Scales page (Start on, Fingering, the sheet engraved, 9ths to 13ths, inversions,
-  the walk sounding, the Practise rows' links), the Keys page (choosing on the circle, the facts, chords and borrowed
+  the walk sounding, the Practise rows' links), the Chords page (the parts through the URL, each choice sounding, the
+  7th and alterations only where the chord takes them, a built chord named by rule, the staff), the Keys page (choosing on the circle, the facts, chords and borrowed
   chords sounding, rows' links, the empty line), the walk in the Player (plays, Setup changes the chord size and the
   pattern, Close), the Player's piece Setup after the refactor.
 
 ## 8. Records updated when it ships
 
 ADR 0014 (a scale's chords are stacks named by rule; the walk is a Performance the Player is handed; a key is a page
-with the circle as its chooser); `DESIGN.md` (the circle; the Chords view's sizes and figures; the Scale view's
-sheet); the glossary (Start on, Fingering, Scale chord, Walk the chords, Borrowed chord, Circle of fifths, Parent
-scale, Figures, the Keys reference); `CLAUDE.md`'s architecture; `docs/CODE_STYLE.md` §8 (the scale's chords);
+with the circle as its chooser; the Chords reference builds any chord from its parts); `DESIGN.md` (the circle; the Chords view's sizes and figures; the Scale view's
+sheet; the Chords reference's parts and its staff); the glossary (Start on, Fingering, Scale chord, Walk the chords,
+Borrowed chord, Circle of fifths, Parent scale, Figures, the Keys reference, Chord parts, Triad, Added tone,
+Alteration); `CLAUDE.md`'s architecture; `docs/CODE_STYLE.md` §8 (the scale's chords, a built chord);
 `PRODUCT.md`'s screens; the roadmap's status (sub-project 4 built), after which this spec and its plan are removed.
