@@ -36,6 +36,14 @@ describe('Learn → Scales', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
   })
 
+  it('titles its practice card as playing the scale, not as the Practice place', async () => {
+    await renderApp('/learn/scales')
+    expect(
+      await screen.findByRole('heading', { level: 3, name: 'Play the scale' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Practice' })).not.toBeInTheDocument()
+  })
+
   it('stops the run on Stop', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/learn/scales')

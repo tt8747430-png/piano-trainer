@@ -35,7 +35,7 @@ export const learn: LocaleResources['learn'] = {
     lh: 'ЛР',
     none: 'Для этой гаммы нет принятой аппликатуры.',
   },
-  practice: 'Практика',
+  playScale: 'Сыграть гамму',
   rhythmLabel: 'Ритм',
   rhythm: {
     even: 'Ровно',

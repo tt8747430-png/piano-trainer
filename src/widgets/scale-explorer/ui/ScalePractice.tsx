@@ -21,7 +21,7 @@ export function ScalePractice({
   const playback = usePlayback<'run'>()
   return (
     <section className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5">
-      <h3 className="text-2xl">{t('learn:practice')}</h3>
+      <h3 className="text-2xl">{t('learn:playScale')}</h3>
       <Dropdown
         label={t('learn:rhythmLabel')}
         value={scale.rhythm}

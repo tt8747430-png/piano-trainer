@@ -31,7 +31,7 @@ function ChoiceQuiz({ mode }: { mode: QuizMode }) {
 }
 
 /**
- * My gaps, read once when the tab opens: an answer that turns a gap known must not restart the
+ * My gaps, read once when the quiz opens: an answer that turns a gap known must not restart the
  * quiz under the learner.
  */
 function GapsQuiz({ onWholeQuiz }: { onWholeQuiz: () => void }) {
