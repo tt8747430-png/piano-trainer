@@ -10,7 +10,6 @@ import {
   pitchClassOf,
   placeScale,
   placeScaleChords,
-  rangeOf,
   SCALE_KINDS,
   scaleFingering,
   scaleHasChords,
@@ -19,7 +18,13 @@ import {
 } from '@/shared/lib/music'
 import { scaleRun } from '@/shared/lib/schedule'
 import { Dropdown, Segmented } from '@/shared/ui'
-import { chordKeyPlays, chordMarks, chordsHolding, scaleMarks } from '../model/scale-keys'
+import {
+  chordKeyPlays,
+  chordMarks,
+  chordsHolding,
+  chordsRange,
+  scaleMarks,
+} from '../model/scale-keys'
 import type { ScaleView } from '../model/scale-view'
 import { useHeardNote } from '../model/use-heard-note'
 import { FingeringTable } from './FingeringTable'
@@ -151,7 +156,7 @@ export function ScaleExplorer({
       {showChords ? (
         <ExplorerKeyboard
           keys={scaleKeys}
-          range={rangeOf(scaleKeys)}
+          range={chordsRange(chords)}
           marks={chordMarks(chords)}
           keyPlays={keyPlays}
           outlined={new Set(holding.map((chord) => chord.key))}

@@ -8,7 +8,14 @@ import {
   scaleFingering,
   spellScale,
 } from '@/shared/lib/music'
-import { chordKeyPlays, chordMarks, chordsHolding, heardName, scaleMarks } from './scale-keys'
+import {
+  chordKeyPlays,
+  chordMarks,
+  chordsHolding,
+  chordsRange,
+  heardName,
+  scaleMarks,
+} from './scale-keys'
 
 const C = note('C')
 const TRIADS = placeScaleChords(C, 'major', 3)
@@ -62,5 +69,12 @@ describe('heardName', () => {
     const f = spellScale(note('F'), 'major')
     expect(heardName(midi(70), f)).toBe('B♭')
     expect(heardName(midi(66), f)).toBe('F#')
+  })
+})
+
+describe('chordsRange', () => {
+  it('spans every key the chords play, from the tonic to the top of the last chord', () => {
+    expect(chordsRange(TRIADS)).toEqual({ from: 60, to: 77 })
+    expect(chordsRange(placeScaleChords(C, 'major', 4))).toEqual({ from: 60, to: 81 })
   })
 })

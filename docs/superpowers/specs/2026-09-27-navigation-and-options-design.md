@@ -123,7 +123,7 @@ The reading notes become content, as the roadmap's lessons are (§3.4, §4.2): `
 - **Chords view:**
   - Each degree's key (the seven of the marked octave) carries its **numeral over its chord** (`ii` over `Dm`): the
     mark's label is the chord symbol and its new **caption** the numeral. The tonic's key keeps the tonic's colour,
-    the others the scale's. The keyboard's range narrows to that octave, so a chord's name fits on its key.
+    the others the scale's. The keyboard spans every key the chords play (triads: C4–F5 in C major), so a chord a key plays is in sight; a long chord name wraps on its key.
   - **Triads · 7ths** and **Keys play: Chords · Notes**, two segmented controls.
   - **Keys play Chords** (default): a tap, a typed key or a Glissando onto a degree's key sounds its chord, stacked
     from that key, and puts the chord's keys down while the hand holds it (for at least the shortest press). Any

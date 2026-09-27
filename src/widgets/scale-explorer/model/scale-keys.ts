@@ -5,7 +5,9 @@ import {
   pitchClass,
   pitchClassOf,
   plainSpelling,
+  rangeOf,
   type Finger,
+  type KeyRange,
   type Midi,
   type PlacedScaleChord,
   type PlacedTone,
@@ -52,6 +54,10 @@ export function chordKeyPlays(chords: readonly PlacedScaleChord[]): (key: Midi) 
   const byKey = new Map(chords.map((placed) => [placed.key, placed.tones.map((tone) => tone.midi)]))
   return (key) => byKey.get(key) ?? [key]
 }
+
+/** Every key the chords play, from the tonic up: the keyboard fills its width with them. */
+export const chordsRange = (chords: readonly PlacedScaleChord[]): KeyRange | undefined =>
+  rangeOf(chords.flatMap((placed) => placed.tones.map((tone) => tone.midi)))
 
 /** The key's chords that hold a note, in any octave, in the scale's order. */
 export const chordsHolding = (
