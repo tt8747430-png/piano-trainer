@@ -155,6 +155,18 @@ describe('Learn → Scales', () => {
     expect(screen.queryByText(/ is in /)).not.toBeInTheDocument()
   })
 
+  it('keeps a note forgotten when the learner comes back to Notes, or to the same root', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/scales?show=chords&keysPlay=notes')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E4' }), { pointerId: 1 })
+    const keysPlay = screen.getByRole('group', { name: 'Keys play' })
+    await user.click(within(keysPlay).getByRole('button', { name: 'Chords' }))
+    await user.click(within(keysPlay).getByRole('button', { name: 'Notes' }))
+    expect(screen.queryByText(/ is in /)).not.toBeInTheDocument()
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).not.toHaveClass('ring-ring')
+  })
+
   it('has no Chords view for a scale without seven notes', async () => {
     await renderApp('/learn/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
