@@ -184,20 +184,22 @@ components:
     textColor: '{colors.ink}'
     rounded: '{rounded.pill}'
     size: '72px'
-  chip:
+  popup-button:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
     rounded: '{rounded.control}'
     height: '44px'
-    padding: '0 16px'
-  chip-selected:
-    backgroundColor: '{colors.umber}'
-    textColor: '{colors.paper-card}'
-    typography: '{typography.control}'
-    rounded: '{rounded.control}'
+    padding: '0 12px'
+  popup-item-selected:
+    textColor: '{colors.umber}'
+    typography: '{typography.body}'
     height: '44px'
-    padding: '0 16px'
+  row-link:
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink}'
+    typography: '{typography.headline}'
+    height: '64px'
   segmented-track:
     backgroundColor: '{colors.sand-sunken}'
     rounded: '{rounded.button}'
@@ -294,7 +296,7 @@ heading; streaks as pressure, upsells, locked content, stock photos; the dark ne
 
 - Grouped surfaces: the page a shade darker than the cards, so a card parts by its surface and a 1px soft line.
 - One honey action per screen, borderless, with the ink on it: the only control filled with a colour.
-- What is chosen is neutral: an umber chip, a card-paper segment on a muted track, a muted fill for the current place.
+- What is chosen is neutral: an umber check in a pop-up, a card-paper segment on a muted track, a muted fill for the current place.
 - Seven paints at one lightness, each with a pale wash; a key's mark is its wash at rest and its paint when down.
 - Literata 600 for titles and chord symbols; Onest for reading and every control.
 - One keyboard component everywhere, the whole piano hung from a light wooden rail.
@@ -312,8 +314,8 @@ colours mean something wherever they appear.
 
 ### Secondary
 
-- **Umber** (`umber` with card-paper text; night `dusk-muted` with `dusk-ground` text): what is chosen, as a fill: a
-  pressed chip, the Player's current beat. Never an action and never a colour.
+- **Umber** (`umber` with card-paper text; night `dusk-muted` with `dusk-ground` text): what is chosen: the check on
+  a pop-up's chosen item and on a Setup list's, the Player's current beat. Never an action and never a colour.
 - **Sky Mist** (`sky-mist`, ink `sky-mist-ink`; night `sky-night`, ink `sky-night-ink`): the current or playing bar
   of a chart, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
   focus, where you are.
@@ -363,8 +365,8 @@ Seven paints at one lightness (`paint-brick`, `paint-yellow`, `paint-grass`, `pa
 ### Neutral
 
 - **Paper** (`paper`; night `dusk-ground`): the page, a shade darker than the cards.
-- **Card Paper** (`paper-card`; night `dusk-card`): cards, sheets, popovers, chips, the soft and round buttons, the
-  nav, the chosen segment.
+- **Card Paper** (`paper-card`; night `dusk-card`): cards, sheets, popovers, pop-up buttons, the soft and round
+  buttons, the nav, the chosen segment.
 - **Sand** (`sand-sunken`; night `dusk-sunken`): hover and pressed fills, segment tracks, the current place in the nav,
   a settings group's header band, slider and switch tracks.
 - **Ink** (`ink`; night `dusk-ink`): text. **Soft Ink** (`ink-soft`; night `dusk-muted`): secondary text, the nav's
@@ -385,9 +387,9 @@ turns sky. Every mark stays while keys go down, and its label stays on it: colou
 **The One Honey Rule.** Each screen has exactly one honey action, and it is the only control whose fill is a colour.
 A second action beside it is card paper in the control line (soft), never a second colour.
 
-**The Neutral Chosen Rule.** What is chosen or where you are is shown in neutrals, never in a paint: a chip fills with
-umber, a segment or a Theory tab becomes a card-paper thumb in the control line on a sand track, the current place in
-the nav fills with sand under a semibold ink label.
+**The Neutral Chosen Rule.** What is chosen or where you are is shown in neutrals, never in a paint: a pop-up button
+shows its value in ink and checks it in umber in its list, a segment becomes a card-paper thumb in the control line on
+a sand track, the current place in the nav fills with sand under a semibold ink label.
 
 **The Increased Contrast Rule.** The quiet default has an answer for the OS's increased-contrast setting: under
 `prefers-contrast: more` secondary text steps up to umber (night `dusk-ink`), the card line to the control line, the
@@ -412,12 +414,12 @@ system, in rem, so it grows with the reader's own text size.
 - **Display** (Literata 600, 44px, 1.1): each screen's title from 1024px, the scale's name.
 - **Large Title** (Literata 600, 34px, 1.15): each screen's title on a phone.
 - **Title 1** (Literata 600, 28px, 1.2): the Continue card's band, the Player's next chord.
-- **Title 2** (Literata 600, 22px, 1.3): level and section headings, sheet titles, the sidebar's name, a chord in the
-  symbols list or a scale's chords, a chart's chord from 640px.
+- **Title 2** (Literata 600, 22px, 1.3): level and section headings, sheet titles, the sidebar's name, a lesson's
+  chord example, a chart's chord from 640px.
 - **Title 3** (Literata 600, 20px, 1.25): a settings group's title, a chart's chord on a phone.
 - **Headline** (Onest 600, 17px, 1.375): step and piece rows, the pill button's label, the Player's feedback. At
-  this size a heading element (a chart's section, a Symbols group, the Player's piece title) stays Literata 600.
-- **Control** (Onest 600, 16px): buttons, chips, segments and the Theory tabs.
+  this size a heading element (a chart's section, the Player's piece title) stays Literata 600.
+- **Control** (Onest 600, 16px): buttons, pop-up buttons' values (their labels Onest 400 in soft ink) and segments.
 - **Body** (Onest 400, 16px, 1.5): everything else; notes at most 65ch.
 - **Label** (Onest 400 to 600, 14px and 12px): row subtitles, bar numbers, method notes; the nav's labels are Onest
   500 at 14px on a phone and 16px in the sidebar, semibold where you are.
@@ -438,7 +440,7 @@ that changes in place never shifts its neighbours.
 
 Phone first. On a phone a shell screen is one column (up to 48rem) with 16px gutters, clears the notch, and scrolls
 over a bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a 240px sidebar (the app's
-name in Literata, then the three places) and the screen takes the width it is given, up to 72rem, with 40px side
+name in Literata, then the four places) and the screen takes the width it is given, up to 72rem, with 40px side
 padding. The Player and the Check are full screen (up to 72rem) with no navigation.
 
 From 1024px each screen arranges itself in two columns with a 40px gap, tops aligned:
@@ -447,9 +449,12 @@ From 1024px each screen arranges itself in two columns with a 40px gap, tops ali
 - **Piece:** facts and actions (5 parts) beside the chart (7 parts).
 - **Player:** the now panel (2 parts) beside the chart (3 parts), the keyboard below; on a phone on its side, two
   columns over the keyboard.
-- **Chords and Scales explorers, Settings:** two equal columns; the Path's steps in two columns inside their card.
+- **Learn and Practice:** two equal columns of grouped rows (Lessons beside References; the Theory quiz beside the
+  studies and progressions).
+- **The Chords and Scales references, Settings:** two equal columns; the Path's steps in two columns inside their
+  card.
 
-Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The explorers, Symbols
+Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The references, a lesson
 and a Piece's chart pin their keyboard to the top while the page scrolls.
 
 **The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
@@ -474,7 +479,7 @@ nowhere else.
 ## Shapes
 
 Soft book corners from one 12px base: black keys 6px, white keys 9px, small parts 10–11px (a segment's thumb 11px),
-buttons, chips, segment tracks and step tiles 12px, cards 14px, sheets 20px at the top. Round buttons, Play, rating
+buttons, pop-up buttons, segment tracks and step tiles 12px, cards 14px, sheets 20px at the top. Round buttons, Play, rating
 marks, the learned toggle, finger circles and pips are fully round. Keys are square at the top and round only at the
 bottom. Every card carries a 1px soft line, every control a 1px control line; list rows inside a card part by a 1px
 hairline.
@@ -495,14 +500,21 @@ Plain, clear, one of them coloured.
 - **Play** (72px circle, honey): the Player's one Play/Stop.
 - **Focus:** a 3px deep-sky ring, 2px outside.
 
-### Chips and segments
+### Pop-up buttons and segments
 
-- **Chip** (44px, 12px corners, card paper in the 1px control line, Onest 600 16px): a row of roots, families,
-  qualities or keys that scrolls past the screen's edge on a phone and wraps from 1024px. Chosen: umber with paper
-  text (night: dusk muted with dusk-ground text).
+**The Choosing Rule** (Apple's Human Interface Guidelines, read for sub-project 2): five or fewer short nouns are a
+segmented control (one tap, every choice in sight); more, or longer names, a pop-up button that shows its label and
+its value; on or off a switch; settings changed less often a sheet; a popover only beside the keys (the keyboard
+settings, which must not cover them). Never a row of chips or a wall of tiles.
+
+- **Pop-up button** (44px, 12px corners, card paper in the 1px control line): its label in soft ink, its value in ink
+  (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
+  (12px corners, the popover shadow and ring) of 44px items, the chosen one checked in umber; a grouped list (the
+  Chord pop-up's five families) names each group in soft ink over a hairline. An item may carry a second word in soft
+  ink ("Minor 7th m7"). Root, Chord, Scale, Rhythm, Collection, Level and the Player's key are pop-ups.
 - **Segmented** (a sand track, 4px inset, 12px corners): one value from a few. Unchosen segments are soft ink with no
-  fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. The Theory
-  tabs are the same track.
+  fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. Two
+  segmented controls whose words could be mistaken for each other name themselves on screen ("Keys play").
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
 
 ### Cards and sheets
@@ -514,8 +526,11 @@ Plain, clear, one of them coloured.
   and the honey pill Continue (beside it from 1024px).
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
-- **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice,
-  reading notes.
+- **Row link** (a list row in a grouped card, 64px): a 48px tile in its paint's wash with a 20px icon in its deep
+  shade, the title in Onest 600 17px, an optional detail line, and a chevron (the disclosure indicator): Learn's and
+  Practice's rows. A titled group of them is a card parted by hairlines.
+- **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice.
+- **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.
 
 ### Marks
 
@@ -527,7 +542,8 @@ Plain, clear, one of them coloured.
 ### Navigation
 
 Monochrome, so the content keeps the colour. A bar docked along the bottom on phones (card paper, a 1px soft line
-above it): three places, a 24px icon over an Onest 500 14px label, both soft ink; the current place fills with sand
+above it): four places, Path · Songs · Learn · Practice (Route, Music, BookOpen, Metronome), a 24px icon over an
+Onest 500 14px label, both soft ink; the current place fills with sand
 under a semibold ink label. From 1024px, a 240px sidebar with a 1px soft line on its right, "Piano Trainer" in
 Literata 600 22px at the top, the places as 44px rows (20px icon, 16px label).
 
@@ -558,7 +574,11 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
 - **Finger row:** finger numbers in 20px circles under the keys, in two staggered lines as the keys stand: a black
   key's in the upper line (sky wash), a white key's in the lower (key paper ringed in key bed). Only while a mark
   carries a finger.
-- **Spotlight** (the explorers, Symbols, a Piece's chart): the keys the app puts down are the ones struck last: an
+- **A mark's caption:** a second, smaller line over a mark's label: in the Scales reference's Chords view each
+  degree's key carries its numeral over its chord (`ii` over `Dm`), both 12px, wrapping anywhere on a narrow key.
+- **What a key plays:** a key sounds itself unless the screen makes it more: in Chords view a degree's key plays its
+  chord, stacked from it, and every key of it is down while the hand holds the key.
+- **Spotlight** (the references, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
   arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by going
   down, never by hiding the rest.
 - **Access:** keys are buttons named by note ("F sharp 4"), one in the tab order, the arrow keys, Home and End walking
@@ -578,7 +598,7 @@ exponential ease-out. Under reduced motion every transition is instant.
 
 - **Do** give each screen exactly one honey action, borderless, with the ink on it.
 - **Do** part cards by surface and a 1px soft line, and draw every control in the 1px control line.
-- **Do** show what is chosen in neutrals: an umber chip, a card-paper segment, a sand fill for the current place.
+- **Do** show what is chosen in neutrals: an umber check, a card-paper segment, a sand fill for the current place.
 - **Do** show every sound on a keyboard: a key that sounds goes down, a mark from its wash to its full paint.
 - **Do** label every coloured key with its degree, finger or note.
 - **Do** set titles and chord symbols in Literata 600, and everything read or pressed in Onest.

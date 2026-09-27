@@ -21,17 +21,25 @@ A container wires data to presentational children. One job each.
 - A page composes widgets and `shared/ui`, with little markup of its own.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
   `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `RoundButton` /
-  `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`,
-  `RatingMark`, `LevelMark`.
+  `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up button, over shadcn's `select`), `RowLink` and
+  `RowGroup` (a row that leads to a page, in a titled card), `PAINT` (the chrome's paints for a tile), `Sheet` /
+  `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`, `LevelMark`.
+- **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
+  no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
+  with its chevron.
+- **Choosing** (Apple's Human Interface Guidelines): five or fewer short nouns are a `Segmented`; more, or longer
+  names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
+  settings changed less often a `Sheet`; a popover only beside the keys. Never a row of chips.
 - **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
   clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
-  play (`useSoundKey`), so its key is down while pressed, not while it rings, and for at least the shortest press
+  play (`useSoundKeys`), so its key is down while pressed, not while it rings, and for at least the shortest press
   (`usePresses` in `shared/lib`, which every hand's keys go through). It follows the **keyboard settings**
   (key size, swipe, note names, the map, typing), saved for every keyboard and set from the rail's settings button or
   Settings (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The
-  explorers, Symbols and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
+  references, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
   arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key sounding
-  is down there.
+  is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales reference's Chords view a
+  degree's key plays its chord), and every key it plays is down while the hand holds it.
   `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
   it on that screen's keyboard (pin it when the page scrolls away from it).
 - **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
@@ -81,10 +89,10 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   to `data-theme` only so shadcn primitives follow the app's setting rather than the OS.
 - **The world is a labelled picture book, printed quietly** (ADR 0010, ADR 0011): seven faded paints at one
   lightness, each with a pale wash. What each colour does is a token: `--primary` (honey) the one action and the only
-  control filled with a colour, `--selected` (umber, neutral) a chosen chip, `--learned` learned, on and connected,
+  control filled with a colour, `--selected` (umber, neutral) the check on a chosen item, `--learned` learned, on and connected,
   `--link` links and `--ring` focus, `--attention` a gap, `--destructive` a wrong key or a reset, `--border` the soft
-  1px line round a card, `--input` the 1px line round a control (3:1), `--hairline` a divider. A chosen segment or
-  Theory tab is `bg-card` with `border-input` on a `bg-muted` track; the nav's place is `bg-muted`. Every line is 1px
+  1px line round a card, `--input` the 1px line round a control (3:1), `--hairline` a divider. A chosen segment is
+  `bg-card` with `border-input` on a `bg-muted` track; the nav's place is `bg-muted`. Every line is 1px
   (`border`, `divide-y`); only focus rings and the keys' own rings are wider. `tokens.css` holds light, dark and a
   `prefers-contrast: more` layer: a new role gets all three where it is a line or a secondary ink.
 - **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
@@ -97,14 +105,14 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   `--key-scale-down`, `--key-tonic` and `--key-tonic-down`, a role or hand and its `-wash`), a plain key sounding is
   `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail` (with `--on-key-rail`), `--key-bed`, `--key-shade`,
   `--key-lip`, `--key-sheen` (the No Glow Rule's one exception, on keys only); a slider's thumb is `--thumb`.
-- **Two faces:** Onest for reading and every control (buttons, chips, segments, tabs, the nav); Literata
+- **Two faces:** Onest for reading and every control (buttons, pop-up buttons, segments, the nav); Literata
   (`font-display`, variable in weight and optical size) for titles (every `h1`–`h3`, at 600 from the base layer) and
   chord symbols. Both faces are variable, so a `font-display` element that is not a heading sets its weight
   (`font-semibold`); never a serif on a control. Faux bold is off.
 - **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
   token, a utility or a named constant.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11
-  · `xl` 12 · `2xl` 12 · `3xl` 14 · `4xl` 20 (black keys, white keys, primitives, chips, buttons, cards, sheets); type
+  · `xl` 12 · `2xl` 12 · `3xl` 14 · `4xl` 20 (black keys, white keys, primitives, pop-up buttons, buttons, cards, sheets); type
   one size per text style, in rem so it follows the reader's text size: `text-lg` 17 · `xl` 20 · `2xl` 22 · `3xl` 28
   · `4xl` 34 · `5xl` 44 (headline, title 3, title 2, title 1, large title, display), Tailwind's `7xl` 72 for the
   chord display; `ease-out` is the one
@@ -167,14 +175,15 @@ URL (`stripSearchParams`), and a control's change replaces the history entry (`r
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an
   `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the
-  play's handle; `useSoundKey` adds a tap on top, at the audio clock's now, as a hand's play (`{ byHand: true }`: the
+  play's handle; `useSoundKeys` adds a hand's keys on top (a tap's key, or the chord a key stands for), at the audio
+  clock's now, as a hand's play (`{ byHand: true }`: the
   port sounds it but leaves it to the key's press to show); what sounds, and which keys were struck last, is the port's
   to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says whether a play still sounds
   (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the port, `playing` (the id last
   played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no shared state; another button's
-  sound cuts it off and the port says so. A chord as the explorers place it is `placedChordSounds`.
+  sound cuts it off and the port says so. A chord as the references place it is `placedChordSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
-- **The explorers place tones with `placeChord` / `placeScale`,** and a chord's inversions are `lastInversion`'s:
+- **The references place tones with `placeChord` / `placeScale`** (and a scale's chords with `placeScaleChords`), and a chord's inversions are `lastInversion`'s:
   the validator, the segments and the keyboard all ask it.
 - Content is data validated by tests: a chart that does not parse, an unknown chord symbol, or a missing Russian
   text fails CI.
@@ -204,8 +213,8 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
 ## 10. Copy and i18n
 
 - **No sentence that repeats what a label, icon or layout already says. No how-to paragraphs.** Empty states and
-  errors get one short line. The one exception is Theory → Symbols' reading notes (master spec §5): reference text
-  about chord symbols behind one row, not instructions for the app.
+  errors get one short line. The one exception is **lessons** (`entities/lesson`, Learn): a lesson teaches music, in
+  prose with examples that play, and never explains a button.
 - Every interface string goes through i18next, in **both** `en` and `ru`
   (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English).
 - Content text a learner reads is `LocalText { en, ru }`, read through `localText(text, locale)`. Credits stay as

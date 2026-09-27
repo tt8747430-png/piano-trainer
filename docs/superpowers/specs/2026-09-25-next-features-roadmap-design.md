@@ -8,8 +8,10 @@
   sub-projects 2 and 4 (§3.8). Then two owner decisions: studies and progressions leave Songs (§3.9), and a lighter
   palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11).
-- **Built:** sub-project 1. Its spec and plan were removed on 2026-09-27 (`git log --diff-filter=D --
-  docs/superpowers` finds them); `DESIGN.md`'s keyboard and ADRs 0009 and 0010 record what they decided.
+- **Built:** sub-projects 1 and 2. Their specs and plans were removed once built, on 2026-09-27 (`git log
+  --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
+  Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
+  places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds).
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,
@@ -234,7 +236,9 @@ Decided by the owner with the building session, recorded here at its request.
   §10.1) and the Called to Play studies. They keep opening in the Player with its patterns, Chord size, hands, tempo,
   Wait mode and loop.
 - Where each lands (the Scales page's Chords mode, Practice's exercises, the key pages) and when is for sub-projects
-  2, 4 and 7's specs; the Path keeps its steps that name them, pointing to their new place.
+  2, 4 and 7's specs; the Path keeps its steps that name them, pointing to their new place. **Sub-project 2 put them
+  on Practice** (lists under the Theory quiz; their pages at `/practice/studies/…` and `/practice/progressions/…`);
+  links from the Chords view and the key pages are sub-project 4's.
 
 ### 3.10 A new world: the labelled picture book (owner, 2026-09-26 and 27; built, ADRs 0010 and 0011)
 
@@ -983,7 +987,7 @@ Each is for the named sub-project's spec to settle (a decision, or "not for this
 | No Stop after Play                                                                        | Play buttons only started sound                                         | 1 (built)         |
 | Keys stubby on one screen, a thin strip on another (the desktop Player)                  | Each screen set a fixed height                                          | 1 (built)         |
 | The Path: 63 steps in one list, all at level 1, rows that open other tabs                 | Levelling left for Phase 4; steps link to Songs or Theory               | 6                 |
-| Theory's Symbols repeats Chords                                                           | The dictionary lists what Chords chooses                                | 2                 |
+| Theory's Symbols repeats Chords                                                           | The dictionary lists what Chords chooses                                | 2 (built)         |
 | The Player's grid of notes (`Bm · Next · RH/LH · F♯4⁵ …`)                                 | No sheet music                                                          | 3                 |
-| Too many options visible (rows of chips on Chords and Scales; the Setup sheet)            | Every choice laid out at once                                           | 2                 |
+| Too many options visible (rows of chips on Chords and Scales; the Setup sheet)            | Every choice laid out at once                                           | 2 (built)         |
 | The Pattern page: a long list of names and paragraphs, nothing to see or hear             | Patterns are only text in the picker                                    | 8                 |

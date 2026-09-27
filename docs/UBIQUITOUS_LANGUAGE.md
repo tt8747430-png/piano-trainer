@@ -72,7 +72,7 @@ differently, the UI column says how.
 | **Key size**                  | How wide the white keys are: Fit (the range fills the width) · Large · Whole piano (`KeySize`)                                                                                                                                                                          | zoom, scale                 |
 | **Note names**                | Which keys carry their note's name: C (every C) · All · None (`NamedKeys`); a mark's own label wins                                                                                                                                                                     | labels (alone)              |
 | **Typing keys**               | The computer keyboard as a piano, read by physical key: A to ' play, the row above the black keys, Z X the octave                                                                                                                                                       | hotkeys, shortcuts          |
-| **Spotlight**                 | On the explorers', Symbols' and a Piece's keyboards: the keys the app puts down are the ones **struck** last, every mark kept                                                                                                                                           | highlight, focus, dim       |
+| **Spotlight**                 | On the references', a lesson's and a Piece's keyboards: the keys the app puts down are the ones **struck** last, every mark kept                                                                                                                                        | highlight, focus, dim       |
 | **Struck** (keys)             | The sounding keys struck last: a block chord's together, an arpeggio's or a run's one by one (`struck()`)                                                                                                                                                               | active, current             |
 | **Finger row**                | The fingers in circles under the keys, a black key's above a white key's                                                                                                                                                                                                | finger labels               |
 
@@ -88,18 +88,33 @@ differently, the UI column says how.
 
 ## Theory gaps
 
-| Term                      | Means                                                                                                                                    | Avoid               |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| **Skill**                 | Something rated from quiz answers: one chord quality or one scale kind (`chord:m7`)                                                      | ability, topic      |
-| **Evidence**              | The last 5 quiz answers on a Skill                                                                                                       | history, attempts   |
-| **Known / Gap / Unknown** | A Skill's rating: 4 of the last 5 right including the latest / tried, not known / never tried                                            | mastered, weak, new |
-| **Check**                 | A short quiz scoped to some Skills (a Piece's chords, a Step's family)                                                                   | test, exam          |
-| **Build chord**           | The quiz mode that names a chord for the learner to play                                                                                 | exercise, drill     |
-| **Name chord**            | The quiz mode that plays a chord for the learner to name                                                                                 | exercise, drill     |
-| **Build scale**           | The quiz mode that names a scale for the learner to play                                                                                 | exercise, drill     |
-| **My gaps**               | The quiz scope that asks Gap Skills first, then Unknown Skills from Pieces the learner opened                                            | review, weak spots  |
-| **Theory quiz**           | One of Theory → Quiz's open-ended quizzes: Build chord, Name chord or Build scale over the chosen Skills, or My gaps; a Check is bounded | tab                 |
-| **Explorer**              | Theory → Chords or Scales: any chord or scale on any root, placed on the keyboard                                                        | viewer, browser     |
+| Term                      | Means                                                                                                                               | Avoid               |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| **Skill**                 | Something rated from quiz answers: one chord quality or one scale kind (`chord:m7`)                                                 | ability, topic      |
+| **Evidence**              | The last 5 quiz answers on a Skill                                                                                                  | history, attempts   |
+| **Known / Gap / Unknown** | A Skill's rating: 4 of the last 5 right including the latest / tried, not known / never tried                                       | mastered, weak, new |
+| **Check**                 | A short quiz scoped to some Skills (a Piece's chords, a Step's family)                                                              | test, exam          |
+| **Build chord**           | The quiz mode that names a chord for the learner to play                                                                            | exercise, drill     |
+| **Name chord**            | The quiz mode that plays a chord for the learner to name                                                                            | exercise, drill     |
+| **Build scale**           | The quiz mode that names a scale for the learner to play                                                                            | exercise, drill     |
+| **My gaps**               | The quiz scope that asks Gap Skills first, then Unknown Skills from Pieces the learner opened                                       | review, weak spots  |
+| **Theory quiz**           | One of Practice's open-ended quizzes: Build chord, Name chord or Build scale over the chosen Skills, or My gaps; a Check is bounded | tab, mode           |
+| **Explorer**              | A Reference that places any chord or scale on any root on the keyboard: Learn → Chords or Scales                                    | viewer, browser     |
+
+## Places and screens
+
+| Term                         | Means                                                                                                                              | UI                           | Avoid                          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------ |
+| **Place**                    | One of the four top-level sections in the nav: Path · Songs · Learn · Practice                                                     | Path, Songs, Learn, Practice | tab (for a place), section     |
+| **Learn**                    | The place of lessons and references (later tools)                                                                                  | Learn («Обучение»)           | Theory                         |
+| **Practice**                 | The place of the Theory quiz, studies and progressions (later exercises and trainers)                                              | Practice («Практика»)        | Drill, Train                   |
+| **Lesson**                   | A Learn page that teaches music, with examples that play (`entities/lesson`, content as code)                                      | Lesson («Урок»)              | tutorial, article              |
+| **Reference**                | A Learn page to look things up in: Chords, Scales                                                                                  | Reference («Справочник»)     | tool, dictionary               |
+| **Shelf**                    | Where a piece's page is: a song or listing on Songs, a study or progression on Practice (`PieceLink`)                              | —                            | category                       |
+| **Scale view / Chords view** | The Scales reference's two views: the scale's degrees on the keys, or each degree's chord on its key                               | Scale · Chords               | mode (a Mode is a church mode) |
+| **Keys play**                | In Chords view, what a degree's key plays: its chord, or its own note (lighting the chords that hold it)                           | Keys play: Chords · Notes    | tap mode                       |
+| **Holds** (a chord, a note)  | A chord holds a note when the note is one of its notes, in any octave (`chordHolds`)                                               | "E is in C, Em and Am"       | contains, fits                 |
+| **Pop-up button**            | A button that shows its label and current value and opens a list to choose one of many (`Dropdown` in code); Apple's pop-up button | —                            | select, chips                  |
 
 ## Settings and app
 

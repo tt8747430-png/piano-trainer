@@ -46,8 +46,9 @@ people**. Both need code that can be changed safely and an interface a newcomer 
 
 ### Not in scope
 
-Accounts, sync, a backend, sheet-music rendering, audio recording, written theory lessons, new pieces, Playwright
-end-to-end tests, and pre-commit hooks. Each can follow as its own effort.
+Accounts, sync, a backend, sheet-music rendering, audio recording, new pieces, Playwright
+end-to-end tests, and pre-commit hooks. Each can follow as its own effort. (Written lessons came in with Learn,
+sub-project 2.)
 
 ## 2. Stack and tooling
 
@@ -98,8 +99,8 @@ the same layer (e.g. `entities/path` → `entities/piece`), imports go only thro
 src/
   app/        router, composition-root (createServices), providers (i18n, theme), PWA update prompt,
               route error boundaries
-  pages/      path · songs · piece · player · theory-chords · theory-scales · theory-symbols ·
-              theory-quiz · settings · not-found
+  pages/      path · songs · piece · player · learn · chords · scales · lesson · practice ·
+              theory-quiz · check · settings · not-found   (as of sub-project 2)
   widgets/    app-nav · path-levels · continue-card · piece-list · chord-chart · piece-skills ·
               player · player-setup · chord-explorer · scale-explorer · quiz-board
   features/   mark-learned · practice · quiz · record-answer · record-practised · connect-midi ·
@@ -364,16 +365,20 @@ explaining.
 
 ## 5. Screens and navigation
 
-**Navigation:** bottom bar `Path · Songs · Theory` on phones; a left rail from 1024px. Settings is a gear in the Path
-header. The Player is full-screen with a back control.
+**Navigation** (revised by sub-project 2, 2026-09-27; ADR 0012): a bar docked at the bottom on phones with the four
+places `Path · Songs · Learn · Practice`; a sidebar from 1024px. Settings is a gear in the Path header. The Player and
+the Check are full-screen with a way back. A screen below a place's top has a back button.
 
 | Route                                        | Screen                                                                                                                                                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                          | **Path**: the Continue card (§4.6 ④), then levels 1–4 with progress, then step rows with a learned check                                                                                 |
-| `/songs`                                     | **Songs**: search; collection and level filters; rows with title (original + translation), key, level, learned check; listings marked "no chart yet"                                      |
+| `/songs`                                     | **Songs** (songs and listings only): search; collection and level pop-ups; rows with title (original + translation), key, level, learned check; listings marked "no chart yet"                                      |
 | `/songs/$pieceId`                            | **Piece**: title, credits, key, meter, note; "Chords in this song" + Check (§4.6 ①); the chart by section (tap a bar to hear it); **Practise** as the one primary action; Mark as learned; a link to the key's scale |
 | `/play/$pieceId`                             | **Player**: a one-line setup summary (key · tempo · hands) that opens the **Setup sheet**; the mode switch `Listen · Step · Your turn`; the keyboard with hand colours; the current-bar note grid; a chart strip to jump; the transport (Play, or Back / Next) as the primary action. The Setup sheet holds key, tempo, hands, pattern, per-hand patterns, voicing (progressions that allow it) and the toggles (finger numbers, melody, metronome, count-in) |
-| `/theory/chords` `/theory/scales` `/theory/symbols` `/theory/quiz` | **Theory**, with a segmented switch. Chords: root, family, quality, inversion, hands, keyboard coloured by chord role, play / arpeggio, and Check yourself when opened from a path step. Scales: root, kind, degrees or fingering, rhythm practice, diatonic chords. Symbols: reading chord symbols + the chord dictionary. Quiz: Build chord, Name chord, Build scale, My gaps; chosen families and scales; stats |
+| `/learn`, `/learn/lessons/$lessonId`         | **Learn**: lessons (the first: reading chord symbols, its examples playing on the keys) and references                                                                                     |
+| `/learn/chords` `/learn/scales`              | **The references.** Chords: root and chord pop-ups, inversion, hands, keyboard coloured by chord role, play / arpeggio, the ways the chord is written, and Check yourself when opened from a path step. Scales: root and scale pop-ups; Scale view (degrees, fingering, rhythm practice) or Chords view (each degree's chord on its key, triads or 7ths, keys playing chords or notes and the chords that hold a note) |
+| `/practice`, `/practice/quiz/$quiz`          | **Practice**: the Theory quiz (Build chord, Name chord, Build scale, My gaps; chosen families and scales; stats), and the studies and progressions                                         |
+| `/practice/studies/$pieceId` `/practice/progressions/$pieceId` | A study's or progression's page, as a song's                                                                                                           |
 | `/settings`                                  | Language, theme, MIDI, reset progress                                                                                                                                                    |
 
 **Progress rules:**
@@ -387,8 +392,8 @@ header. The Player is full-screen with a back control.
   - the Chords or Scales explorer when opened from a path step (the step id travels as `?step=`);
   - automatically, for chord and scale steps, per §4.6 ②.
 
-The legacy Guide tab is dropped. Chord-symbol reading moves to Theory → Symbols, and the song-learning advice is not
-carried over (the copy rule of §8).
+The legacy Guide tab is dropped. Chord-symbol reading is Learn's first lesson (it was Theory → Symbols until
+sub-project 2), and the song-learning advice is not carried over (the copy rule of §8).
 
 ## 6. State and saved data
 
@@ -397,7 +402,7 @@ carried over (the copy rule of §8).
   - explorers: root, family, quality, scale kind, view, rhythm, tempo, `step`
   - player: `key`, `tempo` (default: the piece's), `hands`, `mode`, `pattern`, `rh`, `lh`, `voicing`
 
-  Example: `/theory/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=turn`.
+  Example: `/learn/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=turn`.
 - **Saved stores** (zustand `persist` → `localStorage`, each with a `version` and a `migrate`, so future changes to
   their shape keep learners' progress):
   - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: the first of
@@ -447,7 +452,8 @@ direction must meet:
   label, hand), selected and wrong keys, `onKeyPress`. Keys are buttons with note-name labels for screen readers.
 
 **i18n:**
-- **Interface strings** are in namespaces `common, path, songs, piece, player, theory, quiz, settings`, one
+- **Interface strings** are in namespaces `common, path, songs, piece, player, music, learn, practice, quiz,
+  settings` (`theory` split into `music` and `learn` by sub-project 2), one
   TypeScript module per namespace per locale in `shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed
   against English's shape, so a missing or extra key fails `tsc`; a test also checks parity and that no string is
   empty.
@@ -576,4 +582,5 @@ Each phase gets its own implementation plan (`writing-plans`) and ends green in 
   or 9ths for the progressions that allow it; both hands, RH or LH; Listen, Step (beat, bar, back, jump) and Your
   turn with MIDI or taps; finger numbers; melody; metronome; count-in; 40–160 BPM; loop.
 - **Quiz:** Build chord, Name chord, Build scale; chosen families and scales; correct, total, streak and best.
-- **Guide:** the chord-symbol reading notes and the chord dictionary (now in Theory → Symbols).
+- **Guide:** the chord-symbol reading notes and the chord dictionary (Theory → Symbols, then Learn's first lesson and
+  the Chords reference's Written line since sub-project 2).

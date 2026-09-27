@@ -53,49 +53,52 @@ slice only through its `index.ts`, by alias or relative path alike. Inside share
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
 it. `@` → `src`.
 
-- **app/**: `router.tsx` (code-based TanStack Router; screens are lazy through `routes/*-screens.ts`; `notFound()`
-  for an unknown piece or check), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
+- **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; screens are
+  lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
+  quiz or check, and for a piece on the wrong shelf), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
   lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
-  `FullScreenLayout` for the Player and the Check; `TheoryLayout`), `RoutePending`, `update-prompt/`, `RouteError`,
+  `FullScreenLayout` for the Player and the Check), `RoutePending`, `update-prompt/`, `RouteError`,
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
   (`pages/player/model/use-player.ts`), which is its test surface.
-- **widgets/<x>/**: composite UI tied to screens (`app-nav`, `theory-nav`, `continue-card`, `path-levels`,
-  `piece-list`, `chord-chart`, `piece-skills`, `player-setup`, `chord-explorer`, `scale-explorer`, `step-panel`,
-  `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+- **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
+  `chord-chart`, `piece-skills`, `player-setup`, `chord-explorer`, `scale-explorer` (Scale and Chords views; its pure
+  marks and plays in `model/`), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
-  control, held keys), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
+  control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
-  the keys struck last; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
-  Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the explorers' pinned one), and the
+  the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
+  Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), and the
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the note grid, the marks) and `quiz` (the machine, check plans, the
-  theory quizzes, My gaps, `useQuiz`).
+  Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
-  and section headings; a step's title and `ExplorerLink`), `index.ts`. Content: `piece` (51 pieces, 7 listings, chart
-  and progression parsers), `pattern` (39 patterns), `path`. Saved state: `settings` (`pt-settings`, version 3, with the
+  and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
+  Content: `piece` (51 pieces, 7 listings, chart and progression parsers; `SONG_COLLECTIONS` on Songs, `STUDIES` and
+  `PROGRESSIONS` on Practice), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content:
+  sections of text, steps, notes and chords that play). Saved state: `settings` (`pt-settings`, version 3, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
   `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
-  barrels of their own: `music` the theory kernel (with the piano's ranges and `placeChord`/`placeScale`), `arrangement`
+  barrels of their own: `music` the theory kernel (with the piano's ranges, `placeChord`/`placeScale`/`placeScaleChords` and `chordHolds`), `arrangement`
   (`arrange`, a chart → a Performance), `schedule` (a Performance → sounds in seconds, Listen's loop, a bar, a chord as
-  the explorers place it, a scale run, a tap, which keys sound when and which were struck last), `services`
-  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKey` (a tap, a hand's
-  play), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
+  the references place it, a scale run, a hand's keys, which keys sound when and which were struck last), `services`
+  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
+  the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
-  with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `ChipRow`, `Sheet`
-  with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`,
-  `useLocale`, `useScaleName`, `LocalText`), `test`.
+  with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
+  button), `RowLink` and `RowGroup`, `PAINT`, `Sheet` with its trigger and close, `RatingMark`, `LevelMark`; shadcn in `ui/primitives`), `i18n` (`Locale`,
+  `useLocale`, `useScaleName`, `LocalText`; namespaces per place, `music` for the words every screen shares), `test`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
