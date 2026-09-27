@@ -94,8 +94,8 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     .map((n) => ({
       kind: 'note',
       midi: n.midi,
-      at: at(n.startTick),
-      duration: Math.max(SHORTEST_NOTE, secondsFor(n.durationTicks, tempo) * LEGATO),
+      at: at(n.startTick + n.roll),
+      duration: Math.max(SHORTEST_NOTE, secondsFor(n.durationTicks - n.roll, tempo) * LEGATO),
       velocity: n.velocity,
     }))
 
@@ -135,8 +135,8 @@ export function beatGroupSounds(
       {
         kind: 'note',
         midi: n.midi,
-        at: 0,
-        duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks, tempo)),
+        at: secondsFor(n.roll, tempo),
+        duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks - n.roll, tempo)),
         velocity: n.velocity,
       },
     ]

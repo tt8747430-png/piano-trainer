@@ -10,8 +10,9 @@ import {
   plainSpelling,
   rootSpelling,
   sameNote,
+  writtenOctave,
 } from './note'
-import { pitchClass } from './pitch'
+import { midi, pitchClass } from './pitch'
 
 describe('pitchClassOf', () => {
   it.each([
@@ -129,5 +130,14 @@ describe('noteParam and noteFromParam', () => {
   it('read only a param noteParam wrote', () => {
     // @ts-expect-error Text from anywhere else is not a NoteParam: a URL's goes through readNote first.
     expect(noteFromParam('Bb')).toEqual(note('B', -1))
+  })
+})
+
+describe('writtenOctave', () => {
+  it('writes a key in the octave of its letter', () => {
+    expect(writtenOctave(midi(60), note('C'))).toBe(4)
+    expect(writtenOctave(midi(60), note('B', 1))).toBe(3)
+    expect(writtenOctave(midi(71), note('C', -1))).toBe(5)
+    expect(writtenOctave(midi(62), note('C', 2))).toBe(4)
   })
 })

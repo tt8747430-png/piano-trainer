@@ -9,7 +9,7 @@ import {
 } from '@/shared/lib/music'
 import type { Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
-import { spellPerformedNote } from './note-names'
+import { playedNoteName } from './note-names'
 
 /**
  * The Player's keyboard: the beat group's notes in the hands asked for (the ones heard, or in Wait
@@ -33,7 +33,7 @@ export function practiceMarks(
   for (const played of notes) {
     const label = options.received?.includes(pitchClass(played.midi))
       ? '✓'
-      : spellPerformedNote(performance, played).name
+      : playedNoteName(played).name
     marks.set(played.midi, {
       tone: played.hand,
       label,

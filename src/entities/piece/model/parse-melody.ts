@@ -1,16 +1,16 @@
 import type { Melody, MelodyNote } from '@/shared/lib/arrangement'
-import { midiOf, parseNoteName, type Midi } from '@/shared/lib/music'
+import { midiOf, parseNoteName, type Midi, type SpelledNote } from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError } from './content-error'
 import type { ChartPiece } from './types'
 
 /** `C#5`: a note name and a one-digit octave, or null when that is no key on the keyboard. */
-function readPitch(pitch: string): Midi | null {
+function readPitch(pitch: string): { midi: Midi; spelled: SpelledNote } | null {
   const written = /^(.+?)(\d)$/.exec(pitch)
   const spelled = written?.[1] ? parseNoteName(written[1]) : null
   if (!written || !spelled) return null
   try {
-    return midiOf(spelled, Number(written[2]))
+    return { midi: midiOf(spelled, Number(written[2])), spelled }
   } catch (error) {
     if (error instanceof RangeError) return null
     throw error
@@ -27,11 +27,11 @@ export function parseMelody(piece: ChartPiece): Melody | undefined {
     const [pitch = '', beatsText = '', ...extra] = token.split('/')
     const beats = readBeats(beatsText)
     const durationTicks = beats === null ? null : ticksIn(beats)
-    const midi = pitch === 'r' ? null : readPitch(pitch)
-    if (extra.length > 0 || durationTicks === null || (pitch !== 'r' && midi === null)) {
+    const written = pitch === 'r' ? null : readPitch(pitch)
+    if (extra.length > 0 || durationTicks === null || (pitch !== 'r' && written === null)) {
       throw new ContentError(piece.id, { note: i + 1 }, `cannot read the note "${token}"`)
     }
-    if (midi !== null) notes.push({ midi, startTick: tick, durationTicks })
+    if (written !== null) notes.push({ ...written, startTick: tick, durationTicks })
     tick += durationTicks
   })
   return notes

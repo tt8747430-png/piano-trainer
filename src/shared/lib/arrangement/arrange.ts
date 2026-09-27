@@ -15,7 +15,13 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
-import { autoFingers, chordContext, tokenMidis, type ChordContext } from './chord-context'
+import {
+  autoFingers,
+  chordContext,
+  spellInChord,
+  tokenNotes,
+  type ChordContext,
+} from './chord-context'
 import type {
   BeatGroup,
   Chart,
@@ -136,12 +142,16 @@ function transposeChord(chord: Chord, from: SpelledNote, to: SpelledNote): Chord
   }
 }
 
-/** The tune moves the short way, −5 to +6 semitones, and is read in time order. */
+/** The tune moves the short way, −5 to +6 semitones, its letters with the key, and is read in time order. */
 function transposeMelody(melody: Melody, from: SpelledNote, to: SpelledNote): MelodyNote[] {
   const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
   const semitones = up > 6 ? up - 12 : up
   return melody
-    .map((n) => ({ ...n, midi: midi(n.midi + semitones) }))
+    .map((n) => ({
+      ...n,
+      midi: midi(n.midi + semitones),
+      spelled: transposeNote(n.spelled, from, to),
+    }))
     .sort((a, b) => a.startTick - b.startTick)
 }
 
@@ -187,7 +197,7 @@ function playFigure(
     if (event.start < window.from || event.start >= window.to) return []
     const duration = Math.min(event.duration, window.to - event.start)
     const played = event.tones.flatMap((tone) =>
-      tokenMidis(tone.token, context).map((m) => ({ midi: m, finger: tone.finger })),
+      tokenNotes(tone.token, context).map((sounded) => ({ ...sounded, finger: tone.finger })),
     )
     const written = played.some((p) => p.finger !== undefined)
     const fingers = written
@@ -197,14 +207,15 @@ function playFigure(
           hand,
         )
     return played.map((p, i): PerformanceNote => {
-      const roll = event.rolled ? i : 0
       const finger = fingers[i]
       return {
         midi: p.midi,
+        spelled: p.spelled,
         hand,
         ...(finger === undefined ? {} : { finger }),
-        startTick: window.at + event.start - window.from + roll,
-        durationTicks: Math.max(1, duration - roll),
+        startTick: window.at + event.start - window.from,
+        durationTicks: duration,
+        roll: event.rolled ? i : 0,
         velocity: hand === 'lh' ? VELOCITY.left : event.accent ? VELOCITY.accent : VELOCITY.right,
         chord: window.chord,
       }
@@ -250,16 +261,27 @@ function playTune(
   const end = window.at + window.to - window.from
   return tuneBetween(melody, window.at, end).flatMap((n) => {
     const at = { startTick: n.startTick, durationTicks: n.durationTicks, chord: window.chord }
-    const tune: PerformanceNote = { midi: n.midi, hand: 'rh', velocity: VELOCITY.tune, ...at }
+    const tune: PerformanceNote = {
+      midi: n.midi,
+      spelled: n.spelled,
+      hand: 'rh',
+      roll: 0,
+      velocity: VELOCITY.tune,
+      ...at,
+    }
     if (figure.use !== 'harmony' || n.durationTicks < TICKS_PER_BEAT) return [tune]
     return [
       tune,
-      ...harmonyUnder(n.midi, context).map((m): PerformanceNote => ({
-        midi: m,
-        hand: 'rh',
-        velocity: VELOCITY.harmony,
-        ...at,
-      })),
+      ...spellInChord(context, harmonyUnder(n.midi, context)).map(
+        ({ midi: key, spelled }): PerformanceNote => ({
+          midi: key,
+          spelled,
+          hand: 'rh',
+          roll: 0,
+          velocity: VELOCITY.harmony,
+          ...at,
+        }),
+      ),
     ]
   })
 }
@@ -282,7 +304,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
     const tones = spellChord(chord.root, chord.quality)
     const context = chordContext(
-      { root: pitchClassOf(chord.root), bass: pitchClassOf(chord.bass ?? chord.root), tones },
+      { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
       key,
     )
@@ -329,9 +351,11 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       if (playsTune[chord]) continue
       notes.push({
         midi: midi(n.midi + 12),
+        spelled: n.spelled,
         hand: 'melody',
         startTick: n.startTick,
         durationTicks: n.durationTicks,
+        roll: 0,
         velocity: VELOCITY.doubled,
         chord,
       })

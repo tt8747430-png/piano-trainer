@@ -62,6 +62,10 @@ export const pitchClassOf = (spelled: SpelledNote): PitchClass =>
 export const midiOf = (spelled: SpelledNote, octave: number): Midi =>
   midi(12 * (octave + 1) + naturalPitch(spelled.letter) + spelled.accidental)
 
+/** The octave a key is written in under a spelling: B♯3 and C4 are both 60, C♭5 is 71. */
+export const writtenOctave = (key: Midi, spelled: SpelledNote): number =>
+  Math.floor((key - spelled.accidental) / 12) - 1
+
 export const noteName = (spelled: SpelledNote): string =>
   spelled.letter + ACCIDENTAL_SIGNS[spelled.accidental]
 

@@ -2,14 +2,17 @@ import {
   midi,
   pitchClass,
   pitchClassOf,
-  qualityIntervals,
   scaleIntervals,
+  spellAbove,
+  spellChord,
+  spellInKey,
   type ChordQuality,
   type Finger,
   type Hand,
   type Key,
   type Midi,
   type PitchClass,
+  type SpelledNote,
   type Tone,
 } from '@/shared/lib/music'
 import type { FigureToken } from './types'
@@ -34,11 +37,16 @@ export interface ChordContext {
   readonly voiced: readonly Midi[]
   /** The key the piece is played in, for its I, IV and V triads. */
   readonly key: Key
+  /** The chord's tones as it spells them. */
+  readonly tones: readonly Tone[]
+  /** The root and the bass as the chord spells them. */
+  readonly rootNote: SpelledNote
+  readonly bassNote: SpelledNote
 }
 
 export interface ContextChord {
-  readonly root: PitchClass
-  readonly bass: PitchClass
+  readonly root: SpelledNote
+  readonly bass: SpelledNote
   readonly tones: readonly Tone[]
 }
 
@@ -50,10 +58,12 @@ export function chordContext(
   previous: readonly Midi[] | null,
   key: Key,
 ): ChordContext {
+  const rootPc = pitchClassOf(chord.root)
+  const bassPc = pitchClassOf(chord.bass)
   const third = within(chord.tones[1]?.semitones, 4)
   const fifth = within(chord.tones[2]?.semitones, 7)
   const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
-  const root = midi(55 + pitchClass(chord.root - 7))
+  const root = midi(55 + pitchClass(rootPc - 7))
   const voiced = voiceLead(previous, rightHandPitchClasses(chord.tones))
   return {
     third,
@@ -63,23 +73,57 @@ export function chordContext(
     minor: third === 3,
     pitchClasses: chord.tones.map((tone) => tone.pitchClass),
     root,
-    bass: midi(chord.bass + (chord.bass >= 7 ? 24 : 36)),
+    bass: midi(bassPc + (bassPc >= 7 ? 24 : 36)),
     triad: [root, root + third, root + fifth].map(midi),
     voiced,
     key,
+    tones: chord.tones,
+    rootNote: chord.root,
+    bassNote: chord.bass,
   }
 }
 
-const KEY_TRIAD_DEGREES = { I: 0, IV: 5, V: 7 } as const
+/** A key a token plays, spelled as it is written. */
+export interface TokenNote {
+  readonly midi: Midi
+  readonly spelled: SpelledNote
+}
 
-/** The key's I, IV or V triad (minor I and IV in a minor key), voice-led from the chord. */
-function keyTriad(triad: keyof typeof KEY_TRIAD_DEGREES, context: ChordContext): Midi[] {
+/** Keys of the chord, each as the chord spells it (any other as the key does). */
+export function spellInChord(context: ChordContext, keys: readonly number[]): TokenNote[] {
+  return keys.map((key) => ({
+    midi: midi(key),
+    spelled:
+      context.tones.find((tone) => tone.pitchClass === pitchClass(key))?.note ??
+      spellInKey(pitchClass(key), context.key),
+  }))
+}
+
+/** A key some letters from a spelled note: its letter by the steps, its accidental by the key it is. */
+const stepsFrom = (from: SpelledNote, steps: number, key: number): TokenNote => ({
+  midi: midi(key),
+  spelled: spellAbove(from, { steps, semitones: pitchClass(key - pitchClassOf(from)) }),
+})
+
+const KEY_TRIAD_ROOTS = {
+  I: { steps: 0, semitones: 0 },
+  IV: { steps: 3, semitones: 5 },
+  V: { steps: 4, semitones: 7 },
+} as const
+
+/** The key's I, IV or V triad (minor I and IV in a minor key), voice-led from the chord, spelled from the key. */
+function keyTriad(triad: keyof typeof KEY_TRIAD_ROOTS, context: ChordContext): TokenNote[] {
   const quality: ChordQuality = triad === 'V' || !context.key.minor ? 'maj' : 'min'
-  const root = pitchClassOf(context.key.tonic) + KEY_TRIAD_DEGREES[triad]
+  const tones = spellChord(spellAbove(context.key.tonic, KEY_TRIAD_ROOTS[triad]), quality)
   return voiceLead(
     context.voiced,
-    qualityIntervals(quality).map((interval) => pitchClass(root + interval.semitones)),
-  )
+    tones.map((tone) => tone.pitchClass),
+  ).map((key) => ({
+    midi: key,
+    spelled:
+      tones.find((tone) => tone.pitchClass === pitchClass(key))?.note ??
+      spellInKey(pitchClass(key), context.key),
+  }))
 }
 
 /** The lowest note moved up an octave, `times` times. */
@@ -106,35 +150,60 @@ function scaleStepAbove(steps: number, context: ChordContext): number {
   return (scale[((steps % 7) + 7) % 7] ?? 0) + 12 * Math.floor(steps / 7)
 }
 
-export function tokenMidis(token: FigureToken, context: ChordContext): Midi[] {
-  const played = ((): readonly number[] => {
-    switch (token.kind) {
-      case 'chord':
-        return context.voiced
-      case 'triad':
-        return invert(context.triad, token.inversion)
-      case 'triad-octave':
-        return context.triad.map((m) => m + 12)
-      case 'upper-pair':
-        return context.triad.slice(1)
-      case 'voice': {
-        const count = context.voiced.length
-        const voice = context.voiced[token.index % count] ?? context.root
-        return [voice + 12 * Math.floor(token.index / count)]
-      }
-      case 'key-triad':
-        return keyTriad(token.triad, context)
-      case 'bass-degree':
-        return [context.bass + degreeAbove(token.degree, context)]
-      case 'scale-degree':
-        return [context.root + scaleStepAbove(token.degree, context)]
-      case 'below-root':
-        return [context.root - token.semitones]
-      case 'chord-degree':
-        return [context.root + degreeAbove(token.degree, context)]
+/** A figure token's keys against the chord being played, each spelled (spec §2.2). */
+export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote[] {
+  switch (token.kind) {
+    case 'chord':
+      return spellInChord(context, context.voiced)
+    case 'triad':
+      return spellInChord(context, invert(context.triad, token.inversion))
+    case 'triad-octave':
+      return spellInChord(
+        context,
+        context.triad.map((m) => m + 12),
+      )
+    case 'upper-pair':
+      return spellInChord(context, context.triad.slice(1))
+    case 'voice': {
+      const count = context.voiced.length
+      const voice = context.voiced[token.index % count] ?? context.root
+      return spellInChord(context, [voice + 12 * Math.floor(token.index / count)])
     }
-  })()
-  return played.map(midi)
+    case 'key-triad':
+      return keyTriad(token.triad, context)
+    case 'bass-degree':
+      return [
+        stepsFrom(
+          context.bassNote,
+          token.degree - 1,
+          context.bass + degreeAbove(token.degree, context),
+        ),
+      ]
+    case 'scale-degree':
+      return [
+        stepsFrom(
+          context.rootNote,
+          token.degree,
+          context.root + scaleStepAbove(token.degree, context),
+        ),
+      ]
+    case 'below-root':
+      return [
+        stepsFrom(
+          context.rootNote,
+          token.semitones === 3 ? -2 : -1,
+          context.root - token.semitones,
+        ),
+      ]
+    case 'chord-degree':
+      return [
+        stepsFrom(
+          context.rootNote,
+          token.degree - 1,
+          context.root + degreeAbove(token.degree, context),
+        ),
+      ]
+  }
 }
 
 const RIGHT_FINGERS: Readonly<Record<number, readonly Finger[]>> = {

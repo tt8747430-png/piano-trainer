@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { note } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import { parseMelody } from './parse-melody'
 import { testSong } from '../testing/test-pieces'
@@ -6,11 +7,11 @@ import { testSong } from '../testing/test-pieces'
 const melodyOf = (melody: string) => parseMelody(testSong(['C'], { melody }))
 
 describe('parseMelody', () => {
-  it('reads notes and rests in beats, ignoring bar lines', () => {
+  it('reads notes as written and rests, in beats, ignoring bar lines', () => {
     expect(melodyOf('E4/1 D4/.5 r/1 | C#5/1.5')).toEqual([
-      { midi: 64, startTick: 0, durationTicks: 12 },
-      { midi: 62, startTick: 12, durationTicks: 6 },
-      { midi: 73, startTick: 30, durationTicks: 18 },
+      { midi: 64, spelled: note('E'), startTick: 0, durationTicks: 12 },
+      { midi: 62, spelled: note('D'), startTick: 12, durationTicks: 6 },
+      { midi: 73, spelled: note('C', 1), startTick: 30, durationTicks: 18 },
     ])
   })
 

@@ -1,4 +1,14 @@
-import type { Chord, Finger, Hand, Key, Meter, Midi, Tick, Tone } from '@/shared/lib/music'
+import type {
+  Chord,
+  Finger,
+  Hand,
+  Key,
+  Meter,
+  Midi,
+  SpelledNote,
+  Tick,
+  Tone,
+} from '@/shared/lib/music'
 
 /** A chart as the engine reads it: chords by section, line and bar, in the key it is written in. */
 export interface ChartChord extends Chord {
@@ -21,6 +31,8 @@ export interface Chart {
 
 export interface MelodyNote {
   readonly midi: Midi
+  /** As the melody writes it: C♯5 is C♯, never D♭. */
+  readonly spelled: SpelledNote
   readonly startTick: Tick
   readonly durationTicks: Tick
 }
@@ -118,10 +130,16 @@ export interface PerformanceBar {
 }
 export interface PerformanceNote {
   readonly midi: Midi
+  /** As it is written: a chord tone as its chord spells it, another note as its token or the key does. */
+  readonly spelled: SpelledNote
   readonly hand: NoteHand
   readonly finger?: Finger
+  /** Where it is written: a rolled chord's notes share their onset… */
   readonly startTick: Tick
+  /** …and their written length. */
   readonly durationTicks: Tick
+  /** How late it sounds after its onset: a rolled chord's notes a tick apart, 0 when struck. */
+  readonly roll: Tick
   readonly velocity: number
   /** Index into Performance.chords: the chord this note was played for. */
   readonly chord: number

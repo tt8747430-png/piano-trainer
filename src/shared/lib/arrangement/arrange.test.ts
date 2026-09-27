@@ -9,6 +9,7 @@ import {
   parseChordSymbol,
   parseKey,
   pitchClass,
+  plainSpelling,
   type Meter,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -86,31 +87,46 @@ describe('arrange', () => {
   it('plays a whole-note C over its root', () => {
     const performance = arrange(chart([['C']]), { tonic: C, pattern: BLOCK })
     expect(performance.notes).toEqual([
-      { midi: 36, hand: 'lh', startTick: 0, durationTicks: 48, velocity: 0.2, chord: 0 },
+      {
+        midi: 36,
+        spelled: C,
+        hand: 'lh',
+        startTick: 0,
+        durationTicks: 48,
+        roll: 0,
+        velocity: 0.2,
+        chord: 0,
+      },
       {
         midi: 60,
+        spelled: C,
         hand: 'rh',
         finger: 1,
         startTick: 0,
         durationTicks: 48,
+        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
       {
         midi: 64,
+        spelled: note('E'),
         hand: 'rh',
         finger: 3,
         startTick: 0,
         durationTicks: 48,
+        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
       {
         midi: 67,
+        spelled: note('G'),
         hand: 'rh',
         finger: 5,
         startTick: 0,
         durationTicks: 48,
+        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
@@ -261,16 +277,54 @@ describe('arrange', () => {
     expect(midisAt(minor, 'rh', 0)).toEqual([60, 64, 69])
   })
 
-  it('rolls a chord one tick per note', () => {
+  it('rolls a chord: one written onset, each note sounding a tick after the one below', () => {
     const performance = arrange(chart([['C']]), {
       tonic: C,
       pattern: pattern('rolled', '0/16 T2~', '0/16 L1'),
     })
-    expect(notesOf(performance, 'rh').map((n) => [n.startTick, n.durationTicks])).toEqual([
-      [0, 48],
-      [1, 47],
-      [2, 46],
+    expect(notesOf(performance, 'rh').map((n) => [n.startTick, n.durationTicks, n.roll])).toEqual([
+      [0, 48, 0],
+      [0, 48, 1],
+      [0, 48, 2],
     ])
+    expect(performance.beatGroups).toHaveLength(1)
+  })
+
+  it('spells chord tones as the chord, and other notes by letter steps from the root or bass', () => {
+    const performance = arrange(chart([['G7']], { key: 'G' }), {
+      tonic: note('G'),
+      pattern: pattern('steps', '0/4 _7,4/4 _b7,8/4 _6,12/4 s1', '0/8 L3,8/8 L1'),
+    })
+    expect(notesOf(performance, 'rh').map((n) => n.spelled)).toEqual([
+      note('F', 1),
+      note('F'),
+      note('E'),
+      note('A'),
+    ])
+    expect(notesOf(performance, 'lh').map((n) => n.spelled)).toEqual([note('B'), note('G')])
+  })
+
+  it('spells the key’s triads from the key', () => {
+    const performance = arrange(chart([['C']], { key: 'Ab' }), {
+      tonic: note('A', -1),
+      pattern: pattern('flow', '0/16 Kb', '0/16 L1'),
+    })
+    expect(new Set(notesOf(performance, 'rh').map((n) => n.spelled))).toEqual(
+      new Set([note('D', -1), note('F'), note('A', -1)]),
+    )
+  })
+
+  it('keeps the tune’s spelling, moved by the interval between the keys', () => {
+    const sharp: Melody = [
+      { midi: midi(73), spelled: note('C', 1), startTick: 0, durationTicks: 48 },
+    ]
+    const performance = arrange(chart([['A']], { key: 'D' }), {
+      tonic: note('E', -1),
+      pattern: BLOCK,
+      melody: sharp,
+      doubleMelody: true,
+    })
+    expect(notesOf(performance, 'melody')[0]).toMatchObject({ midi: 86, spelled: note('D') })
   })
 
   it('plays each chord with its method code’s pattern', () => {
@@ -322,7 +376,12 @@ describe('arrange', () => {
   })
 
   const tune = (...notes: [number, number, number][]): Melody =>
-    notes.map(([m, startTick, durationTicks]) => ({ midi: midi(m), startTick, durationTicks }))
+    notes.map(([m, startTick, durationTicks]) => ({
+      midi: midi(m),
+      spelled: plainSpelling(pitchClass(m), true),
+      startTick,
+      durationTicks,
+    }))
 
   it('doubles the tune an octave up', () => {
     const melody = tune([64, 0, 24], [62, 24, 24])
@@ -333,8 +392,26 @@ describe('arrange', () => {
       doubleMelody: true,
     })
     expect(notesOf(doubled, 'melody')).toEqual([
-      { midi: 76, hand: 'melody', startTick: 0, durationTicks: 24, velocity: 0.15, chord: 0 },
-      { midi: 74, hand: 'melody', startTick: 24, durationTicks: 24, velocity: 0.15, chord: 0 },
+      {
+        midi: 76,
+        spelled: note('E'),
+        hand: 'melody',
+        startTick: 0,
+        durationTicks: 24,
+        roll: 0,
+        velocity: 0.15,
+        chord: 0,
+      },
+      {
+        midi: 74,
+        spelled: note('D'),
+        hand: 'melody',
+        startTick: 24,
+        durationTicks: 24,
+        roll: 0,
+        velocity: 0.15,
+        chord: 0,
+      },
     ])
     const alreadyPlayed = arrange(chart([['C']]), {
       tonic: C,

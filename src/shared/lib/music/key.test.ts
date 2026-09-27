@@ -5,10 +5,11 @@ import {
   keySignature,
   parseKey,
   tonicSpelling,
+  spellInKey,
   transposeNote,
   type Key,
 } from './key'
-import { note, noteName, rootSpelling } from './note'
+import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 
 const key = (text: string): Key => {
@@ -104,5 +105,26 @@ describe('transposeNote', () => {
         expect(transposeNote(root, note('G'), note('G'))).toEqual(root)
       }
     }
+  })
+})
+
+describe('spellInKey', () => {
+  const major = (tonic: SpelledNote): Key => ({ tonic, minor: false })
+
+  it('spells a note of the key as its scale does', () => {
+    expect(spellInKey(pitchClass(6), major(note('D', -1)))).toEqual(note('G', -1))
+    expect(spellInKey(pitchClass(10), major(note('F')))).toEqual(note('B', -1))
+    expect(spellInKey(pitchClass(1), major(note('E')))).toEqual(note('C', 1))
+  })
+
+  it('spells a minor key’s raised 6th and 7th', () => {
+    const aMinor: Key = { tonic: note('A'), minor: true }
+    expect(spellInKey(pitchClass(8), aMinor)).toEqual(note('G', 1))
+    expect(spellInKey(pitchClass(6), aMinor)).toEqual(note('F', 1))
+  })
+
+  it('spells a note outside the key plainly, in the key’s direction', () => {
+    expect(spellInKey(pitchClass(6), major(note('C')))).toEqual(note('G', -1))
+    expect(spellInKey(pitchClass(10), major(note('G')))).toEqual(note('A', 1))
   })
 })

@@ -9,6 +9,7 @@ import {
   type SpelledNote,
 } from './note'
 import type { PitchClass } from './pitch'
+import { spellScale } from './scale'
 
 /** A tonic, major or minor. */
 export interface Key {
@@ -54,4 +55,17 @@ export function transposeNote(note: SpelledNote, from: SpelledNote, to: SpelledN
   const moved = spellAbove(to, intervalBetween(from, note))
   if (Math.abs(moved.accidental) < 2) return moved
   return plainSpelling(pitchClassOf(moved), moved.accidental > 0)
+}
+
+/**
+ * A pitch class as a key spells it: the note of its scale (a minor key's raised 6th and 7th too),
+ * else plainly, sharp in a sharp key and flat otherwise.
+ */
+export function spellInKey(pc: PitchClass, key: Key): SpelledNote {
+  const tones = key.minor
+    ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
+    : spellScale(key.tonic, 'major')
+  return (
+    tones.find((tone) => tone.pitchClass === pc)?.note ?? plainSpelling(pc, keyPrefersSharps(key))
+  )
 }

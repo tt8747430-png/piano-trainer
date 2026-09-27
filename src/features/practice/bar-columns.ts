@@ -1,6 +1,6 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
-import { noteLabel, spellPerformedNote } from './note-names'
+import { noteLabel, playedNoteName } from './note-names'
 
 export interface PlayedNote {
   readonly label: string
@@ -54,7 +54,7 @@ export function barColumns(performance: Performance, bar: number): NoteColumn[] 
       played
         .filter((n) => n.hand === hand)
         .map((n) => ({
-          label: noteLabel(spellPerformedNote(performance, n)),
+          label: noteLabel(playedNoteName(n)),
           ...(n.finger ? { finger: n.finger } : {}),
         }))
     return [
