@@ -54,8 +54,15 @@ export function placedChordSounds(
   )
 }
 
-/** One key, now: what a tap on a key sounds. */
-export const keySound = (key: Midi): NoteSound => ({ kind: 'note', midi: key, at: 0, ...TAP })
+/** The keys a hand plays at once, now: a tap's key, or the chord a key stands for, each softer. */
+export const keySounds = (keys: readonly Midi[]): NoteSound[] =>
+  keys.map((key) => ({
+    kind: 'note',
+    midi: key,
+    at: 0,
+    duration: TAP.duration,
+    velocity: keys.length > 1 ? BLOCK.velocity : TAP.velocity,
+  }))
 
 export const PRACTICE_RHYTHM_IDS = [
   'even',

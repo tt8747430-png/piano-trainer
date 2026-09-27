@@ -2,7 +2,7 @@ import { useMemo, type ComponentProps } from 'react'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useHeldKeys } from '@/features/connect-midi'
 import { rangeOf, type Midi } from '@/shared/lib/music'
-import { useSoundingKeys, useSoundKey } from '@/shared/lib/services'
+import { useSoundingKeys, useSoundKeys } from '@/shared/lib/services'
 import { PianoKeyboard } from '@/shared/ui'
 import { useTyping } from '../model/use-typing'
 import { KeyboardSettingsButton } from './KeyboardSettingsButton'
@@ -32,9 +32,9 @@ export function LiveKeyboard({
   const { typing, ...settings } = useSettings(selectKeyboard)
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const held = useHeldKeys()
-  const soundKey = useSoundKey()
+  const soundKeys = useSoundKeys()
   const play = (key: Midi) => {
-    soundKey(key)
+    soundKeys([key])
     onKeyPress?.(key)
   }
   // The keys the app sounds or MIDI holds lead the view; a tapped or typed key is where the hand already is.

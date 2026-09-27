@@ -5,7 +5,7 @@ import { createFakeAudio, createWebAudioOutput, type AudioOutput } from '@/share
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
-import { useSoundKey } from './use-play'
+import { useSoundKeys } from './use-play'
 import { usePlayback } from './use-playback'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
@@ -41,11 +41,11 @@ describe('usePlayback', () => {
   it('turns back when another sound cuts it off, but not under a tapped key', () => {
     const audio = createFakeAudio()
     const { result } = setup(
-      () => ({ a: usePlayback<'a'>(), b: usePlayback<'b'>(), tap: useSoundKey() }),
+      () => ({ a: usePlayback<'a'>(), b: usePlayback<'b'>(), tap: useSoundKeys() }),
       audio,
     )
     act(() => result.current.a.toggle('a', [NOTE]))
-    act(() => result.current.tap(midi(64)))
+    act(() => result.current.tap([midi(64)]))
     expect(result.current.a.playing).toBe('a')
     act(() => result.current.b.toggle('b', [NOTE]))
     expect(result.current.a.playing).toBeNull()

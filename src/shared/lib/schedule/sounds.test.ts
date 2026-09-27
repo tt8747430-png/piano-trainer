@@ -5,7 +5,7 @@ import { audibleHands } from './schedule'
 import {
   barSounds,
   chordSounds,
-  keySound,
+  keySounds,
   placedChordSounds,
   PRACTICE_RHYTHMS,
   scaleRun,
@@ -84,10 +84,21 @@ describe('scaleRun', () => {
   })
 })
 
-describe('keySound', () => {
-  it('sounds one key now, as a tap on it', () => {
-    expect(keySound(midi(66))).toMatchObject({ kind: 'note', midi: 66, at: 0 })
-    expect(keySound(midi(66)).duration).toBeGreaterThan(0.5)
+describe('keySounds', () => {
+  it('sounds a tapped key now, ringing on', () => {
+    const [sound] = keySounds([midi(66)])
+    expect(sound).toMatchObject({ kind: 'note', midi: 66, at: 0 })
+    expect(sound?.duration).toBeGreaterThan(0.5)
+  })
+
+  it('sounds the chord a key stands for at once, each note softer than a lone key', () => {
+    const chord = keySounds([midi(62), midi(65), midi(69)])
+    expect(chord.map((sound) => [sound.midi, sound.at])).toEqual([
+      [62, 0],
+      [65, 0],
+      [69, 0],
+    ])
+    expect(chord[0]?.velocity).toBeLessThan(keySounds([midi(62)])[0]?.velocity ?? 0)
   })
 })
 

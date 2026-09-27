@@ -18,7 +18,7 @@ export {
 export {
   barSounds,
   chordSounds,
-  keySound,
+  keySounds,
   placedChordSounds,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
