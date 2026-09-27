@@ -17,7 +17,7 @@ import {
 } from './scale-keys'
 
 const C = note('C')
-const TRIADS = placeScaleChords(C, 'major', 3)
+const TRIADS = placeScaleChords(C, 'major', 3, 0)
 
 describe('scaleMarks', () => {
   it('marks the tonic and the other degrees, with a hand’s fingers under them', () => {
@@ -54,8 +54,8 @@ describe('chordKeyPlays', () => {
 
 describe('chordsHolding', () => {
   it('finds the chords that hold a note, in any octave', () => {
-    expect(chordsHolding(TRIADS, midi(64)).map((c) => c.roman)).toEqual(['I', 'iii', 'vi'])
-    expect(chordsHolding(TRIADS, midi(76)).map((c) => c.roman)).toEqual(['I', 'iii', 'vi'])
+    expect(chordsHolding(TRIADS, midi(64)).map((c) => c.numeral)).toEqual(['I', 'iii', 'vi'])
+    expect(chordsHolding(TRIADS, midi(76)).map((c) => c.numeral)).toEqual(['I', 'iii', 'vi'])
   })
 
   it('finds none for a note outside the scale', () => {
@@ -74,6 +74,6 @@ describe('heardName', () => {
 describe('chordsRange', () => {
   it('spans every key the chords play, from the tonic to the top of the last chord', () => {
     expect(chordsRange(TRIADS)).toEqual({ from: 60, to: 77 })
-    expect(chordsRange(placeScaleChords(C, 'major', 4))).toEqual({ from: 60, to: 81 })
+    expect(chordsRange(placeScaleChords(C, 'major', 4, 0))).toEqual({ from: 60, to: 81 })
   })
 })

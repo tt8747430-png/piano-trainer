@@ -1,0 +1,167 @@
+import { CHORD_QUALITIES, qualityIntervals, type Chord, type ChordQuality } from './chord'
+import { labelled } from './interval'
+import { noteName, type SpelledNote } from './note'
+import type { PitchClass } from './pitch'
+import { spellScale, type ScaleKind } from './scale'
+import { toneAbove, type Tone } from './tone'
+
+/** How many notes a chord of a scale stacks: a triad, a 7th, a 9th, an 11th, a 13th. */
+export const CHORD_NOTES = [3, 4, 5, 6, 7] as const
+export type ChordNotes = (typeof CHORD_NOTES)[number]
+
+/** A chord of a scale: its notes stacked in thirds from one degree. */
+export interface ScaleChord {
+  /** 0 the tonic … 6. */
+  readonly degree: number
+  /** Its Roman numeral in root position, without a figure: `ii`, `vii°`, `III+`, `viiø`. */
+  readonly roman: string
+  readonly root: SpelledNote
+  /** Root, 3rd, 5th, 7th, 9th, 11th, 13th: as many as it stacks. */
+  readonly tones: readonly Tone[]
+  /** Written after the root: `m7`, `Maj9#11`, `m11♭9♭13`. */
+  readonly suffix: string
+  /** The table's quality with exactly these tones, where there is one. */
+  readonly quality?: ChordQuality
+}
+
+/** The triads a scale stacks, by their 3rd and 5th: the suffix and the numeral's mark. */
+const TRIADS = new Map([
+  ['4 7', { suffix: '', mark: '' }],
+  ['3 7', { suffix: 'm', mark: '' }],
+  ['3 6', { suffix: '°', mark: '°' }],
+  ['4 8', { suffix: '+', mark: '+' }],
+])
+
+/** The 7th chords, by 3rd, 5th and 7th: what goes before and after the highest number, and the numeral's mark. */
+const SEVENTHS = new Map([
+  ['4 7 11', { lead: 'Maj', trail: '', mark: '' }],
+  ['3 7 10', { lead: 'm', trail: '', mark: '' }],
+  ['4 7 10', { lead: '', trail: '', mark: '' }],
+  ['3 6 10', { lead: 'm', trail: '♭5', mark: 'ø' }],
+  ['3 6 9', { lead: '°', trail: '', mark: '°' }],
+  ['3 7 11', { lead: 'm(maj', trail: ')', mark: '' }],
+  ['4 8 11', { lead: '+Maj', trail: '', mark: '+' }],
+  ['4 8 10', { lead: '', trail: '#5', mark: '+' }],
+])
+
+/** An extension's semitones when it is natural: the major 9th, the perfect 11th, the major 13th. */
+const NATURAL: Readonly<Record<number, number>> = { 9: 14, 11: 17, 13: 21 }
+const ALTERATIONS = new Map([
+  [-1, '♭'],
+  [1, '#'],
+])
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+
+function entryOf<V>(table: ReadonlyMap<string, V>, semitones: readonly number[]): V {
+  const entry = table.get(semitones.join(' '))
+  if (!entry) throw new RangeError(`No chord of a scale stacks ${semitones.join(' ')}`)
+  return entry
+}
+
+/**
+ * A stack's suffix by one rule: its triad, or its 7th chord carrying the highest natural extension,
+ * then each altered extension in order (`m7♭9`, `Maj9#11`, `m11♭9♭13`).
+ */
+export function stackSuffix(tones: readonly Tone[]): string {
+  const semitones = tones.map((tone) => tone.semitones)
+  if (tones.length === 3) return entryOf(TRIADS, semitones.slice(1, 3)).suffix
+  const seventh = entryOf(SEVENTHS, semitones.slice(1, 4))
+  let highest = 7
+  const altered: string[] = []
+  semitones.slice(4).forEach((above, i) => {
+    const extension = 9 + 2 * i
+    const alteration = above - (NATURAL[extension] ?? above)
+    if (alteration === 0) highest = extension
+    else altered.push(`${ALTERATIONS.get(alteration) ?? ''}${extension}`)
+  })
+  return `${seventh.lead}${highest}${seventh.trail}${altered.join('')}`
+}
+
+/** A stack's numeral mark: its triad's, or from a 7th up its 7th chord's. */
+function numeralMark(tones: readonly Tone[]): string {
+  const semitones = tones.map((tone) => tone.semitones)
+  return tones.length === 3
+    ? entryOf(TRIADS, semitones.slice(1, 3)).mark
+    : entryOf(SEVENTHS, semitones.slice(1, 4)).mark
+}
+
+/** The table quality whose intervals are exactly these tones, if one is. */
+const qualityOf = (tones: readonly Tone[]): ChordQuality | undefined =>
+  CHORD_QUALITIES.find((quality) => {
+    const intervals = qualityIntervals(quality)
+    return (
+      intervals.length === tones.length &&
+      intervals.every((interval, i) => interval.semitones === tones[i]?.semitones)
+    )
+  })
+
+/**
+ * The chords of a seven-note scale, one on each degree, `notes` stacked in thirds: every other note
+ * of the scale from the degree up, past the octave from the 9th. None for a scale of fewer notes.
+ */
+export function scaleChords(root: SpelledNote, kind: ScaleKind, notes: ChordNotes): ScaleChord[] {
+  const scale = spellScale(root, kind)
+  if (scale.length !== 7) return []
+  return scale.map((degreeTone, degree) => {
+    const tones = Array.from({ length: notes }, (_, third) => {
+      const index = degree + 2 * third
+      const above = scale[index % 7]?.semitones ?? 0
+      const semitones = above + 12 * Math.floor(index / 7) - degreeTone.semitones
+      return toneAbove(degreeTone.note, labelled(2 * third, semitones))
+    })
+    const numeral = NUMERALS[degree] ?? ''
+    const quality = qualityOf(tones)
+    return {
+      degree,
+      roman: (tones[1]?.semitones === 3 ? numeral.toLowerCase() : numeral) + numeralMark(tones),
+      root: degreeTone.note,
+      tones,
+      suffix: stackSuffix(tones),
+      ...(quality ? { quality } : {}),
+    }
+  })
+}
+
+/** A chord of a scale as a symbol, over its bass when that is not the root: `Dm7`, `C/E`. */
+export const scaleChordSymbol = (chord: ScaleChord, bass?: SpelledNote): string =>
+  noteName(chord.root) + chord.suffix + (bass ? `/${noteName(bass)}` : '')
+
+/** A triad's and a 7th's figured-bass figures by inversion; the tradition has none from a 9th up. */
+const FIGURES: Readonly<Partial<Record<ChordNotes, readonly string[]>>> = {
+  3: ['', '⁶', '⁶₄'],
+  4: ['⁷', '⁶₅', '⁴₃', '⁴₂'],
+}
+
+/** What follows a numeral for its chord's inversion: `I⁶`, `ii⁶₅`, `V⁷`; nothing from a 9th up. */
+export const romanFigure = (notes: ChordNotes, inversion: number): string =>
+  FIGURES[notes]?.[inversion] ?? ''
+
+/** Whether a chord of a scale holds a note, in any octave. */
+export const scaleChordHolds = (chord: ScaleChord, pc: PitchClass): boolean =>
+  chord.tones.some((tone) => tone.pitchClass === pc)
+
+/** A 9th a chart may add: a major 9th over any 7th chord, or a ♭9 or ♯9 over a dominant 7th. */
+function ninthAvailable(ninth: ScaleChord, seventh: ChordQuality): boolean {
+  const above = ninth.tones[4]?.semitones
+  return above === 14 || (seventh === 'd7' && (above === 13 || above === 15))
+}
+
+/**
+ * The chord on a degree as a chart plays it: its triad, its 7th, or its 9th where the scale's 9th is
+ * an available tension (else its 7th: C major's iii stays Em7). Always one of the table's qualities.
+ */
+export function scaleChordAt(
+  root: SpelledNote,
+  kind: ScaleKind,
+  degree: number,
+  notes: 3 | 4 | 5,
+): Chord {
+  const base = scaleChords(root, kind, notes === 3 ? 3 : 4)[degree]
+  const ninth = notes === 5 ? scaleChords(root, kind, 5)[degree] : undefined
+  const quality =
+    ninth?.quality && base?.quality && ninthAvailable(ninth, base.quality)
+      ? ninth.quality
+      : base?.quality
+  if (!base || !quality) throw new RangeError(`${kind} has no chord on degree ${degree}`)
+  return { root: base.root, quality }
+}

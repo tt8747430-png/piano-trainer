@@ -90,6 +90,7 @@ export {
 } from './scale'
 export {
   lastInversion,
+  lastStackInversion,
   placeChord,
   placeScale,
   placeScaleChords,
@@ -108,7 +109,17 @@ export {
   type Fingering,
   type Hand,
 } from './fingering'
-export { diatonicChords, type DiatonicChord } from './diatonic'
+export {
+  CHORD_NOTES,
+  romanFigure,
+  scaleChordAt,
+  scaleChordHolds,
+  scaleChords,
+  scaleChordSymbol,
+  stackSuffix,
+  type ChordNotes,
+  type ScaleChord,
+} from './scale-chord'
 export {
   SKILLS,
   chordSkill,

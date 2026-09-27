@@ -73,7 +73,8 @@ export function ScaleExplorer({
     [scale.root, scale.kind, scale.chords, scale.keysPlay, scale.show].join(' '),
   )
   const chords = useMemo(
-    () => (showChords ? placeScaleChords(noteFromParam(scale.root), scale.kind, scale.chords) : []),
+    () =>
+      showChords ? placeScaleChords(noteFromParam(scale.root), scale.kind, scale.chords, 0) : [],
     [showChords, scale.root, scale.kind, scale.chords],
   )
   const keyPlays = useMemo(

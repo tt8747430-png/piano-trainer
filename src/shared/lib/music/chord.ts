@@ -126,6 +126,26 @@ const QUALITIES = {
     intervals: ['r', 'M3', 'P5', 'M7', 'M9'],
   },
   n9: { family: 'nin', suffix: '9', aliases: [], intervals: ['r', 'M3', 'P5', 'm7', 'M9'] },
+  mM9: {
+    family: 'nin',
+    suffix: 'm(maj9)',
+    aliases: ['−Δ9', 'm(+9)'],
+    intervals: ['r', 'm3', 'P5', 'M7', 'M9'],
+    prefersSharps: true,
+  },
+  M9s5: {
+    family: 'nin',
+    suffix: '+Maj9',
+    aliases: ['Δ9(+5)', '+maj9'],
+    intervals: ['r', 'M3', 'A5', 'M7', 'M9'],
+  },
+  hd9: {
+    family: 'nin',
+    suffix: 'm9♭5',
+    aliases: ['ø9', 'm9(−5)'],
+    intervals: ['r', 'm3', 'd5', 'm7', 'M9'],
+    prefersSharps: true,
+  },
   m11: {
     family: 'nin',
     suffix: 'm11',
@@ -189,7 +209,7 @@ const QUALITIES = {
 
 export type ChordQuality = keyof typeof QUALITIES
 
-/** All 33, in table order: family by family. */
+/** All 36, in table order: family by family. */
 export const CHORD_QUALITIES = Object.keys(QUALITIES) as readonly ChordQuality[]
 
 const entry = (quality: ChordQuality): QualityEntry => QUALITIES[quality]

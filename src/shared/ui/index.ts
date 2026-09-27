@@ -1,4 +1,5 @@
 export { ButtonLink } from './ButtonLink'
+export { ChordButton } from './ChordButton'
 export { Dropdown } from './Dropdown'
 export { LevelMark } from './LevelMark'
 export type { Option, OptionGroup, OptionValue } from './option'

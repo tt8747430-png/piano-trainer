@@ -1,11 +1,10 @@
 import {
-  chordHolds,
-  chordSymbol,
   noteName,
   pitchClass,
   pitchClassOf,
   plainSpelling,
   rangeOf,
+  scaleChordHolds,
   type Finger,
   type KeyRange,
   type Midi,
@@ -40,11 +39,7 @@ export function chordMarks(chords: readonly PlacedScaleChord[]): Map<Midi, KeyMa
   return new Map(
     chords.map((placed, i) => [
       placed.key,
-      {
-        tone: i === 0 ? 'tonic' : 'scale',
-        label: chordSymbol(placed.chord),
-        caption: placed.roman,
-      },
+      { tone: i === 0 ? 'tonic' : 'scale', label: placed.symbol, caption: placed.numeral },
     ]),
   )
 }
@@ -63,7 +58,7 @@ export const chordsRange = (chords: readonly PlacedScaleChord[]): KeyRange | und
 export const chordsHolding = (
   chords: readonly PlacedScaleChord[],
   note: Midi,
-): PlacedScaleChord[] => chords.filter((placed) => chordHolds(placed.chord, pitchClass(note)))
+): PlacedScaleChord[] => chords.filter((placed) => scaleChordHolds(placed.chord, pitchClass(note)))
 
 /** A key a hand played, named as the scale spells it, or with a sharp when it is not in the scale. */
 export function heardName(note: Midi, tones: readonly Tone[]): string {

@@ -1,10 +1,16 @@
 import { qualityIntervals, spellChord, type ChordQuality } from './chord'
-import { diatonicChords, type DiatonicChord } from './diatonic'
 import { MIDDLE_C } from './keyboard'
-import { pitchClassOf, sameNote, type SpelledNote } from './note'
+import { pitchClassOf, type SpelledNote } from './note'
 import { midi, type Midi } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
 import type { Tone } from './tone'
+import {
+  romanFigure,
+  scaleChords,
+  scaleChordSymbol,
+  type ChordNotes,
+  type ScaleChord,
+} from './scale-chord'
 
 /** A tone at a key on the keyboard. */
 export interface PlacedTone {
@@ -67,28 +73,56 @@ export function placeScale(root: SpelledNote, kind: ScaleKind, start = 0): Place
   })
 }
 
-/** A chord of a scale where the keyboard shows the scale: on its degree's key, stacked upwards from it. */
-export interface PlacedScaleChord extends DiatonicChord {
-  /** The degree's key, as `placeScale` places it. */
+/** The last inversion a chord of a scale is shown in: the 3rd, 5th or 7th in the bass, as far as it stacks. */
+export const lastStackInversion = (notes: ChordNotes): number =>
+  Math.min(notes - 1, MOST_INVERSIONS)
+
+/** A chord of a scale on the keyboard: on its root's key, in an inversion, labelled as the keys show it. */
+export interface PlacedScaleChord {
+  readonly chord: ScaleChord
+  /** Its root's key, where the scale places the degree. */
   readonly key: Midi
-  /** The chord's tones in root position from that key. */
   readonly tones: readonly PlacedTone[]
+  /** Its symbol, over its bass in an inversion: `Dm7`, `C/E`. */
+  readonly symbol: string
+  /** Its numeral with the inversion's figure: `ii⁷`, `I⁶`. */
+  readonly numeral: string
 }
 
-/** The triads (3) or 7th chords (4) of a seven-note scale, each on its degree's key. */
+/** A stack from its root's key, its lowest `inversion` tones an octave up. */
+export function placeStack(
+  chord: ScaleChord,
+  notes: ChordNotes,
+  key: Midi,
+  inversion: number,
+): PlacedScaleChord {
+  const last = lastStackInversion(notes)
+  if (!Number.isInteger(inversion) || inversion < 0 || inversion > last) {
+    throw new RangeError(`A chord of ${notes} notes has inversions 0–${last}, not ${inversion}`)
+  }
+  const tones = chord.tones
+    .map((tone, i) => ({ tone, midi: midi(key + tone.semitones + (i < inversion ? 12 : 0)) }))
+    .sort((a, b) => a.midi - b.midi)
+  const bass = inversion > 0 ? tones[0]?.tone.note : undefined
+  return {
+    chord,
+    key,
+    tones,
+    symbol: scaleChordSymbol(chord, bass),
+    numeral: chord.roman + romanFigure(notes, inversion),
+  }
+}
+
+/** A seven-note scale's chords of `notes` notes, each on its degree's key as `placeScale` places it, in an inversion. */
 export function placeScaleChords(
   root: SpelledNote,
   kind: ScaleKind,
-  size: 3 | 4,
+  notes: ChordNotes,
+  inversion: number,
 ): PlacedScaleChord[] {
   const degrees = placeScale(root, kind)
-  return diatonicChords(spellScale(root, kind), size).flatMap((diatonic) => {
-    const degree = degrees.find((placed) => sameNote(placed.tone.note, diatonic.chord.root))
-    if (!degree) return []
-    const tones = spellChord(diatonic.chord.root, diatonic.chord.quality).map((tone) => ({
-      tone,
-      midi: midi(degree.midi + tone.semitones),
-    }))
-    return [{ ...diatonic, key: degree.midi, tones }]
+  return scaleChords(root, kind, notes).flatMap((chord) => {
+    const degree = degrees[chord.degree]
+    return degree ? [placeStack(chord, notes, degree.midi, inversion)] : []
   })
 }

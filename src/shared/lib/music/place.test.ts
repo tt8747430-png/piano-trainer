@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { note } from './note'
-import { lastInversion, placeChord, placeScale, placeScaleChords } from './place'
+import {
+  lastInversion,
+  lastStackInversion,
+  placeChord,
+  placeScale,
+  placeScaleChords,
+} from './place'
+import { CHORD_NOTES } from './scale-chord'
 
 const keys = (placed: readonly { midi: number }[]) => placed.map((p) => p.midi)
 
@@ -72,20 +79,40 @@ describe('placeScale', () => {
 
 describe('placeScaleChords', () => {
   it('stands each triad of C major on its degree’s key, with its numeral', () => {
-    const chords = placeScaleChords(note('C'), 'major', 3)
-    expect(chords.map((c) => c.roman)).toEqual(['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'])
+    const chords = placeScaleChords(note('C'), 'major', 3, 0)
+    expect(chords.map((c) => c.numeral)).toEqual(['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'])
     expect(chords.map((c) => c.key)).toEqual([60, 62, 64, 65, 67, 69, 71])
     expect(keys(chords[1]?.tones ?? [])).toEqual([62, 65, 69])
   })
 
-  it('stacks a 7th chord from its degree’s key, even past the octave', () => {
-    const iii = placeScaleChords(note('A'), 'major', 4)[2]
-    expect(iii?.chord).toEqual({ root: note('C', 1), quality: 'm7' })
+  it('stacks a 7th chord from its degree’s key, even past the octave, figured in root position', () => {
+    const iii = placeScaleChords(note('A'), 'major', 4, 0)[2]
+    expect(iii?.chord.quality).toBe('m7')
+    expect(iii?.symbol).toBe('C#m7')
+    expect(iii?.numeral).toBe('iii⁷')
     expect(iii?.key).toBe(73)
     expect(keys(iii?.tones ?? [])).toEqual([73, 76, 80, 83])
   })
 
+  it('raises the lowest tones for an inversion, over its bass, with its figure', () => {
+    const tonic = placeScaleChords(note('C'), 'major', 3, 1)[0]
+    expect(keys(tonic?.tones ?? [])).toEqual([64, 67, 72])
+    expect(tonic?.symbol).toBe('C/E')
+    expect(tonic?.numeral).toBe('I⁶')
+    expect(placeScaleChords(note('C'), 'major', 4, 3)[4]?.numeral).toBe('V⁴₂')
+  })
+
+  it('refuses an inversion the chords do not have', () => {
+    expect(() => placeScaleChords(note('C'), 'major', 3, 3)).toThrow(RangeError)
+  })
+
   it('has none for a scale without seven notes', () => {
-    expect(placeScaleChords(note('C'), 'blues', 3)).toEqual([])
+    expect(placeScaleChords(note('C'), 'blues', 3, 0)).toEqual([])
+  })
+})
+
+describe('lastStackInversion', () => {
+  it('offers the 3rd, 5th and 7th in the bass at most', () => {
+    expect(CHORD_NOTES.map(lastStackInversion)).toEqual([2, 3, 3, 3, 3])
   })
 })

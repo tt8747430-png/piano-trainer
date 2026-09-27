@@ -22,9 +22,9 @@ const names = (root: SpelledNote, quality: ChordQuality) =>
   spellChord(root, quality).map((tone) => noteName(tone.note))
 
 describe('chord qualities', () => {
-  it('are 33, in five families', () => {
-    expect(CHORD_QUALITIES).toHaveLength(33)
-    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 5, 9, 5, 8])
+  it('are 36, in five families', () => {
+    expect(CHORD_QUALITIES).toHaveLength(36)
+    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 5, 9, 8, 8])
     expect(qualitiesIn('sev').every((quality) => chordFamily(quality) === 'sev')).toBe(true)
   })
 
@@ -39,6 +39,15 @@ describe('chord qualities', () => {
     expect(qualitySuffix('maj')).toBe('')
     expect(qualitySuffix('alt')).toBe('7alt')
     expect(qualitySpellings('hd')[0]).toBe('m7♭5')
+  })
+})
+
+describe('the 9ths of melodic minor', () => {
+  it('know the 9ths of melodic minor’s tonic, its III and its vi', () => {
+    expect(names(note('C'), 'mM9')).toEqual(['C', 'E♭', 'G', 'B', 'D'])
+    expect(names(note('C'), 'M9s5')).toEqual(['C', 'E', 'G#', 'B', 'D'])
+    expect(names(note('C'), 'hd9')).toEqual(['C', 'E♭', 'G♭', 'B♭', 'D'])
+    expect(parseChordSymbol('Cø9')).toEqual({ root: note('C'), quality: 'hd9' })
   })
 })
 
