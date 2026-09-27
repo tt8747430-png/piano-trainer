@@ -281,4 +281,21 @@ describe('Learn → Scales', () => {
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveAttribute('data-down')
   })
+
+  it('opens the walk and the key’s common progressions in the Player, in this key', async () => {
+    await renderApp('/learn/scales?root=D&show=chords&chords=4')
+    const walk = await screen.findByRole('link', { name: 'Walk the chords' })
+    expect(walk.getAttribute('href')).toMatch(/^\/play\/walk\?/)
+    expect(walk.getAttribute('href')).toContain('root=D')
+    expect(walk.getAttribute('href')).toContain('chordSize=sevenths')
+    const cadence = screen.getByRole('link', { name: /^I–IV–V–I/ })
+    expect(cadence.getAttribute('href')).toMatch(/^\/play\/cadence\?/)
+    expect(cadence.getAttribute('href')).toContain('key=D')
+  })
+
+  it('offers a mode the walk alone', async () => {
+    await renderApp('/learn/scales?root=D&kind=dorian&show=chords')
+    expect(await screen.findByRole('link', { name: 'Walk the chords' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^I–IV–V–I/ })).not.toBeInTheDocument()
+  })
 })

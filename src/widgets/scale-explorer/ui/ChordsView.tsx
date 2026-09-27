@@ -1,6 +1,7 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PractiseChords } from '@/features/practice'
 import {
   CHORD_NOTES,
   lastInversion,
@@ -119,6 +120,7 @@ export function ChordsView({
         holding={holding}
       />
       <WalkCard scale={scale} walk={walk} onChange={onChange} />
+      <PractiseChords root={tonic} kind={kind} notes={notes} />
       {facts}
     </ScaleLayout>
   )
