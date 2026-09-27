@@ -48,7 +48,7 @@ export function Dropdown<V extends OptionValue>({
         <span aria-hidden className="text-muted-foreground">
           {label}
         </span>
-        <SelectValue className="min-w-0 flex-1 truncate text-left font-semibold" />
+        <SelectValue className="block min-w-0 flex-1 truncate text-left font-semibold" />
       </SelectTrigger>
       <SelectContent>
         {groups.map((group, i) => (
