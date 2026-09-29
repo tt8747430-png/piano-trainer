@@ -46,9 +46,10 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   the thumb or as the scale, on a staff, its Chords view stacking the scale's chords to 13ths in any inversion and
   walking them; Keys, a page for each of the 24 keys on the circle of fifths; Intervals, every interval over a root
   on a staff and heard up, down and together; Available tensions, the twelve notes over a 7th chord as weak, strong,
-  tensions and avoid), Practice (the Theory quiz with My gaps;
+  tensions and avoid; and the tools: the Chord finder, naming the keys played; Reharmonise, the chords that hold a
+  melody note; Passing chords, the ways between two chords), Practice (the Theory quiz with My gaps;
   studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
-  and ADRs 0012–0018.
+  and ADRs 0012–0019.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.

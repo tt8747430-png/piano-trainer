@@ -197,6 +197,9 @@ tempo)` sounds it and `notate(run)` writes it.
 - **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the Available tensions reference,
   `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
   second table of what a chord takes.
+- **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
+  `plainRoot`): the tritone substitution of E♭ is written E7, never F♭7. Keys played are named by `nameChords`, over
+  the builder's chords, never by a second table.
 - **A line in one hand is written on one staff:** `LazyScoreView`'s `staff` draws only that staff of the grand staff
   (an interval, a note to read); music for both hands keeps the grand staff.
 - **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the

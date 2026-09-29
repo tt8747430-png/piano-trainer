@@ -22,7 +22,7 @@
   Figures, Walk the chords, Borrowed chord, Parent scale, Circle of fifths, Keys, Chord parts, Triad, Added tone,
   Alteration). Sub-project 5 is built in four parts (its spec, `2026-09-29-learn-lessons-references-tools-design.md`);
   part 5.1, the Intervals and Available tensions references: ADR 0017; part 5.2, lessons as worksheets and the
-  Fundamentals module: ADR 0018.
+  Fundamentals module: ADR 0018; part 5.3's first three tools (Chord finder, Reharmonise, Passing chords): ADR 0019.
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,

@@ -56,7 +56,8 @@ it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
   references Chords, Scales, Keys (`/learn/keys`), Intervals (`/learn/intervals`) and Available tensions
-  (`/learn/tensions`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
+  (`/learn/tensions`), and the tools Chord finder, Reharmonise and Passing chords (`/learn/chord-finder`,
+  `/learn/reharmonise`, `/learn/passing-chords`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
@@ -81,7 +82,8 @@ it. `@` → `src`.
   inversion with the walk card; its pure marks, plays and `scaleRunOf` in `model/`), `key-explorer` (the circle of
   fifths and a key's facts, signature, chords and borrowed chords), `interval-explorer` (every interval over a root
   as Clefs' cards), `tension-explorer` (a 7th chord's twelve notes in the owner's table's four groups, each played on
-  top), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
+  top), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
+  `passing-chords` (the ways between two chords, each row voice-led), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
@@ -116,7 +118,8 @@ it. `@` → `src`.
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`; `interval-facts.ts`,
-  the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions), `arrangement`
+  the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
+  `passing-chords.ts` and `voice-lead.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyPitchClasses`), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's

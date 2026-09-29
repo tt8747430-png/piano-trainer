@@ -580,6 +580,11 @@ hands). Never a row of chips or a wall of tiles.
 - **Scale example / line of notes** (a lesson's; the same card): a scale's name in Literata 600 20px, its notes as
   chips (the degree on the key's tonic or scale colour, then the note), its run on the treble staff; a line of notes
   on its own clef's staff; Play soft, turning into Stop.
+- **The tools** sit in their own titled group on Learn under References, rows like the references'. The Chord finder
+  shows its chord in the chord display (72px), its notes from the bass as degree chips, "Also:" the other names, and
+  Play (honey), Clear and Open in Chords; Reharmonise sets each group's chords as chord buttons filling a grid (the
+  symbol over "as 3 · in the key"); Passing chords sets each way as a card (its name, In the key or Chromatic at the
+  right in soft ink, its row of chords as outline buttons, one line of why, Play soft), cards two across from 1024px.
 - **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
   so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
   top. The Available tensions reference sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a
