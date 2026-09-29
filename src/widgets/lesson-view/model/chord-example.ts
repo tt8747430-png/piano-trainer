@@ -1,3 +1,4 @@
+import type { ShownKeys } from '@/features/play-example'
 import {
   midi,
   MIDDLE_C,
@@ -9,18 +10,12 @@ import {
 } from '@/shared/lib/music'
 import type { KeyMark } from '@/shared/ui'
 
-/** A lesson's chord example as the keys show it. */
-export interface ChordExample {
-  readonly keys: readonly Midi[]
-  readonly marks: ReadonlyMap<Midi, KeyMark>
-}
-
 /**
  * A chord symbol from a lesson, placed as the Chords reference places it (root position from middle
  * C), its bass after a slash in the octave below; each chord tone marked by role and degree, a bass
  * that is a chord tone as that tone.
  */
-export function placeExample(symbol: string): ChordExample {
+export function placeExample(symbol: string): ShownKeys {
   const chord = parseChordSymbol(symbol)
   const { rh } = placeChord(spellChord(chord.root, chord.quality), {
     inversion: 0,

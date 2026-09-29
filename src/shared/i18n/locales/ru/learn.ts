@@ -8,6 +8,8 @@ export const learn: LocaleResources['learn'] = {
     chords: 'Аккорды',
     scales: 'Гаммы',
     theory: 'Теория',
+    reading: 'Чтение нот',
+    rhythm: 'Ритм',
     accompaniment: 'Аккомпанемент',
     jazz: 'Джаз',
     gospel: 'Госпел',

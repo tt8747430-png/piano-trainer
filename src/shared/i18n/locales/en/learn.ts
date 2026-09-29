@@ -6,6 +6,8 @@ export const learn = {
     chords: 'Chords',
     scales: 'Scales',
     theory: 'Theory',
+    reading: 'Reading',
+    rhythm: 'Rhythm',
     accompaniment: 'Accompaniment',
     jazz: 'Jazz',
     gospel: 'Gospel',

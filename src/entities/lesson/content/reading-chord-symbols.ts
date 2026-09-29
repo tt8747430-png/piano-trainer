@@ -9,6 +9,7 @@ const readingChordSymbols: Lesson = {
   },
   level: 1,
   category: 'chords',
+  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Reading chord symbols', ru: 'Чтение обозначений аккордов' },
