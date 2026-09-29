@@ -17,6 +17,7 @@ import {
   melodyOf,
   pieceById,
   pieceKey,
+  type ChordSize,
   type Piece,
   isSongCollectionId,
   SONG_COLLECTION_IDS,
@@ -197,15 +198,26 @@ describe('the catalog', () => {
     expect(blues && chartOf(blues).sections[0]?.lines.flat()).toHaveLength(12)
   })
 
-  it('reads Ромашковые поля as the course writes it', () => {
+  it('reads Ромашковые поля as the course writes it, growing only its 7th chords', () => {
     const romashki = pieceById('romashki')
-    const bars = romashki
-      ? chartOf(romashki, 'sevenths').sections.flatMap((section) =>
-          section.lines.flatMap((line) =>
-            line.map((bar) => bar.chords.map((chord) => chordSymbol(chord)).join(' ')),
-          ),
-        )
-      : []
-    expect(bars.join(' | ')).toBe('Dm7 Gm7 | Csus2 C7 FMaj7 D7 | Gm7 Dm7/F | Em7♭5 Asus4 A7')
+    if (!romashki) throw new Error('missing piece')
+    const lines = (size: ChordSize) =>
+      chartOf(romashki, size).sections.map((section) =>
+        section.lines.map((line) =>
+          line.map((bar) => bar.chords.map((chord) => chordSymbol(chord)).join(' ')).join(' | '),
+        ),
+      )
+    expect(lines('sevenths')).toEqual([
+      [
+        'Dm7 | Gm7 Asus4 | Dm7',
+        'Gm Csus4 | Am D | D/F# Gm',
+        'Csus4 C F | B♭ Gm',
+        'Em7♭5 | Asus4 A',
+      ],
+      ['Dm7 Gm7 | Csus2 C FMaj7 D7', 'Gm7 Dm/F | Em7♭5 Asus4 A'],
+      ['Dm7 Gm7 | Csus2 C FMaj7 D7', 'Gm7 Dm/F | Em7♭5 A Dm6'],
+    ])
+    expect(lines('ninths')[1]).toEqual(['Dm9 Gm9 | Csus2 C FMaj9 D7♭9', 'Gm9 Dm/F | Em7♭5 Asus4 A'])
+    expect(lines('triads')[1]).toEqual(['Dm Gm | Csus2 C F D', 'Gm Dm/F | E° Asus4 A'])
   })
 })
