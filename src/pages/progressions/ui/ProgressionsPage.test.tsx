@@ -49,6 +49,15 @@ describe('Learn → Progressions', () => {
     ).toMatch(/p=I7-I7-I7-I7-IV7/)
   })
 
+  it('opens the progression in the Player, in its key and chord size', async () => {
+    await renderApp('/learn/progressions?p=ii-V-I&size=sevenths')
+    const practise = await screen.findByRole('link', { name: 'Practise in the Player' })
+    const href = practise.getAttribute('href') ?? ''
+    expect(href).toMatch(/^\/play\/progression\?/)
+    expect(href).toMatch(/p=ii-V-I/)
+    expect(href).toMatch(/chordSize=sevenths/)
+  })
+
   it('speaks Russian', async () => {
     await renderApp('/learn/progressions', { locale: 'ru' })
     expect(

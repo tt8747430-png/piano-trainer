@@ -3,6 +3,7 @@ export const player = {
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
+  progression: { title: '{{numerals}} in {{key}}' },
   chromatic: { title: 'Chromatic walk: {{chords}}' },
   chordTypes: 'Chord types',
   direction: 'Direction',

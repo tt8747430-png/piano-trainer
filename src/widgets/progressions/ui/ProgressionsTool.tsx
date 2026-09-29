@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
@@ -8,7 +9,7 @@ import {
   type Midi,
   type NumeralSize,
 } from '@/shared/lib/music'
-import { KeyDropdown, Segmented, type KeyMark } from '@/shared/ui'
+import { ButtonLink, KeyDropdown, Segmented, type KeyMark } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionLibrary } from './ProgressionLibrary'
@@ -50,6 +51,23 @@ export function ProgressionsTool({
           </div>
           <ProgressionField progression={view.p} musicKey={key} onChange={(p) => onChange({ p })} />
           <ProgressionRow numerals={numerals} musicKey={key} size={view.size} onShow={setShown} />
+          <ButtonLink
+            size="pill"
+            variant="soft"
+            className="self-start"
+            render={
+              <Link
+                to="/play/progression"
+                search={{
+                  p: view.p,
+                  key: view.key,
+                  ...(view.size === 'triads' ? {} : { chordSize: view.size }),
+                }}
+              />
+            }
+          >
+            {t('progressions.practise')}
+          </ButtonLink>
         </div>
         <ProgressionLibrary musicKey={key} size={view.size} />
       </div>

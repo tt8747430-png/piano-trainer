@@ -5,6 +5,7 @@ export const player: LocaleResources['player'] = {
   key: 'Тональность',
   root: 'Основной тон',
   walk: { title: 'Аккорды по ступеням: {{scale}}' },
+  progression: { title: '{{numerals}}: {{key}}' },
   chromatic: { title: 'По полутонам: {{chords}}' },
   chordTypes: 'Виды аккордов',
   direction: 'Направление',

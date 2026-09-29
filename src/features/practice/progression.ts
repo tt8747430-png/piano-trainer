@@ -10,8 +10,14 @@ import type { ChordSize } from '@/entities/piece'
 import { arrange, type Chart, type ChartBar, type Performance } from '@/shared/lib/arrangement'
 import { numeralChord, type Key, type Numeral } from '@/shared/lib/music'
 
-/** A progression's own tempo, pattern and chord size: what the Player plays when its URL chooses none. */
-export const PROGRESSION = { tempo: 80, pattern: 'block', chordSize: 'triads' } as const satisfies {
+/** A progression's own numerals, tempo, pattern and chord size: what the Player plays when its URL chooses none. */
+export const PROGRESSION = {
+  numerals: 'I-V-vi-IV',
+  tempo: 80,
+  pattern: 'block',
+  chordSize: 'triads',
+} as const satisfies {
+  readonly numerals: string
   readonly tempo: number
   readonly pattern: PatternId
   readonly chordSize: ChordSize

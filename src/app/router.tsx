@@ -23,6 +23,7 @@ import {
   PASSING_DEFAULTS,
   LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
+  PROGRESSION_PLAYER_DEFAULTS,
   PROGRESSIONS_DEFAULTS,
   REHARMONISE_DEFAULTS,
   SCALES_DEFAULTS,
@@ -37,6 +38,7 @@ import {
   validatePassingSearch,
   validateLearnSearch,
   validatePlayerSearch,
+  validateProgressionPlayerSearch,
   validateProgressionsSearch,
   validateReharmoniseSearch,
   validateScalesSearch,
@@ -254,6 +256,14 @@ const chromaticRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ChromaticPlayerPage'),
 })
 
+const progressionPlayerRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/play/progression',
+  validateSearch: validateProgressionPlayerSearch,
+  search: { middlewares: [stripSearchParams(PROGRESSION_PLAYER_DEFAULTS)] },
+  component: lazyRouteComponent(playerScreens, 'ProgressionPlayerPage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -287,7 +297,13 @@ const routeTree = rootRoute.addChildren([
     studyRoute,
     progressionRoute,
   ]),
-  fullScreenRoute.addChildren([playerRoute, walkRoute, chromaticRoute, checkRoute]),
+  fullScreenRoute.addChildren([
+    playerRoute,
+    walkRoute,
+    chromaticRoute,
+    progressionPlayerRoute,
+    checkRoute,
+  ]),
 ])
 
 export function createAppRouter(history?: RouterHistory) {

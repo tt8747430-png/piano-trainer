@@ -13,7 +13,7 @@ import {
   readChords,
 } from '@/features/practice'
 import type { LearnFilter } from '@/pages/learn'
-import type { ChromaticSearch, PlayerSearch, WalkSearch } from '@/pages/player'
+import type { ChromaticSearch, PlayerSearch, ProgressionSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, keyListParam, readKeyList, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
@@ -403,5 +403,27 @@ export function validateChromaticSearch(input: Input<ChromaticSearch>): Chromati
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
     rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
     lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
+  }
+}
+
+// Player → Progression: its numerals and key, then the Player's own params; an unread line is the default.
+export const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
+  ...PLAYER_DEFAULTS,
+  p: PROGRESSIONS_DEFAULTS.p,
+  key: keyParam({ tonic: note('C'), minor: false }),
+}
+export function validateProgressionPlayerSearch(
+  input: Input<ProgressionSearch>,
+): ProgressionSearch {
+  const raw: Raw = input
+  const read = typeof raw.key === 'string' ? parseKey(raw.key) : null
+  const numerals = typeof raw.p === 'string' ? parseNumerals(raw.p) : null
+  return {
+    p: numerals ? numeralsParam(numerals) : PROGRESSION_PLAYER_DEFAULTS.p,
+    key: read
+      ? keyParam({ tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor })
+      : PROGRESSION_PLAYER_DEFAULTS.key,
+    ...practiceView(raw),
+    ...setupFigures(raw),
   }
 }
