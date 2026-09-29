@@ -16,6 +16,7 @@ export const player: LocaleResources['player'] = {
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
   needsMelody: 'Нужна мелодия',
+  needsKey: 'Нужна тональность',
   chordSize: 'Аккорды',
   chordSizes: { triads: 'Трезвучия', sevenths: 'Септаккорды', ninths: 'Нонаккорды' },
   toggles: {

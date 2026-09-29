@@ -38,6 +38,7 @@ export function WalkSetup({
       figures={choice}
       methods={false}
       melody={false}
+      keyed
       onFigures={onChange}
     >
       <Dropdown

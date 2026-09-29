@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseFigure } from './figure'
+import { parseFigure, playsKeyTriads } from './figure'
 
 describe('parseFigure', () => {
   it('reads positions in 16ths as ticks', () => {
@@ -59,4 +59,18 @@ describe('parseFigure', () => {
       expect(() => parseFigure(text)).toThrow(`"${text}"`)
     },
   )
+})
+
+describe('playsKeyTriads', () => {
+  it('finds the key’s triads in any of a figure’s events', () => {
+    expect(playsKeyTriads({ kind: 'events', events: parseFigure('0/4 Ka,4/4 C') })).toBe(true)
+    expect(
+      playsKeyTriads({
+        kind: 'events',
+        events: parseFigure('0/16 C'),
+        inThree: parseFigure('0/4 Kb'),
+      }),
+    ).toBe(true)
+    expect(playsKeyTriads({ kind: 'events', events: parseFigure('0/4 C,4/4 T1') })).toBe(false)
+  })
 })

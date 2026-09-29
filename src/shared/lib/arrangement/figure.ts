@@ -1,5 +1,5 @@
 import { TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
-import type { FigureEvent, FigureTone, FigureToken } from './types'
+import type { EventFigure, Figure, FigureEvent, FigureTone, FigureToken } from './types'
 
 const FIXED_TOKENS = new Map<string, FigureToken>([
   ['C', { kind: 'chord' }],
@@ -67,4 +67,20 @@ export function parseFigure(text: string, options: { triplets?: boolean } = {}):
       rolled: match[4] === '~',
     }
   })
+}
+
+const eventsPlayKeyTriads = (events: readonly FigureEvent[]): boolean =>
+  events.some((event) => event.tones.some((tone) => tone.token.kind === 'key-triad'))
+
+/** Whether a figure plays the key's triads (`Ka` `Kb` `Kc`): only a source in a key can play it. */
+export function playsKeyTriads(figure: Figure): boolean {
+  const eventFigures: readonly EventFigure[] =
+    figure.kind === 'events'
+      ? [figure]
+      : figure.use === 'ends'
+        ? [figure.between, figure.withoutMelody]
+        : [figure.withoutMelody]
+  return eventFigures.some((each) =>
+    [each.events, each.inThree ?? [], each.onMajor ?? []].some(eventsPlayKeyTriads),
+  )
 }

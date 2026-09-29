@@ -1,5 +1,5 @@
 export { arrange, type ArrangeOptions } from './arrange'
-export { parseFigure } from './figure'
+export { parseFigure, playsKeyTriads } from './figure'
 export {
   type BeatGroup,
   type Chart,

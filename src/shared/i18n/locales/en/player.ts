@@ -14,6 +14,7 @@ export const player = {
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
   needsMelody: 'Needs a melody',
+  needsKey: 'Needs a key',
   chordSize: 'Chord size',
   chordSizes: { triads: 'Triads', sevenths: '7ths', ninths: '9ths' },
   toggles: {

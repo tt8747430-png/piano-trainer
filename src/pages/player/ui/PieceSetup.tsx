@@ -41,6 +41,7 @@ export function PieceSetup({
       figures={choice}
       methods={hasMethodCodes(piece)}
       melody={hasMelody}
+      keyed
       onFigures={onChange}
     >
       <Dropdown

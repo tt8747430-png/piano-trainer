@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
   LEFT_FIGURES,
+  needsKey,
   needsMelody,
   PATTERN_GROUP_NAMES,
   PATTERN_GROUPS,
@@ -31,6 +32,7 @@ export function PlayerSetup({
   figures,
   methods,
   melody,
+  keyed,
   onFigures,
   children,
 }: {
@@ -41,6 +43,8 @@ export function PlayerSetup({
   methods: boolean
   /** There is a tune for a figure that plays it. */
   melody: boolean
+  /** The source is in a key, for a figure that plays its triads. */
+  keyed: boolean
   onFigures: (change: FigureChange) => void
   children: ReactNode
 }) {
@@ -48,6 +52,7 @@ export function PlayerSetup({
   const locale = useLocale()
   const [page, setPage] = useState<SetupPage | 'main'>('main')
   const noMelody = melody ? undefined : t('needsMelody')
+  const noKey = keyed ? undefined : t('needsKey')
   const choose = (change: FigureChange) => {
     onFigures(change)
     setPage('main')
@@ -90,7 +95,11 @@ export function PlayerSetup({
                       value: id,
                       label: localText(name, locale),
                       ...(description ? { description: localText(description, locale) } : {}),
-                      ...(needsMelody(id) && noMelody ? { disabledNote: noMelody } : {}),
+                      ...(needsMelody(id) && noMelody
+                        ? { disabledNote: noMelody }
+                        : needsKey(id) && noKey
+                          ? { disabledNote: noKey }
+                          : {}),
                     }
                   })}
                   value={figures.pattern}
@@ -106,6 +115,7 @@ export function PlayerSetup({
             figures={RIGHT_FIGURES}
             value={figures.rh}
             noMelody={noMelody}
+            noKey={noKey}
             onChoose={(rh) => choose({ rh })}
             onBack={toMain}
           />
@@ -116,6 +126,7 @@ export function PlayerSetup({
             figures={LEFT_FIGURES}
             value={figures.lh}
             noMelody={noMelody}
+            noKey={noKey}
             onChoose={(lh) => choose({ lh })}
             onBack={toMain}
           />
