@@ -38,6 +38,8 @@ compatibility shims, no leftovers, no workarounds.
 | Source             | 833 files; 30.3k lines outside tests (shared 11.9k, entities 6.9k, widgets 5.7k, features 2.8k, pages 2.2k, app 1.1k) |
 | Tests              | 221 files, 2057 passing, **1 skipped** (`path.test.ts`, "from Phase 4"); 48 s           |
 | Gates              | `typecheck` and `lint` clean; `build` passes                                            |
+| Coverage           | all files: 97.2% statements, 90.7% branches, 98.2% lines                                  |
+| Least covered (branches) | `widgets/step-panel/ui` 50% · `widgets/reharmonise/model` 50% · `widgets/passing-chords/model` 50% (lines 75%) · `pages/lesson/ui` 50% · `pages/scales/ui` 50% · `features/play-example/ui` 62.5% · `widgets/chord-chart/ui` 66.7% · `widgets/sheet-music/ui` 70.9% |
 | Test noise         | jsdom prints "Not implemented: Window's scrollTo()" nine times                          |
 | Entry chunk        | `index` 354 kB (117 kB gzip): React, the router, i18next and **both locales' every namespace** |
 | Other large chunks | `ScoreView` 337 kB (VexFlow, lazy, expected) · `learn-screens` 173 kB · `use-services` 140 kB (a shared chunk named after its first module) · `KeyboardSettingsFields` 105 kB |

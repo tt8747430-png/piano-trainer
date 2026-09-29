@@ -9,6 +9,9 @@ import { stubServiceWorker } from './pwa-register'
 beforeEach(() => {
   stubMatchMedia({ dark: false })
   stubServiceWorker({ waiting: false })
+  // jsdom lays nothing out and cannot scroll the window, which the router resets on every navigation.
+  if (typeof window !== 'undefined')
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
   // Tests in the node environment have no document to give fonts to.
   if (typeof document !== 'undefined') stubFonts()
 })

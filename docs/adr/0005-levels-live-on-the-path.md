@@ -11,9 +11,10 @@ place on the Path would be two sources of truth, and no test could say which is 
 
 `entities/path/content/path.ts` is the only place a level is written: a Step's level is the list it sits in. Pieces
 carry no `level`; Songs reads a piece's level through `levelOf(stepId)`. Tests require every Piece on the Path
-exactly once and no Listing on it; from Phase 4, every level must hold at least one Step.
+exactly once and no Listing on it; once the Path is levelled (roadmap sub-project 6), every level holds at least
+one Step, and that work adds the test.
 
 ## Consequences
 
 - Re-levelling is moving a line in one file.
-- Until Phase 4 everything sits at level 1, and the every-level test is off.
+- Until sub-project 6 levels the Path, everything sits at level 1.

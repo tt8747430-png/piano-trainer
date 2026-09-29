@@ -7,8 +7,9 @@ const scale = (kind: ScaleKind): PathStep => ({ kind: 'scale', scale: kind })
 const pieces = (...ids: PieceId[]): PathStep[] => ids.map((pieceId) => ({ kind: 'piece', pieceId }))
 
 /**
- * The one source of levels. This first path puts everything at level 1; Phase 4 orders and levels
- * it (ADR 0005). Adding a piece: one step here, in the place it should be learned.
+ * The one source of levels. This first path puts everything at level 1; the Path as a course
+ * (roadmap sub-project 6) orders and levels it (ADR 0005). Adding a piece: one step here, in the
+ * place it should be learned.
  */
 export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
   1: [

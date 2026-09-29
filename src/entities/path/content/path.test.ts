@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { COLLECTIONS, PIECES, entryById, isPiece } from '@/entities/piece'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
 import { pathSteps } from '../model/selectors'
-import { LEVELS } from '../model/types'
-import { PATH } from './path'
 
 const steps = pathSteps()
 
@@ -36,10 +34,5 @@ describe('the path', () => {
   it('gives each step one id', () => {
     const ids = steps.map(({ id }) => id)
     expect(new Set(ids).size).toBe(ids.length)
-  })
-
-  // ADR 0005: levels live on the path. Phase 4 levels the path for real and turns this on.
-  it.skip('puts at least one step on every level (ADR 0005, from Phase 4)', () => {
-    for (const level of LEVELS) expect(PATH[level].length, `level ${level}`).toBeGreaterThan(0)
   })
 })
