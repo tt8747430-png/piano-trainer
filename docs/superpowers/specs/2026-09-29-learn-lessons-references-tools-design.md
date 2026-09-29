@@ -266,6 +266,44 @@ in major and minor keys (`progression` blocks); passing chords between a hymn's 
 reharmonising a melody note (linking Reharmonise). Then Gospel: its progressions (the library's gospel row), passing
 chords and reharmonisation. Each lesson's text is its plan's to write, from the sources the roadmap names.
 
+### 6.1 What the lessons need
+
+- **A `pattern` block** (`{ pattern, piece }`): an accompaniment pattern heard in place, **over a piece**, never
+  alone: a pattern is a way of playing chords, and it is heard only on chords; the piece is the one its source
+  teaches it on (the five ways on Called to Play's lesson 3, the right-hand techniques on their lessons' studies,
+  the seven types on «О наш Отец на небесах», a rhythm style on a progression). The block shows the pattern's own
+  name and description (the entity's text, one source), the piece it plays over, **Play** (the piece's first line
+  with the pattern, both hands, at the piece's tempo, in its key; Stop while it plays; the keys go down as it
+  sounds) and **Open in the Player** (`/play/<piece>?pattern=<id>`; the Player's close goes back through the
+  history, to the lesson). A pattern that plays the tune names a piece with a melody (the content test says so).
+- **A `progression` block** (`{ numerals, key, size? }`): the Progressions tool's row, the same component (it moves
+  to `features/play-example`, the examples a reference and a lesson share), and under it a link row into the tool
+  on those numerals, key and size.
+- **Links to the tools and the Player:** `progressions` (numerals, key, size), `passing-chords` (key, from, to),
+  `reharmonise` (key, melody note), `piece` (a piece in the Player, with a pattern or its own). The content test
+  reads each: numerals parse, chords parse, a piece exists.
+- **Modules:** Accompaniment and Gospel join Fundamentals, in that order; Learn's groups follow.
+
+### 6.2 The lessons
+
+**Accompaniment**, in order: *Bass and chords* (Beginner: the left hand's root and octave, the chord in the right
+hand near the middle, moving to the nearest inversion; ways 1 and 5, the bass–chord alternation and the chord
+pulse) · *Broken chords and arpeggios* (Elementary: ways 2–4, harmonic figuration, broken arpeggios, the arpeggio
+up two octaves) · *The five ways* (Beginner: Called to Play's lesson 3, the five in order on its progression, and
+a new way on every chord) · *Right-hand techniques* (Elementary: Called to Play's techniques on their studies) ·
+*The seven types of accompaniment* (Elementary: Боброва's seven on her hymn, what each is for, and mixing them) ·
+*Accompanying a hymn* (Elementary: from the chart to the service: the key, the intro, a type for the verse and
+another for the chorus, the ending, breathing with the singers) · *Common progressions* (Elementary: I–IV–V–I,
+I–V–vi–IV, I–vi–IV–V, ii–V–I, and in minor i–iv–V–i, i–VI–III–VII, i–VII–VI–V) · *Passing chords* (Intermediate:
+a chord between a hymn's chords: the secondary dominant, the diminished 7th, the chromatic approach; the tool on
+each) · *Reharmonising a melody note* (Intermediate: the chords that hold a note, in the key and past it;
+Reharmonise on each).
+
+**Gospel**, in order: *Gospel progressions* (Intermediate: the library's gospel row, in 7ths) · *Gospel passing
+chords* (Intermediate: the 1 to the 4 through I7, the ♯iv° between IV and I, the walk-up ♭VI–♭VII–I, a ii–V into
+any chord) · *Gospel reharmonisation* (Intermediate: a hymn's plain chords made rich: 7ths and 9ths, sus4 to
+dominant, IV over V, the minor iv, the tensions).
+
 ## 7. Words (the glossary)
 
 Settled here: **Interval** (the reference's card: a distance named, heard up, down and together), **Consonance**
