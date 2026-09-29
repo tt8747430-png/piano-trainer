@@ -27,10 +27,13 @@ export {
 export {
   barSounds,
   chordSounds,
+  INTERVAL_WAYS,
+  intervalSounds,
   keySounds,
   PRACTICE_RHYTHM_IDS,
   PRACTICE_RHYTHMS,
   walkSounds,
+  type IntervalWay,
   type PracticeRhythm,
 } from './sounds'
 export { chordBar } from './chord-bar'

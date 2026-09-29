@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import { audibleHands } from './schedule'
-import { barSounds, chordSounds, keySounds, walkSounds } from './sounds'
+import { barSounds, chordSounds, intervalSounds, keySounds, walkSounds } from './sounds'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
@@ -90,5 +90,35 @@ describe('keySounds', () => {
       [69, 0],
     ])
     expect(chord[0]?.velocity).toBeLessThan(keySounds([midi(62)])[0]?.velocity ?? 0)
+  })
+})
+
+describe('intervalSounds', () => {
+  const at = (sounds: readonly { midi: number; at: number }[]) =>
+    sounds.map((sound) => [sound.midi, sound.at])
+
+  it('plays the lower note then the upper going up, the upper first going down', () => {
+    expect(at(intervalSounds(midi(60), midi(63), 'up'))).toEqual([
+      [60, 0],
+      [63, 0.6],
+    ])
+    expect(at(intervalSounds(midi(60), midi(63), 'down'))).toEqual([
+      [63, 0],
+      [60, 0.6],
+    ])
+  })
+
+  it('plays both at once together', () => {
+    expect(at(intervalSounds(midi(60), midi(67), 'together'))).toEqual([
+      [60, 0],
+      [67, 0],
+    ])
+  })
+
+  it('strikes a unison’s one key twice', () => {
+    expect(at(intervalSounds(midi(60), midi(60), 'up'))).toEqual([
+      [60, 0],
+      [60, 0.6],
+    ])
   })
 })

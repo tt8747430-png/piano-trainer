@@ -45,6 +45,24 @@ export const keySounds = (keys: readonly Midi[]): NoteSound[] =>
     velocity: keys.length > 1 ? BLOCK.velocity : TAP.velocity,
   }))
 
+/** The three ways an interval is heard: the lower note first, the upper first, or both at once. */
+export const INTERVAL_WAYS = ['up', 'down', 'together'] as const
+export type IntervalWay = (typeof INTERVAL_WAYS)[number]
+
+const MELODIC = { gap: 0.6, duration: 1.2, velocity: 0.2 } as const
+
+/** An interval's two keys, up, down or together: a unison's one key struck twice. */
+export function intervalSounds(low: Midi, high: Midi, way: IntervalWay): NoteSound[] {
+  const order = way === 'down' ? [high, low] : [low, high]
+  return order.map((key, i) => ({
+    kind: 'note',
+    midi: key,
+    at: way === 'together' ? 0 : i * MELODIC.gap,
+    duration: MELODIC.duration,
+    velocity: way === 'together' ? BLOCK.velocity : MELODIC.velocity,
+  }))
+}
+
 export const PRACTICE_RHYTHM_IDS = [
   'even',
   'long-short',
