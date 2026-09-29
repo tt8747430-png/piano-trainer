@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Square } from 'lucide-react'
-import { useId, useMemo } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PATTERNS, type PatternId } from '@/entities/pattern'
 import { entryTitles, type Piece } from '@/entities/piece'
@@ -28,7 +28,6 @@ export function PatternExample({
   const locale = useLocale()
   const titleId = useId()
   const playback = usePlayback<'opening'>()
-  const opening = useMemo(() => patternOpening(piece, pattern), [piece, pattern])
   const { name, description } = PATTERNS[pattern]
   return (
     <article
@@ -46,6 +45,8 @@ export function PatternExample({
         <Button
           size="pill"
           onClick={() => {
+            // Arranged on the tap, not on the page: a lesson shows many patterns and plays few.
+            const opening = patternOpening(piece, pattern)
             onShow(opening.shown)
             playback.toggle('opening', opening.sounds)
           }}
