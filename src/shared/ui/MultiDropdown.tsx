@@ -1,25 +1,28 @@
-import type { Option, OptionValue } from './option'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './primitives/select'
+import { choiceGroups, type Choices, type OptionValue } from './option'
+import { OptionItems } from './OptionItems'
+import { Select, SelectContent, SelectTrigger, SelectValue } from './primitives/select'
 
 /**
  * Several choices of many behind a pop-up button: the button shows its label and the chosen, the
- * list checks each, a tap on an item turning it on or off. `none` names an empty choice.
+ * list checks each, a tap on an item turning it on or off. `none` names an empty choice; a pop-up
+ * that never empties has none.
  */
 export function MultiDropdown<V extends OptionValue>({
   label,
   none,
   value,
-  options,
   onChange,
   className,
+  ...choices
 }: {
   label: string
-  none: string
+  none?: string
   value: readonly V[]
-  options: readonly Option<V>[]
   onChange: (value: V[]) => void
   className?: string
-}) {
+} & Choices<V>) {
+  const groups = choiceGroups(choices)
+  const options = groups.flatMap((group) => group.options)
   return (
     <Select
       multiple
@@ -43,11 +46,7 @@ export function MultiDropdown<V extends OptionValue>({
         </SelectValue>
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false}>
-        {options.map((option) => (
-          <SelectItem key={String(option.value)} value={option.value} aria-label={option.title}>
-            {option.label}
-          </SelectItem>
-        ))}
+        <OptionItems groups={groups} />
       </SelectContent>
     </Select>
   )

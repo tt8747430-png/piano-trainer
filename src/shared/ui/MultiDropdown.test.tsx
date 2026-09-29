@@ -59,4 +59,35 @@ describe('MultiDropdown', () => {
     await user.click(screen.getByRole('option', { name: '♭9' }))
     expect(onChange).toHaveBeenLastCalledWith([])
   })
+
+  it('lists groups under their labels, each item named by its title, its second word shown', async () => {
+    const user = userEvent.setup()
+    render(
+      <MultiDropdown
+        label="Chord types"
+        value={['m9']}
+        groups={[
+          {
+            label: 'Triads',
+            options: [{ value: 'maj', label: 'M', title: 'Major triad', detail: 'Major triad' }],
+          },
+          {
+            label: '9ths & more',
+            options: [{ value: 'm9', label: 'm9', title: 'Minor 9th', detail: 'Minor 9th' }],
+          },
+        ]}
+        onChange={vi.fn()}
+      />,
+    )
+    const button = screen.getByRole('combobox', { name: 'Chord types' })
+    expect(button).toHaveTextContent('Chord typesm9')
+    await user.click(button)
+    expect(await screen.findByText('Triads')).toBeInTheDocument()
+    expect(screen.getByText('9ths & more')).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'Minor 9th' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    expect(screen.getByRole('option', { name: 'Major triad' })).toHaveTextContent('M Major triad')
+  })
 })

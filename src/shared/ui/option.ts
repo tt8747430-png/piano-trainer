@@ -29,3 +29,19 @@ export const pickedOption = <V extends OptionValue>(
   pressed: readonly string[],
 ): Option<V> | undefined =>
   options.find((option) => option.value !== current && pressed.includes(toggleValue(option.value)))
+
+/** A group of a pop-up's options, under its label where it has one. */
+export interface ChoiceGroup<V extends OptionValue> {
+  readonly label?: string
+  readonly options: readonly Option<V>[]
+}
+
+/** A pop-up's choices: a list of options, or groups of them under their labels. */
+export type Choices<V extends OptionValue> =
+  | { readonly options: readonly Option<V>[]; readonly groups?: never }
+  | { readonly groups: readonly OptionGroup<V>[]; readonly options?: never }
+
+/** The groups a pop-up lists: its own, or one unlabelled group of its options. */
+export const choiceGroups = <V extends OptionValue>(
+  choices: Choices<V>,
+): readonly ChoiceGroup<V>[] => choices.groups ?? [{ options: choices.options }]

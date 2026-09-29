@@ -1,19 +1,6 @@
-import { Fragment } from 'react'
-import type { Option, OptionGroup, OptionValue } from './option'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from './primitives/select'
-
-type Choices<V extends OptionValue> =
-  | { readonly options: readonly Option<V>[]; readonly groups?: never }
-  | { readonly groups: readonly OptionGroup<V>[]; readonly options?: never }
+import { choiceGroups, type Choices, type OptionValue } from './option'
+import { OptionItems } from './OptionItems'
+import { Select, SelectContent, SelectTrigger, SelectValue } from './primitives/select'
 
 /**
  * One choice of many behind a pop-up button (Apple's): the button shows its label and the current
@@ -31,8 +18,7 @@ export function Dropdown<V extends OptionValue>({
   onChange: (value: V) => void
   className?: string
 } & Choices<V>) {
-  const groups: readonly { readonly label?: string; readonly options: readonly Option<V>[] }[] =
-    choices.groups ?? [{ options: choices.options }]
+  const groups = choiceGroups(choices)
   const items = groups.flatMap((group) =>
     group.options.map((option) => ({ value: option.value, label: option.label })),
   )
@@ -51,29 +37,7 @@ export function Dropdown<V extends OptionValue>({
         <SelectValue className="block min-w-0 flex-1 truncate text-left font-semibold" />
       </SelectTrigger>
       <SelectContent>
-        {groups.map((group, i) => (
-          <Fragment key={group.label ?? i}>
-            {i > 0 ? <SelectSeparator /> : null}
-            <SelectGroup>
-              {group.label ? <SelectLabel>{group.label}</SelectLabel> : null}
-              {group.options.map((option) => (
-                <SelectItem
-                  key={String(option.value)}
-                  value={option.value}
-                  aria-label={option.title}
-                >
-                  {option.label}
-                  {option.detail ? (
-                    <>
-                      {' '}
-                      <span className="text-muted-foreground">{option.detail}</span>
-                    </>
-                  ) : null}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </Fragment>
-        ))}
+        <OptionItems groups={groups} />
       </SelectContent>
     </Select>
   )
