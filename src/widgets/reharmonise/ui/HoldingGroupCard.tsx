@@ -24,7 +24,10 @@ export function HoldingGroupCard({
       </h2>
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {chords.map((holding, index) => (
-          <li key={`${holding.degree} ${noteName(holding.chord.root)}${holding.chord.suffix}`}>
+          <li
+            key={`${holding.degree} ${noteName(holding.chord.root)}${holding.chord.suffix}`}
+            className="grid"
+          >
             <ChordButton
               symbol={noteName(holding.chord.root) + holding.chord.suffix}
               numeral={

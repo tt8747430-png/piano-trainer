@@ -28,7 +28,7 @@ export function ChordField({
           autoComplete="off"
           spellCheck={false}
           onChange={(event) => onChange(event.target.value)}
-          className="font-display text-xl font-semibold"
+          className="font-display text-xl font-semibold md:text-xl"
         />
       </InputGroup>
       {readable ? null : (
