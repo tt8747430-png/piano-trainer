@@ -648,6 +648,10 @@ sideways, as Flowkey shows it: ADR 0013.
   or Space to the bar's first.
 - **The loop:** a sand band behind its bars, and an umber grip at each end (a 4px line in a 44px slider) dragged over
   bars or moved by the arrow keys, never past the other end.
+- **Finger numbers** (the Finger numbers toggle): a chord's fingers stand in one column on its voice's outer side, a
+  staff space apart, the top note's finger on top as printed piano music stacks them: over a lone treble voice or an
+  upper voice, under a lone bass voice or a lower voice. The staves move down, apart or the page grows so every
+  column stays on the page.
 - **Sizes:** 1 CSS px a unit, 0.7 on a phone on its side; a bar is as wide as its notes need (VexFlow's least × 1.4)
   and its chord symbols need, never under 80 units.
 - **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,

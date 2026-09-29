@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note } from '@/shared/lib/music'
+import { midi, note, type Finger } from '@/shared/lib/music'
 import { notate, type TimedNote } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { engrave } from './engrave'
@@ -129,5 +129,97 @@ describe('engrave', () => {
         chords.map(() => true),
       )
     }
+  })
+
+  describe('fingers', () => {
+    /** One bar of 4/4 whole notes: each note's midi, letter, finger (or none) and hand. */
+    const bar = (notes: readonly [number, 'C' | 'E' | 'G', Finger | null, TimedNote['hand']][]) =>
+      notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [{ startTick: 0, beats: 4 }],
+        notes: notes.map(([key, letter, finger, hand]) =>
+          n(key, letter, 0, 48, { hand, ...(finger ? { finger } : {}) }),
+        ),
+        chords: [],
+      })
+    /** Each finger number drawn, with where its text stands. */
+    const fingersIn = (host: HTMLElement) =>
+      [...host.querySelectorAll('text')]
+        .filter((text) => /^[1-5]$/.test(text.textContent ?? ''))
+        .map((text) => ({
+          finger: Number(text.textContent),
+          x: Number(text.getAttribute('x')),
+          y: Number(text.getAttribute('y')),
+        }))
+    const column = (drawn: ReturnType<typeof fingersIn>) =>
+      Object.fromEntries(drawn.map(({ finger, y }) => [finger, y]))
+
+    it('stack a chord’s fingers in one column over it, the top note’s on top', () => {
+      const host = document.createElement('div')
+      engrave(
+        bar([
+          [60, 'C', 1, 'rh'],
+          [64, 'E', 3, 'rh'],
+          [67, 'G', 5, 'rh'],
+        ]),
+        host,
+        { scale: 1, fingers: true },
+      )
+      const drawn = fingersIn(host)
+      expect(new Set(drawn.map(({ x }) => x)).size).toBe(1)
+      // G4's head is at 70: its finger stands 7 above it, each lower note's a staff space higher.
+      expect(column(drawn)).toEqual({ 1: 63, 3: 53, 5: 43 })
+    })
+
+    it('stack a left hand’s fingers under its lowest note, and give them room below the staff', () => {
+      const host = document.createElement('div')
+      const layout = engrave(
+        bar([
+          [36, 'C', 5, 'lh'],
+          [48, 'C', 1, 'lh'],
+        ]),
+        host,
+        { scale: 1, fingers: true },
+      )
+      const drawn = fingersIn(host)
+      expect(new Set(drawn.map(({ x }) => x)).size).toBe(1)
+      // C2's head is at 190: the top note's finger 15 below it, the next a staff space lower.
+      expect(column(drawn)).toEqual({ 1: 205, 5: 215 })
+      expect(layout.height).toBeGreaterThanOrEqual(217)
+    })
+
+    it('move the staves down so a high chord’s fingers stay on the page', () => {
+      const host = document.createElement('div')
+      const layout = engrave(
+        bar([
+          [84, 'C', 1, 'rh'],
+          [88, 'E', 3, 'rh'],
+          [91, 'G', 5, 'rh'],
+        ]),
+        host,
+        { scale: 1, fingers: true },
+      )
+      const drawn = fingersIn(host)
+      expect(Math.min(...drawn.map(({ y }) => y))).toBeGreaterThanOrEqual(9)
+      expect(layout.staffTop).toBeGreaterThan(40)
+      expect(Math.max(...drawn.map(({ y }) => y))).toBeLessThan(layout.staffTop)
+    })
+
+    it('put a lower voice’s fingers under it, clear of the tune above', () => {
+      const host = document.createElement('div')
+      engrave(
+        bar([
+          [72, 'C', null, 'melody'],
+          [60, 'C', 1, 'rh'],
+          [64, 'E', 3, 'rh'],
+          [67, 'G', 5, 'rh'],
+        ]),
+        host,
+        { scale: 1, fingers: true },
+      )
+      // C4's head is at 90: the chord's top finger 15 below it, the rest a staff space lower each.
+      expect(column(fingersIn(host))).toEqual({ 5: 105, 3: 115, 1: 125 })
+    })
   })
 })

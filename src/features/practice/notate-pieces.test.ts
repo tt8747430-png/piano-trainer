@@ -85,16 +85,39 @@ describe('notation of the content', () => {
   })
 })
 
+/** The finger numbers drawn off the page: a digit stands 9 over its baseline. */
+function fingersOffThePage(performance: Parameters<typeof notate>[0]) {
+  const host = document.createElement('div')
+  const layout = engrave(notate(performance), host, { scale: 1, fingers: true })
+  expect(layout.measures.length).toBeGreaterThan(0)
+  return [...host.querySelectorAll('text')]
+    .filter((text) => /^[1-5]$/.test(text.textContent ?? ''))
+    .map((text) => Number(text.getAttribute('y')))
+    .filter((y) => y - 9 < 0 || y > layout.height)
+}
+
 describe('engraving of the content', () => {
-  it.each(PIECES.map((piece) => [piece.id, piece] as const))('engraves %s', (_id, piece) => {
-    const layout = engrave(
-      notate(arrangePiece(piece, ownChoice(piece))),
-      document.createElement('div'),
-      {
-        scale: 1,
-        fingers: true,
-      },
-    )
-    expect(layout.measures.length).toBeGreaterThan(0)
+  it.each(PIECES.map((piece) => [piece.id, piece] as const))(
+    'engraves %s with every finger on the page',
+    (_id, piece) => {
+      expect(fingersOffThePage(arrangePiece(piece, ownChoice(piece)))).toEqual([])
+    },
+  )
+
+  it('engraves a chromatic walk of every chord with every finger on the page', () => {
+    const [first, ...rest] = CHORD_QUALITIES
+    if (!first) throw new Error('the table is empty')
+    expect(
+      fingersOffThePage(
+        arrangeChromatic({
+          root: note('C'),
+          chords: [first, ...rest],
+          direction: 'up',
+          pattern: CHROMATIC.pattern,
+          rh: null,
+          lh: null,
+        }),
+      ),
+    ).toEqual([])
   })
 })

@@ -17,7 +17,7 @@ import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
 import { SCORE_HEIGHT } from './size'
-import { buildVoice, type BuiltVoice, type VexNote } from './vexflow-notes'
+import { buildVoice, type BuiltVoice, type FingerReach, type VexNote } from './vexflow-notes'
 
 export interface ScoreLayout {
   /** The engraving's size in CSS pixels. */
@@ -37,6 +37,11 @@ export interface ScoreLayout {
 }
 
 const STAFF_Y: Readonly<Record<StaffId, number>> = { treble: 0, bass: 90 }
+/** A staff's top and bottom lines from its own top (VexFlow keeps four spaces over the staff). */
+const TOP_LINE = 40
+const BOTTOM_LINE = 80
+/** The least room between a column of fingers and the page's edge, or the other staff's content. */
+const FINGER_MARGIN = 2
 /** A measure's notes are never narrower than this, and are given this much more than their least. */
 const LEAST_NOTES = 80
 const SPACING = 1.4
@@ -90,8 +95,13 @@ interface BuiltMeasure {
   readonly width: number
 }
 
-function staveAt(staff: StaffId, x: number, width: number, built: BuiltMeasure, key: Key): Stave {
-  const stave = new Stave(x, STAFF_Y[staff], width)
+function staveAt(
+  staff: StaffId,
+  { x, y, width }: { x: number; y: number; width: number },
+  built: BuiltMeasure,
+  key: Key,
+): Stave {
+  const stave = new Stave(x, y, width)
   if (built.clefs) stave.addClef(staff).addKeySignature(signatureOf(key))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
   return stave
@@ -129,7 +139,9 @@ function chordShortfall(
 ): number {
   const { chords, startTick, ticks } = built.measure
   if (chords.length === 0) return 0
-  const stave = staveAt('treble', 0, width, built, key).setNoteStartX(noteStart)
+  const stave = staveAt('treble', { x: 0, y: STAFF_Y.treble, width }, built, key).setNoteStartX(
+    noteStart,
+  )
   built.formatter.formatToStave([...voices], stave)
   // Each note on the trial stave, so its x is read as the engraving will read it (a voice's stave
   // does not reach its notes until it is drawn).
@@ -174,7 +186,12 @@ function buildMeasure(
   const probe = { measure, staves, formatter, clefs, time, width: 0 }
   const modifiers = Math.max(
     ...STAVES.map((staff) => {
-      const stave = staveAt(staff, 0, LEAST_NOTES, probe, score.key)
+      const stave = staveAt(
+        staff,
+        { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES },
+        probe,
+        score.key,
+      )
       return stave.getNoteStartX() - stave.getX()
     }),
   )
@@ -191,6 +208,30 @@ function buildMeasure(
     notes = Math.max(notes + 1, Math.ceil(notes * short))
   }
   return { ...probe, width: modifiers + notes }
+}
+
+/**
+ * Where the staves stand and how tall the engraving is: the grand staff of `STAFF_Y` and
+ * `SCORE_HEIGHT`, moved down where fingers stand over the treble, apart where they stand between
+ * the staves, and taller where they stand under the bass.
+ */
+function placesOf(built: readonly BuiltMeasure[]): {
+  readonly y: Readonly<Record<StaffId, number>>
+  readonly height: number
+} {
+  const reach = (staff: StaffId, side: keyof FingerReach) =>
+    built.flatMap((measure) =>
+      measure.staves[staff].flatMap((voice) => voice.fingerReach[side] ?? []),
+    )
+  const treble = Math.max(STAFF_Y.treble, FINGER_MARGIN - Math.min(...reach('treble', 'above')))
+  const trebleFloor = Math.max(BOTTOM_LINE, ...reach('treble', 'below'))
+  const bassCeiling = Math.min(TOP_LINE, ...reach('bass', 'above'))
+  const bass =
+    treble + Math.max(STAFF_Y.bass - STAFF_Y.treble, trebleFloor + FINGER_MARGIN - bassCeiling)
+  const height =
+    bass +
+    Math.max(SCORE_HEIGHT - STAFF_Y.bass, Math.max(...reach('bass', 'below')) + FINGER_MARGIN)
+  return { y: { treble, bass }, height }
 }
 
 /** Every tied note joined to the note of its key where its value ends, on its staff. */
@@ -247,8 +288,9 @@ export function engrave(
     buildMeasure(score, measure, score.measures[index - 1], { fingers, scale }),
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
+  const places = placesOf(built)
   const renderer = new Renderer(host, Renderer.Backends.SVG)
-  renderer.resize(width * scale, SCORE_HEIGHT * scale)
+  renderer.resize(width * scale, places.height * scale)
   const context = renderer.getContext()
   context.scale(scale, scale)
   context.setFillStyle('currentColor')
@@ -265,8 +307,13 @@ export function engrave(
   let x = 0
   for (const measure of built) {
     const staves = {
-      treble: staveAt('treble', x, measure.width, measure, score.key),
-      bass: staveAt('bass', x, measure.width, measure, score.key),
+      treble: staveAt(
+        'treble',
+        { x, y: places.y.treble, width: measure.width },
+        measure,
+        score.key,
+      ),
+      bass: staveAt('bass', { x, y: places.y.bass, width: measure.width }, measure, score.key),
     }
     const start = Math.max(staves.treble.getNoteStartX(), staves.bass.getNoteStartX())
     for (const staff of STAVES) staves[staff].setNoteStartX(start).setContext(context).draw()
@@ -304,7 +351,7 @@ export function engrave(
 
   return {
     width: width * scale,
-    height: SCORE_HEIGHT * scale,
+    height: places.height * scale,
     staffTop,
     staffBottom,
     measures,
