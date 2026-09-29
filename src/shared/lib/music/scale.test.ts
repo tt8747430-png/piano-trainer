@@ -3,6 +3,7 @@ import type { Key } from './key'
 import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import {
+  keyPitchClasses,
   SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
@@ -311,5 +312,16 @@ describe('relativeKey', () => {
       tonic: note('A'),
       minor: false,
     })
+  })
+})
+
+describe('keyPitchClasses', () => {
+  it('holds a major key’s scale, and a minor key’s with its raised 6th and 7th', () => {
+    expect([...keyPitchClasses({ tonic: note('C'), minor: false })].sort((a, b) => a - b)).toEqual([
+      0, 2, 4, 5, 7, 9, 11,
+    ])
+    expect([...keyPitchClasses({ tonic: note('A'), minor: true })].sort((a, b) => a - b)).toEqual([
+      0, 2, 4, 5, 6, 7, 8, 9, 11,
+    ])
   })
 })

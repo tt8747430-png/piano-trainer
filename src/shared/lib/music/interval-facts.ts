@@ -35,3 +35,14 @@ export function consonanceOf({ steps, semitones }: Interval): Consonance {
   if (IMPERFECT_STEPS.has(step) && (off === 0 || off === -1)) return 'imperfect'
   return 'dissonance'
 }
+
+/** The simple interval of each span within the octave, in semitones. */
+const BY_SPAN = INTERVAL_GROUPS.simple.slice(0, 12)
+
+/** Two keys' distance named as its simple interval (a 10th a 3rd), 12 and its multiples the octave. */
+export function spanInterval(semitones: number): ReferenceInterval {
+  if (semitones > 0 && semitones % 12 === 0) return 'P8'
+  const name = BY_SPAN[semitones % 12]
+  if (!name) throw new RangeError(`${semitones} semitones is no span of two keys`)
+  return name
+}

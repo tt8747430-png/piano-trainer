@@ -8,6 +8,7 @@ import {
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
+  plainRoot,
   plainSpelling,
   rootSpelling,
   sameNote,
@@ -155,5 +156,15 @@ describe('parseNoteInOctave', () => {
     expect(parseNoteInOctave('E')).toBeNull()
     expect(parseNoteInOctave('H4')).toBeNull()
     expect(parseNoteInOctave('4')).toBeNull()
+  })
+})
+
+describe('plainRoot', () => {
+  it('names a root plainly where letters would give F♭, C♭, E♯, B♯ or a double', () => {
+    expect(plainRoot(note('F', -1))).toEqual(note('E'))
+    expect(plainRoot(note('B', 1))).toEqual(note('C'))
+    expect(plainRoot(note('B', -2))).toEqual(note('A'))
+    expect(plainRoot(note('E', -1))).toEqual(note('E', -1))
+    expect(plainRoot(note('F', 1))).toEqual(note('F', 1))
   })
 })

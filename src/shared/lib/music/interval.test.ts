@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { degreeLabel, INTERVALS, intervalBetween, spellAbove } from './interval'
-import { note } from './note'
+import { degreeLabel, INTERVALS, intervalBetween, spellAbove, spellBelow } from './interval'
+import { note, noteName } from './note'
 
 describe('spellAbove', () => {
   it.each([
@@ -57,5 +57,14 @@ describe('degreeLabel', () => {
     expect(INTERVALS.A2.degree).toBe('#2')
     expect(INTERVALS.d7.degree).toBe('𝄫7')
     expect(INTERVALS.A11.degree).toBe('#11')
+  })
+})
+
+describe('spellBelow', () => {
+  it('spells the note an interval below by letters, as spellAbove does above', () => {
+    expect(noteName(spellBelow(note('G'), INTERVALS.M3))).toBe('E♭')
+    expect(noteName(spellBelow(note('G'), INTERVALS.m9))).toBe('F#')
+    expect(noteName(spellBelow(note('G'), INTERVALS.A11))).toBe('D♭')
+    expect(noteName(spellBelow(note('A', -1), INTERVALS.M3))).toBe('F♭')
   })
 })

@@ -1,13 +1,14 @@
 import {
+  isAccidental,
   letterAt,
   letterIndex,
   naturalPitch,
   pitchClassOf,
   plainSpelling,
-  type Accidental,
+  type Letter,
   type SpelledNote,
 } from './note'
-import { pitchClass } from './pitch'
+import { pitchClass, type PitchClass } from './pitch'
 
 /** How far apart two notes are, in letter steps and in semitones: a 3rd is 2 steps. */
 export interface Interval {
@@ -82,15 +83,26 @@ export const INTERVALS = {
 } as const satisfies Record<string, LabelledInterval>
 export type IntervalName = keyof typeof INTERVALS
 
-/** The note `interval` above `from`, spelled on the letter the steps reach. */
-export function spellAbove(from: SpelledNote, interval: Interval): SpelledNote {
-  const letter = letterAt(letterIndex(from.letter) + interval.steps)
-  const pc = pitchClass(pitchClassOf(from) + interval.semitones)
+/** A pitch class written on a letter: the accidental between them, or its plain spelling past a double. */
+function spelledOn(letter: Letter, pc: PitchClass): SpelledNote {
   const offset = pitchClass(pc - naturalPitch(letter))
   const accidental = offset > 5 ? offset - 12 : offset
-  if (Math.abs(accidental) > 2) return plainSpelling(pc, accidental > 0)
-  return { letter, accidental: accidental as Accidental }
+  return isAccidental(accidental) ? { letter, accidental } : plainSpelling(pc, accidental > 0)
 }
+
+/** The note `interval` above `from`, spelled on the letter the steps reach. */
+export const spellAbove = (from: SpelledNote, interval: Interval): SpelledNote =>
+  spelledOn(
+    letterAt(letterIndex(from.letter) + interval.steps),
+    pitchClass(pitchClassOf(from) + interval.semitones),
+  )
+
+/** The note `interval` below `from`, spelled on the letter the steps reach down: G's major 3rd below is E♭. */
+export const spellBelow = (from: SpelledNote, interval: Interval): SpelledNote =>
+  spelledOn(
+    letterAt(letterIndex(from.letter) - interval.steps),
+    pitchClass(pitchClassOf(from) - interval.semitones),
+  )
 
 /** The interval from `from` up to `to` within one octave: steps 0–6, semitones 0–11. */
 export function intervalBetween(from: SpelledNote, to: SpelledNote): Interval {

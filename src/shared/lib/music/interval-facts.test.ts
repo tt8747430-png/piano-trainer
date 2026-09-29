@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { INTERVALS } from './interval'
-import { consonanceOf, INTERVAL_GROUP_IDS, INTERVAL_GROUPS } from './interval-facts'
+import { consonanceOf, INTERVAL_GROUP_IDS, INTERVAL_GROUPS, spanInterval } from './interval-facts'
 
 describe('the reference’s intervals', () => {
   it('run from the unison to the octave, a semitone at a time but for the one tritone', () => {
@@ -56,5 +56,11 @@ describe('consonanceOf', () => {
       'imperfect',
       'imperfect',
     ])
+  })
+})
+
+describe('spanInterval', () => {
+  it('names two keys’ distance, a compound one as its simple interval', () => {
+    expect([0, 3, 6, 12, 16, 19].map(spanInterval)).toEqual(['r', 'm3', 'A4', 'P8', 'M3', 'P5'])
   })
 })

@@ -4,7 +4,10 @@ export const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const
 export type Letter = (typeof LETTERS)[number]
 
 /** Semitones from the letter: −2 double flat … 2 double sharp. */
-export type Accidental = -2 | -1 | 0 | 1 | 2
+export const ACCIDENTALS = [-2, -1, 0, 1, 2] as const
+export type Accidental = (typeof ACCIDENTALS)[number]
+export const isAccidental = (semitones: number): semitones is Accidental =>
+  ACCIDENTALS.some((accidental) => accidental === semitones)
 
 export interface SpelledNote {
   readonly letter: Letter
@@ -124,6 +127,18 @@ export function plainSpelling(pc: PitchClass, preferSharps: boolean): SpelledNot
   const spelled = (preferSharps ? SHARP_SPELLINGS : FLAT_SPELLINGS)[pc]
   if (!spelled) throw new RangeError(`${pc} is not a pitch class`)
   return spelled
+}
+
+/**
+ * A root named plainly where its letters would give F♭, C♭, E♯, B♯ or a double sharp or flat (the
+ * tritone substitution of E♭ is F♭7 by letters, written E7), leaning the way its accidental does.
+ */
+export function plainRoot(spelled: SpelledNote): SpelledNote {
+  const odd =
+    Math.abs(spelled.accidental) === 2 ||
+    (spelled.accidental === -1 && (spelled.letter === 'F' || spelled.letter === 'C')) ||
+    (spelled.accidental === 1 && (spelled.letter === 'E' || spelled.letter === 'B'))
+  return odd ? plainSpelling(pitchClassOf(spelled), spelled.accidental > 0) : spelled
 }
 
 /** The root a chord or scale on this pitch class is named from: only C♯/D♭ and G♯/A♭ lean. */

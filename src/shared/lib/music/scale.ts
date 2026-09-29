@@ -228,6 +228,15 @@ export function scaleGaps(kind: ScaleKind): ScaleGap[] {
  * A pitch class as a key spells it: the note of its scale (a minor key's raised 6th and 7th too),
  * else plainly, sharp in a sharp key and flat otherwise.
  */
+/** The notes a key's chords are made of: its scale's, and in a minor key its raised 6th and 7th too. */
+export const keyPitchClasses = (key: Key): ReadonlySet<PitchClass> =>
+  new Set(
+    (key.minor
+      ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
+      : spellScale(key.tonic, 'major')
+    ).map((tone) => tone.pitchClass),
+  )
+
 export function spellInKey(pc: PitchClass, key: Key): SpelledNote {
   const tones = key.minor
     ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
