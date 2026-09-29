@@ -45,6 +45,13 @@ const notes = (sounds: readonly Sound[]) =>
 const clicks = (sounds: readonly Sound[]) => sounds.filter((sound) => sound.kind === 'click')
 
 describe('schedule', () => {
+  it('says where the pass runs and when its music starts, after a count-in', () => {
+    const plain = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, fromTick: 12, toTick: 60 })
+    expect([plain.fromTick, plain.toTick, plain.musicStart]).toEqual([12, 60, 0])
+    const counted = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, countIn: true })
+    expect([counted.fromTick, counted.toTick, counted.musicStart]).toEqual([0, 96, 4])
+  })
+
   it('times a bar in seconds at 60 bpm', () => {
     const { sounds, end } = schedule(perform('C'), { tempo: 60, hands: ALL })
     expect(notes(sounds).map((sound) => sound.at)).toEqual([0, 0, 0, 0, 0])

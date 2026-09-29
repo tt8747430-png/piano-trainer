@@ -59,6 +59,11 @@ export interface Scheduled {
   readonly cues: readonly Cue[]
   /** When the pass is over. */
   readonly end: number
+  /** The ticks the pass runs from and to. */
+  readonly fromTick: Tick
+  readonly toTick: Tick
+  /** When `fromTick` sounds, after the pass's start: after its count-in. */
+  readonly musicStart: number
 }
 
 /** A note never sounds shorter than this in a pass… */
@@ -127,6 +132,9 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
     cues,
     end: at(toTick),
+    fromTick,
+    toTick,
+    musicStart,
   }
 }
 
