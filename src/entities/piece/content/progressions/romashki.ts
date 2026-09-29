@@ -13,7 +13,7 @@ export default definePiece({
   chordSize: { default: 'sevenths', choosable: true },
   // Bar 1 at 3.53 s: the voice's first note (2.74 s) is a beat's pickup, as its chorus entry (36.0 s)
   // is a beat before bar 11; a 72 grid over the voice has its beats there. Heard by the owner.
-  recording: { src: vocal, start: 3.53, tempo: 72 },
+  recording: { src: vocal, start: 3.25, tempo: 72 },
   progression: [
     {
       kind: 'verse',
