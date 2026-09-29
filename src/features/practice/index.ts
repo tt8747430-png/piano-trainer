@@ -38,5 +38,11 @@ export {
   type ChromaticChords,
   type ChromaticDirection,
 } from './chromatic'
+export {
+  arrangeProgression,
+  PROGRESSION,
+  progressionChart,
+  type ProgressionChoice,
+} from './progression'
 export { PractiseChords } from './ui/PractiseChords'
 export { ChromaticWalkLink } from './ui/ChromaticWalkLink'
