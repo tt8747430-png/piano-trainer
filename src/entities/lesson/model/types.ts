@@ -28,7 +28,7 @@ export const LESSON_CATEGORIES = [
 export type LessonCategory = (typeof LESSON_CATEGORIES)[number]
 
 /** Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7). */
-export const LESSON_MODULES = ['fundamentals', 'accompaniment'] as const
+export const LESSON_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
 export type LessonModule = (typeof LESSON_MODULES)[number]
 
 /** What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave. */

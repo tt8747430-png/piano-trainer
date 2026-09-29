@@ -7,6 +7,9 @@ import chromaticScale from './chromatic-scale'
 import commonProgressions from './common-progressions'
 import findingHome from './finding-home'
 import fiveWays from './five-ways'
+import gospelPassingChords from './gospel-passing-chords'
+import gospelProgressions from './gospel-progressions'
+import gospelReharmonisation from './gospel-reharmonisation'
 import intervals from './intervals'
 import inversions from './inversions'
 import keySignatures from './key-signatures'
@@ -25,7 +28,7 @@ import wholeAndHalfSteps from './whole-and-half-steps'
 
 /**
  * Every lesson, in the order Learn lists them: the Fundamentals, from the keys to key signatures; then
- * Accompaniment, from bass and chords on.
+ * Accompaniment, from bass and chords to reharmonising a melody; then Gospel.
  */
 export const LESSONS: readonly Lesson[] = [
   findingHome,
@@ -51,4 +54,7 @@ export const LESSONS: readonly Lesson[] = [
   commonProgressions,
   passingChords,
   reharmonisingAMelody,
+  gospelProgressions,
+  gospelPassingChords,
+  gospelReharmonisation,
 ]

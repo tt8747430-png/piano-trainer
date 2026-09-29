@@ -5,7 +5,7 @@ export const learn: LocaleResources['learn'] = {
   level: 'Уровень',
   categoryLabel: 'Раздел',
   any: 'Любой',
-  module: { fundamentals: 'Основы', accompaniment: 'Аккомпанемент' },
+  module: { fundamentals: 'Основы', accompaniment: 'Аккомпанемент', gospel: 'Госпел' },
   noLessons: 'Нет подходящих уроков.',
   everyLesson: 'Показать все уроки',
   tools: 'Инструменты',

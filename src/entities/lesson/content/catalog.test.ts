@@ -220,6 +220,12 @@ describe('the lessons', () => {
     ])
   })
 
+  it('teach gospel’s progressions, passing chords and reharmonisation', () => {
+    expect(
+      LESSONS.filter((lesson) => lesson.module === 'gospel').map((lesson) => lesson.id),
+    ).toEqual(['gospel-progressions', 'gospel-passing-chords', 'gospel-reharmonisation'])
+  })
+
   it('list the modules in order, each lesson after the one before it', () => {
     const modules = LESSONS.map((lesson) => LESSON_MODULES.indexOf(lesson.module))
     expect(modules).toEqual([...modules].sort((a, b) => a - b))
