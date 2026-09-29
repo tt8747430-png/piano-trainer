@@ -656,6 +656,9 @@ sideways, as Flowkey shows it: ADR 0013.
   staff space apart, the top note's finger on top as printed piano music stacks them: over a lone treble voice or an
   upper voice, under a lone bass voice or a lower voice. The staves move down, apart or the page grows so every
   column stays on the page.
+- **Named notes** (the Named notes toggle): each head carries its note's name as spelled, in Bravura's note name
+  noteheads: the letter cut out of a filled head, inside a half or whole note's hollow one, so it reads in either
+  theme. A double sharp or flat keeps a plain head (the font has none). The Player's staff only.
 - **Sizes:** 1 CSS px a unit, 0.7 on a phone on its side; a bar is as wide as its notes need (VexFlow's least × 1.4)
   and its chord symbols need, never under 80 units.
 - **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,

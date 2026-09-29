@@ -26,6 +26,7 @@ export const player: LocaleResources['player'] = {
   chordSizes: { triads: 'Трезвучия', sevenths: 'Септаккорды', ninths: 'Нонаккорды' },
   toggles: {
     fingerNumbers: 'Аппликатура',
+    namedNotes: 'Ноты с названиями',
     melody: 'Мелодия',
     metronome: 'Метроном',
     countIn: 'Отсчёт',

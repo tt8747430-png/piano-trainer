@@ -42,6 +42,8 @@ export interface PracticePlayer {
   readonly feedback: WaitFeedback | null
   readonly muted: StaffId | undefined
   readonly fingers: boolean
+  /** Each notehead carries its note's name. */
+  readonly names: boolean
   setMode(mode: PracticeMode): void
   setTempo(tempo: number): void
   /** Listen at a tempo: the mode and the tempo in one change of the URL. */
@@ -130,6 +132,7 @@ export function usePracticePlayer(
     feedback: waitFeedback(performance, state),
     muted: MUTED[view.hands],
     fingers: toggles.fingerNumbers,
+    names: toggles.namedNotes,
     setMode: (mode) => setView({ mode }),
     setTempo: (next) => setView({ tempo: next === ownTempo ? undefined : next }),
     listenAt: (next) => setView({ mode: 'listen', tempo: next === ownTempo ? undefined : next }),

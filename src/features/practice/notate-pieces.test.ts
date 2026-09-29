@@ -88,7 +88,7 @@ describe('notation of the content', () => {
 /** The finger numbers drawn off the page: a digit stands 9 over its baseline. */
 function fingersOffThePage(performance: Parameters<typeof notate>[0]) {
   const host = document.createElement('div')
-  const layout = engrave(notate(performance), host, { scale: 1, fingers: true })
+  const layout = engrave(notate(performance), host, { scale: 1, fingers: true, names: false })
   expect(layout.measures.length).toBeGreaterThan(0)
   return [...host.querySelectorAll('text')]
     .filter((text) => /^[1-5]$/.test(text.textContent ?? ''))

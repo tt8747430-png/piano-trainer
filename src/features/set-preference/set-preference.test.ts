@@ -37,6 +37,7 @@ describe('set-preference', () => {
     setPracticeToggle(store, 'metronome', true)
     expect(saved(storage).practice).toEqual({
       fingerNumbers: false,
+      namedNotes: false,
       melody: false,
       metronome: true,
       countIn: false,

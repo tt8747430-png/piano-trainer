@@ -24,6 +24,7 @@ export const player = {
   chordSizes: { triads: 'Triads', sevenths: '7ths', ninths: '9ths' },
   toggles: {
     fingerNumbers: 'Finger numbers',
+    namedNotes: 'Named notes',
     melody: 'Melody',
     metronome: 'Metronome',
     countIn: 'Count-in',

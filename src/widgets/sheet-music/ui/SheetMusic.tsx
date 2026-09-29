@@ -21,6 +21,7 @@ export function SheetMusic({
   current,
   loop,
   fingers,
+  names,
   muted,
   onJump,
   onLoopChange,
@@ -32,6 +33,8 @@ export function SheetMusic({
   current: number
   loop: BarRange | null
   fingers: boolean
+  /** Each notehead carries its note's name. */
+  names: boolean
   /** The staff of the hand not heard or practised. */
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
@@ -47,7 +50,7 @@ export function SheetMusic({
       aria-label={t('sheet.label')}
       className="relative -mx-4 overflow-x-auto overscroll-x-contain px-4 pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
     >
-      <ScoreView score={score} scale={scale} fingers={fingers} muted={muted}>
+      <ScoreView score={score} scale={scale} fingers={fingers} names={names} muted={muted}>
         {(layout) => (
           <SheetOverlay
             layout={layout}

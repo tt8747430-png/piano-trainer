@@ -24,6 +24,7 @@ import {
   type StaffId,
   type WrittenNote,
 } from '@/shared/lib/notation'
+import { namedHead } from './named-head'
 
 const VALUE_CODE = { 1: 'w', 2: 'h', 4: 'q', 8: '8', 16: '16', 32: '32' } as const
 const SIGN: Readonly<Record<Sign, string>> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1: '#', 2: '##' }
@@ -76,9 +77,27 @@ export interface BuiltVoice {
   readonly fingerReach: FingerReach
 }
 
+/**
+ * Each head its note's name, set on its key: VexFlow builds a note's heads again from its keys
+ * whenever its stem turns (a beam turns it), so a head swapped once drawn would be lost.
+ */
+function nameHeads(note: StaveNote, written: readonly WrittenNote[], value: Duration['value']) {
+  note.getKeyProps().forEach((props, index) => {
+    const spelled = written[index]?.spelled
+    const head = spelled && namedHead(spelled, value)
+    if (head) props.code = head
+  })
+  note.reset()
+}
+
 function noteOf(
   event: ScoreEvent,
-  { staff, stem, wholeBar }: { staff: StaffId; stem: ScoreVoice['stem']; wholeBar: boolean },
+  {
+    staff,
+    stem,
+    wholeBar,
+    names,
+  }: { staff: StaffId; stem: ScoreVoice['stem']; wholeBar: boolean; names: boolean },
 ): VexNote {
   if (event.kind === 'rest') {
     if (event.hidden) return new GhostNote({ duration: code(event.duration) })
@@ -100,6 +119,7 @@ function noteOf(
       ? { autoStem: true }
       : { stemDirection: stem === 'up' ? Stem.UP : Stem.DOWN }),
   })
+  if (names) nameHeads(note, event.notes, event.duration.value)
   event.notes.forEach((written, index) => {
     if (written.accidental !== null)
       note.addModifier(new Accidental(SIGN[written.accidental]), index)
@@ -150,7 +170,8 @@ export function buildVoice(
     measure,
     meter,
     fingers,
-  }: { staff: StaffId; measure: Measure; meter: Meter; fingers: boolean },
+    names,
+  }: { staff: StaffId; measure: Measure; meter: Meter; fingers: boolean; names: boolean },
 ): BuiltVoice {
   const [only] = voice.events
   const wholeBar =
@@ -160,7 +181,7 @@ export function buildVoice(
     ticksOf(only.duration, meter) === measure.ticks
   const notes = voice.events.map((event) => ({
     event,
-    note: noteOf(event, { staff, stem: voice.stem, wholeBar }),
+    note: noteOf(event, { staff, stem: voice.stem, wholeBar, names }),
   }))
   const side = sideOf(staff, voice.stem)
   const ends = fingers

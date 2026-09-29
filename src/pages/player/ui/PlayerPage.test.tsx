@@ -1,4 +1,4 @@
-import { act, screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -179,6 +179,22 @@ describe('Player', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
     act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
     expect(document.querySelector('[data-slot="finger-row"]')).toBeInTheDocument()
+  })
+
+  it('names the notes on the staff with Named notes, and saves the switch', async () => {
+    // SMuFL's note name noteheads, U+E150–U+E1AF.
+    const namedHeads = () =>
+      [...(document.querySelector('[data-slot="score"] svg')?.textContent ?? '')].filter(
+        (glyph) => glyph >= '\uE150' && glyph <= '\uE1AF',
+      ).length
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
+    expect(namedHeads()).toBe(0)
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('switch', { name: 'Named notes' }))
+    expect(settingsStore.getState().practice.namedNotes).toBe(true)
+    await waitFor(() => expect(namedHeads()).toBeGreaterThan(0))
   })
 
   it('still plays when the music font does not load', async () => {

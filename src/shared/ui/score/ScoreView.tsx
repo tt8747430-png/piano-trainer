@@ -20,12 +20,15 @@ export function ScoreView({
   score,
   scale,
   fingers,
+  names = false,
   muted,
   children,
 }: {
   score: Score
   scale: number
   fingers: boolean
+  /** Each notehead carries its note's name (the Player's Named notes). */
+  names?: boolean
   muted?: StaffId | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
@@ -41,7 +44,10 @@ export function ScoreView({
     loadMusicFonts()
       .then(() => {
         if (current)
-          setEngraving({ status: 'ready', layout: engrave(score, element, { scale, fingers }) })
+          setEngraving({
+            status: 'ready',
+            layout: engrave(score, element, { scale, fingers, names }),
+          })
       })
       .catch(() => {
         if (current) setEngraving({ status: 'error' })
@@ -49,7 +55,7 @@ export function ScoreView({
     return () => {
       current = false
     }
-  }, [score, scale, fingers])
+  }, [score, scale, fingers, names])
 
   const size =
     engraving.status === 'ready'

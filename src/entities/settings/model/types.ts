@@ -16,6 +16,7 @@ export type Theme = (typeof THEMES)[number]
 /** The Setup's saved switches. */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
+  'namedNotes',
   'melody',
   'metronome',
   'countIn',
@@ -26,6 +27,7 @@ export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 /** The Setup's saved switches: how any piece plays (the melody and the recording are a piece's own: its setup shows them). */
 export const PLAYING_TOGGLES = [
   'fingerNumbers',
+  'namedNotes',
   'metronome',
   'countIn',
 ] as const satisfies readonly PracticeToggle[]
@@ -57,6 +59,7 @@ export interface SettingsState {
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
+  namedNotes: false,
   melody: false,
   metronome: false,
   countIn: false,

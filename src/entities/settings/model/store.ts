@@ -22,7 +22,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 4
+export const SETTINGS_VERSION = 5
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -91,7 +91,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
 /**
  * Stored JSON is untrusted: keep each field that is still valid, and the current value otherwise.
  * A version-1 save has no practice or quiz fields, a version-2 save no keyboard, a version-3 save no
- * recording toggle: each gains its defaults here.
+ * recording toggle, a version-4 save no named notes: each gains its defaults here.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)

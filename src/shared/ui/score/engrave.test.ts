@@ -47,7 +47,7 @@ const score = notate({
 describe('engrave', () => {
   it('engraves a grand staff into the host and lays it out left to right', () => {
     const host = document.createElement('div')
-    const layout = engrave(score, host, { scale: 1, fingers: true })
+    const layout = engrave(score, host, { scale: 1, fingers: true, names: false })
     expect(host.querySelector('svg')).not.toBeNull()
     expect(layout.measures.map((m) => m.startTick)).toEqual([0, 48])
     expect(layout.measures[1]?.x).toBe(
@@ -63,15 +63,23 @@ describe('engrave', () => {
 
   it('draws the staves in groups a stylesheet can mute', () => {
     const host = document.createElement('div')
-    engrave(score, host, { scale: 1, fingers: false })
+    engrave(score, host, { scale: 1, fingers: false, names: false })
     expect(host.querySelector('.vf-staff-treble')).not.toBeNull()
     expect(host.querySelector('.vf-staff-bass')).not.toBeNull()
     expect(host.querySelector('svg')?.getAttribute('fill')).toBe('currentColor')
   })
 
   it('scales the layout', () => {
-    const one = engrave(score, document.createElement('div'), { scale: 1, fingers: false })
-    const small = engrave(score, document.createElement('div'), { scale: 0.5, fingers: false })
+    const one = engrave(score, document.createElement('div'), {
+      scale: 1,
+      fingers: false,
+      names: false,
+    })
+    const small = engrave(score, document.createElement('div'), {
+      scale: 0.5,
+      fingers: false,
+      names: false,
+    })
     expect(small.width).toBeCloseTo(one.width / 2)
     expect(small.onsets[1]?.x).toBeCloseTo((one.onsets[1]?.x ?? 0) / 2)
   })
@@ -89,7 +97,7 @@ describe('engrave', () => {
         chords: [],
       }),
       document.createElement('div'),
-      { scale: 1, fingers: false },
+      { scale: 1, fingers: false, names: false },
     )
     expect(layout.onsets.map((onset) => onset.tick)).toEqual([0])
   })
@@ -114,7 +122,11 @@ describe('engrave', () => {
       chords,
     })
     for (const scale of [1, 0.7]) {
-      const layout = engrave(crowded, document.createElement('div'), { scale, fingers: false })
+      const layout = engrave(crowded, document.createElement('div'), {
+        scale,
+        fingers: false,
+        names: false,
+      })
       const end = layout.measures.map((measure) => measure.x + measure.width)
       const rooms = chords.map((chord, i) => {
         const next = chords[i + 1]
@@ -164,7 +176,7 @@ describe('engrave', () => {
           [67, 'G', 5, 'rh'],
         ]),
         host,
-        { scale: 1, fingers: true },
+        { scale: 1, fingers: true, names: false },
       )
       const drawn = fingersIn(host)
       expect(new Set(drawn.map(({ x }) => x)).size).toBe(1)
@@ -180,7 +192,7 @@ describe('engrave', () => {
           [48, 'C', 1, 'lh'],
         ]),
         host,
-        { scale: 1, fingers: true },
+        { scale: 1, fingers: true, names: false },
       )
       const drawn = fingersIn(host)
       expect(new Set(drawn.map(({ x }) => x)).size).toBe(1)
@@ -198,7 +210,7 @@ describe('engrave', () => {
           [91, 'G', 5, 'rh'],
         ]),
         host,
-        { scale: 1, fingers: true },
+        { scale: 1, fingers: true, names: false },
       )
       const drawn = fingersIn(host)
       expect(Math.min(...drawn.map(({ y }) => y))).toBeGreaterThanOrEqual(9)
@@ -216,7 +228,7 @@ describe('engrave', () => {
           [67, 'G', 5, 'rh'],
         ]),
         host,
-        { scale: 1, fingers: true },
+        { scale: 1, fingers: true, names: false },
       )
       // C4's head is at 90: the chord's top finger 15 below it, the rest a staff space lower each.
       expect(column(fingersIn(host))).toEqual({ 5: 105, 3: 115, 1: 125 })

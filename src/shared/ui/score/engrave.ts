@@ -167,11 +167,11 @@ function buildMeasure(
   score: Score,
   measure: Measure,
   previous: Measure | undefined,
-  { fingers, scale }: { fingers: boolean; scale: number },
+  { fingers, names, scale }: { fingers: boolean; names: boolean; scale: number },
 ): BuiltMeasure {
   const build = (staff: StaffId) =>
     measure.staves[staff].map((voice) =>
-      buildVoice(voice, { staff, measure, meter: score.meter, fingers }),
+      buildVoice(voice, { staff, measure, meter: score.meter, fingers, names }),
     )
   const staves = { treble: build('treble'), bass: build('bass') }
   const formatter = new Formatter()
@@ -280,12 +280,12 @@ function drawTies(context: RenderContext, built: readonly BuiltMeasure[], meter:
 export function engrave(
   score: Score,
   host: HTMLDivElement,
-  { scale, fingers }: { scale: number; fingers: boolean },
+  { scale, fingers, names }: { scale: number; fingers: boolean; names: boolean },
 ): ScoreLayout {
   setUpVexFlow()
   host.replaceChildren()
   const built = score.measures.map((measure, index) =>
-    buildMeasure(score, measure, score.measures[index - 1], { fingers, scale }),
+    buildMeasure(score, measure, score.measures[index - 1], { fingers, names, scale }),
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
   const places = placesOf(built)

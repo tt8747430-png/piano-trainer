@@ -19,6 +19,7 @@ function renderSheet({
       current={current}
       loop={loop}
       fingers={false}
+      names={false}
       muted={undefined}
       onJump={onJump}
       onLoopChange={onLoopChange}
@@ -72,6 +73,7 @@ describe('SheetMusic', () => {
           current={7}
           loop={null}
           fingers={false}
+          names={false}
           muted={undefined}
           onJump={onJump}
           onLoopChange={onLoopChange}

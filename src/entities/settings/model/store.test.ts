@@ -26,6 +26,7 @@ describe('createSettingsStore', () => {
     expect(store.getState()).toEqual({ theme: 'system', locale: 'ru', ...DEFAULTS })
     expect(DEFAULT_PRACTICE).toEqual({
       fingerNumbers: false,
+      namedNotes: false,
       melody: false,
       metronome: false,
       countIn: false,
@@ -43,7 +44,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 4,
+      version: 5,
     })
   })
 
@@ -53,6 +54,7 @@ describe('createSettingsStore', () => {
       locale: 'ru',
       practice: {
         fingerNumbers: true,
+        namedNotes: true,
         melody: false,
         metronome: true,
         countIn: false,
@@ -67,13 +69,28 @@ describe('createSettingsStore', () => {
         typing: true,
       },
     }
-    expect(restored(saved, 4)).toEqual(saved)
+    expect(restored(saved, 5)).toEqual(saved)
+  })
+
+  it('gives a version-4 save named notes off, keeping its toggles', () => {
+    const practice = {
+      fingerNumbers: true,
+      melody: true,
+      metronome: false,
+      countIn: true,
+      recording: false,
+    }
+    expect(restored({ theme: 'dark', locale: 'en', practice }, 4).practice).toEqual({
+      ...practice,
+      namedNotes: false,
+    })
   })
 
   it('gives a version-3 save the recording on, keeping its toggles', () => {
     const practice = { fingerNumbers: true, melody: true, metronome: false, countIn: true }
     expect(restored({ theme: 'dark', locale: 'en', practice }, 3).practice).toEqual({
       ...practice,
+      namedNotes: false,
       recording: true,
     })
   })
