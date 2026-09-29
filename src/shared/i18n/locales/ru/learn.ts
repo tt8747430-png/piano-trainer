@@ -105,4 +105,15 @@ export const learn: LocaleResources['learn'] = {
     songs: 'Песни в этой тональности',
     noSongs: 'Песен в этой тональности нет.',
   },
+  intervals: {
+    title: 'Интервалы',
+    simple: 'В пределах октавы',
+    compound: 'Шире октавы',
+    semitones: 'Полутонов: {{n}}',
+    tones: 'Тонов: {{n}}',
+    inChords: 'В аккордах: {{degree}}',
+    up: 'Вверх',
+    down: 'Вниз',
+    together: 'Вместе',
+  },
 }

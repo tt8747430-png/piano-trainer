@@ -81,6 +81,34 @@ export const music = {
   },
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
+  // The Intervals reference's cards: each interval's name and short name.
+  interval: {
+    r: { name: 'Unison', short: 'P1' },
+    m2: { name: 'Minor second', short: 'm2' },
+    M2: { name: 'Major second', short: 'M2' },
+    m3: { name: 'Minor third', short: 'm3' },
+    M3: { name: 'Major third', short: 'M3' },
+    P4: { name: 'Perfect fourth', short: 'P4' },
+    A4: { name: 'Tritone', short: 'A4 · d5' },
+    P5: { name: 'Perfect fifth', short: 'P5' },
+    m6: { name: 'Minor sixth', short: 'm6' },
+    M6: { name: 'Major sixth', short: 'M6' },
+    m7: { name: 'Minor seventh', short: 'm7' },
+    M7: { name: 'Major seventh', short: 'M7' },
+    P8: { name: 'Octave', short: 'P8' },
+    m9: { name: 'Minor ninth', short: 'm9' },
+    M9: { name: 'Major ninth', short: 'M9' },
+    A9: { name: 'Augmented ninth', short: 'A9' },
+    P11: { name: 'Perfect eleventh', short: 'P11' },
+    A11: { name: 'Augmented eleventh', short: 'A11' },
+    m13: { name: 'Minor thirteenth', short: 'm13' },
+    M13: { name: 'Major thirteenth', short: 'M13' },
+  },
+  consonance: {
+    perfect: 'Perfect consonance',
+    imperfect: 'Imperfect consonance',
+    dissonance: 'Dissonance',
+  },
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',

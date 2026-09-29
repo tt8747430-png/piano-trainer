@@ -95,4 +95,15 @@ export const learn = {
     songs: 'Songs in this key',
     noSongs: 'No songs are in this key.',
   },
+  intervals: {
+    title: 'Intervals',
+    simple: 'Within the octave',
+    compound: 'Past the octave',
+    semitones: 'Semitones: {{n}}',
+    tones: 'Tones: {{n}}',
+    inChords: 'In chords: {{degree}}',
+    up: 'Up',
+    down: 'Down',
+    together: 'Together',
+  },
 } as const
