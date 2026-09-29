@@ -2,20 +2,14 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import {
-  keyFromParam,
-  NUMERAL_SIZES,
-  parseNumerals,
-  type Midi,
-  type NumeralSize,
-} from '@/shared/lib/music'
-import { ButtonLink, KeyDropdown, Segmented, type KeyMark } from '@/shared/ui'
+import { ProgressionRow, type ShownKeys } from '@/features/play-example'
+import { keyFromParam, NUMERAL_SIZES, parseNumerals, type NumeralSize } from '@/shared/lib/music'
+import { ButtonLink, KeyDropdown, Segmented } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionLibrary } from './ProgressionLibrary'
-import { ProgressionRow } from './ProgressionRow'
 
-const NO_MARKS: ReadonlyMap<Midi, KeyMark> = new Map()
+const NOTHING: ShownKeys = { keys: [], marks: new Map() }
 
 /**
  * Progressions: numerals or chords in any key and chord size, written as a row of chords that play,
@@ -29,12 +23,12 @@ export function ProgressionsTool({
   onChange: (change: Partial<ProgressionsView>) => void
 }) {
   const { t } = useTranslation('learn')
-  const [shown, setShown] = useState<readonly Midi[]>([])
+  const [shown, setShown] = useState<ShownKeys>(NOTHING)
   const key = keyFromParam(view.key)
   const numerals = parseNumerals(view.p) ?? []
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={shown} marks={NO_MARKS} />
+      <ExplorerKeyboard keys={shown.keys} marks={shown.marks} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">

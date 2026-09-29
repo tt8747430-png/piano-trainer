@@ -14,9 +14,12 @@ import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ChordButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import type { ShownKeys } from '../model/shown'
 
 /** How fast the row walks, a chord each two beats. */
 const ROW_TEMPO = 84
+
+const shownOf = (keys: readonly Midi[]): ShownKeys => ({ keys, marks: new Map() })
 
 /** The progression's chords in the key, each its symbol over its numeral, playing alone; and Play for the row. */
 export function ProgressionRow({
@@ -28,7 +31,7 @@ export function ProgressionRow({
   numerals: readonly Numeral[]
   musicKey: Key
   size: NumeralSize
-  onShow: (keys: readonly Midi[]) => void
+  onShow: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation(['learn', 'common'])
   const playback = usePlayback<number | 'row'>()
@@ -48,7 +51,7 @@ export function ProgressionRow({
               playing={playback.playing === place}
               onClick={() => {
                 const keys = voiced[place] ?? []
-                onShow(keys)
+                onShow(shownOf(keys))
                 playback.toggle(place, chordSounds(keys, { arpeggio: false }))
               }}
             />
@@ -59,7 +62,7 @@ export function ProgressionRow({
         size="pill"
         className="self-start"
         onClick={() => {
-          onShow(voiced.flat())
+          onShow(shownOf(voiced.flat()))
           playback.toggle('row', walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
         }}
       >
