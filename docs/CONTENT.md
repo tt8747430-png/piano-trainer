@@ -113,11 +113,12 @@ piece's own key, at any tempo with its pitch kept ([ADR 0016](adr/0016-a-piece-m
   (`afconvert -f m4af -d aac -b 128000 in.mp3 piece-vocal.m4a`), under Workbox's 2 MiB precache limit, and is
   imported with `?url` (`import vocal from './romashki-vocal.m4a?url'`), so the build fingerprints and precaches it.
 - **`start`** is the second bar 1's downbeat falls, which is not the first sound when the voice begins with a pickup
-  («Ромашковые поля»'s first note is a beat before bar 1, as its chorus entry is a beat before bar 11): fit a beat grid
-  at the tempo over the voice's onsets, check a later landmark (a section's entry, the last note's end), then listen.
-  With the count-in on, the Player plays the pickup in the count-in bar.
-- **`tempo`** is the recording's steady tempo, counted as the chart counts it; its form must be the chart's (a repeat
-  written out, as the chart writes it).
+  («Ромашковые поля»'s first note is a pickup before bar 1): find it by ear, then check the grid from it against later
+  landmarks (a section's entry, the last note). With the count-in on, the Player plays the pickup in the count-in bar.
+- **`tempo`** is the recording's steady tempo, counted as the chart counts it, measured, never taken from the chart:
+  a singer's is often not the chart's («Ромашковые поля» is sung at 73 over a chart at 72, 0.73 s ahead by its last
+  bar). Time a passage that repeats (its two choruses: 16 beats in 13.17 s), and check that every landmark falls within
+  50 ms of its beat. Its form must be the chart's (a repeat written out, as the chart writes it).
 
 ## Progressions
 

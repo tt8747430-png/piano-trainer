@@ -8,22 +8,23 @@ import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import { stubFonts } from '@/shared/test/fonts'
 
 describe('Player', () => {
-  it('plays «Ромашковые поля»’s recording along in Listen, from bar 1 at its own rate', async () => {
+  it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki')
     const play = await screen.findByRole('button', { name: 'Play' })
     expect(audio.loadedRecordings).toHaveLength(1)
     await user.click(play)
     const [first] = audio.recordings
-    expect(first?.play.rate).toBe(1)
+    // Sung at 73 over a chart at 72.
+    expect(first?.play.rate).toBe(72 / 73)
     expect(first?.play.offset).toBe(pieceById('romashki')?.recording?.start)
   })
 
-  it('plays the recording at half speed at 50%', async () => {
+  it('plays the recording at half the chart’s tempo at 50%', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki?tempo=36')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(audio.recordings[0]?.play.rate).toBe(0.5)
+    expect(audio.recordings[0]?.play.rate).toBe(36 / 73)
   })
 
   it('plays no recording in another key, and says why in the Setup', async () => {

@@ -8,8 +8,9 @@
 On 2026-09-29 the owner sent the course's vocal recording of «Ромашковые поля» (an mp3, 66 s, 320 kbps) and asked for
 it to "sync with this playback of chords". The roadmap had refused audio players, for needing a network or an
 account. A recording shipped with the app needs neither. The file is the chart's form (verse, chorus with the 1st
-ending, last chorus with the 2nd) at a steady 72: bar 1 at 3.53 s, the voice's first note (2.74 s) a beat's pickup before it, as its chorus entry is a
-beat before bar 11 (first set at 2.70; the owner heard the voice a beat late, 2026-09-29).
+ending, last chorus with the 2nd) at a steady 73, not the chart's 72: bar 1 at 3.25 s, the voice's first note (2.73 s)
+a pickup before it, and its choruses on bars 11 and 15. First timed at 72 from bar 1 at 2.70, then 3.53; the owner
+heard the voice late, set bar 1 at 3.25, and heard it run ahead of the chords, 0.73 s by its last bar (2026-09-29).
 
 ## Decision
 
