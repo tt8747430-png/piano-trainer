@@ -14,7 +14,7 @@ import {
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { audibleHands, type Hands } from '@/shared/lib/schedule'
+import { audibleHands, type Hands, type Recording } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import type { PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
@@ -58,13 +58,15 @@ export interface PracticePlayer {
 
 /**
  * The Player's one hook over any Performance (spec §2.7): the URL's view and the saved switches in,
- * everything the screen shows out. A page turns its source (a piece, an exercise) into the Performance.
+ * everything the screen shows out. A page turns its source (a piece, an exercise) into the Performance;
+ * a piece's recording plays along in Listen.
  */
 export function usePracticePlayer(
   performance: Performance,
   view: PracticeView,
   setView: (patch: Partial<PracticeView>) => void,
   ownTempo: number,
+  recording: Recording | null = null,
 ): PracticePlayer {
   const toggles = useSettings(selectPractice)
   const tempo = view.tempo ?? ownTempo
@@ -82,6 +84,7 @@ export function usePracticePlayer(
     loop,
     metronome: toggles.metronome,
     countIn: toggles.countIn,
+    recording,
   })
   const { state, press } = practice
   const waiting = state.mode === 'wait'

@@ -20,6 +20,7 @@ const LISTEN: PracticeSetup = {
   loop: null,
   metronome: false,
   countIn: false,
+  recording: null,
 }
 
 let audio: FakeAudio

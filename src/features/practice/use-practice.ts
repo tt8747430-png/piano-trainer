@@ -6,6 +6,7 @@ import {
   beatGroupSounds,
   untilNextBeatGroup,
   type Hands,
+  type Recording,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from './loop'
@@ -33,6 +34,8 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
+  /** The piece's recording, played along in Listen; null plays none. */
+  readonly recording: Recording | null
 }
 
 export interface Practice {
@@ -101,7 +104,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     latest.current = { state, setup }
   })
 
-  const { tempo, ownTempo, speedTraining, swing, metronome, countIn } = setup
+  const { tempo, ownTempo, speedTraining, swing, metronome, countIn, recording } = setup
   const up = speedTraining ? speedUp(tempo, ownTempo) : undefined
   const upStep = up?.step
   const upUntil = up?.until
@@ -129,6 +132,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
         swing,
       },
       { reach: (beatGroup) => dispatch({ type: 'reach', beatGroup }), tempo: setPassTempo },
+      recording,
     )
     // A stopped transport's last pass is no longer sounding: the next says its own tempo.
     return () => {
@@ -147,6 +151,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     swing,
     metronome,
     countIn,
+    recording,
     passRequest,
   ])
 
@@ -173,6 +178,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       }),
     [midi],
   )
+
+  // Loaded while the Player is open, so the first Play starts it at once and the tap primes it.
+  useEffect(() => {
+    if (recording) audio.loadRecording(recording.src)
+  }, [audio, recording])
 
   useEffect(() => () => audio.stop(), [audio])
 
