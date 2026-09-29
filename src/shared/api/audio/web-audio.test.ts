@@ -6,6 +6,7 @@ import { createWebAudioOutput, wholeFileMedia } from './web-audio'
 /** Just enough of an AudioContext to see what the adapter builds. */
 class FakeContext {
   currentTime = 0
+  outputLatency = 0
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
@@ -169,6 +170,41 @@ describe('createWebAudioOutput', () => {
     expect(audio.isPlaying(audio.play([A4]))).toBe(false)
     expect(audio.struck().size).toBe(0)
     expect(createContext).toHaveBeenCalledOnce()
+  })
+})
+
+describe('a recording', () => {
+  it('plays by its own element on the clock of what is heard: the notes’ clock less the output’s latency', async () => {
+    vi.useFakeTimers()
+    const context = new FakeContext()
+    context.outputLatency = 0.1
+    const media = {
+      currentTime: 0,
+      playbackRate: 1,
+      muted: false,
+      paused: true,
+      seeking: false,
+      play: vi.fn(async () => {
+        media.paused = false
+      }),
+      pause: vi.fn(),
+    }
+    const audio = createWebAudioOutput({
+      createContext: () => context as unknown as AudioContext,
+      frame: () => undefined,
+      createMedia: () => media,
+    })
+    audio.play([A4], 1)
+    audio.playRecording('vocal.m4a', { at: 1, offset: 3.26, rate: 1, until: 60 })
+    // The notes' clock has reached bar 1, but its first note is heard only 0.1 s later.
+    context.currentTime = 1.05
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.play).not.toHaveBeenCalled()
+    context.currentTime = 1.1
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.play).toHaveBeenCalledOnce()
+    expect(media.currentTime).toBeCloseTo(3.26)
+    vi.useRealTimers()
   })
 })
 

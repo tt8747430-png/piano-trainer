@@ -24,7 +24,7 @@ export interface AudioOutput {
   play(sounds: readonly Sound[], at?: number, options?: PlayOptions): PlayHandle
   /** Silences what sounds, recordings too, and drops what is queued: every play stops playing. */
   stop(): void
-  /** Readies a recording (fetched, routed to the output) so a Play can start it at once. */
+  /** Readies a recording (fetched whole) so a Play can start it at once. */
   loadRecording(src: string): void
   /** Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until `play.until`. */
   playRecording(src: string, play: RecordingPlay): void

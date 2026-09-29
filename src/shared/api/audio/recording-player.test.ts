@@ -30,40 +30,64 @@ function fakeMedia(refuse = false) {
   })
 }
 
+/**
+ * An element that, as WebKit's does, stands still for `cost` seconds after each seek or play before
+ * it moves on at its rate.
+ */
+function slowMedia(cost: number, now: () => number) {
+  let position = 0
+  let movesFrom = 0
+  const media = {
+    seeks: 0,
+    playbackRate: 1,
+    muted: false,
+    paused: true,
+    seeking: false,
+    get currentTime() {
+      return media.paused
+        ? position
+        : position + Math.max(0, now() - movesFrom) * media.playbackRate
+    },
+    set currentTime(value: number) {
+      media.seeks++
+      position = value
+      movesFrom = now() + cost
+    },
+    play: vi.fn(async () => {
+      if (!media.paused) return
+      movesFrom = Math.max(movesFrom, now() + cost)
+      media.paused = false
+    }),
+    pause: vi.fn(() => {
+      position = media.currentTime
+      media.paused = true
+    }),
+  }
+  return media
+}
+
 describe('createRecordingPlayer', () => {
   let clock = 0
   let media = fakeMedia()
-  let routed = 0
-  const player = () =>
-    createRecordingPlayer({
-      now: () => clock,
-      createMedia: (): Media => media,
-      route: () => {
-        routed++
-      },
-    })
+  const player = () => createRecordingPlayer({ now: () => clock, createMedia: (): Media => media })
   beforeEach(() => {
     vi.useFakeTimers()
     clock = 0
     media = fakeMedia()
-    routed = 0
   })
   afterEach(() => vi.useRealTimers())
 
-  it('starts a play when the clock reaches it, at its offset and rate, routing it then', async () => {
+  it('starts a play when the clock reaches it, at its offset and rate', async () => {
     const recordings = player()
     recordings.load('vocal.m4a')
     recordings.play('vocal.m4a', { at: 1, offset: 2.74, rate: 0.5, until: 20 })
     await vi.advanceTimersByTimeAsync(40)
     expect(media.plays).toBe(0)
-    // Routed only once it plays: an AudioContext made before a gesture would start suspended.
-    expect(routed).toBe(0)
     clock = 1
     await vi.advanceTimersByTimeAsync(20)
     expect(media.plays).toBe(1)
     expect(media.currentTime).toBeCloseTo(2.74)
     expect(media.playbackRate).toBe(0.5)
-    expect(routed).toBe(1)
   })
 
   it('seeks back when it drifts past 40 ms, and leaves it within', async () => {
@@ -103,6 +127,21 @@ describe('createRecordingPlayer', () => {
     clock = 1.1
     await vi.advanceTimersByTimeAsync(20)
     expect(media.seeks).toHaveLength(started + 1)
+  })
+
+  it('learns how long its element takes to seek and seeks that far ahead, so a slow one settles in sync', async () => {
+    // WebKit's element stands still about 0.1 s after a seek: sought back to where it should be, it
+    // was as far behind again, and was sought again and again, the voice stuttering.
+    const slow = slowMedia(0.1, () => clock)
+    const recordings = createRecordingPlayer({ now: () => clock, createMedia: () => slow })
+    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
+    for (let step = 0; step < 250; step++) {
+      clock += 0.02
+      await vi.advanceTimersByTimeAsync(20)
+    }
+    // The start, then one seek that allows for the element's lag.
+    expect(slow.seeks).toBe(2)
+    expect(slow.currentTime - (10 + clock)).toBeCloseTo(0, 2)
   })
 
   it('pauses at a play’s end when nothing follows, and seeks without pausing when one does', async () => {

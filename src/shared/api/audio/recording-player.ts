@@ -27,7 +27,8 @@ const TICK_MS = 20
 const DRIFT = 0.04
 /**
  * How long a seek is given to settle before drift is measured again: an element reports its new time
- * at once but plays on only once it has buffered, so measuring sooner would seek it again and again.
+ * at once but moves on only once it has its data, so measuring sooner would seek it again and again.
+ * The longest seek it can learn.
  */
 const SETTLE = 0.3
 
@@ -36,25 +37,30 @@ interface Queued extends RecordingPlay {
 }
 
 /**
- * Recordings kept on the audio clock: each queued play starts as the clock reaches it (sought to its
+ * Recordings kept on the clock: each queued play starts as the clock reaches it (sought to its
  * offset, at its rate), is sought back whenever it drifts, and is paused at its end unless another
- * play follows, which only seeks it.
+ * play follows, which only seeks it. A seek aims as far ahead as the element stands still after one.
  */
 export function createRecordingPlayer({
   now,
   createMedia,
-  route,
 }: {
+  /** The time being heard, on the notes' clock. */
   now: () => number
   createMedia: (src: string) => Media
-  /** Sends an element to the output, so it leaves with the notes: once, when it first plays (an AudioContext waits for a gesture). */
-  route: (media: Media) => void
 }): RecordingPlayer {
   const elements = new Map<string, Media>()
-  const routed = new Set<Media>()
   let queue: readonly Queued[] = []
   let current: Queued | null = null
   let settledAt = 0
+  /**
+   * How long the element stands still after a seek before it moves on (WebKit's about 0.1 s,
+   * Chrome's under DRIFT), learnt from each seek once it settles. Sought back to where it should be,
+   * a slow element would be as far behind again, and sought again and again, the voice stuttering.
+   */
+  let seekLag = 0
+  /** A seek not yet measured. */
+  let measuring = false
   let timer: ReturnType<typeof setInterval> | null = null
 
   const element = (src: string): Media => {
@@ -64,17 +70,16 @@ export function createRecordingPlayer({
     elements.set(src, made)
     return made
   }
-  const routeOnce = (media: Media) => {
-    if (routed.has(media)) return
-    routed.add(media)
-    route(media)
-  }
   // A play the browser refuses (no gesture yet) stays silent.
   const start = (media: Media) => {
-    routeOnce(media)
     if (media.paused) media.play().catch(() => undefined)
   }
   const expected = (play: Queued, time: number) => play.offset + (time - play.at) * play.rate
+  const seek = (media: Media, play: Queued, time: number) => {
+    media.currentTime = expected(play, time + seekLag)
+    settledAt = time + SETTLE
+    measuring = true
+  }
 
   const tick = () => {
     const time = now()
@@ -84,8 +89,7 @@ export function createRecordingPlayer({
       if (current && current.src !== next.src) element(current.src).pause()
       const media = element(next.src)
       media.playbackRate = next.rate
-      media.currentTime = expected(next, time)
-      settledAt = time + SETTLE
+      seek(media, next, time)
       start(media)
       current = next
     } else if (current) {
@@ -93,13 +97,14 @@ export function createRecordingPlayer({
       if (time >= current.until) {
         media.pause()
         current = null
-      } else if (
-        !media.seeking &&
-        time >= settledAt &&
-        Math.abs(media.currentTime - expected(current, time)) > DRIFT
-      ) {
-        media.currentTime = expected(current, time)
-        settledAt = time + SETTLE
+      } else if (!media.seeking && time >= settledAt) {
+        const drift = media.currentTime - expected(current, time)
+        if (measuring) {
+          // Behind by this much though sought `seekLag` ahead: the seek took that much longer.
+          seekLag = Math.min(SETTLE, Math.max(0, seekLag - drift / current.rate))
+          measuring = false
+        }
+        if (Math.abs(drift) > DRIFT) seek(media, current, time)
       }
     }
     if (!current && queue.length === 0 && timer !== null) {
@@ -118,7 +123,6 @@ export function createRecordingPlayer({
     prime() {
       for (const media of elements.values()) {
         if (!media.paused) continue
-        routeOnce(media)
         media.muted = true
         media
           .play()

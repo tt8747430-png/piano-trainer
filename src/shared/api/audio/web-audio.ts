@@ -117,18 +117,16 @@ export function createWebAudioOutput({
   }
 
   const now = () => context?.currentTime ?? 0
+  /**
+   * What is heard now, on the notes' clock: a note leaves the output its latency after the clock
+   * reaches it (none known where a browser does not say). An element's own time is what it plays out.
+   */
+  const heard = () => (context ? context.currentTime - (context.outputLatency || 0) : 0)
   const lookahead = createLookahead({ now, render })
   const keys = createSoundingKeys({ now, frame })
-  const recordings = createRecordingPlayer({
-    now,
-    createMedia,
-    // Through the AudioContext, a recording leaves by the same output, with the same latency, as the notes.
-    route: (media) => {
-      const audio = openContext()
-      if (audio && media instanceof HTMLMediaElement)
-        audio.createMediaElementSource(media).connect(audio.destination)
-    },
-  })
+  // By its own element, not through the AudioContext: WebKit's tap into it stalls the element about
+  // 0.45 s after every seek, play or change of rate, so the recording could never be kept in time.
+  const recordings = createRecordingPlayer({ now: heard, createMedia })
 
   return {
     async unlock() {
