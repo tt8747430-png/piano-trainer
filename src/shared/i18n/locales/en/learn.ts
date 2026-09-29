@@ -95,6 +95,8 @@ export const learn = {
     songs: 'Songs in this key',
     noSongs: 'No songs are in this key.',
   },
+  // A lesson's example: its Play.
+  example: { play: 'Play' },
   intervals: {
     title: 'Intervals',
     simple: 'Within the octave',
