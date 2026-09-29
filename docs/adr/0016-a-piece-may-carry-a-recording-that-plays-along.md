@@ -25,15 +25,22 @@ by its last bar (2026-09-29).
 - **The timing is pure** (`recordingPlay`: offset from the pass's first tick at the recording's tempo, rate the
   pass's tempo over the recording's). **The port plays it:** `loadRecording`, `playRecording`; the browser adapter
   keeps one audio element per recording, routed through the AudioContext on its first play (the same output and
-  latency as the notes), started by a 20 ms timer when the clock reaches it, sought back past 40 ms of drift (never while it seeks, nor within 0.3 s of a seek, so a buffering seek is not
-  sought again), paused at
-  a pass's end unless another follows (which only seeks), and primed muted on the Play tap so Safari lets it start
-  later.
+  latency as the notes), started by a 20 ms timer when the clock reaches it, sought back past 40 ms of drift (never
+  while it seeks, nor within 0.3 s of a seek, so a buffering seek is not sought again), paused at a pass's end unless
+  another follows (which only seeks), and primed muted on the Play tap so Safari lets it start later.
+- **The element plays the whole file from memory** (`wholeFileMedia`: fetched once, a Blob's object URL), never
+  streamed. Streamed, an element asks for byte ranges, and Workbox's precache answers a range with the whole file
+  (200, not 206): the deployed app's element could not seek (`seekable` empty), so each seek landed back at 0 s and
+  the drift check sought again every 0.3 s, the voice stuttering over its first moments; Safari may refuse such a
+  response outright. Local development has no service worker, so it never showed there (found 2026-09-29, a
+  production build under `vite preview` driven in Chrome: 30 seeks in 10 s, none with the service worker blocked).
 - **A saved Recording switch**, on by default, in the Setup of a piece with one; disabled in another key with "Only in
   D minor". The settings go to version 4: a toggle never saved takes its default.
 - **Decided against:** loading recordings from the device (the owner's choice); decoding to an AudioBuffer (exact, but
   it cannot keep pitch at other tempos); a recording in Wait mode (it cannot wait) or in another key (the voice would
-  clash); YouTube and streamed audio (still out: a network and an account).
+  clash); YouTube and streamed audio (still out: a network and an account); a service worker of our own that answers
+  byte ranges from the precache (Workbox's `RangeRequestsPlugin` on a route ahead of the precache's: a hand-written
+  worker for the whole app, where one file needs it).
 
 ## Consequences
 

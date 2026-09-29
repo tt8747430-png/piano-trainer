@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
-import { createWebAudioOutput } from './web-audio'
+import { createWebAudioOutput, wholeFileMedia } from './web-audio'
 
 /** Just enough of an AudioContext to see what the adapter builds. */
 class FakeContext {
@@ -169,5 +169,26 @@ describe('createWebAudioOutput', () => {
     expect(audio.isPlaying(audio.play([A4]))).toBe(false)
     expect(audio.struck().size).toBe(0)
     expect(createContext).toHaveBeenCalledOnce()
+  })
+})
+
+describe('wholeFileMedia', () => {
+  it('plays a recording from the whole file in memory, never streamed, so it can always seek', async () => {
+    // Streamed, the element asks for byte ranges, and the service worker's precache answers with the
+    // whole file: the element could not seek, and each seek landed back at 0 s.
+    const fetchFile = vi.fn(async () => new Response('m4a'))
+    vi.stubGlobal('fetch', fetchFile)
+    // jsdom has no object URLs.
+    vi.stubGlobal(
+      'URL',
+      class extends URL {
+        static override createObjectURL = () => 'blob:vocal'
+      },
+    )
+    const media = wholeFileMedia('/assets/vocal.m4a')
+    expect(media.getAttribute('src')).toBeNull()
+    await vi.waitFor(() => expect(media.src).toBe('blob:vocal'))
+    expect(fetchFile).toHaveBeenCalledWith('/assets/vocal.m4a')
+    expect(media.preload).toBe('auto')
   })
 })

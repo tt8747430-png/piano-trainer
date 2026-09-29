@@ -65,6 +65,25 @@ const browserContext = (): AudioContext | null =>
 const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 
 /**
+ * A recording's element, playing the whole file from memory. Streamed, an element asks for byte
+ * ranges, and the service worker's precache answers with the whole file: the element could not seek,
+ * so each seek landed back at 0 s and was made again and again (ADR 0016). Until the file is in, the
+ * element has no source: a play waits for it.
+ */
+export function wholeFileMedia(src: string): HTMLAudioElement {
+  const media = new Audio()
+  media.preload = 'auto'
+  // A file that cannot be had leaves the recording silent, as a missing one would.
+  void fetch(src)
+    .then((response) => (response.ok ? response.blob() : Promise.reject(new Error(src))))
+    .then((file) => {
+      media.src = URL.createObjectURL(file)
+    })
+    .catch(() => undefined)
+  return media
+}
+
+/**
  * The WebAudio adapter. No AudioContext exists before the first unlock or play, and none at all
  * where the browser has none: then every call does nothing. The keys sounding are followed on the
  * audio clock every animation frame while a note sounds.
@@ -72,7 +91,7 @@ const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 export function createWebAudioOutput({
   createContext = browserContext,
   frame = animationFrame,
-  createMedia = (src) => new Audio(src),
+  createMedia = wholeFileMedia,
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
@@ -102,11 +121,7 @@ export function createWebAudioOutput({
   const keys = createSoundingKeys({ now, frame })
   const recordings = createRecordingPlayer({
     now,
-    createMedia: (src) => {
-      const media = createMedia(src)
-      if (media instanceof HTMLMediaElement) media.preload = 'auto'
-      return media
-    },
+    createMedia,
     // Through the AudioContext, a recording leaves by the same output, with the same latency, as the notes.
     route: (media) => {
       const audio = openContext()
