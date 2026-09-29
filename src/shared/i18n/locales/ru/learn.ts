@@ -113,7 +113,12 @@ export const learn: LocaleResources['learn'] = {
     songs: 'Песни в этой тональности',
     noSongs: 'Песен в этой тональности нет.',
   },
-  example: { play: 'Сыграть' },
+  example: {
+    play: 'Сыграть',
+    over: 'Пример: «{{piece}}»',
+    openInPlayer: 'Открыть в плеере',
+    inProgressions: 'Открыть в последовательностях',
+  },
   quiz: {
     answer: 'Ответить на клавишах',
     check: 'Проверить',

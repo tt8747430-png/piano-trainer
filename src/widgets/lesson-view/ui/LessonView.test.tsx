@@ -204,3 +204,83 @@ describe('LessonView’s worksheet', () => {
     expect(chords).toMatch(/[?&]size=7(&|$)/)
   })
 })
+
+const C_MAJOR = { tonic: note('C'), minor: false }
+
+/** A lesson with a pattern over its piece, a progression, and links into the tools and the Player. */
+const ACCOMPANIMENT: Lesson = {
+  id: 'accompaniment',
+  title: { en: 'Accompaniment', ru: 'Аккомпанемент' },
+  summary: { en: 'Patterns.', ru: 'Фактуры.' },
+  level: 1,
+  category: 'accompaniment',
+  module: 'fundamentals',
+  sections: [
+    {
+      heading: { en: 'Ways', ru: 'Способы' },
+      blocks: [
+        { kind: 'pattern', pattern: 'M2', piece: 'ex3' },
+        { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
+        {
+          kind: 'link',
+          title: { en: 'C to F in Passing chords', ru: 'Из C в F' },
+          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'E in Reharmonise', ru: 'Ми в реармонизации' },
+          target: { place: 'reharmonise', key: C_MAJOR, note: note('E') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'The hymn in the Player', ru: 'Гимн в плеере' },
+          target: { place: 'piece', piece: 'otche', pattern: 'r4' },
+        },
+      ],
+    },
+  ],
+}
+
+describe('LessonView’s accompaniment', () => {
+  it('plays a pattern over its piece, and opens the piece in the Player with it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(ACCOMPANIMENT)
+    const card = screen.getByRole('article', { name: '2 · Broken chords' })
+    expect(card).toHaveTextContent('Right hand rocks between the upper two notes')
+    expect(card).toHaveTextContent('Lesson 3: C – Dm – G – C – F – C – G – C')
+    await user.click(within(card).getByRole('button', { name: 'Play' }))
+    expect(notes(audio.played.at(-1)?.sounds ?? []).length).toBeGreaterThan(8)
+    expect(within(card).getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    expect(
+      within(card).getByRole('link', { name: 'Open in the Player' }).getAttribute('href'),
+    ).toBe('/play/ex3?pattern=M2')
+  })
+
+  it('plays a progression as the tool’s row, and opens it in Progressions', async () => {
+    await renderLesson(ACCOMPANIMENT)
+    expect(
+      within(screen.getByRole('list', { name: 'Chords' }))
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
+    const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
+    expect(tool).toMatch(/^\/learn\/progressions\?/)
+    expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)
+    expect(tool).toMatch(/[?&]key=C(&|$)/)
+    expect(tool).toMatch(/[?&]size=sevenths(&|$)/)
+  })
+
+  it('links into the tools and the Player on what it names', async () => {
+    await renderLesson(ACCOMPANIMENT)
+    const passing = screen.getByRole('link', { name: 'C to F in Passing chords' })
+    expect(passing.getAttribute('href')).toMatch(/^\/learn\/passing-chords\?/)
+    expect(passing.getAttribute('href')).toMatch(/[?&]from=C(&|$)/)
+    expect(passing.getAttribute('href')).toMatch(/[?&]to=F(&|$)/)
+    const reharmonise = screen.getByRole('link', { name: 'E in Reharmonise' }).getAttribute('href')
+    expect(reharmonise).toMatch(/^\/learn\/reharmonise\?/)
+    expect(reharmonise).toMatch(/[?&]note=E(&|$)/)
+    expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
+      '/play/otche?pattern=r4',
+    )
+  })
+})

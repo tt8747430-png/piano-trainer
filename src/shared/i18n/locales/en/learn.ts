@@ -103,8 +103,13 @@ export const learn = {
     songs: 'Songs in this key',
     noSongs: 'No songs are in this key.',
   },
-  // A lesson's example: its Play.
-  example: { play: 'Play' },
+  // A lesson's example: its Play, the piece a pattern plays over, where it opens.
+  example: {
+    play: 'Play',
+    over: 'Played over “{{piece}}”',
+    openInPlayer: 'Open in the Player',
+    inProgressions: 'Open in Progressions',
+  },
   // A lesson's quiz, answered on its keys.
   quiz: {
     answer: 'Answer on the keys',

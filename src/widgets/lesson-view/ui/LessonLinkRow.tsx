@@ -1,21 +1,32 @@
 import { Link } from '@tanstack/react-router'
 import {
+  Blend,
   BookOpenText,
   ChartNoAxesColumnIncreasing,
   CircleDot,
+  CirclePlay,
   KeyboardMusic,
   Layers,
+  ListMusic,
   Ruler,
+  Waypoints,
 } from 'lucide-react'
 import type { LessonLink } from '@/entities/lesson'
-import { localText, useLocale, type LocalText } from '@/shared/i18n'
-import { keyParam, noteParam, parseChordSymbol, qualityParams } from '@/shared/lib/music'
+import {
+  keyParam,
+  noteParam,
+  numeralsParam,
+  parseChordSymbol,
+  parseNumerals,
+  qualityParams,
+} from '@/shared/lib/music'
 import { RowLink } from '@/shared/ui'
 
-/** A row leading to what a lesson names, in the reference that shows it, with that reference's tile. */
-export function LessonLinkRow({ title, target }: { title: LocalText; target: LessonLink }) {
-  const locale = useLocale()
-  const text = localText(title, locale)
+/**
+ * A row leading to what a lesson names, in the reference, tool or Player that shows it, with the tile
+ * Learn gives that place.
+ */
+export function LessonLinkRow({ title: text, target }: { title: string; target: LessonLink }) {
   switch (target.place) {
     case 'chords': {
       const chord = parseChordSymbol(target.chord)
@@ -98,6 +109,67 @@ export function LessonLinkRow({ title, target }: { title: LocalText; target: Les
           icon={BookOpenText}
           paint="grass"
           render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+        />
+      )
+    case 'progressions':
+      return (
+        <RowLink
+          title={text}
+          icon={ListMusic}
+          paint="grass"
+          render={
+            <Link
+              to="/learn/progressions"
+              search={{
+                key: keyParam(target.key),
+                p: numeralsParam(parseNumerals(target.numerals) ?? []),
+                size: target.size ?? 'triads',
+              }}
+            />
+          }
+        />
+      )
+    case 'passing-chords':
+      return (
+        <RowLink
+          title={text}
+          icon={Waypoints}
+          paint="yellow"
+          render={
+            <Link
+              to="/learn/passing-chords"
+              search={{ key: keyParam(target.key), from: target.from, to: target.to }}
+            />
+          }
+        />
+      )
+    case 'reharmonise':
+      return (
+        <RowLink
+          title={text}
+          icon={Blend}
+          paint="lilac"
+          render={
+            <Link
+              to="/learn/reharmonise"
+              search={{ key: keyParam(target.key), note: noteParam(target.note) }}
+            />
+          }
+        />
+      )
+    case 'piece':
+      return (
+        <RowLink
+          title={text}
+          icon={CirclePlay}
+          paint="sand"
+          render={
+            <Link
+              to="/play/$pieceId"
+              params={{ pieceId: target.piece }}
+              search={target.pattern ? { pattern: target.pattern } : {}}
+            />
+          }
         />
       )
   }
