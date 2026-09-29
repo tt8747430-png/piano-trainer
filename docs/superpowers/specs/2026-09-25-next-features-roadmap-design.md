@@ -10,7 +10,7 @@
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11). Revised 2026-09-29:
   «Ромашковые поля» written as the course writes it and the chromatic walk (ADR 0015), from three pages of Vasily
   Gorshkov's accompaniment course; then a piece may carry a recording that plays along (ADR 0016), its vocal first.
-- **Built:** sub-projects 1, 2, 3 and 4. Their specs and plans were removed once built, on 2026-09-27 (`git log
+- **Built:** sub-projects 1, 2, 3, 4 and 5. Their specs and plans were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
   places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3
@@ -20,10 +20,10 @@
   circle of fifths, the Chords view's sizes and figures, a staff outside the Player, the pop-up that checks several),
   `docs/CODE_STYLE.md` §8 (a run, a scale's chords, a built chord) and the glossary (Start on, Fingering, Scale chord,
   Figures, Walk the chords, Borrowed chord, Parent scale, Circle of fifths, Keys, Chord parts, Triad, Added tone,
-  Alteration). Sub-project 5 is built in four parts (its spec, `2026-09-29-learn-lessons-references-tools-design.md`);
+  Alteration). Sub-project 5 was built in four parts (its spec, `2026-09-29-learn-lessons-references-tools-design.md`);
   part 5.1, the Intervals and Available tensions references: ADR 0017; part 5.2, lessons as worksheets and the
   Fundamentals module: ADR 0018; part 5.3's first three tools (Chord finder, Reharmonise, Passing chords): ADR 0019; the Progressions tool and its Player
-  source: ADR 0020.
+  source: ADR 0020; part 5.4, the Accompaniment and Gospel lessons: ADR 0021.
 - **Builds on:** the master spec (`2026-09-24-piano-trainer-rewrite-design.md`) and the app as built through Phase 3
   and the live keyboard (`DESIGN.md`, `CLAUDE.md`, ADRs 0007 and 0008).
 - **Read first:** Mindscape's (`~/projectsGIT/memory-palaces`) `CLAUDE.md`, `docs/CODE_STYLE.md`,

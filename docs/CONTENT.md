@@ -237,24 +237,32 @@ A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `co
 shows it: an `id`, a `title` and `summary` in both languages, a `level` on the Path's scale, a `category`, a `module`
 and its `sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button.
 
-| Block      | Content                                                                                  | Shows                                 |
-| ---------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
-| `text`     | `{ kind: 'text', lead?, text }`                                                          | a paragraph, its lead in bold         |
-| `steps`    | `{ kind: 'steps', steps: [...] }`                                                        | a numbered list                       |
-| `note`     | `{ kind: 'note', text }`                                                                 | a callout on sand                     |
-| `chords`   | `{ kind: 'chords', symbols: ['C2', 'Cadd9'] }`, written as the lesson writes them        | a button each that plays the chord    |
-| `grid`     | `{ kind: 'grid', quality: 'm7' }`                                                        | the quality on all twelve roots       |
-| `scale`    | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                                    | its name, notes, run on a staff, Play |
-| `interval` | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals reference's card        |
-| `notes`    | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', meter?, key? }`                | the line on one staff, Play           |
-| `quiz`     | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                  |
-| `link`     | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference or a lesson    |
+| Block         | Content                                                                                  | Shows                                                     |
+| ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `text`        | `{ kind: 'text', lead?, text }`                                                          | a paragraph, its lead in bold                             |
+| `steps`       | `{ kind: 'steps', steps: [...] }`                                                        | a numbered list                                           |
+| `note`        | `{ kind: 'note', text }`                                                                 | a callout on sand                                         |
+| `chords`      | `{ kind: 'chords', symbols: ['C2', 'Cadd9'] }`, written as the lesson writes them        | a button each that plays the chord                        |
+| `grid`        | `{ kind: 'grid', quality: 'm7' }`                                                        | the quality on all twelve roots                           |
+| `scale`       | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                                    | its name, notes, run on a staff, Play                     |
+| `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals reference's card                            |
+| `notes`       | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', meter?, key? }`                | the line on one staff, Play                               |
+| `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                     | the pattern over the piece's first line, Play, the Player |
+| `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions tool's row, its link                     |
+| `quiz`        | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                                      |
+| `link`        | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference or a lesson                        |
 
 A line of notes names each note with its octave (`C4` is middle C), then after a slash its value (`1` whole, `2`
 half, `4` quarter, the default, `8` eighth) and a dot for half as long again; its meter is 2/4, 3/4 or 4/4, and its
 `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key` objects (`{ tonic: note('E', -1),
 minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
-`tensions` (a chord, a root) or `lesson` (an id).
+`tensions` (a chord, a root), `lesson` (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key,
+`from` and `to` as symbols), `reharmonise` (a key, a melody note) or `piece` (a piece in the Player, `pattern?`).
+
+A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
+lesson's study, Боброва's seven over `otche`, a rhythm style over a progression. A pattern that plays the tune (`r5`,
+`r6`, `r7`) needs a piece with a melody. Its name and description come from the pattern; the lesson says why it is
+there. Numerals are read as the Progressions tool reads them, a minor key from natural minor.
 
 ## The progressions library
 
@@ -278,6 +286,8 @@ blues' `I7`); leave it out where the chord should grow with the size.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
 - **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
   every line read, every style used, minor ones in their style.
+- **Lessons' patterns** (`src/widgets/lesson-view/model/pattern-example.test.ts`): every pattern block plays over its
+  piece from its first beat.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,
   line of notes, quiz answer and link read by the kernel, every module with a lesson.
 

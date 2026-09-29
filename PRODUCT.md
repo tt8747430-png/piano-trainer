@@ -39,8 +39,10 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 - Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4, Settings behind its gear),
   Songs (songs and listings), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
   training, swing; a piece, or a scale's chords walked with a song's patterns), Learn (lessons as worksheets, grouped by module and filtered by level and category: the Fundamentals module's
-  fourteen, from finding your way on the keys to key signatures, each with examples that play in place and quizzes
-  answered on the keys; the references:
+  fourteen, from finding your way on the keys to key signatures; Accompaniment's nine, from bass and chords through
+  the five ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
+  reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in any
+  key) and quizzes answered on the keys; the references:
   Chords, which builds any chord from its triad, size, 7th, added tone and alterations, on the keys and a staff;
   Scales, thirteen kinds with the modes and both blues, its Scale view starting the run on any note, fingered from
   the thumb or as the scale, on a staff, its Chords view stacking the scale's chords to 13ths in any inversion and
@@ -50,7 +52,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   melody note; Passing chords, the ways between two chords; Progressions, numerals or chords in any key from a library by style,
   played and practised in the Player), Practice (the Theory quiz with My gaps;
   studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
-  and ADRs 0012–0020.
+  and ADRs 0012–0021.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.

@@ -87,14 +87,15 @@ it. `@` → `src`.
   top), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
   `passing-chords` (the ways between two chords, each row voice-led), `progressions` (numerals or chords in any key,
   the library beside them), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
-  `lesson-quiz.ts`, `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+  `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
   Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), `play-example` (the examples a reference and a
-  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ShownKeys`), and the
+  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ProgressionRow`,
+  `ShownKeys`), and the
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
@@ -110,7 +111,8 @@ it. `@` → `src`.
   Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
-  the keys, links by name; `LESSON_MODULES`), `progression-library` (the Progressions tool's named progressions by style,
+  the keys, patterns over their pieces and progressions in any key, links by name to the references, the tools and
+  the Player; `LESSON_MODULES`: Fundamentals, Accompaniment, Gospel), `progression-library` (the Progressions tool's named progressions by style,
   in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
