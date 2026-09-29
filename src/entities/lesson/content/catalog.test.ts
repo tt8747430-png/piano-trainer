@@ -123,7 +123,28 @@ describe('the lessons', () => {
     }
   })
 
-  it('open with reading chord symbols, a beginner’s chords lesson', () => {
-    expect(LESSONS[0]).toMatchObject({ id: 'reading-chord-symbols', level: 1, category: 'chords' })
+  it('teach the fundamentals in order, from finding home to key signatures', () => {
+    expect(
+      LESSONS.filter((lesson) => lesson.module === 'fundamentals').map((lesson) => lesson.id),
+    ).toEqual([
+      'finding-home',
+      'reading-notes',
+      'rhythm-and-meter',
+      'whole-and-half-steps',
+      'major-scales',
+      'chromatic-scale',
+      'intervals',
+      'triads',
+      'seventh-chords',
+      'reading-chord-symbols',
+      'inversions',
+      'minor-scales',
+      'chord-family',
+      'key-signatures',
+    ])
+  })
+
+  it('start at the beginning: every fundamentals lesson a Beginner’s or an Elementary one', () => {
+    for (const lesson of LESSONS) expect([1, 2], lesson.id).toContain(lesson.level)
   })
 })
