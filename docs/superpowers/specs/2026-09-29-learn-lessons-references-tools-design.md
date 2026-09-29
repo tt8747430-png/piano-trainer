@@ -72,10 +72,10 @@ Clefs' Intervals Reference (roadmap §9.1, §10.9), on the app's keys.
   two notes), Together both at once.
 - **The tritone** is spelled as the augmented 4th (F♯ over C) and named "Tritone", its short name "A4 · d5": both
   spellings are the same keys, and the 4th is the one a scale's #11 and a Lydian 4th write.
-- **The root** is a pop-up (the twelve roots, spelled as the Chords reference's Root spells them), default C; the
-  lower note is that root in octave 4 (C4–B4), every upper note spelled by letter steps from it (`spellAbove`), so
-  the minor 3rd over B is D, the augmented 4th over F is B. A root whose interval needs a double accidental keeps
-  the kernel's plain spelling (the kernel's rule).
+- **The root** is a pop-up of the twelve roots (C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B), default C; the lower
+  note is that root in octave 4 (C4–B4), every upper note spelled by letter steps from it (`spellAbove`), so the
+  minor 3rd over B is D, the augmented 4th over F is B, and the minor 2nd over D♭ is E𝄫: the letters are what
+  number an interval, so the reference never trades them for an easier name.
 - **The keyboard** (pinned, `ExplorerKeyboard`) shows the interval last played: the lower key as the tonic mark
   labelled `1`, the upper as a scale mark labelled with its degree (`♭3`, `5`, `#11`), the keys' own grammar; the
   keys go down as they sound. Before anything is played it shows the root.
@@ -88,29 +88,31 @@ Clefs' Intervals Reference (roadmap §9.1, §10.9), on the app's keys.
 
 The owner's reharmonisation table (roadmap §9.9, §10.3), computed.
 
-- **Chord** is a pop-up of the eight 7th chords the table and jazz theory give tensions for: Maj7, m7, 7, m7♭5,
-  7#5, m(maj7), 7sus4, °7 (their table suffixes; each item's second word its name, as the Chords reference's).
+- **Chord** is a pop-up of the nine 7th chords the table and jazz theory give tensions for: Maj7, m7, 7, m7♭5,
+  7#5, m(maj7), 7sus4 (the owner's table), and +Maj7 and °7, the two other 7th chords a scale stacks (their table
+  suffixes on the root; each item's second word its name, as the Chords reference's).
   **Root** is a pop-up of the twelve roots, default C; default chord `7`, the dominant, which has the most to show.
 - **Every note above the root falls in one of four groups**, the table's four columns:
   - **Weak** — the root and a perfect 5th: they add nothing to the chord's sound.
   - **Strong** — the 3rd or the suspended 4th, and the 7th: they name the chord (the guide tones).
   - **Tensions** — an altered 5th of the chord (m7♭5's ♭5, 7#5's #5, °7's ♭5: the table puts them with the
     tensions) and the available tensions: Maj7 9, #11, 13; m7 9, 11, 13; 7 ♭9, 9, #9, #11, ♭13, 13; m7♭5 9, 11, ♭13;
-    7#5 ♭9, 9, #9, #11; m(maj7) 9, 11, 13; 7sus4 ♭9, 9, 13; °7 9, 11, ♭13, 7 (a whole step over each chord tone).
+    7#5 ♭9, 9, #9, #11; m(maj7) 9, 11, 13; +Maj7 9, #11; 7sus4 ♭9, 9, 13; °7 9, 11, ♭13, 7 (a whole step over
+    each chord tone).
   - **Avoid** — every other note: it clashes with a chord tone (the 11 over a major 3rd, the 7 over a minor 7th).
 - The groups hold all twelve notes, each once, and for Maj7, m7 and 7 they are the owner's table exactly by pitch
   class (the test's oracle, §10.3's first table). A chord tone is spelled as its quality spells it; any other note as
   the degree its semitones make over the root: ♭9, 9, #9, 3, 11, #11, 5, ♭13, 13, ♭7, 7. The table writes two of
   them otherwise, C−7's E as "♭11" and C∆7's A♯ as "#13"; the app names them as the major 3rd and the minor 7th
   they sound as, which is what makes them clash.
-- **A note is a chip**: its name and degree ("D 9", "E♭ ♭3"), in the group's card; a tap plays the chord with that
-  note on top and shows both on the keys (the chord in its root position from the root in octave 4, the note in the
-  octave above the chord's top), turning the chip pressed while it sounds (a grid of items, CODE_STYLE §1). A chord
-  tone's chip plays the chord alone. Each group names itself and says in a few words what its notes do ("They name
-  the chord"): the reference teaches the table's four meanings, which is music, not a button.
+- **A note is a chip**: its degree and name ("9 D", "♭3 E♭"), in the group's card; a tap plays the chord with that
+  note on top as a melody note, which is what the table rates, and shows both on the keys (the chord in its root
+  position from the root in octave 4, the note on the nearest key above the chord's top), turning the chip pressed
+  while it sounds (a grid of items, CODE_STYLE §1). Each group names itself and says in a few words what its notes
+  do ("They name the chord"): the reference teaches the table's four meanings, which is music, not a button.
 - **The keyboard** shows the chord's tones by role (the Chords reference's marks), and a tension played joins them
   with its degree label in its role's colour (9th, 11th, 13th are chord roles).
-- **The kernel** (`shared/lib/music/tensions.ts`): `TENSION_CHORDS` (the eight qualities), `tensionGroups(quality)`
+- **The kernel** (`shared/lib/music/tensions.ts`): `TENSION_CHORDS` (the nine qualities), `tensionGroups(quality)`
   → the twelve degrees above a root in the four groups, as labelled intervals spelled by letter steps (so the 9 is
   D, the #9 D♯, the ♭13 A♭); `availableTensions(quality)`. `scaleChordAt` asks it whether a scale's 9th is available
   over its 7th chord (replacing `ninthAvailable`, same answers: C major's iii and vii stay 7ths); the builder's
