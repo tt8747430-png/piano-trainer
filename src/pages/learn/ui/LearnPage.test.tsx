@@ -46,6 +46,10 @@ describe('Learn', () => {
       'href',
       '/learn/passing-chords',
     )
+    expect(within(tools).getByRole('link', { name: 'Progressions' })).toHaveAttribute(
+      'href',
+      '/learn/progressions',
+    )
   })
 
   it('filters the lessons by level and category, kept in the URL, and says when none match', async () => {

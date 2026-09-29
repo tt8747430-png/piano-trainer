@@ -8,6 +8,7 @@ import {
   KEYS_DEFAULTS,
   LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
+  PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
   TENSIONS_DEFAULTS,
@@ -33,6 +34,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/intervals')).toEqual(INTERVALS_DEFAULTS)
     expect(await searchAt('/learn/tensions')).toEqual(TENSIONS_DEFAULTS)
     expect(await searchAt('/learn')).toEqual(LEARN_DEFAULTS)
+    expect(await searchAt('/learn/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -223,5 +225,14 @@ describe('search params', () => {
       category: 'scales',
     })
     expect(await searchAt('/learn?level=9&category=cooking')).toEqual(LEARN_DEFAULTS)
+  })
+
+  it('write a progression’s numerals one way, and take the default for a line that cannot be read', async () => {
+    expect(await searchAt('/learn/progressions?p=ii7%20V7%20IMaj7&key=Am&size=sevenths')).toEqual({
+      p: 'ii7-V7-IMaj7',
+      key: 'Am',
+      size: 'sevenths',
+    })
+    expect(await searchAt('/learn/progressions?p=Q')).toEqual(PROGRESSIONS_DEFAULTS)
   })
 })

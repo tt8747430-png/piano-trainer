@@ -30,6 +30,9 @@ import {
   lastInversion,
   note,
   noteParam,
+  parseNumerals,
+  numeralsParam,
+  NUMERAL_SIZES,
   ownFingering,
   parseKey,
   partsParams,
@@ -56,6 +59,7 @@ import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
 import type { PassingView } from '@/widgets/passing-chords'
+import type { ProgressionsView } from '@/widgets/progressions'
 import type { ReharmoniseView } from '@/widgets/reharmonise'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -279,6 +283,26 @@ export function validatePassingSearch(input: Input<PassingView>): PassingView {
       : PASSING_DEFAULTS.key,
     from: typedChord(raw.from, PASSING_DEFAULTS.from),
     to: typedChord(raw.to, PASSING_DEFAULTS.to),
+  }
+}
+
+// Learn → Progressions: numerals in a key at a chord size; an unread line is the default one.
+export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
+  key: keyParam({ tonic: note('C'), minor: false }),
+  p: 'I-V-vi-IV',
+  size: 'triads',
+}
+const isNumeralSize = isOneOf(NUMERAL_SIZES)
+export function validateProgressionsSearch(input: Input<ProgressionsView>): ProgressionsView {
+  const raw: Raw = input
+  const read = typeof raw.key === 'string' ? parseKey(raw.key) : null
+  const numerals = typeof raw.p === 'string' ? parseNumerals(raw.p) : null
+  return {
+    key: read
+      ? keyParam({ tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor })
+      : PROGRESSIONS_DEFAULTS.key,
+    p: numerals ? numeralsParam(numerals) : PROGRESSIONS_DEFAULTS.p,
+    size: valueOr(isNumeralSize, raw.size, PROGRESSIONS_DEFAULTS.size),
   }
 }
 

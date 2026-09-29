@@ -5,6 +5,7 @@ import {
   CircleDot,
   KeyboardMusic,
   Layers,
+  ListMusic,
   Ruler,
   ScanSearch,
   Waypoints,
@@ -92,6 +93,14 @@ export function LearnPage() {
                 icon={Waypoints}
                 paint="yellow"
                 render={<Link to="/learn/passing-chords" />}
+              />
+            </li>
+            <li>
+              <RowLink
+                title={t('learn:progressions.title')}
+                icon={ListMusic}
+                paint="grass"
+                render={<Link to="/learn/progressions" />}
               />
             </li>
           </RowGroup>
