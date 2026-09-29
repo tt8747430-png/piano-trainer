@@ -138,6 +138,19 @@ export {
 } from './passing-chords'
 export { voiceLead } from './voice-lead'
 export {
+  NUMERAL_SIZES,
+  numeralChord,
+  numeralOf,
+  numeralsParam,
+  numeralText,
+  parseNumeral,
+  parseNumerals,
+  type Numeral,
+  type NumeralSeventh,
+  type NumeralSize,
+  type NumeralTriad,
+} from './numerals'
+export {
   SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
