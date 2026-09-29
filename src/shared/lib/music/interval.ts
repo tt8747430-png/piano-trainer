@@ -71,6 +71,7 @@ export const INTERVALS = {
   d7: labelled(6, 9),
   m7: labelled(6, 10),
   M7: labelled(6, 11),
+  P8: labelled(0, 12),
   m9: labelled(1, 13),
   M9: labelled(1, 14),
   A9: labelled(1, 15),

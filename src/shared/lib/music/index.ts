@@ -39,7 +39,23 @@ export {
   type NoteParam,
   type SpelledNote,
 } from './note'
-export { intervalBetween, spellAbove, type Interval } from './interval'
+export {
+  INTERVALS,
+  intervalBetween,
+  spellAbove,
+  type Interval,
+  type IntervalName,
+  type LabelledInterval,
+} from './interval'
+export {
+  CONSONANCES,
+  consonanceOf,
+  INTERVAL_GROUP_IDS,
+  INTERVAL_GROUPS,
+  type Consonance,
+  type IntervalGroup,
+  type ReferenceInterval,
+} from './interval-facts'
 export {
   keyFromParam,
   keyName,
