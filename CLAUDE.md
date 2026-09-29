@@ -56,8 +56,9 @@ it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
   references Chords, Scales, Keys (`/learn/keys`), Intervals (`/learn/intervals`) and Available tensions
-  (`/learn/tensions`), and the tools Chord finder, Reharmonise and Passing chords (`/learn/chord-finder`,
-  `/learn/reharmonise`, `/learn/passing-chords`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
+  (`/learn/tensions`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
+  `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); the Player's `/play/$pieceId`, `/play/walk`,
+  `/play/chromatic` and `/play/progression`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
@@ -70,7 +71,8 @@ it. `@` → `src`.
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
   `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
-  `chromatic-search.ts`, `ChromaticSetup`) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
+  `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
+  `ProgressionSetup`) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
   references.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup sheet, its first page composed by
@@ -83,7 +85,8 @@ it. `@` → `src`.
   fifths and a key's facts, signature, chords and borrowed chords), `interval-explorer` (every interval over a root
   as Clefs' cards), `tension-explorer` (a 7th chord's twelve notes in the owner's table's four groups, each played on
   top), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
-  `passing-chords` (the ways between two chords, each row voice-led), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
+  `passing-chords` (the ways between two chords, each row voice-led), `progressions` (numerals or chords in any key,
+  the library beside them), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
@@ -97,7 +100,8 @@ it. `@` → `src`.
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
   `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
   and its key's common progressions into the Player); the chromatic walk (`CHROMATIC`, `chromaticChart`,
-  `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
+  `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); a progression (`PROGRESSION`, `progressionChart`,
+  `arrangeProgression`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
@@ -106,7 +110,8 @@ it. `@` → `src`.
   Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
-  the keys, links by name; `LESSON_MODULES`). Saved state: `settings` (`pt-settings`, version 5, with the
+  the keys, links by name; `LESSON_MODULES`), `progression-library` (the Progressions tool's named progressions by style,
+  in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
@@ -119,7 +124,7 @@ it. `@` → `src`.
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`; `interval-facts.ts`,
   the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts` and `voice-lead.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyPitchClasses`), `arrangement`
+  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyPitchClasses`), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's

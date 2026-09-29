@@ -256,6 +256,14 @@ half, `4` quarter, the default, `8` eighth) and a dot for half as long again; it
 minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
 `tensions` (a chord, a root) or `lesson` (an id).
 
+## The progressions library
+
+`src/entities/progression-library/content/library.ts` lists the Progressions tool's named progressions: a style
+(`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `latin`, `gospel`, `minor`, `theory`), an id, the numerals as
+`parseNumerals` reads them (`I V vi IV`, `ii7 V7 IMaj7`, `♭VI ♭VII I`) and the name in both languages. A progression
+of the `minor` style is read in a minor key. Write a 7th where the style plays one whatever the chord size (the
+blues' `I7`); leave it out where the chord should grow with the size.
+
 ## What the tests check
 
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
@@ -268,6 +276,8 @@ minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a k
 - **Path** (`src/entities/path/content/path.test.ts`): every step names a piece that exists, every piece once, no
   listing, every chord family and scale kind.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
+- **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
+  every line read, every style used, minor ones in their style.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,
   line of notes, quiz answer and link read by the kernel, every module with a lesson.
 
