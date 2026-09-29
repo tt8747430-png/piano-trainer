@@ -26,4 +26,16 @@ export type { PracticeChoice } from './choice'
 export { playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'
 export { arrangeWalk, walkChart, WALK, type WalkChoice } from './walk'
+export {
+  arrangeChromatic,
+  chordsParam,
+  CHROMATIC,
+  CHROMATIC_DIRECTIONS,
+  chromaticChart,
+  chromaticRoot,
+  readChords,
+  type ChromaticChoice,
+  type ChromaticChords,
+  type ChromaticDirection,
+} from './chromatic'
 export { PractiseChords } from './ui/PractiseChords'

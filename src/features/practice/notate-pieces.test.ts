@@ -2,10 +2,17 @@ import { describe, expect, it } from 'vitest'
 import { PATTERN_IDS, PATTERNS } from '@/entities/pattern'
 import { melodyOf, PIECES } from '@/entities/piece'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
-import { beatsPerBar, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
+import {
+  beatsPerBar,
+  CHORD_QUALITIES,
+  note,
+  parseChordSymbol,
+  type Meter,
+} from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
 import { engrave } from '@/shared/ui/score/engrave'
 import { arrangePiece, ownChoice } from './arrange-piece'
+import { arrangeChromatic, CHROMATIC } from './chromatic'
 
 /** Every voice of every measure fills its bar, its events end to end; one or two voices a staff. */
 function expectWritten(score: Score) {
@@ -41,6 +48,23 @@ const chartIn = (meter: Meter): Chart => ({
 })
 
 describe('notation of the content', () => {
+  it('writes a chromatic walk of every chord, up and back', () => {
+    const [first, ...rest] = CHORD_QUALITIES
+    if (!first) throw new Error('the table is empty')
+    expectWritten(
+      notate(
+        arrangeChromatic({
+          root: note('C'),
+          chords: [first, ...rest],
+          direction: 'both',
+          pattern: CHROMATIC.pattern,
+          rh: null,
+          lh: null,
+        }),
+      ),
+    )
+  })
+
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
     'writes %s as it plays',
     (_id, piece) => {
