@@ -126,6 +126,7 @@ export {
 } from './chord-parts'
 export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 export { nameChords, type FoundChord } from './chord-finder'
+export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export {
   SCALE_FAMILIES,
   SCALE_KINDS,
