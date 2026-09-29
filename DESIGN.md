@@ -573,6 +573,13 @@ hands). Never a row of chips or a wall of tiles.
   line each in soft ink (14px), so a row's staves stay level; its two notes on the treble staff alone (0.8); and Up ·
   Down · Together as three soft buttons along its foot, each turning into Stop. The Intervals reference grids them
   one, two or three across.
+- **Quiz block** (a lesson's; card paper, 14px, the 1px soft line, 16px inset): its question in Onest 600, then
+  Answer on the keys as a soft button; while open, Check in honey (the lesson's one action) and, after a wrong
+  answer, Show the answer soft; the verdict a line with a grass check or a crimson cross. Its keys take the Theory
+  quiz's faces: chosen honey, extra crimson, missing ringed.
+- **Scale example / line of notes** (a lesson's; the same card): a scale's name in Literata 600 20px, its notes as
+  chips (the degree on the key's tonic or scale colour, then the note), its run on the treble staff; a line of notes
+  on its own clef's staff; Play soft, turning into Stop.
 - **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
   so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
   top. The Available tensions reference sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a

@@ -231,6 +231,31 @@ a chord shorter than two beats picks the pattern up where it sits in the bar.
 `...pieces('bz5')`. Every piece appears exactly once, listings never; a chord family or scale kind appears once. It
 is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
 
+## Lessons
+
+A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts` in the order Learn
+shows it: an `id`, a `title` and `summary` in both languages, a `level` on the Path's scale, a `category`, a `module`
+and its `sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button.
+
+| Block      | Content                                                                                  | Shows                                 |
+| ---------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
+| `text`     | `{ kind: 'text', lead?, text }`                                                          | a paragraph, its lead in bold         |
+| `steps`    | `{ kind: 'steps', steps: [...] }`                                                        | a numbered list                       |
+| `note`     | `{ kind: 'note', text }`                                                                 | a callout on sand                     |
+| `chords`   | `{ kind: 'chords', symbols: ['C2', 'Cadd9'] }`, written as the lesson writes them        | a button each that plays the chord    |
+| `grid`     | `{ kind: 'grid', quality: 'm7' }`                                                        | the quality on all twelve roots       |
+| `scale`    | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                                    | its name, notes, run on a staff, Play |
+| `interval` | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals reference's card        |
+| `notes`    | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', meter?, key? }`                | the line on one staff, Play           |
+| `quiz`     | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                  |
+| `link`     | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference or a lesson    |
+
+A line of notes names each note with its octave (`C4` is middle C), then after a slash its value (`1` whole, `2`
+half, `4` quarter, the default, `8` eighth) and a dot for half as long again; its meter is 2/4, 3/4 or 4/4, and its
+`key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key` objects (`{ tonic: note('E', -1),
+minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
+`tensions` (a chord, a root) or `lesson` (an id).
+
 ## What the tests check
 
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
@@ -243,5 +268,7 @@ is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
 - **Path** (`src/entities/path/content/path.test.ts`): every step names a piece that exists, every piece once, no
   listing, every chord family and scale kind.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
+- **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,
+  line of notes, quiz answer and link read by the kernel, every module with a lesson.
 
 A mistake names its place: `bz10 · section 2, line 1, bar 3: unknown chord symbol "Qm"`.
