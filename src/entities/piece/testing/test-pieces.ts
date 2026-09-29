@@ -19,7 +19,7 @@ export function testSong(
 }
 
 export function testProgression(
-  progression: string,
+  progression: ProgressionPiece['progression'],
   overrides: Partial<ProgressionPiece> = {},
 ): ProgressionPiece {
   return {

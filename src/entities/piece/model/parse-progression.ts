@@ -13,7 +13,7 @@ import {
 } from '@/shared/lib/music'
 import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
-import { ContentError } from './content-error'
+import { ContentError, type ContentPosition } from './content-error'
 import { CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
@@ -112,21 +112,36 @@ function packIntoBars(chords: readonly TimedChord[], meterTicks: Tick): ChartBar
   return bars
 }
 
-/** Reads a progression at a chord size into a chart of real bars, four to a line. */
-export function parseProgression(piece: ProgressionPiece, size: ChordSize): Chart {
-  if (!CHORD_SIZES.includes(size)) throw new RangeError(`Unknown chord size "${size}"`)
-  const meterBeats = beatsPerBar(piece.meter)
-  const chords = piece.progression
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((token, i) =>
-      readChord(token, piece, size, (problem) => {
-        throw new ContentError(piece.id, { chord: i + 1 }, problem)
-      }),
-    )
-  const bars = packIntoBars(chords, meterBeats * TICKS_PER_BEAT)
-  const lines = Array.from({ length: Math.ceil(bars.length / BARS_PER_LINE) }, (_, i) =>
+/** Bars four to a line: a one-string progression's layout. */
+const fourToALine = (bars: readonly ChartBar[]): ChartBar[][] =>
+  Array.from({ length: Math.ceil(bars.length / BARS_PER_LINE) }, (_, i) =>
     bars.slice(i * BARS_PER_LINE, (i + 1) * BARS_PER_LINE),
   )
-  return { key: pieceKey(piece), meter: piece.meter, sections: [{ lines }] }
+
+/**
+ * Reads a progression at a chord size into a chart of real bars: one string four bars a line, or
+ * sections line by line, each line starting on a new bar.
+ */
+export function parseProgression(piece: ProgressionPiece, size: ChordSize): Chart {
+  if (!CHORD_SIZES.includes(size)) throw new RangeError(`Unknown chord size "${size}"`)
+  const meterTicks = beatsPerBar(piece.meter) * TICKS_PER_BEAT
+  const barsOf = (written: string, at: ContentPosition): ChartBar[] =>
+    packIntoBars(
+      written
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((token, i) =>
+          readChord(token, piece, size, (problem) => {
+            throw new ContentError(piece.id, { ...at, chord: i + 1 }, problem)
+          }),
+        ),
+      meterTicks,
+    )
+  const sections =
+    typeof piece.progression === 'string'
+      ? [{ lines: fourToALine(barsOf(piece.progression, {})) }]
+      : piece.progression.map((section, s) => ({
+          lines: section.lines.map((line, l) => barsOf(line, { section: s + 1, line: l + 1 })),
+        }))
+  return { key: pieceKey(piece), meter: piece.meter, sections }
 }

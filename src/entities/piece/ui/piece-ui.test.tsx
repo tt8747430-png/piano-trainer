@@ -2,6 +2,7 @@ import { act, render, renderHook, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { i18n } from '@/shared/i18n'
 import { pieceById } from '../model/selectors'
+import { testProgression } from '../testing/test-pieces'
 import { Credits } from './Credits'
 import { SourceLine } from './SourceLine'
 import { usePieceHeadings, useSectionHeading } from './use-section-heading'
@@ -51,6 +52,17 @@ describe('a piece’s headings', () => {
       'Ending',
     ])
     expect(renderHook(() => usePieceHeadings(twofive)).result.current).toEqual(['Progression'])
+  })
+
+  it('head a progression written in sections as a chart’s', () => {
+    const sectioned = testProgression([
+      { kind: 'verse', lines: ['I:maj:4'] },
+      { kind: 'chorus', last: true, lines: ['V:dom:4'] },
+    ])
+    expect(renderHook(() => usePieceHeadings(sectioned)).result.current).toEqual([
+      'Verse',
+      'Last chorus',
+    ])
   })
 })
 

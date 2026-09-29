@@ -90,3 +90,29 @@ describe('parseProgression', () => {
     expect((caught as ContentError).message).toContain(token)
   })
 })
+
+describe('parseProgression in sections', () => {
+  it('writes each line of a section as its own line of bars, a chart section per section', () => {
+    const chart = parseProgression(
+      testProgression([
+        { kind: 'verse', lines: ['I:maj:4 IV:maj:2', 'V:dom:4'] },
+        { kind: 'chorus', last: true, lines: ['vi:min:2 IV:maj:2 I:maj:4'] },
+      ]),
+      'sevenths',
+    )
+    expect(chart.sections.map((section) => section.lines.map((line) => line.length))).toEqual([
+      [2, 1],
+      [2],
+    ])
+    expect(bars(chart)).toEqual(['CMaj7 4', 'FMaj7 2', 'G7 4', 'Am7 2 | FMaj7 2', 'CMaj7 4'])
+  })
+
+  it('names the section, line and chord it cannot read', () => {
+    expect(() =>
+      parseProgression(
+        testProgression([{ kind: 'verse', lines: ['I:maj:4', 'V:dom:4 IV:mj:4'] }]),
+        'triads',
+      ),
+    ).toThrow('prog · section 1, line 2, chord 2: unknown function in "IV:mj:4"')
+  })
+})

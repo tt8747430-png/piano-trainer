@@ -30,7 +30,7 @@ export interface Section {
   readonly last?: boolean
   /** Anything else the heading says: 'in 2/4', 'and ending'. */
   readonly detail?: LocalText
-  /** Bars separated by spaces; see docs/CONTENT.md. */
+  /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */
   readonly lines: readonly string[]
 }
 
@@ -88,8 +88,11 @@ export type ChordSize = (typeof CHORD_SIZES)[number]
 export interface ProgressionPiece extends PieceCommon {
   readonly kind: 'progression'
   readonly chordSize: { readonly default: ChordSize; readonly choosable: boolean }
-  /** Degree, function and beats per chord: `ii:min:4 V:dom:4 I:maj:8`. */
-  readonly progression: string
+  /**
+   * Degree, function and beats per chord (`ii:min:4 V:dom:4 I:maj:8`), four bars a line under one
+   * heading; or a chart's Sections whose lines are written so, each line of the chart as written.
+   */
+  readonly progression: string | readonly Section[]
 }
 
 export type Piece = ChartPiece | ProgressionPiece

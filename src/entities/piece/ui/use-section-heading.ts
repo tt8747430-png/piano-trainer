@@ -25,9 +25,10 @@ export function useSectionHeading(): (section: Section) => string {
   )
 }
 
-/** The headings a piece's chart is shown under: a song's sections in order, a progression's one. */
+/** The headings a piece's chart is shown under: its sections in order, or a one-string progression's one. */
 export function usePieceHeadings(piece: Piece): string[] {
   const { t } = useTranslation('piece')
   const heading = useSectionHeading()
-  return piece.kind === 'progression' ? [t('progression')] : piece.sections.map(heading)
+  if (piece.kind !== 'progression') return piece.sections.map(heading)
+  return typeof piece.progression === 'string' ? [t('progression')] : piece.progression.map(heading)
 }
