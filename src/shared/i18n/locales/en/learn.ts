@@ -99,6 +99,16 @@ export const learn = {
   },
   // A lesson's example: its Play.
   example: { play: 'Play' },
+  // A lesson's quiz, answered on its keys.
+  quiz: {
+    answer: 'Answer on the keys',
+    check: 'Check',
+    right: 'Right',
+    wrong: 'Not quite',
+    show: 'Show the answer',
+    shown: 'The answer is on the keys',
+    again: 'Try again',
+  },
   intervals: {
     title: 'Intervals',
     simple: 'Within the octave',

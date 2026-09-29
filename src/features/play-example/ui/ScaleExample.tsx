@@ -1,5 +1,5 @@
 import { Square } from 'lucide-react'
-import { useMemo } from 'react'
+import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -36,13 +36,17 @@ export function ScaleExample({
 }) {
   const { t } = useTranslation(['learn', 'common'])
   const scaleName = useScaleName()
+  const captionId = useId()
   const playback = usePlayback<'run'>()
   const tonic = useMemo(() => noteFromParam(root), [root])
   const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
   const score = useMemo(() => notate(example.music), [example])
   return (
-    <figure className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-4">
-      <figcaption className="font-display text-xl font-semibold">
+    <figure
+      aria-labelledby={captionId}
+      className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-4"
+    >
+      <figcaption id={captionId} className="font-display text-xl font-semibold">
         {scaleName(tonic, kind)}
       </figcaption>
       <ol className="flex flex-wrap gap-2">

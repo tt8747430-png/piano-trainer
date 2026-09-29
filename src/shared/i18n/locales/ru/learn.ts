@@ -108,6 +108,15 @@ export const learn: LocaleResources['learn'] = {
     noSongs: 'Песен в этой тональности нет.',
   },
   example: { play: 'Сыграть' },
+  quiz: {
+    answer: 'Ответить на клавишах',
+    check: 'Проверить',
+    right: 'Верно',
+    wrong: 'Не совсем',
+    show: 'Показать ответ',
+    shown: 'Ответ на клавишах',
+    again: 'Ещё раз',
+  },
   intervals: {
     title: 'Интервалы',
     simple: 'В пределах октавы',

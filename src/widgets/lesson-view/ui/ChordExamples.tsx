@@ -1,4 +1,5 @@
 import { Square } from 'lucide-react'
+import type { ShownKeys } from '@/features/play-example'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { Button } from '@/shared/ui/primitives/button'
@@ -13,7 +14,7 @@ export function ChordExamples({
   onShow,
 }: {
   symbols: readonly string[]
-  onShow: (symbol: string) => void
+  onShow: (shown: ShownKeys) => void
 }) {
   const playback = usePlayback<string>()
   return (
@@ -28,7 +29,7 @@ export function ChordExamples({
             aria-pressed={playing}
             className="relative h-12 min-w-16 px-4 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
             onClick={() => {
-              onShow(symbol)
+              onShow(example)
               playback.toggle(symbol, chordSounds(example.keys, { arpeggio: false }))
             }}
           >
