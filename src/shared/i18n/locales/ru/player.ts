@@ -20,6 +20,7 @@ export const player: LocaleResources['player'] = {
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
   needsMelody: 'Нужна мелодия',
+  ownKeyOnly: 'Только в тональности {{key}}',
   needsKey: 'Нужна тональность',
   chordSize: 'Аккорды',
   chordSizes: { triads: 'Трезвучия', sevenths: 'Септаккорды', ninths: 'Нонаккорды' },
@@ -29,6 +30,7 @@ export const player: LocaleResources['player'] = {
     metronome: 'Метроном',
     countIn: 'Отсчёт',
     swing: 'Свинг',
+    recording: 'Запись',
   },
   pace: {
     of: 'Темп: {{value}}',

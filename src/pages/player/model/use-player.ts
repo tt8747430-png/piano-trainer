@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from 'react'
-import type { Piece } from '@/entities/piece'
+import { pieceKey, type Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
 import { arrangePiece, type PracticeChoice } from '@/features/practice'
 import { recordPractised } from '@/features/record-practised'
 import type { Performance } from '@/shared/lib/arrangement'
+import { pitchClassOf } from '@/shared/lib/music'
 import type { SetupChange } from '@/widgets/player-setup'
 import { usePracticePlayer, type PracticePlayer } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
@@ -22,7 +23,7 @@ export function usePlayer(
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
 ): Player {
-  const { melody } = useSettings(selectPractice)
+  const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
   const { key, pattern, rh, lh, chordSize } = search
   const choice = useMemo(
@@ -31,7 +32,10 @@ export function usePlayer(
   )
   const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
-  const player = usePracticePlayer(performance, search, setSearch, piece.tempo)
+  // The recording plays along in the piece's own key only: another would put the voice over other chords.
+  const inOwnKey = pitchClassOf(choice.tonic) === pitchClassOf(pieceKey(piece).tonic)
+  const recording = piece.recording && withRecording && inOwnKey ? piece.recording : null
+  const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
   return {
     choice,
     performance,

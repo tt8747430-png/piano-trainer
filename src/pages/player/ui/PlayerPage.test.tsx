@@ -2,12 +2,62 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { melodyOf, PIECES } from '@/entities/piece'
+import { melodyOf, pieceById, PIECES } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import { stubFonts } from '@/shared/test/fonts'
 
 describe('Player', () => {
+  it('plays «Ромашковые поля»’s recording along in Listen, from bar 1 at its own rate', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/romashki')
+    const play = await screen.findByRole('button', { name: 'Play' })
+    expect(audio.loadedRecordings).toHaveLength(1)
+    await user.click(play)
+    const [first] = audio.recordings
+    expect(first?.play.rate).toBe(1)
+    expect(first?.play.offset).toBe(pieceById('romashki')?.recording?.start)
+  })
+
+  it('plays the recording at half speed at 50%', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/romashki?tempo=36')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(audio.recordings[0]?.play.rate).toBe(0.5)
+  })
+
+  it('plays no recording in another key, and says why in the Setup', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/romashki?key=E')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(audio.recordings).toEqual([])
+    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    // Base UI's switch is a span: disabled is aria-disabled.
+    expect(await screen.findByRole('switch', { name: /Recording/ })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    expect(screen.getByText('Only in D minor')).toBeInTheDocument()
+  })
+
+  it('plays no recording in Wait mode', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/romashki?mode=wait')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(audio.recordings).toEqual([])
+  })
+
+  it('plays no recording with the switch off, and saves the switch', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('switch', { name: /Recording/ }))
+    expect(settingsStore.getState().practice.recording).toBe(false)
+    await user.keyboard('{Escape}')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(audio.recordings).toEqual([])
+  })
+
   it('opens a song with its title, tempo, hands and sheet music, and records it as practised', async () => {
     const { progressStore } = await renderApp('/play/bz5')
     expect(

@@ -18,6 +18,7 @@ export const player = {
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
   needsMelody: 'Needs a melody',
+  ownKeyOnly: 'Only in {{key}}',
   needsKey: 'Needs a key',
   chordSize: 'Chord size',
   chordSizes: { triads: 'Triads', sevenths: '7ths', ninths: '9ths' },
@@ -27,6 +28,7 @@ export const player = {
     metronome: 'Metronome',
     countIn: 'Count-in',
     swing: 'Swing',
+    recording: 'Recording',
   },
   pace: {
     of: 'Tempo: {{value}}',
