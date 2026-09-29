@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -21,5 +21,18 @@ describe('A lesson', () => {
     const { router } = await renderApp('/learn/lessons/reading-chord-symbols')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+  })
+
+  it('answers a Fundamentals quiz on its keys', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/lessons/triads')
+    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
+    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    for (const key of ['E4', 'G sharp 4', 'B4']) {
+      await user.click(within(keyboard).getByRole('button', { name: key }))
+    }
+    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
+    expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
   })
 })

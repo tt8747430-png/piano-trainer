@@ -36,13 +36,13 @@ export function NotesExample({
   )
   const score = useMemo(() => notate(line), [line])
   return (
-    <figure className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-4">
-      <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 scrollbar-none">
+    // Play beside the line where it fits, under it on a narrow screen.
+    <figure className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-3xl border border-border bg-card p-4">
+      <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
         <LazyScoreView score={score} scale={1} fingers={false} staff={clef} />
       </div>
       <Button
         variant="soft"
-        className="self-start"
         onClick={() => {
           onShow(notesShown(line))
           playback.toggle('line', runSounds(line, LINE_TEMPO))

@@ -38,7 +38,9 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 
 - Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4, Settings behind its gear),
   Songs (songs and listings), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
-  training, swing; a piece, or a scale's chords walked with a song's patterns), Learn (lessons; the references:
+  training, swing; a piece, or a scale's chords walked with a song's patterns), Learn (lessons as worksheets, grouped by module and filtered by level and category: the Fundamentals module's
+  fourteen, from finding your way on the keys to key signatures, each with examples that play in place and quizzes
+  answered on the keys; the references:
   Chords, which builds any chord from its triad, size, 7th, added tone and alterations, on the keys and a staff;
   Scales, thirteen kinds with the modes and both blues, its Scale view starting the run on any note, fingered from
   the thumb or as the scale, on a staff, its Chords view stacking the scale's chords to 13ths in any inversion and
@@ -46,7 +48,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   on a staff and heard up, down and together; Available tensions, the twelve notes over a 7th chord as weak, strong,
   tensions and avoid), Practice (the Theory quiz with My gaps;
   studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
-  and ADRs 0012–0017.
+  and ADRs 0012–0018.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.
