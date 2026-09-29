@@ -38,12 +38,9 @@ export function IntervalCard({
   const example = useMemo(() => intervalExample(noteFromParam(root), name), [root, name])
   const score = useMemo(() => notate(example.music), [example])
   const interval = INTERVALS[name]
-  const facts = [
+  const size = [
     t('learn:intervals.semitones', { n: interval.semitones }),
     t('learn:intervals.tones', { n: tonesText(interval.semitones) }),
-    ...(interval.semitones > 12
-      ? [t('learn:intervals.inChords', { degree: interval.degree })]
-      : []),
   ]
   return (
     <article
@@ -58,9 +55,13 @@ export function IntervalCard({
           {t(`music:interval.${name}.short`)}
         </span>
       </header>
+      {/* A line each, so the cards of a row keep their staves level. */}
       <div className="text-sm text-muted-foreground">
-        <p className="tabular-nums">{facts.join(' · ')}</p>
+        <p>{size.join(' · ')}</p>
         <p>{t(`music:consonance.${consonanceOf(interval)}`)}</p>
+        {interval.semitones > 12 ? (
+          <p>{t('learn:intervals.inChords', { degree: interval.degree })}</p>
+        ) : null}
       </div>
       <LazyScoreView score={score} scale={CARD_STAFF} fingers={false} staff="treble" />
       <div className="mt-auto flex gap-2">
