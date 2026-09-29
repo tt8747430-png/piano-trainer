@@ -128,6 +128,16 @@ export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 export { nameChords, type FoundChord } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export {
+  chordInKey,
+  PASSING_CATEGORIES,
+  PASSING_KINDS,
+  passingChords,
+  type PassingCategory,
+  type PassingChords,
+  type PassingKind,
+} from './passing-chords'
+export { voiceLead } from './voice-lead'
+export {
   SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
