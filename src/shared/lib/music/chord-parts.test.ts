@@ -10,12 +10,14 @@ import {
   partsOf,
   partsParams,
   readAlterations,
+  seventhsOf,
   sizesOf,
   withAlterations,
   type ChordParts,
 } from './chord-parts'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
+import { availableTensions } from './tensions'
 
 const TRIAD: ChordParts = {
   triad: 'maj',
@@ -188,5 +190,28 @@ describe('the parts’ URL params', () => {
     expect(readAlterations('s11b9')).toEqual([])
     expect(readAlterations('b9b9')).toEqual([])
     expect(readAlterations(7)).toEqual([])
+  })
+})
+
+describe('the builder’s alterations', () => {
+  /** What each alteration puts in, above the root. */
+  const ADDS = { b9: 13, s9: 15, s11: 18, b13: 20 } as const
+
+  it('are the available tensions of the 7th chord they alter, but for the ♭5, which alters the chord', () => {
+    for (const triad of ['maj', 'aug'] as const) {
+      for (const size of sizesOf(triad)) {
+        if (size === 5) continue
+        for (const seventh of seventhsOf(triad, size)) {
+          const parts = { triad, size, seventh, added: 'none', alterations: [] } as const
+          const base = buildChord(note('C'), { ...parts, size: 7 }).quality
+          if (!base) throw new Error(`the table has no ${triad} ${seventh} 7th`)
+          const tensions = availableTensions(base).map((tension) => tension.semitones)
+          for (const alteration of alterationsOf(parts)) {
+            if (alteration === 'b5') continue
+            expect(tensions, `${triad} ${seventh} ${alteration}`).toContain(ADDS[alteration])
+          }
+        }
+      }
+    }
   })
 })

@@ -5,6 +5,7 @@ import type { Key } from './key'
 import { noteName, pitchClassOf, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
+import { availableTensions } from './tensions'
 import { toneAbove, type Tone } from './tone'
 
 /** How many notes a chord of a scale stacks: a triad, a 7th, a 9th, an 11th, a 13th. */
@@ -106,10 +107,10 @@ export const romanFigure = (notes: ChordNotes, inversion: number): string =>
 export const scaleChordHolds = (chord: ScaleChord, pc: PitchClass): boolean =>
   chord.tones.some((tone) => tone.pitchClass === pc)
 
-/** A 9th a chart may add: a major 9th over any 7th chord, or a ♭9 or ♯9 over a dominant 7th. */
+/** A 9th a chart may add: one that is an available tension over its 7th chord. */
 function ninthAvailable(ninth: ScaleChord, seventh: ChordQuality): boolean {
   const above = ninth.tones[4]?.semitones
-  return above === 14 || (seventh === 'd7' && (above === 13 || above === 15))
+  return availableTensions(seventh).some((tension) => tension.semitones === above)
 }
 
 /**

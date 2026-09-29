@@ -178,6 +178,15 @@ export {
   type ScaleChord,
 } from './scale-chord'
 export {
+  availableTensions,
+  TENSION_CHORDS,
+  TENSION_GROUPS,
+  tensionTones,
+  type TensionChord,
+  type TensionGroup,
+  type TensionTone,
+} from './tensions'
+export {
   SKILLS,
   chordSkill,
   isSkillId,
