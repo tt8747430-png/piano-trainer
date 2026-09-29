@@ -1,6 +1,7 @@
 import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { ChromaticWalkLink } from '@/features/practice'
 import { cn } from '@/shared/lib'
 import { lastInversion, noteName, qualitySpellings, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
@@ -151,6 +152,7 @@ export function ChordExplorer({
               .join(' · ')}
           </span>
         </p>
+        {built.quality ? <ChromaticWalkLink root={built.root} quality={built.quality} /> : null}
       </div>
     </div>
   )

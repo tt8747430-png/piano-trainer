@@ -39,3 +39,4 @@ export {
   type ChromaticDirection,
 } from './chromatic'
 export { PractiseChords } from './ui/PractiseChords'
+export { ChromaticWalkLink } from './ui/ChromaticWalkLink'

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import {
   ChartNoAxesColumnIncreasing,
   Ear,
+  Footprints,
   KeyboardMusic,
   Target,
   type LucideIcon,
@@ -23,7 +24,7 @@ const QUIZ_ROWS = [
   { quiz: 'gaps', icon: Target, paint: 'lilac' },
 ] as const satisfies readonly { quiz: TheoryQuiz; icon: LucideIcon; paint: Paint }[]
 
-/** Practice: the Theory quizzes, then the studies and progressions, each opening its page here. */
+/** Practice: the Theory quizzes and the exercises, then the studies and progressions, each opening its page here. */
 export function PracticePage() {
   const { t } = useTranslation(['practice', 'quiz'])
   const locale = useLocale()
@@ -34,21 +35,33 @@ export function PracticePage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('practice:title')} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
-        <RowGroup title={t('practice:quiz')}>
-          {QUIZ_ROWS.map(({ quiz, icon, paint }) => (
-            <li key={quiz}>
+        <div className="flex flex-col gap-8">
+          <RowGroup title={t('practice:quiz')}>
+            {QUIZ_ROWS.map(({ quiz, icon, paint }) => (
+              <li key={quiz}>
+                <RowLink
+                  title={t(`quiz:modes.${quiz}`)}
+                  detail={
+                    quiz === 'gaps' && gaps > 0 ? t('practice:gaps', { count: gaps }) : undefined
+                  }
+                  icon={icon}
+                  paint={paint}
+                  render={<Link to="/practice/quiz/$quiz" params={{ quiz }} />}
+                />
+              </li>
+            ))}
+          </RowGroup>
+          <RowGroup title={t('practice:exercises')}>
+            <li>
               <RowLink
-                title={t(`quiz:modes.${quiz}`)}
-                detail={
-                  quiz === 'gaps' && gaps > 0 ? t('practice:gaps', { count: gaps }) : undefined
-                }
-                icon={icon}
-                paint={paint}
-                render={<Link to="/practice/quiz/$quiz" params={{ quiz }} />}
+                title={t('practice:chromatic')}
+                icon={Footprints}
+                paint="lilac"
+                render={<Link to="/play/chromatic" />}
               />
             </li>
-          ))}
-        </RowGroup>
+          </RowGroup>
+        </div>
         <PieceList
           groups={[STUDIES, PROGRESSIONS].map((collection) => ({
             id: collection.id,

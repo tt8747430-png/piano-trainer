@@ -39,4 +39,13 @@ describe('Practice', () => {
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
     expect(screen.getByRole('link', { name: 'My gaps Gaps: 1' })).toBeInTheDocument()
   })
+
+  it('offers the chromatic walk among the exercises, opening in the Player', async () => {
+    await renderApp('/practice')
+    const exercises = await screen.findByRole('region', { name: 'Exercises' })
+    expect(within(exercises).getByRole('link', { name: 'Chromatic walk' })).toHaveAttribute(
+      'href',
+      '/play/chromatic',
+    )
+  })
 })
