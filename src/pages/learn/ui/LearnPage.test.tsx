@@ -33,6 +33,11 @@ describe('Learn', () => {
       'href',
       '/learn/tensions',
     )
+    const tools = screen.getByRole('region', { name: 'Tools' })
+    expect(within(tools).getByRole('link', { name: 'Chord finder' })).toHaveAttribute(
+      'href',
+      '/learn/chord-finder',
+    )
   })
 
   it('filters the lessons by level and category, kept in the URL, and says when none match', async () => {

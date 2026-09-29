@@ -28,7 +28,7 @@ export {
 } from './keyboard-view'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject, type Saved } from './saved'
-export { readNote, valueOr, wholeIn } from './search-params'
+export { keyListParam, readKeyList, readNote, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {
   moveTypingOctave,

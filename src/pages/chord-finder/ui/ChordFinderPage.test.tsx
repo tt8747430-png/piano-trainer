@@ -1,0 +1,78 @@
+import { act, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it } from 'vitest'
+import { renderApp } from '@/app/testing/render-app'
+import { midi } from '@/shared/lib/music'
+
+const chordName = () => screen.getByRole('heading', { level: 2 })
+
+describe('Learn → Chord finder', () => {
+  it('names the keys tapped, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/chord-finder')
+    expect(await screen.findByText('Choose the keys of a chord.')).toBeInTheDocument()
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    for (const key of ['C4', 'E4', 'G4']) {
+      await user.click(within(keyboard).getByRole('button', { name: key }))
+    }
+    expect(chordName()).toHaveTextContent('C')
+    expect(router.state.location.search).toEqual({ keys: '60-64-67' })
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+  })
+
+  it('names the root position first, and what else the notes can be', async () => {
+    await renderApp('/learn/chord-finder?keys=60-64-67-69')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C6' })).toBeInTheDocument()
+    expect(screen.getByText('Also: Am7/C')).toBeInTheDocument()
+  })
+
+  it('names an inversion as a slash chord, and opens it in Chords', async () => {
+    await renderApp('/learn/chord-finder?keys=64-67-72')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C/E' })).toBeInTheDocument()
+    const open = screen.getByRole('link', { name: 'Open in Chords' }).getAttribute('href') ?? ''
+    expect(open).toMatch(/^\/learn\/chords\?/)
+    expect(open).toMatch(/[?&]inversion=1(&|$)/)
+  })
+
+  it('names two keys’ interval, and says so when no chord is named', async () => {
+    await renderApp('/learn/chord-finder?keys=60-64')
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Major third' }),
+    ).toBeInTheDocument()
+  })
+
+  it('says so when no chord is named by the notes', async () => {
+    await renderApp('/learn/chord-finder?keys=60-61-62')
+    expect(await screen.findByText('No chord is named by these notes.')).toBeInTheDocument()
+  })
+
+  it('names the keys a MIDI keyboard holds, while it holds them', async () => {
+    const { midi: keyboard } = await renderApp('/learn/chord-finder')
+    await screen.findByText('Choose the keys of a chord.')
+    act(() => {
+      for (const key of [62, 66, 69]) keyboard.press(midi(key))
+    })
+    expect(await screen.findByRole('heading', { level: 2, name: 'D' })).toBeInTheDocument()
+  })
+
+  it('plays the chord, and clears the keys', async () => {
+    const user = userEvent.setup()
+    const { audio, router } = await renderApp('/learn/chord-finder?keys=60-64-67')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(
+      (audio.played.at(-1)?.sounds ?? []).flatMap((sound) =>
+        sound.kind === 'note' ? [sound.midi] : [],
+      ),
+    ).toEqual([60, 64, 67])
+    await user.click(screen.getByRole('button', { name: 'Clear' }))
+    expect(router.state.location.search).toEqual({})
+    expect(await screen.findByText('Choose the keys of a chord.')).toBeInTheDocument()
+  })
+
+  it('speaks Russian', async () => {
+    await renderApp('/learn/chord-finder', { locale: 'ru' })
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Определитель аккордов' }),
+    ).toBeInTheDocument()
+  })
+})

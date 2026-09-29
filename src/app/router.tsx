@@ -17,6 +17,7 @@ import { RoutePending } from './RoutePending'
 import {
   CHORDS_DEFAULTS,
   CHROMATIC_DEFAULTS,
+  FINDER_DEFAULTS,
   INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
   LEARN_DEFAULTS,
@@ -27,6 +28,7 @@ import {
   validateCheckSearch,
   validateChordsSearch,
   validateChromaticSearch,
+  validateFinderSearch,
   validateIntervalsSearch,
   validateKeysSearch,
   validateLearnSearch,
@@ -170,6 +172,13 @@ const tensionsRoute = createRoute({
   search: { middlewares: [stripSearchParams(TENSIONS_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'TensionsPage'),
 })
+const chordFinderRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/chord-finder',
+  validateSearch: validateFinderSearch,
+  search: { middlewares: [stripSearchParams(FINDER_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'ChordFinderPage'),
+})
 
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -241,6 +250,7 @@ const routeTree = rootRoute.addChildren([
     keysRoute,
     intervalsRoute,
     tensionsRoute,
+    chordFinderRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,

@@ -6,6 +6,7 @@ export const learn = {
   module: { fundamentals: 'Fundamentals' },
   noLessons: 'No lessons match.',
   everyLesson: 'Show every lesson',
+  tools: 'Tools',
   references: 'References',
   category: {
     chords: 'Chords',
@@ -124,6 +125,15 @@ export const learn = {
     up: 'Up',
     down: 'Down',
     together: 'Together',
+  },
+  finder: {
+    title: 'Chord finder',
+    choose: 'Choose the keys of a chord.',
+    none: 'No chord is named by these notes.',
+    also: 'Also: {{names}}',
+    no5th: 'No 5th',
+    clear: 'Clear',
+    open: 'Open in Chords',
   },
   tensions: {
     title: 'Available tensions',

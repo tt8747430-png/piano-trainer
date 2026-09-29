@@ -8,6 +8,7 @@ export const learn: LocaleResources['learn'] = {
   module: { fundamentals: 'Основы' },
   noLessons: 'Нет подходящих уроков.',
   everyLesson: 'Показать все уроки',
+  tools: 'Инструменты',
   references: 'Справочник',
   category: {
     chords: 'Аккорды',
@@ -132,6 +133,15 @@ export const learn: LocaleResources['learn'] = {
     up: 'Вверх',
     down: 'Вниз',
     together: 'Вместе',
+  },
+  finder: {
+    title: 'Определитель аккордов',
+    choose: 'Выберите клавиши аккорда.',
+    none: 'Ни один аккорд не состоит из этих нот.',
+    also: 'Также: {{names}}',
+    no5th: 'Без квинты',
+    clear: 'Очистить',
+    open: 'Открыть в аккордах',
   },
   tensions: {
     title: 'Доступные опции',

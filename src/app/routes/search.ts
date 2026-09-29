@@ -15,7 +15,7 @@ import {
 import type { LearnFilter } from '@/pages/learn'
 import type { ChromaticSearch, PlayerSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
-import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
+import { isOneOf, keyListParam, readKeyList, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   ADDED_TONES,
   BUILT_SIZES,
@@ -51,6 +51,7 @@ import {
 } from '@/shared/lib/music'
 import { HANDS, PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
 import type { SetupParams } from '@/widgets/player-setup'
@@ -229,6 +230,13 @@ export function validateIntervalsSearch(input: Input<IntervalView>): IntervalVie
   return {
     root: read ? noteParam(rootSpelling(pitchClassOf(read), false)) : INTERVALS_DEFAULTS.root,
   }
+}
+
+// Learn → Chord finder: the keys chosen, each once, lowest first.
+export const FINDER_DEFAULTS: FinderView = { keys: '' }
+export function validateFinderSearch(input: Input<FinderView>): FinderView {
+  const raw: Raw = input
+  return { keys: keyListParam(readKeyList(raw.keys)) }
 }
 
 // Learn → Available tensions: the root spelled by the chord's one rule, as the Chords reference's.

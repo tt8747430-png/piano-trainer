@@ -1,4 +1,5 @@
 export { lessonById } from '@/entities/lesson'
+export { ChordFinderPage } from '@/pages/chord-finder'
 export { ChordsPage } from '@/pages/chords'
 export { IntervalsPage } from '@/pages/intervals'
 export { KeysPage } from '@/pages/keys'
