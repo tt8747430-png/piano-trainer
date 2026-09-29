@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import type { ShownKeys } from '@/features/play-example'
+import { noteOnTop, type ShownKeys } from '@/features/play-example'
 import {
   chordRootSpelling,
   noteFromParam,
@@ -18,7 +18,7 @@ import {
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { Dropdown } from '@/shared/ui'
-import { tensionChord, withNoteOnTop } from '../model/tension-keys'
+import { tensionChord } from '../model/tension-keys'
 import type { TensionView } from '../model/tension-view'
 import { TensionGroupCard } from './TensionGroupCard'
 
@@ -77,7 +77,10 @@ export function TensionExplorer({
             tones={tones.filter((tone) => tone.group === group)}
             isPlaying={(tone) => playback.playing === idOf(tone)}
             onPlay={(tone) => {
-              const next = withNoteOnTop(chord, tone)
+              const next = noteOnTop(chord, tone.pitchClass, {
+                tone: tone.role,
+                label: tone.degree,
+              })
               setPlayed({ view, shown: next })
               playback.toggle(idOf(tone), chordSounds(next.keys, { arpeggio: false }))
             }}
