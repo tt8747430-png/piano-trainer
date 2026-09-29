@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS } from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
+import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { chordSymbol, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import {
   BOOKS,
@@ -196,6 +197,17 @@ describe('the catalog', () => {
   it('packs the blues into twelve bars', () => {
     const blues = pieceById('blues')
     expect(blues && chartOf(blues).sections[0]?.lines.flat()).toHaveLength(12)
+  })
+
+  it('times every recording: bar 1 in the file, a steady tempo the Player can play', () => {
+    const recorded = PIECES.flatMap((piece) => (piece.recording ? [piece] : []))
+    expect(recorded.map((piece) => piece.id)).toEqual(['romashki'])
+    for (const { recording } of recorded) {
+      expect(recording?.start).toBeGreaterThanOrEqual(0)
+      expect(recording?.tempo).toBeGreaterThanOrEqual(TEMPO_RANGE.min)
+      expect(recording?.tempo).toBeLessThanOrEqual(TEMPO_RANGE.max)
+      expect(recording?.src).toMatch(/romashki-vocal.*\.m4a$/)
+    }
   })
 
   it('reads Ромашковые поля as the course writes it, growing only its 7th chords', () => {

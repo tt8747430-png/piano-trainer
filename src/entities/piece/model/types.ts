@@ -2,6 +2,7 @@ import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
 import { parseKey, type Key, type Letter, type Meter } from '@/shared/lib/music'
+import type { Recording } from '@/shared/lib/schedule'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
 export type PieceId = string
@@ -73,6 +74,8 @@ interface EntryCommon {
 interface PieceCommon extends EntryCommon {
   readonly tempo: number
   readonly pattern: PatternId
+  /** A performance of the piece that plays along in Listen: in its own key and form. */
+  readonly recording?: Recording
 }
 
 export interface ChartPiece extends PieceCommon {

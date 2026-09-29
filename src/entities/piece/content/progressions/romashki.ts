@@ -1,4 +1,5 @@
 import { definePiece } from '../../model/types'
+import vocal from './romashki-vocal.m4a?url'
 
 export default definePiece({
   id: 'romashki',
@@ -10,6 +11,9 @@ export default definePiece({
   tempo: 72,
   pattern: 'pop8',
   chordSize: { default: 'sevenths', choosable: true },
+  // Bar 1 at 2.70 s: a 72 grid over the voice puts a beat on its first sound (2.74 s), bar 11 on the
+  // chorus's entry (36.0 s) and the end just after the voice's last note (62.5 s).
+  recording: { src: vocal, start: 2.7, tempo: 72 },
   progression: [
     {
       kind: 'verse',
