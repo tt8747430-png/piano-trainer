@@ -38,6 +38,7 @@ export {
 } from './sounds'
 export { chordBar } from './chord-bar'
 export { runSounds, scaleRun, type RunOptions } from './run'
+export { NOTE_LINE_METERS, noteLine, type NoteLineMeter } from './note-line'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { swingTick } from './swing'
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'
