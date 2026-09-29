@@ -116,4 +116,14 @@ export const learn: LocaleResources['learn'] = {
     down: 'Вниз',
     together: 'Вместе',
   },
+  tensions: {
+    title: 'Доступные опции',
+    chord: 'Аккорд',
+    group: {
+      weak: { title: 'Слабые', says: 'Ничего не добавляют к звучанию.' },
+      strong: { title: 'Сильные', says: 'Называют аккорд.' },
+      tension: { title: 'Опции', says: 'Окрашивают его.' },
+      avoid: { title: 'Избегаемые', says: 'Спорят с ним.' },
+    },
+  },
 }

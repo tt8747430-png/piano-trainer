@@ -4,6 +4,7 @@ import {
   ChartNoAxesColumnIncreasing,
   CircleDot,
   KeyboardMusic,
+  Layers,
   Ruler,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -64,6 +65,14 @@ export function LearnPage() {
               icon={Ruler}
               paint="yellow"
               render={<Link to="/learn/intervals" />}
+            />
+          </li>
+          <li>
+            <RowLink
+              title={t('learn:tensions.title')}
+              icon={Layers}
+              paint="grass"
+              render={<Link to="/learn/tensions" />}
             />
           </li>
         </RowGroup>

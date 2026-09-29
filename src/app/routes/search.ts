@@ -20,6 +20,7 @@ import {
   buildChord,
   builtRootSpelling,
   CHORD_NOTES,
+  chordRootSpelling,
   FINGERINGS,
   fingeringsOf,
   fitParts,
@@ -31,6 +32,7 @@ import {
   parseKey,
   partsParams,
   pitchClassOf,
+  qualityIntervals,
   rootSpelling,
   readAlterations,
   SCALE_KINDS,
@@ -39,6 +41,7 @@ import {
   scaleRootSpelling,
   SEVENTHS,
   tonicSpelling,
+  TENSION_CHORDS,
   TRIADS,
   type ChordFamily,
   type Fingering,
@@ -51,6 +54,7 @@ import type { KeyView } from '@/widgets/key-explorer'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import type { ScaleView } from '@/widgets/scale-explorer'
+import type { TensionView } from '@/widgets/tension-explorer'
 
 /**
  * What the router hands a validator. Links may pass any subset of the params; each validator reads
@@ -211,6 +215,21 @@ export function validateIntervalsSearch(input: Input<IntervalView>): IntervalVie
   const read = readNote(raw.root)
   return {
     root: read ? noteParam(rootSpelling(pitchClassOf(read), false)) : INTERVALS_DEFAULTS.root,
+  }
+}
+
+// Learn → Available tensions: the root spelled by the chord's one rule, as the Chords reference's.
+const isTensionChord = isOneOf(TENSION_CHORDS)
+export const TENSIONS_DEFAULTS: TensionView = { root: noteParam(note('C')), chord: 'd7' }
+export function validateTensionsSearch(input: Input<TensionView>): TensionView {
+  const raw: Raw = input
+  const chord = valueOr(isTensionChord, raw.chord, TENSIONS_DEFAULTS.chord)
+  const read = readNote(raw.root)
+  return {
+    root: read
+      ? noteParam(chordRootSpelling(pitchClassOf(read), qualityIntervals(chord)))
+      : TENSIONS_DEFAULTS.root,
+    chord,
   }
 }
 

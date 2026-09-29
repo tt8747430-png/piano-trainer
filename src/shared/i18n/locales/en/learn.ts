@@ -106,4 +106,14 @@ export const learn = {
     down: 'Down',
     together: 'Together',
   },
+  tensions: {
+    title: 'Available tensions',
+    chord: 'Chord',
+    group: {
+      weak: { title: 'Weak', says: 'They add nothing to its sound.' },
+      strong: { title: 'Strong', says: 'They name the chord.' },
+      tension: { title: 'Tensions', says: 'They colour it.' },
+      avoid: { title: 'Avoid', says: 'They clash with it.' },
+    },
+  },
 } as const

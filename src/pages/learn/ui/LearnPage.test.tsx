@@ -27,6 +27,10 @@ describe('Learn', () => {
       'href',
       '/learn/intervals',
     )
+    expect(within(references).getByRole('link', { name: 'Available tensions' })).toHaveAttribute(
+      'href',
+      '/learn/tensions',
+    )
   })
 
   it('opens a reference and comes back', async () => {

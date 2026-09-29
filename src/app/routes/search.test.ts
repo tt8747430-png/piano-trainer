@@ -9,6 +9,7 @@ import {
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
+  TENSIONS_DEFAULTS,
   WALK_DEFAULTS,
 } from './search'
 
@@ -29,6 +30,7 @@ describe('search params', () => {
     expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
     expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
     expect(await searchAt('/learn/intervals')).toEqual(INTERVALS_DEFAULTS)
+    expect(await searchAt('/learn/tensions')).toEqual(TENSIONS_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -202,5 +204,14 @@ describe('search params', () => {
   it('respell an interval’s root as the reference spells it', async () => {
     expect(await searchAt('/learn/intervals?root=C%23')).toEqual({ root: 'Db' })
     expect(await searchAt('/learn/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
+  })
+
+  it('respell a tension chord’s root by the chord, and fall back from an unknown chord', async () => {
+    expect(await searchAt('/learn/tensions?chord=m7&root=Db')).toEqual({ chord: 'm7', root: 'C#' })
+    expect(await searchAt('/learn/tensions?chord=maj7&root=C%23')).toEqual({
+      chord: 'maj7',
+      root: 'Db',
+    })
+    expect(await searchAt('/learn/tensions?chord=n9')).toEqual(TENSIONS_DEFAULTS)
   })
 })

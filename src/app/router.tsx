@@ -22,6 +22,7 @@ import {
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
+  TENSIONS_DEFAULTS,
   validateCheckSearch,
   validateChordsSearch,
   validateChromaticSearch,
@@ -30,6 +31,7 @@ import {
   validatePlayerSearch,
   validateScalesSearch,
   validateSongsSearch,
+  validateTensionsSearch,
   validateWalkSearch,
   WALK_DEFAULTS,
 } from './routes/search'
@@ -157,6 +159,13 @@ const intervalsRoute = createRoute({
   search: { middlewares: [stripSearchParams(INTERVALS_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'IntervalsPage'),
 })
+const tensionsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/tensions',
+  validateSearch: validateTensionsSearch,
+  search: { middlewares: [stripSearchParams(TENSIONS_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'TensionsPage'),
+})
 
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -227,6 +236,7 @@ const routeTree = rootRoute.addChildren([
     scalesRoute,
     keysRoute,
     intervalsRoute,
+    tensionsRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,
