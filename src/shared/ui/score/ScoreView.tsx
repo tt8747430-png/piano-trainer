@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { Score, StaffId } from '@/shared/lib/notation'
 import { engrave, type ScoreLayout } from './engrave'
 import { loadMusicFonts } from './music-font'
-import { SCORE_HEIGHT } from './size'
+import { staffHeight } from './size'
 import './score.css'
 
 type Engraving =
@@ -12,9 +12,9 @@ type Engraving =
   | { readonly status: 'error' }
 
 /**
- * A score engraved on one line of grand staff (spec §2.5), once the music font is in. What lies over
- * it (labels, a cursor, the loop) is its children, given the engraving's layout. The staff of `muted`
- * is soft ink.
+ * A score engraved on one line of grand staff (spec §2.5), or on one of its staves, once the music
+ * font is in. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
+ * layout. The staff of `muted` is soft ink.
  */
 export function ScoreView({
   score,
@@ -22,6 +22,7 @@ export function ScoreView({
   fingers,
   names = false,
   muted,
+  staff,
   children,
 }: {
   score: Score
@@ -30,6 +31,8 @@ export function ScoreView({
   /** Each notehead carries its note's name (the Player's Named notes). */
   names?: boolean
   muted?: StaffId | undefined
+  /** Only this staff of the grand staff: a line in one hand, an interval, a note to read. */
+  staff?: StaffId | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
   const { t } = useTranslation('music')
@@ -46,7 +49,7 @@ export function ScoreView({
         if (current)
           setEngraving({
             status: 'ready',
-            layout: engrave(score, element, { scale, fingers, names }),
+            layout: engrave(score, element, { scale, fingers, names, staff }),
           })
       })
       .catch(() => {
@@ -55,12 +58,12 @@ export function ScoreView({
     return () => {
       current = false
     }
-  }, [score, scale, fingers, names])
+  }, [score, scale, fingers, names, staff])
 
   const size =
     engraving.status === 'ready'
       ? { width: engraving.layout.width, height: engraving.layout.height }
-      : { height: SCORE_HEIGHT * scale }
+      : { height: staffHeight(staff) * scale }
   return (
     <div className="relative" style={size}>
       <div

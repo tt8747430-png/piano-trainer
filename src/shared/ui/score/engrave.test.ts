@@ -4,6 +4,7 @@ import { notate, type TimedNote } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { engrave } from './engrave'
 import { xAtTick } from './layout'
+import { staffHeight } from './size'
 
 const n = (
   key: number,
@@ -59,6 +60,29 @@ describe('engrave', () => {
     const xs = layout.onsets.map((onset) => onset.x)
     expect(xs).toEqual([...xs].sort((a, b) => a - b))
     expect(layout.staffTop).toBeLessThan(layout.staffBottom)
+  })
+
+  it('draws one staff alone when asked, as tall as one staff', () => {
+    const line = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [n(60, 'C', 0, 24), n(64, 'E', 24, 24)],
+      chords: [],
+    })
+    const host = document.createElement('div')
+    const layout = engrave(line, host, { scale: 1, fingers: false, names: false, staff: 'treble' })
+    expect(host.querySelector('.vf-staff-treble')).not.toBeNull()
+    expect(host.querySelector('.vf-staff-bass')).toBeNull()
+    expect(layout.height).toBe(staffHeight('treble'))
+    expect(layout.staffBottom - layout.staffTop).toBe(40)
+    expect(layout.onsets.map((onset) => onset.tick)).toEqual([0, 24])
+  })
+
+  it('draws the grand staff as tall as the space a lazy staff keeps for it', () => {
+    const host = document.createElement('div')
+    const layout = engrave(score, host, { scale: 1, fingers: false, names: false })
+    expect(layout.height).toBe(staffHeight(undefined))
   })
 
   it('draws the staves in groups a stylesheet can mute', () => {

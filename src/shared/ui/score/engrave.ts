@@ -16,7 +16,7 @@ import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/share
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
-import { SCORE_HEIGHT } from './size'
+import { ONE_STAFF_Y, SCORE_HEIGHT, STAFF_HEIGHT } from './size'
 import { buildVoice, type BuiltVoice, type FingerReach, type VexNote } from './vexflow-notes'
 
 export interface ScoreLayout {
@@ -167,16 +167,23 @@ function buildMeasure(
   score: Score,
   measure: Measure,
   previous: Measure | undefined,
-  { fingers, names, scale }: { fingers: boolean; names: boolean; scale: number },
+  {
+    fingers,
+    names,
+    scale,
+    shown,
+  }: { fingers: boolean; names: boolean; scale: number; shown: readonly StaffId[] },
 ): BuiltMeasure {
   const build = (staff: StaffId) =>
-    measure.staves[staff].map((voice) =>
-      buildVoice(voice, { staff, measure, meter: score.meter, fingers, names }),
-    )
+    shown.includes(staff)
+      ? measure.staves[staff].map((voice) =>
+          buildVoice(voice, { staff, measure, meter: score.meter, fingers, names }),
+        )
+      : []
   const staves = { treble: build('treble'), bass: build('bass') }
   const formatter = new Formatter()
-  for (const staff of STAVES) formatter.joinVoices(staves[staff].map((built) => built.voice))
-  const voices = STAVES.flatMap((staff) => staves[staff].map((built) => built.voice))
+  for (const staff of shown) formatter.joinVoices(staves[staff].map((built) => built.voice))
+  const voices = shown.flatMap((staff) => staves[staff].map((built) => built.voice))
   const least = formatter.preCalculateMinTotalWidth(voices)
   const clefs = previous === undefined
   const time =
@@ -185,7 +192,7 @@ function buildMeasure(
     previous.time.unit !== measure.time.unit
   const probe = { measure, staves, formatter, clefs, time, width: 0 }
   const modifiers = Math.max(
-    ...STAVES.map((staff) => {
+    ...shown.map((staff) => {
       const stave = staveAt(
         staff,
         { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES },
@@ -211,18 +218,26 @@ function buildMeasure(
 }
 
 /**
- * Where the staves stand and how tall the engraving is: the grand staff of `STAFF_Y` and
- * `SCORE_HEIGHT`, moved down where fingers stand over the treble, apart where they stand between
- * the staves, and taller where they stand under the bass.
+ * Where the staves stand and how tall the engraving is: one staff at `ONE_STAFF_Y` in
+ * `STAFF_HEIGHT`, or the grand staff of `STAFF_Y` and `SCORE_HEIGHT`; moved down where fingers stand
+ * over the top staff, apart where they stand between the staves, and taller where they stand under
+ * the bottom one.
  */
-function placesOf(built: readonly BuiltMeasure[]): {
+function placesOf(
+  built: readonly BuiltMeasure[],
+  staff: StaffId | undefined,
+): {
   readonly y: Readonly<Record<StaffId, number>>
   readonly height: number
 } {
-  const reach = (staff: StaffId, side: keyof FingerReach) =>
-    built.flatMap((measure) =>
-      measure.staves[staff].flatMap((voice) => voice.fingerReach[side] ?? []),
-    )
+  const reach = (on: StaffId, side: keyof FingerReach) =>
+    built.flatMap((measure) => measure.staves[on].flatMap((voice) => voice.fingerReach[side] ?? []))
+  if (staff) {
+    const y = Math.max(ONE_STAFF_Y, FINGER_MARGIN - Math.min(...reach(staff, 'above')))
+    const height =
+      y + Math.max(STAFF_HEIGHT - ONE_STAFF_Y, Math.max(...reach(staff, 'below')) + FINGER_MARGIN)
+    return { y: { treble: y, bass: y }, height }
+  }
   const treble = Math.max(STAFF_Y.treble, FINGER_MARGIN - Math.min(...reach('treble', 'above')))
   const trebleFloor = Math.max(BOTTOM_LINE, ...reach('treble', 'below'))
   const bassCeiling = Math.min(TOP_LINE, ...reach('bass', 'above'))
@@ -235,8 +250,13 @@ function placesOf(built: readonly BuiltMeasure[]): {
 }
 
 /** Every tied note joined to the note of its key where its value ends, on its staff. */
-function drawTies(context: RenderContext, built: readonly BuiltMeasure[], meter: Score['meter']) {
-  for (const staff of STAVES) {
+function drawTies(
+  context: RenderContext,
+  built: readonly BuiltMeasure[],
+  meter: Score['meter'],
+  shown: readonly StaffId[],
+) {
+  for (const staff of shown) {
     const at = new Map<string, { note: VexNote; index: number }>()
     for (const measure of built) {
       for (const voice of measure.staves[staff]) {
@@ -274,21 +294,27 @@ function drawTies(context: RenderContext, built: readonly BuiltMeasure[], meter:
 }
 
 /**
- * Engraves a score into `host` as one system of measures left to right (spec §2.5), and says where
- * everything is, in CSS pixels at `scale`.
+ * Engraves a score into `host` as one system of measures left to right (spec §2.5), on the grand
+ * staff or on `staff` alone, and says where everything is, in CSS pixels at `scale`.
  */
 export function engrave(
   score: Score,
   host: HTMLDivElement,
-  { scale, fingers, names }: { scale: number; fingers: boolean; names: boolean },
+  {
+    scale,
+    fingers,
+    names,
+    staff,
+  }: { scale: number; fingers: boolean; names: boolean; staff?: StaffId | undefined },
 ): ScoreLayout {
   setUpVexFlow()
   host.replaceChildren()
+  const shown: readonly StaffId[] = staff ? [staff] : STAVES
   const built = score.measures.map((measure, index) =>
-    buildMeasure(score, measure, score.measures[index - 1], { fingers, names, scale }),
+    buildMeasure(score, measure, score.measures[index - 1], { fingers, names, scale, shown }),
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
-  const places = placesOf(built)
+  const places = placesOf(built, staff)
   const renderer = new Renderer(host, Renderer.Backends.SVG)
   renderer.resize(width * scale, places.height * scale)
   const context = renderer.getContext()
@@ -306,39 +332,40 @@ export function engrave(
   let staffBottom = 0
   let x = 0
   for (const measure of built) {
-    const staves = {
-      treble: staveAt(
-        'treble',
-        { x, y: places.y.treble, width: measure.width },
-        measure,
-        score.key,
-      ),
-      bass: staveAt('bass', { x, y: places.y.bass, width: measure.width }, measure, score.key),
-    }
-    const start = Math.max(staves.treble.getNoteStartX(), staves.bass.getNoteStartX())
-    for (const staff of STAVES) staves[staff].setNoteStartX(start).setContext(context).draw()
-    if (measure.clefs) {
-      for (const type of ['brace', 'singleLeft'] as const) {
-        new StaveConnector(staves.treble, staves.bass).setType(type).setContext(context).draw()
+    const drawn = shown.map((on) => ({
+      staff: on,
+      stave: staveAt(on, { x, y: places.y[on], width: measure.width }, measure, score.key),
+    }))
+    const [top] = drawn
+    const bottom = drawn.at(-1)
+    if (!top || !bottom) throw new RangeError('A score is engraved on at least one staff')
+    const start = Math.max(...drawn.map(({ stave }) => stave.getNoteStartX()))
+    for (const { stave } of drawn) stave.setNoteStartX(start).setContext(context).draw()
+    // The grand staff's two staves are joined; one staff's own barlines close it.
+    if (top !== bottom) {
+      if (measure.clefs) {
+        for (const type of ['brace', 'singleLeft'] as const) {
+          new StaveConnector(top.stave, bottom.stave).setType(type).setContext(context).draw()
+        }
       }
+      new StaveConnector(top.stave, bottom.stave).setType('singleRight').setContext(context).draw()
     }
-    new StaveConnector(staves.treble, staves.bass).setType('singleRight').setContext(context).draw()
     measure.formatter.formatToStave(
-      STAVES.flatMap((staff) => measure.staves[staff].map((voice) => voice.voice)),
-      staves.treble,
+      shown.flatMap((on) => measure.staves[on].map((voice) => voice.voice)),
+      top.stave,
     )
-    for (const staff of STAVES) {
-      context.openGroup(`staff-${staff}`)
-      for (const voice of measure.staves[staff]) {
-        voice.voice.draw(context, staves[staff])
+    for (const { staff: on, stave } of drawn) {
+      context.openGroup(`staff-${on}`)
+      for (const voice of measure.staves[on]) {
+        voice.voice.draw(context, stave)
         for (const beam of voice.beams) beam.setContext(context).draw()
         for (const tuplet of voice.tuplets) tuplet.setContext(context).draw()
       }
       context.closeGroup()
     }
     for (const [tick, at] of onsetsIn(measure)) onsets.set(tick, at * scale)
-    staffTop = staves.treble.getYForLine(0) * scale
-    staffBottom = staves.bass.getYForLine(4) * scale
+    staffTop = top.stave.getYForLine(0) * scale
+    staffBottom = bottom.stave.getYForLine(4) * scale
     measures.push({
       startTick: measure.measure.startTick,
       ticks: measure.measure.ticks,
@@ -347,7 +374,7 @@ export function engrave(
     })
     x += measure.width
   }
-  drawTies(context, built, score.meter)
+  drawTies(context, built, score.meter, shown)
 
   return {
     width: width * scale,

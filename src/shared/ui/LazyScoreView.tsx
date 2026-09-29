@@ -1,6 +1,6 @@
 import { lazy, Suspense, type ComponentProps } from 'react'
 import { loadScoreView } from './score/load'
-import { SCORE_HEIGHT } from './score/size'
+import { staffHeight } from './score/size'
 
 const ScoreView = lazy(() => loadScoreView().then((module) => ({ default: module.ScoreView })))
 
@@ -10,7 +10,7 @@ const ScoreView = lazy(() => loadScoreView().then((module) => ({ default: module
  */
 export function LazyScoreView(props: ComponentProps<typeof ScoreView>) {
   return (
-    <Suspense fallback={<div style={{ height: SCORE_HEIGHT * props.scale }} />}>
+    <Suspense fallback={<div style={{ height: staffHeight(props.staff) * props.scale }} />}>
       <ScoreView {...props} />
     </Suspense>
   )
