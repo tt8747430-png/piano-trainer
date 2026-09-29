@@ -23,7 +23,8 @@ beat before bar 11 (first set at 2.70; the owner heard the voice a beat late, 20
 - **The timing is pure** (`recordingPlay`: offset from the pass's first tick at the recording's tempo, rate the
   pass's tempo over the recording's). **The port plays it:** `loadRecording`, `playRecording`; the browser adapter
   keeps one audio element per recording, routed through the AudioContext on its first play (the same output and
-  latency as the notes), started by a 20 ms timer when the clock reaches it, sought back past 40 ms of drift, paused at
+  latency as the notes), started by a 20 ms timer when the clock reaches it, sought back past 40 ms of drift (never while it seeks, nor within 0.3 s of a seek, so a buffering seek is not
+  sought again), paused at
   a pass's end unless another follows (which only seeks), and primed muted on the Play tap so Safari lets it start
   later.
 - **A saved Recording switch**, on by default, in the Setup of a piece with one; disabled in another key with "Only in

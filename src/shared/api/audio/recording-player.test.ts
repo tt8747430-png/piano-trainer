@@ -8,6 +8,7 @@ function fakeMedia(refuse = false) {
     playbackRate: 1,
     muted: false,
     paused: true,
+    seeking: false,
     seeks: [] as number[],
     plays: 0,
     pauses: 0,
@@ -79,6 +80,29 @@ describe('createRecordingPlayer', () => {
     media.seeks.pop()
     await vi.advanceTimersByTimeAsync(20)
     expect(media.currentTime).toBeCloseTo(12)
+  })
+
+  it('lets a seek settle before it measures drift again, and leaves a seeking element alone', async () => {
+    const recordings = player()
+    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
+    await vi.advanceTimersByTimeAsync(20)
+    const started = media.seeks.length
+    // Just after the start, still settling: an element behind the clock is not sought again.
+    clock = 0.2
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.seeks).toHaveLength(started)
+    // Settled but still seeking: left alone.
+    clock = 1
+    media.seeking = true
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.seeks).toHaveLength(started)
+    // Settled and playing: sought to where it should be, then left to settle again.
+    media.seeking = false
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.seeks).toHaveLength(started + 1)
+    clock = 1.1
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.seeks).toHaveLength(started + 1)
   })
 
   it('pauses at a play’s end when nothing follows, and seeks without pausing when one does', async () => {

@@ -6,6 +6,7 @@ export interface Media {
   playbackRate: number
   muted: boolean
   readonly paused: boolean
+  readonly seeking: boolean
   play(): Promise<void>
   pause(): void
 }
@@ -24,6 +25,11 @@ export interface RecordingPlayer {
 /** How often the player looks at the clock, and how far a recording may drift before it is sought back. */
 const TICK_MS = 20
 const DRIFT = 0.04
+/**
+ * How long a seek is given to settle before drift is measured again: an element reports its new time
+ * at once but plays on only once it has buffered, so measuring sooner would seek it again and again.
+ */
+const SETTLE = 0.3
 
 interface Queued extends RecordingPlay {
   readonly src: string
@@ -48,6 +54,7 @@ export function createRecordingPlayer({
   const routed = new Set<Media>()
   let queue: readonly Queued[] = []
   let current: Queued | null = null
+  let settledAt = 0
   let timer: ReturnType<typeof setInterval> | null = null
 
   const element = (src: string): Media => {
@@ -78,6 +85,7 @@ export function createRecordingPlayer({
       const media = element(next.src)
       media.playbackRate = next.rate
       media.currentTime = expected(next, time)
+      settledAt = time + SETTLE
       start(media)
       current = next
     } else if (current) {
@@ -85,8 +93,13 @@ export function createRecordingPlayer({
       if (time >= current.until) {
         media.pause()
         current = null
-      } else if (Math.abs(media.currentTime - expected(current, time)) > DRIFT) {
+      } else if (
+        !media.seeking &&
+        time >= settledAt &&
+        Math.abs(media.currentTime - expected(current, time)) > DRIFT
+      ) {
         media.currentTime = expected(current, time)
+        settledAt = time + SETTLE
       }
     }
     if (!current && queue.length === 0 && timer !== null) {
