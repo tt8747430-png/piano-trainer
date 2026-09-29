@@ -5,6 +5,7 @@ import {
   noteFromParam,
   noteName,
   noteParam,
+  parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
   plainSpelling,
@@ -139,5 +140,20 @@ describe('writtenOctave', () => {
     expect(writtenOctave(midi(60), note('B', 1))).toBe(3)
     expect(writtenOctave(midi(71), note('C', -1))).toBe(5)
     expect(writtenOctave(midi(62), note('C', 2))).toBe(4)
+  })
+})
+
+describe('parseNoteInOctave', () => {
+  it('reads a note and its octave as scientific pitch writes them, middle C C4', () => {
+    expect(parseNoteInOctave('C4')).toEqual({ note: note('C'), midi: 60 })
+    expect(parseNoteInOctave('B♭3')).toEqual({ note: note('B', -1), midi: 58 })
+    expect(parseNoteInOctave('F#5')).toEqual({ note: note('F', 1), midi: 78 })
+    expect(parseNoteInOctave('Cb4')).toEqual({ note: note('C', -1), midi: 59 })
+  })
+
+  it('reads nothing without an octave or a note', () => {
+    expect(parseNoteInOctave('E')).toBeNull()
+    expect(parseNoteInOctave('H4')).toBeNull()
+    expect(parseNoteInOctave('4')).toBeNull()
   })
 })

@@ -28,6 +28,7 @@ export {
   noteFromParam,
   noteName,
   noteParam,
+  parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
   plainSpelling,
