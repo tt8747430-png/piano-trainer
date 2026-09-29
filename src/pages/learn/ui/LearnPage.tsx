@@ -1,5 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpenText, ChartNoAxesColumnIncreasing, CircleDot, KeyboardMusic } from 'lucide-react'
+import {
+  BookOpenText,
+  ChartNoAxesColumnIncreasing,
+  CircleDot,
+  KeyboardMusic,
+  Ruler,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LESSONS } from '@/entities/lesson'
 import { LEVEL_NAME } from '@/entities/path'
@@ -50,6 +56,14 @@ export function LearnPage() {
               icon={CircleDot}
               paint="lilac"
               render={<Link to="/learn/keys" />}
+            />
+          </li>
+          <li>
+            <RowLink
+              title={t('learn:intervals.title')}
+              icon={Ruler}
+              paint="yellow"
+              render={<Link to="/learn/intervals" />}
             />
           </li>
         </RowGroup>

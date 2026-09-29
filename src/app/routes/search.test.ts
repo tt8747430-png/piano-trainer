@@ -4,6 +4,7 @@ import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   CHROMATIC_DEFAULTS,
+  INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
@@ -27,6 +28,7 @@ describe('search params', () => {
     expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
     expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
     expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
+    expect(await searchAt('/learn/intervals')).toEqual(INTERVALS_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -195,5 +197,10 @@ describe('search params', () => {
       show: 'scale',
       keysPlay: 'chords',
     })
+  })
+
+  it('respell an interval’s root as the reference spells it', async () => {
+    expect(await searchAt('/learn/intervals?root=C%23')).toEqual({ root: 'Db' })
+    expect(await searchAt('/learn/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
 })

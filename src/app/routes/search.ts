@@ -31,6 +31,7 @@ import {
   parseKey,
   partsParams,
   pitchClassOf,
+  rootSpelling,
   readAlterations,
   SCALE_KINDS,
   scaleHasChords,
@@ -45,6 +46,7 @@ import {
 } from '@/shared/lib/music'
 import { HANDS, PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -199,6 +201,16 @@ export function validateKeysSearch(input: Input<KeyView>): KeyView {
       : KEYS_DEFAULTS.key,
     chords,
     inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
+  }
+}
+
+// Learn → Intervals: the root in the reference's one spelling for its pitch class.
+export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }
+export function validateIntervalsSearch(input: Input<IntervalView>): IntervalView {
+  const raw: Raw = input
+  const read = readNote(raw.root)
+  return {
+    root: read ? noteParam(rootSpelling(pitchClassOf(read), false)) : INTERVALS_DEFAULTS.root,
   }
 }
 

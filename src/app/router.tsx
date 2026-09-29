@@ -17,6 +17,7 @@ import { RoutePending } from './RoutePending'
 import {
   CHORDS_DEFAULTS,
   CHROMATIC_DEFAULTS,
+  INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
@@ -24,6 +25,7 @@ import {
   validateCheckSearch,
   validateChordsSearch,
   validateChromaticSearch,
+  validateIntervalsSearch,
   validateKeysSearch,
   validatePlayerSearch,
   validateScalesSearch,
@@ -148,6 +150,13 @@ const keysRoute = createRoute({
   search: { middlewares: [stripSearchParams(KEYS_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'KeysPage'),
 })
+const intervalsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/intervals',
+  validateSearch: validateIntervalsSearch,
+  search: { middlewares: [stripSearchParams(INTERVALS_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'IntervalsPage'),
+})
 
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -217,6 +226,7 @@ const routeTree = rootRoute.addChildren([
     chordsRoute,
     scalesRoute,
     keysRoute,
+    intervalsRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,
