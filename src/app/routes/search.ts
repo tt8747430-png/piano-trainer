@@ -2,8 +2,16 @@ import type { SearchSchemaInput } from '@tanstack/react-router'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
 import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
-import { isLoopParam, PRACTICE_MODES } from '@/features/practice'
-import type { PlayerSearch, WalkSearch } from '@/pages/player'
+import {
+  CHROMATIC,
+  CHROMATIC_DIRECTIONS,
+  chordsParam,
+  chromaticRoot,
+  isLoopParam,
+  PRACTICE_MODES,
+  readChords,
+} from '@/features/practice'
+import type { ChromaticSearch, PlayerSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
@@ -253,5 +261,28 @@ export function validateWalkSearch(input: Input<WalkSearch>): WalkSearch {
     kind,
     ...practiceView(raw),
     ...setupFigures(raw),
+  }
+}
+
+// Player → Chromatic walk: the chords, root and direction, then the Player's own params.
+export const CHROMATIC_DEFAULTS: ChromaticSearch = {
+  chords: chordsParam(CHROMATIC.chords),
+  root: noteParam(note('C')),
+  direction: CHROMATIC.direction,
+  ...PLAYER_DEFAULTS,
+}
+const isDirection = isOneOf(CHROMATIC_DIRECTIONS)
+export function validateChromaticSearch(input: Input<ChromaticSearch>): ChromaticSearch {
+  const raw: Raw = input
+  const chords = readChords(raw.chords)
+  const root = readNote(raw.root)
+  return {
+    chords: chordsParam(chords),
+    root: noteParam(root ? chromaticRoot(pitchClassOf(root), chords[0]) : note('C')),
+    direction: valueOr(isDirection, raw.direction, CHROMATIC_DEFAULTS.direction),
+    ...practiceView(raw),
+    pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
+    rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
+    lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
   }
 }

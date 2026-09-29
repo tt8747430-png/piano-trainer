@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
+  CHROMATIC_DEFAULTS,
   KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
@@ -24,6 +25,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/scales')).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
+    expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
     expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
   })
 
@@ -154,6 +156,16 @@ describe('search params', () => {
       mode: 'wait',
     })
     expect(await searchAt('/play/walk?root=H&chordSize=elevenths')).toEqual(WALK_DEFAULTS)
+  })
+
+  it('read the chromatic walk’s chords in the table’s order, its root as its first chord spells it', async () => {
+    expect(
+      await searchAt('/play/chromatic?chords=n9.m9.xx&root=Ab&direction=both&pattern=pop8'),
+    ).toMatchObject({ chords: 'm9.n9', root: 'G#', direction: 'both', pattern: 'pop8' })
+    expect(await searchAt('/play/chromatic?chords=xx&root=H&direction=sideways')).toEqual(
+      CHROMATIC_DEFAULTS,
+    )
+    expect(await searchAt('/play/chromatic?chords=')).toEqual(CHROMATIC_DEFAULTS)
   })
 
   it('read a Keys key as the circle spells it, and its chords within their inversions', async () => {

@@ -13,6 +13,7 @@ const ROUTES = [
   ['/songs/bz5', '/songs/$pieceId'],
   ['/play/bz5', '/play/$pieceId'],
   ['/play/walk', '/play/walk'],
+  ['/play/chromatic', '/play/chromatic'],
   ['/learn', '/learn'],
   ['/learn/chords', '/learn/chords'],
   ['/learn/scales', '/learn/scales'],

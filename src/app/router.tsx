@@ -16,12 +16,14 @@ import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
   CHORDS_DEFAULTS,
+  CHROMATIC_DEFAULTS,
   KEYS_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
   validateCheckSearch,
   validateChordsSearch,
+  validateChromaticSearch,
   validateKeysSearch,
   validatePlayerSearch,
   validateScalesSearch,
@@ -186,6 +188,14 @@ const walkRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'WalkPlayerPage'),
 })
 
+const chromaticRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/play/chromatic',
+  validateSearch: validateChromaticSearch,
+  search: { middlewares: [stripSearchParams(CHROMATIC_DEFAULTS)] },
+  component: lazyRouteComponent(playerScreens, 'ChromaticPlayerPage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -213,7 +223,7 @@ const routeTree = rootRoute.addChildren([
     studyRoute,
     progressionRoute,
   ]),
-  fullScreenRoute.addChildren([playerRoute, walkRoute, checkRoute]),
+  fullScreenRoute.addChildren([playerRoute, walkRoute, chromaticRoute, checkRoute]),
 ])
 
 export function createAppRouter(history?: RouterHistory) {
