@@ -15,7 +15,7 @@ export default definePiece({
   // the chart's 72: its choruses are 16 beats apart in 13.17 s, and a 73 grid from bar 1 meets its
   // landmarks within 50 ms (bar 5's C at 16.45 s, the choruses on bars 11 and 15 at 36.11 and 49.25 s,
   // the last note on bar 18 at 59.19 s), where 72 falls 0.73 s behind by the end.
-  recording: { src: vocal, start: 3.25, tempo: 73 },
+  recording: { src: vocal, start: 3.26, tempo: 73 },
   progression: [
     {
       kind: 'verse',
