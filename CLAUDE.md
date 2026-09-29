@@ -55,7 +55,7 @@ imports a package.
 it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
-  references Chords, Scales and Keys (`/learn/keys`); the Player's `/play/$pieceId` and `/play/walk`; screens are
+  references Chords, Scales and Keys (`/learn/keys`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
@@ -66,8 +66,9 @@ it. `@` → `src`.
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
-  `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`)
-  and `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) fill; `pages/keys` is the Keys reference.
+  `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
+  `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
+  `chromatic-search.ts`, `ChromaticSetup`) fill; `pages/keys` is the Keys reference.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup sheet, its first page composed by
   its page: `PlayerSetup` over `FigureChoice`, `FigureRows`, `ChordSizeField`, `MelodySwitch`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
@@ -87,13 +88,14 @@ it. `@` → `src`.
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
   `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
-  and its key's common progressions into the Player); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
+  and its key's common progressions into the Player); the chromatic walk (`CHROMATIC`, `chromaticChart`,
+  `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
-  Content: `piece` (54 pieces, 7 listings, chart and progression parsers; `SONG_COLLECTIONS` on Songs, `STUDIES` and
+  Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content:
   sections of text, steps, notes and chords that play). Saved state: `settings` (`pt-settings`, version 3, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
@@ -107,7 +109,7 @@ it. `@` → `src`.
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`), `arrangement`
-  (`arrange`, a chart → a Performance: each note's written onset, roll and spelling), `notation` (`notate`, a
+  (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a hand's keys, which keys sound when
@@ -116,7 +118,7 @@ it. `@` → `src`.
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
-  button), `MultiDropdown` (the pop-up that checks several), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
+  button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
   `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
   VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,

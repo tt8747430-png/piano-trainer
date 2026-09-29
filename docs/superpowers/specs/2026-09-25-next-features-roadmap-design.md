@@ -7,7 +7,9 @@
   for the key's chords (§1, items 8 and 9): the keyboard's fixes (§3.1), and the key's chords placed in
   sub-projects 2 and 4 (§3.8). Then two owner decisions: studies and progressions leave Songs (§3.9), and a lighter
   palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
-  typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11).
+  typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11). Revised 2026-09-29:
+  «Ромашковые поля» written as the course writes it and the chromatic walk (ADR 0015), from three pages of Vasily
+  Gorshkov's accompaniment course.
 - **Built:** sub-projects 1, 2, 3 and 4. Their specs and plans were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
@@ -407,6 +409,10 @@ app icons) with Apple's App icons guide; "why is it square"; "not good, i like t
 "good but improve the outlines the shapes and the contrast, the individual keys are not distincted very good"; "the
 lover part of the keys a little little bit closer".
 
+**On 9th chords and the course's song (2026-09-29):** "look at this and update the informations if they are wrong and
+update this song with the needed cords … also i want to be able to walk different types or selected types of chords
+chromaticaly not just in the specific key or scale."
+
 ## 8. The grilling session, question by question
 
 Each question was put with a recommendation; the answer is the owner's.
@@ -682,7 +688,7 @@ but never drops an entry without saying why.
 
 **In the app now** (content, `entities/piece`): I–vi–IV–V, I–V–vi–IV, ii–V–I, ii°–V7♭9–i, V9 → IMaj9, V7♭9 → IMaj9,
 V7♭9 → im9, 12-bar blues, the Called to Play lesson progressions (now Studies), and «Stack Your Chords» and «Daisy
-fields» among the progressions. They leave Songs for the key's chords and Practice (§3.9).
+fields» (the whole song, verse and both endings, only its 7th chords growing) among the progressions. They leave Songs for the key's chords and Practice (§3.9).
 
 **The Progressions tool's library** (The Ultimate Piano's list, by style; each generated in any key, played in the
 Player with a song's patterns and Chord size, §3.8):
@@ -802,6 +808,7 @@ group's exact form is taken from primary sources before sub-project 7's spec, an
 
 | Group                      | Exercises                                                                                                                                  |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Chords by semitones (built) | Any chord qualities root by root, a semitone at a time, up, down or up and back, in the Player (the chromatic walk, ADR 0015) |
 | Scales                     | The scale up and down, one to four octaves, hands separately and together; **from any note** (thumb first, or as the scale); in 3rds; in 6ths; in groups of four (1-2-3-4, 2-3-4-5 …) and other groupings (1-3-2-4 …); contrary motion |
 | Chords in a scale          | The key's chords walked up and down as triads, 7ths, 9ths, 11ths and 13ths, in root position and each inversion; broken chords; the key's chords in a progression (§3.8) |
 | Arpeggios                  | Each type of §10.4, in every inversion, one to four octaves, hands separately and together                                                  |

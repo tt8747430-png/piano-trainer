@@ -144,6 +144,21 @@ Each chord is `degree:function:beats`, optionally `/3`, `/5` or `/7`:
 Chords fill bars of the meter in order, a chord longer than the room left tied into the next bar; lines hold four
 bars. The 12-bar blues (`I:dom:16 IV:dom:8 …`) is twelve 4/4 bars.
 
+**In sections.** A song-shaped progression writes `progression` as a chart's sections (`kind`, `n`, `label`, `last`,
+`detail`, `lines`), each line a progression of its own: it starts on a new bar and is one line of the chart, so the
+printed line breaks stay. Headings are a chart's. A mistake names its section, line and chord.
+
+```ts
+progression: [
+  { kind: 'verse', lines: ['i:min:4 iv:min:2 V:=sus4:2 i:min:4', 'ii:hd:4 V:=sus4:2 V:=maj:2'] },
+  { kind: 'chorus', last: true, lines: ['iv:min:2 i:=min:2/3 ii:hd:1 V:=maj:1 i:=m6:2'] },
+],
+```
+
+**As printed.** Write a printed triad, suspension, 6th or slash chord as a fixed quality (`=maj`, `=sus4`, `=m6`,
+`/3`) and a printed 7th chord as a function: then the chord size grows only the 7th chords, as an accompanist
+extends a song («Ромашковые поля»: Dm7 → Dm9, D7 → D7♭9 into Gm, its C and A staying triads).
+
 ## Credits
 
 `credits: [{ role, names }, …]` with `names` exactly as printed and `role` one of `authors` (no role printed),
