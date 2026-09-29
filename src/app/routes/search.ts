@@ -1,4 +1,5 @@
 import type { SearchSchemaInput } from '@tanstack/react-router'
+import { LESSON_CATEGORIES, type LessonCategory } from '@/entities/lesson'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
 import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
@@ -11,6 +12,7 @@ import {
   PRACTICE_MODES,
   readChords,
 } from '@/features/practice'
+import type { LearnFilter } from '@/pages/learn'
 import type { ChromaticSearch, PlayerSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
@@ -83,6 +85,17 @@ export function validateSongsSearch(input: Input<SongsFilter>): SongsFilter {
     q: typeof raw.q === 'string' ? raw.q : SONGS_DEFAULTS.q,
     collection: valueOr(isCollection, raw.collection, SONGS_DEFAULTS.collection),
     level: valueOr(isLevel, raw.level, SONGS_DEFAULTS.level),
+  }
+}
+
+// Learn: its lessons' filter.
+const isLessonCategory = isOneOf<LessonCategory | 'any'>([...LESSON_CATEGORIES, 'any'])
+export const LEARN_DEFAULTS: LearnFilter = { level: 'any', category: 'any' }
+export function validateLearnSearch(input: Input<LearnFilter>): LearnFilter {
+  const raw: Raw = input
+  return {
+    level: valueOr(isLevel, raw.level, LEARN_DEFAULTS.level),
+    category: valueOr(isLessonCategory, raw.category, LEARN_DEFAULTS.category),
   }
 }
 

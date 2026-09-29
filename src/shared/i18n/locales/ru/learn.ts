@@ -2,7 +2,12 @@ import type { LocaleResources } from '../../types'
 
 export const learn: LocaleResources['learn'] = {
   title: 'Обучение',
-  lessons: 'Уроки',
+  level: 'Уровень',
+  categoryLabel: 'Раздел',
+  any: 'Любой',
+  module: { fundamentals: 'Основы' },
+  noLessons: 'Нет подходящих уроков.',
+  everyLesson: 'Показать все уроки',
   references: 'Справочник',
   category: {
     chords: 'Аккорды',

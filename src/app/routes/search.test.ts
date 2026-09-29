@@ -6,6 +6,7 @@ import {
   CHROMATIC_DEFAULTS,
   INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
+  LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
@@ -31,6 +32,7 @@ describe('search params', () => {
     expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
     expect(await searchAt('/learn/intervals')).toEqual(INTERVALS_DEFAULTS)
     expect(await searchAt('/learn/tensions')).toEqual(TENSIONS_DEFAULTS)
+    expect(await searchAt('/learn')).toEqual(LEARN_DEFAULTS)
   })
 
   it('keep what is valid', async () => {
@@ -213,5 +215,13 @@ describe('search params', () => {
       root: 'Db',
     })
     expect(await searchAt('/learn/tensions?chord=n9')).toEqual(TENSIONS_DEFAULTS)
+  })
+
+  it('keep a lesson filter’s level and category, and drop what no lesson has', async () => {
+    expect(await searchAt('/learn?level=2&category=scales')).toEqual({
+      level: 2,
+      category: 'scales',
+    })
+    expect(await searchAt('/learn?level=9&category=cooking')).toEqual(LEARN_DEFAULTS)
   })
 })

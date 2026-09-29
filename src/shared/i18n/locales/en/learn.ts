@@ -1,6 +1,11 @@
 export const learn = {
   title: 'Learn',
-  lessons: 'Lessons',
+  level: 'Level',
+  categoryLabel: 'Category',
+  any: 'Any',
+  module: { fundamentals: 'Fundamentals' },
+  noLessons: 'No lessons match.',
+  everyLesson: 'Show every lesson',
   references: 'References',
   category: {
     chords: 'Chords',

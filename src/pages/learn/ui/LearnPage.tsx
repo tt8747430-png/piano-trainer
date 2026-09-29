@@ -1,39 +1,22 @@
-import { Link } from '@tanstack/react-router'
-import {
-  BookOpenText,
-  ChartNoAxesColumnIncreasing,
-  CircleDot,
-  KeyboardMusic,
-  Layers,
-  Ruler,
-} from 'lucide-react'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { ChartNoAxesColumnIncreasing, CircleDot, KeyboardMusic, Layers, Ruler } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { LESSONS } from '@/entities/lesson'
-import { LEVEL_NAME } from '@/entities/path'
-import { localText, useLocale } from '@/shared/i18n'
 import { RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
+import type { LearnFilter } from '../model/learn-filter'
+import { LessonsColumn } from './LessonsColumn'
 
-/** Learn: the lessons, then the references to look things up in. */
+/** Learn: the lessons by module, filtered by level and category; beside them the references. */
 export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
-  const locale = useLocale()
+  const filter = useSearch({ from: '/shell/learn' })
+  const navigate = useNavigate({ from: '/learn' })
+  const onChange = (change: Partial<LearnFilter>) =>
+    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('learn:title')} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
-        <RowGroup title={t('learn:lessons')}>
-          {LESSONS.map((lesson) => (
-            <li key={lesson.id}>
-              <RowLink
-                title={localText(lesson.title, locale)}
-                detail={`${t(`common:levelName.${LEVEL_NAME[lesson.level]}`)} · ${t(`learn:category.${lesson.category}`)}`}
-                icon={BookOpenText}
-                paint="grass"
-                render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-              />
-            </li>
-          ))}
-        </RowGroup>
+        <LessonsColumn filter={filter} onChange={onChange} />
         <RowGroup title={t('learn:references')}>
           <li>
             <RowLink

@@ -10,6 +10,7 @@ describe('A lesson', () => {
       await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' }),
     ).toBeInTheDocument()
     expect(screen.getByText(/what its numbers mean/)).toBeInTheDocument()
+    expect(screen.getByText('Beginner · Chords')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { level: 2, name: 'Naming any chord in 7 steps' }),
     ).toBeInTheDocument()

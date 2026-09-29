@@ -19,6 +19,7 @@ import {
   CHROMATIC_DEFAULTS,
   INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
+  LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
@@ -28,6 +29,7 @@ import {
   validateChromaticSearch,
   validateIntervalsSearch,
   validateKeysSearch,
+  validateLearnSearch,
   validatePlayerSearch,
   validateScalesSearch,
   validateSongsSearch,
@@ -129,6 +131,8 @@ const progressionRoute = createRoute({
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn',
+  validateSearch: validateLearnSearch,
+  search: { middlewares: [stripSearchParams(LEARN_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
 const chordsRoute = createRoute({

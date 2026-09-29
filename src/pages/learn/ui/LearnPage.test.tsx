@@ -4,11 +4,13 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('Learn', () => {
-  it('lists the lessons with their level and category, and the references', async () => {
+  it('lists the lessons under their module, with their level and category, and the references', async () => {
     await renderApp('/learn')
-    const lessons = await screen.findByRole('region', { name: 'Lessons' })
+    const fundamentals = await screen.findByRole('region', { name: 'Fundamentals' })
     expect(
-      within(lessons).getByRole('link', { name: 'How to read chord symbols Beginner · Chords' }),
+      within(fundamentals).getByRole('link', {
+        name: 'How to read chord symbols Beginner · Chords',
+      }),
     ).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
     const references = screen.getByRole('region', { name: 'References' })
     expect(within(references).getByRole('link', { name: 'Chords' })).toHaveAttribute(
@@ -31,6 +33,19 @@ describe('Learn', () => {
       'href',
       '/learn/tensions',
     )
+  })
+
+  it('filters the lessons by level and category, kept in the URL, and says when none match', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn')
+    await user.click(await screen.findByRole('combobox', { name: 'Category' }))
+    await user.click(await screen.findByRole('option', { name: 'Chords' }))
+    expect(router.state.location.search).toEqual({ category: 'chords' })
+    expect(screen.getByRole('link', { name: /How to read chord symbols/ })).toBeInTheDocument()
+    await router.navigate({ to: '/learn', search: { level: 4, category: 'chords' } })
+    expect(await screen.findByText('No lessons match.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Show every lesson' }))
+    expect(router.state.location.search).toEqual({})
   })
 
   it('opens a reference and comes back', async () => {
