@@ -9,7 +9,7 @@
   palette after The Ultimate Piano's learn view (§3.10). Revised 2026-09-27: that palette printed quietly, with a
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11). Revised 2026-09-29:
   «Ромашковые поля» written as the course writes it and the chromatic walk (ADR 0015), from three pages of Vasily
-  Gorshkov's accompaniment course.
+  Gorshkov's accompaniment course; then a piece may carry a recording that plays along (ADR 0016), its vocal first.
 - **Built:** sub-projects 1, 2, 3 and 4. Their specs and plans were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
@@ -333,7 +333,7 @@ kernel.
 | Toggle mode                            | Keys stay lit when tapped, finger numbers typed onto them, two colours: teaching diagrams   | 1, 5      |
 | Lyrics under the staff                 | A song's words under its tune on the sheet music, the syllables carried by the melody's notes | a piece that carries its words |
 
-**Not for this app:** audio and YouTube players, streaming overlays, image export, cloud storage, branding, kids'
+**Not for this app:** YouTube and streamed audio players (a recording shipped with a piece plays along: ADR 0016), streaming overlays, image export, cloud storage, branding, kids'
 icons (they need a network, an account or another audience), PDF scores (see §3.6), MuseScore's own `.mscz` files
 (MuseScore exports MusicXML); a single staff whose clef follows the range (piano music is read on a grand staff, and
 the sheet mutes the staff not played instead); the metronome's drum grooves and tap tempo (an accompanist practises to
@@ -411,7 +411,8 @@ lover part of the keys a little little bit closer".
 
 **On 9th chords and the course's song (2026-09-29):** "look at this and update the informations if they are wrong and
 update this song with the needed cords … also i want to be able to walk different types or selected types of chords
-chromaticaly not just in the specific key or scale."
+chromaticaly not just in the specific key or scale." Then: "can you also sink the audio with this playback of chords"
+(the course's vocal recording of «Ромашковые поля»), shipped inside the app by the owner's choice.
 
 ## 8. The grilling session, question by question
 

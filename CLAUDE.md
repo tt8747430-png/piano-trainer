@@ -71,7 +71,7 @@ it. `@` → `src`.
   `chromatic-search.ts`, `ChromaticSetup`) fill; `pages/keys` is the Keys reference.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup sheet, its first page composed by
-  its page: `PlayerSetup` over `FigureChoice`, `FigureRows`, `ChordSizeField`, `MelodySwitch`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
+  its page: `PlayerSetup` over `FigureChoice`, `FigureRows`, `ChordSizeField`, `MelodySwitch`, `RecordingSwitch`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
   `player-screen` areas, the tempo and hands popovers, the loop button, ‹ ▶ ›, Wait mode's line), `sheet-music`
   (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
   chord builder: `ChordBuilder`, `ChordSheet`, `viewChord`, `changedView`), `scale-explorer` (`ScaleExplorer` picks
@@ -95,9 +95,9 @@ it. `@` → `src`.
   (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
-  Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections; `SONG_COLLECTIONS` on Songs, `STUDIES` and
+  Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content:
-  sections of text, steps, notes and chords that play). Saved state: `settings` (`pt-settings`, version 3, with the
+  sections of text, steps, notes and chords that play). Saved state: `settings` (`pt-settings`, version 4, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
@@ -111,12 +111,13 @@ it. `@` → `src`.
   `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
-  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a walk of chords, a scale's
+  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a hand's keys, which keys sound when
   and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
-  fakes; the audio port knows which keys it is sounding and whether a play still sounds), `ui` (the kit: `PianoKeyboard`
+  fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
+  the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
   button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
   `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,

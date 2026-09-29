@@ -104,6 +104,19 @@ rest; `|` may mark bars and is ignored. It is written in the piece's key and is 
 lets the tune be doubled and makes the patterns that play it (r5–r7) available. Its notes keep the spelling they are
 written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval.
 
+## The recording
+
+`recording: { src, start, tempo }`: a performance of the piece (a singer's) that plays along in Listen, in the
+piece's own key, at any tempo with its pitch kept ([ADR 0016](adr/0016-a-piece-may-carry-a-recording-that-plays-along.md)).
+
+- **The file** sits beside the piece's file as AAC in an `.m4a` at 128 kbps
+  (`afconvert -f m4af -d aac -b 128000 in.mp3 piece-vocal.m4a`), under Workbox's 2 MiB precache limit, and is
+  imported with `?url` (`import vocal from './romashki-vocal.m4a?url'`), so the build fingerprints and precaches it.
+- **`start`** is the second bar 1 begins: find the first sound, fit a beat grid at the tempo over the voice's onsets,
+  check a later landmark (a section's entry, the last note's end), then listen.
+- **`tempo`** is the recording's steady tempo, counted as the chart counts it; its form must be the chart's (a repeat
+  written out, as the chart writes it).
+
 ## Progressions
 
 A progression has no chart; its chords grow with the chord size the learner picks.

@@ -462,6 +462,10 @@ Wait mode's line the height after it, so the transport keeps the bottom:
   its right, where the right thumb is. Play is 56px there.
 - **From 640px** (tablet, laptop): as on its side, the transport centred under the sheet, the sheet at 1.
 
+A piece with a recording has a **Recording** switch in its Setup, under Melody, on by default; in another key it is
+disabled with "Only in D minor" (the key as `keyOf` writes it) in soft ink under its label. The recording plays in
+Listen only; nothing on the screen marks it beyond the switch.
+
 From 1024px each screen arranges itself in two columns with a 40px gap, tops aligned:
 
 - **Songs:** the filters in an 18rem column, the list beside it.
