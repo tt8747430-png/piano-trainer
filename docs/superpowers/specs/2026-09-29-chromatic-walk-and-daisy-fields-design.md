@@ -60,23 +60,23 @@ Today a Progression is one string packed into bars, headed "Progression". It gai
 progression reads as the course prints it while its chords still grow with the Chord size.
 
 ```ts
-/** A Progression's section: a chart Section's heading, its chords as a progression. */
-export interface ProgressionSection extends Omit<Section, 'lines'> {
-  /** Degree, function and beats per chord: `i:min:2 iv:min:2`. */
-  readonly progression: string
-}
-
 export interface ProgressionPiece extends PieceCommon {
   readonly kind: 'progression'
   readonly chordSize: { readonly default: ChordSize; readonly choosable: boolean }
-  /** One progression, headed "Progression", or sections headed as a chart's. */
-  readonly progression: string | readonly ProgressionSection[]
+  /**
+   * Degree, function and beats per chord (`ii:min:4 V:dom:4 I:maj:8`), four bars a line under one
+   * heading; or a chart's Sections whose lines are written so, each line of the chart as written.
+   */
+  readonly progression: string | readonly Section[]
 }
 ```
 
-- **Parsing** (`parseProgression`): each section is packed into bars on its own (a section starts on a new bar), four
-  bars a line, exactly as the one string is today; the Chart has a section per section. A mistake names its section
-  and chord: `romashki · section 2, chord 5: unknown function in "♭VII:mj:1"`.
+- **The same `Section`** as a song's chart (kind, n, label, last, detail, lines): only its lines' grammar differs, a
+  progression's chords instead of bars. A song-shaped progression keeps the printed line breaks.
+- **Parsing** (`parseProgression`): one string as today (packed into bars, four a line, a mistake named by its
+  chord). Sections: each line packed into bars on its own (a line starts a new bar), a line of the Chart each; a
+  Chart section per section. A mistake names its section, line and chord:
+  `romashki · section 2, line 1, chord 5: unknown function in "♭VII:mj:1"`.
 - **Headings** (`usePieceHeadings`): a string's one heading is "Progression" as today; sections are headed by
   `useSectionHeading`, as a chart's are.
 - The other 13 progressions keep their one string; nothing else reads `progression`.
@@ -109,7 +109,8 @@ slash chords are **fixed** (`=quality`), so they read as the course writes them 
 | 15–17 | as 11–13   | as 11–13                                  |
 | 18  | Em7♭5 A Dm6 (2nd ending) | `ii:hd:1 V:=maj:1 i:=m6:2`   |
 
-("Asus" is the course's shorthand for Asus4, as its chorus writes it.)
+("Asus" is the course's shorthand for Asus4, as its chorus writes it.) The lines break as the course prints them:
+the verse's bars 1–3, 4–6, 7–8, 9–10; each chorus's bars 11–12 and 13–14.
 
 - **The repeat is written out:** the chart format has no repeat signs or endings, so the chorus is a section twice,
   the second `last: true` ("Last chorus"), each with its own ending. 18 bars; the bar numbers up to 14 are the
@@ -190,17 +191,19 @@ export function arrangeChromatic(choice: ChromaticChoice): Performance
   GMaj9 · G9" / «По полутонам: Gm9 · GMaj9 · G9» (the chosen chords on the first root). ✕ goes back, else to
   Practice.
 - **Setup** (`ChromaticSetup`, composed like `WalkSetup`):
-  - **Chords:** a `MultiDropdown` of the 36 qualities in the table's order, each labelled by its suffix (the major
-    triad's `music.major`) and its name. Unchecking the last one checked leaves it checked: the walk always has a
-    chord.
+  - **Chord types:** a `MultiDropdown` of the 36 qualities grouped by family in the table's order (Triads, 6th & add,
+    7th chords, 9ths & more, Altered 7ths), each labelled by its suffix (the major triad's `music.major`) with its
+    name as the item's second word and accessible name; the button shows the chosen suffixes (`m9 Maj9 9`).
+    `MultiDropdown` gains the groups and the second word `Dropdown` already has (one `Choices` type, one list of
+    items, shared by both). Unchecking the last one checked leaves it checked: the walk always has a chord.
   - **Root:** a `Dropdown` of the 12 pitch classes, each spelled as the first chosen chord spells it.
   - **Direction:** a `Segmented` Up · Down · Up and down.
   - `FigureRows` (pattern and hands' figures) and `PlayingFields` (swing). No Chord size, no melody, no methods.
   - `PlayerSetup` gains `keyed: boolean`, beside `melody`: a source without a key closes the figures that play the
     key's triads, and the patterns made of them, with a note saying why ("Needs a key" · «Нужна тональность»), as a
-    source without a tune closes the melody's (`needsMelody`). Which figures those are is the pattern entity's
-    (`playsKeyTriads(figure)`), read from the figure's tokens, never listed by hand. Pieces and the scale walk pass
-    `keyed`.
+    source without a tune closes the melody's (`needsMelody`). Which figures those are is read from their tokens,
+    never listed by hand: `playsKeyTriads(figure)` in the arrangement kernel (it owns the figure notation), and the
+    pattern entity's `needsKey(id)` beside `needsMelody`. Pieces and the scale walk pass `keyed`.
 
 ### 3.3 Ways in
 
@@ -217,7 +220,7 @@ export function arrangeChromatic(choice: ChromaticChoice): Performance
 | Key                        | en                          | ru                        |
 | -------------------------- | --------------------------- | ------------------------- |
 | `player:chromatic.title`   | Chromatic walk: {{chords}}  | По полутонам: {{chords}}  |
-| `player:chords`            | Chords                      | Аккорды                   |
+| `player:chordTypes`        | Chord types                 | Виды аккордов             |
 | `player:direction`         | Direction                   | Направление               |
 | `player:directions.up`     | Up                          | Вверх                     |
 | `player:directions.down`   | Down                        | Вниз                      |
@@ -245,15 +248,17 @@ export function arrangeChromatic(choice: ChromaticChoice): Performance
   with every note on the piano; the walk is written as sheet music, each voice filling its bar.
 - `pages/player/model/chromatic-search.test.ts`: the URL read (defaults, the walk's own pattern, a key-bound pattern
   or figure read as the walk's own) and a Setup change written.
-- `entities/pattern`: `playsKeyTriads` true for `flow` alone today; `PlayerSetup.test.tsx`: `keyed={false}` closes
-  the Chord flow with its note.
+- `playsKeyTriads` true for the `flow` figure alone today, `needsKey` for the `flow` pattern alone;
+  `PlayerSetup.test.tsx`: `keyed={false}` closes the Chord flow with its note. `MultiDropdown.test.tsx`: groups
+  with their labels, an item's second word.
 - `app/routes/search` validation: unknown and repeated ids dropped, table order, empty → `maj`, a bad direction →
   `up`, a root respelled.
 - `ChromaticPlayerPage.test.tsx` (through `renderApp`): the title; Setup's Chords, Root and Direction change the URL
   and the sheet; the last chord cannot be unchecked; ✕.
 - `PracticePage.test.tsx`: the Exercises row opens the walk. The Chords page's test: a table chord's row opens the walk
   on its quality and root; a chord outside the table shows none.
-- `parse-progression.test.ts`: sections start new bars, four bars a line, a Chart section each; an error names its
-  section. `usePieceHeadings`: a string's "Progression", sections' headings.
+- `parse-progression.test.ts`: a section's lines each start a new bar and are a line each, a Chart section per
+  section; an error names its section, line and chord. `usePieceHeadings`: a string's "Progression", sections'
+  headings.
 - `catalog.test.ts`: «Ромашковые поля» at triads, 7ths (the course's chart, §2.2) and 9ths.
 - Verify: `npm run typecheck && npm run lint && npm run test`, then `npm run build` (a new route).
