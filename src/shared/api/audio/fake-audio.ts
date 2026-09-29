@@ -1,4 +1,4 @@
-import type { Sound } from '@/shared/lib/schedule'
+import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
 import { createSoundingKeys } from './sounding'
 import { PLAY_DELAY, type AudioOutput } from './types'
 
@@ -10,6 +10,8 @@ export interface FakeAudio extends AudioOutput {
   readonly unlocks: number
   readonly played: readonly { readonly sounds: readonly Sound[]; readonly at: number }[]
   readonly stops: number
+  readonly loadedRecordings: readonly string[]
+  readonly recordings: readonly { readonly src: string; readonly play: RecordingPlay }[]
   setNow(seconds: number): void
 }
 
@@ -18,6 +20,8 @@ export function createFakeAudio(): FakeAudio {
   let unlocks = 0
   let stops = 0
   const played: { sounds: readonly Sound[]; at: number }[] = []
+  const loadedRecordings: string[] = []
+  const recordings: { src: string; play: RecordingPlay }[] = []
   const keys = createSoundingKeys({ now: () => clock })
   return {
     async unlock() {
@@ -31,6 +35,12 @@ export function createFakeAudio(): FakeAudio {
     stop() {
       stops++
       keys.clear()
+    },
+    loadRecording(src) {
+      loadedRecordings.push(src)
+    },
+    playRecording(src, play) {
+      recordings.push({ src, play })
     },
     now: () => clock,
     sounding: keys.current,
@@ -49,6 +59,12 @@ export function createFakeAudio(): FakeAudio {
     },
     get stops() {
       return stops
+    },
+    get loadedRecordings() {
+      return loadedRecordings
+    },
+    get recordings() {
+      return recordings
     },
   }
 }

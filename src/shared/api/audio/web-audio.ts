@@ -1,5 +1,6 @@
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLookahead } from './lookahead'
+import { createRecordingPlayer, type Media } from './recording-player'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
 import { PLAY_DELAY, type AudioOutput } from './types'
 
@@ -71,9 +72,11 @@ const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 export function createWebAudioOutput({
   createContext = browserContext,
   frame = animationFrame,
+  createMedia = (src) => new Audio(src),
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
+  createMedia?: (src: string) => Media
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<GainNode>()
@@ -97,9 +100,24 @@ export function createWebAudioOutput({
   const now = () => context?.currentTime ?? 0
   const lookahead = createLookahead({ now, render })
   const keys = createSoundingKeys({ now, frame })
+  const recordings = createRecordingPlayer({
+    now,
+    createMedia: (src) => {
+      const media = createMedia(src)
+      if (media instanceof HTMLMediaElement) media.preload = 'auto'
+      return media
+    },
+    // Through the AudioContext, a recording leaves by the same output, with the same latency, as the notes.
+    route: (media) => {
+      const audio = openContext()
+      if (audio && media instanceof HTMLMediaElement)
+        audio.createMediaElementSource(media).connect(audio.destination)
+    },
+  })
 
   return {
     async unlock() {
+      recordings.prime()
       const audio = openContext()
       if (audio?.state === 'suspended') await audio.resume()
     },
@@ -112,6 +130,7 @@ export function createWebAudioOutput({
       return keys.add(sounds, start, options)
     },
     stop() {
+      recordings.stop()
       lookahead.clear()
       keys.clear()
       if (!context) return
@@ -122,6 +141,8 @@ export function createWebAudioOutput({
       }
       voices.clear()
     },
+    loadRecording: (src) => recordings.load(src),
+    playRecording: (src, play) => recordings.play(src, play),
     now,
     sounding: keys.current,
     struck: keys.struck,

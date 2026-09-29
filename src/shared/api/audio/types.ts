@@ -1,5 +1,5 @@
 import type { Midi } from '@/shared/lib/music'
-import type { Sound } from '@/shared/lib/schedule'
+import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
 
 /** One call to `play()`: the port says whether it still sounds (`isPlaying`). */
 export interface PlayHandle {
@@ -18,12 +18,16 @@ export interface PlayOptions {
 
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
-  /** On the first user gesture: browsers start audio suspended until one. */
+  /** On the first user gesture: browsers start audio suspended until one; readies loaded recordings too. */
   unlock(): Promise<void>
   /** Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns their play. */
   play(sounds: readonly Sound[], at?: number, options?: PlayOptions): PlayHandle
-  /** Silences what sounds and drops what is queued: every play stops playing. */
+  /** Silences what sounds, recordings too, and drops what is queued: every play stops playing. */
   stop(): void
+  /** Readies a recording (fetched, routed to the output) so a Play can start it at once. */
+  loadRecording(src: string): void
+  /** Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until `play.until`. */
+  playRecording(src: string, play: RecordingPlay): void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
   /** The keys the app is sounding now (a hand's play aside): the same set until they change. */
