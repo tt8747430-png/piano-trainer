@@ -1,8 +1,11 @@
 import type { Level } from '@/entities/path'
+import type { PatternId } from '@/entities/pattern'
+import type { PieceId } from '@/entities/piece'
 import type { LocalText } from '@/shared/i18n'
 import type {
   ChordQuality,
   Key,
+  NumeralSize,
   ReferenceInterval,
   ScaleKind,
   SpelledNote,
@@ -44,11 +47,29 @@ export type LessonLink =
   | { readonly place: 'intervals'; readonly root?: SpelledNote }
   | { readonly place: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
   | { readonly place: 'lesson'; readonly lesson: string }
+  | {
+      readonly place: 'progressions'
+      /** As `parseNumerals` reads them: `I V vi IV`. */
+      readonly numerals: string
+      readonly key: Key
+      readonly size?: NumeralSize
+    }
+  | {
+      readonly place: 'passing-chords'
+      readonly key: Key
+      /** Chord symbols, as the tool's fields take them. */
+      readonly from: string
+      readonly to: string
+    }
+  | { readonly place: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
+  /** A piece in the Player, with a pattern or its own. */
+  | { readonly place: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
 
 /**
  * One part of a lesson's section: prose, numbered steps, a note to read; or an example that plays in
- * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff); a
- * quiz answered on the keys; a link into a reference.
+ * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff, a
+ * pattern over a piece, a progression in a key); a quiz answered on the keys; a link into a reference,
+ * a tool or the Player.
  */
 export type LessonBlock =
   | { readonly kind: 'text'; readonly lead?: LocalText; readonly text: LocalText }
@@ -66,6 +87,16 @@ export type LessonBlock =
       readonly meter?: NoteLineMeter
       /** The key its signature writes; C major (none) when left out. */
       readonly key?: Key
+    }
+  /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
+  | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }
+  | {
+      readonly kind: 'progression'
+      /** As `parseNumerals` reads them: `ii V I`. */
+      readonly numerals: string
+      readonly key: Key
+      /** Triads when left out. */
+      readonly size?: NumeralSize
     }
   | { readonly kind: 'quiz'; readonly ask: LocalText; readonly answer: QuizAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }

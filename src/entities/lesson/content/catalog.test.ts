@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { note, parseChordSymbol, parseNoteName } from '@/shared/lib/music'
+import { needsMelody } from '@/entities/pattern'
+import { melodyOf, pieceById } from '@/entities/piece'
+import { note, parseChordSymbol, parseNoteName, parseNumerals } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import { lessonById, LESSON_MODULES, LESSONS, type Lesson, type LessonBlock } from '../index'
 
@@ -52,6 +54,15 @@ function problemsOf(block: LessonBlock): string[] {
           }),
         block.notes,
       )
+    case 'pattern': {
+      const piece = pieceById(block.piece)
+      if (!piece) return [block.piece]
+      return needsMelody(block.pattern) && !melodyOf(piece)
+        ? [`${block.pattern} over ${block.piece}`]
+        : []
+    }
+    case 'progression':
+      return unread(() => parseNumerals(block.numerals), block.numerals)
     case 'quiz': {
       const { answer } = block
       return 'chord' in answer
@@ -65,6 +76,14 @@ function problemsOf(block: LessonBlock): string[] {
           return unread(() => parseChordSymbol(target.chord), target.chord)
         case 'lesson':
           return lessonById(target.lesson) ? [] : [target.lesson]
+        case 'progressions':
+          return unread(() => parseNumerals(target.numerals), target.numerals)
+        case 'passing-chords':
+          return [target.from, target.to].flatMap((symbol) =>
+            unread(() => parseChordSymbol(symbol), symbol),
+          )
+        case 'piece':
+          return pieceById(target.piece) ? [] : [target.piece]
         default:
           return []
       }
@@ -112,6 +131,41 @@ describe('the lessons', () => {
         target: { place: 'lesson', lesson: 'nowhere' },
       }),
     ).toEqual(['nowhere'])
+  })
+
+  it('catch a pattern over no piece, or a tune pattern over a piece with no tune', () => {
+    expect(problemsOf({ kind: 'pattern', pattern: 'M1', piece: 'nowhere' })).toEqual(['nowhere'])
+    expect(problemsOf({ kind: 'pattern', pattern: 'r5', piece: 'ex3' })).toEqual(['r5 over ex3'])
+    expect(problemsOf({ kind: 'pattern', pattern: 'r5', piece: 'otche' })).toEqual([])
+  })
+
+  it('catch numerals, chords or a piece a progression or a link cannot read', () => {
+    const title = { en: 'a', ru: 'а' }
+    expect(problemsOf({ kind: 'progression', numerals: 'I V x', key: C_MAJOR })).toEqual(['I V x'])
+    expect(
+      problemsOf({
+        kind: 'link',
+        title,
+        target: { place: 'progressions', numerals: 'I Q', key: C_MAJOR },
+      }),
+    ).toEqual(['I Q'])
+    expect(
+      problemsOf({
+        kind: 'link',
+        title,
+        target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Hq' },
+      }),
+    ).toEqual(['Hq'])
+    expect(
+      problemsOf({ kind: 'link', title, target: { place: 'piece', piece: 'nowhere' } }),
+    ).toEqual(['nowhere'])
+    expect(
+      problemsOf({
+        kind: 'link',
+        title,
+        target: { place: 'piece', piece: 'otche', pattern: 'r4' },
+      }),
+    ).toEqual([])
   })
 
   it('each belong to a module, every module with a lesson', () => {
