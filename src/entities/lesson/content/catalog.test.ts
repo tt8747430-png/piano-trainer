@@ -213,6 +213,10 @@ describe('the lessons', () => {
       'five-ways',
       'right-hand-techniques',
       'seven-types',
+      'accompanying-a-hymn',
+      'common-progressions',
+      'passing-chords',
+      'reharmonising-a-melody',
     ])
   })
 
