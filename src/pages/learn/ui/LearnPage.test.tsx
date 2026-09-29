@@ -38,6 +38,14 @@ describe('Learn', () => {
       'href',
       '/learn/chord-finder',
     )
+    expect(within(tools).getByRole('link', { name: 'Reharmonise' })).toHaveAttribute(
+      'href',
+      '/learn/reharmonise',
+    )
+    expect(within(tools).getByRole('link', { name: 'Passing chords' })).toHaveAttribute(
+      'href',
+      '/learn/passing-chords',
+    )
   })
 
   it('filters the lessons by level and category, kept in the URL, and says when none match', async () => {

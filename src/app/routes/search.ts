@@ -55,6 +55,7 @@ import type { ChordView } from '@/widgets/chord-explorer'
 import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
+import type { PassingView } from '@/widgets/passing-chords'
 import type { ReharmoniseView } from '@/widgets/reharmonise'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -256,6 +257,28 @@ export function validateReharmoniseSearch(input: Input<ReharmoniseView>): Reharm
   return {
     key: keyParam(key),
     note: noteParam(spellInKey(pitchClassOf(melody ?? note('E')), key)),
+  }
+}
+
+// Learn → Passing chords: two chords kept as typed (a line says when one cannot be read), and a key.
+/** The most of a chord symbol a field keeps: the longest the table writes, and some. */
+const TYPED_CHORD = 16
+export const PASSING_DEFAULTS: PassingView = {
+  key: keyParam({ tonic: note('C'), minor: false }),
+  from: 'C',
+  to: 'F',
+}
+const typedChord = (raw: unknown, fallback: string): string =>
+  typeof raw === 'string' ? raw.slice(0, TYPED_CHORD) : fallback
+export function validatePassingSearch(input: Input<PassingView>): PassingView {
+  const raw: Raw = input
+  const read = typeof raw.key === 'string' ? parseKey(raw.key) : null
+  return {
+    key: read
+      ? keyParam({ tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor })
+      : PASSING_DEFAULTS.key,
+    from: typedChord(raw.from, PASSING_DEFAULTS.from),
+    to: typedChord(raw.to, PASSING_DEFAULTS.to),
   }
 }
 

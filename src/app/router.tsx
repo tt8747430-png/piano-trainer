@@ -20,6 +20,7 @@ import {
   FINDER_DEFAULTS,
   INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
+  PASSING_DEFAULTS,
   LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
   REHARMONISE_DEFAULTS,
@@ -32,6 +33,7 @@ import {
   validateFinderSearch,
   validateIntervalsSearch,
   validateKeysSearch,
+  validatePassingSearch,
   validateLearnSearch,
   validatePlayerSearch,
   validateReharmoniseSearch,
@@ -188,6 +190,13 @@ const reharmoniseRoute = createRoute({
   search: { middlewares: [stripSearchParams(REHARMONISE_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'ReharmonisePage'),
 })
+const passingChordsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/passing-chords',
+  validateSearch: validatePassingSearch,
+  search: { middlewares: [stripSearchParams(PASSING_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'PassingChordsPage'),
+})
 
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -261,6 +270,7 @@ const routeTree = rootRoute.addChildren([
     tensionsRoute,
     chordFinderRoute,
     reharmoniseRoute,
+    passingChordsRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,

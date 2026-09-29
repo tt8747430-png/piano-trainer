@@ -7,6 +7,7 @@ import {
   Layers,
   Ruler,
   ScanSearch,
+  Waypoints,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
@@ -83,6 +84,14 @@ export function LearnPage() {
                 icon={Blend}
                 paint="lilac"
                 render={<Link to="/learn/reharmonise" />}
+              />
+            </li>
+            <li>
+              <RowLink
+                title={t('learn:passing.title')}
+                icon={Waypoints}
+                paint="yellow"
+                render={<Link to="/learn/passing-chords" />}
               />
             </li>
           </RowGroup>

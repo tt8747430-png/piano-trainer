@@ -138,9 +138,6 @@ export const learn = {
   reharmonise: {
     title: 'Reharmonise',
     note: 'Melody note',
-    key: 'Key',
-    majorKeys: 'Major keys',
-    minorKeys: 'Minor keys',
     as: 'as {{degree}}',
     inKey: 'in the key',
     group: {
@@ -148,6 +145,63 @@ export const learn = {
       major: 'Major 7ths',
       minor: 'Minor 7ths',
       dominant: 'Dominant 7ths',
+    },
+  },
+  passing: {
+    title: 'Passing chords',
+    from: 'From',
+    to: 'To',
+    unread: 'This chord can’t be read.',
+    inKey: 'In the key',
+    chromatic: 'Chromatic',
+    category: {
+      dominant: 'Dominant',
+      functional: 'Functional',
+      chromatic: 'Chromatic',
+      diminished: 'Diminished',
+      diatonic: 'Diatonic',
+      cadence: 'Cadences',
+    },
+    kind: {
+      secondaryDominant: { name: 'Secondary dominant', why: '{{chord}} is the V7 of {{to}}.' },
+      tritoneSub: {
+        name: 'Tritone substitution',
+        why: '{{chord}} stands in for the V7 of {{to}} and falls a half step into it.',
+      },
+      secondaryTwoFive: {
+        name: 'Secondary ii–V',
+        why: '{{chord}} and {{next}} are the ii and V of {{to}}.',
+      },
+      approachBelow: {
+        name: 'Chromatic approach from below',
+        why: '{{chord}} rises a half step into {{to}}.',
+      },
+      walkUp: {
+        name: 'Bass walking up',
+        why: 'The bass climbs a half step at a time into {{to}}.',
+      },
+      walkDown: {
+        name: 'Bass walking down',
+        why: 'The bass falls a half step at a time into {{to}}.',
+      },
+      doubleApproach: {
+        name: 'Double chromatic approach',
+        why: '{{chord}} and {{next}} close in on {{to}} from a half step below and above.',
+      },
+      diminishedApproach: {
+        name: 'Diminished approach',
+        why: '{{chord}} leads up a half step into {{to}}.',
+      },
+      subdominant: { name: 'Subdominant approach', why: '{{chord}} is the subdominant of {{to}}.' },
+      backdoor: {
+        name: 'Backdoor cadence',
+        why: '{{chord}} is the ♭VII7 of {{to}}: its back door.',
+      },
+      plagal: { name: 'Plagal cadence', why: '{{chord}} is the IV of {{to}}: the Amen cadence.' },
+      minorPlagal: {
+        name: 'Minor plagal cadence',
+        why: '{{chord}} is the iv of {{to}}, borrowed from its minor.',
+      },
     },
   },
   tensions: {

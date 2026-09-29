@@ -5,10 +5,8 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import type { ShownKeys } from '@/features/play-example'
 import {
   chordsHolding,
-  CIRCLE_OF_FIFTHS,
   HOLDING_GROUPS,
   keyFromParam,
-  keyParam,
   midi,
   MIDDLE_C,
   noteFromParam,
@@ -18,12 +16,11 @@ import {
   pitchClass,
   pitchClassOf,
   spellInKey,
-  type Key,
   type Midi,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, KeyDropdown } from '@/shared/ui'
 import { underMelody } from '../model/holding-keys'
 import type { ReharmoniseView } from '../model/reharmonise-view'
 import { HoldingGroupCard } from './HoldingGroupCard'
@@ -57,10 +54,6 @@ export function ReharmoniseTool({
         }
   const held = chordsHolding(melody, key)
   const idOf = (group: string, index: number) => `${view.key} ${view.note} ${group} ${index}`
-  const keyOption = (each: Key) => ({
-    value: keyParam(each),
-    label: t(each.minor ? 'keys.minor' : 'keys.major', { tonic: noteName(each.tonic) }),
-  })
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard keys={shown.keys} marks={shown.marks} onKeyPress={choose} />
@@ -74,21 +67,7 @@ export function ReharmoniseTool({
           })}
           onChange={(note) => onChange({ note })}
         />
-        <Dropdown
-          label={t('reharmonise.key')}
-          value={view.key}
-          groups={[
-            {
-              label: t('reharmonise.majorKeys'),
-              options: CIRCLE_OF_FIFTHS.map((place) => keyOption(place.major)),
-            },
-            {
-              label: t('reharmonise.minorKeys'),
-              options: CIRCLE_OF_FIFTHS.map((place) => keyOption(place.minor)),
-            },
-          ]}
-          onChange={(next) => onChange({ key: next })}
-        />
+        <KeyDropdown value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         {HOLDING_GROUPS.map((group) => (

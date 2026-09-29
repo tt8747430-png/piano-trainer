@@ -82,6 +82,13 @@ export const music: LocaleResources['music'] = {
   // Тон и полутон: Т и П.
   gap: { W: 'Т', H: 'П', 'W+H': 'Т+П' },
   // Карточки справочника интервалов: название интервала и его краткое обозначение.
+  key: {
+    label: 'Тональность',
+    major: '{{tonic}} мажор',
+    minor: '{{tonic}} минор',
+    majors: 'Мажорные',
+    minors: 'Минорные',
+  },
   interval: {
     r: { name: 'Прима', short: 'ч1' },
     m2: { name: 'Малая секунда', short: 'м2' },

@@ -81,6 +81,14 @@ export const music = {
   },
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
+  // A key, as a pop-up names it.
+  key: {
+    label: 'Key',
+    major: '{{tonic}} major',
+    minor: '{{tonic}} minor',
+    majors: 'Major keys',
+    minors: 'Minor keys',
+  },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {
     r: { name: 'Unison', short: 'P1' },

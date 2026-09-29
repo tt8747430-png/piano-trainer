@@ -146,9 +146,6 @@ export const learn: LocaleResources['learn'] = {
   reharmonise: {
     title: 'Гармонизация мелодии',
     note: 'Нота мелодии',
-    key: 'Тональность',
-    majorKeys: 'Мажорные',
-    minorKeys: 'Минорные',
     as: 'как {{degree}}',
     inKey: 'в тональности',
     group: {
@@ -156,6 +153,57 @@ export const learn: LocaleResources['learn'] = {
       major: 'Мажорные септаккорды',
       minor: 'Минорные септаккорды',
       dominant: 'Доминантсептаккорды',
+    },
+  },
+  passing: {
+    title: 'Проходящие аккорды',
+    from: 'От',
+    to: 'К',
+    unread: 'Этот аккорд не читается.',
+    inKey: 'В тональности',
+    chromatic: 'Хроматический',
+    category: {
+      dominant: 'Доминантовые',
+      functional: 'Функциональные',
+      chromatic: 'Хроматические',
+      diminished: 'Уменьшённые',
+      diatonic: 'Диатонические',
+      cadence: 'Каденции',
+    },
+    kind: {
+      secondaryDominant: {
+        name: 'Вторичная доминанта',
+        why: '{{chord}} — доминантсептаккорд к {{to}}.',
+      },
+      tritoneSub: {
+        name: 'Тритоновая замена',
+        why: '{{chord}} заменяет доминанту к {{to}} и спускается в него на полутон.',
+      },
+      secondaryTwoFive: {
+        name: 'Вторичная II–V',
+        why: '{{chord}} и {{next}} — II и V ступени для {{to}}.',
+      },
+      approachBelow: {
+        name: 'Хроматический подход снизу',
+        why: '{{chord}} поднимается в {{to}} на полутон.',
+      },
+      walkUp: { name: 'Бас идёт вверх', why: 'Бас поднимается к {{to}} по полутонам.' },
+      walkDown: { name: 'Бас идёт вниз', why: 'Бас спускается к {{to}} по полутонам.' },
+      doubleApproach: {
+        name: 'Двойной хроматический подход',
+        why: '{{chord}} и {{next}} подходят к {{to}} на полутон снизу и сверху.',
+      },
+      diminishedApproach: {
+        name: 'Уменьшённый подход',
+        why: '{{chord}} ведёт в {{to}} на полутон вверх.',
+      },
+      subdominant: { name: 'Субдоминантовый подход', why: '{{chord}} — субдоминанта к {{to}}.' },
+      backdoor: { name: 'Каденция «чёрного хода»', why: '{{chord}} — ♭VII7 к {{to}}.' },
+      plagal: { name: 'Плагальная каденция', why: '{{chord}} — IV ступень к {{to}}: «аминь».' },
+      minorPlagal: {
+        name: 'Минорная плагальная каденция',
+        why: '{{chord}} — iv к {{to}}, взятая из одноимённого минора.',
+      },
     },
   },
   tensions: {
