@@ -476,6 +476,8 @@ From 1024px each screen arranges itself in two columns with a 40px gap, tops ali
   card.
 - **The Keys reference:** the circle beside the key's name, signature and facts; the keys across both columns; the
   key's chords and borrowed chords beside Practise in the Player and In Scales.
+- **Intervals and Available tensions:** the keys pinned across the width; the interval cards three across, the
+  tensions' four groups two across.
 
 Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The references, a lesson
 and a Piece's chart pin their keyboard to the top while the page scrolls.
@@ -566,6 +568,15 @@ hands). Never a row of chips or a wall of tiles.
   Practice's rows. A titled group of them is a card parted by hairlines.
 - **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice.
 - **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.
+- **Interval card** (card paper, 14px, the 1px soft line, 16px inset): the interval's name (Literata 600 20px) with
+  its short name at the right in soft ink, its size, consonance and (past the octave) the degree a chord writes, a
+  line each in soft ink (14px), so a row's staves stay level; its two notes on the treble staff alone (0.8); and Up ·
+  Down · Together as three soft buttons along its foot, each turning into Stop. The Intervals reference grids them
+  one, two or three across.
+- **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
+  so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
+  top. The Available tensions reference sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a
+  line of what its notes do.
 
 ### Marks
 
@@ -667,7 +678,8 @@ sideways, as Flowkey shows it: ADR 0013.
   reference engraves the run from its start note in the scale's key (a mode in its parent's), the other hand's staff
   soft, finger numbers while Fingers shows a hand; the key page engraves its signature with its scale; the Chords
   reference writes its chord as a bar of whole notes (the left hand's root on the bass staff) with no key signature,
-  every accidental on its note.
+  every accidental on its note; an interval card writes its two notes on the treble staff alone (`staff`), 130 units
+  tall: room above for a 13th over B4 with its sharp, below for two ledger lines.
 
 ### Motion
 

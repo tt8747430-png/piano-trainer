@@ -55,7 +55,8 @@ imports a package.
 it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
-  references Chords, Scales and Keys (`/learn/keys`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
+  references Chords, Scales, Keys (`/learn/keys`), Intervals (`/learn/intervals`) and Available tensions
+  (`/learn/tensions`); the Player's `/play/$pieceId`, `/play/walk` and `/play/chromatic`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
   `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
@@ -68,7 +69,8 @@ it. `@` → `src`.
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
   `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
-  `chromatic-search.ts`, `ChromaticSetup`) fill; `pages/keys` is the Keys reference.
+  `chromatic-search.ts`, `ChromaticSetup`) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
+  references.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup sheet, its first page composed by
   its page: `PlayerSetup` over `FigureChoice`, `FigureRows`, `ChordSizeField`, `MelodySwitch`, `RecordingSwitch`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, the
@@ -77,13 +79,16 @@ it. `@` → `src`.
   chord builder: `ChordBuilder`, `ChordSheet`, `viewChord`, `changedView`), `scale-explorer` (`ScaleExplorer` picks
   `RunView`, the run from any Start on note, fingered, on a staff, or `ChordsView`, the scale's chords to 13ths in an
   inversion with the walk card; its pure marks, plays and `scaleRunOf` in `model/`), `key-explorer` (the circle of
-  fifths and a key's facts, signature, chords and borrowed chords), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+  fifths and a key's facts, signature, chords and borrowed chords), `interval-explorer` (every interval over a root
+  as Clefs' cards), `tension-explorer` (a 7th chord's twelve notes in the owner's table's four groups, each played on
+  top), `lesson-view`, `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedToggle`, `record-answer`, `record-practised`, `reset-progress`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
-  Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), and the
+  Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), `play-example` (the examples a reference and a
+  lesson share, each shown on the page's keys: `IntervalCard`, `ShownKeys`), and the
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
@@ -108,12 +113,13 @@ it. `@` → `src`.
   `scaleKey`, `relatedScale`; fingerings from any start, `thumbFingering`; `scale-chord.ts`, a scale's chords stacked
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
-  `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`), `arrangement`
+  `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`; `interval-facts.ts`,
+  the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's
-  run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a hand's keys, which keys sound when
-  and which were struck last), `services`
+  run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a hand's keys, an interval up, down or
+  together (`intervalSounds`), which keys sound when and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
@@ -121,7 +127,7 @@ it. `@` → `src`.
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
   button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
   `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
-  VexFlow loaded when first shown); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
+  VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
   VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,
   `useLocale`, `useScaleName`, `LocalText`; namespaces per place, `music` for the words every screen shares), `test`.
 

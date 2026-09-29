@@ -194,6 +194,11 @@ tempo)` sounds it and `notate(run)` writes it.
   by `fitParts` (and `withAlterations` for a choice of several), named by the table where it has the chord and else by
   the same tables as the stacks. **Every chord's root is spelled by `chordRootSpelling(pc, intervals)`**: sharp on
   C♯/G♯ under a minor 3rd or minor 9th, the one rule for the table, the builder and the quiz.
+- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the Available tensions reference,
+  `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
+  second table of what a chord takes.
+- **A line in one hand is written on one staff:** `LazyScoreView`'s `staff` draws only that staff of the grand staff
+  (an interval, a note to read); music for both hands keeps the grand staff.
 - **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the
   chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
