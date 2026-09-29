@@ -125,6 +125,7 @@ export {
   type Triad,
 } from './chord-parts'
 export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
+export { nameChords, type FoundChord } from './chord-finder'
 export {
   SCALE_FAMILIES,
   SCALE_KINDS,
