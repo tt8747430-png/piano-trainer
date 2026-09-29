@@ -11,9 +11,9 @@ export default definePiece({
   tempo: 72,
   pattern: 'pop8',
   chordSize: { default: 'sevenths', choosable: true },
-  // Bar 1 at 2.70 s: a 72 grid over the voice puts a beat on its first sound (2.74 s), bar 11 on the
-  // chorus's entry (36.0 s) and the end just after the voice's last note (62.5 s).
-  recording: { src: vocal, start: 2.7, tempo: 72 },
+  // Bar 1 at 3.53 s: the voice's first note (2.74 s) is a beat's pickup, as its chorus entry (36.0 s)
+  // is a beat before bar 11; a 72 grid over the voice has its beats there. Heard by the owner.
+  recording: { src: vocal, start: 3.53, tempo: 72 },
   progression: [
     {
       kind: 'verse',

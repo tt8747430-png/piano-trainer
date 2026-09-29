@@ -8,7 +8,8 @@
 On 2026-09-29 the owner sent the course's vocal recording of «Ромашковые поля» (an mp3, 66 s, 320 kbps) and asked for
 it to "sync with this playback of chords". The roadmap had refused audio players, for needing a network or an
 account. A recording shipped with the app needs neither. The file is the chart's form (verse, chorus with the 1st
-ending, last chorus with the 2nd) at a steady 72: its 60.6 s of sound are the 18 bars, bar 1 at 2.70 s.
+ending, last chorus with the 2nd) at a steady 72: bar 1 at 3.53 s, the voice's first note (2.74 s) a beat's pickup before it, as its chorus entry is a
+beat before bar 11 (first set at 2.70; the owner heard the voice a beat late, 2026-09-29).
 
 ## Decision
 
@@ -17,7 +18,8 @@ ending, last chorus with the 2nd) at a steady 72: its 60.6 s of sound are the 18
   build fingerprints it, and precached with the app (`m4a` in `globPatterns`). The owner chose shipping it over
   loading it from the device.
 - **It plays in Listen only, in the piece's own key only**, at any tempo with its pitch kept (an audio element's
-  rate), from each pass's first bar, as that bar's music starts (after a count-in); Stop silences it.
+  rate), from each pass's first bar as that bar's music starts; during a count-in it plays what leads into the bar
+  (the singer's pickup), never from before the file's start. Stop silences it.
 - **The timing is pure** (`recordingPlay`: offset from the pass's first tick at the recording's tempo, rate the
   pass's tempo over the recording's). **The port plays it:** `loadRecording`, `playRecording`; the browser adapter
   keeps one audio element per recording, routed through the AudioContext on its first play (the same output and
