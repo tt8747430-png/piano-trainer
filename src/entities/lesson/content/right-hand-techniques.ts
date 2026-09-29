@@ -37,29 +37,45 @@ const rightHandTechniques: Lesson = {
       ],
     },
     {
-      heading: { en: 'Runs down', ru: 'Пассажи вниз' },
+      heading: { en: 'Up two octaves', ru: 'Вверх на две октавы' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'From the top of the chord, run down through the 3rd and the 2nd to the root, then again an octave lower.',
-            ru: 'От верхнего звука аккорда спуститесь через терцию и секунду к основному тону, затем ещё раз октавой ниже.',
+            en: 'The same study’s second technique runs the arpeggio 1–3–5–8 up two octaves, fingers 1–2–3–5, over the left hand’s octave.',
+            ru: 'Вторая техника того же этюда ведёт арпеджио 1–3–5–8 вверх на две октавы, пальцами 1–2–3–5, над октавой левой руки.',
           },
         },
-        { kind: 'pattern', pattern: 't3', piece: 'ex6' },
+        { kind: 'pattern', pattern: 't2', piece: 'ex5' },
       ],
     },
     {
-      heading: { en: 'Dotted chords', ru: 'Пунктирные аккорды' },
+      heading: { en: 'Runs down, arpeggios up', ru: 'Пассажи вниз, арпеджио вверх' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The chord in root position, then its 1st and 2nd inversion, in a dotted rhythm over a wide left-hand arpeggio.',
-            ru: 'Аккорд в основном виде, затем в 1-м и 2-м обращении, в пунктирном ритме над широким арпеджио левой руки.',
+            en: 'From the top of the chord, run down through the 3rd and the 2nd to the root, then again an octave lower. The same study turns it round: a quick arpeggio rises over two octaves and lands on the chord.',
+            ru: 'От верхнего звука аккорда спуститесь через терцию и секунду к основному тону, затем ещё раз октавой ниже. Тот же этюд поворачивает это вспять: быстрое арпеджио поднимается через две октавы и приходит на аккорд.',
+          },
+        },
+        { kind: 'pattern', pattern: 't3', piece: 'ex6' },
+        { kind: 'pattern', pattern: 't4', piece: 'ex6' },
+      ],
+    },
+    {
+      heading: { en: 'Chords through the inversions', ru: 'Аккорды по обращениям' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'The chord in root position, then its 1st and 2nd inversion, over a wide left-hand arpeggio: in a dotted rhythm, as three chords climbing to a rolled last one, or plainly, one inversion after another.',
+            ru: 'Аккорд в основном виде, затем в 1-м и 2-м обращении, над широким арпеджио левой руки: в пунктирном ритме, тремя аккордами, поднимающимися к арпеджированному последнему, или просто, обращение за обращением.',
           },
         },
         { kind: 'pattern', pattern: 't5', piece: 'ex7' },
+        { kind: 'pattern', pattern: 'c3', piece: 'ex7' },
+        { kind: 'pattern', pattern: 'inv', piece: 'ex7' },
       ],
     },
     {

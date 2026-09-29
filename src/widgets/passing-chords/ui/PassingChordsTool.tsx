@@ -1,7 +1,7 @@
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import type { ShownKeys } from '@/features/play-example'
+import { NO_KEYS, unmarked, type ShownKeys } from '@/features/play-example'
 import {
   chordInKey,
   keyFromParam,
@@ -20,7 +20,6 @@ import { SuggestionCard } from './SuggestionCard'
 
 /** How fast a row of chords walks, a chord each two beats. */
 const ROW_TEMPO = 84
-const NOTHING: ShownKeys = { keys: [], marks: new Map() }
 
 /**
  * Passing chords: two chords typed and a key; the ways between them by category, each row voice-led
@@ -36,7 +35,7 @@ export function PassingChordsTool({
   const { t } = useTranslation('learn')
   const id = useId()
   const playback = usePlayback<string>()
-  const [shown, setShown] = useState<ShownKeys>(NOTHING)
+  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const key = keyFromParam(view.key)
   const from = readChord(view.from)
   const to = readChord(view.to)
@@ -44,7 +43,7 @@ export function PassingChordsTool({
   const at = `${view.key} ${view.from} ${view.to}`
   const playChord = (chord: Chord, id: string) => {
     const [voiced = []] = voiceLead([chord])
-    setShown({ keys: voiced, marks: new Map() })
+    setShown(unmarked(voiced))
     playback.toggle(id, chordSounds(voiced, { arpeggio: false }))
   }
   return (
@@ -91,7 +90,7 @@ export function PassingChordsTool({
                         onPlayChord={(chord, place) => playChord(chord, `${cardId} ${place}`)}
                         onPlayRow={() => {
                           const voiced = voiceLead([from, ...way.chords, to])
-                          setShown({ keys: voiced.flat(), marks: new Map() })
+                          setShown(unmarked(voiced.flat()))
                           playback.toggle(
                             `${cardId} row`,
                             walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }),

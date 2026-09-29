@@ -1,4 +1,3 @@
-import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { ChromaticWalkLink } from '@/features/practice'
@@ -6,7 +5,7 @@ import { cn } from '@/shared/lib'
 import { lastInversion, noteName, qualitySpellings, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
+import { PlayLabel, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { changedView, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
@@ -117,14 +116,7 @@ export function ChordExplorer({
               playback.toggle('chord', chordSounds(keysOf(chord), { arpeggio: false }))
             }
           >
-            {playback.playing === 'chord' ? (
-              <>
-                <Square data-icon="inline-start" />
-                {t('common:stop')}
-              </>
-            ) : (
-              t('learn:play')
-            )}
+            <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
           </Button>
           <Button
             size="pill"
@@ -134,14 +126,7 @@ export function ChordExplorer({
               playback.toggle('arpeggio', chordSounds(keysOf(chord), { arpeggio: true }))
             }
           >
-            {playback.playing === 'arpeggio' ? (
-              <>
-                <Square data-icon="inline-start" />
-                {t('common:stop')}
-              </>
-            ) : (
-              t('learn:arpeggio')
-            )}
+            <PlayLabel playing={playback.playing === 'arpeggio'}>{t('learn:arpeggio')}</PlayLabel>
           </Button>
         </div>
         <p className="flex flex-wrap items-baseline gap-x-4">

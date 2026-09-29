@@ -1,7 +1,7 @@
-import { Square } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chordSymbol, type Chord, type PassingChords } from '@/shared/lib/music'
+import { PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
@@ -26,7 +26,7 @@ export function SuggestionCard({
   onPlayChord: (chord: Chord, place: number) => void
   onPlayRow: () => void
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const titleId = useId()
   const row = [from, ...way.chords, to]
   const [first, second] = way.chords
@@ -37,10 +37,10 @@ export function SuggestionCard({
     >
       <header className="flex items-baseline justify-between gap-3">
         <h3 id={titleId} className="text-xl">
-          {t(`learn:passing.kind.${way.kind}.name`)}
+          {t(`passing.kind.${way.kind}.name`)}
         </h3>
         <span className="shrink-0 text-sm text-muted-foreground">
-          {t(inKey ? 'learn:passing.inKey' : 'learn:passing.chromatic')}
+          {t(inKey ? 'passing.inKey' : 'passing.chromatic')}
         </span>
       </header>
       <ol className="flex flex-wrap items-center gap-2">
@@ -58,21 +58,14 @@ export function SuggestionCard({
         ))}
       </ol>
       <p className="text-muted-foreground">
-        {t(`learn:passing.kind.${way.kind}.why`, {
+        {t(`passing.kind.${way.kind}.why`, {
           chord: first ? chordSymbol(first) : '',
           next: second ? chordSymbol(second) : '',
           to: chordSymbol(to),
         })}
       </p>
       <Button variant="soft" className="self-start" onClick={onPlayRow}>
-        {isPlaying('row') ? (
-          <>
-            <Square data-icon="inline-start" />
-            {t('common:stop')}
-          </>
-        ) : (
-          t('learn:play')
-        )}
+        <PlayLabel playing={isPlaying('row')}>{t('play')}</PlayLabel>
       </Button>
     </article>
   )

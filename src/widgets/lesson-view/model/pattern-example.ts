@@ -1,6 +1,6 @@
 import type { PatternId } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
-import type { ShownKeys } from '@/features/play-example'
+import { unmarked, type ShownKeys } from '@/features/play-example'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
 
@@ -25,5 +25,5 @@ export function patternOpening(piece: Piece, pattern: PatternId): PatternOpening
   const keys = [
     ...new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))),
   ].sort((a, b) => a - b)
-  return { sounds, shown: { keys, marks: new Map() } }
+  return { sounds, shown: unmarked(keys) }
 }

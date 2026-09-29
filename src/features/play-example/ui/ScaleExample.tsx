@@ -1,4 +1,3 @@
-import { Square } from 'lucide-react'
 import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
@@ -13,7 +12,7 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView } from '@/shared/ui'
+import { LazyScoreView, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { scaleExample } from '../model/scale-example'
 import type { ShownKeys } from '../model/shown'
@@ -34,7 +33,7 @@ export function ScaleExample({
   kind: ScaleKind
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const scaleName = useScaleName()
   const captionId = useId()
   const playback = usePlayback<'run'>()
@@ -80,14 +79,7 @@ export function ScaleExample({
           playback.toggle('run', runSounds(example.music, RUN_TEMPO))
         }}
       >
-        {playback.playing === 'run' ? (
-          <>
-            <Square data-icon="inline-start" />
-            {t('common:stop')}
-          </>
-        ) : (
-          t('learn:example.play')
-        )}
+        <PlayLabel playing={playback.playing === 'run'}>{t('example.play')}</PlayLabel>
       </Button>
     </figure>
   )

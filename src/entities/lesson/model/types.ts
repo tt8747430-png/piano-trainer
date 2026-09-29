@@ -31,6 +31,14 @@ export type LessonCategory = (typeof LESSON_CATEGORIES)[number]
 export const LESSON_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
 export type LessonModule = (typeof LESSON_MODULES)[number]
 
+/** A progression a lesson plays or opens in the tool: numerals in a key, triads when it names no size. */
+export interface LessonProgression {
+  /** As `parseNumerals` reads them: `ii V I`. */
+  readonly numerals: string
+  readonly key: Key
+  readonly size?: NumeralSize
+}
+
 /** What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave. */
 export type QuizAnswer = { readonly chord: string } | { readonly notes: readonly string[] }
 
@@ -47,13 +55,7 @@ export type LessonLink =
   | { readonly place: 'intervals'; readonly root?: SpelledNote }
   | { readonly place: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
   | { readonly place: 'lesson'; readonly lesson: string }
-  | {
-      readonly place: 'progressions'
-      /** As `parseNumerals` reads them: `I V vi IV`. */
-      readonly numerals: string
-      readonly key: Key
-      readonly size?: NumeralSize
-    }
+  | ({ readonly place: 'progressions' } & LessonProgression)
   | {
       readonly place: 'passing-chords'
       readonly key: Key
@@ -90,14 +92,7 @@ export type LessonBlock =
     }
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
   | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }
-  | {
-      readonly kind: 'progression'
-      /** As `parseNumerals` reads them: `ii V I`. */
-      readonly numerals: string
-      readonly key: Key
-      /** Triads when left out. */
-      readonly size?: NumeralSize
-    }
+  | ({ readonly kind: 'progression' } & LessonProgression)
   | { readonly kind: 'quiz'; readonly ask: LocalText; readonly answer: QuizAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }
 

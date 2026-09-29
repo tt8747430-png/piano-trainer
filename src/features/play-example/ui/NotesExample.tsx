@@ -1,11 +1,10 @@
-import { Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, type NoteLineMeter } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView } from '@/shared/ui'
+import { LazyScoreView, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { notesShown } from '../model/notes-example'
 import type { ShownKeys } from '../model/shown'
@@ -28,7 +27,7 @@ export function NotesExample({
   keyParam: KeyParam
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const playback = usePlayback<'line'>()
   const line = useMemo(
     () => noteLine(notes, { hand: HAND_OF[clef], meter, key: keyFromParam(keyParam) }),
@@ -48,14 +47,7 @@ export function NotesExample({
           playback.toggle('line', runSounds(line, LINE_TEMPO))
         }}
       >
-        {playback.playing === 'line' ? (
-          <>
-            <Square data-icon="inline-start" />
-            {t('common:stop')}
-          </>
-        ) : (
-          t('learn:example.play')
-        )}
+        <PlayLabel playing={playback.playing === 'line'}>{t('example.play')}</PlayLabel>
       </Button>
     </figure>
   )

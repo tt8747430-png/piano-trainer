@@ -2,14 +2,18 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { ProgressionRow, type ShownKeys } from '@/features/play-example'
+import {
+  NO_KEYS,
+  ProgressionChords,
+  ProgressionPlay,
+  ProgressionRow,
+  type ShownKeys,
+} from '@/features/play-example'
 import { keyFromParam, NUMERAL_SIZES, parseNumerals, type NumeralSize } from '@/shared/lib/music'
 import { ButtonLink, KeyDropdown, Segmented } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionLibrary } from './ProgressionLibrary'
-
-const NOTHING: ShownKeys = { keys: [], marks: new Map() }
 
 /**
  * Progressions: numerals or chords in any key and chord size, written as a row of chords that play,
@@ -23,7 +27,7 @@ export function ProgressionsTool({
   onChange: (change: Partial<ProgressionsView>) => void
 }) {
   const { t } = useTranslation('learn')
-  const [shown, setShown] = useState<ShownKeys>(NOTHING)
+  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const key = keyFromParam(view.key)
   const numerals = parseNumerals(view.p) ?? []
   return (
@@ -44,7 +48,10 @@ export function ProgressionsTool({
             />
           </div>
           <ProgressionField progression={view.p} musicKey={key} onChange={(p) => onChange({ p })} />
-          <ProgressionRow numerals={numerals} musicKey={key} size={view.size} onShow={setShown} />
+          <ProgressionRow numerals={numerals} musicKey={key} size={view.size} onShow={setShown}>
+            <ProgressionChords />
+            <ProgressionPlay variant="default" />
+          </ProgressionRow>
           <ButtonLink
             size="pill"
             variant="soft"

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useHeldKeys } from '@/features/connect-midi'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
@@ -7,7 +6,7 @@ import { keyListParam, readKeyList } from '@/shared/lib'
 import { nameChords, noteParam, partsParams, pitchClass, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink, type KeyMark } from '@/shared/ui'
+import { ButtonLink, PlayLabel, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { FinderView } from '../model/finder-view'
 import { FinderName } from './FinderName'
@@ -23,7 +22,7 @@ export function ChordFinder({
   view: FinderView
   onChange: (change: Partial<FinderView>) => void
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const playback = usePlayback<'chord'>()
   const held = useHeldKeys()
   const chosen = readKeyList(view.keys)
@@ -51,14 +50,7 @@ export function ChordFinder({
           disabled={keys.length === 0}
           onClick={() => playback.toggle('chord', chordSounds(keys, { arpeggio: false }))}
         >
-          {playback.playing === 'chord' ? (
-            <>
-              <Square data-icon="inline-start" />
-              {t('common:stop')}
-            </>
-          ) : (
-            t('learn:play')
-          )}
+          <PlayLabel playing={playback.playing === 'chord'}>{t('play')}</PlayLabel>
         </Button>
         <Button
           size="pill"
@@ -66,7 +58,7 @@ export function ChordFinder({
           disabled={chosen.length === 0}
           onClick={() => onChange({ keys: '' })}
         >
-          {t('learn:finder.clear')}
+          {t('finder.clear')}
         </Button>
         {best ? (
           <ButtonLink
@@ -83,7 +75,7 @@ export function ChordFinder({
               />
             }
           >
-            {t('learn:finder.open')}
+            {t('finder.open')}
           </ButtonLink>
         ) : null}
       </div>

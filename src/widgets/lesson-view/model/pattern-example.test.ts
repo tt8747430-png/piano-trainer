@@ -24,6 +24,14 @@ describe('patternOpening', () => {
     expect(notes.some((sound) => sound.midi > 60)).toBe(true)
   })
 
+  it('ends a piece in 3/4 where its first line of 3/4 bars ends', () => {
+    const notes = noteSounds(patternOpening(piece('amazing'), 'r3').sounds)
+    // G G7 C G: four bars of 3/4 at the hymn's 80 beats a minute.
+    const lineEnd = (4 * 3 * 60) / 80
+    expect(notes.every((sound) => sound.at < lineEnd)).toBe(true)
+    expect(notes.some((sound) => sound.at >= (lineEnd * 3) / 4)).toBe(true)
+  })
+
   it('shows the keys it plays, lowest first, each once, unmarked', () => {
     const opening = patternOpening(piece('ex3'), 'M2')
     const keys = [...new Set(noteSounds(opening.sounds).map((sound) => sound.midi))].sort(

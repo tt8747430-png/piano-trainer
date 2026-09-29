@@ -94,8 +94,9 @@ it. `@` → `src`.
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
   Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the references' and a lesson's pinned one), `play-example` (the examples a reference and a
-  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ProgressionRow`,
-  `ShownKeys`), and the
+  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ProgressionRow` with
+  its parts `ProgressionChords` and `ProgressionPlay` (honey in the tool, soft in a lesson), `ShownKeys` with `NO_KEYS`
+  and `unmarked`), and the
   machines:
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
@@ -112,7 +113,8 @@ it. `@` → `src`.
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`), `pattern` (39 patterns), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
   the keys, patterns over their pieces and progressions in any key, links by name to the references, the tools and
-  the Player; `LESSON_MODULES`: Fundamentals, Accompaniment, Gospel), `progression-library` (the Progressions tool's named progressions by style,
+  the Player; `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
+  Gospel), `progression-library` (the Progressions tool's named progressions by style,
   in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
@@ -137,7 +139,7 @@ it. `@` → `src`.
   fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
-  button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `Fact`, `ChordButton`, `PAINT`,
+  button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `LEARN_TILES` (the tile a row to each of Learn's pages wears), `Fact`, `ChordButton`, `PlayLabel` (a Play button's words, Stop while it sounds), `PAINT`,
   `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
   VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,

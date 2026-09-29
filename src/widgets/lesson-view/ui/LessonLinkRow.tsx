@@ -1,40 +1,27 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Blend,
-  BookOpenText,
-  ChartNoAxesColumnIncreasing,
-  CircleDot,
-  CirclePlay,
-  KeyboardMusic,
-  Layers,
-  ListMusic,
-  Ruler,
-  Waypoints,
-} from 'lucide-react'
-import type { LessonLink } from '@/entities/lesson'
+import { CirclePlay } from 'lucide-react'
+import { readProgression, type LessonLink } from '@/entities/lesson'
 import {
   keyParam,
   noteParam,
   numeralsParam,
   parseChordSymbol,
-  parseNumerals,
   qualityParams,
 } from '@/shared/lib/music'
-import { RowLink } from '@/shared/ui'
+import { LEARN_TILES, RowLink } from '@/shared/ui'
 
 /**
  * A row leading to what a lesson names, in the reference, tool or Player that shows it, with the tile
- * Learn gives that place.
+ * Learn gives that page.
  */
-export function LessonLinkRow({ title: text, target }: { title: string; target: LessonLink }) {
+export function LessonLinkRow({ title, target }: { title: string; target: LessonLink }) {
   switch (target.place) {
     case 'chords': {
       const chord = parseChordSymbol(target.chord)
       return (
         <RowLink
-          title={text}
-          icon={KeyboardMusic}
-          paint="sand"
+          title={title}
+          {...LEARN_TILES.chords}
           render={
             <Link
               to="/learn/chords"
@@ -47,9 +34,8 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'scales':
       return (
         <RowLink
-          title={text}
-          icon={ChartNoAxesColumnIncreasing}
-          paint="sky"
+          title={title}
+          {...LEARN_TILES.scales}
           render={
             <Link
               to="/learn/scales"
@@ -65,18 +51,16 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'keys':
       return (
         <RowLink
-          title={text}
-          icon={CircleDot}
-          paint="lilac"
+          title={title}
+          {...LEARN_TILES.keys}
           render={<Link to="/learn/keys" search={{ key: keyParam(target.key) }} />}
         />
       )
     case 'intervals':
       return (
         <RowLink
-          title={text}
-          icon={Ruler}
-          paint="yellow"
+          title={title}
+          {...LEARN_TILES.intervals}
           render={
             <Link
               to="/learn/intervals"
@@ -88,9 +72,8 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'tensions':
       return (
         <RowLink
-          title={text}
-          icon={Layers}
-          paint="grass"
+          title={title}
+          {...LEARN_TILES.tensions}
           render={
             <Link
               to="/learn/tensions"
@@ -105,36 +88,31 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'lesson':
       return (
         <RowLink
-          title={text}
-          icon={BookOpenText}
-          paint="grass"
+          title={title}
+          {...LEARN_TILES.lesson}
           render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
         />
       )
-    case 'progressions':
+    case 'progressions': {
+      const { numerals, key, size } = readProgression(target)
       return (
         <RowLink
-          title={text}
-          icon={ListMusic}
-          paint="grass"
+          title={title}
+          {...LEARN_TILES.progressions}
           render={
             <Link
               to="/learn/progressions"
-              search={{
-                key: keyParam(target.key),
-                p: numeralsParam(parseNumerals(target.numerals) ?? []),
-                size: target.size ?? 'triads',
-              }}
+              search={{ key: keyParam(key), p: numeralsParam(numerals), size }}
             />
           }
         />
       )
+    }
     case 'passing-chords':
       return (
         <RowLink
-          title={text}
-          icon={Waypoints}
-          paint="yellow"
+          title={title}
+          {...LEARN_TILES.passingChords}
           render={
             <Link
               to="/learn/passing-chords"
@@ -146,9 +124,8 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'reharmonise':
       return (
         <RowLink
-          title={text}
-          icon={Blend}
-          paint="lilac"
+          title={title}
+          {...LEARN_TILES.reharmonise}
           render={
             <Link
               to="/learn/reharmonise"
@@ -160,7 +137,7 @@ export function LessonLinkRow({ title: text, target }: { title: string; target: 
     case 'piece':
       return (
         <RowLink
-          title={text}
+          title={title}
           icon={CirclePlay}
           paint="sand"
           render={

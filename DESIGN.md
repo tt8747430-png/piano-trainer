@@ -581,9 +581,9 @@ hands). Never a row of chips or a wall of tiles.
   chips (the degree on the key's tonic or scale colour, then the note), its run on the treble staff; a line of notes
   on its own clef's staff; Play soft, turning into Stop.
 - **Pattern example** (a lesson's; the same card): the pattern's name in Literata 600 20px, its description in body
-  text, "Played over" its piece in muted small text, then Play (honey, turning into Stop) and Open in the Player
-  (outline). **Progression example:** the Progressions tool's row of chord buttons and Play, then its row into the
-  tool on a card.
+  text, "Played over" its piece in muted small text, then Play (soft, turning into Stop) and Open in the Player
+  (outline). **Progression example:** the Progressions tool's row of chord buttons and its Play, soft here (the
+  tool's one honey action there), then its row into the tool on a card.
 - **The tools** sit in their own titled group on Learn under References, rows like the references'. The Chord finder
   shows its chord in the chord display (72px), its notes from the bass as degree chips, "Also:" the other names, and
   Play (honey), Clear and Open in Chords; Reharmonise sets each group's chords as chord buttons filling a grid (the

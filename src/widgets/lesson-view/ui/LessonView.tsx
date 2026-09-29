@@ -1,15 +1,13 @@
 import { useMemo, useReducer, useState } from 'react'
 import type { Lesson } from '@/entities/lesson'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import type { ShownKeys } from '@/features/play-example'
+import { NO_KEYS, type ShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
 import { isRight, quizAnswer, quizKeys, quizReducer, type QuizKeys } from '../model/lesson-quiz'
 import { LessonBlock } from './LessonBlock'
 import { QuizBlock } from './QuizBlock'
-
-const NOTHING: ShownKeys = { keys: [], marks: new Map() }
 
 /** Each quiz of a lesson by its place, `section.block`, with its answer on the keys. */
 const answersOf = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
@@ -28,7 +26,7 @@ const answersOf = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
 export function LessonView({ lesson }: { lesson: Lesson }) {
   const locale = useLocale()
   const play = usePlay()
-  const [shown, setShown] = useState<ShownKeys>(NOTHING)
+  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const [quiz, dispatch] = useReducer(quizReducer, null)
   const answers = useMemo(() => answersOf(lesson), [lesson])
   const answer = quiz ? answers.get(quiz.id) : undefined
@@ -59,7 +57,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
             const id = `${s}.${b}`
             if (block.kind !== 'quiz') return <LessonBlock key={id} block={block} onShow={show} />
             const open = quiz?.id === id ? quiz : null
-            const answerKeys = answers.get(id) ?? NOTHING
+            const answerKeys = answers.get(id) ?? NO_KEYS
             return (
               <QuizBlock
                 key={id}

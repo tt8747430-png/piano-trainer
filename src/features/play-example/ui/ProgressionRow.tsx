@@ -1,80 +1,114 @@
-import { Square } from 'lucide-react'
+import { createContext, use, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   chordSymbol,
   numeralChord,
   numeralText,
   voiceLead,
+  type Chord,
   type Key,
-  type Midi,
   type Numeral,
   type NumeralSize,
 } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton } from '@/shared/ui'
+import { ChordButton, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import type { ShownKeys } from '../model/shown'
+import { unmarked, type ShownKeys } from '../model/shown'
 
 /** How fast the row walks, a chord each two beats. */
 const ROW_TEMPO = 84
 
-const shownOf = (keys: readonly Midi[]): ShownKeys => ({ keys, marks: new Map() })
+/** What a progression row's parts share: its chords, which of them plays, and how each plays. */
+interface ProgressionPlayback {
+  readonly chords: readonly { readonly numeral: Numeral; readonly chord: Chord }[]
+  readonly playing: number | 'row' | null
+  playChord(place: number): void
+  playRow(): void
+}
 
-/** The progression's chords in the key, each its symbol over its numeral, playing alone; and Play for the row. */
+const ProgressionContext = createContext<ProgressionPlayback | null>(null)
+
+function useProgression(): ProgressionPlayback {
+  const progression = use(ProgressionContext)
+  if (!progression)
+    throw new Error('A progression’s chords and Play belong inside its ProgressionRow')
+  return progression
+}
+
+/**
+ * A progression in a key as the Progressions tool writes it, voiced smoothly: its parts,
+ * `ProgressionChords` and `ProgressionPlay`, play a chord or the whole row and show it on the page's keys.
+ */
 export function ProgressionRow({
   numerals,
   musicKey,
   size,
   onShow,
+  children,
 }: {
   numerals: readonly Numeral[]
   musicKey: Key
   size: NumeralSize
   onShow: (shown: ShownKeys) => void
+  children: ReactNode
 }) {
-  const { t } = useTranslation(['learn', 'common'])
   const playback = usePlayback<number | 'row'>()
-  const row = numerals.map((numeral) => ({
+  const chords = numerals.map((numeral) => ({
     numeral,
     chord: numeralChord(numeral, musicKey, size),
   }))
-  const voiced = voiceLead(row.map(({ chord }) => chord))
+  const voiced = voiceLead(chords.map(({ chord }) => chord))
+  const progression: ProgressionPlayback = {
+    chords,
+    playing: playback.playing,
+    playChord: (place) => {
+      const keys = voiced[place] ?? []
+      onShow(unmarked(keys))
+      playback.toggle(place, chordSounds(keys, { arpeggio: false }))
+    },
+    playRow: () => {
+      onShow(unmarked(voiced.flat()))
+      playback.toggle('row', walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
+    },
+  }
   return (
-    <div className="flex flex-col gap-3">
-      <ul aria-label={t('learn:progressions.chords')} className="grid grid-cols-4 gap-2">
-        {row.map(({ numeral, chord }, place) => (
-          <li key={`${place} ${chordSymbol(chord)}`} className="grid">
-            <ChordButton
-              symbol={chordSymbol(chord)}
-              numeral={numeralText(numeral)}
-              playing={playback.playing === place}
-              onClick={() => {
-                const keys = voiced[place] ?? []
-                onShow(shownOf(keys))
-                playback.toggle(place, chordSounds(keys, { arpeggio: false }))
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-      <Button
-        size="pill"
-        className="self-start"
-        onClick={() => {
-          onShow(shownOf(voiced.flat()))
-          playback.toggle('row', walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
-        }}
-      >
-        {playback.playing === 'row' ? (
-          <>
-            <Square data-icon="inline-start" />
-            {t('common:stop')}
-          </>
-        ) : (
-          t('learn:play')
-        )}
-      </Button>
-    </div>
+    <ProgressionContext value={progression}>
+      <div className="flex flex-col gap-3">{children}</div>
+    </ProgressionContext>
+  )
+}
+
+/** The progression's chords, each its symbol over its numeral, playing alone. */
+export function ProgressionChords() {
+  const { t } = useTranslation('learn')
+  const { chords, playing, playChord } = useProgression()
+  return (
+    <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
+      {chords.map(({ numeral, chord }, place) => (
+        <li key={`${place} ${chordSymbol(chord)}`} className="grid">
+          <ChordButton
+            symbol={chordSymbol(chord)}
+            numeral={numeralText(numeral)}
+            playing={playing === place}
+            onClick={() => playChord(place)}
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/**
+ * Play for the whole row, turning into Stop: honey where it is the screen's one action (the tool),
+ * soft beside a lesson's other examples.
+ */
+export function ProgressionPlay({ variant }: { variant: 'default' | 'soft' }) {
+  const { t } = useTranslation('learn')
+  const { playing, playRow } = useProgression()
+  return (
+    <Button variant={variant} size="pill" className="self-start" onClick={playRow}>
+      <PlayLabel playing={playing === 'row'}>{t('play')}</PlayLabel>
+    </Button>
   )
 }

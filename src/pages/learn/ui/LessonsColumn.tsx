@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpenText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LESSON_CATEGORIES, LESSONS, type LessonCategory } from '@/entities/lesson'
 import { LEVEL_NAME, LEVELS, type Level } from '@/entities/path'
 import { localText, useLocale } from '@/shared/i18n'
-import { Dropdown, RowGroup, RowLink } from '@/shared/ui'
+import { Dropdown, LEARN_TILES, RowGroup, RowLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import type { LearnFilter } from '../model/learn-filter'
@@ -63,8 +62,7 @@ export function LessonsColumn({
                 <RowLink
                   title={localText(lesson.title, locale)}
                   detail={`${t(`common:levelName.${LEVEL_NAME[lesson.level]}`)} · ${t(`learn:category.${lesson.category}`)}`}
-                  icon={BookOpenText}
-                  paint="grass"
+                  {...LEARN_TILES.lesson}
                   render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
                 />
               </li>

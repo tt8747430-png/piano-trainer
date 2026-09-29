@@ -4,11 +4,13 @@ export { Dropdown } from './Dropdown'
 export { Fact } from './Fact'
 export { KeyDropdown } from './KeyDropdown'
 export { LazyScoreView } from './LazyScoreView'
+export { LEARN_TILES, type Tile } from './learn-tiles'
 export { LevelMark } from './LevelMark'
 export { MultiDropdown } from './MultiDropdown'
 export type { Option, OptionGroup, OptionValue } from './option'
 export { PAINT, type Paint } from './paint'
 export { Pinned } from './Pinned'
+export { PlayLabel } from './PlayLabel'
 export {
   PianoKeyboard,
   RailButton,

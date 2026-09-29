@@ -23,6 +23,17 @@ describe('A lesson', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
   })
 
+  it('opens a pattern’s piece in the Player with it, and closes back to the lesson', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/lessons/five-ways')
+    const card = await screen.findByRole('article', { name: '1 · Bass + chords' })
+    await user.click(within(card).getByRole('link', { name: 'Open in the Player' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/play/ex3'))
+    expect(router.state.location.search).toMatchObject({ pattern: 'M1' })
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/five-ways'))
+  })
+
   it('answers a Fundamentals quiz on its keys', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/triads')

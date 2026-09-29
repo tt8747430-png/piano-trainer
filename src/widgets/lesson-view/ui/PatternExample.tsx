@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Square } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PATTERNS, type PatternId } from '@/entities/pattern'
@@ -7,7 +6,7 @@ import { entryTitles, type Piece } from '@/entities/piece'
 import type { ShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink } from '@/shared/ui'
+import { ButtonLink, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { patternOpening } from '../model/pattern-example'
 
@@ -24,7 +23,7 @@ export function PatternExample({
   piece: Piece
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const locale = useLocale()
   const titleId = useId()
   const playback = usePlayback<'opening'>()
@@ -39,11 +38,11 @@ export function PatternExample({
       </h3>
       {description ? <p className="text-base">{localText(description, locale)}</p> : null}
       <p className="text-sm text-muted-foreground">
-        {t('learn:example.over', { piece: entryTitles(piece, locale).primary })}
+        {t('example.over', { piece: entryTitles(piece, locale).primary })}
       </p>
       <div className="flex flex-wrap gap-2">
         <Button
-          size="pill"
+          variant="soft"
           onClick={() => {
             // Arranged on the tap, not on the page: a lesson shows many patterns and plays few.
             const opening = patternOpening(piece, pattern)
@@ -51,21 +50,13 @@ export function PatternExample({
             playback.toggle('opening', opening.sounds)
           }}
         >
-          {playback.playing === 'opening' ? (
-            <>
-              <Square data-icon="inline-start" />
-              {t('common:stop')}
-            </>
-          ) : (
-            t('learn:example.play')
-          )}
+          <PlayLabel playing={playback.playing === 'opening'}>{t('example.play')}</PlayLabel>
         </Button>
         <ButtonLink
-          size="pill"
-          variant="soft"
+          variant="outline"
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} search={{ pattern }} />}
         >
-          {t('learn:example.openInPlayer')}
+          {t('example.openInPlayer')}
         </ButtonLink>
       </div>
     </article>

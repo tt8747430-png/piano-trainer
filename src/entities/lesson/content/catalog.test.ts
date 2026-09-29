@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { needsMelody } from '@/entities/pattern'
+import { needsMelody, type PatternId } from '@/entities/pattern'
 import { melodyOf, pieceById } from '@/entities/piece'
-import { note, parseChordSymbol, parseNoteName, parseNumerals } from '@/shared/lib/music'
+import { note, parseChordSymbol, parseNoteName } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
-import { lessonById, LESSON_MODULES, LESSONS, type Lesson, type LessonBlock } from '../index'
+import {
+  lessonById,
+  LESSON_MODULES,
+  LESSONS,
+  readProgression,
+  type Lesson,
+  type LessonBlock,
+} from '../index'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 
@@ -32,6 +39,13 @@ const texts = (lesson: Lesson) => [
   ]),
 ]
 
+/** A piece that is not there, or a pattern that plays the tune over a piece that has none. */
+function pieceProblems(pieceId: string, pattern: PatternId | undefined): string[] {
+  const piece = pieceById(pieceId)
+  if (!piece) return [pieceId]
+  return pattern && needsMelody(pattern) && !melodyOf(piece) ? [`${pattern} over ${pieceId}`] : []
+}
+
 /** What in a block the kernel cannot read, or a link that leads nowhere. */
 function problemsOf(block: LessonBlock): string[] {
   const unread = (read: () => unknown, what: string) => {
@@ -54,15 +68,10 @@ function problemsOf(block: LessonBlock): string[] {
           }),
         block.notes,
       )
-    case 'pattern': {
-      const piece = pieceById(block.piece)
-      if (!piece) return [block.piece]
-      return needsMelody(block.pattern) && !melodyOf(piece)
-        ? [`${block.pattern} over ${block.piece}`]
-        : []
-    }
+    case 'pattern':
+      return pieceProblems(block.piece, block.pattern)
     case 'progression':
-      return unread(() => parseNumerals(block.numerals), block.numerals)
+      return unread(() => readProgression(block), block.numerals)
     case 'quiz': {
       const { answer } = block
       return 'chord' in answer
@@ -77,13 +86,13 @@ function problemsOf(block: LessonBlock): string[] {
         case 'lesson':
           return lessonById(target.lesson) ? [] : [target.lesson]
         case 'progressions':
-          return unread(() => parseNumerals(target.numerals), target.numerals)
+          return unread(() => readProgression(target), target.numerals)
         case 'passing-chords':
           return [target.from, target.to].flatMap((symbol) =>
             unread(() => parseChordSymbol(symbol), symbol),
           )
         case 'piece':
-          return pieceById(target.piece) ? [] : [target.piece]
+          return pieceProblems(target.piece, target.pattern)
         default:
           return []
       }
@@ -166,6 +175,9 @@ describe('the lessons', () => {
         target: { place: 'piece', piece: 'otche', pattern: 'r4' },
       }),
     ).toEqual([])
+    expect(
+      problemsOf({ kind: 'link', title, target: { place: 'piece', piece: 'ex3', pattern: 'r5' } }),
+    ).toEqual(['r5 over ex3'])
   })
 
   it('each belong to a module, every module with a lesson', () => {

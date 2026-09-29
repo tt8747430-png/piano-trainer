@@ -1,17 +1,6 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
-import {
-  Blend,
-  ChartNoAxesColumnIncreasing,
-  CircleDot,
-  KeyboardMusic,
-  Layers,
-  ListMusic,
-  Ruler,
-  ScanSearch,
-  Waypoints,
-} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
+import { LEARN_TILES, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import type { LearnFilter } from '../model/learn-filter'
 import { LessonsColumn } from './LessonsColumn'
 
@@ -32,40 +21,35 @@ export function LearnPage() {
             <li>
               <RowLink
                 title={t('learn:chords')}
-                icon={KeyboardMusic}
-                paint="sand"
+                {...LEARN_TILES.chords}
                 render={<Link to="/learn/chords" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:scales')}
-                icon={ChartNoAxesColumnIncreasing}
-                paint="sky"
+                {...LEARN_TILES.scales}
                 render={<Link to="/learn/scales" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:keys.title')}
-                icon={CircleDot}
-                paint="lilac"
+                {...LEARN_TILES.keys}
                 render={<Link to="/learn/keys" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:intervals.title')}
-                icon={Ruler}
-                paint="yellow"
+                {...LEARN_TILES.intervals}
                 render={<Link to="/learn/intervals" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:tensions.title')}
-                icon={Layers}
-                paint="grass"
+                {...LEARN_TILES.tensions}
                 render={<Link to="/learn/tensions" />}
               />
             </li>
@@ -74,32 +58,28 @@ export function LearnPage() {
             <li>
               <RowLink
                 title={t('learn:finder.title')}
-                icon={ScanSearch}
-                paint="sky"
+                {...LEARN_TILES.chordFinder}
                 render={<Link to="/learn/chord-finder" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:reharmonise.title')}
-                icon={Blend}
-                paint="lilac"
+                {...LEARN_TILES.reharmonise}
                 render={<Link to="/learn/reharmonise" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:passing.title')}
-                icon={Waypoints}
-                paint="yellow"
+                {...LEARN_TILES.passingChords}
                 render={<Link to="/learn/passing-chords" />}
               />
             </li>
             <li>
               <RowLink
                 title={t('learn:progressions.title')}
-                icon={ListMusic}
-                paint="grass"
+                {...LEARN_TILES.progressions}
                 render={<Link to="/learn/progressions" />}
               />
             </li>

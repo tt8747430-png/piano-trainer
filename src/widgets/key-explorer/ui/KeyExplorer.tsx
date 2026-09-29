@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
@@ -16,7 +15,7 @@ import {
   walkChords,
   type ScaleKind,
 } from '@/shared/lib/music'
-import { RowGroup, RowLink } from '@/shared/ui'
+import { LEARN_TILES, RowGroup, RowLink } from '@/shared/ui'
 import { keyMarks } from '../model/key-marks'
 import type { KeyView } from '../model/key-view'
 import { CircleOfFifths } from './CircleOfFifths'
@@ -85,16 +84,14 @@ export function KeyExplorer({
           <li>
             <RowLink
               title={scaleName(key.tonic, kind)}
-              icon={ChartNoAxesColumnIncreasing}
-              paint="sky"
+              {...LEARN_TILES.scales}
               render={<Link to="/learn/scales" search={{ root: noteParam(key.tonic), kind }} />}
             />
           </li>
           <li>
             <RowLink
               title={t('keys.chordsTo13ths')}
-              icon={KeyboardMusic}
-              paint="sand"
+              {...LEARN_TILES.chords}
               render={
                 <Link
                   to="/learn/scales"

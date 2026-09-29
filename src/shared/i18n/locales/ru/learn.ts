@@ -115,7 +115,7 @@ export const learn: LocaleResources['learn'] = {
   },
   example: {
     play: 'Сыграть',
-    over: 'Пример: «{{piece}}»',
+    over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',
     inProgressions: 'Открыть в последовательностях',
   },

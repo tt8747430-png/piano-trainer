@@ -1,15 +1,17 @@
 import { useTranslation } from 'react-i18next'
-import type { LessonBlock as Block, LessonLink } from '@/entities/lesson'
+import { readProgression, type LessonBlock as Block, type LessonLink } from '@/entities/lesson'
 import { pieceById } from '@/entities/piece'
 import {
   IntervalCard,
   NotesExample,
+  ProgressionChords,
+  ProgressionPlay,
   ProgressionRow,
   ScaleExample,
   type ShownKeys,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyParam, note, noteParam, parseNumerals } from '@/shared/lib/music'
+import { keyParam, note, noteParam } from '@/shared/lib/music'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
@@ -83,26 +85,21 @@ export function LessonBlock({
       if (!piece) throw new RangeError(`A lesson plays a pattern over "${block.piece}": no piece`)
       return <PatternExample pattern={block.pattern} piece={piece} onShow={onShow} />
     }
-    case 'progression':
+    case 'progression': {
+      const { numerals, key, size } = readProgression(block)
       return (
         <div className="flex flex-col gap-3">
-          <ProgressionRow
-            numerals={parseNumerals(block.numerals) ?? []}
-            musicKey={block.key}
-            size={block.size ?? 'triads'}
-            onShow={onShow}
-          />
+          <ProgressionRow numerals={numerals} musicKey={key} size={size} onShow={onShow}>
+            <ProgressionChords />
+            <ProgressionPlay variant="soft" />
+          </ProgressionRow>
           <LinkCard
             title={t('example.inProgressions')}
-            target={{
-              place: 'progressions',
-              numerals: block.numerals,
-              key: block.key,
-              ...(block.size ? { size: block.size } : {}),
-            }}
+            target={{ place: 'progressions', numerals: block.numerals, key, size }}
           />
         </div>
       )
+    }
     case 'link':
       return <LinkCard title={localText(block.title, locale)} target={block.target} />
   }

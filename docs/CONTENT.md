@@ -250,7 +250,7 @@ and its `sections`, each a heading over blocks. A lesson teaches music in prose;
 | `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                     | the pattern over the piece's first line, Play, the Player |
 | `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions tool's row, its link                     |
 | `quiz`        | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                                      |
-| `link`        | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference or a lesson                        |
+| `link`        | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference, a lesson, a tool or the Player    |
 
 A line of notes names each note with its octave (`C4` is middle C), then after a slash its value (`1` whole, `2`
 half, `4` quarter, the default, `8` eighth) and a dot for half as long again; its meter is 2/4, 3/4 or 4/4, and its
@@ -261,7 +261,7 @@ minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a k
 
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
 lesson's study, Боброва's seven over `otche`, a rhythm style over a progression. A pattern that plays the tune (`r5`,
-`r6`, `r7`) needs a piece with a melody. Its name and description come from the pattern; the lesson says why it is
+`r6`, `r7`) needs a piece with a melody, in a block or a `piece` link. Its name and description come from the pattern; the lesson says why it is
 there. Numerals are read as the Progressions tool reads them, a minor key from natural minor.
 
 ## The progressions library

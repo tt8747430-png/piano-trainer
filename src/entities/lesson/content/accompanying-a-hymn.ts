@@ -1,4 +1,7 @@
+import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
+
+const G_MAJOR = { tonic: note('G'), minor: false }
 
 const accompanyingAHymn: Lesson = {
   id: 'accompanying-a-hymn',
@@ -43,11 +46,12 @@ const accompanyingAHymn: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Before the singers start, play the hymn’s last line, or simply I–IV–V–I in its key, in the harmonic basis. They hear the key and the tempo, and breathe in on its last chord.',
-            ru: 'Прежде чем начнут петь, сыграйте последнюю строку гимна или просто I–IV–V–I в его тональности, гармонической основой. Поющие услышат тональность и темп и вдохнут на последнем аккорде.',
+            en: 'Before the singers start, play the hymn’s last line, or simply I–IV–V–I in its key, in the harmonic basis. They hear the key and the tempo, and breathe in on its last chord. Amazing Grace is in G major; its last line is vi–V–I.',
+            ru: 'Прежде чем начнут петь, сыграйте последнюю строку гимна или просто I–IV–V–I в его тональности, гармонической основой. Поющие услышат тональность и темп и вдохнут на последнем аккорде. «О благодать» — в соль мажоре; её последняя строка — vi–V–I.',
           },
         },
-        { kind: 'pattern', pattern: 'r1', piece: 'amazing' },
+        { kind: 'progression', numerals: 'vi V I', key: G_MAJOR },
+        { kind: 'progression', numerals: 'I IV V I', key: G_MAJOR },
       ],
     },
     {
@@ -86,7 +90,7 @@ const accompanyingAHymn: Lesson = {
             ru: 'Закончите долгим тоническим аккордом или повторите последнюю строку медленнее. IV–I после последнего аккорда завершает гимн, как «аминь».',
           },
         },
-        { kind: 'chords', symbols: ['C', 'F', 'C/E'] },
+        { kind: 'chords', symbols: ['C', 'F', 'C'] },
       ],
     },
     {

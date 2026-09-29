@@ -45,8 +45,8 @@ const gospelPassingChords: Lesson = {
         { kind: 'chords', symbols: ['F', 'F#°7', 'C/G'] },
         {
           kind: 'link',
-          title: { en: 'F to C in Passing chords', ru: 'Из F в C в проходящих аккордах' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C' },
+          title: { en: 'F to G in Passing chords', ru: 'Из F в G в проходящих аккордах' },
+          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
         },
       ],
     },
@@ -69,11 +69,11 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Any chord can be approached by its own ii and V. Before Dm7, play Em7 and A7: C, Em7, A7, Dm7.',
-            ru: 'К любому аккорду можно подойти через его собственные ii и V. Перед Dm7 сыграйте Em7 и A7: C, Em7, A7, Dm7.',
+            en: 'Any chord can be approached by its own ii and V. Before Dm7, play the ii and V of D minor, Em7♭5 and A7: C, Em7♭5, A7, Dm7. Em7 in place of Em7♭5 keeps to C major’s notes and leads in just as well.',
+            ru: 'К любому аккорду можно подойти через его собственные ii и V. Перед Dm7 сыграйте ii и V ре минора, Em7♭5 и A7: C, Em7♭5, A7, Dm7. Em7 вместо Em7♭5 не выходит из звуков до мажора и ведёт так же хорошо.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'Em7', 'A7', 'Dm7'] },
+        { kind: 'chords', symbols: ['C', 'Em7♭5', 'A7', 'Dm7'] },
         {
           kind: 'link',
           title: { en: 'C to Dm in Passing chords', ru: 'Из C в Dm в проходящих аккордах' },

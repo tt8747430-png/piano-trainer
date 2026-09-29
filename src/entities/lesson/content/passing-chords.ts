@@ -7,8 +7,8 @@ const passingChords: Lesson = {
   id: 'passing-chords',
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },
   summary: {
-    en: 'A chord slipped between two of a hymn’s chords to lead into the second: its dominant 7th, a diminished 7th, a walking bass.',
-    ru: 'Аккорд между двумя аккордами гимна, который ведёт во второй: его доминантсептаккорд, уменьшённый септаккорд, идущий бас.',
+    en: 'A chord slipped between two of a hymn’s chords to lead into the second: its dominant 7th, a diminished 7th, a chromatic approach.',
+    ru: 'Аккорд между двумя аккордами гимна, который ведёт во второй: его доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
   },
   level: 3,
   category: 'accompaniment',
@@ -69,16 +69,16 @@ const passingChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'The bass walks', ru: 'Бас идёт' },
+      heading: { en: 'The chromatic approach', ru: 'Хроматический подход' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Between C and Am, move only the bass: C, then C over B, then Am. The chords hardly change, and the bass steps down a scale.',
-            ru: 'Между C и Am двигайте только бас: C, затем C с басом си, затем Am. Аккорды почти не меняются, а бас спускается по гамме.',
+            en: 'A chromatic approach slides into the next chord by half steps. Between C and Am the bass walks down C, B, B♭, A, a dominant 7th on each step: C, B7, B♭7, Am.',
+            ru: 'Хроматический подход соскальзывает в следующий аккорд по полутонам. Между C и Am бас спускается до, си, си-бемоль, ля, с доминантсептаккордом на каждой ступени: C, B7, B♭7, Am.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'C/B', 'Am'] },
+        { kind: 'chords', symbols: ['C', 'B7', 'B♭7', 'Am'] },
         {
           kind: 'link',
           title: { en: 'C to Am in Passing chords', ru: 'Из C в Am в проходящих аккордах' },

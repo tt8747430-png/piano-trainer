@@ -1,9 +1,8 @@
-import { Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { lastInversion, type PlacedScaleChord } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton, Segmented } from '@/shared/ui'
+import { ChordButton, PlayLabel, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { KeyView } from '../model/key-view'
 
@@ -56,7 +55,7 @@ export function KeyChordsSection({
   walk: readonly PlacedScaleChord[]
   onChange: (change: Partial<KeyView>) => void
 }) {
-  const { t } = useTranslation(['learn', 'music', 'common'])
+  const { t } = useTranslation(['learn', 'music'])
   const playback = usePlayback<string>()
   const tap = (id: string, placed: PlacedScaleChord) =>
     playback.toggle(
@@ -102,14 +101,7 @@ export function KeyChordsSection({
         <ChordGrid chords={borrowed} id="b" playing={playback.playing} onTap={tap} />
       </section>
       <Button size="pill" onClick={walkThem}>
-        {playback.playing === 'walk' ? (
-          <>
-            <Square data-icon="inline-start" />
-            {t('common:stop')}
-          </>
-        ) : (
-          t('learn:keys.play')
-        )}
+        <PlayLabel playing={playback.playing === 'walk'}>{t('learn:keys.play')}</PlayLabel>
       </Button>
     </div>
   )

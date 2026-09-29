@@ -1,4 +1,3 @@
-import { Square } from 'lucide-react'
 import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,7 +10,7 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { INTERVAL_WAYS, intervalSounds, type IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView } from '@/shared/ui'
+import { LazyScoreView, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { intervalExample, tonesText } from '../model/interval-example'
 import type { ShownKeys } from '../model/shown'
@@ -32,7 +31,7 @@ export function IntervalCard({
   name: ReferenceInterval
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation(['learn', 'music', 'common'])
+  const { t } = useTranslation(['learn', 'music'])
   const titleId = useId()
   const playback = usePlayback<IntervalWay>()
   const example = useMemo(() => intervalExample(noteFromParam(root), name), [root, name])
@@ -75,14 +74,7 @@ export function IntervalCard({
               playback.toggle(way, intervalSounds(example.low, example.high, way))
             }}
           >
-            {playback.playing === way ? (
-              <>
-                <Square data-icon="inline-start" />
-                {t('common:stop')}
-              </>
-            ) : (
-              t(`learn:intervals.${way}`)
-            )}
+            <PlayLabel playing={playback.playing === way}>{t(`learn:intervals.${way}`)}</PlayLabel>
           </Button>
         ))}
       </div>

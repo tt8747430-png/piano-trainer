@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { ButtonLink } from './ButtonLink'
 import { Dropdown } from './Dropdown'
 import { LevelMark } from './LevelMark'
+import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
@@ -24,6 +25,23 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Path" actions={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+  })
+})
+
+describe('PlayLabel', () => {
+  it('says what its button plays, and Stop while it sounds', () => {
+    const { rerender } = render(
+      <button type="button">
+        <PlayLabel playing={false}>Play up and down</PlayLabel>
+      </button>,
+    )
+    expect(screen.getByRole('button', { name: 'Play up and down' })).toBeInTheDocument()
+    rerender(
+      <button type="button">
+        <PlayLabel playing>Play up and down</PlayLabel>
+      </button>,
+    )
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
   })
 })
 
