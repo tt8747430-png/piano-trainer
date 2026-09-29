@@ -135,6 +135,21 @@ export const learn = {
     clear: 'Clear',
     open: 'Open in Chords',
   },
+  reharmonise: {
+    title: 'Reharmonise',
+    note: 'Melody note',
+    key: 'Key',
+    majorKeys: 'Major keys',
+    minorKeys: 'Minor keys',
+    as: 'as {{degree}}',
+    inKey: 'in the key',
+    group: {
+      triads: 'Triads',
+      major: 'Major 7ths',
+      minor: 'Minor 7ths',
+      dominant: 'Dominant 7ths',
+    },
+  },
   tensions: {
     title: 'Available tensions',
     chord: 'Chord',

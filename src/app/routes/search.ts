@@ -42,6 +42,7 @@ import {
   scaleIntervals,
   scaleRootSpelling,
   SEVENTHS,
+  spellInKey,
   tonicSpelling,
   TENSION_CHORDS,
   TRIADS,
@@ -54,6 +55,7 @@ import type { ChordView } from '@/widgets/chord-explorer'
 import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
+import type { ReharmoniseView } from '@/widgets/reharmonise'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import type { ScaleView } from '@/widgets/scale-explorer'
@@ -237,6 +239,24 @@ export const FINDER_DEFAULTS: FinderView = { keys: '' }
 export function validateFinderSearch(input: Input<FinderView>): FinderView {
   const raw: Raw = input
   return { keys: keyListParam(readKeyList(raw.keys)) }
+}
+
+// Learn → Reharmonise: a key, and a melody note spelled in it.
+export const REHARMONISE_DEFAULTS: ReharmoniseView = {
+  key: keyParam({ tonic: note('C'), minor: false }),
+  note: noteParam(note('E')),
+}
+export function validateReharmoniseSearch(input: Input<ReharmoniseView>): ReharmoniseView {
+  const raw: Raw = input
+  const read = typeof raw.key === 'string' ? parseKey(raw.key) : null
+  const key = read
+    ? { tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor }
+    : { tonic: note('C'), minor: false }
+  const melody = readNote(raw.note)
+  return {
+    key: keyParam(key),
+    note: noteParam(spellInKey(pitchClassOf(melody ?? note('E')), key)),
+  }
 }
 
 // Learn → Available tensions: the root spelled by the chord's one rule, as the Chords reference's.

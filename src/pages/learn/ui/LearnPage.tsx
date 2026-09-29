@@ -1,5 +1,6 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import {
+  Blend,
   ChartNoAxesColumnIncreasing,
   CircleDot,
   KeyboardMusic,
@@ -74,6 +75,14 @@ export function LearnPage() {
                 icon={ScanSearch}
                 paint="sky"
                 render={<Link to="/learn/chord-finder" />}
+              />
+            </li>
+            <li>
+              <RowLink
+                title={t('learn:reharmonise.title')}
+                icon={Blend}
+                paint="lilac"
+                render={<Link to="/learn/reharmonise" />}
               />
             </li>
           </RowGroup>

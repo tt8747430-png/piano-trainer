@@ -22,6 +22,7 @@ import {
   KEYS_DEFAULTS,
   LEARN_DEFAULTS,
   PLAYER_DEFAULTS,
+  REHARMONISE_DEFAULTS,
   SCALES_DEFAULTS,
   SONGS_DEFAULTS,
   TENSIONS_DEFAULTS,
@@ -33,6 +34,7 @@ import {
   validateKeysSearch,
   validateLearnSearch,
   validatePlayerSearch,
+  validateReharmoniseSearch,
   validateScalesSearch,
   validateSongsSearch,
   validateTensionsSearch,
@@ -179,6 +181,13 @@ const chordFinderRoute = createRoute({
   search: { middlewares: [stripSearchParams(FINDER_DEFAULTS)] },
   component: lazyRouteComponent(learnScreens, 'ChordFinderPage'),
 })
+const reharmoniseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/reharmonise',
+  validateSearch: validateReharmoniseSearch,
+  search: { middlewares: [stripSearchParams(REHARMONISE_DEFAULTS)] },
+  component: lazyRouteComponent(learnScreens, 'ReharmonisePage'),
+})
 
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -251,6 +260,7 @@ const routeTree = rootRoute.addChildren([
     intervalsRoute,
     tensionsRoute,
     chordFinderRoute,
+    reharmoniseRoute,
     lessonRoute,
     practiceRoute,
     quizRoute,

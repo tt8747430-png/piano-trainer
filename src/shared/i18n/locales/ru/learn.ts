@@ -143,6 +143,21 @@ export const learn: LocaleResources['learn'] = {
     clear: 'Очистить',
     open: 'Открыть в аккордах',
   },
+  reharmonise: {
+    title: 'Гармонизация мелодии',
+    note: 'Нота мелодии',
+    key: 'Тональность',
+    majorKeys: 'Мажорные',
+    minorKeys: 'Минорные',
+    as: 'как {{degree}}',
+    inKey: 'в тональности',
+    group: {
+      triads: 'Трезвучия',
+      major: 'Мажорные септаккорды',
+      minor: 'Минорные септаккорды',
+      dominant: 'Доминантсептаккорды',
+    },
+  },
   tensions: {
     title: 'Доступные опции',
     chord: 'Аккорд',
