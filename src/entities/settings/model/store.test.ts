@@ -29,6 +29,7 @@ describe('createSettingsStore', () => {
       melody: false,
       metronome: false,
       countIn: false,
+      recording: true,
     })
     expect(DEFAULT_QUIZ_CHOICE).toEqual({
       families: ['sev', 'nin'],
@@ -42,7 +43,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 3,
+      version: 4,
     })
   })
 
@@ -50,7 +51,13 @@ describe('createSettingsStore', () => {
     const saved = {
       theme: 'light',
       locale: 'ru',
-      practice: { fingerNumbers: true, melody: false, metronome: true, countIn: false },
+      practice: {
+        fingerNumbers: true,
+        melody: false,
+        metronome: true,
+        countIn: false,
+        recording: false,
+      },
       quiz: { families: ['tri'], scales: ['blues'] },
       keyboard: {
         keySize: 'large',
@@ -60,7 +67,15 @@ describe('createSettingsStore', () => {
         typing: true,
       },
     }
-    expect(restored(saved, 3)).toEqual(saved)
+    expect(restored(saved, 4)).toEqual(saved)
+  })
+
+  it('gives a version-3 save the recording on, keeping its toggles', () => {
+    const practice = { fingerNumbers: true, melody: true, metronome: false, countIn: true }
+    expect(restored({ theme: 'dark', locale: 'en', practice }, 3).practice).toEqual({
+      ...practice,
+      recording: true,
+    })
   })
 
   it('plays from the computer keyboard by default only where the pointer is fine', () => {

@@ -14,10 +14,16 @@ export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
 
 /** The Setup's saved switches. */
-export const PRACTICE_TOGGLES = ['fingerNumbers', 'melody', 'metronome', 'countIn'] as const
+export const PRACTICE_TOGGLES = [
+  'fingerNumbers',
+  'melody',
+  'metronome',
+  'countIn',
+  'recording',
+] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
-/** The Setup's saved switches: how any piece plays (the melody is a piece's own: its setup shows it). */
+/** The Setup's saved switches: how any piece plays (the melody and the recording are a piece's own: its setup shows them). */
 export const PLAYING_TOGGLES = [
   'fingerNumbers',
   'metronome',
@@ -54,6 +60,7 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   melody: false,
   metronome: false,
   countIn: false,
+  recording: true,
 }
 
 export const DEFAULT_QUIZ_CHOICE: QuizChoice = {

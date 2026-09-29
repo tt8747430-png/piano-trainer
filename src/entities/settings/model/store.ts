@@ -22,7 +22,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 3
+export const SETTINGS_VERSION = 4
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -54,11 +54,14 @@ export function createSettingsStore({
   )
 }
 
-/** A toggle is on only when saved as true; anything else is off. */
+/** A toggle keeps what was saved; one never saved (a newer toggle) takes its default. */
 function practiceToggles(value: unknown): PracticeToggles {
   const saved = savedObject<PracticeToggles>(value)
   return Object.fromEntries(
-    PRACTICE_TOGGLES.map((toggle) => [toggle, saved[toggle] === true]),
+    PRACTICE_TOGGLES.map((toggle) => {
+      const kept: unknown = saved[toggle]
+      return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
+    }),
   ) as Record<keyof PracticeToggles, boolean>
 }
 
@@ -87,7 +90,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
 
 /**
  * Stored JSON is untrusted: keep each field that is still valid, and the current value otherwise.
- * A version-1 save has no practice or quiz fields, a version-2 save no keyboard: each gains its defaults here.
+ * A version-1 save has no practice or quiz fields, a version-2 save no keyboard, a version-3 save no
+ * recording toggle: each gains its defaults here.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
