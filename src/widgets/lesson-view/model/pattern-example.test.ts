@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { LESSONS } from '@/entities/lesson'
 import { pieceById, type Piece } from '@/entities/piece'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { patternOpening } from './pattern-example'
@@ -36,5 +37,19 @@ describe('patternOpening', () => {
     const notes = noteSounds(patternOpening(piece('otche'), 'r5').sounds)
     // The hymn's upbeat: C4 before the first bar.
     expect(notes.some((sound) => sound.midi === 60 && sound.at === 0)).toBe(true)
+  })
+
+  it('plays every lesson’s pattern over its piece, from its first chord', () => {
+    const blocks = LESSONS.flatMap((lesson) =>
+      lesson.sections.flatMap((section) =>
+        section.blocks.flatMap((block) => (block.kind === 'pattern' ? [block] : [])),
+      ),
+    )
+    expect(blocks.length).toBeGreaterThan(0)
+    for (const block of blocks) {
+      const notes = noteSounds(patternOpening(piece(block.piece), block.pattern).sounds)
+      expect(notes.length, `${block.pattern} over ${block.piece}`).toBeGreaterThan(0)
+      expect(Math.min(...notes.map((sound) => sound.at))).toBe(0)
+    }
   })
 })

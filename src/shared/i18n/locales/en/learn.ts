@@ -3,7 +3,7 @@ export const learn = {
   level: 'Level',
   categoryLabel: 'Category',
   any: 'Any',
-  module: { fundamentals: 'Fundamentals' },
+  module: { fundamentals: 'Fundamentals', accompaniment: 'Accompaniment' },
   noLessons: 'No lessons match.',
   everyLesson: 'Show every lesson',
   tools: 'Tools',

@@ -199,6 +199,25 @@ describe('the lessons', () => {
   })
 
   it('start at the beginning: every fundamentals lesson a Beginner’s or an Elementary one', () => {
-    for (const lesson of LESSONS) expect([1, 2], lesson.id).toContain(lesson.level)
+    for (const lesson of LESSONS.filter((each) => each.module === 'fundamentals')) {
+      expect([1, 2], lesson.id).toContain(lesson.level)
+    }
+  })
+
+  it('teach accompaniment from bass and chords to reharmonising a melody', () => {
+    expect(
+      LESSONS.filter((lesson) => lesson.module === 'accompaniment').map((lesson) => lesson.id),
+    ).toEqual([
+      'bass-and-chords',
+      'broken-chords',
+      'five-ways',
+      'right-hand-techniques',
+      'seven-types',
+    ])
+  })
+
+  it('list the modules in order, each lesson after the one before it', () => {
+    const modules = LESSONS.map((lesson) => LESSON_MODULES.indexOf(lesson.module))
+    expect(modules).toEqual([...modules].sort((a, b) => a - b))
   })
 })

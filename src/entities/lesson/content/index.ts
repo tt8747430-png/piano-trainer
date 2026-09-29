@@ -1,7 +1,10 @@
 import type { Lesson } from '../model/types'
+import bassAndChords from './bass-and-chords'
+import brokenChords from './broken-chords'
 import chordFamily from './chord-family'
 import chromaticScale from './chromatic-scale'
 import findingHome from './finding-home'
+import fiveWays from './five-ways'
 import intervals from './intervals'
 import inversions from './inversions'
 import keySignatures from './key-signatures'
@@ -10,11 +13,16 @@ import minorScales from './minor-scales'
 import readingChordSymbols from './reading-chord-symbols'
 import readingNotes from './reading-notes'
 import rhythmAndMeter from './rhythm-and-meter'
+import rightHandTechniques from './right-hand-techniques'
+import sevenTypes from './seven-types'
 import seventhChords from './seventh-chords'
 import triads from './triads'
 import wholeAndHalfSteps from './whole-and-half-steps'
 
-/** Every lesson, in the order Learn lists them: the Fundamentals, from the keys to key signatures. */
+/**
+ * Every lesson, in the order Learn lists them: the Fundamentals, from the keys to key signatures; then
+ * Accompaniment, from bass and chords on.
+ */
 export const LESSONS: readonly Lesson[] = [
   findingHome,
   readingNotes,
@@ -30,4 +38,9 @@ export const LESSONS: readonly Lesson[] = [
   minorScales,
   chordFamily,
   keySignatures,
+  bassAndChords,
+  brokenChords,
+  fiveWays,
+  rightHandTechniques,
+  sevenTypes,
 ]
