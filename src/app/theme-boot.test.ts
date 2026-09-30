@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, onTestFinished } from 'vitest'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from '@/entities/settings'
 import { setTheme } from '@/features/set-preference'
+import { THEME_COLORS } from '@/shared/config'
 import { stubMatchMedia } from '@/shared/test/match-media'
 
 const html = readFileSync('index.html', 'utf8')
@@ -19,6 +20,23 @@ describe('the #theme-boot script in index.html', () => {
     stubMatchMedia({ dark: false })
     setTheme(createSettingsStore({ languages: ['en'] }), 'dark')
     expect(runBoot()).toBe('dark')
+  })
+
+  it('colours the browser toolbar for the theme it paints', () => {
+    // The build writes one theme-color per OS scheme ahead of the script.
+    const metas = (['light', 'dark'] as const).map((scheme) => {
+      const meta = document.createElement('meta')
+      meta.setAttribute('name', 'theme-color')
+      meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`)
+      meta.setAttribute('content', THEME_COLORS[scheme])
+      document.head.append(meta)
+      return meta
+    })
+    onTestFinished(() => metas.forEach((meta) => meta.remove()))
+    stubMatchMedia({ dark: false })
+    setTheme(createSettingsStore({ languages: ['en'] }), 'dark')
+    runBoot()
+    expect(metas.map((meta) => meta.content)).toEqual([THEME_COLORS.dark, THEME_COLORS.dark])
   })
 
   it('asks the OS when the saved theme is system', () => {

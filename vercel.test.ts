@@ -17,7 +17,7 @@ const cacheControlFor = (path: string) =>
     .find((header) => header.key === 'Cache-Control')?.value
 
 describe('the Vercel config', () => {
-  it.each(['/', '/theory/scales', '/songs/bz5', '/play/bz5'])(
+  it.each(['/', '/learn/scales', '/songs/bz5', '/play/bz5'])(
     'answers a deep link to %s with the app, so a reload keeps the screen',
     (path) => {
       expect(servesTheApp(path)).toBe(true)
@@ -32,7 +32,7 @@ describe('the Vercel config', () => {
     expect(cacheControlFor('/assets/index-3f9a1c.js')).toBe('public, max-age=31536000, immutable')
   })
 
-  it.each(['/index.html', '/sw.js', '/manifest.webmanifest'])(
+  it.each(['/', '/learn/scales', '/index.html', '/sw.js', '/manifest.webmanifest', '/favicon.svg'])(
     'makes %s revalidate, so a deploy reaches learners',
     (path) => {
       expect(cacheControlFor(path)).toBe('public, max-age=0, must-revalidate')

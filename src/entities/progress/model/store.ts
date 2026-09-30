@@ -1,8 +1,7 @@
-import { createJSONStorage, persist } from 'zustand/middleware'
-import { createStore, type StoreApi } from 'zustand/vanilla'
+import type { StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/path'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
-import { isRecord, safeLocalStorage, savedObject } from '@/shared/lib'
+import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
@@ -17,20 +16,16 @@ export const PROGRESS_VERSION = 1
 
 export type ProgressStore = StoreApi<ProgressState>
 
-export function createProgressStore({
-  storage = safeLocalStorage(),
-}: { storage?: Storage } = {}): ProgressStore {
-  return createStore<ProgressState>()(
-    persist(() => EMPTY_PROGRESS, {
-      name: PROGRESS_STORAGE_KEY,
+export const createProgressStore = (saving?: SavingOptions): ProgressStore =>
+  createSavedStore(
+    {
+      key: PROGRESS_STORAGE_KEY,
       version: PROGRESS_VERSION,
-      storage: createJSONStorage(() => storage),
-      // Every earlier shape is sanitised field by field in `merge`, so migrating is passing it on.
-      migrate: (persisted) => persisted as ProgressState,
-      merge: (persisted) => sanitize(persisted),
-    }),
+      initial: EMPTY_PROGRESS,
+      read: sanitize,
+    },
+    saving,
   )
-}
 
 const isDate = (value: unknown): value is string =>
   typeof value === 'string' && !Number.isNaN(Date.parse(value))

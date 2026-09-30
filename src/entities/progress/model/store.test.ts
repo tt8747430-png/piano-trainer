@@ -86,6 +86,34 @@ describe('createProgressStore', () => {
     expect(createProgressStore({ storage }).getState().quiz).toEqual(EMPTY_PROGRESS.quiz)
   })
 
+  it.each([0, 2])('reads a version-%i save for what is still valid', (version) => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { learned: { 'piece:bz5': DAY, 'lesson:1': DAY }, quiz: 'lost' }, version)
+    expect(createProgressStore({ storage }).getState()).toEqual({
+      ...EMPTY_PROGRESS,
+      learned: { 'piece:bz5': DAY },
+    })
+  })
+
+  it('keeps what another tab saved when it saves next', () => {
+    const storage = createMemoryStorage()
+    const otherTabs = new EventTarget()
+    const store = createProgressStore({ storage, otherTabs })
+    writeSaved(storage, { ...EMPTY_PROGRESS, practised: { bz5: DAY } })
+    otherTabs.dispatchEvent(
+      new StorageEvent('storage', {
+        key: PROGRESS_STORAGE_KEY,
+        newValue: storage.getItem(PROGRESS_STORAGE_KEY),
+      }),
+    )
+    store.setState({ learned: { 'piece:bz5': DAY } })
+    expect(JSON.parse(storage.getItem(PROGRESS_STORAGE_KEY) ?? 'null').state).toEqual({
+      ...EMPTY_PROGRESS,
+      practised: { bz5: DAY },
+      learned: { 'piece:bz5': DAY },
+    })
+  })
+
   it('starts empty, without throwing, when the saved JSON is corrupt', () => {
     const storage = createMemoryStorage()
     storage.setItem(PROGRESS_STORAGE_KEY, '{oops')

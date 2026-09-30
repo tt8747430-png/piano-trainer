@@ -1,7 +1,9 @@
+import { statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS } from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
+import { PRECACHE_FILE_LIMIT } from '@/shared/config'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { chordSymbol, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import {
@@ -207,6 +209,14 @@ describe('the catalog', () => {
       expect(recording?.tempo).toBeGreaterThanOrEqual(TEMPO_RANGE.min)
       expect(recording?.tempo).toBeLessThanOrEqual(TEMPO_RANGE.max)
       expect(recording?.src).toMatch(/romashki-vocal.*\.m4a$/)
+    }
+  })
+
+  it('keeps every recording small enough to be precached, so it plays offline (ADR 0016)', () => {
+    for (const piece of PIECES) {
+      if (!piece.recording) continue
+      const { size } = statSync(`.${piece.recording.src}`)
+      expect(size, piece.id).toBeLessThanOrEqual(PRECACHE_FILE_LIMIT)
     }
   })
 

@@ -28,6 +28,7 @@ export {
 } from './keyboard-view'
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject, type Saved } from './saved'
+export { createSavedStore, type SavingOptions } from './saved-store'
 export { keyListParam, readKeyList, readNote, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {

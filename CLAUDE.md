@@ -28,8 +28,9 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
 - **Latest stable dependencies, no legacy in code.** Pinned majors: TypeScript 6, Vitest 4, jsdom 29, jest-dom 6,
   eslint-plugin-boundaries 6, and `@vite-pwa/assets-generator` 1 (the range `vite-plugin-pwa` accepts). Bumping
   one is its own change.
-- **Saved data keeps working.** Persisted stores (`pt-settings`, `pt-progress`) carry a `version`; a shape change
-  ships a `migrate` and a sanitising `merge`, never a reset.
+- **Saved data keeps working.** Persisted stores (`pt-settings`, `pt-progress`) are `createSavedStore`s: they carry
+  a `version`, read any version's save through one sanitiser (a shape change is a new version and a sanitiser that
+  reads the old, never a reset), and follow another tab's saves of their version or older.
 - **Staged is deliberate.** Never `git checkout`/`restore`/`stash`/`reset` the owner's work unprompted.
 - **New code copies the nearest slice's shape.** Writes → a feature command. Reads → selectors. Pure logic →
   `shared/lib` or `entities/*/model` with a colocated test.
@@ -106,7 +107,7 @@ it. `@` → `src`.
   `arrangeProgression`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
-  (zustand `persist` over `safeLocalStorage()`, versioned, sanitising `merge`), `model/selectors.ts`, `model/context.ts`
+  (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
   Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
@@ -118,7 +119,8 @@ it. `@` → `src`.
   in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue).
-- **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `isOneOf`, `createStoreContext`, `useMediaQuery`,
+- **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
+  by one sanitiser for any version, following other tabs' saves), `isOneOf`, `createStoreContext`, `useMediaQuery`,
   `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
@@ -135,7 +137,7 @@ it. `@` → `src`.
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a hand's keys, an interval up, down or
   together (`intervalSounds`), which keys sound when and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
-  the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`), `api` (the `audio` and `midi` ports, their browser adapters and
+  the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
@@ -147,9 +149,9 @@ it. `@` → `src`.
 
 **State:** what you look at → URL search params. What must be remembered → a persisted entity store. Everything
 else → component state.
-**Theme:** `index.html`'s `#theme-boot` script paints `data-theme` before first paint from `pt-settings`;
-`ThemeProvider` keeps it and colours the browser toolbar from `THEME_COLORS`. `src/app/theme-boot.test.ts` holds
-the script to the store.
+**Theme:** `index.html`'s `#theme-boot` script paints `data-theme` and the browser toolbar before first paint from
+`pt-settings` (the build prepends one theme-color per OS scheme); `ThemeProvider` keeps both from `THEME_COLORS`.
+`src/app/theme-boot.test.ts` holds the script to the store.
 **Installed app:** `#standalone-boot` locks pinch and double-tap zoom in the installed app only (a tab keeps its
 zoom); `theme.css`'s base keeps text unselectable outside fields, with no callout, no overscroll and no double-tap
 wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).

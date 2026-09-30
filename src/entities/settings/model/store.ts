@@ -1,7 +1,6 @@
-import { createJSONStorage, persist } from 'zustand/middleware'
-import { createStore, type StoreApi } from 'zustand/vanilla'
+import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
-import { safeLocalStorage, savedObject } from '@/shared/lib'
+import { createSavedStore, savedObject, type SavingOptions } from '@/shared/lib'
 import {
   DEFAULT_PRACTICE,
   DEFAULT_QUIZ_CHOICE,
@@ -27,30 +26,27 @@ export const SETTINGS_VERSION = 5
 export type SettingsStore = StoreApi<SettingsState>
 
 export function createSettingsStore({
-  storage = safeLocalStorage(),
   languages = navigator.languages,
   finePointer = matchMedia('(pointer: fine)').matches,
-}: {
-  storage?: Storage
+  ...saving
+}: SavingOptions & {
   languages?: readonly string[]
   finePointer?: boolean
 } = {}): SettingsStore {
-  const initial: SettingsState = {
-    theme: 'system',
-    locale: detectLocale(languages),
-    practice: DEFAULT_PRACTICE,
-    quiz: DEFAULT_QUIZ_CHOICE,
-    keyboard: defaultKeyboard(finePointer),
-  }
-  return createStore<SettingsState>()(
-    persist(() => initial, {
-      name: SETTINGS_STORAGE_KEY,
+  return createSavedStore(
+    {
+      key: SETTINGS_STORAGE_KEY,
       version: SETTINGS_VERSION,
-      storage: createJSONStorage(() => storage),
-      // The sanitiser turns any earlier shape into this one; `merge` then keeps the current fields.
-      migrate: (persisted) => sanitize(persisted, initial),
-      merge: (persisted, current) => sanitize(persisted, current),
-    }),
+      initial: {
+        theme: 'system',
+        locale: detectLocale(languages),
+        practice: DEFAULT_PRACTICE,
+        quiz: DEFAULT_QUIZ_CHOICE,
+        keyboard: defaultKeyboard(finePointer),
+      },
+      read: sanitize,
+    },
+    saving,
   )
 }
 
@@ -89,7 +85,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
 }
 
 /**
- * Stored JSON is untrusted: keep each field that is still valid, and the current value otherwise.
+ * Stored JSON is untrusted: the theme, language and keyboard keep each value still valid and take the
+ * current one otherwise; a practice toggle or quiz list not saved, or not valid, takes its default.
  * A version-1 save has no practice or quiz fields, a version-2 save no keyboard, a version-3 save no
  * recording toggle, a version-4 save no named notes: each gains its defaults here.
  */

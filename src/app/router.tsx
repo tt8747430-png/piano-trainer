@@ -224,6 +224,7 @@ const fullScreenRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: 'full-screen',
   component: FullScreenLayout,
+  staticData: { fullScreen: true },
 })
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
@@ -322,5 +323,9 @@ export type AppRouter = ReturnType<typeof createAppRouter>
 declare module '@tanstack/react-router' {
   interface Register {
     router: AppRouter
+  }
+  interface StaticDataRouteOption {
+    /** A screen on its own (the Player, the Check), which nothing else is laid over. */
+    fullScreen?: true
   }
 }

@@ -3,7 +3,9 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { COLLECTIONS } from '@/entities/piece'
-import { safeLocalStorage } from '@/shared/lib'
+import { SETTINGS_STORAGE_KEY } from '@/entities/settings'
+import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
+import { stubServiceWorker } from '@/shared/test/pwa-register'
 import { createAppRouter } from './router'
 import { renderApp } from './testing/render-app'
 
@@ -84,6 +86,32 @@ describe('the app shell', () => {
   it('shows the Path screen at /', async () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+  })
+
+  it('shows the theme another tab chose', async () => {
+    const storage = createMemoryStorage()
+    const { settingsStore } = await renderApp('/', { storage })
+    const newValue = JSON.stringify({
+      state: { ...settingsStore.getState(), theme: 'dark' },
+      version: 5,
+    })
+    storage.setItem(SETTINGS_STORAGE_KEY, newValue)
+    act(
+      () =>
+        void window.dispatchEvent(
+          new StorageEvent('storage', { key: SETTINGS_STORAGE_KEY, newValue }),
+        ),
+    )
+    expect(document.documentElement.dataset.theme).toBe('dark')
+  })
+
+  it('offers a waiting version in the shell, never over a practice', async () => {
+    stubServiceWorker({ waiting: true })
+    const { router } = await renderApp('/play/bz5')
+    await screen.findByRole('button', { name: 'Play' })
+    expect(screen.queryByText('A new version is ready')).not.toBeInTheDocument()
+    await act(() => router.navigate({ to: '/' }))
+    expect(await screen.findByText('A new version is ready')).toBeInTheDocument()
   })
 
   it('offers the places in the main navigation, marking the current one', async () => {

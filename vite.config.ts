@@ -4,11 +4,15 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
+import { PRECACHE_FILE_LIMIT } from './src/shared/config/precache.ts'
 import { THEME_COLORS } from './src/shared/config/theme-colors.ts'
 
 const fromRoot = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 
-/** The browser toolbar's colour for each OS scheme; ThemeProvider repaints both for a chosen theme. */
+/**
+ * The browser toolbar's colour for each OS scheme, ahead of index.html's #theme-boot script, which
+ * repaints both for a chosen theme before first paint; ThemeProvider keeps them after.
+ */
 function themeColorMeta(): Plugin {
   return {
     name: 'theme-color-meta',
@@ -20,7 +24,7 @@ function themeColorMeta(): Plugin {
           media: `(prefers-color-scheme: ${scheme})`,
           content: THEME_COLORS[scheme],
         },
-        injectTo: 'head',
+        injectTo: 'head-prepend',
       })),
   }
 }
@@ -59,9 +63,15 @@ export default defineConfig({
       workbox: {
         // The pieces' recordings too, so a recording plays offline.
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a}'],
-        // The titles' serif in the scripts the app writes (Latin, Cyrillic); its Greek and
-        // Vietnamese stay on the network, fetched only if a glyph ever needs them.
-        globIgnores: ['**/literata-{greek,greek-ext,vietnamese}-*.woff2'],
+        maximumFileSizeToCacheInBytes: PRECACHE_FILE_LIMIT,
+        // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in
+        // its range is drawn. None of these ranges holds a character the app writes (Onest's latin-ext
+        // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one
+        // fetches it from the network.
+        globIgnores: [
+          '**/literata-{greek,greek-ext,vietnamese,cyrillic-ext,latin-ext}-*.woff2',
+          '**/onest-{vietnamese,cyrillic-ext}-*.woff2',
+        ],
         navigateFallback: '/index.html',
         cleanupOutdatedCaches: true,
       },

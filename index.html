@@ -36,6 +36,13 @@
           }
         }
         document.documentElement.dataset.theme = theme
+        // The browser toolbar takes the same theme's colour: the build writes one theme-color per
+        // OS scheme ahead of this script, and ThemeProvider keeps them once the app runs.
+        var metas = document.querySelectorAll('meta[name="theme-color"]')
+        var painted = document.querySelector(
+          'meta[name="theme-color"][media="(prefers-color-scheme: ' + theme + ')"]',
+        )
+        if (painted) for (var i = 0; i < metas.length; i++) metas[i].content = painted.content
       })()
     </script>
     <script id="standalone-boot">

@@ -181,6 +181,28 @@ describe('createSettingsStore', () => {
     })
   })
 
+  it('reads a save from a newer version for the fields it knows', () => {
+    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 6)).toEqual({
+      theme: 'dark',
+      locale: 'ru',
+      ...DEFAULTS,
+    })
+  })
+
+  it('follows a theme chosen in another tab', () => {
+    const storage = createMemoryStorage()
+    const otherTabs = new EventTarget()
+    const store = createSettingsStore({ storage, languages: ['en'], otherTabs })
+    writeSaved(storage, { ...store.getState(), theme: 'dark' }, 5)
+    otherTabs.dispatchEvent(
+      new StorageEvent('storage', {
+        key: SETTINGS_STORAGE_KEY,
+        newValue: storage.getItem(SETTINGS_STORAGE_KEY),
+      }),
+    )
+    expect(store.getState().theme).toBe('dark')
+  })
+
   it('keeps a theme saved by an older version', () => {
     expect(restored({ theme: 'dark' }, 0).theme).toBe('dark')
   })

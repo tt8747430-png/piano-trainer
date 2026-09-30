@@ -265,8 +265,12 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
 ## 11. Build and deploy
 
 - The Vercel config is `vercel.ts` (`@vercel/config`, a `config` export, which is what Vercel's build reads): the
-  SPA rewrite for every path but `/assets/`; `/assets/*` immutable; `index.html`, `sw.js` and the manifest
-  revalidate. `vercel.test.ts` pins all of it. Read `vercel:knowledge-update` before changing it.
+  SPA rewrite for every path but `/assets/`; `/assets/*` immutable; everything else (the app at any path, `sw.js`,
+  the manifest, the icons) revalidates. `vercel.test.ts` pins all of it. Read `vercel:knowledge-update` before
+  changing it.
+- **The service worker** registers once the page has loaded, looks for a new version whenever the app comes back to
+  the screen, and offers a waiting one in the shell only (never over the Player or the Check). The precache holds
+  only the fonts' subsets the app's text reaches, and no file over `PRECACHE_FILE_LIMIT` (a recording must fit).
 - Check a production build with `npm run build && npm run preview`: it catches lazy-chunk, asset and
   service-worker problems `dev` hides.
 - A `VITE_` variable is public. Never put a secret in one.
