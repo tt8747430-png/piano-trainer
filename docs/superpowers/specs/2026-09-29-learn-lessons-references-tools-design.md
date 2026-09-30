@@ -248,9 +248,9 @@ The Ultimate Piano's progression generator and library (§9.7, §10.1).
 - **The library:** the §10.1 table's progressions by style (Pop, Rock, Jazz, Blues, Classical, R&B / Soul, Latin /
   Bossa, Gospel, Theory), each a row that loads it (the learner's typed line replaced), and the minor-key three
   (i–iv–V–i, i–VI–III–VII, ii°–V–i). Names are `LocalText`; "Axis of Awesome", "Royal Road" stay as musicians say them.
-- **The row:** each chord's numeral over its symbol, a button that plays it and shows it; **Play** plays them in turn,
-  voice-led, a chord a bar at the tool's tempo; **Practise in the Player** opens `/play/progression` with the same
-  numerals, key and size.
+- **The row:** each chord's symbol over its numeral, a button that plays it and shows it; **Play** plays them in turn,
+  voice-led, a chord every two beats at 84 (the Player plays a chord a bar); **Practise in the Player** opens
+  `/play/progression` with the same numerals, key and size.
 - **The Player source** (`features/practice/progression.ts`, `progressionChart`): a chord a bar, four bars a line, in
   4/4 and the key, arranged like any chart with a song's patterns, hands, tempo, Wait mode and the loop; its Setup
   composes Key, Chord size, then the pattern and figures (ADR 0014's composition). It is written in a key, so the

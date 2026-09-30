@@ -7,6 +7,12 @@ import type { Sound } from '@/shared/lib/schedule'
 const onsets = (sounds: readonly Sound[] = []) =>
   new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.at] : []))).size
 
+/** Each note's onset and key, lowest first. */
+const keysOf = (sounds: readonly Sound[]): [number, number][] =>
+  sounds
+    .flatMap((sound): [number, number][] => (sound.kind === 'note' ? [[sound.at, sound.midi]] : []))
+    .sort((a, b) => a[1] - b[1])
+
 describe('Learn → Passing chords', () => {
   it('suggests chords from C to E♭ by category, each in the key or chromatic, with its reason', async () => {
     await renderApp('/learn/passing-chords?from=C&to=Eb')
@@ -26,6 +32,19 @@ describe('Learn → Passing chords', () => {
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
     await user.click(within(twoFive).getByRole('button', { name: 'Fm7' }))
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(1)
+  })
+
+  it('plays a chord of a row as the row voices it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/passing-chords?from=C&to=Eb')
+    const twoFive = await screen.findByRole('article', { name: 'Secondary ii–V' })
+    await user.click(within(twoFive).getByRole('button', { name: 'Play' }))
+    const row = audio.played.at(-1)?.sounds ?? []
+    const starts = [...new Set(keysOf(row).map(([at]) => at))].sort((a, b) => a - b)
+    const second = keysOf(row).flatMap(([at, key]) => (at === starts[1] ? [key] : []))
+    await user.click(within(twoFive).getByRole('button', { name: 'Fm7' }))
+    const alone = keysOf(audio.played.at(-1)?.sounds ?? []).map(([, key]) => key)
+    expect(alone).toEqual(second)
   })
 
   it('says so when a chord typed cannot be read, and keeps what was typed in the URL', async () => {

@@ -44,6 +44,7 @@ const isScaleKind = isOneOf(SCALE_KINDS)
 export function isStepId(value: unknown): value is StepId {
   if (typeof value !== 'string') return false
   const colon = value.indexOf(':')
+  if (colon < 0) return false
   const kind = value.slice(0, colon)
   const name = value.slice(colon + 1)
   switch (kind) {

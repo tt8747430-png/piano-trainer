@@ -30,6 +30,18 @@ describe('Learn → Progressions', () => {
     expect(screen.getByText('This progression can’t be read.')).toBeInTheDocument()
   })
 
+  it('writes typed chords as numerals again once the key changes, as the row plays them', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/progressions')
+    const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
+    await user.clear(field)
+    await user.type(field, 'Am F C G')
+    await user.click(screen.getByRole('combobox', { name: 'Key' }))
+    await user.click(await screen.findByRole('option', { name: 'G major' }))
+    expect(row()).toEqual(['Emvi', 'CIV', 'GI', 'DV'])
+    expect(field).toHaveValue('vi IV I V')
+  })
+
   it('grows the chords with the chord size, and plays the row', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/learn/progressions')

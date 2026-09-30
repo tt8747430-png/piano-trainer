@@ -8,7 +8,7 @@ import {
   PASSING_CATEGORIES,
   passingChords,
   voiceLead,
-  type Chord,
+  type Midi,
 } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -23,7 +23,7 @@ const ROW_TEMPO = 84
 
 /**
  * Passing chords: two chords typed and a key; the ways between them by category, each row voice-led
- * and played, each chord of it played alone, on the keys pinned above.
+ * and played, each chord of it played as the row voices it, on the keys pinned above.
  */
 export function PassingChordsTool({
   view,
@@ -41,10 +41,9 @@ export function PassingChordsTool({
   const to = readChord(view.to)
   const ways = from && to ? passingChords(from, to) : []
   const at = `${view.key} ${view.from} ${view.to}`
-  const playChord = (chord: Chord, id: string) => {
-    const [voiced = []] = voiceLead([chord])
-    setShown(unmarked(voiced))
-    playback.toggle(id, chordSounds(voiced, { arpeggio: false }))
+  const playKeys = (keys: readonly Midi[], id: string) => {
+    setShown(unmarked(keys))
+    playback.toggle(id, chordSounds(keys, { arpeggio: false }))
   }
   return (
     <div className="flex flex-col gap-6">
@@ -79,6 +78,7 @@ export function PassingChordsTool({
                 <div className="grid gap-4 lg:grid-cols-2">
                   {inCategory.map((way) => {
                     const cardId = `${at} ${way.kind}`
+                    const voiced = voiceLead([from, ...way.chords, to])
                     return (
                       <SuggestionCard
                         key={way.kind}
@@ -87,9 +87,8 @@ export function PassingChordsTool({
                         to={to}
                         inKey={way.chords.every((chord) => chordInKey(chord, key))}
                         isPlaying={(what) => playback.playing === `${cardId} ${what}`}
-                        onPlayChord={(chord, place) => playChord(chord, `${cardId} ${place}`)}
+                        onPlayChord={(place) => playKeys(voiced[place] ?? [], `${cardId} ${place}`)}
                         onPlayRow={() => {
-                          const voiced = voiceLead([from, ...way.chords, to])
                           setShown(unmarked(voiced.flat()))
                           playback.toggle(
                             `${cardId} row`,

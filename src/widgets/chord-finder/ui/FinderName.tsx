@@ -1,44 +1,26 @@
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import {
-  noteName,
-  pitchClass,
-  plainSpelling,
-  spanInterval,
-  type FoundChord,
-  type Midi,
-} from '@/shared/lib/music'
+import { noteName, type Midi } from '@/shared/lib/music'
 import { ROLE_BG } from '@/shared/ui'
+import { toneOfKey, type Finding } from '../model/finding'
 
 /**
  * What the keys make: nothing yet, a note, an interval, or a chord, its notes from the bass up by
  * degree and the other names they have; or no chord at all.
  */
-export function FinderName({
-  keys,
-  best,
-  others,
-}: {
-  keys: readonly Midi[]
-  best: FoundChord | undefined
-  others: readonly FoundChord[]
-}) {
+export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: Finding }) {
   const { t } = useTranslation(['learn', 'music'])
-  const [lowest] = keys
-  if (lowest === undefined) {
-    return <p className="text-lg text-muted-foreground">{t('learn:finder.choose')}</p>
+  switch (finding.kind) {
+    case 'empty':
+      return <p className="text-lg text-muted-foreground">{t('learn:finder.choose')}</p>
+    case 'note':
+      return <h2 className="text-7xl">{noteName(finding.note)}</h2>
+    case 'interval':
+      return <h2 className="text-5xl">{t(`music:interval.${finding.interval}.name`)}</h2>
+    case 'none':
+      return <p className="text-lg text-muted-foreground">{t('learn:finder.none')}</p>
   }
-  const other = keys.find((key) => pitchClass(key) !== pitchClass(lowest))
-  if (other === undefined) {
-    return <h2 className="text-7xl">{noteName(plainSpelling(pitchClass(lowest), false))}</h2>
-  }
-  if (!best) {
-    return new Set(keys.map((key) => pitchClass(key))).size === 2 ? (
-      <h2 className="text-5xl">{t(`music:interval.${spanInterval(other - lowest)}.name`)}</h2>
-    ) : (
-      <p className="text-lg text-muted-foreground">{t('learn:finder.none')}</p>
-    )
-  }
+  const { best, others } = finding
   const about = [
     best.chord.quality ? t(`music:quality.${best.chord.quality}`) : null,
     best.no5th ? t('learn:finder.no5th') : null,
@@ -51,7 +33,7 @@ export function FinderName({
       </hgroup>
       <ol className="flex flex-wrap gap-2">
         {keys.map((key) => {
-          const tone = best.chord.tones.find((each) => each.pitchClass === pitchClass(key))
+          const tone = toneOfKey(best, key)
           return tone ? (
             <li
               key={key}

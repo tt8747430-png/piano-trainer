@@ -56,6 +56,17 @@ describe('Learn → Chords', () => {
     await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
   })
 
+  it('keeps the chord written while it plays, engraving it once', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/chords')
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
+    await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
+    const engraved = sheet.querySelector('svg')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(sheet.querySelector('svg')).toBe(engraved)
+  })
+
   it('stacks a suspended chord only as far as it goes', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/chords?triad=sus4&size=13')

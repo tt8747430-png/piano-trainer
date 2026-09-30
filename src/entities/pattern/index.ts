@@ -1,6 +1,5 @@
 export {
   LEFT_FIGURE_IDS,
-  METHOD_CODES,
   PATTERN_GROUPS,
   PATTERN_IDS,
   RIGHT_FIGURE_IDS,
@@ -11,9 +10,6 @@ export {
   type FigureEntry,
   type LeftFigureId,
   type MethodCode,
-  type MethodEntry,
-  type PatternEntry,
-  type PatternGroup,
   type PatternId,
   type RightFigureId,
 } from './model/types'

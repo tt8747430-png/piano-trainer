@@ -177,6 +177,19 @@ describe('LessonView’s worksheet', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([64, 67, 71])
   })
 
+  it('plays a notes answer as a line, one note after another', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const quiz = screen.getByRole('group', { name: 'Play a major third above F.' })
+    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
+    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
+    await user.click(within(quiz).getByRole('button', { name: 'Show the answer' }))
+    const sounds = audio.played.at(-1)?.sounds ?? []
+    expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
+  })
+
   it('shows a quiz’s answer, and opening another quiz closes the first', async () => {
     const user = userEvent.setup()
     await renderLesson(WORKSHEET)

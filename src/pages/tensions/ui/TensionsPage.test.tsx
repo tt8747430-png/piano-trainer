@@ -49,6 +49,14 @@ describe('Learn → Available tensions', () => {
     expect(chips('Strong')).toEqual(['♭3 F', '♭7 C'])
   })
 
+  it('names each chord in its list as choosing it will spell it, on the root’s pitch', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/tensions?root=C%23&chord=m7')
+    await user.click(await screen.findByRole('combobox', { name: 'Chord' }))
+    await user.click(await screen.findByRole('option', { name: /^D♭Maj7 / }))
+    expect(router.state.location.search).toEqual({ chord: 'maj7', root: 'Db' })
+  })
+
   it('speaks Russian', async () => {
     await renderApp('/learn/tensions', { locale: 'ru' })
     expect(

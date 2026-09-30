@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  keyParam,
   numeralsParam,
   numeralText,
   parseNumerals,
@@ -14,7 +15,8 @@ const written = (numerals: readonly Numeral[]): string => numerals.map(numeralTe
 
 /**
  * Numerals or chords typed: each change that reads sets the progression; what the learner typed
- * stays while it means the progression shown, and a line says when it cannot be read.
+ * stays while it means the progression shown in the key it was typed in, and a line says when it
+ * cannot be read.
  */
 export function ProgressionField({
   progression,
@@ -29,8 +31,12 @@ export function ProgressionField({
   const { t } = useTranslation('learn')
   const errorId = useId()
   const [typed, setTyped] = useState<{ text: string; for: string } | null>(null)
+  // Chords mean their numerals in one key: in another, the field writes the numerals the row plays.
+  const meaning = (numerals: string) => `${numerals} ${keyParam(musicKey)}`
   const text =
-    typed && typed.for === progression ? typed.text : written(parseNumerals(progression) ?? [])
+    typed && typed.for === meaning(progression)
+      ? typed.text
+      : written(parseNumerals(progression) ?? [])
   const readable = readProgression(text, musicKey) !== null
   return (
     <label className="flex flex-col gap-1">
@@ -47,7 +53,7 @@ export function ProgressionField({
             const next = event.target.value
             const numerals = readProgression(next, musicKey)
             const param = numerals ? numeralsParam(numerals) : progression
-            setTyped({ text: next, for: param })
+            setTyped({ text: next, for: meaning(param) })
             if (numerals && param !== progression) onChange(param)
           }}
           className="font-display text-xl font-semibold md:text-xl"

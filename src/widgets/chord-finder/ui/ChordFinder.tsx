@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { useHeldKeys } from '@/features/connect-midi'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { keyListParam, readKeyList, partsParams } from '@/shared/lib'
-import { nameChords, noteParam, pitchClass, type Midi } from '@/shared/lib/music'
+import { noteParam, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink, PlayLabel, type KeyMark } from '@/shared/ui'
+import { ButtonLink, PlayLabel } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { FinderView } from '../model/finder-view'
+import { findChord, findingMarks } from '../model/finding'
 import { FinderName } from './FinderName'
 
 /**
@@ -28,12 +29,8 @@ export function ChordFinder({
   const chosen = readKeyList(view.keys)
   // A MIDI keyboard's held keys are the chord while any is held.
   const keys = held.size > 0 ? [...held].sort((a, b) => a - b) : chosen
-  const [best, ...others] = nameChords(keys)
-  const marks = new Map<Midi, KeyMark>()
-  for (const key of keys) {
-    const tone = best?.chord.tones.find((each) => each.pitchClass === pitchClass(key))
-    if (tone) marks.set(key, { tone: tone.role, label: tone.degree })
-  }
+  const finding = findChord(keys)
+  const best = finding.kind === 'chord' ? finding.best : undefined
   const toggle = (key: Midi) =>
     onChange({
       keys: keyListParam(
@@ -42,8 +39,13 @@ export function ChordFinder({
     })
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={keys} marks={marks} selected={new Set(chosen)} onKeyPress={toggle} />
-      <FinderName keys={keys} best={best} others={others} />
+      <ExplorerKeyboard
+        keys={keys}
+        marks={findingMarks(finding, keys)}
+        selected={new Set(chosen)}
+        onKeyPress={toggle}
+      />
+      <FinderName keys={keys} finding={finding} />
       <div className="flex flex-wrap gap-3">
         <Button
           size="pill"

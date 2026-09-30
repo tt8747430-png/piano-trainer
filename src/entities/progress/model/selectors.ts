@@ -1,7 +1,7 @@
 import { pathSteps, pieceStepId, stepById, type PlacedStep, type StepId } from '@/entities/path'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
-import { NO_ANSWERS, ratingOf, type Rating } from './mastery'
+import { NO_ANSWERS } from './mastery'
 import type { Answer, ProgressState, QuizStats } from './types'
 
 export const selectLearned = (state: ProgressState) => state.learned
@@ -17,10 +17,6 @@ function practisedByRecency(practised: ProgressState['practised']): PieceId[] {
     .sort((a, b) => b.at - a.at)
     .map(({ id }) => id)
 }
-
-/** The piece opened in the Player most recently, or null. */
-export const selectLastPractised = (state: ProgressState): PieceId | null =>
-  practisedByRecency(state.practised)[0] ?? null
 
 /**
  * Continue (spec §5): the most recently practised piece still on the path, while it is not learned;
@@ -43,8 +39,3 @@ export const selectAnswers =
   (skill: SkillId) =>
   (state: ProgressState): readonly Answer[] =>
     state.answers[skill] ?? NO_ANSWERS
-
-export const selectRating =
-  (skill: SkillId) =>
-  (state: ProgressState): Rating =>
-    ratingOf(state.answers, skill)

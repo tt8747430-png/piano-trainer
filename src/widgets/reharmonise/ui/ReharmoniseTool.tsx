@@ -7,21 +7,18 @@ import {
   chordsHolding,
   HOLDING_GROUPS,
   keyFromParam,
-  midi,
-  MIDDLE_C,
   noteFromParam,
   noteName,
   noteParam,
   PITCH_CLASSES,
   pitchClass,
-  pitchClassOf,
   spellInKey,
   type Midi,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { Dropdown, KeyDropdown } from '@/shared/ui'
-import { underMelody } from '../model/holding-keys'
+import { melodyAlone, underMelody } from '../model/holding-keys'
 import type { ReharmoniseView } from '../model/reharmonise-view'
 import { HoldingGroupCard } from './HoldingGroupCard'
 
@@ -41,17 +38,13 @@ export function ReharmoniseTool({
   const [played, setPlayed] = useState<{ view: ReharmoniseView; shown: ShownKeys } | null>(null)
   const key = keyFromParam(view.key)
   const melody = noteFromParam(view.note)
-  const melodyKey = midi(MIDDLE_C + pitchClassOf(melody))
   const choose = (tapped: Midi) =>
     onChange({ note: noteParam(spellInKey(pitchClass(tapped), key)) })
   useMidiKeyDown(choose)
   const shown =
     played?.view.key === view.key && played.view.note === view.note
       ? played.shown
-      : {
-          keys: [melodyKey],
-          marks: new Map([[melodyKey, { tone: 'scale' as const, label: noteName(melody) }]]),
-        }
+      : melodyAlone(melody)
   const held = chordsHolding(melody, key)
   const idOf = (group: string, index: number) => `${view.key} ${view.note} ${group} ${index}`
   return (

@@ -1,12 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  midi,
-  note,
-  placeScale,
-  placeScaleChords,
-  runFingering,
-  spellScale,
-} from '@/shared/lib/music'
+import { midi, note, placeScale, placeScaleChords, runFingering } from '@/shared/lib/music'
 import {
   chordKeyPlays,
   chordMarks,
@@ -64,10 +57,11 @@ describe('chordsHolding', () => {
 })
 
 describe('heardName', () => {
-  it('spells a note of the scale as the scale does, any other with a sharp', () => {
-    const f = spellScale(note('F'), 'major')
-    expect(heardName(midi(70), f)).toBe('B♭')
-    expect(heardName(midi(66), f)).toBe('F#')
+  it('spells a note of the scale as the scale does, any other as its key does (spellInKey)', () => {
+    expect(heardName(midi(70), note('F'), 'major')).toBe('B♭')
+    expect(heardName(midi(66), note('F'), 'major')).toBe('G♭')
+    expect(heardName(midi(66), note('G'), 'major')).toBe('F#')
+    expect(heardName(midi(66), note('A'), 'harmonic')).toBe('F#')
   })
 })
 

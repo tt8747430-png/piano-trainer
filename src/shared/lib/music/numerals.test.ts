@@ -3,7 +3,14 @@ import { chordSymbol } from './chord'
 import { parseChordSymbol } from './chord-symbol'
 import type { Key } from './key'
 import { note } from './note'
-import { numeralChord, numeralOf, numeralsParam, numeralText, parseNumerals } from './numerals'
+import {
+  numeralChord,
+  numeralOf,
+  numeralsParam,
+  numeralText,
+  parseNumerals,
+  readDegree,
+} from './numerals'
 import type { ChordSize } from './scale-chord'
 
 const C: Key = { tonic: note('C'), minor: false }
@@ -71,5 +78,19 @@ describe('numeralOf', () => {
 
   it('writes none for a chord a numeral does not name', () => {
     expect(numeralOf(parseChordSymbol('Csus4'), C)).toBeNull()
+  })
+})
+
+describe('readDegree', () => {
+  it('reads a Roman degree in either case, with a flat or sharp before it', () => {
+    expect(readDegree('', 'I')).toEqual({ degree: 0, shift: 0 })
+    expect(readDegree('♭', 'VII')).toEqual({ degree: 6, shift: -1 })
+    expect(readDegree('b', 'iii')).toEqual({ degree: 2, shift: -1 })
+    expect(readDegree('#', 'iv')).toEqual({ degree: 3, shift: 1 })
+  })
+
+  it('reads nothing that is not a degree', () => {
+    expect(readDegree('', 'VIII')).toBeNull()
+    expect(readDegree('x', 'I')).toBeNull()
   })
 })

@@ -150,7 +150,7 @@ describe('Learn → Scales', () => {
     const { midi: keyboard } = await renderApp('/learn/scales?show=chords&keysPlay=notes')
     await screen.findByRole('group', { name: 'Keyboard' })
     act(() => keyboard.press(midi(61)))
-    expect(screen.getByText('No chord of the scale holds C#')).toBeInTheDocument()
+    expect(screen.getByText('No chord of the scale holds D♭')).toBeInTheDocument()
   })
 
   it('forgets the note when the chords change', async () => {

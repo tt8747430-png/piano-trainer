@@ -36,15 +36,16 @@ export function KeyExplorer({
 }) {
   const { t } = useTranslation('learn')
   const scaleName = useScaleName()
-  const key = keyFromParam(view.key)
+  // Read once per key: the signature engraves again whenever the key it is handed is new.
+  const key = useMemo(() => keyFromParam(view.key), [view.key])
   const kind = keyScale(key)
-  const chords = useMemo(() => {
-    const shown = keyFromParam(view.key)
-    return placeScaleChords(shown.tonic, keyScale(shown), view.chords, view.inversion)
-  }, [view.key, view.chords, view.inversion])
+  const chords = useMemo(
+    () => placeScaleChords(key.tonic, keyScale(key), view.chords, view.inversion),
+    [key, view.chords, view.inversion],
+  )
   const borrowed = useMemo(
-    () => placeBorrowedChords(keyFromParam(view.key), view.chords, view.inversion),
-    [view.key, view.chords, view.inversion],
+    () => placeBorrowedChords(key, view.chords, view.inversion),
+    [key, view.chords, view.inversion],
   )
   const walk = useMemo(() => walkChords(chords), [chords])
   const placed = placeScale(key.tonic, kind)

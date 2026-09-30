@@ -6,10 +6,8 @@ export {
   type LessonCategory,
   type LessonLink,
   type LessonModule,
-  type LessonProgression,
-  type LessonSection,
-  type QuizAnswer,
+  type LessonAnswer,
 } from './model/types'
-export { readProgression, type ProgressionInKey } from './model/progression'
+export { readProgression } from './model/progression'
 export { lessonById } from './model/selectors'
 export { LESSONS } from './content'

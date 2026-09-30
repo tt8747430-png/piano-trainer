@@ -1,4 +1,4 @@
-export type { FigureChange, FigureChoice, SetupChange, SetupParams } from './model/setup-params'
+export type { FigureChange, SetupChange, SetupParams } from './model/setup-params'
 export { ChordSizeField } from './ui/ChordSizeField'
 export { FigureRows } from './ui/FigureRows'
 export { MelodySwitch } from './ui/MelodySwitch'

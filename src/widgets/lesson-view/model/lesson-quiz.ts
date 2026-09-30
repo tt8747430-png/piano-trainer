@@ -1,4 +1,4 @@
-import type { QuizAnswer } from '@/entities/lesson'
+import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import type { ShownKeys } from '@/features/play-example'
 import {
   MIDDLE_C,
@@ -9,11 +9,12 @@ import {
   pitchClassOf,
   type Midi,
 } from '@/shared/lib/music'
+import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import { placeExample } from './chord-example'
 
 /** A quiz's answer on the keys: a chord as the Chords reference places it, notes from middle C up. */
-export function quizAnswer(answer: QuizAnswer): ShownKeys {
+export function quizAnswer(answer: LessonAnswer): ShownKeys {
   if ('chord' in answer) return placeExample(answer.chord)
   const marks = new Map<Midi, KeyMark>()
   for (const name of answer.notes) {
@@ -23,6 +24,20 @@ export function quizAnswer(answer: QuizAnswer): ShownKeys {
   }
   return { keys: [...marks.keys()].sort((a, b) => a - b), marks }
 }
+
+/** The keys of an answer heard: a chord's together, notes as a line from the lowest. */
+export const answerSounds = (answer: LessonAnswer, keys: readonly Midi[]): NoteSound[] =>
+  chordSounds(keys, { arpeggio: 'notes' in answer })
+
+/** Each quiz of a lesson by its place, `section.block`, with its answer on the keys. */
+export const quizAnswers = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
+  new Map(
+    lesson.sections.flatMap((section, s) =>
+      section.blocks.flatMap((block, b) =>
+        block.kind === 'quiz' ? [[`${s}.${b}`, quizAnswer(block.answer)] as const] : [],
+      ),
+    ),
+  )
 
 const pitchClasses = (keys: readonly Midi[]) => new Set(keys.map((key) => pitchClass(key)))
 

@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next'
 import { en } from './locales/en'
 import { ru } from './locales/ru'
 
-export const NAMESPACES = [
+const NAMESPACES = [
   'common',
   'path',
   'songs',
@@ -28,8 +28,8 @@ void i18n.use(initReactI18next).init({
 })
 
 export { i18n }
-export type { LocaleResources } from './types'
+
 export { localText, type LocalText } from './local-text'
-export { isLocale, LOCALES, type Locale } from './locale'
+export { LOCALES, type Locale } from './locale'
 export { useLocale } from './use-locale'
 export { useScaleName } from './use-scale-name'

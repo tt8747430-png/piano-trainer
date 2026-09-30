@@ -1,6 +1,7 @@
 # ADR 0005 — Levels live on the Path, nowhere else
 
-- **Status:** accepted · **Date:** 2026-09-24
+- **Status:** accepted · **Date:** 2026-09-24 · amended by [ADR 0018](0018-a-lesson-is-a-worksheet.md): a lesson,
+  which is no Step, carries its own level on the Path's four
 
 ## Context
 
@@ -9,7 +10,7 @@ place on the Path would be two sources of truth, and no test could say which is 
 
 ## Decision
 
-`entities/path/content/path.ts` is the only place a level is written: a Step's level is the list it sits in. Pieces
+`entities/path/content/path.ts` is the only place a Step's level is written: a Step's level is the list it sits in. Pieces
 carry no `level`; Songs reads a piece's level through `levelOf(stepId)`. Tests require every Piece on the Path
 exactly once and no Listing on it; once the Path is levelled (roadmap sub-project 6), every level holds at least
 one Step, and that work adds the test.

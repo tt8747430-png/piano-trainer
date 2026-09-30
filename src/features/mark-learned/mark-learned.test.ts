@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { createProgressStore } from '@/entities/progress'
 import { createMemoryStorage } from '@/shared/lib'
-import { markLearned, unmarkLearned } from './index'
+import { markLearned } from './mark-learned'
+import { unmarkLearned } from './unmark-learned'
 
 const MONDAY = new Date('2026-09-21T10:00:00.000Z')
 const FRIDAY = new Date('2026-09-25T10:00:00.000Z')

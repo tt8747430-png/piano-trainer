@@ -1,5 +1,19 @@
 import { noteOnTop, type ShownKeys } from '@/features/play-example'
-import { pitchClassOf, placeChord, type HoldingChord, type SpelledNote } from '@/shared/lib/music'
+import {
+  midi,
+  MIDDLE_C,
+  noteName,
+  pitchClassOf,
+  placeChord,
+  type HoldingChord,
+  type SpelledNote,
+} from '@/shared/lib/music'
+
+/** The melody note by itself, named, on its key from middle C: what the keys show before a chord plays. */
+export function melodyAlone(melody: SpelledNote): ShownKeys {
+  const key = midi(MIDDLE_C + pitchClassOf(melody))
+  return { keys: [key], marks: new Map([[key, { tone: 'scale', label: noteName(melody) }]]) }
+}
 
 /** A chord that holds the melody, in root position from middle C, with the melody note on top. */
 export function underMelody(holding: HoldingChord, melody: SpelledNote): ShownKeys {

@@ -16,21 +16,22 @@ export function ChordExamples({
   symbols: readonly string[]
   onShow: (shown: ShownKeys) => void
 }) {
-  const playback = usePlayback<string>()
+  // By place: a row may write a chord twice (C F C), and each is its own button.
+  const playback = usePlayback<number>()
   return (
     <div className="flex flex-wrap gap-2">
-      {symbols.map((symbol) => {
+      {symbols.map((symbol, place) => {
         const example = placeExample(symbol)
-        const playing = playback.playing === symbol
+        const playing = playback.playing === place
         return (
           <Button
-            key={symbol}
+            key={place}
             variant="outline"
             aria-pressed={playing}
             className="relative h-12 min-w-16 px-4 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
             onClick={() => {
               onShow(example)
-              playback.toggle(symbol, chordSounds(example.keys, { arpeggio: false }))
+              playback.toggle(place, chordSounds(example.keys, { arpeggio: false }))
             }}
           >
             {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" /> : null}

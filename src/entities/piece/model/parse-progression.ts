@@ -4,6 +4,7 @@ import {
   CHORD_QUALITIES,
   scaleIntervals,
   spellAbove,
+  readDegree,
   spellChord,
   TICKS_PER_BEAT,
   type Chord,
@@ -20,16 +21,7 @@ import { ContentError, type ContentPosition } from './content-error'
 import { pieceKey, type ProgressionPiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
 const MAJOR_SCALE = scaleIntervals('major')
-
-const CHROMATIC = new Map([
-  ['', 0],
-  ['b', -1],
-  ['♭', -1],
-  ['#', 1],
-  ['♯', 1],
-])
 
 /** How each function's chord grows with the chord size: triads, sevenths, ninths. */
 const FUNCTIONS = new Map<string, Readonly<Record<ChordSize, ChordQuality>>>([
@@ -65,8 +57,8 @@ function readChord(
 ): TimedChord {
   const [, chromatic = '', numeral = '', written = '', beatsText = '', bassText] =
     TOKEN.exec(token) ?? fail(`cannot read the chord "${token}"`)
-  const degree =
-    MAJOR_SCALE[NUMERALS.indexOf(numeral.toUpperCase())] ?? fail(`unknown degree in "${token}"`)
+  const read = readDegree(chromatic, numeral) ?? fail(`unknown degree in "${token}"`)
+  const degree = MAJOR_SCALE[read.degree] ?? fail(`unknown degree in "${token}"`)
   const fixed = written.startsWith('=') ? written.slice(1) : null
   const quality =
     fixed === null
@@ -79,7 +71,7 @@ function readChord(
   if (ticks === null) fail(`"${token}" needs beats above 0 on whole ticks`)
   const root = spellAbove(pieceKey(piece).tonic, {
     steps: degree.steps,
-    semitones: degree.semitones + (CHROMATIC.get(chromatic) ?? 0),
+    semitones: degree.semitones + read.shift,
   })
   if (bassText === undefined) return { chord: { root, quality }, ticks }
   const role = BASS_ROLES.get(bassText) ?? fail(`unknown bass in "${token}"`)

@@ -3,11 +3,9 @@ import { pathSteps } from '@/entities/path'
 import {
   selectAnswers,
   selectIsLearned,
-  selectLastPractised,
   selectLearned,
   selectPractised,
   selectQuizStats,
-  selectRating,
   selectSuggestedStep,
 } from './selectors'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
@@ -33,16 +31,6 @@ describe('progress selectors', () => {
   it('tell whether a step is learned', () => {
     expect(selectIsLearned('piece:bz5')(state)).toBe(true)
     expect(selectIsLearned('chords:sev')(state)).toBe(false)
-  })
-
-  it('rate a skill from its evidence', () => {
-    expect(selectRating('chord:m7')(state)).toBe('gap')
-    expect(selectRating('chord:maj')(state)).toBe('unknown')
-  })
-
-  it('find the piece practised last', () => {
-    expect(selectLastPractised(state)).toBe('ode')
-    expect(selectLastPractised(EMPTY_PROGRESS)).toBeNull()
   })
 
   it('give an unanswered skill the same empty evidence every time', () => {

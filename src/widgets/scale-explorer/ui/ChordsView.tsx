@@ -8,7 +8,6 @@ import {
   noteFromParam,
   placeScale,
   placeScaleChords,
-  spellScale,
   walkChords,
   type ChordNotes,
 } from '@/shared/lib/music'
@@ -114,7 +113,8 @@ export function ChordsView({
     >
       <KeyChords
         chords={chords}
-        tones={spellScale(tonic, kind)}
+        root={tonic}
+        kind={kind}
         listening={listening}
         note={note}
         holding={holding}

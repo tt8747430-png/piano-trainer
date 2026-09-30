@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
+import { lessonById } from '@/entities/lesson'
 import {
+  answerSounds,
   checkedKeys,
   isRight,
   quizAnswer,
   quizKeys,
+  quizAnswers,
   quizReducer,
   type QuizState,
 } from './lesson-quiz'
@@ -22,6 +25,32 @@ describe('quizAnswer', () => {
     const third = quizAnswer({ notes: ['F', 'A'] })
     expect(third.keys).toEqual([65, 69])
     expect(third.marks.get(midi(69))).toEqual({ tone: 'scale', label: 'A' })
+  })
+})
+
+describe('quizAnswers', () => {
+  it('holds each quiz of a lesson by its place, section.block, with its answer on the keys', () => {
+    const lesson = lessonById('bass-and-chords')
+    if (!lesson) throw new Error('the lesson is missing')
+    const answers = quizAnswers(lesson)
+    const places = lesson.sections.flatMap((section, s) =>
+      section.blocks.flatMap((block, b) => (block.kind === 'quiz' ? [`${s}.${b}`] : [])),
+    )
+    expect([...answers.keys()]).toEqual(places)
+    expect(places.length).toBeGreaterThan(0)
+  })
+})
+
+describe('answerSounds', () => {
+  const onsets = (answer: Parameters<typeof answerSounds>[0]) =>
+    answerSounds(answer, keys(65, 60, 69)).map((sound) => sound.at)
+
+  it('sounds a chord together and notes as a line, low to high', () => {
+    expect(new Set(onsets({ chord: 'F' })).size).toBe(1)
+    expect(new Set(onsets({ notes: ['F', 'A', 'C'] })).size).toBe(3)
+    expect(answerSounds({ notes: ['F', 'A', 'C'] }, keys(65, 60, 69)).map((s) => s.midi)).toEqual(
+      keys(60, 65, 69),
+    )
   })
 })
 

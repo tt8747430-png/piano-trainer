@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { ChromaticWalkLink } from '@/features/practice'
@@ -39,7 +40,8 @@ export function ChordExplorer({
   const { t } = useTranslation(['learn', 'music', 'common'])
   const play = usePlay()
   const playback = usePlayback<'chord' | 'arpeggio'>()
-  const { chord: built, placed } = viewChord(chord)
+  // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
+  const { chord: built, placed } = useMemo(() => viewChord(chord), [chord])
   const keys = [...placed.lh, ...placed.rh]
   const marks = new Map<Midi, KeyMark>(
     keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),

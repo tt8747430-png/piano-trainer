@@ -65,16 +65,25 @@ function seventhOf(triad: NumeralTriad, mark: string, written: string): NumeralS
   return triad === 'dim' ? null : 'major'
 }
 
+/** A degree as Roman numerals write it, in either case, after a ♭ or ♯: its index from the tonic and its shift. */
+export function readDegree(
+  sign: string,
+  roman: string,
+): { readonly degree: number; readonly shift: -1 | 0 | 1 } | null {
+  const degree = ROMANS.findIndex((each) => each === roman.toUpperCase())
+  const shift = SHIFTS.get(sign)
+  return degree < 0 || shift === undefined ? null : { degree, shift }
+}
+
 /** One numeral: `♭VII`, `ii7`, `IMaj7`, `vii°`, `viiø7`, `III+`; upper case major, lower case minor. */
 export function parseNumeral(token: string): Numeral | null {
   const match = TOKEN.exec(token)
   if (!match) return null
   const [, sign = '', roman = '', mark = '', written = ''] = match
-  const degree = ROMANS.findIndex((each) => each === roman.toUpperCase())
-  const shift = SHIFTS.get(sign)
+  const read = readDegree(sign, roman)
   const triad = triadOf(roman === roman.toUpperCase(), mark)
   const seventh = triad ? seventhOf(triad, mark, written) : null
-  return shift === undefined || !triad || !seventh ? null : { degree, shift, triad, seventh }
+  return !read || !triad || !seventh ? null : { ...read, triad, seventh }
 }
 
 /** A line of numerals apart by spaces, commas, hyphens or dashes; null if any cannot be read, or none is there. */

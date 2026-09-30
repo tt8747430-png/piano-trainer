@@ -20,6 +20,8 @@ describe('step ids', () => {
     ['chords:', false],
     ['chords:x', false],
     ['piece:', false],
+    ['piece1', false],
+    ['scalemajor', false],
     ['scale:constructor', false],
     [3, false],
     [null, false],

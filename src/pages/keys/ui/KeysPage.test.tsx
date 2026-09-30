@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -45,6 +45,16 @@ describe('Learn → Keys', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([65, 68, 72])
     await user.click(screen.getByRole('button', { name: 'Play the chords' }))
     expect(notes(audio.played.at(-1)?.sounds ?? []).slice(0, 3)).toEqual([60, 64, 67])
+  })
+
+  it('keeps the key’s signature written while its chords change, engraving it once', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/keys?key=G')
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
+    await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
+    const engraved = sheet.querySelector('svg')
+    await user.click(screen.getByRole('button', { name: '7ths' }))
+    expect(sheet.querySelector('svg')).toBe(engraved)
   })
 
   it('lists the songs written in the key', async () => {

@@ -15,11 +15,8 @@ import {
   type ChordSize,
 } from '@/shared/lib/music'
 import {
-  BOOKS,
-  COLLECTION_IDS,
   COMMON_PROGRESSIONS,
   COLLECTIONS,
-  isCollectionId,
   PIECES,
   chartOf,
   hasMethodCodes,
@@ -29,9 +26,10 @@ import {
   pieceKey,
   type Piece,
   isSongCollectionId,
-  SONG_COLLECTION_IDS,
   SONG_COLLECTIONS,
 } from '../index'
+import { COLLECTION_IDS, isCollectionId, SONG_COLLECTION_IDS } from '../model/types'
+import { BOOKS } from './books'
 
 const ENTRIES = COLLECTIONS.flatMap((collection) => collection.entries)
 

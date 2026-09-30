@@ -16,6 +16,20 @@ describe('A lesson', () => {
     ).toBeInTheDocument()
   })
 
+  it('plays one of a chord written twice, pressing only the one tapped', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/lessons/inversions')
+    await screen.findByRole('heading', { level: 1 })
+    // The row C, F/C, G/B, C: C before and after its inversions.
+    const row = screen.getByRole('button', { name: 'G/B' }).parentElement
+    if (!row) throw new Error('the lesson writes its row of inversions')
+    const [first, ...others] = within(row).getAllByRole('button', { name: /^C$/ })
+    if (!first || others.length === 0) throw new Error('the row writes C twice')
+    await user.click(first)
+    expect(first).toHaveAttribute('aria-pressed', 'true')
+    for (const other of others) expect(other).toHaveAttribute('aria-pressed', 'false')
+  })
+
   it('goes back to Learn when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/lessons/reading-chord-symbols')

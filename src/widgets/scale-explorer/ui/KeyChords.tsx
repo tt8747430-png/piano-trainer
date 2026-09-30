@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import type { Midi, PlacedScaleChord, Tone } from '@/shared/lib/music'
+import type { Midi, PlacedScaleChord, ScaleKind, SpelledNote } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ChordButton } from '@/shared/ui'
@@ -12,13 +12,15 @@ import { heardName } from '../model/scale-keys'
  */
 export function KeyChords({
   chords,
-  tones,
+  root,
+  kind,
   listening,
   note,
   holding,
 }: {
   chords: readonly PlacedScaleChord[]
-  tones: readonly Tone[]
+  root: SpelledNote
+  kind: ScaleKind
   listening: boolean
   note: Midi | null
   holding: readonly PlacedScaleChord[]
@@ -31,9 +33,9 @@ export function KeyChords({
     note === null
       ? ''
       : holding.length === 0
-        ? t('holdsNone', { note: heardName(note, tones) })
+        ? t('holdsNone', { note: heardName(note, root, kind) })
         : t('holds', {
-            note: heardName(note, tones),
+            note: heardName(note, root, kind),
             chords: new Intl.ListFormat(locale, { type: 'conjunction' }).format(
               holding.map((placed) => placed.symbol),
             ),

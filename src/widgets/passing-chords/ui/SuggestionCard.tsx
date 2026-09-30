@@ -23,7 +23,8 @@ export function SuggestionCard({
   inKey: boolean
   /** Whether the row, or a chord of it by its place, still plays. */
   isPlaying: (what: 'row' | number) => boolean
-  onPlayChord: (chord: Chord, place: number) => void
+  /** A chord of the row, by its place in it. */
+  onPlayChord: (place: number) => void
   onPlayRow: () => void
 }) {
   const { t } = useTranslation('learn')
@@ -50,7 +51,7 @@ export function SuggestionCard({
               variant="outline"
               aria-pressed={isPlaying(place)}
               className="min-w-16 px-4 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
-              onClick={() => onPlayChord(chord, place)}
+              onClick={() => onPlayChord(place)}
             >
               <span className="font-display text-xl font-semibold">{chordSymbol(chord)}</span>
             </Button>

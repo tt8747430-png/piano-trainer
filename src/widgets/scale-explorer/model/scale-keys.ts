@@ -2,15 +2,18 @@ import {
   noteName,
   pitchClass,
   pitchClassOf,
-  plainSpelling,
   rangeOf,
   scaleChordHolds,
+  scaleKey,
+  spellInKey,
+  spellScale,
   type Finger,
   type KeyRange,
   type Midi,
   type PlacedScaleChord,
   type PlacedTone,
-  type Tone,
+  type ScaleKind,
+  type SpelledNote,
 } from '@/shared/lib/music'
 import type { KeyMark } from '@/shared/ui'
 
@@ -60,9 +63,9 @@ export const chordsHolding = (
   note: Midi,
 ): PlacedScaleChord[] => chords.filter((placed) => scaleChordHolds(placed.chord, pitchClass(note)))
 
-/** A key a hand played, named as the scale spells it, or with a sharp when it is not in the scale. */
-export function heardName(note: Midi, tones: readonly Tone[]): string {
+/** A key a hand played, named as the scale spells it, or, not in the scale, as the scale's key does. */
+export function heardName(note: Midi, root: SpelledNote, kind: ScaleKind): string {
   const pc = pitchClass(note)
-  const inScale = tones.find((tone) => pitchClassOf(tone.note) === pc)
-  return noteName(inScale ? inScale.note : plainSpelling(pc, true))
+  const inScale = spellScale(root, kind).find((tone) => pitchClassOf(tone.note) === pc)
+  return noteName(inScale ? inScale.note : spellInKey(pc, scaleKey(root, kind)))
 }

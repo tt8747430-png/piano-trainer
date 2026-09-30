@@ -1,17 +1,13 @@
 export {
-  DEFAULT_PRACTICE,
   DEFAULT_QUIZ_CHOICE,
   PLAYING_TOGGLES,
-  PRACTICE_TOGGLES,
   THEMES,
   canonicalFamilies,
   canonicalScales,
   defaultKeyboard,
   type KeyboardSettings,
   type PracticeToggle,
-  type PracticeToggles,
   type QuizChoice,
-  type SettingsState,
   type Theme,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'

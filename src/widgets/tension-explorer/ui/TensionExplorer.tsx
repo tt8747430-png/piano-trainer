@@ -4,6 +4,7 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { noteOnTop, type ShownKeys } from '@/features/play-example'
 import {
   chordRootSpelling,
+  pitchClassOf,
   noteFromParam,
   noteName,
   noteParam,
@@ -18,7 +19,7 @@ import {
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { Dropdown } from '@/shared/ui'
-import { tensionChord } from '../model/tension-keys'
+import { tensionChord, tensionMark } from '../model/tension-keys'
 import type { TensionView } from '../model/tension-view'
 import { TensionGroupCard } from './TensionGroupCard'
 
@@ -54,7 +55,10 @@ export function TensionExplorer({
           value={view.chord}
           options={TENSION_CHORDS.map((quality) => ({
             value: quality,
-            label: noteName(root) + qualitySuffix(quality),
+            // Each chord's root as choosing it spells it: over C♯, Maj7 is D♭Maj7.
+            label:
+              noteName(chordRootSpelling(pitchClassOf(root), qualityIntervals(quality))) +
+              qualitySuffix(quality),
             detail: t(`music:quality.${quality}`),
           }))}
           onChange={(next) => onChange({ chord: next })}
@@ -77,10 +81,7 @@ export function TensionExplorer({
             tones={tones.filter((tone) => tone.group === group)}
             isPlaying={(tone) => playback.playing === idOf(tone)}
             onPlay={(tone) => {
-              const next = noteOnTop(chord, tone.pitchClass, {
-                tone: tone.role,
-                label: tone.degree,
-              })
+              const next = noteOnTop(chord, tone.pitchClass, tensionMark(tone))
               setPlayed({ view, shown: next })
               playback.toggle(idOf(tone), chordSounds(next.keys, { arpeggio: false }))
             }}

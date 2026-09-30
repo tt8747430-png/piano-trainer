@@ -82,8 +82,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'VII–III–VI climbs the circle of fifths in dominant 7ths, each chord pulling to the next: B7, E7, A7 in C major, ready to fall to ii.',
-            ru: 'VII–III–VI поднимается по квинтовому кругу доминантсептаккордами, и каждый тянет к следующему: B7, E7, A7 в до мажоре, готовые прийти на ii.',
+            en: 'VII–III–VI goes anticlockwise round the circle of fifths in dominant 7ths, down a fifth each time, each chord pulling to the next: B7, E7, A7 in C major, ready to fall to ii.',
+            ru: 'VII–III–VI идёт по кварто-квинтовому кругу против часовой стрелки доминантсептаккордами, каждый раз на квинту вниз, и каждый тянет к следующему: B7, E7, A7 в до мажоре, готовые прийти на ii.',
           },
         },
         { kind: 'progression', numerals: 'VII III VI', key: C_MAJOR, size: 'sevenths' },

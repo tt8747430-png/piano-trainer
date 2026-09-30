@@ -3,21 +3,17 @@ import type { Lesson } from '@/entities/lesson'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { NO_KEYS, type ShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
-import { isRight, quizAnswer, quizKeys, quizReducer, type QuizKeys } from '../model/lesson-quiz'
+import {
+  answerSounds,
+  isRight,
+  quizAnswers,
+  quizKeys,
+  quizReducer,
+  type QuizKeys,
+} from '../model/lesson-quiz'
 import { LessonBlock } from './LessonBlock'
 import { QuizBlock } from './QuizBlock'
-
-/** Each quiz of a lesson by its place, `section.block`, with its answer on the keys. */
-const answersOf = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
-  new Map(
-    lesson.sections.flatMap((section, s) =>
-      section.blocks.flatMap((block, b) =>
-        block.kind === 'quiz' ? [[`${s}.${b}`, quizAnswer(block.answer)] as const] : [],
-      ),
-    ),
-  )
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
@@ -28,7 +24,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const [quiz, dispatch] = useReducer(quizReducer, null)
-  const answers = useMemo(() => answersOf(lesson), [lesson])
+  const answers = useMemo(() => quizAnswers(lesson), [lesson])
   const answer = quiz ? answers.get(quiz.id) : undefined
   const keys: QuizKeys = quiz && answer ? quizKeys(quiz, answer) : shown
   const choosing = quiz !== null && quiz.stage !== 'answer'
@@ -68,11 +64,11 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
                 onCheck={() => {
                   const right = open !== null && isRight(open.chosen, answerKeys)
                   dispatch({ type: 'check', right })
-                  if (open && right) play(chordSounds(open.chosen, { arpeggio: false }))
+                  if (open && right) play(answerSounds(block.answer, open.chosen))
                 }}
                 onReveal={() => {
                   dispatch({ type: 'reveal' })
-                  play(chordSounds(answerKeys.keys, { arpeggio: false }))
+                  play(answerSounds(block.answer, answerKeys.keys))
                 }}
                 onRetry={() => dispatch({ type: 'retry' })}
               />

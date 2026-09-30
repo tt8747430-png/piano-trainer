@@ -15,9 +15,16 @@ describe('placeExample', () => {
     expect(example.marks.has(midi(50))).toBe(false)
   })
 
+  it('plays a slash chord over a chord tone as that inversion, from the bass nearest middle C', () => {
+    // As the lessons teach it: C/E is E G C; from C E G the nearest F is C F A and the nearest G is B D G.
+    expect(placeExample('C/E').keys).toEqual([64, 67, 72])
+    expect(placeExample('F/C').keys).toEqual([60, 65, 69])
+    expect(placeExample('G/B').keys).toEqual([59, 62, 67])
+  })
+
   it('marks a bass that is a chord tone as that tone', () => {
     const example = placeExample('F6/D')
-    expect(example.keys[0]).toBe(50)
-    expect(example.marks.get(midi(50))?.label).toBe('6')
+    expect(example.keys).toEqual([62, 65, 69, 72])
+    expect(example.marks.get(midi(62))?.label).toBe('6')
   })
 })

@@ -114,6 +114,7 @@ export {
   numeralsParam,
   numeralText,
   parseNumerals,
+  readDegree,
   type Numeral,
 } from './numerals'
 export {
