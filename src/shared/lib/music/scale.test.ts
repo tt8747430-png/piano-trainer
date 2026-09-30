@@ -4,6 +4,7 @@ import type { Key } from './key'
 import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import {
+  keyScale,
   keyTones,
   tonesInKey,
   SCALE_FAMILIES,
@@ -314,6 +315,13 @@ describe('relativeKey', () => {
       tonic: note('A'),
       minor: false,
     })
+  })
+})
+
+describe('keyScale', () => {
+  it('is a major key’s major scale and a minor key’s natural minor', () => {
+    expect(keyScale({ tonic: note('D'), minor: false })).toBe('major')
+    expect(keyScale({ tonic: note('D'), minor: true })).toBe('natural')
   })
 })
 

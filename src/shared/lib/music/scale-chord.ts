@@ -4,7 +4,7 @@ import { labelled } from './interval'
 import type { Key } from './key'
 import { noteName, pitchClassOf, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
-import { spellScale, type ScaleKind } from './scale'
+import { keyScale, spellScale, type ScaleKind } from './scale'
 import { availableTensions } from './tensions'
 import { toneAbove, type Tone } from './tone'
 
@@ -184,7 +184,7 @@ const SHIFT_SIGNS = new Map([
 
 /** A key's borrowed chords of `notes` notes, in degree order. */
 export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
-  const own = spellScale(key.tonic, key.minor ? 'natural' : 'major')
+  const own = spellScale(key.tonic, keyScale(key))
   return BORROWED[key.minor ? 'minor' : 'major'].flatMap(({ degree, from }) => {
     const chord = scaleChords(key.tonic, from, notes)[degree]
     const ownRoot = own[degree]

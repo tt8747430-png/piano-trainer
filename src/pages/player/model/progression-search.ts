@@ -2,6 +2,7 @@ import { PROGRESSION, type ProgressionChoice } from '@/features/practice'
 import { keyFromParam, parseNumerals, type KeyParam } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
+import { ownLeftOut } from './own-left-out'
 
 /** A progression's URL: its numerals and key, how the Player goes, and its own choices (absent is its own). */
 export type ProgressionSearch = PracticeView & {
@@ -18,7 +19,7 @@ export function progressionChoice(
   search: Pick<ProgressionSearch, 'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'chordSize'>,
 ): ProgressionChoice {
   return {
-    numerals: parseNumerals(search.p) ?? parseNumerals(PROGRESSION.numerals) ?? [],
+    numerals: parseNumerals(search.p) ?? [],
     key: keyFromParam(search.key),
     pattern:
       search.pattern === undefined || search.pattern === 'chart'
@@ -31,14 +32,5 @@ export function progressionChoice(
 }
 
 /** A Setup change as the URL writes it: its own pattern or chord size left out. */
-export function progressionPatch(change: ProgressionChange): Partial<ProgressionSearch> {
-  return {
-    ...change,
-    ...('pattern' in change
-      ? { pattern: change.pattern === PROGRESSION.pattern ? undefined : change.pattern }
-      : {}),
-    ...('chordSize' in change
-      ? { chordSize: change.chordSize === PROGRESSION.chordSize ? undefined : change.chordSize }
-      : {}),
-  }
-}
+export const progressionPatch = (change: ProgressionChange): Partial<ProgressionSearch> =>
+  ownLeftOut(change, PROGRESSION)

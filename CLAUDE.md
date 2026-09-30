@@ -61,9 +61,10 @@ it. `@` → `src`.
   `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic` and `/play/progression`; screens are
   lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
-  quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/search.ts` (every route's `validateSearch` and defaults, typed with
-  `import type` from the slice that owns each view: the router imports no page or widget code, or it would leave its
-  lazy chunk), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
+  quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (each
+  place's validators, defaults and route search options, typed with `import type` from the slice that owns each view:
+  the router imports no page or widget code, or it would leave its lazy chunk; validators run as the app opens, so they
+  import only what a URL is made of, with `read-search.ts`, never a chart's arrangement), `App.tsx` (the provider stack: `<App settingsStore progressStore services router />`),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
   `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `RouteError`,
@@ -141,7 +142,7 @@ it. `@` → `src`.
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and
   fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
-  with `RailButton`, `Pinned`, `ScreenHeader`, `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
+  with `RailButton`, `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up
   button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `RowLink` and `RowGroup`, `LEARN_TILES` (the tile a row to each of Learn's pages wears), `Fact`, `ChordButton`, `PlayLabel` (a Play button's words, Stop while it sounds), `PAINT`,
   `Sheet` with its trigger and close, `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,

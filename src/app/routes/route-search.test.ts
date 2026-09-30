@@ -3,17 +3,15 @@ import { describe, expect, it } from 'vitest'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
-  CHROMATIC_DEFAULTS,
   INTERVALS_DEFAULTS,
   KEYS_DEFAULTS,
   LEARN_DEFAULTS,
-  PLAYER_DEFAULTS,
-  PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
-  SONGS_DEFAULTS,
   TENSIONS_DEFAULTS,
-  WALK_DEFAULTS,
-} from './search'
+} from './learn-search'
+import { CHROMATIC_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
+import { SONGS_DEFAULTS } from './songs-search'
+import { PROGRESSIONS_DEFAULTS } from './tools-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
@@ -225,6 +223,10 @@ describe('search params', () => {
       category: 'scales',
     })
     expect(await searchAt('/learn?level=9&category=cooking')).toEqual(LEARN_DEFAULTS)
+  })
+
+  it('keep a number typed as a search, which the router reads as a number', async () => {
+    expect(await searchAt('/songs?q=1999')).toMatchObject({ q: '1999' })
   })
 
   it('write a progression’s numerals one way, and take the default for a line that cannot be read', async () => {

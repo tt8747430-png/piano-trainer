@@ -20,6 +20,13 @@ const ROUTES = [
   ['/learn/chords', '/learn/chords'],
   ['/learn/scales', '/learn/scales'],
   ['/learn/keys', '/learn/keys'],
+  ['/learn/intervals', '/learn/intervals'],
+  ['/learn/tensions', '/learn/tensions'],
+  ['/learn/chord-finder', '/learn/chord-finder'],
+  ['/learn/reharmonise', '/learn/reharmonise'],
+  ['/learn/passing-chords', '/learn/passing-chords'],
+  ['/learn/progressions', '/learn/progressions'],
+  ['/play/progression', '/play/progression'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
   ['/practice/quiz/build-chord', '/practice/quiz/$quiz'],
   ['/settings', '/settings'],
@@ -75,9 +82,8 @@ describe('routes', () => {
     vi.resetModules()
     const fresh = await import('./router')
     const router = fresh.createAppRouter(createMemoryHistory())
-    for (const path of ['/', '/songs', '/songs/$pieceId', '/play/$pieceId', '/settings'] as const) {
-      const component = router.routesByPath[path].options.component as { preload?: unknown }
-      expect(component.preload, path).toBeTypeOf('function')
+    for (const [path, route] of Object.entries(router.routesByPath)) {
+      expect(route.options.component, path).toHaveProperty('preload', expect.any(Function))
     }
   })
 })

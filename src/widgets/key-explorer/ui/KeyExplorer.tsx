@@ -6,6 +6,7 @@ import { PractiseChords } from '@/features/practice'
 import { useScaleName } from '@/shared/i18n'
 import {
   keyFromParam,
+  keyScale,
   noteName,
   noteParam,
   placeBorrowedChords,
@@ -13,7 +14,6 @@ import {
   placeScaleChords,
   rangeOf,
   walkChords,
-  type ScaleKind,
 } from '@/shared/lib/music'
 import { LEARN_TILES, RowGroup, RowLink } from '@/shared/ui'
 import { keyMarks } from '../model/key-marks'
@@ -37,15 +37,10 @@ export function KeyExplorer({
   const { t } = useTranslation('learn')
   const scaleName = useScaleName()
   const key = keyFromParam(view.key)
-  const kind: ScaleKind = key.minor ? 'natural' : 'major'
+  const kind = keyScale(key)
   const chords = useMemo(() => {
     const shown = keyFromParam(view.key)
-    return placeScaleChords(
-      shown.tonic,
-      shown.minor ? 'natural' : 'major',
-      view.chords,
-      view.inversion,
-    )
+    return placeScaleChords(shown.tonic, keyScale(shown), view.chords, view.inversion)
   }, [view.key, view.chords, view.inversion])
   const borrowed = useMemo(
     () => placeBorrowedChords(keyFromParam(view.key), view.chords, view.inversion),

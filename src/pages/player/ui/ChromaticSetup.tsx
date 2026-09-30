@@ -19,7 +19,7 @@ import { Dropdown, MultiDropdown, Segmented } from '@/shared/ui'
 import { FigureRows, PlayerSetup, type FigureChange } from '@/widgets/player-setup'
 import { PlayingFields } from '@/widgets/practice-player'
 
-/** The chromatic walk's Setup: its chord types, root and direction, the pattern and figures, and how it plays. */
+/** The chromatic walk's Setup: its chord qualities, root and direction, the pattern and figures, and how it plays. */
 export function ChromaticSetup({
   open,
   onOpenChange,
@@ -55,7 +55,7 @@ export function ChromaticSetup({
       onFigures={onChange}
     >
       <MultiDropdown
-        label={t('player:chordTypes')}
+        label={t('player:qualities')}
         value={choice.chords}
         groups={CHORD_FAMILIES.map((family) => ({
           label: t(`music:family.${family}`),

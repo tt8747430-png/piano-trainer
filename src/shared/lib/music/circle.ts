@@ -1,7 +1,7 @@
 import { tonicSpelling, type Key } from './key'
 import { pitchClassOf, sameNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
-import { relativeKey } from './scale'
+import { keyScale, relativeKey } from './scale'
 import { scaleChords } from './scale-chord'
 
 /** One place on the circle of fifths: a major key outside, its relative minor inside. */
@@ -40,7 +40,7 @@ export interface CircleFunction {
  * minor or diminished one on its minor key's (C's vii°, B°, inside D).
  */
 export function circleFunctions(key: Key): CircleFunction[] {
-  return scaleChords(key.tonic, key.minor ? 'natural' : 'major', 3).flatMap((chord) => {
+  return scaleChords(key.tonic, keyScale(key), 3).flatMap((chord) => {
     const ring: CircleRing = chord.tones[1]?.semitones === 3 ? 'minor' : 'major'
     const pc = pitchClassOf(chord.root)
     const place = CIRCLE_OF_FIFTHS.findIndex((at) => pitchClassOf(at[ring].tonic) === pc)

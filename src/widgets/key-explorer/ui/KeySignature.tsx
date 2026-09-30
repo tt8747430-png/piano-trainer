@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { placeScale, type Key } from '@/shared/lib/music'
+import { keyScale, placeScale, type Key } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { scaleRun } from '@/shared/lib/schedule'
 import { LazyScoreView } from '@/shared/ui'
@@ -13,7 +13,7 @@ export function KeySignature({ value }: { value: Key }) {
     () =>
       notate(
         scaleRun(
-          { notes: placeScale(tonic, minor ? 'natural' : 'major') },
+          { notes: placeScale(tonic, keyScale({ tonic, minor })) },
           {
             rhythm: 'even',
             hands: 'rh',

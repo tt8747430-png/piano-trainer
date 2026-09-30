@@ -228,6 +228,9 @@ export function scaleGaps(kind: ScaleKind): ScaleGap[] {
 export const kindComingDown = (kind: ScaleKind): ScaleKind =>
   kind === 'melodic' ? 'natural' : kind
 
+/** A key's own scale: a major key's major, a minor key's natural minor. */
+export const keyScale = (key: Key): ScaleKind => (key.minor ? 'natural' : 'major')
+
 /** The notes a key's chords are made of: its scale's, and in a minor key its raised 6th and 7th too. */
 export const keyTones = (key: Key): Tone[] =>
   key.minor
@@ -264,7 +267,7 @@ const MODES_OF_MAJOR: readonly ScaleKind[] = [
 
 /** The scales that share a key's notes: its (relative) major's modes, each on its own root, the key's own left out. */
 export function modesOfKey(key: Key): { readonly root: SpelledNote; readonly kind: ScaleKind }[] {
-  const own: ScaleKind = key.minor ? 'natural' : 'major'
+  const own = keyScale(key)
   const major = key.minor ? relatedScale(key.tonic, 'natural')?.root : key.tonic
   if (!major) return []
   const notes = spellScale(major, 'major')
@@ -276,7 +279,7 @@ export function modesOfKey(key: Key): { readonly root: SpelledNote; readonly kin
 
 /** A key's relative: the minor on a major key's 6th, the major on a minor key's 3rd. */
 export function relativeKey(key: Key): Key {
-  const related = relatedScale(key.tonic, key.minor ? 'natural' : 'major')
+  const related = relatedScale(key.tonic, keyScale(key))
   if (!related) throw new RangeError('Every major and minor key has a relative')
   return { tonic: related.root, minor: !key.minor }
 }

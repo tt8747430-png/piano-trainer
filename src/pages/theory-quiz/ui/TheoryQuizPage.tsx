@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectQuizStats, useProgress, useProgressStoreApi } from '@/entities/progress'
@@ -13,8 +12,7 @@ import {
   type QuizMode,
   type TheoryQuiz,
 } from '@/features/quiz'
-import { useGoBack } from '@/shared/lib'
-import { RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { QuizBoard } from '@/widgets/quiz-board'
 import { QuizChoiceSheet } from '@/widgets/quiz-choice'
@@ -63,9 +61,8 @@ export function TheoryQuizPage() {
 
 /** The quiz under its name, with a way back to Practice, its stats and its choice of chords and scales. */
 function QuizScreen({ quiz }: { quiz: TheoryQuiz }) {
-  const { t } = useTranslation(['quiz', 'common'])
+  const { t } = useTranslation('quiz')
   const navigate = useNavigate()
-  const back = useGoBack({ to: '/practice' })
   const stats = useProgress(selectQuizStats)
   const toWholeQuiz = () =>
     void navigate({ to: '/practice/quiz/$quiz', params: { quiz: 'build-chord' }, replace: true })
@@ -73,24 +70,24 @@ function QuizScreen({ quiz }: { quiz: TheoryQuiz }) {
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t(`quiz:modes.${quiz}`)}
-        back={<RoundButton label={t('common:back')} icon={ArrowLeft} onClick={back} />}
+        title={t(`modes.${quiz}`)}
+        back={<BackButton fallback={{ to: '/practice' }} />}
       />
       {quiz === 'gaps' ? <GapsQuiz onWholeQuiz={toWholeQuiz} /> : <ChoiceQuiz mode={quiz} />}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <dl className="flex gap-5 text-sm text-muted-foreground">
           <div>
-            <dt className="inline">{t('quiz:stats.correct')} </dt>
+            <dt className="inline">{t('stats.correct')} </dt>
             <dd className="inline font-semibold text-foreground tabular-nums">
               {stats.correct} / {stats.total}
             </dd>
           </div>
           <div>
-            <dt className="inline">{t('quiz:stats.streak')} </dt>
+            <dt className="inline">{t('stats.streak')} </dt>
             <dd className="inline font-semibold text-foreground tabular-nums">{stats.streak}</dd>
           </div>
           <div>
-            <dt className="inline">{t('quiz:stats.best')} </dt>
+            <dt className="inline">{t('stats.best')} </dt>
             <dd className="inline font-semibold text-foreground tabular-nums">{stats.best}</dd>
           </div>
         </dl>

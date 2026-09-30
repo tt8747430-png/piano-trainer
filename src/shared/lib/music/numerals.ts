@@ -3,7 +3,7 @@ import { spellAbove } from './interval'
 import type { Key } from './key'
 import { letterIndex, pitchClassOf, plainRoot } from './note'
 import { pitchClass } from './pitch'
-import { spellScale, type ScaleKind } from './scale'
+import { keyScale, spellScale } from './scale'
 import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-chord'
 
 /** How much of each chord a line of numerals plays, as a progression's chord size does. */
@@ -51,8 +51,6 @@ const GROWN: Readonly<Record<'sevenths' | 'ninths', Readonly<Record<NumeralTriad
     sevenths: { maj: 'd7', min: 'm7', dim: 'hd', aug: 's5' },
     ninths: { maj: 'n9', min: 'm9', dim: 'hd', aug: 's5' },
   }
-
-const scaleOf = (key: Key): ScaleKind => (key.minor ? 'natural' : 'major')
 
 function triadOf(upper: boolean, mark: string): NumeralTriad | null {
   if (mark === '+') return upper ? 'aug' : null
@@ -119,7 +117,7 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
  * A major key counts from the major scale, a minor key from natural minor.
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
-  const kind = scaleOf(key)
+  const kind = keyScale(key)
   const tone = spellScale(key.tonic, kind)[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const root = plainRoot(
@@ -144,7 +142,7 @@ export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord
 export function numeralOf(chord: Chord, key: Key): Numeral | null {
   const named = NAMED.find(([quality]) => quality === chord.quality)
   const degree = (letterIndex(chord.root.letter) - letterIndex(key.tonic.letter) + 7) % 7
-  const tone = spellScale(key.tonic, scaleOf(key))[degree]
+  const tone = spellScale(key.tonic, keyScale(key))[degree]
   if (!named || !tone) return null
   const distance = pitchClass(pitchClassOf(chord.root) - tone.pitchClass)
   const shift = distance === 0 ? 0 : distance === 1 ? 1 : distance === 11 ? -1 : null

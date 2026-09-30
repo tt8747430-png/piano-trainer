@@ -1,14 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { Chart } from '@/shared/lib/arrangement'
 import { CHORD_QUALITIES, chordSymbol, note, PITCH_CLASSES, rootSpelling } from '@/shared/lib/music'
-import {
-  arrangeChromatic,
-  chordsParam,
-  CHROMATIC,
-  CHROMATIC_DIRECTIONS,
-  chromaticChart,
-  readChords,
-} from './chromatic'
+import { arrangeChromatic, chromaticChart } from './chromatic'
+import { chordsParam, CHROMATIC, CHROMATIC_DIRECTIONS, readChords } from './chromatic-choice'
 
 const symbols = (chart: Chart) =>
   chart.sections.flatMap((section) =>

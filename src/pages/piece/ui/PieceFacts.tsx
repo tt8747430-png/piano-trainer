@@ -1,42 +1,40 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, pieceKey, shelfOf, SourceLine, type Entry } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
-import { useGoBack } from '@/shared/lib'
-import { keyName, noteParam } from '@/shared/lib/music'
-import { ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
+import { keyName, keyScale, noteParam } from '@/shared/lib/music'
+import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
+
+/** Where Back leads from an entry opened directly: its shelf. */
+const SHELF_PAGE = { songs: '/songs', practice: '/practice' } as const
 
 /**
  * A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale.
  * Back returns where the learner came from (Path, Songs, Practice), or to the entry's shelf.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
-  const { t } = useTranslation(['piece', 'common'])
+  const { t } = useTranslation('piece')
   const locale = useLocale()
   const scaleName = useScaleName()
-  const toSongs = useGoBack({ to: '/songs' })
-  const toPractice = useGoBack({ to: '/practice' })
-  const back = { songs: toSongs, practice: toPractice }[shelfOf(entry.kind)]
   const { primary, secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
-  const scaleKind = key.minor ? 'natural' : 'major'
+  const scaleKind = keyScale(key)
   return (
     <div className="flex flex-col gap-3">
       <ScreenHeader
         title={primary}
-        back={<RoundButton label={t('common:back')} icon={ArrowLeft} onClick={back} />}
+        back={<BackButton fallback={{ to: SHELF_PAGE[shelfOf(entry.kind)] }} />}
       />
       {secondary ? <p className="-mt-3 text-lg text-muted-foreground">{secondary}</p> : null}
       {entry.credits ? <Credits credits={entry.credits} /> : null}
       {entry.source ? <SourceLine source={entry.source} /> : null}
       <dl className="flex flex-wrap gap-2">
         <div className="rounded-lg border border-border bg-card px-3 py-1">
-          <dt className="sr-only">{t('piece:key')}</dt>
+          <dt className="sr-only">{t('key')}</dt>
           <dd className="font-semibold">{keyName(key)}</dd>
         </div>
         <div className="rounded-lg border border-border bg-card px-3 py-1">
-          <dt className="sr-only">{t('piece:meter')}</dt>
+          <dt className="sr-only">{t('meter')}</dt>
           <dd className="font-semibold">{entry.meter}</dd>
         </div>
       </dl>
@@ -48,7 +46,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
           <Link to="/learn/scales" search={{ root: noteParam(key.tonic), kind: scaleKind }} />
         }
       >
-        {t('piece:scaleOf', { scale: scaleName(key.tonic, scaleKind) })}
+        {t('scaleOf', { scale: scaleName(key.tonic, scaleKind) })}
       </ButtonLink>
     </div>
   )

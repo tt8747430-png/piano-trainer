@@ -4,6 +4,21 @@ import { LEARN_TILES, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import type { LearnFilter } from '../model/learn-filter'
 import { LessonsColumn } from './LessonsColumn'
 
+/** Learn's references and tools, each a row with its page's title and tile. */
+const REFERENCES = [
+  { to: '/learn/chords', title: 'chords', tile: 'chords' },
+  { to: '/learn/scales', title: 'scales', tile: 'scales' },
+  { to: '/learn/keys', title: 'keys.title', tile: 'keys' },
+  { to: '/learn/intervals', title: 'intervals.title', tile: 'intervals' },
+  { to: '/learn/tensions', title: 'tensions.title', tile: 'tensions' },
+] as const
+const TOOLS = [
+  { to: '/learn/chord-finder', title: 'finder.title', tile: 'chordFinder' },
+  { to: '/learn/reharmonise', title: 'reharmonise.title', tile: 'reharmonise' },
+  { to: '/learn/passing-chords', title: 'passing.title', tile: 'passingChords' },
+  { to: '/learn/progressions', title: 'progressions.title', tile: 'progressions' },
+] as const
+
 /** Learn: the lessons by module, filtered by level and category; beside them the references and tools. */
 export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
@@ -18,71 +33,26 @@ export function LearnPage() {
         <LessonsColumn filter={filter} onChange={onChange} />
         <div className="flex flex-col gap-8">
           <RowGroup title={t('learn:references')}>
-            <li>
-              <RowLink
-                title={t('learn:chords')}
-                {...LEARN_TILES.chords}
-                render={<Link to="/learn/chords" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:scales')}
-                {...LEARN_TILES.scales}
-                render={<Link to="/learn/scales" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:keys.title')}
-                {...LEARN_TILES.keys}
-                render={<Link to="/learn/keys" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:intervals.title')}
-                {...LEARN_TILES.intervals}
-                render={<Link to="/learn/intervals" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:tensions.title')}
-                {...LEARN_TILES.tensions}
-                render={<Link to="/learn/tensions" />}
-              />
-            </li>
+            {REFERENCES.map((row) => (
+              <li key={row.to}>
+                <RowLink
+                  title={t(`learn:${row.title}`)}
+                  {...LEARN_TILES[row.tile]}
+                  render={<Link to={row.to} />}
+                />
+              </li>
+            ))}
           </RowGroup>
           <RowGroup title={t('learn:tools')}>
-            <li>
-              <RowLink
-                title={t('learn:finder.title')}
-                {...LEARN_TILES.chordFinder}
-                render={<Link to="/learn/chord-finder" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:reharmonise.title')}
-                {...LEARN_TILES.reharmonise}
-                render={<Link to="/learn/reharmonise" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:passing.title')}
-                {...LEARN_TILES.passingChords}
-                render={<Link to="/learn/passing-chords" />}
-              />
-            </li>
-            <li>
-              <RowLink
-                title={t('learn:progressions.title')}
-                {...LEARN_TILES.progressions}
-                render={<Link to="/learn/progressions" />}
-              />
-            </li>
+            {TOOLS.map((row) => (
+              <li key={row.to}>
+                <RowLink
+                  title={t(`learn:${row.title}`)}
+                  {...LEARN_TILES[row.tile]}
+                  render={<Link to={row.to} />}
+                />
+              </li>
+            ))}
           </RowGroup>
         </div>
       </div>

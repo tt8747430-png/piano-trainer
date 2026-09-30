@@ -2,10 +2,8 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
 import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 import type { BeatGroupRange } from './loop'
+import type { PracticeMode } from './practice-mode'
 
-/** Listen: the app plays at a tempo. Wait mode: the app waits for your notes (spec §2.7). */
-export const PRACTICE_MODES = ['listen', 'wait'] as const
-export type PracticeMode = (typeof PRACTICE_MODES)[number]
 export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
 export interface PracticeState {

@@ -1,8 +1,8 @@
 import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { stepById, useStepTitle } from '@/entities/path'
+import { stepById, useStepTitle, type StepId } from '@/entities/path'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
 import { useGoBack } from '@/shared/lib'
@@ -55,13 +55,14 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   )
 }
 
+/** The check's questions, drawn once from the evidence as it opens: each skill as often as it still needs. */
+function CheckDraw({ of }: { of: StepId }) {
+  const progress = useProgressStoreApi()
+  const [plan] = useState(() => checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())))
+  return plan ? <CheckFlow plan={plan} /> : null
+}
+
 export function CheckPage() {
   const { of } = useSearch({ from: '/full-screen/check' })
-  const progress = useProgressStoreApi()
-  // Drawn once, from the evidence as the check opens: each skill as often as it still needs.
-  const plan = useMemo(
-    () => (of ? checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())) : null),
-    [of, progress],
-  )
-  return plan ? <CheckFlow key={plan.of} plan={plan} /> : null
+  return of ? <CheckDraw key={of} of={of} /> : null
 }

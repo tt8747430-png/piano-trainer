@@ -6,5 +6,5 @@ export const practice = {
   quiz: 'Theory quiz',
   exercises: 'Exercises',
   // The count after a colon reads right for any number, in both languages.
-  gaps: 'Gaps: {{count}}',
+  gaps: 'To check: {{count}}',
 } as const

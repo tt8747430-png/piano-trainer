@@ -8,9 +8,6 @@ import { useProgressionPlayer } from '../model/use-progression-player'
 import { PlayerLayout } from './PlayerLayout'
 import { ProgressionSetup } from './ProgressionSetup'
 
-/** A progression has one section and names none. */
-const NO_HEADINGS: readonly string[] = []
-
 /** A progression in the Player: numerals in any key, a chord a bar, with a song's patterns. */
 export function ProgressionPlayerPage() {
   const { t } = useTranslation(['player', 'music'])
@@ -38,7 +35,6 @@ export function ProgressionPlayerPage() {
         view={search}
         player={player}
         performance={performance}
-        headings={NO_HEADINGS}
         onSetup={() => setSetupOpen(true)}
       />
       <ProgressionSetup

@@ -111,6 +111,7 @@ export const learn: LocaleResources['learn'] = {
     inScales: 'В гаммах',
     chordsTo13ths: 'Её аккорды до терцдецимаккордов',
     songs: 'Песни в этой тональности',
+    studies: 'Этюды в этой тональности',
     noSongs: 'Песен в этой тональности нет.',
   },
   example: {

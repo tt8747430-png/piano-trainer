@@ -404,7 +404,7 @@ sub-project 2), and the song-learning advice is not carried over (the copy rule 
   - player: how it goes (`mode` listen · wait, `tempo` 20–160, default the piece's, `speedTraining`, `hands`,
     `swing`, `loop` as printed bars `3-6`) and the piece's own choices (`key`, `pattern`, `rh`, `lh`, `chordSize`)
 
-  Example: `/learn/chords?root=G&quality=m9`, `/play/bz5?key=A&hands=lh&mode=wait&loop=3-6`.
+  Example: `/learn/chords?root=G&triad=min&size=9`, `/play/bz5?key=A&hands=lh&mode=wait&loop=3-6`.
 - **Saved stores** (zustand `persist` → `localStorage`, each with a `version` and a `migrate`, so future changes to
   their shape keep learners' progress):
   - `settings` (`pt-settings`): `theme: 'system' | 'light' | 'dark'`, `locale: 'en' | 'ru'` (first run: the first of
@@ -425,7 +425,7 @@ sub-project 2), and the song-learning advice is not carried over (the copy rule 
 | Audio suspended until a gesture                       | The first tap anywhere calls `audio.unlock()`; Play buttons also unlock before playing      |
 | No Web MIDI                                           | MIDI controls hidden; Settings shows one line saying this browser cannot connect a keyboard |
 | MIDI permission denied / no device                    | The Connect control shows that status in one line; taps on the on-screen keyboard still work |
-| Unknown `$pieceId`, or a listing's id                 | Not-found screen with a link to Songs                                                       |
+| Unknown `$pieceId`, a piece on another shelf, a listing in the Player | Not-found screen with a link to Songs                                             |
 | Invalid search param                                  | Replaced by the default; no error shown                                                     |
 | A render error                                        | A route-level error boundary with "Something went wrong" + reload; other routes unaffected  |
 | Broken content (chart, chord symbol, missing text)    | Cannot ship: the catalog tests fail in CI (§9)                                              |

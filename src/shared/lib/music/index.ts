@@ -120,6 +120,7 @@ export {
   SCALE_FAMILIES,
   SCALE_KINDS,
   kindComingDown,
+  keyScale,
   modesOfKey,
   relatedScale,
   relativeKey,

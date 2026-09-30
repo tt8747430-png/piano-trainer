@@ -57,8 +57,11 @@ describe('Check', () => {
     expect(screen.getByText('Minor blues is now marked learned.')).toBeInTheDocument()
   })
 
-  it('shows not found for a check of nothing', async () => {
-    await renderApp('/check?of=piece:gone')
-    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
-  })
+  it.each(['/check?of=piece:gone', '/check', '/check?of=nothing'])(
+    'shows not found for a check of nothing: %s',
+    async (path) => {
+      await renderApp(path)
+      expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    },
+  )
 })

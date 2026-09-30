@@ -168,7 +168,8 @@ The roadmap's worksheet (§3.4, §9.8, §10.7), on the lesson entity sub-project
   by module, a titled group each, in the module order; a row's detail is its level and category, as now.
 - **Level** and **Category** are pop-ups over the lessons (Any, then the levels or the categories that have lessons),
   held in the URL (`/learn?level=1&category=chords`, defaults left out): what the learner looks at is the URL's. A
-  module with no lesson left under the filter is not shown; none at all is one line, "No lessons match."
+  module with no lesson left under the filter is not shown; none at all is one line, "No lessons match.", with a
+  button back to every lesson (as Songs clears its filters).
 - The lesson page adds the level and category under the summary, and nothing else: no contents list (a lesson is
   three to six sections; the page is its own contents).
 

@@ -55,6 +55,14 @@ describe('Learn → Keys', () => {
     ).toBeInTheDocument()
   })
 
+  it('lists the studies written in the key apart from its songs', async () => {
+    await renderApp('/learn/keys?key=C')
+    const studies = await screen.findByRole('region', { name: 'Studies in this key' })
+    expect(within(studies).getByRole('link', { name: /^Lesson 3: C – Dm/ })).toBeInTheDocument()
+    const songs = screen.getByRole('region', { name: 'Songs in this key' })
+    expect(within(songs).queryByRole('link', { name: /^Lesson 3: C – Dm/ })).not.toBeInTheDocument()
+  })
+
   it('says so when no song is in the key', async () => {
     await renderApp('/learn/keys?key=B')
     expect(await screen.findByText('No songs are in this key.')).toBeInTheDocument()

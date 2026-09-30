@@ -11,6 +11,7 @@ import {
 } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
+import { ownLeftOut } from './own-left-out'
 
 /** The Player's URL: how it goes, and the piece's own choices (spec §2.10). */
 export type PlayerSearch = PracticeView & SetupParams
@@ -45,13 +46,11 @@ export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean
 /** A Setup change as the URL writes it: a key, pattern or chord size equal to the piece's own is left out. */
 export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
   const own = ownChoice(piece)
-  const ownChordSize = piece.kind === 'progression' ? piece.chordSize.default : undefined
-  const unlessOwn = <V>(value: V, ownValue: V): V | undefined =>
-    value === ownValue ? undefined : value
-  return {
-    ...change,
-    ...('key' in change ? { key: unlessOwn(change.key, noteParam(own.tonic)) } : {}),
-    ...('pattern' in change ? { pattern: unlessOwn(change.pattern, own.pattern) } : {}),
-    ...('chordSize' in change ? { chordSize: unlessOwn(change.chordSize, ownChordSize) } : {}),
-  }
+  const written = ownLeftOut(change, {
+    pattern: own.pattern,
+    chordSize: piece.kind === 'progression' ? piece.chordSize.default : undefined,
+  })
+  return 'key' in change
+    ? { ...written, key: change.key === noteParam(own.tonic) ? undefined : change.key }
+    : written
 }

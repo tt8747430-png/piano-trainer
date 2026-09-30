@@ -1,27 +1,8 @@
-import { accompanimentOptions, type Accompaniment, type PatternId } from '@/entities/pattern'
+import { accompanimentOptions } from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { numeralChord, type Key, type Numeral, type ChordSize } from '@/shared/lib/music'
-
-/** A progression's own numerals, tempo, pattern and chord size: what the Player plays when its URL chooses none. */
-export const PROGRESSION = {
-  numerals: 'I-V-vi-IV',
-  tempo: 80,
-  pattern: 'block',
-  chordSize: 'triads',
-} as const satisfies {
-  readonly numerals: string
-  readonly tempo: number
-  readonly pattern: PatternId
-  readonly chordSize: ChordSize
-}
-
-/** What the learner plays a progression with: the Player's URL, read. */
-export interface ProgressionChoice extends Accompaniment {
-  readonly numerals: readonly Numeral[]
-  readonly key: Key
-  readonly chordSize: ChordSize
-}
+import { numeralChord, type ChordSize, type Key, type Numeral } from '@/shared/lib/music'
+import type { ProgressionChoice } from './progression-choice'
 
 /** Numerals in a key at a chord size, a chord a bar of 4/4, four bars a line. */
 export function progressionChart(

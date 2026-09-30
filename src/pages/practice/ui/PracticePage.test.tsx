@@ -33,11 +33,11 @@ describe('Practice', () => {
     expect(within(quiz).getByRole('link', { name: 'My gaps' })).toBeInTheDocument()
   })
 
-  it('says how many gaps My gaps holds', async () => {
+  it('says how many skills My gaps holds to check, gaps and unknowns alike', async () => {
     const { progressStore } = await renderApp('/practice')
     await screen.findByRole('region', { name: 'Theory quiz' })
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
-    expect(screen.getByRole('link', { name: 'My gaps Gaps: 1' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'My gaps To check: 1' })).toBeInTheDocument()
   })
 
   it('offers the chromatic walk among the exercises, opening in the Player', async () => {

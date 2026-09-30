@@ -16,9 +16,9 @@ import {
   initialPractice,
   practiceReducer,
   type PracticeEvent,
-  type PracticeMode,
   type PracticeState,
 } from './practice-machine'
+import type { PracticeMode } from './practice-mode'
 import { speedUp } from './speed'
 import { startTransport } from './transport'
 

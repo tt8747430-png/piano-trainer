@@ -4,6 +4,11 @@ import { midi, parseNoteName, PIANO, type Midi, type SpelledNote } from '@/share
 export const valueOr = <T>(is: (value: unknown) => value is T, raw: unknown, fallback: T): T =>
   is(raw) ? raw : fallback
 
+/** Text as typed; a number as written, since the router reads `?q=1999` as one; else the fallback. */
+export function readText(raw: unknown, fallback: string): string {
+  return typeof raw === 'string' ? raw : typeof raw === 'number' ? String(raw) : fallback
+}
+
 /** A whole number from min to max, as a number or as text; else the fallback. */
 export function wholeIn<F>(raw: unknown, min: number, max: number, fallback: F): number | F {
   const value = typeof raw === 'string' && raw.trim() !== '' ? Number(raw) : raw

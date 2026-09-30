@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
 import {
   keyParam,
+  keyScale,
   modesOfKey,
   noteName,
   noteParam,
@@ -19,7 +20,7 @@ export function KeyFacts({ value }: { value: Key }) {
   const scaleName = useScaleName()
   const signature = signatureNotes(value)
   const relative = relativeKey(value)
-  const notes = spellScale(value.tonic, value.minor ? 'natural' : 'major')
+  const notes = spellScale(value.tonic, keyScale(value))
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('keys.signature')}>

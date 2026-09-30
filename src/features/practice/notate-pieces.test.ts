@@ -12,7 +12,8 @@ import {
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
 import { engrave } from '@/shared/ui/score/engrave'
 import { arrangePiece, ownChoice } from './arrange-piece'
-import { arrangeChromatic, CHROMATIC } from './chromatic'
+import { arrangeChromatic } from './chromatic'
+import { CHROMATIC } from './chromatic-choice'
 
 /** Every voice of every measure fills its bar, its events end to end; one or two voices a staff. */
 function expectWritten(score: Score) {

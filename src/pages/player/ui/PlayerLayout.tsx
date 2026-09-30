@@ -18,6 +18,9 @@ import {
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 
+/** A walk or a progression: one section, named nowhere. */
+const NO_HEADINGS: readonly string[] = []
+
 /**
  * The Player's screen over any Performance (Flowkey's shape): the toolbar with the tempo, hands, loop,
  * MIDI and Setup, the keys, the sheet music, Wait mode's line and the transport.
@@ -28,7 +31,7 @@ export function PlayerLayout({
   view,
   player,
   performance,
-  headings,
+  headings = NO_HEADINGS,
   onSetup,
 }: {
   title: string
@@ -36,8 +39,8 @@ export function PlayerLayout({
   view: PracticeView
   player: PracticePlayer
   performance: Performance
-  /** Each section's name, by section: shown at its first bar. */
-  headings: readonly string[]
+  /** Each section's name, by section: shown at its first bar; none for a source with one section. */
+  headings?: readonly string[]
   onSetup: () => void
 }) {
   const { t } = useTranslation('player')

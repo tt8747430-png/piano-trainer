@@ -1,5 +1,3 @@
-import { Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -17,7 +15,7 @@ import { resetProgress } from '@/features/reset-progress'
 import { setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
+import { BackButton, ScreenHeader, Segmented } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -60,7 +58,7 @@ function Group({
 }
 
 export function SettingsPage() {
-  const { t } = useTranslation(['settings', 'common'])
+  const { t } = useTranslation('settings')
   const settings = useSettingsStoreApi()
   const progress = useProgressStoreApi()
   const locale = useSettings(selectLocale)
@@ -73,47 +71,44 @@ export function SettingsPage() {
   return (
     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
       <div className="lg:col-span-2">
-        <ScreenHeader
-          title={t('settings:title')}
-          back={<RoundLink label={t('common:back')} icon={ArrowLeft} render={<Link to="/" />} />}
-        />
+        <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/' }} />} />
       </div>
-      <Group title={t('settings:language.label')}>
+      <Group title={t('language.label')}>
         <Segmented
-          label={t('settings:language.label')}
+          label={t('language.label')}
           value={locale}
-          options={LOCALES.map((value) => ({ value, label: t(`settings:${LOCALE_LABEL[value]}`) }))}
+          options={LOCALES.map((value) => ({ value, label: t(`${LOCALE_LABEL[value]}`) }))}
           onChange={(value) => setLocale(settings, value)}
         />
       </Group>
-      <Group title={t('settings:theme.label')}>
+      <Group title={t('theme.label')}>
         <Segmented
-          label={t('settings:theme.label')}
+          label={t('theme.label')}
           value={theme}
-          options={THEMES.map((value) => ({ value, label: t(`settings:${THEME_LABEL[value]}`) }))}
+          options={THEMES.map((value) => ({ value, label: t(`${THEME_LABEL[value]}`) }))}
           onChange={(value) => setTheme(settings, value)}
         />
       </Group>
-      <Group title={t('settings:keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
+      <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
         <KeyboardSettingsFields />
       </Group>
-      <Group title={t('settings:midi')}>
+      <Group title={t('midi')}>
         <MidiControl />
       </Group>
-      <Group title={t('settings:progress.label')}>
+      <Group title={t('progress.label')}>
         <AlertDialog open={confirming} onOpenChange={setConfirming}>
           <AlertDialogTrigger render={<Button variant="destructive" className="self-start" />}>
-            {t('settings:progress.reset')}
+            {t('progress.reset')}
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{t('settings:progress.title')}</AlertDialogTitle>
-              <AlertDialogDescription>{t('settings:progress.body')}</AlertDialogDescription>
+              <AlertDialogTitle>{t('progress.title')}</AlertDialogTitle>
+              <AlertDialogDescription>{t('progress.body')}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>{t('settings:progress.cancel')}</AlertDialogCancel>
+              <AlertDialogCancel>{t('progress.cancel')}</AlertDialogCancel>
               <AlertDialogAction variant="destructive" onClick={reset}>
-                {t('settings:progress.confirm')}
+                {t('progress.confirm')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

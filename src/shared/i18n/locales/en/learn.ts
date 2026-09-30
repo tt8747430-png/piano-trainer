@@ -101,6 +101,7 @@ export const learn = {
     inScales: 'In Scales',
     chordsTo13ths: 'Its chords, to 13ths',
     songs: 'Songs in this key',
+    studies: 'Studies in this key',
     noSongs: 'No songs are in this key.',
   },
   // A lesson's example: its Play, the piece a pattern plays over, where it opens.

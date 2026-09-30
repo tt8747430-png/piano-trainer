@@ -9,6 +9,7 @@ import { playsKeyTriads } from '@/shared/lib/arrangement'
 import { noteFromParam, type NoteParam } from '@/shared/lib/music'
 import type { FigureChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
+import { ownLeftOut } from './own-left-out'
 
 /** The chromatic walk's URL: its chords, root and direction, how the Player goes, and its own choices (absent is its own). */
 export type ChromaticSearch = PracticeView & {
@@ -40,11 +41,5 @@ export function chromaticChoice(
 }
 
 /** A Setup change as the walk's URL writes it: its own pattern left out. */
-export function chromaticPatch(change: FigureChange): Partial<ChromaticSearch> {
-  return {
-    ...change,
-    ...('pattern' in change
-      ? { pattern: change.pattern === CHROMATIC.pattern ? undefined : change.pattern }
-      : {}),
-  }
-}
+export const chromaticPatch = (change: FigureChange): Partial<ChromaticSearch> =>
+  ownLeftOut(change, CHROMATIC)

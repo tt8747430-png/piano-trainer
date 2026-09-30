@@ -35,7 +35,7 @@ export function PractiseChords({
   kind: ScaleKind
   notes: ChordNotes
 }) {
-  const { t } = useTranslation(['practice', 'player'])
+  const { t } = useTranslation(['practice', 'music'])
   if (!scaleHasChords(kind)) return null
   const chordSize = sizeOfNotes(notes)
   const key = KEY_OF[kind]
@@ -63,7 +63,7 @@ export function PractiseChords({
             <li key={piece.id}>
               <RowLink
                 title={piece.title}
-                detail={t(`player:keyOf.${key}`, { tonic: noteName(root) })}
+                detail={t(`music:key.${key}`, { tonic: noteName(root) })}
                 icon={ListMusic}
                 paint="lilac"
                 render={

@@ -2,6 +2,7 @@ import { WALK, type WalkChoice } from '@/features/practice'
 import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
+import { ownLeftOut } from './own-left-out'
 
 /** The walk's URL: its scale, how the Player goes, and the walk's own choices (absent is its own). */
 export type WalkSearch = PracticeView & {
@@ -28,14 +29,4 @@ export function walkChoice(
 }
 
 /** A Setup change as the walk's URL writes it: its own pattern or chord size left out. */
-export function walkPatch(change: WalkChange): Partial<WalkSearch> {
-  return {
-    ...change,
-    ...('pattern' in change
-      ? { pattern: change.pattern === WALK.pattern ? undefined : change.pattern }
-      : {}),
-    ...('chordSize' in change
-      ? { chordSize: change.chordSize === WALK.chordSize ? undefined : change.chordSize }
-      : {}),
-  }
-}
+export const walkPatch = (change: WalkChange): Partial<WalkSearch> => ownLeftOut(change, WALK)

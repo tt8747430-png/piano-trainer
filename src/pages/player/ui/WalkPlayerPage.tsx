@@ -8,9 +8,6 @@ import type { WalkSearch } from '../model/walk-search'
 import { PlayerLayout } from './PlayerLayout'
 import { WalkSetup } from './WalkSetup'
 
-/** A walk has one section and names none. */
-const NO_HEADINGS: readonly string[] = []
-
 /** Walk the chords in the Player: a scale's chords up to the tonic's octave and back, with a song's patterns. */
 export function WalkPlayerPage() {
   const { t } = useTranslation('player')
@@ -33,7 +30,6 @@ export function WalkPlayerPage() {
         view={search}
         player={player}
         performance={performance}
-        headings={NO_HEADINGS}
         onSetup={() => setSetupOpen(true)}
       />
       <WalkSetup

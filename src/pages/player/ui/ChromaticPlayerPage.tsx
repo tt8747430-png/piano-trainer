@@ -9,10 +9,7 @@ import { useChromaticPlayer } from '../model/use-chromatic-player'
 import { ChromaticSetup } from './ChromaticSetup'
 import { PlayerLayout } from './PlayerLayout'
 
-/** A chromatic walk has one section and names none. */
-const NO_HEADINGS: readonly string[] = []
-
-/** The chromatic walk in the Player: the chosen chord types root by root, a semitone at a time, with a song's patterns. */
+/** The chromatic walk in the Player: the chosen chord qualities root by root, a semitone at a time, with a song's patterns. */
 export function ChromaticPlayerPage() {
   const { t } = useTranslation('player')
   const search = useSearch({ from: '/full-screen/play/chromatic' })
@@ -34,7 +31,6 @@ export function ChromaticPlayerPage() {
         view={search}
         player={player}
         performance={performance}
-        headings={NO_HEADINGS}
         onSetup={() => setSetupOpen(true)}
       />
       <ChromaticSetup

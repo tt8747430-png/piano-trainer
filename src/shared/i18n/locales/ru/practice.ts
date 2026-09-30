@@ -7,5 +7,5 @@ export const practice: LocaleResources['practice'] = {
   title: 'Практика',
   quiz: 'Тест по теории',
   exercises: 'Упражнения',
-  gaps: 'Пробелы: {{count}}',
+  gaps: 'На проверку: {{count}}',
 }

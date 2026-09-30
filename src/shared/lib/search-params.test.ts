@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { isOneOf } from './is-one-of'
 import { midi, note } from './music'
-import { keyListParam, readKeyList, readNote, valueOr, wholeIn } from './search-params'
+import { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
 
 const isMode = isOneOf(['listen', 'step', 'wait'] as const)
 
@@ -10,6 +10,15 @@ describe('valueOr', () => {
     expect(valueOr(isMode, 'step', 'listen')).toBe('step')
     expect(valueOr(isMode, 'dance', 'listen')).toBe('listen')
     expect(valueOr(isMode, 3, 'listen')).toBe('listen')
+  })
+})
+
+describe('readText', () => {
+  it('keeps text as typed, and a number as written, which the router reads out of `?q=1999`', () => {
+    expect(readText('Yesterday', '')).toBe('Yesterday')
+    expect(readText(1999, '')).toBe('1999')
+    expect(readText(undefined, 'C')).toBe('C')
+    expect(readText(['a'], 'C')).toBe('C')
   })
 })
 

@@ -1,4 +1,5 @@
 import {
+  keyScale,
   spellScale,
   type Accidental,
   type Key,
@@ -9,10 +10,7 @@ import {
 /** Each letter's accidental in a key's signature: its major or natural minor scale. */
 export function keyAccidentals(key: Key): ReadonlyMap<Letter, Accidental> {
   return new Map(
-    spellScale(key.tonic, key.minor ? 'natural' : 'major').map((tone) => [
-      tone.note.letter,
-      tone.note.accidental,
-    ]),
+    spellScale(key.tonic, keyScale(key)).map((tone) => [tone.note.letter, tone.note.accidental]),
   )
 }
 

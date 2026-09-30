@@ -4,7 +4,6 @@ import {
   createRouter,
   lazyRouteComponent,
   notFound,
-  stripSearchParams,
   type RouterHistory,
 } from '@tanstack/react-router'
 import { NotFoundPage } from '@/pages/not-found'
@@ -15,38 +14,27 @@ import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
-  CHORDS_DEFAULTS,
-  CHROMATIC_DEFAULTS,
-  FINDER_DEFAULTS,
-  INTERVALS_DEFAULTS,
-  KEYS_DEFAULTS,
-  PASSING_DEFAULTS,
-  LEARN_DEFAULTS,
-  PLAYER_DEFAULTS,
-  PROGRESSION_PLAYER_DEFAULTS,
-  PROGRESSIONS_DEFAULTS,
-  REHARMONISE_DEFAULTS,
-  SCALES_DEFAULTS,
-  SONGS_DEFAULTS,
-  TENSIONS_DEFAULTS,
-  validateCheckSearch,
-  validateChordsSearch,
-  validateChromaticSearch,
-  validateFinderSearch,
-  validateIntervalsSearch,
-  validateKeysSearch,
-  validatePassingSearch,
-  validateLearnSearch,
-  validatePlayerSearch,
-  validateProgressionPlayerSearch,
-  validateProgressionsSearch,
-  validateReharmoniseSearch,
-  validateScalesSearch,
-  validateSongsSearch,
-  validateTensionsSearch,
-  validateWalkSearch,
-  WALK_DEFAULTS,
-} from './routes/search'
+  chordsSearch,
+  intervalsSearch,
+  keysSearch,
+  learnSearch,
+  scalesSearch,
+  tensionsSearch,
+} from './routes/learn-search'
+import {
+  chromaticSearch,
+  playerSearch,
+  progressionPlayerSearch,
+  walkSearch,
+} from './routes/player-search'
+import { validateCheckSearch } from './routes/practice-search'
+import { songsSearch } from './routes/songs-search'
+import {
+  finderSearch,
+  passingSearch,
+  progressionsSearch,
+  reharmoniseSearch,
+} from './routes/tools-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -88,8 +76,7 @@ const settingsRoute = createRoute({
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
-  validateSearch: validateSongsSearch,
-  search: { middlewares: [stripSearchParams(SONGS_DEFAULTS)] },
+  ...songsSearch,
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
 const pieceRoute = createRoute({
@@ -141,71 +128,61 @@ const progressionRoute = createRoute({
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn',
-  validateSearch: validateLearnSearch,
-  search: { middlewares: [stripSearchParams(LEARN_DEFAULTS)] },
+  ...learnSearch,
   component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
 const chordsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/chords',
-  validateSearch: validateChordsSearch,
-  search: { middlewares: [stripSearchParams(CHORDS_DEFAULTS)] },
+  ...chordsSearch,
   component: lazyRouteComponent(learnScreens, 'ChordsPage'),
 })
 const scalesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/scales',
-  validateSearch: validateScalesSearch,
-  search: { middlewares: [stripSearchParams(SCALES_DEFAULTS)] },
+  ...scalesSearch,
   component: lazyRouteComponent(learnScreens, 'ScalesPage'),
 })
 const keysRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/keys',
-  validateSearch: validateKeysSearch,
-  search: { middlewares: [stripSearchParams(KEYS_DEFAULTS)] },
+  ...keysSearch,
   component: lazyRouteComponent(learnScreens, 'KeysPage'),
 })
 const intervalsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/intervals',
-  validateSearch: validateIntervalsSearch,
-  search: { middlewares: [stripSearchParams(INTERVALS_DEFAULTS)] },
+  ...intervalsSearch,
   component: lazyRouteComponent(learnScreens, 'IntervalsPage'),
 })
 const tensionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/tensions',
-  validateSearch: validateTensionsSearch,
-  search: { middlewares: [stripSearchParams(TENSIONS_DEFAULTS)] },
+  ...tensionsSearch,
   component: lazyRouteComponent(learnScreens, 'TensionsPage'),
 })
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/chord-finder',
-  validateSearch: validateFinderSearch,
-  search: { middlewares: [stripSearchParams(FINDER_DEFAULTS)] },
+  ...finderSearch,
   component: lazyRouteComponent(learnScreens, 'ChordFinderPage'),
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/reharmonise',
-  validateSearch: validateReharmoniseSearch,
-  search: { middlewares: [stripSearchParams(REHARMONISE_DEFAULTS)] },
+  ...reharmoniseSearch,
   component: lazyRouteComponent(learnScreens, 'ReharmonisePage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/passing-chords',
-  validateSearch: validatePassingSearch,
-  search: { middlewares: [stripSearchParams(PASSING_DEFAULTS)] },
+  ...passingSearch,
   component: lazyRouteComponent(learnScreens, 'PassingChordsPage'),
 })
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/progressions',
-  validateSearch: validateProgressionsSearch,
-  search: { middlewares: [stripSearchParams(PROGRESSIONS_DEFAULTS)] },
+  ...progressionsSearch,
   component: lazyRouteComponent(learnScreens, 'ProgressionsPage'),
 })
 
@@ -229,8 +206,7 @@ const fullScreenRoute = createRoute({
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',
-  validateSearch: validatePlayerSearch,
-  search: { middlewares: [stripSearchParams(PLAYER_DEFAULTS)] },
+  ...playerSearch,
   beforeLoad: async ({ params }) => {
     const { pieceById } = await playerScreens()
     if (!pieceById(params.pieceId)) throw notFound()
@@ -241,8 +217,7 @@ const playerRoute = createRoute({
 const walkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/walk',
-  validateSearch: validateWalkSearch,
-  search: { middlewares: [stripSearchParams(WALK_DEFAULTS)] },
+  ...walkSearch,
   beforeLoad: ({ search }) => {
     if (!scaleHasChords(search.kind)) throw notFound()
   },
@@ -252,16 +227,14 @@ const walkRoute = createRoute({
 const chromaticRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/chromatic',
-  validateSearch: validateChromaticSearch,
-  search: { middlewares: [stripSearchParams(CHROMATIC_DEFAULTS)] },
+  ...chromaticSearch,
   component: lazyRouteComponent(playerScreens, 'ChromaticPlayerPage'),
 })
 
 const progressionPlayerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/progression',
-  validateSearch: validateProgressionPlayerSearch,
-  search: { middlewares: [stripSearchParams(PROGRESSION_PLAYER_DEFAULTS)] },
+  ...progressionPlayerSearch,
   component: lazyRouteComponent(playerScreens, 'ProgressionPlayerPage'),
 })
 

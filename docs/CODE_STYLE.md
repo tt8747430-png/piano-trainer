@@ -20,10 +20,10 @@ A container wires data to presentational children. One job each.
 - **One exported component per file, named for the file.** Private helpers may stay.
 - A page composes widgets and `shared/ui`, with little markup of its own.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
-  `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `RoundButton` /
-  `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up button, over shadcn's `select`), `RowLink` and
-  `RowGroup` (a row that leads to a page, in a titled card), `PAINT` (the chrome's paints for a tile), `Sheet` /
-  `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`, `LevelMark`.
+  `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `BackButton` (a screen's
+  Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up button, over shadcn's
+  `select`), `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `PAINT` (the chrome's paints for
+  a tile), `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`, `LevelMark`.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
   with its chevron.
@@ -47,7 +47,7 @@ A container wires data to presentational children. One job each.
   bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by itself
   (a choice sounding, a quiz's question) has no button and no Stop.
 - A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
-  `SetupParams`); `app/routes/search.ts` imports it with `import type`.
+  `SetupParams`); its place's validator in `app/routes` imports it with `import type`.
 
 ## 2. Logic into hooks; components render
 
@@ -142,10 +142,12 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `index.ts` · the `@/` alias, never
 `../../` across slices.
 
-**Search params** are validated in `app/routes/search.ts`: an invalid value takes its default, silently (no
-clamping). Each validator writes every one of its params, an invalid optional one as `undefined`, because the router
-lays a route's search over the raw one and a param left out would let the stale value through. Defaults leave the
-URL (`stripSearchParams`), and a control's change replaces the history entry (`replace: true`).
+**Search params** are validated in `app/routes/<place>-search.ts`: an invalid value takes its default, silently (no
+clamping). Validators run as the app opens, so they import only what a URL is made of (`read-search.ts`, a feature's
+`*-choice.ts`), never a module that arranges or plays: the bundler moves whole modules into the first paint. Each
+validator writes every one of its params, an invalid optional one as `undefined`, because the router lays a route's
+search over the raw one and a param left out would let the stale value through. Defaults leave the URL
+(`stripSearchParams`), and a control's change replaces the history entry (`replace: true`).
 
 ## 7. Performance
 

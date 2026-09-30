@@ -39,7 +39,7 @@ export function PieceSetup({
   onChange: (change: SetupChange) => void
   onSwing: (on: boolean) => void
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   const own = pieceKey(piece)
   const { minor } = own
   const hasMelody = melodyOf(piece) !== undefined
@@ -55,13 +55,13 @@ export function PieceSetup({
       onFigures={onChange}
     >
       <Dropdown
-        label={t('key')}
+        label={t('player:key')}
         value={noteParam(choice.tonic)}
         options={PITCH_CLASSES.map((pc) => {
           const tonic = tonicSpelling(pc, minor)
           return {
             value: noteParam(tonic),
-            label: t(minor ? 'keyOf.minor' : 'keyOf.major', { tonic: noteName(tonic) }),
+            label: t(minor ? 'music:key.minor' : 'music:key.major', { tonic: noteName(tonic) }),
           }
         })}
         onChange={(key) => onChange({ key })}
@@ -79,7 +79,7 @@ export function PieceSetup({
           ownKey={
             pitchClassOf(choice.tonic) === pitchClassOf(own.tonic)
               ? null
-              : t(minor ? 'keyOf.minor' : 'keyOf.major', { tonic: noteName(own.tonic) })
+              : t(minor ? 'music:key.minor' : 'music:key.major', { tonic: noteName(own.tonic) })
           }
         />
       ) : null}
