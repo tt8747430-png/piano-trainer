@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Piece, Section } from '../model/types'
@@ -26,9 +26,14 @@ export function useSectionHeading(): (section: Section) => string {
 }
 
 /** The headings a piece's chart is shown under: its sections in order, or a one-string progression's one. */
-export function usePieceHeadings(piece: Piece): string[] {
+export function usePieceHeadings(piece: Piece): readonly string[] {
   const { t } = useTranslation('piece')
   const heading = useSectionHeading()
-  if (piece.kind !== 'progression') return piece.sections.map(heading)
-  return typeof piece.progression === 'string' ? [t('progression')] : piece.progression.map(heading)
+  // One array per piece and language: the sheet's labels are drawn again only when it changes.
+  return useMemo(() => {
+    if (piece.kind !== 'progression') return piece.sections.map(heading)
+    return typeof piece.progression === 'string'
+      ? [t('progression')]
+      : piece.progression.map(heading)
+  }, [piece, heading, t])
 }

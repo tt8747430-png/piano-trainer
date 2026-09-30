@@ -156,13 +156,21 @@ export function PianoKeyboard({
     })
   }
 
-  const nameOf = (key: Midi) => {
-    const spelled = plainSpelling(pitchClass(key), true)
-    return t(isBlackKey(key) ? 'note.sharp' : 'note.natural', {
-      letter: spelled.letter,
-      octave: octaveOf(key),
-    })
-  }
+  // Every key's name, once per language: a render names none, and a glissando renders per key.
+  const names = useMemo(
+    () =>
+      new Map(
+        PIANO_LAYOUT.keys.map(({ midi }) => {
+          const spelled = plainSpelling(pitchClass(midi), true)
+          const name = t(isBlackKey(midi) ? 'note.sharp' : 'note.natural', {
+            letter: spelled.letter,
+            octave: octaveOf(midi),
+          })
+          return [midi, name]
+        }),
+      ),
+    [t],
+  )
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const next = MOVES[event.key]?.(tabStop)
@@ -229,7 +237,7 @@ export function PianoKeyboard({
             <Key
               key={key.midi}
               geometry={key}
-              name={nameOf(key.midi)}
+              name={names.get(key.midi) ?? ''}
               look={keyLook(key.midi, { ...states, down }, { namedKeys, letters })}
               chosen={selectable ? (states.selected?.has(key.midi) ?? false) : undefined}
               tabStop={key.midi === tabStop}

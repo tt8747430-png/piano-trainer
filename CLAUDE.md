@@ -60,7 +60,8 @@ it. `@` → `src`.
   (`/learn/tensions`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
   `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic` and `/play/progression`; screens are
-  lazy through `routes/*-screens.ts` (home, songs, learn, practice, player); `notFound()` for an unknown piece, lesson,
+  lazy through `routes/*-screens.ts` (home, settings, songs, learn, practice, player: a chunk holds the screens
+  that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (each
   place's validators, defaults and route search options, typed with `import type` from the slice that owns each view:
   the router imports no page or widget code, or it would leave its lazy chunk; validators run as the app opens, so they
@@ -173,7 +174,7 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
   No `any`.
 - Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
-  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text). Only a test the DOM gets in the way of opts into
+  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, webMidi })`, which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and

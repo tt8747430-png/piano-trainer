@@ -41,6 +41,7 @@ import { ShellLayout } from './ShellLayout'
 // that names content asks its screens module whether it is there, so the content stays in that
 // chunk and out of the first paint.
 const homeScreens = () => import('./routes/home-screens')
+const settingsScreens = () => import('./routes/settings-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const learnScreens = () => import('./routes/learn-screens')
@@ -71,7 +72,7 @@ const pathRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
-  component: lazyRouteComponent(homeScreens, 'SettingsPage'),
+  component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,

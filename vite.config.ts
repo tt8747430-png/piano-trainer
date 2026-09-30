@@ -37,7 +37,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
-      includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon-180x180.png'],
+      // The icons are in the precache by the glob below; listed here too, each would be there twice.
+      includeManifestIcons: false,
       manifest: {
         name: 'Piano Trainer',
         short_name: 'Piano',

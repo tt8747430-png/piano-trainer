@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 
@@ -5,7 +6,7 @@ import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
  * Over the staff: each bar's number, a section's name at its first bar, and each chord symbol at its
  * onset (spec §2.6). The bars' buttons carry the same words for a screen reader.
  */
-export function SheetLabels({
+export const SheetLabels = memo(function SheetLabels({
   layout,
   performance,
   headings,
@@ -41,4 +42,4 @@ export function SheetLabels({
       ))}
     </div>
   )
-}
+})
