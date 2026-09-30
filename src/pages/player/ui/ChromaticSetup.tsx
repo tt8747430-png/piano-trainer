@@ -51,6 +51,7 @@ export function ChromaticSetup({
       methods={false}
       melody={false}
       keyed={false}
+      compound={false}
       onFigures={onChange}
     >
       <MultiDropdown

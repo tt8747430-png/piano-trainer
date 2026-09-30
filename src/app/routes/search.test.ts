@@ -182,7 +182,7 @@ describe('search params', () => {
       chords: 4,
       inversion: 3,
     })
-    expect(await searchAt('/learn/keys?key=D%23m')).toMatchObject({ key: 'Ebm' })
+    expect(await searchAt('/learn/keys?key=Ebm')).toMatchObject({ key: 'D#m' })
     expect(await searchAt('/learn/keys?key=H&chords=5&inversion=3')).toEqual(KEYS_DEFAULTS)
   })
 

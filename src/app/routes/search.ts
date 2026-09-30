@@ -46,6 +46,7 @@ import {
   scaleRootSpelling,
   SEVENTHS,
   spellInKey,
+  circleKey,
   tonicSpelling,
   TENSION_CHORDS,
   TRIADS,
@@ -221,9 +222,7 @@ export function validateKeysSearch(input: Input<KeyView>): KeyView {
   const key = typeof raw.key === 'string' ? parseKey(raw.key) : null
   const chords = valueOr(isKeyChords, raw.chords, KEYS_DEFAULTS.chords)
   return {
-    key: key
-      ? keyParam({ tonic: tonicSpelling(pitchClassOf(key.tonic), key.minor), minor: key.minor })
-      : KEYS_DEFAULTS.key,
+    key: key ? keyParam(circleKey(pitchClassOf(key.tonic), key.minor)) : KEYS_DEFAULTS.key,
     chords,
     inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
   }

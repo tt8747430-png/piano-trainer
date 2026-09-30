@@ -15,4 +15,8 @@ describe('swingTick', () => {
     expect(swingTick(3)).toBe(4)
     expect(swingTick(9)).toBe(10)
   })
+
+  it('leaves a note written on the triplet grid where it is: it is long-short already', () => {
+    expect([4, 8, 16, 20].map(swingTick)).toEqual([4, 8, 16, 20])
+  })
 })

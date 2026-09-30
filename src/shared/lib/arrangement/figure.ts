@@ -69,18 +69,30 @@ export function parseFigure(text: string, options: { triplets?: boolean } = {}):
   })
 }
 
-const eventsPlayKeyTriads = (events: readonly FigureEvent[]): boolean =>
-  events.some((event) => event.tones.some((tone) => tone.token.kind === 'key-triad'))
-
-/** Whether a figure plays the key's triads (`Ka` `Kb` `Kc`): only a source in a key can play it. */
-export function playsKeyTriads(figure: Figure): boolean {
+/** Every set of events a figure can play: its own, its 3/4 and major variants, a tune figure's accompaniment. */
+function eventSets(figure: Figure): (readonly FigureEvent[])[] {
   const eventFigures: readonly EventFigure[] =
     figure.kind === 'events'
       ? [figure]
       : figure.use === 'ends'
         ? [figure.between, figure.withoutMelody]
         : [figure.withoutMelody]
-  return eventFigures.some((each) =>
-    [each.events, each.inThree ?? [], each.onMajor ?? []].some(eventsPlayKeyTriads),
-  )
+  return eventFigures.flatMap((each) => [each.events, each.inThree ?? [], each.onMajor ?? []])
 }
+
+/** Whether a figure plays the key's triads (`Ka` `Kb` `Kc`): only a source in a key can play it. */
+export const playsKeyTriads = (figure: Figure): boolean =>
+  eventSets(figure).some((events) =>
+    events.some((event) => event.tones.some((tone) => tone.token.kind === 'key-triad')),
+  )
+
+/**
+ * Whether a figure plays inside a beat (an 8th, a 16th): written for a beat divided in two, it cannot
+ * play in 6/8 or 12/8, whose beat divides in three.
+ */
+export const splitsTheBeat = (figure: Figure): boolean =>
+  eventSets(figure).some((events) =>
+    events.some(
+      (event) => event.start % TICKS_PER_BEAT !== 0 || event.duration % TICKS_PER_BEAT !== 0,
+    ),
+  )

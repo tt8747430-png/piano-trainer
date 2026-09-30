@@ -60,10 +60,10 @@ describe('Learn → Keys', () => {
     expect(await screen.findByText('No songs are in this key.')).toBeInTheDocument()
   })
 
-  it('reads a key spelled another way as the circle spells it', async () => {
-    const { router } = await renderApp('/learn/keys?key=D%23m')
-    expect(await screen.findByRole('heading', { level: 2, name: 'E♭ minor' })).toBeInTheDocument()
-    expect(router.state.location.search).toEqual({ key: 'Ebm' })
+  it('reads a key spelled another way as the circle spells it, with its relative’s signature', async () => {
+    const { router } = await renderApp('/learn/keys?key=Ebm')
+    expect(await screen.findByRole('heading', { level: 2, name: 'D# minor' })).toBeInTheDocument()
+    expect(router.state.location.search).toEqual({ key: 'D#m' })
   })
 
   it('takes a random key from the header', async () => {

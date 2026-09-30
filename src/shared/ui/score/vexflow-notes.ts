@@ -14,7 +14,13 @@ import {
   Voice,
   VoiceMode,
 } from 'vexflow/core'
-import { isCompound, TICKS_PER_BEAT, type Accidental as Sign, type Meter } from '@/shared/lib/music'
+import {
+  isCompound,
+  TICKS_PER_BEAT,
+  timeSignature,
+  type Accidental as Sign,
+  type Meter,
+} from '@/shared/lib/music'
 import {
   ticksOf,
   type Duration,
@@ -206,7 +212,9 @@ export function buildVoice(
     drawn: group.every((note) => note instanceof StaveNote),
     tuplet: new Tuplet(group, { numNotes: 3, notesOccupied: 2 }),
   }))
-  const built = new Voice({ numBeats: measure.time.count, beatValue: measure.time.unit })
+  // As long as the measure is: a pickup is shorter than the signature it is written under.
+  const length = timeSignature(measure.ticks / TICKS_PER_BEAT, meter)
+  const built = new Voice({ numBeats: length.count, beatValue: length.unit })
   if (wholeBar) built.setMode(VoiceMode.SOFT)
   built.addTickables(notes.map(({ note }) => note))
   // Every note, a hidden rest's too: VexFlow counts the beat through it and breaks the beam at it.

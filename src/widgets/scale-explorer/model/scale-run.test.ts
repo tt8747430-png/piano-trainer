@@ -23,6 +23,14 @@ describe('scaleRunOf', () => {
     )
   })
 
+  it('brings melodic minor back down as natural minor, each note with its finger there', () => {
+    const run = scaleRunOf({ ...view, root: noteParam(note('A')), kind: 'melodic' })
+    expect(run.music.notes.map((n) => n.midi)).toEqual([
+      69, 71, 72, 74, 76, 78, 80, 81, 79, 77, 76, 74, 72, 71, 69,
+    ])
+    expect(run.music.notes.map((n) => n.finger).join('')).toBe('123123454321321')
+  })
+
   it('writes the run in its scale’s key, a mode in its parent’s', () => {
     expect(scaleRunOf({ ...view, root: noteParam(note('D')), kind: 'dorian' }).music.key).toEqual({
       tonic: note('C'),

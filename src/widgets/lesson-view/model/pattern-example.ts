@@ -12,7 +12,8 @@ export interface PatternOpening {
 
 /**
  * A pattern heard over a piece: the piece's first line with it, both hands, in the piece's key and at
- * its tempo, as the Player would play it there.
+ * its tempo, as the Player would play it there, from its first sound (a pickup the pattern rests
+ * through is left out).
  */
 export function patternOpening(piece: Piece, pattern: PatternId): PatternOpening {
   const performance = arrangePiece(piece, { ...ownChoice(piece), pattern })
@@ -20,6 +21,7 @@ export function patternOpening(piece: Piece, pattern: PatternId): PatternOpening
   const { sounds } = schedule(performance, {
     tempo: piece.tempo,
     hands: audibleHands('both'),
+    fromTick: performance.beatGroups[0]?.tick ?? 0,
     toTick: secondLine?.startTick ?? performance.totalTicks,
   })
   const keys = [

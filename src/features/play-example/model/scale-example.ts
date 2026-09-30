@@ -1,4 +1,10 @@
-import { placeScale, scaleKey, type ScaleKind, type SpelledNote } from '@/shared/lib/music'
+import {
+  kindComingDown,
+  placeScale,
+  scaleKey,
+  type ScaleKind,
+  type SpelledNote,
+} from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { scaleRun } from '@/shared/lib/schedule'
 import type { ShownKeys } from './shown'
@@ -22,6 +28,14 @@ export function scaleExample(
         ]),
       ),
     },
-    music: scaleRun(placed, { rhythm: 'even', hands: 'rh', key: scaleKey(root, kind) }),
+    music: scaleRun(
+      { notes: placed },
+      {
+        rhythm: 'even',
+        hands: 'rh',
+        key: scaleKey(root, kind),
+        down: { notes: placeScale(root, kindComingDown(kind)) },
+      },
+    ),
   }
 }

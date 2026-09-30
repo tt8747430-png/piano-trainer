@@ -3,7 +3,7 @@ import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval
 import type { Key } from './key'
 import { pitchClassOf, plainRoot, plainSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
-import { keyPitchClasses } from './scale'
+import { tonesInKey } from './scale'
 
 /** The Ultimate Piano's categories of passing chords (roadmap §10.2), in the order they are shown. */
 export const PASSING_CATEGORIES = [
@@ -119,8 +119,6 @@ export function passingChords(from: Chord, to: Chord): PassingChords[] {
   return kept
 }
 
-/** Whether every tone of a chord is one of the key's notes. */
-export function chordInKey(chord: Chord, key: Key): boolean {
-  const notes = keyPitchClasses(key)
-  return spellChord(chord.root, chord.quality).every((tone) => notes.has(tone.pitchClass))
-}
+/** Whether every tone of a chord is one of the key's notes, spelled as the key spells it. */
+export const chordInKey = (chord: Chord, key: Key): boolean =>
+  tonesInKey(spellChord(chord.root, chord.quality), key)

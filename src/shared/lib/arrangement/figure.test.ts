@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseFigure, playsKeyTriads } from './figure'
+import { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
 
 describe('parseFigure', () => {
   it('reads positions in 16ths as ticks', () => {
@@ -72,5 +72,20 @@ describe('playsKeyTriads', () => {
       }),
     ).toBe(true)
     expect(playsKeyTriads({ kind: 'events', events: parseFigure('0/4 C,4/4 T1') })).toBe(false)
+  })
+})
+
+describe('splitsTheBeat', () => {
+  it('finds a figure that plays inside a beat, which a compound meter divides in three', () => {
+    expect(splitsTheBeat({ kind: 'events', events: parseFigure('0/4 C,4/4 C') })).toBe(false)
+    expect(splitsTheBeat({ kind: 'events', events: parseFigure('0/16 L1+L8') })).toBe(false)
+    expect(splitsTheBeat({ kind: 'events', events: parseFigure('0/2 C,2/2 C') })).toBe(true)
+    expect(
+      splitsTheBeat({
+        kind: 'events',
+        events: parseFigure('0/4 C'),
+        onMajor: parseFigure('0/4 C,6/2 C'),
+      }),
+    ).toBe(true)
   })
 })

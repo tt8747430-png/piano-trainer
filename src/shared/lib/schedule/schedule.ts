@@ -1,5 +1,12 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import {
+  beatsBefore,
+  beatsPerBar,
+  isCompound,
+  TICKS_PER_BEAT,
+  type Midi,
+  type Tick,
+} from '@/shared/lib/music'
 import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -84,17 +91,28 @@ const secondsFor = (ticks: Tick, tempo: number): number =>
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
+/** A bar's beats on the meter's grid: a pickup counts from where its bar would begin. */
+function barGrid(performance: Performance, index: number): { start: Tick; beats: number } {
+  const bar = performance.bars[index]
+  if (!bar) return { start: 0, beats: beatsPerBar(performance.meter) }
+  const before = beatsBefore(performance.bars, index, performance.meter)
+  return before > 0
+    ? { start: bar.startTick - before * TICKS_PER_BEAT, beats: beatsPerBar(performance.meter) }
+    : { start: bar.startTick, beats: Math.ceil(bar.beats) }
+}
+
 /**
  * A count-in: a bar's worth of beats before `fromTick`, on the beats of the bar it starts in, so the
- * music comes in on its beat wherever the pass begins; each bar's first beat is accented.
+ * music comes in on its beat wherever the pass begins (a pickup's too); each bar's first beat is
+ * accented.
  */
 function countInBeats(performance: Performance, fromTick: Tick): { tick: Tick; accent: boolean }[] {
-  const bar = performance.bars.findLast((candidate) => candidate.startTick <= fromTick)
-  if (!bar) return []
-  const beats = Math.ceil(bar.beats)
+  const index = performance.bars.findLastIndex((candidate) => candidate.startTick <= fromTick)
+  if (index < 0) return []
+  const { start, beats } = barGrid(performance, index)
   const earliest = fromTick - beats * TICKS_PER_BEAT
   return Array.from({ length: 2 * beats }, (_, k) => k - beats).flatMap((k) => {
-    const tick = bar.startTick + k * TICKS_PER_BEAT
+    const tick = start + k * TICKS_PER_BEAT
     return tick >= earliest && tick < fromTick ? [{ tick, accent: (k + beats) % beats === 0 }] : []
   })
 }
@@ -129,12 +147,14 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     })
 
   const metronome: Sound[] = options.metronome
-    ? performance.bars.flatMap((bar) =>
-        Array.from({ length: Math.ceil(bar.beats) }, (_, k) => k).flatMap((k): Sound[] => {
-          const tick = bar.startTick + k * TICKS_PER_BEAT
-          return inPass(tick) ? [{ kind: 'click', at: at(tick), accent: k === 0 }] : []
-        }),
-      )
+    ? performance.bars.flatMap((bar, index) => {
+        const { start, beats } = barGrid(performance, index)
+        return Array.from({ length: beats }, (_, k) => k).flatMap((k): Sound[] => {
+          const tick = start + k * TICKS_PER_BEAT
+          const inBar = tick >= bar.startTick
+          return inBar && inPass(tick) ? [{ kind: 'click', at: at(tick), accent: k === 0 }] : []
+        })
+      })
     : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>

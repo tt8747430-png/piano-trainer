@@ -19,31 +19,45 @@ const PLAYING: Readonly<Record<Hands, readonly Hand[]>> = {
   both: ['lh', 'rh'],
 }
 
+/** A run's notes one way, from the bottom note up, and each hand's finger on each. */
+export interface RunWay {
+  readonly notes: readonly PlacedTone[]
+  readonly fingers?: Readonly<Record<Hand, readonly Finger[]>>
+}
+
 export interface RunOptions {
   readonly rhythm: PracticeRhythm
   readonly hands: Hands
   /** The key it is written in. */
   readonly key: Key
-  /** Each hand's fingers on the notes going up; coming down, each note keeps its finger. */
-  readonly fingers?: Readonly<Record<Hand, readonly Finger[]>>
+  /** The way down where it is not the way up (melodic minor's natural minor), with its own fingers. */
+  readonly down?: RunWay
 }
 
 /**
  * A scale's notes up and back down in 8ths of a practice rhythm, for one hand or both (the left an
- * octave down), as timed music in 4/4: what the Scales reference plays and writes.
+ * octave down), as timed music in 4/4: what the Scales reference plays and writes. Coming down, each
+ * note keeps its finger.
  */
-export function scaleRun(notes: readonly PlacedTone[], options: RunOptions): TimedMusic {
+export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
   const lengths = PRACTICE_RHYTHMS[options.rhythm]
-  const up = notes.map((_, index) => index)
-  const upAndDown = [...up, ...up.slice(0, -1).reverse()]
+  const down = options.down ?? up
+  const indices = up.notes.map((_, index) => index)
+  const upAndDown = [
+    ...indices.map((index) => ({ way: up, index })),
+    ...indices
+      .slice(0, -1)
+      .reverse()
+      .map((index) => ({ way: down, index })),
+  ]
   const played: TimedNote[] = []
   let tick = 0
-  upAndDown.forEach((index, i) => {
+  upAndDown.forEach(({ way, index }, i) => {
     const length = Math.round((lengths[i % lengths.length] ?? 1) * TICKS_PER_EIGHTH)
-    const placed = notes[index]
+    const placed = way.notes[index]
     if (placed) {
       for (const hand of PLAYING[options.hands]) {
-        const finger = options.fingers?.[hand][index]
+        const finger = way.fingers?.[hand][index]
         played.push({
           midi: midi(placed.midi + OCTAVE[hand]),
           spelled: placed.tone.note,

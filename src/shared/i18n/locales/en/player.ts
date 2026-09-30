@@ -21,6 +21,7 @@ export const player = {
   needsMelody: 'Needs a melody',
   ownKeyOnly: 'Only in {{key}}',
   needsKey: 'Needs a key',
+  needsSimpleTime: 'Needs simple time',
   chordSize: 'Chord size',
   chordSizes: { triads: 'Triads', sevenths: '7ths', ninths: '9ths' },
   toggles: {

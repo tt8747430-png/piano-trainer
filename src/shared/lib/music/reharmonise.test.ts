@@ -9,6 +9,13 @@ const symbols = (group: HoldingGroup) =>
   )
 
 describe('chordsHolding', () => {
+  it('never marks a chord in the key that holds a note the key spells otherwise', () => {
+    const fMinor = chordsHolding(note('G', 1), { tonic: note('A'), minor: true }).triads.find(
+      (each) => noteName(each.chord.root) === 'F' && each.chord.suffix === 'm',
+    )
+    expect(fMinor?.inKey).toBe(false)
+  })
+
   it('lists the triads that hold a note as root, 3rd or 5th', () => {
     expect(symbols('triads')).toEqual(['G 1', 'E♭ 3', 'C 5', 'Gm 1', 'Em ♭3', 'Cm 5'])
   })

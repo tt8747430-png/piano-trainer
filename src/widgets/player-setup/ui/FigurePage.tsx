@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import type { FigureEntry } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
-import { playsKeyTriads, type Figure } from '@/shared/lib/arrangement'
+import { playsKeyTriads, splitsTheBeat, type Figure } from '@/shared/lib/arrangement'
 import { ChoiceList } from './ChoiceList'
 import { ListPage } from './ListPage'
 
 /**
  * A hand's page of the sheet: the pattern's own figure, or any figure for that hand; one that
  * plays the tune is closed to a piece without a melody, one that plays the key's triads to a source
- * without a key.
+ * without a key, one that plays inside the beat to a piece in 6/8 or 12/8.
  */
 export function FigurePage<Id extends string>({
   ids,
@@ -16,6 +16,7 @@ export function FigurePage<Id extends string>({
   value,
   noMelody,
   noKey,
+  noSimpleTime,
   onChoose,
   onBack,
 }: {
@@ -27,6 +28,8 @@ export function FigurePage<Id extends string>({
   noMelody: string | undefined
   /** Why a figure that plays the key's triads is closed; nothing for a source in a key. */
   noKey: string | undefined
+  /** Why a figure that plays inside the beat is closed; nothing for a piece in simple time. */
+  noSimpleTime: string | undefined
   /** A figure, or undefined for the pattern's own. */
   onChoose: (id: Id | undefined) => void
   onBack: () => void
@@ -41,7 +44,13 @@ export function FigurePage<Id extends string>({
           ...ids.map((id) => {
             const { name, figure } = figures[id]
             const closed =
-              figure.kind === 'melody' ? noMelody : playsKeyTriads(figure) ? noKey : undefined
+              figure.kind === 'melody'
+                ? noMelody
+                : playsKeyTriads(figure)
+                  ? noKey
+                  : splitsTheBeat(figure)
+                    ? noSimpleTime
+                    : undefined
             return {
               value: id,
               label: localText(name, locale),

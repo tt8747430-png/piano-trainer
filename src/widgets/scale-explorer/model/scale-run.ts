@@ -1,5 +1,6 @@
 import {
   fingeringsOf,
+  kindComingDown,
   noteFromParam,
   ownFingering,
   placeScale,
@@ -9,6 +10,7 @@ import {
   type Fingering,
   type Hand,
   type PlacedTone,
+  type ScaleKind,
 } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { scaleRun } from '@/shared/lib/schedule'
@@ -32,24 +34,33 @@ export function scaleRunOf(
   const root = noteFromParam(view.root)
   const start = view.start - 1
   const placed = placeScale(root, view.kind, start)
-  const keys = placed.map((key) => key.midi)
   const own = ownFingering(view.kind, start)
   const fingering = view.fingering ?? own
-  const fingers = {
-    rh: runFingering(root, view.kind, start, keys, 'rh', fingering),
-    lh: runFingering(root, view.kind, start, keys, 'lh', fingering),
+  /** A way of the run as it is fingered: each hand's finger on each of its keys. */
+  const fingered = (kind: ScaleKind, notes: readonly PlacedTone[]) => {
+    const keys = notes.map((key) => key.midi)
+    return {
+      rh: runFingering(root, kind, start, keys, 'rh', fingering),
+      lh: runFingering(root, kind, start, keys, 'lh', fingering),
+    }
   }
+  const fingers = fingered(view.kind, placed)
+  const downKind = kindComingDown(view.kind)
+  const downNotes = placeScale(root, downKind, start)
   return {
     placed,
     fingering,
     own,
     fingerings: fingeringsOf(view.kind, start),
     fingers,
-    music: scaleRun(placed, {
-      rhythm: view.rhythm,
-      hands: view.hands,
-      key: scaleKey(root, view.kind),
-      fingers,
-    }),
+    music: scaleRun(
+      { notes: placed, fingers },
+      {
+        rhythm: view.rhythm,
+        hands: view.hands,
+        key: scaleKey(root, view.kind),
+        down: { notes: downNotes, fingers: fingered(downKind, downNotes) },
+      },
+    ),
   }
 }

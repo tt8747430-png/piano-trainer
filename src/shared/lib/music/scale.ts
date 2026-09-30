@@ -1,6 +1,6 @@
 import { INTERVALS, type IntervalName, type Interval } from './interval'
 import { keyPrefersSharps, keySignature, type Key } from './key'
-import { plainSpelling, rootSpelling, type SpelledNote } from './note'
+import { plainSpelling, rootSpelling, sameNote, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
@@ -224,25 +224,30 @@ export function scaleGaps(kind: ScaleKind): ScaleGap[] {
   })
 }
 
+/** A scale coming back down: melodic minor comes down as natural minor, as it is taught; any other as it went up. */
+export const kindComingDown = (kind: ScaleKind): ScaleKind =>
+  kind === 'melodic' ? 'natural' : kind
+
+/** The notes a key's chords are made of: its scale's, and in a minor key its raised 6th and 7th too. */
+export const keyTones = (key: Key): Tone[] =>
+  key.minor
+    ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
+    : spellScale(key.tonic, 'major')
+
+/** Whether every tone is one of the key's notes, spelled as the key spells it: A♭ is not A minor's G♯. */
+export function tonesInKey(tones: readonly Tone[], key: Key): boolean {
+  const notes = keyTones(key)
+  return tones.every((tone) => notes.some((note) => sameNote(note.note, tone.note)))
+}
+
 /**
  * A pitch class as a key spells it: the note of its scale (a minor key's raised 6th and 7th too),
  * else plainly, sharp in a sharp key and flat otherwise.
  */
-/** The notes a key's chords are made of: its scale's, and in a minor key its raised 6th and 7th too. */
-export const keyPitchClasses = (key: Key): ReadonlySet<PitchClass> =>
-  new Set(
-    (key.minor
-      ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
-      : spellScale(key.tonic, 'major')
-    ).map((tone) => tone.pitchClass),
-  )
-
 export function spellInKey(pc: PitchClass, key: Key): SpelledNote {
-  const tones = key.minor
-    ? [...spellScale(key.tonic, 'natural'), ...spellScale(key.tonic, 'melodic')]
-    : spellScale(key.tonic, 'major')
   return (
-    tones.find((tone) => tone.pitchClass === pc)?.note ?? plainSpelling(pc, keyPrefersSharps(key))
+    keyTones(key).find((tone) => tone.pitchClass === pc)?.note ??
+    plainSpelling(pc, keyPrefersSharps(key))
   )
 }
 

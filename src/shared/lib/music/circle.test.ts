@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { CIRCLE_OF_FIFTHS, circleFunctions, randomKey } from './circle'
+import { CIRCLE_OF_FIFTHS, circleFunctions, circleKey, randomKey } from './circle'
 import { keyName } from './key'
 import { note } from './note'
+import { pitchClass } from './pitch'
 
 describe('CIRCLE_OF_FIFTHS', () => {
-  it('goes round by fifths from C, each major over its relative minor, spelled as the app spells tonics', () => {
+  it('goes round by fifths from C, each major over its relative minor with the same signature', () => {
     expect(CIRCLE_OF_FIFTHS.map((place) => keyName(place.major))).toEqual([
       'C',
       'G',
@@ -26,13 +27,21 @@ describe('CIRCLE_OF_FIFTHS', () => {
       'F#m',
       'C#m',
       'G#m',
-      'E♭m',
+      'D#m',
       'B♭m',
       'Fm',
       'Cm',
       'Gm',
       'Dm',
     ])
+  })
+})
+
+describe('circleKey', () => {
+  it('spells a key as the circle does, so a key found by its tonic is on the circle', () => {
+    expect(keyName(circleKey(pitchClass(3), true))).toBe('D#m')
+    expect(keyName(circleKey(pitchClass(6), false))).toBe('F#')
+    expect(keyName(circleKey(pitchClass(1), false))).toBe('D♭')
   })
 })
 

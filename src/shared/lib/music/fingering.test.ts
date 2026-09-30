@@ -7,6 +7,7 @@ import {
   thumbFingering,
   type Finger,
 } from './fingering'
+import { isBlackKey } from './keyboard'
 import { LETTERS, note } from './note'
 import { pitchClass } from './pitch'
 import { placeScale } from './place'
@@ -23,11 +24,39 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('C'), 'blues', 'lh', 0))).toBe('4214321')
   })
 
-  it('fingers harmonic and melodic minor as natural minor', () => {
+  it('fingers harmonic and melodic minor as natural minor, melodic as its major where a thumb would be black', () => {
     for (const hand of ['rh', 'lh'] as const) {
-      const natural = scaleFingering(note('A'), 'natural', hand, 0)
-      expect(scaleFingering(note('A'), 'harmonic', hand, 0)).toEqual(natural)
-      expect(scaleFingering(note('A'), 'melodic', hand, 0)).toEqual(natural)
+      expect(scaleFingering(note('A'), 'harmonic', hand, 0)).toEqual(
+        scaleFingering(note('A'), 'natural', hand, 0),
+      )
+      expect(scaleFingering(note('A'), 'melodic', hand, 0)).toEqual(
+        scaleFingering(note('A'), 'natural', hand, 0),
+      )
+    }
+  })
+
+  it('fingers C♯ melodic minor as C♯ major, keeping the thumb off A♯', () => {
+    expect(digits(scaleFingering(note('C', 1), 'melodic', 'rh', 0))).toBe(
+      digits(scaleFingering(note('C', 1), 'major', 'rh', 0)),
+    )
+  })
+
+  it('ends D♭ and F♯ major’s left hand on the finger its octave takes in a longer run', () => {
+    expect(digits(scaleFingering(note('D', -1), 'major', 'lh', 0))).toBe('32143213')
+    expect(digits(scaleFingering(note('F', 1), 'major', 'lh', 0))).toBe('43213214')
+  })
+
+  it('never puts a thumb on a black key in a taught seven-note scale from its tonic', () => {
+    for (const kind of ['major', 'natural', 'harmonic', 'melodic'] as const) {
+      for (let pc = 0; pc < 12; pc++) {
+        const root = scaleRootSpelling(pitchClass(pc), kind)
+        const keys = placeScale(root, kind).map((placed) => placed.midi)
+        for (const hand of ['rh', 'lh'] as const) {
+          const fingers = scaleFingering(root, kind, hand, 0)
+          const blackThumbs = keys.filter((key, i) => fingers[i] === 1 && isBlackKey(key))
+          expect(blackThumbs, `${kind} on ${pc}, ${hand}`).toEqual([])
+        }
+      }
     }
   })
 

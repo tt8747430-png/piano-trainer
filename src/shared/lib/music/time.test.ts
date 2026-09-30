@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  beatsBefore,
   beatsPerBar,
   isCompound,
   METERS,
@@ -9,6 +10,12 @@ import {
 } from './time'
 
 describe('time', () => {
+  it('reads a first bar shorter than the meter as a pickup: the end of a bar', () => {
+    const bars = [{ beats: 1 }, { beats: 4 }, { beats: 2 }]
+    expect(bars.map((_, index) => beatsBefore(bars, index, '4/4'))).toEqual([3, 0, 0])
+    expect(beatsBefore([{ beats: 3 }], 0, '3/4')).toBe(0)
+  })
+
   it('counts twelve ticks a beat', () => {
     expect(TICKS_PER_BEAT).toBe(12)
   })

@@ -130,7 +130,7 @@ it. `@` → `src`.
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`; `interval-facts.ts`,
   the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyPitchClasses`), `arrangement`
+  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyTones` and `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's

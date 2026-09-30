@@ -1,4 +1,6 @@
 import {
+  beatsBefore,
+  beatsPerBar,
   TICKS_PER_BEAT,
   timeSignature,
   writtenOctave,
@@ -171,9 +173,13 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
   return withAccidentals(drafts, bar.key)
 }
 
-/** Timed notes as a written score: bars, a grand staff, voices, values, ties and accidentals (spec §2.4). */
+/**
+ * Timed notes as a written score: bars, a grand staff, voices, values, ties and accidentals (spec
+ * §2.4). A pickup is written under the meter's signature, a short first bar.
+ */
 export function notate(music: TimedMusic): Score {
-  const measures = music.bars.map((written): Measure => {
+  const measures = music.bars.map((written, index): Measure => {
+    const pickup = beatsBefore(music.bars, index, music.meter) > 0
     const bar: Bar = {
       start: written.startTick,
       ticks: Math.round(written.beats * TICKS_PER_BEAT),
@@ -184,7 +190,7 @@ export function notate(music: TimedMusic): Score {
     return {
       startTick: bar.start,
       ticks: bar.ticks,
-      time: timeSignature(written.beats, music.meter),
+      time: timeSignature(pickup ? beatsPerBar(music.meter) : written.beats, music.meter),
       staves: { treble: writeStaff(chords.treble, bar), bass: writeStaff(chords.bass, bar) },
       chords: music.chords
         .filter((chord) => chord.startTick >= bar.start && chord.startTick < bar.start + bar.ticks)

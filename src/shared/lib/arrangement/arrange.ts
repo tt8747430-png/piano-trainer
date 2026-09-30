@@ -1,4 +1,5 @@
 import {
+  beatsBefore,
   beatsPerBar,
   chordBass,
   chordSymbol,
@@ -81,18 +82,24 @@ interface Layout {
   /** Bars that open or close their line. */
   readonly lineEnds: ReadonlySet<number>
   readonly totalTicks: Tick
+  /** The ticks of the meter's bar a pickup leaves out before it; 0 without one. */
+  readonly pickup: Tick
 }
 
 function layOut(chart: Chart): Layout {
   const chords: PlacedChord[] = []
   const bars: PerformanceBar[] = []
   const lineEnds = new Set<number>()
+  const written = chart.sections.flatMap((section) => section.lines.flat())
+  // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
+  const pickup = beatsBefore(written, 0, chart.meter) * TICKS_PER_BEAT
   let tick = 0
   chart.sections.forEach((section, sectionIndex) =>
     section.lines.forEach((line, lineIndex) =>
       line.forEach((bar, barInLine) => {
         const index = bars.length
         const barStart = tick
+        const gridStart = tick - (index === 0 ? pickup : 0)
         if (barInLine === 0 || barInLine === line.length - 1) lineEnds.add(index)
         const chordIndexes = bar.chords.map((chord) => {
           const durationTicks = Math.round(chord.beats * TICKS_PER_BEAT)
@@ -101,7 +108,7 @@ function layOut(chart: Chart): Layout {
             startTick: tick,
             durationTicks,
             bar: index,
-            offsetInBar: tick - barStart,
+            offsetInBar: tick - gridStart,
           })
           tick += durationTicks
           return chords.length - 1
@@ -116,7 +123,7 @@ function layOut(chart: Chart): Layout {
       }),
     ),
   )
-  return { chords, bars, lineEnds, totalTicks: tick }
+  return { chords, bars, lineEnds, totalTicks: tick, pickup }
 }
 
 /** The index of the last start at or before `tick`: which chord or bar is sounding then. */
@@ -328,13 +335,14 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       pattern: pattern.id,
     })
 
-    // A chord plays its pattern in windows of one meter bar. A chord shorter than two beats picks the
-    // pattern up where it sits in the bar; every other window starts at the pattern's beginning.
+    // A chord plays its pattern in windows of one meter bar. A chord shorter than two beats, or in a
+    // pickup, picks the pattern up where it sits in the bar; every other window starts at the
+    // pattern's beginning.
     const end = placed.startTick + placed.durationTicks
+    const picksUp = placed.chord.beats < 2 || (placed.bar === 0 && layout.pickup > 0)
     let at = placed.startTick
     while (at < end) {
-      const from =
-        at === placed.startTick && placed.chord.beats < 2 ? placed.offsetInBar % meterTicks : 0
+      const from = at === placed.startTick && picksUp ? placed.offsetInBar % meterTicks : 0
       const length = Math.min(meterTicks - from, end - at)
       const window: Window = { from, to: from + length, at, chord: index }
       if (rh.kind === 'events') notes.push(...playFigure(rh, context, 'rh', window, barBeats))

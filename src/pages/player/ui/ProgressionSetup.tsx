@@ -31,6 +31,7 @@ export function ProgressionSetup({
       methods={false}
       melody={false}
       keyed
+      compound={false}
       onFigures={onChange}
     >
       <KeyDropdown value={keyParam(choice.key)} onChange={onKey} />

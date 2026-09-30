@@ -27,6 +27,21 @@ const shape = (events: readonly ScoreEvent[]) =>
 const notesOf = (event: ScoreEvent | undefined) => (event?.kind === 'notes' ? event.notes : [])
 
 describe('notate', () => {
+  it('writes a pickup under the meter’s signature, as a short first bar', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 12), n(64, note('E'), 'rh', 12, 48)], {
+        bars: [
+          { startTick: 0, beats: 1 },
+          { startTick: 12, beats: 4 },
+        ],
+      }),
+    )
+    expect(score.measures.map((measure) => [measure.time, measure.ticks])).toEqual([
+      [{ count: 4, unit: 4 }, 12],
+      [{ count: 4, unit: 4 }, 48],
+    ])
+  })
+
   it('writes a bar of C on a grand staff, with its chord symbol and time signature', () => {
     const score = notate(
       music([

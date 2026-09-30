@@ -133,10 +133,38 @@ function invert(notes: readonly number[], times: number): number[] {
   return inverted
 }
 
-/** Degrees 1–15 above a root, on the chord's own 3rd, 5th and 7th. */
-function degreeAbove(degree: number, context: ChordContext): number {
-  const steps = [0, 2, context.third, 5, context.fifth, 9, context.seventh]
+type Stack = Pick<ChordContext, 'third' | 'fifth' | 'seventh'>
+
+/** Degrees 1–15 above a note, on a stack's 3rd, 5th and 7th. */
+function degreeAbove(degree: number, stack: Stack): number {
+  const steps = [0, 2, stack.third, 5, stack.fifth, 9, stack.seventh]
   return (steps[(degree - 1) % 7] ?? 0) + 12 * Math.floor((degree - 1) / 7)
+}
+
+/** The tones a chord stacks from its bass: its root, 3rd, 5th and 7th, never a tension. */
+const STACKED = new Set(['root', '3rd', '5th', '7th'])
+
+/**
+ * The 3rd, 5th and 7th above the bass: the chord's own over its root; over another bass, the chord's
+ * tones stacked up from it (Dm/F: A, then D), so every note the left hand plays is the chord's.
+ */
+function stackFromBass(context: ChordContext): Stack {
+  const bass = pitchClass(context.bass)
+  if (bass === pitchClass(context.root)) return context
+  const above = [
+    ...new Set(
+      context.tones
+        .filter((tone) => STACKED.has(tone.role))
+        .map((tone) => pitchClass(tone.pitchClass - bass)),
+    ),
+  ]
+    .filter((semitones) => semitones !== 0)
+    .sort((a, b) => a - b)
+  return {
+    third: above[0] ?? context.third,
+    fifth: above[1] ?? context.fifth,
+    seventh: above[2] ?? context.seventh,
+  }
 }
 
 const semitonesOf = (kind: 'major' | 'natural') =>
@@ -171,14 +199,14 @@ export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote
     }
     case 'key-triad':
       return keyTriad(token.triad, context)
-    case 'bass-degree':
-      return [
-        stepsFrom(
-          context.bassNote,
-          token.degree - 1,
-          context.bass + degreeAbove(token.degree, context),
-        ),
-      ]
+    case 'bass-degree': {
+      const key = context.bass + degreeAbove(token.degree, stackFromBass(context))
+      // The 3rd, 5th and 7th are chord tones, spelled as the chord spells them.
+      const step = (token.degree - 1) % 7
+      return step > 0 && step % 2 === 0
+        ? spellInChord(context, [key])
+        : [stepsFrom(context.bassNote, token.degree - 1, key)]
+    }
     case 'scale-degree':
       return [
         stepsFrom(

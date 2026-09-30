@@ -23,6 +23,7 @@ export const player: LocaleResources['player'] = {
   needsMelody: 'Нужна мелодия',
   ownKeyOnly: 'Только в тональности {{key}}',
   needsKey: 'Нужна тональность',
+  needsSimpleTime: 'Нужен простой размер',
   chordSize: 'Аккорды',
   chordSizes: { triads: 'Трезвучия', sevenths: 'Септаккорды', ninths: 'Нонаккорды' },
   toggles: {

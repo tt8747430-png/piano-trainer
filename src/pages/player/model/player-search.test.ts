@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
 import { hasMethodCodes, PIECES, pieceById } from '@/entities/piece'
+import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
 import { note, noteParam } from '@/shared/lib/music'
 import { resolveChoice, searchPatch } from './player-search'
@@ -36,6 +38,18 @@ describe('resolveChoice', () => {
     const plain = PIECES.find((p) => !hasMethodCodes(p))
     if (!plain) throw new Error('every piece names its methods')
     expect(resolveChoice(plain, { pattern: 'chart' }, false).pattern).toBe(plain.pattern)
+  })
+
+  it('plays a piece in 6/8 by its own pattern and figures when the URL names ones inside the beat', () => {
+    const rh = RIGHT_FIGURE_IDS.find((id) => splitsTheBeat(RIGHT_FIGURES[id].figure))
+    const lh = LEFT_FIGURE_IDS.find((id) => splitsTheBeat(LEFT_FIGURES[id].figure))
+    if (!rh || !lh) throw new Error('figures inside the beat')
+    const bz2 = piece('bz2')
+    expect(resolveChoice(bz2, { pattern: 'ballad', rh, lh }, false)).toMatchObject({
+      pattern: ownChoice(bz2).pattern,
+      rh: null,
+      lh: null,
+    })
   })
 
   it('lets only a progression that allows it change its chord size', () => {

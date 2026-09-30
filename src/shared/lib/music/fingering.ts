@@ -1,7 +1,7 @@
 import { isBlackKey } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
-import type { Midi } from './pitch'
-import { relatedScale, scaleHasChords, type ScaleKind } from './scale'
+import { midi, type Midi } from './pitch'
+import { relatedScale, scaleHasChords, spellScale, type ScaleKind } from './scale'
 
 export type Finger = 1 | 2 | 3 | 4 | 5
 export type Hand = 'rh' | 'lh'
@@ -33,12 +33,12 @@ const C_SHAPE = fingers('12312345', '54321321')
 const RUNS: Readonly<Record<FingeringTable, Readonly<Partial<Record<number, Run>>>>> = {
   major: {
     0: C_SHAPE,
-    1: fingers('23123412', '32143212'),
+    1: fingers('23123412', '32143213'),
     2: C_SHAPE,
     3: fingers('31234123', '32143213'),
     4: C_SHAPE,
     5: fingers('12341234', '54321321'),
-    6: fingers('23412312', '43213212'),
+    6: fingers('23412312', '43213214'),
     7: C_SHAPE,
     8: fingers('23123123', '32143213'),
     9: C_SHAPE,
@@ -104,6 +104,22 @@ function tableRun(table: FingeringTable, root: SpelledNote, hand: Hand): Finger[
 }
 
 /**
+ * The table a kind is fingered by on a root, in a hand. Melodic minor's raised 6th and 7th can put
+ * natural minor's thumb on a black key (C♯: A♯); there it takes its tonic's major's, from which it
+ * differs only in its 3rd.
+ */
+function tableFor(kind: ScaleKind, root: SpelledNote, hand: Hand): FingeringTable | undefined {
+  const own = OWN_TABLE[kind]
+  if (kind !== 'melodic' || own === undefined) return own
+  const tones = spellScale(root, kind)
+  const thumbOnBlack = tableRun(own, root, hand).some((finger, i) => {
+    const tone = tones[i % tones.length]
+    return finger === 1 && tone !== undefined && isBlackKey(midi(tone.pitchClass))
+  })
+  return thumbOnBlack ? 'major' : own
+}
+
+/**
  * Each degree's finger in a longer run, from where the run puts the thumb: a right-hand note takes
  * one finger more for each degree it lies above the thumb before it, a left-hand note for each
  * degree below the thumb after it (B♭ major's thumbs are on C and F, so between octaves B♭ is 4).
@@ -122,7 +138,7 @@ function continuing(run: readonly Finger[], hand: Hand): Finger[] {
 
 /** Each degree's continuing finger: the kind's own table, or a mode's parent major's. */
 function continuingFingers(root: SpelledNote, kind: ScaleKind, hand: Hand): Finger[] {
-  const own = OWN_TABLE[kind]
+  const own = tableFor(kind, root, hand)
   if (own) return continuing(tableRun(own, root, hand), hand)
   const parent = relatedScale(root, kind)
   if (parent?.relation !== 'parent') throw new RangeError(`${kind} has no fingering to carry`)
@@ -142,7 +158,7 @@ export function scaleFingering(
   hand: Hand,
   start: number,
 ): Finger[] {
-  const own = OWN_TABLE[kind]
+  const own = tableFor(kind, root, hand)
   if (own && start === 0) return tableRun(own, root, hand)
   if (!scaleHasChords(kind))
     throw new RangeError(`${kind} is fingered as its scale from its tonic only`)

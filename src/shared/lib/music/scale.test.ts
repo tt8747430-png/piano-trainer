@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
+import { spellChord } from './chord'
 import type { Key } from './key'
 import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import {
-  keyPitchClasses,
+  keyTones,
+  tonesInKey,
   SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
@@ -315,13 +317,18 @@ describe('relativeKey', () => {
   })
 })
 
-describe('keyPitchClasses', () => {
+describe('keyTones and tonesInKey', () => {
   it('holds a major key’s scale, and a minor key’s with its raised 6th and 7th', () => {
-    expect([...keyPitchClasses({ tonic: note('C'), minor: false })].sort((a, b) => a - b)).toEqual([
-      0, 2, 4, 5, 7, 9, 11,
-    ])
-    expect([...keyPitchClasses({ tonic: note('A'), minor: true })].sort((a, b) => a - b)).toEqual([
-      0, 2, 4, 5, 6, 7, 8, 9, 11,
-    ])
+    const names = (key: Key) => keyTones(key).map((tone) => noteName(tone.note))
+    expect(names({ tonic: note('C'), minor: false })).toEqual(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
+    expect(new Set(names({ tonic: note('A'), minor: true }))).toEqual(
+      new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'F#', 'G#']),
+    )
+  })
+
+  it('holds a chord in the key only when the key spells each of its tones alike', () => {
+    const aMinor: Key = { tonic: note('A'), minor: true }
+    expect(tonesInKey(spellChord(note('E'), 'maj'), aMinor)).toBe(true)
+    expect(tonesInKey(spellChord(note('F'), 'min'), aMinor)).toBe(false)
   })
 })

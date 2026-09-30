@@ -75,15 +75,15 @@ meter, note })`. It shows in Songs and never opens in the Player; it has no path
 
 A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
 
-| Written                    | Means                                                                                 |
-| -------------------------- | ------------------------------------------------------------------------------------- |
-| `C Dm G-C`                 | Chords without `@beats` share the meter's beats: `G-C` in 4/4 is two beats each       |
-| `C@1-C/E@1-Dsus4@1-D/F#@1` | `@beats` fixes a chord's length (`@.5`, `@1.5` too)                                   |
-| `Gm/E@2-Asus4-A7`          | Given beats first; the others share what is left (1 and 1)                            |
-| `Dm@1-Edim@1 Gm@2`         | A bar where every chord gives beats lasts their sum: a 2/4 bar inside 4/4             |
-| `Fm@1`                     | A pickup bar                                                                          |
-| `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                         |
-| `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`) |
+| Written                    | Means                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `C Dm G-C`                 | Chords without `@beats` share the meter's beats: `G-C` in 4/4 is two beats each                  |
+| `C@1-C/E@1-Dsus4@1-D/F#@1` | `@beats` fixes a chord's length (`@.5`, `@1.5` too)                                              |
+| `Gm/E@2-Asus4-A7`          | Given beats first; the others share what is left (1 and 1)                                       |
+| `Dm@1-Edim@1 Gm@2`         | A bar where every chord gives beats lasts their sum: a 2/4 bar inside 4/4                        |
+| `Fm@1`                     | A first bar shorter than the meter is a pickup: the end of a bar, played, counted and written so |
+| `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
+| `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
 
 Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (12 per beat:
 `.5`, `.25`, `1.5`, not `.3`).

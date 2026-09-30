@@ -49,11 +49,14 @@ describe('every lesson’s staves', () => {
         for (const block of section.blocks) {
           if (block.kind !== 'scale') continue
           const score = notate(
-            scaleRun(placeScale(block.root, block.scale), {
-              rhythm: 'even',
-              hands: 'rh',
-              key: scaleKey(block.root, block.scale),
-            }),
+            scaleRun(
+              { notes: placeScale(block.root, block.scale) },
+              {
+                rhythm: 'even',
+                hands: 'rh',
+                key: scaleKey(block.root, block.scale),
+              },
+            ),
           )
           expectWritten(score)
           const host = document.createElement('div')

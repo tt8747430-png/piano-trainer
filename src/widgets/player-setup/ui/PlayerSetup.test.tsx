@@ -7,7 +7,7 @@ import { FigureRows } from './FigureRows'
 import { MelodySwitch } from './MelodySwitch'
 import { PlayerSetup } from './PlayerSetup'
 
-function renderSetup({ methods = false, melody = false, keyed = true } = {}) {
+function renderSetup({ methods = false, melody = false, keyed = true, compound = false } = {}) {
   const onFigures = vi.fn()
   const view = renderWithSettings(
     <PlayerSetup
@@ -17,6 +17,7 @@ function renderSetup({ methods = false, melody = false, keyed = true } = {}) {
       methods={methods}
       melody={melody}
       keyed={keyed}
+      compound={compound}
       onFigures={onFigures}
     >
       <p>The source’s own choices</p>
@@ -82,5 +83,18 @@ describe('PlayerSetup', () => {
     expect(
       screen.getByRole('button', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
     ).toBeEnabled()
+  })
+
+  it('closes what plays inside a beat to a piece in 6/8 or 12/8, keeping what plays on it', async () => {
+    const user = userEvent.setup()
+    renderSetup({ compound: true })
+    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+    expect(
+      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.ballad.name.en) }),
+    ).toBeDisabled()
+    expect(
+      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.r1.name.en) }),
+    ).toBeEnabled()
+    expect(screen.getAllByText('Needs simple time').length).toBeGreaterThan(0)
   })
 })

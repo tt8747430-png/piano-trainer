@@ -6,6 +6,7 @@ import {
   chordSymbol,
   midi,
   note,
+  noteParam,
   parseChordSymbol,
   parseKey,
   pitchClass,
@@ -306,6 +307,30 @@ describe('arrange', () => {
       note('A'),
     ])
     expect(notesOf(performance, 'lh').map((n) => n.spelled)).toEqual([note('B'), note('G')])
+  })
+
+  it.each([
+    ['Dm/F', note('F'), [note('F'), note('A'), note('D'), note('F')]],
+    ['Cm/Eb', note('E', -1), [note('E', -1), note('G'), note('C'), note('E', -1)]],
+    ['Fm/D', note('F'), [note('D'), note('F'), note('A', -1), note('D')]],
+  ] as const)(
+    'plays %s’s left hand in its own tones, stacked up from the bass',
+    (symbol, tonic, expected) => {
+      const performance = arrange(chart([[symbol]], { key: noteParam(tonic) }), {
+        tonic,
+        pattern: pattern('arp', '0/16 C', '0/4 L1,4/4 L3,8/4 L5,12/4 L8'),
+      })
+      expect(notesOf(performance, 'lh').map((n) => n.spelled)).toEqual(expected)
+      const lh = notesOf(performance, 'lh').map((n) => n.midi)
+      expect(lh).toEqual([...lh].sort((a, b) => a - b))
+    },
+  )
+
+  it('plays a pickup as the end of a bar: the pattern’s last beat, not its first', () => {
+    const performance = arrange(chart([['C@1', 'F']]), { tonic: C, pattern: BEATS })
+    expect(performance.bars[0]?.beats).toBe(1)
+    const inPickup = performance.notes.filter((n) => n.startTick < 12)
+    expect(new Set(inPickup.map((n) => n.hand))).toEqual(new Set(['rh']))
   })
 
   it('spells the key’s triads from the key', () => {

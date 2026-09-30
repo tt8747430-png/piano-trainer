@@ -8,11 +8,14 @@ import { LazyScoreView } from './LazyScoreView'
 describe('LazyScoreView', () => {
   it('keeps the staff’s space while it loads, then engraves the score', async () => {
     const score = notate(
-      scaleRun(placeScale(note('C'), 'major'), {
-        rhythm: 'even',
-        hands: 'rh',
-        key: { tonic: note('C'), minor: false },
-      }),
+      scaleRun(
+        { notes: placeScale(note('C'), 'major') },
+        {
+          rhythm: 'even',
+          hands: 'rh',
+          key: { tonic: note('C'), minor: false },
+        },
+      ),
     )
     const { container } = render(<LazyScoreView score={score} scale={1} fingers={false} />)
     await waitFor(() =>

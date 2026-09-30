@@ -12,11 +12,14 @@ export function KeySignature({ value }: { value: Key }) {
   const score = useMemo(
     () =>
       notate(
-        scaleRun(placeScale(tonic, minor ? 'natural' : 'major'), {
-          rhythm: 'even',
-          hands: 'rh',
-          key: { tonic, minor },
-        }),
+        scaleRun(
+          { notes: placeScale(tonic, minor ? 'natural' : 'major') },
+          {
+            rhythm: 'even',
+            hands: 'rh',
+            key: { tonic, minor },
+          },
+        ),
       ),
     [tonic, minor],
   )

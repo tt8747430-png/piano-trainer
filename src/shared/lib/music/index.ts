@@ -1,6 +1,7 @@
 export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
   beatsPerBar,
+  beatsBefore,
   isCompound,
   METERS,
   TICKS_PER_BEAT,
@@ -154,7 +155,8 @@ export {
   SCALE_FAMILIES,
   SCALE_KINDS,
   isMinorScale,
-  keyPitchClasses,
+  keyTones,
+  kindComingDown,
   modesOfKey,
   relatedScale,
   relativeKey,
@@ -228,6 +230,7 @@ export {
 export {
   CIRCLE_OF_FIFTHS,
   circleFunctions,
+  circleKey,
   randomKey,
   sameKey,
   type CircleFunction,

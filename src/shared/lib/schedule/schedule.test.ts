@@ -45,6 +45,37 @@ const notes = (sounds: readonly Sound[]) =>
 const clicks = (sounds: readonly Sound[]) => sounds.filter((sound) => sound.kind === 'click')
 
 describe('schedule', () => {
+  it('counts a pickup as the end of a bar: no accent on it, the next bar’s first beat accented', () => {
+    const withPickup = arrange(
+      {
+        key: C_MAJOR,
+        meter: '4/4',
+        sections: [
+          {
+            lines: [
+              [{ chords: [{ ...parseChordSymbol('C'), beats: 1 }], beats: 1 }, oneChordBar('F')],
+            ],
+          },
+        ],
+      },
+      { tonic: note('C'), pattern: BLOCK },
+    )
+    const { sounds } = schedule(withPickup, {
+      tempo: 60,
+      hands: ALL,
+      metronome: true,
+      countIn: true,
+    })
+    expect(clicks(sounds).slice(0, 6)).toEqual([
+      { kind: 'click', at: 0, accent: false },
+      { kind: 'click', at: 1, accent: true },
+      { kind: 'click', at: 2, accent: false },
+      { kind: 'click', at: 3, accent: false },
+      { kind: 'click', at: 4, accent: false },
+      { kind: 'click', at: 5, accent: true },
+    ])
+  })
+
   it('says where the pass runs and when its music starts, after a count-in', () => {
     const plain = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, fromTick: 12, toTick: 60 })
     expect([plain.fromTick, plain.toTick, plain.musicStart]).toEqual([12, 60, 0])

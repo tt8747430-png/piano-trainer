@@ -3,7 +3,7 @@ import { buildChord, partsOf, type BuiltChord, type ChordParts } from './chord-p
 import { INTERVALS, spellBelow, type IntervalName } from './interval'
 import type { Key } from './key'
 import { plainRoot, type SpelledNote } from './note'
-import { keyPitchClasses } from './scale'
+import { tonesInKey } from './scale'
 
 /** The owner's table's groups (roadmap §10.3), with the triads a hymn's melody note takes first. */
 export const HOLDING_GROUPS = ['triads', 'major', 'minor', 'dominant'] as const
@@ -77,7 +77,6 @@ export function chordsHolding(
   melody: SpelledNote,
   key: Key,
 ): Readonly<Record<HoldingGroup, readonly HoldingChord[]>> {
-  const keyNotes = keyPitchClasses(key)
   const holding = (group: HoldingGroup): HoldingChord[] =>
     HOLDING[group].flatMap(({ parts, as }) =>
       as.map((name) => {
@@ -87,7 +86,7 @@ export function chordsHolding(
           chord,
           parts,
           degree: interval.degree,
-          inKey: chord.tones.every((tone) => keyNotes.has(tone.pitchClass)),
+          inKey: tonesInKey(chord.tones, key),
         }
       }),
     )

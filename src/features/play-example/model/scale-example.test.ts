@@ -19,4 +19,9 @@ describe('scaleExample', () => {
     expect(music.key).toEqual({ tonic: note('C'), minor: false })
     expect(new Set(music.notes.map((n) => n.hand))).toEqual(new Set(['rh']))
   })
+
+  it('brings melodic minor back down as natural minor', () => {
+    const { music } = scaleExample(note('A'), 'melodic')
+    expect(music.notes.slice(7).map((n) => n.midi)).toEqual([81, 79, 77, 76, 74, 72, 71, 69])
+  })
 })

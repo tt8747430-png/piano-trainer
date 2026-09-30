@@ -17,7 +17,7 @@ interface QualityEntry {
 }
 
 const QUALITIES = {
-  maj: { family: 'tri', suffix: '', aliases: [], intervals: ['r', 'M3', 'P5'] },
+  maj: { family: 'tri', suffix: '', aliases: ['M', 'maj'], intervals: ['r', 'M3', 'P5'] },
   min: {
     family: 'tri',
     suffix: 'm',
@@ -56,7 +56,7 @@ const QUALITIES = {
   maj7: {
     family: 'sev',
     suffix: 'Maj7',
-    aliases: ['maj7', 'M7', 'maj', 'Δ7', 'Δ', 'M'],
+    aliases: ['maj7', 'M7', 'Δ7', 'Δ'],
     intervals: ['r', 'M3', 'P5', 'M7'],
   },
   m7: {
@@ -69,7 +69,7 @@ const QUALITIES = {
   hd: {
     family: 'sev',
     suffix: 'm7♭5',
-    aliases: ['ø', 'm7(−5)'],
+    aliases: ['ø', 'ø7', 'm7(−5)'],
     intervals: ['r', 'm3', 'd5', 'm7'],
   },
   o7: {
@@ -87,7 +87,7 @@ const QUALITIES = {
   sus7: {
     family: 'sev',
     suffix: '7sus4',
-    aliases: ['7sus', '11'],
+    aliases: ['7sus'],
     intervals: ['r', 'P4', 'P5', 'm7'],
   },
   M7s11: {
@@ -161,7 +161,7 @@ const QUALITIES = {
   s5: {
     family: 'alt',
     suffix: '7#5',
-    aliases: ['7(+5)', '7+'],
+    aliases: ['7(+5)', '7+', '+7'],
     intervals: ['r', 'M3', 'A5', 'm7'],
   },
   s11: {

@@ -15,6 +15,20 @@ const BEATS_PER_BAR: Readonly<Record<Meter, number>> = {
 }
 export const beatsPerBar = (meter: Meter): number => BEATS_PER_BAR[meter]
 
+/**
+ * A pickup: a first bar shorter than the meter's, which is the end of a bar (its first note an
+ * upbeat). The beats of the meter's bar it leaves out before it; none for any other bar.
+ */
+export function beatsBefore(
+  bars: readonly { readonly beats: number }[],
+  index: number,
+  meter: Meter,
+): number {
+  const bar = bars[index]
+  const full = beatsPerBar(meter)
+  return index === 0 && bar !== undefined && bar.beats < full ? full - bar.beats : 0
+}
+
 /** A meter in eighths whose beat is a dotted quarter. */
 export const isCompound = (meter: Meter): boolean => meter.endsWith('/8')
 

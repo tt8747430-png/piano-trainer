@@ -39,6 +39,7 @@ export function WalkSetup({
       methods={false}
       melody={false}
       keyed
+      compound={false}
       onFigures={onChange}
     >
       <Dropdown

@@ -24,6 +24,10 @@ describe('parseChordSymbol', () => {
     ['C°', note('C'), 'dim'],
     ['F♯m7', note('F', 1), 'm7'],
     ['Dm7(-5)', note('D'), 'hd'],
+    ['Cmaj', note('C'), 'maj'],
+    ['CM', note('C'), 'maj'],
+    ['Cø7', note('C'), 'hd'],
+    ['C+7', note('C'), 's5'],
   ])('reads the ASCII form %s', (symbol, root, quality) => {
     expect(parseChordSymbol(symbol)).toEqual({ root, quality })
   })
@@ -39,15 +43,18 @@ describe('parseChordSymbol', () => {
     expect(parseChordSymbol(symbol)).toEqual(chord)
   })
 
-  it.each(['H7', 'Cmaj13', '', 'C/X', '7'])('names the symbol it cannot read: %j', (symbol) => {
-    let caught: unknown
-    try {
-      parseChordSymbol(symbol)
-    } catch (error) {
-      caught = error
-    }
-    expect(caught).toBeInstanceOf(ChordSymbolError)
-    expect((caught as ChordSymbolError).symbol).toBe(symbol)
-    expect((caught as ChordSymbolError).message).toBe(`Unknown chord symbol "${symbol}"`)
-  })
+  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C11'])(
+    'names the symbol it cannot read: %j',
+    (symbol) => {
+      let caught: unknown
+      try {
+        parseChordSymbol(symbol)
+      } catch (error) {
+        caught = error
+      }
+      expect(caught).toBeInstanceOf(ChordSymbolError)
+      expect((caught as ChordSymbolError).symbol).toBe(symbol)
+      expect((caught as ChordSymbolError).message).toBe(`Unknown chord symbol "${symbol}"`)
+    },
+  )
 })

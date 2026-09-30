@@ -1,11 +1,11 @@
 import { statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS } from '@/entities/pattern'
+import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS, splitsBeat } from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { PRECACHE_FILE_LIMIT } from '@/shared/config'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
-import { chordSymbol, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
+import { chordSymbol, isCompound, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
 import {
   BOOKS,
   CHORD_SIZES,
@@ -209,6 +209,12 @@ describe('the catalog', () => {
       expect(recording?.tempo).toBeGreaterThanOrEqual(TEMPO_RANGE.min)
       expect(recording?.tempo).toBeLessThanOrEqual(TEMPO_RANGE.max)
       expect(recording?.src).toMatch(/romashki-vocal.*\.m4a$/)
+    }
+  })
+
+  it('gives every piece in 6/8 or 12/8 a pattern that plays on the beat', () => {
+    for (const piece of PIECES) {
+      if (isCompound(piece.meter)) expect(splitsBeat(piece.pattern), piece.id).toBe(false)
     }
   })
 

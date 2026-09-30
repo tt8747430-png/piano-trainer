@@ -1,7 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
-import { noteName, noteParam, PITCH_CLASSES, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
+import {
+  isCompound,
+  noteName,
+  noteParam,
+  PITCH_CLASSES,
+  pitchClassOf,
+  tonicSpelling,
+} from '@/shared/lib/music'
 import { Dropdown } from '@/shared/ui'
 import {
   ChordSizeField,
@@ -44,6 +51,7 @@ export function PieceSetup({
       methods={hasMethodCodes(piece)}
       melody={hasMelody}
       keyed
+      compound={isCompound(piece.meter)}
       onFigures={onChange}
     >
       <Dropdown

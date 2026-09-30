@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { note, placeScale } from '@/shared/lib/music'
-import { runSounds, scaleRun, type RunOptions } from './run'
+import { runSounds, scaleRun, type RunWay } from './run'
 
-const C_MAJOR = placeScale(note('C'), 'major')
+const C_MAJOR: RunWay = { notes: placeScale(note('C'), 'major') }
 const C_KEY = { tonic: note('C'), minor: false }
 
 describe('scaleRun', () => {
@@ -31,11 +31,11 @@ describe('scaleRun', () => {
   })
 
   it('plays the left hand an octave lower, both hands together, each note with its hand’s finger', () => {
-    const fingers: RunOptions['fingers'] = {
+    const fingers: RunWay['fingers'] = {
       rh: [1, 2, 3, 1, 2, 3, 4, 5],
       lh: [5, 4, 3, 2, 1, 3, 2, 1],
     }
-    const both = scaleRun(C_MAJOR, { rhythm: 'even', hands: 'both', key: C_KEY, fingers })
+    const both = scaleRun({ ...C_MAJOR, fingers }, { rhythm: 'even', hands: 'both', key: C_KEY })
     expect(both.notes.filter((n) => n.startTick === 0)).toMatchObject([
       { midi: 48, hand: 'lh', finger: 5 },
       { midi: 60, hand: 'rh', finger: 1 },

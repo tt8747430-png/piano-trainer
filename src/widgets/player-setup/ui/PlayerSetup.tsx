@@ -5,6 +5,7 @@ import {
   LEFT_FIGURES,
   needsKey,
   needsMelody,
+  splitsBeat,
   PATTERN_GROUP_NAMES,
   PATTERN_GROUPS,
   PATTERNS,
@@ -33,6 +34,7 @@ export function PlayerSetup({
   methods,
   melody,
   keyed,
+  compound,
   onFigures,
   children,
 }: {
@@ -45,6 +47,8 @@ export function PlayerSetup({
   melody: boolean
   /** The source is in a key, for a figure that plays its triads. */
   keyed: boolean
+  /** The source is in 6/8 or 12/8: a figure that plays inside the beat is closed. */
+  compound: boolean
   onFigures: (change: FigureChange) => void
   children: ReactNode
 }) {
@@ -53,6 +57,7 @@ export function PlayerSetup({
   const [page, setPage] = useState<SetupPage | 'main'>('main')
   const noMelody = melody ? undefined : t('needsMelody')
   const noKey = keyed ? undefined : t('needsKey')
+  const noSimpleTime = compound ? t('needsSimpleTime') : undefined
   const choose = (change: FigureChange) => {
     onFigures(change)
     setPage('main')
@@ -99,7 +104,9 @@ export function PlayerSetup({
                         ? { disabledNote: noMelody }
                         : needsKey(id) && noKey
                           ? { disabledNote: noKey }
-                          : {}),
+                          : splitsBeat(id) && noSimpleTime
+                            ? { disabledNote: noSimpleTime }
+                            : {}),
                     }
                   })}
                   value={figures.pattern}
@@ -116,6 +123,7 @@ export function PlayerSetup({
             value={figures.rh}
             noMelody={noMelody}
             noKey={noKey}
+            noSimpleTime={noSimpleTime}
             onChoose={(rh) => choose({ rh })}
             onBack={toMain}
           />
@@ -127,6 +135,7 @@ export function PlayerSetup({
             value={figures.lh}
             noMelody={noMelody}
             noKey={noKey}
+            noSimpleTime={noSimpleTime}
             onChoose={(lh) => choose({ lh })}
             onBack={toMain}
           />

@@ -198,11 +198,12 @@ tempo)` sounds it and `notate(run)` writes it.
   `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
   second table of what a chord takes.
 - **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
-  `plainRoot`): the tritone substitution of E♭ is written E7, never F♭7. Keys played are named by `nameChords`, over
+  `plainRoot`): the tritone substitution of B♭7 (E♭'s dominant) is written E7, never F♭7. Keys played are named by `nameChords`, over
   the builder's chords, never by a second table.
 - **A line in one hand is written on one staff:** `LazyScoreView`'s `staff` draws only that staff of the grand staff
   (an interval, a note to read); music for both hands keeps the grand staff.
-- **`arrangement` exports only `arrange`** (plus `parseFigure`, `TICKS_PER_BEAT` and the types). Voice leading, the
+- **`arrangement` exports only `arrange`** (plus `parseFigure`, what a figure needs of its source, `playsKeyTriads` and
+  `splitsTheBeat`, and the types). Voice leading, the
   chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
