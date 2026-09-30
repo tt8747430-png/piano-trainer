@@ -1,7 +1,7 @@
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
-import { parseKey, type Key, type Letter, type Meter } from '@/shared/lib/music'
+import { parseKey, type ChordSize, type Key, type Letter, type Meter } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
@@ -84,9 +84,6 @@ export interface ChartPiece extends PieceCommon {
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
 }
-
-export const CHORD_SIZES = ['triads', 'sevenths', 'ninths'] as const
-export type ChordSize = (typeof CHORD_SIZES)[number]
 
 export interface ProgressionPiece extends PieceCommon {
   readonly kind: 'progression'

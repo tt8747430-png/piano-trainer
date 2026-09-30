@@ -1,26 +1,18 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints, ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { COMMON_PROGRESSIONS, type ChordSize } from '@/entities/piece'
+import { COMMON_PROGRESSIONS } from '@/entities/piece'
 import {
   noteName,
   noteParam,
   scaleHasChords,
+  sizeOfNotes,
   type ChordNotes,
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 import { WALK } from '../walk'
-
-/** The Player's chord size nearest a reference's: 9ths for anything larger. */
-const CHORD_SIZE: Readonly<Record<ChordNotes, ChordSize>> = {
-  3: 'triads',
-  4: 'sevenths',
-  5: 'ninths',
-  6: 'ninths',
-  7: 'ninths',
-}
 
 /** The kinds that are a key's scale, and so have its common progressions: major, and the three minors. */
 const KEY_OF: Readonly<Partial<Record<ScaleKind, 'major' | 'minor'>>> = {
@@ -45,7 +37,7 @@ export function PractiseChords({
 }) {
   const { t } = useTranslation(['practice', 'player'])
   if (!scaleHasChords(kind)) return null
-  const chordSize = CHORD_SIZE[notes]
+  const chordSize = sizeOfNotes(notes)
   const key = KEY_OF[kind]
   return (
     <RowGroup title={t('practice:inPlayer')}>

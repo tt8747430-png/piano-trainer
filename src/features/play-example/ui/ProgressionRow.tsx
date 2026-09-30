@@ -8,7 +8,7 @@ import {
   type Chord,
   type Key,
   type Numeral,
-  type NumeralSize,
+  type ChordSize,
 } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -49,7 +49,7 @@ export function ProgressionRow({
 }: {
   numerals: readonly Numeral[]
   musicKey: Key
-  size: NumeralSize
+  size: ChordSize
   onShow: (shown: ShownKeys) => void
   children: ReactNode
 }) {

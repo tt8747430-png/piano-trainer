@@ -4,7 +4,8 @@ import { chordSymbol } from '@/shared/lib/music'
 import { testProgression } from '../testing/test-pieces'
 import { ContentError } from './content-error'
 import { parseProgression } from './parse-progression'
-import { CHORD_SIZES, type ChordSize, type KeyText } from './types'
+import { CHORD_SIZES, type ChordSize } from '@/shared/lib/music'
+import type { KeyText } from './types'
 
 const bars = (chart: Chart) =>
   chart.sections.flatMap((section) =>

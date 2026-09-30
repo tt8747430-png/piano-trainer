@@ -4,7 +4,7 @@ import {
   note,
   placeScale,
   placeScaleChords,
-  scaleFingering,
+  runFingering,
   spellScale,
 } from '@/shared/lib/music'
 import {
@@ -21,7 +21,7 @@ const TRIADS = placeScaleChords(C, 'major', 3, 0)
 
 describe('scaleMarks', () => {
   it('marks the tonic and the other degrees, with a hand’s fingers under them', () => {
-    const marks = scaleMarks(placeScale(C, 'major'), scaleFingering(C, 'major', 'rh', 0))
+    const marks = scaleMarks(placeScale(C, 'major'), runFingering(C, 'major', 0, [], 'rh', 'scale'))
     expect(marks.get(midi(60))).toEqual({ tone: 'tonic', label: '1', finger: 1 })
     expect(marks.get(midi(65))).toEqual({ tone: 'scale', label: '4', finger: 1 })
   })

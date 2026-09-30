@@ -2,7 +2,8 @@ import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import type { ChordSize, Piece } from './types'
+import type { ChordSize } from '@/shared/lib/music'
+import type { Piece } from './types'
 
 /** A piece's chart; a progression at the chosen chord size when it lets the learner choose. */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {

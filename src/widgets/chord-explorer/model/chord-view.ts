@@ -3,14 +3,12 @@ import {
   fitParts,
   lastInversion,
   noteFromParam,
-  partsFromParams,
-  partsParams,
   placeChord,
   type BuiltChord,
   type NoteParam,
-  type PartsParams,
   type PlacedChord,
 } from '@/shared/lib/music'
+import { type PartsParams, partsFromParams, partsParams } from '@/shared/lib'
 
 /** What the Chords reference shows: a chord built part by part on a root, in an inversion, in one hand or two. */
 export interface ChordView extends PartsParams {

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { ComponentProps } from 'react'
-import { qualitiesIn, qualityParams } from '@/shared/lib/music'
+import { qualitiesIn } from '@/shared/lib/music'
+import { qualityParams } from '@/shared/lib'
 import type { PathStep } from '../model/types'
 
 export type ExplorerStep = Exclude<PathStep, { readonly kind: 'piece' }>

@@ -1,25 +1,17 @@
 export { arrange, type ArrangeOptions } from './arrange'
 export { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
 export {
-  type BeatGroup,
   type Chart,
   type ChartBar,
   type ChartChord,
-  type ChartSection,
   type EventFigure,
   type EventPattern,
   type Figure,
   type FigureEvent,
-  type FigureTone,
-  type FigureToken,
   type Melody,
-  type MelodyFigure,
   type MelodyNote,
-  type MelodyPattern,
   type NoteHand,
   type Pattern,
   type Performance,
-  type PerformanceBar,
   type PerformanceNote,
-  type PerformedChord,
 } from './types'

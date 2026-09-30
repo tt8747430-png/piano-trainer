@@ -7,8 +7,6 @@ import {
   builtRootSpelling,
   noteName,
   noteParam,
-  partsFromParams,
-  partsParams,
   PITCH_CLASSES,
   SEVENTH_DEGREE,
   seventhsOf,
@@ -18,6 +16,7 @@ import {
   withAlterations,
   type BuiltSize,
 } from '@/shared/lib/music'
+import { partsFromParams, partsParams } from '@/shared/lib'
 import { Dropdown, MultiDropdown, Segmented } from '@/shared/ui'
 import type { ChordView } from '../model/chord-view'
 

@@ -5,10 +5,17 @@ import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { PRECACHE_FILE_LIMIT } from '@/shared/config'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
-import { chordSymbol, isCompound, noteName, pitchClass, tonicSpelling } from '@/shared/lib/music'
+import {
+  CHORD_SIZES,
+  chordSymbol,
+  isCompound,
+  noteName,
+  pitchClass,
+  tonicSpelling,
+  type ChordSize,
+} from '@/shared/lib/music'
 import {
   BOOKS,
-  CHORD_SIZES,
   COLLECTION_IDS,
   COMMON_PROGRESSIONS,
   COLLECTIONS,
@@ -20,7 +27,6 @@ import {
   melodyOf,
   pieceById,
   pieceKey,
-  type ChordSize,
   type Piece,
   isSongCollectionId,
   SONG_COLLECTION_IDS,

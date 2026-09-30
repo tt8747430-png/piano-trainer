@@ -105,6 +105,19 @@ describe('schedule', () => {
     expect(end).toBe(4)
   })
 
+  it('sounds a note still held where the pass starts, from there for what is left of it', () => {
+    const held = arrange(chart('C', 'F'), {
+      tonic: note('C'),
+      pattern: BLOCK,
+      melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }],
+      doubleMelody: true,
+    })
+    const { sounds } = schedule(held, { tempo: 60, hands: ALL, fromTick: 48 })
+    const tied = notes(sounds).find((sound) => sound.midi === 84)
+    expect(tied?.at).toBe(0)
+    expect(tied?.duration).toBeCloseTo(4 * 0.95)
+  })
+
   it('counts in one bar of clicks before the music', () => {
     const { sounds, end } = schedule(perform('C'), { tempo: 60, hands: ALL, countIn: true })
     expect(clicks(sounds)).toEqual([
@@ -274,8 +287,10 @@ describe('schedule: a passage and swing', () => {
     })
     expect(cues.map((cue) => cue.beatGroup)).toEqual([1, 2])
     expect(end).toBe(2)
+    // The bass struck on beat 1 is still held: it sounds from the pass's start to its end.
     const bass = notes(sounds).find((sound) => sound.midi < 48)
-    expect(bass).toBeUndefined()
+    expect(bass?.at).toBe(0)
+    expect(bass?.duration).toBeCloseTo(2 * 0.95)
   })
 
   it('cuts a note that would sound past the pass’s end', () => {

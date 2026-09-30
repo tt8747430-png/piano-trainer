@@ -3,7 +3,6 @@ export {
   beatsPerBar,
   beatsBefore,
   isCompound,
-  METERS,
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
@@ -23,7 +22,6 @@ export {
   type KeyRange,
 } from './keyboard'
 export {
-  LETTERS,
   midiOf,
   note,
   noteFromParam,
@@ -32,7 +30,6 @@ export {
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
-  plainRoot,
   plainSpelling,
   rootSpelling,
   sameNote,
@@ -42,30 +39,18 @@ export {
   type NoteParam,
   type SpelledNote,
 } from './note'
+export { INTERVALS, spellAbove, type IntervalName } from './interval'
 export {
-  INTERVALS,
-  intervalBetween,
-  spellAbove,
-  spellBelow,
-  type Interval,
-  type IntervalName,
-  type LabelledInterval,
-} from './interval'
-export {
-  CONSONANCES,
   consonanceOf,
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   spanInterval,
-  type Consonance,
-  type IntervalGroup,
   type ReferenceInterval,
 } from './interval-facts'
 export {
   keyFromParam,
   keyName,
   keyParam,
-  keyPrefersSharps,
   keySignature,
   parseKey,
   signatureNotes,
@@ -74,20 +59,18 @@ export {
   type Key,
   type KeyParam,
 } from './key'
-export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
+export { type ChordRole, type Tone } from './tone'
 export {
   CHORD_FAMILIES,
   CHORD_QUALITIES,
   chordBass,
   chordFamily,
-  chordHolds,
   chordRootSpelling,
   chordSymbol,
   qualitiesIn,
   qualityIntervals,
   qualitySpellings,
   qualitySuffix,
-  qualityWithIntervals,
   spellChord,
   type Chord,
   type ChordFamily,
@@ -95,20 +78,16 @@ export {
 } from './chord'
 export {
   ADDED_SYMBOL,
+  ALTERATIONS,
+  partsOf,
   ADDED_TONES,
   addedOf,
   ALTERATION_SIGN,
-  ALTERATIONS,
   alterationsOf,
   BUILT_SIZES,
   buildChord,
   builtRootSpelling,
   fitParts,
-  partsFromParams,
-  partsOf,
-  partsParams,
-  qualityParams,
-  readAlterations,
   SEVENTH_DEGREE,
   SEVENTHS,
   seventhsOf,
@@ -116,51 +95,34 @@ export {
   TRIADS,
   triadSuffix,
   withAlterations,
+  type BuiltChord,
   type AddedTone,
   type Alteration,
-  type BuiltChord,
   type BuiltSize,
   type ChordParts,
-  type PartsParams,
   type Seventh,
   type Triad,
 } from './chord-parts'
 export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
 export { nameChords, type FoundChord } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
-export {
-  chordInKey,
-  PASSING_CATEGORIES,
-  PASSING_KINDS,
-  passingChords,
-  type PassingCategory,
-  type PassingChords,
-  type PassingKind,
-} from './passing-chords'
+export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead } from './voice-lead'
 export {
-  NUMERAL_SIZES,
   numeralChord,
   numeralOf,
   numeralsParam,
   numeralText,
-  parseNumeral,
   parseNumerals,
   type Numeral,
-  type NumeralSeventh,
-  type NumeralSize,
-  type NumeralTriad,
 } from './numerals'
 export {
   SCALE_FAMILIES,
   SCALE_KINDS,
-  isMinorScale,
-  keyTones,
   kindComingDown,
   modesOfKey,
   relatedScale,
   relativeKey,
-  scaleFamily,
   scaleGaps,
   scaleHasChords,
   scaleIntervals,
@@ -169,9 +131,6 @@ export {
   scaleRootSpelling,
   spellInKey,
   spellScale,
-  type RelatedScale,
-  type ScaleFamily,
-  type ScaleGap,
   type ScaleKind,
 } from './scale'
 export {
@@ -190,27 +149,21 @@ export {
   fingeringsOf,
   ownFingering,
   runFingering,
-  scaleFingering,
-  thumbFingering,
   type Finger,
   type Fingering,
   type Hand,
 } from './fingering'
 export {
-  borrowedChords,
   CHORD_NOTES,
-  romanFigure,
+  CHORD_SIZES,
+  SIZE_NOTES,
+  sizeOfNotes,
   scaleChordAt,
   scaleChordHolds,
-  scaleChords,
-  scaleChordSymbol,
-  stackSuffix,
-  type BorrowedChord,
   type ChordNotes,
-  type ScaleChord,
+  type ChordSize,
 } from './scale-chord'
 export {
-  availableTensions,
   TENSION_CHORDS,
   TENSION_GROUPS,
   tensionTones,
@@ -218,22 +171,12 @@ export {
   type TensionGroup,
   type TensionTone,
 } from './tensions'
-export {
-  SKILLS,
-  chordSkill,
-  isSkillId,
-  scaleSkill,
-  skillOf,
-  type Skill,
-  type SkillId,
-} from './skill'
+export { SKILLS, chordSkill, isSkillId, scaleSkill, skillOf, type SkillId } from './skill'
 export {
   CIRCLE_OF_FIFTHS,
   circleFunctions,
   circleKey,
   randomKey,
   sameKey,
-  type CircleFunction,
-  type CirclePlace,
   type CircleRing,
 } from './circle'

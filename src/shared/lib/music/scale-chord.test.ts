@@ -29,7 +29,7 @@ describe('scaleChords', () => {
     [4, 'CMaj7 Dm7 Em7 FMaj7 G7 Am7 Bm7♭5'],
     [5, 'CMaj9 Dm9 Em7♭9 FMaj9 G9 Am9 Bm7♭5♭9'],
     [6, 'CMaj11 Dm11 Em11♭9 FMaj9#11 G11 Am11 Bm11♭5♭9'],
-    [7, 'CMaj13 Dm13 Em11♭9♭13 FMaj13#11 G13 Am11♭13 Bm11♭5♭9♭13'],
+    [7, 'CMaj13(11) Dm13 Em11♭9♭13 FMaj13#11 G13(11) Am11♭13 Bm11♭5♭9♭13'],
   ] as const)('stacks C major’s chords of %i notes: %s', (notes, expected) => {
     expect(symbols(note('C'), 'major', notes)).toBe(expected)
   })

@@ -5,7 +5,7 @@ import type { LocalText } from '@/shared/i18n'
 import type {
   ChordQuality,
   Key,
-  NumeralSize,
+  ChordSize,
   ReferenceInterval,
   ScaleKind,
   SpelledNote,
@@ -36,7 +36,7 @@ export interface LessonProgression {
   /** As `parseNumerals` reads them: `ii V I`. */
   readonly numerals: string
   readonly key: Key
-  readonly size?: NumeralSize
+  readonly size?: ChordSize
 }
 
 /** What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave. */

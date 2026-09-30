@@ -1,8 +1,14 @@
-import { qualityIntervals, spellChord, type Chord, type ChordQuality } from './chord'
+import {
+  chordRootSpelling,
+  qualityIntervals,
+  spellChord,
+  type Chord,
+  type ChordQuality,
+} from './chord'
 import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval'
 import type { Key } from './key'
-import { pitchClassOf, plainRoot, plainSpelling, type SpelledNote } from './note'
-import { pitchClass } from './pitch'
+import { pitchClassOf, plainRoot, type SpelledNote } from './note'
+import { pitchClass, type PitchClass } from './pitch'
 import { tonesInKey } from './scale'
 
 /** The Ultimate Piano's categories of passing chords (roadmap §10.2), in the order they are shown. */
@@ -70,8 +76,9 @@ const on = (root: SpelledNote, quality: ChordQuality): Chord => ({ root: plainRo
  * The chords that can pass between two, by The Ultimate Piano's rules, each an interval from To's
  * root spelled by letters and then named plainly: the V7 of To and its tritone substitute; To's ii–V
  * (a half-diminished ii before a minor To); a dominant a half step below; the bass walking up or down
- * by half steps when From is two to four semitones away; To approached from both half steps, or by the
- * diminished 7th below; To's IV (iv before a minor To); the backdoor ♭VII7; the plagal IVMaj7 and ivm7.
+ * by half steps when From is two to four semitones away, each dominant's root spelled as the app spells
+ * a chord's root; To approached from both half steps, or by the diminished 7th below; To's IV (iv
+ * before a minor To); the backdoor ♭VII7; the plagal IVMaj7 before a major To and ivm7 before either.
  * A way whose chords repeat From or To, or repeat an earlier way, is left out.
  */
 export function passingChords(from: Chord, to: Chord): PassingChords[] {
@@ -82,10 +89,14 @@ export function passingChords(from: Chord, to: Chord): PassingChords[] {
   const fromPc = pitchClassOf(from.root)
   const rise = pitchClass(pitchClassOf(to.root) - fromPc)
   const fall = pitchClass(fromPc - pitchClassOf(to.root))
-  const walk = (span: number, sharps: boolean): Chord[] | null =>
+  const walkingDominant = (pc: PitchClass): Chord => ({
+    root: chordRootSpelling(pc, qualityIntervals('d7')),
+    quality: 'd7',
+  })
+  const walk = (span: number, step: 1 | -1): Chord[] | null =>
     span >= WALK.least && span <= WALK.most
       ? Array.from({ length: span - 1 }, (_, i) =>
-          on(plainSpelling(pitchClass(fromPc + (sharps ? i + 1 : -(i + 1))), sharps), 'd7'),
+          walkingDominant(pitchClass(fromPc + step * (i + 1))),
         )
       : null
   const ways: Readonly<Record<PassingKind, readonly Chord[] | null>> = {
@@ -93,13 +104,13 @@ export function passingChords(from: Chord, to: Chord): PassingChords[] {
     tritoneSub: [on(up('m2'), 'd7')],
     secondaryTwoFive: [on(up('M2'), minor ? 'hd' : 'm7'), dominant],
     approachBelow: [on(down('m2'), 'd7')],
-    walkUp: walk(rise, true),
-    walkDown: walk(fall, false),
+    walkUp: walk(rise, 1),
+    walkDown: walk(fall, -1),
     doubleApproach: [on(down('m2'), 'd7'), on(up('m2'), 'o7')],
     diminishedApproach: [on(down('m2'), 'o7')],
     subdominant: [on(up('P4'), minor ? 'min' : 'maj')],
     backdoor: [on(up('m7'), 'd7')],
-    plagal: [on(up('P4'), 'maj7')],
+    plagal: minor ? null : [on(up('P4'), 'maj7')],
     minorPlagal: [on(up('P4'), 'm7')],
   }
   const kept: PassingChords[] = []

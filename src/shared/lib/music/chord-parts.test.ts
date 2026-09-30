@@ -6,10 +6,7 @@ import {
   builtRootSpelling,
   CHORD_PARTS,
   fitParts,
-  partsFromParams,
   partsOf,
-  partsParams,
-  readAlterations,
   seventhsOf,
   sizesOf,
   withAlterations,
@@ -171,25 +168,6 @@ describe('builtRootSpelling', () => {
     expect(builtRootSpelling(pitchClass(1), parts({ triad: 'sus4', size: 9 }))).toEqual(
       note('D', -1),
     )
-  })
-})
-
-describe('the parts’ URL params', () => {
-  it('write the alterations as a symbol does, and read back only that', () => {
-    const ninthSharpEleven = parts({ size: 9, alterations: ['b9', 's11'] })
-    expect(partsParams(ninthSharpEleven)).toEqual({
-      triad: 'maj',
-      size: 9,
-      seventh: 'minor',
-      added: 'none',
-      alter: 'b9s11',
-    })
-    expect(partsFromParams(partsParams(ninthSharpEleven))).toEqual(ninthSharpEleven)
-    expect(partsParams(TRIAD).alter).toBe('')
-    expect(readAlterations('b5b9s9')).toEqual(['b5', 'b9', 's9'])
-    expect(readAlterations('s11b9')).toEqual([])
-    expect(readAlterations('b9b9')).toEqual([])
-    expect(readAlterations(7)).toEqual([])
   })
 })
 

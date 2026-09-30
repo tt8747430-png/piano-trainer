@@ -12,6 +12,21 @@ import { toneAbove, type Tone } from './tone'
 export const CHORD_NOTES = [3, 4, 5, 6, 7] as const
 export type ChordNotes = (typeof CHORD_NOTES)[number]
 
+/** How big the app plays a chord it works out: a triad, a 7th or a 9th chord. */
+export const CHORD_SIZES = ['triads', 'sevenths', 'ninths'] as const
+export type ChordSize = (typeof CHORD_SIZES)[number]
+
+/** The notes a chord size stacks. */
+export const SIZE_NOTES: Readonly<Record<ChordSize, 3 | 4 | 5>> = {
+  triads: 3,
+  sevenths: 4,
+  ninths: 5,
+}
+
+/** The chord size nearest a stack's notes: 9ths for anything larger. */
+export const sizeOfNotes = (notes: ChordNotes): ChordSize =>
+  notes === 3 ? 'triads' : notes === 4 ? 'sevenths' : 'ninths'
+
 /** A chord of a scale: its notes stacked in thirds from one degree. */
 export interface ScaleChord {
   /** 0 the tonic … 6. */
@@ -37,7 +52,9 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
 
 /**
  * A stack's suffix by one rule: its triad, or its 7th chord carrying the highest natural extension,
- * then each altered extension in order (`m7♭9`, `Maj9#11`, `m11♭9♭13`).
+ * then each altered extension in order (`m7♭9`, `Maj9#11`, `m11♭9♭13`). A 13th chord over a major
+ * 3rd leaves its natural 11th out (the Chord builder's `13`), so a stack that keeps it says so:
+ * `G13(11)`.
  */
 export function stackSuffix(tones: readonly Tone[]): string {
   const semitones = tones.map((tone) => tone.semitones)
@@ -51,7 +68,8 @@ export function stackSuffix(tones: readonly Tone[]): string {
     if (alteration === 0) highest = extension
     else altered.push(`${ALTERATIONS.get(alteration) ?? ''}${extension}`)
   })
-  return `${seventh.lead}${highest}${seventh.trail}${altered.join('')}`
+  const keptEleventh = highest === 13 && semitones[1] === 4 && semitones[5] === NATURAL[11]
+  return `${seventh.lead}${highest}${seventh.trail}${altered.join('')}${keptEleventh ? '(11)' : ''}`
 }
 
 /** A stack's numeral mark: its triad's, or from a 7th up its 7th chord's. */

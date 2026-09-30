@@ -251,12 +251,6 @@ export function spellChord(root: SpelledNote, quality: ChordQuality): Tone[] {
   return entry(quality).intervals.map((name) => toneAbove(root, INTERVALS[name]))
 }
 
-/** Whether a note, in any octave, is one of the chord's notes: its tones, or the bass after a slash. */
-export function chordHolds(chord: Chord, pc: PitchClass): boolean {
-  if (chord.bass && pitchClassOf(chord.bass) === pc) return true
-  return spellChord(chord.root, chord.quality).some((tone) => pitchClassOf(tone.note) === pc)
-}
-
 export const chordSymbol = (chord: Chord): string =>
   noteName(chord.root) +
   qualitySuffix(chord.quality) +

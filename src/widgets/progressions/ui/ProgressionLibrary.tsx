@@ -9,12 +9,12 @@ import {
   numeralText,
   parseNumerals,
   type Key,
-  type NumeralSize,
+  type ChordSize,
 } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 
 /** The library by style: each progression a row that opens it in the tool, in the same tonic's key. */
-export function ProgressionLibrary({ musicKey, size }: { musicKey: Key; size: NumeralSize }) {
+export function ProgressionLibrary({ musicKey, size }: { musicKey: Key; size: ChordSize }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   return (

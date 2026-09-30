@@ -5,7 +5,8 @@ import { pieceStepId } from '@/entities/path'
 import { skillsOfPiece, type Piece } from '@/entities/piece'
 import { ratingOf, selectAllAnswers, useProgress } from '@/entities/progress'
 import type { Performance } from '@/shared/lib/arrangement'
-import { noteParam, qualityParams, qualitySuffix, skillOf } from '@/shared/lib/music'
+import { noteParam, qualitySuffix, skillOf } from '@/shared/lib/music'
+import { qualityParams } from '@/shared/lib'
 import { ButtonLink, RatingMark } from '@/shared/ui'
 
 /** The chord qualities a piece uses, each with its rating and a way into the explorer; a check of them all. */

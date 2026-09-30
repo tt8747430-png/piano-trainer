@@ -10,12 +10,14 @@ import {
   type ChordQuality,
   type ChordRole,
   type Tick,
+  CHORD_SIZES,
+  type ChordSize,
 } from '@/shared/lib/music'
 import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
 import { fourToALine } from './chart-layout'
 import { ContentError, type ContentPosition } from './content-error'
-import { CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
+import { pieceKey, type ProgressionPiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']

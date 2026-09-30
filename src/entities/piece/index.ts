@@ -1,5 +1,4 @@
 export {
-  CHORD_SIZES,
   COLLECTION_IDS,
   SONG_COLLECTION_IDS,
   CREDIT_ROLES,
@@ -12,7 +11,6 @@ export {
   pieceKey,
   type BookId,
   type ChartPiece,
-  type ChordSize,
   type Collection,
   type CollectionId,
   type Credit,

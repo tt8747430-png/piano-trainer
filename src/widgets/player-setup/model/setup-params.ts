@@ -1,5 +1,5 @@
 import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
-import type { ChordSize } from '@/entities/piece'
+import type { ChordSize } from '@/shared/lib/music'
 import type { NoteParam } from '@/shared/lib/music'
 
 /** The piece's own choices as the Player's URL holds them: an absent one is the piece's own. */

@@ -9,7 +9,7 @@ import {
   ProgressionRow,
   type ShownKeys,
 } from '@/features/play-example'
-import { keyFromParam, NUMERAL_SIZES, parseNumerals, type NumeralSize } from '@/shared/lib/music'
+import { keyFromParam, CHORD_SIZES, parseNumerals, type ChordSize } from '@/shared/lib/music'
 import { ButtonLink, KeyDropdown, Segmented } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionField } from './ProgressionField'
@@ -37,10 +37,10 @@ export function ProgressionsTool({
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
             <KeyDropdown value={view.key} onChange={(next) => onChange({ key: next })} />
-            <Segmented<NumeralSize>
+            <Segmented<ChordSize>
               label={t('chordSize.label')}
               value={view.size}
-              options={NUMERAL_SIZES.map((size) => ({
+              options={CHORD_SIZES.map((size) => ({
                 value: size,
                 label: t(`chordSize.${size}`),
               }))}

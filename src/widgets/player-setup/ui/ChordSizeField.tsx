@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { CHORD_SIZES, type ChordSize } from '@/entities/piece'
+import { CHORD_SIZES, type ChordSize } from '@/shared/lib/music'
 import { Segmented } from '@/shared/ui'
 
 /** How much of each chord a progression plays: Triads · 7ths · 9ths. */

@@ -33,7 +33,7 @@ export const OCTAVE_UP = 'KeyX'
 export const TYPING_START = MIDDLE_C
 /** …and moves between C1 and C8. */
 const LOWEST_C = midi(24)
-const HIGHEST_C = midi(108)
+const HIGHEST_C = PIANO.to
 
 /** The typing C an octave further, or the same one at C1 or C8. */
 export function moveTypingOctave(typingC: Midi, by: -1 | 1): Midi {

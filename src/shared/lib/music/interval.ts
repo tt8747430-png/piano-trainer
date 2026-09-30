@@ -1,9 +1,11 @@
 import {
+  accidentalSign,
   isAccidental,
   letterAt,
   letterIndex,
   naturalPitch,
   pitchClassOf,
+  plainSemitones,
   plainSpelling,
   type Letter,
   type SpelledNote,
@@ -21,16 +23,6 @@ export interface LabelledInterval extends Interval {
   readonly degree: string
 }
 
-/** The semitones of the major or perfect interval over each letter distance: a 2nd 2, a 4th 5, a 7th 11. */
-const PLAIN_SEMITONES = [0, 2, 4, 5, 7, 9, 11]
-const DEGREE_SIGNS = new Map([
-  [-2, '𝄫'],
-  [-1, '♭'],
-  [0, ''],
-  [1, '#'],
-  [2, '𝄪'],
-])
-
 /**
  * How an interval above a root is written as a degree: its number from the letter steps, past the
  * octave from 12 semitones on (a 9th, an 11th), and its sign from how far it lies from the major or
@@ -38,8 +30,8 @@ const DEGREE_SIGNS = new Map([
  */
 export function degreeLabel(steps: number, semitones: number): string {
   const compound = semitones >= 12
-  const plain = (PLAIN_SEMITONES[steps % 7] ?? 0) + (compound ? 12 : 0)
-  const sign = DEGREE_SIGNS.get(semitones - plain)
+  const plain = plainSemitones(steps % 7) + (compound ? 12 : 0)
+  const sign = accidentalSign(semitones - plain)
   if (sign === undefined) throw new RangeError(`${semitones} semitones is no ${steps}-step degree`)
   return `${sign}${(steps % 7) + 1 + (compound ? 7 : 0)}`
 }

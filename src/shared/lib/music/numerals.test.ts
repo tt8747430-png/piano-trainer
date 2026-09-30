@@ -3,18 +3,12 @@ import { chordSymbol } from './chord'
 import { parseChordSymbol } from './chord-symbol'
 import type { Key } from './key'
 import { note } from './note'
-import {
-  numeralChord,
-  numeralOf,
-  numeralsParam,
-  numeralText,
-  parseNumerals,
-  type NumeralSize,
-} from './numerals'
+import { numeralChord, numeralOf, numeralsParam, numeralText, parseNumerals } from './numerals'
+import type { ChordSize } from './scale-chord'
 
 const C: Key = { tonic: note('C'), minor: false }
 const A_MINOR: Key = { tonic: note('A'), minor: true }
-const chords = (text: string, key: Key, size: NumeralSize) =>
+const chords = (text: string, key: Key, size: ChordSize) =>
   (parseNumerals(text) ?? []).map((numeral) => chordSymbol(numeralChord(numeral, key, size)))
 
 describe('parseNumerals', () => {

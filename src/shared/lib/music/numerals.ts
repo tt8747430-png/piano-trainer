@@ -4,11 +4,9 @@ import type { Key } from './key'
 import { letterIndex, pitchClassOf, plainRoot } from './note'
 import { pitchClass } from './pitch'
 import { spellScale, type ScaleKind } from './scale'
-import { scaleChordAt, scaleChords } from './scale-chord'
+import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-chord'
 
 /** How much of each chord a line of numerals plays, as a progression's chord size does. */
-export const NUMERAL_SIZES = ['triads', 'sevenths', 'ninths'] as const
-export type NumeralSize = (typeof NUMERAL_SIZES)[number]
 
 export type NumeralTriad = 'maj' | 'min' | 'dim' | 'aug'
 export type NumeralSeventh = 'none' | 'minor' | 'major' | 'diminished' | 'half'
@@ -53,7 +51,6 @@ const GROWN: Readonly<Record<'sevenths' | 'ninths', Readonly<Record<NumeralTriad
     sevenths: { maj: 'd7', min: 'm7', dim: 'hd', aug: 's5' },
     ninths: { maj: 'n9', min: 'm9', dim: 'hd', aug: 's5' },
   }
-const NOTES: Readonly<Record<NumeralSize, 3 | 4 | 5>> = { triads: 3, sevenths: 4, ninths: 5 }
 
 const scaleOf = (key: Key): ScaleKind => (key.minor ? 'natural' : 'major')
 
@@ -121,7 +118,7 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
  * and any other grows as its triad says: a major chord to a dominant, a minor one to a minor 7th.
  * A major key counts from the major scale, a minor key from natural minor.
  */
-export function numeralChord(numeral: Numeral, key: Key, size: NumeralSize): Chord {
+export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = scaleOf(key)
   const tone = spellScale(key.tonic, kind)[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
@@ -138,7 +135,7 @@ export function numeralChord(numeral: Numeral, key: Key, size: NumeralSize): Cho
   }
   const own = scaleChords(key.tonic, kind, 3)[numeral.degree]?.quality
   if (numeral.shift === 0 && own === numeral.triad) {
-    return scaleChordAt(key.tonic, kind, numeral.degree, NOTES[size])
+    return scaleChordAt(key.tonic, kind, numeral.degree, SIZE_NOTES[size])
   }
   return { root, quality: size === 'triads' ? numeral.triad : GROWN[size][numeral.triad] }
 }

@@ -3,7 +3,6 @@ import {
   CHORD_FAMILIES,
   CHORD_QUALITIES,
   chordBass,
-  chordHolds,
   chordFamily,
   chordRootSpelling,
   chordSymbol,
@@ -128,22 +127,5 @@ describe('chordRootSpelling', () => {
   it('leans sharp or flat by quality', () => {
     expect(chordRootSpelling(pitchClass(1), qualityIntervals('min'))).toEqual(note('C', 1))
     expect(chordRootSpelling(pitchClass(1), qualityIntervals('maj'))).toEqual(note('D', -1))
-  })
-})
-
-describe('chordHolds', () => {
-  // The reharmonisation table's G row (roadmap §10.3) is the oracle.
-  const G = pitchClassOf(note('G'))
-
-  it.each(['EbMaj7', 'AbMaj7', 'Em7', 'Am7', 'Eb7', 'A7', 'C', 'G'])('%s holds G', (symbol) => {
-    expect(chordHolds(parseChordSymbol(symbol), G)).toBe(true)
-  })
-
-  it.each(['Dm', 'F', 'Bdim', 'DMaj7'])('%s does not hold G', (symbol) => {
-    expect(chordHolds(parseChordSymbol(symbol), G)).toBe(false)
-  })
-
-  it('counts the bass of a slash chord', () => {
-    expect(chordHolds(parseChordSymbol('C/D'), pitchClassOf(note('D')))).toBe(true)
   })
 })

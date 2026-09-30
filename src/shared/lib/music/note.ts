@@ -58,6 +58,13 @@ export const letterAt = (index: number): Letter => LETTERS[((index % 7) + 7) % 7
 
 export const naturalPitch = (letter: Letter): number => NATURAL_PITCHES[letter]
 
+/** The semitones of the major or perfect interval over a letter distance: C major's notes from C. */
+export const plainSemitones = (steps: number): number => naturalPitch(letterAt(steps))
+
+/** How an accidental of so many semitones is written (`♭`, `𝄪`); none past a double. */
+export const accidentalSign = (semitones: number): string | undefined =>
+  isAccidental(semitones) ? ACCIDENTAL_SIGNS[semitones] : undefined
+
 export const pitchClassOf = (spelled: SpelledNote): PitchClass =>
   pitchClass(naturalPitch(spelled.letter) + spelled.accidental)
 

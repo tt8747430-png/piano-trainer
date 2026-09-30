@@ -1,4 +1,11 @@
 export { cn } from './cn'
+export {
+  partsFromParams,
+  partsParams,
+  qualityParams,
+  readAlterations,
+  type PartsParams,
+} from './chord-params'
 export { foldText, matchesQuery } from './fold-text'
 export { isOneOf } from './is-one-of'
 export {

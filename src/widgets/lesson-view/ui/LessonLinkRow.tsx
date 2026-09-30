@@ -1,13 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { CirclePlay } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
-import {
-  keyParam,
-  noteParam,
-  numeralsParam,
-  parseChordSymbol,
-  qualityParams,
-} from '@/shared/lib/music'
+import { keyParam, noteParam, numeralsParam, parseChordSymbol } from '@/shared/lib/music'
+import { qualityParams } from '@/shared/lib'
 import { LEARN_TILES, RowLink } from '@/shared/ui'
 
 /**

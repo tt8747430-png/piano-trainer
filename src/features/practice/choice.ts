@@ -1,6 +1,5 @@
 import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
-import type { ChordSize } from '@/entities/piece'
-import type { SpelledNote } from '@/shared/lib/music'
+import type { SpelledNote, ChordSize } from '@/shared/lib/music'
 
 /** What the learner chose to practise a piece with: the Player's URL, read. */
 export interface PracticeChoice {

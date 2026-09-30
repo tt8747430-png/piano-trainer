@@ -2,7 +2,7 @@ import type { SearchSchemaInput } from '@tanstack/react-router'
 import { LESSON_CATEGORIES, type LessonCategory } from '@/entities/lesson'
 import { isStepId, LEVELS, type Level, type StepId } from '@/entities/path'
 import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
-import { CHORD_SIZES, isSongCollectionId, type CollectionId } from '@/entities/piece'
+import { isSongCollectionId, type CollectionId } from '@/entities/piece'
 import {
   CHROMATIC,
   CHROMATIC_DIRECTIONS,
@@ -15,7 +15,16 @@ import {
 import type { LearnFilter } from '@/pages/learn'
 import type { ChromaticSearch, PlayerSearch, ProgressionSearch, WalkSearch } from '@/pages/player'
 import type { SongsFilter } from '@/pages/songs'
-import { isOneOf, keyListParam, readKeyList, readNote, valueOr, wholeIn } from '@/shared/lib'
+import {
+  isOneOf,
+  keyListParam,
+  readKeyList,
+  readNote,
+  valueOr,
+  wholeIn,
+  partsParams,
+  readAlterations,
+} from '@/shared/lib'
 import {
   ADDED_TONES,
   BUILT_SIZES,
@@ -32,14 +41,12 @@ import {
   noteParam,
   parseNumerals,
   numeralsParam,
-  NUMERAL_SIZES,
+  CHORD_SIZES,
   ownFingering,
   parseKey,
-  partsParams,
   pitchClassOf,
   qualityIntervals,
   rootSpelling,
-  readAlterations,
   SCALE_KINDS,
   scaleHasChords,
   scaleIntervals,
@@ -291,7 +298,6 @@ export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   p: 'I-V-vi-IV',
   size: 'triads',
 }
-const isNumeralSize = isOneOf(NUMERAL_SIZES)
 export function validateProgressionsSearch(input: Input<ProgressionsView>): ProgressionsView {
   const raw: Raw = input
   const read = typeof raw.key === 'string' ? parseKey(raw.key) : null
@@ -301,7 +307,7 @@ export function validateProgressionsSearch(input: Input<ProgressionsView>): Prog
       ? keyParam({ tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor })
       : PROGRESSIONS_DEFAULTS.key,
     p: numerals ? numeralsParam(numerals) : PROGRESSIONS_DEFAULTS.p,
-    size: valueOr(isNumeralSize, raw.size, PROGRESSIONS_DEFAULTS.size),
+    size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
   }
 }
 

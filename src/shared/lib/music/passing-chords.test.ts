@@ -16,7 +16,7 @@ describe('passingChords', () => {
       ['tritoneSub', 'E7'],
       ['secondaryTwoFive', 'Fm7 B♭7'],
       ['approachBelow', 'D7'],
-      ['walkUp', 'C#7 D7'],
+      ['walkUp', 'D♭7 D7'],
       ['doubleApproach', 'D7 E°7'],
       ['diminishedApproach', 'D°7'],
       ['subdominant', 'A♭'],
@@ -32,10 +32,19 @@ describe('passingChords', () => {
     expect(rows(E_FLAT, C)).toContainEqual(['walkDown', 'D7 D♭7'])
   })
 
-  it('makes a minor target’s ii half-diminished and its IV minor', () => {
+  it('makes a minor target’s ii half-diminished and its IV minor, its plagal chord the minor one', () => {
     const toAm = rows(C, parseChordSymbol('Am'))
     expect(toAm).toContainEqual(['secondaryTwoFive', 'Bm7♭5 E7'])
     expect(toAm).toContainEqual(['subdominant', 'Dm'])
+    expect(toAm.map(([kind]) => kind)).not.toContain('plagal')
+    expect(toAm).toContainEqual(['minorPlagal', 'Dm7'])
+  })
+
+  it('spells a walk’s dominants as the app spells a chord’s root', () => {
+    expect(rows(parseChordSymbol('A'), parseChordSymbol('Db'))).toContainEqual([
+      'walkUp',
+      'B♭7 B7 C7',
+    ])
   })
 })
 

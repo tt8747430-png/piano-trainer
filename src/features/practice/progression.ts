@@ -1,7 +1,7 @@
 import { accompanimentOptions, type Accompaniment, type PatternId } from '@/entities/pattern'
-import { fourToALine, wholeBar, type ChordSize } from '@/entities/piece'
+import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { numeralChord, type Key, type Numeral } from '@/shared/lib/music'
+import { numeralChord, type Key, type Numeral, type ChordSize } from '@/shared/lib/music'
 
 /** A progression's own numerals, tempo, pattern and chord size: what the Player plays when its URL chooses none. */
 export const PROGRESSION = {

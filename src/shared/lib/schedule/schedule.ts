@@ -132,10 +132,13 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   }))
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
+  // A note still held where the pass starts sounds from there, for what is left of it.
+  const heard = (n: PerformanceNote) =>
+    inPass(n.startTick) || (n.startTick < fromTick && n.startTick + n.durationTicks > fromTick)
   const played: Sound[] = performance.notes
-    .filter((n) => inPass(n.startTick) && isAudible(n, hands))
+    .filter((n) => heard(n) && isAudible(n, hands))
     .map((n) => {
-      const start = n.startTick + n.roll
+      const start = Math.max(fromTick, n.startTick + n.roll)
       const end = Math.min(n.startTick + n.durationTicks, toTick)
       return {
         kind: 'note',

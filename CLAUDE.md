@@ -123,14 +123,15 @@ it. `@` → `src`.
   by one sanitiser for any version, following other tabs' saves), `isOneOf`, `createStoreContext`, `useMediaQuery`,
   `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
-  `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers, `foldText`; and with
+  `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords reference's URL holds
+  them), `foldText`; and with
   barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
   `scaleKey`, `relatedScale`; fingerings from any start, `thumbFingering`; `scale-chord.ts`, a scale's chords stacked
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `circle.ts`, the circle of fifths;
-  `placeChord` over any tones, `placeScale`, `placeScaleChords`, `walkChords` and `chordHolds`; `interval-facts.ts`,
+  `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `keyTones` and `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `arrangement`
+  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's
