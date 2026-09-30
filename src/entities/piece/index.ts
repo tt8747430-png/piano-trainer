@@ -29,6 +29,7 @@ export {
 } from './model/types'
 export { ContentError, type ContentPosition } from './model/content-error'
 export { chartOf, hasMethodCodes, melodyOf } from './model/chart'
+export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
 export { entriesInKey, entryById, pieceById } from './model/selectors'
 export { shelfOf, type Shelf } from './model/shelf'

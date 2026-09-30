@@ -21,6 +21,11 @@ export interface PracticeState {
   /** Wait mode: the pitch classes the practised hands play here, lowest first. */
   readonly expected: readonly PitchClass[]
   readonly received: readonly PitchClass[]
+  /**
+   * Wait mode: keys played before their beat group, while the app plays the other hand or a rest;
+   * the app's move on counts them, a learner's move forgets them.
+   */
+  readonly ahead: readonly PitchClass[]
   readonly outcome: Outcome
   /** The last wrong key, to show. */
   readonly wrong: Midi | null
@@ -39,6 +44,8 @@ export type PracticeEvent =
   /** The transport arrived at a beat group. */
   | { readonly type: 'reach'; readonly beatGroup: number }
   | { readonly type: 'next' }
+  /** Wait mode moves on by itself after a right answer or a rest. */
+  | { readonly type: 'advance' }
   | { readonly type: 'prev' }
   | { readonly type: 'jumpToBar'; readonly bar: number }
   /** The learner tapped a beat group. */
@@ -68,6 +75,19 @@ function expectedAt(performance: Performance, beatGroup: number, hands: Hands): 
 const bounds = (state: Pick<PracticeState, 'performance' | 'loop'>): BeatGroupRange =>
   state.loop ?? { first: 0, last: Math.max(0, state.performance.beatGroups.length - 1) }
 
+/**
+ * The beat group of `to`'s performance at the moment `from`'s cursor stands on: a new arrangement
+ * (another pattern, chord size or key) may cut a bar into more or fewer beat groups.
+ */
+function sameMoment(from: PracticeState, to: PracticeState): number {
+  if (from.performance === to.performance) return from.beatGroup
+  const tick = from.performance.beatGroups[from.beatGroup]?.tick ?? 0
+  return Math.max(
+    0,
+    to.performance.beatGroups.findLastIndex((group) => group.tick <= tick),
+  )
+}
+
 const clamp = (state: PracticeState, beatGroup: number) => {
   const { first, last } = bounds(state)
   return Math.min(last, Math.max(first, beatGroup))
@@ -80,8 +100,25 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
     beatGroup,
     expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
+    ahead: [],
     outcome: 'waiting',
     wrong: null,
+  }
+}
+
+const isComplete = (expected: readonly PitchClass[], received: readonly PitchClass[]) =>
+  expected.every((pc) => received.includes(pc))
+
+/** On by itself: the keys played ahead count toward the beat group arrived at, or wait through a rest. */
+function advance(state: PracticeState): PracticeState {
+  const moved = next(state)
+  if (moved.outcome === 'finished' || state.ahead.length === 0) return moved
+  if (moved.expected.length === 0) return { ...moved, ahead: state.ahead }
+  const received = moved.expected.filter((pc) => state.ahead.includes(pc))
+  return {
+    ...moved,
+    received,
+    outcome: received.length > 0 && isComplete(moved.expected, received) ? 'correct' : 'waiting',
   }
 }
 
@@ -100,6 +137,7 @@ export function initialPractice(
     playing: false,
     expected: [],
     received: [],
+    ahead: [],
     outcome: 'waiting',
     wrong: null,
   }
@@ -112,7 +150,15 @@ function next(state: PracticeState): PracticeState {
   const { first, last } = bounds(state)
   if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
   if (state.mode === 'listen' || state.loop) return moveTo(state, first)
-  return { ...state, playing: false, expected: [], received: [], outcome: 'finished', wrong: null }
+  return {
+    ...state,
+    playing: false,
+    expected: [],
+    received: [],
+    ahead: [],
+    outcome: 'finished',
+    wrong: null,
+  }
 }
 
 /** Back past the start: Listen goes round to the end, Wait mode stays. */
@@ -124,13 +170,16 @@ function prev(state: PracticeState): PracticeState {
 }
 
 function noteOn(state: PracticeState, key: Midi): PracticeState {
-  const done = state.outcome === 'correct' || state.outcome === 'finished'
-  if (state.mode !== 'wait' || !state.playing || done || state.expected.length === 0) return state
+  if (state.mode !== 'wait' || !state.playing || state.outcome === 'finished') return state
   const pc = pitchClass(key)
+  // Played while the app plays the other hand or a rest: it belongs to a beat group to come.
+  if (state.outcome === 'correct' || state.expected.length === 0) {
+    return state.ahead.includes(pc) ? state : { ...state, ahead: [...state.ahead, pc] }
+  }
   if (!state.expected.includes(pc)) return { ...state, outcome: 'wrong', wrong: key }
   const received = state.received.includes(pc) ? state.received : [...state.received, pc]
-  const complete = state.expected.every((expected) => received.includes(expected))
-  return { ...state, received, outcome: complete ? 'correct' : 'waiting', wrong: null }
+  const outcome = isComplete(state.expected, received) ? 'correct' : 'waiting'
+  return { ...state, received, outcome, wrong: null }
 }
 
 /** Every rule of Listen and Wait mode; the practice hook connects it to time and sound. */
@@ -145,10 +194,11 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         loop: event.loop,
         playing: state.playing && event.mode === state.mode,
       }
-      // A cursor outside a new loop starts at the loop's start; otherwise it stays, clamped.
+      // The cursor keeps its moment; outside a new loop it starts at the loop's start.
       const { loop } = configured
-      const outside = loop !== null && (state.beatGroup < loop.first || state.beatGroup > loop.last)
-      return moveTo(configured, outside ? loop.first : clamp(configured, state.beatGroup))
+      const at = sameMoment(state, configured)
+      const outside = loop !== null && (at < loop.first || at > loop.last)
+      return moveTo(configured, outside ? loop.first : clamp(configured, at))
     }
     case 'play':
       return state.outcome === 'finished'
@@ -167,6 +217,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
     }
     case 'next':
       return next(state)
+    case 'advance':
+      return advance(state)
     case 'prev':
       return prev(state)
     case 'jumpToBar': {

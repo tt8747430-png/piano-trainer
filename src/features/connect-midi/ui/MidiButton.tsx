@@ -6,16 +6,25 @@ import { Button } from '@/shared/ui/primitives/button'
 import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 import { MidiControl } from './MidiControl'
 
-/** The Player's MIDI button: a dot shows the status; the popover connects. Hidden without Web MIDI. */
+/**
+ * The Player's MIDI button: a dot shows the status and the name says it; the popover connects.
+ * Hidden without Web MIDI.
+ */
 export function MidiButton() {
   const { t } = useTranslation('common')
   const { connection } = useMidiConnection()
   if (connection.kind === 'unsupported') return null
+  const connected = isMidiConnected(connection)
   return (
     <Popover>
       <PopoverTrigger
         render={
-          <Button variant="surface" size="icon" aria-label={t('midi.label')} className="relative" />
+          <Button
+            variant="surface"
+            size="icon"
+            aria-label={connected ? t('midi.labelConnected') : t('midi.label')}
+            className="relative"
+          />
         }
       >
         <Cable aria-hidden />
@@ -23,7 +32,7 @@ export function MidiButton() {
           aria-hidden
           className={cn(
             'absolute top-2 right-2 size-2 rounded-full',
-            isMidiConnected(connection) ? 'bg-learned' : 'bg-border',
+            connected ? 'bg-learned' : 'bg-border',
           )}
         />
       </PopoverTrigger>

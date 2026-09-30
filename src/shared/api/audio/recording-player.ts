@@ -16,7 +16,10 @@ export interface RecordingPlayer {
   load(src: string): void
   /** Queues a play; it starts when the clock reaches its `at`. */
   play(src: string, play: RecordingPlay): void
-  /** Inside a gesture: plays each loaded recording muted and pauses it, so it may play later without one. */
+  /**
+   * Inside a gesture: plays each loaded recording not yet primed muted and pauses it, so it may play
+   * later without one. A play that starts meanwhile keeps the element going.
+   */
   prime(): void
   /** Pauses every recording and forgets what is queued. */
   stop(): void
@@ -38,8 +41,9 @@ interface Queued extends RecordingPlay {
 
 /**
  * Recordings kept on the clock: each queued play starts as the clock reaches it (sought to its
- * offset, at its rate), is sought back whenever it drifts, and is paused at its end unless another
- * play follows, which only seeks it. A seek aims as far ahead as the element stands still after one.
+ * offset, at its rate), is sought back whenever it drifts, is started again when something pauses it
+ * (an interruption, a prime that finished late), and is paused at its end unless another play follows,
+ * which only seeks it. A seek aims as far ahead as the element stands still after one.
  */
 export function createRecordingPlayer({
   now,
@@ -50,6 +54,8 @@ export function createRecordingPlayer({
   createMedia: (src: string) => Media
 }): RecordingPlayer {
   const elements = new Map<string, Media>()
+  // Safari lets an element play without a gesture once one gesture has played it.
+  const primed = new WeakSet<Media>()
   let queue: readonly Queued[] = []
   let current: Queued | null = null
   let settledAt = 0
@@ -70,10 +76,12 @@ export function createRecordingPlayer({
     elements.set(src, made)
     return made
   }
-  // A play the browser refuses (no gesture yet) stays silent.
+  // A play the browser refuses (no gesture yet) stays silent. One that takes over a prime is heard.
   const start = (media: Media) => {
+    media.muted = false
     if (media.paused) media.play().catch(() => undefined)
   }
+  const playing = (media: Media) => current !== null && elements.get(current.src) === media
   const expected = (play: Queued, time: number) => play.offset + (time - play.at) * play.rate
   const seek = (media: Media, play: Queued, time: number) => {
     media.currentTime = expected(play, time + seekLag)
@@ -97,6 +105,9 @@ export function createRecordingPlayer({
       if (time >= current.until) {
         media.pause()
         current = null
+      } else if (media.paused) {
+        seek(media, current, time)
+        start(media)
       } else if (!media.seeking && time >= settledAt) {
         const drift = media.currentTime - expected(current, time)
         if (measuring) {
@@ -122,11 +133,14 @@ export function createRecordingPlayer({
     },
     prime() {
       for (const media of elements.values()) {
-        if (!media.paused) continue
+        if (primed.has(media) || !media.paused) continue
         media.muted = true
         media
           .play()
-          .then(() => media.pause())
+          .then(() => {
+            primed.add(media)
+            if (!playing(media)) media.pause()
+          })
           .catch(() => undefined)
           .finally(() => {
             media.muted = false

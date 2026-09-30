@@ -8,6 +8,13 @@ const BEATS = {
   lh: { kind: 'events', events: parseFigure('0/16 L1+L8') },
 } as const
 
+/** Chords on beats 1 and 3 in the right hand, the root in octaves at each chord in the left. */
+const HALVES = {
+  id: 'halves',
+  rh: { kind: 'events', events: parseFigure('0/8 C,8/8 C') },
+  lh: { kind: 'events', events: parseFigure('0/16 L1+L8') },
+} as const
+
 const chart = (...bars: string[][]): Chart => ({
   key: { tonic: note('C'), minor: false },
   meter: '4/4',
@@ -33,4 +40,10 @@ export const ONE_BAR: Performance = arrange(chart(['C', 'G']), { tonic: note('C'
 export const TWO_BARS: Performance = arrange(chart(['C'], ['G']), {
   tonic: note('C'),
   pattern: BEATS,
+})
+
+/** The same two bars in halves: four beat groups, two to a bar, at 0, 24, 48, 72. */
+export const TWO_BARS_IN_HALVES: Performance = arrange(chart(['C'], ['G']), {
+  tonic: note('C'),
+  pattern: HALVES,
 })

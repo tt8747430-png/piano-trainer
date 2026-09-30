@@ -48,11 +48,12 @@ export const common = {
   learned: { toggle: '{{title}}: learned', done: 'Learned' },
   midi: {
     label: 'MIDI keyboard',
+    labelConnected: 'MIDI keyboard, connected',
     connect: 'Connect a MIDI keyboard',
     connecting: 'Connecting…',
     retry: 'Try again',
     connected: 'Connected: {{devices}}',
-    noDevice: 'No MIDI keyboard found. Plug one in by USB.',
+    noDevice: 'No MIDI keyboard found.',
     denied: 'MIDI access was blocked.',
     unsupported: 'This browser can’t connect a MIDI keyboard.',
   },

@@ -25,14 +25,12 @@ export function usePresses<Id>(): {
   const [down, setDown] = useState(NOTHING)
   /** The press each id holds. */
   const held = useRef(new Map<Id, Press>())
-  /** Presses younger than the shortest press, and the ones among them already let go. */
-  const young = useRef(new Set<Press>())
-  const letGo = useRef(new Set<Press>())
-  const timers = useRef(new Set<ReturnType<typeof setTimeout>>())
+  /** Presses younger than the shortest press: the timer that ends it, and whether they are let go. */
+  const young = useRef(new Map<Press, { timer: ReturnType<typeof setTimeout>; letGo: boolean }>())
 
   useEffect(() => {
-    const pending = timers.current
-    return () => pending.forEach(clearTimeout)
+    const pending = young.current
+    return () => pending.forEach(({ timer }) => clearTimeout(timer))
   }, [])
 
   const end = useCallback(
@@ -51,7 +49,8 @@ export function usePresses<Id>(): {
       const press = held.current.get(id)
       if (press === undefined) return
       held.current.delete(id)
-      if (young.current.has(press)) letGo.current.add(press)
+      const youth = young.current.get(press)
+      if (youth) youth.letGo = true
       else end(press)
     },
     [end],
@@ -62,14 +61,13 @@ export function usePresses<Id>(): {
       release(id)
       const press: Press = {}
       held.current.set(id, press)
-      young.current.add(press)
       setDown((presses) => new Map(presses).set(press, key))
       const timer = setTimeout(() => {
-        timers.current.delete(timer)
+        const letGo = young.current.get(press)?.letGo
         young.current.delete(press)
-        if (letGo.current.delete(press)) end(press)
+        if (letGo) end(press)
       }, SHORTEST_PRESS_MS)
-      timers.current.add(timer)
+      young.current.set(press, { timer, letGo: false })
     },
     [release, end],
   )

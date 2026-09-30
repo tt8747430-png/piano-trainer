@@ -86,6 +86,20 @@ describe('Player', () => {
     expect(audio.stops).toBeGreaterThan(0)
   })
 
+  it('falls silent, every key up, when the learner leaves while Listen plays the recording', async () => {
+    const user = userEvent.setup()
+    const { audio, router } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(audio.recordings).toHaveLength(1)
+    act(() => audio.setNow(0.5))
+    expect(audio.sounding().size).toBeGreaterThan(0)
+    const stops = audio.stops
+    await act(() => router.navigate({ to: '/' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    expect(audio.stops).toBeGreaterThan(stops)
+    expect(audio.sounding().size).toBe(0)
+  })
+
   it('steps with Back and Next, sounding each beat group', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/bz5')

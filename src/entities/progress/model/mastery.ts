@@ -20,6 +20,14 @@ export function rate(answers: readonly Answer[]): Rating {
   return right >= KNOWN_AT && evidence.at(-1)?.correct ? 'known' : 'gap'
 }
 
+/** How many right answers in a row would make these answers Known: none once they are. */
+export function stillToKnow(answers: readonly Answer[]): number {
+  const right: Answer = { correct: true, at: new Date(0).toISOString() }
+  let more = 0
+  while (rate([...answers, ...Array.from({ length: more }, () => right)]) !== 'known') more++
+  return more
+}
+
 /** One array for every skill with no evidence, so a subscriber never sees a new reference. */
 export const NO_ANSWERS: readonly Answer[] = []
 

@@ -18,7 +18,10 @@ export interface PlayOptions {
 
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
-  /** On the first user gesture: browsers start audio suspended until one; readies loaded recordings too. */
+  /**
+   * On a user gesture: resumes audio a browser started or put back in suspension (iOS after a call),
+   * and primes each loaded recording once. Does nothing once audio runs and every recording is primed.
+   */
   unlock(): Promise<void>
   /** Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns their play. */
   play(sounds: readonly Sound[], at?: number, options?: PlayOptions): PlayHandle

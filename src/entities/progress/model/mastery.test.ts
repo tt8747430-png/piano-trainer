@@ -8,6 +8,7 @@ import {
   ratingOf,
   skillsToCheck,
   stepCompletedBy,
+  stillToKnow,
 } from './mastery'
 import { EMPTY_PROGRESS, type Answer, type ProgressState } from './types'
 
@@ -40,6 +41,19 @@ describe('rate', () => {
     ['010111', 'known'],
   ])('%j is %s', (pattern, rating) => {
     expect(rate(answers(pattern))).toBe(rating)
+  })
+})
+
+describe('stillToKnow', () => {
+  it.each([
+    ['', 4],
+    ['111', 1],
+    ['11110', 1],
+    ['00000', 4],
+    ['10110', 2],
+    ['01111', 0],
+  ])('%j needs %i more right in a row to be Known', (pattern, more) => {
+    expect(stillToKnow(answers(pattern))).toBe(more)
   })
 })
 

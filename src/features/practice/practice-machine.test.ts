@@ -8,7 +8,7 @@ import {
   type PracticeEvent,
   type PracticeState,
 } from './practice-machine'
-import { ONE_BAR, TWO_BARS } from './testing/performances'
+import { ONE_BAR, TWO_BARS, TWO_BARS_IN_HALVES } from './testing/performances'
 
 const run = (state: PracticeState, ...events: PracticeEvent[]) =>
   events.reduce(practiceReducer, state)
@@ -113,9 +113,35 @@ describe('the practice machine', () => {
       expect(run(wrong, ...press(60, 64, 67)).outcome).toBe('correct')
     })
 
-    it('ignores keys once the beat group is done', () => {
+    it('never marks a key played once the beat group is done wrong', () => {
       const done = run(waiting('rh'), ...press(60, 64, 67))
-      expect(run(done, ...press(61))).toBe(done)
+      expect(run(done, ...press(61))).toMatchObject({ outcome: 'correct', wrong: null })
+    })
+
+    it('keeps a key played during the pause for the beat group it belongs to', () => {
+      const ahead = run(waiting('rh'), ...press(60, 64, 67), ...press(64))
+      expect(run(ahead, { type: 'advance' })).toMatchObject({
+        beatGroup: 1,
+        received: [4],
+        outcome: 'waiting',
+      })
+    })
+
+    it('is right at once when the keys played ahead complete the next beat group', () => {
+      const ahead = run(waiting('rh'), ...press(60, 64, 67), ...press(60, 64, 67))
+      expect(run(ahead, { type: 'advance' })).toMatchObject({ beatGroup: 1, outcome: 'correct' })
+    })
+
+    it('carries a key played through a rest to the beat group it belongs to', () => {
+      const rest = run(waiting('lh'), ...press(48), { type: 'advance' })
+      expect(rest.expected).toEqual([])
+      const next = run(rest, ...press(43), { type: 'advance' })
+      expect(next).toMatchObject({ beatGroup: 2, expected: [7], outcome: 'correct' })
+    })
+
+    it('forgets keys played ahead when the learner moves', () => {
+      const ahead = run(waiting('rh'), ...press(60, 64, 67), ...press(64))
+      expect(run(ahead, { type: 'next' })).toMatchObject({ beatGroup: 1, received: [] })
     })
 
     it('expects nothing where the practised hand has nothing to play', () => {
@@ -161,6 +187,16 @@ describe('the practice machine', () => {
       const configured = run(state, configure(ONE_BAR, 'listen', 'both'))
       expect(configured.beatGroup).toBe(3)
       expect(configured.performance).toBe(ONE_BAR)
+    })
+
+    it('keeps its moment in the music when a new arrangement cuts the bars differently', () => {
+      // Bar 2, beat 2 in beats: in halves, bar 2's first half holds it.
+      const state = run(initialPractice(TWO_BARS, 'listen', 'both'), {
+        type: 'jumpToBeatGroup',
+        beatGroup: 5,
+      })
+      const configured = run(state, configure(TWO_BARS_IN_HALVES, 'listen', 'both'))
+      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(48)
     })
 
     it('stops playing when the mode changes, and not otherwise', () => {

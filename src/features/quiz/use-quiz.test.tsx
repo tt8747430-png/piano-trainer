@@ -28,6 +28,12 @@ function setup(config: QuizConfig) {
 }
 
 describe('useQuiz', () => {
+  it('falls silent when the learner leaves', () => {
+    const { unmount, audio } = setup(ONLY_C_MAJOR)
+    unmount()
+    expect(audio.stops).toBe(1)
+  })
+
   it('asks a question at once and records a right answer as evidence', () => {
     const { result, store, audio } = setup(ONLY_C_MAJOR)
     const question = result.current.state.question

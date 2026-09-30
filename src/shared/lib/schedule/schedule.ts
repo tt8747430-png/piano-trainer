@@ -1,5 +1,5 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { beatsPerBar, isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
 import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -84,21 +84,34 @@ const secondsFor = (ticks: Tick, tempo: number): number =>
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
+/**
+ * A count-in: a bar's worth of beats before `fromTick`, on the beats of the bar it starts in, so the
+ * music comes in on its beat wherever the pass begins; each bar's first beat is accented.
+ */
+function countInBeats(performance: Performance, fromTick: Tick): { tick: Tick; accent: boolean }[] {
+  const bar = performance.bars.findLast((candidate) => candidate.startTick <= fromTick)
+  if (!bar) return []
+  const beats = Math.ceil(bar.beats)
+  const earliest = fromTick - beats * TICKS_PER_BEAT
+  return Array.from({ length: 2 * beats }, (_, k) => k - beats).flatMap((k) => {
+    const tick = bar.startTick + k * TICKS_PER_BEAT
+    return tick >= earliest && tick < fromTick ? [{ tick, accent: (k + beats) % beats === 0 }] : []
+  })
+}
+
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  const beat = secondsFor(TICKS_PER_BEAT, tempo)
-  const countIn: Sound[] = options.countIn
-    ? Array.from({ length: beatsPerBar(performance.meter) }, (_, k) => ({
-        kind: 'click',
-        at: k * beat,
-        accent: k === 0,
-      }))
-    : []
-  const musicStart = countIn.length * beat
   const place = options.swing && !isCompound(performance.meter) ? swingTick : (tick: Tick) => tick
+  const counted = options.countIn ? countInBeats(performance, fromTick) : []
+  const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
+  const countIn: Sound[] = counted.map(({ tick, accent }) => ({
+    kind: 'click',
+    at: at(tick),
+    accent,
+  }))
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
   const played: Sound[] = performance.notes

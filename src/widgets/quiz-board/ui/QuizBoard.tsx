@@ -14,7 +14,6 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
   const { t } = useTranslation(['quiz', 'music', 'common'])
   const nameScale = useScaleName()
   const { question, selected, result } = quiz.state
-  if (!question) return null
 
   const building = question.mode !== 'name-chord'
   // Building a chord or scale: keys are chosen until the answer is checked.

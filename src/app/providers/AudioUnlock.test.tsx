@@ -15,18 +15,17 @@ function renderUnlock() {
 }
 
 describe('AudioUnlock', () => {
-  it('unlocks audio on the first tap, and only then', () => {
+  it('unlocks audio on every tap and key press, so audio the browser suspends again comes back', () => {
     const audio = renderUnlock()
     expect(audio.unlocks).toBe(0)
     fireEvent.pointerDown(document.body)
-    fireEvent.pointerDown(document.body)
     fireEvent.keyDown(document.body, { key: 'a' })
-    expect(audio.unlocks).toBe(1)
+    expect(audio.unlocks).toBe(2)
   })
 
-  it('unlocks audio on the first key press', () => {
+  it('unlocks audio when a finger lifts, which is when a touch counts as a gesture', () => {
     const audio = renderUnlock()
-    fireEvent.keyDown(document.body, { key: 'Enter' })
+    fireEvent.pointerUp(document.body)
     expect(audio.unlocks).toBe(1)
   })
 })

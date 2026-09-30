@@ -13,6 +13,7 @@ import {
 } from '@/shared/lib/music'
 import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
+import { fourToALine } from './chart-layout'
 import { ContentError, type ContentPosition } from './content-error'
 import { CHORD_SIZES, pieceKey, type ChordSize, type ProgressionPiece } from './types'
 
@@ -42,8 +43,6 @@ const BASS_ROLES = new Map<string, ChordRole>([
   ['5', '5th'],
   ['7', '7th'],
 ])
-
-const BARS_PER_LINE = 4
 
 const isQuality = isOneOf(CHORD_QUALITIES)
 
@@ -111,12 +110,6 @@ function packIntoBars(chords: readonly TimedChord[], meterTicks: Tick): ChartBar
   if (current.length > 0) close()
   return bars
 }
-
-/** Bars four to a line: a one-string progression's layout. */
-const fourToALine = (bars: readonly ChartBar[]): ChartBar[][] =>
-  Array.from({ length: Math.ceil(bars.length / BARS_PER_LINE) }, (_, i) =>
-    bars.slice(i * BARS_PER_LINE, (i + 1) * BARS_PER_LINE),
-  )
 
 /**
  * Reads a progression at a chord size into a chart of real bars: one string four bars a line, or

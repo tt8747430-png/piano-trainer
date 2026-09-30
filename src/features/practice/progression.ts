@@ -1,13 +1,6 @@
-import {
-  LEFT_FIGURES,
-  PATTERNS,
-  RIGHT_FIGURES,
-  type LeftFigureId,
-  type PatternId,
-  type RightFigureId,
-} from '@/entities/pattern'
-import type { ChordSize } from '@/entities/piece'
-import { arrange, type Chart, type ChartBar, type Performance } from '@/shared/lib/arrangement'
+import { accompanimentOptions, type Accompaniment, type PatternId } from '@/entities/pattern'
+import { fourToALine, wholeBar, type ChordSize } from '@/entities/piece'
+import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { numeralChord, type Key, type Numeral } from '@/shared/lib/music'
 
 /** A progression's own numerals, tempo, pattern and chord size: what the Player plays when its URL chooses none. */
@@ -24,16 +17,11 @@ export const PROGRESSION = {
 }
 
 /** What the learner plays a progression with: the Player's URL, read. */
-export interface ProgressionChoice {
+export interface ProgressionChoice extends Accompaniment {
   readonly numerals: readonly Numeral[]
   readonly key: Key
-  readonly pattern: PatternId
-  readonly rh: RightFigureId | null
-  readonly lh: LeftFigureId | null
   readonly chordSize: ChordSize
 }
-
-const BARS_PER_LINE = 4
 
 /** Numerals in a key at a chord size, a chord a bar of 4/4, four bars a line. */
 export function progressionChart(
@@ -41,23 +29,12 @@ export function progressionChart(
   key: Key,
   chordSize: ChordSize,
 ): Chart {
-  const bars: ChartBar[] = numerals.map((numeral) => ({
-    chords: [{ ...numeralChord(numeral, key, chordSize), beats: 4 }],
-    beats: 4,
-  }))
-  const lines = Array.from({ length: Math.ceil(bars.length / BARS_PER_LINE) }, (_, i) =>
-    bars.slice(i * BARS_PER_LINE, (i + 1) * BARS_PER_LINE),
-  )
-  return { key, meter: '4/4', sections: [{ lines }] }
+  const bars = numerals.map((numeral) => wholeBar(numeralChord(numeral, key, chordSize)))
+  return { key, meter: '4/4', sections: [{ lines: fourToALine(bars) }] }
 }
 
 /** A progression as the Player plays it: the learner's pattern, hands' figures and chord size. */
 export function arrangeProgression(choice: ProgressionChoice): Performance {
   const chart = progressionChart(choice.numerals, choice.key, choice.chordSize)
-  return arrange(chart, {
-    tonic: chart.key.tonic,
-    pattern: PATTERNS[choice.pattern].pattern,
-    ...(choice.rh ? { rh: RIGHT_FIGURES[choice.rh].figure } : {}),
-    ...(choice.lh ? { lh: LEFT_FIGURES[choice.lh].figure } : {}),
-  })
+  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(choice) })
 }

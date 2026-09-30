@@ -1,10 +1,4 @@
-import {
-  LEFT_FIGURES,
-  METHOD_PATTERNS,
-  PATTERNS,
-  RIGHT_FIGURES,
-  type PatternId,
-} from '@/entities/pattern'
+import { accompanimentOptions, METHOD_PATTERNS, type PatternId } from '@/entities/pattern'
 import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
@@ -29,10 +23,12 @@ export function arrangePiece(piece: Piece, choice: PracticeChoice): Performance 
   const fromChart = choice.pattern === 'chart'
   return arrange(chartOf(piece, choice.chordSize ?? undefined), {
     tonic: choice.tonic,
-    pattern: PATTERNS[choice.pattern === 'chart' ? piece.pattern : choice.pattern].pattern,
+    ...accompanimentOptions({
+      pattern: fromChart ? piece.pattern : choice.pattern,
+      rh: choice.rh,
+      lh: choice.lh,
+    }),
     ...(fromChart ? { methods: METHOD_PATTERNS } : {}),
-    ...(choice.rh ? { rh: RIGHT_FIGURES[choice.rh].figure } : {}),
-    ...(choice.lh ? { lh: LEFT_FIGURES[choice.lh].figure } : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),
   })
 }

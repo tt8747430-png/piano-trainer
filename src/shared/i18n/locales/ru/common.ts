@@ -46,11 +46,12 @@ export const common: LocaleResources['common'] = {
   learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
   midi: {
     label: 'MIDI-клавиатура',
+    labelConnected: 'MIDI-клавиатура подключена',
     connect: 'Подключить MIDI-клавиатуру',
     connecting: 'Подключение…',
     retry: 'Ещё раз',
     connected: 'Подключено: {{devices}}',
-    noDevice: 'MIDI-клавиатура не найдена. Подключите её по USB.',
+    noDevice: 'MIDI-клавиатура не найдена.',
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',
   },

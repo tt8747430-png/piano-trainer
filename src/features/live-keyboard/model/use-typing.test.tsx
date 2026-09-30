@@ -57,6 +57,16 @@ describe('typing on the computer keyboard', () => {
     expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
   })
 
+  it('lets every typed key go when Cmd is let go: macOS sends no key-up for a letter under Cmd', () => {
+    vi.useFakeTimers()
+    typingKeyboard()
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    fireEvent.keyDown(window, { code: 'MetaLeft', key: 'Meta', metaKey: true })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    fireEvent.keyUp(window, { code: 'MetaLeft', key: 'Meta' })
+    expect(screen.getByRole('button', { name: 'C4' })).not.toHaveAttribute('data-down')
+  })
+
   it('moves an octave up with X', async () => {
     const user = userEvent.setup()
     const { onKeyPress } = typingKeyboard()
@@ -64,11 +74,12 @@ describe('typing on the computer keyboard', () => {
     expect(onKeyPress).toHaveBeenCalledWith(72)
   })
 
-  it('plays nothing on auto-repeat, with Cmd held, or into a text field', async () => {
+  it('plays nothing on auto-repeat, with Cmd or Shift held, or into a text field', async () => {
     const user = userEvent.setup()
     const { onKeyPress } = typingKeyboard()
     fireEvent.keyDown(window, { code: 'KeyA', key: 'a', repeat: true })
     await user.keyboard('{Meta>}a{/Meta}')
+    await user.keyboard('{Shift>}a{/Shift}')
     await user.click(screen.getByRole('textbox', { name: 'Search' }))
     await user.keyboard('a')
     expect(onKeyPress).not.toHaveBeenCalled()

@@ -8,17 +8,13 @@ import {
   spellChord,
   type KeyRange,
   type Midi,
-  type Tone,
 } from '@/shared/lib/music'
 import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
-import type { Question } from './quiz-machine'
+import { tonesOf, type Question } from './quiz-machine'
 
 /** Middle C to the E above the next C: room to build most chords and scales, any octave counting. */
 export const QUIZ_RANGE: KeyRange = { from: MIDDLE_C, to: midi(76) }
-
-const tonesOf = (question: Question): readonly Tone[] =>
-  question.mode === 'build-scale' ? question.notes : question.tones
 
 /** The question's answer on the keyboard: a chord placed from middle C, a scale up from its root. */
 export function targetKeys(question: Question): Midi[] {
@@ -34,8 +30,8 @@ export function targetKeys(question: Question): Midi[] {
  * The quiz range, grown to hold the question's answer, so a wide chord shows whole and the keys
  * outlined after Check are on the keyboard.
  */
-export const quizKeyboardRange = (question: Question | null): KeyRange =>
-  question ? keyboardRange(targetKeys(question), QUIZ_RANGE) : QUIZ_RANGE
+export const quizKeyboardRange = (question: Question): KeyRange =>
+  keyboardRange(targetKeys(question), QUIZ_RANGE)
 
 /** The answer, sounded: a chord struck, a scale rolled upwards. */
 export const questionSounds = (question: Question): NoteSound[] =>

@@ -4,6 +4,7 @@ import { createWebMidiInput, hasWebMidi } from './web-midi'
 
 class FakeInput {
   onmidimessage: ((event: { data: Uint8Array }) => void) | null = null
+  state: 'connected' | 'disconnected' = 'connected'
   constructor(
     readonly id: string,
     readonly name: string | null,
@@ -21,6 +22,15 @@ class FakeAccess {
   }
   plugIn(input: FakeInput) {
     this.inputs.set(input.id, input)
+    this.onstatechange?.()
+  }
+  unplug(input: FakeInput) {
+    this.inputs.delete(input.id)
+    this.onstatechange?.()
+  }
+  /** Unplugged, as Chrome may report it: still in the map, its state disconnected. */
+  disconnect(input: FakeInput) {
+    input.state = 'disconnected'
     this.onstatechange?.()
   }
 }
@@ -73,6 +83,54 @@ describe('createWebMidiInput', () => {
     access.plugIn(piano)
     piano.send([0x90, 60, 90])
     expect(statuses).toEqual([{ state: 'no-device' }, { state: 'connected', devices: ['a'] }])
+    expect(heard).toHaveBeenCalledOnce()
+  })
+
+  it('lets go of the keys still held on a keyboard unplugged, and only those', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const pads = new FakeInput('b', 'Pads')
+    const access = new FakeAccess(piano, pads)
+    const midi = withAccess(access)
+    const heard: NoteEvent[] = []
+    midi.onNote((event) => heard.push(event))
+    await midi.connect()
+    piano.send([0x90, 60, 90])
+    piano.send([0x90, 64, 90])
+    piano.send([0x80, 64, 0])
+    pads.send([0x90, 67, 90])
+    heard.length = 0
+    access.unplug(piano)
+    expect(heard).toEqual([{ midi: 60, on: false, velocity: 0 }])
+  })
+
+  it('lets go of a keyboard’s keys when its port turns disconnected in place', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const access = new FakeAccess(piano)
+    const midi = withAccess(access)
+    const heard: NoteEvent[] = []
+    const statuses: MidiStatus[] = []
+    midi.onNote((event) => heard.push(event))
+    midi.onStatus((status) => statuses.push(status))
+    await midi.connect()
+    piano.send([0x90, 60, 90])
+    access.disconnect(piano)
+    expect(heard.at(-1)).toEqual({ midi: 60, on: false, velocity: 0 })
+    expect(statuses.at(-1)).toEqual({ state: 'no-device' })
+  })
+
+  it('asks for access once, so a retry never hears a key twice', async () => {
+    // Each access the browser grants has its own port objects for the same keyboard.
+    const ports: FakeInput[] = []
+    const midi = createWebMidiInput(async () => {
+      const port = new FakeInput('a', 'Piano')
+      ports.push(port)
+      return new FakeAccess(port) as unknown as MIDIAccess
+    })
+    const heard = vi.fn()
+    midi.onNote(heard)
+    await midi.connect()
+    await midi.connect()
+    for (const port of ports) port.send([0x90, 60, 90])
     expect(heard).toHaveBeenCalledOnce()
   })
 

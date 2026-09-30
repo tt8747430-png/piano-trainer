@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { stepById, useStepTitle } from '@/entities/path'
-import { selectIsLearned, useProgressStoreApi } from '@/entities/progress'
+import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
 import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
@@ -57,6 +57,11 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
 
 export function CheckPage() {
   const { of } = useSearch({ from: '/full-screen/check' })
-  const plan = useMemo(() => (of ? checkPlan(of) : null), [of])
+  const progress = useProgressStoreApi()
+  // Drawn once, from the evidence as the check opens: each skill as often as it still needs.
+  const plan = useMemo(
+    () => (of ? checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())) : null),
+    [of, progress],
+  )
   return plan ? <CheckFlow key={plan.of} plan={plan} /> : null
 }

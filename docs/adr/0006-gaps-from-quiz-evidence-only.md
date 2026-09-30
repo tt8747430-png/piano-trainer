@@ -20,3 +20,6 @@ Known), in the quiz's My gaps mode, and as one line on the Continue card.
 - The rating is pure (`entities/progress/model/mastery.ts`) and exhaustively tested.
 - A learner who only plays and never quizzes sees Unknowns, not Gaps: the Checks are the way in.
 - Five answers per Skill keeps storage small (40 Skills × 5).
+- A Step's Check asks each Skill as often as its Evidence still lacks to be Known (`stillToKnow`, at least once),
+  so a learner who answers every question right ends it with the Step learned; a Piece's Check asks its chords in
+  turn, six questions or one each.

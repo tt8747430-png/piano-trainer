@@ -66,6 +66,34 @@ function slowMedia(cost: number, now: () => number) {
   return media
 }
 
+/**
+ * An element whose file is still loading: as a real one, `play()` takes it out of pause at once and
+ * resolves only once the file is in (`loaded()`).
+ */
+function loadingMedia() {
+  let loaded = () => {}
+  const media = {
+    currentTime: 0,
+    playbackRate: 1,
+    muted: false,
+    paused: true,
+    seeking: false,
+    plays: 0,
+    play() {
+      media.plays++
+      media.paused = false
+      return new Promise<void>((resolve) => {
+        loaded = resolve
+      })
+    },
+    pause() {
+      media.paused = true
+    },
+    loaded: () => loaded(),
+  }
+  return media
+}
+
 describe('createRecordingPlayer', () => {
   let clock = 0
   let media = fakeMedia()
@@ -179,6 +207,42 @@ describe('createRecordingPlayer', () => {
     expect(media.plays).toBe(1)
     expect(media.paused).toBe(true)
     expect(media.muted).toBe(false)
+  })
+
+  it('keeps a play going that starts while the Play tap’s prime is still loading the file', async () => {
+    const loading = loadingMedia()
+    const recordings = createRecordingPlayer({ now: () => clock, createMedia: () => loading })
+    recordings.load('vocal.m4a')
+    recordings.prime()
+    recordings.play('vocal.m4a', { at: 0.1, offset: 2.74, rate: 1, until: 20 })
+    clock = 0.1
+    await vi.advanceTimersByTimeAsync(20)
+    loading.loaded()
+    clock = 0.2
+    await vi.advanceTimersByTimeAsync(20)
+    expect(loading.paused).toBe(false)
+    expect(loading.muted).toBe(false)
+  })
+
+  it('starts its element again when something pauses it under a play, as an interruption does', async () => {
+    const recordings = player()
+    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
+    await vi.advanceTimersByTimeAsync(20)
+    media.pause()
+    clock = 2
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.paused).toBe(false)
+    expect(media.currentTime).toBeCloseTo(12)
+  })
+
+  it('primes each recording once: a later tap leaves a primed one alone', async () => {
+    const recordings = player()
+    recordings.load('vocal.m4a')
+    recordings.prime()
+    await vi.advanceTimersByTimeAsync(0)
+    recordings.prime()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(media.plays).toBe(1)
   })
 
   it('stays silent when the browser refuses to play', async () => {

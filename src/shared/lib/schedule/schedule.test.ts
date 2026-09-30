@@ -86,6 +86,37 @@ describe('schedule', () => {
     expect(end).toBe(8)
   })
 
+  it('counts in on the beats of the bar it starts in, so the music comes in on its beat', () => {
+    // From beat 3: "3 4 | 1 2", then the music on beat 3, the accent on the bar's first beat.
+    const { sounds, musicStart } = schedule(perform('C', 'F'), {
+      tempo: 60,
+      hands: ALL,
+      fromTick: 24,
+      countIn: true,
+      metronome: true,
+    })
+    expect(clicks(sounds).slice(0, 6)).toEqual([
+      { kind: 'click', at: 0, accent: false },
+      { kind: 'click', at: 1, accent: false },
+      { kind: 'click', at: 2, accent: true },
+      { kind: 'click', at: 3, accent: false },
+      { kind: 'click', at: 4, accent: false },
+      { kind: 'click', at: 5, accent: false },
+    ])
+    expect(musicStart).toBe(4)
+  })
+
+  it('comes in half a beat after the last click when it starts on an off-beat', () => {
+    const { sounds, musicStart } = schedule(perform('C', 'F'), {
+      tempo: 60,
+      hands: ALL,
+      fromTick: 18,
+      countIn: true,
+    })
+    expect(clicks(sounds).map((click) => click.at)).toEqual([0, 1, 2, 3])
+    expect(musicStart).toBe(3.5)
+  })
+
   it('clicks every beat with the metronome, accenting each bar’s first', () => {
     const whole = schedule(perform('C'), { tempo: 60, hands: ALL, metronome: true })
     expect(clicks(whole.sounds)).toEqual([

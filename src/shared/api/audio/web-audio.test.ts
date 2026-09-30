@@ -10,7 +10,7 @@ class FakeContext {
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
-  readonly gains: { disconnected: boolean; silenced: boolean }[] = []
+  readonly gains: { disconnected: boolean }[] = []
   resume = vi.fn(async () => {
     this.state = 'running'
   })
@@ -20,7 +20,6 @@ class FakeContext {
       value: 0,
       setValueAtTime: vi.fn(set),
       exponentialRampToValueAtTime: vi.fn(),
-      cancelScheduledValues: vi.fn(),
     }
   }
 
@@ -34,12 +33,9 @@ class FakeContext {
   }
 
   createGain() {
-    const record = { disconnected: false, silenced: false }
+    const record = { disconnected: false }
     this.gains.push(record)
     const gain = this.param()
-    gain.cancelScheduledValues = vi.fn(() => {
-      record.silenced = true
-    })
     const node = this.node({ gain })
     node.disconnect = vi.fn(() => {
       record.disconnected = true
@@ -130,14 +126,24 @@ describe('createWebAudioOutput', () => {
     expect(context.state).toBe('running')
   })
 
-  it('silences and lets go of what sounds on stop', () => {
+  it('resumes a context iOS interrupted, on the next unlock, and leaves a running one alone', async () => {
+    const { context, audio } = setUp()
+    await audio.unlock()
+    context.state = 'interrupted'
+    await audio.unlock()
+    await audio.unlock()
+    expect(context.resume).toHaveBeenCalledTimes(2)
+  })
+
+  it('silences what sounds on stop, and stops its oscillators at once rather than at their end', () => {
     const { context, audio } = setUp()
     audio.play([A4, CLICK], 0)
+    context.currentTime = 0.5
     audio.stop()
-    expect(context.gains.filter((g) => g.silenced || g.disconnected).length).toBeGreaterThan(0)
-    const voices = context.gains.filter((g) => g.silenced)
-    expect(voices.every((g) => g.disconnected)).toBe(true)
-    expect(voices).toHaveLength(2)
+    // Each voice's output: the note's envelope and the click's gain.
+    expect(context.gains.filter((g) => g.disconnected)).toHaveLength(2)
+    expect(context.oscillators).toHaveLength(4)
+    expect(context.oscillators.every((o) => o.stop === 0.5)).toBe(true)
   })
 
   it('follows the keys sounding on the audio clock, frame by frame', () => {

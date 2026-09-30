@@ -14,8 +14,14 @@ const SILENT = 0.0001
 
 const frequencyOf = (note: NoteSound) => 440 * 2 ** ((note.midi - 69) / 12)
 
-/** Builds a sound's nodes and returns the gain that silences it; `ended` runs when it is over. */
-type Render<S> = (context: AudioContext, sound: S, at: number, ended: () => void) => GainNode
+/** A sound's nodes: the oscillators that make it and the gain it leaves by. */
+interface Voice {
+  readonly sources: readonly OscillatorNode[]
+  readonly output: GainNode
+}
+
+/** Builds a sound's voice; `ended` runs when it is over. */
+type Render<S> = (context: AudioContext, sound: S, at: number, ended: () => void) => Voice
 
 const playNote: Render<NoteSound> = (context, note, at, ended) => {
   const frequency = frequencyOf(note)
@@ -30,7 +36,7 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
   envelope.gain.exponentialRampToValueAtTime(peak, at + 0.008)
   envelope.gain.exponentialRampToValueAtTime(peak * 0.4, at + Math.min(0.35, note.duration * 0.5))
   envelope.gain.exponentialRampToValueAtTime(SILENT, release)
-  for (const { multiple, type, level } of PARTIALS) {
+  const sources = PARTIALS.map(({ multiple, type, level }) => {
     const oscillator = context.createOscillator()
     const gain = context.createGain()
     oscillator.type = type
@@ -40,9 +46,10 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
     oscillator.start(at)
     oscillator.stop(at + note.duration + 0.25)
     if (multiple === 1) oscillator.onended = ended
-  }
+    return oscillator
+  })
   filter.connect(envelope).connect(context.destination)
-  return envelope
+  return { sources, output: envelope }
 }
 
 const playClick: Render<ClickSound> = (context, click, at, ended) => {
@@ -56,13 +63,17 @@ const playClick: Render<ClickSound> = (context, click, at, ended) => {
   oscillator.start(at)
   oscillator.stop(at + 0.06)
   oscillator.onended = ended
-  return gain
+  return { sources: [oscillator], output: gain }
 }
 
 const browserContext = (): AudioContext | null =>
   typeof AudioContext === 'function' ? new AudioContext() : null
 
 const animationFrame = (look: () => void) => void requestAnimationFrame(look)
+
+/** Audio a browser holds back until a gesture: started suspended, or interrupted (iOS, by a call). */
+const held = (context: AudioContext) =>
+  context.state === 'suspended' || context.state === 'interrupted'
 
 /**
  * A recording's element, playing the whole file from memory. Streamed, an element asks for byte
@@ -98,7 +109,7 @@ export function createWebAudioOutput({
   createMedia?: (src: string) => Media
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
-  const voices = new Set<GainNode>()
+  const voices = new Set<Voice>()
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
@@ -108,12 +119,12 @@ export function createWebAudioOutput({
 
   const render = (sound: Sound, at: number) => {
     if (!context) return
-    const ended = () => voices.delete(gain)
-    const gain =
+    const ended = () => voices.delete(voice)
+    const voice =
       sound.kind === 'note'
         ? playNote(context, sound, at, ended)
         : playClick(context, sound, at, ended)
-    voices.add(gain)
+    voices.add(voice)
   }
 
   const now = () => context?.currentTime ?? 0
@@ -132,12 +143,12 @@ export function createWebAudioOutput({
     async unlock() {
       recordings.prime()
       const audio = openContext()
-      if (audio?.state === 'suspended') await audio.resume()
+      if (audio && held(audio)) await audio.resume()
     },
     play(sounds, at, options) {
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
-      if (audio.state === 'suspended') void audio.resume()
+      if (held(audio)) void audio.resume()
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
       return keys.add(sounds, start, options)
@@ -147,10 +158,9 @@ export function createWebAudioOutput({
       lookahead.clear()
       keys.clear()
       if (!context) return
-      for (const gain of voices) {
-        gain.gain.cancelScheduledValues(0)
-        gain.gain.setValueAtTime(0, context.currentTime)
-        gain.disconnect()
+      for (const { sources, output } of voices) {
+        output.disconnect()
+        for (const source of sources) source.stop(context.currentTime)
       }
       voices.clear()
     },

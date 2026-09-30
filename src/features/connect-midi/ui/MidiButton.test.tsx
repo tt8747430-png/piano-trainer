@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -17,6 +17,14 @@ describe('MidiButton', () => {
   it('is hidden where the browser cannot connect a keyboard', () => {
     renderButton(null)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
+  })
+
+  it('says in its name when a keyboard is connected, not by the dot’s colour alone', async () => {
+    const midi = createFakeMidi()
+    renderButton(midi)
+    expect(screen.getByRole('button', { name: 'MIDI keyboard' })).toBeInTheDocument()
+    await act(() => midi.connect())
+    expect(screen.getByRole('button', { name: 'MIDI keyboard, connected' })).toBeInTheDocument()
   })
 
   it('opens the connect control', async () => {

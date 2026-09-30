@@ -2,7 +2,9 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { createProgressStore } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
+import { createMemoryStorage } from '@/shared/lib'
 import { scaleSkill } from '@/shared/lib/music'
 
 describe('Check', () => {
@@ -14,16 +16,25 @@ describe('Check', () => {
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '6')
   })
 
+  it('asks a scale the learner already knows once', async () => {
+    const storage = createMemoryStorage()
+    const progressStore = createProgressStore({ storage })
+    for (let i = 0; i < 4; i++)
+      recordAnswer(progressStore, { skill: scaleSkill('blues'), correct: true }, new Date())
+    await renderApp('/check?of=scale:blues', { storage })
+    expect(await screen.findByRole('progressbar')).toHaveAttribute('aria-valuemax', '1')
+  })
+
   it('shows the score and each skill’s rating at the end', async () => {
     const user = userEvent.setup()
     await renderApp('/check?of=scale:blues')
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 4; i++) {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
       await user.click(screen.getByRole('button', { name: 'Check' }))
       await user.click(screen.getByRole('button', { name: 'Next' }))
     }
-    expect(await screen.findByText('0 of 6')).toBeInTheDocument()
+    expect(await screen.findByText('0 of 4')).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Done' })).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Open in Scales' })).toBeInTheDocument()
   })

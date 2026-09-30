@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { useProgressStoreApi } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
 import type { Midi } from '@/shared/lib/music'
-import { usePlay, usePlayback } from '@/shared/lib/services'
+import { usePlay, usePlayback, useServices } from '@/shared/lib/services'
 import { questionSounds } from './quiz-keys'
+import { createQuestion } from './quiz-draw'
 import {
   answerOf,
-  createQuestion,
-  INITIAL_QUIZ,
   isFinished,
   quizReducer,
+  startQuiz,
   type QuizConfig,
   type QuizEvent,
   type QuizState,
@@ -37,21 +37,20 @@ export interface Quiz {
 export function useQuiz(config: QuizConfig, options: { random?: () => number } = {}): Quiz {
   const random = options.random ?? Math.random
   const store = useProgressStoreApi()
+  const { audio } = useServices()
   const play = usePlay()
   const playback = usePlayback<'question'>()
-  const [state, setState] = useState(() =>
-    quizReducer(INITIAL_QUIZ, {
-      type: 'ask',
-      question: createQuestion(config, { index: 0, random }),
-    }),
-  )
+  const [state, setState] = useState(() => startQuiz(createQuestion(config, { index: 0, random })))
   const machine = useRef(state)
   const { question } = state
 
   // Name chord is asked by ear: a question sounds when it is shown.
   useEffect(() => {
-    if (question?.mode === 'name-chord') play(questionSounds(question))
+    if (question.mode === 'name-chord') play(questionSounds(question))
   }, [question, play])
+
+  // Leaving the quiz silences it.
+  useEffect(() => () => audio.stop(), [audio])
 
   const send = (event: QuizEvent) => {
     const before = machine.current
@@ -60,7 +59,7 @@ export function useQuiz(config: QuizConfig, options: { random?: () => number } =
     machine.current = after
     setState(after)
     const answer = before.result ? null : answerOf(after)
-    if (!answer || !after.question) return
+    if (!answer) return
     recordAnswer(store, answer, new Date())
     if (after.question.mode !== 'name-chord') play(questionSounds(after.question))
   }
@@ -85,8 +84,7 @@ export function useQuiz(config: QuizConfig, options: { random?: () => number } =
       })
     },
     hear() {
-      const current = machine.current.question
-      if (current) playback.toggle('question', questionSounds(current))
+      playback.toggle('question', questionSounds(machine.current.question))
     },
     hearing: playback.playing === 'question',
   }

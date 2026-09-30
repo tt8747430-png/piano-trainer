@@ -12,6 +12,7 @@ export {
   rate,
   ratingOf,
   skillsToCheck,
+  stillToKnow,
   type Rating,
 } from './model/mastery'
 export { withAnswer, withLearned } from './model/changes'

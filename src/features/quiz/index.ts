@@ -1,9 +1,9 @@
+export { createQuestion } from './quiz-draw'
 export {
-  INITIAL_QUIZ,
   answerOf,
-  createQuestion,
   isFinished,
   quizReducer,
+  startQuiz,
   type Question,
   type QuizConfig,
   type QuizEvent,

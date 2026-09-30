@@ -101,6 +101,21 @@ describe('usePractice: Listen', () => {
     expect(audio.played[0]?.sounds.filter((sound) => sound.kind === 'click')).toHaveLength(4)
   })
 
+  it('counts in when Play starts, never when a move starts the pass again', () => {
+    const { result } = renderPractice(TWO_BARS, { countIn: true })
+    act(() => result.current.play())
+    act(() => result.current.jumpToBar(1))
+    expect(audio.played).toHaveLength(2)
+    expect(audio.played[1]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
+  })
+
+  it('plays on when the count-in is switched while it plays', () => {
+    const { result, rerender } = renderPractice(ONE_BAR)
+    act(() => result.current.play())
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, countIn: true } })
+    expect(audio.played).toHaveLength(1)
+  })
+
   it('stops the sound and stops following', () => {
     const { result } = renderPractice(ONE_BAR)
     act(() => result.current.play())
@@ -183,6 +198,36 @@ describe('usePractice: Wait mode', () => {
     expect(result.current.state).toMatchObject({ beatGroup: 2, expected: [7] })
   })
 
+  it('plays the other hand once, however often Play is tapped meanwhile', () => {
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
+    act(() => {
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+      keyboard.press(midi(67))
+    })
+    act(() => result.current.play())
+    expect(audio.played).toHaveLength(1)
+  })
+
+  it('keeps a run of rests on the audio clock, each where the last ends', () => {
+    const { result } = renderPractice(TWO_BARS, { mode: 'wait', hands: 'lh' })
+    act(() => result.current.play())
+    act(() => keyboard.press(midi(48)))
+    wait(150)
+    wait(1000)
+    expect(result.current.state.beatGroup).toBe(2)
+    expect(audio.played.map((play) => play.at)).toEqual([0.1, 0.1, 1.1])
+  })
+
+  it('sounds nothing where the learner moves while it waits: the learner plays it', () => {
+    const { result } = renderPractice(TWO_BARS, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
+    act(() => result.current.next())
+    expect(result.current.state.beatGroup).toBe(1)
+    expect(audio.played).toHaveLength(0)
+  })
+
   it('shows a wrong key and waits', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     act(() => result.current.play())
@@ -228,7 +273,7 @@ describe('usePractice: a loop and speed training', () => {
     expect(result.current.passTempo).toBeNull()
   })
 
-  it('starts again from the cursor at the chosen tempo when the hands change mid-training', () => {
+  it('starts again from the cursor, the climb carried on, when the hands change mid-training', () => {
     const training = { ...LISTEN, tempo: 60, ownTempo: 120, speedTraining: true }
     const { result, rerender } = renderPractice(ONE_BAR, training)
     act(() => result.current.play())
@@ -242,6 +287,28 @@ describe('usePractice: a loop and speed training', () => {
     expect(notesOf(restarted?.sounds ?? [])[0]?.at).toBe(0)
     expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(12)
     clockTo(5.3 + 0.1 + 0.5)
+    expect(result.current.passTempo).toBe(66)
+  })
+
+  it('carries the climb on when the learner moves while training plays', () => {
+    const { result } = renderPractice(ONE_BAR, { tempo: 60, ownTempo: 120, speedTraining: true })
+    act(() => result.current.play())
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2)
+    expect(result.current.passTempo).toBe(66)
+    act(() => result.current.next())
+    clockTo(4.2 + 0.1 + 0.5)
+    expect(result.current.passTempo).toBe(66)
+  })
+
+  it('starts the climb over at the chosen tempo when Play starts it again', () => {
+    const { result } = renderPractice(ONE_BAR, { tempo: 60, ownTempo: 120, speedTraining: true })
+    act(() => result.current.play())
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2)
+    act(() => result.current.stop())
+    act(() => result.current.play())
+    clockTo(4.2 + 0.1 + 0.5)
     expect(result.current.passTempo).toBe(60)
   })
 
@@ -269,6 +336,28 @@ describe('usePractice: a loop and speed training', () => {
 })
 
 describe('usePractice: unmount', () => {
+  it('plays nothing more once gone, with a right answer’s pause still to run', () => {
+    const { result, unmount } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
+    act(() => {
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+      keyboard.press(midi(67))
+    })
+    expect(result.current.state.outcome).toBe('correct')
+    const played = audio.played.length
+    unmount()
+    wait(5000)
+    expect(audio.played).toHaveLength(played)
+  })
+
+  it('queues no further pass once gone mid-Listen', () => {
+    const { result, unmount } = renderPractice(ONE_BAR)
+    act(() => result.current.play())
+    unmount()
+    clockTo(0.1 + 3.6)
+    expect(audio.played).toHaveLength(1)
+  })
   it('silences the sound and stops listening to the keyboard', () => {
     const { result, unmount } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     act(() => result.current.play())
