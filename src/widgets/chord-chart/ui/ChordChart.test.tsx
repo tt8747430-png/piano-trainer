@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
@@ -10,7 +11,7 @@ function piece(id: string) {
   return found
 }
 const bz5 = piece('bz5')
-const performance = arrangePiece(bz5, ownChoice(bz5))
+const performance = arrangePiece(bz5, ownChoice(bz5), BUILT_IN_PATTERNS)
 
 describe('ChordChart', () => {
   it('makes every bar a toggle, pressed while it plays', () => {

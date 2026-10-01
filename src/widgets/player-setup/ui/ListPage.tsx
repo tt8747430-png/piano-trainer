@@ -1,5 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -22,16 +22,18 @@ export interface SheetChoiceGroup {
 
 /**
  * One of the sheet's lists, as a page of it, with the way back to the first page: it opens on the
- * choice it holds, so a keyboard user starts where they are.
+ * choice it holds, so a keyboard user starts where they are. `children` follow the list (a way out).
  */
 export function ListPage({
   label,
   groups,
   onBack,
+  children,
 }: {
   label: string
   groups: readonly SheetChoiceGroup[]
   onBack: () => void
+  children?: ReactNode
 }) {
   const { t } = useTranslation('player')
   const list = useRef<HTMLDivElement>(null)
@@ -59,13 +61,17 @@ export function ListPage({
               <span className="min-w-0 flex-1">
                 <span className="block font-semibold">{choice.label}</span>
                 {choice.note ? (
-                  <span className="block text-sm text-muted-foreground">{choice.note}</span>
+                  <>
+                    {' '}
+                    <span className="block text-sm text-muted-foreground">{choice.note}</span>
+                  </>
                 ) : null}
               </span>
             ),
           })),
         }))}
       />
+      {children}
     </div>
   )
 }

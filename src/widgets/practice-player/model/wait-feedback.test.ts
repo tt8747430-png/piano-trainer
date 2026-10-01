@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
 import {
@@ -12,7 +13,7 @@ import { waitFeedback } from './wait-feedback'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
-const performance = arrangePiece(bz5, ownChoice(bz5))
+const performance = arrangePiece(bz5, ownChoice(bz5), BUILT_IN_PATTERNS)
 // Wait mode moves on past a beat group its hand has nothing to play in, so the fixture waits where
 // the right hand first plays.
 const firstRightHand = performance.beatGroups.findIndex((group) =>

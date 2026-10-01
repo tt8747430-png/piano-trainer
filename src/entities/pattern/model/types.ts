@@ -150,6 +150,9 @@ export interface FigureEntry<F extends Figure> {
 export interface PatternEntry {
   readonly group: PatternGroup
   readonly name: LocalText
+  /** What it sounds like and what each hand does, in one line: the picker's line under its name. */
+  readonly idea: LocalText
+  /** The source's fuller explanation, where it gives one: the pattern's page. */
   readonly description?: LocalText
   readonly rh: RightFigureId
   readonly lh: LeftFigureId

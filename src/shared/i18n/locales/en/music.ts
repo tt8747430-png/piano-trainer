@@ -136,4 +136,6 @@ export const music = {
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
   },
+  // A list of patterns, the Patterns reference's and the Setup's: the learner's shelves round the groups.
+  patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
 } as const

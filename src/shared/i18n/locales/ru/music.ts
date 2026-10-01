@@ -135,4 +135,5 @@ export const music: LocaleResources['music'] = {
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
   },
+  patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
 }

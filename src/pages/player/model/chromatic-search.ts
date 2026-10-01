@@ -1,4 +1,10 @@
-import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
+import {
+  LEFT_FIGURES,
+  playableFigure,
+  playablePattern,
+  RIGHT_FIGURES,
+  type PatternBook,
+} from '@/entities/pattern'
 import {
   chordsParam,
   CHROMATIC,
@@ -29,12 +35,13 @@ export function chromaticChoice(
     ChromaticSearch,
     'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh' | 'inversion'
   >,
+  book: PatternBook,
 ): ChromaticChoice {
   return {
     root: noteFromParam(search.root),
     chords: readChords(search.chords),
     direction: search.direction,
-    pattern: playablePattern(search.pattern, CHROMATIC.pattern, CHROMATIC.fit),
+    pattern: playablePattern(book, search.pattern, CHROMATIC.pattern, CHROMATIC.fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, CHROMATIC.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, CHROMATIC.fit),
     inversion: search.inversion ?? null,

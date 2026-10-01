@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
-import { choosableChordSize, entriesInKey, entryById, isOwnKey, pieceById } from './selectors'
+import { PIECES } from '../content'
+import {
+  choosableChordSize,
+  entriesInKey,
+  entryById,
+  isOwnKey,
+  pieceById,
+  piecesPlaying,
+} from './selectors'
 
 describe('lookups', () => {
   it('find a piece by id', () => {
@@ -51,3 +59,15 @@ function piece(id: string) {
   if (!found) throw new Error(id)
   return found
 }
+
+describe('piecesPlaying', () => {
+  it('finds the pieces that play a pattern as their own or by a method their chart names', () => {
+    const ids = (pattern: Parameters<typeof piecesPlaying>[0]) =>
+      piecesPlaying(pattern).map((piece) => piece.id)
+    expect(ids('jazz')).toContain('twofive')
+    // Called to Play's songs play M1 and name the others by method code: `2` is M2.
+    expect(ids('M2')).toContain('hgta')
+    expect(PIECES.find((piece) => piece.id === 'hgta')?.pattern).toBe('M1')
+    expect(piecesPlaying('jazz')).toBe(piecesPlaying('jazz'))
+  })
+})

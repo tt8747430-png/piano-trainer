@@ -1,7 +1,8 @@
-import { playsKeyTriads, splitsTheBeat, type Figure } from '@/shared/lib/arrangement'
-import { PATTERNS } from '../content/patterns'
+import { playsKeyTriads, splitsTheBeat, type Figure, type Pattern } from '@/shared/lib/arrangement'
+import type { PatternRef } from './own'
 import type { PatternChoice } from './accompaniment'
-import type { FigureEntry, PatternId } from './types'
+import type { PatternBook } from './book'
+import type { FigureEntry } from './types'
 
 /** What a pattern or figure may need that not all music has, in the order a closed one names it. */
 export const FIGURE_NEEDS = ['melody', 'key', 'simpleTime'] as const
@@ -29,20 +30,24 @@ export const figureNeed = (figure: Figure, fit: PatternFit): FigureNeed | null =
   unmet([figure], fit)
 
 /** What a pattern needs, in either hand, that the music lacks, or null where it can play. */
-export const patternNeed = (id: PatternId, fit: PatternFit): FigureNeed | null =>
-  unmet([PATTERNS[id].pattern.rh, PATTERNS[id].pattern.lh], fit)
+export const patternNeed = (
+  { pattern }: { readonly pattern: Pattern },
+  fit: PatternFit,
+): FigureNeed | null => unmet([pattern.rh, pattern.lh], fit)
 
 /**
- * The pattern the URL names where the music can play it, else the music's own. From the chart is a
- * chart's own methods, so it plays only where it is the music's own.
+ * The pattern the URL names where the book holds it and the music can play it, else the music's own.
+ * From the chart is a chart's own methods, so it plays only where it is the music's own.
  */
 export function playablePattern<Own extends PatternChoice>(
+  book: PatternBook,
   named: PatternChoice | undefined,
   own: Own,
   fit: PatternFit,
-): Own | PatternId {
+): Own | PatternRef {
   if (named === undefined || named === 'chart') return own
-  return patternNeed(named, fit) === null ? named : own
+  const entry = book.get(named)
+  return entry && patternNeed(entry, fit) === null ? named : own
 }
 
 /** The figure the URL names for a hand where the music can play it, else null: the pattern's own. */

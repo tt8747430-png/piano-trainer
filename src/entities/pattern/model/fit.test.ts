@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURES, RIGHT_FIGURES } from '../content/figures'
+import { PATTERNS } from '../content/patterns'
+import { BUILT_IN_PATTERNS } from './book'
 import { figureNeed, patternNeed, playableFigure, playablePattern, type PatternFit } from './fit'
 import { LEFT_FIGURE_IDS, PATTERN_IDS, RIGHT_FIGURE_IDS } from './types'
 
@@ -23,23 +25,25 @@ describe('figureNeed', () => {
 
 describe('patternNeed', () => {
   it('names the first need of either hand that the music lacks', () => {
-    expect(patternNeed('r6', NOTHING)).toBe('melody')
-    expect(patternNeed('r6', { ...NOTHING, melody: true })).toBe('simpleTime')
-    expect(patternNeed('flow', { ...EVERYTHING, key: false })).toBe('key')
-    expect(patternNeed('block', NOTHING)).toBeNull()
+    expect(patternNeed(PATTERNS.r6, NOTHING)).toBe('melody')
+    expect(patternNeed(PATTERNS.r6, { ...NOTHING, melody: true })).toBe('simpleTime')
+    expect(patternNeed(PATTERNS.flow, { ...EVERYTHING, key: false })).toBe('key')
+    expect(patternNeed(PATTERNS.block, NOTHING)).toBeNull()
   })
 })
 
 describe('playablePattern', () => {
   it('takes a pattern the music can play, else the music’s own', () => {
-    expect(playablePattern('r6', 'block', EVERYTHING)).toBe('r6')
-    expect(playablePattern('r6', 'block', { ...EVERYTHING, melody: false })).toBe('block')
-    expect(playablePattern(undefined, 'ballad', EVERYTHING)).toBe('ballad')
+    expect(playablePattern(BUILT_IN_PATTERNS, 'r6', 'block', EVERYTHING)).toBe('r6')
+    expect(
+      playablePattern(BUILT_IN_PATTERNS, 'r6', 'block', { ...EVERYTHING, melody: false }),
+    ).toBe('block')
+    expect(playablePattern(BUILT_IN_PATTERNS, undefined, 'ballad', EVERYTHING)).toBe('ballad')
   })
 
   it('plays From the chart only where it is the music’s own', () => {
-    expect(playablePattern('chart', 'chart', EVERYTHING)).toBe('chart')
-    expect(playablePattern('chart', 'block', EVERYTHING)).toBe('block')
+    expect(playablePattern(BUILT_IN_PATTERNS, 'chart', 'chart', EVERYTHING)).toBe('chart')
+    expect(playablePattern(BUILT_IN_PATTERNS, 'chart', 'block', EVERYTHING)).toBe('block')
   })
 })
 
@@ -54,7 +58,7 @@ describe('playableFigure', () => {
 describe('what needs a key', () => {
   it('is the Chord flow alone: its right hand plays the key’s triads', () => {
     const keyless = { ...EVERYTHING, key: false }
-    expect(PATTERN_IDS.filter((id) => patternNeed(id, keyless))).toEqual(['flow'])
+    expect(PATTERN_IDS.filter((id) => patternNeed(PATTERNS[id], keyless))).toEqual(['flow'])
     expect(RIGHT_FIGURE_IDS.filter((id) => figureNeed(RIGHT_FIGURES[id].figure, keyless))).toEqual([
       'flow',
     ])

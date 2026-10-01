@@ -1,4 +1,5 @@
 import {
+  AudioWaveform,
   Blend,
   BookOpenText,
   ChartNoAxesColumnIncreasing,
@@ -30,6 +31,7 @@ export const LEARN_TILES = {
   keys: { icon: CircleDot, paint: 'lilac' },
   intervals: { icon: Ruler, paint: 'yellow' },
   tensions: { icon: Layers, paint: 'grass' },
+  patterns: { icon: AudioWaveform, paint: 'yellow' },
   chordFinder: { icon: ScanSearch, paint: 'sky' },
   reharmonise: { icon: Blend, paint: 'lilac' },
   passingChords: { icon: Waypoints, paint: 'yellow' },

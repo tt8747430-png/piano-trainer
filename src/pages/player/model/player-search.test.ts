@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
 import { hasMethodCodes, melodyOf, PIECES, pieceById } from '@/entities/piece'
@@ -16,12 +17,12 @@ const twofive = piece('twofive')
 
 describe('resolveChoice', () => {
   it('plays the piece as written when the URL chooses nothing', () => {
-    expect(resolveChoice(bz5, {}, false)).toEqual(ownChoice(bz5))
+    expect(resolveChoice(bz5, {}, false, BUILT_IN_PATTERNS)).toEqual(ownChoice(bz5))
   })
 
   it('takes the key, figures and melody the learner chose', () => {
     expect(
-      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true),
+      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true, BUILT_IN_PATTERNS),
     ).toMatchObject({
       tonic: note('A'),
       rh: 't1',
@@ -31,13 +32,17 @@ describe('resolveChoice', () => {
   })
 
   it('spells a key for the piece’s mode', () => {
-    expect(resolveChoice(bz5, { key: noteParam(note('A', 1)) }, false).tonic).toEqual(note('B', -1))
+    expect(
+      resolveChoice(bz5, { key: noteParam(note('A', 1)) }, false, BUILT_IN_PATTERNS).tonic,
+    ).toEqual(note('B', -1))
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {
     const plain = PIECES.find((p) => !hasMethodCodes(p))
     if (!plain) throw new Error('every piece names its methods')
-    expect(resolveChoice(plain, { pattern: 'chart' }, false).pattern).toBe(plain.pattern)
+    expect(resolveChoice(plain, { pattern: 'chart' }, false, BUILT_IN_PATTERNS).pattern).toBe(
+      plain.pattern,
+    )
   })
 
   it('plays a piece in 6/8 by its own pattern and figures when the URL names ones inside the beat', () => {
@@ -45,7 +50,9 @@ describe('resolveChoice', () => {
     const lh = LEFT_FIGURE_IDS.find((id) => splitsTheBeat(LEFT_FIGURES[id].figure))
     if (!rh || !lh) throw new Error('figures inside the beat')
     const bz2 = piece('bz2')
-    expect(resolveChoice(bz2, { pattern: 'ballad', rh, lh }, false)).toMatchObject({
+    expect(
+      resolveChoice(bz2, { pattern: 'ballad', rh, lh }, false, BUILT_IN_PATTERNS),
+    ).toMatchObject({
       pattern: ownChoice(bz2).pattern,
       rh: null,
       lh: null,
@@ -57,15 +64,21 @@ describe('resolveChoice', () => {
       (p) => melodyOf(p) === undefined && !hasMethodCodes(p) && !isCompound(p.meter),
     )
     if (!tuneless) throw new Error('a piece in simple time without a melody')
-    expect(resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, false)).toMatchObject({
+    expect(
+      resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, false, BUILT_IN_PATTERNS),
+    ).toMatchObject({
       pattern: tuneless.pattern,
       rh: null,
     })
   })
 
   it('lets only a progression that allows it change its chord size', () => {
-    expect(resolveChoice(twofive, { chordSize: 'ninths' }, false).chordSize).toBe('ninths')
-    expect(resolveChoice(bz5, { chordSize: 'ninths' }, false).chordSize).toBeNull()
+    expect(
+      resolveChoice(twofive, { chordSize: 'ninths' }, false, BUILT_IN_PATTERNS).chordSize,
+    ).toBe('ninths')
+    expect(
+      resolveChoice(bz5, { chordSize: 'ninths' }, false, BUILT_IN_PATTERNS).chordSize,
+    ).toBeNull()
   })
 })
 

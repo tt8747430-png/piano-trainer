@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { RIGHT_FIGURES } from '../content/figures'
 import { PATTERNS } from '../content/patterns'
+import { BUILT_IN_PATTERNS } from './book'
 import { followsInversion, playsChord } from './plays-chord'
 
 describe('playsChord', () => {
@@ -20,10 +21,10 @@ describe('playsChord', () => {
 
 describe('followsInversion', () => {
   it('follows the right hand’s own figure first, then the pattern’s; the chart’s plan may', () => {
-    expect(followsInversion({ pattern: 'block', rh: null })).toBe(true)
-    expect(followsInversion({ pattern: 'flow', rh: null })).toBe(false)
-    expect(followsInversion({ pattern: 'flow', rh: 'b1' })).toBe(true)
-    expect(followsInversion({ pattern: 'chart', rh: null })).toBe(true)
-    expect(followsInversion({ pattern: 'chart', rh: 'inv' })).toBe(false)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'block', rh: null })).toBe(true)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'flow', rh: null })).toBe(false)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'flow', rh: 'b1' })).toBe(true)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: null })).toBe(true)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: 'inv' })).toBe(false)
   })
 })

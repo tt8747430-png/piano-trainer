@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, note } from '@/shared/lib/music'
 import { arrangeWalk, walkChart, WALK } from './walk'
@@ -53,15 +54,18 @@ describe('walkChart', () => {
 
 describe('arrangeWalk', () => {
   it('arranges the walk with the chosen pattern, fifteen bars', () => {
-    const performance = arrangeWalk({
-      root: note('D'),
-      kind: 'dorian',
-      pattern: WALK.pattern,
-      rh: null,
-      lh: null,
-      inversion: null,
-      chordSize: 'sevenths',
-    })
+    const performance = arrangeWalk(
+      {
+        root: note('D'),
+        kind: 'dorian',
+        pattern: WALK.pattern,
+        rh: null,
+        lh: null,
+        inversion: null,
+        chordSize: 'sevenths',
+      },
+      BUILT_IN_PATTERNS,
+    )
     expect(performance.bars).toHaveLength(15)
     expect(performance.chords[0]?.symbol).toBe('Dm7')
     expect(performance.chords[3]?.symbol).toBe('G7')

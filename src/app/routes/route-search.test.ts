@@ -1,6 +1,6 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
-import { testViews } from '@/app/testing/test-views'
+import { testContext } from '@/app/testing/test-context'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
@@ -18,7 +18,7 @@ import { PROGRESSIONS_DEFAULTS } from './tools-search'
 async function searchAt(url: string) {
   const router = createAppRouter({
     history: createMemoryHistory({ initialEntries: [url] }),
-    views: testViews(),
+    ...testContext(),
   })
   await router.load()
   return router.state.matches.at(-1)?.search

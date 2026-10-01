@@ -13,7 +13,14 @@ export {
 export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
-export { choosableChordSize, entriesInKey, entryById, isOwnKey, pieceById } from './model/selectors'
+export {
+  choosableChordSize,
+  entriesInKey,
+  entryById,
+  isOwnKey,
+  pieceById,
+  piecesPlaying,
+} from './model/selectors'
 export { shelfOf } from './model/shelf'
 export { entryTitles } from './model/titles'
 export { Credits } from './ui/Credits'

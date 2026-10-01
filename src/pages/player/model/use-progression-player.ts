@@ -1,3 +1,4 @@
+import { usePatternBook } from '@/entities/pattern'
 import { useMemo } from 'react'
 import { arrangeProgression, PROGRESSION, type ProgressionChoice } from '@/features/practice'
 import { usePracticePlayer } from '@/widgets/practice-player'
@@ -17,12 +18,13 @@ export function useProgressionPlayer(
   search: ProgressionSearch,
   setSearch: (patch: Partial<ProgressionSearch>) => void,
 ): WalkingPlayerOf<ProgressionChoice, ProgressionChange> {
+  const book = usePatternBook()
   const { p, key, pattern, rh, lh, inversion, chordSize, walk } = search
   const choice = useMemo(
-    () => progressionChoice({ p, key, pattern, rh, lh, inversion, chordSize, walk }),
-    [p, key, pattern, rh, lh, inversion, chordSize, walk],
+    () => progressionChoice({ p, key, pattern, rh, lh, inversion, chordSize, walk }, book),
+    [p, key, pattern, rh, lh, inversion, chordSize, walk, book],
   )
-  const performance = useMemo(() => arrangeProgression(choice), [choice])
+  const performance = useMemo(() => arrangeProgression(choice, book), [choice, book])
   const player = usePracticePlayer(performance, search, setSearch, PROGRESSION.tempo)
   const keyName = useKeyName()
   // Walked through the keys, each key's section is named by its key; in one, the line is unnamed.

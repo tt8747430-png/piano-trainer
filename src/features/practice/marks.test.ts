@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
 import { noteName, pitchClass } from '@/shared/lib/music'
@@ -7,7 +8,7 @@ import { playerRange, practiceMarks } from './marks'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
-const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'M1' })
+const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'M1' }, BUILT_IN_PATTERNS)
 
 const BOTH = audibleHands('both')
 

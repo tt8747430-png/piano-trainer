@@ -6,6 +6,7 @@ import {
   notFound,
   type RouterHistory,
 } from '@tanstack/react-router'
+import { isOwnPatternId, isPatternRef, type PatternsStore } from '@/entities/pattern'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage } from '@/pages/not-found'
@@ -29,6 +30,7 @@ import {
   SCALES_KEPT,
   scalesSearch,
   tensionsSearch,
+  validateNewPatternSearch,
 } from './routes/learn-search'
 import {
   CHROMATIC_KEPT,
@@ -81,9 +83,13 @@ function NotFoundScreen() {
   )
 }
 
-/** What every route is handed: the screens' remembered views (ADR 0022). */
+/**
+ * What every route is handed: the screens' remembered views (ADR 0022) and the learner's patterns,
+ * which say whether a pattern's page is there (ADR 0026).
+ */
 export interface RouterContext {
   readonly views: ViewsStore
+  readonly patterns: PatternsStore
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -234,6 +240,41 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(learnScreens, 'ProgressionsPage'),
 })
 
+// Patterns: each explained, starred, hidden; the learner's own made and edited (ADR 0026).
+const patternsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/patterns',
+  component: lazyRouteComponent(learnScreens, 'PatternsPage'),
+})
+/** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
+const inBook = (ref: string, patterns: PatternsStore) =>
+  isPatternRef(ref) &&
+  (!isOwnPatternId(ref) || patterns.getState().own.some((pattern) => pattern.id === ref))
+const newPatternRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/patterns/new',
+  validateSearch: validateNewPatternSearch,
+  component: lazyRouteComponent(learnScreens, 'NewPatternPage'),
+})
+const patternRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/patterns/$patternRef',
+  beforeLoad: ({ params, context }) => {
+    if (!inBook(params.patternRef, context.patterns)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'PatternPage'),
+})
+const editPatternRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/patterns/$patternRef/edit',
+  beforeLoad: ({ params, context }) => {
+    if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
+      throw notFound()
+    }
+  },
+  component: lazyRouteComponent(learnScreens, 'EditPatternPage'),
+})
+
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/lessons/$lessonId',
@@ -337,6 +378,10 @@ const routeTree = rootRoute.addChildren([
     reharmoniseRoute,
     passingChordsRoute,
     progressionsRoute,
+    patternsRoute,
+    newPatternRoute,
+    patternRoute,
+    editPatternRoute,
     lessonRoute,
     practiceRoute,
     trainerRoute,
@@ -354,20 +399,18 @@ const routeTree = rootRoute.addChildren([
 ])
 
 /**
- * The app's router over `history` (the browser's by default), handed the screens' remembered views:
- * a remembered screen restores its view on entering, and saves it each time it changes.
+ * The app's router over `history` (the browser's by default), handed its context: a remembered
+ * screen restores its view on entering, and saves it each time it changes.
  */
 export function createAppRouter({
   history,
   views,
-}: {
-  history?: RouterHistory
-  views: ViewsStore
-}) {
+  patterns,
+}: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views },
+    context: { views, patterns },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

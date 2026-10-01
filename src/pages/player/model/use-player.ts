@@ -1,3 +1,4 @@
+import { usePatternBook } from '@/entities/pattern'
 import { useEffect, useMemo } from 'react'
 import { isOwnKey, pieceKey, usePieceHeadings, type Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -19,12 +20,13 @@ export function usePlayer(
 ): WalkingPlayerOf<PracticeChoice, SetupChange> {
   const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
+  const book = usePatternBook()
   const { key, pattern, rh, lh, inversion, chordSize, walk } = search
   const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize, walk }, melody),
-    [piece, key, pattern, rh, lh, inversion, chordSize, walk, melody],
+    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize, walk }, melody, book),
+    [piece, key, pattern, rh, lh, inversion, chordSize, walk, melody, book],
   )
-  const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
+  const performance = useMemo(() => arrangePiece(piece, choice, book), [piece, choice, book])
   const ownHeadings = usePieceHeadings(piece)
   const keyName = useKeyName()
   const { minor } = pieceKey(piece)

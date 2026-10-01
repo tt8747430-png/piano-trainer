@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { WALK } from '@/features/practice'
 import { note, noteParam } from '@/shared/lib/music'
@@ -7,7 +8,7 @@ const search = { root: noteParam(note('D')), kind: 'dorian' } as const
 
 describe('walkChoice', () => {
   it('takes the walk’s own pattern and chord size where the URL chooses none', () => {
-    expect(walkChoice(search)).toEqual({
+    expect(walkChoice(search, BUILT_IN_PATTERNS)).toEqual({
       root: note('D'),
       kind: 'dorian',
       pattern: WALK.pattern,
@@ -19,11 +20,13 @@ describe('walkChoice', () => {
   })
 
   it('reads From the chart as the walk’s own pattern: its chart names no methods', () => {
-    expect(walkChoice({ ...search, pattern: 'chart' }).pattern).toBe(WALK.pattern)
+    expect(walkChoice({ ...search, pattern: 'chart' }, BUILT_IN_PATTERNS).pattern).toBe(
+      WALK.pattern,
+    )
   })
 
   it('reads a pattern or figure that plays the tune as its own: a walk has no tune', () => {
-    expect(walkChoice({ ...search, pattern: 'r6', rh: 'mel' })).toMatchObject({
+    expect(walkChoice({ ...search, pattern: 'r6', rh: 'mel' }, BUILT_IN_PATTERNS)).toMatchObject({
       pattern: WALK.pattern,
       rh: null,
     })

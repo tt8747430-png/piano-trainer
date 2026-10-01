@@ -1,7 +1,9 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
+import { createMemoryStorage } from '@/shared/lib'
 
 describe('A progression in the Player', () => {
   it('plays numerals in a key as sheet music, titled by them', async () => {
@@ -80,5 +82,64 @@ describe('A progression in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     expect(router.state.location.pathname).toBe('/learn/progressions')
     expect(router.state.location.search).toMatchObject({ p: 'ii-V-I', key: 'Bb' })
+  })
+
+  describe('its pattern picker', () => {
+    const saved = () => {
+      const storage = createMemoryStorage()
+      storage.setItem(
+        PATTERNS_STORAGE_KEY,
+        JSON.stringify({
+          state: {
+            favourites: ['rock'],
+            hidden: ['ballad', 'funk'],
+            own: [{ id: 'my-1', name: 'Sunday', rh: 'jaz', lh: 'walk' }],
+            nextOwn: 2,
+          },
+          version: 1,
+        }),
+      )
+      return storage
+    }
+    const openPicker = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(await screen.findByRole('button', { name: 'Setup' }))
+      await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+      return screen.getByRole('listbox', { name: 'Pattern' })
+    }
+
+    it('offers favourites and the learner’s own first, each with its idea, and plays their own', async () => {
+      const user = userEvent.setup()
+      const { router } = await renderApp('/play/progression?p=ii-V-I', { storage: saved() })
+      const list = await openPicker(user)
+      const [first, second] = within(list).getAllByRole('group')
+      expect(first).toBe(within(list).getByRole('group', { name: 'Favourites' }))
+      expect(second).toBe(within(list).getByRole('group', { name: 'Your patterns' }))
+      if (!first) throw new Error('the favourites')
+      expect(
+        within(first).getByRole('option', { name: /^Rock Driving 8th-note chords/ }),
+      ).toBeInTheDocument()
+      await user.click(within(list).getByRole('option', { name: /^Sunday/ }))
+      expect(router.state.location.search).toMatchObject({ pattern: 'my-1' })
+      expect(screen.getByRole('button', { name: /^Pattern.*Sunday/ })).toBeInTheDocument()
+    })
+
+    it('leaves the hidden out, but for the one playing', async () => {
+      const user = userEvent.setup()
+      await renderApp('/play/progression?p=ii-V-I&pattern=ballad', { storage: saved() })
+      const list = await openPicker(user)
+      expect(within(list).getByRole('option', { name: /^Ballad arpeggio/ })).toBeInTheDocument()
+      expect(within(list).queryByRole('option', { name: /^Funk/ })).toBeNull()
+      expect(screen.getByRole('link', { name: /^Patterns in Learn/ })).toHaveAttribute(
+        'href',
+        '/learn/patterns',
+      )
+    })
+
+    it('plays its own pattern for one of the learner’s since deleted', async () => {
+      const user = userEvent.setup()
+      await renderApp('/play/progression?p=ii-V-I&pattern=my-7', { storage: saved() })
+      await user.click(await screen.findByRole('button', { name: 'Setup' }))
+      expect(screen.getByRole('button', { name: /^Pattern.*Whole notes/ })).toBeInTheDocument()
+    })
   })
 })

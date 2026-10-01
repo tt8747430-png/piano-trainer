@@ -1,4 +1,5 @@
 import { LESSON_CATEGORIES, type LessonCategory } from '@/entities/lesson'
+import { isPatternRef, type PatternRef } from '@/entities/pattern'
 import { isStepId } from '@/entities/path'
 import type { LearnFilter } from '@/pages/learn'
 import { isOneOf, partsParams, readAlterations, readNote, valueOr, wholeIn } from '@/shared/lib'
@@ -37,7 +38,15 @@ import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
 import type { ScaleView } from '@/widgets/scale-explorer'
 import type { TensionView } from '@/widgets/tension-explorer'
-import { C_MAJOR_PARAM, isHands, isLevel, isScaleKind, routeSearch, type Raw } from './read-search'
+import {
+  C_MAJOR_PARAM,
+  isHands,
+  isLevel,
+  isScaleKind,
+  routeSearch,
+  type Input,
+  type Raw,
+} from './read-search'
 
 // Learn: its lessons' filter, and the references.
 
@@ -199,3 +208,12 @@ export function readTensionsSearch(raw: Raw): TensionView {
   }
 }
 export const tensionsSearch = routeSearch(readTensionsSearch, TENSIONS_DEFAULTS)
+
+/** A new pattern's search: the pattern it starts from (Make your own from it), if any. */
+export interface NewPatternSearch {
+  readonly from?: PatternRef
+}
+export const validateNewPatternSearch = (input: Input<NewPatternSearch>): NewPatternSearch => {
+  const raw: Raw = input
+  return { from: isPatternRef(raw.from) ? raw.from : undefined }
+}

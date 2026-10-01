@@ -1,5 +1,6 @@
 import {
   accompanimentOptions,
+  type PatternBook,
   type Accompaniment,
   type PatternFit,
   type PatternId,
@@ -50,7 +51,7 @@ export function walkChart(root: SpelledNote, kind: ScaleKind, chordSize: ChordSi
 }
 
 /** The walk as the Player plays it: the learner's pattern, hands' figures and chord size. */
-export function arrangeWalk(choice: WalkChoice): Performance {
+export function arrangeWalk(choice: WalkChoice, book: PatternBook): Performance {
   const chart = walkChart(choice.root, choice.kind, choice.chordSize)
-  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(choice) })
+  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(book, choice) })
 }

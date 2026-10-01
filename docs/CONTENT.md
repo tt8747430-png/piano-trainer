@@ -198,8 +198,11 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 - **A figure** (one hand's part): its id in `RIGHT_FIGURE_IDS` or `LEFT_FIGURE_IDS`, then
   `{ name, figure: eventFigure('…') }`.
-- **A pattern:** its id in `PATTERN_IDS`, then `{ group, name, description?, rh, lh }` naming two figures. A right
-  hand that plays the tune makes it a melody pattern, which falls back to r4 on a piece with no melody.
+- **A pattern:** its id in `PATTERN_IDS`, then `{ group, name, idea, description?, rh, lh }` naming two figures.
+  `idea` is one line in both languages, what it sounds like and what each hand does: the picker's line under its
+  name. `description` is the source's fuller explanation, shown on the pattern's page. A right hand that plays the
+  tune makes it a melody pattern, which falls back to r4 on a piece with no melody. The learner's own patterns are
+  saved state, not content (ADR 0026).
 - **A method code:** its code in `METHOD_CODES`, then `{ pattern, label }`.
 
 ### The figure notation

@@ -12,6 +12,7 @@ const REFERENCES = [
   { to: '/learn/keys', title: 'keys.title', tile: 'keys' },
   { to: '/learn/intervals', title: 'intervals.title', tile: 'intervals' },
   { to: '/learn/tensions', title: 'tensions.title', tile: 'tensions' },
+  { to: '/learn/patterns', title: 'patterns.title', tile: 'patterns' },
 ] as const
 const TOOLS = [
   { to: '/learn/chord-finder', title: 'finder.title', tile: 'chordFinder' },

@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import type { Chart } from '@/shared/lib/arrangement'
 import { CHORD_QUALITIES, chordSymbol, note, PITCH_CLASSES, rootSpelling } from '@/shared/lib/music'
@@ -86,15 +87,18 @@ describe('arrangeChromatic', () => {
     'arranges every chord from every root going %s, every note on the piano',
     (direction) => {
       for (const pc of PITCH_CLASSES) {
-        const performance = arrangeChromatic({
-          root: rootSpelling(pc, false),
-          chords: EVERY_CHORD,
-          direction,
-          pattern: CHROMATIC.pattern,
-          rh: null,
-          lh: null,
-          inversion: null,
-        })
+        const performance = arrangeChromatic(
+          {
+            root: rootSpelling(pc, false),
+            chords: EVERY_CHORD,
+            direction,
+            pattern: CHROMATIC.pattern,
+            rh: null,
+            lh: null,
+            inversion: null,
+          },
+          BUILT_IN_PATTERNS,
+        )
         expect(performance.bars).toHaveLength(
           (direction === 'both' ? 25 : 13) * CHORD_QUALITIES.length,
         )

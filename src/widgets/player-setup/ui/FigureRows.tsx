@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { LEFT_FIGURES, PATTERNS, RIGHT_FIGURES } from '@/entities/pattern'
+import { LEFT_FIGURES, RIGHT_FIGURES, usePatternBook } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { InversionField } from './InversionField'
 import { useSetup, type SetupPage } from './setup-context'
@@ -30,6 +30,7 @@ export function FigureRows() {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const { figures } = useSetup()
+  const book = usePatternBook()
   return (
     <>
       <div>
@@ -39,7 +40,7 @@ export function FigureRows() {
           value={
             figures.pattern === 'chart'
               ? t('fromChart')
-              : localText(PATTERNS[figures.pattern].name, locale)
+              : localText(book.require(figures.pattern).name, locale)
           }
         />
         <SetupRow

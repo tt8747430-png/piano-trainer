@@ -10,6 +10,7 @@ export {
   type FigureEntry,
   type LeftFigureId,
   type MethodCode,
+  type PatternGroup,
   type PatternId,
   type RightFigureId,
 } from './model/types'
@@ -27,8 +28,38 @@ export {
   type FigureNeed,
   type PatternFit,
 } from './model/fit'
+export {
+  OWN_NAME_MAX,
+  isOwnPatternId,
+  isPatternRef,
+  ownName,
+  ownPatternId,
+  type OwnPattern,
+  type OwnPatternId,
+  type PatternRef,
+} from './model/own'
+export { BUILT_IN_PATTERNS, patternBook, type BookPattern, type PatternBook } from './model/book'
+export {
+  PATTERNS_STORAGE_KEY,
+  createPatternsStore,
+  type PatternsState,
+  type PatternsStore,
+} from './model/store'
+export {
+  PatternsStoreProvider,
+  usePatternBook,
+  usePatterns,
+  usePatternsStoreApi,
+} from './model/context'
+export { pickerShelves, referenceShelves, type PatternShelf } from './model/shelves'
 export { followsInversion, playsChord } from './model/plays-chord'
-export { patternsIn } from './model/selectors'
+export {
+  patternsIn,
+  selectFavourites,
+  selectHidden,
+  selectIsFavourite,
+  selectIsHidden,
+} from './model/selectors'
 export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
 export { PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'

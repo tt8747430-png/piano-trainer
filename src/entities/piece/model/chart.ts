@@ -1,4 +1,4 @@
-import type { PatternFit } from '@/entities/pattern'
+import { isMethodCode, METHODS, type PatternFit, type PatternId } from '@/entities/pattern'
 import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
 import { isCompound, type ChordSize } from '@/shared/lib/music'
 import { parseChart } from './parse-chart'
@@ -33,3 +33,14 @@ export const pieceFit = (piece: Piece): PatternFit => ({
   key: true,
   simpleTime: !isCompound(piece.meter),
 })
+
+/** The built-in patterns a piece plays: its own, and those its chart's methods name. */
+export function patternsOfPiece(piece: Piece): ReadonlySet<PatternId> {
+  const methods =
+    piece.kind === 'progression'
+      ? []
+      : chordsOf(parseChart(piece)).flatMap((chord) =>
+          isMethodCode(chord.method) ? [METHODS[chord.method].pattern] : [],
+        )
+  return new Set([piece.pattern, ...methods])
+}

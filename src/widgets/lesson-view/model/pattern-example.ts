@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { PatternId } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
 
@@ -17,7 +18,7 @@ export interface PatternOpening {
  * through is left out).
  */
 export function patternOpening(piece: Piece, pattern: PatternId): PatternOpening {
-  const performance = arrangePiece(piece, { ...ownChoice(piece), pattern })
+  const performance = arrangePiece(piece, { ...ownChoice(piece), pattern }, BUILT_IN_PATTERNS)
   const secondLine = performance.bars.find((bar) => bar.section > 0 || bar.line > 0)
   const { sounds } = schedule(performance, {
     tempo: piece.tempo,

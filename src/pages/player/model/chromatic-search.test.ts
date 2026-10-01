@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { CHROMATIC } from '@/features/practice'
 import { note, noteParam } from '@/shared/lib/music'
@@ -7,7 +8,7 @@ const search = { chords: 'm9.n9', root: noteParam(note('G')), direction: 'both' 
 
 describe('chromaticChoice', () => {
   it('reads the chords, and takes the walk’s own pattern where the URL chooses none', () => {
-    expect(chromaticChoice(search)).toEqual({
+    expect(chromaticChoice(search, BUILT_IN_PATTERNS)).toEqual({
       root: note('G'),
       chords: ['m9', 'n9'],
       direction: 'both',
@@ -19,12 +20,18 @@ describe('chromaticChoice', () => {
   })
 
   it('reads From the chart, and anything that needs a key, as the walk’s own', () => {
-    expect(chromaticChoice({ ...search, pattern: 'chart' }).pattern).toBe(CHROMATIC.pattern)
-    expect(chromaticChoice({ ...search, pattern: 'flow', rh: 'flow' })).toMatchObject({
+    expect(chromaticChoice({ ...search, pattern: 'chart' }, BUILT_IN_PATTERNS).pattern).toBe(
+      CHROMATIC.pattern,
+    )
+    expect(
+      chromaticChoice({ ...search, pattern: 'flow', rh: 'flow' }, BUILT_IN_PATTERNS),
+    ).toMatchObject({
       pattern: CHROMATIC.pattern,
       rh: null,
     })
-    expect(chromaticChoice({ ...search, pattern: 'ballad', rh: 't1' })).toMatchObject({
+    expect(
+      chromaticChoice({ ...search, pattern: 'ballad', rh: 't1' }, BUILT_IN_PATTERNS),
+    ).toMatchObject({
       pattern: 'ballad',
       rh: 't1',
     })

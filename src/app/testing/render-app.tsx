@@ -1,5 +1,6 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
+import { createPatternsStore } from '@/entities/pattern'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
 import { createViewsStore } from '@/entities/views'
@@ -27,10 +28,12 @@ export async function renderApp(
 ) {
   const settingsStore = createSettingsStore({ storage, languages: [locale], finePointer: false })
   const progressStore = createProgressStore({ storage })
+  const patternsStore = createPatternsStore({ storage })
   const viewsStore = createViewsStore({ storage })
   const router = createAppRouter({
     history: createMemoryHistory({ initialEntries: [path] }),
     views: viewsStore,
+    patterns: patternsStore,
   })
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   await loadScoreView()
@@ -40,9 +43,10 @@ export async function renderApp(
     <App
       settingsStore={settingsStore}
       progressStore={progressStore}
+      patternsStore={patternsStore}
       services={{ audio, midi: webMidi ? midi : null }}
       router={router}
     />,
   )
-  return { ...view, router, settingsStore, progressStore, viewsStore, audio, midi }
+  return { ...view, router, settingsStore, progressStore, patternsStore, viewsStore, audio, midi }
 }

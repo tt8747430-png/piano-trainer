@@ -3,6 +3,7 @@ import {
   playableFigure,
   playablePattern,
   RIGHT_FIGURES,
+  type PatternBook,
   type PatternFit,
 } from '@/entities/pattern'
 import { choosableChordSize, pieceFit, pieceKey, type Piece } from '@/entities/piece'
@@ -26,14 +27,19 @@ export type PlayerSearch = PracticeView & SetupParams
  * pattern or figure the piece cannot play (one that plays a tune it lacks, or inside the beat of
  * 6/8 or 12/8).
  */
-export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean): PracticeChoice {
+export function resolveChoice(
+  piece: Piece,
+  search: SetupParams,
+  melody: boolean,
+  book: PatternBook,
+): PracticeChoice {
   const own = ownChoice(piece)
   const walk = walksKeys(piece) ? (search.walk ?? null) : null
   const fit = choiceFit(piece, walk)
   const { minor } = pieceKey(piece)
   return {
     tonic: search.key ? tonicSpelling(pitchClassOf(noteFromParam(search.key)), minor) : own.tonic,
-    pattern: playablePattern(search.pattern, own.pattern, fit),
+    pattern: playablePattern(book, search.pattern, own.pattern, fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
     inversion: search.inversion ?? null,

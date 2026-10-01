@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithSettings } from '@/app/testing/render-with-settings'
+import { renderRouted } from '@/app/testing/render-routed'
 import { PATTERNS, type PatternFit } from '@/entities/pattern'
 import { FigureRows } from './FigureRows'
 import { MelodySwitch } from './MelodySwitch'
@@ -13,7 +13,7 @@ const SONG: PatternFit = { methodCodes: false, melody: false, key: true, simpleT
 async function renderSetup(fit: Partial<PatternFit> = {}) {
   const user = userEvent.setup()
   const onFigures = vi.fn()
-  const view = renderWithSettings(
+  const view = await renderRouted(
     <PlayerSetup
       figures={{ pattern: 'block', rh: null, lh: null, inversion: null }}
       fit={{ ...SONG, ...fit }}

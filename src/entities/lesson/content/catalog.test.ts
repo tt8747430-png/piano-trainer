@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { patternNeed, type PatternId } from '@/entities/pattern'
+import { PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import { note, parseChordSymbol, parseNoteName } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
@@ -43,7 +43,9 @@ const texts = (lesson: Lesson) => [
 function pieceProblems(pieceId: string, pattern: PatternId | undefined): string[] {
   const piece = pieceById(pieceId)
   if (!piece) return [pieceId]
-  return pattern && patternNeed(pattern, pieceFit(piece)) ? [`${pattern} over ${pieceId}`] : []
+  return pattern && patternNeed(PATTERNS[pattern], pieceFit(piece))
+    ? [`${pattern} over ${pieceId}`]
+    : []
 }
 
 /** What in a block the kernel cannot read, or a link that leads nowhere. */

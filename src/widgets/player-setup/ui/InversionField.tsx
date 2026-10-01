@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { followsInversion } from '@/entities/pattern'
+import { followsInversion, usePatternBook } from '@/entities/pattern'
 import { INVERSIONS, type Inversion } from '@/shared/lib/music'
 import { INVERSION_NAMES, Segmented } from '@/shared/ui'
 import { useSetup } from './setup-context'
@@ -14,7 +14,7 @@ const NEAREST = 'nearest'
 export function InversionField() {
   const { t } = useTranslation(['player', 'music'])
   const { figures, onFigures } = useSetup()
-  const follows = followsInversion(figures)
+  const follows = followsInversion(usePatternBook(), figures)
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm text-muted-foreground">{t('music:inversion.label')}</span>

@@ -1,6 +1,6 @@
 import {
   isLeftFigureId,
-  isPatternId,
+  isPatternRef,
   isRightFigureId,
   type PatternChoice,
 } from '@/entities/pattern'
@@ -58,7 +58,7 @@ import {
 // The Player, over whatever it plays: a piece, a walk of a scale's chords, the chromatic walk, a progression.
 
 const isPlayerPattern = (value: unknown): value is PatternChoice =>
-  value === 'chart' || isPatternId(value)
+  value === 'chart' || isPatternRef(value)
 const isMode = isOneOf(PRACTICE_MODES)
 
 // A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the default.

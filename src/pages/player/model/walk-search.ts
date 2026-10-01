@@ -1,4 +1,10 @@
-import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
+import {
+  LEFT_FIGURES,
+  playableFigure,
+  playablePattern,
+  RIGHT_FIGURES,
+  type PatternBook,
+} from '@/entities/pattern'
 import { WALK, type WalkChoice } from '@/features/practice'
 import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
@@ -18,11 +24,12 @@ export type WalkChange = FigureChange &
 /** The walk's URL read: what it leaves out is the walk's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function walkChoice(
   search: Pick<WalkSearch, 'root' | 'kind' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize'>,
+  book: PatternBook,
 ): WalkChoice {
   return {
     root: noteFromParam(search.root),
     kind: search.kind,
-    pattern: playablePattern(search.pattern, WALK.pattern, WALK.fit),
+    pattern: playablePattern(book, search.pattern, WALK.pattern, WALK.fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, WALK.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, WALK.fit),
     inversion: search.inversion ?? null,

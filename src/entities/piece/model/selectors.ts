@@ -1,5 +1,7 @@
 import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
-import { COLLECTIONS } from '../content'
+import type { PatternId } from '@/entities/pattern'
+import { COLLECTIONS, PIECES } from '../content'
+import { patternsOfPiece } from './chart'
 import { isPiece, pieceKey, type Entry, type Piece } from './types'
 
 const ENTRY_BY_ID = new Map(
@@ -31,4 +33,15 @@ export function entriesInKey(key: Key): Entry[] {
       entry.kind !== 'progression' && own.minor === key.minor && pitchClassOf(own.tonic) === tonic
     )
   })
+}
+
+const PLAYING = new Map<PatternId, readonly Piece[]>()
+
+/** The songs, studies and progressions that play a built-in pattern, in catalogue order. */
+export function piecesPlaying(pattern: PatternId): readonly Piece[] {
+  const known = PLAYING.get(pattern)
+  if (known) return known
+  const pieces = PIECES.filter((piece) => patternsOfPiece(piece).has(pattern))
+  PLAYING.set(pattern, pieces)
+  return pieces
 }

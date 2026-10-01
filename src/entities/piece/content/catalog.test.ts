@@ -218,7 +218,7 @@ describe('the catalog', () => {
 
   it('gives every piece a pattern it can play: on the beat in 6/8 or 12/8, a tune where it plays one', () => {
     for (const piece of PIECES)
-      expect(patternNeed(piece.pattern, pieceFit(piece)), piece.id).toBeNull()
+      expect(patternNeed(PATTERNS[piece.pattern], pieceFit(piece)), piece.id).toBeNull()
   })
 
   it('keeps every recording small enough to be precached, so it plays offline (ADR 0016)', () => {

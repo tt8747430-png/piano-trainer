@@ -566,8 +566,9 @@ hands). Never a row of chips or a wall of tiles.
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
 - **Row link** (a list row in a grouped card, 64px): a 48px tile in its paint's wash with a 20px icon in its deep
-  shade, the title in Onest 600 17px, an optional detail line, and a chevron (the disclosure indicator): Learn's and
-  Practice's rows. A titled group of them is a card parted by hairlines.
+  shade, the title in Onest 600 17px, an optional detail of up to two lines, and a chevron (the disclosure
+  indicator): Learn's and Practice's rows. A titled group of them is a card parted by hairlines. A list of one kind
+  (the Patterns reference) goes without tiles: every row would wear the same one.
 - **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice.
 - **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.
 - **Interval card** (card paper, 14px, the 1px soft line, 16px inset): the interval's name (Literata 600 20px) with
@@ -594,6 +595,16 @@ hands). Never a row of chips or a wall of tiles.
   Progressions sets its Key pop-up and Chord size, the field for numerals or chords, the row of chord buttons (the
   symbol over its numeral), Play (honey) and Practise in the Player (soft) on the left, and the library by style as
   titled groups of rows on the right (under it on a phone).
+- **Patterns** (a Learn reference): Favourites, Your patterns, the four groups and Hidden as titled groups of row
+  links without tiles, each a name over its idea line; New pattern is the bar's round +. **A pattern's page:** the
+  bar's star (pressed: a sand fill and a filled star) toggles a favourite; the idea in 20px, each hand's figure as two
+  facts, a card with the pattern over a bar of C major on the grand staff (or over the first line of a song with a
+  tune), "Over …" in muted small text and Play (honey, the page's one action), the source's description in body
+  text, then outline actions: Practise in the Player, Make your own from it and Hide from the Player (a built-in), or
+  Edit and Delete (crimson line; asks first) for the learner's own; Used in lists the music that plays it. **The
+  editor:** Name (a 48px field), Right hand and Left hand pop-ups, the same card with Play soft, then Save (honey) and
+  Cancel. **The Setup's Pattern page** lists From the chart, Favourites, Your patterns and the groups (the hidden left
+  out but for the one playing), each a name over its idea line, and at its foot a row link to Patterns in Learn.
 - **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
   so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
   top. The Available tensions reference sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a

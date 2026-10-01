@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PATTERN_IDS, PATTERNS } from '@/entities/pattern'
+import { PATTERN_IDS, PATTERNS, BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { melodyOf, PIECES } from '@/entities/piece'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
 import {
@@ -54,15 +54,18 @@ describe('notation of the content', () => {
     if (!first) throw new Error('the table is empty')
     expectWritten(
       notate(
-        arrangeChromatic({
-          root: note('C'),
-          chords: [first, ...rest],
-          direction: 'both',
-          pattern: CHROMATIC.pattern,
-          rh: null,
-          lh: null,
-          inversion: null,
-        }),
+        arrangeChromatic(
+          {
+            root: note('C'),
+            chords: [first, ...rest],
+            direction: 'both',
+            pattern: CHROMATIC.pattern,
+            rh: null,
+            lh: null,
+            inversion: null,
+          },
+          BUILT_IN_PATTERNS,
+        ),
       ),
     )
   })
@@ -70,9 +73,11 @@ describe('notation of the content', () => {
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
     'writes %s as it plays',
     (_id, piece) => {
-      expectWritten(notate(arrangePiece(piece, ownChoice(piece))))
+      expectWritten(notate(arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS)))
       if (melodyOf(piece))
-        expectWritten(notate(arrangePiece(piece, { ...ownChoice(piece), melody: true })))
+        expectWritten(
+          notate(arrangePiece(piece, { ...ownChoice(piece), melody: true }, BUILT_IN_PATTERNS)),
+        )
     },
   )
 
@@ -102,7 +107,9 @@ describe('engraving of the content', () => {
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
     'engraves %s with every finger on the page',
     (_id, piece) => {
-      expect(fingersOffThePage(arrangePiece(piece, ownChoice(piece)))).toEqual([])
+      expect(fingersOffThePage(arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS))).toEqual(
+        [],
+      )
     },
   )
 
@@ -111,15 +118,18 @@ describe('engraving of the content', () => {
     if (!first) throw new Error('the table is empty')
     expect(
       fingersOffThePage(
-        arrangeChromatic({
-          root: note('C'),
-          chords: [first, ...rest],
-          direction: 'up',
-          pattern: CHROMATIC.pattern,
-          rh: null,
-          lh: null,
-          inversion: null,
-        }),
+        arrangeChromatic(
+          {
+            root: note('C'),
+            chords: [first, ...rest],
+            direction: 'up',
+            pattern: CHROMATIC.pattern,
+            rh: null,
+            lh: null,
+            inversion: null,
+          },
+          BUILT_IN_PATTERNS,
+        ),
       ),
     ).toEqual([])
   })

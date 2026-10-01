@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useMemo } from 'react'
@@ -23,7 +24,10 @@ import { OPEN_PLAINLY } from '@/shared/lib'
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
   const playback = usePlayback<number>()
-  const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
+  const performance = useMemo(
+    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
+    [piece],
+  )
   const headings = usePieceHeadings(piece)
   const toggleBar = (bar: number) =>
     playback.toggle(bar, () =>

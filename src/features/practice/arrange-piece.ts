@@ -1,4 +1,9 @@
-import { accompanimentOptions, METHOD_PATTERNS, type PatternChoice } from '@/entities/pattern'
+import {
+  accompanimentOptions,
+  METHOD_PATTERNS,
+  type PatternBook,
+  type PatternChoice,
+} from '@/entities/pattern'
 import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import {
   arrange,
@@ -29,23 +34,23 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
  * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody;
  * a progression walked through the keys from the learner's key, written in C, without a tune.
  */
-export function arrangePiece(piece: Piece, choice: PracticeChoice): Performance {
+export function arrangePiece(piece: Piece, choice: PracticeChoice, book: PatternBook): Performance {
   const chart = chartOf(piece, choice.chordSize ?? undefined)
   if (choice.walk) {
     const keys = walkKeys({ tonic: choice.tonic, minor: pieceKey(piece).minor }, choice.walk)
     const walked = chartInKeys(chart, keys)
-    return arrange(walked, { ...arrangeOptions(piece, choice), tonic: walked.key.tonic })
+    return arrange(walked, { ...arrangeOptions(piece, choice, book), tonic: walked.key.tonic })
   }
-  return arrange(chart, arrangeOptions(piece, choice))
+  return arrange(chart, arrangeOptions(piece, choice, book))
 }
 
 /** The learner's choices as `arrange` takes them. */
-function arrangeOptions(piece: Piece, choice: PracticeChoice): ArrangeOptions {
+function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook): ArrangeOptions {
   const melody = choice.walk ? undefined : melodyOf(piece)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
-    ...accompanimentOptions({
+    ...accompanimentOptions(book, {
       pattern: fromChart ? piece.pattern : choice.pattern,
       rh: choice.rh,
       lh: choice.lh,

@@ -3,6 +3,7 @@ import {
   playableFigure,
   playablePattern,
   RIGHT_FIGURES,
+  type PatternBook,
   type PatternFit,
 } from '@/entities/pattern'
 import { PROGRESSION, walkingFit, type ProgressionChoice } from '@/features/practice'
@@ -32,13 +33,14 @@ export function progressionChoice(
     ProgressionSearch,
     'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize' | 'walk'
   >,
+  book: PatternBook,
 ): ProgressionChoice {
   const walk = search.walk ?? null
   const fit = progressionFit(walk)
   return {
     numerals: parseNumerals(search.p) ?? [],
     key: keyFromParam(search.key),
-    pattern: playablePattern(search.pattern, PROGRESSION.pattern, fit),
+    pattern: playablePattern(book, search.pattern, PROGRESSION.pattern, fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
     inversion: search.inversion ?? null,

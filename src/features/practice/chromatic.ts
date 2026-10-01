@@ -1,4 +1,4 @@
-import { accompanimentOptions } from '@/entities/pattern'
+import { accompanimentOptions, type PatternBook } from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import {
@@ -39,7 +39,7 @@ export function chromaticChart(
 }
 
 /** The chromatic walk as the Player plays it: the learner's pattern and hands' figures. */
-export function arrangeChromatic(choice: ChromaticChoice): Performance {
+export function arrangeChromatic(choice: ChromaticChoice, book: PatternBook): Performance {
   const chart = chromaticChart(choice.root, choice.chords, choice.direction)
-  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(choice) })
+  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(book, choice) })
 }

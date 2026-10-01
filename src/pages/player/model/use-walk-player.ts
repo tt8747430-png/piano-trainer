@@ -1,3 +1,4 @@
+import { usePatternBook } from '@/entities/pattern'
 import { useMemo } from 'react'
 import { arrangeWalk, WALK, type WalkChoice } from '@/features/practice'
 import { usePracticePlayer } from '@/widgets/practice-player'
@@ -9,12 +10,13 @@ export function useWalkPlayer(
   search: WalkSearch,
   setSearch: (patch: Partial<WalkSearch>) => void,
 ): PlayerOf<WalkChoice, WalkChange> {
+  const book = usePatternBook()
   const { root, kind, pattern, rh, lh, inversion, chordSize } = search
   const choice = useMemo(
-    () => walkChoice({ root, kind, pattern, rh, lh, inversion, chordSize }),
-    [root, kind, pattern, rh, lh, inversion, chordSize],
+    () => walkChoice({ root, kind, pattern, rh, lh, inversion, chordSize }, book),
+    [root, kind, pattern, rh, lh, inversion, chordSize, book],
   )
-  const performance = useMemo(() => arrangeWalk(choice), [choice])
+  const performance = useMemo(() => arrangeWalk(choice, book), [choice, book])
   const player = usePracticePlayer(performance, search, setSearch, WALK.tempo)
   return { choice, performance, player, changeSetup: (change) => setSearch(walkPatch(change)) }
 }

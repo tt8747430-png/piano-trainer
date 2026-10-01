@@ -1,4 +1,4 @@
-import { accompanimentOptions } from '@/entities/pattern'
+import { accompanimentOptions, type PatternBook } from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, chartInKeys, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { numeralChord, walkKeys, type ChordSize, type Key, type Numeral } from '@/shared/lib/music'
@@ -18,8 +18,8 @@ export function progressionChart(
  * A progression as the Player plays it: the learner's pattern, hands' figures and chord size, in its
  * key or walked through the keys.
  */
-export function arrangeProgression(choice: ProgressionChoice): Performance {
+export function arrangeProgression(choice: ProgressionChoice, book: PatternBook): Performance {
   const inKey = progressionChart(choice.numerals, choice.key, choice.chordSize)
   const chart = choice.walk ? chartInKeys(inKey, walkKeys(choice.key, choice.walk)) : inKey
-  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(choice) })
+  return arrange(chart, { tonic: chart.key.tonic, ...accompanimentOptions(book, choice) })
 }

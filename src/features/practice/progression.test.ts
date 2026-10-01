@@ -1,3 +1,4 @@
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, note, parseNumerals } from '@/shared/lib/music'
 import { arrangeProgression, progressionChart } from './progression'
@@ -26,30 +27,36 @@ describe('progressionChart', () => {
 
 describe('arrangeProgression', () => {
   it('arranges it with a pattern, a bar a chord', () => {
-    const performance = arrangeProgression({
-      numerals: numerals(TWELVE_BAR),
-      key: C,
-      pattern: 'block',
-      rh: null,
-      lh: null,
-      inversion: null,
-      chordSize: 'triads',
-      walk: null,
-    })
+    const performance = arrangeProgression(
+      {
+        numerals: numerals(TWELVE_BAR),
+        key: C,
+        pattern: 'block',
+        rh: null,
+        lh: null,
+        inversion: null,
+        chordSize: 'triads',
+        walk: null,
+      },
+      BUILT_IN_PATTERNS,
+    )
     expect(performance.bars).toHaveLength(12)
   })
 
   it('walks it through the keys and home, a key a section', () => {
-    const performance = arrangeProgression({
-      numerals: numerals('ii V I'),
-      key: C,
-      pattern: 'block',
-      rh: null,
-      lh: null,
-      inversion: null,
-      chordSize: 'sevenths',
-      walk: 'semitones-up',
-    })
+    const performance = arrangeProgression(
+      {
+        numerals: numerals('ii V I'),
+        key: C,
+        pattern: 'block',
+        rh: null,
+        lh: null,
+        inversion: null,
+        chordSize: 'sevenths',
+        walk: 'semitones-up',
+      },
+      BUILT_IN_PATTERNS,
+    )
     expect(performance.bars).toHaveLength(39)
     expect(performance.chords.slice(3, 6).map((chord) => chord.symbol)).toEqual([
       'E♭m7',
