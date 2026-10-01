@@ -233,6 +233,23 @@ describe('a Piece', () => {
   })
 })
 
+describe('going back', () => {
+  it('returns to where the learner was on the screen it goes back to', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn')
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(480)
+    act(() => void document.dispatchEvent(new Event('scroll')))
+    await user.click(screen.getByRole('link', { name: /^Keys/ }))
+    await screen.findByRole('heading', { level: 1, name: 'Keys' })
+    vi.mocked(window.scrollTo).mockClear()
+    await act(() => router.history.back())
+    await waitFor(() =>
+      expect(window.scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 480 })),
+    )
+  })
+})
+
 describe('routes that name a piece', () => {
   it('show not found for a piece that is not there', async () => {
     await renderApp('/songs/nothing')

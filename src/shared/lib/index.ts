@@ -7,6 +7,7 @@ export {
   type PartsParams,
 } from './chord-params'
 export { matchesQuery } from './fold-text'
+export { IN_PLACE } from './in-place'
 export { isOneOf } from './is-one-of'
 export {
   KEY_SIZES,
@@ -45,6 +46,7 @@ export {
   typingLetters,
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
+export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { useMediaQuery } from './use-media-query'
 export { toggled } from './toggled'
 export { useScrollMotion } from './use-scroll-motion'

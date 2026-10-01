@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { STEP_PAINT } from '@/entities/path'
 import { PROGRESSION_LIBRARY, PROGRESSION_STYLES } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
+import { IN_PLACE } from '@/shared/lib'
 import {
   keyParam,
   numeralsParam,
@@ -34,6 +35,7 @@ export function ProgressionLibrary({ musicKey, size }: { musicKey: Key; size: Ch
                   render={
                     <Link
                       to="/learn/progressions"
+                      {...IN_PLACE}
                       search={{
                         key: keyParam({ tonic: musicKey.tonic, minor: each.minor }),
                         p: numeralsParam(numerals),

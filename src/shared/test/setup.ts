@@ -6,12 +6,14 @@ import { stubFonts } from './fonts'
 import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
+import { stubResizeObserver } from './resize'
 
 beforeEach(() => {
   stubMatchMedia({ dark: false })
   stubServiceWorker({ waiting: false })
   // jsdom lays nothing out: everything a test renders is on screen.
   stubIntersectionObserver({ visible: true })
+  stubResizeObserver()
   // jsdom lays nothing out and cannot scroll the window, which the router resets on every navigation.
   if (typeof window !== 'undefined')
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)

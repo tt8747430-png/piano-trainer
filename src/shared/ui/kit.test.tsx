@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
@@ -10,12 +10,14 @@ import { InversionChoice } from './InversionChoice'
 import { LevelMark } from './LevelMark'
 import { NamedSegmented } from './NamedSegmented'
 import { NoteDropdown } from './NoteDropdown'
+import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
+import { ScreenBarProvider } from './ScreenBarProvider'
 import { ScreenHeader } from './ScreenHeader'
 import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
@@ -33,6 +35,41 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Path" actions={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+  })
+  const scrollTo = (y: number) => {
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
+    act(() => void window.dispatchEvent(new Event('scroll')))
+  }
+  const renderBar = () => {
+    render(
+      <ScreenBarProvider>
+        <ScreenHeader title="Chords" back={<button type="button">Back</button>} />
+        <Pinned>The keys</Pinned>
+      </ScreenBarProvider>,
+    )
+    const bar = screen.getByRole('heading', { level: 1, name: 'Chords' }).closest('header')
+    const pinned = screen.getByText('The keys')
+    return { bar, pinned }
+  }
+
+  it('hides while the page scrolls down and comes back on the way up, the pinned keys under it', async () => {
+    const { bar, pinned } = renderBar()
+    await waitFor(() => expect(pinned).toHaveStyle({ top: '64px' }))
+    expect(bar).not.toHaveAttribute('data-hidden')
+    scrollTo(120)
+    expect(bar).toHaveAttribute('data-hidden')
+    expect(pinned).toHaveStyle({ top: '0px' })
+    scrollTo(80)
+    expect(bar).not.toHaveAttribute('data-hidden')
+    expect(pinned).toHaveStyle({ top: '64px' })
+  })
+
+  it('stays while focus is inside it', async () => {
+    const user = userEvent.setup()
+    const { bar } = renderBar()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    scrollTo(300)
+    expect(bar).not.toHaveAttribute('data-hidden')
   })
 })
 

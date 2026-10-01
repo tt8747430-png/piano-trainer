@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
-import { useGoBack } from '@/shared/lib'
+import { IN_PLACE, useGoBack } from '@/shared/lib'
 import { useWalkPlayer } from '../model/use-walk-player'
 import type { WalkSearch } from '../model/walk-search'
 import { PlayerLayout } from './PlayerLayout'
@@ -18,7 +18,7 @@ export function WalkPlayerPage() {
     search: { root: search.root, kind: search.kind, show: 'chords' },
   })
   const setSearch = (patch: Partial<WalkSearch>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE })
   const { choice, performance, player, changeSetup } = useWalkPlayer(search, setSearch)
   return (
     <PlayerLayout

@@ -1,5 +1,6 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { IN_PLACE } from '@/shared/lib'
 import { LEARN_TILES, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import type { LearnFilter } from '../model/learn-filter'
 import { LessonsColumn } from './LessonsColumn'
@@ -25,7 +26,7 @@ export function LearnPage() {
   const filter = useSearch({ from: '/shell/learn' })
   const navigate = useNavigate({ from: '/learn' })
   const onChange = (change: Partial<LearnFilter>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('learn:title')} />

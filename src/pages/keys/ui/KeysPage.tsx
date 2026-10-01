@@ -3,6 +3,7 @@ import { Dices } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entriesInKey, shelfOf } from '@/entities/piece'
+import { IN_PLACE } from '@/shared/lib'
 import { keyFromParam, keyParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { KeyExplorer, type KeyView } from '@/widgets/key-explorer'
@@ -26,7 +27,7 @@ export function KeysPage() {
     },
   ].filter((group) => group.entries.length > 0)
   const onChange = (change: Partial<KeyView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader

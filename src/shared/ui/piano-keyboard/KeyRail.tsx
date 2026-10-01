@@ -11,9 +11,9 @@ const IN_VIEW = '100cqw'
 
 /**
  * The rail the keys hang from, the piano's length: a swipe on it scrolls the keys, which hold still
- * under a finger. Its controls stay in view wherever the keys are scrolled: ‹ › an octave, the
- * keyboard map, and `children` (the screen's `RailButton`s). Keys that do not scroll have no ‹ › and
- * no map.
+ * under a finger. Its controls stay in view wherever the keys are scrolled: the keyboard map, then
+ * at its end ‹ › an octave together (one control, never a lone arrow in the corner a Back takes) and
+ * `children` (the screen's `RailButton`s). Keys that do not scroll have no ‹ › and no map.
  */
 export function KeyRail({
   scroller,
@@ -42,14 +42,14 @@ export function KeyRail({
       {/* The rail itself, drawn along the strip's foot: the buttons' targets reach above it. */}
       <span aria-hidden className="absolute inset-x-0 bottom-0 h-7 bg-key-rail" />
       <div className="sticky left-0 flex h-full items-end" style={{ width: IN_VIEW }}>
-        {scrolls ? (
-          <RailButton label={t('rail.octaveDown')} icon={ChevronLeft} onClick={() => step(-1)} />
-        ) : null}
         <div className="relative flex min-w-0 flex-1">
           {map && scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
         </div>
         {scrolls ? (
-          <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
+          <>
+            <RailButton label={t('rail.octaveDown')} icon={ChevronLeft} onClick={() => step(-1)} />
+            <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
+          </>
         ) : null}
         {children}
       </div>

@@ -1,31 +1,24 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Credits, entryTitles, pieceKey, shelfOf, SourceLine, type Entry } from '@/entities/piece'
+import { Credits, entryTitles, pieceKey, SourceLine, type Entry } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { keySymbol, keyScale, noteParam } from '@/shared/lib/music'
-import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
-
-/** Where Back leads from an entry opened directly: its shelf. */
-const SHELF_PAGE = { songs: '/songs', practice: '/practice' } as const
+import { ButtonLink } from '@/shared/ui'
 
 /**
- * A song's or listing's title, credits, source, key and meter, note, and a way to its key's scale.
- * Back returns where the learner came from (Path, Songs, Practice), or to the entry's shelf.
+ * A song's or listing's facts under its bar (`PieceHeader`): its second title, credits, source, key
+ * and meter, note, and a way to its key's scale.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
   const scaleName = useScaleName()
-  const { primary, secondary } = entryTitles(entry, locale)
+  const { secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = keyScale(key)
   return (
     <div className="flex flex-col gap-3">
-      <ScreenHeader
-        title={primary}
-        back={<BackButton fallback={{ to: SHELF_PAGE[shelfOf(entry.kind)] }} />}
-      />
-      {secondary ? <p className="-mt-3 text-lg text-muted-foreground">{secondary}</p> : null}
+      {secondary ? <p className="text-lg text-muted-foreground">{secondary}</p> : null}
       {entry.credits ? <Credits credits={entry.credits} /> : null}
       {entry.source ? <SourceLine source={entry.source} /> : null}
       <dl className="flex flex-wrap gap-2">

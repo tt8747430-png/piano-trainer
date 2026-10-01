@@ -1,5 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { IN_PLACE } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ReharmoniseTool, type ReharmoniseView } from '@/widgets/reharmonise'
 
@@ -9,7 +10,7 @@ export function ReharmonisePage() {
   const view = useSearch({ from: '/shell/learn/reharmonise' })
   const navigate = useNavigate({ from: '/learn/reharmonise' })
   const onChange = (change: Partial<ReharmoniseView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader

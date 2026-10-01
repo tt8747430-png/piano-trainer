@@ -289,6 +289,8 @@ export function createAppRouter(history?: RouterHistory) {
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,
     defaultPendingMs: 300,
+    // Back returns to where the learner was on the screen they go back to.
+    scrollRestoration: true,
   })
 }
 

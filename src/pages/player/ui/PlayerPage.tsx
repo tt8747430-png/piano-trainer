@@ -1,6 +1,7 @@
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import { entryTitles, pieceById, usePieceHeadings, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
+import { IN_PLACE } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { useClose } from '../model/use-close'
 import { usePlayer } from '../model/use-player'
@@ -16,7 +17,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const { choice, performance, player, changeSetup } = usePlayer(
     piece,
     search,
-    (patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true }),
+    (patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE }),
   )
   return (
     <PlayerLayout

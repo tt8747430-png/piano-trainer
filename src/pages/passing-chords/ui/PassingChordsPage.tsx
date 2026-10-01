@@ -1,5 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { IN_PLACE } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { PassingChordsTool, type PassingView } from '@/widgets/passing-chords'
 
@@ -9,7 +10,7 @@ export function PassingChordsPage() {
   const view = useSearch({ from: '/shell/learn/passing-chords' })
   const navigate = useNavigate({ from: '/learn/passing-chords' })
   const onChange = (change: Partial<PassingView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('passing.title')} back={<BackButton fallback={{ to: '/learn' }} />} />

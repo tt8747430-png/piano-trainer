@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, IN_PLACE } from '@/shared/lib'
 import {
   CIRCLE_OF_FIFTHS,
   circleFunctions,
@@ -73,7 +73,7 @@ export function CircleOfFifths({ current }: { current: Key }) {
                   from="/learn/keys"
                   to="/learn/keys"
                   search={(prev) => ({ ...prev, key: keyParam(key) })}
-                  replace
+                  {...IN_PLACE}
                   aria-label={name(key)}
                   aria-current={sameKey(key, current) ? 'page' : undefined}
                   className={cn(

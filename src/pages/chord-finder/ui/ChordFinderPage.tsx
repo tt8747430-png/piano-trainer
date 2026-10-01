@@ -1,5 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { IN_PLACE } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ChordFinder, type FinderView } from '@/widgets/chord-finder'
 
@@ -9,7 +10,7 @@ export function ChordFinderPage() {
   const view = useSearch({ from: '/shell/learn/chord-finder' })
   const navigate = useNavigate({ from: '/learn/chord-finder' })
   const onChange = (change: Partial<FinderView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('finder.title')} back={<BackButton fallback={{ to: '/learn' }} />} />

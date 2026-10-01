@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { useGoBack } from '@/shared/lib'
+import { IN_PLACE, useGoBack } from '@/shared/lib'
 import { numeralText } from '@/shared/lib/music'
 import type { ProgressionSearch } from '../model/progression-search'
 import { useProgressionPlayer } from '../model/use-progression-player'
@@ -14,7 +14,7 @@ export function ProgressionPlayerPage() {
   const search = useSearch({ from: '/full-screen/play/progression' })
   const navigate = useNavigate({ from: '/play/progression' })
   const setSearch = (patch: Partial<ProgressionSearch>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE })
   const { choice, performance, player, changeSetup } = useProgressionPlayer(search, setSearch)
   const close = useGoBack({
     to: '/learn/progressions',

@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { IN_PLACE } from '@/shared/lib'
 import {
   noteParam,
   relatedScale,
@@ -44,7 +45,7 @@ export function ScaleFacts({
                 from="/learn/scales"
                 to="/learn/scales"
                 search={(prev) => ({ ...prev, root: noteParam(related.root), kind: related.kind })}
-                replace
+                {...IN_PLACE}
               />
             }
           >

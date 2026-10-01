@@ -1,9 +1,18 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('Learn → Chords', () => {
+  it('keeps the scroll when a choice changes the chord', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/chords')
+    await user.click(await screen.findByRole('radio', { name: 'Root' }))
+    vi.mocked(window.scrollTo).mockClear()
+    await user.click(screen.getByRole('radio', { name: '1st' }))
+    expect(window.scrollTo).not.toHaveBeenCalled()
+  })
+
   it('shows C major by default, named, its keys labelled by degree', async () => {
     await renderApp('/learn/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()

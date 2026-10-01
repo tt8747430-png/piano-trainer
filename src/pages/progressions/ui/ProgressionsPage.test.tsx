@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -68,6 +68,18 @@ describe('Learn → Progressions', () => {
     expect(href).toMatch(/^\/play\/progression\?/)
     expect(href).toMatch(/p=ii-V-I/)
     expect(href).toMatch(/chordSize=sevenths/)
+  })
+
+  it('takes a library progression in place: Back then leaves for Learn', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn')
+    await user.click(await screen.findByRole('link', { name: /^Progressions/ }))
+    await user.click(await screen.findByRole('link', { name: /^12-bar blues/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({ p: expect.stringMatching(/^I7/) }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
   })
 
   it('speaks Russian', async () => {

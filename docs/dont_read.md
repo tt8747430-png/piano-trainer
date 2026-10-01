@@ -1,0 +1,6 @@
+1. want to walk up also the progressions like this, and i want also to practices in what inversion i want it to practices all the cords or progressions. and also the preferences of the user must be also saved like what pattern, what key and other preferences. a lot of the preferences are not saved or none of them is saved.
+2. look at the information here and what can you take from theese the best practices the best exercices and maybe also best lessons
+3. also why when i click on the some button on the bottom of the page is will be scrolled to the top. this is not good and causes flickering and bad ui and ux. 
+4. also we dont have somethign like auto hide header on scroll to top auto appeas and ot scroll to bottom auto disappears. beause the user must scroll to the top to get back and also the buttons of the piano are disorienting the user because the user thinks that these are buttons to go back to another page. 
+5. also the back button doest do what it should. it must not undo the actions that the user selected on the page but should go back to another page from where the user came .  this is false what happens now. 
+/Users/kristianbraila/Downloads/f0acc180-cced-44f4-a8d9-f2a916ad9428.pdf /Users/kristianbraila/Downloads/05a1d197-69b3-4d73-b9ae-83303d501c63.pdf

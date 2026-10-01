@@ -215,6 +215,16 @@
 @utility pt-safe {
   padding-top: max(--spacing(4), env(safe-area-inset-top));
 }
+/* The screen's bar takes the place of its page's top padding: it pads itself clear of the notch. */
+@utility -mt-safe {
+  margin-top: calc(-1 * max(--spacing(4), env(safe-area-inset-top)));
+}
+/* What stays at the top under the screen's bar moves with it (`duration-*` and `ease-*` time it). */
+@utility transition-top {
+  transition-property: top;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }

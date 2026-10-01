@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName, useScaleName } from '@/shared/i18n'
+import { IN_PLACE } from '@/shared/lib'
 import {
   keyParam,
   keyScale,
@@ -37,7 +38,7 @@ export function KeyFacts({ value }: { value: Key }) {
               from="/learn/keys"
               to="/learn/keys"
               search={(prev) => ({ ...prev, key: keyParam(relative) })}
-              replace
+              {...IN_PLACE}
             />
           }
         >

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LEVEL_NAME, LEVELS, levelOf, pieceStepId, type Level } from '@/entities/path'
 import { SONG_COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
+import { IN_PLACE } from '@/shared/lib'
 import { Dropdown, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -28,7 +29,7 @@ export function SongsPage() {
   const navigate = useNavigate({ from: '/songs' })
   const query = useDeferredValue(search.q)
   const set = (change: Partial<SongsFilter>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), replace: true })
+    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
   // No search at all: the route fills its defaults.
   const clear = () => void navigate({ search: {}, replace: true })
   const groups = songsView(SONG_COLLECTIONS, { ...search, q: query }, levelOfEntry).map((g) => ({
