@@ -8,6 +8,7 @@ export {
 } from './chord-params'
 export { matchesQuery } from './fold-text'
 export { IN_PLACE } from './in-place'
+export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
   KEY_SIZES,

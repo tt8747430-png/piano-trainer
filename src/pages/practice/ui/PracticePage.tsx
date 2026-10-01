@@ -15,6 +15,7 @@ import { myGaps, type TheoryQuiz } from '@/features/quiz'
 import { localText, useLocale } from '@/shared/i18n'
 import { RowGroup, RowLink, ScreenHeader, type Paint } from '@/shared/ui'
 import { PieceList } from '@/widgets/piece-list'
+import { OPEN_PLAINLY } from '@/shared/lib'
 
 /** The Theory quizzes, each as a row with a tile of its kind: chords sand, scales sky, gaps lilac. */
 const QUIZ_ROWS = [
@@ -57,7 +58,7 @@ export function PracticePage() {
                 title={t('practice:chromatic')}
                 icon={Footprints}
                 paint="lilac"
-                render={<Link to="/play/chromatic" />}
+                render={<Link to="/play/chromatic" state={OPEN_PLAINLY} />}
               />
             </li>
           </RowGroup>

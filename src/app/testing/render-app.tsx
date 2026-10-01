@@ -2,6 +2,7 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
+import { createViewsStore } from '@/entities/views'
 import type { Locale } from '@/shared/i18n'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
@@ -26,7 +27,11 @@ export async function renderApp(
 ) {
   const settingsStore = createSettingsStore({ storage, languages: [locale], finePointer: false })
   const progressStore = createProgressStore({ storage })
-  const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
+  const viewsStore = createViewsStore({ storage })
+  const router = createAppRouter({
+    history: createMemoryHistory({ initialEntries: [path] }),
+    views: viewsStore,
+  })
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   await loadScoreView()
   const audio = createFakeAudio()
@@ -39,5 +44,5 @@ export async function renderApp(
       router={router}
     />,
   )
-  return { ...view, router, settingsStore, progressStore, audio, midi }
+  return { ...view, router, settingsStore, progressStore, viewsStore, audio, midi }
 }

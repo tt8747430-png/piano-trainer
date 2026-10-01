@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
+import { createViewsStore } from '@/entities/views'
 import '@/shared/i18n'
 import { App } from './app/App'
 import { createServices } from './app/composition-root'
@@ -17,7 +18,7 @@ createRoot(rootElement).render(
       settingsStore={createSettingsStore()}
       progressStore={createProgressStore()}
       services={createServices()}
-      router={createAppRouter()}
+      router={createAppRouter({ views: createViewsStore() })}
     />
   </StrictMode>,
 )

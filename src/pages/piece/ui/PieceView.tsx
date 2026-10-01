@@ -14,6 +14,7 @@ import { ChordChart } from '@/widgets/chord-chart'
 import { PieceSkills } from '@/widgets/piece-skills'
 import { PieceFacts } from './PieceFacts'
 import { PieceHeader } from './PieceHeader'
+import { OPEN_PLAINLY } from '@/shared/lib'
 
 /**
  * A piece with a chart: its facts, Practise and the learned toggle, its chords, and the chart to
@@ -44,7 +45,9 @@ export function PieceView({ piece }: { piece: Piece }) {
             <ButtonLink
               size="pill"
               className="flex-1"
-              render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />}
+              render={
+                <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
+              }
             >
               <Play data-icon="inline-start" />
               {t('practise')}

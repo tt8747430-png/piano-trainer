@@ -6,6 +6,7 @@ import { COLLECTIONS } from '@/entities/piece'
 import { SETTINGS_STORAGE_KEY } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
+import { testViews } from '@/app/testing/test-views'
 import { createAppRouter } from './router'
 import { renderApp } from './testing/render-app'
 
@@ -37,7 +38,10 @@ const ROUTES = [
 ] as const
 
 async function open(path: string) {
-  const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
+  const router = createAppRouter({
+    history: createMemoryHistory({ initialEntries: [path] }),
+    views: testViews(),
+  })
   await router.load()
   return router
 }
@@ -81,7 +85,7 @@ describe('routes', () => {
     // module shows screens nothing has loaded yet.
     vi.resetModules()
     const fresh = await import('./router')
-    const router = fresh.createAppRouter(createMemoryHistory())
+    const router = fresh.createAppRouter({ history: createMemoryHistory(), views: testViews() })
     for (const [path, route] of Object.entries(router.routesByPath)) {
       expect(route.options.component, path).toHaveProperty('preload', expect.any(Function))
     }

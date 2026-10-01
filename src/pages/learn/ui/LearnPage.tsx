@@ -1,6 +1,6 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { IN_PLACE } from '@/shared/lib'
+import { IN_PLACE, OPEN_PLAINLY } from '@/shared/lib'
 import { LEARN_TILES, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import type { LearnFilter } from '../model/learn-filter'
 import { LessonsColumn } from './LessonsColumn'
@@ -39,7 +39,7 @@ export function LearnPage() {
                 <RowLink
                   title={t(`learn:${row.title}`)}
                   {...LEARN_TILES[row.tile]}
-                  render={<Link to={row.to} />}
+                  render={<Link to={row.to} state={OPEN_PLAINLY} />}
                 />
               </li>
             ))}
@@ -50,7 +50,7 @@ export function LearnPage() {
                 <RowLink
                   title={t(`learn:${row.title}`)}
                   {...LEARN_TILES[row.tile]}
-                  render={<Link to={row.to} />}
+                  render={<Link to={row.to} state={OPEN_PLAINLY} />}
                 />
               </li>
             ))}

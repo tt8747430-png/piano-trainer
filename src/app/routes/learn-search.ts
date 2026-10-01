@@ -37,28 +37,19 @@ import type { IntervalView } from '@/widgets/interval-explorer'
 import type { KeyView } from '@/widgets/key-explorer'
 import type { ScaleView } from '@/widgets/scale-explorer'
 import type { TensionView } from '@/widgets/tension-explorer'
-import {
-  C_MAJOR_PARAM,
-  isHands,
-  isLevel,
-  isScaleKind,
-  routeSearch,
-  type Input,
-  type Raw,
-} from './read-search'
+import { C_MAJOR_PARAM, isHands, isLevel, isScaleKind, routeSearch, type Raw } from './read-search'
 
 // Learn: its lessons' filter, and the references.
 
 const isLessonCategory = isOneOf<LessonCategory | 'any'>([...LESSON_CATEGORIES, 'any'])
 export const LEARN_DEFAULTS: LearnFilter = { level: 'any', category: 'any' }
-function validateLearnSearch(input: Input<LearnFilter>): LearnFilter {
-  const raw: Raw = input
+export function readLearnSearch(raw: Raw): LearnFilter {
   return {
     level: valueOr(isLevel, raw.level, LEARN_DEFAULTS.level),
     category: valueOr(isLessonCategory, raw.category, LEARN_DEFAULTS.category),
   }
 }
-export const learnSearch = routeSearch(validateLearnSearch, LEARN_DEFAULTS)
+export const learnSearch = routeSearch(readLearnSearch, LEARN_DEFAULTS)
 
 // Chords
 export type ChordsStepId = `chords:${ChordFamily}`
@@ -80,8 +71,7 @@ const isAddedTone = isOneOf(ADDED_TONES)
 const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
-function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
-  const raw: Raw = input
+export function readChordsSearch(raw: Raw): ChordsSearch {
   const parts = fitParts({
     triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
     size: valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size),
@@ -100,7 +90,9 @@ function validateChordsSearch(input: Input<ChordsSearch>): ChordsSearch {
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }
 }
-export const chordsSearch = routeSearch(validateChordsSearch, CHORDS_DEFAULTS)
+export const chordsSearch = routeSearch(readChordsSearch, CHORDS_DEFAULTS)
+/** A link names a chord; the hands it is shown in are the learner's. */
+export const CHORDS_KEPT: readonly (keyof ChordsSearch & string)[] = ['hands']
 
 // Scales
 export type ScaleStepId = `scale:${ScaleKind}`
@@ -136,8 +128,7 @@ function chosenFingering(kind: ScaleKind, start: number, raw: unknown): Fingerin
     ? raw
     : undefined
 }
-function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
-  const raw: Raw = input
+export function readScalesSearch(raw: Raw): ScalesSearch {
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
   const start = wholeIn(raw.start, 1, scaleIntervals(kind).length, SCALES_DEFAULTS.start)
@@ -163,13 +154,19 @@ function validateScalesSearch(input: Input<ScalesSearch>): ScalesSearch {
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
-export const scalesSearch = routeSearch(validateScalesSearch, SCALES_DEFAULTS)
+export const scalesSearch = routeSearch(readScalesSearch, SCALES_DEFAULTS)
+/** A link names a scale; how it is fingered, its rhythm, tempo and hands are the learner's. */
+export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = [
+  'fingers',
+  'rhythm',
+  'tempo',
+  'hands',
+]
 
 // Keys: a key as the circle spells it.
 export const KEYS_DEFAULTS: KeyView = { key: C_MAJOR_PARAM, chords: 3, inversion: 0 }
 const isKeyChords = isOneOf<KeyView['chords']>([3, 4])
-function validateKeysSearch(input: Input<KeyView>): KeyView {
-  const raw: Raw = input
+export function readKeysSearch(raw: Raw): KeyView {
   const key = typeof raw.key === 'string' ? parseKey(raw.key) : null
   const chords = valueOr(isKeyChords, raw.chords, KEYS_DEFAULTS.chords)
   return {
@@ -178,24 +175,22 @@ function validateKeysSearch(input: Input<KeyView>): KeyView {
     inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
   }
 }
-export const keysSearch = routeSearch(validateKeysSearch, KEYS_DEFAULTS)
+export const keysSearch = routeSearch(readKeysSearch, KEYS_DEFAULTS)
 
 // Intervals: the root in the reference's one spelling for its pitch class.
 export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }
-function validateIntervalsSearch(input: Input<IntervalView>): IntervalView {
-  const raw: Raw = input
+export function readIntervalsSearch(raw: Raw): IntervalView {
   const read = readNote(raw.root)
   return {
     root: read ? noteParam(rootSpelling(pitchClassOf(read), false)) : INTERVALS_DEFAULTS.root,
   }
 }
-export const intervalsSearch = routeSearch(validateIntervalsSearch, INTERVALS_DEFAULTS)
+export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
 
 // Available tensions: the root spelled by the chord's one rule, as the Chords reference's.
 const isTensionChord = isOneOf(TENSION_CHORDS)
 export const TENSIONS_DEFAULTS: TensionView = { root: noteParam(note('C')), chord: 'd7' }
-function validateTensionsSearch(input: Input<TensionView>): TensionView {
-  const raw: Raw = input
+export function readTensionsSearch(raw: Raw): TensionView {
   const chord = valueOr(isTensionChord, raw.chord, TENSIONS_DEFAULTS.chord)
   const read = readNote(raw.root)
   return {
@@ -203,4 +198,4 @@ function validateTensionsSearch(input: Input<TensionView>): TensionView {
     chord,
   }
 }
-export const tensionsSearch = routeSearch(validateTensionsSearch, TENSIONS_DEFAULTS)
+export const tensionsSearch = routeSearch(readTensionsSearch, TENSIONS_DEFAULTS)

@@ -1,11 +1,13 @@
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   createRoute,
   createRouter,
   lazyRouteComponent,
   notFound,
   type RouterHistory,
 } from '@tanstack/react-router'
+import type { ViewsStore } from '@/entities/views'
+import { rememberView } from '@/features/remember-view'
 import { NotFoundPage } from '@/pages/not-found'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
@@ -14,25 +16,45 @@ import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
+  CHORDS_KEPT,
   chordsSearch,
   intervalsSearch,
   keysSearch,
   learnSearch,
+  readChordsSearch,
+  readIntervalsSearch,
+  readKeysSearch,
+  readScalesSearch,
+  readTensionsSearch,
+  SCALES_KEPT,
   scalesSearch,
   tensionsSearch,
 } from './routes/learn-search'
 import {
+  CHROMATIC_KEPT,
   chromaticSearch,
+  PLAYER_KEPT,
   playerSearch,
+  PROGRESSION_KEPT,
   progressionPlayerSearch,
+  readChromaticSearch,
+  readPlayerSearch,
+  readProgressionPlayerSearch,
+  readWalkSearch,
+  WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
 import { validateCheckSearch } from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
+import { remembered, restoreView, type RestoreContext } from './routes/remember'
 import {
   finderSearch,
   passingSearch,
   progressionsSearch,
+  readFinderSearch,
+  readPassingSearch,
+  readProgressionsSearch,
+  readReharmoniseSearch,
   reharmoniseSearch,
 } from './routes/tools-search'
 import { ShellLayout } from './ShellLayout'
@@ -56,7 +78,15 @@ function NotFoundScreen() {
   )
 }
 
-const rootRoute = createRootRoute({ component: RootLayout, notFoundComponent: NotFoundScreen })
+/** What every route is handed: the screens' remembered views (ADR 0022). */
+export interface RouterContext {
+  readonly views: ViewsStore
+}
+
+const rootRoute = createRootRouteWithContext<RouterContext>()({
+  component: RootLayout,
+  notFoundComponent: NotFoundScreen,
+})
 
 // Screens reached from the main navigation.
 const shellRoute = createRoute({
@@ -136,54 +166,63 @@ const chordsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/chords',
   ...chordsSearch,
+  ...remembered(readChordsSearch, CHORDS_KEPT),
   component: lazyRouteComponent(learnScreens, 'ChordsPage'),
 })
 const scalesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/scales',
   ...scalesSearch,
+  ...remembered(readScalesSearch, SCALES_KEPT),
   component: lazyRouteComponent(learnScreens, 'ScalesPage'),
 })
 const keysRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/keys',
   ...keysSearch,
+  ...remembered(readKeysSearch, []),
   component: lazyRouteComponent(learnScreens, 'KeysPage'),
 })
 const intervalsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/intervals',
   ...intervalsSearch,
+  ...remembered(readIntervalsSearch, []),
   component: lazyRouteComponent(learnScreens, 'IntervalsPage'),
 })
 const tensionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/tensions',
   ...tensionsSearch,
+  ...remembered(readTensionsSearch, []),
   component: lazyRouteComponent(learnScreens, 'TensionsPage'),
 })
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/chord-finder',
   ...finderSearch,
+  ...remembered(readFinderSearch, []),
   component: lazyRouteComponent(learnScreens, 'ChordFinderPage'),
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/reharmonise',
   ...reharmoniseSearch,
+  ...remembered(readReharmoniseSearch, []),
   component: lazyRouteComponent(learnScreens, 'ReharmonisePage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/passing-chords',
   ...passingSearch,
+  ...remembered(readPassingSearch, []),
   component: lazyRouteComponent(learnScreens, 'PassingChordsPage'),
 })
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/progressions',
   ...progressionsSearch,
+  ...remembered(readProgressionsSearch, []),
   component: lazyRouteComponent(learnScreens, 'ProgressionsPage'),
 })
 
@@ -204,13 +243,17 @@ const fullScreenRoute = createRoute({
   component: FullScreenLayout,
   staticData: { fullScreen: true },
 })
+const restorePiece: (context: RestoreContext) => void = restoreView(readPlayerSearch, PLAYER_KEPT)
+const restoreWalk: (context: RestoreContext) => void = restoreView(readWalkSearch, WALK_KEPT)
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',
   ...playerSearch,
-  beforeLoad: async ({ params }) => {
+  staticData: { remembered: true },
+  beforeLoad: async (context) => {
     const { pieceById } = await playerScreens()
-    if (!pieceById(params.pieceId)) throw notFound()
+    if (!pieceById(context.params.pieceId)) throw notFound()
+    restorePiece(context)
   },
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
 })
@@ -219,8 +262,10 @@ const walkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/walk',
   ...walkSearch,
-  beforeLoad: ({ search }) => {
-    if (!scaleHasChords(search.kind)) throw notFound()
+  staticData: { remembered: true },
+  beforeLoad: (context) => {
+    if (!scaleHasChords(context.search.kind)) throw notFound()
+    restoreWalk(context)
   },
   component: lazyRouteComponent(playerScreens, 'WalkPlayerPage'),
 })
@@ -229,6 +274,7 @@ const chromaticRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/chromatic',
   ...chromaticSearch,
+  ...remembered(readChromaticSearch, CHROMATIC_KEPT),
   component: lazyRouteComponent(playerScreens, 'ChromaticPlayerPage'),
 })
 
@@ -236,6 +282,7 @@ const progressionPlayerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/progression',
   ...progressionPlayerSearch,
+  ...remembered(readProgressionPlayerSearch, PROGRESSION_KEPT),
   component: lazyRouteComponent(playerScreens, 'ProgressionPlayerPage'),
 })
 
@@ -281,10 +328,21 @@ const routeTree = rootRoute.addChildren([
   ]),
 ])
 
-export function createAppRouter(history?: RouterHistory) {
-  return createRouter({
+/**
+ * The app's router over `history` (the browser's by default), handed the screens' remembered views:
+ * a remembered screen restores its view on entering, and saves it each time it changes.
+ */
+export function createAppRouter({
+  history,
+  views,
+}: {
+  history?: RouterHistory
+  views: ViewsStore
+}) {
+  const router = createRouter({
     routeTree,
     history,
+    context: { views },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,
@@ -292,6 +350,12 @@ export function createAppRouter(history?: RouterHistory) {
     // Back returns to where the learner was on the screen they go back to.
     scrollRestoration: true,
   })
+  router.subscribe('onResolved', ({ toLocation }) => {
+    if (router.state.matches.at(-1)?.staticData.remembered) {
+      rememberView(views, toLocation.pathname, toLocation.search)
+    }
+  })
+  return router
 }
 
 export type AppRouter = ReturnType<typeof createAppRouter>
@@ -303,5 +367,7 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     /** A screen on its own (the Player, the Check), which nothing else is laid over. */
     fullScreen?: true
+    /** A screen that comes back the learner's way (ADR 0022): its view saved in `pt-views`. */
+    remembered?: true
   }
 }

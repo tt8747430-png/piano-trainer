@@ -8,6 +8,7 @@ import {
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { testViews } from '@/app/testing/test-views'
 import { createAppRouter } from './router'
 import { RouteError } from './RouteError'
 
@@ -71,7 +72,7 @@ describe('RouteError', () => {
   })
 
   it('is the router’s default error screen', () => {
-    const router = createAppRouter(createMemoryHistory())
+    const router = createAppRouter({ history: createMemoryHistory(), views: testViews() })
     expect(router.options.defaultErrorComponent).toBe(RouteError)
   })
 })

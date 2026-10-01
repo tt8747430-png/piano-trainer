@@ -36,7 +36,6 @@ import {
   readKey,
   readNumerals,
   routeSearch,
-  type Input,
   type Raw,
 } from './read-search'
 
@@ -76,8 +75,7 @@ function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversi
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)
 const walk = (raw: Raw) => (isKeyWalk(raw.walk) ? raw.walk : undefined)
 
-function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
-  const raw: Raw = input
+export function readPlayerSearch(raw: Raw): PlayerSearch {
   const key = readNote(raw.key)
   return {
     ...practiceView(raw),
@@ -87,7 +85,27 @@ function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
     walk: walk(raw),
   }
 }
-export const playerSearch = routeSearch(validatePlayerSearch, PLAYER_DEFAULTS)
+export const playerSearch = routeSearch(readPlayerSearch, PLAYER_DEFAULTS)
+
+/** How the learner plays: what a link to the Player that names its music takes from the last time. */
+const PLAYING = [
+  'pattern',
+  'rh',
+  'lh',
+  'inversion',
+  'tempo',
+  'hands',
+  'mode',
+  'swing',
+  'speedTraining',
+] as const
+/** A piece's kept params (ADR 0022): its key and chord size too, and its walk of keys. */
+export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
+  'key',
+  'chordSize',
+  'walk',
+  ...PLAYING,
+]
 
 // Walk the chords: the scale, then the Player's own params.
 export const WALK_DEFAULTS: WalkSearch = {
@@ -95,8 +113,7 @@ export const WALK_DEFAULTS: WalkSearch = {
   kind: 'major',
   ...PLAYER_DEFAULTS,
 }
-function validateWalkSearch(input: Input<WalkSearch>): WalkSearch {
-  const raw: Raw = input
+export function readWalkSearch(raw: Raw): WalkSearch {
   const kind = valueOr(isScaleKind, raw.kind, WALK_DEFAULTS.kind)
   const root = readNote(raw.root)
   return {
@@ -107,7 +124,9 @@ function validateWalkSearch(input: Input<WalkSearch>): WalkSearch {
     chordSize: chordSize(raw),
   }
 }
-export const walkSearch = routeSearch(validateWalkSearch, WALK_DEFAULTS)
+export const walkSearch = routeSearch(readWalkSearch, WALK_DEFAULTS)
+/** Not its chord size: a link leaves it out for the walk's own. */
+export const WALK_KEPT: readonly (keyof WalkSearch & string)[] = PLAYING
 
 // The chromatic walk: the chords, root and direction, then the Player's own params.
 export const CHROMATIC_DEFAULTS: ChromaticSearch = {
@@ -117,8 +136,7 @@ export const CHROMATIC_DEFAULTS: ChromaticSearch = {
   ...PLAYER_DEFAULTS,
 }
 const isDirection = isOneOf(CHROMATIC_DIRECTIONS)
-function validateChromaticSearch(input: Input<ChromaticSearch>): ChromaticSearch {
-  const raw: Raw = input
+export function readChromaticSearch(raw: Raw): ChromaticSearch {
   const chords = readChords(raw.chords)
   const root = readNote(raw.root)
   return {
@@ -129,7 +147,8 @@ function validateChromaticSearch(input: Input<ChromaticSearch>): ChromaticSearch
     ...figures(raw),
   }
 }
-export const chromaticSearch = routeSearch(validateChromaticSearch, CHROMATIC_DEFAULTS)
+export const chromaticSearch = routeSearch(readChromaticSearch, CHROMATIC_DEFAULTS)
+export const CHROMATIC_KEPT: readonly (keyof ChromaticSearch & string)[] = ['direction', ...PLAYING]
 
 // A progression: its numerals and key, then the Player's own params; an unread line is its own.
 export const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
@@ -137,8 +156,7 @@ export const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
   p: PROGRESSION.numerals,
   key: C_MAJOR_PARAM,
 }
-function validateProgressionPlayerSearch(input: Input<ProgressionSearch>): ProgressionSearch {
-  const raw: Raw = input
+export function readProgressionPlayerSearch(raw: Raw): ProgressionSearch {
   const key = readKey(raw.key)
   return {
     p: readNumerals(raw.p, PROGRESSION_PLAYER_DEFAULTS.p),
@@ -150,6 +168,8 @@ function validateProgressionPlayerSearch(input: Input<ProgressionSearch>): Progr
   }
 }
 export const progressionPlayerSearch = routeSearch(
-  validateProgressionPlayerSearch,
+  readProgressionPlayerSearch,
   PROGRESSION_PLAYER_DEFAULTS,
 )
+/** Not its numerals, key or chord size: the Progressions tool names them, its triads by leaving the size out. */
+export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = ['walk', ...PLAYING]

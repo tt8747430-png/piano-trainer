@@ -10,7 +10,7 @@ import {
   skillsToCheck,
   useProgress,
 } from '@/entities/progress'
-import { cn } from '@/shared/lib'
+import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { keySymbol } from '@/shared/lib/music'
 import { ButtonLink, PAINT } from '@/shared/ui'
 
@@ -22,7 +22,7 @@ function ContinueButton({ step, label }: { step: PathStep; label: string }) {
       className="lg:min-w-64"
       render={
         step.kind === 'piece' ? (
-          <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} />
+          <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
         ) : (
           <ExplorerLink step={step} />
         )

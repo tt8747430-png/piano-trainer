@@ -30,10 +30,13 @@ import { HANDS } from '@/shared/lib/schedule'
 export type Input<S> = Partial<S> & SearchSchemaInput
 export type Raw = Readonly<Record<string, unknown>>
 
-/** A route's search options: its validator, and its defaults left out of the URL. */
-export function routeSearch<S extends object>(validateSearch: (input: Input<S>) => S, defaults: S) {
+/**
+ * A route's search options: its validator, which reads the URL with `read`, and its defaults left
+ * out of the URL. Links may name any of its params (`Input`).
+ */
+export function routeSearch<S extends object>(read: (raw: Raw) => S, defaults: S) {
   return {
-    validateSearch,
+    validateSearch: (input: Input<S>): S => read(input),
     search: { middlewares: [stripSearchParams<S>(defaults)] },
   }
 }

@@ -1,5 +1,6 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
+import { testViews } from '@/app/testing/test-views'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
@@ -15,7 +16,10 @@ import { PROGRESSIONS_DEFAULTS } from './tools-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
-  const router = createAppRouter(createMemoryHistory({ initialEntries: [url] }))
+  const router = createAppRouter({
+    history: createMemoryHistory({ initialEntries: [url] }),
+    views: testViews(),
+  })
   await router.load()
   return router.state.matches.at(-1)?.search
 }
