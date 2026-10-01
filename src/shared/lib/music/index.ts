@@ -3,6 +3,8 @@ export {
   beatsPerBar,
   beatsBefore,
   isCompound,
+  isMeter,
+  METERS,
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,

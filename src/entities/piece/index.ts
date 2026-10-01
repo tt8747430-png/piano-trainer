@@ -17,6 +17,24 @@ export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
 export { ContentError } from './model/content-error'
 export { keyText, musicOf, pitchText, sameMusic, withMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
+export {
+  isOwnSongId,
+  ownSongId,
+  PIECE_TEMPO,
+  songTitle,
+  TITLE_MAX,
+  type OwnSong,
+  type OwnSongId,
+} from './model/own'
+export {
+  createPiecesStore,
+  PIECES_STORAGE_KEY,
+  type PiecesState,
+  type PiecesStore,
+} from './model/store'
+export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
+export { repertoire, versionOf, type Repertoire } from './model/repertoire'
+export { useRepertoire } from './model/use-repertoire'
 export { beatsText, writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
 export { writeMelody, type BarSpan } from './model/write-melody'

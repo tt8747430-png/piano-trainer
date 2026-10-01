@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   beatsBefore,
+  isMeter,
   beatsPerBar,
   isCompound,
   METERS,
@@ -37,5 +38,12 @@ describe('time', () => {
 
   it('refuses a bar no time signature writes', () => {
     expect(() => timeSignature(1 / 3, '4/4')).toThrow(RangeError)
+  })
+})
+
+describe('isMeter', () => {
+  it('tells the five meters from anything else', () => {
+    expect(METERS.every(isMeter)).toBe(true)
+    expect(['5/4', 4, null].some(isMeter)).toBe(false)
   })
 })

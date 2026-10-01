@@ -89,6 +89,7 @@ describe('a written hand', () => {
     ['C4^6/1', 'cannot read "C4^6/1"'],
     ['C4/1@5', 'starts past its bar'],
     ['C4/1@0', 'cannot read "C4/1@0"'],
+    ['C9/1', 'cannot read "C9/1"'],
   ])('names the bar of a token it cannot read: %j', (token, problem) => {
     const error = errorOf(['G C'], { lh: `- | ${token}` })
     expect(error.position).toEqual({ section: 1, line: 1, bar: 2 })

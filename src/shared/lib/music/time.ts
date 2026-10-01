@@ -5,6 +5,9 @@ export const TICKS_PER_BEAT = 12
 export const METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const
 export type Meter = (typeof METERS)[number]
 
+/** Whether stored or typed text names one of the meters. */
+export const isMeter = (value: unknown): value is Meter => METERS.some((meter) => meter === value)
+
 /** Compound meters count dotted quarters: 6/8 has two beats, 12/8 four. */
 const BEATS_PER_BAR: Readonly<Record<Meter, number>> = {
   '2/4': 2,

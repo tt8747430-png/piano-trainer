@@ -1,5 +1,5 @@
 import type { HandNote } from '@/shared/lib/arrangement'
-import type { Finger, Tick } from '@/shared/lib/music'
+import { PIANO, type Finger, type Tick } from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
 import { readPitch } from './note-text'
@@ -33,11 +33,12 @@ const TOKEN = /^([^/@]+)\/([^/@]+)(?:@(.+))?$/
 
 type Fail = (problem: string) => never
 
-/** `C4^1+E4^3`: notes struck together, each with an optional finger; null when one cannot be read. */
+/** `C4^1+E4^3`: notes struck together, each with an optional finger; null when one cannot be read or lies off the piano. */
 function readPitches(text: string): Omit<HandNote, 'startTick' | 'durationTicks'>[] | null {
   const pitches = text.split('+').map((written) => {
     const [name = '', finger, ...extra] = written.split('^')
-    const pitch = readPitch(name)
+    const read = readPitch(name)
+    const pitch = read && read.midi >= PIANO.from && read.midi <= PIANO.to ? read : null
     const fingered = finger === undefined ? undefined : FINGERS.get(finger)
     if (!pitch || extra.length > 0 || (finger !== undefined && fingered === undefined)) return null
     return fingered === undefined ? pitch : { ...pitch, finger: fingered }
