@@ -3,7 +3,7 @@ export const player = {
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
-  progression: { title: '{{numerals}} in {{key}}' },
+  progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
   chromatic: { title: 'Chromatic walk: {{chords}}' },
   qualities: 'Chord types',
   direction: 'Direction',
@@ -20,6 +20,16 @@ export const player = {
   ownFigure: 'The pattern’s own',
   /** The right hand's chord: each nearest the last, or one inversion every time. */
   inversion: { nearest: 'Nearest', own: 'This pattern plays its own shapes.' },
+  /** A progression through the keys, back home at the end. */
+  keyWalk: {
+    label: 'Through the keys',
+    one: 'One key',
+    'semitones-up': 'Up by semitones',
+    'semitones-down': 'Down by semitones',
+    'tones-up': 'Up by whole tones',
+    'tones-down': 'Down by whole tones',
+    fifths: 'Round the circle of fifths',
+  },
   ownKeyOnly: 'Only in {{key}}',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },

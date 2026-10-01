@@ -1,6 +1,6 @@
 import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
 import { choosableChordSize, pieceFit, pieceKey, type Piece } from '@/entities/piece'
-import { ownChoice, type PracticeChoice } from '@/features/practice'
+import { ownChoice, walkingFit, type PracticeChoice } from '@/features/practice'
 import { noteFromParam, noteParam, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -16,7 +16,8 @@ export type PlayerSearch = PracticeView & SetupParams
  */
 export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean): PracticeChoice {
   const own = ownChoice(piece)
-  const fit = pieceFit(piece)
+  const walk = piece.kind === 'progression' ? (search.walk ?? null) : null
+  const fit = walkingFit(pieceFit(piece), walk)
   const { minor } = pieceKey(piece)
   return {
     tonic: search.key ? tonicSpelling(pitchClassOf(noteFromParam(search.key)), minor) : own.tonic,
@@ -26,6 +27,7 @@ export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean
     inversion: search.inversion ?? null,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
     melody,
+    walk,
   }
 }
 

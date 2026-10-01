@@ -1,5 +1,6 @@
 export type { FigureChange, SetupChange, SetupParams } from './model/setup-params'
 export { FigureRows } from './ui/FigureRows'
+export { KeyWalkField } from './ui/KeyWalkField'
 export { MelodySwitch } from './ui/MelodySwitch'
 export { PlayerSetup } from './ui/PlayerSetup'
 export { RecordingSwitch } from './ui/RecordingSwitch'

@@ -1,5 +1,5 @@
 import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
-import { PROGRESSION, type ProgressionChoice } from '@/features/practice'
+import { PROGRESSION, walkingFit, type ProgressionChoice } from '@/features/practice'
 import { keyFromParam, parseNumerals, type KeyParam } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -14,23 +14,26 @@ export type ProgressionSearch = PracticeView & {
 
 /** What a progression's Setup changes: its key, the pattern and figures, and the chord size. */
 export type ProgressionChange = FigureChange &
-  Pick<SetupChange, 'chordSize'> & { readonly key?: KeyParam }
+  Pick<SetupChange, 'chordSize' | 'walk'> & { readonly key?: KeyParam }
 
 /** The URL read: what it leaves out is the Player's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function progressionChoice(
   search: Pick<
     ProgressionSearch,
-    'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize'
+    'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize' | 'walk'
   >,
 ): ProgressionChoice {
+  const walk = search.walk ?? null
+  const fit = walkingFit(PROGRESSION.fit, walk)
   return {
     numerals: parseNumerals(search.p) ?? [],
     key: keyFromParam(search.key),
-    pattern: playablePattern(search.pattern, PROGRESSION.pattern, PROGRESSION.fit),
-    rh: playableFigure(search.rh, RIGHT_FIGURES, PROGRESSION.fit),
-    lh: playableFigure(search.lh, LEFT_FIGURES, PROGRESSION.fit),
+    pattern: playablePattern(search.pattern, PROGRESSION.pattern, fit),
+    rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
+    lh: playableFigure(search.lh, LEFT_FIGURES, fit),
     inversion: search.inversion ?? null,
     chordSize: search.chordSize ?? PROGRESSION.chordSize,
+    walk,
   }
 }
 

@@ -31,6 +31,7 @@ import {
   isChordSize,
   isHands,
   isInversion,
+  isKeyWalk,
   isScaleKind,
   readKey,
   readNumerals,
@@ -73,6 +74,7 @@ function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversi
   }
 }
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)
+const walk = (raw: Raw) => (isKeyWalk(raw.walk) ? raw.walk : undefined)
 
 function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
   const raw: Raw = input
@@ -82,6 +84,7 @@ function validatePlayerSearch(input: Input<PlayerSearch>): PlayerSearch {
     key: key ? noteParam(key) : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
+    walk: walk(raw),
   }
 }
 export const playerSearch = routeSearch(validatePlayerSearch, PLAYER_DEFAULTS)
@@ -143,6 +146,7 @@ function validateProgressionPlayerSearch(input: Input<ProgressionSearch>): Progr
     ...practiceView(raw),
     ...figures(raw),
     chordSize: chordSize(raw),
+    walk: walk(raw),
   }
 }
 export const progressionPlayerSearch = routeSearch(

@@ -34,7 +34,28 @@ describe('arrangeProgression', () => {
       lh: null,
       inversion: null,
       chordSize: 'triads',
+      walk: null,
     })
     expect(performance.bars).toHaveLength(12)
+  })
+
+  it('walks it through the keys and home, a key a section', () => {
+    const performance = arrangeProgression({
+      numerals: numerals('ii V I'),
+      key: C,
+      pattern: 'block',
+      rh: null,
+      lh: null,
+      inversion: null,
+      chordSize: 'sevenths',
+      walk: 'semitones-up',
+    })
+    expect(performance.bars).toHaveLength(39)
+    expect(performance.chords.slice(3, 6).map((chord) => chord.symbol)).toEqual([
+      'E♭m7',
+      'A♭7',
+      'D♭Maj7',
+    ])
+    expect(performance.chords.at(-1)?.symbol).toBe('CMaj7')
   })
 })

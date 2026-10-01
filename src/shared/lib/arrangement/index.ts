@@ -1,4 +1,5 @@
 export { arrange, type ArrangeOptions } from './arrange'
+export { chartInKeys } from './chart-in-keys'
 export { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
 export {
   type Chart,

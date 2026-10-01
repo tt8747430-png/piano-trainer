@@ -1,10 +1,12 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { IN_PLACE, useGoBack } from '@/shared/lib'
 import { numeralText } from '@/shared/lib/music'
 import type { ProgressionSearch } from '../model/progression-search'
 import { useProgressionPlayer } from '../model/use-progression-player'
+import { walkHeadings } from '../model/walk-headings'
 import { PlayerLayout } from './PlayerLayout'
 import { ProgressionSetup } from './ProgressionSetup'
 
@@ -21,12 +23,22 @@ export function ProgressionPlayerPage() {
     search: { p: search.p, key: search.key, size: choice.chordSize },
   })
   const keyName = useKeyName()
+  const headings = useMemo(
+    () => (choice.walk ? walkHeadings(choice.key, choice.walk, keyName) : undefined),
+    [choice.walk, choice.key, keyName],
+  )
+  const named = { numerals: choice.numerals.map(numeralText).join('–'), key: keyName(choice.key) }
   return (
     <PlayerLayout
-      title={t('player:progression.title', {
-        numerals: choice.numerals.map(numeralText).join('–'),
-        key: keyName(choice.key),
-      })}
+      title={
+        choice.walk
+          ? t('player:progression.walking', {
+              ...named,
+              walk: t(`player:keyWalk.${choice.walk}`).toLocaleLowerCase(),
+            })
+          : t('player:progression.title', named)
+      }
+      headings={headings}
       onClose={close}
       view={search}
       player={player}

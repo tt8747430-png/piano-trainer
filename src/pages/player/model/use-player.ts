@@ -17,16 +17,19 @@ export function usePlayer(
 ): PlayerOf<PracticeChoice, SetupChange> {
   const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
-  const { key, pattern, rh, lh, inversion, chordSize } = search
+  const { key, pattern, rh, lh, inversion, chordSize, walk } = search
   const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize }, melody),
-    [piece, key, pattern, rh, lh, inversion, chordSize, melody],
+    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize, walk }, melody),
+    [piece, key, pattern, rh, lh, inversion, chordSize, walk, melody],
   )
   const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
-  // The recording plays along in the piece's own key only: another would put the voice over other chords.
+  // The recording plays along in the piece's own key only: another, or a walk of keys, would put the
+  // voice over other chords.
   const recording =
-    piece.recording && withRecording && isOwnKey(piece, choice.tonic) ? piece.recording : null
+    piece.recording && withRecording && isOwnKey(piece, choice.tonic) && !choice.walk
+      ? piece.recording
+      : null
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
   return {
     choice,

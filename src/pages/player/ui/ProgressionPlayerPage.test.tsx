@@ -52,6 +52,23 @@ describe('A progression in the Player', () => {
     expect(screen.getByText('This pattern plays its own shapes.')).toBeInTheDocument()
   })
 
+  it('walks the progression through the keys chosen in the Setup, titled by the walk', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/progression?p=ii-V-I&key=C&chordSize=sevenths')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('combobox', { name: 'Through the keys' }))
+    await user.click(await screen.findByRole('option', { name: 'Up by semitones' }))
+    expect(router.state.location.search).toMatchObject({ walk: 'semitones-up' })
+    expect(
+      await screen.findByRole('heading', {
+        name: 'ii–V–I from C major, up by semitones',
+        hidden: true,
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Bar 4: E♭m7', hidden: true })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Bar 39: CMaj7', hidden: true })).toBeInTheDocument()
+  })
+
   it('opens the default progression for a line it cannot read', async () => {
     await renderApp('/play/progression?p=Q')
     expect(await screen.findByRole('heading', { name: 'I–V–vi–IV in C major' })).toBeInTheDocument()

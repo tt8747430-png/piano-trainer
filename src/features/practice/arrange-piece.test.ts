@@ -20,6 +20,7 @@ describe('ownChoice', () => {
       inversion: null,
       chordSize: null,
       melody: false,
+      walk: null,
     })
   })
 })
@@ -53,5 +54,19 @@ describe('arrangePiece', () => {
       arrangePiece(twofive, { ...ownChoice(twofive), chordSize }).chords.map((c) => c.symbol)
     expect(symbols('triads')[0]).toBe('Dm')
     expect(symbols('ninths')[0]).toBe('Dm9')
+  })
+
+  it('walks a progression through the keys from the chosen one, home at the end', () => {
+    const twofive = piece('twofive')
+    const walked = arrangePiece(twofive, {
+      ...ownChoice(twofive),
+      chordSize: 'sevenths',
+      walk: 'tones-down',
+    })
+    const own = arrangePiece(twofive, { ...ownChoice(twofive), chordSize: 'sevenths' })
+    const bars = own.bars.length
+    expect(walked.bars).toHaveLength(bars * 7)
+    expect(walked.chords[0]?.symbol).toBe(own.chords[0]?.symbol)
+    expect(walked.chords[own.chords.length]?.symbol).toBe('Cm7')
   })
 })

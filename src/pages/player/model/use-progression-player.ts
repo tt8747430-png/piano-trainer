@@ -14,10 +14,10 @@ export function useProgressionPlayer(
   search: ProgressionSearch,
   setSearch: (patch: Partial<ProgressionSearch>) => void,
 ): PlayerOf<ProgressionChoice, ProgressionChange> {
-  const { p, key, pattern, rh, lh, inversion, chordSize } = search
+  const { p, key, pattern, rh, lh, inversion, chordSize, walk } = search
   const choice = useMemo(
-    () => progressionChoice({ p, key, pattern, rh, lh, inversion, chordSize }),
-    [p, key, pattern, rh, lh, inversion, chordSize],
+    () => progressionChoice({ p, key, pattern, rh, lh, inversion, chordSize, walk }),
+    [p, key, pattern, rh, lh, inversion, chordSize, walk],
   )
   const performance = useMemo(() => arrangeProgression(choice), [choice])
   const player = usePracticePlayer(performance, search, setSearch, PROGRESSION.tempo)

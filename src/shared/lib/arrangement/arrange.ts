@@ -142,7 +142,7 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
 }
 
 /** Keeps the chord's letters: its root moves by the interval between tonics, its bass likewise. */
-function transposeChord(chord: Chord, from: SpelledNote, to: SpelledNote): Chord {
+export function transposeChord(chord: Chord, from: SpelledNote, to: SpelledNote): Chord {
   const root = transposeNote(chord.root, from, to)
   if (!chord.bass) return { root, quality: chord.quality }
   return {

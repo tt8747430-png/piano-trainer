@@ -189,3 +189,4 @@ export {
   sameKey,
   type CircleRing,
 } from './circle'
+export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'

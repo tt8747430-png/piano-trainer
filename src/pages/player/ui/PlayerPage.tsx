@@ -1,10 +1,12 @@
+import { useMemo } from 'react'
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
-import { entryTitles, pieceById, usePieceHeadings, type Piece } from '@/entities/piece'
-import { useLocale } from '@/shared/i18n'
+import { entryTitles, pieceById, pieceKey, usePieceHeadings, type Piece } from '@/entities/piece'
+import { useKeyName, useLocale } from '@/shared/i18n'
 import { IN_PLACE } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { useClose } from '../model/use-close'
 import { usePlayer } from '../model/use-player'
+import { walkHeadings } from '../model/walk-headings'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
@@ -13,11 +15,20 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const navigate = useNavigate({ from: '/play/$pieceId' })
   const close = useClose(piece)
-  const headings = usePieceHeadings(piece)
+  const ownHeadings = usePieceHeadings(piece)
+  const keyName = useKeyName()
   const { choice, performance, player, changeSetup } = usePlayer(
     piece,
     search,
     (patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE }),
+  )
+  const { minor } = pieceKey(piece)
+  const headings = useMemo(
+    () =>
+      choice.walk
+        ? walkHeadings({ tonic: choice.tonic, minor }, choice.walk, keyName)
+        : ownHeadings,
+    [choice.walk, choice.tonic, minor, keyName, ownHeadings],
   )
   return (
     <PlayerLayout

@@ -1,5 +1,5 @@
 import type { Accompaniment, PatternFit, PatternId } from '@/entities/pattern'
-import type { ChordSize, Key, Numeral } from '@/shared/lib/music'
+import type { ChordSize, Key, KeyWalk, Numeral } from '@/shared/lib/music'
 
 // What a progression in the Player is, apart from its chart, so the router's validators carry no
 // arrangement into the first paint.
@@ -27,4 +27,6 @@ export interface ProgressionChoice extends Accompaniment {
   readonly numerals: readonly Numeral[]
   readonly key: Key
   readonly chordSize: ChordSize
+  /** Through the keys from `key` and home; `null` plays it in `key` alone. */
+  readonly walk: KeyWalk | null
 }

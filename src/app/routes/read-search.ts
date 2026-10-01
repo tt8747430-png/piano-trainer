@@ -4,6 +4,7 @@ import { isOneOf } from '@/shared/lib'
 import {
   CHORD_SIZES,
   INVERSIONS,
+  KEY_WALKS,
   keyParam,
   note,
   numeralsParam,
@@ -41,6 +42,7 @@ export const isHands = isOneOf(HANDS)
 export const isScaleKind = isOneOf(SCALE_KINDS)
 export const isChordSize = isOneOf(CHORD_SIZES)
 export const isInversion = isOneOf(INVERSIONS)
+export const isKeyWalk = isOneOf(KEY_WALKS)
 export const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
 
 /** The key a tool or a progression opens in. */
