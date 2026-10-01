@@ -50,6 +50,12 @@ describe('repertoire', () => {
     expect(pieces.original('bz1')).toBe(entryById('bz1'))
   })
 
+  it('gives the same version each time it is asked, so what is worked out from it stays', () => {
+    const pieces = repertoire({ versions: { bz1: VERSION }, songs: [SONG] })
+    expect(pieces.piece('bz1')).toBe(pieces.piece('bz1'))
+    expect(pieces.entry('my-1')).toBe(pieces.piece('my-1'))
+  })
+
   it('makes a listing with a version a song that plays', () => {
     const listing = entryById('bz4')
     expect(listing && isPiece(listing)).toBe(false)

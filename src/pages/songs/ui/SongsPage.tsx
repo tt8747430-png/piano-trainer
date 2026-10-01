@@ -62,7 +62,7 @@ export function SongsPage() {
               options={[
                 { value: 'all', label: t('songs:all') },
                 ...shelves
-                  .filter((shelf) => shelf.entries.length > 0)
+                  .filter((shelf) => shelf.entries.length > 0 || shelf.id === search.collection)
                   .map((shelf) => ({ value: shelf.id, label: shelf.name })),
               ]}
               onChange={(collection) => set({ collection })}

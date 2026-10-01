@@ -68,7 +68,6 @@ export const editor = {
   },
   song: {
     title: 'Title',
-    key: 'Key',
     bpm: '{{tempo}} BPM',
     tempo: 'Tempo',
     pattern: 'Pattern',

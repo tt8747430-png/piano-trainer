@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { musicOf, pieceById, type PiecesState } from '@/entities/piece'
+import {
+  musicOf,
+  PIECES,
+  pieceById,
+  sameMusic,
+  type ChartPiece,
+  type PiecesState,
+} from '@/entities/piece'
+import { readDraft, writeDraft } from '@/features/score-editor'
 import { editorTarget } from './editor-target'
 
 const NONE: PiecesState = { versions: {}, songs: [], nextSong: 1 }
@@ -26,6 +34,16 @@ describe('editorTarget', () => {
     })
     expect(target?.music).toEqual(musicOf(amazing))
     expect(target?.kind === 'version' && target.original).toEqual(musicOf(amazing))
+  })
+
+  it.each(
+    PIECES.filter((piece): piece is ChartPiece => piece.kind !== 'progression').map((piece) => [
+      piece.id,
+    ]),
+  )('knows %s written back unchanged as its original, however the book writes it', (id) => {
+    const target = editorTarget(NONE, id)
+    if (target?.kind !== 'version') throw new Error(`${id} has a version to edit`)
+    expect(sameMusic(writeDraft(readDraft(target.music)), target.original)).toBe(true)
   })
 
   it('edits the learner’s version where there is one', () => {

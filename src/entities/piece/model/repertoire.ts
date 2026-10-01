@@ -56,12 +56,19 @@ export function repertoire({
     const entry = entryById(id)
     return entry && entry.kind !== 'progression' ? entry : undefined
   }
+  // Each version is worked out once, so a screen's memos over it hold.
+  const played = new Map<string, ChartPiece>()
   const entry = (id: string): Entry | undefined => {
     const mine = isOwnSongId(id) ? own.get(id) : undefined
     if (mine) return mine
     const original = versionable(id)
     const music = Object.hasOwn(versions, id) ? versions[id] : undefined
-    return original && music ? versionOf(original, music) : entryById(id)
+    if (!original || !music) return entryById(id)
+    const known = played.get(id)
+    if (known) return known
+    const version = versionOf(original, music)
+    played.set(id, version)
+    return version
   }
   return {
     entry,

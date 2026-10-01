@@ -95,6 +95,12 @@ describe('Songs: your own', () => {
     expect(router.state.location.pathname).toBe('/songs')
   })
 
+  it('names Your songs in the Collection pop-up when chosen, before there are any', async () => {
+    await renderApp('/songs?collection=mine')
+    expect(await screen.findByText('No songs match.')).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: /Collection/ })).toHaveTextContent('Your songs')
+  })
+
   it('lists a listing whose chart the learner wrote as a song', async () => {
     const version = {
       ...SONG,

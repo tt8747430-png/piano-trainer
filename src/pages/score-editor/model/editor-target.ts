@@ -11,6 +11,10 @@ import {
   type PiecesState,
 } from '@/entities/piece'
 import { chartStart, type MusicTarget } from '@/features/edit-piece'
+import { readDraft, writeDraft } from '@/features/score-editor'
+
+/** Music as the editor writes it: the book's own spelling of beats and bars put as the writer puts it. */
+const asWritten = (music: PieceMusic): PieceMusic => writeDraft(readDraft(music))
 
 /** What the editor writes: a catalog song's, study's or listing's version, or an own song (spec §2). */
 export type EditorTarget =
@@ -21,7 +25,10 @@ export type EditorTarget =
       readonly entry: ChartPiece | Listing
       /** The music the editor opens on: the learner's version, else the original. */
       readonly music: PieceMusic
-      /** What Reset brings back and a version equal to it is no version: a listing's is its chart's start. */
+      /**
+       * A version equal to it is no version: the original as the editor writes it (a listing's, its chart's
+       * start).
+       */
       readonly original: PieceMusic
       readonly hasVersion: boolean
     }
@@ -43,8 +50,10 @@ export function editorTarget(state: PiecesState, id: string): EditorTarget | und
   }
   const entry = repertoire(state).original(id)
   if (!entry || entry.kind === 'progression') return undefined
-  const original =
-    entry.kind === 'listing' ? chartStart(pieceKey(entry), entry.meter) : musicOf(entry)
+  // Compared with what the editor writes, so the original written back unchanged is no version.
+  const original = asWritten(
+    entry.kind === 'listing' ? chartStart(pieceKey(entry), entry.meter) : musicOf(entry),
+  )
   const version = Object.hasOwn(state.versions, id) ? state.versions[id] : undefined
   return {
     kind: 'version',

@@ -70,7 +70,6 @@ export const editor: LocaleResources['editor'] = {
   },
   song: {
     title: 'Название',
-    key: 'Тональность',
     bpm: '{{tempo}} уд/мин',
     tempo: 'Темп',
     pattern: 'Фактура',
