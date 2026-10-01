@@ -44,7 +44,8 @@ score cannot use.
 
 ## Consequences
 
-- The editor (sub-project 9) edits a Score and adds `perform(score)`, its way back to a Performance; a lesson's staff
+- The editor (sub-project 9) edits a piece's music, not a Score: its chart, its tune and bars of either hand written
+  note by note, which `arrange` plays (ADR 0027, amending this line's first plan, `perform(score)`); a lesson's staff
   (5) and the scale as sheet music (4) reuse `ScoreView`; the key's chords (4) and exercises (7) hand the Player a
   Performance.
 - The roadmap's §12 items are decided: lyrics under the staff are planned (no piece carries its words yet); a single

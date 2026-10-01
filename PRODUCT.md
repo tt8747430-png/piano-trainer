@@ -37,7 +37,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 ## Capabilities and Constraints
 
 - Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4, Settings behind its gear),
-  Songs (songs and listings), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
+  Songs (songs and listings, and the learner's own songs, made from New song), a Piece, the Player (sheet music as it plays; Listen or Wait mode, a loop, speed
   training, swing; a piece, or a scale's chords walked with a song's patterns), Learn (lessons as worksheets, grouped by module and filtered by level and category: the Fundamentals module's
   fourteen, from finding your way on the keys to key signatures; Accompaniment's nine, from bass and chords through
   the five ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
@@ -52,7 +52,10 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   pattern on the staff over C, the music that plays it), with favourites, hiding from the Player's list, and the
   learner's own patterns made from any two figures; and the tools: the Chord finder, naming the keys played; Reharmonise, the chords that hold a
   melody note; Passing chords, the ways between two chords; Progressions, numerals or chords in any key from a library by style,
-  played and practised in the Player), Practice (trainers, each a ladder of levels or Custom, runs of rounds summed up and recorded per level: Build
+  played and practised in the Player), the score editor (the learner's version of any song or study, or the chart of a
+  listing, and songs of their own: chords typed, tapped or played, the melody and any bar of either hand written note
+  by note from the keys, the computer keyboard or MIDI, undo and redo, every change saved, played in the Player in any
+  key), Practice (trainers, each a ladder of levels or Custom, runs of rounds summed up and recorded per level: Build
   chord, Name chord, Build scale and My gaps; intervals, chords and scales by ear; reading notes, key signatures, a
   key's degrees and a chord's role; exercises by group, each generated in
   any key and played in the Player: scales from any note over one to four octaves, in 3rds, 6ths and groups, in
@@ -60,7 +63,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   the dominant scale down, arpeggios from the 3rd and drop-2 7ths; Piano With Jonny's 2-5-1 scale, inner voice, modes,
   rapid switch and pattern shifting; the five-finger position and Hanon No. 1; and the walks and progressions through
   the keys; studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
-  and ADRs 0012–0026.
+  and ADRs 0012–0027.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.

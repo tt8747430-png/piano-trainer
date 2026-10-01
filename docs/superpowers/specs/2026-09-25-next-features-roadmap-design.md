@@ -10,9 +10,10 @@
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11). Revised 2026-09-29:
   «Ромашковые поля» written as the course writes it and the chromatic walk (ADR 0015), from three pages of Vasily
   Gorshkov's accompaniment course; then a piece may carry a recording that plays along (ADR 0016), its vocal first.
-- **Built:** sub-projects 1, 2, 3, 4, 5, 7 and 8 (the owner asked on 2026-10-01 to skip 6, the Path as a course, which
-  stays planned). Sub-project 7 (exercises and trainers): its spec `2026-10-01-practice-exercises-and-trainers-design.md`,
-  ADRs 0024 and 0025. Sub-project 8 (patterns): its spec `2026-10-01-patterns-design.md`, ADR 0026. The specs and plans of 1 to 4 were removed once built, on 2026-09-27 (`git log
+- **Built:** sub-projects 1, 2, 3, 4, 5, 7, 8 and 9 (the owner asked on 2026-10-01 to skip 6, the Path as a course,
+  which stays planned). Sub-project 7 (exercises and trainers): its spec `2026-10-01-practice-exercises-and-trainers-design.md`,
+  ADRs 0024 and 0025. Sub-project 8 (patterns): its spec `2026-10-01-patterns-design.md`, ADR 0026. Sub-project 9 (the
+  score editor): its spec `2026-10-01-score-editor-design.md`, ADR 0027. The specs and plans of 1 to 4 were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
   places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3
@@ -332,8 +333,8 @@ kernel.
 
 | Item                                   | What it is                                                                                 | Waits for |
 | -------------------------------------- | ------------------------------------------------------------------------------------------ | --------- |
-| MusicXML load and save                 | Bring a score from MuseScore, Sibelius, Finale or Dorico, and take one out                  | 9         |
-| Record from a MIDI keyboard            | Play on a connected keyboard, in a full-screen keyboard, and the notes are written into a score | 9     |
+| MusicXML load and save                 | Bring a score from MuseScore, Sibelius, Finale or Dorico, and take one out                  | the owner (9 built) |
+| Record from a MIDI keyboard            | Play on a connected keyboard, in a full-screen keyboard, and the notes are written into a score | the owner (9 built) |
 | Live score                             | What you play written onto a grand staff as you play, the chord named above it              | 3, 5      |
 | Toggle mode                            | Keys stay lit when tapped, finger numbers typed onto them, two colours: teaching diagrams   | 1, 5      |
 | Lyrics under the staff                 | A song's words under its tune on the sheet music, the syllables carried by the melody's notes | a piece that carries its words |
@@ -995,7 +996,7 @@ the range, the metronome's drum grooves and tap tempo, and a MIDI sustain pedal 
 | -------------------------------------------------------------------------------------------- | -------------------------------- | ----------- |
 | Rhythm training                                                                              | Clefs' Exercises                 | 7           |
 | A chord chart generator (a progression's diagrams at once)                                   | The Ultimate Piano               | 5           |
-| A lead-sheet editor with sections and lyrics (ChordPro export)                               | The Ultimate Piano               | 9           |
+| A lead-sheet editor with sections and lyrics (ChordPro export)                               | The Ultimate Piano               | 9: decided (sections built; lyrics planned, §5; ChordPro not for this app) |
 | Mark other keys (show the keys outside a scale)                                              | The Ultimate Piano's learn view  | 4           |
 | A key chosen for spelling what is played (the live score)                                    | The Ultimate Piano               | planned     |
 

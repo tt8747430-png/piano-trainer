@@ -713,6 +713,33 @@ sideways, as Flowkey shows it: ADR 0013.
   every accidental on its note; an interval card writes its two notes on the treble staff alone (`staff`), 130 units
   tall: room above for a 13th over B4 with its sharp, below for two ledger lines.
 
+### The score editor
+
+The page where a learner writes their version of a piece or a song of their own (ADR 0027), full screen like the
+Player and a laptop's first: a toolbar (✕, the title with "Your version" in soft ink under it once there is one,
+Undo and Redo round, MIDI, the song's settings ⚙, Play in honey: the screen's one action, Stop while it sounds), the
+**Chords · Melody · Right hand · Left hand** segments, the sheet scrolling between them and the tools, a line of soft
+text saying where the caret is, and the keys (160px, 192px from 1024px).
+
+- **The sheet:** each section's heading a pull-down (its kind, Join with the section before) over its lines, each chart
+  line one line of grand staff with its bars numbered and its chord symbols as the Player's sheet sets them; the
+  melody and a written right hand on the treble, a written left hand on the bass, a staff with nothing in a bar left
+  empty. The caret is the Player's cursor band (sky mist) on the layer's staff, as wide as the value chosen (over the
+  chord symbols in Chords); bars chosen with Shift sit on a sand band; in a hand's layer, a bar the pattern plays reads
+  **Pattern** in soft ink on that staff. A click puts the caret where it lands.
+- **The tools,** one row over the keys that scrolls sideways on a phone: in the notes, the values as a segmented
+  control of their glyphs (Noto Music), Dot, Triplet (x/4 only) and Chord as outline toggles (pressed: sand), Rest,
+  ‹ › ↑ ↓ as round buttons, Respell, Delete, and in a hand Write out or Back to the pattern and a Finger pop-up for
+  each note at the caret; in the chords, the Chord field (Literata), the key's chords as outline buttons with their
+  symbols in Literata, Delete chord, the Bar pull-down (its actions as 44px rows and the bar's Length pop-up), ‹ ›.
+- **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
+- **The song's settings** (a sheet): an own song's Title, the Key pop-up, the Tempo slider (40–160, set on release),
+  the Pattern pop-up of the patterns the music can play by group, and the meter as a fact.
+- **New song** (Songs' round +) is a sheet: Title, Key, the five meters as segments, and Make in honey at its foot.
+- **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
+  (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the
+  chart (the honey pill).
+
 ### Motion
 
 One ease-out, `cubic-bezier(0.22, 1, 0.36, 1)`: 200ms on colour changes, 80ms on keys. Sheets rise on their own

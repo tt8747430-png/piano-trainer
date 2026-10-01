@@ -61,7 +61,7 @@ it. `@` → `src`.
   `/learn/patterns/new` and `…/$patternRef/edit`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
   `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); Practice's trainers
   (`/practice/trainers/$trainerId`); the Player's `/play/$pieceId`, `/play/walk`,
-  `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; screens are
+  `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId`; screens are
   lazy through `routes/*-screens.ts` (home, settings, songs, learn, practice, player: a chunk holds the screens
   that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (each
@@ -69,8 +69,8 @@ it. `@` → `src`.
   the router imports no page or widget code, or it would leave its lazy chunk; validators run as the app opens, so they
   import only what a URL is made of, with `read-search.ts`, never a chart's arrangement; each exports its `read*`
   reader and a remembered route's kept params), `routes/remember.ts` (a remembered route's `beforeLoad`: the two rules
-  of ADR 0022, one redirect at most; `createAppRouter({ history, views })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore services router />`; the router's
-  context holds the views and patterns stores),
+  of ADR 0022, one redirect at most; `createAppRouter({ history, views, patterns, pieces })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore piecesStore services router />`;
+  the router's context holds the views, patterns and pieces stores),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
   `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `RouteError`,
@@ -83,7 +83,9 @@ it. `@` → `src`.
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
   the exercise's own fields) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
   references, `pages/patterns`, `pages/pattern` and `pages/pattern-editor` the Patterns reference, a pattern's page
-  and the editor of the learner's own.
+  and the editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
+  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; its parts share one
+  context and read the store narrowly).
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup: its button and sheet, its first page
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `FigureRows` (with the
@@ -96,7 +98,8 @@ it. `@` → `src`.
   fifths and a key's facts, signature, chords and borrowed chords), `interval-explorer` (every interval over a root
   as Clefs' cards), `tension-explorer` (a 7th chord's twelve notes in the owner's table's four groups, each played on
   top), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
-  `passing-chords` (the ways between two chords, each row voice-led), `exercise-list` (Practice's exercises by group, each
+  `passing-chords` (the ways between two chords, each row voice-led), `score-sheet` (the score editor's sheet: a line of
+  grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (Practice's exercises by group, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progressions` (numerals or chords in any key,
   the library beside them), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
@@ -104,7 +107,9 @@ it. `@` → `src`.
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (Practice's trainers)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `remember-view`, `manage-patterns` (favourite, hide, save and delete
-  the learner's own)), `connect-midi` (the connection, the status
+  the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
+  song; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
+  chords, bars, sections and settings; the caret; `reduce` with undo and redo; `createEditorStore`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
@@ -129,7 +134,10 @@ it. `@` → `src`.
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
   Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`, `pieceFit`, `choosableChordSize`,
-  `isOwnKey`), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
+  `isOwnKey`; bars of either hand written out (`hands`, `parseHands`) and the writers back to text (`writeBar`,
+  `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`, version 1, their
+  versions by piece id and their own songs (`my-<n>`), read through the repertoire (`repertoire`, `useRepertoire`):
+  the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
   `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`,
   version 1: favourites, hidden, own; `referenceShelves` / `pickerShelves`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
@@ -162,8 +170,9 @@ it. `@` → `src`.
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling, the right hand's chord voice-led or
-  in one inversion (`voiceInversion`, `inversionPitchClasses`); `chartInKeys`, a chart once per key; `playsKeyTriads`), `notation` (`notate`, a
-  Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
+  in one inversion (`voiceInversion`, `inversionPitchClasses`); a bar's written hands in place of the pattern's;
+  `chartInKeys`, a chart once per key; `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
+  Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a hand's keys, an interval up, down or
   together (`intervalSounds`), which keys sound when and which were struck last), `services`
@@ -206,7 +215,7 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
   scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
-  `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore` and `patternsStore` too); a widget that
+  `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore` and `piecesStore` too); a widget that
   leads elsewhere, `await renderRouted(ui)`; which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and
   `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that sound); both in
