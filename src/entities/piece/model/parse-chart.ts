@@ -1,8 +1,15 @@
 import { isMethodCode, type MethodCode } from '@/entities/pattern'
-import type { Chart, ChartBar, ChartChord } from '@/shared/lib/arrangement'
-import { beatsPerBar, ChordSymbolError, parseChordSymbol, type Chord } from '@/shared/lib/music'
+import type { Chart, ChartBar, ChartChord, WrittenHands } from '@/shared/lib/arrangement'
+import {
+  beatsPerBar,
+  ChordSymbolError,
+  parseChordSymbol,
+  TICKS_PER_BEAT,
+  type Chord,
+} from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
+import { HAND_IDS, parseHands, type HandBar, type ReadHands } from './parse-hands'
 import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
@@ -54,7 +61,17 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
   return { chords, beats: chords.reduce((sum, chord) => sum + chord.beats, 0) }
 }
 
-/** Reads a song's or study's chart, naming the bar of any mistake in a ContentError. */
+/** The hands a bar writes, from what was read for every bar; none when it writes neither. */
+function handsOf(read: ReadHands, index: number): WrittenHands | undefined {
+  const hands: { rh?: WrittenHands['rh']; lh?: WrittenHands['lh'] } = {}
+  for (const hand of HAND_IDS) {
+    const notes = read[hand]?.[index]
+    if (notes) hands[hand] = notes
+  }
+  return hands.rh || hands.lh ? hands : undefined
+}
+
+/** Reads a song's or study's chart, its written hands in its bars, naming the bar of any mistake in a ContentError. */
 export function parseChart(piece: ChartPiece): Chart {
   const meterBeats = beatsPerBar(piece.meter)
   const failAt =
@@ -62,17 +79,31 @@ export function parseChart(piece: ChartPiece): Chart {
     (problem) => {
       throw new ContentError(piece.id, position, problem)
     }
+  const places: HandBar[] = []
+  const sections = piece.sections.map((section, s) => ({
+    lines: section.lines.map((line, l) => {
+      const bars = line.split(/\s+/).filter(Boolean)
+      if (bars.length === 0) failAt({ section: s + 1, line: l + 1 })('empty line')
+      return bars.map((bar, b) => {
+        const position = { section: s + 1, line: l + 1, bar: b + 1 }
+        const read = readBar(bar, meterBeats, failAt(position))
+        places.push({ ticks: Math.round(read.beats * TICKS_PER_BEAT), position })
+        return read
+      })
+    }),
+  }))
+  const hands = parseHands(piece, places)
+  let index = 0
   return {
     key: pieceKey(piece),
     meter: piece.meter,
-    sections: piece.sections.map((section, s) => ({
-      lines: section.lines.map((line, l) => {
-        const bars = line.split(/\s+/).filter(Boolean)
-        if (bars.length === 0) failAt({ section: s + 1, line: l + 1 })('empty line')
-        return bars.map((bar, b) =>
-          readBar(bar, meterBeats, failAt({ section: s + 1, line: l + 1, bar: b + 1 })),
-        )
-      }),
+    sections: sections.map((section) => ({
+      lines: section.lines.map((line) =>
+        line.map((bar) => {
+          const written = handsOf(hands, index++)
+          return written ? { ...bar, hands: written } : bar
+        }),
+      ),
     })),
   }
 }

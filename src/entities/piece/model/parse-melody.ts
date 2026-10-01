@@ -1,21 +1,8 @@
 import type { Melody, MelodyNote } from '@/shared/lib/arrangement'
-import { midiOf, parseNoteName, type Midi, type SpelledNote } from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError } from './content-error'
+import { readPitch } from './note-text'
 import type { ChartPiece } from './types'
-
-/** `C#5`: a note name and a one-digit octave, or null when that is no key on the keyboard. */
-function readPitch(pitch: string): { midi: Midi; spelled: SpelledNote } | null {
-  const written = /^(.+?)(\d)$/.exec(pitch)
-  const spelled = written?.[1] ? parseNoteName(written[1]) : null
-  if (!written || !spelled) return null
-  try {
-    return { midi: midiOf(spelled, Number(written[2])), spelled }
-  } catch (error) {
-    if (error instanceof RangeError) return null
-    throw error
-  }
-}
 
 /** `E4/1 D4/.5 r/1 | C#5/1.5`: note and octave (or `r` for a rest), a slash, then beats. */
 export function parseMelody(piece: ChartPiece): Melody | undefined {

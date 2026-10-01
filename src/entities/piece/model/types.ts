@@ -78,11 +78,19 @@ interface PieceCommon extends EntryCommon {
   readonly recording?: Recording
 }
 
+/** A hand's bars written note by note, `|` between them, `-` for a bar the pattern plays: see docs/CONTENT.md. */
+export interface Hands {
+  readonly rh?: string
+  readonly lh?: string
+}
+
 export interface ChartPiece extends PieceCommon {
   readonly kind: 'song' | 'study'
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
+  /** Bars of either hand written note by note, played in place of the pattern's hand there. */
+  readonly hands?: Hands
 }
 
 export interface ProgressionPiece extends PieceCommon {

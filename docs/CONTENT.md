@@ -51,6 +51,7 @@ export default definePiece({
 | `pattern`                  | The accompaniment the Player starts with (a pattern id, below)                        |
 | `note`                     | Optional `LocalText`, by the [copy rule](#text)                                       |
 | `sections`, `melody`       | Songs and studies: the [chart](#the-chart) and an optional [melody](#the-melody)      |
+| `hands`                    | Songs and studies: optional bars of either hand [written out](#written-hands)         |
 | `progression`, `chordSize` | Progressions: see [Progressions](#progressions)                                       |
 
 A chart that names method codes starts the Player on its own plan: each coded chord plays its method's pattern,
@@ -103,6 +104,24 @@ international: B, never H.
 rest; `|` may mark bars and is ignored. It is written in the piece's key and is no longer than the chart. A melody
 lets the tune be doubled and makes the patterns that play it (r5–r7) available. Its notes keep the spelling they are
 written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval.
+
+## Written hands
+
+`hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there
+(the learner's versions are written so too, ADR 0027). Each hand is its bars separated by `|`, one entry for every bar
+of the chart in order:
+
+| Written                  | Means                                                                                                                                                     |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-`                      | The pattern plays this hand in this bar                                                                                                                   |
+| `C4/1 E4/1 G4/2`         | Notes one after another, each a pitch and its beats, as the melody writes them                                                                            |
+| `C4+E4+G4/2`             | Notes struck together                                                                                                                                     |
+| `E4^3`                   | A finger (1–5), as the figure notation writes it                                                                                                          |
+| `r/1`                    | A rest; a bar of rests is written silence, not the pattern                                                                                                |
+| `C3/4 E3+G3/1@2 E3+G3/1` | `@beat` starts a token on a beat counted from 1 (`@2.5` the "and" of 2), so a held note and the notes over it are both written; the next token follows it |
+
+Written in the piece's key, on whole ticks, every note on the piano. A note may last past its bar's end only into bars
+where the same hand is written: it is held across the barline.
 
 ## The recording
 
