@@ -9,6 +9,7 @@ import {
   type ChordQuality,
   type Finger,
   type Hand,
+  type Inversion,
   type Key,
   type Midi,
   type PitchClass,
@@ -16,7 +17,12 @@ import {
   type Tone,
 } from '@/shared/lib/music'
 import type { FigureToken } from './types'
-import { rightHandPitchClasses, voiceLead } from './voice-leading'
+import {
+  inversionPitchClasses,
+  rightHandPitchClasses,
+  voiceInversion,
+  voiceLead,
+} from './voice-leading'
 
 /** Everything the figure tokens need to know about the chord being played. */
 export interface ChordContext {
@@ -33,7 +39,7 @@ export interface ChordContext {
   readonly bass: Midi
   /** The close triad from `root`. */
   readonly triad: readonly Midi[]
-  /** The chord voice-led from the previous one. */
+  /** The chord voice-led from the previous one, or in the inversion asked for. */
   readonly voiced: readonly Midi[]
   /** The key the piece is played in, for its I, IV and V triads. */
   readonly key: Key
@@ -57,6 +63,8 @@ export function chordContext(
   chord: ContextChord,
   previous: readonly Midi[] | null,
   key: Key,
+  /** Every chord in this inversion; `null` voice-leads each from the last. */
+  inversion: Inversion | null = null,
 ): ChordContext {
   const rootPc = pitchClassOf(chord.root)
   const bassPc = pitchClassOf(chord.bass)
@@ -64,7 +72,10 @@ export function chordContext(
   const fifth = within(chord.tones[2]?.semitones, 7)
   const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
   const root = midi(55 + pitchClass(rootPc - 7))
-  const voiced = voiceLead(previous, rightHandPitchClasses(chord.tones))
+  const voiced =
+    inversion === null
+      ? voiceLead(previous, rightHandPitchClasses(chord.tones))
+      : voiceInversion(previous, inversionPitchClasses(chord.tones), inversion)
   return {
     third,
     fifth,

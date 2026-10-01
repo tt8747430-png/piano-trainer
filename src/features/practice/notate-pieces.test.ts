@@ -61,6 +61,7 @@ describe('notation of the content', () => {
           pattern: CHROMATIC.pattern,
           rh: null,
           lh: null,
+          inversion: null,
         }),
       ),
     )
@@ -117,6 +118,7 @@ describe('engraving of the content', () => {
           pattern: CHROMATIC.pattern,
           rh: null,
           lh: null,
+          inversion: null,
         }),
       ),
     ).toEqual([])

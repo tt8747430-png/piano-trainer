@@ -18,7 +18,10 @@ export type ProgressionChange = FigureChange &
 
 /** The URL read: what it leaves out is the Player's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function progressionChoice(
-  search: Pick<ProgressionSearch, 'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'chordSize'>,
+  search: Pick<
+    ProgressionSearch,
+    'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize'
+  >,
 ): ProgressionChoice {
   return {
     numerals: parseNumerals(search.p) ?? [],
@@ -26,6 +29,7 @@ export function progressionChoice(
     pattern: playablePattern(search.pattern, PROGRESSION.pattern, PROGRESSION.fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, PROGRESSION.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, PROGRESSION.fit),
+    inversion: search.inversion ?? null,
     chordSize: search.chordSize ?? PROGRESSION.chordSize,
   }
 }

@@ -28,6 +28,10 @@ export interface PlacedChord {
 /** The explorers offer root position and at most the first three inversions. */
 const MOST_INVERSIONS = 3
 
+/** Root position and the first three inversions: the bass on the root, 3rd, 5th or 7th. */
+export const INVERSIONS = [0, 1, 2, 3] as const
+export type Inversion = (typeof INVERSIONS)[number]
+
 /**
  * The last inversion a chord of `notes` notes is shown in: one per tone after the root, at most
  * three (the 3rd, 5th or 7th in the bass).

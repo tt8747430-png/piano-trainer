@@ -25,7 +25,10 @@ export type ChromaticSearch = PracticeView & {
  * play (From the chart, a tune, the key's triads: the walk has no key).
  */
 export function chromaticChoice(
-  search: Pick<ChromaticSearch, 'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh'>,
+  search: Pick<
+    ChromaticSearch,
+    'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh' | 'inversion'
+  >,
 ): ChromaticChoice {
   return {
     root: noteFromParam(search.root),
@@ -34,6 +37,7 @@ export function chromaticChoice(
     pattern: playablePattern(search.pattern, CHROMATIC.pattern, CHROMATIC.fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, CHROMATIC.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, CHROMATIC.fit),
+    inversion: search.inversion ?? null,
   }
 }
 

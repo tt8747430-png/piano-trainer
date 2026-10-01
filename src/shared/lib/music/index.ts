@@ -140,6 +140,7 @@ export {
 } from './scale'
 export {
   fitInversion,
+  INVERSIONS,
   lastInversion,
   placeBorrowedChords,
   placeChord,
@@ -148,6 +149,7 @@ export {
   walkChords,
   type PlacedChord,
   type PlacedScaleChord,
+  type Inversion,
   type PlacedTone,
 } from './place'
 export {

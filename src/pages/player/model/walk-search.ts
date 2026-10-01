@@ -17,7 +17,7 @@ export type WalkChange = FigureChange &
 
 /** The walk's URL read: what it leaves out is the walk's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function walkChoice(
-  search: Pick<WalkSearch, 'root' | 'kind' | 'pattern' | 'rh' | 'lh' | 'chordSize'>,
+  search: Pick<WalkSearch, 'root' | 'kind' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize'>,
 ): WalkChoice {
   return {
     root: noteFromParam(search.root),
@@ -25,6 +25,7 @@ export function walkChoice(
     pattern: playablePattern(search.pattern, WALK.pattern, WALK.fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, WALK.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, WALK.fit),
+    inversion: search.inversion ?? null,
     chordSize: search.chordSize ?? WALK.chordSize,
   }
 }

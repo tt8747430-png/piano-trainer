@@ -15,7 +15,7 @@ async function renderSetup(fit: Partial<PatternFit> = {}) {
   const onFigures = vi.fn()
   const view = renderWithSettings(
     <PlayerSetup
-      figures={{ pattern: 'block', rh: null, lh: null }}
+      figures={{ pattern: 'block', rh: null, lh: null, inversion: null }}
       fit={{ ...SONG, ...fit }}
       onFigures={onFigures}
     >

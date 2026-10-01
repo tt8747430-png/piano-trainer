@@ -14,10 +14,10 @@ export function useChromaticPlayer(
   search: ChromaticSearch,
   setSearch: (patch: Partial<ChromaticSearch>) => void,
 ): PlayerOf<ChromaticChoice, ChromaticChange> {
-  const { chords, root, direction, pattern, rh, lh } = search
+  const { chords, root, direction, pattern, rh, lh, inversion } = search
   const choice = useMemo(
-    () => chromaticChoice({ chords, root, direction, pattern, rh, lh }),
-    [chords, root, direction, pattern, rh, lh],
+    () => chromaticChoice({ chords, root, direction, pattern, rh, lh, inversion }),
+    [chords, root, direction, pattern, rh, lh, inversion],
   )
   const performance = useMemo(() => arrangeChromatic(choice), [choice])
   const player = usePracticePlayer(performance, search, setSearch, CHROMATIC.tempo)

@@ -59,6 +59,7 @@ describe('arrangeWalk', () => {
       pattern: WALK.pattern,
       rh: null,
       lh: null,
+      inversion: null,
       chordSize: 'sevenths',
     })
     expect(performance.bars).toHaveLength(15)

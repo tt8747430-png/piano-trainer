@@ -17,6 +17,7 @@ describe('ownChoice', () => {
       pattern: 'r4',
       rh: null,
       lh: null,
+      inversion: null,
       chordSize: null,
       melody: false,
     })

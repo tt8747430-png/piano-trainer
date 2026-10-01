@@ -17,10 +17,10 @@ export function usePlayer(
 ): PlayerOf<PracticeChoice, SetupChange> {
   const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
-  const { key, pattern, rh, lh, chordSize } = search
+  const { key, pattern, rh, lh, inversion, chordSize } = search
   const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, chordSize }, melody),
-    [piece, key, pattern, rh, lh, chordSize, melody],
+    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize }, melody),
+    [piece, key, pattern, rh, lh, inversion, chordSize, melody],
   )
   const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])

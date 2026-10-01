@@ -32,6 +32,7 @@ describe('arrangeProgression', () => {
       pattern: 'block',
       rh: null,
       lh: null,
+      inversion: null,
       chordSize: 'triads',
     })
     expect(performance.bars).toHaveLength(12)

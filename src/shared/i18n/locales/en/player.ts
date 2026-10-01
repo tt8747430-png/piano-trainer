@@ -18,6 +18,8 @@ export const player = {
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
+  /** The right hand's chord: each nearest the last, or one inversion every time. */
+  inversion: { nearest: 'Nearest', own: 'This pattern plays its own shapes.' },
   ownKeyOnly: 'Only in {{key}}',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },

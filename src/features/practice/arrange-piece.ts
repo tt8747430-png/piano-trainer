@@ -13,6 +13,7 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   pattern: defaultPattern(piece),
   rh: null,
   lh: null,
+  inversion: null,
   chordSize: null,
   melody: false,
 })
@@ -27,6 +28,7 @@ export function arrangePiece(piece: Piece, choice: PracticeChoice): Performance 
       pattern: fromChart ? piece.pattern : choice.pattern,
       rh: choice.rh,
       lh: choice.lh,
+      inversion: choice.inversion,
     }),
     ...(fromChart ? { methods: METHOD_PATTERNS } : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),

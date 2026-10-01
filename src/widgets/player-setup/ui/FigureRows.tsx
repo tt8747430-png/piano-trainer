@@ -2,6 +2,7 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LEFT_FIGURES, PATTERNS, RIGHT_FIGURES } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
+import { InversionField } from './InversionField'
 import { useSetup, type SetupPage } from './setup-context'
 
 /** A row on the sheet's first page that opens one of its lists. */
@@ -21,32 +22,38 @@ function SetupRow({ page, label, value }: { page: SetupPage; label: string; valu
   )
 }
 
-/** The pattern and each hand's figure, each opening its list as a page of the Setup sheet. */
+/**
+ * The pattern and each hand's figure, each opening its list as a page of the Setup sheet, and the
+ * inversion the right hand's chord keeps.
+ */
 export function FigureRows() {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const { figures } = useSetup()
   return (
-    <div>
-      <SetupRow
-        page="pattern"
-        label={t('pattern')}
-        value={
-          figures.pattern === 'chart'
-            ? t('fromChart')
-            : localText(PATTERNS[figures.pattern].name, locale)
-        }
-      />
-      <SetupRow
-        page="rh"
-        label={t('rh')}
-        value={figures.rh ? localText(RIGHT_FIGURES[figures.rh].name, locale) : t('ownFigure')}
-      />
-      <SetupRow
-        page="lh"
-        label={t('lh')}
-        value={figures.lh ? localText(LEFT_FIGURES[figures.lh].name, locale) : t('ownFigure')}
-      />
-    </div>
+    <>
+      <div>
+        <SetupRow
+          page="pattern"
+          label={t('pattern')}
+          value={
+            figures.pattern === 'chart'
+              ? t('fromChart')
+              : localText(PATTERNS[figures.pattern].name, locale)
+          }
+        />
+        <SetupRow
+          page="rh"
+          label={t('rh')}
+          value={figures.rh ? localText(RIGHT_FIGURES[figures.rh].name, locale) : t('ownFigure')}
+        />
+        <SetupRow
+          page="lh"
+          label={t('lh')}
+          value={figures.lh ? localText(LEFT_FIGURES[figures.lh].name, locale) : t('ownFigure')}
+        />
+      </div>
+      <InversionField />
+    </>
   )
 }

@@ -199,6 +199,17 @@ describe('arrange', () => {
     })
   })
 
+  it('keeps every chord in the inversion asked for: its lowest note the 3rd', () => {
+    const performance = arrange(chart([['Dm7', 'G7', 'Cmaj7']]), {
+      tonic: C,
+      pattern: BLOCK,
+      inversion: 1,
+    })
+    const lowest = [0, 48, 96].map((tick) => Math.min(...midisAt(performance, 'rh', tick)) % 12)
+    expect(lowest).toEqual([5, 11, 4]) // F, B, E
+    expect(midisAt(performance, 'rh', 0)).toHaveLength(4) // the root kept: D F A C from F
+  })
+
   it('keeps the right hand in range for every quality on every root', () => {
     const symbols = CHORD_QUALITIES.flatMap((quality) =>
       Array.from({ length: 12 }, (_, pc) =>

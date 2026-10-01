@@ -27,6 +27,7 @@ export {
   type FigureNeed,
   type PatternFit,
 } from './model/fit'
+export { keepsInversion, playsChord } from './model/plays-chord'
 export { patternsIn } from './model/selectors'
 export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
 export { PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'

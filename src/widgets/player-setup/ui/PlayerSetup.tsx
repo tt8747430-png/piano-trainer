@@ -61,7 +61,7 @@ export function PlayerSetup({
       <SheetTrigger render={<RoundButton label={t('setup')} icon={SlidersHorizontal} />} />
       <SheetContent title={page === 'main' ? t('setup') : t(page)}>
         {page === 'main' ? (
-          <SetupContext value={{ figures, openPage }}>
+          <SetupContext value={{ figures, openPage, onFigures }}>
             <div ref={main} className="flex flex-col gap-5">
               {children}
             </div>

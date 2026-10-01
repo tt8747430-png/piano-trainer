@@ -23,6 +23,7 @@ export function resolveChoice(piece: Piece, search: SetupParams, melody: boolean
     pattern: playablePattern(search.pattern, own.pattern, fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
+    inversion: search.inversion ?? null,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
     melody,
   }

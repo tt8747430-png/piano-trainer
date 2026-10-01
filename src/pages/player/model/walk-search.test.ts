@@ -13,6 +13,7 @@ describe('walkChoice', () => {
       pattern: WALK.pattern,
       rh: null,
       lh: null,
+      inversion: null,
       chordSize: WALK.chordSize,
     })
   })

@@ -20,6 +20,7 @@ export const player: LocaleResources['player'] = {
   rh: 'Правая рука',
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
+  inversion: { nearest: 'Ближайшее', own: 'Эта фактура играет свои фигуры.' },
   ownKeyOnly: 'Только в тональности {{key}}',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },

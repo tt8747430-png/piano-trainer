@@ -11,6 +11,7 @@ import {
   transposeNote,
   type Chord,
   type Hand,
+  type Inversion,
   type Key,
   type Midi,
   type SpelledNote,
@@ -56,6 +57,8 @@ export interface ArrangeOptions {
   readonly melody?: Melody
   /** Also play the tune an octave up (hand 'melody'). */
   readonly doubleMelody?: boolean
+  /** The right hand's chord in this inversion every time; left out, each voice-led from the last. */
+  readonly inversion?: Inversion
 }
 
 const VELOCITY = {
@@ -314,6 +317,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
       key,
+      options.inversion ?? null,
     )
     previous = context.voiced
     const { method } = placed.chord

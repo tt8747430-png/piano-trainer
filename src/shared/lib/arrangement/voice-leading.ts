@@ -47,3 +47,45 @@ export function rightHandPitchClasses(tones: readonly Tone[]): PitchClass[] {
   const fitted = upper.length > 4 ? upper.filter((tone) => tone.role !== '5th').slice(0, 4) : upper
   return fitted.map((tone) => tone.pitchClass)
 }
+
+/** The tones a chord adds above its 7th. */
+const TENSIONS = new Set(['9th', '11th', '13th'])
+
+/**
+ * What the right hand plays of a chord in an inversion, in the order it stacks: a chord of up to four
+ * notes whole (root, 3rd, 5th, 7th); a bigger one leaves its root to the bass and its 5th out, down to
+ * four notes, its first tension standing where the root was.
+ */
+export function inversionPitchClasses(tones: readonly Tone[]): PitchClass[] {
+  if (tones.length <= 4) return tones.map((tone) => tone.pitchClass)
+  const upper = tones.slice(1)
+  const fitted = upper.length > 4 ? upper.filter((tone) => tone.role !== '5th').slice(0, 4) : upper
+  const first = fitted.find((tone) => TENSIONS.has(tone.role))
+  const ordered = first ? [first, ...fitted.filter((tone) => tone !== first)] : fitted
+  return ordered.map((tone) => tone.pitchClass)
+}
+
+/**
+ * The chord stacked close from its note number `inversion` (a smaller chord from its last), the lowest
+ * note from E3 to E4, the octave that moves least from `previous` when there are two.
+ */
+export function voiceInversion(
+  previous: readonly Midi[] | null,
+  pcs: readonly PitchClass[],
+  inversion: number,
+): Midi[] {
+  const lowest = pcs[Math.min(inversion, pcs.length - 1)] ?? 0
+  const before = previous?.length ? [...previous].sort(ascending) : null
+  let nearest: number[] = []
+  let shortest = Infinity
+  for (let base = LOWEST_BASE; base <= HIGHEST_BASE; base++) {
+    if (pitchClass(base) !== lowest) continue
+    const voicing = voicingFrom(base, pcs)
+    const moved = distance(voicing, before)
+    if (moved < shortest) {
+      shortest = moved
+      nearest = voicing
+    }
+  }
+  return nearest.map(midi)
+}

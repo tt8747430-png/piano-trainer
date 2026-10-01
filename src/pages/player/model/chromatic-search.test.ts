@@ -14,6 +14,7 @@ describe('chromaticChoice', () => {
       pattern: CHROMATIC.pattern,
       rh: null,
       lh: null,
+      inversion: null,
     })
   })
 

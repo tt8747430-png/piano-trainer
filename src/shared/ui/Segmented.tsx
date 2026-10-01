@@ -11,16 +11,20 @@ export function Segmented<V extends OptionValue>({
   value,
   options,
   onChange,
+  disabled = false,
 }: {
   label: string
   value: V
   options: readonly Option<V>[]
   onChange: (value: V) => void
+  /** Shown, but not to be changed: its segments faded. */
+  disabled?: boolean
 }) {
   return (
     <RadioGroup
       aria-label={label}
       value={value}
+      disabled={disabled}
       onValueChange={(next) => {
         const picked = options.find((option) => option.value === next)
         if (picked && picked.value !== value) onChange(picked.value)
@@ -32,7 +36,7 @@ export function Segmented<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={option.title}
-          className="inline-flex h-11 min-w-11 flex-1 cursor-default items-center justify-center rounded-lg border border-transparent px-2 text-center text-base leading-tight font-semibold text-muted-foreground transition-colors duration-200 ease-out outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring data-checked:border-input data-checked:bg-card data-checked:text-foreground"
+          className="inline-flex h-11 min-w-11 flex-1 cursor-default items-center justify-center rounded-lg border border-transparent px-2 text-center text-base leading-tight font-semibold text-muted-foreground transition-colors duration-200 ease-out outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring data-checked:border-input data-checked:bg-card data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground"
         >
           {option.label}
         </Radio.Root>

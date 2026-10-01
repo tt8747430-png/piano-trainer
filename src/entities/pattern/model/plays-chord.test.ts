@@ -1,0 +1,29 @@
+import { describe, expect, it } from 'vitest'
+import { RIGHT_FIGURES } from '../content/figures'
+import { PATTERNS } from '../content/patterns'
+import { keepsInversion, playsChord } from './plays-chord'
+
+describe('playsChord', () => {
+  it('is true for a right hand that plays the chord or its voices, false for its own shapes', () => {
+    expect(playsChord(RIGHT_FIGURES.b1.figure)).toBe(true)
+    expect(playsChord(RIGHT_FIGURES.jaz.figure)).toBe(true)
+    expect(playsChord(RIGHT_FIGURES.inv.figure)).toBe(false)
+    expect(playsChord(RIGHT_FIGURES.flow.figure)).toBe(false)
+  })
+
+  it('is false for a right hand that plays the tune', () => {
+    const tune = Object.values(PATTERNS).find((entry) => entry.pattern.rh.kind === 'melody')
+    if (!tune) throw new Error('a melody pattern')
+    expect(playsChord(tune.pattern.rh)).toBe(false)
+  })
+})
+
+describe('keepsInversion', () => {
+  it('follows the right hand’s own figure first, then the pattern’s; the chart’s plan may', () => {
+    expect(keepsInversion({ pattern: 'block', rh: null })).toBe(true)
+    expect(keepsInversion({ pattern: 'flow', rh: null })).toBe(false)
+    expect(keepsInversion({ pattern: 'flow', rh: 'b1' })).toBe(true)
+    expect(keepsInversion({ pattern: 'chart', rh: null })).toBe(true)
+    expect(keepsInversion({ pattern: 'chart', rh: 'inv' })).toBe(false)
+  })
+})

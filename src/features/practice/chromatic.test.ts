@@ -93,6 +93,7 @@ describe('arrangeChromatic', () => {
           pattern: CHROMATIC.pattern,
           rh: null,
           lh: null,
+          inversion: null,
         })
         expect(performance.bars).toHaveLength(
           (direction === 'both' ? 25 : 13) * CHORD_QUALITIES.length,
