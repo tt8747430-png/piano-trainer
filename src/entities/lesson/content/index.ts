@@ -3,6 +3,7 @@ import accompanyingAHymn from './accompanying-a-hymn'
 import bassAndChords from './bass-and-chords'
 import brokenChords from './broken-chords'
 import chordFamily from './chord-family'
+import chordFunctions from './chord-functions'
 import chromaticScale from './chromatic-scale'
 import commonProgressions from './common-progressions'
 import findingHome from './finding-home'
@@ -23,7 +24,9 @@ import rhythmAndMeter from './rhythm-and-meter'
 import rightHandTechniques from './right-hand-techniques'
 import sevenTypes from './seven-types'
 import seventhChords from './seventh-chords'
+import thinkingInDegrees from './thinking-in-degrees'
 import triads from './triads'
+import twoFiveOne from './two-five-one'
 import wholeAndHalfSteps from './whole-and-half-steps'
 
 /**
@@ -44,6 +47,7 @@ export const LESSONS: readonly Lesson[] = [
   inversions,
   minorScales,
   chordFamily,
+  chordFunctions,
   keySignatures,
   bassAndChords,
   brokenChords,
@@ -52,6 +56,8 @@ export const LESSONS: readonly Lesson[] = [
   sevenTypes,
   accompanyingAHymn,
   commonProgressions,
+  thinkingInDegrees,
+  twoFiveOne,
   passingChords,
   reharmonisingAMelody,
   gospelProgressions,

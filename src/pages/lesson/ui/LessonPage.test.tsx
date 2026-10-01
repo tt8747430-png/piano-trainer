@@ -17,6 +17,17 @@ describe('A lesson', () => {
     ).toBeInTheDocument()
   })
 
+  it('opens its exercises in the Player, walked through the keys or in an inversion', async () => {
+    await renderApp('/learn/lessons/two-five-one')
+    const step1 = await screen.findByRole('link', { name: /^Step 1: up by semitones/ })
+    expect(step1.getAttribute('href')).toBe(
+      '/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up',
+    )
+    expect(screen.getByRole('link', { name: /^9ths from the 7th/ }).getAttribute('href')).toBe(
+      '/play/progression?p=ii-V-I&chordSize=ninths&inversion=3',
+    )
+  })
+
   it('plays one of a chord written twice, pressing only the one tapped', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/inversions')

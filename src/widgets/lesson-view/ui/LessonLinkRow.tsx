@@ -131,6 +131,28 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           }
         />
       )
+    case 'player': {
+      const { numerals, key, size } = readProgression(target)
+      return (
+        <RowLink
+          title={title}
+          icon={CirclePlay}
+          paint={STEP_PAINT.progression}
+          render={
+            <Link
+              to="/play/progression"
+              search={{
+                p: numeralsParam(numerals),
+                key: keyParam(key),
+                ...(size === 'triads' ? {} : { chordSize: size }),
+                ...(target.walk ? { walk: target.walk } : {}),
+                ...(target.inversion === undefined ? {} : { inversion: target.inversion }),
+              }}
+            />
+          }
+        />
+      )
+    }
     case 'piece': {
       const piece = pieceById(target.piece)
       if (!piece) throw new RangeError(`A lesson links to "${target.piece}": no piece`)

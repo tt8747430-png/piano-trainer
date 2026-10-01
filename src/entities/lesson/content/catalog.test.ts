@@ -86,6 +86,7 @@ function problemsOf(block: LessonBlock): string[] {
         case 'lesson':
           return lessonById(target.lesson) ? [] : [target.lesson]
         case 'progressions':
+        case 'player':
           return unread(() => readProgression(target), target.numerals)
         case 'passing-chords':
           return [target.from, target.to].flatMap((symbol) =>
@@ -140,6 +141,13 @@ describe('the lessons', () => {
         target: { place: 'lesson', lesson: 'nowhere' },
       }),
     ).toEqual(['nowhere'])
+    expect(
+      problemsOf({
+        kind: 'link',
+        title: { en: 'a', ru: 'а' },
+        target: { place: 'player', numerals: 'ii Q', key: C_MAJOR },
+      }),
+    ).toEqual(['ii Q'])
   })
 
   it('catch a pattern over no piece, or a tune pattern over a piece with no tune', () => {
@@ -206,6 +214,7 @@ describe('the lessons', () => {
       'inversions',
       'minor-scales',
       'chord-family',
+      'chord-functions',
       'key-signatures',
     ])
   })
@@ -227,6 +236,8 @@ describe('the lessons', () => {
       'seven-types',
       'accompanying-a-hymn',
       'common-progressions',
+      'thinking-in-degrees',
+      'two-five-one',
       'passing-chords',
       'reharmonising-a-melody',
     ])

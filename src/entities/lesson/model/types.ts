@@ -4,7 +4,9 @@ import type { PieceId } from '@/entities/piece'
 import type { LocalText } from '@/shared/i18n'
 import type {
   ChordQuality,
+  Inversion,
   Key,
+  KeyWalk,
   ChordSize,
   ReferenceInterval,
   ScaleKind,
@@ -66,6 +68,11 @@ export type LessonLink =
   | { readonly place: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
   /** A piece in the Player, with a pattern or its own. */
   | { readonly place: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
+  /** A progression in the Player, ready to practise: walked through the keys, in an inversion. */
+  | ({ readonly place: 'player' } & LessonProgression & {
+        readonly walk?: KeyWalk
+        readonly inversion?: Inversion
+      })
 
 /**
  * One part of a lesson's section: prose, numbered steps, a note to read; or an example that plays in
