@@ -21,6 +21,7 @@ import {
   fingered,
   inBeats,
   inEighths,
+  leftHandBelow,
   scaleDegrees,
   shell,
   toneDegrees,
@@ -85,7 +86,7 @@ export function sixthDiminishedScale(choice: {
   const tonic = tonicKey(root, octaves)
   const hand = (side: Hand): Played[] => {
     const keys = range(0, 8 * octaves).map(
-      toneDegrees(tones, side === 'rh' ? tonic : midi(tonic - 12)),
+      toneDegrees(tones, side === 'rh' ? tonic : midi(tonic - leftHandBelow(octaves))),
     )
     const up = fingered(
       keys,

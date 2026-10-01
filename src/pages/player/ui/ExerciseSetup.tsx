@@ -28,6 +28,7 @@ import {
 import {
   Dropdown,
   InversionChoice,
+  NamedSegmented,
   NoteDropdown,
   RoundButton,
   Segmented,
@@ -156,7 +157,8 @@ export function ExerciseSetup({
             />
           ) : null}
           {fields.octaves && fields.octaves.length > 1 ? (
-            <Segmented
+            // Bare numbers: the name on screen says what they count.
+            <NamedSegmented
               label={t('player:exercise.octaves')}
               value={choice.octaves}
               options={fields.octaves.map((octaves) => ({
@@ -167,7 +169,7 @@ export function ExerciseSetup({
             />
           ) : null}
           {fields.figure ? (
-            <Segmented
+            <NamedSegmented
               label={t('player:exercise.figure')}
               value={choice.figure}
               options={fields.figure.map((figure) => ({

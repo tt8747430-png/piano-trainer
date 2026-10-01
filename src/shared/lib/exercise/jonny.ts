@@ -19,7 +19,7 @@ import {
   fingered,
   inBeats,
   inEighths,
-  octaveBelow,
+  handBelow,
   scaleDegrees,
   shell,
   type Played,
@@ -157,8 +157,8 @@ export function rapidSwitch(choice: { readonly root: SpelledNote }): Performance
   return exercisePerformance({
     key: { tonic: note('C'), minor: false },
     notes: [
-      ...inEighths({ rh: line, lh: octaveBelow(line) }),
-      ...inEighths({ rh: [closing], lh: octaveBelow([closing]) }, 12 * BAR),
+      ...inEighths({ rh: line, lh: handBelow(line) }),
+      ...inEighths({ rh: [closing], lh: handBelow([closing]) }, 12 * BAR),
     ],
     harmony: [
       ...keys.map((key, i) => ({

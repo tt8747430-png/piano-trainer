@@ -67,7 +67,7 @@ describe('scaleExercise', () => {
     expect(fingers(scale)[0]).toBe('1')
   })
 
-  it('starts four octaves an octave lower, so the run stays on the keyboard', () => {
+  it('starts four octaves an octave lower, so the run stays on the keyboard, the left hand two below', () => {
     const scale = scaleExercise({
       root: C,
       kind: 'major',
@@ -76,7 +76,7 @@ describe('scaleExercise', () => {
       fingering: 'scale',
     })
     const keys = scale.notes.map((n) => n.midi)
-    expect(Math.min(...keys)).toBe(36)
+    expect(Math.min(...keys)).toBe(24)
     expect(Math.max(...keys)).toBe(96)
   })
 })

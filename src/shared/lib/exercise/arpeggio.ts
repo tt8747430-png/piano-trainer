@@ -2,6 +2,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import {
   arpeggioFingering,
   fitInversion,
+  MIDDLE_C,
   midi,
   PIANO,
   pitchClassOf,
@@ -11,12 +12,12 @@ import {
   type Hand,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { fingered, inEighths, tonicKey, type Played } from './line'
+import { fingered, inEighths, leftHandBelow, type Played } from './line'
 import { exercisePerformance } from './performance'
 
 /**
  * A chord's tones up `octaves` octaves from the tone its inversion puts at the bottom and back, in
- * 8ths, both hands an octave apart, fingered by the arpeggio rule; written in its root's major or
+ * 8ths, the left hand below the right, fingered by the arpeggio rule; written in its root's major or
  * minor key, under its symbol over its bass.
  */
 export function arpeggioExercise(choice: {
@@ -29,15 +30,20 @@ export function arpeggioExercise(choice: {
   const tones = spellChord(root, quality)
   const count = tones.length
   const inversion = fitInversion(choice.inversion, count)
-  // The bottom tone from the root's key; an octave lower when the top would leave the keyboard.
-  const lowest = tonicKey(root, octaves) + (tones[inversion]?.semitones ?? 0)
-  const rootKey = tonicKey(root, octaves) - (lowest + 12 * octaves > PIANO.to ? 12 : 0)
+  // The bottom tone from the root's key, octaves lower while the top would leave the keyboard.
+  const bottom = tones[inversion]?.semitones ?? 0
+  let rootKey = MIDDLE_C + pitchClassOf(root)
+  while (rootKey + bottom + 12 * octaves > PIANO.to) rootKey -= 12
   const handRun = (hand: Hand): Played[] => {
     const keys = Array.from({ length: count * octaves + 1 }, (_, i): Played => {
       const at = inversion + i
       const tone = tones[at % count] ?? tones[0]
       if (!tone) throw new RangeError('A chord has at least its root')
-      const key = rootKey + tone.semitones + 12 * Math.floor(at / count) - (hand === 'lh' ? 12 : 0)
+      const key =
+        rootKey +
+        tone.semitones +
+        12 * Math.floor(at / count) -
+        (hand === 'lh' ? leftHandBelow(octaves) : 0)
       return { midi: midi(key), spelled: tone.note }
     })
     const up = fingered(

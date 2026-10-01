@@ -136,7 +136,7 @@ export const EXERCISES: readonly Exercise[] = [
     id: 'sixth-diminished-chords',
     group: 'barryHarris',
     level: 4,
-    name: { en: 'Its chords', ru: 'Её аккорды' },
+    name: { en: '6th-diminished chords', ru: 'Секстово-уменьшённые аккорды' },
     trains: {
       en: 'Each note of the 6th-diminished scale harmonised, close or in drop 2',
       ru: 'Каждая нота секстово-уменьшённой гаммы с аккордом, тесно или drop 2',

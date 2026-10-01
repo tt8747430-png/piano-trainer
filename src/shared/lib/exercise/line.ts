@@ -1,6 +1,7 @@
 import {
   MIDDLE_C,
   midi,
+  PIANO,
   pitchClassOf,
   scaleChordAt,
   scaleHasChords,
@@ -29,11 +30,19 @@ export interface Played {
 }
 
 /**
- * The right hand's tonic: at or above middle C for one or two octaves, an octave lower for three or
- * four, so the run stays on the keyboard; the left hand plays an octave below it.
+ * The right hand's tonic for a run of `octaves`: at or above middle C, an octave lower only when the
+ * run's top would leave the keyboard.
  */
-export const tonicKey = (root: SpelledNote, octaves = 1): Midi =>
-  midi(MIDDLE_C + pitchClassOf(root) - (octaves >= 3 ? 12 : 0))
+export function tonicKey(root: SpelledNote, octaves = 1): Midi {
+  const tonic = MIDDLE_C + pitchClassOf(root)
+  return midi(tonic + 11 + 12 * octaves > PIANO.to ? tonic - 12 : tonic)
+}
+
+/**
+ * How far below the right hand the left plays a run: an octave, or two once the run spans two
+ * octaves or more, so each hand stays on its own staff.
+ */
+export const leftHandBelow = (octaves: number): number => (octaves >= 2 ? 24 : 12)
 
 /** A scale's notes by degree from its tonic's key (0 the tonic), past the octave either way. */
 export const scaleDegrees = (root: SpelledNote, kind: ScaleKind, tonic: Midi) =>
@@ -59,9 +68,9 @@ export const fingered = (keys: readonly Played[], fingers: readonly Finger[]): P
     return finger === undefined ? key : { ...key, finger }
   })
 
-/** Keys an octave away: the left hand's under the right's. */
-export const octaveBelow = (keys: readonly Played[]): Played[] =>
-  keys.map(({ finger: _finger, ...key }) => ({ ...key, midi: midi(key.midi - 12) }))
+/** The left hand's keys `below` semitones under the right's, without the right's fingers. */
+export const handBelow = (keys: readonly Played[], below = 12): Played[] =>
+  keys.map(({ finger: _finger, ...key }) => ({ ...key, midi: midi(key.midi - below) }))
 
 /**
  * Each hand's keys one after another in 8ths from `from`, both hands together, the last held to the

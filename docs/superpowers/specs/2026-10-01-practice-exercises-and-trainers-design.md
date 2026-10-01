@@ -107,26 +107,33 @@ chromatic walk and the progression Player open those Players with their exercise
 
 ## 5. Trainers: what they are (7.2)
 
-A **Trainer** asks a round, waits for an answer (tap, typing, MIDI, or a choice), shows the right answer beside the
-learner's, and moves on. Every trainer has:
+A **Trainer** asks a **round**, waits for an answer (keys tapped, typed or played on MIDI, or a choice), shows the
+right answer beside the learner's, and moves on; a **run** is a fixed number of rounds. Every trainer has:
 
-- **Levels** (a ladder of fixed rounds, so runs compare) or **Custom** (its choices sheet); **rounds**: 10 by default,
-  or until stopped.
-- **Settings in its sheet:** auto-next (on: a right answer moves on after a moment) and, for the ear trainers,
-  how the question sounds.
-- **A session summary** at the end of a run: accuracy, the average answer time, the rounds missed (each with its
-  answer), **Again** and **Done**.
-- **Progress per trainer and level** (`pt-trainers`, a saved store, version 1): runs, the last and best accuracy,
-  the best in-run streak. No daily streak, no points (PRODUCT.md).
-- Answers on a rated skill (a chord quality or scale kind) are evidence, as the quiz's are (ADR 0006); the ear and
-  reading trainers rate nothing new (a "Skill" stays a quiz-rated chord quality or scale kind).
+- **Levels** (its ladder, §6; each a fixed set of what it asks, so runs at a level compare) and, where it has choices,
+  **Custom**. What a trainer asks is what the learner looks at, so it lives in the URL (`level`, Custom's own params)
+  and the screen is remembered (ADR 0022); the Theory quiz's saved `QuizChoice` leaves the settings (`pt-settings`
+  version 6 reads a version-5 save without it).
+- **Rounds:** 10 (default), 20, or **until stopped** (`rounds=0`), in the URL.
+- **Auto-next**, a saved switch in its sheet (`pt-settings` version 6, `trainer.autoNext`, off by default): a right
+  answer moves on after a moment (`AUTO_NEXT_MS`, 900 ms); a wrong one waits, so the answer can be read.
+- **A session summary** at the end of a run, or when the learner stops: accuracy, the average answer time (from
+  the round shown to the answer given), the rounds missed (each with its answer), **Again** and **Done**.
+- **Progress per trainer and level** in `pt-progress` (version 2): `trainers[trainerId:level]` = runs, the last and
+  best accuracy, the best in-run streak. The quiz's one shared count (`quiz`: right, total, streak, best) has no
+  trainer to belong to and is not carried over (version 1's answers, learned steps and practised pieces are). No
+  daily streak, no points (PRODUCT.md).
+- **Evidence:** Build chord, Name chord, Build scale and My gaps answer on a rated skill, as the quiz's did (ADR 0006);
+  the ear, reading and key trainers rate nothing (a Skill stays a quiz-rated chord quality or scale kind).
 
-**Where it lives:** `features/trainer` (the round machine, generalising `quiz-machine`: a round is a question with
-its answer kind, keys or a choice; the session reducer: rounds, answers, times, summary; each trainer's `ask` rule
-and ladder), `entities/trainer-progress` (the saved store), `widgets/trainer-board` (the round's prompt, keyboard or
-staff, answers and the summary), `pages/trainer` at `/practice/trainers/$trainerId` with `?level=` (or `custom`).
-The quiz's `features/quiz` folds into `features/trainer`; the Check (a step's or a piece's) keeps its machine, which
-is the same round machine with a fixed plan.
+**Where it lives:** `features/trainer` replaces `features/quiz`: the round machine (`round-machine.ts`, the quiz
+machine grown by the new rounds), each trainer's draw and ladder (`trainers/*.ts`, with the trainer list in
+`trainers.ts`), the run (`run.ts`: rounds, answers, times, streak, summary), `useTrainer` (audio, MIDI, evidence and
+the clock), and the Check's plan (`check-plan.ts`, a fixed list of rounds). `widgets/trainer-board` replaces
+`widgets/quiz-board` (one round: its prompt, keys, staff or sound, choices, and the answer) with the summary beside
+it; `widgets/trainer-choice` replaces `widgets/quiz-choice` (Custom's fields). `pages/trainer` at
+`/practice/trainers/$trainerId` replaces `pages/theory-quiz` and its `/practice/quiz/$quiz`; the Check keeps its
+screen over the same board.
 
 ## 6. The trainers (7.2)
 

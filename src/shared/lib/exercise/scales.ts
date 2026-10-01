@@ -15,7 +15,8 @@ import type { Performance } from '@/shared/lib/arrangement'
 import {
   fingered,
   inEighths,
-  octaveBelow,
+  handBelow,
+  leftHandBelow,
   scaleDegrees,
   tonicChord,
   tonicKey,
@@ -44,7 +45,7 @@ function overTonic(run: ScaleRun, notes: readonly LineNote[]): Performance {
 }
 
 /**
- * The scale up `octaves` octaves from degree `start` and back, both hands an octave apart, in 8ths:
+ * The scale up `octaves` octaves from degree `start` and back in 8ths, the left hand below the right:
  * fingered as the scale or from the thumb (a fingering the scale cannot take is its own), and coming
  * down as the scale comes down (melodic minor as natural minor).
  */
@@ -59,7 +60,11 @@ export function scaleExercise(
   const degrees = range(start, start + count * octaves)
   const tonic = tonicKey(root, octaves)
   const handRun = (scale: ScaleKind, hand: Hand): Played[] => {
-    const place = scaleDegrees(root, scale, hand === 'rh' ? tonic : midi(tonic - 12))
+    const place = scaleDegrees(
+      root,
+      scale,
+      hand === 'rh' ? tonic : midi(tonic - leftHandBelow(octaves)),
+    )
     const keys = degrees.map(place)
     const fingers = runFingering(
       root,
@@ -78,8 +83,8 @@ export function scaleExercise(
 
 /**
  * A figure (degrees above its first note) restarted on each degree up the scale, then mirrored down
- * from the top, home on the tonic: broken 3rds are [0, 2], groups of four [0, 1, 2, 3]. Both hands an
- * octave apart; no fingers, as no method gives one rule for them.
+ * from the top, home on the tonic: broken 3rds are [0, 2], groups of four [0, 1, 2, 3]. The left hand
+ * below the right; no fingers, as no method gives one rule for them.
  */
 export function sequenceExercise(
   run: ScaleRun & { readonly figure: readonly number[] },
@@ -92,7 +97,7 @@ export function sequenceExercise(
   const degrees = [...up, ...down]
   if (degrees.at(-1) !== 0) degrees.push(0)
   const keys = degrees.map(scaleDegrees(root, kind, tonicKey(root, octaves)))
-  return overTonic(run, inEighths({ rh: keys, lh: octaveBelow(keys) }))
+  return overTonic(run, inEighths({ rh: keys, lh: handBelow(keys, leftHandBelow(octaves)) }))
 }
 
 /**
