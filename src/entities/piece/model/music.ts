@@ -5,6 +5,9 @@ import {
   type Midi,
   type SpelledNote,
 } from '@/shared/lib/music'
+import type { Chart, Melody } from '@/shared/lib/arrangement'
+import { parseChart } from './parse-chart'
+import { parseMelody } from './parse-melody'
 import type { ChartPiece, KeyText, Section } from './types'
 
 /** A song's or study's music as the content writes it: what a learner's version holds (ADR 0027). */
@@ -23,6 +26,12 @@ export const musicOf = (piece: ChartPiece): PieceMusic => ({
   ...(piece.melody === undefined ? {} : { melody: piece.melody }),
   ...(piece.hands === undefined ? {} : { hands: piece.hands }),
 })
+
+/** Music read as the engine reads a piece: its chart (with the written hands) and its tune; a mistake throws a ContentError. */
+export function readMusic(music: PieceMusic): { chart: Chart; melody: Melody | undefined } {
+  const piece: ChartPiece = { id: 'music', kind: 'song', title: '', ...music }
+  return { chart: parseChart(piece), melody: parseMelody(piece) }
+}
 
 /** A piece playing this music in place of its own: its melody and hands only where the music has them. */
 export const withMusic = (piece: ChartPiece, music: PieceMusic): ChartPiece => ({

@@ -11,11 +11,22 @@ export {
   type Listing,
   type Piece,
   type PieceId,
+  type Section,
+  type SectionKind,
 } from './model/types'
+export { SECTION_KINDS } from './model/types'
 
 export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
 export { ContentError } from './model/content-error'
-export { keyText, musicOf, pitchText, sameMusic, withMusic, type PieceMusic } from './model/music'
+export {
+  keyText,
+  musicOf,
+  pitchText,
+  readMusic,
+  sameMusic,
+  withMusic,
+  type PieceMusic,
+} from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
   isOwnSongId,
