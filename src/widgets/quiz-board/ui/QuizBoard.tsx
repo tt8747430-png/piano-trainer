@@ -1,4 +1,5 @@
 import { Square, Volume2 } from 'lucide-react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
@@ -8,12 +9,14 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * One question at a time: the prompt, the keyboard, the answer, and one action. After the last
- * question of a bounded quiz, Next calls `onFinish`.
+ * question of a bounded quiz, Next calls `onFinish`. A keyboard user keeps their place: an answer
+ * moves them to Next, and Next to the new question.
  */
 export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => void }) {
   const { t } = useTranslation(['quiz', 'music', 'common'])
   const nameScale = useScaleName()
   const { question, selected, result } = quiz.state
+  const prompt = useRef<HTMLHeadingElement>(null)
 
   const building = question.mode !== 'name-chord'
   // Building a chord or scale: keys are chosen until the answer is checked.
@@ -24,7 +27,7 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
     question.mode === 'build-scale'
       ? scaleName
       : `${question.symbol} · ${t(`music:quality.${question.quality}`)}`
-  const prompt =
+  const asked =
     question.mode === 'build-chord'
       ? t('quiz:prompt.buildChord', { symbol: question.symbol })
       : question.mode === 'name-chord'
@@ -36,7 +39,13 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
   return (
     <section className="flex flex-col gap-5">
       <div className="flex items-center gap-3">
-        <h2 className="min-w-0 flex-1 text-4xl text-balance">{prompt}</h2>
+        <h2
+          ref={prompt}
+          tabIndex={-1}
+          className="min-w-0 flex-1 text-4xl text-balance outline-none"
+        >
+          {asked}
+        </h2>
         {question.mode === 'name-chord' ? (
           <RoundButton
             label={quiz.hearing ? t('common:stop') : t('quiz:playAgain')}
@@ -93,7 +102,15 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
       ) : null}
 
       {result && next ? (
-        <Button size="pill" onClick={next}>
+        // Shown in place of what was just pressed, so the answer hands it the focus.
+        <Button
+          size="pill"
+          autoFocus
+          onClick={() => {
+            next()
+            prompt.current?.focus()
+          }}
+        >
           {t('quiz:next')}
         </Button>
       ) : null}

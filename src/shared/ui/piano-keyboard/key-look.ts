@@ -44,7 +44,7 @@ export interface KeyText {
 
 export type KeyFill = 'white' | 'black' | 'lit' | 'selected' | 'wrong' | KeyTone
 
-/** A key's label: a mark's own (a degree, ✓, a note the Player spells), or its note's name, drawn smaller. */
+/** A key's label: a mark's own (a degree, ✓, a note the Player spells), ✕ on a wrong key, or its note's name, drawn smaller. */
 export interface KeyLabel {
   readonly kind: 'mark' | 'name'
   readonly text: string
@@ -77,10 +77,19 @@ function nameOf(key: Midi, namedKeys: NamedKeys): string | undefined {
   return namedKeys === 'all' ? noteName(plainSpelling(pc, true)) : undefined
 }
 
-function labelOf(key: Midi, mark: KeyMark | undefined, namedKeys: NamedKeys): KeyLabel | undefined {
+/** A wrong key's own mark where nothing else labels it: crimson is never its only cue. */
+const WRONG_MARK = '✕'
+
+function labelOf(
+  key: Midi,
+  mark: KeyMark | undefined,
+  wrong: boolean,
+  namedKeys: NamedKeys,
+): KeyLabel | undefined {
   if (mark?.label) {
     return { kind: 'mark', text: mark.label, ...(mark.caption ? { caption: mark.caption } : {}) }
   }
+  if (wrong) return { kind: 'mark', text: WRONG_MARK }
   const name = nameOf(key, namedKeys)
   return name === undefined ? undefined : { kind: 'name', text: name }
 }
@@ -88,7 +97,7 @@ function labelOf(key: Midi, mark: KeyMark | undefined, namedKeys: NamedKeys): Ke
 /** How a key looks: a wrong key over a lit one, a lit one over a mark, a mark over a selection; down over all. */
 export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
   const mark = states.marks?.get(key)
-  const label = labelOf(key, mark, text.namedKeys)
+  const label = labelOf(key, mark, states.wrong?.has(key) ?? false, text.namedKeys)
   const letter = text.letters?.get(key)
   return {
     fill: fillOf(key, states, mark),
@@ -97,6 +106,27 @@ export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
     ...(label ? { label } : {}),
     ...(letter ? { letter } : {}),
   }
+}
+
+/** The words a key's state is said in, after its note. */
+export type KeyStateWords = Readonly<Record<'wrong' | 'missing' | 'lit', string>>
+
+/**
+ * What a key says besides its note, for a screen reader: what its mark prints (a numeral over its
+ * degree), and whether it is wrong, missing or the chord played. Empty where it says nothing more.
+ */
+export function keyDescription(look: KeyLook, words: KeyStateWords): string {
+  const { label } = look
+  const printed =
+    label?.kind === 'mark' && label.text !== WRONG_MARK
+      ? [...(label.caption ? [label.caption] : []), label.text]
+      : []
+  const states = [
+    ...(look.fill === 'wrong' ? [words.wrong] : []),
+    ...(look.fill === 'lit' ? [words.lit] : []),
+    ...(look.outlined ? [words.missing] : []),
+  ]
+  return [...printed, ...states].join(', ')
 }
 
 /** Whether two looks draw the same key: `Key`'s memo compares every field a key shows. */

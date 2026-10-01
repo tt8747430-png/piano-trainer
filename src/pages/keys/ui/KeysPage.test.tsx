@@ -52,7 +52,7 @@ describe('Learn → Keys', () => {
     await renderApp('/learn/keys')
     await user.click(await screen.findByRole('button', { name: /^C\s*I$/ }))
     expect(screen.getByRole('button', { name: /^C\s*I$/ })).toHaveAttribute('aria-pressed', 'true')
-    await user.click(screen.getByRole('button', { name: '7ths' }))
+    await user.click(screen.getByRole('radio', { name: '7ths' }))
     expect(screen.getByRole('button', { name: /^CMaj7/ })).toHaveAttribute('aria-pressed', 'false')
   })
 
@@ -62,7 +62,7 @@ describe('Learn → Keys', () => {
     const sheet = await screen.findByRole('region', { name: 'Sheet music' })
     await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
     const engraved = sheet.querySelector('svg')
-    await user.click(screen.getByRole('button', { name: '7ths' }))
+    await user.click(screen.getByRole('radio', { name: '7ths' }))
     expect(sheet.querySelector('svg')).toBe(engraved)
   })
 

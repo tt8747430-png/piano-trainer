@@ -23,25 +23,25 @@ describe('Settings', () => {
 
   it('shows the saved language and theme as chosen', async () => {
     await renderApp('/settings')
-    expect(await screen.findByRole('button', { name: 'English' })).toHaveAttribute(
-      'aria-pressed',
+    expect(await screen.findByRole('radio', { name: 'English' })).toHaveAttribute(
+      'aria-checked',
       'true',
     )
-    expect(screen.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true')
   })
 
   it('groups each choice under its own heading', async () => {
     await renderApp('/settings')
-    const language = await screen.findByRole('group', { name: 'Language' })
+    const language = await screen.findByRole('radiogroup', { name: 'Language' })
     expect(
       within(language)
-        .getAllByRole('button')
+        .getAllByRole('radio')
         .map((b) => b.textContent),
     ).toEqual(['English', 'Русский'])
-    const theme = screen.getByRole('group', { name: 'Theme' })
+    const theme = screen.getByRole('radiogroup', { name: 'Theme' })
     expect(
       within(theme)
-        .getAllByRole('button')
+        .getAllByRole('radio')
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
@@ -55,8 +55,8 @@ describe('Settings', () => {
   it('sets up the keyboard, and saves each change', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
-    const keys = await screen.findByRole('group', { name: 'Keys' })
-    await user.click(within(keys).getByRole('button', { name: 'Large' }))
+    const keys = await screen.findByRole('radiogroup', { name: 'Keys' })
+    await user.click(within(keys).getByRole('radio', { name: 'Large' }))
     await user.click(screen.getByRole('switch', { name: 'Keyboard map' }))
     expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', map: true })
   })
@@ -71,14 +71,14 @@ describe('Settings', () => {
   it('saves a new language', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
-    await user.click(await screen.findByRole('button', { name: 'Русский' }))
+    await user.click(await screen.findByRole('radio', { name: 'Русский' }))
     expect(settingsStore.getState().locale).toBe('ru')
   })
 
   it('saves a new theme', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
-    await user.click(await screen.findByRole('button', { name: 'Dark' }))
+    await user.click(await screen.findByRole('radio', { name: 'Dark' }))
     expect(settingsStore.getState().theme).toBe('dark')
   })
 

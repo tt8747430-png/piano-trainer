@@ -11,6 +11,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import type { FinderView } from '../model/finder-view'
 import { findChord, findingMarks } from '../model/finding'
 import { FinderName } from './FinderName'
+import { useFindingSaid } from './use-finding-said'
 
 /**
  * The Chord finder: keys tapped on (or held on a MIDI keyboard) are named as a chord, each key marked
@@ -30,6 +31,7 @@ export function ChordFinder({
   // A MIDI keyboard's held keys are the chord while any is held.
   const keys = held.size > 0 ? [...held].sort((a, b) => a - b) : chosen
   const finding = findChord(keys)
+  const said = useFindingSaid(finding)
   const best = finding.kind === 'chord' ? finding.best : undefined
   const toggle = (key: Midi) => onChange({ keys: keyListParam(toggled(chosen, key)) })
   return (
@@ -40,6 +42,10 @@ export function ChordFinder({
         onKeyPress={toggle}
       />
       <FinderName keys={keys} finding={finding} />
+      {/* The name changes while the focus stays on the keys: said here, once each time. */}
+      <p role="status" className="sr-only">
+        {said}
+      </p>
       <div className="flex flex-wrap gap-3">
         <Button
           size="pill"

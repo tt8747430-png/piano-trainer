@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints, ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { COMMON_PROGRESSIONS } from '@/entities/piece'
+import { COMMON_PROGRESSIONS, entryTitles } from '@/entities/piece'
+import { useLocale } from '@/shared/i18n'
 import {
   keyMode,
   noteName,
@@ -29,6 +30,7 @@ export function PractiseChords({
   notes: ChordNotes
 }) {
   const { t } = useTranslation(['practice', 'music'])
+  const locale = useLocale()
   if (!scaleHasChords(kind)) return null
   const chordSize = sizeOfNotes(notes)
   // A key's scale has its key's common progressions; a mode has none.
@@ -56,7 +58,7 @@ export function PractiseChords({
         ? COMMON_PROGRESSIONS[key].map((piece) => (
             <li key={piece.id}>
               <RowLink
-                title={piece.title}
+                title={entryTitles(piece, locale).primary}
                 detail={t(`music:key.${key}`, { tonic: noteName(root) })}
                 icon={ListMusic}
                 paint="lilac"

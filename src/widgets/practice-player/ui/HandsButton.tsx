@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Hands } from '@/shared/lib/schedule'
+import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import { ChoiceRow } from './ChoiceRow'
 import { HandsIcon } from './HandsIcon'
 
 /** The popover's order: one hand, the other, both. */
@@ -32,20 +32,29 @@ export function HandsButton({
       >
         <HandsIcon hands={hands} />
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-64 gap-1 p-2">
-        {CHOICES.map((choice) => (
-          <ChoiceRow
-            key={choice}
-            chosen={choice === hands}
-            onChoose={() => {
-              onChange(choice)
-              setOpen(false)
-            }}
-          >
-            <HandsIcon hands={choice} />
-            {t(`common:hands.${choice}`)}
-          </ChoiceRow>
-        ))}
+      <PopoverContent aria-label={t('player:hands')} align="end" className="w-64 gap-1 p-2">
+        <Listbox
+          label={t('player:hands')}
+          optionClassName="min-h-11 rounded-lg px-2 text-base"
+          groups={[
+            {
+              options: CHOICES.map((choice) => ({
+                key: choice,
+                selected: choice === hands,
+                content: (
+                  <>
+                    <HandsIcon hands={choice} />
+                    {t(`common:hands.${choice}`)}
+                  </>
+                ),
+                onChoose: () => {
+                  onChange(choice)
+                  setOpen(false)
+                },
+              })),
+            },
+          ]}
+        />
       </PopoverContent>
     </Popover>
   )

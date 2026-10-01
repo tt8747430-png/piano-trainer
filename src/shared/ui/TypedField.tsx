@@ -4,7 +4,7 @@ import { InputGroup, InputGroupInput } from './primitives/input-group'
 
 /**
  * Music typed by name (a chord, a progression) in the book serif, its label over it and, while it
- * cannot be read, `error` under it.
+ * cannot be read, `error` under it. An empty field is being typed again, never wrong.
  */
 export function TypedField({
   label,
@@ -20,14 +20,15 @@ export function TypedField({
   className?: string
 }) {
   const errorId = useId()
+  const shown = value.trim() === '' ? null : error
   return (
     <label className={cn('flex flex-col gap-1', className)}>
       <span className="text-sm text-muted-foreground">{label}</span>
       <InputGroup className="h-12 rounded-2xl bg-card">
         <InputGroupInput
           value={value}
-          aria-invalid={error !== null}
-          aria-describedby={error === null ? undefined : errorId}
+          aria-invalid={shown !== null}
+          aria-describedby={shown === null ? undefined : errorId}
           autoCapitalize="off"
           autoComplete="off"
           spellCheck={false}
@@ -35,9 +36,9 @@ export function TypedField({
           className="font-display text-xl font-semibold md:text-xl"
         />
       </InputGroup>
-      {error === null ? null : (
+      {shown === null ? null : (
         <span id={errorId} className="text-sm text-destructive">
-          {error}
+          {shown}
         </span>
       )}
     </label>

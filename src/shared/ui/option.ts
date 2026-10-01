@@ -16,20 +16,6 @@ export interface OptionGroup<V extends OptionValue> {
   readonly options: readonly Option<V>[]
 }
 
-/** A toggle's value is a string; this is the one place an option's value becomes one. */
-export const toggleValue = (value: OptionValue): string => String(value)
-
-/**
- * The option a toggle group's change picked: the one newly pressed. Pressing the chosen toggle
- * again picks nothing, so one option stays chosen.
- */
-export const pickedOption = <V extends OptionValue>(
-  options: readonly Option<V>[],
-  current: V,
-  pressed: readonly string[],
-): Option<V> | undefined =>
-  options.find((option) => option.value !== current && pressed.includes(toggleValue(option.value)))
-
 /** A group of a pop-up's options, under its label where it has one. */
 export interface ChoiceGroup<V extends OptionValue> {
   readonly label?: string

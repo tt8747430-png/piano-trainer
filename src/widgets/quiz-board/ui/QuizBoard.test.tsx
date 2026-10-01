@@ -79,4 +79,22 @@ describe('QuizBoard', () => {
     await user.click(screen.getByRole('button', { name: 'Stop' }))
     expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument()
   })
+
+  it('keeps the keyboard user’s place: on Next after an answer, on the new question after Next', async () => {
+    const user = userEvent.setup()
+    renderBoard({ chordMode: 'name-chord', scope: { skills: ['chord:d7'], roots: C } })
+    const answers = screen.getByRole('group', { name: 'Answers' })
+    await user.click(within(answers).getAllByRole('button')[0] ?? answers)
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByRole('heading', { name: 'Which chord is this?' })).toHaveFocus()
+  })
+
+  it('moves to Next once a build is checked', async () => {
+    const user = userEvent.setup()
+    renderBoard({ chordMode: 'build-chord', scope: { skills: ['chord:maj'], roots: C } })
+    await user.click(screen.getByRole('button', { name: 'C4' }))
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+  })
 })

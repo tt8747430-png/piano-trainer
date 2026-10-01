@@ -46,6 +46,14 @@ describe('RouteError', () => {
     expect(reload).toHaveBeenCalledOnce()
   })
 
+  it('says when the learner is offline: the screen opens once they are back online', async () => {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    renderThrowing(['/play/broken'])
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'You’re offline. This screen opens once you’re back online.',
+    )
+  })
+
   it('leaves a screen that throws for where the learner came from', async () => {
     const user = userEvent.setup()
     const { router } = renderThrowing(['/', '/play/broken'])

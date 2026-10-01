@@ -1,4 +1,4 @@
-import { memo, type PointerEvent } from 'react'
+import { memo, useId, type PointerEvent } from 'react'
 import { BLACK_HEIGHT, cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { ROLE_BG, ROLE_WASH } from '../role-classes'
@@ -49,6 +49,8 @@ const DOWN: Readonly<Record<KeyFill, string>> = {
 interface KeyProps {
   readonly geometry: KeyGeometry
   readonly name: string
+  /** What it says after its note: what its mark prints, and whether it is wrong, missing or played. */
+  readonly description: string
   readonly look: KeyLook
   /** aria-pressed where the keys are toggles. */
   readonly chosen: boolean | undefined
@@ -64,6 +66,7 @@ interface KeyProps {
 function KeyButton({
   geometry,
   name,
+  description,
   look,
   chosen,
   tabStop,
@@ -72,12 +75,14 @@ function KeyButton({
   onFocusKey,
 }: KeyProps) {
   const { black } = geometry
+  const descriptionId = useId()
   return (
     <button
       type="button"
       data-midi={geometry.midi}
       data-down={look.down ? '' : undefined}
       aria-label={name}
+      aria-describedby={description ? descriptionId : undefined}
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
       onPointerDown={(event) => onPointerPress(geometry.midi, event)}
@@ -117,6 +122,11 @@ function KeyButton({
         )}
         style={black ? undefined : { top: `calc(${BLACK_HEIGHT}% + 0.25rem)` }}
       />
+      {description ? (
+        <span id={descriptionId} className="sr-only">
+          {description}
+        </span>
+      ) : null}
       {look.letter ? (
         <span aria-hidden className="relative text-xs font-semibold opacity-70">
           {look.letter}
@@ -150,6 +160,7 @@ export const Key = memo(
   (a, b) =>
     a.geometry === b.geometry &&
     a.name === b.name &&
+    a.description === b.description &&
     a.chosen === b.chosen &&
     a.tabStop === b.tabStop &&
     a.onPointerPress === b.onPointerPress &&

@@ -26,7 +26,7 @@ describe('Walk the chords in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/walk?root=D&kind=dorian')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('button', { name: '7ths' }))
+    await user.click(await screen.findByRole('radio', { name: '7ths' }))
     expect(router.state.location.search).toMatchObject({ chordSize: 'sevenths' })
     // The sheet is modal: the sheet music behind it is hidden from the accessibility tree.
     expect(

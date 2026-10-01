@@ -31,6 +31,7 @@ describe('MidiButton', () => {
     const user = userEvent.setup()
     renderButton(createFakeMidi())
     await user.click(screen.getByRole('button', { name: 'MIDI keyboard' }))
+    expect(await screen.findByRole('dialog', { name: 'MIDI keyboard' })).toBeInTheDocument()
     expect(
       await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }),
     ).toBeInTheDocument()

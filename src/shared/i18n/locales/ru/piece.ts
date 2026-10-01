@@ -8,7 +8,6 @@ export const piece: LocaleResources['piece'] = {
   },
   checkChords: 'Проверить эти аккорды',
   chart: 'Аккорды по тактам',
-  barLabel: 'Такт {{n}}',
   progression: 'Последовательность',
   practise: 'Играть',
   noChart: 'Аккордов пока нет',

@@ -22,12 +22,13 @@ A container wires data to presentational children. One job each.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
   `RailButton` (a button in its rail, filling its `children` slot) and `ShownKeys` (what a page's keyboard shows),
   `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
-  and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Dropdown` (the pop-up button,
+  (a radio group) and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Listbox`
+  (one choice of a list: a Setup page's, the tempo and hands popovers), `Dropdown` (the pop-up button,
   over shadcn's `select`) with `MultiDropdown`, `KeyDropdown` (the 24 keys) and `NoteDropdown` (the 12 notes, each
   spelled by the caller's rule), `InversionChoice`, `ChordSizeField`, `SwitchRow` (on or off in its row), `TypedField`
   (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
   `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `LEARN_TILES`, `PAINT`
-  (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`,
+  (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`. A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:

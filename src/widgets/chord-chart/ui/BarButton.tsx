@@ -21,11 +21,15 @@ export function BarButton({
   pressed: boolean
   onClick: () => void
 }) {
-  const { t } = useTranslation('piece')
+  const { t } = useTranslation('music')
   return (
     <button
       type="button"
-      aria-label={`${t('barLabel', { n: number })}: ${symbols.join(' ')}`}
+      // Named by all it prints: its number, its chords, and the notes under them.
+      aria-label={t('sheet.barChords', {
+        n: number,
+        chords: [symbols.join(' '), ...notes].join(' · '),
+      })}
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(

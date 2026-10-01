@@ -9,7 +9,6 @@ import {
   type PatternFit,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
-import { ChoiceList } from './ChoiceList'
 import { ListPage } from './ListPage'
 
 /**
@@ -30,40 +29,41 @@ export function PatternPage({
   const { t } = useTranslation('player')
   const locale = useLocale()
   return (
-    <ListPage onBack={onBack}>
-      {fit.methodCodes ? (
-        <ChoiceList<PatternChoice>
-          items={[
-            { value: 'chart', label: t('fromChart'), description: t('fromChartDescription') },
-          ]}
-          value={value}
-          onChoose={onChoose}
-        />
-      ) : null}
-      {PATTERN_GROUPS.map((group) => (
-        <section key={group} className="flex flex-col gap-1">
-          <h3 className="text-sm font-semibold text-muted-foreground">
-            {localText(PATTERN_GROUP_NAMES[group], locale)}
-          </h3>
-          <ChoiceList<PatternChoice>
-            items={patternsIn(group).map((id) => {
-              const { name, description } = PATTERNS[id]
-              const need = patternNeed(id, fit)
-              return {
-                value: id,
-                label: localText(name, locale),
-                ...(need
-                  ? { disabledNote: t(`needs.${need}`) }
-                  : description
-                    ? { description: localText(description, locale) }
-                    : {}),
-              }
-            })}
-            value={value}
-            onChoose={onChoose}
-          />
-        </section>
-      ))}
-    </ListPage>
+    <ListPage
+      label={t('pattern')}
+      onBack={onBack}
+      groups={[
+        ...(fit.methodCodes
+          ? [
+              {
+                choices: [
+                  {
+                    key: 'chart',
+                    label: t('fromChart'),
+                    note: t('fromChartDescription'),
+                    selected: value === 'chart',
+                    onChoose: () => onChoose('chart'),
+                  },
+                ],
+              },
+            ]
+          : []),
+        ...PATTERN_GROUPS.map((group) => ({
+          label: localText(PATTERN_GROUP_NAMES[group], locale),
+          choices: patternsIn(group).map((id) => {
+            const { name, description } = PATTERNS[id]
+            const need = patternNeed(id, fit)
+            return {
+              key: id,
+              label: localText(name, locale),
+              note: need ? t(`needs.${need}`) : description && localText(description, locale),
+              selected: value === id,
+              disabled: need !== null,
+              onChoose: () => onChoose(id),
+            }
+          }),
+        })),
+      ]}
+    />
   )
 }

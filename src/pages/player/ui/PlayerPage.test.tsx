@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 import { melodyOf, pieceById, PIECES } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
@@ -112,10 +113,10 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Tempo: 100%' }))
-    await user.click(await screen.findByRole('button', { name: 'Wait mode' }))
+    await user.click(await screen.findByRole('option', { name: 'Wait mode' }))
     expect(router.state.location.search).toMatchObject({ mode: 'wait' })
     await user.click(screen.getByRole('button', { name: 'Tempo: Wait' }))
-    await user.click(await screen.findByRole('button', { name: '50% speed' }))
+    await user.click(await screen.findByRole('option', { name: '50% speed' }))
     expect(router.state.location.search).toEqual({ tempo: 36 })
   })
 
@@ -144,7 +145,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Hands: Both hands' }))
-    await user.click(await screen.findByRole('button', { name: 'Left hand' }))
+    await user.click(await screen.findByRole('option', { name: 'Left hand' }))
     expect(router.state.location.search).toMatchObject({ hands: 'lh' })
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'treble')
   })
@@ -218,5 +219,14 @@ describe('Player', () => {
     expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(audio.played).toHaveLength(1)
+  })
+
+  it('speaks Russian on its screen, its Setup and its pattern list', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5', { locale: 'ru' })
+    await user.click(await screen.findByRole('button', { name: 'Параметры' }))
+    expect(untranslated(document.body)).toEqual([])
+    await user.click(screen.getByRole('button', { name: /^Фактура/ }))
+    expect(untranslated(document.body)).toEqual([])
   })
 })

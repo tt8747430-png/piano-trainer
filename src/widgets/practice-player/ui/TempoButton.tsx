@@ -1,27 +1,14 @@
 import { Gauge } from 'lucide-react'
-import { useId, useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PracticeMode } from '@/features/practice'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
+import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
-import { ChoiceRow } from './ChoiceRow'
-
-/** A titled group of the popover's choices. */
-function ChoiceGroup({ label, children }: { label: string; children: ReactNode }) {
-  const id = useId()
-  return (
-    <div role="group" aria-labelledby={id} className="flex flex-col gap-1">
-      <p id={id} className="text-sm font-semibold text-muted-foreground">
-        {label}
-      </p>
-      {children}
-    </div>
-  )
-}
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any
@@ -64,26 +51,37 @@ export function TempoButton({
         <Gauge data-icon="inline-start" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 gap-4 p-4">
-        <ChoiceGroup label={t('pace.ownPace')}>
-          <ChoiceRow chosen={mode === 'wait'} onChoose={() => choose(onWait)}>
-            {t('pace.wait')}
-          </ChoiceRow>
-        </ChoiceGroup>
-        <ChoiceGroup label={t('pace.playAlong')}>
-          {SPEEDS.map((share) => {
-            const speed = speedTempo(ownTempo, share)
-            return (
-              <ChoiceRow
-                key={share}
-                chosen={mode === 'listen' && tempo === speed}
-                onChoose={() => choose(() => onTempo(speed))}
-              >
-                {share === 1 ? t('pace.own') : t('pace.speed', { percent: share * 100 })}
-              </ChoiceRow>
-            )
-          })}
-        </ChoiceGroup>
+      <PopoverContent aria-label={t('tempo')} align="start" className="w-80 gap-4 p-4">
+        <Listbox
+          label={t('tempo')}
+          className="gap-4"
+          optionClassName="min-h-11 rounded-lg px-2 text-base"
+          groups={[
+            {
+              label: t('pace.ownPace'),
+              options: [
+                {
+                  key: 'wait',
+                  selected: mode === 'wait',
+                  content: t('pace.wait'),
+                  onChoose: () => choose(onWait),
+                },
+              ],
+            },
+            {
+              label: t('pace.playAlong'),
+              options: SPEEDS.map((share) => {
+                const speed = speedTempo(ownTempo, share)
+                return {
+                  key: String(share),
+                  selected: mode === 'listen' && tempo === speed,
+                  content: share === 1 ? t('pace.own') : t('pace.speed', { percent: share * 100 }),
+                  onChoose: () => choose(() => onTempo(speed)),
+                }
+              }),
+            },
+          ]}
+        />
         <Slider
           min={TEMPO_RANGE.min}
           max={TEMPO_RANGE.max}

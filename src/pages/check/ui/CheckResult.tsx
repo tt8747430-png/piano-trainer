@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ratingOf, selectAllAnswers, selectIsLearned, useProgress } from '@/entities/progress'
 import type { CheckPlan } from '@/features/quiz'
@@ -24,10 +25,17 @@ export function CheckResult({
   const { t } = useTranslation(['quiz', 'music'])
   const answers = useProgress(selectAllAnswers)
   const learned = useProgress(selectIsLearned(plan.marks ?? plan.of))
+  const score = useRef<HTMLParagraphElement>(null)
+  // The score replaces the question whose Next ended the check: it takes the focus, and is read.
+  useEffect(() => score.current?.focus(), [])
 
   return (
     <section className="flex flex-1 flex-col gap-6">
-      <p className="font-display text-7xl font-semibold tabular-nums">
+      <p
+        ref={score}
+        tabIndex={-1}
+        className="font-display text-7xl font-semibold tabular-nums outline-none"
+      >
         {t('score', { correct, total: plan.length })}
       </p>
       {plan.marks && learned && newlyLearned ? (

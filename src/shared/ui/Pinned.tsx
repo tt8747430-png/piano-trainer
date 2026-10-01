@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib'
 export function Pinned({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
+      data-slot="pinned"
       className={cn(
         'sticky top-0 z-20 -mx-4 bg-background px-4 pt-safe pb-3 lg:mx-0 lg:px-0',
         className,

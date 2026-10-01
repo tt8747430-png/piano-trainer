@@ -35,6 +35,8 @@ describe('Check', () => {
       await user.click(screen.getByRole('button', { name: 'Next' }))
     }
     expect(await screen.findByText('0 of 4')).toBeInTheDocument()
+    // The score takes the focus from the Next that ended the check, so a screen reader reads it.
+    expect(screen.getByText('0 of 4')).toHaveFocus()
     expect(screen.getAllByRole('button', { name: 'Done' })).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Open in Scales' })).toBeInTheDocument()
   })

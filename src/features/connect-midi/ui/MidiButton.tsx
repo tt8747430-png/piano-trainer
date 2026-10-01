@@ -1,7 +1,12 @@
 import { Cable } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/shared/ui/primitives/popover'
 import { Button } from '@/shared/ui/primitives/button'
 import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 import { MidiControl } from './MidiControl'
@@ -37,7 +42,7 @@ export function MidiButton() {
         />
       </PopoverTrigger>
       <PopoverContent align="end" className="w-72 p-4">
-        <p className="mb-2 font-semibold">{t('midi.label')}</p>
+        <PopoverTitle className="mb-2 text-base font-semibold">{t('midi.label')}</PopoverTitle>
         <MidiControl />
       </PopoverContent>
     </Popover>

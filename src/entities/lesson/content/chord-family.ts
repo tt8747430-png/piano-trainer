@@ -69,12 +69,12 @@ const chordFamily: Lesson = {
       blocks: [
         {
           kind: 'quiz',
-          ask: { en: 'Play the V chord of G major.', ru: 'Сыграйте V ступень соль мажора.' },
+          ask: { en: 'Play the V chord of G major.', ru: 'Сыграйте аккорд V ступени соль мажора.' },
           answer: { chord: 'D' },
         },
         {
           kind: 'quiz',
-          ask: { en: 'Play the ii chord of F major.', ru: 'Сыграйте ii ступень фа мажора.' },
+          ask: { en: 'Play the ii chord of F major.', ru: 'Сыграйте аккорд ii ступени фа мажора.' },
           answer: { chord: 'Gm' },
         },
         {

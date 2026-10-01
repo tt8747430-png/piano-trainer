@@ -9,7 +9,11 @@ export const common = {
     practice: 'Practice',
     settings: 'Settings',
   },
-  errors: { title: 'Something went wrong', reload: 'Reload' },
+  errors: {
+    title: 'Something went wrong',
+    offline: 'You’re offline. This screen opens once you’re back online.',
+    reload: 'Reload',
+  },
   notFound: { title: 'Page not found', toSongs: 'Go to Songs' },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   close: 'Close',
@@ -26,6 +30,8 @@ export const common = {
   // A piano key's name: its note and octave.
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
   keyboard: 'Keyboard',
+  // What a key is, said after its note: a quiz's wrong or missing key, Name chord's chord.
+  keyState: { wrong: 'Wrong', missing: 'Missing', lit: 'Played' },
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons and its map.

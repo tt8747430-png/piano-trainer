@@ -15,7 +15,7 @@ describe('A progression in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=Bb')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('button', { name: '7ths' }))
+    await user.click(await screen.findByRole('radio', { name: '7ths' }))
     expect(router.state.location.search).toMatchObject({ chordSize: 'sevenths' })
     expect(
       await screen.findByRole('button', { name: 'Bar 1: Cm7', hidden: true }),

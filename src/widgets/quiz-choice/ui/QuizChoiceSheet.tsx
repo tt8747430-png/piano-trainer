@@ -12,7 +12,7 @@ import { chosenSkills, type QuizMode } from '@/features/quiz'
 import { setQuizFamilies, setQuizScales } from '@/features/set-preference'
 import { toggled } from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
-import { Sheet, SheetClose, SheetContent, SheetTrigger, SwitchRow } from '@/shared/ui'
+import { Sheet, SheetContent, SheetTrigger, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** Which chord families and scales the open-ended quiz asks: switches, then Apply. */
@@ -85,7 +85,6 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
             }
           />
         ))}
-        <SheetClose className="sr-only">{t('common:close')}</SheetClose>
       </SheetContent>
     </Sheet>
   )

@@ -17,6 +17,8 @@ describe('Learn → Chord finder', () => {
       await user.click(within(keyboard).getByRole('button', { name: key }))
     }
     expect(chordName()).toHaveTextContent('C')
+    // Said as it changes, while the focus stays on the keys.
+    expect(screen.getByRole('status')).toHaveTextContent('C · Major triad')
     expect(router.state.location.search).toEqual({ keys: '60-64-67' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
@@ -55,7 +57,8 @@ describe('Learn → Chord finder', () => {
 
   it('says so when no chord is named by the notes', async () => {
     await renderApp('/learn/chord-finder?keys=60-61-62')
-    expect(await screen.findByText('No chord is named by these notes.')).toBeInTheDocument()
+    expect(await screen.findByRole('status')).toHaveTextContent('No chord is named by these notes.')
+    expect(screen.getAllByText('No chord is named by these notes.')).toHaveLength(2)
   })
 
   it('names the keys a MIDI keyboard holds, while it holds them', async () => {

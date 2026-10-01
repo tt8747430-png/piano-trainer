@@ -1,7 +1,11 @@
-import { pickedOption, toggleValue, type Option, type OptionValue } from './option'
-import { ToggleGroup, ToggleGroupItem } from './primitives/toggle-group'
+import { Radio } from '@base-ui/react/radio'
+import { RadioGroup } from '@base-ui/react/radio-group'
+import type { Option, OptionValue } from './option'
 
-/** One choice of a few, always one chosen: a segmented control, the chosen segment a card on its track. */
+/**
+ * One choice of a few, always one chosen: a segmented control, the chosen segment a card on its
+ * track. A radio group: the arrows move to a segment and choose it.
+ */
 export function Segmented<V extends OptionValue>({
   label,
   value,
@@ -14,26 +18,25 @@ export function Segmented<V extends OptionValue>({
   onChange: (value: V) => void
 }) {
   return (
-    <ToggleGroup
+    <RadioGroup
       aria-label={label}
-      value={[toggleValue(value)]}
-      onValueChange={(pressed) => {
-        const picked = pickedOption(options, value, pressed)
-        if (picked) onChange(picked.value)
+      value={value}
+      onValueChange={(next) => {
+        const picked = options.find((option) => option.value === next)
+        if (picked && picked.value !== value) onChange(picked.value)
       }}
-      variant="segment"
-      spacing={1}
-      className="flex w-full rounded-2xl bg-muted p-1"
+      className="flex w-full gap-1 rounded-2xl bg-muted p-1"
     >
       {options.map((option) => (
-        <ToggleGroupItem
-          key={toggleValue(option.value)}
-          value={toggleValue(option.value)}
+        <Radio.Root
+          key={String(option.value)}
+          value={option.value}
           aria-label={option.title}
+          className="inline-flex h-11 min-w-11 flex-1 cursor-default items-center justify-center rounded-lg border border-transparent px-2 text-center text-base leading-tight font-semibold text-muted-foreground transition-colors duration-200 ease-out outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring data-checked:border-input data-checked:bg-card data-checked:text-foreground"
         >
           {option.label}
-        </ToggleGroupItem>
+        </Radio.Root>
       ))}
-    </ToggleGroup>
+    </RadioGroup>
   )
 }

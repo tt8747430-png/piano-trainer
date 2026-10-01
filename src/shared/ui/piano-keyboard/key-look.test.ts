@@ -83,6 +83,12 @@ describe('keyLook', () => {
     expect(fill({ selected: all })).toBe('selected')
   })
 
+  it('marks a wrong key ✕ where nothing else labels it, so colour is not its only cue', () => {
+    const wrong = new Set([C4])
+    expect(keyLook(C4, { wrong }, UNNAMED).label).toEqual({ kind: 'mark', text: '✕' })
+    expect(keyLook(C4, { wrong, marks: root }, UNNAMED).label).toEqual({ kind: 'mark', text: '1' })
+  })
+
   it('outlines a key whatever its fill', () => {
     expect(keyLook(C4, { outlined: new Set([C4]) }, UNNAMED)).toMatchObject({
       fill: 'white',

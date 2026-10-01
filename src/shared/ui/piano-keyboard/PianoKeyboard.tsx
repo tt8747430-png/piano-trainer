@@ -13,7 +13,7 @@ import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
 import { KeyRail } from './KeyRail'
-import { keyLook, type KeyStates } from './key-look'
+import { keyDescription, keyLook, type KeyStates, type KeyStateWords } from './key-look'
 import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
@@ -95,6 +95,10 @@ export function PianoKeyboard({
   const scroller = useRef<HTMLDivElement>(null)
   const keys = useRef<HTMLDivElement>(null)
   const names = useKeyNames()
+  const words = useMemo<KeyStateWords>(
+    () => ({ wrong: t('keyState.wrong'), missing: t('keyState.missing'), lit: t('keyState.lit') }),
+    [t],
+  )
   const [tabStop, setTabStop] = useState<Midi>(range.from)
   const { from, to } = range
   const span = useMemo(() => spanOf(PIANO_LAYOUT.keys, { from, to }), [from, to])
@@ -162,19 +166,23 @@ export function PianoKeyboard({
               : undefined
           }
         >
-          {PIANO_LAYOUT.keys.map((key) => (
-            <Key
-              key={key.midi}
-              geometry={key}
-              name={names.get(key.midi) ?? ''}
-              look={keyLook(key.midi, { ...states, down }, { namedKeys, letters })}
-              chosen={states.selected?.has(key.midi)}
-              tabStop={key.midi === tabStop}
-              onPointerPress={pointers.pointerDown}
-              onClickPress={pointers.click}
-              onFocusKey={setTabStop}
-            />
-          ))}
+          {PIANO_LAYOUT.keys.map((key) => {
+            const look = keyLook(key.midi, { ...states, down }, { namedKeys, letters })
+            return (
+              <Key
+                key={key.midi}
+                geometry={key}
+                name={names.get(key.midi) ?? ''}
+                description={keyDescription(look, words)}
+                look={look}
+                chosen={states.selected?.has(key.midi)}
+                tabStop={key.midi === tabStop}
+                onPointerPress={pointers.pointerDown}
+                onClickPress={pointers.click}
+                onFocusKey={setTabStop}
+              />
+            )
+          })}
           {/* The rail's shade falling on the keys. */}
           <span
             aria-hidden

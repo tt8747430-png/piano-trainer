@@ -2,6 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 
 describe('Learn', () => {
   it('lists the lessons under their module, with their level and category, and the references', async () => {
@@ -78,5 +79,6 @@ describe('Learn', () => {
   it('speaks Russian', async () => {
     await renderApp('/learn', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
+    expect(untranslated(document.body)).toEqual([])
   })
 })

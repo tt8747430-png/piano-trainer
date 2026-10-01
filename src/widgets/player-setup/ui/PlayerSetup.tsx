@@ -1,5 +1,5 @@
 import { SlidersHorizontal } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
@@ -34,6 +34,17 @@ export function PlayerSetup({
 }) {
   const { t } = useTranslation('player')
   const [page, setPage] = useState<SetupPage | 'main'>('main')
+  const main = useRef<HTMLDivElement>(null)
+  /** The list page last open: back on the first page, its row takes the focus again. */
+  const [opened, setOpened] = useState<SetupPage | null>(null)
+  useEffect(() => {
+    if (page !== 'main' || opened === null) return
+    main.current?.querySelector<HTMLElement>(`[data-setup-page="${opened}"]`)?.focus()
+  }, [page, opened])
+  const openPage = (next: SetupPage) => {
+    setOpened(next)
+    setPage(next)
+  }
   const choose = (change: FigureChange) => {
     onFigures(change)
     setPage('main')
@@ -42,14 +53,18 @@ export function PlayerSetup({
   return (
     <Sheet
       onOpenChange={(open) => {
-        if (!open) setPage('main')
+        if (open) return
+        setPage('main')
+        setOpened(null)
       }}
     >
       <SheetTrigger render={<RoundButton label={t('setup')} icon={SlidersHorizontal} />} />
       <SheetContent title={page === 'main' ? t('setup') : t(page)}>
         {page === 'main' ? (
-          <SetupContext value={{ figures, openPage: setPage }}>
-            <div className="flex flex-col gap-5">{children}</div>
+          <SetupContext value={{ figures, openPage }}>
+            <div ref={main} className="flex flex-col gap-5">
+              {children}
+            </div>
           </SetupContext>
         ) : null}
         {page === 'pattern' ? (
@@ -62,6 +77,7 @@ export function PlayerSetup({
         ) : null}
         {page === 'rh' ? (
           <FigurePage
+            label={t('rh')}
             ids={RIGHT_FIGURE_IDS}
             figures={RIGHT_FIGURES}
             value={figures.rh}
@@ -72,6 +88,7 @@ export function PlayerSetup({
         ) : null}
         {page === 'lh' ? (
           <FigurePage
+            label={t('lh')}
             ids={LEFT_FIGURE_IDS}
             figures={LEFT_FIGURES}
             value={figures.lh}

@@ -79,8 +79,9 @@ describe('Segmented', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<Segmented label="Mode" value="step" options={MODES} onChange={onChange} />)
-    expect(screen.getByRole('button', { name: 'Step' })).toHaveAttribute('aria-pressed', 'true')
-    await user.click(screen.getByRole('button', { name: 'Wait' }))
+    expect(screen.getByRole('radiogroup', { name: 'Mode' })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Step' })).toHaveAttribute('aria-checked', 'true')
+    await user.click(screen.getByRole('radio', { name: 'Wait' }))
     expect(onChange).toHaveBeenCalledWith('wait')
   })
 
@@ -88,8 +89,17 @@ describe('Segmented', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<Segmented label="Mode" value="step" options={MODES} onChange={onChange} />)
-    await user.click(screen.getByRole('button', { name: 'Step' }))
+    await user.click(screen.getByRole('radio', { name: 'Step' }))
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('moves to the next segment with the arrows, choosing it', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<Segmented label="Mode" value="step" options={MODES} onChange={onChange} />)
+    screen.getByRole('radio', { name: 'Step' }).focus()
+    await user.keyboard('{ArrowRight}')
+    expect(onChange).toHaveBeenCalledWith('wait')
   })
 
   it('hands a number back as a number', async () => {
@@ -100,7 +110,7 @@ describe('Segmented', () => {
       { value: 1, label: '1st' },
     ]
     render(<Segmented label="Inversion" value={0} options={inversions} onChange={onChange} />)
-    await user.click(screen.getByRole('button', { name: '1st' }))
+    await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onChange).toHaveBeenCalledWith(1)
   })
 })
@@ -111,8 +121,8 @@ describe('NamedSegmented', () => {
     const onChange = vi.fn()
     render(<NamedSegmented label="Mode" value="step" options={MODES} onChange={onChange} />)
     expect(screen.getByText('Mode')).toBeVisible()
-    expect(screen.getByRole('group', { name: 'Mode' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Wait' }))
+    expect(screen.getByRole('radiogroup', { name: 'Mode' })).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: 'Wait' }))
     expect(onChange).toHaveBeenCalledWith('wait')
   })
 })
@@ -122,16 +132,16 @@ describe('InversionChoice', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     const { rerender } = render(<InversionChoice notes={3} value={0} onChange={onChange} />)
-    const group = screen.getByRole('group', { name: 'Inversion' })
+    const group = screen.getByRole('radiogroup', { name: 'Inversion' })
     expect(
       within(group)
-        .getAllByRole('button')
+        .getAllByRole('radio')
         .map((b) => b.textContent),
     ).toEqual(['Root', '1st', '2nd'])
-    await user.click(screen.getByRole('button', { name: '2nd' }))
+    await user.click(screen.getByRole('radio', { name: '2nd' }))
     expect(onChange).toHaveBeenCalledWith(2)
     rerender(<InversionChoice notes={7} value={0} onChange={onChange} />)
-    expect(within(group).getAllByRole('button')).toHaveLength(4)
+    expect(within(group).getAllByRole('radio')).toHaveLength(4)
   })
 })
 
@@ -140,8 +150,8 @@ describe('ChordSizeField', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<ChordSizeField value="triads" onChange={onChange} />)
-    expect(screen.getByRole('group', { name: 'Chord size' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: '9ths' }))
+    expect(screen.getByRole('radiogroup', { name: 'Chord size' })).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: '9ths' }))
     expect(onChange).toHaveBeenCalledWith('ninths')
   })
 })
@@ -176,6 +186,14 @@ describe('TypedField', () => {
     )
     expect(field).toHaveAttribute('aria-invalid', 'true')
     expect(field).toHaveAccessibleDescription('This chord can’t be read.')
+  })
+
+  it('says nothing while the field is empty: the learner is typing again', () => {
+    render(
+      <TypedField label="From" value=" " error="This chord can’t be read." onChange={() => {}} />,
+    )
+    expect(screen.getByRole('textbox', { name: 'From' })).toHaveAttribute('aria-invalid', 'false')
+    expect(screen.queryByText('This chord can’t be read.')).toBeNull()
   })
 })
 

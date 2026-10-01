@@ -26,7 +26,7 @@ export function MidiControl() {
   const line = statusLine(connection, t)
   return (
     <div className="flex flex-col gap-3">
-      <p aria-live="polite" className="text-muted-foreground empty:hidden">
+      <p aria-live="polite" className="text-muted-foreground empty:sr-only">
         {line}
       </p>
       {connection.kind === 'unsupported' || isMidiConnected(connection) ? null : (

@@ -53,7 +53,7 @@ describe('The chromatic walk in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic?chords=maj9&root=G')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('button', { name: 'Up and down' }))
+    await user.click(await screen.findByRole('radio', { name: 'Up and down' }))
     expect(router.state.location.search).toMatchObject({ direction: 'both' })
     await user.click(screen.getByRole('combobox', { name: 'Root' }))
     await user.click(await screen.findByRole('option', { name: 'A♭' }))
@@ -66,8 +66,8 @@ describe('The chromatic walk in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await user.click(await screen.findByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
-    ).toBeDisabled()
+      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+    ).toHaveAttribute('aria-disabled', 'true')
   })
 
   it('closes to Practice when opened directly', async () => {

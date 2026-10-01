@@ -38,21 +38,24 @@ describe('PlayerSetup', () => {
   it('chooses a pattern from its group, keeping melody patterns from music without a tune', async () => {
     const { user, onFigures } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(screen.getByRole('button', { name: new RegExp(PATTERNS.r5.name.en) })).toBeDisabled()
-    await user.click(screen.getByRole('button', { name: new RegExp(PATTERNS.ballad.name.en) }))
+    expect(screen.getByRole('option', { name: new RegExp(PATTERNS.r5.name.en) })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.click(screen.getByRole('option', { name: new RegExp(PATTERNS.ballad.name.en) }))
     expect(onFigures).toHaveBeenCalledWith({ pattern: 'ballad' })
   })
 
   it('offers From the chart only where the chart names its methods', async () => {
     const { user } = await renderSetup({ methodCodes: true })
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(screen.getByRole('button', { name: /From the chart/ })).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: /From the chart/ })).toBeInTheDocument()
   })
 
   it('goes back to the pattern’s own figure', async () => {
     const { user, onFigures } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Right hand.*own/ }))
-    await user.click(screen.getByRole('button', { name: /The pattern’s own/ }))
+    await user.click(screen.getByRole('option', { name: /The pattern’s own/ }))
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
@@ -66,8 +69,8 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup({ key: false })
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
-    ).toBeDisabled()
+      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+    ).toHaveAttribute('aria-disabled', 'true')
     expect(screen.getByText('Needs a key')).toBeInTheDocument()
   })
 
@@ -75,19 +78,19 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
-    ).toBeEnabled()
+      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+    ).not.toHaveAttribute('aria-disabled')
   })
 
   it('closes what plays inside a beat to a piece in 6/8 or 12/8, keeping what plays on it', async () => {
     const { user } = await renderSetup({ simpleTime: false })
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.ballad.name.en) }),
-    ).toBeDisabled()
+      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.ballad.name.en) }),
+    ).toHaveAttribute('aria-disabled', 'true')
     expect(
-      screen.getByRole('button', { name: (name) => name.includes(PATTERNS.r1.name.en) }),
-    ).toBeEnabled()
+      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.r1.name.en) }),
+    ).not.toHaveAttribute('aria-disabled')
     expect(screen.getAllByText('Needs simple time').length).toBeGreaterThan(0)
   })
 
@@ -97,5 +100,22 @@ describe('PlayerSetup', () => {
     await user.keyboard('{Escape}')
     await user.click(screen.getByRole('button', { name: 'Setup' }))
     expect(screen.getByText('The music’s own choices')).toBeInTheDocument()
+  })
+
+  it('closes from a Close a screen reader reaches', async () => {
+    const { user } = await renderSetup()
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByText('The music’s own choices')).not.toBeInTheDocument()
+  })
+
+  it('opens a list on its choice, and goes back to the row that opened it', async () => {
+    const { user } = await renderSetup()
+    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+    expect(screen.getByRole('option', { name: new RegExp(PATTERNS.block.name.en) })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByRole('button', { name: /^Pattern/ })).toHaveFocus()
+    await user.click(screen.getByRole('button', { name: /^Right hand/ }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByRole('button', { name: /^Right hand/ })).toHaveFocus()
   })
 })

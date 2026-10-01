@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { figureNeed, type FigureEntry, type PatternFit } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Figure } from '@/shared/lib/arrangement'
-import { ChoiceList } from './ChoiceList'
 import { ListPage } from './ListPage'
 
 /**
@@ -10,6 +9,7 @@ import { ListPage } from './ListPage'
  * cannot play (a tune it lacks, its key's triads, inside the beat of 6/8) closed, with what it needs.
  */
 export function FigurePage<Id extends string>({
+  label,
   ids,
   figures,
   value,
@@ -17,6 +17,7 @@ export function FigurePage<Id extends string>({
   onChoose,
   onBack,
 }: {
+  label: string
   ids: readonly Id[]
   figures: Readonly<Record<Id, FigureEntry<Figure>>>
   /** The chosen figure; null is the pattern's own. */
@@ -29,23 +30,33 @@ export function FigurePage<Id extends string>({
   const { t } = useTranslation('player')
   const locale = useLocale()
   return (
-    <ListPage onBack={onBack}>
-      <ChoiceList<Id | null>
-        items={[
-          { value: null, label: t('ownFigure') },
-          ...ids.map((id) => {
-            const { name, figure } = figures[id]
-            const need = figureNeed(figure, fit)
-            return {
-              value: id,
-              label: localText(name, locale),
-              ...(need ? { disabledNote: t(`needs.${need}`) } : {}),
-            }
-          }),
-        ]}
-        value={value}
-        onChoose={(id) => onChoose(id ?? undefined)}
-      />
-    </ListPage>
+    <ListPage
+      label={label}
+      onBack={onBack}
+      groups={[
+        {
+          choices: [
+            {
+              key: 'own',
+              label: t('ownFigure'),
+              selected: value === null,
+              onChoose: () => onChoose(undefined),
+            },
+            ...ids.map((id) => {
+              const { name, figure } = figures[id]
+              const need = figureNeed(figure, fit)
+              return {
+                key: id,
+                label: localText(name, locale),
+                note: need ? t(`needs.${need}`) : undefined,
+                selected: value === id,
+                disabled: need !== null,
+                onChoose: () => onChoose(id),
+              }
+            }),
+          ],
+        },
+      ]}
+    />
   )
 }

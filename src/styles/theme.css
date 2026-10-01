@@ -193,6 +193,17 @@
     outline: 3px solid var(--color-ring);
     outline-offset: 2px;
   }
+  /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
+     its tallest (the notch, the rail, keys at 40dvh, the finger row, its foot) and the phone's tab bar. */
+  html:has([data-slot='pinned']) {
+    scroll-padding-top: calc(40dvh + --spacing(23) + max(--spacing(4), env(safe-area-inset-top)));
+  }
+  html:has([data-slot='app-nav']) {
+    scroll-padding-bottom: calc(--spacing(16) + env(safe-area-inset-bottom));
+    @variant lg {
+      scroll-padding-bottom: 0;
+    }
+  }
 }
 
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */

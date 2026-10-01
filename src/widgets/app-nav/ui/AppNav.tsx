@@ -16,6 +16,7 @@ export function AppNav() {
   return (
     <nav
       aria-label={t('nav.label')}
+      data-slot="app-nav"
       className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card pb-safe lg:inset-y-0 lg:right-auto lg:w-60 lg:border-t-0 lg:border-r lg:pb-0"
     >
       <p

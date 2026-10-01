@@ -31,9 +31,9 @@ describe('Learn → Chords', () => {
   it('offers a 7th chord its 7th, and a dominant its alterations', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/chords?size=9')
-    await user.click(await screen.findByRole('button', { name: 'Major 7th' }))
+    await user.click(await screen.findByRole('radio', { name: 'Major 7th' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'CMaj9' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Minor 7th' }))
+    await user.click(screen.getByRole('radio', { name: 'Minor 7th' }))
     const alterations = await screen.findByRole('combobox', { name: 'Alterations' })
     expect(alterations).toHaveTextContent('None')
     await user.click(alterations)
@@ -132,10 +132,10 @@ describe('Learn → Chords', () => {
 
   it('offers only the inversions the chord has', async () => {
     await renderApp('/learn/chords')
-    const inversions = await screen.findByRole('group', { name: 'Inversion' })
+    const inversions = await screen.findByRole('radiogroup', { name: 'Inversion' })
     expect(
       within(inversions)
-        .getAllByRole('button')
+        .getAllByRole('radio')
         .map((b) => b.textContent),
     ).toEqual(['Root', '1st', '2nd'])
   })

@@ -28,8 +28,8 @@ describe('Learn → Scales', () => {
   it('puts a hand’s fingers under the keys, which keep their degrees', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/scales')
-    const fingers = await screen.findByRole('group', { name: 'Fingers' })
-    await user.click(within(fingers).getByRole('button', { name: 'Right hand' }))
+    const fingers = await screen.findByRole('radiogroup', { name: 'Fingers' })
+    await user.click(within(fingers).getByRole('radio', { name: 'Right hand' }))
     expect(router.state.location.search).toMatchObject({ fingers: 'rh' })
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('4')
@@ -109,8 +109,8 @@ describe('Learn → Scales', () => {
   it('shows each degree’s numeral over its chord in Chords view', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/scales')
-    const show = await screen.findByRole('group', { name: 'Show' })
-    await user.click(within(show).getByRole('button', { name: 'Chords' }))
+    const show = await screen.findByRole('radiogroup', { name: 'Show' })
+    await user.click(within(show).getByRole('radio', { name: 'Chords' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -169,9 +169,9 @@ describe('Learn → Scales', () => {
     await renderApp('/learn/scales?show=chords&keysPlay=notes')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E4' }), { pointerId: 1 })
-    const keysPlay = screen.getByRole('group', { name: 'Keys play' })
-    await user.click(within(keysPlay).getByRole('button', { name: 'Chords' }))
-    await user.click(within(keysPlay).getByRole('button', { name: 'Notes' }))
+    const keysPlay = screen.getByRole('radiogroup', { name: 'Keys play' })
+    await user.click(within(keysPlay).getByRole('radio', { name: 'Chords' }))
+    await user.click(within(keysPlay).getByRole('radio', { name: 'Notes' }))
     expect(screen.queryByText(/ is in /)).not.toBeInTheDocument()
     expect(within(keyboard).getByRole('button', { name: 'E4' })).not.toHaveClass('ring-ring')
   })
@@ -210,9 +210,9 @@ describe('Learn → Scales', () => {
     await user.click(await screen.findByRole('combobox', { name: 'Start on' }))
     await user.click(await screen.findByRole('option', { name: /^E/ }))
     expect(router.state.location.search).toMatchObject({ start: 3 })
-    const fingering = screen.getByRole('group', { name: 'Fingering' })
-    expect(within(fingering).getByRole('button', { name: 'From the thumb' })).toHaveAttribute(
-      'aria-pressed',
+    const fingering = screen.getByRole('radiogroup', { name: 'Fingering' })
+    expect(within(fingering).getByRole('radio', { name: 'From the thumb' })).toHaveAttribute(
+      'aria-checked',
       'true',
     )
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
@@ -225,8 +225,8 @@ describe('Learn → Scales', () => {
   it('fingers the run as the scale fingers it', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/scales?start=3&fingers=rh')
-    const fingering = await screen.findByRole('group', { name: 'Fingering' })
-    await user.click(within(fingering).getByRole('button', { name: 'As the scale' }))
+    const fingering = await screen.findByRole('radiogroup', { name: 'Fingering' })
+    await user.click(within(fingering).getByRole('radio', { name: 'As the scale' }))
     expect(router.state.location.search).toMatchObject({ start: 3, fingering: 'scale' })
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('31234123')
   })

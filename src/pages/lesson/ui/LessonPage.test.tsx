@@ -2,6 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 
 describe('A lesson', () => {
   it('shows its title and summary over its sections', async () => {
@@ -48,6 +49,19 @@ describe('A lesson', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/five-ways'))
   })
 
+  it('keeps a keyboard user on the quiz’s button as it opens, shows the answer and starts again', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/lessons/triads')
+    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
+    within(quiz).getByRole('button', { name: 'Answer on the keys' }).focus()
+    await user.keyboard('{Enter}')
+    expect(within(quiz).getByRole('button', { name: 'Check' })).toHaveFocus()
+    await user.click(screen.getByRole('button', { name: 'E4' }))
+    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
+    await user.click(within(quiz).getByRole('button', { name: 'Show the answer' }))
+    expect(within(quiz).getByRole('button', { name: 'Try again' })).toHaveFocus()
+  })
+
   it('answers a Fundamentals quiz on its keys', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/triads')
@@ -59,5 +73,11 @@ describe('A lesson', () => {
     }
     await user.click(within(quiz).getByRole('button', { name: 'Check' }))
     expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
+  })
+
+  it('speaks Russian on every block of a lesson', async () => {
+    await renderApp('/learn/lessons/inversions', { locale: 'ru' })
+    await screen.findByRole('heading', { level: 1 })
+    expect(untranslated(document.body)).toEqual([])
   })
 })

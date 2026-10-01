@@ -634,8 +634,8 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
   key, a MIDI key) and for at least the shortest press, 150ms, so the lightest tap shows; let go, it is plain again,
   however long its sound rings. The keys hold still under a finger. **Scroll** (the default): only the key a finger
   touched sounds; the keyboard scrolls from its rail. **Glissando:** every key a finger slides onto sounds.
-- **Faces:** plain; a mark's wash with its label; honey for a quiz's chosen or Name chord's lit keys; crimson for a
-  wrong key; a deep-sky ring inside a missing key; and down over all of them. A wrong key wins over a lit one, a lit
+- **Faces:** plain; a mark's wash with its label; honey for a quiz's chosen or Name chord's lit keys; crimson with ✕ for
+  a wrong key; a deep-sky ring inside a missing key; and down over all of them. A wrong key wins over a lit one, a lit
   one over a mark, a mark over a selection. **Note names** (C · All · None) put "C4" on every C, or its name on every
   key, drawn smaller than a mark's label, which always wins. The computer keyboard's letters sit on the keys it plays.
 - **Finger row:** finger numbers in 20px circles under the keys, in two staggered lines as the keys stand: a black

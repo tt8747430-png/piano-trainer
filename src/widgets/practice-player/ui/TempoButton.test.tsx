@@ -30,13 +30,14 @@ describe('TempoButton', () => {
     const user = userEvent.setup()
     const { onWait, onTempo } = renderTempo()
     await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
+    expect(await screen.findByRole('dialog', { name: 'Tempo' })).toBeInTheDocument()
     expect(
-      await screen.findByRole('button', { name: 'Original tempo', pressed: true }),
+      await screen.findByRole('option', { name: 'Original tempo', selected: true }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Wait mode' }))
+    await user.click(screen.getByRole('option', { name: 'Wait mode' }))
     expect(onWait).toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
-    await user.click(await screen.findByRole('button', { name: '50% speed' }))
+    await user.click(await screen.findByRole('option', { name: '50% speed' }))
     expect(onTempo).toHaveBeenLastCalledWith(36)
   })
 

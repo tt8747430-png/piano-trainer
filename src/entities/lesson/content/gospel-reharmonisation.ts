@@ -90,8 +90,8 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'quiz',
           ask: {
-            en: 'Play C major’s IV chord, borrowed from the minor.',
-            ru: 'Сыграйте IV ступень до мажора, взятую из минора.',
+            en: 'Play C major’s iv chord, borrowed from the minor.',
+            ru: 'Сыграйте аккорд iv ступени до мажора, взятый из минора.',
           },
           answer: { chord: 'Fm' },
         },

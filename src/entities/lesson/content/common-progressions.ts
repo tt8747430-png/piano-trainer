@@ -94,14 +94,14 @@ const commonProgressions: Lesson = {
       blocks: [
         {
           kind: 'quiz',
-          ask: { en: 'Play the IV chord of D major.', ru: 'Сыграйте IV ступень ре мажора.' },
+          ask: { en: 'Play the IV chord of D major.', ru: 'Сыграйте аккорд IV ступени ре мажора.' },
           answer: { chord: 'G' },
         },
         {
           kind: 'quiz',
           ask: {
             en: 'Play the V chord of E minor, made major.',
-            ru: 'Сыграйте мажорную V ступень ми минора.',
+            ru: 'Сыграйте мажорный аккорд V ступени ми минора.',
           },
           answer: { chord: 'B' },
         },

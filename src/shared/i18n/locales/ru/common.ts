@@ -11,7 +11,11 @@ export const common: LocaleResources['common'] = {
     practice: 'Практика',
     settings: 'Настройки',
   },
-  errors: { title: 'Что-то пошло не так', reload: 'Перезагрузить' },
+  errors: {
+    title: 'Что-то пошло не так',
+    offline: 'Нет сети. Этот экран откроется, когда она появится.',
+    reload: 'Перезагрузить',
+  },
   notFound: { title: 'Страница не найдена', toSongs: 'К песням' },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
@@ -27,6 +31,7 @@ export const common: LocaleResources['common'] = {
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
+  keyState: { wrong: 'Неверно', missing: 'Не хватает', lit: 'Звучит' },
   stop: 'Стоп',
   rail: {
     octaveDown: 'Октава вниз',

@@ -45,7 +45,7 @@ describe('Learn → Progressions', () => {
   it('grows the chords with the chord size, and plays the row', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/learn/progressions')
-    await user.click(await screen.findByRole('button', { name: '7ths' }))
+    await user.click(await screen.findByRole('radio', { name: '7ths' }))
     expect(row()).toEqual(['CMaj7I', 'G7V', 'Am7vi', 'FMaj7IV'])
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)

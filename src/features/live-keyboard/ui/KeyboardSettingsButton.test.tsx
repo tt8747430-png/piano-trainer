@@ -9,9 +9,9 @@ describe('KeyboardSettingsButton', () => {
     const { settingsStore } = setUp()
     await user.click(screen.getByRole('button', { name: 'Keyboard settings' }))
     const popover = await screen.findByRole('dialog', { name: 'Keyboard settings' })
-    await user.click(within(popover).getByRole('button', { name: 'Large' }))
-    await user.click(within(popover).getByRole('button', { name: 'Glissando' }))
-    await user.click(within(popover).getByRole('button', { name: 'All' }))
+    await user.click(within(popover).getByRole('radio', { name: 'Large' }))
+    await user.click(within(popover).getByRole('radio', { name: 'Glissando' }))
+    await user.click(within(popover).getByRole('radio', { name: 'All' }))
     await user.click(within(popover).getByRole('switch', { name: 'Keyboard map' }))
     await user.click(
       within(popover).getByRole('switch', { name: /Play from the computer keyboard/ }),

@@ -12,6 +12,7 @@ export const player: LocaleResources['player'] = {
   directions: { up: 'Вверх', down: 'Вниз', both: 'Вверх и вниз' },
   tempo: 'Темп',
   bpm: '{{tempo}} уд/мин',
+  hands: 'Руки',
   handsOf: 'Руки: {{hands}}',
   pattern: 'Фактура',
   fromChart: 'Как в песне',
