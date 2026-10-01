@@ -1,5 +1,5 @@
 import { defaultStringifySearch, redirect } from '@tanstack/react-router'
-import { selectView, type RememberedView, type ViewsStore } from '@/entities/views'
+import { sameView, selectView, type RememberedView, type ViewsStore } from '@/entities/views'
 import type { Raw } from './read-search'
 
 // A screen comes back the learner's way (spec §6, ADR 0022). Opened plainly (`OPEN_PLAINLY`), its
@@ -25,16 +25,8 @@ export function viewToOpen(
   return filled.length === 0 ? url : { ...Object.fromEntries(filled), ...url }
 }
 
-/** Two searches read alike: the same params, each with the same value (left-out ones ignored). */
-function sameView(a: object, b: object): boolean {
-  const defined = (search: object) => Object.entries(search).filter(([, v]) => v !== undefined)
-  const left = defined(a)
-  const right = new Map(defined(b))
-  return left.length === right.size && left.every(([param, value]) => right.get(param) === value)
-}
-
-/** What a remembered route's `beforeLoad` is handed by the router. */
-export interface RestoreContext {
+/** What a remembered route's `beforeLoad` reads of what the router hands it. */
+interface RestoreContext {
   readonly cause: 'preload' | 'enter' | 'stay'
   readonly location: {
     readonly pathname: string
@@ -51,7 +43,10 @@ export interface RestoreContext {
  * only when that changes what the screen shows: a remembered value the reader rejects opens nothing
  * new, so it never redirects again.
  */
-export function restoreView(read: (raw: Raw) => object, kept: readonly string[]) {
+export function restoreView<S extends object>(
+  read: (raw: Raw) => S,
+  kept: readonly (keyof S & string)[],
+) {
   return ({ cause, location, context, search }: RestoreContext): void => {
     if (cause !== 'enter') return
     const remembered = selectView(context.views.getState(), location.pathname)
@@ -63,7 +58,10 @@ export function restoreView(read: (raw: Raw) => object, kept: readonly string[])
 }
 
 /** A remembered route's options: it says it is remembered, and restores its view on entering. */
-export const remembered = (read: (raw: Raw) => object, kept: readonly string[]) => ({
+export const remembered = <S extends object>(
+  read: (raw: Raw) => S,
+  kept: readonly (keyof S & string)[],
+) => ({
   staticData: { remembered: true } as const,
   beforeLoad: restoreView(read, kept),
 })

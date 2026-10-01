@@ -219,11 +219,13 @@
 @utility -mt-safe {
   margin-top: calc(-1 * max(--spacing(4), env(safe-area-inset-top)));
 }
-/* What stays at the top under the screen's bar moves with it (`duration-*` and `ease-*` time it). */
-@utility transition-top {
-  transition-property: top;
-  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-  transition-duration: var(--tw-duration, var(--default-transition-duration));
+/* What stays at the top sits under the screen's bar while it shows (`ScreenBarProvider`). */
+@utility top-screen-bar {
+  top: var(--screen-bar, 0px);
+}
+/* A laptop's sticky column: under the bar, a gutter below it. */
+@utility top-screen-bar-8 {
+  top: calc(var(--screen-bar, 0px) + --spacing(8));
 }
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);

@@ -18,7 +18,7 @@ key.
   chord (`voiceInversion`). A chord of up to four notes plays whole (a triad's 3rd inversion is its 2nd); a bigger one
   leaves its root and 5th out, down to four notes, its first tension where the root was (`inversionPitchClasses`), so
   Dm9's 1st inversion is the course's 3-5-7-9 and its 3rd the 7-9-3-5. Only a figure that plays the chord as voiced
-  (`C`, `vN`) changes; a pattern that plays its own shapes keeps them, and its Setup says so (`keepsInversion`).
+  (`C`, `vN`) changes; a pattern that plays its own shapes keeps them, and its Setup says so (`followsInversion`).
 - **A walk of keys is a chart transformation**, `chartInKeys(chart, walkKeys(key, walk))`: the chart once per key, a
   section per key, written in C so the sheet music writes each chord's accidentals (as the chromatic walk does).
   It is offered for progressions (the progression Player and progression pieces), URL `walk`: up or down by

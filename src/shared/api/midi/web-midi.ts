@@ -11,14 +11,15 @@ const statusOf = (inputs: readonly MIDIInput[]): MidiStatus =>
     ? { state: 'connected', devices: inputs.map((input) => input.name ?? input.id) }
     : { state: 'no-device' }
 
-/**
- * The Web MIDI adapter: every keyboard plugged in is listened to, and re-hooked when devices change.
- * A keyboard unplugged lets go of the keys it was holding, so no key stays down without a hand.
- */
 /** Whether the learner has allowed MIDI on this site: asked without a prompt. */
 const midiPermission = async (): Promise<PermissionState> =>
   (await navigator.permissions.query({ name: 'midi' })).state
 
+/**
+ * The Web MIDI adapter: every keyboard plugged in is listened to, and re-hooked when devices change.
+ * A keyboard unplugged lets go of the keys it was holding, so no key stays down without a hand. One
+ * the learner allowed before reconnects without a prompt.
+ */
 export function createWebMidiInput(
   requestAccess: () => Promise<MIDIAccess> = () => navigator.requestMIDIAccess(),
   permission: () => Promise<PermissionState> = midiPermission,

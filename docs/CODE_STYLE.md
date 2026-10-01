@@ -213,8 +213,8 @@ tempo)` sounds it and `notate(run)` writes it.
 - **A line in one hand is written on one staff:** `LazyScoreView`'s `staff` draws only that staff of the grand staff
   (an interval, a note to read); music for both hands keeps the grand staff.
 - **`arrangement` exports only `arrange`** (plus `parseFigure`, what a figure needs of its source, `playsKeyTriads` and
-  `splitsTheBeat`, and the types). Voice leading, the
-  chord context and fingering are internal and tested through `arrange`.
+  `splitsTheBeat`, `chartInKeys`, a chart walked through the keys before it is arranged, and the types). Voice
+  leading, an inversion's voicing, the chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an

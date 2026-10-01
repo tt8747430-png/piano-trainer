@@ -46,7 +46,7 @@ import {
 } from './routes/player-search'
 import { validateCheckSearch } from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
-import { remembered, restoreView, type RestoreContext } from './routes/remember'
+import { remembered, restoreView } from './routes/remember'
 import {
   finderSearch,
   passingSearch,
@@ -243,8 +243,9 @@ const fullScreenRoute = createRoute({
   component: FullScreenLayout,
   staticData: { fullScreen: true },
 })
-const restorePiece: (context: RestoreContext) => void = restoreView(readPlayerSearch, PLAYER_KEPT)
-const restoreWalk: (context: RestoreContext) => void = restoreView(readWalkSearch, WALK_KEPT)
+// A piece and a walk check what they name first, then restore their view.
+const restorePiece = restoreView(readPlayerSearch, PLAYER_KEPT)
+const restoreWalk = restoreView(readWalkSearch, WALK_KEPT)
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',

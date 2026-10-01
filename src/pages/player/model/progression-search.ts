@@ -1,6 +1,12 @@
-import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
+import {
+  LEFT_FIGURES,
+  playableFigure,
+  playablePattern,
+  RIGHT_FIGURES,
+  type PatternFit,
+} from '@/entities/pattern'
 import { PROGRESSION, walkingFit, type ProgressionChoice } from '@/features/practice'
-import { keyFromParam, parseNumerals, type KeyParam } from '@/shared/lib/music'
+import { keyFromParam, parseNumerals, type KeyParam, type KeyWalk } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
@@ -16,6 +22,10 @@ export type ProgressionSearch = PracticeView & {
 export type ProgressionChange = FigureChange &
   Pick<SetupChange, 'chordSize' | 'walk'> & { readonly key?: KeyParam }
 
+/** What a progression, as it is played, has for its patterns: no key's triads while it walks the keys. */
+export const progressionFit = (walk: KeyWalk | null): PatternFit =>
+  walkingFit(PROGRESSION.fit, walk)
+
 /** The URL read: what it leaves out is the Player's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function progressionChoice(
   search: Pick<
@@ -24,7 +34,7 @@ export function progressionChoice(
   >,
 ): ProgressionChoice {
   const walk = search.walk ?? null
-  const fit = walkingFit(PROGRESSION.fit, walk)
+  const fit = progressionFit(walk)
   return {
     numerals: parseNumerals(search.p) ?? [],
     key: keyFromParam(search.key),

@@ -4,6 +4,16 @@ export const player = {
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
   progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
+  /** A piece walked through the keys, from the learner's key. */
+  pieceWalking: '{{title}}, {{walk}}',
+  /** A walk through the keys, as a title says it. */
+  walking: {
+    'semitones-up': 'up by semitones',
+    'semitones-down': 'down by semitones',
+    'tones-up': 'up by whole tones',
+    'tones-down': 'down by whole tones',
+    fifths: 'round the circle of fifths',
+  },
   chromatic: { title: 'Chromatic walk: {{chords}}' },
   qualities: 'Chord types',
   direction: 'Direction',

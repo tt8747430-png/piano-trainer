@@ -1,38 +1,30 @@
-import { useMemo } from 'react'
-import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
-import { entryTitles, pieceById, pieceKey, usePieceHeadings, type Piece } from '@/entities/piece'
-import { useKeyName, useLocale } from '@/shared/i18n'
-import { IN_PLACE } from '@/shared/lib'
+import { useTranslation } from 'react-i18next'
+import { useParams, useSearch } from '@tanstack/react-router'
+import { entryTitles, pieceById, type Piece } from '@/entities/piece'
+import { useLocale } from '@/shared/i18n'
+import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { useClose } from '../model/use-close'
+import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
-import { walkHeadings } from '../model/walk-headings'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
-  const navigate = useNavigate({ from: '/play/$pieceId' })
   const close = useClose(piece)
-  const ownHeadings = usePieceHeadings(piece)
-  const keyName = useKeyName()
-  const { choice, performance, player, changeSetup } = usePlayer(
+  const setSearch = useViewChange<PlayerSearch>()
+  const { t } = useTranslation('player')
+  const { choice, performance, player, fit, headings, changeSetup } = usePlayer(
     piece,
     search,
-    (patch) => void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE }),
+    setSearch,
   )
-  const { minor } = pieceKey(piece)
-  const headings = useMemo(
-    () =>
-      choice.walk
-        ? walkHeadings({ tonic: choice.tonic, minor }, choice.walk, keyName)
-        : ownHeadings,
-    [choice.walk, choice.tonic, minor, keyName, ownHeadings],
-  )
+  const title = entryTitles(piece, locale).primary
   return (
     <PlayerLayout
-      title={entryTitles(piece, locale).primary}
+      title={choice.walk ? t('pieceWalking', { title, walk: t(`walking.${choice.walk}`) }) : title}
       onClose={close}
       view={search}
       player={player}
@@ -42,6 +34,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         <PieceSetup
           piece={piece}
           choice={choice}
+          fit={fit}
           swing={isCompound(piece.meter) ? null : search.swing}
           onChange={changeSetup}
           onSwing={player.setSwing}

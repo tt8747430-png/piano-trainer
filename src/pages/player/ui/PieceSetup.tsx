@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { choosableChordSize, isOwnKey, pieceFit, pieceKey, type Piece } from '@/entities/piece'
-import { walkingFit, type PracticeChoice } from '@/features/practice'
+import { choosableChordSize, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
+import { walksKeys, type PracticeChoice } from '@/features/practice'
+import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, tonicSpelling } from '@/shared/lib/music'
 import { ChordSizeField, NoteDropdown } from '@/shared/ui'
@@ -18,12 +19,15 @@ import { PlayingFields } from '@/widgets/practice-player'
 export function PieceSetup({
   piece,
   choice,
+  fit,
   swing,
   onChange,
   onSwing,
 }: {
   piece: Piece
   choice: PracticeChoice
+  /** What the piece, as it is played, has for its patterns. */
+  fit: PatternFit
   /** Null where the meter cannot swing. */
   swing: boolean | null
   onChange: (change: SetupChange) => void
@@ -32,7 +36,6 @@ export function PieceSetup({
   const { t } = useTranslation('player')
   const keyName = useKeyName()
   const own = pieceKey(piece)
-  const fit = walkingFit(pieceFit(piece), choice.walk)
   const chordSize = choosableChordSize(piece)
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
@@ -43,7 +46,7 @@ export function PieceSetup({
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
-      {piece.kind === 'progression' ? (
+      {walksKeys(piece) ? (
         <KeyWalkField value={choice.walk} onChange={(walk) => onChange({ walk })} />
       ) : null}
       <FigureRows />

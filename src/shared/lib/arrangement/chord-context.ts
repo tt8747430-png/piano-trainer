@@ -64,7 +64,7 @@ export function chordContext(
   previous: readonly Midi[] | null,
   key: Key,
   /** Every chord in this inversion; `null` voice-leads each from the last. */
-  inversion: Inversion | null = null,
+  inversion: Inversion | null,
 ): ChordContext {
   const rootPc = pitchClassOf(chord.root)
   const bassPc = pitchClassOf(chord.bass)

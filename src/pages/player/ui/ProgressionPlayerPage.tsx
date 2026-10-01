@@ -1,12 +1,10 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useMemo } from 'react'
+import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { IN_PLACE, useGoBack } from '@/shared/lib'
+import { useViewChange, useGoBack } from '@/shared/lib'
 import { numeralText } from '@/shared/lib/music'
 import type { ProgressionSearch } from '../model/progression-search'
 import { useProgressionPlayer } from '../model/use-progression-player'
-import { walkHeadings } from '../model/walk-headings'
 import { PlayerLayout } from './PlayerLayout'
 import { ProgressionSetup } from './ProgressionSetup'
 
@@ -14,28 +12,22 @@ import { ProgressionSetup } from './ProgressionSetup'
 export function ProgressionPlayerPage() {
   const { t } = useTranslation(['player', 'music'])
   const search = useSearch({ from: '/full-screen/play/progression' })
-  const navigate = useNavigate({ from: '/play/progression' })
-  const setSearch = (patch: Partial<ProgressionSearch>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...patch }), ...IN_PLACE })
-  const { choice, performance, player, changeSetup } = useProgressionPlayer(search, setSearch)
+  const setSearch = useViewChange<ProgressionSearch>()
+  const { choice, performance, player, fit, headings, changeSetup } = useProgressionPlayer(
+    search,
+    setSearch,
+  )
   const close = useGoBack({
     to: '/learn/progressions',
     search: { p: search.p, key: search.key, size: choice.chordSize },
   })
   const keyName = useKeyName()
-  const headings = useMemo(
-    () => (choice.walk ? walkHeadings(choice.key, choice.walk, keyName) : undefined),
-    [choice.walk, choice.key, keyName],
-  )
   const named = { numerals: choice.numerals.map(numeralText).join('–'), key: keyName(choice.key) }
   return (
     <PlayerLayout
       title={
         choice.walk
-          ? t('player:progression.walking', {
-              ...named,
-              walk: t(`player:keyWalk.${choice.walk}`).toLocaleLowerCase(),
-            })
+          ? t('player:progression.walking', { ...named, walk: t(`player:walking.${choice.walk}`) })
           : t('player:progression.title', named)
       }
       headings={headings}
@@ -46,6 +38,7 @@ export function ProgressionPlayerPage() {
       setup={
         <ProgressionSetup
           choice={choice}
+          fit={fit}
           swing={search.swing}
           onChange={changeSetup}
           onSwing={player.setSwing}

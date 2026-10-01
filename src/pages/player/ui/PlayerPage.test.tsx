@@ -238,6 +238,9 @@ describe('Player', () => {
     await user.click(await screen.findByRole('option', { name: 'Down by whole tones' }))
     expect(router.state.location.search).toMatchObject({ walk: 'tones-down' })
     expect(
+      await screen.findByRole('heading', { name: 'ii–V–I, down by whole tones', hidden: true }),
+    ).toBeInTheDocument()
+    expect(
       await screen.findByRole('button', { name: 'Bar 5: Cm7', hidden: true }),
     ).toBeInTheDocument()
   })

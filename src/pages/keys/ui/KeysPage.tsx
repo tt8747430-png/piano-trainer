@@ -1,9 +1,9 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
 import { Dices } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entriesInKey, shelfOf } from '@/entities/piece'
-import { IN_PLACE } from '@/shared/lib'
+import { useViewChange } from '@/shared/lib'
 import { keyFromParam, keyParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { KeyExplorer, type KeyView } from '@/widgets/key-explorer'
@@ -13,7 +13,6 @@ import { PieceList } from '@/widgets/piece-list'
 export function KeysPage() {
   const { t } = useTranslation('learn')
   const view = useSearch({ from: '/shell/learn/keys' })
-  const navigate = useNavigate({ from: '/learn/keys' })
   const songsId = useId()
   const key = keyFromParam(view.key)
   const inKey = entriesInKey(key)
@@ -26,8 +25,7 @@ export function KeysPage() {
       entries: inKey.filter((entry) => entry.kind === 'study'),
     },
   ].filter((group) => group.entries.length > 0)
-  const onChange = (change: Partial<KeyView>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
+  const onChange = useViewChange<KeyView>()
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader

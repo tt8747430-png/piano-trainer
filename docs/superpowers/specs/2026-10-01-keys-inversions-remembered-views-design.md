@@ -114,7 +114,7 @@ the PDFs' own typos (none affect content).
   One key (default) · Up by semitones · Down by semitones · Up by whole tones · Down by whole tones · Round the circle
   of fifths. URL `walk`, absent is One key.
 - **The keys** (`shared/lib/music`: `walkKeys(key, walk)`), each ending back home: by semitones 12 keys and home (13);
-  by whole tones 6 and home (7); round the circle each key a 5th lower (C F B♭ E♭ A♭ D♭ G♭ B E A D G C). A minor
+  by whole tones 6 and home (7); round the circle each key a 5th lower (C F B♭ E♭ A♭ D♭ F♯ B E A D G C: F♯, as `tonicSpelling` spells that key). A minor
   progression stays minor. Each tonic is spelled by the key's one rule (`tonicSpelling`).
 - **The chart** (`shared/lib/arrangement`: `chartInKeys(chart, keys)`): the progression once per key, a section per
   key, in C so the sheet music writes each chord's accidentals (as the chromatic walk does). Down by whole tones from

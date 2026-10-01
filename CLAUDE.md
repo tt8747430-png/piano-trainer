@@ -110,7 +110,7 @@ it. `@` → `src`.
   `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
   and its key's common progressions into the Player); the chromatic walk (`CHROMATIC`, `chromaticChart`,
   `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); a progression (`PROGRESSION`, `progressionChart`,
-  `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
+  `arrangeProgression`; walked through the keys by `walk`, `walksKeys`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
@@ -118,7 +118,7 @@ it. `@` → `src`.
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
   Content: `piece` (54 pieces, 7 listings, chart and progression parsers, a progression in one line or in sections, a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` and
   `PROGRESSIONS` on Practice, `COMMON_PROGRESSIONS` a key's, `entriesInKey`, `pieceFit`, `choosableChordSize`,
-  `isOwnKey`), `pattern` (39 patterns; `PatternFit` and `patternNeed` / `playablePattern`, what music can play; `keepsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
+  `isOwnKey`), `pattern` (39 patterns; `PatternFit` and `patternNeed` / `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
   the keys, patterns over their pieces and progressions in any key, links by name to the references, the tools and
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
@@ -126,11 +126,11 @@ it. `@` → `src`.
   in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
-  version 1: each remembered screen's last view, at most 200, `selectView`; written by `features/remember-view`).
+  version 1: each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
   by one sanitiser for any version, following other tabs' saves), `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
   `useScrollMotion`, `useShownOnScrollUp` (the screen bar's hide and show), `IN_PLACE` (a navigation that changes the
-  screen in place: replace, keep the scroll), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
+  screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords reference's URL holds
@@ -155,7 +155,7 @@ it. `@` → `src`.
   fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader` (the screen's bar, sticky, hidden while reading down; `ScreenBarProvider` in `AppShell`
-  shares its height with `Pinned`), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
+  sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utilities read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
   button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `KeyDropdown`, `NoteDropdown`,
   `InversionChoice`, `ChordSizeField`, `SwitchRow`, `TypedField`, `RowLink` and `RowGroup`, `LEARN_TILES` (the tile a row to each of Learn's pages wears), `Fact`, `PlayToggle` and `ChordButton`, `ToneChip`, `PlayLabel` (a Play button's words, Stop while it sounds), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
   `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,

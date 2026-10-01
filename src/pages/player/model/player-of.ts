@@ -1,3 +1,4 @@
+import type { PatternFit } from '@/entities/pattern'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { PracticePlayer } from '@/widgets/practice-player'
 
@@ -7,4 +8,11 @@ export interface PlayerOf<Choice, Change> {
   readonly performance: Performance
   readonly player: PracticePlayer
   changeSetup(change: Change): void
+}
+
+/** A Player that may walk its music through the keys: what its patterns can play, and its sections' names. */
+export interface WalkingPlayerOf<Choice, Change> extends PlayerOf<Choice, Change> {
+  readonly fit: PatternFit
+  /** By section; while it walks, each key's name. */
+  readonly headings: readonly string[]
 }

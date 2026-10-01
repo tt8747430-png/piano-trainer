@@ -43,9 +43,14 @@ export function voiceLead(previous: readonly Midi[] | null, pcs: readonly PitchC
  * has it); a bigger chord without its root and 5th, at most four notes.
  */
 export function rightHandPitchClasses(tones: readonly Tone[]): PitchClass[] {
-  const upper = tones.length >= 4 ? tones.slice(1) : tones
-  const fitted = upper.length > 4 ? upper.filter((tone) => tone.role !== '5th').slice(0, 4) : upper
-  return fitted.map((tone) => tone.pitchClass)
+  const upper = tones.length >= 4 ? rootless(tones) : tones
+  return upper.map((tone) => tone.pitchClass)
+}
+
+/** A chord without its root (the bass has it), and past four notes without its 5th, at most four. */
+function rootless(tones: readonly Tone[]): readonly Tone[] {
+  const upper = tones.slice(1)
+  return upper.length > 4 ? upper.filter((tone) => tone.role !== '5th').slice(0, 4) : upper
 }
 
 /** The tones a chord adds above its 7th. */
@@ -58,8 +63,7 @@ const TENSIONS = new Set(['9th', '11th', '13th'])
  */
 export function inversionPitchClasses(tones: readonly Tone[]): PitchClass[] {
   if (tones.length <= 4) return tones.map((tone) => tone.pitchClass)
-  const upper = tones.slice(1)
-  const fitted = upper.length > 4 ? upper.filter((tone) => tone.role !== '5th').slice(0, 4) : upper
+  const fitted = rootless(tones)
   const first = fitted.find((tone) => TENSIONS.has(tone.role))
   const ordered = first ? [first, ...fitted.filter((tone) => tone !== first)] : fitted
   return ordered.map((tone) => tone.pitchClass)

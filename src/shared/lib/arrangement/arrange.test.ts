@@ -199,6 +199,37 @@ describe('arrange', () => {
     })
   })
 
+  describe('in an inversion', () => {
+    const rhAt = (symbols: string[], inversion: 0 | 1 | 2 | 3, tick = 0) =>
+      midisAt(
+        arrange(chart([symbols]), { tonic: C, pattern: BLOCK, inversion }),
+        'rh',
+        tick,
+      ).toSorted((a, b) => a - b)
+
+    it('stacks a chord from its note, the lowest from E3 to E4', () => {
+      expect(rhAt(['C'], 0)).toEqual([60, 64, 67]) // C4 E4 G4
+      expect(rhAt(['C'], 1)).toEqual([64, 67, 72]) // E4 G4 C5
+      expect(rhAt(['C'], 2)).toEqual([55, 60, 64]) // G3 C4 E4
+    })
+
+    it('gives a triad asked for its 3rd inversion its 2nd', () => {
+      expect(rhAt(['C'], 3)).toEqual([55, 60, 64])
+    })
+
+    it('plays a bigger chord rootless, its 9th where the root was', () => {
+      expect(rhAt(['Dm9'], 0)).toEqual([64, 65, 69, 72]) // E F A C
+      expect(rhAt(['Dm9'], 1)).toEqual([53, 57, 60, 64]) // F A C E: 3-5-7-9
+      expect(rhAt(['Dm9'], 3)).toEqual([60, 64, 65, 69]) // C E F A: 7-9-3-5
+      expect(rhAt(['G13'], 0)).toEqual([57, 59, 64, 65]) // A B E F: root and 5th out
+    })
+
+    it('takes the octave nearer the last chord when there are two', () => {
+      expect(rhAt(['G', 'Em'], 0, 48)).toEqual([52, 55, 59]) // after G3 B3 D4: E3, not E4
+      expect(rhAt(['C', 'Em'], 1, 48)).toEqual([55, 59, 64]) // after E4 G4 C5: G3 (no G4 under E4)
+    })
+  })
+
   it('keeps every chord in the inversion asked for: its lowest note the 3rd', () => {
     const performance = arrange(chart([['Dm7', 'G7', 'Cmaj7']]), {
       tonic: C,

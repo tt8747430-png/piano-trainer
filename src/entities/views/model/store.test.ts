@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
-import { createViewsStore, MOST_VIEWS, VIEWS_STORAGE_KEY } from './store'
+import { createViewsStore, VIEWS_STORAGE_KEY } from './store'
+import { MOST_VIEWS } from './view'
 
 const writeSaved = (storage: Storage, state: unknown, version = 1) =>
   storage.setItem(VIEWS_STORAGE_KEY, JSON.stringify({ state, version }))

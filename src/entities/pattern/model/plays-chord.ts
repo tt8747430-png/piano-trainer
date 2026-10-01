@@ -19,10 +19,10 @@ export function playsChord(figure: Figure): boolean {
 }
 
 /**
- * Whether an inversion changes what this accompaniment plays: its right hand's own figure decides,
- * else the pattern's; the chart's own plan may play the chord, so it may.
+ * Whether this accompaniment follows an inversion (it changes what it plays): its right hand's own
+ * figure decides, else the pattern's; the chart's own plan may play the chord, so it may.
  */
-export function keepsInversion({
+export function followsInversion({
   pattern,
   rh,
 }: Pick<AccompanimentChoice, 'pattern' | 'rh'>): boolean {

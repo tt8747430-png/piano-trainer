@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { keepsInversion } from '@/entities/pattern'
+import { followsInversion } from '@/entities/pattern'
 import { INVERSIONS, type Inversion } from '@/shared/lib/music'
 import { INVERSION_NAMES, Segmented } from '@/shared/ui'
 import { useSetup } from './setup-context'
@@ -14,13 +14,13 @@ const NEAREST = 'nearest'
 export function InversionField() {
   const { t } = useTranslation(['player', 'music'])
   const { figures, onFigures } = useSetup()
-  const free = keepsInversion(figures)
+  const follows = followsInversion(figures)
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm text-muted-foreground">{t('music:inversion.label')}</span>
       <Segmented<Inversion | typeof NEAREST>
         label={t('music:inversion.label')}
-        disabled={!free}
+        disabled={!follows}
         value={figures.inversion ?? NEAREST}
         options={[
           { value: NEAREST, label: t('player:inversion.nearest') },
@@ -31,7 +31,7 @@ export function InversionField() {
         ]}
         onChange={(value) => onFigures({ inversion: value === NEAREST ? undefined : value })}
       />
-      {free ? null : <p className="text-sm text-muted-foreground">{t('player:inversion.own')}</p>}
+      {follows ? null : <p className="text-sm text-muted-foreground">{t('player:inversion.own')}</p>}
     </div>
   )
 }

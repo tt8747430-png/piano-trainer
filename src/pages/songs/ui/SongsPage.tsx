@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { LEVEL_NAME, LEVELS, levelOf, pieceStepId, type Level } from '@/entities/path'
 import { SONG_COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
-import { IN_PLACE } from '@/shared/lib'
-import { Dropdown, ScreenHeader, useScreenBar } from '@/shared/ui'
+import { useViewChange } from '@/shared/lib'
+import { Dropdown, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { PieceList } from '@/widgets/piece-list'
@@ -27,10 +27,8 @@ export function SongsPage() {
   const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
-  const { offset } = useScreenBar()
   const query = useDeferredValue(search.q)
-  const set = (change: Partial<SongsFilter>) =>
-    void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
+  const set = useViewChange<SongsFilter>()
   // No search at all: the route fills its defaults.
   const clear = () => void navigate({ search: {}, replace: true })
   const groups = songsView(SONG_COLLECTIONS, { ...search, q: query }, levelOfEntry).map((g) => ({
@@ -44,10 +42,7 @@ export function SongsPage() {
       <ScreenHeader title={t('songs:title')} />
       <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
         {/* On a laptop the filters stay beside the list, under the screen's bar while it shows. */}
-        <div
-          className="flex flex-col gap-5 duration-200 ease-out motion-safe:transition-top lg:sticky"
-          style={{ top: `calc(${offset}px + 2rem)` }}
-        >
+        <div className="flex flex-col gap-5 lg:sticky lg:top-screen-bar-8">
           <SearchField value={search.q} onChange={(q) => set({ q })} />
           <div className="flex flex-wrap gap-2">
             <Dropdown<CollectionId | 'all'>

@@ -49,19 +49,25 @@ describe('ScreenHeader', () => {
     )
     const bar = screen.getByRole('heading', { level: 1, name: 'Chords' }).closest('header')
     const pinned = screen.getByText('The keys')
-    return { bar, pinned }
+    // jsdom lays nothing out: the pinned keys' `top` is the bar's height through `--screen-bar`.
+    const under = () =>
+      pinned
+        .closest<HTMLElement>('[data-slot="screen-bar-root"]')
+        ?.style.getPropertyValue('--screen-bar')
+    expect(pinned).toHaveClass('top-screen-bar')
+    return { bar, under }
   }
 
   it('hides while the page scrolls down and comes back on the way up, the pinned keys under it', async () => {
-    const { bar, pinned } = renderBar()
-    await waitFor(() => expect(pinned).toHaveStyle({ top: '64px' }))
+    const { bar, under } = renderBar()
+    await waitFor(() => expect(under()).toBe('64px'))
     expect(bar).not.toHaveAttribute('data-hidden')
     scrollTo(120)
     expect(bar).toHaveAttribute('data-hidden')
-    expect(pinned).toHaveStyle({ top: '0px' })
+    expect(under()).toBe('0px')
     scrollTo(80)
     expect(bar).not.toHaveAttribute('data-hidden')
-    expect(pinned).toHaveStyle({ top: '64px' })
+    expect(under()).toBe('64px')
   })
 
   it('stays while focus is inside it', async () => {
