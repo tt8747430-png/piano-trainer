@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import {
   ChartNoAxesColumnIncreasing,
   Ear,
-  Footprints,
   KeyboardMusic,
   Target,
   type LucideIcon,
@@ -14,8 +13,8 @@ import { selectAllAnswers, selectPractised, useProgress } from '@/entities/progr
 import { myGaps, type TheoryQuiz } from '@/features/quiz'
 import { localText, useLocale } from '@/shared/i18n'
 import { RowGroup, RowLink, ScreenHeader, type Paint } from '@/shared/ui'
+import { ExerciseList } from '@/widgets/exercise-list'
 import { PieceList } from '@/widgets/piece-list'
-import { OPEN_PLAINLY } from '@/shared/lib'
 
 /** The Theory quizzes, each as a row with a tile of its kind: chords sand, scales sky, gaps lilac. */
 const QUIZ_ROWS = [
@@ -25,7 +24,7 @@ const QUIZ_ROWS = [
   { quiz: 'gaps', icon: Target, paint: 'lilac' },
 ] as const satisfies readonly { quiz: TheoryQuiz; icon: LucideIcon; paint: Paint }[]
 
-/** Practice: the Theory quizzes and the exercises, then the studies and progressions, each opening its page here. */
+/** Practice: the Theory quizzes and the exercises by group, then the studies and progressions, each opening its page here. */
 export function PracticePage() {
   const { t } = useTranslation(['practice', 'quiz'])
   const locale = useLocale()
@@ -52,16 +51,7 @@ export function PracticePage() {
               </li>
             ))}
           </RowGroup>
-          <RowGroup title={t('practice:exercises')}>
-            <li>
-              <RowLink
-                title={t('practice:chromatic')}
-                icon={Footprints}
-                paint="lilac"
-                render={<Link to="/play/chromatic" state={OPEN_PLAINLY} />}
-              />
-            </li>
-          </RowGroup>
+          <ExerciseList />
         </div>
         <PieceList
           groups={[STUDIES, PROGRESSIONS].map((collection) => ({

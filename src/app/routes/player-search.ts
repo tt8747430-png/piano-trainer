@@ -13,7 +13,23 @@ import {
   PROGRESSION,
   readChords,
 } from '@/features/practice'
-import type { ChromaticSearch, PlayerSearch, ProgressionSearch, WalkSearch } from '@/pages/player'
+import {
+  isArpeggioQuality,
+  isChordTone,
+  isExerciseInversion,
+  isFigureId,
+  isFingering,
+  isOctaves,
+  isTonality,
+  isVoicing,
+} from '@/entities/exercise'
+import type {
+  ChromaticSearch,
+  ExerciseSearch,
+  PlayerSearch,
+  ProgressionSearch,
+  WalkSearch,
+} from '@/pages/player'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   keyParam,
@@ -173,3 +189,41 @@ export const progressionPlayerSearch = routeSearch(
 )
 /** Not its numerals, key or chord size: the Progressions tool names them, its triads by leaving the size out. */
 export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = ['walk', ...PLAYING]
+
+// An exercise: the Player's own params, its swing absent for the exercise's own, then its choices,
+// each absent for the exercise's own (the page reads them against the exercise).
+export const EXERCISE_DEFAULTS: ExerciseSearch = {
+  mode: PLAYER_DEFAULTS.mode,
+  speedTraining: false,
+  hands: PLAYER_DEFAULTS.hands,
+}
+const when = <T>(guard: (value: unknown) => value is T, raw: unknown): T | undefined =>
+  guard(raw) ? raw : undefined
+export function readExerciseSearch(raw: Raw): ExerciseSearch {
+  const root = readNote(raw.root)
+  const { swing: _swing, ...view } = practiceView(raw)
+  return {
+    ...view,
+    swing: typeof raw.swing === 'boolean' ? raw.swing : undefined,
+    root: root ? noteParam(root) : undefined,
+    kind: when(isScaleKind, raw.kind),
+    octaves: when(isOctaves, raw.octaves),
+    start: wholeIn(raw.start, 0, 6, undefined),
+    fingering: when(isFingering, raw.fingering),
+    quality: when(isArpeggioQuality, raw.quality),
+    inversion: when(isExerciseInversion, raw.inversion),
+    figure: when(isFigureId, raw.figure),
+    voicing: when(isVoicing, raw.voicing),
+    from: when(isChordTone, raw.from),
+    tonality: when(isTonality, raw.tonality),
+  }
+}
+export const exerciseSearch = routeSearch(readExerciseSearch, EXERCISE_DEFAULTS)
+/** How the learner plays, not what: a link that names an exercise's choices leaves its own out. */
+export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
+  'tempo',
+  'hands',
+  'mode',
+  'swing',
+  'speedTraining',
+]

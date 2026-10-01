@@ -125,15 +125,18 @@ function tableFor(kind: ScaleKind, root: SpelledNote, hand: Hand): FingeringTabl
  * degree below the thumb after it (B♭ major's thumbs are on C and F, so between octaves B♭ is 4).
  */
 function continuing(run: readonly Finger[], hand: Hand): Finger[] {
+  return Array.from({ length: run.length - 1 }, (_, degree) => continuingAt(run, hand, degree))
+}
+
+/** One degree's finger in a longer run: `continuing`'s rule for that degree alone. */
+function continuingAt(run: readonly Finger[], hand: Hand, degree: number): Finger {
   const degrees = run.length - 1
   const thumbs = new Set(run.flatMap((finger, i) => (finger === 1 ? [i % degrees] : [])))
-  return Array.from({ length: degrees }, (_, degree) => {
-    for (let steps = 0; steps < degrees; steps++) {
-      const at = hand === 'rh' ? degree - steps : degree + steps
-      if (thumbs.has((at + degrees) % degrees)) return toFinger(steps + 1)
-    }
-    throw new RangeError('A fingering puts the thumb on no degree')
-  })
+  for (let steps = 0; steps < degrees; steps++) {
+    const at = hand === 'rh' ? degree - steps : degree + steps
+    if (thumbs.has((at + degrees) % degrees)) return toFinger(steps + 1)
+  }
+  throw new RangeError('A fingering puts the thumb on no degree')
 }
 
 /** Each degree's continuing finger: the kind's own table, or a mode's parent major's. */
@@ -164,10 +167,7 @@ export function scaleFingering(
   if (own && start === 0) {
     const run = tableRun(own, root, hand)
     const octave = run.slice(1, -1)
-    const turns = Array.from({ length: octaves - 1 }, () => [
-      continuing(run, hand)[0] ?? 1,
-      ...octave,
-    ])
+    const turns = Array.from({ length: octaves - 1 }, () => [continuingAt(run, hand, 0), ...octave])
     return [...run.slice(0, -1), ...turns.flat(), run.at(-1) ?? 1]
   }
   if (!scaleHasChords(kind))

@@ -3,6 +3,7 @@ import {
   arpeggioFingering,
   fitInversion,
   midi,
+  PIANO,
   pitchClassOf,
   spellChord,
   tonicSpelling,
@@ -28,7 +29,9 @@ export function arpeggioExercise(choice: {
   const tones = spellChord(root, quality)
   const count = tones.length
   const inversion = fitInversion(choice.inversion, count)
-  const rootKey = tonicKey(root, octaves)
+  // The bottom tone from the root's key; an octave lower when the top would leave the keyboard.
+  const lowest = tonicKey(root, octaves) + (tones[inversion]?.semitones ?? 0)
+  const rootKey = tonicKey(root, octaves) - (lowest + 12 * octaves > PIANO.to ? 12 : 0)
   const handRun = (hand: Hand): Played[] => {
     const keys = Array.from({ length: count * octaves + 1 }, (_, i): Played => {
       const at = inversion + i

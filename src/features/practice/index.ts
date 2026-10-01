@@ -15,6 +15,7 @@ export { playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'
 export { arrangeWalk, WALK, type WalkChoice } from './walk'
 export { arrangeChromatic } from './chromatic'
+export { arrangeExercise } from './exercise'
 export {
   chordsParam,
   CHROMATIC,

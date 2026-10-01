@@ -40,12 +40,29 @@ describe('Practice', () => {
     expect(screen.getByRole('link', { name: 'My gaps To check: 1' })).toBeInTheDocument()
   })
 
-  it('offers the chromatic walk among the exercises, opening in the Player', async () => {
+  it('lists the exercises by group, each with its level, opening in the Player', async () => {
     await renderApp('/practice')
-    const exercises = await screen.findByRole('region', { name: 'Exercises' })
-    expect(within(exercises).getByRole('link', { name: 'Chromatic walk' })).toHaveAttribute(
+    const scales = await screen.findByRole('region', { name: 'Scales' })
+    expect(within(scales).getByRole('link', { name: 'Scale Beginner' })).toHaveAttribute(
       'href',
-      '/play/chromatic',
+      '/play/exercise/scale',
     )
+    const harris = screen.getByRole('region', { name: 'Barry Harris' })
+    expect(within(harris).getByRole('link', { name: 'Drop-2 7ths Advanced' })).toHaveAttribute(
+      'href',
+      '/play/exercise/drop-two',
+    )
+    const chords = screen.getByRole('region', { name: 'Chords in a scale' })
+    expect(
+      within(chords).getByRole('link', { name: 'Chords by semitones Elementary' }),
+    ).toHaveAttribute('href', '/play/chromatic')
+  })
+
+  it('opens a progression through the keys in the progression Player', async () => {
+    await renderApp('/practice')
+    const progressions = await screen.findByRole('region', { name: 'Progressions in every key' })
+    expect(
+      within(progressions).getByRole('link', { name: 'ii–V–I through the keys Elementary' }),
+    ).toHaveAttribute('href', '/play/progression?p=ii7-V7-IMaj7&walk=fifths')
   })
 })

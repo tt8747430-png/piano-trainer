@@ -74,4 +74,21 @@ export const player = {
   notThat: 'Not {{note}}',
   finished: 'Finished',
   again: 'Again',
+  /** An exercise's Setup: the choices its rule takes. */
+  exercise: {
+    title: '{{name}}: {{of}}',
+    scale: 'Scale',
+    chord: 'Chord',
+    startOn: 'Start on',
+    fingering: 'Fingering',
+    fingerings: { thumb: 'From the thumb', scale: 'As the scale' },
+    octaves: 'Octaves',
+    figure: 'Figure',
+    voicing: 'Voicing',
+    voicings: { close: 'Close', drop2: 'Drop 2' },
+    from: 'From',
+    chordTones: { root: 'Root', third: '3rd', fifth: '5th', seventh: '7th' },
+    tonality: 'Major or minor',
+    tonalities: { major: 'Major', minor: 'Minor' },
+  },
 } as const

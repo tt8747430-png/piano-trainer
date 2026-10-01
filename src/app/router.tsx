@@ -33,11 +33,14 @@ import {
 import {
   CHROMATIC_KEPT,
   chromaticSearch,
+  EXERCISE_KEPT,
+  exerciseSearch,
   PLAYER_KEPT,
   playerSearch,
   PROGRESSION_KEPT,
   progressionPlayerSearch,
   readChromaticSearch,
+  readExerciseSearch,
   readPlayerSearch,
   readProgressionPlayerSearch,
   readWalkSearch,
@@ -246,6 +249,7 @@ const fullScreenRoute = createRoute({
 // A piece and a walk check what they name first, then restore their view.
 const restorePiece = restoreView(readPlayerSearch, PLAYER_KEPT)
 const restoreWalk = restoreView(readWalkSearch, WALK_KEPT)
+const restoreExercise = restoreView(readExerciseSearch, EXERCISE_KEPT)
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',
@@ -287,6 +291,20 @@ const progressionPlayerRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ProgressionPlayerPage'),
 })
 
+// An exercise its own rule writes; each remembers its own view, under its own path.
+const exerciseRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/play/exercise/$exerciseId',
+  ...exerciseSearch,
+  staticData: { remembered: true },
+  beforeLoad: async (context) => {
+    const { isExerciseId } = await playerScreens()
+    if (!isExerciseId(context.params.exerciseId)) throw notFound()
+    restoreExercise(context)
+  },
+  component: lazyRouteComponent(playerScreens, 'ExercisePlayerPage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -325,6 +343,7 @@ const routeTree = rootRoute.addChildren([
     walkRoute,
     chromaticRoute,
     progressionPlayerRoute,
+    exerciseRoute,
     checkRoute,
   ]),
 ])

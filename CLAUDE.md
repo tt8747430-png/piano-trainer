@@ -50,8 +50,8 @@ One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest ru
 
 `app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above; another
 slice only through its `index.ts`, by alias or relative path alike. Inside shared, the kernel is fenced tighter:
-`shared/lib/music` imports only itself, `shared/lib/arrangement` and `shared/lib/notation` only music, and none of them
-imports a package.
+`shared/lib/music` imports only itself, `shared/lib/arrangement` and `shared/lib/notation` only music,
+`shared/lib/exercise` music and arrangement's types, and none of them imports a package.
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
 it. `@` → `src`.
 
@@ -59,7 +59,7 @@ it. `@` → `src`.
   references Chords, Scales, Keys (`/learn/keys`), Intervals (`/learn/intervals`) and Available tensions
   (`/learn/tensions`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
   `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); the Player's `/play/$pieceId`, `/play/walk`,
-  `/play/chromatic` and `/play/progression`; screens are
+  `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; screens are
   lazy through `routes/*-screens.ts` (home, settings, songs, learn, practice, player: a chunk holds the screens
   that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (each
@@ -77,7 +77,8 @@ it. `@` → `src`.
   `pages/player` serves a piece or a walk: one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
-  `ProgressionSetup`) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
+  `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
+  the exercise's own fields) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
   references.
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup: its button and sheet, its first page
@@ -91,7 +92,8 @@ it. `@` → `src`.
   fifths and a key's facts, signature, chords and borrowed chords), `interval-explorer` (every interval over a root
   as Clefs' cards), `tension-explorer` (a 7th chord's twelve notes in the owner's table's four groups, each played on
   top), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
-  `passing-chords` (the ways between two chords, each row voice-led), `progressions` (numerals or chords in any key,
+  `passing-chords` (the ways between two chords, each row voice-led), `exercise-list` (Practice's exercises by group, each
+  row opening its Player), `progressions` (numerals or chords in any key,
   the library beside them), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
@@ -108,7 +110,7 @@ it. `@` → `src`.
   `practice` (the pure `practice-machine`, `usePractice`, which drives it with audio, MIDI and the clock, and the
   Player's pure parts: `ownChoice`, `arrangePiece`, the marks, the loop's bars (`readLoop`, `loopParam`,
   `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
-  and its key's common progressions into the Player); the chromatic walk (`CHROMATIC`, `chromaticChart`,
+  and its key's common progressions into the Player); an exercise (`arrangeExercise`: its rule over the learner's choice, ADR 0024); the chromatic walk (`CHROMATIC`, `chromaticChart`,
   `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); a progression (`PROGRESSION`, `progressionChart`,
   `arrangeProgression`; walked through the keys by `walk`, `walksKeys`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
   Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
@@ -123,7 +125,8 @@ it. `@` → `src`.
   the keys, patterns over their pieces and progressions in any key, links by name to the references, the tools and
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
   Gospel), `progression-library` (the Progressions tool's named progressions by style,
-  in numerals). Saved state: `settings` (`pt-settings`, version 5, with the
+  in numerals), `exercise` (Practice's exercises: groups, levels, names, the fields each rule takes and its own choice;
+  `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 5, with the
   keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
   version 1: each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
@@ -136,14 +139,16 @@ it. `@` → `src`.
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords reference's URL holds
   them), `foldText`; and with
   barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
-  `scaleKey`, `relatedScale`; fingerings from any start, `thumbFingering`; `scale-chord.ts`, a scale's chords stacked
+  `scaleKey`, `relatedScale`; fingerings from any start and over several octaves, `thumbFingering`, `arpeggioFingering`; `scale-chord.ts`, a scale's chords stacked
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `writtenSymbol`, `qualityRootSpelling`,
   `readChordSymbol`, `keySymbol`, `keyMode`, `fitInversion`, `STACK_SIZES`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
   `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
-  `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `arrangement`
+  `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
+  `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
+  five-finger position, Hanon No. 1), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling, the right hand's chord voice-led or
   in one inversion (`voiceInversion`, `inversionPitchClasses`); `chartInKeys`, a chart once per key; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals), `schedule` (a Performance → sounds in seconds,
