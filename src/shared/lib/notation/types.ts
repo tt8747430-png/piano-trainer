@@ -36,7 +36,12 @@ export interface TimedNote {
 export interface TimedMusic {
   readonly key: Key
   readonly meter: Meter
-  readonly bars: readonly { readonly startTick: Tick; readonly beats: number }[]
+  readonly bars: readonly {
+    readonly startTick: Tick
+    readonly beats: number
+    /** Staves with nothing to write in this bar: each holds the time with a rest that is not printed. */
+    readonly blank?: readonly StaffId[]
+  }[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
 }

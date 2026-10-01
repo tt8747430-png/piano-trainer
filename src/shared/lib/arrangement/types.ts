@@ -16,9 +16,23 @@ export interface ChartChord extends Chord {
   /** The method code written after the chord (`t1`, `3ch`): which pattern plays it. */
   readonly method?: string
 }
+/** A note a hand plays as written in its bar: from the bar's start, in the chart's key. */
+export interface HandNote {
+  readonly midi: Midi
+  readonly spelled: SpelledNote
+  readonly startTick: Tick
+  readonly durationTicks: Tick
+  readonly finger?: Finger
+}
+/** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
+export interface WrittenHands {
+  readonly rh?: readonly HandNote[]
+  readonly lh?: readonly HandNote[]
+}
 export interface ChartBar {
   readonly chords: readonly ChartChord[]
   readonly beats: number
+  readonly hands?: WrittenHands
 }
 export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]

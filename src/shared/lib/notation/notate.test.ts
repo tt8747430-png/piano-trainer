@@ -173,3 +173,18 @@ describe('notate', () => {
     ])
   })
 })
+
+describe('notate with a blank staff', () => {
+  it('writes a staff the bar leaves blank as one hidden rest', () => {
+    const score = notate(
+      music([n(60, note('C'), 'melody', 0, 48)], {
+        bars: [{ startTick: 0, beats: 4, blank: ['bass'] }],
+      }),
+    )
+    const [measure] = score.measures
+    expect(measure?.staves.bass).toEqual([
+      { events: [expect.objectContaining({ kind: 'rest', tick: 0, hidden: true })], stem: 'auto' },
+    ])
+    expect(measure?.staves.bass[0]?.events).toHaveLength(1)
+  })
+})

@@ -173,6 +173,14 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
   return withAccidentals(drafts, bar.key)
 }
 
+/** A staff with nothing to write: hidden rests that hold the bar's time. */
+const blankStaff = (bar: Bar): ScoreVoice[] => [
+  {
+    events: rests({ start: 0, end: bar.ticks }, bar, voiceGrid([], bar.meter), true),
+    stem: 'auto',
+  },
+]
+
 /**
  * Timed notes as a written score: bars, a grand staff, voices, values, ties and accidentals (spec
  * §2.4). A pickup is written under the meter's signature, a short first bar.
@@ -187,11 +195,13 @@ export function notate(music: TimedMusic): Score {
       key: music.key,
     }
     const chords = barChords(music.notes, bar)
+    const staff = (id: StaffId) =>
+      written.blank?.includes(id) ? blankStaff(bar) : writeStaff(chords[id], bar)
     return {
       startTick: bar.start,
       ticks: bar.ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : written.beats, music.meter),
-      staves: { treble: writeStaff(chords.treble, bar), bass: writeStaff(chords.bass, bar) },
+      staves: { treble: staff('treble'), bass: staff('bass') },
       chords: music.chords
         .filter((chord) => chord.startTick >= bar.start && chord.startTick < bar.start + bar.ticks)
         .map((chord) => ({ tick: chord.startTick, symbol: chord.symbol })),

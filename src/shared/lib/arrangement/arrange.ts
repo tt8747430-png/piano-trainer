@@ -31,6 +31,7 @@ import type {
   EventFigure,
   EventPattern,
   Figure,
+  HandNote,
   Melody,
   MelodyFigure,
   MelodyNote,
@@ -40,6 +41,7 @@ import type {
   PerformanceBar,
   PerformanceNote,
   PerformedChord,
+  WrittenHands,
 } from './types'
 
 export interface ArrangeOptions {
@@ -82,6 +84,8 @@ interface PlacedChord {
 interface Layout {
   readonly chords: readonly PlacedChord[]
   readonly bars: readonly PerformanceBar[]
+  /** Each bar's hands written note by note, by bar. */
+  readonly hands: readonly (WrittenHands | undefined)[]
   /** Bars that open or close their line. */
   readonly lineEnds: ReadonlySet<number>
   readonly totalTicks: Tick
@@ -92,6 +96,7 @@ interface Layout {
 function layOut(chart: Chart): Layout {
   const chords: PlacedChord[] = []
   const bars: PerformanceBar[] = []
+  const hands: (WrittenHands | undefined)[] = []
   const lineEnds = new Set<number>()
   const written = chart.sections.flatMap((section) => section.lines.flat())
   // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
@@ -116,6 +121,7 @@ function layOut(chart: Chart): Layout {
           tick += durationTicks
           return chords.length - 1
         })
+        hands.push(bar.hands)
         bars.push({
           startTick: barStart,
           beats: bar.beats,
@@ -126,7 +132,7 @@ function layOut(chart: Chart): Layout {
       }),
     ),
   )
-  return { chords, bars, lineEnds, totalTicks: tick, pickup }
+  return { chords, bars, hands, lineEnds, totalTicks: tick, pickup }
 }
 
 /** The index of the last start at or before `tick`: which chord or bar is sounding then. */
@@ -152,17 +158,19 @@ export function transposeChord(chord: Chord, from: SpelledNote, to: SpelledNote)
   }
 }
 
-/** The tune moves the short way, −5 to +6 semitones, its letters with the key, and is read in time order. */
-function transposeMelody(melody: Melody, from: SpelledNote, to: SpelledNote): MelodyNote[] {
+/** Written notes (a tune, a hand) move the short way, −5 to +6 semitones, their letters with the key. */
+export function transposeNotes<N extends { readonly midi: Midi; readonly spelled: SpelledNote }>(
+  notes: readonly N[],
+  from: SpelledNote,
+  to: SpelledNote,
+): N[] {
   const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
   const semitones = up > 6 ? up - 12 : up
-  return melody
-    .map((n) => ({
-      ...n,
-      midi: midi(n.midi + semitones),
-      spelled: transposeNote(n.spelled, from, to),
-    }))
-    .sort((a, b) => a.startTick - b.startTick)
+  return notes.map((n) => ({
+    ...n,
+    midi: midi(n.midi + semitones),
+    spelled: transposeNote(n.spelled, from, to),
+  }))
 }
 
 const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
@@ -296,11 +304,40 @@ function playTune(
   })
 }
 
+const HANDS: readonly Hand[] = ['rh', 'lh']
+
+/** A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its onset. */
+function playWritten(
+  written: readonly HandNote[],
+  hand: Hand,
+  barStart: Tick,
+  chordStarts: readonly Tick[],
+  from: SpelledNote,
+  to: SpelledNote,
+): PerformanceNote[] {
+  return transposeNotes(written, from, to).map((n): PerformanceNote => {
+    const startTick = barStart + n.startTick
+    return {
+      midi: n.midi,
+      spelled: n.spelled,
+      hand,
+      ...(n.finger === undefined ? {} : { finger: n.finger }),
+      startTick,
+      durationTicks: n.durationTicks,
+      roll: 0,
+      velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,
+      chord: sounding(chordStarts, startTick),
+    }
+  })
+}
+
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const key: Key = { tonic: options.tonic, minor: chart.key.minor }
   const melody = options.melody?.length
-    ? transposeMelody(options.melody, chart.key.tonic, options.tonic)
+    ? transposeNotes(options.melody, chart.key.tonic, options.tonic).sort(
+        (a, b) => a.startTick - b.startTick,
+      )
     : null
   const layout = layOut(chart)
   const barBeats = beatsPerBar(chart.meter)
@@ -327,7 +364,8 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       layout.lineEnds.has(placed.bar),
     )
     const lh = options.lh ?? pattern.lh
-    playsTune.push(rh.kind === 'melody')
+    const written = layout.hands[placed.bar]
+    playsTune.push(rh.kind === 'melody' && !written?.rh)
     chords.push({
       ...chord,
       symbol: chordSymbol(chord),
@@ -349,14 +387,27 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       const from = at === placed.startTick && picksUp ? placed.offsetInBar % meterTicks : 0
       const length = Math.min(meterTicks - from, end - at)
       const window: Window = { from, to: from + length, at, chord: index }
-      if (rh.kind === 'events') notes.push(...playFigure(rh, context, 'rh', window, barBeats))
-      else if (melody) notes.push(...playTune(rh, melody, context, window))
-      notes.push(...playFigure(lh, context, 'lh', window, barBeats))
+      // A hand written in this bar plays its written notes instead (after the chords).
+      if (!written?.rh) {
+        if (rh.kind === 'events') notes.push(...playFigure(rh, context, 'rh', window, barBeats))
+        else if (melody) notes.push(...playTune(rh, melody, context, window))
+      }
+      if (!written?.lh) notes.push(...playFigure(lh, context, 'lh', window, barBeats))
       at += length
     }
   })
 
   const chordStarts = layout.chords.map((placed) => placed.startTick)
+  layout.hands.forEach((written, bar) => {
+    const barStart = layout.bars[bar]?.startTick ?? 0
+    for (const hand of HANDS) {
+      const played = written?.[hand]
+      if (played)
+        notes.push(
+          ...playWritten(played, hand, barStart, chordStarts, chart.key.tonic, options.tonic),
+        )
+    }
+  })
   if (options.doubleMelody && melody) {
     for (const n of melody) {
       const chord = sounding(chordStarts, n.startTick)

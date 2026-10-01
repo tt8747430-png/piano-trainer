@@ -1,4 +1,4 @@
-export { arrange, type ArrangeOptions } from './arrange'
+export { arrange, transposeNotes, type ArrangeOptions } from './arrange'
 export { chartInKeys } from './chart-in-keys'
 export { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
 export {
@@ -10,6 +10,7 @@ export {
   type EventPattern,
   type Figure,
   type FigureEvent,
+  type HandNote,
   type Melody,
   type MelodyNote,
   type NoteHand,
@@ -17,4 +18,5 @@ export {
   type Performance,
   type PerformanceBar,
   type PerformanceNote,
+  type WrittenHands,
 } from './types'

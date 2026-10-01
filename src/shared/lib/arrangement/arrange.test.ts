@@ -22,11 +22,13 @@ import type {
   ChartBar,
   EventFigure,
   EventPattern,
+  HandNote,
   Melody,
   MelodyFigure,
   MelodyPattern,
   NoteHand,
   Performance,
+  WrittenHands,
 } from './types'
 
 const figure = (text: string, variants: Omit<Partial<EventFigure>, 'kind'> = {}): EventFigure => ({
@@ -617,5 +619,106 @@ describe('arrange', () => {
     expect([0, 12, 24].map((tick) => pitchClassesAt(performance, 'rh', tick))).toEqual(
       triads.map((triad) => new Set(triad)),
     )
+  })
+})
+
+describe('a hand written into a bar', () => {
+  const hand = (...notes: [number, number, number, (1 | 2 | 3 | 4 | 5)?][]): HandNote[] =>
+    notes.map(([m, startTick, durationTicks, finger]) => ({
+      midi: midi(m),
+      spelled: plainSpelling(pitchClass(m), true),
+      startTick,
+      durationTicks,
+      ...(finger ? { finger } : {}),
+    }))
+  const writing = (written: ChartBar, hands: WrittenHands): ChartBar => ({ ...written, hands })
+  const twoBars = (hands: WrittenHands): Chart => {
+    const plain = chart([['C', 'G']])
+    const [first, second] = plain.sections[0]?.lines[0] ?? []
+    if (!first || !second) throw new Error('two bars')
+    return { ...plain, sections: [{ lines: [[writing(first, hands), second]] }] }
+  }
+
+  it('plays the written left hand in its bar, and the pattern’s everywhere else', () => {
+    const performance = arrange(twoBars({ lh: hand([36, 0, 24], [43, 24, 24]) }), {
+      tonic: C,
+      pattern: BEATS,
+    })
+    expect(notesOf(performance, 'lh').map((n) => [n.midi, n.startTick, n.durationTicks])).toEqual([
+      [36, 0, 24],
+      [43, 24, 24],
+      [31, 48, 48],
+      [43, 48, 48],
+    ])
+    expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48, 60, 72, 84])
+  })
+
+  it('plays the written right hand in place of the tune a melody pattern gives it', () => {
+    const DOUBLING: MelodyPattern = {
+      id: 'tune',
+      rh: { kind: 'melody', use: 'double', withoutMelody: figure('0/16 C') },
+      lh: figure('0/16 L1'),
+      withoutMelody: BLOCK,
+    }
+    const melody: Melody = [
+      { midi: midi(76), spelled: note('E'), startTick: 0, durationTicks: 48 },
+      { midi: midi(74), spelled: note('D'), startTick: 48, durationTicks: 48 },
+    ]
+    const performance = arrange(twoBars({ rh: hand([72, 0, 48]) }), {
+      tonic: C,
+      pattern: DOUBLING,
+      melody,
+    })
+    expect(notesOf(performance, 'rh').map((n) => [n.midi, n.startTick])).toEqual([
+      [72, 0],
+      [74, 48],
+    ])
+  })
+
+  it('moves the written notes to the chosen key, letters with it, fingers kept', () => {
+    const performance = arrange(twoBars({ rh: hand([64, 0, 48, 3]) }), {
+      tonic: note('E', -1),
+      pattern: BLOCK,
+    })
+    const [written] = notesOf(performance, 'rh')
+    expect(written).toMatchObject({ midi: 67, spelled: note('G'), finger: 3, startTick: 0 })
+  })
+
+  it('puts each written note under the chord sounding at its onset', () => {
+    const plain = chart([['C-G']])
+    const [only] = plain.sections[0]?.lines[0] ?? []
+    if (!only) throw new Error('one bar')
+    const performance = arrange(
+      {
+        ...plain,
+        sections: [{ lines: [[writing(only, { lh: hand([36, 0, 12], [43, 24, 12]) })]] }],
+      },
+      { tonic: C, pattern: BLOCK },
+    )
+    expect(notesOf(performance, 'lh').map((n) => n.chord)).toEqual([0, 1])
+  })
+
+  it('holds a written note across the barline into a bar the hand writes too', () => {
+    const plain = chart([['C', 'G']])
+    const [first, second] = plain.sections[0]?.lines[0] ?? []
+    if (!first || !second) throw new Error('two bars')
+    const held: Chart = {
+      ...plain,
+      sections: [
+        {
+          lines: [
+            [
+              writing(first, { lh: hand([36, 0, 72]) }),
+              writing(second, { lh: hand([43, 24, 24]) }),
+            ],
+          ],
+        },
+      ],
+    }
+    const performance = arrange(held, { tonic: C, pattern: BLOCK })
+    expect(notesOf(performance, 'lh').map((n) => [n.midi, n.startTick, n.durationTicks])).toEqual([
+      [36, 0, 72],
+      [43, 72, 24],
+    ])
   })
 })
