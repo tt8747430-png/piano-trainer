@@ -37,7 +37,7 @@ export function EditorKeyboard() {
     return { from, to }
   }, [span])
   return (
-    <div className="h-40 shrink-0 lg:h-48">
+    <div className="flex h-40 min-w-0 shrink-0 lg:h-48">
       <LiveKeyboard range={range} height="fill" selected={selected} onKeyPress={actions.play} />
     </div>
   )

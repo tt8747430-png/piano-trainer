@@ -18,6 +18,7 @@ export const editor = {
   },
   caret: {
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
+    held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
     pattern: 'Bar {{bar}}, beat {{beat}} · pattern',
     end: 'End of the piece',

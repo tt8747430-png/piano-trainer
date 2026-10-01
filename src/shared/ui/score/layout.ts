@@ -14,17 +14,20 @@ export function xAmong(points: readonly { tick: Tick; x: number }[], tick: Tick)
   return before.x + ((after.x - before.x) * (tick - before.tick)) / (after.tick - before.tick)
 }
 
-/** The x of any tick: an onset's own, or in proportion between the onsets around it and its bar's end. */
+/**
+ * The x of any tick: an onset's own, or in proportion between the onsets around it, its bar's start
+ * where nothing is written there (where its notes begin) and its bar's end.
+ */
 export function xAtTick(layout: ScoreLayout, tick: Tick): number {
   const measure =
     layout.measures.find((m) => tick < m.startTick + m.ticks) ?? layout.measures.at(-1)
   if (!measure) return 0
   const end = measure.startTick + measure.ticks
-  return xAmong(
-    [
-      ...layout.onsets.filter((onset) => onset.tick >= measure.startTick && onset.tick < end),
-      { tick: end, x: measure.x + measure.width },
-    ],
-    tick,
+  const onsets = layout.onsets.filter(
+    (onset) => onset.tick >= measure.startTick && onset.tick < end,
   )
+  const opening = onsets.some((onset) => onset.tick === measure.startTick)
+    ? []
+    : [{ tick: measure.startTick, x: measure.notes }]
+  return xAmong([...opening, ...onsets, { tick: end, x: measure.x + measure.width }], tick)
 }

@@ -37,6 +37,8 @@ export interface ScoreLayout {
     readonly ticks: Tick
     readonly x: number
     readonly width: number
+    /** Where its notes begin, after any clef, key and time signature. */
+    readonly notes: number
   }[]
   /** Each staff drawn: its top and bottom lines. */
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
@@ -157,9 +159,12 @@ function chordShortfall(
     for (const voice of built.staves[staff])
       for (const { note } of voice.notes) note.setStave(stave)
   }
-  const points = [...onsetsIn(built)]
-    .map(([tick, x]) => ({ tick, x }))
-    .sort((a, b) => a.tick - b.tick)
+  const onsets = onsetsIn(built)
+  // A bar with nothing written at its start (or at all) begins where its notes would.
+  const opening = onsets.has(startTick) ? [] : [{ tick: startTick, x: noteStart }]
+  const points = [...opening, ...[...onsets].map(([tick, x]) => ({ tick, x }))].sort(
+    (a, b) => a.tick - b.tick,
+  )
   const barline = { tick: startTick + ticks, x: width }
   const xOf = (tick: Tick) => xAmong([...points, barline], tick)
   return Math.max(
@@ -395,6 +400,7 @@ export function engrave(
       ticks: measure.measure.ticks,
       x: x * scale,
       width: measure.width * scale,
+      notes: start * scale,
     })
     x += measure.width
   }

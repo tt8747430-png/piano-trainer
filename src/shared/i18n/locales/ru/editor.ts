@@ -20,6 +20,7 @@ export const editor: LocaleResources['editor'] = {
   },
   caret: {
     at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
+    held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
     pattern: 'Такт {{bar}}, доля {{beat}} · фактура',
     end: 'Конец пьесы',

@@ -1,11 +1,18 @@
-import { barAt, notesAt, totalTicks, type EditorState } from '@/features/score-editor'
+import {
+  barAt,
+  notesAt,
+  notesOf,
+  totalTicks,
+  type DraftNote,
+  type EditorState,
+} from '@/features/score-editor'
 import { chordSymbol, noteName, TICKS_PER_BEAT, writtenOctave } from '@/shared/lib/music'
 
 /** What the caret line says: where the caret is, and what is there. */
 export type CaretSaid =
   | { readonly kind: 'end' }
   | {
-      readonly kind: 'at' | 'rest' | 'pattern'
+      readonly kind: 'at' | 'held' | 'rest' | 'pattern'
       readonly bar: number
       readonly beat: string
       readonly what: string
@@ -13,6 +20,9 @@ export type CaretSaid =
 
 /** A beat counted from 1, a part of one as a decimal: 1, 2.5. */
 const beatOf = (ticks: number) => String(Math.round((ticks / TICKS_PER_BEAT + 1) * 100) / 100)
+
+const names = (notes: readonly DraftNote[]) =>
+  notes.map((n) => `${noteName(n.spelled)}${writtenOctave(n.midi, n.spelled)}`).join(' ')
 
 export function caretSaid({
   draft,
@@ -28,10 +38,11 @@ export function caretSaid({
   }
   if (layer !== 'melody' && !bar[layer]) return { kind: 'pattern', ...at, what: '' }
   const notes = notesAt(draft, layer, caret)
-  if (notes.length === 0) return { kind: 'rest', ...at, what: '' }
-  return {
-    kind: 'at',
-    ...at,
-    what: notes.map((n) => `${noteName(n.spelled)}${writtenOctave(n.midi, n.spelled)}`).join(' '),
-  }
+  if (notes.length > 0) return { kind: 'at', ...at, what: names(notes) }
+  const held = notesOf(draft, layer).filter(
+    (n) => n.startTick < caret && n.startTick + n.durationTicks > caret,
+  )
+  return held.length > 0
+    ? { kind: 'held', ...at, what: names(held) }
+    : { kind: 'rest', ...at, what: '' }
 }

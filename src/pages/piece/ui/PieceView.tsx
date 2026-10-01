@@ -70,7 +70,9 @@ export function PieceView({ piece }: { piece: Piece }) {
             )}
           </div>
           {own ? (
-            <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
+            <div className="flex">
+              <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
+            </div>
           ) : hasVersion ? (
             <div className="flex flex-wrap items-center gap-3">
               <p className="font-semibold">{t('yourVersion')}</p>

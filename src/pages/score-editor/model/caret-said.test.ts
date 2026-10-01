@@ -20,4 +20,9 @@ describe('caretSaid', () => {
     expect(at(60, 'lh')).toEqual({ kind: 'pattern', bar: 2, beat: '2', what: '' })
     expect(at(96, 'melody')).toEqual({ kind: 'end' })
   })
+
+  it('says a note is held where it sounds on from before the caret', () => {
+    expect(at(12, 'melody')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
+    expect(at(60, 'melody')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
+  })
 })

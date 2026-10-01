@@ -80,6 +80,10 @@ export function LineOverlay({
           />
         ) : null
       })}
+      {/* The caret first, so the labels and the notes stand over it. */}
+      {caret === null ? null : (
+        <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} />
+      )}
       <LineLabels layout={layout} music={music} firstBar={(line.bars[0]?.index ?? 0) + 1} />
       {hand && staff
         ? layout.measures.map((measure, index) =>
@@ -100,9 +104,6 @@ export function LineOverlay({
             ),
           )
         : null}
-      {caret === null ? null : (
-        <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} />
-      )}
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
         const chords = (placed?.bar.chords ?? []).map((chord) => chordSymbol(chord.chord))

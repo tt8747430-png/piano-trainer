@@ -87,6 +87,32 @@ describe('engrave', () => {
     expect(changed.onsets[0]?.x).toBe(opening.onsets[0]?.x)
   })
 
+  it('gives a bar with nothing written its own width, its chord symbol over where its notes begin', () => {
+    const blank = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [
+        { startTick: 0, beats: 4, blank: ['treble', 'bass'] },
+        { startTick: 48, beats: 4, blank: ['treble', 'bass'] },
+      ],
+      notes: [],
+      chords: [
+        { startTick: 0, symbol: 'C' },
+        { startTick: 48, symbol: 'G7' },
+      ],
+    })
+    const layout = engrave(blank, document.createElement('div'), {
+      scale: 1,
+      fingers: false,
+      names: false,
+    })
+    const [first, second] = layout.measures
+    expect(first?.width).toBeLessThan(400)
+    expect(second?.width).toBeLessThan(400)
+    expect(xAtTick(layout, 48)).toBeLessThan((second?.x ?? 0) + (second?.width ?? 0) / 2)
+    expect(xAtTick(layout, 48)).toBeGreaterThanOrEqual(second?.x ?? 0)
+  })
+
   it('draws one staff alone when asked, as tall as one staff', () => {
     const line = notate({
       key: { tonic: note('C'), minor: false },
