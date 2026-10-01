@@ -1,19 +1,21 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { Link } from '@tanstack/react-router'
-import { Play } from 'lucide-react'
+import { PencilLine, Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/path'
-import { usePieceHeadings, type Piece } from '@/entities/piece'
+import { entryTitles, isOwnSongId, usePieceHeadings, usePieces, type Piece } from '@/entities/piece'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
+import { useLocale } from '@/shared/i18n'
 import { ButtonLink, Pinned } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceSkills } from '@/widgets/piece-skills'
 import { PieceFacts } from './PieceFacts'
+import { OwnMusicActions } from './OwnMusicActions'
 import { PieceHeader } from './PieceHeader'
 import { OPEN_PLAINLY } from '@/shared/lib'
 
@@ -23,7 +25,11 @@ import { OPEN_PLAINLY } from '@/shared/lib'
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
+  const locale = useLocale()
   const playback = usePlayback<number>()
+  const own = isOwnSongId(piece.id) ? piece.id : null
+  const hasVersion = usePieces((state) => Object.hasOwn(state.versions, piece.id))
+  const title = entryTitles(piece, locale).primary
   const performance = useMemo(
     () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
     [piece],
@@ -52,8 +58,25 @@ export function PieceView({ piece }: { piece: Piece }) {
               <Play data-icon="inline-start" />
               {t('practise')}
             </ButtonLink>
-            <LearnedButton step={pieceStepId(piece.id)} />
+            {own ? null : <LearnedButton step={pieceStepId(piece.id)} />}
+            {piece.kind === 'progression' ? null : (
+              <ButtonLink
+                variant="outline"
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+              >
+                <PencilLine data-icon="inline-start" />
+                {t('edit')}
+              </ButtonLink>
+            )}
           </div>
+          {own ? (
+            <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
+          ) : hasVersion ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="font-semibold">{t('yourVersion')}</p>
+              <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
+            </div>
+          ) : null}
           <PieceSkills piece={piece} performance={performance} />
         </div>
         <section className="flex flex-col gap-3 lg:pt-4">

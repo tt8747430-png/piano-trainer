@@ -1,8 +1,9 @@
-import { act, screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { COLLECTIONS } from '@/entities/piece'
+import { createMemoryStorage } from '@/shared/lib'
 
 describe('Piece', () => {
   it('titles a song in English over its printed title, with credits and source', async () => {
@@ -72,11 +73,11 @@ describe('Piece', () => {
     ).toBeInTheDocument()
   })
 
-  it('shows a listing without a chart', async () => {
+  it('shows a listing without a chart: its one action writes it', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalogue has no listing')
     await renderApp(`/songs/${listing.id}`)
-    expect(await screen.findByText('No chart yet')).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'Write the chart' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Practise' })).not.toBeInTheDocument()
   })
 
@@ -90,5 +91,64 @@ describe('Piece', () => {
     await user.click(bar)
     expect(audio.stops).toBe(stops + 1)
     expect(bar).toHaveAttribute('aria-pressed', 'false')
+  })
+})
+
+describe('Piece: the learner’s own music', () => {
+  const MUSIC = {
+    key: 'G',
+    meter: '3/4',
+    tempo: 80,
+    pattern: 'r2',
+    sections: [{ kind: 'verse', lines: ['Em D C G'] }],
+  }
+  const saved = (state: object) => {
+    const storage = createMemoryStorage()
+    storage.setItem('pt-pieces', JSON.stringify({ state, version: 1 }))
+    return storage
+  }
+
+  it('edits a song in the score editor', async () => {
+    await renderApp('/songs/amazing')
+    expect(await screen.findByRole('link', { name: 'Edit' })).toHaveAttribute(
+      'href',
+      '/edit/amazing',
+    )
+  })
+
+  it('shows the learner’s version, and resets it to the original once asked', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/songs/amazing', {
+      storage: saved({ versions: { amazing: MUSIC } }),
+    })
+    expect(await screen.findByText('Your version')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Bar 1: Em$/ })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
+    await user.click(await screen.findByRole('button', { name: 'Reset' }))
+    expect(piecesStore.getState().versions).toEqual({})
+    expect(await screen.findByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
+    expect(screen.queryByText('Your version')).toBeNull()
+  })
+
+  it('deletes an own song once asked, back on Songs', async () => {
+    const user = userEvent.setup()
+    const song = { id: 'my-1', title: 'Morning', ...MUSIC }
+    const { router, piecesStore } = await renderApp('/songs/my-1', {
+      storage: saved({ songs: [song], nextSong: 2 }),
+    })
+    expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Learned' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Delete' }))
+    await user.click(await screen.findByRole('button', { name: 'Delete for good' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
+    expect(piecesStore.getState().songs).toEqual([])
+  })
+
+  it('writes a listing’s chart in the editor', async () => {
+    await renderApp('/songs/bz4')
+    expect(await screen.findByRole('link', { name: 'Write the chart' })).toHaveAttribute(
+      'href',
+      '/edit/bz4',
+    )
   })
 })

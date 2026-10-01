@@ -1,7 +1,8 @@
-import { screen } from '@testing-library/react'
+import { cleanup, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { createMemoryStorage } from '@/shared/lib'
 
 describe('Songs', () => {
   it('lists the collections, marking listings with no chart', async () => {
@@ -48,5 +49,61 @@ describe('Songs', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Hymns' })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Studies' })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Progressions' })).not.toBeInTheDocument()
+  })
+})
+
+describe('Songs: your own', () => {
+  const SONG = {
+    id: 'my-1',
+    title: 'Morning',
+    key: 'G',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['G C D G'] }],
+  }
+  const saved = (state: object) => {
+    const storage = createMemoryStorage()
+    storage.setItem('pt-pieces', JSON.stringify({ state, version: 1 }))
+    return storage
+  }
+
+  it('makes a new song from its title, key and meter, and opens it in the editor', async () => {
+    const user = userEvent.setup()
+    const { router, piecesStore } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    const make = await screen.findByRole('button', { name: 'Make' })
+    expect(make).toBeDisabled()
+    await user.type(screen.getByRole('textbox', { name: 'Title' }), 'Evening')
+    await user.click(screen.getByRole('radio', { name: '3/4' }))
+    await user.click(make)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(piecesStore.getState().songs).toMatchObject([
+      { id: 'my-1', title: 'Evening', key: 'C', meter: '3/4' },
+    ])
+  })
+
+  it('lists your songs first, and chooses them in the Collection pop-up', async () => {
+    const { router } = await renderApp('/songs', { storage: saved({ songs: [SONG], nextSong: 2 }) })
+    const headings = await screen.findAllByRole('heading', { level: 2 })
+    expect(headings[0]).toHaveTextContent('Your songs')
+    expect(screen.getByRole('link', { name: /Morning/ })).toHaveAttribute('href', '/songs/my-1')
+    cleanup()
+    await renderApp('/songs?collection=mine', { storage: saved({ songs: [SONG], nextSong: 2 }) })
+    expect(await screen.findByRole('link', { name: /Morning/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Still, my soul/ })).toBeNull()
+    expect(router.state.location.pathname).toBe('/songs')
+  })
+
+  it('lists a listing whose chart the learner wrote as a song', async () => {
+    const version = {
+      ...SONG,
+      key: 'Cm',
+      meter: '3/4',
+      sections: [{ kind: 'verse', lines: ['Cm'] }],
+    }
+    await renderApp('/songs?q=лань', { storage: saved({ versions: { bz4: version } }) })
+    const row = await screen.findByRole('link', { name: /Как лань желает/ })
+    expect(row).not.toHaveTextContent('No chart yet')
   })
 })

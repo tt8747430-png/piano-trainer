@@ -10,4 +10,12 @@ export const songs = {
   learned: 'Learned',
   empty: 'No songs match.',
   clearFilters: 'Clear filters',
+  yours: 'Your songs',
+  newSong: 'New song',
+  making: {
+    title: 'New song',
+    name: 'Title',
+    meter: 'Meter',
+    make: 'Make',
+  },
 } as const

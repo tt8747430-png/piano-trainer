@@ -12,7 +12,7 @@ const ALL = { q: '', collection: 'all', level: 'any' } as const
 describe('songsView', () => {
   it('shows every entry, by collection, when nothing filters', () => {
     const groups = songsView(COLLECTIONS, ALL, levelOfEntry)
-    expect(groups.map((g) => g.collection.id)).toEqual(COLLECTIONS.map((c) => c.id))
+    expect(groups.map((g) => g.shelf.id)).toEqual(COLLECTIONS.map((c) => c.id))
   })
 
   it('finds a song by either title or a credited name, ignoring case', () => {
@@ -25,7 +25,7 @@ describe('songsView', () => {
 
   it('keeps one collection', () => {
     const groups = songsView(COLLECTIONS, { ...ALL, collection: 'hymns' }, levelOfEntry)
-    expect(groups.map((g) => g.collection.id)).toEqual(['hymns'])
+    expect(groups.map((g) => g.shelf.id)).toEqual(['hymns'])
   })
 
   it('filters by level, which listings do not have', () => {

@@ -11,5 +11,13 @@ export const songs: LocaleResources['songs'] = {
   noChart: 'Аккордов пока нет',
   learned: 'Выучено',
   empty: 'Ничего не найдено.',
+  yours: 'Ваши песни',
+  newSong: 'Новая песня',
+  making: {
+    title: 'Новая песня',
+    name: 'Название',
+    meter: 'Размер',
+    make: 'Создать',
+  },
   clearFilters: 'Сбросить фильтры',
 }

@@ -2,15 +2,16 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LEVEL_NAME, LEVELS, levelOf, pieceStepId, type Level } from '@/entities/path'
-import { SONG_COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
+import { SONG_COLLECTIONS, useRepertoire, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { Dropdown, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { PieceList } from '@/widgets/piece-list'
-import type { SongsFilter } from '../model/songs-filter'
+import type { SongsFilter, SongsShelf } from '../model/songs-filter'
 import { songsView } from '../model/songs-view'
+import { NewSongSheet } from './NewSongSheet'
 import { SearchField } from './SearchField'
 
 const levelOfEntry = (entry: Entry) =>
@@ -31,26 +32,38 @@ export function SongsPage() {
   const set = useViewChange<SongsFilter>()
   // No search at all: the route fills its defaults.
   const clear = () => void navigate({ search: {}, replace: true })
-  const groups = songsView(SONG_COLLECTIONS, { ...search, q: query }, levelOfEntry).map((g) => ({
-    id: g.collection.id,
-    heading: search.collection === 'all' ? localText(g.collection.name, locale) : null,
+  const pieces = useRepertoire()
+  // The learner's songs first, then the songbooks', each entry in the learner's version.
+  const shelves = [
+    { id: 'mine' as const, name: t('songs:yours'), entries: pieces.ownSongs },
+    ...SONG_COLLECTIONS.map((collection) => ({
+      id: collection.id,
+      name: localText(collection.name, locale),
+      entries: collection.entries.map((entry) => pieces.entry(entry.id) ?? entry),
+    })),
+  ]
+  const groups = songsView(shelves, { ...search, q: query }, levelOfEntry).map((g) => ({
+    id: g.shelf.id,
+    heading: search.collection === 'all' ? g.shelf.name : null,
     entries: g.entries,
   }))
 
   return (
     <div className="flex flex-col">
-      <ScreenHeader title={t('songs:title')} />
+      <ScreenHeader title={t('songs:title')} actions={<NewSongSheet />} />
       <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
         {/* On a laptop the filters stay beside the list, under the screen's bar while it shows. */}
         <div className="flex flex-col gap-5 lg:sticky lg:top-screen-bar-8">
           <SearchField value={search.q} onChange={(q) => set({ q })} />
           <div className="flex flex-wrap gap-2">
-            <Dropdown<CollectionId | 'all'>
+            <Dropdown<SongsShelf | 'all'>
               label={t('songs:collection')}
               value={search.collection}
               options={[
                 { value: 'all', label: t('songs:all') },
-                ...SONG_COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
+                ...shelves
+                  .filter((shelf) => shelf.entries.length > 0)
+                  .map((shelf) => ({ value: shelf.id, label: shelf.name })),
               ]}
               onChange={(collection) => set({ collection })}
             />
