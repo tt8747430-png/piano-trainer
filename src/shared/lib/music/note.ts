@@ -184,3 +184,18 @@ export function noteFromParam(param: NoteParam): SpelledNote {
   if (!spelled) throw new RangeError(`noteParam wrote ${param}, which is not a note`)
   return spelled
 }
+
+/**
+ * The note written the other way, with one accidental at most: C♯ is D♭, E is F♭, B♯ is C; the next
+ * spelling of its pitch by letter, round to the first. A note with one spelling (D) stays.
+ */
+export function otherSpelling(spelled: SpelledNote): SpelledNote {
+  const pc = pitchClassOf(spelled)
+  const spellings = LETTERS.flatMap((letter) => {
+    const accidental = pitchClass(pc - naturalPitch(letter))
+    const signed = accidental > 6 ? accidental - 12 : accidental
+    return Math.abs(signed) <= 1 && isAccidental(signed) ? [note(letter, signed)] : []
+  })
+  const at = spellings.findIndex((candidate) => sameNote(candidate, spelled))
+  return spellings[(at + 1) % spellings.length] ?? spelled
+}

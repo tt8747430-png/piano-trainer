@@ -5,6 +5,7 @@ import {
   noteFromParam,
   noteName,
   noteParam,
+  otherSpelling,
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
@@ -13,6 +14,7 @@ import {
   rootSpelling,
   sameNote,
   writtenOctave,
+  type SpelledNote,
 } from './note'
 import { midi, pitchClass } from './pitch'
 
@@ -166,5 +168,19 @@ describe('plainRoot', () => {
     expect(plainRoot(note('B', -2))).toEqual(note('A'))
     expect(plainRoot(note('E', -1))).toEqual(note('E', -1))
     expect(plainRoot(note('F', 1))).toEqual(note('F', 1))
+  })
+})
+
+describe('otherSpelling', () => {
+  it('writes a note the other way, with one accidental at most', () => {
+    const names = (letters: SpelledNote[]) => letters.map((n) => noteName(otherSpelling(n)))
+    expect(
+      names([note('C', 1), note('D', -1), note('E'), note('F', -1), note('C'), note('B', 1)]),
+    ).toEqual(['D♭', 'C#', 'F♭', 'E', 'B#', 'C'])
+  })
+
+  it('leaves a note with no other spelling as it is', () => {
+    expect(otherSpelling(note('G', 1))).toEqual(note('A', -1))
+    expect(otherSpelling(note('D'))).toEqual(note('D'))
   })
 })

@@ -30,6 +30,7 @@ export {
   noteFromParam,
   noteName,
   noteParam,
+  otherSpelling,
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
