@@ -257,7 +257,9 @@ half, `4` quarter, the default, `8` eighth) and a dot for half as long again; it
 `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key` objects (`{ tonic: note('E', -1),
 minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
 `tensions` (a chord, a root), `lesson` (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key,
-`from` and `to` as symbols), `reharmonise` (a key, a melody note) or `piece` (a piece in the Player, `pattern?`).
+`from` and `to` as symbols), `reharmonise` (a key, a melody note), `piece` (a piece in the Player, `pattern?`) or
+`player` (a progression in the Player, ready to practise: numerals, a key, `size?`, `walk?` through the keys,
+`inversion?` 0–3).
 
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
 lesson's study, Боброва's seven over `otche`, a rhythm style over a progression. A pattern that plays the tune (`r5`,

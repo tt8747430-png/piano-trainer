@@ -56,7 +56,7 @@ Tailwind 4, Base UI.
 **Interfaces:**
 - Produces: `IN_PLACE: { readonly replace: true; readonly resetScroll: false }` from `@/shared/lib`.
 
-- [ ] **Step 1: Failing tests.** In `ProgressionsPage.test.tsx`:
+- [x] **Step 1: Failing tests.** In `ProgressionsPage.test.tsx`:
 
 ```tsx
 it('takes a library progression in place: Back then leaves for Learn', async () => {
@@ -81,9 +81,9 @@ it('keeps the scroll when a choice changes the chord', async () => {
 })
 ```
 
-- [ ] **Step 2:** `npx vitest run src/pages/progressions src/pages/chords` → both FAIL (Back lands on the first pick;
+- [x] **Step 2:** `npx vitest run src/pages/progressions src/pages/chords` → both FAIL (Back lands on the first pick;
   `scrollTo` called with `{ top: 0 }`).
-- [ ] **Step 3: `IN_PLACE`.**
+- [x] **Step 3: `IN_PLACE`.**
 
 ```ts
 // src/shared/lib/in-place.ts
@@ -99,8 +99,8 @@ true })` becomes `navigate({ search: (prev) => ({ ...prev, ...x }), ...IN_PLACE 
 `TheoryQuizPage`'s replace of a quiz keep `replace: true` alone (one leaves a filter, the other swaps a screen and
 should start at the top). In `CircleOfFifths`, `KeyFacts`, `ScaleFacts` the `replace` prop becomes `{...IN_PLACE}`;
 `ProgressionLibrary`'s `<Link to="/learn/progressions" …>` gains `{...IN_PLACE}`.
-- [ ] **Step 4: Scroll restoration.** In `createAppRouter`, add `scrollRestoration: true` to `createRouter`.
-- [ ] **Step 5:** tests pass; full checks + `npm run build`. In Chrome: Chords scrolled → 1st keeps the scroll;
+- [x] **Step 4: Scroll restoration.** In `createAppRouter`, add `scrollRestoration: true` to `createRouter`.
+- [x] **Step 5:** tests pass; full checks + `npm run build`. In Chrome: Chords scrolled → 1st keeps the scroll;
   Progressions picks → Back → Learn at its scroll.
 
 ### Task 2: The screen's bar and the rail (spec §3.2)
@@ -118,7 +118,7 @@ should start at the top). In `CircleOfFifths`, `KeyFacts`, `ScaleFacts` the `rep
 - Produces: `useShownOnScrollUp(): boolean`; `ScreenBarProvider`; `useScreenBar(): { offset: number; shown: boolean;
   report(height: number): void; hold(held: boolean): void }` (`offset` is the bar's row height while it shows, else 0).
 
-- [ ] **Step 1: Failing hook test.**
+- [x] **Step 1: Failing hook test.**
 
 ```ts
 // use-shown-on-scroll-up.test.ts
@@ -140,8 +140,8 @@ it('shows at the top, hides scrolling down, shows again scrolling up, ignoring a
 })
 ```
 
-- [ ] **Step 2:** run → FAIL (no module).
-- [ ] **Step 3: The hook.**
+- [x] **Step 2:** run → FAIL (no module).
+- [x] **Step 3: The hook.**
 
 ```ts
 // src/shared/lib/use-shown-on-scroll-up.ts
@@ -176,15 +176,15 @@ export function useShownOnScrollUp(): boolean {
 }
 ```
 
-- [ ] **Step 4: `ResizeObserver` for jsdom** (`src/shared/test/resize.ts`, called in `setup.ts`'s `beforeEach` like
+- [x] **Step 4: `ResizeObserver` for jsdom** (`src/shared/test/resize.ts`, called in `setup.ts`'s `beforeEach` like
   `stubIntersectionObserver`): a class whose `observe(target)` queues one callback with
   `[{ target, borderBoxSize: [{ blockSize: height, inlineSize: 0 }], contentBoxSize: [...same], contentRect:
   target.getBoundingClientRect(), devicePixelContentBoxSize: [] }]`; `stubResizeObserver({ height = 64 })`.
-- [ ] **Step 5: Failing bar test** (`kit.test.tsx`): render `<ScreenBarProvider><ScreenHeader title="Chords"
+- [x] **Step 5: Failing bar test** (`kit.test.tsx`): render `<ScreenBarProvider><ScreenHeader title="Chords"
   back={<button>Back</button>} /><Pinned>keys</Pinned></ScreenBarProvider>`; after the observer reports, the
   header's `data-shown` is `"true"` and the pinned element's `style.top` is `64px`; scroll to 120 → `data-shown`
   `"false"`, `top` `0px`; focus Back, scroll to 300 → still `"true"`.
-- [ ] **Step 6: The bar.**
+- [x] **Step 6: The bar.**
 
 ```tsx
 // src/shared/ui/screen-bar.tsx
@@ -228,14 +228,14 @@ pb-4">` holds back, title and actions. A `ResizeObserver` on the row reports `bo
 instead of `top-0`. `theme.css`: `@utility -mt-safe { margin-top: calc(-1 * max(--spacing(4),
 env(safe-area-inset-top))); }` and `@utility transition-top { transition-property: top; }`. `AppShell` wraps its
 `<main>` in `<ScreenBarProvider>`.
-- [ ] **Step 7: The piece page's bar spans the page.** Move `ScreenHeader` out of `PieceFacts` into `PieceView` and
+- [x] **Step 7: The piece page's bar spans the page.** Move `ScreenHeader` out of `PieceFacts` into `PieceView` and
   `ListingView` (first child, above the grid); the laptop column keeps `lg:sticky` with `style={{ top:
   \`calc(${offset}px + 2rem)\` }}` instead of `lg:top-8`.
-- [ ] **Step 8: The rail.** Failing test in `PianoKeyboard.test.tsx`: the rail's buttons in order are
+- [x] **Step 8: The rail.** Failing test in `PianoKeyboard.test.tsx`: the rail's buttons in order are
   `['Octave down', 'Octave up', 'Keyboard settings']` with the map before them. In `KeyRail`, move the octave-down
   `RailButton` after the map's `flex-1` div, beside octave-up; update the doc comment ("its controls at its end: ‹ ›
   an octave, then the screen's").
-- [ ] **Step 9:** checks green; Chrome: Chords scrolled down hides the bar, a flick up shows it above the keys; the
+- [x] **Step 9:** checks green; Chrome: Chords scrolled down hides the bar, a flick up shows it above the keys; the
   piece page on a phone width keeps its bar over the chart.
 
 ### Task 3: Inversion in every Player (spec §4)
@@ -259,7 +259,7 @@ env(safe-area-inset-top))); }` and `@utility transition-top { transition-propert
   `Accompaniment.inversion: Inversion | null`; `SetupParams.inversion?: Inversion`; `FigureChange` includes
   `inversion`; `playsChord(figure: Figure): boolean` (pattern).
 
-- [ ] **Step 1: Failing kernel tests** (`voice-leading.test.ts`):
+- [x] **Step 1: Failing kernel tests** (`voice-leading.test.ts`):
 
 ```ts
 const pcs = (symbol: string) => inversionPitchClasses(spellChordSymbol(symbol))
@@ -279,7 +279,7 @@ it('stacks from the inversion’s note, lowest E3–E4, nearer the last chord', 
 
 (`spellChordSymbol` = the kernel's chord-from-symbol helper; use `spellChord(parseChordSymbol(s).root,
 parseChordSymbol(s).quality)` if no such helper is exported.) Run → FAIL.
-- [ ] **Step 2: Kernel.**
+- [x] **Step 2: Kernel.**
 
 ```ts
 // voice-leading.ts
@@ -328,18 +328,18 @@ export function voiceInversion(
 `chordContext(chord, previous, key, inversion: Inversion | null)`: `voiced = inversion === null ? voiceLead(previous,
 rightHandPitchClasses(chord.tones)) : voiceInversion(previous, inversionPitchClasses(chord.tones), inversion)`.
 `arrange` passes `options.inversion ?? null`. `INVERSIONS`/`Inversion` live beside `lastInversion` in `place.ts`.
-- [ ] **Step 3: An arrange test:** `ii-V-I` sevenths in C with `inversion: 1`: every `rh` chord event's lowest note
+- [x] **Step 3: An arrange test:** `ii-V-I` sevenths in C with `inversion: 1`: every `rh` chord event's lowest note
   is the chord's 3rd (F, B, E). Run → pass.
-- [ ] **Step 4: Pattern.** `Accompaniment` gains `readonly inversion: Inversion | null`; `accompanimentOptions` adds
+- [x] **Step 4: Pattern.** `Accompaniment` gains `readonly inversion: Inversion | null`; `accompanimentOptions` adds
   `...(inversion === null ? {} : { inversion })`. `playsChord(figure)`: true when any event's tone token is `chord` or
   `voice` (a `MelodyFigure` is false). Test: `b1` true, `inv` false, `flow` false, `jaz` true.
-- [ ] **Step 5: URL and choices.** `SetupParams.inversion?: Inversion`; `FigureChange = Pick<SetupChange, 'pattern' |
+- [x] **Step 5: URL and choices.** `SetupParams.inversion?: Inversion`; `FigureChange = Pick<SetupChange, 'pattern' |
   'rh' | 'lh' | 'inversion'>`. `figures(raw)` in `player-search.ts` reads `inversion: isInversion(raw.inversion) ?
   raw.inversion : undefined` (`isInversion = isOneOf(INVERSIONS)` in `read-search.ts`). Each resolver adds
   `inversion: search.inversion ?? null` (`resolveChoice`, `walkChoice`, `chromaticChoice`, `progressionChoice`), and
   each `use-*-player` hook memo dependency list gains `inversion`. `ownChoice` and `WALK`/`CHROMATIC`/`PROGRESSION`
   defaults: `inversion: null`.
-- [ ] **Step 6: The field.** `Segmented` gains `disabled?: boolean` (passed to `RadioGroup`, segments
+- [x] **Step 6: The field.** `Segmented` gains `disabled?: boolean` (passed to `RadioGroup`, segments
   `data-disabled:opacity-50`). `InversionField` (widgets/player-setup), rendered at the end of `FigureRows`, reads
   `figures` and a new `onFigures` from the Setup context:
 
@@ -371,7 +371,7 @@ export function InversionField() {
 from `entities/pattern` beside `playsChord`; `INVERSION_NAMES` moves from `InversionChoice` to `shared/ui` export.)
 Strings: en `inversion: { label: 'Inversion', nearest: 'Nearest', own: 'This pattern plays its own shapes.' }`; ru
 `{ label: 'Обращение', nearest: 'Ближайшее', own: 'Эта фактура играет свои фигуры.' }`.
-- [ ] **Step 7: Player test:** `/play/progression?p=ii-V-I&key=C&chordSize=sevenths` → Setup → Inversion → 1st: URL
+- [x] **Step 7: Player test:** `/play/progression?p=ii-V-I&key=C&chordSize=sevenths` → Setup → Inversion → 1st: URL
   has `inversion: 1`, the first chord's right hand starts on F. Checks green.
 
 ### Task 4: Walk the keys (spec §5)
@@ -390,7 +390,7 @@ Strings: en `inversion: { label: 'Inversion', nearest: 'Nearest', own: 'This pat
   readonly Key[]): Chart`; `SetupParams.walk?: KeyWalk`; `PracticeChoice.walk` and `ProgressionChoice.walk: KeyWalk |
   null`.
 
-- [ ] **Step 1: Failing tests.**
+- [x] **Step 1: Failing tests.**
 
 ```ts
 // key-walk.test.ts
@@ -418,7 +418,7 @@ it('plays a chart once per key, a section each, written in C', () => {
 })
 ```
 
-- [ ] **Step 2: Kernel.**
+- [x] **Step 2: Kernel.**
 
 ```ts
 // key-walk.ts
@@ -472,22 +472,22 @@ export function chartInKeys(chart: Chart, keys: readonly Key[]): Chart {
 ```
 
 A piece's sections become one section per key (its verse/chorus headings give way to the keys' names).
-- [ ] **Step 3: Choices.** `walk(raw)` read in `player-search.ts` for the piece and progression validators
+- [x] **Step 3: Choices.** `walk(raw)` read in `player-search.ts` for the piece and progression validators
   (`isOneOf(KEY_WALKS)`). `ProgressionChoice.walk`: `progressionChoice` reads `search.walk ?? null`;
   `arrangeProgression`: `walk ? chartInKeys(chart, walkKeys(choice.key, walk)) : chart`, `tonic` the chart's.
   `PracticeChoice.walk`: `resolveChoice` sets it only for `piece.kind === 'progression'`; `arrangePiece` walks
   `chartOf(piece, size)` from `pieceKey(piece)` with the choice's tonic as home. While walking the fit's `key` is false
   (`walkingFit(fit)`) and `use-player` passes no recording.
-- [ ] **Step 4: Headings and title.** `walkHeadings(keys, headings, keyName)`: per key, the first section's heading is
+- [x] **Step 4: Headings and title.** `walkHeadings(keys, headings, keyName)`: per key, the first section's heading is
   the key's name, the rest keep theirs; `PlayerPage` passes it while walking. The progression title while walking:
   en `progression.walking: '{{numerals}} from {{key}}, {{walk}}'`, ru `'{{numerals}} от {{key}}, {{walk}}'`.
-- [ ] **Step 5: The field.** `KeyWalkField` (a `Dropdown`, label "Through the keys"), in `ProgressionSetup` and in
+- [x] **Step 5: The field.** `KeyWalkField` (a `Dropdown`, label "Through the keys"), in `ProgressionSetup` and in
   `PieceSetup` for a progression. Strings: en `walk: { label: 'Through the keys', one: 'One key', 'semitones-up': 'Up
   by semitones', 'semitones-down': 'Down by semitones', 'tones-up': 'Up by whole tones', 'tones-down': 'Down by whole
   tones', fifths: 'Round the circle of fifths' }`; ru `{ label: 'По тональностям', one: 'Одна тональность',
   'semitones-up': 'Вверх по полутонам', 'semitones-down': 'Вниз по полутонам', 'tones-up': 'Вверх по тонам',
   'tones-down': 'Вниз по тонам', fifths: 'По квинтовому кругу' }`.
-- [ ] **Step 6: Player tests:** `/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up` → 39 bars, bar 4 is
+- [x] **Step 6: Player tests:** `/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up` → 39 bars, bar 4 is
   `E♭m7`; `/play/twofive?walk=tones-down` → bar 4 is `Cm7`. Checks green.
 
 ### Task 5: Remembered views (spec §6)
@@ -506,7 +506,7 @@ A piece's sections become one section per key (its verse/chorus headings give wa
   `viewToOpen(url, remembered, kept): Raw`; `routeSearch(validate, defaults, remember?: { kept: readonly (keyof S &
   string)[] })`.
 
-- [ ] **Step 1: Store tests then store.**
+- [x] **Step 1: Store tests then store.**
 
 ```ts
 // store.ts
@@ -540,9 +540,9 @@ function sanitize(persisted: unknown): ViewsState {
 
 Tests: a non-object, a non-`/` path, an object value and `NaN` are dropped; 201 paths keep the last 200; a second
 store on the same storage follows the first's save (`otherTabs`).
-- [ ] **Step 2: The command.** `rememberView(store, path, view)`: drops `loop` and `step`, writes the path last
+- [x] **Step 2: The command.** `rememberView(store, path, view)`: drops `loop` and `step`, writes the path last
   (delete, then add), trims to `MOST_VIEWS`; a view equal to the remembered one writes nothing. Test each.
-- [ ] **Step 3: The rules** (`src/app/routes/remember.ts`):
+- [x] **Step 3: The rules** (`src/app/routes/remember.ts`):
 
 ```ts
 export type Raw = Readonly<Record<string, unknown>>
@@ -576,7 +576,7 @@ export function restoreView<S extends object>(validate: (input: Raw) => S, kept:
 `sameView` compares the two objects' defined entries. `routeSearch(validate, defaults, remember?)` adds `staticData:
 { remembered: true }` and `beforeLoad: restoreView(validate, remember.kept)` when given. Unit tests for `viewToOpen`
 (plain, named, kept filled, nothing to fill returns the same object).
-- [ ] **Step 4: Router.** `createRootRouteWithContext<{ views: ViewsStore }>()`; `createAppRouter({ history, views })`
+- [x] **Step 4: Router.** `createRootRouteWithContext<{ views: ViewsStore }>()`; `createAppRouter({ history, views })`
   passes `context: { views }` and subscribes:
 
 ```ts
@@ -592,14 +592,14 @@ pattern rh lh inversion tempo hands mode swing speedTraining`; scales `fingers r
 keys, intervals, tensions, chord finder, reharmonise, passing chords, progressions `[]`. Routes with a `beforeLoad` of
 their own (piece, walk) run it first, then the restore. `main.tsx` and `renderApp` create `createViewsStore({ storage
 })`; `renderApp` returns `viewsStore`.
-- [ ] **Step 5: Whole-app tests** (`remembered-views.test.tsx`, one `storage` shared by two `renderApp`s):
+- [x] **Step 5: Whole-app tests** (`remembered-views.test.tsx`, one `storage` shared by two `renderApp`s):
   - a piece's key, pattern, inversion and tempo come back when it is opened plainly again; its loop does not;
   - the progression Player opened from the tool keeps the tool's numerals, key and triads, and the remembered pattern
     and walk;
   - a lesson's link to Chords names G minor: G minor shows (no remembered root or quality);
   - Learn → Chords (plain) returns to the remembered chord, and Back from it lands on Learn (the redirect replaced);
   - an unreadable remembered value (`tempo: 'fast'`) opens once with the default, no second redirect.
-- [ ] **Step 6:** ADR 0022 (context, decision = §6's two rules and the table, consequences: links stay exact, a
+- [x] **Step 6:** ADR 0022 (context, decision = §6's two rules and the table, consequences: links stay exact, a
   remembered value is validated like a URL's, amends ADR 0003). Checks + `npm run build` green; Chrome: a piece's G
   major and 1st inversion survive closing and reopening.
 
@@ -615,10 +615,10 @@ their own (piece, walk) run it first, then the restore. `main.tsx` and `renderAp
 - Consumes: `KeyWalk`, `Inversion`; the `/play/progression` search (`p`, `key`, `chordSize`, `walk`, `inversion`).
 - Produces: `LessonLink` variant `({ place: 'player' } & LessonProgression & { walk?: KeyWalk; inversion?: Inversion })`.
 
-- [ ] **Step 1: Failing catalog case:** `problemsOf({ kind: 'link', title, target: { place: 'player', numerals: 'ii
+- [x] **Step 1: Failing catalog case:** `problemsOf({ kind: 'link', title, target: { place: 'player', numerals: 'ii
   Q', key: C_MAJOR } })` reports the numerals. Add the `'player'` case to `problemsOf` (reads numerals like
   `'progressions'`). Run → FAIL until the type and case exist.
-- [ ] **Step 2: The link row.**
+- [x] **Step 2: The link row.**
 
 ```tsx
 case 'player': {
@@ -645,25 +645,25 @@ case 'player': {
 }
 ```
 
-- [ ] **Step 3: Content.** Three lessons as the spec §7 lists, in the house worksheet style (see
+- [x] **Step 3: Content.** Three lessons as the spec §7 lists, in the house worksheet style (see
   `chord-family.ts`): every text `{ en, ru }`; examples as `chords`/`progression` blocks; quizzes `{ chord }`
   answers; links (`keys`, `piece`, `player`). `two-five-one`'s exercise links: `{ place: 'player', numerals: 'ii V
   I', key: C_MAJOR, size: 'sevenths', walk: 'semitones-up' }`, the same with `walk: 'tones-down'`, and `size:
   'ninths', inversion: 1` then `inversion: 3`. Order in `LESSONS`: `chordFunctions` after `chordFamily`;
   `thinkingInDegrees`, `twoFiveOne` after `commonProgressions`. Levels 2, 2, 3; categories `theory`, `accompaniment`,
   `jazz`; modules `fundamentals`, `accompaniment`, `accompaniment`.
-- [ ] **Step 4:** a LessonPage test opens `two-five-one` and finds the walk link's href with `walk=semitones-up`.
+- [x] **Step 4:** a LessonPage test opens `two-five-one` and finds the walk link's href with `walk=semitones-up`.
   Checks green.
 
 ### Task 7: Docs
 
-- [ ] CLAUDE.md: `entities/views` (`pt-views`), `features/remember-view`, `IN_PLACE`, `useShownOnScrollUp`, the
+- [x] CLAUDE.md: `entities/views` (`pt-views`), `features/remember-view`, `IN_PLACE`, `useShownOnScrollUp`, the
   screen bar (`ScreenBarProvider`), `walkKeys`, `chartInKeys`, `inversionPitchClasses`/`voiceInversion`, the
   `player` lesson link; the State line ("what must be remembered → a persisted entity store; a screen's last view →
   `pt-views`").
-- [ ] UBIQUITOUS_LANGUAGE: Inversion (Setup): Nearest · Root · 1st · 2nd · 3rd; **Walk the keys**; **Remembered
+- [x] UBIQUITOUS_LANGUAGE: Inversion (Setup): Nearest · Root · 1st · 2nd · 3rd; **Walk the keys**; **Remembered
   view**; **Screen bar**.
-- [ ] CONTENT.md: the `player` link target.
-- [ ] ADR 0023 "An inversion and a walk of keys are ways to play any chart" (spec §4–5).
-- [ ] `npx prettier --write` the touched files; final `npm run typecheck && npm run lint && npm run test && npm run
+- [x] CONTENT.md: the `player` link target.
+- [x] ADR 0023 "An inversion and a walk of keys are ways to play any chart" (spec §4–5).
+- [x] `npx prettier --write` the touched files; final `npm run typecheck && npm run lint && npm run test && npm run
   build`.
