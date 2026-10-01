@@ -2,21 +2,19 @@ import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { chordsRange, scaleShown } from '@/features/play-example'
 import { PractiseChords } from '@/features/practice'
-import { useScaleName } from '@/shared/i18n'
+import { useKeyName, useScaleName } from '@/shared/i18n'
 import {
   keyFromParam,
   keyScale,
-  noteName,
   noteParam,
   placeBorrowedChords,
   placeScale,
   placeScaleChords,
-  rangeOf,
   walkChords,
 } from '@/shared/lib/music'
 import { LEARN_TILES, RowGroup, RowLink } from '@/shared/ui'
-import { keyMarks } from '../model/key-marks'
 import type { KeyView } from '../model/key-view'
 import { CircleOfFifths } from './CircleOfFifths'
 import { KeyChordsSection } from './KeyChordsSection'
@@ -36,6 +34,7 @@ export function KeyExplorer({
 }) {
   const { t } = useTranslation('learn')
   const scaleName = useScaleName()
+  const keyName = useKeyName()
   // Read once per key: the signature engraves again whenever the key it is handed is new.
   const key = useMemo(() => keyFromParam(view.key), [view.key])
   const kind = keyScale(key)
@@ -48,23 +47,18 @@ export function KeyExplorer({
     [key, view.chords, view.inversion],
   )
   const walk = useMemo(() => walkChords(chords), [chords])
-  const placed = placeScale(key.tonic, kind)
+  const scale = scaleShown(placeScale(key.tonic, kind))
   return (
     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
       <CircleOfFifths current={key} />
       <div className="flex flex-col gap-4">
-        <h2 className="text-5xl">
-          {t(key.minor ? 'keys.minor' : 'keys.major', { tonic: noteName(key.tonic) })}
-        </h2>
+        <h2 className="text-5xl">{keyName(key)}</h2>
         <KeySignature value={key} />
         <KeyFacts value={key} />
       </div>
       <ExplorerKeyboard
-        keys={placed.map((tone) => tone.midi)}
-        range={rangeOf(
-          [...walk, ...borrowed].flatMap((chord) => chord.tones.map((tone) => tone.midi)),
-        )}
-        marks={keyMarks(placed)}
+        shown={scale}
+        range={chordsRange([...walk, ...borrowed])}
         className="lg:col-span-2"
       />
       <KeyChordsSection

@@ -27,14 +27,6 @@ export const learn: LocaleResources['learn'] = {
   keysPlay: { label: 'Клавиши играют', chords: 'Аккорды', notes: 'Ноты' },
   holds: '{{note}} есть в {{chords}}',
   holdsNone: 'Ни в одном аккорде гаммы нет {{note}}',
-  chordSize: {
-    label: 'Размер аккорда',
-    triads: 'Трезвучия',
-    sevenths: 'Септаккорды',
-    ninths: 'Нонаккорды',
-    elevenths: 'Ундецимаккорды',
-    thirteenths: 'Терцдецимаккорды',
-  },
   builder: {
     triad: 'Трезвучие',
     triads: {
@@ -64,7 +56,6 @@ export const learn: LocaleResources['learn'] = {
   },
   walk: { title: 'Аккорды по ступеням', played: 'Как играть', block: 'Аккордом' },
   root: 'Основной тон',
-  inversionLabel: 'Обращение',
   handsLabel: 'Руки',
   play: 'Сыграть',
   arpeggio: 'Арпеджио',
@@ -98,8 +89,6 @@ export const learn: LocaleResources['learn'] = {
   keys: {
     title: 'Тональности',
     circle: 'Квинтовый круг',
-    major: '{{tonic}} мажор',
-    minor: '{{tonic}} минор',
     random: 'Случайная тональность',
     signature: 'Знаки',
     noSignature: 'Без знаков',

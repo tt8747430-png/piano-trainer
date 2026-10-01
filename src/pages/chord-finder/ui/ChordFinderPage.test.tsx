@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { midi } from '@/shared/lib/music'
+import { stubScrolling } from '@/shared/test/layout'
 
 const chordName = () => screen.getByRole('heading', { level: 2 })
 
@@ -18,6 +19,17 @@ describe('Learn → Chord finder', () => {
     expect(chordName()).toHaveTextContent('C')
     expect(router.state.location.search).toEqual({ keys: '60-64-67' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+  })
+
+  it('keeps the keys still under a tap outside the middle octaves (ADR 0009)', async () => {
+    const user = userEvent.setup()
+    const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
+    await renderApp('/learn/chord-finder')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    const before = scrolls.length
+    await user.click(within(keyboard).getByRole('button', { name: 'B3' }))
+    expect(chordName()).toHaveTextContent('B')
+    expect(scrolls).toHaveLength(before)
   })
 
   it('names the root position first, and what else the notes can be', async () => {

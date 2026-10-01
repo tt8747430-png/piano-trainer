@@ -10,8 +10,7 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
-import type { KeyMark } from '@/shared/ui'
-import type { ShownKeys } from './shown'
+import type { KeyMark, ShownKeys } from '@/shared/ui'
 
 /** The octave an interval's lower note is written in: middle C's. */
 const LOWER_OCTAVE = 4

@@ -11,8 +11,8 @@ import {
   useProgress,
 } from '@/entities/progress'
 import { cn } from '@/shared/lib'
-import { keyName } from '@/shared/lib/music'
-import { ButtonLink } from '@/shared/ui'
+import { keySymbol } from '@/shared/lib/music'
+import { ButtonLink, PAINT } from '@/shared/ui'
 
 /** The card's one action: a piece opens in the Player, a chord or scale step in its explorer. */
 function ContinueButton({ step, label }: { step: PathStep; label: string }) {
@@ -44,7 +44,7 @@ export function ContinueCard() {
 
   if (!suggested) {
     return (
-      <section className="flex flex-col items-start gap-3 rounded-3xl border border-border bg-card p-5">
+      <section className="flex flex-col items-start gap-3 card p-5">
         <p className="font-display text-2xl font-semibold">{t('allLearned')}</p>
         <ButtonLink variant="outline" render={<Link to="/songs" />}>
           {t('toSongs')}
@@ -57,20 +57,17 @@ export function ContinueCard() {
   const piece = suggested.step.kind === 'piece' ? pieceById(suggested.step.pieceId) : undefined
   const toCheck = piece ? skillsToCheck(skillsOfPiece(piece), answers).length : 0
   const detail = piece
-    ? [title.secondary, keyName(pieceKey(piece))].filter(Boolean).join(' · ')
+    ? [title.secondary, keySymbol(pieceKey(piece))].filter(Boolean).join(' · ')
     : t(`kind.${title.kind}`)
 
   return (
-    <section
-      aria-labelledby={headingId}
-      className="overflow-hidden rounded-3xl border border-border bg-card"
-    >
+    <section aria-labelledby={headingId} className="overflow-hidden card">
       {/* The book's header band: the card's own title, on the wash of its step's paint. */}
       <h2
         id={headingId}
         className={cn(
           'border-b border-border px-5 py-3 text-3xl text-balance',
-          STEP_PAINT[title.kind].fill,
+          PAINT[STEP_PAINT[title.kind]].fill,
         )}
       >
         {title.primary}

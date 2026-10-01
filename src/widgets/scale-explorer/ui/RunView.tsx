@@ -1,10 +1,10 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { scaleShown } from '@/features/play-example'
 import { noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { runSounds } from '@/shared/lib/schedule'
-import { Dropdown, Segmented } from '@/shared/ui'
-import { scaleMarks } from '../model/scale-keys'
+import { Dropdown, NamedSegmented, Segmented } from '@/shared/ui'
 import { scaleRunOf } from '../model/scale-run'
 import type { ScaleView } from '../model/scale-view'
 import { FingeringTable } from './FingeringTable'
@@ -69,7 +69,8 @@ export function RunView({
               onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
             />
           ) : null}
-          <Segmented
+          {/* Beside Hands' Right hand · Left hand, Fingers' own would read as the same choice. */}
+          <NamedSegmented
             label={t('learn:fingers.label')}
             value={scale.fingers}
             options={FINGERS.map(({ value, label }) => ({ value, label: t(label) }))}
@@ -79,11 +80,13 @@ export function RunView({
       }
       keyboard={
         <ExplorerKeyboard
-          keys={run.music.notes.map((n) => n.midi)}
-          marks={scaleMarks(
-            run.placed,
-            scale.fingers === 'none' ? null : run.fingers[scale.fingers],
-          )}
+          shown={{
+            keys: run.music.notes.map((n) => n.midi),
+            marks: scaleShown(
+              run.placed,
+              scale.fingers === 'none' ? undefined : run.fingers[scale.fingers],
+            ).marks,
+          }}
           className="lg:order-first lg:col-span-2"
         />
       }

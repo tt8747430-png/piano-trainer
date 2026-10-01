@@ -1,6 +1,5 @@
 import { midi, pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
-import type { KeyMark } from '@/shared/ui'
-import type { ShownKeys } from './shown'
+import type { KeyMark, ShownKeys } from '@/shared/ui'
 
 /** A chord with a note on top, as a melody over it: the nearest key above its highest with that note. */
 export function noteOnTop(chord: ShownKeys, pc: PitchClass, mark: KeyMark): ShownKeys {

@@ -1,11 +1,10 @@
 import {
   CHORD_QUALITIES,
   chordFamily,
-  chordRootSpelling,
   chordSymbol,
   PITCH_CLASSES,
   pitchClassOf,
-  qualityIntervals,
+  qualityRootSpelling,
   sameNote,
   scaleRootSpelling,
   skillOf,
@@ -61,7 +60,7 @@ function nameOptions(
     random,
   )
   const wrong = [...sameFamily, ...others].slice(0, OPTIONS - 1).map((quality) => {
-    const root = chordRootSpelling(pitchClassOf(question.root), qualityIntervals(quality))
+    const root = qualityRootSpelling(pitchClassOf(question.root), quality)
     return chordSymbol({ root, quality })
   })
   return shuffled([...wrong, question.symbol], random)
@@ -84,7 +83,7 @@ function draw(config: QuizConfig, index: number, random: () => number): Question
       notes: spellScale(root, target.scale),
     }
   }
-  const root = chordRootSpelling(pc, qualityIntervals(target.quality))
+  const root = qualityRootSpelling(pc, target.quality)
   const chord: ChordQuestion = {
     skill,
     root,

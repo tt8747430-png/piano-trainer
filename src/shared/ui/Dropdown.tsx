@@ -1,6 +1,7 @@
 import { choiceGroups, type Choices, type OptionValue } from './option'
 import { OptionItems } from './OptionItems'
-import { Select, SelectContent, SelectTrigger, SelectValue } from './primitives/select'
+import { DropdownTrigger } from './DropdownTrigger'
+import { Select, SelectContent } from './primitives/select'
 
 /**
  * One choice of many behind a pop-up button (Apple's): the button shows its label and the current
@@ -30,12 +31,7 @@ export function Dropdown<V extends OptionValue>({
         if (next !== null && next !== value) onChange(next)
       }}
     >
-      <SelectTrigger aria-label={label} className={className}>
-        <span aria-hidden className="text-muted-foreground">
-          {label}
-        </span>
-        <SelectValue className="block min-w-0 flex-1 truncate text-left font-semibold" />
-      </SelectTrigger>
+      <DropdownTrigger label={label} className={className} />
       <SelectContent>
         <OptionItems groups={groups} />
       </SelectContent>

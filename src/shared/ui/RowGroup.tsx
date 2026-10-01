@@ -8,9 +8,7 @@ export function RowGroup({ title, children }: { title: string; children: ReactNo
       <h2 id={id} className="text-2xl">
         {title}
       </h2>
-      <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card px-2">
-        {children}
-      </ul>
+      <ul className="flex flex-col divide-y divide-hairline card px-2">{children}</ul>
     </section>
   )
 }

@@ -3,7 +3,6 @@ import { midi } from '@/shared/lib/music'
 import { lessonById } from '@/entities/lesson'
 import {
   answerSounds,
-  checkedKeys,
   isRight,
   quizAnswer,
   quizKeys,
@@ -61,15 +60,6 @@ describe('isRight', () => {
     expect(isRight(keys(64, 67), E_MINOR)).toBe(false)
     expect(isRight(keys(64, 67, 71, 74), E_MINOR)).toBe(false)
     expect(isRight([], E_MINOR)).toBe(false)
-  })
-})
-
-describe('checkedKeys', () => {
-  it('marks the right keys by role, the extra ones wrong, and rings the missing ones', () => {
-    const checked = checkedKeys(keys(64, 68), E_MINOR)
-    expect(checked.marks.get(midi(64))).toEqual({ tone: 'root', label: '1' })
-    expect([...checked.wrong]).toEqual([68])
-    expect([...checked.outlined]).toEqual([67, 71])
   })
 })
 

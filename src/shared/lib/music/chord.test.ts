@@ -8,9 +8,11 @@ import {
   chordSymbol,
   qualitiesIn,
   qualityIntervals,
+  qualityRootSpelling,
   qualitySpellings,
   qualitySuffix,
   spellChord,
+  writtenSymbol,
   type ChordQuality,
 } from './chord'
 import { parseChordSymbol } from './chord-symbol'
@@ -127,5 +129,19 @@ describe('chordRootSpelling', () => {
   it('leans sharp or flat by quality', () => {
     expect(chordRootSpelling(pitchClass(1), qualityIntervals('min'))).toEqual(note('C', 1))
     expect(chordRootSpelling(pitchClass(1), qualityIntervals('maj'))).toEqual(note('D', -1))
+  })
+})
+
+describe('qualityRootSpelling', () => {
+  it('names a chord of a quality from the root that reads best', () => {
+    expect(qualityRootSpelling(pitchClass(1), 'min')).toEqual(note('C', 1))
+    expect(qualityRootSpelling(pitchClass(1), 'maj7')).toEqual(note('D', -1))
+  })
+})
+
+describe('writtenSymbol', () => {
+  it('writes a chord from its root and suffix, over a bass that is not its root', () => {
+    expect(writtenSymbol({ root: note('G'), suffix: '13(11)' })).toBe('G13(11)')
+    expect(writtenSymbol({ root: note('C'), suffix: '' }, note('E'))).toBe('C/E')
   })
 })

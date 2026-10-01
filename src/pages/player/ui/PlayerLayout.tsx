@@ -1,9 +1,7 @@
-import { SlidersHorizontal } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import type { ReactNode } from 'react'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
-import { RoundButton } from '@/shared/ui'
 import {
   HandsButton,
   LoopButton,
@@ -32,18 +30,18 @@ export function PlayerLayout({
   player,
   performance,
   headings = NO_HEADINGS,
-  onSetup,
+  setup,
 }: {
   title: string
   onClose: () => void
   view: PracticeView
   player: PracticePlayer
   performance: Performance
-  /** Each section's name, by section: shown at its first bar; none for a source with one section. */
+  /** Each section's name, by section: shown at its first bar; none for music with one section. */
   headings?: readonly string[]
-  onSetup: () => void
+  /** The Setup: its button, in the toolbar, and the sheet it opens. */
+  setup: ReactNode
 }) {
-  const { t } = useTranslation('player')
   const { practice } = player
   return (
     <PlayerScreen>
@@ -68,7 +66,7 @@ export function PlayerLayout({
       <PlayerArea area="actions" className="flex items-center justify-end gap-2">
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <MidiButton />
-        <RoundButton label={t('setup')} icon={SlidersHorizontal} onClick={onSetup} />
+        {setup}
       </PlayerArea>
       <PlayerArea area="keys" className="flex">
         <LiveKeyboard
@@ -78,7 +76,6 @@ export function PlayerLayout({
           wrong={player.wrong}
           onKeyPress={player.tapKey}
           height="fill"
-          className="min-h-0 flex-1"
         />
       </PlayerArea>
       <PlayerArea area="sheet">

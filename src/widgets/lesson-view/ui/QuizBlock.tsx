@@ -31,11 +31,7 @@ export function QuizBlock({
   const locale = useLocale()
   const id = useId()
   return (
-    <div
-      role="group"
-      aria-labelledby={id}
-      className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-4"
-    >
+    <div role="group" aria-labelledby={id} className="flex flex-col gap-3 card p-4">
       <p id={id} className="font-semibold">
         {localText(ask, locale)}
       </p>

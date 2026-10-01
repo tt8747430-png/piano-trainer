@@ -4,10 +4,9 @@ import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, type NoteLineMeter } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView, PlayLabel } from '@/shared/ui'
+import { LazyScoreView, PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { notesShown } from '../model/notes-example'
-import type { ShownKeys } from '../model/shown'
 
 /** The tempo a lesson's line of notes plays at: slow enough to read along. */
 const LINE_TEMPO = 72
@@ -36,15 +35,15 @@ export function NotesExample({
   const score = useMemo(() => notate(line), [line])
   return (
     // Play beside the line where it fits, under it on a narrow screen.
-    <figure className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-3xl border border-border bg-card p-4">
+    <figure className="flex flex-wrap items-center gap-x-6 gap-y-3 card p-4">
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-        <LazyScoreView score={score} scale={1} fingers={false} staff={clef} />
+        <LazyScoreView score={score} staff={clef} />
       </div>
       <Button
         variant="soft"
         onClick={() => {
           onShow(notesShown(line))
-          playback.toggle('line', runSounds(line, LINE_TEMPO))
+          playback.toggle('line', () => runSounds(line, LINE_TEMPO))
         }}
       >
         <PlayLabel playing={playback.playing === 'line'}>{t('example.play')}</PlayLabel>

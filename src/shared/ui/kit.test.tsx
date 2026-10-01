@@ -1,10 +1,15 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
+import { note, noteName, noteParam, rootSpelling } from '@/shared/lib/music'
 import { ButtonLink } from './ButtonLink'
+import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
+import { InversionChoice } from './InversionChoice'
 import { LevelMark } from './LevelMark'
+import { NamedSegmented } from './NamedSegmented'
+import { NoteDropdown } from './NoteDropdown'
 import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
@@ -13,6 +18,9 @@ import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
 import { ScreenHeader } from './ScreenHeader'
 import { Segmented } from './Segmented'
+import { SwitchRow } from './SwitchRow'
+import { ToneChip } from './ToneChip'
+import { TypedField } from './TypedField'
 
 const MODES = [
   { value: 'listen', label: 'Listen' },
@@ -97,6 +105,101 @@ describe('Segmented', () => {
   })
 })
 
+describe('NamedSegmented', () => {
+  it('shows its name beside the segments, and is named by it once', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<NamedSegmented label="Mode" value="step" options={MODES} onChange={onChange} />)
+    expect(screen.getByText('Mode')).toBeVisible()
+    expect(screen.getByRole('group', { name: 'Mode' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Wait' }))
+    expect(onChange).toHaveBeenCalledWith('wait')
+  })
+})
+
+describe('InversionChoice', () => {
+  it('offers root position and each inversion the chord has, at most three', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(<InversionChoice notes={3} value={0} onChange={onChange} />)
+    const group = screen.getByRole('group', { name: 'Inversion' })
+    expect(
+      within(group)
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual(['Root', '1st', '2nd'])
+    await user.click(screen.getByRole('button', { name: '2nd' }))
+    expect(onChange).toHaveBeenCalledWith(2)
+    rerender(<InversionChoice notes={7} value={0} onChange={onChange} />)
+    expect(within(group).getAllByRole('button')).toHaveLength(4)
+  })
+})
+
+describe('ChordSizeField', () => {
+  it('chooses how much of each chord plays: triads, 7ths or 9ths', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<ChordSizeField value="triads" onChange={onChange} />)
+    expect(screen.getByRole('group', { name: 'Chord size' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: '9ths' }))
+    expect(onChange).toHaveBeenCalledWith('ninths')
+  })
+})
+
+describe('ToneChip', () => {
+  it('shows a tone’s degree in its colour, then its note', () => {
+    render(
+      <>
+        <ToneChip face="3rd" degree="♭3" note="E♭" />
+        <ToneChip face="tonic" degree="1" note="C" />
+      </>,
+    )
+    expect(screen.getByText('♭3')).toHaveClass('bg-role-3rd')
+    expect(screen.getByText('♭3').parentElement).toHaveTextContent('♭3E♭')
+    expect(screen.getByText('1')).toHaveClass('bg-key-tonic')
+  })
+})
+
+describe('TypedField', () => {
+  it('reports what is typed, and says under it why it cannot be read', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <TypedField label="From" value="C" error={null} onChange={onChange} />,
+    )
+    const field = screen.getByRole('textbox', { name: 'From' })
+    expect(field).toHaveAttribute('aria-invalid', 'false')
+    await user.type(field, 'm')
+    expect(onChange).toHaveBeenCalledWith('Cm')
+    rerender(
+      <TypedField label="From" value="Qx" error="This chord can’t be read." onChange={onChange} />,
+    )
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(field).toHaveAccessibleDescription('This chord can’t be read.')
+  })
+})
+
+describe('SwitchRow', () => {
+  it('is a switch named by its label, its note under the label', async () => {
+    const user = userEvent.setup()
+    const onCheckedChange = vi.fn()
+    render(
+      <SwitchRow
+        label="Recording"
+        detail="Only in G major"
+        checked={false}
+        disabled
+        onCheckedChange={onCheckedChange}
+      />,
+    )
+    const toggle = screen.getByRole('switch', { name: /^Recording/ })
+    expect(screen.getByText('Only in G major')).toBeInTheDocument()
+    expect(toggle).toHaveAttribute('aria-disabled', 'true')
+    await user.click(toggle)
+    expect(onCheckedChange).not.toHaveBeenCalled()
+  })
+})
+
 describe('marks', () => {
   it('names a rating in words', () => {
     render(<RatingMark rating="gap" />)
@@ -156,6 +259,41 @@ describe('Dropdown', () => {
     expect(await screen.findByRole('group', { name: '7th chords' })).toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: 'Minor 7th m7' }))
     expect(onChange).toHaveBeenCalledWith(1)
+  })
+})
+
+describe('NoteDropdown', () => {
+  it('offers the twelve notes as its rule spells them, and reports the one chosen', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(
+      <NoteDropdown
+        label="Root"
+        value={noteParam(note('C'))}
+        spell={(pc) => rootSpelling(pc, false)}
+        onChange={onChange}
+      />,
+    )
+    await user.click(screen.getByRole('combobox', { name: 'Root' }))
+    expect(await screen.findAllByRole('option')).toHaveLength(12)
+    await user.click(screen.getByRole('option', { name: 'D♭' }))
+    expect(onChange).toHaveBeenCalledWith(noteParam(note('D', -1)))
+  })
+
+  it('names each note by its own rule where it gives one', async () => {
+    const user = userEvent.setup()
+    render(
+      <NoteDropdown
+        label="Key"
+        value={noteParam(note('C'))}
+        spell={(pc) => rootSpelling(pc, false)}
+        name={(tonic) => `${noteName(tonic)} major`}
+        onChange={() => {}}
+      />,
+    )
+    expect(screen.getByRole('combobox', { name: 'Key' })).toHaveTextContent('C major')
+    await user.click(screen.getByRole('combobox', { name: 'Key' }))
+    expect(await screen.findByRole('option', { name: 'E♭ major' })).toBeInTheDocument()
   })
 })
 

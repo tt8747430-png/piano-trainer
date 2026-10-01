@@ -1,24 +1,16 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { chordShown } from '@/features/play-example'
 import { ChromaticWalkLink } from '@/features/practice'
-import { cn } from '@/shared/lib'
-import { lastInversion, noteName, qualitySpellings, type Midi } from '@/shared/lib/music'
+import { type Midi, noteName, qualitySpellings, writtenSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { PlayLabel, ROLE_BG, Segmented, type KeyMark } from '@/shared/ui'
+import { InversionChoice, PlayLabel, Segmented, ToneChip } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { changedView, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordSheet } from './ChordSheet'
-
-/** Root position and the first three inversions, with the name each has on screen. */
-const INVERSIONS = [
-  { value: 0, name: 'root' },
-  { value: 1, name: 'first' },
-  { value: 2, name: 'second' },
-  { value: 3, name: 'third' },
-] as const
 
 /** The keys a chord's placement strikes, the left hand's first. */
 const keysOf = (view: ChordView): Midi[] => {
@@ -42,12 +34,8 @@ export function ChordExplorer({
   const playback = usePlayback<'chord' | 'arpeggio'>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
   const { chord: built, placed } = useMemo(() => viewChord(chord), [chord])
-  const keys = [...placed.lh, ...placed.rh]
-  const marks = new Map<Midi, KeyMark>(
-    keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
-  )
-  const rootName = noteName(built.root)
-  const symbol = rootName + built.suffix
+  const shown = chordShown([...placed.lh, ...placed.rh])
+  const symbol = writtenSymbol(built)
   // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
@@ -66,12 +54,9 @@ export function ChordExplorer({
         </hgroup>
         <ChordBuilder chord={chord} onChange={change} />
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Segmented
-            label={t('learn:inversionLabel')}
+          <InversionChoice
+            notes={built.tones.length}
             value={chord.inversion}
-            options={INVERSIONS.filter(
-              ({ value }) => value <= lastInversion(built.tones.length),
-            ).map(({ value, name }) => ({ value, label: t(`music:inversion.${name}`) }))}
             onChange={(inversion) => change({ inversion })}
           />
           <Segmented
@@ -85,28 +70,13 @@ export function ChordExplorer({
           />
         </div>
       </div>
-      <ExplorerKeyboard
-        keys={keys.map((key) => key.midi)}
-        marks={marks}
-        className="lg:order-first lg:col-span-2"
-      />
+      <ExplorerKeyboard shown={shown} className="lg:order-first lg:col-span-2" />
       <div className="flex flex-col gap-4">
         <ChordSheet placed={placed} />
         <ol className="flex flex-wrap gap-2">
           {built.tones.map((tone) => (
-            <li
-              key={tone.degree}
-              className="flex items-center gap-2 rounded-xl border border-border bg-card py-1 pr-3 pl-1"
-            >
-              <span
-                className={cn(
-                  'grid size-7 place-items-center rounded-lg text-sm font-bold text-on-role',
-                  ROLE_BG[tone.role],
-                )}
-              >
-                {tone.degree}
-              </span>
-              <span className="font-semibold">{noteName(tone.note)}</span>
+            <li key={tone.degree}>
+              <ToneChip face={tone.role} degree={tone.degree} note={noteName(tone.note)} />
             </li>
           ))}
         </ol>
@@ -115,7 +85,7 @@ export function ChordExplorer({
             size="pill"
             className="flex-1"
             onClick={() =>
-              playback.toggle('chord', chordSounds(keysOf(chord), { arpeggio: false }))
+              playback.toggle('chord', () => chordSounds(keysOf(chord), { arpeggio: false }))
             }
           >
             <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
@@ -125,7 +95,7 @@ export function ChordExplorer({
             variant="soft"
             className="flex-1"
             onClick={() =>
-              playback.toggle('arpeggio', chordSounds(keysOf(chord), { arpeggio: true }))
+              playback.toggle('arpeggio', () => chordSounds(keysOf(chord), { arpeggio: true }))
             }
           >
             <PlayLabel playing={playback.playing === 'arpeggio'}>{t('learn:arpeggio')}</PlayLabel>
@@ -135,7 +105,7 @@ export function ChordExplorer({
           <span className="text-muted-foreground">{t('learn:written')}</span>
           <span className="font-display text-xl font-semibold">
             {(built.quality ? qualitySpellings(built.quality) : [built.suffix])
-              .map((suffix) => rootName + suffix)
+              .map((suffix) => writtenSymbol({ root: built.root, suffix }))
               .join(' · ')}
           </span>
         </p>

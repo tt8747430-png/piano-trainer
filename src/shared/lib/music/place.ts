@@ -1,3 +1,4 @@
+import { writtenSymbol } from './chord'
 import type { Key } from './key'
 import { MIDDLE_C } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
@@ -8,7 +9,6 @@ import {
   borrowedChords,
   romanFigure,
   scaleChords,
-  scaleChordSymbol,
   type ChordNotes,
   type ScaleChord,
 } from './scale-chord'
@@ -33,6 +33,10 @@ const MOST_INVERSIONS = 3
  * three (the 3rd, 5th or 7th in the bass).
  */
 export const lastInversion = (notes: number): number => Math.min(notes - 1, MOST_INVERSIONS)
+
+/** An inversion a chord of `notes` notes is shown in: the one asked, else its last. */
+export const fitInversion = (inversion: number, notes: number): number =>
+  Math.min(inversion, lastInversion(notes))
 
 /**
  * A chord's tones from its root's key, its lowest `inversion` tones an octave up (a chord's tones
@@ -107,7 +111,7 @@ export function placeStack(
     chord,
     key,
     tones,
-    symbol: scaleChordSymbol(chord, bass),
+    symbol: writtenSymbol(chord, bass),
     numeral: chord.roman + romanFigure(notes, inversion),
   }
 }

@@ -1,11 +1,11 @@
 import { createContext, use } from 'react'
-import type { FigureChoice } from '../model/setup-params'
+import type { AccompanimentChoice } from '@/entities/pattern'
 
 /** The sheet's lists that open as its pages. */
 export type SetupPage = 'pattern' | 'rh' | 'lh'
 
 interface SetupContextValue {
-  readonly figures: FigureChoice
+  readonly figures: AccompanimentChoice
   openPage(page: SetupPage): void
 }
 

@@ -1,9 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { ScaleChordGrid } from '@/features/play-example'
 import { useLocale } from '@/shared/i18n'
 import type { Midi, PlacedScaleChord, ScaleKind, SpelledNote } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
-import { ChordButton } from '@/shared/ui'
 import { heardName } from '../model/scale-keys'
 
 /**
@@ -27,7 +25,6 @@ export function KeyChords({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const playback = usePlayback<number>()
   const holds = new Set(holding.map((placed) => placed.chord.degree))
   const said =
     note === null
@@ -42,26 +39,7 @@ export function KeyChords({
           })
   return (
     <section aria-label={t('chordsIn')} className="flex flex-col gap-3">
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 lg:grid-cols-4">
-        {chords.map((placed) => (
-          <ChordButton
-            key={placed.chord.degree}
-            symbol={placed.symbol}
-            numeral={placed.numeral}
-            playing={playback.playing === placed.chord.degree}
-            holds={holds.has(placed.chord.degree)}
-            onClick={() =>
-              playback.toggle(
-                placed.chord.degree,
-                chordSounds(
-                  placed.tones.map((tone) => tone.midi),
-                  { arpeggio: false },
-                ),
-              )
-            }
-          />
-        ))}
-      </div>
+      <ScaleChordGrid chords={chords} holds={holds} />
       {listening ? (
         <p aria-live="polite" className="min-h-7 text-lg">
           {said}

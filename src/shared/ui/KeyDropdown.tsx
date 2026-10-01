@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { CIRCLE_OF_FIFTHS, keyParam, noteName, type Key, type KeyParam } from '@/shared/lib/music'
+import { useKeyName } from '@/shared/i18n'
+import { CIRCLE_OF_FIFTHS, keyParam, type Key, type KeyParam } from '@/shared/lib/music'
 import { Dropdown } from './Dropdown'
 
 /** One of the 24 keys behind a pop-up button: the major keys, then the minor, round the circle of fifths. */
@@ -11,10 +12,8 @@ export function KeyDropdown({
   onChange: (key: KeyParam) => void
 }) {
   const { t } = useTranslation('music')
-  const option = (key: Key) => ({
-    value: keyParam(key),
-    label: t(key.minor ? 'key.minor' : 'key.major', { tonic: noteName(key.tonic) }),
-  })
+  const keyName = useKeyName()
+  const option = (key: Key) => ({ value: keyParam(key), label: keyName(key) })
   return (
     <Dropdown
       label={t('key.label')}

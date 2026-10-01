@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import { KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
-import { Segmented } from '@/shared/ui'
-import { Switch } from '@/shared/ui/primitives/switch'
+import { Segmented, SwitchRow } from '@/shared/ui'
 
 /** One choice: its name as a row's text (the group around it has the heading), its control under it. */
 function Field({ label, children }: { label: string; children: ReactNode }) {
@@ -54,24 +53,18 @@ export function KeyboardSettingsFields() {
         />
       </Field>
       <div>
-        <label className="flex min-h-14 items-center justify-between gap-4 border-b border-border">
-          {t('keyboardSettings.map')}
-          <Switch checked={keyboard.map} onCheckedChange={(map) => setKeyboard(store, { map })} />
-        </label>
-        <label className="flex min-h-14 items-center justify-between gap-4">
-          <span className="flex flex-col">
-            {t('keyboardSettings.typing')}
-            {keyboard.typing ? (
-              <span className="text-sm text-muted-foreground">
-                {t('keyboardSettings.typingHint')}
-              </span>
-            ) : null}
-          </span>
-          <Switch
-            checked={keyboard.typing}
-            onCheckedChange={(typing) => setKeyboard(store, { typing })}
-          />
-        </label>
+        <SwitchRow
+          label={t('keyboardSettings.map')}
+          checked={keyboard.map}
+          onCheckedChange={(map) => setKeyboard(store, { map })}
+        />
+        <SwitchRow
+          label={t('keyboardSettings.typing')}
+          detail={keyboard.typing ? t('keyboardSettings.typingHint') : undefined}
+          checked={keyboard.typing}
+          onCheckedChange={(typing) => setKeyboard(store, { typing })}
+          className="border-b-0"
+        />
       </div>
     </div>
   )

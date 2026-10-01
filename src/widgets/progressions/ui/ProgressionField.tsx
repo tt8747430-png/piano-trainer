@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   keyParam,
@@ -8,7 +8,7 @@ import {
   type Key,
   type Numeral,
 } from '@/shared/lib/music'
-import { InputGroup, InputGroupInput } from '@/shared/ui/primitives/input-group'
+import { TypedField } from '@/shared/ui'
 import { readProgression } from '../model/typed-progression'
 
 const written = (numerals: readonly Numeral[]): string => numerals.map(numeralText).join(' ')
@@ -29,7 +29,6 @@ export function ProgressionField({
   onChange: (progression: string) => void
 }) {
   const { t } = useTranslation('learn')
-  const errorId = useId()
   const [typed, setTyped] = useState<{ text: string; for: string } | null>(null)
   // Chords mean their numerals in one key: in another, the field writes the numerals the row plays.
   const meaning = (numerals: string) => `${numerals} ${keyParam(musicKey)}`
@@ -37,33 +36,17 @@ export function ProgressionField({
     typed && typed.for === meaning(progression)
       ? typed.text
       : written(parseNumerals(progression) ?? [])
-  const readable = readProgression(text, musicKey) !== null
   return (
-    <label className="flex flex-col gap-1">
-      <span className="text-sm text-muted-foreground">{t('progressions.field')}</span>
-      <InputGroup className="h-12 rounded-2xl bg-card">
-        <InputGroupInput
-          value={text}
-          aria-invalid={!readable}
-          aria-describedby={readable ? undefined : errorId}
-          autoCapitalize="off"
-          autoComplete="off"
-          spellCheck={false}
-          onChange={(event) => {
-            const next = event.target.value
-            const numerals = readProgression(next, musicKey)
-            const param = numerals ? numeralsParam(numerals) : progression
-            setTyped({ text: next, for: meaning(param) })
-            if (numerals && param !== progression) onChange(param)
-          }}
-          className="font-display text-xl font-semibold md:text-xl"
-        />
-      </InputGroup>
-      {readable ? null : (
-        <span id={errorId} className="text-sm text-destructive">
-          {t('progressions.unread')}
-        </span>
-      )}
-    </label>
+    <TypedField
+      label={t('progressions.field')}
+      value={text}
+      error={readProgression(text, musicKey) === null ? t('progressions.unread') : null}
+      onChange={(next) => {
+        const numerals = readProgression(next, musicKey)
+        const param = numerals ? numeralsParam(numerals) : progression
+        setTyped({ text: next, for: meaning(param) })
+        if (numerals && param !== progression) onChange(param)
+      }}
+    />
   )
 }

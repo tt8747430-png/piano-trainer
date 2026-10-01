@@ -1,7 +1,7 @@
 import { useMemo, useReducer, useState } from 'react'
 import type { Lesson } from '@/entities/lesson'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { NO_KEYS, type ShownKeys } from '@/features/play-example'
+
 import { localText, useLocale } from '@/shared/i18n'
 import { usePlay } from '@/shared/lib/services'
 import {
@@ -14,6 +14,7 @@ import {
 } from '../model/lesson-quiz'
 import { LessonBlock } from './LessonBlock'
 import { QuizBlock } from './QuizBlock'
+import { NO_KEYS, type ShownKeys } from '@/shared/ui'
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
@@ -36,8 +37,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   return (
     <div className="flex flex-col gap-8">
       <ExplorerKeyboard
-        keys={keys.keys}
-        marks={keys.marks}
+        shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}
         outlined={keys.outlined}

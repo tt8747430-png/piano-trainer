@@ -5,7 +5,7 @@ import {
   PIANO_LAYOUT,
   scrollByOctave,
   scrollToCentre,
-  useMediaQuery,
+  useScrollMotion,
   viewFrame,
   type ScrollMetrics,
 } from '@/shared/lib'
@@ -45,7 +45,7 @@ export function KeyboardMap({
   dots: ReadonlySet<Midi>
 }) {
   const { t } = useTranslation('common')
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const motion = useScrollMotion()
   const dragging = useRef<number | null>(null)
   const metrics = useScrollView(scroller)
   const frame = viewFrame(metrics)
@@ -53,7 +53,7 @@ export function KeyboardMap({
   const room = Math.max(0, metrics.scrollWidth - metrics.clientWidth)
 
   const moveView = (left: number, smooth: boolean) =>
-    scroller.current?.scrollTo({ left, behavior: smooth && !reduceMotion ? 'smooth' : 'instant' })
+    scroller.current?.scrollTo({ left, behavior: smooth ? motion : 'instant' })
 
   const moveToPoint = (event: PointerEvent<HTMLDivElement>) => {
     const box = event.currentTarget.getBoundingClientRect()

@@ -84,7 +84,7 @@ export function useQuiz(config: QuizConfig, options: { random?: () => number } =
       })
     },
     hear() {
-      playback.toggle('question', questionSounds(machine.current.question))
+      playback.toggle('question', () => questionSounds(machine.current.question))
     },
     hearing: playback.playing === 'question',
   }

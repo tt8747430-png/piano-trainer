@@ -35,4 +35,12 @@ describe('chromaticPatch', () => {
     expect(chromaticPatch({ pattern: CHROMATIC.pattern })).toEqual({ pattern: undefined })
     expect(chromaticPatch({ rh: 't1' })).toEqual({ rh: 't1' })
   })
+
+  it('writes the chords, root and direction chosen', () => {
+    expect(chromaticPatch({ chords: ['d7', 'm7'] })).toEqual({ chords: 'm7.d7' })
+    expect(chromaticPatch({ root: noteParam(note('A')), direction: 'down' })).toEqual({
+      root: 'A',
+      direction: 'down',
+    })
+  })
 })

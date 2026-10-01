@@ -145,6 +145,10 @@ export const scaleKindsIn = (family: ScaleFamily): readonly ScaleKind[] =>
 /** A minor 3rd above the root: the three minors, Dorian, Phrygian, Locrian, the minor pentatonic and blues. */
 export const isMinorScale = (kind: ScaleKind): boolean => SCALES[kind].minor
 
+/** The key a scale is the scale of: major, minor for the three minors; null for a mode or a blues scale. */
+export const keyMode = (kind: ScaleKind): 'major' | 'minor' | null =>
+  scaleFamily(kind) === 'keys' ? (isMinorScale(kind) ? 'minor' : 'major') : null
+
 const plainInterval = (interval: ScaleInterval): IntervalName =>
   typeof interval === 'string' ? interval : interval.blue[0]
 

@@ -5,9 +5,6 @@ import {
   ALTERATION_SIGN,
   alterationsOf,
   builtRootSpelling,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
   SEVENTH_DEGREE,
   seventhsOf,
   sizesOf,
@@ -17,7 +14,7 @@ import {
   type BuiltSize,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
-import { Dropdown, MultiDropdown, Segmented } from '@/shared/ui'
+import { Dropdown, MultiDropdown, NamedSegmented, NoteDropdown } from '@/shared/ui'
 import type { ChordView } from '../model/chord-view'
 
 /** Each size's name on screen. */
@@ -48,13 +45,10 @@ export function ChordBuilder({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap gap-2">
-        <Dropdown
+        <NoteDropdown
           label={t('learn:root')}
           value={chord.root}
-          options={PITCH_CLASSES.map((pc) => {
-            const spelled = builtRootSpelling(pc, parts)
-            return { value: noteParam(spelled), label: noteName(spelled) }
-          })}
+          spell={(pc) => builtRootSpelling(pc, parts)}
           onChange={(root) => onChange({ root })}
         />
         <Dropdown
@@ -68,7 +62,7 @@ export function ChordBuilder({
           onChange={(triad) => onChange({ triad })}
         />
         <Dropdown
-          label={t('learn:chordSize.label')}
+          label={t('music:chordSize.label')}
           value={parts.size}
           options={sizesOf(parts.triad).map((size) => ({
             value: size,
@@ -78,21 +72,16 @@ export function ChordBuilder({
         />
       </div>
       {parts.size > 5 && sevenths.length > 1 ? (
-        <div className="flex items-center gap-3">
-          <span aria-hidden className="shrink-0 text-muted-foreground">
-            {t('learn:builder.seventh')}
-          </span>
-          <Segmented
-            label={t('learn:builder.seventh')}
-            value={parts.seventh}
-            options={sevenths.map((seventh) => ({
-              value: seventh,
-              label: SEVENTH_DEGREE[seventh],
-              title: t(`learn:builder.sevenths.${seventh}`),
-            }))}
-            onChange={(seventh) => onChange({ seventh })}
-          />
-        </div>
+        <NamedSegmented
+          label={t('learn:builder.seventh')}
+          value={parts.seventh}
+          options={sevenths.map((seventh) => ({
+            value: seventh,
+            label: SEVENTH_DEGREE[seventh],
+            title: t(`learn:builder.sevenths.${seventh}`),
+          }))}
+          onChange={(seventh) => onChange({ seventh })}
+        />
       ) : null}
       {parts.size === 5 && added.length > 1 ? (
         <Dropdown

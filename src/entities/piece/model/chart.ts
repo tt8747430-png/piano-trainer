@@ -1,8 +1,9 @@
+import type { PatternFit } from '@/entities/pattern'
 import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
+import { isCompound, type ChordSize } from '@/shared/lib/music'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import type { ChordSize } from '@/shared/lib/music'
 import type { Piece } from './types'
 
 /** A piece's chart; a progression at the chosen chord size when it lets the learner choose. */
@@ -24,3 +25,11 @@ export const chordsOf = (chart: Chart): ChartChord[] =>
 /** Whether the chart names its own playing techniques, so the Player can follow them. */
 export const hasMethodCodes = (piece: Piece): boolean =>
   piece.kind !== 'progression' && chordsOf(parseChart(piece)).some((chord) => chord.method)
+
+/** What a piece has for a pattern: its chart's methods where it names them, its tune where it has one, a key, and its meter. */
+export const pieceFit = (piece: Piece): PatternFit => ({
+  methodCodes: hasMethodCodes(piece),
+  melody: melodyOf(piece) !== undefined,
+  key: true,
+  simpleTime: !isCompound(piece.meter),
+})

@@ -47,6 +47,15 @@ describe('Learn → Keys', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? []).slice(0, 3)).toEqual([60, 64, 67])
   })
 
+  it('presses no chord of a new size while the old one still sounds', async () => {
+    const user = userEvent.setup()
+    await renderApp('/learn/keys')
+    await user.click(await screen.findByRole('button', { name: /^C\s*I$/ }))
+    expect(screen.getByRole('button', { name: /^C\s*I$/ })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: '7ths' }))
+    expect(screen.getByRole('button', { name: /^CMaj7/ })).toHaveAttribute('aria-pressed', 'false')
+  })
+
   it('keeps the key’s signature written while its chords change, engraving it once', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/keys?key=G')

@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { stepById, useStepTitle, type StepId } from '@/entities/path'
-import { LearnedToggle } from '@/features/mark-learned'
+import { LearnedButton } from '@/features/mark-learned'
 import { ButtonLink } from '@/shared/ui'
 
 /** The path step an explorer was opened from: its check and its learned toggle. */
@@ -17,7 +17,7 @@ export function StepPanel({ step }: { step: StepId }) {
       <ButtonLink render={<Link to="/check" search={{ of: step }} />}>
         {t('checkYourself')}
       </ButtonLink>
-      <LearnedToggle step={step} title={title} variant="text" />
+      <LearnedButton step={step} />
     </section>
   )
 }

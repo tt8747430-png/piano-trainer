@@ -8,8 +8,11 @@ import { useServices } from './use-services'
 export interface Playback<Id extends string | number> {
   /** The id last played, while it plays: until its last note ends, it is stopped, or another sound cuts it off. */
   readonly playing: Id | null
-  /** A Play button's tap: stops `id`'s sound while it plays; else cuts off what sounds and plays `sounds` as `id`. */
-  toggle(id: Id, sounds: readonly Sound[]): void
+  /**
+   * A Play button's tap: stops `id`'s sound while it plays; else cuts off what sounds and plays as
+   * `id` the sounds `sounds` works out, only then: a Stop works nothing out.
+   */
+  toggle(id: Id, sounds: () => readonly Sound[]): void
 }
 
 /**
@@ -26,12 +29,12 @@ export function usePlayback<Id extends string | number>(): Playback<Id> {
     started !== null && audio.isPlaying(started.play) ? started.id : null,
   )
   const toggle = useCallback(
-    (id: Id, sounds: readonly Sound[]) => {
+    (id: Id, sounds: () => readonly Sound[]) => {
       if (playing === id) {
         audio.stop()
         setStarted(null)
       } else {
-        setStarted({ id, play: play(sounds) })
+        setStarted({ id, play: play(sounds()) })
       }
     },
     [audio, play, playing],

@@ -1,33 +1,25 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { chordsRange } from '@/features/play-example'
 import { PractiseChords } from '@/features/practice'
 import {
   CHORD_NOTES,
-  lastInversion,
+  fitInversion,
   noteFromParam,
   placeScale,
   placeScaleChords,
+  STACK_SIZES,
   walkChords,
-  type ChordNotes,
 } from '@/shared/lib/music'
-import { Dropdown, Segmented } from '@/shared/ui'
-import { chordKeyPlays, chordMarks, chordsHolding, chordsRange } from '../model/scale-keys'
+import { Dropdown, InversionChoice, NamedSegmented } from '@/shared/ui'
+import { chordKeyPlays, chordMarks, chordsHolding } from '../model/scale-keys'
 import type { ScaleView } from '../model/scale-view'
 import { useHeardNote } from '../model/use-heard-note'
 import { KeyChords } from './KeyChords'
 import { ScaleLayout } from './ScaleLayout'
 import { WalkCard } from './WalkCard'
 
-/** Each size's name on screen, by how many notes it stacks. */
-const SIZE_NAMES = {
-  3: 'triads',
-  4: 'sevenths',
-  5: 'ninths',
-  6: 'elevenths',
-  7: 'thirteenths',
-} as const satisfies Record<ChordNotes, string>
-const INVERSION_NAMES = ['root', 'first', 'second', 'third'] as const
 const KEYS_PLAY = ['chords', 'notes'] as const
 
 /**
@@ -66,44 +58,37 @@ export function ChordsView({
         <>
           {choice}
           <Dropdown
-            label={t('learn:chordSize.label')}
+            label={t('music:chordSize.label')}
             value={notes}
             options={CHORD_NOTES.map((value) => ({
               value,
-              label: t(`learn:chordSize.${SIZE_NAMES[value]}`),
+              label: t(`music:chordSize.${STACK_SIZES[value]}`),
             }))}
             onChange={(next) =>
-              onChange({ chords: next, inversion: Math.min(inversion, lastInversion(next)) })
+              onChange({ chords: next, inversion: fitInversion(inversion, next) })
             }
           />
-          <Segmented
-            label={t('learn:inversionLabel')}
+          <InversionChoice
+            notes={notes}
             value={inversion}
-            options={INVERSION_NAMES.slice(0, lastInversion(notes) + 1).map((name, value) => ({
-              value,
-              label: t(`music:inversion.${name}`),
-            }))}
             onChange={(next) => onChange({ inversion: next })}
           />
-          {/* Its own label on screen: beside Scale · Chords, a bare "Chords · Notes" would read as the same choice. */}
-          <div className="flex items-center gap-3">
-            <span aria-hidden className="shrink-0 text-muted-foreground">
-              {t('learn:keysPlay.label')}
-            </span>
-            <Segmented
-              label={t('learn:keysPlay.label')}
-              value={keysPlay}
-              options={KEYS_PLAY.map((value) => ({ value, label: t(`learn:keysPlay.${value}`) }))}
-              onChange={(next) => onChange({ keysPlay: next })}
-            />
-          </div>
+          {/* Beside Scale · Chords, a bare "Chords · Notes" would read as the same choice. */}
+          <NamedSegmented
+            label={t('learn:keysPlay.label')}
+            value={keysPlay}
+            options={KEYS_PLAY.map((value) => ({ value, label: t(`learn:keysPlay.${value}`) }))}
+            onChange={(next) => onChange({ keysPlay: next })}
+          />
         </>
       }
       keyboard={
         <ExplorerKeyboard
-          keys={placeScale(tonic, kind).map((key) => key.midi)}
+          shown={{
+            keys: placeScale(tonic, kind).map((key) => key.midi),
+            marks: chordMarks(chords),
+          }}
           range={chordsRange(walk)}
-          marks={chordMarks(chords)}
           keyPlays={keyPlays}
           outlined={new Set(holding.map((chord) => chord.key))}
           onKeyPress={listening ? hear : undefined}

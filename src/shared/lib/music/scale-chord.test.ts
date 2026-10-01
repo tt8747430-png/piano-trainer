@@ -1,16 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { qualitySuffix } from './chord'
+import { qualitySuffix, writtenSymbol } from './chord'
 import { noteName, note } from './note'
 import { pitchClass } from './pitch'
 import { SCALE_KINDS, scaleHasChords, scaleRootSpelling, spellScale } from './scale'
 import {
   borrowedChords,
   CHORD_NOTES,
+  CHORD_SIZES,
   romanFigure,
   scaleChordAt,
   scaleChordHolds,
   scaleChords,
-  scaleChordSymbol,
+  SIZE_NOTES,
+  STACK_SIZES,
 } from './scale-chord'
 import { chordSymbol } from './chord'
 
@@ -20,7 +22,7 @@ const symbols = (
   notes: 3 | 4 | 5 | 6 | 7 = 3,
 ) =>
   scaleChords(root, kind, notes)
-    .map((chord) => scaleChordSymbol(chord))
+    .map((chord) => writtenSymbol(chord))
     .join(' ')
 
 describe('scaleChords', () => {
@@ -119,11 +121,11 @@ describe('romanFigure', () => {
   })
 })
 
-describe('scaleChordSymbol', () => {
+describe('writtenSymbol', () => {
   it('writes an inversion over its bass', () => {
     const [tonic] = scaleChords(note('C'), 'major', 3)
     if (!tonic) throw new Error('C major has a tonic chord')
-    expect(scaleChordSymbol(tonic, note('E'))).toBe('C/E')
+    expect(writtenSymbol(tonic, note('E'))).toBe('C/E')
   })
 })
 
@@ -164,9 +166,9 @@ describe('borrowedChords', () => {
   it('borrows ♭III, iv, ♭VI and ♭VII into a major key from its parallel minor', () => {
     const chords = borrowedChords({ tonic: note('C'), minor: false }, 3)
     expect(written(chords)).toEqual(['♭III', 'iv', '♭VI', '♭VII'])
-    expect(chords.map((chord) => scaleChordSymbol(chord))).toEqual(['E♭', 'Fm', 'A♭', 'B♭'])
+    expect(chords.map((chord) => writtenSymbol(chord))).toEqual(['E♭', 'Fm', 'A♭', 'B♭'])
     expect(
-      borrowedChords({ tonic: note('C'), minor: false }, 4).map((c) => scaleChordSymbol(c)),
+      borrowedChords({ tonic: note('C'), minor: false }, 4).map((c) => writtenSymbol(c)),
     ).toEqual(['E♭Maj7', 'Fm7', 'A♭Maj7', 'B♭7'])
   })
 
@@ -174,6 +176,19 @@ describe('borrowedChords', () => {
     const chords = borrowedChords({ tonic: note('A'), minor: true }, 3)
     expect(written(chords)).toEqual(['I', '♭II', 'IV', 'V'])
     expect(chords.map((chord) => chord.from)).toEqual(['major', 'phrygian', 'melodic', 'harmonic'])
-    expect(chords.map((chord) => scaleChordSymbol(chord))).toEqual(['A', 'B♭', 'D', 'E'])
+    expect(chords.map((chord) => writtenSymbol(chord))).toEqual(['A', 'B♭', 'D', 'E'])
+  })
+})
+
+describe('STACK_SIZES', () => {
+  it('names a stack by its size, the progressions’ sizes among them', () => {
+    expect(CHORD_NOTES.map((notes) => STACK_SIZES[notes])).toEqual([
+      'triads',
+      'sevenths',
+      'ninths',
+      'elevenths',
+      'thirteenths',
+    ])
+    for (const size of CHORD_SIZES) expect(STACK_SIZES[SIZE_NOTES[size]]).toBe(size)
   })
 })

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { selectPractice, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setPracticeToggle } from '@/features/set-preference'
-import { Switch } from '@/shared/ui/primitives/switch'
+import { SwitchRow } from '@/shared/ui'
 
 /**
  * The recording switch: a piece's recording played along in Listen, saved for every piece with one.
@@ -12,18 +12,12 @@ export function RecordingSwitch({ ownKey }: { ownKey: string | null }) {
   const settings = useSettingsStoreApi()
   const { recording } = useSettings(selectPractice)
   return (
-    <label className="flex min-h-14 items-center justify-between gap-3 border-b border-border text-lg">
-      <span className="flex flex-col">
-        {t('toggles.recording')}
-        {ownKey ? (
-          <span className="text-sm text-muted-foreground">{t('ownKeyOnly', { key: ownKey })}</span>
-        ) : null}
-      </span>
-      <Switch
-        checked={recording && ownKey === null}
-        disabled={ownKey !== null}
-        onCheckedChange={(on) => setPracticeToggle(settings, 'recording', on)}
-      />
-    </label>
+    <SwitchRow
+      label={t('toggles.recording')}
+      detail={ownKey ? t('ownKeyOnly', { key: ownKey }) : undefined}
+      checked={recording && ownKey === null}
+      disabled={ownKey !== null}
+      onCheckedChange={(on) => setPracticeToggle(settings, 'recording', on)}
+    />
   )
 }

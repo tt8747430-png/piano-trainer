@@ -1,21 +1,14 @@
 import { useMemo } from 'react'
 import { arrangeWalk, WALK, type WalkChoice } from '@/features/practice'
-import type { Performance } from '@/shared/lib/arrangement'
-import { usePracticePlayer, type PracticePlayer } from '@/widgets/practice-player'
+import { usePracticePlayer } from '@/widgets/practice-player'
 import { walkChoice, walkPatch, type WalkChange, type WalkSearch } from './walk-search'
-
-export interface WalkPlayer {
-  readonly choice: WalkChoice
-  readonly performance: Performance
-  readonly player: PracticePlayer
-  changeSetup(change: WalkChange): void
-}
+import type { PlayerOf } from './player-of'
 
 /** Walk the chords as the Player plays it: the URL's scale and choices arranged, practised from the widget's hook. */
 export function useWalkPlayer(
   search: WalkSearch,
   setSearch: (patch: Partial<WalkSearch>) => void,
-): WalkPlayer {
+): PlayerOf<WalkChoice, WalkChange> {
   const { root, kind, pattern, rh, lh, chordSize } = search
   const choice = useMemo(
     () => walkChoice({ root, kind, pattern, rh, lh, chordSize }),

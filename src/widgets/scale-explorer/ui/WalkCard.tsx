@@ -22,7 +22,7 @@ export function WalkCard({
     { arpeggio: scale.arpeggio, tempo: scale.tempo },
   )
   return (
-    <section className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5">
+    <section className="flex flex-col gap-4 card p-5">
       <h3 className="text-2xl">{t('walk.title')}</h3>
       <Segmented
         label={t('walk.played')}

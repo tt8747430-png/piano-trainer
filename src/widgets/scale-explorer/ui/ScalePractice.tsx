@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { PRACTICE_RHYTHM_IDS, type NoteSound } from '@/shared/lib/schedule'
-import { Dropdown, Segmented } from '@/shared/ui'
+import { Dropdown, NamedSegmented } from '@/shared/ui'
 import type { ScaleView } from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
 import { TempoSlider } from './TempoSlider'
@@ -17,7 +17,7 @@ export function ScalePractice({
 }) {
   const { t } = useTranslation(['learn', 'common'])
   return (
-    <section className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5">
+    <section className="flex flex-col gap-4 card p-5">
       <h3 className="text-2xl">{t('learn:playScale')}</h3>
       <Dropdown
         label={t('learn:rhythmLabel')}
@@ -26,7 +26,7 @@ export function ScalePractice({
         onChange={(rhythm) => onChange({ rhythm })}
       />
       <TempoSlider tempo={scale.tempo} onChange={(tempo) => onChange({ tempo })} />
-      <Segmented
+      <NamedSegmented
         label={t('learn:handsLabel')}
         value={scale.hands}
         options={[

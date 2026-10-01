@@ -17,12 +17,9 @@ export const player = {
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
-  needsMelody: 'Needs a melody',
   ownKeyOnly: 'Only in {{key}}',
-  needsKey: 'Needs a key',
-  needsSimpleTime: 'Needs simple time',
-  chordSize: 'Chord size',
-  chordSizes: { triads: 'Triads', sevenths: '7ths', ninths: '9ths' },
+  /** Why a pattern or figure is closed to the music. */
+  needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },
   toggles: {
     fingerNumbers: 'Finger numbers',
     namedNotes: 'Named notes',

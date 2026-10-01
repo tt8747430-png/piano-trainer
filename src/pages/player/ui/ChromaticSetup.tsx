@@ -1,59 +1,33 @@
 import { useTranslation } from 'react-i18next'
-import {
-  CHROMATIC_DIRECTIONS,
-  chromaticRoot,
-  type ChromaticChoice,
-  type ChromaticChords,
-  type ChromaticDirection,
-} from '@/features/practice'
+import { CHROMATIC, CHROMATIC_DIRECTIONS, type ChromaticChoice } from '@/features/practice'
 import {
   CHORD_FAMILIES,
-  noteName,
   noteParam,
-  PITCH_CLASSES,
   qualitiesIn,
+  qualityRootSpelling,
   qualitySuffix,
-  type NoteParam,
 } from '@/shared/lib/music'
-import { Dropdown, MultiDropdown, Segmented } from '@/shared/ui'
-import { FigureRows, PlayerSetup, type FigureChange } from '@/widgets/player-setup'
+import { MultiDropdown, NoteDropdown, Segmented } from '@/shared/ui'
+import { FigureRows, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingFields } from '@/widgets/practice-player'
+import type { ChromaticChange } from '../model/chromatic-search'
 
 /** The chromatic walk's Setup: its chord qualities, root and direction, the pattern and figures, and how it plays. */
 export function ChromaticSetup({
-  open,
-  onOpenChange,
   choice,
   swing,
-  onChords,
-  onRoot,
-  onDirection,
   onChange,
   onSwing,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
   choice: ChromaticChoice
   swing: boolean
-  onChords: (chords: ChromaticChords) => void
-  onRoot: (root: NoteParam) => void
-  onDirection: (direction: ChromaticDirection) => void
-  onChange: (change: FigureChange) => void
+  onChange: (change: ChromaticChange) => void
   onSwing: (on: boolean) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   const [first] = choice.chords
   return (
-    <PlayerSetup
-      open={open}
-      onOpenChange={onOpenChange}
-      figures={choice}
-      methods={false}
-      melody={false}
-      keyed={false}
-      compound={false}
-      onFigures={onChange}
-    >
+    <PlayerSetup figures={choice} fit={CHROMATIC.fit} onFigures={onChange}>
       <MultiDropdown
         label={t('player:qualities')}
         value={choice.chords}
@@ -68,17 +42,14 @@ export function ChromaticSetup({
         }))}
         onChange={([checked, ...others]) => {
           // Unchecking the last one leaves it checked: the walk always has a chord.
-          if (checked) onChords([checked, ...others])
+          if (checked) onChange({ chords: [checked, ...others] })
         }}
       />
-      <Dropdown
+      <NoteDropdown
         label={t('player:root')}
         value={noteParam(choice.root)}
-        options={PITCH_CLASSES.map((pc) => {
-          const root = chromaticRoot(pc, first)
-          return { value: noteParam(root), label: noteName(root) }
-        })}
-        onChange={onRoot}
+        spell={(pc) => qualityRootSpelling(pc, first)}
+        onChange={(root) => onChange({ root })}
       />
       <Segmented
         label={t('player:direction')}
@@ -87,7 +58,7 @@ export function ChromaticSetup({
           value: direction,
           label: t(`player:directions.${direction}`),
         }))}
-        onChange={onDirection}
+        onChange={(direction) => onChange({ direction })}
       />
       <FigureRows />
       <PlayingFields swing={swing} onSwing={onSwing} />

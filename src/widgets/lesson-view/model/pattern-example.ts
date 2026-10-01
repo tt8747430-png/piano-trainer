@@ -1,8 +1,9 @@
 import type { PatternId } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
-import { unmarked, type ShownKeys } from '@/features/play-example'
+
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
+import { type ShownKeys, unmarked } from '@/shared/ui'
 
 /** What a pattern block plays, and the keys it shows while it does. */
 export interface PatternOpening {

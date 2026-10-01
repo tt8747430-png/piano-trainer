@@ -1,5 +1,5 @@
 import { useEffect, type RefObject } from 'react'
-import { useMediaQuery } from '@/shared/lib'
+import { useScrollMotion } from '@/shared/lib'
 import { followScroll } from '../model/follow'
 
 /**
@@ -11,13 +11,13 @@ export function useFollow(
   cursor: RefObject<HTMLElement | null>,
   x: number | null,
 ) {
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const motion = useScrollMotion()
   useEffect(() => {
     const view = scroller.current
     const box = cursor.current?.offsetParent
     if (!view || x === null || view.scrollWidth <= view.clientWidth) return
     const origin = box instanceof HTMLElement ? box.offsetLeft : 0
     const left = followScroll(origin + x, { left: view.scrollLeft, width: view.clientWidth })
-    if (left !== null) view.scrollTo({ left, behavior: reduceMotion ? 'auto' : 'smooth' })
-  }, [scroller, cursor, x, reduceMotion])
+    if (left !== null) view.scrollTo({ left, behavior: motion })
+  }, [scroller, cursor, x, motion])
 }

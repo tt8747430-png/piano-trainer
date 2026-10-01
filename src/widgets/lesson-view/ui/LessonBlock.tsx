@@ -4,11 +4,11 @@ import { pieceById } from '@/entities/piece'
 import {
   IntervalCard,
   NotesExample,
-  ProgressionChords,
-  ProgressionPlay,
-  ProgressionRow,
+  ChordRow,
+  progressionRow,
+  RowChords,
+  RowPlay,
   ScaleExample,
-  type ShownKeys,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyParam, note, noteParam } from '@/shared/lib/music'
@@ -16,13 +16,14 @@ import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
+import type { ShownKeys } from '@/shared/ui'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** One link on its card, as a lesson's rows are. */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {
   return (
-    <ul className="rounded-3xl border border-border bg-card px-2">
+    <ul className="card px-2">
       <li>
         <LessonLinkRow title={title} target={target} />
       </li>
@@ -89,10 +90,10 @@ export function LessonBlock({
       const { numerals, key, size } = readProgression(block)
       return (
         <div className="flex flex-col gap-3">
-          <ProgressionRow numerals={numerals} musicKey={key} size={size} onShow={onShow}>
-            <ProgressionChords />
-            <ProgressionPlay variant="soft" />
-          </ProgressionRow>
+          <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
+            <RowChords />
+            <RowPlay variant="soft" />
+          </ChordRow>
           <LinkCard
             title={t('example.inProgressions')}
             target={{ place: 'progressions', numerals: block.numerals, key, size }}

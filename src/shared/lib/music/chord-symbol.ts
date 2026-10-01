@@ -47,3 +47,13 @@ export function parseChordSymbol(symbol: string): Chord {
   }
   throw new ChordSymbolError(symbol)
 }
+
+/** A chord as a learner types it, spaces around it left out; null while it cannot be read (mid-word, a symbol the table lacks). */
+export function readChordSymbol(typed: string): Chord | null {
+  try {
+    return parseChordSymbol(typed.trim())
+  } catch (error) {
+    if (error instanceof ChordSymbolError) return null
+    throw error
+  }
+}

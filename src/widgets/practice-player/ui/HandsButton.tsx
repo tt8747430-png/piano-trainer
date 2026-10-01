@@ -32,7 +32,7 @@ export function HandsButton({
       >
         <HandsIcon hands={hands} />
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-64 gap-1 rounded-3xl p-2">
+      <PopoverContent align="end" className="w-64 gap-1 p-2">
         {CHOICES.map((choice) => (
           <ChoiceRow
             key={choice}

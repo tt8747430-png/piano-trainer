@@ -3,6 +3,7 @@ import { spellChord, type ChordQuality } from './chord'
 import { rangeOf } from './keyboard'
 import { note, type SpelledNote } from './note'
 import {
+  fitInversion,
   lastInversion,
   placeBorrowedChords,
   placeChord,
@@ -53,6 +54,14 @@ describe('lastInversion', () => {
     expect(lastInversion(3)).toBe(2)
     expect(lastInversion(4)).toBe(3)
     expect(CHORD_NOTES.map(lastInversion)).toEqual([2, 3, 3, 3, 3])
+  })
+})
+
+describe('fitInversion', () => {
+  it('keeps an inversion the chord has, else takes its last', () => {
+    expect(fitInversion(1, 3)).toBe(1)
+    expect(fitInversion(3, 3)).toBe(2)
+    expect(fitInversion(3, 4)).toBe(3)
   })
 })
 

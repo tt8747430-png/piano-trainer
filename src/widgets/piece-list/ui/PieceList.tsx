@@ -23,7 +23,7 @@ export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
               {group.heading}
             </h2>
           )}
-          <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card px-2">
+          <ul className="flex flex-col divide-y divide-hairline card px-2">
             {group.entries.map((entry) => (
               <EntryRow key={entry.id} entry={entry} />
             ))}

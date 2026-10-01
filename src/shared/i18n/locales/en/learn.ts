@@ -26,14 +26,6 @@ export const learn = {
   keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
   holds: '{{note}} is in {{chords}}',
   holdsNone: 'No chord of the scale holds {{note}}',
-  chordSize: {
-    label: 'Chord size',
-    triads: 'Triads',
-    sevenths: '7ths',
-    ninths: '9ths',
-    elevenths: '11ths',
-    thirteenths: '13ths',
-  },
   // The Chords reference builds a chord part by part.
   builder: {
     triad: 'Triad',
@@ -54,7 +46,6 @@ export const learn = {
   },
   walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
   root: 'Root',
-  inversionLabel: 'Inversion',
   handsLabel: 'Hands',
   play: 'Play',
   arpeggio: 'Arpeggio',
@@ -88,8 +79,6 @@ export const learn = {
   keys: {
     title: 'Keys',
     circle: 'Circle of fifths',
-    major: '{{tonic}} major',
-    minor: '{{tonic}} minor',
     random: 'A random key',
     signature: 'Signature',
     noSignature: 'No sharps or flats',

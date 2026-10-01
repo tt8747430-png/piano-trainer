@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { CHORD_SIZES, type ChordSize } from '@/shared/lib/music'
-import { Segmented } from '@/shared/ui'
+import { Segmented } from './Segmented'
 
 /** How much of each chord a progression plays: Triads · 7ths · 9ths. */
 export function ChordSizeField({
@@ -10,12 +10,12 @@ export function ChordSizeField({
   value: ChordSize
   onChange: (size: ChordSize) => void
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation('music')
   return (
     <Segmented
-      label={t('chordSize')}
+      label={t('chordSize.label')}
       value={value}
-      options={CHORD_SIZES.map((size) => ({ value: size, label: t(`chordSizes.${size}`) }))}
+      options={CHORD_SIZES.map((size) => ({ value: size, label: t(`chordSize.${size}`) }))}
       onChange={onChange}
     />
   )

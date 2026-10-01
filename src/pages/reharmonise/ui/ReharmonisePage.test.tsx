@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import type { Sound } from '@/shared/lib/schedule'
+import { stubScrolling } from '@/shared/test/layout'
 
 const chords = (group: string) =>
   within(screen.getByRole('region', { name: group }))
@@ -41,6 +42,21 @@ describe('Learn → Reharmonise', () => {
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
     expect(router.state.location.search).toEqual({ note: 'A' })
+  })
+
+  it('names a tapped note on the key tapped, the keys held still', async () => {
+    const user = userEvent.setup()
+    const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
+    await renderApp('/learn/reharmonise')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    // The hand has scrolled down to F♯2 (white key 14 of 52, 28px each).
+    const scroller = keyboard.closest('[data-slot="keys-scroller"]')
+    if (!scroller) throw new Error('the keys scroll')
+    scroller.scrollLeft = 350
+    const before = scrolls.length
+    await user.click(within(keyboard).getByRole('button', { name: 'F sharp 2' }))
+    expect(within(keyboard).getByRole('button', { name: 'F sharp 2' })).toHaveTextContent('G♭')
+    expect(scrolls).toHaveLength(before)
   })
 
   it('plays a chord under the melody note and shows it on the keys', async () => {

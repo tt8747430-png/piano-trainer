@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   useCallback,
   useLayoutEffect,
@@ -9,31 +8,13 @@ import {
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  cn,
-  PIANO_LAYOUT,
-  scrollByOctave,
-  spanOf,
-  useMediaQuery,
-  type KeySize,
-  type NamedKeys,
-  type Swipe,
-} from '@/shared/lib'
-import {
-  isBlackKey,
-  midi,
-  octaveOf,
-  PIANO,
-  pitchClass,
-  plainSpelling,
-  type KeyRange,
-  type Midi,
-} from '@/shared/lib/music'
+import { cn, PIANO_LAYOUT, spanOf, type KeySize, type NamedKeys, type Swipe } from '@/shared/lib'
+import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
-import { KeyboardMap } from './KeyboardMap'
+import { KeyRail } from './KeyRail'
 import { keyLook, type KeyStates } from './key-look'
-import { RailButton } from './RailButton'
+import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
@@ -49,9 +30,6 @@ const KEY_LENGTH = 4.2
 const MIN_KEYS_PX = 96
 /** …nor taller than this share of the screen's height. */
 const MAX_KEYS_DVH = 40
-
-/** The width of the stretch in view, in the scroller's container units: the rail's controls span it. */
-const IN_VIEW = '100cqw'
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
@@ -78,7 +56,6 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
 export function PianoKeyboard({
   range,
   inView,
-  selectable = false,
   keySize = 'fit',
   swipe = 'scroll',
   namedKeys = 'c',
@@ -87,7 +64,6 @@ export function PianoKeyboard({
   height = 'proportional',
   keyPlays,
   onKeyPress,
-  className,
   children,
   ...states
 }: KeyStates & {
@@ -95,8 +71,6 @@ export function PianoKeyboard({
   range: KeyRange
   /** Keys to keep in sight: it opens centred on them (else on its range) and scrolls to them when out of sight. */
   inView?: KeyRange | undefined
-  /** The keys are toggles (a quiz's keys to choose), and say whether they are chosen. */
-  selectable?: boolean
   keySize?: KeySize
   swipe?: Swipe
   /** Which keys carry their note's name: every C (the default), every key, or none. */
@@ -105,7 +79,7 @@ export function PianoKeyboard({
   map?: boolean
   /** The computer keyboard's letters on the keys it plays. */
   letters?: ReadonlyMap<Midi, string> | undefined
-  /** 'proportional': the keys a piano's length for their width; 'fill': the height it is given (the Player). */
+  /** 'proportional': the keys a piano's length for their width; 'fill': all its flex parent's height (the Player). */
   height?: 'proportional' | 'fill'
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
@@ -114,14 +88,13 @@ export function PianoKeyboard({
   keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
   /** Every key does something: a key that did nothing would be a dead end. */
   onKeyPress: (key: Midi) => void
-  className?: string
   /** The rail's trailing controls: `RailButton`s. */
   children?: ReactNode
 }) {
   const { t } = useTranslation('common')
   const scroller = useRef<HTMLDivElement>(null)
   const keys = useRef<HTMLDivElement>(null)
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const names = useKeyNames()
   const [tabStop, setTabStop] = useState<Midi>(range.from)
   const { from, to } = range
   const span = useMemo(() => spanOf(PIANO_LAYOUT.keys, { from, to }), [from, to])
@@ -147,31 +120,6 @@ export function PianoKeyboard({
   const scrolls = keySize !== 'piano'
   const white = WHITE_WIDTH[keySize](span.whites)
 
-  const step = (by: -1 | 1) => {
-    const element = scroller.current
-    if (!element || element.scrollWidth <= element.clientWidth) return
-    element.scrollTo({
-      left: scrollByOctave(element, PIANO_LAYOUT.whites, by),
-      behavior: reduceMotion ? 'instant' : 'smooth',
-    })
-  }
-
-  // Every key's name, once per language: a render names none, and a glissando renders per key.
-  const names = useMemo(
-    () =>
-      new Map(
-        PIANO_LAYOUT.keys.map(({ midi }) => {
-          const spelled = plainSpelling(pitchClass(midi), true)
-          const name = t(isBlackKey(midi) ? 'note.sharp' : 'note.natural', {
-            letter: spelled.letter,
-            octave: octaveOf(midi),
-          })
-          return [midi, name]
-        }),
-      ),
-    [t],
-  )
-
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const next = MOVES[event.key]?.(tabStop)
     if (next === undefined) return
@@ -186,35 +134,16 @@ export function PianoKeyboard({
       data-slot="keys-scroller"
       className={cn(
         '@container flex overflow-x-auto overscroll-x-contain rounded-t-sm scrollbar-none',
-        className,
+        height === 'fill' && 'min-h-0 flex-1',
       )}
     >
       <div
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        {/* The rail runs the piano's length: a swipe on it scrolls the keys, which hold still under a finger. */}
-        <div className="relative h-11 shrink-0">
-          {/* The rail itself, drawn along the strip's foot: the buttons' targets reach above it. */}
-          <span aria-hidden className="absolute inset-x-0 bottom-0 h-7 bg-key-rail" />
-          {/* Its controls stay in view wherever the keys are scrolled. */}
-          <div className="sticky left-0 flex h-full items-end" style={{ width: IN_VIEW }}>
-            {scrolls ? (
-              <RailButton
-                label={t('rail.octaveDown')}
-                icon={ChevronLeft}
-                onClick={() => step(-1)}
-              />
-            ) : null}
-            <div className="relative flex min-w-0 flex-1">
-              {map && scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
-            </div>
-            {scrolls ? (
-              <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
-            ) : null}
-            {children}
-          </div>
-        </div>
+        <KeyRail scroller={scroller} scrolls={scrolls} map={map} dots={dots}>
+          {children}
+        </KeyRail>
         <div
           ref={keys}
           role="group"
@@ -239,7 +168,7 @@ export function PianoKeyboard({
               geometry={key}
               name={names.get(key.midi) ?? ''}
               look={keyLook(key.midi, { ...states, down }, { namedKeys, letters })}
-              chosen={selectable ? (states.selected?.has(key.midi) ?? false) : undefined}
+              chosen={states.selected?.has(key.midi)}
               tabStop={key.midi === tabStop}
               onPointerPress={pointers.pointerDown}
               onClickPress={pointers.click}

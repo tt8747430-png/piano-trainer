@@ -1,16 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import {
-  NO_KEYS,
-  ProgressionChords,
-  ProgressionPlay,
-  ProgressionRow,
-  type ShownKeys,
-} from '@/features/play-example'
-import { keyFromParam, CHORD_SIZES, parseNumerals, type ChordSize } from '@/shared/lib/music'
-import { ButtonLink, KeyDropdown, Segmented } from '@/shared/ui'
+import { ChordRow, progressionRow, RowChords, RowPlay, useShownKeys } from '@/features/play-example'
+import { keyFromParam, parseNumerals } from '@/shared/lib/music'
+import { ButtonLink, ChordSizeField, KeyDropdown, NO_KEYS } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionLibrary } from './ProgressionLibrary'
@@ -27,31 +20,23 @@ export function ProgressionsTool({
   onChange: (change: Partial<ProgressionsView>) => void
 }) {
   const { t } = useTranslation('learn')
-  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
+  const [shown, setShown] = useShownKeys(`${view.key} ${view.p} ${view.size}`, NO_KEYS)
   const key = keyFromParam(view.key)
   const numerals = parseNumerals(view.p) ?? []
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={shown.keys} marks={shown.marks} />
+      <ExplorerKeyboard shown={shown} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
             <KeyDropdown value={view.key} onChange={(next) => onChange({ key: next })} />
-            <Segmented<ChordSize>
-              label={t('chordSize.label')}
-              value={view.size}
-              options={CHORD_SIZES.map((size) => ({
-                value: size,
-                label: t(`chordSize.${size}`),
-              }))}
-              onChange={(size) => onChange({ size })}
-            />
+            <ChordSizeField value={view.size} onChange={(size) => onChange({ size })} />
           </div>
           <ProgressionField progression={view.p} musicKey={key} onChange={(p) => onChange({ p })} />
-          <ProgressionRow numerals={numerals} musicKey={key} size={view.size} onShow={setShown}>
-            <ProgressionChords />
-            <ProgressionPlay variant="default" />
-          </ProgressionRow>
+          <ChordRow chords={progressionRow(numerals, key, view.size)} onShow={setShown}>
+            <RowChords />
+            <RowPlay variant="default" />
+          </ChordRow>
           <ButtonLink
             size="pill"
             variant="soft"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   keyFromParam,
-  keyName,
+  keySymbol,
   keyParam,
   keyPrefersSharps,
   keySignature,
@@ -35,14 +35,14 @@ describe('parseKey', () => {
   })
 })
 
-describe('keyName', () => {
+describe('keySymbol', () => {
   it.each([
     ['C', 'C'],
     ['F#', 'F#'],
     ['Bbm', 'B♭m'],
     ['G#m', 'G#m'],
   ])('%s is named %s', (text, name) => {
-    expect(keyName(key(text))).toBe(name)
+    expect(keySymbol(key(text))).toBe(name)
   })
 })
 

@@ -1,8 +1,7 @@
-import { isMethodCode, METHODS } from '@/entities/pattern'
+import { METHODS } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { beatsPerBar, timeSignature, timeSignatureText } from '@/shared/lib/music'
-import { chartSections } from '../model/chart-sections'
+import { chartBar, chartSections } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
 /**
@@ -24,22 +23,17 @@ export function ChordChart({
   const locale = useLocale()
 
   const barOf = (index: number) => {
-    const bar = performance.bars[index]
+    const bar = chartBar(performance, index)
     if (!bar) return null
-    const chords = bar.chords.map((i) => performance.chords[i]).filter((c) => c !== undefined)
-    const methods = [...new Set(chords.map((c) => c.method).filter((m) => m !== undefined))]
-      .filter(isMethodCode)
-      .map((code) => localText(METHODS[code].label, locale))
-    const notes =
-      bar.beats === beatsPerBar(performance.meter)
-        ? methods
-        : [...methods, timeSignatureText(timeSignature(bar.beats, performance.meter))]
     return (
       <BarButton
         key={index}
         number={index + 1}
-        symbols={chords.map((c) => c.symbol)}
-        notes={notes}
+        symbols={bar.symbols}
+        notes={[
+          ...bar.methods.map((code) => localText(METHODS[code].label, locale)),
+          ...(bar.signature ? [bar.signature] : []),
+        ]}
         pressed={playing === index}
         onClick={() => onBar(index)}
       />

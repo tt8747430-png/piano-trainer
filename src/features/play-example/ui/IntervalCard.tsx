@@ -10,10 +10,9 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { INTERVAL_WAYS, intervalSounds, type IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView, PlayLabel } from '@/shared/ui'
+import { LazyScoreView, PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { intervalExample, tonesText } from '../model/interval-example'
-import type { ShownKeys } from '../model/shown'
 
 /** A card's staff, a little smaller than a reference's own. */
 const CARD_STAFF = 0.8
@@ -42,10 +41,7 @@ export function IntervalCard({
     t('learn:intervals.tones', { n: tonesText(interval.semitones) }),
   ]
   return (
-    <article
-      aria-labelledby={titleId}
-      className="flex h-full flex-col gap-3 rounded-3xl border border-border bg-card p-4"
-    >
+    <article aria-labelledby={titleId} className="flex h-full flex-col gap-3 card p-4">
       <header className="flex items-baseline justify-between gap-3">
         <h3 id={titleId} className="text-xl">
           {t(`music:interval.${name}.name`)}
@@ -62,7 +58,7 @@ export function IntervalCard({
           <p>{t('learn:intervals.inChords', { degree: interval.degree })}</p>
         ) : null}
       </div>
-      <LazyScoreView score={score} scale={CARD_STAFF} fingers={false} staff="treble" />
+      <LazyScoreView score={score} scale={CARD_STAFF} staff="treble" />
       <div className="mt-auto flex gap-2">
         {INTERVAL_WAYS.map((way) => (
           <Button
@@ -71,7 +67,7 @@ export function IntervalCard({
             className="flex-1 px-2"
             onClick={() => {
               onShow(example.shown)
-              playback.toggle(way, intervalSounds(example.low, example.high, way))
+              playback.toggle(way, () => intervalSounds(example.low, example.high, way))
             }}
           >
             <PlayLabel playing={playback.playing === way}>{t(`learn:intervals.${way}`)}</PlayLabel>

@@ -9,7 +9,7 @@ import {
   spellScale,
 } from '@/shared/lib/music'
 import type { Question } from './quiz-machine'
-import { answerKeys, QUIZ_RANGE, quizKeyboardRange, targetKeys } from './quiz-keys'
+import { answerKeys, checkedKeys, QUIZ_RANGE, quizKeyboardRange, targetKeys } from './quiz-keys'
 
 const chordAsked = (letter: 'C' | 'B', quality: 'maj' | 'n13') => {
   const root = note(letter)
@@ -58,5 +58,22 @@ describe('quiz keys', () => {
     expect(marks.get(midi(67))?.tone).toBe('5th')
     expect([...outlined]).toEqual([64])
     expect([...wrong]).toEqual([63])
+  })
+})
+
+describe('checkedKeys', () => {
+  it('marks the keys of the answer’s notes as the answer does, the extra ones wrong, and rings the missing', () => {
+    const answer = {
+      keys: [midi(64), midi(67), midi(71)],
+      marks: new Map([
+        [midi(64), { tone: 'root', label: '1' }],
+        [midi(67), { tone: '3rd', label: '♭3' }],
+        [midi(71), { tone: '5th', label: '5' }],
+      ] as const),
+    }
+    const checked = checkedKeys([midi(52), midi(68)], answer)
+    expect(checked.marks.get(midi(52))).toEqual({ tone: 'root', label: '1' })
+    expect([...checked.wrong]).toEqual([68])
+    expect([...checked.outlined]).toEqual([67, 71])
   })
 })

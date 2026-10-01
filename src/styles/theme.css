@@ -195,6 +195,11 @@
   }
 }
 
+/* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
+@utility card {
+  @apply rounded-3xl border border-border bg-card;
+}
+
 /* Clear the notch and the home indicator: named utilities, not arbitrary values in markup. */
 @utility pt-safe {
   padding-top: max(--spacing(4), env(safe-area-inset-top));

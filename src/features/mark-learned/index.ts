@@ -1,1 +1,2 @@
-export { LearnedToggle } from './ui/LearnedToggle'
+export { LearnedButton } from './ui/LearnedButton'
+export { LearnedCheck } from './ui/LearnedCheck'

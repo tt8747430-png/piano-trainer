@@ -1,9 +1,9 @@
 import {
-  chordRootSpelling,
-  qualityIntervals,
-  spellChord,
   type Chord,
   type ChordQuality,
+  qualityIntervals,
+  qualityRootSpelling,
+  spellChord,
 } from './chord'
 import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval'
 import type { Key } from './key'
@@ -90,7 +90,7 @@ export function passingChords(from: Chord, to: Chord): PassingChords[] {
   const rise = pitchClass(pitchClassOf(to.root) - fromPc)
   const fall = pitchClass(fromPc - pitchClassOf(to.root))
   const walkingDominant = (pc: PitchClass): Chord => ({
-    root: chordRootSpelling(pc, qualityIntervals('d7')),
+    root: qualityRootSpelling(pc, 'd7'),
     quality: 'd7',
   })
   const walk = (span: number, step: 1 | -1): Chord[] | null =>

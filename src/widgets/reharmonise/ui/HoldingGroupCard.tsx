@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { noteName, type HoldingChord, type HoldingGroup } from '@/shared/lib/music'
+import { type HoldingChord, type HoldingGroup, noteName, writtenSymbol } from '@/shared/lib/music'
 import { ChordButton } from '@/shared/ui'
 
 /** One group of the chords that hold the melody: each chord, the note's degree in it, and whether the key has it. */
@@ -29,7 +29,7 @@ export function HoldingGroupCard({
             className="grid"
           >
             <ChordButton
-              symbol={noteName(holding.chord.root) + holding.chord.suffix}
+              symbol={writtenSymbol(holding.chord)}
               numeral={
                 t('reharmonise.as', { degree: holding.degree }) +
                 (holding.inKey ? ` · ${t('reharmonise.inKey')}` : '')

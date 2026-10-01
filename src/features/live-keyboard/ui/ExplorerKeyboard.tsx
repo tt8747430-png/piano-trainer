@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -5,16 +6,17 @@ import {
   type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { Pinned, type KeyMark } from '@/shared/ui'
+import { Pinned, type ShownKeys } from '@/shared/ui'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
  * An explorer's keyboard, pinned while the page scrolls: `range` fills its width (by default the
- * middle octaves grown to hold `keys`), and it keeps `keys` in view.
+ * middle octaves grown to hold the keys it opened on and the keys the app shows), and it keeps the
+ * keys the app shows in view. A key a hand chooses (`selected`) never moves it: the keys hold still
+ * under the finger (ADR 0009).
  */
 export function ExplorerKeyboard({
-  keys,
-  marks,
+  shown,
   range,
   keyPlays,
   outlined,
@@ -23,8 +25,8 @@ export function ExplorerKeyboard({
   onKeyPress,
   className,
 }: {
-  keys: readonly Midi[]
-  marks: ReadonlyMap<Midi, KeyMark>
+  /** The keys to hold in view, each marked as the page shows it. */
+  shown: ShownKeys
   range?: KeyRange | undefined
   /** What a key plays (Chords view: a degree's chord). */
   keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
@@ -39,14 +41,16 @@ export function ExplorerKeyboard({
   /** Where it sits in the explorer's layout (a laptop's full-width row). */
   className?: string
 }) {
+  const { keys, marks } = shown
+  const [opened] = useState(keys)
+  const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
   return (
     <Pinned className={className}>
       <LiveKeyboard
-        range={range ?? keyboardRange(keys, MIDDLE_OCTAVES)}
-        inView={rangeOf(keys)}
+        range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
+        inView={rangeOf(showing) ?? rangeOf(opened)}
         marks={marks}
         outlined={outlined}
-        selectable={selected !== undefined}
         selected={selected}
         wrong={wrong}
         keyPlays={keyPlays}

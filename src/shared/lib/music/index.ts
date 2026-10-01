@@ -49,7 +49,7 @@ export {
 } from './interval-facts'
 export {
   keyFromParam,
-  keyName,
+  keySymbol,
   keyParam,
   keySignature,
   parseKey,
@@ -67,6 +67,8 @@ export {
   chordFamily,
   chordRootSpelling,
   chordSymbol,
+  qualityRootSpelling,
+  writtenSymbol,
   qualitiesIn,
   qualityIntervals,
   qualitySpellings,
@@ -103,7 +105,7 @@ export {
   type Seventh,
   type Triad,
 } from './chord-parts'
-export { ChordSymbolError, parseChordSymbol } from './chord-symbol'
+export { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
 export { nameChords, type FoundChord } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
@@ -121,6 +123,7 @@ export {
   SCALE_FAMILIES,
   SCALE_KINDS,
   kindComingDown,
+  keyMode,
   keyScale,
   modesOfKey,
   relatedScale,
@@ -136,6 +139,7 @@ export {
   type ScaleKind,
 } from './scale'
 export {
+  fitInversion,
   lastInversion,
   placeBorrowedChords,
   placeChord,
@@ -159,6 +163,7 @@ export {
   CHORD_NOTES,
   CHORD_SIZES,
   SIZE_NOTES,
+  STACK_SIZES,
   sizeOfNotes,
   scaleChordAt,
   scaleChordHolds,

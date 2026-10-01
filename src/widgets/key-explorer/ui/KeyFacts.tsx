@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useScaleName } from '@/shared/i18n'
+import { useKeyName, useScaleName } from '@/shared/i18n'
 import {
   keyParam,
   keyScale,
@@ -18,6 +18,7 @@ import { ButtonLink, Fact } from '@/shared/ui'
 export function KeyFacts({ value }: { value: Key }) {
   const { t } = useTranslation('learn')
   const scaleName = useScaleName()
+  const keyName = useKeyName()
   const signature = signatureNotes(value)
   const relative = relativeKey(value)
   const notes = spellScale(value.tonic, keyScale(value))
@@ -40,7 +41,7 @@ export function KeyFacts({ value }: { value: Key }) {
             />
           }
         >
-          {t(relative.minor ? 'keys.minor' : 'keys.major', { tonic: noteName(relative.tonic) })}
+          {keyName(relative)}
         </ButtonLink>
       </Fact>
       <Fact term={t('keys.modes')}>

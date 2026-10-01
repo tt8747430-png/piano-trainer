@@ -10,6 +10,12 @@ describe('melodyAlone', () => {
     expect(shown.keys).toEqual([midi(64)])
     expect(shown.marks.get(midi(64))).toEqual({ tone: 'scale', label: 'E' })
   })
+
+  it('shows it on the key a hand chose it on', () => {
+    const shown = melodyAlone(note('F', 1), midi(42))
+    expect(shown.keys).toEqual([midi(42)])
+    expect(shown.marks.get(midi(42))).toEqual({ tone: 'scale', label: 'F#' })
+  })
 })
 
 describe('underMelody', () => {

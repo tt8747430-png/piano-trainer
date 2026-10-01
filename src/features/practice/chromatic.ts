@@ -2,18 +2,14 @@ import { accompanimentOptions } from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import {
+  type ChordQuality,
   note,
   pitchClass,
   pitchClassOf,
-  type ChordQuality,
+  qualityRootSpelling,
   type SpelledNote,
 } from '@/shared/lib/music'
-import {
-  chromaticRoot,
-  inTableOrder,
-  type ChromaticChoice,
-  type ChromaticDirection,
-} from './chromatic-choice'
+import { inTableOrder, type ChromaticChoice, type ChromaticDirection } from './chromatic-choice'
 
 /** Semitones from the root: up to its octave, down to the octave below, or up and back, the octave once. */
 const STEPS: Readonly<Record<ChromaticDirection, readonly number[]>> = {
@@ -36,7 +32,7 @@ export function chromaticChart(
   const qualities = inTableOrder(chords)
   const bars = STEPS[direction].flatMap((step) =>
     qualities.map((quality) =>
-      wholeBar({ root: chromaticRoot(pitchClass(from + step), quality), quality }),
+      wholeBar({ root: qualityRootSpelling(pitchClass(from + step), quality), quality }),
     ),
   )
   return { key: C_MAJOR, meter: '4/4', sections: [{ lines: fourToALine(bars) }] }

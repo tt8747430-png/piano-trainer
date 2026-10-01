@@ -19,12 +19,9 @@ export const player: LocaleResources['player'] = {
   rh: 'Правая рука',
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
-  needsMelody: 'Нужна мелодия',
   ownKeyOnly: 'Только в тональности {{key}}',
-  needsKey: 'Нужна тональность',
-  needsSimpleTime: 'Нужен простой размер',
-  chordSize: 'Аккорды',
-  chordSizes: { triads: 'Трезвучия', sevenths: 'Септаккорды', ninths: 'Нонаккорды' },
+  /** Why a pattern or figure is closed to the music. */
+  needs: { melody: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },
   toggles: {
     fingerNumbers: 'Аппликатура',
     namedNotes: 'Ноты с названиями',

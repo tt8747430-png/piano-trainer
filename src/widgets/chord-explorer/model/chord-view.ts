@@ -1,7 +1,7 @@
 import {
   buildChord,
+  fitInversion,
   fitParts,
-  lastInversion,
   noteFromParam,
   placeChord,
   type BuiltChord,
@@ -38,6 +38,6 @@ export function changedView(view: ChordView, change: Partial<ChordView>): ChordV
   return {
     ...next,
     ...partsParams(parts),
-    inversion: Math.min(next.inversion, lastInversion(notes)),
+    inversion: fitInversion(next.inversion, notes),
   }
 }

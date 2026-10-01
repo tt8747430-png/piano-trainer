@@ -2,15 +2,12 @@ import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
 import {
   noteFromParam,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
   SCALE_FAMILIES,
   scaleHasChords,
   scaleKindsIn,
   scaleRootSpelling,
 } from '@/shared/lib/music'
-import { Dropdown, Segmented } from '@/shared/ui'
+import { Dropdown, NoteDropdown, Segmented } from '@/shared/ui'
 import type { ScaleView } from '../model/scale-view'
 
 const SHOW = ['scale', 'chords'] as const
@@ -29,13 +26,10 @@ export function ScaleChoice({
     <>
       <h2 className="text-5xl">{scaleName(noteFromParam(scale.root), scale.kind)}</h2>
       <div className="flex flex-wrap gap-2">
-        <Dropdown
+        <NoteDropdown
           label={t('learn:root')}
           value={scale.root}
-          options={PITCH_CLASSES.map((pc) => {
-            const spelled = scaleRootSpelling(pc, scale.kind)
-            return { value: noteParam(spelled), label: noteName(spelled) }
-          })}
+          spell={(pc) => scaleRootSpelling(pc, scale.kind)}
           onChange={(root) => onChange({ root })}
         />
         <Dropdown

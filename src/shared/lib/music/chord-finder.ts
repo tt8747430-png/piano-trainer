@@ -1,3 +1,4 @@
+import { writtenSymbol } from './chord'
 import {
   buildChord,
   builtRootSpelling,
@@ -5,7 +6,7 @@ import {
   type BuiltChord,
   type ChordParts,
 } from './chord-parts'
-import { note, noteName, type SpelledNote } from './note'
+import { note, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
 
 /** A chord the notes played make: its parts, its bass when not its root, and whether its 5th is left out. */
@@ -66,7 +67,7 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
           chord,
           parts: shape.parts,
           ...(bass ? { bass } : {}),
-          symbol: noteName(chord.root) + chord.suffix + (bass ? `/${noteName(bass)}` : ''),
+          symbol: writtenSymbol(chord, bass),
           no5th,
           ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS ? { inversion: bassAt } : {}),
         },

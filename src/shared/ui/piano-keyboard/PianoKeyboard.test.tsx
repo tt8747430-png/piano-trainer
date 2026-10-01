@@ -113,12 +113,17 @@ describe('PianoKeyboard', () => {
     expect(c).toHaveTextContent('1')
   })
 
-  it('makes keys toggles when they are selectable, and fills the selected ones yellow', () => {
-    renderKeyboard({ selectable: true, selected: new Set([C4]) })
+  it('makes keys toggles when it holds a selection, and fills the selected ones yellow', () => {
+    renderKeyboard({ selected: new Set([C4]) })
     const c = screen.getByRole('button', { name: 'C4' })
     expect(c).toHaveAttribute('aria-pressed', 'true')
     expect(c).toHaveClass('bg-primary')
     expect(screen.getByRole('button', { name: 'D4' })).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it('keeps its keys plain buttons without a selection', () => {
+    renderKeyboard()
+    expect(screen.getByRole('button', { name: 'C4' })).not.toHaveAttribute('aria-pressed')
   })
 
   it('puts a key down: a plain one turns the down colour, a marked one its full colour', () => {

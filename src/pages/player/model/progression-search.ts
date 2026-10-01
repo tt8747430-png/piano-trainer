@@ -1,3 +1,4 @@
+import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
 import { PROGRESSION, type ProgressionChoice } from '@/features/practice'
 import { keyFromParam, parseNumerals, type KeyParam } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
@@ -11,26 +12,28 @@ export type ProgressionSearch = PracticeView & {
   readonly key: KeyParam
 } & Omit<SetupParams, 'key'>
 
-/** What a progression's Setup changes: the pattern and figures, and the chord size. */
-export type ProgressionChange = FigureChange & Pick<SetupChange, 'chordSize'>
+/** What a progression's Setup changes: its key, the pattern and figures, and the chord size. */
+export type ProgressionChange = FigureChange &
+  Pick<SetupChange, 'chordSize'> & { readonly key?: KeyParam }
 
-/** The URL read: what it leaves out is the Player's own; its chart names no methods, so From the chart is its own pattern. */
+/** The URL read: what it leaves out is the Player's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function progressionChoice(
   search: Pick<ProgressionSearch, 'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'chordSize'>,
 ): ProgressionChoice {
   return {
     numerals: parseNumerals(search.p) ?? [],
     key: keyFromParam(search.key),
-    pattern:
-      search.pattern === undefined || search.pattern === 'chart'
-        ? PROGRESSION.pattern
-        : search.pattern,
-    rh: search.rh ?? null,
-    lh: search.lh ?? null,
+    pattern: playablePattern(search.pattern, PROGRESSION.pattern, PROGRESSION.fit),
+    rh: playableFigure(search.rh, RIGHT_FIGURES, PROGRESSION.fit),
+    lh: playableFigure(search.lh, LEFT_FIGURES, PROGRESSION.fit),
     chordSize: search.chordSize ?? PROGRESSION.chordSize,
   }
 }
 
 /** A Setup change as the URL writes it: its own pattern or chord size left out. */
-export const progressionPatch = (change: ProgressionChange): Partial<ProgressionSearch> =>
-  ownLeftOut(change, PROGRESSION)
+export function progressionPatch({
+  key,
+  ...change
+}: ProgressionChange): Partial<ProgressionSearch> {
+  return { ...ownLeftOut(change, PROGRESSION), ...(key ? { key } : {}) }
+}

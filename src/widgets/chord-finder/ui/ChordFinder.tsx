@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useHeldKeys } from '@/features/connect-midi'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { keyListParam, readKeyList, partsParams } from '@/shared/lib'
+import { keyListParam, partsParams, readKeyList, toggled } from '@/shared/lib'
 import { noteParam, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -31,17 +31,11 @@ export function ChordFinder({
   const keys = held.size > 0 ? [...held].sort((a, b) => a - b) : chosen
   const finding = findChord(keys)
   const best = finding.kind === 'chord' ? finding.best : undefined
-  const toggle = (key: Midi) =>
-    onChange({
-      keys: keyListParam(
-        chosen.includes(key) ? chosen.filter((each) => each !== key) : [...chosen, key],
-      ),
-    })
+  const toggle = (key: Midi) => onChange({ keys: keyListParam(toggled(chosen, key)) })
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard
-        keys={keys}
-        marks={findingMarks(finding, keys)}
+        shown={{ keys, marks: findingMarks(finding, keys) }}
         selected={new Set(chosen)}
         onKeyPress={toggle}
       />
@@ -50,7 +44,7 @@ export function ChordFinder({
         <Button
           size="pill"
           disabled={keys.length === 0}
-          onClick={() => playback.toggle('chord', chordSounds(keys, { arpeggio: false }))}
+          onClick={() => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))}
         >
           <PlayLabel playing={playback.playing === 'chord'}>{t('play')}</PlayLabel>
         </Button>

@@ -1,6 +1,7 @@
 import { choiceGroups, type Choices, type OptionValue } from './option'
 import { OptionItems } from './OptionItems'
-import { Select, SelectContent, SelectTrigger, SelectValue } from './primitives/select'
+import { DropdownTrigger } from './DropdownTrigger'
+import { Select, SelectContent } from './primitives/select'
 
 /**
  * Several choices of many behind a pop-up button: the button shows its label and the chosen, the
@@ -30,21 +31,16 @@ export function MultiDropdown<V extends OptionValue>({
       value={[...value]}
       onValueChange={(next: V[]) => onChange(next)}
     >
-      <SelectTrigger aria-label={label} className={className}>
-        <span aria-hidden className="text-muted-foreground">
-          {label}
-        </span>
-        <SelectValue className="block min-w-0 flex-1 truncate text-left font-semibold">
-          {(chosen: V[]) =>
-            chosen.length === 0
-              ? none
-              : options
-                  .filter((option) => chosen.includes(option.value))
-                  .map((option) => option.label)
-                  .join(' ')
-          }
-        </SelectValue>
-      </SelectTrigger>
+      <DropdownTrigger label={label} className={className}>
+        {(chosen: V[]) =>
+          chosen.length === 0
+            ? none
+            : options
+                .filter((option) => chosen.includes(option.value))
+                .map((option) => option.label)
+                .join(' ')
+        }
+      </DropdownTrigger>
       <SelectContent alignItemWithTrigger={false}>
         <OptionItems groups={groups} />
       </SelectContent>

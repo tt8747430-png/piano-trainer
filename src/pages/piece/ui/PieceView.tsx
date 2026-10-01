@@ -3,11 +3,10 @@ import { Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/path'
-import { entryTitles, usePieceHeadings, type Piece } from '@/entities/piece'
+import { usePieceHeadings, type Piece } from '@/entities/piece'
 import { LiveKeyboard } from '@/features/live-keyboard'
-import { LearnedToggle } from '@/features/mark-learned'
+import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
-import { useLocale } from '@/shared/i18n'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ButtonLink, Pinned } from '@/shared/ui'
@@ -22,12 +21,10 @@ import { PieceFacts } from './PieceFacts'
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
   const playback = usePlayback<number>()
-  const locale = useLocale()
   const performance = useMemo(() => arrangePiece(piece, ownChoice(piece)), [piece])
   const headings = usePieceHeadings(piece)
   const toggleBar = (bar: number) =>
-    playback.toggle(
-      bar,
+    playback.toggle(bar, () =>
       barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
     )
 
@@ -44,11 +41,7 @@ export function PieceView({ piece }: { piece: Piece }) {
             <Play data-icon="inline-start" />
             {t('practise')}
           </ButtonLink>
-          <LearnedToggle
-            step={pieceStepId(piece.id)}
-            title={entryTitles(piece, locale).primary}
-            variant="text"
-          />
+          <LearnedButton step={pieceStepId(piece.id)} />
         </div>
         <PieceSkills piece={piece} performance={performance} />
       </div>

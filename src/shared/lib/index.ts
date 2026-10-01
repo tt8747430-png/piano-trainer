@@ -46,4 +46,6 @@ export {
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
 export { useMediaQuery } from './use-media-query'
+export { toggled } from './toggled'
+export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'

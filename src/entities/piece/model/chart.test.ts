@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasMethodCodes, melodyOf } from './chart'
+import { chartOf, hasMethodCodes, melodyOf, pieceFit } from './chart'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
   const chord = chartOf(...args).sections[0]?.lines[0]?.[0]?.chords[0]
@@ -40,5 +40,21 @@ describe('hasMethodCodes', () => {
     expect(hasMethodCodes(testSong(['C:t1 F']))).toBe(true)
     expect(hasMethodCodes(testSong(['C F']))).toBe(false)
     expect(hasMethodCodes(testProgression('I:maj:4'))).toBe(false)
+  })
+})
+
+describe('pieceFit', () => {
+  it('gives a pattern the piece’s methods, tune, key and meter', () => {
+    expect(pieceFit(testSong(['C:t1 F'], { melody: 'C4/4' }))).toEqual({
+      methodCodes: true,
+      melody: true,
+      key: true,
+      simpleTime: true,
+    })
+    expect(pieceFit(testSong(['C'], { meter: '6/8' }))).toMatchObject({
+      methodCodes: false,
+      melody: false,
+      simpleTime: false,
+    })
   })
 })

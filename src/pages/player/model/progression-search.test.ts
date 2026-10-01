@@ -21,11 +21,23 @@ describe('progressionChoice', () => {
   it('reads From the chart as its own pattern: its chart names no methods', () => {
     expect(progressionChoice({ ...search, pattern: 'chart' }).pattern).toBe(PROGRESSION.pattern)
   })
+
+  it('reads a pattern or figure that plays the tune as its own: a progression has no tune', () => {
+    expect(progressionChoice({ ...search, pattern: 'r6', rh: 'mel' })).toMatchObject({
+      pattern: PROGRESSION.pattern,
+      rh: null,
+    })
+  })
 })
 
 describe('progressionPatch', () => {
   it('writes a choice equal to its own as absent', () => {
     expect(progressionPatch({ pattern: PROGRESSION.pattern })).toEqual({ pattern: undefined })
     expect(progressionPatch({ chordSize: 'sevenths' })).toEqual({ chordSize: 'sevenths' })
+  })
+
+  it('writes the key chosen', () => {
+    const key = keyParam({ tonic: note('E'), minor: true })
+    expect(progressionPatch({ key })).toEqual({ key })
   })
 })

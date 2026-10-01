@@ -1,7 +1,6 @@
 import { noteName, type Midi } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
-import type { KeyMark } from '@/shared/ui'
-import type { ShownKeys } from './shown'
+import type { KeyMark, ShownKeys } from '@/shared/ui'
 
 /** The keys a line of notes plays, each once, marked with its note's name as written. */
 export function notesShown(line: TimedMusic): ShownKeys {

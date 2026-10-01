@@ -1,4 +1,4 @@
-import { pitchClassOf, type Key } from '@/shared/lib/music'
+import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
 import { COLLECTIONS } from '../content'
 import { isPiece, pieceKey, type Entry, type Piece } from './types'
 
@@ -13,6 +13,14 @@ export function pieceById(id: string): Piece | undefined {
   const entry = entryById(id)
   return entry && isPiece(entry) ? entry : undefined
 }
+
+/** A progression's own chord size where the learner may change it (the Player's Setup); else null. */
+export const choosableChordSize = (piece: Piece): ChordSize | null =>
+  piece.kind === 'progression' && piece.chordSize.choosable ? piece.chordSize.default : null
+
+/** Whether `tonic` is the piece's own key's, however spelled: its recording plays along only there. */
+export const isOwnKey = (piece: Piece, tonic: SpelledNote): boolean =>
+  pitchClassOf(tonic) === pitchClassOf(pieceKey(piece).tonic)
 
 /** The songs, listings and studies written in a key, in catalog order (a progression is practised in any key). */
 export function entriesInKey(key: Key): Entry[] {

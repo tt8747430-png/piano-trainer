@@ -2,7 +2,16 @@
 export const music = {
   // The major triad's label where a chord's suffix names it: its own suffix is empty.
   major: 'M',
-  inversion: { root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  // How big a chord is: its stack of notes, triads to 13ths.
+  chordSize: {
+    label: 'Chord size',
+    triads: 'Triads',
+    sevenths: '7ths',
+    ninths: '9ths',
+    elevenths: '11ths',
+    thirteenths: '13ths',
+  },
   family: {
     tri: 'Triads',
     six: '6th & add',

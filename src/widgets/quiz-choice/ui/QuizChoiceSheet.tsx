@@ -8,19 +8,12 @@ import {
   useSettingsStoreApi,
   type QuizChoice,
 } from '@/entities/settings'
-import type { QuizMode } from '@/features/quiz'
+import { chosenSkills, type QuizMode } from '@/features/quiz'
 import { setQuizFamilies, setQuizScales } from '@/features/set-preference'
+import { toggled } from '@/shared/lib'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Sheet, SheetClose, SheetContent, SheetTrigger, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Switch } from '@/shared/ui/primitives/switch'
-
-const toggled = <T,>(list: readonly T[], item: T, on: boolean): T[] =>
-  on ? [...list, item] : list.filter((x) => x !== item)
-
-/** What a mode asks from: chord families for building or naming chords, scales for Build scale. */
-const asksFrom = (mode: QuizMode, choice: QuizChoice): readonly unknown[] =>
-  mode === 'build-scale' ? choice.scales : choice.families
 
 /** Which chord families and scales the open-ended quiz asks: switches, then Apply. */
 export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
@@ -39,15 +32,6 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
     setQuizScales(store, draft.scales)
     setOpen(false)
   }
-  const row = (label: string, checked: boolean, onChange: (on: boolean) => void) => (
-    <label
-      key={label}
-      className="flex min-h-13 items-center justify-between gap-4 border-b border-border text-lg"
-    >
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  )
 
   return (
     <Sheet open={open} onOpenChange={openWith}>
@@ -58,7 +42,7 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
       <SheetContent
         title={t('quiz:choice.open')}
         footer={
-          <Button size="pill" onClick={apply} disabled={asksFrom(mode, draft).length === 0}>
+          <Button size="pill" onClick={apply} disabled={chosenSkills(mode, draft).length === 0}>
             {t('quiz:choice.apply')}
           </Button>
         }
@@ -78,19 +62,29 @@ export function QuizChoiceSheet({ mode }: { mode: QuizMode }) {
         <h3 className="pt-2 text-sm font-semibold text-muted-foreground">
           {t('quiz:choice.families')}
         </h3>
-        {CHORD_FAMILIES.map((family) =>
-          row(t(`music:family.${family}`), draft.families.includes(family), (on) =>
-            setDraft((d) => ({ ...d, families: toggled(d.families, family, on) })),
-          ),
-        )}
+        {CHORD_FAMILIES.map((family) => (
+          <SwitchRow
+            key={family}
+            label={t(`music:family.${family}`)}
+            checked={draft.families.includes(family)}
+            onCheckedChange={(on) =>
+              setDraft((d) => ({ ...d, families: toggled(d.families, family, on) }))
+            }
+          />
+        ))}
         <h3 className="pt-4 text-sm font-semibold text-muted-foreground">
           {t('quiz:choice.scales')}
         </h3>
-        {SCALE_KINDS.map((kind) =>
-          row(t(`music:scaleKind.${kind}`), draft.scales.includes(kind), (on) =>
-            setDraft((d) => ({ ...d, scales: toggled(d.scales, kind, on) })),
-          ),
-        )}
+        {SCALE_KINDS.map((kind) => (
+          <SwitchRow
+            key={kind}
+            label={t(`music:scaleKind.${kind}`)}
+            checked={draft.scales.includes(kind)}
+            onCheckedChange={(on) =>
+              setDraft((d) => ({ ...d, scales: toggled(d.scales, kind, on) }))
+            }
+          />
+        ))}
         <SheetClose className="sr-only">{t('common:close')}</SheetClose>
       </SheetContent>
     </Sheet>

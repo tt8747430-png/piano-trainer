@@ -13,7 +13,7 @@ import {
   isMethodCode,
   isPatternId,
   isRightFigureId,
-  needsMelody,
+  patternNeed,
   patternsIn,
 } from '../index'
 
@@ -39,7 +39,8 @@ describe('the pattern catalog', () => {
   })
 
   it('falls back to r4 where a melody is needed and missing', () => {
-    expect(PATTERN_IDS.filter(needsMelody)).toEqual(['r5', 'r6', 'r7'])
+    const tuneless = { methodCodes: true, melody: false, key: true, simpleTime: true }
+    expect(PATTERN_IDS.filter((id) => patternNeed(id, tuneless))).toEqual(['r5', 'r6', 'r7'])
     for (const id of ['r5', 'r6', 'r7'] as const) {
       const { pattern } = PATTERNS[id]
       expect('withoutMelody' in pattern && pattern.withoutMelody).toBe(PATTERNS.r4.pattern)

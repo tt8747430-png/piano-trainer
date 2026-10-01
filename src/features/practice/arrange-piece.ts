@@ -1,10 +1,10 @@
-import { accompanimentOptions, METHOD_PATTERNS, type PatternId } from '@/entities/pattern'
+import { accompanimentOptions, METHOD_PATTERNS, type PatternChoice } from '@/entities/pattern'
 import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
 
 /** The chart's own methods when it names them, else the piece's pattern. */
-export const defaultPattern = (piece: Piece): PatternId | 'chart' =>
+export const defaultPattern = (piece: Piece): PatternChoice =>
   hasMethodCodes(piece) ? 'chart' : piece.pattern
 
 /** The piece as written: its key, its default pattern and chord size, no figures swapped, no doubled melody. */

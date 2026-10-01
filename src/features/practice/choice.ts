@@ -1,13 +1,9 @@
-import type { LeftFigureId, PatternId, RightFigureId } from '@/entities/pattern'
+import type { AccompanimentChoice } from '@/entities/pattern'
 import type { SpelledNote, ChordSize } from '@/shared/lib/music'
 
 /** What the learner chose to practise a piece with: the Player's URL, read. */
-export interface PracticeChoice {
+export interface PracticeChoice extends AccompanimentChoice {
   readonly tonic: SpelledNote
-  /** A pattern for every chord, or the chart's own method codes. */
-  readonly pattern: PatternId | 'chart'
-  readonly rh: RightFigureId | null
-  readonly lh: LeftFigureId | null
   /** Null plays the piece's own chord size. */
   readonly chordSize: ChordSize | null
   /** The melody switch: the tune an octave up too. */

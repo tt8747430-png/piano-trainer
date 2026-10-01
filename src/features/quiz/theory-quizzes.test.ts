@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_QUIZ_CHOICE } from '@/entities/settings'
 import { chordSkill, qualitiesIn, scaleSkill } from '@/shared/lib/music'
-import { theoryQuizConfig } from './theory-quizzes'
+import { chosenSkills, theoryQuizConfig } from './theory-quizzes'
 
 describe('theoryQuizConfig', () => {
   it('builds or names the chosen families’ chords', () => {
@@ -28,5 +28,14 @@ describe('theoryQuizConfig', () => {
       skills: ['scale:blues', 'chord:m7'],
       ordered: true,
     })
+  })
+})
+
+describe('chosenSkills', () => {
+  it('asks a chord mode the chosen families’ chords, Build scale the chosen scales', () => {
+    const choice = { families: ['tri' as const], scales: ['major' as const] }
+    expect(chosenSkills('name-chord', choice)).toEqual(qualitiesIn('tri').map(chordSkill))
+    expect(chosenSkills('build-scale', choice)).toEqual([scaleSkill('major')])
+    expect(chosenSkills('build-scale', { ...choice, scales: [] })).toEqual([])
   })
 })

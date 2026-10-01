@@ -10,9 +10,17 @@ const NEAR = '200px'
 /**
  * A score engraved as the Player's is, its engraver (VexFlow) loaded only when a staff is first on
  * screen, so a page that shows one keeps it out of its own chunk, and a lesson engraves only the
- * staves it reaches: until then, the staff's space.
+ * staves it reaches: until then, the staff's space. A staff outside the Player is at its own size
+ * with no fingering unless it says so.
  */
-export function LazyScoreView(props: ComponentProps<typeof ScoreView>) {
+export function LazyScoreView({
+  scale = 1,
+  fingers = false,
+  ...props
+}: Omit<ComponentProps<typeof ScoreView>, 'scale' | 'fingers'> & {
+  scale?: number
+  fingers?: boolean
+}) {
   const place = useRef<HTMLDivElement>(null)
   const [shown, setShown] = useState(false)
   useEffect(() => {
@@ -27,11 +35,11 @@ export function LazyScoreView(props: ComponentProps<typeof ScoreView>) {
     observer.observe(element)
     return () => observer.disconnect()
   }, [shown])
-  const space = <div ref={place} style={{ height: staffHeight(props.staff) * props.scale }} />
+  const space = <div ref={place} style={{ height: staffHeight(props.staff) * scale }} />
   if (!shown) return space
   return (
     <Suspense fallback={space}>
-      <ScoreView {...props} />
+      <ScoreView {...props} scale={scale} fingers={fingers} />
     </Suspense>
   )
 }

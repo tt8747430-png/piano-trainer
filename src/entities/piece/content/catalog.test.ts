@@ -1,6 +1,6 @@
 import { statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS, splitsBeat } from '@/entities/pattern'
+import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS, patternNeed } from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { PRECACHE_FILE_LIMIT } from '@/shared/config'
@@ -8,7 +8,6 @@ import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
   CHORD_SIZES,
   chordSymbol,
-  isCompound,
   noteName,
   pitchClass,
   tonicSpelling,
@@ -23,6 +22,7 @@ import {
   isPiece,
   melodyOf,
   pieceById,
+  pieceFit,
   pieceKey,
   type Piece,
   isSongCollectionId,
@@ -216,10 +216,9 @@ describe('the catalog', () => {
     }
   })
 
-  it('gives every piece in 6/8 or 12/8 a pattern that plays on the beat', () => {
-    for (const piece of PIECES) {
-      if (isCompound(piece.meter)) expect(splitsBeat(piece.pattern), piece.id).toBe(false)
-    }
+  it('gives every piece a pattern it can play: on the beat in 6/8 or 12/8, a tune where it plays one', () => {
+    for (const piece of PIECES)
+      expect(patternNeed(piece.pattern, pieceFit(piece)), piece.id).toBeNull()
   })
 
   it('keeps every recording small enough to be precached, so it plays offline (ADR 0016)', () => {

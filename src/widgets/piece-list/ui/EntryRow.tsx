@@ -4,7 +4,7 @@ import { levelOf, pieceStepId } from '@/entities/path'
 import { entryTitles, PieceLink, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { keyName } from '@/shared/lib/music'
+import { keySymbol } from '@/shared/lib/music'
 import { LevelMark } from '@/shared/ui'
 
 /** A piece or listing in a list, linking to its page on its shelf: its number, titles, key and meter or "no chart yet", level and learned mark. */
@@ -32,7 +32,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
           <span className="block text-sm text-muted-foreground">
             {entry.kind === 'listing'
               ? t('noChart')
-              : `${keyName(pieceKey(entry))} · ${entry.meter}`}
+              : `${keySymbol(pieceKey(entry))} · ${entry.meter}`}
           </span>
         </span>
         {level ? <LevelMark level={level} /> : null}

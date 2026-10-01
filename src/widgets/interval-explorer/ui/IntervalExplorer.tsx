@@ -1,18 +1,14 @@
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { IntervalCard, intervalRoot, type ShownKeys } from '@/features/play-example'
+import { IntervalCard, intervalRoot, useShownKeys } from '@/features/play-example'
 import {
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   noteFromParam,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
   rootSpelling,
-  type NoteParam,
 } from '@/shared/lib/music'
-import { Dropdown } from '@/shared/ui'
+import { NoteDropdown } from '@/shared/ui'
 import type { IntervalView } from '../model/interval-view'
 
 /**
@@ -28,19 +24,14 @@ export function IntervalExplorer({
 }) {
   const { t } = useTranslation('learn')
   const id = useId()
-  const [played, setPlayed] = useState<{ root: NoteParam; shown: ShownKeys } | null>(null)
-  // What was played over another root no longer stands on these keys.
-  const shown = played?.root === view.root ? played.shown : intervalRoot(noteFromParam(view.root))
+  const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={shown.keys} marks={shown.marks} />
-      <Dropdown
+      <ExplorerKeyboard shown={shown} />
+      <NoteDropdown
         label={t('root')}
         value={view.root}
-        options={PITCH_CLASSES.map((pc) => {
-          const spelled = rootSpelling(pc, false)
-          return { value: noteParam(spelled), label: noteName(spelled) }
-        })}
+        spell={(pc) => rootSpelling(pc, false)}
         onChange={(root) => onChange({ root })}
         className="self-start"
       />
@@ -52,11 +43,7 @@ export function IntervalExplorer({
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {INTERVAL_GROUPS[group].map((name) => (
               <li key={name}>
-                <IntervalCard
-                  root={view.root}
-                  name={name}
-                  onShow={(next) => setPlayed({ root: view.root, shown: next })}
-                />
+                <IntervalCard root={view.root} name={name} onShow={show} />
               </li>
             ))}
           </ul>

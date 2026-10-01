@@ -1,17 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
+import { choosableChordSize, isOwnKey, pieceFit, pieceKey, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
+import { useKeyName } from '@/shared/i18n'
+import { noteParam, tonicSpelling } from '@/shared/lib/music'
+import { ChordSizeField, NoteDropdown } from '@/shared/ui'
 import {
-  isCompound,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
-  pitchClassOf,
-  tonicSpelling,
-} from '@/shared/lib/music'
-import { Dropdown } from '@/shared/ui'
-import {
-  ChordSizeField,
   FigureRows,
   MelodySwitch,
   PlayerSetup,
@@ -22,16 +15,12 @@ import { PlayingFields } from '@/widgets/practice-player'
 
 /** A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
 export function PieceSetup({
-  open,
-  onOpenChange,
   piece,
   choice,
   swing,
   onChange,
   onSwing,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
   piece: Piece
   choice: PracticeChoice
   /** Null where the meter cannot swing. */
@@ -39,49 +28,30 @@ export function PieceSetup({
   onChange: (change: SetupChange) => void
   onSwing: (on: boolean) => void
 }) {
-  const { t } = useTranslation(['player', 'music'])
+  const { t } = useTranslation('player')
+  const keyName = useKeyName()
   const own = pieceKey(piece)
-  const { minor } = own
-  const hasMelody = melodyOf(piece) !== undefined
+  const fit = pieceFit(piece)
+  const chordSize = choosableChordSize(piece)
   return (
-    <PlayerSetup
-      open={open}
-      onOpenChange={onOpenChange}
-      figures={choice}
-      methods={hasMethodCodes(piece)}
-      melody={hasMelody}
-      keyed
-      compound={isCompound(piece.meter)}
-      onFigures={onChange}
-    >
-      <Dropdown
-        label={t('player:key')}
+    <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
+      <NoteDropdown
+        label={t('key')}
         value={noteParam(choice.tonic)}
-        options={PITCH_CLASSES.map((pc) => {
-          const tonic = tonicSpelling(pc, minor)
-          return {
-            value: noteParam(tonic),
-            label: t(minor ? 'music:key.minor' : 'music:key.major', { tonic: noteName(tonic) }),
-          }
-        })}
+        spell={(pc) => tonicSpelling(pc, own.minor)}
+        name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
       <FigureRows />
-      {piece.kind === 'progression' && piece.chordSize.choosable ? (
+      {chordSize ? (
         <ChordSizeField
-          value={choice.chordSize ?? piece.chordSize.default}
-          onChange={(chordSize) => onChange({ chordSize })}
+          value={choice.chordSize ?? chordSize}
+          onChange={(next) => onChange({ chordSize: next })}
         />
       ) : null}
-      {hasMelody ? <MelodySwitch /> : null}
+      {fit.melody ? <MelodySwitch /> : null}
       {piece.recording ? (
-        <RecordingSwitch
-          ownKey={
-            pitchClassOf(choice.tonic) === pitchClassOf(own.tonic)
-              ? null
-              : t(minor ? 'music:key.minor' : 'music:key.major', { tonic: noteName(own.tonic) })
-          }
-        />
+        <RecordingSwitch ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
       ) : null}
       <PlayingFields swing={swing} onSwing={onSwing} />
     </PlayerSetup>

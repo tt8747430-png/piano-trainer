@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, qualitySpellings } from './chord'
-import { ChordSymbolError, parseChordSymbol } from './chord-symbol'
+import { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
 
@@ -57,4 +57,13 @@ describe('parseChordSymbol', () => {
       expect((caught as ChordSymbolError).message).toBe(`Unknown chord symbol "${symbol}"`)
     },
   )
+})
+
+describe('readChordSymbol', () => {
+  it('reads what is typed, spaces around it left out, and nothing it cannot read', () => {
+    expect(readChordSymbol(' Dm7 ')).toEqual({ root: note('D'), quality: 'm7' })
+    expect(readChordSymbol('Dm7/')).toBeNull()
+    expect(readChordSymbol('Qx')).toBeNull()
+    expect(readChordSymbol('')).toBeNull()
+  })
 })

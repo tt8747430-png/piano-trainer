@@ -1,4 +1,9 @@
-import { accompanimentOptions, type Accompaniment, type PatternId } from '@/entities/pattern'
+import {
+  accompanimentOptions,
+  type Accompaniment,
+  type PatternFit,
+  type PatternId,
+} from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import {
@@ -10,11 +15,20 @@ import {
   type ChordSize,
 } from '@/shared/lib/music'
 
-/** The walk's own tempo, pattern and chord size: what the Player plays when its URL chooses none. */
-export const WALK = { tempo: 72, pattern: 'block', chordSize: 'triads' } as const satisfies {
+/**
+ * The walk's own tempo, pattern and chord size: what the Player plays when its URL chooses none; and
+ * what it has for a pattern: a key, no tune, no methods of its own.
+ */
+export const WALK = {
+  tempo: 72,
+  pattern: 'block',
+  chordSize: 'triads',
+  fit: { methodCodes: false, melody: false, key: true, simpleTime: true },
+} as const satisfies {
   readonly tempo: number
   readonly pattern: PatternId
   readonly chordSize: ChordSize
+  readonly fit: PatternFit
 }
 
 /** Up from the tonic to its octave and back down, a degree a bar. */

@@ -7,7 +7,8 @@ import {
 } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { scaleRun } from '@/shared/lib/schedule'
-import type { ShownKeys } from './shown'
+import { scaleShown } from './marks'
+import type { ShownKeys } from '@/shared/ui'
 
 /**
  * A scale as a lesson shows it: its keys up an octave from the root, each with its degree, the tonic
@@ -19,15 +20,7 @@ export function scaleExample(
 ): { readonly shown: ShownKeys; readonly music: TimedMusic } {
   const placed = placeScale(root, kind)
   return {
-    shown: {
-      keys: placed.map((key) => key.midi),
-      marks: new Map(
-        placed.map((key) => [
-          key.midi,
-          { tone: key.tone.role === 'root' ? 'tonic' : 'scale', label: key.tone.degree },
-        ]),
-      ),
-    },
+    shown: scaleShown(placed),
     music: scaleRun(
       { notes: placed },
       {

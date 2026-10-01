@@ -1,25 +1,17 @@
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { NO_KEYS, unmarked, type ShownKeys } from '@/features/play-example'
+import { useShownKeys } from '@/features/play-example'
 import {
   chordInKey,
   keyFromParam,
   PASSING_CATEGORIES,
   passingChords,
-  voiceLead,
-  type Midi,
+  readChordSymbol,
 } from '@/shared/lib/music'
-import { chordSounds, walkSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
-import { KeyDropdown } from '@/shared/ui'
+import { KeyDropdown, NO_KEYS, TypedField } from '@/shared/ui'
 import type { PassingView } from '../model/passing-view'
-import { readChord } from '../model/read-chord'
-import { ChordField } from './ChordField'
 import { SuggestionCard } from './SuggestionCard'
-
-/** How fast a row of chords walks, a chord each two beats. */
-const ROW_TEMPO = 84
 
 /**
  * Passing chords: two chords typed and a key; the ways between them by category, each row voice-led
@@ -34,32 +26,29 @@ export function PassingChordsTool({
 }) {
   const { t } = useTranslation('learn')
   const id = useId()
-  const playback = usePlayback<string>()
-  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const key = keyFromParam(view.key)
-  const from = readChord(view.from)
-  const to = readChord(view.to)
+  const from = readChordSymbol(view.from)
+  const to = readChordSymbol(view.to)
   const ways = from && to ? passingChords(from, to) : []
   const at = `${view.key} ${view.from} ${view.to}`
-  const playKeys = (keys: readonly Midi[], id: string) => {
-    setShown(unmarked(keys))
-    playback.toggle(id, chordSounds(keys, { arpeggio: false }))
-  }
+  const [shown, setShown] = useShownKeys(at, NO_KEYS)
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={shown.keys} marks={shown.marks} />
+      <ExplorerKeyboard shown={shown} />
       <div className="flex flex-wrap items-end gap-3">
-        <ChordField
+        <TypedField
           label={t('passing.from')}
           value={view.from}
-          readable={from !== null}
+          error={from === null ? t('passing.unread') : null}
           onChange={(typed) => onChange({ from: typed })}
+          className="w-36"
         />
-        <ChordField
+        <TypedField
           label={t('passing.to')}
           value={view.to}
-          readable={to !== null}
+          error={to === null ? t('passing.unread') : null}
           onChange={(typed) => onChange({ to: typed })}
+          className="w-36"
         />
         <KeyDropdown value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
@@ -76,28 +65,16 @@ export function PassingChordsTool({
                   {t(`passing.category.${category}`)}
                 </h2>
                 <div className="grid gap-4 lg:grid-cols-2">
-                  {inCategory.map((way) => {
-                    const cardId = `${at} ${way.kind}`
-                    const voiced = voiceLead([from, ...way.chords, to])
-                    return (
-                      <SuggestionCard
-                        key={way.kind}
-                        way={way}
-                        from={from}
-                        to={to}
-                        inKey={way.chords.every((chord) => chordInKey(chord, key))}
-                        isPlaying={(what) => playback.playing === `${cardId} ${what}`}
-                        onPlayChord={(place) => playKeys(voiced[place] ?? [], `${cardId} ${place}`)}
-                        onPlayRow={() => {
-                          setShown(unmarked(voiced.flat()))
-                          playback.toggle(
-                            `${cardId} row`,
-                            walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }),
-                          )
-                        }}
-                      />
-                    )
-                  })}
+                  {inCategory.map((way) => (
+                    <SuggestionCard
+                      key={way.kind}
+                      way={way}
+                      from={from}
+                      to={to}
+                      inKey={way.chords.every((chord) => chordInKey(chord, key))}
+                      onShow={setShown}
+                    />
+                  ))}
                 </div>
               </section>
             ) : null

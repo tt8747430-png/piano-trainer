@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { needsMelody, type PatternId } from '@/entities/pattern'
-import { melodyOf, pieceById } from '@/entities/piece'
+import { patternNeed, type PatternId } from '@/entities/pattern'
+import { pieceById, pieceFit } from '@/entities/piece'
 import { note, parseChordSymbol, parseNoteName } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import {
@@ -39,11 +39,11 @@ const texts = (lesson: Lesson) => [
   ]),
 ]
 
-/** A piece that is not there, or a pattern that plays the tune over a piece that has none. */
+/** A piece that is not there, or a pattern the piece cannot play (a tune it lacks, inside the beat of 6/8). */
 function pieceProblems(pieceId: string, pattern: PatternId | undefined): string[] {
   const piece = pieceById(pieceId)
   if (!piece) return [pieceId]
-  return pattern && needsMelody(pattern) && !melodyOf(piece) ? [`${pattern} over ${pieceId}`] : []
+  return pattern && patternNeed(pattern, pieceFit(piece)) ? [`${pattern} over ${pieceId}`] : []
 }
 
 /** What in a block the kernel cannot read, or a link that leads nowhere. */

@@ -4,6 +4,7 @@ import type { Key } from './key'
 import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import {
+  keyMode,
   keyScale,
   keyTones,
   tonesInKey,
@@ -338,5 +339,18 @@ describe('keyTones and tonesInKey', () => {
     const aMinor: Key = { tonic: note('A'), minor: true }
     expect(tonesInKey(spellChord(note('E'), 'maj'), aMinor)).toBe(true)
     expect(tonesInKey(spellChord(note('F'), 'min'), aMinor)).toBe(false)
+  })
+})
+
+describe('keyMode', () => {
+  it('names the key a scale is the scale of: major, minor for the three minors, none for a mode', () => {
+    expect(SCALE_KINDS.filter((kind) => keyMode(kind) === 'major')).toEqual(['major'])
+    expect(SCALE_KINDS.filter((kind) => keyMode(kind) === 'minor')).toEqual([
+      'natural',
+      'harmonic',
+      'melodic',
+    ])
+    expect(keyMode('dorian')).toBeNull()
+    expect(keyMode('blues')).toBeNull()
   })
 })

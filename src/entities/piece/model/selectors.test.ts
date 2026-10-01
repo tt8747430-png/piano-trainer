@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
-import { entriesInKey, entryById, pieceById } from './selectors'
+import { choosableChordSize, entriesInKey, entryById, isOwnKey, pieceById } from './selectors'
 
 describe('lookups', () => {
   it('find a piece by id', () => {
@@ -31,3 +31,23 @@ describe('entriesInKey', () => {
     expect(entriesInKey({ tonic: note('B'), minor: false })).toEqual([])
   })
 })
+
+describe('choosableChordSize', () => {
+  it('is a progression’s own chord size where the learner may change it, else null', () => {
+    expect(choosableChordSize(piece('twofive'))).toBe('sevenths')
+    expect(choosableChordSize(piece('bz5'))).toBeNull()
+  })
+})
+
+describe('isOwnKey', () => {
+  it('holds for the piece’s tonic, however it is spelled', () => {
+    expect(isOwnKey(piece('bz5'), note('G'))).toBe(true)
+    expect(isOwnKey(piece('bz5'), note('A'))).toBe(false)
+  })
+})
+
+function piece(id: string) {
+  const found = pieceById(id)
+  if (!found) throw new Error(id)
+  return found
+}

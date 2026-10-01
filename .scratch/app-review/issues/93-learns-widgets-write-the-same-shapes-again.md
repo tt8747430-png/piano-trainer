@@ -1,6 +1,6 @@
 # 93. Learn's widgets write the same controls and shapes again
 
-Status: ready-for-agent
+Status: done
 Severity: P3
 Tier: 7
 Rule: Duplicated Code; `vercel-composition-patterns`
@@ -24,3 +24,18 @@ For Tier 7.
 For Tier 7, with 76.
 
 ## Comments
+
+Done in Tier 7, item by item:
+
+1. `NoteDropdown` (kit, with a `name` rule) at eight sites; `qualityRootSpelling` (kernel) for the root rule written
+   five times, `chromaticRoot` gone.
+2. `fitInversion` and `STACK_SIZES` (kernel), `InversionChoice` and `ChordSizeField` (kit), their words in `music`.
+3. `ScaleChordGrid` (play-example; fixed 115), `chordShown` / `scaleShown` / `chordsRange` for six mark builders,
+   `useShownKeys` for five "played, else the default" states; `ShownKeys` moves to the kit and `ExplorerKeyboard`
+   takes it whole.
+4. `ToneChip` and `PlayToggle` (kit; the passing chords row gains its Square), the `card` utility for 19 copies;
+   Play → Stop: `toggle` takes its sounds lazily (113). Dropped: a staff wrapper (contextual).
+5. `ChordRow` / `RowChords` / `RowPlay` (any row of chords; `ROW_TEMPO` once), `TypedField` (kit), `readChordSymbol`
+   (kernel), `checkedKeys` (features/quiz; the Theory quiz's `answerKeys` over it).
+6. `useKeyName` (i18n) for seven key names; the kernel's short name is `keySymbol`. Beyond: `writtenSymbol` for four
+   hand-written symbols, `toggled` for three list toggles.

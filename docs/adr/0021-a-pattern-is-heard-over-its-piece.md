@@ -21,7 +21,7 @@ progression, and open the tools and the Player on what it names.
   that would fall back to figuration.
 - **A progression is the Progressions tool's row** (`{ kind: 'progression', numerals, key, size? }`): the same
   component, moved to `features/play-example` beside the Intervals reference's card, with a link into the tool. Its
-  parts (`ProgressionChords`, `ProgressionPlay`) are composed by each page: Play is the tool's one honey action and a
+  parts (`RowChords`, `RowPlay` of a `ChordRow`) are composed by each page: Play is the tool's one honey action and a
   lesson's soft one, beside its other examples (the One Honey Rule). A block and a link name a progression alike
   (`LessonProgression`), read by one reader (`readProgression`).
 - **Links reach the tools and the Player:** `progressions`, `passing-chords`, `reharmonise` and `piece`, each read by

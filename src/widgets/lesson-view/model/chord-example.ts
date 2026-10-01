@@ -1,4 +1,4 @@
-import type { ShownKeys } from '@/features/play-example'
+import { chordShown } from '@/features/play-example'
 import {
   midi,
   MIDDLE_C,
@@ -9,7 +9,7 @@ import {
   type Midi,
   type PitchClass,
 } from '@/shared/lib/music'
-import type { KeyMark } from '@/shared/ui'
+import type { ShownKeys } from '@/shared/ui'
 
 /** A pitch class's key nearest middle C: from the F♯ below to the F above. */
 const nearMiddleC = (pc: PitchClass): Midi => midi(MIDDLE_C + (pc > 5 ? pc - 12 : pc))
@@ -30,10 +30,7 @@ export function placeExample(symbol: string): ShownKeys {
   const lowest = placed[0]
   const shift = bass && inversion >= 0 && lowest ? nearMiddleC(pitchClassOf(bass)) - lowest.midi : 0
   const rh = placed.map((key) => ({ tone: key.tone, midi: midi(key.midi + shift) }))
-  const marks = new Map<Midi, KeyMark>(
-    rh.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }]),
-  )
-  const keys = rh.map((key) => key.midi)
+  const { keys, marks } = chordShown(rh)
   if (!bass || inversion >= 0) return { keys, marks }
   return { keys: [midi(MIDDLE_C - 12 + pitchClassOf(bass)), ...keys], marks }
 }

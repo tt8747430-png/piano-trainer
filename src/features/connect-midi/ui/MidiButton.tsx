@@ -36,7 +36,7 @@ export function MidiButton() {
           )}
         />
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-72 rounded-3xl p-4">
+      <PopoverContent align="end" className="w-72 p-4">
         <p className="mb-2 font-semibold">{t('midi.label')}</p>
         <MidiControl />
       </PopoverContent>

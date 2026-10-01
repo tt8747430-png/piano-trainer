@@ -1,3 +1,4 @@
+import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
 import { WALK, type WalkChoice } from '@/features/practice'
 import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import type { FigureChange, SetupChange, SetupParams } from '@/widgets/player-setup'
@@ -10,20 +11,20 @@ export type WalkSearch = PracticeView & {
   readonly kind: ScaleKind
 } & Omit<SetupParams, 'key'>
 
-/** What the walk's Setup changes: the pattern and figures, and the chord size. */
-export type WalkChange = FigureChange & Pick<SetupChange, 'chordSize'>
+/** What the walk's Setup changes: its root, the pattern and figures, and the chord size. */
+export type WalkChange = FigureChange &
+  Pick<SetupChange, 'chordSize'> & { readonly root?: NoteParam }
 
-/** The walk's URL read: what it leaves out is the walk's own; its chart names no methods, so From the chart is its own pattern. */
+/** The walk's URL read: what it leaves out is the walk's own, and so is a pattern or figure it cannot play (From the chart, a tune). */
 export function walkChoice(
   search: Pick<WalkSearch, 'root' | 'kind' | 'pattern' | 'rh' | 'lh' | 'chordSize'>,
 ): WalkChoice {
   return {
     root: noteFromParam(search.root),
     kind: search.kind,
-    pattern:
-      search.pattern === undefined || search.pattern === 'chart' ? WALK.pattern : search.pattern,
-    rh: search.rh ?? null,
-    lh: search.lh ?? null,
+    pattern: playablePattern(search.pattern, WALK.pattern, WALK.fit),
+    rh: playableFigure(search.rh, RIGHT_FIGURES, WALK.fit),
+    lh: playableFigure(search.lh, LEFT_FIGURES, WALK.fit),
     chordSize: search.chordSize ?? WALK.chordSize,
   }
 }

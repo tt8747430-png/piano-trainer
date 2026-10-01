@@ -1,24 +1,21 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { noteOnTop, type ShownKeys } from '@/features/play-example'
+import { noteOnTop, useShownKeys } from '@/features/play-example'
 import {
   chordRootSpelling,
-  pitchClassOf,
+  chordSymbol,
   noteFromParam,
-  noteName,
-  noteParam,
-  PITCH_CLASSES,
+  pitchClassOf,
   qualityIntervals,
-  qualitySuffix,
+  qualityRootSpelling,
   TENSION_CHORDS,
   TENSION_GROUPS,
-  tensionTones,
   type TensionTone,
+  tensionTones,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, NoteDropdown } from '@/shared/ui'
 import { tensionChord, tensionMark } from '../model/tension-keys'
 import type { TensionView } from '../model/tension-view'
 import { TensionGroupCard } from './TensionGroupCard'
@@ -36,19 +33,16 @@ export function TensionExplorer({
 }) {
   const { t } = useTranslation(['learn', 'music'])
   const playback = usePlayback<string>()
-  const [played, setPlayed] = useState<{ view: TensionView; shown: ShownKeys } | null>(null)
   const root = noteFromParam(view.root)
   const chord = tensionChord(root, view.chord)
-  // A note played over another chord or root no longer stands on these keys.
-  const shown =
-    played?.view.root === view.root && played.view.chord === view.chord ? played.shown : chord
+  const [shown, show] = useShownKeys(`${view.root} ${view.chord}`, chord)
   const tones = tensionTones(root, view.chord)
   const intervals = qualityIntervals(view.chord)
   // A chip's sound is its chord's and root's: after a change, no chip of the new chord is pressed.
   const idOf = (tone: TensionTone) => `${view.root} ${view.chord} ${tone.pitchClass}`
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard keys={shown.keys} marks={shown.marks} />
+      <ExplorerKeyboard shown={shown} />
       <div className="flex flex-wrap gap-2">
         <Dropdown
           label={t('learn:tensions.chord')}
@@ -56,20 +50,15 @@ export function TensionExplorer({
           options={TENSION_CHORDS.map((quality) => ({
             value: quality,
             // Each chord's root as choosing it spells it: over C♯, Maj7 is D♭Maj7.
-            label:
-              noteName(chordRootSpelling(pitchClassOf(root), qualityIntervals(quality))) +
-              qualitySuffix(quality),
+            label: chordSymbol({ root: qualityRootSpelling(pitchClassOf(root), quality), quality }),
             detail: t(`music:quality.${quality}`),
           }))}
           onChange={(next) => onChange({ chord: next })}
         />
-        <Dropdown
+        <NoteDropdown
           label={t('learn:root')}
           value={view.root}
-          options={PITCH_CLASSES.map((pc) => {
-            const spelled = chordRootSpelling(pc, intervals)
-            return { value: noteParam(spelled), label: noteName(spelled) }
-          })}
+          spell={(pc) => chordRootSpelling(pc, intervals)}
           onChange={(next) => onChange({ root: next })}
         />
       </div>
@@ -82,8 +71,8 @@ export function TensionExplorer({
             isPlaying={(tone) => playback.playing === idOf(tone)}
             onPlay={(tone) => {
               const next = noteOnTop(chord, tone.pitchClass, tensionMark(tone))
-              setPlayed({ view, shown: next })
-              playback.toggle(idOf(tone), chordSounds(next.keys, { arpeggio: false }))
+              show(next)
+              playback.toggle(idOf(tone), () => chordSounds(next.keys, { arpeggio: false }))
             }}
           />
         ))}

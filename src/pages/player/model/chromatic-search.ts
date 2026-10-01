@@ -1,11 +1,12 @@
-import { LEFT_FIGURES, needsKey, RIGHT_FIGURES } from '@/entities/pattern'
+import { LEFT_FIGURES, playableFigure, playablePattern, RIGHT_FIGURES } from '@/entities/pattern'
 import {
+  chordsParam,
   CHROMATIC,
   readChords,
   type ChromaticChoice,
+  type ChromaticChords,
   type ChromaticDirection,
 } from '@/features/practice'
-import { playsKeyTriads } from '@/shared/lib/arrangement'
 import { noteFromParam, type NoteParam } from '@/shared/lib/music'
 import type { FigureChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -20,26 +21,30 @@ export type ChromaticSearch = PracticeView & {
 } & Omit<SetupParams, 'key' | 'chordSize'>
 
 /**
- * The walk's URL read: what it leaves out is the walk's own, and so is From the chart (the walk
- * names no methods) and anything that plays the key's triads (the walk has no key).
+ * The walk's URL read: what it leaves out is the walk's own, and so is a pattern or figure it cannot
+ * play (From the chart, a tune, the key's triads: the walk has no key).
  */
 export function chromaticChoice(
   search: Pick<ChromaticSearch, 'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh'>,
 ): ChromaticChoice {
-  const { pattern, rh, lh } = search
   return {
     root: noteFromParam(search.root),
     chords: readChords(search.chords),
     direction: search.direction,
-    pattern:
-      pattern === undefined || pattern === 'chart' || needsKey(pattern)
-        ? CHROMATIC.pattern
-        : pattern,
-    rh: rh && !playsKeyTriads(RIGHT_FIGURES[rh].figure) ? rh : null,
-    lh: lh && !playsKeyTriads(LEFT_FIGURES[lh].figure) ? lh : null,
+    pattern: playablePattern(search.pattern, CHROMATIC.pattern, CHROMATIC.fit),
+    rh: playableFigure(search.rh, RIGHT_FIGURES, CHROMATIC.fit),
+    lh: playableFigure(search.lh, LEFT_FIGURES, CHROMATIC.fit),
   }
 }
 
-/** A Setup change as the walk's URL writes it: its own pattern left out. */
-export const chromaticPatch = (change: FigureChange): Partial<ChromaticSearch> =>
-  ownLeftOut(change, CHROMATIC)
+/** What the chromatic walk's Setup changes: its chords, root and direction, the pattern and figures. */
+export type ChromaticChange = FigureChange & {
+  readonly chords?: ChromaticChords
+  readonly root?: NoteParam
+  readonly direction?: ChromaticDirection
+}
+
+/** A Setup change as the walk's URL writes it: its chords as the URL holds them, its own pattern left out. */
+export function chromaticPatch({ chords, ...change }: ChromaticChange): Partial<ChromaticSearch> {
+  return { ...ownLeftOut(change, CHROMATIC), ...(chords ? { chords: chordsParam(chords) } : {}) }
+}

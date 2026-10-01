@@ -2,6 +2,9 @@ import { memo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 
+/** A bar's number sits this far right of its barline, clear of the line. */
+const NUMBER_INSET_PX = 4
+
 /**
  * Over the staff: each bar's number, a section's name at its first bar, and each chord symbol at its
  * onset (spec §2.6). The bars' buttons carry the same words for a screen reader.
@@ -24,7 +27,7 @@ export const SheetLabels = memo(function SheetLabels({
           <span
             key={index}
             className="absolute top-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums"
-            style={{ left: measure.x + 4 }}
+            style={{ left: measure.x + NUMBER_INSET_PX }}
           >
             {index + 1}
             {starts && headings[section] ? ` · ${headings[section]}` : null}

@@ -9,7 +9,7 @@ export function PlayUpDown({ sounds }: { sounds: readonly Sound[] }) {
   const { t } = useTranslation('learn')
   const playback = usePlayback<'up-down'>()
   return (
-    <Button size="pill" onClick={() => playback.toggle('up-down', sounds)}>
+    <Button size="pill" onClick={() => playback.toggle('up-down', () => sounds)}>
       <PlayLabel playing={playback.playing === 'up-down'}>{t('playUpDown')}</PlayLabel>
     </Button>
   )

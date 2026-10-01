@@ -11,7 +11,7 @@ export function ChordSheet({ placed }: { placed: PlacedChord }) {
   const score = useMemo(() => notate(chordBar(placed)), [placed])
   return (
     <section aria-label={t('sheet.label')}>
-      <LazyScoreView score={score} scale={1} fingers={false} />
+      <LazyScoreView score={score} />
     </section>
   )
 }

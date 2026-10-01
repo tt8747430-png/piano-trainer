@@ -25,7 +25,8 @@ export function parseKey(text: string): Key | null {
   return tonic ? { tonic, minor } : null
 }
 
-export const keyName = (key: Key): string => noteName(key.tonic) + (key.minor ? 'm' : '')
+/** A key written as a chord symbol is: `Am`, `F#`. */
+export const keySymbol = (key: Key): string => noteName(key.tonic) + (key.minor ? 'm' : '')
 
 /** Each letter's place on the circle of fifths, as a major tonic: sharps above 0, flats below. */
 const LETTER_FIFTHS: Readonly<Record<Letter, number>> = {

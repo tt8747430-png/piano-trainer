@@ -22,7 +22,7 @@ const cMajor = () =>
 describe('LazyScoreView', () => {
   it('keeps the staff’s space while it loads, then engraves the score', async () => {
     const score = cMajor()
-    const { container } = render(<LazyScoreView score={score} scale={1} fingers={false} />)
+    const { container } = render(<LazyScoreView score={score} />)
     await waitFor(() =>
       expect(container.querySelector('[data-slot="score"] svg')).toBeInTheDocument(),
     )
@@ -30,7 +30,7 @@ describe('LazyScoreView', () => {
 
   it('engraves nothing, and loads no engraver, until the staff is on screen', async () => {
     const screen = stubIntersectionObserver({ visible: false })
-    const { container } = render(<LazyScoreView score={cMajor()} scale={1} fingers={false} />)
+    const { container } = render(<LazyScoreView score={cMajor()} />)
     await act(() => Promise.resolve())
     expect(container.querySelector('[data-slot="score"]')).not.toBeInTheDocument()
     expect(container.firstElementChild).toHaveStyle({ height: `${staffHeight(undefined)}px` })

@@ -2,7 +2,16 @@ import type { LocaleResources } from '../../types'
 
 export const music: LocaleResources['music'] = {
   major: 'M',
-  inversion: { root: 'Основной', first: '1-е', second: '2-е', third: '3-е' },
+  inversion: { label: 'Обращение', root: 'Основной', first: '1-е', second: '2-е', third: '3-е' },
+  // How big a chord is: its stack of notes, triads to 13ths.
+  chordSize: {
+    label: 'Размер аккорда',
+    triads: 'Трезвучия',
+    sevenths: 'Септаккорды',
+    ninths: 'Нонаккорды',
+    elevenths: 'Ундецимаккорды',
+    thirteenths: 'Терцдецимаккорды',
+  },
   family: {
     tri: 'Трезвучия',
     six: 'Секста и add',

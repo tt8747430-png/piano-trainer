@@ -19,7 +19,6 @@ export {
   chordsParam,
   CHROMATIC,
   CHROMATIC_DIRECTIONS,
-  chromaticRoot,
   readChords,
   type ChromaticChoice,
   type ChromaticChords,

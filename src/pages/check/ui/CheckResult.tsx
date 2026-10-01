@@ -33,7 +33,7 @@ export function CheckResult({
       {plan.marks && learned && newlyLearned ? (
         <p className="text-lg font-semibold text-learned">{t('marked', { title })}</p>
       ) : null}
-      <ul className="flex flex-col divide-y divide-hairline rounded-3xl border border-border bg-card">
+      <ul className="flex flex-col divide-y divide-hairline card">
         {plan.skills.map((skillId) => {
           const skill = skillOf(skillId)
           const rating = ratingOf(answers, skillId)

@@ -4,12 +4,13 @@ import type { LearnFilter } from '@/pages/learn'
 import { isOneOf, partsParams, readAlterations, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   ADDED_TONES,
-  BUILT_SIZES,
   buildChord,
+  BUILT_SIZES,
   builtRootSpelling,
   CHORD_NOTES,
-  chordRootSpelling,
+  type ChordFamily,
   circleKey,
+  type Fingering,
   FINGERINGS,
   fingeringsOf,
   fitParts,
@@ -20,17 +21,15 @@ import {
   ownFingering,
   parseKey,
   pitchClassOf,
-  qualityIntervals,
+  qualityRootSpelling,
   rootSpelling,
   scaleHasChords,
   scaleIntervals,
+  type ScaleKind,
   scaleRootSpelling,
   SEVENTHS,
   TENSION_CHORDS,
   TRIADS,
-  type ChordFamily,
-  type Fingering,
-  type ScaleKind,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
@@ -200,9 +199,7 @@ function validateTensionsSearch(input: Input<TensionView>): TensionView {
   const chord = valueOr(isTensionChord, raw.chord, TENSIONS_DEFAULTS.chord)
   const read = readNote(raw.root)
   return {
-    root: read
-      ? noteParam(chordRootSpelling(pitchClassOf(read), qualityIntervals(chord)))
-      : TENSIONS_DEFAULTS.root,
+    root: read ? noteParam(qualityRootSpelling(pitchClassOf(read), chord)) : TENSIONS_DEFAULTS.root,
     chord,
   }
 }

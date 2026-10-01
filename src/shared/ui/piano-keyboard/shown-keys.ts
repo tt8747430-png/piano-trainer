@@ -1,7 +1,7 @@
 import type { Midi } from '@/shared/lib/music'
-import type { KeyMark } from '@/shared/ui'
+import type { KeyMark } from './key-look'
 
-/** What an example puts on the page's keyboard: its keys, and how each is marked. */
+/** What a page's keyboard shows: the keys to hold in view, and how each is marked. */
 export interface ShownKeys {
   readonly keys: readonly Midi[]
   readonly marks: ReadonlyMap<Midi, KeyMark>

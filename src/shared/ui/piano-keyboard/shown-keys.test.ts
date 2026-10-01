@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { NO_KEYS, unmarked } from './shown'
+import { NO_KEYS, unmarked } from './shown-keys'
 
 describe('the keys an example shows', () => {
   it('are none before an example plays', () => {

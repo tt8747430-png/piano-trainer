@@ -20,10 +20,16 @@ A container wires data to presentational children. One job each.
 - **One exported component per file, named for the file.** Private helpers may stay.
 - A page composes widgets and `shared/ui`, with little markup of its own.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
-  `RailButton` (a button in its rail, filling its `children` slot), `Pinned`, `ScreenHeader`, `BackButton` (a screen's
-  Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`, `Dropdown` (the pop-up button, over shadcn's
-  `select`), `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `PAINT` (the chrome's paints for
-  a tile), `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`, `LevelMark`.
+  `RailButton` (a button in its rail, filling its `children` slot) and `ShownKeys` (what a page's keyboard shows),
+  `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
+  and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Dropdown` (the pop-up button,
+  over shadcn's `select`) with `MultiDropdown`, `KeyDropdown` (the 24 keys) and `NoteDropdown` (the 12 notes, each
+  spelled by the caller's rule), `InversionChoice`, `ChordSizeField`, `SwitchRow` (on or off in its row), `TypedField`
+  (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
+  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `LEARN_TILES`, `PAINT`
+  (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` / `SheetClose`, `RatingMark`,
+  `LevelMark`, `LazyScoreView`. A choice a component would make by a boolean prop is a component of its own (an
+  explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
   with its chevron.
@@ -81,7 +87,8 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 `src/styles/tokens.css`, exposed as utilities by `@theme inline` in `src/styles/theme.css`.
 
 - **Semantic utilities only** (`bg-card`, `text-muted-foreground`, `bg-role-3rd`): never a raw colour, never a
-  primitive, never `p-[13px]`. No role yet → add one to `tokens.css`, in both themes.
+  primitive, never `p-[13px]`. No role yet → add one to `tokens.css`, in both themes. DESIGN's card surface is the
+  `card` utility (`theme.css`: its corners, soft line and paper), on whatever element holds the card.
 - **Compose with `cn()`** (`shared/lib/cn.ts`, which re-exports shadcn's `cn` package; shadcn primitives import the
   package directly). A custom theme name its default tables do not know (a new text size, radius or shadow) must be
   registered with `createCn` from `cn/config`, with a test, or `cn()` drops classes.

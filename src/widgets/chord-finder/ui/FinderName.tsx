@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
 import { noteName, type Midi } from '@/shared/lib/music'
-import { ROLE_BG } from '@/shared/ui'
+import { ToneChip } from '@/shared/ui'
 import { toneOfKey, type Finding } from '../model/finding'
 
 /**
@@ -35,19 +34,8 @@ export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: 
         {keys.map((key) => {
           const tone = toneOfKey(best, key)
           return tone ? (
-            <li
-              key={key}
-              className="flex items-center gap-2 rounded-xl border border-border bg-card py-1 pr-3 pl-1"
-            >
-              <span
-                className={cn(
-                  'grid size-7 place-items-center rounded-lg text-sm font-bold text-on-role',
-                  ROLE_BG[tone.role],
-                )}
-              >
-                {tone.degree}
-              </span>
-              <span className="font-semibold">{noteName(tone.note)}</span>
+            <li key={key}>
+              <ToneChip face={tone.role} degree={tone.degree} note={noteName(tone.note)} />
             </li>
           ) : null
         })}

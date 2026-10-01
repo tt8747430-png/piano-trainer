@@ -490,7 +490,8 @@ longest line, so bars line up down the chart; a bar is parted by a 1px control l
 Flat, grouped by surface. Depth is the book's: a card paper on a darker paper, a 1px soft line round it; hover and
 press fill with sand or darken a shade (brightness 95%). Shadows appear only on what floats over the page:
 
-- **Popover** (`shadow-md` with a 1px ring of ink at 10%): the MIDI, keyboard-settings, tempo and hands popovers.
+- **Popover** (12px corners, `shadow-md` with a 1px ring of ink at 10%): the MIDI, keyboard-settings, tempo and
+  hands popovers.
 - **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
 - **Slider thumb** (`shadow-md` with a 1px soft-line ring).
 
@@ -538,7 +539,7 @@ hands). Never a row of chips or a wall of tiles.
 - **Pop-up button** (44px, 12px corners, card paper in the 1px control line): its label in soft ink, its value in ink
   (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
   (12px corners, the popover shadow and ring) of 44px items, the chosen one checked in umber; a grouped list (the
-  Chord pop-up's five families) names each group in soft ink over a hairline. An item may carry a second word in soft
+  scale pop-up's families, the chromatic walk's chord types) names each group in soft ink over a hairline. An item may carry a second word in soft
   ink ("Minor 7th m7"). Root, Scale, Start on, Chord size, Triad, Added tone, Rhythm, Collection, Level and the
   Player's key are pop-ups.
 - **Pop-up button that checks several** (`MultiDropdown`): the Choosing Rule's pop-up for several of many, never a
@@ -551,7 +552,8 @@ hands). Never a row of chips or a wall of tiles.
   each named "Minor 7th" and so on for a screen reader) are segments.
 - **Only what applies is offered:** a choice the thing shown cannot take is left out, never disabled and never
   explained (the Chords reference's 7th under a triad, Added tone over a 7th chord, Alterations on a minor chord;
-  Fingering for a scale with one).
+  Fingering for a scale with one). One exception, the Player's Setup lists: a pattern or figure the music cannot play
+  stays in its list, closed, with what it needs ("Needs a melody"), so the catalog reads the same over every piece.
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
 
 ### Cards and sheets

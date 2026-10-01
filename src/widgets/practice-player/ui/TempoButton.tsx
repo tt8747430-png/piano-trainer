@@ -64,7 +64,7 @@ export function TempoButton({
         <Gauge data-icon="inline-start" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 gap-4 rounded-3xl p-4">
+      <PopoverContent align="start" className="w-80 gap-4 p-4">
         <ChoiceGroup label={t('pace.ownPace')}>
           <ChoiceRow chosen={mode === 'wait'} onChoose={() => choose(onWait)}>
             {t('pace.wait')}

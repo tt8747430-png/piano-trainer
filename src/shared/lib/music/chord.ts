@@ -251,10 +251,18 @@ export function spellChord(root: SpelledNote, quality: ChordQuality): Tone[] {
   return entry(quality).intervals.map((name) => toneAbove(root, INTERVALS[name]))
 }
 
+/** The root a chord of `quality` on this pitch class is named from (`chordRootSpelling` over its intervals). */
+export const qualityRootSpelling = (pc: PitchClass, quality: ChordQuality): SpelledNote =>
+  chordRootSpelling(pc, qualityIntervals(quality))
+
+/** A chord written from its root and suffix, over its bass when that is not the root: `Dm7`, `C/E`. */
+export const writtenSymbol = (
+  chord: { readonly root: SpelledNote; readonly suffix: string },
+  bass?: SpelledNote,
+): string => noteName(chord.root) + chord.suffix + (bass ? `/${noteName(bass)}` : '')
+
 export const chordSymbol = (chord: Chord): string =>
-  noteName(chord.root) +
-  qualitySuffix(chord.quality) +
-  (chord.bass ? `/${noteName(chord.bass)}` : '')
+  writtenSymbol({ root: chord.root, suffix: qualitySuffix(chord.quality) }, chord.bass)
 
 /** A bass that is a chord tone is spelled as that tone (`D#/G` is `D#/F𝄪`); any other as written. */
 export function chordBass(

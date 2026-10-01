@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { STEP_PAINT } from '@/entities/path'
 import { PROGRESSION_LIBRARY, PROGRESSION_STYLES } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
 import {
@@ -29,7 +30,7 @@ export function ProgressionLibrary({ musicKey, size }: { musicKey: Key; size: Ch
                   title={localText(each.name, locale)}
                   detail={numerals.map(numeralText).join('–')}
                   icon={ListMusic}
-                  paint="grass"
+                  paint={STEP_PAINT.progression}
                   render={
                     <Link
                       to="/learn/progressions"

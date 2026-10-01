@@ -1,5 +1,7 @@
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
-import type { ShownKeys } from '@/features/play-example'
+
+import { checkedKeys } from '@/features/quiz'
+import { toggled } from '@/shared/lib'
 import {
   MIDDLE_C,
   midi,
@@ -10,7 +12,7 @@ import {
   type Midi,
 } from '@/shared/lib/music'
 import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
-import type { KeyMark } from '@/shared/ui'
+import type { KeyMark, ShownKeys } from '@/shared/ui'
 import { placeExample } from './chord-example'
 
 /** A quiz's answer on the keys: a chord as the Chords reference places it, notes from middle C up. */
@@ -48,27 +50,6 @@ export function isRight(chosen: readonly Midi[], answer: ShownKeys): boolean {
   return played.size === wanted.size && [...wanted].every((pc) => played.has(pc))
 }
 
-/** After Check: each right key marked as the answer marks its note, the extras wrong, the missing ringed. */
-export function checkedKeys(
-  chosen: readonly Midi[],
-  answer: ShownKeys,
-): { marks: Map<Midi, KeyMark>; wrong: Set<Midi>; outlined: Set<Midi> } {
-  const byNote = new Map(answer.keys.map((key) => [pitchClass(key), answer.marks.get(key)]))
-  const marks = new Map<Midi, KeyMark>()
-  const wrong = new Set<Midi>()
-  for (const key of chosen) {
-    const mark = byNote.get(pitchClass(key))
-    if (mark) marks.set(key, mark)
-    else wrong.add(key)
-  }
-  const played = pitchClasses(chosen)
-  return {
-    marks,
-    wrong,
-    outlined: new Set(answer.keys.filter((key) => !played.has(pitchClass(key)))),
-  }
-}
-
 /** The one open quiz of a lesson: its keys chosen, and where it stands. */
 export type QuizState = {
   readonly id: string
@@ -94,9 +75,7 @@ export function quizReducer(state: QuizState, event: QuizEvent): QuizState {
       return {
         ...state,
         stage: 'choosing',
-        chosen: state.chosen.includes(event.key)
-          ? state.chosen.filter((key) => key !== event.key)
-          : [...state.chosen, event.key],
+        chosen: toggled(state.chosen, event.key),
       }
     case 'check':
       return { ...state, stage: event.right ? 'right' : 'wrong' }

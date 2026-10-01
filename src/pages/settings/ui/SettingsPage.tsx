@@ -50,7 +50,7 @@ function Group({
   className?: string
 }) {
   return (
-    <section className={cn('overflow-hidden rounded-3xl border border-border bg-card', className)}>
+    <section className={cn('overflow-hidden card', className)}>
       <h2 className="border-b border-border bg-muted px-5 py-2 text-xl">{title}</h2>
       <div className="flex flex-col gap-3 p-5">{children}</div>
     </section>

@@ -1,28 +1,20 @@
 import { useEffect, useMemo } from 'react'
-import { pieceKey, type Piece } from '@/entities/piece'
+import { isOwnKey, type Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
 import { arrangePiece, type PracticeChoice } from '@/features/practice'
 import { recordPractised } from '@/features/record-practised'
-import type { Performance } from '@/shared/lib/arrangement'
-import { pitchClassOf } from '@/shared/lib/music'
 import type { SetupChange } from '@/widgets/player-setup'
-import { usePracticePlayer, type PracticePlayer } from '@/widgets/practice-player'
+import { usePracticePlayer } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
-
-export interface Player {
-  readonly choice: PracticeChoice
-  readonly performance: Performance
-  readonly player: PracticePlayer
-  changeSetup(change: SetupChange): void
-}
+import type { PlayerOf } from './player-of'
 
 /** The piece as the Player plays it (spec §2.1): its URL's choices arranged, practised from the widget's hook. */
 export function usePlayer(
   piece: Piece,
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
-): Player {
+): PlayerOf<PracticeChoice, SetupChange> {
   const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
   const { key, pattern, rh, lh, chordSize } = search
@@ -33,8 +25,8 @@ export function usePlayer(
   const performance = useMemo(() => arrangePiece(piece, choice), [piece, choice])
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
   // The recording plays along in the piece's own key only: another would put the voice over other chords.
-  const inOwnKey = pitchClassOf(choice.tonic) === pitchClassOf(pieceKey(piece).tonic)
-  const recording = piece.recording && withRecording && inOwnKey ? piece.recording : null
+  const recording =
+    piece.recording && withRecording && isOwnKey(piece, choice.tonic) ? piece.recording : null
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
   return {
     choice,

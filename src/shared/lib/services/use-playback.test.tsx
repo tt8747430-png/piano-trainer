@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createFakeAudio, createWebAudioOutput, type AudioOutput } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
@@ -21,7 +21,7 @@ describe('usePlayback', () => {
   it('is playing its id from the tap until the last note ends', () => {
     const audio = createFakeAudio()
     const { result } = setup(() => usePlayback<'chord'>(), audio)
-    act(() => result.current.toggle('chord', [NOTE]))
+    act(() => result.current.toggle('chord', () => [NOTE]))
     expect(result.current.playing).toBe('chord')
     act(() => audio.setNow(1.05))
     expect(result.current.playing).toBe('chord')
@@ -32,10 +32,18 @@ describe('usePlayback', () => {
   it('stops on a second tap, even before the first note sounded', () => {
     const audio = createFakeAudio()
     const { result } = setup(() => usePlayback<'chord'>(), audio)
-    act(() => result.current.toggle('chord', [NOTE]))
-    act(() => result.current.toggle('chord', [NOTE]))
+    act(() => result.current.toggle('chord', () => [NOTE]))
+    act(() => result.current.toggle('chord', () => [NOTE]))
     expect(result.current.playing).toBeNull()
     expect(audio.stops).toBe(2)
+  })
+
+  it('works out its sounds only when a play starts, never for a Stop', () => {
+    const { result } = setup(() => usePlayback<'chord'>())
+    const sounds = vi.fn(() => [NOTE])
+    act(() => result.current.toggle('chord', sounds))
+    act(() => result.current.toggle('chord', sounds))
+    expect(sounds).toHaveBeenCalledOnce()
   })
 
   it('turns back when another sound cuts it off, but not under a tapped key', () => {
@@ -44,10 +52,10 @@ describe('usePlayback', () => {
       () => ({ a: usePlayback<'a'>(), b: usePlayback<'b'>(), tap: useSoundKeys() }),
       audio,
     )
-    act(() => result.current.a.toggle('a', [NOTE]))
+    act(() => result.current.a.toggle('a', () => [NOTE]))
     act(() => result.current.tap([midi(64)]))
     expect(result.current.a.playing).toBe('a')
-    act(() => result.current.b.toggle('b', [NOTE]))
+    act(() => result.current.b.toggle('b', () => [NOTE]))
     expect(result.current.a.playing).toBeNull()
     expect(result.current.b.playing).toBe('b')
   })
@@ -55,7 +63,7 @@ describe('usePlayback', () => {
   it('never turns into Stop where nothing can sound', () => {
     const silent = createWebAudioOutput({ createContext: () => null, frame: () => {} })
     const { result } = setup(() => usePlayback<'chord'>(), silent)
-    act(() => result.current.toggle('chord', [NOTE]))
+    act(() => result.current.toggle('chord', () => [NOTE]))
     expect(result.current.playing).toBeNull()
   })
 })

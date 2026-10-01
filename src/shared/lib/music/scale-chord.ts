@@ -2,7 +2,7 @@ import { qualityWithIntervals, type Chord, type ChordQuality } from './chord'
 import { seventhName, triadName } from './chord-name'
 import { labelled } from './interval'
 import type { Key } from './key'
-import { noteName, pitchClassOf, type SpelledNote } from './note'
+import { pitchClassOf, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
 import { keyScale, spellScale, type ScaleKind } from './scale'
 import { availableTensions } from './tensions'
@@ -15,6 +15,15 @@ export type ChordNotes = (typeof CHORD_NOTES)[number]
 /** How big the app plays a chord it works out: a triad, a 7th or a 9th chord. */
 export const CHORD_SIZES = ['triads', 'sevenths', 'ninths'] as const
 export type ChordSize = (typeof CHORD_SIZES)[number]
+
+/** What a stack of so many notes is called: triads to 13ths, the chord sizes among them. */
+export const STACK_SIZES = {
+  3: 'triads',
+  4: 'sevenths',
+  5: 'ninths',
+  6: 'elevenths',
+  7: 'thirteenths',
+} as const satisfies Readonly<Record<ChordNotes, string>>
 
 /** The notes a chord size stacks. */
 export const SIZE_NOTES: Readonly<Record<ChordSize, 3 | 4 | 5>> = {
@@ -106,10 +115,6 @@ export function scaleChords(root: SpelledNote, kind: ScaleKind, notes: ChordNote
     }
   })
 }
-
-/** A chord of a scale as a symbol, over its bass when that is not the root: `Dm7`, `C/E`. */
-export const scaleChordSymbol = (chord: ScaleChord, bass?: SpelledNote): string =>
-  noteName(chord.root) + chord.suffix + (bass ? `/${noteName(bass)}` : '')
 
 /** A triad's and a 7th's figured-bass figures by inversion; the tradition has none from a 9th up. */
 const FIGURES: Readonly<Partial<Record<ChordNotes, readonly string[]>>> = {

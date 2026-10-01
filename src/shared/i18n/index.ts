@@ -32,4 +32,5 @@ export { i18n }
 export { localText, type LocalText } from './local-text'
 export { LOCALES, type Locale } from './locale'
 export { useLocale } from './use-locale'
+export { useKeyName } from './use-key-name'
 export { useScaleName } from './use-scale-name'

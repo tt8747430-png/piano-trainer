@@ -3,6 +3,7 @@ import { Footprints, ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { COMMON_PROGRESSIONS } from '@/entities/piece'
 import {
+  keyMode,
   noteName,
   noteParam,
   scaleHasChords,
@@ -13,14 +14,6 @@ import {
 } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 import { WALK } from '../walk'
-
-/** The kinds that are a key's scale, and so have its common progressions: major, and the three minors. */
-const KEY_OF: Readonly<Partial<Record<ScaleKind, 'major' | 'minor'>>> = {
-  major: 'major',
-  natural: 'minor',
-  harmonic: 'minor',
-  melodic: 'minor',
-}
 
 /**
  * A scale's chords to practise in the Player, each row opening it there in this key: walked up and
@@ -38,7 +31,8 @@ export function PractiseChords({
   const { t } = useTranslation(['practice', 'music'])
   if (!scaleHasChords(kind)) return null
   const chordSize = sizeOfNotes(notes)
-  const key = KEY_OF[kind]
+  // A key's scale has its key's common progressions; a mode has none.
+  const key = keyMode(kind)
   return (
     <RowGroup title={t('practice:inPlayer')}>
       <li>

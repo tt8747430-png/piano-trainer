@@ -1,9 +1,13 @@
-import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from '@/entities/pattern'
+import {
+  isLeftFigureId,
+  isPatternId,
+  isRightFigureId,
+  type PatternChoice,
+} from '@/entities/pattern'
 import {
   CHROMATIC,
   CHROMATIC_DIRECTIONS,
   chordsParam,
-  chromaticRoot,
   isLoopParam,
   PRACTICE_MODES,
   PROGRESSION,
@@ -11,7 +15,14 @@ import {
 } from '@/features/practice'
 import type { ChromaticSearch, PlayerSearch, ProgressionSearch, WalkSearch } from '@/pages/player'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
-import { keyParam, note, noteParam, pitchClassOf, scaleRootSpelling } from '@/shared/lib/music'
+import {
+  keyParam,
+  note,
+  noteParam,
+  pitchClassOf,
+  qualityRootSpelling,
+  scaleRootSpelling,
+} from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -27,9 +38,9 @@ import {
   type Raw,
 } from './read-search'
 
-// The Player, over any source: a piece, a walk of a scale's chords, the chromatic walk, a progression.
+// The Player, over whatever it plays: a piece, a walk of a scale's chords, the chromatic walk, a progression.
 
-const isPlayerPattern = (value: unknown): value is PatternId | 'chart' =>
+const isPlayerPattern = (value: unknown): value is PatternChoice =>
   value === 'chart' || isPatternId(value)
 const isMode = isOneOf(PRACTICE_MODES)
 
@@ -51,7 +62,7 @@ function practiceView(raw: Raw): PracticeView {
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
   }
 }
-/** The pattern and the hands' figures a Setup chooses: any source's. */
+/** The pattern and the hands' figures a Setup chooses, whatever the Player plays. */
 function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh'> {
   return {
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
@@ -107,7 +118,7 @@ function validateChromaticSearch(input: Input<ChromaticSearch>): ChromaticSearch
   const root = readNote(raw.root)
   return {
     chords: chordsParam(chords),
-    root: noteParam(root ? chromaticRoot(pitchClassOf(root), chords[0]) : note('C')),
+    root: noteParam(root ? qualityRootSpelling(pitchClassOf(root), chords[0]) : note('C')),
     direction: valueOr(isDirection, raw.direction, CHROMATIC_DEFAULTS.direction),
     ...practiceView(raw),
     ...figures(raw),

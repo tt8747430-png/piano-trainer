@@ -1,8 +1,7 @@
 import {
-  ChordSymbolError,
   numeralOf,
-  parseChordSymbol,
   parseNumerals,
+  readChordSymbol,
   type Key,
   type Numeral,
 } from '@/shared/lib/music'
@@ -18,14 +17,10 @@ export function readProgression(text: string, key: Key): Numeral[] | null {
   if (tokens.length === 0) return null
   const read: Numeral[] = []
   for (const token of tokens) {
-    try {
-      const numeral = numeralOf(parseChordSymbol(token), key)
-      if (!numeral) return null
-      read.push(numeral)
-    } catch (error) {
-      if (error instanceof ChordSymbolError) return null
-      throw error
-    }
+    const chord = readChordSymbol(token)
+    const numeral = chord && numeralOf(chord, key)
+    if (!numeral) return null
+    read.push(numeral)
   }
   return read
 }

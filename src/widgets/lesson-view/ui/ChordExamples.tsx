@@ -1,8 +1,6 @@
-import { Square } from 'lucide-react'
-import type { ShownKeys } from '@/features/play-example'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { Button } from '@/shared/ui/primitives/button'
+import { PlayToggle, type ShownKeys } from '@/shared/ui'
 import { placeExample } from '../model/chord-example'
 
 /**
@@ -24,19 +22,17 @@ export function ChordExamples({
         const example = placeExample(symbol)
         const playing = playback.playing === place
         return (
-          <Button
+          <PlayToggle
             key={place}
-            variant="outline"
-            aria-pressed={playing}
-            className="relative h-12 min-w-16 px-4 aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
+            playing={playing}
+            className="h-12 min-w-16 px-4"
             onClick={() => {
               onShow(example)
-              playback.toggle(place, chordSounds(example.keys, { arpeggio: false }))
+              playback.toggle(place, () => chordSounds(example.keys, { arpeggio: false }))
             }}
           >
-            {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" /> : null}
             <span className="font-display text-xl font-semibold">{symbol}</span>
-          </Button>
+          </PlayToggle>
         )
       })}
     </div>

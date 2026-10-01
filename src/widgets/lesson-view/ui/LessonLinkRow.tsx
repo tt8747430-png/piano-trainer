@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { CirclePlay } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
+import { STEP_PAINT } from '@/entities/path'
+import { pieceById } from '@/entities/piece'
 import { keyParam, noteParam, numeralsParam, parseChordSymbol } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
 import { LEARN_TILES, RowLink } from '@/shared/ui'
@@ -129,12 +131,14 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           }
         />
       )
-    case 'piece':
+    case 'piece': {
+      const piece = pieceById(target.piece)
+      if (!piece) throw new RangeError(`A lesson links to "${target.piece}": no piece`)
       return (
         <RowLink
           title={title}
           icon={CirclePlay}
-          paint="sand"
+          paint={STEP_PAINT[piece.kind]}
           render={
             <Link
               to="/play/$pieceId"
@@ -144,5 +148,6 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           }
         />
       )
+    }
   }
 }

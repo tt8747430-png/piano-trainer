@@ -28,7 +28,7 @@ export function ScaleSheet({
       aria-label={t('sheet.label')}
       className="-mx-4 overflow-x-auto overscroll-x-contain px-4 scrollbar-none lg:mx-0 lg:px-0"
     >
-      <LazyScoreView score={score} scale={1} fingers={fingers} muted={MUTED[hands]} />
+      <LazyScoreView score={score} fingers={fingers} muted={MUTED[hands]} />
     </section>
   )
 }

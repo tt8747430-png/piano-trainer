@@ -77,6 +77,15 @@ describe('touching the keys', () => {
     expect(onKeyPress.mock.calls).toEqual([[60], [60], [62]])
   })
 
+  it('draws a key played by a click no pointer made down for the shortest press', () => {
+    vi.useFakeTimers()
+    const { key } = setUp()
+    fireEvent.click(key('C4'))
+    expect(key('C4')).toHaveAttribute('data-down')
+    pastTheShortestPress()
+    expect(key('C4')).not.toHaveAttribute('data-down')
+  })
+
   it('plays a click no pointer made after a long press whose click never came', () => {
     const { onKeyPress, key } = setUp()
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))

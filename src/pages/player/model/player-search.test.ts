@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
-import { hasMethodCodes, PIECES, pieceById } from '@/entities/piece'
+import { hasMethodCodes, melodyOf, PIECES, pieceById } from '@/entities/piece'
 import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
-import { note, noteParam } from '@/shared/lib/music'
+import { isCompound, note, noteParam } from '@/shared/lib/music'
 import { resolveChoice, searchPatch } from './player-search'
 
 function piece(id: string) {
@@ -49,6 +49,17 @@ describe('resolveChoice', () => {
       pattern: ownChoice(bz2).pattern,
       rh: null,
       lh: null,
+    })
+  })
+
+  it('plays a piece without a tune by its own pattern when the URL names one that plays it', () => {
+    const tuneless = PIECES.find(
+      (p) => melodyOf(p) === undefined && !hasMethodCodes(p) && !isCompound(p.meter),
+    )
+    if (!tuneless) throw new Error('a piece in simple time without a melody')
+    expect(resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, false)).toMatchObject({
+      pattern: tuneless.pattern,
+      rh: null,
     })
   })
 

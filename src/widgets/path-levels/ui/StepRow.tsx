@@ -18,8 +18,9 @@ import {
 } from '@/entities/path'
 import { pieceById, PieceLink } from '@/entities/piece'
 import { knownCount, type ProgressState } from '@/entities/progress'
-import { LearnedToggle } from '@/features/mark-learned'
+import { LearnedCheck } from '@/features/mark-learned'
 import { cn } from '@/shared/lib'
+import { PAINT } from '@/shared/ui'
 
 const ICON: Readonly<Record<StepKind, LucideIcon>> = {
   chords: KeyboardMusic,
@@ -59,8 +60,8 @@ export function StepRow({
       <span
         className={cn(
           'grid size-12 shrink-0 place-items-center rounded-2xl',
-          STEP_PAINT[title.kind].fill,
-          STEP_PAINT[title.kind].ink,
+          PAINT[STEP_PAINT[title.kind]].fill,
+          PAINT[STEP_PAINT[title.kind]].ink,
         )}
       >
         <Icon aria-hidden className="size-5" />
@@ -85,7 +86,7 @@ export function StepRow({
         // A step naming a piece that is not there (the path's content test forbids it) leads nowhere.
         <span className={ROW_LINK}>{body}</span>
       )}
-      <LearnedToggle step={placed.id} title={title.primary} />
+      <LearnedCheck step={placed.id} title={title.primary} />
     </li>
   )
 }

@@ -1,13 +1,6 @@
-import type { Accompaniment, PatternId } from '@/entities/pattern'
+import type { Accompaniment, PatternFit, PatternId } from '@/entities/pattern'
 import { isOneOf } from '@/shared/lib'
-import {
-  CHORD_QUALITIES,
-  chordRootSpelling,
-  qualityIntervals,
-  type ChordQuality,
-  type PitchClass,
-  type SpelledNote,
-} from '@/shared/lib/music'
+import { CHORD_QUALITIES, type ChordQuality, type SpelledNote } from '@/shared/lib/music'
 
 // What a chromatic walk is, as its URL holds it: its chords, root and direction, and the walk's own
 // choices. Apart from its chart, so the router's validators carry no arrangement into the first paint.
@@ -18,17 +11,22 @@ export type ChromaticDirection = (typeof CHROMATIC_DIRECTIONS)[number]
 /** At least one chord quality: a chromatic walk always walks a chord. */
 export type ChromaticChords = readonly [ChordQuality, ...ChordQuality[]]
 
-/** The walk's own chords, direction, tempo and pattern: what the Player plays when its URL chooses none. */
+/**
+ * The walk's own chords, direction, tempo and pattern: what the Player plays when its URL chooses
+ * none; and what it has for a pattern: no key, no tune, no methods of its own.
+ */
 export const CHROMATIC = {
   chords: ['maj'],
   direction: 'up',
   tempo: 72,
   pattern: 'block',
+  fit: { methodCodes: false, melody: false, key: false, simpleTime: true },
 } as const satisfies {
   readonly chords: ChromaticChords
   readonly direction: ChromaticDirection
   readonly tempo: number
   readonly pattern: PatternId
+  readonly fit: PatternFit
 }
 
 /** What the learner walks: the Player's URL, read. */
@@ -43,10 +41,6 @@ const isQuality = isOneOf(CHORD_QUALITIES)
 /** The chosen qualities in the table's order, each once. */
 export const inTableOrder = (chords: readonly ChordQuality[]): ChordQuality[] =>
   CHORD_QUALITIES.filter((quality) => chords.includes(quality))
-
-/** A chord's root on this pitch class, spelled by the one rule over its intervals: G♯m9, A♭Maj9. */
-export const chromaticRoot = (pc: PitchClass, quality: ChordQuality): SpelledNote =>
-  chordRootSpelling(pc, qualityIntervals(quality))
 
 /** The URL's chords (`m9.maj9.n9`) read: known qualities, each once, in the table's order; none is the walk's own. */
 export function readChords(value: unknown): ChromaticChords {

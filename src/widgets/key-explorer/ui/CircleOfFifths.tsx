@@ -1,11 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   CIRCLE_OF_FIFTHS,
   circleFunctions,
   keyParam,
-  noteName,
+  keySymbol,
   sameKey,
   type CircleRing,
   type Key,
@@ -30,8 +31,7 @@ export function CircleOfFifths({ current }: { current: Key }) {
   const functions = circleFunctions(current)
   const numeral = (place: number, ring: CircleRing) =>
     functions.find((at) => at.place === place && at.ring === ring)?.numeral
-  const name = (key: Key) =>
-    t(key.minor ? 'keys.minor' : 'keys.major', { tonic: noteName(key.tonic) })
+  const name = useKeyName()
   return (
     <nav aria-label={t('keys.circle')} className="relative mx-auto aspect-square w-full max-w-sm">
       <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 size-full">
@@ -81,9 +81,7 @@ export function CircleOfFifths({ current }: { current: Key }) {
                     mark ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
-                  <span className="text-sm font-semibold">
-                    {noteName(key.tonic) + (key.minor ? 'm' : '')}
-                  </span>
+                  <span className="text-sm font-semibold">{keySymbol(key)}</span>
                   <span className="text-xs tabular-nums">{mark ?? signatureCount(key)}</span>
                 </Link>
               </li>

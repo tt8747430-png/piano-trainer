@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, pieceKey, shelfOf, SourceLine, type Entry } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
-import { keyName, keyScale, noteParam } from '@/shared/lib/music'
+import { keySymbol, keyScale, noteParam } from '@/shared/lib/music'
 import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
 
 /** Where Back leads from an entry opened directly: its shelf. */
@@ -31,7 +31,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
       <dl className="flex flex-wrap gap-2">
         <div className="rounded-lg border border-border bg-card px-3 py-1">
           <dt className="sr-only">{t('key')}</dt>
-          <dd className="font-semibold">{keyName(key)}</dd>
+          <dd className="font-semibold">{keySymbol(key)}</dd>
         </div>
         <div className="rounded-lg border border-border bg-card px-3 py-1">
           <dt className="sr-only">{t('meter')}</dt>

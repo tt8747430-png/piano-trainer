@@ -2,6 +2,9 @@ import { useCallback, useRef, type PointerEvent, type RefObject } from 'react'
 import { keyAt, PIANO_LAYOUT, usePresses, type Swipe } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 
+/** The press of a click no pointer made: no pointer has this id. */
+const NO_POINTER = -1
+
 /**
  * A key plays the instant a pointer touches it, and the keys never scroll under it (they take the
  * finger from the page). Scroll: that key only, down until the finger lifts. Glissando: every key a
@@ -53,12 +56,16 @@ export function useKeyPointers({
     [onPress, moveTo],
   )
 
-  // A click no pointer made (Enter, Space, a screen reader) has no click count: it always plays.
+  // A click no pointer made (Enter, Space, a screen reader) has no click count: it always plays,
+  // and its key goes down for the shortest press, as a tap's does.
   const click = useCallback(
     (key: Midi, clickCount: number) => {
-      if (clickCount === 0 || pointerKey.current !== key) onPress(key)
+      if (clickCount !== 0 && pointerKey.current === key) return
+      press(NO_POINTER, key)
+      release(NO_POINTER)
+      onPress(key)
     },
-    [onPress],
+    [onPress, press, release],
   )
 
   const group = {
