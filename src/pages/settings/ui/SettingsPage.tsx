@@ -69,51 +69,51 @@ export function SettingsPage() {
     setConfirming(false)
   }
   return (
-    <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
-      <div className="lg:col-span-2">
-        <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/' }} />} />
+    <div className="flex flex-col gap-6">
+      <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/' }} />} />
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
+        <Group title={t('language.label')}>
+          <Segmented
+            label={t('language.label')}
+            value={locale}
+            options={LOCALES.map((value) => ({ value, label: t(`${LOCALE_LABEL[value]}`) }))}
+            onChange={(value) => setLocale(settings, value)}
+          />
+        </Group>
+        <Group title={t('theme.label')}>
+          <Segmented
+            label={t('theme.label')}
+            value={theme}
+            options={THEMES.map((value) => ({ value, label: t(`${THEME_LABEL[value]}`) }))}
+            onChange={(value) => setTheme(settings, value)}
+          />
+        </Group>
+        <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
+          <KeyboardSettingsFields />
+        </Group>
+        <Group title={t('midi')}>
+          <MidiControl />
+        </Group>
+        <Group title={t('progress.label')}>
+          <AlertDialog open={confirming} onOpenChange={setConfirming}>
+            <AlertDialogTrigger render={<Button variant="destructive" className="self-start" />}>
+              {t('progress.reset')}
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t('progress.title')}</AlertDialogTitle>
+                <AlertDialogDescription>{t('progress.body')}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t('progress.cancel')}</AlertDialogCancel>
+                <AlertDialogAction variant="destructive" onClick={reset}>
+                  {t('progress.confirm')}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </Group>
       </div>
-      <Group title={t('language.label')}>
-        <Segmented
-          label={t('language.label')}
-          value={locale}
-          options={LOCALES.map((value) => ({ value, label: t(`${LOCALE_LABEL[value]}`) }))}
-          onChange={(value) => setLocale(settings, value)}
-        />
-      </Group>
-      <Group title={t('theme.label')}>
-        <Segmented
-          label={t('theme.label')}
-          value={theme}
-          options={THEMES.map((value) => ({ value, label: t(`${THEME_LABEL[value]}`) }))}
-          onChange={(value) => setTheme(settings, value)}
-        />
-      </Group>
-      <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
-        <KeyboardSettingsFields />
-      </Group>
-      <Group title={t('midi')}>
-        <MidiControl />
-      </Group>
-      <Group title={t('progress.label')}>
-        <AlertDialog open={confirming} onOpenChange={setConfirming}>
-          <AlertDialogTrigger render={<Button variant="destructive" className="self-start" />}>
-            {t('progress.reset')}
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t('progress.title')}</AlertDialogTitle>
-              <AlertDialogDescription>{t('progress.body')}</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t('progress.cancel')}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={reset}>
-                {t('progress.confirm')}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </Group>
     </div>
   )
 }

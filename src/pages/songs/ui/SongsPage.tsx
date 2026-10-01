@@ -5,7 +5,7 @@ import { LEVEL_NAME, LEVELS, levelOf, pieceStepId, type Level } from '@/entities
 import { SONG_COLLECTIONS, type CollectionId, type Entry } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { IN_PLACE } from '@/shared/lib'
-import { Dropdown, ScreenHeader } from '@/shared/ui'
+import { Dropdown, ScreenHeader, useScreenBar } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { PieceList } from '@/widgets/piece-list'
@@ -27,6 +27,7 @@ export function SongsPage() {
   const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
+  const { offset } = useScreenBar()
   const query = useDeferredValue(search.q)
   const set = (change: Partial<SongsFilter>) =>
     void navigate({ search: (prev) => ({ ...prev, ...change }), ...IN_PLACE })
@@ -39,50 +40,56 @@ export function SongsPage() {
   }))
 
   return (
-    <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
-      <div className="flex flex-col gap-5 lg:sticky lg:top-8">
-        <ScreenHeader title={t('songs:title')} />
-        <SearchField value={search.q} onChange={(q) => set({ q })} />
-        <div className="flex flex-wrap gap-2">
-          <Dropdown<CollectionId | 'all'>
-            label={t('songs:collection')}
-            value={search.collection}
-            options={[
-              { value: 'all', label: t('songs:all') },
-              ...SONG_COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
-            ]}
-            onChange={(collection) => set({ collection })}
-          />
-          {SONG_LEVELS.length > 1 ? (
-            <Dropdown<Level | 'any'>
-              label={t('songs:level')}
-              value={search.level}
+    <div className="flex flex-col">
+      <ScreenHeader title={t('songs:title')} />
+      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
+        {/* On a laptop the filters stay beside the list, under the screen's bar while it shows. */}
+        <div
+          className="flex flex-col gap-5 duration-200 ease-out motion-safe:transition-top lg:sticky"
+          style={{ top: `calc(${offset}px + 2rem)` }}
+        >
+          <SearchField value={search.q} onChange={(q) => set({ q })} />
+          <div className="flex flex-wrap gap-2">
+            <Dropdown<CollectionId | 'all'>
+              label={t('songs:collection')}
+              value={search.collection}
               options={[
-                { value: 'any', label: t('songs:anyLevel') },
-                ...SONG_LEVELS.map((level) => ({
-                  value: level,
-                  label: t(`common:levelName.${LEVEL_NAME[level]}`),
-                })),
+                { value: 'all', label: t('songs:all') },
+                ...SONG_COLLECTIONS.map((c) => ({ value: c.id, label: localText(c.name, locale) })),
               ]}
-              onChange={(level) => set({ level })}
+              onChange={(collection) => set({ collection })}
             />
-          ) : null}
+            {SONG_LEVELS.length > 1 ? (
+              <Dropdown<Level | 'any'>
+                label={t('songs:level')}
+                value={search.level}
+                options={[
+                  { value: 'any', label: t('songs:anyLevel') },
+                  ...SONG_LEVELS.map((level) => ({
+                    value: level,
+                    label: t(`common:levelName.${LEVEL_NAME[level]}`),
+                  })),
+                ]}
+                onChange={(level) => set({ level })}
+              />
+            ) : null}
+          </div>
         </div>
+        {groups.length > 0 ? (
+          <PieceList groups={groups} />
+        ) : (
+          <Empty>
+            <EmptyHeader>
+              <EmptyTitle>{t('songs:empty')}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button variant="soft" onClick={clear}>
+                {t('songs:clearFilters')}
+              </Button>
+            </EmptyContent>
+          </Empty>
+        )}
       </div>
-      {groups.length > 0 ? (
-        <PieceList groups={groups} />
-      ) : (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('songs:empty')}</EmptyTitle>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button variant="soft" onClick={clear}>
-              {t('songs:clearFilters')}
-            </Button>
-          </EmptyContent>
-        </Empty>
-      )}
     </div>
   )
 }
