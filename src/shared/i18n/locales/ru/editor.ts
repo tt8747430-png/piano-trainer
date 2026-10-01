@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const editor: LocaleResources['editor'] = {
   yourVersion: 'Ваша версия',
+  play: 'Сыграть',
   undo: 'Отменить',
   redo: 'Повторить',
   settings: 'Настройки песни',
@@ -18,8 +19,7 @@ export const editor: LocaleResources['editor'] = {
     pattern: 'Фактура',
   },
   caret: {
-    chord: 'Такт {{bar}}, доля {{beat}} · {{chord}}',
-    notes: 'Такт {{bar}}, доля {{beat}} · {{notes}}',
+    at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
     pattern: 'Такт {{bar}}, доля {{beat}} · фактура',
     end: 'Конец пьесы',
@@ -71,6 +71,7 @@ export const editor: LocaleResources['editor'] = {
   song: {
     title: 'Название',
     key: 'Тональность',
+    bpm: '{{tempo}} уд/мин',
     tempo: 'Темп',
     pattern: 'Фактура',
     meter: 'Размер',

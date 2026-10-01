@@ -1,5 +1,6 @@
 export const editor = {
   yourVersion: 'Your version',
+  play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
   settings: 'Song settings',
@@ -16,8 +17,7 @@ export const editor = {
     pattern: 'Pattern',
   },
   caret: {
-    chord: 'Bar {{bar}}, beat {{beat}} · {{chord}}',
-    notes: 'Bar {{bar}}, beat {{beat}} · {{notes}}',
+    at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
     pattern: 'Bar {{bar}}, beat {{beat}} · pattern',
     end: 'End of the piece',
@@ -69,6 +69,7 @@ export const editor = {
   song: {
     title: 'Title',
     key: 'Key',
+    bpm: '{{tempo}} BPM',
     tempo: 'Tempo',
     pattern: 'Pattern',
     meter: 'Meter',

@@ -21,7 +21,7 @@ export {
   type EditorState,
   type Selection,
 } from './model/editor'
-export { notesAt, type Voice } from './model/notes'
+export { notesAt, notesOf, type Voice } from './model/notes'
 export { createEditorStore, type EditorStore } from './model/store'
 export { barAt, barsOf, chordsAt, totalTicks, type PlacedBar } from './model/timeline'
 export { NOTE_VALUES, valueTicks, type NoteValue } from './model/values'

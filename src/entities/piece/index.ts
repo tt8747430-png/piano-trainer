@@ -64,7 +64,7 @@ export { entryTitles } from './model/titles'
 export { Credits } from './ui/Credits'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
-export { usePieceHeadings } from './ui/use-section-heading'
+export { usePieceHeadings, useSectionHeading } from './ui/use-section-heading'
 export {
   COLLECTIONS,
   COMMON_PROGRESSIONS,

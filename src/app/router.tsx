@@ -356,6 +356,17 @@ const exerciseRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ExercisePlayerPage'),
 })
 
+// The score editor: the Player's chunk carries the engraver it writes on.
+const editRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/edit/$pieceId',
+  beforeLoad: async ({ params, context }) => {
+    const { editableIn } = await playerScreens()
+    if (!editableIn(context.pieces.getState(), params.pieceId)) throw notFound()
+  },
+  component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -399,6 +410,7 @@ const routeTree = rootRoute.addChildren([
     chromaticRoute,
     progressionPlayerRoute,
     exerciseRoute,
+    editRoute,
     checkRoute,
   ]),
 ])

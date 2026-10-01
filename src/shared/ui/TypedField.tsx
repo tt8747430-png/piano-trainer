@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, type KeyboardEvent, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { InputGroup, InputGroupInput } from './primitives/input-group'
 
@@ -11,12 +11,16 @@ export function TypedField({
   value,
   error,
   onChange,
+  onKeyDown,
+  ref,
   className,
 }: {
   label: string
   value: string
   error: string | null
   onChange: (value: string) => void
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void
+  ref?: Ref<HTMLInputElement>
   className?: string
 }) {
   const errorId = useId()
@@ -26,7 +30,9 @@ export function TypedField({
       <span className="text-sm text-muted-foreground">{label}</span>
       <InputGroup className="h-12 rounded-2xl bg-card">
         <InputGroupInput
+          ref={ref}
           value={value}
+          onKeyDown={onKeyDown}
           aria-invalid={shown !== null}
           aria-describedby={shown === null ? undefined : errorId}
           autoCapitalize="off"
