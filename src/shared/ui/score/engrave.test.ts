@@ -60,6 +60,31 @@ describe('engrave', () => {
     const xs = layout.onsets.map((onset) => onset.x)
     expect(xs).toEqual([...xs].sort((a, b) => a - b))
     expect(layout.staffTop).toBeLessThan(layout.staffBottom)
+    expect(layout.staves.treble?.top).toBe(layout.staffTop)
+    expect(layout.staves.bass?.bottom).toBe(layout.staffBottom)
+    expect(layout.staves.treble?.bottom).toBeLessThan(layout.staves.bass?.top ?? 0)
+  })
+
+  it('prints no time signature at a line that continues in the time before it', () => {
+    const opening = engrave(score, document.createElement('div'), {
+      scale: 1,
+      fingers: false,
+      names: false,
+    })
+    const continuing = engrave(score, document.createElement('div'), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      timeBefore: { count: 4, unit: 4 },
+    })
+    expect(continuing.onsets[0]?.x).toBeLessThan(opening.onsets[0]?.x ?? 0)
+    const changed = engrave(score, document.createElement('div'), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      timeBefore: { count: 3, unit: 4 },
+    })
+    expect(changed.onsets[0]?.x).toBe(opening.onsets[0]?.x)
   })
 
   it('draws one staff alone when asked, as tall as one staff', () => {

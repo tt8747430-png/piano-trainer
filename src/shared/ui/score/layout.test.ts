@@ -7,6 +7,7 @@ const layout: ScoreLayout = {
   height: 210,
   staffTop: 40,
   staffBottom: 170,
+  staves: { treble: { top: 40, bottom: 80 }, bass: { top: 130, bottom: 170 } },
   measures: [
     { startTick: 0, ticks: 48, x: 0, width: 200 },
     { startTick: 48, ticks: 48, x: 200, width: 200 },

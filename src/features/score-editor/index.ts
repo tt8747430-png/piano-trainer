@@ -1,5 +1,5 @@
 export { barLengths, type BarRange, type Clip } from './model/bars'
-export { chordPlaces } from './model/caret'
+export { caretPlaces, chordPlaces } from './model/caret'
 export { keyChords } from './model/chords'
 export {
   HANDS,

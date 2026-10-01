@@ -1,5 +1,6 @@
 import type { LocaleResources } from '../../types'
 import { common } from './common'
+import { editor } from './editor'
 import { path } from './path'
 import { learn } from './learn'
 import { music } from './music'
@@ -21,4 +22,5 @@ export const ru: LocaleResources = {
   practice,
   quiz,
   settings,
+  editor,
 }

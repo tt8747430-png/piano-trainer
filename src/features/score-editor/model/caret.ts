@@ -35,6 +35,10 @@ function voicePlaces(draft: Draft, layer: Exclude<Layer, 'chords'>, step: Tick):
   )
 }
 
+/** Every place the caret may stand in a layer, the value's step apart in a voice. */
+export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
+  layer === 'chords' ? chordPlaces(draft) : voicePlaces(draft, layer, step)
+
 /** The caret's next place forwards (1) or back (−1), staying where it is at either end. */
 export function nextCaret(
   draft: Draft,
@@ -43,7 +47,7 @@ export function nextCaret(
   step: Tick,
   direction: -1 | 1,
 ): Tick {
-  const places = layer === 'chords' ? chordPlaces(draft) : voicePlaces(draft, layer, step)
+  const places = caretPlaces(draft, layer, step)
   const next =
     direction > 0
       ? places.find((place) => place > caret)

@@ -17,6 +17,8 @@ beforeEach(() => {
   // jsdom lays nothing out and cannot scroll the window, which the router resets on every navigation.
   if (typeof window !== 'undefined')
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+  // jsdom cannot scroll an element into view: one asked to stays where it is.
+  if (typeof Element !== 'undefined') Element.prototype.scrollIntoView = vi.fn()
   // Tests in the node environment have no document to give fonts to.
   if (typeof document !== 'undefined') stubFonts()
 })

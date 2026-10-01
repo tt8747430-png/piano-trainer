@@ -11,7 +11,13 @@ import {
   type RenderContext,
   type Voice,
 } from 'vexflow/core'
-import { keySignature, timeSignatureText, type Key, type Tick } from '@/shared/lib/music'
+import {
+  keySignature,
+  timeSignatureText,
+  type Key,
+  type Tick,
+  type TimeSignature,
+} from '@/shared/lib/music'
 import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
@@ -32,6 +38,8 @@ export interface ScoreLayout {
     readonly x: number
     readonly width: number
   }[]
+  /** Each staff drawn: its top and bottom lines. */
+  readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
 }
@@ -167,6 +175,7 @@ function buildMeasure(
   score: Score,
   measure: Measure,
   previous: Measure | undefined,
+  timeBefore: TimeSignature | undefined,
   {
     fingers,
     names,
@@ -186,10 +195,8 @@ function buildMeasure(
   const voices = shown.flatMap((staff) => staves[staff].map((built) => built.voice))
   const least = formatter.preCalculateMinTotalWidth(voices)
   const clefs = previous === undefined
-  const time =
-    !previous ||
-    previous.time.count !== measure.time.count ||
-    previous.time.unit !== measure.time.unit
+  const before = previous?.time ?? timeBefore
+  const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
   const probe = { measure, staves, formatter, clefs, time, width: 0 }
   const modifiers = Math.max(
     ...shown.map((staff) => {
@@ -305,13 +312,26 @@ export function engrave(
     fingers,
     names,
     staff,
-  }: { scale: number; fingers: boolean; names: boolean; staff?: StaffId | undefined },
+    timeBefore,
+  }: {
+    scale: number
+    fingers: boolean
+    names: boolean
+    staff?: StaffId | undefined
+    /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
+    timeBefore?: TimeSignature | undefined
+  },
 ): ScoreLayout {
   setUpVexFlow()
   host.replaceChildren()
   const shown: readonly StaffId[] = staff ? [staff] : STAVES
   const built = score.measures.map((measure, index) =>
-    buildMeasure(score, measure, score.measures[index - 1], { fingers, names, scale, shown }),
+    buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
+      fingers,
+      names,
+      scale,
+      shown,
+    }),
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
   const places = placesOf(built, staff)
@@ -330,6 +350,7 @@ export function engrave(
   const onsets = new Map<Tick, number>()
   let staffTop = 0
   let staffBottom = 0
+  const staves: { -readonly [S in StaffId]?: { top: number; bottom: number } } = {}
   let x = 0
   for (const measure of built) {
     const drawn = shown.map((on) => ({
@@ -366,6 +387,9 @@ export function engrave(
     for (const [tick, at] of onsetsIn(measure)) onsets.set(tick, at * scale)
     staffTop = top.stave.getYForLine(0) * scale
     staffBottom = bottom.stave.getYForLine(4) * scale
+    for (const { staff: on, stave } of drawn) {
+      staves[on] = { top: stave.getYForLine(0) * scale, bottom: stave.getYForLine(4) * scale }
+    }
     measures.push({
       startTick: measure.measure.startTick,
       ticks: measure.measure.ticks,
@@ -381,6 +405,7 @@ export function engrave(
     height: places.height * scale,
     staffTop,
     staffBottom,
+    staves,
     measures,
     onsets: [...onsets].map(([tick, at]) => ({ tick, x: at })).sort((a, b) => a.tick - b.tick),
   }
