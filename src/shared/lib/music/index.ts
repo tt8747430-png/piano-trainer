@@ -153,10 +153,12 @@ export {
   type PlacedTone,
 } from './place'
 export {
+  arpeggioFingering,
   FINGERINGS,
   fingeringsOf,
   ownFingering,
   runFingering,
+  thumbFingering,
   type Finger,
   type Fingering,
   type Hand,

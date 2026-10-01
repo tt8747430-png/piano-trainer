@@ -171,3 +171,32 @@ describe('the notation kernel (eslint)', { timeout: 60_000 }, () => {
     expect(broken).not.toContain('boundaries/dependencies')
   })
 })
+
+describe('the exercises (eslint)', { timeout: 60_000 }, () => {
+  it('let exercise import the music kernel, a Performance and its own files', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/exercise/example.ts',
+      "import { TICKS_PER_BEAT } from '@/shared/lib/music'\nimport type { Performance } from '@/shared/lib/arrangement'\nimport { BAR } from './line'\nexport const example: [number, number, Performance | null] = [TICKS_PER_BEAT, BAR, null]\n",
+    )
+    expect(broken).toEqual([])
+  })
+
+  it.each(['@/shared/lib/notation', '@/shared/lib', '@/entities/piece'])(
+    'refuse exercise importing %s',
+    async (source) => {
+      const broken = await rulesBrokenBy(
+        'src/shared/lib/exercise/example.ts',
+        `import * as outside from '${source}'\nexport const example = outside\n`,
+      )
+      expect(broken).toContain('boundaries/dependencies')
+    },
+  )
+
+  it('refuse exercise importing a package', async () => {
+    const broken = await rulesBrokenBy(
+      'src/shared/lib/exercise/example.ts',
+      "import { create } from 'zustand'\nexport const example = create\n",
+    )
+    expect(broken).toContain('no-restricted-imports')
+  })
+})

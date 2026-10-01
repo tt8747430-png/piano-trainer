@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  arpeggioFingering,
   fingeringsOf,
   ownFingering,
   runFingering,
@@ -9,7 +10,7 @@ import {
 } from './fingering'
 import { isBlackKey } from './keyboard'
 import { LETTERS, note } from './note'
-import { pitchClass } from './pitch'
+import { midi, pitchClass, type Midi } from './pitch'
 import { placeScale } from './place'
 import { SCALE_KINDS, scaleHasChords, scaleRootSpelling } from './scale'
 
@@ -77,6 +78,15 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('D'), 'dorian', 'lh', 0))).toBe('43213214')
   })
 
+  it('fingers several octaves with the taught first and last fingers and each octave’s turn between', () => {
+    expect(digits(scaleFingering(note('C'), 'major', 'rh', 0, 2))).toBe('123123412312345')
+    expect(digits(scaleFingering(note('C'), 'major', 'lh', 0, 2))).toBe('543213214321321')
+    // B♭ major's middle B♭ is 4 in the right hand, 3 in the left.
+    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0, 2))).toBe('212312341231234')
+    expect(digits(scaleFingering(note('B', -1), 'major', 'lh', 0, 2))).toBe('321432132143213')
+    expect(digits(scaleFingering(note('C'), 'major', 'rh', 2, 2))).toBe('312341231234123')
+  })
+
   it('carries no pentatonic or blues fingering to another note', () => {
     expect(() => scaleFingering(note('C'), 'blues', 'rh', 2)).toThrow(RangeError)
     expect(() => scaleFingering(note('A'), 'mpent', 'rh', 0)).toThrow(RangeError)
@@ -127,6 +137,14 @@ describe('fingeringsOf and ownFingering', () => {
 })
 
 describe('runFingering', () => {
+  it('reads a run’s octaves from its keys', () => {
+    const keys = [
+      ...placeScale(note('C'), 'major'),
+      ...placeScale(note('C'), 'major').slice(1),
+    ].map((placed, i) => midi(i > 7 ? placed.midi + 12 : placed.midi))
+    expect(digits(runFingering(note('C'), 'major', 0, keys, 'rh', 'scale'))).toBe('123123412312345')
+  })
+
   it('uses only fingers 1–5 for every kind, root, start and hand it offers', () => {
     for (const kind of SCALE_KINDS) {
       for (let pc = 0; pc < 12; pc++) {
@@ -144,5 +162,52 @@ describe('runFingering', () => {
         }
       }
     }
+  })
+})
+
+describe('arpeggioFingering', () => {
+  /** A chord's tones from `bottom`, stacked by `steps` semitones, over `octaves` octaves and its top note. */
+  const arpeggio = (bottom: number, steps: readonly number[], octaves: number): Midi[] => {
+    const keys = [bottom]
+    for (let octave = 0; octave < octaves; octave++)
+      for (const step of steps) keys.push((keys.at(-1) ?? bottom) + step)
+    return keys.map(midi)
+  }
+
+  it('fingers a white-key triad in every position as it is taught', () => {
+    // C, C/E, C/G over two octaves.
+    expect(digits(arpeggioFingering(arpeggio(60, [4, 3, 5], 2), 'rh'))).toBe('1231235')
+    expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 5], 2), 'lh'))).toBe('5421421')
+    expect(digits(arpeggioFingering(arpeggio(64, [3, 5, 4], 2), 'rh'))).toBe('1241245')
+    expect(digits(arpeggioFingering(arpeggio(52, [3, 5, 4], 2), 'lh'))).toBe('5421421')
+    expect(digits(arpeggioFingering(arpeggio(67, [5, 4, 3], 2), 'rh'))).toBe('1231235')
+    expect(digits(arpeggioFingering(arpeggio(55, [5, 4, 3], 2), 'lh'))).toBe('5321321')
+  })
+
+  it('fingers a 7th chord in fours', () => {
+    expect(digits(arpeggioFingering(arpeggio(60, [4, 3, 3, 2], 2), 'rh'))).toBe('123412345')
+    expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 3, 2], 2), 'lh'))).toBe('543214321')
+  })
+
+  it('puts the thumb on the first white key from a black one', () => {
+    // A♭ major: the thumb on C.
+    expect(digits(arpeggioFingering(arpeggio(68, [4, 3, 5], 1), 'rh'))).toBe('2124')
+    expect(digits(arpeggioFingering(arpeggio(56, [4, 3, 5], 1), 'lh'))).toBe('2142')
+  })
+
+  it('uses only fingers 1–5 on every root and shape', () => {
+    const shapes = [
+      [4, 3, 5],
+      [3, 4, 5],
+      [3, 3, 6],
+      [4, 4, 4],
+      [3, 3, 3, 3],
+      [4, 3, 4, 1],
+    ]
+    for (let root = 48; root < 60; root++)
+      for (const steps of shapes)
+        for (const hand of ['rh', 'lh'] as const)
+          for (const finger of arpeggioFingering(arpeggio(root, steps, 3), hand))
+            expect([1, 2, 3, 4, 5]).toContain(finger)
   })
 })

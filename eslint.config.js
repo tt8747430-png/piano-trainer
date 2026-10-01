@@ -9,10 +9,10 @@ import globals from 'globals'
 // Feature-Sliced Design: a layer imports from its own layer or the layers below it.
 const FSD_LAYERS = ['app', 'pages', 'widgets', 'features', 'entities', 'shared']
 const SLICED_LAYERS = ['pages', 'widgets', 'features', 'entities']
-// The theory kernel, the notation kernel and the accompaniment engine sit inside shared, fenced tighter:
-// every layer may use them, music imports only itself, notation only music and itself, and arrangement
-// only music and itself.
-const KERNEL = ['music', 'notation', 'arrangement']
+// The theory kernel, the notation kernel, the accompaniment engine and the exercises sit inside shared,
+// fenced tighter: every layer may use them, music imports only itself, notation only music and itself,
+// arrangement only music and itself, and exercise music, arrangement (a Performance) and itself.
+const KERNEL = ['music', 'notation', 'arrangement', 'exercise']
 const fsdDependencyRules = [
   ...FSD_LAYERS.map((from) => ({
     from: { type: from },
@@ -25,6 +25,14 @@ const fsdDependencyRules = [
   {
     from: { type: 'arrangement' },
     allow: [{ to: { type: 'music' } }, { to: { type: 'arrangement' } }],
+  },
+  {
+    from: { type: 'exercise' },
+    allow: [
+      { to: { type: 'music' } },
+      { to: { type: 'arrangement' } },
+      { to: { type: 'exercise' } },
+    ],
   },
   // Another slice only through its index.ts, whatever the import path (boundaries does not check a
   // slice's imports of its own files). Rules are last-match-wins, so this narrows the ones above.
@@ -80,6 +88,7 @@ export default defineConfig(
         { type: 'music', pattern: 'src/shared/lib/music' },
         { type: 'notation', pattern: 'src/shared/lib/notation' },
         { type: 'arrangement', pattern: 'src/shared/lib/arrangement' },
+        { type: 'exercise', pattern: 'src/shared/lib/exercise' },
         { type: 'shared', pattern: 'src/shared' },
       ],
       'boundaries/ignore': ['**/*.test.{ts,tsx}'],
@@ -96,7 +105,7 @@ export default defineConfig(
   },
   {
     // boundaries does not check packages: the kernels import none at all, only their own files.
-    files: ['src/shared/lib/{music,notation,arrangement}/**/*.ts'],
+    files: ['src/shared/lib/{music,notation,arrangement,exercise}/**/*.ts'],
     ignores: ['**/*.test.ts'],
     rules: {
       'no-restricted-imports': [
@@ -106,7 +115,7 @@ export default defineConfig(
             {
               regex: '^(?!\\.{1,2}/|@/)',
               message:
-                'The music kernel, the notation kernel and the arrangement engine import no package. See CLAUDE.md → Architecture.',
+                'The music kernel, the notation kernel, the arrangement engine and the exercises import no package. See CLAUDE.md → Architecture.',
             },
           ],
         },
