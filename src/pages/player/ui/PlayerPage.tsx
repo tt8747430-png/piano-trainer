@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearch } from '@tanstack/react-router'
-import { entryTitles, pieceById, type Piece } from '@/entities/piece'
+import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
@@ -47,6 +47,6 @@ function PiecePlayer({ piece }: { piece: Piece }) {
 /** A piece in the Player: the route's piece, its choices from the URL. */
 export function PlayerPage() {
   const { pieceId } = useParams({ from: '/full-screen/play/$pieceId' })
-  const piece = pieceById(pieceId)
+  const piece = useRepertoire().piece(pieceId)
   return piece ? <PiecePlayer key={piece.id} piece={piece} /> : null
 }

@@ -7,6 +7,7 @@ import {
   type RouterHistory,
 } from '@tanstack/react-router'
 import { isOwnPatternId, isPatternRef, type PatternsStore } from '@/entities/pattern'
+import type { PiecesStore } from '@/entities/piece'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage } from '@/pages/not-found'
@@ -84,12 +85,14 @@ function NotFoundScreen() {
 }
 
 /**
- * What every route is handed: the screens' remembered views (ADR 0022) and the learner's patterns,
- * which say whether a pattern's page is there (ADR 0026).
+ * What every route is handed: the screens' remembered views (ADR 0022), the learner's patterns, which
+ * say whether a pattern's page is there (ADR 0026), and the learner's pieces, which say whether a
+ * piece, its page or its editor is (ADR 0027).
  */
 export interface RouterContext {
   readonly views: ViewsStore
   readonly patterns: PatternsStore
+  readonly pieces: PiecesStore
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -122,9 +125,9 @@ const songsRoute = createRoute({
 const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
-  beforeLoad: async ({ params }) => {
-    const { entryById, shelfOf } = await songsScreens()
-    const entry = entryById(params.pieceId)
+  beforeLoad: async ({ params, context }) => {
+    const { entryIn, shelfOf } = await songsScreens()
+    const entry = entryIn(context.pieces.getState(), params.pieceId)
     if (!entry || shelfOf(entry.kind) !== 'songs') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
@@ -153,18 +156,20 @@ const trainerRoute = createRoute({
 const studyRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/studies/$pieceId',
-  beforeLoad: async ({ params }) => {
-    const { pieceById } = await songsScreens()
-    if (pieceById(params.pieceId)?.kind !== 'study') throw notFound()
+  beforeLoad: async ({ params, context }) => {
+    const { entryIn } = await songsScreens()
+    if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'study') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 const progressionRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/progressions/$pieceId',
-  beforeLoad: async ({ params }) => {
-    const { pieceById } = await songsScreens()
-    if (pieceById(params.pieceId)?.kind !== 'progression') throw notFound()
+  beforeLoad: async ({ params, context }) => {
+    const { entryIn } = await songsScreens()
+    if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'progression') {
+      throw notFound()
+    }
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
@@ -302,8 +307,8 @@ const playerRoute = createRoute({
   ...playerSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
-    const { pieceById } = await playerScreens()
-    if (!pieceById(context.params.pieceId)) throw notFound()
+    const { pieceIn } = await playerScreens()
+    if (!pieceIn(context.context.pieces.getState(), context.params.pieceId)) throw notFound()
     restorePiece(context)
   },
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
@@ -406,11 +411,12 @@ export function createAppRouter({
   history,
   views,
   patterns,
+  pieces,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns },
+    context: { views, patterns, pieces },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

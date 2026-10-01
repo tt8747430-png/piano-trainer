@@ -1,5 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { act, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { COLLECTIONS } from '@/entities/piece'
@@ -306,5 +306,58 @@ describe('shelves', () => {
     const { router } = await renderApp('/play/flow')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/practice/progressions/flow'))
+  })
+})
+
+describe('the learner’s pieces', () => {
+  const saved = (state: object) => {
+    const storage = createMemoryStorage()
+    storage.setItem('pt-pieces', JSON.stringify({ state, version: 1 }))
+    return storage
+  }
+  const SONG = {
+    id: 'my-1',
+    title: 'Morning',
+    key: 'G',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['G C D G'] }],
+  }
+
+  it('plays a song in the learner’s version', async () => {
+    const version = {
+      ...SONG,
+      key: 'Bm',
+      meter: '12/8',
+      sections: [{ kind: 'verse', lines: ['Em A'] }],
+    }
+    await renderApp('/play/bz1', { storage: saved({ versions: { bz1: version } }) })
+    expect(await screen.findByRole('button', { name: 'Bar 1: Em' })).toBeInTheDocument()
+  })
+
+  it('plays an own song, and shows its page on Songs', async () => {
+    const storage = saved({ songs: [SONG], nextSong: 2 })
+    await renderApp('/play/my-1', { storage })
+    expect(await screen.findByRole('button', { name: 'Bar 2: C' })).toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs/my-1', { storage })
+    expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
+  })
+
+  it('opens a listing in the Player once the learner has written its chart', async () => {
+    const version = {
+      ...SONG,
+      key: 'Cm',
+      meter: '3/4',
+      sections: [{ kind: 'verse', lines: ['Cm Fm'] }],
+    }
+    await renderApp('/play/bz4', { storage: saved({ versions: { bz4: version } }) })
+    expect(await screen.findByRole('button', { name: 'Bar 1: Cm' })).toBeInTheDocument()
+  })
+
+  it('shows not found for an own song that is not there', async () => {
+    await renderApp('/play/my-3')
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

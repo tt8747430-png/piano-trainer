@@ -1,5 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
+import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
 import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
@@ -13,12 +14,14 @@ export function App({
   settingsStore,
   progressStore,
   patternsStore,
+  piecesStore,
   services,
   router,
 }: {
   settingsStore: SettingsStore
   progressStore: ProgressStore
   patternsStore: PatternsStore
+  piecesStore: PiecesStore
   services: Services
   router: AppRouter
 }) {
@@ -26,14 +29,16 @@ export function App({
     <SettingsStoreProvider store={settingsStore}>
       <ProgressStoreProvider store={progressStore}>
         <PatternsStoreProvider store={patternsStore}>
-          <ServicesProvider services={services}>
-            <LocaleSync />
-            <AudioUnlock />
-            <MidiReconnect />
-            <ThemeProvider>
-              <RouterProvider router={router} />
-            </ThemeProvider>
-          </ServicesProvider>
+          <PiecesStoreProvider store={piecesStore}>
+            <ServicesProvider services={services}>
+              <LocaleSync />
+              <AudioUnlock />
+              <MidiReconnect />
+              <ThemeProvider>
+                <RouterProvider router={router} />
+              </ThemeProvider>
+            </ServicesProvider>
+          </PiecesStoreProvider>
         </PatternsStoreProvider>
       </ProgressStoreProvider>
     </SettingsStoreProvider>

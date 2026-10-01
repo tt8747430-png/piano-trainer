@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createPatternsStore } from '@/entities/pattern'
+import { createPiecesStore } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
 import { createViewsStore } from '@/entities/views'
@@ -13,8 +14,10 @@ import './styles/index.css'
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('index.html has no #root element')
 
-// One store of the learner's patterns: the screens read it, and the router asks it what is there.
+// One store each of the learner's patterns and pieces: the screens read them, and the router asks them
+// what is there.
 const patternsStore = createPatternsStore()
+const piecesStore = createPiecesStore()
 
 createRoot(rootElement).render(
   <StrictMode>
@@ -22,8 +25,13 @@ createRoot(rootElement).render(
       settingsStore={createSettingsStore()}
       progressStore={createProgressStore()}
       patternsStore={patternsStore}
+      piecesStore={piecesStore}
       services={createServices()}
-      router={createAppRouter({ views: createViewsStore(), patterns: patternsStore })}
+      router={createAppRouter({
+        views: createViewsStore(),
+        patterns: patternsStore,
+        pieces: piecesStore,
+      })}
     />
   </StrictMode>,
 )
