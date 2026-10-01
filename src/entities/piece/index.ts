@@ -4,13 +4,22 @@ export {
   pieceKey,
   type Collection,
   type CollectionId,
+  type ChartPiece,
   type Entry,
+  type Hands,
+  type KeyText,
   type Listing,
   type Piece,
   type PieceId,
 } from './model/types'
 
 export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
+export { ContentError } from './model/content-error'
+export { keyText, musicOf, pitchText, sameMusic, withMusic, type PieceMusic } from './model/music'
+export { HAND_IDS, type HandId } from './model/parse-hands'
+export { beatsText, writeBar } from './model/write-chart'
+export { writeHand } from './model/write-hands'
+export { writeMelody, type BarSpan } from './model/write-melody'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
 export {
