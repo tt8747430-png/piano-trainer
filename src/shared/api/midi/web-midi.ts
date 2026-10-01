@@ -15,8 +15,13 @@ const statusOf = (inputs: readonly MIDIInput[]): MidiStatus =>
  * The Web MIDI adapter: every keyboard plugged in is listened to, and re-hooked when devices change.
  * A keyboard unplugged lets go of the keys it was holding, so no key stays down without a hand.
  */
+/** Whether the learner has allowed MIDI on this site: asked without a prompt. */
+const midiPermission = async (): Promise<PermissionState> =>
+  (await navigator.permissions.query({ name: 'midi' })).state
+
 export function createWebMidiInput(
   requestAccess: () => Promise<MIDIAccess> = () => navigator.requestMIDIAccess(),
+  permission: () => Promise<PermissionState> = midiPermission,
 ): MidiInput {
   const notes = createListeners<NoteEvent>()
   const statuses = createListeners<MidiStatus>()
@@ -61,7 +66,12 @@ export function createWebMidiInput(
   // Granted once and kept: a second access would hear every key through ports of its own.
   let granted: MIDIAccess | null = null
 
-  return {
+  const input: MidiInput = {
+    async reconnect() {
+      // A browser that cannot say (no Permissions API, no `midi` name) waits for the learner's Connect.
+      const state = await permission().catch(() => null)
+      return state === 'granted' ? input.connect() : null
+    },
     async connect() {
       let status: MidiStatus
       try {
@@ -78,4 +88,5 @@ export function createWebMidiInput(
     onNote: notes.add,
     onStatus: statuses.add,
   }
+  return input
 }

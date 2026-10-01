@@ -1,7 +1,8 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { midi } from '@/shared/lib/music'
 
 describe('Practice → a Theory quiz', () => {
   it('is titled by its quiz and asks it', async () => {
@@ -31,6 +32,29 @@ describe('Practice → a Theory quiz', () => {
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
     expect(progressStore.getState().quiz.total).toBe(1)
+  })
+
+  it('takes the keys played on a MIDI keyboard as the answer', async () => {
+    const user = userEvent.setup()
+    const { midi: midiKeyboard, progressStore } = await renderApp('/practice/quiz/build-chord')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    act(() => midiKeyboard.press(midi(60)))
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+    expect(progressStore.getState().quiz.total).toBe(1)
+  })
+
+  it('connects a MIDI keyboard from its header', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/quiz/build-chord')
+    await user.click(await screen.findByRole('button', { name: 'MIDI keyboard' }))
+    await user.click(await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }))
+    expect(
+      await screen.findByRole('button', { name: 'MIDI keyboard, connected' }),
+    ).toBeInTheDocument()
   })
 
   it('goes back to Practice when it was opened directly', async () => {

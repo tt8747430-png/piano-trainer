@@ -48,6 +48,23 @@ describe('createWebMidiInput', () => {
     expect(await withAccess(new FakeAccess()).connect()).toEqual({ state: 'no-device' })
   })
 
+  it('reconnects on its own only where the keyboard was allowed before', async () => {
+    const request = vi.fn(
+      async () => new FakeAccess(new FakeInput('a', 'Piano')) as unknown as MIDIAccess,
+    )
+    const allowed = createWebMidiInput(request, async () => 'granted')
+    expect(await allowed.reconnect()).toEqual({ state: 'connected', devices: ['Piano'] })
+    expect(allowed.current()).toEqual({ state: 'connected', devices: ['Piano'] })
+    const asked = vi.fn(async () => new FakeAccess() as unknown as MIDIAccess)
+    const notYet = createWebMidiInput(asked, async () => 'prompt')
+    expect(await notYet.reconnect()).toBeNull()
+    expect(asked).not.toHaveBeenCalled()
+    expect(notYet.current()).toBeNull()
+    const unknown = createWebMidiInput(asked, () => Promise.reject(new TypeError('midi')))
+    expect(await unknown.reconnect()).toBeNull()
+    expect(asked).not.toHaveBeenCalled()
+  })
+
   it('reports a refused permission', async () => {
     const midi = createWebMidiInput(() => Promise.reject(new DOMException('no', 'SecurityError')))
     expect(await midi.connect()).toEqual({ state: 'denied' })

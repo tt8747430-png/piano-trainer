@@ -12,6 +12,7 @@ import {
   type QuizMode,
   type TheoryQuiz,
 } from '@/features/quiz'
+import { MidiButton } from '@/features/connect-midi'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { QuizBoard } from '@/widgets/quiz-board'
@@ -72,6 +73,7 @@ function QuizScreen({ quiz }: { quiz: TheoryQuiz }) {
       <ScreenHeader
         title={t(`modes.${quiz}`)}
         back={<BackButton fallback={{ to: '/practice' }} />}
+        actions={<MidiButton />}
       />
       {quiz === 'gaps' ? <GapsQuiz onWholeQuiz={toWholeQuiz} /> : <ChoiceQuiz mode={quiz} />}
       <div className="flex flex-wrap items-center justify-between gap-3">

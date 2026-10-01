@@ -1,7 +1,8 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('A lesson', () => {
@@ -82,6 +83,18 @@ describe('A lesson', () => {
     for (const key of ['E4', 'G sharp 4', 'B4']) {
       await user.click(within(keyboard).getByRole('button', { name: key }))
     }
+    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
+    expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
+  })
+
+  it('answers a quiz from a MIDI keyboard', async () => {
+    const user = userEvent.setup()
+    const { midi: midiKeyboard } = await renderApp('/learn/lessons/triads')
+    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
+    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    act(() => {
+      for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
+    })
     await user.click(within(quiz).getByRole('button', { name: 'Check' }))
     expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
   })

@@ -16,6 +16,11 @@ export interface NoteEvent {
 export interface MidiInput {
   /** Asks for access and listens to every keyboard plugged in, now and later. */
   connect(): Promise<MidiStatus>
+  /**
+   * Connects without asking where the learner allowed the keyboard before (the app opened again);
+   * null, and no prompt, where they have not.
+   */
+  reconnect(): Promise<MidiStatus | null>
   onNote(listener: (event: NoteEvent) => void): () => void
   onStatus(listener: (status: MidiStatus) => void): () => void
   /** The last status, or null before any connect(). */

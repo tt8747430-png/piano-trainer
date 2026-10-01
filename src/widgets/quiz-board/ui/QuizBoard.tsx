@@ -1,6 +1,7 @@
 import { Square, Volume2 } from 'lucide-react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { answerKeys, quizKeyboardRange, targetKeys, type Quiz } from '@/features/quiz'
 import { useScaleName } from '@/shared/i18n'
@@ -21,6 +22,10 @@ export function QuizBoard({ quiz, onFinish }: { quiz: Quiz; onFinish?: () => voi
   const building = question.mode !== 'name-chord'
   // Building a chord or scale: keys are chosen until the answer is checked.
   const choosing = building && !result
+  // A key played on the MIDI keyboard chooses like a tap.
+  useMidiKeyDown((key) => {
+    if (choosing) quiz.toggleKey(key)
+  })
   const next = quiz.finished ? onFinish : quiz.next
   const scaleName = question.mode === 'build-scale' ? nameScale(question.root, question.kind) : ''
   const answerName =

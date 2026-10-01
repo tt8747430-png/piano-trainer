@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { stepById, useStepTitle, type StepId } from '@/entities/path'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
+import { MidiButton } from '@/features/connect-midi'
 import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
 import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
@@ -38,6 +39,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
           })}
           className="flex-1"
         />
+        <MidiButton />
       </header>
       <h1 className="text-2xl">{t('quiz:checkTitle', { title })}</h1>
       {done ? (

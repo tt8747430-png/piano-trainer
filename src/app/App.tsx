@@ -4,6 +4,7 @@ import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { LocaleSync } from './providers/LocaleSync'
+import { MidiReconnect } from './providers/MidiReconnect'
 import { ThemeProvider } from './providers/ThemeProvider'
 import type { AppRouter } from './router'
 
@@ -24,6 +25,7 @@ export function App({
         <ServicesProvider services={services}>
           <LocaleSync />
           <AudioUnlock />
+          <MidiReconnect />
           <ThemeProvider>
             <RouterProvider router={router} />
           </ThemeProvider>

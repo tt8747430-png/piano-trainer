@@ -9,8 +9,10 @@ export interface FakeMidi extends MidiInput {
   setStatus(status: MidiStatus): void
 }
 
+/** `allowed`: the learner allowed the keyboard before, so the app reconnects to it as it opens. */
 export function createFakeMidi(
   status: MidiStatus = { state: 'connected', devices: ['Keyboard'] },
+  { allowed = false }: { allowed?: boolean } = {},
 ): FakeMidi {
   let current: MidiStatus | null = null
   const notes = createListeners<NoteEvent>()
@@ -19,12 +21,14 @@ export function createFakeMidi(
     current = next
     statuses.emit(next)
   }
+  const connect = async () => {
+    const next = current ?? status
+    report(next)
+    return next
+  }
   return {
-    async connect() {
-      const next = current ?? status
-      report(next)
-      return next
-    },
+    connect,
+    reconnect: async () => (allowed ? connect() : null),
     current: () => current,
     onNote: notes.add,
     onStatus: statuses.add,

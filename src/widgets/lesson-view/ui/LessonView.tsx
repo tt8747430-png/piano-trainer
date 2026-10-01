@@ -1,7 +1,7 @@
 import { useMemo, useReducer, useState } from 'react'
 import type { Lesson } from '@/entities/lesson'
+import { useMidiKeyDown } from '@/features/connect-midi'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-
 import { localText, useLocale } from '@/shared/i18n'
 import { usePlay } from '@/shared/lib/services'
 import {
@@ -29,6 +29,10 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   const answer = quiz ? answers.get(quiz.id) : undefined
   const keys: QuizKeys = quiz && answer ? quizKeys(quiz, answer) : shown
   const choosing = quiz !== null && quiz.stage !== 'answer'
+  // The open quiz is answered on the MIDI keyboard as on the screen's keys.
+  useMidiKeyDown((key) => {
+    if (choosing) dispatch({ type: 'toggle', key })
+  })
   // An example played closes the open quiz: the keys show the example.
   const show = (next: ShownKeys) => {
     dispatch({ type: 'close' })
