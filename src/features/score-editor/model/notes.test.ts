@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { PieceMusic } from '@/entities/piece'
 import { midi, note, noteName } from '@/shared/lib/music'
-import { readDraft, type Draft, type DraftNote } from './draft'
+import { draftOf, shape } from '../testing/test-draft'
 import {
   addToChord,
   backToPattern,
@@ -16,19 +15,6 @@ import {
 } from './notes'
 import { barsOf, totalTicks } from './timeline'
 
-const draftOf = (music: Partial<PieceMusic> = {}): Draft =>
-  readDraft({
-    key: 'G',
-    meter: '4/4',
-    tempo: 90,
-    pattern: 'r1',
-    sections: [{ kind: 'verse', lines: ['G C'] }],
-    ...music,
-  })
-const shape = (notes: readonly DraftNote[]) =>
-  notes.map(
-    (n) => `${noteName(n.spelled)}${Math.floor(n.midi / 12) - 1}@${n.startTick}/${n.durationTicks}`,
-  )
 const keys = (...numbers: number[]) => numbers.map((n) => midi(n))
 
 describe('writeNotes in the melody', () => {
