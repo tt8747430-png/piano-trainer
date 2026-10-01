@@ -1,6 +1,6 @@
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 
-import { checkedKeys } from '@/features/quiz'
+import { checkedKeys } from '@/features/trainer'
 import { toggled } from '@/shared/lib'
 import {
   MIDDLE_C,

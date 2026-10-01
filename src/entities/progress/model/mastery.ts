@@ -1,6 +1,6 @@
 import { skillsOfStep, stepIdOf, stepOfSkill, type StepId } from '@/entities/path'
 import type { SkillId } from '@/shared/lib/music'
-import type { Answer, ProgressState, QuizStats } from './types'
+import type { Answer, ProgressState } from './types'
 
 /** How many of a skill's latest answers count as evidence. */
 export const EVIDENCE_SIZE = 5
@@ -43,16 +43,6 @@ export const skillsToCheck = (
 
 export const knownCount = (skills: readonly SkillId[], answers: ProgressState['answers']): number =>
   skills.filter((skill) => ratingOf(answers, skill) === 'known').length
-
-export function countAnswer(stats: QuizStats, correct: boolean): QuizStats {
-  const streak = correct ? stats.streak + 1 : 0
-  return {
-    correct: stats.correct + (correct ? 1 : 0),
-    total: stats.total + 1,
-    streak,
-    best: Math.max(stats.best, streak),
-  }
-}
 
 const allKnown = (state: ProgressState, skills: readonly SkillId[]) =>
   skills.every((skill) => ratingOf(state.answers, skill) === 'known')

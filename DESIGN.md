@@ -470,8 +470,8 @@ From 1024px each screen arranges itself in two columns with a 40px gap, tops ali
 
 - **Songs:** the filters in an 18rem column, the list beside it.
 - **Piece:** facts and actions (5 parts) beside the chart (7 parts).
-- **Learn and Practice:** two equal columns of grouped rows (Lessons beside References; the Theory quiz beside the
-  studies and progressions).
+- **Learn and Practice:** two equal columns of grouped rows (Lessons beside References; the trainers and exercises beside
+  the studies and progressions).
 - **The Chords and Scales references, Settings:** two equal columns; the Path's steps in two columns inside their
   card.
 - **The Keys reference:** the circle beside the key's name, signature and facts; the keys across both columns; the

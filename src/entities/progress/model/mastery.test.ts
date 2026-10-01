@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { SkillId } from '@/shared/lib/music'
 import {
-  countAnswer,
   knownCount,
   latestEvidence,
   rate,
@@ -61,23 +60,6 @@ describe('latestEvidence', () => {
   it('keeps the last five answers', () => {
     expect(latestEvidence(answers('011111'))).toEqual(answers('011111').slice(1))
     expect(latestEvidence(answers('11'))).toEqual(answers('11'))
-  })
-})
-
-describe('countAnswer', () => {
-  const stats = { correct: 3, total: 5, streak: 2, best: 2 }
-
-  it('counts a right answer into the streak and the best', () => {
-    expect(countAnswer(stats, true)).toEqual({ correct: 4, total: 6, streak: 3, best: 3 })
-  })
-
-  it('ends the streak on a wrong answer and keeps the best', () => {
-    expect(countAnswer({ ...stats, best: 7 }, false)).toEqual({
-      correct: 3,
-      total: 6,
-      streak: 0,
-      best: 7,
-    })
   })
 })
 

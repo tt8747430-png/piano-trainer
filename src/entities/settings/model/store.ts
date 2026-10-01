@@ -3,10 +3,8 @@ import { isLocale } from '@/shared/i18n/locale'
 import { createSavedStore, savedObject, type SavingOptions } from '@/shared/lib'
 import {
   DEFAULT_PRACTICE,
-  DEFAULT_QUIZ_CHOICE,
+  DEFAULT_TRAINER,
   PRACTICE_TOGGLES,
-  canonicalFamilies,
-  canonicalScales,
   defaultKeyboard,
   detectLocale,
   isKeySize,
@@ -15,13 +13,13 @@ import {
   isTheme,
   type KeyboardSettings,
   type PracticeToggles,
-  type QuizChoice,
   type SettingsState,
+  type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 5
+export const SETTINGS_VERSION = 6
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -41,7 +39,7 @@ export function createSettingsStore({
         theme: 'system',
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
-        quiz: DEFAULT_QUIZ_CHOICE,
+        trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
       },
       read: sanitize,
@@ -61,14 +59,11 @@ function practiceToggles(value: unknown): PracticeToggles {
   ) as Record<keyof PracticeToggles, boolean>
 }
 
-/** Each list keeps its known entries; a list left empty takes the default. */
-function quizChoice(value: unknown): QuizChoice {
-  const saved = savedObject<QuizChoice>(value)
-  const families = Array.isArray(saved.families) ? canonicalFamilies(saved.families) : []
-  const scales = Array.isArray(saved.scales) ? canonicalScales(saved.scales) : []
+/** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
+function trainerSettings(value: unknown): TrainerSettings {
+  const saved = savedObject<TrainerSettings>(value)
   return {
-    families: families.length > 0 ? families : DEFAULT_QUIZ_CHOICE.families,
-    scales: scales.length > 0 ? scales : DEFAULT_QUIZ_CHOICE.scales,
+    autoNext: typeof saved.autoNext === 'boolean' ? saved.autoNext : DEFAULT_TRAINER.autoNext,
   }
 }
 
@@ -86,9 +81,10 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
 
 /**
  * Stored JSON is untrusted: the theme, language and keyboard keep each value still valid and take the
- * current one otherwise; a practice toggle or quiz list not saved, or not valid, takes its default.
- * A version-1 save has no practice or quiz fields, a version-2 save no keyboard, a version-3 save no
- * recording toggle, a version-4 save no named notes: each gains its defaults here.
+ * current one otherwise; a practice toggle or trainer setting not saved, or not valid, takes its
+ * default. A version-1 save has no practice fields, a version-2 save no keyboard, a version-3 save no
+ * recording toggle, a version-4 save no named notes, a version-5 save no trainer settings (its quiz
+ * choice is what a trainer's URL now holds, and is not read): each gains its defaults here.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
@@ -96,7 +92,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     theme: isTheme(saved.theme) ? saved.theme : current.theme,
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
-    quiz: quizChoice(saved.quiz),
+    trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
   }
 }

@@ -29,7 +29,7 @@ const ROUTES = [
   ['/learn/progressions', '/learn/progressions'],
   ['/play/progression', '/play/progression'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
-  ['/practice/quiz/build-chord', '/practice/quiz/$quiz'],
+  ['/practice/trainers/build-chord', '/practice/trainers/$trainerId'],
   ['/settings', '/settings'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
@@ -72,7 +72,7 @@ describe('routes', () => {
     expect(router.options.defaultPendingMs).toBe(300)
   })
 
-  it.each(['/theory', '/theory/chords', '/learn/lessons/nothing', '/practice/quiz/nothing'])(
+  it.each(['/theory', '/theory/chords', '/learn/lessons/nothing', '/practice/trainers/nothing', '/practice/quiz/gaps'])(
     'shows not found at %s',
     async (path) => {
       await renderApp(path)
@@ -135,7 +135,7 @@ describe('the app shell', () => {
   it.each([
     ['/learn/scales', 'Learn'],
     ['/learn/lessons/reading-chord-symbols', 'Learn'],
-    ['/practice/quiz/gaps', 'Practice'],
+    ['/practice/trainers/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })

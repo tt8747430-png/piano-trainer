@@ -5,8 +5,10 @@ export const practice: LocaleResources['practice'] = {
   walk: 'Аккорды по ступеням',
   chromatic: 'По полутонам',
   title: 'Практика',
-  quiz: 'Тест по теории',
   groups: {
+    theory: 'Теория',
+    ear: 'На слух',
+    reading: 'Чтение и тональности',
     scales: 'Гаммы',
     arpeggios: 'Арпеджио',
     chords: 'Аккорды гаммы',

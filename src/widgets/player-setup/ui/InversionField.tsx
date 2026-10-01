@@ -31,7 +31,9 @@ export function InversionField() {
         ]}
         onChange={(value) => onFigures({ inversion: value === NEAREST ? undefined : value })}
       />
-      {follows ? null : <p className="text-sm text-muted-foreground">{t('player:inversion.own')}</p>}
+      {follows ? null : (
+        <p className="text-sm text-muted-foreground">{t('player:inversion.own')}</p>
+      )}
     </div>
   )
 }

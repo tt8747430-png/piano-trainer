@@ -1,4 +1,4 @@
-export { checkPlan, isTheoryQuiz } from '@/features/quiz'
+export { checkPlan, isTrainerId } from '@/features/trainer'
 export { CheckPage } from '@/pages/check'
 export { PracticePage } from '@/pages/practice'
-export { TheoryQuizPage } from '@/pages/theory-quiz'
+export { TrainerPage } from '@/pages/trainer'

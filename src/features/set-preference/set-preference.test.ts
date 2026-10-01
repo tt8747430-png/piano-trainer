@@ -1,14 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { createSettingsStore, DEFAULT_QUIZ_CHOICE, defaultKeyboard } from '@/entities/settings'
+import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
-import {
-  setKeyboard,
-  setLocale,
-  setPracticeToggle,
-  setQuizFamilies,
-  setQuizScales,
-  setTheme,
-} from './index'
+import { setAutoNext, setKeyboard, setLocale, setPracticeToggle, setTheme } from './index'
 
 const saved = (storage: Storage) => JSON.parse(storage.getItem('pt-settings') ?? 'null').state
 
@@ -47,24 +40,12 @@ describe('set-preference', () => {
     expect(store.getState().practice.metronome).toBe(false)
   })
 
-  it('setQuizFamilies saves the families in table order', () => {
+  it('setAutoNext saves whether a trainer moves on by itself', () => {
     const { storage, store } = setUp()
-    setQuizFamilies(store, ['nin', 'tri'])
-    expect(saved(storage).quiz).toEqual({ ...DEFAULT_QUIZ_CHOICE, families: ['tri', 'nin'] })
-  })
-
-  it('setQuizFamilies keeps the choice when given none', () => {
-    const { store } = setUp()
-    setQuizFamilies(store, [])
-    expect(store.getState().quiz).toEqual(DEFAULT_QUIZ_CHOICE)
-  })
-
-  it('setQuizScales saves the scales in table order, and keeps the choice when given none', () => {
-    const { store } = setUp()
-    setQuizScales(store, ['blues', 'major'])
-    expect(store.getState().quiz.scales).toEqual(['major', 'blues'])
-    setQuizScales(store, [])
-    expect(store.getState().quiz.scales).toEqual(['major', 'blues'])
+    setAutoNext(store, true)
+    expect(saved(storage).trainer).toEqual({ autoNext: true })
+    setAutoNext(store, false)
+    expect(store.getState().trainer.autoNext).toBe(false)
   })
 
   it('setKeyboard changes the keyboard settings it is given and saves them, the others kept', () => {

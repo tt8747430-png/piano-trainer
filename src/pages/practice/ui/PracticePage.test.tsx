@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { recordAnswer } from '@/features/record-answer'
+import { recordRun } from '@/features/record-run'
 
 describe('Practice', () => {
   it('lists the studies and the progressions, each opening on Practice', async () => {
@@ -17,25 +18,41 @@ describe('Practice', () => {
     )
   })
 
-  it('offers the four quizzes, each opening on Practice', async () => {
+  it('offers the trainers in three groups, each opening its trainer', async () => {
     await renderApp('/practice')
-    const quiz = await screen.findByRole('region', { name: 'Theory quiz' })
+    const theory = await screen.findByRole('region', { name: 'Theory' })
     expect(
-      within(quiz)
+      within(theory)
         .getAllByRole('link')
         .map((link) => link.getAttribute('href')),
     ).toEqual([
-      '/practice/quiz/build-chord',
-      '/practice/quiz/name-chord',
-      '/practice/quiz/build-scale',
-      '/practice/quiz/gaps',
+      '/practice/trainers/build-chord',
+      '/practice/trainers/name-chord',
+      '/practice/trainers/build-scale',
+      '/practice/trainers/gaps',
     ])
-    expect(within(quiz).getByRole('link', { name: 'My gaps' })).toBeInTheDocument()
+    const ear = screen.getByRole('region', { name: 'By ear' })
+    expect(within(ear).getByRole('link', { name: 'Intervals by ear' })).toHaveAttribute(
+      'href',
+      '/practice/trainers/intervals-by-ear',
+    )
+    const reading = screen.getByRole('region', { name: 'Reading and keys' })
+    expect(within(reading).getAllByRole('link')).toHaveLength(4)
+  })
+
+  it('says how many runs a trainer has, over all its levels', async () => {
+    const { progressStore } = await renderApp('/practice')
+    await screen.findByRole('region', { name: 'Theory' })
+    act(() => {
+      recordRun(progressStore, 'reading-notes:anchors', { accuracy: 90, streak: 9 })
+      recordRun(progressStore, 'reading-notes:treble', { accuracy: 70, streak: 3 })
+    })
+    expect(screen.getByRole('link', { name: 'Reading notes Runs: 2' })).toBeInTheDocument()
   })
 
   it('says how many skills My gaps holds to check, gaps and unknowns alike', async () => {
     const { progressStore } = await renderApp('/practice')
-    await screen.findByRole('region', { name: 'Theory quiz' })
+    await screen.findByRole('region', { name: 'Theory' })
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
     expect(screen.getByRole('link', { name: 'My gaps To check: 1' })).toBeInTheDocument()
   })

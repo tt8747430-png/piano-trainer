@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { stepById, useStepTitle, type StepId } from '@/entities/path'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { MidiButton } from '@/features/connect-midi'
-import { checkPlan, useQuiz, type CheckPlan } from '@/features/quiz'
+import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useGoBack } from '@/shared/lib'
 import { RoundButton } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
-import { QuizBoard } from '@/widgets/quiz-board'
+import { TrainerBoard } from '@/widgets/trainer-board'
 import { CheckResult } from './CheckResult'
 
 function CheckFlow({ plan }: { plan: CheckPlan }) {
@@ -18,13 +18,12 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const stepTitle = useStepTitle()
   const step = stepById(plan.of)
   const title = step ? stepTitle(step.step).primary : ''
-  const quiz = useQuiz(plan.config)
+  const trainer = useTrainer(plan.asks, { rounds: plan.length })
   const [learnedBefore] = useState(
     () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),
   )
-  const [done, setDone] = useState(false)
   const close = useGoBack({ to: '/' })
-  const answered = quiz.state.asked - (quiz.state.result ? 0 : 1)
+  const answered = trainer.run.answered.length
 
   return (
     <div className="flex flex-1 flex-col gap-5 pt-2">
@@ -33,25 +32,22 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
         <Progress
           value={answered}
           max={plan.length}
-          aria-label={t('quiz:progress', {
-            n: Math.min(answered + 1, plan.length),
-            total: plan.length,
-          })}
+          aria-label={t('quiz:progress', { n: trainer.number, total: plan.length })}
           className="flex-1"
         />
         <MidiButton />
       </header>
       <h1 className="text-2xl">{t('quiz:checkTitle', { title })}</h1>
-      {done ? (
+      {trainer.summary ? (
         <CheckResult
           plan={plan}
-          correct={quiz.state.correct}
+          correct={trainer.run.answered.filter((round) => round.correct).length}
           title={title}
           newlyLearned={!learnedBefore}
           onDone={close}
         />
       ) : (
-        <QuizBoard quiz={quiz} onFinish={() => setDone(true)} />
+        <TrainerBoard trainer={trainer} asks={plan.asks} />
       )}
     </div>
   )

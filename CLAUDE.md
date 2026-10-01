@@ -58,7 +58,8 @@ it. `@` → `src`.
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice; Learn's
   references Chords, Scales, Keys (`/learn/keys`), Intervals (`/learn/intervals`) and Available tensions
   (`/learn/tensions`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
-  `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); the Player's `/play/$pieceId`, `/play/walk`,
+  `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); Practice's trainers
+  (`/practice/trainers/$trainerId`); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; screens are
   lazy through `routes/*-screens.ts` (home, settings, songs, learn, practice, player: a chunk holds the screens
   that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
@@ -95,7 +96,8 @@ it. `@` → `src`.
   `passing-chords` (the ways between two chords, each row voice-led), `exercise-list` (Practice's exercises by group, each
   row opening its Player), `progressions` (numerals or chords in any key,
   the library beside them), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
-  `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `quiz-board`, `quiz-choice`), each owning in `model/` the view type a route's URL holds.
+  `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too),
+  `trainer-choice` (a trainer's Custom fields), `trainer-list` (Practice's trainers)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `remember-view`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
@@ -112,8 +114,10 @@ it. `@` → `src`.
   `loopBeatGroups`), `speedUp`, the walk (`WALK`, `walkChart`, `arrangeWalk`) and `PractiseChords` (a scale's walk
   and its key's common progressions into the Player); an exercise (`arrangeExercise`: its rule over the learner's choice, ADR 0024); the chromatic walk (`CHROMATIC`, `chromaticChart`,
   `arrangeChromatic`, `readChords`, `ChromaticWalkLink`); a progression (`PROGRESSION`, `progressionChart`,
-  `arrangeProgression`; walked through the keys by `walk`, `walksKeys`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `quiz` (the machine, check plans, the
-  Theory quizzes (`isTheoryQuiz`), My gaps, `useQuiz`).
+  `arrangeProgression`; walked through the keys by `walk`, `walksKeys`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
+  machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
+  `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
@@ -126,8 +130,8 @@ it. `@` → `src`.
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
   Gospel), `progression-library` (the Progressions tool's named progressions by style,
   in numerals), `exercise` (Practice's exercises: groups, levels, names, the fields each rule takes and its own choice;
-  `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 5, with the
-  keyboard settings), `progress` (`pt-progress`; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 6, with the
+  keyboard settings and the trainers' auto-next), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
   version 1: each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read

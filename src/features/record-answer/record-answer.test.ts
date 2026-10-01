@@ -6,12 +6,11 @@ import { recordAnswer } from './index'
 const NOW = new Date('2026-09-25T10:00:00.000Z')
 
 describe('recordAnswer', () => {
-  it('records an answer as evidence and in the quiz stats, and saves it', () => {
+  it('records an answer as evidence on its skill, and saves it', () => {
     const storage = createMemoryStorage()
     const store = createProgressStore({ storage })
     recordAnswer(store, { skill: 'chord:m7', correct: true }, NOW)
     expect(store.getState().answers['chord:m7']).toEqual([{ correct: true, at: NOW.toISOString() }])
-    expect(store.getState().quiz).toEqual({ correct: 1, total: 1, streak: 1, best: 1 })
     expect(storage.getItem('pt-progress')).toContain(NOW.toISOString())
   })
 

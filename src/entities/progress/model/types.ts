@@ -14,12 +14,22 @@ export interface QuizAnswer {
   readonly correct: boolean
 }
 
-export interface QuizStats {
-  readonly correct: number
-  readonly total: number
+/** How a trainer's run went: right answers out of 100, and the most in a row. */
+export interface RunResult {
+  readonly accuracy: number
   readonly streak: number
-  readonly best: number
 }
+
+/** A trainer's runs at one level (or Custom): how many, the last and best accuracy, the best streak. */
+export interface TrainerRecord {
+  readonly runs: number
+  readonly last: number
+  readonly best: number
+  readonly bestStreak: number
+}
+
+/** Where a trainer keeps a level's record: `name-chord:3`, `intervals-by-ear:custom`. */
+export type RunKey = `${string}:${string}`
 
 /** What the learner has done, saved on this device. Dates are ISO strings. */
 export interface ProgressState {
@@ -29,14 +39,13 @@ export interface ProgressState {
   readonly practised: Readonly<Partial<Record<PieceId, string>>>
   /** Each skill's evidence, oldest first, at most EVIDENCE_SIZE answers. */
   readonly answers: Readonly<Partial<Record<SkillId, readonly Answer[]>>>
-  readonly quiz: QuizStats
+  /** Each trainer's record, by trainer and level. */
+  readonly trainers: Readonly<Partial<Record<RunKey, TrainerRecord>>>
 }
-
-export const NO_QUIZ_STATS: QuizStats = { correct: 0, total: 0, streak: 0, best: 0 }
 
 export const EMPTY_PROGRESS: ProgressState = {
   learned: {},
   practised: {},
   answers: {},
-  quiz: NO_QUIZ_STATS,
+  trainers: {},
 }

@@ -50,13 +50,15 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   on a staff and heard up, down and together; Available tensions, the twelve notes over a 7th chord as weak, strong,
   tensions and avoid; and the tools: the Chord finder, naming the keys played; Reharmonise, the chords that hold a
   melody note; Passing chords, the ways between two chords; Progressions, numerals or chords in any key from a library by style,
-  played and practised in the Player), Practice (the Theory quiz with My gaps; exercises by group, each generated in
+  played and practised in the Player), Practice (trainers, each a ladder of levels or Custom, runs of rounds summed up and recorded per level: Build
+  chord, Name chord, Build scale and My gaps; intervals, chords and scales by ear; reading notes, key signatures, a
+  key's degrees and a chord's role; exercises by group, each generated in
   any key and played in the Player: scales from any note over one to four octaves, in 3rds, 6ths and groups, in
   contrary motion; arpeggios of thirteen types in any inversion; Barry Harris's 6th-diminished scale and its chords,
   the dominant scale down, arpeggios from the 3rd and drop-2 7ths; Piano With Jonny's 2-5-1 scale, inner voice, modes,
   rapid switch and pattern shifting; the five-finger position and Hanon No. 1; and the walks and progressions through
   the keys; studies and progressions), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md`
-  and ADRs 0012–0024.
+  and ADRs 0012–0025.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.

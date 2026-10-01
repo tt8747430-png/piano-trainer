@@ -5,8 +5,8 @@ import {
   selectIsLearned,
   selectLearned,
   selectPractised,
-  selectQuizStats,
   selectSuggestedStep,
+  selectTrainerRecord,
 } from './selectors'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
 
@@ -18,14 +18,23 @@ const state: ProgressState = {
     hgta: '2026-09-22T10:00:00.000Z',
   },
   answers: { 'chord:m7': [{ correct: true, at: '2026-09-24T10:00:00.000Z' }] },
-  quiz: { correct: 1, total: 1, streak: 1, best: 1 },
+  trainers: { 'name-chord:3': { runs: 2, last: 80, best: 90, bestStreak: 6 } },
 }
 
 describe('progress selectors', () => {
   it('return saved fields as they are', () => {
     expect(selectLearned(state)).toBe(state.learned)
     expect(selectPractised(state)).toBe(state.practised)
-    expect(selectQuizStats(state)).toBe(state.quiz)
+  })
+
+  it('return a trainer level’s record, or none before its first run', () => {
+    expect(selectTrainerRecord('name-chord:3')(state)).toEqual({
+      runs: 2,
+      last: 80,
+      best: 90,
+      bestStreak: 6,
+    })
+    expect(selectTrainerRecord('name-chord:4')(state)).toBeUndefined()
   })
 
   it('tell whether a step is learned', () => {

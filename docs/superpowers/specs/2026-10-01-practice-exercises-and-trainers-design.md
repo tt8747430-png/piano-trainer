@@ -143,8 +143,8 @@ screen over the same board.
 | Name chord (`name-chord`) | A chord heard (block or arpeggio) | One of four names | The chords ladder |
 | Build scale (`build-scale`) | A scale named | Keys | Major → minors → modes → blues and pentatonics → all |
 | My gaps (`gaps`) | Gap skills first | Keys | None (it is its own list) |
-| Intervals by ear (`intervals-by-ear`) | An interval heard up, down or together | One of the intervals asked | m2/M2/m3/M3 → + P4 P5 → + tritone, 6ths → all twelve → compound |
-| Chords by ear (`chords-by-ear`) | A chord heard | Its quality | Major/minor → + dim/aug → 7ths → all eight |
+| Intervals by ear (`intervals-by-ear`) | An interval heard up, down or together | One of the intervals asked | m2/M2/m3/M3 → + P4 P5 → + tritone, 6ths → all twelve up → down → together → compound |
+| Chords by ear (`chords-by-ear`) | A chord heard | Its quality | Major/minor → + dim/aug → 7ths → all eight → all eight arpeggiated |
 | Scales by ear (`scales-by-ear`) | A scale heard up or down | Its kind | Major/natural minor → + harmonic → + the modes |
 | Reading notes (`reading-notes`) | A note on the staff | Its key | The notes ladder (§6.2) |
 | Key signatures (`key-signatures`) | A key, or a signature on the staff | The count of ♯/♭, or the key | Up to 2 → up to 4 → all, majors → minors → both |

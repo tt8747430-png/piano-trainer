@@ -4,7 +4,7 @@ import { createProgressStore, PROGRESS_STORAGE_KEY } from './store'
 import { EMPTY_PROGRESS } from './types'
 
 /** Puts progress in storage as an earlier session would have saved it. */
-const writeSaved = (storage: Storage, state: unknown, version = 1) =>
+const writeSaved = (storage: Storage, state: unknown, version = 2) =>
   storage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({ state, version }))
 
 const DAY = '2026-09-25T10:00:00.000Z'
@@ -22,7 +22,7 @@ describe('createProgressStore', () => {
     store.setState({ learned: { 'piece:bz5': DAY } })
     expect(JSON.parse(storage.getItem('pt-progress') ?? 'null')).toEqual({
       state: { ...EMPTY_PROGRESS, learned: { 'piece:bz5': DAY } },
-      version: 1,
+      version: 2,
     })
   })
 
@@ -32,7 +32,7 @@ describe('createProgressStore', () => {
       learned: { 'chords:sev': DAY },
       practised: { bz5: DAY },
       answers: { 'chord:m7': [{ correct: true, at: DAY }] },
-      quiz: { correct: 1, total: 1, streak: 1, best: 1 },
+      trainers: { 'build-chord:1': { runs: 3, last: 70, best: 90, bestStreak: 8 } },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -50,7 +50,12 @@ describe('createProgressStore', () => {
         'scale:major': [{ correct: 'yes', at: DAY }, { correct: false, at: DAY }, null],
         'scale:blues': 'none',
       },
-      quiz: { correct: 3, total: 5, streak: 4, best: 2 },
+      trainers: {
+        'name-chord:3': { runs: 2, last: 80, best: 70, bestStreak: 5 },
+        'name-chord:4': { runs: 0, last: 0, best: 0, bestStreak: 0 },
+        'chords by ear': { runs: 1, last: 50, best: 50, bestStreak: 1 },
+        'reading-notes:1': { runs: 1, last: 120, best: 120, bestStreak: 1 },
+      },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -60,33 +65,30 @@ describe('createProgressStore', () => {
         'chord:m7': seven.slice(2),
         'scale:major': [{ correct: false, at: DAY }],
       },
-      quiz: { correct: 3, total: 5, streak: 4, best: 4 },
+      trainers: { 'name-chord:3': { runs: 2, last: 80, best: 80, bestStreak: 5 } },
     })
   })
 
-  it('raises a count below one it must hold, rather than lose the stats', () => {
+  it('reads a version-1 save, its quiz stats belonging to no trainer', () => {
     const storage = createMemoryStorage()
-    writeSaved(storage, { quiz: { correct: 6, total: 5, streak: 3, best: 2 } })
-    expect(createProgressStore({ storage }).getState().quiz).toEqual({
-      correct: 6,
-      total: 6,
-      streak: 3,
-      best: 3,
+    const answers = { 'chord:m7': [{ correct: true, at: DAY }] }
+    writeSaved(
+      storage,
+      {
+        learned: { 'piece:bz5': DAY },
+        answers,
+        quiz: { correct: 1, total: 1, streak: 1, best: 1 },
+      },
+      1,
+    )
+    expect(createProgressStore({ storage }).getState()).toEqual({
+      ...EMPTY_PROGRESS,
+      learned: { 'piece:bz5': DAY },
+      answers,
     })
   })
 
-  it.each([
-    { correct: -1, total: 5, streak: 0, best: 0 },
-    { correct: 1.5, total: 5, streak: 0, best: 0 },
-    { correct: 1, total: 5 },
-    'lots',
-  ])('starts the quiz stats over when they cannot be read: %j', (quiz) => {
-    const storage = createMemoryStorage()
-    writeSaved(storage, { quiz })
-    expect(createProgressStore({ storage }).getState().quiz).toEqual(EMPTY_PROGRESS.quiz)
-  })
-
-  it.each([0, 2])('reads a version-%i save for what is still valid', (version) => {
+  it.each([0, 3])('reads a version-%i save for what is still valid', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY, 'lesson:1': DAY }, quiz: 'lost' }, version)
     expect(createProgressStore({ storage }).getState()).toEqual({

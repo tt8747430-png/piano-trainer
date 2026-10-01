@@ -1,56 +1,21 @@
-import { Link } from '@tanstack/react-router'
-import {
-  ChartNoAxesColumnIncreasing,
-  Ear,
-  KeyboardMusic,
-  Target,
-  type LucideIcon,
-} from 'lucide-react'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PROGRESSIONS, STUDIES } from '@/entities/piece'
-import { selectAllAnswers, selectPractised, useProgress } from '@/entities/progress'
-import { myGaps, type TheoryQuiz } from '@/features/quiz'
 import { localText, useLocale } from '@/shared/i18n'
-import { RowGroup, RowLink, ScreenHeader, type Paint } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 import { ExerciseList } from '@/widgets/exercise-list'
 import { PieceList } from '@/widgets/piece-list'
+import { TrainerList } from '@/widgets/trainer-list'
 
-/** The Theory quizzes, each as a row with a tile of its kind: chords sand, scales sky, gaps lilac. */
-const QUIZ_ROWS = [
-  { quiz: 'build-chord', icon: KeyboardMusic, paint: 'sand' },
-  { quiz: 'name-chord', icon: Ear, paint: 'sand' },
-  { quiz: 'build-scale', icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
-  { quiz: 'gaps', icon: Target, paint: 'lilac' },
-] as const satisfies readonly { quiz: TheoryQuiz; icon: LucideIcon; paint: Paint }[]
-
-/** Practice: the Theory quizzes and the exercises by group, then the studies and progressions, each opening its page here. */
+/** Practice: the trainers and the exercises by group, then the studies and progressions, each opening its page here. */
 export function PracticePage() {
-  const { t } = useTranslation(['practice', 'quiz'])
+  const { t } = useTranslation('practice')
   const locale = useLocale()
-  const answers = useProgress(selectAllAnswers)
-  const practised = useProgress(selectPractised)
-  const gaps = useMemo(() => myGaps(answers, practised).length, [answers, practised])
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('practice:title')} />
+      <ScreenHeader title={t('title')} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex flex-col gap-8">
-          <RowGroup title={t('practice:quiz')}>
-            {QUIZ_ROWS.map(({ quiz, icon, paint }) => (
-              <li key={quiz}>
-                <RowLink
-                  title={t(`quiz:modes.${quiz}`)}
-                  detail={
-                    quiz === 'gaps' && gaps > 0 ? t('practice:gaps', { count: gaps }) : undefined
-                  }
-                  icon={icon}
-                  paint={paint}
-                  render={<Link to="/practice/quiz/$quiz" params={{ quiz }} />}
-                />
-              </li>
-            ))}
-          </RowGroup>
+          <TrainerList />
           <ExerciseList />
         </div>
         <PieceList

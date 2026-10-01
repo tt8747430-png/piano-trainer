@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { qualitiesIn, type SkillId } from '@/shared/lib/music'
-import { withAnswer, withLearned } from './changes'
+import { withAnswer, withLearned, withRun } from './changes'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
 
 const MONDAY = '2026-09-21T10:00:00.000Z'
@@ -15,17 +15,6 @@ describe('withAnswer', () => {
     const saved = answer(EMPTY_PROGRESS, 'chord:m7', '0111111').answers['chord:m7']
     expect(saved).toHaveLength(5)
     expect(saved?.every((a) => a.correct && a.at === MONDAY)).toBe(true)
-  })
-
-  it('counts the quiz stats, the streak ending on a wrong answer and the best kept', () => {
-    const wrongLast = answer(EMPTY_PROGRESS, 'chord:m7', '1110')
-    expect(wrongLast.quiz).toEqual({ correct: 3, total: 4, streak: 0, best: 3 })
-    expect(answer(wrongLast, 'chord:maj', '1').quiz).toEqual({
-      correct: 4,
-      total: 5,
-      streak: 1,
-      best: 3,
-    })
   })
 
   it('marks a scale step learned once its skill is Known', () => {
@@ -71,5 +60,26 @@ describe('withLearned', () => {
   it('keeps the day a step was first marked, and the same state', () => {
     const marked = withLearned(EMPTY_PROGRESS, 'piece:bz5', MONDAY)
     expect(withLearned(marked, 'piece:bz5', FRIDAY)).toBe(marked)
+  })
+})
+
+describe('withRun', () => {
+  it('counts a run at a level, its accuracy the last, keeping the bests', () => {
+    const first = withRun(EMPTY_PROGRESS, 'intervals-by-ear:2', { accuracy: 90, streak: 7 })
+    const second = withRun(first, 'intervals-by-ear:2', { accuracy: 60, streak: 3 })
+    expect(second.trainers['intervals-by-ear:2']).toEqual({
+      runs: 2,
+      last: 60,
+      best: 90,
+      bestStreak: 7,
+    })
+  })
+
+  it('keeps each level’s record apart', () => {
+    const state = withRun(EMPTY_PROGRESS, 'build-chord:1', { accuracy: 100, streak: 10 })
+    expect(withRun(state, 'build-chord:2', { accuracy: 50, streak: 2 }).trainers).toEqual({
+      'build-chord:1': { runs: 1, last: 100, best: 100, bestStreak: 10 },
+      'build-chord:2': { runs: 1, last: 50, best: 50, bestStreak: 2 },
+    })
   })
 })

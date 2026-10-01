@@ -5,14 +5,14 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
-  NO_QUIZ_STATS,
   type Answer,
   type ProgressState,
-  type QuizStats,
+  type RunKey,
+  type TrainerRecord,
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 1
+export const PROGRESS_VERSION = 2
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -59,25 +59,32 @@ function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
   return answers.length > 0 ? latestEvidence(answers) : undefined
 }
 
+/** A trainer and its level, as a record is kept under: `name-chord:3`. */
+const isRunKey = (key: string): key is RunKey => /^[a-z][a-z0-9-]*:[a-z0-9-]+$/.test(key)
+
+const isPercent = (value: unknown): value is number => isCount(value) && value <= 100
+
 /**
- * Stats that cannot be read start over. Counts that contradict each other are raised, never lost: the
- * total to the right answers, the best to the streak.
+ * A record that cannot be read is dropped; one whose numbers contradict each other is raised, never
+ * lost: the best to the last.
  */
-function quizStats(value: unknown): QuizStats {
-  const { correct, total, streak, best } = savedObject<QuizStats>(value)
-  if (!isCount(correct) || !isCount(total) || !isCount(streak) || !isCount(best)) {
-    return NO_QUIZ_STATS
-  }
-  return { correct, total: Math.max(total, correct), streak, best: Math.max(best, streak) }
+function trainerRecord(value: unknown): TrainerRecord | undefined {
+  const { runs, last, best, bestStreak } = savedObject<TrainerRecord>(value)
+  if (!isCount(runs) || runs < 1 || !isPercent(last) || !isPercent(best) || !isCount(bestStreak))
+    return undefined
+  return { runs, last, best: Math.max(best, last), bestStreak }
 }
 
-/** Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. */
+/**
+ * Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. A version-1 save's
+ * quiz stats (one count over every quiz) belong to no trainer and are not read.
+ */
 function sanitize(persisted: unknown): ProgressState {
   const saved = savedObject<ProgressState>(persisted)
   return {
     learned: kept<StepId, string>(saved.learned, isStepId, dateOrNothing),
     practised: kept(saved.practised, isPieceKey, dateOrNothing),
     answers: kept<SkillId, readonly Answer[]>(saved.answers, isSkillId, evidenceOrNothing),
-    quiz: quizStats(saved.quiz),
+    trainers: kept(saved.trainers, isRunKey, trainerRecord),
   }
 }

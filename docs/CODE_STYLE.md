@@ -66,7 +66,7 @@ A container wires data to presentational children. One job each.
 ## 3. Complex state → a reducer or a machine
 
 - Several values changing together, or distinct phases → a pure reducer or discriminated-union machine outside the
-  component, with its own tests (`features/practice/practice-machine.ts`, `features/quiz/quiz-machine.ts`). The
+  component, with its own tests (`features/practice/practice-machine.ts`, `features/trainer/round-machine.ts`). The
   component dispatches.
 - A page with many acts exposes **one** hook, `pages/<x>/model/use-<thing>.ts`. That hook is the test surface
   (`renderHook`), not the page.

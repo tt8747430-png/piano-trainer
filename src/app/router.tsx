@@ -47,7 +47,7 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { validateCheckSearch } from './routes/practice-search'
+import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import {
@@ -130,14 +130,19 @@ const practiceRoute = createRoute({
   path: '/practice',
   component: lazyRouteComponent(practiceScreens, 'PracticePage'),
 })
-const quizRoute = createRoute({
+// A trainer: each remembers its own level, rounds and Custom, under its own path.
+const restoreTrainer = restoreView(readTrainerSearch, [])
+const trainerRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/quiz/$quiz',
-  beforeLoad: async ({ params }) => {
-    const { isTheoryQuiz } = await practiceScreens()
-    if (!isTheoryQuiz(params.quiz)) throw notFound()
+  path: '/practice/trainers/$trainerId',
+  ...trainerSearch,
+  staticData: { remembered: true },
+  beforeLoad: async (context) => {
+    const { isTrainerId } = await practiceScreens()
+    if (!isTrainerId(context.params.trainerId)) throw notFound()
+    restoreTrainer(context)
   },
-  component: lazyRouteComponent(practiceScreens, 'TheoryQuizPage'),
+  component: lazyRouteComponent(practiceScreens, 'TrainerPage'),
 })
 const studyRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -334,7 +339,7 @@ const routeTree = rootRoute.addChildren([
     progressionsRoute,
     lessonRoute,
     practiceRoute,
-    quizRoute,
+    trainerRoute,
     studyRoute,
     progressionRoute,
   ]),

@@ -8,7 +8,6 @@ import {
   type NamedKeys,
   type Swipe,
 } from '@/shared/lib'
-import { CHORD_FAMILIES, SCALE_KINDS, type ChordFamily, type ScaleKind } from '@/shared/lib/music'
 
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
@@ -32,10 +31,10 @@ export const PLAYING_TOGGLES = [
   'countIn',
 ] as const satisfies readonly PracticeToggle[]
 
-/** The chord families and scale kinds the open-ended quiz asks about. */
-export interface QuizChoice {
-  readonly families: readonly ChordFamily[]
-  readonly scales: readonly ScaleKind[]
+/** How every trainer goes, whatever it asks. */
+export interface TrainerSettings {
+  /** A right answer moves on to the next round by itself. */
+  readonly autoNext: boolean
 }
 
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
@@ -53,7 +52,7 @@ export interface SettingsState {
   theme: Theme
   locale: Locale
   practice: PracticeToggles
-  quiz: QuizChoice
+  trainer: TrainerSettings
   keyboard: KeyboardSettings
 }
 
@@ -66,18 +65,7 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   recording: true,
 }
 
-export const DEFAULT_QUIZ_CHOICE: QuizChoice = {
-  families: ['sev', 'nin'],
-  scales: ['major', 'natural', 'harmonic'],
-}
-
-/** The known families among `values`, each once, in table order: the one rule for a family list. */
-export const canonicalFamilies = (values: readonly unknown[]): ChordFamily[] =>
-  CHORD_FAMILIES.filter((family) => values.includes(family))
-
-/** The known scale kinds among `values`, each once, in table order. */
-export const canonicalScales = (values: readonly unknown[]): ScaleKind[] =>
-  SCALE_KINDS.filter((kind) => values.includes(kind))
+export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

@@ -32,10 +32,10 @@ describe('Check', () => {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
       await user.click(screen.getByRole('button', { name: 'Check' }))
-      await user.click(screen.getByRole('button', { name: 'Next' }))
+      await user.click(screen.getByRole('button', { name: i < 3 ? 'Next' : 'Results' }))
     }
     expect(await screen.findByText('0 of 4')).toBeInTheDocument()
-    // The score takes the focus from the Next that ended the check, so a screen reader reads it.
+    // The score takes the focus from the Results that ended the check, so a screen reader reads it.
     expect(screen.getByText('0 of 4')).toHaveFocus()
     expect(screen.getAllByRole('button', { name: 'Done' })).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Open in Scales' })).toBeInTheDocument()
@@ -54,7 +54,7 @@ describe('Check', () => {
       const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
       await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
       await user.click(screen.getByRole('button', { name: 'Check' }))
-      await user.click(screen.getByRole('button', { name: 'Next' }))
+      await user.click(screen.getByRole('button', { name: /^(Next|Results)$/ }))
     }
     expect(screen.getByText('Minor blues is now marked learned.')).toBeInTheDocument()
   })

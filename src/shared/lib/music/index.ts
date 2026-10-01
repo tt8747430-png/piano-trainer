@@ -22,6 +22,7 @@ export {
   type KeyRange,
 } from './keyboard'
 export {
+  LETTERS,
   midiOf,
   note,
   noteFromParam,

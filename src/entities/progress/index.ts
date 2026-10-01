@@ -1,6 +1,14 @@
-export { EMPTY_PROGRESS, type Answer, type ProgressState, type QuizAnswer } from './model/types'
+export {
+  EMPTY_PROGRESS,
+  type Answer,
+  type ProgressState,
+  type QuizAnswer,
+  type RunKey,
+  type RunResult,
+  type TrainerRecord,
+} from './model/types'
 export { knownCount, ratingOf, skillsToCheck, stillToKnow } from './model/mastery'
-export { withAnswer, withLearned } from './model/changes'
+export { withAnswer, withLearned, withRun } from './model/changes'
 export { createProgressStore, type ProgressStore } from './model/store'
 export {
   selectAllAnswers,
@@ -8,7 +16,8 @@ export {
   selectIsLearned,
   selectLearned,
   selectPractised,
-  selectQuizStats,
   selectSuggestedStep,
+  selectTrainerRecord,
+  selectTrainerRecords,
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'

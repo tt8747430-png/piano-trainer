@@ -3,9 +3,11 @@ export const practice = {
   walk: 'Walk the chords',
   chromatic: 'Chromatic walk',
   title: 'Practice',
-  quiz: 'Theory quiz',
   // Practice's exercise groups (roadmap §10.5).
   groups: {
+    theory: 'Theory',
+    ear: 'By ear',
+    reading: 'Reading and keys',
     scales: 'Scales',
     arpeggios: 'Arpeggios',
     chords: 'Chords in a scale',

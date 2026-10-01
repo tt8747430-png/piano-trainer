@@ -2,11 +2,11 @@ import { pathSteps, pieceStepId, stepById, type PlacedStep, type StepId } from '
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
 import { NO_ANSWERS } from './mastery'
-import type { Answer, ProgressState, QuizStats } from './types'
+import type { Answer, ProgressState, RunKey, TrainerRecord } from './types'
 
 export const selectLearned = (state: ProgressState) => state.learned
 export const selectPractised = (state: ProgressState) => state.practised
-export const selectQuizStats = (state: ProgressState): QuizStats => state.quiz
+export const selectTrainerRecords = (state: ProgressState) => state.trainers
 
 export const selectAllAnswers = (state: ProgressState) => state.answers
 
@@ -39,3 +39,8 @@ export const selectAnswers =
   (skill: SkillId) =>
   (state: ProgressState): readonly Answer[] =>
     state.answers[skill] ?? NO_ANSWERS
+
+export const selectTrainerRecord =
+  (key: RunKey) =>
+  (state: ProgressState): TrainerRecord | undefined =>
+    state.trainers[key]

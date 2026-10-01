@@ -10,7 +10,9 @@
   typeset serif, and a new app icon (§3.10), after Apple's and Material's guidelines (§9.11). Revised 2026-09-29:
   «Ромашковые поля» written as the course writes it and the chromatic walk (ADR 0015), from three pages of Vasily
   Gorshkov's accompaniment course; then a piece may carry a recording that plays along (ADR 0016), its vocal first.
-- **Built:** sub-projects 1, 2, 3, 4 and 5. Their specs and plans were removed once built, on 2026-09-27 (`git log
+- **Built:** sub-projects 1, 2, 3, 4, 5 and 7 (the owner asked on 2026-10-01 to skip 6, the Path as a course, which
+  stays planned). Sub-project 7 (exercises and trainers): its spec `2026-10-01-practice-exercises-and-trainers-design.md`,
+  ADRs 0024 and 0025. The specs and plans of 1 to 4 were removed once built, on 2026-09-27 (`git log
   --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
   places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3

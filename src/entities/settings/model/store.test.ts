@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
-import { DEFAULT_PRACTICE, DEFAULT_QUIZ_CHOICE, defaultKeyboard } from './types'
+import { DEFAULT_PRACTICE, DEFAULT_TRAINER, defaultKeyboard } from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
 const writeSaved = (storage: Storage, state: unknown, version = 2) =>
@@ -16,12 +16,12 @@ const restored = (state: unknown, version = 2) => {
 // The test setup's matchMedia answers false: no fine pointer, so no typing by default.
 const DEFAULTS = {
   practice: DEFAULT_PRACTICE,
-  quiz: DEFAULT_QUIZ_CHOICE,
+  trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
 }
 
 describe('createSettingsStore', () => {
-  it('starts on the system theme, the browser language, no toggles and the default quiz', () => {
+  it('starts on the system theme, the browser language, no toggles and no auto-next', () => {
     const store = createSettingsStore({ storage: createMemoryStorage(), languages: ['ru-RU'] })
     expect(store.getState()).toEqual({ theme: 'system', locale: 'ru', ...DEFAULTS })
     expect(DEFAULT_PRACTICE).toEqual({
@@ -32,10 +32,7 @@ describe('createSettingsStore', () => {
       countIn: false,
       recording: true,
     })
-    expect(DEFAULT_QUIZ_CHOICE).toEqual({
-      families: ['sev', 'nin'],
-      scales: ['major', 'natural', 'harmonic'],
-    })
+    expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
   })
 
   it('saves under pt-settings with its version', () => {
@@ -44,7 +41,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 5,
+      version: 6,
     })
   })
 
@@ -60,7 +57,7 @@ describe('createSettingsStore', () => {
         countIn: false,
         recording: false,
       },
-      quiz: { families: ['tri'], scales: ['blues'] },
+      trainer: { autoNext: true },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
@@ -69,7 +66,7 @@ describe('createSettingsStore', () => {
         typing: true,
       },
     }
-    expect(restored(saved, 5)).toEqual(saved)
+    expect(restored(saved, 6)).toEqual(saved)
   })
 
   it('gives a version-4 save named notes off, keeping its toggles', () => {
@@ -117,7 +114,7 @@ describe('createSettingsStore', () => {
       theme: 'dark',
       locale: 'ru',
       practice: DEFAULT_PRACTICE,
-      quiz: DEFAULT_QUIZ_CHOICE,
+      quiz: { families: ['sev'], scales: ['major'] },
     }
     expect(restored(saved)).toEqual({ theme: 'dark', locale: 'ru', ...DEFAULTS })
   })
@@ -162,13 +159,23 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('keeps the known families and scales once each, in order, and the default for none', () => {
-    const choice = (quiz: unknown) => restored({ quiz }).quiz
-    expect(choice({ families: ['sev', 'bogus', 'sev'], scales: ['blues', 'major'] })).toEqual({
-      families: ['sev'],
-      scales: ['major', 'blues'],
-    })
-    expect(choice({ families: [], scales: 'major' })).toEqual(DEFAULT_QUIZ_CHOICE)
+  it('gives a version-5 save auto-next off and no quiz choice, keeping the rest', () => {
+    const settings = restored(
+      {
+        theme: 'dark',
+        quiz: { families: ['tri'], scales: ['blues'] },
+        practice: { countIn: true },
+      },
+      5,
+    )
+    expect(settings).not.toHaveProperty('quiz')
+    expect(settings.trainer).toEqual(DEFAULT_TRAINER)
+    expect(settings.theme).toBe('dark')
+    expect(settings.practice.countIn).toBe(true)
+  })
+
+  it('turns an auto-next that is not a boolean off', () => {
+    expect(restored({ trainer: { autoNext: 'yes' } }, 6).trainer).toEqual(DEFAULT_TRAINER)
   })
 
   it('starts fresh, without throwing, when the saved JSON is corrupt', () => {
