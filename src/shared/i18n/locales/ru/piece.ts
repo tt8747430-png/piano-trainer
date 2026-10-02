@@ -13,6 +13,7 @@ export const piece: LocaleResources['piece'] = {
   edit: 'Изменить',
   writeChart: 'Записать аккорды',
   yourVersion: 'Ваша версия',
+  music: 'Музыка',
   reset: 'Вернуть оригинал',
   resetting: {
     title: 'Вернуть «{{title}}» к оригиналу?',

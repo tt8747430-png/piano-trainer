@@ -12,6 +12,7 @@ export const piece = {
   edit: 'Edit',
   writeChart: 'Write the chart',
   yourVersion: 'Your version',
+  music: 'Music',
   reset: 'Reset to the original',
   resetting: {
     title: 'Reset {{title}}?',

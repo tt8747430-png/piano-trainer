@@ -1,7 +1,8 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { isMeter, parseKey, TICKS_PER_BEAT } from '@/shared/lib/music'
+import { isMeter, parseKey, type Tick } from '@/shared/lib/music'
+import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
 import {
@@ -12,7 +13,6 @@ import {
   type OwnSong,
   type OwnSongId,
 } from './own'
-import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import {
   SECTION_KINDS,
@@ -75,7 +75,7 @@ function sectionOf(saved: unknown): Section | null {
   }
 }
 
-function handsOf(saved: unknown): Hands | undefined {
+function savedHands(saved: unknown): Hands | undefined {
   if (!isRecord(saved)) return undefined
   const hands = {
     ...(isText(saved.rh) ? { rh: saved.rh } : {}),
@@ -85,10 +85,8 @@ function handsOf(saved: unknown): Hands | undefined {
 }
 
 /** The ticks a piece's chart lasts. */
-const chartTicks = (piece: ChartPiece) =>
-  parseChart(piece)
-    .sections.flatMap((section) => section.lines.flat())
-    .reduce((sum, bar) => sum + Math.round(bar.beats * TICKS_PER_BEAT), 0)
+const chartTicks = (piece: ChartPiece): Tick =>
+  barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
 
 /** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
 function musicOfSaved(saved: unknown): PieceMusic | null {
@@ -98,7 +96,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
   if (!read.every((section) => section !== null)) return null
-  const written = handsOf(hands)
+  const written = savedHands(hands)
   const piece: ChartPiece = {
     id: 'saved',
     kind: 'song',

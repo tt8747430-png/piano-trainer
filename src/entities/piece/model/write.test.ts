@@ -8,11 +8,12 @@ import {
   type Key,
 } from '@/shared/lib/music'
 import type { ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
+import { ticksIn } from './beats'
 import { keyText, musicOf, pitchText, sameMusic } from './music'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { testSong } from '../testing/test-pieces'
-import { writeBar } from './write-chart'
+import { beatsText, writeBar } from './write-chart'
 import { writeHand } from './write-hands'
 import { writeMelody } from './write-melody'
 
@@ -25,6 +26,15 @@ const bar = (...chords: [string, number, string?][]): ChartBar => ({
   beats: chords.reduce((sum, [, beats]) => sum + beats, 0),
 })
 const firstBar = (line: string) => parseChart(testSong([line])).sections[0]?.lines[0]?.[0]
+
+describe('beatsText', () => {
+  it('writes ticks as beats in the shortest decimal that reads back as them', () => {
+    expect([24, 18, 6, 3, 27].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '2.25'])
+    expect(beatsText(4)).toBe('.3333333333')
+    expect(ticksIn(Number(beatsText(4)))).toBe(4)
+    expect(ticksIn(Number(beatsText(20)))).toBe(20)
+  })
+})
 
 describe('writeBar', () => {
   it('leaves out beats where the chords share a full bar equally', () => {

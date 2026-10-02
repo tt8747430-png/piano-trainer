@@ -2,7 +2,10 @@ import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shar
 import type { PatternId } from '@/entities/pattern'
 import { COLLECTIONS, PIECES } from '../content'
 import { patternsOfPiece } from './chart'
-import { isPiece, pieceKey, type Entry, type Piece } from './types'
+import type { PieceMusic } from './music'
+import type { OwnSong } from './own'
+import type { PiecesState } from './store'
+import { isPiece, pieceKey, type ChartPiece, type Entry, type Listing, type Piece } from './types'
 
 const ENTRY_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
@@ -15,6 +18,27 @@ export function pieceById(id: string): Piece | undefined {
   const entry = entryById(id)
   return entry && isPiece(entry) ? entry : undefined
 }
+
+/** The catalog entry a learner may have a version of: a song, study or listing (never a progression). */
+export function versionableEntry(id: string): ChartPiece | Listing | undefined {
+  const entry = entryById(id)
+  return entry && entry.kind !== 'progression' ? entry : undefined
+}
+
+/** The learner's version's music of a catalog song, study or listing, where there is one. */
+export const selectVersion = (
+  state: Pick<PiecesState, 'versions'>,
+  id: string,
+): PieceMusic | undefined =>
+  Object.hasOwn(state.versions, id) && versionableEntry(id) ? state.versions[id] : undefined
+
+/** Whether the learner has a version of a catalog song, study or listing. */
+export const selectHasVersion = (state: Pick<PiecesState, 'versions'>, id: string): boolean =>
+  selectVersion(state, id) !== undefined
+
+/** The learner's own song with this id. */
+export const selectOwnSong = (state: Pick<PiecesState, 'songs'>, id: string): OwnSong | undefined =>
+  state.songs.find((song) => song.id === id)
 
 /** A progression's own chord size where the learner may change it (the Player's Setup); else null. */
 export const choosableChordSize = (piece: Piece): ChordSize | null =>

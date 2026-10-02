@@ -2,6 +2,7 @@ import { isMethodCode, type MethodCode } from '@/entities/pattern'
 import type { Chart, ChartBar, ChartChord, WrittenHands } from '@/shared/lib/arrangement'
 import {
   beatsPerBar,
+  beatsToTicks,
   ChordSymbolError,
   parseChordSymbol,
   TICKS_PER_BEAT,
@@ -26,10 +27,13 @@ function readChord(text: string, fail: Fail): WrittenChord {
   const [symbol = '', beatsText, ...afterBeats] = head.split('@')
   if (afterMethod.length > 0 || afterBeats.length > 0) fail(`cannot read the chord "${text}"`)
   if (method !== undefined && !isMethodCode(method)) fail(`unknown method code "${method}"`)
-  const beats = beatsText === undefined ? null : readBeats(beatsText)
-  if (beatsText !== undefined && beats === null)
+  const read = beatsText === undefined ? null : readBeats(beatsText)
+  if (beatsText !== undefined && read === null)
     fail(`"${beatsText}" is not a number of beats above 0`)
-  if (beats !== null && ticksIn(beats) === null) fail(`"${beatsText}" beats fall between ticks`)
+  const ticks = read === null ? null : ticksIn(read)
+  if (read !== null && ticks === null) fail(`"${beatsText}" beats fall between ticks`)
+  // Kept as the whole ticks they are, so `.3333333333` is a third of a beat exactly.
+  const beats = ticks === null ? null : ticks / TICKS_PER_BEAT
   try {
     return { chord: parseChordSymbol(symbol), beats, method }
   } catch (error) {
@@ -62,7 +66,7 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
 }
 
 /** The hands a bar writes, from what was read for every bar; none when it writes neither. */
-function handsOf(read: ReadHands, index: number): WrittenHands | undefined {
+function barHands(read: ReadHands, index: number): WrittenHands | undefined {
   const hands: { rh?: WrittenHands['rh']; lh?: WrittenHands['lh'] } = {}
   for (const hand of HAND_IDS) {
     const notes = read[hand]?.[index]
@@ -87,7 +91,7 @@ export function parseChart(piece: ChartPiece): Chart {
       return bars.map((bar, b) => {
         const position = { section: s + 1, line: l + 1, bar: b + 1 }
         const read = readBar(bar, meterBeats, failAt(position))
-        places.push({ ticks: Math.round(read.beats * TICKS_PER_BEAT), position })
+        places.push({ ticks: beatsToTicks(read.beats), position })
         return read
       })
     }),
@@ -100,7 +104,7 @@ export function parseChart(piece: ChartPiece): Chart {
     sections: sections.map((section) => ({
       lines: section.lines.map((line) =>
         line.map((bar) => {
-          const written = handsOf(hands, index++)
+          const written = barHands(hands, index++)
           return written ? { ...bar, hands: written } : bar
         }),
       ),

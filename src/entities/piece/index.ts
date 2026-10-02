@@ -17,16 +17,7 @@ export {
 export { SECTION_KINDS } from './model/types'
 
 export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
-export { ContentError } from './model/content-error'
-export {
-  keyText,
-  musicOf,
-  pitchText,
-  readMusic,
-  sameMusic,
-  withMusic,
-  type PieceMusic,
-} from './model/music'
+export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
   isOwnSongId,
@@ -44,11 +35,11 @@ export {
   type PiecesStore,
 } from './model/store'
 export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
-export { repertoire, versionOf, type Repertoire } from './model/repertoire'
+export { repertoire, type Repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
-export { beatsText, writeBar } from './model/write-chart'
+export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
-export { writeMelody, type BarSpan } from './model/write-melody'
+export { writeMelody } from './model/write-melody'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
 export {
@@ -58,6 +49,10 @@ export {
   isOwnKey,
   pieceById,
   piecesPlaying,
+  selectHasVersion,
+  selectOwnSong,
+  selectVersion,
+  versionableEntry,
 } from './model/selectors'
 export { shelfOf } from './model/shelf'
 export { entryTitles } from './model/titles'

@@ -1,6 +1,6 @@
-import { pitchClassOf, TICKS_PER_BEAT } from '@/shared/lib/music'
-import { parseChart } from './parse-chart'
-import { entryById } from './selectors'
+import { pitchClassOf } from '@/shared/lib/music'
+import { barTicksOf } from './chart'
+import { entryById, selectVersion, versionableEntry } from './selectors'
 import { pieceKey, isPiece, type ChartPiece, type Entry, type Listing, type Piece } from './types'
 import { withMusic, type PieceMusic } from './music'
 import { isOwnSongId, type OwnSong } from './own'
@@ -12,24 +12,17 @@ export interface Repertoire {
   entry(id: string): Entry | undefined
   /** The same, where it opens in the Player. */
   piece(id: string): Piece | undefined
-  /** Whether the learner has a version of this catalog song, study or listing. */
-  hasVersion(id: string): boolean
   /** The catalog's own entry: what Reset to the original brings back. */
   original(id: string): Entry | undefined
   readonly ownSongs: readonly ChartPiece[]
 }
-
-const barTicks = (piece: ChartPiece) =>
-  parseChart(piece).sections.flatMap((section) =>
-    section.lines.flatMap((line) => line.map((bar) => Math.round(bar.beats * TICKS_PER_BEAT))),
-  )
 
 /** Whether the music keeps the original's timeline: its key, meter and every bar's length. */
 function sameTimeline(original: ChartPiece, version: ChartPiece): boolean {
   const [a, b] = [pieceKey(original), pieceKey(version)]
   if (pitchClassOf(a.tonic) !== pitchClassOf(b.tonic) || a.minor !== b.minor) return false
   if (original.meter !== version.meter) return false
-  const [before, after] = [barTicks(original), barTicks(version)]
+  const [before, after] = [barTicksOf(original), barTicksOf(version)]
   return before.length === after.length && before.every((ticks, i) => ticks === after[i])
 }
 
@@ -52,17 +45,13 @@ export function repertoire({
   songs,
 }: Pick<PiecesState, 'versions' | 'songs'>): Repertoire {
   const own = new Map(songs.map((song) => [song.id, ownPiece(song)]))
-  const versionable = (id: string) => {
-    const entry = entryById(id)
-    return entry && entry.kind !== 'progression' ? entry : undefined
-  }
   // Each version is worked out once, so a screen's memos over it hold.
   const played = new Map<string, ChartPiece>()
   const entry = (id: string): Entry | undefined => {
     const mine = isOwnSongId(id) ? own.get(id) : undefined
     if (mine) return mine
-    const original = versionable(id)
-    const music = Object.hasOwn(versions, id) ? versions[id] : undefined
+    const original = versionableEntry(id)
+    const music = selectVersion({ versions }, id)
     if (!original || !music) return entryById(id)
     const known = played.get(id)
     if (known) return known
@@ -76,7 +65,6 @@ export function repertoire({
       const found = entry(id)
       return found && isPiece(found) ? found : undefined
     },
-    hasVersion: (id) => Object.hasOwn(versions, id) && versionable(id) !== undefined,
     original: entryById,
     ownSongs: [...own.values()],
   }

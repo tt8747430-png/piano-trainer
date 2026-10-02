@@ -1,13 +1,21 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Credits, entryTitles, pieceKey, SourceLine, type Entry } from '@/entities/piece'
+import {
+  Credits,
+  entryTitles,
+  pieceKey,
+  selectHasVersion,
+  SourceLine,
+  usePieces,
+  type Entry,
+} from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { keySymbol, keyScale, noteParam } from '@/shared/lib/music'
 import { ButtonLink } from '@/shared/ui'
 
 /**
  * A song's or listing's facts under its bar (`PieceHeader`): its second title, credits, source, key
- * and meter, note, and a way to its key's scale.
+ * and meter (and Your version, where the learner has one), note, and a way to its key's scale.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation('piece')
@@ -16,6 +24,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
   const { secondary } = entryTitles(entry, locale)
   const key = pieceKey(entry)
   const scaleKind = keyScale(key)
+  const hasVersion = usePieces((state) => selectHasVersion(state, entry.id))
   return (
     <div className="flex flex-col gap-3">
       {secondary ? <p className="text-lg text-muted-foreground">{secondary}</p> : null}
@@ -30,6 +39,12 @@ export function PieceFacts({ entry }: { entry: Entry }) {
           <dt className="sr-only">{t('meter')}</dt>
           <dd className="font-semibold">{entry.meter}</dd>
         </div>
+        {hasVersion ? (
+          <div className="rounded-lg border border-border bg-card px-3 py-1">
+            <dt className="sr-only">{t('music')}</dt>
+            <dd className="font-semibold">{t('yourVersion')}</dd>
+          </div>
+        ) : null}
       </dl>
       {entry.note ? <p className="max-w-prose text-lg">{localText(entry.note, locale)}</p> : null}
       <ButtonLink

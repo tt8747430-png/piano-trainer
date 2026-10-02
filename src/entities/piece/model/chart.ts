@@ -1,10 +1,10 @@
 import { isMethodCode, METHODS, type PatternFit, type PatternId } from '@/entities/pattern'
 import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
-import { isCompound, type ChordSize } from '@/shared/lib/music'
+import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/lib/music'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import type { Piece } from './types'
+import type { ChartPiece, Piece } from './types'
 
 /** A piece's chart; a progression at the chosen chord size when it lets the learner choose. */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
@@ -20,6 +20,12 @@ export const melodyOf = (piece: Piece): Melody | undefined =>
 export const chordsOf = (chart: Chart): ChartChord[] =>
   chart.sections.flatMap((section) =>
     section.lines.flatMap((line) => line.flatMap((bar) => bar.chords)),
+  )
+
+/** Each bar's length in a song's or study's chart, in order. */
+export const barTicksOf = (piece: ChartPiece): Tick[] =>
+  parseChart(piece).sections.flatMap((section) =>
+    section.lines.flatMap((line) => line.map((bar) => beatsToTicks(bar.beats))),
   )
 
 /** Whether the chart names its own playing techniques, so the Player can follow them. */

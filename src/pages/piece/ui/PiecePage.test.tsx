@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { COLLECTIONS } from '@/entities/piece'
+import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
 describe('Piece', () => {
@@ -104,7 +104,7 @@ describe('Piece: the learner’s own music', () => {
   }
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem('pt-pieces', JSON.stringify({ state, version: 1 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
     return storage
   }
 
@@ -121,7 +121,7 @@ describe('Piece: the learner’s own music', () => {
     const { piecesStore } = await renderApp('/songs/amazing', {
       storage: saved({ versions: { amazing: MUSIC } }),
     })
-    expect(await screen.findByText('Your version')).toBeInTheDocument()
+    expect((await screen.findByText('Your version')).closest('dl')).not.toBeNull()
     expect(screen.getByRole('button', { name: /^Bar 1: Em$/ })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))

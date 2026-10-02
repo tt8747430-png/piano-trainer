@@ -2,6 +2,7 @@ import { cleanup, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
 describe('Songs', () => {
@@ -64,7 +65,7 @@ describe('Songs: your own', () => {
   }
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem('pt-pieces', JSON.stringify({ state, version: 1 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
     return storage
   }
 

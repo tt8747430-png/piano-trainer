@@ -36,7 +36,6 @@ describe('repertoire', () => {
   it('gives the catalog’s pieces as they are, with no version', () => {
     const pieces = repertoire({ versions: {}, songs: [] })
     expect(pieces.piece('bz1')).toBe(pieceById('bz1'))
-    expect(pieces.hasVersion('bz1')).toBe(false)
     expect(pieces.ownSongs).toEqual([])
   })
 
@@ -46,7 +45,6 @@ describe('repertoire', () => {
     expect(firstChord(version)).toBe('Em')
     expect(version).toMatchObject({ id: 'bz1', kind: 'song', title: 'Боже, спасибо' })
     expect(version?.kind !== 'progression' && version?.credits).toEqual(chartPiece('bz1').credits)
-    expect(pieces.hasVersion('bz1')).toBe(true)
     expect(pieces.original('bz1')).toBe(entryById('bz1'))
   })
 
@@ -82,9 +80,7 @@ describe('repertoire', () => {
   it('leaves a progression and an unknown id as they are', () => {
     const pieces = repertoire({ versions: { twofive: VERSION, gone: VERSION }, songs: [] })
     expect(pieces.piece('twofive')).toBe(pieceById('twofive'))
-    expect(pieces.hasVersion('twofive')).toBe(false)
     expect(pieces.piece('gone')).toBeUndefined()
-    expect(pieces.hasVersion('gone')).toBe(false)
   })
 
   it('gives the learner’s own songs, in the order made', () => {

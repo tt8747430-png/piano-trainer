@@ -14,7 +14,7 @@ export const common = {
     offline: 'You’re offline. This screen opens once you’re back online.',
     reload: 'Reload',
   },
-  notFound: { title: 'Page not found', toSongs: 'Go to Songs' },
+  notFound: { title: 'Page not found', toSongs: 'Go to Songs', toPatterns: 'Go to Patterns' },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   close: 'Close',
   loading: 'Loading',

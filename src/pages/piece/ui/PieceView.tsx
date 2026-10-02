@@ -4,7 +4,14 @@ import { PencilLine, Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/path'
-import { entryTitles, isOwnSongId, usePieceHeadings, usePieces, type Piece } from '@/entities/piece'
+import {
+  entryTitles,
+  isOwnSongId,
+  selectHasVersion,
+  usePieceHeadings,
+  usePieces,
+  type Piece,
+} from '@/entities/piece'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
@@ -28,7 +35,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   const locale = useLocale()
   const playback = usePlayback<number>()
   const own = isOwnSongId(piece.id) ? piece.id : null
-  const hasVersion = usePieces((state) => Object.hasOwn(state.versions, piece.id))
+  const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
   const performance = useMemo(
     () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
@@ -74,8 +81,7 @@ export function PieceView({ piece }: { piece: Piece }) {
               <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
             </div>
           ) : hasVersion ? (
-            <div className="flex flex-wrap items-center gap-3">
-              <p className="font-semibold">{t('yourVersion')}</p>
+            <div className="flex">
               <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
             </div>
           ) : null}

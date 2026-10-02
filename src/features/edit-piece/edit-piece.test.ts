@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { createPiecesStore, type PieceMusic } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
-import { deleteSong, makeSong, renameSong, resetVersion, saveMusic } from './index'
+import { chartStart, deleteSong, makeSong, renameSong, resetVersion, saveMusic } from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -24,10 +24,13 @@ describe('saveMusic', () => {
     expect(store.getState().versions).toEqual({})
   })
 
-  it('keeps any music written for a listing', () => {
+  it('keeps a listing’s chart once it is more than the chart it starts from', () => {
     const store = fresh()
-    saveMusic(store, { kind: 'version', id: 'bz4', original: null }, ORIGINAL)
+    const start = chartStart({ tonic: note('C'), minor: true }, '3/4')
+    saveMusic(store, { kind: 'version', id: 'bz4', original: start }, ORIGINAL)
     expect(store.getState().versions).toEqual({ bz4: ORIGINAL })
+    saveMusic(store, { kind: 'version', id: 'bz4', original: start }, start)
+    expect(store.getState().versions).toEqual({})
   })
 
   it('replaces an own song’s music, keeping its id and title', () => {

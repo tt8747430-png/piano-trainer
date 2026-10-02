@@ -8,6 +8,9 @@ import {
   isOwnKey,
   pieceById,
   piecesPlaying,
+  selectHasVersion,
+  selectOwnSong,
+  selectVersion,
 } from './selectors'
 
 describe('lookups', () => {
@@ -23,6 +26,34 @@ describe('lookups', () => {
   it.each(['nope', 'constructor', ''])('find nothing for %j', (id) => {
     expect(entryById(id)).toBeUndefined()
     expect(pieceById(id)).toBeUndefined()
+  })
+})
+
+describe('the learner’s pieces', () => {
+  const music = {
+    key: 'G',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['G'] }],
+  } as const
+  const state = {
+    versions: { bz1: music, bz4: music, twofive: music, gone: music },
+    songs: [{ ...music, id: 'my-1', title: 'Morning' }] as const,
+  }
+
+  it('find a version of a song, study or listing, never of a progression or an unknown id', () => {
+    expect(selectVersion(state, 'bz1')).toBe(music)
+    expect(selectHasVersion(state, 'bz4')).toBe(true)
+    expect(selectHasVersion(state, 'bz5')).toBe(false)
+    expect(selectHasVersion(state, 'twofive')).toBe(false)
+    expect(selectHasVersion(state, 'gone')).toBe(false)
+    expect(selectHasVersion(state, 'constructor')).toBe(false)
+  })
+
+  it('find an own song by its id', () => {
+    expect(selectOwnSong(state, 'my-1')?.title).toBe('Morning')
+    expect(selectOwnSong(state, 'my-2')).toBeUndefined()
   })
 })
 
