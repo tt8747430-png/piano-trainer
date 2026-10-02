@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Question } from '@/features/trainer'
-import { note, noteName, writtenOctave } from '@/shared/lib/music'
+import { note, writtenName } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { noteLine } from '@/shared/lib/schedule'
 import { LazyScoreView } from '@/shared/ui'
@@ -11,7 +11,7 @@ const C_MAJOR = { tonic: note('C'), minor: false }
 /** What a reading round shows on a staff: a note on its clef, or a key's signature over a bar's rest. */
 function staffOf(question: Extract<Question, { mode: 'read-note' | 'key-signature' }>) {
   if (question.mode === 'read-note') {
-    const written = `${noteName(question.spelled)}${writtenOctave(question.key, question.spelled)}/1`
+    const written = `${writtenName(question.key, question.spelled)}/1`
     const hand = question.clef === 'treble' ? 'rh' : 'lh'
     return { clef: question.clef, music: noteLine(written, { hand, meter: '4/4', key: C_MAJOR }) }
   }

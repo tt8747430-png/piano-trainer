@@ -1,6 +1,7 @@
 import {
   beatsBefore,
   beatsPerBar,
+  beatsToTicks,
   chordBass,
   chordSymbol,
   midi,
@@ -110,7 +111,7 @@ function layOut(chart: Chart): Layout {
         const gridStart = tick - (index === 0 ? pickup : 0)
         if (barInLine === 0 || barInLine === line.length - 1) lineEnds.add(index)
         const chordIndexes = bar.chords.map((chord) => {
-          const durationTicks = Math.round(chord.beats * TICKS_PER_BEAT)
+          const durationTicks = beatsToTicks(chord.beats)
           chords.push({
             chord,
             startTick: tick,

@@ -2,6 +2,7 @@ export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './p
 export {
   beatsPerBar,
   beatsBefore,
+  beatsToTicks,
   isCompound,
   isMeter,
   METERS,
@@ -37,6 +38,7 @@ export {
   plainSpelling,
   rootSpelling,
   sameNote,
+  writtenName,
   writtenOctave,
   type Accidental,
   type Letter,
@@ -145,6 +147,7 @@ export {
 export {
   fitInversion,
   INVERSIONS,
+  isInversion,
   lastInversion,
   placeBorrowedChords,
   placeChord,
@@ -159,6 +162,7 @@ export {
 export {
   arpeggioFingering,
   FINGERINGS,
+  FINGERS,
   fingeringsOf,
   ownFingering,
   runFingering,

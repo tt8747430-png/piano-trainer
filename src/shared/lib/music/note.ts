@@ -89,6 +89,10 @@ export const writtenOctave = (key: Midi, spelled: SpelledNote): number =>
 export const noteName = (spelled: SpelledNote): string =>
   spelled.letter + ACCIDENTAL_SIGNS[spelled.accidental]
 
+/** A key as spelled with its written octave, as scientific pitch writes it: `B#3`, `C4`. */
+export const writtenName = (key: Midi, spelled: SpelledNote): string =>
+  `${noteName(spelled)}${writtenOctave(key, spelled)}`
+
 const isLetter = (value: string): value is Letter => (LETTERS as readonly string[]).includes(value)
 
 /** 'Eb', 'E♭', 'F##', 'F𝄪', 'Bbb': a capital letter and what is written after it, or null. */

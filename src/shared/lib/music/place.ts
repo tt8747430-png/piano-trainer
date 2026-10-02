@@ -29,6 +29,10 @@ export interface PlacedChord {
 export const INVERSIONS = [0, 1, 2, 3] as const
 export type Inversion = (typeof INVERSIONS)[number]
 
+/** Whether stored or typed text, or a number chosen, is one of the inversions. */
+export const isInversion = (value: unknown): value is Inversion =>
+  INVERSIONS.some((inversion) => inversion === value)
+
 /** The explorers offer root position and at most the first three inversions. */
 const MOST_INVERSIONS = INVERSIONS.length - 1
 

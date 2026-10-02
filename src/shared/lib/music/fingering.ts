@@ -6,7 +6,8 @@ import { relatedScale, scaleHasChords, scaleIntervals, spellScale, type ScaleKin
 export type Finger = 1 | 2 | 3 | 4 | 5
 export type Hand = 'rh' | 'lh'
 
-const FINGERS: readonly Finger[] = [1, 2, 3, 4, 5]
+/** The fingers, thumb first. */
+export const FINGERS: readonly Finger[] = [1, 2, 3, 4, 5]
 
 /** How a run is fingered: the thumb on its first note, or each note as the scale fingers it. */
 export const FINGERINGS = ['thumb', 'scale'] as const

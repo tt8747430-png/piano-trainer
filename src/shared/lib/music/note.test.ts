@@ -13,6 +13,7 @@ import {
   plainSpelling,
   rootSpelling,
   sameNote,
+  writtenName,
   writtenOctave,
   type SpelledNote,
 } from './note'
@@ -143,6 +144,14 @@ describe('writtenOctave', () => {
     expect(writtenOctave(midi(60), note('B', 1))).toBe(3)
     expect(writtenOctave(midi(71), note('C', -1))).toBe(5)
     expect(writtenOctave(midi(62), note('C', 2))).toBe(4)
+  })
+})
+
+describe('writtenName', () => {
+  it('names a key as spelled, in the octave of its letter', () => {
+    expect(writtenName(midi(60), note('C'))).toBe('C4')
+    expect(writtenName(midi(60), note('B', 1))).toBe('B#3')
+    expect(writtenName(midi(70), note('B', -1))).toBe('B♭4')
   })
 })
 

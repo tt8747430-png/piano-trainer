@@ -11,4 +11,4 @@ export {
   type TimedNote,
   type WrittenNote,
 } from './types'
-export { ticksOf } from './values'
+export { ticksOf, valuesOf } from './values'

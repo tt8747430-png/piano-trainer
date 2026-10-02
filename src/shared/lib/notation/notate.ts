@@ -1,7 +1,7 @@
 import {
   beatsBefore,
   beatsPerBar,
-  TICKS_PER_BEAT,
+  beatsToTicks,
   timeSignature,
   writtenOctave,
   type Key,
@@ -190,7 +190,7 @@ export function notate(music: TimedMusic): Score {
     const pickup = beatsBefore(music.bars, index, music.meter) > 0
     const bar: Bar = {
       start: written.startTick,
-      ticks: Math.round(written.beats * TICKS_PER_BEAT),
+      ticks: beatsToTicks(written.beats),
       meter: music.meter,
       key: music.key,
     }

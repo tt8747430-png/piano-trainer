@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { signatureOption, type ChoiceQuestion, type Question } from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
-import { noteName, parseKey, writtenOctave } from '@/shared/lib/music'
+import { noteName, parseKey, writtenName } from '@/shared/lib/music'
 
 /** Where a chord asked in an inversion has its lowest note, by inversion. */
 const POSITION = ['root', 'first', 'second', 'third'] as const
@@ -91,7 +91,7 @@ export function useRoundWords() {
       case 'name-scale':
         return scaleName(question.root, question.kind)
       case 'read-note':
-        return `${noteName(question.spelled)}${writtenOctave(question.key, question.spelled)}`
+        return writtenName(question.key, question.spelled)
       case 'key-degrees':
         return question.notes.map((tone) => noteName(tone.note)).join(' ')
       case 'key-signature':

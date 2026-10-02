@@ -2,6 +2,9 @@
 export type Tick = number
 export const TICKS_PER_BEAT = 12
 
+/** Beats in ticks, to the nearest tick (a third of a beat written `.3333` is 4). */
+export const beatsToTicks = (beats: number): Tick => Math.round(beats * TICKS_PER_BEAT)
+
 export const METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const
 export type Meter = (typeof METERS)[number]
 

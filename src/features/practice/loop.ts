@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import { beatsToTicks, type Tick } from '@/shared/lib/music'
 
 /** The bars a loop goes round, first to last, counted from 0. */
 export interface BarRange {
@@ -48,6 +48,6 @@ export function loopTicks(performance: Performance, bars: BarRange): { from: Tic
   const last = performance.bars[bars.last]
   return {
     from: first?.startTick ?? 0,
-    to: last ? last.startTick + Math.round(last.beats * TICKS_PER_BEAT) : performance.totalTicks,
+    to: last ? last.startTick + beatsToTicks(last.beats) : performance.totalTicks,
   }
 }
