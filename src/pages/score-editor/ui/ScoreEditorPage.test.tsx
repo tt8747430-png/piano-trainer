@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { musicOf, pieceById } from '@/entities/piece'
+import { musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setKeyboard } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
@@ -19,7 +19,7 @@ const SONG = {
 const withSong = () => {
   const storage = createMemoryStorage()
   storage.setItem(
-    'pt-pieces',
+    PIECES_STORAGE_KEY,
     JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: 1 }),
   )
   return storage
@@ -66,6 +66,10 @@ describe('the score editor', () => {
       expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1 D4/1 E4/1 F4/2' }),
     )
     expect(screen.getByRole('status')).toHaveTextContent('Bar 2, beat 2')
+    // Off the layer's radio group, whose arrows choose a layer.
+    await user.click(screen.getByRole('status'))
+    await user.keyboard('{ArrowLeft}{ArrowLeft}')
+    expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
   })
 
   it('undoes and redoes by button and by Cmd+Z', async () => {
@@ -84,10 +88,46 @@ describe('the score editor', () => {
   it('plays the song from the caret’s bar, and Stop stops it', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(audio.played.at(-1)?.sounds.length).toBeGreaterThan(0)
+    await user.click(await screen.findByRole('button', { name: 'Bar 3: G' }))
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    const ends = (audio.played.at(-1)?.sounds ?? []).map((sound) =>
+      sound.kind === 'note' ? sound.at + sound.duration : sound.at,
+    )
+    // Bars 3 and 4 at 90 a minute: eight beats of 2/3 of a second.
+    expect(Math.max(...ends)).toBeCloseTo(16 / 3, 0)
     await user.click(screen.getByRole('button', { name: 'Stop' }))
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+  })
+
+  it('plays a written left hand in the Player, in any key', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    // C3 over G: a note the pattern never plays there.
+    const song = { ...SONG, hands: { lh: 'C3/4 | - | - | -' } }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    const { audio } = await renderApp('/play/my-1?key=A', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    const keys = (audio.played.at(-1)?.sounds ?? []).flatMap((sound) =>
+      sound.kind === 'note' ? [sound.midi] : [],
+    )
+    expect(keys).toContain(midi(50))
+    expect(keys).not.toContain(midi(48))
+  })
+
+  it('opens a song with a tune in the Player with Melody to switch', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = { ...SONG, melody: 'B4/4 | D5/4 | G4/4 | G4/4' }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    await renderApp('/play/my-1', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    expect(await screen.findByRole('switch', { name: 'Melody' })).toBeInTheDocument()
   })
 
   it('closes to the song’s page', async () => {

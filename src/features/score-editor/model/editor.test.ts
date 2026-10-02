@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import { chordSymbol, midi, note, parseChordSymbol } from '@/shared/lib/music'
+import { chordSymbol, midi, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
+import { ticksOf } from '@/shared/lib/notation'
 import { draftOf, form, lengths, shape } from '../testing/test-draft'
-import { initialEditor, reduce, type EditorAction, type EditorState } from './editor'
+import { reduce } from './editor'
+import { initialEditor, type EditorAction, type EditorState } from './state'
 import { createEditorStore } from './store'
 
 const run = (state: EditorState, ...actions: EditorAction[]) => actions.reduce(reduce, state)
@@ -58,6 +60,51 @@ describe('the editor', () => {
     expect(shape(triplet.draft.melody)).toEqual(['G4@0/4'])
   })
 
+  it('chooses only values the meter writes in whole ticks', () => {
+    const choices: EditorAction[] = [
+      ...([1, 2, 4, 8, 16] as const).map((value): EditorAction => ({ type: 'value', value })),
+      { type: 'dot' },
+      { type: 'triplet' },
+    ]
+    for (const meter of ['4/4', '3/4', '6/8', '12/8'] satisfies Meter[]) {
+      const opened = initialEditor(draftOf({ meter, sections: [{ kind: 'verse', lines: ['G'] }] }))
+      for (const first of choices) {
+        for (const second of choices) {
+          for (const third of choices) {
+            const { value } = run(opened, first, second, third)
+            expect(Number.isInteger(ticksOf(value, meter)), JSON.stringify(value)).toBe(true)
+            expect(value.dots === 1 && value.triplet).toBe(false)
+          }
+        }
+      }
+    }
+  })
+
+  it('takes no dot on a sixteenth in x/4, and drops one a sixteenth cannot carry', () => {
+    const sixteenth = run(start(), { type: 'value', value: 16 }, { type: 'dot' })
+    expect(sixteenth.value).toEqual({ value: 16, dots: 0, triplet: false })
+    const dotted = run(
+      start(),
+      { type: 'value', value: 8 },
+      { type: 'dot' },
+      { type: 'value', value: 16 },
+    )
+    expect(dotted.value).toEqual({ value: 16, dots: 0, triplet: false })
+    const compound = run(
+      initialEditor(draftOf({ meter: '6/8', sections: [{ kind: 'verse', lines: ['G'] }] })),
+      { type: 'value', value: 16 },
+      { type: 'dot' },
+    )
+    expect(compound.value).toEqual({ value: 16, dots: 1, triplet: false })
+  })
+
+  it('takes a dot or a triplet, never both', () => {
+    const dotted = run(start(), { type: 'value', value: 8 }, { type: 'triplet' }, { type: 'dot' })
+    expect(dotted.value).toEqual({ value: 8, dots: 1, triplet: false })
+    const triplet = run(start(), { type: 'value', value: 8 }, { type: 'dot' }, { type: 'triplet' })
+    expect(triplet.value).toEqual({ value: 8, dots: 0, triplet: true })
+  })
+
   it('leaves Triplet off in a compound meter', () => {
     const state = run(
       initialEditor(draftOf({ meter: '6/8', sections: [{ kind: 'verse', lines: ['G'] }] })),
@@ -92,22 +139,25 @@ describe('the editor', () => {
     expect(state.draft.hands.rh[0]?.finger).toBe(1)
   })
 
-  it('sets a chord at the caret and moves on a beat or to the next bar, adding one past the last', () => {
+  it('sets a chord at the caret and moves on a beat or to the next bar', () => {
     const am = parseChordSymbol('Am')
     const beat = run(initialEditor(draftOf()), { type: 'chord', chord: am, advance: 'beat' })
     expect(form(beat.draft)).toEqual([[['Am@0', 'C@0']]])
     expect(beat.caret).toBe(12)
-    const last = run(
-      initialEditor(draftOf()),
-      { type: 'place', tick: 48, layer: 'chords' },
-      {
-        type: 'chord',
-        chord: am,
-        advance: 'bar',
-      },
-    )
-    expect(form(last.draft)).toEqual([[['G@0', 'Am@0', 'Am@0']]])
-    expect(last.caret).toBe(96)
+    const bar = run(initialEditor(draftOf()), { type: 'chord', chord: am, advance: 'bar' })
+    expect(form(bar.draft)).toEqual([[['Am@0', 'C@0']]])
+    expect(bar.caret).toBe(48)
+  })
+
+  it('stays on the last bar after a chord, or adds a bar past it when typing on', () => {
+    const am = parseChordSymbol('Am')
+    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 48, layer: 'chords' })
+    const stays = run(onLast, { type: 'chord', chord: am, advance: 'bar' })
+    expect(form(stays.draft)).toEqual([[['G@0', 'Am@0']]])
+    expect(stays.caret).toBe(48)
+    const typed = run(onLast, { type: 'chord', chord: am, advance: 'barAdding' })
+    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', 'Am@0']]])
+    expect(typed.caret).toBe(96)
   })
 
   it('names keys struck together in the chords as a chord, and stays', () => {
@@ -180,5 +230,25 @@ describe('createEditorStore', () => {
     expect(onChange).not.toHaveBeenCalled()
     store.dispatch(key(67, 0))
     expect(onChange).toHaveBeenCalledWith(store.getState().draft)
+  })
+
+  it('takes an edit that changes nothing as no undo step and saves nothing', () => {
+    const onChange = vi.fn()
+    const store = createEditorStore(draftOf(), onChange)
+    const nothing: EditorAction[] = [
+      { type: 'layer', layer: 'melody' },
+      { type: 'delete' },
+      { type: 'settings', tempo: 90, pattern: 'r1', key: store.getState().draft.key },
+      { type: 'layer', layer: 'rh' },
+      { type: 'backToPattern' },
+      { type: 'layer', layer: 'chords' },
+      { type: 'delete' },
+      { type: 'bars', edit: 'newLine' },
+      { type: 'barLength', ticks: 48 },
+      { type: 'chord', chord: parseChordSymbol('G'), advance: 'bar' },
+    ]
+    for (const action of nothing) store.dispatch(action)
+    expect(onChange).not.toHaveBeenCalled()
+    expect(store.getState().past).toEqual([])
   })
 })

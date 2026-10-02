@@ -40,7 +40,7 @@ const endOf = (line: SheetLineBars) => {
   return last ? last.start + last.bar.ticks : line.start
 }
 
-/** A voice's notes sounding in [from, to), timed from `from`. */
+/** A layer's notes sounding in [from, to), timed from `from`. */
 function sounding(
   notes: readonly DraftNote[],
   hand: TimedNote['hand'],

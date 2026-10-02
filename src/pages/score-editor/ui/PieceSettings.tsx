@@ -1,25 +1,31 @@
 import { Settings } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
 import { PIECE_TEMPO } from '@/entities/piece'
+import { draftFit } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { Dropdown, Fact, KeyDropdown, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { songPatterns } from '../model/song-patterns'
+import { piecePatterns } from '../model/piece-patterns'
 import { SongTitleField } from './SongTitleField'
 
-/** The song's settings (spec §6.4): an own song's title, the key, the tempo and the pattern; the meter. */
-export function SongSettings() {
+/** The piece's settings (spec §6.4): an own song's title, the key, the tempo and the pattern; the meter. */
+export function PieceSettings() {
   const { t } = useTranslation('editor')
   const locale = useLocale()
   const { actions, meta } = useScoreEditorContext()
-  const draft = useEditorState((state) => state.draft)
-  const [tempo, setTempo] = useState(draft.tempo)
+  const key = useEditorState((state) => state.draft.key)
+  const saved = useEditorState((state) => state.draft.tempo)
+  const pattern = useEditorState((state) => state.draft.pattern)
+  const meter = useEditorState((state) => state.draft.meter)
+  const fit = useEditorState(useShallow((state) => draftFit(state.draft)))
+  const [tempo, setTempo] = useState(saved)
   return (
-    <Sheet onOpenChange={(open) => (open ? setTempo(draft.tempo) : undefined)}>
+    <Sheet onOpenChange={(open) => (open ? setTempo(saved) : undefined)}>
       <SheetTrigger render={<Button variant="surface" size="icon" aria-label={t('settings')} />}>
         <Settings aria-hidden />
       </SheetTrigger>
@@ -27,7 +33,7 @@ export function SongSettings() {
         <div className="flex flex-col gap-5 pt-2">
           {meta.kind === 'song' ? <SongTitleField /> : null}
           <KeyDropdown
-            value={keyParam(draft.key)}
+            value={keyParam(key)}
             onChange={(key) => actions.dispatch({ type: 'settings', key: keyFromParam(key) })}
           />
           <Slider
@@ -48,12 +54,12 @@ export function SongSettings() {
           </Slider>
           <Dropdown
             label={t('song.pattern')}
-            value={draft.pattern}
-            groups={songPatterns(draft, locale)}
+            value={pattern}
+            groups={piecePatterns(fit, pattern, locale)}
             onChange={(pattern) => actions.dispatch({ type: 'settings', pattern })}
           />
           <dl>
-            <Fact term={t('song.meter')}>{draft.meter}</Fact>
+            <Fact term={t('song.meter')}>{meter}</Fact>
           </dl>
         </div>
       </SheetContent>

@@ -1,5 +1,5 @@
 import type { PatternId } from '@/entities/pattern'
-import { PIECE_TEMPO } from '@/entities/piece'
+import { keyText, PIECE_TEMPO } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import { midi, PIANO, type Key } from '@/shared/lib/music'
 import type { Draft, DraftNote } from './draft'
@@ -18,6 +18,7 @@ function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
  */
 export function setKey(draft: Draft, key: Key): Draft {
   const from = draft.key
+  if (keyText(from) === keyText(key)) return draft
   return {
     ...draft,
     key,
@@ -39,9 +40,10 @@ export function setKey(draft: Draft, key: Key): Draft {
 }
 
 /** The tempo, kept within the tempos a piece is written at. */
-export const setTempo = (draft: Draft, tempo: number): Draft => ({
-  ...draft,
-  tempo: Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, Math.round(tempo))),
-})
+export function setTempo(draft: Draft, tempo: number): Draft {
+  const kept = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, Math.round(tempo)))
+  return kept === draft.tempo ? draft : { ...draft, tempo: kept }
+}
 
-export const setPattern = (draft: Draft, pattern: PatternId): Draft => ({ ...draft, pattern })
+export const setPattern = (draft: Draft, pattern: PatternId): Draft =>
+  pattern === draft.pattern ? draft : { ...draft, pattern }

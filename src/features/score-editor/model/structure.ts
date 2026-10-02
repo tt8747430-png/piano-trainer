@@ -61,7 +61,7 @@ export function spliceNotes(
   })
 }
 
-/** Every voice's notes spliced alike. */
+/** The melody's and each hand's notes spliced alike. */
 export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft => ({
   ...draft,
   melody: spliceNotes(draft.melody, at, removed, inserted),

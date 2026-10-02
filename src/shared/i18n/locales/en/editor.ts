@@ -18,10 +18,21 @@ export const editor = {
   },
   caret: {
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
+    notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
     pattern: 'Bar {{bar}}, beat {{beat}} · pattern',
     end: 'End of the piece',
+    values: {
+      whole: 'whole',
+      half: 'half',
+      quarter: 'quarter',
+      eighth: 'eighth',
+      sixteenth: 'sixteenth',
+      thirtySecond: '32nd',
+    },
+    dotted: 'dotted {{value}}',
+    triplet: '{{value}} triplet',
   },
   values: {
     label: 'Note value',

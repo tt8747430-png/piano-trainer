@@ -20,10 +20,21 @@ export const editor: LocaleResources['editor'] = {
   },
   caret: {
     at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
+    notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
     pattern: 'Такт {{bar}}, доля {{beat}} · фактура',
     end: 'Конец пьесы',
+    values: {
+      whole: 'целая',
+      half: 'половинная',
+      quarter: 'четвертная',
+      eighth: 'восьмая',
+      sixteenth: 'шестнадцатая',
+      thirtySecond: 'тридцать вторая',
+    },
+    dotted: '{{value}} с точкой',
+    triplet: '{{value}} в триоли',
   },
   values: {
     label: 'Длительность',

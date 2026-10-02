@@ -30,7 +30,6 @@ describe('editorTarget', () => {
       kind: 'version',
       id: 'amazing',
       entry: amazing,
-      hasVersion: false,
     })
     expect(target?.music).toEqual(musicOf(amazing))
     expect(target?.kind === 'version' && target.original).toEqual(musicOf(amazing))
@@ -50,7 +49,6 @@ describe('editorTarget', () => {
     const version = { ...SONG, key: 'G' as const, meter: '3/4' as const }
     const target = editorTarget({ ...NONE, versions: { amazing: version } }, 'amazing')
     expect(target?.music).toEqual(version)
-    expect(target?.hasVersion).toBe(true)
   })
 
   it('starts a listing’s chart in its key and meter, which is its original', () => {

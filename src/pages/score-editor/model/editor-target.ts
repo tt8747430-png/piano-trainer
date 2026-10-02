@@ -2,7 +2,9 @@ import {
   isOwnSongId,
   musicOf,
   pieceKey,
-  repertoire,
+  selectOwnSong,
+  selectVersion,
+  versionableEntry,
   type ChartPiece,
   type Listing,
   type OwnSongId,
@@ -30,39 +32,29 @@ export type EditorTarget =
        * start).
        */
       readonly original: PieceMusic
-      readonly hasVersion: boolean
     }
   | {
       readonly kind: 'song'
       readonly id: OwnSongId
       readonly title: string
       readonly music: PieceMusic
-      readonly hasVersion: false
     }
 
 /** The editor's target for an id, or none: a progression, or nothing there, is not edited. */
 export function editorTarget(state: PiecesState, id: string): EditorTarget | undefined {
   if (isOwnSongId(id)) {
-    const song = state.songs.find((own) => own.id === id)
+    const song = selectOwnSong(state, id)
     if (!song) return undefined
     const { id: _id, title, ...music } = song
-    return { kind: 'song', id, title, music, hasVersion: false }
+    return { kind: 'song', id, title, music }
   }
-  const entry = repertoire(state).original(id)
-  if (!entry || entry.kind === 'progression') return undefined
+  const entry = versionableEntry(id)
+  if (!entry) return undefined
   // Compared with what the editor writes, so the original written back unchanged is no version.
   const original = asWritten(
     entry.kind === 'listing' ? chartStart(pieceKey(entry), entry.meter) : musicOf(entry),
   )
-  const version = Object.hasOwn(state.versions, id) ? state.versions[id] : undefined
-  return {
-    kind: 'version',
-    id,
-    entry,
-    music: version ?? original,
-    original,
-    hasVersion: version !== undefined,
-  }
+  return { kind: 'version', id, entry, music: selectVersion(state, id) ?? original, original }
 }
 
 /** Where the editor saves what it writes. */

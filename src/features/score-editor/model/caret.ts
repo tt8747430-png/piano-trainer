@@ -1,5 +1,5 @@
 import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
-import type { Draft, Layer } from './draft'
+import type { Draft, Layer, NoteLayer } from './draft'
 import { notesOf } from './notes'
 import { barsOf, totalTicks } from './timeline'
 
@@ -24,8 +24,8 @@ export function snapToChord(draft: Draft, tick: Tick): Tick {
   return places.findLast((place) => place <= tick) ?? places[0] ?? 0
 }
 
-/** Where the caret may stand in a voice: its notes' starts and ends, steps of the value, barlines, the ends. */
-function voicePlaces(draft: Draft, layer: Exclude<Layer, 'chords'>, step: Tick): Tick[] {
+/** Where the caret may stand in a layer of notes: their starts and ends, steps of the value, barlines, the ends. */
+function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
   const steps = barsOf(draft).flatMap(({ start, bar }) =>
     Array.from({ length: Math.ceil(bar.ticks / step) }, (_, k) => start + k * step),
   )
@@ -35,9 +35,9 @@ function voicePlaces(draft: Draft, layer: Exclude<Layer, 'chords'>, step: Tick):
   )
 }
 
-/** Every place the caret may stand in a layer, the value's step apart in a voice. */
+/** Every place the caret may stand in a layer, the value's step apart in the melody or a hand. */
 export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
-  layer === 'chords' ? chordPlaces(draft) : voicePlaces(draft, layer, step)
+  layer === 'chords' ? chordPlaces(draft) : notePlaces(draft, layer, step)
 
 /** The caret's next place forwards (1) or back (−1), staying where it is at either end. */
 export function nextCaret(

@@ -1,11 +1,17 @@
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
-import { entryTitles, usePieces, usePiecesStoreApi, type PiecesState } from '@/entities/piece'
+import {
+  entryTitles,
+  selectHasVersion,
+  selectOwnSong,
+  usePieces,
+  usePiecesStoreApi,
+} from '@/entities/piece'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { renameSong, saveMusic } from '@/features/edit-piece'
 import {
   barAt,
-  barsOf,
   createEditorStore,
+  isHandLayer,
   readDraft,
   writeDraft,
   type EditorAction,
@@ -56,10 +62,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   }, [])
   const close = useCloseTo(target)
   const hasVersion = usePieces(
-    (state: PiecesState) => target.kind === 'version' && Object.hasOwn(state.versions, target.id),
+    (state) => target.kind === 'version' && selectHasVersion(state, target.id),
   )
-  const songTitle = usePieces((state: PiecesState) =>
-    target.kind === 'song' ? state.songs.find((song) => song.id === target.id)?.title : undefined,
+  const songTitle = usePieces((state) =>
+    target.kind === 'song' ? selectOwnSong(state, target.id)?.title : undefined,
   )
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
@@ -87,10 +93,9 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
 
   const writeOut = () => {
     const { draft, caret, layer } = store.getState()
-    if (layer !== 'rh' && layer !== 'lh') return
-    const bar = barsOf(draft)[barAt(draft, caret).index]
-    if (!bar) return
-    store.dispatch({ type: 'writeOut', played: playedInBar(arrangeDraft(draft), layer, bar) })
+    if (!isHandLayer(layer)) return
+    const played = playedInBar(arrangeDraft(draft), layer, barAt(draft, caret))
+    store.dispatch({ type: 'writeOut', played })
   }
 
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {

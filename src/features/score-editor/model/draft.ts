@@ -1,15 +1,20 @@
-import type { PatternId } from '@/entities/pattern'
+import type { PatternFit, PatternId } from '@/entities/pattern'
 import {
+  HAND_IDS,
   keyText,
   readMusic,
   writeBar,
   writeHand,
   writeMelody,
+  type HandId,
   type PieceMusic,
   type Section,
 } from '@/entities/piece'
+import { isOneOf } from '@/shared/lib'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
+  beatsToTicks,
+  isCompound,
   parseKey,
   TICKS_PER_BEAT,
   type Chord,
@@ -20,12 +25,15 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
+import { barsOf, chordsAt, startsIn, type PlacedBar } from './timeline'
 
 /** What the editor writes (spec §6.1): the chords, the melody or a hand. */
-export const LAYERS = ['chords', 'melody', 'rh', 'lh'] as const
+export const LAYERS = ['chords', 'melody', ...HAND_IDS] as const
 export type Layer = (typeof LAYERS)[number]
-export const HANDS = ['rh', 'lh'] as const
-export type HandId = (typeof HANDS)[number]
+/** A layer of notes: the melody or a hand. */
+export type NoteLayer = Exclude<Layer, 'chords'>
+/** Whether a layer is a hand's (written bar by bar, else the pattern's). */
+export const isHandLayer = isOneOf<HandId>(HAND_IDS)
 
 /** A note of the melody or a hand on the piece's timeline. */
 export interface DraftNote {
@@ -70,36 +78,34 @@ export interface Draft {
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
 
-const ticksOf = (beats: number): Tick => Math.round(beats * TICKS_PER_BEAT)
-
-/** Music as the editor holds it: it reads as the Player reads it, or throws a ContentError. */
+/** Music as the editor holds it: it reads as the Player reads it, or throws where it does not. */
 export function readDraft(music: PieceMusic): Draft {
   const key = parseKey(music.key)
   if (!key) throw new RangeError(`The music is in no key: "${music.key}"`)
   const { chart, melody } = readMusic(music)
   const hands: Record<HandId, DraftNote[]> = { rh: [], lh: [] }
   let tick = 0
-  const sections = chart.sections.map((section, s) => {
-    const { lines: _lines, ...heading } = music.sections[s] ?? { kind: 'verse', lines: [] }
+  // The chart reads a section for each of the music's, in order: the headings are the music's.
+  const sections = music.sections.map(({ lines: _lines, ...heading }, s) => {
     return {
       heading,
-      lines: section.lines.map((line) =>
+      lines: (chart.sections[s]?.lines ?? []).map((line) =>
         line.map((bar): DraftBar => {
           const start = tick
-          tick += ticksOf(bar.beats)
+          tick += beatsToTicks(bar.beats)
           let at = 0
           const chords = bar.chords.map(({ beats, method, ...chord }) => {
             const placed = { at, chord, ...(method ? { method } : {}) }
-            at += ticksOf(beats)
+            at += beatsToTicks(beats)
             return placed
           })
-          for (const hand of HANDS) {
+          for (const hand of HAND_IDS) {
             for (const n of bar.hands?.[hand] ?? []) {
               hands[hand].push({ ...n, startTick: start + n.startTick })
             }
           }
           return {
-            ticks: ticksOf(bar.beats),
+            ticks: beatsToTicks(bar.beats),
             chords,
             rh: bar.hands?.rh !== undefined,
             lh: bar.hands?.lh !== undefined,
@@ -122,10 +128,10 @@ export function readDraft(music: PieceMusic): Draft {
 /** A draft bar as the chart reads it: its chords with their beats. */
 function chartBar(bar: DraftBar) {
   return {
-    chords: bar.chords.map((chord, i) => ({
-      ...chord.chord,
-      beats: ((bar.chords[i + 1]?.at ?? bar.ticks) - chord.at) / TICKS_PER_BEAT,
-      ...(chord.method ? { method: chord.method } : {}),
+    chords: chordsAt(bar).map(({ chord, ticks, method }) => ({
+      ...chord,
+      beats: ticks / TICKS_PER_BEAT,
+      ...(method ? { method } : {}),
     })),
     beats: bar.ticks / TICKS_PER_BEAT,
   }
@@ -134,28 +140,21 @@ function chartBar(bar: DraftBar) {
 /** A hand's notes bar by bar, from each bar's start: null where the pattern plays. */
 function handBars(
   notes: readonly DraftNote[],
-  bars: readonly { start: Tick; bar: DraftBar }[],
+  bars: readonly PlacedBar[],
   hand: HandId,
 ): (HandNote[] | null)[] {
-  return bars.map(({ start, bar }) =>
-    bar[hand]
+  return bars.map((placed) =>
+    placed.bar[hand]
       ? notes
-          .filter((n) => n.startTick >= start && n.startTick < start + bar.ticks)
-          .map((n) => ({ ...n, startTick: n.startTick - start }))
+          .filter((n) => startsIn(n.startTick, placed))
+          .map((n) => ({ ...n, startTick: n.startTick - placed.start }))
       : null,
   )
 }
 
 /** The draft as the content writes music. */
 export function writeDraft(draft: Draft): PieceMusic {
-  const placed: { start: Tick; bar: DraftBar }[] = []
-  let tick = 0
-  for (const section of draft.sections) {
-    for (const bar of section.lines.flat()) {
-      placed.push({ start: tick, bar })
-      tick += bar.ticks
-    }
-  }
+  const placed = barsOf(draft)
   const melody = writeMelody(
     draft.melody,
     placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks })),
@@ -180,3 +179,13 @@ export function writeDraft(draft: Draft): PieceMusic {
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),
   }
 }
+
+/** What the draft's music gives a pattern to play over: a tune, simple time, method codes. */
+export const draftFit = (draft: Draft): PatternFit => ({
+  melody: draft.melody.length > 0,
+  key: true,
+  simpleTime: !isCompound(draft.meter),
+  methodCodes: draft.sections.some((section) =>
+    section.lines.some((line) => line.some((bar) => bar.chords.some((chord) => chord.method))),
+  ),
+})

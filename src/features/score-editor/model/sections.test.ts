@@ -18,6 +18,12 @@ describe('sections', () => {
     expect(newSection(verse, 0)).toBe(verse)
   })
 
+  it('leaves a section given the kind and name it has as it was', () => {
+    expect(setSectionKind(verse, 0, 'verse')).toBe(verse)
+    const last = draftOf({ sections: [{ kind: 'chorus', last: true, lines: ['G'] }] })
+    expect(headings(setSectionKind(last, 0, 'chorus'))).toEqual([{ kind: 'chorus' }])
+  })
+
   it('joins a section to the one before', () => {
     expect(form(joinSection(newSection(verse, 2), 1))).toEqual(form(verse))
   })

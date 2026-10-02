@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
-import { readDraft, type Layer } from '@/features/score-editor'
+import { createEditorStore, placesIn, readDraft, type Layer } from '@/features/score-editor'
 import { loadScoreView } from '@/shared/ui'
 import { ScoreSheet } from './ScoreSheet'
 
@@ -27,6 +27,7 @@ const sheet = (layer: Layer, onPlace = vi.fn()) =>
       caretTicks={12}
       selection={null}
       onPlace={onPlace}
+      placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
       heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
     />,
   )

@@ -4,7 +4,7 @@ import { MidiButton } from '@/features/connect-midi'
 import { PlayLabel, RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { SongSettings } from './SongSettings'
+import { PieceSettings } from './PieceSettings'
 
 /** The editor's toolbar: Close and the title, Undo and Redo, MIDI, the song's settings, and Play. */
 export function EditorToolbar() {
@@ -36,7 +36,7 @@ export function EditorToolbar() {
         onClick={() => actions.dispatch({ type: 'redo' })}
       />
       <MidiButton />
-      <SongSettings />
+      <PieceSettings />
       <Button onClick={actions.togglePlay}>
         <PlayLabel playing={meta.playing}>
           <Play data-icon="inline-start" />

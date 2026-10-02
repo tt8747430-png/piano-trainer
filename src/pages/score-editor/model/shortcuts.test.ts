@@ -79,10 +79,12 @@ describe('shortcutOf', () => {
       type: 'bars',
       edit: 'copy',
     })
-    expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'melody')).toEqual({
+    expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'chords')).toEqual({
       type: 'bars',
       edit: 'cut',
     })
+    expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'melody')).toBeNull()
+    expect(shortcutOf(press('KeyC', 'c', { metaKey: true }), 'rh')).toBeNull()
     expect(shortcutOf(press('KeyV', 'v', { metaKey: true }), 'chords')).toEqual({
       type: 'bars',
       edit: 'paste',

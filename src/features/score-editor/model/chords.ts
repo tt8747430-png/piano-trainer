@@ -1,4 +1,11 @@
-import { keyScale, scaleChordAt, type Chord, type Key, type Tick } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  keyScale,
+  scaleChordAt,
+  type Chord,
+  type Key,
+  type Tick,
+} from '@/shared/lib/music'
 import type { Draft, DraftChord } from './draft'
 import { withBar } from './notes'
 
@@ -7,6 +14,7 @@ export const setChord = (draft: Draft, index: number, at: Tick, chord: Chord): D
   withBar(draft, index, (bar) => {
     if (at < 0 || at >= bar.ticks) return bar
     const there = bar.chords.find((placed) => placed.at === at)
+    if (there && chordSymbol(there.chord) === chordSymbol(chord)) return bar
     const method = there?.method ?? bar.chords[0]?.method
     const placed: DraftChord = { at, chord, ...(method ? { method } : {}) }
     return {

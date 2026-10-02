@@ -1,32 +1,38 @@
-import { valueTicks } from '@/features/score-editor'
-import { TICKS_PER_BEAT } from '@/shared/lib/music'
+import { useCallback, useMemo } from 'react'
+import { caretTicks, placesIn, selectedBars, type Layer } from '@/features/score-editor'
+import type { Tick } from '@/shared/lib/music'
 import { ScoreSheet } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SectionHeading } from './SectionHeading'
 
 /** The sheet the editor writes on: the caret where the next note or chord goes. */
 export function EditorSheet() {
-  const { actions } = useScoreEditorContext()
+  const {
+    store,
+    actions: { dispatch },
+  } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
-  const value = useEditorState((state) => state.value)
+  const width = useEditorState(caretTicks)
   const selection = useEditorState((state) => state.selection)
+  const chosen = useMemo(() => (selection ? selectedBars(selection) : null), [selection])
+  const onPlace = useCallback(
+    (tick: Tick, to: Layer, extend: boolean) =>
+      dispatch({ type: 'place', tick, layer: to, extend }),
+    [dispatch],
+  )
+  // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
+  const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   return (
     <ScoreSheet
       draft={draft}
       caret={caret}
       layer={layer}
-      caretTicks={layer === 'chords' ? TICKS_PER_BEAT : valueTicks(value, draft.meter)}
-      selection={
-        selection
-          ? {
-              from: Math.min(selection.anchor, selection.head),
-              to: Math.max(selection.anchor, selection.head),
-            }
-          : null
-      }
-      onPlace={(tick, to, extend) => actions.dispatch({ type: 'place', tick, layer: to, extend })}
+      caretTicks={width}
+      selection={chosen}
+      onPlace={onPlace}
+      placesOf={placesOf}
       heading={(section) => <SectionHeading section={section} />}
     />
   )

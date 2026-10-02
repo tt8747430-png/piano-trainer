@@ -1,11 +1,11 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
-import type { ChartPiece } from '@/entities/piece'
+import type { ChartPiece, HandId } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import {
+  startsIn,
   writeDraft,
   type Draft,
   type DraftNote,
-  type HandId,
   type PlacedBar,
 } from '@/features/score-editor'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -20,10 +20,10 @@ export function arrangeDraft(draft: Draft): Performance {
 export function playedInBar(
   performance: Performance,
   hand: HandId,
-  { start, bar }: PlacedBar,
+  placed: PlacedBar,
 ): DraftNote[] {
   return performance.notes
-    .filter((n) => n.hand === hand && n.startTick >= start && n.startTick < start + bar.ticks)
+    .filter((n) => n.hand === hand && startsIn(n.startTick, placed))
     .map((n) => ({
       midi: n.midi,
       spelled: n.spelled,

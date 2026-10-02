@@ -24,6 +24,10 @@ export function barsOf(draft: Draft): PlacedBar[] {
   return placed
 }
 
+/** Whether a note starting at `tick` starts in a bar. */
+export const startsIn = (tick: Tick, { start, bar }: PlacedBar): boolean =>
+  tick >= start && tick < start + bar.ticks
+
 export const totalTicks = (draft: Draft): Tick =>
   draft.sections.reduce(
     (sum, section) => sum + section.lines.flat().reduce((ticks, bar) => ticks + bar.ticks, 0),

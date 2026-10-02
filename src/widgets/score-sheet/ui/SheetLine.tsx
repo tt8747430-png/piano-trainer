@@ -1,35 +1,31 @@
-import { useEffect, useRef } from 'react'
-import type { BarRange, Draft, Layer } from '@/features/score-editor'
-import type { Tick, TimeSignature } from '@/shared/lib/music'
-import type { Score, TimedMusic } from '@/shared/lib/notation'
+import { memo, useEffect, useRef } from 'react'
+import type { BarRange, Layer } from '@/features/score-editor'
+import type { Tick } from '@/shared/lib/music'
 import { LazyScoreView } from '@/shared/ui'
-import type { SheetLineBars } from '../model/line-music'
+import type { LineSheet } from '../model/line-sheets'
 import { LineOverlay } from './LineOverlay'
 
-/** One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen. */
-export function SheetLine({
-  draft,
-  line,
-  music,
-  score,
-  timeBefore,
+/**
+ * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen;
+ * a row of a busy sheet, drawn again only when its props change.
+ */
+export const SheetLine = memo(function SheetLine({
+  sheet,
   layer,
   caret,
   caretTicks,
   selection,
   onPlace,
+  placesOf,
 }: {
-  draft: Draft
-  line: SheetLineBars
-  music: TimedMusic
-  score: Score
-  timeBefore: TimeSignature | undefined
+  sheet: LineSheet
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
   caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
+  placesOf: (layer: Layer) => readonly Tick[]
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const holdsCaret = caret !== null
@@ -39,21 +35,21 @@ export function SheetLine({
   }, [holdsCaret])
   return (
     <div ref={ref} className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none">
-      <LazyScoreView score={score} timeBefore={timeBefore}>
+      <LazyScoreView score={sheet.score} timeBefore={sheet.timeBefore}>
         {(layout) => (
           <LineOverlay
             layout={layout}
-            music={music}
-            line={line}
-            draft={draft}
+            music={sheet.music}
+            line={sheet.line}
             layer={layer}
             caret={caret}
             caretTicks={caretTicks}
             selection={selection}
             onPlace={onPlace}
+            placesOf={placesOf}
           />
         )}
       </LazyScoreView>
     </div>
   )
-}
+})

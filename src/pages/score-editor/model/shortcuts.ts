@@ -1,4 +1,4 @@
-import type { EditorAction, Layer, NoteValue } from '@/features/score-editor'
+import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
 
 /** What a key press is made of, as the browser's KeyboardEvent says it. */
 export interface KeyPress {
@@ -14,7 +14,7 @@ export interface KeyPress {
 export type Shortcut = EditorAction | { readonly type: 'chordField' }
 
 /** The value keys, by physical key so every layout chooses the same: 1 a whole note to 5 a sixteenth. */
-const VALUES: Readonly<Record<string, NoteValue['value']>> = {
+const VALUES: Readonly<Record<string, ChosenValue['value']>> = {
   Digit1: 1,
   Digit2: 2,
   Digit3: 4,
@@ -30,16 +30,18 @@ const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
 /**
  * The editor's shortcut for a key press in a layer (spec §6), or null. Only keys the typing keys leave
  * free: digits, the full stop, arrows, Home, End, Backspace, Delete and Enter, and Cmd or Ctrl with
- * Z, Y, C, X, V; a letter alone plays the piano.
+ * Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   const mod = press.metaKey || press.ctrlKey
   if (mod) {
     if (press.code === 'KeyZ') return { type: press.shiftKey ? 'redo' : 'undo' }
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
-    if (isBarEditKey(press.code)) return { type: 'bars', edit: BAR_EDITS[press.code] }
+    if (isBarEditKey(press.code)) {
+      return layer === 'chords' ? { type: 'bars', edit: BAR_EDITS[press.code] } : null
+    }
   }
-  const move = (by: 'step' | 'bar' | 'end', direction: -1 | 1): Shortcut => ({
+  const move = (by: CaretMove, direction: -1 | 1): Shortcut => ({
     type: 'move',
     by,
     direction,

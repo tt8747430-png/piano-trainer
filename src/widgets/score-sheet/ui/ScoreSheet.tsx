@@ -1,14 +1,14 @@
-import { useState, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
-import { createLineScores } from '../model/line-scores'
-import { lineMusic, linesOf, timeBeforeLine } from '../model/line-music'
+import { createLineSheets } from '../model/line-sheets'
 import { SheetLine } from './SheetLine'
 
 /**
  * The editor's sheet (spec §6.1): the piece by section, each heading the page's, and each chart line a
- * line of grand staff with its bars numbered and its chord symbols, the caret on its layer's staff.
+ * line of grand staff with its bars numbered and its chord symbols, the caret on its layer's staff. A
+ * line drawn again only when what it shows changes.
  */
 export function ScoreSheet({
   draft,
@@ -17,6 +17,7 @@ export function ScoreSheet({
   caretTicks,
   selection,
   onPlace,
+  placesOf,
   heading,
 }: {
   draft: Draft
@@ -26,39 +27,38 @@ export function ScoreSheet({
   caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
+  /** Where the caret may stand in a layer, asked when a bar is clicked. */
+  placesOf: (layer: Layer) => readonly Tick[]
   /** A section's heading. */
   heading: (section: number) => ReactNode
 }) {
   const { t } = useTranslation('editor')
-  const [scoreOf] = useState(createLineScores)
-  const lines = linesOf(draft)
+  const [sheetsOf] = useState(createLineSheets)
+  const sheets = useMemo(() => sheetsOf(draft), [sheetsOf, draft])
   const caretBar = barAt(draft, caret).index
   return (
     <section aria-label={t('sheet.label')} className="flex flex-col gap-8">
       {draft.sections.map((_, section) => (
         <section key={section} className="flex flex-col gap-2">
           {heading(section)}
-          {lines
-            .filter((line) => line.section === section)
-            .map((line) => {
-              const music = lineMusic(draft, line)
-              const holds = line.bars.some((placed) => placed.index === caretBar)
-              return (
-                <SheetLine
-                  key={line.line}
-                  draft={draft}
-                  line={line}
-                  music={music}
-                  score={scoreOf(music)}
-                  timeBefore={timeBeforeLine(draft, line)}
-                  layer={layer}
-                  caret={holds ? caret - line.start : null}
-                  caretTicks={caretTicks}
-                  selection={selection}
-                  onPlace={onPlace}
-                />
-              )
-            })}
+          {sheets
+            .filter((sheet) => sheet.line.section === section)
+            .map((sheet) => (
+              <SheetLine
+                key={sheet.line.line}
+                sheet={sheet}
+                layer={layer}
+                caret={
+                  sheet.line.bars.some((placed) => placed.index === caretBar)
+                    ? caret - sheet.line.start
+                    : null
+                }
+                caretTicks={caretTicks}
+                selection={selection}
+                onPlace={onPlace}
+                placesOf={placesOf}
+              />
+            ))}
         </section>
       ))}
     </section>

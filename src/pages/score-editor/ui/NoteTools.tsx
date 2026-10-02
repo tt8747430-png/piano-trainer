@@ -1,27 +1,21 @@
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { NOTE_VALUES, type NoteValue } from '@/features/score-editor'
+import { NOTE_VALUES, takesDot, type ChosenValue } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
 import { RoundButton, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { VALUE_WORDS } from '../model/value-words'
 import { HandBarTools } from './HandBarTools'
 
 /** Each value's glyph (Noto Music) and the word a screen reader says. */
-const VALUE_GLYPHS: Readonly<Record<NoteValue['value'], string>> = {
+const VALUE_GLYPHS: Readonly<Record<ChosenValue['value'], string>> = {
   1: '𝅝',
   2: '𝅗𝅥',
   4: '𝅘𝅥',
   8: '𝅘𝅥𝅮',
   16: '𝅘𝅥𝅯',
 }
-const VALUE_WORDS = {
-  1: 'whole',
-  2: 'half',
-  4: 'quarter',
-  8: 'eighth',
-  16: 'sixteenth',
-} as const satisfies Readonly<Record<NoteValue['value'], string>>
 
 const PRESSABLE = 'aria-pressed:bg-muted aria-pressed:text-foreground'
 
@@ -32,6 +26,7 @@ export function NoteTools() {
   const value = useEditorState((state) => state.value)
   const chord = useEditorState((state) => state.chord)
   const compound = useEditorState((state) => isCompound(state.draft.meter))
+  const dottable = useEditorState((state) => takesDot(state.value.value, state.draft.meter))
   const dispatch = actions.dispatch
   return (
     <>
@@ -50,6 +45,7 @@ export function NoteTools() {
       <Button
         variant="outline"
         aria-pressed={value.dots === 1}
+        disabled={!dottable}
         className={PRESSABLE}
         onClick={() => dispatch({ type: 'dot' })}
       >

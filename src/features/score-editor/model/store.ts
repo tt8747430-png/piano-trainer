@@ -1,6 +1,7 @@
 import { createStore, type StoreApi } from 'zustand/vanilla'
 import type { Draft } from './draft'
-import { initialEditor, reduce, type EditorAction, type EditorState } from './editor'
+import { reduce } from './editor'
+import { initialEditor, type EditorAction, type EditorState } from './state'
 
 /** An editor's visit: its state, and the one way to change it. */
 export interface EditorStore extends StoreApi<EditorState> {

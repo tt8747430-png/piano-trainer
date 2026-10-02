@@ -1,27 +1,19 @@
-export { barLengths, type BarRange, type Clip } from './model/bars'
-export { caretPlaces, chordPlaces } from './model/caret'
+export { barLengths, type BarRange } from './model/bars'
 export { keyChords } from './model/chords'
 export {
-  HANDS,
+  draftFit,
+  isHandLayer,
   LAYERS,
   readDraft,
   writeDraft,
   type Draft,
-  type DraftBar,
-  type DraftChord,
   type DraftNote,
-  type DraftSection,
-  type HandId,
   type Layer,
 } from './model/draft'
-export {
-  STRUCK_TOGETHER_MS,
-  type BarEdit,
-  type EditorAction,
-  type EditorState,
-  type Selection,
-} from './model/editor'
-export { notesAt, notesOf, type Voice } from './model/notes'
+export { caretTicks, placesIn } from './model/caret-moves'
+export { selectedBars } from './model/form-edits'
+export { type BarEdit, type CaretMove, type EditorAction, type EditorState } from './model/state'
+export { notesAt, notesOf } from './model/notes'
 export { createEditorStore, type EditorStore } from './model/store'
-export { barAt, barsOf, chordsAt, totalTicks, type PlacedBar } from './model/timeline'
-export { NOTE_VALUES, valueTicks, type NoteValue } from './model/values'
+export { barAt, barsOf, startsIn, totalTicks, type PlacedBar } from './model/timeline'
+export { NOTE_VALUES, takesDot, type ChosenValue } from './model/values'

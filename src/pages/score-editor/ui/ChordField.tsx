@@ -5,8 +5,8 @@ import { TypedField } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 
 /**
- * The chord at the caret, typed: Enter sets it and moves to the next bar, Tab to the next beat,
- * Escape leaves the field.
+ * The chord at the caret, typed: Enter sets it and moves to the next bar (adding one past the last),
+ * Tab to the next beat, Escape leaves the field.
  */
 export function ChordField({ symbol }: { symbol: string }) {
   const { t } = useTranslation('editor')
@@ -22,7 +22,7 @@ export function ChordField({ symbol }: { symbol: string }) {
       return
     }
     const advance =
-      event.key === 'Enter' ? 'bar' : event.key === 'Tab' && !event.shiftKey ? 'beat' : null
+      event.key === 'Enter' ? 'barAdding' : event.key === 'Tab' && !event.shiftKey ? 'beat' : null
     if (!advance || !chord) return
     event.preventDefault()
     actions.dispatch({ type: 'chord', chord, advance })
