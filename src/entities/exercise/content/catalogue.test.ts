@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { note, noteParam } from '@/shared/lib/music'
+import { note, noteParam, parseNumerals } from '@/shared/lib/music'
 import { exerciseChoice } from '../model/resolve'
 import { EXERCISE_GROUPS, EXERCISE_IDS, isRuleExercise } from '../model/types'
 import { EXERCISES } from './catalogue'
@@ -16,6 +16,13 @@ describe('the exercises', () => {
         .map((exercise) => exercise.id)
         .toSorted(),
     ).toEqual([...EXERCISE_IDS].toSorted())
+  })
+
+  it('opens every progression in numerals the kernel reads', () => {
+    for (const exercise of EXERCISES) {
+      if (isRuleExercise(exercise) || exercise.opens.player !== 'progression') continue
+      expect(parseNumerals(exercise.opens.numerals), exercise.id).not.toBeNull()
+    }
   })
 
   it('lists every group in the page’s order, none empty', () => {

@@ -5,9 +5,8 @@ import {
   pitchClassOf,
   scaleChordAt,
   scaleHasChords,
+  spellChord,
   spellScale,
-  TICKS_PER_BEAT,
-  spellAbove,
   type Chord,
   type Finger,
   type Hand,
@@ -18,9 +17,18 @@ import {
   type Tone,
 } from '@/shared/lib/music'
 import type { LineNote } from './performance'
+import { BAR, EIGHTH } from './time'
 
-export const EIGHTH: Tick = TICKS_PER_BEAT / 2
-export const BAR: Tick = 4 * TICKS_PER_BEAT
+/** The whole numbers from `from` to `to`, both kept, counting up or down. */
+export function range(from: number, to: number): number[] {
+  const step = to >= from ? 1 : -1
+  return Array.from({ length: Math.abs(to - from) + 1 }, (_, i) => from + i * step)
+}
+
+/** A run up and back down the same keys, its top played once. */
+export const upAndBack = <T>(up: readonly T[]): T[] => [...up, ...[...up].reverse().slice(1)]
+
+const BOTH_HANDS: readonly Hand[] = ['rh', 'lh']
 
 /** A key of the line, as it is written, and the finger on it where the method gives one. */
 export interface Played {
@@ -80,8 +88,8 @@ export function inEighths(
   hands: Readonly<Partial<Record<Hand, readonly Played[]>>>,
   from: Tick = 0,
 ): LineNote[] {
-  return (Object.entries(hands) as [Hand, readonly Played[]][]).flatMap(([hand, keys]) =>
-    keys.map((key, i) => {
+  return BOTH_HANDS.flatMap((hand) =>
+    (hands[hand] ?? []).map((key, i, keys) => {
       const startTick = from + i * EIGHTH
       const last = i === keys.length - 1
       const durationTicks = last ? Math.ceil((startTick + EIGHTH) / BAR) * BAR - startTick : EIGHTH
@@ -99,25 +107,25 @@ export function inBeats(
   every: Tick,
   from: Tick = 0,
 ): LineNote[] {
-  return (Object.entries(hands) as [Hand, readonly (readonly Played[])[]][]).flatMap(
-    ([hand, chords]) =>
-      chords.flatMap((keys, i) => {
-        const startTick = from + i * every
-        const last = i === chords.length - 1
-        const durationTicks = last ? Math.ceil((startTick + every) / BAR) * BAR - startTick : every
-        return keys.map((key) => ({ ...key, hand, startTick, durationTicks }))
-      }),
+  return BOTH_HANDS.flatMap((hand) =>
+    (hands[hand] ?? []).flatMap((keys, i, chords) => {
+      const startTick = from + i * every
+      const last = i === chords.length - 1
+      const durationTicks = last ? Math.ceil((startTick + every) / BAR) * BAR - startTick : every
+      return keys.map((key) => ({ ...key, hand, startTick, durationTicks }))
+    }),
   )
 }
 
-/** The left hand's shell of a chord: its root (F2 to E3) and its 7th, `seventh` semitones above. */
-export function shell(chord: Chord, seventh: number): Played[] {
+/** The left hand's shell of a 7th chord: its root (F2 to E3) and its 7th above it. */
+export function shell(chord: Chord): Played[] {
   const pc = pitchClassOf(chord.root)
   const rootKey = midi(MIDDLE_C - 24 + pc + (pc < 5 ? 12 : 0))
-  const top = spellAbove(chord.root, { steps: 6, semitones: seventh })
+  const seventh = spellChord(chord.root, chord.quality).find((tone) => tone.degree.endsWith('7'))
+  if (!seventh) throw new RangeError(`${chord.quality} has no 7th to hold`)
   return [
     { midi: rootKey, spelled: chord.root },
-    { midi: midi(rootKey + seventh), spelled: top },
+    { midi: midi(rootKey + seventh.semitones), spelled: seventh.note },
   ]
 }
 

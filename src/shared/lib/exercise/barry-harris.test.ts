@@ -28,6 +28,7 @@ describe('sixthDiminishedScale', () => {
     const onBeats = scale.notes.filter((n) => n.hand === 'rh' && n.startTick % 12 === 0)
     expect(onBeats.slice(0, 4).map((n) => noteName(n.spelled))).toEqual(['C', 'E', 'G', 'A'])
     expect(scale.chords[0]?.symbol).toBe('C6')
+    expect(scale.notes.every((n) => n.finger === undefined)).toBe(true)
   })
 
   it('runs the minor one over the minor 6th chord', () => {
@@ -43,7 +44,8 @@ describe('sixthDiminishedChords', () => {
     expect(onset(chords, 'rh', 0)).toBe('E G A C')
     expect(onset(chords, 'rh', 12)).toBe('F A♭ B D')
     expect(chords.chords.slice(0, 3).map((chord) => chord.symbol)).toEqual(['C6', 'B°7', 'C6'])
-    expect(chords.notes.some((n) => n.hand === 'lh')).toBe(false)
+    // The left hand holds the root a bar at a time.
+    expect([0, 48, 96, 144].map((tick) => onset(chords, 'lh', tick))).toEqual(['C', 'C', 'C', 'C'])
   })
 
   it('drops the second voice from the top into the left hand in drop 2', () => {

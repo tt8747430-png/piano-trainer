@@ -17,9 +17,11 @@ import {
   inEighths,
   handBelow,
   leftHandBelow,
+  range,
   scaleDegrees,
   tonicChord,
   tonicKey,
+  upAndBack,
   type Played,
 } from './line'
 import { exercisePerformance, type LineNote } from './performance'
@@ -30,17 +32,12 @@ export interface ScaleRun {
   readonly octaves: number
 }
 
-const range = (from: number, to: number): number[] => {
-  const step = to >= from ? 1 : -1
-  return Array.from({ length: Math.abs(to - from) + 1 }, (_, i) => from + i * step)
-}
-
 /** A scale's music: in its key, over its tonic chord. */
 function overTonic(run: ScaleRun, notes: readonly LineNote[]): Performance {
   return exercisePerformance({
     key: scaleKey(run.root, run.kind),
     notes,
-    harmony: [{ chord: tonicChord(run.root, run.kind), startTick: 0, durationTicks: 1 }],
+    harmony: [{ chord: tonicChord(run.root, run.kind), startTick: 0 }],
   })
 }
 
@@ -124,7 +121,7 @@ export function contraryExercise(run: ScaleRun): Performance {
     const bottomUp = fingered(keys, fingers)
     // The right hand reads its run up; the left plays its own from the top down.
     const out = side === 'rh' ? bottomUp : [...bottomUp].reverse()
-    return [...out, ...[...out].reverse().slice(1)]
+    return upAndBack(out)
   }
   return overTonic(run, inEighths({ rh: hand('rh'), lh: hand('lh') }))
 }

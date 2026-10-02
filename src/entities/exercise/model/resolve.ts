@@ -9,6 +9,7 @@ import {
   scaleRootSpelling,
   tonicSpelling,
   type NoteParam,
+  type PitchClass,
   type SpelledNote,
 } from '@/shared/lib/music'
 import type { ExerciseChoice } from './choice'
@@ -38,13 +39,12 @@ const BASE: ExerciseChoice = {
 const allowed = <T>(value: T | undefined, allows: readonly T[] | true | undefined, own: T): T =>
   value !== undefined && (allows === true || allows?.includes(value)) ? value : own
 
-/** The root spelled by the exercise's rule: as its scale, its chord or its key. */
-function spelled(
+/** A root spelled by the exercise's rule: as its scale, its chord or its key. */
+export function exerciseRootSpelling(
   exercise: RuleExercise,
-  root: SpelledNote,
-  choice: Omit<ExerciseChoice, 'root'>,
+  pc: PitchClass,
+  choice: Pick<ExerciseChoice, 'kind' | 'quality' | 'tonality'>,
 ): SpelledNote {
-  const pc = pitchClassOf(root)
   switch (exercise.fields.root) {
     case 'scale':
       return scaleRootSpelling(pc, choice.kind)
@@ -83,5 +83,5 @@ export function exerciseChoice(exercise: RuleExercise, params: ExerciseParams): 
     tonality: allowed(params.tonality, fields.tonality, own.tonality),
   }
   const root = params.root ? noteFromParam(params.root) : own.root
-  return { root: spelled(exercise, root, rest), ...rest }
+  return { root: exerciseRootSpelling(exercise, pitchClassOf(root), rest), ...rest }
 }

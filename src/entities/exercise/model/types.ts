@@ -62,10 +62,8 @@ interface Described {
   readonly group: ExerciseGroup
   readonly level: Level
   readonly name: LocalText
-  /** What it trains, in a line. */
+  /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
-  /** Whose idea it is, as they are known: `Barry Harris`, `Piano With Jonny`. */
-  readonly source?: string
 }
 
 /** An exercise its own rule writes: its choices, and how it plays when the URL names none. */

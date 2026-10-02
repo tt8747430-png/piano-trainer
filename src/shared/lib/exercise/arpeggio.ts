@@ -12,7 +12,7 @@ import {
   type Hand,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { fingered, inEighths, leftHandBelow, type Played } from './line'
+import { fingered, inEighths, leftHandBelow, upAndBack, type Played } from './line'
 import { exercisePerformance } from './performance'
 
 /**
@@ -53,7 +53,7 @@ export function arpeggioExercise(choice: {
         hand,
       ),
     )
-    return [...up, ...[...up].reverse().slice(1)]
+    return upAndBack(up)
   }
   const minor = tones[1]?.degree === '♭3'
   const bass = tones[inversion]?.note
@@ -64,7 +64,6 @@ export function arpeggioExercise(choice: {
       {
         chord: { root, quality, ...(inversion > 0 && bass ? { bass } : {}) },
         startTick: 0,
-        durationTicks: 1,
       },
     ],
   })

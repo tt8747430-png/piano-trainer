@@ -3,7 +3,6 @@ import { LEVELS, type Level } from '@/entities/path'
 import { isOneOf } from '@/shared/lib'
 import {
   CHORD_SIZES,
-  INVERSIONS,
   KEY_WALKS,
   keyParam,
   note,
@@ -44,7 +43,6 @@ export function routeSearch<S extends object>(read: (raw: Raw) => S, defaults: S
 export const isHands = isOneOf(HANDS)
 export const isScaleKind = isOneOf(SCALE_KINDS)
 export const isChordSize = isOneOf(CHORD_SIZES)
-export const isInversion = isOneOf(INVERSIONS)
 export const isKeyWalk = isOneOf(KEY_WALKS)
 export const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
 

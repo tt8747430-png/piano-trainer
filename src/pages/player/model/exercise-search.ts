@@ -33,22 +33,33 @@ export const viewPatch = (
     ? { ...patch, swing: patch.swing === exercise.swing ? undefined : patch.swing }
     : patch
 
+/** A choice as the URL writes it: none where it is the exercise's own. */
+const unlessOwn = <T>(value: T | undefined, own: T): T | undefined =>
+  value === own ? undefined : value
+
 /**
  * A Setup change as the exercise's URL writes it: the root as a param, and each choice its own when
- * the exercise would play it anyway, left out.
+ * the exercise would play it anyway, left out; a choice the change does not name stays as it is.
  */
 export function exercisePatch(
   exercise: RuleExercise,
   change: ExerciseChange,
 ): Partial<ExerciseSearch> {
   const own = exerciseChoice(exercise, {})
-  const patch: Record<string, unknown> = {}
-  for (const [field, value] of Object.entries(change) as [keyof ExerciseChoice, unknown][]) {
-    if (field === 'root') {
-      const root = change.root
-      patch.root =
-        root && pitchClassOf(root) !== pitchClassOf(own.root) ? noteParam(root) : undefined
-    } else patch[field] = value === own[field] ? undefined : value
+  const { root } = change
+  return {
+    ...('root' in change && {
+      root: root && pitchClassOf(root) !== pitchClassOf(own.root) ? noteParam(root) : undefined,
+    }),
+    ...('kind' in change && { kind: unlessOwn(change.kind, own.kind) }),
+    ...('octaves' in change && { octaves: unlessOwn(change.octaves, own.octaves) }),
+    ...('start' in change && { start: unlessOwn(change.start, own.start) }),
+    ...('fingering' in change && { fingering: unlessOwn(change.fingering, own.fingering) }),
+    ...('quality' in change && { quality: unlessOwn(change.quality, own.quality) }),
+    ...('inversion' in change && { inversion: unlessOwn(change.inversion, own.inversion) }),
+    ...('figure' in change && { figure: unlessOwn(change.figure, own.figure) }),
+    ...('voicing' in change && { voicing: unlessOwn(change.voicing, own.voicing) }),
+    ...('from' in change && { from: unlessOwn(change.from, own.from) }),
+    ...('tonality' in change && { tonality: unlessOwn(change.tonality, own.tonality) }),
   }
-  return patch as Partial<ExerciseSearch>
 }

@@ -7,7 +7,6 @@ import type {
 import {
   chordSymbol,
   spellChord,
-  TICKS_PER_BEAT,
   type Chord,
   type Finger,
   type Hand,
@@ -16,6 +15,7 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
+import { BAR, BAR_BEATS } from './time'
 
 /** A note of an exercise's line, in one hand. */
 export interface LineNote {
@@ -27,15 +27,11 @@ export interface LineNote {
   readonly finger?: Finger
 }
 
-/** The chord a passage of an exercise is over, from its first tick. */
+/** The chord a passage of an exercise is over, from its first tick until the next chord or the end. */
 export interface Harmony {
   readonly chord: Chord
   readonly startTick: Tick
-  readonly durationTicks: Tick
 }
-
-const BAR_BEATS = 4
-const BAR_TICKS = BAR_BEATS * TICKS_PER_BEAT
 const BARS_A_LINE = 4
 const VELOCITY: Readonly<Record<Hand, number>> = { rh: 0.15, lh: 0.17 }
 
@@ -58,19 +54,19 @@ export function exercisePerformance(music: {
   readonly harmony: readonly Harmony[]
 }): Performance {
   const end = Math.max(...music.notes.map((n) => n.startTick + n.durationTicks), 1)
-  const barCount = Math.ceil(end / BAR_TICKS)
+  const barCount = Math.ceil(end / BAR)
   const harmonyStarts = music.harmony.map((h) => h.startTick)
-  const chords = music.harmony.map((h) => ({
+  const chords = music.harmony.map((h, i) => ({
     ...h.chord,
     symbol: chordSymbol(h.chord),
     tones: spellChord(h.chord.root, h.chord.quality),
     startTick: h.startTick,
-    durationTicks: h.durationTicks,
-    bar: Math.floor(h.startTick / BAR_TICKS),
+    durationTicks: (harmonyStarts[i + 1] ?? barCount * BAR) - h.startTick,
+    bar: Math.floor(h.startTick / BAR),
     pattern: 'exercise',
   }))
   const bars: PerformanceBar[] = Array.from({ length: barCount }, (_, bar) => ({
-    startTick: bar * BAR_TICKS,
+    startTick: bar * BAR,
     beats: BAR_BEATS,
     section: 0,
     line: Math.floor(bar / BARS_A_LINE),
@@ -88,14 +84,14 @@ export function exercisePerformance(music: {
   notes.forEach((n, i) => onsets.set(n.startTick, [...(onsets.get(n.startTick) ?? []), i]))
   const beatGroups = [...onsets].map(([tick, members]): BeatGroup => ({
     tick,
-    bar: Math.floor(tick / BAR_TICKS),
+    bar: Math.floor(tick / BAR),
     chord: sounding(harmonyStarts, tick),
     notes: members,
   }))
   return {
     key: music.key,
     meter: '4/4',
-    totalTicks: barCount * BAR_TICKS,
+    totalTicks: barCount * BAR,
     bars,
     chords,
     notes,

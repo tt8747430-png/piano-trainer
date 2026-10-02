@@ -16,7 +16,6 @@ import {
 import {
   isArpeggioQuality,
   isChordTone,
-  isExerciseInversion,
   isFigureId,
   isFingering,
   isOctaves,
@@ -32,6 +31,7 @@ import type {
 } from '@/pages/player'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
+  isInversion,
   keyParam,
   note,
   noteParam,
@@ -46,7 +46,6 @@ import {
   C_MAJOR_PARAM,
   isChordSize,
   isHands,
-  isInversion,
   isKeyWalk,
   isScaleKind,
   readKey,
@@ -211,7 +210,7 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     start: wholeIn(raw.start, 0, 6, undefined),
     fingering: when(isFingering, raw.fingering),
     quality: when(isArpeggioQuality, raw.quality),
-    inversion: when(isExerciseInversion, raw.inversion),
+    inversion: when(isInversion, raw.inversion),
     figure: when(isFigureId, raw.figure),
     voicing: when(isVoicing, raw.voicing),
     from: when(isChordTone, raw.from),

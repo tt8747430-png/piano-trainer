@@ -34,7 +34,7 @@ function exerciseLink(exercise: Exercise) {
   }
 }
 
-/** An exercise's row: its name and level, opening it in the Player; its group's tile. */
+/** An exercise's row: its name, its level and what it trains, opening it in the Player; its group's tile. */
 export function ExerciseRow({
   exercise,
   icon,
@@ -49,7 +49,7 @@ export function ExerciseRow({
   return (
     <RowLink
       title={localText(exercise.name, locale)}
-      detail={t(`levelName.${LEVEL_NAME[exercise.level]}`)}
+      detail={`${t(`levelName.${LEVEL_NAME[exercise.level]}`)} · ${localText(exercise.trains, locale)}`}
       icon={icon}
       paint={paint}
       render={exerciseLink(exercise)}

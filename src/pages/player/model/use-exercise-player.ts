@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { exerciseChoice, type ExerciseChoice, type RuleExercise } from '@/entities/exercise'
 import { arrangeExercise } from '@/features/practice'
-import { usePracticePlayer } from '@/widgets/practice-player'
+import { usePracticePlayer, type PracticeView } from '@/widgets/practice-player'
 import {
   exercisePatch,
   exerciseView,
@@ -11,12 +11,16 @@ import {
 } from './exercise-search'
 import type { PlayerOf } from './player-of'
 
-/** An exercise as the Player plays it: its rule over the URL's choice, practised from the widget's hook. */
+/**
+ * An exercise as the Player plays it: its rule over the URL's choice, practised from the widget's hook,
+ * and the Player's view (the exercise's own swing where the URL names none).
+ */
 export function useExercisePlayer(
   exercise: RuleExercise,
   search: ExerciseSearch,
   setSearch: (patch: Partial<ExerciseSearch>) => void,
-): PlayerOf<ExerciseChoice, ExerciseChange> {
+): PlayerOf<ExerciseChoice, ExerciseChange> & { readonly view: PracticeView } {
+  // Each choice by itself, so a change of tempo or hands keeps the same choice and its music.
   const {
     root,
     kind,
@@ -61,9 +65,10 @@ export function useExercisePlayer(
     ],
   )
   const performance = useMemo(() => arrangeExercise(exercise.id, choice), [exercise.id, choice])
+  const view = exerciseView(exercise, search)
   const player = usePracticePlayer(
     performance,
-    exerciseView(exercise, search),
+    view,
     (patch) => setSearch(viewPatch(exercise, patch)),
     exercise.tempo,
   )
@@ -71,6 +76,7 @@ export function useExercisePlayer(
     choice,
     performance,
     player,
+    view,
     changeSetup: (change) => setSearch(exercisePatch(exercise, change)),
   }
 }

@@ -1,8 +1,6 @@
 import { isOneOf } from '@/shared/lib'
 import {
   FINGERINGS,
-  INVERSIONS,
-  SCALE_KINDS,
   type ChordQuality,
   type Fingering,
   type Inversion,
@@ -35,16 +33,18 @@ export const ARPEGGIO_QUALITIES = [
 ] as const satisfies readonly ChordQuality[]
 export type ArpeggioQuality = (typeof ARPEGGIO_QUALITIES)[number]
 
-/** A sequence's figure, by the degrees it plays from where it starts (1 is that note). */
+/** A sequence's figures, named by the degrees they play from where they start. */
+export const FIGURE_IDS = ['1234', '1324', '1235', '1353', '3212'] as const
+export type FigureId = (typeof FIGURE_IDS)[number]
+
+/** Each figure's degrees from where it starts (0 is that note). */
 export const FIGURES = {
   '1234': [0, 1, 2, 3],
   '1324': [0, 2, 1, 3],
   '1235': [0, 1, 2, 4],
   '1353': [0, 2, 4, 2],
   '3212': [2, 1, 0, 1],
-} as const satisfies Record<string, readonly number[]>
-export type FigureId = keyof typeof FIGURES
-export const FIGURE_IDS = Object.keys(FIGURES) as FigureId[]
+} as const satisfies Readonly<Record<FigureId, readonly number[]>>
 
 export const VOICINGS = ['close', 'drop2'] as const
 export type Voicing = (typeof VOICINGS)[number]
@@ -83,5 +83,3 @@ export const isVoicing = isOneOf(VOICINGS)
 export const isChordTone = isOneOf(CHORD_TONES)
 export const isTonality = isOneOf(TONALITIES)
 export const isFingering = isOneOf(FINGERINGS)
-export const isExerciseInversion = isOneOf(INVERSIONS)
-export const isExerciseKind = isOneOf(SCALE_KINDS)

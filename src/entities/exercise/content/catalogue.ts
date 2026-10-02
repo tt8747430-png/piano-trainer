@@ -3,8 +3,6 @@ import { OCTAVES } from '../model/choice'
 import type { Exercise } from '../model/types'
 
 const FEW_OCTAVES = [1, 2] as const
-const BARRY_HARRIS = 'Barry Harris'
-const JONNY = 'Piano With Jonny'
 
 /**
  * Practice's exercises, by group in the page's order (roadmap §10.5, spec §3): each written for the
@@ -126,7 +124,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'Eight notes an octave: the 6th chord on the beats, the diminished 7th between',
       ru: 'Восемь нот в октаве: секстаккорд на долях, уменьшённый септаккорд между ними',
     },
-    source: BARRY_HARRIS,
     fields: { root: 'key', tonality: true, octaves: FEW_OCTAVES },
     own: { tonality: 'major', octaves: 1 },
     tempo: 80,
@@ -141,7 +138,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'Each note of the 6th-diminished scale harmonised, close or in drop 2',
       ru: 'Каждая нота секстово-уменьшённой гаммы с аккордом, тесно или drop 2',
     },
-    source: BARRY_HARRIS,
     fields: { root: 'key', tonality: true, voicing: true },
     own: { tonality: 'major', voicing: 'close' },
     tempo: 66,
@@ -156,7 +152,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'The V7’s scale down with a half step that puts its chord tones on the beats',
       ru: 'Гамма V7 вниз с полутоном, который ставит звуки аккорда на доли',
     },
-    source: BARRY_HARRIS,
     fields: { root: 'key', from: true },
     own: { from: 'root' },
     tempo: 92,
@@ -171,7 +166,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'Over a ii–V–I: each chord’s 3-5-7-9, then the scale down into the next',
       ru: 'В обороте ii–V–I: 3-5-7-9 каждого аккорда, затем гамма вниз к следующему',
     },
-    source: BARRY_HARRIS,
     fields: { root: 'key' },
     own: {},
     tempo: 84,
@@ -186,7 +180,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'The key’s 7th chords up and down, the second voice from the top in the left hand',
       ru: 'Септаккорды тональности вверх и вниз, второй сверху голос в левой руке',
     },
-    source: BARRY_HARRIS,
     fields: { root: 'key', inversion: [0, 1, 2, 3] },
     own: { inversion: 0 },
     tempo: 60,
@@ -201,7 +194,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'The scale in swung 8ths over the left hand’s shells of a ii–V–I',
       ru: 'Гамма свингующими восьмыми над «скелетами» ii–V–I в левой руке',
     },
-    source: JONNY,
     fields: { root: 'key' },
     own: {},
     tempo: 96,
@@ -216,7 +208,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'The key’s 7th chords: the 3rd held on top, the 7th stepping down to the 6th',
       ru: 'Септаккорды тональности: терция держится сверху, септима спускается к сексте',
     },
-    source: JONNY,
     fields: { root: 'key' },
     own: {},
     tempo: 66,
@@ -231,7 +222,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'The scale from each of its degrees, Ionian to Locrian, fingered as the scale',
       ru: 'Гамма от каждой ступени, от ионийского до локрийского, с аппликатурой гаммы',
     },
-    source: JONNY,
     fields: { root: 'key' },
     own: {},
     tempo: 80,
@@ -246,7 +236,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'One unbroken line through all twelve keys round the circle of fifths',
       ru: 'Одна непрерывная линия через все двенадцать тональностей по квинтовому кругу',
     },
-    source: JONNY,
     fields: { root: 'key' },
     own: {},
     tempo: 84,
@@ -261,7 +250,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'A short figure restarted on each degree, its shape kept: a melodic sequence',
       ru: 'Короткая фигура от каждой ступени с той же формой: мелодическая секвенция',
     },
-    source: JONNY,
     fields: { root: 'key', figure: ['1235', '1353', '3212'] },
     own: { figure: '1235' },
     tempo: 84,
@@ -323,7 +311,6 @@ export const EXERCISES: readonly Exercise[] = [
       en: 'An even, independent hand: one figure climbing two octaves and coming back',
       ru: 'Ровность и независимость пальцев: одна фигура на две октавы вверх и обратно',
     },
-    source: 'C.-L. Hanon',
     fields: { root: 'key' },
     own: {},
     tempo: 92,

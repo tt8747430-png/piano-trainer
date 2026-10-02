@@ -15,28 +15,27 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 import {
-  BAR,
   fingered,
   inBeats,
   inEighths,
   handBelow,
   scaleDegrees,
   shell,
+  upAndBack,
   type Played,
 } from './line'
 import { exercisePerformance, type Harmony, type LineNote } from './performance'
+import { BAR, HALF } from './time'
 
 // Piano With Jonny's five major-scale exercises: the scale as music uses it (roadmap §9.4).
 
-const HALF = BAR / 2
 const MAJOR = 'major'
 const tonicAt = (root: SpelledNote, octave: number): Midi =>
   midi(MIDDLE_C + 12 * (octave - 4) + pitchClassOf(root))
 const sevenths = (root: SpelledNote, degrees: readonly number[]) =>
   degrees.map((degree) => scaleChordAt(root, MAJOR, degree % 7, 4))
 const barEach = (chords: readonly Harmony['chord'][]): Harmony[] =>
-  chords.map((chord, i) => ({ chord, startTick: i * BAR, durationTicks: BAR }))
-const seventhOf = (quality: string) => (quality === 'maj7' ? 11 : quality === 'o7' ? 9 : 10)
+  chords.map((chord, i) => ({ chord, startTick: i * BAR }))
 
 /**
  * The major scale up over the ii's shell and down over the V's, home on the I's (2-5-1 scale):
@@ -53,7 +52,7 @@ export function twoFiveOneScale(choice: { readonly root: SpelledNote }): Perform
     notes: [
       ...inEighths({ rh: [...up, ...down] }),
       ...inEighths({ rh: [place(0)] }, 2 * BAR),
-      ...inBeats({ lh: chords.map((chord) => shell(chord, seventhOf(chord.quality))) }, BAR),
+      ...inBeats({ lh: chords.map(shell) }, BAR),
     ],
     harmony: barEach(chords),
   })
@@ -87,13 +86,15 @@ export function innerVoice(choice: { readonly root: SpelledNote }): Performance 
 
 /**
  * The major scale from each of its degrees, Ionian to Locrian, up an octave and back, two bars a
- * mode, both hands fingered as the parent scale (the thumbs where C major puts them).
+ * mode, the left hand two octaves below, both fingered as the parent scale (the thumbs where C major
+ * puts them).
  */
 export function modes(choice: { readonly root: SpelledNote }): Performance {
   const { root } = choice
   const runs = [0, 1, 2, 3, 4, 5, 6].map((start) => {
     const hand = (side: Hand): Played[] => {
-      const place = scaleDegrees(root, MAJOR, tonicAt(root, side === 'rh' ? 4 : 3))
+      // Locrian reaches the tonic's second octave: the left hand two octaves below, on its own staff.
+      const place = scaleDegrees(root, MAJOR, tonicAt(root, side === 'rh' ? 4 : 2))
       const keys = Array.from({ length: 8 }, (_, i) => place(start + i))
       const fingers = runFingering(
         root,
@@ -103,8 +104,7 @@ export function modes(choice: { readonly root: SpelledNote }): Performance {
         side,
         'scale',
       )
-      const up = fingered(keys, fingers)
-      return [...up, ...[...up].reverse().slice(1)]
+      return upAndBack(fingered(keys, fingers))
     }
     return inEighths({ rh: hand('rh'), lh: hand('lh') }, start * 2 * BAR)
   })
@@ -114,7 +114,6 @@ export function modes(choice: { readonly root: SpelledNote }): Performance {
     harmony: [0, 1, 2, 3, 4, 5, 6].map((degree) => ({
       chord: scaleChordAt(root, MAJOR, degree, 3),
       startTick: degree * 2 * BAR,
-      durationTicks: 2 * BAR,
     })),
   })
 }
@@ -164,9 +163,8 @@ export function rapidSwitch(choice: { readonly root: SpelledNote }): Performance
       ...keys.map((key, i) => ({
         chord: { root: key.tonic, quality: 'maj' as const },
         startTick: i * BAR,
-        durationTicks: BAR,
       })),
-      { chord: { root, quality: 'maj' }, startTick: 12 * BAR, durationTicks: BAR },
+      { chord: { root, quality: 'maj' }, startTick: 12 * BAR },
     ],
   })
 }

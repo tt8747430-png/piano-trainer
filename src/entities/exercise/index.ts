@@ -5,8 +5,6 @@ export {
   FIGURES,
   isArpeggioQuality,
   isChordTone,
-  isExerciseInversion,
-  isExerciseKind,
   isFigureId,
   isFingering,
   isTonality,
@@ -35,6 +33,6 @@ export {
   type RuleExercise,
   type WayExercise,
 } from './model/types'
-export { exerciseChoice, type ExerciseParams } from './model/resolve'
+export { exerciseChoice, exerciseRootSpelling, type ExerciseParams } from './model/resolve'
 export { exercisesIn, isExerciseId, ruleExercise } from './model/selectors'
 export { EXERCISES } from './content/catalogue'
