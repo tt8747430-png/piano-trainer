@@ -23,7 +23,7 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, ButtonLink, Fact, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, Fact, NotFound, RoundButton, ScreenHeader } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -187,10 +187,17 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   )
 }
 
-/** A pattern's page: the route's pattern, built-in or the learner's own. */
+/** A pattern's page: the route's pattern, built-in or the learner's own (gone once deleted in another tab). */
 export function PatternPage() {
+  const { t } = useTranslation('common')
   const { patternRef } = useParams({ from: '/shell/learn/patterns/$patternRef' })
   const book = usePatternBook()
   const pattern = isPatternRef(patternRef) ? book.get(patternRef) : undefined
-  return pattern ? <PatternView key={pattern.ref} pattern={pattern} book={book} /> : null
+  return pattern ? (
+    <PatternView key={pattern.ref} pattern={pattern} book={book} />
+  ) : (
+    <NotFound>
+      <ButtonLink render={<Link to="/learn/patterns" />}>{t('notFound.toPatterns')}</ButtonLink>
+    </NotFound>
+  )
 }

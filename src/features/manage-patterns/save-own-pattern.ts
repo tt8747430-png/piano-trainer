@@ -10,8 +10,9 @@ import {
 export type OwnPatternDraft = Omit<OwnPattern, 'id'>
 
 /**
- * Saves the learner's pattern: under `id` in its place, or as a new one under the next number. Hands
- * back its id; null, and nothing saved, where the name is empty once trimmed or too long.
+ * Saves the learner's pattern: under `id` in its place, or as a new one under the next number (as is
+ * one deleted in another tab while it was changed). Hands back its id; null, and nothing saved, where
+ * the name is empty once trimmed or too long.
  */
 export function saveOwnPattern(
   store: PatternsStore,
@@ -21,7 +22,7 @@ export function saveOwnPattern(
   const name = ownName(draft.name)
   if (!name) return null
   const { own, nextOwn } = store.getState()
-  if (id) {
+  if (id && own.some((pattern) => pattern.id === id)) {
     store.setState({
       own: own.map((pattern) => (pattern.id === id ? { ...draft, id, name } : pattern)),
     })

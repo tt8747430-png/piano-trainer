@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import {
-  PATTERN_GROUP_NAMES,
   patternNeed,
   pickerShelves,
   selectFavourites,
@@ -10,7 +9,7 @@ import {
   usePatterns,
   type PatternChoice,
   type PatternFit,
-  type PatternShelf,
+  useShelfName,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { LEARN_TILES, RowLink } from '@/shared/ui'
@@ -33,18 +32,15 @@ export function PatternPage({
   onChoose: (pattern: PatternChoice) => void
   onBack: () => void
 }) {
-  const { t } = useTranslation(['player', 'music'])
+  const { t } = useTranslation('player')
   const locale = useLocale()
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
-  const shelfName = ({ shelf }: PatternShelf) =>
-    shelf === 'favourites' || shelf === 'own' || shelf === 'hidden'
-      ? t(`music:patternShelf.${shelf}`)
-      : localText(PATTERN_GROUP_NAMES[shelf], locale)
+  const shelfName = useShelfName()
   return (
     <ListPage
-      label={t('player:pattern')}
+      label={t('pattern')}
       onBack={onBack}
       groups={[
         ...(fit.methodCodes
@@ -53,8 +49,8 @@ export function PatternPage({
                 choices: [
                   {
                     key: 'chart',
-                    label: t('player:fromChart'),
-                    note: t('player:fromChartDescription'),
+                    label: t('fromChart'),
+                    note: t('fromChartDescription'),
                     selected: value === 'chart',
                     onChoose: () => onChoose('chart'),
                   },
@@ -69,7 +65,7 @@ export function PatternPage({
             return {
               key: `${shelf.shelf}:${pattern.ref}`,
               label: localText(pattern.name, locale),
-              note: need ? t(`player:needs.${need}`) : localText(pattern.idea, locale),
+              note: need ? t(`needs.${need}`) : localText(pattern.idea, locale),
               selected: value === pattern.ref,
               disabled: need !== null,
               onChoose: () => onChoose(pattern.ref),
@@ -79,7 +75,7 @@ export function PatternPage({
       ]}
     >
       <RowLink
-        title={t('player:patternsInLearn')}
+        title={t('patternsInLearn')}
         {...LEARN_TILES.patterns}
         render={<Link to="/learn/patterns" />}
       />

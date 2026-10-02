@@ -6,7 +6,12 @@ import {
   notFound,
   type RouterHistory,
 } from '@tanstack/react-router'
-import { isOwnPatternId, isPatternRef, type PatternsStore } from '@/entities/pattern'
+import {
+  isOwnPatternId,
+  isPatternRef,
+  selectOwnPattern,
+  type PatternsStore,
+} from '@/entities/pattern'
 import type { PiecesStore } from '@/entities/piece'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
@@ -254,7 +259,7 @@ const patternsRoute = createRoute({
 /** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
 const inBook = (ref: string, patterns: PatternsStore) =>
   isPatternRef(ref) &&
-  (!isOwnPatternId(ref) || patterns.getState().own.some((pattern) => pattern.id === ref))
+  (!isOwnPatternId(ref) || selectOwnPattern(ref)(patterns.getState()) !== undefined)
 const newPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/patterns/new',

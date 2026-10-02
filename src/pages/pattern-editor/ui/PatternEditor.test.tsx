@@ -2,6 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import type { PatternRef } from '@/entities/pattern'
 
 describe('The pattern editor', () => {
   it('makes a pattern from another, saves it under the learner’s name and opens its page', async () => {
@@ -25,6 +26,29 @@ describe('The pattern editor', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn/patterns/M1'))
   })
 
+  it('makes one the Player’s picker offers, which plays its own figures', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp('/learn/patterns/new?from=M1')
+    await user.click(await screen.findByRole('combobox', { name: 'Right hand' }))
+    await user.click(await screen.findByRole('option', { name: 'Charleston' }))
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/patterns/my-1'))
+    const playWith = async (pattern: PatternRef) => {
+      await router.navigate({ to: '/play/progression', search: { p: 'ii-V-I', pattern } })
+      await user.click(await screen.findByRole('button', { name: 'Play' }))
+      await user.click(screen.getByRole('button', { name: 'Stop' }))
+      return audio.played.at(-1)?.sounds
+    }
+    const builtIn = await playWith('M1')
+    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('button', { name: /^Pattern/ }))
+    const list = screen.getByRole('listbox', { name: 'Pattern' })
+    await user.click(within(list).getByRole('option', { name: /^1 · Bass \+ chords \(mine\)/ }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ pattern: 'my-1' }))
+    await user.keyboard('{Escape}')
+    expect(await playWith('my-1')).not.toEqual(builtIn)
+  })
+
   it('saves nothing without a name', async () => {
     const user = userEvent.setup()
     const { patternsStore } = await renderApp('/learn/patterns/new')
@@ -35,11 +59,25 @@ describe('The pattern editor', () => {
     expect(patternsStore.getState().own).toEqual([])
   })
 
+  it('starts from a long-named pattern with a name that fits, so it saves', async () => {
+    await renderApp('/learn/patterns/new?from=M3')
+    const name = await screen.findByRole('textbox', { name: 'Name' })
+    // 40 characters at most: the name the source has, cut at a word.
+    expect(name).toHaveValue('3 · Arpeggio (3rd, then 5th +… (mine)')
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+  })
+
   it('plays the draft as it changes', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/learn/patterns/new')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(audio.played).toHaveLength(1)
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    await user.click(screen.getByRole('combobox', { name: 'Right hand' }))
+    await user.click(await screen.findByRole('option', { name: 'Charleston' }))
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    const [plain, charleston] = audio.played
+    expect(audio.played).toHaveLength(2)
+    expect(charleston?.sounds).not.toEqual(plain?.sounds)
   })
 
   it('changes the learner’s pattern in its place, and is not found for a built-in', async () => {

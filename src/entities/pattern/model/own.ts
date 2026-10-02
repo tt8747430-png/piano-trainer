@@ -36,3 +36,16 @@ export function ownName(text: string): string | null {
   const name = text.trim()
   return name.length > 0 && name.length <= OWN_NAME_MAX ? name : null
 }
+
+/**
+ * A name made from another's, `mine` wrapping it ("Waltz (mine)"): where the whole would be too long,
+ * the other's name shortened at a word, with an ellipsis.
+ */
+export function nameFrom(name: string, mine: (name: string) => string): string {
+  const whole = mine(name)
+  if (whole.length <= OWN_NAME_MAX) return whole
+  const room = OWN_NAME_MAX - mine('').length - 1
+  const cut = name.slice(0, room)
+  const atWord = name[room] === ' ' || !cut.includes(' ') ? cut : cut.slice(0, cut.lastIndexOf(' '))
+  return mine(`${atWord.trimEnd()}…`)
+}

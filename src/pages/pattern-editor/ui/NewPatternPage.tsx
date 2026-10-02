@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { usePatternBook } from '@/entities/pattern'
+import { nameFrom, usePatternBook } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { PatternEditor } from './PatternEditor'
 
@@ -16,7 +16,9 @@ export function NewPatternPage() {
   const source = from ? book.get(from) : undefined
   const start = source
     ? {
-        name: t('patterns.editor.mine', { name: localText(source.name, locale) }),
+        name: nameFrom(localText(source.name, locale), (name) =>
+          t('patterns.editor.mine', { name }),
+        ),
         rh: source.rh,
         lh: source.lh,
       }

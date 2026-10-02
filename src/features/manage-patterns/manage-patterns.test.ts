@@ -54,6 +54,17 @@ describe('saveOwnPattern', () => {
     expect(patterns.getState().nextOwn).toBe(2)
   })
 
+  it('saves a pattern deleted in another tab while it was changed as a new one', () => {
+    const patterns = store()
+    const id = saveOwnPattern(patterns, DRAFT)
+    if (!id) throw new Error('saved')
+    deleteOwnPattern(patterns, id)
+    expect(saveOwnPattern(patterns, { ...DRAFT, name: 'Sunday best' }, id)).toBe('my-2')
+    expect(patterns.getState().own).toEqual([
+      { id: 'my-2', name: 'Sunday best', rh: 'jaz', lh: 'walk' },
+    ])
+  })
+
   it('saves nothing without a name', () => {
     const patterns = store()
     expect(saveOwnPattern(patterns, { ...DRAFT, name: '   ' })).toBeNull()

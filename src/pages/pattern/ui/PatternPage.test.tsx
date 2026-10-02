@@ -1,8 +1,9 @@
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
+import { deleteOwnPattern } from '@/features/manage-patterns'
 import { createMemoryStorage } from '@/shared/lib'
 
 const withOwn = () => {
@@ -91,6 +92,17 @@ describe('A pattern’s page', () => {
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn/patterns'))
     expect(patternsStore.getState()).toMatchObject({ own: [], favourites: [] })
+  })
+
+  it('is not found once another tab deletes it, with the way back to Patterns', async () => {
+    const { patternsStore } = await renderApp('/learn/patterns/my-1', { storage: withOwn() })
+    await screen.findByRole('heading', { level: 1, name: 'Sunday' })
+    act(() => deleteOwnPattern(patternsStore, 'my-1'))
+    expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Go to Patterns' })).toHaveAttribute(
+      'href',
+      '/learn/patterns',
+    )
   })
 
   it('is not found for a pattern the book does not hold', async () => {

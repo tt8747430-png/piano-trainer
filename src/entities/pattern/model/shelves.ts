@@ -2,7 +2,7 @@ import type { PatternChoice } from './accompaniment'
 import type { BookPattern, PatternBook } from './book'
 import type { PatternRef } from './own'
 import type { PatternsState } from './store'
-import { PATTERN_GROUPS, type PatternGroup, type PatternId } from './types'
+import { isPatternId, PATTERN_GROUPS, type PatternGroup, type PatternId } from './types'
 import { patternsIn } from './selectors'
 
 /** A titled run of patterns in a list: the learner's favourites or own, a built-in group, the hidden. */
@@ -19,14 +19,18 @@ const inBook = (book: PatternBook, refs: readonly PatternRef[]): BookPattern[] =
     return entry ? [entry] : []
   })
 
-/** Favourites, the learner's own, then each built-in group without what `leftOut` leaves out; none empty. */
+/**
+ * Favourites, the learner's own, then each built-in group, each without what `leftOut` leaves out (a
+ * built-in only: an own pattern is never hidden); none empty.
+ */
 function shelves(
   book: PatternBook,
   { favourites }: Choices,
   leftOut: (id: PatternId) => boolean,
 ): PatternShelf[] {
+  const kept = (ref: PatternRef) => !(isPatternId(ref) && leftOut(ref))
   return [
-    { shelf: 'favourites' as const, patterns: inBook(book, favourites) },
+    { shelf: 'favourites' as const, patterns: inBook(book, favourites.filter(kept)) },
     { shelf: 'own' as const, patterns: book.own },
     ...PATTERN_GROUPS.map((group) => ({
       shelf: group,

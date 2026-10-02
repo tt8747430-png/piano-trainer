@@ -1,33 +1,26 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useId, useMemo, useState } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
   LEFT_FIGURES,
   OWN_NAME_MAX,
-  ownName,
-  ownPatternId,
-  patternBook,
   RIGHT_FIGURE_IDS,
   RIGHT_FIGURES,
-  usePatterns,
-  usePatternsStoreApi,
   type OwnPatternId,
 } from '@/entities/pattern'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { saveOwnPattern, type OwnPatternDraft } from '@/features/manage-patterns'
-import { useShownKeys } from '@/features/play-example'
+import type { OwnPatternDraft } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
-import { useGoBack } from '@/shared/lib'
 import { BackButton, Dropdown, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { InputGroup, InputGroupInput } from '@/shared/ui/primitives/input-group'
-import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
+import { PatternPlay, PatternStaff } from '@/widgets/pattern-music'
+import { usePatternEditor } from '../model/use-pattern-editor'
 
 /**
  * A pattern of the learner's own made or changed: its name and a figure for each hand from the
  * catalogue, heard and on the staff as they change. Save keeps it and opens its page in the editor's
- * place; Cancel leaves it unsaved. The draft is the screen's own: a half-made pattern is not kept.
+ * place; Cancel leaves it unsaved.
  */
 export function PatternEditor({
   title,
@@ -42,34 +35,7 @@ export function PatternEditor({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const nameId = useId()
-  const store = usePatternsStoreApi()
-  const own = usePatterns((state) => state.own)
-  const nextOwn = usePatterns((state) => state.nextOwn)
-  const navigate = useNavigate()
-  const cancel = useGoBack({ to: '/learn/patterns' })
-  const [draft, setDraft] = useState(start)
-  const change = (part: Partial<OwnPatternDraft>) => setDraft((was) => ({ ...was, ...part }))
-
-  // The draft heard as it would play once saved: under the id it keeps or will take.
-  const draftId = id ?? ownPatternId(nextOwn)
-  const book = useMemo(
-    () =>
-      patternBook([...own.filter((pattern) => pattern.id !== draftId), { ...draft, id: draftId }]),
-    [own, draft, draftId],
-  )
-  const sample = usePatternSample(book.require(draftId), book)
-  const [shown, show] = useShownKeys(`${draft.rh} ${draft.lh}`, sample.shown)
-
-  const save = () => {
-    const saved = saveOwnPattern(store, draft, id)
-    if (saved) {
-      void navigate({
-        to: '/learn/patterns/$patternRef',
-        params: { patternRef: saved },
-        replace: true,
-      })
-    }
-  }
+  const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={title} back={<BackButton fallback={{ to: '/learn/patterns' }} />} />
@@ -119,7 +85,7 @@ export function PatternEditor({
           <PatternPlay sample={sample} onShow={show} variant="soft" />
         </section>
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" disabled={ownName(draft.name) === null}>
+          <Button type="submit" disabled={!savable}>
             {t('patterns.editor.save')}
           </Button>
           <Button type="button" variant="outline" onClick={cancel}>

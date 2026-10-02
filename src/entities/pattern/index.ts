@@ -29,9 +29,10 @@ export {
   type PatternFit,
 } from './model/fit'
 export {
-  OWN_NAME_MAX,
   isOwnPatternId,
   isPatternRef,
+  nameFrom,
+  OWN_NAME_MAX,
   ownName,
   ownPatternId,
   type OwnPattern,
@@ -59,7 +60,9 @@ export {
   selectHidden,
   selectIsFavourite,
   selectIsHidden,
+  selectOwnPattern,
 } from './model/selectors'
 export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
 export { PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
+export { useShelfName } from './ui/use-shelf-name'

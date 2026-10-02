@@ -31,6 +31,12 @@ describe('referenceShelves', () => {
       'genres',
     ])
   })
+
+  it('shows a starred pattern that is hidden on the hidden shelf only', () => {
+    const shelves = referenceShelves(book, { favourites: ['funk', 'ballad'], hidden: ['funk'] })
+    expect(shelves[0]?.patterns.map((pattern) => pattern.ref)).toEqual(['ballad'])
+    expect(shelves.at(-1)?.patterns.map((pattern) => pattern.ref)).toEqual(['funk'])
+  })
 })
 
 describe('pickerShelves', () => {
@@ -46,5 +52,15 @@ describe('pickerShelves', () => {
     expect(pickerShelves(book, { favourites: [], hidden: [] }, 'block').at(-1)?.shelf).toBe(
       'genres',
     )
+  })
+
+  it('leaves a hidden favourite out too, unless it plays now', () => {
+    const choices = { favourites: ['funk' as const, 'my-1' as const], hidden: ['funk' as const] }
+    const favourites = (chosen: 'funk' | 'block') =>
+      pickerShelves(book, choices, chosen)
+        .find(({ shelf }) => shelf === 'favourites')
+        ?.patterns.map((pattern) => pattern.ref)
+    expect(favourites('block')).toEqual(['my-1'])
+    expect(favourites('funk')).toEqual(['funk', 'my-1'])
   })
 })

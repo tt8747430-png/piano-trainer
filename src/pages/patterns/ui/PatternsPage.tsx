@@ -3,13 +3,12 @@ import { Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  PATTERN_GROUP_NAMES,
   referenceShelves,
   selectFavourites,
   selectHidden,
   usePatternBook,
   usePatterns,
-  type PatternShelf,
+  useShelfName,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, RoundLink, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
@@ -19,7 +18,7 @@ import { BackButton, RoundLink, RowGroup, RowLink, ScreenHeader } from '@/shared
  * at the end; each row a name and its idea in a line, opening its page. New pattern in the bar.
  */
 export function PatternsPage() {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation('learn')
   const locale = useLocale()
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
@@ -28,18 +27,15 @@ export function PatternsPage() {
     () => referenceShelves(book, { favourites, hidden }),
     [book, favourites, hidden],
   )
-  const shelfName = ({ shelf }: PatternShelf) =>
-    shelf === 'favourites' || shelf === 'own' || shelf === 'hidden'
-      ? t(`music:patternShelf.${shelf}`)
-      : localText(PATTERN_GROUP_NAMES[shelf], locale)
+  const shelfName = useShelfName()
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('learn:patterns.title')}
+        title={t('patterns.title')}
         back={<BackButton fallback={{ to: '/learn' }} />}
         actions={
           <RoundLink
-            label={t('learn:patterns.new')}
+            label={t('patterns.new')}
             icon={Plus}
             render={<Link to="/learn/patterns/new" />}
           />
