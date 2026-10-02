@@ -6,8 +6,7 @@ Concise. Answer first. No preamble, no recap.
 
 Piano Trainer: an offline-first PWA for learning songs, chords and scales at the piano. React 19 + Vite + strict
 TypeScript, **Feature-Sliced Design** (lint-enforced), English + Russian, deployed on Vercel. Design:
-[spec](docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md). The old single-file app is
-`legacy/index.html`: a reading reference, never imported, deleted at the Phase 4 switch-over.
+[spec](docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md).
 
 ## Skills — before writing code
 

@@ -92,7 +92,7 @@ blocks. Practice needs the staff (reading notes) and the deeper scales (exercise
 the most computer-bound, and goes last.
 
 **Phase 4** (master spec §11) keeps its switch-over (the Russian review, the parity check, production on Vercel,
-deleting `legacy/`). Its levelling moves into sub-project 6.
+deleting `legacy/`), done 2026-10-02. Its levelling moves into sub-project 6.
 
 ## 3. Decisions
 

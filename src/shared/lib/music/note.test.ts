@@ -73,8 +73,8 @@ describe('plainSpelling', () => {
 })
 
 describe('rootSpelling', () => {
-  // Legacy rootFor: only C♯/D♭ and G♯/A♭ follow the preference; E♭, F♯ and B♭ are fixed.
-  const LEGACY = [
+  // Only C♯/D♭ and G♯/A♭ follow the preference; E♭, F♯ and B♭ are fixed.
+  const ROOTS = [
     ['C', 'C'],
     ['C#', 'D♭'],
     ['D', 'D'],
@@ -87,13 +87,13 @@ describe('rootSpelling', () => {
     ['A', 'A'],
     ['B♭', 'B♭'],
     ['B', 'B'],
-  ]
+  ] as const
 
-  it.each(LEGACY.map(([sharp, flat], pc) => [pc, sharp, flat]))(
-    'pc %i → %s leaning sharp, %s leaning flat',
-    (pc, sharp, flat) => {
-      expect(noteName(rootSpelling(pitchClass(pc as number), true))).toBe(sharp)
-      expect(noteName(rootSpelling(pitchClass(pc as number), false))).toBe(flat)
+  it.each(ROOTS.map(([sharp, flat], pc) => ({ pc, sharp, flat })))(
+    'pc $pc → $sharp leaning sharp, $flat leaning flat',
+    ({ pc, sharp, flat }) => {
+      expect(noteName(rootSpelling(pitchClass(pc), true))).toBe(sharp)
+      expect(noteName(rootSpelling(pitchClass(pc), false))).toBe(flat)
     },
   )
 })

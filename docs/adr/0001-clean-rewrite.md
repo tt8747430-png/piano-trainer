@@ -1,6 +1,7 @@
 # ADR 0001 — A clean rewrite, not a migration
 
-- **Status:** accepted · **Date:** 2026-09-24
+- **Status:** accepted · **Date:** 2026-09-24 · switched over 2026-10-02: the parity check passed, and `legacy/` and
+  the Pages workflow are deleted (`git show 9575033:legacy/index.html` reads the old app)
 
 ## Context
 

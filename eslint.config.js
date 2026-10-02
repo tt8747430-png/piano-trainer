@@ -49,7 +49,6 @@ export default defineConfig(
     'dev-dist',
     'coverage',
     'node_modules',
-    'legacy',
     'public',
     '.superpowers',
     '.agents',

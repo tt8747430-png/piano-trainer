@@ -5,7 +5,11 @@
 - **Amended** 2026-09-25 by the Phase 2 plan's refinements and the Phase 3 screens design. Phases 1–3 are built;
   their plans and the screens design were removed on 2026-09-26 (`git log --diff-filter=D -- docs/superpowers`
   finds them). What they changed lives in the code, `CLAUDE.md`, `DESIGN.md`, `docs/CODE_STYLE.md`,
-  `docs/CONTENT.md`, the glossary and the ADRs. Phase 4 (§11) is still to come.
+  `docs/CONTENT.md`, the glossary and the ADRs.
+- **Phase 4 switched over** 2026-10-02. The roadmap (`2026-09-25-next-features-roadmap-design.md`) moved its
+  levelling into sub-project 6, still planned, which turns on the every-level-has-a-step test. The owner reviewed
+  the Russian. The §12 parity check passed against `legacy/index.html`, as recorded under §12. `legacy/` and the
+  Pages workflow are deleted; Vercel serves production from `main`.
 - **Reference project:** `~/projectsGIT/memory-palaces` (Mindscape). Its `CLAUDE.md` and `docs/CODE_STYLE.md` are
   the model for this repo's standards, and are adapted here rather than copied wholesale.
 
@@ -573,6 +577,12 @@ Each phase gets its own implementation plan (`writing-plans`) and ends green in 
    - point production at Vercel, and delete `legacy/` and the Pages workflow.
 
 ## 12. Parity checklist (verified in Phase 4)
+
+**Verified 2026-10-02** against the old app's own tables: its 33 chord qualities, 7 scale kinds, 5 practice rhythms,
+51 pieces and 7 listings (every id) and 39 patterns all exist in the new app, which adds more of each. What the new app
+leaves out is on purpose: the Guide's song-learning advice and the old screens' how-to paragraphs (each chord's
+"How to find it" note, a scale's practice tip, a song's "How to practise") fall to the copy rule of §8; Step mode is
+‹ › in Listen and Wait mode.
 
 - **Chords:** 12 roots × 33 qualities; inversions; one hand or both; block and arpeggio playback; degree labels
   and role colours.

@@ -3,9 +3,6 @@
 Learn to play songs at the piano: a path from easy to hard, the chords and scales each song needs, and a practice
 player that plays along, steps through, or waits for you. Installable, works offline, in English and Russian.
 
-> The rewrite is in progress. The current app is `legacy/index.html`, still served on GitHub Pages; the new app
-> replaces it at the end of Phase 4 ([spec](docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md)).
-
 ## Run it
 
 Needs Node 24 (`nvm use`).
@@ -23,6 +20,7 @@ npm run build && npm run preview   # the production build, with the service work
 - The words we use: [docs/UBIQUITOUS_LANGUAGE.md](docs/UBIQUITOUS_LANGUAGE.md).
 - Decisions and why: [docs/adr](docs/adr); the visual world in [ADR 0007](docs/adr/0007-visual-world-from-reference-apps.md).
 - Every push and pull request runs typecheck, lint, tests with coverage and the build
-  (`.github/workflows/ci.yml`). Vercel builds a preview of each pull request.
+  (`.github/workflows/ci.yml`). Vercel builds a preview of each pull request and deploys `main` to production
+  (`vercel.ts`).
 
 - How to add a song, a progression, a pattern or a path step: [docs/CONTENT.md](docs/CONTENT.md).
