@@ -31,7 +31,8 @@ Checked against what shipped after the roadmap was written:
 
 An **Exercise** is a line of notes generated from a rule in any key, opened in the Player: sheet music, Listen and
 Wait mode, tempo and speed training, hands, the loop, swing. Each has a group, a level (1–4, the Path's names), a
-"what it trains" line, its source, and the choices its rule takes. Generated, never copied (roadmap §4.4): Hanon's
+"what it trains" line (shown under its name with its level; whose idea it is, its group says), and the choices
+its rule takes. Generated, never copied (roadmap §4.4): Hanon's
 first exercise is public domain and its rule is the exercise; the rest are written from the methods' ideas.
 
 **Where it lives:**
@@ -51,9 +52,11 @@ first exercise is public domain and its rule is the exercise; the rest are writt
 · As the scale), `quality` (an arpeggio type), `inversion`, `figure` (a sequence's shape), `voicing` (Close · Drop 2),
 `from` (the chord tone a line starts on), `minor` (major · minor, where the rule has both).
 
-**Hands and register.** Every generator writes both hands (the left an octave below, or mirrored in contrary motion);
-the Player's hands popover chooses which is practised, as it does for a piece. One or two octaves start the right
-hand at the root at or above middle C; three or four start an octave lower, so the run stays on the keyboard.
+**Hands and register.** Every generator writes both hands (the left an octave below, two from a run of two octaves
+or more, or mirrored in contrary motion; under the 6th-diminished chords in close position it holds the root); the
+Player's hands popover chooses which is practised, as it does for a piece. The right hand starts at the root at or
+above middle C, an octave lower only where the run's top would leave the keyboard. Each hand stays on its own staff:
+the left hand reaches A♯4 at most, and drop 2's chords move down by octaves until it does.
 
 **Fingering** is written where the method fingers it, and only there: a scale (its taught fingering over any number
 of octaves, or from the thumb), contrary motion, an arpeggio (one rule, §3), the five-finger position, Hanon, PWJ's
@@ -71,7 +74,7 @@ inner voice and modes. A sequence, a Barry Harris line or a rapid switch shows n
 | Arpeggios | Arpeggio (`arpeggio`) | 2 | A chord's tones up and down 1–4 octaves, from any inversion | root, quality (§10.4's thirteen), inversion, octaves |
 | Chords in a scale | Chords of a scale | 2 | The walk (`/play/walk`) | (its Player) |
 | | Chords by semitones | 2 | The chromatic walk (`/play/chromatic`) | (its Player) |
-| Barry Harris | 6th-diminished scale (`sixth-diminished`) | 3 | Major (C D E F G G♯ A B) or minor (C D E♭ F G G♯ A B) up and down: the 6th chord's notes on the beats | root, minor, octaves |
+| Barry Harris | 6th-diminished scale (`sixth-diminished`) | 3 | Major (C D E F G A♭ A B) or minor (C D E♭ F G A♭ A B) up and down: the 6th chord's notes on the beats | root, minor, octaves |
 | | Its chords (`sixth-diminished-chords`) | 4 | Each note of that scale harmonised: the 6th chord (C6 / Cm6) on its own notes, the diminished 7th a semitone under the root on the passing ones; close or drop 2 | root, minor, voicing |
 | | Dominant scale down (`dominant-scale`) | 3 | V7's bebop scale down two octaves from a chord tone: the half step between root and ♭7 keeps every chord tone on a beat | root (the key), from |
 | | Arpeggios from the 3rd (`from-third`) | 4 | ii–V–I: each chord's 3-5-7-9, then the scale down from the 9th's octave, into the next chord's 3rd | root (the key) |
@@ -181,3 +184,12 @@ When each part ships: PRODUCT.md (Practice's exercises and trainers), the glossa
 Round, Run, Session summary, Sequence, 6th-diminished scale, Drop 2, Shell, Guide tones), ADR 0024 (an exercise is a
 rule that writes a Performance) and ADR 0025 (a trainer is a round machine with a ladder; its progress is saved per
 trainer), CLAUDE.md's architecture, DESIGN.md's Practice.
+
+## Review amendments (2026-10-02)
+
+- The 6th-diminished scale is spelled with the ♭6 (A♭ in C): B°7 is B D F A♭. It carries no fingers, as ADR 0024 says
+  of Barry Harris's lines.
+- Sequences, contrary motion and the 6th-diminished scale offer one or two octaves (`FEW_OCTAVES`): past two, the
+  hands cross staves and the figure loses its shape. The scale and the arpeggio keep 1–4.
+- An exercise has no `source` field: its group (Barry Harris, Piano With Jonny) or its name (Hanon) says whose it is.
+- A harmony lasts until the next chord or the end; the generators give only where each chord starts.

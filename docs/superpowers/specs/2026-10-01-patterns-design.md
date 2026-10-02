@@ -150,3 +150,13 @@ cover every hand the sources teach; the step editor is recorded in §8.
   lists its songs; starring and hiding; making an own pattern from a built-in, saving, finding it in the Player's
   picker, playing it; editing and deleting; the picker leaves hidden patterns out but for the chosen one; the Player
   opened with an own ref that was deleted plays the music's own pattern.
+
+## Review amendments (2026-10-02)
+
+- **A hidden pattern is out of Favourites too:** in the picker (but for the one playing) and in the reference, where
+  a starred hidden pattern is on the Hidden shelf only.
+- **Make your own from it fits the name:** a source's name too long for "… (mine)" within 40 characters is cut at a
+  word, with an ellipsis, so the draft saves as it opens.
+- **Saving a pattern deleted in another tab** makes it anew under the next number; its page and its editor, once it
+  is gone, show Page not found with the way back to Patterns.
+- **The editor is heard by its figures:** typing its name neither arranges nor engraves the sample again.

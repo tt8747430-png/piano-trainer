@@ -29,7 +29,7 @@ A container wires data to presentational children. One job each.
   (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
   `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `LEARN_TILES`, `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
-  `LevelMark`, `LazyScoreView`. A choice a component would make by a boolean prop is a component of its own (an
+  `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,

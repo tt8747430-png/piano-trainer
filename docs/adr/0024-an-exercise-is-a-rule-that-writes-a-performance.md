@@ -23,7 +23,7 @@ pattern: it is a line of notes, both hands, fingered by its method.
   the first white tone each octave, the third finger a 4 over a 4th), the five-finger position, Hanon, PWJ's inner
   voice and modes. Sequences, Barry Harris's lines and the rapid switch carry none.
 - **The catalogue is content** (`entities/exercise`): each exercise's group, level, name and "trains" line in both
-  languages, its source, the choices its rule takes (`fields`, each with what it allows), its own choice, tempo and
+  languages (its group or name says whose idea it is), the choices its rule takes (`fields`, each with what it allows), its own choice, tempo and
   swing. An exercise another Player already plays (the walk, the chromatic walk, a progression through the keys) is
   a catalogue row that names that Player and its params, never a second implementation.
 - **One route, one page:** `/play/exercise/$exerciseId`, remembered per exercise. Its URL holds the Player's view and

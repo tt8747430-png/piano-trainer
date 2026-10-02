@@ -56,7 +56,8 @@ Checked against what shipped after the roadmap and ADR 0013 were written:
   they were written with them.
 - **The repertoire** (`repertoire(state)` in `entities/piece`, `useRepertoire()` from the store): `entry(id)` (a
   catalog entry, in its version when there is one: a listing with a version is a song; or an own song), `piece(id)`
-  (the same, playable), `version(id)` (whether the learner has one), `ownSongs`. The router asks it whether a
+  (the same, playable), `original(id)`, `ownSongs`; whether the learner has a version is a selector over the store
+  (`selectHasVersion`, with `selectVersion` and `selectOwnSong`). The router asks it whether a
   piece, its page or its editor is there.
 - **A recording plays along with a version** only while the version keeps the original's timeline: the same meter,
   key and every bar's length. Otherwise the version has none (the singer would be over other bars).
@@ -269,3 +270,17 @@ staff, as wide as the note value chosen; in Chords, over the chord row at a beat
   open it in the Player and hear the melody; a version of a song is played in the Player and reset; a listing gets a
   chart and opens in the Player; undo and redo; a MIDI chord sets a chord; a written left hand plays in the Player in
   another key.
+
+## Review amendments (2026-10-02)
+
+- **A value is always whole ticks:** Dot is off where the dotted value falls between ticks (a 16th in x/4), and a dot
+  and a triplet never go together, so whatever the editor writes reads back.
+- **An edit that changes nothing is no step:** no undo entry and no save (deleting where nothing is, the same tempo,
+  key, pattern or chord, a bar given back to the pattern it already is).
+- **A tapped chord stops on the last bar;** Enter in the Chord field still adds a bar past it, to type a chart on.
+- **Cmd/Ctrl C X V edit bars in the chords only;** in the melody or a hand they do nothing.
+- **The caret line names the value:** "Bar 1, beat 4 · F4 half", a dotted or triplet value too; a length no one
+  value writes (tied over) is named by its notes alone.
+- **`@beats` are written in the shortest decimal that reads back as the same ticks** (`.3333333333` a third of a
+  beat), and the chart reads them as whole ticks.
+- **A page whose song is gone** (deleted in another tab) shows Page not found with the way back, as the router does.

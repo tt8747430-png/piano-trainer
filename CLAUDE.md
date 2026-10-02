@@ -136,7 +136,8 @@ it. `@` → `src`.
   `isOwnKey`; bars of either hand written out (`hands`, `parseHands`) and the writers back to text (`writeBar`,
   `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`, version 1, their
   versions by piece id and their own songs (`my-<n>`), read through the repertoire (`repertoire`, `useRepertoire`):
-  the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
+  the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read;
+  `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
   `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`,
   version 1: favourites, hidden, own; `referenceShelves` / `pickerShelves`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
@@ -183,7 +184,7 @@ it. `@` → `src`.
   sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utilities read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
   button), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`), `KeyDropdown`, `NoteDropdown`,
   `InversionChoice`, `ChordSizeField`, `SwitchRow`, `TypedField`, `RowLink` (its tile optional, a detail of two lines) and `RowGroup`, `LEARN_TILES` (the tile a row to each of Learn's pages wears), `Fact`, `PlayToggle` and `ChordButton`, `ToneChip`, `PlayLabel` (a Play button's words, Stop while it sounds), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
-  `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `LevelMark`, `LazyScoreView` (a staff outside the Player,
+  `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `LevelMark`, `NotFound` (a page not there, or deleted in another tab), `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
   VexFlow over a Score, and `xAtTick`), `i18n` (`Locale`,
   `useLocale`, `useScaleName`, `useKeyName`, `LocalText`; namespaces per place, `music` for the words every screen shares), `test`.
