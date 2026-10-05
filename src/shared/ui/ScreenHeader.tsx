@@ -36,7 +36,7 @@ export function ScreenHeader({
       data-hidden={shown ? undefined : ''}
       onFocus={() => hold(true)}
       onBlur={(event) => hold(event.currentTarget.contains(event.relatedTarget))}
-      className="sticky top-0 z-30 -mx-4 -mt-safe bg-background px-4 pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full lg:mx-0 lg:px-0"
+      className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
       <div ref={row} className="flex items-center gap-3 pt-2 pb-4">
         {back}

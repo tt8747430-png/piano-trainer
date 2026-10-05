@@ -5,8 +5,10 @@ import { cn, IN_PLACE } from '@/shared/lib'
 import {
   CIRCLE_OF_FIFTHS,
   circleFunctions,
-  keyParam,
+  keyMode,
+  keyScale,
   keySymbol,
+  noteParam,
   sameKey,
   type CircleRing,
   type Key,
@@ -22,9 +24,10 @@ const WEDGE = {
 } as const
 
 /**
- * The circle of fifths as the Keys reference's chooser: every key a link to its page, its signature's
- * count under its name; the key shown and the places of its seven chords wear the keys' marks and
- * carry their numerals (I IV V outside and ii iii vi vii° inside for C).
+ * The circle of fifths as the Key view's chooser: every key a link to its scale (a minor key its
+ * natural minor, or the minor already shown), its signature's count under its name; the key shown
+ * and the places of its seven chords wear the keys' marks and carry their numerals (I IV V outside
+ * and ii iii vi vii° inside for C).
  */
 export function CircleOfFifths({ current }: { current: Key }) {
   const { t } = useTranslation('learn')
@@ -70,14 +73,23 @@ export function CircleOfFifths({ current }: { current: Key }) {
                 style={{ left: `${x}%`, top: `${y}%` }}
               >
                 <Link
-                  from="/learn/keys"
-                  to="/learn/keys"
-                  search={(prev) => ({ ...prev, key: keyParam(key) })}
+                  from="/practice/scales"
+                  to="/practice/scales"
+                  search={(prev) => ({
+                    ...prev,
+                    root: noteParam(key.tonic),
+                    kind:
+                      keyMode(prev.kind) === (key.minor ? 'minor' : 'major')
+                        ? prev.kind
+                        : keyScale(key),
+                  })}
                   {...IN_PLACE}
+                  // Only the key shown is where the learner is: C's link names no param the URL lacks.
+                  activeOptions={{ exact: true }}
                   aria-label={name(key)}
                   aria-current={sameKey(key, current) ? 'page' : undefined}
                   className={cn(
-                    'grid size-11 place-content-center gap-0.5 rounded-full text-center leading-none transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring aria-[current=page]:bg-card aria-[current=page]:ring-1 aria-[current=page]:ring-input',
+                    'grid size-11 place-content-center gap-0.5 rounded-full text-center leading-none transition-colors duration-200 ease-out hover:bg-muted aria-[current=page]:bg-card aria-[current=page]:ring-1 aria-[current=page]:ring-input',
                     mark ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >

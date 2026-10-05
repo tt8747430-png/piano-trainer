@@ -11,16 +11,16 @@ const row = () =>
 const onsets = (sounds: readonly Sound[] = []) =>
   new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.at] : []))).size
 
-describe('Learn → Progressions', () => {
+describe('Practice → Progressions', () => {
   it('writes a progression’s chords in the key, each over its numeral', async () => {
-    await renderApp('/learn/progressions')
+    await renderApp('/practice/progressions')
     await screen.findByRole('list', { name: 'Chords' })
     expect(row()).toEqual(['CI', 'GV', 'Amvi', 'FIV'])
   })
 
   it('reads chords typed as numerals, kept in the URL, and says when it cannot', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/progressions')
+    const { router } = await renderApp('/practice/progressions')
     const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
     await user.clear(field)
     await user.type(field, 'Am F C G')
@@ -32,7 +32,7 @@ describe('Learn → Progressions', () => {
 
   it('writes typed chords as numerals again once the key changes, as the row plays them', async () => {
     const user = userEvent.setup()
-    await renderApp('/learn/progressions')
+    await renderApp('/practice/progressions')
     const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
     await user.clear(field)
     await user.type(field, 'Am F C G')
@@ -44,7 +44,7 @@ describe('Learn → Progressions', () => {
 
   it('grows the chords with the chord size, and plays the row', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/progressions')
+    const { audio } = await renderApp('/practice/progressions')
     await user.click(await screen.findByRole('radio', { name: '7ths' }))
     expect(row()).toEqual(['CMaj7I', 'G7V', 'Am7vi', 'FMaj7IV'])
     await user.click(screen.getByRole('button', { name: 'Play' }))
@@ -52,7 +52,7 @@ describe('Learn → Progressions', () => {
   })
 
   it('takes a progression from the library by style', async () => {
-    await renderApp('/learn/progressions')
+    await renderApp('/practice/progressions')
     const blues = await screen.findByRole('region', { name: 'Blues' })
     expect(
       within(blues)
@@ -62,7 +62,7 @@ describe('Learn → Progressions', () => {
   })
 
   it('opens the progression in the Player, in its key and chord size', async () => {
-    await renderApp('/learn/progressions?p=ii-V-I&size=sevenths')
+    await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
     const practise = await screen.findByRole('link', { name: 'Practise in the Player' })
     const href = practise.getAttribute('href') ?? ''
     expect(href).toMatch(/^\/play\/progression\?/)
@@ -70,20 +70,21 @@ describe('Learn → Progressions', () => {
     expect(href).toMatch(/chordSize=sevenths/)
   })
 
-  it('takes a library progression in place: Back then leaves for Learn', async () => {
+  it('takes a library progression in place: Back then leaves for Practice', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn')
-    await user.click(await screen.findByRole('link', { name: /^Progressions/ }))
+    const { router } = await renderApp('/practice?topic=progressions')
+    const explore = await screen.findByRole('region', { name: 'Explore' })
+    await user.click(within(explore).getByRole('link', { name: 'Progressions' }))
     await user.click(await screen.findByRole('link', { name: /^12-bar blues/ }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ p: expect.stringMatching(/^I7/) }),
     )
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
   })
 
   it('speaks Russian', async () => {
-    await renderApp('/learn/progressions', { locale: 'ru' })
+    await renderApp('/practice/progressions', { locale: 'ru' })
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Последовательности' }),
     ).toBeInTheDocument()

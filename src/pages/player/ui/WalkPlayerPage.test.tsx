@@ -41,7 +41,7 @@ describe('Walk the chords in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/walk?root=D&kind=dorian')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    expect(router.state.location.pathname).toBe('/learn/scales')
+    expect(router.state.location.pathname).toBe('/practice/scales')
     expect(router.state.location.search).toMatchObject({
       root: 'D',
       kind: 'dorian',

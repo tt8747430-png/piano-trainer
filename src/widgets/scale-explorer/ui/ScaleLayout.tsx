@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-/** The Scales reference's two columns from a laptop's width: the choices, then the content, the keyboard across both on top. */
+/** The Scales explorer's two columns from a laptop's width: the choices, then the content, the keyboard across both on top. */
 export function ScaleLayout({
   controls,
   keyboard,

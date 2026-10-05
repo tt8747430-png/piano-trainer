@@ -54,7 +54,7 @@ export function ScaleExample({
           </li>
         ))}
       </ol>
-      <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 scrollbar-none">
+      <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
         <LazyScoreView score={score} staff="treble" />
       </div>
       <Button

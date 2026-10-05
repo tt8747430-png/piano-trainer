@@ -24,7 +24,7 @@ export interface FoundChord {
   readonly symbol: string
   /** The tones the hand left out, as `LEFT_OUT` orders them: none when every tone is there. */
   readonly leftOut: readonly LeftOut[]
-  /** Which chord tone is lowest, 0 the root, where the Chords reference can show it (up to the 3rd inversion). */
+  /** Which chord tone is lowest, 0 the root, where the Chords explorer can show it (up to the 3rd inversion). */
   readonly inversion?: number
 }
 
@@ -96,7 +96,7 @@ const SHAPES = CHORD_PARTS.reduce((byKey, parts) => {
 const flatFiveOverTensions = (parts: ChordParts): boolean =>
   parts.size >= 9 && parts.alterations.includes('b5')
 
-/** The Chords reference shows root position and three inversions. */
+/** The Chords explorer shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
 /**

@@ -34,7 +34,7 @@ export type AddedTone = (typeof ADDED_TONES)[number]
 export const ALTERATIONS = ['b5', 'b9', 's9', 's11', 'b13'] as const
 export type Alteration = (typeof ALTERATIONS)[number]
 
-/** A chord as the Chords reference builds it, part by part. */
+/** A chord as the Chords explorer builds it, part by part. */
 export interface ChordParts {
   readonly triad: Triad
   readonly size: BuiltSize

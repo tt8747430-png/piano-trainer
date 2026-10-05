@@ -15,7 +15,7 @@ import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark, ShownKeys } from '@/shared/ui'
 import { placeExample } from './chord-example'
 
-/** A quiz's answer on the keys: a chord as the Chords reference places it, notes from middle C up. */
+/** A quiz's answer on the keys: a chord as the Chords explorer places it, notes from middle C up. */
 export function quizAnswer(answer: LessonAnswer): ShownKeys {
   if ('chord' in answer) return placeExample(answer.chord)
   const marks = new Map<Midi, KeyMark>()

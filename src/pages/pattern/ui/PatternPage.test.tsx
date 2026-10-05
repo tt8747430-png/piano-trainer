@@ -25,7 +25,7 @@ const withOwn = () => {
 
 describe('A pattern’s page', () => {
   it('explains it: its idea, each hand’s figure, the source’s words and the music that plays it', async () => {
-    await renderApp('/learn/patterns/M1')
+    await renderApp('/practice/patterns/M1')
     expect(
       await screen.findByRole('heading', { level: 1, name: '1 · Bass + chords' }),
     ).toBeInTheDocument()
@@ -39,14 +39,14 @@ describe('A pattern’s page', () => {
 
   it('plays its bar of C on the keys, and stops', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/patterns/M1')
+    const { audio } = await renderApp('/practice/patterns/M1')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.played).toHaveLength(1)
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
   })
 
   it('plays a tune pattern over a song with a tune, and opens it there in the Player', async () => {
-    await renderApp('/learn/patterns/r5')
+    await renderApp('/practice/patterns/r5')
     expect(await screen.findByText(/^Over the first line of /)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Practise in the Player' })).toHaveAttribute(
       'href',
@@ -56,7 +56,7 @@ describe('A pattern’s page', () => {
 
   it('stars it, hides it from the Player and shows it again', async () => {
     const user = userEvent.setup()
-    const { patternsStore } = await renderApp('/learn/patterns/ballad')
+    const { patternsStore } = await renderApp('/practice/patterns/ballad')
     const star = await screen.findByRole('button', { name: 'Favourite' })
     await user.click(star)
     expect(star).toHaveAttribute('aria-pressed', 'true')
@@ -69,7 +69,7 @@ describe('A pattern’s page', () => {
   })
 
   it('opens the progression Player with it', async () => {
-    await renderApp('/learn/patterns/ballad')
+    await renderApp('/practice/patterns/ballad')
     expect(await screen.findByRole('link', { name: 'Practise in the Player' })).toHaveAttribute(
       'href',
       '/play/progression?pattern=ballad',
@@ -78,35 +78,35 @@ describe('A pattern’s page', () => {
 
   it('shows the learner’s own, with Edit and Delete, and deletes it once asked', async () => {
     const user = userEvent.setup()
-    const { router, patternsStore } = await renderApp('/learn/patterns/my-1', {
+    const { router, patternsStore } = await renderApp('/practice/patterns/my-1', {
       storage: withOwn(),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
     expect(screen.getByText('Charleston · Walking the triad 1–3–5–3')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute(
       'href',
-      '/learn/patterns/my-1/edit',
+      '/practice/patterns/my-1/edit',
     )
     expect(screen.queryByRole('button', { name: 'Hide from the Player' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/patterns'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/patterns'))
     expect(patternsStore.getState()).toMatchObject({ own: [], favourites: [] })
   })
 
   it('is not found once another tab deletes it, with the way back to Patterns', async () => {
-    const { patternsStore } = await renderApp('/learn/patterns/my-1', { storage: withOwn() })
+    const { patternsStore } = await renderApp('/practice/patterns/my-1', { storage: withOwn() })
     await screen.findByRole('heading', { level: 1, name: 'Sunday' })
     act(() => deleteOwnPattern(patternsStore, 'my-1'))
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Go to Patterns' })).toHaveAttribute(
       'href',
-      '/learn/patterns',
+      '/practice/patterns',
     )
   })
 
   it('is not found for a pattern the book does not hold', async () => {
-    await renderApp('/learn/patterns/my-9')
+    await renderApp('/practice/patterns/my-9')
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
   })
 })

@@ -7,9 +7,9 @@ import type { Sound } from '@/shared/lib/schedule'
 const timed = (sounds: readonly Sound[] = []) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [[sound.midi, sound.at]] : []))
 
-describe('Learn → Intervals', () => {
+describe('Practice → Intervals', () => {
   it('writes a card for every interval, within the octave and past it', async () => {
-    await renderApp('/learn/intervals')
+    await renderApp('/practice/intervals')
     const simple = await screen.findByRole('region', { name: 'Within the octave' })
     expect(
       within(simple)
@@ -43,7 +43,7 @@ describe('Learn → Intervals', () => {
 
   it('plays an interval up, down and together, and shows it on the keys', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/intervals')
+    const { audio } = await renderApp('/practice/intervals')
     const third = await screen.findByRole('article', { name: 'Minor third' })
     await user.click(within(third).getByRole('button', { name: 'Up' }))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
@@ -67,7 +67,7 @@ describe('Learn → Intervals', () => {
 
   it('chooses the root, kept in the URL', async () => {
     const user = userEvent.setup()
-    const { router, audio } = await renderApp('/learn/intervals')
+    const { router, audio } = await renderApp('/practice/intervals')
     await user.click(await screen.findByRole('combobox', { name: 'Root' }))
     await user.click(await screen.findByRole('option', { name: 'D' }))
     expect(router.state.location.search).toEqual({ root: 'D' })
@@ -80,7 +80,7 @@ describe('Learn → Intervals', () => {
   })
 
   it('speaks Russian', async () => {
-    await renderApp('/learn/intervals', { locale: 'ru' })
+    await renderApp('/practice/intervals', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Интервалы' })).toBeInTheDocument()
     expect(screen.getByRole('article', { name: 'Малая терция' })).toHaveTextContent('м3')
   })

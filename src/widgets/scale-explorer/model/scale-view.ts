@@ -1,12 +1,19 @@
 import type { ChordNotes, Fingering, NoteParam, ScaleKind } from '@/shared/lib/music'
 import type { Hands, PracticeRhythm } from '@/shared/lib/schedule'
 
-/** What the Scales reference shows: the scale, what its keys carry, and how it is practised. */
+/** The views of a scale, in the order their segments stand. */
+export const SCALE_SHOWS = ['scale', 'chords', 'key'] as const
+export type ScaleShow = (typeof SCALE_SHOWS)[number]
+
+/** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
   readonly root: NoteParam
   readonly kind: ScaleKind
-  /** What the keys carry: the scale's degrees, or the key's chords (a seven-note scale only). */
-  readonly show: 'scale' | 'chords'
+  /**
+   * What the page shows: the scale's run, its chords (a seven-note scale only), or its key on the
+   * circle of fifths (a major or minor scale only).
+   */
+  readonly show: ScaleShow
   /** The degree the run starts on, 1 the tonic (Scale view). */
   readonly start: number
   /** How the run is fingered; absent, as its start is (`ownFingering`). */

@@ -18,15 +18,14 @@ const ROUTES = [
   ['/play/walk', '/play/walk'],
   ['/play/chromatic', '/play/chromatic'],
   ['/learn', '/learn'],
-  ['/learn/chords', '/learn/chords'],
-  ['/learn/scales', '/learn/scales'],
-  ['/learn/keys', '/learn/keys'],
-  ['/learn/intervals', '/learn/intervals'],
-  ['/learn/tensions', '/learn/tensions'],
-  ['/learn/chord-finder', '/learn/chord-finder'],
-  ['/learn/reharmonise', '/learn/reharmonise'],
-  ['/learn/passing-chords', '/learn/passing-chords'],
-  ['/learn/progressions', '/learn/progressions'],
+  ['/practice/chords', '/practice/chords'],
+  ['/practice/scales', '/practice/scales'],
+  ['/practice/intervals', '/practice/intervals'],
+  ['/practice/tensions', '/practice/tensions'],
+  ['/practice/chord-finder', '/practice/chord-finder'],
+  ['/practice/reharmonise', '/practice/reharmonise'],
+  ['/practice/passing-chords', '/practice/passing-chords'],
+  ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
   ['/practice/trainers/build-chord', '/practice/trainers/$trainerId'],
@@ -57,8 +56,8 @@ describe('routes', () => {
       '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&chordSize=elevenths',
       ['key', 'tempo', 'pattern', 'rh', 'lh', 'chordSize'],
     ],
-    ['/learn/chords?step=scale:major', ['step']],
-    ['/learn/scales?step=chords:tri', ['step']],
+    ['/practice/chords?step=scale:major', ['step']],
+    ['/practice/scales?step=chords:tri', ['step']],
     ['/check?of=chords:tri&x=1', []],
   ] as const)('keeps a stale optional param in %s from the screen', async (path, dropped) => {
     const router = await open(path)
@@ -131,12 +130,18 @@ describe('the app shell', () => {
     await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual(['Path', 'Songs', 'Learn', 'Practice'])
+    expect(links.map((link) => link.textContent)).toEqual([
+      'Path',
+      'Songs',
+      'Learn',
+      'Practice',
+      'Settings',
+    ])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
   it.each([
-    ['/learn/scales', 'Learn'],
+    ['/practice/scales', 'Practice'],
     ['/learn/lessons/reading-chord-symbols', 'Learn'],
     ['/practice/trainers/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
@@ -148,7 +153,9 @@ describe('the app shell', () => {
   it('reaches Settings from the Path screen', async () => {
     const user = userEvent.setup()
     await renderApp('/')
-    await user.click(await screen.findByRole('link', { name: 'Settings' }))
+    await user.click(
+      within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
+    )
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument()
   })
 
@@ -243,12 +250,12 @@ describe('a Piece', () => {
 describe('going back', () => {
   it('returns to where the learner was on the screen it goes back to', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn')
-    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    const { router } = await renderApp('/practice')
+    await screen.findByRole('heading', { level: 1, name: 'Practice' })
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(480)
     act(() => void document.dispatchEvent(new Event('scroll')))
-    await user.click(screen.getByRole('link', { name: /^Keys/ }))
-    await screen.findByRole('heading', { level: 1, name: 'Keys' })
+    await user.click(screen.getByRole('link', { name: 'Chord finder' }))
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     vi.mocked(window.scrollTo).mockClear()
     await act(() => router.history.back())
     await waitFor(() =>

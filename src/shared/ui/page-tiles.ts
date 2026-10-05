@@ -21,10 +21,10 @@ export interface Tile {
 }
 
 /**
- * The tile each of Learn's pages wears on every row that leads to it, so a lesson's link, a key's page
- * and Learn's own lists show a page alike.
+ * The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup and
+ * Practice's own lists show a page alike.
  */
-export const LEARN_TILES = {
+export const PAGE_TILES = {
   lesson: { icon: BookOpenText, paint: 'grass' },
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },

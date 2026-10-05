@@ -14,7 +14,7 @@ export function ExplorerLink({
   if (step.kind === 'scale') {
     return (
       <Link
-        to="/learn/scales"
+        to="/practice/scales"
         search={{ kind: step.scale, step: `scale:${step.scale}` }}
         {...props}
       />
@@ -23,7 +23,7 @@ export function ExplorerLink({
   const [quality] = qualitiesIn(step.family)
   return (
     <Link
-      to="/learn/chords"
+      to="/practice/chords"
       search={{ ...(quality ? qualityParams(quality) : {}), step: `chords:${step.family}` }}
       {...props}
     />

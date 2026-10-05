@@ -8,7 +8,7 @@ describe('Path', () => {
     await renderApp('/')
     const card = await screen.findByRole('region', { name: 'Triads' })
     expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
-      /^\/learn\/chords\?.*step=chords(%3A|:)tri/,
+      /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
     )
   })
 
@@ -48,6 +48,6 @@ describe('Path', () => {
       within(level)
         .getByRole('link', { name: /^Triads/ })
         .getAttribute('href'),
-    ).toMatch(/^\/learn\/chords\?.*step=chords(%3A|:)tri/)
+    ).toMatch(/^\/practice\/chords\?.*step=chords(%3A|:)tri/)
   })
 })

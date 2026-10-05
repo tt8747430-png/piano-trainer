@@ -1,82 +1,39 @@
-import { screen, waitFor, within } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('Learn', () => {
-  it('lists the lessons under their module, with their level and category, and the references', async () => {
+  it('lists the lessons under their module, each with what it is about and its level', async () => {
     await renderApp('/learn')
     const fundamentals = await screen.findByRole('region', { name: 'Fundamentals' })
+    const lesson = within(fundamentals).getByRole('link', {
+      name: /^How to read chord symbols Chords/,
+    })
+    expect(lesson).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
+    expect(within(lesson).getByRole('img', { name: 'Level 1' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Accompaniment' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Gospel' })).toBeInTheDocument()
+  })
+
+  it('numbers a module’s lessons in the order they are taught', async () => {
+    await renderApp('/learn')
+    const gospel = await screen.findByRole('region', { name: 'Gospel' })
     expect(
-      within(fundamentals).getByRole('link', {
-        name: 'How to read chord symbols Beginner · Chords',
-      }),
-    ).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
-    const references = screen.getByRole('region', { name: 'References' })
-    expect(within(references).getByRole('link', { name: 'Chords' })).toHaveAttribute(
-      'href',
-      '/learn/chords',
-    )
-    expect(within(references).getByRole('link', { name: 'Scales' })).toHaveAttribute(
-      'href',
-      '/learn/scales',
-    )
-    expect(within(references).getByRole('link', { name: 'Keys' })).toHaveAttribute(
-      'href',
-      '/learn/keys',
-    )
-    expect(within(references).getByRole('link', { name: 'Intervals' })).toHaveAttribute(
-      'href',
-      '/learn/intervals',
-    )
-    expect(within(references).getByRole('link', { name: 'Available tensions' })).toHaveAttribute(
-      'href',
-      '/learn/tensions',
-    )
-    const tools = screen.getByRole('region', { name: 'Tools' })
-    expect(within(tools).getByRole('link', { name: 'Chord finder' })).toHaveAttribute(
-      'href',
-      '/learn/chord-finder',
-    )
-    expect(within(tools).getByRole('link', { name: 'Reharmonise' })).toHaveAttribute(
-      'href',
-      '/learn/reharmonise',
-    )
-    expect(within(tools).getByRole('link', { name: 'Passing chords' })).toHaveAttribute(
-      'href',
-      '/learn/passing-chords',
-    )
-    expect(within(tools).getByRole('link', { name: 'Progressions' })).toHaveAttribute(
-      'href',
-      '/learn/progressions',
-    )
+      within(gospel)
+        .getAllByRole('link')
+        .map((link) => link.querySelector('[data-slot="row-tile"]')?.textContent),
+    ).toEqual(['1', '2', '3'])
   })
 
-  it('filters the lessons by level and category, kept in the URL, and says when none match', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/learn')
-    await user.click(await screen.findByRole('combobox', { name: 'Category' }))
-    await user.click(await screen.findByRole('option', { name: 'Chords' }))
-    expect(router.state.location.search).toEqual({ category: 'chords' })
-    expect(screen.getByRole('link', { name: /How to read chord symbols/ })).toBeInTheDocument()
-    await router.navigate({ to: '/learn', search: { level: 4, category: 'chords' } })
-    expect(await screen.findByText('No lessons match.')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Show every lesson' }))
-    expect(router.state.location.search).toEqual({})
+  it('holds lessons only: what is explored and practised is on Practice', async () => {
+    await renderApp('/learn')
+    await screen.findByRole('region', { name: 'Fundamentals' })
+    expect(screen.queryByRole('link', { name: 'Chord finder' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
   })
 
-  it('opens a reference and comes back', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/learn')
-    await user.click(await screen.findByRole('link', { name: 'Scales' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Scales' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
-  })
-
-  it('speaks Russian', async () => {
+  it('reads in Russian, with nothing left in English', async () => {
     await renderApp('/learn', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])

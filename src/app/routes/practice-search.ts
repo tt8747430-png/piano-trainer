@@ -1,8 +1,26 @@
 import { isStepId, type StepId } from '@/entities/path'
 import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
+import type { PracticeHubView, PracticeTopic } from '@/pages/practice'
 import { valueOr } from '@/shared/lib'
 import { parseNoteInOctave } from '@/shared/lib/music'
 import { routeSearch, type Input, type Raw } from './read-search'
+
+// Practice: the topic it shows. Named here, so the validator loads none of Practice's own code.
+const TOPIC: Readonly<Record<PracticeTopic, true>> = {
+  chords: true,
+  scales: true,
+  ear: true,
+  progressions: true,
+  accompaniment: true,
+  technique: true,
+}
+const isTopic = (value: unknown): value is PracticeTopic =>
+  typeof value === 'string' && Object.hasOwn(TOPIC, value)
+export const PRACTICE_DEFAULTS: PracticeHubView = { topic: 'chords' }
+export function readPracticeSearch(raw: Raw): PracticeHubView {
+  return { topic: valueOr(isTopic, raw.topic, PRACTICE_DEFAULTS.topic) }
+}
+export const practiceSearch = routeSearch(readPracticeSearch, PRACTICE_DEFAULTS)
 
 // The Check: the step it checks; none is not found, so nothing is left out of the URL.
 export interface CheckSearch {

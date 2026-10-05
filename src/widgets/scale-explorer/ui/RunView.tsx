@@ -31,7 +31,7 @@ export function RunView({
 }: {
   scale: ScaleView
   onChange: (change: Partial<ScaleView>) => void
-  /** Which scale: the reference's own choices, over this view's. */
+  /** Which scale: the explorer's own choices, over this view's. */
   choice: ReactNode
   /** What the scale is made of, under this view's content. */
   facts: ReactNode
@@ -87,7 +87,7 @@ export function RunView({
               scale.fingers === 'none' ? undefined : run.fingers[scale.fingers],
             ).marks,
           }}
-          className="lg:order-first lg:col-span-2"
+          className="order-first lg:col-span-2"
         />
       }
     >

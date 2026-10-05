@@ -77,7 +77,7 @@ export type LessonLink =
 /**
  * One part of a lesson's section: prose, numbered steps, a note to read; or an example that plays in
  * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff, a
- * pattern over a piece, a progression in a key); a quiz answered on the keys; a link into a reference,
+ * pattern over a piece, a progression in a key); a quiz answered on the keys; a link into an explorer,
  * a tool or the Player.
  */
 export type LessonBlock =

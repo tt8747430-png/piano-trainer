@@ -11,7 +11,7 @@ const PLAIN = { rh: 'x1', lh: 'r' } as const
 export function NewPatternPage() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const { from } = useSearch({ from: '/shell/learn/patterns/new' })
+  const { from } = useSearch({ from: '/shell/practice/patterns/new' })
   const book = usePatternBook()
   const source = from ? book.get(from) : undefined
   const start = source

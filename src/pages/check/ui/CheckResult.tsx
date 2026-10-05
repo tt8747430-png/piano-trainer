@@ -50,12 +50,14 @@ export function CheckResult({
             skill.kind === 'chord'
               ? {
                   name: t(`music:quality.${skill.quality}`),
-                  explorerLink: <Link to="/learn/chords" search={qualityParams(skill.quality)} />,
+                  explorerLink: (
+                    <Link to="/practice/chords" search={qualityParams(skill.quality)} />
+                  ),
                   openLabel: t('openChords'),
                 }
               : {
                   name: t(`music:scaleKind.${skill.scale}`),
-                  explorerLink: <Link to="/learn/scales" search={{ kind: skill.scale }} />,
+                  explorerLink: <Link to="/practice/scales" search={{ kind: skill.scale }} />,
                   openLabel: t('openScales'),
                 }
           return (

@@ -1,12 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { LEVEL_NAME } from '@/entities/path'
 import { isRuleExercise, type Exercise } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { numeralsParam, parseNumerals } from '@/shared/lib/music'
-import { RowLink, type Paint } from '@/shared/ui'
+import { LevelMark, RowLink, type Paint } from '@/shared/ui'
 
 /** Where an exercise opens: its own rule's Player, or the Player that already plays it. */
 function exerciseLink(exercise: Exercise) {
@@ -34,7 +32,7 @@ function exerciseLink(exercise: Exercise) {
   }
 }
 
-/** An exercise's row: its name, its level and what it trains, opening it in the Player; its group's tile. */
+/** An exercise's row: its name over what it trains, its level's mark, opening it in the Player; its group's tile. */
 export function ExerciseRow({
   exercise,
   icon,
@@ -44,14 +42,14 @@ export function ExerciseRow({
   icon: LucideIcon
   paint: Paint
 }) {
-  const { t } = useTranslation('common')
   const locale = useLocale()
   return (
     <RowLink
       title={localText(exercise.name, locale)}
-      detail={`${t(`levelName.${LEVEL_NAME[exercise.level]}`)} · ${localText(exercise.trains, locale)}`}
+      detail={localText(exercise.trains, locale)}
       icon={icon}
       paint={paint}
+      trailing={<LevelMark level={exercise.level} />}
       render={exerciseLink(exercise)}
     />
   )

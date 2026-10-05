@@ -4,7 +4,7 @@ import type { SpelledNote } from './note'
 import { toneAbove, type Tone } from './tone'
 
 /**
- * The 7th chords the Available tensions reference shows: the owner's table's (Maj7, m7, 7, m7♭5,
+ * The 7th chords the Available tensions explorer shows: the owner's table's (Maj7, m7, 7, m7♭5,
  * 7#5, m(maj7), 7sus4) and the two other 7th chords a scale stacks (+Maj7, °7).
  */
 export const TENSION_CHORDS = [
@@ -64,7 +64,7 @@ const OTHER: readonly IntervalName[] = [
 const isTensionChord = (quality: ChordQuality): quality is TensionChord =>
   TENSION_CHORDS.some((chord) => chord === quality)
 
-/** The tensions a chord takes; none for a chord the reference does not show (a triad, a 9th). */
+/** The tensions a chord takes; none for a chord the explorer does not show (a triad, a 9th). */
 export const availableTensions = (quality: ChordQuality): readonly LabelledInterval[] =>
   isTensionChord(quality) ? AVAILABLE[quality].map((name) => INTERVALS[name]) : []
 

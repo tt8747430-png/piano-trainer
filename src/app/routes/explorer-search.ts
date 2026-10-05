@@ -1,8 +1,17 @@
-import { LESSON_CATEGORIES, type LessonCategory } from '@/entities/lesson'
 import { isPatternRef, type PatternRef } from '@/entities/pattern'
 import { isStepId } from '@/entities/path'
-import type { LearnFilter } from '@/pages/learn'
-import { isOneOf, partsParams, readAlterations, readNote, valueOr, wholeIn } from '@/shared/lib'
+import { PROGRESSION } from '@/features/practice'
+import {
+  isOneOf,
+  keyListParam,
+  partsParams,
+  readAlterations,
+  readKeyList,
+  readNote,
+  readText,
+  valueOr,
+  wholeIn,
+} from '@/shared/lib'
 import {
   ADDED_TONES,
   buildChord,
@@ -10,17 +19,16 @@ import {
   builtRootSpelling,
   CHORD_NOTES,
   type ChordFamily,
-  circleKey,
   type Fingering,
   FINGERINGS,
   fingeringsOf,
   fitParts,
+  keyMode,
   keyParam,
   lastInversion,
   note,
   noteParam,
   ownFingering,
-  parseKey,
   pitchClassOf,
   qualityRootSpelling,
   rootSpelling,
@@ -29,36 +37,34 @@ import {
   type ScaleKind,
   scaleRootSpelling,
   SEVENTHS,
+  spellInKey,
   TENSION_CHORDS,
   TRIADS,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
-import type { KeyView } from '@/widgets/key-explorer'
-import type { ScaleView } from '@/widgets/scale-explorer'
+import type { PassingView } from '@/widgets/passing-chords'
+import type { ProgressionsView } from '@/widgets/progressions'
+import type { ReharmoniseView } from '@/widgets/reharmonise'
+import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
 import type { TensionView } from '@/widgets/tension-explorer'
 import {
+  C_MAJOR,
   C_MAJOR_PARAM,
+  isChordSize,
   isHands,
-  isLevel,
   isScaleKind,
+  readKey,
+  readNumerals,
   routeSearch,
   type Input,
   type Raw,
 } from './read-search'
 
-// Learn: its lessons' filter, and the references.
-
-const isLessonCategory = isOneOf<LessonCategory | 'any'>([...LESSON_CATEGORIES, 'any'])
-export const LEARN_DEFAULTS: LearnFilter = { level: 'any', category: 'any' }
-export function readLearnSearch(raw: Raw): LearnFilter {
-  return {
-    level: valueOr(isLevel, raw.level, LEARN_DEFAULTS.level),
-    category: valueOr(isLessonCategory, raw.category, LEARN_DEFAULTS.category),
-  }
-}
-export const learnSearch = routeSearch(readLearnSearch, LEARN_DEFAULTS)
+// The pages Practice explores with: a chord, a scale and its key, intervals, tensions, and the pages that
+// work a thing out (the chord of the keys played, a melody note's chords, passing chords, a progression).
 
 // Chords
 export type ChordsStepId = `chords:${ChordFamily}`
@@ -120,7 +126,12 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   keysPlay: 'chords',
   arpeggio: false,
 }
-const isScaleShow = isOneOf<ScaleView['show']>(['scale', 'chords'])
+/** The views a scale has: its run, its chords with seven notes, its key where it is a key's scale. */
+const scaleShows = (kind: ScaleKind): readonly ScaleShow[] => [
+  'scale',
+  ...(scaleHasChords(kind) ? (['chords'] as const) : []),
+  ...(keyMode(kind) === null ? [] : (['key'] as const)),
+]
 const isKeysPlay = isOneOf<ScaleView['keysPlay']>(['chords', 'notes'])
 const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
 const isChordNotes = isOneOf(CHORD_NOTES)
@@ -147,9 +158,7 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
   return {
     root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
     kind,
-    show: scaleHasChords(kind)
-      ? valueOr(isScaleShow, raw.show, SCALES_DEFAULTS.show)
-      : SCALES_DEFAULTS.show,
+    show: valueOr(isOneOf(scaleShows(kind)), raw.show, SCALES_DEFAULTS.show),
     start,
     fingering: chosenFingering(kind, start - 1, raw.fingering),
     fingers: valueOr(isScaleFingers, raw.fingers, SCALES_DEFAULTS.fingers),
@@ -172,21 +181,7 @@ export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = [
   'hands',
 ]
 
-// Keys: a key as the circle spells it.
-export const KEYS_DEFAULTS: KeyView = { key: C_MAJOR_PARAM, chords: 3, inversion: 0 }
-const isKeyChords = isOneOf<KeyView['chords']>([3, 4])
-export function readKeysSearch(raw: Raw): KeyView {
-  const key = typeof raw.key === 'string' ? parseKey(raw.key) : null
-  const chords = valueOr(isKeyChords, raw.chords, KEYS_DEFAULTS.chords)
-  return {
-    key: key ? keyParam(circleKey(pitchClassOf(key.tonic), key.minor)) : KEYS_DEFAULTS.key,
-    chords,
-    inversion: wholeIn(raw.inversion, 0, lastInversion(chords), KEYS_DEFAULTS.inversion),
-  }
-}
-export const keysSearch = routeSearch(readKeysSearch, KEYS_DEFAULTS)
-
-// Intervals: the root in the reference's one spelling for its pitch class.
+// Intervals: the root in the explorer's one spelling for its pitch class.
 export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }
 export function readIntervalsSearch(raw: Raw): IntervalView {
   const read = readNote(raw.root)
@@ -196,7 +191,7 @@ export function readIntervalsSearch(raw: Raw): IntervalView {
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
 
-// Available tensions: the root spelled by the chord's one rule, as the Chords reference's.
+// Available tensions: the root spelled by the chord's one rule, as the Chords explorer's.
 const isTensionChord = isOneOf(TENSION_CHORDS)
 export const TENSIONS_DEFAULTS: TensionView = { root: noteParam(note('C')), chord: 'd7' }
 export function readTensionsSearch(raw: Raw): TensionView {
@@ -217,3 +212,52 @@ export const validateNewPatternSearch = (input: Input<NewPatternSearch>): NewPat
   const raw: Raw = input
   return { from: isPatternRef(raw.from) ? raw.from : undefined }
 }
+
+// Chord finder: the keys chosen, each once, lowest first.
+export const FINDER_DEFAULTS: FinderView = { keys: '' }
+export function readFinderSearch(raw: Raw): FinderView {
+  return { keys: keyListParam(readKeyList(raw.keys)) }
+}
+export const finderSearch = routeSearch(readFinderSearch, FINDER_DEFAULTS)
+
+// Reharmonise: a key, and a melody note spelled in it.
+export const REHARMONISE_DEFAULTS: ReharmoniseView = {
+  key: C_MAJOR_PARAM,
+  note: noteParam(note('E')),
+}
+export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
+  const key = readKey(raw.key) ?? C_MAJOR
+  const melody = readNote(raw.note) ?? note('E')
+  return { key: keyParam(key), note: noteParam(spellInKey(pitchClassOf(melody), key)) }
+}
+export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
+
+// Passing chords: two chords kept as typed (a line says when one cannot be read), and a key.
+/** The most of a chord symbol a field keeps: the longest the table writes, and some. */
+const TYPED_CHORD = 16
+export const PASSING_DEFAULTS: PassingView = { key: C_MAJOR_PARAM, from: 'C', to: 'F' }
+export function readPassingSearch(raw: Raw): PassingView {
+  const key = readKey(raw.key)
+  return {
+    key: key ? keyParam(key) : PASSING_DEFAULTS.key,
+    from: readText(raw.from, PASSING_DEFAULTS.from).slice(0, TYPED_CHORD),
+    to: readText(raw.to, PASSING_DEFAULTS.to).slice(0, TYPED_CHORD),
+  }
+}
+export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
+
+// Progressions: numerals in a key at a chord size; an unread line is the Player's own.
+export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
+  key: C_MAJOR_PARAM,
+  p: PROGRESSION.numerals,
+  size: 'triads',
+}
+export function readProgressionsSearch(raw: Raw): ProgressionsView {
+  const key = readKey(raw.key)
+  return {
+    key: key ? keyParam(key) : PROGRESSIONS_DEFAULTS.key,
+    p: readNumerals(raw.p, PROGRESSIONS_DEFAULTS.p),
+    size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
+  }
+}
+export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)

@@ -18,23 +18,23 @@ const saved = (state: object) => {
 }
 const shelf = (name: string) => screen.getByRole('region', { name })
 
-describe('Learn → Patterns', () => {
-  it('is a reference in Learn, listing the groups, each pattern with its idea', async () => {
+describe('Practice → Patterns', () => {
+  it('opens from Practice’s Accompaniment, listing the groups, each pattern with its idea', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn')
-    await user.click(await screen.findByRole('link', { name: /^Patterns/ }))
+    const { router } = await renderApp('/practice?topic=accompaniment')
+    await user.click(await screen.findByRole('link', { name: 'Patterns' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Patterns' })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/learn/patterns')
+    expect(router.state.location.pathname).toBe('/practice/patterns')
     expect(
       within(shelf('Rhythm styles')).getByRole('link', {
         name: /^Ballad arpeggio A gentle arpeggio over the root and 5th\.$/,
       }),
-    ).toHaveAttribute('href', '/learn/patterns/ballad')
+    ).toHaveAttribute('href', '/practice/patterns/ballad')
     expect(screen.queryByRole('region', { name: 'Favourites' })).not.toBeInTheDocument()
   })
 
   it('lists the learner’s favourites and own first, and the hidden at the end', async () => {
-    await renderApp('/learn/patterns', {
+    await renderApp('/practice/patterns', {
       storage: saved({
         favourites: ['ballad'],
         hidden: ['funk'],
@@ -49,7 +49,7 @@ describe('Learn → Patterns', () => {
     expect(names.at(-1)).toBe('Hidden')
     expect(within(shelf('Your patterns')).getByRole('link', { name: /^Sunday/ })).toHaveAttribute(
       'href',
-      '/learn/patterns/my-1',
+      '/practice/patterns/my-1',
     )
     expect(within(shelf('Hidden')).getByRole('link', { name: /^Funk/ })).toBeInTheDocument()
     expect(within(shelf('Rhythm styles')).queryByRole('link', { name: /^Funk/ })).toBeNull()
@@ -57,11 +57,11 @@ describe('Learn → Patterns', () => {
 
   it('makes a new pattern from its bar', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/patterns')
+    const { router } = await renderApp('/practice/patterns')
     await user.click(await screen.findByRole('link', { name: 'New pattern' }))
     expect(
       await screen.findByRole('heading', { level: 1, name: 'New pattern' }),
     ).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/learn/patterns/new')
+    expect(router.state.location.pathname).toBe('/practice/patterns/new')
   })
 })

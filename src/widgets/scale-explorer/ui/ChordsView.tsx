@@ -92,7 +92,7 @@ export function ChordsView({
           keyPlays={keyPlays}
           outlined={new Set(holding.map((chord) => chord.key))}
           onKeyPress={listening ? hear : undefined}
-          className="lg:order-first lg:col-span-2"
+          className="order-first lg:col-span-2"
         />
       }
     >

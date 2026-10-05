@@ -2,7 +2,7 @@ import type { Interval, IntervalName } from './interval'
 import { plainSemitones } from './note'
 
 /**
- * The Intervals reference's cards: the thirteen within the octave, then the compound intervals a
+ * The Intervals explorer's cards: the thirteen within the octave, then the compound intervals a
  * chord symbol names (♭9, 9, #9, 11, #11, ♭13, 13).
  */
 export const INTERVAL_GROUPS = {
@@ -11,7 +11,7 @@ export const INTERVAL_GROUPS = {
 } as const satisfies Record<string, readonly IntervalName[]>
 export type IntervalGroup = keyof typeof INTERVAL_GROUPS
 export const INTERVAL_GROUP_IDS = ['simple', 'compound'] as const satisfies readonly IntervalGroup[]
-/** An interval the reference writes a card for. */
+/** An interval the explorer writes a card for. */
 export type ReferenceInterval = (typeof INTERVAL_GROUPS)[IntervalGroup][number]
 
 export const CONSONANCES = ['perfect', 'imperfect', 'dissonance'] as const

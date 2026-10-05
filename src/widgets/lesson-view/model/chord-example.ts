@@ -16,7 +16,7 @@ const nearMiddleC = (pc: PitchClass): Midi => midi(MIDDLE_C + (pc > 5 ? pc - 12 
 
 /**
  * A chord symbol from a lesson on the keys, each chord tone marked by role and degree. A chord is
- * placed as the Chords reference places it (root position from middle C); over a bass that is one of
+ * placed as the Chords explorer places it (root position from middle C); over a bass that is one of
  * its tones, in that inversion, stacked from the bass nearest middle C, as the lessons teach it (C/E
  * is E G C; from C E G the nearest F/C is C F A); over any other bass, in root position with the
  * bass in the octave below.

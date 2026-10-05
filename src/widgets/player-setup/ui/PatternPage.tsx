@@ -12,14 +12,14 @@ import {
   useShelfName,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
-import { LEARN_TILES, RowLink } from '@/shared/ui'
+import { PAGE_TILES, RowLink } from '@/shared/ui'
 import { ListPage } from './ListPage'
 
 /**
  * The sheet's page of patterns: From the chart first where the chart names its methods, then the
  * learner's favourites and own patterns and the built-in groups, the hidden left out but for the one
  * playing. A row is a name and its idea in a line; a pattern the music cannot play is closed with what
- * it needs. At the foot, the way to Learn's Patterns, where each is explained and the list is kept.
+ * it needs. At the foot, the way to the Patterns page, where each is explained and the list is kept.
  */
 export function PatternPage({
   value,
@@ -75,9 +75,9 @@ export function PatternPage({
       ]}
     >
       <RowLink
-        title={t('patternsInLearn')}
-        {...LEARN_TILES.patterns}
-        render={<Link to="/learn/patterns" />}
+        title={t('allPatterns')}
+        {...PAGE_TILES.patterns}
+        render={<Link to="/practice/patterns" />}
       />
     </ListPage>
   )

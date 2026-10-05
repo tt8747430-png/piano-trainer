@@ -28,8 +28,11 @@ export const player = {
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
-  /** The picker's way to Learn's Patterns, where they are explained, starred, hidden and made. */
-  patternsInLearn: 'Patterns in Learn',
+  /** A changed hand's way back. */
+  ownFigureOf: '{{hand}}: back to the pattern’s own',
+  playing: 'How it plays',
+  /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
+  allPatterns: 'All patterns',
   /** The right hand's chord: each nearest the last, or one inversion every time. */
   inversion: { nearest: 'Nearest', own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */

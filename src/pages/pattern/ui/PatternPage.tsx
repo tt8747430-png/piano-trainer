@@ -64,7 +64,7 @@ function BuiltInActions({ id }: { id: PatternId }) {
     <>
       <ButtonLink
         variant="outline"
-        render={<Link to="/learn/patterns/new" search={{ from: id }} />}
+        render={<Link to="/practice/patterns/new" search={{ from: id }} />}
       >
         {t('patterns.makeOwn')}
       </ButtonLink>
@@ -86,13 +86,15 @@ function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
   const [asking, setAsking] = useState(false)
   const remove = () => {
     // Leave the page first: it has nothing to show once the pattern is gone.
-    void navigate({ to: '/learn/patterns', replace: true }).then(() => deleteOwnPattern(store, id))
+    void navigate({ to: '/practice/patterns', replace: true }).then(() =>
+      deleteOwnPattern(store, id),
+    )
   }
   return (
     <>
       <ButtonLink
         variant="outline"
-        render={<Link to="/learn/patterns/$patternRef/edit" params={{ patternRef: id }} />}
+        render={<Link to="/practice/patterns/$patternRef/edit" params={{ patternRef: id }} />}
       >
         {t('patterns.edit')}
       </ButtonLink>
@@ -133,7 +135,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={name}
-        back={<BackButton fallback={{ to: '/learn/patterns' }} />}
+        back={<BackButton fallback={{ to: '/practice/patterns' }} />}
         actions={<FavouriteButton pattern={pattern} />}
       />
       <ExplorerKeyboard shown={shown} />
@@ -190,14 +192,14 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
 /** A pattern's page: the route's pattern, built-in or the learner's own (gone once deleted in another tab). */
 export function PatternPage() {
   const { t } = useTranslation('common')
-  const { patternRef } = useParams({ from: '/shell/learn/patterns/$patternRef' })
+  const { patternRef } = useParams({ from: '/shell/practice/patterns/$patternRef' })
   const book = usePatternBook()
   const pattern = isPatternRef(patternRef) ? book.get(patternRef) : undefined
   return pattern ? (
     <PatternView key={pattern.ref} pattern={pattern} book={book} />
   ) : (
     <NotFound>
-      <ButtonLink render={<Link to="/learn/patterns" />}>{t('notFound.toPatterns')}</ButtonLink>
+      <ButtonLink render={<Link to="/practice/patterns" />}>{t('notFound.toPatterns')}</ButtonLink>
     </NotFound>
   )
 }

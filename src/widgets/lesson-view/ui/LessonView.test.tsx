@@ -209,10 +209,10 @@ describe('LessonView’s worksheet', () => {
   it('links into the references on what it names', async () => {
     await renderLesson(WORKSHEET)
     expect(screen.getByRole('link', { name: 'D Dorian in Scales' }).getAttribute('href')).toBe(
-      '/learn/scales?root=D&kind=dorian',
+      '/practice/scales?root=D&kind=dorian',
     )
     const chords = screen.getByRole('link', { name: 'Cm7 in Chords' }).getAttribute('href') ?? ''
-    expect(chords).toMatch(/^\/learn\/chords\?/)
+    expect(chords).toMatch(/^\/practice\/chords\?/)
     expect(chords).toMatch(/[?&]triad=min(&|$)/)
     expect(chords).toMatch(/[?&]size=7(&|$)/)
   })
@@ -277,7 +277,7 @@ describe('LessonView’s accompaniment', () => {
         .map((button) => button.textContent),
     ).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
     const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
-    expect(tool).toMatch(/^\/learn\/progressions\?/)
+    expect(tool).toMatch(/^\/practice\/progressions\?/)
     expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)
     expect(tool).toMatch(/[?&]key=C(&|$)/)
     expect(tool).toMatch(/[?&]size=sevenths(&|$)/)
@@ -286,11 +286,11 @@ describe('LessonView’s accompaniment', () => {
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
     const passing = screen.getByRole('link', { name: 'C to F in Passing chords' })
-    expect(passing.getAttribute('href')).toMatch(/^\/learn\/passing-chords\?/)
+    expect(passing.getAttribute('href')).toMatch(/^\/practice\/passing-chords\?/)
     expect(passing.getAttribute('href')).toMatch(/[?&]from=C(&|$)/)
     expect(passing.getAttribute('href')).toMatch(/[?&]to=F(&|$)/)
     const reharmonise = screen.getByRole('link', { name: 'E in Reharmonise' }).getAttribute('href')
-    expect(reharmonise).toMatch(/^\/learn\/reharmonise\?/)
+    expect(reharmonise).toMatch(/^\/practice\/reharmonise\?/)
     expect(reharmonise).toMatch(/[?&]note=E(&|$)/)
     expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
       '/play/otche?pattern=r4',

@@ -25,19 +25,24 @@ import { RoutePending } from './RoutePending'
 import {
   CHORDS_KEPT,
   chordsSearch,
+  finderSearch,
   intervalsSearch,
-  keysSearch,
-  learnSearch,
+  passingSearch,
+  progressionsSearch,
   readChordsSearch,
+  readFinderSearch,
   readIntervalsSearch,
-  readKeysSearch,
+  readPassingSearch,
+  readProgressionsSearch,
+  readReharmoniseSearch,
   readScalesSearch,
   readTensionsSearch,
+  reharmoniseSearch,
   SCALES_KEPT,
   scalesSearch,
   tensionsSearch,
   validateNewPatternSearch,
-} from './routes/learn-search'
+} from './routes/explorer-search'
 import {
   CHROMATIC_KEPT,
   chromaticSearch,
@@ -56,19 +61,15 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
+import {
+  practiceSearch,
+  readPracticeSearch,
+  readTrainerSearch,
+  trainerSearch,
+  validateCheckSearch,
+} from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
-import {
-  finderSearch,
-  passingSearch,
-  progressionsSearch,
-  readFinderSearch,
-  readPassingSearch,
-  readProgressionsSearch,
-  readReharmoniseSearch,
-  reharmoniseSearch,
-} from './routes/tools-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -79,6 +80,7 @@ const settingsScreens = () => import('./routes/settings-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const learnScreens = () => import('./routes/learn-screens')
+const explorerScreens = () => import('./routes/explorer-screens')
 const practiceScreens = () => import('./routes/practice-screens')
 
 /** An unknown address keeps the main navigation, so the learner is never stranded. */
@@ -139,10 +141,13 @@ const pieceRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-// Practice, and the studies and progressions that are practised there.
+// Practice by topic, which comes back on the topic it was left on; the trainers, and the studies and
+// progressions that are practised there.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
+  ...practiceSearch,
+  ...remembered(readPracticeSearch, []),
   component: lazyRouteComponent(practiceScreens, 'PracticePage'),
 })
 // A trainer: each remembers its own level, rounds and Custom, under its own path.
@@ -180,82 +185,75 @@ const progressionRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-// Learn: its lessons and references.
+// Learn: its lessons.
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn',
-  ...learnSearch,
   component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
+// What Practice explores with: each page shows a thing on the keys or works it out.
 const chordsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/chords',
+  path: '/practice/chords',
   ...chordsSearch,
   ...remembered(readChordsSearch, CHORDS_KEPT),
-  component: lazyRouteComponent(learnScreens, 'ChordsPage'),
+  component: lazyRouteComponent(explorerScreens, 'ChordsPage'),
 })
 const scalesRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/scales',
+  path: '/practice/scales',
   ...scalesSearch,
   ...remembered(readScalesSearch, SCALES_KEPT),
-  component: lazyRouteComponent(learnScreens, 'ScalesPage'),
-})
-const keysRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/learn/keys',
-  ...keysSearch,
-  ...remembered(readKeysSearch, []),
-  component: lazyRouteComponent(learnScreens, 'KeysPage'),
+  component: lazyRouteComponent(explorerScreens, 'ScalesPage'),
 })
 const intervalsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/intervals',
+  path: '/practice/intervals',
   ...intervalsSearch,
   ...remembered(readIntervalsSearch, []),
-  component: lazyRouteComponent(learnScreens, 'IntervalsPage'),
+  component: lazyRouteComponent(explorerScreens, 'IntervalsPage'),
 })
 const tensionsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/tensions',
+  path: '/practice/tensions',
   ...tensionsSearch,
   ...remembered(readTensionsSearch, []),
-  component: lazyRouteComponent(learnScreens, 'TensionsPage'),
+  component: lazyRouteComponent(explorerScreens, 'TensionsPage'),
 })
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/chord-finder',
+  path: '/practice/chord-finder',
   ...finderSearch,
   ...remembered(readFinderSearch, []),
-  component: lazyRouteComponent(learnScreens, 'ChordFinderPage'),
+  component: lazyRouteComponent(explorerScreens, 'ChordFinderPage'),
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/reharmonise',
+  path: '/practice/reharmonise',
   ...reharmoniseSearch,
   ...remembered(readReharmoniseSearch, []),
-  component: lazyRouteComponent(learnScreens, 'ReharmonisePage'),
+  component: lazyRouteComponent(explorerScreens, 'ReharmonisePage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/passing-chords',
+  path: '/practice/passing-chords',
   ...passingSearch,
   ...remembered(readPassingSearch, []),
-  component: lazyRouteComponent(learnScreens, 'PassingChordsPage'),
+  component: lazyRouteComponent(explorerScreens, 'PassingChordsPage'),
 })
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/progressions',
+  path: '/practice/progressions',
   ...progressionsSearch,
   ...remembered(readProgressionsSearch, []),
-  component: lazyRouteComponent(learnScreens, 'ProgressionsPage'),
+  component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
 // Patterns: each explained, starred, hidden; the learner's own made and edited (ADR 0026).
 const patternsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/patterns',
-  component: lazyRouteComponent(learnScreens, 'PatternsPage'),
+  path: '/practice/patterns',
+  component: lazyRouteComponent(explorerScreens, 'PatternsPage'),
 })
 /** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
 const inBook = (ref: string, patterns: PatternsStore) =>
@@ -263,27 +261,27 @@ const inBook = (ref: string, patterns: PatternsStore) =>
   (!isOwnPatternId(ref) || selectOwnPattern(ref)(patterns.getState()) !== undefined)
 const newPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/patterns/new',
+  path: '/practice/patterns/new',
   validateSearch: validateNewPatternSearch,
-  component: lazyRouteComponent(learnScreens, 'NewPatternPage'),
+  component: lazyRouteComponent(explorerScreens, 'NewPatternPage'),
 })
 const patternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/patterns/$patternRef',
+  path: '/practice/patterns/$patternRef',
   beforeLoad: ({ params, context }) => {
     if (!inBook(params.patternRef, context.patterns)) throw notFound()
   },
-  component: lazyRouteComponent(learnScreens, 'PatternPage'),
+  component: lazyRouteComponent(explorerScreens, 'PatternPage'),
 })
 const editPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/patterns/$patternRef/edit',
+  path: '/practice/patterns/$patternRef/edit',
   beforeLoad: ({ params, context }) => {
     if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
       throw notFound()
     }
   },
-  component: lazyRouteComponent(learnScreens, 'EditPatternPage'),
+  component: lazyRouteComponent(explorerScreens, 'EditPatternPage'),
 })
 
 const lessonRoute = createRoute({
@@ -394,7 +392,6 @@ const routeTree = rootRoute.addChildren([
     learnRoute,
     chordsRoute,
     scalesRoute,
-    keysRoute,
     intervalsRoute,
     tensionsRoute,
     chordFinderRoute,

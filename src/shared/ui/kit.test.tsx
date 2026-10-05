@@ -366,11 +366,11 @@ describe('RowLink', () => {
         detail="Beginner"
         icon={Settings}
         paint="sand"
-        render={<a href="/learn/chords" />}
+        render={<a href="/practice/chords" />}
       />,
     )
     const link = screen.getByRole('link', { name: 'Chords Beginner' })
-    expect(link).toHaveAttribute('href', '/learn/chords')
+    expect(link).toHaveAttribute('href', '/practice/chords')
     expect(link.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sand')
   })
 })

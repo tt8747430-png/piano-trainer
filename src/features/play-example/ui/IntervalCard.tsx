@@ -14,7 +14,7 @@ import { LazyScoreView, PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { intervalExample, tonesText } from '../model/interval-example'
 
-/** A card's staff, a little smaller than a reference's own. */
+/** A card's staff, a little smaller than an explorer's own. */
 const CARD_STAFF = 0.8
 
 /**

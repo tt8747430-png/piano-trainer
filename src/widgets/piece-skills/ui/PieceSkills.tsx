@@ -29,7 +29,7 @@ export function PieceSkills({ piece, performance }: { piece: Piece; performance:
           return (
             <li key={id}>
               <Link
-                to="/learn/chords"
+                to="/practice/chords"
                 search={{
                   ...qualityParams(skill.quality),
                   ...(first ? { root: noteParam(first.root) } : {}),

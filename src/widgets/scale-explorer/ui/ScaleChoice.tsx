@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
 import {
+  keyMode,
   noteFromParam,
   SCALE_FAMILIES,
   scaleHasChords,
@@ -8,11 +9,16 @@ import {
   scaleRootSpelling,
 } from '@/shared/lib/music'
 import { Dropdown, NoteDropdown, Segmented } from '@/shared/ui'
-import type { ScaleView } from '../model/scale-view'
+import { SCALE_SHOWS, type ScaleShow, type ScaleView } from '../model/scale-view'
 
-const SHOW = ['scale', 'chords'] as const
+/** The views a scale has: its run always, its chords with seven notes, its key where it is one's scale. */
+const HAS_SHOW: Readonly<Record<ScaleShow, (kind: ScaleView['kind']) => boolean>> = {
+  scale: () => true,
+  chords: scaleHasChords,
+  key: (kind) => keyMode(kind) !== null,
+}
 
-/** Which scale: its name, its root and kind from pop-up buttons, and Scale · Chords where it has chords. */
+/** Which scale: its name, its root and kind from pop-up buttons, and Scale · Chords · Key, each where the scale has it. */
 export function ScaleChoice({
   scale,
   onChange,
@@ -22,6 +28,7 @@ export function ScaleChoice({
 }) {
   const { t } = useTranslation(['learn', 'music'])
   const scaleName = useScaleName()
+  const shows = SCALE_SHOWS.filter((show) => HAS_SHOW[show](scale.kind))
   return (
     <>
       <h2 className="text-5xl">{scaleName(noteFromParam(scale.root), scale.kind)}</h2>
@@ -45,11 +52,11 @@ export function ScaleChoice({
           onChange={(kind) => onChange({ kind })}
         />
       </div>
-      {scaleHasChords(scale.kind) ? (
+      {shows.length > 1 ? (
         <Segmented
           label={t('learn:show.label')}
           value={scale.show}
-          options={SHOW.map((value) => ({ value, label: t(`learn:show.${value}`) }))}
+          options={shows.map((value) => ({ value, label: t(`learn:show.${value}`) }))}
           onChange={(show) => onChange({ show })}
         />
       ) : null}

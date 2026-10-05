@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import { IN_PLACE } from '@/shared/lib'
 import {
-  keyParam,
   keyScale,
   modesOfKey,
   noteName,
@@ -15,7 +14,7 @@ import {
 } from '@/shared/lib/music'
 import { ButtonLink, Fact } from '@/shared/ui'
 
-/** A key's signature and notes, its relative (a key page) and the modes that share its notes (in Scales). */
+/** A key's signature and notes, its relative (shown as a key too) and the modes that share its notes (each as a scale). */
 export function KeyFacts({ value }: { value: Key }) {
   const { t } = useTranslation('learn')
   const scaleName = useScaleName()
@@ -35,9 +34,13 @@ export function KeyFacts({ value }: { value: Key }) {
           className="px-0"
           render={
             <Link
-              from="/learn/keys"
-              to="/learn/keys"
-              search={(prev) => ({ ...prev, key: keyParam(relative) })}
+              from="/practice/scales"
+              to="/practice/scales"
+              search={(prev) => ({
+                ...prev,
+                root: noteParam(relative.tonic),
+                kind: keyScale(relative),
+              })}
               {...IN_PLACE}
             />
           }
@@ -52,7 +55,7 @@ export function KeyFacts({ value }: { value: Key }) {
               key={kind}
               variant="link"
               className="px-0"
-              render={<Link to="/learn/scales" search={{ root: noteParam(root), kind }} />}
+              render={<Link to="/practice/scales" search={{ root: noteParam(root), kind }} />}
             >
               {scaleName(root, kind)}
             </ButtonLink>

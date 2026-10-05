@@ -34,7 +34,7 @@ export function ProgressionLibrary({ musicKey, size }: { musicKey: Key; size: Ch
                   paint={STEP_PAINT.progression}
                   render={
                     <Link
-                      to="/learn/progressions"
+                      to="/practice/progressions"
                       {...IN_PLACE}
                       search={{
                         key: keyParam({ tonic: musicKey.tonic, minor: each.minor }),

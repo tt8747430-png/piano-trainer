@@ -42,8 +42,8 @@ export function ScaleFacts({
             className="px-0"
             render={
               <Link
-                from="/learn/scales"
-                to="/learn/scales"
+                from="/practice/scales"
+                to="/practice/scales"
                 search={(prev) => ({ ...prev, root: noteParam(related.root), kind: related.kind })}
                 {...IN_PLACE}
               />

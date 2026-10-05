@@ -15,7 +15,7 @@ import { useFindingSaid } from './use-finding-said'
 
 /**
  * The Chord finder: keys tapped on (or held on a MIDI keyboard) are named as a chord, each key marked
- * by its degree in it; played, cleared, or opened in the Chords reference.
+ * by its degree in it; played, cleared, or opened in the Chords explorer.
  */
 export function ChordFinder({
   view,
@@ -68,7 +68,7 @@ export function ChordFinder({
             variant="soft"
             render={
               <Link
-                to="/learn/chords"
+                to="/practice/chords"
                 search={{
                   root: noteParam(best.chord.root),
                   ...partsParams(best.parts),

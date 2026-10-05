@@ -5,14 +5,13 @@ import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   INTERVALS_DEFAULTS,
-  KEYS_DEFAULTS,
-  LEARN_DEFAULTS,
+  PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
   TENSIONS_DEFAULTS,
-} from './learn-search'
+} from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
+import { PRACTICE_DEFAULTS } from './practice-search'
 import { SONGS_DEFAULTS } from './songs-search'
-import { PROGRESSIONS_DEFAULTS } from './tools-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
@@ -27,16 +26,15 @@ async function searchAt(url: string) {
 describe('search params', () => {
   it('fill every default for an empty URL', async () => {
     expect(await searchAt('/songs')).toEqual(SONGS_DEFAULTS)
-    expect(await searchAt('/learn/chords')).toEqual(CHORDS_DEFAULTS)
-    expect(await searchAt('/learn/scales')).toEqual(SCALES_DEFAULTS)
+    expect(await searchAt('/practice/chords')).toEqual(CHORDS_DEFAULTS)
+    expect(await searchAt('/practice/scales')).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
     expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
-    expect(await searchAt('/learn/keys')).toEqual(KEYS_DEFAULTS)
-    expect(await searchAt('/learn/intervals')).toEqual(INTERVALS_DEFAULTS)
-    expect(await searchAt('/learn/tensions')).toEqual(TENSIONS_DEFAULTS)
-    expect(await searchAt('/learn')).toEqual(LEARN_DEFAULTS)
-    expect(await searchAt('/learn/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
+    expect(await searchAt('/practice/intervals')).toEqual(INTERVALS_DEFAULTS)
+    expect(await searchAt('/practice/tensions')).toEqual(TENSIONS_DEFAULTS)
+    expect(await searchAt('/practice')).toEqual(PRACTICE_DEFAULTS)
+    expect(await searchAt('/practice/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
   })
 
@@ -48,7 +46,7 @@ describe('search params', () => {
   it('keep what is valid', async () => {
     expect(
       await searchAt(
-        '/learn/chords?root=Bb&triad=min&size=9&seventh=major&inversion=2&hands=both&step=chords:sev',
+        '/practice/chords?root=Bb&triad=min&size=9&seventh=major&inversion=2&hands=both&step=chords:sev',
       ),
     ).toEqual({
       root: 'Bb',
@@ -61,11 +59,11 @@ describe('search params', () => {
       hands: 'both',
       step: 'chords:sev',
     })
-    expect(await searchAt('/learn/chords?size=13&alter=b9s11')).toMatchObject({
+    expect(await searchAt('/practice/chords?size=13&alter=b9s11')).toMatchObject({
       size: 13,
       alter: 'b9s11',
     })
-    expect(await searchAt('/learn/chords?triad=min&added=add9')).toMatchObject({
+    expect(await searchAt('/practice/chords?triad=min&added=add9')).toMatchObject({
       triad: 'min',
       added: 'add9',
     })
@@ -86,12 +84,11 @@ describe('search params', () => {
       lh: 'o',
       chordSize: 'ninths',
     })
-    expect(await searchAt('/songs?q=душа&collection=hymns&level=1')).toEqual({
+    expect(await searchAt('/songs?q=душа&collection=hymns')).toEqual({
       q: 'душа',
       collection: 'hymns',
-      level: 1,
     })
-    expect(await searchAt('/learn/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
+    expect(await searchAt('/practice/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
       root: 'Eb',
       kind: 'harmonic',
       chords: 4,
@@ -111,51 +108,53 @@ describe('search params', () => {
     expect(await searchAt('/play/bz5?loop=x&speedTraining=1')).toEqual(PLAYER_DEFAULTS)
     expect(
       await searchAt(
-        '/learn/chords?triad=maj13&size=6&seventh=7&added=6&alter=x&inversion=7&step=scale:major',
+        '/practice/chords?triad=maj13&size=6&seventh=7&added=6&alter=x&inversion=7&step=scale:major',
       ),
     ).toEqual(CHORDS_DEFAULTS)
-    expect(await searchAt('/learn/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
-    expect(await searchAt('/learn/chords?inversion=3')).toMatchObject({ inversion: 0 })
-    expect(await searchAt('/learn/scales?kind=ionian&tempo=10&chords=9&step=chords:tri')).toEqual(
-      SCALES_DEFAULTS,
-    )
-    expect(await searchAt('/songs?collection=psalms&level=9')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/practice/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
+    expect(await searchAt('/practice/chords?inversion=3')).toMatchObject({ inversion: 0 })
+    expect(
+      await searchAt('/practice/scales?kind=ionian&tempo=10&chords=9&step=chords:tri'),
+    ).toEqual(SCALES_DEFAULTS)
+    expect(await searchAt('/songs?collection=psalms')).toEqual(SONGS_DEFAULTS)
     expect(await searchAt('/songs?collection=studies')).toEqual(SONGS_DEFAULTS)
   })
 
   it('read the Scales fingers, none by default, and ignore an old link’s view', async () => {
     expect(SCALES_DEFAULTS.fingers).toBe('none')
-    expect(await searchAt('/learn/scales?fingers=rh')).toMatchObject({ fingers: 'rh' })
-    expect(await searchAt('/learn/scales?fingers=x')).toMatchObject({ fingers: 'none' })
-    expect(await searchAt('/learn/scales?view=rh')).toMatchObject({ fingers: 'none' })
+    expect(await searchAt('/practice/scales?fingers=rh')).toMatchObject({ fingers: 'rh' })
+    expect(await searchAt('/practice/scales?fingers=x')).toMatchObject({ fingers: 'none' })
+    expect(await searchAt('/practice/scales?view=rh')).toMatchObject({ fingers: 'none' })
   })
 
   it('read the Scales start and a chosen fingering, dropping one the run cannot take or takes itself', async () => {
-    expect(await searchAt('/learn/scales?start=3&fingering=scale')).toMatchObject({
+    expect(await searchAt('/practice/scales?start=3&fingering=scale')).toMatchObject({
       start: 3,
       fingering: 'scale',
     })
-    expect(await searchAt('/learn/scales?start=9')).toMatchObject({ start: 1 })
-    expect(await searchAt('/learn/scales?fingering=scale')).toMatchObject({ fingering: undefined })
-    expect(await searchAt('/learn/scales?kind=blues&start=3&fingering=scale')).toMatchObject({
+    expect(await searchAt('/practice/scales?start=9')).toMatchObject({ start: 1 })
+    expect(await searchAt('/practice/scales?fingering=scale')).toMatchObject({
+      fingering: undefined,
+    })
+    expect(await searchAt('/practice/scales?kind=blues&start=3&fingering=scale')).toMatchObject({
       fingering: undefined,
     })
   })
 
   it('read the Chords view’s size, inversion and walk, an inversion kept within the size', async () => {
     expect(
-      await searchAt('/learn/scales?show=chords&chords=6&inversion=2&arpeggio=true'),
+      await searchAt('/practice/scales?show=chords&chords=6&inversion=2&arpeggio=true'),
     ).toMatchObject({ chords: 6, inversion: 2, arpeggio: true })
-    expect(await searchAt('/learn/scales?chords=3&inversion=3')).toMatchObject({ inversion: 0 })
-    expect(await searchAt('/learn/scales?kind=blues&chords=6')).toMatchObject({ chords: 3 })
+    expect(await searchAt('/practice/scales?chords=3&inversion=3')).toMatchObject({ inversion: 0 })
+    expect(await searchAt('/practice/scales?kind=blues&chords=6')).toMatchObject({ chords: 3 })
   })
 
   it('fit a chord’s parts to one another', async () => {
-    expect(await searchAt('/learn/chords?triad=sus2&size=13&alter=b9')).toMatchObject({
+    expect(await searchAt('/practice/chords?triad=sus2&size=13&alter=b9')).toMatchObject({
       size: 7,
       alter: '',
     })
-    expect(await searchAt('/learn/chords?size=7&added=six&alter=b5s11')).toMatchObject({
+    expect(await searchAt('/practice/chords?size=7&added=six&alter=b5s11')).toMatchObject({
       added: 'none',
       alter: 'b5',
     })
@@ -184,55 +183,59 @@ describe('search params', () => {
     expect(await searchAt('/play/chromatic?chords=')).toEqual(CHROMATIC_DEFAULTS)
   })
 
-  it('read a Keys key as the circle spells it, and its chords within their inversions', async () => {
-    expect(await searchAt('/learn/keys?key=Bb&chords=4&inversion=3')).toEqual({
-      key: 'Bb',
-      chords: 4,
-      inversion: 3,
+  it('read a scale’s Key view only where the scale is a key’s, and Chords only with seven notes', async () => {
+    expect(await searchAt('/practice/scales?show=key')).toMatchObject({ show: 'key' })
+    expect(await searchAt('/practice/scales?kind=harmonic&show=key')).toMatchObject({ show: 'key' })
+    expect(await searchAt('/practice/scales?kind=dorian&show=key')).toMatchObject({ show: 'scale' })
+    expect(await searchAt('/practice/scales?kind=dorian&show=chords')).toMatchObject({
+      show: 'chords',
     })
-    expect(await searchAt('/learn/keys?key=Ebm')).toMatchObject({ key: 'D#m' })
-    expect(await searchAt('/learn/keys?key=H&chords=5&inversion=3')).toEqual(KEYS_DEFAULTS)
+    expect(await searchAt('/practice/scales?kind=pent&show=chords')).toMatchObject({
+      show: 'scale',
+    })
+  })
+
+  it('read Practice’s topic, an unknown one as the first', async () => {
+    expect(await searchAt('/practice?topic=technique')).toEqual({ topic: 'technique' })
+    expect(await searchAt('/practice?topic=cooking')).toEqual(PRACTICE_DEFAULTS)
   })
 
   it('spell a root the way its explorer names it', async () => {
-    expect(await searchAt('/learn/chords?root=A%23')).toMatchObject({ root: 'Bb' })
-    expect(await searchAt('/learn/chords?root=Db&triad=min')).toMatchObject({ root: 'C#' })
+    expect(await searchAt('/practice/chords?root=A%23')).toMatchObject({ root: 'Bb' })
+    expect(await searchAt('/practice/chords?root=Db&triad=min')).toMatchObject({ root: 'C#' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })
   })
 
   it('read the Scales view, falling back to the scale view where a scale has no chords', async () => {
     expect(SCALES_DEFAULTS).toMatchObject({ show: 'scale', keysPlay: 'chords' })
-    expect(await searchAt('/learn/scales?show=chords&keysPlay=notes')).toMatchObject({
+    expect(await searchAt('/practice/scales?show=chords&keysPlay=notes')).toMatchObject({
       show: 'chords',
       keysPlay: 'notes',
     })
-    expect(await searchAt('/learn/scales?kind=blues&show=chords')).toMatchObject({ show: 'scale' })
-    expect(await searchAt('/learn/scales?show=x&keysPlay=x')).toMatchObject({
+    expect(await searchAt('/practice/scales?kind=blues&show=chords')).toMatchObject({
+      show: 'scale',
+    })
+    expect(await searchAt('/practice/scales?show=x&keysPlay=x')).toMatchObject({
       show: 'scale',
       keysPlay: 'chords',
     })
   })
 
   it('respell an interval’s root as the reference spells it', async () => {
-    expect(await searchAt('/learn/intervals?root=C%23')).toEqual({ root: 'Db' })
-    expect(await searchAt('/learn/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
+    expect(await searchAt('/practice/intervals?root=C%23')).toEqual({ root: 'Db' })
+    expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
 
   it('respell a tension chord’s root by the chord, and fall back from an unknown chord', async () => {
-    expect(await searchAt('/learn/tensions?chord=m7&root=Db')).toEqual({ chord: 'm7', root: 'C#' })
-    expect(await searchAt('/learn/tensions?chord=maj7&root=C%23')).toEqual({
+    expect(await searchAt('/practice/tensions?chord=m7&root=Db')).toEqual({
+      chord: 'm7',
+      root: 'C#',
+    })
+    expect(await searchAt('/practice/tensions?chord=maj7&root=C%23')).toEqual({
       chord: 'maj7',
       root: 'Db',
     })
-    expect(await searchAt('/learn/tensions?chord=n9')).toEqual(TENSIONS_DEFAULTS)
-  })
-
-  it('keep a lesson filter’s level and category, and drop what no lesson has', async () => {
-    expect(await searchAt('/learn?level=2&category=scales')).toEqual({
-      level: 2,
-      category: 'scales',
-    })
-    expect(await searchAt('/learn?level=9&category=cooking')).toEqual(LEARN_DEFAULTS)
+    expect(await searchAt('/practice/tensions?chord=n9')).toEqual(TENSIONS_DEFAULTS)
   })
 
   it('keep a number typed as a search, which the router reads as a number', async () => {
@@ -240,11 +243,13 @@ describe('search params', () => {
   })
 
   it('write a progression’s numerals one way, and take the default for a line that cannot be read', async () => {
-    expect(await searchAt('/learn/progressions?p=ii7%20V7%20IMaj7&key=Am&size=sevenths')).toEqual({
+    expect(
+      await searchAt('/practice/progressions?p=ii7%20V7%20IMaj7&key=Am&size=sevenths'),
+    ).toEqual({
       p: 'ii7-V7-IMaj7',
       key: 'Am',
       size: 'sevenths',
     })
-    expect(await searchAt('/learn/progressions?p=Q')).toEqual(PROGRESSIONS_DEFAULTS)
+    expect(await searchAt('/practice/progressions?p=Q')).toEqual(PROGRESSIONS_DEFAULTS)
   })
 })

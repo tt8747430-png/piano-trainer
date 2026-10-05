@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { EXERCISE_GROUPS, exercisesIn, type ExerciseGroup } from '@/entities/exercise'
+import { exercisesIn, type ExerciseGroup } from '@/entities/exercise'
 import { RowGroup, type Paint } from '@/shared/ui'
 import { ExerciseRow } from './ExerciseRow'
 
@@ -24,12 +24,12 @@ const GROUP_TILE = {
   technique: { icon: Hand, paint: 'yellow' },
 } as const satisfies Record<ExerciseGroup, { icon: LucideIcon; paint: Paint }>
 
-/** Practice's exercises, a titled group each, every row opening its exercise in the Player. */
-export function ExerciseList() {
+/** A topic's exercises, a titled group each, every row opening its exercise in the Player. */
+export function ExerciseList({ groups }: { groups: readonly ExerciseGroup[] }) {
   const { t } = useTranslation('practice')
   return (
     <>
-      {EXERCISE_GROUPS.map((group) => (
+      {groups.map((group) => (
         <RowGroup key={group} title={t(`groups.${group}`)}>
           {exercisesIn(group).map((exercise) => (
             <li key={exercise.id}>

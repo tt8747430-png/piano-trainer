@@ -12,9 +12,9 @@ const chords = (group: string) =>
 const notes = (sounds: readonly Sound[] = []) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))
 
-describe('Learn → Reharmonise', () => {
+describe('Practice → Reharmonise', () => {
   it('lists the triads that hold E, the ones of C major marked', async () => {
-    await renderApp('/learn/reharmonise')
+    await renderApp('/practice/reharmonise')
     await screen.findByRole('region', { name: 'Triads' })
     expect(chords('Triads')).toEqual([
       'Eas 1',
@@ -28,7 +28,7 @@ describe('Learn → Reharmonise', () => {
 
   it('takes a melody note from the pop-up, kept in the URL, and gives the owner’s table', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/reharmonise')
+    const { router } = await renderApp('/practice/reharmonise')
     await user.click(await screen.findByRole('combobox', { name: 'Melody note' }))
     await user.click(await screen.findByRole('option', { name: 'G' }))
     expect(router.state.location.search).toEqual({ note: 'G' })
@@ -38,7 +38,7 @@ describe('Learn → Reharmonise', () => {
 
   it('takes a melody note tapped on the keys', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/reharmonise')
+    const { router } = await renderApp('/practice/reharmonise')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
     expect(router.state.location.search).toEqual({ note: 'A' })
@@ -47,7 +47,7 @@ describe('Learn → Reharmonise', () => {
   it('names a tapped note on the key tapped, the keys held still', async () => {
     const user = userEvent.setup()
     const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
-    await renderApp('/learn/reharmonise')
+    await renderApp('/practice/reharmonise')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     // The hand has scrolled down to F♯2 (white key 14 of 52, 28px each).
     const scroller = keyboard.closest('[data-slot="keys-scroller"]')
@@ -61,7 +61,7 @@ describe('Learn → Reharmonise', () => {
 
   it('plays a chord under the melody note and shows it on the keys', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/reharmonise?note=G')
+    const { audio } = await renderApp('/practice/reharmonise?note=G')
     const major = await screen.findByRole('region', { name: 'Major 7ths' })
     const fMaj9 = within(major)
       .getAllByRole('button')
@@ -73,7 +73,7 @@ describe('Learn → Reharmonise', () => {
   })
 
   it('speaks Russian', async () => {
-    await renderApp('/learn/reharmonise', { locale: 'ru' })
+    await renderApp('/practice/reharmonise', { locale: 'ru' })
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Гармонизация мелодии' }),
     ).toBeInTheDocument()

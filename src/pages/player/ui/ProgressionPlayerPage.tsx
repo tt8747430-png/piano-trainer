@@ -18,7 +18,7 @@ export function ProgressionPlayerPage() {
     setSearch,
   )
   const close = useGoBack({
-    to: '/learn/progressions',
+    to: '/practice/progressions',
     search: { p: search.p, key: search.key, size: choice.chordSize },
   })
   const keyName = useKeyName()

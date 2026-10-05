@@ -8,7 +8,7 @@ import { StepPanel } from '@/widgets/step-panel'
 /** The Chords reference: any chord on any root, with its path step's panel when opened from one. */
 export function ChordsPage() {
   const { t } = useTranslation('learn')
-  const { step, ...chord } = useSearch({ from: '/shell/learn/chords' })
+  const { step, ...chord } = useSearch({ from: '/shell/practice/chords' })
   const onChange = useViewChange<ChordView>()
   return (
     <div className="flex flex-col gap-6">

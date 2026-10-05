@@ -15,7 +15,7 @@ const keys = (...numbers: number[]) => numbers.map((n) => midi(n))
 const E_MINOR = quizAnswer({ chord: 'Em' })
 
 describe('quizAnswer', () => {
-  it('places a chord answer as the Chords reference does, each tone by role', () => {
+  it('places a chord answer as the Chords explorer does, each tone by role', () => {
     expect(E_MINOR.keys).toEqual([64, 67, 71])
     expect(E_MINOR.marks.get(midi(67))).toEqual({ tone: '3rd', label: '♭3' })
   })

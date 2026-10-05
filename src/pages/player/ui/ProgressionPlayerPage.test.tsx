@@ -80,7 +80,7 @@ describe('A progression in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=Bb')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    expect(router.state.location.pathname).toBe('/learn/progressions')
+    expect(router.state.location.pathname).toBe('/practice/progressions')
     expect(router.state.location.search).toMatchObject({ p: 'ii-V-I', key: 'Bb' })
   })
 
@@ -131,7 +131,7 @@ describe('A progression in the Player', () => {
       expect(within(list).queryByRole('option', { name: /^Funk/ })).toBeNull()
       expect(screen.getByRole('link', { name: /^Patterns in Learn/ })).toHaveAttribute(
         'href',
-        '/learn/patterns',
+        '/practice/patterns',
       )
     })
 

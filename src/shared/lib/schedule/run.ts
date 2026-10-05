@@ -36,7 +36,7 @@ export interface RunOptions {
 
 /**
  * A scale's notes up and back down in 8ths of a practice rhythm, for one hand or both (the left an
- * octave down), as timed music in 4/4: what the Scales reference plays and writes. Coming down, each
+ * octave down), as timed music in 4/4: what the Scales explorer plays and writes. Coming down, each
  * note keeps its finger.
  */
 export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {

@@ -22,7 +22,7 @@ const HEARD = ownPatternId(1)
 export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
-  const cancel = useGoBack({ to: '/learn/patterns' })
+  const cancel = useGoBack({ to: '/practice/patterns' })
   const [draft, setDraft] = useState(start)
   const change = (part: Partial<OwnPatternDraft>) => setDraft((was) => ({ ...was, ...part }))
   const { rh, lh } = draft
@@ -33,7 +33,7 @@ export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
     const saved = saveOwnPattern(store, draft, id)
     if (!saved) return
     void navigate({
-      to: '/learn/patterns/$patternRef',
+      to: '/practice/patterns/$patternRef',
       params: { patternRef: saved },
       replace: true,
     })

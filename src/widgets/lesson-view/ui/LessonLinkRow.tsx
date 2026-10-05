@@ -3,13 +3,13 @@ import { CirclePlay } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
 import { STEP_PAINT } from '@/entities/path'
 import { pieceById } from '@/entities/piece'
-import { keyParam, noteParam, numeralsParam, parseChordSymbol } from '@/shared/lib/music'
+import { keyParam, keyScale, noteParam, numeralsParam, parseChordSymbol } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
-import { LEARN_TILES, RowLink } from '@/shared/ui'
+import { PAGE_TILES, RowLink } from '@/shared/ui'
 
 /**
- * A row leading to what a lesson names, in the reference, tool or Player that shows it, with the tile
- * Learn gives that page.
+ * A row leading to what a lesson names, on the page or in the Player that shows it, with that page's
+ * own tile.
  */
 export function LessonLinkRow({ title, target }: { title: string; target: LessonLink }) {
   switch (target.place) {
@@ -18,10 +18,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.chords}
+          {...PAGE_TILES.chords}
           render={
             <Link
-              to="/learn/chords"
+              to="/practice/chords"
               search={{ root: noteParam(chord.root), ...qualityParams(chord.quality) }}
             />
           }
@@ -32,10 +32,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.scales}
+          {...PAGE_TILES.scales}
           render={
             <Link
-              to="/learn/scales"
+              to="/practice/scales"
               search={{
                 root: noteParam(target.root),
                 kind: target.scale,
@@ -49,18 +49,27 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.keys}
-          render={<Link to="/learn/keys" search={{ key: keyParam(target.key) }} />}
+          {...PAGE_TILES.keys}
+          render={
+            <Link
+              to="/practice/scales"
+              search={{
+                root: noteParam(target.key.tonic),
+                kind: keyScale(target.key),
+                show: 'key',
+              }}
+            />
+          }
         />
       )
     case 'intervals':
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.intervals}
+          {...PAGE_TILES.intervals}
           render={
             <Link
-              to="/learn/intervals"
+              to="/practice/intervals"
               search={target.root ? { root: noteParam(target.root) } : {}}
             />
           }
@@ -70,10 +79,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.tensions}
+          {...PAGE_TILES.tensions}
           render={
             <Link
-              to="/learn/tensions"
+              to="/practice/tensions"
               search={{
                 chord: target.chord,
                 ...(target.root ? { root: noteParam(target.root) } : {}),
@@ -86,7 +95,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.lesson}
+          {...PAGE_TILES.lesson}
           render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
         />
       )
@@ -95,10 +104,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.progressions}
+          {...PAGE_TILES.progressions}
           render={
             <Link
-              to="/learn/progressions"
+              to="/practice/progressions"
               search={{ key: keyParam(key), p: numeralsParam(numerals), size }}
             />
           }
@@ -109,10 +118,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.passingChords}
+          {...PAGE_TILES.passingChords}
           render={
             <Link
-              to="/learn/passing-chords"
+              to="/practice/passing-chords"
               search={{ key: keyParam(target.key), from: target.from, to: target.to }}
             />
           }
@@ -122,10 +131,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...LEARN_TILES.reharmonise}
+          {...PAGE_TILES.reharmonise}
           render={
             <Link
-              to="/learn/reharmonise"
+              to="/practice/reharmonise"
               search={{ key: keyParam(target.key), note: noteParam(target.note) }}
             />
           }

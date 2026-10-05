@@ -14,7 +14,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, RoundLink, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 
 /**
- * Learn's Patterns: the learner's favourites and own patterns, the built-in groups, and the hidden
+ * Patterns: the learner's favourites and own patterns, the built-in groups, and the hidden
  * at the end; each row a name and its idea in a line, opening its page. New pattern in the bar.
  */
 export function PatternsPage() {
@@ -32,16 +32,16 @@ export function PatternsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('patterns.title')}
-        back={<BackButton fallback={{ to: '/learn' }} />}
+        back={<BackButton fallback={{ to: '/practice', search: { topic: 'accompaniment' } }} />}
         actions={
           <RoundLink
             label={t('patterns.new')}
             icon={Plus}
-            render={<Link to="/learn/patterns/new" />}
+            render={<Link to="/practice/patterns/new" />}
           />
         }
       />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
+      <div className="flex flex-col gap-8">
         {shelves.map((shelf) => (
           <RowGroup key={shelf.shelf} title={shelfName(shelf)}>
             {shelf.patterns.map((pattern) => (
@@ -50,7 +50,10 @@ export function PatternsPage() {
                   title={localText(pattern.name, locale)}
                   detail={localText(pattern.idea, locale)}
                   render={
-                    <Link to="/learn/patterns/$patternRef" params={{ patternRef: pattern.ref }} />
+                    <Link
+                      to="/practice/patterns/$patternRef"
+                      params={{ patternRef: pattern.ref }}
+                    />
                   }
                 />
               </li>

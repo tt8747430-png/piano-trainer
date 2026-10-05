@@ -11,9 +11,9 @@ const chips = (group: string) =>
     .getAllByRole('button')
     .map((chip) => chip.textContent)
 
-describe('Learn → Available tensions', () => {
+describe('Practice → Available tensions', () => {
   it('groups the notes over C7 as the owner’s table does', async () => {
-    await renderApp('/learn/tensions')
+    await renderApp('/practice/tensions')
     await screen.findByRole('region', { name: 'Weak' })
     expect(chips('Weak')).toEqual(['1 C', '5 G'])
     expect(chips('Strong')).toEqual(['3 E', '♭7 B♭'])
@@ -23,7 +23,7 @@ describe('Learn → Available tensions', () => {
 
   it('plays the chord with a note on top and shows it on the keys', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/tensions')
+    const { audio } = await renderApp('/practice/tensions')
     const ninth = await screen.findByRole('button', { name: '9 D' })
     await user.click(ninth)
     expect(notes(audio.played.at(-1)?.sounds)).toEqual([60, 64, 67, 70, 74])
@@ -34,7 +34,7 @@ describe('Learn → Available tensions', () => {
 
   it('chooses a chord and a root, kept in the URL, and drops the note shown over the last chord', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/tensions')
+    const { router } = await renderApp('/practice/tensions')
     await user.click(await screen.findByRole('button', { name: '9 D' }))
     await user.click(screen.getByRole('combobox', { name: 'Chord' }))
     await user.click(await screen.findByRole('option', { name: 'Cm7 Minor 7th' }))
@@ -51,14 +51,14 @@ describe('Learn → Available tensions', () => {
 
   it('names each chord in its list as choosing it will spell it, on the root’s pitch', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/tensions?root=C%23&chord=m7')
+    const { router } = await renderApp('/practice/tensions?root=C%23&chord=m7')
     await user.click(await screen.findByRole('combobox', { name: 'Chord' }))
     await user.click(await screen.findByRole('option', { name: /^D♭Maj7 / }))
     expect(router.state.location.search).toEqual({ chord: 'maj7', root: 'Db' })
   })
 
   it('speaks Russian', async () => {
-    await renderApp('/learn/tensions', { locale: 'ru' })
+    await renderApp('/practice/tensions', { locale: 'ru' })
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Доступные опции' }),
     ).toBeInTheDocument()

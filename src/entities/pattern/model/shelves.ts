@@ -43,7 +43,7 @@ function shelves(
 }
 
 /**
- * The Patterns reference's list: favourites, the learner's own, the built-in groups, and the hidden
+ * The Patterns page's list: favourites, the learner's own, the built-in groups, and the hidden
  * at the end, so one can be found and shown again.
  */
 export function referenceShelves(book: PatternBook, choices: Choices): PatternShelf[] {

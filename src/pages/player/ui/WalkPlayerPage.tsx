@@ -13,7 +13,7 @@ export function WalkPlayerPage() {
   const scaleName = useScaleName()
   const search = useSearch({ from: '/full-screen/play/walk' })
   const close = useGoBack({
-    to: '/learn/scales',
+    to: '/practice/scales',
     search: { root: search.root, kind: search.kind, show: 'chords' },
   })
   const setSearch = useViewChange<WalkSearch>()

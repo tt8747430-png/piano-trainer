@@ -26,7 +26,7 @@ export function KeySignature({ value }: { value: Key }) {
   return (
     <section
       aria-label={t('sheet.label')}
-      className="-mx-4 overflow-x-auto overscroll-x-contain px-4 scrollbar-none lg:mx-0 lg:px-0"
+      className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none lg:mx-0 lg:px-0"
     >
       <LazyScoreView score={score} muted="bass" />
     </section>

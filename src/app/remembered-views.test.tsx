@@ -37,7 +37,7 @@ describe('Remembered views', () => {
       '/play/progression?p=ii-V-I&key=D&chordSize=ninths&pattern=jazz&walk=fifths',
       storage,
     )
-    const { router } = await renderApp('/learn/progressions?p=I-IV-V&key=G', { storage })
+    const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G', { storage })
     await user.click(await screen.findByRole('link', { name: 'Practise in the Player' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
@@ -51,30 +51,30 @@ describe('Remembered views', () => {
 
   it('shows what a link names, even the screen’s defaults, over the remembered view', async () => {
     const storage = createMemoryStorage()
-    await useScreen('/learn/chords?root=D&triad=min&hands=both', storage)
-    const named = await renderApp('/learn/chords?root=G&triad=min', { storage })
+    await useScreen('/practice/chords?root=D&triad=min&hands=both', storage)
+    const named = await renderApp('/practice/chords?root=G&triad=min', { storage })
     await waitFor(() =>
       expect(named.router.state.location.search).toMatchObject({ root: 'G', triad: 'min' }),
     )
     expect(named.router.state.location.search).toMatchObject({ hands: 'both' })
     named.unmount()
     // A link naming C major leaves the URL bare: still C major, never the remembered D minor.
-    const bare = await renderApp('/learn/chords', { storage })
+    const bare = await renderApp('/practice/chords', { storage })
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     expect(bare.router.state.location.search).not.toHaveProperty('root')
   })
 
-  it('opens a reference from Learn as it was left, and Back from it returns to Learn', async () => {
+  it('opens a page Practice explores as it was left, and Back from it returns to Practice', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
-    await useScreen('/learn/chords?root=D&triad=min', storage)
-    const { router } = await renderApp('/learn', { storage })
-    await user.click(await screen.findByRole('link', { name: /^Chords/ }))
+    await useScreen('/practice/chords?root=D&triad=min', storage)
+    const { router } = await renderApp('/practice', { storage })
+    await user.click(await screen.findByRole('link', { name: 'Chords' }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' }),
     )
     router.history.back()
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
   })
 
   it('opens an unreadable remembered value as the default, redirecting once', async () => {

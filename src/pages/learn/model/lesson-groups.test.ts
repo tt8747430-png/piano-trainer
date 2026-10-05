@@ -2,36 +2,36 @@ import { describe, expect, it } from 'vitest'
 import type { Lesson } from '@/entities/lesson'
 import { lessonGroups } from './lesson-groups'
 
-const lesson = (id: string, level: Lesson['level'], category: Lesson['category']): Lesson => ({
+const lesson = (id: string, module: Lesson['module']): Lesson => ({
   id,
   title: { en: id, ru: id },
   summary: { en: id, ru: id },
-  level,
-  category,
-  module: 'fundamentals',
+  level: 1,
+  category: 'chords',
+  module,
   sections: [],
 })
-const LESSONS = [lesson('a', 1, 'chords'), lesson('b', 2, 'scales'), lesson('c', 1, 'scales')]
 
 describe('lessonGroups', () => {
-  it('groups every lesson under its module, in order, with no filter', () => {
+  it('groups every lesson under its module, modules and lessons in the order taught', () => {
+    const lessons = [lesson('a', 'gospel'), lesson('b', 'fundamentals'), lesson('c', 'gospel')]
     expect(
-      lessonGroups({ level: 'any', category: 'any' }, LESSONS).map((group) => [
-        group.module,
-        group.lessons.map((each) => each.id),
-      ]),
-    ).toEqual([['fundamentals', ['a', 'b', 'c']]])
+      lessonGroups(lessons).map((group) => [group.module, group.lessons.map((each) => each.id)]),
+    ).toEqual([
+      ['fundamentals', ['b']],
+      ['gospel', ['a', 'c']],
+    ])
   })
 
-  it('keeps the lessons of a level and a category', () => {
-    expect(
-      lessonGroups({ level: 1, category: 'scales' }, LESSONS).flatMap((group) =>
-        group.lessons.map((each) => each.id),
-      ),
-    ).toEqual(['c'])
+  it('leaves out a module without lessons', () => {
+    expect(lessonGroups([lesson('a', 'accompaniment')]).map((group) => group.module)).toEqual([
+      'accompaniment',
+    ])
   })
 
-  it('leaves out a module the filter empties', () => {
-    expect(lessonGroups({ level: 4, category: 'any' }, LESSONS)).toEqual([])
+  it('holds every lesson of the catalogue once', () => {
+    expect(lessonGroups().flatMap((group) => group.lessons)).toHaveLength(
+      new Set(lessonGroups().flatMap((group) => group.lessons.map((each) => each.id))).size,
+    )
   })
 })

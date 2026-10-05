@@ -7,7 +7,7 @@ import { PatternEditor } from './PatternEditor'
 /** One of the learner's own patterns changed: its name and figures to start from. */
 export function EditPatternPage() {
   const { t } = useTranslation(['learn', 'common'])
-  const { patternRef } = useParams({ from: '/shell/learn/patterns/$patternRef/edit' })
+  const { patternRef } = useParams({ from: '/shell/practice/patterns/$patternRef/edit' })
   const pattern = usePatterns((state) =>
     isOwnPatternId(patternRef) ? selectOwnPattern(patternRef)(state) : undefined,
   )
@@ -15,7 +15,7 @@ export function EditPatternPage() {
     // Deleted in another tab while it was being changed.
     return (
       <NotFound>
-        <ButtonLink render={<Link to="/learn/patterns" />}>
+        <ButtonLink render={<Link to="/practice/patterns" />}>
           {t('common:notFound.toPatterns')}
         </ButtonLink>
       </NotFound>

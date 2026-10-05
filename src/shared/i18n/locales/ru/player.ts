@@ -28,7 +28,9 @@ export const player: LocaleResources['player'] = {
   rh: 'Правая рука',
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
-  patternsInLearn: 'Фактуры в разделе «Обучение»',
+  ownFigureOf: '{{hand}}: как в рисунке',
+  playing: 'Как звучит',
+  allPatterns: 'Все фактуры',
   inversion: { nearest: 'Ближайшее', own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
     label: 'По тональностям',

@@ -10,7 +10,7 @@ export function Pinned({ children, className }: { children: ReactNode; className
     <div
       data-slot="pinned"
       className={cn(
-        'sticky top-screen-bar z-20 -mx-4 bg-background px-4 pt-safe pb-3 lg:mx-0 lg:px-0',
+        'sticky top-screen-bar z-20 -mx-gutter bg-background px-gutter pt-safe pb-3',
         className,
       )}
     >

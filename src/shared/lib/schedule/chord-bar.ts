@@ -22,7 +22,7 @@ const held =
 
 /**
  * A chord as the explorers place it, held for a bar of 4/4 with no key signature (every accidental
- * on its note): how the Chords reference writes it.
+ * on its note): how the Chords explorer writes it.
  */
 export function chordBar(placed: PlacedChord): TimedMusic {
   return {

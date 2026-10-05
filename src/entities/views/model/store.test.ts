@@ -13,14 +13,14 @@ const restored = (state: unknown) => {
 }
 
 describe('createViewsStore', () => {
-  it('starts with no screen remembered and saves under pt-views, version 1', () => {
+  it('starts with no screen remembered and saves under pt-views, version 2', () => {
     const storage = createMemoryStorage()
     const store = createViewsStore({ storage })
     expect(store.getState()).toEqual({ views: {} })
-    store.setState({ views: { '/learn/chords': { root: 'G' } } })
+    store.setState({ views: { '/practice/chords': { root: 'G' } } })
     expect(JSON.parse(storage.getItem('pt-views') ?? 'null')).toEqual({
-      state: { views: { '/learn/chords': { root: 'G' } } },
-      version: 1,
+      state: { views: { '/practice/chords': { root: 'G' } } },
+      version: 2,
     })
   })
 
@@ -44,6 +44,40 @@ describe('createViewsStore', () => {
     expect(restored({ views: [] })).toEqual({ views: {} })
   })
 
+  it('moves a version-1 view to where its screen now is, in the order it was used', () => {
+    expect(
+      Object.entries(
+        restored({
+          views: {
+            '/learn/chords': { root: 'G' },
+            '/play/bz5': { key: 'A' },
+            '/learn/patterns/1': { tab: 'rh' },
+            '/learn/progressions': { p: 'ii.V.I' },
+          },
+        }).views,
+      ),
+    ).toEqual([
+      ['/practice/chords', { root: 'G' }],
+      ['/play/bz5', { key: 'A' }],
+      ['/practice/patterns/1', { tab: 'rh' }],
+      ['/practice/progressions', { p: 'ii.V.I' }],
+    ])
+  })
+
+  it('forgets the Keys page’s view: its key is now a view of Scales', () => {
+    expect(
+      restored({ views: { '/learn/keys': { key: 'G' }, '/learn/scales': { root: 'D' } } }),
+    ).toEqual({
+      views: { '/practice/scales': { root: 'D' } },
+    })
+  })
+
+  it('keeps a lesson’s path as it is', () => {
+    expect(restored({ views: { '/learn/lessons/triads': { quiz: 1 } } })).toEqual({
+      views: { '/learn/lessons/triads': { quiz: 1 } },
+    })
+  })
+
   it('keeps the screens used last, at most 200', () => {
     const views = Object.fromEntries(
       Array.from({ length: MOST_VIEWS + 1 }, (_, i) => [`/play/p${i}`, { tempo: i }]),
@@ -58,13 +92,13 @@ describe('createViewsStore', () => {
     const storage = createMemoryStorage()
     const otherTabs = new EventTarget()
     const store = createViewsStore({ storage, otherTabs })
-    writeSaved(storage, { views: { '/learn/scales': { root: 'D' } } })
+    writeSaved(storage, { views: { '/practice/scales': { root: 'D' } } })
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {
         key: VIEWS_STORAGE_KEY,
         newValue: storage.getItem(VIEWS_STORAGE_KEY),
       }),
     )
-    expect(store.getState().views).toEqual({ '/learn/scales': { root: 'D' } })
+    expect(store.getState().views).toEqual({ '/practice/scales': { root: 'D' } })
   })
 })
