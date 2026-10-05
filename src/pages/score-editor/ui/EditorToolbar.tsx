@@ -13,7 +13,7 @@ export function EditorToolbar() {
   const { actions, meta, takes } = useScoreEditorContext()
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
-  const recording = takes.recorder.stage !== 'idle'
+  const recording = takes.stage !== 'idle'
   return (
     <div className="flex flex-wrap items-center gap-2">
       <div className="flex min-w-0 flex-1 items-center gap-3">

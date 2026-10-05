@@ -75,7 +75,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
   const takes = useTakes(target.id, store, title)
-  const recording = takes.recorder.stage !== 'idle'
+  const recording = takes.stage !== 'idle'
 
   const dispatch = useCallback((action: EditorAction) => store.dispatch(action), [store])
   const play = useCallback(

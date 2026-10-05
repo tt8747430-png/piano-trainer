@@ -26,11 +26,12 @@
 ## 2. Recording a take
 
 - **Where:** the score editor's toolbar has **Record** (an icon button) that opens the **Recorder** sheet. Songs'
-  New song sheet has **Make and record** beside Make: it makes the song and opens its editor with the Recorder open
+  New song sheet has **Make and record** under Make: it makes the song and opens its editor with the Recorder open
   (the editor's URL `?record=true`: the sheet open is what you look at, so the URL holds it; closing it replaces the
   URL without it).
-- **What it needs:** a MIDI keyboard connected. The Recorder shows the MIDI control in its place otherwise, with one
-  line: "Connect a MIDI keyboard to record." (no Web MIDI: "Recording needs a browser with MIDI: Chrome or Edge.").
+- **What it needs:** a MIDI keyboard connected. Until one is, the Recorder shows the MIDI control (its status line and
+  Connect; in a browser without Web MIDI, "This browser can't connect a MIDI keyboard.") and Record is disabled: the
+  control already says what is missing, so no second line repeats it (CODE_STYLE §10).
 - **The click:** Record starts a **count-in** of one bar of the meter's beats (the first accented) at the song's
   tempo, then the take. A **Click** switch in the Recorder (saved, on by default: `pt-settings` version 7,
   `recorder.click`) keeps the click going while recording; off, only the count-in sounds. The click follows the

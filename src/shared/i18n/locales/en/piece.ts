@@ -23,7 +23,7 @@ export const piece = {
   delete: 'Delete',
   deleting: {
     title: 'Delete {{title}}?',
-    says: 'It leaves Your songs, and its music with it.',
+    says: 'It leaves Your songs, and its music and takes with it.',
     confirm: 'Delete for good',
     cancel: 'Keep it',
   },

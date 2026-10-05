@@ -11,7 +11,11 @@ import {
   type TakeId,
 } from '@/entities/take'
 import { deleteTake, saveTake } from '@/features/manage-takes'
-import { useRecorder, type RecorderState } from '@/features/record-take'
+import {
+  useRecorder,
+  type RecorderProgressSource,
+  type RecorderStage,
+} from '@/features/record-take'
 import { barAt, barsOf, takeParts, type EditorStore, type TakeInto } from '@/features/score-editor'
 import { downloadFile, IN_PLACE } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -30,7 +34,10 @@ type Ended = 'kept' | 'nothing'
 export interface TakesValue {
   /** Whose takes: the piece's id. */
   readonly pieceId: string
-  readonly recorder: RecorderState
+  /** Whether a take records: the screen's tools give way while it does. */
+  readonly stage: RecorderStage
+  /** Where the take is, for the recording strip alone. */
+  readonly progress: RecorderProgressSource
   /** Whether the takes' sheet is open. */
   readonly open: boolean
   readonly setOpen: (open: boolean) => void
@@ -94,7 +101,8 @@ export function useTakes(pieceId: string, store: EditorStore, title: string): Ta
 
   return {
     pieceId,
-    recorder: recorder.state,
+    stage: recorder.stage,
+    progress: recorder.progress,
     open,
     setOpen,
     ended,

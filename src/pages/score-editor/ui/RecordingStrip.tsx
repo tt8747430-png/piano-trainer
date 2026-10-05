@@ -1,4 +1,5 @@
 import { Square } from 'lucide-react'
+import { useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
@@ -13,8 +14,8 @@ export function RecordingStrip() {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const firstBar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
-  const state = takes.recorder
-  if (state.stage === 'idle') return null
+  const state = useSyncExternalStore(takes.progress.subscribe, takes.progress.current)
+  if (!state) return null
   return (
     <div className="flex min-h-14 items-center gap-4 card px-4 py-2">
       <span

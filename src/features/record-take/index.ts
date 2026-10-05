@@ -1,2 +1,7 @@
-export { useRecorder, type Recorder, type RecorderState } from './use-recorder'
-export type { RecorderPlan } from './model/recorder'
+export {
+  useRecorder,
+  type Recorder,
+  type RecorderProgressSource,
+  type RecorderStage,
+} from './use-recorder'
+export type { RecorderPlan, RecorderProgress } from './model/recorder'

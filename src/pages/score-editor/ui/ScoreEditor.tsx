@@ -24,7 +24,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <EditorSheet />
         </div>
-        {editor.takes.recorder.stage === 'idle' ? (
+        {editor.takes.stage === 'idle' ? (
           <>
             <EditorTools />
             <CaretLine />

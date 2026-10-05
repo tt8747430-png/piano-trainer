@@ -28,21 +28,25 @@ afterEach(() => vi.useRealTimers())
 
 describe('useRecorder', () => {
   it('counts in, records, and hands on the take at Stop with what it was recorded to', () => {
+    // The stage is the screen's; where the take is, beat by beat, only the part that shows it reads.
     const { audio, keyboard, onTake, result } = renderRecorder()
-    expect(result.current.state).toEqual({ stage: 'idle' })
+    expect(result.current.stage).toBe('idle')
     act(() => result.current.start(PLAN))
-    expect(result.current.state).toEqual({ stage: 'counting', beat: 1 })
+    expect(result.current.stage).toBe('counting')
+    expect(result.current.progress.current()).toEqual({ stage: 'counting', beat: 1 })
     act(() => {
       audio.setNow(2.2)
       vi.advanceTimersByTime(25)
     })
-    expect(result.current.state).toEqual({ stage: 'recording', bar: 0, seconds: 0 })
+    expect(result.current.stage).toBe('recording')
+    expect(result.current.progress.current()).toEqual({ stage: 'recording', bar: 0, seconds: 0 })
     act(() => keyboard.press(midi(60)))
     act(() => {
       audio.setNow(2.6)
       result.current.stop()
     })
-    expect(result.current.state).toEqual({ stage: 'idle' })
+    expect(result.current.stage).toBe('idle')
+    expect(result.current.progress.current()).toBeNull()
     expect(onTake).toHaveBeenCalledOnce()
     expect(onTake.mock.calls[0]?.[0].notes).toEqual([
       { midi: 60, at: 100, held: 400, velocity: 100 },
@@ -54,7 +58,7 @@ describe('useRecorder', () => {
     const { onTake, result } = renderRecorder()
     act(() => result.current.start(PLAN))
     act(() => result.current.stop())
-    expect(result.current.state).toEqual({ stage: 'idle' })
+    expect(result.current.stage).toBe('idle')
     expect(onTake).not.toHaveBeenCalled()
   })
 
@@ -72,7 +76,7 @@ describe('useRecorder', () => {
   it('records nothing without a MIDI keyboard', () => {
     const { audio, result } = renderRecorder({ webMidi: false })
     act(() => result.current.start(PLAN))
-    expect(result.current.state).toEqual({ stage: 'idle' })
+    expect(result.current.stage).toBe('idle')
     expect(audio.played).toEqual([])
   })
 })

@@ -50,7 +50,7 @@ export function RecorderSheet() {
             variant="surface"
             size="icon"
             aria-label={t('recorder.open')}
-            disabled={takes.recorder.stage !== 'idle'}
+            disabled={takes.stage !== 'idle'}
           />
         }
       >
