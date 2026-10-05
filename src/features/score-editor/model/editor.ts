@@ -17,6 +17,7 @@ import {
 import { joinSection, setSectionKind } from './sections'
 import { setKey, setPattern, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
+import { writeTake } from './take-edits'
 import { barAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue } from './values'
 
@@ -83,6 +84,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return isHandLayer(layer)
         ? commit(state, backToPattern(draft, layer, barAt(draft, caret).index))
         : state
+    case 'take':
+      return commit(state, writeTake(draft, barAt(draft, caret).start, action.parts), {
+        struck: null,
+      })
     case 'bars':
       return barsEdited(state, action.edit)
     case 'barLength':

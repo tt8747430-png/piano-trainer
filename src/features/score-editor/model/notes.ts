@@ -22,7 +22,8 @@ export interface Written {
 export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
   layer === 'melody' ? draft.melody : draft.hands[layer]
 
-function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
+/** The draft with a layer's notes, in order. */
+export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
   return layer === 'melody'
     ? { ...draft, melody: sorted }
@@ -44,7 +45,7 @@ export function withBar(draft: Draft, index: number, change: (bar: DraftBar) => 
 }
 
 /** The draft long enough for a note at `at`. */
-function reaching(draft: Draft, at: Tick): Draft {
+export function reaching(draft: Draft, at: Tick): Draft {
   let grown = draft
   while (at >= totalTicks(grown)) {
     const next = insertBar(grown, barsOf(grown).length - 1)
@@ -71,7 +72,8 @@ function writtenAt(draft: Draft, hand: HandId, at: Tick): Draft {
   return bar[hand] ? draft : withBar(draft, index, (written) => ({ ...written, [hand]: true }))
 }
 
-const spelledIn = (draft: Draft, key: Midi) => ({
+/** A key as the draft writes it: spelled in its key. */
+export const spelledIn = (draft: Draft, key: Midi) => ({
   midi: key,
   spelled: spellInKey(pitchClass(key), draft.key),
 })

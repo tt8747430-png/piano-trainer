@@ -3,6 +3,7 @@ import type { SectionKind } from '@/entities/piece'
 import type { Chord, Finger, Key, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
+import type { TakePart } from './take-edits'
 import type { ChosenValue } from './values'
 
 /** What undo and redo bring back. */
@@ -79,6 +80,8 @@ export type EditorAction =
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }
   | { readonly type: 'writeOut'; readonly played: readonly DraftNote[] }
   | { readonly type: 'backToPattern' }
+  /** A take written from the caret's bar (spec 2026-10-05 §4). */
+  | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }

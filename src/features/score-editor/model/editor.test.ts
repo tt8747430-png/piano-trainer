@@ -37,6 +37,20 @@ describe('the editor', () => {
     expect(run(state, { type: 'undo' }).draft.hands.rh).toEqual([])
   })
 
+  it('writes a take from the caret’s bar as one undo step, and a take of nothing as none', () => {
+    const at = run(start('rh'), { type: 'place', tick: 60, layer: 'rh' })
+    const parts = [
+      { layer: 'rh' as const, notes: [{ midi: midi(67), startTick: 0, durationTicks: 12 }] },
+    ]
+    const state = run(at, { type: 'take', parts })
+    expect(shape(state.draft.hands.rh)).toEqual(['G4@48/12'])
+    expect(state.past).toHaveLength(at.past.length + 1)
+    expect(run(state, { type: 'undo' }).draft).toBe(at.draft)
+    const nothing = run(at, { type: 'take', parts: [{ layer: 'rh', notes: [] }] })
+    expect(nothing.draft).toBe(at.draft)
+    expect(nothing.past).toBe(at.past)
+  })
+
   it('ends keys struck together when the caret moves', () => {
     const state = run(
       start('rh'),
