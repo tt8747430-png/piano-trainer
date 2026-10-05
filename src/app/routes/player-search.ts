@@ -29,6 +29,7 @@ import type {
   ProgressionSearch,
   WalkSearch,
 } from '@/pages/player'
+import type { EditSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   isInversion,
@@ -226,3 +227,8 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
   'swing',
   'speedTraining',
 ]
+
+// The score editor: whether its takes are open.
+export const EDIT_DEFAULTS: EditSearch = { record: false }
+export const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
+export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)

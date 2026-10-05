@@ -18,6 +18,7 @@ export const songs: LocaleResources['songs'] = {
     name: 'Название',
     meter: 'Размер',
     make: 'Создать',
+    makeAndRecord: 'Создать и записать',
   },
   clearFilters: 'Сбросить фильтры',
 }

@@ -11,7 +11,10 @@ import { Input } from '@/shared/ui/primitives/input'
 
 const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 
-/** New song: its title, key and meter, then Make, which opens it in the score editor. */
+/**
+ * New song: its title, key and meter, then Make, which opens it in the score editor, or Make and
+ * record, which opens it on its takes.
+ */
 export function NewSongSheet() {
   const { t } = useTranslation('songs')
   const store = usePiecesStoreApi()
@@ -19,10 +22,12 @@ export function NewSongSheet() {
   const [title, setTitle] = useState('')
   const [key, setKey] = useState(C_MAJOR)
   const [meter, setMeter] = useState<Meter>('4/4')
-  const make = () => {
+  /** Makes the song and opens it in the score editor, its takes open to record into it. */
+  const make = (record: boolean) => {
     const id = makeSong(store, { title, key: keyFromParam(key), meter })
-    if (id) void navigate({ to: '/edit/$pieceId', params: { pieceId: id } })
+    if (id) void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })
   }
+  const untitled = songTitle(title) === null
   return (
     <Sheet>
       <SheetTrigger render={<Button variant="surface" size="icon" aria-label={t('newSong')} />}>
@@ -31,9 +36,14 @@ export function NewSongSheet() {
       <SheetContent
         title={t('making.title')}
         footer={
-          <Button size="lg" disabled={songTitle(title) === null} onClick={make}>
-            {t('making.make')}
-          </Button>
+          <div className="flex flex-col gap-3">
+            <Button size="lg" disabled={untitled} onClick={() => make(false)}>
+              {t('making.make')}
+            </Button>
+            <Button size="lg" variant="soft" disabled={untitled} onClick={() => make(true)}>
+              {t('making.makeAndRecord')}
+            </Button>
+          </div>
         }
       >
         <div className="flex flex-col gap-5 pt-2">

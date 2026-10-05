@@ -17,5 +17,6 @@ export const songs = {
     name: 'Title',
     meter: 'Meter',
     make: 'Make',
+    makeAndRecord: 'Make and record',
   },
 } as const

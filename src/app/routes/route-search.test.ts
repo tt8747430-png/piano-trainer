@@ -10,7 +10,7 @@ import {
   SCALES_DEFAULTS,
   TENSIONS_DEFAULTS,
 } from './learn-search'
-import { CHROMATIC_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
+import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
 import { SONGS_DEFAULTS } from './songs-search'
 import { PROGRESSIONS_DEFAULTS } from './tools-search'
 
@@ -37,6 +37,12 @@ describe('search params', () => {
     expect(await searchAt('/learn/tensions')).toEqual(TENSIONS_DEFAULTS)
     expect(await searchAt('/learn')).toEqual(LEARN_DEFAULTS)
     expect(await searchAt('/learn/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
+    expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
+  })
+
+  it('open the score editor’s takes only when the URL says so', async () => {
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true })
+    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
   })
 
   it('keep what is valid', async () => {

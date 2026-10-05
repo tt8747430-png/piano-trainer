@@ -2,11 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { downloadFile } from './download-file'
 
 describe('downloadFile', () => {
-  afterEach(() => {
-    vi.useRealTimers()
-    vi.unstubAllGlobals()
-    vi.restoreAllMocks()
-  })
+  afterEach(() => vi.useRealTimers())
 
   it('saves the bytes as a file of its name, and lets the address go once the save has begun', () => {
     vi.useFakeTimers()

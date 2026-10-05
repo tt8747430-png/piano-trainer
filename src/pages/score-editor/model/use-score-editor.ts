@@ -25,6 +25,7 @@ import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import { savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf } from './shortcuts'
+import { useTakes } from './use-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
 const OWN_KEYS =
@@ -34,6 +35,8 @@ const OWN_ARROWS = '[role="radiogroup"], [role="slider"], [data-slot="keys-scrol
 const ARROWS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'])
 /** Where Enter presses what has the focus. */
 const PRESSED = 'button, a'
+/** The keys that stop a take: everything else waits until it has stopped. */
+const STOPS_A_TAKE = new Set([' ', 'Escape'])
 
 /** Close: back where the editor was opened from, or to the piece's page on its shelf. */
 function useCloseTo(target: EditorTarget): () => void {
@@ -45,7 +48,8 @@ function useCloseTo(target: EditorTarget): () => void {
 
 /**
  * The score editor's visit (spec §6): its store over the target's draft, saving each change; keys from
- * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; Write out.
+ * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; Write out;
+ * and the takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  */
 export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const pieces = usePiecesStoreApi()
@@ -70,10 +74,15 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
+  const takes = useTakes(target.id, store, title)
+  const recording = takes.recorder.stage !== 'idle'
+
   const dispatch = useCallback((action: EditorAction) => store.dispatch(action), [store])
   const play = useCallback(
-    (key: Midi) => store.dispatch({ type: 'key', key, time: performance.now() }),
-    [store],
+    (key: Midi) => {
+      if (!recording) store.dispatch({ type: 'key', key, time: performance.now() })
+    },
+    [store, recording],
   )
   useMidiKeyDown(play)
 
@@ -99,6 +108,12 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   }
 
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    if (recording) {
+      if (!STOPS_A_TAKE.has(event.key)) return
+      event.preventDefault()
+      takes.stop()
+      return
+    }
     if (!(event.target instanceof Element)) return
     if (event.target.closest(OWN_KEYS)) return
     if (ARROWS.has(event.key) && event.target.closest(OWN_ARROWS)) return
@@ -121,6 +136,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
 
   return {
     store,
+    takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
     meta: {
       title,

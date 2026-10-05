@@ -5,13 +5,15 @@ import { PlayLabel, RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { PieceSettings } from './PieceSettings'
+import { RecorderSheet } from './RecorderSheet'
 
-/** The editor's toolbar: Close and the title, Undo and Redo, MIDI, the song's settings, and Play. */
+/** The editor's toolbar: Close and the title, Undo and Redo, MIDI, the takes, the song's settings, and Play. */
 export function EditorToolbar() {
   const { t } = useTranslation(['editor', 'common'])
-  const { actions, meta } = useScoreEditorContext()
+  const { actions, meta, takes } = useScoreEditorContext()
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
+  const recording = takes.recorder.stage !== 'idle'
   return (
     <div className="flex flex-wrap items-center gap-2">
       <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -36,8 +38,9 @@ export function EditorToolbar() {
         onClick={() => actions.dispatch({ type: 'redo' })}
       />
       <MidiButton />
+      <RecorderSheet />
       <PieceSettings />
-      <Button onClick={actions.togglePlay}>
+      <Button disabled={recording} onClick={actions.togglePlay}>
         <PlayLabel playing={meta.playing}>
           <Play data-icon="inline-start" />
           {t('editor:play')}

@@ -7,10 +7,12 @@ import { EditorSheet } from './EditorSheet'
 import { EditorToolbar } from './EditorToolbar'
 import { EditorTools } from './EditorTools'
 import { LayerChoice } from './LayerChoice'
+import { RecordingStrip } from './RecordingStrip'
 
 /**
  * The score editor (spec §6): the toolbar, what to write, the sheet scrolling between them and the
- * layer's tools, the caret's line and the keys at the foot.
+ * layer's tools, the caret's line and the keys at the foot; while a take records, the recording
+ * strip in place of the tools and the caret's line.
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
@@ -22,8 +24,14 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <EditorSheet />
         </div>
-        <EditorTools />
-        <CaretLine />
+        {editor.takes.recorder.stage === 'idle' ? (
+          <>
+            <EditorTools />
+            <CaretLine />
+          </>
+        ) : (
+          <RecordingStrip />
+        )}
         <EditorKeyboard />
       </div>
     </ScoreEditorContext>

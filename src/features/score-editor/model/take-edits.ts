@@ -29,20 +29,23 @@ export function takeParts(
   ]
 }
 
-const SIMPLE_GRIDS: readonly Duration[] = [
+/** Note values, the first the beat: never none. */
+type Grids = readonly [Duration, ...Duration[]]
+
+const SIMPLE_GRIDS: Grids = [
   { value: 4, dots: 0, triplet: false },
   { value: 8, dots: 0, triplet: false },
   { value: 16, dots: 0, triplet: false },
   { value: 8, dots: 0, triplet: true },
 ]
-const COMPOUND_GRIDS: readonly Duration[] = [
+const COMPOUND_GRIDS: Grids = [
   { value: 4, dots: 1, triplet: false },
   { value: 8, dots: 0, triplet: false },
   { value: 16, dots: 0, triplet: false },
 ]
 
 /** The shortest notes a take is snapped to: the beat, an eighth, a sixteenth, and in x/4 an eighth triplet. */
-export const takeGrids = (meter: Meter): readonly Duration[] =>
+export const takeGrids = (meter: Meter): Grids =>
   isCompound(meter) ? COMPOUND_GRIDS : SIMPLE_GRIDS
 
 /** The ticks a take's notes cover: from the bar it is written from to the end of the bar it ends in. */

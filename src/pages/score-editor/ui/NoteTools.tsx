@@ -1,21 +1,12 @@
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { NOTE_VALUES, takesDot, type ChosenValue } from '@/features/score-editor'
+import { NOTE_VALUES, takesDot } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
 import { RoundButton, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { VALUE_WORDS } from '../model/value-words'
+import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import { HandBarTools } from './HandBarTools'
-
-/** Each value's glyph (Noto Music) and the word a screen reader says. */
-const VALUE_GLYPHS: Readonly<Record<ChosenValue['value'], string>> = {
-  1: '𝅝',
-  2: '𝅗𝅥',
-  4: '𝅘𝅥',
-  8: '𝅘𝅥𝅮',
-  16: '𝅘𝅥𝅯',
-}
 
 const PRESSABLE = 'aria-pressed:bg-muted aria-pressed:text-foreground'
 

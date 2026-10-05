@@ -41,6 +41,7 @@ import {
 import {
   CHROMATIC_KEPT,
   chromaticSearch,
+  editSearch,
   EXERCISE_KEPT,
   exerciseSearch,
   PLAYER_KEPT,
@@ -365,6 +366,7 @@ const exerciseRoute = createRoute({
 const editRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/edit/$pieceId',
+  ...editSearch,
   beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
     if (!editableIn(context.pieces.getState(), params.pieceId)) throw notFound()
