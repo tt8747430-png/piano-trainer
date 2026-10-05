@@ -12,6 +12,8 @@ export interface Option<V extends OptionValue> {
   readonly title?: string
   /** A pop-up item's second word, in soft ink after its label ("Minor 7th · m7"). */
   readonly detail?: string
+  /** How a pop-up's button writes it among the others chosen, where its label is long (`m2`). */
+  readonly short?: string
 }
 
 /** Options under a name: a pop-up button's group (a chord family). */

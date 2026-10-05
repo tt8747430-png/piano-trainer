@@ -37,6 +37,21 @@ describe('MultiDropdown', () => {
     )
   })
 
+  it('writes a chosen item by its short name where it has one', () => {
+    render(
+      <MultiDropdown
+        label="Intervals"
+        value={['m2', 'P5']}
+        options={[
+          { value: 'm2', label: 'Minor second', short: 'm2' },
+          { value: 'P5', label: 'Perfect fifth', short: 'P5' },
+        ]}
+        onChange={vi.fn()}
+      />,
+    )
+    expect(screen.getByRole('combobox', { name: 'Intervals' })).toHaveTextContent('Intervalsm2 P5')
+  })
+
   it('checks each chosen item, and a tap turns one on or off', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()

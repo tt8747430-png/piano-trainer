@@ -4,8 +4,8 @@ import { DropdownTrigger } from './DropdownTrigger'
 import { Select, SelectContent } from './primitives/select'
 
 /**
- * Several choices of many behind a pop-up button: the button shows its label and the chosen, the
- * list checks each, a tap on an item turning it on or off. `none` names an empty choice; a pop-up
+ * Several choices of many behind a pop-up button: the button shows its label and the chosen (each by
+ * its short name where it has one), the list checks each, a tap on an item turning it on or off. `none` names an empty choice; a pop-up
  * that never empties has none.
  */
 export function MultiDropdown<V extends OptionValue>({
@@ -40,7 +40,7 @@ export function MultiDropdown<V extends OptionValue>({
             ? none
             : options
                 .filter((option) => chosen.includes(option.value))
-                .map((option) => option.label)
+                .map((option) => option.short ?? option.label)
                 .join(' ')
         }
       </DropdownTrigger>

@@ -95,6 +95,7 @@ export function TrainerChoice({
                   value: interval,
                   label: t(`music:interval.${interval}.name`),
                   detail: t(`music:interval.${interval}.short`),
+                  short: t(`music:interval.${interval}.short`),
                 })),
             }))}
             onChange={(chosen) => write('intervals', chosen)}

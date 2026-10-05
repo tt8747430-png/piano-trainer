@@ -14,7 +14,7 @@ import {
   pitchClassOf,
   type Key,
 } from '@/shared/lib/music'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, Labelled } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 
 /** The pop-up's value for a progression the library does not hold: the learner's own line. */
@@ -24,7 +24,7 @@ const dashed = (numerals: string): string =>
   (parseNumerals(numerals) ?? []).map(numeralText).join('–')
 
 /**
- * The progression shown, chosen from the library by style behind one pop-up button: it names the
+ * The progression shown, chosen from the library by style behind one pop-up button under its name: it names the
  * library's progression the numerals are, or the line itself when the learner typed their own.
  * Choosing one keeps the tonic and takes the progression's mode, and its chord size where it has one.
  */
@@ -49,30 +49,33 @@ export function ProgressionChoice({
     })),
   }))
   return (
-    <Dropdown
-      label={t('progressions.choose')}
-      value={named?.id ?? TYPED}
-      groups={
-        named
-          ? library
-          : [
-              {
-                label: t('progressions.typed'),
-                options: [{ value: TYPED, label: dashed(view.p) }],
-              },
-              ...library,
-            ]
-      }
-      onChange={(id) => {
-        const chosen = PROGRESSION_LIBRARY.find((each) => each.id === id)
-        if (!chosen) return
-        onChange({
-          p: libraryParam(chosen),
-          key: keyParam(circleKey(pitchClassOf(musicKey.tonic), chosen.minor)),
-          ...(chosen.size ? { size: chosen.size } : {}),
-        })
-      }}
-      className="w-full"
-    />
+    <Labelled label={t('progressions.choose')}>
+      <Dropdown
+        bare
+        label={t('progressions.choose')}
+        value={named?.id ?? TYPED}
+        groups={
+          named
+            ? library
+            : [
+                {
+                  label: t('progressions.typed'),
+                  options: [{ value: TYPED, label: dashed(view.p) }],
+                },
+                ...library,
+              ]
+        }
+        onChange={(id) => {
+          const chosen = PROGRESSION_LIBRARY.find((each) => each.id === id)
+          if (!chosen) return
+          onChange({
+            p: libraryParam(chosen),
+            key: keyParam(circleKey(pitchClassOf(musicKey.tonic), chosen.minor)),
+            ...(chosen.size ? { size: chosen.size } : {}),
+          })
+        }}
+        className="w-full"
+      />
+    </Labelled>
   )
 }
