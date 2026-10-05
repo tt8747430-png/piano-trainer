@@ -127,9 +127,29 @@ describe('A trainer', () => {
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/trainers/intervals-by-ear?level=custom')
-    await user.click(await screen.findByRole('combobox', { name: /^Heard/ }))
-    await user.click(await screen.findByRole('option', { name: 'Together' }))
+    const heard = await screen.findByRole('group', { name: 'Heard' })
+    await user.click(within(heard).getByRole('button', { name: 'Together' }))
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
+  })
+
+  it('shows a short list of Custom’s as chips, one always left on', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/trainers/name-chord?level=custom&families=tri')
+    const families = await screen.findByRole('group', { name: 'Chord families' })
+    const chips = within(families).getAllByRole('button')
+    expect(chips.map((chip) => chip.textContent)).toEqual([
+      'Triads',
+      '6th & add',
+      '7th chords',
+      '9ths & more',
+      'Altered 7ths',
+    ])
+    await user.click(within(families).getByRole('button', { name: 'Triads' }))
+    expect(router.state.location.search).toMatchObject({ families: 'tri' })
+    expect(within(families).getByRole('button', { name: 'Triads' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
   it('opens an unknown level at the first', async () => {

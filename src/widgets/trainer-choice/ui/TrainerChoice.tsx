@@ -17,7 +17,7 @@ import {
   SCALE_FAMILIES,
   scaleKindsIn,
 } from '@/shared/lib/music'
-import { Dropdown, MultiDropdown, SwitchRow } from '@/shared/ui'
+import { Dropdown, Labelled, MultiDropdown, SwitchRow, ToggleChips } from '@/shared/ui'
 
 type ListField = keyof typeof CUSTOM_CHOICES
 
@@ -31,8 +31,9 @@ const WHITE_KEYS = Array.from({ length: 9 }, (_, octave) => ({
 })).filter((group) => group.keys.length > 0)
 
 /**
- * Custom's fields for a trainer: the lists it asks from (each checks several and never empties) and
- * its switches, each written to the URL, its own left out.
+ * Custom's fields for a trainer: the lists it asks from (each checks several and never empties; a
+ * short one as chips in sight, a long one behind a pop-up) and its switches, each written to the
+ * URL, its own left out.
  */
 export function TrainerChoice({
   trainer,
@@ -54,17 +55,19 @@ export function TrainerChoice({
   const fields = new Set(trainer.custom)
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
         {fields.has('families') ? (
-          <MultiDropdown
-            label={t('quiz:choice.families')}
-            value={orOwn(readList(view.families, CUSTOM_CHOICES.families), CUSTOM_OWN.families)}
-            options={CUSTOM_CHOICES.families.map((family) => ({
-              value: family,
-              label: t(`music:family.${family}`),
-            }))}
-            onChange={(chosen) => write('families', chosen)}
-          />
+          <Labelled label={t('quiz:choice.families')}>
+            <ToggleChips
+              label={t('quiz:choice.families')}
+              value={orOwn(readList(view.families, CUSTOM_CHOICES.families), CUSTOM_OWN.families)}
+              options={CUSTOM_CHOICES.families.map((family) => ({
+                value: family,
+                label: t(`music:family.${family}`),
+              }))}
+              onChange={(chosen) => write('families', chosen)}
+            />
+          </Labelled>
         ) : null}
         {fields.has('scales') ? (
           <MultiDropdown
@@ -98,15 +101,17 @@ export function TrainerChoice({
           />
         ) : null}
         {fields.has('ways') ? (
-          <MultiDropdown
-            label={t('quiz:choice.ways')}
-            value={orOwn(readList(view.ways, CUSTOM_CHOICES.ways), CUSTOM_OWN.ways)}
-            options={CUSTOM_CHOICES.ways.map((way) => ({
-              value: way,
-              label: t(`quiz:ways.${way}`),
-            }))}
-            onChange={(chosen) => write('ways', chosen)}
-          />
+          <Labelled label={t('quiz:choice.ways')}>
+            <ToggleChips
+              label={t('quiz:choice.ways')}
+              value={orOwn(readList(view.ways, CUSTOM_CHOICES.ways), CUSTOM_OWN.ways)}
+              options={CUSTOM_CHOICES.ways.map((way) => ({
+                value: way,
+                label: t(`quiz:ways.${way}`),
+              }))}
+              onChange={(chosen) => write('ways', chosen)}
+            />
+          </Labelled>
         ) : null}
         {fields.has('qualities') ? (
           <MultiDropdown
