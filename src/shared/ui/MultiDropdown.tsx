@@ -13,6 +13,7 @@ export function MultiDropdown<V extends OptionValue>({
   none,
   value,
   onChange,
+  bare = false,
   className,
   ...choices
 }: {
@@ -20,6 +21,8 @@ export function MultiDropdown<V extends OptionValue>({
   none?: string
   value: readonly V[]
   onChange: (value: V[]) => void
+  /** Under a name already printed: the button shows its value alone. */
+  bare?: boolean
   className?: string
 } & Choices<V>) {
   const groups = choiceGroups(choices)
@@ -31,7 +34,7 @@ export function MultiDropdown<V extends OptionValue>({
       value={[...value]}
       onValueChange={(next: V[]) => onChange(next)}
     >
-      <DropdownTrigger label={label} className={className}>
+      <DropdownTrigger label={label} bare={bare} className={className}>
         {(chosen: V[]) =>
           chosen.length === 0
             ? none

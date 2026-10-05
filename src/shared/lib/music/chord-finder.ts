@@ -41,6 +41,10 @@ const PLAIN: Readonly<Record<LeftOut, string>> = {
 }
 const isPlain = (tone: Tone, role: LeftOut) => tone.role === role && tone.degree === PLAIN[role]
 
+/** A 6/9 over a 3rd: a suspended one keeps its 5th, or it is only stacked 4ths. */
+const isSixNine = (parts: ChordParts): boolean =>
+  parts.triad !== 'sus4' && parts.added.includes('add6') && parts.added.includes('add9')
+
 /**
  * The tones of a chord a hand may leave out (spec 2026-10-05 §5): its perfect 5th, from a 7th chord
  * up and from a 6/9; its natural 9th and 11th under its highest number (a 13th's, an 11th's 9th); and
@@ -53,7 +57,7 @@ function leavable(parts: ChordParts, tones: readonly Tone[]): LeftOut[] {
   const top = parts.size === 5 ? 5 : highestNatural(parts)
   const rules: Readonly<Record<LeftOut, boolean>> = {
     '3rd': parts.size === 7 && parts.triad === 'maj' && parts.alterations.length === 0,
-    '5th': parts.size >= 7 || parts.added === 'sixNine',
+    '5th': parts.size >= 7 || isSixNine(parts),
     '9th': top >= 11,
     '11th': top === 13,
   }
@@ -96,13 +100,20 @@ const SHAPES = CHORD_PARTS.reduce((byKey, parts) => {
 const flatFiveOverTensions = (parts: ChordParts): boolean =>
   parts.size >= 9 && parts.alterations.includes('b5')
 
+/**
+ * A 7th chord with an added tone is a part of the chord stacked to that tone: `C E B♭ A` reads as C13
+ * with its 5th and 9th left out before C7(add13), and `C E♭ B♭ F` as Cm11 before Cm7(add11).
+ */
+const addsOverSeventh = (parts: ChordParts): boolean => parts.size >= 7 && parts.added.length > 0
+
 /** The Chords explorer shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
 /**
  * The chords three or more keys make, best first: every chord the builder makes, on each pitch class
  * played as its root, the root spelled by the builder's one rule. Root position first, then a ♭5 read
- * as a #11 from a 9th up, then the fewest tones left out, then one the table names, then fewer notes;
+ * as a #11 from a 9th up, then a stacked chord before a 7th chord with an added tone, then the fewest
+ * tones left out, then one the table names, then fewer notes;
  * each symbol once.
  */
 export function nameChords(keys: readonly Midi[]): FoundChord[] {
@@ -132,6 +143,7 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
   const rank = (each: FoundChord) => [
     each.bass ? 1 : 0,
     flatFiveOverTensions(each.parts) ? 1 : 0,
+    addsOverSeventh(each.parts) ? 1 : 0,
     each.leftOut.length,
     each.chord.quality ? 0 : 1,
     each.chord.tones.length,

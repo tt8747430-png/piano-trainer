@@ -43,6 +43,12 @@ describe('nameChords', () => {
     expect(named(48, 64, 70, 78, 81)[0]).toBe('C13#11')
   })
 
+  it('names a stacked chord before the 7th chord that adds its top tone', () => {
+    expect(named(48, 64, 70, 81).slice(0, 2)).toEqual(['C13', 'C7(add13)'])
+    expect(named(48, 63, 67, 70, 77).slice(0, 2)).toEqual(['Cm11', 'Cm7(add11)'])
+    expect(named(60, 62, 64, 65, 67)[0]).toBe('C(add2,add4)')
+  })
+
   it('takes a 7th chord over a major triad without its 3rd where its 5th is played', () => {
     const [seventh] = found(48, 55, 58)
     expect(seventh?.symbol).toBe('C7')

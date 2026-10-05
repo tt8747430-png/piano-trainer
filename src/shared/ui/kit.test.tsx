@@ -22,6 +22,7 @@ import { ScreenBarProvider } from './ScreenBarProvider'
 import { ScreenHeader } from './ScreenHeader'
 import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
+import { ToggleChips } from './ToggleChips'
 import { ToneChip } from './ToneChip'
 import { TypedField } from './TypedField'
 
@@ -321,6 +322,43 @@ describe('Dropdown', () => {
     expect(await screen.findByRole('group', { name: '7th chords' })).toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: 'Minor 7th m7' }))
     expect(onChange).toHaveBeenCalledWith(1)
+  })
+
+  it('shows its value alone under a printed name, still named for a screen reader', () => {
+    render(<Dropdown bare label="Root" value="C" options={ROOTS} onChange={vi.fn()} />)
+    const trigger = screen.getByRole('combobox', { name: 'Root' })
+    expect(trigger).toHaveTextContent('C')
+    expect(trigger).not.toHaveTextContent('Root')
+  })
+})
+
+describe('ToggleChips', () => {
+  const SIGNS = [
+    { value: 'b9', label: '♭9', title: 'Flat 9th' },
+    { value: 's9', label: '#9' },
+    { value: 's11', label: '#11' },
+  ] as const
+
+  it('shows every choice as a chip, the chosen ones pressed', () => {
+    render(<ToggleChips label="Alterations" value={['s9']} options={SIGNS} onChange={vi.fn()} />)
+    const chips = within(screen.getByRole('group', { name: 'Alterations' })).getAllByRole('button')
+    expect(chips.map((chip) => chip.textContent)).toEqual(['♭9', '#9', '#11'])
+    expect(chips.map((chip) => chip.getAttribute('aria-pressed'))).toEqual([
+      'false',
+      'true',
+      'false',
+    ])
+    expect(screen.getByRole('button', { name: 'Flat 9th' })).toBe(chips[0])
+  })
+
+  it('turns one on or off, reporting the chosen in the options’ order', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<ToggleChips label="Alterations" value={['s9']} options={SIGNS} onChange={onChange} />)
+    await user.click(screen.getByRole('button', { name: 'Flat 9th' }))
+    expect(onChange).toHaveBeenLastCalledWith(['b9', 's9'])
+    await user.click(screen.getByRole('button', { name: '#9' }))
+    expect(onChange).toHaveBeenLastCalledWith([])
   })
 })
 

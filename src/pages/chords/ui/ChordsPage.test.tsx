@@ -51,20 +51,59 @@ describe('Practice → Chords', () => {
     await user.click(await screen.findByRole('radio', { name: 'Major 7th' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'CMaj9' })).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: 'Minor 7th' }))
-    const alterations = await screen.findByRole('combobox', { name: 'Alterations' })
-    expect(alterations).toHaveTextContent('None')
-    await user.click(alterations)
-    await user.click(await screen.findByRole('option', { name: '#11' }))
+    const alterations = await screen.findByRole('group', { name: 'Alterations' })
+    expect(
+      within(alterations)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['♭5', '♭9', '#9', '#11', '♭13'])
+    await user.click(within(alterations).getByRole('button', { name: '#11' }))
     expect(router.state.location.search).toMatchObject({ size: 9, alter: 's11' })
     expect(await screen.findByRole('heading', { level: 2, name: 'C9#11' })).toBeInTheDocument()
+    expect(within(alterations).getByRole('button', { name: '#11' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
-  it('adds a tone to a triad, and names a chord the table lacks by rule', async () => {
-    await renderApp('/practice/chords?triad=min&added=add9')
+  it('adds tones to a triad as chips, several at once, and names a chord the table lacks by rule', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chords?triad=min&added=add9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm(add9)' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Added tone' })).toHaveTextContent('add9')
-    const written = screen.getByText('Written')
-    expect(written.parentElement).toHaveTextContent(/^WrittenCm\(add9\)$/)
+    const added = screen.getByRole('group', { name: 'Added tones' })
+    expect(
+      within(added)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['2', '4', '6', '9', '11'])
+    expect(within(added).getByRole('button', { name: 'add9' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.queryByText('Also written')).not.toBeInTheDocument()
+    await user.click(within(added).getByRole('button', { name: '6' }))
+    expect(router.state.location.search).toMatchObject({ added: 'add6add9' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm6/9' })).toBeInTheDocument()
+  })
+
+  it('takes the tone chosen last of two an octave apart', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chords?added=add9')
+    const added = await screen.findByRole('group', { name: 'Added tones' })
+    await user.click(within(added).getByRole('button', { name: 'add2' }))
+    expect(router.state.location.search).toMatchObject({ added: 'add2' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cadd2' })).toBeInTheDocument()
+  })
+
+  it('adds to a 7th chord the tone its stack skipped, and none where it skipped none', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chords?triad=min&size=7')
+    const added = await screen.findByRole('group', { name: 'Added tones' })
+    await user.click(within(added).getByRole('button', { name: 'add11' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: '11th' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm11' })).toBeInTheDocument()
+    expect(screen.queryByRole('group', { name: 'Added tones' })).not.toBeInTheDocument()
   })
 
   it('writes the chord on a staff', async () => {
@@ -175,10 +214,17 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
   })
 
-  it('writes the chord every way it is written', async () => {
+  it('writes the other ways the chord is written', async () => {
     await renderApp('/practice/chords?triad=min&size=7')
-    const written = await screen.findByText('Written')
-    expect(written.parentElement).toHaveTextContent(/Cm7 · C/)
+    const written = await screen.findByText('Also written')
+    expect(written.parentElement).toHaveTextContent(/^Also writtenC−7$/)
+  })
+
+  it('sets a long symbol a size down, so it stays on a phone’s line', async () => {
+    await renderApp('/practice/chords?size=7&added=add13')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C7(add13)' })).toHaveClass(
+      'text-5xl',
+    )
   })
 
   it('is the first of Chords’ two tabs, under a header with a way back', async () => {

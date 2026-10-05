@@ -33,7 +33,7 @@ const thirteenth = (triad: 'maj' | 'min'): ChordParts => ({
   triad,
   size: 13,
   seventh: triad === 'maj' ? 'major' : 'minor',
-  added: 'none',
+  added: [],
   alterations: [],
 })
 

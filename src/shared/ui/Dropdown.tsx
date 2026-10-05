@@ -11,12 +11,15 @@ export function Dropdown<V extends OptionValue>({
   label,
   value,
   onChange,
+  bare = false,
   className,
   ...choices
 }: {
   label: string
   value: V
   onChange: (value: V) => void
+  /** Under a name already printed: the button shows its value alone. */
+  bare?: boolean
   className?: string
 } & Choices<V>) {
   const groups = choiceGroups(choices)
@@ -31,7 +34,7 @@ export function Dropdown<V extends OptionValue>({
         if (next !== null && next !== value) onChange(next)
       }}
     >
-      <DropdownTrigger label={label} className={className} />
+      <DropdownTrigger label={label} bare={bare} className={className} />
       <SelectContent>
         <OptionItems groups={groups} />
       </SelectContent>

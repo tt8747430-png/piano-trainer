@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { noteName, type FoundChord, type Midi } from '@/shared/lib/music'
-import { ToneChip } from '@/shared/ui'
+import { ChordHeading, ToneChip } from '@/shared/ui'
 import { toneOfKey, type Finding } from '../model/finding'
 import { useChordAbout } from './use-chord-about'
 
@@ -38,7 +38,7 @@ function FoundName({
   return (
     <div className="flex flex-col gap-3">
       <hgroup>
-        <h2 className="text-7xl">{best.symbol}</h2>
+        <ChordHeading symbol={best.symbol} />
         {about.length > 0 ? <p className="text-muted-foreground">{about.join(' · ')}</p> : null}
       </hgroup>
       <ol className="flex flex-wrap gap-2">

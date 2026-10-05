@@ -3,6 +3,7 @@ export {
   partsFromParams,
   partsParams,
   qualityParams,
+  readAdded,
   readAlterations,
   type PartsParams,
 } from './chord-params'

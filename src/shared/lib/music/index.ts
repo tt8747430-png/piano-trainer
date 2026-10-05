@@ -85,6 +85,7 @@ export {
   type ChordQuality,
 } from './chord'
 export {
+  ADDED_DEGREE,
   ADDED_SYMBOL,
   ALTERATIONS,
   partsOf,
@@ -102,6 +103,7 @@ export {
   sizesOf,
   TRIADS,
   triadSuffix,
+  withAdded,
   withAlterations,
   type BuiltChord,
   type AddedTone,

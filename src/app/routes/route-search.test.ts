@@ -49,7 +49,7 @@ describe('search params', () => {
       triad: 'min',
       size: 9,
       seventh: 'major',
-      added: 'none',
+      added: '',
       alter: '',
       inversion: 2,
       hands: 'both',
@@ -148,8 +148,8 @@ describe('search params', () => {
       size: 7,
       alter: '',
     })
-    expect(await searchAt('/practice/chords?size=7&added=six&alter=b5s11')).toMatchObject({
-      added: 'none',
+    expect(await searchAt('/practice/chords?size=7&added=add6&alter=b5s11')).toMatchObject({
+      added: '',
       alter: 'b5',
     })
   })

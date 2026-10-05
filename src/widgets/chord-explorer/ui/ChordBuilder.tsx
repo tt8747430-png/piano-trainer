@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import {
+  ADDED_DEGREE,
   ADDED_SYMBOL,
   addedOf,
   ALTERATION_SIGN,
@@ -9,18 +10,12 @@ import {
   seventhsOf,
   sizesOf,
   TRIADS,
+  withAdded,
   withAlterations,
   type BuiltSize,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
-import {
-  Dropdown,
-  InversionChoice,
-  Labelled,
-  MultiDropdown,
-  NotePicker,
-  Segmented,
-} from '@/shared/ui'
+import { InversionChoice, Labelled, NotePicker, Segmented, ToggleChips } from '@/shared/ui'
 import type { ChordView } from '../model/chord-view'
 
 /** Each size's name on screen. */
@@ -33,9 +28,9 @@ const SIZE_NAMES = {
 } as const satisfies Record<BuiltSize, string>
 
 /**
- * A chord's choices, each a labelled field in the order a chord is built: its root among the twelve
- * notes, its triad, its size; then its 7th, the tone a triad adds, or a dominant's alterations, each
- * only where the chord takes one; then how it is held: its inversion, and one hand or two.
+ * A chord's choices, every one in sight, each a labelled field in the order a chord is built: its root
+ * among the twelve notes, a row of its own; its triad, its size; then its 7th, the tones it adds and its alterations as
+ * chips, each only where the chord takes one; then how it is held: its inversion, and one hand or two.
  */
 export function ChordBuilder({
   chord,
@@ -50,16 +45,18 @@ export function ChordBuilder({
   const { t } = useTranslation(['learn', 'music', 'common'])
   const parts = partsFromParams(chord)
   const sevenths = seventhsOf(parts.triad, parts.size)
-  const added = addedOf(parts.triad)
+  const added = addedOf(parts)
   const alterations = alterationsOf(parts)
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
-      <NotePicker
-        label={t('learn:root')}
-        value={chord.root}
-        spell={(pc) => builtRootSpelling(pc, parts)}
-        onChange={(root) => onChange({ root })}
-      />
+      <div className="col-span-full">
+        <NotePicker
+          label={t('learn:root')}
+          value={chord.root}
+          spell={(pc) => builtRootSpelling(pc, parts)}
+          onChange={(root) => onChange({ root })}
+        />
+      </div>
       <Labelled label={t('learn:builder.triad')}>
         <Segmented
           label={t('learn:builder.triad')}
@@ -97,25 +94,24 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
-      {parts.size === 5 && added.length > 1 ? (
+      {added.length > 0 ? (
         <Labelled label={t('learn:builder.added')}>
-          <Dropdown
+          <ToggleChips
             label={t('learn:builder.added')}
             value={parts.added}
             options={added.map((tone) => ({
               value: tone,
-              label: tone === 'none' ? t('learn:builder.none') : ADDED_SYMBOL[tone],
+              label: ADDED_DEGREE[tone],
+              title: ADDED_SYMBOL[tone],
             }))}
-            onChange={(tone) => onChange({ added: tone })}
-            className="w-full"
+            onChange={(chosen) => onChange(partsParams(withAdded(parts, chosen)))}
           />
         </Labelled>
       ) : null}
       {alterations.length > 0 ? (
         <Labelled label={t('learn:builder.alterations')}>
-          <MultiDropdown
+          <ToggleChips
             label={t('learn:builder.alterations')}
-            none={t('learn:builder.none')}
             value={parts.alterations}
             options={alterations.map((alteration) => ({
               value: alteration,

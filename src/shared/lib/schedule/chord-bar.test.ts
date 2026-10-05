@@ -7,7 +7,7 @@ const DIMINISHED_7TH = buildChord(note('C'), {
   triad: 'dim',
   size: 7,
   seventh: 'diminished',
-  added: 'none',
+  added: [],
   alterations: [],
 })
 

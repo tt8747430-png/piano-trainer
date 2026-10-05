@@ -5,6 +5,7 @@ import {
   isOneOf,
   keyListParam,
   partsParams,
+  readAdded,
   readAlterations,
   readKeyList,
   readNote,
@@ -13,7 +14,6 @@ import {
   wholeIn,
 } from '@/shared/lib'
 import {
-  ADDED_TONES,
   buildChord,
   BUILT_SIZES,
   builtRootSpelling,
@@ -71,7 +71,7 @@ export const CHORDS_DEFAULTS: ChordsSearch = {
   triad: 'maj',
   size: 5,
   seventh: 'minor',
-  added: 'none',
+  added: '',
   alter: '',
   inversion: 0,
   hands: 'rh',
@@ -79,7 +79,6 @@ export const CHORDS_DEFAULTS: ChordsSearch = {
 const isTriad = isOneOf(TRIADS)
 const isBuiltSize = isOneOf(BUILT_SIZES)
 const isSeventh = isOneOf(SEVENTHS)
-const isAddedTone = isOneOf(ADDED_TONES)
 const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
@@ -88,7 +87,7 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
     triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
     size: valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size),
     seventh: valueOr(isSeventh, raw.seventh, CHORDS_DEFAULTS.seventh),
-    added: valueOr(isAddedTone, raw.added, CHORDS_DEFAULTS.added),
+    added: readAdded(raw.added),
     alterations: readAlterations(raw.alter),
   })
   const read = readNote(raw.root)

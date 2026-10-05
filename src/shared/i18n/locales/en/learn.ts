@@ -13,8 +13,8 @@ export const learn = {
   },
   chords: 'Chords',
   scales: 'Scales and keys',
-  // The ways a chord symbol is written on this root.
-  written: 'Written',
+  // The other ways a chord symbol is written on this root.
+  written: 'Also written',
   show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
   keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
   holds: '{{note}} is in {{chords}}',
@@ -34,9 +34,8 @@ export const learn = {
     sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
     seventh: '7th',
     sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
-    added: 'Added tone',
+    added: 'Added tones',
     alterations: 'Alterations',
-    none: 'None',
   },
   walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
   root: 'Root',

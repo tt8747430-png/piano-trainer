@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { PlayLabel, ToneChip } from '@/shared/ui'
+import { ChordHeading, PlayLabel, ToneChip } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { changedView, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
@@ -30,7 +30,7 @@ const keysOf = (view: ChordView): Midi[] => {
 
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
- * is (its symbol, its tones, every way it is written, the chord on a staff) with Play and Arpeggio;
+ * is (its symbol, its tones, the other ways it is written, the chord on a staff) with Play and Arpeggio;
  * its choices; a 7th chord's available tensions; and its ways into the Player.
  */
 export function ChordExplorer({
@@ -50,6 +50,8 @@ export function ChordExplorer({
   const [shown, show] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
   const symbol = writtenSymbol(built)
   const { quality } = built
+  // The other ways its symbol is written: the table's, where the table has the chord.
+  const others = quality ? qualitySpellings(quality).slice(1) : []
   // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
@@ -62,10 +64,10 @@ export function ChordExplorer({
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
-      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-4">
         <div className="flex min-w-0 flex-col gap-3">
           <hgroup>
-            <h2 className="text-7xl">{symbol}</h2>
+            <ChordHeading symbol={symbol} />
             {quality ? (
               <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
             ) : null}
@@ -77,23 +79,25 @@ export function ChordExplorer({
               </li>
             ))}
           </ol>
-          <p className="flex flex-wrap items-baseline gap-x-4">
-            <span className="text-muted-foreground">{t('learn:written')}</span>
-            <span className="font-display text-xl font-semibold">
-              {(quality ? qualitySpellings(quality) : [built.suffix])
-                .map((suffix) => writtenSymbol({ root: built.root, suffix }))
-                .join(' · ')}
-            </span>
-          </p>
+          {others.length > 0 ? (
+            <p className="flex flex-wrap items-baseline gap-x-4">
+              <span className="text-muted-foreground">{t('learn:written')}</span>
+              <span className="font-display text-xl font-semibold">
+                {others.map((suffix) => writtenSymbol({ root: built.root, suffix })).join(' · ')}
+              </span>
+            </p>
+          ) : null}
         </div>
-        <ChordSheet placed={placed} />
-        <div className="flex gap-3">
-          <Button size="pill" onClick={() => sound('chord')}>
-            <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
-          </Button>
-          <Button size="pill" variant="soft" onClick={() => sound('arpeggio')}>
-            <PlayLabel playing={playback.playing === 'arpeggio'}>{t('learn:arpeggio')}</PlayLabel>
-          </Button>
+        <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
+          <ChordSheet placed={placed} />
+          <div className="flex gap-3">
+            <Button size="pill" onClick={() => sound('chord')}>
+              <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
+            </Button>
+            <Button size="pill" variant="soft" onClick={() => sound('arpeggio')}>
+              <PlayLabel playing={playback.playing === 'arpeggio'}>{t('learn:arpeggio')}</PlayLabel>
+            </Button>
+          </div>
         </div>
       </div>
       <ChordBuilder chord={chord} notes={built.tones.length} onChange={change} />

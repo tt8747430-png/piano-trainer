@@ -17,17 +17,11 @@ export type BuiltSize = (typeof BUILT_SIZES)[number]
 export const SEVENTHS = ['minor', 'major', 'diminished'] as const
 export type Seventh = (typeof SEVENTHS)[number]
 
-/** A tone a triad adds: the 6th, the 6th and 9th, or a 2nd, 4th, 9th, 11th or raised 11th. */
-export const ADDED_TONES = [
-  'none',
-  'six',
-  'sixNine',
-  'add2',
-  'add4',
-  'add9',
-  'add11',
-  'addS11',
-] as const
+/**
+ * A tone a chord adds beside the ones it stacks, in the order a hand finds them: a 2nd, 4th or 6th
+ * inside the triad, a 9th, 11th, raised 11th or 13th over it.
+ */
+export const ADDED_TONES = ['add2', 'add4', 'add6', 'add9', 'add11', 'addS11', 'add13'] as const
 export type AddedTone = (typeof ADDED_TONES)[number]
 
 /** The tones a 7th chord with a major 3rd may raise or lower, in the order a symbol writes them. */
@@ -40,8 +34,8 @@ export interface ChordParts {
   readonly size: BuiltSize
   /** A 7th chord's and up; `minor` below them. */
   readonly seventh: Seventh
-  /** A triad's; `none` from a 7th chord up. */
-  readonly added: AddedTone
+  /** In `ADDED_TONES` order; only those `addedOf` offers. */
+  readonly added: readonly AddedTone[]
   /** In `ALTERATIONS` order; only those `alterationsOf` offers. */
   readonly alterations: readonly Alteration[]
 }
@@ -50,7 +44,7 @@ export interface ChordParts {
 export interface BuiltChord {
   readonly root: SpelledNote
   readonly tones: readonly Tone[]
-  /** The table's suffix where the table has the chord, else the rule's: `13sus4`, `m(add9)`, `9#11`. */
+  /** The table's suffix where the table has the chord, else the rule's: `13sus4`, `m(add9)`, `7(add13)`. */
   readonly suffix: string
   readonly quality?: ChordQuality
 }
@@ -68,15 +62,14 @@ const SEVENTH_INTERVAL: Readonly<Record<Seventh, IntervalName>> = {
   major: 'M7',
   diminished: 'd7',
 }
-const ADDED_INTERVALS: Readonly<Record<AddedTone, readonly IntervalName[]>> = {
-  none: [],
-  six: ['M6'],
-  sixNine: ['M6', 'M9'],
-  add2: ['M2'],
-  add4: ['P4'],
-  add9: ['M9'],
-  add11: ['P11'],
-  addS11: ['A11'],
+const ADDED_INTERVAL: Readonly<Record<AddedTone, IntervalName>> = {
+  add2: 'M2',
+  add4: 'P4',
+  add6: 'M6',
+  add9: 'M9',
+  add11: 'P11',
+  addS11: 'A11',
+  add13: 'M13',
 }
 /** What an alteration puts in, and the natural tone it takes out. */
 const ALTERED: Readonly<
@@ -104,14 +97,24 @@ export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {
 }
 
 /** How each part is written in a symbol. */
-export const ADDED_SYMBOL: Readonly<Record<Exclude<AddedTone, 'none'>, string>> = {
-  six: '6',
-  sixNine: '6/9',
+export const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
   add2: 'add2',
   add4: 'add4',
+  add6: '6',
   add9: 'add9',
   add11: 'add11',
   addS11: 'add#11',
+  add13: 'add13',
+}
+/** The number an added tone is, as its chip says it: 2, 6, #11. */
+export const ADDED_DEGREE: Readonly<Record<AddedTone, string>> = {
+  add2: INTERVALS.M2.degree,
+  add4: INTERVALS.P4.degree,
+  add6: INTERVALS.M6.degree,
+  add9: INTERVALS.M9.degree,
+  add11: INTERVALS.P11.degree,
+  addS11: INTERVALS.A11.degree,
+  add13: INTERVALS.M13.degree,
 }
 export const ALTERATION_SIGN: Readonly<Record<Alteration, string>> = {
   b5: '♭5',
@@ -143,18 +146,32 @@ export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
 }
 
 /**
- * The tones a triad adds: the major triad every one (its raised 11th the Lydian triad's), the minor
+ * The tones a triad adds: the major triad its 2nd to its raised 11th (the Lydian triad's), the minor
  * triad all but that, a sus4 its 6th and 9th, the rest none.
  */
-const ADDED: Readonly<Record<Triad, readonly AddedTone[]>> = {
-  maj: ADDED_TONES,
-  min: ADDED_TONES.filter((tone) => tone !== 'addS11'),
-  dim: ['none'],
-  aug: ['none'],
-  sus2: ['none'],
-  sus4: ['none', 'six', 'add9'],
+const TRIAD_ADDS: Readonly<Record<Triad, readonly AddedTone[]>> = {
+  maj: ['add2', 'add4', 'add6', 'add9', 'add11', 'addS11'],
+  min: ['add2', 'add4', 'add6', 'add9', 'add11'],
+  dim: [],
+  aug: [],
+  sus2: [],
+  sus4: ['add6', 'add9'],
 }
-export const addedOf = (triad: Triad): readonly AddedTone[] => ADDED[triad]
+
+/**
+ * The tones a chord may add, as chord dictionaries name them: a triad its own; a 7th chord only a tone
+ * its stack skipped. Over a 7th chord that is the 13th (a major 9th's is the 13th chord as the builder
+ * writes it, so only a 7th's and a minor 9th's) and, under a minor 3rd, a 7th chord's 11th: an 11th
+ * clashes with a major 3rd, and is left out of the 13th for it. A 9th added is the 9th chord.
+ */
+export function addedOf({ triad, size }: Pick<ChordParts, 'triad' | 'size'>): readonly AddedTone[] {
+  if (size === 5) return TRIAD_ADDS[triad]
+  const eleventh = size === 7 && (triad === 'min' || triad === 'dim')
+  const thirteenth = (triad === 'maj' && size === 7) || (triad === 'min' && size <= 9)
+  return ADDED_TONES.filter(
+    (tone) => (tone === 'add11' && eleventh) || (tone === 'add13' && thirteenth),
+  )
+}
 
 /**
  * The alterations a chord takes, its available tensions: a dominant 7th (a major 3rd under a minor
@@ -169,10 +186,30 @@ export function alterationsOf(parts: ChordParts): readonly Alteration[] {
   return parts.triad === 'aug' ? ALTERATIONS.filter((each) => each !== 'b13') : ALTERATIONS
 }
 
+/** Parts that cannot stand together: `a` and `b` in either order. */
+const paired =
+  <T>(pairs: readonly (readonly [T, T])[]) =>
+  (a: T, b: T): boolean =>
+    pairs.some(([first, second]) => (first === a && second === b) || (first === b && second === a))
+
 /** Alterations that land on the same key, the first kept when both are asked for: a ♭5 is a #11. */
-const CLASHES: readonly (readonly [Alteration, Alteration])[] = [['b5', 's11']]
-const clash = (a: Alteration, b: Alteration): boolean =>
-  CLASHES.some(([first, second]) => (first === a && second === b) || (first === b && second === a))
+const clash = paired<Alteration>([['b5', 's11']])
+
+/** Added tones that are one choice, the first kept when both are asked for: a tone and its octave, an 11th and its raised one. */
+const addedClash = paired<AddedTone>([
+  ['add2', 'add9'],
+  ['add4', 'add11'],
+  ['add4', 'addS11'],
+  ['add11', 'addS11'],
+])
+
+/** An added tone is the natural tone an alteration takes out: a 13th added over a ♭13. */
+const crosses = (tone: AddedTone, alteration: Alteration): boolean =>
+  ADDED_INTERVAL[tone] === ALTERED[alteration].takes
+
+/** A list without what clashes with something before it: the first of two kept. */
+const firstKept = <T>(list: readonly T[], clashes: (a: T, b: T) => boolean): T[] =>
+  list.filter((each, i) => !list.slice(0, i).some((earlier) => clashes(earlier, each)))
 
 const DEFAULT_SEVENTH: Seventh = 'minor'
 
@@ -186,42 +223,73 @@ export function fitParts(parts: ChordParts): ChordParts {
     size > 5 && seventhsOf(parts.triad, size).includes(parts.seventh)
       ? parts.seventh
       : DEFAULT_SEVENTH
-  const added = size === 5 && addedOf(parts.triad).includes(parts.added) ? parts.added : 'none'
+  const adds = addedOf({ triad: parts.triad, size })
+  const added = firstKept(
+    ADDED_TONES.filter((each) => parts.added.includes(each) && adds.includes(each)),
+    addedClash,
+  )
   const fitted = { triad: parts.triad, size, seventh, added, alterations: [] }
   const offered = alterationsOf(fitted)
-  const alterations = ALTERATIONS.filter(
-    (each) => parts.alterations.includes(each) && offered.includes(each),
+  const alterations = firstKept(
+    ALTERATIONS.filter((each) => parts.alterations.includes(each) && offered.includes(each)),
+    clash,
   )
   return {
     ...fitted,
-    alterations: alterations.filter(
-      (each, i) => !alterations.slice(0, i).some((earlier) => clash(earlier, each)),
-    ),
+    alterations: alterations.filter((each) => !added.some((tone) => crosses(tone, each))),
   }
 }
 
-/** Parts with the alterations chosen next: one just chosen turns off the one it clashes with (a #11 a ♭5). */
+/** What is chosen next of a list: one just chosen turns off the ones it clashes with. */
+const lastKept = <T>(
+  before: readonly T[],
+  chosen: readonly T[],
+  clashes: (a: T, b: T) => boolean,
+): { kept: T[]; fresh: T[] } => {
+  const fresh = chosen.filter((each) => !before.includes(each))
+  return {
+    kept: chosen.filter(
+      (each) => fresh.includes(each) || !fresh.some((other) => clashes(other, each)),
+    ),
+    fresh,
+  }
+}
+
+/**
+ * Parts with the alterations chosen next: one just chosen turns off the one it clashes with (a #11 a
+ * ♭5) and the added tone it alters (a ♭13 an added 13th).
+ */
 export function withAlterations(parts: ChordParts, chosen: readonly Alteration[]): ChordParts {
-  const fresh = chosen.filter((each) => !parts.alterations.includes(each))
+  const { kept, fresh } = lastKept(parts.alterations, chosen, clash)
   return fitParts({
     ...parts,
-    alterations: chosen.filter(
-      (each) => fresh.includes(each) || !fresh.some((other) => clash(other, each)),
-    ),
+    added: parts.added.filter((tone) => !fresh.some((each) => crosses(tone, each))),
+    alterations: kept,
   })
 }
 
 /**
- * The intervals parts build, from the root up: the triad; then its added tone, or its 7th and the
- * natural 9th, 11th and 13th up to the size (the 11th left out of a 13th over a major 3rd, where it
- * clashes with the 3rd, and a sus4's 11th, which is its 4th); each alteration in place of its natural
- * tone, or added (a ♭5 under a raised 5th: the altered chord).
+ * Parts with the added tones chosen next: one just chosen turns off its octave (an add9 an add2) and
+ * the alteration of its degree (an added 13th a ♭13).
+ */
+export function withAdded(parts: ChordParts, chosen: readonly AddedTone[]): ChordParts {
+  const { kept, fresh } = lastKept(parts.added, chosen, addedClash)
+  return fitParts({
+    ...parts,
+    added: kept,
+    alterations: parts.alterations.filter((each) => !fresh.some((tone) => crosses(tone, each))),
+  })
+}
+
+/**
+ * The intervals parts build, from the root up: the triad; from a 7th chord, its 7th and the natural
+ * 9th, 11th and 13th up to the size (the 11th left out of a 13th over a major 3rd, where it clashes
+ * with the 3rd, and a sus4's 11th, which is its 4th), each alteration in place of its natural tone, or
+ * added (a ♭5 under a raised 5th: the altered chord); then the tones it adds.
  */
 function builtIntervals(parts: ChordParts): LabelledInterval[] {
   const names = new Set<IntervalName>(TRIAD_INTERVALS[parts.triad])
-  if (parts.size === 5) {
-    for (const name of ADDED_INTERVALS[parts.added]) names.add(name)
-  } else {
+  if (parts.size > 5) {
     const major3rd = names.has('M3')
     names.add(SEVENTH_INTERVAL[parts.seventh])
     if (parts.size >= 9) names.add('M9')
@@ -234,6 +302,7 @@ function builtIntervals(parts: ChordParts): LabelledInterval[] {
       names.add(ALTERED[alteration].adds)
     }
   }
+  for (const tone of parts.added) names.add(ADDED_INTERVAL[tone])
   return [...names].map((name) => INTERVALS[name]).sort((a, b) => a.semitones - b.semitones)
 }
 
@@ -253,27 +322,40 @@ const SIX: Readonly<Partial<Record<Triad, { readonly lead: string; readonly trai
   sus4: { lead: '', trail: 'sus4' },
 }
 
+/** A name with the tones it adds after it in brackets, a lone one bare where nothing stands before it: `add9`, `m(add9)`, `(add2,add4)`. */
+function withAddedTones(name: string, tones: readonly AddedTone[]): string {
+  const [only, ...more] = tones.map((tone) => ADDED_SYMBOL[tone])
+  if (only === undefined) return name
+  return name === '' && more.length === 0 ? only : `${name}(${[only, ...more].join(',')})`
+}
+
 /**
- * A chord's suffix by rule: a triad's, with its added tone (`6`, `m6/9`, `6sus4`, `add9`,
- * `m(add9)`); a 7th chord's name around its highest natural number (`m11`, `13sus4`, `Maj9`), then each
- * alteration in order (`9#11`, `7♭5♭9`, `Maj13#11`).
+ * A triad's suffix with the tones it adds: its 6th written first, with its 9th as `6/9` (`6`, `m6/9`,
+ * `6sus4`), then the rest (`add9`, `m(add9)`, `6(add11)`).
+ */
+function triadRuleSuffix(parts: ChordParts): string {
+  const six = parts.added.includes('add6') ? SIX[parts.triad] : undefined
+  if (!six) return withAddedTones(triadSuffix(parts.triad), parts.added)
+  const sixNine = parts.added.includes('add9')
+  return withAddedTones(
+    `${six.lead}${sixNine ? '6/9' : '6'}${six.trail}`,
+    parts.added.filter((tone) => tone !== 'add6' && !(sixNine && tone === 'add9')),
+  )
+}
+
+/**
+ * A chord's suffix by rule: a triad's with the tones it adds; a 7th chord's name around its highest
+ * natural number (`m11`, `13sus4`, `Maj9`), then each alteration in order (`9#11`, `7♭5♭9`,
+ * `Maj13#11`), then the tones it adds (`7(add13)`, `m7(add11)`).
  */
 function ruleSuffix(parts: ChordParts): string {
-  if (parts.size === 5) {
-    const triad = triadSuffix(parts.triad)
-    if (parts.added === 'none') return triad
-    const six = SIX[parts.triad]
-    if ((parts.added === 'six' || parts.added === 'sixNine') && six) {
-      return `${six.lead}${ADDED_SYMBOL[parts.added]}${six.trail}`
-    }
-    return triad ? `${triad}(${ADDED_SYMBOL[parts.added]})` : ADDED_SYMBOL[parts.added]
-  }
+  if (parts.size === 5) return triadRuleSuffix(parts)
   const { lead, trail } = seventhName([
     ...triadSemitones(parts.triad),
     INTERVALS[SEVENTH_INTERVAL[parts.seventh]].semitones,
   ])
   const altered = parts.alterations.map((each) => ALTERATION_SIGN[each]).join('')
-  return `${lead}${highestNatural(parts)}${trail}${altered}`
+  return withAddedTones(`${lead}${highestNatural(parts)}${trail}${altered}`, parts.added)
 }
 
 /** A chord from its parts on a root: its tones spelled by letter steps, named as the table or the rule names it. */
@@ -302,27 +384,21 @@ const subsetsOf = <T>(list: readonly T[]): T[][] =>
     .sort((a, b) => a.length - b.length)
 
 /**
- * Every chord the builder makes, each once, simplest first: by triad, size, 7th and added tone, then
- * the fewest alterations. Where two parts build the same chord (a 7th with a ♭9 and a 9th with its 9th
- * lowered), the smaller size is kept.
+ * Every chord the builder makes, each once, simplest first: by triad, size and 7th, then the fewest
+ * added tones, then the fewest alterations. Where two parts build the same chord (a 7th with a ♭9 and
+ * a 9th with its 9th lowered; an added 2nd and 9th, which fit to the 2nd alone), the first is kept.
  */
 export const CHORD_PARTS: readonly ChordParts[] = (() => {
   const all = TRIADS.flatMap((triad) =>
     sizesOf(triad).flatMap((size) =>
-      size === 5
-        ? addedOf(triad).map((added) => ({
-            triad,
-            size,
-            seventh: DEFAULT_SEVENTH,
-            added,
-            alterations: [],
-          }))
-        : seventhsOf(triad, size).flatMap((seventh) => {
-            const parts: ChordParts = { triad, size, seventh, added: 'none', alterations: [] }
-            return subsetsOf(alterationsOf(parts)).map((alterations) =>
-              fitParts({ ...parts, alterations }),
-            )
-          }),
+      (size === 5 ? [DEFAULT_SEVENTH] : seventhsOf(triad, size)).flatMap((seventh) => {
+        const parts: ChordParts = { triad, size, seventh, added: [], alterations: [] }
+        return subsetsOf(addedOf(parts)).flatMap((added) =>
+          subsetsOf(alterationsOf(parts)).map((alterations) =>
+            fitParts({ ...parts, added, alterations }),
+          ),
+        )
+      }),
     ),
   )
   const seen = new Set<string>()
