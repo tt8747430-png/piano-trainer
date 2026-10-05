@@ -23,6 +23,8 @@ export const practice = {
     exercises: 'Technique · Barry Harris · Piano With Jonny',
     quiz: 'Chords · Scales and keys · By ear · Reading',
   },
+  // Chords' two pages.
+  chords: { build: 'Build', find: 'Find' },
   // Accompaniment's two pages.
   accompaniment: { patterns: 'Patterns', studies: 'Studies' },
   // Progressions' first tab; its other two are named by their own pages.

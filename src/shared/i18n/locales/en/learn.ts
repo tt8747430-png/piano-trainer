@@ -111,7 +111,6 @@ export const learn = {
     together: 'Together',
   },
   finder: {
-    title: 'Chord finder',
     choose: 'Choose the keys of a chord.',
     none: 'No chord is named by these notes.',
     also: 'Also: {{names}}',
@@ -215,7 +214,6 @@ export const learn = {
   },
   tensions: {
     title: 'Available tensions',
-    chord: 'Chord',
     group: {
       weak: { title: 'Weak', says: 'They add nothing to its sound.' },
       strong: { title: 'Strong', says: 'They name the chord.' },
@@ -225,7 +223,6 @@ export const learn = {
   },
   // Patterns: each explained and heard, the learner's favourites, hidden and own.
   patterns: {
-    title: 'Patterns',
     new: 'New pattern',
     favourite: 'Favourite',
     rightHand: 'Right hand',

@@ -30,7 +30,6 @@ import {
   noteParam,
   ownFingering,
   pitchClassOf,
-  qualityRootSpelling,
   rootSpelling,
   scaleHasChords,
   scaleIntervals,
@@ -38,7 +37,6 @@ import {
   scaleRootSpelling,
   SEVENTHS,
   spellInKey,
-  TENSION_CHORDS,
   TRIADS,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
@@ -49,7 +47,6 @@ import type { PassingView } from '@/widgets/passing-chords'
 import type { ProgressionsView } from '@/widgets/progressions'
 import type { ReharmoniseView } from '@/widgets/reharmonise'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
-import type { TensionView } from '@/widgets/tension-explorer'
 import {
   C_MAJOR,
   C_MAJOR_PARAM,
@@ -190,19 +187,6 @@ export function readIntervalsSearch(raw: Raw): IntervalView {
   }
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
-
-// Available tensions: the root spelled by the chord's one rule, as the Chords explorer's.
-const isTensionChord = isOneOf(TENSION_CHORDS)
-export const TENSIONS_DEFAULTS: TensionView = { root: noteParam(note('C')), chord: 'd7' }
-export function readTensionsSearch(raw: Raw): TensionView {
-  const chord = valueOr(isTensionChord, raw.chord, TENSIONS_DEFAULTS.chord)
-  const read = readNote(raw.root)
-  return {
-    root: read ? noteParam(qualityRootSpelling(pitchClassOf(read), chord)) : TENSIONS_DEFAULTS.root,
-    chord,
-  }
-}
-export const tensionsSearch = routeSearch(readTensionsSearch, TENSIONS_DEFAULTS)
 
 /** A new pattern's search: the pattern it starts from (Make your own from it), if any. */
 export interface NewPatternSearch {

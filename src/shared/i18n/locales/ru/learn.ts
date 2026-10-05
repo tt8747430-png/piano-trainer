@@ -119,7 +119,6 @@ export const learn: LocaleResources['learn'] = {
     together: 'Вместе',
   },
   finder: {
-    title: 'Определитель аккордов',
     choose: 'Выберите клавиши аккорда.',
     none: 'Ни один аккорд не состоит из этих нот.',
     also: 'Также: {{names}}',
@@ -217,7 +216,6 @@ export const learn: LocaleResources['learn'] = {
   },
   tensions: {
     title: 'Доступные опции',
-    chord: 'Аккорд',
     group: {
       weak: { title: 'Слабые', says: 'Ничего не добавляют к звучанию.' },
       strong: { title: 'Сильные', says: 'Называют аккорд.' },
@@ -226,7 +224,6 @@ export const learn: LocaleResources['learn'] = {
     },
   },
   patterns: {
-    title: 'Фактуры',
     new: 'Новая фактура',
     favourite: 'Избранное',
     rightHand: 'Правая рука',

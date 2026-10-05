@@ -7,7 +7,6 @@ import {
   INTERVALS_DEFAULTS,
   PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
-  TENSIONS_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
 import { SONGS_DEFAULTS } from './songs-search'
@@ -31,7 +30,6 @@ describe('search params', () => {
     expect(await searchAt('/play/walk')).toEqual(WALK_DEFAULTS)
     expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
     expect(await searchAt('/practice/intervals')).toEqual(INTERVALS_DEFAULTS)
-    expect(await searchAt('/practice/tensions')).toEqual(TENSIONS_DEFAULTS)
     expect(await searchAt('/practice/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
   })
@@ -217,18 +215,6 @@ describe('search params', () => {
   it('respell an interval’s root as the reference spells it', async () => {
     expect(await searchAt('/practice/intervals?root=C%23')).toEqual({ root: 'Db' })
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
-  })
-
-  it('respell a tension chord’s root by the chord, and fall back from an unknown chord', async () => {
-    expect(await searchAt('/practice/tensions?chord=m7&root=Db')).toEqual({
-      chord: 'm7',
-      root: 'C#',
-    })
-    expect(await searchAt('/practice/tensions?chord=maj7&root=C%23')).toEqual({
-      chord: 'maj7',
-      root: 'Db',
-    })
-    expect(await searchAt('/practice/tensions?chord=n9')).toEqual(TENSIONS_DEFAULTS)
   })
 
   it('keep a number typed as a search, which the router reads as a number', async () => {

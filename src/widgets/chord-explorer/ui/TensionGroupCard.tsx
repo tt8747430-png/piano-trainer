@@ -28,9 +28,9 @@ export function TensionGroupCard({
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3 card p-4">
       <hgroup>
-        <h2 id={id} className="text-xl">
+        <h3 id={id} className="text-xl">
           {t(`tensions.group.${group}.title`)}
-        </h2>
+        </h3>
         <p className="text-sm text-muted-foreground">{t(`tensions.group.${group}.says`)}</p>
       </hgroup>
       <ul className="flex flex-wrap gap-2">

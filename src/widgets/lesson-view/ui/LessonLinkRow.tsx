@@ -82,9 +82,9 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           {...PAGE_TILES.tensions}
           render={
             <Link
-              to="/practice/tensions"
+              to="/practice/chords"
               search={{
-                chord: target.chord,
+                ...qualityParams(target.chord),
                 ...(target.root ? { root: noteParam(target.root) } : {}),
               }}
             />

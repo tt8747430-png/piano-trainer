@@ -78,6 +78,26 @@ describe('createViewsStore', () => {
     ).toEqual({ views: { '/practice/scales': { root: 'D' } } })
   })
 
+  it('moves a page that became a tab to its subject, and forgets Available tensions', () => {
+    expect(
+      restored({
+        views: {
+          '/practice/chord-finder': { keys: '60.64.67' },
+          '/learn/passing-chords': { from: 'C', to: 'F' },
+          '/practice/reharmonise': { note: 'G' },
+          '/practice/tensions': { chord: 'm7' },
+          '/learn/tensions': { chord: 'd7' },
+        },
+      }),
+    ).toEqual({
+      views: {
+        '/practice/chords/find': { keys: '60.64.67' },
+        '/practice/progressions/passing': { from: 'C', to: 'F' },
+        '/practice/progressions/reharmonise': { note: 'G' },
+      },
+    })
+  })
+
   it('keeps a lesson’s path as it is', () => {
     expect(restored({ views: { '/learn/lessons/triads': { quiz: 1 } } })).toEqual({
       views: { '/learn/lessons/triads': { quiz: 1 } },

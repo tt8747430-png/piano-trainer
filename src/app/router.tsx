@@ -36,11 +36,9 @@ import {
   readProgressionsSearch,
   readReharmoniseSearch,
   readScalesSearch,
-  readTensionsSearch,
   reharmoniseSearch,
   SCALES_KEPT,
   scalesSearch,
-  tensionsSearch,
   validateNewPatternSearch,
 } from './routes/explorer-search'
 import {
@@ -207,16 +205,9 @@ const intervalsRoute = createRoute({
   ...remembered(readIntervalsSearch, []),
   component: lazyRouteComponent(explorerScreens, 'IntervalsPage'),
 })
-const tensionsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/tensions',
-  ...tensionsSearch,
-  ...remembered(readTensionsSearch, []),
-  component: lazyRouteComponent(explorerScreens, 'TensionsPage'),
-})
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/chord-finder',
+  path: '/practice/chords/find',
   ...finderSearch,
   ...remembered(readFinderSearch, []),
   component: lazyRouteComponent(explorerScreens, 'ChordFinderPage'),
@@ -387,7 +378,6 @@ const routeTree = rootRoute.addChildren([
     chordsRoute,
     scalesRoute,
     intervalsRoute,
-    tensionsRoute,
     chordFinderRoute,
     reharmoniseRoute,
     passingChordsRoute,

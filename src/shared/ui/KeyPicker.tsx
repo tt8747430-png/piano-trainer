@@ -21,7 +21,7 @@ const KEYS: readonly (readonly Key[])[] = MODES.map((minor) =>
 /**
  * One of the 24 keys, all in sight and a tap away: the major keys over the minor keys, each written
  * as a chart writes it (D♭, C♯m), so a key has one name and the picker never relabels itself. Six
- * across on a phone, twelve from 640px.
+ * across, twelve where its own width holds them.
  */
 export function KeyPicker({
   value,
@@ -33,7 +33,7 @@ export function KeyPicker({
   const { t } = useTranslation('music')
   const keyName = useKeyName()
   return (
-    <div className="flex min-w-0 flex-col gap-2">
+    <div className="@container flex min-w-0 flex-col gap-2">
       <p aria-hidden className="flex items-baseline justify-between gap-3">
         <span className="text-sm text-muted-foreground">{t('key.label')}</span>
         <span className="font-semibold">{keyName(keyFromParam(value))}</span>
@@ -48,7 +48,7 @@ export function KeyPicker({
         className="flex flex-col gap-1 rounded-2xl bg-muted p-1"
       >
         {KEYS.map((row, minor) => (
-          <div key={minor} className="grid grid-cols-6 gap-1 sm:grid-cols-12">
+          <div key={minor} className="grid grid-cols-6 gap-1 @xl:grid-cols-12">
             {row.map((key) => (
               <Radio.Root
                 key={keyParam(key)}

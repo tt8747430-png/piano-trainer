@@ -23,6 +23,7 @@ export const practice: LocaleResources['practice'] = {
     exercises: 'Техника · Барри Харрис · Piano With Jonny',
     quiz: 'Аккорды · Гаммы и тональности · На слух · Чтение',
   },
+  chords: { build: 'Построить', find: 'Найти' },
   accompaniment: { patterns: 'Фактуры', studies: 'Этюды' },
   progression: 'Последовательность',
   keyProgressions: 'Последовательности в этой тональности',

@@ -23,20 +23,22 @@ const MOVED =
   /^\/learn\/(chords|scales|intervals|tensions|patterns|chord-finder|reharmonise|passing-chords|progressions)(?=\/|$)/
 /**
  * The screens that are gone: version 1's Keys page (a key is a view of Scales, which remembers its
- * own) and version 2's Practice by topic (Practice lists its places and remembers nothing).
+ * own), version 2's Practice by topic (Practice lists its places and remembers nothing) and its
+ * Available tensions (a 7th chord's tensions are a part of the chord built).
  */
-const GONE: ReadonlySet<string> = new Set(['/learn/keys', '/practice'])
+const GONE: ReadonlySet<string> = new Set(['/learn/keys', '/practice', '/practice/tensions'])
 
 /** The pages a version-2 save knew on their own, now tabs of the subject they belong to. */
 const TABBED: Readonly<Record<string, string>> = {
+  '/practice/chord-finder': '/practice/chords/find',
   '/practice/passing-chords': '/practice/progressions/passing',
   '/practice/reharmonise': '/practice/progressions/reharmonise',
 }
 
 /** Where a saved path's screen is now, or null for a screen that is gone. */
 function pathNow(path: string): string | null {
-  if (GONE.has(path)) return null
   const practised = path.replace(MOVED, '/practice/$1')
+  if (GONE.has(path) || GONE.has(practised)) return null
   return TABBED[practised] ?? practised
 }
 

@@ -21,8 +21,7 @@ const ROUTES = [
   ['/practice/chords', '/practice/chords'],
   ['/practice/scales', '/practice/scales'],
   ['/practice/intervals', '/practice/intervals'],
-  ['/practice/tensions', '/practice/tensions'],
-  ['/practice/chord-finder', '/practice/chord-finder'],
+  ['/practice/chords/find', '/practice/chords/find'],
   ['/practice/progressions/reharmonise', '/practice/progressions/reharmonise'],
   ['/practice/progressions/passing', '/practice/progressions/passing'],
   ['/practice/progressions', '/practice/progressions'],
@@ -79,6 +78,8 @@ describe('routes', () => {
     '/practice/progressions/flow',
     '/practice/passing-chords',
     '/practice/reharmonise',
+    '/practice/tensions',
+    '/practice/chord-finder',
   ])('shows not found at %s', async (path) => {
     await renderApp(path)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
