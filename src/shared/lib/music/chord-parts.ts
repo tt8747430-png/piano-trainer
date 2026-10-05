@@ -97,7 +97,7 @@ export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {
 }
 
 /** How each part is written in a symbol. */
-export const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
+const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
   add2: 'add2',
   add4: 'add4',
   add6: '6',
@@ -105,16 +105,6 @@ export const ADDED_SYMBOL: Readonly<Record<AddedTone, string>> = {
   add11: 'add11',
   addS11: 'add#11',
   add13: 'add13',
-}
-/** The number an added tone is, as its chip says it: 2, 6, #11. */
-export const ADDED_DEGREE: Readonly<Record<AddedTone, string>> = {
-  add2: INTERVALS.M2.degree,
-  add4: INTERVALS.P4.degree,
-  add6: INTERVALS.M6.degree,
-  add9: INTERVALS.M9.degree,
-  add11: INTERVALS.P11.degree,
-  addS11: INTERVALS.A11.degree,
-  add13: INTERVALS.M13.degree,
 }
 export const ALTERATION_SIGN: Readonly<Record<Alteration, string>> = {
   b5: '♭5',
@@ -146,15 +136,16 @@ export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
 }
 
 /**
- * The tones a triad adds: the major triad its 2nd to its raised 11th (the Lydian triad's), the minor
- * triad all but that, a sus4 its 6th and 9th, the rest none.
+ * The tones a triad adds, as chord dictionaries name them: the major triad its 2nd to its raised 11th
+ * (the Lydian triad's), the minor triad all but that, a sus4 its 6th and 9th, a sus2 its 6th (`6sus2`;
+ * its 9th is its 2nd), the augmented triad its 9th (`+(add9)`), the diminished triad none.
  */
 const TRIAD_ADDS: Readonly<Record<Triad, readonly AddedTone[]>> = {
   maj: ['add2', 'add4', 'add6', 'add9', 'add11', 'addS11'],
   min: ['add2', 'add4', 'add6', 'add9', 'add11'],
   dim: [],
-  aug: [],
-  sus2: [],
+  aug: ['add9'],
+  sus2: ['add6'],
   sus4: ['add6', 'add9'],
 }
 
@@ -319,6 +310,7 @@ export function highestNatural(parts: ChordParts): 7 | 9 | 11 | 13 {
 const SIX: Readonly<Partial<Record<Triad, { readonly lead: string; readonly trail: string }>>> = {
   maj: { lead: '', trail: '' },
   min: { lead: 'm', trail: '' },
+  sus2: { lead: '', trail: 'sus2' },
   sus4: { lead: '', trail: 'sus4' },
 }
 

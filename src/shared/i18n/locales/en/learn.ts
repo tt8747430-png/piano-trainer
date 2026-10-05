@@ -21,7 +21,9 @@ export const learn = {
   holdsNone: 'No chord of the scale holds {{note}}',
   // The Chords reference builds a chord part by part.
   builder: {
-    triad: 'Triad',
+    quality: 'Quality',
+    suspension: 'Suspension',
+    none: 'None',
     triads: {
       maj: 'Major',
       min: 'Minor',
@@ -30,7 +32,7 @@ export const learn = {
       sus2: 'Suspended 2nd',
       sus4: 'Suspended 4th',
     },
-    triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug', sus2: 'Sus2', sus4: 'Sus4' },
+    triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug' },
     sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
     seventh: '7th',
     sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },

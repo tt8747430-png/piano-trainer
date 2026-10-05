@@ -90,8 +90,6 @@ export {
   type ChordQuality,
 } from './chord'
 export {
-  ADDED_DEGREE,
-  ADDED_SYMBOL,
   ALTERATIONS,
   partsOf,
   ADDED_TONES,

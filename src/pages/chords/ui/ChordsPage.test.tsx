@@ -18,7 +18,7 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText('Major triad')).toBeInTheDocument()
-    const triads = screen.getByRole('radiogroup', { name: 'Triad' })
+    const triads = screen.getByRole('radiogroup', { name: 'Quality' })
     expect(within(triads).getByRole('radio', { name: 'Major' })).toBeChecked()
     const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
     expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
@@ -34,7 +34,7 @@ describe('Practice → Chords', () => {
     const { router, audio } = await renderApp('/practice/chords?root=G&size=7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
     await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Triad' })).getByRole('radio', {
+      within(screen.getByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
         name: 'Minor',
       }),
     )
@@ -75,13 +75,13 @@ describe('Practice → Chords', () => {
       within(added)
         .getAllByRole('button')
         .map((chip) => chip.textContent),
-    ).toEqual(['2', '4', '6', '9', '11'])
+    ).toEqual(['add2', 'add4', 'add6', 'add9', 'add11'])
     expect(within(added).getByRole('button', { name: 'add9' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     expect(screen.queryByText('Also written')).not.toBeInTheDocument()
-    await user.click(within(added).getByRole('button', { name: '6' }))
+    await user.click(within(added).getByRole('button', { name: 'add6' }))
     expect(router.state.location.search).toMatchObject({ added: 'add6add9' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm6/9' })).toBeInTheDocument()
   })
@@ -123,15 +123,29 @@ describe('Practice → Chords', () => {
     expect(sheet.querySelector('svg')).toBe(engraved)
   })
 
-  it('stacks a suspended chord only as far as it goes', async () => {
-    await renderApp('/practice/chords?triad=sus4&size=13')
+  it('suspends a major chord apart from its quality, offering only what its size takes', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chords?triad=sus4&size=13')
     expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
-    const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
+    const quality = screen.getByRole('radiogroup', { name: 'Quality' })
+    expect(within(quality).getByRole('radio', { name: 'Major' })).toBeChecked()
+    const suspension = screen.getByRole('radiogroup', { name: 'Suspension' })
     expect(
-      within(sizes)
+      within(suspension)
         .getAllByRole('radio')
         .map((option) => option.textContent),
-    ).toEqual(['Triad', '7th', '9th', '13th'])
+    ).toEqual(['None', 'sus4'])
+    await user.click(screen.getByRole('radio', { name: '11th' }))
+    expect(router.state.location.search).toMatchObject({ size: 11 })
+    expect(router.state.location.search).not.toHaveProperty('triad')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()
+    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
+  })
+
+  it('offers a suspension under a major chord only', async () => {
+    await renderApp('/practice/chords?triad=min')
+    await screen.findByRole('heading', { level: 2, name: 'Cm' })
+    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
@@ -244,7 +258,16 @@ describe('Practice → Chords', () => {
     await screen.findByRole('heading', { level: 2, name: 'C7' })
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual(['Letter', 'Accidental', 'Triad', 'Chord size', '7th', 'Inversion', 'Hands'])
+    ).toEqual([
+      'Letter',
+      'Accidental',
+      'Quality',
+      'Chord size',
+      '7th',
+      'Suspension',
+      'Inversion',
+      'Hands',
+    ])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
@@ -313,7 +336,7 @@ describe('Practice → Chords, a 7th chord’s tensions', () => {
     await renderApp('/practice/chords?size=7')
     await user.click(await screen.findByRole('button', { name: '9 D' }))
     await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Triad' })).getByRole('radio', {
+      within(screen.getByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
         name: 'Minor',
       }),
     )

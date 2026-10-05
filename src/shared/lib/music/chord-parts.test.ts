@@ -44,6 +44,8 @@ describe('buildChord', () => {
     [{ triad: 'sus4', added: ['add6'] }, 'C6sus4: C F G A'],
     [{ triad: 'sus4', added: ['add9'] }, 'Csus4(add9): C F G D'],
     [{ triad: 'sus4', added: ['add6', 'add9'] }, 'C6/9sus4: C F G A D'],
+    [{ triad: 'sus2', added: ['add6'] }, 'C6sus2: C D G A'],
+    [{ triad: 'aug', added: ['add9'] }, 'C+(add9): C E G# D'],
     [{ added: ['addS11'] }, 'Cadd#11: C E G F#'],
     [{ added: ['add2', 'add4'] }, 'C(add2,add4): C D E F G'],
     [{ added: ['add6', 'add11'] }, 'C6(add11): C E G A F'],
@@ -124,10 +126,10 @@ describe('partsOf', () => {
 })
 
 describe('CHORD_PARTS', () => {
-  it('makes 170 chords, each once', () => {
+  it('makes 172 chords, each once', () => {
     const suffixes = CHORD_PARTS.map((each) => buildChord(note('C'), each).suffix)
     expect(new Set(suffixes).size).toBe(suffixes.length)
-    expect(suffixes).toHaveLength(170)
+    expect(suffixes).toHaveLength(172)
   })
 
   it('holds only parts that fit', () => {
@@ -188,8 +190,9 @@ describe('what a chord may add', () => {
     expect(addedOf(parts({}))).toEqual(['add2', 'add4', 'add6', 'add9', 'add11', 'addS11'])
     expect(addedOf(parts({ triad: 'min' }))).toEqual(['add2', 'add4', 'add6', 'add9', 'add11'])
     expect(addedOf(parts({ triad: 'sus4' }))).toEqual(['add6', 'add9'])
-    expect(addedOf(parts({ triad: 'sus2' }))).toEqual([])
-    expect(addedOf(parts({ triad: 'aug' }))).toEqual([])
+    expect(addedOf(parts({ triad: 'sus2' }))).toEqual(['add6'])
+    expect(addedOf(parts({ triad: 'aug' }))).toEqual(['add9'])
+    expect(addedOf(parts({ triad: 'dim' }))).toEqual([])
     expect(addedOf(parts({ size: 7 }))).toEqual(['add13'])
     expect(addedOf(parts({ triad: 'min', size: 7 }))).toEqual(['add11', 'add13'])
     expect(addedOf(parts({ triad: 'dim', size: 7 }))).toEqual(['add11'])

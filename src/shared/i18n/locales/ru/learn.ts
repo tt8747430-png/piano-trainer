@@ -21,7 +21,9 @@ export const learn: LocaleResources['learn'] = {
   holds: '{{note}} есть в {{chords}}',
   holdsNone: 'Ни в одном аккорде гаммы нет {{note}}',
   builder: {
-    triad: 'Трезвучие',
+    quality: 'Вид',
+    suspension: 'Задержание',
+    none: 'Нет',
     triads: {
       maj: 'Мажорное',
       min: 'Минорное',
@@ -30,7 +32,7 @@ export const learn: LocaleResources['learn'] = {
       sus2: 'С задержанной секундой',
       sus4: 'С задержанной квартой',
     },
-    triadShort: { maj: 'Маж', min: 'Мин', dim: 'Ум', aug: 'Ув', sus2: 'Sus2', sus4: 'Sus4' },
+    triadShort: { maj: 'Маж', min: 'Мин', dim: 'Ум', aug: 'Ув' },
     sizes: {
       triad: 'Трезвучие',
       seventh: 'Септаккорд',

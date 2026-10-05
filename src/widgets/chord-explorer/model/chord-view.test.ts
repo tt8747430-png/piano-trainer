@@ -7,7 +7,7 @@ const C: ChordView = {
   triad: 'maj',
   size: 5,
   seventh: 'minor',
-  added: 'none',
+  added: '',
   alter: '',
   inversion: 0,
   hands: 'rh',
@@ -31,6 +31,19 @@ describe('changedView', () => {
       alter: '',
     })
     expect(changedView(dominant, { triad: 'sus2' })).toMatchObject({ size: 7, alter: '' })
+  })
+
+  it('drops a suspension the size chosen cannot take, keeping the size', () => {
+    const sus2 = { ...C, triad: 'sus2' as const, size: 7 as const }
+    expect(changedView(sus2, { size: 9 })).toMatchObject({ triad: 'maj', size: 9 })
+    expect(changedView({ ...C, triad: 'sus4' }, { size: 13 })).toMatchObject({
+      triad: 'sus4',
+      size: 13,
+    })
+    expect(changedView({ ...C, triad: 'sus4' }, { size: 11 })).toMatchObject({
+      triad: 'maj',
+      size: 11,
+    })
   })
 
   it('keeps the inversion the smaller chord has', () => {
