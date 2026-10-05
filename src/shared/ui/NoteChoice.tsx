@@ -81,7 +81,7 @@ export function NoteChoice({
               // The sign drawn at a size that reads (the music font's ♮ and ♭ are small), named in words.
               label: '',
               icon: (
-                <span aria-hidden className="text-2xl leading-none">
+                <span aria-hidden className="text-3xl leading-none">
                   {ACCIDENTAL_FACES[accidental].sign}
                 </span>
               ),

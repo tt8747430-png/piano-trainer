@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { midi, note } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
@@ -27,6 +27,20 @@ describe('ScoreView', () => {
     )
     expect(await screen.findByText('Bars: 2')).toBeInTheDocument()
     expect(document.querySelector('[data-slot="score"] svg')).toBeInTheDocument()
+  })
+
+  it('marks the notes chosen, on their staff at their tick, without engraving again', async () => {
+    const { rerender } = render(
+      <ScoreView score={score} scale={1} fingers={false} selected={{ staff: 'treble', tick: 0 }} />,
+    )
+    await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
+    const engraved = document.querySelector('[data-slot="score"] svg')
+    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-tick', '0')
+    rerender(
+      <ScoreView score={score} scale={1} fingers={false} selected={{ staff: 'bass', tick: 0 }} />,
+    )
+    await waitFor(() => expect(document.querySelector('.vf-selected')).not.toBeInTheDocument())
+    expect(document.querySelector('[data-slot="score"] svg')).toBe(engraved)
   })
 
   it('names the staff it mutes', async () => {

@@ -14,3 +14,7 @@
 [data-slot='score'][data-muted='bass'] .vf-staff-bass {
   color: var(--muted-foreground);
 }
+/* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
+[data-slot='score'] .vf-selected {
+  color: var(--ring);
+}

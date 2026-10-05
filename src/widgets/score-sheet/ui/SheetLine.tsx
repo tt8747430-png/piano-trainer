@@ -6,8 +6,8 @@ import type { LineSheet } from '../model/line-sheets'
 import { LineOverlay } from './LineOverlay'
 
 /**
- * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen;
- * a row of a busy sheet, drawn again only when its props change.
+ * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen,
+ * the notes at the caret marked; a row of a busy sheet, drawn again only when its props change.
  */
 export const SheetLine = memo(function SheetLine({
   sheet,
@@ -33,13 +33,18 @@ export const SheetLine = memo(function SheetLine({
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const holdsCaret = caret !== null
+  // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
+  const selected =
+    caret === null || layer === 'chords'
+      ? undefined
+      : { staff: layer === 'lh' ? ('bass' as const) : ('treble' as const), tick: caret }
   // The caret's line comes into view when the caret moves onto it.
   useEffect(() => {
     if (holdsCaret) ref.current?.scrollIntoView({ block: 'nearest' })
   }, [holdsCaret])
   return (
     <div ref={ref} className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none">
-      <LazyScoreView score={sheet.score} timeBefore={sheet.timeBefore}>
+      <LazyScoreView score={sheet.score} timeBefore={sheet.timeBefore} selected={selected}>
         {(layout) => (
           <LineOverlay
             layout={layout}

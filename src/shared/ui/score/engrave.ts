@@ -306,6 +306,20 @@ function drawTies(
 }
 
 /**
+ * Each drawn chord or note named by its staff and tick (`data-staff`, `data-tick`), so what lies over
+ * the engraving can mark the notes chosen without engraving again.
+ */
+function tagNotes(host: HTMLDivElement, voice: BuiltVoice, staff: StaffId) {
+  for (const { event, note } of voice.notes) {
+    if (event.kind !== 'notes') continue
+    // By the document's own index of ids: a long score has thousands of notes to name.
+    const group = host.ownerDocument.getElementById(`vf-${note.getAttribute('id')}`)
+    group?.setAttribute('data-staff', staff)
+    group?.setAttribute('data-tick', String(event.tick))
+  }
+}
+
+/**
  * Engraves a score into `host` as one system of measures left to right (spec §2.5), on the grand
  * staff or on `staff` alone, and says where everything is, in CSS pixels at `scale`.
  */
@@ -386,6 +400,7 @@ export function engrave(
         voice.voice.draw(context, stave)
         for (const beam of voice.beams) beam.setContext(context).draw()
         for (const tuplet of voice.tuplets) tuplet.setContext(context).draw()
+        tagNotes(host, voice, on)
       }
       context.closeGroup()
     }

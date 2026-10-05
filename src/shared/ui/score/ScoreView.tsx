@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { TimeSignature } from '@/shared/lib/music'
+import type { Tick, TimeSignature } from '@/shared/lib/music'
 import type { Score, StaffId } from '@/shared/lib/notation'
 import { engrave, type ScoreLayout } from './engrave'
 import { loadMusicFonts } from './music-font'
@@ -25,6 +25,7 @@ export function ScoreView({
   muted,
   staff,
   timeBefore,
+  selected,
   children,
 }: {
   score: Score
@@ -37,6 +38,8 @@ export function ScoreView({
   staff?: StaffId | undefined
   /** The time signature before this line of music: printed again only where it changes. */
   timeBefore?: TimeSignature | undefined
+  /** The notes chosen, marked in the focus colour as a notation app marks a selection. */
+  selected?: { readonly staff: StaffId; readonly tick: Tick } | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
   const { t } = useTranslation('music')
@@ -75,6 +78,21 @@ export function ScoreView({
       current = false
     }
   }, [score, scale, fingers, names, staff, beforeCount, beforeUnit])
+
+  // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
+  const selectedStaff = selected?.staff
+  const selectedTick = selected?.tick
+  useEffect(() => {
+    const element = host.current
+    if (!element || engraving.status !== 'ready' || selectedStaff === undefined) return
+    const marked = element.querySelectorAll(
+      `[data-staff="${selectedStaff}"][data-tick="${selectedTick}"]`,
+    )
+    for (const each of marked) each.classList.add('vf-selected')
+    return () => {
+      for (const each of marked) each.classList.remove('vf-selected')
+    }
+  }, [engraving, selectedStaff, selectedTick])
 
   const size =
     engraving.status === 'ready'

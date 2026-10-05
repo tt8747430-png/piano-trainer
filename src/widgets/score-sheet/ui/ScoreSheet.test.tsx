@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { createEditorStore, placesIn, readDraft, type Layer } from '@/features/score-editor'
@@ -80,5 +80,11 @@ describe('ScoreSheet', () => {
     if (!head) throw new Error('no line head')
     await user.click(head)
     expect(onSignature).toHaveBeenCalled()
+  })
+
+  it('marks the notes at the caret on its staff as the ones chosen', async () => {
+    sheet('melody')
+    await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
+    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-staff', 'treble')
   })
 })

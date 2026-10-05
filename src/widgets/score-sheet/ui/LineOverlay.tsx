@@ -118,7 +118,7 @@ export function LineOverlay({
           aria-label={t('sheet.signature')}
           title={t('sheet.signature')}
           onClick={onSignature}
-          className="absolute bottom-0 z-30 cursor-pointer rounded-lg transition-colors duration-200 ease-out hover:bg-foreground/5"
+          className="absolute bottom-0 z-30 cursor-pointer rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
           style={{ left: first.x, width: first.notes - first.x, top: 0 }}
         />
       ) : null}
@@ -132,7 +132,8 @@ export function LineOverlay({
             tabIndex={-1}
             aria-label={t('sheet.bar', { n: (placed?.index ?? 0) + 1, chords: chords.join(' ') })}
             onClick={place(index)}
-            className="absolute bottom-0 z-20 cursor-text rounded-lg transition-colors duration-200 ease-out hover:bg-foreground/5 focus-visible:-outline-offset-3"
+            // A pointer's target only (the arrows move the caret): it takes no focus ring round the bar.
+            className="absolute bottom-0 z-20 cursor-text rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
             style={{ left: measure.x, width: measure.width, top: -CHORD_ROW }}
           />
         )
