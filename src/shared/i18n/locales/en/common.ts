@@ -45,7 +45,7 @@ export const common = {
     settings: 'Keyboard settings',
     glissando: 'Glissando',
   },
-  // The keyboard settings: in the rail's popover and in Settings.
+  // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
     keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
     namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },

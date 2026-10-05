@@ -1,4 +1,5 @@
 export { PianoKeyboard } from './PianoKeyboard'
 export { RailButton } from './RailButton'
+export { RailChoice } from './RailChoice'
 export type { KeyMark, KeyStates, KeyTone } from './key-look'
 export { NO_KEYS, unmarked, type ShownKeys } from './shown-keys'

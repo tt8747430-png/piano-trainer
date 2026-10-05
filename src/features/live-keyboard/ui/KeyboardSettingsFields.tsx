@@ -16,7 +16,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /**
- * The keyboard settings, saved for every keyboard: in the rail's popover and in Settings. How a swipe
+ * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in place). How a swipe
  * plays is the rail's own toggle, beside the keys it changes.
  */
 export function KeyboardSettingsFields() {

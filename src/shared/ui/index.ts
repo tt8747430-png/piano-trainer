@@ -29,6 +29,7 @@ export {
   NO_KEYS,
   PianoKeyboard,
   RailButton,
+  RailChoice,
   unmarked,
   type KeyMark,
   type ShownKeys,

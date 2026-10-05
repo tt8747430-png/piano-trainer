@@ -257,7 +257,10 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords?size=7')
     await screen.findByRole('heading', { level: 2, name: 'C7' })
     expect(
-      screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
+      screen
+        .getAllByRole('radiogroup')
+        .filter((group) => !group.closest('[aria-label="Keyboard settings"]'))
+        .map((group) => group.getAttribute('aria-label')),
     ).toEqual([
       'Letter',
       'Accidental',
