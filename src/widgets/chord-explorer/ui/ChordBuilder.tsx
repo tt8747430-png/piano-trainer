@@ -9,12 +9,11 @@ import {
   seventhsOf,
   sizesOf,
   TRIADS,
-  triadSuffix,
   withAlterations,
   type BuiltSize,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
-import { Dropdown, MultiDropdown, NamedSegmented, NoteDropdown } from '@/shared/ui'
+import { Dropdown, MultiDropdown, NamedSegmented, NotePicker, Segmented } from '@/shared/ui'
 import type { ChordView } from '../model/chord-view'
 
 /** Each size's name on screen. */
@@ -27,8 +26,9 @@ const SIZE_NAMES = {
 } as const satisfies Record<BuiltSize, string>
 
 /**
- * A chord's parts, each a choice: its root, triad and size; then its 7th, the tone a triad adds, or a
- * dominant's alterations, each only where the chord takes one.
+ * A chord's parts, each a choice: its root among the twelve notes, its triad and its size, all in
+ * sight and a tap each; then its 7th, the tone a triad adds, or a dominant's alterations, each only
+ * where the chord takes one.
  */
 export function ChordBuilder({
   chord,
@@ -44,33 +44,31 @@ export function ChordBuilder({
   const alterations = alterationsOf(parts)
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-2">
-        <NoteDropdown
-          label={t('learn:root')}
-          value={chord.root}
-          spell={(pc) => builtRootSpelling(pc, parts)}
-          onChange={(root) => onChange({ root })}
-        />
-        <Dropdown
-          label={t('learn:builder.triad')}
-          value={parts.triad}
-          options={TRIADS.map((triad) => ({
-            value: triad,
-            label: t(`learn:builder.triads.${triad}`),
-            detail: triadSuffix(triad) || t('music:major'),
-          }))}
-          onChange={(triad) => onChange({ triad })}
-        />
-        <Dropdown
-          label={t('music:chordSize.label')}
-          value={parts.size}
-          options={sizesOf(parts.triad).map((size) => ({
-            value: size,
-            label: t(`learn:builder.sizes.${SIZE_NAMES[size]}`),
-          }))}
-          onChange={(size) => onChange({ size })}
-        />
-      </div>
+      <NotePicker
+        label={t('learn:root')}
+        value={chord.root}
+        spell={(pc) => builtRootSpelling(pc, parts)}
+        onChange={(root) => onChange({ root })}
+      />
+      <Segmented
+        label={t('learn:builder.triad')}
+        value={parts.triad}
+        options={TRIADS.map((triad) => ({
+          value: triad,
+          label: t(`learn:builder.triadShort.${triad}`),
+          title: t(`learn:builder.triads.${triad}`),
+        }))}
+        onChange={(triad) => onChange({ triad })}
+      />
+      <Segmented
+        label={t('music:chordSize.label')}
+        value={parts.size}
+        options={sizesOf(parts.triad).map((size) => ({
+          value: size,
+          label: t(`learn:builder.sizes.${SIZE_NAMES[size]}`),
+        }))}
+        onChange={(size) => onChange({ size })}
+      />
       {parts.size > 5 && sevenths.length > 1 ? (
         <NamedSegmented
           label={t('learn:builder.seventh')}

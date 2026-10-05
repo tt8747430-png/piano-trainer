@@ -70,7 +70,7 @@ export function ChordExplorer({
           />
         </div>
       </div>
-      <ExplorerKeyboard shown={shown} className="lg:order-first lg:col-span-2" />
+      <ExplorerKeyboard shown={shown} className="order-first lg:col-span-2" />
       <div className="flex flex-col gap-4">
         <ChordSheet placed={placed} />
         <ol className="flex flex-wrap gap-2">

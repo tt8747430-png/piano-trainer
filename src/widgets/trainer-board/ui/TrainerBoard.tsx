@@ -105,7 +105,11 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       </p>
 
       {choices && !result ? (
-        <div role="group" aria-label={t('quiz:answers')} className="grid grid-cols-2 gap-3">
+        <div
+          role="group"
+          aria-label={t('quiz:answers')}
+          className="grid grid-cols-2 gap-3 sm:max-w-xl"
+        >
           {choices.map(({ value, label }) => (
             <Button key={value} variant="outline" size="lg" onClick={() => trainer.choose(value)}>
               {label}
@@ -115,7 +119,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       ) : null}
 
       {choosing ? (
-        <div className="flex gap-3">
+        <div className="flex gap-3 sm:max-w-xl">
           {selected.length > 0 ? (
             <Button variant="soft" size="pill" onClick={trainer.clear}>
               {t('quiz:clear')}
@@ -137,6 +141,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         <Button
           size="pill"
           autoFocus
+          className="sm:max-w-xl"
           onClick={() => {
             trainer.next()
             prompt.current?.focus()

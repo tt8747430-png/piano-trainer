@@ -53,10 +53,11 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           <NamedSegmented
             label={t('rounds.label')}
             value={view.rounds}
-            options={ROUNDS.map((rounds) => ({
-              value: rounds,
-              label: rounds === 0 ? t('rounds.untilStopped') : String(rounds),
-            }))}
+            options={ROUNDS.map((rounds) =>
+              rounds === 0
+                ? { value: rounds, label: '∞', title: t('rounds.untilStopped') }
+                : { value: rounds, label: String(rounds) },
+            )}
             onChange={(rounds) => setView({ rounds })}
           />
         </div>

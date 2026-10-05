@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
-describe('Learn → Chords', () => {
+describe('Practice → Chords', () => {
   it('keeps the scroll when a choice changes the chord', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chords')
@@ -17,8 +17,13 @@ describe('Learn → Chords', () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText('Major triad')).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Triad' })).toHaveTextContent('Major')
-    expect(screen.getByRole('combobox', { name: 'Chord size' })).toHaveTextContent('Triad')
+    const triads = screen.getByRole('radiogroup', { name: 'Triad' })
+    expect(within(triads).getByRole('radio', { name: 'Major' })).toBeChecked()
+    const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
+    expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
+    expect(
+      within(screen.getByRole('radiogroup', { name: 'Root' })).getAllByRole('radio'),
+    ).toHaveLength(12)
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
@@ -27,12 +32,14 @@ describe('Learn → Chords', () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/chords?root=G&size=7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Triad' }))
-    await user.click(await screen.findByRole('option', { name: 'Minor m' }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Triad' })).getByRole('radio', {
+        name: 'Minor',
+      }),
+    )
     expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
-    await user.click(await screen.findByRole('option', { name: '11th' }))
+    await user.click(screen.getByRole('radio', { name: '11th' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
     expect(audio.played.length).toBeGreaterThan(1)
   })
@@ -77,16 +84,14 @@ describe('Learn → Chords', () => {
   })
 
   it('stacks a suspended chord only as far as it goes', async () => {
-    const user = userEvent.setup()
     await renderApp('/practice/chords?triad=sus4&size=13')
     expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
-    expect((await screen.findAllByRole('option')).map((option) => option.textContent)).toEqual([
-      'Triad',
-      '7th',
-      '9th',
-      '13th',
-    ])
+    const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
+    expect(
+      within(sizes)
+        .getAllByRole('radio')
+        .map((option) => option.textContent),
+    ).toEqual(['Triad', '7th', '9th', '13th'])
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
@@ -151,18 +156,20 @@ describe('Learn → Chords', () => {
 
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
-    const { progressStore } = await renderApp('/practice/chords?size=7&seventh=major&step=chords:sev')
+    const { progressStore } = await renderApp(
+      '/practice/chords?size=7&seventh=major&step=chords:sev',
+    )
     const check = await screen.findByRole('link', { name: 'Check yourself' })
     expect(check.getAttribute('href')).toMatch(/^\/check\?of=chords(%3A|:)sev$/)
     await user.click(screen.getByRole('button', { name: 'Learned' }))
     expect(progressStore.getState().learned['chords:sev']).toBeDefined()
   })
 
-  it('chooses the root from its pop-up', async () => {
+  it('chooses the root among the twelve notes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?triad=min')
-    await user.click(await screen.findByRole('combobox', { name: 'Root' }))
-    await user.click(await screen.findByRole('option', { name: 'E' }))
+    const roots = await screen.findByRole('radiogroup', { name: 'Root' })
+    await user.click(within(roots).getByRole('radio', { name: 'E' }))
     expect(router.state.location.search).toMatchObject({ root: 'E', triad: 'min' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
   })

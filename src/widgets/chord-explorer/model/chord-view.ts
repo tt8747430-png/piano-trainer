@@ -10,7 +10,7 @@ import {
 } from '@/shared/lib/music'
 import { type PartsParams, partsFromParams, partsParams } from '@/shared/lib'
 
-/** What the Chords reference shows: a chord built part by part on a root, in an inversion, in one hand or two. */
+/** What the Chords explorer shows: a chord built part by part on a root, in an inversion, in one hand or two. */
 export interface ChordView extends PartsParams {
   readonly root: NoteParam
   readonly inversion: number
