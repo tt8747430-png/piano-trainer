@@ -68,7 +68,8 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
   staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody
   and any bar of either hand written note by note from the keys, the computer keyboard or MIDI, the clef and
-  signatures opening the song's key, tempo and meter, undo and redo, every change saved, played in the Player in any
+  signatures opening the song's key, tempo and time signature (changed within its kind), the notes at the caret
+  marked, undo and redo, every change saved, played in the Player in any
   key), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
   0012–0030.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).

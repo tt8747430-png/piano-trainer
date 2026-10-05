@@ -782,7 +782,8 @@ the title and Play), the sheet scrolling under it, then the
   ("Melody · Bar 1, beat 2 · rest"). **Chord names** is a toolbar toggle (a T, named beside it from 1024px): off, the
   chord symbols and their row leave the sheet and a click there writes the tune. The clef, key and time signature at
   each line's head open the song's settings (a sand wash on hover). A bar under the pointer takes a 5% ink wash, no
-  ring.
+  ring, and no focus ring when clicked (the arrows move the caret). **The notes at the caret** on its staff are drawn
+  in deep sky, as a notation app marks a selection, on the engraving as it is (nothing is engraved again).
 - **The tool dock,** over the keys: on the treble staff, its two voices first, **Melody · Right hand** as segments
   with their pictures (a note, a hand); then that place's tools as a palette, one row
   that scrolls sideways on a phone, its groups parted by a 32px hairline (`ToolDivider`). Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
@@ -794,7 +795,8 @@ the title and Play), the sheet scrolling under it, then the
   shows the focus ring inside it.
 - **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
 - **The song's settings** (a sheet, from the toolbar or a line's head): an own song's Title, the key choice, the Tempo
-  slider (40–160, set on release) and the meter as a fact. The pattern is the Player's Setup's, where it is heard;
+  slider (40–160, set on release) and the Time signature as segments of its own kind (2/4 · 3/4 · 4/4, or 6/8 · 12/8:
+  across kinds every written value would be another note). Changing it makes each full bar the new one, a pickup kept. The pattern is the Player's Setup's, where it is heard;
   its list ends with Make your own pattern.
 - **Sections** are named as a song's parts: Intro · Verse · Chorus · Bridge · Ending; a songbook's own kinds (Practice,
   Hymn, Part) stay on its pieces and are not offered.
