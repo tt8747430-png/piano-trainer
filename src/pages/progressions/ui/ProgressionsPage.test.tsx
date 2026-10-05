@@ -102,7 +102,8 @@ describe('Practice → Progressions', () => {
 
   it('opens the progression in the Player, in its key and chord size', async () => {
     await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
-    const practise = await screen.findByRole('link', { name: 'Practise in the Player' })
+    const inPlayer = await screen.findByRole('region', { name: 'Practise in the Player' })
+    const practise = within(inPlayer).getByRole('link', { name: 'In C major' })
     const href = practise.getAttribute('href') ?? ''
     expect(href).toMatch(/^\/play\/progression\?/)
     expect(href).toMatch(/p=ii-V-I/)
@@ -112,7 +113,7 @@ describe('Practice → Progressions', () => {
 
   it('opens it through the keys, round the circle of fifths', async () => {
     await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
-    const through = await screen.findByRole('link', { name: 'Through the keys' })
+    const through = await screen.findByRole('link', { name: /^Through the keys/ })
     expect(through.getAttribute('href')).toMatch(/^\/play\/progression\?.*walk=fifths/)
   })
 

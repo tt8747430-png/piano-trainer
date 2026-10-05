@@ -38,7 +38,7 @@ describe('Remembered views', () => {
       storage,
     )
     const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G', { storage })
-    await user.click(await screen.findByRole('link', { name: 'Practise in the Player' }))
+    await user.click(await screen.findByRole('link', { name: 'In G major' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         p: 'I-IV-V',

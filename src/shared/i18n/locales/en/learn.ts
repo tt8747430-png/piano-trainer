@@ -192,7 +192,7 @@ export const learn = {
     field: 'Numerals or chords',
     unread: 'This progression can’t be read.',
     chords: 'Chords',
-    practise: 'Practise in the Player',
+    inKey: 'In {{key}}',
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',

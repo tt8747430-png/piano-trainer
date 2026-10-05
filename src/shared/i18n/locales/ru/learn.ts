@@ -194,7 +194,7 @@ export const learn: LocaleResources['learn'] = {
     field: 'Ступени или аккорды',
     unread: 'Эта последовательность не читается.',
     chords: 'Аккорды',
-    practise: 'Играть в плеере',
+    inKey: 'В тональности {{key}}',
     throughKeys: 'По тональностям',
     choose: 'Последовательность',
     typed: 'Набрана',
