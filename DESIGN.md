@@ -735,7 +735,16 @@ text saying where the caret is, and the keys (160px, 192px from 1024px).
 - **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
 - **The song's settings** (a sheet): an own song's Title, the Key pop-up, the Tempo slider (40–160, set on release),
   the Pattern pop-up of the patterns the music can play by group, and the meter as a fact.
-- **New song** (Songs' round +) is a sheet: Title, Key, the five meters as segments, and Make in honey at its foot.
+- **The takes** (the toolbar's Record, a round button with a dot, ADR 0028): a sheet titled Takes with the tempo,
+  meter and the caret's bar as facts, the Click switch, the MIDI control while no keyboard is connected, and Record in
+  honey; under it the piece's takes, the newest first, each its time made (semibold) over its length and tempo in soft
+  ink, with Play and Write into the score (soft) and Download and Delete (round). Write into the score and Delete are
+  pages of the sheet (‹ Back; Into as segments, Split at a pop-up, Shortest note as glyph segments named on screen,
+  Write in honey; Delete in its crimson line beside Keep it). While a take records, the tools and the caret's line
+  give way to the recording strip: a card with a softly pulsing ink dot, Count-in and its beat or Recording, the bar
+  and the time in tabular figures, and Stop in honey.
+- **New song** (Songs' round +) is a sheet: Title, Key, the five meters as segments, and Make in honey at its foot,
+  Make and record (soft) under it.
 - **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
   (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the
   chart (the honey pill).

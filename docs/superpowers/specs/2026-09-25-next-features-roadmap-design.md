@@ -334,7 +334,7 @@ kernel.
 | Item                                   | What it is                                                                                 | Waits for |
 | -------------------------------------- | ------------------------------------------------------------------------------------------ | --------- |
 | MusicXML load and save                 | Bring a score from MuseScore, Sibelius, Finale or Dorico, and take one out                  | the owner (9 built) |
-| Record from a MIDI keyboard            | Play on a connected keyboard, in a full-screen keyboard, and the notes are written into a score | the owner (9 built) |
+| Record from a MIDI keyboard            | Built 2026-10-05 as takes: played on a connected keyboard to a click, kept as played, written into a score on request (ADR 0028) | built |
 | Live score                             | What you play written onto a grand staff as you play, the chord named above it              | 3, 5      |
 | Toggle mode                            | Keys stay lit when tapped, finger numbers typed onto them, two colours: teaching diagrams   | 1, 5      |
 | Lyrics under the staff                 | A song's words under its tune on the sheet music, the syllables carried by the melody's notes | a piece that carries its words |

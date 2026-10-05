@@ -236,7 +236,7 @@ staff, as wide as the note value chosen; in Chords, over the chord row at a beat
 | Item | Why not yet |
 | --- | --- |
 | MusicXML load and save | The owner's word: planned only (roadmap §5) |
-| Recording from a MIDI keyboard into a score | The owner's word: planned only (roadmap §5) |
+| Recording from a MIDI keyboard into a score | Built 2026-10-05 as takes (spec `2026-10-05-takes-and-more-chords-design.md`, ADR 0028) |
 | Lyrics under the staff | No piece carries its words; a syllable needs its note (roadmap §5) |
 | A lead sheet exported as ChordPro or PDF | Not for this app: no sharing or export; MusicXML is the one exchange format, planned |
 | Writing an own pattern's figure note by note | A figure's notes are tokens over any chord, not pitches: a different input from the editor's (patterns spec §8) |

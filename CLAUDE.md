@@ -60,7 +60,8 @@ it. `@` → `src`.
   `/learn/patterns/new` and `…/$patternRef/edit`), and the tools Chord finder, Reharmonise, Passing chords and Progressions (`/learn/chord-finder`,
   `/learn/reharmonise`, `/learn/passing-chords`, `/learn/progressions`); Practice's trainers
   (`/practice/trainers/$trainerId`); the Player's `/play/$pieceId`, `/play/walk`,
-  `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId`; screens are
+  `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
+  opens its takes); screens are
   lazy through `routes/*-screens.ts` (home, settings, songs, learn, practice, player: a chunk holds the screens
   that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (each
@@ -68,7 +69,7 @@ it. `@` → `src`.
   the router imports no page or widget code, or it would leave its lazy chunk; validators run as the app opens, so they
   import only what a URL is made of, with `read-search.ts`, never a chart's arrangement; each exports its `read*`
   reader and a remembered route's kept params), `routes/remember.ts` (a remembered route's `beforeLoad`: the two rules
-  of ADR 0022, one redirect at most; `createAppRouter({ history, views, patterns, pieces })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore piecesStore services router />`;
+  of ADR 0022, one redirect at most; `createAppRouter({ history, views, patterns, pieces })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore piecesStore takesStore services router />`;
   the router's context holds the views, patterns and pieces stores),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
@@ -83,8 +84,8 @@ it. `@` → `src`.
   the exercise's own fields) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
   references, `pages/patterns`, `pages/pattern` and `pages/pattern-editor` the Patterns reference, a pattern's page
   and the editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
-  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; its parts share one
-  context and read the store narrowly).
+  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useTakes`, the recorder
+  and the takes' sheet (ADR 0028); its parts share one context and read the store narrowly).
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup: its button and sheet, its first page
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `FigureRows` (with the
@@ -107,8 +108,10 @@ it. `@` → `src`.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
-  song; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
-  chords, bars, sections and settings; the caret; `reduce` with undo and redo; `createEditorStore`), `connect-midi` (the connection, the status
+  song with its takes; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
+  chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`, `takeGrids`; the
+  caret; `reduce` with undo and redo; `createEditorStore`), `record-take` (ADR 0028: `takeOf`, the keys and pedal heard
+  against the click; `recorderClicks`; `startRecorder`; `useRecorder`), `manage-takes` (`saveTake`, `deleteTake`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
@@ -146,12 +149,13 @@ it. `@` → `src`.
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
   Gospel), `progression-library` (the Progressions tool's named progressions by style,
   in numerals), `exercise` (Practice's exercises: groups, levels, names, the fields each rule takes and its own choice;
-  `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 6, with the
-  keyboard settings and the trainers' auto-next), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 7, with the
+  keyboard settings, the trainers' auto-next and the recorder's click), `take` (ADR 0028: `pt-takes`, version 1, saved
+  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds`, `quantise`, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
   version 1: each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
-  by one sanitiser for any version, following other tabs' saves), `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
+  by one sanitiser for any version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
   `useScrollMotion`, `useShownOnScrollUp` (the screen bar's hide and show), `IN_PLACE` (a navigation that changes the
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
@@ -162,7 +166,8 @@ it. `@` → `src`.
   `scaleKey`, `relatedScale`; fingerings from any start and over several octaves, `thumbFingering`, `arpeggioFingering`; `scale-chord.ts`, a scale's chords stacked
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `writtenSymbol`, `qualityRootSpelling`,
-  `readChordSymbol`, `keySymbol`, `keyMode`, `fitInversion`, `STACK_SIZES`; `circle.ts`, the circle of fifths;
+  `readChordSymbol`, `keySymbol`, `keyMode`, `fitInversion`, `STACK_SIZES`; `nameChords`, the Chord finder's, with the tones
+  a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals reference's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
   `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
@@ -178,7 +183,8 @@ it. `@` → `src`.
   together (`intervalSounds`), which keys sound when and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
   the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and
-  fakes; the audio port knows which keys it is sounding and whether a play still sounds; it plays a piece's recording on
+  fakes; MIDI events carry their time and the sustain pedal is `onPedal`; the audio port knows which keys it is sounding,
+  whether a play still sounds, and the audio time heard at a moment (`audioTimeAt`); it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton`, `Pinned`, `ScreenHeader` (the screen's bar, sticky, hidden while reading down; `ScreenBarProvider` in `AppShell`
   sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utilities read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
@@ -215,7 +221,7 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
   Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
   scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen). Only a test the DOM gets in the way of opts into
   `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
-  `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore` and `piecesStore` too); a widget that
+  `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore`, `piecesStore` and `takesStore` too); a widget that
   leads elsewhere, `await renderRouted(ui)`; which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and
   `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that sound); both in
