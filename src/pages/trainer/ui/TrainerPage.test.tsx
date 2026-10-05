@@ -158,7 +158,7 @@ describe('A trainer', () => {
   })
 
   it('asks My gaps’ gaps, read once as it opens', async () => {
-    const { progressStore } = await renderApp('/practice')
+    const { progressStore } = await renderApp('/practice/quiz')
     await screen.findByRole('link', { name: /^My gaps/ })
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
     const user = userEvent.setup()
@@ -168,10 +168,10 @@ describe('A trainer', () => {
     ).toBeInTheDocument()
   })
 
-  it('goes back to Practice from its Back', async () => {
+  it('goes back to Quiz from its Back', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/trainers/build-chord')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    expect(router.state.location.pathname).toBe('/practice')
+    expect(router.state.location.pathname).toBe('/practice/quiz')
   })
 })

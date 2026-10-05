@@ -1,4 +1,7 @@
 export { checkPlan, isTrainerId } from '@/features/trainer'
 export { CheckPage } from '@/pages/check'
+export { ExercisesPage } from '@/pages/exercises'
 export { PracticePage } from '@/pages/practice'
+export { QuizPage } from '@/pages/quiz'
+export { StudiesPage } from '@/pages/studies'
 export { TrainerPage } from '@/pages/trainer'

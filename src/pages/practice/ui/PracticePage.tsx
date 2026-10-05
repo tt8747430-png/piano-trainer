@@ -1,67 +1,64 @@
-import { useSearch } from '@tanstack/react-router'
-import {
-  AudioWaveform,
-  ChartNoAxesColumnIncreasing,
-  Ear,
-  Hand,
-  KeyboardMusic,
-  ListMusic,
-  type LucideIcon,
-} from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Dumbbell, ListChecks } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useViewChange } from '@/shared/lib'
-import { ScreenHeader } from '@/shared/ui'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/primitives/tabs'
-import { GapsLink } from '@/widgets/trainer-list'
-import { PRACTICE_TOPICS, type PracticeHubView, type PracticeTopic } from '../model/topics'
-import { TopicPanel } from './TopicPanel'
-
-/** Each topic's mark on its tab. */
-const TOPIC_ICON: Readonly<Record<PracticeTopic, LucideIcon>> = {
-  chords: KeyboardMusic,
-  scales: ChartNoAxesColumnIncreasing,
-  ear: Ear,
-  progressions: ListMusic,
-  accompaniment: AudioWaveform,
-  technique: Hand,
-}
-
-const isTopic = (value: unknown): value is PracticeTopic =>
-  PRACTICE_TOPICS.some((topic) => topic === value)
+import { selectAllAnswers, selectPractised, useProgress } from '@/entities/progress'
+import { myGaps } from '@/features/trainer'
+import { OPEN_PLAINLY } from '@/shared/lib'
+import { PAGE_TILES, RowLink, ScreenHeader, type Tile } from '@/shared/ui'
 
 /**
- * Practice: everything practised, a topic at a time (the URL holds it, and the place comes back on
- * it): the pages that explore the topic, the trainers that quiz it, and the exercises and pieces
- * that play it in the Player. My gaps, which checks across topics, is in the bar.
+ * Practice's seven places, in the order they are listed: each one page for a thing practised, wearing
+ * that page's tile.
+ */
+const SUBJECTS = [
+  { id: 'chords', to: '/practice/chords', tile: PAGE_TILES.chords },
+  { id: 'scales', to: '/practice/scales', tile: PAGE_TILES.scales },
+  { id: 'progressions', to: '/practice/progressions', tile: PAGE_TILES.progressions },
+  { id: 'intervals', to: '/practice/intervals', tile: PAGE_TILES.intervals },
+  { id: 'accompaniment', to: '/practice/patterns', tile: PAGE_TILES.patterns },
+  { id: 'exercises', to: '/practice/exercises', tile: { icon: Dumbbell, paint: 'sand' } },
+  { id: 'quiz', to: '/practice/quiz', tile: { icon: ListChecks, paint: 'lilac' } },
+] as const satisfies readonly { id: string; to: string; tile: Tile }[]
+
+/** How many skills My gaps holds to check. */
+function useGapsCount(): number {
+  const answers = useProgress(selectAllAnswers)
+  const practised = useProgress(selectPractised)
+  return useMemo(() => myGaps(answers, practised).length, [answers, practised])
+}
+
+/**
+ * Practice: seven places, each named for what is practised and saying what is inside it. Each opens
+ * as it was left.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')
-  const { topic } = useSearch({ from: '/shell/practice' })
-  const onChange = useViewChange<PracticeHubView>()
+  const gaps = useGapsCount()
+  // The Quiz row says how many skills wait to be checked, behind the gap's dot.
+  const toCheck =
+    gaps > 0 ? (
+      <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-muted-foreground tabular-nums">
+        <span aria-hidden className="size-2.5 rounded-full bg-attention" />
+        {t('gaps', { count: gaps })}
+      </span>
+    ) : undefined
   return (
-    <div className="flex flex-col">
-      <ScreenHeader title={t('title')} actions={<GapsLink />} />
-      <Tabs
-        value={topic}
-        onValueChange={(next: unknown) => {
-          if (isTopic(next)) onChange({ topic: next })
-        }}
-      >
-        <TabsList aria-label={t('topics.label')} className="-mx-gutter px-gutter">
-          {PRACTICE_TOPICS.map((id) => {
-            const Icon = TOPIC_ICON[id]
-            return (
-              <TabsTrigger key={id} value={id}>
-                <Icon aria-hidden />
-                {t(`topics.${id}`)}
-              </TabsTrigger>
-            )
-          })}
-        </TabsList>
-        <TabsContent value={topic}>
-          <TopicPanel topic={topic} />
-        </TabsContent>
-      </Tabs>
+    <div className="flex flex-col gap-2">
+      <ScreenHeader title={t('title')} />
+      <ul className="grid-cards gap-2 *:card *:px-2">
+        {SUBJECTS.map(({ id, to, tile }) => (
+          <li key={id}>
+            <RowLink
+              title={t(`subjects.${id}`)}
+              detail={t(`inside.${id}`)}
+              {...tile}
+              trailing={id === 'quiz' ? toCheck : undefined}
+              render={<Link to={to} state={OPEN_PLAINLY} />}
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

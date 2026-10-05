@@ -13,7 +13,7 @@ export function PassingChordsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('passing.title')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'progressions' } }} />}
+        back={<BackButton fallback={{ to: '/practice' }} />}
       />
       <PassingChordsTool view={view} onChange={onChange} />
     </div>

@@ -62,7 +62,7 @@ export function RowLink({
               </>
             ) : null}
           </span>
-          {trailing}
+          {trailing ? <> {trailing}</> : null}
           <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
         </>
       ),

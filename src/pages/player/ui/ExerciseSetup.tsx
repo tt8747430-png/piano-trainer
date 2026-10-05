@@ -1,6 +1,6 @@
 import { SlidersHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ExerciseChoice, RuleExercise } from '@/entities/exercise'
+import type { ExerciseChoice, Exercise } from '@/entities/exercise'
 import { RoundButton, Sheet, SheetContent, SheetTrigger, ToggleGrid } from '@/shared/ui'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
@@ -18,7 +18,7 @@ export function ExerciseSetup({
   onChange,
   onSwing,
 }: {
-  exercise: RuleExercise
+  exercise: Exercise
   choice: ExerciseChoice
   swing: boolean
   onChange: (change: ExerciseChange) => void

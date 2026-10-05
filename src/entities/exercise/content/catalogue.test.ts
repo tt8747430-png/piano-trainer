@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { note, noteParam, parseNumerals } from '@/shared/lib/music'
+import { note, noteParam } from '@/shared/lib/music'
 import { exerciseChoice } from '../model/resolve'
-import { EXERCISE_GROUPS, EXERCISE_IDS, isRuleExercise } from '../model/types'
+import { EXERCISE_GROUPS, EXERCISE_IDS } from '../model/types'
 import { EXERCISES } from './catalogue'
 
 describe('the exercises', () => {
@@ -11,21 +11,12 @@ describe('the exercises', () => {
   })
 
   it('writes every rule’s exercise, and only those', () => {
-    expect(
-      EXERCISES.filter(isRuleExercise)
-        .map((exercise) => exercise.id)
-        .toSorted(),
-    ).toEqual([...EXERCISE_IDS].toSorted())
+    expect(EXERCISES.map((exercise) => exercise.id).toSorted()).toEqual(
+      [...EXERCISE_IDS].toSorted(),
+    )
   })
 
-  it('opens every progression in numerals the kernel reads', () => {
-    for (const exercise of EXERCISES) {
-      if (isRuleExercise(exercise) || exercise.opens.player !== 'progression') continue
-      expect(parseNumerals(exercise.opens.numerals), exercise.id).not.toBeNull()
-    }
-  })
-
-  it('lists every group in the page’s order, none empty', () => {
+  it('lists every group in order, none empty', () => {
     const groups = EXERCISES.map((exercise) => exercise.group)
     expect([...new Set(groups)]).toEqual(EXERCISE_GROUPS)
   })
@@ -40,7 +31,7 @@ describe('the exercises', () => {
   })
 
   it('plays each rule its own way when its URL names nothing', () => {
-    for (const exercise of EXERCISES.filter(isRuleExercise)) {
+    for (const exercise of EXERCISES) {
       const choice = exerciseChoice(exercise, {})
       for (const [field, value] of Object.entries(exercise.own)) {
         expect(choice[field as keyof typeof choice], `${exercise.id}: ${field}`).toEqual(value)
@@ -50,7 +41,7 @@ describe('the exercises', () => {
 })
 
 describe('exerciseChoice', () => {
-  const [scale] = EXERCISES.filter(isRuleExercise)
+  const [scale] = EXERCISES
 
   it('takes what the exercise allows and plays its own for the rest', () => {
     if (!scale) throw new Error('No scale')

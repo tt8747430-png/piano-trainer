@@ -13,7 +13,7 @@ export function ProgressionsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('progressions.title')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'progressions' } }} />}
+        back={<BackButton fallback={{ to: '/practice' }} />}
       />
       <ProgressionsTool view={view} onChange={onChange} />
     </div>

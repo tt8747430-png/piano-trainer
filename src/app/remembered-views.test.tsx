@@ -69,7 +69,7 @@ describe('Remembered views', () => {
     const storage = createMemoryStorage()
     await useScreen('/practice/chords?root=D&triad=min', storage)
     const { router } = await renderApp('/practice', { storage })
-    await user.click(await screen.findByRole('link', { name: 'Chords' }))
+    await user.click(await screen.findByRole('link', { name: /^Chords / }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' }),
     )

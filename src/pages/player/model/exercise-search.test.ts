@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { ruleExercise } from '@/entities/exercise'
+import { exerciseOf } from '@/entities/exercise'
 import { note } from '@/shared/lib/music'
 import { exercisePatch } from './exercise-search'
 
-const arpeggio = ruleExercise('arpeggio')
+const arpeggio = exerciseOf('arpeggio')
 
 describe('exercisePatch', () => {
   it('writes only the choices a change names, the exercise’s own as none', () => {

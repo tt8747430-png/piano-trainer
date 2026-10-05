@@ -21,7 +21,7 @@ export function ScalesPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('scales')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'scales' } }} />}
+        back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           key ? (
             <RoundButton

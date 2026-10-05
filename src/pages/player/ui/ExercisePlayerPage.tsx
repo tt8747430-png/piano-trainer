@@ -1,11 +1,6 @@
 import { useParams, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import {
-  isExerciseId,
-  ruleExercise,
-  type ExerciseChoice,
-  type RuleExercise,
-} from '@/entities/exercise'
+import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
 import { useGoBack, useViewChange } from '@/shared/lib'
 import { chordSymbol } from '@/shared/lib/music'
@@ -15,7 +10,7 @@ import { ExerciseSetup } from './ExerciseSetup'
 import { PlayerLayout } from './PlayerLayout'
 
 /** What an exercise is played on, as its title says it: its scale, its chord or its key. */
-function useExerciseOf(exercise: RuleExercise, choice: ExerciseChoice): string {
+function useExerciseOf(exercise: Exercise, choice: ExerciseChoice): string {
   const scaleName = useScaleName()
   const keyName = useKeyName()
   switch (exercise.fields.root) {
@@ -32,11 +27,11 @@ function useExerciseOf(exercise: RuleExercise, choice: ExerciseChoice): string {
 export function ExercisePlayerPage() {
   const { exerciseId } = useParams({ from: '/full-screen/play/exercise/$exerciseId' })
   return isExerciseId(exerciseId) ? (
-    <ExerciseScreen key={exerciseId} exercise={ruleExercise(exerciseId)} />
+    <ExerciseScreen key={exerciseId} exercise={exerciseOf(exerciseId)} />
   ) : null
 }
 
-function ExerciseScreen({ exercise }: { exercise: RuleExercise }) {
+function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/exercise/$exerciseId' })

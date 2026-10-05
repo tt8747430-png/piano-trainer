@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { exerciseChoice, type ExerciseChoice, type RuleExercise } from '@/entities/exercise'
+import { exerciseChoice, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { arrangeExercise } from '@/features/practice'
 import { usePracticePlayer, type PracticeView } from '@/widgets/practice-player'
 import {
@@ -16,7 +16,7 @@ import type { PlayerOf } from './player-of'
  * and the Player's view (the exercise's own swing where the URL names none).
  */
 export function useExercisePlayer(
-  exercise: RuleExercise,
+  exercise: Exercise,
   search: ExerciseSearch,
   setSearch: (patch: Partial<ExerciseSearch>) => void,
 ): PlayerOf<ExerciseChoice, ExerciseChange> & { readonly view: PracticeView } {

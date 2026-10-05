@@ -23,16 +23,12 @@ export {
 export {
   EXERCISE_GROUPS,
   EXERCISE_IDS,
-  isRuleExercise,
   type Exercise,
   type ExerciseField,
   type ExerciseFields,
   type ExerciseGroup,
   type ExerciseId,
-  type ExerciseWay,
-  type RuleExercise,
-  type WayExercise,
 } from './model/types'
 export { exerciseChoice, exerciseRootSpelling, type ExerciseParams } from './model/resolve'
-export { exercisesIn, isExerciseId, ruleExercise } from './model/selectors'
+export { exerciseOf, exercisesIn, isExerciseId } from './model/selectors'
 export { EXERCISES } from './content/catalogue'

@@ -14,19 +14,25 @@ function runsOf(records: ReturnType<typeof selectTrainerRecords>, id: TrainerId)
   )
 }
 
-/** A topic's trainers under one heading: each row opens its trainer as it was left, saying how many runs it has. */
-export function TrainerList({ trainers }: { trainers: readonly TrainerId[] }) {
-  const { t } = useTranslation(['practice', 'quiz'])
+/** A group of trainers under its heading: each row opens its trainer as it was left, saying how many runs it has. */
+export function TrainerList({
+  title,
+  trainers,
+}: {
+  title: string
+  trainers: readonly TrainerId[]
+}) {
+  const { t } = useTranslation('quiz')
   const records = useProgress(selectTrainerRecords)
   return (
-    <RowGroup title={t('practice:quiz')}>
+    <RowGroup title={title}>
       {trainers.map((id) => {
         const runs = runsOf(records, id)
         return (
           <li key={id}>
             <RowLink
-              title={t(`quiz:trainers.${id}`)}
-              detail={runs > 0 ? t('quiz:record.runs', { count: runs }) : undefined}
+              title={t(`trainers.${id}`)}
+              detail={runs > 0 ? t('record.runs', { count: runs }) : undefined}
               {...TRAINER_TILE[id]}
               render={
                 <Link

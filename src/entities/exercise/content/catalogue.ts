@@ -94,28 +94,6 @@ export const EXERCISES: readonly Exercise[] = [
     swing: false,
   },
   {
-    id: 'chords-of-scale',
-    group: 'chords',
-    level: 2,
-    name: { en: 'Chords of a scale', ru: 'Аккорды гаммы' },
-    trains: {
-      en: 'A scale’s chords up and down, in any size, inversion and pattern',
-      ru: 'Аккорды гаммы вверх и вниз, любого размера, обращения и фактуры',
-    },
-    opens: { player: 'walk' },
-  },
-  {
-    id: 'chords-by-semitones',
-    group: 'chords',
-    level: 2,
-    name: { en: 'Chords by semitones', ru: 'Аккорды по полутонам' },
-    trains: {
-      en: 'Chosen chords root by root, a semitone at a time',
-      ru: 'Выбранные аккорды от каждого звука, по полутону',
-    },
-    opens: { player: 'chromatic' },
-  },
-  {
     id: 'sixth-diminished',
     group: 'barryHarris',
     level: 3,
@@ -254,39 +232,6 @@ export const EXERCISES: readonly Exercise[] = [
     own: { figure: '1235' },
     tempo: 84,
     swing: true,
-  },
-  {
-    id: 'two-five-one-keys',
-    group: 'progressions',
-    level: 2,
-    name: { en: 'ii–V–I through the keys', ru: 'ii–V–I по тональностям' },
-    trains: {
-      en: 'The jazz cadence in every key, round the circle',
-      ru: 'Джазовый оборот во всех тональностях, по кругу',
-    },
-    opens: { player: 'progression', numerals: 'ii7 V7 IMaj7', walk: 'fifths' },
-  },
-  {
-    id: 'turnaround-keys',
-    group: 'progressions',
-    level: 3,
-    name: { en: 'I–vi–ii–V through the keys', ru: 'I–vi–ii–V по тональностям' },
-    trains: {
-      en: 'The turnaround in every key, round the circle',
-      ru: 'Оборот I–vi–ii–V во всех тональностях, по кругу',
-    },
-    opens: { player: 'progression', numerals: 'IMaj7 vi7 ii7 V7', walk: 'fifths' },
-  },
-  {
-    id: 'circle-keys',
-    group: 'progressions',
-    level: 3,
-    name: { en: 'Round the circle through the keys', ru: 'Квинтовый круг по тональностям' },
-    trains: {
-      en: 'Every degree of the key a 5th apart, home to I, in every key',
-      ru: 'Все ступени тональности через квинту и домой к I, во всех тональностях',
-    },
-    opens: { player: 'progression', numerals: 'I IV vii° iii vi ii V I', walk: 'fifths' },
   },
   {
     id: 'five-finger',

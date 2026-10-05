@@ -11,7 +11,7 @@ import { TrainerRunView } from './TrainerRunView'
 import { TrainerSettings } from './TrainerSettings'
 import { useLevelName } from './use-level-name'
 
-/** A trainer, named by the path: the one Practice opened. */
+/** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {
   const { trainerId } = useParams({ from: '/shell/practice/trainers/$trainerId' })
   return isTrainerId(trainerId) ? <TrainerScreenView key={trainerId} id={trainerId} /> : null
@@ -22,7 +22,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
   const { t } = useTranslation('quiz')
   const view = useSearch({ from: '/shell/practice/trainers/$trainerId' })
   const setView = useViewChange<TrainerView>()
-  const close = useGoBack({ to: '/practice' })
+  const close = useGoBack({ to: '/practice/quiz' })
   const { trainer, level, asks, runKey, runId, record } = useTrainerScreen(id, view)
   const levelName = useLevelName()
   const levels = [...trainer.levels, ...(trainer.custom.length > 0 ? [CUSTOM] : [])].map(
@@ -32,7 +32,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t(`trainers.${id}`)}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton fallback={{ to: '/practice/quiz' }} />}
         actions={
           <>
             <MidiButton />

@@ -61,17 +61,17 @@ describe('An exercise in the Player', () => {
 
   it('comes back as it was left when opened plainly', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice')
-    await user.click(await screen.findByRole('link', { name: /^Arpeggio A chord/ }))
-    await screen.findByRole('heading', { name: 'Arpeggio: C' })
+    const { router } = await renderApp('/practice/exercises')
+    await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
+    await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
     await user.click(screen.getByRole('button', { name: 'Setup' }))
-    await user.click(screen.getByRole('combobox', { name: /^Chord/ }))
-    await user.click(await screen.findByRole('option', { name: /Minor 7th/ }))
+    await user.click(await screen.findByRole('button', { name: 'Swing' }))
     await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Close' }))
-    await user.click(await screen.findByRole('link', { name: /^Arpeggio A chord/ }))
-    expect(await screen.findByRole('heading', { name: 'Arpeggio: Cm7' })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/play/exercise/arpeggio')
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
+    await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
+    expect(router.state.location.pathname).toBe('/play/exercise/from-third')
+    expect(router.state.location.search).toHaveProperty('swing')
   })
 
   it('is not found for an exercise there is not', async () => {

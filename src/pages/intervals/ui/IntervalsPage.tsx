@@ -13,7 +13,7 @@ export function IntervalsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('intervals.title')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'ear' } }} />}
+        back={<BackButton fallback={{ to: '/practice' }} />}
       />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>

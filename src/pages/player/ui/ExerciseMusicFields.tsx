@@ -4,7 +4,7 @@ import {
   exerciseRootSpelling,
   TONALITIES,
   type ExerciseChoice,
-  type RuleExercise,
+  type Exercise,
 } from '@/entities/exercise'
 import {
   chordFamily,
@@ -31,7 +31,7 @@ export function ExerciseMusicFields({
   choice,
   onChange,
 }: {
-  exercise: RuleExercise
+  exercise: Exercise
   choice: ExerciseChoice
   onChange: (change: ExerciseChange) => void
 }) {

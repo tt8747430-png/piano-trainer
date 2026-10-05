@@ -1,24 +1,15 @@
 import { isOneOf } from '@/shared/lib'
 import { EXERCISES } from '../content/catalogue'
-import {
-  EXERCISE_IDS,
-  isRuleExercise,
-  type Exercise,
-  type ExerciseGroup,
-  type ExerciseId,
-  type RuleExercise,
-} from './types'
+import { EXERCISE_IDS, type Exercise, type ExerciseGroup, type ExerciseId } from './types'
 
-/** Whether a value names an exercise its own rule writes. */
+/** Whether a value names an exercise. */
 export const isExerciseId = isOneOf(EXERCISE_IDS)
 
-const RULES = new Map(
-  EXERCISES.filter(isRuleExercise).map((exercise) => [exercise.id, exercise] as const),
-)
+const BY_ID = new Map(EXERCISES.map((exercise) => [exercise.id, exercise] as const))
 
-/** The exercise a rule writes, by its id. */
-export function ruleExercise(id: ExerciseId): RuleExercise {
-  const exercise = RULES.get(id)
+/** An exercise by its id. */
+export function exerciseOf(id: ExerciseId): Exercise {
+  const exercise = BY_ID.get(id)
   if (!exercise) throw new RangeError(`No exercise ${id}`)
   return exercise
 }

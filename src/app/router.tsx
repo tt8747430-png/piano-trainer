@@ -61,13 +61,7 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import {
-  practiceSearch,
-  readPracticeSearch,
-  readTrainerSearch,
-  trainerSearch,
-  validateCheckSearch,
-} from './routes/practice-search'
+import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { ShellLayout } from './ShellLayout'
@@ -141,14 +135,27 @@ const pieceRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-// Practice by topic, which comes back on the topic it was left on; the trainers, and the studies and
-// progressions that are practised there.
+// Practice's seven places; Quiz with its trainers, Exercises, and the studies and progressions that
+// are practised there.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
-  ...practiceSearch,
-  ...remembered(readPracticeSearch, []),
   component: lazyRouteComponent(practiceScreens, 'PracticePage'),
+})
+const quizRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/quiz',
+  component: lazyRouteComponent(practiceScreens, 'QuizPage'),
+})
+const exercisesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/exercises',
+  component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
+})
+const studiesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/studies',
+  component: lazyRouteComponent(practiceScreens, 'StudiesPage'),
 })
 // A trainer: each remembers its own level, rounds and Custom, under its own path.
 const restoreTrainer = restoreView(readTrainerSearch, [])
@@ -404,7 +411,10 @@ const routeTree = rootRoute.addChildren([
     editPatternRoute,
     lessonRoute,
     practiceRoute,
+    quizRoute,
+    exercisesRoute,
     trainerRoute,
+    studiesRoute,
     studyRoute,
     progressionRoute,
   ]),

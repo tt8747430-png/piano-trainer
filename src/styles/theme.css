@@ -221,6 +221,26 @@
   @apply rounded-3xl border border-border bg-card;
 }
 
+/* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen; and one tab of it,
+   the chosen one (a tab pressed, or the link of the page shown) in ink over an ink underline. */
+@utility tab-strip {
+  @apply relative flex gap-1 overflow-x-auto border-b border-border scrollbar-none;
+}
+@utility tab {
+  @apply relative inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-base font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3;
+  &::after {
+    content: '';
+    @apply absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-foreground opacity-0 transition-opacity duration-200;
+  }
+  &[data-active],
+  &[aria-current='page'] {
+    @apply text-foreground;
+    &::after {
+      @apply opacity-100;
+    }
+  }
+}
+
 /* A screen's gutter, and what bleeds across it to the screen's edges (a bar, a row that scrolls sideways). */
 @utility px-gutter {
   padding-inline: var(--gutter);

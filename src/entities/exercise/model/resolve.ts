@@ -13,7 +13,7 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 import type { ExerciseChoice } from './choice'
-import type { RuleExercise } from './types'
+import type { Exercise } from './types'
 
 /** An exercise's params as its URL holds them, each read and checked by the router; absent is its own. */
 export type ExerciseParams = {
@@ -41,7 +41,7 @@ const allowed = <T>(value: T | undefined, allows: readonly T[] | true | undefine
 
 /** A root spelled by the exercise's rule: as its scale, its chord or its key. */
 export function exerciseRootSpelling(
-  exercise: RuleExercise,
+  exercise: Exercise,
   pc: PitchClass,
   choice: Pick<ExerciseChoice, 'kind' | 'quality' | 'tonality'>,
 ): SpelledNote {
@@ -59,7 +59,7 @@ export function exerciseRootSpelling(
  * An exercise's choice from its URL: each param it takes and allows, else its own, else the base; a
  * Start on past its scale's notes is the tonic, and a fingering the run cannot take its own.
  */
-export function exerciseChoice(exercise: RuleExercise, params: ExerciseParams): ExerciseChoice {
+export function exerciseChoice(exercise: Exercise, params: ExerciseParams): ExerciseChoice {
   const { fields } = exercise
   const own = { ...BASE, ...exercise.own }
   const kind = allowed(params.kind, fields.kind, own.kind)

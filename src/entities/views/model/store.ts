@@ -3,7 +3,7 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { latestViews, viewOf, type RememberedView, type Views } from './view'
 
 export const VIEWS_STORAGE_KEY = 'pt-views'
-export const VIEWS_VERSION = 2
+export const VIEWS_VERSION = 3
 
 export interface ViewsState {
   readonly views: Views
@@ -21,12 +21,15 @@ export const createViewsStore = (saving: SavingOptions = {}): ViewsStore =>
 /** The pages a version-1 save knew under Learn, now under Practice with everything else that is practised. */
 const MOVED =
   /^\/learn\/(chords|scales|intervals|tensions|patterns|chord-finder|reharmonise|passing-chords|progressions)(?=\/|$)/
-/** The Keys page of a version-1 save: a key is now a view of Scales, which remembers its own. */
-const KEYS_PAGE = '/learn/keys'
+/**
+ * The screens that are gone: version 1's Keys page (a key is a view of Scales, which remembers its
+ * own) and version 2's Practice by topic (Practice lists its places and remembers nothing).
+ */
+const GONE: ReadonlySet<string> = new Set(['/learn/keys', '/practice'])
 
 /** Where a saved path's screen is now, or null for a screen that is gone. */
 const pathNow = (path: string): string | null =>
-  path === KEYS_PAGE ? null : path.replace(MOVED, '/practice/$1')
+  GONE.has(path) ? null : path.replace(MOVED, '/practice/$1')
 
 /**
  * Stored JSON is untrusted: paths from the root keep their views' params, each under its screen's

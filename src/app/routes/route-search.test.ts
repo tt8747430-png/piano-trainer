@@ -10,7 +10,6 @@ import {
   TENSIONS_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
-import { PRACTICE_DEFAULTS } from './practice-search'
 import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
@@ -33,7 +32,6 @@ describe('search params', () => {
     expect(await searchAt('/play/chromatic')).toEqual(CHROMATIC_DEFAULTS)
     expect(await searchAt('/practice/intervals')).toEqual(INTERVALS_DEFAULTS)
     expect(await searchAt('/practice/tensions')).toEqual(TENSIONS_DEFAULTS)
-    expect(await searchAt('/practice')).toEqual(PRACTICE_DEFAULTS)
     expect(await searchAt('/practice/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
   })
@@ -193,11 +191,6 @@ describe('search params', () => {
     expect(await searchAt('/practice/scales?kind=pent&show=chords')).toMatchObject({
       show: 'scale',
     })
-  })
-
-  it('read Practice’s topic, an unknown one as the first', async () => {
-    expect(await searchAt('/practice?topic=technique')).toEqual({ topic: 'technique' })
-    expect(await searchAt('/practice?topic=cooking')).toEqual(PRACTICE_DEFAULTS)
   })
 
   it('spell a root the way its explorer names it', async () => {

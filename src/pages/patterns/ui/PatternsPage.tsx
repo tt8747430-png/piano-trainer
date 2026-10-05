@@ -12,13 +12,14 @@ import {
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, RoundLink, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
+import { AccompanimentTabs } from '@/widgets/subject-tabs'
 
 /**
- * Patterns: the learner's favourites and own patterns, the built-in groups, and the hidden
- * at the end; each row a name and its idea in a line, opening its page. New pattern in the bar.
+ * Accompaniment's patterns: the learner's favourites and own patterns, the built-in groups, and the
+ * hidden at the end; each row a name and its idea in a line, opening its page. New pattern in the bar.
  */
 export function PatternsPage() {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'practice'])
   const locale = useLocale()
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
@@ -30,17 +31,20 @@ export function PatternsPage() {
   const shelfName = useShelfName()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('patterns.title')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'accompaniment' } }} />}
-        actions={
-          <RoundLink
-            label={t('patterns.new')}
-            icon={Plus}
-            render={<Link to="/practice/patterns/new" />}
-          />
-        }
-      />
+      <div className="flex flex-col">
+        <ScreenHeader
+          title={t('practice:subjects.accompaniment')}
+          back={<BackButton fallback={{ to: '/practice' }} />}
+          actions={
+            <RoundLink
+              label={t('learn:patterns.new')}
+              icon={Plus}
+              render={<Link to="/practice/patterns/new" />}
+            />
+          }
+        />
+        <AccompanimentTabs current="patterns" />
+      </div>
       <div className="flex flex-col gap-8">
         {shelves.map((shelf) => (
           <RowGroup key={shelf.shelf} title={shelfName(shelf)}>

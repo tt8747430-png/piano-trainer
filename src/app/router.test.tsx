@@ -254,8 +254,8 @@ describe('going back', () => {
     await screen.findByRole('heading', { level: 1, name: 'Practice' })
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(480)
     act(() => void document.dispatchEvent(new Event('scroll')))
-    await user.click(screen.getByRole('link', { name: 'Chord finder' }))
-    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await user.click(screen.getByRole('link', { name: /^Intervals / }))
+    await screen.findByRole('heading', { level: 1, name: 'Intervals' })
     vi.mocked(window.scrollTo).mockClear()
     await act(() => router.history.back())
     await waitFor(() =>

@@ -3,14 +3,13 @@ import {
   ARPEGGIO_QUALITIES,
   EXERCISES,
   exerciseChoice,
-  isRuleExercise,
   type ExerciseParams,
 } from '@/entities/exercise'
 import { noteParam, pitchClass, plainSpelling, SCALE_KINDS } from '@/shared/lib/music'
 import { notate, ticksOf } from '@/shared/lib/notation'
 import { arrangeExercise } from './exercise'
 
-const RULES = EXERCISES.filter(isRuleExercise)
+const RULES = EXERCISES
 const ROOTS = Array.from({ length: 12 }, (_, pc) => noteParam(plainSpelling(pitchClass(pc), false)))
 
 /** Every voice of every measure fills its bar. */

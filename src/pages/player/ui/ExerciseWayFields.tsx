@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { CHORD_TONES, VOICINGS, type ExerciseChoice, type RuleExercise } from '@/entities/exercise'
+import { CHORD_TONES, VOICINGS, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { fingeringsOf, isInversion, spellChord } from '@/shared/lib/music'
 import { InversionChoice, NamedSegmented, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
@@ -13,7 +13,7 @@ export function ExerciseWayFields({
   choice,
   onChange,
 }: {
-  exercise: RuleExercise
+  exercise: Exercise
   choice: ExerciseChoice
   onChange: (change: ExerciseChange) => void
 }) {

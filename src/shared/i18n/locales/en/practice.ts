@@ -3,28 +3,40 @@ export const practice = {
   walk: 'Walk the chords',
   chromatic: 'Chromatic walk',
   title: 'Practice',
-  // Practice's topics: what a learner works on.
-  topics: {
-    label: 'Topics',
+  // Practice's seven places, each named for what is practised.
+  subjects: {
     chords: 'Chords',
     scales: 'Scales and keys',
-    ear: 'Ear and reading',
     progressions: 'Progressions',
+    intervals: 'Intervals',
     accompaniment: 'Accompaniment',
-    technique: 'Technique',
+    exercises: 'Exercises',
+    quiz: 'Quiz',
   },
-  // A topic's ways in: pages that show a thing on the keys, and trainers that ask.
-  explore: 'Explore',
-  quiz: 'Quiz',
-  // The exercises a topic plays in the Player, by group (roadmap §10.5).
+  // What is inside each, in a line.
+  inside: {
+    chords: 'Build · Find · Tensions',
+    scales: 'Scale · Chords · Key',
+    progressions: 'In any key · Passing chords · Reharmonise',
+    intervals: 'On the keys, up and down',
+    accompaniment: 'Patterns · Studies',
+    exercises: 'Technique · Barry Harris · Piano With Jonny',
+    quiz: 'Chords · Scales and keys · By ear · Reading',
+  },
+  // Accompaniment's two pages.
+  accompaniment: { patterns: 'Patterns', studies: 'Studies' },
+  // The Exercises page's groups (roadmap §10.5).
   groups: {
-    scales: 'Scale exercises',
-    arpeggios: 'Arpeggios',
-    chords: 'Chords in a scale',
+    technique: 'Finger technique',
     barryHarris: 'Barry Harris',
     jonny: 'Piano With Jonny',
-    progressions: 'Through the keys',
-    technique: 'Finger technique',
+  },
+  // The Quiz page's groups of trainers.
+  quizGroups: {
+    chords: 'Chords',
+    scales: 'Scales and keys',
+    ear: 'By ear',
+    reading: 'Reading',
   },
   // The count after a colon reads right for any number, in both languages.
   gaps: 'To check: {{count}}',

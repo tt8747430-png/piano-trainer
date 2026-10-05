@@ -2,7 +2,7 @@ import {
   exerciseChoice,
   type ExerciseChoice,
   type ExerciseParams,
-  type RuleExercise,
+  type Exercise,
 } from '@/entities/exercise'
 import { noteParam, pitchClassOf } from '@/shared/lib/music'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -19,14 +19,14 @@ export type ExerciseSearch = Omit<PracticeView, 'swing'> & {
 export type ExerciseChange = Partial<ExerciseChoice>
 
 /** The Player's view of an exercise: its swing, or the exercise's own. */
-export const exerciseView = (exercise: RuleExercise, search: ExerciseSearch): PracticeView => ({
+export const exerciseView = (exercise: Exercise, search: ExerciseSearch): PracticeView => ({
   ...search,
   swing: search.swing ?? exercise.swing,
 })
 
 /** A change of the Player's view as the URL writes it: swing as the exercise's own is left out. */
 export const viewPatch = (
-  exercise: RuleExercise,
+  exercise: Exercise,
   patch: Partial<PracticeView>,
 ): Partial<ExerciseSearch> =>
   'swing' in patch
@@ -41,10 +41,7 @@ const unlessOwn = <T>(value: T | undefined, own: T): T | undefined =>
  * A Setup change as the exercise's URL writes it: the root as a param, and each choice its own when
  * the exercise would play it anyway, left out; a choice the change does not name stays as it is.
  */
-export function exercisePatch(
-  exercise: RuleExercise,
-  change: ExerciseChange,
-): Partial<ExerciseSearch> {
+export function exercisePatch(exercise: Exercise, change: ExerciseChange): Partial<ExerciseSearch> {
   const own = exerciseChoice(exercise, {})
   const { root } = change
   return {

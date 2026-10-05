@@ -72,9 +72,8 @@ describe('Practice → Progressions', () => {
 
   it('takes a library progression in place: Back then leaves for Practice', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice?topic=progressions')
-    const explore = await screen.findByRole('region', { name: 'Explore' })
-    await user.click(within(explore).getByRole('link', { name: 'Progressions' }))
+    const { router } = await renderApp('/practice')
+    await user.click(await screen.findByRole('link', { name: /^Progressions / }))
     await user.click(await screen.findByRole('link', { name: /^12-bar blues/ }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ p: expect.stringMatching(/^I7/) }),

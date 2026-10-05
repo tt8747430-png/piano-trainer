@@ -13,7 +13,7 @@ export function ReharmonisePage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('reharmonise.title')}
-        back={<BackButton fallback={{ to: '/practice', search: { topic: 'progressions' } }} />}
+        back={<BackButton fallback={{ to: '/practice' }} />}
       />
       <ReharmoniseTool view={view} onChange={onChange} />
     </div>

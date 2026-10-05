@@ -19,12 +19,15 @@ const saved = (state: object) => {
 const shelf = (name: string) => screen.getByRole('region', { name })
 
 describe('Practice → Patterns', () => {
-  it('opens from Practice’s Accompaniment, listing the groups, each pattern with its idea', async () => {
+  it('opens from Practice’s Accompaniment, its first tab, listing the groups, each pattern with its idea', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice?topic=accompaniment')
-    await user.click(await screen.findByRole('link', { name: 'Patterns' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Patterns' })).toBeInTheDocument()
+    const { router } = await renderApp('/practice')
+    await user.click(await screen.findByRole('link', { name: /^Accompaniment / }))
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Accompaniment' }),
+    ).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/practice/patterns')
+    expect(screen.getByRole('link', { name: 'Patterns' })).toHaveAttribute('aria-current', 'page')
     expect(
       within(shelf('Rhythm styles')).getByRole('link', {
         name: /^Ballad arpeggio A gentle arpeggio over the root and 5th\.$/,
@@ -42,7 +45,7 @@ describe('Practice → Patterns', () => {
         nextOwn: 2,
       }),
     })
-    await screen.findByRole('heading', { level: 1, name: 'Patterns' })
+    await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     const names = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
     expect(names[0]).toBe('Favourites')
     expect(names[1]).toBe('Your patterns')

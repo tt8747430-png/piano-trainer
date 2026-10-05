@@ -10,8 +10,8 @@ import { TRAINER_TILE } from './trainer-tile'
 const Icon = TRAINER_TILE.gaps.icon
 
 /**
- * My gaps, the trainer that checks across every topic, from Practice's bar: how many skills it holds
- * to check after its name, behind the gap's dot.
+ * My gaps, the trainer that checks across every other, from the Quiz page's bar: how many skills it
+ * holds to check after its name, behind the gap's dot.
  */
 export function GapsLink() {
   const { t } = useTranslation(['practice', 'quiz'])

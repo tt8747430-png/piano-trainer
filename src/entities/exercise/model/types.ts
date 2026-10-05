@@ -1,21 +1,13 @@
 import type { Level } from '@/entities/path'
 import type { LocalText } from '@/shared/i18n'
-import type { Inversion, KeyWalk, ScaleKind } from '@/shared/lib/music'
+import type { Inversion, ScaleKind } from '@/shared/lib/music'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'
 
-/** Practice's exercise groups, in the order the page lists them (roadmap §10.5). */
-export const EXERCISE_GROUPS = [
-  'scales',
-  'arpeggios',
-  'chords',
-  'barryHarris',
-  'jonny',
-  'progressions',
-  'technique',
-] as const
+/** The exercise groups, in the catalogue's order: a scale's and a chord's open from their pages, the rest from Exercises. */
+export const EXERCISE_GROUPS = ['scales', 'arpeggios', 'barryHarris', 'jonny', 'technique'] as const
 export type ExerciseGroup = (typeof EXERCISE_GROUPS)[number]
 
-/** The exercises written by a rule of their own, in the Player at `/play/exercise/$exerciseId`. */
+/** The exercises, each written by a rule of its own, in the Player at `/play/exercise/$exerciseId`. */
 export const EXERCISE_IDS = [
   'scale',
   'thirds',
@@ -58,35 +50,16 @@ export interface ExerciseFields {
 }
 export type ExerciseField = Exclude<keyof ExerciseFields, 'root'>
 
-interface Described {
+/** An exercise: what it is called and trains, the choices its rule takes, and how it plays when the URL names none. */
+export interface Exercise {
+  readonly id: ExerciseId
   readonly group: ExerciseGroup
   readonly level: Level
   readonly name: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
-}
-
-/** An exercise its own rule writes: its choices, and how it plays when the URL names none. */
-export interface RuleExercise extends Described {
-  readonly id: ExerciseId
   readonly fields: ExerciseFields
   readonly own: Partial<ExerciseChoice>
   readonly tempo: number
   readonly swing: boolean
 }
-
-/** Where an exercise another Player already plays opens, by what it names. */
-export type ExerciseWay =
-  | { readonly player: 'walk' }
-  | { readonly player: 'chromatic' }
-  | { readonly player: 'progression'; readonly numerals: string; readonly walk: KeyWalk }
-
-/** An exercise played in another Player: the walk, the chromatic walk, a progression through the keys. */
-export interface WayExercise extends Described {
-  readonly id: string
-  readonly opens: ExerciseWay
-}
-
-export type Exercise = RuleExercise | WayExercise
-
-export const isRuleExercise = (exercise: Exercise): exercise is RuleExercise => 'fields' in exercise

@@ -13,14 +13,14 @@ const restored = (state: unknown) => {
 }
 
 describe('createViewsStore', () => {
-  it('starts with no screen remembered and saves under pt-views, version 2', () => {
+  it('starts with no screen remembered and saves under pt-views, version 3', () => {
     const storage = createMemoryStorage()
     const store = createViewsStore({ storage })
     expect(store.getState()).toEqual({ views: {} })
     store.setState({ views: { '/practice/chords': { root: 'G' } } })
     expect(JSON.parse(storage.getItem('pt-views') ?? 'null')).toEqual({
       state: { views: { '/practice/chords': { root: 'G' } } },
-      version: 2,
+      version: 3,
     })
   })
 
@@ -70,6 +70,12 @@ describe('createViewsStore', () => {
     ).toEqual({
       views: { '/practice/scales': { root: 'D' } },
     })
+  })
+
+  it('forgets Practice’s topic of version 2: Practice lists its places', () => {
+    expect(
+      restored({ views: { '/practice': { topic: 'ear' }, '/practice/scales': { root: 'D' } } }),
+    ).toEqual({ views: { '/practice/scales': { root: 'D' } } })
   })
 
   it('keeps a lesson’s path as it is', () => {
