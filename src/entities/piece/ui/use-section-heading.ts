@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale } from '@/shared/i18n'
-import type { Piece, Section } from '../model/types'
+import { isDegreePiece, type Piece, type Section } from '../model/types'
 
 /** A section's heading in the learner's language: "Verse 4 and ending", "Последний припев в ля миноре". */
 export function useSectionHeading(): (section: Section) => string {
@@ -25,13 +25,13 @@ export function useSectionHeading(): (section: Section) => string {
   )
 }
 
-/** The headings a piece's chart is shown under: its sections in order, or a one-string progression's one. */
+/** The headings a piece's chart is shown under: its sections in order, or the one of degrees written in one line. */
 export function usePieceHeadings(piece: Piece): readonly string[] {
   const { t } = useTranslation('piece')
   const heading = useSectionHeading()
   // One array per piece and language: the sheet's labels are drawn again only when it changes.
   return useMemo(() => {
-    if (piece.kind !== 'progression') return piece.sections.map(heading)
+    if (!isDegreePiece(piece)) return piece.sections.map(heading)
     return typeof piece.progression === 'string'
       ? [t('progression')]
       : piece.progression.map(heading)

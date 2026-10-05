@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useParams, useSearch } from '@tanstack/react-router'
 import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
@@ -15,7 +14,6 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
   const setSearch = useViewChange<PlayerSearch>()
-  const { t } = useTranslation('player')
   const { choice, performance, player, fit, headings, changeSetup } = usePlayer(
     piece,
     search,
@@ -24,7 +22,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const title = entryTitles(piece, locale).primary
   return (
     <PlayerLayout
-      title={choice.walk ? t('pieceWalking', { title, walk: t(`walking.${choice.walk}`) }) : title}
+      title={title}
       onClose={close}
       view={search}
       player={player}

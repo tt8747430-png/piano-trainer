@@ -95,11 +95,6 @@ export const music: LocaleResources['music'] = {
     label: 'Тональность',
     major: '{{tonic}} мажор',
     minor: '{{tonic}} минор',
-    majors: 'Мажорные',
-    minors: 'Минорные',
-    mode: 'Лад',
-    majorMode: 'Мажор',
-    minorMode: 'Минор',
   },
   interval: {
     r: { name: 'Прима', short: 'ч1' },

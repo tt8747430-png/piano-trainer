@@ -24,6 +24,8 @@ export const practice: LocaleResources['practice'] = {
     quiz: 'Аккорды · Гаммы и тональности · На слух · Чтение',
   },
   accompaniment: { patterns: 'Фактуры', studies: 'Этюды' },
+  progression: 'Последовательность',
+  keyProgressions: 'Последовательности в этой тональности',
   groups: {
     technique: 'Техника пальцев',
     barryHarris: 'Барри Харрис',

@@ -23,8 +23,8 @@ const ROUTES = [
   ['/practice/intervals', '/practice/intervals'],
   ['/practice/tensions', '/practice/tensions'],
   ['/practice/chord-finder', '/practice/chord-finder'],
-  ['/practice/reharmonise', '/practice/reharmonise'],
-  ['/practice/passing-chords', '/practice/passing-chords'],
+  ['/practice/progressions/reharmonise', '/practice/progressions/reharmonise'],
+  ['/practice/progressions/passing', '/practice/progressions/passing'],
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
@@ -33,7 +33,6 @@ const ROUTES = [
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
   ['/practice/studies/ex3', '/practice/studies/$pieceId'],
-  ['/practice/progressions/flow', '/practice/progressions/$pieceId'],
 ] as const
 
 async function open(path: string) {
@@ -77,6 +76,9 @@ describe('routes', () => {
     '/learn/lessons/nothing',
     '/practice/trainers/nothing',
     '/practice/quiz/gaps',
+    '/practice/progressions/flow',
+    '/practice/passing-chords',
+    '/practice/reharmonise',
   ])('shows not found at %s', async (path) => {
     await renderApp(path)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
@@ -301,18 +303,18 @@ describe('shelves', () => {
     )
   })
 
-  it('goes back from a study opened directly to Practice', async () => {
+  it('goes back from a study opened directly to Accompaniment’s studies', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/studies'))
   })
 
-  it('closes a progression’s Player, opened directly, to its page on Practice', async () => {
+  it('closes the Player of a song written in degrees, opened directly, to its page on Songs', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/play/flow')
+    const { router } = await renderApp('/play/romashki')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/progressions/flow'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/romashki'))
   })
 })
 

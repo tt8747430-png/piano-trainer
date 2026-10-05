@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/path'
 import {
   entryTitles,
+  isDegreePiece,
   isOwnSongId,
   selectHasVersion,
   usePieceHeadings,
@@ -29,8 +30,8 @@ import { OPEN_PLAINLY } from '@/shared/lib'
 
 /**
  * A piece with a chart, in one column: its facts, Practise with the learned toggle and Edit, the
- * chords it plays, the chart to tap and hear under a pinned keyboard that shows what sounds, then
- * what is printed about it and, for the learner's own music, its way back.
+ * keyboard pinned, showing what sounds, over the chords it plays and its chart, each to tap and hear;
+ * then what is printed about it and, for the learner's own music, its way back.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -63,7 +64,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           {t('practise')}
         </ButtonLink>
         {own ? null : <LearnedButton step={pieceStepId(piece.id)} />}
-        {piece.kind === 'progression' ? null : (
+        {isDegreePiece(piece) ? null : (
           <ButtonLink
             variant="outline"
             render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
@@ -73,12 +74,12 @@ export function PieceView({ piece }: { piece: Piece }) {
           </ButtonLink>
         )}
       </div>
+      <Pinned>
+        <LiveKeyboard range={playerRange(performance)} spotlight />
+      </Pinned>
       <PieceChords piece={piece} performance={performance} />
       <section className="flex flex-col gap-3">
         <h2 className="text-2xl">{t('chart')}</h2>
-        <Pinned>
-          <LiveKeyboard range={playerRange(performance)} spotlight />
-        </Pinned>
         <ChordChart
           performance={performance}
           headings={headings}

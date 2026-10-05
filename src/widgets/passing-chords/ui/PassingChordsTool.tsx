@@ -9,7 +9,7 @@ import {
   passingChords,
   readChordSymbol,
 } from '@/shared/lib/music'
-import { KeyDropdown, NO_KEYS, TypedField } from '@/shared/ui'
+import { KeyPicker, NO_KEYS, TypedField } from '@/shared/ui'
 import type { PassingView } from '../model/passing-view'
 import { SuggestionCard } from './SuggestionCard'
 
@@ -35,22 +35,22 @@ export function PassingChordsTool({
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
-      <div className="flex flex-wrap items-end gap-3">
-        <TypedField
-          label={t('passing.from')}
-          value={view.from}
-          error={from === null ? t('passing.unread') : null}
-          onChange={(typed) => onChange({ from: typed })}
-          className="w-36"
-        />
-        <TypedField
-          label={t('passing.to')}
-          value={view.to}
-          error={to === null ? t('passing.unread') : null}
-          onChange={(typed) => onChange({ to: typed })}
-          className="w-36"
-        />
-        <KeyDropdown value={view.key} onChange={(next) => onChange({ key: next })} />
+      <div className="grid-fields gap-x-10 gap-y-6">
+        <div className="grid grid-cols-2 items-start gap-3">
+          <TypedField
+            label={t('passing.from')}
+            value={view.from}
+            error={from === null ? t('passing.unread') : null}
+            onChange={(typed) => onChange({ from: typed })}
+          />
+          <TypedField
+            label={t('passing.to')}
+            value={view.to}
+            error={to === null ? t('passing.unread') : null}
+            onChange={(typed) => onChange({ to: typed })}
+          />
+        </div>
+        <KeyPicker value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
       {from && to
         ? PASSING_CATEGORIES.map((category) => {
@@ -64,7 +64,7 @@ export function PassingChordsTool({
                 <h2 id={`${id}-${category}`} className="text-2xl">
                   {t(`passing.category.${category}`)}
                 </h2>
-                <div className="grid gap-4 lg:grid-cols-2">
+                <div className="grid-fields gap-4">
                   {inCategory.map((way) => (
                     <SuggestionCard
                       key={way.kind}

@@ -42,10 +42,10 @@ describe('section headings', () => {
 })
 
 describe('a piece’s headings', () => {
-  it('head a song’s sections in order, and a progression as one', () => {
+  it('head a song’s sections in order, and degrees written in one line as one', () => {
     const bz5 = pieceById('bz5')
-    const twofive = pieceById('twofive')
-    if (!bz5 || !twofive) throw new Error('missing piece')
+    const twofive = testProgression('ii:min:4 V:dom:4 I:maj:8')
+    if (!bz5) throw new Error('missing piece')
     expect(renderHook(() => usePieceHeadings(bz5)).result.current).toEqual([
       'Verse',
       'Chorus',

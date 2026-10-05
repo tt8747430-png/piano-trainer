@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setKeyboard } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
@@ -148,7 +148,7 @@ describe('the score editor', () => {
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(piecesStore.getState().versions).toEqual({}))
     const original = pieceById('amazing')
-    if (!original || original.kind === 'progression') throw new Error('a song')
+    if (!original || isDegreePiece(original)) throw new Error('a song')
     expect(musicOf(original).sections[0]?.lines[0]).toBe('G G7 C G')
   })
 
@@ -173,8 +173,8 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Back to the pattern' })).toBeInTheDocument()
   })
 
-  it('shows not found for a progression', async () => {
-    await renderApp('/edit/twofive')
+  it('shows not found for a song written in degrees', async () => {
+    await renderApp('/edit/romashki')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

@@ -126,11 +126,11 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The gospel rhythm plays syncopated chords over a moving bass. Try it on the pop progression.',
-            ru: 'Госпел-ритм — это синкопированные аккорды над движущимся басом. Попробуйте его на поп-последовательности.',
+            en: 'The gospel rhythm plays syncopated chords over a moving bass. Hear it over a study’s plain chords.',
+            ru: 'Госпел-ритм — это синкопированные аккорды над движущимся басом. Послушайте его на простых аккордах этюда.',
           },
         },
-        { kind: 'pattern', pattern: 'gospel', piece: 'pop' },
+        { kind: 'pattern', pattern: 'gospel', piece: 'ex3' },
       ],
     },
     {

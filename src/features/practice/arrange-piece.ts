@@ -5,13 +5,7 @@ import {
   type PatternChoice,
 } from '@/entities/pattern'
 import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
-import {
-  arrange,
-  chartInKeys,
-  type ArrangeOptions,
-  type Performance,
-} from '@/shared/lib/arrangement'
-import { walkKeys } from '@/shared/lib/music'
+import { arrange, type ArrangeOptions, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
 
 /** The chart's own methods when it names them, else the piece's pattern. */
@@ -27,26 +21,18 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   inversion: null,
   chordSize: null,
   melody: false,
-  walk: null,
 })
 
 /**
- * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody;
- * a progression walked through the keys from the learner's key, written in C, without a tune.
+ * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody.
  */
 export function arrangePiece(piece: Piece, choice: PracticeChoice, book: PatternBook): Performance {
-  const chart = chartOf(piece, choice.chordSize ?? undefined)
-  if (choice.walk) {
-    const keys = walkKeys({ tonic: choice.tonic, minor: pieceKey(piece).minor }, choice.walk)
-    const walked = chartInKeys(chart, keys)
-    return arrange(walked, { ...arrangeOptions(piece, choice, book), tonic: walked.key.tonic })
-  }
-  return arrange(chart, arrangeOptions(piece, choice, book))
+  return arrange(chartOf(piece, choice.chordSize ?? undefined), arrangeOptions(piece, choice, book))
 }
 
 /** The learner's choices as `arrange` takes them. */
 function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook): ArrangeOptions {
-  const melody = choice.walk ? undefined : melodyOf(piece)
+  const melody = melodyOf(piece)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,

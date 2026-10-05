@@ -1,4 +1,5 @@
 export {
+  isDegreePiece,
   isPiece,
   isSongCollectionId,
   pieceKey,
@@ -60,11 +61,4 @@ export { Credits } from './ui/Credits'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
 export { usePieceHeadings, useSectionHeading } from './ui/use-section-heading'
-export {
-  COLLECTIONS,
-  COMMON_PROGRESSIONS,
-  PIECES,
-  PROGRESSIONS,
-  SONG_COLLECTIONS,
-  STUDIES,
-} from './content'
+export { COLLECTIONS, PIECES, SONG_COLLECTIONS, STUDIES } from './content'

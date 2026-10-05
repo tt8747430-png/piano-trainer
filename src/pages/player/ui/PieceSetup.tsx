@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { choosableChordSize, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
-import { walksKeys, type PracticeChoice } from '@/features/practice'
+import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, tonicSpelling } from '@/shared/lib/music'
 import { ChordSizeField, NotePicker, ToggleGrid } from '@/shared/ui'
 import {
-  KeyWalkField,
   MelodyToggle,
   PatternCard,
   PlayerSetup,
@@ -15,7 +14,7 @@ import {
 } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 
-/** A piece's Setup: its key (a progression's walk through the keys), the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
+/** A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
 export function PieceSetup({
   piece,
   choice,
@@ -46,9 +45,6 @@ export function PieceSetup({
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
-      {walksKeys(piece) ? (
-        <KeyWalkField value={choice.walk} onChange={(walk) => onChange({ walk })} />
-      ) : null}
       <PatternCard />
       {chordSize ? (
         <ChordSizeField

@@ -197,6 +197,9 @@ export const learn = {
     unread: 'This progression can’t be read.',
     chords: 'Chords',
     practise: 'Practise in the Player',
+    throughKeys: 'Through the keys',
+    choose: 'Progression',
+    typed: 'Typed',
     style: {
       pop: 'Pop',
       rock: 'Rock',

@@ -14,11 +14,11 @@ import {
   type ChordSize,
 } from '@/shared/lib/music'
 import {
-  COMMON_PROGRESSIONS,
   COLLECTIONS,
   PIECES,
   chartOf,
   hasMethodCodes,
+  isDegreePiece,
   isPiece,
   melodyOf,
   pieceById,
@@ -77,39 +77,16 @@ function accompaniments(piece: Piece) {
 }
 
 describe('the catalog', () => {
-  it('names the key’s common progressions, each a progression in its mode', () => {
-    expect(COMMON_PROGRESSIONS.major.map((piece) => piece.title)).toEqual([
-      'I–IV–V–I',
-      'I–vi–IV–V',
-      'ii–V–I',
-      'I–V–vi–IV',
-    ])
-    expect(COMMON_PROGRESSIONS.minor.map((piece) => piece.title)).toEqual([
-      'i–iv–V–i',
-      'i–VI–III–VII',
-      'iiø–V7♭9–i',
-    ])
-    for (const [mode, pieces] of Object.entries(COMMON_PROGRESSIONS)) {
-      for (const piece of pieces) {
-        expect(piece.kind).toBe('progression')
-        expect(pieceKey(piece).minor).toBe(mode === 'minor')
-      }
-    }
-  })
-
   it('leaves the Player’s own words free: no piece is called walk', () => {
     expect(pieceById('walk')).toBeUndefined()
   })
-  it('holds 54 pieces and 7 listings in 5 collections, each id once', () => {
-    expect(COLLECTIONS.map((collection) => collection.id)).toEqual([
-      'bozhe-spasibo',
-      'called-to-play',
-      'hymns',
-      'studies',
-      'progressions',
+  it('holds 42 pieces and 7 listings in 5 collections, each id once', () => {
+    expect(COLLECTIONS.map((collection) => collection.id)).toEqual([...COLLECTION_IDS])
+    expect(PIECES).toHaveLength(42)
+    // One song is written in degrees, as its course teaches it; it is a song all the same.
+    expect(PIECES.filter(isDegreePiece).map((piece) => [piece.id, piece.kind])).toEqual([
+      ['romashki', 'song'],
     ])
-    expect(PIECES).toHaveLength(54)
-    expect(PIECES.filter((piece) => piece.kind === 'progression')).toHaveLength(13)
     expect(LISTINGS).toHaveLength(7)
     const ids = ENTRIES.map((entry) => entry.id)
     expect(new Set(ids).size).toBe(ids.length)
@@ -126,7 +103,7 @@ describe('the catalog', () => {
     'parses %s at every chord size it allows',
     (_id, piece) => {
       const chordSizes =
-        piece.kind === 'progression' && piece.chordSize.choosable ? CHORD_SIZES : [undefined]
+        isDegreePiece(piece) && piece.chordSize.choosable ? CHORD_SIZES : [undefined]
       for (const chordSize of chordSizes) expect(() => chartOf(piece, chordSize)).not.toThrow()
       expect(() => melodyOf(piece)).not.toThrow()
     },
@@ -198,11 +175,6 @@ describe('the catalog', () => {
       expect(text.en.trim(), `${path}.en`).not.toBe('')
       expect(text.ru.trim(), `${path}.ru`).not.toBe('')
     }
-  })
-
-  it('packs the blues into twelve bars', () => {
-    const blues = pieceById('blues')
-    expect(blues && chartOf(blues).sections[0]?.lines.flat()).toHaveLength(12)
   })
 
   it('times every recording: bar 1 in the file, a steady tempo the Player can play', () => {

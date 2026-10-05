@@ -5,7 +5,6 @@ export const player = {
   walk: { title: 'Walk the chords in {{scale}}' },
   progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
   /** A piece walked through the keys, from the learner's key. */
-  pieceWalking: '{{title}}, {{walk}}',
   /** A walk through the keys, as a title says it. */
   walking: {
     'semitones-up': 'up by semitones',

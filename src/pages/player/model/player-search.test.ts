@@ -13,7 +13,7 @@ function piece(id: string) {
   return found
 }
 const bz5 = piece('bz5')
-const twofive = piece('twofive')
+const twofive = piece('romashki')
 
 describe('resolveChoice', () => {
   it('plays the piece as written when the URL chooses nothing', () => {

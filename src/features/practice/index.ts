@@ -27,6 +27,6 @@ export {
 } from './chromatic-choice'
 export { arrangeProgression } from './progression'
 export { PROGRESSION, type ProgressionChoice } from './progression-choice'
-export { walkingFit, walksKeys } from './walking'
+export { walkingFit } from './walking'
 export { PractiseChords } from './ui/PractiseChords'
 export { ChromaticWalkLink } from './ui/ChromaticWalkLink'

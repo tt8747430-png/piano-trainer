@@ -93,8 +93,12 @@ export interface ChartPiece extends PieceCommon {
   readonly hands?: Hands
 }
 
-export interface ProgressionPiece extends PieceCommon {
-  readonly kind: 'progression'
+/**
+ * A song written in degrees, as its course teaches it: read in any key, its chords growing with the
+ * chord size. What a piece is (its kind) and how it is written are two things.
+ */
+export interface DegreePiece extends PieceCommon {
+  readonly kind: 'song'
   readonly chordSize: { readonly default: ChordSize; readonly choosable: boolean }
   /**
    * Degree, function and beats per chord (`ii:min:4 V:dom:4 I:maj:8`), four bars a line under one
@@ -103,7 +107,10 @@ export interface ProgressionPiece extends PieceCommon {
   readonly progression: string | readonly Section[]
 }
 
-export type Piece = ChartPiece | ProgressionPiece
+export type Piece = ChartPiece | DegreePiece
+
+/** Whether a piece is written in degrees, not as a chart in its key. */
+export const isDegreePiece = (piece: Entry): piece is DegreePiece => 'progression' in piece
 
 /** A songbook entry with no chart yet: shown in Songs, never opened in the Player. */
 export interface Listing extends EntryCommon {
@@ -112,13 +119,13 @@ export interface Listing extends EntryCommon {
 
 export type Entry = Piece | Listing
 
-/** The collections, songs first (in the order Songs lists them), then Practice's. */
+/** The collections, songs first (in the order Songs lists them), then Practice's studies. */
 export const COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
   'hymns',
+  'other',
   'studies',
-  'progressions',
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]
 export const isCollectionId = isOneOf(COLLECTION_IDS)
@@ -131,6 +138,7 @@ export const SONG_COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
   'hymns',
+  'other',
 ] as const satisfies readonly CollectionId[]
 export const isSongCollectionId = isOneOf<CollectionId>(SONG_COLLECTION_IDS)
 export interface Collection {

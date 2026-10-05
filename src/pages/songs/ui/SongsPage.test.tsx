@@ -88,7 +88,6 @@ describe('Songs: your own', () => {
     const make = await screen.findByRole('button', { name: 'Make' })
     expect(make).toBeDisabled()
     await user.type(screen.getByRole('textbox', { name: 'Title' }), 'Evening')
-    await user.click(screen.getByRole('radio', { name: 'Minor' }))
     await user.click(screen.getByRole('radio', { name: 'E minor' }))
     await user.click(screen.getByRole('radio', { name: '3/4' }))
     await user.click(make)

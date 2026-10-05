@@ -4,7 +4,7 @@ import { entryTitles, pieceById } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import type { PathStep } from '../model/types'
 
-export type StepKind = 'chords' | 'scale' | 'study' | 'song' | 'progression'
+export type StepKind = 'chords' | 'scale' | 'study' | 'song'
 
 export interface StepTitle {
   readonly primary: string

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  isDegreePiece,
   musicOf,
   PIECES,
   pieceById,
@@ -24,7 +25,7 @@ const SONG = {
 describe('editorTarget', () => {
   it('edits a song’s version against its original, from the original when there is none yet', () => {
     const amazing = pieceById('amazing')
-    if (!amazing || amazing.kind === 'progression') throw new Error('a song')
+    if (!amazing || isDegreePiece(amazing)) throw new Error('a song')
     const target = editorTarget(NONE, 'amazing')
     expect(target).toMatchObject({
       kind: 'version',
@@ -36,9 +37,7 @@ describe('editorTarget', () => {
   })
 
   it.each(
-    PIECES.filter((piece): piece is ChartPiece => piece.kind !== 'progression').map((piece) => [
-      piece.id,
-    ]),
+    PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece)).map((piece) => [piece.id]),
   )('knows %s written back unchanged as its original, however the book writes it', (id) => {
     const target = editorTarget(NONE, id)
     if (target?.kind !== 'version') throw new Error(`${id} has a version to edit`)
@@ -66,7 +65,7 @@ describe('editorTarget', () => {
       kind: 'song',
       id: 'my-1',
     })
-    expect(editorTarget(NONE, 'twofive')).toBeUndefined()
+    expect(editorTarget(NONE, 'romashki')).toBeUndefined()
     expect(editorTarget(NONE, 'my-1')).toBeUndefined()
     expect(editorTarget(NONE, 'nothing')).toBeUndefined()
   })

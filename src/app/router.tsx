@@ -135,8 +135,7 @@ const pieceRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-// Practice's seven places; Quiz with its trainers, Exercises, and the studies and progressions that
-// are practised there.
+// Practice's seven places; Quiz with its trainers, Exercises, and the studies that are practised there.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
@@ -180,18 +179,6 @@ const studyRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-const progressionRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/$pieceId',
-  beforeLoad: async ({ params, context }) => {
-    const { entryIn } = await songsScreens()
-    if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'progression') {
-      throw notFound()
-    }
-  },
-  component: lazyRouteComponent(songsScreens, 'PiecePage'),
-})
-
 // Learn: its lessons.
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -236,14 +223,14 @@ const chordFinderRoute = createRoute({
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/reharmonise',
+  path: '/practice/progressions/reharmonise',
   ...reharmoniseSearch,
   ...remembered(readReharmoniseSearch, []),
   component: lazyRouteComponent(explorerScreens, 'ReharmonisePage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/passing-chords',
+  path: '/practice/progressions/passing',
   ...passingSearch,
   ...remembered(readPassingSearch, []),
   component: lazyRouteComponent(explorerScreens, 'PassingChordsPage'),
@@ -416,7 +403,6 @@ const routeTree = rootRoute.addChildren([
     trainerRoute,
     studiesRoute,
     studyRoute,
-    progressionRoute,
   ]),
   fullScreenRoute.addChildren([
     playerRoute,

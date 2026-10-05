@@ -36,8 +36,11 @@ describe('Practice → Progressions', () => {
     const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
     await user.clear(field)
     await user.type(field, 'Am F C G')
-    await user.click(screen.getByRole('combobox', { name: 'Key' }))
-    await user.click(await screen.findByRole('option', { name: 'G major' }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Key' })).getByRole('radio', {
+        name: 'G major',
+      }),
+    )
     expect(row()).toEqual(['Emvi', 'CIV', 'GI', 'DV'])
     expect(field).toHaveValue('vi IV I V')
   })
@@ -51,14 +54,50 @@ describe('Practice → Progressions', () => {
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
   })
 
-  it('takes a progression from the library by style', async () => {
+  it('names the library’s progression it shows, and takes another from the pop-up by style', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    const choice = await screen.findByRole('combobox', { name: 'Progression' })
+    expect(choice).toHaveTextContent('Axis of Awesome')
+    await user.click(choice)
+    const blues = await screen.findByRole('group', { name: 'Blues' })
+    await user.click(within(blues).getByRole('option', { name: /^12-bar blues/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({
+        p: expect.stringMatching(/^I7-I7-I7-I7-IV7/),
+      }),
+    )
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('12-bar blues')
+    expect(screen.getByText('Great with the blues scale on top.')).toBeInTheDocument()
+  })
+
+  it('offers no row that chooses in place: the library is one pop-up, never a list of links', async () => {
     await renderApp('/practice/progressions')
-    const blues = await screen.findByRole('region', { name: 'Blues' })
-    expect(
-      within(blues)
-        .getByRole('link', { name: /^12-bar blues/ })
-        .getAttribute('href'),
-    ).toMatch(/p=I7-I7-I7-I7-IV7/)
+    await screen.findByRole('combobox', { name: 'Progression' })
+    const links = within(screen.getByRole('main'))
+      .getAllByRole('link')
+      .map((link) => link.getAttribute('href') ?? '')
+    expect(links.filter((href) => href.startsWith('/practice/progressions?'))).toEqual([])
+  })
+
+  it('takes a minor progression in the minor key of the same tonic, at its own chord size', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?key=A')
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    await user.click(await screen.findByRole('option', { name: /^Minor ii–V–i/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({
+        key: 'Am',
+        p: 'iiø7-V7b9-i',
+        size: 'ninths',
+      }),
+    )
+    expect(row()).toEqual(['Bm7♭5iiø7', 'E7♭9V7♭9', 'Am9i'])
+  })
+
+  it('says a typed line is the learner’s own', async () => {
+    await renderApp('/practice/progressions?p=I-I-IV')
+    expect(await screen.findByRole('combobox', { name: 'Progression' })).toHaveTextContent('I–I–IV')
   })
 
   it('opens the progression in the Player, in its key and chord size', async () => {
@@ -68,13 +107,34 @@ describe('Practice → Progressions', () => {
     expect(href).toMatch(/^\/play\/progression\?/)
     expect(href).toMatch(/p=ii-V-I/)
     expect(href).toMatch(/chordSize=sevenths/)
+    expect(href).toMatch(/pattern=jazz/)
+  })
+
+  it('opens it through the keys, round the circle of fifths', async () => {
+    await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
+    const through = await screen.findByRole('link', { name: 'Through the keys' })
+    expect(through.getAttribute('href')).toMatch(/^\/play\/progression\?.*walk=fifths/)
+  })
+
+  it('is the first of Progressions’ three tabs, each a page', async () => {
+    await renderApp('/practice/progressions')
+    const tabs = within(
+      await screen.findByRole('navigation', { name: 'Progressions' }),
+    ).getAllByRole('link')
+    expect(tabs.map((tab) => [tab.textContent, tab.getAttribute('href')])).toEqual([
+      ['Progression', '/practice/progressions'],
+      ['Passing chords', '/practice/progressions/passing'],
+      ['Reharmonise', '/practice/progressions/reharmonise'],
+    ])
+    expect(tabs[0]).toHaveAttribute('aria-current', 'page')
   })
 
   it('takes a library progression in place: Back then leaves for Practice', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Progressions / }))
-    await user.click(await screen.findByRole('link', { name: /^12-bar blues/ }))
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    await user.click(await screen.findByRole('option', { name: /^12-bar blues/ }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ p: expect.stringMatching(/^I7/) }),
     )

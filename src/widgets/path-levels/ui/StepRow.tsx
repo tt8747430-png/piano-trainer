@@ -1,7 +1,6 @@
 import {
   ChartNoAxesColumnIncreasing,
   KeyboardMusic,
-  ListMusic,
   Music,
   Repeat2,
   type LucideIcon,
@@ -27,7 +26,6 @@ const ICON: Readonly<Record<StepKind, LucideIcon>> = {
   scale: ChartNoAxesColumnIncreasing,
   study: Repeat2,
   song: Music,
-  progression: ListMusic,
 }
 const ROW_LINK =
   'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out hover:bg-muted'

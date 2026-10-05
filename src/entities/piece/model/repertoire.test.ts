@@ -5,12 +5,12 @@ import { musicOf, type PieceMusic } from './music'
 import { repertoire, versionOf } from './repertoire'
 import { testSong } from '../testing/test-pieces'
 import { entryById, pieceById } from './selectors'
-import { isPiece, type ChartPiece, type Piece } from './types'
+import { isDegreePiece, isPiece, type ChartPiece, type Piece } from './types'
 import type { OwnSong } from './own'
 
 const chartPiece = (id: string): ChartPiece => {
   const piece = pieceById(id)
-  if (!piece || piece.kind === 'progression') throw new Error(`${id} is no chart piece`)
+  if (!piece || isDegreePiece(piece)) throw new Error(`${id} is no chart piece`)
   return piece
 }
 const firstChord = (piece: Piece | undefined) => {
@@ -44,7 +44,7 @@ describe('repertoire', () => {
     const version = pieces.piece('bz1')
     expect(firstChord(version)).toBe('Em')
     expect(version).toMatchObject({ id: 'bz1', kind: 'song', title: 'Боже, спасибо' })
-    expect(version?.kind !== 'progression' && version?.credits).toEqual(chartPiece('bz1').credits)
+    expect(version?.credits).toEqual(chartPiece('bz1').credits)
     expect(pieces.original('bz1')).toBe(entryById('bz1'))
   })
 
@@ -77,9 +77,9 @@ describe('repertoire', () => {
     expect(pieces.entry('bz4')?.kind).toBe('song')
   })
 
-  it('leaves a progression and an unknown id as they are', () => {
-    const pieces = repertoire({ versions: { twofive: VERSION, gone: VERSION }, songs: [] })
-    expect(pieces.piece('twofive')).toBe(pieceById('twofive'))
+  it('leaves a song written in degrees and an unknown id as they are', () => {
+    const pieces = repertoire({ versions: { romashki: VERSION, gone: VERSION }, songs: [] })
+    expect(pieces.piece('romashki')).toBe(pieceById('romashki'))
     expect(pieces.piece('gone')).toBeUndefined()
   })
 

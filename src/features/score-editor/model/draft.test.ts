@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { musicOf, PIECES, readMusic, type ChartPiece, type PieceMusic } from '@/entities/piece'
+import {
+  isDegreePiece,
+  musicOf,
+  PIECES,
+  readMusic,
+  type ChartPiece,
+  type PieceMusic,
+} from '@/entities/piece'
 import { midi, note } from '@/shared/lib/music'
 import { readDraft, writeDraft } from './draft'
 import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
 
-const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => piece.kind !== 'progression')
+const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
 const WRITTEN: PieceMusic = {
   key: 'G',

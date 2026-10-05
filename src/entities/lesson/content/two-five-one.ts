@@ -171,7 +171,7 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: { en: 'The ii–V–I in the Player', ru: 'ii–V–I в плеере' },
-          target: { place: 'piece', piece: 'twofive' },
+          target: { place: 'player', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
         },
       ],
     },

@@ -36,6 +36,14 @@ describe('parseNumerals', () => {
   it('writes them for a URL', () => {
     expect(numeralsParam(parseNumerals('♭VII ii7 V7') ?? [])).toBe('bVII-ii7-V7')
   })
+
+  it('reads a ♭9 written on a dominant 7th, and only there', () => {
+    expect((parseNumerals('V7♭9 I') ?? []).map(numeralText)).toEqual(['V7♭9', 'I'])
+    expect(numeralsParam(parseNumerals('V7b9 i') ?? [])).toBe('V7b9-i')
+    expect(parseNumerals('ii7♭9')).toBeNull()
+    expect(parseNumerals('vii°7♭9')).toBeNull()
+    expect(parseNumerals('IMaj7♭9')).toBeNull()
+  })
 })
 
 describe('numeralChord', () => {
@@ -52,6 +60,12 @@ describe('numeralChord', () => {
   it('keeps what is written', () => {
     expect(chords('I7 IV7 V7', C, 'triads')).toEqual(['C7', 'F7', 'G7'])
     expect(chords('IMaj7 vii°7', C, 'triads')).toEqual(['CMaj7', 'B°7'])
+  })
+
+  it('keeps a written ♭9 at every size, the chord it leads to growing as ever', () => {
+    expect(chords('V7♭9 I', C, 'triads')).toEqual(['G7♭9', 'C'])
+    expect(chords('V7♭9 I', C, 'ninths')).toEqual(['G7♭9', 'CMaj9'])
+    expect(chords('V7♭9 i', A_MINOR, 'ninths')).toEqual(['E7♭9', 'Am9'])
   })
 
   it('counts a minor key from natural minor', () => {

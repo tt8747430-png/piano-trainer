@@ -4,17 +4,17 @@ import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/li
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import type { ChartPiece, Piece } from './types'
+import { isDegreePiece, type ChartPiece, type Piece } from './types'
 
-/** A piece's chart; a progression at the chosen chord size when it lets the learner choose. */
+/** A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose. */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
-  if (piece.kind !== 'progression') return parseChart(piece)
+  if (!isDegreePiece(piece)) return parseChart(piece)
   const { choosable, default: fixed } = piece.chordSize
   return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
 }
 
 export const melodyOf = (piece: Piece): Melody | undefined =>
-  piece.kind === 'progression' ? undefined : parseMelody(piece)
+  isDegreePiece(piece) ? undefined : parseMelody(piece)
 
 /** Every chord of a chart in order. */
 export const chordsOf = (chart: Chart): ChartChord[] =>
@@ -30,7 +30,7 @@ export const barTicksOf = (piece: ChartPiece): Tick[] =>
 
 /** Whether the chart names its own playing techniques, so the Player can follow them. */
 export const hasMethodCodes = (piece: Piece): boolean =>
-  piece.kind !== 'progression' && chordsOf(parseChart(piece)).some((chord) => chord.method)
+  !isDegreePiece(piece) && chordsOf(parseChart(piece)).some((chord) => chord.method)
 
 /** What a piece has for a pattern: its chart's methods where it names them, its tune where it has one, a key, and its meter. */
 export const pieceFit = (piece: Piece): PatternFit => ({
@@ -42,11 +42,10 @@ export const pieceFit = (piece: Piece): PatternFit => ({
 
 /** The built-in patterns a piece plays: its own, and those its chart's methods name. */
 export function patternsOfPiece(piece: Piece): ReadonlySet<PatternId> {
-  const methods =
-    piece.kind === 'progression'
-      ? []
-      : chordsOf(parseChart(piece)).flatMap((chord) =>
-          isMethodCode(chord.method) ? [METHODS[chord.method].pattern] : [],
-        )
+  const methods = isDegreePiece(piece)
+    ? []
+    : chordsOf(parseChart(piece)).flatMap((chord) =>
+        isMethodCode(chord.method) ? [METHODS[chord.method].pattern] : [],
+      )
   return new Set([piece.pattern, ...methods])
 }

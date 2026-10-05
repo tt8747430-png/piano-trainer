@@ -98,7 +98,6 @@ export function readPlayerSearch(raw: Raw): PlayerSearch {
     key: key ? noteParam(key) : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
-    walk: walk(raw),
   }
 }
 export const playerSearch = routeSearch(readPlayerSearch, PLAYER_DEFAULTS)
@@ -115,11 +114,10 @@ const PLAYING = [
   'swing',
   'speedTraining',
 ] as const
-/** A piece's kept params (ADR 0022): its key and chord size too, and its walk of keys. */
+/** A piece's kept params (ADR 0022): its key and chord size too. */
 export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
   'key',
   'chordSize',
-  'walk',
   ...PLAYING,
 ]
 

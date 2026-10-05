@@ -21,7 +21,6 @@ describe('ownChoice', () => {
       inversion: null,
       chordSize: null,
       melody: false,
-      walk: null,
     })
   })
 })
@@ -52,35 +51,13 @@ describe('arrangePiece', () => {
     expect(performance.chords.every((c) => c.pattern === 'r4')).toBe(true)
   })
 
-  it('grows a progression’s chords with the chord size that it lets the learner choose', () => {
-    const twofive = piece('twofive')
+  it('grows the chords of a song written in degrees with the chord size that it lets the learner choose', () => {
+    const twofive = piece('romashki')
     const symbols = (chordSize: 'triads' | 'ninths') =>
       arrangePiece(twofive, { ...ownChoice(twofive), chordSize }, BUILT_IN_PATTERNS).chords.map(
         (c) => c.symbol,
       )
     expect(symbols('triads')[0]).toBe('Dm')
     expect(symbols('ninths')[0]).toBe('Dm9')
-  })
-
-  it('walks a progression through the keys from the chosen one, home at the end', () => {
-    const twofive = piece('twofive')
-    const walked = arrangePiece(
-      twofive,
-      {
-        ...ownChoice(twofive),
-        chordSize: 'sevenths',
-        walk: 'tones-down',
-      },
-      BUILT_IN_PATTERNS,
-    )
-    const own = arrangePiece(
-      twofive,
-      { ...ownChoice(twofive), chordSize: 'sevenths' },
-      BUILT_IN_PATTERNS,
-    )
-    const bars = own.bars.length
-    expect(walked.bars).toHaveLength(bars * 7)
-    expect(walked.chords[0]?.symbol).toBe(own.chords[0]?.symbol)
-    expect(walked.chords[own.chords.length]?.symbol).toBe('Cm7')
   })
 })

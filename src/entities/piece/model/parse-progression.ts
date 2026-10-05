@@ -18,7 +18,7 @@ import { isOneOf } from '@/shared/lib'
 import { readBeats, ticksIn } from './beats'
 import { fourToALine } from './chart-layout'
 import { ContentError, type ContentPosition } from './content-error'
-import { pieceKey, type ProgressionPiece } from './types'
+import { pieceKey, type DegreePiece } from './types'
 
 /** Roman numerals name the degrees of the major scale from the tonic. */
 const MAJOR_SCALE = scaleIntervals('major')
@@ -51,7 +51,7 @@ interface TimedChord {
 /** `degree:function:beats[/3|/5|/7]`, e.g. `♭VII:dom:2` or `i:min:2/3`. */
 function readChord(
   token: string,
-  piece: ProgressionPiece,
+  piece: DegreePiece,
   size: ChordSize,
   fail: (problem: string) => never,
 ): TimedChord {
@@ -109,7 +109,7 @@ function packIntoBars(chords: readonly TimedChord[], meterTicks: Tick): ChartBar
  * Reads a progression at a chord size into a chart of real bars: one string four bars a line, or
  * sections line by line, each line starting on a new bar.
  */
-export function parseProgression(piece: ProgressionPiece, size: ChordSize): Chart {
+export function parseProgression(piece: DegreePiece, size: ChordSize): Chart {
   if (!CHORD_SIZES.includes(size)) throw new RangeError(`Unknown chord size "${size}"`)
   const meterTicks = beatsPerBar(piece.meter) * TICKS_PER_BEAT
   const barsOf = (written: string, at: ContentPosition): ChartBar[] =>

@@ -199,6 +199,9 @@ export const learn: LocaleResources['learn'] = {
     unread: 'Эта последовательность не читается.',
     chords: 'Аккорды',
     practise: 'Играть в плеере',
+    throughKeys: 'По тональностям',
+    choose: 'Последовательность',
+    typed: 'Набрана',
     style: {
       pop: 'Поп',
       rock: 'Рок',

@@ -1,4 +1,4 @@
-import { FilePenLine, GraduationCap, ListMusic, Music, type LucideIcon } from 'lucide-react'
+import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { levelOf, pieceStepId } from '@/entities/path'
 import { entryTitles, PieceLink, pieceKey, type Entry } from '@/entities/piece'
@@ -7,12 +7,11 @@ import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
 import { LearnedBadge, LevelMark, RowLink, type Paint } from '@/shared/ui'
 
-/** A kind of entry's tile where the book gives it no number: a song yellow, a study grass, a progression lilac. */
+/** A kind of entry's tile where the book gives it no number: a song yellow, a study grass. */
 const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint }>> = {
   song: { icon: Music, paint: 'yellow' },
   listing: { icon: FilePenLine, paint: 'sand' },
   study: { icon: GraduationCap, paint: 'grass' },
-  progression: { icon: ListMusic, paint: 'lilac' },
 }
 
 /**

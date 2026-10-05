@@ -5,9 +5,9 @@ import { musicOf, withMusic } from '../model/music'
 import { writeBar } from '../model/write-chart'
 import { writeMelody } from '../model/write-melody'
 import { PIECES } from './index'
-import type { ChartPiece } from '../model/types'
+import { isDegreePiece, type ChartPiece } from '../model/types'
 
-const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => piece.kind !== 'progression')
+const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
 describe('every chart piece, written back', () => {
   it.each(CHART_PIECES.map((piece) => [piece.id, piece] as const))(

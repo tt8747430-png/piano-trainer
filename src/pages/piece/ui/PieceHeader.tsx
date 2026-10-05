@@ -3,7 +3,7 @@ import { useLocale } from '@/shared/i18n'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 
 /** Where Back leads from an entry opened directly: its shelf. */
-const SHELF_PAGE = { songs: '/songs', practice: '/practice' } as const
+const SHELF_PAGE = { songs: '/songs', practice: '/practice/studies' } as const
 
 /**
  * A song's or listing's bar: its title, and Back where the learner came from (Path, Songs, Practice),

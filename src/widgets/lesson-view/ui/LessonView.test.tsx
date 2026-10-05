@@ -286,11 +286,11 @@ describe('LessonView’s accompaniment', () => {
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
     const passing = screen.getByRole('link', { name: 'C to F in Passing chords' })
-    expect(passing.getAttribute('href')).toMatch(/^\/practice\/passing-chords\?/)
+    expect(passing.getAttribute('href')).toMatch(/^\/practice\/progressions\/passing\?/)
     expect(passing.getAttribute('href')).toMatch(/[?&]from=C(&|$)/)
     expect(passing.getAttribute('href')).toMatch(/[?&]to=F(&|$)/)
     const reharmonise = screen.getByRole('link', { name: 'E in Reharmonise' }).getAttribute('href')
-    expect(reharmonise).toMatch(/^\/practice\/reharmonise\?/)
+    expect(reharmonise).toMatch(/^\/practice\/progressions\/reharmonise\?/)
     expect(reharmonise).toMatch(/[?&]note=E(&|$)/)
     expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
       '/play/otche?pattern=r4',

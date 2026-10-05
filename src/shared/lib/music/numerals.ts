@@ -9,9 +9,12 @@ import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-c
 /** How much of each chord a line of numerals plays, as a progression's chord size does. */
 
 export type NumeralTriad = 'maj' | 'min' | 'dim' | 'aug'
-export type NumeralSeventh = 'none' | 'minor' | 'major' | 'diminished' | 'half'
+export type NumeralSeventh = 'none' | 'minor' | 'major' | 'diminished' | 'half' | 'flatNine'
 
-/** A Roman numeral read: its degree of the key's scale, a chromatic shift, its triad, and a 7th if written. */
+/**
+ * A Roman numeral read: its degree of the key's scale, a chromatic shift, its triad, and a 7th if
+ * written (a dominant's may carry its ♭9, the one alteration a resolution is taught with).
+ */
 export interface Numeral {
   readonly degree: number
   readonly shift: -1 | 0 | 1
@@ -20,7 +23,8 @@ export interface Numeral {
 }
 
 const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
-const TOKEN = /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(°|o|ø|\+)?(7|Maj7|maj7|M7)?$/
+const TOKEN =
+  /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(°|o|ø|\+)?(7[b♭]9|7|Maj7|maj7|M7)?$/
 const SHIFTS = new Map<string, -1 | 0 | 1>([
   ['', 0],
   ['b', -1],
@@ -43,6 +47,7 @@ const NAMED: readonly (readonly [ChordQuality, NumeralTriad, NumeralSeventh])[] 
   ['o7', 'dim', 'diminished'],
   ['s5', 'aug', 'minor'],
   ['M7s5', 'aug', 'major'],
+  ['b9', 'maj', 'flatNine'],
 ]
 
 /** What a chord that is not the key's own grows to: a major chord to a dominant, a minor one to a minor 7th. */
@@ -62,6 +67,7 @@ function seventhOf(triad: NumeralTriad, mark: string, written: string): NumeralS
   if (mark === 'ø') return written === '' || written === '7' ? 'half' : null
   if (written === '') return 'none'
   if (written === '7') return triad === 'dim' ? 'diminished' : 'minor'
+  if (written.endsWith('9')) return triad === 'maj' ? 'flatNine' : null
   return triad === 'dim' ? null : 'major'
 }
 
@@ -75,7 +81,7 @@ export function readDegree(
   return degree < 0 || shift === undefined ? null : { degree, shift }
 }
 
-/** One numeral: `♭VII`, `ii7`, `IMaj7`, `vii°`, `viiø7`, `III+`; upper case major, lower case minor. */
+/** One numeral: `♭VII`, `ii7`, `IMaj7`, `V7♭9`, `vii°`, `viiø7`, `III+`; upper case major, lower case minor. */
 export function parseNumeral(token: string): Numeral | null {
   const match = TOKEN.exec(token)
   if (!match) return null
@@ -98,7 +104,17 @@ export function parseNumerals(text: string): Numeral[] | null {
   return numerals.length > 0 ? numerals : null
 }
 
-/** A numeral as it is written: `♭VII`, `viiø7`, `IMaj7`. */
+/** A 7th as a numeral writes it after its triad's mark. */
+const SEVENTH_TEXT: Readonly<Record<NumeralSeventh, string>> = {
+  none: '',
+  minor: '7',
+  diminished: '7',
+  half: '7',
+  major: 'Maj7',
+  flatNine: '7♭9',
+}
+
+/** A numeral as it is written: `♭VII`, `viiø7`, `IMaj7`, `V7♭9`. */
 export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
   const roman = ROMANS[numeral.degree] ?? ''
@@ -111,8 +127,7 @@ export function numeralText(numeral: Numeral): string {
         : numeral.triad === 'dim'
           ? '°'
           : ''
-  const seventh = numeral.seventh === 'none' ? '' : numeral.seventh === 'major' ? 'Maj7' : '7'
-  return sign + (upper ? roman : roman.toLowerCase()) + mark + seventh
+  return sign + (upper ? roman : roman.toLowerCase()) + mark + SEVENTH_TEXT[numeral.seventh]
 }
 
 /** Numerals as a URL holds them: joined by hyphens, flats as `b`. */

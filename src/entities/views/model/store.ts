@@ -27,9 +27,18 @@ const MOVED =
  */
 const GONE: ReadonlySet<string> = new Set(['/learn/keys', '/practice'])
 
+/** The pages a version-2 save knew on their own, now tabs of the subject they belong to. */
+const TABBED: Readonly<Record<string, string>> = {
+  '/practice/passing-chords': '/practice/progressions/passing',
+  '/practice/reharmonise': '/practice/progressions/reharmonise',
+}
+
 /** Where a saved path's screen is now, or null for a screen that is gone. */
-const pathNow = (path: string): string | null =>
-  GONE.has(path) ? null : path.replace(MOVED, '/practice/$1')
+function pathNow(path: string): string | null {
+  if (GONE.has(path)) return null
+  const practised = path.replace(MOVED, '/practice/$1')
+  return TABBED[practised] ?? practised
+}
 
 /**
  * Stored JSON is untrusted: paths from the root keep their views' params, each under its screen's

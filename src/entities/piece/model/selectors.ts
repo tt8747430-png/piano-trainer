@@ -5,7 +5,15 @@ import { patternsOfPiece } from './chart'
 import type { PieceMusic } from './music'
 import type { OwnSong } from './own'
 import type { PiecesState } from './store'
-import { isPiece, pieceKey, type ChartPiece, type Entry, type Listing, type Piece } from './types'
+import {
+  isDegreePiece,
+  isPiece,
+  pieceKey,
+  type ChartPiece,
+  type Entry,
+  type Listing,
+  type Piece,
+} from './types'
 
 const ENTRY_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
@@ -19,10 +27,10 @@ export function pieceById(id: string): Piece | undefined {
   return entry && isPiece(entry) ? entry : undefined
 }
 
-/** The catalog entry a learner may have a version of: a song, study or listing (never a progression). */
+/** The catalog entry a learner may have a version of: a song, study or listing written as a chart (never one written in degrees). */
 export function versionableEntry(id: string): ChartPiece | Listing | undefined {
   const entry = entryById(id)
-  return entry && entry.kind !== 'progression' ? entry : undefined
+  return entry && !isDegreePiece(entry) ? entry : undefined
 }
 
 /** The learner's version's music of a catalog song, study or listing, where there is one. */
@@ -40,22 +48,20 @@ export const selectHasVersion = (state: Pick<PiecesState, 'versions'>, id: strin
 export const selectOwnSong = (state: Pick<PiecesState, 'songs'>, id: string): OwnSong | undefined =>
   state.songs.find((song) => song.id === id)
 
-/** A progression's own chord size where the learner may change it (the Player's Setup); else null. */
+/** The own chord size of a piece written in degrees, where the learner may change it (the Player's Setup); else null. */
 export const choosableChordSize = (piece: Piece): ChordSize | null =>
-  piece.kind === 'progression' && piece.chordSize.choosable ? piece.chordSize.default : null
+  isDegreePiece(piece) && piece.chordSize.choosable ? piece.chordSize.default : null
 
 /** Whether `tonic` is the piece's own key's, however spelled: its recording plays along only there. */
 export const isOwnKey = (piece: Piece, tonic: SpelledNote): boolean =>
   pitchClassOf(tonic) === pitchClassOf(pieceKey(piece).tonic)
 
-/** The songs, listings and studies written in a key, in catalog order (a progression is practised in any key). */
+/** The songs, listings and studies in a key, in catalog order. */
 export function entriesInKey(key: Key): Entry[] {
   const tonic = pitchClassOf(key.tonic)
   return [...ENTRY_BY_ID.values()].filter((entry) => {
     const own = pieceKey(entry)
-    return (
-      entry.kind !== 'progression' && own.minor === key.minor && pitchClassOf(own.tonic) === tonic
-    )
+    return own.minor === key.minor && pitchClassOf(own.tonic) === tonic
   })
 }
 

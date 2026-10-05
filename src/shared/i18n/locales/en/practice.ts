@@ -25,6 +25,10 @@ export const practice = {
   },
   // Accompaniment's two pages.
   accompaniment: { patterns: 'Patterns', studies: 'Studies' },
+  // Progressions' first tab; its other two are named by their own pages.
+  progression: 'Progression',
+  // A scale's page: its key's common progressions, each opening Progressions in this key.
+  keyProgressions: 'Progressions in this key',
   // The Exercises page's groups (roadmap §10.5).
   groups: {
     technique: 'Finger technique',

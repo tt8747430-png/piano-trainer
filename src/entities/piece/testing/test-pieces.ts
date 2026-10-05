@@ -1,4 +1,4 @@
-import type { ChartPiece, ProgressionPiece, Section } from '../model/types'
+import type { ChartPiece, DegreePiece, Section } from '../model/types'
 
 /** A song to parse in tests: one section of the given lines unless sections are given. */
 export function testSong(
@@ -19,12 +19,12 @@ export function testSong(
 }
 
 export function testProgression(
-  progression: ProgressionPiece['progression'],
-  overrides: Partial<ProgressionPiece> = {},
-): ProgressionPiece {
+  progression: DegreePiece['progression'],
+  overrides: Partial<DegreePiece> = {},
+): DegreePiece {
   return {
     id: 'prog',
-    kind: 'progression',
+    kind: 'song',
     title: 'Test',
     key: 'C',
     meter: '4/4',

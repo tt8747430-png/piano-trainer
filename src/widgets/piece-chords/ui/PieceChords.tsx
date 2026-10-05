@@ -25,7 +25,7 @@ export function PieceChords({ piece, performance }: { piece: Piece; performance:
     <section aria-labelledby={headingId} className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <h2 id={headingId} className="text-2xl">
-          {t(`chords.${piece.kind}`)}
+          {t('chords')}
         </h2>
         {stepById(step) ? (
           <ButtonLink variant="outline" render={<Link to="/check" search={{ of: step }} />}>

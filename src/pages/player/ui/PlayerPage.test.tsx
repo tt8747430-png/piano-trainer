@@ -229,21 +229,6 @@ describe('Player', () => {
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('walks a progression piece through the keys from its Setup', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/play/twofive')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(screen.getByRole('combobox', { name: 'Through the keys' }))
-    await user.click(await screen.findByRole('option', { name: 'Down by whole tones' }))
-    expect(router.state.location.search).toMatchObject({ walk: 'tones-down' })
-    expect(
-      await screen.findByRole('heading', { name: 'ii–V–I, down by whole tones', hidden: true }),
-    ).toBeInTheDocument()
-    expect(
-      await screen.findByRole('button', { name: 'Bar 5: Cm7', hidden: true }),
-    ).toBeInTheDocument()
-  })
-
   it('offers no walk through the keys for a song', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')

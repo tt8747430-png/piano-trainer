@@ -282,21 +282,24 @@ describe('Practice → Scales and keys', () => {
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveAttribute('data-down')
   })
 
-  it('opens the walk and the key’s common progressions in the Player, in this key', async () => {
+  it('opens the walk in the Player and the key’s common progressions on Progressions, in this key', async () => {
     await renderApp('/practice/scales?root=D&show=chords&chords=4')
     const walk = await screen.findByRole('link', { name: 'Walk the chords' })
     expect(walk.getAttribute('href')).toMatch(/^\/play\/walk\?/)
     expect(walk.getAttribute('href')).toContain('root=D')
     expect(walk.getAttribute('href')).toContain('chordSize=sevenths')
-    const cadence = screen.getByRole('link', { name: /^I–IV–V–I/ })
-    expect(cadence.getAttribute('href')).toMatch(/^\/play\/cadence\?/)
-    expect(cadence.getAttribute('href')).toContain('key=D')
+    const inKey = screen.getByRole('region', { name: 'Progressions in this key' })
+    const cadence = within(inKey).getByRole('link', { name: 'Authentic cadence I–IV–V–I' })
+    expect(cadence.getAttribute('href')).toBe(
+      '/practice/progressions?key=D&p=I-IV-V-I&size=sevenths',
+    )
+    expect(within(inKey).getAllByRole('link')).toHaveLength(4)
   })
 
   it('offers a mode the walk alone', async () => {
     await renderApp('/practice/scales?root=D&kind=dorian&show=chords')
     expect(await screen.findByRole('link', { name: 'Walk the chords' })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /^I–IV–V–I/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Progressions in this key' })).toBeNull()
   })
 })
 

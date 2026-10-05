@@ -121,7 +121,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           {...PAGE_TILES.passingChords}
           render={
             <Link
-              to="/practice/passing-chords"
+              to="/practice/progressions/passing"
               search={{ key: keyParam(target.key), from: target.from, to: target.to }}
             />
           }
@@ -134,7 +134,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           {...PAGE_TILES.reharmonise}
           render={
             <Link
-              to="/practice/reharmonise"
+              to="/practice/progressions/reharmonise"
               search={{ key: keyParam(target.key), note: noteParam(target.note) }}
             />
           }
@@ -146,7 +146,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         <RowLink
           title={title}
           icon={CirclePlay}
-          paint={STEP_PAINT.progression}
+          paint={PAGE_TILES.progressions.paint}
           render={
             <Link
               to="/play/progression"

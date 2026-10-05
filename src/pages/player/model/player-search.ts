@@ -4,17 +4,10 @@ import {
   playablePattern,
   RIGHT_FIGURES,
   type PatternBook,
-  type PatternFit,
 } from '@/entities/pattern'
-import { choosableChordSize, pieceFit, pieceKey, type Piece } from '@/entities/piece'
-import { ownChoice, walkingFit, walksKeys, type PracticeChoice } from '@/features/practice'
-import {
-  noteFromParam,
-  noteParam,
-  pitchClassOf,
-  tonicSpelling,
-  type KeyWalk,
-} from '@/shared/lib/music'
+import { choosableChordSize, isDegreePiece, pieceFit, pieceKey, type Piece } from '@/entities/piece'
+import { ownChoice, type PracticeChoice } from '@/features/practice'
+import { noteFromParam, noteParam, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
@@ -34,8 +27,7 @@ export function resolveChoice(
   book: PatternBook,
 ): PracticeChoice {
   const own = ownChoice(piece)
-  const walk = walksKeys(piece) ? (search.walk ?? null) : null
-  const fit = choiceFit(piece, walk)
+  const fit = pieceFit(piece)
   const { minor } = pieceKey(piece)
   return {
     tonic: search.key ? tonicSpelling(pitchClassOf(noteFromParam(search.key)), minor) : own.tonic,
@@ -45,20 +37,15 @@ export function resolveChoice(
     inversion: search.inversion ?? null,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
     melody,
-    walk,
   }
 }
-
-/** What the piece, as it is played, has for its patterns: no key's triads while it walks the keys. */
-export const choiceFit = (piece: Piece, walk: KeyWalk | null): PatternFit =>
-  walkingFit(pieceFit(piece), walk)
 
 /** A Setup change as the URL writes it: a key, pattern or chord size equal to the piece's own is left out. */
 export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
   const own = ownChoice(piece)
   const written = ownLeftOut(change, {
     pattern: own.pattern,
-    chordSize: piece.kind === 'progression' ? piece.chordSize.default : undefined,
+    chordSize: isDegreePiece(piece) ? piece.chordSize.default : undefined,
   })
   return 'key' in change
     ? { ...written, key: change.key === noteParam(own.tonic) ? undefined : change.key }

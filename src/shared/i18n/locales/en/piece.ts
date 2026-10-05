@@ -1,12 +1,8 @@
 export const piece = {
-  // The chords row names the piece by its kind.
-  chords: {
-    song: 'Chords in this song',
-    study: 'Chords in this study',
-    progression: 'Chords in this progression',
-  },
+  // The chords a piece plays, each once, to tap; then its chart, bar by bar.
+  chords: 'Chords',
   checkChords: 'Check these chords',
-  chart: 'Chords',
+  chart: 'Chart',
   progression: 'Progression',
   practise: 'Practise',
   edit: 'Edit',

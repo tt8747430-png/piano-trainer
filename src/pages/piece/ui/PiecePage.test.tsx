@@ -18,7 +18,7 @@ describe('Piece', () => {
   it('lists the chords the song plays, each by its own name, to tap and hear', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/songs/bz5')
-    const chords = await screen.findByRole('region', { name: 'Chords in this song' })
+    const chords = await screen.findByRole('region', { name: 'Chords' })
     const names = within(chords)
       .getAllByRole('button')
       .map((button) => button.textContent)
@@ -36,7 +36,7 @@ describe('Piece', () => {
 
   it('checks the song’s chords from their row', async () => {
     await renderApp('/songs/bz5')
-    const chords = await screen.findByRole('region', { name: 'Chords in this song' })
+    const chords = await screen.findByRole('region', { name: 'Chords' })
     expect(
       within(chords).getByRole('link', { name: 'Check these chords' }).getAttribute('href'),
     ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
@@ -61,7 +61,7 @@ describe('Piece', () => {
   it('offers Practise before the chords and the chart, in the first screenful', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    const chords = screen.getByRole('region', { name: 'Chords in this song' })
+    const chords = screen.getByRole('region', { name: 'Chords' })
     expect(practise.compareDocumentPosition(chords) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
@@ -85,13 +85,6 @@ describe('Piece', () => {
       await screen.findByRole('heading', { level: 1, name: 'Мир, душа, храни' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 3, name: 'Куплет' })).toBeInTheDocument()
-  })
-
-  it('names the chords row by the piece’s kind', async () => {
-    await renderApp('/practice/progressions/twofive')
-    expect(
-      await screen.findByRole('region', { name: 'Chords in this progression' }),
-    ).toBeInTheDocument()
   })
 
   it('shows a listing without a chart: its one action writes it', async () => {

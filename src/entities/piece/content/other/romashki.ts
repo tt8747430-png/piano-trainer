@@ -3,7 +3,7 @@ import vocal from './romashki-vocal.m4a?url'
 
 export default definePiece({
   id: 'romashki',
-  kind: 'progression',
+  kind: 'song',
   title: 'Ромашковые поля',
   titleEn: 'Daisy fields',
   key: 'Dm',
