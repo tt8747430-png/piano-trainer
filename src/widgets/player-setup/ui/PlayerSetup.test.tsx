@@ -2,26 +2,35 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderRouted } from '@/app/testing/render-routed'
-import { PATTERNS, type PatternFit } from '@/entities/pattern'
-import { FigureRows } from './FigureRows'
-import { MelodySwitch } from './MelodySwitch'
+import {
+  LEFT_FIGURES,
+  PATTERNS,
+  RIGHT_FIGURES,
+  type AccompanimentChoice,
+  type PatternFit,
+} from '@/entities/pattern'
+import { MelodyToggle } from './MelodyToggle'
+import { PatternCard } from './PatternCard'
 import { PlayerSetup } from './PlayerSetup'
 
 /** A song in 4/4 with no tune and no methods of its own. */
 const SONG: PatternFit = { methodCodes: false, melody: false, key: true, simpleTime: true }
 
-async function renderSetup(fit: Partial<PatternFit> = {}) {
+async function renderSetup(
+  fit: Partial<PatternFit> = {},
+  figures: Partial<AccompanimentChoice> = {},
+) {
   const user = userEvent.setup()
   const onFigures = vi.fn()
   const view = await renderRouted(
     <PlayerSetup
-      figures={{ pattern: 'block', rh: null, lh: null, inversion: null }}
+      figures={{ pattern: 'block', rh: null, lh: null, inversion: null, ...figures }}
       fit={{ ...SONG, ...fit }}
       onFigures={onFigures}
     >
       <p>The music’s own choices</p>
-      <FigureRows />
-      <MelodySwitch />
+      <PatternCard />
+      <MelodyToggle />
     </PlayerSetup>,
   )
   await user.click(screen.getByRole('button', { name: 'Setup' }))
@@ -29,10 +38,42 @@ async function renderSetup(fit: Partial<PatternFit> = {}) {
 }
 
 describe('PlayerSetup', () => {
-  it('opens from its button on the page’s own choices, with the figure rows', async () => {
+  it('opens from its button on the page’s own choices, with the pattern and its two hands', async () => {
     await renderSetup()
     expect(screen.getByText('The music’s own choices')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Pattern.*Whole notes/ })).toBeInTheDocument()
+  })
+
+  it('names the figure each hand plays: the pattern’s own until the learner changes it', async () => {
+    await renderSetup()
+    expect(
+      screen.getByRole('button', {
+        name: `Right hand: ${RIGHT_FIGURES[PATTERNS.block.rh].name.en}`,
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: `Left hand: ${LEFT_FIGURES[PATTERNS.block.lh].name.en}` }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /back to the pattern’s own/ })).toBeNull()
+  })
+
+  it('shows a changed hand by its figure, with a way back to the pattern’s own beside it', async () => {
+    const { user, onFigures } = await renderSetup({}, { rh: 'b2' })
+    expect(
+      screen.getByRole('button', { name: `Right hand: ${RIGHT_FIGURES.b2.name.en}` }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Right hand: back to the pattern’s own' }))
+    expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
+    expect(
+      screen.queryByRole('button', { name: 'Left hand: back to the pattern’s own' }),
+    ).toBeNull()
+  })
+
+  it('draws each inversion as its stack of notes, and keeps Nearest by default', async () => {
+    const { user, onFigures } = await renderSetup()
+    expect(screen.getByRole('radio', { name: 'Nearest' })).toBeChecked()
+    await user.click(screen.getByRole('radio', { name: '1st' }))
+    expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
   })
 
   it('chooses a pattern from its group, keeping melody patterns from music without a tune', async () => {
@@ -54,15 +95,18 @@ describe('PlayerSetup', () => {
 
   it('goes back to the pattern’s own figure', async () => {
     const { user, onFigures } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: /^Right hand.*own/ }))
+    await user.click(screen.getByRole('button', { name: /^Right hand: / }))
     await user.click(screen.getByRole('option', { name: /The pattern’s own/ }))
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('saves the melody switch in settings', async () => {
+  it('saves the melody toggle in settings, pressed while it is on', async () => {
     const { user, settingsStore } = await renderSetup({ melody: true })
-    await user.click(screen.getByRole('switch', { name: 'Melody' }))
+    const melody = screen.getByRole('button', { name: 'Melody' })
+    expect(melody).toHaveAttribute('aria-pressed', 'false')
+    await user.click(melody)
     expect(settingsStore.getState().practice.melody).toBe(true)
+    expect(melody).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('closes what plays the key’s triads to music without a key', async () => {

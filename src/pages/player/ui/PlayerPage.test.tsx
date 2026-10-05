@@ -34,12 +34,10 @@ describe('Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Setup' }))
-    // Base UI's switch is a span: disabled is aria-disabled.
-    expect(await screen.findByRole('switch', { name: /Recording/ })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
-    expect(screen.getByText('Only in D minor')).toBeInTheDocument()
+    const recording = await screen.findByRole('button', { name: /^Recording/ })
+    expect(recording).toBeDisabled()
+    expect(recording).toHaveAttribute('aria-pressed', 'false')
+    expect(recording).toHaveTextContent('Only in D minor')
   })
 
   it('plays no recording in Wait mode', async () => {
@@ -49,11 +47,11 @@ describe('Player', () => {
     expect(audio.recordings).toEqual([])
   })
 
-  it('plays no recording with the switch off, and saves the switch', async () => {
+  it('plays no recording with its toggle off, and saves the toggle', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/play/romashki')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('switch', { name: /Recording/ }))
+    await user.click(await screen.findByRole('button', { name: 'Recording' }))
     expect(settingsStore.getState().practice.recording).toBe(false)
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
@@ -164,19 +162,20 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('combobox', { name: 'Key' }))
-    await user.click(await screen.findByRole('option', { name: 'A major' }))
+    await user.click(await screen.findByRole('radio', { name: 'A major' }))
     expect(router.state.location.search).toMatchObject({ key: 'A' })
-    await user.click(screen.getByRole('switch', { name: 'Swing' }))
+    await user.click(screen.getByRole('button', { name: 'Swing' }))
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
   })
 
-  it('names the key on the Setup’s pop-up, and shows Melody only for a piece with a tune', async () => {
+  it('shows all twelve keys in the Setup, the piece’s chosen, and Melody only for a piece with a tune', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('combobox', { name: 'Key' })).toHaveTextContent('G major')
-    expect(screen.queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
+    const keys = await screen.findByRole('radiogroup', { name: 'Key' })
+    expect(within(keys).getAllByRole('radio')).toHaveLength(12)
+    expect(within(keys).getByRole('radio', { name: 'G major' })).toBeChecked()
+    expect(screen.queryByRole('button', { name: 'Melody' })).not.toBeInTheDocument()
   })
 
   it('shows Melody in the Setup of a piece with a tune', async () => {
@@ -185,7 +184,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     await renderApp(`/play/${withTune.id}`)
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('switch', { name: 'Melody' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Melody' })).toBeInTheDocument()
   })
 
   it('puts the fingers under the keys with Finger numbers', async () => {
@@ -196,7 +195,7 @@ describe('Player', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).toBeInTheDocument()
   })
 
-  it('names the notes on the staff with Named notes, and saves the switch', async () => {
+  it('names the notes on the staff with Named notes, and saves the toggle', async () => {
     // SMuFL's note name noteheads, U+E150–U+E1AF.
     const namedHeads = () =>
       [...(document.querySelector('[data-slot="score"] svg')?.textContent ?? '')].filter(
@@ -207,7 +206,7 @@ describe('Player', () => {
     await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
     expect(namedHeads()).toBe(0)
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('switch', { name: 'Named notes' }))
+    await user.click(await screen.findByRole('button', { name: 'Named notes' }))
     expect(settingsStore.getState().practice.namedNotes).toBe(true)
     await waitFor(() => expect(namedHeads()).toBeGreaterThan(0))
   })

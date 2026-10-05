@@ -4,16 +4,16 @@ import { walksKeys, type PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, tonicSpelling } from '@/shared/lib/music'
-import { ChordSizeField, NoteDropdown } from '@/shared/ui'
+import { ChordSizeField, NotePicker, ToggleGrid } from '@/shared/ui'
 import {
-  FigureRows,
   KeyWalkField,
-  MelodySwitch,
+  MelodyToggle,
+  PatternCard,
   PlayerSetup,
-  RecordingSwitch,
+  RecordingToggle,
   type SetupChange,
 } from '@/widgets/player-setup'
-import { PlayingFields } from '@/widgets/practice-player'
+import { PlayingToggles } from '@/widgets/practice-player'
 
 /** A piece's Setup: its key (a progression's walk through the keys), the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
 export function PieceSetup({
@@ -39,7 +39,7 @@ export function PieceSetup({
   const chordSize = choosableChordSize(piece)
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
-      <NoteDropdown
+      <NotePicker
         label={t('key')}
         value={noteParam(choice.tonic)}
         spell={(pc) => tonicSpelling(pc, own.minor)}
@@ -49,18 +49,20 @@ export function PieceSetup({
       {walksKeys(piece) ? (
         <KeyWalkField value={choice.walk} onChange={(walk) => onChange({ walk })} />
       ) : null}
-      <FigureRows />
+      <PatternCard />
       {chordSize ? (
         <ChordSizeField
           value={choice.chordSize ?? chordSize}
           onChange={(next) => onChange({ chordSize: next })}
         />
       ) : null}
-      {fit.melody ? <MelodySwitch /> : null}
-      {piece.recording ? (
-        <RecordingSwitch ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-      ) : null}
-      <PlayingFields swing={swing} onSwing={onSwing} />
+      <ToggleGrid label={t('playing')}>
+        <PlayingToggles swing={swing} onSwing={onSwing} />
+        {fit.melody ? <MelodyToggle /> : null}
+        {piece.recording ? (
+          <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
+        ) : null}
+      </ToggleGrid>
     </PlayerSetup>
   )
 }

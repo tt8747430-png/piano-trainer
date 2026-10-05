@@ -1,8 +1,8 @@
 import { SlidersHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ExerciseChoice, RuleExercise } from '@/entities/exercise'
-import { RoundButton, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
-import { PlayingFields } from '@/widgets/practice-player'
+import { RoundButton, Sheet, SheetContent, SheetTrigger, ToggleGrid } from '@/shared/ui'
+import { PlayingToggles } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
 import { ExerciseWayFields } from './ExerciseWayFields'
@@ -32,7 +32,9 @@ export function ExerciseSetup({
         <div className="flex flex-col gap-5">
           <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
           <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
-          <PlayingFields swing={swing} onSwing={onSwing} />
+          <ToggleGrid label={t('playing')}>
+            <PlayingToggles swing={swing} onSwing={onSwing} />
+          </ToggleGrid>
         </div>
       </SheetContent>
     </Sheet>

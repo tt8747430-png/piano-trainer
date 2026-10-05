@@ -17,7 +17,7 @@ import { SetupContext, type SetupPage } from './setup-context'
 
 /**
  * The Player's Setup: its button, and the sheet it opens. The sheet's first page is `children`,
- * composed by the page: the music's own choices, `FigureRows`, how it plays. The pattern and figure
+ * composed by the page: the music's own choices, `PatternCard`, how it plays. The pattern and figure
  * lists open as the sheet's pages, so a sheet never opens over a sheet; each closes a pattern or
  * figure the music cannot play (`fit`).
  */

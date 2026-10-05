@@ -7,9 +7,9 @@ import {
   qualityRootSpelling,
   qualitySuffix,
 } from '@/shared/lib/music'
-import { MultiDropdown, NoteDropdown, Segmented } from '@/shared/ui'
-import { FigureRows, PlayerSetup } from '@/widgets/player-setup'
-import { PlayingFields } from '@/widgets/practice-player'
+import { MultiDropdown, NotePicker, Segmented, ToggleGrid } from '@/shared/ui'
+import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
+import { PlayingToggles } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
 
 /** The chromatic walk's Setup: its chord qualities, root and direction, the pattern and figures, and how it plays. */
@@ -45,7 +45,7 @@ export function ChromaticSetup({
           if (checked) onChange({ chords: [checked, ...others] })
         }}
       />
-      <NoteDropdown
+      <NotePicker
         label={t('player:root')}
         value={noteParam(choice.root)}
         spell={(pc) => qualityRootSpelling(pc, first)}
@@ -60,8 +60,10 @@ export function ChromaticSetup({
         }))}
         onChange={(direction) => onChange({ direction })}
       />
-      <FigureRows />
-      <PlayingFields swing={swing} onSwing={onSwing} />
+      <PatternCard />
+      <ToggleGrid label={t('playing')}>
+        <PlayingToggles swing={swing} onSwing={onSwing} />
+      </ToggleGrid>
     </PlayerSetup>
   )
 }

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -55,8 +55,9 @@ describe('The chromatic walk in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await user.click(await screen.findByRole('radio', { name: 'Up and down' }))
     expect(router.state.location.search).toMatchObject({ direction: 'both' })
-    await user.click(screen.getByRole('combobox', { name: 'Root' }))
-    await user.click(await screen.findByRole('option', { name: 'A♭' }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Root' })).getByRole('radio', { name: 'A♭' }),
+    )
     expect(router.state.location.search).toMatchObject({ root: 'Ab' })
   })
 

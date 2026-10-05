@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -32,8 +32,9 @@ describe('Walk the chords in the Player', () => {
     expect(
       await screen.findByRole('button', { name: 'Bar 1: Dm7', hidden: true }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Root' }))
-    await user.click(await screen.findByRole('option', { name: 'E' }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Root' })).getByRole('radio', { name: 'E' }),
+    )
     expect(router.state.location.search).toMatchObject({ root: 'E', kind: 'dorian' })
   })
 

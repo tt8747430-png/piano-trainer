@@ -22,8 +22,7 @@ describe('A progression in the Player', () => {
     expect(
       await screen.findByRole('button', { name: 'Bar 1: Cm7', hidden: true }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Key' }))
-    await user.click(await screen.findByRole('option', { name: 'G major' }))
+    await user.click(screen.getByRole('radio', { name: 'G major' }))
     expect(router.state.location.search).toMatchObject({ key: 'G', p: 'ii-V-I' })
   })
 
@@ -129,7 +128,7 @@ describe('A progression in the Player', () => {
       const list = await openPicker(user)
       expect(within(list).getByRole('option', { name: /^Ballad arpeggio/ })).toBeInTheDocument()
       expect(within(list).queryByRole('option', { name: /^Funk/ })).toBeNull()
-      expect(screen.getByRole('link', { name: /^Patterns in Learn/ })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: /^All patterns/ })).toHaveAttribute(
         'href',
         '/practice/patterns',
       )
