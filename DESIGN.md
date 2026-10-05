@@ -468,8 +468,10 @@ takes the height left, so the transport keeps the bottom:
 
 **The Setup** (the toolbar's ⚙, a sheet) reads top to bottom as pictures: the key as a note picker (the piece's
 mode named over it), the **pattern card** (its name and idea on a row that opens the pattern list; under it its two
-hands side by side, left then right, each naming the figure it plays and opening that hand's list, a changed hand
-with a way back to the pattern's own beside it), the inversion as five drawn segments (Nearest, then Root to 3rd as
+hands, left then right, each a row of its own on a phone and side by side where they fit, naming the figure it plays
+whole with a chevron to that hand's list; a changed hand has a way back to the pattern's own beside it, and the
+pattern's line then reads "Left hand changed", "Right hand changed" or "Both hands changed" in ink in place of its
+idea, so a changed pattern never passes for the pattern itself), the inversion as five drawn segments (Nearest, then Root to 3rd as
 stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Finger numbers, Named
 notes, Metronome, Count-in, Swing, and a piece's Melody and Recording).
 
@@ -481,7 +483,8 @@ How each screen uses its width:
 
 - **Songs:** the search, the collections as tabs (All, Your songs once there are any, then the books), and the songs
   as row cards in a grid.
-- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit, the keyboard pinned, then
+- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
+  alone on a phone), the keyboard pinned, then
   Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
 - **Learn:** the lessons, module by module, as row cards in a grid, each numbered in the order taught.
 - **Practice:** seven rows, one for each place (Chords, Scales and keys, Progressions, Intervals, Accompaniment,
@@ -597,7 +600,8 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
 - **Row link** (64px): a 48px tile in its paint's wash with a 20px icon in its deep shade, or its number in a
-  sequence in Literata (a lesson in its module, a song in its book), the title in Onest 600 17px, an optional detail
+  sequence in Literata (a lesson in its module, a song in its book), the title in Onest 600 17px on up to two lines (a
+  song's title is never cut short), an optional detail
   of one line, what it carries at its end (a key, a level's mark, the learned badge) and a chevron (the disclosure
   indicator). A titled group of them is a grid of row cards, each its own card. A list of one kind (the Patterns
   page) goes without tiles: every row would wear the same one.
@@ -757,8 +761,9 @@ sideways, as Flowkey shows it: ADR 0013.
 
 The page where a learner writes their version of a piece or a song of their own (ADR 0027), full screen like the
 Player and a laptop's first: a toolbar (✕, the title with "Your version" in soft ink under it once there is one,
-Undo and Redo round, MIDI, the song's settings ⚙, Play in honey: the screen's one action, Stop while it sounds; on a
-phone the round tools take a row of their own under the title and Play), the sheet scrolling under it, then the
+Undo and Redo round, MIDI, Record and Song settings (each named beside its icon from 1024px, its icon alone below),
+Play in honey: the screen's one action, Stop while it sounds; on a phone the round tools take a row of their own under
+the title and Play), the sheet scrolling under it, then the
 **tool dock**, a line of soft text saying where the caret is, and the keys at their own proportion.
 
 - **The sheet:** each section's heading a pull-down (its kind, Join with the section before) over its lines, each chart
@@ -769,7 +774,7 @@ phone the round tools take a row of their own under the title and Play), the she
   **Pattern** in soft ink on that staff. A click puts the caret where it lands.
 - **The tool dock,** over the keys: first what they write, **Chords · Melody · Right hand · Left hand** as segments
   with their pictures (a letter, a note, a hand, the left one mirrored); then that layer's tools as a palette, one row
-  that scrolls sideways on a phone. Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
+  that scrolls sideways on a phone, its groups parted by a 32px hairline (`ToolDivider`). Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
   and for a screen reader, a toggle filled sand in an ink line while on: in the notes, the values as segments of
   their glyphs (Noto Music), then a dotted note, an italic 3 (x/4 only), a rest and Chord (stacked layers), ← →, then
   ↑ ↓, ♯♭ (Respell) and ⌫; in a hand, Write out or Back to the pattern and a Finger pop-up for each note at the
