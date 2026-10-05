@@ -46,7 +46,7 @@ export function PracticePage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader title={t('title')} />
-      <ul className="grid-cards gap-2 *:card *:px-2">
+      <ul className="grid-cards gap-2 *:card">
         {SUBJECTS.map(({ id, to, tile }) => (
           <li key={id}>
             <RowLink

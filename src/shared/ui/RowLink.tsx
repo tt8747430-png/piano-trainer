@@ -34,9 +34,10 @@ export function RowLink({
     render,
     props: {
       className: cn(
-        'flex min-h-16 min-w-0 items-center gap-3 rounded-2xl py-1.5 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+        // The whole card is the link: its hover fills the card to its line, never a box inside it.
+        'group/row flex min-h-16 min-w-0 items-center gap-3 rounded-3xl py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
         // A row without a tile keeps its text off the card's edge.
-        paint ? 'px-1' : 'px-3',
+        paint ? 'pl-2' : 'pl-4',
       ),
       children: (
         <>
@@ -65,7 +66,10 @@ export function RowLink({
             ) : null}
           </span>
           {trailing ? <> {trailing}</> : null}
-          <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+          <ChevronRight
+            aria-hidden
+            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover/row:translate-x-0.5 group-hover/row:text-foreground"
+          />
         </>
       ),
     },

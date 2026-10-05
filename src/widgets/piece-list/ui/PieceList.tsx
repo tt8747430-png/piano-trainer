@@ -26,7 +26,7 @@ export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
               {group.heading}
             </h2>
           )}
-          <ul className="grid-cards gap-2 *:card *:px-2">
+          <ul className="grid-cards gap-2 *:card">
             {group.entries.map((entry) => (
               <EntryRow key={entry.id} entry={entry} />
             ))}

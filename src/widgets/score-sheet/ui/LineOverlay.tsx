@@ -110,7 +110,7 @@ export function LineOverlay({
             tabIndex={-1}
             aria-label={t('sheet.bar', { n: (placed?.index ?? 0) + 1, chords: chords.join(' ') })}
             onClick={place(index)}
-            className="absolute bottom-0 z-20 cursor-pointer rounded-md transition-shadow duration-200 ease-out hover:ring-1 hover:ring-input focus-visible:-outline-offset-3"
+            className="absolute bottom-0 z-20 cursor-text rounded-lg transition-colors duration-200 ease-out hover:bg-foreground/5 focus-visible:-outline-offset-3"
             style={{ left: measure.x, width: measure.width, top: -CHORD_ROW }}
           />
         )

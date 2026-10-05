@@ -11,7 +11,7 @@ export function RowGroup({ title, children }: { title: string; children: ReactNo
       <h2 id={id} className="text-2xl">
         {title}
       </h2>
-      <ul className="grid-cards gap-2 *:card *:px-2">{children}</ul>
+      <ul className="grid-cards gap-2 *:card">{children}</ul>
     </section>
   )
 }
