@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
-import { setAutoNext, setKeyboard, setLocale, setPracticeToggle, setTheme } from './index'
+import {
+  setAutoNext,
+  setKeyboard,
+  setLocale,
+  setPracticeToggle,
+  setRecorderClick,
+  setTheme,
+} from './index'
 
 const saved = (storage: Storage) => JSON.parse(storage.getItem('pt-settings') ?? 'null').state
 
@@ -38,6 +45,14 @@ describe('set-preference', () => {
     })
     setPracticeToggle(store, 'metronome', false)
     expect(store.getState().practice.metronome).toBe(false)
+  })
+
+  it('setRecorderClick saves whether the click goes on while a take records', () => {
+    const { storage, store } = setUp()
+    setRecorderClick(store, false)
+    expect(saved(storage).recorder).toEqual({ click: false })
+    setRecorderClick(store, true)
+    expect(store.getState().recorder.click).toBe(true)
   })
 
   it('setAutoNext saves whether a trainer moves on by itself', () => {

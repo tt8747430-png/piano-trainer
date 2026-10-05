@@ -4,6 +4,7 @@ import { createPatternsStore } from '@/entities/pattern'
 import { createPiecesStore } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
+import { createTakesStore } from '@/entities/take'
 import { createViewsStore } from '@/entities/views'
 import '@/shared/i18n'
 import { App } from './app/App'
@@ -26,6 +27,7 @@ createRoot(rootElement).render(
       progressStore={createProgressStore()}
       patternsStore={patternsStore}
       piecesStore={piecesStore}
+      takesStore={createTakesStore()}
       services={createServices()}
       router={createAppRouter({
         views: createViewsStore(),

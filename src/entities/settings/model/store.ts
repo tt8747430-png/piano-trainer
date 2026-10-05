@@ -3,6 +3,7 @@ import { isLocale } from '@/shared/i18n/locale'
 import { createSavedStore, savedObject, type SavingOptions } from '@/shared/lib'
 import {
   DEFAULT_PRACTICE,
+  DEFAULT_RECORDER,
   DEFAULT_TRAINER,
   PRACTICE_TOGGLES,
   defaultKeyboard,
@@ -13,13 +14,14 @@ import {
   isTheme,
   type KeyboardSettings,
   type PracticeToggles,
+  type RecorderSettings,
   type SettingsState,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 6
+export const SETTINGS_VERSION = 7
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -41,6 +43,7 @@ export function createSettingsStore({
         practice: DEFAULT_PRACTICE,
         trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
+        recorder: DEFAULT_RECORDER,
       },
       read: sanitize,
     },
@@ -67,6 +70,12 @@ function trainerSettings(value: unknown): TrainerSettings {
   }
 }
 
+/** The recorder's click keeps what was saved; one never saved, or not valid, takes its default. */
+function recorderSettings(value: unknown): RecorderSettings {
+  const saved = savedObject<RecorderSettings>(value)
+  return { click: typeof saved.click === 'boolean' ? saved.click : DEFAULT_RECORDER.click }
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -84,7 +93,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
  * current one otherwise; a practice toggle or trainer setting not saved, or not valid, takes its
  * default. A version-1 save has no practice fields, a version-2 save no keyboard, a version-3 save no
  * recording toggle, a version-4 save no named notes, a version-5 save no trainer settings (its quiz
- * choice is what a trainer's URL now holds, and is not read): each gains its defaults here.
+ * choice is what a trainer's URL now holds, and is not read), a version-6 save no recorder: each gains
+ * its defaults here.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
@@ -94,5 +104,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     practice: practiceToggles(saved.practice),
     trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
+    recorder: recorderSettings(saved.recorder),
   }
 }

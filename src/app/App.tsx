@@ -3,6 +3,7 @@ import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
 import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
 import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
+import { type TakesStore, TakesStoreProvider } from '@/entities/take'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { LocaleSync } from './providers/LocaleSync'
@@ -15,6 +16,7 @@ export function App({
   progressStore,
   patternsStore,
   piecesStore,
+  takesStore,
   services,
   router,
 }: {
@@ -22,6 +24,7 @@ export function App({
   progressStore: ProgressStore
   patternsStore: PatternsStore
   piecesStore: PiecesStore
+  takesStore: TakesStore
   services: Services
   router: AppRouter
 }) {
@@ -30,14 +33,16 @@ export function App({
       <ProgressStoreProvider store={progressStore}>
         <PatternsStoreProvider store={patternsStore}>
           <PiecesStoreProvider store={piecesStore}>
-            <ServicesProvider services={services}>
-              <LocaleSync />
-              <AudioUnlock />
-              <MidiReconnect />
-              <ThemeProvider>
-                <RouterProvider router={router} />
-              </ThemeProvider>
-            </ServicesProvider>
+            <TakesStoreProvider store={takesStore}>
+              <ServicesProvider services={services}>
+                <LocaleSync />
+                <AudioUnlock />
+                <MidiReconnect />
+                <ThemeProvider>
+                  <RouterProvider router={router} />
+                </ThemeProvider>
+              </ServicesProvider>
+            </TakesStoreProvider>
           </PiecesStoreProvider>
         </PatternsStoreProvider>
       </ProgressStoreProvider>

@@ -39,6 +39,23 @@ describe('createSavedStore', () => {
     expect(JSON.parse(storage.getItem(KEY) ?? 'null')).toEqual({ state: { count: 3 }, version: 2 })
   })
 
+  it('saves what `write` makes of its state, and reads it back through `read`', () => {
+    const storage = createMemoryStorage()
+    const options = {
+      key: KEY,
+      version: 1,
+      initial: { count: 0 },
+      write: ({ count }: Count) => ({ n: count }),
+      read: (saved: unknown, current: Count): Count =>
+        isRecord(saved) && typeof saved.n === 'number' ? { count: saved.n } : current,
+    }
+    const store = createSavedStore(options, { storage, otherTabs: new EventTarget() })
+    store.setState({ count: 7 })
+    expect(JSON.parse(storage.getItem(KEY) ?? 'null')).toEqual({ state: { n: 7 }, version: 1 })
+    const again = createSavedStore(options, { storage, otherTabs: new EventTarget() })
+    expect(again.getState()).toEqual({ count: 7 })
+  })
+
   it.each([1, 2, 3])('reads a version-%i save for what it can', (version) => {
     const storage = createMemoryStorage()
     save(storage, { count: 4 }, version)

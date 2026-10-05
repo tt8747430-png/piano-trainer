@@ -48,12 +48,19 @@ export interface KeyboardSettings {
   readonly typing: boolean
 }
 
+/** How the score editor's Recorder records a take (ADR 0028). */
+export interface RecorderSettings {
+  /** The click goes on after the count-in, while the take records. */
+  readonly click: boolean
+}
+
 export interface SettingsState {
   theme: Theme
   locale: Locale
   practice: PracticeToggles
   trainer: TrainerSettings
   keyboard: KeyboardSettings
+  recorder: RecorderSettings
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -66,6 +73,8 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
+
+export const DEFAULT_RECORDER: RecorderSettings = { click: true }
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
-import { DEFAULT_PRACTICE, DEFAULT_TRAINER, defaultKeyboard } from './types'
+import { DEFAULT_PRACTICE, DEFAULT_RECORDER, DEFAULT_TRAINER, defaultKeyboard } from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
 const writeSaved = (storage: Storage, state: unknown, version = 2) =>
@@ -18,6 +18,7 @@ const DEFAULTS = {
   practice: DEFAULT_PRACTICE,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
+  recorder: DEFAULT_RECORDER,
 }
 
 describe('createSettingsStore', () => {
@@ -33,6 +34,7 @@ describe('createSettingsStore', () => {
       recording: true,
     })
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
+    expect(DEFAULT_RECORDER).toEqual({ click: true })
   })
 
   it('saves under pt-settings with its version', () => {
@@ -41,7 +43,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 6,
+      version: 7,
     })
   })
 
@@ -65,8 +67,19 @@ describe('createSettingsStore', () => {
         map: true,
         typing: true,
       },
+      recorder: { click: false },
     }
-    expect(restored(saved, 6)).toEqual(saved)
+    expect(restored(saved, 7)).toEqual(saved)
+  })
+
+  it('gives a version-6 save the recorder’s click on, keeping the rest', () => {
+    const settings = restored({ theme: 'dark', trainer: { autoNext: true } }, 6)
+    expect(settings.recorder).toEqual({ click: true })
+    expect(settings.trainer.autoNext).toBe(true)
+  })
+
+  it('turns a click that is not a boolean on, its default', () => {
+    expect(restored({ recorder: { click: 'no' } }, 7).recorder).toEqual(DEFAULT_RECORDER)
   })
 
   it('gives a version-4 save named notes off, keeping its toggles', () => {
@@ -189,7 +202,7 @@ describe('createSettingsStore', () => {
   })
 
   it('reads a save from a newer version for the fields it knows', () => {
-    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 6)).toEqual({
+    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 8)).toEqual({
       theme: 'dark',
       locale: 'ru',
       ...DEFAULTS,

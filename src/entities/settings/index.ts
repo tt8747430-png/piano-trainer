@@ -5,6 +5,7 @@ export {
   defaultKeyboard,
   type KeyboardSettings,
   type PracticeToggle,
+  type RecorderSettings,
   type Theme,
   type TrainerSettings,
 } from './model/types'
@@ -14,6 +15,7 @@ export {
   selectKeyboard,
   selectLocale,
   selectPractice,
+  selectRecorder,
   selectTheme,
   selectTrainer,
 } from './model/selectors'

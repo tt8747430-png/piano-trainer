@@ -4,6 +4,7 @@ import { createPatternsStore } from '@/entities/pattern'
 import { createPiecesStore } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
 import { createSettingsStore } from '@/entities/settings'
+import { createTakesStore } from '@/entities/take'
 import { createViewsStore } from '@/entities/views'
 import type { Locale } from '@/shared/i18n'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -14,8 +15,9 @@ import { App } from '../App'
 import { createAppRouter } from '../router'
 
 /**
- * The whole app at `path`, on in-memory storage unless told otherwise, in the given language, with
- * fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a browser without it.
+ * The whole app at `path`, its saved stores on in-memory storage unless told otherwise, in the given
+ * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
+ * browser without it.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  */
@@ -31,6 +33,7 @@ export async function renderApp(
   const progressStore = createProgressStore({ storage })
   const patternsStore = createPatternsStore({ storage })
   const piecesStore = createPiecesStore({ storage })
+  const takesStore = createTakesStore({ storage })
   const viewsStore = createViewsStore({ storage })
   const router = createAppRouter({
     history: createMemoryHistory({ initialEntries: [path] }),
@@ -48,6 +51,7 @@ export async function renderApp(
       progressStore={progressStore}
       patternsStore={patternsStore}
       piecesStore={piecesStore}
+      takesStore={takesStore}
       services={{ audio, midi: webMidi ? midi : null }}
       router={router}
     />,
@@ -59,6 +63,7 @@ export async function renderApp(
     progressStore,
     patternsStore,
     piecesStore,
+    takesStore,
     viewsStore,
     audio,
     midi,
