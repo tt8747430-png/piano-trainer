@@ -42,6 +42,7 @@ export const editor = {
     eighth: 'Eighth note',
     sixteenth: 'Sixteenth note',
   },
+  groups: { value: 'Value and kind', caret: 'Caret', notes: 'Notes at the caret' },
   dot: 'Dotted',
   triplet: 'Triplet',
   rest: 'Rest',

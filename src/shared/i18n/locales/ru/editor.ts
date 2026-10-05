@@ -44,6 +44,7 @@ export const editor: LocaleResources['editor'] = {
     eighth: 'Восьмая',
     sixteenth: 'Шестнадцатая',
   },
+  groups: { value: 'Длительность и вид', caret: 'Курсор', notes: 'Ноты под курсором' },
   dot: 'С точкой',
   triplet: 'Триоль',
   rest: 'Пауза',

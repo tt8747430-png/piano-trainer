@@ -1,24 +1,25 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { Mic, Plus } from 'lucide-react'
+import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong } from '@/features/edit-piece'
 import { keyFromParam, keyParam, METERS, note, type Meter } from '@/shared/lib/music'
-import { KeyDropdown, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { KeyPicker, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 
 const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 
 /**
- * New song: its title, key and meter, then Make, which opens it in the score editor, or Make and
- * record, which opens it on its takes.
+ * New song: its title, its key among the twelve notes and its meter, each a tap; then Make, which
+ * opens it in the score editor, or Record beside it, which opens it on its takes.
  */
 export function NewSongSheet() {
   const { t } = useTranslation('songs')
   const store = usePiecesStoreApi()
   const navigate = useNavigate()
+  const meterId = useId()
   const [title, setTitle] = useState('')
   const [key, setKey] = useState(C_MAJOR)
   const [meter, setMeter] = useState<Meter>('4/4')
@@ -36,33 +37,38 @@ export function NewSongSheet() {
       <SheetContent
         title={t('making.title')}
         footer={
-          <div className="flex flex-col gap-3">
-            <Button size="lg" disabled={untitled} onClick={() => make(false)}>
+          <div className="flex gap-3">
+            <Button size="lg" className="flex-1" disabled={untitled} onClick={() => make(false)}>
               {t('making.make')}
             </Button>
             <Button size="lg" variant="soft" disabled={untitled} onClick={() => make(true)}>
+              <Mic data-icon="inline-start" aria-hidden />
               {t('making.makeAndRecord')}
             </Button>
           </div>
         }
       >
-        <div className="flex flex-col gap-5 pt-2">
-          <label className="flex flex-col gap-1">
-            <span className="text-sm text-muted-foreground">{t('making.name')}</span>
-            <Input
-              value={title}
-              maxLength={TITLE_MAX}
-              onChange={(event) => setTitle(event.target.value)}
-              className="h-12"
-            />
-          </label>
-          <KeyDropdown value={key} onChange={setKey} />
-          <Segmented
-            label={t('making.meter')}
-            value={meter}
-            options={METERS.map((value) => ({ value, label: value }))}
-            onChange={setMeter}
+        <div className="flex flex-col gap-6">
+          <Input
+            aria-label={t('making.name')}
+            placeholder={t('making.name')}
+            value={title}
+            maxLength={TITLE_MAX}
+            onChange={(event) => setTitle(event.target.value)}
+            className="h-14 px-4 font-display text-xl font-semibold"
           />
+          <KeyPicker value={key} onChange={setKey} />
+          <div className="flex flex-col gap-2">
+            <span id={meterId} aria-hidden className="text-sm text-muted-foreground">
+              {t('making.meter')}
+            </span>
+            <Segmented
+              label={t('making.meter')}
+              value={meter}
+              options={METERS.map((value) => ({ value, label: value }))}
+              onChange={setMeter}
+            />
+          </div>
         </div>
       </SheetContent>
     </Sheet>

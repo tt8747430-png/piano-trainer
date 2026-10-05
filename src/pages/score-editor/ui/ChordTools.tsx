@@ -1,8 +1,8 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { barAt, keyChords } from '@/features/score-editor'
 import { chordSymbol } from '@/shared/lib/music'
-import { RoundButton } from '@/shared/ui'
+import { ToolButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarMenu } from './BarMenu'
@@ -34,20 +34,24 @@ export function ChordTools() {
           </Button>
         ))}
       </div>
-      <Button variant="outline" onClick={() => actions.dispatch({ type: 'delete' })}>
-        {t('chord.delete')}
-      </Button>
+      <ToolButton label={t('chord.delete')} onClick={() => actions.dispatch({ type: 'delete' })}>
+        <Delete aria-hidden />
+      </ToolButton>
+      <div role="group" aria-label={t('groups.caret')} className="flex shrink-0 gap-1">
+        <ToolButton
+          label={t('back')}
+          onClick={() => actions.dispatch({ type: 'move', by: 'step', direction: -1 })}
+        >
+          <ArrowLeft aria-hidden />
+        </ToolButton>
+        <ToolButton
+          label={t('on')}
+          onClick={() => actions.dispatch({ type: 'move', by: 'step', direction: 1 })}
+        >
+          <ArrowRight aria-hidden />
+        </ToolButton>
+      </div>
       <BarMenu />
-      <RoundButton
-        label={t('back')}
-        icon={ArrowLeft}
-        onClick={() => actions.dispatch({ type: 'move', by: 'step', direction: -1 })}
-      />
-      <RoundButton
-        label={t('on')}
-        icon={ArrowRight}
-        onClick={() => actions.dispatch({ type: 'move', by: 'step', direction: 1 })}
-      />
     </>
   )
 }

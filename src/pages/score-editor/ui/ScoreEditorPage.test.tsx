@@ -117,7 +117,7 @@ describe('the score editor', () => {
     expect(keys).not.toContain(midi(48))
   })
 
-  it('opens a song with a tune in the Player with Melody to switch', async () => {
+  it('opens a song with a tune in the Player with Melody to turn on', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const song = { ...SONG, melody: 'B4/4 | D5/4 | G4/4 | G4/4' }
@@ -127,7 +127,7 @@ describe('the score editor', () => {
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('switch', { name: 'Melody' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Melody' })).toBeInTheDocument()
   })
 
   it('closes to the song’s page', async () => {
@@ -426,7 +426,7 @@ describe('the score editor’s takes', () => {
     const { router } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
-    await user.click(screen.getByRole('button', { name: 'Make and record' }))
+    await user.click(screen.getByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
     expect(router.state.location.pathname).toBe('/edit/my-1')
     await user.keyboard('{Escape}')

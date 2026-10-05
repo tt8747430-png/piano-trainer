@@ -78,7 +78,7 @@ const gridBars = (draft: Draft): GridBar[] =>
 /**
  * The score editor's takes (ADR 0028): the recorder over the caret's bar, each take kept as it ends
  * and the sheet opened on it while the screen is there; a take written into the score, downloaded or
- * deleted. Whether the sheet is open is the URL's (Make and record arrives with it open).
+ * deleted. Whether the sheet is open is the URL's (New song's Record arrives with it open).
  */
 export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: string): EditorTakes {
   const takes = useTakesStoreApi()
