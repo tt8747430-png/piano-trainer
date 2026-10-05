@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePiecesStoreApi, type OwnSongId, type PieceId } from '@/entities/piece'
+import { useTakesStoreApi } from '@/entities/take'
 import { deleteSong, resetVersion } from '@/features/edit-piece'
 import {
   AlertDialog,
@@ -30,6 +31,7 @@ export function OwnMusicActions({
 }) {
   const { t } = useTranslation('piece')
   const store = usePiecesStoreApi()
+  const takes = useTakesStoreApi()
   const navigate = useNavigate()
   const [asking, setAsking] = useState(false)
   const words = piece.kind === 'version' ? 'resetting' : 'deleting'
@@ -40,7 +42,7 @@ export function OwnMusicActions({
     }
     // Leave the page first: it has nothing to show once the song is gone.
     const { id } = piece
-    void navigate({ to: '/songs', replace: true }).then(() => deleteSong(store, id))
+    void navigate({ to: '/songs', replace: true }).then(() => deleteSong(store, takes, id))
   }
   return (
     <AlertDialog open={asking} onOpenChange={setAsking}>

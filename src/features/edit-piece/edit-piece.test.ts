@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { createPiecesStore, type PieceMusic } from '@/entities/piece'
+import { createTakesStore, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
 import { chartStart, deleteSong, makeSong, renameSong, resetVersion, saveMusic } from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
+const freshTakes = () =>
+  createTakesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
 const ORIGINAL: PieceMusic = {
   key: 'G',
   meter: '3/4',
@@ -84,9 +87,33 @@ describe('the learner’s songs', () => {
     expect(store.getState().songs[0]?.title).toBe('Two')
     renameSong(store, first, '')
     expect(store.getState().songs[0]?.title).toBe('Two')
-    deleteSong(store, first)
+    deleteSong(store, freshTakes(), first)
     expect(store.getState().songs).toEqual([])
     expect(makeSong(store, { title: 'Three', key, meter: '4/4' })).toBe('my-2')
+  })
+
+  it('deletes a song’s takes with it, and no other piece’s', () => {
+    const store = fresh()
+    const takes = freshTakes()
+    const song = makeSong(store, {
+      title: 'One',
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+    })
+    if (!song) throw new Error('made')
+    const take = (id: Take['id'], pieceId: string): Take => ({
+      id,
+      pieceId,
+      made: 0,
+      tempo: 90,
+      meter: '4/4',
+      length: 0,
+      notes: [],
+      pedal: [],
+    })
+    takes.setState({ takes: [take('take-1', song), take('take-2', 'bz1')], nextTake: 3 })
+    deleteSong(store, takes, song)
+    expect(takes.getState().takes.map((each) => each.id)).toEqual(['take-2'])
   })
 })
 

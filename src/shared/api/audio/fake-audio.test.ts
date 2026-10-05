@@ -26,9 +26,11 @@ describe('createFakeAudio', () => {
     expect(audio.played[0]?.at).toBeCloseTo(5.1)
   })
 
-  it('hears the page’s clock as its own: both start together and nothing lags', () => {
+  it('hears the page’s now as its own clock’s now: a key struck now falls where the test set it', () => {
     const audio = createFakeAudio()
-    expect(audio.audioTimeAt(1500)).toBe(1.5)
+    audio.setNow(5)
+    expect(audio.audioTimeAt(performance.now())).toBeCloseTo(5, 2)
+    expect(audio.audioTimeAt(performance.now() - 500)).toBeCloseTo(4.5, 2)
   })
 
   it('knows which keys sound as the test moves its clock, and forgets them on stop', () => {

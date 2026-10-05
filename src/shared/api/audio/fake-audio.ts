@@ -4,8 +4,8 @@ import { PLAY_DELAY, type AudioOutput } from './types'
 
 /**
  * An AudioOutput for tests: records what it is asked, and keeps a clock the test moves. The keys
- * sounding follow that clock: a test sees them change when it moves it. The page's clock is heard as
- * its own (a key struck at 1500 ms falls at 1.5 s), so a test times MIDI keys on the audio clock.
+ * sounding follow that clock: a test sees them change when it moves it. The page's now is heard as its
+ * clock's now, with nothing lagging: a MIDI key struck after `setNow(2.5)` falls at 2.5 s.
  */
 export interface FakeAudio extends AudioOutput {
   readonly unlocks: number
@@ -44,7 +44,7 @@ export function createFakeAudio(): FakeAudio {
       recordings.push({ src, play })
     },
     now: () => clock,
-    audioTimeAt: (pageTime) => pageTime / 1000,
+    audioTimeAt: (pageTime) => clock + (pageTime - performance.now()) / 1000,
     sounding: keys.current,
     struck: keys.struck,
     isPlaying: keys.isPlaying,
