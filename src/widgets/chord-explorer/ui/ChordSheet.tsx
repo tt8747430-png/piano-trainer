@@ -5,12 +5,12 @@ import { notate } from '@/shared/lib/notation'
 import { chordBar } from '@/shared/lib/schedule'
 import { LazyScoreView } from '@/shared/ui'
 
-/** The chord written: a bar of it on a grand staff, as the keys place it. */
+/** The chord written: a bar of it on a grand staff, as the keys place it; its place kept while the staff loads. */
 export function ChordSheet({ placed }: { placed: PlacedChord }) {
   const { t } = useTranslation('music')
   const score = useMemo(() => notate(chordBar(placed)), [placed])
   return (
-    <section aria-label={t('sheet.label')}>
+    <section aria-label={t('sheet.label')} className="min-w-40">
       <LazyScoreView score={score} />
     </section>
   )

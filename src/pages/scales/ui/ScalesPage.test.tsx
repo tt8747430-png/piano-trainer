@@ -229,8 +229,13 @@ describe('Practice → Scales and keys', () => {
   it('starts the run on any note, fingered from the thumb there', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/scales?fingers=rh')
-    await user.click(await screen.findByRole('combobox', { name: 'Start on' }))
-    await user.click(await screen.findByRole('option', { name: /^E/ }))
+    const startOn = await screen.findByRole('radiogroup', { name: 'Start on' })
+    expect(
+      within(startOn)
+        .getAllByRole('radio')
+        .map((each) => each.textContent),
+    ).toEqual(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
+    await user.click(within(startOn).getByRole('radio', { name: 'E' }))
     expect(router.state.location.search).toMatchObject({ start: 3 })
     const fingering = screen.getByRole('radiogroup', { name: 'Fingering' })
     expect(within(fingering).getByRole('radio', { name: 'From the thumb' })).toHaveAttribute(

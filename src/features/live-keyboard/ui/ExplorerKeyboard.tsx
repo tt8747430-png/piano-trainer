@@ -6,6 +6,7 @@ import {
   type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
+import { cn } from '@/shared/lib'
 import { Pinned, type ShownKeys } from '@/shared/ui'
 import { LiveKeyboard } from './LiveKeyboard'
 
@@ -45,7 +46,9 @@ export function ExplorerKeyboard({
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
   return (
-    <Pinned className={className}>
+    // The rail's strip is as tall as its buttons' targets and draws only its lower part: the rest is
+    // already the gap over the keys, so the keyboard sits that much nearer what is above it.
+    <Pinned className={cn('-mt-4', className)}>
       <LiveKeyboard
         range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
         inView={rangeOf(showing) ?? rangeOf(opened)}

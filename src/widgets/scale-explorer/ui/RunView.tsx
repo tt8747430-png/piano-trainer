@@ -71,17 +71,11 @@ export function RunView({
             />
           </Labelled>
           <Labelled label={t('learn:startOn')}>
-            <Dropdown
-              bare
+            <Segmented
               label={t('learn:startOn')}
               value={start}
-              options={tones.map((tone, i) => ({
-                value: i + 1,
-                label: noteName(tone.note),
-                detail: tone.degree,
-              }))}
+              options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
               onChange={(next) => onChange({ start: next })}
-              className="w-full"
             />
           </Labelled>
           {run.fingerings.length > 1 ? (

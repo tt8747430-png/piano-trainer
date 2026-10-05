@@ -3,7 +3,7 @@ import { SCALE_FAMILIES, scaleKindsIn, scaleRootSpelling } from '@/shared/lib/mu
 import { Dropdown, Labelled, NotePicker } from '@/shared/ui'
 import type { ScaleView } from '../model/scale-view'
 
-/** Which scale, the first two fields of every view: its root among the twelve notes, and its kind by family. */
+/** Which scale, the first two fields of every view: its root among the twelve notes, a row of its own, and its kind by family. */
 export function ScaleChoice({
   scale,
   onChange,
@@ -14,12 +14,14 @@ export function ScaleChoice({
   const { t } = useTranslation(['learn', 'music'])
   return (
     <>
-      <NotePicker
-        label={t('learn:root')}
-        value={scale.root}
-        spell={(pc) => scaleRootSpelling(pc, scale.kind)}
-        onChange={(root) => onChange({ root })}
-      />
+      <div className="col-span-full">
+        <NotePicker
+          label={t('learn:root')}
+          value={scale.root}
+          spell={(pc) => scaleRootSpelling(pc, scale.kind)}
+          onChange={(root) => onChange({ root })}
+        />
+      </div>
       <Labelled label={t('learn:scaleLabel')}>
         <Dropdown
           bare
