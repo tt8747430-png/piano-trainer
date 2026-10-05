@@ -8,7 +8,7 @@ import { TrainerChoice } from '@/widgets/trainer-choice'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
 import { TrainerRunView } from './TrainerRunView'
-import { TrainerSettings } from './TrainerSettings'
+import { AutoNextToggle } from './AutoNextToggle'
 import { useLevelName } from './use-level-name'
 
 /** A trainer, named by the path: the one Quiz opened. */
@@ -33,12 +33,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
       <ScreenHeader
         title={t(`trainers.${id}`)}
         back={<BackButton fallback={{ to: '/practice/quiz' }} />}
-        actions={
-          <>
-            <MidiButton />
-            <TrainerSettings />
-          </>
-        }
+        actions={<MidiButton />}
       />
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -60,6 +55,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
             )}
             onChange={(rounds) => setView({ rounds })}
           />
+          <AutoNextToggle />
         </div>
         {level === CUSTOM ? (
           <TrainerChoice trainer={trainer} view={view} onChange={setView} />

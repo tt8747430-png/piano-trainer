@@ -40,17 +40,22 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
     return myGaps(answers, practised)
   })
   const level = levelOf(trainer, view)
-  const { families, scales, intervals, ways, qualities, arpeggio, kinds, descending } = view
+  const { sizes, suspended, added, altered, scales, intervals, ways, qualities, arpeggio } = view
+  const { kinds, descending } = view
   const { from, to, accidentals, rounds } = view
   const asks = useMemo(() => {
     if (trainer.id === 'gaps' && gaps.length === 0) return null
-    const custom = { rounds, families, scales, intervals, ways, qualities, arpeggio }
-    return trainer.asks(level, { ...custom, kinds, descending, from, to, accidentals }, gaps)
+    const custom = { rounds, sizes, suspended, added, altered, scales, intervals, ways }
+    const more = { qualities, arpeggio, kinds, descending, from, to, accidentals }
+    return trainer.asks(level, { ...custom, ...more }, gaps)
   }, [
     trainer,
     level,
     rounds,
-    families,
+    sizes,
+    suspended,
+    added,
+    altered,
     scales,
     intervals,
     ways,
@@ -67,7 +72,10 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
   const runId = [
     level,
     rounds,
-    families,
+    sizes,
+    suspended,
+    added,
+    altered,
     scales,
     intervals,
     ways,

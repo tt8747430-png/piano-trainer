@@ -55,7 +55,6 @@ export const quiz = {
   round: 'Round: {{n}}',
   roundOf: 'Round {{n}} of {{total}}',
   stop: 'End the run',
-  settings: 'Trainer settings',
   autoNext: 'Next by itself',
   record: { runs: 'Runs: {{count}}', best: 'Best: {{percent}}%', last: 'Last: {{percent}}%' },
   summary: {
@@ -71,7 +70,10 @@ export const quiz = {
   },
   // Custom's choices.
   choice: {
-    families: 'Chord families',
+    sizes: 'Sizes',
+    suspended: 'Suspended',
+    added: 'Added tones',
+    altered: 'Altered chords',
     scales: 'Scales',
     intervals: 'Intervals',
     ways: 'Heard',

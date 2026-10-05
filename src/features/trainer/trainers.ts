@@ -1,10 +1,8 @@
 import {
-  CHORD_FAMILIES,
   chordSkill,
   INTERVAL_GROUPS,
   midi,
   parseNoteInOctave,
-  qualitiesIn,
   SCALE_KINDS,
   scaleSkill,
   type SkillId,
@@ -39,11 +37,12 @@ import {
 } from './ladders/keys'
 import { NOTE_LEVELS, NOTE_RANGE, noteLevel, rangeNotes, type NoteLevel } from './ladders/notes'
 import { SCALE_LEVEL_KINDS, SCALE_LEVELS, type ScaleLevel } from './ladders/scales'
+import { chordTypes, TYPE_ADDED, TYPE_SIZES, TYPE_SUSPENDED, type ChordTypes } from './chord-types'
 import { CUSTOM, readList, type TrainerId, type TrainerView } from './trainer-view'
 
 /** Custom's choices a trainer has: each a field of its sheet. */
 export type CustomField =
-  | 'families'
+  | 'chordTypes'
   | 'scales'
   | 'intervals'
   | 'ways'
@@ -66,7 +65,7 @@ export interface Trainer {
 
 /** What each of Custom's lists chooses from. */
 export const CUSTOM_CHOICES = {
-  families: CHORD_FAMILIES,
+  sizes: TYPE_SIZES,
   scales: SCALE_KINDS,
   intervals: [...INTERVAL_GROUPS.simple.slice(1), ...INTERVAL_GROUPS.compound],
   ways: INTERVAL_WAYS,
@@ -76,7 +75,7 @@ export const CUSTOM_CHOICES = {
 
 /** Custom's own choices: what a trainer's Custom asks before the learner changes it. */
 export const CUSTOM_OWN = {
-  families: ['tri', 'sev'],
+  sizes: ['triads', 'sevenths'],
   scales: ['major', 'natural', 'harmonic'],
   intervals: SIMPLE_INTERVALS,
   ways: ['up'],
@@ -90,21 +89,26 @@ export const CUSTOM_OWN = {
 export const orOwn = <T>(read: readonly T[], own: readonly T[]): readonly T[] =>
   read.length > 0 ? read : own
 
-/** Custom's chord families, as the skills they rate. */
-const familySkills = (view: TrainerView): SkillId[] =>
-  orOwn(readList(view.families, CUSTOM_CHOICES.families), CUSTOM_OWN.families)
-    .flatMap((family) => qualitiesIn(family))
-    .map(chordSkill)
+/** Custom's chord types as the URL writes them: sizes (its own where none), then what each adds. */
+export const chordTypesOf = (view: TrainerView): ChordTypes => ({
+  sizes: orOwn(readList(view.sizes, CUSTOM_CHOICES.sizes), CUSTOM_OWN.sizes),
+  suspended: readList(view.suspended, TYPE_SUSPENDED),
+  added: readList(view.added, TYPE_ADDED),
+  altered: view.altered === true,
+})
+
+/** Custom's chord types, as the skills they rate. */
+const typeSkills = (view: TrainerView): SkillId[] => chordTypes(chordTypesOf(view)).map(chordSkill)
 
 function chordTrainer(id: 'build-chord' | 'name-chord'): Trainer {
   return {
     id,
     levels: CHORD_LEVELS,
-    custom: ['families'],
+    custom: ['chordTypes'],
     rates: true,
     asks: (level, view) =>
       level === CUSTOM
-        ? { kind: 'skills', chords: id, skills: familySkills(view) }
+        ? { kind: 'skills', chords: id, skills: typeSkills(view) }
         : { kind: 'chords', mode: id, chords: chordLevel(level as ChordLevel) },
   }
 }

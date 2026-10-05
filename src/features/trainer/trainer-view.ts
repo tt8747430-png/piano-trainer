@@ -34,7 +34,11 @@ export const CUSTOM = 'custom'
 export interface TrainerView {
   readonly level?: string
   readonly rounds: Rounds
-  readonly families?: string
+  /** Build and Name chord's types: sizes, suspensions and added tones as lists, Altered a switch. */
+  readonly sizes?: string
+  readonly suspended?: string
+  readonly added?: string
+  readonly altered?: boolean
   readonly scales?: string
   readonly intervals?: string
   readonly ways?: string

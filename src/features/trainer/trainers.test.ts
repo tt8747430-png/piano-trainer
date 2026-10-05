@@ -29,16 +29,28 @@ describe('every trainer', () => {
 })
 
 describe('Custom', () => {
-  it('asks the chord families a chord trainer’s URL names', () => {
-    const asks = trainerOf('build-chord').asks(CUSTOM, { ...TEN, families: 'six' }, [])
+  it('asks the chord types a chord trainer’s URL names', () => {
+    const asks = trainerOf('build-chord').asks(
+      CUSTOM,
+      { ...TEN, sizes: 'triads', added: 'six.add9' },
+      [],
+    )
     expect(asks).toMatchObject({ kind: 'skills', chords: 'build-chord' })
     expect(asks.kind === 'skills' && asks.skills).toEqual([
+      'chord:maj',
+      'chord:min',
+      'chord:dim',
+      'chord:aug',
       'chord:six',
       'chord:m6',
-      'chord:s69',
-      'chord:m69',
       'chord:add9',
     ])
+  })
+
+  it('asks triads and 7th chords, plain, before the learner chooses', () => {
+    const asks = trainerOf('name-chord').asks(CUSTOM, TEN, [])
+    expect(asks.kind === 'skills' && asks.skills).toContain('chord:d7')
+    expect(asks.kind === 'skills' && asks.skills).not.toContain('chord:sus4')
   })
 
   it('asks its own when the URL names nothing it knows', () => {

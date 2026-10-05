@@ -132,24 +132,30 @@ describe('A trainer', () => {
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
   })
 
-  it('shows a short list of Custom’s as chips, one always left on', async () => {
+  it('asks Build chord’s types as the chord trainer’s sheet names them, each in sight', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/trainers/name-chord?level=custom&families=tri')
-    const families = await screen.findByRole('group', { name: 'Chord families' })
-    const chips = within(families).getAllByRole('button')
-    expect(chips.map((chip) => chip.textContent)).toEqual([
-      'Triads',
-      '6th & add',
-      '7th chords',
-      '9ths & more',
-      'Altered 7ths',
-    ])
-    await user.click(within(families).getByRole('button', { name: 'Triads' }))
-    expect(router.state.location.search).toMatchObject({ families: 'tri' })
-    expect(within(families).getByRole('button', { name: 'Triads' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
+    const { router } = await renderApp('/practice/trainers/build-chord?level=custom')
+    const sizes = await screen.findByRole('group', { name: 'Sizes' })
+    expect(
+      within(sizes)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['Triads', '7ths', '9ths', '11ths', '13ths'])
+    await user.click(within(sizes).getByRole('button', { name: '9ths' }))
+    expect(router.state.location.search).toMatchObject({ sizes: 'triads.sevenths.ninths' })
+    const suspended = screen.getByRole('group', { name: 'Suspended' })
+    await user.click(within(suspended).getByRole('button', { name: 'sus4' }))
+    expect(router.state.location.search).toMatchObject({ suspended: 'sus4' })
+    await user.click(within(suspended).getByRole('button', { name: 'sus4' }))
+    expect(router.state.location.search).not.toHaveProperty('suspended')
+    const added = screen.getByRole('group', { name: 'Added tones' })
+    expect(
+      within(added)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['6', '6/9', 'add9'])
+    await user.click(screen.getByRole('button', { name: 'Altered chords' }))
+    expect(router.state.location.search).toMatchObject({ altered: true })
   })
 
   it('opens an unknown level at the first', async () => {
@@ -159,12 +165,14 @@ describe('A trainer', () => {
     )
   })
 
-  it('saves auto-next from its settings', async () => {
+  it('saves auto-next from its toggle in sight, no settings sheet', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/trainers/build-scale')
-    await user.click(await screen.findByRole('button', { name: 'Trainer settings' }))
-    await user.click(screen.getByRole('switch', { name: 'Next by itself' }))
+    const autoNext = await screen.findByRole('button', { name: 'Next by itself' })
+    await user.click(autoNext)
     expect(settingsStore.getState().trainer.autoNext).toBe(true)
+    expect(autoNext).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.queryByRole('button', { name: 'Trainer settings' })).not.toBeInTheDocument()
   })
 
   it('says My gaps has none yet, with a way to a trainer', async () => {

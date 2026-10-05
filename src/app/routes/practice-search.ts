@@ -24,7 +24,10 @@ export function readTrainerSearch(raw: Raw): TrainerView {
   return {
     level: isLevelParam(raw.level) ? raw.level : undefined,
     rounds: valueOr(isRounds, raw.rounds, TRAINER_DEFAULTS.rounds),
-    families: list(raw.families),
+    sizes: list(raw.sizes),
+    suspended: list(raw.suspended),
+    added: list(raw.added),
+    altered: on(raw.altered),
     scales: list(raw.scales),
     intervals: list(raw.intervals),
     ways: list(raw.ways),

@@ -39,3 +39,4 @@ export {
   type TrainerView,
 } from './trainer-view'
 export { AUTO_NEXT_MS, useTrainer, type TrainerRun } from './use-trainer'
+export { TYPE_ADDED, TYPE_SIZES, TYPE_SUSPENDED } from './chord-types'

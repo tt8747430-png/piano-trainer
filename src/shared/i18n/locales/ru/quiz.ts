@@ -53,7 +53,6 @@ export const quiz: LocaleResources['quiz'] = {
   round: 'Раунд: {{n}}',
   roundOf: 'Раунд {{n}} из {{total}}',
   stop: 'Закончить',
-  settings: 'Настройки тренажёра',
   autoNext: 'Дальше само',
   record: {
     runs: 'Попыток: {{count}}',
@@ -72,7 +71,10 @@ export const quiz: LocaleResources['quiz'] = {
     again: 'Ещё раз',
   },
   choice: {
-    families: 'Группы аккордов',
+    sizes: 'Размеры',
+    suspended: 'С задержанием',
+    added: 'Добавленные тоны',
+    altered: 'Альтерированные аккорды',
     scales: 'Гаммы',
     intervals: 'Интервалы',
     ways: 'Звучание',

@@ -5,6 +5,8 @@ import {
   listParam,
   orOwn,
   readList,
+  TYPE_ADDED,
+  TYPE_SUSPENDED,
   type Trainer,
   type TrainerView,
 } from '@/features/trainer'
@@ -18,8 +20,20 @@ import {
   scaleKindsIn,
 } from '@/shared/lib/music'
 import { Dropdown, Labelled, MultiDropdown, SwitchRow, ToggleChips } from '@/shared/ui'
+import { Toggle } from '@/shared/ui/primitives/toggle'
 
 type ListField = keyof typeof CUSTOM_CHOICES
+
+/** The added tones a chord type may take, as a chord symbol writes them. */
+const ADDED_NAMES: Readonly<Record<(typeof TYPE_ADDED)[number], string>> = {
+  six: '6',
+  sixNine: '6/9',
+  add9: 'add9',
+}
+
+/** A list Custom may leave empty, its own being none: absent from the URL when empty. */
+const optionalList = (chosen: readonly string[]) =>
+  chosen.length > 0 ? listParam(chosen) : undefined
 
 /** The piano's white keys, an octave a group: Reading notes' range. */
 const WHITE_KEYS = Array.from({ length: 9 }, (_, octave) => ({
@@ -56,18 +70,43 @@ export function TrainerChoice({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
-        {fields.has('families') ? (
-          <Labelled label={t('quiz:choice.families')}>
-            <ToggleChips
-              label={t('quiz:choice.families')}
-              value={orOwn(readList(view.families, CUSTOM_CHOICES.families), CUSTOM_OWN.families)}
-              options={CUSTOM_CHOICES.families.map((family) => ({
-                value: family,
-                label: t(`music:family.${family}`),
-              }))}
-              onChange={(chosen) => write('families', chosen)}
-            />
-          </Labelled>
+        {fields.has('chordTypes') ? (
+          <>
+            <Labelled label={t('quiz:choice.sizes')}>
+              <ToggleChips
+                label={t('quiz:choice.sizes')}
+                value={orOwn(readList(view.sizes, CUSTOM_CHOICES.sizes), CUSTOM_OWN.sizes)}
+                options={CUSTOM_CHOICES.sizes.map((size) => ({
+                  value: size,
+                  label: t(`music:chordSize.${size}`),
+                }))}
+                onChange={(chosen) => write('sizes', chosen)}
+              />
+            </Labelled>
+            <Labelled label={t('quiz:choice.suspended')}>
+              <ToggleChips
+                label={t('quiz:choice.suspended')}
+                value={readList(view.suspended, TYPE_SUSPENDED)}
+                options={TYPE_SUSPENDED.map((sus) => ({ value: sus, label: sus }))}
+                onChange={(chosen) => onChange({ suspended: optionalList(chosen) })}
+              />
+            </Labelled>
+            <Labelled label={t('quiz:choice.added')}>
+              <ToggleChips
+                label={t('quiz:choice.added')}
+                value={readList(view.added, TYPE_ADDED)}
+                options={TYPE_ADDED.map((tone) => ({ value: tone, label: ADDED_NAMES[tone] }))}
+                onChange={(chosen) => onChange({ added: optionalList(chosen) })}
+              />
+            </Labelled>
+            <Toggle
+              pressed={view.altered === true}
+              onPressedChange={(on) => onChange({ altered: on || undefined })}
+              className="text-muted-foreground aria-pressed:text-foreground"
+            >
+              {t('quiz:choice.altered')}
+            </Toggle>
+          </>
         ) : null}
         {fields.has('scales') ? (
           <MultiDropdown
