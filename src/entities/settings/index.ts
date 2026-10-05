@@ -6,6 +6,7 @@ export {
   type KeyboardSettings,
   type PracticeToggle,
   type RecorderSettings,
+  type Sidebar,
   type Theme,
   type TrainerSettings,
 } from './model/types'
@@ -16,6 +17,7 @@ export {
   selectLocale,
   selectPractice,
   selectRecorder,
+  selectSidebar,
   selectTheme,
   selectTrainer,
 } from './model/selectors'

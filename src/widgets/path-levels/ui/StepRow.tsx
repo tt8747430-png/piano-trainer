@@ -30,7 +30,7 @@ const ICON: Readonly<Record<StepKind, LucideIcon>> = {
   progression: ListMusic,
 }
 const ROW_LINK =
-  'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring'
+  'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out hover:bg-muted'
 
 /** A step on the Path: what it is, how far along it is, and its learned toggle. A piece opens its page on its shelf. */
 export function StepRow({

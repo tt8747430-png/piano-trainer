@@ -1,9 +1,13 @@
+import type { ReactNode } from 'react'
+
 /** A choice's value: an id, a note, or a number such as an inversion or a level. */
 export type OptionValue = string | number
 
 export interface Option<V extends OptionValue> {
   readonly value: V
   readonly label: string
+  /** A segment's picture, drawn over its label: what the choice looks like (an inversion's stack). */
+  readonly icon?: ReactNode
   /** The accessible name, when the label alone is not enough (`7` → "Dominant 7th"). */
   readonly title?: string
   /** A pop-up item's second word, in soft ink after its label ("Minor 7th · m7"). */

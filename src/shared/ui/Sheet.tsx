@@ -1,5 +1,7 @@
+import { X } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Button } from './primitives/button'
 import {
   Drawer,
   DrawerClose,
@@ -18,8 +20,8 @@ export function Sheet(props: ComponentProps<typeof Drawer>) {
 }
 
 /**
- * The sheet's panel: a title, a body that scrolls, and an optional footer; and a Close a screen
- * reader reaches, where a sighted hand swipes the sheet down.
+ * The sheet's panel: its title beside its Close, a body that scrolls with room round it, and an
+ * optional footer parted from it by a hairline, clear of the home indicator.
  */
 export function SheetContent({
   title,
@@ -32,13 +34,19 @@ export function SheetContent({
 }) {
   const { t } = useTranslation('common')
   return (
-    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card">
-      <DrawerHeader className="px-5 pt-3 text-left">
-        <DrawerTitle className="font-display text-2xl font-semibold">{title}</DrawerTitle>
+    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card text-base">
+      <DrawerHeader className="flex-row items-center justify-between gap-3 px-5 pt-1 pb-4 text-left group-data-[swipe-axis=y]/drawer-popup:text-left">
+        <DrawerTitle className="min-w-0 font-display text-2xl font-semibold">{title}</DrawerTitle>
+        <DrawerClose render={<Button variant="ghost" size="icon" aria-label={t('close')} />}>
+          <X aria-hidden />
+        </DrawerClose>
       </DrawerHeader>
       <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-5 pb-6">{children}</div>
-      {footer ? <DrawerFooter className="px-5 pb-safe">{footer}</DrawerFooter> : null}
-      <DrawerClose className="sr-only">{t('close')}</DrawerClose>
+      {footer ? (
+        <DrawerFooter className="border-t border-hairline px-5 pt-4 pb-safe-4">
+          {footer}
+        </DrawerFooter>
+      ) : null}
     </DrawerContent>
   )
 }

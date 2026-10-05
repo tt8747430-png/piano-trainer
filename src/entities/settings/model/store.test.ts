@@ -1,7 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
-import { DEFAULT_PRACTICE, DEFAULT_RECORDER, DEFAULT_TRAINER, defaultKeyboard } from './types'
+import {
+  DEFAULT_PRACTICE,
+  DEFAULT_RECORDER,
+  DEFAULT_SIDEBAR,
+  DEFAULT_TRAINER,
+  defaultKeyboard,
+} from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
 const writeSaved = (storage: Storage, state: unknown, version = 2) =>
@@ -19,6 +25,7 @@ const DEFAULTS = {
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
+  sidebar: DEFAULT_SIDEBAR,
 }
 
 describe('createSettingsStore', () => {
@@ -43,7 +50,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 7,
+      version: 8,
     })
   })
 
@@ -68,8 +75,19 @@ describe('createSettingsStore', () => {
         typing: true,
       },
       recorder: { click: false },
+      sidebar: 'collapsed',
     }
-    expect(restored(saved, 7)).toEqual(saved)
+    expect(restored(saved, 8)).toEqual(saved)
+  })
+
+  it('gives a version-7 save the sidebar open, keeping the rest', () => {
+    const settings = restored({ theme: 'dark', recorder: { click: false } }, 7)
+    expect(settings.sidebar).toBe('open')
+    expect(settings.recorder).toEqual({ click: false })
+  })
+
+  it('opens a sidebar saved as anything but open or collapsed', () => {
+    expect(restored({ sidebar: 'wide' }, 8).sidebar).toBe('open')
   })
 
   it('gives a version-6 save the recorder’s click on, keeping the rest', () => {
@@ -202,7 +220,7 @@ describe('createSettingsStore', () => {
   })
 
   it('reads a save from a newer version for the fields it knows', () => {
-    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 8)).toEqual({
+    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 9)).toEqual({
       theme: 'dark',
       locale: 'ru',
       ...DEFAULTS,

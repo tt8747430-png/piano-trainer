@@ -51,7 +51,7 @@ export function BarTargets({
               )
         if (target !== null && target >= 0) onJump(target)
       }}
-      className="absolute inset-y-0 z-20 cursor-pointer rounded-md ring-inset outline-none transition-shadow duration-200 ease-out hover:ring-1 hover:ring-input focus-visible:ring-3 focus-visible:ring-ring"
+      className="absolute inset-y-0 z-20 cursor-pointer rounded-md ring-inset transition-shadow duration-200 ease-out hover:ring-1 hover:ring-input focus-visible:-outline-offset-3"
       style={{ left: measure.x, width: measure.width }}
     />
   ))

@@ -7,6 +7,7 @@ import {
   setLocale,
   setPracticeToggle,
   setRecorderClick,
+  setSidebar,
   setTheme,
 } from './index'
 
@@ -23,6 +24,13 @@ describe('set-preference', () => {
     setTheme(store, 'dark')
     expect(store.getState().theme).toBe('dark')
     expect(saved(storage).theme).toBe('dark')
+  })
+
+  it('setSidebar collapses the sidebar and saves it', () => {
+    const { storage, store } = setUp()
+    setSidebar(store, 'collapsed')
+    expect(store.getState().sidebar).toBe('collapsed')
+    expect(saved(storage).sidebar).toBe('collapsed')
   })
 
   it('setLocale changes and saves the language', () => {

@@ -13,11 +13,14 @@ export function PathPage() {
       <ScreenHeader
         title={t('path:title')}
         actions={
-          <RoundLink
-            label={t('common:nav.settings')}
-            icon={Settings}
-            render={<Link to="/settings" />}
-          />
+          // A laptop's sidebar has Settings at its foot.
+          <div className="lg:hidden">
+            <RoundLink
+              label={t('common:nav.settings')}
+              icon={Settings}
+              render={<Link to="/settings" />}
+            />
+          </div>
         }
       />
       <div className="mt-2 flex flex-col gap-6">

@@ -48,7 +48,7 @@ export function SheetMusic({
     <section
       ref={scroller}
       aria-label={t('sheet.label')}
-      className="relative -mx-4 overflow-x-auto overscroll-x-contain px-4 pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
+      className="relative -mx-gutter overflow-x-auto overscroll-x-contain px-gutter pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
     >
       <ScoreView score={score} scale={scale} fingers={fingers} names={names} muted={muted}>
         {(layout) => (

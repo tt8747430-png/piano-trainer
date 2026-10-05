@@ -48,6 +48,10 @@ export interface KeyboardSettings {
   readonly typing: boolean
 }
 
+export const SIDEBARS = ['open', 'collapsed'] as const
+/** A laptop's sidebar: its places named, or their icons alone. */
+export type Sidebar = (typeof SIDEBARS)[number]
+
 /** How the score editor's Recorder records a take (ADR 0028). */
 export interface RecorderSettings {
   /** The click goes on after the count-in, while the take records. */
@@ -61,6 +65,7 @@ export interface SettingsState {
   trainer: TrainerSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
+  sidebar: Sidebar
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -76,6 +81,8 @@ export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
 export const DEFAULT_RECORDER: RecorderSettings = { click: true }
 
+export const DEFAULT_SIDEBAR: Sidebar = 'open'
+
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   keySize: 'fit',
@@ -89,6 +96,7 @@ export const isTheme = isOneOf(THEMES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
+export const isSidebar = isOneOf(SIDEBARS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

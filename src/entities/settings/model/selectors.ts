@@ -4,6 +4,7 @@ import type {
   PracticeToggles,
   RecorderSettings,
   SettingsState,
+  Sidebar,
   Theme,
   TrainerSettings,
 } from './types'
@@ -14,3 +15,4 @@ export const selectPractice = (state: SettingsState): PracticeToggles => state.p
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
+export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar

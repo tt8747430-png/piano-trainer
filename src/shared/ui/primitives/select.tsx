@@ -30,7 +30,7 @@ function SelectTrigger({ className, children, ...props }: SelectPrimitive.Trigge
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        'flex h-11 min-w-0 items-center gap-2 rounded-xl border border-input bg-card px-3 text-base whitespace-nowrap transition-colors duration-200 ease-out outline-none select-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+        'flex h-11 min-w-0 items-center gap-2 rounded-xl border border-input bg-card px-3 text-base whitespace-nowrap transition-colors duration-200 ease-out select-none hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
         className,
       )}
       {...props}
@@ -100,7 +100,7 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex min-h-11 w-full cursor-default items-center rounded-lg py-2 pr-10 pl-3 text-base outline-hidden select-none data-highlighted:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+        'relative flex min-h-11 w-full cursor-default items-center rounded-lg py-2 pr-10 pl-3 text-base outline-hidden select-none data-highlighted:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
         className,
       )}
       {...props}

@@ -33,7 +33,7 @@ export function BarButton({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        'relative flex min-h-18 min-w-0 flex-col items-start justify-end gap-0.5 overflow-hidden border-l border-input px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
+        'relative flex min-h-18 min-w-0 flex-col items-start justify-end gap-0.5 overflow-hidden border-l border-input px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out focus-visible:-outline-offset-3',
         pressed ? 'bg-secondary text-secondary-foreground' : 'hover:bg-muted/60',
       )}
     >

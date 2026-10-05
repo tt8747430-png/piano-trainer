@@ -97,6 +97,9 @@ export const music = {
     minor: '{{tonic}} minor',
     majors: 'Major keys',
     minors: 'Minor keys',
+    mode: 'Mode',
+    majorMode: 'Major',
+    minorMode: 'Minor',
   },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {

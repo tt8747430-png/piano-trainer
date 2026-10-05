@@ -13,7 +13,7 @@ export function LearnedCheck({ step, title }: { step: StepId; title: string }) {
       aria-pressed={learned}
       aria-label={t('learned.toggle', { title })}
       onClick={toggle}
-      className="grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
+      className="grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-200 ease-out hover:bg-muted"
     >
       <LearnedMark learned={learned} />
     </button>

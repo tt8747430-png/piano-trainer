@@ -60,7 +60,7 @@ export function LoopGrip({
         const box = event.currentTarget.parentElement?.getBoundingClientRect()
         if (box) move(barAt(measures, event.clientX - box.left))
       }}
-      className="group absolute inset-y-0 z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring"
+      className="group absolute inset-y-0 z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
       style={{ left: x }}
     >
       <span

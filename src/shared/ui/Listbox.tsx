@@ -97,7 +97,7 @@ export function Listbox({
                 choose(option)
               }}
               className={cn(
-                'flex w-full cursor-default items-center gap-3 text-left transition-colors duration-200 ease-out outline-none select-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset aria-disabled:opacity-50 aria-disabled:hover:bg-transparent',
+                'flex w-full cursor-default items-center gap-3 text-left transition-colors duration-200 ease-out select-none hover:bg-muted aria-disabled:opacity-50 aria-disabled:hover:bg-transparent focus-visible:-outline-offset-3',
                 optionClassName,
               )}
             >

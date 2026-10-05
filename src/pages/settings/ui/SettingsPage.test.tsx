@@ -7,7 +7,9 @@ describe('Settings', () => {
   it('goes back to the Path it was opened from, leaving no Settings to come back to', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/')
-    await user.click(await screen.findByRole('link', { name: 'Settings' }))
+    await user.click(
+      within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
+    )
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     expect(router.history.canGoBack()).toBe(false)

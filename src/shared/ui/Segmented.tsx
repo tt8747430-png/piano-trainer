@@ -4,7 +4,8 @@ import type { Option, OptionValue } from './option'
 
 /**
  * One choice of a few, always one chosen: a segmented control, the chosen segment a card on its
- * track. A radio group: the arrows move to a segment and choose it.
+ * track, a segment's picture (an option's `icon`) over its label. A radio group: the arrows move to a
+ * segment and choose it.
  */
 export function Segmented<V extends OptionValue>({
   label,
@@ -36,8 +37,9 @@ export function Segmented<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={option.title}
-          className="inline-flex h-11 min-w-11 flex-1 cursor-default items-center justify-center rounded-lg border border-transparent px-2 text-center text-base leading-tight font-semibold text-muted-foreground transition-colors duration-200 ease-out outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring data-checked:border-input data-checked:bg-card data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground"
+          className="inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-lg border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-card data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground"
         >
+          {option.icon}
           {option.label}
         </Radio.Root>
       ))}
