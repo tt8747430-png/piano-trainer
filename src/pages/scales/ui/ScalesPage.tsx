@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { useViewChange } from '@/shared/lib'
 import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
-import { keyOfScale, ScaleExplorer, type ScaleView } from '@/widgets/scale-explorer'
+import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
 import { StepPanel } from '@/widgets/step-panel'
+import { ScalesTabs } from '@/widgets/subject-tabs'
 import { PiecesInKey } from './PiecesInKey'
 
 /**
@@ -19,22 +20,25 @@ export function ScalesPage() {
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('scales')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
-        actions={
-          key ? (
-            <RoundButton
-              label={t('keys.random')}
-              icon={Dices}
-              onClick={() => {
-                const next = randomKey(Math.random, key)
-                onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
-              }}
-            />
-          ) : null
-        }
-      />
+      <div className="flex flex-col">
+        <ScreenHeader
+          title={t('scales')}
+          back={<BackButton fallback={{ to: '/practice' }} />}
+          actions={
+            key ? (
+              <RoundButton
+                label={t('keys.random')}
+                icon={Dices}
+                onClick={() => {
+                  const next = randomKey(Math.random, key)
+                  onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
+                }}
+              />
+            ) : null
+          }
+        />
+        <ScalesTabs shows={showsOf(scale.kind)} current={scale.show} />
+      </div>
       {step ? <StepPanel step={step} /> : null}
       <ScaleExplorer scale={scale} onChange={onChange} />
       {key ? <PiecesInKey musicKey={key} /> : null}

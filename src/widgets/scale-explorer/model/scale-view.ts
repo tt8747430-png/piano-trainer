@@ -1,9 +1,23 @@
-import type { ChordNotes, Fingering, NoteParam, ScaleKind } from '@/shared/lib/music'
+import {
+  keyMode,
+  scaleHasChords,
+  type ChordNotes,
+  type Fingering,
+  type NoteParam,
+  type ScaleKind,
+} from '@/shared/lib/music'
 import type { Hands, PracticeRhythm } from '@/shared/lib/schedule'
 
-/** The views of a scale, in the order their segments stand. */
+/** The views of a scale, in the order their tabs stand. */
 export const SCALE_SHOWS = ['scale', 'chords', 'key'] as const
 export type ScaleShow = (typeof SCALE_SHOWS)[number]
+
+/** The views a scale has: its run always, its chords with seven notes, its key where it is one's scale. */
+export const showsOf = (kind: ScaleKind): readonly ScaleShow[] =>
+  SCALE_SHOWS.filter(
+    (show) =>
+      show === 'scale' || (show === 'chords' ? scaleHasChords(kind) : keyMode(kind) !== null),
+  )
 
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
@@ -18,10 +32,9 @@ export interface ScaleView {
   readonly start: number
   /** How the run is fingered; absent, as its start is (`ownFingering`). */
   readonly fingering?: Fingering
-  /** The fingers under the keys: none, or one hand's (Scale view). */
-  readonly fingers: 'none' | 'rh' | 'lh'
   readonly rhythm: PracticeRhythm
   readonly tempo: number
+  /** The hand that plays the run, or both; its fingers stand under the keys (the right hand's for both). */
   readonly hands: Hands
   /** How many notes each chord stacks: 3 a triad … 7 a 13th (Chords view). */
   readonly chords: ChordNotes

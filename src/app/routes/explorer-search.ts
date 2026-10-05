@@ -114,7 +114,6 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   kind: 'major',
   show: 'scale',
   start: 1,
-  fingers: 'none',
   rhythm: 'even',
   tempo: 80,
   hands: 'rh',
@@ -130,7 +129,6 @@ const scaleShows = (kind: ScaleKind): readonly ScaleShow[] => [
   ...(keyMode(kind) === null ? [] : (['key'] as const)),
 ]
 const isKeysPlay = isOneOf<ScaleView['keysPlay']>(['chords', 'notes'])
-const isScaleFingers = isOneOf<ScaleView['fingers']>(['none', 'rh', 'lh'])
 const isChordNotes = isOneOf(CHORD_NOTES)
 const isScaleStep = (value: unknown): value is ScaleStepId =>
   isStepId(value) && value.startsWith('scale:')
@@ -158,7 +156,6 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     show: valueOr(isOneOf(scaleShows(kind)), raw.show, SCALES_DEFAULTS.show),
     start,
     fingering: chosenFingering(kind, start - 1, raw.fingering),
-    fingers: valueOr(isScaleFingers, raw.fingers, SCALES_DEFAULTS.fingers),
     rhythm: valueOr(isRhythm, raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
@@ -170,13 +167,8 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
   }
 }
 export const scalesSearch = routeSearch(readScalesSearch, SCALES_DEFAULTS)
-/** A link names a scale; how it is fingered, its rhythm, tempo and hands are the learner's. */
-export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = [
-  'fingers',
-  'rhythm',
-  'tempo',
-  'hands',
-]
+/** A link names a scale; its rhythm, tempo and hands are the learner's. */
+export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = ['rhythm', 'tempo', 'hands']
 
 // Intervals: the root in the explorer's one spelling for its pitch class.
 export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }

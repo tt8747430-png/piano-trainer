@@ -16,7 +16,7 @@ export const learn: LocaleResources['learn'] = {
   chords: 'Аккорды',
   scales: 'Гаммы и тональности',
   written: 'Пишется',
-  show: { label: 'Показать', scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
+  show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
   keysPlay: { label: 'Клавиши играют', chords: 'Аккорды', notes: 'Ноты' },
   holds: '{{note}} есть в {{chords}}',
   holdsNone: 'Ни в одном аккорде гаммы нет {{note}}',
@@ -56,7 +56,6 @@ export const learn: LocaleResources['learn'] = {
   checkYourself: 'Проверить себя',
   scaleLabel: 'Гамма',
   startOn: 'Начать с',
-  fingers: { label: 'Пальцы', none: 'Нет' },
   fingering: {
     label: 'Аппликатура',
     thumb: 'От первого пальца',
@@ -65,7 +64,6 @@ export const learn: LocaleResources['learn'] = {
     rh: 'ПР',
     lh: 'ЛР',
   },
-  playScale: 'Сыграть гамму',
   rhythmLabel: 'Ритм',
   rhythm: {
     even: 'Ровно',

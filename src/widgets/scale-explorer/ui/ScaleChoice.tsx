@@ -1,24 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { useScaleName } from '@/shared/i18n'
-import {
-  keyMode,
-  noteFromParam,
-  SCALE_FAMILIES,
-  scaleHasChords,
-  scaleKindsIn,
-  scaleRootSpelling,
-} from '@/shared/lib/music'
-import { Dropdown, NoteDropdown, Segmented } from '@/shared/ui'
-import { SCALE_SHOWS, type ScaleShow, type ScaleView } from '../model/scale-view'
+import { SCALE_FAMILIES, scaleKindsIn, scaleRootSpelling } from '@/shared/lib/music'
+import { Dropdown, Labelled, NotePicker } from '@/shared/ui'
+import type { ScaleView } from '../model/scale-view'
 
-/** The views a scale has: its run always, its chords with seven notes, its key where it is one's scale. */
-const HAS_SHOW: Readonly<Record<ScaleShow, (kind: ScaleView['kind']) => boolean>> = {
-  scale: () => true,
-  chords: scaleHasChords,
-  key: (kind) => keyMode(kind) !== null,
-}
-
-/** Which scale: its name, its root and kind from pop-up buttons, and Scale · Chords · Key, each where the scale has it. */
+/** Which scale, the first two fields of every view: its root among the twelve notes, and its kind by family. */
 export function ScaleChoice({
   scale,
   onChange,
@@ -27,18 +12,15 @@ export function ScaleChoice({
   onChange: (change: Partial<ScaleView>) => void
 }) {
   const { t } = useTranslation(['learn', 'music'])
-  const scaleName = useScaleName()
-  const shows = SCALE_SHOWS.filter((show) => HAS_SHOW[show](scale.kind))
   return (
     <>
-      <h2 className="text-5xl">{scaleName(noteFromParam(scale.root), scale.kind)}</h2>
-      <div className="flex flex-wrap gap-2">
-        <NoteDropdown
-          label={t('learn:root')}
-          value={scale.root}
-          spell={(pc) => scaleRootSpelling(pc, scale.kind)}
-          onChange={(root) => onChange({ root })}
-        />
+      <NotePicker
+        label={t('learn:root')}
+        value={scale.root}
+        spell={(pc) => scaleRootSpelling(pc, scale.kind)}
+        onChange={(root) => onChange({ root })}
+      />
+      <Labelled label={t('learn:scaleLabel')}>
         <Dropdown
           label={t('learn:scaleLabel')}
           value={scale.kind}
@@ -50,16 +32,9 @@ export function ScaleChoice({
             })),
           }))}
           onChange={(kind) => onChange({ kind })}
+          className="w-full"
         />
-      </div>
-      {shows.length > 1 ? (
-        <Segmented
-          label={t('learn:show.label')}
-          value={scale.show}
-          options={shows.map((value) => ({ value, label: t(`learn:show.${value}`) }))}
-          onChange={(show) => onChange({ show })}
-        />
-      ) : null}
+      </Labelled>
     </>
   )
 }

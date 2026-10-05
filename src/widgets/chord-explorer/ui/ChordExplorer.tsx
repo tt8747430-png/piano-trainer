@@ -30,8 +30,8 @@ const keysOf = (view: ChordView): Midi[] => {
 
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
- * is (its symbol, its tones, every way it is written) with Play and Arpeggio; its choices; the chord
- * on a staff; a 7th chord's available tensions; and its ways into the Player.
+ * is (its symbol, its tones, every way it is written, the chord on a staff) with Play and Arpeggio;
+ * its choices; a 7th chord's available tensions; and its ways into the Player.
  */
 export function ChordExplorer({
   chord,
@@ -86,6 +86,7 @@ export function ChordExplorer({
             </span>
           </p>
         </div>
+        <ChordSheet placed={placed} />
         <div className="flex gap-3">
           <Button size="pill" onClick={() => sound('chord')}>
             <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
@@ -96,7 +97,6 @@ export function ChordExplorer({
         </div>
       </div>
       <ChordBuilder chord={chord} notes={built.tones.length} onChange={change} />
-      <ChordSheet placed={placed} />
       {quality && takesTensions(quality) ? (
         <ChordTensions
           root={built.root}

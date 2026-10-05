@@ -15,7 +15,7 @@ export const learn = {
   scales: 'Scales and keys',
   // The ways a chord symbol is written on this root.
   written: 'Written',
-  show: { label: 'Show', scale: 'Scale', chords: 'Chords', key: 'Key' },
+  show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
   keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
   holds: '{{note}} is in {{chords}}',
   holdsNone: 'No chord of the scale holds {{note}}',
@@ -46,7 +46,6 @@ export const learn = {
   checkYourself: 'Check yourself',
   scaleLabel: 'Scale',
   startOn: 'Start on',
-  fingers: { label: 'Fingers', none: 'None' },
   fingering: {
     label: 'Fingering',
     thumb: 'From the thumb',
@@ -55,7 +54,6 @@ export const learn = {
     rh: 'RH',
     lh: 'LH',
   },
-  playScale: 'Play the scale',
   rhythmLabel: 'Rhythm',
   rhythm: {
     even: 'Even',

@@ -25,23 +25,40 @@ describe('Practice → Scales and keys', () => {
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveClass('bg-key-scale')
   })
 
-  it('puts a hand’s fingers under the keys, which keep their degrees', async () => {
+  it('puts the playing hand’s fingers under the keys, which keep their degrees', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    const fingers = await screen.findByRole('radiogroup', { name: 'Fingers' })
-    await user.click(within(fingers).getByRole('radio', { name: 'Right hand' }))
-    expect(router.state.location.search).toMatchObject({ fingers: 'rh' })
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('4')
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
+    const hands = screen.getByRole('radiogroup', { name: 'Hands' })
+    await user.click(within(hands).getByRole('radio', { name: 'Left hand' }))
+    expect(router.state.location.search).toMatchObject({ hands: 'lh' })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('54321321')
+    expect(screen.queryByRole('radiogroup', { name: 'Fingers' })).not.toBeInTheDocument()
   })
 
-  it('titles its practice card as playing the scale, not as the Practice place', async () => {
+  it('has one Play, beside the scale’s name, and no card of its own for playing', async () => {
     await renderApp('/practice/scales')
-    expect(
-      await screen.findByRole('heading', { level: 3, name: 'Play the scale' }),
-    ).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Play up and down' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Play the scale' })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Practice' })).not.toBeInTheDocument()
+  })
+
+  it('opens the scale’s exercises in the Player, each on this scale', async () => {
+    await renderApp('/practice/scales?root=D&kind=dorian')
+    const practise = await screen.findByRole('region', { name: 'Practise in the Player' })
+    expect(
+      within(practise)
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href')),
+    ).toEqual([
+      '/play/exercise/scale?root=D&kind=dorian',
+      '/play/exercise/thirds?root=D&kind=dorian',
+      '/play/exercise/sixths?root=D&kind=dorian',
+      '/play/exercise/groups?root=D&kind=dorian',
+      '/play/exercise/contrary?root=D&kind=dorian',
+    ])
   })
 
   it('stops the run on Stop', async () => {
@@ -96,11 +113,14 @@ describe('Practice → Scales and keys', () => {
     expect(c4).not.toHaveAttribute('data-down')
   })
 
-  it('chooses the root and the scale from pop-up buttons', async () => {
+  it('chooses the root among the twelve notes and the scale from a pop-up button', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    await user.click(await screen.findByRole('combobox', { name: 'Root' }))
-    await user.click(await screen.findByRole('option', { name: 'E♭' }))
+    await user.click(
+      within(await screen.findByRole('radiogroup', { name: 'Root' })).getByRole('radio', {
+        name: 'E♭',
+      }),
+    )
     await user.click(screen.getByRole('combobox', { name: 'Scale' }))
     await user.click(await screen.findByRole('option', { name: 'Harmonic minor' }))
     expect(router.state.location.search).toMatchObject({ root: 'Eb', kind: 'harmonic' })
@@ -109,8 +129,8 @@ describe('Practice → Scales and keys', () => {
   it('shows each degree’s numeral over its chord in Chords view', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/scales')
-    const show = await screen.findByRole('radiogroup', { name: 'Show' })
-    await user.click(within(show).getByRole('radio', { name: 'Chords' }))
+    const views = await screen.findByRole('navigation', { name: 'Scales and keys' })
+    await user.click(within(views).getByRole('link', { name: 'Chords' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -200,7 +220,9 @@ describe('Practice → Scales and keys', () => {
   it('has no Chords view for a scale without seven notes', async () => {
     await renderApp('/practice/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
-    expect(screen.queryByRole('group', { name: 'Show' })).not.toBeInTheDocument()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Scales and keys' })).getAllByRole('link'),
+    ).toHaveLength(1)
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('1')
   })
 
@@ -376,15 +398,18 @@ describe('Practice → Scales and keys, Key view', () => {
   it('takes a random key from the header, staying on the Key view', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
+    // Any key but the one shown: after two, one of them is not C, so the URL names a root.
     await user.click(await screen.findByRole('button', { name: 'A random key' }))
+    const first = router.state.location.search
+    await user.click(screen.getByRole('button', { name: 'A random key' }))
     expect(router.state.location.search).toHaveProperty('show', 'key')
-    expect(router.state.location.search).toHaveProperty('root')
+    expect(router.state.location.search).not.toEqual(first)
   })
 
   it('has no Key view, songs or random key for a scale that is not a key’s', async () => {
     await renderApp('/practice/scales?kind=dorian&show=key')
     expect(await screen.findByRole('heading', { level: 2, name: 'C Dorian' })).toBeInTheDocument()
-    expect(screen.queryByRole('radio', { name: 'Key' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Key' })).not.toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Circle of fifths' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'A random key' })).not.toBeInTheDocument()
   })

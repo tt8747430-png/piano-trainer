@@ -116,11 +116,9 @@ describe('search params', () => {
     expect(await searchAt('/songs?collection=studies')).toEqual(SONGS_DEFAULTS)
   })
 
-  it('read the Scales fingers, none by default, and ignore an old link’s view', async () => {
-    expect(SCALES_DEFAULTS.fingers).toBe('none')
-    expect(await searchAt('/practice/scales?fingers=rh')).toMatchObject({ fingers: 'rh' })
-    expect(await searchAt('/practice/scales?fingers=x')).toMatchObject({ fingers: 'none' })
-    expect(await searchAt('/practice/scales?view=rh')).toMatchObject({ fingers: 'none' })
+  it('ignore an old link’s fingers: the playing hand’s stand under the keys', async () => {
+    expect(await searchAt('/practice/scales?fingers=rh')).toMatchObject(SCALES_DEFAULTS)
+    expect(await searchAt('/practice/scales?view=rh')).toMatchObject(SCALES_DEFAULTS)
   })
 
   it('read the Scales start and a chosen fingering, dropping one the run cannot take or takes itself', async () => {
