@@ -38,7 +38,8 @@
   the piece's end.
 - **Where it starts:** at the caret's bar. The take's time 0 is that bar's downbeat as heard.
 - **Timing:** what the learner hears is the audio clock less its output latency; what they play arrives on the
-  page's clock. The audio port answers `audioTimeAt(pageTime)` (from `getOutputTimestamp`), the MIDI port stamps
+  page's clock. The audio port answers `audioTimeAt(pageTime)` (the heard clock recordings play by, ADR 0016, moved by how
+  long before now the moment was), the MIDI port stamps
   each event with the page's clock (`MIDIMessageEvent.timeStamp`), so every key is placed where it was heard
   against the click.
 - **Kept:** a key struck within half a beat before the downbeat counts as on it; earlier keys are the count-in's and
@@ -135,7 +136,7 @@ The finder names keys only by the builder's chords (CODE_STYLE §8). Two changes
   same-key cuts, triplets); `midiFile` (header, tempo and signature, events in order with delta times, pedal);
   the takes sanitiser (compact form, bad notes dropped, ids never reused); `writeTake` (whole bars, hands written
   out, melody one line, bars added, one undo step); `nameChords` (each voicing in §5, ranking, the 124 → new count).
-- **Adapters:** web MIDI stamps events and reads the pedal; web audio's `audioTimeAt` from `getOutputTimestamp`.
+- **Adapters:** web MIDI stamps events and reads the pedal; web audio's `audioTimeAt` from the heard clock.
 - **App (`renderApp`):** record in the editor with the fake MIDI and clock (count-in, keys, Stop), the take listed,
   played, written into both hands, undone; downloaded; deleted; no MIDI shows the line; Make and record opens the
   Recorder; the Chord finder names C13 from a shell.

@@ -81,7 +81,9 @@ function setUp() {
   const createContext = vi.fn(() => context as unknown as AudioContext)
   const frames: (() => void)[] = []
   const frame = (look: () => void) => void frames.push(look)
-  return { context, createContext, frames, audio: createWebAudioOutput({ createContext, frame }) }
+  const page = { now: 0 }
+  const audio = createWebAudioOutput({ createContext, frame, pageNow: () => page.now })
+  return { context, createContext, frames, page, audio }
 }
 
 describe('createWebAudioOutput', () => {
@@ -104,6 +106,18 @@ describe('createWebAudioOutput', () => {
     audio.play([A4], 1)
     expect(context.oscillators).toHaveLength(0)
     audio.stop()
+  })
+
+  it('places a moment of the page’s clock on the audio clock, as what was heard then', () => {
+    const { context, page, audio } = setUp()
+    // No audio clock yet: the page's own, in seconds.
+    expect(audio.audioTimeAt(2500)).toBe(2.5)
+    audio.play([CLICK])
+    context.currentTime = 10
+    context.outputLatency = 0.05
+    page.now = 20_000
+    expect(audio.audioTimeAt(20_500)).toBeCloseTo(10.45)
+    expect(audio.audioTimeAt(19_000)).toBeCloseTo(8.95)
   })
 
   it('plays a click as one oscillator', () => {

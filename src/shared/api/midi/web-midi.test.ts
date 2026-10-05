@@ -1,16 +1,17 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { MidiStatus, NoteEvent } from './types'
+import type { MidiStatus, NoteEvent, PedalEvent } from './types'
 import { createWebMidiInput, hasWebMidi } from './web-midi'
 
 class FakeInput {
-  onmidimessage: ((event: { data: Uint8Array }) => void) | null = null
+  onmidimessage: ((event: { data: Uint8Array; timeStamp: number }) => void) | null = null
   state: 'connected' | 'disconnected' = 'connected'
   constructor(
     readonly id: string,
     readonly name: string | null,
   ) {}
-  send(data: number[]) {
-    this.onmidimessage?.({ data: Uint8Array.from(data) })
+  /** A message as the browser hands it on: its bytes, and when it came on the page's clock. */
+  send(data: number[], timeStamp = 0) {
+    this.onmidimessage?.({ data: Uint8Array.from(data), timeStamp })
   }
 }
 
@@ -77,15 +78,33 @@ describe('createWebMidiInput', () => {
     const heard: NoteEvent[] = []
     const unsubscribe = midi.onNote((event) => heard.push(event))
     await midi.connect()
-    piano.send([0x90, 60, 90])
-    pads.send([0x80, 62, 0])
-    pads.send([0xb0, 64, 127])
+    piano.send([0x90, 60, 90], 120.5)
+    pads.send([0x80, 62, 0], 130)
+    pads.send([0xb0, 64, 127], 140)
     unsubscribe()
-    piano.send([0x90, 64, 90])
+    piano.send([0x90, 64, 90], 150)
     expect(heard).toEqual([
-      { midi: 60, on: true, velocity: 90 },
-      { midi: 62, on: false, velocity: 0 },
+      { midi: 60, on: true, velocity: 90, time: 120.5 },
+      { midi: 62, on: false, velocity: 0, time: 130 },
     ])
+  })
+
+  it('hands on the sustain pedal, apart from the keys', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const midi = withAccess(new FakeAccess(piano))
+    const pedal: PedalEvent[] = []
+    const keys = vi.fn()
+    midi.onPedal((event) => pedal.push(event))
+    midi.onNote(keys)
+    await midi.connect()
+    piano.send([0xb0, 64, 127], 10)
+    piano.send([0xb0, 64, 0], 20)
+    piano.send([0xb0, 7, 100], 30)
+    expect(pedal).toEqual([
+      { down: true, time: 10 },
+      { down: false, time: 20 },
+    ])
+    expect(keys).not.toHaveBeenCalled()
   })
 
   it('hooks a keyboard plugged in later and reports the new status', async () => {
@@ -117,7 +136,21 @@ describe('createWebMidiInput', () => {
     pads.send([0x90, 67, 90])
     heard.length = 0
     access.unplug(piano)
-    expect(heard).toEqual([{ midi: 60, on: false, velocity: 0 }])
+    expect(heard).toEqual([{ midi: 60, on: false, velocity: 0, time: expect.any(Number) }])
+  })
+
+  it('lets go of the pedal held down on a keyboard unplugged', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const pads = new FakeInput('b', 'Pads')
+    const access = new FakeAccess(piano, pads)
+    const midi = withAccess(access)
+    const pedal: PedalEvent[] = []
+    midi.onPedal((event) => pedal.push(event))
+    await midi.connect()
+    piano.send([0xb0, 64, 127])
+    access.unplug(pads)
+    access.unplug(piano)
+    expect(pedal.map((event) => event.down)).toEqual([true, false])
   })
 
   it('lets go of a keyboard’s keys when its port turns disconnected in place', async () => {
@@ -131,7 +164,7 @@ describe('createWebMidiInput', () => {
     await midi.connect()
     piano.send([0x90, 60, 90])
     access.disconnect(piano)
-    expect(heard.at(-1)).toEqual({ midi: 60, on: false, velocity: 0 })
+    expect(heard.at(-1)).toEqual({ midi: 60, on: false, velocity: 0, time: expect.any(Number) })
     expect(statuses.at(-1)).toEqual({ state: 'no-device' })
   })
 

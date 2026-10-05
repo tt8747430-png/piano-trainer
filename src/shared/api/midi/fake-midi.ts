@@ -1,11 +1,17 @@
 import type { Midi } from '@/shared/lib/music'
 import { createListeners } from './listeners'
-import type { MidiInput, MidiStatus, NoteEvent } from './types'
+import type { MidiInput, MidiStatus, NoteEvent, PedalEvent } from './types'
 
-/** A MidiInput for tests: the test presses the keys and changes the status. */
+/** When a fake message came, on the page's clock: now unless the test says. */
+interface At {
+  readonly time?: number
+}
+
+/** A MidiInput for tests: the test presses the keys and the pedal, and changes the status. */
 export interface FakeMidi extends MidiInput {
-  press(midi: Midi): void
-  release(midi: Midi): void
+  press(midi: Midi, at?: At & { readonly velocity?: number }): void
+  release(midi: Midi, at?: At): void
+  pedal(down: boolean, at?: At): void
   setStatus(status: MidiStatus): void
 }
 
@@ -16,6 +22,7 @@ export function createFakeMidi(
 ): FakeMidi {
   let current: MidiStatus | null = null
   const notes = createListeners<NoteEvent>()
+  const pedals = createListeners<PedalEvent>()
   const statuses = createListeners<MidiStatus>()
   const report = (next: MidiStatus) => {
     current = next
@@ -31,9 +38,13 @@ export function createFakeMidi(
     reconnect: async () => (allowed ? connect() : null),
     current: () => current,
     onNote: notes.add,
+    onPedal: pedals.add,
     onStatus: statuses.add,
-    press: (midi) => notes.emit({ midi, on: true, velocity: 100 }),
-    release: (midi) => notes.emit({ midi, on: false, velocity: 0 }),
+    press: (midi, { time = performance.now(), velocity = 100 } = {}) =>
+      notes.emit({ midi, on: true, velocity, time }),
+    release: (midi, { time = performance.now() } = {}) =>
+      notes.emit({ midi, on: false, velocity: 0, time }),
+    pedal: (down, { time = performance.now() } = {}) => pedals.emit({ down, time }),
     setStatus: report,
   }
 }

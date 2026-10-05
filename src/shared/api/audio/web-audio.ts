@@ -103,10 +103,13 @@ export function createWebAudioOutput({
   createContext = browserContext,
   frame = animationFrame,
   createMedia = wholeFileMedia,
+  pageNow = () => performance.now(),
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
   createMedia?: (src: string) => Media
+  /** The page's clock, in milliseconds. */
+  pageNow?: () => number
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<Voice>()
@@ -167,6 +170,9 @@ export function createWebAudioOutput({
     loadRecording: (src) => recordings.load(src),
     playRecording: (src, play) => recordings.play(src, play),
     now,
+    // What is heard now, moved by how long before or after now the page's moment was.
+    audioTimeAt: (pageTime) =>
+      context ? heard() + (pageTime - pageNow()) / 1000 : pageTime / 1000,
     sounding: keys.current,
     struck: keys.struck,
     isPlaying: keys.isPlaying,

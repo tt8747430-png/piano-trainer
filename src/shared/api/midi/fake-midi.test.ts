@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import { createFakeMidi } from './fake-midi'
-import type { MidiStatus, NoteEvent } from './types'
+import type { MidiStatus, NoteEvent, PedalEvent } from './types'
 
 describe('createFakeMidi', () => {
   it('connects with the status it was given', async () => {
@@ -20,6 +20,26 @@ describe('createFakeMidi', () => {
     expect(heard.map(({ midi: key, on }) => [key, on])).toEqual([
       [60, true],
       [60, false],
+    ])
+  })
+
+  it('plays keys and the pedal at the times the test gives', () => {
+    const fake = createFakeMidi()
+    const heard: NoteEvent[] = []
+    const pedal: PedalEvent[] = []
+    fake.onNote((event) => heard.push(event))
+    fake.onPedal((event) => pedal.push(event))
+    fake.press(midi(60), { time: 100, velocity: 40 })
+    fake.pedal(true, { time: 150 })
+    fake.release(midi(60), { time: 200 })
+    fake.pedal(false, { time: 250 })
+    expect(heard).toEqual([
+      { midi: 60, on: true, velocity: 40, time: 100 },
+      { midi: 60, on: false, velocity: 0, time: 200 },
+    ])
+    expect(pedal).toEqual([
+      { down: true, time: 150 },
+      { down: false, time: 250 },
     ])
   })
 

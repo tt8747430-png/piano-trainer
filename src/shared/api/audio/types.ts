@@ -33,6 +33,12 @@ export interface AudioOutput {
   playRecording(src: string, play: RecordingPlay): void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
+  /**
+   * What the audio clock was being heard at, at `pageTime` (milliseconds on the page's clock,
+   * `performance.now()`'s): where a key struck then falls against what sounded. Before there is any
+   * audio clock, the page's own in seconds.
+   */
+  audioTimeAt(pageTime: number): number
   /** The keys the app is sounding now (a hand's play aside): the same set until they change. */
   sounding(): ReadonlySet<Midi>
   /** The keys sounding now that were struck last (spotlight): the same set until they change. */

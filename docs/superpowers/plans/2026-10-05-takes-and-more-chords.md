@@ -72,11 +72,11 @@ PedalEvent)`; `parseMidiMessage(data, time): MidiMessage | null`; `MidiInput.onP
 
 **Files:** `src/shared/api/audio/{types,web-audio,fake-audio}.ts` (+tests).
 
-**Produces:** `AudioOutput.audioTimeAt(pageTime: number): number` — web: `contextTime + (pageTime −
-performanceTime) / 1000` from `getOutputTimestamp()`, `pageTime / 1000` before a context exists; fake: `pageTime /
+**Produces:** `AudioOutput.audioTimeAt(pageTime: number): number` — web: `heard() + (pageTime − pageNow()) / 1000`
+(`heard`: the context's time less its output latency), `pageTime / 1000` before a context exists; fake: `pageTime /
 1000` (its clocks start together).
 
-- [ ] Test (red) with a stub context's `getOutputTimestamp`; implement; commit "Audio: the audio time heard at a
+- [ ] Test (red) with a stub context and page clock; implement; commit "Audio: the audio time heard at a
   moment of the page's clock".
 
 ### Task 4: Takes are saved (`entities/take`), with `createSavedStore`'s `write`; settings v7

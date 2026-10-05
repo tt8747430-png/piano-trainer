@@ -1,7 +1,7 @@
 import type { Midi } from '@/shared/lib/music'
 import { createListeners } from './listeners'
 import { parseMidiMessage } from './parse-message'
-import type { MidiInput, MidiStatus, NoteEvent } from './types'
+import type { MidiInput, MidiStatus, NoteEvent, PedalEvent } from './types'
 
 export const hasWebMidi = (navigator: Navigator | undefined = globalThis.navigator): boolean =>
   typeof navigator?.requestMIDIAccess === 'function'
@@ -17,14 +17,16 @@ const midiPermission = async (): Promise<PermissionState> =>
 
 /**
  * The Web MIDI adapter: every keyboard plugged in is listened to, and re-hooked when devices change.
- * A keyboard unplugged lets go of the keys it was holding, so no key stays down without a hand. One
- * the learner allowed before reconnects without a prompt.
+ * Each message keeps the time it came (its event's `timeStamp`, on the page's clock), not the time a
+ * handler ran. A keyboard unplugged lets go of the keys it was holding and of its pedal, so nothing
+ * stays down without a hand or a foot. One the learner allowed before reconnects without a prompt.
  */
 export function createWebMidiInput(
   requestAccess: () => Promise<MIDIAccess> = () => navigator.requestMIDIAccess(),
   permission: () => Promise<PermissionState> = midiPermission,
 ): MidiInput {
   const notes = createListeners<NoteEvent>()
+  const pedals = createListeners<PedalEvent>()
   const statuses = createListeners<MidiStatus>()
   let current: MidiStatus | null = null
   const report = (status: MidiStatus) => {
@@ -32,27 +34,36 @@ export function createWebMidiInput(
     statuses.emit(status)
   }
 
-  // The keys each keyboard holds down, by the keyboard's id.
-  const held = new Map<string, Set<Midi>>()
+  // What each keyboard holds down, by the keyboard's id: its keys, and whether its pedal is down.
+  const held = new Map<string, { keys: Set<Midi>; pedal: boolean }>()
 
   const listenTo = (input: MIDIInput) => {
-    const keys = held.get(input.id) ?? new Set<Midi>()
-    held.set(input.id, keys)
+    const holding = held.get(input.id) ?? { keys: new Set<Midi>(), pedal: false }
+    held.set(input.id, holding)
     input.onmidimessage = (event) => {
-      const note = event.data ? parseMidiMessage(event.data) : null
-      if (!note) return
-      if (note.on) keys.add(note.midi)
-      else keys.delete(note.midi)
+      const message = event.data ? parseMidiMessage(event.data, event.timeStamp) : null
+      if (!message) return
+      if (message.kind === 'pedal') {
+        const { kind: _kind, ...pedal } = message
+        holding.pedal = pedal.down
+        pedals.emit(pedal)
+        return
+      }
+      const { kind: _kind, ...note } = message
+      if (note.on) holding.keys.add(note.midi)
+      else holding.keys.delete(note.midi)
       notes.emit(note)
     }
   }
 
   const letGoOfUnplugged = (inputs: readonly MIDIInput[]) => {
     const present = new Set(inputs.map((input) => input.id))
-    for (const [id, keys] of held) {
+    const time = performance.now()
+    for (const [id, { keys, pedal }] of held) {
       if (present.has(id)) continue
       held.delete(id)
-      for (const midi of keys) notes.emit({ midi, on: false, velocity: 0 })
+      for (const midi of keys) notes.emit({ midi, on: false, velocity: 0, time })
+      if (pedal) pedals.emit({ down: false, time })
     }
   }
 
@@ -87,6 +98,7 @@ export function createWebMidiInput(
     },
     current: () => current,
     onNote: notes.add,
+    onPedal: pedals.add,
     onStatus: statuses.add,
   }
   return input

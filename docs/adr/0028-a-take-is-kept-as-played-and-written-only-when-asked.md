@@ -23,7 +23,8 @@ learner who only wants to hear themselves back gets a score they did not ask for
 - **It is played to the song's click:** a bar's count-in, then (if the saved Click switch is on) a click on the
   piece's bars, so the take's beats are the piece's and writing it needs no tempo found from the playing.
 - **Time is placed where it was heard.** The audio port answers what audio-clock time was being heard at a moment of
-  the page's clock (`getOutputTimestamp`), and the MIDI port stamps each event with that clock (the event's own
+  the page's clock (the AudioContext's time less its output latency, the clock recordings play by in ADR 0016,
+  moved by how long before now that moment was), and the MIDI port stamps each event with that clock (the event's own
   `timeStamp`, not when a handler ran). Both are the ports' to know (ADR 0004).
 - **The pedal is part of the port.** The MIDI port reads CC 64 as the sustain pedal (`onPedal`) beside the keys, and an
   unplugged keyboard lets it go as it lets go of its keys.
