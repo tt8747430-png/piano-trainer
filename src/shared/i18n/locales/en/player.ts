@@ -29,6 +29,7 @@ export const player = {
   ownFigure: 'The pattern’s own',
   /** A changed hand's way back. */
   ownFigureOf: '{{hand}}: back to the pattern’s own',
+  changed: { lh: 'Left hand changed', rh: 'Right hand changed', both: 'Both hands changed' },
   playing: 'How it plays',
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',

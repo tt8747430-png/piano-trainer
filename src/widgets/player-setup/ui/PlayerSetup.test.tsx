@@ -69,6 +69,20 @@ describe('PlayerSetup', () => {
     ).toBeNull()
   })
 
+  it('says on the pattern which hand the learner changed, and nothing while neither is', async () => {
+    await renderSetup({}, { lh: 'o' })
+    expect(
+      screen.getByRole('button', { name: /^Pattern: Whole notes.*, left hand changed$/ }),
+    ).toBeInTheDocument()
+  })
+
+  it('says both hands are changed when both are', async () => {
+    await renderSetup({}, { lh: 'o', rh: 'b2' })
+    expect(
+      screen.getByRole('button', { name: /^Pattern: Whole notes.*, both hands changed$/ }),
+    ).toBeInTheDocument()
+  })
+
   it('draws each inversion as its stack of notes, and keeps Nearest by default', async () => {
     const { user, onFigures } = await renderSetup()
     expect(screen.getByRole('radio', { name: 'Nearest' })).toBeChecked()
