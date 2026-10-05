@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
-import { Fact, KeyChoice, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { metersFor } from '@/features/score-editor'
+import { KeyChoice, Labelled, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -34,7 +35,7 @@ function SongTempo() {
 }
 
 /**
- * The piece's settings (spec §6.4): an own song's title, the key and the tempo; the meter. Opened from
+ * The piece's settings (spec §6.4): an own song's title, the key, the tempo and the meter (of its kind). Opened from
  * the toolbar, or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
@@ -66,9 +67,14 @@ export function PieceSettings() {
             onChange={(key) => actions.dispatch({ type: 'settings', key: keyFromParam(key) })}
           />
           <SongTempo />
-          <dl>
-            <Fact term={t('song.meter')}>{meter}</Fact>
-          </dl>
+          <Labelled label={t('song.meter')}>
+            <Segmented
+              label={t('song.meter')}
+              value={meter}
+              options={metersFor(meter).map((each) => ({ value: each, label: each }))}
+              onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
+            />
+          </Labelled>
         </div>
       </SheetContent>
     </Sheet>

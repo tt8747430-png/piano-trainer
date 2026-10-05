@@ -87,7 +87,6 @@ export const editor: LocaleResources['editor'] = {
     title: 'Название',
     bpm: '{{tempo}} уд/мин',
     tempo: 'Темп',
-    pattern: 'Фактура',
     meter: 'Размер',
   },
   recorder: {

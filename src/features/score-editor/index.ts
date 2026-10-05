@@ -1,7 +1,6 @@
 export { barLengths, type BarRange } from './model/bars'
 export { keyChords } from './model/chords'
 export {
-  draftFit,
   isHandLayer,
   LAYERS,
   readDraft,
@@ -14,6 +13,7 @@ export { caretTicks, placesIn } from './model/caret-moves'
 export { selectedBars } from './model/form-edits'
 export { type BarEdit, type CaretMove, type EditorAction, type EditorState } from './model/state'
 export { notesAt, notesOf } from './model/notes'
+export { metersFor } from './model/settings'
 export { createEditorStore, type EditorStore } from './model/store'
 export { TAKE_INTO, takeParts, type TakeInto, type TakePart } from './model/take-edits'
 export { barAt, barsOf, startsIn, totalTicks, type PlacedBar } from './model/timeline'

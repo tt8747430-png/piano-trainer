@@ -1,4 +1,4 @@
-import type { PatternFit, PatternId } from '@/entities/pattern'
+import type { PatternId } from '@/entities/pattern'
 import {
   HAND_IDS,
   keyText,
@@ -14,7 +14,6 @@ import { isOneOf } from '@/shared/lib'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
   beatsToTicks,
-  isCompound,
   parseKey,
   TICKS_PER_BEAT,
   type Chord,
@@ -180,12 +179,3 @@ export function writeDraft(draft: Draft): PieceMusic {
   }
 }
 
-/** What the draft's music gives a pattern to play over: a tune, simple time, method codes. */
-export const draftFit = (draft: Draft): PatternFit => ({
-  melody: draft.melody.length > 0,
-  key: true,
-  simpleTime: !isCompound(draft.meter),
-  methodCodes: draft.sections.some((section) =>
-    section.lines.some((line) => line.some((bar) => bar.chords.some((chord) => chord.method))),
-  ),
-})

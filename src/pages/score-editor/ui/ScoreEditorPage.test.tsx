@@ -70,6 +70,25 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('combobox', { name: 'Pattern' })).not.toBeInTheDocument()
   })
 
+  it('changes the time signature to another of its kind, each bar made the new one', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const [head] = await screen.findAllByRole('button', { name: 'Key and time signature' })
+    if (!head) throw new Error('no line head')
+    await user.click(head)
+    const meters = within(await screen.findByRole('dialog', { name: 'Song settings' })).getByRole(
+      'radiogroup',
+      { name: 'Time signature' },
+    )
+    expect(
+      within(meters)
+        .getAllByRole('radio')
+        .map((meter) => meter.textContent),
+    ).toEqual(['2/4', '3/4', '4/4'])
+    await user.click(within(meters).getByRole('radio', { name: '3/4' }))
+    expect(songOf(piecesStore.getState())).toMatchObject({ meter: '3/4' })
+  })
+
   it('names a section as a song’s part, nothing a songbook calls its own', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })

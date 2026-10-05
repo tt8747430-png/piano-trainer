@@ -86,8 +86,7 @@ export const editor = {
     title: 'Title',
     bpm: '{{tempo}} BPM',
     tempo: 'Tempo',
-    pattern: 'Pattern',
-    meter: 'Meter',
+    meter: 'Time signature',
   },
   recorder: {
     title: 'Takes',
