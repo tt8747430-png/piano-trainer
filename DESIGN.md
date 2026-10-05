@@ -467,7 +467,7 @@ takes the height left, so the transport keeps the bottom:
 - **From 640px** (tablet, laptop): as on its side, the transport centred under the sheet, the sheet at 1.
 
 **The Setup** (the toolbar's ⚙, a sheet) reads top to bottom as pictures: the key as a note picker (the piece's
-mode named over it), the **pattern card** (its name and idea on a row that opens the pattern list; under it its two
+mode named over it, a key choice in the piece's mode), the **pattern card** (its name and idea on a row that opens the pattern list; under it its two
 hands, left then right, each a row of its own on a phone and side by side where they fit, naming the figure it plays
 whole with a chevron to that hand's list; a changed hand has a way back to the pattern's own beside it, and the
 pattern's line then reads "Left hand changed", "Right hand changed" or "Both hands changed" in ink in place of its
@@ -554,11 +554,13 @@ Plain, clear, one of them coloured.
 **The Choosing Rule** (Apple's Human Interface Guidelines, read for sub-project 2): five or fewer short nouns are a
 segmented control (one tap, every choice in sight); more, or longer names, a pop-up button that shows its label and
 its value; on or off a switch; settings changed less often a sheet; a popover anchored to its button for a few quick
-choices whose effect shows at once (the keyboard settings, which must not cover the keys; the Player's tempo and
-hands). **And a choice is drawn where a picture says it faster** (ADR 0029): the twelve notes are a **note picker**
-(a sand track of twelve segments, six across on a phone, the chosen name over it at the right: a root, a key's tonic),
-a key the **key picker** (all 24 keys in sight, the major keys over the minor, each under its one name, so nothing
-relabels itself); an inversion is its stack of noteheads over its name, the root's in the
+choices whose effect shows at once (the Player's tempo and hands); a setting is never hidden behind a pop-up when it
+fits in sight (the keyboard's in its rail, a trainer's Auto next on its page). **And a choice is drawn where a picture
+says it faster** (ADR 0029): a note is a **note choice** in two parts as a notation app chooses one, its seven letters
+as segments then ♮ · # · ♭ (drawn large, named Natural, Sharp, Flat), the chosen name over it at the right; what is
+chosen is what is written, so D♭ stays D♭ whatever the chord or mode (a root, a melody note); a key is the **key
+choice**, its tonic so, then Major · Minor, offering only the accidentals a key signature writes (D♭ major, C♯ minor,
+never D♭ minor; the other mode respells only such a tonic); an inversion is its stack of noteheads over its name, the root's in the
 root's paint; several on-or-offs together on a sheet are **toggle tiles** (an icon over its name, 72px, soft ink in
 the control line; on: the learned paint's wash with its deep shade); the sections of one screen are **tabs** (a strip
 on a hairline, 48px, an ink underline under the chosen one, scrolling sideways on a phone). **Several of five to eight
@@ -603,7 +605,8 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
   sequence in Literata (a lesson in its module, a song in its book), the title in Onest 600 17px on up to two lines (a
   song's title is never cut short), an optional detail
   of one line, what it carries at its end (a key, a level's mark, the learned badge) and a chevron (the disclosure
-  indicator). A titled group of them is a grid of row cards, each its own card. A list of one kind (the Patterns
+  indicator). A titled group of them is a grid of row cards, each its own card and each card the link: its hover
+  fills the whole card (sand) and moves the chevron 2px, never a box inside the card. A list of one kind (the Patterns
   page) goes without tiles: every row would wear the same one.
 - **Sheet** (card paper, 20px top, swipe handle, its Literata title at the left with a Close at the right, a scrolling
   body with 20px insets, an optional footer over a hairline): Setup, New song, the takes.
@@ -674,8 +677,10 @@ piano's length, drawn 28px at the foot of a 44px strip, and a swipe on it scroll
 44px targets whose ink icons sit in the drawn rail and never reach over a key, focused with the deep-sky ring: **‹ ›**
 at its ends move the keys an octave, the **keyboard map** between them (off by default) draws all 88 keys small with
 an ink frame round the part in view and dots under the keys marked or down, the **glissando toggle** (its chip
-filled in ink while on) says how a swipe plays, and the **settings button** at its right end opens the keyboard
-settings (key size, note names, the map, typing) in a popover beside the keyboard, never over it. A rail button's
+filled in ink while on) says how a swipe plays, and the **keyboard settings** sit in the rail itself (`RailChoice`):
+Keys (Fit · Large · Whole piano) and Note names (C · All · None) as small chips on the rail under a small soft label,
+the chosen filled as a pressed rail button, then the map and typing as rail toggles. From 1024px they are always in
+sight; below it the settings button opens them in the rail, scrolling sideways, never in a pop-up. A rail button's
 icon sits on a chip in the drawn rail: the chip takes the hover, the pressed fill and the focus ring.
 
 - **Proportions:** a key is 4.4 times as long as a white key is wide on every screen, the Player's too, at least 96px
@@ -772,8 +777,14 @@ the title and Play), the sheet scrolling under it, then the
   empty. The caret is the Player's cursor band (sky mist) on the layer's staff, as wide as the value chosen (over the
   chord symbols in Chords); bars chosen with Shift sit on a sand band; in a hand's layer, a bar the pattern plays reads
   **Pattern** in soft ink on that staff. A click puts the caret where it lands.
-- **The tool dock,** over the keys: first what they write, **Chords · Melody · Right hand · Left hand** as segments
-  with their pictures (a letter, a note, a hand, the left one mirrored); then that layer's tools as a palette, one row
+- **Where the caret writes** is chosen by a click, as in a notation app: the chord row over a staff (with Chord names
+  on), the treble staff or the bass staff; there is no control for it. The caret's line names the part first
+  ("Melody · Bar 1, beat 2 · rest"). **Chord names** is a toolbar toggle (a T, named beside it from 1024px): off, the
+  chord symbols and their row leave the sheet and a click there writes the tune. The clef, key and time signature at
+  each line's head open the song's settings (a sand wash on hover). A bar under the pointer takes a 5% ink wash, no
+  ring.
+- **The tool dock,** over the keys: on the treble staff, its two voices first, **Melody · Right hand** as segments
+  with their pictures (a note, a hand); then that place's tools as a palette, one row
   that scrolls sideways on a phone, its groups parted by a 32px hairline (`ToolDivider`). Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
   and for a screen reader, a toggle filled sand in an ink line while on: in the notes, the values as segments of
   their glyphs (Noto Music), then a dotted note, an italic 3 (x/4 only), a rest and Chord (stacked layers), ← →, then
@@ -782,8 +793,11 @@ the title and Play), the sheet scrolling under it, then the
   Literata, ⌫, ← →, and the Bar pull-down (its actions as 44px rows and the bar's Length pop-up). A bar of the sheet
   shows the focus ring inside it.
 - **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
-- **The song's settings** (a sheet): an own song's Title, the key picker, the Tempo slider (40–160, set on release),
-  the Pattern pop-up of the patterns the music can play by group, and the meter as a fact.
+- **The song's settings** (a sheet, from the toolbar or a line's head): an own song's Title, the key choice, the Tempo
+  slider (40–160, set on release) and the meter as a fact. The pattern is the Player's Setup's, where it is heard;
+  its list ends with Make your own pattern.
+- **Sections** are named as a song's parts: Intro · Verse · Chorus · Bridge · Ending; a songbook's own kinds (Practice,
+  Hymn, Part) stay on its pieces and are not offered.
 - **The takes** (the toolbar's Record, a round button with a dot, ADR 0028): a sheet titled Takes with the tempo,
   meter and the caret's bar as facts, the Click switch, the MIDI control while no keyboard is connected, and Record in
   honey; under it the piece's takes, the newest first, each its time made (semibold) over its length and tempo in soft
@@ -793,8 +807,7 @@ the title and Play), the sheet scrolling under it, then the
   beside Keep it). While a take records, the tools and the caret's line give way to the recording strip: a card with
   a softly pulsing ink dot, Count-in and its beat or Recording, the bar and the time in tabular figures, and Stop in
   honey; Undo, Redo, the song's settings, Record and Play wait.
-- **New song** (Songs' round +) is a sheet: the Title field (Literata, its name as its placeholder), the key picker
-  (twelve notes, then Major · Minor), the five meters as segments, and at its foot Make in honey with Record (soft, a
+- **New song** (Songs' round +) is a sheet: the Title field (Literata, its name as its placeholder), the key choice, the five meters as segments, and at its foot Make in honey with Record (soft, a
   microphone) beside it.
 - **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
   (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the

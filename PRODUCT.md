@@ -46,7 +46,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
   reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in
   any key) and quizzes answered on the keys), Practice (seven places, each one page for a thing practised. **Chords:** Build makes any chord from its
-  root, triad, size, 7th, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
+  root (letter and accidental), quality, size, 7th, suspension, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
   in sight, on the keys and a staff, with a 7th chord's available tensions
   (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player; Find names the keys played.
   **Scales and keys:** thirteen scale kinds with the modes and both blues; its Scale view starts the run on any note,
@@ -65,9 +65,11 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
   them, in its bar),
   the score editor (the learner's version of any song or study, or the chart of a
-  listing, and songs of their own: chords typed, tapped or played, the melody and any bar of either hand written note
-  by note from the keys, the computer keyboard or MIDI, undo and redo, every change saved, played in the Player in
-  any key), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
+  listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
+  staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody
+  and any bar of either hand written note by note from the keys, the computer keyboard or MIDI, the clef and
+  signatures opening the song's key, tempo and meter, undo and redo, every change saved, played in the Player in any
+  key), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
   0012–0030.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
