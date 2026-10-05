@@ -417,7 +417,9 @@ system, in rem, so it grows with the reader's own text size.
 
 ### Hierarchy
 
-- **Chord Display** (Literata 600, 72px, 1): the chord in the Chords explorer, a Check's score.
+- **Chord Display** (Literata 600, 72px, 1): the chord in the Chords explorer and the Chord finder, a Check's score;
+  a symbol longer than five characters (`Cm7(add11)`) a step down at 44px, so it stays on a phone's line
+  (`ChordHeading`).
 - **Display** (Literata 600, 44px, 1.1): each screen's title from 1024px, the scale's name.
 - **Large Title** (Literata 600, 34px, 1.15): each screen's title on a phone.
 - **Title 1** (Literata 600, 28px, 1.2): the Continue card's band.
@@ -556,25 +558,31 @@ a key the **key picker** (all 24 keys in sight, the major keys over the minor, e
 relabels itself); an inversion is its stack of noteheads over its name, the root's in the
 root's paint; several on-or-offs together on a sheet are **toggle tiles** (an icon over its name, 72px, soft ink in
 the control line; on: the learned paint's wash with its deep shade); the sections of one screen are **tabs** (a strip
-on a hairline, 48px, an ink underline under the chosen one, scrolling sideways on a phone). A pop-up button stays for
-long lists and beside other controls in a row.
+on a hairline, 48px, an ink underline under the chosen one, scrolling sideways on a phone). **Several of five to eight
+short names are toggle chips**, every one in sight (a chord's added tones and alterations, a trainer's chord families
+and how an interval is heard). A pop-up button stays for long lists and beside other controls in a row.
 
 - **Pop-up button** (44px, 12px corners, card paper in the 1px control line): its label in soft ink, its value in ink
-  (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
+  (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Under a field's printed name it is
+  `bare`: its value alone, its name kept for a screen reader, so nothing is named twice. Its list is a popover surface
   (12px corners, the popover shadow and ring) of 44px items, the chosen one checked in umber; a grouped list (the
   scale pop-up's families, the chromatic walk's chord types) names each group in soft ink over a hairline. An item may carry a second word in soft
-  ink ("Minor 7th m7"). Root, Scale, Start on, Chord size, Triad, Added tone, Rhythm, Collection, Level and the
-  Player's key are pop-ups.
-- **Pop-up button that checks several** (`MultiDropdown`): the Choosing Rule's pop-up for several of many, never a
-  grid of chips. The button shows its label and every chosen value in order ("♭9 #11"), or None; its list checks each
-  chosen item, and a tap turns one on or off without closing it. The Chords explorer's Alterations.
+  ink ("Minor 7th m7"). Scale, Rhythm, the Progression, a trainer's Level and the Player's lists are pop-ups.
+- **Pop-up button that checks several** (`MultiDropdown`): the Choosing Rule's pop-up for several of many (a
+  trainer's Custom scales, intervals and chords, the chromatic walk's chord types). The button shows its label and
+  every chosen value in order, or None; its list checks each chosen item, and a tap turns one on or off without
+  closing it.
+- **Toggle chips** (`ToggleChips`): several of a few, all in sight. A row of 44px chips that wraps, each at least
+  56px; off, soft ink on card paper in the control line; on, ink on sand in an ink line (the toggle's pressed face).
+  A group named for a screen reader, each chip a pressed button. Added tones read by their number (2 · 4 · 6 · 9 · 11
+  · #11 · 13, each named add2 and so on), alterations by their sign (♭5 · ♭9 · #9 · #11 · ♭13).
 - **Segmented** (a sand track, 4px inset, 12px corners): one value from a few. Unchosen segments are soft ink with no
   fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. Two
   segmented controls whose words could be mistaken for each other name themselves on screen ("Keys play", the
-  Chords explorer's "7th"). Fingering, Inversion, Block · Arpeggio and the 7th (labelled by degree, ♭7 · 7 · 𝄫7,
-  each named "Minor 7th" and so on for a screen reader) are segments.
+  Chords explorer's "7th"). Triad, Chord size, Start on (the scale's notes), Fingering, Inversion, Block · Arpeggio
+  and the 7th (labelled by degree, ♭7 · 7 · 𝄫7, each named "Minor 7th" and so on for a screen reader) are segments.
 - **Only what applies is offered:** a choice the thing shown cannot take is left out, never disabled and never
-  explained (the Chords explorer's 7th under a triad, Added tone over a 7th chord, Alterations on a minor chord;
+  explained (the Chords explorer's 7th under a triad, Added tones over an 11th chord, Alterations on a minor chord;
   Fingering for a scale with one). One exception, the Player's Setup lists: a pattern or figure the music cannot play
   stays in its list, closed, with what it needs ("Needs a melody"), so the catalog reads the same over every piece.
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.

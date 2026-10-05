@@ -46,7 +46,8 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
   reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in
   any key) and quizzes answered on the keys), Practice (seven places, each one page for a thing practised. **Chords:** Build makes any chord from its
-  root, triad, size, 7th, added tone and alterations, on the keys and a staff, with a 7th chord's available tensions
+  root, triad, size, 7th, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
+  in sight, on the keys and a staff, with a 7th chord's available tensions
   (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player; Find names the keys played.
   **Scales and keys:** thirteen scale kinds with the modes and both blues; its Scale view starts the run on any note,
   fingered from the thumb or as the scale, on a staff, and opens the scale's exercises in the Player (over one to four
