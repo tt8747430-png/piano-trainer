@@ -12,7 +12,7 @@ type RowTile =
 
 /**
  * A list row that leads to a page: a tile in its paint with an icon, or its number in a sequence (a
- * list of one kind goes without, every row's tile alike), a title, an optional detail of one line, what it carries at its end (a level,
+ * list of one kind goes without, every row's tile alike), a title of up to two lines, an optional detail of one line, what it carries at its end (a level,
  * a mark) and a chevron (Apple's disclosure indicator). `render` is the link (a router `Link`).
  */
 export function RowLink({
@@ -54,7 +54,9 @@ export function RowLink({
             </span>
           ) : null}
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-lg font-semibold">{title}</span>
+            <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">
+              {title}
+            </span>
             {detail ? (
               <>
                 {' '}
