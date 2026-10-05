@@ -33,7 +33,7 @@ describe('Walk the chords in the Player', () => {
       await screen.findByRole('button', { name: 'Bar 1: Dm7', hidden: true }),
     ).toBeInTheDocument()
     await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Root' })).getByRole('radio', { name: 'E' }),
+      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E' }),
     )
     expect(router.state.location.search).toMatchObject({ root: 'E', kind: 'dorian' })
   })

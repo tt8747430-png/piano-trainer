@@ -7,7 +7,7 @@ import {
 } from '@/entities/pattern'
 import { choosableChordSize, isDegreePiece, pieceFit, pieceKey, type Piece } from '@/entities/piece'
 import { ownChoice, type PracticeChoice } from '@/features/practice'
-import { noteFromParam, noteParam, pitchClassOf, tonicSpelling } from '@/shared/lib/music'
+import { noteFromParam, noteParam, writtenKey } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
@@ -30,7 +30,7 @@ export function resolveChoice(
   const fit = pieceFit(piece)
   const { minor } = pieceKey(piece)
   return {
-    tonic: search.key ? tonicSpelling(pitchClassOf(noteFromParam(search.key)), minor) : own.tonic,
+    tonic: search.key ? writtenKey({ tonic: noteFromParam(search.key), minor }).tonic : own.tonic,
     pattern: playablePattern(book, search.pattern, own.pattern, fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),

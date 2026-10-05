@@ -6,8 +6,10 @@ import {
   parseNoteName,
   pitchClassOf,
   plainSpelling,
+  ROOT_ACCIDENTALS,
   rootSpelling,
   type Letter,
+  type RootAccidental,
   type SpelledNote,
 } from './note'
 import type { PitchClass } from './pitch'
@@ -44,6 +46,22 @@ export const keySignature = (key: Key): number =>
   LETTER_FIFTHS[key.tonic.letter] + 7 * key.tonic.accidental - (key.minor ? 3 : 0)
 
 export const keyPrefersSharps = (key: Key): boolean => keySignature(key) > 0
+
+/** The most sharps or flats a key signature writes: C♯ major's seven, C♭ major's. */
+const MOST_IN_SIGNATURE = 7
+
+/** Whether a signature writes the key: one of the 15 major and 15 minor keys. */
+const isWrittenKey = (key: Key): boolean => Math.abs(keySignature(key)) <= MOST_IN_SIGNATURE
+
+/** The accidentals that make a written key on a letter, in a chooser's order: D♭ major, never D♭ minor. */
+export const writtenKeyAccidentals = (letter: Letter, minor: boolean): RootAccidental[] =>
+  ROOT_ACCIDENTALS.filter((accidental) => isWrittenKey({ tonic: note(letter, accidental), minor }))
+
+/** A key as the learner wrote it, or, where no signature writes it, its tonic spelled by the key's rule. */
+export const writtenKey = (key: Key): Key =>
+  isWrittenKey(key)
+    ? key
+    : { tonic: tonicSpelling(pitchClassOf(key.tonic), key.minor), minor: key.minor }
 
 /** The tonic a key on this pitch class is named from: minor keys lean sharp (G♯ minor, D♭ major). */
 export const tonicSpelling = (pc: PitchClass, minor: boolean): SpelledNote =>

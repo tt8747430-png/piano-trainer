@@ -117,9 +117,10 @@ describe('Practice → Scales and keys', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
     await user.click(
-      within(await screen.findByRole('radiogroup', { name: 'Root' })).getByRole('radio', {
-        name: 'E♭',
-      }),
+      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E' }),
+    )
+    await user.click(
+      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'Flat' }),
     )
     await user.click(screen.getByRole('combobox', { name: 'Scale' }))
     await user.click(await screen.findByRole('option', { name: 'Harmonic minor' }))

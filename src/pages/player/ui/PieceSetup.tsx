@@ -3,8 +3,8 @@ import { choosableChordSize, isOwnKey, pieceKey, type Piece } from '@/entities/p
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
-import { noteParam, tonicSpelling } from '@/shared/lib/music'
-import { ChordSizeField, NotePicker, ToggleGrid } from '@/shared/ui'
+import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
+import { ChordSizeField, NoteChoice, ToggleGrid } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -38,10 +38,11 @@ export function PieceSetup({
   const chordSize = choosableChordSize(piece)
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
-      <NotePicker
+      <NoteChoice
         label={t('key')}
         value={noteParam(choice.tonic)}
-        spell={(pc) => tonicSpelling(pc, own.minor)}
+        accidentals={(letter) => writtenKeyAccidentals(letter, own.minor)}
+
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />

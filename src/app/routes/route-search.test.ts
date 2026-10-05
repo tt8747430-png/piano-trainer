@@ -167,10 +167,10 @@ describe('search params', () => {
     expect(await searchAt('/play/walk?root=H&chordSize=elevenths')).toEqual(WALK_DEFAULTS)
   })
 
-  it('read the chromatic walk’s chords in the table’s order, its root as its first chord spells it', async () => {
+  it('read the chromatic walk’s chords in the table’s order, its root as written', async () => {
     expect(
       await searchAt('/play/chromatic?chords=n9.m9.xx&root=Ab&direction=both&pattern=pop8'),
-    ).toMatchObject({ chords: 'm9.n9', root: 'G#', direction: 'both', pattern: 'pop8' })
+    ).toMatchObject({ chords: 'm9.n9', root: 'Ab', direction: 'both', pattern: 'pop8' })
     expect(await searchAt('/play/chromatic?chords=xx&root=H&direction=sideways')).toEqual(
       CHROMATIC_DEFAULTS,
     )
@@ -189,10 +189,12 @@ describe('search params', () => {
     })
   })
 
-  it('spell a root the way its explorer names it', async () => {
-    expect(await searchAt('/practice/chords?root=A%23')).toMatchObject({ root: 'Bb' })
-    expect(await searchAt('/practice/chords?root=Db&triad=min')).toMatchObject({ root: 'C#' })
+  it('keep a root and a key as written, a key no signature writes respelled', async () => {
+    expect(await searchAt('/practice/chords?root=A%23')).toMatchObject({ root: 'A#' })
+    expect(await searchAt('/practice/chords?root=Db&triad=min')).toMatchObject({ root: 'Db' })
     expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })
+    expect(await searchAt('/practice/progressions?key=Dbm')).toMatchObject({ key: 'C#m' })
+    expect(await searchAt('/practice/progressions?key=C%23')).toMatchObject({ key: 'C#' })
   })
 
   it('read the Scales view, falling back to the scale view where a scale has no chords', async () => {
@@ -210,8 +212,8 @@ describe('search params', () => {
     })
   })
 
-  it('respell an interval’s root as the reference spells it', async () => {
-    expect(await searchAt('/practice/intervals?root=C%23')).toEqual({ root: 'Db' })
+  it('keep an interval’s root as written', async () => {
+    expect(await searchAt('/practice/intervals?root=C%23')).toEqual({ root: 'C#' })
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
 

@@ -162,7 +162,9 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('radio', { name: 'A major' }))
+    await user.click(
+      within(await screen.findByRole('group', { name: 'Key' })).getByRole('radio', { name: 'A' }),
+    )
     expect(router.state.location.search).toMatchObject({ key: 'A' })
     await user.click(screen.getByRole('button', { name: 'Swing' }))
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
@@ -172,9 +174,9 @@ describe('Player', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const keys = await screen.findByRole('radiogroup', { name: 'Key' })
-    expect(within(keys).getAllByRole('radio')).toHaveLength(12)
-    expect(within(keys).getByRole('radio', { name: 'G major' })).toBeChecked()
+    const key = await screen.findByRole('group', { name: 'Key' })
+    expect(within(key).getByRole('radio', { name: 'G' })).toBeChecked()
+    expect(within(key).getByText('G major')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Melody' })).not.toBeInTheDocument()
   })
 

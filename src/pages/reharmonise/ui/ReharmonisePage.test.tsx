@@ -30,7 +30,7 @@ describe('Practice → Reharmonise', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions/reharmonise')
     await user.click(
-      within(await screen.findByRole('radiogroup', { name: 'Melody note' })).getByRole('radio', {
+      within(await screen.findByRole('group', { name: 'Melody note' })).getByRole('radio', {
         name: 'G',
       }),
     )

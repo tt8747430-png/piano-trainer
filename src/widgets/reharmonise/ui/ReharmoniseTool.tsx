@@ -17,7 +17,7 @@ import {
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { KeyPicker, NotePicker } from '@/shared/ui'
+import { KeyChoice, NoteChoice } from '@/shared/ui'
 import { melodyAlone, underMelody } from '../model/holding-keys'
 import type { ReharmoniseView } from '../model/reharmonise-view'
 import { HoldingGroupCard } from './HoldingGroupCard'
@@ -57,13 +57,13 @@ export function ReharmoniseTool({
       {/* A note is chosen where a hand is: the range stays, so the keys hold still under it. */}
       <ExplorerKeyboard shown={shown} range={MIDDLE_OCTAVES} onKeyPress={choose} />
       <div className="grid-fields gap-x-10 gap-y-6">
-        <NotePicker
+        <NoteChoice
           label={t('reharmonise.note')}
           value={view.note}
-          spell={(pc) => spellInKey(pc, key)}
+
           onChange={(note) => onChange({ note })}
         />
-        <KeyPicker value={view.key} onChange={(next) => onChange({ key: next })} />
+        <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
       <div className="grid-fields gap-6">
         {HOLDING_GROUPS.map((group) => (

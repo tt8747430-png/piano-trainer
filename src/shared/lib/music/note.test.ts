@@ -10,6 +10,7 @@ import {
   parseNoteName,
   pitchClassOf,
   plainRoot,
+  ROOT_ACCIDENTALS,
   plainSpelling,
   rootSpelling,
   sameNote,
@@ -191,5 +192,11 @@ describe('otherSpelling', () => {
   it('leaves a note with no other spelling as it is', () => {
     expect(otherSpelling(note('G', 1))).toEqual(note('A', -1))
     expect(otherSpelling(note('D'))).toEqual(note('D'))
+  })
+})
+
+describe('ROOT_ACCIDENTALS', () => {
+  it('offers a root natural, sharp or flat, as a chooser lists them', () => {
+    expect(ROOT_ACCIDENTALS).toEqual([0, 1, -1])
   })
 })

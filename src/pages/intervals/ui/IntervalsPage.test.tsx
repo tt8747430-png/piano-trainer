@@ -69,7 +69,7 @@ describe('Practice → Intervals', () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/intervals')
     await user.click(
-      within(await screen.findByRole('radiogroup', { name: 'Root' })).getByRole('radio', {
+      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', {
         name: 'D',
       }),
     )

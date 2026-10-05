@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { WALK, type WalkChoice } from '@/features/practice'
-import { noteParam, scaleRootSpelling } from '@/shared/lib/music'
-import { ChordSizeField, NotePicker, ToggleGrid } from '@/shared/ui'
+import { noteParam } from '@/shared/lib/music'
+import { ChordSizeField, NoteChoice, ToggleGrid } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { WalkChange } from '../model/walk-search'
@@ -21,10 +21,10 @@ export function WalkSetup({
   const { t } = useTranslation('player')
   return (
     <PlayerSetup figures={choice} fit={WALK.fit} onFigures={onChange}>
-      <NotePicker
+      <NoteChoice
         label={t('root')}
         value={noteParam(choice.root)}
-        spell={(pc) => scaleRootSpelling(pc, choice.kind)}
+
         onChange={(root) => onChange({ root })}
       />
       <PatternCard />

@@ -37,9 +37,7 @@ describe('Practice → Progressions', () => {
     await user.clear(field)
     await user.type(field, 'Am F C G')
     await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Key' })).getByRole('radio', {
-        name: 'G major',
-      }),
+      within(screen.getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'G' }),
     )
     expect(row()).toEqual(['Emvi', 'CIV', 'GI', 'DV'])
     expect(field).toHaveValue('vi IV I V')

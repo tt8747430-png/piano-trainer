@@ -152,6 +152,10 @@ export function plainRoot(spelled: SpelledNote): SpelledNote {
   return odd ? plainSpelling(pitchClassOf(spelled), spelled.accidental > 0) : spelled
 }
 
+/** A root's accidentals as a chooser lists them: natural, sharp, flat. */
+export const ROOT_ACCIDENTALS = [0, 1, -1] as const satisfies readonly Accidental[]
+export type RootAccidental = (typeof ROOT_ACCIDENTALS)[number]
+
 /** The root a chord or scale on this pitch class is named from: only C♯/D♭ and G♯/A♭ lean. */
 export function rootSpelling(pc: PitchClass, preferSharps: boolean): SpelledNote {
   switch (pc) {

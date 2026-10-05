@@ -31,15 +31,7 @@ import type {
 } from '@/pages/player'
 import type { EditSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
-import {
-  isInversion,
-  keyParam,
-  note,
-  noteParam,
-  pitchClassOf,
-  qualityRootSpelling,
-  scaleRootSpelling,
-} from '@/shared/lib/music'
+import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -131,7 +123,7 @@ export function readWalkSearch(raw: Raw): WalkSearch {
   const kind = valueOr(isScaleKind, raw.kind, WALK_DEFAULTS.kind)
   const root = readNote(raw.root)
   return {
-    root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : WALK_DEFAULTS.root,
+    root: root ? noteParam(root) : WALK_DEFAULTS.root,
     kind,
     ...practiceView(raw),
     ...figures(raw),
@@ -155,7 +147,7 @@ export function readChromaticSearch(raw: Raw): ChromaticSearch {
   const root = readNote(raw.root)
   return {
     chords: chordsParam(chords),
-    root: noteParam(root ? qualityRootSpelling(pitchClassOf(root), chords[0]) : note('C')),
+    root: noteParam(root ?? note('C')),
     direction: valueOr(isDirection, raw.direction, CHROMATIC_DEFAULTS.direction),
     ...practiceView(raw),
     ...figures(raw),

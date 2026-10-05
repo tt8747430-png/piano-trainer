@@ -22,9 +22,9 @@ describe('Practice → Chords', () => {
     expect(within(triads).getByRole('radio', { name: 'Major' })).toBeChecked()
     const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
     expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
-    expect(
-      within(screen.getByRole('radiogroup', { name: 'Root' })).getAllByRole('radio'),
-    ).toHaveLength(12)
+    const root = screen.getByRole('group', { name: 'Root' })
+    expect(within(root).getByRole('radio', { name: 'C' })).toBeChecked()
+    expect(within(root).getByRole('radio', { name: 'Natural' })).toBeChecked()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
@@ -208,7 +208,7 @@ describe('Practice → Chords', () => {
   it('chooses the root among the twelve notes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?triad=min')
-    const roots = await screen.findByRole('radiogroup', { name: 'Root' })
+    const roots = await screen.findByRole('group', { name: 'Root' })
     await user.click(within(roots).getByRole('radio', { name: 'E' }))
     expect(router.state.location.search).toMatchObject({ root: 'E', triad: 'min' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
@@ -244,7 +244,7 @@ describe('Practice → Chords', () => {
     await screen.findByRole('heading', { level: 2, name: 'C7' })
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual(['Root', 'Triad', 'Chord size', '7th', 'Inversion', 'Hands'])
+    ).toEqual(['Letter', 'Accidental', 'Triad', 'Chord size', '7th', 'Inversion', 'Hands'])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {

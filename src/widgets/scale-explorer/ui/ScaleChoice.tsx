@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { SCALE_FAMILIES, scaleKindsIn, scaleRootSpelling } from '@/shared/lib/music'
-import { Dropdown, Labelled, NotePicker } from '@/shared/ui'
+import { SCALE_FAMILIES, scaleKindsIn } from '@/shared/lib/music'
+import { Dropdown, Labelled, NoteChoice } from '@/shared/ui'
 import type { ScaleView } from '../model/scale-view'
 
 /** Which scale, the first two fields of every view: its root among the twelve notes, a row of its own, and its kind by family. */
@@ -15,10 +15,10 @@ export function ScaleChoice({
   return (
     <>
       <div className="col-span-full">
-        <NotePicker
+        <NoteChoice
           label={t('learn:root')}
           value={scale.root}
-          spell={(pc) => scaleRootSpelling(pc, scale.kind)}
+
           onChange={(root) => onChange({ root })}
         />
       </div>

@@ -3,16 +3,15 @@ import { LEVELS, type Level } from '@/entities/path'
 import { isOneOf } from '@/shared/lib'
 import {
   CHORD_SIZES,
+  type Key,
   KEY_WALKS,
   keyParam,
   note,
   numeralsParam,
   parseKey,
   parseNumerals,
-  pitchClassOf,
   SCALE_KINDS,
-  tonicSpelling,
-  type Key,
+  writtenKey,
 } from '@/shared/lib/music'
 import { HANDS } from '@/shared/lib/schedule'
 
@@ -50,12 +49,10 @@ export const isLevel = isOneOf<Level | 'any'>([...LEVELS, 'any'])
 export const C_MAJOR: Key = { tonic: note('C'), minor: false }
 export const C_MAJOR_PARAM = keyParam(C_MAJOR)
 
-/** A key from the URL, its tonic spelled by the key's one rule (`tonicSpelling`); null if none reads. */
+/** A key from the URL as written, respelled only where no signature writes it; null if none reads. */
 export function readKey(raw: unknown): Key | null {
   const read = typeof raw === 'string' ? parseKey(raw) : null
-  return read
-    ? { tonic: tonicSpelling(pitchClassOf(read.tonic), read.minor), minor: read.minor }
-    : null
+  return read ? writtenKey(read) : null
 }
 
 /** Numerals from the URL, written one way; the fallback for a line that cannot be read. */

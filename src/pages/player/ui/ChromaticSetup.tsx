@@ -4,10 +4,9 @@ import {
   CHORD_FAMILIES,
   noteParam,
   qualitiesIn,
-  qualityRootSpelling,
   qualitySuffix,
 } from '@/shared/lib/music'
-import { MultiDropdown, NotePicker, Segmented, ToggleGrid } from '@/shared/ui'
+import { MultiDropdown, NoteChoice, Segmented, ToggleGrid } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
@@ -25,7 +24,6 @@ export function ChromaticSetup({
   onSwing: (on: boolean) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
-  const [first] = choice.chords
   return (
     <PlayerSetup figures={choice} fit={CHROMATIC.fit} onFigures={onChange}>
       <MultiDropdown
@@ -45,10 +43,10 @@ export function ChromaticSetup({
           if (checked) onChange({ chords: [checked, ...others] })
         }}
       />
-      <NotePicker
+      <NoteChoice
         label={t('player:root')}
         value={noteParam(choice.root)}
-        spell={(pc) => qualityRootSpelling(pc, first)}
+
         onChange={(root) => onChange({ root })}
       />
       <Segmented

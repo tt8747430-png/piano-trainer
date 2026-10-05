@@ -6,7 +6,7 @@ import { PIECE_TEMPO } from '@/entities/piece'
 import { draftFit } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
-import { Dropdown, Fact, KeyPicker, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Dropdown, Fact, KeyChoice, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -43,7 +43,7 @@ export function PieceSettings() {
       <SheetContent title={t('settings')}>
         <div className="flex flex-col gap-6">
           {meta.kind === 'song' ? <SongTitleField /> : null}
-          <KeyPicker
+          <KeyChoice
             value={keyParam(key)}
             onChange={(key) => actions.dispatch({ type: 'settings', key: keyFromParam(key) })}
           />

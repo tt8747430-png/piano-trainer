@@ -4,7 +4,7 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { ChordRow, progressionRow, RowChords, RowPlay, useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyFromParam, parseNumerals } from '@/shared/lib/music'
-import { ChordSizeField, KeyPicker, Labelled, NO_KEYS } from '@/shared/ui'
+import { ChordSizeField, KeyChoice, Labelled, NO_KEYS } from '@/shared/ui'
 import type { ProgressionsView } from '../model/progressions-view'
 import { ProgressionChoice } from './ProgressionChoice'
 import { ProgressionField } from './ProgressionField'
@@ -49,7 +49,7 @@ export function ProgressionsTool({
           <ProgressionChoice view={view} musicKey={key} onChange={onChange} />
           <ProgressionField progression={view.p} musicKey={key} onChange={(p) => onChange({ p })} />
         </div>
-        <KeyPicker value={view.key} onChange={(next) => onChange({ key: next })} />
+        <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
         <Labelled label={t('music:chordSize.label')}>
           <ChordSizeField value={view.size} onChange={(size) => onChange({ size })} />
         </Labelled>

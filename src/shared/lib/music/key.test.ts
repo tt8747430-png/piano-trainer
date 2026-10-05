@@ -9,6 +9,8 @@ import {
   signatureNotes,
   tonicSpelling,
   transposeNote,
+  writtenKey,
+  writtenKeyAccidentals,
   type Key,
 } from './key'
 import { note, noteName, rootSpelling } from './note'
@@ -126,5 +128,24 @@ describe('signatureNotes', () => {
     expect(signatureNotes(key('Eb')).map(noteName)).toEqual(['B♭', 'E♭', 'A♭'])
     expect(signatureNotes(key('F#m')).map(noteName)).toEqual(['F#', 'C#', 'G#'])
     expect(signatureNotes(key('Am'))).toEqual([])
+  })
+})
+
+describe('the written keys', () => {
+  it('offers the accidentals that make one of the 30 keys a signature writes', () => {
+    expect(writtenKeyAccidentals('C', false)).toEqual([0, 1, -1])
+    expect(writtenKeyAccidentals('D', false)).toEqual([0, -1])
+    expect(writtenKeyAccidentals('D', true)).toEqual([0, 1])
+    expect(writtenKeyAccidentals('B', false)).toEqual([0, -1])
+    expect(writtenKeyAccidentals('A', true)).toEqual([0, 1, -1])
+    expect(writtenKeyAccidentals('F', true)).toEqual([0, 1])
+  })
+
+  it('keeps a key as written, and respells one no signature writes', () => {
+    expect(writtenKey(key('C#m'))).toEqual(key('C#m'))
+    expect(writtenKey(key('Db'))).toEqual(key('Db'))
+    expect(writtenKey(key('C#'))).toEqual(key('C#'))
+    expect(writtenKey(key('Dbm'))).toEqual(key('C#m'))
+    expect(writtenKey(key('D#'))).toEqual(key('Eb'))
   })
 })

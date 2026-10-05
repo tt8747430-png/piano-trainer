@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong } from '@/features/edit-piece'
 import { keyFromParam, keyParam, METERS, note, type Meter } from '@/shared/lib/music'
-import { KeyPicker, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { KeyChoice, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 
@@ -57,7 +57,7 @@ export function NewSongSheet() {
             onChange={(event) => setTitle(event.target.value)}
             className="h-14 px-4 font-display text-xl font-semibold"
           />
-          <KeyPicker value={key} onChange={setKey} />
+          <KeyChoice value={key} onChange={setKey} />
           <div className="flex flex-col gap-2">
             <span id={meterId} aria-hidden className="text-sm text-muted-foreground">
               {t('making.meter')}

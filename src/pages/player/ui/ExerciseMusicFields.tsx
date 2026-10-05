@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import {
   ARPEGGIO_QUALITIES,
-  exerciseRootSpelling,
   TONALITIES,
   type ExerciseChoice,
   type Exercise,
@@ -16,7 +15,7 @@ import {
   scaleKindsIn,
   spellScale,
 } from '@/shared/lib/music'
-import { Dropdown, NotePicker, Segmented } from '@/shared/ui'
+import { Dropdown, NoteChoice, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /** The arpeggio types by feel's families: triads, then 7ths. */
@@ -39,10 +38,10 @@ export function ExerciseMusicFields({
   const { fields } = exercise
   return (
     <>
-      <NotePicker
+      <NoteChoice
         label={fields.root === 'key' ? t('player:key') : t('player:root')}
         value={noteParam(choice.root)}
-        spell={(pc) => exerciseRootSpelling(exercise, pc, choice)}
+
         onChange={(root) => onChange({ root: noteFromParam(root) })}
       />
       <div className="flex flex-wrap gap-2">

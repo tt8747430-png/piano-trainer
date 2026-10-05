@@ -5,7 +5,6 @@ import {
   addedOf,
   ALTERATION_SIGN,
   alterationsOf,
-  builtRootSpelling,
   SEVENTH_DEGREE,
   seventhsOf,
   sizesOf,
@@ -15,7 +14,7 @@ import {
   type BuiltSize,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
-import { InversionChoice, Labelled, NotePicker, Segmented, ToggleChips } from '@/shared/ui'
+import { InversionChoice, Labelled, NoteChoice, Segmented, ToggleChips } from '@/shared/ui'
 import type { ChordView } from '../model/chord-view'
 
 /** Each size's name on screen. */
@@ -50,10 +49,10 @@ export function ChordBuilder({
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
-        <NotePicker
+        <NoteChoice
           label={t('learn:root')}
           value={chord.root}
-          spell={(pc) => builtRootSpelling(pc, parts)}
+
           onChange={(root) => onChange({ root })}
         />
       </div>

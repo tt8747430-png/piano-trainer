@@ -16,7 +16,6 @@ import {
 import {
   buildChord,
   BUILT_SIZES,
-  builtRootSpelling,
   CHORD_NOTES,
   type ChordFamily,
   type Fingering,
@@ -30,11 +29,9 @@ import {
   noteParam,
   ownFingering,
   pitchClassOf,
-  rootSpelling,
   scaleHasChords,
   scaleIntervals,
   type ScaleKind,
-  scaleRootSpelling,
   SEVENTHS,
   spellInKey,
   TRIADS,
@@ -91,7 +88,7 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
     alterations: readAlterations(raw.alter),
   })
   const read = readNote(raw.root)
-  const root = read ? builtRootSpelling(pitchClassOf(read), parts) : note('C')
+  const root = read ?? note('C')
   const notes = buildChord(root, parts).tones.length
   return {
     root: noteParam(root),
@@ -150,7 +147,7 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     ? valueOr(isChordNotes, raw.chords, SCALES_DEFAULTS.chords)
     : SCALES_DEFAULTS.chords
   return {
-    root: root ? noteParam(scaleRootSpelling(pitchClassOf(root), kind)) : SCALES_DEFAULTS.root,
+    root: root ? noteParam(root) : SCALES_DEFAULTS.root,
     kind,
     show: valueOr(isOneOf(scaleShows(kind)), raw.show, SCALES_DEFAULTS.show),
     start,
@@ -169,12 +166,12 @@ export const scalesSearch = routeSearch(readScalesSearch, SCALES_DEFAULTS)
 /** A link names a scale; its rhythm, tempo and hands are the learner's. */
 export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = ['rhythm', 'tempo', 'hands']
 
-// Intervals: the root in the explorer's one spelling for its pitch class.
+// Intervals: the root as the learner wrote it.
 export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }
 export function readIntervalsSearch(raw: Raw): IntervalView {
   const read = readNote(raw.root)
   return {
-    root: read ? noteParam(rootSpelling(pitchClassOf(read), false)) : INTERVALS_DEFAULTS.root,
+    root: read ? noteParam(read) : INTERVALS_DEFAULTS.root,
   }
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)

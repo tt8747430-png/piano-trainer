@@ -95,6 +95,17 @@ export const music = {
     label: 'Key',
     major: '{{tonic}} major',
     minor: '{{tonic}} minor',
+    mode: 'Mode',
+    majorMode: 'Major',
+    minorMode: 'Minor',
+  },
+  // A note chosen in two parts: its letter, then its accidental.
+  note: {
+    letter: 'Letter',
+    accidental: 'Accidental',
+    natural: 'Natural',
+    sharp: 'Sharp',
+    flat: 'Flat',
   },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {

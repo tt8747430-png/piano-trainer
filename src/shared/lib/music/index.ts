@@ -25,6 +25,7 @@ export {
   type KeyRange,
 } from './keyboard'
 export {
+  accidentalSign,
   LETTERS,
   midiOf,
   note,
@@ -36,7 +37,9 @@ export {
   parseNoteName,
   pitchClassOf,
   plainSpelling,
+  ROOT_ACCIDENTALS,
   rootSpelling,
+  type RootAccidental,
   sameNote,
   writtenName,
   writtenOctave,
@@ -62,6 +65,8 @@ export {
   signatureNotes,
   tonicSpelling,
   transposeNote,
+  writtenKey,
+  writtenKeyAccidentals,
   type Key,
   type KeyParam,
 } from './key'

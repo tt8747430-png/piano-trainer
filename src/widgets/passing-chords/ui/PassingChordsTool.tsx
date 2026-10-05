@@ -9,7 +9,7 @@ import {
   passingChords,
   readChordSymbol,
 } from '@/shared/lib/music'
-import { KeyPicker, NO_KEYS, TypedField } from '@/shared/ui'
+import { KeyChoice, NO_KEYS, TypedField } from '@/shared/ui'
 import type { PassingView } from '../model/passing-view'
 import { SuggestionCard } from './SuggestionCard'
 
@@ -50,7 +50,7 @@ export function PassingChordsTool({
             onChange={(typed) => onChange({ to: typed })}
           />
         </div>
-        <KeyPicker value={view.key} onChange={(next) => onChange({ key: next })} />
+        <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
       {from && to
         ? PASSING_CATEGORIES.map((category) => {

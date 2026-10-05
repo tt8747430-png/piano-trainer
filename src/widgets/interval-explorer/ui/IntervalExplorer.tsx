@@ -6,9 +6,8 @@ import {
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   noteFromParam,
-  rootSpelling,
 } from '@/shared/lib/music'
-import { NotePicker } from '@/shared/ui'
+import { NoteChoice } from '@/shared/ui'
 import type { IntervalView } from '../model/interval-view'
 
 /**
@@ -29,10 +28,10 @@ export function IntervalExplorer({
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
       <div className="grid-fields">
-        <NotePicker
+        <NoteChoice
           label={t('root')}
           value={view.root}
-          spell={(pc) => rootSpelling(pc, false)}
+
           onChange={(root) => onChange({ root })}
         />
       </div>
