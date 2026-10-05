@@ -1,30 +1,25 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LEVEL_NAME, LEVELS, levelOf, pieceStepId, type Level } from '@/entities/path'
-import { SONG_COLLECTIONS, useRepertoire, type Entry } from '@/entities/piece'
+import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import { Dropdown, ScreenHeader } from '@/shared/ui'
+import { ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/primitives/tabs'
 import { PieceList } from '@/widgets/piece-list'
 import type { SongsFilter, SongsShelf } from '../model/songs-filter'
 import { songsView } from '../model/songs-view'
 import { NewSongSheet } from './NewSongSheet'
 import { SearchField } from './SearchField'
 
-const levelOfEntry = (entry: Entry) =>
-  entry.kind === 'listing' ? undefined : levelOf(pieceStepId(entry.id))
-/** The levels Songs' songs are on: only those are worth choosing. */
-const SONG_LEVELS = LEVELS.filter((level) =>
-  SONG_COLLECTIONS.some((collection) =>
-    collection.entries.some((entry) => levelOfEntry(entry) === level),
-  ),
-)
-
+/**
+ * Songs: a search, the collections as tabs (the learner's own songs first, All before them), and the
+ * songs as cards in as many columns as the width holds, under their collection while All shows.
+ */
 export function SongsPage() {
-  const { t } = useTranslation(['songs', 'common'])
+  const { t } = useTranslation('songs')
   const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
@@ -35,69 +30,57 @@ export function SongsPage() {
   const pieces = useRepertoire()
   // The learner's songs first, then the songbooks', each entry in the learner's version.
   const shelves = [
-    { id: 'mine' as const, name: t('songs:yours'), entries: pieces.ownSongs },
+    { id: 'mine' as const, name: t('yours'), entries: pieces.ownSongs },
     ...SONG_COLLECTIONS.map((collection) => ({
       id: collection.id,
       name: localText(collection.name, locale),
       entries: collection.entries.map((entry) => pieces.entry(entry.id) ?? entry),
     })),
   ]
-  const groups = songsView(shelves, { ...search, q: query }, levelOfEntry).map((g) => ({
+  const tabs = shelves.filter((shelf) => shelf.entries.length > 0 || shelf.id === search.collection)
+  const isShelf = (value: unknown): value is SongsShelf | 'all' =>
+    value === 'all' || tabs.some((shelf) => shelf.id === value)
+  const groups = songsView(shelves, { ...search, q: query }).map((g) => ({
     id: g.shelf.id,
     heading: search.collection === 'all' ? g.shelf.name : null,
     entries: g.entries,
   }))
 
   return (
-    <div className="flex flex-col">
-      <ScreenHeader title={t('songs:title')} actions={<NewSongSheet />} />
-      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-x-10">
-        {/* On a laptop the filters stay beside the list, under the screen's bar while it shows. */}
-        <div className="flex flex-col gap-5 lg:sticky lg:top-screen-bar-8">
-          <SearchField value={search.q} onChange={(q) => set({ q })} />
-          <div className="flex flex-wrap gap-2">
-            <Dropdown<SongsShelf | 'all'>
-              label={t('songs:collection')}
-              value={search.collection}
-              options={[
-                { value: 'all', label: t('songs:all') },
-                ...shelves
-                  .filter((shelf) => shelf.entries.length > 0 || shelf.id === search.collection)
-                  .map((shelf) => ({ value: shelf.id, label: shelf.name })),
-              ]}
-              onChange={(collection) => set({ collection })}
-            />
-            {SONG_LEVELS.length > 1 ? (
-              <Dropdown<Level | 'any'>
-                label={t('songs:level')}
-                value={search.level}
-                options={[
-                  { value: 'any', label: t('songs:anyLevel') },
-                  ...SONG_LEVELS.map((level) => ({
-                    value: level,
-                    label: t(`common:levelName.${LEVEL_NAME[level]}`),
-                  })),
-                ]}
-                onChange={(level) => set({ level })}
-              />
-            ) : null}
-          </div>
-        </div>
+    <div className="flex flex-col gap-4">
+      <ScreenHeader title={t('title')} actions={<NewSongSheet />} />
+      <div className="lg:max-w-md">
+        <SearchField value={search.q} onChange={(q) => set({ q })} />
+      </div>
+      <Tabs
+        value={search.collection}
+        onValueChange={(next: unknown) => {
+          if (isShelf(next)) set({ collection: next })
+        }}
+      >
+        <TabsList aria-label={t('collection')} className="-mx-gutter px-gutter">
+          <TabsTrigger value="all">{t('all')}</TabsTrigger>
+          {tabs.map((shelf) => (
+            <TabsTrigger key={shelf.id} value={shelf.id}>
+              {shelf.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
         {groups.length > 0 ? (
           <PieceList groups={groups} />
         ) : (
           <Empty>
             <EmptyHeader>
-              <EmptyTitle>{t('songs:empty')}</EmptyTitle>
+              <EmptyTitle>{t('empty')}</EmptyTitle>
             </EmptyHeader>
             <EmptyContent>
               <Button variant="soft" onClick={clear}>
-                {t('songs:clearFilters')}
+                {t('clearFilters')}
               </Button>
             </EmptyContent>
           </Empty>
         )}
-      </div>
+      </Tabs>
     </div>
   )
 }

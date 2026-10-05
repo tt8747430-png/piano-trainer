@@ -4,8 +4,6 @@ export const songs = {
   clearSearch: 'Clear search',
   collection: 'Collection',
   all: 'All',
-  level: 'Level',
-  anyLevel: 'Any',
   noChart: 'No chart yet',
   learned: 'Learned',
   empty: 'No songs match.',
@@ -17,6 +15,6 @@ export const songs = {
     name: 'Title',
     meter: 'Meter',
     make: 'Make',
-    makeAndRecord: 'Make and record',
+    makeAndRecord: 'Record',
   },
 } as const

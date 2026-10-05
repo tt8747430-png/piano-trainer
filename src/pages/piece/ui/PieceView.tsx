@@ -20,15 +20,17 @@ import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
 import { ButtonLink, Pinned } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
-import { PieceSkills } from '@/widgets/piece-skills'
+import { PieceChords } from '@/widgets/piece-chords'
+import { PieceAbout } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
 import { OwnMusicActions } from './OwnMusicActions'
 import { PieceHeader } from './PieceHeader'
 import { OPEN_PLAINLY } from '@/shared/lib'
 
 /**
- * A piece with a chart: its facts, Practise and the learned toggle, its chords, and the chart to
- * tap and hear, under a pinned keyboard that shows what sounds.
+ * A piece with a chart, in one column: its facts, Practise with the learned toggle and Edit, the
+ * chords it plays, the chart to tap and hear under a pinned keyboard that shows what sounds, then
+ * what is printed about it and, for the learner's own music, its way back.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -48,58 +50,52 @@ export function PieceView({ piece }: { piece: Piece }) {
     )
 
   return (
-    <div className="flex flex-col pb-4">
+    <div className="flex flex-col gap-6 pb-4">
       <PieceHeader entry={piece} />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-x-10">
-        {/* On a laptop the facts stay beside the chart, under the screen's bar while it shows. */}
-        <div className="flex flex-col gap-8 lg:sticky lg:top-screen-bar-8">
-          <PieceFacts entry={piece} />
-          <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink
-              size="pill"
-              className="flex-1"
-              render={
-                <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
-              }
-            >
-              <Play data-icon="inline-start" />
-              {t('practise')}
-            </ButtonLink>
-            {own ? null : <LearnedButton step={pieceStepId(piece.id)} />}
-            {piece.kind === 'progression' ? null : (
-              <ButtonLink
-                variant="outline"
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              >
-                <PencilLine data-icon="inline-start" />
-                {t('edit')}
-              </ButtonLink>
-            )}
-          </div>
-          {own ? (
-            <div className="flex">
-              <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
-            </div>
-          ) : hasVersion ? (
-            <div className="flex">
-              <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
-            </div>
-          ) : null}
-          <PieceSkills piece={piece} performance={performance} />
-        </div>
-        <section className="flex flex-col gap-3 lg:pt-4">
-          <h2 className="text-2xl">{t('chart')}</h2>
-          <Pinned>
-            <LiveKeyboard range={playerRange(performance)} spotlight />
-          </Pinned>
-          <ChordChart
-            performance={performance}
-            headings={headings}
-            onBar={toggleBar}
-            playing={playback.playing}
-          />
-        </section>
+      <PieceFacts entry={piece} />
+      <div className="flex flex-wrap items-center gap-3">
+        <ButtonLink
+          size="pill"
+          className="flex-1 sm:max-w-xs"
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+        >
+          <Play data-icon="inline-start" />
+          {t('practise')}
+        </ButtonLink>
+        {own ? null : <LearnedButton step={pieceStepId(piece.id)} />}
+        {piece.kind === 'progression' ? null : (
+          <ButtonLink
+            variant="outline"
+            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+          >
+            <PencilLine data-icon="inline-start" />
+            {t('edit')}
+          </ButtonLink>
+        )}
       </div>
+      <PieceChords piece={piece} performance={performance} />
+      <section className="flex flex-col gap-3">
+        <h2 className="text-2xl">{t('chart')}</h2>
+        <Pinned>
+          <LiveKeyboard range={playerRange(performance)} spotlight />
+        </Pinned>
+        <ChordChart
+          performance={performance}
+          headings={headings}
+          onBar={toggleBar}
+          playing={playback.playing}
+        />
+      </section>
+      <PieceAbout entry={piece} />
+      {own ? (
+        <div className="flex">
+          <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
+        </div>
+      ) : hasVersion ? (
+        <div className="flex">
+          <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
+        </div>
+      ) : null}
     </div>
   )
 }

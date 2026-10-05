@@ -15,10 +15,28 @@ describe('Piece', () => {
     expect(screen.getByText('«Боже, спасибо» · No. 5 · p. 16')).toBeInTheDocument()
   })
 
-  it('lists the song’s chords with their ratings and checks them', async () => {
+  it('lists the chords the song plays, each by its own name, to tap and hear', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/songs/bz5')
+    const chords = await screen.findByRole('region', { name: 'Chords in this song' })
+    const names = within(chords)
+      .getAllByRole('button')
+      .map((button) => button.textContent)
+    expect(names[0]).toBe('G')
+    expect(new Set(names).size).toBe(names.length)
+    await user.click(within(chords).getByRole('button', { name: 'G' }))
+    expect(
+      audio.played.at(-1)?.sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : [])),
+    ).toEqual([67, 71, 74])
+    expect(within(chords).getByRole('button', { name: 'G' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
+  it('checks the song’s chords from their row', async () => {
     await renderApp('/songs/bz5')
     const chords = await screen.findByRole('region', { name: 'Chords in this song' })
-    expect(within(chords).getAllByRole('link').length).toBeGreaterThan(1)
     expect(
       within(chords).getByRole('link', { name: 'Check these chords' }).getAttribute('href'),
     ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
@@ -54,7 +72,10 @@ describe('Piece', () => {
       'href',
       '/play/bz5',
     )
-    await user.click(screen.getByRole('button', { name: 'Learned' }))
+    const learned = screen.getByRole('button', { name: 'Learned' })
+    expect(learned).toHaveAttribute('aria-pressed', 'false')
+    await user.click(learned)
+    expect(learned).toHaveAttribute('aria-pressed', 'true')
     expect(progressStore.getState().learned['piece:bz5']).toBeDefined()
   })
 

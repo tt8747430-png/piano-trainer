@@ -1,50 +1,53 @@
-import { Check } from 'lucide-react'
+import { FilePenLine, GraduationCap, ListMusic, Music, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { levelOf, pieceStepId } from '@/entities/path'
 import { entryTitles, PieceLink, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
-import { LevelMark } from '@/shared/ui'
+import { LearnedBadge, LevelMark, RowLink, type Paint } from '@/shared/ui'
 
-/** A piece or listing in a list, linking to its page on its shelf: its number, titles, key and meter or "no chart yet", level and learned mark. */
+/** A kind of entry's tile where the book gives it no number: a song yellow, a study grass, a progression lilac. */
+const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint }>> = {
+  song: { icon: Music, paint: 'yellow' },
+  listing: { icon: FilePenLine, paint: 'sand' },
+  study: { icon: GraduationCap, paint: 'grass' },
+  progression: { icon: ListMusic, paint: 'lilac' },
+}
+
+/**
+ * A piece or listing in a list, linking to its page on its shelf: its number in its book on its tile
+ * (else its kind's icon), its title over its second one (a listing: "no chart yet"), then its key, its
+ * level's mark and, once learned, the learned badge.
+ */
 export function EntryRow({ entry }: { entry: Entry }) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
   const learned = useProgress(selectIsLearned(step))
-  const level = entry.kind === 'listing' ? undefined : levelOf(step)
+  const level = levelOf(step)
+  const tile = KIND_TILE[entry.kind]
+  const number = entry.source?.number
   return (
     <li>
-      <PieceLink
-        entry={entry}
-        className="flex min-h-16 items-center gap-3 rounded-2xl px-1 py-3 transition-colors duration-200 ease-out outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring"
-      >
-        <span className="w-7 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
-          {entry.source?.number ?? ''}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-lg font-semibold">{primary}</span>
-          {secondary ? (
-            <span className="block truncate text-sm text-muted-foreground">{secondary}</span>
-          ) : null}
-          <span className="block text-sm text-muted-foreground">
-            {entry.kind === 'listing'
-              ? t('noChart')
-              : `${keySymbol(pieceKey(entry))} · ${entry.meter}`}
-          </span>
-        </span>
-        {level ? <LevelMark level={level} /> : null}
-        <span className="grid size-6 shrink-0 place-items-center">
-          {learned ? (
+      <RowLink
+        title={primary}
+        detail={entry.kind === 'listing' ? t('noChart') : secondary}
+        {...(number === undefined ? tile : { numeral: number, paint: tile.paint })}
+        trailing={
+          entry.kind === 'listing' ? null : (
             <>
-              <Check aria-hidden className="size-5 text-learned" strokeWidth={3} />
-              <span className="sr-only">{t('learned')}</span>
+              <span className="shrink-0 font-display font-semibold tabular-nums">
+                {keySymbol(pieceKey(entry))}
+              </span>
+              {level ? <LevelMark level={level} /> : null}
+              {learned ? <LearnedBadge label={t('learned')} /> : null}
             </>
-          ) : null}
-        </span>
-      </PieceLink>
+          )
+        }
+        render={<PieceLink entry={entry} />}
+      />
     </li>
   )
 }

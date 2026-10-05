@@ -6,8 +6,6 @@ export const songs: LocaleResources['songs'] = {
   clearSearch: 'Очистить поиск',
   collection: 'Сборник',
   all: 'Все',
-  level: 'Уровень',
-  anyLevel: 'Любой',
   noChart: 'Аккордов пока нет',
   learned: 'Выучено',
   empty: 'Ничего не найдено.',
@@ -18,7 +16,7 @@ export const songs: LocaleResources['songs'] = {
     name: 'Название',
     meter: 'Размер',
     make: 'Создать',
-    makeAndRecord: 'Создать и записать',
+    makeAndRecord: 'Записать',
   },
   clearFilters: 'Сбросить фильтры',
 }

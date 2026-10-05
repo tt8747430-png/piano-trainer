@@ -3,6 +3,7 @@ import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Listing } from '@/entities/piece'
 import { ButtonLink } from '@/shared/ui'
+import { PieceAbout } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
 import { PieceHeader } from './PieceHeader'
 
@@ -22,6 +23,7 @@ export function ListingView({ listing }: { listing: Listing }) {
           <PencilLine data-icon="inline-start" />
           {t('writeChart')}
         </ButtonLink>
+        <PieceAbout entry={listing} />
       </div>
     </div>
   )

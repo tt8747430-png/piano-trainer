@@ -1,8 +1,9 @@
-import { cleanup, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { PIECES_STORAGE_KEY } from '@/entities/piece'
+import { markLearned } from '@/features/mark-learned/mark-learned'
 import { createMemoryStorage } from '@/shared/lib'
 
 describe('Songs', () => {
@@ -35,14 +36,25 @@ describe('Songs', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps one collection, which its pop-up names instead of a heading', async () => {
+  it('keeps one collection, which its tab names instead of a heading', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs')
-    await user.click(await screen.findByRole('combobox', { name: 'Collection' }))
-    await user.click(await screen.findByRole('option', { name: 'Hymns' }))
-    expect(router.state.location.search).toMatchObject({ collection: 'hymns' })
+    const tabs = await screen.findByRole('tablist', { name: 'Collection' })
+    expect(within(tabs).getByRole('tab', { name: 'All' })).toHaveAttribute('aria-selected', 'true')
+    await user.click(within(tabs).getByRole('tab', { name: 'Hymns' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ collection: 'hymns' }))
     expect(await screen.findByRole('link', { name: /Silent Night/ })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
+  })
+
+  it('shows a song’s key, its level and, once learned, that it is', async () => {
+    const { progressStore } = await renderApp('/songs')
+    const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
+    expect(song).toHaveTextContent('G')
+    expect(within(song).getByRole('img', { name: /^Level/ })).toBeInTheDocument()
+    expect(within(song).queryByRole('img', { name: 'Learned' })).not.toBeInTheDocument()
+    act(() => markLearned(progressStore, 'piece:bz5', new Date()))
+    expect(within(song).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
   })
 
   it('lists songs only: no study or progression', async () => {
@@ -76,15 +88,17 @@ describe('Songs: your own', () => {
     const make = await screen.findByRole('button', { name: 'Make' })
     expect(make).toBeDisabled()
     await user.type(screen.getByRole('textbox', { name: 'Title' }), 'Evening')
+    await user.click(screen.getByRole('radio', { name: 'Minor' }))
+    await user.click(screen.getByRole('radio', { name: 'E minor' }))
     await user.click(screen.getByRole('radio', { name: '3/4' }))
     await user.click(make)
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(piecesStore.getState().songs).toMatchObject([
-      { id: 'my-1', title: 'Evening', key: 'C', meter: '3/4' },
+      { id: 'my-1', title: 'Evening', key: 'Em', meter: '3/4' },
     ])
   })
 
-  it('lists your songs first, and chooses them in the Collection pop-up', async () => {
+  it('lists your songs first, and chooses them from their tab', async () => {
     const { router } = await renderApp('/songs', { storage: saved({ songs: [SONG], nextSong: 2 }) })
     const headings = await screen.findAllByRole('heading', { level: 2 })
     expect(headings[0]).toHaveTextContent('Your songs')
@@ -96,10 +110,16 @@ describe('Songs: your own', () => {
     expect(router.state.location.pathname).toBe('/songs')
   })
 
-  it('names Your songs in the Collection pop-up when chosen, before there are any', async () => {
+  it('gives Your songs a tab when chosen, before there are any', async () => {
     await renderApp('/songs?collection=mine')
     expect(await screen.findByText('No songs match.')).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: /Collection/ })).toHaveTextContent('Your songs')
+    expect(screen.getByRole('tab', { name: 'Your songs' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('has no tab for Your songs while there are none', async () => {
+    await renderApp('/songs')
+    await screen.findByRole('tablist', { name: 'Collection' })
+    expect(screen.queryByRole('tab', { name: 'Your songs' })).not.toBeInTheDocument()
   })
 
   it('lists a listing whose chart the learner wrote as a song', async () => {
