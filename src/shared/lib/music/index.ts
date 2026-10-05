@@ -112,7 +112,7 @@ export {
   type Triad,
 } from './chord-parts'
 export { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
-export { nameChords, type FoundChord } from './chord-finder'
+export { LEFT_OUT, nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead } from './voice-lead'

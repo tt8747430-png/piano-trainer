@@ -41,6 +41,7 @@ describe('buildChord', () => {
     [{ triad: 'min', added: 'add11' }, 'Cm(add11): C E♭ G F'],
     [{ triad: 'sus4', added: 'six' }, 'C6sus4: C F G A'],
     [{ triad: 'sus4', added: 'add9' }, 'Csus4(add9): C F G D'],
+    [{ added: 'addS11' }, 'Cadd#11: C E G F#'],
   ] as const)('builds a triad and its added tone: %o → %s', (change, expected) => {
     expect(built(change)).toBe(expected)
   })
@@ -76,6 +77,8 @@ describe('buildChord', () => {
     [{ size: 13, alterations: ['b9', 'b13'] }, 'C7♭9♭13: C E G B♭ D♭ A♭'],
     [{ size: 13, seventh: 'major', alterations: ['s11'] }, 'CMaj13#11: C E G B D F# A'],
     [{ triad: 'aug', size: 7, alterations: ['s9'] }, 'C7#5#9: C E G# B♭ D#'],
+    [{ triad: 'sus4', size: 7, alterations: ['b9'] }, 'C7sus4♭9: C F G B♭ D♭'],
+    [{ triad: 'sus4', size: 13, alterations: ['b9'] }, 'C13sus4♭9: C F G B♭ D♭ A'],
   ] as const)('alters a 7th chord with a major 3rd: %o → %s', (change, expected) => {
     expect(built(change)).toBe(expected)
   })
@@ -103,10 +106,10 @@ describe('partsOf', () => {
 })
 
 describe('CHORD_PARTS', () => {
-  it('makes 124 chords, each once', () => {
+  it('makes 127 chords, each once', () => {
     const suffixes = CHORD_PARTS.map((each) => buildChord(note('C'), each).suffix)
     expect(new Set(suffixes).size).toBe(suffixes.length)
-    expect(suffixes).toHaveLength(124)
+    expect(suffixes).toHaveLength(127)
   })
 
   it('holds only parts that fit', () => {
@@ -123,10 +126,13 @@ describe('what a triad and size offer', () => {
     expect(sizesOf('aug')).toEqual([5, 7, 9])
   })
 
-  it('alters a dominant every way, a major 7th only by its #11, a minor chord not at all', () => {
+  it('alters a dominant every way, a major 7th only by its #11, a 7sus4 by its ♭9, a minor chord not at all', () => {
     expect(alterationsOf(parts({ size: 9 }))).toEqual(['b5', 'b9', 's9', 's11', 'b13'])
     expect(alterationsOf(parts({ triad: 'aug', size: 7 }))).toEqual(['b5', 'b9', 's9', 's11'])
     expect(alterationsOf(parts({ size: 7, seventh: 'major' }))).toEqual(['s11'])
+    expect(alterationsOf(parts({ triad: 'sus4', size: 7 }))).toEqual(['b9'])
+    expect(alterationsOf(parts({ triad: 'sus4', size: 13 }))).toEqual(['b9'])
+    expect(alterationsOf(parts({ triad: 'sus4' }))).toEqual([])
     expect(alterationsOf(parts({ triad: 'min', size: 9 }))).toEqual([])
     expect(alterationsOf(parts({}))).toEqual([])
   })
@@ -176,11 +182,12 @@ describe('the builder’s alterations', () => {
   const ADDS = { b9: 13, s9: 15, s11: 18, b13: 20 } as const
 
   it('are the available tensions of the 7th chord they alter, but for the ♭5, which alters the chord', () => {
-    for (const triad of ['maj', 'aug'] as const) {
+    for (const triad of ['maj', 'aug', 'sus4'] as const) {
       for (const size of sizesOf(triad)) {
         if (size === 5) continue
         for (const seventh of seventhsOf(triad, size)) {
           const parts = { triad, size, seventh, added: 'none', alterations: [] } as const
+          if (alterationsOf(parts).length === 0) continue
           const base = buildChord(note('C'), { ...parts, size: 7 }).quality
           if (!base) throw new Error(`the table has no ${triad} ${seventh} 7th`)
           const tensions = availableTensions(base).map((tension) => tension.semitones)

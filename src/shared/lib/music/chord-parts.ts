@@ -17,8 +17,17 @@ export type BuiltSize = (typeof BUILT_SIZES)[number]
 export const SEVENTHS = ['minor', 'major', 'diminished'] as const
 export type Seventh = (typeof SEVENTHS)[number]
 
-/** A tone a triad adds: the 6th, the 6th and 9th, or a 2nd, 4th, 9th or 11th. */
-export const ADDED_TONES = ['none', 'six', 'sixNine', 'add2', 'add4', 'add9', 'add11'] as const
+/** A tone a triad adds: the 6th, the 6th and 9th, or a 2nd, 4th, 9th, 11th or raised 11th. */
+export const ADDED_TONES = [
+  'none',
+  'six',
+  'sixNine',
+  'add2',
+  'add4',
+  'add9',
+  'add11',
+  'addS11',
+] as const
 export type AddedTone = (typeof ADDED_TONES)[number]
 
 /** The tones a 7th chord with a major 3rd may raise or lower, in the order a symbol writes them. */
@@ -67,6 +76,7 @@ const ADDED_INTERVALS: Readonly<Record<AddedTone, readonly IntervalName[]>> = {
   add4: ['P4'],
   add9: ['M9'],
   add11: ['P11'],
+  addS11: ['A11'],
 }
 /** What an alteration puts in, and the natural tone it takes out. */
 const ALTERED: Readonly<
@@ -101,6 +111,7 @@ export const ADDED_SYMBOL: Readonly<Record<Exclude<AddedTone, 'none'>, string>> 
   add4: 'add4',
   add9: 'add9',
   add11: 'add11',
+  addS11: 'add#11',
 }
 export const ALTERATION_SIGN: Readonly<Record<Alteration, string>> = {
   b5: '♭5',
@@ -131,10 +142,13 @@ export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
   return size === 7 ? ['minor', 'diminished'] : ['minor']
 }
 
-/** The tones a triad adds: the major and minor triads every one, a sus4 its 6th and 9th, the rest none. */
+/**
+ * The tones a triad adds: the major triad every one (its raised 11th the Lydian triad's), the minor
+ * triad all but that, a sus4 its 6th and 9th, the rest none.
+ */
 const ADDED: Readonly<Record<Triad, readonly AddedTone[]>> = {
   maj: ADDED_TONES,
-  min: ADDED_TONES,
+  min: ADDED_TONES.filter((tone) => tone !== 'addS11'),
   dim: ['none'],
   aug: ['none'],
   sus2: ['none'],
@@ -144,10 +158,13 @@ export const addedOf = (triad: Triad): readonly AddedTone[] => ADDED[triad]
 
 /**
  * The alterations a chord takes, its available tensions: a dominant 7th (a major 3rd under a minor
- * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its #11; the rest none.
+ * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its #11; a 7sus4 its ♭9;
+ * the rest none.
  */
 export function alterationsOf(parts: ChordParts): readonly Alteration[] {
-  if (parts.size === 5 || (parts.triad !== 'maj' && parts.triad !== 'aug')) return []
+  if (parts.size === 5) return []
+  if (parts.triad === 'sus4') return parts.seventh === 'minor' ? ['b9'] : []
+  if (parts.triad !== 'maj' && parts.triad !== 'aug') return []
   if (parts.seventh === 'major') return ['s11']
   return parts.triad === 'aug' ? ALTERATIONS.filter((each) => each !== 'b13') : ALTERATIONS
 }
@@ -221,7 +238,7 @@ function builtIntervals(parts: ChordParts): LabelledInterval[] {
 }
 
 /** The highest natural extension a 7th chord keeps: the number its symbol carries. */
-function highestNatural(parts: ChordParts): 7 | 9 | 11 | 13 {
+export function highestNatural(parts: ChordParts): 7 | 9 | 11 | 13 {
   const has = (alteration: Alteration) => parts.alterations.includes(alteration)
   if (parts.size === 13 && !has('b13')) return 13
   if (parts.size === 11 && !has('s11')) return 11

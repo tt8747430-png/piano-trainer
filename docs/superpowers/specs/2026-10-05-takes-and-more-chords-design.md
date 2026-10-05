@@ -93,7 +93,7 @@
 The finder names keys only by the builder's chords (CODE_STYLE §8). Two changes:
 
 - **The builder makes two more:** a **7sus4 takes a ♭9** (an available tension of the 7sus4 in `tensions.ts`):
-  7sus4♭9 and 13sus4♭9, in the Chords reference too; and a major triad takes **add♯11** (`C(add#11)`, the Lydian
+  7sus4♭9 and 13sus4♭9, in the Chords reference too; and a major triad takes **add♯11** (`Cadd#11`, the Lydian
   triad).
 - **A chord may leave tones out, as hands do** (`FoundChord.leftOut`, replacing `no5th`):
   - the **5th**, from a 7th chord up and from a 6/9;
@@ -101,7 +101,9 @@ The finder names keys only by the builder's chords (CODE_STYLE §8). Two changes
     `C E♭ B♭ F` Cm11, `C E B A` CMaj13;
   - the **3rd** of a 7th chord over a major triad whose 5th is played: `C G B♭` is C7 with no 3rd.
   - Never the root, the 7th, the highest number or an alteration: they are what the name says.
-- **Best first:** root position, then the fewest tones left out, then a chord the table names, then fewer notes.
+- **Best first:** root position, then a ♭5 read as the ♯11 from a 9th up (one key: a tension there, an altered 5th in
+  a 7th chord, so `C E B♭ D F#` is C9♯11 with no 5th and `C E G♭ B♭` C7♭5), then the fewest tones left out, then a
+  chord the table names, then fewer notes.
   The finder shows what is left out after the quality ("No 5th · No 9th"), and says it to a screen reader.
 - **Decided against:** naming rootless voicings by a root not played (`E G B D` stays Em7, not Cmaj9: every set of
   keys would name several chords that are not there); a minor 3rd left out (it cannot be told from a major one).

@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { noteName, type Midi } from '@/shared/lib/music'
+import { noteName, type FoundChord, type Midi } from '@/shared/lib/music'
 import { ToneChip } from '@/shared/ui'
 import { toneOfKey, type Finding } from '../model/finding'
+import { useChordAbout } from './use-chord-about'
 
 /**
  * What the keys make: nothing yet, a note, an interval, or a chord, its notes from the bass up by
@@ -19,11 +20,21 @@ export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: 
     case 'none':
       return <p className="text-lg text-muted-foreground">{t('learn:finder.none')}</p>
   }
-  const { best, others } = finding
-  const about = [
-    best.chord.quality ? t(`music:quality.${best.chord.quality}`) : null,
-    best.no5th ? t('learn:finder.no5th') : null,
-  ].filter((each) => each !== null)
+  return <FoundName keys={keys} best={finding.best} others={finding.others} />
+}
+
+/** A chord found: its symbol, what it is and leaves out, its notes by degree, and its other names. */
+function FoundName({
+  keys,
+  best,
+  others,
+}: {
+  keys: readonly Midi[]
+  best: FoundChord
+  others: readonly FoundChord[]
+}) {
+  const { t } = useTranslation('learn')
+  const about = useChordAbout()(best)
   return (
     <div className="flex flex-col gap-3">
       <hgroup>
@@ -42,7 +53,7 @@ export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: 
       </ol>
       {others.length > 0 ? (
         <p>
-          {t('learn:finder.also', {
+          {t('finder.also', {
             names: others
               .slice(0, 4)
               .map((each) => each.symbol)

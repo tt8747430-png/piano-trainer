@@ -40,6 +40,13 @@ describe('Learn → Chord finder', () => {
     expect(screen.getByText('Also: Am7/C')).toBeInTheDocument()
   })
 
+  it('names a shell, and says the tones it leaves out', async () => {
+    await renderApp('/learn/chord-finder?keys=48-64-70-81')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C13' })).toBeInTheDocument()
+    expect(screen.getByText('Dominant 13th · No 5th · No 9th')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('C13 · Dominant 13th · No 5th · No 9th')
+  })
+
   it('names an inversion as a slash chord, and opens it in Chords', async () => {
     await renderApp('/learn/chord-finder?keys=64-67-72')
     expect(await screen.findByRole('heading', { level: 2, name: 'C/E' })).toBeInTheDocument()

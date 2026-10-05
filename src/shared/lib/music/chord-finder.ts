@@ -3,21 +3,27 @@ import {
   buildChord,
   builtRootSpelling,
   CHORD_PARTS,
+  highestNatural,
   type BuiltChord,
   type ChordParts,
 } from './chord-parts'
 import { note, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
+import type { ChordRole, Tone } from './tone'
 
-/** A chord the notes played make: its parts, its bass when not its root, and whether its 5th is left out. */
+/** The tones a hand may leave out of a chord, in the order they are said. */
+export const LEFT_OUT = ['3rd', '5th', '9th', '11th'] as const satisfies readonly ChordRole[]
+export type LeftOut = (typeof LEFT_OUT)[number]
+
+/** A chord the notes played make: its parts, its bass when not its root, and the tones left out. */
 export interface FoundChord {
   readonly chord: BuiltChord
   readonly parts: ChordParts
   /** The lowest note when it is not the root: the part after the slash. */
   readonly bass?: SpelledNote
   readonly symbol: string
-  /** The perfect 5th left out, as a hand often leaves it. */
-  readonly no5th: boolean
+  /** The tones the hand left out, as `LEFT_OUT` orders them: none when every tone is there. */
+  readonly leftOut: readonly LeftOut[]
   /** Which chord tone is lowest, 0 the root, where the Chords reference can show it (up to the 3rd inversion). */
   readonly inversion?: number
 }
@@ -26,27 +32,69 @@ export interface FoundChord {
 const shapeKey = (semitones: readonly number[]): string =>
   [...new Set(semitones.map((each) => pitchClass(each)))].sort((a, b) => a - b).join(' ')
 
+/** The plain tone of each number a hand leaves out: a major 3rd, a perfect 5th, a natural 9th or 11th. */
+const PLAIN: Readonly<Record<LeftOut, string>> = {
+  '3rd': '3',
+  '5th': '5',
+  '9th': '9',
+  '11th': '11',
+}
+const isPlain = (tone: Tone, role: LeftOut) => tone.role === role && tone.degree === PLAIN[role]
+
 /**
- * Every chord the builder makes, as its notes above its root; and a 7th chord or larger without its
- * perfect 5th, as hands play them (a 6th or an added tone without its 5th would only invent names).
+ * The tones of a chord a hand may leave out (spec 2026-10-05 §5): its perfect 5th, from a 7th chord
+ * up and from a 6/9; its natural 9th and 11th under its highest number (a 13th's, an 11th's 9th); and
+ * the major 3rd of an unaltered 7th chord, where the 5th is played. Never the root, the 7th, the
+ * highest number or an alteration: they are what the name says. A 6th or an added tone keeps its 5th,
+ * or its name would be invented.
  */
-const SHAPES = CHORD_PARTS.map((parts) => {
-  const semitones = buildChord(note('C'), parts).tones.map((tone) => tone.semitones)
-  const has5th = semitones.includes(7) && parts.size >= 7
-  return {
-    parts,
-    exact: shapeKey(semitones),
-    no5th: has5th ? shapeKey(semitones.filter((each) => each !== 7)) : null,
+function leavable(parts: ChordParts, tones: readonly Tone[]): LeftOut[] {
+  const has = (role: LeftOut) => tones.some((tone) => isPlain(tone, role))
+  const top = parts.size === 5 ? 5 : highestNatural(parts)
+  const rules: Readonly<Record<LeftOut, boolean>> = {
+    '3rd': parts.size === 7 && parts.triad === 'maj' && parts.alterations.length === 0,
+    '5th': parts.size >= 7 || parts.added === 'sixNine',
+    '9th': top >= 11,
+    '11th': top === 13,
   }
+  return LEFT_OUT.filter((role) => rules[role] && has(role))
+}
+
+/** Every way of leaving tones out: none, each alone, and together, but never the 3rd and the 5th both. */
+const waysToLeaveOut = (leavable: readonly LeftOut[]): LeftOut[][] =>
+  leavable
+    .reduce<LeftOut[][]>((ways, role) => [...ways, ...ways.map((way) => [...way, role])], [[]])
+    .filter((way) => !(way.includes('3rd') && way.includes('5th')))
+
+/** Three tones at least name a chord. */
+const FEWEST_TONES = 3
+
+/** Every chord the builder makes, as its notes above its root, whole and with each way of leaving tones out. */
+const SHAPES = CHORD_PARTS.flatMap((parts) => {
+  const tones = buildChord(note('C'), parts).tones
+  return waysToLeaveOut(leavable(parts, tones)).flatMap((leftOut) => {
+    const kept = tones.filter((tone) => !leftOut.some((role) => isPlain(tone, role)))
+    return kept.length < FEWEST_TONES
+      ? []
+      : [{ parts, leftOut, key: shapeKey(kept.map((tone) => tone.semitones)) }]
+  })
 })
+
+/**
+ * A ♭5 and a #11 are one key: from a 9th up it reads as the #11, a tension, and in a 7th chord as an
+ * altered 5th. So `C E B♭ D F#` is C9#11 with no 5th before C9♭5, and `C E G♭ B♭` stays C7♭5.
+ */
+const flatFiveOverTensions = (parts: ChordParts): boolean =>
+  parts.size >= 9 && parts.alterations.includes('b5')
 
 /** The Chords reference shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
 /**
  * The chords three or more keys make, best first: every chord the builder makes, on each pitch class
- * played as its root, the root spelled by the builder's one rule. Root position first, then a chord
- * with every tone there, then one the table names, then fewer notes; each symbol once.
+ * played as its root, the root spelled by the builder's one rule. Root position first, then a ♭5 read
+ * as a #11 from a 9th up, then the fewest tones left out, then one the table names, then fewer notes;
+ * each symbol once.
  */
 export function nameChords(keys: readonly Midi[]): FoundChord[] {
   const lowest = Math.min(...keys)
@@ -56,8 +104,7 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
   const found = pcs.flatMap((rootPc: PitchClass) => {
     const played = shapeKey(pcs.map((pc) => pc - rootPc))
     return SHAPES.flatMap((shape) => {
-      const no5th = shape.exact !== played
-      if (no5th && shape.no5th !== played) return []
+      if (shape.key !== played) return []
       const chord = buildChord(builtRootSpelling(rootPc, shape.parts), shape.parts)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]
@@ -68,7 +115,7 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
           parts: shape.parts,
           ...(bass ? { bass } : {}),
           symbol: writtenSymbol(chord, bass),
-          no5th,
+          leftOut: shape.leftOut,
           ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS ? { inversion: bassAt } : {}),
         },
       ]
@@ -76,7 +123,8 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
   })
   const rank = (each: FoundChord) => [
     each.bass ? 1 : 0,
-    each.no5th ? 1 : 0,
+    flatFiveOverTensions(each.parts) ? 1 : 0,
+    each.leftOut.length,
     each.chord.quality ? 0 : 1,
     each.chord.tones.length,
   ]
