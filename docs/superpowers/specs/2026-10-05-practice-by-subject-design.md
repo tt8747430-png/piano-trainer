@@ -46,8 +46,8 @@ stacks the old ones.
 | Exercises | `/practice/exercises` | Technique · Barry Harris · Piano With Jonny |
 | Quiz | `/practice/quiz` | every trainer |
 
-`pages/practice/model/subjects.ts` is the one table (a test holds every trainer and every exercise group to exactly
-one home). `topics.ts`, `TopicPanel`, the topic tabs and Practice's remembered view go.
+The rows are the page's own list; `pages/quiz/model/quiz-groups.ts` holds every trainer to one group by a test.
+`topics.ts`, `TopicPanel`, the topic tabs and Practice's remembered view go.
 
 **Quiz** (`/practice/quiz`, `pages/quiz`): the trainers in four groups, each row saying its runs: Chords (Build
 chord, Name chord, A chord's role), Scales and keys (Build scale, Key signatures, The degrees of a key), By ear
@@ -106,7 +106,7 @@ interface LibraryProgression {
 4. **Practise in the Player**: in this key, or through the keys (fifths, fourths, half steps).
 
 **Passing chords** (`/practice/progressions/passing`) and **Reharmonise** (`/practice/progressions/reharmonise`) are
-the page family's other two tabs; a tab carries the key across. Their old paths go.
+the page family's other two tabs, each opening as it was left (ADR 0022). Their old paths go.
 
 ## 3. Chords: build and find on one page
 
@@ -140,9 +140,8 @@ pop-up button, segments, or `ChoiceRow` (a radio: its mark at the left, no chevr
   two keys, each with one name), one row where the mode is fixed. No chooser relabels itself.
 - **Inside a key, everything is spelled by the key:** the circle of fifths names the key's own chords as the key
   does (G♭ and E♭m in D♭ major, not F♯ and D♯m).
-- **A root worked out is named plainly:** a key's borrowed chords (E, A and B in D♭ major, not F♭, B𝄫 and C♭) and
-  every chord a tool works out take `chordRootSpelling`, the builder's and the table's rule, so D♯ and A♯ never
-  root a chord beside E♭ and B♭.
+- **A borrowed root is named plainly,** with its tones: E, A and B in D♭ major, not F♭, B𝄫 and C♭. Passing chords and
+  Reharmonise keep ADR 0019's rule (letters, then plainly): a tritone substitution is spelled from where it falls.
 
 ## 7. The rest of the brief, checked
 
@@ -151,7 +150,8 @@ pop-up button, segments, or `ChoiceRow` (a radio: its mark at the left, no chevr
 - **Learned** is one mark: a grass check in a circle, the same on a row and on the song's button.
 - **The keyboard's rail:** scroll ‹ ›, then glissando and settings as pressed toggles; each button's focus ring drawn
   inside the rail, whole.
-- **The score editor** must show its sheet at every size (the sheet was blank in a wide window on first load).
+- **The score editor's sheet** was blank only in a hidden browser tab, where no staff is ever "on screen"; it is
+  no fault of the app.
 
 ## Build order
 

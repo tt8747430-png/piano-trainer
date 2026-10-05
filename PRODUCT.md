@@ -45,30 +45,29 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   from finding your way on the keys to key signatures; Accompaniment's eleven, from bass and chords through the five
   ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
   reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in
-  any key) and quizzes answered on the keys), Practice (everything practised, a topic at a time: Chords, Scales and
-  keys, Ear and reading, Progressions, Accompaniment, Technique. A topic has up to three ways in. **Explore:** the
-  pages that show a thing on the keys or work it out: Chords, which builds any chord from its root, triad, size, 7th,
-  added tone and alterations, on the keys and a staff; Scales and keys, thirteen scale kinds with the modes and both
-  blues, its Scale view starting the run on any note, fingered from the thumb or as the scale, on a staff, its Chords
-  view stacking the scale's chords to 13ths in any inversion and walking them, its Key view (a major or minor scale)
-  the circle of fifths with the key's signature, relative, modes, borrowed chords and songs; Intervals, every
-  interval over a root on a staff and heard up, down and together; Available tensions, the twelve notes over a 7th
-  chord as weak, strong, tensions and avoid; Patterns, each pattern's page explaining and playing it, with
-  favourites, hiding from the Player's list, and the learner's own patterns made from any two figures; the Chord
-  finder, naming the keys played; Reharmonise, the chords that hold a melody note; Passing chords, the ways between
-  two chords; Progressions, numerals or chords in any key from a library by style. **Quiz:** the trainers, each a
-  ladder of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's
-  role, Build scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My
-  gaps, across topics, from Practice's bar. **And what it plays** in the Player: exercises by group, each generated
-  in any key (scales from any note over one to four octaves, in 3rds, 6ths and groups, in contrary motion; arpeggios
-  of thirteen types in any inversion; Barry Harris's 6th-diminished scale and its chords, the dominant scale down,
-  arpeggios from the 3rd and drop-2 7ths; Piano With Jonny's 2-5-1 scale, inner voice, modes, rapid switch and
-  pattern shifting; the five-finger position and Hanon No. 1; the walks and progressions through the keys), then the
-  studies and progressions), the score editor (the learner's version of any song or study, or the chart of a
+  any key) and quizzes answered on the keys), Practice (seven places, each one page for a thing practised. **Chords:** Build makes any chord from its
+  root, triad, size, 7th, added tone and alterations, on the keys and a staff, with a 7th chord's available tensions
+  (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player; Find names the keys played.
+  **Scales and keys:** thirteen scale kinds with the modes and both blues; its Scale view starts the run on any note,
+  fingered from the thumb or as the scale, on a staff, and opens the scale's exercises in the Player (over one to four
+  octaves, in 3rds, 6ths and groups, in contrary motion); its Chords view stacks the scale's chords to 13ths in any
+  inversion and walks them; its Key view (a major or minor scale) is the circle of fifths with the key's signature,
+  relative, modes, borrowed chords and songs. **Progressions:** one library by style, or a line typed in numerals or
+  chords, in any key and chord size, played and opened in the Player in the key or through the keys; Passing chords,
+  the ways between two chords; Reharmonise, the chords that hold a melody note. **Intervals:** every interval over a
+  root on a staff, heard up, down and together. **Accompaniment:** Patterns, each pattern's page explaining and
+  playing it, with favourites, hiding from the Player's list, and the learner's own made from any two figures; and
+  the Studies they are practised on. **Exercises:** the five-finger position and Hanon No. 1; Barry Harris's
+  6th-diminished scale and its chords, the dominant scale down, arpeggios from the 3rd and drop-2 7ths; Piano With
+  Jonny's 2-5-1 scale, inner voice, modes, rapid switch and pattern shifting. **Quiz:** every trainer, each a ladder
+  of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's role, Build
+  scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
+  them, in its bar),
+  the score editor (the learner's version of any song or study, or the chart of a
   listing, and songs of their own: chords typed, tapped or played, the melody and any bar of either hand written note
   by note from the keys, the computer keyboard or MIDI, undo and redo, every change saved, played in the Player in
   any key), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
-  0012–0029.
+  0012–0030.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.
@@ -99,7 +98,7 @@ taken from them: streaks as pressure, mascots, upsells, locked content, stock ph
 
 ## Evidence on Hand
 
-- 54 pieces, 7 listings, 39 accompaniment patterns and the path, as code under `src/entities/*/content/`.
+- 42 pieces, 7 listings, 39 accompaniment patterns, the progression library and the path, as code under `src/entities/*/content/`.
 - No testimonials, users, metrics or screenshots of real use. Do not invent any.
 
 ## Product Principles

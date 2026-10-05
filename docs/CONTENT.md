@@ -40,7 +40,7 @@ export default definePiece({
 
 | Field                      | What it holds                                                                         |
 | -------------------------- | ------------------------------------------------------------------------------------- |
-| `kind`                     | `'song'` or `'study'` (with a chart), `'progression'` (with a progression)            |
+| `kind`                     | `'song'` or `'study'`: what it is, not how it is written                              |
 | `title`                    | As printed, in its own language                                                       |
 | `titleEn`                  | The English title, only where the printed one is not English                          |
 | `credits`                  | See [Credits](#credits)                                                               |
@@ -52,7 +52,7 @@ export default definePiece({
 | `note`                     | Optional `LocalText`, by the [copy rule](#text)                                       |
 | `sections`, `melody`       | Songs and studies: the [chart](#the-chart) and an optional [melody](#the-melody)      |
 | `hands`                    | Songs and studies: optional bars of either hand [written out](#written-hands)         |
-| `progression`, `chordSize` | Progressions: see [Progressions](#progressions)                                       |
+| `progression`, `chordSize` | A song written in degrees: see [Written in degrees](#written-in-degrees)              |
 
 A chart that names method codes starts the Player on its own plan: each coded chord plays its method's pattern,
 every other chord plays `pattern`.
@@ -139,22 +139,25 @@ piece's own key, at any tempo with its pitch kept ([ADR 0016](adr/0016-a-piece-m
   bar). Time a passage that repeats (its two choruses: 16 beats in 13.17 s), and check that every landmark falls within
   50 ms of its beat. Its form must be the chart's (a repeat written out, as the chart writes it).
 
-## Progressions
+## Written in degrees
 
-A progression has no chart; its chords grow with the chord size the learner picks.
+A song a course teaches in degrees, to be played in any key, is written so instead of as a chart: it has no
+`sections`; its chords grow with the chord size the learner picks. It is a song all the same (`kind: 'song'`,
+`isDegreePiece` tells its format). A progression that is only practised is not a piece: it goes in
+[the progressions library](#the-progressions-library).
 
 ```ts
 export default definePiece({
-  id: 'twofive',
-  kind: 'progression',
-  title: 'ii–V–I',
-  key: 'C',
+  id: 'romashki',
+  kind: 'song',
+  title: 'Ромашковые поля',
+  titleEn: 'Daisy fields',
+  key: 'Dm',
   meter: '4/4',
   tempo: 72,
-  pattern: 'jazz',
+  pattern: 'pop8',
   chordSize: { default: 'sevenths', choosable: true },
-  progression: 'ii:min:4 V:dom:4 I:maj:8',
-  note: { en: 'The basic jazz cadence. With 9ths: m9 → 9 → Maj9.', ru: '…' },
+  progression: [{ kind: 'verse', lines: ['i:min:4 iv:min:2 V:=sus4:2 i:min:4'] }],
 })
 ```
 
@@ -177,9 +180,9 @@ Each chord is `degree:function:beats`, optionally `/3`, `/5` or `/7`:
 - **Chord size:** `{ default, choosable }`; `choosable: false` fixes the chord size.
 
 Chords fill bars of the meter in order, a chord longer than the room left tied into the next bar; lines hold four
-bars. The 12-bar blues (`I:dom:16 IV:dom:8 …`) is twelve 4/4 bars.
+bars: `I:dom:16 IV:dom:8 …` fills four bars, then two.
 
-**In sections.** A song-shaped progression writes `progression` as a chart's sections (`kind`, `n`, `label`, `last`,
+**In sections.** A song writes `progression` as a chart's sections (`kind`, `n`, `label`, `last`,
 `detail`, `lines`), each line a progression of its own: it starts on a new bar and is one line of the chart, so the
 printed line breaks stay. Headings are a chart's. A mistake names its section, line and chord.
 
@@ -270,7 +273,7 @@ and its `sections`, each a heading over blocks. A lesson teaches music in prose;
 | `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals explorer's card                             |
 | `notes`       | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', meter?, key? }`                | the line on one staff, Play                               |
 | `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                     | the pattern over the piece's first line, Play, the Player |
-| `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions tool's row, its link                     |
+| `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions page's row, its link                     |
 | `quiz`        | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                                      |
 | `link`        | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference, a lesson, a tool or the Player    |
 
@@ -278,23 +281,26 @@ A line of notes names each note with its octave (`C4` is middle C), then after a
 half, `4` quarter, the default, `8` eighth) and a dot for half as long again; its meter is 2/4, 3/4 or 4/4, and its
 `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key` objects (`{ tonic: note('E', -1),
 minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
-`tensions` (a chord, a root), `lesson` (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key,
+`tensions` (a chord, a root: the chord builder opens on it), `lesson` (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key,
 `from` and `to` as symbols), `reharmonise` (a key, a melody note), `piece` (a piece in the Player, `pattern?`) or
 `player` (a progression in the Player, ready to practise: numerals, a key, `size?`, `walk?` through the keys,
 `inversion?` 0–3).
 
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
-lesson's study, Боброва's seven over `otche`, a rhythm style over a progression. A pattern that plays the tune (`r5`,
+lesson's study, Боброва's seven over `otche`, a rhythm style over a study's plain chords. A pattern that plays the tune (`r5`,
 `r6`, `r7`) needs a piece with a melody, in a block or a `piece` link. Its name and description come from the pattern; the lesson says why it is
-there. Numerals are read as the Progressions tool reads them, a minor key from natural minor.
+there. Numerals are read as the Progressions page reads them, a minor key from natural minor.
 
 ## The progressions library
 
-`src/entities/progression-library/content/library.ts` lists the Progressions tool's named progressions: a style
+`src/entities/progression-library/content/library.ts` is the one list of the progressions that are practised: a style
 (`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `latin`, `gospel`, `minor`, `theory`), an id, the numerals as
-`parseNumerals` reads them (`I V vi IV`, `ii7 V7 IMaj7`, `♭VI ♭VII I`) and the name in both languages. A progression
-of the `minor` style is read in a minor key. Write a 7th where the style plays one whatever the chord size (the
-blues' `I7`); leave it out where the chord should grow with the size.
+`parseNumerals` reads them (`I V vi IV`, `iiø7 V7♭9 i`, `♭VI ♭VII I`) and the name in both languages; and, where it
+has them, a `note` (what it teaches, in a line, by the [copy rule](#text)), the `pattern` its Player opens with and the
+chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a 7th where the style
+plays one whatever the chord size (the blues' `I7`, a resolution's `V7♭9`); leave it out where the chord should grow
+with the size. **A line of numerals is written once in its mode**: the page names the progression it shows by its
+line, so a second name for the same line is left out.
 
 ## What the tests check
 
@@ -309,7 +315,8 @@ blues' `I7`); leave it out where the chord should grow with the size.
   listing, every chord family and scale kind.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
 - **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
-  every line read, every style used, minor ones in their style.
+  every line read and written once in its mode, every style used, minor ones in their style, every note in both
+  languages.
 - **Lessons' patterns** (`src/widgets/lesson-view/model/pattern-example.test.ts`): every pattern block plays over its
   piece from its first beat.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,

@@ -479,14 +479,20 @@ How each screen uses its width:
 
 - **Songs:** the search, the collections as tabs (All, Your songs once there are any, then the books), and the songs
   as row cards in a grid.
-- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit, the chords it plays, the
-  chart under its pinned keyboard, then what is printed about it.
+- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit, the keyboard pinned, then
+  Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
 - **Learn:** the lessons, module by module, as row cards in a grid, each numbered in the order taught.
-- **Practice:** its topics as tabs; a topic's Explore, Quiz and what it plays, each a titled grid of row cards.
-- **The explorers, Settings:** two equal columns from 1024px (the choices beside what they show), the keyboard pinned
-  across both, first on every screen size.
-- **Intervals and Available tensions:** the keys pinned across the width; the interval cards three across, the
-  tensions' four groups two across.
+- **Practice:** seven rows, one for each place (Chords, Scales and keys, Progressions, Intervals, Accompaniment,
+  Exercises, Quiz), each saying what is inside it in a line; Quiz and Exercises are titled grids of row cards.
+- **A subject's pages** (Chords' Build · Find, Scales' Scale · Chords · Key, Progressions' three, Accompaniment's
+  Patterns · Studies) are tabs under the screen's title: links, the page shown in ink over an ink underline.
+- **A page that shows a thing on the keys** (ADR 0030) reads top to bottom on every width: the keyboard pinned; what
+  it is (its name in the chord display or the display size, its tones or facts, a staff where it has one) with the
+  page's one honey Play at the right; its choices, each a field under its name in soft ink, in a grid of as many
+  columns of at least 20rem as fit; then its titled sections (available tensions, Practise in the Player). No page
+  splits into two columns of unrelated things.
+- **Settings:** two equal columns from 1024px.
+- **Intervals:** the interval cards as many across as fit.
 
 Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The explorers, a lesson
 and a Piece's chart pin their keyboard to the top while the page scrolls.
@@ -546,7 +552,8 @@ its value; on or off a switch; settings changed less often a sheet; a popover an
 choices whose effect shows at once (the keyboard settings, which must not cover the keys; the Player's tempo and
 hands). **And a choice is drawn where a picture says it faster** (ADR 0029): the twelve notes are a **note picker**
 (a sand track of twelve segments, six across on a phone, the chosen name over it at the right: a root, a key's tonic),
-a key the note picker over Major · Minor; an inversion is its stack of noteheads over its name, the root's in the
+a key the **key picker** (all 24 keys in sight, the major keys over the minor, each under its one name, so nothing
+relabels itself); an inversion is its stack of noteheads over its name, the root's in the
 root's paint; several on-or-offs together on a sheet are **toggle tiles** (an icon over its name, 72px, soft ink in
 the control line; on: the learned paint's wash with its deep shade); the sections of one screen are **tabs** (a strip
 on a hairline, 48px, an ink underline under the chosen one, scrolling sideways on a phone). A pop-up button stays for
@@ -603,16 +610,18 @@ long lists and beside other controls in a row.
   on its own clef's staff; Play soft, turning into Stop.
 - **Pattern example** (a lesson's; the same card): the pattern's name in Literata 600 20px, its description in body
   text, "Played over" its piece in muted small text, then Play (soft, turning into Stop) and Open in the Player
-  (outline). **Progression example:** the Progressions tool's row of chord buttons and its Play, soft here (the
+  (outline). **Progression example:** the Progressions page's row of chord buttons and its Play, soft here (the
   tool's one honey action there), then its row into the tool on a card.
-- **The explorers that work a thing out** sit with the others under their topic's Explore on Practice. The Chord finder
+- **The pages that work a thing out.** Chords' Find
   shows its chord in the chord display (72px), its notes from the bass as degree chips, "Also:" the other names, and
   Play (honey), Clear and Open in Chords; Reharmonise sets each group's chords as chord buttons filling a grid (the
   symbol over "as 3 · in the key"); Passing chords sets each way as a card (its name, In the key or Chromatic at the
   right in soft ink, its row of chords as outline buttons, one line of why, Play soft), cards two across from 1024px.
-  Progressions sets its Key pop-up and Chord size, the field for numerals or chords, the row of chord buttons (the
-  symbol over its numeral), Play (honey) and Practise in the Player (soft) on the left, and the library by style as
-  titled groups of rows on the right (under it on a phone).
+  Progressions sets the row of chord buttons (the symbol over its numeral) first, with Play (honey), Practise in the
+  Player and Through the keys (soft) and the progression's note under them; then its fields: the library behind one
+  pop-up button grouped by style (it names the progression shown, or the line typed) over the field for numerals or
+  chords, the key picker and the chord size. **A row that chooses is never a row that leaves:** a row with a chevron
+  is always a link.
 - **Patterns** (under Practice's Accompaniment): Favourites, Your patterns, the four groups and Hidden as titled groups of row
   links without tiles, each a name over its idea line; New pattern is the bar's round +. **A pattern's page:** the
   bar's star (pressed: a sand fill and a filled star) toggles a favourite; the idea in 20px, each hand's figure as two
@@ -625,8 +634,8 @@ long lists and beside other controls in a row.
   out but for the one playing), each a name over its idea line, and at its foot a row link to Patterns in Learn.
 - **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
   so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
-  top. The Available tensions explorer sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a
-  line of what its notes do.
+  top. The chord builder sets them under a 7th chord in four cards, Weak · Strong · Tensions · Avoid, each titled
+  with a line of what its notes do.
 
 ### Marks
 
@@ -644,7 +653,7 @@ above it): four places, Path · Songs · Learn · Practice (Route, Music, BookOp
 Onest 500 14px label, both soft ink; the current place fills with sand in a 1px soft line under a semibold ink label.
 From 1024px, a 256px sidebar with a 1px soft line on its right: "Piano Trainer" in Literata 600 22px beside the
 collapse button, the places as 44px rows (20px icon, 16px label) and Settings at its foot. Collapsed, it is 72px of
-icons, each named in a tooltip. Learn is the lessons; Practice is everything practised, a topic at a time.
+icons, each named in a tooltip. Learn is the lessons; Practice is seven places, one for each thing practised.
 
 ### The keyboard (signature)
 

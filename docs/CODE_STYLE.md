@@ -25,9 +25,9 @@ A container wires data to presentational children. One job each.
   `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
   (a radio group) and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Listbox`
   (one choice of a list: a Setup page's, the tempo and hands popovers), `Dropdown` (the pop-up button,
-  over shadcn's `select`) with `MultiDropdown`, `KeyDropdown` (the 24 keys) and `NoteDropdown` (the 12 notes, each
-  spelled by the caller's rule), `NotePicker` (the twelve notes in sight, a tap each) and `KeyPicker` (it over Major ·
-  Minor), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
+  over shadcn's `select`) with `MultiDropdown`, `NotePicker` (the twelve notes in sight, a tap each, spelled by the
+  caller's rule) and `KeyPicker` (all 24 keys in sight, each under its one name), `Labelled` (a choice under its name:
+  one field of a page's `grid-fields`), `NavTabs` (a subject's pages as tabs that are links), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
   its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
@@ -217,7 +217,7 @@ tempo)` sounds it and `notate(run)` writes it.
   by `fitParts` (and `withAlterations` for a choice of several), named by the table where it has the chord and else by
   the same tables as the stacks. **Every chord's root is spelled by `chordRootSpelling(pc, intervals)`**: sharp on
   C♯/G♯ under a minor 3rd or minor 9th, the one rule for the table, the builder and the quiz.
-- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the Available tensions explorer,
+- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the chord builder's tensions,
   `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
   second table of what a chord takes.
 - **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
