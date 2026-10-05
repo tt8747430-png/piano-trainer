@@ -1,7 +1,6 @@
 import type { HandId } from '@/entities/piece'
 import type { QuantisedNote } from '@/entities/take'
-import { isCompound, type Meter, type Midi, type Tick } from '@/shared/lib/music'
-import type { Duration } from '@/shared/lib/notation'
+import type { Midi, Tick } from '@/shared/lib/music'
 import { isHandLayer, type Draft, type DraftNote, type NoteLayer } from './draft'
 import { notesOf, reaching, spelledIn, withBar, withNotes } from './notes'
 import { barAt, barsOf } from './timeline'
@@ -29,25 +28,6 @@ export function takeParts(
   ]
 }
 
-/** Note values, the first the beat: never none. */
-type Grids = readonly [Duration, ...Duration[]]
-
-const SIMPLE_GRIDS: Grids = [
-  { value: 4, dots: 0, triplet: false },
-  { value: 8, dots: 0, triplet: false },
-  { value: 16, dots: 0, triplet: false },
-  { value: 8, dots: 0, triplet: true },
-]
-const COMPOUND_GRIDS: Grids = [
-  { value: 4, dots: 1, triplet: false },
-  { value: 8, dots: 0, triplet: false },
-  { value: 16, dots: 0, triplet: false },
-]
-
-/** The shortest notes a take is snapped to: the beat, an eighth, a sixteenth, and in x/4 an eighth triplet. */
-export const takeGrids = (meter: Meter): Grids =>
-  isCompound(meter) ? COMPOUND_GRIDS : SIMPLE_GRIDS
-
 /** The ticks a take's notes cover: from the bar it is written from to the end of the bar it ends in. */
 interface Span {
   readonly from: Tick
@@ -65,13 +45,15 @@ const clearedIn = (notes: readonly DraftNote[], { from, to }: Span): DraftNote[]
 
 /** The tune in a take: the highest key at each onset, each note cut where the next starts. */
 function oneLine(notes: readonly QuantisedNote[]): QuantisedNote[] {
-  const onsets = [...new Set(notes.map((n) => n.startTick))].sort((a, b) => a - b)
-  return onsets.flatMap((onset, i) => {
-    const at = notes.filter((n) => n.startTick === onset)
-    const highest = at.reduce((top, n) => (n.midi > top.midi ? n : top))
-    const next = onsets[i + 1]
-    const end = Math.min(onset + highest.durationTicks, next ?? Infinity)
-    return [{ ...highest, durationTicks: end - onset }]
+  const highest = new Map<Tick, QuantisedNote>()
+  for (const n of notes) {
+    const top = highest.get(n.startTick)
+    if (!top || n.midi > top.midi) highest.set(n.startTick, n)
+  }
+  const line = [...highest.values()].sort((a, b) => a.startTick - b.startTick)
+  return line.map((n, i) => {
+    const next = line[i + 1]?.startTick ?? Infinity
+    return { ...n, durationTicks: Math.min(n.startTick + n.durationTicks, next) - n.startTick }
   })
 }
 
@@ -104,9 +86,10 @@ function writePart(draft: Draft, { layer, notes }: TakePart, span: Span): Draft 
  * there are replaced, a hand's bars written out. The draft as it was for a take with no notes.
  */
 export function writeTake(draft: Draft, from: Tick, parts: readonly TakePart[]): Draft {
-  const ends = parts.flatMap((part) => part.notes.map((n) => n.startTick + n.durationTicks))
-  if (ends.length === 0) return draft
-  const last = from + Math.max(...ends) - 1
+  const notes = parts.flatMap((part) => part.notes)
+  if (notes.length === 0) return draft
+  const end = notes.reduce((latest, n) => Math.max(latest, n.startTick + n.durationTicks), 0)
+  const last = from + end - 1
   const grown = reaching(draft, last)
   const lastBar = barAt(grown, last)
   const span = { from, to: lastBar.start + lastBar.bar.ticks }

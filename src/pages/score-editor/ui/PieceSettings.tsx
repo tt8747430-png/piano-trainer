@@ -17,7 +17,7 @@ import { SongTitleField } from './SongTitleField'
 export function PieceSettings() {
   const { t } = useTranslation('editor')
   const locale = useLocale()
-  const { actions, meta } = useScoreEditorContext()
+  const { actions, meta, takes } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
   const saved = useEditorState((state) => state.draft.tempo)
   const pattern = useEditorState((state) => state.draft.pattern)
@@ -26,7 +26,16 @@ export function PieceSettings() {
   const [tempo, setTempo] = useState(saved)
   return (
     <Sheet onOpenChange={(open) => (open ? setTempo(saved) : undefined)}>
-      <SheetTrigger render={<Button variant="surface" size="icon" aria-label={t('settings')} />}>
+      <SheetTrigger
+        render={
+          <Button
+            variant="surface"
+            size="icon"
+            aria-label={t('settings')}
+            disabled={takes.stage !== 'idle'}
+          />
+        }
+      >
         <Settings aria-hidden />
       </SheetTrigger>
       <SheetContent title={t('settings')}>

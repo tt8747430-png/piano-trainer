@@ -1,10 +1,9 @@
 import { Square } from 'lucide-react'
 import { useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
 import { clockTime } from '../model/clock-time'
-import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useScoreEditorContext } from '../model/editor-context'
 
 /**
  * A take recording, in place of the tools: the count-in's beat, then the piece's bar and the time,
@@ -13,7 +12,6 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 export function RecordingStrip() {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
-  const firstBar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const state = useSyncExternalStore(takes.progress.subscribe, takes.progress.current)
   if (!state) return null
   return (
@@ -29,7 +27,7 @@ export function RecordingStrip() {
         <span>
           {state.stage === 'counting'
             ? state.beat
-            : `${t('recorder.bar', { n: firstBar + state.bar })} · ${clockTime(state.seconds * 1000)}`}
+            : `${t('recorder.bar', { n: takes.fromBar + state.bar })} · ${clockTime(state.seconds * 1000)}`}
         </span>
       </p>
       <Button onClick={takes.stop}>

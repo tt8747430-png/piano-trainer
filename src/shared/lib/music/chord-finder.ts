@@ -61,24 +61,33 @@ function leavable(parts: ChordParts, tones: readonly Tone[]): LeftOut[] {
 }
 
 /** Every way of leaving tones out: none, each alone, and together, but never the 3rd and the 5th both. */
-const waysToLeaveOut = (leavable: readonly LeftOut[]): LeftOut[][] =>
-  leavable
+const waysToLeaveOut = (roles: readonly LeftOut[]): LeftOut[][] =>
+  roles
     .reduce<LeftOut[][]>((ways, role) => [...ways, ...ways.map((way) => [...way, role])], [[]])
     .filter((way) => !(way.includes('3rd') && way.includes('5th')))
 
 /** Three tones at least name a chord. */
 const FEWEST_TONES = 3
 
-/** Every chord the builder makes, as its notes above its root, whole and with each way of leaving tones out. */
-const SHAPES = CHORD_PARTS.flatMap((parts) => {
+interface Shape {
+  readonly parts: ChordParts
+  readonly leftOut: readonly LeftOut[]
+}
+
+/**
+ * Every chord the builder makes, whole and with each way of leaving tones out, by its notes above its
+ * root (`shapeKey`): the chords a set of pitch classes over a root may be.
+ */
+const SHAPES = CHORD_PARTS.reduce((byKey, parts) => {
   const tones = buildChord(note('C'), parts).tones
-  return waysToLeaveOut(leavable(parts, tones)).flatMap((leftOut) => {
+  for (const leftOut of waysToLeaveOut(leavable(parts, tones))) {
     const kept = tones.filter((tone) => !leftOut.some((role) => isPlain(tone, role)))
-    return kept.length < FEWEST_TONES
-      ? []
-      : [{ parts, leftOut, key: shapeKey(kept.map((tone) => tone.semitones)) }]
-  })
-})
+    if (kept.length < FEWEST_TONES) continue
+    const key = shapeKey(kept.map((tone) => tone.semitones))
+    byKey.set(key, [...(byKey.get(key) ?? []), { parts, leftOut }])
+  }
+  return byKey
+}, new Map<string, Shape[]>())
 
 /**
  * A ♭5 and a #11 are one key: from a 9th up it reads as the #11, a tension, and in a 7th chord as an
@@ -102,9 +111,8 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
   if (pcs.length < 3) return []
   const bassPc = pitchClass(lowest)
   const found = pcs.flatMap((rootPc: PitchClass) => {
-    const played = shapeKey(pcs.map((pc) => pc - rootPc))
-    return SHAPES.flatMap((shape) => {
-      if (shape.key !== played) return []
+    const shapes = SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? []
+    return shapes.flatMap((shape) => {
       const chord = buildChord(builtRootSpelling(rootPc, shape.parts), shape.parts)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]

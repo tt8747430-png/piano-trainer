@@ -41,6 +41,7 @@ learner who only wants to hear themselves back gets a score they did not ask for
 
 ## Consequences
 
-- The score editor's tools give way to a recording strip while a take records; the keys played do not write.
+- The score editor's tools give way to a recording strip while a take records; the keys played do not write. A take
+  ends kept when the editor is left or the app hidden: a page may be closed without another word.
 - `deleteSong` deletes the song's takes; a version's takes stay with the piece.
 - A browser without Web MIDI (Safari) cannot record; the Recorder says so.

@@ -25,7 +25,7 @@ import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import { savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf } from './shortcuts'
-import { useTakes } from './use-takes'
+import { useEditorTakes } from './use-editor-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
 const OWN_KEYS =
@@ -74,7 +74,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
-  const takes = useTakes(target.id, store, title)
+  const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
   const dispatch = useCallback((action: EditorAction) => store.dispatch(action), [store])

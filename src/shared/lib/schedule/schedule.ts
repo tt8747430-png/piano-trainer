@@ -1,12 +1,6 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import {
-  beatsBefore,
-  beatsPerBar,
-  isCompound,
-  TICKS_PER_BEAT,
-  type Midi,
-  type Tick,
-} from '@/shared/lib/music'
+import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import { barClicks, checkedTempo, countInBeats, secondsFor } from './grid'
 import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -80,42 +74,7 @@ const SHORTEST_ALONE = 0.35
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
 
-function checkedTempo(tempo: number): number {
-  if (!(tempo > 0)) throw new RangeError(`A tempo is beats per minute above 0, not ${tempo}`)
-  return tempo
-}
-
-/** Ticks to seconds at a tempo, multiplying before dividing so whole beats come out exact. */
-const secondsFor = (ticks: Tick, tempo: number): number =>
-  (ticks * 60) / (checkedTempo(tempo) * TICKS_PER_BEAT)
-
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
-
-/** A bar's beats on the meter's grid: a pickup counts from where its bar would begin. */
-function barGrid(performance: Performance, index: number): { start: Tick; beats: number } {
-  const bar = performance.bars[index]
-  if (!bar) return { start: 0, beats: beatsPerBar(performance.meter) }
-  const before = beatsBefore(performance.bars, index, performance.meter)
-  return before > 0
-    ? { start: bar.startTick - before * TICKS_PER_BEAT, beats: beatsPerBar(performance.meter) }
-    : { start: bar.startTick, beats: Math.ceil(bar.beats) }
-}
-
-/**
- * A count-in: a bar's worth of beats before `fromTick`, on the beats of the bar it starts in, so the
- * music comes in on its beat wherever the pass begins (a pickup's too); each bar's first beat is
- * accented.
- */
-function countInBeats(performance: Performance, fromTick: Tick): { tick: Tick; accent: boolean }[] {
-  const index = performance.bars.findLastIndex((candidate) => candidate.startTick <= fromTick)
-  if (index < 0) return []
-  const { start, beats } = barGrid(performance, index)
-  const earliest = fromTick - beats * TICKS_PER_BEAT
-  return Array.from({ length: 2 * beats }, (_, k) => k - beats).flatMap((k) => {
-    const tick = start + k * TICKS_PER_BEAT
-    return tick >= earliest && tick < fromTick ? [{ tick, accent: (k + beats) % beats === 0 }] : []
-  })
-}
 
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
@@ -150,14 +109,11 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     })
 
   const metronome: Sound[] = options.metronome
-    ? performance.bars.flatMap((bar, index) => {
-        const { start, beats } = barGrid(performance, index)
-        return Array.from({ length: beats }, (_, k) => k).flatMap((k): Sound[] => {
-          const tick = start + k * TICKS_PER_BEAT
-          const inBar = tick >= bar.startTick
-          return inBar && inPass(tick) ? [{ kind: 'click', at: at(tick), accent: k === 0 }] : []
-        })
-      })
+    ? performance.bars.flatMap((_, index) =>
+        barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
+          inPass(tick) ? [{ kind: 'click', at: at(tick), accent }] : [],
+        ),
+      )
     : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>

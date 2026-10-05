@@ -1,13 +1,13 @@
 import { LONGEST_TAKE_MS, type Played } from '@/entities/take'
 import { PLAY_DELAY, type AudioOutput } from '@/shared/api/audio'
 import type { MidiInput } from '@/shared/api/midi'
-import { recorderClicks, type ClickPlan } from './recorder-clicks'
-import { takeOf, type Heard } from './take-of'
+import { recorderClicks, type ClickPlan } from '@/shared/lib/schedule'
+import { isKept, takeOf, type Heard } from './take-of'
 
 /** How often the recorder looks at the audio clock. */
 const FOLLOW_INTERVAL_MS = 25
 
-/** What a take is recorded to: the piece's bars from its first, the meter, tempo and click, and the notes the takes have room for. */
+/** What a take is recorded to: the piece's bars and the one it starts at, the meter, tempo and click, and the notes the takes have room for. */
 export interface RecorderPlan extends Omit<ClickPlan, 'longest'> {
   readonly room: number
 }
@@ -45,11 +45,12 @@ export function startRecorder(
 ): () => void {
   const longest = LONGEST_TAKE_MS / 1000
   const clicks = recorderClicks({ ...plan, longest })
+  // What sounds stops first: nothing plays under a take.
+  audio.stop()
   const start = audio.now() + PLAY_DELAY
   const downbeat = start + clicks.downbeat
+  const timing = { downbeat, tempo: plan.tempo }
   const beat = 60 / plan.tempo
-  // A key struck from half a beat before the downbeat is kept (`takeOf`): it takes room.
-  const earliest = downbeat - beat / 2
   const heardNow = () => audio.audioTimeAt(performance.now())
   audio.play(clicks.sounds, start)
 
@@ -66,13 +67,13 @@ export function startRecorder(
     stopPedal()
     audio.stop()
     const at = Math.min(heardNow(), downbeat + longest)
-    on.ended(at > downbeat ? takeOf(heard, { downbeat, stop: at, tempo: plan.tempo }) : null)
+    on.ended(at > downbeat ? takeOf(heard, { ...timing, stop: at }) : null)
   }
 
   const stopNotes = midi.onNote((event) => {
     const at = audio.audioTimeAt(event.time)
     heard.push({ kind: 'note', midi: event.midi, on: event.on, velocity: event.velocity, at })
-    if (event.on && at >= earliest && ++struck >= plan.room) stop()
+    if (event.on && isKept(event.midi, at, timing) && ++struck >= plan.room) stop()
   })
   const stopPedal = midi.onPedal((event) => {
     heard.push({ kind: 'pedal', down: event.down, at: audio.audioTimeAt(event.time) })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { takeOf, type Heard } from './take-of'
+import { isKept, takeOf, type Heard } from './take-of'
 
 const key = (n: number, on: boolean, at: number, velocity = on ? 80 : 0): Heard => ({
   kind: 'note',
@@ -33,6 +33,14 @@ describe('takeOf', () => {
       { ...AT_120, stop: 11 },
     )
     expect(played.notes).toEqual([{ midi: 60, at: 0, held: 500, velocity: 80 }])
+  })
+
+  it('keeps only the piano’s keys: one a controller sends past them is not the piano’s', () => {
+    const played = takeOf(
+      [key(110, true, 10.1), key(20, true, 10.2), key(108, true, 10.3), key(21, true, 10.4)],
+      { ...AT_120, stop: 11 },
+    )
+    expect(played.notes.map((n) => n.midi)).toEqual([108, 21])
   })
 
   it('ends a key struck again while it is held, and starts it anew', () => {
@@ -81,5 +89,13 @@ describe('takeOf', () => {
       pedal: [],
       length: 0,
     })
+  })
+})
+
+describe('isKept', () => {
+  it('keeps a key on the piano struck from half a beat before the downbeat', () => {
+    expect(isKept(midi(60), 9.75, AT_120)).toBe(true)
+    expect(isKept(midi(60), 9.74, AT_120)).toBe(false)
+    expect(isKept(midi(109), 10, AT_120)).toBe(false)
   })
 })

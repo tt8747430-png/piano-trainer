@@ -2,13 +2,13 @@ import { createContext, use } from 'react'
 import { useStore } from 'zustand'
 import type { EditorAction, EditorState, EditorStore } from '@/features/score-editor'
 import type { Midi } from '@/shared/lib/music'
-import type { TakesValue } from './use-takes'
+import type { EditorTakes } from './use-editor-takes'
 
 /** What the editor's parts share (composition: each reads what it needs, none knows how it is kept). */
 export interface ScoreEditorValue {
   readonly store: EditorStore
   /** The recorder and the piece's takes. */
-  readonly takes: TakesValue
+  readonly takes: EditorTakes
   readonly actions: {
     readonly dispatch: (action: EditorAction) => void
     /** A key played on the keys, the computer keyboard or MIDI: written at the caret, unless a take records. */

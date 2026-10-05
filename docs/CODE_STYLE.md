@@ -218,7 +218,9 @@ tempo)` sounds it and `notate(run)` writes it.
   (`ChartBar.hands`) play in place of the pattern's hand there (ADR 0027). Voice
   leading, an inversion's voicing, the chord context and fingering are internal and tested through `arrange`.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
-  Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`).
+  Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`); a take's click
+  is `recorderClicks`, on the Player's bar grid. A take is the one thing kept in time as played, milliseconds (ADR
+  0028): `takeSounds` hears it and `quantise` snaps it to ticks, both in `entities/take`.
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an
   `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the
   play's handle; `useSoundKeys` adds a hand's keys on top (a tap's key, or the chord a key stands for), at the audio

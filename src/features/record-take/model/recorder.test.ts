@@ -6,7 +6,17 @@ import { midi } from '@/shared/lib/music'
 import { startRecorder, type RecorderPlan, type RecorderProgress } from './recorder'
 
 /** 4/4 at 120: a beat is half a second, the count-in two seconds. */
-const PLAN: RecorderPlan = { barTicks: [48, 48], meter: '4/4', tempo: 120, click: true, room: 100 }
+const PLAN: RecorderPlan = {
+  bars: [
+    { startTick: 0, beats: 4 },
+    { startTick: 48, beats: 4 },
+  ],
+  meter: '4/4',
+  from: 0,
+  tempo: 120,
+  click: true,
+  room: 100,
+}
 
 function setUp(plan: RecorderPlan = PLAN) {
   const audio = createFakeAudio()
@@ -30,8 +40,9 @@ beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
 describe('startRecorder', () => {
-  it('plays a bar’s count-in and the click from just after now', () => {
+  it('silences what sounds, then plays a bar’s count-in and the click from just after now', () => {
     const { audio } = setUp()
+    expect(audio.stops).toBe(1)
     const [clicks] = audio.played
     expect(clicks?.at).toBeCloseTo(1.1)
     expect(clicks?.sounds.slice(0, 5).map((click) => click.at)).toEqual([0, 0.5, 1, 1.5, 2])
@@ -64,7 +75,7 @@ describe('startRecorder', () => {
     keyboard.release(midi(60))
     audio.setNow(4.1)
     stop()
-    expect(audio.stops).toBe(1)
+    expect(audio.stops).toBe(2)
     expect(ended).toEqual([
       {
         notes: [{ midi: 60, at: 0, held: 500, velocity: 90 }],
@@ -83,9 +94,12 @@ describe('startRecorder', () => {
     expect(ended).toEqual([null])
   })
 
-  it('stops itself when the takes have no more room', () => {
+  it('stops itself when the takes have no more room, counting only the keys it keeps', () => {
     const { audio, keyboard, ended } = setUp({ ...PLAN, room: 2 })
+    audio.setNow(2.5)
+    keyboard.press(midi(48))
     audio.setNow(3.5)
+    keyboard.press(midi(110))
     keyboard.press(midi(60))
     keyboard.press(midi(64))
     keyboard.press(midi(67))

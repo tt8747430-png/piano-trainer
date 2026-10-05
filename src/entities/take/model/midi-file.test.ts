@@ -42,6 +42,20 @@ describe('midiFile', () => {
     ])
   })
 
+  it('lets go of a key no earlier than the tick after it went down, so no note is left on', () => {
+    const file = midiFile({
+      ...TAKE,
+      length: 1000,
+      notes: [{ midi: midi(60), at: 0, held: 0, velocity: 90 }],
+      pedal: [],
+    })
+    expect([...file.slice(37)]).toEqual([
+      ...[0x00, 0x90, 60, 90],
+      ...[0x01, 0x80, 60, 64],
+      ...[0x87, 0x3f, 0xff, 0x2f, 0x00],
+    ])
+  })
+
   it('counts a compound meter’s beat as a dotted quarter', () => {
     const file = midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedal: [] })
     expect([...file.slice(22, 37)]).toEqual([

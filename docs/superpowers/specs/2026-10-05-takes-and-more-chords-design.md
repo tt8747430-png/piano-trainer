@@ -32,8 +32,9 @@
 - **What it needs:** a MIDI keyboard connected. Until one is, the Recorder shows the MIDI control (its status line and
   Connect; in a browser without Web MIDI, "This browser can't connect a MIDI keyboard.") and Record is disabled: the
   control already says what is missing, so no second line repeats it (CODE_STYLE §10).
-- **The click:** Record starts a **count-in** of one bar of the meter's beats (the first accented) at the song's
-  tempo, then the take. A **Click** switch in the Recorder (saved, on by default: `pt-settings` version 7,
+- **The click:** Record silences what sounds and starts the Player's **count-in** (a bar's beats before the take's
+  first bar, on the meter's beats, so a pickup comes in on its beat; each bar's first accented) at the song's tempo,
+  then the take. A **Click** switch in the Recorder (saved, on by default: `pt-settings` version 7,
   `recorder.click`) keeps the click going while recording; off, only the count-in sounds. The click follows the
   piece's bars from the caret's bar (an accent at each bar's start, a click each beat), and the meter's bars past
   the piece's end.
@@ -43,12 +44,13 @@
   long before now the moment was), the MIDI port stamps
   each event with the page's clock (`MIDIMessageEvent.timeStamp`), so every key is placed where it was heard
   against the click.
-- **Kept:** a key struck within half a beat before the downbeat counts as on it; earlier keys are the count-in's and
-  are not kept. A key struck again while held ends the earlier note. Keys still held at Stop, and a pedal still
+- **Kept:** the piano's keys (a transposed controller's keys past them are not); a key struck within half a beat
+  before the downbeat counts as on it; earlier keys are the count-in's and are not kept. A key struck again while held ends the earlier note. Keys still held at Stop, and a pedal still
   down, end at Stop. The **sustain pedal** (MIDI CC 64, down from 64) is kept as its presses.
-- **While recording:** the editor's tools give way to the **recording strip** (a pulsing dot, the piece's bar number,
-  the time, and **Stop**, the screen's one action, honey); the keys played do not write at the caret; Play and Record
-  are disabled; Space and Escape stop. Leaving the editor stops and keeps the take.
+- **While recording:** the editor's tools give way to the **recording strip** (a pulsing dot, the piece's bar number
+  counted from the bar the take started at, the time, and **Stop**, the screen's one action, honey); the keys played
+  do not write at the caret; Play, Record, Undo, Redo and the song's settings are disabled; Space and Escape stop.
+  Leaving the editor, or the app being hidden (a tab closed, the installed app swiped away), stops and keeps the take.
 - **Stop:** the take is saved and the Recorder opens on it. Stopped during the count-in, nothing is kept; a take with
   no notes is not saved ("Nothing was played.").
 - **Bounds:** a take stops itself at **10 minutes**, or when the takes hold **60,000 notes** in all (about 1.3 MB of
@@ -63,13 +65,13 @@
   sanitiser) reads it back, keeping only notes on the piano with times and velocities in range.
 - **The Recorder lists the piece's takes, newest first:** each a row with when it was made, its length and tempo, and
   Play (Stop while it sounds; the keys show on the editor's keyboard), Write into the score, Download (a `.mid`
-  file) and Delete (asked once more: "Delete this take?").
+  file) and Delete (asked once more in an alert: "Delete this take?").
 - **Heard as played:** each note at its onset and velocity (the gain rising with the square of the velocity), sounding
   while its key is held, or on to the pedal's release when the pedal was down as it was let go, and never past the
   same key struck again.
 - **`.mid`:** a Standard MIDI File (format 0, 480 ticks a quarter): the take's tempo (a compound meter's beat is a
   dotted quarter) and time signature, every note on and off with its velocity, the pedal as CC 64. Named
-  `<piece title> <date>.mid`.
+  `<piece title> <date> <hh.mm>.mid`.
 - **Deleting a song deletes its takes.** A version's takes stay with the piece: they are what was played, whatever
   the music says now.
 
@@ -78,8 +80,9 @@
 - The Recorder's **Write into the score** opens its form over the take:
   - **Into:** Both hands · Right hand · Left hand · Melody (Segmented).
   - **Split at** (Both hands only): a key from C2 to C6, middle C by default; keys from it up go to the right hand.
-  - **Shortest note:** in x/4 a quarter, an eighth, a sixteenth or an eighth triplet; in x/8 a beat (dotted quarter),
-    an eighth or a sixteenth. An eighth by default.
+  - **Shortest note:** a value of the meter the take was played in (the piece's may have changed since): in x/4 a
+    quarter, an eighth, a sixteenth or an eighth triplet; in x/8 a beat (dotted quarter), an eighth or a sixteenth.
+    An eighth by default.
   - **From bar** the caret's bar (a Fact), and **Write**.
 - **Quantised** (`quantise`, pure, in `entities/take`): each onset and each release snapped to the nearest step of the
   chosen value at the take's tempo; a note at least one step long; a note of a hand cut where the same key starts
@@ -116,16 +119,16 @@ The finder names keys only by the builder's chords (CODE_STYLE §8). Two changes
 | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `shared/api/midi`         | `NoteEvent.time`; `PedalEvent` and `onPedal`; `parseMidiMessage` reads CC 64; an unplugged keyboard lets the pedal go |
 | `shared/api/audio`        | `audioTimeAt(pageTime)`                                                                                        |
-| `shared/lib`              | `createSavedStore`'s `write`; `downloadFile` (bytes saved as a file)                                           |
+| `shared/lib`              | `createSavedStore`'s `write`; `downloadFile` (bytes saved as a file); `recorderClicks` in `schedule`           |
 | `shared/lib/music`        | `alterationsOf` (a 7sus4's ♭9), `ADDED_TONES` (`addS11`), `nameChords` with `leftOut`                          |
-| `entities/settings`       | version 7: `recorder.click`; `selectRecorderClick`                                                             |
+| `entities/settings`       | version 7: `recorder.click`; `selectRecorder`                                                                  |
 | `entities/take`           | `Take`, `pt-takes`, selectors (`selectTakesOf`, `selectRoomLeft`), `takeSounds`, `quantise`, `takeGrids`, `midiFile` |
-| `features/record-take`    | the pure `takeOf` (events → a take), `recorderClicks`, and `useRecorder` (stage, start, stop, progress)       |
+| `features/record-take`    | the pure `takeOf` (events → a take) and `isKept`, and `useRecorder` (stage, start, stop, progress)            |
 | `features/manage-takes`   | `saveTake`, `deleteTake`                                                                                       |
 | `features/set-preference` | `setRecorderClick`                                                                                             |
 | `features/edit-piece`     | `deleteSong` deletes the song's takes                                                                          |
 | `features/score-editor`   | `writeTake` and its action; `takeParts` (a take's notes split into layers)                                    |
-| `pages/score-editor`      | the Recorder sheet, its take rows and write form, the recording strip; `useScoreEditor` holds the recorder     |
+| `pages/score-editor`      | the Recorder sheet, its take rows and write form, the recording strip; `useEditorTakes` holds the recorder     |
 | `pages/songs`             | Make and record                                                                                                |
 | `app`                     | the takes store in `main.tsx`, `App`, `renderApp`; the editor route's `record` search                         |
 

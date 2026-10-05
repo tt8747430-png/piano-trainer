@@ -7,7 +7,10 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { PieceSettings } from './PieceSettings'
 import { RecorderSheet } from './RecorderSheet'
 
-/** The editor's toolbar: Close and the title, Undo and Redo, MIDI, the takes, the song's settings, and Play. */
+/**
+ * The editor's toolbar: Close and the title, Undo and Redo, MIDI, the takes, the song's settings, and
+ * Play; while a take records, only Close and MIDI.
+ */
 export function EditorToolbar() {
   const { t } = useTranslation(['editor', 'common'])
   const { actions, meta, takes } = useScoreEditorContext()
@@ -28,13 +31,13 @@ export function EditorToolbar() {
       <RoundButton
         label={t('editor:undo')}
         icon={Undo2}
-        disabled={!canUndo}
+        disabled={recording || !canUndo}
         onClick={() => actions.dispatch({ type: 'undo' })}
       />
       <RoundButton
         label={t('editor:redo')}
         icon={Redo2}
-        disabled={!canRedo}
+        disabled={recording || !canRedo}
         onClick={() => actions.dispatch({ type: 'redo' })}
       />
       <MidiButton />

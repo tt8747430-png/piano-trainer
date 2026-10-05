@@ -37,7 +37,9 @@ export function RecordPanel() {
         onCheckedChange={(on) => setRecorderClick(settings, on)}
       />
       {connected ? null : <MidiControl />}
-      {takes.ended === 'nothing' ? <p role="status">{t('recorder.nothing')}</p> : null}
+      {takes.page.kind === 'takes' && takes.page.nothingPlayed ? (
+        <p role="status">{t('recorder.nothing')}</p>
+      ) : null}
       {room === 0 ? <p>{t('recorder.full')}</p> : null}
       <Button size="lg" disabled={!connected || room === 0} onClick={takes.record}>
         <CircleDot data-icon="inline-start" />

@@ -42,14 +42,15 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
   const quartersPerMinute = take.tempo * (compound ? 1.5 : 1)
   const tickAt = (ms: number) => Math.round((ms / 60_000) * quartersPerMinute * DIVISION)
   const events: TrackEvent[] = [
-    ...take.notes.flatMap((note) => [
-      { tick: tickAt(note.at), order: 3, bytes: [NOTE_ON, note.midi, note.velocity] },
-      {
-        tick: tickAt(note.at + note.held),
-        order: 0,
-        bytes: [NOTE_OFF, note.midi, RELEASE_VELOCITY],
-      },
-    ]),
+    ...take.notes.flatMap((note) => {
+      const on = tickAt(note.at)
+      // Offs come first at a tick: a key let go within its own tick goes up on the next.
+      const off = Math.max(tickAt(note.at + note.held), on + 1)
+      return [
+        { tick: on, order: 3, bytes: [NOTE_ON, note.midi, note.velocity] },
+        { tick: off, order: 0, bytes: [NOTE_OFF, note.midi, RELEASE_VELOCITY] },
+      ]
+    }),
     ...take.pedal.flatMap((press) => [
       { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, SUSTAIN, 127] },
       { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, SUSTAIN, 0] },

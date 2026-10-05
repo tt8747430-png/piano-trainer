@@ -1,5 +1,5 @@
 import type { PedalPress, Played, TakeNote } from '@/entities/take'
-import type { Midi } from '@/shared/lib/music'
+import { PIANO, type Midi } from '@/shared/lib/music'
 
 /** A key or the pedal as the learner heard it against the click: `at`, in seconds on the audio clock. */
 export type Heard =
@@ -17,21 +17,31 @@ export interface TakeTiming {
   readonly downbeat: number
   /** When Stop came, on the audio clock. */
   readonly stop: number
-  /** The click's beats a minute: half a beat before the downbeat counts as on it. */
+  /** The click's beats a minute: a key struck half a beat before the downbeat counts as on it. */
   readonly tempo: number
 }
 
 /**
- * What was played from the downbeat to Stop (ADR 0028), in whole milliseconds from the downbeat. A key
- * struck within half a beat before the downbeat counts as on it, keeping its length; an earlier one is
- * the count-in's and is not kept. A key struck again while held ends the earlier note there. The keys
- * and the pedal still down at Stop end at Stop; anything after it is not kept.
+ * Whether a key struck at `at` is the take's: one of the piano's keys, struck no earlier than half a
+ * beat before the downbeat (one struck earlier is the count-in's). What takes the takes' room.
  */
-export function takeOf(heard: readonly Heard[], { downbeat, stop, tempo }: TakeTiming): Played {
+export const isKept = (
+  key: Midi,
+  at: number,
+  { downbeat, tempo }: Pick<TakeTiming, 'downbeat' | 'tempo'>,
+): boolean => key >= PIANO.from && key <= PIANO.to && at >= downbeat - 30 / tempo
+
+/**
+ * What was played from the downbeat to Stop (ADR 0028), in whole milliseconds from the downbeat: the
+ * keys `isKept` keeps, one struck before the downbeat counted as on it, keeping its length. A key
+ * struck again while held ends the earlier note there. The keys and the pedal still down at Stop end
+ * at Stop; anything after it is not kept.
+ */
+export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
+  const { downbeat, stop } = timing
   if (stop <= downbeat) return { notes: [], pedal: [], length: 0 }
   const ms = (at: number) => Math.round((at - downbeat) * 1000)
   const length = ms(stop)
-  const earliest = downbeat - 30 / tempo
   const notes: TakeNote[] = []
   const pedal: PedalPress[] = []
   const struck = new Map<Midi, { readonly at: number; readonly velocity: number }>()
@@ -63,7 +73,7 @@ export function takeOf(heard: readonly Heard[], { downbeat, stop, tempo }: TakeT
       letGo(event.midi, event.at)
       continue
     }
-    if (event.at < earliest) continue
+    if (!isKept(event.midi, event.at, timing)) continue
     letGo(event.midi, event.at)
     struck.set(event.midi, { at: event.at, velocity: event.velocity })
   }

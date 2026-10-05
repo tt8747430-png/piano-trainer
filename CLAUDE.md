@@ -84,7 +84,7 @@ it. `@` → `src`.
   the exercise's own fields) fill; `pages/keys` is the Keys reference, `pages/intervals` and `pages/tensions` the Intervals and Available tensions
   references, `pages/patterns`, `pages/pattern` and `pages/pattern-editor` the Patterns reference, a pattern's page
   and the editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
-  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useTakes`, the recorder
+  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028); its parts share one context and read the store narrowly).
 - **widgets/<x>/**: composite UI tied to screens (`app-nav`, `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-skills`, `player-setup` (the Setup: its button and sheet, its first page
@@ -109,9 +109,9 @@ it. `@` → `src`.
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
   song with its takes; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
-  chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`, `takeGrids`; the
+  chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`; the
   caret; `reduce` with undo and redo; `createEditorStore`), `record-take` (ADR 0028: `takeOf`, the keys and pedal heard
-  against the click; `recorderClicks`; `startRecorder`; `useRecorder`), `manage-takes` (`saveTake`, `deleteTake`), `connect-midi` (the connection, the status
+  against the click, `isKept`; `startRecorder`; `useRecorder`, a take's end `stopped` or `left`), `manage-takes` (`saveTake`, `deleteTake`), `connect-midi` (the connection, the status
   control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
@@ -151,7 +151,7 @@ it. `@` → `src`.
   in numerals), `exercise` (Practice's exercises: groups, levels, names, the fields each rule takes and its own choice;
   `exerciseChoice` reads a URL against an exercise; a row may name another Player that plays it). Saved state: `settings` (`pt-settings`, version 7, with the
   keyboard settings, the trainers' auto-next and the recorder's click), `take` (ADR 0028: `pt-takes`, version 1, saved
-  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds`, `quantise`, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
   version 1: each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
@@ -178,7 +178,7 @@ it. `@` → `src`.
   in one inversion (`voiceInversion`, `inversionPitchClasses`); a bar's written hands in place of the pattern's;
   `chartInKeys`, a chart once per key; `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
-  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a walk of chords, a scale's
+  swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a hand's keys, an interval up, down or
   together (`intervalSounds`), which keys sound when and which were struck last), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or

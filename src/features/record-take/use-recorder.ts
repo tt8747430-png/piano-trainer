@@ -7,6 +7,12 @@ import { startRecorder, type RecorderPlan, type RecorderProgress } from './model
 export type RecorderStage = 'idle' | RecorderProgress['stage']
 
 /**
+ * How a take ended: `stopped` by Stop, by itself or by the app being hidden, the screen still there;
+ * `left` as the screen went, so the take is only to be kept.
+ */
+export type TakeEnding = 'stopped' | 'left'
+
+/**
  * Where a take is, as it changes beat by beat and second by second: read by the one part that shows
  * it (`useSyncExternalStore`), so the screen around it does not render again each second.
  */
@@ -45,20 +51,35 @@ function createProgressSource(): RecorderProgressSource & {
 
 /**
  * The score editor's recorder (ADR 0028): a take from the MIDI keyboard to the click, handed on with
- * the plan it was recorded to when it stops past its count-in (by Stop, by itself, or by the screen
- * going), even with nothing played.
+ * the plan it was recorded to and how it ended when it stops past its count-in (by Stop, by itself,
+ * by the app being hidden, or by the screen going), even with nothing played.
  */
-export function useRecorder(onTake: (played: Played, plan: RecorderPlan) => void): Recorder {
+export function useRecorder(
+  onTake: (played: Played, plan: RecorderPlan, ending: TakeEnding) => void,
+): Recorder {
   const { audio, midi } = useServices()
   const [stage, setStage] = useState<RecorderStage>('idle')
   const [progress] = useState(createProgressSource)
   const session = useRef<(() => void) | null>(null)
+  const left = useRef(false)
   // The latest `onTake`: a take may end in a timer, a key's handler or the screen's cleanup.
   const latestOnTake = useRef(onTake)
   useEffect(() => {
     latestOnTake.current = onTake
   })
-  useEffect(() => () => session.current?.(), [])
+  useEffect(() => {
+    left.current = false
+    // A hidden page may be closed without another word: the take stops, and is kept, now.
+    const onHidden = () => {
+      if (document.visibilityState === 'hidden') session.current?.()
+    }
+    document.addEventListener('visibilitychange', onHidden)
+    return () => {
+      document.removeEventListener('visibilitychange', onHidden)
+      left.current = true
+      session.current?.()
+    }
+  }, [])
 
   const start = (plan: RecorderPlan) => {
     if (session.current || !midi) return
@@ -73,7 +94,7 @@ export function useRecorder(onTake: (played: Played, plan: RecorderPlan) => void
         session.current = null
         progress.set(null)
         setStage('idle')
-        if (played) latestOnTake.current(played, plan)
+        if (played) latestOnTake.current(played, plan, left.current ? 'left' : 'stopped')
       },
     })
   }

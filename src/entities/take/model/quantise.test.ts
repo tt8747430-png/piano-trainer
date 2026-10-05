@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { midi } from '@/shared/lib/music'
-import { quantise } from './quantise'
+import { midi, type Meter } from '@/shared/lib/music'
+import { ticksOf, type Duration } from '@/shared/lib/notation'
+import { quantise, takeGrids } from './quantise'
 import type { Take } from './types'
 
 /** At 60 a beat is a second: 12 ticks; an eighth (6 ticks) is half a second. */
@@ -20,7 +21,7 @@ const note = (key: number, at: number, held: number) => ({
   held,
   velocity: 80,
 })
-const EIGHTH = 6
+const EIGHTH: Duration = { value: 8, dots: 0, triplet: false }
 
 describe('quantise', () => {
   it('snaps each onset and release to the nearest step', () => {
@@ -49,8 +50,32 @@ describe('quantise', () => {
   it('snaps to a triplet’s step at the take’s tempo', () => {
     // At 120 a beat is half a second; an eighth triplet (4 ticks) is a sixth of a second.
     const notes = [note(60, 170, 150)]
-    expect(quantise({ ...TAKE, tempo: 120, notes }, 4)).toEqual([
+    expect(quantise({ ...TAKE, tempo: 120, notes }, { ...EIGHTH, triplet: true })).toEqual([
       { midi: 60, startTick: 4, durationTicks: 4 },
     ])
   })
+
+  it('snaps to a value in the take’s own meter, whatever the piece’s is now', () => {
+    // In 6/8 at 60 a dotted quarter is a second: an eighth (4 ticks) is a third of it.
+    const notes = [note(60, 0, 300), note(64, 333, 300), note(67, 667, 300)]
+    expect(quantise({ ...TAKE, meter: '6/8', notes }, EIGHTH)).toEqual([
+      { midi: 60, startTick: 0, durationTicks: 4 },
+      { midi: 64, startTick: 4, durationTicks: 4 },
+      { midi: 67, startTick: 8, durationTicks: 4 },
+    ])
+  })
+})
+
+describe('takeGrids', () => {
+  it.each([
+    ['4/4', [12, 6, 3, 4]],
+    ['3/4', [12, 6, 3, 4]],
+    ['6/8', [12, 4, 2]],
+    ['12/8', [12, 4, 2]],
+  ] as const)(
+    'offers %s the beat, an eighth, a sixteenth, and in simple time a triplet',
+    (meter: Meter, ticks) => {
+      expect(takeGrids(meter).map((grid) => ticksOf(grid, meter))).toEqual(ticks)
+    },
+  )
 })

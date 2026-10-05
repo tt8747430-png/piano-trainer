@@ -738,11 +738,12 @@ text saying where the caret is, and the keys (160px, 192px from 1024px).
 - **The takes** (the toolbar's Record, a round button with a dot, ADR 0028): a sheet titled Takes with the tempo,
   meter and the caret's bar as facts, the Click switch, the MIDI control while no keyboard is connected, and Record in
   honey; under it the piece's takes, the newest first, each its time made (semibold) over its length and tempo in soft
-  ink, with Play and Write into the score (soft) and Download and Delete (round). Write into the score and Delete are
-  pages of the sheet (‹ Back; Into as segments, Split at a pop-up, Shortest note as glyph segments named on screen,
-  Write in honey; Delete in its crimson line beside Keep it). While a take records, the tools and the caret's line
-  give way to the recording strip: a card with a softly pulsing ink dot, Count-in and its beat or Recording, the bar
-  and the time in tabular figures, and Stop in honey.
+  ink, with Play and Write into the score (soft) and Download and Delete (round). Write into the score is a page of
+  the sheet (‹ Back; Into as segments, Split at a pop-up grouped by octave, Shortest note as glyph segments named on
+  screen, Write in honey); Delete asks in an alert, as every deletion does (the take named, Delete in its crimson
+  beside Keep it). While a take records, the tools and the caret's line give way to the recording strip: a card with
+  a softly pulsing ink dot, Count-in and its beat or Recording, the bar and the time in tabular figures, and Stop in
+  honey; Undo, Redo, the song's settings, Record and Play wait.
 - **New song** (Songs' round +) is a sheet: Title, Key, the five meters as segments, and Make in honey at its foot,
   Make and record (soft) under it.
 - **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original

@@ -343,9 +343,14 @@ describe('the score editor’s takes', () => {
     expect(files[0]?.type).toBe('audio/midi')
 
     await user.click(within(sheet).getByRole('button', { name: 'Delete' }))
-    const asking = await screen.findByRole('dialog', { name: 'Delete this take?' })
+    const keeping = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
+    await user.click(within(keeping).getByRole('button', { name: 'Keep it' }))
+    expect(takesStore.getState().takes).toHaveLength(1)
+
+    await user.click(within(sheet).getByRole('button', { name: 'Delete' }))
+    const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
     await user.click(within(asking).getByRole('button', { name: 'Delete' }))
-    expect(await screen.findByText('No takes yet.')).toBeInTheDocument()
+    expect(await within(sheet).findByText('No takes yet.')).toBeInTheDocument()
     expect(takesStore.getState().takes).toEqual([])
   })
 
@@ -365,6 +370,44 @@ describe('the score editor’s takes', () => {
     await user.click(screen.getByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
     expect(takesStore.getState().takes.map((take) => take.pieceId)).toEqual(['my-1'])
+  })
+
+  it('holds the open sheet in the URL, gives way while a take records, and reopens on the takes', async () => {
+    const user = userEvent.setup()
+    const {
+      audio,
+      midi: keyboard,
+      router,
+    } = await renderApp('/edit/my-1', {
+      storage: withSong(),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Record' }))
+    expect(router.state.location.search).toEqual({ record: true })
+    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    await user.click(within(sheet).getByRole('button', { name: 'Connect a MIDI keyboard' }))
+    await user.click(await within(sheet).findByRole('button', { name: 'Record' }))
+    expect(router.state.location.search).toEqual({})
+
+    // The song stopped as the take began, and the tools that change it wait for Stop.
+    expect(screen.getByRole('button', { name: 'Play' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Undo' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Song settings' })).toBeDisabled()
+    playArpeggio(audio, keyboard)
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+
+    const takes = await screen.findByRole('dialog', { name: 'Takes' })
+    expect(router.state.location.search).toEqual({ record: true })
+    await user.click(within(takes).getByRole('button', { name: 'Write into the score' }))
+    const form = await screen.findByRole('dialog', { name: 'Write into the score' })
+    await user.click(within(form).getByRole('button', { name: 'Write' }))
+    await waitFor(() => expect(form).not.toBeInTheDocument())
+    expect(router.state.location.search).toEqual({})
+
+    await user.click(screen.getByRole('button', { name: 'Record' }))
+    const again = await screen.findByRole('dialog', { name: 'Takes' })
+    expect(within(again).getByRole('button', { name: 'Record' })).toBeEnabled()
   })
 
   it('cannot record in a browser without MIDI', async () => {

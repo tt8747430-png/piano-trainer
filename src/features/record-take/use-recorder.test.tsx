@@ -8,7 +8,14 @@ import { ServicesProvider } from '@/shared/lib/services'
 import type { RecorderPlan } from './model/recorder'
 import { useRecorder } from './use-recorder'
 
-const PLAN: RecorderPlan = { barTicks: [48], meter: '4/4', tempo: 120, click: true, room: 100 }
+const PLAN: RecorderPlan = {
+  bars: [{ startTick: 0, beats: 4 }],
+  meter: '4/4',
+  from: 0,
+  tempo: 120,
+  click: true,
+  room: 100,
+}
 
 function renderRecorder({ webMidi = true }: { webMidi?: boolean } = {}) {
   const audio = createFakeAudio()
@@ -52,6 +59,7 @@ describe('useRecorder', () => {
       { midi: 60, at: 100, held: 400, velocity: 100 },
     ])
     expect(onTake.mock.calls[0]?.[1]).toBe(PLAN)
+    expect(onTake.mock.calls[0]?.[2]).toBe('stopped')
   })
 
   it('hands on nothing for a take stopped in its count-in', () => {
@@ -71,6 +79,23 @@ describe('useRecorder', () => {
     })
     unmount()
     expect(onTake).toHaveBeenCalledOnce()
+    // The screen is gone: the take is only kept.
+    expect(onTake.mock.calls[0]?.[2]).toBe('left')
+  })
+
+  it('stops and keeps the take when the app is hidden (a tab closed, the app swiped away)', () => {
+    const { audio, keyboard, onTake, result } = renderRecorder()
+    act(() => result.current.start(PLAN))
+    act(() => {
+      audio.setNow(2.5)
+      keyboard.press(midi(62))
+    })
+    const visibility = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+    act(() => document.dispatchEvent(new Event('visibilitychange')))
+    visibility.mockRestore()
+    expect(result.current.stage).toBe('idle')
+    expect(onTake).toHaveBeenCalledOnce()
+    expect(onTake.mock.calls[0]?.[2]).toBe('stopped')
   })
 
   it('records nothing without a MIDI keyboard', () => {

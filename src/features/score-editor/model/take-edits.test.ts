@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { midi, type Meter } from '@/shared/lib/music'
-import { ticksOf } from '@/shared/lib/notation'
+import { midi } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
-import { takeGrids, takeParts, writeTake, type TakePart } from './take-edits'
+import { takeParts, writeTake, type TakePart } from './take-edits'
 import { barsOf, totalTicks } from './timeline'
 
 const note = (key: number, startTick: number, durationTicks: number) => ({
@@ -22,20 +21,6 @@ describe('takeParts', () => {
     ])
     expect(takeParts(notes, 'melody', midi(60))).toEqual([{ layer: 'melody', notes }])
   })
-})
-
-describe('takeGrids', () => {
-  it.each([
-    ['4/4', [12, 6, 3, 4]],
-    ['3/4', [12, 6, 3, 4]],
-    ['6/8', [12, 4, 2]],
-    ['12/8', [12, 4, 2]],
-  ] as const)(
-    'offers %s the beat, an eighth, a sixteenth, and in simple time a triplet',
-    (meter: Meter, ticks) => {
-      expect(takeGrids(meter).map((grid) => ticksOf(grid, meter))).toEqual(ticks)
-    },
-  )
 })
 
 describe('writeTake', () => {
