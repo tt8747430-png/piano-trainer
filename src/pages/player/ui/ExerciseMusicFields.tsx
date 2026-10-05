@@ -16,7 +16,7 @@ import {
   scaleKindsIn,
   spellScale,
 } from '@/shared/lib/music'
-import { Dropdown, NoteDropdown, Segmented } from '@/shared/ui'
+import { Dropdown, NotePicker, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /** The arpeggio types by feel's families: triads, then 7ths. */
@@ -39,13 +39,13 @@ export function ExerciseMusicFields({
   const { fields } = exercise
   return (
     <>
+      <NotePicker
+        label={fields.root === 'key' ? t('player:key') : t('player:root')}
+        value={noteParam(choice.root)}
+        spell={(pc) => exerciseRootSpelling(exercise, pc, choice)}
+        onChange={(root) => onChange({ root: noteFromParam(root) })}
+      />
       <div className="flex flex-wrap gap-2">
-        <NoteDropdown
-          label={fields.root === 'key' ? t('player:key') : t('player:root')}
-          value={noteParam(choice.root)}
-          spell={(pc) => exerciseRootSpelling(exercise, pc, choice)}
-          onChange={(root) => onChange({ root: noteFromParam(root) })}
-        />
         {fields.kind ? (
           <Dropdown
             label={t('player:exercise.scale')}

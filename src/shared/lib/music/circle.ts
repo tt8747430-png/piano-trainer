@@ -1,5 +1,5 @@
 import { tonicSpelling, type Key } from './key'
-import { pitchClassOf, sameNote } from './note'
+import { pitchClassOf, sameNote, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
 import { keyScale, relativeKey } from './scale'
 import { scaleChords } from './scale-chord'
@@ -28,11 +28,15 @@ export function circleKey(pc: PitchClass, minor: boolean): Key {
   return place[ring]
 }
 
-/** Where one of a key's chords sits on the circle, with its numeral. */
+/**
+ * Where one of a key's chords sits on the circle, with its numeral and its root as the key spells it:
+ * D♭ major's IV is G♭, on the place the circle itself calls F♯ major.
+ */
 export interface CircleFunction {
   readonly place: number
   readonly ring: CircleRing
   readonly numeral: string
+  readonly root: SpelledNote
 }
 
 /**
@@ -44,7 +48,7 @@ export function circleFunctions(key: Key): CircleFunction[] {
     const ring: CircleRing = chord.tones[1]?.semitones === 3 ? 'minor' : 'major'
     const pc = pitchClassOf(chord.root)
     const place = CIRCLE_OF_FIFTHS.findIndex((at) => pitchClassOf(at[ring].tonic) === pc)
-    return place < 0 ? [] : [{ place, ring, numeral: chord.roman }]
+    return place < 0 ? [] : [{ place, ring, numeral: chord.roman, root: chord.root }]
   })
 }
 

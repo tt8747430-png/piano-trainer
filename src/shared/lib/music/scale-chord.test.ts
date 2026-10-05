@@ -172,6 +172,29 @@ describe('borrowedChords', () => {
     ).toEqual(['E♭Maj7', 'Fm7', 'A♭Maj7', 'B♭7'])
   })
 
+  it('names a borrowed root plainly: E, A and B in D♭ major, never F♭, B𝄫 and C♭', () => {
+    const key = { tonic: note('D', -1), minor: false }
+    expect(borrowedChords(key, 3).map((chord) => writtenSymbol(chord))).toEqual([
+      'E',
+      'G♭m',
+      'A',
+      'B',
+    ])
+    expect(written(borrowedChords(key, 3))).toEqual(['♭III', 'iv', '♭VI', '♭VII'])
+    // Its tones follow its name: E major is E G♯ B.
+    expect(borrowedChords(key, 3)[0]?.tones.map((tone) => noteName(tone.note))).toEqual([
+      'E',
+      'G#',
+      'B',
+    ])
+    expect(borrowedChords(key, 4).map((chord) => writtenSymbol(chord))).toEqual([
+      'EMaj7',
+      'G♭m7',
+      'AMaj7',
+      'B7',
+    ])
+  })
+
   it('borrows the Picardy I, the Neapolitan ♭II, Dorian’s IV and harmonic minor’s V into a minor key', () => {
     const chords = borrowedChords({ tonic: note('A'), minor: true }, 3)
     expect(written(chords)).toEqual(['I', '♭II', 'IV', 'V'])

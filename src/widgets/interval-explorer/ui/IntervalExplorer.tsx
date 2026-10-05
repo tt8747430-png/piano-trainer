@@ -8,7 +8,7 @@ import {
   noteFromParam,
   rootSpelling,
 } from '@/shared/lib/music'
-import { NoteDropdown } from '@/shared/ui'
+import { NotePicker } from '@/shared/ui'
 import type { IntervalView } from '../model/interval-view'
 
 /**
@@ -28,19 +28,20 @@ export function IntervalExplorer({
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
-      <NoteDropdown
-        label={t('root')}
-        value={view.root}
-        spell={(pc) => rootSpelling(pc, false)}
-        onChange={(root) => onChange({ root })}
-        className="self-start"
-      />
+      <div className="grid-fields">
+        <NotePicker
+          label={t('root')}
+          value={view.root}
+          spell={(pc) => rootSpelling(pc, false)}
+          onChange={(root) => onChange({ root })}
+        />
+      </div>
       {INTERVAL_GROUP_IDS.map((group) => (
         <section key={group} aria-labelledby={`${id}-${group}`} className="flex flex-col gap-3">
           <h2 id={`${id}-${group}`} className="text-2xl">
             {t(`intervals.${group}`)}
           </h2>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid-fields gap-4">
             {INTERVAL_GROUPS[group].map((name) => (
               <li key={name}>
                 <IntervalCard root={view.root} name={name} onShow={show} />

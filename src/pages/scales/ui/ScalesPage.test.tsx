@@ -339,6 +339,19 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
   })
 
+  it('writes the key’s chords on the circle as the key spells them, and its borrowed chords plainly', async () => {
+    await renderApp('/practice/scales?root=Db&show=key')
+    const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
+    // IV and ii of D♭ major stand on the places the circle calls F# major and D# minor.
+    expect(within(circle).getByRole('link', { name: 'F# major' })).toHaveTextContent('G♭IV')
+    expect(within(circle).getByRole('link', { name: 'D# minor' })).toHaveTextContent('E♭mii')
+    const borrowed = screen.getByRole('heading', { level: 3, name: 'Borrowed chords' })
+    const names = within(borrowed.parentElement ?? circle)
+      .getAllByRole('button')
+      .map((chord) => chord.textContent)
+    expect(names).toEqual(['E♭III', 'G♭miv', 'A♭VI', 'B♭VII'])
+  })
+
   it('chooses a key on the circle, and shows its signature, notes, relative and modes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')

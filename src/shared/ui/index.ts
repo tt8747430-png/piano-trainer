@@ -18,7 +18,6 @@ export { Listbox, type ListboxGroup, type ListboxOption } from './Listbox'
 export { MultiDropdown } from './MultiDropdown'
 export { NamedSegmented } from './NamedSegmented'
 export { NavTabs, type NavTab } from './NavTabs'
-export { NoteDropdown } from './NoteDropdown'
 export { NotePicker } from './NotePicker'
 
 export { PAINT, type Paint } from './paint'

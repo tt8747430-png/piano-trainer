@@ -2,14 +2,15 @@ import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
-import { note, noteName, noteParam, rootSpelling } from '@/shared/lib/music'
+import { keyParam, note, noteName, noteParam, rootSpelling } from '@/shared/lib/music'
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { InversionChoice } from './InversionChoice'
 import { LevelMark } from './LevelMark'
 import { NamedSegmented } from './NamedSegmented'
-import { NoteDropdown } from './NoteDropdown'
+import { KeyPicker } from './KeyPicker'
+import { NotePicker } from './NotePicker'
 import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
@@ -323,28 +324,27 @@ describe('Dropdown', () => {
   })
 })
 
-describe('NoteDropdown', () => {
-  it('offers the twelve notes as its rule spells them, and reports the one chosen', async () => {
+describe('NotePicker', () => {
+  it('shows the twelve notes as its rule spells them, and reports the one tapped', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(
-      <NoteDropdown
+      <NotePicker
         label="Root"
         value={noteParam(note('C'))}
         spell={(pc) => rootSpelling(pc, false)}
         onChange={onChange}
       />,
     )
-    await user.click(screen.getByRole('combobox', { name: 'Root' }))
-    expect(await screen.findAllByRole('option')).toHaveLength(12)
-    await user.click(screen.getByRole('option', { name: 'D♭' }))
+    const notes = within(screen.getByRole('radiogroup', { name: 'Root' })).getAllByRole('radio')
+    expect(notes).toHaveLength(12)
+    await user.click(screen.getByRole('radio', { name: 'D♭' }))
     expect(onChange).toHaveBeenCalledWith(noteParam(note('D', -1)))
   })
 
-  it('names each note by its own rule where it gives one', async () => {
-    const user = userEvent.setup()
+  it('names each note by its own rule where it gives one', () => {
     render(
-      <NoteDropdown
+      <NotePicker
         label="Key"
         value={noteParam(note('C'))}
         spell={(pc) => rootSpelling(pc, false)}
@@ -352,9 +352,36 @@ describe('NoteDropdown', () => {
         onChange={() => {}}
       />,
     )
-    expect(screen.getByRole('combobox', { name: 'Key' })).toHaveTextContent('C major')
-    await user.click(screen.getByRole('combobox', { name: 'Key' }))
-    expect(await screen.findByRole('option', { name: 'E♭ major' })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'C major' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'E♭ major' })).toBeInTheDocument()
+  })
+})
+
+describe('KeyPicker', () => {
+  const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
+  const C_SHARP_MINOR = keyParam({ tonic: note('C', 1), minor: true })
+
+  it('shows all 24 keys at once, each under its one name, the major keys over the minor', () => {
+    render(<KeyPicker value={C_MAJOR} onChange={() => {}} />)
+    const keys = within(screen.getByRole('radiogroup', { name: 'Key' })).getAllByRole('radio')
+    expect(keys.map((key) => key.textContent)).toEqual([
+      ...['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'],
+      ...['Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'B♭m', 'Bm'],
+    ])
+    expect(screen.getByRole('radio', { name: 'C major' })).toBeChecked()
+  })
+
+  it('reports the key tapped, and keeps every name when the key shown is minor', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(<KeyPicker value={C_MAJOR} onChange={onChange} />)
+    const names = () => screen.getAllByRole('radio').map((key) => key.textContent)
+    const before = names()
+    await user.click(screen.getByRole('radio', { name: 'C# minor' }))
+    expect(onChange).toHaveBeenCalledWith(C_SHARP_MINOR)
+    rerender(<KeyPicker value={C_SHARP_MINOR} onChange={onChange} />)
+    expect(names()).toEqual(before)
+    expect(screen.getByRole('radio', { name: 'C# minor' })).toBeChecked()
   })
 })
 

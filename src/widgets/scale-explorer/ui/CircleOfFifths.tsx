@@ -26,14 +26,14 @@ const WEDGE = {
 /**
  * The circle of fifths as the Key view's chooser: every key a link to its scale (a minor key its
  * natural minor, or the minor already shown), its signature's count under its name; the key shown
- * and the places of its seven chords wear the keys' marks and carry their numerals (I IV V outside
- * and ii iii vi vii° inside for C).
+ * and the places of its seven chords wear the keys' marks, each written as the key spells it over its
+ * numeral (I IV V outside and ii iii vi vii° inside for C).
  */
 export function CircleOfFifths({ current }: { current: Key }) {
   const { t } = useTranslation('learn')
   const functions = circleFunctions(current)
-  const numeral = (place: number, ring: CircleRing) =>
-    functions.find((at) => at.place === place && at.ring === ring)?.numeral
+  const chordAt = (place: number, ring: CircleRing) =>
+    functions.find((at) => at.place === place && at.ring === ring)
   const name = useKeyName()
   return (
     <nav aria-label={t('keys.circle')} className="relative mx-auto aspect-square w-full max-w-sm">
@@ -47,7 +47,7 @@ export function CircleOfFifths({ current }: { current: Key }) {
               className={cn(
                 'stroke-border',
                 WEDGE[
-                  sameKey(place[ring], current) ? 'tonic' : numeral(i, ring) ? 'chord' : 'plain'
+                  sameKey(place[ring], current) ? 'tonic' : chordAt(i, ring) ? 'chord' : 'plain'
                 ],
               )}
             />
@@ -65,7 +65,7 @@ export function CircleOfFifths({ current }: { current: Key }) {
           RINGS.map((ring) => {
             const key = place[ring]
             const { x, y } = cellCentre(i, ring)
-            const mark = numeral(i, ring)
+            const chord = chordAt(i, ring)
             return (
               <li
                 key={`${ring} ${i}`}
@@ -90,11 +90,16 @@ export function CircleOfFifths({ current }: { current: Key }) {
                   aria-current={sameKey(key, current) ? 'page' : undefined}
                   className={cn(
                     'grid size-11 place-content-center gap-0.5 rounded-full text-center leading-none transition-colors duration-200 ease-out hover:bg-muted aria-[current=page]:bg-card aria-[current=page]:ring-1 aria-[current=page]:ring-input',
-                    mark ? 'text-foreground' : 'text-muted-foreground',
+                    chord ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
-                  <span className="text-sm font-semibold">{keySymbol(key)}</span>
-                  <span className="text-xs tabular-nums">{mark ?? signatureCount(key)}</span>
+                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though the place is F♯'s. */}
+                  <span className="text-sm font-semibold">
+                    {chord ? keySymbol({ tonic: chord.root, minor: key.minor }) : keySymbol(key)}
+                  </span>
+                  <span className="text-xs tabular-nums">
+                    {chord?.numeral ?? signatureCount(key)}
+                  </span>
                 </Link>
               </li>
             )

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { CIRCLE_OF_FIFTHS, circleFunctions, circleKey, randomKey } from './circle'
 import { keySymbol } from './key'
-import { note } from './note'
+import { note, noteName } from './note'
 import { pitchClass } from './pitch'
 
 describe('CIRCLE_OF_FIFTHS', () => {
@@ -48,14 +48,22 @@ describe('circleKey', () => {
 describe('circleFunctions', () => {
   it('puts a major key’s seven chords on its place and its neighbours’', () => {
     expect(circleFunctions({ tonic: note('C'), minor: false })).toEqual([
-      { place: 0, ring: 'major', numeral: 'I' },
-      { place: 11, ring: 'minor', numeral: 'ii' },
-      { place: 1, ring: 'minor', numeral: 'iii' },
-      { place: 11, ring: 'major', numeral: 'IV' },
-      { place: 1, ring: 'major', numeral: 'V' },
-      { place: 0, ring: 'minor', numeral: 'vi' },
-      { place: 2, ring: 'minor', numeral: 'vii°' },
+      { place: 0, ring: 'major', numeral: 'I', root: note('C') },
+      { place: 11, ring: 'minor', numeral: 'ii', root: note('D') },
+      { place: 1, ring: 'minor', numeral: 'iii', root: note('E') },
+      { place: 11, ring: 'major', numeral: 'IV', root: note('F') },
+      { place: 1, ring: 'major', numeral: 'V', root: note('G') },
+      { place: 0, ring: 'minor', numeral: 'vi', root: note('A') },
+      { place: 2, ring: 'minor', numeral: 'vii°', root: note('B') },
     ])
+  })
+
+  it('names each chord’s root as the key spells it, where the circle names its place otherwise', () => {
+    const roots = circleFunctions({ tonic: note('D', -1), minor: false }).map(
+      (at) => `${at.numeral} ${noteName(at.root)}`,
+    )
+    // D♭ major's ii and IV stand on the places the circle calls D♯ minor and F♯ major.
+    expect(roots).toEqual(['I D♭', 'ii E♭', 'iii F', 'IV G♭', 'V A♭', 'vi B♭', 'vii° C'])
   })
 
   it('does the same for a minor key, its ii° on the place inside its relative’s V', () => {
@@ -72,6 +80,7 @@ describe('circleFunctions', () => {
       place: 2,
       ring: 'minor',
       numeral: 'ii°',
+      root: note('B'),
     })
   })
 })

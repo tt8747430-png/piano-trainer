@@ -2,7 +2,7 @@ import { qualityWithIntervals, type Chord, type ChordQuality } from './chord'
 import { seventhName, triadName } from './chord-name'
 import { labelled } from './interval'
 import type { Key } from './key'
-import { pitchClassOf, type SpelledNote } from './note'
+import { pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
 import { keyScale, spellScale, type ScaleKind } from './scale'
 import { availableTensions } from './tensions'
@@ -187,7 +187,11 @@ const SHIFT_SIGNS = new Map([
   [11, '♭'],
 ])
 
-/** A key's borrowed chords of `notes` notes, in degree order. */
+/**
+ * A key's borrowed chords of `notes` notes, in degree order. A root the parallel scale's letters would
+ * write as F♭, C♭ or with a double flat is named plainly, and its tones follow it: D♭ major borrows E,
+ * A and B, never F♭, B𝄫 and C♭.
+ */
 export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
   const own = spellScale(key.tonic, keyScale(key))
   return BORROWED[key.minor ? 'minor' : 'major'].flatMap(({ degree, from }) => {
@@ -195,6 +199,17 @@ export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
     const ownRoot = own[degree]
     if (!chord || !ownRoot) return []
     const shift = pitchClass(pitchClassOf(chord.root) - pitchClassOf(ownRoot.note))
-    return [{ ...chord, roman: (SHIFT_SIGNS.get(shift) ?? '') + chord.roman, from }]
+    const root = plainRoot(chord.root)
+    return [
+      {
+        ...chord,
+        root,
+        tones: chord.tones.map((tone, third) =>
+          toneAbove(root, labelled(2 * third, tone.semitones)),
+        ),
+        roman: (SHIFT_SIGNS.get(shift) ?? '') + chord.roman,
+        from,
+      },
+    ]
   })
 }

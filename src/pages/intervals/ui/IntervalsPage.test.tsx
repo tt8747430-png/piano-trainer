@@ -68,8 +68,11 @@ describe('Practice → Intervals', () => {
   it('chooses the root, kept in the URL', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/intervals')
-    await user.click(await screen.findByRole('combobox', { name: 'Root' }))
-    await user.click(await screen.findByRole('option', { name: 'D' }))
+    await user.click(
+      within(await screen.findByRole('radiogroup', { name: 'Root' })).getByRole('radio', {
+        name: 'D',
+      }),
+    )
     expect(router.state.location.search).toEqual({ root: 'D' })
     const fifth = screen.getByRole('article', { name: 'Perfect fifth' })
     await user.click(within(fifth).getByRole('button', { name: 'Together' }))
