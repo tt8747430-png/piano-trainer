@@ -36,6 +36,7 @@ export {
 export { createMemoryStorage, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
+export { downloadFile } from './download-file'
 export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {
