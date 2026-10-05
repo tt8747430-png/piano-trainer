@@ -267,7 +267,7 @@ and its `sections`, each a heading over blocks. A lesson teaches music in prose;
 | `chords`      | `{ kind: 'chords', symbols: ['C2', 'Cadd9'] }`, written as the lesson writes them        | a button each that plays the chord                        |
 | `grid`        | `{ kind: 'grid', quality: 'm7' }`                                                        | the quality on all twelve roots                           |
 | `scale`       | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                                    | its name, notes, run on a staff, Play                     |
-| `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals reference's card                            |
+| `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                  | the Intervals explorer's card                             |
 | `notes`       | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', meter?, key? }`                | the line on one staff, Play                               |
 | `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                     | the pattern over the piece's first line, Play, the Player |
 | `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions tool's row, its link                     |

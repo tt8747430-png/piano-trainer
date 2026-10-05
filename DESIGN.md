@@ -445,15 +445,17 @@ that changes in place never shifts its neighbours.
 
 ## Layout
 
-Phone first. On a phone a shell screen is one column (up to 48rem) with 16px gutters, clears the notch, and scrolls
-over a bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a 240px sidebar (the app's
-name in Literata, then the four places) and the screen takes the width it is given, up to 72rem, with 40px side
-padding. The Player and the Check are full screen (up to 72rem) with no navigation: the viewport's height, scrolling
-inside when their content is taller.
+Phone first, and every screen takes the width it is given (ADR 0029). A shell screen has a gutter that grows with
+the width (16px on a phone, 24px from 640px, 40px beside the sidebar), clears the notch, and on a phone scrolls over a
+bar docked along the bottom (112px of bottom padding). From 1024px the bar becomes a sidebar: 256px with the app's
+name in Literata, the four places and Settings at its foot, or collapsed to 72px of icons by the button at its top
+(saved; each place then named in a tooltip). No screen is capped: a list is a grid of row cards, as many columns of
+at least 18rem as fit. The Player, the score editor and the Check are full screen with no navigation: the viewport's
+height and width, scrolling inside when their content is taller.
 
 **The Player** (Flowkey's shape) is a toolbar, the keyboard, the sheet, Wait mode's line and the transport, placed by
-the `player-screen` grid. The keyboard takes the height the rest leave (upright 192–320px, from 640px 224–384px), and
-Wait mode's line the height after it, so the transport keeps the bottom:
+the `player-screen` grid. The keyboard is as tall as its keys' proportion makes it (below), and Wait mode's line
+takes the height left, so the transport keeps the bottom:
 
 - **Upright phone:** the toolbar holds ✕, the title (truncated), the loop, MIDI and ⚙ (Setup); the tempo and hands
   buttons flank ‹ ▶ › at the bottom, in the thumb's reach, the transport's buttons 8px apart.
@@ -462,24 +464,31 @@ Wait mode's line the height after it, so the transport keeps the bottom:
   its right, where the right thumb is. Play is 56px there.
 - **From 640px** (tablet, laptop): as on its side, the transport centred under the sheet, the sheet at 1.
 
-A piece with a recording has a **Recording** switch in its Setup, under Melody, on by default; in another key it is
-disabled with "Only in D minor" (the key as `keyOf` writes it) in soft ink under its label. The recording plays in
-Listen only; nothing on the screen marks it beyond the switch.
+**The Setup** (the toolbar's ⚙, a sheet) reads top to bottom as pictures: the key as a note picker (the piece's
+mode named over it), the **pattern card** (its name and idea on a row that opens the pattern list; under it its two
+hands side by side, left then right, each naming the figure it plays and opening that hand's list, a changed hand
+with a way back to the pattern's own beside it), the inversion as five drawn segments (Nearest, then Root to 3rd as
+stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Finger numbers, Named
+notes, Metronome, Count-in, Swing, and a piece's Melody and Recording).
 
-From 1024px each screen arranges itself in two columns with a 40px gap, tops aligned:
+A piece with a recording has a **Recording** toggle tile in its Setup, on by default; in another key it is
+disabled with "Only in D minor" (the key as `keyOf` writes it) under its name. The recording plays in Listen only;
+nothing on the screen marks it beyond the tile.
 
-- **Songs:** the filters in an 18rem column, the list beside it.
-- **Piece:** facts and actions (5 parts) beside the chart (7 parts).
-- **Learn and Practice:** two equal columns of grouped rows (Lessons beside References; the trainers and exercises beside
-  the studies and progressions).
-- **The Chords and Scales references, Settings:** two equal columns; the Path's steps in two columns inside their
-  card.
-- **The Keys reference:** the circle beside the key's name, signature and facts; the keys across both columns; the
-  key's chords and borrowed chords beside Practise in the Player and In Scales.
+How each screen uses its width:
+
+- **Songs:** the search, the collections as tabs (All, Your songs once there are any, then the books), and the songs
+  as row cards in a grid.
+- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit, the chords it plays, the
+  chart under its pinned keyboard, then what is printed about it.
+- **Learn:** the lessons, module by module, as row cards in a grid, each numbered in the order taught.
+- **Practice:** its topics as tabs; a topic's Explore, Quiz and what it plays, each a titled grid of row cards.
+- **The explorers, Settings:** two equal columns from 1024px (the choices beside what they show), the keyboard pinned
+  across both, first on every screen size.
 - **Intervals and Available tensions:** the keys pinned across the width; the interval cards three across, the
   tensions' four groups two across.
 
-Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The references, a lesson
+Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The explorers, a lesson
 and a Piece's chart pin their keyboard to the top while the page scrolls.
 
 **The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
@@ -526,7 +535,8 @@ Plain, clear, one of them coloured.
 - **Round** (44px, card paper, the control line, 20px icon): close, back and next, settings, MIDI, the loop (pressed:
   a sand fill), the hands (one hand, the other mirrored, or both); always labelled.
 - **Play** (72px circle, honey; 56px on a phone on its side): the Player's one Play/Stop.
-- **Focus:** a 3px deep-sky ring, 2px outside.
+- **Focus:** a 3px deep-sky ring, 2px outside: one ring for every control, the base layer's own; inset only where a
+  scroller would cut it (a bar of a chart, a key rail's button, a tab).
 
 ### Pop-up buttons and segments
 
@@ -534,7 +544,13 @@ Plain, clear, one of them coloured.
 segmented control (one tap, every choice in sight); more, or longer names, a pop-up button that shows its label and
 its value; on or off a switch; settings changed less often a sheet; a popover anchored to its button for a few quick
 choices whose effect shows at once (the keyboard settings, which must not cover the keys; the Player's tempo and
-hands). Never a row of chips or a wall of tiles.
+hands). **And a choice is drawn where a picture says it faster** (ADR 0029): the twelve notes are a **note picker**
+(a sand track of twelve segments, six across on a phone, the chosen name over it at the right: a root, a key's tonic),
+a key the note picker over Major · Minor; an inversion is its stack of noteheads over its name, the root's in the
+root's paint; several on-or-offs together on a sheet are **toggle tiles** (an icon over its name, 72px, soft ink in
+the control line; on: the learned paint's wash with its deep shade); the sections of one screen are **tabs** (a strip
+on a hairline, 48px, an ink underline under the chosen one, scrolling sideways on a phone). A pop-up button stays for
+long lists and beside other controls in a row.
 
 - **Pop-up button** (44px, 12px corners, card paper in the 1px control line): its label in soft ink, its value in ink
   (Onest 600 16px, truncated before it runs past the button), an up-down chevron. Its list is a popover surface
@@ -544,14 +560,14 @@ hands). Never a row of chips or a wall of tiles.
   Player's key are pop-ups.
 - **Pop-up button that checks several** (`MultiDropdown`): the Choosing Rule's pop-up for several of many, never a
   grid of chips. The button shows its label and every chosen value in order ("♭9 #11"), or None; its list checks each
-  chosen item, and a tap turns one on or off without closing it. The Chords reference's Alterations.
+  chosen item, and a tap turns one on or off without closing it. The Chords explorer's Alterations.
 - **Segmented** (a sand track, 4px inset, 12px corners): one value from a few. Unchosen segments are soft ink with no
   fill; the chosen one is a card-paper thumb (11px) in the 1px control line with ink text, Onest 600 16px. Two
   segmented controls whose words could be mistaken for each other name themselves on screen ("Keys play", the
-  Chords reference's "7th"). Fingering, Inversion, Block · Arpeggio and the 7th (labelled by degree, ♭7 · 7 · 𝄫7,
+  Chords explorer's "7th"). Fingering, Inversion, Block · Arpeggio and the 7th (labelled by degree, ♭7 · 7 · 𝄫7,
   each named "Minor 7th" and so on for a screen reader) are segments.
 - **Only what applies is offered:** a choice the thing shown cannot take is left out, never disabled and never
-  explained (the Chords reference's 7th under a triad, Added tone over a 7th chord, Alterations on a minor chord;
+  explained (the Chords explorer's 7th under a triad, Added tone over a 7th chord, Alterations on a minor chord;
   Fingering for a scale with one). One exception, the Player's Setup lists: a pattern or figure the music cannot play
   stays in its list, closed, with what it needs ("Needs a melody"), so the catalog reads the same over every piece.
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
@@ -565,16 +581,18 @@ hands). Never a row of chips or a wall of tiles.
   and the honey pill Continue (beside it from 1024px).
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
-- **Row link** (a list row in a grouped card, 64px): a 48px tile in its paint's wash with a 20px icon in its deep
-  shade, the title in Onest 600 17px, an optional detail of up to two lines, and a chevron (the disclosure
-  indicator): Learn's and Practice's rows. A titled group of them is a card parted by hairlines. A list of one kind
-  (the Patterns reference) goes without tiles: every row would wear the same one.
-- **Sheet** (card paper, 20px top, swipe handle, Literata title, scrolling body, optional footer): Setup, quiz choice.
+- **Row link** (64px): a 48px tile in its paint's wash with a 20px icon in its deep shade, or its number in a
+  sequence in Literata (a lesson in its module, a song in its book), the title in Onest 600 17px, an optional detail
+  of one line, what it carries at its end (a key, a level's mark, the learned badge) and a chevron (the disclosure
+  indicator). A titled group of them is a grid of row cards, each its own card. A list of one kind (the Patterns
+  page) goes without tiles: every row would wear the same one.
+- **Sheet** (card paper, 20px top, swipe handle, its Literata title at the left with a Close at the right, a scrolling
+  body with 20px insets, an optional footer over a hairline): Setup, New song, the takes.
 - **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.
 - **Interval card** (card paper, 14px, the 1px soft line, 16px inset): the interval's name (Literata 600 20px) with
   its short name at the right in soft ink, its size, consonance and (past the octave) the degree a chord writes, a
   line each in soft ink (14px), so a row's staves stay level; its two notes on the treble staff alone (0.8); and Up ·
-  Down · Together as three soft buttons along its foot, each turning into Stop. The Intervals reference grids them
+  Down · Together as three soft buttons along its foot, each turning into Stop. The Intervals explorer grids them
   one, two or three across.
 - **Quiz block** (a lesson's; card paper, 14px, the 1px soft line, 16px inset): its question in Onest 600, then
   Answer on the keys as a soft button; while open, Check in honey (the lesson's one action) and, after a wrong
@@ -587,7 +605,7 @@ hands). Never a row of chips or a wall of tiles.
   text, "Played over" its piece in muted small text, then Play (soft, turning into Stop) and Open in the Player
   (outline). **Progression example:** the Progressions tool's row of chord buttons and its Play, soft here (the
   tool's one honey action there), then its row into the tool on a card.
-- **The tools** sit in their own titled group on Learn under References, rows like the references'. The Chord finder
+- **The explorers that work a thing out** sit with the others under their topic's Explore on Practice. The Chord finder
   shows its chord in the chord display (72px), its notes from the bass as degree chips, "Also:" the other names, and
   Play (honey), Clear and Open in Chords; Reharmonise sets each group's chords as chord buttons filling a grid (the
   symbol over "as 3 · in the key"); Passing chords sets each way as a card (its name, In the key or Chromatic at the
@@ -595,7 +613,7 @@ hands). Never a row of chips or a wall of tiles.
   Progressions sets its Key pop-up and Chord size, the field for numerals or chords, the row of chord buttons (the
   symbol over its numeral), Play (honey) and Practise in the Player (soft) on the left, and the library by style as
   titled groups of rows on the right (under it on a phone).
-- **Patterns** (a Learn reference): Favourites, Your patterns, the four groups and Hidden as titled groups of row
+- **Patterns** (under Practice's Accompaniment): Favourites, Your patterns, the four groups and Hidden as titled groups of row
   links without tiles, each a name over its idea line; New pattern is the bar's round +. **A pattern's page:** the
   bar's star (pressed: a sand fill and a filled star) toggles a favourite; the idea in 20px, each hand's figure as two
   facts, a card with the pattern over a bar of C major on the grand staff (or over the first line of a song with a
@@ -607,23 +625,26 @@ hands). Never a row of chips or a wall of tiles.
   out but for the one playing), each a name over its idea line, and at its foot a row link to Patterns in Learn.
 - **Tension chip** (the 44px outline button of a grid item): its degree on its role's colour (an avoid note's on sand,
   so no chord role is spent on it), then its note; pressed (sky mist, a small square) while the chord plays with it on
-  top. The Available tensions reference sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a
+  top. The Available tensions explorer sets them in four cards, Weak · Strong · Tensions · Avoid, each titled with a
   line of what its notes do.
 
 ### Marks
 
 - **Rating mark:** known is a 16px grass disc with a check; a gap a 10px ochre dot; not checked a 10px ring of the
   control line, 1px.
-- **Learned toggle:** a 28px ring of the control line, 1px, in a 44px target; learned fills it grass with a check.
+- **Learned toggle:** on a path's row, a 28px ring of the control line in a 44px target, filled grass with a check
+  once learned; on a piece's page, a toggle button (a small ring with a check, "Learned") that wears the grass wash
+  when on. **Learned badge** (a song's row): a 20px grass disc with a white check.
 - **Level mark:** four 4px pips rising 6 to 12px, the first ones soft ink, the rest hairline.
 
 ### Navigation
 
 Monochrome, so the content keeps the colour. A bar docked along the bottom on phones (card paper, a 1px soft line
 above it): four places, Path · Songs · Learn · Practice (Route, Music, BookOpen, Metronome), a 24px icon over an
-Onest 500 14px label, both soft ink; the current place fills with sand
-under a semibold ink label. From 1024px, a 240px sidebar with a 1px soft line on its right, "Piano Trainer" in
-Literata 600 22px at the top, the places as 44px rows (20px icon, 16px label).
+Onest 500 14px label, both soft ink; the current place fills with sand in a 1px soft line under a semibold ink label.
+From 1024px, a 256px sidebar with a 1px soft line on its right: "Piano Trainer" in Literata 600 22px beside the
+collapse button, the places as 44px rows (20px icon, 16px label) and Settings at its foot. Collapsed, it is 72px of
+icons, each named in a tooltip. Learn is the lessons; Practice is everything practised, a topic at a time.
 
 ### The keyboard (signature)
 
@@ -631,20 +652,21 @@ The whole piano, A0–C8, hung from a light wooden **rail** and scrolling sidewa
 piano's length, drawn 28px at the foot of a 44px strip, and a swipe on it scrolls the keys; its controls stay in view,
 44px targets whose ink icons sit in the drawn rail and never reach over a key, focused with the deep-sky ring: **‹ ›**
 at its ends move the keys an octave, the **keyboard map** between them (off by default) draws all 88 keys small with
-an ink frame round the part in view and dots under the keys marked or down, and the **settings button** at its right
-end opens the keyboard settings in a popover beside the keyboard, never over it.
+an ink frame round the part in view and dots under the keys marked or down, the **glissando toggle** (its chip
+filled in ink while on) says how a swipe plays, and the **settings button** at its right end opens the keyboard
+settings (key size, note names, the map, typing) in a popover beside the keyboard, never over it. A rail button's
+icon sits on a chip in the drawn rail: the chip takes the hover, the pressed fill and the focus ring.
 
-- **Proportions:** a key is 4.2 times as long as a white key is wide, at least 96px and at most 40% of the screen's
-  height; the Player's keyboard takes the height its layout gives it. **Key size:** Fit (the range fills the width,
-  white keys 28–48px), Large (56px, about an octave on a phone) or Whole piano (all 52 white keys fill the width; no
+- **Proportions:** a key is 4.4 times as long as a white key is wide on every screen, the Player's too, at least 96px
+  and at most 32% of the screen's height. **Key size:** Fit (the range fills the width, white keys 34–48px), Large (56px, about an octave on a phone) or Whole piano (all 52 white keys fill the width; no
   ‹ ›, no map, no finger row). It opens centred on the keys that matter and centres again when the size changes.
 - **Material:** white keys part by a 1px line of key bed and end in a lip; black keys end in a lighter slope. **Down**
   is physical as well as coloured: a key going down drops 2px and its lip or slope shortens to a third, in 80ms;
   under reduced motion, at once.
 - **Touch:** a key sounds and goes down the instant it is touched, and stays down while it is held (a finger, a typed
   key, a MIDI key) and for at least the shortest press, 150ms, so the lightest tap shows; let go, it is plain again,
-  however long its sound rings. The keys hold still under a finger. **Scroll** (the default): only the key a finger
-  touched sounds; the keyboard scrolls from its rail. **Glissando:** every key a finger slides onto sounds.
+  however long its sound rings. The keys hold still under a finger. By default only the key a finger touched sounds
+  and the keyboard scrolls from its rail; with the rail's **Glissando** on, every key a finger slides onto sounds.
 - **Faces:** plain; a mark's wash with its label; honey for a quiz's chosen or Name chord's lit keys; crimson with ✕ for
   a wrong key; a deep-sky ring inside a missing key; and down over all of them. A wrong key wins over a lit one, a lit
   one over a mark, a mark over a selection. **Note names** (C · All · None) put "C4" on every C, or its name on every
@@ -652,14 +674,14 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
 - **Finger row:** finger numbers in 20px circles under the keys, in two staggered lines as the keys stand: a black
   key's in the upper line (sky wash), a white key's in the lower (key paper ringed in key bed). Only while a mark
   carries a finger.
-- **A mark's caption:** a second, smaller line over a mark's label: in the Scales reference's Chords view each
+- **A mark's caption:** a second, smaller line over a mark's label: in the Scales explorer's Chords view each
   degree's key carries its numeral over its chord (`ii` over `Dm`), both 12px, wrapping anywhere on a narrow key; in
   an inversion the numeral takes its figure and the chord its bass (`I⁶` over `C/E`).
 - **What a key plays:** a key sounds itself unless the screen makes it more: in Chords view a degree's key plays its
   chord, stacked from it, and every key of it is down while the hand holds the key. The keyboard then spans every
   key the walk of the chords plays (C4 to G5 for C major's triads, the tonic's chord an octave up included), so a
   chord a key plays or the walk strikes is in sight on a phone.
-- **Spotlight** (the references, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
+- **Spotlight** (the explorers, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
   arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by going
   down, never by hiding the rest.
 - **Access:** keys are buttons named by note ("F sharp 4"), one in the tab order, the arrow keys, Home and End walking
@@ -668,15 +690,16 @@ end opens the keyboard settings in a popover beside the keyboard, never over it.
 - **Every Play becomes Stop** (a square) while its sound plays; in a grid of items (a Piece's bars, a scale's chords)
   the item is pressed instead (sky mist), and a second tap stops it.
 
-### The circle of fifths (the Keys reference)
+### The circle of fifths (the Key view)
 
-The Keys reference's chooser: a square up to 24rem, centred, two rings of twelve wedges (the major keys outside, their
+The chooser of Scales and keys' Key view (a major or minor scale): a square up to 24rem, centred, two rings of twelve wedges (the major keys outside, their
 relative minors inside, C at the top and a fifth a twelfth of the turn clockwise) parted by the soft line. The key
 shown fills its wedge with the tonic's wash and the places of its six other chords the scale's (the keys' own marks:
 the circle is the key's scale drawn round); the rest are card paper. Every key is a 44px round link on its wedge with
 its name (Onest 600 14px) over its numeral where it holds one of the key's chords (ink), or its signature's count
 ("3♭") in soft ink; the key shown is card paper in the control line (`aria-current`). The key's name sits in the middle
-in Literata 600 18px. A dice round button in the header takes a random key.
+in Literata 600 18px. A dice round button in the header takes a random key. Beside it: the signature on a staff, the
+key's notes, relative and modes, the chords it borrows, and under them the songs and studies in the key.
 
 ### The sheet (the Player)
 
@@ -707,9 +730,9 @@ sideways, as Flowkey shows it: ADR 0013.
 - **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,
   and the keys, Play and Wait mode still work.
 - **Outside the Player** a staff is `LazyScoreView`, VexFlow loaded the first time one is on screen: the Scales
-  reference engraves the run from its start note in the scale's key (a mode in its parent's), the other hand's staff
+  explorer engraves the run from its start note in the scale's key (a mode in its parent's), the other hand's staff
   soft, finger numbers while Fingers shows a hand; the key page engraves its signature with its scale; the Chords
-  reference writes its chord as a bar of whole notes (the left hand's root on the bass staff) with no key signature,
+  explorer writes its chord as a bar of whole notes (the left hand's root on the bass staff) with no key signature,
   every accidental on its note; an interval card writes its two notes on the treble staff alone (`staff`), 130 units
   tall: room above for a 13th over B4 with its sharp, below for two ledger lines.
 
@@ -717,9 +740,9 @@ sideways, as Flowkey shows it: ADR 0013.
 
 The page where a learner writes their version of a piece or a song of their own (ADR 0027), full screen like the
 Player and a laptop's first: a toolbar (✕, the title with "Your version" in soft ink under it once there is one,
-Undo and Redo round, MIDI, the song's settings ⚙, Play in honey: the screen's one action, Stop while it sounds), the
-**Chords · Melody · Right hand · Left hand** segments, the sheet scrolling between them and the tools, a line of soft
-text saying where the caret is, and the keys (160px, 192px from 1024px).
+Undo and Redo round, MIDI, the song's settings ⚙, Play in honey: the screen's one action, Stop while it sounds; on a
+phone the round tools take a row of their own under the title and Play), the sheet scrolling under it, then the
+**tool dock**, a line of soft text saying where the caret is, and the keys at their own proportion.
 
 - **The sheet:** each section's heading a pull-down (its kind, Join with the section before) over its lines, each chart
   line one line of grand staff with its bars numbered and its chord symbols as the Player's sheet sets them; the
@@ -727,13 +750,17 @@ text saying where the caret is, and the keys (160px, 192px from 1024px).
   empty. The caret is the Player's cursor band (sky mist) on the layer's staff, as wide as the value chosen (over the
   chord symbols in Chords); bars chosen with Shift sit on a sand band; in a hand's layer, a bar the pattern plays reads
   **Pattern** in soft ink on that staff. A click puts the caret where it lands.
-- **The tools,** one row over the keys that scrolls sideways on a phone: in the notes, the values as a segmented
-  control of their glyphs (Noto Music), Dot, Triplet (x/4 only) and Chord as outline toggles (pressed: sand), Rest,
-  ‹ › ↑ ↓ as round buttons, Respell, Delete, and in a hand Write out or Back to the pattern and a Finger pop-up for
-  each note at the caret; in the chords, the Chord field (Literata), the key's chords as outline buttons with their
-  symbols in Literata, Delete chord, the Bar pull-down (its actions as 44px rows and the bar's Length pop-up), ‹ ›.
+- **The tool dock,** over the keys: first what they write, **Chords · Melody · Right hand · Left hand** as segments
+  with their pictures (a letter, a note, a hand, the left one mirrored); then that layer's tools as a palette, one row
+  that scrolls sideways on a phone. Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
+  and for a screen reader, a toggle filled sand in an ink line while on: in the notes, the values as segments of
+  their glyphs (Noto Music), then a dotted note, an italic 3 (x/4 only), a rest and Chord (stacked layers), ← →, then
+  ↑ ↓, ♯♭ (Respell) and ⌫; in a hand, Write out or Back to the pattern and a Finger pop-up for each note at the
+  caret; in the chords, the Chord field (Literata), the key's chords as outline buttons with their symbols in
+  Literata, ⌫, ← →, and the Bar pull-down (its actions as 44px rows and the bar's Length pop-up). A bar of the sheet
+  shows the focus ring inside it.
 - **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
-- **The song's settings** (a sheet): an own song's Title, the Key pop-up, the Tempo slider (40–160, set on release),
+- **The song's settings** (a sheet): an own song's Title, the key picker, the Tempo slider (40–160, set on release),
   the Pattern pop-up of the patterns the music can play by group, and the meter as a fact.
 - **The takes** (the toolbar's Record, a round button with a dot, ADR 0028): a sheet titled Takes with the tempo,
   meter and the caret's bar as facts, the Click switch, the MIDI control while no keyboard is connected, and Record in
@@ -744,8 +771,9 @@ text saying where the caret is, and the keys (160px, 192px from 1024px).
   beside Keep it). While a take records, the tools and the caret's line give way to the recording strip: a card with
   a softly pulsing ink dot, Count-in and its beat or Recording, the bar and the time in tabular figures, and Stop in
   honey; Undo, Redo, the song's settings, Record and Play wait.
-- **New song** (Songs' round +) is a sheet: Title, Key, the five meters as segments, and Make in honey at its foot,
-  Make and record (soft) under it.
+- **New song** (Songs' round +) is a sheet: the Title field (Literata, its name as its placeholder), the key picker
+  (twelve notes, then Major · Minor), the five meters as segments, and at its foot Make in honey with Record (soft, a
+  microphone) beside it.
 - **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
   (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the
   chart (the honey pill).

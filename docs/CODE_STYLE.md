@@ -20,14 +20,18 @@ A container wires data to presentational children. One job each.
 - **One exported component per file, named for the file.** Private helpers may stay.
 - A page composes widgets and `shared/ui`, with little markup of its own.
 - Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
-  `RailButton` (a button in its rail, filling its `children` slot) and `ShownKeys` (what a page's keyboard shows),
+  `RailButton` (a button in its rail, filling its `children` slot; a toggle with `aria-pressed`) and `ShownKeys` (what
+  a page's keyboard shows),
   `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
   (a radio group) and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Listbox`
   (one choice of a list: a Setup page's, the tempo and hands popovers), `Dropdown` (the pop-up button,
   over shadcn's `select`) with `MultiDropdown`, `KeyDropdown` (the 24 keys) and `NoteDropdown` (the 12 notes, each
-  spelled by the caller's rule), `InversionChoice`, `ChordSizeField`, `SwitchRow` (on or off in its row), `TypedField`
+  spelled by the caller's rule), `NotePicker` (the twelve notes in sight, a tap each) and `KeyPicker` (it over Major ·
+  Minor), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
+  its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
+  icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
-  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page, in a titled card), `LEARN_TILES`, `PAINT`
+  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
@@ -37,16 +41,25 @@ A container wires data to presentational children. One job each.
 - **Choosing** (Apple's Human Interface Guidelines): five or fewer short nouns are a `Segmented`; more, or longer
   names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
   settings changed less often a `Sheet`; a popover anchored to its button for a few quick choices whose effect shows
-  at once (the keyboard settings beside the keys, the Player's tempo and hands). Never a row of chips.
+  at once (the keyboard settings beside the keys, the Player's tempo and hands). Where a picture says it faster (ADR
+  0029): twelve notes are a `NotePicker`, a key a `KeyPicker`, an inversion its drawn stack, several on-or-offs
+  together on a sheet `ToggleTile`s, the sections of one screen tabs (`ui/primitives/tabs`). A `Dropdown` stays for
+  long lists and beside other controls in a row.
+- **A screen takes the width it is given.** No `max-w-*` on a screen; its side gutter is `px-gutter` (what bleeds to
+  the edges, `-mx-gutter`), a list is `grid-cards` (row cards, as many columns of 18rem as fit), chord buttons
+  `grid-chords`. Two fixed columns are for an explorer's choices beside what they show, never for two lists.
+- **One focus ring.** The base layer draws it (3px, 2px off the control): a component adds no `outline-none` and no
+  ring of its own. Inside a scroller or a clipped box that would cut it, `focus-visible:-outline-offset-3`.
 - **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
   clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
   play (`useSoundKeys`), so its key is down while pressed, not while it rings, and for at least the shortest press
   (`usePresses` in `shared/lib`, which every hand's keys go through). It follows the **keyboard settings**
-  (key size, swipe, note names, the map, typing), saved for every keyboard and set from the rail's settings button or
-  Settings (`KeyboardSettingsFields`, one component in both places); a screen never passes them itself. The
-  references, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
+  (key size, note names, the map, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
+  keyboard and set from the rail or Settings (`KeyboardSettingsFields`, one component in both places); a screen never
+  passes them itself, and the keyboard keeps its own proportion on every screen (no screen sizes it). The
+  explorers, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
   arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key sounding
-  is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales reference's Chords view a
+  is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
   degree's key plays its chord), and every key it plays is down while the hand holds it.
   `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
   it on that screen's keyboard (pin it when the page scrolls away from it).
@@ -204,7 +217,7 @@ tempo)` sounds it and `notate(run)` writes it.
   by `fitParts` (and `withAlterations` for a choice of several), named by the table where it has the chord and else by
   the same tables as the stacks. **Every chord's root is spelled by `chordRootSpelling(pc, intervals)`**: sharp on
   C♯/G♯ under a minor 3rd or minor 9th, the one rule for the table, the builder and the quiz.
-- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the Available tensions reference,
+- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the Available tensions explorer,
   `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
   second table of what a chord takes.
 - **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
@@ -232,7 +245,7 @@ tempo)` sounds it and `notate(run)` writes it.
   sound cuts it off and the port says so. A chord's keys sound with `chordSounds(keys, { arpeggio })`, a walk of
   chords with `walkSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
-- **The references place tones with `placeChord(tones, { inversion, bothHands })` / `placeScale(root, kind, start)`**
+- **The explorers place tones with `placeChord(tones, { inversion, bothHands })` / `placeScale(root, kind, start)`**
   (a scale's chords with `placeScaleChords`, a key's borrowed ones with `placeBorrowedChords`), and a chord of `notes`
   notes has the inversions `lastInversion(notes)` gives: the validators, the segments and the keyboard all ask it.
 - Content is data validated by tests: a chart that does not parse, an unknown chord symbol, or a missing Russian
