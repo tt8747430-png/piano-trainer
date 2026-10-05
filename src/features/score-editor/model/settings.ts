@@ -1,4 +1,3 @@
-import type { PatternId } from '@/entities/pattern'
 import { keyText, PIECE_TEMPO } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import { midi, PIANO, type Key } from '@/shared/lib/music'
@@ -44,6 +43,3 @@ export function setTempo(draft: Draft, tempo: number): Draft {
   const kept = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, Math.round(tempo)))
   return kept === draft.tempo ? draft : { ...draft, tempo: kept }
 }
-
-export const setPattern = (draft: Draft, pattern: PatternId): Draft =>
-  pattern === draft.pattern ? draft : { ...draft, pattern }

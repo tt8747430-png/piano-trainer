@@ -7,13 +7,15 @@ export const editor: LocaleResources['editor'] = {
   redo: 'Повторить',
   settings: 'Настройки песни',
   layers: {
-    label: 'Писать',
     chords: 'Аккорды',
     melody: 'Мелодия',
     rh: 'Правая рука',
     lh: 'Левая рука',
   },
+  voice: 'Голос',
+  chordNames: 'Названия аккордов',
   sheet: {
+    signature: 'Тональность и размер',
     label: 'Ноты',
     bar: 'Такт {{n}}: {{chords}}',
     pattern: 'Фактура',

@@ -43,6 +43,7 @@ export const piece: LocaleResources['piece'] = {
     verse: 'Куплет',
     verseNumbered: '{{n}}-й куплет',
     chorus: 'Припев',
+    bridge: 'Бридж',
     lastChorus: 'Последний припев',
     ending: 'Окончание',
     lastEnding: 'Последнее окончание',

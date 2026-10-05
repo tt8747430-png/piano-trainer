@@ -6,6 +6,7 @@ import { Segmented, ToolButton, ToolDivider } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import { HandBarTools } from './HandBarTools'
+import { TrebleVoice } from './TrebleVoice'
 
 /** A tool drawn as notation: a glyph of the music font, at a note value's size. */
 const GLYPH = 'font-sans text-3xl leading-none'
@@ -27,6 +28,7 @@ export function NoteTools() {
   const dispatch = actions.dispatch
   return (
     <>
+      <TrebleVoice />
       <div className="w-64 shrink-0">
         <Segmented
           label={t('values.label')}

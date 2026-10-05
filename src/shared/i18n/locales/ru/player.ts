@@ -31,6 +31,8 @@ export const player: LocaleResources['player'] = {
   changed: { lh: 'Левая рука изменена', rh: 'Правая рука изменена', both: 'Обе руки изменены' },
   playing: 'Как звучит',
   allPatterns: 'Все фактуры',
+  ownPattern: 'Своя фактура',
+  ownPatternDetail: 'Левая и правая рука на ваш выбор',
   inversion: { nearest: 'Ближайшее', own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
     label: 'По тональностям',

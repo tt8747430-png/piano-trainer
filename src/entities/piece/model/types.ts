@@ -14,12 +14,21 @@ export const SECTION_KINDS = [
   'intro',
   'verse',
   'chorus',
+  'bridge',
   'ending',
   'practice',
   'hymn',
   'part',
 ] as const
 export type SectionKind = (typeof SECTION_KINDS)[number]
+/** The parts a song has, as its maker names them; the songbooks' own (Practice, Hymn, Part) stay theirs. */
+export const SONG_SECTION_KINDS = [
+  'intro',
+  'verse',
+  'chorus',
+  'bridge',
+  'ending',
+] as const satisfies readonly SectionKind[]
 
 export interface Section {
   readonly kind: SectionKind

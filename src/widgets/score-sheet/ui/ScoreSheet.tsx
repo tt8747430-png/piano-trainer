@@ -19,6 +19,8 @@ export function ScoreSheet({
   onPlace,
   placesOf,
   heading,
+  chordNames,
+  onSignature,
 }: {
   draft: Draft
   caret: Tick
@@ -31,6 +33,10 @@ export function ScoreSheet({
   placesOf: (layer: Layer) => readonly Tick[]
   /** A section's heading. */
   heading: (section: number) => ReactNode
+  /** Chord names over the staff, written in their row; without them a click there writes the tune. */
+  chordNames: boolean
+  /** The clef, key and time signature clicked: what changes them. */
+  onSignature: () => void
 }) {
   const { t } = useTranslation('editor')
   const [sheetsOf] = useState(createLineSheets)
@@ -57,6 +63,8 @@ export function ScoreSheet({
                 selection={selection}
                 onPlace={onPlace}
                 placesOf={placesOf}
+                chordNames={chordNames}
+                onSignature={onSignature}
               />
             ))}
         </section>

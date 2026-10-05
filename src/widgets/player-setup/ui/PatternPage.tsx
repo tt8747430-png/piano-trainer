@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   patternNeed,
@@ -19,7 +20,8 @@ import { ListPage } from './ListPage'
  * The sheet's page of patterns: From the chart first where the chart names its methods, then the
  * learner's favourites and own patterns and the built-in groups, the hidden left out but for the one
  * playing. A row is a name and its idea in a line; a pattern the music cannot play is closed with what
- * it needs. At the foot, the way to the Patterns page, where each is explained and the list is kept.
+ * it needs. At its foot, making your own pattern, and the Patterns page, where each is explained and
+ * the list is kept.
  */
 export function PatternPage({
   value,
@@ -74,6 +76,13 @@ export function PatternPage({
         })),
       ]}
     >
+      <RowLink
+        title={t('ownPattern')}
+        detail={t('ownPatternDetail')}
+        icon={Plus}
+        paint="grass"
+        render={<Link to="/practice/patterns/new" />}
+      />
       <RowLink
         title={t('allPatterns')}
         {...PAGE_TILES.patterns}

@@ -10,9 +10,9 @@ import { CHORD_ROW } from './chord-row'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
 
-/** The layer a point on a line's bar writes: the chord row, the bass staff, or the treble's. */
-function layerAt(y: number, layout: ScoreLayout, layer: Layer): Layer {
-  if (y < 0) return 'chords'
+/** The layer a point on a line's bar writes: the chord row (with chord names), the bass staff, or the treble's. */
+function layerAt(y: number, layout: ScoreLayout, layer: Layer, chordNames: boolean): Layer {
+  if (y < 0 && chordNames) return 'chords'
   const { treble, bass } = layout.staves
   if (treble && bass && y > (treble.bottom + bass.top) / 2) return 'lh'
   return layer === 'rh' ? 'rh' : 'melody'
@@ -32,6 +32,8 @@ export function LineOverlay({
   selection,
   onPlace,
   placesOf,
+  chordNames,
+  onSignature,
 }: {
   layout: ScoreLayout
   music: TimedMusic
@@ -43,9 +45,12 @@ export function LineOverlay({
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
   placesOf: (layer: Layer) => readonly Tick[]
+  chordNames: boolean
+  onSignature: () => void
 }) {
   const { t } = useTranslation('editor')
   const hand = isHandLayer(layer) ? layer : null
+  const [first] = layout.measures
   const staff = hand === 'lh' ? layout.staves.bass : layout.staves.treble
   const place = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     const placed = line.bars[index]
@@ -56,7 +61,7 @@ export function LineOverlay({
       return
     }
     const box = event.currentTarget.getBoundingClientRect()
-    const target = layerAt(event.clientY - box.top - CHORD_ROW, layout, layer)
+    const target = layerAt(event.clientY - box.top - CHORD_ROW, layout, layer, chordNames)
     const end = placed.start + placed.bar.ticks
     const places = placesOf(target).filter((tick) => tick >= placed.start && tick < end)
     const x = measure.x + event.clientX - box.left
@@ -80,7 +85,12 @@ export function LineOverlay({
       {caret === null ? null : (
         <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} />
       )}
-      <LineLabels layout={layout} music={music} firstBar={(line.bars[0]?.index ?? 0) + 1} />
+      <LineLabels
+        layout={layout}
+        music={music}
+        firstBar={(line.bars[0]?.index ?? 0) + 1}
+        chordNames={chordNames}
+      />
       {hand && staff
         ? layout.measures.map((measure, index) =>
             line.bars[index]?.bar[hand] ? null : (
@@ -100,6 +110,18 @@ export function LineOverlay({
             ),
           )
         : null}
+      {first && first.notes > first.x ? (
+        // The clef, key and time signature at the line's head: a click opens what changes them.
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label={t('sheet.signature')}
+          title={t('sheet.signature')}
+          onClick={onSignature}
+          className="absolute bottom-0 z-30 cursor-pointer rounded-lg transition-colors duration-200 ease-out hover:bg-foreground/5"
+          style={{ left: first.x, width: first.notes - first.x, top: 0 }}
+        />
+      ) : null}
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
         const chords = (placed?.bar.chords ?? []).map((chord) => chordSymbol(chord.chord))

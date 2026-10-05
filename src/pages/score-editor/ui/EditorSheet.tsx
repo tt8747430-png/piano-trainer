@@ -10,6 +10,7 @@ export function EditorSheet() {
   const {
     store,
     actions: { dispatch },
+    view,
   } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
@@ -22,6 +23,8 @@ export function EditorSheet() {
       dispatch({ type: 'place', tick, layer: to, extend }),
     [dispatch],
   )
+  const { openSettings: open } = view
+  const openSettings = useCallback(() => open(true), [open])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   return (
@@ -34,6 +37,8 @@ export function EditorSheet() {
       onPlace={onPlace}
       placesOf={placesOf}
       heading={(section) => <SectionHeading section={section} />}
+      chordNames={view.chordNames}
+      onSignature={openSettings}
     />
   )
 }

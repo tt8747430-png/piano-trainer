@@ -33,6 +33,8 @@ export const player = {
   playing: 'How it plays',
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
+  ownPattern: 'Make your own pattern',
+  ownPatternDetail: 'A left hand and a right hand of your choice',
   /** The right hand's chord: each nearest the last, or one inversion every time. */
   inversion: { nearest: 'Nearest', own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */

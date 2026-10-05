@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { draftOf, form, shape } from '../testing/test-draft'
-import { setKey, setPattern, setTempo } from './settings'
+import { setKey, setTempo } from './settings'
 
 describe('the song’s settings', () => {
   const draft = draftOf({
@@ -26,9 +26,8 @@ describe('the song’s settings', () => {
     expect(form(minor)).toEqual(form(draft))
   })
 
-  it('sets the tempo within 40 to 160, and the pattern', () => {
+  it('sets the tempo within 40 to 160', () => {
     expect(setTempo(draft, 200).tempo).toBe(160)
     expect(setTempo(draft, 72).tempo).toBe(72)
-    expect(setPattern(draft, 'ballad').pattern).toBe('ballad')
   })
 })

@@ -17,6 +17,8 @@ export const SheetLine = memo(function SheetLine({
   selection,
   onPlace,
   placesOf,
+  chordNames,
+  onSignature,
 }: {
   sheet: LineSheet
   layer: Layer
@@ -26,6 +28,8 @@ export const SheetLine = memo(function SheetLine({
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
   placesOf: (layer: Layer) => readonly Tick[]
+  chordNames: boolean
+  onSignature: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const holdsCaret = caret !== null
@@ -47,6 +51,8 @@ export const SheetLine = memo(function SheetLine({
             selection={selection}
             onPlace={onPlace}
             placesOf={placesOf}
+            chordNames={chordNames}
+            onSignature={onSignature}
           />
         )}
       </LazyScoreView>

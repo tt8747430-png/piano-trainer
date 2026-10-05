@@ -4,14 +4,17 @@ export const editor = {
   undo: 'Undo',
   redo: 'Redo',
   settings: 'Song settings',
+  // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
   layers: {
-    label: 'Write',
     chords: 'Chords',
     melody: 'Melody',
     rh: 'Right hand',
     lh: 'Left hand',
   },
+  voice: 'Voice',
+  chordNames: 'Chord names',
   sheet: {
+    signature: 'Key and time signature',
     label: 'Score',
     bar: 'Bar {{n}}: {{chords}}',
     pattern: 'Pattern',

@@ -15,7 +15,7 @@ export {
   type Section,
   type SectionKind,
 } from './model/types'
-export { SECTION_KINDS } from './model/types'
+export { SONG_SECTION_KINDS } from './model/types'
 
 export { chartOf, hasMethodCodes, melodyOf, pieceFit } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'

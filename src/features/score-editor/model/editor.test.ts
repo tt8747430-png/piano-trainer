@@ -12,10 +12,10 @@ const start = (layer: EditorState['layer'] = 'melody') =>
   run(initialEditor(draftOf()), { type: 'layer', layer })
 
 describe('the editor', () => {
-  it('opens on the chords at the piece’s start, writing quarter notes', () => {
+  it('opens on the tune at the piece’s start, writing quarter notes', () => {
     const state = initialEditor(draftOf())
     expect(state).toMatchObject({
-      layer: 'chords',
+      layer: 'melody',
       caret: 0,
       value: { value: 4, dots: 0, triplet: false },
       chord: false,
@@ -175,7 +175,7 @@ describe('the editor', () => {
   })
 
   it('names keys struck together in the chords as a chord, and stays', () => {
-    const state = run(initialEditor(draftOf()), key(57, 0), key(60, 20), key(64, 40), key(67, 60))
+    const state = run(start('chords'), key(57, 0), key(60, 20), key(64, 40), key(67, 60))
     expect(
       state.draft.sections[0]?.lines[0]?.[0]?.chords.map((placed) => chordSymbol(placed.chord)),
     ).toEqual(['Am7'])
@@ -185,7 +185,10 @@ describe('the editor', () => {
 
   it('selects bars with Shift, and copies, cuts and pastes them', () => {
     const chosen = run(
-      initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })),
+      run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })), {
+        type: 'layer',
+        layer: 'chords',
+      }),
       {
         type: 'move',
         by: 'bar',
@@ -221,8 +224,8 @@ describe('the editor', () => {
   })
 
   it('changes the song’s settings', () => {
-    const state = run(initialEditor(draftOf()), { type: 'settings', tempo: 120, pattern: 'ballad' })
-    expect(state.draft).toMatchObject({ tempo: 120, pattern: 'ballad' })
+    const state = run(initialEditor(draftOf()), { type: 'settings', tempo: 120 })
+    expect(state.draft).toMatchObject({ tempo: 120 })
   })
 
   it('undoes and redoes the changes with the caret, and a new change drops the redo', () => {
@@ -252,7 +255,7 @@ describe('createEditorStore', () => {
     const nothing: EditorAction[] = [
       { type: 'layer', layer: 'melody' },
       { type: 'delete' },
-      { type: 'settings', tempo: 90, pattern: 'r1', key: store.getState().draft.key },
+      { type: 'settings', tempo: 90, key: store.getState().draft.key },
       { type: 'layer', layer: 'rh' },
       { type: 'backToPattern' },
       { type: 'layer', layer: 'chords' },

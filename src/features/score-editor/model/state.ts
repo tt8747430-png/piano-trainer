@@ -1,4 +1,3 @@
-import type { PatternId } from '@/entities/pattern'
 import type { SectionKind } from '@/entities/piece'
 import type { Chord, Finger, Key, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
@@ -90,7 +89,6 @@ export type EditorAction =
       readonly type: 'settings'
       readonly key?: Key
       readonly tempo?: number
-      readonly pattern?: PatternId
     }
   | { readonly type: 'undo' }
   | { readonly type: 'redo' }
@@ -98,7 +96,7 @@ export type EditorAction =
 export const initialEditor = (draft: Draft): EditorState => ({
   draft,
   caret: 0,
-  layer: 'chords',
+  layer: 'melody',
   value: { value: 4, dots: 0, triplet: false },
   chord: false,
   selection: null,

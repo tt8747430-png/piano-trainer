@@ -21,6 +21,15 @@ export interface ScoreEditorValue {
     /** An own song's title, given anew; an empty one changes nothing. */
     readonly rename: (title: string) => void
   }
+  /** What the sheet shows and which of the page's sheets is open: chosen here, never saved. */
+  readonly view: {
+    /** Chord names over the staff, and the chord row they are written in. */
+    readonly chordNames: boolean
+    readonly showChordNames: (on: boolean) => void
+    /** The song's settings sheet, opened from the toolbar or the sheet's clef, key and time. */
+    readonly settingsOpen: boolean
+    readonly openSettings: (open: boolean) => void
+  }
   readonly meta: {
     readonly title: string
     readonly hasVersion: boolean

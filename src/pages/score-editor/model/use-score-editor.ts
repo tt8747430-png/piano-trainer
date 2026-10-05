@@ -54,6 +54,8 @@ function useCloseTo(target: EditorTarget): () => void {
 export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
+  const [chordNames, setChordNames] = useState(true)
+  const [settingsOpen, openSettings] = useState(false)
   const [store] = useState(() =>
     createEditorStore(readDraft(target.music), (draft) =>
       saveMusic(pieces, savingTo(target), writeDraft(draft)),
@@ -134,10 +136,18 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
+  const showChordNames = (on: boolean) => {
+    setChordNames(on)
+    // With no chord row there is no chord to write: the caret goes to the tune.
+    if (!on && store.getState().layer === 'chords')
+      store.dispatch({ type: 'layer', layer: 'melody' })
+  }
+
   return {
     store,
     takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
+    view: { chordNames, showChordNames, settingsOpen, openSettings },
     meta: {
       title,
       hasVersion,

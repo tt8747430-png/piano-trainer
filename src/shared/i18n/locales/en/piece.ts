@@ -42,6 +42,7 @@ export const piece = {
     verse: 'Verse',
     verseNumbered: 'Verse {{n}}',
     chorus: 'Chorus',
+    bridge: 'Bridge',
     lastChorus: 'Last chorus',
     ending: 'Ending',
     lastEnding: 'Last ending',

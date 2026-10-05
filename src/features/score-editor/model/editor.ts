@@ -15,7 +15,7 @@ import {
   writeRest,
 } from './notes'
 import { joinSection, setSectionKind } from './sections'
-import { setKey, setPattern, setTempo } from './settings'
+import { setKey, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt } from './timeline'
@@ -100,7 +100,6 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       let next = draft
       if (action.key) next = setKey(next, action.key)
       if (action.tempo !== undefined) next = setTempo(next, action.tempo)
-      if (action.pattern) next = setPattern(next, action.pattern)
       return commit(state, next)
     }
     case 'undo':

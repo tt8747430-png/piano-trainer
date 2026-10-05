@@ -4,16 +4,19 @@ import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 /** A bar's number sits this far right of its barline, clear of the line. */
 const NUMBER_INSET_PX = 4
 
-/** Over a line's staff: each bar's number and each chord symbol at its onset, as the Player's sheet sets them. */
+/** Over a line's staff: each bar's number and, with chord names, each chord symbol at its onset, as the Player's sheet sets them. */
 export function LineLabels({
   layout,
   music,
   firstBar,
+  chordNames,
 }: {
   layout: ScoreLayout
   music: TimedMusic
   /** The number of the line's first bar. */
   firstBar: number
+  /** Whether the chord symbols are shown. */
+  chordNames: boolean
 }) {
   return (
     <div aria-hidden className="absolute inset-x-0 bottom-full h-11">
@@ -26,7 +29,7 @@ export function LineLabels({
           {firstBar + index}
         </span>
       ))}
-      {music.chords.map((chord, index) => (
+      {(chordNames ? music.chords : []).map((chord, index) => (
         <span
           key={index}
           className="absolute bottom-0.5 font-display text-lg font-semibold whitespace-nowrap"

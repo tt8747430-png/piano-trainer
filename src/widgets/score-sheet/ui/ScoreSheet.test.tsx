@@ -18,7 +18,7 @@ const draft = readDraft({
   hands: { lh: '- | - | E3/4 | - | -' },
 })
 
-const sheet = (layer: Layer, onPlace = vi.fn()) =>
+const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature = vi.fn()) =>
   render(
     <ScoreSheet
       draft={draft}
@@ -29,6 +29,8 @@ const sheet = (layer: Layer, onPlace = vi.fn()) =>
       onPlace={onPlace}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
       heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
+      chordNames={chordNames}
+      onSignature={onSignature}
     />,
   )
 
@@ -58,5 +60,25 @@ describe('ScoreSheet', () => {
     sheet('lh')
     await screen.findByRole('button', { name: 'Bar 1: G' })
     expect(screen.getAllByText('Pattern')).toHaveLength(4)
+  })
+
+  it('writes a click over the staff into the tune when chord names are hidden', async () => {
+    const user = userEvent.setup()
+    const onPlace = vi.fn()
+    sheet('melody', onPlace, false)
+    const [bar] = await screen.findAllByRole('button', { name: /^Bar 1/ })
+    if (!bar) throw new Error('no bar')
+    await user.click(bar)
+    expect(onPlace).toHaveBeenCalledWith(expect.any(Number), 'melody', false)
+  })
+
+  it('opens what changes the clef, key and time from a line’s head', async () => {
+    const user = userEvent.setup()
+    const onSignature = vi.fn()
+    sheet('melody', vi.fn(), true, onSignature)
+    const [head] = await screen.findAllByRole('button', { name: 'Key and time signature' })
+    if (!head) throw new Error('no line head')
+    await user.click(head)
+    expect(onSignature).toHaveBeenCalled()
   })
 })
