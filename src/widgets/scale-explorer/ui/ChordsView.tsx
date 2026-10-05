@@ -13,7 +13,7 @@ import {
   walkChords,
 } from '@/shared/lib/music'
 import { walkSounds } from '@/shared/lib/schedule'
-import { Dropdown, InversionChoice, Labelled, Segmented } from '@/shared/ui'
+import { InversionChoice, Labelled, Segmented } from '@/shared/ui'
 import { chordKeyPlays, chordMarks, chordsHolding } from '../model/scale-keys'
 import type { ScaleView } from '../model/scale-view'
 import { useHeardNote } from '../model/use-heard-note'
@@ -85,7 +85,7 @@ export function ChordsView({
         <>
           {choice}
           <Labelled label={t('music:chordSize.label')}>
-            <Dropdown
+            <Segmented
               label={t('music:chordSize.label')}
               value={notes}
               options={CHORD_NOTES.map((value) => ({
@@ -95,7 +95,6 @@ export function ChordsView({
               onChange={(next) =>
                 onChange({ chords: next, inversion: fitInversion(inversion, next) })
               }
-              className="w-full"
             />
           </Labelled>
           <Labelled label={t('music:inversion.label')}>

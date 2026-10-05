@@ -22,6 +22,7 @@ export function ScaleChoice({
       />
       <Labelled label={t('learn:scaleLabel')}>
         <Dropdown
+          bare
           label={t('learn:scaleLabel')}
           value={scale.kind}
           groups={SCALE_FAMILIES.map((family) => ({

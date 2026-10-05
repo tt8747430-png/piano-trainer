@@ -179,8 +179,8 @@ describe('Practice → Scales and keys', () => {
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E4' }), { pointerId: 1 })
     expect(screen.getByText(/ is in /)).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Chord size' }))
-    await user.click(await screen.findByRole('option', { name: '7ths' }))
+    const sizes = await screen.findByRole('radiogroup', { name: 'Chord size' })
+    await user.click(within(sizes).getByRole('radio', { name: '7ths' }))
     expect(screen.queryByText(/ is in /)).not.toBeInTheDocument()
   })
 
@@ -270,8 +270,8 @@ describe('Practice → Scales and keys', () => {
   it('stacks the scale’s chords up to 13ths', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=chords')
-    await user.click(await screen.findByRole('combobox', { name: 'Chord size' }))
-    await user.click(await screen.findByRole('option', { name: '13ths' }))
+    const sizes = await screen.findByRole('radiogroup', { name: 'Chord size' })
+    await user.click(within(sizes).getByRole('radio', { name: '13ths' }))
     expect(router.state.location.search).toMatchObject({ chords: 7 })
     expect(screen.getByRole('button', { name: /^FMaj13#11/ })).toBeInTheDocument()
   })
@@ -286,8 +286,8 @@ describe('Practice → Scales and keys', () => {
   it('keeps an inversion the smaller chords have when the size shrinks', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=chords&chords=4&inversion=3')
-    await user.click(await screen.findByRole('combobox', { name: 'Chord size' }))
-    await user.click(await screen.findByRole('option', { name: 'Triads' }))
+    const sizes = await screen.findByRole('radiogroup', { name: 'Chord size' })
+    await user.click(within(sizes).getByRole('radio', { name: 'Triads' }))
     expect(router.state.location.search).toMatchObject({ inversion: 2 })
     expect(router.state.location.search).not.toHaveProperty('chords')
   })

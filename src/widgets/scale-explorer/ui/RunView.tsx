@@ -72,6 +72,7 @@ export function RunView({
           </Labelled>
           <Labelled label={t('learn:startOn')}>
             <Dropdown
+              bare
               label={t('learn:startOn')}
               value={start}
               options={tones.map((tone, i) => ({
@@ -98,6 +99,7 @@ export function RunView({
           ) : null}
           <Labelled label={t('learn:rhythmLabel')}>
             <Dropdown
+              bare
               label={t('learn:rhythmLabel')}
               value={rhythm}
               options={PRACTICE_RHYTHM_IDS.map((r) => ({
