@@ -68,14 +68,13 @@ export function PlayerLayout({
         <MidiButton />
         {setup}
       </PlayerArea>
-      <PlayerArea area="keys" className="flex">
+      <PlayerArea area="keys">
         <LiveKeyboard
           range={player.range}
           inView={player.inView}
           marks={player.marks}
           wrong={player.wrong}
           onKeyPress={player.tapKey}
-          height="fill"
         />
       </PlayerArea>
       <PlayerArea area="sheet">

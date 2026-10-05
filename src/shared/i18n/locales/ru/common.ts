@@ -10,6 +10,8 @@ export const common: LocaleResources['common'] = {
     learn: 'Обучение',
     practice: 'Практика',
     settings: 'Настройки',
+    collapse: 'Свернуть боковую панель',
+    open: 'Развернуть боковую панель',
   },
   errors: {
     title: 'Что-то пошло не так',
@@ -39,10 +41,10 @@ export const common: LocaleResources['common'] = {
     map: 'Клавиши на экране',
     mapRange: '{{from}} – {{to}}',
     settings: 'Настройки клавиатуры',
+    glissando: 'Глиссандо',
   },
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
-    swipe: { label: 'Свайп', scroll: 'Прокрутка', glissando: 'Глиссандо' },
     namedKeys: { label: 'Названия нот', c: 'C', all: 'Все', none: 'Нет' },
     map: 'Карта клавиатуры',
     typing: 'Играть с клавиатуры компьютера',

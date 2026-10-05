@@ -26,8 +26,8 @@ export function EditorKeyboard() {
   const range = useEditorState(useShallow(layerSpan))
   const selected = useMemo(() => new Set(here), [here])
   return (
-    <div className="flex h-40 min-w-0 shrink-0 lg:h-48">
-      <LiveKeyboard range={range} height="fill" selected={selected} onKeyPress={actions.play} />
+    <div className="min-w-0 shrink-0">
+      <LiveKeyboard range={range} selected={selected} onKeyPress={actions.play} />
     </div>
   )
 }

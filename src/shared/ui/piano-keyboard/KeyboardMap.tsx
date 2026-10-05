@@ -95,7 +95,7 @@ export function KeyboardMap({
       onPointerCancel={() => {
         dragging.current = null
       }}
-      className="relative flex h-11 w-full touch-none items-end rounded-sm px-1 pb-0.5 outline-none focus-visible:ring-3 focus-visible:ring-ring"
+      className="relative flex h-11 w-full touch-none items-end rounded-sm px-1 pb-0.5 focus-visible:-outline-offset-3"
     >
       {/* The strip and its dots share one box, so a key's place is a share of the strip's width. */}
       <div aria-hidden className="relative h-6 w-full">

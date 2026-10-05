@@ -10,7 +10,6 @@ describe('KeyboardSettingsButton', () => {
     await user.click(screen.getByRole('button', { name: 'Keyboard settings' }))
     const popover = await screen.findByRole('dialog', { name: 'Keyboard settings' })
     await user.click(within(popover).getByRole('radio', { name: 'Large' }))
-    await user.click(within(popover).getByRole('radio', { name: 'Glissando' }))
     await user.click(within(popover).getByRole('radio', { name: 'All' }))
     await user.click(within(popover).getByRole('switch', { name: 'Keyboard map' }))
     await user.click(
@@ -18,12 +17,20 @@ describe('KeyboardSettingsButton', () => {
     )
     expect(settingsStore.getState().keyboard).toEqual({
       keySize: 'large',
-      swipe: 'glissando',
+      swipe: 'scroll',
       namedKeys: 'all',
       map: true,
       typing: true,
     })
     expect(within(popover).getByText('Z X · octave')).toBeInTheDocument()
     expect(screen.getByRole('slider', { name: 'Keys in view' })).toBeInTheDocument()
+  })
+
+  it('leaves how a swipe plays to the rail’s own toggle', async () => {
+    const user = userEvent.setup()
+    setUp()
+    await user.click(screen.getByRole('button', { name: 'Keyboard settings' }))
+    const popover = await screen.findByRole('dialog', { name: 'Keyboard settings' })
+    expect(within(popover).queryByRole('radio', { name: 'Glissando' })).not.toBeInTheDocument()
   })
 })

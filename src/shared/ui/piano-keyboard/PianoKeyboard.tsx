@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, PIANO_LAYOUT, spanOf, type KeySize, type NamedKeys, type Swipe } from '@/shared/lib'
+import { PIANO_LAYOUT, spanOf, type KeySize, type NamedKeys, type Swipe } from '@/shared/lib'
 import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
@@ -18,18 +18,18 @@ import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
-/** Fit's white keys: never narrower than this, so they stay tappable; past it the keyboard scrolls… */
-const MIN_WHITE_PX = 28
+/** Fit's white keys: never narrower than this, so a finger finds them; past it the keyboard scrolls… */
+const MIN_WHITE_PX = 34
 /** …nor wider than this: a wide screen shows the neighbouring keys instead. */
 const MAX_WHITE_PX = 48
 /** Large keys: about an octave in view on a phone. */
 const LARGE_WHITE_PX = 56
-/** A key is this many times as long as a white key is wide (a piano's proportion)… */
-const KEY_LENGTH = 4.2
+/** A key is this many times as long as a white key is wide, on every screen: a piano's proportion… */
+const KEY_LENGTH = 4.4
 /** …never shorter than this… */
 const MIN_KEYS_PX = 96
 /** …nor taller than this share of the screen's height. */
-const MAX_KEYS_DVH = 40
+const MAX_KEYS_DVH = 32
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
@@ -61,7 +61,6 @@ export function PianoKeyboard({
   namedKeys = 'c',
   map = false,
   letters,
-  height = 'proportional',
   keyPlays,
   onKeyPress,
   children,
@@ -79,8 +78,6 @@ export function PianoKeyboard({
   map?: boolean
   /** The computer keyboard's letters on the keys it plays. */
   letters?: ReadonlyMap<Midi, string> | undefined
-  /** 'proportional': the keys a piano's length for their width; 'fill': all its flex parent's height (the Player). */
-  height?: 'proportional' | 'fill'
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
    * degree's key its chord). All of it is down while the key is held.
@@ -136,10 +133,7 @@ export function PianoKeyboard({
     <div
       ref={scroller}
       data-slot="keys-scroller"
-      className={cn(
-        '@container flex overflow-x-auto overscroll-x-contain rounded-t-sm scrollbar-none',
-        height === 'fill' && 'min-h-0 flex-1',
-      )}
+      className="@container flex overflow-x-auto overscroll-x-contain rounded-t-sm scrollbar-none"
     >
       <div
         className="flex shrink-0 flex-col"
@@ -154,17 +148,10 @@ export function PianoKeyboard({
           aria-label={t('keyboard')}
           onKeyDown={onKeyDown}
           {...pointers.group}
-          className={cn(
-            'relative touch-none bg-key-bed select-none',
-            height === 'fill' ? 'min-h-0 flex-1' : 'shrink-0',
-          )}
-          style={
-            height === 'proportional'
-              ? {
-                  height: `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MAX_KEYS_DVH}dvh)`,
-                }
-              : undefined
-          }
+          className="relative shrink-0 touch-none bg-key-bed select-none"
+          style={{
+            height: `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MAX_KEYS_DVH}dvh)`,
+          }}
         >
           {PIANO_LAYOUT.keys.map((key) => {
             const look = keyLook(key.midi, { ...states, down }, { namedKeys, letters })

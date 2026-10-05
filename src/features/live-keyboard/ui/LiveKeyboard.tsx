@@ -5,6 +5,7 @@ import { rangeOf, type Midi } from '@/shared/lib/music'
 import { useSoundingKeys, useSoundKeys } from '@/shared/lib/services'
 import { PianoKeyboard } from '@/shared/ui'
 import { useTyping } from '../model/use-typing'
+import { GlissandoToggle } from './GlissandoToggle'
 import { KeyboardSettingsButton } from './KeyboardSettingsButton'
 
 /** A key plays itself unless the screen says otherwise. */
@@ -63,6 +64,7 @@ export function LiveKeyboard({
       keyPlays={keyPlays}
       onKeyPress={play}
     >
+      <GlissandoToggle />
       <KeyboardSettingsButton />
     </PianoKeyboard>
   )

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
+import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
 import { Segmented, SwitchRow } from '@/shared/ui'
 
 /** One choice: its name as a row's text (the group around it has the heading), its control under it. */
@@ -15,7 +15,10 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-/** The keyboard settings, saved for every keyboard: in the rail's popover and in Settings. */
+/**
+ * The keyboard settings, saved for every keyboard: in the rail's popover and in Settings. How a swipe
+ * plays is the rail's own toggle, beside the keys it changes.
+ */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
@@ -31,14 +34,6 @@ export function KeyboardSettingsFields() {
             label: t(`keyboardSettings.keySize.${value}`),
           }))}
           onChange={(keySize) => setKeyboard(store, { keySize })}
-        />
-      </Field>
-      <Field label={t('keyboardSettings.swipe.label')}>
-        <Segmented
-          label={t('keyboardSettings.swipe.label')}
-          value={keyboard.swipe}
-          options={SWIPES.map((value) => ({ value, label: t(`keyboardSettings.swipe.${value}`) }))}
-          onChange={(swipe) => setKeyboard(store, { swipe })}
         />
       </Field>
       <Field label={t('keyboardSettings.namedKeys.label')}>

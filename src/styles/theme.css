@@ -142,6 +142,16 @@
   html[data-theme='dark'] {
     color-scheme: dark;
   }
+  /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
+  :root {
+    --gutter: --spacing(4);
+    @variant sm {
+      --gutter: --spacing(6);
+    }
+    @variant lg {
+      --gutter: --spacing(10);
+    }
+  }
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
@@ -194,9 +204,9 @@
     outline-offset: 2px;
   }
   /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
-     its tallest (the notch, the rail, keys at 40dvh, the finger row, its foot) and the phone's tab bar. */
+     its tallest (the notch, the rail, keys at 32dvh, the finger row, its foot) and the phone's tab bar. */
   html:has([data-slot='pinned']) {
-    scroll-padding-top: calc(40dvh + --spacing(23) + max(--spacing(4), env(safe-area-inset-top)));
+    scroll-padding-top: calc(32dvh + --spacing(23) + max(--spacing(4), env(safe-area-inset-top)));
   }
   html:has([data-slot='app-nav']) {
     scroll-padding-bottom: calc(--spacing(16) + env(safe-area-inset-bottom));
@@ -209,6 +219,29 @@
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
 @utility card {
   @apply rounded-3xl border border-border bg-card;
+}
+
+/* A screen's gutter, and what bleeds across it to the screen's edges (a bar, a row that scrolls sideways). */
+@utility px-gutter {
+  padding-inline: var(--gutter);
+}
+@utility -mx-gutter {
+  margin-inline: calc(-1 * var(--gutter));
+}
+/* A grid of cards that takes the width it is given: as many columns of at least 18rem as fit. */
+@utility grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+}
+/* Chord buttons, as many across as fit, each at least 4.5rem. */
+@utility grid-chords {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+}
+/* The same for small tiles, at least 9rem. */
+@utility grid-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(9rem, 100%), 1fr));
 }
 
 /* Clear the notch and the home indicator: named utilities, not arbitrary values in markup. */
@@ -230,6 +263,17 @@
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }
+/* The same with a floor: a sheet's footer keeps its inset where there is no home indicator. */
+@utility pb-safe-4 {
+  padding-bottom: max(--spacing(4), env(safe-area-inset-bottom));
+}
+/* A screen beside the laptop's sidebar: clear of it, open (16rem) or collapsed (4.5rem), by a gutter. */
+@utility pl-sidebar {
+  padding-left: calc(--spacing(64) + var(--gutter));
+}
+@utility pl-sidebar-collapsed {
+  padding-left: calc(--spacing(18) + var(--gutter));
+}
 @utility bottom-safe {
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
@@ -238,13 +282,13 @@
    the tempo and hands flank the transport at the bottom, in the thumb's reach, and the toolbar's
    title and actions span columns of their own, so neither row squeezes the other; from 640px the
    tempo and hands join the toolbar and the transport sits under the sheet; on a phone on its side
-   the transport stands right of the sheet, where the right thumb is. The keyboard takes the height
-   the rest leave, between its least and most; what is left after it goes to the Wait line's row,
-   so the transport stays at the bottom. */
+   the transport stands right of the sheet, where the right thumb is. The keyboard is as tall as its
+   keys' proportion makes it; what is left goes to the Wait line's row, so the transport stays at the
+   bottom. */
 @utility player-screen {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-rows: auto minmax(12rem, 20rem) auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr auto;
   grid-template-areas:
     'lead lead actions actions'
     'keys keys keys keys'
@@ -277,7 +321,7 @@
   }
   @variant sm {
     grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto minmax(14rem, 24rem) auto 1fr auto;
+    grid-template-rows: auto auto auto 1fr auto;
     grid-template-areas:
       'lead tempo hands actions'
       'keys keys keys keys'
@@ -287,7 +331,7 @@
   }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'lead tempo hands actions'
       'keys keys keys keys'
