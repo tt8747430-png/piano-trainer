@@ -31,12 +31,14 @@ export function PieceSettings() {
           <Button
             variant="surface"
             size="icon"
-            aria-label={t('settings')}
+            className="lg:w-auto lg:gap-2 lg:px-4"
             disabled={takes.stage !== 'idle'}
           />
         }
       >
         <Settings aria-hidden />
+        {/* Named on a laptop's toolbar, where there is room; its icon alone on a phone. */}
+        <span className="max-lg:sr-only">{t('settings')}</span>
       </SheetTrigger>
       <SheetContent title={t('settings')}>
         <div className="flex flex-col gap-6">

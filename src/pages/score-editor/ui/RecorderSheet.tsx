@@ -28,12 +28,14 @@ export function RecorderSheet() {
           <Button
             variant="surface"
             size="icon"
-            aria-label={t('recorder.open')}
+            className="lg:w-auto lg:gap-2 lg:px-4"
             disabled={takes.stage !== 'idle'}
           />
         }
       >
         <CircleDot aria-hidden />
+        {/* Named on a laptop's toolbar, where there is room; its icon alone on a phone. */}
+        <span className="max-lg:sr-only">{t('recorder.open')}</span>
       </SheetTrigger>
       <SheetContent title={writing ? t('recorder.write') : t('recorder.title')}>
         {writing ? (

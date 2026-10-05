@@ -2,7 +2,7 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Delete, Layers } from 'lucid
 import { useTranslation } from 'react-i18next'
 import { NOTE_VALUES, takesDot } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
-import { Segmented, ToolButton } from '@/shared/ui'
+import { Segmented, ToolButton, ToolDivider } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import { HandBarTools } from './HandBarTools'
@@ -13,8 +13,9 @@ const GLYPH = 'font-sans text-3xl leading-none'
 const REST = '𝄽'
 
 /**
- * Writing notes, as a palette: the value, then Dot, Triplet, Rest and Chord, the caret's arrows, the
- * notes there a semitone up or down, respelled or deleted; in a hand, that bar's own tools.
+ * Writing notes, as a palette in groups parted by a hairline: the value, then Dot, Triplet, Rest and
+ * Chord, the caret's arrows, the notes there a semitone up or down, respelled or deleted; in a hand,
+ * that bar's own tools.
  */
 export function NoteTools() {
   const { t } = useTranslation('editor')
@@ -43,6 +44,7 @@ export function NoteTools() {
           onChange={(next) => dispatch({ type: 'value', value: next })}
         />
       </div>
+      <ToolDivider />
       <div role="group" aria-label={t('groups.value')} className="flex shrink-0 gap-1">
         <ToolButton
           label={t('dot')}
@@ -78,6 +80,7 @@ export function NoteTools() {
           <Layers aria-hidden />
         </ToolButton>
       </div>
+      <ToolDivider />
       <div role="group" aria-label={t('groups.caret')} className="flex shrink-0 gap-1">
         <ToolButton
           label={t('back')}
@@ -92,6 +95,7 @@ export function NoteTools() {
           <ArrowRight aria-hidden />
         </ToolButton>
       </div>
+      <ToolDivider />
       <div role="group" aria-label={t('groups.notes')} className="flex shrink-0 gap-1">
         <ToolButton label={t('up')} onClick={() => dispatch({ type: 'shift', semitones: 1 })}>
           <ArrowUp aria-hidden />

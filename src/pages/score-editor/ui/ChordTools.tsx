@@ -2,13 +2,13 @@ import { ArrowLeft, ArrowRight, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { barAt, keyChords } from '@/features/score-editor'
 import { chordSymbol } from '@/shared/lib/music'
-import { ToolButton } from '@/shared/ui'
+import { ToolButton, ToolDivider } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarMenu } from './BarMenu'
 import { ChordField } from './ChordField'
 
-/** Writing chords: the chord typed or tapped from the key's, deleting one, and the bars. */
+/** Writing chords, in groups parted by a hairline: the chord typed or tapped from the key's, deleting one, and the caret and the bars. */
 export function ChordTools() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -34,9 +34,11 @@ export function ChordTools() {
           </Button>
         ))}
       </div>
+      <ToolDivider />
       <ToolButton label={t('chord.delete')} onClick={() => actions.dispatch({ type: 'delete' })}>
         <Delete aria-hidden />
       </ToolButton>
+      <ToolDivider />
       <div role="group" aria-label={t('groups.caret')} className="flex shrink-0 gap-1">
         <ToolButton
           label={t('back')}

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { barAt, isHandLayer, notesAt } from '@/features/score-editor'
 import { FINGERS, writtenName, type Finger } from '@/shared/lib/music'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, ToolDivider } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
@@ -24,6 +24,7 @@ export function HandBarTools() {
   if (!isHandLayer(layer)) return null
   return (
     <>
+      <ToolDivider />
       {written ? (
         <Button variant="outline" onClick={() => actions.dispatch({ type: 'backToPattern' })}>
           {t('backToPattern')}
