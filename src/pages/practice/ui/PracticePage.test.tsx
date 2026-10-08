@@ -14,7 +14,7 @@ describe('Practice', () => {
       ['Scales and keys Scale · Chords · Key', '/practice/scales'],
       ['Progressions In any key · Passing chords · Reharmonise', '/practice/progressions'],
       ['Intervals On the keys, up and down', '/practice/intervals'],
-      ['Accompaniment Patterns · Studies', '/practice/patterns'],
+      ['Accompaniment Called to Play · Боброва · Styles', '/practice/accompaniment'],
       ['Exercises Technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
       ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
     ])

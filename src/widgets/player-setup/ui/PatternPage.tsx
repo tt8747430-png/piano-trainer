@@ -10,7 +10,7 @@ import {
   usePatterns,
   type PatternChoice,
   type PatternFit,
-  useShelfName,
+  useFullShelfName,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
@@ -39,7 +39,7 @@ export function PatternPage({
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
-  const shelfName = useShelfName()
+  const shelfName = useFullShelfName()
   return (
     <ListPage
       label={t('pattern')}
@@ -86,7 +86,7 @@ export function PatternPage({
       <RowLink
         title={t('allPatterns')}
         {...PAGE_TILES.patterns}
-        render={<Link to="/practice/patterns" />}
+        render={<Link to="/practice/accompaniment" />}
       />
     </ListPage>
   )

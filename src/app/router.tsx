@@ -23,12 +23,14 @@ import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
+  accompanimentSearch,
   CHORDS_KEPT,
   chordsSearch,
   finderSearch,
   intervalsSearch,
   passingSearch,
   progressionsSearch,
+  readAccompanimentSearch,
   readChordsSearch,
   readFinderSearch,
   readIntervalsSearch,
@@ -149,11 +151,6 @@ const exercisesRoute = createRoute({
   path: '/practice/exercises',
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
-const studiesRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/studies',
-  component: lazyRouteComponent(practiceScreens, 'StudiesPage'),
-})
 // A trainer: each remembers its own level, rounds and Custom, under its own path.
 const restoreTrainer = restoreView(readTrainerSearch, [])
 const trainerRoute = createRoute({
@@ -234,11 +231,14 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
-// Patterns: each explained, starred, hidden; the learner's own made and edited (ADR 0026).
-const patternsRoute = createRoute({
+// Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
+// explained, starred, hidden on its own page; the learner's own are made and edited (ADR 0026).
+const accompanimentRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/patterns',
-  component: lazyRouteComponent(explorerScreens, 'PatternsPage'),
+  path: '/practice/accompaniment',
+  ...accompanimentSearch,
+  ...remembered(readAccompanimentSearch, []),
+  component: lazyRouteComponent(explorerScreens, 'AccompanimentPage'),
 })
 /** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
 const inBook = (ref: string, patterns: PatternsStore) =>
@@ -382,7 +382,7 @@ const routeTree = rootRoute.addChildren([
     reharmoniseRoute,
     passingChordsRoute,
     progressionsRoute,
-    patternsRoute,
+    accompanimentRoute,
     newPatternRoute,
     patternRoute,
     editPatternRoute,
@@ -391,7 +391,6 @@ const routeTree = rootRoute.addChildren([
     quizRoute,
     exercisesRoute,
     trainerRoute,
-    studiesRoute,
     studyRoute,
   ]),
   fullScreenRoute.addChildren([

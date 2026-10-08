@@ -1,8 +1,17 @@
+import { METHOD_BOOK_IDS } from '@/entities/book'
+import { isOneOf } from '@/shared/lib'
+import { PATTERN_GROUP_BOOK } from '../content/patterns'
 import type { PatternChoice } from './accompaniment'
 import type { BookPattern, PatternBook } from './book'
 import type { PatternRef } from './own'
 import type { PatternsState } from './store'
-import { isPatternId, PATTERN_GROUPS, type PatternGroup, type PatternId } from './types'
+import {
+  isPatternGroup,
+  isPatternId,
+  PATTERN_GROUPS,
+  type PatternGroup,
+  type PatternId,
+} from './types'
 import { patternsIn } from './selectors'
 
 /** A titled run of patterns in a list: the learner's favourites or own, a built-in group, the hidden. */
@@ -10,6 +19,18 @@ export interface PatternShelf {
   readonly shelf: 'favourites' | 'own' | PatternGroup | 'hidden'
   readonly patterns: readonly BookPattern[]
 }
+
+/**
+ * The reference's parts, each a page of Accompaniment: a method book's groups, the rhythm styles, and
+ * what the learner starred, made and hid.
+ */
+export const REFERENCE_PARTS = [...METHOD_BOOK_IDS, 'styles', 'yours'] as const
+export type ReferencePart = (typeof REFERENCE_PARTS)[number]
+export const isReferencePart = isOneOf(REFERENCE_PARTS)
+
+/** The part a shelf is on: a group's book's, Styles for a group of no book, Yours for the learner's. */
+export const partOfShelf = (shelf: PatternShelf['shelf']): ReferencePart =>
+  isPatternGroup(shelf) ? (PATTERN_GROUP_BOOK[shelf] ?? 'styles') : 'yours'
 
 type Choices = Pick<PatternsState, 'favourites' | 'hidden'>
 
@@ -43,14 +64,21 @@ function shelves(
 }
 
 /**
- * The Patterns page's list: favourites, the learner's own, the built-in groups, and the hidden
- * at the end, so one can be found and shown again.
+ * One part of the reference, Accompaniment's list: a book's groups or the rhythm styles without the
+ * hidden; on Yours the favourites, the learner's own, and the hidden at the end, so one can be found
+ * and shown again.
  */
-export function referenceShelves(book: PatternBook, choices: Choices): PatternShelf[] {
+export function referenceShelves(
+  book: PatternBook,
+  choices: Choices,
+  part: ReferencePart,
+): PatternShelf[] {
   const hidden = new Set(choices.hidden)
   const shown = shelves(book, choices, (id) => hidden.has(id))
   const away = inBook(book, choices.hidden)
-  return away.length > 0 ? [...shown, { shelf: 'hidden', patterns: away }] : shown
+  const all: PatternShelf[] =
+    away.length > 0 ? [...shown, { shelf: 'hidden', patterns: away }] : shown
+  return all.filter(({ shelf }) => partOfShelf(shelf) === part)
 }
 
 /** The Setup's picker: as the reference, but the hidden are left out, all but the one playing now. */

@@ -5,6 +5,7 @@ export {
   RIGHT_FIGURE_IDS,
   isLeftFigureId,
   isMethodCode,
+  isPatternGroup,
   isPatternId,
   isRightFigureId,
   type FigureEntry,
@@ -52,7 +53,15 @@ export {
   usePatterns,
   usePatternsStoreApi,
 } from './model/context'
-export { pickerShelves, referenceShelves, type PatternShelf } from './model/shelves'
+export {
+  isReferencePart,
+  partOfShelf,
+  pickerShelves,
+  REFERENCE_PARTS,
+  referenceShelves,
+  type PatternShelf,
+  type ReferencePart,
+} from './model/shelves'
 export { followsInversion, playsChord } from './model/plays-chord'
 export {
   patternsIn,
@@ -63,6 +72,7 @@ export {
   selectOwnPattern,
 } from './model/selectors'
 export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
-export { PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'
+export { PATTERN_GROUP_BOOK, PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
+export { useFullShelfName } from './ui/use-full-shelf-name'
 export { useShelfName } from './ui/use-shelf-name'

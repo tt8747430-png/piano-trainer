@@ -7,6 +7,7 @@ import {
   isPatternId,
   isPatternRef,
   LEFT_FIGURES,
+  partOfShelf,
   RIGHT_FIGURES,
   selectIsFavourite,
   selectIsHidden,
@@ -86,9 +87,11 @@ function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
   const [asking, setAsking] = useState(false)
   const remove = () => {
     // Leave the page first: it has nothing to show once the pattern is gone.
-    void navigate({ to: '/practice/patterns', replace: true }).then(() =>
-      deleteOwnPattern(store, id),
-    )
+    void navigate({
+      to: '/practice/accompaniment',
+      search: { show: 'yours' },
+      replace: true,
+    }).then(() => deleteOwnPattern(store, id))
   }
   return (
     <>
@@ -135,7 +138,14 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={name}
-        back={<BackButton fallback={{ to: '/practice/patterns' }} />}
+        back={
+          <BackButton
+            fallback={{
+              to: '/practice/accompaniment',
+              search: { show: partOfShelf(pattern.group) },
+            }}
+          />
+        }
         actions={<FavouriteButton pattern={pattern} />}
       />
       <ExplorerKeyboard shown={shown} />
@@ -199,7 +209,9 @@ export function PatternPage() {
     <PatternView key={pattern.ref} pattern={pattern} book={book} />
   ) : (
     <NotFound>
-      <ButtonLink render={<Link to="/practice/patterns" />}>{t('notFound.toPatterns')}</ButtonLink>
+      <ButtonLink render={<Link to="/practice/accompaniment" />}>
+        {t('notFound.toAccompaniment')}
+      </ButtonLink>
     </NotFound>
   )
 }

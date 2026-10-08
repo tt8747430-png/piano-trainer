@@ -116,6 +116,15 @@ describe('A progression in the Player', () => {
       const [first, second] = within(list).getAllByRole('group')
       expect(first).toBe(within(list).getByRole('group', { name: 'Favourites' }))
       expect(second).toBe(within(list).getByRole('group', { name: 'Your patterns' }))
+      // Every book's shelves are in one list here, so a method book's says its book first.
+      for (const name of [
+        'Called to Play · The 5 ways (lesson 3)',
+        'Called to Play · Right-hand techniques',
+        'Боброва · The 7 types of accompaniment',
+        'Rhythm styles',
+      ]) {
+        expect(within(list).getByRole('group', { name })).toBeInTheDocument()
+      }
       if (!first) throw new Error('the favourites')
       expect(
         within(first).getByRole('option', { name: /^Rock Driving 8th-note chords/ }),
@@ -133,7 +142,7 @@ describe('A progression in the Player', () => {
       expect(within(list).queryByRole('option', { name: /^Funk/ })).toBeNull()
       expect(screen.getByRole('link', { name: /^All patterns/ })).toHaveAttribute(
         'href',
-        '/practice/patterns',
+        '/practice/accompaniment',
       )
     })
 

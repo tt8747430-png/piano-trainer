@@ -15,6 +15,7 @@ import {
 } from '@/shared/lib/music'
 import {
   COLLECTIONS,
+  METHOD_BOOK_PIECES,
   PIECES,
   chartOf,
   hasMethodCodes,
@@ -43,6 +44,17 @@ describe('the collections', () => {
     expect(SONG_COLLECTIONS.map((collection) => collection.id)).toEqual(SONG_COLLECTION_IDS)
     expect(isSongCollectionId('hymns')).toBe(true)
     expect(isSongCollectionId('studies')).toBe(false)
+  })
+
+  it('give each method book the pieces its patterns are practised on: the studies, and the hymns', () => {
+    const studies = METHOD_BOOK_PIECES['called-to-play']
+    const hymns = METHOD_BOOK_PIECES['seven-types']
+    expect([studies.id, hymns.id]).toEqual(['studies', 'hymns'])
+    for (const study of studies.entries) expect(study.source?.book, study.id).toBe('called-to-play')
+    // A hymn opens with one of Боброва's seven types.
+    for (const hymn of hymns.entries) {
+      expect(isPiece(hymn) && PATTERNS[hymn.pattern].group, hymn.id).toBe('seven-types')
+    }
   })
 })
 const LISTINGS = ENTRIES.filter((entry) => !isPiece(entry))

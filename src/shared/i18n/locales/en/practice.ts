@@ -19,14 +19,19 @@ export const practice = {
     scales: 'Scale · Chords · Key',
     progressions: 'In any key · Passing chords · Reharmonise',
     intervals: 'On the keys, up and down',
-    accompaniment: 'Patterns · Studies',
+    accompaniment: 'Called to Play · Боброва · Styles',
     exercises: 'Technique · Barry Harris · Piano With Jonny',
     quiz: 'Chords · Scales and keys · By ear · Reading',
   },
   // Chords' two pages.
   chords: { build: 'Build', find: 'Find' },
-  // Accompaniment's two pages.
-  accompaniment: { patterns: 'Patterns', studies: 'Studies' },
+  // Accompaniment's pages after its method books', and the line of a page with no pattern to show.
+  accompaniment: {
+    styles: 'Styles',
+    yours: 'Yours',
+    noneYours: 'Patterns you star, make or hide are kept here.',
+    allHidden: 'Every pattern here is hidden. They are kept on Yours.',
+  },
   // Progressions' first tab; its other two are named by their own pages.
   progression: 'Progression',
   // A scale's page: its key's common progressions, each opening Progressions in this key.

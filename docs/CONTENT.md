@@ -44,7 +44,7 @@ export default definePiece({
 | `title`                    | As printed, in its own language                                                       |
 | `titleEn`                  | The English title, only where the printed one is not English                          |
 | `credits`                  | See [Credits](#credits)                                                               |
-| `source`                   | `{ book, number?, page? }`; the books are in `content/books.ts`                       |
+| `source`                   | `{ book, number?, page? }`; the books are in `entities/book`                          |
 | `key`                      | The key it is written in: a letter, `#` or `b`, then `m` for minor (`G`, `F#`, `Ebm`) |
 | `meter`                    | `'2/4'`, `'3/4'`, `'4/4'`, `'6/8'` or `'12/8'`: the piece's main meter                |
 | `tempo`                    | Beats per minute, 40–160 (a compound meter's beat is the dotted quarter)              |
@@ -260,7 +260,9 @@ is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
 
 A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts` in the order Learn
 shows it: an `id`, a `title` and `summary` in both languages, a `level` on the Path's scale, a `category`, a `module`
-and its `sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button.
+and its `sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button. A lesson
+that teaches one method book's own (its ways, its types) is in that book's module; one that teaches by subject and
+quotes the books stays in Accompaniment.
 
 | Block         | Content                                                                                  | Shows                                                     |
 | ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |

@@ -18,7 +18,7 @@ export const common: LocaleResources['common'] = {
     offline: 'Нет сети. Этот экран откроется, когда она появится.',
     reload: 'Перезагрузить',
   },
-  notFound: { title: 'Страница не найдена', toSongs: 'К песням', toPatterns: 'К фактурам' },
+  notFound: { title: 'Страница не найдена', toSongs: 'К песням', toAccompaniment: 'К аккомпанементу' },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
   loading: 'Загрузка',

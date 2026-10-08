@@ -1,3 +1,4 @@
+import type { MethodBookId } from '@/entities/book'
 import type { LocalText } from '@/shared/i18n'
 import type { EventPattern, Pattern } from '@/shared/lib/arrangement'
 import {
@@ -10,20 +11,20 @@ import {
 } from '../model/types'
 import { LEFT_FIGURES, RIGHT_FIGURES } from './figures'
 
+/** A group's own name, without its book's: a list that mixes the books says the book first. */
 export const PATTERN_GROUP_NAMES: Readonly<Record<PatternGroup, LocalText>> = {
-  'lesson-3': {
-    en: 'Called to Play — the 5 ways (lesson 3)',
-    ru: 'Called to Play — 5 способов (урок 3)',
-  },
-  techniques: {
-    en: 'Called to Play — right-hand techniques',
-    ru: 'Called to Play — техники правой руки',
-  },
-  'seven-types': {
-    en: '7 types of accompaniment (Боброва)',
-    ru: '7 типов аккомпанемента (Боброва)',
-  },
+  'lesson-3': { en: 'The 5 ways (lesson 3)', ru: '5 способов (урок 3)' },
+  techniques: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
+  'seven-types': { en: 'The 7 types of accompaniment', ru: '7 типов аккомпанемента' },
   genres: { en: 'Rhythm styles', ru: 'Ритмические стили' },
+}
+
+/** The method book that teaches a group's patterns; the rhythm styles are no book's. */
+export const PATTERN_GROUP_BOOK: Readonly<Record<PatternGroup, MethodBookId | null>> = {
+  'lesson-3': 'called-to-play',
+  techniques: 'called-to-play',
+  'seven-types': 'seven-types',
+  genres: null,
 }
 
 type WrittenPattern = Omit<PatternEntry, 'pattern'>

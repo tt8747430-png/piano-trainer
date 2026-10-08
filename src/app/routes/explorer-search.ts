@@ -1,4 +1,4 @@
-import { isPatternRef, type PatternRef } from '@/entities/pattern'
+import { isPatternRef, isReferencePart, type PatternRef } from '@/entities/pattern'
 import { isStepId } from '@/entities/path'
 import { PROGRESSION } from '@/features/practice'
 import {
@@ -44,6 +44,7 @@ import type { PassingView } from '@/widgets/passing-chords'
 import type { ProgressionsView } from '@/widgets/progressions'
 import type { ReharmoniseView } from '@/widgets/reharmonise'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
+import type { AccompanimentView } from '@/widgets/subject-tabs'
 import {
   C_MAJOR,
   C_MAJOR_PARAM,
@@ -233,3 +234,10 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
   }
 }
 export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)
+
+// Accompaniment: the page of it shown, its first method book's unless the URL names another.
+const ACCOMPANIMENT_DEFAULTS: AccompanimentView = { show: 'called-to-play' }
+export function readAccompanimentSearch(raw: Raw): AccompanimentView {
+  return { show: valueOr(isReferencePart, raw.show, ACCOMPANIMENT_DEFAULTS.show) }
+}
+export const accompanimentSearch = routeSearch(readAccompanimentSearch, ACCOMPANIMENT_DEFAULTS)

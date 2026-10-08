@@ -59,9 +59,9 @@ it. `@` → `src`.
   practised (ADR 0030; `/practice` lists them and remembers nothing): Chords (`/practice/chords` Build,
   `/practice/chords/find` Find), Scales and keys (`/practice/scales`, its Scale · Chords · Key views as tabs),
   Progressions (`/practice/progressions`, `…/passing`, `…/reharmonise`), Intervals (`/practice/intervals`),
-  Accompaniment (`/practice/patterns` with a pattern's page `/practice/patterns/$patternRef` and the editor
-  `/practice/patterns/new` and `…/$patternRef/edit`; `/practice/studies` and a study's page
-  `/practice/studies/$pieceId`), Exercises (`/practice/exercises`) and Quiz (`/practice/quiz`, its trainers
+  Accompaniment (`/practice/accompaniment`, its Called to Play · Боброва · Styles · Yours as tabs, ADR 0033; a
+  pattern's page `/practice/patterns/$patternRef` and the editor `/practice/patterns/new` and `…/$patternRef/edit`;
+  a study's page `/practice/studies/$pieceId`), Exercises (`/practice/exercises`) and Quiz (`/practice/quiz`, its trainers
   `/practice/trainers/$trainerId`); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
   opens its takes); screens are
@@ -88,8 +88,8 @@ it. `@` → `src`.
   trainer by group (`model/quiz-groups.ts`, held by a test to every trainer) with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords` and `pages/chord-finder` Chords' Build and Find; `pages/scales`
   Scales and keys (its Key view's songs in the key, `PiecesInKey`); `pages/progressions`, `pages/passing-chords` and
-  `pages/reharmonise` Progressions' three tabs; `pages/intervals`; `pages/patterns` and `pages/studies`
-  Accompaniment's two tabs, `pages/pattern` and `pages/pattern-editor` a pattern's page and the
+  `pages/reharmonise` Progressions' three tabs; `pages/intervals`; `pages/accompaniment` Accompaniment (a
+  part's `PatternShelves`, a method book's `BookPieces`), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
   `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028); its parts share one context and read the store narrowly).
@@ -110,7 +110,7 @@ it. `@` → `src`.
   facts and borrowed chords; its pure marks, plays, `scaleRunOf`, `keyOfScale` and `showsOf` in `model/`), `interval-explorer` (every interval over a root
   as Clefs' cards), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
   `passing-chords` (the ways between two chords, each row voice-led), `subject-tabs` (a subject's pages as tabs that
-  are links: `ChordsTabs`, `ScalesTabs`, `ProgressionsTabs`, `AccompanimentTabs`), `score-sheet` (the score editor's sheet: a line of
+  are links: `ChordsTabs`, `ScalesTabs`, `ProgressionsTabs`, `AccompanimentTabs` over its URL's `AccompanimentView`), `score-sheet` (the score editor's sheet: a line of
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progressions` (a progression in any key: its row of chords, `ProgressionChoice`
@@ -148,7 +148,8 @@ it. `@` → `src`.
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
   Content: `piece` (42 pieces, 7 listings; a chart's parser and the parser of a song written in degrees (`isDegreePiece`:
-  a piece's format is not its kind), a piece's `recording`; `SONG_COLLECTIONS` on Songs, `STUDIES` on Practice,
+  a piece's format is not its kind), a piece's `recording`; `SONG_COLLECTIONS` on Songs, `METHOD_BOOK_PIECES` (a method book's: the studies on
+  Practice, the hymns),
   `entriesInKey`, `pieceFit`, `choosableChordSize`,
   `isOwnKey`; bars of either hand written out (`hands`, `parseHands`) and the writers back to text (`writeBar`,
   `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`, version 1, their
@@ -156,12 +157,13 @@ it. `@` → `src`.
   the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read;
   `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
   `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`,
-  version 1: favourites, hidden, own; `referenceShelves` / `pickerShelves`; `PatternFit` and `patternNeed` /
+  version 1: favourites, hidden, own; `PATTERN_GROUP_BOOK`; `referenceShelves` (a part of `REFERENCE_PARTS`) /
+  `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
   the keys, patterns over their pieces and progressions in any key, links by name to the explorers and
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
-  Gospel), `progression-library` (the one model of a progression that is practised: named, by style, in numerals,
+  each method book, Gospel), `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033), `progression-library` (the one model of a progression that is practised: named, by style, in numerals,
   each line once in its mode, with its note, pattern and chord size; `libraryProgression` names a line, `COMMON_PROGRESSIONS`
   a key's, `LIBRARY_BY_STYLE` what its pop-up lists, `otherModeVersion` a cadence's version in the other mode, from
   `MODE_VERSIONS`), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;

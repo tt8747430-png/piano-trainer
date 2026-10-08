@@ -31,6 +31,8 @@ const ROUTES = [
   ['/settings', '/settings'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
+  ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
+  ['/practice/patterns/M1', '/practice/patterns/$patternRef'],
   ['/practice/studies/ex3', '/practice/studies/$pieceId'],
 ] as const
 
@@ -304,11 +306,12 @@ describe('shelves', () => {
     )
   })
 
-  it('goes back from a study opened directly to Accompaniment’s studies', async () => {
+  it('goes back from a study opened directly to Accompaniment, on the page of its studies', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/studies'))
+    await waitFor(() => expect(router.state.location.href).toBe('/practice/accompaniment'))
+    expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()
   })
 
   it('closes the Player of a song written in degrees, opened directly, to its page on Songs', async () => {

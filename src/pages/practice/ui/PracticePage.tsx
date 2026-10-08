@@ -16,7 +16,7 @@ const SUBJECTS = [
   { id: 'scales', to: '/practice/scales', tile: PAGE_TILES.scales },
   { id: 'progressions', to: '/practice/progressions', tile: PAGE_TILES.progressions },
   { id: 'intervals', to: '/practice/intervals', tile: PAGE_TILES.intervals },
-  { id: 'accompaniment', to: '/practice/patterns', tile: PAGE_TILES.patterns },
+  { id: 'accompaniment', to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
   { id: 'exercises', to: '/practice/exercises', tile: { icon: Dumbbell, paint: 'sand' } },
   { id: 'quiz', to: '/practice/quiz', tile: { icon: ListChecks, paint: 'lilac' } },
 ] as const satisfies readonly { id: string; to: string; tile: Tile }[]

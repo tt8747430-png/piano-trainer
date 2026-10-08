@@ -11,6 +11,7 @@ import {
 /** Groups use the glossary's words; their displayed names keep the source's wording. */
 export const PATTERN_GROUPS = ['lesson-3', 'techniques', 'seven-types', 'genres'] as const
 export type PatternGroup = (typeof PATTERN_GROUPS)[number]
+export const isPatternGroup = isOneOf(PATTERN_GROUPS)
 
 export const RIGHT_FIGURE_IDS = [
   'b1',

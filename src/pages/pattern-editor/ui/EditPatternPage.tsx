@@ -15,8 +15,8 @@ export function EditPatternPage() {
     // Deleted in another tab while it was being changed.
     return (
       <NotFound>
-        <ButtonLink render={<Link to="/practice/patterns" />}>
-          {t('common:notFound.toPatterns')}
+        <ButtonLink render={<Link to="/practice/accompaniment" />}>
+          {t('common:notFound.toAccompaniment')}
         </ButtonLink>
       </NotFound>
     )

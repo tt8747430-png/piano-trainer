@@ -4,6 +4,7 @@ import {
   LEFT_FIGURES,
   METHOD_PATTERNS,
   METHODS,
+  PATTERN_GROUP_BOOK,
   PATTERN_GROUP_NAMES,
   PATTERN_GROUPS,
   PATTERN_IDS,
@@ -11,6 +12,7 @@ import {
   RIGHT_FIGURES,
   isLeftFigureId,
   isMethodCode,
+  isPatternGroup,
   isPatternId,
   isRightFigureId,
   patternNeed,
@@ -24,6 +26,26 @@ describe('the pattern catalog', () => {
     expect(Object.keys(RIGHT_FIGURES)).toHaveLength(36)
     expect(Object.keys(LEFT_FIGURES)).toHaveLength(20)
     expect(Object.keys(METHODS)).toHaveLength(17)
+  })
+
+  it('says which method book teaches each group, the rhythm styles no book’s', () => {
+    expect(PATTERN_GROUPS.map((group) => [group, PATTERN_GROUP_BOOK[group]])).toEqual([
+      ['lesson-3', 'called-to-play'],
+      ['techniques', 'called-to-play'],
+      ['seven-types', 'seven-types'],
+      ['genres', null],
+    ])
+    expect(isPatternGroup('genres')).toBe(true)
+    expect(isPatternGroup('own')).toBe(false)
+  })
+
+  it('names a group without its book: a list says the book where it mixes them', () => {
+    expect(PATTERN_GROUPS.map((group) => PATTERN_GROUP_NAMES[group].en)).toEqual([
+      'The 5 ways (lesson 3)',
+      'Right-hand techniques',
+      'The 7 types of accompaniment',
+      'Rhythm styles',
+    ])
   })
 
   it('gives every pattern its own id', () => {

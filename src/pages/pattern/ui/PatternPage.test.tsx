@@ -90,18 +90,31 @@ describe('A pattern’s page', () => {
     expect(screen.queryByRole('button', { name: 'Hide from the Player' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/patterns'))
+    await waitFor(() =>
+      expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
+    )
     expect(patternsStore.getState()).toMatchObject({ own: [], favourites: [] })
   })
 
-  it('is not found once another tab deletes it, with the way back to Patterns', async () => {
+  it.each([
+    ['M1', '/practice/accompaniment'],
+    ['r1', '/practice/accompaniment?show=seven-types'],
+    ['ballad', '/practice/accompaniment?show=styles'],
+  ])('goes back from %s, opened directly, to its page of Accompaniment', async (ref, page) => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(`/practice/patterns/${ref}`)
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.href).toBe(page))
+  })
+
+  it('is not found once another tab deletes it, with the way back to Accompaniment', async () => {
     const { patternsStore } = await renderApp('/practice/patterns/my-1', { storage: withOwn() })
     await screen.findByRole('heading', { level: 1, name: 'Sunday' })
     act(() => deleteOwnPattern(patternsStore, 'my-1'))
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Go to Patterns' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Go to Accompaniment' })).toHaveAttribute(
       'href',
-      '/practice/patterns',
+      '/practice/accompaniment',
     )
   })
 

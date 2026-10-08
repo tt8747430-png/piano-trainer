@@ -105,11 +105,11 @@ describe('The pattern editor', () => {
 
   it('cancels back where it was opened from', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/patterns')
+    const { router } = await renderApp('/practice/accompaniment')
     await user.click(await screen.findByRole('link', { name: 'New pattern' }))
     const form = (await screen.findByRole('textbox', { name: 'Name' })).closest('form')
     if (!form) throw new Error('the editor is a form')
     await user.click(within(form).getByRole('button', { name: 'Cancel' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/patterns'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/accompaniment'))
   })
 })

@@ -22,7 +22,7 @@ const HEARD = ownPatternId(1)
 export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
-  const cancel = useGoBack({ to: '/practice/patterns' })
+  const cancel = useGoBack({ to: '/practice/accompaniment' })
   const [draft, setDraft] = useState(start)
   const change = (part: Partial<OwnPatternDraft>) => setDraft((was) => ({ ...was, ...part }))
   const { rh, lh } = draft
