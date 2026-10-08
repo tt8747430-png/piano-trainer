@@ -55,7 +55,7 @@ Each has its test in the task that owns the code (1–3 Task 1 kernel, 4 Task 1 
   `parseNumerals`, `numeralText`, `numeralsLine`, `numeralsParam`, `numeralChord`, `numeralOf`, `readDegree` keep their
   signatures. `NumeralTriad` and `NumeralSeventh` go.
 
-- [ ] **Step 1: Write the failing kernel tests** in `numerals.test.ts` (keep every existing test but the one named
+- [x] **Step 1: Write the failing kernel tests** in `numerals.test.ts` (keep every existing test but the one named
       below):
 
 ```ts
@@ -117,10 +117,10 @@ it('writes none for a chord whose root is no degree’s, sharpened or flattened'
 })
 ```
 
-- [ ] **Step 2: Run** `npx vitest run src/shared/lib/music/numerals.test.ts` — expect the new tests to fail (`IIm7`
+- [x] **Step 2: Run** `npx vitest run src/shared/lib/music/numerals.test.ts` — expect the new tests to fail (`IIm7`
       unread, `I6` unread, `quality` missing).
 
-- [ ] **Step 3: Implement.** In `chord-symbol.ts`, beside `QUALITY_BY_SUFFIX`:
+- [x] **Step 3: Implement.** In `chord-symbol.ts`, beside `QUALITY_BY_SUFFIX`:
 
 ```ts
 /** The chord a suffix writes, in any of its spellings (`m7b5`, `maj7`, none for major); null for one the table lacks. */
@@ -179,9 +179,9 @@ as before (`GROWN` keyed by those four); `numeralOf` returns `{ degree, shift, q
 chord whose root is a degree or a semitone from one. `NAMED`, `triadOf`, `seventhOf`, `SEVENTH_TEXT` and the two
 types go.
 
-- [ ] **Step 4: Run** the kernel tests — expect PASS; then `npx tsc --noEmit` and fix any literal `Numeral` in tests.
+- [x] **Step 4: Run** the kernel tests — expect PASS; then `npx tsc --noEmit` and fix any literal `Numeral` in tests.
 
-- [ ] **Step 5: The field and the page.** Add to `typed-progression.test.ts`:
+- [x] **Step 5: The field and the page.** Add to `typed-progression.test.ts`:
 
 ```ts
 it('reads the sheets’ degrees and chords of any quality', () => {
@@ -196,7 +196,7 @@ it('reads the sheets’ degrees and chords of any quality', () => {
 and to `ProgressionsPage.test.tsx`:
 
 ```tsx
-it('reads a 6th chord typed, and a chord a URL must escape', async () => {
+it('reads a 6th chord typed', async () => {
   const user = userEvent.setup()
   const { router } = await renderApp('/practice/progressions')
   const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
@@ -215,7 +215,7 @@ it('opens on a line whose chords a URL escapes', async () => {
 
 Run both files — expect PASS (no code change beyond the kernel's).
 
-- [ ] **Step 6: Verify and commit** — `npm run typecheck && npm run lint && npm run test`, prettier on touched files.
+- [x] **Step 6: Verify and commit** — `npm run typecheck && npm run lint && npm run test`, prettier on touched files.
 
 ```bash
 git add src/shared/lib/music src/widgets/progressions/model/typed-progression.test.ts src/pages/progressions/ui/ProgressionsPage.test.tsx
@@ -226,14 +226,16 @@ git commit -m "Numerals: a degree carries any chord of the table, read the sheet
 
 **Files:**
 
-- Modify: `src/shared/lib/music/voice-lead.ts`
+- Modify: `src/shared/lib/music/voice-lead.ts`, `src/shared/lib/music/place.ts` (`inverted` exported to the kernel:
+  a chord's tones from its root's key in an inversion, which places a hand without its root where `placeChord`
+  would count from the hand's lowest tone)
 - Test: `src/shared/lib/music/voice-lead.test.ts`
 
 **Interfaces:**
 
 - Produces: `voiceLead(chords: readonly Chord[]): Midi[][]`, unchanged in shape: each chord its bass, then the hand.
 
-- [ ] **Step 1: Write the failing tests** (the shapes are the sheet's, p.9 Step 1 and p.6 moved to B♭):
+- [x] **Step 1: Write the failing tests** (the shapes are the sheet's, p.9 Step 1 and p.6 moved to B♭):
 
 ```ts
 const voiced = (...symbols: string[]) => voiceLead(symbols.map(parseChordSymbol))
@@ -266,9 +268,9 @@ it('voices a row of one chord, of none, and a 13th', () => {
 
 and widen the existing "keeps the right hand above the bass" test's qualities with `'m9'`, `'n9'`, `'maj9'`, `'n13'`.
 
-- [ ] **Step 2: Run** `npx vitest run src/shared/lib/music/voice-lead.test.ts` — expect the three new tests to fail.
+- [x] **Step 2: Run** `npx vitest run src/shared/lib/music/voice-lead.test.ts` — expect the three new tests to fail.
 
-- [ ] **Step 3: Implement:**
+- [x] **Step 3: Implement:**
 
 ```ts
 /** The bass plays each root between C3 and B3, an octave lower where the hand reaches down to it. */
@@ -280,10 +282,10 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
   let previous: readonly Midi[] | null = null
   return chords.map((chord) => {
     const tones = spellChord(chord.root, chord.quality)
-    const [rootTone] = tones
+    const rootClass = tones[0]?.pitchClass ?? 0
     const held = tones.length >= ROOTLESS_FROM ? tones.slice(1) : tones
     const options = Array.from({ length: lastInversion(held.length) + 1 }, (_, inversion) =>
-      placeChord(held, { inversion, bothHands: false }).rh.map((placed) => placed.midi),
+      inverted(held, midi(MIDDLE_C + rootClass), inversion).map((placed) => placed.midi),
     ).flatMap((keys) => [keys, keys.map((key) => midi(key - 12))])
     const [first = []] = options
     const target = previous === null ? null : middle(previous)
@@ -294,7 +296,7 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
             Math.abs(middle(keys) - target) < Math.abs(middle(best) - target) ? keys : best,
           )
     previous = hand
-    const root = BASS_FROM + (rootTone?.pitchClass ?? 0)
+    const root = BASS_FROM + rootClass
     return [midi(root < Math.min(...hand) ? root : root - 12), ...hand]
   })
 }
@@ -302,10 +304,10 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
 
 with the doc comment saying both rules.
 
-- [ ] **Step 4: Run** the file — expect PASS — then the suites that play rows:
+- [x] **Step 4: Run** the file — expect PASS — then the suites that play rows:
       `npx vitest run src/pages/progressions src/pages/passing-chords src/widgets/lesson-view`.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 git add src/shared/lib/music/voice-lead.ts src/shared/lib/music/voice-lead.test.ts
@@ -324,7 +326,7 @@ git commit -m "Rows: a 9th's root is the bass's, and the bass sits under the han
 - Consumes: `KEY_WALKS` (`@/shared/lib/music`), `InPlayer` (`../model/progressions-view`).
 - Produces: `PROGRESSION_KEPT` without `'walk'`.
 
-- [ ] **Step 1: Write the failing tests.** In `ProgressionsPage.test.tsx`, in place of "opens it through the keys,
+- [x] **Step 1: Write the failing tests.** In `ProgressionsPage.test.tsx`, in place of "opens it through the keys,
       round the circle of fifths":
 
 ```tsx
@@ -353,9 +355,9 @@ it('lists every walk through the keys as a row into the Player, and the key alon
 In `remembered-views.test.tsx`, "opens the progression the tool names, played the learner's way" expects
 `{ p: 'I-IV-V', key: 'G', pattern: 'jazz' }`: the pattern is the learner's, the walk is not.
 
-- [ ] **Step 2: Run** both files — expect FAIL (one walk row; `walk: 'fifths'` kept).
+- [x] **Step 2: Run** both files — expect FAIL (one walk row; `walk: 'fifths'` kept).
 
-- [ ] **Step 3: Implement.** `ProgressionPractice` returns two groups:
+- [x] **Step 3: Implement.** `ProgressionPractice` returns two groups:
 
 ```tsx
 <>
@@ -386,9 +388,9 @@ In `remembered-views.test.tsx`, "opens the progression the tool names, played th
 
 and `PROGRESSION_KEPT` is `PLAYING` (its comment: the tool names the walk).
 
-- [ ] **Step 4: Run** both files, then `npx vitest run src/app src/pages/player src/widgets/lesson-view` — expect PASS.
+- [x] **Step 4: Run** both files, then `npx vitest run src/app src/pages/player src/widgets/lesson-view` — expect PASS.
 
-- [ ] **Step 5: Verify and commit** — `npm run typecheck && npm run lint && npm run test && npm run build`.
+- [x] **Step 5: Verify and commit** — `npm run typecheck && npm run lint && npm run test && npm run build`.
 
 ```bash
 git add src/widgets/progressions/ui/ProgressionPractice.tsx src/app/routes/player-search.ts src/pages/progressions/ui/ProgressionsPage.test.tsx src/app/remembered-views.test.tsx
@@ -404,6 +406,6 @@ git commit -m "Progressions: every walk through the keys a row, and the key alon
   `docs/CODE_STYLE.md` §8 (a row's hands), `docs/adr/0022-…md` is left as written (ADR 0032 amends its table),
   `CLAUDE.md` (the kernel's numerals, `ProgressionPractice`'s rows)
 
-- [ ] **Step 1:** Write ADR 0032 (amends 0020 and 0022): the three decisions of the spec and their consequences.
-- [ ] **Step 2:** Update the four docs to what the code does; `npx prettier --write` on them.
-- [ ] **Step 3:** Commit: `Docs: ADR 0032, numerals that carry a chord, a row's hands and the walks as rows`.
+- [x] **Step 1:** Write ADR 0032 (amends 0020 and 0022): the three decisions of the spec and their consequences.
+- [x] **Step 2:** Update the four docs to what the code does; `npx prettier --write` on them.
+- [x] **Step 3:** Commit: `Docs: ADR 0032, numerals that carry a chord, a row's hands and the walks as rows`.

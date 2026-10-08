@@ -114,7 +114,7 @@ it. `@` → `src`.
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progressions` (a progression in any key: its row of chords, `ProgressionChoice`
-  (the library behind one pop-up) and the typed field; its pure `changedView` (a key turned minor or major takes a
+  (the library behind one pop-up) and the typed field; `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys; its pure `changedView` (a key turned minor or major takes a
   cadence to its version in that mode, ADR 0031), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too),
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar)), each owning in `model/` the view type a route's URL holds.
@@ -186,7 +186,7 @@ it. `@` → `src`.
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `voice-lead.ts` and `numerals.ts`, the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
+  `passing-chords.ts`, `voice-lead.ts` (a row's hands: a 9th's root left to the bass, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`

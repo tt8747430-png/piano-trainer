@@ -223,6 +223,12 @@ tempo)` sounds it and `notate(run)` writes it.
 - **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the chord builder's tensions,
   `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
   second table of what a chord takes.
+- **A numeral is a chord symbol with a degree for a root** (`numerals.ts`, ADR 0032): its quality is the table's, read
+  by the chord symbols' own suffix lookup (`readQualitySuffix`) and written one way (lower case for a chord with a
+  minor 3rd). Never a second table of what a numeral may write.
+- **A row of chords is voiced by `voiceLead`:** each chord over its root in the bass, the hand in the inversion
+  nearest the one before; a chord of five notes or more leaves its root to the bass, and the bass sits under the
+  hand. The Player's hands are the arrangement's, not this.
 - **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
   `plainRoot`): the tritone substitution of B♭7 (E♭'s dominant) is written E7, never F♭7. Keys played are named by `nameChords`, over
   the builder's chords and the tones a hand leaves out of them (`leftOut`), never by a second table.

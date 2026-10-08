@@ -289,7 +289,9 @@ minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a k
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
 lesson's study, Боброва's seven over `otche`, a rhythm style over a study's plain chords. A pattern that plays the tune (`r5`,
 `r6`, `r7`) needs a piece with a melody, in a block or a `piece` link. Its name and description come from the pattern; the lesson says why it is
-there. Numerals are read as the Progressions page reads them, a minor key from natural minor.
+there. Numerals are read as the Progressions page reads them, a minor key from natural minor: a degree, then what a
+chord symbol writes after its root (`V7`, `I6`, `Vsus4`, `ii9`, `iiø7`), lower case for a chord with a minor 3rd
+(ADR 0032).
 
 ## The progressions library
 
@@ -297,9 +299,9 @@ there. Numerals are read as the Progressions page reads them, a minor key from n
 (`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `latin`, `gospel`, `minor`, `theory`), an id, the numerals as
 `parseNumerals` reads them (`I V vi IV`, `iiø7 V7♭9 i`, `♭VI ♭VII I`) and the name in both languages; and, where it
 has them, a `note` (what it teaches, in a line, by the [copy rule](#text)), the `pattern` its Player opens with and the
-chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a 7th where the style
-plays one whatever the chord size (the blues' `I7`, a resolution's `V7♭9`); leave it out where the chord should grow
-with the size. **A line of numerals is written once in its mode**: the page names the progression it shows by its
+chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a chord where the style
+plays it whatever the chord size (the blues' `I7`, a resolution's `V7♭9`, a tonic's `I6`); leave a triad plain where
+the chord should grow with the size. **A line of numerals is written once in its mode**: the page names the progression it shows by its
 line, so a second name for the same line is left out. **A cadence's version in the minor key of the same tonic** is
 a pair in `MODE_VERSIONS`, the major one first (the jazz cadence and the minor ii–V–i): on the page, a key turned minor
 or major takes one to the other (ADR 0031). An id is its entry's alone: `tsc` holds every id a table names.
