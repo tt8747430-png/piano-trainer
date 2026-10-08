@@ -30,6 +30,22 @@ describe('Practice → Progressions', () => {
     expect(screen.getByText('This progression can’t be read.')).toBeInTheDocument()
   })
 
+  it('reads a 6th chord typed', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
+    await user.clear(field)
+    await user.type(field, 'Dm7 G7 C6')
+    expect(router.state.location.search).toEqual({ p: 'ii7-V7-I6' })
+    expect(row()).toEqual(['Dm7ii7', 'G7V7', 'C6I6'])
+  })
+
+  it('opens on a line whose chords a URL escapes', async () => {
+    await renderApp(`/practice/progressions?p=${encodeURIComponent('I6/9-V7#9-III+')}`)
+    await screen.findByRole('list', { name: 'Chords' })
+    expect(row()).toEqual(['C6/9I6/9', 'G7#9V7#9', 'E+III+'])
+  })
+
   it('writes typed chords as numerals again once the key changes, as the row plays them', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/progressions')

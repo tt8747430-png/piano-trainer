@@ -27,6 +27,10 @@ const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
   ),
 )
 
+/** The chord a suffix writes, in any of its spellings (`m7b5`, `maj7`, none for major); null for one the table lacks. */
+export const readQualitySuffix = (suffix: string): ChordQuality | null =>
+  QUALITY_BY_SUFFIX.get(normalise(suffix)) ?? null
+
 /** Root lengths tried, longest first: `F##`, `Bbb` and `F𝄪` take three code units. */
 const ROOT_LENGTHS = [3, 2, 1]
 
@@ -41,7 +45,7 @@ export function parseChordSymbol(symbol: string): Chord {
   const head = bass ? symbol.slice(0, slash) : symbol
   for (const length of ROOT_LENGTHS) {
     const root = parseNoteName(head.slice(0, length))
-    const quality = QUALITY_BY_SUFFIX.get(normalise(head.slice(length)))
+    const quality = readQualitySuffix(head.slice(length))
     if (!root || !quality) continue
     return bass ? { root, quality, bass: chordBass(root, quality, bass) } : { root, quality }
   }

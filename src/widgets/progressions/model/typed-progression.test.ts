@@ -15,8 +15,20 @@ describe('readProgression', () => {
     expect(read('Dm7, G7, CMaj7')).toEqual(['ii7', 'V7', 'IMaj7'])
   })
 
+  it('reads the sheets’ degrees, and chords of any quality', () => {
+    const dMinor = { tonic: note('D'), minor: true }
+    expect(read('IIm7 – V7 – Imaj7')).toEqual(['ii7', 'V7', 'IMaj7'])
+    expect(read('Dm7 G7 C6')).toEqual(['ii7', 'V7', 'I6'])
+    expect(readProgression('Dm7 Gm9 Asus4 Dm7', dMinor)?.map(numeralText)).toEqual([
+      'i7',
+      'iv9',
+      'Vsus4',
+      'i7',
+    ])
+  })
+
   it('reads nothing it cannot write as numerals', () => {
-    expect(read('Csus4 G')).toBeNull()
+    expect(read('F## G')).toBeNull()
     expect(read('Qx')).toBeNull()
     expect(read('')).toBeNull()
   })

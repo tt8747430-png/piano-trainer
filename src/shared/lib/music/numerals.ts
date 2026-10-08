@@ -1,4 +1,5 @@
-import type { Chord, ChordQuality } from './chord'
+import { qualitySuffix, type Chord, type ChordQuality } from './chord'
+import { readQualitySuffix } from './chord-symbol'
 import { spellAbove } from './interval'
 import type { Key } from './key'
 import { letterIndex, pitchClassOf, plainRoot } from './note'
@@ -6,25 +7,19 @@ import { pitchClass } from './pitch'
 import { keyScale, spellScale } from './scale'
 import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-chord'
 
-/** How much of each chord a line of numerals plays, as a progression's chord size does. */
-
-export type NumeralTriad = 'maj' | 'min' | 'dim' | 'aug'
-export type NumeralSeventh = 'none' | 'minor' | 'major' | 'diminished' | 'half' | 'flatNine'
-
 /**
- * A Roman numeral read: its degree of the key's scale, a chromatic shift, its triad, and a 7th if
- * written (a dominant's may carry its ♭9, the one alteration a resolution is taught with).
+ * A Roman numeral read: its degree of the key's scale, a chromatic shift, and the chord on it, any of
+ * the table's. A plain triad grows with a progression's chord size; any other chord is played as it
+ * is written.
  */
 export interface Numeral {
   readonly degree: number
   readonly shift: -1 | 0 | 1
-  readonly triad: NumeralTriad
-  readonly seventh: NumeralSeventh
+  readonly quality: ChordQuality
 }
 
 const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
-const TOKEN =
-  /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(°|o|ø|\+)?(7[b♭]9|7|Maj7|maj7|M7)?$/
+const TOKEN = /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(.*)$/
 const SHIFTS = new Map<string, -1 | 0 | 1>([
   ['', 0],
   ['b', -1],
@@ -34,44 +29,51 @@ const SHIFTS = new Map<string, -1 | 0 | 1>([
 ])
 
 /**
- * The table's qualities a numeral names, by its triad and 7th (a dominant's with its ♭9): the rest (a
- * 6th, a suspension, any other 9th) it does not.
+ * What a lower-case numeral writes after it, for each chord of the table with a minor 3rd: a minor
+ * chord's suffix without its `m`, a diminished one's mark.
  */
-const NAMED: readonly (readonly [ChordQuality, NumeralTriad, NumeralSeventh])[] = [
-  ['maj', 'maj', 'none'],
-  ['min', 'min', 'none'],
-  ['dim', 'dim', 'none'],
-  ['aug', 'aug', 'none'],
-  ['d7', 'maj', 'minor'],
-  ['m7', 'min', 'minor'],
-  ['maj7', 'maj', 'major'],
-  ['mM7', 'min', 'major'],
-  ['hd', 'dim', 'half'],
-  ['o7', 'dim', 'diminished'],
-  ['s5', 'aug', 'minor'],
-  ['M7s5', 'aug', 'major'],
-  ['b9', 'maj', 'flatNine'],
-]
+const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, string>([
+  ['min', ''],
+  ['m6', '6'],
+  ['m69', '6/9'],
+  ['m7', '7'],
+  ['mM7', 'Maj7'],
+  ['m9', '9'],
+  ['mM9', 'Maj9'],
+  ['m11', '11'],
+  ['dim', '°'],
+  ['o7', '°7'],
+  ['hd', 'ø7'],
+  ['hd9', 'ø9'],
+])
+const LOWER_QUALITIES = new Map([...LOWER_TAILS].map(([quality, tail]) => [tail, quality] as const))
+/** Other ways a lower-case numeral's tail is typed. */
+const TAIL_ALIASES: ReadonlyMap<string, string> = new Map([
+  ['o', '°'],
+  ['o7', '°7'],
+  ['ø', 'ø7'],
+  ['maj7', 'Maj7'],
+  ['M7', 'Maj7'],
+  ['maj9', 'Maj9'],
+  ['M9', 'Maj9'],
+])
 
-/** What a chord that is not the key's own grows to: a major chord to a dominant, a minor one to a minor 7th. */
-const GROWN: Readonly<Record<'sevenths' | 'ninths', Readonly<Record<NumeralTriad, ChordQuality>>>> =
-  {
-    sevenths: { maj: 'd7', min: 'm7', dim: 'hd', aug: 's5' },
-    ninths: { maj: 'n9', min: 'm9', dim: 'hd', aug: 's5' },
-  }
+type PlainTriad = 'maj' | 'min' | 'dim' | 'aug'
 
-function triadOf(upper: boolean, mark: string): NumeralTriad | null {
-  if (mark === '+') return upper ? 'aug' : null
-  if (mark) return upper ? null : 'dim'
-  return upper ? 'maj' : 'min'
+/** What a plain triad that is not the key's own chord grows to: a major chord to a dominant, a minor one to a minor 7th. */
+const GROWN: Readonly<Record<'sevenths' | 'ninths', Readonly<Record<PlainTriad, ChordQuality>>>> = {
+  sevenths: { maj: 'd7', min: 'm7', dim: 'hd', aug: 's5' },
+  ninths: { maj: 'n9', min: 'm9', dim: 'hd', aug: 's5' },
 }
 
-function seventhOf(triad: NumeralTriad, mark: string, written: string): NumeralSeventh | null {
-  if (mark === 'ø') return written === '' || written === '7' ? 'half' : null
-  if (written === '') return 'none'
-  if (written === '7') return triad === 'dim' ? 'diminished' : 'minor'
-  if (written.endsWith('9')) return triad === 'maj' ? 'flatNine' : null
-  return triad === 'dim' ? null : 'major'
+const isPlainTriad = (quality: ChordQuality): quality is PlainTriad => quality in GROWN.sevenths
+
+/** A lower-case numeral's chord: by its tail, or by a suffix that itself writes a chord with a minor 3rd (`iim7`). */
+function lowerQuality(tail: string): ChordQuality | null {
+  const short = LOWER_QUALITIES.get(TAIL_ALIASES.get(tail) ?? tail)
+  if (short) return short
+  const full = readQualitySuffix(tail)
+  return full && LOWER_TAILS.has(full) ? full : null
 }
 
 /** A degree as Roman numerals write it, in either case, after a ♭ or ♯: its index from the tonic and its shift. */
@@ -84,15 +86,19 @@ export function readDegree(
   return degree < 0 || shift === undefined ? null : { degree, shift }
 }
 
-/** One numeral: `♭VII`, `ii7`, `IMaj7`, `V7♭9`, `vii°`, `viiø7`, `III+`; upper case major, lower case minor. */
+/**
+ * One numeral: a degree, then what a chord symbol writes after its root. Upper case takes any chord
+ * as the table spells it (`V7`, `IMaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
+ * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `iMaj7`),
+ * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`).
+ */
 export function parseNumeral(token: string): Numeral | null {
   const match = TOKEN.exec(token)
   if (!match) return null
-  const [, sign = '', roman = '', mark = '', written = ''] = match
+  const [, sign = '', roman = '', tail = ''] = match
   const read = readDegree(sign, roman)
-  const triad = triadOf(roman === roman.toUpperCase(), mark)
-  const seventh = triad ? seventhOf(triad, mark, written) : null
-  return !read || !triad || !seventh ? null : { ...read, triad, seventh }
+  const quality = roman === roman.toUpperCase() ? readQualitySuffix(tail) : lowerQuality(tail)
+  return !read || !quality ? null : { ...read, quality }
 }
 
 /** A line of numerals apart by spaces, commas, hyphens or dashes; null if any cannot be read, or none is there. */
@@ -107,30 +113,18 @@ export function parseNumerals(text: string): Numeral[] | null {
   return numerals.length > 0 ? numerals : null
 }
 
-/** A 7th as a numeral writes it after its triad's mark. */
-const SEVENTH_TEXT: Readonly<Record<NumeralSeventh, string>> = {
-  none: '',
-  minor: '7',
-  diminished: '7',
-  half: '7',
-  major: 'Maj7',
-  flatNine: '7♭9',
-}
-
-/** A numeral as it is written: `♭VII`, `viiø7`, `IMaj7`, `V7♭9`. */
+/**
+ * A numeral as it is written, one way: lower case for a chord with a minor 3rd (`ii7`, `viiø7`,
+ * `i6`), upper case with the table's suffix for any other (`♭VII`, `IMaj7`, `V7♭9`, `Vsus4`).
+ */
 export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
   const roman = ROMANS[numeral.degree] ?? ''
-  const upper = numeral.triad === 'maj' || numeral.triad === 'aug'
-  const mark =
-    numeral.triad === 'aug'
-      ? '+'
-      : numeral.seventh === 'half'
-        ? 'ø'
-        : numeral.triad === 'dim'
-          ? '°'
-          : ''
-  return sign + (upper ? roman : roman.toLowerCase()) + mark + SEVENTH_TEXT[numeral.seventh]
+  const tail = LOWER_TAILS.get(numeral.quality)
+  return (
+    sign +
+    (tail === undefined ? roman + qualitySuffix(numeral.quality) : roman.toLowerCase() + tail)
+  )
 }
 
 /** Numerals as a line to read, a dash between them: `ii–V–I`. */
@@ -142,10 +136,10 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
   numerals.map(numeralText).join('-').replaceAll('♭', 'b')
 
 /**
- * A numeral's chord in a key at a chord size. A 7th written fixes the chord; otherwise the key's own
- * chord on its degree grows as the scale's does (`scaleChordAt`: a 9th only where it is available),
- * and any other grows as its triad says: a major chord to a dominant, a minor one to a minor 7th.
- * A major key counts from the major scale, a minor key from natural minor.
+ * A numeral's chord in a key at a chord size. Any chord but a plain triad is played as written;
+ * a triad that is the key's own chord on its degree grows as the scale's does (`scaleChordAt`: a 9th
+ * only where it is available), and any other grows as it is: a major chord to a dominant, a minor one
+ * to a minor 7th. A major key counts from the major scale, a minor key from natural minor.
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = keyScale(key)
@@ -154,28 +148,21 @@ export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord
   const root = plainRoot(
     numeral.shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: numeral.shift }),
   )
-  if (numeral.seventh !== 'none') {
-    const named = NAMED.find(
-      ([, triad, seventh]) => triad === numeral.triad && seventh === numeral.seventh,
-    )
-    if (!named)
-      throw new RangeError(`No chord is a ${numeral.triad} triad with a ${numeral.seventh} 7th`)
-    return { root, quality: named[0] }
-  }
+  const { quality } = numeral
+  if (!isPlainTriad(quality)) return { root, quality }
   const own = scaleChords(key.tonic, kind, 3)[numeral.degree]?.quality
-  if (numeral.shift === 0 && own === numeral.triad) {
+  if (numeral.shift === 0 && own === quality) {
     return scaleChordAt(key.tonic, kind, numeral.degree, SIZE_NOTES[size])
   }
-  return { root, quality: size === 'triads' ? numeral.triad : GROWN[size][numeral.triad] }
+  return { root, quality: size === 'triads' ? quality : GROWN[size][quality] }
 }
 
-/** A chord as its numeral in a key (Am in C is vi); none for a chord a numeral does not name. */
+/** A chord as its numeral in a key (Am in C is vi, C6 is I6); none where its root is more than a semitone from its degree. */
 export function numeralOf(chord: Chord, key: Key): Numeral | null {
-  const named = NAMED.find(([quality]) => quality === chord.quality)
   const degree = (letterIndex(chord.root.letter) - letterIndex(key.tonic.letter) + 7) % 7
   const tone = spellScale(key.tonic, keyScale(key))[degree]
-  if (!named || !tone) return null
+  if (!tone) return null
   const distance = pitchClass(pitchClassOf(chord.root) - tone.pitchClass)
   const shift = distance === 0 ? 0 : distance === 1 ? 1 : distance === 11 ? -1 : null
-  return shift === null ? null : { degree, shift, triad: named[1], seventh: named[2] }
+  return shift === null ? null : { degree, shift, quality: chord.quality }
 }
