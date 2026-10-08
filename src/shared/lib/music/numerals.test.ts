@@ -88,11 +88,28 @@ describe('numeralChord', () => {
   it('reads the key’s own chords, growing with the chord size as the scale’s do', () => {
     expect(chords('I vi ii V', C, 'triads')).toEqual(['C', 'Am', 'Dm', 'G'])
     expect(chords('I vi ii V', C, 'sevenths')).toEqual(['CMaj7', 'Am7', 'Dm7', 'G7'])
-    expect(chords('iii vii°', C, 'ninths')).toEqual(['Em7', 'Bm7♭5'])
+    expect(chords('iii', C, 'ninths')).toEqual(['Em7'])
+  })
+
+  it('gives a half-diminished chord its natural 9th at 9ths, whatever the key has over it', () => {
+    const C_MINOR: Key = { tonic: note('C'), minor: true }
+    expect(chords('ii° V i', C_MINOR, 'ninths')).toEqual(['Dm9♭5', 'G7♭9', 'Cm9'])
+    expect(chords('ii° V i', C_MINOR, 'sevenths')).toEqual(['Dm7♭5', 'G7', 'Cm7'])
+    expect(chords('ii° V i', C_MINOR, 'triads')).toEqual(['D°', 'G', 'Cm'])
+    expect(chords('vii° #iv°', C, 'ninths')).toEqual(['Bm9♭5', 'F#m9♭5'])
+    expect(chords('iiø7', C_MINOR, 'ninths')).toEqual(['Dm7♭5'])
   })
 
   it('grows another major chord to a dominant and another minor one to a minor 7th', () => {
     expect(chords('VII III VI ♭VII iv', C, 'sevenths')).toEqual(['B7', 'E7', 'A7', 'B♭7', 'Fm7'])
+  })
+
+  it('grows a chord that is not the key’s own to the 9th the key has', () => {
+    expect(chords('i iv V i', A_MINOR, 'ninths')).toEqual(['Am9', 'Dm9', 'E7♭9', 'Am9'])
+    expect(chords('i iv V i', A_MINOR, 'sevenths')).toEqual(['Am7', 'Dm7', 'E7', 'Am7'])
+    expect(chords('VII III VI II', C, 'ninths')).toEqual(['B7♭9', 'E7♭9', 'A9', 'D9'])
+    expect(chords('♭VI ♭VII iv', C, 'ninths')).toEqual(['A♭9', 'B♭9', 'Fm9'])
+    expect(chords('ii', A_MINOR, 'ninths')).toEqual(['Bm7'])
   })
 
   it('keeps what is written', () => {

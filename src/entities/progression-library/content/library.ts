@@ -26,7 +26,8 @@ const note = (en: string, ru: string): LocalText => ({ en, ru })
  * The Ultimate Piano's progressions by style (roadmap §10.1) with the app's own practice
  * progressions among them, each line of numerals once in its mode. The blues write their 7ths (a
  * blues I is a dominant 7th); the gospel walk-up climbs to I from the flat side; the resolutions
- * write the dominant's ♭9 where they teach it.
+ * write the dominant's ♭9 where they teach it. The minor ii–V–i writes plain triads, so it grows with
+ * the chord size: the half-diminished ii and the dominant at 7ths, the dominant's ♭9 only at 9ths.
  */
 const LIBRARY = [
   entry('pop', 'axis', 'I V vi IV', 'Axis of Awesome', 'Axis of Awesome', {
@@ -119,7 +120,7 @@ const LIBRARY = [
     pattern: 'pop8',
     note: note('The minor-key loop of pop and rock ballads.', 'Минорный круг поп- и рок-баллад.'),
   }),
-  entry('minor', 'minor-two-five', 'iiø7 V7♭9 i', 'Minor ii–V–i', 'Минорная II–V–I', {
+  entry('minor', 'minor-two-five', 'ii° V i', 'Minor ii–V–i', 'Минорная II–V–I', {
     pattern: 'jazz',
     size: 'ninths',
     note: note(

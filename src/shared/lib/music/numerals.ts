@@ -1,11 +1,19 @@
-import { qualitySuffix, type Chord, type ChordQuality } from './chord'
+import {
+  qualityIntervals,
+  qualitySuffix,
+  qualityWithIntervals,
+  type Chord,
+  type ChordQuality,
+} from './chord'
 import { readQualitySuffix } from './chord-symbol'
 import { spellAbove } from './interval'
 import type { Key } from './key'
-import { letterIndex, pitchClassOf, plainRoot } from './note'
+import { letterIndex, pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import { keyScale, spellScale } from './scale'
 import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-chord'
+import { availableTensions } from './tensions'
+import type { Tone } from './tone'
 
 /**
  * A Roman numeral read: its degree of the key's scale, a chromatic shift, and the chord on it, any of
@@ -60,13 +68,28 @@ const TAIL_ALIASES: ReadonlyMap<string, string> = new Map([
 
 type PlainTriad = 'maj' | 'min' | 'dim' | 'aug'
 
-/** What a plain triad that is not the key's own chord grows to: a major chord to a dominant, a minor one to a minor 7th. */
-const GROWN: Readonly<Record<'sevenths' | 'ninths', Readonly<Record<PlainTriad, ChordQuality>>>> = {
-  sevenths: { maj: 'd7', min: 'm7', dim: 'hd', aug: 's5' },
-  ninths: { maj: 'n9', min: 'm9', dim: 'hd', aug: 's5' },
+/** The 7th chord a plain triad that is not the key's own grows to: a major chord a dominant, a minor one a minor 7th. */
+const GROWN_SEVENTH: Readonly<Record<PlainTriad, ChordQuality>> = {
+  maj: 'd7',
+  min: 'm7',
+  dim: 'hd',
+  aug: 's5',
 }
 
-const isPlainTriad = (quality: ChordQuality): quality is PlainTriad => quality in GROWN.sevenths
+const isPlainTriad = (quality: ChordQuality): quality is PlainTriad => quality in GROWN_SEVENTH
+
+/** How far above a root the key's next note lies, as a 9th: a ♭9 where it is a semitone up, else a 9. */
+function keyNinth(root: SpelledNote, scale: readonly Tone[]): number {
+  const above = (letterIndex(root.letter) + 1) % 7
+  const next = scale.find((tone) => letterIndex(tone.note.letter) === above)
+  return next && pitchClass(next.pitchClass - pitchClassOf(root)) === 1 ? 13 : 14
+}
+
+/** A 7th chord grown to the 9th the key has over it, where the chord takes that 9th and the table has the chord. */
+function grownNinth(seventh: ChordQuality, ninth: number): ChordQuality {
+  const tension = availableTensions(seventh).find((each) => each.semitones === ninth)
+  return (tension && qualityWithIntervals([...qualityIntervals(seventh), tension])) ?? seventh
+}
 
 /** A lower-case numeral's chord: by its tail, or by a suffix that itself writes a chord with a minor 3rd (`iim7`). */
 function lowerQuality(tail: string): ChordQuality | null {
@@ -136,14 +159,23 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
   numerals.map(numeralText).join('-').replaceAll('♭', 'b')
 
 /**
+ * A half-diminished chord grown to a 9th: its 9th is the natural one whatever the key has over it
+ * (locrian ♮2, the tensions table's), for the key's ♭9 is never played over it.
+ */
+const withOwnNinth = (quality: ChordQuality): ChordQuality => (quality === 'hd' ? 'hd9' : quality)
+
+/**
  * A numeral's chord in a key at a chord size. Any chord but a plain triad is played as written;
  * a triad that is the key's own chord on its degree grows as the scale's does (`scaleChordAt`: a 9th
  * only where it is available), and any other grows as it is: a major chord to a dominant, a minor one
- * to a minor 7th. A major key counts from the major scale, a minor key from natural minor.
+ * to a minor 7th, then to the 9th the key has over it where the chord takes it (a minor key's V to
+ * `7♭9`); a half-diminished chord takes its natural 9th (a minor key's ii to `m9♭5`). A major key
+ * counts from the major scale, a minor key from natural minor.
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = keyScale(key)
-  const tone = spellScale(key.tonic, kind)[numeral.degree]
+  const scale = spellScale(key.tonic, kind)
+  const tone = scale[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const root = plainRoot(
     numeral.shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: numeral.shift }),
@@ -152,9 +184,13 @@ export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord
   if (!isPlainTriad(quality)) return { root, quality }
   const own = scaleChords(key.tonic, kind, 3)[numeral.degree]?.quality
   if (numeral.shift === 0 && own === quality) {
-    return scaleChordAt(key.tonic, kind, numeral.degree, SIZE_NOTES[size])
+    const grown = scaleChordAt(key.tonic, kind, numeral.degree, SIZE_NOTES[size])
+    return size === 'ninths' ? { ...grown, quality: withOwnNinth(grown.quality) } : grown
   }
-  return { root, quality: size === 'triads' ? quality : GROWN[size][quality] }
+  if (size === 'triads') return { root, quality }
+  const seventh = GROWN_SEVENTH[quality]
+  if (size === 'sevenths') return { root, quality: seventh }
+  return { root, quality: withOwnNinth(grownNinth(seventh, keyNinth(root, scale))) }
 }
 
 /** A chord as its numeral in a key (Am in C is vi, C6 is I6); none where its root is more than a semitone from its degree. */

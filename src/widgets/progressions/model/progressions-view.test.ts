@@ -21,12 +21,12 @@ const library = (id: string): LibraryProgression => {
 describe('changedView', () => {
   it('takes the jazz cadence to its minor version when the key turns minor, at the size shown', () => {
     expect(changedView(view(major('C'), 'ii-V-I', 'sevenths'), { key: minor('C') })).toEqual(
-      view(minor('C'), 'iiø7-V7b9-i', 'sevenths'),
+      view(minor('C'), 'ii°-V-i', 'sevenths'),
     )
   })
 
   it('takes the minor version back when the key turns major', () => {
-    expect(changedView(view(minor('C'), 'iiø7-V7b9-i', 'ninths'), { key: major('C') })).toEqual(
+    expect(changedView(view(minor('C'), 'ii°-V-i', 'ninths'), { key: major('C') })).toEqual(
       view(major('C'), 'ii-V-I', 'ninths'),
     )
   })
@@ -54,7 +54,7 @@ describe('changedView', () => {
 describe('chosenView', () => {
   it('takes a progression in the key of the same tonic and its mode, at its own chord size', () => {
     expect(chosenView(view(major('A'), 'I-V-vi-IV', 'triads'), library('minor-two-five'))).toEqual(
-      view(minor('A'), 'iiø7-V7b9-i', 'ninths'),
+      view(minor('A'), 'ii°-V-i', 'ninths'),
     )
   })
 

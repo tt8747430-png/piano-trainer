@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseNumerals } from '@/shared/lib/music'
+import { chordSymbol, note, numeralChord, parseNumerals, type ChordSize } from '@/shared/lib/music'
 import {
   COMMON_PROGRESSIONS,
   LIBRARY_BY_STYLE,
@@ -74,7 +74,7 @@ describe('the progressions library', () => {
       return progression && libraryLine(progression)
     }
     expect(line('jazz-cadence')).toBe('ii–V–I')
-    expect(line('minor-two-five')).toBe('iiø7–V7♭9–i')
+    expect(line('minor-two-five')).toBe('ii°–V–i')
     expect(line('gospel-walk-up')).toBe('♭VI–♭VII–I')
   })
 
@@ -100,7 +100,16 @@ describe('the progressions library', () => {
     const numerals = (id: string) => progressionById(id)?.numerals
     expect(numerals('flat-nine-resolution')).toBe('V7♭9 I')
     expect(numerals('minor-flat-nine-resolution')).toBe('V7♭9 i')
-    expect(numerals('minor-two-five')).toBe('iiø7 V7♭9 i')
+  })
+
+  it('grows the minor ii–V–i with the chord size: the sheet’s 7th chords, a 9th on each at 9ths', () => {
+    const cMinor = { tonic: note('C'), minor: true }
+    const line = parseNumerals(progressionById('minor-two-five')?.numerals ?? '') ?? []
+    const chords = (size: ChordSize) =>
+      line.map((numeral) => chordSymbol(numeralChord(numeral, cMinor, size)))
+    expect(chords('triads')).toEqual(['D°', 'G', 'Cm'])
+    expect(chords('sevenths')).toEqual(['Dm7♭5', 'G7', 'Cm7'])
+    expect(chords('ninths')).toEqual(['Dm9♭5', 'G7♭9', 'Cm9'])
   })
 
   it('offers a key its common progressions, a major key’s and a minor key’s in their own mode', () => {

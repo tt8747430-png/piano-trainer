@@ -123,11 +123,11 @@ describe('Practice → Progressions', () => {
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         key: 'Am',
-        p: 'iiø7-V7b9-i',
+        p: 'ii°-V-i',
         size: 'ninths',
       }),
     )
-    expect(row()).toEqual(['Bm7♭5iiø7', 'E7♭9V7♭9', 'Am9i'])
+    expect(row()).toEqual(['Bm9♭5ii°', 'E7♭9V', 'Am9i'])
   })
 
   it('takes the jazz cadence to its minor version when the key turns minor, and back', async () => {
@@ -138,12 +138,12 @@ describe('Practice → Progressions', () => {
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         key: 'Cm',
-        p: 'iiø7-V7b9-i',
+        p: 'ii°-V-i',
         size: 'sevenths',
       }),
     )
     expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Minor ii–V–i')
-    expect(row()).toEqual(['Dm7♭5iiø7', 'G7♭9V7♭9', 'Cm7i'])
+    expect(row()).toEqual(['Dm7♭5ii°', 'G7V', 'Cm7i'])
     await user.click(mode.getByRole('radio', { name: 'Major' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
