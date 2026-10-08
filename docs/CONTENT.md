@@ -297,11 +297,11 @@ chord symbol writes after its root (`V7`, `I6`, `Vsus4`, `ii9`, `iiø7`), lower 
 
 `src/entities/progression-library/content/library.ts` is the one list of the progressions that are practised: a style
 (`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `latin`, `gospel`, `minor`, `theory`), an id, the numerals as
-`parseNumerals` reads them (`I V vi IV`, `iiø7 V7♭9 i`, `♭VI ♭VII I`) and the name in both languages; and, where it
+`parseNumerals` reads them (`I V vi IV`, `ii° V i`, `♭VI ♭VII I`) and the name in both languages; and, where it
 has them, a `note` (what it teaches, in a line, by the [copy rule](#text)), the `pattern` its Player opens with and the
 chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a chord where the style
 plays it whatever the chord size (the blues' `I7`, a resolution's `V7♭9`, a tonic's `I6`); leave a triad plain where
-the chord should grow with the size. **A line of numerals is written once in its mode**: the page names the progression it shows by its
+the chord should grow with the size (the minor ii–V–i is `ii° V i`: Dm7♭5 G7 Cm7 at 7ths, Dm9♭5 G7♭9 Cm9 at 9ths). **A line of numerals is written once in its mode**: the page names the progression it shows by its
 line, so a second name for the same line is left out. **A cadence's version in the minor key of the same tonic** is
 a pair in `MODE_VERSIONS`, the major one first (the jazz cadence and the minor ii–V–i): on the page, a key turned minor
 or major takes one to the other (ADR 0031). An id is its entry's alone: `tsc` holds every id a table names.

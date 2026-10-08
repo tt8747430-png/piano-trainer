@@ -25,6 +25,6 @@ cadence's minor version (the half-diminished ii, the dominant, the minor tonic) 
 
 - A library cadence is never shown as a typed line because its key changed mode, and its minor version is one tap
   away.
-- The minor ii–V–i keeps the ♭9 on its dominant, as the owner's minor cadence writes it; the sheet's plain dominant
-  is the same line typed with `V7`.
+- The minor ii–V–i grows with the chord size (ADR 0032): at 7ths it is the sheet's minor version, and at 9ths its
+  dominant takes the ♭9 and its ii the natural 9th.
 - A new cadence with a minor version adds its pair to `MODE_VERSIONS`.
