@@ -1,29 +1,32 @@
 import { spellChord, type Chord } from './chord'
-import { lastInversion, placeChord } from './place'
+import { MIDDLE_C } from './keyboard'
+import { inverted, lastInversion } from './place'
 import { midi, type Midi } from './pitch'
 
-/** The bass plays each root between C3 and B3. */
+/** The bass plays each root between C3 and B3, an octave lower where the hand reaches down to it. */
 const BASS_FROM = 48
+
+/** A chord of this many notes leaves its root to the bass. */
+const ROOTLESS_FROM = 5
 
 const middle = (keys: readonly Midi[]): number =>
   keys.reduce((sum, key) => sum + key, 0) / Math.max(keys.length, 1)
 
 /**
  * A row of chords as a hand plays it smoothly: each chord over its root in the bass, the right hand in
- * the inversion (in its own octave or an octave down, always above the bass) whose middle lies
- * nearest the chord before's, the first in root position from middle C.
+ * the inversion (in its own octave or an octave down) whose middle lies nearest the chord before's,
+ * the first in root position from middle C. A chord of five notes or more leaves its root to the bass
+ * (a 9th chord's hand is its 3rd, 5th, 7th and 9th), and the bass always sits under the hand.
  */
 export function voiceLead(chords: readonly Chord[]): Midi[][] {
   let previous: readonly Midi[] | null = null
   return chords.map((chord) => {
     const tones = spellChord(chord.root, chord.quality)
-    const [rootTone] = tones
-    const bass = midi(BASS_FROM + (rootTone?.pitchClass ?? 0))
-    const options = Array.from({ length: lastInversion(tones.length) + 1 }, (_, inversion) =>
-      placeChord(tones, { inversion, bothHands: false }).rh.map((placed) => placed.midi),
-    )
-      .flatMap((keys) => [keys, keys.map((key) => midi(key - 12))])
-      .filter((keys) => Math.min(...keys) > bass)
+    const rootClass = tones[0]?.pitchClass ?? 0
+    const held = tones.length >= ROOTLESS_FROM ? tones.slice(1) : tones
+    const options = Array.from({ length: lastInversion(held.length) + 1 }, (_, inversion) =>
+      inverted(held, midi(MIDDLE_C + rootClass), inversion).map((placed) => placed.midi),
+    ).flatMap((keys) => [keys, keys.map((key) => midi(key - 12))])
     const [first = []] = options
     const target = previous === null ? null : middle(previous)
     const hand =
@@ -33,6 +36,7 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
             Math.abs(middle(keys) - target) < Math.abs(middle(best) - target) ? keys : best,
           )
     previous = hand
-    return [bass, ...hand]
+    const root = BASS_FROM + rootClass
+    return [midi(root < Math.min(...hand) ? root : root - 12), ...hand]
   })
 }

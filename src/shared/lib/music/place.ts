@@ -50,7 +50,7 @@ export const fitInversion = (inversion: number, notes: number): number =>
  * A chord's tones from its root's key, its lowest `inversion` tones an octave up (a chord's tones
  * rise from the root, so these are its lowest), lowest first.
  */
-function inverted(tones: readonly Tone[], key: Midi, inversion: number): PlacedTone[] {
+export function inverted(tones: readonly Tone[], key: Midi, inversion: number): PlacedTone[] {
   const last = lastInversion(tones.length)
   if (!Number.isInteger(inversion) || inversion < 0 || inversion > last) {
     throw new RangeError(
