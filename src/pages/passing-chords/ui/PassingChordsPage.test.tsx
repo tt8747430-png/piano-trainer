@@ -76,6 +76,18 @@ describe('Practice → Passing chords', () => {
     expect(walk).toHaveTextContent('The bass steps through the key’s own chords into F.')
   })
 
+  it('leads a diminished 7th into a slash chord’s bass, and plays the bass it writes', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/practice/progressions/passing?from=F&to=C/G')
+    const diminished = await screen.findByRole('article', { name: 'Diminished approach' })
+    expect(diminished).toHaveTextContent('F#°7 leads up a half step into C/G.')
+    await user.click(within(diminished).getByRole('button', { name: 'Play' }))
+    const row = keysOf(audio.played.at(-1)?.sounds ?? [])
+    const starts = [...new Set(row.map(([at]) => at))].sort((a, b) => a - b)
+    const basses = starts.map((start) => row.find(([at]) => at === start)?.[1])
+    expect(basses).toEqual([53, 54, 55])
+  })
+
   it('speaks Russian', async () => {
     await renderApp('/practice/progressions/passing', { locale: 'ru' })
     expect(await screen.findByRole('link', { name: 'Проходящие аккорды' })).toHaveAttribute(

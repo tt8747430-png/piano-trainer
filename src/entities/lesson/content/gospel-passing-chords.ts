@@ -45,8 +45,8 @@ const gospelPassingChords: Lesson = {
         { kind: 'chords', symbols: ['F', 'F#°7', 'C/G'] },
         {
           kind: 'link',
-          title: { en: 'F to G in Passing chords', ru: 'Из F в G в проходящих аккордах' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
+          title: { en: 'F to C/G in Passing chords', ru: 'Из F в C/G в проходящих аккордах' },
+          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C/G' },
         },
       ],
     },
@@ -81,8 +81,8 @@ const gospelPassingChords: Lesson = {
         { kind: 'chords', symbols: ['C', 'Em7♭5', 'A7', 'Dm7'] },
         {
           kind: 'link',
-          title: { en: 'C to Dm in Passing chords', ru: 'Из C в Dm в проходящих аккордах' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm' },
+          title: { en: 'C to Dm7 in Passing chords', ru: 'Из C в Dm7 в проходящих аккордах' },
+          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm7' },
         },
       ],
     },

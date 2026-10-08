@@ -29,6 +29,19 @@ describe('voiceLead', () => {
     ])
   })
 
+  it('puts a slash chord over the bass it writes: F, F♯°7, C/G climbs F, F♯, G', () => {
+    const row = voiced('F', 'F#°7', 'C/G')
+    expect(row.map(([bass]) => bass)).toEqual([53, 54, 55])
+    expect(row[2]?.slice(1).map((key) => key % 12)).toEqual(expect.arrayContaining([0, 4, 7]))
+  })
+
+  it('keeps a 9th chord’s root in the hand when its bass is another note', () => {
+    const [[bass = 0, ...hand] = []] = voiced('CMaj9/E')
+    expect(bass % 12).toBe(4)
+    expect(hand.map((key) => key % 12)).toContain(0)
+    expect(Math.min(...hand)).toBeGreaterThan(bass)
+  })
+
   it('voices a row of one chord, of none, and a 13th', () => {
     expect(voiced('C')).toEqual([[48, 60, 64, 67]])
     expect(voiced()).toEqual([])

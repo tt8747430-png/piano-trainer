@@ -36,6 +36,8 @@ export const PASSING_KINDS = [
   'walkDown',
   'doubleApproach',
   'diminishedApproach',
+  'diminishedAbove',
+  'commonToneDiminished',
   'diatonicWalk',
   'backdoor',
   'backdoorTwoFive',
@@ -54,6 +56,8 @@ const CATEGORY_OF: Readonly<Record<PassingKind, PassingCategory>> = {
   walkDown: 'chromatic',
   doubleApproach: 'chromatic',
   diminishedApproach: 'diminished',
+  diminishedAbove: 'diminished',
+  commonToneDiminished: 'diminished',
   diatonicWalk: 'diatonic',
   backdoor: 'cadence',
   backdoorTwoFive: 'cadence',
@@ -77,6 +81,15 @@ const isMinor = (chord: Chord): boolean =>
 
 const same = (a: Chord, b: Chord): boolean =>
   pitchClassOf(a.root) === pitchClassOf(b.root) && a.quality === b.quality
+
+const notesOf = (chord: Chord): string =>
+  spellChord(chord.root, chord.quality)
+    .map((tone) => tone.pitchClass)
+    .sort((a, b) => a - b)
+    .join(' ')
+
+/** Whether two chords are the same notes: F♯°7 is C°7 from another of its four notes. */
+const sameNotes = (a: Chord, b: Chord): boolean => notesOf(a) === notesOf(b)
 
 const on = (root: SpelledNote, quality: ChordQuality): Chord => ({ root: plainRoot(root), quality })
 
@@ -114,15 +127,19 @@ function diatonicWalk(from: Chord, to: Chord, key: Key): Chord[] | null {
  * To's root spelled by letters and then named plainly: the V7 of To and its tritone substitute; To's
  * ii–V (a half-diminished ii before a minor To); a dominant a half step below; the bass walking up or
  * down by half steps when From is two to four semitones away, each dominant's root spelled as the app
- * spells a chord's root; To approached from both half steps, or by the diminished 7th below; the
- * key's own chords on the steps between (`diatonicWalk`); the plagal IV (a minor To's own iv); and
+ * spells a chord's root; To approached from both half steps; the diminished 7th a half step below
+ * To's bass (the bass a slash chord writes: F♯°7 before C/G), the one a half step above a minor To's,
+ * and the one on a major To's own root (the common-tone diminished); the key's own chords on the
+ * steps between (`diatonicWalk`); the plagal IV (a minor To's own iv); and
  * what a major To borrows from its minor, the backdoor ♭VII7, alone and after its ivm7 (the backdoor
- * ii–V), the minor plagal iv, and the gospel walk-up ♭VI–♭VII. A way whose chords repeat From or To, or repeat an earlier way, is left out.
+ * ii–V), the minor plagal iv, and the gospel walk-up ♭VI–♭VII. A way whose chords repeat From or To,
+ * or are an earlier way's notes, is left out.
  */
 export function passingChords(from: Chord, to: Chord, key: Key): PassingChords[] {
   const up = (name: IntervalName) => spellAbove(to.root, INTERVALS[name])
   const down = (name: IntervalName) => spellBelow(to.root, INTERVALS[name])
   const minor = isMinor(to)
+  const bass = to.bass ?? to.root
   const dominant = on(up('P5'), 'd7')
   const fromPc = pitchClassOf(from.root)
   const rise = pitchClass(pitchClassOf(to.root) - fromPc)
@@ -145,7 +162,9 @@ export function passingChords(from: Chord, to: Chord, key: Key): PassingChords[]
     walkUp: walk(rise, 1),
     walkDown: walk(fall, -1),
     doubleApproach: [on(down('m2'), 'd7'), on(up('m2'), 'o7')],
-    diminishedApproach: [on(down('m2'), 'o7')],
+    diminishedApproach: [on(spellBelow(bass, INTERVALS.m2), 'o7')],
+    diminishedAbove: minor ? [on(spellAbove(bass, INTERVALS.m2), 'o7')] : null,
+    commonToneDiminished: minor ? null : [on(to.root, 'o7')],
     diatonicWalk: diatonicWalk(from, to, key),
     backdoor: minor ? null : [on(up('m7'), 'd7')],
     backdoorTwoFive: minor ? null : [on(up('P4'), 'm7'), on(up('m7'), 'd7')],
@@ -162,7 +181,7 @@ export function passingChords(from: Chord, to: Chord, key: Key): PassingChords[]
         way.chords.length === chords.length &&
         way.chords.every((chord, i) => {
           const other = chords[i]
-          return other !== undefined && same(chord, other)
+          return other !== undefined && sameNotes(chord, other)
         }),
     )
     if (!repeats) kept.push({ kind, category: CATEGORY_OF[kind], chords })

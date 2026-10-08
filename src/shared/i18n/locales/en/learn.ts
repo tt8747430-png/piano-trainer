@@ -177,6 +177,14 @@ export const learn = {
         name: 'Diminished approach',
         why: '{{chord}} leads up a half step into {{to}}.',
       },
+      diminishedAbove: {
+        name: 'Diminished approach from above',
+        why: '{{chord}} slides down a half step into {{to}}.',
+      },
+      commonToneDiminished: {
+        name: 'Common-tone diminished',
+        why: '{{chord}} stands on the root of {{to}} and opens into it.',
+      },
       diatonicWalk: {
         name: 'Walking through the key',
         why: 'The bass steps through the key’s own chords into {{to}}.',

@@ -781,8 +781,13 @@ differs where that says a chord twice or says what is not so):
   third or a fourth apart, by the shorter way (C, Dm, Em, F; C, B°, Am, G). It is the one rule that reads the key.
 - **Added: the gospel walk-up**, ♭VI–♭VII into a major chord, which the Gospel passing chords lesson teaches and
   the Progressions library holds.
-- **Not added:** the diminished 7th from above alone (it stays in the double approach), the common-tone diminished,
-  and a slash chord as a target (the lesson's F, F♯°7, C/G).
+- **Added: the diminished 7th from above**, a half step over a minor chord (Em7, E♭°7, Dm7: Barry Harris's
+  "flat three diminished goes to the two"), and **the common-tone diminished**, on a major or dominant chord's own
+  root (C°7 into C).
+- **A slash chord is a target with its bass:** a diminished 7th leads by half step into the bass a chord writes, so
+  F to C/G offers the gospel F, F♯°7, C/G (the raised-4th diminished into I over its 5th), and a row plays a slash
+  chord over that bass (`voiceLead`). F♯°7 and C°7 are the same four notes: a way that is an earlier way's notes is
+  left out.
 
 **The Chord explorer's relationships** (with it): whether two chords are diatonic in the key, the interval between
 their roots ("Minor third, 3 steps"), common tones, their distance on the circle of fifths, and the voice leading

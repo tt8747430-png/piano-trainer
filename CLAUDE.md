@@ -186,7 +186,7 @@ it. `@` → `src`.
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `voice-lead.ts` (a row's hands: a 9th's root left to the bass, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
+  `passing-chords.ts`, `voice-lead.ts` (a row's hands: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`

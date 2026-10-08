@@ -10,6 +10,7 @@ import {
   parseChordSymbol,
   parseNoteName,
   parseNumerals,
+  passingChords,
   writtenSymbol,
 } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
@@ -287,6 +288,33 @@ describe('the lessons', () => {
       )
     expect(taught).toHaveLength(6)
     for (const symbol of taught) expect(shown, symbol).toContain(symbol)
+  })
+
+  it('link a row of passing chords to the tool that shows it: the row’s last chord, its chords between', () => {
+    const written = (symbol: string) => chordSymbol(parseChordSymbol(symbol))
+    const linked = LESSONS.flatMap((lesson) =>
+      lesson.sections.flatMap((section) => {
+        const row = section.blocks.flatMap((block) =>
+          block.kind === 'chords' ? block.symbols : [],
+        )
+        return section.blocks.flatMap((block) =>
+          block.kind === 'link' && block.target.place === 'passing-chords'
+            ? [{ at: `${lesson.id}: ${row.join(' ')}`, row, target: block.target }]
+            : [],
+        )
+      }),
+    )
+    expect(linked).toHaveLength(8)
+    for (const { at, row, target } of linked) {
+      expect(written(target.to), at).toBe(written(row.at(-1) ?? ''))
+      const between = row.slice(row[0] === target.from ? 1 : 0, -1).map(written)
+      const ways = passingChords(
+        parseChordSymbol(target.from),
+        parseChordSymbol(target.to),
+        target.key,
+      ).map((way) => way.chords.map(chordSymbol))
+      expect(ways, at).toContainEqual(between)
+    }
   })
 
   it('list the modules in order, each lesson after the one before it', () => {

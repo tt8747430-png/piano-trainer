@@ -21,6 +21,7 @@ describe('passingChords', () => {
       ['walkUp', 'D♭7 D7'],
       ['doubleApproach', 'D7 E°7'],
       ['diminishedApproach', 'D°7'],
+      ['commonToneDiminished', 'E♭°7'],
       ['backdoor', 'D♭7'],
       ['backdoorTwoFive', 'A♭m7 D♭7'],
       ['plagal', 'A♭'],
@@ -74,6 +75,24 @@ describe('passingChords', () => {
     expect(walk('C', 'Eb')).toEqual([])
     expect(walk('Am', 'C', { tonic: note('A'), minor: true })).toEqual([['diatonicWalk', 'B°']])
     expect(walk('C', 'F', { tonic: note('G'), minor: false })).toEqual([])
+  })
+
+  it('leads a diminished 7th down into a minor chord, and opens one on a major chord’s own root', () => {
+    const toDm = rows(C, parseChordSymbol('Dm'))
+    expect(toDm).toContainEqual(['diminishedApproach', 'C#°7'])
+    expect(toDm).toContainEqual(['diminishedAbove', 'E♭°7'])
+    expect(toDm.map(([kind]) => kind)).not.toContain('commonToneDiminished')
+    const toC = rows(parseChordSymbol('F'), C)
+    expect(toC).toContainEqual(['diminishedApproach', 'B°7'])
+    expect(toC).toContainEqual(['commonToneDiminished', 'C°7'])
+    expect(toC.map(([kind]) => kind)).not.toContain('diminishedAbove')
+  })
+
+  it('leads a diminished 7th into a slash chord’s bass, the gospel F, F♯°7, C/G, its notes said once', () => {
+    const diminished = passingChords(parseChordSymbol('F'), parseChordSymbol('C/G'), C_MAJOR)
+      .filter((way) => way.category === 'diminished')
+      .map((way) => [way.kind, way.chords.map(chordSymbol).join(' ')])
+    expect(diminished).toEqual([['diminishedApproach', 'F#°7']])
   })
 
   it('spells a walk’s dominants as the app spells a chord’s root', () => {
