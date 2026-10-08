@@ -61,6 +61,11 @@ const gospelPassingChords: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['A♭', 'B♭', 'C'] },
+        {
+          kind: 'link',
+          title: { en: 'F to C in Passing chords', ru: 'Из F в C в проходящих аккордах' },
+          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C' },
+        },
       ],
     },
     {

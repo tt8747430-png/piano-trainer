@@ -9,9 +9,13 @@ import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval
 import type { Key } from './key'
 import { pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
-import { tonesInKey } from './scale'
+import { keyScale, spellScale, tonesInKey } from './scale'
+import { scaleChordAt } from './scale-chord'
 
-/** The Ultimate Piano's categories of passing chords (roadmap §10.2), in the order they are shown. */
+/**
+ * The categories of passing chords, in the order they are shown: The Ultimate Piano's (roadmap §10.2),
+ * its Diatonic the chords of the key itself.
+ */
 export const PASSING_CATEGORIES = [
   'dominant',
   'functional',
@@ -32,10 +36,12 @@ export const PASSING_KINDS = [
   'walkDown',
   'doubleApproach',
   'diminishedApproach',
-  'subdominant',
+  'diatonicWalk',
   'backdoor',
+  'backdoorTwoFive',
   'plagal',
   'minorPlagal',
+  'gospelWalkUp',
 ] as const
 export type PassingKind = (typeof PASSING_KINDS)[number]
 
@@ -48,10 +54,12 @@ const CATEGORY_OF: Readonly<Record<PassingKind, PassingCategory>> = {
   walkDown: 'chromatic',
   doubleApproach: 'chromatic',
   diminishedApproach: 'diminished',
-  subdominant: 'diatonic',
+  diatonicWalk: 'diatonic',
   backdoor: 'cadence',
+  backdoorTwoFive: 'cadence',
   plagal: 'cadence',
   minorPlagal: 'cadence',
+  gospelWalkUp: 'cadence',
 }
 
 /** A way between two chords: the chords that go between them. */
@@ -72,16 +80,46 @@ const same = (a: Chord, b: Chord): boolean =>
 
 const on = (root: SpelledNote, quality: ChordQuality): Chord => ({ root: plainRoot(root), quality })
 
+/** A walk through the key puts one or two of its chords between: its ends a third or a fourth apart. */
+const STEPS_BETWEEN = { least: 1, most: 2 } as const
+
 /**
- * The chords that can pass between two, by The Ultimate Piano's rules, each an interval from To's
- * root spelled by letters and then named plainly: the V7 of To and its tritone substitute; To's ii–V
- * (a half-diminished ii before a minor To); a dominant a half step below; the bass walking up or down
- * by half steps when From is two to four semitones away, each dominant's root spelled as the app spells
- * a chord's root; To approached from both half steps, or by the diminished 7th below; To's IV (iv
- * before a minor To); the backdoor ♭VII7; the plagal IVMaj7 before a major To and ivm7 before either.
- * A way whose chords repeat From or To, or repeat an earlier way, is left out.
+ * The key's own triads on the scale steps between two chords whose roots are the key's, by the shorter
+ * way round: C, Dm, Em, F going up, C, B°, Am, G coming down.
  */
-export function passingChords(from: Chord, to: Chord): PassingChords[] {
+function diatonicWalk(from: Chord, to: Chord, key: Key): Chord[] | null {
+  const kind = keyScale(key)
+  const scale = spellScale(key.tonic, kind)
+  const degreeOf = (chord: Chord) =>
+    scale.findIndex((tone) => tone.pitchClass === pitchClassOf(chord.root))
+  const start = degreeOf(from)
+  const end = degreeOf(to)
+  if (start < 0 || end < 0) return null
+  const up = (end - start + scale.length) % scale.length
+  const steps = up <= scale.length / 2 ? up : up - scale.length
+  const between = Math.abs(steps) - 1
+  if (between < STEPS_BETWEEN.least || between > STEPS_BETWEEN.most) return null
+  return Array.from({ length: between }, (_, i) =>
+    scaleChordAt(
+      key.tonic,
+      kind,
+      (start + Math.sign(steps) * (i + 1) + scale.length) % scale.length,
+      3,
+    ),
+  )
+}
+
+/**
+ * The chords that can pass between two in a key, by The Ultimate Piano's rules, each an interval from
+ * To's root spelled by letters and then named plainly: the V7 of To and its tritone substitute; To's
+ * ii–V (a half-diminished ii before a minor To); a dominant a half step below; the bass walking up or
+ * down by half steps when From is two to four semitones away, each dominant's root spelled as the app
+ * spells a chord's root; To approached from both half steps, or by the diminished 7th below; the
+ * key's own chords on the steps between (`diatonicWalk`); the plagal IV (a minor To's own iv); and
+ * what a major To borrows from its minor, the backdoor ♭VII7, alone and after its ivm7 (the backdoor
+ * ii–V), the minor plagal iv, and the gospel walk-up ♭VI–♭VII. A way whose chords repeat From or To, or repeat an earlier way, is left out.
+ */
+export function passingChords(from: Chord, to: Chord, key: Key): PassingChords[] {
   const up = (name: IntervalName) => spellAbove(to.root, INTERVALS[name])
   const down = (name: IntervalName) => spellBelow(to.root, INTERVALS[name])
   const minor = isMinor(to)
@@ -108,10 +146,12 @@ export function passingChords(from: Chord, to: Chord): PassingChords[] {
     walkDown: walk(fall, -1),
     doubleApproach: [on(down('m2'), 'd7'), on(up('m2'), 'o7')],
     diminishedApproach: [on(down('m2'), 'o7')],
-    subdominant: [on(up('P4'), minor ? 'min' : 'maj')],
-    backdoor: [on(up('m7'), 'd7')],
-    plagal: minor ? null : [on(up('P4'), 'maj7')],
-    minorPlagal: [on(up('P4'), 'm7')],
+    diatonicWalk: diatonicWalk(from, to, key),
+    backdoor: minor ? null : [on(up('m7'), 'd7')],
+    backdoorTwoFive: minor ? null : [on(up('P4'), 'm7'), on(up('m7'), 'd7')],
+    plagal: [on(up('P4'), minor ? 'min' : 'maj')],
+    minorPlagal: minor ? null : [on(up('P4'), 'min')],
+    gospelWalkUp: minor ? null : [on(up('m6'), 'maj'), on(up('m7'), 'maj')],
   }
   const kept: PassingChords[] = []
   for (const kind of PASSING_KINDS) {

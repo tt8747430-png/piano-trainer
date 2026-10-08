@@ -767,6 +767,23 @@ leading), Diatonic (inside the key), Cadences (cadential patterns), Diminished (
 Cmaj7; D♭7 for G7, sharing the tritone B–F); chromatic approach (Cmaj7 → D♭maj7 → Dm7). **Uses:** songwriting,
 reharmonisation, jazz study, arranging; for the app's first users, moving between a hymn's chords.
 
+**Corrected against the sources, 2026-10-09** (the table above is what The Ultimate Piano showed; `passingChords`
+differs where that says a chord twice or says what is not so):
+
+- **Subdominant approach and Plagal cadence were one move twice**, IV and IVMaj7 into the same chord. One row is
+  kept, the plagal cadence, as the triad the cadence is: IV before a major chord, a minor chord's own iv before it.
+  Diatonic was no name for it: the IV of the target is often outside the key (A♭ in C).
+- **Minor plagal** is iv–I, borrowed from the parallel minor, so it is offered before a major chord only (it said
+  "borrowed from its minor" of a minor chord's own iv), and as the triad: F, Fm, C.
+- **Backdoor cadence** resolves to a major tonic (ivm7–♭VII7–I, Coker's name), so it is offered before a major
+  chord only. **Added: the backdoor ii–V**, ivm7–♭VII7, the form it is named for.
+- **Added: walking through the key** (Diatonic): the key's own chords on the steps between two of its chords a
+  third or a fourth apart, by the shorter way (C, Dm, Em, F; C, B°, Am, G). It is the one rule that reads the key.
+- **Added: the gospel walk-up**, ♭VI–♭VII into a major chord, which the Gospel passing chords lesson teaches and
+  the Progressions library holds.
+- **Not added:** the diminished 7th from above alone (it stays in the double approach), the common-tone diminished,
+  and a slash chord as a target (the lesson's F, F♯°7, C/G).
+
 **The Chord explorer's relationships** (with it): whether two chords are diatonic in the key, the interval between
 their roots ("Minor third, 3 steps"), common tones, their distance on the circle of fifths, and the voice leading
 between them.

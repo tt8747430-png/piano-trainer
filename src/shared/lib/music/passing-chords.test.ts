@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, type Chord } from './chord'
 import { parseChordSymbol } from './chord-symbol'
+import type { Key } from './key'
 import { note } from './note'
 import { chordInKey, passingChords } from './passing-chords'
 
 const C = parseChordSymbol('C')
 const E_FLAT = parseChordSymbol('Eb')
-const rows = (from: Chord, to: Chord) =>
-  passingChords(from, to).map((each) => [each.kind, each.chords.map(chordSymbol).join(' ')])
+const C_MAJOR = { tonic: note('C'), minor: false }
+const rows = (from: Chord, to: Chord, key: Key = C_MAJOR) =>
+  passingChords(from, to, key).map((each) => [each.kind, each.chords.map(chordSymbol).join(' ')])
 
 describe('passingChords', () => {
   it('suggests The Ultimate Piano’s chords from C to E♭', () => {
@@ -19,10 +21,11 @@ describe('passingChords', () => {
       ['walkUp', 'D♭7 D7'],
       ['doubleApproach', 'D7 E°7'],
       ['diminishedApproach', 'D°7'],
-      ['subdominant', 'A♭'],
       ['backdoor', 'D♭7'],
-      ['plagal', 'A♭Maj7'],
-      ['minorPlagal', 'A♭m7'],
+      ['backdoorTwoFive', 'A♭m7 D♭7'],
+      ['plagal', 'A♭'],
+      ['minorPlagal', 'A♭m'],
+      ['gospelWalkUp', 'B D♭'],
     ])
   })
 
@@ -32,12 +35,45 @@ describe('passingChords', () => {
     expect(rows(E_FLAT, C)).toContainEqual(['walkDown', 'D7 D♭7'])
   })
 
-  it('makes a minor target’s ii half-diminished and its IV minor, its plagal chord the minor one', () => {
+  it('makes a minor target’s ii half-diminished and its plagal chord its own iv', () => {
     const toAm = rows(C, parseChordSymbol('Am'))
     expect(toAm).toContainEqual(['secondaryTwoFive', 'Bm7♭5 E7'])
-    expect(toAm).toContainEqual(['subdominant', 'Dm'])
-    expect(toAm.map(([kind]) => kind)).not.toContain('plagal')
-    expect(toAm).toContainEqual(['minorPlagal', 'Dm7'])
+    expect(toAm).toContainEqual(['plagal', 'Dm'])
+  })
+
+  it('says a chord once: the subdominant is the plagal chord, not a second row with a 7th', () => {
+    const subdominants = (to: string) =>
+      rows(C, parseChordSymbol(to)).filter(([, chords]) => /^(A♭|Dm)(Maj7|7)?$/.test(chords ?? ''))
+    expect(subdominants('Eb')).toEqual([['plagal', 'A♭']])
+    expect(subdominants('Am')).toEqual([['plagal', 'Dm']])
+  })
+
+  it('borrows from a major target’s minor only: no back door and no minor plagal into a minor chord', () => {
+    const kinds = rows(C, parseChordSymbol('Am')).map(([kind]) => kind)
+    expect(kinds).not.toContain('backdoor')
+    expect(kinds).not.toContain('backdoorTwoFive')
+    expect(kinds).not.toContain('minorPlagal')
+    expect(kinds).not.toContain('gospelWalkUp')
+    expect(rows(parseChordSymbol('F'), C)).toContainEqual(['minorPlagal', 'Fm'])
+  })
+
+  it('walks up to a major chord from its ♭VI and ♭VII, the gospel lesson’s A♭, B♭, C', () => {
+    expect(rows(parseChordSymbol('F'), C)).toContainEqual(['gospelWalkUp', 'A♭ B♭'])
+  })
+
+  it('walks through the key between two of its chords a third or a fourth apart', () => {
+    const walk = (from: string, to: string, key: Key = C_MAJOR) =>
+      rows(parseChordSymbol(from), parseChordSymbol(to), key).filter(
+        ([kind]) => kind === 'diatonicWalk',
+      )
+    expect(walk('C', 'Em')).toEqual([['diatonicWalk', 'Dm']])
+    expect(walk('C', 'F')).toEqual([['diatonicWalk', 'Dm Em']])
+    expect(walk('C', 'G')).toEqual([['diatonicWalk', 'B° Am']])
+    expect(walk('C', 'Am')).toEqual([['diatonicWalk', 'B°']])
+    expect(walk('F', 'G')).toEqual([])
+    expect(walk('C', 'Eb')).toEqual([])
+    expect(walk('Am', 'C', { tonic: note('A'), minor: true })).toEqual([['diatonicWalk', 'B°']])
+    expect(walk('C', 'F', { tonic: note('G'), minor: false })).toEqual([])
   })
 
   it('spells a walk’s dominants as the app spells a chord’s root', () => {

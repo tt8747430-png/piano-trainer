@@ -29,7 +29,7 @@ export function PassingChordsTool({
   const key = keyFromParam(view.key)
   const from = readChordSymbol(view.from)
   const to = readChordSymbol(view.to)
-  const ways = from && to ? passingChords(from, to) : []
+  const ways = from && to ? passingChords(from, to, key) : []
   const at = `${view.key} ${view.from} ${view.to}`
   const [shown, setShown] = useShownKeys(at, NO_KEYS)
   return (

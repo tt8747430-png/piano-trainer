@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import {
+  chordsHolding,
   chordSymbol,
+  HOLDING_GROUPS,
   note,
   numeralChord,
   parseChordSymbol,
   parseNoteName,
   parseNumerals,
+  writtenSymbol,
 } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import {
@@ -270,6 +273,20 @@ describe('the lessons', () => {
         : [],
     )
     expect(chords).toEqual(['Bm7♭5', 'E7', 'Am7'])
+  })
+
+  it('reharmonise E with chords the Reharmonise tool shows under it', () => {
+    const held = chordsHolding(note('E'), C_MAJOR)
+    const shown = HOLDING_GROUPS.flatMap((group) =>
+      held[group].map((each) => writtenSymbol(each.chord)),
+    )
+    const taught = (lessonById('reharmonising-a-melody')?.sections ?? [])
+      .filter((section) => section.heading.en !== 'Try it')
+      .flatMap((section) =>
+        section.blocks.flatMap((block) => (block.kind === 'chords' ? block.symbols : [])),
+      )
+    expect(taught).toHaveLength(6)
+    for (const symbol of taught) expect(shown, symbol).toContain(symbol)
   })
 
   it('list the modules in order, each lesson after the one before it', () => {

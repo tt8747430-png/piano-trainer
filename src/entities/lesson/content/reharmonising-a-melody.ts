@@ -38,11 +38,11 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '7th chords hold the note in more ways: E is the 7th of FMaj7, the 9th of Dm9 and the 5th of A7, which is also the V7 of Dm and leads on to it.',
-            ru: 'Септаккорды дают ещё больше вариантов: ми — септима FMaj7, нона Dm9 и квинта A7, который к тому же V7 для Dm и ведёт в него.',
+            en: '7th chords hold the note in more ways: E is the 7th of FMaj7, the 9th of Dm9 and the 3rd of C7, which is the V7 of F and leads on to it.',
+            ru: 'Септаккорды дают ещё больше вариантов: ми — септима FMaj7, нона Dm9 и терция C7, который к тому же V7 для F и ведёт в него.',
           },
         },
-        { kind: 'chords', symbols: ['FMaj7', 'Dm9', 'A7'] },
+        { kind: 'chords', symbols: ['FMaj7', 'Dm9', 'C7'] },
       ],
     },
     {

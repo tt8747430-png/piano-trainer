@@ -177,15 +177,29 @@ export const learn = {
         name: 'Diminished approach',
         why: '{{chord}} leads up a half step into {{to}}.',
       },
-      subdominant: { name: 'Subdominant approach', why: '{{chord}} is the subdominant of {{to}}.' },
+      diatonicWalk: {
+        name: 'Walking through the key',
+        why: 'The bass steps through the key’s own chords into {{to}}.',
+      },
       backdoor: {
         name: 'Backdoor cadence',
         why: '{{chord}} is the ♭VII7 of {{to}}: its back door.',
       },
-      plagal: { name: 'Plagal cadence', why: '{{chord}} is the IV of {{to}}: the Amen cadence.' },
+      backdoorTwoFive: {
+        name: 'Backdoor ii–V',
+        why: '{{chord}} and {{next}} are the iv and ♭VII7 of {{to}}, borrowed from its minor.',
+      },
+      plagal: {
+        name: 'Plagal cadence',
+        why: '{{chord}} is the subdominant of {{to}}: the Amen cadence.',
+      },
       minorPlagal: {
         name: 'Minor plagal cadence',
         why: '{{chord}} is the iv of {{to}}, borrowed from its minor.',
+      },
+      gospelWalkUp: {
+        name: 'Gospel walk-up',
+        why: '{{chord}} and {{next}} climb by whole steps into {{to}}, borrowed from its minor.',
       },
     },
   },

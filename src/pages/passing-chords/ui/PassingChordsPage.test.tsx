@@ -61,9 +61,19 @@ describe('Practice → Passing chords', () => {
 
   it('marks a row whose chords are all the key’s', async () => {
     await renderApp('/practice/progressions/passing?from=C&to=Am')
-    const subdominant = await screen.findByRole('article', { name: 'Subdominant approach' })
-    expect(within(subdominant).getByRole('button', { name: 'Dm' })).toBeInTheDocument()
-    expect(subdominant).toHaveTextContent('In the key')
+    const plagal = await screen.findByRole('article', { name: 'Plagal cadence' })
+    expect(within(plagal).getByRole('button', { name: 'Dm' })).toBeInTheDocument()
+    expect(plagal).toHaveTextContent('In the key')
+  })
+
+  it('walks through the key between two of its chords, under Diatonic', async () => {
+    await renderApp('/practice/progressions/passing?from=C&to=F')
+    const diatonic = await screen.findByRole('region', { name: 'Diatonic' })
+    const walk = within(diatonic).getByRole('article', { name: 'Walking through the key' })
+    expect(within(walk).getByRole('button', { name: 'Dm' })).toBeInTheDocument()
+    expect(within(walk).getByRole('button', { name: 'Em' })).toBeInTheDocument()
+    expect(walk).toHaveTextContent('In the key')
+    expect(walk).toHaveTextContent('The bass steps through the key’s own chords into F.')
   })
 
   it('speaks Russian', async () => {

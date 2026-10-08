@@ -21,8 +21,8 @@ up in; a tool works something out from what the learner gives it.
 - **Reharmonise is the owner's table as roles** (`chordsHolding`): triads as root, 3rd, 5th; major 7ths as 3, 7, 9,
   #11, 13; minor 7ths as ♭3, ♭7, 9, 11, 13; dominants as 3, ♭7, ♭9, 9, #9, #11, ♭13, 13. The whole table is its test.
   Each chord is marked in the key when every tone is the key's (a minor key's raised 6th and 7th included).
-- **Passing chords are twelve rules from the target's root** (`passingChords`), in The Ultimate Piano's six
-  categories; a row that repeats From, To or an earlier row is left out; every row plays voice-led (`voiceLead`: the
+- **Passing chords are rules from the target's root** (`passingChords`; twelve then, fourteen with the key's own
+  walk since the roadmap §10.2's corrections of 2026-10-09), in The Ultimate Piano's six categories; a row that repeats From, To or an earlier row is left out; every row plays voice-led (`voiceLead`: the
   bass the root, the right hand the inversion nearest the last).
 - **Roots are spelled by letters, then named plainly** (`spellBelow`, `spellAbove`, `plainRoot`): F♭ is written E,
   B𝄫 A, as a chord chart writes them.
