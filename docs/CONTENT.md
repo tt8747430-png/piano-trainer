@@ -300,7 +300,9 @@ has them, a `note` (what it teaches, in a line, by the [copy rule](#text)), the 
 chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a 7th where the style
 plays one whatever the chord size (the blues' `I7`, a resolution's `V7♭9`); leave it out where the chord should grow
 with the size. **A line of numerals is written once in its mode**: the page names the progression it shows by its
-line, so a second name for the same line is left out.
+line, so a second name for the same line is left out. **A cadence's version in the minor key of the same tonic** is
+a pair in `MODE_VERSIONS`, the major one first (the jazz cadence and the minor ii–V–i): on the page, a key turned minor
+or major takes one to the other (ADR 0031). An id is its entry's alone: `tsc` holds every id a table names.
 
 ## What the tests check
 
@@ -316,7 +318,7 @@ line, so a second name for the same line is left out.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
 - **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
   every line read and written once in its mode, every style used, minor ones in their style, every note in both
-  languages.
+  languages, each pair of versions in opposite modes.
 - **Lessons' patterns** (`src/widgets/lesson-view/model/pattern-example.test.ts`): every pattern block plays over its
   piece from its first beat.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,

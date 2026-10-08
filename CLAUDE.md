@@ -114,7 +114,8 @@ it. `@` → `src`.
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progressions` (a progression in any key: its row of chords, `ProgressionChoice`
-  (the library behind one pop-up) and the typed field), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
+  (the library behind one pop-up) and the typed field; its pure `changedView` (a key turned minor or major takes a
+  cadence to its version in that mode, ADR 0031), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too),
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
@@ -162,7 +163,8 @@ it. `@` → `src`.
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
   Gospel), `progression-library` (the one model of a progression that is practised: named, by style, in numerals,
   each line once in its mode, with its note, pattern and chord size; `libraryProgression` names a line, `COMMON_PROGRESSIONS`
-  a key's), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
+  a key's, `LIBRARY_BY_STYLE` what its pop-up lists, `otherModeVersion` a cadence's version in the other mode, from
+  `MODE_VERSIONS`), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
   `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, version 8, with the laptop's sidebar, open or collapsed, the
   keyboard settings, the trainers' auto-next and the recorder's click), `take` (ADR 0028: `pt-takes`, version 1, saved
   compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
@@ -202,7 +204,7 @@ it. `@` → `src`.
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton` and `RailChoice` (a choice set on the keyboard's rail), `Pinned`, `ScreenHeader` (the screen's bar, sticky, hidden while reading down; `ScreenBarProvider` in `AppShell`
   sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utilities read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
-  button; `bare` under a printed name), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`),
+  button; `bare` under a printed name), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`; in both a list with other values is another list, mounted anew: `listKey`),
   `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so, then Major · Minor, only the keys a signature writes), `ToggleChips` (several of a few, all in sight), `ChordHeading` (a chord's symbol, a long one a size down), `Labelled` (a choice under its name, one field of a page's `grid-fields`), `NavTabs` (tabs that are links), `InversionChoice` over `InversionGlyph`, `ChordSizeField`, `SwitchRow`, `ToggleTile` and `ToggleGrid`, `ToolButton`, `LearnedBadge`, `TypedField`, `RowLink` (its tile an icon, a number or none, a detail of one line, a trailing slot) and `RowGroup` (a titled grid of row cards), `PAGE_TILES` (the tile a row to each page wears), `Fact`, `PlayToggle` and `ChordButton`, `ToneChip`, `PlayLabel` (a Play button's words, Stop while it sounds), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
   `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `LevelMark`, `NotFound` (a page not there, or deleted in another tab), `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,

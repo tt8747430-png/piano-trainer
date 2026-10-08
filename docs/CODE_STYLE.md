@@ -25,8 +25,10 @@ A container wires data to presentational children. One job each.
   `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
   (a radio group) and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Listbox`
   (one choice of a list: a Setup page's, the tempo and hands popovers), `Dropdown` (the pop-up button,
-  over shadcn's `select`) with `MultiDropdown`, `NotePicker` (the twelve notes in sight, a tap each, spelled by the
-  caller's rule) and `KeyPicker` (all 24 keys in sight, each under its one name), `Labelled` (a choice under its name:
+  over shadcn's `select`) with `MultiDropdown` (in both, a list with other values is another list, mounted anew by
+  `listKey`: Base UI checks a list changed in place against the value it held before, and reports a choice nobody
+  made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
+  then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
   one field of a page's `grid-fields`), `NavTabs` (a subject's pages as tabs that are links), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
   its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
@@ -42,7 +44,8 @@ A container wires data to presentational children. One job each.
   names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
   settings changed less often a `Sheet`; a popover anchored to its button for a few quick choices whose effect shows
   at once (the keyboard settings beside the keys, the Player's tempo and hands). Where a picture says it faster (ADR
-  0029): twelve notes are a `NotePicker`, a key a `KeyPicker`, an inversion its drawn stack, several on-or-offs
+  0029): a note is a `NoteChoice` and a key a `KeyChoice` (the letter, then its accidental, as it is written), an
+  inversion its drawn stack, several on-or-offs
   together on a sheet `ToggleTile`s, the sections of one screen tabs (`ui/primitives/tabs`). A `Dropdown` stays for
   long lists and beside other controls in a row.
 - **A screen takes the width it is given.** No `max-w-*` on a screen; its side gutter is `px-gutter` (what bleeds to
