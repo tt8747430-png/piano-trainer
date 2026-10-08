@@ -180,10 +180,26 @@ describe('Practice → Progressions', () => {
     expect(href).toMatch(/pattern=jazz/)
   })
 
-  it('opens it through the keys, round the circle of fifths', async () => {
+  it('lists every walk through the keys as a row into the Player, and the key alone', async () => {
     await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
-    const through = await screen.findByRole('link', { name: /^Through the keys/ })
-    expect(through.getAttribute('href')).toMatch(/^\/play\/progression\?.*walk=fifths/)
+    const walks = within(
+      await screen.findByRole('region', { name: 'Through the keys' }),
+    ).getAllByRole('link')
+    expect(walks.map((link) => link.textContent)).toEqual([
+      'Up by semitones',
+      'Down by semitones',
+      'Up by whole tones',
+      'Down by whole tones',
+      'Round the circle of fifths',
+    ])
+    expect(
+      walks.map((link) => /walk=([a-z-]+)/.exec(link.getAttribute('href') ?? '')?.[1]),
+    ).toEqual(['semitones-up', 'semitones-down', 'tones-up', 'tones-down', 'fifths'])
+    for (const link of walks)
+      expect(link.getAttribute('href')).toMatch(/^\/play\/progression\?.*p=ii-V-I/)
+    expect(screen.getByRole('link', { name: 'In C major' }).getAttribute('href')).not.toMatch(
+      /walk=/,
+    )
   })
 
   it('is the first of Progressions’ three tabs, each a page', async () => {

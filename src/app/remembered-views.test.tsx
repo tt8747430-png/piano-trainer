@@ -30,7 +30,7 @@ describe('Remembered views', () => {
     )
   })
 
-  it('opens the progression the tool names, played the learner’s way', async () => {
+  it('opens the progression the tool names, played the learner’s way, in the key alone', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     await useScreen(
@@ -44,7 +44,6 @@ describe('Remembered views', () => {
         p: 'I-IV-V',
         key: 'G',
         pattern: 'jazz',
-        walk: 'fifths',
       }),
     )
   })

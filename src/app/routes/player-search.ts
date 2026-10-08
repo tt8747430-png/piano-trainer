@@ -177,8 +177,11 @@ export const progressionPlayerSearch = routeSearch(
   readProgressionPlayerSearch,
   PROGRESSION_PLAYER_DEFAULTS,
 )
-/** Not its numerals, key or chord size: the Progressions tool names them, its triads by leaving the size out. */
-export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = ['walk', ...PLAYING]
+/**
+ * Not its numerals, key, chord size or walk: the Progressions tool names them, its triads by leaving the
+ * size out and the key alone by leaving the walk out.
+ */
+export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = PLAYING
 
 // An exercise: the Player's own params, its swing absent for the exercise's own, then its choices,
 // each absent for the exercise's own (the page reads them against the exercise).
