@@ -124,6 +124,7 @@ export { voiceLead } from './voice-lead'
 export {
   numeralChord,
   numeralOf,
+  numeralsLine,
   numeralsParam,
   numeralText,
   parseNumerals,

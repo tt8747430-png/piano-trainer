@@ -1,15 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { COMMON_PROGRESSIONS, libraryParam } from '@/entities/progression-library'
+import { COMMON_PROGRESSIONS, libraryLine, libraryParam } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   circleKey,
   keyMode,
   keyParam,
   noteParam,
-  numeralText,
-  parseNumerals,
   pitchClassOf,
   scaleHasChords,
   sizeOfNotes,
@@ -66,7 +64,7 @@ export function PractiseChords({
             <li key={progression.id}>
               <RowLink
                 title={localText(progression.name, locale)}
-                detail={(parseNumerals(progression.numerals) ?? []).map(numeralText).join('–')}
+                detail={libraryLine(progression)}
                 {...PAGE_TILES.progressions}
                 render={
                   <Link

@@ -33,7 +33,10 @@ const SHIFTS = new Map<string, -1 | 0 | 1>([
   ['♯', 1],
 ])
 
-/** The table's qualities a numeral names, by its triad and 7th: the rest (a 6th, a suspension, a 9th) it does not. */
+/**
+ * The table's qualities a numeral names, by its triad and 7th (a dominant's with its ♭9): the rest (a
+ * 6th, a suspension, any other 9th) it does not.
+ */
 const NAMED: readonly (readonly [ChordQuality, NumeralTriad, NumeralSeventh])[] = [
   ['maj', 'maj', 'none'],
   ['min', 'min', 'none'],
@@ -129,6 +132,10 @@ export function numeralText(numeral: Numeral): string {
           : ''
   return sign + (upper ? roman : roman.toLowerCase()) + mark + SEVENTH_TEXT[numeral.seventh]
 }
+
+/** Numerals as a line to read, a dash between them: `ii–V–I`. */
+export const numeralsLine = (numerals: readonly Numeral[]): string =>
+  numerals.map(numeralText).join('–')
 
 /** Numerals as a URL holds them: joined by hyphens, flats as `b`. */
 export const numeralsParam = (numerals: readonly Numeral[]): string =>

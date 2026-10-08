@@ -2,11 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { parseNumerals } from '@/shared/lib/music'
 import {
   COMMON_PROGRESSIONS,
+  LIBRARY_BY_STYLE,
+  libraryLine,
   libraryParam,
   libraryProgression,
-  PROGRESSION_LIBRARY,
-  PROGRESSION_STYLES,
+  otherModeVersion,
+  progressionById,
 } from '../index'
+import { PROGRESSION_STYLES } from '../model/types'
+import { PROGRESSION_LIBRARY } from './library'
 
 describe('the progressions library', () => {
   it('has unique ids, every name in English and Russian', () => {
@@ -50,8 +54,50 @@ describe('the progressions library', () => {
     }
   })
 
+  it('finds a progression by its id, and none by another', () => {
+    for (const each of PROGRESSION_LIBRARY) expect(progressionById(each.id), each.id).toBe(each)
+    expect(progressionById('typed')).toBeUndefined()
+  })
+
+  it('lists the library by style, in the styles’ order, every progression once', () => {
+    expect(LIBRARY_BY_STYLE.map((group) => group.style)).toEqual([...PROGRESSION_STYLES])
+    expect(LIBRARY_BY_STYLE.flatMap((group) => group.progressions)).toHaveLength(
+      PROGRESSION_LIBRARY.length,
+    )
+    for (const { style, progressions } of LIBRARY_BY_STYLE)
+      for (const each of progressions) expect(each.style, each.id).toBe(style)
+  })
+
+  it('writes a progression’s line as it is read, a dash between its numerals', () => {
+    const line = (id: string) => {
+      const progression = progressionById(id)
+      return progression && libraryLine(progression)
+    }
+    expect(line('jazz-cadence')).toBe('ii–V–I')
+    expect(line('minor-two-five')).toBe('iiø7–V7♭9–i')
+    expect(line('gospel-walk-up')).toBe('♭VI–♭VII–I')
+  })
+
+  it('holds a cadence’s version in the other mode, from either side', () => {
+    const version = (id: string) => {
+      const progression = progressionById(id)
+      return progression && otherModeVersion(progression)?.id
+    }
+    expect(version('jazz-cadence')).toBe('minor-two-five')
+    expect(version('minor-two-five')).toBe('jazz-cadence')
+    expect(version('authentic')).toBe('minor-cadence')
+    expect(version('flat-nine-resolution')).toBe('minor-flat-nine-resolution')
+    expect(version('axis')).toBeUndefined()
+    for (const each of PROGRESSION_LIBRARY) {
+      const other = otherModeVersion(each)
+      if (!other) continue
+      expect(other.minor, each.id).toBe(!each.minor)
+      expect(otherModeVersion(other), each.id).toBe(each)
+    }
+  })
+
   it('keeps the ♭9 the resolutions teach', () => {
-    const numerals = (id: string) => PROGRESSION_LIBRARY.find((each) => each.id === id)?.numerals
+    const numerals = (id: string) => progressionById(id)?.numerals
     expect(numerals('flat-nine-resolution')).toBe('V7♭9 I')
     expect(numerals('minor-flat-nine-resolution')).toBe('V7♭9 i')
     expect(numerals('minor-two-five')).toBe('iiø7 V7♭9 i')

@@ -1,51 +1,40 @@
 import { useTranslation } from 'react-i18next'
 import {
-  libraryParam,
-  libraryProgression,
-  PROGRESSION_LIBRARY,
-  PROGRESSION_STYLES,
+  LIBRARY_BY_STYLE,
+  libraryLine,
+  progressionById,
+  type LibraryProgression,
 } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
-import {
-  circleKey,
-  keyParam,
-  numeralText,
-  parseNumerals,
-  pitchClassOf,
-  type Key,
-} from '@/shared/lib/music'
+import { numeralsLine, type Numeral } from '@/shared/lib/music'
 import { Dropdown, Labelled } from '@/shared/ui'
-import type { ProgressionsView } from '../model/progressions-view'
 
 /** The pop-up's value for a progression the library does not hold: the learner's own line. */
 const TYPED = 'typed'
 
-const dashed = (numerals: string): string =>
-  (parseNumerals(numerals) ?? []).map(numeralText).join('–')
-
 /**
- * The progression shown, chosen from the library by style behind one pop-up button under its name: it names the
- * library's progression the numerals are, or the line itself when the learner typed their own.
- * Choosing one keeps the tonic and takes the progression's mode, and its chord size where it has one.
+ * The progression shown, chosen from the library by style behind one pop-up button under its name: it
+ * names the library's progression the line is, or the line itself when the learner typed their own.
  */
 export function ProgressionChoice({
-  view,
-  musicKey,
-  onChange,
+  named,
+  numerals,
+  onChoose,
 }: {
-  view: ProgressionsView
-  musicKey: Key
-  onChange: (change: Partial<ProgressionsView>) => void
+  /** The library's progression shown; none for a line the learner typed. */
+  named: LibraryProgression | undefined
+  /** The line shown. */
+  numerals: readonly Numeral[]
+  onChoose: (progression: LibraryProgression) => void
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const named = libraryProgression(view.p, musicKey.minor)
-  const library = PROGRESSION_STYLES.map((style) => ({
+  const library = LIBRARY_BY_STYLE.map(({ style, progressions }) => ({
     label: t(`progressions.style.${style}`),
-    options: PROGRESSION_LIBRARY.filter((each) => each.style === style).map((each) => ({
+    options: progressions.map((each) => ({
       value: each.id,
       label: localText(each.name, locale),
-      detail: dashed(each.numerals),
+      detail: libraryLine(each),
     })),
   }))
   return (
@@ -60,19 +49,14 @@ export function ProgressionChoice({
             : [
                 {
                   label: t('progressions.typed'),
-                  options: [{ value: TYPED, label: dashed(view.p) }],
+                  options: [{ value: TYPED, label: numeralsLine(numerals) }],
                 },
                 ...library,
               ]
         }
         onChange={(id) => {
-          const chosen = PROGRESSION_LIBRARY.find((each) => each.id === id)
-          if (!chosen) return
-          onChange({
-            p: libraryParam(chosen),
-            key: keyParam(circleKey(pitchClassOf(musicKey.tonic), chosen.minor)),
-            ...(chosen.size ? { size: chosen.size } : {}),
-          })
+          const chosen = progressionById(id)
+          if (chosen) onChoose(chosen)
         }}
         className="w-full"
       />

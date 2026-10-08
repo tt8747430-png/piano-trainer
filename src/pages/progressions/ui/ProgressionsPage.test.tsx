@@ -114,6 +114,40 @@ describe('Practice → Progressions', () => {
     expect(row()).toEqual(['Bm7♭5iiø7', 'E7♭9V7♭9', 'Am9i'])
   })
 
+  it('takes the jazz cadence to its minor version when the key turns minor, and back', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
+    const mode = within(await screen.findByRole('radiogroup', { name: 'Mode' }))
+    await user.click(mode.getByRole('radio', { name: 'Minor' }))
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({
+        key: 'Cm',
+        p: 'iiø7-V7b9-i',
+        size: 'sevenths',
+      }),
+    )
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Minor ii–V–i')
+    expect(row()).toEqual(['Dm7♭5iiø7', 'G7♭9V7♭9', 'Cm7i'])
+    await user.click(mode.getByRole('radio', { name: 'Major' }))
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
+    )
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
+    expect(row()).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
+  })
+
+  it('takes a library progression in place of a typed line, and closes its pop-up', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?p=I-I-IV')
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    await user.click(await screen.findByRole('option', { name: /^Jazz cadence/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
+    )
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
+    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument())
+  })
+
   it('says a typed line is the learner’s own', async () => {
     await renderApp('/practice/progressions?p=I-I-IV')
     expect(await screen.findByRole('combobox', { name: 'Progression' })).toHaveTextContent('I–I–IV')

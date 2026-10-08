@@ -4,14 +4,14 @@ import type { LibraryProgression, ProgressionStyle } from '../model/types'
 type Extras = Pick<LibraryProgression, 'note' | 'pattern' | 'size'>
 
 /** A progression of the library: a major key's unless its style is the minor keys'. */
-const entry = (
+const entry = <const Id extends string>(
   style: ProgressionStyle,
-  id: string,
+  id: Id,
   numerals: string,
   en: string,
   ru: string,
   extras: Extras = {},
-): LibraryProgression => ({
+): LibraryProgression & { readonly id: Id } => ({
   id,
   style,
   numerals,
@@ -28,7 +28,7 @@ const note = (en: string, ru: string): LocalText => ({ en, ru })
  * blues I is a dominant 7th); the gospel walk-up climbs to I from the flat side; the resolutions
  * write the dominant's ♭9 where they teach it.
  */
-export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = [
+const LIBRARY = [
   entry('pop', 'axis', 'I V vi IV', 'Axis of Awesome', 'Axis of Awesome', {
     pattern: 'pop8',
     note: note(
@@ -174,4 +174,20 @@ export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = [
       ),
     },
   ),
+] as const
+
+/** A progression's id, as the library writes it. */
+export type ProgressionId = (typeof LIBRARY)[number]['id']
+
+/** The library, style by style in the order written. */
+export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = LIBRARY
+
+/**
+ * A cadence and its version in the minor key of the same tonic, the major one first: what a key turned
+ * minor takes it to, and back. The jazz cadence's is the minor ii–V–i (the 2-5-1 sheet's minor version).
+ */
+export const MODE_VERSIONS: readonly (readonly [major: ProgressionId, minor: ProgressionId])[] = [
+  ['jazz-cadence', 'minor-two-five'],
+  ['flat-nine-resolution', 'minor-flat-nine-resolution'],
+  ['authentic', 'minor-cadence'],
 ]

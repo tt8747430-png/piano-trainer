@@ -1,18 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints, Music } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { PatternId } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
-import type { ChordSize, Key, KeyParam } from '@/shared/lib/music'
+import type { Key } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
-
-/** What the Player opens on: the progression, its key, and its chord size and pattern where it has them. */
-export interface InPlayer {
-  readonly p: string
-  readonly key: KeyParam
-  readonly chordSize?: Exclude<ChordSize, 'triads'>
-  readonly pattern?: PatternId
-}
+import type { InPlayer } from '../model/progressions-view'
 
 /**
  * A progression practised in the Player, as Chords and Scales list theirs: in the key shown, and

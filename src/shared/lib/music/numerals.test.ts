@@ -6,6 +6,7 @@ import { note } from './note'
 import {
   numeralChord,
   numeralOf,
+  numeralsLine,
   numeralsParam,
   numeralText,
   parseNumerals,
@@ -35,6 +36,10 @@ describe('parseNumerals', () => {
 
   it('writes them for a URL', () => {
     expect(numeralsParam(parseNumerals('♭VII ii7 V7') ?? [])).toBe('bVII-ii7-V7')
+  })
+
+  it('writes them as a line to read, a dash between them', () => {
+    expect(numeralsLine(parseNumerals('bVII ii7 V7b9') ?? [])).toBe('♭VII–ii7–V7♭9')
   })
 
   it('reads a ♭9 written on a dominant 7th, and only there', () => {
