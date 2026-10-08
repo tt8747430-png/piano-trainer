@@ -10,7 +10,6 @@ export const PROGRESSION_STYLES = [
   'blues',
   'classical',
   'soul',
-  'latin',
   'gospel',
   'minor',
   'theory',

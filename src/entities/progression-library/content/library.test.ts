@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { chordSymbol, note, numeralChord, parseNumerals, type ChordSize } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  note,
+  numeralChord,
+  parseNumerals,
+  type ChordSize,
+  type Key,
+} from '@/shared/lib/music'
 import {
   COMMON_PROGRESSIONS,
   LIBRARY_BY_STYLE,
@@ -11,6 +18,14 @@ import {
 } from '../index'
 import { PROGRESSION_STYLES } from '../model/types'
 import { PROGRESSION_LIBRARY } from './library'
+
+const C_MAJOR = { tonic: note('C'), minor: false }
+
+/** A progression's chords in a key at a chord size, as the Progressions page shows them. */
+const chordsOf = (id: string, key: Key, size: ChordSize): string[] =>
+  (parseNumerals(progressionById(id)?.numerals ?? '') ?? []).map((numeral) =>
+    chordSymbol(numeralChord(numeral, key, size)),
+  )
 
 describe('the progressions library', () => {
   it('has unique ids, every name in English and Russian', () => {
@@ -44,6 +59,14 @@ describe('the progressions library', () => {
       expect(libraryProgression(libraryParam(each), each.minor), each.id).toBe(each)
     expect(libraryProgression('I-I-I', false)).toBeUndefined()
     expect(libraryProgression('I-V-vi-IV', true)).toBeUndefined()
+  })
+
+  it('holds a loop once: no progression is another with a chord held', () => {
+    const loops = PROGRESSION_LIBRARY.map((each) => {
+      const chords = libraryParam(each).split('-')
+      return `${each.minor} ${chords.filter((chord, at) => chord !== chords[at - 1]).join('-')}`
+    })
+    expect(new Set(loops).size).toBe(loops.length)
   })
 
   it('says a note in both languages', () => {
@@ -85,7 +108,7 @@ describe('the progressions library', () => {
     }
     expect(version('jazz-cadence')).toBe('minor-two-five')
     expect(version('minor-two-five')).toBe('jazz-cadence')
-    expect(version('authentic')).toBe('minor-cadence')
+    expect(version('complete-cadence')).toBe('minor-cadence')
     expect(version('flat-nine-resolution')).toBe('minor-flat-nine-resolution')
     expect(version('axis')).toBeUndefined()
     for (const each of PROGRESSION_LIBRARY) {
@@ -103,18 +126,42 @@ describe('the progressions library', () => {
   })
 
   it('grows the minor ii–V–i with the chord size: the sheet’s 7th chords, a 9th on each at 9ths', () => {
-    const cMinor = { tonic: note('C'), minor: true }
-    const line = parseNumerals(progressionById('minor-two-five')?.numerals ?? '') ?? []
     const chords = (size: ChordSize) =>
-      line.map((numeral) => chordSymbol(numeralChord(numeral, cMinor, size)))
+      chordsOf('minor-two-five', { tonic: note('C'), minor: true }, size)
     expect(chords('triads')).toEqual(['D°', 'G', 'Cm'])
     expect(chords('sevenths')).toEqual(['Dm7♭5', 'G7', 'Cm7'])
     expect(chords('ninths')).toEqual(['Dm9♭5', 'G7♭9', 'Cm9'])
   })
 
+  it('names a progression for the chords musicians play under that name', () => {
+    expect(chordsOf('autumn-leaves', C_MAJOR, 'sevenths')).toEqual(['Dm7', 'G7', 'CMaj7', 'FMaj7'])
+    expect(chordsOf('wild-thing', C_MAJOR, 'triads')).toEqual(['C', 'F', 'G', 'F'])
+    expect(PROGRESSION_LIBRARY.map((each) => each.name.en)).not.toContain('Louie Louie')
+    expect(chordsOf('seven-three-six', C_MAJOR, 'sevenths')).toEqual(['Bm7♭5', 'E7', 'Am7'])
+    expect(chordsOf('seven-three-six', C_MAJOR, 'ninths')).toEqual(['Bm9♭5', 'E7♭9', 'Am9'])
+  })
+
+  it('names the cadences by how they close: V–I authentic, IV–V–I complete', () => {
+    const name = (id: string) => progressionById(id)?.name
+    expect(chordsOf('authentic', C_MAJOR, 'triads')).toEqual(['C', 'G', 'C'])
+    expect(name('authentic')).toEqual({ en: 'Authentic cadence', ru: 'Автентическая каденция' })
+    expect(chordsOf('complete-cadence', C_MAJOR, 'triads')).toEqual(['C', 'F', 'G', 'C'])
+    expect(name('complete-cadence')).toEqual({ en: 'Complete cadence', ru: 'Полная каденция' })
+  })
+
+  it('holds the Andalusian cadence the lessons teach: a minor key stepping down to its major V', () => {
+    expect(libraryProgression('i-VII-VI-V', true)?.name.en).toBe('Andalusian cadence')
+    expect(chordsOf('andalusian', { tonic: note('A'), minor: true }, 'triads')).toEqual([
+      'Am',
+      'G',
+      'F',
+      'E',
+    ])
+  })
+
   it('offers a key its common progressions, a major key’s and a minor key’s in their own mode', () => {
     expect(COMMON_PROGRESSIONS.major.map((each) => each.id)).toEqual([
-      'authentic',
+      'complete-cadence',
       'doo-wop',
       'jazz-cadence',
       'axis',

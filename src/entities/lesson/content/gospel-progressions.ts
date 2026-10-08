@@ -7,8 +7,8 @@ const gospelProgressions: Lesson = {
   id: 'gospel-progressions',
   title: { en: 'Gospel progressions', ru: 'Госпел-последовательности' },
   summary: {
-    en: 'The progressions gospel is built on, coloured with 7ths: the lift, the standard, the hymn, the climb, the resolution and the walk-up, and the gospel rhythm.',
-    ru: 'Последовательности, на которых строится госпел, раскрашенные септаккордами: подъём, стандарт, гимн, восхождение, разрешение и подход снизу, и госпел-ритм.',
+    en: 'The progressions gospel is built on, coloured with 7ths: the lift, the standard, the hymn, the 7–3–6, the resolution and the walk-up, and the gospel rhythm.',
+    ru: 'Последовательности, на которых строится госпел, раскрашенные септаккордами: подъём, стандарт, гимн, 7–3–6, разрешение и подход снизу, и госпел-ритм.',
   },
   level: 3,
   category: 'gospel',
@@ -46,8 +46,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'I–iii–IV–V climbs step by step to the dominant. Here it is in F major.',
-            ru: 'I–iii–IV–V поднимается по ступеням к доминанте. Здесь — в фа мажоре.',
+            en: 'I–iii–IV–V climbs to the dominant: up a third, then step by step. Here it is in F major.',
+            ru: 'I–iii–IV–V поднимается к доминанте: на терцию вверх, затем по ступеням. Здесь — в фа мажоре.',
           },
         },
         {
@@ -77,16 +77,16 @@ const gospelProgressions: Lesson = {
       ],
     },
     {
-      heading: { en: 'The climb', ru: 'Восхождение' },
+      heading: { en: 'The 7–3–6', ru: '7–3–6' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'VII–III–VI goes anticlockwise round the circle of fifths in dominant 7ths, down a fifth each time, each chord pulling to the next: B7, E7, A7 in C major, ready to fall to ii.',
-            ru: 'VII–III–VI идёт по кварто-квинтовому кругу против часовой стрелки доминантсептаккордами, каждый раз на квинту вниз, и каждый тянет к следующему: B7, E7, A7 в до мажоре, готовые прийти на ii.',
+            en: 'Gospel players name it by its bass: the 7th, 3rd and 6th notes of the key. It is a ii–V–i into the relative minor: a half-diminished 7th, a dominant 7th, and the minor vi they pull to. In C major: Bm7♭5, E7, Am7.',
+            ru: 'Госпел-музыканты называют её по басу: VII, III и VI ступени тональности. Это ii–V–i в параллельный минор: полууменьшённый септаккорд, доминантсептаккорд и минорная vi, к которой они тянут. В до мажоре: Bm7♭5, E7, Am7.',
           },
         },
-        { kind: 'progression', numerals: 'VII III VI', key: C_MAJOR, size: 'sevenths' },
+        { kind: 'progression', numerals: 'vii° III vi', key: C_MAJOR, size: 'sevenths' },
       ],
     },
     {
@@ -146,7 +146,7 @@ const gospelProgressions: Lesson = {
           title: { en: 'Gospel in Progressions', ru: 'Госпел в последовательностях' },
           target: {
             place: 'progressions',
-            numerals: 'IV V iii vi',
+            numerals: 'vii° III vi',
             key: C_MAJOR,
             size: 'sevenths',
           },

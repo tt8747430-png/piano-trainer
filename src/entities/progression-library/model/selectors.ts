@@ -60,6 +60,6 @@ export const otherModeVersion = (progression: LibraryProgression): LibraryProgre
 export const COMMON_PROGRESSIONS: Readonly<
   Record<'major' | 'minor', readonly LibraryProgression[]>
 > = {
-  major: (['authentic', 'doo-wop', 'jazz-cadence', 'axis'] as const).map(listed),
+  major: (['complete-cadence', 'doo-wop', 'jazz-cadence', 'axis'] as const).map(listed),
   minor: (['minor-cadence', 'minor-pop', 'minor-two-five'] as const).map(listed),
 }

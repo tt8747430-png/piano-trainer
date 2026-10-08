@@ -14,7 +14,7 @@ cadence's minor version (the half-diminished ii, the dominant, the minor tonic) 
 
 - **The library pairs a cadence with its version in the minor key of the same tonic** (`MODE_VERSIONS`, read by
   `otherModeVersion`): the jazz cadence and the minor ii–V–i, the ♭9 resolution and the ♭9 resolution into minor, the
-  authentic cadence and the minor cadence. A pair is content; `tsc` holds its ids to the library's.
+  complete cadence (I–IV–V–I) and the minor cadence. A pair is content; `tsc` holds its ids to the library's.
 - **A key turned minor or major takes the library's progression shown to that version**, at the chord size shown
   (`changedView` in `widgets/progressions/model`). A progression the library holds in one mode, and a line a learner
   typed, stay as they are written: numerals are read as written in any key (ADR 0020).

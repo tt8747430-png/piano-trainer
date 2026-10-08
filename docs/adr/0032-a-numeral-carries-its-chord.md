@@ -19,7 +19,7 @@ hand off an inversion whose lowest key was the bass's; the page listed one walk.
 - **It is read as a chord symbol with a degree for a root.** Upper case takes any spelling the table reads (`V7`,
   `IMaj7`, `I6`, `Vsus4`, the sheets' `IIm7` and `IVm9`); lower case is a chord with a minor 3rd, its suffix without
   the `m` (`ii7`, `i6`, `ii9`, `iMaj7`), a diminished one by its mark (`vii°`, `vii°7`, `iiø7`). A bare upper-case
-  numeral stays a major chord, as the library's gospel climb writes them.
+  numeral stays a major chord, as the library's gospel 7–3–6 writes its III.
 - **It is written one way:** lower case for the table's twelve chords with a minor 3rd, upper case with the table's
   suffix for the rest. `IIm7` typed is `ii7` under its chord. An augmented dominant is `III7#5`; `III+7` is still
   read.

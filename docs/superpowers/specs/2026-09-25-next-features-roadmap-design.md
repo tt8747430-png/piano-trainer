@@ -717,6 +717,24 @@ versions (i–iv–V–i, i–VI–III–VII, ii°–V–i) and jazz's (the mino
 ii–Vs; §10.7) as the lessons reach them. Names are LocalText; "Axis of Awesome" and "Royal Road" are the names
 musicians use and stay as they are.
 
+**Corrected against the sources, 2026-10-09** (the table above is The Ultimate Piano's list as it stands there; the
+library differs where the list is wrong or says a thing twice):
+
+- **Gospel climb** is the gospel 7–3–6, named by its bass: viiø7–III7–vi, a ii–V–i into the relative minor
+  (Bm7♭5–E7–Am7 in C), not three major chords. The library writes `vii° III vi`.
+- **Louie Louie** is I–IV–v–IV, its v minor. I–IV–V–IV is **Wild Thing**, and is named so.
+- **Autumn Leaves** opens ii–V–I–IV, the list's "jazz standard"; that line takes the name. ii–V–I–vi was only the
+  rhythm changes loop started on ii, and is dropped.
+- **Authentic and perfect cadence** are two names for V–I. I–V–I is the authentic cadence; I–IV–V–I is the complete
+  cadence (Russian «полная каденция»: subdominant, dominant, tonic).
+- **Dropped, a loop with a chord held:** I–IV–V–V (rock anthem; basic rock) and ii–V–I–I (samba cadence; the jazz
+  cadence). Latin/Bossa's other two lines were already rhythm changes and I–IV–V–IV, so the style holds nothing of
+  its own and is gone.
+- **A second name for a line already there**, left out when the library was built: pop rock (Axis), modern R&B
+  (alternative pop), soul turnaround and bossa nova (rhythm changes), Latin groove (I–IV–V–IV), gospel lift (Royal
+  Road).
+- **Added:** the Andalusian cadence (i–VII–VI–V), which the Common progressions lesson teaches.
+
 ### 10.2 Passing chords (sub-project 5)
 
 **Input:** a key for context (C/Am, G/Em …), a **start** chord and a **target** chord, typed ("Am7", "Cmaj7", "G7",

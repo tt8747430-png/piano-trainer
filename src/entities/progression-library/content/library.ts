@@ -25,9 +25,11 @@ const note = (en: string, ru: string): LocalText => ({ en, ru })
 /**
  * The Ultimate Piano's progressions by style (roadmap §10.1) with the app's own practice
  * progressions among them, each line of numerals once in its mode. The blues write their 7ths (a
- * blues I is a dominant 7th); the gospel walk-up climbs to I from the flat side; the resolutions
- * write the dominant's ♭9 where they teach it. The minor ii–V–i writes plain triads, so it grows with
- * the chord size: the half-diminished ii and the dominant at 7ths, the dominant's ♭9 only at 9ths.
+ * blues I is a dominant 7th); the gospel 7–3–6 writes its III a major chord, the dominant of vi; the
+ * gospel walk-up climbs to I from the flat side; the resolutions write the dominant's ♭9 where they
+ * teach it. The minor ii–V–i writes plain triads, so it grows with the chord size: the
+ * half-diminished ii and the dominant at 7ths, the dominant's ♭9 only at 9ths. A name is the one
+ * musicians give those chords, and a loop is held once: not again with a chord held.
  */
 const LIBRARY = [
   entry('pop', 'axis', 'I V vi IV', 'Axis of Awesome', 'Axis of Awesome', {
@@ -50,8 +52,7 @@ const LIBRARY = [
   entry('pop', 'pachelbel', 'I V vi iii IV I IV V', 'Pachelbel’s Canon', 'Канон Пахельбеля'),
   entry('rock', 'basic-rock', 'I IV V', 'Basic rock', 'Простой рок'),
   entry('rock', 'rock-shuffle', 'I V IV', 'Rock shuffle', 'Рок-шаффл'),
-  entry('rock', 'louie-louie', 'I IV V IV', 'Louie Louie', 'Louie Louie'),
-  entry('rock', 'rock-anthem', 'I IV V V', 'Rock anthem', 'Рок-гимн'),
+  entry('rock', 'wild-thing', 'I IV V IV', 'Wild Thing', 'Wild Thing'),
   entry('jazz', 'jazz-cadence', 'ii V I', 'Jazz cadence', 'Джазовая каденция', {
     pattern: 'jazz',
     size: 'sevenths',
@@ -62,9 +63,8 @@ const LIBRARY = [
   }),
   entry('jazz', 'rhythm-changes', 'I vi ii V', 'Rhythm changes', 'Rhythm changes'),
   entry('jazz', 'full-turnaround', 'iii vi ii V', 'Full turnaround', 'Полный оборот'),
-  entry('jazz', 'jazz-standard', 'ii V I IV', 'Jazz standard', 'Джазовый стандарт'),
+  entry('jazz', 'autumn-leaves', 'ii V I IV', 'Autumn Leaves', 'Autumn Leaves'),
   entry('jazz', 'sweet-jazz', 'I IV ii V', 'Sweet jazz', 'Мягкий джаз'),
-  entry('jazz', 'autumn-leaves', 'ii V I vi', 'Autumn Leaves', 'Autumn Leaves'),
   entry('jazz', 'dominant-resolution', 'V I', 'Dominant resolution', 'Разрешение доминанты', {
     size: 'ninths',
     note: note(
@@ -92,22 +92,27 @@ const LIBRARY = [
       note: note('Great with the blues scale on top.', 'Хорошо звучит с блюзовой гаммой сверху.'),
     },
   ),
-  entry('classical', 'authentic', 'I IV V I', 'Authentic cadence', 'Полная каденция', {
+  entry('classical', 'complete-cadence', 'I IV V I', 'Complete cadence', 'Полная каденция', {
     note: note(
       'Home, away to the subdominant and the dominant, and home.',
       'Тоника, субдоминанта, доминанта и снова тоника.',
     ),
   }),
-  entry('classical', 'perfect', 'I V I', 'Perfect cadence', 'Совершенная каденция'),
+  entry('classical', 'authentic', 'I V I', 'Authentic cadence', 'Автентическая каденция'),
   entry('classical', 'classical-standard', 'I ii V I', 'Classical standard', 'Классический оборот'),
   entry('classical', 'deceptive', 'I IV V vi', 'Deceptive cadence', 'Прерванная каденция'),
   entry('classical', 'plagal', 'I IV I', 'Plagal cadence', 'Плагальная каденция'),
   entry('soul', 'neo-soul', 'vi V IV V', 'Neo-soul', 'Нео-соул'),
   entry('soul', 'emotional-rnb', 'vi IV V I', 'Emotional R&B', 'Лирический R&B'),
-  entry('latin', 'samba-cadence', 'ii V I I', 'Samba cadence', 'Самба-каденция'),
   entry('gospel', 'gospel-standard', 'I iii IV V', 'Gospel standard', 'Госпел-стандарт'),
   entry('gospel', 'gospel-hymn', 'I IV I V', 'Gospel hymn', 'Госпел-гимн'),
-  entry('gospel', 'gospel-climb', 'VII III VI', 'Gospel climb', 'Госпел-восхождение'),
+  entry('gospel', 'seven-three-six', 'vii° III vi', 'Gospel 7–3–6', 'Госпел 7–3–6', {
+    size: 'sevenths',
+    note: note(
+      'Named by its bass, the 7th, 3rd and 6th notes of the key: a ii–V–i into the relative minor.',
+      'Названа по басу, VII, III и VI ступеням тональности: ii–V–i в параллельный минор.',
+    ),
+  }),
   entry('gospel', 'gospel-resolution', 'V IV I', 'Gospel resolution', 'Госпел-разрешение'),
   entry('gospel', 'gospel-walk-up', '♭VI ♭VII I', 'Gospel walk-up', 'Госпел-подход'),
   entry('minor', 'minor-cadence', 'i iv V i', 'Minor cadence', 'Минорная каденция', {
@@ -120,6 +125,7 @@ const LIBRARY = [
     pattern: 'pop8',
     note: note('The minor-key loop of pop and rock ballads.', 'Минорный круг поп- и рок-баллад.'),
   }),
+  entry('minor', 'andalusian', 'i VII VI V', 'Andalusian cadence', 'Андалузская каденция'),
   entry('minor', 'minor-two-five', 'ii° V i', 'Minor ii–V–i', 'Минорная II–V–I', {
     pattern: 'jazz',
     size: 'ninths',
@@ -190,5 +196,5 @@ export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = LIBRARY
 export const MODE_VERSIONS: readonly (readonly [major: ProgressionId, minor: ProgressionId])[] = [
   ['jazz-cadence', 'minor-two-five'],
   ['flat-nine-resolution', 'minor-flat-nine-resolution'],
-  ['authentic', 'minor-cadence'],
+  ['complete-cadence', 'minor-cadence'],
 ]

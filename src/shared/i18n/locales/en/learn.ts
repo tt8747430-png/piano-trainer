@@ -205,7 +205,6 @@ export const learn = {
       blues: 'Blues',
       classical: 'Classical',
       soul: 'R&B / Soul',
-      latin: 'Latin / Bossa',
       gospel: 'Gospel',
       minor: 'Minor keys',
       theory: 'Theory',

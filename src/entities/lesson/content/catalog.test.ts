@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
-import { note, parseChordSymbol, parseNoteName } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  note,
+  numeralChord,
+  parseChordSymbol,
+  parseNoteName,
+  parseNumerals,
+} from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import {
   lessonById,
@@ -249,6 +256,20 @@ describe('the lessons', () => {
     expect(
       LESSONS.filter((lesson) => lesson.module === 'gospel').map((lesson) => lesson.id),
     ).toEqual(['gospel-progressions', 'gospel-passing-chords', 'gospel-reharmonisation'])
+  })
+
+  it('teach the gospel 7–3–6 as it is played: a half-diminished 7, a dominant 3, the minor 6', () => {
+    const section = lessonById('gospel-progressions')?.sections.find(
+      (each) => each.heading.en === 'The 7–3–6',
+    )
+    const chords = (section?.blocks ?? []).flatMap((block) =>
+      block.kind === 'progression'
+        ? (parseNumerals(block.numerals) ?? []).map((numeral) =>
+            chordSymbol(numeralChord(numeral, block.key, block.size ?? 'triads')),
+          )
+        : [],
+    )
+    expect(chords).toEqual(['Bm7♭5', 'E7', 'Am7'])
   })
 
   it('list the modules in order, each lesson after the one before it', () => {
