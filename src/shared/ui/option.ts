@@ -37,3 +37,11 @@ export type Choices<V extends OptionValue> =
 export const choiceGroups = <V extends OptionValue>(
   choices: Choices<V>,
 ): readonly ChoiceGroup<V>[] => choices.groups ?? [{ options: choices.options }]
+
+/**
+ * Which list a pop-up holds: its values in order, as a React key. A list with other values is another
+ * list, mounted anew: Base UI checks a list that changed in place against the value it held before
+ * the change, and reports its first value as chosen where that one has left the list.
+ */
+export const listKey = <V extends OptionValue>(groups: readonly ChoiceGroup<V>[]): string =>
+  groups.flatMap((group) => group.options.map((option) => option.value)).join('\n')

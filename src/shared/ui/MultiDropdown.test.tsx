@@ -75,6 +75,26 @@ describe('MultiDropdown', () => {
     expect(onChange).toHaveBeenLastCalledWith([])
   })
 
+  it('reports no choice when its owner changes the list and the value together', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <MultiDropdown label="Alterations" value={['b9']} options={SIGNS} onChange={onChange} />,
+    )
+    await user.click(screen.getByRole('combobox', { name: 'Alterations' }))
+    await screen.findByRole('option', { name: '♭9' })
+    rerender(
+      <MultiDropdown
+        label="Alterations"
+        value={['b5']}
+        options={[{ value: 'b5', label: '♭5' }]}
+        onChange={onChange}
+      />,
+    )
+    expect(onChange).not.toHaveBeenCalled()
+    expect(screen.getByRole('combobox', { name: 'Alterations' })).toHaveTextContent('Alterations♭5')
+  })
+
   it('lists groups under their labels, each item named by its title, its second word shown', async () => {
     const user = userEvent.setup()
     render(

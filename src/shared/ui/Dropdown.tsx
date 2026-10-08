@@ -1,4 +1,4 @@
-import { choiceGroups, type Choices, type OptionValue } from './option'
+import { choiceGroups, listKey, type Choices, type OptionValue } from './option'
 import { OptionItems } from './OptionItems'
 import { DropdownTrigger } from './DropdownTrigger'
 import { Select, SelectContent } from './primitives/select'
@@ -35,7 +35,7 @@ export function Dropdown<V extends OptionValue>({
       }}
     >
       <DropdownTrigger label={label} bare={bare} className={className} />
-      <SelectContent>
+      <SelectContent key={listKey(groups)}>
         <OptionItems groups={groups} />
       </SelectContent>
     </Select>

@@ -1,4 +1,4 @@
-import { choiceGroups, type Choices, type OptionValue } from './option'
+import { choiceGroups, listKey, type Choices, type OptionValue } from './option'
 import { OptionItems } from './OptionItems'
 import { DropdownTrigger } from './DropdownTrigger'
 import { Select, SelectContent } from './primitives/select'
@@ -44,7 +44,7 @@ export function MultiDropdown<V extends OptionValue>({
                 .join(' ')
         }
       </DropdownTrigger>
-      <SelectContent alignItemWithTrigger={false}>
+      <SelectContent key={listKey(groups)} alignItemWithTrigger={false}>
         <OptionItems groups={groups} />
       </SelectContent>
     </Select>

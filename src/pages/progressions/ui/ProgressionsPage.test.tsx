@@ -69,6 +69,27 @@ describe('Practice → Progressions', () => {
     expect(screen.getByText('Great with the blues scale on top.')).toBeInTheDocument()
   })
 
+  it('keeps the progression chosen while the key turns minor and major again', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    await user.click(await screen.findByRole('option', { name: /^12-bar blues/ }))
+    await waitFor(() =>
+      expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent(
+        '12-bar blues',
+      ),
+    )
+    const mode = within(screen.getByRole('radiogroup', { name: 'Mode' }))
+    await user.click(mode.getByRole('radio', { name: 'Minor' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ key: 'Cm' }))
+    await user.click(mode.getByRole('radio', { name: 'Major' }))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('key'))
+    expect(router.state.location.search).toMatchObject({
+      p: expect.stringMatching(/^I7-I7-I7-I7-IV7/),
+    })
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('12-bar blues')
+  })
+
   it('offers no row that chooses in place: the library is one pop-up, never a list of links', async () => {
     await renderApp('/practice/progressions')
     await screen.findByRole('combobox', { name: 'Progression' })

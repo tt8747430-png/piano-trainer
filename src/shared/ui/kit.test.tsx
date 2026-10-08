@@ -330,6 +330,34 @@ describe('Dropdown', () => {
     expect(trigger).toHaveTextContent('C')
     expect(trigger).not.toHaveTextContent('Root')
   })
+
+  it('takes a choice typed on its closed button', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<Dropdown label="Root" value="C" options={ROOTS} onChange={onChange} />)
+    await user.tab()
+    expect(screen.getByRole('combobox', { name: 'Root' })).toHaveFocus()
+    // The list is in the page, hidden, a moment after the button takes the focus.
+    await screen.findByRole('option', { name: 'D', hidden: true })
+    await user.keyboard('d')
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('D')
+  })
+
+  it('reports no choice when its owner changes the list and the value together', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const own = { value: 'own', label: 'I–I–IV' }
+    const { rerender } = render(
+      <Dropdown label="Root" value="C" options={ROOTS} onChange={onChange} />,
+    )
+    await user.click(screen.getByRole('combobox', { name: 'Root' }))
+    await user.click(await screen.findByRole('option', { name: 'D' }))
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('D')
+    rerender(<Dropdown label="Root" value="own" options={[own, ...ROOTS]} onChange={onChange} />)
+    rerender(<Dropdown label="Root" value="D" options={ROOTS} onChange={onChange} />)
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('combobox', { name: 'Root' })).toHaveTextContent('RootD')
+  })
 })
 
 describe('ToggleChips', () => {
