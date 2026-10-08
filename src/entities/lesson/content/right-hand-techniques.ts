@@ -9,7 +9,7 @@ const rightHandTechniques: Lesson = {
   },
   level: 2,
   category: 'accompaniment',
-  module: 'accompaniment',
+  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Decorating a chord', ru: 'Украшение аккорда' },

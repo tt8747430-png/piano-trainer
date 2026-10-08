@@ -9,7 +9,7 @@ const fiveWays: Lesson = {
   },
   level: 1,
   category: 'accompaniment',
-  module: 'accompaniment',
+  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'One progression', ru: 'Одна последовательность' },

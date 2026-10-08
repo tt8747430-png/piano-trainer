@@ -1,3 +1,4 @@
+import { METHOD_BOOK_IDS } from '@/entities/book'
 import type { Level } from '@/entities/path'
 import type { PatternId } from '@/entities/pattern'
 import type { PieceId } from '@/entities/piece'
@@ -29,8 +30,16 @@ export const LESSON_CATEGORIES = [
 ] as const
 export type LessonCategory = (typeof LESSON_CATEGORIES)[number]
 
-/** Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7). */
-export const LESSON_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
+/**
+ * Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7): what is taught
+ * by subject, and each method book's own lessons under its book.
+ */
+export const LESSON_MODULES = [
+  'fundamentals',
+  'accompaniment',
+  ...METHOD_BOOK_IDS,
+  'gospel',
+] as const
 export type LessonModule = (typeof LESSON_MODULES)[number]
 
 /** A progression a lesson plays or opens in the tool: numerals in a key, triads when it names no size. */

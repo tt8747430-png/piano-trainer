@@ -5,8 +5,6 @@ import hymns from './hymns'
 import other from './other'
 import studies from './studies'
 
-export { BOOKS } from './books'
-
 /** The collections Songs lists, in order. */
 export const SONG_COLLECTIONS: readonly Collection[] = [bozheSpasibo, calledToPlay, hymns, other]
 

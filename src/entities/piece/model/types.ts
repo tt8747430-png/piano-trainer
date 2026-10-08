@@ -1,3 +1,4 @@
+import type { BookId } from '@/entities/book'
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
@@ -44,8 +45,7 @@ export interface Section {
   readonly lines: readonly string[]
 }
 
-/** A printed songbook or method a Source cites. */
-export type BookId = 'bozhe-spasibo' | 'called-to-play' | 'seven-types'
+/** Where a piece is printed: its book, and its number and page there. */
 export interface Source {
   readonly book: BookId
   readonly number?: number

@@ -12,7 +12,7 @@ const accompanyingAHymn: Lesson = {
   },
   level: 2,
   category: 'accompaniment',
-  module: 'accompaniment',
+  module: 'seven-types',
   sections: [
     {
       heading: { en: 'Before you play', ru: 'Прежде чем играть' },

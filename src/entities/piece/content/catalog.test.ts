@@ -29,7 +29,6 @@ import {
   SONG_COLLECTIONS,
 } from '../index'
 import { COLLECTION_IDS, isCollectionId, SONG_COLLECTION_IDS } from '../model/types'
-import { BOOKS } from './books'
 
 const ENTRIES = COLLECTIONS.flatMap((collection) => collection.entries)
 
@@ -167,7 +166,6 @@ describe('the catalog', () => {
         expect(credit.names, entry.id).not.toContain(':')
       }
     }
-    for (const book of Object.values(BOOKS)) expect(book.title.trim()).not.toBe('')
   })
 
   it('writes every text in both languages', () => {

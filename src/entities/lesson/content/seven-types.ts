@@ -9,7 +9,7 @@ const sevenTypes: Lesson = {
   },
   level: 2,
   category: 'accompaniment',
-  module: 'accompaniment',
+  module: 'seven-types',
   sections: [
     {
       heading: { en: 'One hymn, seven ways', ru: 'Один гимн — семь способов' },

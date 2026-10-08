@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { BOOKS } from '../content/books'
+import { BOOKS } from '@/entities/book'
 import type { Source } from '../model/types'
 
 /** The printed book it comes from, with its number and page there. */

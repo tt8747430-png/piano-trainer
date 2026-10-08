@@ -12,8 +12,30 @@ describe('Learn', () => {
     })
     expect(lesson).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
     expect(within(lesson).getByRole('img', { name: 'Level 1' })).toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Accompaniment' })).toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Gospel' })).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 2 }).map((each) => each.textContent)).toEqual([
+      'Fundamentals',
+      'Accompaniment',
+      'Called to Play',
+      'Боброва',
+      'Gospel',
+    ])
+  })
+
+  it('gathers each method book’s lessons in a section of its own', async () => {
+    await renderApp('/learn')
+    const lessonsOf = (name: string) =>
+      within(screen.getByRole('region', { name }))
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href'))
+    await screen.findByRole('region', { name: 'Fundamentals' })
+    expect(lessonsOf('Called to Play')).toEqual([
+      '/learn/lessons/five-ways',
+      '/learn/lessons/right-hand-techniques',
+    ])
+    expect(lessonsOf('Боброва')).toEqual([
+      '/learn/lessons/seven-types',
+      '/learn/lessons/accompanying-a-hymn',
+    ])
   })
 
   it('numbers a module’s lessons in the order they are taught', async () => {

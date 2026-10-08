@@ -31,7 +31,8 @@ import wholeAndHalfSteps from './whole-and-half-steps'
 
 /**
  * Every lesson, in the order Learn lists them: the Fundamentals, from the keys to key signatures; then
- * Accompaniment, from bass and chords to reharmonising a melody; then Gospel.
+ * Accompaniment, from bass and chords to reharmonising a melody; each method book's own lessons, Called
+ * to Play's and Боброва's; then Gospel.
  */
 export const LESSONS: readonly Lesson[] = [
   findingHome,
@@ -51,15 +52,15 @@ export const LESSONS: readonly Lesson[] = [
   keySignatures,
   bassAndChords,
   brokenChords,
-  fiveWays,
-  rightHandTechniques,
-  sevenTypes,
-  accompanyingAHymn,
   commonProgressions,
   thinkingInDegrees,
   twoFiveOne,
   passingChords,
   reharmonisingAMelody,
+  fiveWays,
+  rightHandTechniques,
+  sevenTypes,
+  accompanyingAHymn,
   gospelProgressions,
   gospelPassingChords,
   gospelReharmonisation,

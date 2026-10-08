@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { isMethodBookId, METHOD_BOOK_NAMES } from '@/entities/book'
 import { localText, useLocale } from '@/shared/i18n'
 import { PAGE_TILES, LevelMark, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import { lessonGroups } from '../model/lesson-groups'
@@ -7,16 +8,22 @@ import { lessonGroups } from '../model/lesson-groups'
 /** A module's lessons are numbered in the order they are taught. */
 const GROUPS = lessonGroups()
 
-/** Learn: the lessons, module by module in the order they are taught, each with what it is about and its level. */
+/**
+ * Learn: the lessons, module by module in the order they are taught, each with what it is about and its
+ * level. A method book's lessons are a module under its book's name.
+ */
 export function LearnPage() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   return (
     <div className="flex flex-col gap-8">
       <ScreenHeader title={t('title')} />
-      {GROUPS.map((group) => (
-        <RowGroup key={group.module} title={t(`module.${group.module}`)}>
-          {group.lessons.map((lesson, i) => (
+      {GROUPS.map(({ module, lessons }) => (
+        <RowGroup
+          key={module}
+          title={isMethodBookId(module) ? METHOD_BOOK_NAMES[module] : t(`module.${module}`)}
+        >
+          {lessons.map((lesson, i) => (
             <li key={lesson.id}>
               <RowLink
                 title={localText(lesson.title, locale)}
