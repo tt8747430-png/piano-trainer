@@ -4,7 +4,7 @@ export default definePiece({
   id: 'exm1',
   kind: 'study',
   title: 'Урок 3: новый способ на каждом аккорде (C)',
-  titleEn: 'Lesson 3: a new method on every chord (C)',
+  titleEn: 'Lesson 3: a new way on every chord (C)',
   source: { book: 'called-to-play' },
   key: 'C',
   meter: '4/4',

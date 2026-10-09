@@ -10,7 +10,7 @@ export default definePiece({
   tempo: 80,
   pattern: 'M1',
   note: {
-    en: 'The workbook asks you to make your own plan for this song: a different method on each line, with the earlier songs as a model.',
+    en: 'The workbook asks you to make your own plan for this song: a different way on each line, with the earlier songs as a model.',
     ru: 'Учебник предлагает составить свой план для этой песни: на каждой строке новый способ, по образцу предыдущих песен.',
   },
   sections: [

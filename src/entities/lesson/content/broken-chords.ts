@@ -17,8 +17,8 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A chord need not be struck all at once. Played a note at a time, it keeps moving between the words and fills a slow song without getting louder. In way 2 the left hand holds the octave while the right hand rocks in 8ths between the chord’s upper notes and its lowest.',
-            ru: 'Аккорд не обязательно брать разом. Сыгранный по звукам, он движется между словами и заполняет медленную песню, не становясь громче. Во втором способе левая рука держит октаву, а правая восьмыми чередует верхние звуки аккорда и нижний.',
+            en: 'A chord need not be struck all at once. Played a note at a time, it keeps moving between the words and fills a slow song without getting louder. Called to Play’s second way is the first step.',
+            ru: 'Аккорд не обязательно брать разом. Сыгранный по звукам, он движется между словами и заполняет медленную песню, не становясь громче. Второй способ Called to Play — первый шаг.',
           },
         },
         { kind: 'pattern', pattern: 'M2', piece: 'ex3' },
@@ -30,12 +30,19 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'An arpeggio climbs the chord across both hands. In way 3 the left hand plays root, 5th and octave (1–5–8), and the right hand goes on with the 3rd and holds the 5th and octave. In way 4 the arpeggio runs up through both hands and comes back down, all in 8ths.',
-            ru: 'Арпеджио поднимается по аккорду через обе руки. В третьем способе левая рука играет основной тон, квинту и октаву (1–5–8), а правая продолжает терцией и держит квинту с октавой. В четвёртом арпеджио поднимается через обе руки и возвращается вниз, всё восьмыми.',
+            en: 'An arpeggio climbs the chord across both hands, one line passed from the left into the right: Called to Play’s third and fourth ways.',
+            ru: 'Арпеджио поднимается по аккорду через обе руки, одной линией из левой в правую: третий и четвёртый способы Called to Play.',
           },
         },
         { kind: 'pattern', pattern: 'M3', piece: 'ex3' },
         { kind: 'pattern', pattern: 'M4', piece: 'ex3' },
+        {
+          kind: 'note',
+          text: {
+            en: 'Hold the bass through the bar, with the pedal if you use it, changing it with each chord: the broken notes then sound as one chord.',
+            ru: 'Держите бас весь такт — педалью, если играете с ней, меняя её с каждым аккордом: тогда ломаные звуки сольются в один аккорд.',
+          },
+        },
       ],
     },
     {
@@ -44,8 +51,8 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Боброва’s fourth type is the one used most in church: the left hand’s 1–5–8 passes into the right hand, which plays the chord’s notes in a turning order. It moves and sings at once.',
-            ru: 'Четвёртый вид у Бобровой — самый употребительный в церкви: 1–5–8 левой руки переходит в правую, которая играет звуки аккорда в переменном порядке. Он одновременно движется и поёт.',
+            en: 'Боброва’s fourth type passes the arpeggio from hand to hand too, and turns it back on itself in the right hand.',
+            ru: 'Четвёртый вид у Бобровой тоже передаёт арпеджио из руки в руку, а в правой поворачивает его назад.',
           },
         },
         { kind: 'pattern', pattern: 'r4', piece: 'otche' },
@@ -60,26 +67,6 @@ const brokenChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Two octaves up', ru: 'Вверх на две октавы' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Called to Play’s second right-hand technique runs the arpeggio 1–3–5–8 up two octaves, fingers 1–2–3–5, over the left hand’s octave.',
-            ru: 'Вторая техника правой руки из Called to Play ведёт арпеджио 1–3–5–8 вверх на две октавы, пальцами 1–2–3–5, над октавой левой руки.',
-          },
-        },
-        { kind: 'pattern', pattern: 't2', piece: 'ex5' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Hold the bass through the bar, with the pedal if you use it, changing it with each chord: the broken notes then sound as one chord.',
-            ru: 'Держите бас весь такт — педалью, если играете с ней, меняя её с каждым аккордом: тогда ломаные звуки сольются в один аккорд.',
-          },
-        },
-      ],
-    },
-    {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
@@ -89,6 +76,11 @@ const brokenChords: Lesson = {
             ru: 'Выберите звуки, по которым поднимается арпеджио ля минора.',
           },
           answer: { chord: 'Am' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
+          target: { place: 'lesson', lesson: 'right-hand-techniques' },
         },
         {
           kind: 'link',

@@ -48,8 +48,8 @@ const bassAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The first of Called to Play’s five ways: the left hand holds the bass in octaves while the right hand plays the chord on every beat. It is steady and simple; start every new chart with it.',
-            ru: 'Первый из пяти способов Called to Play: левая рука держит бас октавами, а правая играет аккорд на каждую долю. Это ровно и просто — начинайте с него любую новую последовательность.',
+            en: 'The first of Called to Play’s five ways, and the steadiest: start every new chart with it.',
+            ru: 'Первый из пяти способов Called to Play и самый ровный — с него начинайте любую новую последовательность.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'ex3' },
@@ -61,8 +61,8 @@ const bassAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Way 5 keeps the chords on the beat and gives the bass a long–short rhythm, which carries a march or a lively hymn forward.',
-            ru: 'Пятый способ оставляет аккорды на долях, а басу даёт ритм «долго–коротко» — он ведёт вперёд марш или бодрый гимн.',
+            en: 'Way 5 keeps the right hand as it was and sets the bass going: it carries a march or a lively hymn forward.',
+            ru: 'Пятый способ оставляет правую руку как была и приводит бас в движение — он ведёт вперёд марш или бодрый гимн.',
           },
         },
         { kind: 'pattern', pattern: 'M5', piece: 'ex3' },
@@ -74,16 +74,16 @@ const bassAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Н. В. Боброва’s second accompaniment type: the bass and the chord take turns, and the bass walks through the chord’s notes. It gives songs of praise a clear pulse.',
-            ru: 'Второй вид аккомпанемента у Н. В. Бобровой: бас и аккорд звучат по очереди, а бас идёт по звукам аккорда. Он даёт песням хвалы ясную пульсацию.',
+            en: 'Н. В. Боброва’s second type lets the two hands take turns instead of sounding together.',
+            ru: 'Второй вид у Н. В. Бобровой даёт рукам звучать по очереди, а не вместе.',
           },
         },
         { kind: 'pattern', pattern: 'r2', piece: 'otche' },
         {
           kind: 'text',
           text: {
-            en: 'Her third type repeats the chord in the right hand and plays the bass less often: slow, it is calm and thoughtful; fast, it is excited.',
-            ru: 'Её третий вид повторяет аккорд в правой руке, а бас звучит реже: медленно — спокойно и вдумчиво, быстро — взволнованно.',
+            en: 'Her third type turns it round: the right hand keeps going, and the bass comes in less often.',
+            ru: 'Её третий вид делает наоборот: правая рука не останавливается, а бас вступает реже.',
           },
         },
         { kind: 'pattern', pattern: 'r3', piece: 'otche' },
