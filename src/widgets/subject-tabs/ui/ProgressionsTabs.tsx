@@ -1,7 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { NavTabs } from '@/shared/ui'
+import { NavTab, NavTabs } from '@/shared/ui'
 
 /**
  * Progressions' three pages as tabs: a progression in a key, the passing chords between two chords,
@@ -14,28 +13,31 @@ export function ProgressionsTabs({
 }) {
   const { t } = useTranslation(['practice', 'learn'])
   return (
-    <NavTabs
-      label={t('practice:subjects.progressions')}
-      tabs={[
-        {
-          id: 'progression',
-          label: t('practice:progression'),
-          current: current === 'progression',
-          render: <Link to="/practice/progressions" replace state={OPEN_PLAINLY} />,
-        },
-        {
-          id: 'passing',
-          label: t('learn:passing.title'),
-          current: current === 'passing',
-          render: <Link to="/practice/progressions/passing" replace state={OPEN_PLAINLY} />,
-        },
-        {
-          id: 'reharmonise',
-          label: t('learn:reharmonise.title'),
-          current: current === 'reharmonise',
-          render: <Link to="/practice/progressions/reharmonise" replace state={OPEN_PLAINLY} />,
-        },
-      ]}
-    />
+    <NavTabs label={t('practice:subjects.progressions')}>
+      <NavTab
+        to="/practice/progressions"
+        replace
+        state={OPEN_PLAINLY}
+        current={current === 'progression'}
+      >
+        {t('practice:progression')}
+      </NavTab>
+      <NavTab
+        to="/practice/progressions/passing"
+        replace
+        state={OPEN_PLAINLY}
+        current={current === 'passing'}
+      >
+        {t('learn:passing.title')}
+      </NavTab>
+      <NavTab
+        to="/practice/progressions/reharmonise"
+        replace
+        state={OPEN_PLAINLY}
+        current={current === 'reharmonise'}
+      >
+        {t('learn:reharmonise.title')}
+      </NavTab>
+    </NavTabs>
   )
 }

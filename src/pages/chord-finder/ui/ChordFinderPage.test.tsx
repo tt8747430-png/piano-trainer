@@ -91,10 +91,14 @@ describe('Practice → Chord finder', () => {
     expect(await screen.findByText('Choose the keys of a chord.')).toBeInTheDocument()
   })
 
-  it('is Chords’ second tab', async () => {
-    await renderApp('/practice/chords/find')
+  it('is Chords’ second tab, the one page shown', async () => {
+    await renderApp('/practice/chords/find?keys=60.64.67')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Find' })).toHaveAttribute('aria-current', 'page')
+    const tabs = within(screen.getByRole('navigation', { name: 'Chords' })).getAllByRole('link')
+    expect(tabs.map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
+      ['Build', null],
+      ['Find', 'page'],
+    ])
   })
 
   it('speaks Russian', async () => {

@@ -88,6 +88,20 @@ describe('Practice → Passing chords', () => {
     expect(basses).toEqual([53, 54, 55])
   })
 
+  it('is Progressions’ second tab, the one page shown', async () => {
+    await renderApp('/practice/progressions/passing')
+    const nav = await screen.findByRole('navigation', { name: 'Progressions' })
+    expect(
+      within(nav)
+        .getAllByRole('link')
+        .map((tab) => [tab.textContent, tab.getAttribute('aria-current')]),
+    ).toEqual([
+      ['Progression', null],
+      ['Passing chords', 'page'],
+      ['Reharmonise', null],
+    ])
+  })
+
   it('speaks Russian', async () => {
     await renderApp('/practice/progressions/passing', { locale: 'ru' })
     expect(await screen.findByRole('link', { name: 'Проходящие аккорды' })).toHaveAttribute(

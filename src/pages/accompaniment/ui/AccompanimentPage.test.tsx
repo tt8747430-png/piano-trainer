@@ -127,6 +127,17 @@ describe('Practice → Accompaniment', () => {
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
   })
 
+  it('marks only the page shown as the current tab', async () => {
+    await renderApp('/practice/accompaniment?show=styles')
+    await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
+    expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
+      ['Called to Play', null],
+      ['Боброва', null],
+      ['Styles', 'page'],
+      ['Yours', null],
+    ])
+  })
+
   it('opens on its first page for a page the URL names that it does not have', async () => {
     await renderApp('/practice/accompaniment?show=psalms')
     expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()

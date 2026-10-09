@@ -29,7 +29,7 @@ A container wires data to presentational children. One job each.
   `listKey`: Base UI checks a list changed in place against the value it held before, and reports a choice nobody
   made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
   then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
-  one field of a page's `grid-fields`), `NavTabs` (a subject's pages as tabs that are links), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
+  one field of a page's `grid-fields`), `NavTabs` with `NavTab` (a subject's pages as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
   its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,

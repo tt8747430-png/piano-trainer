@@ -334,6 +334,22 @@ describe('Practice → Scales and keys', () => {
   })
 })
 
+describe('Practice → Scales and keys, its tabs', () => {
+  it('marks only the view shown as the current tab', async () => {
+    await renderApp('/practice/scales?kind=harmonic&show=chords')
+    const nav = await screen.findByRole('navigation', { name: 'Scales and keys' })
+    expect(
+      within(nav)
+        .getAllByRole('link')
+        .map((tab) => [tab.textContent, tab.getAttribute('aria-current')]),
+    ).toEqual([
+      ['Scale', null],
+      ['Chords', 'page'],
+      ['Key', null],
+    ])
+  })
+})
+
 describe('Practice → Scales and keys, Key view', () => {
   it('shows a key on the circle of fifths, marking its seven chords', async () => {
     await renderApp('/practice/scales?show=key')
