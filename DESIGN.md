@@ -670,24 +670,34 @@ From 1024px, a 256px sidebar with a 1px soft line on its right: "Piano Trainer" 
 collapse button, the places as 44px rows (20px icon, 16px label) and Settings at its foot. Collapsed, it is 72px of
 icons, each named in a tooltip. Learn is the lessons; Practice is seven places, one for each thing practised.
 
+**The screen's bar** (a shell screen's title, 36px Literata, 48px from 1024px, with Back before it and actions
+after) holds at the top on paper; where the screen is one of a subject's several, the subject's **tabs** are its
+second row. It stays until the page has scrolled past it, slides away over 200ms while the page is read downwards
+and comes back, tabs and all, the moment the page turns upward; what is pinned under it (the keyboard) slides with
+it, never jumping.
+
+**Shortcuts.** `?` opens a sheet of the keys this screen takes: groups under a small soft label (this screen's,
+then Piano keys, then Anywhere), each row a line of ink with its **keycaps** at the right, sand chips 28px tall in
+Onest 500 14px (`Kbd`): `Space`, `←`, `R`, `⌘` `B`. A control with a key names it to a pointer that rests on it:
+"Play (Space)". A screen touched with a finger sees no Shortcuts button.
+
 ### The keyboard (signature)
 
 The whole piano, A0–C8, hung from a light wooden **rail** and scrolling sideways with no bar. The rail runs the
-piano's length, drawn 28px at the foot of a 44px strip, and a swipe on it scrolls the keys; its controls stay in view,
-44px targets whose ink icons sit in the drawn rail and never reach over a key, focused with the deep-sky ring: **‹ ›**
-at its ends move the keys an octave, the **keyboard map** between them (off by default) draws all 88 keys small with
-an ink frame round the part in view and dots under the keys marked or down, the **glissando toggle** (its chip
-filled in ink while on) says how a swipe plays, and the **keyboard settings** sit in the rail itself (`RailChoice`):
-Keys (Fit · Large · Whole piano) and Note names (C · All · None) as small chips on the rail under a small soft label,
-the chosen filled as a pressed rail button, then the map and typing as rail toggles, and Sound the MIDI keyboard (a
-speaker) while a keyboard is connected. Beside the glissando toggle, the **Pedal** (a footprint) holds the sustain
-while pressed, and shows pressed while the MIDI keyboard's pedal is down. From 1024px they are always in
-sight; below it the settings button opens them in the rail, scrolling sideways, never in a pop-up. A rail button's
-icon sits on a chip in the drawn rail: the chip takes the hover, the pressed fill and the focus ring.
+piano's length, drawn 28px at the foot of a 44px strip, and a swipe on it scrolls the keys. Its controls stay in view,
+every one a picture and none behind a button: 44px targets whose ink icons sit on chips in the drawn rail and never
+reach over a key, focused with the deep-sky ring, each naming itself to a pointer that rests on it. Left to right:
+the **keyboard map** (all 88 keys small, an ink frame round the part in view, dots under the keys marked or down;
+at most 22rem wide, always there where the keys scroll); **‹ ›**, an octave each way; the **zoom**, − and +, over
+Whole piano · Fit · Large, the button at an end faded; the **note names**, one button that goes round wearing what the
+keys show (`C`, `CDE`, a struck-out `C` and an empty chip for none); **typing** (a keyboard); then, a gap on, how the
+keys play: Sound the MIDI keyboard (a speaker) while one is connected, the **glissando toggle** (waves) and the
+**Pedal** (a drawn piano pedal, `PedalIcon`), pressed while the sustain is down, the MIDI keyboard's too. A toggle
+that is on fills its chip in ink. A pointer that cannot use a control does not see it (‹ › and typing are a fine
+pointer's), and a rail too short keeps its buttons: ‹ › go below 28rem, the map below 20rem.
 
 - **Proportions:** a key is 4.4 times as long as a white key is wide on every screen, the Player's too, at least 96px
-  and at most 32% of the screen's height. **Key size:** Fit (the range fills the width, white keys 34–48px), Large (56px, about an octave on a phone) or Whole piano (all 52 white keys fill the width; no
-  ‹ ›, no map, no finger row). It opens centred on the keys that matter and centres again when the size changes.
+  and at most 32% of the screen's height. **Key size:** Whole piano (all 52 white keys fill the width; no ‹ ›, no map, no finger row), Fit (the range fills the width, white keys 34–48px) or Large (56px, about an octave on a phone). It opens centred on the keys that matter and centres again when the size changes.
 - **Material:** white keys part by a 1px line of key bed and end in a lip; black keys end in a lighter slope. **Down**
   is physical as well as coloured: a key going down drops 2px and its lip or slope shortens to a third, in 80ms;
   under reduced motion, at once.

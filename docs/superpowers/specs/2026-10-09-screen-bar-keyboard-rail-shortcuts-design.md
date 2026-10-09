@@ -100,14 +100,14 @@ used alone: R. Named keys and `?` are read by `key`.
 | Songs | `/` | Search |
 | The Player | `Space` | Play or stop |
 | | `←` `→` | A step back, a step on |
-| | `↑` `↓` | Listen's tempo, 5 up or down (repeats) |
+| | `↑` `↓` | Listen's tempo to the next 5% of the song's, up or down (repeats) |
 | | `R` | Loop the bar, or remove the loop |
 | | `Home` | Back to the first bar |
 | | `Esc` | Close |
 | A trainer | `Enter` | The round's action: Check, Next |
 | | `1`–`9` | The answer in that place |
 | | `R` | Hear it again |
-| Chords · Scales · Progressions | `Enter` | The page's Play, or Stop |
+| Chords · Chord finder · Scales · Progressions | `Enter` | The page's one Play, or Stop |
 | The piano (listed, not new) | `A`–`'`, `Z` `X`, `Space` | Play, the octave, the pedal |
 | The score editor (listed, not new) | as spec 2026-10-01 §6 | |
 
@@ -116,7 +116,7 @@ Pedal and a MIDI pedal still do.
 
 ### Where they are found
 
-- `?` and Settings → Keyboard → Shortcuts open `ShortcutsSheet`: groups of rows, a name and its keys as `Kbd`
+- `?` and Settings → Keyboard → Shortcuts open the shortcuts' sheet (`ShortcutsHelp`): groups of rows, a name and its keys as `Kbd`
   (shadcn's, added with the CLI); `⌘` on a Mac, `Ctrl` elsewhere.
 - The Player's buttons and the rail's name their key in `title`.
 - A screen with no fine pointer shows no Shortcuts button.
@@ -126,9 +126,18 @@ Pedal and a MIDI pedal still do.
 - `shared/lib/shortcuts/`: `combo.ts` (a combo, `matches`, `comboKeys` for display; pure, tested), `guards.ts`
   (`isTyping`, `takesKey`, `inPopUp`: the selectors typing and the Space pedal already use, in one place),
   `ShortcutsProvider` + `useShortcuts` + `useShortcutGroups` (the registry the sheet reads).
-- `features/shortcuts-help/`: `ShortcutsSheet`, `ShortcutsButton`, and the `?` binding.
+- `features/shortcuts-help/`: `ShortcutsHelp` (the sheet and the `?` binding, round the router's outlet) and
+  `ShortcutsButton`.
 - Each screen's bindings sit beside what they drive: `widgets/practice-player/model/use-player-shortcuts.ts`,
-  `widgets/trainer-board`, `widgets/app-nav` (places, sidebar), `pages/songs` (search), the explorers' Play.
+  `widgets/trainer-board/ui/use-round-shortcuts.ts`, `widgets/app-nav` (places, sidebar), `pages/songs` (search),
+  `shared/ui/use-play-key.ts` (a screen's one Play).
+
+### As built
+
+- A control takes Space or Enter only when the keyboard (Tab) moved the focus to it; one a pointer pressed keeps the
+  focus but not the key, so Space is still Play after a tap on Loop.
+- Groups of one name are one group in the sheet (the app's keys are bound by its navigation and by the sheet).
+- `KEY_SIZES` is `piano · fit · large`, the zoom's order; ‹ › leave a rail under 28rem, the map one under 20rem.
 
 ## 4. The 2026-10-05 notes, read against today's app
 

@@ -75,8 +75,11 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   named, drawn as a piano roll, played from any bar and kept to the bars chosen), Settings (with the MIDI keyboard's
   own group: the keyboard heard, Sound the MIDI keyboard, Play through the piano, an octave shift, the Touch and a
   reversed pedal). Every key a hand plays sounds while it is held, under a pedal: the MIDI keyboard's, the rail's
-  Pedal or Space. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
-  0012–0034.
+  Pedal or Space. The keyboard's rail holds every keyboard setting in sight as a picture (a zoom, the note names,
+  typing, glissando, the pedal) beside its map. The computer's keys drive the app: Space, the arrows, R, Home and
+  Escape in the Player, Enter for a screen's one Play and a round's one action, numbers for a round's answers, Alt
+  and 1–4 for the four places, and `?` for the sheet that lists them. Full behaviour:
+  `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs 0012–0036.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.
