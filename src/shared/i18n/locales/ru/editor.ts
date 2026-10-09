@@ -125,4 +125,5 @@ export const editor: LocaleResources['editor'] = {
     bar: 'Такт {{n}}',
     stop: 'Стоп',
   },
+  roll: { label: 'Нот: {{notes}} · тактов: {{bars}}', playFrom: 'Играть с такта {{n}}' },
 }

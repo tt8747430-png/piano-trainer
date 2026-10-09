@@ -124,4 +124,6 @@ export const editor = {
     bar: 'Bar {{n}}',
     stop: 'Stop',
   },
+  // A take drawn as a piano roll, on its page.
+  roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
 } as const
