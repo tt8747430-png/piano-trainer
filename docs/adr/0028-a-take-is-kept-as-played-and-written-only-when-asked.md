@@ -1,6 +1,7 @@
 # ADR 0028 — A take is kept as played, and written into the score only when asked
 
-- **Status:** accepted · **Date:** 2026-10-05 · **Builds on:** ADR 0004 and 0008 (audio and MIDI behind ports), ADR
+- **Status:** accepted, amended by ADR 0034 (a take may be named and cut to whole bars) · **Date:** 2026-10-05 ·
+  **Builds on:** ADR 0004 and 0008 (audio and MIDI behind ports), ADR
   0003 (saved state in stores), ADR 0027 (a version is the piece's music in its own format) · **Spec:**
   `2026-10-05-takes-and-more-chords-design.md`
 

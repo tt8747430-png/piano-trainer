@@ -1,6 +1,6 @@
 # ADR 0030 — Practice is seven places, one page for each thing practised, and a progression has one model
 
-- **Status:** accepted · **Date:** 2026-10-05 · **Amends:** ADR 0029 (Practice by topic, Explore · Quiz · what it
+- **Status:** accepted, amended by ADR 0034 (Free play, the eighth place) · **Date:** 2026-10-05 · **Amends:** ADR 0029 (Practice by topic, Explore · Quiz · what it
   plays), ADR 0015 (progressions as pieces), ADR 0019 and 0020 (Learn's tools, a progression player source), ADR 0022
   (what is remembered)
 

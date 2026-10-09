@@ -1,6 +1,6 @@
 # A piano voice, the MIDI keyboard's settings, takes that are whole, and Free play
 
-- **Status:** designed 2026-10-09; awaiting the owner's review. The owner asked: "add all the missing piano component
+- **Status:** built 2026-10-09 (plan `2026-10-09-piano-voice-midi-and-free-play.md`, ADR 0034). The owner asked: "add all the missing piano component
   features like all the left features and the sustain piano and the more feature for the midi keyboard and its
   recording the note pressing higher or lower or softer or louder and all the missing feature for the midi
   recording". Claude wrote back the understanding in four parts (a piano voice; the MIDI keyboard's settings; the

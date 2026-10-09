@@ -241,13 +241,16 @@ tempo)` sounds it and `notate(run)` writes it.
 - Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`); a take's click
   is `recorderClicks`, on the Player's bar grid. A take is the one thing kept in time as played, milliseconds (ADR
-  0028): `takeSounds` hears it and `quantise` snaps it to ticks, both in `entities/take`.
+  0028): `takeSounds` hears it (its pedals, through the Touch) and `quantise` snaps it to ticks, both in
+  `entities/take`; a velocity's loudness is `velocityGain`, the live voice's and a take's alike.
 - Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an
-  `AudioContext` or calls `requestMIDIAccess`. `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the
-  play's handle; `useSoundKeys` adds a hand's keys on top (a tap's key, or the chord a key stands for), at the audio
-  clock's now, as a hand's play (`{ byHand: true }`: the
-  port sounds it but leaves it to the key's press to show); what sounds, and which keys were struck last, is the port's
-  to know (`useSoundingKeys()`, `useSoundingKeys('struck')`). The port also says whether a play still sounds
+  `AudioContext` or calls `requestMIDIAccess`. **Scheduled music goes through `play()`, a hand's keys through the live
+  voice** (ADR 0034): `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the play's handle;
+  `useLiveVoice` sounds a hand's keys on top (a tap's key, a typed key, or the chord a key stands for) from its press
+  until its release, under the pedals (`usePedal`), and lets go of whatever it still holds as its screen goes; never a
+  hand's key through `play()`. What the music sounds, which keys were struck last, and the live voice's keys are the
+  port's to know (`useSoundingKeys()`, `useSoundingKeys('struck')`, `useSoundingKeys('live')`); the live voice's keys
+  show down but never lead the keyboard's view. The MIDI keyboard is set up once, by `MidiSync` (`configure`). The port also says whether a play still sounds
   (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the port, `playing` (the id last
   played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no shared state; another button's
   sound cuts it off and the port says so. A chord's keys sound with `chordSounds(keys, { arpeggio })`, a walk of

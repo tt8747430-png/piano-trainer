@@ -335,16 +335,16 @@ kernel.
 | -------------------------------------- | ------------------------------------------------------------------------------------------ | --------- |
 | MusicXML load and save                 | Bring a score from MuseScore, Sibelius, Finale or Dorico, and take one out                  | the owner (9 built) |
 | Record from a MIDI keyboard            | Built 2026-10-05 as takes: played on a connected keyboard to a click, kept as played, written into a score on request (ADR 0028) | built |
-| Live score                             | What you play written onto a grand staff as you play, the chord named above it              | 3, 5      |
-| Toggle mode                            | Keys stay lit when tapped, finger numbers typed onto them, two colours: teaching diagrams   | 1, 5      |
+| Live score                             | Built 2026-10-09 as Free play's Play: what you play written onto a grand staff, each chord named over its bar (ADR 0034) | built |
+| Toggle mode                            | Built 2026-10-09 as Free play's Mark: keys marked in two colours with fingers, a teaching diagram kept as a link (ADR 0034) | built |
 | Lyrics under the staff                 | A song's words under its tune on the sheet music, the syllables carried by the melody's notes | a piece that carries its words |
 
 **Not for this app:** YouTube and streamed audio players (a recording shipped with a piece plays along: ADR 0016), streaming overlays, image export, cloud storage, branding, kids'
 icons (they need a network, an account or another audience), PDF scores (see §3.6), MuseScore's own `.mscz` files
 (MuseScore exports MusicXML); a single staff whose clef follows the range (piano music is read on a grand staff, and
 the sheet mutes the staff not played instead); the metronome's drum grooves and tap tempo (an accompanist practises to
-a click; the tempo popover sets a tempo); a sustain pedal from a MIDI keyboard (the keyboard sounds itself, and the
-app reads only which keys go down).
+a click; the tempo popover sets a tempo). A sustain pedal from a MIDI keyboard was here until ADR 0034: the keys the
+app sounds now have the pedal, and a keyboard with no speaker can be sounded by the app.
 
 ## 6. What this changes in the product record
 
@@ -1030,7 +1030,8 @@ selection outside fields (built by sub-project 1's follow-up, `#standalone-boot`
 
 Each is for the named sub-project's spec to settle (a decision, or "not for this app" with its reason). Sub-project 3
 settled its four (its spec §2.9, ADR 0013): lyrics under the staff are planned (§5); a single staff whose clef follows
-the range, the metronome's drum grooves and tap tempo, and a MIDI sustain pedal are not for this app (§5).
+the range and the metronome's drum grooves and tap tempo are not for this app (§5); the MIDI sustain pedal, once among
+them, is built (ADR 0034).
 
 | Item                                                                                         | Seen in                          | Sub-project |
 | -------------------------------------------------------------------------------------------- | -------------------------------- | ----------- |

@@ -55,16 +55,16 @@ slice only through its `index.ts`, by alias or relative path alike. Inside share
 it. `@` → `src`.
 
 - **app/**: `router.tsx` (code-based TanStack Router, the four places Path · Songs · Learn · Practice (ADR 0029); Learn is
-  its lessons (`/learn`, `/learn/lessons/$lessonId`); Practice is seven places, each one page family for a thing
-  practised (ADR 0030; `/practice` lists them and remembers nothing): Chords (`/practice/chords` Build,
+  its lessons (`/learn`, `/learn/lessons/$lessonId`); Practice is eight places, each one page family for a thing
+  practised (ADR 0030, 0034; `/practice` lists them and remembers nothing): Chords (`/practice/chords` Build,
   `/practice/chords/find` Find), Scales and keys (`/practice/scales`, its Scale · Chords · Key views as tabs),
   Progressions (`/practice/progressions`, `…/passing`, `…/reharmonise`), Intervals (`/practice/intervals`),
   Accompaniment (`/practice/accompaniment`, its Called to Play · Боброва · Styles · Yours as tabs, ADR 0033; a
   pattern's page `/practice/patterns/$patternRef` and the editor `/practice/patterns/new` and `…/$patternRef/edit`;
-  a study's page `/practice/studies/$pieceId`), Exercises (`/practice/exercises`) and Quiz (`/practice/quiz`, its trainers
-  `/practice/trainers/$trainerId`); the Player's `/play/$pieceId`, `/play/walk`,
+  a study's page `/practice/studies/$pieceId`), Exercises (`/practice/exercises`), Quiz (`/practice/quiz`, its trainers
+  `/practice/trainers/$trainerId`) and Free play (`/practice/free-play`, Play · Mark, ADR 0034); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
-  opens its takes); screens are
+  opens its takes) and, in the shell, a take's page `/edit/$pieceId/takes/$takeId`; screens are
   lazy through `routes/*-screens.ts` (home, settings, songs, learn, explorer, practice, player: a chunk holds the screens
   that load together, so the Path carries no Settings popups); `notFound()` for an unknown piece, lesson,
   quiz or check, a piece on the wrong shelf, and a walk of a scale without chords), `routes/<place>-search.ts` (songs, explorer, practice, player: each
@@ -72,10 +72,10 @@ it. `@` → `src`.
   the router imports no page or widget code, or it would leave its lazy chunk; validators run as the app opens, so they
   import only what a URL is made of, with `read-search.ts`, never a chart's arrangement; each exports its `read*`
   reader and a remembered route's kept params), `routes/remember.ts` (a remembered route's `beforeLoad`: the two rules
-  of ADR 0022, one redirect at most; `createAppRouter({ history, views, patterns, pieces })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore piecesStore takesStore services router />`;
-  the router's context holds the views, patterns and pieces stores),
+  of ADR 0022, one redirect at most; `createAppRouter({ history, views, patterns, pieces, takes })` saves its view `onResolved`), `App.tsx` (the provider stack: `<App settingsStore progressStore patternsStore piecesStore takesStore services router />`;
+  the router's context holds the views, patterns, pieces and takes stores),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
-  `ThemeProvider`, `AudioUnlock`), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
+  `ThemeProvider`, `AudioUnlock`, `MidiReconnect`, `MidiSync`: the MIDI keyboard as the settings say, ADR 0034), the layouts (`RootLayout`; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
   `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `RouteError`,
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
@@ -84,7 +84,7 @@ it. `@` → `src`.
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
-  the exercise's own fields) fill; `pages/learn` is the lessons by module; `pages/practice` the seven places as rows; `pages/quiz` every
+  the exercise's own fields) fill; `pages/learn` is the lessons by module; `pages/practice` the eight places as rows; `pages/free-play` Free play (`useFreePlay`: Play's trail or Mark's marks, the URL's `marks`; `MarkTools`); `pages/quiz` every
   trainer by group (`model/quiz-groups.ts`, held by a test to every trainer) with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords` and `pages/chord-finder` Chords' Build and Find; `pages/scales`
   Scales and keys (its Key view's songs in the key, `PiecesInKey`); `pages/progressions`, `pages/passing-chords` and
@@ -92,7 +92,8 @@ it. `@` → `src`.
   part's `PatternShelves`, a method book's `BookPieces`), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
   `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
-  and the takes' sheet (ADR 0028); its parts share one context and read the store narrowly).
+  and the takes' sheet (ADR 0028), `tuneOf` (the song's tune under a take); its parts share one context and read the store narrowly;
+  `TakePage`, a take's page: its name, `TakeRoll`, `useTakePlay` and `KeepBars`, ADR 0034).
 - **widgets/<x>/**: composite UI tied to screens (`app-nav` (the phone's bar; the laptop's sidebar, which collapses to its icons), `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-chords` (the chords a piece plays, each to tap, `chordsOf`, and the
   Check of them), `player-setup` (the Setup: its button and sheet, its first page
@@ -117,16 +118,17 @@ it. `@` → `src`.
   (the library behind one pop-up) and the typed field; `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys; its pure `changedView` (a key turned minor or major takes a
   cadence to its version in that mode, ADR 0031), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too),
-  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar)), each owning in `model/` the view type a route's URL holds.
+  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
+  moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
   song with its takes; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
   chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`; the
-  caret; `reduce` with undo and redo; `createEditorStore`), `record-take` (ADR 0028: `takeOf`, the keys and pedal heard
-  against the click, `isKept`; `startRecorder`; `useRecorder`, a take's end `stopped` or `left`), `manage-takes` (`saveTake`, `deleteTake`), `connect-midi` (the connection, the status
-  control, held keys, `useMidiKeyDown`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
-  settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds, `spotlight` puts down only
+  caret; `reduce` with undo and redo; `createEditorStore`), `record-take` (ADR 0028: `takeOf`, the keys and the three pedals heard
+  against the click, `isKept`; `startRecorder`, the tune under it; `useRecorder`, a take's end `stopped` or `left`), `manage-takes` (`saveTake`, `deleteTake`, `renameTake`, `keepTakeBars`), `connect-midi` (the connection, the status
+  control naming a chosen keyboard away, held keys (on under the sustain), `useMidiKeyDown`, `useMidiSync` (ADR 0034: `configure`, MIDI keys through the live voice with Sound the MIDI keyboard, its pedals the voice's, notes through the piano), `MidiSettingsFields`, the rail's `MidiSoundToggle`), `live-keyboard` (`LiveKeyboard`, the keyboard every screen shows, set up by the saved keyboard
+  settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds while held (`useLiveVoice`), `PedalToggle` and `useSpacePedal` hold the sustain, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings button and `KeyboardSettingsFields`, the settings in its popover and in
   Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the explorers' and a lesson's pinned one; `GlissandoToggle`, the rail's own), `play-example` (the examples an explorer and a
   lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ChordRow` (any row of
@@ -167,9 +169,9 @@ it. `@` → `src`.
   each line once in its mode, with its note, pattern and chord size; `libraryProgression` names a line, `COMMON_PROGRESSIONS`
   a key's, `LIBRARY_BY_STYLE` what its pop-up lists, `otherModeVersion` a cadence's version in the other mode, from
   `MODE_VERSIONS`), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
-  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, version 8, with the laptop's sidebar, open or collapsed, the
-  keyboard settings, the trainers' auto-next and the recorder's click), `take` (ADR 0028: `pt-takes`, version 1, saved
-  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, version 9, with the laptop's sidebar, open or collapsed, the
+  keyboard settings, the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`, version 2: a name, the bar it starts at, the three pedals' presses; saved
+  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
   version 3: each remembered screen's last view under its path of today, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
@@ -177,7 +179,7 @@ it. `@` → `src`.
   `useScrollMotion`, `useShownOnScrollUp` (the screen bar's hide and show), `IN_PLACE` (a navigation that changes the
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
-  `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options),
+  `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options), `midi-choices` (the MIDI keyboard's), `diagram-marks` (a teaching diagram's marks in a URL, `markKey`),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords explorer's URL holds
   them), `foldText`; and with
   barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
@@ -198,16 +200,16 @@ it. `@` → `src`.
   Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a hand's keys, an interval up, down or
-  together (`intervalSounds`), which keys sound when and which were struck last), `services`
-  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useSoundKeys` (a hand's play: a tap's key or
-  the chord a key stands for), `useSoundingKeys`)), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and
-  fakes; MIDI events carry their time and the sustain pedal is `onPedal`; the audio port knows which keys it is sounding,
+  together (`intervalSounds`), which keys sound when and which were struck last; `damper.ts`, the three pedals over held keys; `velocity.ts`, `velocityGain`, `touchVelocity`), `services`
+  (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useLiveVoice` (a hand's keys: a tap's key or
+  the chord a key stands for, sounding while held), `usePedal`, `useSoundingKeys` (the music's, the struck, the live voice's))), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and
+  fakes; MIDI events carry their time and the three pedals are `onPedal`; the MIDI port (`MidiPort`) hears the keyboard chosen as `configure` says and lists its speakers (`outputs`, `noteOutput`); the audio port's live voice (`press`, `release`, `pedal`, `live`) beside `play()`, and its notes `notesTo` a keyboard's speaker (`midi-sound-output.ts`); the audio port knows which keys it is sounding,
   whether a play still sounds, and the audio time heard at a moment (`audioTimeAt`); it plays a piece's recording on
   the audio clock: `loadRecording`, `playRecording`, `recording-player.ts`), `ui` (the kit: `PianoKeyboard`
   with `RailButton` and `RailChoice` (a choice set on the keyboard's rail), `Pinned`, `ScreenHeader` (the screen's bar, sticky, hidden while reading down; `ScreenBarProvider` in `AppShell`
   sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utilities read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
   button; `bare` under a printed name), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`; in both a list with other values is another list, mounted anew: `listKey`),
-  `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so, then Major · Minor, only the keys a signature writes), `ToggleChips` (several of a few, all in sight), `ChordHeading` (a chord's symbol, a long one a size down), `Labelled` (a choice under its name, one field of a page's `grid-fields`), `NavTabs` (tabs that are links), `InversionChoice` over `InversionGlyph`, `ChordSizeField`, `SwitchRow`, `ToggleTile` and `ToggleGrid`, `ToolButton`, `LearnedBadge`, `TypedField`, `RowLink` (its tile an icon, a number or none, a detail of one line, a trailing slot) and `RowGroup` (a titled grid of row cards), `PAGE_TILES` (the tile a row to each page wears), `Fact`, `PlayToggle` and `ChordButton`, `ToneChip`, `PlayLabel` (a Play button's words, Stop while it sounds), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
+  `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so, then Major · Minor, only the keys a signature writes), `ToggleChips` (several of a few, all in sight), `ChordHeading` (a chord's symbol, a long one a size down), `Labelled` (a choice under its name, one field of a page's `grid-fields`), `SettingField` (a choice in Settings under its name), `NavTabs` (tabs that are links), `InversionChoice` over `InversionGlyph`, `ChordSizeField`, `SwitchRow`, `ToggleTile` and `ToggleGrid`, `ToolButton`, `LearnedBadge`, `TypedField`, `RowLink` (its tile an icon, a number or none, a detail of one line, a trailing slot) and `RowGroup` (a titled grid of row cards), `PAGE_TILES` (the tile a row to each page wears), `Fact`, `PlayToggle` and `ChordButton`, `ToneChip`, `PlayLabel` (a Play button's words, Stop while it sounds), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
   `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `LevelMark`, `NotFound` (a page not there, or deleted in another tab), `LazyScoreView` (a staff outside the Player,
   VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives`; `ui/score`, imported by that path only: `ScoreView`,
   VexFlow over a Score (each note named by its staff and tick, the `selected` ones marked), and `xAtTick`), `i18n` (`Locale`,

@@ -679,7 +679,9 @@ at its ends move the keys an octave, the **keyboard map** between them (off by d
 an ink frame round the part in view and dots under the keys marked or down, the **glissando toggle** (its chip
 filled in ink while on) says how a swipe plays, and the **keyboard settings** sit in the rail itself (`RailChoice`):
 Keys (Fit · Large · Whole piano) and Note names (C · All · None) as small chips on the rail under a small soft label,
-the chosen filled as a pressed rail button, then the map and typing as rail toggles. From 1024px they are always in
+the chosen filled as a pressed rail button, then the map and typing as rail toggles, and Sound the MIDI keyboard (a
+speaker) while a keyboard is connected. Beside the glissando toggle, the **Pedal** (a footprint) holds the sustain
+while pressed, and shows pressed while the MIDI keyboard's pedal is down. From 1024px they are always in
 sight; below it the settings button opens them in the rail, scrolling sideways, never in a pop-up. A rail button's
 icon sits on a chip in the drawn rail: the chip takes the hover, the pressed fill and the focus ring.
 
@@ -689,9 +691,9 @@ icon sits on a chip in the drawn rail: the chip takes the hover, the pressed fil
 - **Material:** white keys part by a 1px line of key bed and end in a lip; black keys end in a lighter slope. **Down**
   is physical as well as coloured: a key going down drops 2px and its lip or slope shortens to a third, in 80ms;
   under reduced motion, at once.
-- **Touch:** a key sounds and goes down the instant it is touched, and stays down while it is held (a finger, a typed
-  key, a MIDI key) and for at least the shortest press, 150ms, so the lightest tap shows; let go, it is plain again,
-  however long its sound rings. The keys hold still under a finger. By default only the key a finger touched sounds
+- **Touch:** a key sounds and goes down the instant it is touched, sounds while it is held (a finger, a typed key, a
+  MIDI key) and stays down for at least the shortest press, 150ms, so the lightest tap shows; let go, it is plain
+  again and its sound stops, unless the pedal holds it: then it stays down, sounding, until the pedal comes up. The keys hold still under a finger. By default only the key a finger touched sounds
   and the keyboard scrolls from its rail; with the rail's **Glissando** on, every key a finger slides onto sounds.
 - **Faces:** plain; a mark's wash with its label; honey for a quiz's chosen or Name chord's lit keys; crimson with ✕ for
   a wrong key; a deep-sky ring inside a missing key; and down over all of them. A wrong key wins over a lit one, a lit
@@ -809,11 +811,27 @@ the title and Play), the sheet scrolling under it, then the
   beside Keep it). While a take records, the tools and the caret's line give way to the recording strip: a card with
   a softly pulsing ink dot, Count-in and its beat or Recording, the bar and the time in tabular figures, and Stop in
   honey; Undo, Redo, the song's settings, Record and Play wait.
+- **A take's page** (its row's name a link; in the shell, under its screen bar): the Name field (the time made as its
+  placeholder), Play (soft) beside its length and tempo, the **piano roll** on a card scrolling sideways (96px a bar,
+  an 8px lane a key, black keys' lanes in muted paper, notes in ink at four strengths by velocity, the sustain,
+  sostenuto and soft a thin lane each underneath, bar lines in the soft line and beats in hairline, a honey playhead,
+  each bar a full-height button numbered as the piece numbers it), then **Keep bars**: First and Last bar pop-up
+  buttons and Keep (outline) once they cut something, the bars that go dimmed on the roll, asked first in an alert.
+  The keyboard over it goes down as the take plays.
 - **New song** (Songs' round +) is a sheet: the Title field (Literata, its name as its placeholder), the key choice, the five meters as segments, and at its foot Make in honey with Record (soft, a
   microphone) beside it.
 - **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
   (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the
   chart (the honey pill).
+
+### Free play
+
+Practice's eighth place, the screen bar over the keyboard at its widest (C2–C7), then a row of Mode (Play · Mark as
+segments), the key choice and Clear (outline, an eraser), then the **live score**: a grand staff with no time
+signature, each chord a whole note in a bar of its own, its name over it in Literata 600 18px with its kind and the
+tones left out under it in soft 12px ink; before anything is played, one empty bar and "Play, and it is written
+here." in soft ink. In Mark, a second row: Colour (Right hand · Left hand) and Finger (None, 1–5) as named
+segments; a marked key wears its hand's tone with its letter (R, L), its finger in the finger row.
 
 ### Motion
 

@@ -45,7 +45,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   from finding your way on the keys to key signatures; Accompaniment's eleven, from bass and chords through the five
   ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
   reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in
-  any key) and quizzes answered on the keys), Practice (seven places, each one page for a thing practised. **Chords:** Build makes any chord from its
+  any key) and quizzes answered on the keys), Practice (eight places, each one page for a thing practised. **Chords:** Build makes any chord from its
   root (letter and accidental), quality, size, 7th, suspension, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
   in sight, on the keys and a staff, with a 7th chord's available tensions
   (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player; Find names the keys played.
@@ -63,15 +63,20 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   Jonny's 2-5-1 scale, inner voice, modes, rapid switch and pattern shifting. **Quiz:** every trainer, each a ladder
   of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's role, Build
   scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
-  them, in its bar),
+  them, in its bar. **Free play:** the piano at its widest under a live score, each chord played written on a grand
+  staff and named; Mark makes a teaching diagram, keys in two colours with fingers, sent as a link),
   the score editor (the learner's version of any song or study, or the chart of a
   listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
   staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody
   and any bar of either hand written note by note from the keys, the computer keyboard or MIDI, the clef and
   signatures opening the song's key, tempo and time signature (changed within its kind), the notes at the caret
   marked, undo and redo, every change saved, played in the Player in any
-  key), Settings. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
-  0012–0030.
+  key; takes recorded on a MIDI keyboard to a click, the song's tune under them if asked, each with a page of its own:
+  named, drawn as a piano roll, played from any bar and kept to the bars chosen), Settings (with the MIDI keyboard's
+  own group: the keyboard heard, Sound the MIDI keyboard, Play through the piano, an octave shift, the Touch and a
+  reversed pedal). Every key a hand plays sounds while it is held, under a pedal: the MIDI keyboard's, the rail's
+  Pedal or Space. Full behaviour: `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs
+  0012–0034.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
 - No accounts, sync, backend or audio recording.
