@@ -2,6 +2,9 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setMidi } from '@/features/set-preference'
+import { SHORTEST_PRESS_MS } from '@/shared/lib'
+import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 
 describe('Practice → Chords', () => {
@@ -352,5 +355,35 @@ describe('Practice → Chords, a 7th chord’s tensions', () => {
   it('reads in Russian', async () => {
     await renderApp('/practice/chords?size=7', { locale: 'ru' })
     expect(await screen.findByRole('region', { name: 'Избегаемые' })).toBeInTheDocument()
+  })
+})
+
+describe('Practice → Chords, on a MIDI keyboard', () => {
+  it('sounds a MIDI key only once Sound the MIDI keyboard is on', async () => {
+    const { audio, midi: keyboard, settingsStore } = await renderApp('/practice/chords')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    act(() => keyboard.press(midi(60)))
+    act(() => keyboard.release(midi(60)))
+    expect(audio.voice).toEqual([])
+    act(() => setMidi(settingsStore, { sound: true }))
+    act(() => keyboard.press(midi(60), { velocity: 90 }))
+    expect(audio.voice).toEqual([{ kind: 'press', midi: 60, velocity: 90 }])
+  })
+
+  it('keeps a key let go under the pedal down until the pedal comes up', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    const { midi: keyboard } = await renderApp('/practice/chords')
+    const keys = await screen.findByRole('group', { name: 'Keyboard' })
+    const c4 = within(keys).getByRole('button', { name: 'C4' })
+    act(() => {
+      keyboard.pedal(true)
+      keyboard.press(midi(60))
+    })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    act(() => keyboard.release(midi(60)))
+    expect(c4).toHaveAttribute('data-down')
+    act(() => keyboard.pedal(false))
+    expect(c4).not.toHaveAttribute('data-down')
+    vi.useRealTimers()
   })
 })

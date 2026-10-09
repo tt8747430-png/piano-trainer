@@ -8,6 +8,7 @@ import { type Services, ServicesProvider } from '@/shared/lib/services'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
+import { MidiSync } from './providers/MidiSync'
 import { ThemeProvider } from './providers/ThemeProvider'
 import type { AppRouter } from './router'
 
@@ -38,6 +39,7 @@ export function App({
                 <LocaleSync />
                 <AudioUnlock />
                 <MidiReconnect />
+                <MidiSync />
                 <ThemeProvider>
                   <RouterProvider router={router} />
                 </ThemeProvider>

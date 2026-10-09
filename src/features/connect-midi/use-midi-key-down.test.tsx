@@ -20,9 +20,9 @@ describe('useMidiKeyDown', () => {
     const keyboard = createFakeMidi()
     const onKey = vi.fn()
     renderHook(() => useMidiKeyDown(onKey), { wrapper: wrapperWith(keyboard) })
-    keyboard.press(midi(64))
+    keyboard.press(midi(64), { time: 120 })
     keyboard.release(midi(64))
-    expect(onKey.mock.calls).toEqual([[64]])
+    expect(onKey.mock.calls).toEqual([[64, 120]])
   })
 
   it('does nothing where the browser has no Web MIDI', () => {

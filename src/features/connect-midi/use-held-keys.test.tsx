@@ -41,4 +41,33 @@ describe('useHeldKeys', () => {
     act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     expect(result.current.size).toBe(0)
   })
+
+  it('keeps a key let go under the sustain down until the pedal comes up', () => {
+    const { keyboard, result } = renderHeldKeys()
+    act(() => {
+      keyboard.pedal(true)
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+    })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    act(() => keyboard.release(midi(60)))
+    expect([...result.current].toSorted()).toEqual([60, 64])
+    act(() => keyboard.pedal(true, { pedal: 'soft' }))
+    act(() => keyboard.pedal(false))
+    expect([...result.current]).toEqual([64])
+  })
+
+  it('holds a key struck again under the sustain as a hand holds it', () => {
+    const { keyboard, result } = renderHeldKeys()
+    act(() => {
+      keyboard.pedal(true)
+      keyboard.press(midi(60))
+    })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    act(() => keyboard.release(midi(60)))
+    act(() => keyboard.press(midi(60)))
+    act(() => keyboard.pedal(false))
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    expect([...result.current]).toEqual([60])
+  })
 })
