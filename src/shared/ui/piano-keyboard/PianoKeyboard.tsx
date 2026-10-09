@@ -12,7 +12,7 @@ import { PIANO_LAYOUT, spanOf, type KeySize, type NamedKeys, type Swipe } from '
 import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
-import { KeyRail } from './KeyRail'
+import { KeyRail, type RailCaption } from './KeyRail'
 import { keyDescription, keyLook, type KeyStates, type KeyStateWords } from './key-look'
 import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
@@ -60,6 +60,7 @@ export function PianoKeyboard({
   swipe = 'scroll',
   namedKeys = 'c',
   letters,
+  caption,
   keyPlays,
   onKeyPress,
   onKeyRelease,
@@ -76,6 +77,8 @@ export function PianoKeyboard({
   namedKeys?: NamedKeys
   /** The computer keyboard's letters on the keys it plays. */
   letters?: ReadonlyMap<Midi, string> | undefined
+  /** What the rail says of the keys a hand holds (their chord): nothing while its `text` is empty. */
+  caption?: RailCaption | undefined
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
    * degree's key its chord). All of it is down while the key is held.
@@ -142,7 +145,7 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots}>
+        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots} caption={caption}>
           {children}
         </KeyRail>
         <div

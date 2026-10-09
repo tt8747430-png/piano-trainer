@@ -60,10 +60,12 @@ export const common: LocaleResources['common'] = {
     glissando: 'Глиссандо',
     pedal: 'Педаль',
     sound: 'Звук MIDI-клавиатуры',
+    chord: 'Сыгранный аккорд',
   },
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
     namedKeys: { label: 'Названия нот', c: 'C', all: 'Все', none: 'Нет' },
+    chordNames: 'Называть сыгранные аккорды',
     typing: 'Играть с клавиатуры компьютера',
     typingHint: 'Z X · октава',
   },

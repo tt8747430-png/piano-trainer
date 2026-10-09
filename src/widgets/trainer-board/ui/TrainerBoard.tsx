@@ -118,6 +118,8 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         outlined={checked?.outlined}
         wrong={checked?.wrong}
         onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
+        // A round asks for a chord or its name: the rail does not say it.
+        namesChords={false}
       />
 
       <p aria-live="polite" className="flex min-h-7 items-center gap-2 text-lg font-semibold">

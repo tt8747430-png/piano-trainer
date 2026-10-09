@@ -47,6 +47,8 @@ export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
+  /** The rail names the chord a hand holds. */
+  readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
 }
@@ -121,6 +123,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   keySize: 'fit',
   swipe: 'scroll',
   namedKeys: 'c',
+  chordNames: true,
   typing: finePointer,
 })
 

@@ -1,7 +1,20 @@
-import { act, screen } from '@testing-library/react'
+import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { midi } from '@/shared/lib/music'
+import { chordSounds } from '@/shared/lib/schedule'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
+
+/** A finger down on each key, held. */
+const hold = (...names: string[]) =>
+  names.forEach((name, pointerId) =>
+    fireEvent.pointerDown(screen.getByRole('button', { name }), {
+      pointerId,
+      pointerType: 'touch',
+    }),
+  )
+/** What the rail says of the chord held, its name for a screen reader first; null while it says nothing. */
+const chord = () => screen.queryByText('Chord played:')?.parentElement?.textContent ?? null
 
 describe('the keyboard’s rail', () => {
   it('holds every control in sight, as pictures: no settings button, no pop-up', () => {
@@ -69,5 +82,55 @@ describe('the keyboard’s rail', () => {
   it('names each button on hover', () => {
     setUp()
     expect(screen.getByRole('button', { name: 'Pedal' })).toHaveAttribute('title', 'Pedal')
+  })
+
+  it('names the chord a hand holds, and nothing under three notes', () => {
+    setUp()
+    hold('C4', 'E4')
+    expect(chord()).toBeNull()
+    const g4 = screen.getByRole('button', { name: 'G4' })
+    fireEvent.pointerDown(g4, { pointerId: 2, pointerType: 'touch' })
+    expect(chord()).toBe('Chord played: C')
+    fireEvent.pointerUp(g4, { pointerId: 2, pointerType: 'touch' })
+    expect(chord()).toBeNull()
+  })
+
+  it('names a chord over the bass it is played on', () => {
+    setUp()
+    hold('E4', 'G4', 'B4', 'D4')
+    expect(chord()).toBe('Chord played: Em7/D')
+  })
+
+  it('names the keys held on a MIDI keyboard', () => {
+    const { midiKeyboard } = setUp()
+    act(() => [62, 65, 69].forEach((key) => midiKeyboard.press(midi(key))))
+    expect(chord()).toBe('Chord played: Dm')
+  })
+
+  it('names the keys the pedal holds, each tapped and let go', async () => {
+    const user = userEvent.setup()
+    const { audio } = setUp()
+    act(() => audio.pedal('sustain', true))
+    for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
+    expect(chord()).toBe('Chord played: C')
+  })
+
+  it('names what a hand plays, not what the app sounds', () => {
+    const { audio } = setUp()
+    act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: false }), 0))
+    act(() => audio.setNow(0.1))
+    expect(chord()).toBeNull()
+  })
+
+  it('names the chords played or not, as its button says, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = setUp()
+    const names = screen.getByRole('button', { name: 'Name the chords played' })
+    expect(names).toHaveAttribute('aria-pressed', 'true')
+    await user.click(names)
+    expect(names).toHaveAttribute('aria-pressed', 'false')
+    expect(settingsStore.getState().keyboard.chordNames).toBe(false)
+    hold('C4', 'E4', 'G4')
+    expect(chord()).toBeNull()
   })
 })

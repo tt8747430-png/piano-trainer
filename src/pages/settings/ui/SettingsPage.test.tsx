@@ -62,7 +62,12 @@ describe('Settings', () => {
     const keys = await screen.findByRole('radiogroup', { name: 'Keys' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
     await user.click(screen.getByRole('switch', { name: 'Play from the computer keyboard' }))
-    expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', typing: true })
+    await user.click(screen.getByRole('switch', { name: 'Name the chords played' }))
+    expect(settingsStore.getState().keyboard).toMatchObject({
+      keySize: 'large',
+      typing: true,
+      chordNames: false,
+    })
   })
 
   it('names each keyboard choice as a row of its group, not as a second heading', async () => {

@@ -60,7 +60,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 10,
+      version: 11,
     })
   })
 
@@ -81,6 +81,7 @@ describe('createSettingsStore', () => {
         keySize: 'large',
         swipe: 'glissando',
         namedKeys: 'none',
+        chordNames: false,
         typing: true,
       },
       recorder: { click: false, tune: true },
@@ -94,7 +95,7 @@ describe('createSettingsStore', () => {
         pedal: 'normal',
       },
     }
-    expect(restored(saved, 10)).toEqual(saved)
+    expect(restored(saved, 11)).toEqual(saved)
   })
 
   it('gives a version-7 save the sidebar open, keeping the rest', () => {
@@ -151,6 +152,7 @@ describe('createSettingsStore', () => {
       keySize: 'fit',
       swipe: 'scroll',
       namedKeys: 'c',
+      chordNames: true,
       typing: true,
     })
     expect(keyboard(false).typing).toBe(false)
@@ -171,12 +173,14 @@ describe('createSettingsStore', () => {
       keySize: 'huge',
       swipe: 'glissando',
       namedKeys: 'all',
+      chordNames: 'no',
       typing: 'yes',
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }, 3).keyboard).toEqual({
       keySize: 'fit',
       swipe: 'glissando',
       namedKeys: 'all',
+      chordNames: true,
       typing: false,
     })
   })
@@ -193,7 +197,16 @@ describe('createSettingsStore', () => {
       keySize: 'large',
       swipe: 'scroll',
       namedKeys: 'all',
+      chordNames: true,
       typing: true,
+    })
+  })
+
+  it('gives a version-10 save the chords played named, keeping its keyboard', () => {
+    const keyboard = { keySize: 'piano', swipe: 'glissando', namedKeys: 'none', typing: true }
+    expect(restored({ theme: 'dark', keyboard }, 10).keyboard).toEqual({
+      ...keyboard,
+      chordNames: true,
     })
   })
 

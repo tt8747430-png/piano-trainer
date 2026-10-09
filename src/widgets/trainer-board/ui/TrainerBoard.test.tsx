@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
@@ -55,6 +55,19 @@ describe('TrainerBoard', () => {
     await user.click(check)
     expect(screen.getByText('Right')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+  })
+
+  it('names no chord played in a round, its chord names off: the name is the question', () => {
+    renderBoard(skills('chord:maj', 'name-chord'))
+    for (const [pointerId, name] of ['C4', 'E4', 'G4'].entries())
+      fireEvent.pointerDown(screen.getByRole('button', { name }), {
+        pointerId,
+        pointerType: 'touch',
+      })
+    expect(screen.queryByText('Chord played:')).not.toBeInTheDocument()
+    const names = screen.getByRole('button', { name: 'Name the chords played' })
+    expect(names).toBeDisabled()
+    expect(names).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('names the answer after a wrong build', async () => {

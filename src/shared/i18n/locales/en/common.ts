@@ -58,11 +58,13 @@ export const common = {
     glissando: 'Glissando',
     pedal: 'Pedal',
     sound: 'Sound the MIDI keyboard',
+    chord: 'Chord played',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
     keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
     namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },
+    chordNames: 'Name the chords played',
     typing: 'Play from the computer keyboard',
     typingHint: 'Z X · octave',
   },

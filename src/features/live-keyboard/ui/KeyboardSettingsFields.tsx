@@ -39,6 +39,12 @@ export function KeyboardSettingsFields() {
         />
       </SettingField>
       <SwitchRow
+        label={t('keyboardSettings.chordNames')}
+        checked={keyboard.chordNames}
+        onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
+        className="border-b-0"
+      />
+      <SwitchRow
         label={t('keyboardSettings.typing')}
         detail={keyboard.typing ? t('keyboardSettings.typingHint') : undefined}
         checked={keyboard.typing}

@@ -29,7 +29,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 10
+export const SETTINGS_VERSION = 11
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -114,6 +114,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
     swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
+    chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
   }
 }
@@ -125,7 +126,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
  * recording toggle, a version-4 save no named notes, a version-5 save no trainer settings (its quiz
  * choice is what a trainer's URL now holds, and is not read), a version-6 save no recorder, a version-7
  * save no sidebar, a version-8 save no MIDI settings and no tune: each gains its defaults here. A
- * version-9 save's keyboard map is not read: the map is the rail's own, wherever the keys scroll.
+ * version-9 save's keyboard map is not read: the map is the rail's own, wherever the keys scroll. A
+ * version-10 save has no chord names: the chords played are named until the learner says not.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
