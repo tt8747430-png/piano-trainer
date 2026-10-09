@@ -43,6 +43,24 @@ describe('midiFile', () => {
     ])
   })
 
+  it('writes the sostenuto as controller 66 and the soft pedal as 67', () => {
+    const file = [
+      ...midiFile({
+        ...TAKE,
+        pedals: [
+          { pedal: 'sostenuto', down: 0, up: 500 },
+          { pedal: 'soft', down: 500, up: 1000 },
+        ],
+      }),
+    ]
+    const holds = (bytes: number[]) =>
+      file.some((_, i) => bytes.every((byte, j) => file[i + j] === byte))
+    for (const controller of [0x42, 0x43]) {
+      expect(holds([0xb0, controller, 0x7f])).toBe(true)
+      expect(holds([0xb0, controller, 0x00])).toBe(true)
+    }
+  })
+
   it('lets go of a key no earlier than the tick after it went down, so no note is left on', () => {
     const file = midiFile({
       ...TAKE,

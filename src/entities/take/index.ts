@@ -12,6 +12,7 @@ export {
 export { createTakesStore, type TakesStore } from './model/store'
 export { selectRoomLeft, selectTake, selectTakesOf } from './model/selectors'
 export { TakesStoreProvider, useTakes, useTakesStoreApi } from './model/context'
-export { takeSounds } from './model/sounds'
+export { takeSounds, takeSoundsFrom } from './model/sounds'
+export { barMs, keepBars, takeBarCount } from './model/bars'
 export { quantise, takeGrids, type QuantisedNote } from './model/quantise'
 export { midiFile, takeFileName } from './model/midi-file'

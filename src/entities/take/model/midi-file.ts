@@ -1,4 +1,5 @@
 import { beatsPerBar, isCompound, timeSignature } from '@/shared/lib/music'
+import type { PedalKind } from '@/shared/lib/schedule'
 import type { Take } from './types'
 
 /** Ticks a quarter note in the file. */
@@ -9,11 +10,16 @@ const CLOCKS_PER_QUARTER = 24
 const NOTE_ON = 0x90
 const NOTE_OFF = 0x80
 const CONTROL_CHANGE = 0xb0
-const SUSTAIN = 64
+/** Each pedal's controller. */
+const PEDAL_CONTROLLER: Readonly<Record<PedalKind, number>> = {
+  sustain: 64,
+  sostenuto: 66,
+  soft: 67,
+}
 /** The velocity a note-off carries where a keyboard sends none. */
 const RELEASE_VELOCITY = 64
 
-/** An event in the track, and the order events at one tick are written: offs, the pedal, then ons. */
+/** An event in the track, and the order events at one tick are written: offs, the pedals, then ons. */
 interface TrackEvent {
   readonly tick: number
   readonly order: number
@@ -34,7 +40,8 @@ const ascii = (text: string): number[] => [...text].map((char) => char.charCodeA
 
 /**
  * A take as a Standard MIDI File (format 0): its tempo (a compound meter's beat a dotted quarter) and
- * time signature, each key on and off with its velocity, and the sustain pedal as controller 64.
+ * time signature, each key on and off with its velocity as played, and the pedals as their
+ * controllers: the sustain 64, the sostenuto 66, the soft 67.
  */
 export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
   const { count, unit } = timeSignature(beatsPerBar(take.meter), take.meter)
@@ -51,12 +58,13 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
         { tick: off, order: 0, bytes: [NOTE_OFF, note.midi, RELEASE_VELOCITY] },
       ]
     }),
-    ...take.pedals
-      .filter((press) => press.pedal === 'sustain')
-      .flatMap((press) => [
-        { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, SUSTAIN, 127] },
-        { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, SUSTAIN, 0] },
-      ]),
+    ...take.pedals.flatMap((press) => {
+      const controller = PEDAL_CONTROLLER[press.pedal]
+      return [
+        { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, controller, 127] },
+        { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, controller, 0] },
+      ]
+    }),
   ].sort((a, b) => a.tick - b.tick || a.order - b.order)
   const clocksPerClick = CLOCKS_PER_QUARTER * (compound ? 1.5 : 1)
   const track: number[] = [
