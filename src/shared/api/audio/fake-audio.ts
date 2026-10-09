@@ -1,6 +1,7 @@
 import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
+import { createLiveVoice } from './live-voice'
 import { createSoundingKeys } from './sounding'
-import { PLAY_DELAY, type AudioOutput } from './types'
+import { PLAY_DELAY, type AudioOutput, type LiveEvent } from './types'
 
 /**
  * An AudioOutput for tests: records what it is asked, and keeps a clock the test moves. The keys
@@ -11,6 +12,8 @@ export interface FakeAudio extends AudioOutput {
   readonly unlocks: number
   readonly played: readonly { readonly sounds: readonly Sound[]; readonly at: number }[]
   readonly stops: number
+  /** What the hands did to the live voice, in order. */
+  readonly voice: readonly LiveEvent[]
   readonly loadedRecordings: readonly string[]
   readonly recordings: readonly { readonly src: string; readonly play: RecordingPlay }[]
   setNow(seconds: number): void
@@ -23,7 +26,9 @@ export function createFakeAudio(): FakeAudio {
   const played: { sounds: readonly Sound[]; at: number }[] = []
   const loadedRecordings: string[] = []
   const recordings: { src: string; play: RecordingPlay }[] = []
+  const voice: LiveEvent[] = []
   const keys = createSoundingKeys({ now: () => clock })
+  const live = createLiveVoice({ strike() {}, silence() {}, changed: keys.setLive })
   return {
     async unlock() {
       unlocks++
@@ -37,6 +42,19 @@ export function createFakeAudio(): FakeAudio {
       stops++
       keys.clear()
     },
+    press(key, velocity) {
+      voice.push({ kind: 'press', midi: key, velocity })
+      live.press(key, velocity)
+    },
+    release(key) {
+      voice.push({ kind: 'release', midi: key })
+      live.release(key)
+    },
+    pedal(pedal, down) {
+      voice.push({ kind: 'pedal', pedal, down })
+      live.pedal(pedal, down)
+    },
+    pedals: live.pedals,
     loadRecording(src) {
       loadedRecordings.push(src)
     },
@@ -61,6 +79,9 @@ export function createFakeAudio(): FakeAudio {
     },
     get stops() {
       return stops
+    },
+    get voice() {
+      return voice
     },
     get loadedRecordings() {
       return loadedRecordings

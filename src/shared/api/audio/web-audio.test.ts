@@ -10,16 +10,19 @@ class FakeContext {
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
-  readonly gains: { disconnected: boolean }[] = []
+  readonly gains: { disconnected: boolean; targets: { value: number; at: number }[] }[] = []
   resume = vi.fn(async () => {
     this.state = 'running'
   })
 
-  private param(set?: (value: number) => void) {
+  private param(targets: { value: number; at: number }[] = []) {
     return {
       value: 0,
-      setValueAtTime: vi.fn(set),
+      setValueAtTime: vi.fn(),
       exponentialRampToValueAtTime: vi.fn(),
+      linearRampToValueAtTime: vi.fn(),
+      cancelScheduledValues: vi.fn(),
+      setTargetAtTime: vi.fn((value: number, at: number) => void targets.push({ value, at })),
     }
   }
 
@@ -33,9 +36,9 @@ class FakeContext {
   }
 
   createGain() {
-    const record = { disconnected: false }
+    const record = { disconnected: false, targets: [] as { value: number; at: number }[] }
     this.gains.push(record)
-    const gain = this.param()
+    const gain = this.param(record.targets)
     const node = this.node({ gain })
     node.disconnect = vi.fn(() => {
       record.disconnected = true
@@ -190,6 +193,44 @@ describe('createWebAudioOutput', () => {
     expect(audio.isPlaying(audio.play([A4]))).toBe(false)
     expect(audio.struck().size).toBe(0)
     expect(createContext).toHaveBeenCalledOnce()
+  })
+})
+
+describe('the live voice', () => {
+  it('sounds a pressed key until it is let go: oscillators with no stop', () => {
+    const { context, audio } = setUp()
+    audio.press(midi(69), 100)
+    expect(context.oscillators.map((o) => Math.round(o.frequency))).toEqual([440, 880, 1320])
+    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
+  })
+
+  it('lets a key go: its gain dies away and its oscillators stop soon after', () => {
+    const { context, audio } = setUp()
+    audio.press(midi(69), 100)
+    context.currentTime = 2
+    audio.release(midi(69))
+    const envelope = context.gains.find((gain) => gain.targets.length > 0)
+    expect(envelope?.targets.at(-1)).toEqual({ value: 0.0001, at: 2 })
+    expect(context.oscillators.every((o) => o.stop === 2.25)).toBe(true)
+  })
+
+  it('keeps a pressed key sounding through a stop of the music', () => {
+    const { context, audio } = setUp()
+    audio.press(midi(69), 100)
+    audio.stop()
+    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
+    expect([...audio.sounding()]).toEqual([69])
+  })
+
+  it('holds a key let go under the sustain until it comes up', () => {
+    const { context, audio } = setUp()
+    audio.pedal('sustain', true)
+    audio.press(midi(69), 100)
+    audio.release(midi(69))
+    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
+    audio.pedal('sustain', false)
+    expect(context.oscillators.every((o) => o.stop === 0.25)).toBe(true)
+    expect(audio.sounding().size).toBe(0)
   })
 })
 

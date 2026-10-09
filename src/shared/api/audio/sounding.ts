@@ -3,6 +3,8 @@ import {
   keysSoundingAt,
   keysStruckAt,
   keyWindows,
+  QUIET_DAMPER,
+  type Damper,
   type KeyWindow,
   type Sound,
 } from '@/shared/lib/schedule'
@@ -24,6 +26,11 @@ export interface SoundingKeys {
   subscribe(onChange: () => void): () => void
   /** Looks at the clock again. */
   update(): void
+  /**
+   * The live voice now: its keys sounding and struck with the scheduled ones until they change; the
+   * listeners are told when they or the pedals change.
+   */
+  setLive(live: Pick<Damper, 'sounding' | 'pedals'>): void
 }
 
 /** The play of sounds with no notes, or of sounds nothing could play: it never plays. */
@@ -33,6 +40,9 @@ const NONE: ReadonlySet<Midi> = new Set()
 
 const sameKeys = (a: ReadonlySet<Midi>, b: ReadonlySet<Midi>) =>
   a.size === b.size && [...a].every((key) => b.has(key))
+
+const withLive = (keys: ReadonlySet<Midi>, live: ReadonlySet<Midi>): ReadonlySet<Midi> =>
+  live.size === 0 ? keys : new Set([...keys, ...live])
 
 /**
  * The log both audio adapters keep. With `frame` (the browser's animation frames) it looks at the
@@ -48,6 +58,8 @@ export function createSoundingKeys({
   let windows: readonly KeyWindow[] = []
   let current = NONE
   let struck = NONE
+  let live = NONE
+  let pedals = QUIET_DAMPER.pedals
   const playing = new Set<PlayHandle>()
   let looking = false
   const listeners = new Set<() => void>()
@@ -58,10 +70,10 @@ export function createSoundingKeys({
     windows = windows.filter((window) => window.to > time)
     const ended = [...playing].filter((play) => play.until <= time)
     for (const play of ended) playing.delete(play)
-    const sounding = keysSoundingAt(windows, time)
+    const sounding = withLive(keysSoundingAt(windows, time), live)
     const soundingChanged = !sameKeys(sounding, current)
     if (soundingChanged) current = sounding.size === 0 ? NONE : sounding
-    const last = keysStruckAt(windows, time)
+    const last = withLive(keysStruckAt(windows, time), live)
     const struckChanged = !sameKeys(last, struck)
     if (struckChanged) struck = last.size === 0 ? NONE : last
     if (stopped || ended.length > 0 || soundingChanged || struckChanged)
@@ -107,5 +119,11 @@ export function createSoundingKeys({
       }
     },
     update,
+    setLive({ sounding, pedals: now }) {
+      const pedalled = now !== pedals
+      pedals = now
+      if (!sameKeys(sounding, live)) live = sounding.size === 0 ? NONE : sounding
+      look(pedalled)
+    },
   }
 }

@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
+import { chordSounds, QUIET_DAMPER } from '@/shared/lib/schedule'
 import { createSoundingKeys } from './sounding'
 
 const C_MAJOR = [60, 64, 67].map(midi)
+const UP = QUIET_DAMPER.pedals
+const live = (...keys: number[]) => ({ sounding: new Set(keys.map(midi)), pedals: UP })
 
 function setUp({ frames = false } = {}) {
   let clock = 0
@@ -147,5 +149,45 @@ describe('createSoundingKeys', () => {
     expect(queued).toHaveLength(1)
     tick(5)
     expect(keys.isPlaying(play)).toBe(false)
+  })
+
+  it('shows the live voice’s keys sounding and struck beside the scheduled ones', () => {
+    const { keys, at } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    keys.add(chordSounds([midi(64)], { arpeggio: false }), 0)
+    at(0.5)
+    keys.setLive(live(60))
+    expect([...keys.current()].toSorted()).toEqual([60, 64])
+    expect([...keys.struck()].toSorted()).toEqual([60, 64])
+    expect(onChange).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the same live keys until they change', () => {
+    const { keys } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    keys.setLive(live(60))
+    const shown = keys.current()
+    keys.setLive(live(60))
+    expect(keys.current()).toBe(shown)
+    expect(onChange).toHaveBeenCalledOnce()
+    keys.setLive(live())
+    expect(keys.current().size).toBe(0)
+  })
+
+  it('tells its listeners when a pedal moves, though no key changes', () => {
+    const { keys } = setUp()
+    const onChange = vi.fn()
+    keys.subscribe(onChange)
+    keys.setLive({ sounding: new Set(), pedals: { ...UP, sustain: true } })
+    expect(onChange).toHaveBeenCalledOnce()
+  })
+
+  it('keeps the live keys through a clear: a held key is the hand’s, not the music’s', () => {
+    const { keys } = setUp()
+    keys.setLive(live(60))
+    keys.clear()
+    expect([...keys.current()]).toEqual([60])
   })
 })

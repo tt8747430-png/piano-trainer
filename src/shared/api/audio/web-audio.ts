@@ -1,4 +1,6 @@
+import type { Midi } from '@/shared/lib/music'
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
+import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
 import { createRecordingPlayer, type Media } from './recording-player'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
@@ -12,7 +14,7 @@ const PARTIALS = [
 ] as const
 const SILENT = 0.0001
 
-const frequencyOf = (note: NoteSound) => 440 * 2 ** ((note.midi - 69) / 12)
+const frequencyOf = (key: Midi) => 440 * 2 ** ((key - 69) / 12)
 
 /** A sound's nodes: the oscillators that make it and the gain it leaves by. */
 interface Voice {
@@ -23,8 +25,22 @@ interface Voice {
 /** Builds a sound's voice; `ended` runs when it is over. */
 type Render<S> = (context: AudioContext, sound: S, at: number, ended: () => void) => Voice
 
+/** The piano's partials at `frequency` into `filter`, from `at`: each oscillator with its level. */
+function partials(context: AudioContext, frequency: number, filter: AudioNode, at: number) {
+  return PARTIALS.map(({ multiple, type, level }) => {
+    const oscillator = context.createOscillator()
+    const gain = context.createGain()
+    oscillator.type = type
+    oscillator.frequency.value = frequency * multiple
+    gain.gain.value = level
+    oscillator.connect(gain).connect(filter)
+    oscillator.start(at)
+    return oscillator
+  })
+}
+
 const playNote: Render<NoteSound> = (context, note, at, ended) => {
-  const frequency = frequencyOf(note)
+  const frequency = frequencyOf(note.midi)
   const release = at + note.duration + 0.2
   const filter = context.createBiquadFilter()
   filter.type = 'lowpass'
@@ -36,20 +52,42 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
   envelope.gain.exponentialRampToValueAtTime(peak, at + 0.008)
   envelope.gain.exponentialRampToValueAtTime(peak * 0.4, at + Math.min(0.35, note.duration * 0.5))
   envelope.gain.exponentialRampToValueAtTime(SILENT, release)
-  const sources = PARTIALS.map(({ multiple, type, level }) => {
-    const oscillator = context.createOscillator()
-    const gain = context.createGain()
-    oscillator.type = type
-    oscillator.frequency.value = frequency * multiple
-    gain.gain.value = level
-    oscillator.connect(gain).connect(filter)
-    oscillator.start(at)
-    oscillator.stop(at + note.duration + 0.25)
-    if (multiple === 1) oscillator.onended = ended
-    return oscillator
-  })
+  const sources = partials(context, frequency, filter, at)
+  for (const source of sources) source.stop(at + note.duration + 0.25)
+  if (sources[0]) sources[0].onended = ended
   filter.connect(envelope).connect(context.destination)
   return { sources, output: envelope }
+}
+
+/**
+ * A key a hand holds, struck at `gain` now: it rises in 8 ms, then dies away as a string does (a
+ * lower key longer) and never stops by itself: its damper stops it (`damped`).
+ */
+function holdNote(context: AudioContext, key: Midi, gain: number): Voice {
+  const at = context.currentTime
+  const frequency = frequencyOf(key)
+  const decay = 1.5 + (4.5 * (108 - key)) / 87
+  const filter = context.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.setValueAtTime(Math.min(7000, frequency * 9), at)
+  filter.frequency.setTargetAtTime(Math.max(300, frequency * 2), at, decay)
+  const envelope = context.createGain()
+  envelope.gain.setValueAtTime(SILENT, at)
+  envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, gain), at + 0.008)
+  envelope.gain.setTargetAtTime(SILENT, at + 0.008, decay)
+  const sources = partials(context, frequency, filter, at)
+  filter.connect(envelope).connect(context.destination)
+  return { sources, output: envelope }
+}
+
+/** A held key's damper falls now: its sound dies in a moment, and its oscillators stop. */
+function damped(context: AudioContext, { sources, output }: Voice) {
+  const at = context.currentTime
+  const level = output.gain.value
+  output.gain.cancelScheduledValues(at)
+  output.gain.setValueAtTime(level, at)
+  output.gain.setTargetAtTime(SILENT, at, 0.04)
+  for (const source of sources) source.stop(at + 0.25)
 }
 
 const playClick: Render<ClickSound> = (context, click, at, ended) => {
@@ -72,7 +110,7 @@ const browserContext = (): AudioContext | null =>
 const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 
 /** Audio a browser holds back until a gesture: started suspended, or interrupted (iOS, by a call). */
-const held = (context: AudioContext) =>
+const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
 
 /**
@@ -113,6 +151,8 @@ export function createWebAudioOutput({
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<Voice>()
+  /** The keys the live voice holds sounding: apart from `voices`, so stop() never reaches them. */
+  const held = new Map<Midi, Voice>()
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
@@ -141,17 +181,32 @@ export function createWebAudioOutput({
   // By its own element, not through the AudioContext: WebKit's tap into it stalls the element about
   // 0.45 s after every seek, play or change of rate, so the recording could never be kept in time.
   const recordings = createRecordingPlayer({ now: heard, createMedia })
+  const voice = createLiveVoice({
+    strike(key, gain) {
+      const audio = openContext()
+      if (!audio) return
+      if (heldBack(audio)) void audio.resume()
+      held.set(key, holdNote(audio, key, gain))
+    },
+    silence(key) {
+      const sound = held.get(key)
+      if (!context || !sound) return
+      damped(context, sound)
+      held.delete(key)
+    },
+    changed: keys.setLive,
+  })
 
   return {
     async unlock() {
       recordings.prime()
       const audio = openContext()
-      if (audio && held(audio)) await audio.resume()
+      if (audio && heldBack(audio)) await audio.resume()
     },
     play(sounds, at, options) {
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
-      if (held(audio)) void audio.resume()
+      if (heldBack(audio)) void audio.resume()
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
       return keys.add(sounds, start, options)
@@ -167,6 +222,10 @@ export function createWebAudioOutput({
       }
       voices.clear()
     },
+    press: voice.press,
+    release: voice.release,
+    pedal: voice.pedal,
+    pedals: voice.pedals,
     loadRecording: (src) => recordings.load(src),
     playRecording: (src, play) => recordings.play(src, play),
     now,

@@ -66,6 +66,41 @@ describe('createFakeAudio', () => {
   })
 })
 
+describe('the fake’s live voice', () => {
+  it('records each press, release and pedal', () => {
+    const audio = createFakeAudio()
+    audio.press(midi(60), 100)
+    audio.pedal('sustain', true)
+    audio.release(midi(60))
+    expect(audio.voice).toEqual([
+      { kind: 'press', midi: 60, velocity: 100 },
+      { kind: 'pedal', pedal: 'sustain', down: true },
+      { kind: 'release', midi: 60 },
+    ])
+  })
+
+  it('sounds a key let go under the sustain until the sustain comes up, and says so each time', () => {
+    const audio = createFakeAudio()
+    const onChange = vi.fn()
+    audio.onSounding(onChange)
+    audio.pedal('sustain', true)
+    audio.press(midi(60), 100)
+    audio.release(midi(60))
+    expect([...audio.sounding()]).toEqual([60])
+    expect(audio.pedals().sustain).toBe(true)
+    audio.pedal('sustain', false)
+    expect(audio.sounding().size).toBe(0)
+    expect(onChange).toHaveBeenCalledTimes(3)
+  })
+
+  it('leaves a held key sounding through a stop', () => {
+    const audio = createFakeAudio()
+    audio.press(midi(60), 100)
+    audio.stop()
+    expect([...audio.sounding()]).toEqual([60])
+  })
+})
+
 describe('the fake’s recordings', () => {
   it('records what it loads and each play of a recording', () => {
     const audio = createFakeAudio()

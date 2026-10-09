@@ -1,5 +1,11 @@
 import type { Midi } from '@/shared/lib/music'
-import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
+import type { PedalKind, RecordingPlay, Sound } from '@/shared/lib/schedule'
+
+/** What a hand does to the live voice: what the fake audio records. */
+export type LiveEvent =
+  | { readonly kind: 'press'; readonly midi: Midi; readonly velocity: number }
+  | { readonly kind: 'release'; readonly midi: Midi }
+  | { readonly kind: 'pedal'; readonly pedal: PedalKind; readonly down: boolean }
 
 /** One call to `play()`: the port says whether it still sounds (`isPlaying`). */
 export interface PlayHandle {
@@ -25,8 +31,20 @@ export interface AudioOutput {
   unlock(): Promise<void>
   /** Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns their play. */
   play(sounds: readonly Sound[], at?: number, options?: PlayOptions): PlayHandle
-  /** Silences what sounds, recordings too, and drops what is queued: every play stops playing. */
+  /**
+   * Silences what sounds, recordings too, and drops what is queued: every play stops playing. The
+   * live voice is a hand's: a key it holds ends when it is let go.
+   */
   stop(): void
+  /**
+   * The live voice (spec 2026-10-09 §2.1): a key struck at `velocity` (1–127) sounds until it is let
+   * go, or on under the pedals; struck again, it stops first.
+   */
+  press(key: Midi, velocity: number): void
+  release(key: Midi): void
+  pedal(pedal: PedalKind, down: boolean): void
+  /** The pedals now: the same object until one changes. */
+  pedals(): Readonly<Record<PedalKind, boolean>>
   /** Readies a recording (fetched whole) so a Play can start it at once. */
   loadRecording(src: string): void
   /** Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until `play.until`. */
@@ -39,13 +57,16 @@ export interface AudioOutput {
    * audio clock, the page's own in seconds.
    */
   audioTimeAt(pageTime: number): number
-  /** The keys the app is sounding now (a hand's play aside): the same set until they change. */
+  /** The keys the app is sounding now, the live voice's too: the same set until they change. */
   sounding(): ReadonlySet<Midi>
   /** The keys sounding now that were struck last (spotlight): the same set until they change. */
   struck(): ReadonlySet<Midi>
   /** Whether a play has a note sounding or still to come: false once its last note ends or stop() cuts it off. */
   isPlaying(play: PlayHandle): boolean
-  /** Calls `onChange` whenever the keys sounding or struck change, a play ends, or stop() runs; returns what stops it. */
+  /**
+   * Calls `onChange` whenever the keys sounding or struck change, a play ends, stop() runs or a pedal
+   * moves; returns what stops it.
+   */
   onSounding(onChange: () => void): () => void
 }
 
