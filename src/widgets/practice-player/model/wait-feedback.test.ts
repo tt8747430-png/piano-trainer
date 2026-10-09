@@ -46,6 +46,15 @@ describe('waitFeedback', () => {
       expect(feedback.notes.every((n) => ['G', 'B', 'D'].includes(n))).toBe(true)
   })
 
+  it('names the notes lowest first, as the hands play them', () => {
+    const bz1 = pieceById('bz1')
+    if (!bz1) throw new Error('bz1')
+    const bm = arrangePiece(bz1, ownChoice(bz1), BUILT_IN_PATTERNS)
+    const playing = practiceReducer(initialPractice(bm, 'wait', 'both'), { type: 'play' })
+    // Thank you, God opens on Bm: B in the bass, then D and F♯ above it.
+    expect(waitFeedback(bm, playing)).toEqual({ kind: 'play', notes: ['B', 'D', 'F#'] })
+  })
+
   it('names the notes to play as they are written', () => {
     const feedback = waitFeedback(performance, waiting)
     if (feedback?.kind !== 'play') throw new Error('expected a note to play')

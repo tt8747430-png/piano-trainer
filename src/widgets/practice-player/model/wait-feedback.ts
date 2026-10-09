@@ -1,6 +1,6 @@
 import { spellPitchClass, type PracticeState } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { noteName, pitchClass } from '@/shared/lib/music'
+import { noteName, pitchClass, type PitchClass } from '@/shared/lib/music'
 
 /** What Wait mode's line says (spec §2.7). */
 export type WaitFeedback =
@@ -20,10 +20,17 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
   if (state.outcome === 'wrong' && state.wrong !== null) {
     return { kind: 'not', note: spellPitchClass(performance, group.chord, pitchClass(state.wrong)) }
   }
-  const played = group.notes.map((index) => performance.notes[index])
-  const notes = state.expected.map((pc) => {
-    const written = played.find((n) => n !== undefined && pitchClass(n.midi) === pc)
-    return written ? noteName(written.spelled) : spellPitchClass(performance, group.chord, pc)
-  })
+  // The notes of the beat as written, lowest first: each pitch class is named by its lowest key, and
+  // named in that order (B D F♯ for a B minor chord over its bass), as the hands read it.
+  const played = group.notes
+    .flatMap((index) => performance.notes[index] ?? [])
+    .toSorted((a, b) => a.midi - b.midi)
+  const lowest = (pc: PitchClass) => played.find((n) => pitchClass(n.midi) === pc)
+  const notes = state.expected
+    .map((pc) => ({ pc, written: lowest(pc) }))
+    .toSorted((a, b) => (a.written?.midi ?? Infinity) - (b.written?.midi ?? Infinity))
+    .map(({ pc, written }) =>
+      written ? noteName(written.spelled) : spellPitchClass(performance, group.chord, pc),
+    )
   return notes.length > 0 ? { kind: 'play', notes } : null
 }
