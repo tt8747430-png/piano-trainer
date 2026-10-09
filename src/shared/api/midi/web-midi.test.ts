@@ -79,12 +79,14 @@ describe('createWebMidiInput', () => {
     const unsubscribe = midi.onNote((event) => heard.push(event))
     await midi.connect()
     piano.send([0x90, 60, 90], 120.5)
+    pads.send([0x90, 62, 80], 125)
     pads.send([0x80, 62, 0], 130)
     pads.send([0xb0, 64, 127], 140)
     unsubscribe()
     piano.send([0x90, 64, 90], 150)
     expect(heard).toEqual([
       { midi: 60, on: true, velocity: 90, time: 120.5 },
+      { midi: 62, on: true, velocity: 80, time: 125 },
       { midi: 62, on: false, velocity: 0, time: 130 },
     ])
   })
@@ -101,8 +103,8 @@ describe('createWebMidiInput', () => {
     piano.send([0xb0, 64, 0], 20)
     piano.send([0xb0, 7, 100], 30)
     expect(pedal).toEqual([
-      { down: true, time: 10 },
-      { down: false, time: 20 },
+      { pedal: 'sustain', down: true, time: 10 },
+      { pedal: 'sustain', down: false, time: 20 },
     ])
     expect(keys).not.toHaveBeenCalled()
   })
@@ -151,6 +153,22 @@ describe('createWebMidiInput', () => {
     access.unplug(pads)
     access.unplug(piano)
     expect(pedal.map((event) => event.down)).toEqual([true, false])
+  })
+
+  it('lets go of the sostenuto and the soft pedal held on a keyboard unplugged', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const access = new FakeAccess(piano)
+    const midi = withAccess(access)
+    const pedal: PedalEvent[] = []
+    midi.onPedal((event) => pedal.push(event))
+    await midi.connect()
+    piano.send([0xb0, 66, 127])
+    piano.send([0xb0, 67, 127])
+    access.unplug(piano)
+    expect(pedal.slice(2).map(({ pedal: kind, down }) => [kind, down])).toEqual([
+      ['sostenuto', false],
+      ['soft', false],
+    ])
   })
 
   it('lets go of a keyboard’s keys when its port turns disconnected in place', async () => {
@@ -207,5 +225,88 @@ describe('hasWebMidi', () => {
       true,
     )
     expect(hasWebMidi({} as Navigator)).toBe(false)
+  })
+})
+
+describe('the keyboard heard', () => {
+  const ANY = { device: null, octaveShift: 0, reversedPedal: false }
+
+  async function twoKeyboards() {
+    const piano = new FakeInput('a', 'Piano')
+    const pads = new FakeInput('b', 'Pads')
+    const access = new FakeAccess(piano, pads)
+    const midi = withAccess(access)
+    const heard: NoteEvent[] = []
+    const pedal: PedalEvent[] = []
+    const statuses: MidiStatus[] = []
+    midi.onNote((event) => heard.push(event))
+    midi.onPedal((event) => pedal.push(event))
+    midi.onStatus((status) => statuses.push(status))
+    await midi.connect()
+    return { piano, pads, access, midi, heard, pedal, statuses }
+  }
+
+  it('hears only the keyboard chosen', async () => {
+    const { piano, pads, midi, heard } = await twoKeyboards()
+    midi.configure({ ...ANY, device: 'Piano' })
+    piano.send([0x90, 60, 90])
+    pads.send([0x90, 62, 90])
+    expect(heard.map((event) => event.midi)).toEqual([60])
+  })
+
+  it('says the keyboard chosen is away while it is unplugged, and connected once it is back', async () => {
+    const { piano, access, midi, statuses } = await twoKeyboards()
+    midi.configure({ ...ANY, device: 'Piano' })
+    access.unplug(piano)
+    expect(midi.current()).toEqual({ state: 'away', device: 'Piano', devices: ['Pads'] })
+    access.plugIn(piano)
+    expect(statuses.at(-1)).toEqual({ state: 'connected', devices: ['Pads', 'Piano'] })
+  })
+
+  it('says a keyboard chosen before access is away from the first connect', async () => {
+    const midi = withAccess(new FakeAccess(new FakeInput('b', 'Pads')))
+    midi.configure({ ...ANY, device: 'Piano' })
+    expect(await midi.connect()).toEqual({ state: 'away', device: 'Piano', devices: ['Pads'] })
+  })
+
+  it('lets go of every key and pedal held as the choice changes', async () => {
+    const { piano, midi, heard, pedal } = await twoKeyboards()
+    piano.send([0x90, 60, 90], 5)
+    piano.send([0xb0, 64, 127], 6)
+    midi.configure({ ...ANY, octaveShift: 1 })
+    expect(heard.at(-1)).toMatchObject({ midi: 60, on: false })
+    expect(pedal.at(-1)).toMatchObject({ pedal: 'sustain', down: false })
+  })
+
+  it('changes nothing when told the same choice', async () => {
+    const { piano, midi, heard } = await twoKeyboards()
+    piano.send([0x90, 60, 90])
+    midi.configure(ANY)
+    expect(heard).toHaveLength(1)
+  })
+
+  it('moves each key by the octaves chosen, and leaves out a key moved off the piano', async () => {
+    const { piano, midi, heard } = await twoKeyboards()
+    midi.configure({ ...ANY, octaveShift: 1 })
+    piano.send([0x90, 60, 90])
+    piano.send([0x80, 60, 0])
+    piano.send([0x90, 100, 90])
+    expect(heard.map(({ midi: key, on }) => [key, on])).toEqual([
+      [72, true],
+      [72, false],
+    ])
+  })
+
+  it('reads a reversed pedal the right way round', async () => {
+    const { piano, midi, pedal } = await twoKeyboards()
+    midi.configure({ ...ANY, reversedPedal: true })
+    piano.send([0xb0, 64, 0])
+    expect(pedal.at(-1)).toMatchObject({ pedal: 'sustain', down: true })
+  })
+
+  it('lets go of no key a keyboard never put down', async () => {
+    const { piano, heard } = await twoKeyboards()
+    piano.send([0x80, 60, 0])
+    expect(heard).toEqual([])
   })
 })

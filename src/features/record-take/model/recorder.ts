@@ -76,6 +76,7 @@ export function startRecorder(
     if (event.on && isKept(event.midi, at, timing) && ++struck >= plan.room) stop()
   })
   const stopPedal = midi.onPedal((event) => {
+    if (event.pedal !== 'sustain') return
     heard.push({ kind: 'pedal', down: event.down, at: audio.audioTimeAt(event.time) })
   })
 

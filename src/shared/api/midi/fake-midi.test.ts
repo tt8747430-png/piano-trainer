@@ -38,9 +38,24 @@ describe('createFakeMidi', () => {
       { midi: 60, on: false, velocity: 0, time: 200 },
     ])
     expect(pedal).toEqual([
-      { down: true, time: 150 },
-      { down: false, time: 250 },
+      { pedal: 'sustain', down: true, time: 150 },
+      { pedal: 'sustain', down: false, time: 250 },
     ])
+  })
+
+  it('puts down the pedal the test names', () => {
+    const fake = createFakeMidi()
+    const pedal: PedalEvent[] = []
+    fake.onPedal((event) => pedal.push(event))
+    fake.pedal(true, { pedal: 'soft', time: 5 })
+    expect(pedal).toEqual([{ pedal: 'soft', down: true, time: 5 }])
+  })
+
+  it('records how it is told to hear the keyboard', () => {
+    const fake = createFakeMidi()
+    const choice = { device: 'Piano', octaveShift: -1, reversedPedal: true }
+    fake.configure(choice)
+    expect(fake.choices).toEqual([choice])
   })
 
   it('reports a new status', async () => {

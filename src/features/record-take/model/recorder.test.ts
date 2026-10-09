@@ -85,6 +85,18 @@ describe('startRecorder', () => {
     ])
   })
 
+  it('keeps the sustain’s presses, not the other pedals’', () => {
+    const { audio, keyboard, ended, stop } = setUp()
+    audio.setNow(3.1)
+    keyboard.press(midi(60))
+    keyboard.pedal(true, { pedal: 'soft' })
+    audio.setNow(3.6)
+    keyboard.pedal(false, { pedal: 'soft' })
+    audio.setNow(4.1)
+    stop()
+    expect(ended[0]?.pedal).toEqual([])
+  })
+
   it('keeps nothing when stopped in the count-in, and hears no key after', () => {
     const { audio, keyboard, ended, stop } = setUp()
     audio.setNow(2)

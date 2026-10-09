@@ -1,25 +1,37 @@
-import type { Midi } from '@/shared/lib/music'
+import { midi, PIANO, type Midi } from '@/shared/lib/music'
+import type { PedalKind } from '@/shared/lib/schedule'
 import { createListeners } from './listeners'
 import { parseMidiMessage } from './parse-message'
-import type { MidiInput, MidiStatus, NoteEvent, PedalEvent } from './types'
+import {
+  ANY_KEYBOARD,
+  type MidiInput,
+  type MidiStatus,
+  type NoteEvent,
+  type PedalEvent,
+} from './types'
 
 export const hasWebMidi = (navigator: Navigator | undefined = globalThis.navigator): boolean =>
   typeof navigator?.requestMIDIAccess === 'function'
-
-const statusOf = (inputs: readonly MIDIInput[]): MidiStatus =>
-  inputs.length > 0
-    ? { state: 'connected', devices: inputs.map((input) => input.name ?? input.id) }
-    : { state: 'no-device' }
 
 /** Whether the learner has allowed MIDI on this site: asked without a prompt. */
 const midiPermission = async (): Promise<PermissionState> =>
   (await navigator.permissions.query({ name: 'midi' })).state
 
+/** The keys a keyboard holds down, and its pedals down. */
+interface Holding {
+  readonly keys: Set<Midi>
+  readonly pedals: Set<PedalKind>
+}
+
+const nameOf = (input: MIDIInput) => input.name ?? input.id
+
 /**
- * The Web MIDI adapter: every keyboard plugged in is listened to, and re-hooked when devices change.
- * Each message keeps the time it came (its event's `timeStamp`, on the page's clock), not the time a
- * handler ran. A keyboard unplugged lets go of the keys it was holding and of its pedal, so nothing
- * stays down without a hand or a foot. One the learner allowed before reconnects without a prompt.
+ * The Web MIDI adapter: the keyboards chosen (every one plugged in, or the one by its name) are
+ * listened to, and re-hooked when devices change; the others are not. Each message keeps the time it
+ * came (its event's `timeStamp`, on the page's clock), not the time a handler ran; its key moved by
+ * the octaves chosen (one moved off the piano is not heard). A keyboard unplugged, or no longer
+ * heard, lets go of the keys it was holding and of its pedals, so nothing stays down without a hand
+ * or a foot. One the learner allowed before reconnects without a prompt.
  */
 export function createWebMidiInput(
   requestAccess: () => Promise<MIDIAccess> = () => navigator.requestMIDIAccess(),
@@ -33,46 +45,60 @@ export function createWebMidiInput(
     current = status
     statuses.emit(status)
   }
+  let choice = ANY_KEYBOARD
 
-  // What each keyboard holds down, by the keyboard's id: its keys, and whether its pedal is down.
-  const held = new Map<string, { keys: Set<Midi>; pedal: boolean }>()
+  // What each keyboard heard holds down, by the keyboard's id.
+  const held = new Map<string, Holding>()
 
   const listenTo = (input: MIDIInput) => {
-    const holding = held.get(input.id) ?? { keys: new Set<Midi>(), pedal: false }
+    const holding = held.get(input.id) ?? { keys: new Set<Midi>(), pedals: new Set<PedalKind>() }
     held.set(input.id, holding)
     input.onmidimessage = (event) => {
-      const message = event.data ? parseMidiMessage(event.data, event.timeStamp) : null
+      const message = event.data
+        ? parseMidiMessage(event.data, event.timeStamp, choice.reversedPedal)
+        : null
       if (!message) return
       if (message.kind === 'pedal') {
         const { kind: _kind, ...pedal } = message
-        holding.pedal = pedal.down
+        if (pedal.down) holding.pedals.add(pedal.pedal)
+        else holding.pedals.delete(pedal.pedal)
         pedals.emit(pedal)
         return
       }
       const { kind: _kind, ...note } = message
-      if (note.on) holding.keys.add(note.midi)
-      else holding.keys.delete(note.midi)
-      notes.emit(note)
+      const shifted = note.midi + 12 * choice.octaveShift
+      if (shifted < PIANO.from || shifted > PIANO.to) return
+      const key = midi(shifted)
+      if (note.on) holding.keys.add(key)
+      else if (!holding.keys.delete(key)) return
+      notes.emit({ ...note, midi: key })
     }
   }
 
-  const letGoOfUnplugged = (inputs: readonly MIDIInput[]) => {
-    const present = new Set(inputs.map((input) => input.id))
+  /** Lets go of what a keyboard held, as it stops being heard. */
+  const letGo = (id: string) => {
+    const holding = held.get(id)
+    if (!holding) return
+    held.delete(id)
     const time = performance.now()
-    for (const [id, { keys, pedal }] of held) {
-      if (present.has(id)) continue
-      held.delete(id)
-      for (const midi of keys) notes.emit({ midi, on: false, velocity: 0, time })
-      if (pedal) pedals.emit({ down: false, time })
-    }
+    for (const key of holding.keys) notes.emit({ midi: key, on: false, velocity: 0, time })
+    for (const pedal of holding.pedals) pedals.emit({ pedal, down: false, time })
   }
 
   // A port unplugged may leave the map, or stay in it disconnected.
   const hook = (access: MIDIAccess): MidiStatus => {
     const inputs = [...access.inputs.values()].filter((input) => input.state === 'connected')
-    letGoOfUnplugged(inputs)
-    for (const input of inputs) listenTo(input)
-    return statusOf(inputs)
+    const heard = inputs.filter(
+      (input) => choice.device === null || nameOf(input) === choice.device,
+    )
+    const heardIds = new Set(heard.map((input) => input.id))
+    for (const id of [...held.keys()]) if (!heardIds.has(id)) letGo(id)
+    for (const input of inputs) if (!heardIds.has(input.id)) input.onmidimessage = null
+    for (const input of heard) listenTo(input)
+    const devices = inputs.map(nameOf)
+    if (choice.device !== null && heard.length === 0)
+      return { state: 'away', device: choice.device, devices }
+    return devices.length > 0 ? { state: 'connected', devices } : { state: 'no-device' }
   }
 
   // Granted once and kept: a second access would hear every key through ports of its own.
@@ -95,6 +121,17 @@ export function createWebMidiInput(
       }
       report(status)
       return status
+    },
+    configure(next) {
+      if (
+        next.device === choice.device &&
+        next.octaveShift === choice.octaveShift &&
+        next.reversedPedal === choice.reversedPedal
+      )
+        return
+      for (const id of [...held.keys()]) letGo(id)
+      choice = next
+      if (granted) report(hook(granted))
     },
     current: () => current,
     onNote: notes.add,
