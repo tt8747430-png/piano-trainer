@@ -1,7 +1,7 @@
 import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createSoundingKeys } from './sounding'
-import { PLAY_DELAY, type AudioOutput, type LiveEvent } from './types'
+import { PLAY_DELAY, type AudioOutput, type LiveEvent, type NoteOutput } from './types'
 
 /**
  * An AudioOutput for tests: records what it is asked, and keeps a clock the test moves. The keys
@@ -14,6 +14,8 @@ export interface FakeAudio extends AudioOutput {
   readonly stops: number
   /** What the hands did to the live voice, in order. */
   readonly voice: readonly LiveEvent[]
+  /** The keyboard's speaker the notes are sent to; null: the browser. */
+  readonly notesOut: NoteOutput | null
   readonly loadedRecordings: readonly string[]
   readonly recordings: readonly { readonly src: string; readonly play: RecordingPlay }[]
   setNow(seconds: number): void
@@ -27,6 +29,7 @@ export function createFakeAudio(): FakeAudio {
   const loadedRecordings: string[] = []
   const recordings: { src: string; play: RecordingPlay }[] = []
   const voice: LiveEvent[] = []
+  let notesOut: NoteOutput | null = null
   const keys = createSoundingKeys({ now: () => clock })
   const live = createLiveVoice({ strike() {}, silence() {}, changed: keys.setLive })
   return {
@@ -55,6 +58,9 @@ export function createFakeAudio(): FakeAudio {
       live.pedal(pedal, down)
     },
     pedals: live.pedals,
+    notesTo(output) {
+      notesOut = output
+    },
     loadRecording(src) {
       loadedRecordings.push(src)
     },
@@ -83,6 +89,9 @@ export function createFakeAudio(): FakeAudio {
     },
     get voice() {
       return voice
+    },
+    get notesOut() {
+      return notesOut
     },
     get loadedRecordings() {
       return loadedRecordings

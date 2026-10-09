@@ -51,6 +51,16 @@ describe('createFakeMidi', () => {
     expect(pedal).toEqual([{ pedal: 'soft', down: true, time: 5 }])
   })
 
+  it('sounds notes on its speaker where the test gives it one and it is connected', async () => {
+    const fake = createFakeMidi(undefined, { output: true })
+    expect(fake.noteOutput()).toBeNull()
+    await fake.connect()
+    fake.noteOutput()?.noteOn(midi(60), 90, 10)
+    expect(fake.sent).toEqual([{ kind: 'on', midi: 60, velocity: 90, at: 10 }])
+    expect(fake.outputs()).toEqual(['Keyboard'])
+    expect(createFakeMidi().outputs()).toEqual([])
+  })
+
   it('records how it is told to hear the keyboard', () => {
     const fake = createFakeMidi()
     const choice = { device: 'Piano', octaveShift: -1, reversedPedal: true }

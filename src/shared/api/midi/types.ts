@@ -1,3 +1,4 @@
+import type { NoteOutput } from '@/shared/api/audio'
 import type { Midi } from '@/shared/lib/music'
 import type { PedalKind } from '@/shared/lib/schedule'
 
@@ -43,8 +44,11 @@ export interface PedalEvent {
 export type MidiMessage =
   ({ readonly kind: 'note' } & NoteEvent) | ({ readonly kind: 'pedal' } & PedalEvent)
 
-/** A MIDI keyboard. Built once in app/composition-root.ts; null where the browser has no Web MIDI. */
-export interface MidiInput {
+/**
+ * The MIDI keyboards: the keys and pedals played on them, and their speakers. Built once in
+ * app/composition-root.ts; null where the browser has no Web MIDI.
+ */
+export interface MidiPort {
   /** Asks for access and listens to every keyboard plugged in, now and later. */
   connect(): Promise<MidiStatus>
   /**
@@ -59,4 +63,8 @@ export interface MidiInput {
   current(): MidiStatus | null
   /** Hears as chosen from now: every key and pedal held is let go first. */
   configure(choice: MidiChoice): void
+  /** The names of the keyboards that can sound notes. */
+  outputs(): readonly string[]
+  /** The chosen keyboard's speaker, or the first with one under Any keyboard; null where none. */
+  noteOutput(): NoteOutput | null
 }

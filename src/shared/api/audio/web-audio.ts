@@ -2,6 +2,7 @@ import type { Midi } from '@/shared/lib/music'
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
+import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
 import { createRecordingPlayer, type Media } from './recording-player'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
 import { PLAY_DELAY, type AudioOutput } from './types'
@@ -153,6 +154,8 @@ export function createWebAudioOutput({
   const voices = new Set<Voice>()
   /** The keys the live voice holds sounding: apart from `voices`, so stop() never reaches them. */
   const held = new Map<Midi, Voice>()
+  /** The keyboard's speaker the notes go to, while they go through the piano. */
+  let piano: MidiSoundOutput | null = null
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
@@ -161,6 +164,10 @@ export function createWebAudioOutput({
   }
 
   const render = (sound: Sound, at: number) => {
+    if (sound.kind === 'note' && piano) {
+      piano.render(sound, at)
+      return
+    }
     if (!context) return
     const ended = () => voices.delete(voice)
     const voice =
@@ -212,6 +219,7 @@ export function createWebAudioOutput({
       return keys.add(sounds, start)
     },
     stop() {
+      piano?.stop()
       recordings.stop()
       lookahead.clear()
       keys.clear()
@@ -226,6 +234,16 @@ export function createWebAudioOutput({
     release: voice.release,
     pedal: voice.pedal,
     pedals: voice.pedals,
+    notesTo(output) {
+      piano?.stop()
+      piano = output
+        ? createMidiSoundOutput(output, {
+            // A moment of the audio clock on the page's: the piano's note heard with the click.
+            pageTimeOf: (audioTime) => pageNow() + (audioTime - heard()) * 1000,
+            pageNow,
+          })
+        : null
+    },
     loadRecording: (src) => recordings.load(src),
     playRecording: (src, play) => recordings.play(src, play),
     now,

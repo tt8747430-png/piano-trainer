@@ -1,6 +1,6 @@
 import { LONGEST_TAKE_MS, type Played } from '@/entities/take'
 import { PLAY_DELAY, type AudioOutput } from '@/shared/api/audio'
-import type { MidiInput } from '@/shared/api/midi'
+import type { MidiPort } from '@/shared/api/midi'
 import { recorderClicks, type ClickPlan, type NoteSound } from '@/shared/lib/schedule'
 import { isKept, takeOf, type Heard } from './take-of'
 
@@ -45,7 +45,7 @@ function sameProgress(a: RecorderProgress | null, b: RecorderProgress): boolean 
  */
 export function startRecorder(
   audio: AudioOutput,
-  midi: MidiInput,
+  midi: MidiPort,
   plan: RecorderPlan,
   on: RecorderEvents,
 ): () => void {

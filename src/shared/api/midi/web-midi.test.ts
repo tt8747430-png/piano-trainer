@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
+import { midi as midiKey } from '@/shared/lib/music'
 import type { MidiStatus, NoteEvent, PedalEvent } from './types'
-import { createWebMidiInput, hasWebMidi } from './web-midi'
+import { createWebMidi, hasWebMidi } from './web-midi'
 
 class FakeInput {
   onmidimessage: ((event: { data: Uint8Array; timeStamp: number }) => void) | null = null
@@ -15,11 +16,28 @@ class FakeInput {
   }
 }
 
+/** A keyboard's speaker: what it is sent, with when. */
+class FakeOutput {
+  state: 'connected' | 'disconnected' = 'connected'
+  readonly sent: { data: number[]; at: number | undefined }[] = []
+  constructor(
+    readonly id: string,
+    readonly name: string | null,
+  ) {}
+  send(data: number[], at?: number) {
+    this.sent.push({ data, at })
+  }
+}
+
 class FakeAccess {
   readonly inputs = new Map<string, FakeInput>()
+  readonly outputs = new Map<string, FakeOutput>()
   onstatechange: (() => void) | null = null
-  constructor(...inputs: FakeInput[]) {
-    for (const input of inputs) this.inputs.set(input.id, input)
+  constructor(...ports: (FakeInput | FakeOutput)[]) {
+    for (const port of ports) {
+      if (port instanceof FakeOutput) this.outputs.set(port.id, port)
+      else this.inputs.set(port.id, port)
+    }
   }
   plugIn(input: FakeInput) {
     this.inputs.set(input.id, input)
@@ -37,9 +55,9 @@ class FakeAccess {
 }
 
 const withAccess = (access: FakeAccess) =>
-  createWebMidiInput(async () => access as unknown as MIDIAccess)
+  createWebMidi(async () => access as unknown as MIDIAccess)
 
-describe('createWebMidiInput', () => {
+describe('createWebMidi', () => {
   it('connects to every keyboard plugged in', async () => {
     const midi = withAccess(new FakeAccess(new FakeInput('a', 'Piano'), new FakeInput('b', 'Pads')))
     expect(await midi.connect()).toEqual({ state: 'connected', devices: ['Piano', 'Pads'] })
@@ -53,21 +71,21 @@ describe('createWebMidiInput', () => {
     const request = vi.fn(
       async () => new FakeAccess(new FakeInput('a', 'Piano')) as unknown as MIDIAccess,
     )
-    const allowed = createWebMidiInput(request, async () => 'granted')
+    const allowed = createWebMidi(request, async () => 'granted')
     expect(await allowed.reconnect()).toEqual({ state: 'connected', devices: ['Piano'] })
     expect(allowed.current()).toEqual({ state: 'connected', devices: ['Piano'] })
     const asked = vi.fn(async () => new FakeAccess() as unknown as MIDIAccess)
-    const notYet = createWebMidiInput(asked, async () => 'prompt')
+    const notYet = createWebMidi(asked, async () => 'prompt')
     expect(await notYet.reconnect()).toBeNull()
     expect(asked).not.toHaveBeenCalled()
     expect(notYet.current()).toBeNull()
-    const unknown = createWebMidiInput(asked, () => Promise.reject(new TypeError('midi')))
+    const unknown = createWebMidi(asked, () => Promise.reject(new TypeError('midi')))
     expect(await unknown.reconnect()).toBeNull()
     expect(asked).not.toHaveBeenCalled()
   })
 
   it('reports a refused permission', async () => {
-    const midi = createWebMidiInput(() => Promise.reject(new DOMException('no', 'SecurityError')))
+    const midi = createWebMidi(() => Promise.reject(new DOMException('no', 'SecurityError')))
     expect(await midi.connect()).toEqual({ state: 'denied' })
   })
 
@@ -189,7 +207,7 @@ describe('createWebMidiInput', () => {
   it('asks for access once, so a retry never hears a key twice', async () => {
     // Each access the browser grants has its own port objects for the same keyboard.
     const ports: FakeInput[] = []
-    const midi = createWebMidiInput(async () => {
+    const midi = createWebMidi(async () => {
       const port = new FakeInput('a', 'Piano')
       ports.push(port)
       return new FakeAccess(port) as unknown as MIDIAccess
@@ -213,7 +231,7 @@ describe('createWebMidiInput', () => {
   })
 
   it('keeps a refused permission as its status', async () => {
-    const midi = createWebMidiInput(() => Promise.reject(new DOMException('no', 'SecurityError')))
+    const midi = createWebMidi(() => Promise.reject(new DOMException('no', 'SecurityError')))
     await midi.connect()
     expect(midi.current()).toEqual({ state: 'denied' })
   })
@@ -308,5 +326,40 @@ describe('the keyboard heard', () => {
     const { piano, heard } = await twoKeyboards()
     piano.send([0x80, 60, 0])
     expect(heard).toEqual([])
+  })
+})
+
+const midi60 = midiKey(60)
+
+describe('the keyboards’ speakers', () => {
+  const ANY = { device: null, octaveShift: 0, reversedPedal: false }
+
+  it('lists the keyboards that can sound notes', async () => {
+    const midi = withAccess(
+      new FakeAccess(new FakeOutput('o1', 'Piano'), new FakeOutput('o2', 'Pads')),
+    )
+    expect(midi.outputs()).toEqual([])
+    await midi.connect()
+    expect(midi.outputs()).toEqual(['Piano', 'Pads'])
+  })
+
+  it('sounds notes on the keyboard chosen, timed, or the first under Any keyboard', async () => {
+    const piano = new FakeOutput('o1', 'Piano')
+    const pads = new FakeOutput('o2', 'Pads')
+    const midi = withAccess(new FakeAccess(pads, piano))
+    await midi.connect()
+    midi.noteOutput()?.noteOn(midi60, 90, 1500)
+    expect(pads.sent).toEqual([{ data: [0x90, 60, 90], at: 1500 }])
+    midi.configure({ ...ANY, device: 'Piano' })
+    midi.noteOutput()?.noteOff(midi60, 2000)
+    expect(piano.sent).toEqual([{ data: [0x80, 60, 64], at: 2000 }])
+  })
+
+  it('has no speaker where no keyboard has one', async () => {
+    const midi = withAccess(new FakeAccess(new FakeInput('a', 'Piano')))
+    await midi.connect()
+    expect(midi.noteOutput()).toBeNull()
+    midi.configure({ ...ANY, device: 'Pads' })
+    expect(midi.noteOutput()).toBeNull()
   })
 })

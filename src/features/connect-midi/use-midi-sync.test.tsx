@@ -13,7 +13,7 @@ import { useMidiSync } from './use-midi-sync'
 
 function setUp() {
   const audio = createFakeAudio()
-  const keyboard = createFakeMidi()
+  const keyboard = createFakeMidi(undefined, { output: true })
   const settingsStore = createSettingsStore({
     storage: createMemoryStorage(),
     languages: ['en'],
@@ -66,6 +66,19 @@ describe('useMidiSync', () => {
     keyboard.press(C)
     unmount()
     expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: C })
+  })
+
+  it('sends the app’s music to the piano with Play through the piano on, and back when it goes', async () => {
+    const { audio, keyboard, settingsStore } = setUp()
+    await act(() => keyboard.connect())
+    expect(audio.notesOut).toBeNull()
+    act(() => setMidi(settingsStore, { throughPiano: true }))
+    expect(audio.notesOut).not.toBeNull()
+    act(() => keyboard.setStatus({ state: 'no-device' }))
+    expect(audio.notesOut).toBeNull()
+    act(() => keyboard.setStatus({ state: 'connected', devices: ['Keyboard'] }))
+    act(() => setMidi(settingsStore, { throughPiano: false }))
+    expect(audio.notesOut).toBeNull()
   })
 
   it('hands every pedal to the voice, the switch off too', () => {

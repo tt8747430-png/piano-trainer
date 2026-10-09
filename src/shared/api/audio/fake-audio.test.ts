@@ -93,6 +93,17 @@ describe('the fake’s live voice', () => {
   })
 })
 
+describe('the fake’s piano', () => {
+  it('keeps the speaker the notes are sent to', () => {
+    const audio = createFakeAudio()
+    const output = { noteOn() {}, noteOff() {}, clear() {} }
+    audio.notesTo(output)
+    expect(audio.notesOut).toBe(output)
+    audio.notesTo(null)
+    expect(audio.notesOut).toBeNull()
+  })
+})
+
 describe('the fake’s recordings', () => {
   it('records what it loads and each play of a recording', () => {
     const audio = createFakeAudio()

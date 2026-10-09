@@ -13,6 +13,14 @@ export interface PlayHandle {
   readonly until: number
 }
 
+/** A keyboard's speaker the app's notes can sound on: times on the page's clock, in milliseconds. */
+export interface NoteOutput {
+  noteOn(midi: Midi, velocity: number, pageTime: number): void
+  noteOff(midi: Midi, pageTime: number): void
+  /** Drops what is queued, where the output can. */
+  clear(): void
+}
+
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
   /**
@@ -36,6 +44,11 @@ export interface AudioOutput {
   pedal(pedal: PedalKind, down: boolean): void
   /** The pedals now: the same object until one changes. */
   pedals(): Readonly<Record<PedalKind, boolean>>
+  /**
+   * The scheduled notes sound on `output` instead of the browser (spec 2026-10-09 §3.3): the click
+   * and a recording stay in the browser, and so does the live voice; null: the browser again.
+   */
+  notesTo(output: NoteOutput | null): void
   /** Readies a recording (fetched whole) so a Play can start it at once. */
   loadRecording(src: string): void
   /** Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until `play.until`. */

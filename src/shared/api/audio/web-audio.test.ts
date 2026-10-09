@@ -196,6 +196,48 @@ describe('createWebAudioOutput', () => {
   })
 })
 
+describe('through the piano', () => {
+  function pianoSpeaker() {
+    const sent: string[] = []
+    return {
+      sent,
+      output: {
+        noteOn: (key: number, velocity: number) => void sent.push(`on ${key} ${velocity}`),
+        noteOff: (key: number) => void sent.push(`off ${key}`),
+        clear: () => void sent.push('clear'),
+      },
+    }
+  }
+
+  it('sends the notes to the piano, and still sounds the click in the browser', () => {
+    const { context, audio } = setUp()
+    const { output, sent } = pianoSpeaker()
+    audio.notesTo(output)
+    audio.play([A4, CLICK], 0)
+    expect(sent).toEqual(['on 69 104', 'off 69'])
+    expect(context.oscillators).toHaveLength(1)
+  })
+
+  it('sounds the notes in the browser again once the piano is let go', () => {
+    const { context, audio } = setUp()
+    const { output, sent } = pianoSpeaker()
+    audio.notesTo(output)
+    audio.notesTo(null)
+    audio.play([A4], 0)
+    expect(sent).toEqual(['clear'])
+    expect(context.oscillators).toHaveLength(3)
+  })
+
+  it('lets go of the piano’s notes on Stop', () => {
+    const { audio } = setUp()
+    const { output, sent } = pianoSpeaker()
+    audio.notesTo(output)
+    audio.play([A4], 0)
+    audio.stop()
+    expect(sent).toContain('clear')
+  })
+})
+
 describe('the live voice', () => {
   it('sounds a pressed key until it is let go: oscillators with no stop', () => {
     const { context, audio } = setUp()
