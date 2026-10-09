@@ -1,6 +1,7 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
   KeyboardSettings,
+  MidiSettings,
   PracticeToggles,
   RecorderSettings,
   SettingsState,
@@ -16,3 +17,4 @@ export const selectTrainer = (state: SettingsState): TrainerSettings => state.tr
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
+export const selectMidi = (state: SettingsState): MidiSettings => state.midi

@@ -3,11 +3,16 @@ import {
   isOneOf,
   KEY_SIZES,
   NAMED_KEYS,
+  OCTAVE_SHIFTS,
+  PEDAL_WAYS,
   SWIPES,
   type KeySize,
   type NamedKeys,
+  type OctaveShift,
+  type PedalWay,
   type Swipe,
 } from '@/shared/lib'
+import { TOUCHES, type Touch } from '@/shared/lib/schedule'
 
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
@@ -56,6 +61,22 @@ export type Sidebar = (typeof SIDEBARS)[number]
 export interface RecorderSettings {
   /** The click goes on after the count-in, while the take records. */
   readonly click: boolean
+  /** The song's tune plays under the take (spec 2026-10-09 §4.2). */
+  readonly tune: boolean
+}
+
+/** The MIDI keyboard's settings (spec 2026-10-09 §3.1). */
+export interface MidiSettings {
+  /** The keyboard heard, by its name; null: any. */
+  readonly device: string | null
+  /** The app sounds the keys played on it: for a keyboard with no speaker. */
+  readonly sound: boolean
+  /** The app's music sounds on its speaker. */
+  readonly throughPiano: boolean
+  readonly octaveShift: OctaveShift
+  /** How loud the app hears its velocities. */
+  readonly touch: Touch
+  readonly pedal: PedalWay
 }
 
 export interface SettingsState {
@@ -66,6 +87,7 @@ export interface SettingsState {
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
+  midi: MidiSettings
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -79,7 +101,20 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
-export const DEFAULT_RECORDER: RecorderSettings = { click: true }
+export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
+
+/** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
+export const DEFAULT_MIDI: MidiSettings = {
+  device: null,
+  sound: false,
+  throughPiano: false,
+  octaveShift: 0,
+  touch: 'normal',
+  pedal: 'normal',
+}
+
+/** The longest keyboard name kept. */
+export const DEVICE_NAME_MAX = 100
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
 
@@ -97,6 +132,9 @@ export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
+export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
+export const isTouch = isOneOf(TOUCHES)
+export const isPedalWay = isOneOf(PEDAL_WAYS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

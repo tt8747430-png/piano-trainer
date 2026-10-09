@@ -6,7 +6,9 @@ import {
   setKeyboard,
   setLocale,
   setPracticeToggle,
+  setMidi,
   setRecorderClick,
+  setRecorderTune,
   setSidebar,
   setTheme,
 } from './index'
@@ -58,9 +60,23 @@ describe('set-preference', () => {
   it('setRecorderClick saves whether the click goes on while a take records', () => {
     const { storage, store } = setUp()
     setRecorderClick(store, false)
-    expect(saved(storage).recorder).toEqual({ click: false })
+    expect(saved(storage).recorder).toEqual({ click: false, tune: false })
     setRecorderClick(store, true)
     expect(store.getState().recorder.click).toBe(true)
+  })
+
+  it('setRecorderTune saves whether the tune plays under a take, keeping the click', () => {
+    const { storage, store } = setUp()
+    setRecorderClick(store, false)
+    setRecorderTune(store, true)
+    expect(saved(storage).recorder).toEqual({ click: false, tune: true })
+  })
+
+  it('setMidi saves one MIDI setting and keeps the rest', () => {
+    const { storage, store } = setUp()
+    setMidi(store, { device: 'Piano' })
+    setMidi(store, { touch: 'light' })
+    expect(saved(storage).midi).toMatchObject({ device: 'Piano', touch: 'light', sound: false })
   })
 
   it('setAutoNext saves whether a trainer moves on by itself', () => {

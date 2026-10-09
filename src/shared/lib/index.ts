@@ -19,6 +19,7 @@ export {
   type NamedKeys,
   type Swipe,
 } from './keyboard-choices'
+export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
 export {
   BLACK_HEIGHT,
   keyAt,

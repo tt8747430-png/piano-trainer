@@ -4,6 +4,7 @@ export {
   THEMES,
   defaultKeyboard,
   type KeyboardSettings,
+  type MidiSettings,
   type PracticeToggle,
   type RecorderSettings,
   type Sidebar,
@@ -15,6 +16,7 @@ export { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from '.
 export {
   selectKeyboard,
   selectLocale,
+  selectMidi,
   selectPractice,
   selectRecorder,
   selectSidebar,

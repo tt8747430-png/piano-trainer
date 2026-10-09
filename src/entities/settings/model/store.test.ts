@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
 import {
+  DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
@@ -26,6 +27,7 @@ const DEFAULTS = {
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
+  midi: DEFAULT_MIDI,
 }
 
 describe('createSettingsStore', () => {
@@ -41,7 +43,15 @@ describe('createSettingsStore', () => {
       recording: true,
     })
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
-    expect(DEFAULT_RECORDER).toEqual({ click: true })
+    expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false })
+    expect(DEFAULT_MIDI).toEqual({
+      device: null,
+      sound: false,
+      throughPiano: false,
+      octaveShift: 0,
+      touch: 'normal',
+      pedal: 'normal',
+    })
   })
 
   it('saves under pt-settings with its version', () => {
@@ -50,7 +60,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 8,
+      version: 9,
     })
   })
 
@@ -74,16 +84,24 @@ describe('createSettingsStore', () => {
         map: true,
         typing: true,
       },
-      recorder: { click: false },
+      recorder: { click: false, tune: true },
       sidebar: 'collapsed',
+      midi: {
+        device: 'Piano',
+        sound: true,
+        throughPiano: false,
+        octaveShift: 1,
+        touch: 'light',
+        pedal: 'normal',
+      },
     }
-    expect(restored(saved, 8)).toEqual(saved)
+    expect(restored(saved, 9)).toEqual(saved)
   })
 
   it('gives a version-7 save the sidebar open, keeping the rest', () => {
     const settings = restored({ theme: 'dark', recorder: { click: false } }, 7)
     expect(settings.sidebar).toBe('open')
-    expect(settings.recorder).toEqual({ click: false })
+    expect(settings.recorder).toEqual({ click: false, tune: false })
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
@@ -92,7 +110,7 @@ describe('createSettingsStore', () => {
 
   it('gives a version-6 save the recorder’s click on, keeping the rest', () => {
     const settings = restored({ theme: 'dark', trainer: { autoNext: true } }, 6)
-    expect(settings.recorder).toEqual({ click: true })
+    expect(settings.recorder).toEqual(DEFAULT_RECORDER)
     expect(settings.trainer.autoNext).toBe(true)
   })
 
@@ -203,6 +221,30 @@ describe('createSettingsStore', () => {
     expect(settings.trainer).toEqual(DEFAULT_TRAINER)
     expect(settings.theme).toBe('dark')
     expect(settings.practice.countIn).toBe(true)
+  })
+
+  it('gives a version-8 save the MIDI keyboard’s defaults and no tune, keeping its click', () => {
+    const settings = restored({ theme: 'dark', recorder: { click: false } }, 8)
+    expect(settings.midi).toEqual(DEFAULT_MIDI)
+    expect(settings.recorder).toEqual({ click: false, tune: false })
+    expect(settings.theme).toBe('dark')
+  })
+
+  it('restores the MIDI keyboard’s settings, an unknown value taking its default alone', () => {
+    const midi = {
+      device: 'Piano',
+      sound: true,
+      throughPiano: true,
+      octaveShift: -2,
+      touch: 'heavy',
+      pedal: 'reversed',
+    }
+    expect(restored({ midi }, 9).midi).toEqual(midi)
+    expect(
+      restored({ midi: { ...midi, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' } }, 9)
+        .midi,
+    ).toEqual({ ...midi, octaveShift: 0, touch: 'normal', device: null, sound: false })
+    expect(restored({ midi: { device: 'x'.repeat(101) } }, 9).midi.device).toBeNull()
   })
 
   it('turns an auto-next that is not a boolean off', () => {
