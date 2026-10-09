@@ -1,12 +1,6 @@
 import type { Midi } from '@/shared/lib/music'
-import type { NoteSound } from '@/shared/lib/schedule'
+import { velocityGain, type NoteSound } from '@/shared/lib/schedule'
 import type { PedalPress, Take, TakeNote } from './types'
-
-/** The loudest key's gain, struck at 127: the arranged music's notes sound about 0.1–0.2. */
-const LOUDEST = 0.3
-
-/** How loud a key struck at `velocity` (1–127) sounds: as the square of the velocity, as a piano's. */
-const takeGain = (velocity: number): number => LOUDEST * (velocity / 127) ** 2
 
 /** When a key let go at `up` stops sounding: on to the pedal's release where the pedal was down. */
 const releasedAt = (up: number, pedal: readonly PedalPress[]): number =>
@@ -52,7 +46,7 @@ export function takeSounds(take: Take): NoteSound[] {
       midi: note.midi,
       at: note.at / 1000,
       duration: (end - note.at) / 1000,
-      velocity: takeGain(note.velocity),
+      velocity: velocityGain(note.velocity),
     }
   })
 }

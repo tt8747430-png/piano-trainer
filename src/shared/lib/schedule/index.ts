@@ -38,3 +38,11 @@ export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './soun
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'
 export { recorderClicks, type ClickPlan, type RecorderClicks } from './recorder-clicks'
 export type { GridBar } from './grid'
+export {
+  gainVelocity,
+  HAND_VELOCITY,
+  TOUCHES,
+  touchVelocity,
+  velocityGain,
+  type Touch,
+} from './velocity'
