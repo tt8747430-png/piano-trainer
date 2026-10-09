@@ -51,4 +51,9 @@ export const practice = {
   },
   // The count after a colon reads right for any number, in both languages.
   gaps: 'To check: {{count}}',
+  // Free play: the piano played freely, written and named.
+  freePlay: {
+    score: 'Live score',
+    empty: 'Play, and it is written here.',
+  },
 } as const

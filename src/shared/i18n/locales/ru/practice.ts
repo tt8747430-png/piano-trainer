@@ -44,4 +44,8 @@ export const practice: LocaleResources['practice'] = {
     reading: 'Чтение',
   },
   gaps: 'На проверку: {{count}}',
+  freePlay: {
+    score: 'Живые ноты',
+    empty: 'Играйте — ноты появятся здесь.',
+  },
 }

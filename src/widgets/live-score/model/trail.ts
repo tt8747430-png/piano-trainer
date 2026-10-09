@@ -30,7 +30,7 @@ export function strike(trail: Trail, key: Midi, time: number): Trail {
 }
 
 /** A bar's four beats: each chord is a whole note. */
-const BAR_TICKS = 4 * TICKS_PER_BEAT
+export const BAR_TICKS = 4 * TICKS_PER_BEAT
 /** The treble's keys from middle C up. */
 const MIDDLE_C = 60
 
