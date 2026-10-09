@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong } from '@/features/edit-piece'
 import { keyFromParam, keyParam, METERS, note, type Meter } from '@/shared/lib/music'
-import { KeyChoice, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { KeyChoice, NameField, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
 
 const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 
@@ -49,13 +48,11 @@ export function NewSongSheet() {
         }
       >
         <div className="flex flex-col gap-6">
-          <Input
-            aria-label={t('making.name')}
-            placeholder={t('making.name')}
+          <NameField
+            label={t('making.name')}
             value={title}
             maxLength={TITLE_MAX}
             onChange={(event) => setTitle(event.target.value)}
-            className="h-14 px-4 font-display text-xl font-semibold"
           />
           <KeyChoice value={key} onChange={setKey} />
           <div className="flex flex-col gap-2">

@@ -148,7 +148,7 @@ describe('Settings', () => {
     const { progressStore } = await renderApp('/settings')
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
     await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    await user.click(screen.getByRole('button', { name: 'Keep it' }))
     expect(progressStore.getState().learned['chords:tri']).toBeDefined()
     await user.click(screen.getByRole('button', { name: 'Reset progress' }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))

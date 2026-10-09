@@ -1,4 +1,3 @@
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   LEFT_FIGURE_IDS,
@@ -11,9 +10,8 @@ import {
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import type { OwnPatternDraft } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, Dropdown, ScreenHeader } from '@/shared/ui'
+import { BackButton, Dropdown, NameField, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { InputGroup, InputGroupInput } from '@/shared/ui/primitives/input-group'
 import { PatternPlay, PatternStaff } from '@/widgets/pattern-music'
 import { usePatternEditor } from '../model/use-pattern-editor'
 
@@ -34,7 +32,6 @@ export function PatternEditor({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const nameId = useId()
   const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
     <div className="flex flex-col gap-6">
@@ -50,19 +47,12 @@ export function PatternEditor({
           save()
         }}
       >
-        <label htmlFor={nameId} className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">{t('patterns.editor.name')}</span>
-          <InputGroup className="h-12 rounded-2xl bg-card">
-            <InputGroupInput
-              id={nameId}
-              value={draft.name}
-              maxLength={OWN_NAME_MAX}
-              autoComplete="off"
-              onChange={(event) => change({ name: event.target.value })}
-              className="text-lg font-semibold md:text-lg"
-            />
-          </InputGroup>
-        </label>
+        <NameField
+          label={t('patterns.editor.name')}
+          value={draft.name}
+          maxLength={OWN_NAME_MAX}
+          onChange={(event) => change({ name: event.target.value })}
+        />
         <div className="flex flex-wrap gap-2">
           <Dropdown
             label={t('patterns.rightHand')}

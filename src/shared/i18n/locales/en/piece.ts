@@ -25,7 +25,7 @@ export const piece = {
   },
   scaleOf: 'Scale: {{scale}}',
   key: 'Key',
-  meter: 'Meter',
+  meter: 'Time signature',
   credit: {
     authors: 'Authors',
     'words-and-music': 'Words and music',

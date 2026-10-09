@@ -13,7 +13,7 @@ export const songs = {
   making: {
     title: 'New song',
     name: 'Title',
-    meter: 'Meter',
+    meter: 'Time signature',
     make: 'Make',
     makeAndRecord: 'Record',
   },

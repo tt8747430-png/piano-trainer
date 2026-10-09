@@ -11,7 +11,7 @@ export const settings: LocaleResources['settings'] = {
     reset: 'Сбросить прогресс',
     title: 'Сбросить прогресс?',
     body: 'Выученные шаги, открытые песни и ответы теста на этом устройстве будут удалены.',
-    cancel: 'Отмена',
+    cancel: 'Оставить',
     confirm: 'Сбросить',
   },
 }

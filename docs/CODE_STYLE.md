@@ -32,7 +32,7 @@ A container wires data to presentational children. One job each.
   one field of a page's `grid-fields`), `NavTabs` with `NavTab` (a subject's pages as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
   its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
-  (music typed by name), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
+  (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
   `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an

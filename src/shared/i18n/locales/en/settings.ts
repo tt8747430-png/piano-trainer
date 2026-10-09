@@ -9,7 +9,7 @@ export const settings = {
     reset: 'Reset progress',
     title: 'Reset progress?',
     body: 'Learned steps, practised songs and quiz answers on this device will be cleared.',
-    cancel: 'Cancel',
+    cancel: 'Keep it',
     confirm: 'Reset',
   },
 } as const
