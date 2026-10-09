@@ -1,6 +1,6 @@
 import { spellChord, type Chord } from './chord'
 import { MIDDLE_C } from './keyboard'
-import { inverted, lastInversion } from './place'
+import { closeFrom } from './place'
 import { pitchClassOf } from './note'
 import { midi, type Midi } from './pitch'
 
@@ -18,10 +18,10 @@ const middle = (keys: readonly Midi[]): number =>
 
 /**
  * A row of chords as a hand plays it smoothly: each chord over its root in the bass, or over the bass
- * a slash chord writes (`C/G`), the right hand in the inversion (in its own octave or an octave down)
- * whose middle lies nearest the chord before's, the first in root position from middle C. A chord of
- * five notes or more leaves its root to the bass when the bass plays it (a 9th chord's hand is its
- * 3rd, 5th, 7th and 9th), and the bass always sits under the hand.
+ * a slash chord writes (`C/G`), the right hand held close from one of its tones (in its own octave or
+ * an octave down), the one whose middle lies nearest the chord before's, the first from its lowest
+ * tone at middle C. A chord of five notes or more leaves its root to the bass when the bass plays it
+ * (a 9th chord's hand is its 3rd, 5th, 7th and 9th), and the bass always sits under the hand.
  */
 export function voiceLead(chords: readonly Chord[]): Midi[][] {
   let previous: readonly Midi[] | null = null
@@ -29,9 +29,15 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
     const tones = spellChord(chord.root, chord.quality)
     const rootClass = tones[0]?.pitchClass ?? 0
     const held = tones.length >= ROOTLESS_FROM && !chord.bass ? tones.slice(1) : tones
-    const options = Array.from({ length: lastInversion(held.length) + 1 }, (_, inversion) =>
-      inverted(held, midi(MIDDLE_C + rootClass), inversion).map((placed) => placed.midi),
-    ).flatMap((keys) => [keys, keys.map((key) => midi(key - 12))])
+    // The hand from each of its tones, held close: a triad's or a 7th chord's inversions, and a
+    // bigger chord inside an octave (a 13th's 3rd, 5th, 13th, 7th and 9th, not a stack an 11th wide).
+    const options = held
+      .map((start) =>
+        closeFrom(held, start, midi(MIDDLE_C + rootClass + (start.semitones % 12))).map(
+          (placed) => placed.midi,
+        ),
+      )
+      .flatMap((keys) => [keys, keys.map((key) => midi(key - 12))])
     const [first = []] = options
     const target = previous === null ? null : middle(previous)
     const hand =

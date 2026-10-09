@@ -24,6 +24,7 @@ export const learn: LocaleResources['learn'] = {
     quality: 'Вид',
     suspension: 'Задержание',
     none: 'Нет',
+    handFrom: 'Правая рука от',
     triads: {
       maj: 'Мажорное',
       min: 'Минорное',

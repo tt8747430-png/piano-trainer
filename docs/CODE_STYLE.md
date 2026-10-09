@@ -257,8 +257,13 @@ tempo)` sounds it and `notate(run)` writes it.
   chords with `walkSounds`.
 - Randomness is injected (`random: () => number`), so every quiz test is deterministic.
 - **The explorers place tones with `placeChord(tones, { inversion, bothHands })` / `placeScale(root, kind, start)`**
-  (a scale's chords with `placeScaleChords`, a key's borrowed ones with `placeBorrowedChords`), and a chord of `notes`
+  (a scale's chords with `placeScaleChords`, a key's borrowed ones with `placeBorrowedChords`), and a stack of `notes`
   notes has the inversions `lastInversion(notes)` gives: the validators, the segments and the keyboard all ask it.
+- **A chord of five notes or more takes two hands** (ADR 0035, `TWO_HANDS_FROM`): `placeChord` with `bothHands`
+  gives the left hand the root (and the perfect 5th from six notes) and holds the rest close in the right
+  (`closeFrom`); a built chord's inversions are `chordInversions(tones)` (from five notes root position, and 3 where
+  the right hand can start from its 7th), fitted by `fitChordInversion`. With one hand `placeChord` still spells the
+  whole stack, which is what a trainer or an example asks for. Never stack a big chord in one hand to be played.
 - Content is data validated by tests: a chart that does not parse, an unknown chord symbol, or a missing Russian
   text fails CI.
 

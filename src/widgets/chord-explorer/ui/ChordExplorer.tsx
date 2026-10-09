@@ -100,7 +100,7 @@ export function ChordExplorer({
           </div>
         </div>
       </div>
-      <ChordBuilder chord={chord} notes={built.tones.length} onChange={change} />
+      <ChordBuilder chord={chord} tones={built.tones} onChange={change} />
       {quality && takesTensions(quality) ? (
         <ChordTensions
           root={built.root}

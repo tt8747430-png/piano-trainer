@@ -56,12 +56,12 @@ describe('search params', () => {
   it('keep what is valid', async () => {
     expect(
       await searchAt(
-        '/practice/chords?root=Bb&triad=min&size=9&seventh=major&inversion=2&hands=both&step=chords:sev',
+        '/practice/chords?root=Bb&triad=min&size=7&seventh=major&inversion=2&hands=both&step=chords:sev',
       ),
     ).toEqual({
       root: 'Bb',
       triad: 'min',
-      size: 9,
+      size: 7,
       seventh: 'major',
       added: '',
       alter: '',
@@ -69,6 +69,9 @@ describe('search params', () => {
       hands: 'both',
       step: 'chords:sev',
     })
+    // From five notes a chord is in root position or has its right hand from the 7th (ADR 0035).
+    expect(await searchAt('/practice/chords?size=9&inversion=3')).toMatchObject({ inversion: 3 })
+    expect(await searchAt('/practice/chords?size=9&inversion=2')).toMatchObject({ inversion: 0 })
     expect(await searchAt('/practice/chords?size=13&alter=b9s11')).toMatchObject({
       size: 13,
       alter: 'b9s11',

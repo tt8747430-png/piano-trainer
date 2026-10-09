@@ -188,7 +188,7 @@ it. `@` → `src`.
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `writtenSymbol`, `qualityRootSpelling`,
   `readChordSymbol`, `keySymbol`, `keyMode`, `fitInversion`, `STACK_SIZES`; `nameChords`, the Chord finder's, with the tones
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
-  `placeChord` over any tones, `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
+  `placeChord` over any tones (from five notes in two hands, the root and a 13th's 5th in the left, the rest close in the right; `chordInversions`, ADR 0035), `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
   `passing-chords.ts`, `voice-lead.ts` (a row's hands: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by

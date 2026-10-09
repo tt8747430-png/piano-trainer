@@ -3,6 +3,7 @@ import {
   addedOf,
   ALTERATION_SIGN,
   alterationsOf,
+  chordInversions,
   SEVENTH_DEGREE,
   seventhsOf,
   sizesOf,
@@ -10,11 +11,13 @@ import {
   withAlterations,
   type AddedTone,
   type BuiltSize,
+  type Tone,
   type Triad,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
 import { InversionChoice, Labelled, NoteChoice, Segmented, ToggleChips } from '@/shared/ui'
-import { isSuspended, type ChordView } from '../model/chord-view'
+import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
+import { RightHandFrom } from './RightHandFrom'
 
 /** A chord's quality: its 3rd and 5th. A suspension is a field of its own. */
 const QUALITIES = ['maj', 'min', 'aug', 'dim'] as const satisfies readonly Triad[]
@@ -46,15 +49,17 @@ const SIZE_NAMES = {
  * offered only what fits the fields before it: its root (letter and accidental), a row of its own; its
  * quality (major, minor, augmented, diminished), its size, its suspension (a major chord's); then its 7th, the tones it adds and its alterations as
  * chips, each only where the chord takes one; then how it is held: its inversion, and one hand or two.
+ * A chord of five notes or more takes two hands (ADR 0035): in the inversion's place, where its right
+ * hand starts, when it has more than one start.
  */
 export function ChordBuilder({
   chord,
-  notes,
+  tones,
   onChange,
 }: {
   chord: ChordView
-  /** How many notes the chord has: it has that many positions. */
-  notes: number
+  /** The chord's tones: how many say its inversions, and whether one hand holds it. */
+  tones: readonly Tone[]
   onChange: (change: Partial<ChordView>) => void
 }) {
   const { t } = useTranslation(['learn', 'music', 'common'])
@@ -66,6 +71,7 @@ export function ChordBuilder({
   const sevenths = seventhsOf(parts.triad, parts.size)
   const added = addedOf(parts)
   const alterations = alterationsOf(parts)
+  const twoHands = takesTwoHands(tones.length)
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
@@ -152,17 +158,30 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
-      <Labelled label={t('music:inversion.label')}>
-        <InversionChoice
-          notes={notes}
-          value={chord.inversion}
-          onChange={(inversion) => onChange({ inversion })}
-        />
-      </Labelled>
+      {twoHands ? (
+        chordInversions(tones).length > 1 ? (
+          <Labelled label={t('learn:builder.handFrom')}>
+            <RightHandFrom
+              tones={tones}
+              value={chord.inversion}
+              onChange={(inversion) => onChange({ inversion })}
+            />
+          </Labelled>
+        ) : null
+      ) : (
+        <Labelled label={t('music:inversion.label')}>
+          <InversionChoice
+            notes={tones.length}
+            value={chord.inversion}
+            onChange={(inversion) => onChange({ inversion })}
+          />
+        </Labelled>
+      )}
       <Labelled label={t('learn:handsLabel')}>
         <Segmented
           label={t('learn:handsLabel')}
-          value={chord.hands}
+          value={twoHands ? 'both' : chord.hands}
+          disabled={twoHands}
           options={[
             { value: 'rh', label: t('common:hands.rh') },
             { value: 'both', label: t('common:hands.both') },

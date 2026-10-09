@@ -211,6 +211,29 @@ describe('Practice → Chords', () => {
     ).toEqual(['Root', '1st', '2nd'])
   })
 
+  it('shares a chord of five notes between the hands, the right hand from its 3rd or its 7th', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chords?size=9')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9' })).toBeInTheDocument()
+    // Two hands whatever was chosen: one hand cannot hold the stack.
+    const hands = within(screen.getByRole('radiogroup', { name: 'Hands' }))
+    expect(hands.getByRole('radio', { name: 'Both hands' })).toBeChecked()
+    expect(hands.getByRole('radio', { name: 'Right hand' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    expect(screen.queryByRole('radiogroup', { name: 'Inversion' })).not.toBeInTheDocument()
+    const from = within(screen.getByRole('radiogroup', { name: 'Right hand from' }))
+    expect(from.getAllByRole('radio').map((radio) => radio.textContent)).toEqual(['3 E', '♭7 B♭'])
+    const keyboard = within(screen.getByRole('group', { name: 'Keyboard' }))
+    expect(keyboard.getByRole('button', { name: 'C3' })).toHaveTextContent('1')
+    expect(keyboard.getByRole('button', { name: 'C4' })).not.toHaveTextContent('1')
+    expect(keyboard.getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+    await user.click(from.getByRole('radio', { name: '♭7 B♭' }))
+    expect(router.state.location.search).toMatchObject({ size: 9, inversion: 3 })
+    expect(keyboard.getByRole('button', { name: 'A sharp 3' })).toHaveTextContent('♭7')
+  })
+
   it('opened from a path step, offers its check and its learned toggle', async () => {
     const user = userEvent.setup()
     const { progressStore } = await renderApp(

@@ -22,6 +22,14 @@ describe('viewChord', () => {
   })
 })
 
+describe('viewChord, from five notes', () => {
+  it('shares the chord between two hands, whichever hands the view names', () => {
+    const { placed } = viewChord({ ...C, size: 9 })
+    expect(placed.lh.map((key) => key.midi)).toEqual([48])
+    expect(placed.rh.map((key) => key.midi)).toEqual([64, 67, 70, 74])
+  })
+})
+
 describe('changedView', () => {
   it('fits the parts to one another', () => {
     const dominant = { ...C, size: 9 as const, alter: 'b9' }
@@ -44,6 +52,12 @@ describe('changedView', () => {
       triad: 'maj',
       size: 11,
     })
+  })
+
+  it('keeps the right hand’s start a bigger chord has: from the 7th, else root position', () => {
+    expect(changedView({ ...C, size: 7, inversion: 3 }, { size: 9 }).inversion).toBe(3)
+    expect(changedView({ ...C, size: 7, inversion: 1 }, { size: 9 }).inversion).toBe(0)
+    expect(changedView({ ...C, size: 9, inversion: 3 }, { size: 7 }).inversion).toBe(3)
   })
 
   it('keeps the inversion the smaller chord has', () => {

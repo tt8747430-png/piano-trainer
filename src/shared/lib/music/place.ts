@@ -62,9 +62,92 @@ export function inverted(tones: readonly Tone[], key: Midi, inversion: number): 
     .sort((a, b) => a.midi - b.midi)
 }
 
+/** From this many notes a chord takes two hands: one hand cannot hold its stack (ADR 0035). */
+export const TWO_HANDS_FROM = 5
+
+/** The most keys the right hand holds of a chord in two hands. */
+const HAND_KEYS = 5
+const PERFECT_FIFTH = 7
+/** The inversion in which a two-handed chord's right hand starts from its 7th. */
+const FROM_SEVENTH = 3
+
 /**
- * A chord's tones, from its root up, as the explorers place them: the right hand from the root at or
- * above middle C in an inversion, and for both hands the root an octave below in the left hand.
+ * A chord of five notes or more shared between the hands (ADR 0035): the left hand takes the root
+ * and, from six notes, the perfect 5th over it; where the right hand would still hold more than five
+ * keys, the 7th too (its shell), then an altered 5th. The right hand takes the rest, every tone once.
+ */
+function sharedOut(tones: readonly Tone[]): { lh: Tone[]; rh: Tone[] } {
+  const [root, ...rest] = tones
+  if (!root) throw new RangeError('A chord has at least its root')
+  const lh = [root]
+  let rh = rest
+  const give = (wanted: (tone: Tone) => boolean) => {
+    const tone = rh.find(wanted)
+    if (!tone) return
+    lh.push(tone)
+    rh = rh.filter((each) => each !== tone)
+  }
+  if (tones.length > TWO_HANDS_FROM) {
+    give((tone) => tone.role === '5th' && tone.semitones === PERFECT_FIFTH)
+  }
+  if (rh.length > HAND_KEYS) give((tone) => tone.role === '7th')
+  if (rh.length > HAND_KEYS) give((tone) => tone.role === '5th')
+  return { lh, rh }
+}
+
+/** The tone a two-handed chord's right hand can turn to start from: its 7th, or the 6th of a 6/9. */
+const turnTone = (rh: readonly Tone[]): Tone | undefined =>
+  rh.find((tone) => tone.role === '7th') ??
+  rh.find((tone) => tone.role === '13th' && tone.semitones < 12)
+
+/** A hand's tones held close: `start` on its key, each other tone on the nearest key above it. */
+export const closeFrom = (tones: readonly Tone[], start: Tone, startKey: Midi): PlacedTone[] =>
+  tones
+    .map((tone) => ({
+      tone,
+      midi: midi(startKey + pitchClass(tone.pitchClass - start.pitchClass)),
+    }))
+    .sort((a, b) => a.midi - b.midi)
+
+/**
+ * The inversions a built chord is shown in. Up to four notes: root position and one per tone after
+ * the root. From five, in two hands (ADR 0035), its root stays in the bass: root position, the right
+ * hand from its lowest tone (the 3rd), and the 3rd inversion where that hand has a 7th or 6th to
+ * start from instead (3-5-7-9 and 7-9-3-5).
+ */
+export function chordInversions(tones: readonly Tone[]): readonly number[] {
+  if (tones.length < TWO_HANDS_FROM) return INVERSIONS.slice(0, lastInversion(tones.length) + 1)
+  return turnTone(sharedOut(tones).rh) ? [0, FROM_SEVENTH] : [0]
+}
+
+/** An inversion a built chord is shown in: the one asked, else the nearest it has under it. */
+export const fitChordInversion = (inversion: number, tones: readonly Tone[]): number =>
+  chordInversions(tones).findLast((each) => each <= inversion) ?? 0
+
+/** A chord of five notes or more in two hands from its root's key: see `sharedOut` and `chordInversions`. */
+function twoHands(tones: readonly Tone[], key: Midi, inversion: number): PlacedChord {
+  if (!chordInversions(tones).includes(inversion)) {
+    throw new RangeError(
+      `A chord of ${tones.length} notes in two hands has no inversion ${inversion}`,
+    )
+  }
+  const { lh, rh } = sharedOut(tones)
+  const turn = inversion === FROM_SEVENTH ? turnTone(rh) : undefined
+  const start = turn ?? rh[0]
+  if (!start) throw new RangeError('A chord in two hands has a note for the right hand')
+  // The hand from the 7th sits under the hand from the 3rd, so both stay near middle C.
+  const startKey = midi(key + (start.semitones % 12) - (turn ? 12 : 0))
+  return {
+    lh: lh.map((tone) => ({ tone, midi: midi(key - 12 + tone.semitones) })),
+    rh: closeFrom(rh, start, startKey),
+  }
+}
+
+/**
+ * A chord's tones, from its root up, as the explorers place them. In one hand: the whole stack from
+ * the root at or above middle C in an inversion (a chord spelled out, whatever its size). In both
+ * hands: up to four notes, that hand over the root an octave below; from five notes, shared between
+ * the hands as a pianist holds it (`sharedOut`, ADR 0035).
  */
 export function placeChord(
   tones: readonly Tone[],
@@ -73,6 +156,9 @@ export function placeChord(
   const [root] = tones
   if (!root) throw new RangeError('A chord has at least its root')
   const key = midi(MIDDLE_C + root.pitchClass)
+  if (options.bothHands && tones.length >= TWO_HANDS_FROM) {
+    return twoHands(tones, key, options.inversion)
+  }
   return {
     rh: inverted(tones, key, options.inversion),
     lh: options.bothHands ? [{ tone: root, midi: midi(key - 12) }] : [],

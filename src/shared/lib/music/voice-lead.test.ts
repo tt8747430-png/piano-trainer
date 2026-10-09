@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { chordRootSpelling, qualityIntervals, type ChordQuality } from './chord'
+import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, type ChordQuality } from './chord'
+import { note } from './note'
 import { parseChordSymbol } from './chord-symbol'
 import { pitchClass } from './pitch'
 import { voiceLead } from './voice-lead'
@@ -49,6 +50,17 @@ describe('voiceLead', () => {
     expect(hand).toHaveLength(5)
     expect(hand.map((key) => key % 12)).not.toContain(7)
     expect(Math.min(...hand)).toBeGreaterThan(bass)
+  })
+
+  it('holds a big chord’s hand close, inside an octave: G13 is B D E F A, not a stack an 11th wide', () => {
+    const [[, ...hand] = []] = voiced('G13')
+    expect(hand).toEqual([71, 74, 76, 77, 81])
+    // Every chord of the table that one hand cannot stack.
+    for (const quality of CHORD_QUALITIES.filter((each) => qualityIntervals(each).length >= 5)) {
+      const [[bass = 0, ...keys] = []] = voiceLead([{ root: note('C'), quality }])
+      expect(Math.max(...keys) - Math.min(...keys), quality).toBeLessThanOrEqual(11)
+      expect(Math.min(...keys), quality).toBeGreaterThan(bass)
+    }
   })
 
   it('keeps the right hand above the bass, never striking a key twice', () => {

@@ -16,11 +16,13 @@ import {
   buildChord,
   BUILT_SIZES,
   CHORD_NOTES,
+  chordInversions,
   type ChordFamily,
   type Fingering,
   FINGERINGS,
   fingeringsOf,
   fitParts,
+  INVERSIONS,
   keyMode,
   keyParam,
   lastInversion,
@@ -90,11 +92,13 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
   })
   const read = readNote(raw.root)
   const root = read ?? note('C')
-  const notes = buildChord(root, parts).tones.length
+  const asked = wholeIn(raw.inversion, 0, INVERSIONS.length - 1, CHORDS_DEFAULTS.inversion)
   return {
     root: noteParam(root),
     ...partsParams(parts),
-    inversion: wholeIn(raw.inversion, 0, lastInversion(notes), CHORDS_DEFAULTS.inversion),
+    inversion: chordInversions(buildChord(root, parts).tones).includes(asked)
+      ? asked
+      : CHORDS_DEFAULTS.inversion,
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }

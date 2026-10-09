@@ -1,17 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { spellChord, type ChordQuality } from './chord'
+import { buildChord, CHORD_PARTS, type ChordParts } from './chord-parts'
 import { rangeOf } from './keyboard'
 import { note, type SpelledNote } from './note'
 import {
+  chordInversions,
+  fitChordInversion,
   fitInversion,
   lastInversion,
   placeBorrowedChords,
   placeChord,
   placeScale,
   placeScaleChords,
+  TWO_HANDS_FROM,
   walkChords,
 } from './place'
 import { CHORD_NOTES } from './scale-chord'
+import type { Tone } from './tone'
 
 const keys = (placed: readonly { midi: number }[]) => placed.map((p) => p.midi)
 const tones = (root: SpelledNote, quality: ChordQuality) => spellChord(root, quality)
@@ -46,6 +51,93 @@ describe('placeChord', () => {
     expect(keys(placed.lh)).toEqual([58])
     expect(placed.lh[0]?.tone.role).toBe('root')
     expect(placed.rh.map((p) => p.tone.degree)).toEqual(['1', '3', '5', '7'])
+  })
+})
+
+describe('placeChord, two hands from five notes', () => {
+  const built = (parts: Partial<ChordParts>) =>
+    buildChord(note('C'), {
+      triad: 'maj',
+      size: 5,
+      seventh: 'minor',
+      added: [],
+      alterations: [],
+      ...parts,
+    }).tones
+  const hands = (chord: readonly Tone[], inversion = 0) => {
+    const placed = placeChord(chord, { inversion, bothHands: true })
+    return [keys(placed.lh), keys(placed.rh)]
+  }
+  const span = (placed: readonly { midi: number }[]) =>
+    Math.max(...keys(placed)) - Math.min(...keys(placed))
+
+  it('leaves a 9th chord’s root to the left hand, its 3rd, 5th, 7th and 9th to the right', () => {
+    // C9: C3 · E4 G4 B♭4 D5; C7♭9: C3 · E4 G4 B♭4 D♭5.
+    expect(hands(built({ size: 9 }))).toEqual([[48], [64, 67, 70, 74]])
+    expect(hands(built({ size: 9, alterations: ['b9'] }))).toEqual([[48], [64, 67, 70, 73]])
+  })
+
+  it('gives the left hand the 5th too from six notes, the right hand the rest inside an octave', () => {
+    // Cm11: C3 G3 · E♭4 F4 B♭4 D5; C13 (no 11th over its major 3rd): C3 G3 · E4 A4 B♭4 D5.
+    expect(hands(built({ triad: 'min', size: 11 }))).toEqual([
+      [48, 55],
+      [63, 65, 70, 74],
+    ])
+    expect(hands(built({ size: 13 }))).toEqual([
+      [48, 55],
+      [64, 69, 70, 74],
+    ])
+  })
+
+  it('turns the right hand to start from the 7th, an octave down, in the 3rd inversion', () => {
+    // C9: C3 · B♭3 D4 E4 G4; C13: C3 G3 · B♭3 D4 E4 A4; a 6/9 turns from its 6th: C3 · A3 D4 E4 G4.
+    expect(hands(built({ size: 9 }), 3)).toEqual([[48], [58, 62, 64, 67]])
+    expect(hands(built({ size: 13 }), 3)).toEqual([
+      [48, 55],
+      [58, 62, 64, 69],
+    ])
+    expect(hands(built({ added: ['add6', 'add9'] }), 3)).toEqual([[48], [57, 62, 64, 67]])
+  })
+
+  it('offers a chord of five notes or more root position and, where its right hand has a 7th or 6th, the 3rd inversion', () => {
+    expect(chordInversions(built({}))).toEqual([0, 1, 2])
+    expect(chordInversions(built({ size: 7 }))).toEqual([0, 1, 2, 3])
+    expect(chordInversions(built({ size: 9 }))).toEqual([0, 3])
+    expect(chordInversions(built({ added: ['add6', 'add9'] }))).toEqual([0, 3])
+    expect(() => placeChord(built({ size: 9 }), { inversion: 1, bothHands: true })).toThrow(
+      RangeError,
+    )
+  })
+
+  it('fits an inversion to the nearest the chord has at or under it', () => {
+    expect(fitChordInversion(3, built({}))).toBe(2)
+    expect(fitChordInversion(2, built({ size: 9 }))).toBe(0)
+    expect(fitChordInversion(3, built({ size: 9 }))).toBe(3)
+  })
+
+  it('holds every tone of every chord of five notes or more once, each hand within its reach', () => {
+    for (const parts of CHORD_PARTS) {
+      const chord = buildChord(note('C'), parts)
+      if (chord.tones.length < TWO_HANDS_FROM) continue
+      for (const inversion of chordInversions(chord.tones)) {
+        const placed = placeChord(chord.tones, { inversion, bothHands: true })
+        const name = `C${chord.suffix} ${inversion}`
+        expect([...placed.lh, ...placed.rh].map((each) => each.tone.degree).sort(), name).toEqual(
+          chord.tones.map((tone) => tone.degree).sort(),
+        )
+        expect(placed.rh.length, name).toBeLessThanOrEqual(5)
+        // Inside an octave: a major 7th at most; the left hand under the right.
+        expect(span(placed.rh), name).toBeLessThanOrEqual(11)
+        expect(span(placed.lh), name).toBeLessThanOrEqual(11)
+        expect(Math.max(...keys(placed.lh)), name).toBeLessThan(Math.min(...keys(placed.rh)))
+      }
+    }
+  })
+
+  it('keeps the whole stack in one hand for a caller that spells the chord', () => {
+    const placed = placeChord(built({ size: 9 }), { inversion: 0, bothHands: false })
+    expect(keys(placed.rh)).toEqual([60, 64, 67, 70, 74])
+    expect(placed.lh).toEqual([])
   })
 })
 

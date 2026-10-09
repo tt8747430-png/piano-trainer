@@ -152,6 +152,8 @@ export {
   type ScaleKind,
 } from './scale'
 export {
+  chordInversions,
+  fitChordInversion,
   fitInversion,
   INVERSIONS,
   isInversion,
@@ -160,6 +162,7 @@ export {
   placeChord,
   placeScale,
   placeScaleChords,
+  TWO_HANDS_FROM,
   walkChords,
   type PlacedChord,
   type PlacedScaleChord,

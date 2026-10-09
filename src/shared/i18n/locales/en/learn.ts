@@ -24,6 +24,8 @@ export const learn = {
     quality: 'Quality',
     suspension: 'Suspension',
     none: 'None',
+    // A chord of five notes or more, its root left to the bass: where its right hand starts.
+    handFrom: 'Right hand from',
     triads: {
       maj: 'Major',
       min: 'Minor',
