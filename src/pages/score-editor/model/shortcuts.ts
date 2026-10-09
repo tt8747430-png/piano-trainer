@@ -1,14 +1,5 @@
 import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
-
-/** What a key press is made of, as the browser's KeyboardEvent says it. */
-export interface KeyPress {
-  readonly code: string
-  readonly key: string
-  readonly metaKey: boolean
-  readonly ctrlKey: boolean
-  readonly shiftKey: boolean
-  readonly altKey: boolean
-}
+import type { KeyPress } from '@/shared/lib/shortcuts'
 
 /** A shortcut: an editor action, or the Chord field to type in. */
 export type Shortcut = EditorAction | { readonly type: 'chordField' }

@@ -9,9 +9,7 @@ import {
   usePresses,
 } from '@/shared/lib'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
-
-/** Where a key typed goes into a field: nothing plays there. */
-const EDITABLE = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])'
+import { isTyping } from '@/shared/lib/shortcuts'
 
 const sameRange = (a: KeyRange | undefined, b: KeyRange | undefined) =>
   a?.from === b?.from && a?.to === b?.to
@@ -63,7 +61,7 @@ export function useTyping({
   })
   const typed = useEffectEvent((event: KeyboardEvent) => {
     if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
-    if (event.target instanceof Element && event.target.closest(EDITABLE)) return
+    if (isTyping(event.target)) return
     if (event.code === OCTAVE_DOWN || event.code === OCTAVE_UP) {
       event.preventDefault()
       const by = event.code === OCTAVE_UP ? 1 : -1

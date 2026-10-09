@@ -1,31 +1,6 @@
 import { useEffect } from 'react'
 import { useServices } from '@/shared/lib/services'
-
-/** Where Space has a job of its own: a field types it, a control is pressed by it. */
-const SPACE_TAKERS = [
-  'a[href]',
-  'button',
-  'input',
-  'select',
-  'textarea',
-  'summary',
-  '[contenteditable]:not([contenteditable="false"])',
-  ...[
-    'button',
-    'switch',
-    'slider',
-    'radio',
-    'checkbox',
-    'tab',
-    'menuitem',
-    'option',
-    'combobox',
-    'listbox',
-  ].map((role) => `[role="${role}"]`),
-].join(', ')
-
-const takesSpace = (target: EventTarget | null) =>
-  target instanceof Element && target.closest(SPACE_TAKERS) !== null
+import { takesKey } from '@/shared/lib/shortcuts'
 
 /**
  * Space holds the sustain while it is held (spec 2026-10-09 §2.3), where Space has no other job: not
@@ -49,7 +24,7 @@ export function useSpacePedal({ enabled }: { enabled: boolean }): void {
         return
       }
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
-      if (takesSpace(event.target)) return
+      if (takesKey(event.target)) return
       event.preventDefault()
       holding = true
       audio.pedal('sustain', true)

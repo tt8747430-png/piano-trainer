@@ -5,6 +5,7 @@ import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { type TakesStore, TakesStoreProvider } from '@/entities/take'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
+import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
@@ -41,7 +42,9 @@ export function App({
                 <MidiReconnect />
                 <MidiSync />
                 <ThemeProvider>
-                  <RouterProvider router={router} />
+                  <ShortcutsProvider>
+                    <RouterProvider router={router} />
+                  </ShortcutsProvider>
                 </ThemeProvider>
               </ServicesProvider>
             </TakesStoreProvider>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { shortcutOf, type KeyPress } from './shortcuts'
+import type { KeyPress } from '@/shared/lib/shortcuts'
+import { shortcutOf } from './shortcuts'
 
 const press = (code: string, key: string, mods: Partial<KeyPress> = {}): KeyPress => ({
   code,
