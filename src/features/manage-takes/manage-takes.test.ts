@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { createTakesStore, type Played } from '@/entities/take'
+import { createTakesStore, keepBars, type Played } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
-import { deleteTake, saveTake } from './index'
+import { deleteTake, keepTakeBars, renameTake, saveTake } from './index'
 
 const fresh = () =>
   createTakesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -36,5 +36,40 @@ describe('deleteTake', () => {
     deleteTake(store, first)
     expect(store.getState().takes).toEqual([])
     expect(saveTake(store, TAKE)).toBe('take-2')
+  })
+})
+
+describe('renameTake', () => {
+  it('names a take, trimmed and cut at 40 characters; a blank name takes it away', () => {
+    const store = fresh()
+    const id = saveTake(store, TAKE)
+    renameTake(store, id, '  Verse  ')
+    expect(store.getState().takes[0]?.name).toBe('Verse')
+    renameTake(store, id, 'x'.repeat(50))
+    expect(store.getState().takes[0]?.name).toBe('x'.repeat(40))
+    renameTake(store, id, '   ')
+    expect(store.getState().takes[0]).not.toHaveProperty('name')
+  })
+
+  it('changes nothing for a take that is not there', () => {
+    const store = fresh()
+    saveTake(store, TAKE)
+    const before = store.getState()
+    renameTake(store, 'take-9', 'Verse')
+    expect(store.getState()).toBe(before)
+  })
+})
+
+describe('keepTakeBars', () => {
+  it('cuts a take to its bars for good, keeping the others and the next number', () => {
+    const store = fresh()
+    const long = { ...TAKE, tempo: 120, length: 8000 }
+    const first = saveTake(store, long)
+    const second = saveTake(store, TAKE)
+    keepTakeBars(store, first, 1, 2)
+    const [cut, other] = store.getState().takes
+    expect(cut).toEqual(keepBars({ id: first, ...long }, 1, 2))
+    expect(other?.id).toBe(second)
+    expect(store.getState().nextTake).toBe(3)
   })
 })
