@@ -107,9 +107,10 @@ describe('the learner’s songs', () => {
       made: 0,
       tempo: 90,
       meter: '4/4',
+      fromBar: 1,
       length: 0,
       notes: [],
-      pedal: [],
+      pedals: [],
     })
     takes.setState({ takes: [take('take-1', song), take('take-2', 'bz1')], nextTake: 3 })
     deleteSong(store, takes, song)

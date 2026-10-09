@@ -79,13 +79,13 @@ describe('startRecorder', () => {
     expect(ended).toEqual([
       {
         notes: [{ midi: 60, at: 0, held: 500, velocity: 90 }],
-        pedal: [{ down: 0, up: 1000 }],
+        pedals: [{ pedal: 'sustain', down: 0, up: 1000 }],
         length: 1000,
       },
     ])
   })
 
-  it('keeps the sustain’s presses, not the other pedals’', () => {
+  it('keeps each pedal’s presses as that pedal’s', () => {
     const { audio, keyboard, ended, stop } = setUp()
     audio.setNow(3.1)
     keyboard.press(midi(60))
@@ -94,7 +94,7 @@ describe('startRecorder', () => {
     keyboard.pedal(false, { pedal: 'soft' })
     audio.setNow(4.1)
     stop()
-    expect(ended[0]?.pedal).toEqual([])
+    expect(ended[0]?.pedals).toEqual([{ pedal: 'soft', down: 0, up: 500 }])
   })
 
   it('keeps nothing when stopped in the count-in, and hears no key after', () => {

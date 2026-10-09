@@ -101,6 +101,7 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
         made: Date.now(),
         tempo: plan.tempo,
         meter: plan.meter,
+        fromBar: plan.from + 1,
         ...played,
       })
     }

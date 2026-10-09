@@ -1,7 +1,8 @@
 import type { PedalPress, Played, TakeNote } from '@/entities/take'
 import { PIANO, type Midi } from '@/shared/lib/music'
+import type { PedalKind } from '@/shared/lib/schedule'
 
-/** A key or the pedal as the learner heard it against the click: `at`, in seconds on the audio clock. */
+/** A key or a pedal as the learner heard it against the click: `at`, in seconds on the audio clock. */
 export type Heard =
   | {
       readonly kind: 'note'
@@ -10,7 +11,12 @@ export type Heard =
       readonly velocity: number
       readonly at: number
     }
-  | { readonly kind: 'pedal'; readonly down: boolean; readonly at: number }
+  | {
+      readonly kind: 'pedal'
+      readonly pedal: PedalKind
+      readonly down: boolean
+      readonly at: number
+    }
 
 export interface TakeTiming {
   /** The first recorded bar's downbeat, on the audio clock. */
@@ -34,18 +40,19 @@ export const isKept = (
 /**
  * What was played from the downbeat to Stop (ADR 0028), in whole milliseconds from the downbeat: the
  * keys `isKept` keeps, one struck before the downbeat counted as on it, keeping its length. A key
- * struck again while held ends the earlier note there. The keys and the pedal still down at Stop end
- * at Stop; anything after it is not kept.
+ * struck again while held ends the earlier note there. Each pedal's presses are its own. The keys and
+ * the pedals still down at Stop end at Stop; anything after it is not kept.
  */
 export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
   const { downbeat, stop } = timing
-  if (stop <= downbeat) return { notes: [], pedal: [], length: 0 }
+  if (stop <= downbeat) return { notes: [], pedals: [], length: 0 }
   const ms = (at: number) => Math.round((at - downbeat) * 1000)
   const length = ms(stop)
   const notes: TakeNote[] = []
-  const pedal: PedalPress[] = []
+  const pedals: PedalPress[] = []
   const struck = new Map<Midi, { readonly at: number; readonly velocity: number }>()
-  let pedalDown: number | null = null
+  /** When each pedal down went down. */
+  const pedalDown = new Map<PedalKind, number>()
 
   const letGo = (key: Midi, at: number) => {
     const note = struck.get(key)
@@ -55,18 +62,19 @@ export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
     const held = Math.min(ms(at) - ms(note.at), length - onset)
     notes.push({ midi: key, at: onset, held: Math.max(0, held), velocity: note.velocity })
   }
-  const lift = (at: number) => {
-    if (pedalDown === null) return
+  const lift = (pedal: PedalKind, at: number) => {
+    const down = pedalDown.get(pedal)
+    if (down === undefined) return
+    pedalDown.delete(pedal)
     const up = ms(at)
-    if (up > 0) pedal.push({ down: Math.max(0, ms(pedalDown)), up })
-    pedalDown = null
+    if (up > 0) pedals.push({ pedal, down: Math.max(0, ms(down)), up })
   }
 
   for (const event of heard) {
     if (event.at > stop) continue
     if (event.kind === 'pedal') {
-      if (!event.down) lift(event.at)
-      else pedalDown ??= event.at
+      if (!event.down) lift(event.pedal, event.at)
+      else if (!pedalDown.has(event.pedal)) pedalDown.set(event.pedal, event.at)
       continue
     }
     if (!event.on) {
@@ -78,7 +86,8 @@ export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
     struck.set(event.midi, { at: event.at, velocity: event.velocity })
   }
   for (const key of [...struck.keys()]) letGo(key, stop)
-  lift(stop)
+  for (const pedal of [...pedalDown.keys()]) lift(pedal, stop)
   notes.sort((a, b) => a.at - b.at || a.midi - b.midi)
-  return { notes, pedal, length }
+  pedals.sort((a, b) => a.down - b.down)
+  return { notes, pedals, length }
 }

@@ -8,7 +8,7 @@ const fresh = () =>
   createTakesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
 const PLAYED: Played = {
   notes: [{ midi: midi(60), at: 0, held: 500, velocity: 80 }],
-  pedal: [],
+  pedals: [],
   length: 1000,
 }
 const TAKE = {
@@ -16,6 +16,7 @@ const TAKE = {
   made: 1_760_000_000_000,
   tempo: 90,
   meter: '4/4',
+  fromBar: 1,
   ...PLAYED,
 } as const
 

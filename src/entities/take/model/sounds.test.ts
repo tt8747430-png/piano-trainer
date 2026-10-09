@@ -9,9 +9,10 @@ const TAKE: Take = {
   made: 0,
   tempo: 90,
   meter: '4/4',
+  fromBar: 1,
   length: 3000,
   notes: [],
-  pedal: [],
+  pedals: [],
 }
 
 const note = (key: number, at: number, held: number, velocity = 80) => ({
@@ -37,7 +38,7 @@ describe('takeSounds', () => {
     const sounds = takeSounds({
       ...TAKE,
       notes: [note(60, 0, 200), note(64, 100, 200), note(60, 800, 100), note(67, 1500, 100)],
-      pedal: [{ down: 150, up: 1000 }],
+      pedals: [{ pedal: 'sustain', down: 150, up: 1000 }],
     })
     expect(sounds.map(({ midi: key, at, duration }) => [key, at, duration])).toEqual([
       [60, 0, 0.8],

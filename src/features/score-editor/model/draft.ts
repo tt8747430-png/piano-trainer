@@ -178,4 +178,3 @@ export function writeDraft(draft: Draft): PieceMusic {
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),
   }
 }
-

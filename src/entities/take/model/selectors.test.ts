@@ -10,9 +10,10 @@ const take = (id: Take['id'], pieceId: string, notes: number): Take => ({
   made: 0,
   tempo: 90,
   meter: '4/4',
+  fromBar: 1,
   length: 1000,
   notes: Array.from({ length: notes }, () => ({ midi: midi(60), at: 0, held: 10, velocity: 80 })),
-  pedal: [],
+  pedals: [],
 })
 
 const STATE: TakesState = {

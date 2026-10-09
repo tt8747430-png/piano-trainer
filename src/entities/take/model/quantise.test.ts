@@ -11,9 +11,10 @@ const TAKE: Take = {
   made: 0,
   tempo: 60,
   meter: '4/4',
+  fromBar: 1,
   length: 4000,
   notes: [],
-  pedal: [],
+  pedals: [],
 }
 const note = (key: number, at: number, held: number) => ({
   midi: midi(key),

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
+import type { PedalKind } from '@/shared/lib/schedule'
 import { isKept, takeOf, type Heard } from './take-of'
 
 const key = (n: number, on: boolean, at: number, velocity = on ? 80 : 0): Heard => ({
@@ -9,7 +10,12 @@ const key = (n: number, on: boolean, at: number, velocity = on ? 80 : 0): Heard 
   velocity,
   at,
 })
-const pedal = (down: boolean, at: number): Heard => ({ kind: 'pedal', down, at })
+const pedal = (down: boolean, at: number, kind: PedalKind = 'sustain'): Heard => ({
+  kind: 'pedal',
+  pedal: kind,
+  down,
+  at,
+})
 
 /** At 120 a beat is half a second: the downbeat at 10 s on the audio clock. */
 const AT_120 = { downbeat: 10, tempo: 120 }
@@ -60,7 +66,7 @@ describe('takeOf', () => {
       { ...AT_120, stop: 11 },
     )
     expect(played.notes).toEqual([{ midi: 60, at: 500, held: 500, velocity: 80 }])
-    expect(played.pedal).toEqual([{ down: 200, up: 1000 }])
+    expect(played.pedals).toEqual([{ pedal: 'sustain', down: 200, up: 1000 }])
   })
 
   it('keeps the pedal’s presses, one held from the count-in starting on the downbeat', () => {
@@ -77,16 +83,34 @@ describe('takeOf', () => {
       ].sort((a, b) => a.at - b.at),
       { ...AT_120, stop: 12 },
     )
-    expect(played.pedal).toEqual([
-      { down: 0, up: 500 },
-      { down: 600, up: 1000 },
+    expect(played.pedals).toEqual([
+      { pedal: 'sustain', down: 0, up: 500 },
+      { pedal: 'sustain', down: 600, up: 1000 },
+    ])
+  })
+
+  it('keeps each pedal’s presses on their own, overlapping', () => {
+    const played = takeOf(
+      [
+        pedal(true, 10.1),
+        pedal(true, 10.2, 'soft'),
+        pedal(false, 10.5),
+        pedal(true, 10.6, 'sostenuto'),
+        pedal(false, 10.8, 'soft'),
+      ],
+      { ...AT_120, stop: 11 },
+    )
+    expect(played.pedals).toEqual([
+      { pedal: 'sustain', down: 100, up: 500 },
+      { pedal: 'soft', down: 200, up: 800 },
+      { pedal: 'sostenuto', down: 600, up: 1000 },
     ])
   })
 
   it('keeps nothing from a take stopped before its downbeat', () => {
     expect(takeOf([key(60, true, 9.9)], { ...AT_120, stop: 9.95 })).toEqual({
       notes: [],
-      pedal: [],
+      pedals: [],
       length: 0,
     })
   })

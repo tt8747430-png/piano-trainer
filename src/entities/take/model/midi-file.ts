@@ -51,10 +51,12 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
         { tick: off, order: 0, bytes: [NOTE_OFF, note.midi, RELEASE_VELOCITY] },
       ]
     }),
-    ...take.pedal.flatMap((press) => [
-      { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, SUSTAIN, 127] },
-      { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, SUSTAIN, 0] },
-    ]),
+    ...take.pedals
+      .filter((press) => press.pedal === 'sustain')
+      .flatMap((press) => [
+        { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, SUSTAIN, 127] },
+        { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, SUSTAIN, 0] },
+      ]),
   ].sort((a, b) => a.tick - b.tick || a.order - b.order)
   const clocksPerClick = CLOCKS_PER_QUARTER * (compound ? 1.5 : 1)
   const track: number[] = [

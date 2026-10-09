@@ -38,8 +38,9 @@ function nextStrikes(notes: readonly TakeNote[]): Map<TakeNote, number> {
 export function takeSounds(take: Take): NoteSound[] {
   const notes = take.notes.toSorted((a, b) => a.at - b.at)
   const next = nextStrikes(notes)
+  const sustain = take.pedals.filter((press) => press.pedal === 'sustain')
   return notes.map((note) => {
-    const sounding = releasedAt(note.at + note.held, take.pedal)
+    const sounding = releasedAt(note.at + note.held, sustain)
     const end = Math.min(sounding, next.get(note) ?? sounding)
     return {
       kind: 'note',

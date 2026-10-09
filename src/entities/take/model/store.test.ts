@@ -4,7 +4,7 @@ import { midi } from '@/shared/lib/music'
 import { createTakesStore, TAKES_STORAGE_KEY } from './store'
 import type { Take } from './types'
 
-const restored = (state: unknown, version = 1) => {
+const restored = (state: unknown, version = 2) => {
   const storage = createMemoryStorage()
   storage.setItem(TAKES_STORAGE_KEY, JSON.stringify({ state, version }))
   return createTakesStore({ storage, otherTabs: new EventTarget() }).getState()
@@ -21,7 +21,8 @@ const TAKE: Take = {
     { midi: midi(60), at: 0, held: 640, velocity: 90 },
     { midi: midi(64), at: 667, held: 600, velocity: 72 },
   ],
-  pedal: [{ down: 10, up: 1300 }],
+  pedals: [{ pedal: 'sustain', down: 10, up: 1300 }],
+  fromBar: 1,
 }
 /** The take as it is saved: each note and press a short list of whole numbers. */
 const SAVED_TAKE = {
@@ -35,7 +36,8 @@ const SAVED_TAKE = {
     [60, 0, 640, 90],
     [64, 667, 600, 72],
   ],
-  pedal: [[10, 1300]],
+  pedals: [[10, 1300]],
+  fromBar: 1,
 }
 
 describe('createTakesStore', () => {
@@ -46,7 +48,7 @@ describe('createTakesStore', () => {
     store.setState({ takes: [TAKE], nextTake: 2 })
     expect(JSON.parse(storage.getItem('pt-takes') ?? 'null')).toEqual({
       state: { takes: [SAVED_TAKE], nextTake: 2 },
-      version: 1,
+      version: 2,
     })
   })
 
@@ -65,15 +67,68 @@ describe('createTakesStore', () => {
       [68, 'x', 100, 80],
       'C4',
     ]
-    const pedal = [
+    const pedals = [
       [10, 1300],
       [1300, 10],
       [0, 5000],
-      [1, 2, 3],
+      [0, 100, 7],
+      [1, 2, 3, 4],
     ]
-    const take = restored({ takes: [{ ...SAVED_TAKE, notes, pedal }], nextTake: 2 }).takes[0]
+    const take = restored({ takes: [{ ...SAVED_TAKE, notes, pedals }], nextTake: 2 }).takes[0]
     expect(take?.notes).toEqual([{ midi: 60, at: 0, held: 640, velocity: 90 }])
-    expect(take?.pedal).toEqual([{ down: 10, up: 1300 }])
+    expect(take?.pedals).toEqual([{ pedal: 'sustain', down: 10, up: 1300 }])
+  })
+
+  it('reads a version-1 take’s presses as the sustain’s, from bar 1, unnamed', () => {
+    const { pedals: _pedals, fromBar: _fromBar, ...older } = SAVED_TAKE
+    const v1 = {
+      ...older,
+      pedal: [
+        [10, 1300],
+        [20, 30, 1],
+      ],
+    }
+    expect(restored({ takes: [v1], nextTake: 2 }, 1).takes).toEqual([TAKE])
+  })
+
+  it('keeps the soft pedal’s and the sostenuto’s presses, the bar it starts at and its name', () => {
+    const saved = {
+      ...SAVED_TAKE,
+      name: 'Verse, slower',
+      fromBar: 9,
+      pedals: [
+        [10, 1300],
+        [20, 400, 1],
+        [500, 900, 2],
+      ],
+    }
+    const storage = createMemoryStorage()
+    storage.setItem(
+      TAKES_STORAGE_KEY,
+      JSON.stringify({ state: { takes: [saved], nextTake: 2 }, version: 2 }),
+    )
+    const store = createTakesStore({ storage, otherTabs: new EventTarget() })
+    expect(store.getState().takes[0]).toEqual({
+      ...TAKE,
+      name: 'Verse, slower',
+      fromBar: 9,
+      pedals: [
+        { pedal: 'sustain', down: 10, up: 1300 },
+        { pedal: 'soft', down: 20, up: 400 },
+        { pedal: 'sostenuto', down: 500, up: 900 },
+      ],
+    })
+    store.setState({ takes: [...store.getState().takes], nextTake: 2 })
+    expect(JSON.parse(storage.getItem(TAKES_STORAGE_KEY) ?? 'null').state.takes[0]).toEqual(saved)
+  })
+
+  it('reads a name trimmed to 1–40 characters, else none; a bar from 1, else 1', () => {
+    const read = (extra: object) => restored({ takes: [{ ...SAVED_TAKE, ...extra }] }).takes[0]
+    expect(read({ name: '  Intro  ' })?.name).toBe('Intro')
+    expect(read({ name: 'x'.repeat(41) })).not.toHaveProperty('name')
+    expect(read({ name: '   ' })).not.toHaveProperty('name')
+    expect(read({ fromBar: 0 })?.fromBar).toBe(1)
+    expect(read({ fromBar: 2.5 })?.fromBar).toBe(1)
   })
 
   it('rounds a time to the millisecond', () => {

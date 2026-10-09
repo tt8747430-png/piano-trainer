@@ -1,5 +1,6 @@
 import type { PieceId } from '@/entities/piece'
 import type { Meter, Midi } from '@/shared/lib/music'
+import type { PedalKind } from '@/shared/lib/schedule'
 
 /** A take's id: `take-` and its number, never given twice. */
 export type TakeId = `take-${number}`
@@ -25,16 +26,20 @@ export interface TakeNote {
   readonly velocity: number
 }
 
-/** The sustain pedal held down, from `down` to `up`, in milliseconds from the take's first downbeat. */
+/** A pedal held down, from `down` to `up`, in milliseconds from the take's first downbeat. */
 export interface PedalPress {
+  readonly pedal: PedalKind
   readonly down: number
   readonly up: number
 }
 
-/** What was played from the first downbeat to Stop: the keys in the order struck, the pedal, and its length in milliseconds. */
+/**
+ * What was played from the first downbeat to Stop: the keys in the order struck, the pedals' presses,
+ * and its length in milliseconds.
+ */
 export interface Played {
   readonly notes: readonly TakeNote[]
-  readonly pedal: readonly PedalPress[]
+  readonly pedals: readonly PedalPress[]
   readonly length: number
 }
 
@@ -42,11 +47,18 @@ export interface Played {
 export interface Take extends Played {
   readonly id: TakeId
   readonly pieceId: PieceId
+  /** The learner's name for it; none: when it was made. */
+  readonly name?: string
   /** When it was recorded, in milliseconds since the epoch. */
   readonly made: number
   readonly tempo: number
   readonly meter: Meter
+  /** The piece's bar it was recorded from, from 1. */
+  readonly fromBar: number
 }
+
+/** The longest name a take keeps. */
+export const TAKE_NAME_MAX = 40
 
 /** The longest take: it stops itself at 10 minutes. */
 export const LONGEST_TAKE_MS = 10 * 60 * 1000

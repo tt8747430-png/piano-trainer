@@ -10,12 +10,13 @@ const TAKE: Take = {
   made: 0,
   tempo: 120,
   meter: '3/4',
+  fromBar: 1,
   length: 1500,
   notes: [
     { midi: midi(60), at: 0, held: 500, velocity: 90 },
     { midi: midi(64), at: 500, held: 1000, velocity: 70 },
   ],
-  pedal: [{ down: 250, up: 1000 }],
+  pedals: [{ pedal: 'sustain', down: 250, up: 1000 }],
 }
 
 const text = (bytes: Uint8Array) => String.fromCharCode(...bytes)
@@ -47,7 +48,7 @@ describe('midiFile', () => {
       ...TAKE,
       length: 1000,
       notes: [{ midi: midi(60), at: 0, held: 0, velocity: 90 }],
-      pedal: [],
+      pedals: [],
     })
     expect([...file.slice(37)]).toEqual([
       ...[0x00, 0x90, 60, 90],
@@ -57,7 +58,7 @@ describe('midiFile', () => {
   })
 
   it('counts a compound meter’s beat as a dotted quarter', () => {
-    const file = midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedal: [] })
+    const file = midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedals: [] })
     expect([...file.slice(22, 37)]).toEqual([
       ...[0x00, 0xff, 0x58, 0x04, 6, 3, 36, 8],
       // A dotted quarter a second: a quarter in 666,667 µs.

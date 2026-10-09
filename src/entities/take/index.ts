@@ -1,5 +1,7 @@
 export {
+  isTakeId,
   LONGEST_TAKE_MS,
+  TAKE_NAME_MAX,
   takeId,
   type PedalPress,
   type Played,

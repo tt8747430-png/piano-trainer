@@ -330,7 +330,7 @@ describe('the score editor’s takes', () => {
     await user.click(screen.getByRole('button', { name: 'Stop' }))
     // The keys played wrote nothing at the caret while the take recorded.
     expect(songOf(piecesStore.getState())).toEqual(SONG)
-    expect(takesStore.getState().takes).toHaveLength(1)
+    expect(takesStore.getState().takes).toMatchObject([{ fromBar: 1 }])
 
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
     const [take] = within(sheet).getAllByRole('listitem')
