@@ -1,4 +1,4 @@
-export { comboKeys, matches, type Combo, type KeyPress } from './combo'
+export { comboKeys, keyHint, matches, type Combo, type KeyPress } from './combo'
 export { inPopUp, isTyping, takesKey } from './guards'
 export type { Shortcut, ShortcutScope } from './registry'
 export { ShortcutsProvider } from './ShortcutsProvider'

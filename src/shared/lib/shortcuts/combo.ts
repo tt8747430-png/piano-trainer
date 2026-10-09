@@ -55,3 +55,7 @@ export function comboKeys(combo: Combo, mac: boolean): readonly string[] {
     'code' in combo ? capOf(combo.code) : (PRINTED[combo.key] ?? combo.key),
   ]
 }
+
+/** A control's name with its shortcut after it, for the hint a pointer resting on it reads. */
+export const keyHint = (label: string, combo: Combo, mac = false): string =>
+  `${label} (${comboKeys(combo, mac).join(' ')})`

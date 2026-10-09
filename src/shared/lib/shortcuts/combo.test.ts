@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { comboKeys, matches, type KeyPress } from './combo'
+import { comboKeys, keyHint, matches, type KeyPress } from './combo'
 
 const press = (patch: Partial<KeyPress>): KeyPress => ({
   code: '',
@@ -68,5 +68,12 @@ describe('comboKeys', () => {
     expect(comboKeys({ key: 'Escape' }, false)).toEqual(['Esc'])
     expect(comboKeys({ key: '?' }, false)).toEqual(['?'])
     expect(comboKeys({ key: 'Enter' }, false)).toEqual(['Enter'])
+  })
+})
+
+describe('keyHint', () => {
+  it('puts a control’s key after its name', () => {
+    expect(keyHint('Play', { key: ' ' })).toBe('Play (Space)')
+    expect(keyHint('Sidebar', { code: 'KeyB', mod: true }, true)).toBe('Sidebar (⌘ B)')
   })
 })

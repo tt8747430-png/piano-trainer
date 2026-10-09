@@ -71,6 +71,18 @@ export const player = {
     speedTraining: 'Speed training',
     speedTrainingDetail: '5% faster each pass, up to 100%',
   },
+  // The Player's shortcuts, as the sheet lists them.
+  shortcuts: {
+    group: 'Player',
+    playStop: 'Play or stop',
+    back: 'A step back',
+    next: 'A step on',
+    faster: 'Listen 5% faster',
+    slower: 'Listen 5% slower',
+    loop: 'Loop the bar, or remove the loop',
+    start: 'Back to the first bar',
+    close: 'Close',
+  },
   loop: 'Loop',
   back: 'Back',
   next: 'Next',

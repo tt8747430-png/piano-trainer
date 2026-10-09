@@ -1,4 +1,5 @@
 export type { PracticeView } from './model/practice-view'
+export { usePlayerShortcuts } from './model/use-player-shortcuts'
 export { usePracticePlayer, type PracticePlayer } from './model/use-practice-player'
 export { HandsButton } from './ui/HandsButton'
 export { LoopButton } from './ui/LoopButton'

@@ -10,6 +10,7 @@ import {
   PlayerTitle,
   PlayerTransport,
   TempoButton,
+  usePlayerShortcuts,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
@@ -21,7 +22,8 @@ const NO_HEADINGS: readonly string[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape): the toolbar with the tempo, hands, loop,
- * MIDI and Setup, the keys, the sheet music, Wait mode's line and the transport.
+ * MIDI and Setup, the keys, the sheet music, Wait mode's line and the transport; the computer's keys
+ * drive it (`usePlayerShortcuts`).
  */
 export function PlayerLayout({
   title,
@@ -43,6 +45,7 @@ export function PlayerLayout({
   setup: ReactNode
 }) {
   const { practice } = player
+  usePlayerShortcuts(player, view, onClose)
   return (
     <PlayerScreen>
       <PlayerArea area="lead">
@@ -75,6 +78,8 @@ export function PlayerLayout({
           marks={player.marks}
           wrong={player.wrong}
           onKeyPress={player.tapKey}
+          // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
+          spacePedal={false}
         />
       </PlayerArea>
       <PlayerArea area="sheet">
