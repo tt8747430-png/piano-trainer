@@ -10,12 +10,12 @@ import {
   KeyChoice,
   Labelled,
   NO_KEYS,
+  RoundButton,
   ScreenHeader,
   Segmented,
   type KeyMark,
   type ShownKeys,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { LiveScore } from '@/widgets/live-score'
 import { FREE_PLAY_MODES, type FreePlayView } from '../model/free-play-view'
 import { useFreePlay } from '../model/use-free-play'
@@ -59,9 +59,17 @@ export function FreePlayPage() {
       <ScreenHeader
         title={t('freePlay.title')}
         back={<BackButton fallback={{ to: '/practice' }} />}
+        actions={
+          <RoundButton
+            label={t('freePlay.clear')}
+            icon={Eraser}
+            disabled={free.chords.length === 0}
+            onClick={free.clear}
+          />
+        }
       />
       <ExplorerKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
-      <div className="flex flex-wrap items-end gap-x-6 gap-y-4">
+      <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('freePlay.mode')}>
           <Segmented
             label={t('freePlay.mode')}
@@ -71,21 +79,15 @@ export function FreePlayPage() {
           />
         </Labelled>
         <KeyChoice value={view.key} onChange={(key) => change({ key })} />
-        <Button variant="outline" onClick={free.clear}>
-          <Eraser data-icon="inline-start" />
-          {t('freePlay.clear')}
-        </Button>
-      </div>
-      {marking ? (
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        {marking ? (
           <MarkTools
             colour={free.mark.colour}
             finger={free.mark.finger ?? null}
             onColour={free.setColour}
             onFinger={free.setFinger}
           />
-        </div>
-      ) : null}
+        ) : null}
+      </div>
       <LiveScore chords={free.chords} keyParam={view.key} />
     </div>
   )

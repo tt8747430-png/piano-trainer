@@ -29,10 +29,11 @@ describe('Practice → Free play', () => {
     expect(screen.getByRole('status')).toHaveTextContent('E')
   })
 
-  it('empties the trail on Clear', async () => {
+  it('empties the trail on Clear, which waits for something to clear', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/free-play')
     await screen.findByRole('heading', { level: 1, name: 'Free play' })
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeDisabled()
     strike('C4')
     await user.click(screen.getByRole('button', { name: 'Clear' }))
     expect(screen.getByText('Play, and it is written here.')).toBeInTheDocument()
