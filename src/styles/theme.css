@@ -282,10 +282,6 @@
 @utility top-screen-bar {
   top: var(--screen-bar, 0px);
 }
-/* A laptop's sticky column: under the bar, a gutter below it. */
-@utility top-screen-bar-8 {
-  top: calc(var(--screen-bar, 0px) + --spacing(8));
-}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }

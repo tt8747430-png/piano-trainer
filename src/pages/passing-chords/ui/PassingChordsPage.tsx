@@ -12,13 +12,11 @@ export function PassingChordsPage() {
   const onChange = useViewChange<PassingView>()
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader
-          title={t('progressions.title')}
-          back={<BackButton fallback={{ to: '/practice' }} />}
-        />
-        <ProgressionsTabs current="passing" />
-      </div>
+      <ScreenHeader
+        title={t('progressions.title')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        tabs={<ProgressionsTabs current="passing" />}
+      />
       <PassingChordsTool view={view} onChange={onChange} />
     </div>
   )

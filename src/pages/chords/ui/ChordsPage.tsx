@@ -13,10 +13,11 @@ export function ChordsPage() {
   const onChange = useViewChange<ChordView>()
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader title={t('chords')} back={<BackButton fallback={{ to: '/practice' }} />} />
-        <ChordsTabs current="build" />
-      </div>
+      <ScreenHeader
+        title={t('chords')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        tabs={<ChordsTabs current="build" />}
+      />
       {step ? <StepPanel step={step} /> : null}
       <ChordExplorer chord={chord} onChange={onChange} />
     </div>

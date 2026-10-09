@@ -12,13 +12,11 @@ export function ProgressionsPage() {
   const onChange = useViewChange<ProgressionsView>()
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader
-          title={t('progressions.title')}
-          back={<BackButton fallback={{ to: '/practice' }} />}
-        />
-        <ProgressionsTabs current="progression" />
-      </div>
+      <ScreenHeader
+        title={t('progressions.title')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        tabs={<ProgressionsTabs current="progression" />}
+      />
       <ProgressionsTool view={view} onChange={onChange} />
     </div>
   )

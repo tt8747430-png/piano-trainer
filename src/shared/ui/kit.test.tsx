@@ -38,6 +38,12 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
+
+  it('holds a subject’s tabs in the bar, under the title', () => {
+    render(<ScreenHeader title="Chords" tabs={<nav aria-label="Chords" />} />)
+    const bar = screen.getByRole('banner')
+    expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
+  })
   const scrollTo = (y: number) => {
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
     act(() => void window.dispatchEvent(new Event('scroll')))
@@ -68,6 +74,14 @@ describe('ScreenHeader', () => {
     expect(bar).toHaveAttribute('data-hidden')
     expect(under()).toBe('0px')
     scrollTo(80)
+    expect(bar).not.toHaveAttribute('data-hidden')
+    expect(under()).toBe('64px')
+  })
+
+  it('stays until the page has scrolled past it', async () => {
+    const { bar, under } = renderBar()
+    await waitFor(() => expect(under()).toBe('64px'))
+    scrollTo(40)
     expect(bar).not.toHaveAttribute('data-hidden')
     expect(under()).toBe('64px')
   })

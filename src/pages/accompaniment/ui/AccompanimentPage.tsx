@@ -18,20 +18,18 @@ export function AccompanimentPage() {
   const { show } = useSearch({ from: '/shell/practice/accompaniment' })
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader
-          title={t('practice:subjects.accompaniment')}
-          back={<BackButton fallback={{ to: '/practice' }} />}
-          actions={
-            <RoundLink
-              label={t('learn:patterns.new')}
-              icon={Plus}
-              render={<Link to="/practice/patterns/new" />}
-            />
-          }
-        />
-        <AccompanimentTabs current={show} />
-      </div>
+      <ScreenHeader
+        title={t('practice:subjects.accompaniment')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        actions={
+          <RoundLink
+            label={t('learn:patterns.new')}
+            icon={Plus}
+            render={<Link to="/practice/patterns/new" />}
+          />
+        }
+        tabs={<AccompanimentTabs current={show} />}
+      />
       <div className="flex flex-col gap-8">
         <PatternShelves part={show} />
         {isMethodBookId(show) ? <BookPieces book={show} /> : null}

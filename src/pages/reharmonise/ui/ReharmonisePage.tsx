@@ -12,13 +12,11 @@ export function ReharmonisePage() {
   const onChange = useViewChange<ReharmoniseView>()
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader
-          title={t('progressions.title')}
-          back={<BackButton fallback={{ to: '/practice' }} />}
-        />
-        <ProgressionsTabs current="reharmonise" />
-      </div>
+      <ScreenHeader
+        title={t('progressions.title')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        tabs={<ProgressionsTabs current="reharmonise" />}
+      />
       <ReharmoniseTool view={view} onChange={onChange} />
     </div>
   )

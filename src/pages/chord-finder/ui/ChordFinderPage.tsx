@@ -12,10 +12,11 @@ export function ChordFinderPage() {
   const onChange = useViewChange<FinderView>()
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader title={t('chords')} back={<BackButton fallback={{ to: '/practice' }} />} />
-        <ChordsTabs current="find" />
-      </div>
+      <ScreenHeader
+        title={t('chords')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        tabs={<ChordsTabs current="find" />}
+      />
       <ChordFinder view={view} onChange={onChange} />
     </div>
   )

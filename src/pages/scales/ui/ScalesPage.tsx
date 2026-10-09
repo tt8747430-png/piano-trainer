@@ -20,25 +20,23 @@ export function ScalesPage() {
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <ScreenHeader
-          title={t('scales')}
-          back={<BackButton fallback={{ to: '/practice' }} />}
-          actions={
-            key ? (
-              <RoundButton
-                label={t('keys.random')}
-                icon={Dices}
-                onClick={() => {
-                  const next = randomKey(Math.random, key)
-                  onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
-                }}
-              />
-            ) : null
-          }
-        />
-        <ScalesTabs shows={showsOf(scale.kind)} current={scale.show} />
-      </div>
+      <ScreenHeader
+        title={t('scales')}
+        back={<BackButton fallback={{ to: '/practice' }} />}
+        actions={
+          key ? (
+            <RoundButton
+              label={t('keys.random')}
+              icon={Dices}
+              onClick={() => {
+                const next = randomKey(Math.random, key)
+                onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
+              }}
+            />
+          ) : null
+        }
+        tabs={<ScalesTabs shows={showsOf(scale.kind)} current={scale.show} />}
+      />
       {step ? <StepPanel step={step} /> : null}
       <ScaleExplorer scale={scale} onChange={onChange} />
       {key ? <PiecesInKey musicKey={key} /> : null}
