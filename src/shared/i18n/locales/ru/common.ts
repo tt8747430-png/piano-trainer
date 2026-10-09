@@ -20,8 +20,13 @@ export const common: LocaleResources['common'] = {
   },
   notFound: {
     title: 'Страница не найдена',
+    toPath: 'К пути',
     toSongs: 'К песням',
+    toLearn: 'К обучению',
+    toQuiz: 'К проверке',
+    toScales: 'К гаммам и тональностям',
     toAccompaniment: 'К аккомпанементу',
+    toExercises: 'К упражнениям',
     toTakes: 'К дублям',
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },

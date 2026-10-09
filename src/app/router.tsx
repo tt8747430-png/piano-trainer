@@ -5,6 +5,7 @@ import {
   lazyRouteComponent,
   notFound,
   redirect,
+  rootRouteId,
   type RouterHistory,
 } from '@tanstack/react-router'
 import {
@@ -17,7 +18,7 @@ import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
-import { NotFoundPage } from '@/pages/not-found'
+import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FullScreenLayout } from './FullScreenLayout'
@@ -89,9 +90,16 @@ const practiceScreens = () => import('./routes/practice-screens')
 function NotFoundScreen() {
   return (
     <AppShell>
-      <NotFoundPage />
+      <NotFoundPage way="songs" />
     </AppShell>
   )
+}
+
+/** A route's not found, for a thing its URL names that is not there: the way back to its place. */
+function notFoundIn(way: NotFoundWay) {
+  return function PlaceNotFound() {
+    return <NotFoundPage way={way} />
+  }
 }
 
 /**
@@ -136,6 +144,7 @@ const songsRoute = createRoute({
 const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
+  notFoundComponent: notFoundIn('songs'),
   beforeLoad: async ({ params, context }) => {
     const { entryIn, shelfOf } = await songsScreens()
     const entry = entryIn(context.pieces.getState(), params.pieceId)
@@ -174,6 +183,7 @@ const restoreTrainer = restoreView(readTrainerSearch, [])
 const trainerRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/trainers/$trainerId',
+  notFoundComponent: notFoundIn('quiz'),
   ...trainerSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
@@ -196,6 +206,7 @@ const trainerRoute = createRoute({
 const studyRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/studies/$pieceId',
+  notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: async ({ params, context }) => {
     const { entryIn } = await songsScreens()
     if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'study') throw notFound()
@@ -281,6 +292,7 @@ const newPatternRoute = createRoute({
 const patternRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/patterns/$patternRef',
+  notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: ({ params, context }) => {
     if (!inBook(params.patternRef, context.patterns)) throw notFound()
   },
@@ -289,6 +301,7 @@ const patternRoute = createRoute({
 const editPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/patterns/$patternRef/edit',
+  notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: ({ params, context }) => {
     if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
       throw notFound()
@@ -300,6 +313,7 @@ const editPatternRoute = createRoute({
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/lessons/$lessonId',
+  notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params }) => {
     const { lessonById } = await learnScreens()
     if (!lessonById(params.lessonId)) throw notFound()
@@ -321,6 +335,7 @@ const restoreExercise = restoreView(readExerciseSearch, EXERCISE_KEPT)
 const playerRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/$pieceId',
+  notFoundComponent: notFoundIn('songs'),
   ...playerSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
@@ -334,6 +349,7 @@ const playerRoute = createRoute({
 const walkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/walk',
+  notFoundComponent: notFoundIn('scales'),
   ...walkSearch,
   staticData: { remembered: true },
   beforeLoad: (context) => {
@@ -363,6 +379,7 @@ const progressionPlayerRoute = createRoute({
 const exerciseRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/play/exercise/$exerciseId',
+  notFoundComponent: notFoundIn('exercises'),
   ...exerciseSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
@@ -377,6 +394,7 @@ const exerciseRoute = createRoute({
 const editRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/edit/$pieceId',
+  notFoundComponent: notFoundIn('songs'),
   ...editSearch,
   beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
@@ -389,13 +407,14 @@ const editRoute = createRoute({
 const takeRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/edit/$pieceId/takes/$takeId',
+  notFoundComponent: TakeNotFound,
   beforeLoad: async ({ params, context }) => {
     const { editableIn, takeIn } = await playerScreens()
-    if (
-      !editableIn(context.pieces.getState(), params.pieceId) ||
-      !takeIn(context.takes.getState(), params.pieceId, params.takeId)
-    )
-      throw notFound()
+    // A song that is not there has no takes to lead back to: the address's own not found.
+    if (!editableIn(context.pieces.getState(), params.pieceId)) {
+      throw notFound({ routeId: rootRouteId })
+    }
+    if (!takeIn(context.takes.getState(), params.pieceId, params.takeId)) throw notFound()
   },
   component: lazyRouteComponent(playerScreens, 'TakePage'),
 })
@@ -403,6 +422,7 @@ const takeRoute = createRoute({
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
+  notFoundComponent: notFoundIn('path'),
   validateSearch: validateCheckSearch,
   beforeLoad: async ({ search }) => {
     const { checkPlan } = await practiceScreens()

@@ -164,6 +164,26 @@ describe('the app shell', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument()
   })
 
+  it.each([
+    ['/songs/nothing', 'Go to Songs', '/songs'],
+    ['/play/nothing', 'Go to Songs', '/songs'],
+    ['/edit/nothing', 'Go to Songs', '/songs'],
+    ['/learn/lessons/nothing', 'Go to Learn', '/learn'],
+    ['/practice/trainers/nothing', 'Go to Quiz', '/practice/quiz'],
+    ['/practice/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/practice/patterns/my-9/edit', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/practice/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
+    ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
+    ['/check?of=nothing', 'Go to Path', '/'],
+    ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?record=true'],
+    ['/edit/nothing/takes/nothing', 'Go to Songs', '/songs'],
+  ])('shows not found at %s with the way back to its place', async (path, way, href) => {
+    await renderApp(path)
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: way })).toHaveAttribute('href', href)
+  })
+
   it('shows a not-found screen for an unknown address', async () => {
     await renderApp('/nowhere')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
