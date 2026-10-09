@@ -47,6 +47,9 @@ export const quiz = {
   done: 'Done',
   right: 'Right',
   itWas: 'It’s {{answer}}',
+  // A choice round's answers once one is chosen, for a screen reader.
+  theAnswer: 'The answer',
+  yourAnswer: 'Your answer',
   wrongBass: 'It’s {{answer}}, with {{bass}} lowest',
   // A trainer's screen: its level, rounds and settings.
   level: 'Level',

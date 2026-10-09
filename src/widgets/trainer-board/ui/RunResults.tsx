@@ -61,7 +61,7 @@ export function RunResults({
         <Button variant="soft" size="pill" onClick={onDone}>
           {t('done')}
         </Button>
-        <Button size="pill" className="flex-1" onClick={onAgain}>
+        <Button size="pill" className="flex-1 sm:min-w-56 sm:flex-none" onClick={onAgain}>
           {t('summary.again')}
         </Button>
       </div>

@@ -1,10 +1,11 @@
-import { Square, Volume2 } from 'lucide-react'
+import { Check, Square, Volume2, X } from 'lucide-react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import {
   answerKeys,
+  choiceAnswer,
   choosesKeys,
   isChoice,
   pressesKeys,
@@ -16,6 +17,7 @@ import {
 import { noteName } from '@/shared/lib/music'
 import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { AnsweredChoices } from './AnsweredChoices'
 import { DegreeSlots } from './DegreeSlots'
 import { RoundStaff } from './RoundStaff'
 import { useRoundWords } from './use-round-words'
@@ -100,22 +102,37 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
       />
 
-      <p aria-live="polite" className="min-h-7 text-lg font-semibold">
+      <p aria-live="polite" className="flex min-h-7 items-center gap-2 text-lg font-semibold">
+        {result ? (
+          result.correct ? (
+            <Check aria-hidden className="size-5 text-learned" />
+          ) : (
+            <X aria-hidden className="size-5 text-destructive" />
+          )
+        ) : null}
         {verdict}
       </p>
 
-      {choices && !result ? (
-        <div
-          role="group"
-          aria-label={t('quiz:answers')}
-          className="grid grid-cols-2 gap-3 lg:grid-cols-4"
-        >
-          {choices.map(({ value, label }) => (
-            <Button key={value} variant="outline" size="lg" onClick={() => trainer.choose(value)}>
-              {label}
-            </Button>
-          ))}
-        </div>
+      {choices && isChoice(question) ? (
+        result?.kind === 'choice' ? (
+          <AnsweredChoices
+            choices={choices}
+            answer={choiceAnswer(question)}
+            chosen={result.chosen}
+          />
+        ) : (
+          <div
+            role="group"
+            aria-label={t('quiz:answers')}
+            className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+          >
+            {choices.map(({ value, label }) => (
+              <Button key={value} variant="outline" size="lg" onClick={() => trainer.choose(value)}>
+                {label}
+              </Button>
+            ))}
+          </div>
+        )
       ) : null}
 
       {choosing ? (

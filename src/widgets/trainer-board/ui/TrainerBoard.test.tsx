@@ -85,6 +85,28 @@ describe('TrainerBoard', () => {
     expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
+  it('keeps the answers in sight after a wrong choice: the one chosen and the answer marked', async () => {
+    const user = userEvent.setup()
+    renderBoard(skills('chord:d7', 'name-chord'))
+    const options = within(screen.getByRole('group', { name: 'Answers' })).getAllByRole('button')
+    const wrong = options.find((option) => option.textContent !== 'C7')
+    if (!wrong) throw new Error('no wrong answer offered')
+    const chosen = wrong.textContent ?? ''
+    await user.click(wrong)
+    expect(screen.getByText(/^It’s C7/)).toBeInTheDocument()
+    const answered = within(screen.getByRole('list', { name: 'Answers' })).getAllByRole('listitem')
+    expect(answered.map((item) => item.textContent)).toEqual(
+      options.map((option) =>
+        option.textContent === 'C7'
+          ? 'C7The answer'
+          : option.textContent === chosen
+            ? `${chosen}Your answer`
+            : option.textContent,
+      ),
+    )
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+  })
+
   it('turns Play again into Stop while the round sounds', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj', 'name-chord'))

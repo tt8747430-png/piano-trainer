@@ -46,6 +46,8 @@ export const quiz: LocaleResources['quiz'] = {
   done: 'Готово',
   right: 'Верно',
   itWas: 'Это {{answer}}',
+  theAnswer: 'Правильный ответ',
+  yourAnswer: 'Ваш ответ',
   wrongBass: 'Это {{answer}}, внизу {{bass}}',
   level: 'Уровень',
   custom: 'Свой',
