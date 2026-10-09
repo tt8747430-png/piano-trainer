@@ -48,7 +48,7 @@ export function ExplorerKeyboard({
   return (
     // The rail's strip is as tall as its buttons' targets and draws only its lower part: the rest is
     // already the gap over the keys, so the keyboard sits that much nearer what is above it.
-    <Pinned className={cn('-mt-4', className)}>
+    <Pinned className={cn('-mt-2', className)}>
       <LiveKeyboard
         range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
         inView={rangeOf(showing) ?? rangeOf(opened)}
