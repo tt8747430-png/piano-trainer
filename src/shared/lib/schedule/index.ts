@@ -25,7 +25,6 @@ export {
   chordSounds,
   INTERVAL_WAYS,
   intervalSounds,
-  keySounds,
   PRACTICE_RHYTHM_IDS,
   walkSounds,
   type IntervalWay,

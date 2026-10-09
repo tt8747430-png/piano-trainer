@@ -20,17 +20,39 @@ describe('LiveKeyboard', () => {
     const onKeyPress = vi.fn()
     const { audio } = setUp({ onKeyPress })
     await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
-    expect(audio.played.flatMap((play) => play.sounds)).toMatchObject([{ kind: 'note', midi: 66 }])
+    expect(audio.voice[0]).toEqual({ kind: 'press', midi: 66, velocity: 100 })
     expect(audio.stops).toBe(0)
     expect(onKeyPress).toHaveBeenCalledWith(66)
   })
 
-  it('sounds a tapped key at once, from the audio clock’s now', async () => {
-    const user = userEvent.setup()
+  it('sounds a tapped key until it is lifted', () => {
     const { audio } = setUp()
-    audio.setNow(2)
-    await user.click(screen.getByRole('button', { name: 'F sharp 4' }))
-    expect(audio.played.at(-1)?.at).toBe(2)
+    const key = screen.getByRole('button', { name: 'F sharp 4' })
+    fireEvent.pointerDown(key, { pointerId: 1, pointerType: 'touch' })
+    expect(audio.voice).toEqual([{ kind: 'press', midi: 66, velocity: 100 }])
+    fireEvent.pointerUp(key, { pointerId: 1, pointerType: 'touch' })
+    expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: 66 })
+  })
+
+  it('lets go of a key still held as the screen goes', () => {
+    const { audio, unmount } = setUp()
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'C4' }), {
+      pointerId: 1,
+      pointerType: 'touch',
+    })
+    unmount()
+    expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: 60 })
+  })
+
+  it('sounds a typed key until it comes up', () => {
+    const { audio, settingsStore } = setUp()
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
+    expect(audio.voice).toEqual([
+      { kind: 'press', midi: 60, velocity: 100 },
+      { kind: 'release', midi: 60 },
+    ])
   })
 
   it('puts a tapped key down while it is pressed, and up once it lifts, however long it rings', () => {
@@ -104,11 +126,15 @@ describe('LiveKeyboard', () => {
     const { audio } = setUp({
       keyPlays: (key) => (key === 62 ? [midi(62), midi(65), midi(69)] : [key]),
     })
-    fireEvent.pointerDown(screen.getByRole('button', { name: 'D4' }), { pointerId: 1 })
-    const notes = (audio.played.at(-1)?.sounds ?? []).flatMap((sound) =>
-      sound.kind === 'note' ? [sound.midi] : [],
-    )
-    expect(notes).toEqual([62, 65, 69])
+    const d4 = screen.getByRole('button', { name: 'D4' })
+    fireEvent.pointerDown(d4, { pointerId: 1 })
+    expect(audio.voice.map((event) => event.kind === 'press' && event.midi)).toEqual([62, 65, 69])
     expect(screen.getByRole('button', { name: 'A4' })).toHaveAttribute('data-down')
+    fireEvent.pointerUp(d4, { pointerId: 1 })
+    expect(audio.voice.slice(3).map((event) => event.kind)).toEqual([
+      'release',
+      'release',
+      'release',
+    ])
   })
 })

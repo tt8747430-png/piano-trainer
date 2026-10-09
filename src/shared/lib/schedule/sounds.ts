@@ -17,7 +17,6 @@ export function barSounds(
 
 const BLOCK = { duration: 1.6, velocity: 0.18 } as const
 const ARPEGGIO = { gap: 0.22, duration: 1.4, velocity: 0.2 } as const
-const TAP = { duration: 1.2, velocity: 0.2 } as const
 
 /** A chord struck at once or rolled upwards: the explorers' Play and Arpeggio. */
 export function chordSounds(
@@ -34,16 +33,6 @@ export function chordSounds(
       velocity: options.arpeggio ? ARPEGGIO.velocity : BLOCK.velocity,
     }))
 }
-
-/** The keys a hand plays at once, now: a tap's key, or the chord a key stands for, each softer. */
-export const keySounds = (keys: readonly Midi[]): NoteSound[] =>
-  keys.map((key) => ({
-    kind: 'note',
-    midi: key,
-    at: 0,
-    duration: TAP.duration,
-    velocity: keys.length > 1 ? BLOCK.velocity : TAP.velocity,
-  }))
 
 /** The three ways an interval is heard: the lower note first, the upper first, or both at once. */
 export const INTERVAL_WAYS = ['up', 'down', 'together'] as const

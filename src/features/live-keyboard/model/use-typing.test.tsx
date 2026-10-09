@@ -20,7 +20,7 @@ describe('typing on the computer keyboard', () => {
     const user = userEvent.setup()
     const { audio, onKeyPress } = typingKeyboard()
     await user.keyboard('a')
-    expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 60 }])
+    expect(audio.voice[0]).toEqual({ kind: 'press', midi: 60, velocity: 100 })
     expect(onKeyPress).toHaveBeenCalledWith(60)
     expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
   })

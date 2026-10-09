@@ -13,15 +13,6 @@ export interface PlayHandle {
   readonly until: number
 }
 
-/** How a play is shown on the keys. */
-export interface PlayOptions {
-  /**
-   * A hand's play (a tapped or typed key): the keyboard shows the key while the hand holds it, so
-   * the port sounds it without counting it among the keys it shows sounding.
-   */
-  readonly byHand?: boolean
-}
-
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
   /**
@@ -30,7 +21,7 @@ export interface AudioOutput {
    */
   unlock(): Promise<void>
   /** Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns their play. */
-  play(sounds: readonly Sound[], at?: number, options?: PlayOptions): PlayHandle
+  play(sounds: readonly Sound[], at?: number): PlayHandle
   /**
    * Silences what sounds, recordings too, and drops what is queued: every play stops playing. The
    * live voice is a hand's: a key it holds ends when it is let go.
@@ -57,10 +48,15 @@ export interface AudioOutput {
    * audio clock, the page's own in seconds.
    */
   audioTimeAt(pageTime: number): number
-  /** The keys the app is sounding now, the live voice's too: the same set until they change. */
+  /** The keys the app's music is sounding now: the same set until they change. */
   sounding(): ReadonlySet<Midi>
   /** The keys sounding now that were struck last (spotlight): the same set until they change. */
   struck(): ReadonlySet<Midi>
+  /**
+   * The keys the live voice sounds now: a hand's, and the ones the pedals hold after it let go. The
+   * same set until they change.
+   */
+  live(): ReadonlySet<Midi>
   /** Whether a play has a note sounding or still to come: false once its last note ends or stop() cuts it off. */
   isPlaying(play: PlayHandle): boolean
   /**

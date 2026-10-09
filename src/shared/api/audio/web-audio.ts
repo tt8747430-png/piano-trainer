@@ -203,13 +203,13 @@ export function createWebAudioOutput({
       const audio = openContext()
       if (audio && heldBack(audio)) await audio.resume()
     },
-    play(sounds, at, options) {
+    play(sounds, at) {
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
       if (heldBack(audio)) void audio.resume()
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
-      return keys.add(sounds, start, options)
+      return keys.add(sounds, start)
     },
     stop() {
       recordings.stop()
@@ -234,6 +234,7 @@ export function createWebAudioOutput({
       context ? heard() + (pageTime - pageNow()) / 1000 : pageTime / 1000,
     sounding: keys.current,
     struck: keys.struck,
+    live: keys.live,
     isPlaying: keys.isPlaying,
     onSounding: keys.subscribe,
   }

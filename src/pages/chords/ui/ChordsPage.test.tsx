@@ -195,7 +195,7 @@ describe('Practice → Chords', () => {
     const { audio } = await renderApp('/practice/chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'A4' }))
-    expect(audio.played.at(-1)?.sounds).toMatchObject([{ kind: 'note', midi: 69 }])
+    expect(audio.voice[0]).toEqual({ kind: 'press', midi: 69, velocity: 100 })
   })
 
   it('offers only the inversions the chord has', async () => {

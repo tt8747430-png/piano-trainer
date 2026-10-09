@@ -5,7 +5,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
-import { usePlay, useSoundKeys } from './use-play'
+import { usePlay } from './use-play'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 
@@ -17,9 +17,6 @@ function setup<T>(hook: () => T) {
   const { result } = renderHook(hook, { wrapper })
   return { audio, result, current: result.current }
 }
-
-const keysPlayed = (sounds: readonly Sound[]) =>
-  sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))
 
 describe('usePlay', () => {
   it('unlocks audio and plays from just after now', () => {
@@ -37,36 +34,5 @@ describe('usePlay', () => {
     play([NOTE])
     expect(audio.stops).toBe(2)
     expect(audio.played).toHaveLength(2)
-  })
-})
-
-describe('useSoundKeys', () => {
-  it('sounds a tapped key on top of what sounds, cutting nothing off', () => {
-    const { audio, current: soundKeys } = setup(useSoundKeys)
-    soundKeys([midi(66)])
-    expect(audio.unlocks).toBe(1)
-    expect(audio.stops).toBe(0)
-    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([66])
-  })
-
-  it('sounds a tap at once, from the audio clock’s now', () => {
-    const { audio, current: soundKeys } = setup(useSoundKeys)
-    audio.setNow(3)
-    soundKeys([midi(60)])
-    expect(audio.played.at(-1)?.at).toBe(3)
-  })
-
-  it('leaves a tapped key for the hand to show: it is not among the keys sounding', () => {
-    const { audio, current: soundKeys } = setup(useSoundKeys)
-    soundKeys([midi(60)])
-    audio.setNow(0.5)
-    expect(audio.sounding().size).toBe(0)
-  })
-
-  it('sounds every key a hand plays at once, as one play', () => {
-    const { audio, current: soundKeys } = setup(useSoundKeys)
-    soundKeys([midi(62), midi(65), midi(69)])
-    expect(audio.played).toHaveLength(1)
-    expect(keysPlayed(audio.played[0]?.sounds ?? [])).toEqual([62, 65, 69])
   })
 })

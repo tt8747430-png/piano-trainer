@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import { audibleHands } from './schedule'
-import { barSounds, chordSounds, intervalSounds, keySounds, walkSounds } from './sounds'
+import { barSounds, chordSounds, intervalSounds, walkSounds } from './sounds'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const TWO_BARS_CHART: Chart = {
@@ -72,24 +72,6 @@ describe('walkSounds', () => {
     expect(sounds.slice(0, 3).map((s) => s.at)).toEqual([0, 0.5, 1])
     // Seven notes an 8th apart take four beats before the next chord.
     expect(sounds[7]?.at).toBe(4)
-  })
-})
-
-describe('keySounds', () => {
-  it('sounds a tapped key now, ringing on', () => {
-    const [sound] = keySounds([midi(66)])
-    expect(sound).toMatchObject({ kind: 'note', midi: 66, at: 0 })
-    expect(sound?.duration).toBeGreaterThan(0.5)
-  })
-
-  it('sounds the chord a key stands for at once, each note softer than a lone key', () => {
-    const chord = keySounds([midi(62), midi(65), midi(69)])
-    expect(chord.map((sound) => [sound.midi, sound.at])).toEqual([
-      [62, 0],
-      [65, 0],
-      [69, 0],
-    ])
-    expect(chord[0]?.velocity).toBeLessThan(keySounds([midi(62)])[0]?.velocity ?? 0)
   })
 })
 

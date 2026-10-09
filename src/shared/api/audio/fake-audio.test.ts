@@ -56,14 +56,6 @@ describe('createFakeAudio', () => {
     audio.stop()
     expect(audio.isPlaying(play)).toBe(false)
   })
-
-  it('records a hand’s play without showing its keys', () => {
-    const audio = createFakeAudio()
-    audio.play(chordSounds([midi(60)], { arpeggio: false }), 0, { byHand: true })
-    audio.setNow(0.5)
-    expect(audio.played).toHaveLength(1)
-    expect(audio.sounding().size).toBe(0)
-  })
 })
 
 describe('the fake’s live voice', () => {
@@ -86,10 +78,10 @@ describe('the fake’s live voice', () => {
     audio.pedal('sustain', true)
     audio.press(midi(60), 100)
     audio.release(midi(60))
-    expect([...audio.sounding()]).toEqual([60])
+    expect([...audio.live()]).toEqual([60])
     expect(audio.pedals().sustain).toBe(true)
     audio.pedal('sustain', false)
-    expect(audio.sounding().size).toBe(0)
+    expect(audio.live().size).toBe(0)
     expect(onChange).toHaveBeenCalledTimes(3)
   })
 
@@ -97,7 +89,7 @@ describe('the fake’s live voice', () => {
     const audio = createFakeAudio()
     audio.press(midi(60), 100)
     audio.stop()
-    expect([...audio.sounding()]).toEqual([60])
+    expect([...audio.live()]).toEqual([60])
   })
 })
 

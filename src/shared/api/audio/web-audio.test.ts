@@ -219,7 +219,7 @@ describe('the live voice', () => {
     audio.press(midi(69), 100)
     audio.stop()
     expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
-    expect([...audio.sounding()]).toEqual([69])
+    expect([...audio.live()]).toEqual([69])
   })
 
   it('holds a key let go under the sustain until it comes up', () => {
@@ -230,7 +230,7 @@ describe('the live voice', () => {
     expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
     audio.pedal('sustain', false)
     expect(context.oscillators.every((o) => o.stop === 0.25)).toBe(true)
-    expect(audio.sounding().size).toBe(0)
+    expect(audio.live().size).toBe(0)
   })
 })
 

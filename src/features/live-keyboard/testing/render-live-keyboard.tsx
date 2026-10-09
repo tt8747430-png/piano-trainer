@@ -29,7 +29,7 @@ export function renderLiveKeyboard({
     languages: ['en'],
     finePointer: false,
   })
-  render(
+  const { unmount } = render(
     <SettingsStoreProvider store={settingsStore}>
       <ServicesProvider services={{ audio, midi: midiKeyboard }}>
         <LiveKeyboard
@@ -43,5 +43,5 @@ export function renderLiveKeyboard({
       </ServicesProvider>
     </SettingsStoreProvider>,
   )
-  return { audio, midiKeyboard, settingsStore }
+  return { audio, midiKeyboard, settingsStore, unmount }
 }

@@ -8,12 +8,12 @@ import {
   type KeyWindow,
   type Sound,
 } from '@/shared/lib/schedule'
-import type { PlayHandle, PlayOptions } from './types'
+import type { PlayHandle } from './types'
 
 /** Which keys the audio output is sounding, and which plays still sound: until they end or are stopped. */
 export interface SoundingKeys {
-  /** Notes the output was asked to play from `at` on the clock; returns their play. A hand's play shows no keys. */
-  add(sounds: readonly Sound[], at: number, options?: PlayOptions): PlayHandle
+  /** Notes the output was asked to play from `at` on the clock; returns their play. */
+  add(sounds: readonly Sound[], at: number): PlayHandle
   /** Nothing sounds any more: every play stops playing. */
   clear(): void
   /** The keys sounding at the last look: the same set until they change. */
@@ -26,11 +26,10 @@ export interface SoundingKeys {
   subscribe(onChange: () => void): () => void
   /** Looks at the clock again. */
   update(): void
-  /**
-   * The live voice now: its keys sounding and struck with the scheduled ones until they change; the
-   * listeners are told when they or the pedals change.
-   */
+  /** The live voice now: the listeners are told when its keys or the pedals change. */
   setLive(live: Pick<Damper, 'sounding' | 'pedals'>): void
+  /** The live voice's keys sounding at its last change: the same set until they change. */
+  live(): ReadonlySet<Midi>
 }
 
 /** The play of sounds with no notes, or of sounds nothing could play: it never plays. */
@@ -40,9 +39,6 @@ const NONE: ReadonlySet<Midi> = new Set()
 
 const sameKeys = (a: ReadonlySet<Midi>, b: ReadonlySet<Midi>) =>
   a.size === b.size && [...a].every((key) => b.has(key))
-
-const withLive = (keys: ReadonlySet<Midi>, live: ReadonlySet<Midi>): ReadonlySet<Midi> =>
-  live.size === 0 ? keys : new Set([...keys, ...live])
 
 /**
  * The log both audio adapters keep. With `frame` (the browser's animation frames) it looks at the
@@ -70,10 +66,10 @@ export function createSoundingKeys({
     windows = windows.filter((window) => window.to > time)
     const ended = [...playing].filter((play) => play.until <= time)
     for (const play of ended) playing.delete(play)
-    const sounding = withLive(keysSoundingAt(windows, time), live)
+    const sounding = keysSoundingAt(windows, time)
     const soundingChanged = !sameKeys(sounding, current)
     if (soundingChanged) current = sounding.size === 0 ? NONE : sounding
-    const last = withLive(keysStruckAt(windows, time), live)
+    const last = keysStruckAt(windows, time)
     const struckChanged = !sameKeys(last, struck)
     if (struckChanged) struck = last.size === 0 ? NONE : last
     if (stopped || ended.length > 0 || soundingChanged || struckChanged)
@@ -92,11 +88,11 @@ export function createSoundingKeys({
   }
 
   return {
-    add(sounds, at, { byHand = false } = {}) {
+    add(sounds, at) {
       const added = keyWindows(sounds, at)
       if (added.length === 0) return NOTHING_PLAYED
       const play: PlayHandle = { until: Math.max(...added.map((window) => window.to)) }
-      if (!byHand) windows = [...windows, ...added]
+      windows = [...windows, ...added]
       playing.add(play)
       update()
       follow()
@@ -120,10 +116,11 @@ export function createSoundingKeys({
     },
     update,
     setLive({ sounding, pedals: now }) {
-      const pedalled = now !== pedals
+      const changed = now !== pedals || !sameKeys(sounding, live)
       pedals = now
       if (!sameKeys(sounding, live)) live = sounding.size === 0 ? NONE : sounding
-      look(pedalled)
+      if (changed) for (const listener of listeners) listener()
     },
+    live: () => live,
   }
 }

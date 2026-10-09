@@ -28,8 +28,6 @@ function setUp({ frames = false } = {}) {
   }
 }
 
-const setUpWithFrames = () => setUp({ frames: true })
-
 describe('createSoundingKeys', () => {
   it('puts keys down as their notes start and lets them up as they end', () => {
     const { keys, at } = setUp()
@@ -128,38 +126,16 @@ describe('createSoundingKeys', () => {
     expect(keys.isPlaying(keys.add([{ kind: 'click', at: 0, accent: true }], 0))).toBe(false)
   })
 
-  it('plays a hand’s play without showing its keys: the hand that holds them shows them', () => {
-    const { keys, at } = setUp()
-    const onChange = vi.fn()
-    keys.subscribe(onChange)
-    const play = keys.add(chordSounds([midi(60)], { arpeggio: false }), 1, { byHand: true })
-    at(1.5)
-    expect(keys.current().size).toBe(0)
-    expect(keys.struck().size).toBe(0)
-    expect(keys.isPlaying(play)).toBe(true)
-    at(5)
-    expect(keys.isPlaying(play)).toBe(false)
-    expect(onChange).toHaveBeenCalledOnce()
-  })
-
-  it('looks again every frame while only a hand’s play sounds, so its end is heard', () => {
-    const { keys, queued, tick } = setUpWithFrames()
-    keys.subscribe(() => {})
-    const play = keys.add(chordSounds([midi(60)], { arpeggio: false }), 0, { byHand: true })
-    expect(queued).toHaveLength(1)
-    tick(5)
-    expect(keys.isPlaying(play)).toBe(false)
-  })
-
-  it('shows the live voice’s keys sounding and struck beside the scheduled ones', () => {
+  it('keeps the live voice’s keys apart from the music’s, telling its listeners', () => {
     const { keys, at } = setUp()
     const onChange = vi.fn()
     keys.subscribe(onChange)
     keys.add(chordSounds([midi(64)], { arpeggio: false }), 0)
     at(0.5)
     keys.setLive(live(60))
-    expect([...keys.current()].toSorted()).toEqual([60, 64])
-    expect([...keys.struck()].toSorted()).toEqual([60, 64])
+    expect([...keys.live()]).toEqual([60])
+    expect([...keys.current()]).toEqual([64])
+    expect([...keys.struck()]).toEqual([64])
     expect(onChange).toHaveBeenCalledTimes(2)
   })
 
@@ -168,12 +144,12 @@ describe('createSoundingKeys', () => {
     const onChange = vi.fn()
     keys.subscribe(onChange)
     keys.setLive(live(60))
-    const shown = keys.current()
+    const shown = keys.live()
     keys.setLive(live(60))
-    expect(keys.current()).toBe(shown)
+    expect(keys.live()).toBe(shown)
     expect(onChange).toHaveBeenCalledOnce()
     keys.setLive(live())
-    expect(keys.current().size).toBe(0)
+    expect(keys.live().size).toBe(0)
   })
 
   it('tells its listeners when a pedal moves, though no key changes', () => {
@@ -188,6 +164,6 @@ describe('createSoundingKeys', () => {
     const { keys } = setUp()
     keys.setLive(live(60))
     keys.clear()
-    expect([...keys.current()]).toEqual([60])
+    expect([...keys.live()]).toEqual([60])
   })
 })

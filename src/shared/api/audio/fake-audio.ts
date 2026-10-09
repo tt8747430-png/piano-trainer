@@ -33,10 +33,10 @@ export function createFakeAudio(): FakeAudio {
     async unlock() {
       unlocks++
     },
-    play(sounds, at, options) {
+    play(sounds, at) {
       const start = at ?? clock + PLAY_DELAY
       played.push({ sounds, at: start })
-      return keys.add(sounds, start, options)
+      return keys.add(sounds, start)
     },
     stop() {
       stops++
@@ -65,6 +65,7 @@ export function createFakeAudio(): FakeAudio {
     audioTimeAt: (pageTime) => clock + (pageTime - performance.now()) / 1000,
     sounding: keys.current,
     struck: keys.struck,
+    live: keys.live,
     isPlaying: keys.isPlaying,
     onSounding: keys.subscribe,
     setNow(seconds) {

@@ -2,11 +2,14 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import type { LiveEvent } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 
 const notes = (sounds: readonly Sound[]) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))
+const pressed = (voice: readonly LiveEvent[]) =>
+  voice.flatMap((event) => (event.kind === 'press' ? [event.midi] : []))
 
 describe('Practice → Scales and keys', () => {
   it('spells E♭ harmonic minor with its C♭ and names its structure', async () => {
@@ -143,7 +146,7 @@ describe('Practice → Scales and keys', () => {
     const { audio } = await renderApp('/practice/scales?show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'D4' }), { pointerId: 1 })
-    expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([62, 65, 69])
+    expect(pressed(audio.voice)).toEqual([62, 65, 69])
     expect(within(keyboard).getByRole('button', { name: 'A4' })).toHaveAttribute('data-down')
   })
 
@@ -158,7 +161,7 @@ describe('Practice → Scales and keys', () => {
     const { audio } = await renderApp('/practice/scales?show=chords&keysPlay=notes')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E4' }), { pointerId: 1 })
-    expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([64])
+    expect(pressed(audio.voice)).toEqual([64])
     expect(screen.getByText('E is in C, Em, and Am')).toBeInTheDocument()
     for (const name of ['C4', 'E4', 'A4']) {
       expect(within(keyboard).getByRole('button', { name })).toHaveClass('ring-ring')
