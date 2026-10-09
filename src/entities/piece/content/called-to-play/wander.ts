@@ -14,7 +14,8 @@ export default definePiece({
     ru: 'Песня выпускного экзамена. Спланируйте своё вступление, способы и динамику на 2 куплета, затем сыграйте её с певцом.',
   },
   sections: [
-    { kind: 'verse', lines: ['Am Dm G C', 'F Dm E E', 'Am Dm G C', 'F Dm E E'] },
+    { kind: 'verse', n: 1, lines: ['Am Dm G C', 'F Dm E E', 'Am Dm G C', 'F Dm E E'] },
     { kind: 'chorus', lines: ['Am Dm G C', 'F Dm E Am'] },
+    { kind: 'verse', n: 2, lines: ['Am Dm G C', 'F Dm E E', 'Am Dm G C', 'F Dm E E'] },
   ],
 })

@@ -17,7 +17,7 @@ export default definePiece({
         'Em:4 Am:t3 D:5.1 G:6d',
         'C:3 Am:t1 B:2 Em:t4',
         'Em:3ch Am:inv D:t5 G:6u',
-        'C:t4 Am:6d B:t1 Em:1',
+        'C:t4 Am:6d B:t1 Em',
       ],
     },
   ],
