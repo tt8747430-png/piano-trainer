@@ -1,10 +1,11 @@
-import { act, createEvent, fireEvent, screen } from '@testing-library/react'
+import { act, createEvent, fireEvent, renderHook, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setKeyboard } from '@/features/set-preference'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { stubScrolling } from '@/shared/test/layout'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
+import { useTyping } from './use-typing'
 
 function typingKeyboard(onKeyPress = vi.fn()) {
   const set = setUp({ onKeyPress })
@@ -109,5 +110,54 @@ describe('typing on the computer keyboard', () => {
     setUp({ onKeyPress })
     await user.keyboard('a')
     expect(onKeyPress).not.toHaveBeenCalled()
+  })
+})
+
+describe('a typed key let go', () => {
+  function typing() {
+    const onKey = vi.fn()
+    const onKeyUp = vi.fn()
+    const hook = renderHook(
+      ({ enabled }) => useTyping({ enabled, onKey, onKeyUp, inView: undefined }),
+      { initialProps: { enabled: true } },
+    )
+    return { onKeyUp, hook }
+  }
+
+  const down = (code: string, key: string) => fireEvent.keyDown(window, { code, key })
+
+  it('reports the key it played as it comes up, though Z moved the octave meanwhile', () => {
+    const { onKeyUp } = typing()
+    down('KeyA', 'a')
+    down('KeyZ', 'z')
+    fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
+    fireEvent.keyUp(window, { code: 'KeyA', key: 'a' })
+    expect(onKeyUp).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it('reports every key held as the window loses the focus', () => {
+    const { onKeyUp } = typing()
+    down('KeyA', 'a')
+    down('KeyD', 'd')
+    act(() => void window.dispatchEvent(new Event('blur')))
+    expect(onKeyUp.mock.calls).toEqual([[60], [64]])
+  })
+
+  it('reports every key held as Cmd is let go', () => {
+    const { onKeyUp } = typing()
+    down('KeyA', 'a')
+    fireEvent.keyUp(window, { code: 'MetaLeft', key: 'Meta' })
+    expect(onKeyUp).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it('reports every key held as typing is switched off, or the screen goes', () => {
+    const { onKeyUp, hook } = typing()
+    down('KeyA', 'a')
+    hook.rerender({ enabled: false })
+    expect(onKeyUp).toHaveBeenCalledExactlyOnceWith(60)
+    hook.rerender({ enabled: true })
+    down('KeyD', 'd')
+    hook.unmount()
+    expect(onKeyUp.mock.calls).toEqual([[60], [64]])
   })
 })

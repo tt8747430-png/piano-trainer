@@ -63,6 +63,7 @@ export function PianoKeyboard({
   letters,
   keyPlays,
   onKeyPress,
+  onKeyRelease,
   children,
   ...states
 }: KeyStates & {
@@ -85,6 +86,8 @@ export function PianoKeyboard({
   keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
   /** Every key does something: a key that did nothing would be a dead end. */
   onKeyPress: (key: Midi) => void
+  /** A key a hand pressed is let go: lifted, left, or (pressed with no pointer) at once. */
+  onKeyRelease?: ((key: Midi) => void) | undefined
   /** The rail's trailing controls: `RailButton`s. */
   children?: ReactNode
 }) {
@@ -103,11 +106,14 @@ export function PianoKeyboard({
 
   // Keys hold one handler for good, so they re-render only when their own look changes.
   const latestPress = useRef(onKeyPress)
+  const latestRelease = useRef(onKeyRelease)
   useLayoutEffect(() => {
     latestPress.current = onKeyPress
+    latestRelease.current = onKeyRelease
   })
   const press = useCallback((key: Midi) => latestPress.current(key), [])
-  const pointers = useKeyPointers({ swipe, keys, onPress: press })
+  const letGo = useCallback((key: Midi) => latestRelease.current?.(key), [])
+  const pointers = useKeyPointers({ swipe, keys, onPress: press, onRelease: letGo })
 
   const down = useMemo(() => {
     if (pointers.pressed.size === 0) return states.down

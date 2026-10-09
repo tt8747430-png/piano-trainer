@@ -12,17 +12,20 @@ const NO_POINTER = -1
  * shortest press, so a tap as light as a trackpad's shows. No capture is needed: a touch or pen is
  * captured by the key it went down on, so its moves and its lift reach the group; a mouse released
  * outside is forgotten at its next move. A pointer's own click never plays again; any other click
- * (Enter, Space, a screen reader) plays once.
+ * (Enter, Space, a screen reader) plays once. A key a pointer leaves or lifts from is let go
+ * (`onRelease`), before the next it enters plays; a click no pointer made plays, then lets go.
  */
 export function useKeyPointers({
   swipe,
   keys,
   onPress,
+  onRelease,
 }: {
   swipe: Swipe
   /** The keys' group, whose box a pointer's position is read against. */
   keys: RefObject<HTMLElement | null>
   onPress: (key: Midi) => void
+  onRelease: (key: Midi) => void
 }) {
   /** Each pointer down on the keys, and the key it is on (null between keys, in Glissando). */
   const pointers = useRef(new Map<number, Midi | null>())
@@ -31,19 +34,23 @@ export function useKeyPointers({
   /** The key a pointer went down on: the pointer's click that follows belongs to that press. */
   const pointerKey = useRef<Midi | null>(null)
 
-  /** The pointer is on `key` (or between keys): its press moves there. */
+  /** The pointer is on `key` (or between keys): its press moves there, letting go of the key it left. */
   const moveTo = useCallback(
     (pointerId: number, key: Midi | null) => {
+      const left = pointers.current.get(pointerId)
       pointers.current.set(pointerId, key)
+      if (left != null && left !== key) onRelease(left)
       if (key === null) release(pointerId)
       else press(pointerId, key)
     },
-    [press, release],
+    [press, release, onRelease],
   )
 
   const forget = (pointerId: number) => {
+    const left = pointers.current.get(pointerId)
     if (!pointers.current.delete(pointerId)) return
     release(pointerId)
+    if (left != null) onRelease(left)
   }
 
   const pointerDown = useCallback(
@@ -64,8 +71,9 @@ export function useKeyPointers({
       press(NO_POINTER, key)
       release(NO_POINTER)
       onPress(key)
+      onRelease(key)
     },
-    [onPress, press, release],
+    [onPress, onRelease, press, release],
   )
 
   const group = {

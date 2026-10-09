@@ -21,11 +21,19 @@ const touch = (pointerId: number, clientX: number, clientY = 90) => ({
 
 function setUp(props: Partial<ComponentProps<typeof PianoKeyboard>> = {}) {
   const onKeyPress = vi.fn()
-  render(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={onKeyPress} {...props} />)
+  const onKeyRelease = vi.fn()
+  render(
+    <PianoKeyboard
+      range={ONE_OCTAVE}
+      onKeyPress={onKeyPress}
+      onKeyRelease={onKeyRelease}
+      {...props}
+    />,
+  )
   const keys = screen.getByRole('group', { name: 'Keyboard' })
   stubBox(keys, { width: 520, height: 100 })
   const key = (name: string) => screen.getByRole('button', { name })
-  return { onKeyPress, keys, key }
+  return { onKeyPress, onKeyRelease, keys, key }
 }
 
 /** Past the shortest press: a key let go is up again. */
@@ -162,5 +170,56 @@ describe('touching the keys', () => {
     expect(onKeyPress).toHaveBeenCalledExactlyOnceWith(60)
     pastTheShortestPress()
     expect(key('C4')).not.toHaveAttribute('data-down')
+  })
+})
+
+describe('letting a key go', () => {
+  it('reports a touch’s key once as it lifts', () => {
+    const { onKeyRelease, key } = setUp()
+    fireEvent.pointerDown(key('F sharp 4'), touch(1, 270, 30))
+    expect(onKeyRelease).not.toHaveBeenCalled()
+    fireEvent.pointerUp(key('F sharp 4'), touch(1, 270, 30))
+    fireEvent.pointerUp(key('F sharp 4'), touch(1, 270, 30))
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(66)
+  })
+
+  it('reports the key of a press the browser cancels', () => {
+    const { onKeyRelease, keys, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerCancel(keys, touch(1, x(23)))
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it('in Glissando, lets the key a finger leaves go before the next one plays', () => {
+    const { onKeyPress, onKeyRelease, keys, key } = setUp({ swipe: 'glissando' })
+    const heard: string[] = []
+    onKeyPress.mockImplementation((played: number) => heard.push(`press ${played}`))
+    onKeyRelease.mockImplementation((letGo: number) => heard.push(`release ${letGo}`))
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerMove(keys, touch(1, x(24)))
+    expect(heard).toEqual(['press 60', 'release 60', 'press 62'])
+  })
+
+  it('in Glissando, lets a key go as the pointer leaves the keys', () => {
+    const { onKeyRelease, keys, key } = setUp({ swipe: 'glissando' })
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerLeave(keys, touch(1, x(23)))
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it('in Scroll, lets a key go as the pointer leaves the keys', () => {
+    const { onKeyRelease, keys, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerLeave(keys, touch(1, x(23)))
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it('plays then lets go a key pressed with no pointer (Enter, a screen reader)', async () => {
+    const user = userEvent.setup()
+    const { onKeyPress, onKeyRelease, key } = setUp()
+    key('C4').focus()
+    await user.keyboard('{Enter}')
+    expect(onKeyPress).toHaveBeenCalledExactlyOnceWith(60)
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
   })
 })

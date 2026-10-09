@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import {
   moveTypingOctave,
   OCTAVE_DOWN,
@@ -24,15 +24,18 @@ const NONE: ReadonlySet<Midi> = new Set()
  * for at least the shortest press; Z and X move the typing octave, and the keyboard shows it until the screen's own keys in view
  * change. Nothing plays from a text field, with a modifier held, or on auto-repeat; a key that
  * plays is not also the browser's. Letting go of Cmd lets go of every typed key: macOS sends no
- * key-up for a letter released while Cmd is held.
+ * key-up for a letter released while Cmd is held. Each key let go calls `onKeyUp` with the key it
+ * played; typing switched off, or the screen gone, lets go of every key held.
  */
 export function useTyping({
   enabled,
   onKey,
+  onKeyUp,
   inView,
 }: {
   enabled: boolean
   onKey: (key: Midi) => void
+  onKeyUp?: ((key: Midi) => void) | undefined
   inView: KeyRange | undefined
 }): {
   letters: ReadonlyMap<Midi, string> | undefined
@@ -45,6 +48,19 @@ export function useTyping({
   const { keys: held, press, release, releaseAll } = usePresses<string>()
   /** The screen's keys in view when Z or X last moved the octave: the octave shows until they change. */
   const [movedOver, setMovedOver] = useState<{ readonly view: KeyRange | undefined } | null>(null)
+  /** Each physical key held, under its code, with the piano key it played: what its key-up lets go. */
+  const playing = useRef(new Map<string, Midi>())
+  const letGo = useEffectEvent((code: string) => {
+    const key = playing.current.get(code)
+    if (key === undefined) return
+    playing.current.delete(code)
+    release(code)
+    onKeyUp?.(key)
+  })
+  const letAllGo = useEffectEvent(() => {
+    for (const code of [...playing.current.keys()]) letGo(code)
+    releaseAll()
+  })
   const typed = useEffectEvent((event: KeyboardEvent) => {
     if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
     if (event.target instanceof Element && event.target.closest(EDITABLE)) return
@@ -58,6 +74,8 @@ export function useTyping({
     const key = typedKey(event.code, typingC)
     if (key === null) return
     event.preventDefault()
+    letGo(event.code)
+    playing.current.set(event.code, key)
     press(event.code, key)
     onKey(key)
   })
@@ -66,19 +84,20 @@ export function useTyping({
     if (!enabled) return
     const onKeyDown = (event: KeyboardEvent) => typed(event)
     const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'Meta') releaseAll()
-      else release(event.code)
+      if (event.key === 'Meta') letAllGo()
+      else letGo(event.code)
     }
+    const onBlur = () => letAllGo()
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
-    window.addEventListener('blur', releaseAll)
+    window.addEventListener('blur', onBlur)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
-      window.removeEventListener('blur', releaseAll)
-      releaseAll()
+      window.removeEventListener('blur', onBlur)
+      letAllGo()
     }
-  }, [enabled, press, release, releaseAll])
+  }, [enabled])
 
   const letters = useMemo(() => typingLetters(typingC), [typingC])
   const followsTyping = enabled && movedOver !== null && sameRange(movedOver.view, inView)
