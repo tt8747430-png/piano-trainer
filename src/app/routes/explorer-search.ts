@@ -9,7 +9,6 @@ import {
   readAlterations,
   readKeyList,
   readNote,
-  readText,
   valueOr,
   wholeIn,
 } from '@/shared/lib'
@@ -53,6 +52,7 @@ import {
   isScaleKind,
   readKey,
   readNumerals,
+  readTypedChord,
   routeSearch,
   type Input,
   type Raw,
@@ -205,16 +205,14 @@ export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
 }
 export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
 
-// Passing chords: two chords kept as typed (a line says when one cannot be read), and a key.
-/** The most of a chord symbol a field keeps: the longest the table writes, and some. */
-const TYPED_CHORD = 16
+// Passing chords: two chords as they were typed, each read (one that cannot be read is the default), and a key.
 export const PASSING_DEFAULTS: PassingView = { key: C_MAJOR_PARAM, from: 'C', to: 'F' }
 export function readPassingSearch(raw: Raw): PassingView {
   const key = readKey(raw.key)
   return {
     key: key ? keyParam(key) : PASSING_DEFAULTS.key,
-    from: readText(raw.from, PASSING_DEFAULTS.from).slice(0, TYPED_CHORD),
-    to: readText(raw.to, PASSING_DEFAULTS.to).slice(0, TYPED_CHORD),
+    from: readTypedChord(raw.from, PASSING_DEFAULTS.from),
+    to: readTypedChord(raw.to, PASSING_DEFAULTS.to),
   }
 }
 export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)

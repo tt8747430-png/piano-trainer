@@ -5,6 +5,7 @@ import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   INTERVALS_DEFAULTS,
+  PASSING_DEFAULTS,
   PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
 } from './explorer-search'
@@ -243,5 +244,14 @@ describe('search params', () => {
       size: 'sevenths',
     })
     expect(await searchAt('/practice/progressions?p=Q')).toEqual(PROGRESSIONS_DEFAULTS)
+  })
+
+  it('keep the chords typed for Passing chords, and take the default for one that cannot be read', async () => {
+    expect(await searchAt('/practice/progressions/passing?from=G7&to=Am7b5')).toEqual({
+      ...PASSING_DEFAULTS,
+      from: 'G7',
+      to: 'Am7b5',
+    })
+    expect(await searchAt('/practice/progressions/passing?from=Hm&to=Qx')).toEqual(PASSING_DEFAULTS)
   })
 })

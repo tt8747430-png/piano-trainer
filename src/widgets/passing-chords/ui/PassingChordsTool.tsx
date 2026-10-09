@@ -9,8 +9,9 @@ import {
   passingChords,
   readChordSymbol,
 } from '@/shared/lib/music'
-import { KeyChoice, NO_KEYS, TypedField } from '@/shared/ui'
+import { KeyChoice, NO_KEYS } from '@/shared/ui'
 import type { PassingView } from '../model/passing-view'
+import { ChordField } from './ChordField'
 import { SuggestionCard } from './SuggestionCard'
 
 /**
@@ -37,18 +38,12 @@ export function PassingChordsTool({
       <ExplorerKeyboard shown={shown} />
       <div className="grid-fields gap-x-10 gap-y-6">
         <div className="grid grid-cols-2 items-start gap-3">
-          <TypedField
+          <ChordField
             label={t('passing.from')}
-            value={view.from}
-            error={from === null ? t('passing.unread') : null}
-            onChange={(typed) => onChange({ from: typed })}
+            chord={view.from}
+            onChange={(from) => onChange({ from })}
           />
-          <TypedField
-            label={t('passing.to')}
-            value={view.to}
-            error={to === null ? t('passing.unread') : null}
-            onChange={(typed) => onChange({ to: typed })}
-          />
+          <ChordField label={t('passing.to')} chord={view.to} onChange={(to) => onChange({ to })} />
         </div>
         <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>

@@ -47,16 +47,22 @@ describe('Practice → Passing chords', () => {
     expect(alone).toEqual(second)
   })
 
-  it('says so when a chord typed cannot be read, and keeps what was typed in the URL', async () => {
+  it('says so when a chord typed cannot be read, and keeps the ways of the last one read', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions/passing')
     const to = await screen.findByRole('textbox', { name: 'To' })
     await user.clear(to)
-    await user.type(to, 'Qx')
+    await user.type(to, 'Eb')
+    expect(router.state.location.search).toEqual({ to: 'Eb' })
+    await user.type(to, 'q')
+    expect(to).toHaveValue('Ebq')
     expect(screen.getByText('This chord can’t be read.')).toBeInTheDocument()
     expect(to).toHaveAttribute('aria-invalid', 'true')
-    expect(screen.queryAllByRole('article')).toEqual([])
-    expect(router.state.location.search).toEqual({ to: 'Qx' })
+    expect(router.state.location.search).toEqual({ to: 'Eb' })
+    const dominant = screen.getByRole('region', { name: 'Dominant' })
+    expect(within(dominant).getByRole('article', { name: 'Secondary dominant' })).toHaveTextContent(
+      'B♭7 is the V7 of E♭.',
+    )
   })
 
   it('marks a row whose chords are all the key’s', async () => {
