@@ -46,3 +46,12 @@ export {
   velocityGain,
   type Touch,
 } from './velocity'
+export {
+  damp,
+  PEDALS,
+  QUIET_DAMPER,
+  SOFT_GAIN,
+  type Damper,
+  type DamperEvent,
+  type PedalKind,
+} from './damper'
