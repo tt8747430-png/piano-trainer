@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { RIGHT_FIGURES } from '../content/figures'
-import { PATTERNS } from '../content/patterns'
 import { BUILT_IN_PATTERNS } from './book'
 import { followsInversion, playsChord } from './plays-chord'
 
@@ -13,9 +12,7 @@ describe('playsChord', () => {
   })
 
   it('is false for a right hand that plays the tune', () => {
-    const tune = Object.values(PATTERNS).find((entry) => entry.pattern.rh.kind === 'melody')
-    if (!tune) throw new Error('a melody pattern')
-    expect(playsChord(tune.pattern.rh)).toBe(false)
+    expect(playsChord(BUILT_IN_PATTERNS.require('r5').pattern.rh)).toBe(false)
   })
 })
 

@@ -1,3 +1,4 @@
+import type { MethodBookId } from '@/entities/book'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
 import {
@@ -5,11 +6,10 @@ import {
   type EventFigure,
   type Figure,
   type FigureEvent,
-  type Pattern,
 } from '@/shared/lib/arrangement'
 
 /** Groups use the glossary's words; their displayed names keep the source's wording. */
-export const PATTERN_GROUPS = ['lesson-3', 'techniques', 'seven-types', 'genres'] as const
+export const PATTERN_GROUPS = ['five-ways', 'techniques', 'seven-types', 'genres'] as const
 export type PatternGroup = (typeof PATTERN_GROUPS)[number]
 export const isPatternGroup = isOneOf(PATTERN_GROUPS)
 
@@ -149,6 +149,13 @@ export interface FigureEntry<F extends Figure> {
   readonly figure: F
 }
 
+export interface PatternGroupEntry {
+  /** Its own name, without its book's: a list that mixes the books says the book first. */
+  readonly name: LocalText
+  /** The method book that teaches it; the rhythm styles are no book's. */
+  readonly book: MethodBookId | null
+}
+
 export interface PatternEntry {
   readonly group: PatternGroup
   readonly name: LocalText
@@ -158,8 +165,6 @@ export interface PatternEntry {
   readonly description?: LocalText
   readonly rh: RightFigureId
   readonly lh: LeftFigureId
-  /** `pattern.id` is this entry's id. */
-  readonly pattern: Pattern
 }
 
 export interface MethodEntry {

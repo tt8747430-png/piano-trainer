@@ -18,7 +18,7 @@ describe('patternBook', () => {
       rh: 'bal',
       lh: 'bal',
     })
-    expect(ballad?.pattern).toBe(PATTERNS.ballad.pattern)
+    expect(ballad?.pattern).toBe(BUILT_IN_PATTERNS.require('ballad').pattern)
   })
 
   it('finds the learner’s own, named in both languages, its idea its two figures', () => {
@@ -46,6 +46,6 @@ describe('patternBook', () => {
 
   it('plays an own pattern with a tune figure as the built-in tune patterns do', () => {
     const tune = patternBook([{ id: 'my-4', name: 'Tune', rh: 'mel', lh: 'o' }]).get('my-4')
-    expect(tune?.pattern).toMatchObject({ withoutMelody: PATTERNS.r4.pattern })
+    expect(tune?.pattern).toMatchObject({ withoutMelody: BUILT_IN_PATTERNS.require('r4').pattern })
   })
 })

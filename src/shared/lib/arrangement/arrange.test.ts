@@ -393,7 +393,7 @@ describe('arrange', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,
       pattern: BLOCK,
-      methods: { t1: BEATS },
+      methods: new Map([['t1', BEATS]]),
     })
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48])
     expect(performance.chords.map((chord) => [chord.method, chord.pattern])).toEqual([
@@ -406,7 +406,7 @@ describe('arrange', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,
       pattern: BLOCK,
-      methods: { t1: BEATS },
+      methods: new Map([['t1', BEATS]]),
       rh: figure('0/8 C'),
       lh: figure('0/4 L1,4/4 L5'),
     })

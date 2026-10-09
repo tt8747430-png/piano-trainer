@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PATTERN_IDS, PATTERNS, BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { PATTERN_IDS, BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { melodyOf, PIECES } from '@/entities/piece'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
 import {
@@ -87,7 +87,12 @@ describe('notation of the content', () => {
     ),
   )('writes the pattern %s in %s', (id, meter) => {
     expectWritten(
-      notate(arrange(chartIn(meter), { tonic: note('C'), pattern: PATTERNS[id].pattern })),
+      notate(
+        arrange(chartIn(meter), {
+          tonic: note('C'),
+          pattern: BUILT_IN_PATTERNS.require(id).pattern,
+        }),
+      ),
     )
   })
 })

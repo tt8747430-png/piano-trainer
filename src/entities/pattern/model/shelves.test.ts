@@ -18,7 +18,7 @@ describe('referenceShelves', () => {
 
   it('lists a method book’s groups on its part', () => {
     expect(outline(referenceShelves(book, choices, 'called-to-play'))).toEqual([
-      ['lesson-3', 5],
+      ['five-ways', 5],
       ['techniques', 12],
     ])
     expect(outline(referenceShelves(book, choices, 'seven-types'))).toEqual([['seven-types', 8]])
@@ -60,7 +60,7 @@ describe('referenceShelves', () => {
     expect(REFERENCE_PARTS).toEqual(['called-to-play', 'seven-types', 'styles', 'yours'])
     expect(
       (
-        ['favourites', 'own', 'lesson-3', 'techniques', 'seven-types', 'genres', 'hidden'] as const
+        ['favourites', 'own', 'five-ways', 'techniques', 'seven-types', 'genres', 'hidden'] as const
       ).map(partOfShelf),
     ).toEqual([
       'yours',

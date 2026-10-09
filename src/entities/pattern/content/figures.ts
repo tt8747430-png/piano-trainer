@@ -13,7 +13,7 @@ const R4 = eventFigure('6/2 v1,8/2 v3,10/2 v2,12/2 v4,14/2 v3', {
 })
 const R4B = eventFigure('0/2 v1,2/2 v3,4/2 v2,6/2 v3,8/2 v1,10/2 v3,12/2 v2,14/2 v3')
 
-export const RIGHT_FIGURES: Readonly<Record<RightFigureId, FigureEntry<Figure>>> = {
+export const RIGHT_FIGURES = {
   b1: {
     name: { en: 'Chord on every beat', ru: 'Аккорд на каждую долю' },
     figure: eventFigure('0/4 C,4/4 C,8/4 C,12/4 C'),
@@ -165,7 +165,7 @@ export const RIGHT_FIGURES: Readonly<Record<RightFigureId, FigureEntry<Figure>>>
     name: { en: 'Country off-beats', ru: 'Кантри: слабые доли' },
     figure: eventFigure('4/8 C,12/4 C'),
   },
-}
+} satisfies Readonly<Record<RightFigureId, FigureEntry<Figure>>>
 
 export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure>>> = {
   o: {

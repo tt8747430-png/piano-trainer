@@ -1,6 +1,6 @@
 import { METHOD_BOOK_IDS } from '@/entities/book'
 import { isOneOf } from '@/shared/lib'
-import { PATTERN_GROUP_BOOK } from '../content/patterns'
+import { PATTERN_GROUP_ENTRIES } from '../content/patterns'
 import type { PatternChoice } from './accompaniment'
 import type { BookPattern, PatternBook } from './book'
 import type { PatternRef } from './own'
@@ -30,7 +30,7 @@ export const isReferencePart = isOneOf(REFERENCE_PARTS)
 
 /** The part a shelf is on: a group's book's, Styles for a group of no book, Yours for the learner's. */
 export const partOfShelf = (shelf: PatternShelf['shelf']): ReferencePart =>
-  isPatternGroup(shelf) ? (PATTERN_GROUP_BOOK[shelf] ?? 'styles') : 'yours'
+  isPatternGroup(shelf) ? (PATTERN_GROUP_ENTRIES[shelf].book ?? 'styles') : 'yours'
 
 type Choices = Pick<PatternsState, 'favourites' | 'hidden'>
 

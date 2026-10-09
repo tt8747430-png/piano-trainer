@@ -1,5 +1,5 @@
 import { METHOD_BOOK_NAMES } from '@/entities/book'
-import { PATTERN_GROUP_BOOK } from '../content/patterns'
+import { PATTERN_GROUP_ENTRIES } from '../content/patterns'
 import type { PatternShelf } from '../model/shelves'
 import { isPatternGroup } from '../model/types'
 import { useShelfName } from './use-shelf-name'
@@ -11,7 +11,7 @@ import { useShelfName } from './use-shelf-name'
 export function useFullShelfName(): (shelf: PatternShelf) => string {
   const shelfName = useShelfName()
   return (shelf) => {
-    const book = isPatternGroup(shelf.shelf) ? PATTERN_GROUP_BOOK[shelf.shelf] : null
+    const book = isPatternGroup(shelf.shelf) ? PATTERN_GROUP_ENTRIES[shelf.shelf].book : null
     return book ? `${METHOD_BOOK_NAMES[book]} · ${shelfName(shelf)}` : shelfName(shelf)
   }
 }

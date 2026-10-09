@@ -1,17 +1,14 @@
 export {
   LEFT_FIGURE_IDS,
-  PATTERN_GROUPS,
   PATTERN_IDS,
   RIGHT_FIGURE_IDS,
   isLeftFigureId,
   isMethodCode,
-  isPatternGroup,
   isPatternId,
   isRightFigureId,
   type FigureEntry,
   type LeftFigureId,
   type MethodCode,
-  type PatternGroup,
   type PatternId,
   type RightFigureId,
 } from './model/types'
@@ -64,7 +61,6 @@ export {
 } from './model/shelves'
 export { followsInversion, playsChord } from './model/plays-chord'
 export {
-  patternsIn,
   selectFavourites,
   selectHidden,
   selectIsFavourite,
@@ -72,7 +68,7 @@ export {
   selectOwnPattern,
 } from './model/selectors'
 export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
-export { PATTERN_GROUP_BOOK, PATTERN_GROUP_NAMES, PATTERNS } from './content/patterns'
+export { PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
 export { useFullShelfName } from './ui/use-full-shelf-name'
 export { useShelfName } from './ui/use-shelf-name'

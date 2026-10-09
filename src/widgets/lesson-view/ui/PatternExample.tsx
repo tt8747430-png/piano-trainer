@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PATTERNS, type PatternId } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, type PatternId } from '@/entities/pattern'
 import { entryTitles, type Piece } from '@/entities/piece'
 
 import { localText, useLocale } from '@/shared/i18n'
@@ -27,7 +27,7 @@ export function PatternExample({
   const locale = useLocale()
   const titleId = useId()
   const playback = usePlayback<'opening'>()
-  const { name, description } = PATTERNS[pattern]
+  const { name, description } = BUILT_IN_PATTERNS.require(pattern)
   return (
     <article aria-labelledby={titleId} className="flex flex-col gap-3 card p-4">
       <h3 id={titleId} className="text-xl">

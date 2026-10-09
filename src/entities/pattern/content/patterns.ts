@@ -1,37 +1,24 @@
-import type { MethodBookId } from '@/entities/book'
-import type { LocalText } from '@/shared/i18n'
-import type { EventPattern, Pattern } from '@/shared/lib/arrangement'
-import {
-  PATTERN_IDS,
-  type LeftFigureId,
-  type PatternEntry,
-  type PatternGroup,
-  type PatternId,
-  type RightFigureId,
-} from '../model/types'
-import { LEFT_FIGURES, RIGHT_FIGURES } from './figures'
+import type { PatternEntry, PatternGroup, PatternGroupEntry, PatternId } from '../model/types'
 
-/** A group's own name, without its book's: a list that mixes the books says the book first. */
-export const PATTERN_GROUP_NAMES: Readonly<Record<PatternGroup, LocalText>> = {
-  'lesson-3': { en: 'The 5 ways (lesson 3)', ru: '5 способов (урок 3)' },
-  techniques: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
-  'seven-types': { en: 'The 7 types of accompaniment', ru: '7 типов аккомпанемента' },
-  genres: { en: 'Rhythm styles', ru: 'Ритмические стили' },
+export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEntry>> = {
+  'five-ways': {
+    name: { en: 'The 5 ways (lesson 3)', ru: '5 способов (урок 3)' },
+    book: 'called-to-play',
+  },
+  techniques: {
+    name: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
+    book: 'called-to-play',
+  },
+  'seven-types': {
+    name: { en: 'The 7 types of accompaniment', ru: '7 типов аккомпанемента' },
+    book: 'seven-types',
+  },
+  genres: { name: { en: 'Rhythm styles', ru: 'Ритмические стили' }, book: null },
 }
 
-/** The method book that teaches a group's patterns; the rhythm styles are no book's. */
-export const PATTERN_GROUP_BOOK: Readonly<Record<PatternGroup, MethodBookId | null>> = {
-  'lesson-3': 'called-to-play',
-  techniques: 'called-to-play',
-  'seven-types': 'seven-types',
-  genres: null,
-}
-
-type WrittenPattern = Omit<PatternEntry, 'pattern'>
-
-const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
+export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   M1: {
-    group: 'lesson-3',
+    group: 'five-ways',
     name: { en: '1 · Bass + chords', ru: '1 · Бас + аккорды' },
     idea: {
       en: 'The chord on every beat over a held octave bass.',
@@ -45,7 +32,7 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
     lh: 'o',
   },
   M2: {
-    group: 'lesson-3',
+    group: 'five-ways',
     name: { en: '2 · Broken chords', ru: '2 · Ломаные аккорды' },
     idea: {
       en: "The right hand rocks between the chord's upper notes and its lowest over a held octave.",
@@ -59,7 +46,7 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
     lh: 'o',
   },
   M3: {
-    group: 'lesson-3',
+    group: 'five-ways',
     name: {
       en: '3 · Arpeggio (3rd, then 5th + octave)',
       ru: '3 · Арпеджио (терция, затем квинта + октава)',
@@ -76,7 +63,7 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
     lh: 'arp',
   },
   M4: {
-    group: 'lesson-3',
+    group: 'five-ways',
     name: { en: '4 · Arpeggio 1–5–8 · 3–5–8–5–3', ru: '4 · Арпеджио 1–5–8 · 3–5–8–5–3' },
     idea: {
       en: 'One arpeggio climbs through both hands in 8ths and comes back down.',
@@ -90,7 +77,7 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
     lh: 'arp',
   },
   M5: {
-    group: 'lesson-3',
+    group: 'five-ways',
     name: { en: '5 · Bass + chords (dotted bass)', ru: '5 · Бас + аккорды (пунктирный бас)' },
     idea: {
       en: 'The chord on every beat over octaves in a long–short rhythm.',
@@ -111,8 +98,8 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
       ru: 'Аккорд, затем его основной тон прыгает на одну и две октавы вверх.',
     },
     description: {
-      en: 'Technique 1: the chord, then the root one and two octaves higher and back.',
-      ru: 'Техника 1: аккорд, затем основной тон на одну и две октавы выше и обратно.',
+      en: 'Technique 1: the chord as a dotted quarter, then its root an octave higher as an 8th, two octaves higher and back as quarters.',
+      ru: 'Техника 1: аккорд четвертью с точкой, затем его основной тон октавой выше восьмой, на две октавы выше и обратно четвертями.',
     },
     rh: 't1',
     lh: 'o',
@@ -237,8 +224,8 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
       ru: 'Терция уходит во вторую ступень, в четвёртую и обратно над пунктирными октавами.',
     },
     description: {
-      en: 'Technique 10: the 3rd moves to the 2nd, the 4th and back.',
-      ru: 'Техника 10: терция переходит в секунду, в кварту и обратно.',
+      en: 'Technique 10: a chord on every beat, its 3rd moving to the 2nd, the 4th and back (Dm, Dsus2, Dsus4, Dm).',
+      ru: 'Техника 10: аккорд на каждую долю, его терция переходит в секунду, в кварту и обратно (Dm, Dsus2, Dsus4, Dm).',
     },
     rh: 'p53',
     lh: 'dot',
@@ -524,29 +511,3 @@ const WRITTEN: Readonly<Record<PatternId, WrittenPattern>> = {
     lh: 'bal',
   },
 }
-
-function eventPattern(id: string, rh: RightFigureId, lh: LeftFigureId): EventPattern {
-  const right = RIGHT_FIGURES[rh].figure
-  if (right.kind !== 'events') throw new Error(`Pattern ${id}: ${rh} plays the tune`)
-  return { id, rh: right, lh: LEFT_FIGURES[lh].figure }
-}
-
-/** What a pattern that plays the tune plays, both hands, on a piece with no melody. */
-const WITHOUT_MELODY = eventPattern('r4', WRITTEN.r4.rh, WRITTEN.r4.lh)
-
-/**
- * The pattern `arrange` plays for a figure in each hand, under `id`: a right hand that plays the tune
- * falls back to Harmonic figuration (r4) on a piece with no melody.
- */
-export function figurePattern(id: string, rh: RightFigureId, lh: LeftFigureId): Pattern {
-  const right = RIGHT_FIGURES[rh].figure
-  if (right.kind === 'events') return eventPattern(id, rh, lh)
-  return { id, rh: right, lh: LEFT_FIGURES[lh].figure, withoutMelody: WITHOUT_MELODY }
-}
-
-const patternOf = (id: PatternId): Pattern =>
-  id === WITHOUT_MELODY.id ? WITHOUT_MELODY : figurePattern(id, WRITTEN[id].rh, WRITTEN[id].lh)
-
-export const PATTERNS = Object.fromEntries(
-  PATTERN_IDS.map((id) => [id, { ...WRITTEN[id], pattern: patternOf(id) }]),
-) as Readonly<Record<PatternId, PatternEntry>>

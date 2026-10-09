@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol, TICKS_PER_BEAT, type Hand } from '@/shared/lib/music'
-import { PATTERNS, type PatternId } from '../index'
+import { BUILT_IN_PATTERNS, type PatternId } from '../index'
 
 const SIXTEENTH = TICKS_PER_BEAT / 4
 const NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -23,7 +23,7 @@ const chart = (symbols: readonly string[]): Chart => ({
 })
 
 const play = (id: PatternId, ...symbols: string[]) =>
-  arrange(chart(symbols), { tonic: note('C'), pattern: PATTERNS[id].pattern })
+  arrange(chart(symbols), { tonic: note('C'), pattern: BUILT_IN_PATTERNS.require(id).pattern })
 
 /** A hand's events in the figure notation's terms: `start/length` in 16ths, then its keys (`C4` is middle C). */
 function written(performance: Performance, hand: Hand): string[] {

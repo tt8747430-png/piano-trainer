@@ -1,6 +1,12 @@
 import { statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { METHOD_PATTERNS, PATTERN_IDS, PATTERNS, patternNeed } from '@/entities/pattern'
+import {
+  BUILT_IN_PATTERNS,
+  METHOD_PATTERNS,
+  PATTERN_IDS,
+  PATTERNS,
+  patternNeed,
+} from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { PRECACHE_FILE_LIMIT } from '@/shared/config'
@@ -80,10 +86,13 @@ function problemsIn(performance: Performance): string[] {
 }
 
 function accompaniments(piece: Piece) {
-  const own = PATTERNS[piece.pattern].pattern
+  const own = BUILT_IN_PATTERNS.require(piece.pattern).pattern
   return [
     { pattern: own, methods: hasMethodCodes(piece) ? METHOD_PATTERNS : undefined },
-    ...PATTERN_IDS.map((id) => ({ pattern: PATTERNS[id].pattern, methods: undefined })),
+    ...PATTERN_IDS.map((id) => ({
+      pattern: BUILT_IN_PATTERNS.require(id).pattern,
+      methods: undefined,
+    })),
   ]
 }
 
@@ -155,7 +164,7 @@ describe('the catalog', () => {
       const last = melody.at(-1)
       const chart = arrange(chartOf(piece), {
         tonic: pieceKey(piece).tonic,
-        pattern: PATTERNS.block.pattern,
+        pattern: BUILT_IN_PATTERNS.require('block').pattern,
       })
       expect((last?.startTick ?? 0) + (last?.durationTicks ?? 0), piece.id).toBeLessThanOrEqual(
         chart.totalTicks,
@@ -200,7 +209,10 @@ describe('the catalog', () => {
 
   it('gives every piece a pattern it can play: on the beat in 6/8 or 12/8, a tune where it plays one', () => {
     for (const piece of PIECES)
-      expect(patternNeed(PATTERNS[piece.pattern], pieceFit(piece)), piece.id).toBeNull()
+      expect(
+        patternNeed(BUILT_IN_PATTERNS.require(piece.pattern), pieceFit(piece)),
+        piece.id,
+      ).toBeNull()
   })
 
   it('keeps every recording small enough to be precached, so it plays offline (ADR 0016)', () => {

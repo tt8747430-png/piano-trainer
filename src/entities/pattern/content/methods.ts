@@ -1,6 +1,5 @@
-import type { Pattern } from '@/shared/lib/arrangement'
+import { BUILT_IN_PATTERNS } from '../model/book'
 import { METHOD_CODES, type MethodCode, type MethodEntry } from '../model/types'
-import { PATTERNS } from './patterns'
 
 /** The code itself where it is a number; otherwise the source book's short label. */
 const numbered = (code: MethodCode) => ({ en: code, ru: code })
@@ -26,6 +25,6 @@ export const METHODS: Readonly<Record<MethodCode, MethodEntry>> = {
 }
 
 /** The chart's own plan, as `arrange` takes it: each method code's pattern. */
-export const METHOD_PATTERNS = Object.fromEntries(
-  METHOD_CODES.map((code) => [code, PATTERNS[METHODS[code].pattern].pattern]),
-) as Readonly<Record<MethodCode, Pattern>>
+export const METHOD_PATTERNS = new Map(
+  METHOD_CODES.map((code) => [code, BUILT_IN_PATTERNS.require(METHODS[code].pattern).pattern]),
+)

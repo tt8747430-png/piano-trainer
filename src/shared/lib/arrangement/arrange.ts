@@ -51,7 +51,7 @@ export interface ArrangeOptions {
   /** Every chord's pattern… */
   readonly pattern: Pattern
   /** …unless its method code is here: the chart's own plan. */
-  readonly methods?: Readonly<Record<string, Pattern>>
+  readonly methods?: ReadonlyMap<string, Pattern>
   /** Replaces every pattern's right hand. */
   readonly rh?: Figure
   /** Replaces every pattern's left hand. */
@@ -177,8 +177,7 @@ export function transposeNotes<N extends { readonly midi: Midi; readonly spelled
 const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
 
 function patternFor(method: string | undefined, options: ArrangeOptions, hasMelody: boolean) {
-  const { methods } = options
-  const planned = method && methods && Object.hasOwn(methods, method) ? methods[method] : undefined
+  const planned = method === undefined ? undefined : options.methods?.get(method)
   const pattern = planned ?? options.pattern
   return isMelodyPattern(pattern) && !hasMelody ? pattern.withoutMelody : pattern
 }

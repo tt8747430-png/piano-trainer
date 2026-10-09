@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import {
   chordsHolding,
@@ -54,7 +54,7 @@ const texts = (lesson: Lesson) => [
 function pieceProblems(pieceId: string, pattern: PatternId | undefined): string[] {
   const piece = pieceById(pieceId)
   if (!piece) return [pieceId]
-  return pattern && patternNeed(PATTERNS[pattern], pieceFit(piece))
+  return pattern && patternNeed(BUILT_IN_PATTERNS.require(pattern), pieceFit(piece))
     ? [`${pattern} over ${pieceId}`]
     : []
 }

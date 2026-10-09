@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURES, RIGHT_FIGURES } from '../content/figures'
-import { PATTERNS } from '../content/patterns'
 import { BUILT_IN_PATTERNS } from './book'
 import { figureNeed, patternNeed, playableFigure, playablePattern, type PatternFit } from './fit'
 import { LEFT_FIGURE_IDS, PATTERN_IDS, RIGHT_FIGURE_IDS } from './types'
@@ -25,10 +24,14 @@ describe('figureNeed', () => {
 
 describe('patternNeed', () => {
   it('names the first need of either hand that the music lacks', () => {
-    expect(patternNeed(PATTERNS.r6, NOTHING)).toBe('melody')
-    expect(patternNeed(PATTERNS.r6, { ...NOTHING, melody: true })).toBe('simpleTime')
-    expect(patternNeed(PATTERNS.flow, { ...EVERYTHING, key: false })).toBe('key')
-    expect(patternNeed(PATTERNS.block, NOTHING)).toBeNull()
+    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), NOTHING)).toBe('melody')
+    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), { ...NOTHING, melody: true })).toBe(
+      'simpleTime',
+    )
+    expect(patternNeed(BUILT_IN_PATTERNS.require('flow'), { ...EVERYTHING, key: false })).toBe(
+      'key',
+    )
+    expect(patternNeed(BUILT_IN_PATTERNS.require('block'), NOTHING)).toBeNull()
   })
 })
 
@@ -58,7 +61,9 @@ describe('playableFigure', () => {
 describe('what needs a key', () => {
   it('is the Chord flow alone: its right hand plays the key’s triads', () => {
     const keyless = { ...EVERYTHING, key: false }
-    expect(PATTERN_IDS.filter((id) => patternNeed(PATTERNS[id], keyless))).toEqual(['flow'])
+    expect(PATTERN_IDS.filter((id) => patternNeed(BUILT_IN_PATTERNS.require(id), keyless))).toEqual(
+      ['flow'],
+    )
     expect(RIGHT_FIGURE_IDS.filter((id) => figureNeed(RIGHT_FIGURES[id].figure, keyless))).toEqual([
       'flow',
     ])

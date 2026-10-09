@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURES, RIGHT_FIGURES } from '../content/figures'
-import { PATTERNS } from '../content/patterns'
 import { accompanimentOptions } from './accompaniment'
 import { BUILT_IN_PATTERNS } from './book'
 import { LEFT_FIGURE_IDS, RIGHT_FIGURE_IDS } from './types'
@@ -15,7 +14,7 @@ describe('accompanimentOptions', () => {
         inversion: null,
       }),
     ).toEqual({
-      pattern: PATTERNS.block.pattern,
+      pattern: BUILT_IN_PATTERNS.require('block').pattern,
     })
   })
 
@@ -26,7 +25,7 @@ describe('accompanimentOptions', () => {
     expect(
       accompanimentOptions(BUILT_IN_PATTERNS, { pattern: 'block', rh, lh, inversion: null }),
     ).toEqual({
-      pattern: PATTERNS.block.pattern,
+      pattern: BUILT_IN_PATTERNS.require('block').pattern,
       rh: RIGHT_FIGURES[rh].figure,
       lh: LEFT_FIGURES[lh].figure,
     })
@@ -41,7 +40,7 @@ describe('accompanimentOptions', () => {
         inversion: 2,
       }),
     ).toEqual({
-      pattern: PATTERNS.block.pattern,
+      pattern: BUILT_IN_PATTERNS.require('block').pattern,
       inversion: 2,
     })
   })

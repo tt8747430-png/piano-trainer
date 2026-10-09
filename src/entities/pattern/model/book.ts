@@ -1,7 +1,8 @@
 import type { LocalText } from '@/shared/i18n'
 import type { Pattern } from '@/shared/lib/arrangement'
 import { LEFT_FIGURES, RIGHT_FIGURES } from '../content/figures'
-import { figurePattern, PATTERNS } from '../content/patterns'
+import { PATTERNS } from '../content/patterns'
+import { figurePattern } from './figure-pattern'
 import type { OwnPattern, PatternRef } from './own'
 import { PATTERN_IDS, type LeftFigureId, type PatternGroup, type RightFigureId } from './types'
 
@@ -34,7 +35,10 @@ export interface PatternBook {
 }
 
 const BUILT_IN = new Map<PatternRef, BookPattern>(
-  PATTERN_IDS.map((id) => [id, { ...PATTERNS[id], ref: id }]),
+  PATTERN_IDS.map((id) => {
+    const entry = PATTERNS[id]
+    return [id, { ...entry, ref: id, pattern: figurePattern(id, entry.rh, entry.lh) }]
+  }),
 )
 
 /** Both languages say an own pattern by its name, and its idea by its two figures. */
