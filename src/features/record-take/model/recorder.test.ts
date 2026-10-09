@@ -16,6 +16,7 @@ const PLAN: RecorderPlan = {
   tempo: 120,
   click: true,
   room: 100,
+  tune: [],
 }
 
 function setUp(plan: RecorderPlan = PLAN) {
@@ -95,6 +96,15 @@ describe('startRecorder', () => {
     audio.setNow(4.1)
     stop()
     expect(ended[0]?.pedals).toEqual([{ pedal: 'soft', down: 0, up: 500 }])
+  })
+
+  it('plays the song’s tune under the take from its downbeat, and stops it at Stop', () => {
+    const tune = [{ kind: 'note', midi: midi(72), at: 0, duration: 0.5, velocity: 0.2 }] as const
+    const { audio, stop } = setUp({ ...PLAN, tune })
+    // Just after now (1 s), the count-in's 2 s, then the downbeat.
+    expect(audio.played.at(-1)).toEqual({ sounds: tune, at: 3.1 })
+    stop()
+    expect(audio.stops).toBe(2)
   })
 
   it('keeps nothing when stopped in the count-in, and hears no key after', () => {

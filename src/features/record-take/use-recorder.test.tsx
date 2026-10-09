@@ -15,6 +15,7 @@ const PLAN: RecorderPlan = {
   tempo: 120,
   click: true,
   room: 100,
+  tune: [],
 }
 
 function renderRecorder({ webMidi = true }: { webMidi?: boolean } = {}) {

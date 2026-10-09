@@ -307,6 +307,30 @@ describe('the score editor’s takes', () => {
     at(3.2)
   }
 
+  it('offers the tune under a take only for a song with one, and saves the choice', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = { ...SONG, melody: 'B4/4 | D5/4 | G4/4 | G4/4' }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    const { settingsStore } = await renderApp('/edit/my-1', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Record' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    await user.click(within(sheet).getByRole('switch', { name: 'Tune' }))
+    expect(settingsStore.getState().recorder.tune).toBe(true)
+  })
+
+  it('offers no tune for a song without one', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Record' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    expect(within(sheet).getByRole('switch', { name: 'Click' })).toBeInTheDocument()
+    expect(within(sheet).queryByRole('switch', { name: 'Tune' })).not.toBeInTheDocument()
+  })
+
   it('records a take to the count-in, keeps it, plays it, and writes it into both hands', async () => {
     const user = userEvent.setup()
     const {

@@ -93,6 +93,7 @@ export const editor = {
     open: 'Record',
     record: 'Record',
     click: 'Click',
+    tune: 'Tune',
     from: 'From bar',
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',

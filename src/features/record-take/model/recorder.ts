@@ -1,15 +1,20 @@
 import { LONGEST_TAKE_MS, type Played } from '@/entities/take'
 import { PLAY_DELAY, type AudioOutput } from '@/shared/api/audio'
 import type { MidiInput } from '@/shared/api/midi'
-import { recorderClicks, type ClickPlan } from '@/shared/lib/schedule'
+import { recorderClicks, type ClickPlan, type NoteSound } from '@/shared/lib/schedule'
 import { isKept, takeOf, type Heard } from './take-of'
 
 /** How often the recorder looks at the audio clock. */
 const FOLLOW_INTERVAL_MS = 25
 
-/** What a take is recorded to: the piece's bars and the one it starts at, the meter, tempo and click, and the notes the takes have room for. */
+/**
+ * What a take is recorded to: the piece's bars and the one it starts at, the meter, tempo and click,
+ * the notes the takes have room for, and what plays under it.
+ */
 export interface RecorderPlan extends Omit<ClickPlan, 'longest'> {
   readonly room: number
+  /** What plays under the take from its downbeat (seconds from it): the song's tune, or nothing. */
+  readonly tune: readonly NoteSound[]
 }
 
 /** Where a take is: in its count-in (the beat, from 1), or recording (the bar from its first, from 0, and whole seconds). */
@@ -33,9 +38,10 @@ function sameProgress(a: RecorderProgress | null, b: RecorderProgress): boolean 
 }
 
 /**
- * Records a take (ADR 0028): the count-in and the click on the audio clock from just after now, and
- * every key and the pedal on the MIDI keyboard, each placed where it was heard. It stops itself at
- * the longest take or when the takes have no more room. Returns the function that stops it.
+ * Records a take (ADR 0028): the count-in and the click on the audio clock from just after now, the
+ * tune under it from its downbeat, and every key and pedal on the MIDI keyboard, each placed where it
+ * was heard. It stops itself at the longest take or when the takes have no more room. Returns the
+ * function that stops it.
  */
 export function startRecorder(
   audio: AudioOutput,
@@ -53,6 +59,7 @@ export function startRecorder(
   const beat = 60 / plan.tempo
   const heardNow = () => audio.audioTimeAt(performance.now())
   audio.play(clicks.sounds, start)
+  if (plan.tune.length > 0) audio.play(plan.tune, downbeat)
 
   const heard: Heard[] = []
   let struck = 0

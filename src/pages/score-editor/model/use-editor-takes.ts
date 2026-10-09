@@ -30,6 +30,7 @@ import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 import type { GridBar } from '@/shared/lib/schedule'
 import type { EditSearch } from './edit-search'
+import { tuneOf } from './tune'
 
 /** How a take is written into the score: where, split at which key, and snapped to which value. */
 export interface WriteChoice {
@@ -112,6 +113,7 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
   const record = () => {
     const { draft, caret } = store.getState()
     const from = barAt(draft, caret).index
+    const { click, tune } = settings.getState().recorder
     show(null)
     setFromBar(from + 1)
     recorder.start({
@@ -119,8 +121,9 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
       meter: draft.meter,
       from,
       tempo: draft.tempo,
-      click: settings.getState().recorder.click,
+      click,
       room: selectRoomLeft(takes.getState()),
+      tune: tune && draft.melody.length > 0 ? tuneOf(draft, from) : [],
     })
   }
 

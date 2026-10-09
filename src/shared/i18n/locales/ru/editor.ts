@@ -94,6 +94,7 @@ export const editor: LocaleResources['editor'] = {
     open: 'Записать',
     record: 'Записать',
     click: 'Метроном',
+    tune: 'Мелодия',
     from: 'С такта',
     full: 'Дубли заняли всё место: удалите один, чтобы записать новый.',
     nothing: 'Ничего не сыграно.',
