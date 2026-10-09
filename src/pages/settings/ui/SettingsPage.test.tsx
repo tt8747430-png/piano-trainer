@@ -61,8 +61,8 @@ describe('Settings', () => {
     const { settingsStore } = await renderApp('/settings')
     const keys = await screen.findByRole('radiogroup', { name: 'Keys' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: 'Keyboard map' }))
-    expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', map: true })
+    await user.click(screen.getByRole('switch', { name: 'Play from the computer keyboard' }))
+    expect(settingsStore.getState().keyboard).toMatchObject({ keySize: 'large', typing: true })
   })
 
   it('names each keyboard choice as a row of its group, not as a second heading', async () => {

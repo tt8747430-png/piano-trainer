@@ -59,7 +59,6 @@ export function PianoKeyboard({
   keySize = 'fit',
   swipe = 'scroll',
   namedKeys = 'c',
-  map = false,
   letters,
   keyPlays,
   onKeyPress,
@@ -75,8 +74,6 @@ export function PianoKeyboard({
   swipe?: Swipe
   /** Which keys carry their note's name: every C (the default), every key, or none. */
   namedKeys?: NamedKeys
-  /** The keyboard map in the rail. */
-  map?: boolean
   /** The computer keyboard's letters on the keys it plays. */
   letters?: ReadonlyMap<Midi, string> | undefined
   /**
@@ -88,7 +85,7 @@ export function PianoKeyboard({
   onKeyPress: (key: Midi) => void
   /** A key a hand pressed is let go: lifted, left, or (pressed with no pointer) at once. */
   onKeyRelease?: ((key: Midi) => void) | undefined
-  /** The rail's trailing controls: `RailButton`s. */
+  /** The rail's trailing controls: `RailGroup`s of `RailButton`s. */
   children?: ReactNode
 }) {
   const { t } = useTranslation('common')
@@ -145,7 +142,7 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail scroller={scroller} scrolls={scrolls} map={map} dots={dots}>
+        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots}>
           {children}
         </KeyRail>
         <div

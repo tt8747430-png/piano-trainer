@@ -1,14 +1,16 @@
 import { useMemo, type ComponentProps } from 'react'
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { useHeldKeys } from '@/features/connect-midi'
+import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
 import { rangeOf, type Midi } from '@/shared/lib/music'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
-import { PianoKeyboard } from '@/shared/ui'
+import { PianoKeyboard, RailGroup } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
 import { GlissandoToggle } from './GlissandoToggle'
+import { KeyZoom } from './KeyZoom'
+import { NamedKeysToggle } from './NamedKeysToggle'
 import { PedalToggle } from './PedalToggle'
-import { RailSettings } from './RailSettings'
+import { TypingToggle } from './TypingToggle'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
@@ -17,7 +19,9 @@ const ALONE = (key: Midi): readonly Midi[] => [key]
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Unless the
+ * else the screen makes it mean. Its rail holds every setting in sight, as pictures: how the keys
+ * look (their size as a zoom, their names, the typing letters), then how they play (a MIDI
+ * keyboard's sound, glissando, the pedal). Unless the
  * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
  * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
  * chord's keys together, every mark kept. With `keyPlays`, a key a hand plays may sound more than
@@ -32,7 +36,7 @@ export function LiveKeyboard({
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
-  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'map' | 'letters' | 'children' | 'onKeyPress'
+  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'letters' | 'children' | 'onKeyPress'
 > & {
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
@@ -80,9 +84,16 @@ export function LiveKeyboard({
       onKeyPress={play}
       onKeyRelease={letGo}
     >
-      <RailSettings />
-      <GlissandoToggle />
-      <PedalToggle />
+      <RailGroup>
+        <KeyZoom />
+        <NamedKeysToggle />
+        <TypingToggle />
+      </RailGroup>
+      <RailGroup>
+        <MidiSoundToggle />
+        <GlissandoToggle />
+        <PedalToggle />
+      </RailGroup>
     </PianoKeyboard>
   )
 }

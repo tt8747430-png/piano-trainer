@@ -23,7 +23,9 @@ export { isOneOf } from './is-one-of'
 export {
   KEY_SIZES,
   NAMED_KEYS,
+  nextNamedKeys,
   SWIPES,
+  zoomKeySize,
   type KeySize,
   type NamedKeys,
   type Swipe,

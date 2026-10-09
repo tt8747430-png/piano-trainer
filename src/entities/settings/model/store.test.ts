@@ -60,7 +60,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 9,
+      version: 10,
     })
   })
 
@@ -81,7 +81,6 @@ describe('createSettingsStore', () => {
         keySize: 'large',
         swipe: 'glissando',
         namedKeys: 'none',
-        map: true,
         typing: true,
       },
       recorder: { click: false, tune: true },
@@ -95,7 +94,7 @@ describe('createSettingsStore', () => {
         pedal: 'normal',
       },
     }
-    expect(restored(saved, 9)).toEqual(saved)
+    expect(restored(saved, 10)).toEqual(saved)
   })
 
   it('gives a version-7 save the sidebar open, keeping the rest', () => {
@@ -152,7 +151,6 @@ describe('createSettingsStore', () => {
       keySize: 'fit',
       swipe: 'scroll',
       namedKeys: 'c',
-      map: false,
       typing: true,
     })
     expect(keyboard(false).typing).toBe(false)
@@ -173,14 +171,28 @@ describe('createSettingsStore', () => {
       keySize: 'huge',
       swipe: 'glissando',
       namedKeys: 'all',
-      map: 'yes',
-      typing: true,
+      typing: 'yes',
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }, 3).keyboard).toEqual({
       keySize: 'fit',
       swipe: 'glissando',
       namedKeys: 'all',
-      map: false,
+      typing: false,
+    })
+  })
+
+  it('reads a version-9 save without its keyboard map: the map is the rail’s own now', () => {
+    const keyboard = {
+      keySize: 'large',
+      swipe: 'scroll',
+      namedKeys: 'all',
+      map: true,
+      typing: true,
+    }
+    expect(restored({ theme: 'dark', keyboard }, 9).keyboard).toEqual({
+      keySize: 'large',
+      swipe: 'scroll',
+      namedKeys: 'all',
       typing: true,
     })
   })

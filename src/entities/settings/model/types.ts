@@ -47,8 +47,6 @@ export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
-  /** The strip of all 88 keys in the rail. */
-  readonly map: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
 }
@@ -123,7 +121,6 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   keySize: 'fit',
   swipe: 'scroll',
   namedKeys: 'c',
-  map: false,
   typing: finePointer,
 })
 

@@ -170,7 +170,6 @@ describe('PianoKeyboard', () => {
   it('shows the whole piano with nothing to move: no ‹ ›, no map, no finger row', () => {
     renderKeyboard({
       keySize: 'piano',
-      map: true,
       marks: new Map<Midi, KeyMark>([[C4, { tone: 'tonic', label: '1', finger: 1 }]]),
     })
     expect(screen.queryByRole('button', { name: 'Octave up' })).not.toBeInTheDocument()
@@ -179,7 +178,7 @@ describe('PianoKeyboard', () => {
   })
 
   it('scrolls from its rail: the rail moves with the keys, its controls kept in view', () => {
-    renderKeyboard({ map: true })
+    renderKeyboard()
     const scroller = document.querySelector('[data-slot="keys-scroller"]')
     expect(scroller).toContainElement(screen.getByRole('button', { name: 'Octave up' }))
     expect(scroller).toContainElement(screen.getByRole('slider', { name: 'Keys in view' }))
@@ -187,7 +186,7 @@ describe('PianoKeyboard', () => {
   })
 
   it('keeps ‹ › together at the rail’s end, after the map and before the screen’s controls', () => {
-    renderKeyboard({ map: true, children: <button type="button">Settings</button> })
+    renderKeyboard({ children: <button type="button">Settings</button> })
     const rail = [
       screen.getByRole('slider', { name: 'Keys in view' }),
       ...screen.getAllByRole('button').filter((button) => !/\d$/.test(button.ariaLabel ?? '')),

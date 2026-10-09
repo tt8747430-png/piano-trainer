@@ -50,7 +50,13 @@ export const common: LocaleResources['common'] = {
     octaveUp: 'Октава вверх',
     map: 'Клавиши на экране',
     mapRange: '{{from}} – {{to}}',
-    settings: 'Настройки клавиатуры',
+    zoomOut: 'Клавиши мельче',
+    zoomIn: 'Клавиши крупнее',
+    names: {
+      c: 'Названия нот: каждое C',
+      all: 'Названия нот: все клавиши',
+      none: 'Названия нот: выключены',
+    },
     glissando: 'Глиссандо',
     pedal: 'Педаль',
     sound: 'Звук MIDI-клавиатуры',
@@ -58,7 +64,6 @@ export const common: LocaleResources['common'] = {
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
     namedKeys: { label: 'Названия нот', c: 'C', all: 'Все', none: 'Нет' },
-    map: 'Карта клавиатуры',
     typing: 'Играть с клавиатуры компьютера',
     typingHint: 'Z X · октава',
   },

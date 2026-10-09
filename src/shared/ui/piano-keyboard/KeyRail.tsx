@@ -5,6 +5,7 @@ import { PIANO_LAYOUT, scrollByOctave, useScrollMotion } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { KeyboardMap } from './KeyboardMap'
 import { RailButton } from './RailButton'
+import { RailGroup } from './RailGroup'
 
 /** The width of the stretch in view, in the scroller's container units: the rail's controls span it. */
 const IN_VIEW = '100cqw'
@@ -12,20 +13,18 @@ const IN_VIEW = '100cqw'
 /**
  * The rail the keys hang from, the piano's length: a swipe on it scrolls the keys, which hold still
  * under a finger. Its controls stay in view wherever the keys are scrolled: the keyboard map, then
- * at its end ‹ › an octave together (one control, never a lone arrow in the corner a Back takes) and
- * `children` (the screen's `RailButton`s). Keys that do not scroll have no ‹ › and no map.
+ * at its end ‹ › an octave together (one control, never a lone arrow in the corner a Back takes;
+ * for a mouse on a rail long enough, which cannot swipe: a finger does not see them) and `children`
+ * (the screen's `RailGroup`s of `RailButton`s). Keys that do not scroll have no ‹ › and no map.
  */
 export function KeyRail({
   scroller,
   scrolls,
-  map,
   dots,
   children,
 }: {
   scroller: RefObject<HTMLElement | null>
   scrolls: boolean
-  /** The keyboard map, where the keys scroll. */
-  map: boolean
   /** The keys the map dots: marked or down. */
   dots: ReadonlySet<Midi>
   children?: ReactNode
@@ -42,14 +41,15 @@ export function KeyRail({
       {/* The rail itself, drawn along the strip's foot: the buttons' targets reach above it. */}
       <span aria-hidden className="absolute inset-x-0 bottom-0 h-7 bg-key-rail" />
       <div className="sticky left-0 flex h-full items-end" style={{ width: IN_VIEW }}>
-        <div className="relative flex min-w-0 flex-1">
-          {map && scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
+        {/* A rail too short for its buttons and a map keeps the buttons. */}
+        <div className="relative flex min-w-0 flex-1 @max-xs:hidden">
+          {scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
         </div>
         {scrolls ? (
-          <>
+          <RailGroup className="@max-md:hidden pointer-coarse:hidden">
             <RailButton label={t('rail.octaveDown')} icon={ChevronLeft} onClick={() => step(-1)} />
             <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
-          </>
+          </RailGroup>
         ) : null}
         {children}
       </div>

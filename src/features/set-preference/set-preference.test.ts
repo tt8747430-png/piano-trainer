@@ -89,11 +89,11 @@ describe('set-preference', () => {
 
   it('setKeyboard changes the keyboard settings it is given and saves them, the others kept', () => {
     const { storage, store } = setUp()
-    setKeyboard(store, { swipe: 'glissando', map: true })
+    setKeyboard(store, { swipe: 'glissando', namedKeys: 'all' })
     expect(store.getState().keyboard).toEqual({
       ...defaultKeyboard(false),
       swipe: 'glissando',
-      map: true,
+      namedKeys: 'all',
     })
     expect(saved(storage).keyboard).toEqual(store.getState().keyboard)
   })

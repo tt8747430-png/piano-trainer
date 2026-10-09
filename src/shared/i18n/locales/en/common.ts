@@ -52,7 +52,9 @@ export const common = {
     octaveUp: 'Octave up',
     map: 'Keys in view',
     mapRange: '{{from}} to {{to}}',
-    settings: 'Keyboard settings',
+    zoomOut: 'Smaller keys',
+    zoomIn: 'Larger keys',
+    names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
     sound: 'Sound the MIDI keyboard',
@@ -61,7 +63,6 @@ export const common = {
   keyboardSettings: {
     keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
     namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },
-    map: 'Keyboard map',
     typing: 'Play from the computer keyboard',
     typingHint: 'Z X · octave',
   },

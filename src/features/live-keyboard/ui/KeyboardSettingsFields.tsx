@@ -5,8 +5,8 @@ import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
 import { Segmented, SettingField, SwitchRow } from '@/shared/ui'
 
 /**
- * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in place). How a swipe
- * plays is the rail's own toggle, beside the keys it changes.
+ * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in
+ * place, as pictures). How a swipe plays is the rail's own toggle, beside the keys it changes.
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation('common')
@@ -36,20 +36,13 @@ export function KeyboardSettingsFields() {
           onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
         />
       </SettingField>
-      <div>
-        <SwitchRow
-          label={t('keyboardSettings.map')}
-          checked={keyboard.map}
-          onCheckedChange={(map) => setKeyboard(store, { map })}
-        />
-        <SwitchRow
-          label={t('keyboardSettings.typing')}
-          detail={keyboard.typing ? t('keyboardSettings.typingHint') : undefined}
-          checked={keyboard.typing}
-          onCheckedChange={(typing) => setKeyboard(store, { typing })}
-          className="border-b-0"
-        />
-      </div>
+      <SwitchRow
+        label={t('keyboardSettings.typing')}
+        detail={keyboard.typing ? t('keyboardSettings.typingHint') : undefined}
+        checked={keyboard.typing}
+        onCheckedChange={(typing) => setKeyboard(store, { typing })}
+        className="border-b-0"
+      />
     </div>
   )
 }
