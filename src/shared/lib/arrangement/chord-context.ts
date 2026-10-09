@@ -195,14 +195,12 @@ export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote
     case 'chord':
       return spellInChord(context, context.voiced)
     case 'triad':
-      return spellInChord(context, invert(context.triad, token.inversion))
-    case 'triad-octave':
       return spellInChord(
         context,
-        context.triad.map((m) => m + 12),
+        invert(context.triad, token.inversion).map((m) => m + 12 * token.octaves),
       )
-    case 'upper-pair':
-      return spellInChord(context, context.triad.slice(1))
+    case 'upper-voices':
+      return spellInChord(context, context.voiced.slice(1))
     case 'voice': {
       const count = context.voiced.length
       const voice = context.voiced[token.index % count] ?? context.root

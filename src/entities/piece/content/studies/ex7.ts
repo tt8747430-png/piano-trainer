@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 72,
   pattern: 't5',
   note: {
-    en: 'Use dotted chords, “3 chords” and inversions.',
-    ru: 'Используйте пунктирные аккорды, «3 аккорда» и обращения.',
+    en: 'Use the three new right-hand techniques: ♩.♪♩, “3 chords” and inversions.',
+    ru: 'Используйте три новые техники правой руки: ♩.♪♩, «3 аккорда» и обращения.',
   },
   sections: [{ kind: 'practice', lines: ['Am Dm E Am', 'G F E Am'] }],
 })

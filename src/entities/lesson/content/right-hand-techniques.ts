@@ -50,13 +50,13 @@ const rightHandTechniques: Lesson = {
       ],
     },
     {
-      heading: { en: 'Runs down, arpeggios up', ru: 'Пассажи вниз, арпеджио вверх' },
+      heading: { en: 'Runs down, runs up', ru: 'Пассажи вниз и вверх' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'From the top of the chord, run down through the 3rd and the 2nd to the root, then again an octave lower. The same study turns it round: a quick arpeggio rises over two octaves and lands on the chord.',
-            ru: 'От верхнего звука аккорда спуститесь через терцию и секунду к основному тону, затем ещё раз октавой ниже. Тот же этюд поворачивает это вспять: быстрое арпеджио поднимается через две октавы и приходит на аккорд.',
+            en: 'Take the 2nd and the 5th together, then run down 3–2–1 to the root, and the same an octave lower. The same study turns it round: the root, 2nd, 3rd and 5th climb two octaves, fingers 1–2–3–5 each time.',
+            ru: 'Возьмите вместе секунду и квинту, затем спуститесь 3–2–1 к основному тону, и то же октавой ниже. Тот же этюд поворачивает это вспять: основной тон, секунда, терция и квинта поднимаются на две октавы, каждый раз пальцами 1–2–3–5.',
           },
         },
         { kind: 'pattern', pattern: 't3', piece: 'ex6' },
@@ -64,13 +64,13 @@ const rightHandTechniques: Lesson = {
       ],
     },
     {
-      heading: { en: 'Chords through the inversions', ru: 'Аккорды по обращениям' },
+      heading: { en: 'Chords up the keyboard', ru: 'Аккорды вверх по клавиатуре' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The chord in root position, then its 1st and 2nd inversion, over a wide left-hand arpeggio: in a dotted rhythm, as three chords climbing to a rolled last one, or plainly, one inversion after another.',
-            ru: 'Аккорд в основном виде, затем в 1-м и 2-м обращении, над широким арпеджио левой руки: в пунктирном ритме, тремя аккордами, поднимающимися к арпеджированному последнему, или просто, обращение за обращением.',
+            en: 'Over a wide left-hand arpeggio the chord moves up: dotted, then an octave higher; as three chords an octave apart; or through its inversions, root position, then the 1st and 2nd.',
+            ru: 'Над широким арпеджио левой руки аккорд движется вверх: с точкой, затем октавой выше; тремя аккордами через октаву; или по обращениям — основной вид, затем 1-е и 2-е.',
           },
         },
         { kind: 'pattern', pattern: 't5', piece: 'ex7' },
@@ -84,8 +84,8 @@ const rightHandTechniques: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the chord and move one voice: the root steps down a whole tone (Dm becomes Dm7), the lowest voice falls by half steps, or the 3rd turns 3–2–4–3.',
-            ru: 'Держите аккорд и двигайте один голос: основной тон спускается на целый тон (Dm становится Dm7), нижний голос спускается по полутонам или терция движется 3–2–4–3.',
+            en: 'Keep the chord and move one voice: the ♭7 joins under the root (Dm becomes Dm7), the root falls by half steps, or the 3rd turns 3–2–4–3.',
+            ru: 'Держите аккорд и двигайте один голос: ♭7 добавляется под основным тоном (Dm становится Dm7), основной тон спускается по полутонам или терция движется 3–2–4–3.',
           },
         },
         { kind: 'pattern', pattern: 'p51', piece: 'ex8' },
@@ -99,8 +99,8 @@ const rightHandTechniques: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Parallel sixths climb or fall to the chord over a 1–5–8–5 bass: two voices a sixth apart, moving together.',
-            ru: 'Параллельные сексты поднимаются или спускаются к аккорду над басом 1–5–8–5: два голоса на расстоянии сексты движутся вместе.',
+            en: 'Parallel sixths climb or fall along the scale over a 1–5–8–5 bass: two voices a sixth apart, moving together between the chord’s 3rd and 5th.',
+            ru: 'Параллельные сексты поднимаются или спускаются по гамме над басом 1–5–8–5: два голоса на расстоянии сексты движутся вместе между терцией и квинтой аккорда.',
           },
         },
         { kind: 'pattern', pattern: 's6u', piece: 'ex9' },

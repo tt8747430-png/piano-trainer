@@ -259,7 +259,7 @@ describe('LessonView’s accompaniment', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(ACCOMPANIMENT)
     const card = screen.getByRole('article', { name: '2 · Broken chords' })
-    expect(card).toHaveTextContent('Right hand rocks between the upper two notes')
+    expect(card).toHaveTextContent('Right hand rocks in 8ths between the upper notes')
     expect(card).toHaveTextContent('Lesson 3: C – Dm – G – C – F – C – G – C')
     await user.click(within(card).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? []).length).toBeGreaterThan(8)

@@ -3,11 +3,12 @@ import type { EventFigure, Figure, FigureEvent, FigureTone, FigureToken } from '
 
 const FIXED_TOKENS = new Map<string, FigureToken>([
   ['C', { kind: 'chord' }],
-  ['T', { kind: 'triad', inversion: 0 }],
-  ['T1', { kind: 'triad', inversion: 1 }],
-  ['T2', { kind: 'triad', inversion: 2 }],
-  ['T8', { kind: 'triad-octave' }],
-  ['U', { kind: 'upper-pair' }],
+  ['T', { kind: 'triad', inversion: 0, octaves: 0 }],
+  ['T1', { kind: 'triad', inversion: 1, octaves: 0 }],
+  ['T2', { kind: 'triad', inversion: 2, octaves: 0 }],
+  ['T8', { kind: 'triad', inversion: 0, octaves: 1 }],
+  ['T15', { kind: 'triad', inversion: 0, octaves: 2 }],
+  ['U', { kind: 'upper-voices' }],
   ['Ka', { kind: 'key-triad', triad: 'I' }],
   ['Kb', { kind: 'key-triad', triad: 'IV' }],
   ['Kc', { kind: 'key-triad', triad: 'V' }],

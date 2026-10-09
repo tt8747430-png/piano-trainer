@@ -17,8 +17,8 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A chord need not be struck all at once. Played a note at a time, it keeps moving between the words and fills a slow song without getting louder. In way 2 the left hand holds the octave while the right hand rocks between the chord’s upper two notes and its root in 8ths.',
-            ru: 'Аккорд не обязательно брать разом. Сыгранный по звукам, он движется между словами и заполняет медленную песню, не становясь громче. Во втором способе левая рука держит октаву, а правая восьмыми чередует два верхних звука аккорда и основной тон.',
+            en: 'A chord need not be struck all at once. Played a note at a time, it keeps moving between the words and fills a slow song without getting louder. In way 2 the left hand holds the octave while the right hand rocks in 8ths between the chord’s upper notes and its lowest.',
+            ru: 'Аккорд не обязательно брать разом. Сыгранный по звукам, он движется между словами и заполняет медленную песню, не становясь громче. Во втором способе левая рука держит октаву, а правая восьмыми чередует верхние звуки аккорда и нижний.',
           },
         },
         { kind: 'pattern', pattern: 'M2', piece: 'ex3' },

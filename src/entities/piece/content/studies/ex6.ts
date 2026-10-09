@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 72,
   pattern: 't3',
   note: {
-    en: 'Use techniques 3 and 4: runs down and a fast arpeggio up.',
-    ru: 'Используйте техники 3 и 4: пассажи вниз и быстрое арпеджио вверх.',
+    en: 'Use the two new right-hand techniques: a run down to the root and a run up 1–2–3–5.',
+    ru: 'Используйте две новые техники правой руки: пассаж вниз к основному тону и пассаж вверх 1–2–3–5.',
   },
   sections: [{ kind: 'practice', lines: ['G C D Em', 'Am D G'] }],
 })

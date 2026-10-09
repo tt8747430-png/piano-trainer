@@ -67,6 +67,14 @@ const fiveWays: Lesson = {
           },
           target: { place: 'piece', piece: 'exm2' },
         },
+        {
+          kind: 'link',
+          title: {
+            en: 'A new way on every chord, in D minor',
+            ru: 'Новый способ на каждом аккорде, ре минор',
+          },
+          target: { place: 'piece', piece: 'exm3' },
+        },
       ],
     },
     {

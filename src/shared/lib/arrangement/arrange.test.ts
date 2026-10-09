@@ -277,11 +277,11 @@ describe('arrange', () => {
   it('reads every figure token against the chord being played', () => {
     const tokens = pattern(
       'tokens',
-      '0/2 v1,2/2 v4,4/2 s2+s7,6/2 _7+_b7+_6,8/2 3+5+8+10,10/2 T1,12/2 T8,14/2 U',
+      '0/2 v1,2/2 v4,4/2 s2+s7,6/2 _7+_b7+_6,8/2 3+5+8+10,10/2 T1,12/2 T8,14/2 U,15/1 T15',
       '0/4 L1+L3+L5+L10',
     )
     const major = arrange(chart([['C']]), { tonic: C, pattern: tokens })
-    expect([0, 6, 12, 18, 24, 30, 36, 42].map((tick) => midisAt(major, 'rh', tick))).toEqual([
+    expect([0, 6, 12, 18, 24, 30, 36, 42, 45].map((tick) => midisAt(major, 'rh', tick))).toEqual([
       [60],
       [72],
       [64, 72],
@@ -290,10 +290,16 @@ describe('arrange', () => {
       [64, 67, 72],
       [72, 76, 79],
       [64, 67],
+      [84, 88, 91],
     ])
     expect(midisAt(major, 'lh', 0)).toEqual([36, 40, 43, 52])
     const minor = arrange(chart([['Am']]), { tonic: C, pattern: tokens })
     expect(midisAt(minor, 'rh', 12)).toEqual([60, 69])
+    const led = arrange(chart([['C', 'G']]), {
+      tonic: C,
+      pattern: pattern('upper', '0/16 U', '0/16 L1'),
+    })
+    expect(midisAt(led, 'rh', 48)).toEqual([62, 67]) // G led to B3 D4 G4: all but its lowest
     const seventh = arrange(chart([['G7']]), {
       tonic: C,
       pattern: pattern('seventh', '0/16 7', '0/16 L7'),

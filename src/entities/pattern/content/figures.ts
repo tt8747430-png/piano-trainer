@@ -19,8 +19,8 @@ export const RIGHT_FIGURES: Readonly<Record<RightFigureId, FigureEntry<Figure>>>
     figure: eventFigure('0/4 C,4/4 C,8/4 C,12/4 C'),
   },
   b2: {
-    name: { en: 'Broken chord: 3rd+5th, root', ru: 'Ломаный аккорд: терция+квинта, основной тон' },
-    figure: eventFigure('0/2 U,2/2 1^1,4/2 U,6/2 1^1,8/2 U,10/2 1^1,12/2 U,14/2 1^1'),
+    name: { en: 'Broken chord: upper notes, lowest', ru: 'Ломаный аккорд: верхние звуки, нижний' },
+    figure: eventFigure('0/2 U,2/2 v1^1,4/2 U,6/2 v1^1,8/2 U,10/2 v1^1,12/2 U,14/2 v1^1'),
   },
   b3: {
     name: { en: 'Arpeggio: 3rd, then 5th + octave', ru: 'Арпеджио: терция, затем квинта + октава' },
@@ -39,43 +39,38 @@ export const RIGHT_FIGURES: Readonly<Record<RightFigureId, FigureEntry<Figure>>>
     figure: eventFigure('0/2 1^1,2/2 3^2,4/2 5^3,6/2 8^5,8/2 8^1,10/2 10^2,12/2 12^3,14/2 15^5'),
   },
   t3: {
-    name: { en: '♬ Runs down from the top', ru: '♬ Пассажи вниз от верхнего звука' },
+    name: { en: '♬ 2nd and 5th, then down 3–2–1', ru: '♬ Секунда и квинта, затем вниз 3–2–1' },
     figure: eventFigure(
-      '0/2 8^2+12^5,2/2 10^3,4/2 9^2,6/2 8^1,8/2 1^2+5^5,10/2 3^3,12/2 2^2,14/2 1^1',
+      '0/2 9^2+12^5,2/2 10^3,4/2 9^2,6/2 8^1,8/2 2^2+5^5,10/2 3^3,12/2 2^2,14/2 1^1',
     ),
   },
   t4: {
-    name: { en: '♬ Fast arpeggio up, then chord', ru: '♬ Быстрое арпеджио вверх, затем аккорд' },
-    figure: eventFigure(
-      '0/1 1^1,1/1 3^2,2/1 5^3,3/1 8^5,4/1 8^1,5/1 10^2,6/1 12^3,7/1 15^5,8/8 T8',
-    ),
+    name: { en: '♫ Up 1–2–3–5 over two octaves', ru: '♫ Вверх 1–2–3–5 на две октавы' },
+    figure: eventFigure('0/2 1^1,2/2 2^2,4/2 3^3,6/2 5^5,8/2 8^1,10/2 9^2,12/2 10^3,14/2 12^5'),
   },
   t5: {
     name: {
-      en: '♩.♪♩ Dotted chords through inversions',
-      ru: '♩.♪♩ Пунктирные аккорды по обращениям',
+      en: '♩.♪♩ Dotted chord, then an octave up',
+      ru: '♩.♪♩ Пунктирный аккорд, затем октавой выше',
     },
-    figure: eventFigure('0/6 T,6/2 T1,8/8 T2'),
+    figure: eventFigure('0/6 T,6/2 T8,8/8 T8'),
   },
   c3: {
-    name: {
-      en: '3 chords climbing (last one rolled)',
-      ru: '3 аккорда вверх (последний арпеджирован)',
-    },
-    figure: eventFigure('0/4 T,4/4 T1,8/8 T2~'),
+    name: { en: '3 chords an octave apart', ru: '3 аккорда через октаву' },
+    figure: eventFigure('0/4 T,4/4 T8,8/8 T15'),
   },
   inv: {
     name: { en: 'Inversions: root, 1st, 2nd', ru: 'Обращения: основной вид, 1-е, 2-е' },
     figure: eventFigure('0/8 T,8/4 T1,12/4 T2'),
   },
   p51: {
-    name: { en: '5.1 Root steps down to ♭7', ru: '5.1 Основной тон спускается к ♭7' },
-    figure: eventFigure('0/4 T,4/4 T,8/4 _b7+3+5,12/4 _b7+3+5'),
+    name: { en: '5.1 The ♭7 under the root', ru: '5.1 ♭7 под основным тоном' },
+    figure: eventFigure('0/4 T,4/4 T,8/4 _b7+T,12/4 _b7+T'),
   },
   p52: {
     name: { en: '5.2 Falling line 1–7–♭7–6', ru: '5.2 Нисходящая линия 1–7–♭7–6' },
     figure: eventFigure('0/4 T,4/4 _7+3+5,8/4 _b7+3+5,12/4 _6+3+5', {
-      onMajor: '0/4 T,4/4 _7+3+5,8/4 _b7+3+5,12/4 _b7+3+5',
+      onMajor: '0/4 T,4/4 _7+3+5,8/8 _b7+3+5',
     }),
   },
   p53: {
@@ -84,7 +79,7 @@ export const RIGHT_FIGURES: Readonly<Record<RightFigureId, FigureEntry<Figure>>>
   },
   s6u: {
     name: { en: '6th↑ Rising sixths', ru: 'Сексты ↑ Восходящие сексты' },
-    figure: eventFigure('0/2 s2+s7,2/2 s3+s8,4/2 s3+s8,6/2 s4+s9,8/8 5+8'),
+    figure: eventFigure('0/2 s2+s7,2/2 s3+s8,4/2 s3+s8,6/2 s4+s9,8/8 s4+s9'),
   },
   s6d: {
     name: { en: '6th↓ Falling sixths', ru: 'Сексты ↓ Нисходящие сексты' },
@@ -196,6 +191,10 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
   wide: {
     name: { en: 'Wide arpeggio 1–5–8–10–12–10', ru: 'Широкое арпеджио 1–5–8–10–12–10' },
     figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/4 L12^1,12/4 L10^2'),
+  },
+  climb: {
+    name: { en: 'Arpeggio 1–5–8–10, the 12th held', ru: 'Арпеджио 1–5–8–10, дуодецима выдержана' },
+    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/8 L12^1'),
   },
   q: {
     name: { en: '1–5–8–5 in quarters', ru: '1–5–8–5 четвертями' },

@@ -237,8 +237,8 @@ Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` 
 | --------------- | -------------------------------------------------------------------------------- |
 | `C`             | The chord, voice-led from the last one                                           |
 | `T` `T1` `T2`   | The close triad from the root, or its 1st or 2nd inversion                       |
-| `T8`            | The close triad an octave up                                                     |
-| `U`             | The triad's 3rd and 5th                                                          |
+| `T8` `T15`      | The close triad one or two octaves up                                            |
+| `U`             | The chord's upper notes as `C` voices it, all but its lowest (`v1`)              |
 | `1`–`15`        | A degree above the root, on the chord's own 3rd, 5th and 7th (`8` is the octave) |
 | `vN`            | The Nth note of the voiced chord from the bottom; past its top, an octave up     |
 | `_7` `_b7` `_6` | 1, 2 or 3 semitones below the root                                               |

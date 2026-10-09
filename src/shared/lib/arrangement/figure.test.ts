@@ -23,14 +23,15 @@ describe('parseFigure', () => {
     expect(parseFigure('0/2 C!')[0]?.accent).toBe(true)
     const [rolled] = parseFigure('8/8 T2~')
     expect(rolled?.rolled).toBe(true)
-    expect(rolled?.tones).toEqual([{ token: { kind: 'triad', inversion: 2 } }])
+    expect(rolled?.tones).toEqual([{ token: { kind: 'triad', inversion: 2, octaves: 0 } }])
   })
 
   it.each([
-    ['T', { kind: 'triad', inversion: 0 }],
-    ['T1', { kind: 'triad', inversion: 1 }],
-    ['T8', { kind: 'triad-octave' }],
-    ['U', { kind: 'upper-pair' }],
+    ['T', { kind: 'triad', inversion: 0, octaves: 0 }],
+    ['T1', { kind: 'triad', inversion: 1, octaves: 0 }],
+    ['T8', { kind: 'triad', inversion: 0, octaves: 1 }],
+    ['T15', { kind: 'triad', inversion: 0, octaves: 2 }],
+    ['U', { kind: 'upper-voices' }],
     ['v3', { kind: 'voice', index: 2 }],
     ['Ka', { kind: 'key-triad', triad: 'I' }],
     ['Kb', { kind: 'key-triad', triad: 'IV' }],

@@ -56,12 +56,10 @@ export type Melody = readonly MelodyNote[]
 export type FigureToken =
   /** `C`: the voice-led chord */
   | { readonly kind: 'chord' }
-  /** `T` `T1` `T2`: the close triad from the root, or an inversion of it */
-  | { readonly kind: 'triad'; readonly inversion: 0 | 1 | 2 }
-  /** `T8`: the close triad an octave up */
-  | { readonly kind: 'triad-octave' }
-  /** `U`: the triad's 3rd and 5th */
-  | { readonly kind: 'upper-pair' }
+  /** `T` `T1` `T2`: the close triad from the root, or an inversion of it; `T8` `T15` it one or two octaves up */
+  | { readonly kind: 'triad'; readonly inversion: 0 | 1 | 2; readonly octaves: 0 | 1 | 2 }
+  /** `U`: the voice-led chord's upper notes, all but its lowest (`v1`) */
+  | { readonly kind: 'upper-voices' }
   /** `1`–`15`: a degree above the root, on the chord's own 3rd, 5th and 7th */
   | { readonly kind: 'chord-degree'; readonly degree: number }
   /** `vN`: the Nth note of the voiced chord (index N − 1), repeating an octave up past its top */
