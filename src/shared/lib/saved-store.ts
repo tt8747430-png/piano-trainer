@@ -40,7 +40,9 @@ export function createSavedStore<State>(
       version,
       storage: createJSONStorage(() => storage),
       partialize: write,
-      migrate: (saved) => read(saved, initial),
+      // Any version's save reaches `merge` as saved, and is read there once: read in `migrate` too,
+      // a compact save would be read a second time from the state it became.
+      migrate: (saved) => saved,
       merge: (saved, current) => read(saved, current),
     }),
   )

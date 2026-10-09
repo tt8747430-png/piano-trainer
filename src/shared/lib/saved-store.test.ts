@@ -56,6 +56,23 @@ describe('createSavedStore', () => {
     expect(again.getState()).toEqual({ count: 7 })
   })
 
+  it('reads an older version’s compact save once, never its own state as a save', () => {
+    const storage = createMemoryStorage()
+    save(storage, { n: 5 }, 1)
+    const store = createSavedStore(
+      {
+        key: KEY,
+        version: 2,
+        initial: { count: 0 },
+        write: ({ count }: Count) => ({ n: count }),
+        read: (saved: unknown, current: Count): Count =>
+          isRecord(saved) && typeof saved.n === 'number' ? { count: saved.n } : current,
+      },
+      { storage, otherTabs: new EventTarget() },
+    )
+    expect(store.getState()).toEqual({ count: 5 })
+  })
+
   it.each([1, 2, 3])('reads a version-%i save for what it can', (version) => {
     const storage = createMemoryStorage()
     save(storage, { count: 4 }, version)
