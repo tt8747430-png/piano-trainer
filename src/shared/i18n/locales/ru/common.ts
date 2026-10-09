@@ -22,6 +22,7 @@ export const common: LocaleResources['common'] = {
     title: 'Страница не найдена',
     toSongs: 'К песням',
     toAccompaniment: 'К аккомпанементу',
+    toTakes: 'К дублям',
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',

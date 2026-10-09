@@ -20,6 +20,7 @@ export const common = {
     title: 'Page not found',
     toSongs: 'Go to Songs',
     toAccompaniment: 'Go to Accompaniment',
+    toTakes: 'Go to the takes',
   },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   close: 'Close',

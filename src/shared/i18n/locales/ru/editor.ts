@@ -125,5 +125,19 @@ export const editor: LocaleResources['editor'] = {
     bar: 'Такт {{n}}',
     stop: 'Стоп',
   },
+  take: {
+    name: 'Название',
+    play: 'Сыграть',
+    keep: 'Оставить такты',
+    first: 'Первый такт',
+    last: 'Последний такт',
+    keepIt: 'Оставить',
+    keeping: {
+      title: 'Оставить такты {{first}}–{{last}}?',
+      body: 'Остальные такты удалятся навсегда.',
+      confirm: 'Оставить',
+      cancel: 'Отмена',
+    },
+  },
   roll: { label: 'Нот: {{notes}} · тактов: {{bars}}', playFrom: 'Играть с такта {{n}}' },
 }

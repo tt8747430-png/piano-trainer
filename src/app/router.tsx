@@ -13,6 +13,7 @@ import {
   type PatternsStore,
 } from '@/entities/pattern'
 import type { PiecesStore } from '@/entities/piece'
+import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage } from '@/pages/not-found'
@@ -88,13 +89,14 @@ function NotFoundScreen() {
 
 /**
  * What every route is handed: the screens' remembered views (ADR 0022), the learner's patterns, which
- * say whether a pattern's page is there (ADR 0026), and the learner's pieces, which say whether a
- * piece, its page or its editor is (ADR 0027).
+ * say whether a pattern's page is there (ADR 0026), the learner's pieces, which say whether a piece,
+ * its page or its editor is (ADR 0027), and their takes, which say whether a take's page is (ADR 0034).
  */
 export interface RouterContext {
   readonly views: ViewsStore
   readonly patterns: PatternsStore
   readonly pieces: PiecesStore
+  readonly takes: TakesStore
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -357,6 +359,21 @@ const editRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
 })
 
+// A take's page, in the shell: a page to read and listen to, beside the editor that recorded it.
+const takeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/edit/$pieceId/takes/$takeId',
+  beforeLoad: async ({ params, context }) => {
+    const { editableIn, takeIn } = await playerScreens()
+    if (
+      !editableIn(context.pieces.getState(), params.pieceId) ||
+      !takeIn(context.takes.getState(), params.pieceId, params.takeId)
+    )
+      throw notFound()
+  },
+  component: lazyRouteComponent(playerScreens, 'TakePage'),
+})
+
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
@@ -392,6 +409,7 @@ const routeTree = rootRoute.addChildren([
     exercisesRoute,
     trainerRoute,
     studyRoute,
+    takeRoute,
   ]),
   fullScreenRoute.addChildren([
     playerRoute,
@@ -413,11 +431,12 @@ export function createAppRouter({
   views,
   patterns,
   pieces,
+  takes,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces },
+    context: { views, patterns, pieces, takes },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

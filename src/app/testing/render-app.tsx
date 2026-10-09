@@ -40,6 +40,7 @@ export async function renderApp(
     views: viewsStore,
     patterns: patternsStore,
     pieces: piecesStore,
+    takes: takesStore,
   })
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   await loadScoreView()

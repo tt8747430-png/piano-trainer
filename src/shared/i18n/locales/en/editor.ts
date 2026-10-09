@@ -125,5 +125,20 @@ export const editor = {
     stop: 'Stop',
   },
   // A take drawn as a piano roll, on its page.
+  // A take's own page.
+  take: {
+    name: 'Name',
+    play: 'Play',
+    keep: 'Keep bars',
+    first: 'First bar',
+    last: 'Last bar',
+    keepIt: 'Keep',
+    keeping: {
+      title: 'Keep bars {{first}}–{{last}}?',
+      body: 'The other bars are deleted for good.',
+      confirm: 'Keep',
+      cancel: 'Cancel',
+    },
+  },
   roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
 } as const

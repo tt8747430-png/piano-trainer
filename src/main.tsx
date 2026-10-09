@@ -15,10 +15,11 @@ import './styles/index.css'
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('index.html has no #root element')
 
-// One store each of the learner's patterns and pieces: the screens read them, and the router asks them
-// what is there.
+// One store each of the learner's patterns, pieces and takes: the screens read them, and the router
+// asks them what is there.
 const patternsStore = createPatternsStore()
 const piecesStore = createPiecesStore()
+const takesStore = createTakesStore()
 
 createRoot(rootElement).render(
   <StrictMode>
@@ -27,12 +28,13 @@ createRoot(rootElement).render(
       progressStore={createProgressStore()}
       patternsStore={patternsStore}
       piecesStore={piecesStore}
-      takesStore={createTakesStore()}
+      takesStore={takesStore}
       services={createServices()}
       router={createAppRouter({
         views: createViewsStore(),
         patterns: patternsStore,
         pieces: piecesStore,
+        takes: takesStore,
       })}
     />
   </StrictMode>,
