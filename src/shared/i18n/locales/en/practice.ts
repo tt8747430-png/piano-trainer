@@ -60,6 +60,8 @@ export const practice = {
     play: 'Play',
     mark: 'Mark',
     clear: 'Clear',
+    colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
+    finger: { label: 'Finger', none: 'None' },
     score: 'Live score',
     empty: 'Play, and it is written here.',
   },

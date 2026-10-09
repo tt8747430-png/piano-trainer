@@ -52,6 +52,8 @@ export const practice: LocaleResources['practice'] = {
     play: 'Игра',
     mark: 'Отметить',
     clear: 'Очистить',
+    colour: { label: 'Цвет', a: 'Правая рука', b: 'Левая рука', aLetter: 'П', bLetter: 'Л' },
+    finger: { label: 'Палец', none: 'Нет' },
     score: 'Живые ноты',
     empty: 'Играйте — ноты появятся здесь.',
   },

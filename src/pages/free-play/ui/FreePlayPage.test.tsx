@@ -45,6 +45,43 @@ describe('Practice → Free play', () => {
     expect(screen.getByRole('status')).toHaveTextContent('F#')
   })
 
+  it('marks a diagram in two colours with fingers, into the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/free-play?mode=mark')
+    await screen.findByRole('heading', { level: 1, name: 'Free play' })
+    const choose = (group: string, option: string) =>
+      user.click(
+        within(screen.getByRole('radiogroup', { name: group })).getByRole('radio', {
+          name: option,
+        }),
+      )
+    await choose('Colour', 'Right hand')
+    await choose('Finger', '1')
+    strike('C4')
+    await choose('Colour', 'Left hand')
+    await choose('Finger', '5')
+    strike('G4')
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ marks: '60a1,67b5' }))
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('15')
+    expect(within(keyboard()).getByRole('button', { name: 'C4' })).toHaveTextContent('R')
+    expect(within(keyboard()).getByRole('button', { name: 'G4' })).toHaveTextContent('L')
+    expect(screen.getByRole('status')).toHaveTextContent('Perfect fifth')
+    await choose('Colour', 'Right hand')
+    await choose('Finger', '1')
+    strike('C4')
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ marks: '67b5' }))
+  })
+
+  it('opens a diagram sent as a link, and Clear takes its marks away', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/free-play?mode=mark&marks=60a3%2C64a%2C67b5')
+    await screen.findByRole('heading', { level: 1, name: 'Free play' })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('35')
+    expect(screen.getByRole('status')).toHaveTextContent('C Major triad')
+    await user.click(screen.getByRole('button', { name: 'Clear' }))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('marks'))
+  })
+
   it('opens from Practice’s eighth row', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
