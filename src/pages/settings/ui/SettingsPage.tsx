@@ -9,7 +9,7 @@ import {
   useSettingsStoreApi,
   type Theme,
 } from '@/entities/settings'
-import { MidiControl } from '@/features/connect-midi'
+import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
 import { setLocale, setTheme } from '@/features/set-preference'
@@ -93,6 +93,7 @@ export function SettingsPage() {
         </Group>
         <Group title={t('midi')}>
           <MidiControl />
+          <MidiSettingsFields />
         </Group>
         <Group title={t('progress.label')}>
           <AlertDialog open={confirming} onOpenChange={setConfirming}>

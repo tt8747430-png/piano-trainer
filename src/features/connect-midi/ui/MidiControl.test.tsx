@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { renderWithSettings as render } from '@/app/testing/render-with-settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -40,5 +41,17 @@ describe('MidiControl', () => {
     await user.click(screen.getByRole('button', { name: 'Connect a MIDI keyboard' }))
     expect(await screen.findByText('MIDI access was blocked.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
+  })
+
+  it('names a keyboard chosen that is away', async () => {
+    const user = userEvent.setup()
+    const away = { state: 'away', device: 'Piano', devices: ['Pads'] } as const
+    render(
+      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi(away) }}>
+        <MidiControl />
+      </ServicesProvider>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Connect a MIDI keyboard' }))
+    expect(await screen.findByText('Piano is not connected.')).toBeInTheDocument()
   })
 })

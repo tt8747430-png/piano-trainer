@@ -1,21 +1,28 @@
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
+import { selectMidi, useSettings } from '@/entities/settings'
 import { Button } from '@/shared/ui/primitives/button'
 import { Spinner } from '@/shared/ui/primitives/spinner'
 import { isMidiConnected, useMidiConnection, type MidiConnection } from '../use-midi-connection'
 
-function statusLine(connection: MidiConnection, t: TFunction<'common'>): string | null {
-  switch (connection.kind) {
-    case 'unsupported':
-      return t('midi.unsupported')
-    case 'ready':
-      return connection.status.state === 'connected'
-        ? t('midi.connected', { devices: connection.status.devices.join(', ') })
-        : connection.status.state === 'denied'
-          ? t('midi.denied')
-          : t('midi.noDevice')
-    default:
-      return null
+/** The connection in a line: the keyboard chosen by its name (connected, or not), else every one connected. */
+function statusLine(
+  connection: MidiConnection,
+  chosen: string | null,
+  t: TFunction<'common'>,
+): string | null {
+  if (connection.kind === 'unsupported') return t('midi.unsupported')
+  if (connection.kind !== 'ready') return null
+  const { status } = connection
+  switch (status.state) {
+    case 'connected':
+      return t('midi.connected', { devices: chosen ?? status.devices.join(', ') })
+    case 'away':
+      return t('midi.away', { device: status.device })
+    case 'denied':
+      return t('midi.denied')
+    case 'no-device':
+      return t('midi.noDevice')
   }
 }
 
@@ -23,7 +30,8 @@ function statusLine(connection: MidiConnection, t: TFunction<'common'>): string 
 export function MidiControl() {
   const { t } = useTranslation('common')
   const { connection, connect } = useMidiConnection()
-  const line = statusLine(connection, t)
+  const { device } = useSettings(selectMidi)
+  const line = statusLine(connection, device, t)
   return (
     <div className="flex flex-col gap-3">
       <p aria-live="polite" className="text-muted-foreground empty:sr-only">

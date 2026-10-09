@@ -2,6 +2,8 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
+import { setMidi } from '@/features/set-preference'
 
 describe('Settings', () => {
   it('goes back to the Path it was opened from, leaving no Settings to come back to', async () => {
@@ -89,6 +91,56 @@ describe('Settings', () => {
     expect(
       await screen.findByText('This browser can’t connect a MIDI keyboard.'),
     ).toBeInTheDocument()
+  })
+
+  it('sets up the MIDI keyboard under its connection, and saves each change', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    await user.click(await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Keyboard' }))
+    await user.click(await screen.findByRole('option', { name: 'Keyboard' }))
+    await user.click(screen.getByRole('switch', { name: /Sound the MIDI keyboard/ }))
+    await user.click(screen.getByRole('switch', { name: /Play through the piano/ }))
+    const choose = (group: string, value: string) =>
+      user.click(
+        within(screen.getByRole('radiogroup', { name: group })).getByRole('radio', { name: value }),
+      )
+    await choose('Octave shift', '+1')
+    await choose('Touch', 'Light')
+    await choose('Pedal', 'Reversed')
+    expect(settingsStore.getState().midi).toEqual({
+      device: 'Keyboard',
+      sound: true,
+      throughPiano: true,
+      octaveShift: 1,
+      touch: 'light',
+      pedal: 'reversed',
+    })
+    expect(screen.getByText('Connected: Keyboard')).toBeInTheDocument()
+  })
+
+  it('keeps a keyboard chosen while it is away, and says it is not connected', async () => {
+    const user = userEvent.setup()
+    const { settingsStore, midi } = await renderApp('/settings')
+    act(() => setMidi(settingsStore, { device: 'Piano' }))
+    act(() => midi.setStatus({ state: 'away', device: 'Piano', devices: ['Keyboard'] }))
+    expect(await screen.findByText('Piano is not connected.')).toBeInTheDocument()
+    await user.click(screen.getByRole('combobox', { name: 'Keyboard' }))
+    expect(await screen.findByRole('option', { name: 'Piano (not connected)' })).toBeInTheDocument()
+    await user.click(screen.getByRole('option', { name: 'Any keyboard' }))
+    expect(settingsStore.getState().midi.device).toBeNull()
+  })
+
+  it('shows no MIDI settings where the browser cannot connect a keyboard', async () => {
+    await renderApp('/settings', { webMidi: false })
+    await screen.findByText('This browser can’t connect a MIDI keyboard.')
+    expect(screen.queryByRole('radiogroup', { name: 'Octave shift' })).not.toBeInTheDocument()
+  })
+
+  it('reads in Russian, with nothing left in English', async () => {
+    await renderApp('/settings', { locale: 'ru' })
+    await screen.findByRole('radiogroup', { name: 'Сдвиг октавы' })
+    expect(untranslated(document.body)).toEqual([])
   })
 
   it('resets progress only after confirming, then closes the dialog', async () => {

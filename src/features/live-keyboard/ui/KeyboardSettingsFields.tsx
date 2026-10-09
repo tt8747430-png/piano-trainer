@@ -1,19 +1,8 @@
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
-import { Segmented, SwitchRow } from '@/shared/ui'
-
-/** One choice: its name as a row's text (the group around it has the heading), its control under it. */
-function Field({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <span className="text-foreground">{label}</span>
-      {children}
-    </div>
-  )
-}
+import { Segmented, SettingField, SwitchRow } from '@/shared/ui'
 
 /**
  * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in place). How a swipe
@@ -25,7 +14,7 @@ export function KeyboardSettingsFields() {
   const keyboard = useSettings(selectKeyboard)
   return (
     <div className="flex flex-col gap-4">
-      <Field label={t('keyboardSettings.keySize.label')}>
+      <SettingField label={t('keyboardSettings.keySize.label')}>
         <Segmented
           label={t('keyboardSettings.keySize.label')}
           value={keyboard.keySize}
@@ -35,8 +24,8 @@ export function KeyboardSettingsFields() {
           }))}
           onChange={(keySize) => setKeyboard(store, { keySize })}
         />
-      </Field>
-      <Field label={t('keyboardSettings.namedKeys.label')}>
+      </SettingField>
+      <SettingField label={t('keyboardSettings.namedKeys.label')}>
         <Segmented
           label={t('keyboardSettings.namedKeys.label')}
           value={keyboard.namedKeys}
@@ -46,7 +35,7 @@ export function KeyboardSettingsFields() {
           }))}
           onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
         />
-      </Field>
+      </SettingField>
       <div>
         <SwitchRow
           label={t('keyboardSettings.map')}

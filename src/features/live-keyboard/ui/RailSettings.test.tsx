@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
@@ -24,6 +24,18 @@ describe('RailSettings', () => {
       'true',
     )
     expect(screen.getByRole('slider', { name: 'Keys in view' })).toBeInTheDocument()
+  })
+
+  it('offers Sound the MIDI keyboard only while one is connected, and saves it', async () => {
+    const user = userEvent.setup()
+    const { settingsStore, midiKeyboard } = setUp()
+    const rail = screen.getByRole('group', { name: 'Keyboard settings' })
+    const sound = () => within(rail).queryByRole('button', { name: 'Sound the MIDI keyboard' })
+    expect(sound()).not.toBeInTheDocument()
+    await act(() => midiKeyboard.connect())
+    await user.click(sound() ?? rail)
+    expect(sound()).toHaveAttribute('aria-pressed', 'true')
+    expect(settingsStore.getState().midi.sound).toBe(true)
   })
 
   it('opens them in the rail on a narrow screen from the settings button, no pop-up', async () => {

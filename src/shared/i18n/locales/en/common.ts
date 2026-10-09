@@ -49,6 +49,7 @@ export const common = {
     settings: 'Keyboard settings',
     glissando: 'Glissando',
     pedal: 'Pedal',
+    sound: 'Sound the MIDI keyboard',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
@@ -66,8 +67,20 @@ export const common = {
     connecting: 'Connecting…',
     retry: 'Try again',
     connected: 'Connected: {{devices}}',
+    away: '{{device}} is not connected.',
     noDevice: 'No MIDI keyboard found.',
     denied: 'MIDI access was blocked.',
     unsupported: 'This browser can’t connect a MIDI keyboard.',
+  },
+  // The MIDI keyboard's settings, in Settings under its connection.
+  midiSettings: {
+    device: { label: 'Keyboard', any: 'Any keyboard', away: '{{device}} (not connected)' },
+    sound: 'Sound the MIDI keyboard',
+    soundNote: 'For a keyboard with no speaker',
+    throughPiano: 'Play through the piano',
+    throughPianoNote: 'The app’s music on the keyboard’s own speaker',
+    octaveShift: 'Octave shift',
+    touch: { label: 'Touch', light: 'Light', normal: 'Normal', heavy: 'Heavy' },
+    pedal: { label: 'Pedal', normal: 'Normal', reversed: 'Reversed' },
   },
 } as const

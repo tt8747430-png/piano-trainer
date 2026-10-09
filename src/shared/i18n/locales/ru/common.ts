@@ -47,6 +47,7 @@ export const common: LocaleResources['common'] = {
     settings: 'Настройки клавиатуры',
     glissando: 'Глиссандо',
     pedal: 'Педаль',
+    sound: 'Звук MIDI-клавиатуры',
   },
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
@@ -63,8 +64,19 @@ export const common: LocaleResources['common'] = {
     connecting: 'Подключение…',
     retry: 'Ещё раз',
     connected: 'Подключено: {{devices}}',
+    away: '{{device}} не подключена.',
     noDevice: 'MIDI-клавиатура не найдена.',
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',
+  },
+  midiSettings: {
+    device: { label: 'Клавиатура', any: 'Любая клавиатура', away: '{{device}} (не подключена)' },
+    sound: 'Звук MIDI-клавиатуры',
+    soundNote: 'Для клавиатуры без динамика',
+    throughPiano: 'Звук через пианино',
+    throughPianoNote: 'Музыка приложения — в динамике клавиатуры',
+    octaveShift: 'Сдвиг октавы',
+    touch: { label: 'Чувствительность', light: 'Лёгкая', normal: 'Обычная', heavy: 'Тяжёлая' },
+    pedal: { label: 'Педаль', normal: 'Обычная', reversed: 'Обратная' },
   },
 }

@@ -1,6 +1,7 @@
 import { Keyboard, Map as MapIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { MidiSoundToggle } from '@/features/connect-midi'
 import { setKeyboard } from '@/features/set-preference'
 import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
 import { RailButton, RailChoice } from '@/shared/ui'
@@ -8,7 +9,8 @@ import { RailButton, RailChoice } from '@/shared/ui'
 /**
  * The keyboard settings set in the rail, every one in sight and saved for every keyboard: the keys'
  * size and the note names as small choices, the map and typing from the computer keyboard as
- * toggles. How a swipe plays is the rail's own glissando toggle beside them.
+ * toggles; while a MIDI keyboard is connected, whether the app sounds it. How a swipe plays is the
+ * rail's own glissando toggle beside them.
  */
 export function KeyboardRailSettings() {
   const { t } = useTranslation('common')
@@ -48,6 +50,7 @@ export function KeyboardRailSettings() {
         title={keyboard.typing ? t('keyboardSettings.typingHint') : t('keyboardSettings.typing')}
         onClick={() => setKeyboard(store, { typing: !keyboard.typing })}
       />
+      <MidiSoundToggle />
     </>
   )
 }
