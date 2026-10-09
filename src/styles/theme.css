@@ -77,6 +77,8 @@
    * chord symbols only; every control reads in Onest.
    */
   --font-display: 'Literata Variable', 'Noto Music', Georgia, serif;
+  /* A music sign that stands alone (the rail's pedal mark): set by the music font's own metrics. */
+  --font-music: 'Noto Music', serif;
 
   --color-role-root: var(--role-root);
   --color-role-3rd: var(--role-3rd);

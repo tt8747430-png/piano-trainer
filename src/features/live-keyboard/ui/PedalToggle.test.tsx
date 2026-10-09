@@ -24,4 +24,9 @@ describe('PedalToggle', () => {
     act(() => audio.pedal('sustain', true))
     expect(screen.getByRole('button', { name: 'Pedal' })).toHaveAttribute('aria-pressed', 'true')
   })
+
+  it('wears the pedal mark a score prints', () => {
+    setUp()
+    expect(screen.getByRole('button', { name: 'Pedal' })).toHaveTextContent('\u{1D1AE}')
+  })
 })

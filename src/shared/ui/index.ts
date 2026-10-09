@@ -32,7 +32,6 @@ export {
   PianoKeyboard,
   RailButton,
   RailGroup,
-  PedalIcon,
   unmarked,
   type KeyMark,
   type ShownKeys,
