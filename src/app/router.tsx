@@ -4,6 +4,7 @@ import {
   createRouter,
   lazyRouteComponent,
   notFound,
+  redirect,
   type RouterHistory,
 } from '@tanstack/react-router'
 import {
@@ -167,7 +168,8 @@ const exercisesRoute = createRoute({
   path: '/practice/exercises',
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
-// A trainer: each remembers its own level, rounds and Custom, under its own path.
+// A trainer: each remembers its own level, rounds and Custom, under its own path. Its levels are its
+// ladder's, which the validator cannot see: a level it does not have leaves the URL here.
 const restoreTrainer = restoreView(readTrainerSearch, [])
 const trainerRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -175,9 +177,19 @@ const trainerRoute = createRoute({
   ...trainerSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
-    const { isTrainerId } = await practiceScreens()
-    if (!isTrainerId(context.params.trainerId)) throw notFound()
+    const { isTrainerId, ownTrainerView, trainerOf } = await practiceScreens()
+    const { trainerId } = context.params
+    if (!isTrainerId(trainerId)) throw notFound()
     restoreTrainer(context)
+    const own = ownTrainerView(trainerOf(trainerId), context.search)
+    if (own !== context.search) {
+      throw redirect({
+        to: '/practice/trainers/$trainerId',
+        params: { trainerId },
+        search: own,
+        replace: true,
+      })
+    }
   },
   component: lazyRouteComponent(practiceScreens, 'TrainerPage'),
 })

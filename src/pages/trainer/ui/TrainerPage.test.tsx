@@ -158,11 +158,25 @@ describe('A trainer', () => {
     expect(router.state.location.search).toMatchObject({ altered: true })
   })
 
-  it('opens an unknown level at the first', async () => {
-    await renderApp('/practice/trainers/reading-notes?level=everything')
+  it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
+    const { router, viewsStore } = await renderApp(
+      '/practice/trainers/reading-notes?level=everything',
+    )
     expect(await screen.findByRole('combobox', { name: /^Level/ })).toHaveTextContent(
       'The three anchors',
     )
+    expect(router.state.location.search).toEqual({})
+    expect(viewsStore.getState().views['/practice/trainers/reading-notes']).toEqual({})
+  })
+
+  it('writes its first level as no level, and Custom only for a trainer that has it', async () => {
+    const first = await renderApp('/practice/trainers/build-chord?level=c-main')
+    await screen.findByRole('heading', { level: 1, name: 'Build chord' })
+    expect(first.router.state.location.search).toEqual({})
+    first.unmount()
+    const gaps = await renderApp('/practice/trainers/gaps?level=custom&rounds=20')
+    await screen.findByRole('heading', { level: 1, name: 'My gaps' })
+    expect(gaps.router.state.location.search).toEqual({ rounds: 20 })
   })
 
   it('saves auto-next from its toggle in sight, no settings sheet', async () => {

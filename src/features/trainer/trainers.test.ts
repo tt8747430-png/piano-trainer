@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { drawRound } from './draw'
 import { choiceAnswer, isChoice } from './round-machine'
-import { levelOf, runKeyOf, trainerOf } from './trainers'
+import { levelOf, ownTrainerView, runKeyOf, trainerOf } from './trainers'
 import { CUSTOM, TRAINER_IDS, type TrainerView } from './trainer-view'
 import { scripted } from './testing/asks'
 
@@ -86,6 +86,19 @@ describe('levelOf and runKeyOf', () => {
     expect(levelOf(trainerOf('key-signatures'), { ...TEN, level: CUSTOM })).toBe('up-to-two')
     expect(levelOf(trainerOf('chord-role'), { ...TEN, level: 'minor' })).toBe('minor')
     expect(levelOf(trainerOf('gaps'), TEN)).toBe('')
+  })
+
+  it('writes a URL’s level as its trainer has it: none for its first or one it lacks', () => {
+    const view = { ...TEN, level: 'sevenths' }
+    expect(ownTrainerView(trainerOf('build-chord'), view)).toBe(view)
+    expect(ownTrainerView(trainerOf('build-chord'), { ...TEN, level: 'c-main' })).toEqual(TEN)
+    expect(ownTrainerView(trainerOf('build-chord'), { ...TEN, level: 'everything' })).toEqual(TEN)
+    expect(ownTrainerView(trainerOf('intervals-by-ear'), { ...TEN, level: CUSTOM })).toEqual({
+      ...TEN,
+      level: CUSTOM,
+    })
+    expect(ownTrainerView(trainerOf('gaps'), { ...TEN, level: CUSTOM })).toEqual(TEN)
+    expect(ownTrainerView(trainerOf('gaps'), TEN)).toBe(TEN)
   })
 
   it('keeps each level’s record under the trainer and level, My gaps under one', () => {

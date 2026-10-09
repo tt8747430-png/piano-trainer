@@ -244,6 +244,16 @@ export function levelOf(trainer: Trainer, view: TrainerView): string {
   return level !== undefined && trainer.levels.includes(level) ? level : (trainer.levels[0] ?? '')
 }
 
+/**
+ * A trainer's URL as it should be: a level of its own, none for its first (absent is its first) or for
+ * one it does not have. The same view when it already is.
+ */
+export function ownTrainerView(trainer: Trainer, view: TrainerView): TrainerView {
+  const level = levelOf(trainer, view)
+  const own = level === (trainer.levels[0] ?? '') ? undefined : level
+  return own === view.level ? view : { ...view, level: own }
+}
+
 /** Where a trainer keeps a level's record: `name-chord:c-main`; My gaps, with no ladder, `gaps:all`. */
 export const runKeyOf = (trainer: Trainer, level: string) =>
   `${trainer.id}:${level || 'all'}` as const

@@ -1,4 +1,4 @@
-export { checkPlan, isTrainerId } from '@/features/trainer'
+export { checkPlan, isTrainerId, ownTrainerView, trainerOf } from '@/features/trainer'
 export { CheckPage } from '@/pages/check'
 export { ExercisesPage } from '@/pages/exercises'
 export { FreePlayPage } from '@/pages/free-play'

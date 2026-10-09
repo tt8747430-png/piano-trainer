@@ -19,6 +19,7 @@ export {
   ladderOf,
   levelOf,
   orOwn,
+  ownTrainerView,
   runKeyOf,
   trainerOf,
   type CustomField,
