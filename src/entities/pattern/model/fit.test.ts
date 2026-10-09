@@ -15,10 +15,10 @@ describe('figureNeed', () => {
 
   it('closes the key’s triads to music without a key, and a figure inside the beat to 6/8', () => {
     expect(figureNeed(RIGHT_FIGURES.flow.figure, { ...EVERYTHING, key: false })).toBe('key')
-    expect(figureNeed(LEFT_FIGURES.arp.figure, { ...EVERYTHING, simpleTime: false })).toBe(
+    expect(figureNeed(LEFT_FIGURES.fig.figure, { ...EVERYTHING, simpleTime: false })).toBe(
       'simpleTime',
     )
-    expect(figureNeed(LEFT_FIGURES.arp.figure, { ...EVERYTHING, key: false })).toBeNull()
+    expect(figureNeed(LEFT_FIGURES.fig.figure, { ...EVERYTHING, key: false })).toBeNull()
   })
 })
 

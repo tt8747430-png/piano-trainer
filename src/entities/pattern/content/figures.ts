@@ -184,10 +184,6 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
     name: { en: 'Dotted octaves ♩. ♪', ru: 'Пунктирные октавы ♩. ♪' },
     figure: eventFigure('0/6 L1+L8,6/2 L1+L8,8/6 L1+L8,14/2 L1+L8'),
   },
-  arp: {
-    name: { en: 'Arpeggio 1–5–8 (held)', ru: 'Арпеджио 1–5–8 (с задержкой звуков)' },
-    figure: eventFigure('0/16 L1^5,2/14 L5^2,4/12 L8^1'),
-  },
   wide: {
     name: { en: 'Wide arpeggio 1–5–8–10–12–10', ru: 'Широкое арпеджио 1–5–8–10–12–10' },
     figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/4 L12^1,12/4 L10^2'),
@@ -212,7 +208,7 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
     figure: eventFigure('0/4 L1^5,4/4 L3^3,8/4 L5^1,12/4 L3^3'),
   },
   fig: {
-    name: { en: 'Figuration 1–5–8 (no 3rd)', ru: 'Фигурация 1–5–8 (без терции)' },
+    name: { en: 'Arpeggio 1–5–8 (no 3rd)', ru: 'Арпеджио 1–5–8 (без терции)' },
     figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1'),
   },
   bro: {

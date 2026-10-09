@@ -47,7 +47,7 @@ describe('Called to Play’s ways and techniques, as the book writes them', () =
   it('3 · the left hand’s 1–5–8, then the 3rd and the 5th with the octave (Am)', () => {
     const am = play('M3', 'Am')
     expect(written(am, 'rh')).toEqual(['6/2 C4', '8/8 E4+A4'])
-    expect(written(am, 'lh').map((event) => event.split(' ')[1])).toEqual(['A1', 'E2', 'A2'])
+    expect(written(am, 'lh')).toEqual(['0/2 A1', '2/2 E2', '4/2 A2'])
   })
 
   it('4 · the arpeggio up through both hands and back down (Am)', () => {

@@ -58,7 +58,6 @@ export const LEFT_FIGURE_IDS = [
   'r',
   'h',
   'dot',
-  'arp',
   'wide',
   'climb',
   'q',

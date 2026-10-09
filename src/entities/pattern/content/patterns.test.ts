@@ -17,11 +17,11 @@ import { METHOD_PATTERNS, METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
 describe('the pattern catalog', () => {
-  it('has 39 patterns in four groups, built from 36 right-hand and 21 left-hand figures', () => {
+  it('has 39 patterns in four groups, built from 36 right-hand and 20 left-hand figures', () => {
     expect(PATTERN_IDS).toHaveLength(39)
     expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 12, 8, 14])
     expect(Object.keys(RIGHT_FIGURES)).toHaveLength(36)
-    expect(Object.keys(LEFT_FIGURES)).toHaveLength(21)
+    expect(Object.keys(LEFT_FIGURES)).toHaveLength(20)
     expect(Object.keys(METHODS)).toHaveLength(17)
   })
 
@@ -118,7 +118,7 @@ describe('the pattern catalog', () => {
       LEFT_FIGURES: Object.values(LEFT_FIGURES).map((entry) => entry.name),
       METHODS: Object.values(METHODS).map((method) => method.label),
     })
-    expect(texts.length).toBeGreaterThanOrEqual(4 + 39 * 2 + 36 + 21 + 17)
+    expect(texts.length).toBeGreaterThanOrEqual(4 + 39 * 2 + 36 + 20 + 17)
     for (const { path, text } of texts) {
       expect(text.en.trim(), `${path}.en`).not.toBe('')
       expect(text.ru.trim(), `${path}.ru`).not.toBe('')

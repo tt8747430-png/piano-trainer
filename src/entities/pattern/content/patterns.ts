@@ -60,7 +60,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Левая рука 1–5–8 (пальцы 5–2–1), правая продолжает терцией и держит квинту с октавой.',
     },
     rh: 'b3',
-    lh: 'arp',
+    lh: 'fig',
   },
   M4: {
     group: 'five-ways',
@@ -74,7 +74,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Арпеджио поднимается через левую руку, продолжается в правой и возвращается вниз. Всё восьмыми.',
     },
     rh: 'b4',
-    lh: 'arp',
+    lh: 'fig',
   },
   M5: {
     group: 'five-ways',

@@ -8,7 +8,13 @@ import {
   type OwnPatternId,
   type PatternRef,
 } from './own'
-import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from './types'
+import {
+  isLeftFigureId,
+  isPatternId,
+  isRightFigureId,
+  type LeftFigureId,
+  type PatternId,
+} from './types'
 
 export const PATTERNS_STORAGE_KEY = 'pt-patterns'
 export const PATTERNS_VERSION = 1
@@ -35,10 +41,14 @@ export const createPatternsStore = (saving: SavingOptions = {}): PatternsStore =
     saving,
   )
 
+/** The left hands since retired, by the figure that now plays their notes. */
+const RETIRED_LEFT: Readonly<Record<string, LeftFigureId>> = { arp: 'fig' }
+
 /** A saved own pattern that reads: its id, a name of 1 to 40 characters, known figures. */
 function ownPattern(saved: unknown): OwnPattern | null {
   if (!isRecord(saved)) return null
-  const { id, name, rh, lh } = saved
+  const { id, name, rh } = saved
+  const lh = typeof saved.lh === 'string' ? (RETIRED_LEFT[saved.lh] ?? saved.lh) : saved.lh
   const kept = typeof name === 'string' ? ownName(name) : null
   return isOwnPatternId(id) && kept && isRightFigureId(rh) && isLeftFigureId(lh)
     ? { id, name: kept, rh, lh }
