@@ -1,4 +1,4 @@
-import { useScaleName } from '@/shared/i18n'
+import { useKeyName, useScaleName } from '@/shared/i18n'
 import { noteFromParam, spellScale } from '@/shared/lib/music'
 import { keyOfScale } from '../model/scale-key'
 import type { ScaleView } from '../model/scale-view'
@@ -22,11 +22,14 @@ export function ScaleExplorer({
   onChange: (change: Partial<ScaleView>) => void
 }) {
   const scaleName = useScaleName()
+  const keyName = useKeyName()
   const root = noteFromParam(scale.root)
   const name = scaleName(root, scale.kind)
   const choice = <ScaleChoice scale={scale} onChange={onChange} />
   const musicKey = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
-  if (musicKey) return <KeyView scale={scale} name={name} musicKey={musicKey} choice={choice} />
+  // The Key view is the key's: named as the key, whichever of its scales chose it.
+  if (musicKey)
+    return <KeyView scale={scale} name={keyName(musicKey)} musicKey={musicKey} choice={choice} />
   const facts = <ScaleFacts root={root} kind={scale.kind} tones={spellScale(root, scale.kind)} />
   return scale.show === 'chords' ? (
     <ChordsView scale={scale} name={name} onChange={onChange} choice={choice} facts={facts} />

@@ -48,13 +48,13 @@ describe('circleKey', () => {
 describe('circleFunctions', () => {
   it('puts a major key’s seven chords on its place and its neighbours’', () => {
     expect(circleFunctions({ tonic: note('C'), minor: false })).toEqual([
-      { place: 0, ring: 'major', numeral: 'I', root: note('C') },
-      { place: 11, ring: 'minor', numeral: 'ii', root: note('D') },
-      { place: 1, ring: 'minor', numeral: 'iii', root: note('E') },
-      { place: 11, ring: 'major', numeral: 'IV', root: note('F') },
-      { place: 1, ring: 'major', numeral: 'V', root: note('G') },
-      { place: 0, ring: 'minor', numeral: 'vi', root: note('A') },
-      { place: 2, ring: 'minor', numeral: 'vii°', root: note('B') },
+      { place: 0, ring: 'major', numeral: 'I', root: note('C'), symbol: 'C' },
+      { place: 11, ring: 'minor', numeral: 'ii', root: note('D'), symbol: 'Dm' },
+      { place: 1, ring: 'minor', numeral: 'iii', root: note('E'), symbol: 'Em' },
+      { place: 11, ring: 'major', numeral: 'IV', root: note('F'), symbol: 'F' },
+      { place: 1, ring: 'major', numeral: 'V', root: note('G'), symbol: 'G' },
+      { place: 0, ring: 'minor', numeral: 'vi', root: note('A'), symbol: 'Am' },
+      { place: 2, ring: 'minor', numeral: 'vii°', root: note('B'), symbol: 'B°' },
     ])
   })
 
@@ -81,6 +81,7 @@ describe('circleFunctions', () => {
       ring: 'minor',
       numeral: 'ii°',
       root: note('B'),
+      symbol: 'B°',
     })
   })
 })

@@ -4,7 +4,7 @@ import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { chordsRange, ScaleChordGrid, scaleShown } from '@/features/play-example'
 import {
   fitInversion,
-  noteFromParam,
+  keyScale,
   placeBorrowedChords,
   placeScale,
   placeScaleChords,
@@ -18,9 +18,9 @@ import { KeySignature } from './KeySignature'
 import { ScaleLayout } from './ScaleLayout'
 
 /**
- * Key view: the scale's key on the circle of fifths, which chooses another, beside its signature on a
- * staff, its notes, relative and modes; and the chords it borrows, to tap, in the size and inversion
- * the Chords view was left in (triads or 7ths).
+ * Key view: the scale's key, named and marked on the keys as its signature writes it, on the circle of
+ * fifths, which chooses another, beside its signature on a staff, its notes, relative and modes; and
+ * the chords it borrows, to tap, in the size and inversion the Chords view was left in (triads or 7ths).
  */
 export function KeyView({
   scale,
@@ -35,14 +35,15 @@ export function KeyView({
   choice: ReactNode
 }) {
   const { t } = useTranslation('learn')
-  const { root, kind } = scale
+  // The key's own scale: the notes its signature writes (a minor key's natural minor).
+  const { tonic } = musicKey
+  const kind = keyScale(musicKey)
   const notes = scale.chords === 3 ? 3 : 4
   const inversion = fitInversion(scale.inversion, notes)
   const borrowed = useMemo(
     () => placeBorrowedChords(musicKey, notes, inversion),
     [musicKey, notes, inversion],
   )
-  const tonic = noteFromParam(root)
   const range = useMemo(
     () =>
       chordsRange([...walkChords(placeScaleChords(tonic, kind, notes, inversion)), ...borrowed]),

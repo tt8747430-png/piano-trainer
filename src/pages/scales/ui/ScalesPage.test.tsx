@@ -360,8 +360,18 @@ describe('Practice → Scales and keys, Key view', () => {
       'page',
     )
     expect(within(circle).getByRole('link', { name: 'F major' })).toHaveTextContent('IV')
-    expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('vii°')
+    // Its vii° stands on B minor's place, written as the chord it is.
+    expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('B°vii°')
     expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
+  })
+
+  it('names a minor scale’s key and marks the notes its signature writes', async () => {
+    await renderApp('/practice/scales?root=F%23&kind=harmonic&show=key')
+    expect(await screen.findByRole('heading', { level: 2, name: 'F# minor' })).toBeInTheDocument()
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    // F♯ minor's 7th as its signature writes it is E, not harmonic minor's raised E♯.
+    expect(within(keyboard).getByRole('button', { name: 'E5' })).toHaveTextContent('♭7')
+    expect(within(keyboard).getByRole('button', { name: 'F5' })).not.toHaveTextContent('7')
   })
 
   it('writes the key’s chords on the circle as the key spells them, and its borrowed chords plainly', async () => {

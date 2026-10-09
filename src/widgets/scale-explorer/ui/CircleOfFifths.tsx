@@ -26,8 +26,8 @@ const WEDGE = {
 /**
  * The circle of fifths as the Key view's chooser: every key a link to its scale (a minor key its
  * natural minor, or the minor already shown), its signature's count under its name; the key shown
- * and the places of its seven chords wear the keys' marks, each written as the key spells it over its
- * numeral (I IV V outside and ii iii vi vii° inside for C).
+ * and the places of its seven chords wear the keys' marks, each the chord as the key writes it over
+ * its numeral (C, F, G outside and Dm, Em, Am, B° inside for C).
  */
 export function CircleOfFifths({ current }: { current: Key }) {
   const { t } = useTranslation('learn')
@@ -93,9 +93,9 @@ export function CircleOfFifths({ current }: { current: Key }) {
                     chord ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
-                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though the place is F♯'s. */}
+                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though the place is F♯'s, and B° in C, though the place is B minor's. */}
                   <span className="text-sm font-semibold">
-                    {chord ? keySymbol({ tonic: chord.root, minor: key.minor }) : keySymbol(key)}
+                    {chord ? chord.symbol : keySymbol(key)}
                   </span>
                   <span className="text-xs tabular-nums">
                     {chord?.numeral ?? signatureCount(key)}
