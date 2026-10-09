@@ -38,6 +38,7 @@ export function ChordPractice({ root, quality }: { root: SpelledNote; quality: C
       <li>
         <RowLink
           title={t('chromatic')}
+          detail={t('chromaticDetail')}
           icon={Footprints}
           paint="lilac"
           render={

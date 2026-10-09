@@ -4,6 +4,7 @@ export const practice: LocaleResources['practice'] = {
   inPlayer: 'Играть в плеере',
   walk: 'Аккорды по ступеням',
   chromatic: 'По полутонам',
+  chromaticDetail: 'Аккорд на каждый такт, по полутону от его основного тона',
   title: 'Практика',
   subjects: {
     chords: 'Аккорды',

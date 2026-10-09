@@ -279,7 +279,10 @@ describe('Practice → Chords', () => {
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
     await renderApp('/practice/chords?root=G&triad=min&size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm9' })).toBeInTheDocument()
-    const href = screen.getByRole('link', { name: 'Chromatic walk' }).getAttribute('href') ?? ''
+    const walk = screen.getByRole('link', {
+      name: 'Chromatic walk The chord a bar each, a semitone at a time from its root',
+    })
+    const href = walk.getAttribute('href') ?? ''
     const [path, query] = href.split('?')
     expect(path).toBe('/play/chromatic')
     expect(new URLSearchParams(query).get('chords')).toBe('m9')
@@ -289,7 +292,7 @@ describe('Practice → Chords', () => {
   it('offers no chromatic walk for a chord the table does not name', async () => {
     await renderApp('/practice/chords?triad=sus4&size=13')
     expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'Chromatic walk' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^Chromatic walk/ })).not.toBeInTheDocument()
   })
 
   it('opens the chord’s arpeggio in the Player, on this chord', async () => {

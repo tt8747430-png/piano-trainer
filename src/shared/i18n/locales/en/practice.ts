@@ -2,6 +2,7 @@ export const practice = {
   inPlayer: 'Practise in the Player',
   walk: 'Walk the chords',
   chromatic: 'Chromatic walk',
+  chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
   title: 'Practice',
   // Practice's seven places, each named for what is practised.
   subjects: {
