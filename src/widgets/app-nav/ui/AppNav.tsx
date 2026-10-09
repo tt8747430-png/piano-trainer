@@ -95,7 +95,7 @@ export function AppNav() {
       <div className="hidden h-20 shrink-0 items-center gap-2 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:justify-center">
         <p
           aria-hidden
-          className="min-w-0 flex-1 truncate pl-3 font-display text-2xl leading-none font-semibold group-data-[sidebar=collapsed]/nav:hidden"
+          className="min-w-0 flex-1 pl-3 font-display text-2xl leading-tight font-semibold text-balance group-data-[sidebar=collapsed]/nav:hidden"
         >
           {t('appName')}
         </p>
