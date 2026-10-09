@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import { selectMidi, useSettings } from '@/entities/settings'
+import { selectMidi, useSettingsStoreApi } from '@/entities/settings'
 import { selectTakesOf, takeSounds, useTakes, type TakeId } from '@/entities/take'
 import { usePlayback } from '@/shared/lib/services'
 import { useScoreEditorContext } from '../model/editor-context'
@@ -12,7 +12,7 @@ export function TakeList() {
   const { takes } = useScoreEditorContext()
   const list = useTakes(useShallow((state) => selectTakesOf(state, takes.pieceId)))
   const playback = usePlayback<TakeId>()
-  const { touch } = useSettings(selectMidi)
+  const settings = useSettingsStoreApi()
   if (list.length === 0) return <p className="text-muted-foreground">{t('recorder.none')}</p>
   return (
     <ul aria-label={t('recorder.title')} className="flex flex-col divide-y divide-hairline">
@@ -21,7 +21,9 @@ export function TakeList() {
           key={take.id}
           take={take}
           playing={playback.playing === take.id}
-          onPlay={() => playback.toggle(take.id, () => takeSounds(take, touch))}
+          onPlay={() =>
+            playback.toggle(take.id, () => takeSounds(take, selectMidi(settings.getState()).touch))
+          }
         />
       ))}
     </ul>

@@ -9,7 +9,7 @@ import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 export function MidiSoundToggle() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
-  const { sound } = useSettings(selectMidi)
+  const sound = useSettings((state) => selectMidi(state).sound)
   const { connection } = useMidiConnection()
   if (!isMidiConnected(connection)) return null
   return (

@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react'
-import { selectMidi, useSettings } from '@/entities/settings'
+import { selectMidi, useSettingsStoreApi } from '@/entities/settings'
 import { barMs, takeSoundsFrom, type Take } from '@/entities/take'
 import { PLAY_DELAY, type PlayHandle } from '@/shared/api/audio'
 import { useServices } from '@/shared/lib/services'
@@ -14,7 +14,7 @@ export interface TakePlay {
 
 export function useTakePlay(take: Take): TakePlay {
   const { audio } = useServices()
-  const { touch } = useSettings(selectMidi)
+  const settings = useSettingsStoreApi()
   const [started, setStarted] = useState<{
     readonly handle: PlayHandle
     readonly at: number
@@ -35,6 +35,7 @@ export function useTakePlay(take: Take): TakePlay {
       audio.stop()
       const fromMs = bar * barMs(take)
       const at = audio.now() + PLAY_DELAY
+      const { touch } = selectMidi(settings.getState())
       setStarted({ handle: audio.play(takeSoundsFrom(take, touch, fromMs), at), at, fromMs })
     },
     stop() {

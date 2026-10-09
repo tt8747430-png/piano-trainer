@@ -42,7 +42,7 @@ export function useFreePlay(view: FreePlayView): FreePlay {
     void navigate({
       search: (prev) => ({
         ...prev,
-        marks: diagramMarksParam(change(readDiagramMarks(prev.marks ?? ''))),
+        marks: diagramMarksParam(change(readDiagramMarks(prev.marks))),
       }),
       ...IN_PLACE,
     })

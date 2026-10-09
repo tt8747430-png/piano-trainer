@@ -30,7 +30,7 @@ function statusLine(
 export function MidiControl() {
   const { t } = useTranslation('common')
   const { connection, connect } = useMidiConnection()
-  const { device } = useSettings(selectMidi)
+  const device = useSettings((state) => selectMidi(state).device)
   const line = statusLine(connection, device, t)
   return (
     <div className="flex flex-col gap-3">
