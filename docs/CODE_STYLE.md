@@ -57,7 +57,7 @@ A container wires data to presentational children. One job each.
   clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
   play (`useSoundKeys`), so its key is down while pressed, not while it rings, and for at least the shortest press
   (`usePresses` in `shared/lib`, which every hand's keys go through). It follows the **keyboard settings**
-  (key size, note names, the map, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
+  (key size, note names, chord names, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
   keyboard and set from the rail or Settings (`KeyboardSettingsFields`, one component in both places); a screen never
   passes them itself, and the keyboard keeps its own proportion on every screen (no screen sizes it). The
   explorers, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
