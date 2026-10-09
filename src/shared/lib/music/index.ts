@@ -123,6 +123,7 @@ export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } fro
 export { voiceLead } from './voice-lead'
 export {
   numeralChord,
+  numeralGrows,
   numeralOf,
   numeralsLine,
   numeralsParam,

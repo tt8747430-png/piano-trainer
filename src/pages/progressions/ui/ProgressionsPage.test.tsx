@@ -68,6 +68,15 @@ describe('Practice → Progressions', () => {
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
   })
 
+  it('leaves the chord size out of reach for a line whose chords are all written out', async () => {
+    await renderApp('/practice/progressions?p=ii7-V7-IMaj7')
+    const size = within(await screen.findByRole('radiogroup', { name: 'Chord size' }))
+    for (const radio of size.getAllByRole('radio')) {
+      expect(radio).toHaveAttribute('aria-disabled', 'true')
+    }
+    expect(row()).toEqual(['Dm7ii7', 'G7V7', 'CMaj7IMaj7'])
+  })
+
   it('names the library’s progression it shows, and takes another from the pop-up by style', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions')

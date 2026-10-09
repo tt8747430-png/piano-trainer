@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { ChordRow, progressionRow, RowChords, RowPlay, useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyFromParam, parseNumerals } from '@/shared/lib/music'
+import { keyFromParam, numeralGrows, parseNumerals } from '@/shared/lib/music'
 import { ChordSizeField, KeyChoice, Labelled, NO_KEYS } from '@/shared/ui'
 import {
   changedView,
@@ -54,7 +54,11 @@ export function ProgressionsTool({
         </div>
         <KeyChoice value={view.key} onChange={(next) => change({ key: next })} />
         <Labelled label={t('music:chordSize.label')}>
-          <ChordSizeField value={view.size} onChange={(size) => change({ size })} />
+          <ChordSizeField
+            value={view.size}
+            disabled={!numerals.some(numeralGrows)}
+            onChange={(size) => change({ size })}
+          />
         </Labelled>
       </div>
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />

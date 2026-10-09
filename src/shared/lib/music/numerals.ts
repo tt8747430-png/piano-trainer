@@ -78,6 +78,9 @@ const GROWN_SEVENTH: Readonly<Record<PlainTriad, ChordQuality>> = {
 
 const isPlainTriad = (quality: ChordQuality): quality is PlainTriad => quality in GROWN_SEVENTH
 
+/** Whether a numeral's chord grows with a progression's chord size: a plain triad does, a chord written out does not. */
+export const numeralGrows = (numeral: Numeral): boolean => isPlainTriad(numeral.quality)
+
 /** How far above a root the key's next note lies, as a 9th: a ♭9 where it is a semitone up, else a 9. */
 function keyNinth(root: SpelledNote, scale: readonly Tone[]): number {
   const above = (letterIndex(root.letter) + 1) % 7

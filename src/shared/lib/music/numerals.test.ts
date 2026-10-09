@@ -5,6 +5,7 @@ import type { Key } from './key'
 import { note } from './note'
 import {
   numeralChord,
+  numeralGrows,
   numeralOf,
   numeralsLine,
   numeralsParam,
@@ -131,6 +132,14 @@ describe('numeralChord', () => {
   it('counts a minor key from natural minor', () => {
     expect(chords('i iv V i', A_MINOR, 'triads')).toEqual(['Am', 'Dm', 'E', 'Am'])
     expect(chords('i VI III VII', A_MINOR, 'sevenths')).toEqual(['Am7', 'FMaj7', 'CMaj7', 'G7'])
+  })
+})
+
+describe('numeralGrows', () => {
+  it('says a plain triad grows with the chord size, and a chord written out does not', () => {
+    const grows = (text: string) => (parseNumerals(text) ?? []).map(numeralGrows)
+    expect(grows('I ii° III+ bVII')).toEqual([true, true, true, true])
+    expect(grows('ii7 V7 IMaj7 I6 Vsus4')).toEqual([false, false, false, false, false])
   })
 })
 
