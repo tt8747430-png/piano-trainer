@@ -8,7 +8,7 @@ import { OPEN_PLAINLY } from '@/shared/lib'
 import { PAGE_TILES, RowLink, ScreenHeader, type Tile } from '@/shared/ui'
 
 /**
- * Practice's seven places, in the order they are listed: each one page for a thing practised, wearing
+ * Practice's eight places, in the order they are listed: each one page for a thing practised, wearing
  * that page's tile.
  */
 const SUBJECTS = [
@@ -19,6 +19,7 @@ const SUBJECTS = [
   { id: 'accompaniment', to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
   { id: 'exercises', to: '/practice/exercises', tile: { icon: Dumbbell, paint: 'sand' } },
   { id: 'quiz', to: '/practice/quiz', tile: { icon: ListChecks, paint: 'lilac' } },
+  { id: 'freePlay', to: '/practice/free-play', tile: PAGE_TILES.freePlay },
 ] as const satisfies readonly { id: string; to: string; tile: Tile }[]
 
 /** How many skills My gaps holds to check. */
@@ -29,7 +30,7 @@ function useGapsCount(): number {
 }
 
 /**
- * Practice: seven places, each named for what is practised and saying what is inside it. Each opens
+ * Practice: eight places, each named for what is practised and saying what is inside it. Each opens
  * as it was left.
  */
 export function PracticePage() {

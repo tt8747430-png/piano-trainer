@@ -7,6 +7,7 @@ import {
   KeyboardMusic,
   Layers,
   ListMusic,
+  Piano,
   Ruler,
   ScanSearch,
   Waypoints,
@@ -36,4 +37,5 @@ export const PAGE_TILES = {
   reharmonise: { icon: Blend, paint: 'lilac' },
   passingChords: { icon: Waypoints, paint: 'yellow' },
   progressions: { icon: ListMusic, paint: 'grass' },
+  freePlay: { icon: Piano, paint: 'sky' },
 } as const satisfies Readonly<Record<string, Tile>>

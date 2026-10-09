@@ -13,6 +13,7 @@ export const practice: LocaleResources['practice'] = {
     accompaniment: 'Аккомпанемент',
     exercises: 'Упражнения',
     quiz: 'Проверка',
+    freePlay: 'Свободная игра',
   },
   inside: {
     chords: 'Построить · Найти · Тенсии',
@@ -22,6 +23,7 @@ export const practice: LocaleResources['practice'] = {
     accompaniment: 'Called to Play · Боброва · Стили',
     exercises: 'Техника · Барри Харрис · Piano With Jonny',
     quiz: 'Аккорды · Гаммы и тональности · На слух · Чтение',
+    freePlay: 'Живые ноты · Отметить',
   },
   chords: { build: 'Построить', find: 'Найти' },
   accompaniment: {
@@ -45,6 +47,11 @@ export const practice: LocaleResources['practice'] = {
   },
   gaps: 'На проверку: {{count}}',
   freePlay: {
+    title: 'Свободная игра',
+    mode: 'Режим',
+    play: 'Игра',
+    mark: 'Отметить',
+    clear: 'Очистить',
     score: 'Живые ноты',
     empty: 'Играйте — ноты появятся здесь.',
   },

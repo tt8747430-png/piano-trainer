@@ -5,7 +5,7 @@ import { untranslated } from '@/app/testing/untranslated'
 import { recordAnswer } from '@/features/record-answer'
 
 describe('Practice', () => {
-  it('lists its seven places, each a link to one page that says what is inside it', async () => {
+  it('lists its eight places, each a link to one page that says what is inside it', async () => {
     await renderApp('/practice')
     expect(await screen.findByRole('heading', { level: 1, name: 'Practice' })).toBeInTheDocument()
     const rows = within(screen.getByRole('main')).getAllByRole('link')
@@ -17,6 +17,7 @@ describe('Practice', () => {
       ['Accompaniment Called to Play · Боброва · Styles', '/practice/accompaniment'],
       ['Exercises Technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
       ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
+      ['Free play Live score · Mark', '/practice/free-play'],
     ])
   })
 

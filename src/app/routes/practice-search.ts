@@ -1,8 +1,9 @@
 import { isStepId, type StepId } from '@/entities/path'
 import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
-import { valueOr } from '@/shared/lib'
-import { parseNoteInOctave } from '@/shared/lib/music'
-import { routeSearch, type Input, type Raw } from './read-search'
+import type { FreePlayView } from '@/pages/free-play'
+import { diagramMarksParam, readDiagramMarks, valueOr } from '@/shared/lib'
+import { keyParam, parseNoteInOctave } from '@/shared/lib/music'
+import { C_MAJOR_PARAM, readKey, routeSearch, type Input, type Raw } from './read-search'
 
 // The Check: the step it checks; none is not found, so nothing is left out of the URL.
 export interface CheckSearch {
@@ -41,3 +42,15 @@ export function readTrainerSearch(raw: Raw): TrainerView {
   }
 }
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
+
+// Free play: Play or Mark, the key the live score spells in, and Mark's marks written back clean.
+export const FREE_PLAY_DEFAULTS: FreePlayView = { mode: 'play', key: C_MAJOR_PARAM, marks: '' }
+export function readFreePlaySearch(raw: Raw): FreePlayView {
+  const key = readKey(raw.key)
+  return {
+    mode: raw.mode === 'mark' ? 'mark' : 'play',
+    key: key ? keyParam(key) : FREE_PLAY_DEFAULTS.key,
+    marks: typeof raw.marks === 'string' ? diagramMarksParam(readDiagramMarks(raw.marks)) : '',
+  }
+}
+export const freePlaySearch = routeSearch(readFreePlaySearch, FREE_PLAY_DEFAULTS)

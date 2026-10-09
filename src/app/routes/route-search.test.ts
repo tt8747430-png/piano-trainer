@@ -9,6 +9,7 @@ import {
   SCALES_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
+import { FREE_PLAY_DEFAULTS } from './practice-search'
 import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
@@ -32,6 +33,18 @@ describe('search params', () => {
     expect(await searchAt('/practice/intervals')).toEqual(INTERVALS_DEFAULTS)
     expect(await searchAt('/practice/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
+    expect(await searchAt('/practice/free-play')).toEqual(FREE_PLAY_DEFAULTS)
+  })
+
+  it('read Free play’s mode, key and marks, the marks written back clean', async () => {
+    expect(await searchAt('/practice/free-play?mode=mark&key=D&marks=67b%2C60a3')).toEqual({
+      mode: 'mark',
+      key: 'D',
+      marks: '60a3,67b',
+    })
+    expect(await searchAt('/practice/free-play?mode=draw&key=H&marks=20a%2Cx')).toEqual(
+      FREE_PLAY_DEFAULTS,
+    )
   })
 
   it('open the score editor’s takes only when the URL says so', async () => {

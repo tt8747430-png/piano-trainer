@@ -62,7 +62,13 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
+import {
+  freePlaySearch,
+  readFreePlaySearch,
+  readTrainerSearch,
+  trainerSearch,
+  validateCheckSearch,
+} from './routes/practice-search'
 import { songsSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { ShellLayout } from './ShellLayout'
@@ -147,6 +153,14 @@ const quizRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/quiz',
   component: lazyRouteComponent(practiceScreens, 'QuizPage'),
+})
+// Free play: the piano played freely, written and named, or marked as a teaching diagram.
+const freePlayRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/free-play',
+  ...freePlaySearch,
+  ...remembered(readFreePlaySearch, []),
+  component: lazyRouteComponent(practiceScreens, 'FreePlayPage'),
 })
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -407,6 +421,7 @@ const routeTree = rootRoute.addChildren([
     practiceRoute,
     quizRoute,
     exercisesRoute,
+    freePlayRoute,
     trainerRoute,
     studyRoute,
     takeRoute,

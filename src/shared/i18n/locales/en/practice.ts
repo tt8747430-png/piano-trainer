@@ -12,6 +12,7 @@ export const practice = {
     accompaniment: 'Accompaniment',
     exercises: 'Exercises',
     quiz: 'Quiz',
+    freePlay: 'Free play',
   },
   // What is inside each, in a line.
   inside: {
@@ -22,6 +23,7 @@ export const practice = {
     accompaniment: 'Called to Play · Боброва · Styles',
     exercises: 'Technique · Barry Harris · Piano With Jonny',
     quiz: 'Chords · Scales and keys · By ear · Reading',
+    freePlay: 'Live score · Mark',
   },
   // Chords' two pages.
   chords: { build: 'Build', find: 'Find' },
@@ -53,6 +55,11 @@ export const practice = {
   gaps: 'To check: {{count}}',
   // Free play: the piano played freely, written and named.
   freePlay: {
+    title: 'Free play',
+    mode: 'Mode',
+    play: 'Play',
+    mark: 'Mark',
+    clear: 'Clear',
     score: 'Live score',
     empty: 'Play, and it is written here.',
   },
