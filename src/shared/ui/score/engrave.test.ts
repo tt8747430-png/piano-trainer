@@ -18,11 +18,10 @@ const n = (
   hand: 'rh',
   startTick: start,
   durationTicks: length,
-  roll: 0,
   ...extra,
 })
 
-/** Two bars: a rolled chord with fingers, a triplet beat, a tie across the barline, a held bass under moving notes. */
+/** Two bars: a chord with fingers, a triplet beat, a tie across the barline, a held bass under moving notes. */
 const score = notate({
   key: { tonic: note('G'), minor: false },
   meter: '4/4',
@@ -32,7 +31,7 @@ const score = notate({
   ],
   notes: [
     n(60, 'C', 0, 12, { finger: 1 }),
-    n(64, 'E', 0, 12, { finger: 3, roll: 1 }),
+    n(64, 'E', 0, 12, { finger: 3 }),
     n(67, 'G', 12, 8),
     n(66, 'F', 20, 4),
     n(67, 'G', 36, 24),

@@ -234,7 +234,6 @@ function playFigure(
         ...(finger === undefined ? {} : { finger }),
         startTick: window.at + event.start - window.from,
         durationTicks: duration,
-        roll: event.rolled ? i : 0,
         velocity: hand === 'lh' ? VELOCITY.left : event.accent ? VELOCITY.accent : VELOCITY.right,
         chord: window.chord,
       }
@@ -284,7 +283,6 @@ function playTune(
       midi: n.midi,
       spelled: n.spelled,
       hand: 'rh',
-      roll: 0,
       velocity: VELOCITY.tune,
       ...at,
     }
@@ -296,7 +294,6 @@ function playTune(
           midi: key,
           spelled,
           hand: 'rh',
-          roll: 0,
           velocity: VELOCITY.harmony,
           ...at,
         }),
@@ -325,7 +322,6 @@ function playWritten(
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       startTick,
       durationTicks: n.durationTicks,
-      roll: 0,
       velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,
       chord: sounding(chordStarts, startTick),
     }
@@ -419,7 +415,6 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         hand: 'melody',
         startTick: n.startTick,
         durationTicks: n.durationTicks,
-        roll: 0,
         velocity: VELOCITY.doubled,
         chord,
       })

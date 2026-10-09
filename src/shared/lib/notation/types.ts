@@ -27,8 +27,6 @@ export interface TimedNote {
   readonly hand: Hand | 'melody'
   readonly startTick: Tick
   readonly durationTicks: Tick
-  /** How late it sounds after its onset: a rolled chord's notes after the first. */
-  readonly roll: Tick
   readonly finger?: Finger
 }
 
@@ -63,8 +61,6 @@ export interface NotesEvent {
   readonly tick: Tick
   readonly duration: Duration
   readonly notes: readonly WrittenNote[]
-  /** Rolled: a wavy line before it. */
-  readonly rolled: boolean
 }
 
 export interface RestEvent {

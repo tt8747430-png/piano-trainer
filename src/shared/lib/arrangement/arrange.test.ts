@@ -97,7 +97,6 @@ describe('arrange', () => {
         hand: 'lh',
         startTick: 0,
         durationTicks: 48,
-        roll: 0,
         velocity: 0.2,
         chord: 0,
       },
@@ -108,7 +107,6 @@ describe('arrange', () => {
         finger: 1,
         startTick: 0,
         durationTicks: 48,
-        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
@@ -119,7 +117,6 @@ describe('arrange', () => {
         finger: 3,
         startTick: 0,
         durationTicks: 48,
-        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
@@ -130,7 +127,6 @@ describe('arrange', () => {
         finger: 5,
         startTick: 0,
         durationTicks: 48,
-        roll: 0,
         velocity: 0.12,
         chord: 0,
       },
@@ -332,19 +328,6 @@ describe('arrange', () => {
     expect(midisAt(minor, 'rh', 0)).toEqual([60, 64, 69])
   })
 
-  it('rolls a chord: one written onset, each note sounding a tick after the one below', () => {
-    const performance = arrange(chart([['C']]), {
-      tonic: C,
-      pattern: pattern('rolled', '0/16 T2~', '0/16 L1'),
-    })
-    expect(notesOf(performance, 'rh').map((n) => [n.startTick, n.durationTicks, n.roll])).toEqual([
-      [0, 48, 0],
-      [0, 48, 1],
-      [0, 48, 2],
-    ])
-    expect(performance.beatGroups).toHaveLength(1)
-  })
-
   it('spells chord tones as the chord, and other notes by letter steps from the root or bass', () => {
     const performance = arrange(chart([['G7']], { key: 'G' }), {
       tonic: note('G'),
@@ -477,7 +460,6 @@ describe('arrange', () => {
         hand: 'melody',
         startTick: 0,
         durationTicks: 24,
-        roll: 0,
         velocity: 0.15,
         chord: 0,
       },
@@ -487,7 +469,6 @@ describe('arrange', () => {
         hand: 'melody',
         startTick: 24,
         durationTicks: 24,
-        roll: 0,
         velocity: 0.15,
         chord: 0,
       },

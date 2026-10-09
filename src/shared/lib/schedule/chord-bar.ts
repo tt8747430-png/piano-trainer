@@ -17,7 +17,6 @@ const held =
     hand,
     startTick: 0,
     durationTicks: WHOLE_BAR,
-    roll: 0,
   })
 
 /**

@@ -16,7 +16,6 @@ export interface BarChord {
   readonly start: Tick
   readonly end: Tick
   readonly notes: readonly BarNote[]
-  readonly rolled: boolean
 }
 
 /** A voice's chords in time order, not yet written in values, and its stem. */
@@ -57,7 +56,6 @@ function place(voice: BarChord[], chord: BarChord) {
       ...last,
       end,
       notes: [...kept, ...joined].sort((a, b) => a.midi - b.midi),
-      rolled: last.rolled || chord.rolled,
     }
     return
   }

@@ -194,22 +194,6 @@ describe('schedule', () => {
     ])
   })
 
-  it('sounds a rolled chord a tick apart from its written onset', () => {
-    const rolled = arrange(chart('C'), {
-      tonic: note('C'),
-      pattern: {
-        id: 'rolled',
-        rh: { kind: 'events', events: parseFigure('0/16 T~') },
-        lh: { kind: 'events', events: parseFigure('0/16 L1') },
-      },
-    })
-    const rh = notes(schedule(rolled, { tempo: 60, hands: audibleHands('rh') }).sounds)
-    expect(rh.map((sound) => sound.at)).toEqual([0, 1 / 12, 2 / 12])
-    expect(
-      beatGroupSounds(rolled, 0, { tempo: 60, hands: audibleHands('rh') }).map((s) => s.at),
-    ).toEqual([0, 1 / 12, 2 / 12])
-  })
-
   it('keeps a very short note audible', () => {
     const performance = perform('C')
     const blip: Performance = {
@@ -221,7 +205,6 @@ describe('schedule', () => {
           hand: 'rh',
           startTick: 0,
           durationTicks: 1,
-          roll: 0,
           velocity: 0.12,
           chord: 0,
         },

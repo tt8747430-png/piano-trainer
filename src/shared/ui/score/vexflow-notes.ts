@@ -9,7 +9,6 @@ import {
   Stave,
   StaveNote,
   Stem,
-  Stroke,
   Tuplet,
   Voice,
   VoiceMode,
@@ -130,7 +129,6 @@ function noteOf(
     if (written.accidental !== null)
       note.addModifier(new Accidental(SIGN[written.accidental]), index)
   })
-  if (event.rolled) note.addStroke(0, new Stroke(Stroke.Type.ARPEGGIO_DIRECTIONLESS))
   if (event.duration.dots) Dot.buildAndAttach([note], { all: true })
   return note
 }

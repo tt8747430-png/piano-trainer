@@ -11,7 +11,6 @@ const chord = (
   hand,
   start,
   end,
-  rolled: false,
   notes: keys.map((key) => ({
     midi: midi(key),
     spelled: note('C'),

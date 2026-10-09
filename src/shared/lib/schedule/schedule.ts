@@ -97,7 +97,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const played: Sound[] = performance.notes
     .filter((n) => heard(n) && isAudible(n, hands))
     .map((n) => {
-      const start = Math.max(fromTick, n.startTick + n.roll)
+      const start = Math.max(fromTick, n.startTick)
       const end = Math.min(n.startTick + n.durationTicks, toTick)
       return {
         kind: 'note',
@@ -146,8 +146,8 @@ export function beatGroupSounds(
       {
         kind: 'note',
         midi: n.midi,
-        at: secondsFor(n.roll, tempo),
-        duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks - n.roll, tempo)),
+        at: 0,
+        duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks, tempo)),
         velocity: n.velocity,
       },
     ]

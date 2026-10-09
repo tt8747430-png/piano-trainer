@@ -64,7 +64,6 @@ export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
           hand,
           startTick: tick,
           durationTicks: length,
-          roll: 0,
           ...(finger === undefined ? {} : { finger }),
         })
       }

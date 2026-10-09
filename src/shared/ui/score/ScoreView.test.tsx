@@ -12,9 +12,7 @@ const score = notate({
     { startTick: 0, beats: 3 },
     { startTick: 36, beats: 3 },
   ],
-  notes: [
-    { midi: midi(60), spelled: note('C'), hand: 'rh', startTick: 0, durationTicks: 72, roll: 0 },
-  ],
+  notes: [{ midi: midi(60), spelled: note('C'), hand: 'rh', startTick: 0, durationTicks: 72 }],
   chords: [{ startTick: 0, symbol: 'C' }],
 })
 

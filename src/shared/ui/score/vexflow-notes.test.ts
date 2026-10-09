@@ -13,14 +13,12 @@ const played = (tick: number, duration: Duration): ScoreEvent => ({
   kind: 'notes',
   tick,
   duration,
-  rolled: false,
   notes: [{ midi: midi(60), spelled: note('C'), octave: 4, accidental: null, tie: false }],
 })
 const chord = (tick: number, duration: Duration): ScoreEvent => ({
   kind: 'notes',
   tick,
   duration,
-  rolled: false,
   notes: [
     { midi: midi(66), spelled: note('F', 1), octave: 4, accidental: null, tie: false },
     { midi: midi(74), spelled: note('D'), octave: 5, accidental: null, tie: false },

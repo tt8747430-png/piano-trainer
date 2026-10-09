@@ -45,7 +45,6 @@ export function noteLine(
       hand: options.hand,
       startTick: tick,
       durationTicks: length,
-      roll: 0,
     })
     tick += length
   }

@@ -55,7 +55,6 @@ function sounding(
       hand,
       startTick: n.startTick - from,
       durationTicks: n.durationTicks,
-      roll: 0,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
     }))
 }

@@ -199,9 +199,8 @@ search over the raw one and a param left out would let the stale value through. 
   `shared/lib/notation` only music, and none of them imports a package (lint).
 - **Time is the kernel's:** `Tick`, `TICKS_PER_BEAT`, `Meter`, `beatsPerBar`, `isCompound` and `timeSignature` live
   in `shared/lib/music/time.ts`; nothing re-exports them elsewhere.
-- **A Performance is what sounds, and what is written:** each note keeps its written onset and length, its `roll`
-  (how late a rolled chord's note sounds; the schedule sounds it at `startTick + roll`) and its `spelled` note, decided
-  where the chord is voiced; the tune keeps its written spelling. `notate(performance)` (`shared/lib/notation`) writes
+- **A Performance is what sounds, and what is written:** each note keeps its written onset and length and its
+  `spelled` note, decided where the chord is voiced; the tune keeps its written spelling. `notate(performance)` (`shared/lib/notation`) writes
   it as a Score; the Score is never played, and cutting or quantising in `notate` changes only what is written.
 - **Sheet music is `ScoreView`** (`shared/ui/score`, imported by that path, never the kit's barrel, so only the
   Player's chunk carries VexFlow). It engraves once the music font is in, hands its children the layout (a measure's

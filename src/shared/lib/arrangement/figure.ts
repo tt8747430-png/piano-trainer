@@ -44,11 +44,11 @@ function readTone(text: string): FigureTone | null {
   return match?.[2] ? { token, finger: Number(match[2]) as Finger } : { token }
 }
 
-const EVENT = /^(\d+)\/(\d+) (\S+?)([!~]?)$/
+const EVENT = /^(\d+)\/(\d+) (\S+?)(!?)$/
 
 /**
  * Reads the figure notation: comma-separated `start/length tones` events in 16ths (triplet 8ths with
- * `triplets`); tones joined by `+`, each optionally `^finger`; an event ending `!` is accented, `~` rolled.
+ * `triplets`); tones joined by `+`, each optionally `^finger`; an event ending `!` is accented.
  */
 export function parseFigure(text: string, options: { triplets?: boolean } = {}): FigureEvent[] {
   const unit = TICKS_PER_BEAT / (options.triplets ? 3 : 4)
@@ -65,7 +65,6 @@ export function parseFigure(text: string, options: { triplets?: boolean } = {}):
       duration: length * unit,
       tones: tones.filter((tone) => tone !== null),
       accent: match[4] === '!',
-      rolled: match[4] === '~',
     }
   })
 }

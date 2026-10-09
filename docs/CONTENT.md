@@ -231,7 +231,7 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 `eventFigure(events, { inThree?, onMajor?, triplets? })`. `events` are comma-separated `start/length tones` in 16ths
 of a 4/4 bar (triplet 8ths with `triplets: true`); `inThree` replaces them in 3/4, `onMajor` on major chords.
-Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented, `~` rolled.
+Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
 
 | Token           | Plays                                                                            |
 | --------------- | -------------------------------------------------------------------------------- |

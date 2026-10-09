@@ -10,7 +10,6 @@ describe('parseFigure', () => {
     ])
     expect(events[0]?.tones).toEqual([{ token: { kind: 'chord' } }])
     expect(events[0]?.accent).toBe(false)
-    expect(events[0]?.rolled).toBe(false)
   })
 
   it('reads positions in triplet 8ths', () => {
@@ -19,11 +18,8 @@ describe('parseFigure', () => {
     expect(event?.duration).toBe(24)
   })
 
-  it('reads accents and rolls', () => {
+  it('reads accents', () => {
     expect(parseFigure('0/2 C!')[0]?.accent).toBe(true)
-    const [rolled] = parseFigure('8/8 T2~')
-    expect(rolled?.rolled).toBe(true)
-    expect(rolled?.tones).toEqual([{ token: { kind: 'triad', inversion: 2, octaves: 0 } }])
   })
 
   it.each([
@@ -54,7 +50,7 @@ describe('parseFigure', () => {
     expect(parseFigure('8/8 5^2+8^5')[0]?.tones.map((tone) => tone.finger)).toEqual([2, 5])
   })
 
-  it.each(['0/4 Q', '0 C', '0/4', '0/4 1^6', 'x/4 C', '0/0 C', '0/4 16', '0/4 C?'])(
+  it.each(['0/4 Q', '0 C', '0/4', '0/4 1^6', 'x/4 C', '0/0 C', '0/4 16', '0/4 C?', '0/4 C~'])(
     'names the event it cannot read: %j',
     (text) => {
       expect(() => parseFigure(text)).toThrow(`"${text}"`)

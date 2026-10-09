@@ -109,10 +109,8 @@ describe('Called to Play’s ways and techniques, as the book writes them', () =
     expect(written(c, 'lh')).toEqual(['0/2 C2', '2/2 G2', '4/2 C3', '6/2 E3', '8/4 G3', '12/4 E3'])
   })
 
-  it('3 chords · the chord in three octaves, none rolled (C)', () => {
-    const c = play('c3', 'C')
-    expect(written(c, 'rh')).toEqual(['0/4 C4+E4+G4', '4/4 C5+E5+G5', '8/8 C6+E6+G6'])
-    expect(c.notes.every((n) => n.roll === 0)).toBe(true)
+  it('3 chords · the chord in three octaves (C)', () => {
+    expect(written(play('c3', 'C'), 'rh')).toEqual(['0/4 C4+E4+G4', '4/4 C5+E5+G5', '8/8 C6+E6+G6'])
   })
 
   it('Invers. · root position held, then the 1st and 2nd inversion; the bass climbs to its 12th (C)', () => {

@@ -11,7 +11,7 @@ const n = (
   startTick: number,
   durationTicks: number,
   extra: Partial<TimedNote> = {},
-): TimedNote => ({ midi: midi(key), spelled, hand, startTick, durationTicks, roll: 0, ...extra })
+): TimedNote => ({ midi: midi(key), spelled, hand, startTick, durationTicks, ...extra })
 
 const music = (notes: TimedNote[], extra: Partial<TimedMusic> = {}): TimedMusic => ({
   key: { tonic: note('C'), minor: false },
@@ -108,22 +108,19 @@ describe('notate', () => {
     expect(events.map((event) => notesOf(event)[0]?.accidental)).toEqual([null, 0, null, 1])
   })
 
-  it('writes a hand’s tied pieces with one finger, and a rolled chord once', () => {
+  it('writes a hand’s tied pieces with one finger', () => {
     const score = notate(
       music([
         n(60, note('C'), 'rh', 6, 12, { finger: 1 }),
-        n(64, note('E'), 'rh', 6, 12, { finger: 3, roll: 1 }),
+        n(64, note('E'), 'rh', 6, 12, { finger: 3 }),
       ]),
     )
     const events = (score.measures[0]?.staves.treble[0]?.events ?? []).filter(
       (event): event is NotesEvent => event.kind === 'notes',
     )
-    expect(
-      events.map((event) => [event.tick, event.rolled, event.notes.map((w) => [w.tie, w.finger])]),
-    ).toEqual([
+    expect(events.map((event) => [event.tick, event.notes.map((w) => [w.tie, w.finger])])).toEqual([
       [
         6,
-        true,
         [
           [true, 1],
           [true, 3],
@@ -131,7 +128,6 @@ describe('notate', () => {
       ],
       [
         12,
-        false,
         [
           [false, undefined],
           [false, undefined],

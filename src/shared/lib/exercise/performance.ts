@@ -76,7 +76,6 @@ export function exercisePerformance(music: {
     .sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
     .map((n) => ({
       ...n,
-      roll: 0,
       velocity: VELOCITY[n.hand],
       chord: sounding(harmonyStarts, n.startTick),
     }))

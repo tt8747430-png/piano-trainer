@@ -57,14 +57,13 @@ export function intervalExample(root: SpelledNote, name: IntervalName): Interval
       meter: '4/4',
       bars: [{ startTick: 0, beats: 4 }],
       notes: [
-        { midi: low, spelled: root, hand: 'rh', startTick: 0, durationTicks: HALF_NOTE, roll: 0 },
+        { midi: low, spelled: root, hand: 'rh', startTick: 0, durationTicks: HALF_NOTE },
         {
           midi: high,
           spelled: upper,
           hand: 'rh',
           startTick: HALF_NOTE,
           durationTicks: HALF_NOTE,
-          roll: 0,
         },
       ],
       chords: [],

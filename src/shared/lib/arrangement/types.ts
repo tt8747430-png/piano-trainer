@@ -81,7 +81,6 @@ export interface FigureEvent {
   readonly duration: Tick
   readonly tones: readonly FigureTone[]
   readonly accent: boolean
-  readonly rolled: boolean
 }
 /** A hand's figure as fixed events for a 4/4 bar; `inThree` replaces them in 3/4, `onMajor` on major chords. */
 export interface EventFigure {
@@ -146,12 +145,8 @@ export interface PerformanceNote {
   readonly spelled: SpelledNote
   readonly hand: NoteHand
   readonly finger?: Finger
-  /** Where it is written: a rolled chord's notes share their onset… */
   readonly startTick: Tick
-  /** …and their written length. */
   readonly durationTicks: Tick
-  /** How late it sounds after its onset: a rolled chord's notes a tick apart, 0 when struck. */
-  readonly roll: Tick
   readonly velocity: number
   /** Index into Performance.chords: the chord this note was played for. */
   readonly chord: number

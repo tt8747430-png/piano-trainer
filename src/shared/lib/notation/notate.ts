@@ -59,17 +59,15 @@ function barChords(notes: readonly TimedNote[], bar: Bar): Record<StaffId, BarCh
     }
     const id = `${n.hand} ${start} ${stop}`
     const group = groups.get(id)
-    const rolled = n.roll > 0 && !tiedFrom
     if (!group) {
       groups.set(id, {
         staff: staffOf(n.hand),
-        chord: { hand: n.hand, start, end: stop, notes: [written], rolled },
+        chord: { hand: n.hand, start, end: stop, notes: [written] },
       })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
       group.chord = {
         ...group.chord,
         notes: [...group.chord.notes, written].sort((a, b) => a.midi - b.midi),
-        rolled: group.chord.rolled || rolled,
       }
     }
   }
@@ -104,7 +102,6 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
         kind: 'notes',
         tick: bar.start + piece.tick,
         duration: piece.duration,
-        rolled: chord.rolled && i === 0,
         notes: chord.notes.map((n) => ({
           midi: n.midi,
           spelled: n.spelled,
