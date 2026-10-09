@@ -16,7 +16,11 @@ export const common = {
     offline: 'You’re offline. This screen opens once you’re back online.',
     reload: 'Reload',
   },
-  notFound: { title: 'Page not found', toSongs: 'Go to Songs', toAccompaniment: 'Go to Accompaniment' },
+  notFound: {
+    title: 'Page not found',
+    toSongs: 'Go to Songs',
+    toAccompaniment: 'Go to Accompaniment',
+  },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   close: 'Close',
   loading: 'Loading',
@@ -44,6 +48,7 @@ export const common = {
     mapRange: '{{from}} to {{to}}',
     settings: 'Keyboard settings',
     glissando: 'Glissando',
+    pedal: 'Pedal',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {

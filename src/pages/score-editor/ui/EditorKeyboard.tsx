@@ -19,15 +19,23 @@ function layerSpan({ draft, layer }: EditorState): KeyRange {
   return keyboardRange(keys, layer === 'lh' ? BASS : TREBLE)
 }
 
-/** The keyboard: a key played is written at the caret; the notes there are chosen keys. */
+/**
+ * The keyboard: a key played is written at the caret; the notes there are chosen keys. While a take
+ * records, Space stops it rather than holding the pedal.
+ */
 export function EditorKeyboard() {
-  const { actions } = useScoreEditorContext()
+  const { actions, takes } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(layerSpan))
   const selected = useMemo(() => new Set(here), [here])
   return (
     <div className="min-w-0 shrink-0">
-      <LiveKeyboard range={range} selected={selected} onKeyPress={actions.play} />
+      <LiveKeyboard
+        range={range}
+        selected={selected}
+        onKeyPress={actions.play}
+        spacePedal={takes.stage === 'idle'}
+      />
     </div>
   )
 }

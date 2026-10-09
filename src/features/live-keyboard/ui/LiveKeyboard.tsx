@@ -4,8 +4,10 @@ import { useHeldKeys } from '@/features/connect-midi'
 import { rangeOf, type Midi } from '@/shared/lib/music'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { PianoKeyboard } from '@/shared/ui'
+import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
 import { GlissandoToggle } from './GlissandoToggle'
+import { PedalToggle } from './PedalToggle'
 import { RailSettings } from './RailSettings'
 
 /** A key plays itself unless the screen says otherwise. */
@@ -26,6 +28,7 @@ export function LiveKeyboard({
   onKeyPress,
   inView,
   spotlight = false,
+  spacePedal = true,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
@@ -35,6 +38,8 @@ export function LiveKeyboard({
   onKeyPress?: ((key: Midi) => void) | undefined
   /** The explorers' keyboards: the keys struck last go down, alone or together. */
   spotlight?: boolean
+  /** Space holds the pedal while typing plays the keys: off where the screen gives Space a job. */
+  spacePedal?: boolean
 }) {
   const { typing, ...settings } = useSettings(selectKeyboard)
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
@@ -55,6 +60,7 @@ export function LiveKeyboard({
     onKeyUp: letGo,
     inView: inView ?? soundingRange,
   })
+  useSpacePedal({ enabled: typing && spacePedal })
   // A key the live voice sounds is down until its damper falls: held, or on under the pedal.
   const down = useMemo(
     () =>
@@ -76,6 +82,7 @@ export function LiveKeyboard({
     >
       <RailSettings />
       <GlissandoToggle />
+      <PedalToggle />
     </PianoKeyboard>
   )
 }

@@ -18,7 +18,11 @@ export const common: LocaleResources['common'] = {
     offline: 'Нет сети. Этот экран откроется, когда она появится.',
     reload: 'Перезагрузить',
   },
-  notFound: { title: 'Страница не найдена', toSongs: 'К песням', toAccompaniment: 'К аккомпанементу' },
+  notFound: {
+    title: 'Страница не найдена',
+    toSongs: 'К песням',
+    toAccompaniment: 'К аккомпанементу',
+  },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
   loading: 'Загрузка',
@@ -42,6 +46,7 @@ export const common: LocaleResources['common'] = {
     mapRange: '{{from}} – {{to}}',
     settings: 'Настройки клавиатуры',
     glissando: 'Глиссандо',
+    pedal: 'Педаль',
   },
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },

@@ -44,6 +44,15 @@ describe('LiveKeyboard', () => {
     expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: 60 })
   })
 
+  it('holds the pedal on Space only while typing plays the keys', () => {
+    const { audio, settingsStore } = setUp()
+    fireEvent.keyDown(document.body, { code: 'Space', key: ' ' })
+    expect(audio.pedals().sustain).toBe(false)
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    fireEvent.keyDown(document.body, { code: 'Space', key: ' ' })
+    expect(audio.pedals().sustain).toBe(true)
+  })
+
   it('sounds a typed key until it comes up', () => {
     const { audio, settingsStore } = setUp()
     act(() => setKeyboard(settingsStore, { typing: true }))
