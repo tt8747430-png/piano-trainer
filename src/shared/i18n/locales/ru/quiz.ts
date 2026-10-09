@@ -37,6 +37,12 @@ export const quiz: LocaleResources['quiz'] = {
   },
   signature: { none: 'Нет', sharps: '{{count}} ♯', flats: '{{count}} ♭' },
   degrees: 'Ступени',
+  shortcuts: {
+    group: 'Проверка',
+    act: 'Проверить, затем дальше',
+    answer: 'Ответ на этом месте',
+    hear: 'Послушать ещё раз',
+  },
   playAgain: 'Ещё раз',
   answers: 'Ответы',
   check: 'Проверить',

@@ -34,6 +34,9 @@ export function useShortcuts(
   }, [registry, enabled, name, scope, listed])
 }
 
+/** Whether the keyboard is a Mac's, for a hint that names a key: Cmd or Ctrl. */
+export const useShortcutsPlatform = (): boolean => use(ShortcutsContext)?.mac ?? false
+
 /** A group as the sheet lists it: each row's name and its keycaps. */
 export interface ListedShortcuts {
   readonly name: string
@@ -44,7 +47,8 @@ const SCOPES: readonly ShortcutScope[] = ['screen', 'piano', 'app']
 
 /**
  * The shortcuts on screen, for the sheet: the screen's groups first, then the piano's, then the
- * app's; a group bound twice (two keyboards on a screen) listed once.
+ * app's. Groups of one name are one group (the app's keys are bound by its navigation and by its
+ * sheet), and a row bound twice (two keyboards on a screen) is listed once.
  */
 export function useListedShortcuts(): readonly ListedShortcuts[] {
   const shortcuts = use(ShortcutsContext)
@@ -53,20 +57,19 @@ export function useListedShortcuts(): readonly ListedShortcuts[] {
     shortcuts?.registry.groups ?? (() => NO_GROUPS),
   )
   const mac = shortcuts?.mac ?? false
-  const names = new Set<string>()
-  return SCOPES.flatMap((scope) =>
-    groups
-      .filter((group) => group.scope === scope)
-      .filter((group) => !names.has(group.name) && names.add(group.name))
-      .map((group) => ({
-        name: group.name,
-        rows: group
-          .shortcuts()
-          .filter((shortcut) => !isBound(shortcut) || !shortcut.hidden)
-          .map((shortcut) => ({
-            label: shortcut.label,
-            keys: isBound(shortcut) ? comboKeys(shortcut.combo, mac) : shortcut.shown,
-          })),
-      })),
-  )
+  const listed = new Map<string, Map<string, readonly string[]>>()
+  for (const scope of SCOPES) {
+    for (const group of groups.filter((other) => other.scope === scope)) {
+      const rows = listed.get(group.name) ?? new Map<string, readonly string[]>()
+      for (const shortcut of group.shortcuts()) {
+        if (!isBound(shortcut)) rows.set(shortcut.label, shortcut.shown)
+        else if (!shortcut.hidden) rows.set(shortcut.label, comboKeys(shortcut.combo, mac))
+      }
+      listed.set(group.name, rows)
+    }
+  }
+  return [...listed].map(([name, rows]) => ({
+    name,
+    rows: [...rows].map(([label, keys]) => ({ label, keys })),
+  }))
 }

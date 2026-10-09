@@ -38,6 +38,13 @@ export const quiz = {
   // A key signature's count, as an answer.
   signature: { none: 'None', sharps: '{{count}} ♯', flats: '{{count}} ♭' },
   degrees: 'Degrees',
+  // A round's shortcuts, as the sheet lists them.
+  shortcuts: {
+    group: 'Quiz',
+    act: 'Check, then the next round',
+    answer: 'The answer in that place',
+    hear: 'Hear it again',
+  },
   playAgain: 'Play again',
   answers: 'Answers',
   check: 'Check',

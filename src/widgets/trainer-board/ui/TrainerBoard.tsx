@@ -20,12 +20,13 @@ import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
 import { DegreeSlots } from './DegreeSlots'
 import { RoundStaff } from './RoundStaff'
+import { useRoundShortcuts } from './use-round-shortcuts'
 import { useRoundWords } from './use-round-words'
 
 /**
  * One round at a time: what it asks (its words, a staff, a sound to hear again), the keyboard, the
  * answer, and one action. A keyboard user keeps their place: an answer moves them to Next, and Next
- * to the new round's prompt.
+ * to the new round's prompt; the computer's keys answer too (`useRoundShortcuts`).
  */
 export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Asks }) {
   const { t } = useTranslation(['quiz', 'common'])
@@ -43,6 +44,23 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
     else if (pressing) trainer.pressKey(key)
   })
   const choices = isChoice(question) ? words.options(question) : null
+  const hears = isChoice(question) && question.mode !== 'key-signature'
+  const goOn = () => {
+    trainer.next()
+    prompt.current?.focus()
+  }
+  useRoundShortcuts({
+    act: result ? goOn : choosing && selected.length > 0 ? trainer.check : null,
+    answers:
+      choices && !result
+        ? choices.map(
+            ({ value }) =>
+              () =>
+                trainer.choose(value),
+          )
+        : [],
+    hear: hears ? trainer.hear : null,
+  })
   // On the keys, answered: a build's or a press's keys against the answer; a round heard, what played.
   const checked =
     result && (choosesKeys(question) || pressesKeys(question))
@@ -73,7 +91,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         >
           {words.prompt(question)}
         </h2>
-        {isChoice(question) && question.mode !== 'key-signature' ? (
+        {hears ? (
           <RoundButton
             label={trainer.hearing ? t('common:stop') : t('quiz:playAgain')}
             icon={trainer.hearing ? Square : Volume2}
@@ -155,15 +173,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
 
       {result ? (
         // Shown in place of what was just pressed, so the answer hands it the focus.
-        <Button
-          size="pill"
-          autoFocus
-          className="sm:min-w-56 sm:self-start"
-          onClick={() => {
-            trainer.next()
-            prompt.current?.focus()
-          }}
-        >
+        <Button size="pill" autoFocus className="sm:min-w-56 sm:self-start" onClick={goOn}>
           {trainer.run.over ? t('quiz:results') : t('quiz:next')}
         </Button>
       ) : null}

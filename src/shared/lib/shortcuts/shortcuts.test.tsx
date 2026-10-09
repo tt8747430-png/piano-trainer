@@ -171,4 +171,20 @@ describe('the computer’s shortcuts', () => {
       'Player: Play Space, Sidebar ⌘+B, The answer in that place 1+–+9',
     )
   })
+
+  it('lists groups of one name as one, a row bound twice once', () => {
+    const row = (label: string, code: string): Shortcut => ({
+      label,
+      combo: { code },
+      run: () => {},
+    })
+    setUp(
+      <>
+        <Screen name="Anywhere" shortcuts={[row('Songs', 'Digit2')]} />
+        <Screen name="Anywhere" shortcuts={[row('Songs', 'Digit2'), row('Learn', 'Digit3')]} />
+        <Listed />
+      </>,
+    )
+    expect(screen.getByRole('listitem')).toHaveTextContent('Anywhere: Songs 2, Learn 3')
+  })
 })

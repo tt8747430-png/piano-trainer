@@ -1,15 +1,20 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { midi } from '@/shared/lib/music'
 
 const keyboard = () => screen.getByRole('group', { name: 'Keyboard' })
-/** Puts keys down at once, as a hand strikes a chord, and lifts them. */
+/**
+ * Puts keys down at once, as a hand strikes a chord, and lifts them. The clock stands still while
+ * they go down: a busy runner must not spread one strike over more than a chord's 50 ms.
+ */
 function strike(...names: string[]) {
   const keys = names.map((name) => within(keyboard()).getByRole('button', { name }))
+  const now = vi.spyOn(performance, 'now').mockReturnValue(performance.now())
   keys.forEach((key, i) => fireEvent.pointerDown(key, { pointerId: i + 1, pointerType: 'touch' }))
+  now.mockRestore()
   keys.forEach((key, i) => fireEvent.pointerUp(key, { pointerId: i + 1, pointerType: 'touch' }))
 }
 

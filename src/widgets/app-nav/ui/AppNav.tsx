@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   BookOpen,
   Metronome,
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
@@ -20,15 +21,37 @@ interface Place {
   readonly label: 'nav.path' | 'nav.songs' | 'nav.learn' | 'nav.practice' | 'nav.settings'
   readonly icon: LucideIcon
   readonly exact: boolean
+  /** The place's shortcut: Alt and its number. */
+  readonly key?: Combo
 }
 
 /** The four places, each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
 const PLACES: readonly Place[] = [
-  { to: '/', label: 'nav.path', icon: Route, exact: true },
-  { to: '/songs', label: 'nav.songs', icon: Music, exact: false },
-  { to: '/learn', label: 'nav.learn', icon: BookOpen, exact: false },
-  { to: '/practice', label: 'nav.practice', icon: Metronome, exact: false },
+  { to: '/', label: 'nav.path', icon: Route, exact: true, key: { code: 'Digit1', alt: true } },
+  {
+    to: '/songs',
+    label: 'nav.songs',
+    icon: Music,
+    exact: false,
+    key: { code: 'Digit2', alt: true },
+  },
+  {
+    to: '/learn',
+    label: 'nav.learn',
+    icon: BookOpen,
+    exact: false,
+    key: { code: 'Digit3', alt: true },
+  },
+  {
+    to: '/practice',
+    label: 'nav.practice',
+    icon: Metronome,
+    exact: false,
+    key: { code: 'Digit4', alt: true },
+  },
 ]
+/** The sidebar, open or collapsed: the platform's modifier and B. */
+const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /** Settings: at the sidebar's foot on a laptop, behind the Path's gear on a phone. */
 const SETTINGS: Place = { to: '/settings', label: 'nav.settings', icon: Settings, exact: false }
 
@@ -77,7 +100,8 @@ function PlaceLink({
 
 /**
  * The main navigation: a bar docked along the bottom on phones; from 1024px a sidebar that collapses
- * to its icons and remembers it, with Settings at its foot.
+ * to its icons and remembers it, with Settings at its foot. From the computer's keys, Alt and a
+ * place's number goes there, and the platform's modifier with B collapses or opens the sidebar.
  */
 export function AppNav() {
   const { t } = useTranslation('common')
@@ -85,6 +109,22 @@ export function AppNav() {
   const sidebar = useSettings(selectSidebar)
   const collapsed = sidebar === 'collapsed'
   const ToggleIcon = collapsed ? PanelLeftOpen : PanelLeftClose
+  const navigate = useNavigate()
+  const mac = useShortcutsPlatform()
+  const toggle = () => setSidebar(store, collapsed ? 'open' : 'collapsed')
+  const toggleLabel = t(collapsed ? 'nav.open' : 'nav.collapse')
+  useShortcuts(
+    t('shortcuts.app'),
+    [
+      ...PLACES.flatMap(({ to, label, key }) =>
+        key
+          ? [{ label: t(label), combo: key, run: () => void navigate({ to, state: OPEN_PLAINLY }) }]
+          : [],
+      ),
+      { label: t('shortcuts.sidebar'), combo: SIDEBAR_KEY, run: toggle },
+    ],
+    { scope: 'app' },
+  )
   return (
     <nav
       aria-label={t('nav.label')}
@@ -101,9 +141,10 @@ export function AppNav() {
         </p>
         <button
           type="button"
-          aria-label={t(collapsed ? 'nav.open' : 'nav.collapse')}
+          aria-label={toggleLabel}
+          title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
           aria-expanded={!collapsed}
-          onClick={() => setSidebar(store, collapsed ? 'open' : 'collapsed')}
+          onClick={toggle}
           className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
         >
           <ToggleIcon aria-hidden className="size-5" />

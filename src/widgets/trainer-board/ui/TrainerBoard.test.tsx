@@ -8,6 +8,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, note, pitchClass } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
+import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { TrainerBoard } from './TrainerBoard'
 
 function Board({ asks }: { asks: Asks }) {
@@ -20,7 +21,9 @@ function renderBoard(asks: Asks) {
   renderWithSettings(
     <ProgressStoreProvider store={store}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
-        <Board asks={asks} />
+        <ShortcutsProvider mac={false}>
+          <Board asks={asks} />
+        </ShortcutsProvider>
       </ServicesProvider>
     </ProgressStoreProvider>,
   )
@@ -124,6 +127,35 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
     await user.keyboard('{Enter}')
     expect(screen.getByRole('heading', { name: 'Which chord is this?' })).toHaveFocus()
+  })
+
+  it('chooses the answer in a place on its number, and goes on with Enter', async () => {
+    const user = userEvent.setup()
+    renderBoard(skills('chord:d7', 'name-chord'))
+    const options = within(screen.getByRole('group', { name: 'Answers' })).getAllByRole('button')
+    const place = options.findIndex((option) => option.textContent === 'C7') + 1
+    await user.keyboard(String(place))
+    expect(screen.getByText('Right')).toBeInTheDocument()
+    await user.keyboard('{Enter}')
+    expect(screen.queryByText('Right')).not.toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
+  })
+
+  it('checks a build with Enter once keys are chosen', async () => {
+    const user = userEvent.setup()
+    renderBoard(skills('chord:maj', 'build-chord'))
+    await user.keyboard('{Enter}')
+    expect(screen.queryByText('Right')).not.toBeInTheDocument()
+    for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
+    await user.keyboard('{Enter}')
+    expect(screen.getByText('Right')).toBeInTheDocument()
+  })
+
+  it('plays the round again on R', async () => {
+    const user = userEvent.setup()
+    renderBoard(skills('chord:maj', 'name-chord'))
+    await user.keyboard('r')
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
   })
 
   it('names an interval’s options by their names', () => {

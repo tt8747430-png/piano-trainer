@@ -1,5 +1,6 @@
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
+import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -15,6 +16,7 @@ import { RecordingStrip } from './RecordingStrip'
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
+  useEditorShortcutList()
   return (
     <ScoreEditorContext value={editor}>
       <div className="flex min-h-0 flex-1 flex-col gap-3 py-2">

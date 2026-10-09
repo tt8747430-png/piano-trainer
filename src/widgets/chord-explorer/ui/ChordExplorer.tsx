@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChordHeading, PlayLabel, ToneChip } from '@/shared/ui'
+import { ChordHeading, PlayLabel, ToneChip, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { changedView, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
@@ -60,6 +60,7 @@ export function ChordExplorer({
   }
   const sound = (id: 'chord' | 'arpeggio') =>
     playback.toggle(id, () => chordSounds(keysOf(chord), { arpeggio: id === 'arpeggio' }))
+  usePlayKey(() => sound('chord'))
 
   return (
     <div className="flex flex-col gap-6">

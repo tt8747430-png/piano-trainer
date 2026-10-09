@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
+import { ShortcutsButton } from '@/features/shortcuts-help'
 import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
 import { Segmented, SettingField, SwitchRow } from '@/shared/ui'
 
 /**
  * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in
- * place, as pictures). How a swipe plays is the rail's own toggle, beside the keys it changes.
+ * place, as pictures). How a swipe plays is the rail's own toggle, beside the keys it changes. Under
+ * them, the way to the computer's shortcuts.
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation('common')
@@ -43,6 +45,7 @@ export function KeyboardSettingsFields() {
         onCheckedChange={(typing) => setKeyboard(store, { typing })}
         className="border-b-0"
       />
+      <ShortcutsButton />
     </div>
   )
 }

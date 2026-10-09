@@ -1,8 +1,10 @@
 import { useMemo, type ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
 import { rangeOf, type Midi } from '@/shared/lib/music'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
+import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard, RailGroup } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
@@ -65,6 +67,17 @@ export function LiveKeyboard({
     inView: inView ?? soundingRange,
   })
   useSpacePedal({ enabled: typing && spacePedal })
+  // The typing keys are heard by `useTyping` and the pedal's hook: here they are only listed.
+  const { t } = useTranslation('common')
+  useShortcuts(
+    t('shortcuts.piano'),
+    [
+      { label: t('shortcuts.typing'), shown: ['A', '–', '’'] },
+      { label: t('shortcuts.octave'), shown: ['Z', 'X'] },
+      ...(spacePedal ? [{ label: t('shortcuts.pedal'), shown: ['Space'] }] : []),
+    ],
+    { enabled: typing, scope: 'piano' },
+  )
   // A key the live voice sounds is down until its damper falls: held, or on under the pedal.
   const down = useMemo(
     () =>

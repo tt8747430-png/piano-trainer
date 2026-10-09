@@ -46,12 +46,17 @@ const PRINTED: Readonly<Record<string, string>> = {
 /** A physical key's cap: the letter of `KeyR`, the digit of `Digit1`. */
 const capOf = (code: string) => code.replace(/^(Key|Digit)/, '')
 
+/** The modifiers' caps, as the platform's keyboard prints them. */
+export const modifierCaps = (mac: boolean) =>
+  mac ? { mod: '⌘', alt: '⌥', shift: '⇧' } : { mod: 'Ctrl', alt: 'Alt', shift: 'Shift' }
+
 /** A combo's keycaps in the order they are pressed, as the platform's keyboard prints them. */
 export function comboKeys(combo: Combo, mac: boolean): readonly string[] {
+  const caps = modifierCaps(mac)
   return [
-    ...(combo.mod ? [mac ? '⌘' : 'Ctrl'] : []),
-    ...(combo.alt ? [mac ? '⌥' : 'Alt'] : []),
-    ...(combo.shift ? [mac ? '⇧' : 'Shift'] : []),
+    ...(combo.mod ? [caps.mod] : []),
+    ...(combo.alt ? [caps.alt] : []),
+    ...(combo.shift ? [caps.shift] : []),
     'code' in combo ? capOf(combo.code) : (PRINTED[combo.key] ?? combo.key),
   ]
 }

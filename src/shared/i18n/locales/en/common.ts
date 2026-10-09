@@ -66,6 +66,19 @@ export const common = {
     typing: 'Play from the computer keyboard',
     typingHint: 'Z X · octave',
   },
+  // The computer's shortcuts: the sheet, and the groups every screen shares.
+  shortcuts: {
+    title: 'Shortcuts',
+    show: 'Show the shortcuts',
+    screen: 'This screen',
+    play: 'Play, or stop',
+    piano: 'Piano keys',
+    typing: 'Play the keys',
+    octave: 'An octave down, up',
+    pedal: 'Hold the pedal',
+    app: 'Anywhere',
+    sidebar: 'Collapse or open the sidebar',
+  },
   learned: { toggle: '{{title}}: learned', done: 'Learned' },
   midi: {
     label: 'MIDI keyboard',

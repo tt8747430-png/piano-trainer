@@ -6,7 +6,7 @@ import { keyListParam, partsParams, readKeyList, toggled } from '@/shared/lib'
 import { noteParam, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink, PlayLabel } from '@/shared/ui'
+import { ButtonLink, PlayLabel, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { FinderView } from '../model/finder-view'
 import { findChord, findingMarks } from '../model/finding'
@@ -34,6 +34,8 @@ export function ChordFinder({
   const said = useFindingSaid(finding)
   const best = finding.kind === 'chord' ? finding.best : undefined
   const toggle = (key: Midi) => onChange({ keys: keyListParam(toggled(chosen, key)) })
+  const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
+  usePlayKey(play, keys.length > 0)
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard
@@ -47,11 +49,7 @@ export function ChordFinder({
         {said}
       </p>
       <div className="flex flex-wrap gap-3">
-        <Button
-          size="pill"
-          disabled={keys.length === 0}
-          onClick={() => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))}
-        >
+        <Button size="pill" disabled={keys.length === 0} onClick={play}>
           <PlayLabel playing={playback.playing === 'chord'}>{t('play')}</PlayLabel>
         </Button>
         <Button

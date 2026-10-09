@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { chordSymbol, voiceLead } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton, PlayLabel, type ShownKeys, unmarked } from '@/shared/ui'
+import { ChordButton, PlayLabel, type ShownKeys, unmarked, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
 
@@ -83,11 +83,12 @@ export function RowChords() {
 
 /**
  * Play for the whole row, turning into Stop: honey where it is the screen's one action (the tool),
- * soft beside other examples.
+ * which Enter plays too; soft beside other examples.
  */
 export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
   const { t } = useTranslation('learn')
   const { playing, playRow } = useRow()
+  usePlayKey(playRow, variant === 'default')
   return (
     <Button variant={variant} size="pill" className="self-start" onClick={playRow}>
       <PlayLabel playing={playing === 'row'}>{t('play')}</PlayLabel>

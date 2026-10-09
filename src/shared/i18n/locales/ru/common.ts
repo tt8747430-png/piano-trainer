@@ -67,6 +67,18 @@ export const common: LocaleResources['common'] = {
     typing: 'Играть с клавиатуры компьютера',
     typingHint: 'Z X · октава',
   },
+  shortcuts: {
+    title: 'Горячие клавиши',
+    show: 'Показать горячие клавиши',
+    screen: 'Этот экран',
+    play: 'Играть или остановить',
+    piano: 'Клавиши фортепиано',
+    typing: 'Играть на клавишах',
+    octave: 'На октаву ниже, выше',
+    pedal: 'Держать педаль',
+    app: 'Везде',
+    sidebar: 'Свернуть или открыть боковую панель',
+  },
   learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
   midi: {
     label: 'MIDI-клавиатура',

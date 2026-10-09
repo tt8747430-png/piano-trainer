@@ -26,6 +26,7 @@ export { PAINT, type Paint } from './paint'
 export { Pinned } from './Pinned'
 export { PlayLabel } from './PlayLabel'
 export { PlayToggle } from './PlayToggle'
+export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
   PianoKeyboard,

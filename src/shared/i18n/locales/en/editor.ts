@@ -140,5 +140,22 @@ export const editor = {
       cancel: 'Cancel',
     },
   },
+  // The editor's keys, as the shortcuts' sheet lists them.
+  shortcuts: {
+    group: 'Score editor',
+    value: 'A note value, whole to sixteenth',
+    dot: 'Dotted',
+    rest: 'A rest',
+    step: 'Move the caret',
+    bar: 'Move a bar',
+    ends: 'To the start, the end',
+    semitone: 'A semitone up, down',
+    octave: 'An octave up, down',
+    delete: 'Delete',
+    chord: 'Type a chord',
+    undo: 'Undo',
+    redo: 'Redo',
+    bars: 'Copy, cut, paste the bars',
+  },
   roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
 } as const
