@@ -56,32 +56,28 @@ describe('createSavedStore', () => {
     expect(again.getState()).toEqual({ count: 7 })
   })
 
-  it('reads an older version’s compact save once, never its own state as a save', () => {
+  it('reads a save of its version for what it can', () => {
     const storage = createMemoryStorage()
-    save(storage, { n: 5 }, 1)
-    const store = createSavedStore(
-      {
-        key: KEY,
-        version: 2,
-        initial: { count: 0 },
-        write: ({ count }: Count) => ({ n: count }),
-        read: (saved: unknown, current: Count): Count =>
-          isRecord(saved) && typeof saved.n === 'number' ? { count: saved.n } : current,
-      },
-      { storage, otherTabs: new EventTarget() },
-    )
-    expect(store.getState()).toEqual({ count: 5 })
-  })
-
-  it.each([1, 2, 3])('reads a version-%i save for what it can', (version) => {
-    const storage = createMemoryStorage()
-    save(storage, { count: 4 }, version)
+    save(storage, { count: 4, more: true }, 2)
     expect(counter(storage).store.getState()).toEqual({ count: 4 })
   })
 
+  it.each([1, 3])(
+    'starts from its initial state over a version-%i save, and saves that',
+    (version) => {
+      const storage = createMemoryStorage()
+      save(storage, { count: 4 }, version)
+      expect(counter(storage).store.getState()).toEqual({ count: 0 })
+      expect(JSON.parse(storage.getItem(KEY) ?? 'null')).toEqual({
+        state: { count: 0 },
+        version: 2,
+      })
+    },
+  )
+
   it('keeps its initial state for what a save cannot give', () => {
     const storage = createMemoryStorage()
-    save(storage, { count: 'four' }, 1)
+    save(storage, { count: 'four' }, 2)
     expect(counter(storage).store.getState()).toEqual({ count: 0 })
   })
 
@@ -91,14 +87,7 @@ describe('createSavedStore', () => {
     expect(store.getState()).toEqual({ count: 5 })
   })
 
-  it('brings an older version’s save from another tab up to date', () => {
-    const { storage, store, savedElsewhere } = counter()
-    savedElsewhere({ count: 5 }, 1)
-    expect(store.getState()).toEqual({ count: 5 })
-    expect(JSON.parse(storage.getItem(KEY) ?? 'null')).toEqual({ state: { count: 5 }, version: 2 })
-  })
-
-  it('leaves a newer version’s save in another tab alone, never writing it back in its own', () => {
+  it('leaves another version’s save in another tab alone, never writing it back in its own', () => {
     const { storage, store, savedElsewhere } = counter()
     savedElsewhere({ count: 5, more: true }, 3)
     expect(store.getState()).toEqual({ count: 0 })

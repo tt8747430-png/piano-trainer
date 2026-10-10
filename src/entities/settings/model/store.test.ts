@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
-import { createSettingsStore, SETTINGS_STORAGE_KEY } from './store'
+import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
 import {
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
@@ -11,10 +11,10 @@ import {
 } from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
-const writeSaved = (storage: Storage, state: unknown, version = 2) =>
+const writeSaved = (storage: Storage, state: unknown, version = SETTINGS_VERSION) =>
   storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ state, version }))
 
-const restored = (state: unknown, version = 2) => {
+const restored = (state: unknown, version = SETTINGS_VERSION) => {
   const storage = createMemoryStorage()
   writeSaved(storage, state, version)
   return createSettingsStore({ storage, languages: ['en'] }).getState()
@@ -60,7 +60,7 @@ describe('createSettingsStore', () => {
     store.setState({ theme: 'dark' })
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual({
       state: { theme: 'dark', locale: 'en', ...DEFAULTS },
-      version: 11,
+      version: SETTINGS_VERSION,
     })
   })
 
@@ -95,50 +95,15 @@ describe('createSettingsStore', () => {
         pedal: 'normal',
       },
     }
-    expect(restored(saved, 11)).toEqual(saved)
-  })
-
-  it('gives a version-7 save the sidebar open, keeping the rest', () => {
-    const settings = restored({ theme: 'dark', recorder: { click: false } }, 7)
-    expect(settings.sidebar).toBe('open')
-    expect(settings.recorder).toEqual({ click: false, tune: false })
+    expect(restored(saved)).toEqual(saved)
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
-    expect(restored({ sidebar: 'wide' }, 8).sidebar).toBe('open')
-  })
-
-  it('gives a version-6 save the recorder’s click on, keeping the rest', () => {
-    const settings = restored({ theme: 'dark', trainer: { autoNext: true } }, 6)
-    expect(settings.recorder).toEqual(DEFAULT_RECORDER)
-    expect(settings.trainer.autoNext).toBe(true)
+    expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
   })
 
   it('turns a click that is not a boolean on, its default', () => {
-    expect(restored({ recorder: { click: 'no' } }, 7).recorder).toEqual(DEFAULT_RECORDER)
-  })
-
-  it('gives a version-4 save named notes off, keeping its toggles', () => {
-    const practice = {
-      fingerNumbers: true,
-      melody: true,
-      metronome: false,
-      countIn: true,
-      recording: false,
-    }
-    expect(restored({ theme: 'dark', locale: 'en', practice }, 4).practice).toEqual({
-      ...practice,
-      namedNotes: false,
-    })
-  })
-
-  it('gives a version-3 save the recording on, keeping its toggles', () => {
-    const practice = { fingerNumbers: true, melody: true, metronome: false, countIn: true }
-    expect(restored({ theme: 'dark', locale: 'en', practice }, 3).practice).toEqual({
-      ...practice,
-      namedNotes: false,
-      recording: true,
-    })
+    expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
   it('plays from the computer keyboard by default only where the pointer is fine', () => {
@@ -158,16 +123,6 @@ describe('createSettingsStore', () => {
     expect(keyboard(false).typing).toBe(false)
   })
 
-  it('gives a version-2 save the keyboard’s defaults and keeps the rest', () => {
-    const saved = {
-      theme: 'dark',
-      locale: 'ru',
-      practice: DEFAULT_PRACTICE,
-      quiz: { families: ['sev'], scales: ['major'] },
-    }
-    expect(restored(saved)).toEqual({ theme: 'dark', locale: 'ru', ...DEFAULTS })
-  })
-
   it('restores the keyboard settings, an unknown value taking its default alone', () => {
     const keyboard = {
       keySize: 'huge',
@@ -176,45 +131,12 @@ describe('createSettingsStore', () => {
       chordNames: 'no',
       typing: 'yes',
     }
-    expect(restored({ theme: 'light', locale: 'en', keyboard }, 3).keyboard).toEqual({
+    expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
       swipe: 'glissando',
       namedKeys: 'all',
       chordNames: true,
       typing: false,
-    })
-  })
-
-  it('reads a version-9 save without its keyboard map: the map is the rail’s own now', () => {
-    const keyboard = {
-      keySize: 'large',
-      swipe: 'scroll',
-      namedKeys: 'all',
-      map: true,
-      typing: true,
-    }
-    expect(restored({ theme: 'dark', keyboard }, 9).keyboard).toEqual({
-      keySize: 'large',
-      swipe: 'scroll',
-      namedKeys: 'all',
-      chordNames: true,
-      typing: true,
-    })
-  })
-
-  it('gives a version-10 save the chords played named, keeping its keyboard', () => {
-    const keyboard = { keySize: 'piano', swipe: 'glissando', namedKeys: 'none', typing: true }
-    expect(restored({ theme: 'dark', keyboard }, 10).keyboard).toEqual({
-      ...keyboard,
-      chordNames: true,
-    })
-  })
-
-  it('gives a version 1 save the new defaults, keeping its theme and language', () => {
-    expect(restored({ theme: 'dark', locale: 'ru' }, 1)).toEqual({
-      theme: 'dark',
-      locale: 'ru',
-      ...DEFAULTS,
     })
   })
 
@@ -233,28 +155,6 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('gives a version-5 save auto-next off and no quiz choice, keeping the rest', () => {
-    const settings = restored(
-      {
-        theme: 'dark',
-        quiz: { families: ['tri'], scales: ['blues'] },
-        practice: { countIn: true },
-      },
-      5,
-    )
-    expect(settings).not.toHaveProperty('quiz')
-    expect(settings.trainer).toEqual(DEFAULT_TRAINER)
-    expect(settings.theme).toBe('dark')
-    expect(settings.practice.countIn).toBe(true)
-  })
-
-  it('gives a version-8 save the MIDI keyboard’s defaults and no tune, keeping its click', () => {
-    const settings = restored({ theme: 'dark', recorder: { click: false } }, 8)
-    expect(settings.midi).toEqual(DEFAULT_MIDI)
-    expect(settings.recorder).toEqual({ click: false, tune: false })
-    expect(settings.theme).toBe('dark')
-  })
-
   it('restores the MIDI keyboard’s settings, an unknown value taking its default alone', () => {
     const midi = {
       device: 'Piano',
@@ -264,16 +164,31 @@ describe('createSettingsStore', () => {
       touch: 'heavy',
       pedal: 'reversed',
     }
-    expect(restored({ midi }, 9).midi).toEqual(midi)
+    expect(restored({ midi }).midi).toEqual(midi)
     expect(
-      restored({ midi: { ...midi, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' } }, 9)
-        .midi,
+      restored({ midi: { ...midi, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' } }).midi,
     ).toEqual({ ...midi, octaveShift: 0, touch: 'normal', device: null, sound: false })
-    expect(restored({ midi: { device: 'x'.repeat(101) } }, 9).midi.device).toBeNull()
+    expect(restored({ midi: { device: 'x'.repeat(101) } }).midi.device).toBeNull()
   })
 
   it('turns an auto-next that is not a boolean off', () => {
-    expect(restored({ trainer: { autoNext: 'yes' } }, 6).trainer).toEqual(DEFAULT_TRAINER)
+    expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
+  })
+
+  it('gives a setting never saved its default, keeping the rest', () => {
+    expect(restored({ theme: 'dark', locale: 'ru', future: true })).toEqual({
+      theme: 'dark',
+      locale: 'ru',
+      ...DEFAULTS,
+    })
+  })
+
+  it('does not read a save of another version', () => {
+    expect(restored({ theme: 'dark', locale: 'ru' }, SETTINGS_VERSION + 1)).toEqual({
+      theme: 'system',
+      locale: 'en',
+      ...DEFAULTS,
+    })
   })
 
   it('starts fresh, without throwing, when the saved JSON is corrupt', () => {
@@ -286,19 +201,11 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('reads a save from a newer version for the fields it knows', () => {
-    expect(restored({ theme: 'dark', locale: 'ru', future: true }, 9)).toEqual({
-      theme: 'dark',
-      locale: 'ru',
-      ...DEFAULTS,
-    })
-  })
-
   it('follows a theme chosen in another tab', () => {
     const storage = createMemoryStorage()
     const otherTabs = new EventTarget()
     const store = createSettingsStore({ storage, languages: ['en'], otherTabs })
-    writeSaved(storage, { ...store.getState(), theme: 'dark' }, 5)
+    writeSaved(storage, { ...store.getState(), theme: 'dark' })
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {
         key: SETTINGS_STORAGE_KEY,
@@ -306,10 +213,6 @@ describe('createSettingsStore', () => {
       }),
     )
     expect(store.getState().theme).toBe('dark')
-  })
-
-  it('keeps a theme saved by an older version', () => {
-    expect(restored({ theme: 'dark' }, 0).theme).toBe('dark')
   })
 
   it('works on blocked storage, holding choices for the session', () => {

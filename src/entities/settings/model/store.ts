@@ -29,7 +29,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 11
+export const SETTINGS_VERSION = 1
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -122,12 +122,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
 /**
  * Stored JSON is untrusted: the theme, language and keyboard keep each value still valid and take the
  * current one otherwise; a practice toggle or trainer setting not saved, or not valid, takes its
- * default. A version-1 save has no practice fields, a version-2 save no keyboard, a version-3 save no
- * recording toggle, a version-4 save no named notes, a version-5 save no trainer settings (its quiz
- * choice is what a trainer's URL now holds, and is not read), a version-6 save no recorder, a version-7
- * save no sidebar, a version-8 save no MIDI settings and no tune: each gains its defaults here. A
- * version-9 save's keyboard map is not read: the map is the rail's own, wherever the keys scroll. A
- * version-10 save has no chord names: the chords played are named until the learner says not.
+ * default.
  */
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)

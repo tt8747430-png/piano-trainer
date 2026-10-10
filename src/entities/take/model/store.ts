@@ -15,7 +15,7 @@ import {
 } from './types'
 
 export const TAKES_STORAGE_KEY = 'pt-takes'
-export const TAKES_VERSION = 2
+export const TAKES_VERSION = 1
 
 /** The learner's takes (ADR 0028), in the order recorded. */
 export interface TakesState {
@@ -76,12 +76,9 @@ function noteOf(saved: unknown, length: number): TakeNote | null {
   return { midi: midi(key), at: onset, held: holding, velocity }
 }
 
-/**
- * A saved press of a pedal within the take, let go after it went down; null otherwise. A version-1
- * save (`sustainOnly`) pressed only the sustain, as `[down, up]`.
- */
-function pressOf(saved: unknown, length: number, sustainOnly: boolean): PedalPress | null {
-  if (!Array.isArray(saved) || saved.length < 2 || saved.length > (sustainOnly ? 2 : 3)) return null
+/** A saved press of a pedal within the take, let go after it went down; null otherwise. */
+function pressOf(saved: unknown, length: number): PedalPress | null {
+  if (!Array.isArray(saved) || saved.length < 2 || saved.length > 3) return null
   const [savedDown, savedUp, kind]: unknown[] = saved
   const down = msWithin(savedDown, length)
   const up = msWithin(savedUp, length)
@@ -105,15 +102,10 @@ const kept = <T>(saved: unknown, read: (each: unknown) => T | null): T[] =>
     return value === null ? [] : [value]
   })
 
-/**
- * A saved take whose fields read; its notes and presses kept one by one. A version-1 save has its
- * sustain's presses as `pedal`, no bar (it was the first) and no name.
- */
+/** A saved take whose fields read; its notes and presses kept one by one. */
 function takeOf(saved: unknown): Take | null {
   if (!isRecord(saved)) return null
-  const { id, pieceId, name, made, tempo, meter, fromBar, length, notes } = saved
-  const sustainOnly = !Array.isArray(saved.pedals)
-  const presses = sustainOnly ? saved.pedal : saved.pedals
+  const { id, pieceId, name, made, tempo, meter, fromBar, length, notes, pedals } = saved
   const lasting = msWithin(length, LONGEST_TAKE_MS)
   const tempoRead =
     typeof tempo === 'number' &&
@@ -130,7 +122,7 @@ function takeOf(saved: unknown): Take | null {
     !isMeter(meter) ||
     lasting === null ||
     !Array.isArray(notes) ||
-    !Array.isArray(presses)
+    !Array.isArray(pedals)
   ) {
     return null
   }
@@ -144,7 +136,7 @@ function takeOf(saved: unknown): Take | null {
     fromBar: barOf(fromBar),
     length: lasting,
     notes: kept(notes, (each) => noteOf(each, lasting)),
-    pedals: kept(presses, (each) => pressOf(each, lasting, sustainOnly)),
+    pedals: kept(pedals, (each) => pressOf(each, lasting)),
   }
 }
 

@@ -11,12 +11,16 @@ export interface SavingOptions {
   readonly otherTabs?: EventTarget
 }
 
+/** What `migrate` hands `merge` for a save of another version: nothing of it is read. */
+const DISCARDED = Symbol('discarded')
+
 /**
- * A store saved under `key` in `version`. Saved data keeps working (CLAUDE.md): stored JSON is
- * untrusted and may be any version's, so `read` turns whatever was saved into this version's state,
- * taking `current`'s value for what it cannot read, and a save is never reset. What is saved is the
- * state, or what `write` makes of it (a compact form); `read` reads that back. The store follows
- * another tab's saves (`followOtherTabs`), so one tab never writes over another's.
+ * A store saved under `key` in `version` (ADR 0038). Stored JSON is untrusted, so `read` turns a save
+ * of this version into its state, field by field, taking `current`'s value for what it cannot read: a
+ * field added later reads as its default. A save of another version is not read, and the store starts
+ * from `initial`: a shape that changes is a new version. What is saved is the state, or what `write`
+ * makes of it (a compact form); `read` reads that back. The store follows another tab's saves of its
+ * version (`followOtherTabs`), so one tab never writes over another's.
  */
 export function createSavedStore<State>(
   {
@@ -40,10 +44,8 @@ export function createSavedStore<State>(
       version,
       storage: createJSONStorage(() => storage),
       partialize: write,
-      // Any version's save reaches `merge` as saved, and is read there once: read in `migrate` too,
-      // a compact save would be read a second time from the state it became.
-      migrate: (saved) => saved,
-      merge: (saved, current) => read(saved, current),
+      migrate: () => DISCARDED,
+      merge: (saved, current) => (saved === DISCARDED ? current : read(saved, current)),
     }),
   )
   followOtherTabs(store.persist, { key, version }, otherTabs)

@@ -110,7 +110,7 @@ describe('the app shell', () => {
     const { settingsStore } = await renderApp('/', { storage })
     const newValue = JSON.stringify({
       state: { ...settingsStore.getState(), theme: 'dark' },
-      version: 5,
+      version: 1,
     })
     storage.setItem(SETTINGS_STORAGE_KEY, newValue)
     act(

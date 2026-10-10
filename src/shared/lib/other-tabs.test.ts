@@ -22,15 +22,9 @@ describe('followOtherTabs', () => {
     expect(rehydrate).toHaveBeenCalledOnce()
   })
 
-  it('reads again a save of an older version, which it can bring up to date', () => {
+  it.each([1, 3])('leaves a version-%i save to the tab that wrote it', (version) => {
     const { tabs, rehydrate } = follow()
-    tabs.dispatchEvent(saved('pt-progress', at(1)))
-    expect(rehydrate).toHaveBeenCalledOnce()
-  })
-
-  it('leaves a newer version’s save to the tab that wrote it', () => {
-    const { tabs, rehydrate } = follow()
-    tabs.dispatchEvent(saved('pt-progress', at(3)))
+    tabs.dispatchEvent(saved('pt-progress', at(version)))
     expect(rehydrate).not.toHaveBeenCalled()
   })
 

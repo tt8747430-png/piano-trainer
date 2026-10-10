@@ -12,7 +12,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 2
+export const PROGRESS_VERSION = 1
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -76,9 +76,7 @@ function trainerRecord(value: unknown): TrainerRecord | undefined {
 }
 
 /**
- * Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. A version-1 save's
- * quiz stats (one count over every quiz) belong to no trainer and are not read.
- */
+ * Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. */
 function sanitize(persisted: unknown): ProgressState {
   const saved = savedObject<ProgressState>(persisted)
   return {

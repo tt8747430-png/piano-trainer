@@ -8,9 +8,9 @@ interface Rehydrates {
 /**
  * Another tab (or the installed app beside a tab) saved under `key`: the store reads the save again,
  * so its own next save carries the other tab's changes instead of writing over them. It follows a
- * save of its own version, or an older one it brings up to date; a newer version's save is left to
- * the tab that wrote it, which reads this one's. Were both to follow each other's, each would write
- * the save back in its own version and wake the other, for as long as both were open.
+ * save of its own version only: another version's is left to the tab that wrote it. Were tabs of two
+ * versions to follow each other's, each would write the save back in its own version and wake the
+ * other, for as long as both were open.
  */
 export function followOtherTabs(
   store: Rehydrates,
@@ -19,8 +19,7 @@ export function followOtherTabs(
 ): void {
   tabs.addEventListener('storage', (event) => {
     if (!(event instanceof StorageEvent) || event.key !== key) return
-    const saved = versionOf(event.newValue)
-    if (saved !== undefined && saved <= version) void store.rehydrate()
+    if (versionOf(event.newValue) === version) void store.rehydrate()
   })
 }
 

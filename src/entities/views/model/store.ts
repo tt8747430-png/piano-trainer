@@ -3,7 +3,7 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { latestViews, viewOf, type RememberedView, type Views } from './view'
 
 export const VIEWS_STORAGE_KEY = 'pt-views'
-export const VIEWS_VERSION = 3
+export const VIEWS_VERSION = 1
 
 export interface ViewsState {
   readonly views: Views
@@ -18,33 +18,8 @@ export const createViewsStore = (saving: SavingOptions = {}): ViewsStore =>
     saving,
   )
 
-/** The pages a version-1 save knew under Learn, now under Practice with everything else that is practised. */
-const MOVED =
-  /^\/learn\/(chords|scales|intervals|tensions|patterns|chord-finder|reharmonise|passing-chords|progressions)(?=\/|$)/
 /**
- * The screens that are gone: version 1's Keys page (a key is a view of Scales, which remembers its
- * own), version 2's Practice by topic (Practice lists its places and remembers nothing) and its
- * Available tensions (a 7th chord's tensions are a part of the chord built).
- */
-const GONE: ReadonlySet<string> = new Set(['/learn/keys', '/practice', '/practice/tensions'])
-
-/** The pages a version-2 save knew on their own, now tabs of the subject they belong to. */
-const TABBED: Readonly<Record<string, string>> = {
-  '/practice/chord-finder': '/practice/chords/find',
-  '/practice/passing-chords': '/practice/progressions/passing',
-  '/practice/reharmonise': '/practice/progressions/reharmonise',
-}
-
-/** Where a saved path's screen is now, or null for a screen that is gone. */
-function pathNow(path: string): string | null {
-  const practised = path.replace(MOVED, '/practice/$1')
-  if (GONE.has(path) || GONE.has(practised)) return null
-  return TABBED[practised] ?? practised
-}
-
-/**
- * Stored JSON is untrusted: paths from the root keep their views' params, each under its screen's
- * path of today; the last 200 stand.
+ * Stored JSON is untrusted: paths from the root keep their views' params; the last 200 stand.
  */
 function sanitize(persisted: unknown): ViewsState {
   const saved = savedObject<ViewsState>(persisted).views
@@ -52,8 +27,7 @@ function sanitize(persisted: unknown): ViewsState {
     views: latestViews(
       Object.entries(isRecord(saved) ? saved : {}).flatMap(([path, view]) => {
         if (!path.startsWith('/') || !isRecord(view)) return []
-        const now = pathNow(path)
-        return now === null ? [] : [[now, viewOf(view)] as readonly [string, RememberedView]]
+        return [[path, viewOf(view)] as readonly [string, RememberedView]]
       }),
     ),
   }

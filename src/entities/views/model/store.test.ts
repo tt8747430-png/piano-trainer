@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
-import { createViewsStore, VIEWS_STORAGE_KEY } from './store'
+import { createViewsStore, VIEWS_STORAGE_KEY, VIEWS_VERSION } from './store'
 import { MOST_VIEWS } from './view'
 
-const writeSaved = (storage: Storage, state: unknown, version = 1) =>
+const writeSaved = (storage: Storage, state: unknown, version = VIEWS_VERSION) =>
   storage.setItem(VIEWS_STORAGE_KEY, JSON.stringify({ state, version }))
 
 const restored = (state: unknown) => {
@@ -13,14 +13,14 @@ const restored = (state: unknown) => {
 }
 
 describe('createViewsStore', () => {
-  it('starts with no screen remembered and saves under pt-views, version 3', () => {
+  it('starts with no screen remembered and saves under pt-views in its version', () => {
     const storage = createMemoryStorage()
     const store = createViewsStore({ storage })
     expect(store.getState()).toEqual({ views: {} })
     store.setState({ views: { '/practice/chords': { root: 'G' } } })
     expect(JSON.parse(storage.getItem('pt-views') ?? 'null')).toEqual({
       state: { views: { '/practice/chords': { root: 'G' } } },
-      version: 3,
+      version: VIEWS_VERSION,
     })
   })
 
@@ -36,7 +36,7 @@ describe('createViewsStore', () => {
         views: {
           'play/bz5': { key: 'A' },
           '/play/flow': { key: 'G', loop: { from: 1 }, tempo: null, bad: Number.NaN },
-          '/learn/keys': 'G',
+          '/practice/scales': 'G',
         },
       }),
     ).toEqual({ views: { '/play/flow': { key: 'G' } } })
@@ -44,64 +44,9 @@ describe('createViewsStore', () => {
     expect(restored({ views: [] })).toEqual({ views: {} })
   })
 
-  it('moves a version-1 view to where its screen now is, in the order it was used', () => {
-    expect(
-      Object.entries(
-        restored({
-          views: {
-            '/learn/chords': { root: 'G' },
-            '/play/bz5': { key: 'A' },
-            '/learn/patterns/1': { tab: 'rh' },
-            '/learn/progressions': { p: 'ii.V.I' },
-          },
-        }).views,
-      ),
-    ).toEqual([
-      ['/practice/chords', { root: 'G' }],
-      ['/play/bz5', { key: 'A' }],
-      ['/practice/patterns/1', { tab: 'rh' }],
-      ['/practice/progressions', { p: 'ii.V.I' }],
-    ])
-  })
-
-  it('forgets the Keys page’s view: its key is now a view of Scales', () => {
-    expect(
-      restored({ views: { '/learn/keys': { key: 'G' }, '/learn/scales': { root: 'D' } } }),
-    ).toEqual({
-      views: { '/practice/scales': { root: 'D' } },
-    })
-  })
-
-  it('forgets Practice’s topic of version 2: Practice lists its places', () => {
-    expect(
-      restored({ views: { '/practice': { topic: 'ear' }, '/practice/scales': { root: 'D' } } }),
-    ).toEqual({ views: { '/practice/scales': { root: 'D' } } })
-  })
-
-  it('moves a page that became a tab to its subject, and forgets Available tensions', () => {
-    expect(
-      restored({
-        views: {
-          '/practice/chord-finder': { keys: '60.64.67' },
-          '/learn/passing-chords': { from: 'C', to: 'F' },
-          '/practice/reharmonise': { note: 'G' },
-          '/practice/tensions': { chord: 'm7' },
-          '/learn/tensions': { chord: 'd7' },
-        },
-      }),
-    ).toEqual({
-      views: {
-        '/practice/chords/find': { keys: '60.64.67' },
-        '/practice/progressions/passing': { from: 'C', to: 'F' },
-        '/practice/progressions/reharmonise': { note: 'G' },
-      },
-    })
-  })
-
-  it('keeps a lesson’s path as it is', () => {
-    expect(restored({ views: { '/learn/lessons/triads': { quiz: 1 } } })).toEqual({
-      views: { '/learn/lessons/triads': { quiz: 1 } },
-    })
+  it('keeps the screens in the order they were used', () => {
+    const views = { '/practice/chords': { root: 'G' }, '/play/bz5': { key: 'A' } }
+    expect(Object.entries(restored({ views }).views)).toEqual(Object.entries(views))
   })
 
   it('keeps the screens used last, at most 200', () => {

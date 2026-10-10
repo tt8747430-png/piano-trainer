@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
-import { createProgressStore, PROGRESS_STORAGE_KEY } from './store'
+import { createProgressStore, PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from './store'
 import { EMPTY_PROGRESS } from './types'
 
 /** Puts progress in storage as an earlier session would have saved it. */
-const writeSaved = (storage: Storage, state: unknown, version = 2) =>
+const writeSaved = (storage: Storage, state: unknown, version = PROGRESS_VERSION) =>
   storage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({ state, version }))
 
 const DAY = '2026-09-25T10:00:00.000Z'
@@ -22,7 +22,7 @@ describe('createProgressStore', () => {
     store.setState({ learned: { 'piece:bz5': DAY } })
     expect(JSON.parse(storage.getItem('pt-progress') ?? 'null')).toEqual({
       state: { ...EMPTY_PROGRESS, learned: { 'piece:bz5': DAY } },
-      version: 2,
+      version: PROGRESS_VERSION,
     })
   })
 
@@ -69,32 +69,10 @@ describe('createProgressStore', () => {
     })
   })
 
-  it('reads a version-1 save, its quiz stats belonging to no trainer', () => {
+  it.each([0, 2])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
-    const answers = { 'chord:m7': [{ correct: true, at: DAY }] }
-    writeSaved(
-      storage,
-      {
-        learned: { 'piece:bz5': DAY },
-        answers,
-        quiz: { correct: 1, total: 1, streak: 1, best: 1 },
-      },
-      1,
-    )
-    expect(createProgressStore({ storage }).getState()).toEqual({
-      ...EMPTY_PROGRESS,
-      learned: { 'piece:bz5': DAY },
-      answers,
-    })
-  })
-
-  it.each([0, 3])('reads a version-%i save for what is still valid', (version) => {
-    const storage = createMemoryStorage()
-    writeSaved(storage, { learned: { 'piece:bz5': DAY, 'lesson:1': DAY }, quiz: 'lost' }, version)
-    expect(createProgressStore({ storage }).getState()).toEqual({
-      ...EMPTY_PROGRESS,
-      learned: { 'piece:bz5': DAY },
-    })
+    writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)
+    expect(createProgressStore({ storage }).getState()).toEqual(EMPTY_PROGRESS)
   })
 
   it('keeps what another tab saved when it saves next', () => {

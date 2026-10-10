@@ -43,7 +43,7 @@ function withTake(take: object = TAKE) {
   )
   storage.setItem(
     TAKES_STORAGE_KEY,
-    JSON.stringify({ state: { takes: [take], nextTake: 2 }, version: 2 }),
+    JSON.stringify({ state: { takes: [take], nextTake: 2 }, version: 1 }),
   )
   return storage
 }

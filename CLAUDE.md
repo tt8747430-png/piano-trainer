@@ -27,9 +27,11 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
 - **Latest stable dependencies, no legacy in code.** Pinned majors: TypeScript 6, Vitest 4, jsdom 29, jest-dom 6,
   eslint-plugin-boundaries 6, and `@vite-pwa/assets-generator` 1 (the range `vite-plugin-pwa` accepts). Bumping
   one is its own change.
-- **Saved data keeps working.** Persisted stores (`pt-settings`, `pt-progress`) are `createSavedStore`s: they carry
-  a `version`, read any version's save through one sanitiser (a shape change is a new version and a sanitiser that
-  reads the old, never a reset), and follow another tab's saves of their version or older.
+- **Saved stores read one version (ADR 0038).** Persisted stores (`pt-settings`, `pt-progress`, …) are
+  `createSavedStore`s: they carry a `version`, read a save of that version field by field through one sanitiser (a
+  field added later reads as its default), start from their initial state over any other version's save, and
+  follow another tab's saves of their version. Until release the app has no users: a shape change bumps the version,
+  with no migration and no reader of old saves. The built-in content always works.
 - **Staged is deliberate.** Never `git checkout`/`restore`/`stash`/`reset` the owner's work unprompted.
 - **New code copies the nearest slice's shape.** Writes → a feature command. Reads → selectors. Pure logic →
   `shared/lib` or `entities/*/model` with a colocated test.
@@ -154,12 +156,12 @@ it. `@` → `src`.
   Practice, the hymns),
   `entriesInKey`, `pieceFit`, `choosableChordSize`,
   `isOwnKey`; bars of either hand written out (`hands`, `parseHands`) and the writers back to text (`writeBar`,
-  `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`, version 1, their
+  `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`: their
   versions by piece id and their own songs (`my-<n>`), read through the repertoire (`repertoire`, `useRepertoire`):
   the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read;
   `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
-  `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`,
-  version 1: favourites, hidden, own; `PATTERN_GROUP_BOOK`; `referenceShelves` (a part of `REFERENCE_PARTS`) /
+  `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`:
+  favourites, hidden, own; `PATTERN_GROUP_BOOK`; `referenceShelves` (a part of `REFERENCE_PARTS`) /
   `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
@@ -169,13 +171,13 @@ it. `@` → `src`.
   each line once in its mode, with its note, pattern and chord size; `libraryProgression` names a line, `COMMON_PROGRESSIONS`
   a key's, `LIBRARY_BY_STYLE` what its pop-up lists, `otherModeVersion` a cadence's version in the other mode, from
   `MODE_VERSIONS`), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
-  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, version 11, with the laptop's sidebar, open or collapsed, the
-  keyboard settings (with `chordNames`), the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`, version 2: a name, the bar it starts at, the three pedals' presses; saved
-  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, version 2, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
-  changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`,
-  version 3: each remembered screen's last view under its path of today, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
+  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, with the laptop's sidebar, open or collapsed, the
+  keyboard settings (with `chordNames`), the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`: a name, the bar it starts at, the three pedals' presses; saved
+  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`:
+  each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
-  by one sanitiser for any version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
+  by one sanitiser for its version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
   `useScrollMotion`, `useShownOnScrollUp` (the screen bar's hide and show, once the page has scrolled past it), `IN_PLACE` (a navigation that changes the
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with

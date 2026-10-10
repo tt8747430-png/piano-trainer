@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
-import { createTakesStore, TAKES_STORAGE_KEY } from './store'
+import { createTakesStore, TAKES_STORAGE_KEY, TAKES_VERSION } from './store'
 import type { Take } from './types'
 
-const restored = (state: unknown, version = 2) => {
+const restored = (state: unknown, version = TAKES_VERSION) => {
   const storage = createMemoryStorage()
   storage.setItem(TAKES_STORAGE_KEY, JSON.stringify({ state, version }))
   return createTakesStore({ storage, otherTabs: new EventTarget() }).getState()
@@ -48,7 +48,7 @@ describe('createTakesStore', () => {
     store.setState({ takes: [TAKE], nextTake: 2 })
     expect(JSON.parse(storage.getItem('pt-takes') ?? 'null')).toEqual({
       state: { takes: [SAVED_TAKE], nextTake: 2 },
-      version: 2,
+      version: TAKES_VERSION,
     })
   })
 
@@ -79,18 +79,6 @@ describe('createTakesStore', () => {
     expect(take?.pedals).toEqual([{ pedal: 'sustain', down: 10, up: 1300 }])
   })
 
-  it('reads a version-1 take’s presses as the sustain’s, from bar 1, unnamed', () => {
-    const { pedals: _pedals, fromBar: _fromBar, ...older } = SAVED_TAKE
-    const v1 = {
-      ...older,
-      pedal: [
-        [10, 1300],
-        [20, 30, 1],
-      ],
-    }
-    expect(restored({ takes: [v1], nextTake: 2 }, 1).takes).toEqual([TAKE])
-  })
-
   it('keeps the soft pedal’s and the sostenuto’s presses, the bar it starts at and its name', () => {
     const saved = {
       ...SAVED_TAKE,
@@ -105,7 +93,7 @@ describe('createTakesStore', () => {
     const storage = createMemoryStorage()
     storage.setItem(
       TAKES_STORAGE_KEY,
-      JSON.stringify({ state: { takes: [saved], nextTake: 2 }, version: 2 }),
+      JSON.stringify({ state: { takes: [saved], nextTake: 2 }, version: TAKES_VERSION }),
     )
     const store = createTakesStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState().takes[0]).toEqual({
