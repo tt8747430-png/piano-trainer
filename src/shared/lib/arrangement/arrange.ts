@@ -170,7 +170,8 @@ export function transposeNotes<N extends { readonly midi: Midi; readonly spelled
   return notes.map((n) => ({
     ...n,
     midi: midi(n.midi + semitones),
-    spelled: transposeNote(n.spelled, from, to),
+    // Spelled as the chords are: a double sharp where the key writes one, not a natural.
+    spelled: transposeNote(n.spelled, from, to, 2),
   }))
 }
 

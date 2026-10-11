@@ -69,11 +69,17 @@ export const tonicSpelling = (pc: PitchClass, minor: boolean): SpelledNote =>
 
 /**
  * Moves a note from one tonic to another by the interval between them, so its letter moves with the
- * key (D in G is E♭ in A♭). A note that would need a double accidental takes its plain spelling.
+ * key (D in G is E♭ in A♭). A note that would need more accidentals than `most` (one for a chord's
+ * root, two for a note written on the staff: G♯ minor's leading tone is F𝄪) takes its plain spelling.
  */
-export function transposeNote(note: SpelledNote, from: SpelledNote, to: SpelledNote): SpelledNote {
+export function transposeNote(
+  note: SpelledNote,
+  from: SpelledNote,
+  to: SpelledNote,
+  most: 1 | 2 = 1,
+): SpelledNote {
   const moved = spellAbove(to, intervalBetween(from, note))
-  if (Math.abs(moved.accidental) < 2) return moved
+  if (Math.abs(moved.accidental) <= most) return moved
   return plainSpelling(pitchClassOf(moved), moved.accidental > 0)
 }
 

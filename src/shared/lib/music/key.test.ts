@@ -100,6 +100,8 @@ describe('transposeNote', () => {
 
   it('falls back to the plain spelling where a double accidental would be needed', () => {
     expect(transposeNote(note('A', 1), note('C'), note('C', 1))).toEqual(note('B'))
+    // A note on the staff keeps a double sharp: E minor's D♯ is G♯ minor's F𝄪.
+    expect(transposeNote(note('D', 1), note('E'), note('G', 1), 2)).toEqual(note('F', 2))
   })
 
   it('leaves every root unchanged when the tonic stays', () => {
