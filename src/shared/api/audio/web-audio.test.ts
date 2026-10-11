@@ -79,14 +79,20 @@ class FakeContext {
 const A4: Sound = { kind: 'note', midi: midi(69), at: 0.05, duration: 1, velocity: 0.2 }
 const CLICK: Sound = { kind: 'click', at: 0, accent: true }
 
-function setUp() {
+function setUp({ activated = true }: { activated?: boolean } = {}) {
   const context = new FakeContext()
   const createContext = vi.fn(() => context as unknown as AudioContext)
   const frames: (() => void)[] = []
   const frame = (look: () => void) => void frames.push(look)
   const page = { now: 0 }
-  const audio = createWebAudioOutput({ createContext, frame, pageNow: () => page.now })
-  return { context, createContext, frames, page, audio }
+  const gesture = { activated }
+  const audio = createWebAudioOutput({
+    createContext,
+    frame,
+    pageNow: () => page.now,
+    activated: () => gesture.activated,
+  })
+  return { context, createContext, frames, page, gesture, audio }
 }
 
 describe('createWebAudioOutput', () => {
@@ -134,6 +140,16 @@ describe('createWebAudioOutput', () => {
     context.currentTime = 2
     audio.play([CLICK])
     expect(context.oscillators[0]?.start).toBeCloseTo(2.1)
+  })
+
+  it('lets a play go before any gesture, creating no audio to hold it back', () => {
+    const { context, createContext, gesture, audio } = setUp({ activated: false })
+    void audio.unlock()
+    audio.play([A4], 0.125)
+    expect(createContext).not.toHaveBeenCalled()
+    gesture.activated = true
+    audio.play([A4], 0.125)
+    expect(context.oscillators.length).toBeGreaterThan(0)
   })
 
   it('resumes a suspended context on unlock', async () => {

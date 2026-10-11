@@ -110,6 +110,9 @@ const browserContext = (): AudioContext | null =>
 
 const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 
+/** Whether the page has had a gesture, which lets it start audio; where the browser cannot say, yes. */
+const browserActivated = () => navigator.userActivation?.hasBeenActive ?? true
+
 /** Audio a browser holds back until a gesture: started suspended, or interrupted (iOS, by a call). */
 const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
@@ -143,12 +146,15 @@ export function createWebAudioOutput({
   frame = animationFrame,
   createMedia = wholeFileMedia,
   pageNow = () => performance.now(),
+  activated = browserActivated,
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
   createMedia?: (src: string) => Media
   /** The page's clock, in milliseconds. */
   pageNow?: () => number
+  /** Whether a gesture has let the page start audio. */
+  activated?: () => boolean
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<Voice>()
@@ -206,11 +212,17 @@ export function createWebAudioOutput({
 
   return {
     async unlock() {
+      // Called with no gesture behind it (a sound as a screen opens), it could only start held back.
+      if (!activated()) return
       recordings.prime()
       const audio = openContext()
       if (audio && heldBack(audio)) await audio.resume()
     },
     play(sounds, at) {
+      // Before any gesture nothing can be heard: a play then (a round sounded as its trainer opens)
+      // is let go, not queued on held-back audio to burst out at the first tap.
+      if ((context === undefined || (context && heldBack(context))) && !activated())
+        return NOTHING_PLAYED
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
       if (heldBack(audio)) void audio.resume()
