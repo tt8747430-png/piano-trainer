@@ -2,9 +2,17 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerLink, STEP_PAINT, useStepTitle, type PathStep } from '@/entities/path'
+import {
+  ExplorerLink,
+  LEVEL_NAME,
+  skillsOfStep,
+  STEP_PAINT,
+  useStepTitle,
+  type PathStep,
+} from '@/entities/path'
 import { pieceById, pieceKey, skillsOfPiece } from '@/entities/piece'
 import {
+  knownCount,
   selectAllAnswers,
   selectSuggestedStep,
   skillsToCheck,
@@ -34,9 +42,12 @@ function ContinueButton({ step, label }: { step: PathStep; label: string }) {
   )
 }
 
-/** What to play next (spec §5), in one tap; the chords it still has to check, when it is a song. */
+/**
+ * What to play next (spec §5), in one tap: what the step is, its level, how many of a chord step's
+ * chords are known; the chords a song still has to check.
+ */
 export function ContinueCard() {
-  const { t } = useTranslation('path')
+  const { t } = useTranslation(['path', 'common'])
   const headingId = useId()
   const suggested = useProgress(selectSuggestedStep)
   const answers = useProgress(selectAllAnswers)
@@ -56,9 +67,17 @@ export function ContinueCard() {
   const title = stepTitle(suggested.step)
   const piece = suggested.step.kind === 'piece' ? pieceById(suggested.step.pieceId) : undefined
   const toCheck = piece ? skillsToCheck(skillsOfPiece(piece), answers).length : 0
-  const detail = piece
-    ? [title.secondary, keySymbol(pieceKey(piece))].filter(Boolean).join(' · ')
-    : t(`kind.${title.kind}`)
+  const skills = skillsOfStep(suggested.step)
+  const detail = [
+    piece ? title.secondary : t(`kind.${title.kind}`),
+    piece ? keySymbol(pieceKey(piece)) : null,
+    suggested.step.kind === 'chords'
+      ? t('known', { known: knownCount(skills, answers), total: skills.length })
+      : null,
+    t(`common:levelName.${LEVEL_NAME[suggested.level]}`),
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <section aria-labelledby={headingId} className="overflow-hidden card">

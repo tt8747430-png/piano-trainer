@@ -4,9 +4,10 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('Path', () => {
-  it('suggests the first step on a first run', async () => {
+  it('suggests the first step on a first run, saying what it is and how far along', async () => {
     await renderApp('/')
     const card = await screen.findByRole('region', { name: 'Triads' })
+    expect(within(card).getByText('Chords · 0 of 6 known · Beginner')).toBeInTheDocument()
     expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
       /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
     )
