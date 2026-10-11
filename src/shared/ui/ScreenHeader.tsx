@@ -49,12 +49,14 @@ export function ScreenHeader({
       onBlur={(event) => hold(event.currentTarget.contains(event.relatedTarget))}
       className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
-      <div className="flex items-center gap-3 pt-2 pb-4">
+      {/* The title takes its own width first: where it and the actions do not fit a line, the
+          actions go under it rather than squeeze a long word (Последовательности) apart. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4">
         {back}
-        <h1 className="min-w-0 flex-1 text-4xl text-balance hyphens-auto wrap-break-word lg:text-5xl">
+        <h1 className="min-w-0 flex-auto text-3xl text-balance hyphens-auto wrap-break-word sm:text-4xl lg:text-5xl">
           {title}
         </h1>
-        {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+        {actions ? <div className="ms-auto flex shrink-0 items-center gap-2">{actions}</div> : null}
       </div>
       {tabs}
     </header>

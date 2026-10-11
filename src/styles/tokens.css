@@ -92,6 +92,8 @@
   --secondary-foreground: var(--p-sky-mist-ink);
   --muted: var(--p-sand-100);
   --muted-foreground: var(--p-ink-soft);
+  /* The chosen one of a segmented choice: raised off its muted track, a card by day. */
+  --chosen: var(--p-paper-card);
   --accent: var(--p-sand-100);
   --accent-foreground: var(--p-ink);
   --link: var(--p-sky-deep);
@@ -198,6 +200,8 @@
   --secondary-foreground: var(--p-sky-night-ink);
   --muted: var(--p-dusk-850);
   --muted-foreground: var(--p-dusk-muted);
+  /* By night a card is darker than the track: the chosen segment takes the lighter line to stand up. */
+  --chosen: var(--p-dusk-line);
   --accent: var(--p-dusk-850);
   --accent-foreground: var(--p-dusk-ink);
   --link: var(--p-sky-light);

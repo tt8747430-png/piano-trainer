@@ -8,6 +8,7 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-chosen: var(--chosen);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
@@ -225,8 +226,45 @@
 
 /* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen; and one tab of it,
    the chosen one (a tab pressed, or the link of the page shown) in ink over an ink underline. */
+/* A strip that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
 @utility tab-strip {
   @apply relative flex gap-1 overflow-x-auto border-b border-border scrollbar-none;
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--strip-fade-start),
+      #000 calc(100% - var(--strip-fade-end)),
+      transparent
+    );
+    animation: strip-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+}
+@property --strip-fade-start {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --strip-fade-end {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes strip-fade {
+  0% {
+    --strip-fade-start: 0px;
+    --strip-fade-end: 32px;
+  }
+  8%,
+  92% {
+    --strip-fade-start: 32px;
+    --strip-fade-end: 32px;
+  }
+  100% {
+    --strip-fade-start: 32px;
+    --strip-fade-end: 0px;
+  }
 }
 @utility tab {
   @apply relative inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-base font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3;
@@ -312,7 +350,7 @@
 @utility player-screen {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-rows: auto auto auto 1fr auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
   grid-template-areas:
     'lead lead actions actions'
     'keys keys keys keys'
@@ -345,7 +383,7 @@
   }
   @variant sm {
     grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
     grid-template-areas:
       'lead tempo hands actions'
       'keys keys keys keys'

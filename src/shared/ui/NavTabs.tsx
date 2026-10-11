@@ -1,17 +1,34 @@
 import { createLink, type LinkComponent } from '@tanstack/react-router'
-import type { ComponentProps, ReactNode } from 'react'
+import { useEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 
 /**
  * One of a subject's pages: a router link drawn as a tab. Which page is shown is the page's to say
  * (`current`), not the router's: the router counts a link active on a child path or a looser search
  * (Build on Find, the first view under a search param), so the tab sets its own `aria-current` and
- * drops the router's mark and class.
+ * drops the router's mark and class. The page's tab is scrolled into the strip's view, where the strip
+ * is wider than the screen.
  */
-function TabAnchor({ current, ...props }: ComponentProps<'a'> & { current: boolean }) {
+function TabAnchor({ current, ref, ...props }: ComponentProps<'a'> & { current: boolean }) {
+  const tab = useRef<HTMLAnchorElement>(null)
+  useEffect(() => {
+    const strip = tab.current?.closest('ul')
+    if (!current || !tab.current || !strip) return
+    const { offsetLeft, offsetWidth } = tab.current
+    if (
+      offsetLeft < strip.scrollLeft ||
+      offsetLeft + offsetWidth > strip.scrollLeft + strip.clientWidth
+    )
+      strip.scrollLeft = offsetLeft - (strip.clientWidth - offsetWidth) / 2
+  }, [current])
   return (
     <li className="flex">
       <a
         {...props}
+        ref={(element) => {
+          tab.current = element
+          if (typeof ref === 'function') return ref(element)
+          if (ref) ref.current = element
+        }}
         className="tab"
         aria-current={current ? 'page' : undefined}
         data-status={undefined}
