@@ -29,6 +29,8 @@ function TabAnchor({ current, ref, ...props }: ComponentProps<'a'> & { current: 
           if (typeof ref === 'function') return ref(element)
           if (ref) ref.current = element
         }}
+        // The page shown is already open: its tab does not open it afresh, its choices dropped.
+        onClick={current ? (event) => event.preventDefault() : props.onClick}
         className="tab"
         aria-current={current ? 'page' : undefined}
         data-status={undefined}

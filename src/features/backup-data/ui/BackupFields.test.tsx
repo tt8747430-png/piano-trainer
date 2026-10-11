@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
-import { createMemoryStorage } from '@/shared/lib'
+import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { BackupFields } from './BackupFields'
 
 const SETTINGS = { state: { theme: 'dark' }, version: 1 }
@@ -50,6 +50,33 @@ describe('BackupFields', () => {
     await user.click(screen.getByRole('button', { name: 'Restore' }))
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual(SETTINGS)
     expect(onRestored).toHaveBeenCalledOnce()
+  })
+
+  it('restores nothing where the browser keeps only memory, and says why', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('blocked', 'SecurityError')
+    })
+    const memory = safeLocalStorage()
+    const onRestored = vi.fn()
+    renderWithSettings(<BackupFields storage={memory} onRestored={onRestored} />)
+    await user.upload(
+      fileInput(),
+      backupFile({ kind: 'piano-trainer-backup', format: 1, saves: { 'pt-settings': SETTINGS } }),
+    )
+    await user.click(await screen.findByRole('button', { name: 'Restore' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('This browser keeps nothing')
+    expect(memory.getItem('pt-settings')).toBeNull()
+    expect(onRestored).not.toHaveBeenCalled()
+  })
+
+  it('reads no file too large to be a backup', async () => {
+    const user = userEvent.setup()
+    renderWithSettings(<BackupFields storage={createMemoryStorage()} onRestored={vi.fn()} />)
+    const huge = new File(['{}'], 'huge.json', { type: 'application/json' })
+    Object.defineProperty(huge, 'size', { value: 60 * 1024 * 1024 })
+    await user.upload(fileInput(), huge)
+    expect(await screen.findByRole('alert')).toHaveTextContent('too large')
   })
 
   it('says so when the file is not a backup, and changes nothing', async () => {

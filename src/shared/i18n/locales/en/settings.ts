@@ -24,6 +24,9 @@ export const settings = {
     otherVersions: 'Some of it was saved by another version of the app: that part starts afresh.',
     noRoom:
       'The backup could not be restored: this device has no room for it. Nothing was changed.',
+    notKept:
+      'This browser keeps nothing once the app is closed (a private window, or site data blocked): a backup restored here would be gone. Nothing was changed.',
+    tooLarge: 'This file is too large to be a Piano Trainer backup.',
     cancel: 'Keep what is here',
     confirm: 'Restore',
   },

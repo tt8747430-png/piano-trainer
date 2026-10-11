@@ -6,6 +6,7 @@ import {
   notFound,
   redirect,
   rootRouteId,
+  type AnyRoute,
   type RouterHistory,
 } from '@tanstack/react-router'
 import {
@@ -500,10 +501,19 @@ export function createAppRouter({
     scrollRestoration: true,
     scrollToTopSelectors: [`[data-scroll-restoration-id="${FULL_SCREEN_SCROLL}"]`],
   })
+  // A screen's view: the params its route reads, as the URL wrote them where the route read them so;
+  // nothing else a link carried, and never a screen not found.
   router.subscribe('onResolved', ({ toLocation }) => {
-    if (router.state.matches.at(-1)?.staticData.remembered) {
-      rememberView(views, toLocation.pathname, toLocation.search)
-    }
+    const match = router.state.matches.at(-1)
+    if (!match?.staticData.remembered || match.status !== 'success') return
+    const route: AnyRoute = router.routesById[match.routeId]
+    const validate: unknown = route.options.validateSearch
+    const read: Record<string, unknown> =
+      typeof validate === 'function' ? validate(toLocation.search) : {}
+    const own = Object.entries(toLocation.search).filter(
+      ([param, value]) => param in read && JSON.stringify(read[param]) === JSON.stringify(value),
+    )
+    rememberView(views, toLocation.pathname, Object.fromEntries(own))
   })
   return router
 }

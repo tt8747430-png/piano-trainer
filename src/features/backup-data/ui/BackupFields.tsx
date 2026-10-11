@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { downloadFile, safeLocalStorage } from '@/shared/lib'
+import { downloadFile, keepsSaves, safeLocalStorage } from '@/shared/lib'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +21,10 @@ import {
   writeBackup,
   type Backup,
 } from '../model/backup'
+import { announceRestore } from '../model/restore-channel'
+
+/** No backup the app writes comes near this: a larger file is not one, and is not read. */
+const LARGEST_BACKUP = 50 * 1024 * 1024
 
 /** Asks the browser to keep the app's storage when it runs short of room; it may say no. */
 const keepStorage = () => void navigator.storage?.persist?.().catch(() => {})
@@ -40,7 +44,7 @@ export function BackupFields({
   const locale = useLocale()
   const file = useRef<HTMLInputElement>(null)
   const [found, setFound] = useState<Backup | null>(null)
-  const [failed, setFailed] = useState<'notBackup' | 'noRoom' | null>(null)
+  const [failed, setFailed] = useState<'notBackup' | 'noRoom' | 'notKept' | 'tooLarge' | null>(null)
 
   const save = () => {
     const now = new Date()
@@ -53,18 +57,30 @@ export function BackupFields({
   }
   const open = async (chosen: File | undefined) => {
     if (!chosen) return
-    const backup = readBackup(await chosen.text())
+    if (chosen.size > LARGEST_BACKUP) {
+      setFailed('tooLarge')
+      setFound(null)
+      return
+    }
+    const backup = readBackup(await chosen.text().catch(() => ''))
     setFailed(backup === null ? 'notBackup' : null)
     setFound(backup)
   }
   const restore = () => {
     if (!found) return
+    // Restored into memory, it would be gone as the app opens again over it.
+    if (!keepsSaves(storage)) {
+      setFailed('notKept')
+      setFound(null)
+      return
+    }
     if (!restoreBackup(storage, found)) {
       setFailed('noRoom')
       setFound(null)
       return
     }
     keepStorage()
+    announceRestore()
     onRestored()
   }
   const made = found?.made ? new Date(found.made) : null

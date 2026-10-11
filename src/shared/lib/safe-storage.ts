@@ -29,6 +29,9 @@ export function safeLocalStorage(): Storage {
   }
 }
 
+/** Whether saves written to `storage` outlast the page: not where the browser left only memory. */
+export const keepsSaves = (storage: Storage): boolean => storage !== memory
+
 export function createMemoryStorage(): Storage {
   const items = new Map<string, string>()
   return {

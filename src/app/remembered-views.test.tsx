@@ -30,6 +30,23 @@ describe('Remembered views', () => {
     )
   })
 
+  it('remembers a screen’s own params as its route reads them, and no screen not found', async () => {
+    const storage = createMemoryStorage()
+    const { viewsStore } = await renderApp('/play/bz5?key=A&junk=x', { storage })
+    await waitFor(() => expect(viewsStore.getState().views['/play/bz5']).toBeDefined())
+    expect(viewsStore.getState().views['/play/bz5']).toEqual({ key: 'A' })
+    const missing = await renderApp('/play/nope?key=A', { storage: createMemoryStorage() })
+    await screen.findAllByRole('heading', { level: 1 })
+    expect(missing.viewsStore.getState().views['/play/nope']).toBeUndefined()
+  })
+
+  it('keeps a screen as it is when its own tab is tapped', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chords?root=D&triad=min')
+    await user.click(await screen.findByRole('link', { name: 'Build' }))
+    expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' })
+  })
+
   it('opens the progression the tool names, played the learner’s way, in the key alone', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()

@@ -27,4 +27,12 @@ describe('rememberView', () => {
     rememberView(views, '/learn/keys', { key: 'G' })
     expect(views.getState()).toBe(before)
   })
+
+  it('moves a screen opened again as it was to the latest, so it is kept the longest', () => {
+    const views = store()
+    rememberView(views, '/learn/keys', { key: 'G' })
+    rememberView(views, '/play/bz5', { key: 'A' })
+    rememberView(views, '/learn/keys', { key: 'G' })
+    expect(Object.keys(views.getState().views)).toEqual(['/play/bz5', '/learn/keys'])
+  })
 })
