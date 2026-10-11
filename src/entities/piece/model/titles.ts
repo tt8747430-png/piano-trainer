@@ -9,11 +9,20 @@ interface EntryTitles {
 /**
  * A title in the learner's language over the printed one, where it has one (spec §8): English
  * shows a Russian song's English title, Russian a hymn's Russian; otherwise the printed title alone.
+ * A study's title is a lesson's heading, its translation all of it: no printed one under it.
  */
 export function entryTitles(
-  entry: { readonly title: string; readonly titleEn?: string; readonly titleRu?: string },
+  entry: {
+    readonly kind?: string
+    readonly title: string
+    readonly titleEn?: string
+    readonly titleRu?: string
+  },
   locale: Locale,
 ): EntryTitles {
   const translated = locale === 'en' ? entry.titleEn : entry.titleRu
-  return translated ? { primary: translated, secondary: entry.title } : { primary: entry.title }
+  if (!translated) return { primary: entry.title }
+  return entry.kind === 'study'
+    ? { primary: translated }
+    : { primary: translated, secondary: entry.title }
 }
