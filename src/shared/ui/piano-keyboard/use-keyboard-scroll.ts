@@ -1,21 +1,32 @@
-import { useEffect, useEffectEvent, useLayoutEffect, useRef, type RefObject } from 'react'
-import { spanOf, useScrollMotion, type KeyGeometry, type KeySize, type KeySpan } from '@/shared/lib'
+import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, type RefObject } from 'react'
+import {
+  spanOf,
+  useScrollMotion,
+  type KeyGeometry,
+  type KeySize,
+  type KeySpan,
+  type ScrollMetrics,
+} from '@/shared/lib'
 import type { KeyRange } from '@/shared/lib/music'
+import { scrollStore } from './use-scroll-view'
 
-/** Scrolls so `span` sits in the middle of the keyboard. */
-function centre(element: HTMLElement, span: KeySpan, behavior: ScrollBehavior) {
-  const width = element.scrollWidth
-  if (width <= element.clientWidth) return
-  const middle = ((span.left + span.right) / 2 / 100) * width
-  element.scrollTo({ left: middle - element.clientWidth / 2, behavior })
+/** Scrolls so `span` sits in the middle of the keyboard, measured as `metrics`. */
+function centre(
+  element: HTMLElement,
+  { clientWidth, scrollWidth }: ScrollMetrics,
+  span: KeySpan,
+  behavior: ScrollBehavior,
+) {
+  if (scrollWidth <= clientWidth) return
+  const middle = ((span.left + span.right) / 2 / 100) * scrollWidth
+  element.scrollTo({ left: middle - clientWidth / 2, behavior })
 }
 
 /** Whether all of `span` is in the keyboard's visible part. */
-function inSight(element: HTMLElement, span: KeySpan): boolean {
-  const width = element.scrollWidth
-  const shown = element.scrollLeft
+function inSight({ scrollLeft, clientWidth, scrollWidth }: ScrollMetrics, span: KeySpan): boolean {
   return (
-    (span.left / 100) * width >= shown && (span.right / 100) * width <= shown + element.clientWidth
+    (span.left / 100) * scrollWidth >= scrollLeft &&
+    (span.right / 100) * scrollWidth <= scrollLeft + clientWidth
   )
 }
 
@@ -33,10 +44,20 @@ export function useKeyboardScroll(
 ) {
   const motion = useScrollMotion()
   const opened = useRef(false)
+  // Where the keyboard is scrolled, kept as it scrolls and resizes: the keys in view change with
+  // every beat, and asking the page then would make it lay out again after each key went down.
+  const metrics = useMemo(() => scrollStore(scroller), [scroller])
+  useEffect(() => metrics.subscribe(() => undefined), [metrics])
   // The keys in view as they are when the range changes: following them is the next effect's.
   const centreOnRange = useEffectEvent((element: HTMLElement) => {
     const target = inView ? spanOf(keys, inView) : span
-    centre(element, target, opened.current ? motion : 'instant')
+    // Measured now: the key size may have just changed the keyboard's width.
+    const now = {
+      scrollLeft: 0,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+    }
+    centre(element, now, target, opened.current ? motion : 'instant')
     opened.current = true
   })
 
@@ -51,6 +72,7 @@ export function useKeyboardScroll(
     const element = scroller.current
     if (!element || viewFrom === undefined || viewTo === undefined) return
     const view = spanOf(keys, { from: viewFrom, to: viewTo })
-    if (!inSight(element, view)) centre(element, view, motion)
-  }, [scroller, keys, viewFrom, viewTo, motion])
+    const seen = metrics.read()
+    if (!inSight(seen, view)) centre(element, seen, view, motion)
+  }, [scroller, metrics, keys, viewFrom, viewTo, motion])
 }
