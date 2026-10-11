@@ -130,7 +130,7 @@ export function AppNav() {
       aria-label={t('nav.label')}
       data-slot="app-nav"
       data-sidebar={sidebar}
-      className="group/nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card pb-safe lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
+      className="group/nav fixed inset-x-0 bottom-0 z-30 print:hidden border-t border-border bg-card pb-safe lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
     >
       <div className="hidden h-20 shrink-0 items-center gap-2 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:justify-center">
         <p

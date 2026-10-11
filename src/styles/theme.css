@@ -142,8 +142,10 @@
     /* No rubber band or pull-to-refresh: the app's pages end where they end. */
     overscroll-behavior: none;
   }
-  html[data-theme='dark'] {
-    color-scheme: dark;
+  @media screen {
+    html[data-theme='dark'] {
+      color-scheme: dark;
+    }
   }
   /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
   :root {
@@ -400,6 +402,11 @@
       'sheet sheet sheet status'
       'sheet sheet sheet transport';
   }
+}
+
+/* Paper: the page's own margins, as a printed chart has. */
+@page {
+  margin: 16mm;
 }
 
 @media (prefers-reduced-motion: reduce) {

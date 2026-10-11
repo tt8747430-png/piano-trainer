@@ -184,55 +184,58 @@
   --key-focus-halo: var(--p-white);
 }
 
-[data-theme='dark'] {
-  --background: var(--p-dusk-950);
-  --foreground: var(--p-dusk-ink);
-  --card: var(--p-dusk-900);
-  --card-foreground: var(--p-dusk-ink);
-  --popover: var(--p-dusk-900);
-  --popover-foreground: var(--p-dusk-ink);
-  /* By night the action is a step lower, so it never glares in a dim hall. */
-  --primary: var(--p-honey-night);
-  --primary-foreground: var(--p-dusk-950);
-  --selected: var(--p-dusk-muted);
-  --selected-foreground: var(--p-dusk-950);
-  --secondary: var(--p-sky-night);
-  --secondary-foreground: var(--p-sky-night-ink);
-  --muted: var(--p-dusk-850);
-  --muted-foreground: var(--p-dusk-muted);
-  /* By night a card is darker than the track: the chosen segment takes the lighter line to stand up. */
-  --chosen: var(--p-dusk-line);
-  --accent: var(--p-dusk-850);
-  --accent-foreground: var(--p-dusk-ink);
-  --link: var(--p-sky-light);
-  --paint-sand: var(--p-dusk-sand);
-  --paint-yellow: var(--p-dusk-yellow);
-  --paint-grass: var(--p-dusk-grass);
-  --paint-sky: var(--p-dusk-sky);
-  --paint-lilac: var(--p-dusk-lilac);
-  --on-paint-sand: var(--p-sand-light);
-  --on-paint-yellow: var(--p-yellow-light);
-  --on-paint-grass: var(--p-grass-light);
-  --on-paint-sky: var(--p-sky-light);
-  --on-paint-lilac: var(--p-lilac-light);
-  --learned: var(--p-grass-light);
-  --learned-foreground: var(--p-dusk-950);
-  --attention: var(--p-ochre-light);
-  --destructive: var(--p-crimson-light);
-  --destructive-foreground: var(--p-dusk-950);
-  --border: var(--p-dusk-line);
-  --input: var(--p-dusk-control);
-  --hairline: var(--p-dusk-800);
-  --ring: var(--p-sky-light);
-  --thumb: var(--p-dusk-ink);
+/* Dark on a screen only: paper is printed in the light theme's ink, its backgrounds left off. */
+@media screen {
+  [data-theme='dark'] {
+    --background: var(--p-dusk-950);
+    --foreground: var(--p-dusk-ink);
+    --card: var(--p-dusk-900);
+    --card-foreground: var(--p-dusk-ink);
+    --popover: var(--p-dusk-900);
+    --popover-foreground: var(--p-dusk-ink);
+    /* By night the action is a step lower, so it never glares in a dim hall. */
+    --primary: var(--p-honey-night);
+    --primary-foreground: var(--p-dusk-950);
+    --selected: var(--p-dusk-muted);
+    --selected-foreground: var(--p-dusk-950);
+    --secondary: var(--p-sky-night);
+    --secondary-foreground: var(--p-sky-night-ink);
+    --muted: var(--p-dusk-850);
+    --muted-foreground: var(--p-dusk-muted);
+    /* By night a card is darker than the track: the chosen segment takes the lighter line to stand up. */
+    --chosen: var(--p-dusk-line);
+    --accent: var(--p-dusk-850);
+    --accent-foreground: var(--p-dusk-ink);
+    --link: var(--p-sky-light);
+    --paint-sand: var(--p-dusk-sand);
+    --paint-yellow: var(--p-dusk-yellow);
+    --paint-grass: var(--p-dusk-grass);
+    --paint-sky: var(--p-dusk-sky);
+    --paint-lilac: var(--p-dusk-lilac);
+    --on-paint-sand: var(--p-sand-light);
+    --on-paint-yellow: var(--p-yellow-light);
+    --on-paint-grass: var(--p-grass-light);
+    --on-paint-sky: var(--p-sky-light);
+    --on-paint-lilac: var(--p-lilac-light);
+    --learned: var(--p-grass-light);
+    --learned-foreground: var(--p-dusk-950);
+    --attention: var(--p-ochre-light);
+    --destructive: var(--p-crimson-light);
+    --destructive-foreground: var(--p-dusk-950);
+    --border: var(--p-dusk-line);
+    --input: var(--p-dusk-control);
+    --hairline: var(--p-dusk-800);
+    --ring: var(--p-sky-light);
+    --thumb: var(--p-dusk-ink);
 
-  /* By night the keys keep their paper, a shade softer; the marks do not change. */
-  --key-white: var(--p-dusk-key);
-  --key-black: var(--p-dusk-black-key);
-  --key-bed: var(--p-dusk-bed);
-  --key-rail: var(--p-dusk-rail);
-  --on-key-rail: var(--p-dusk-ink);
-  --mark-wash: 50%;
+    /* By night the keys keep their paper, a shade softer; the marks do not change. */
+    --key-white: var(--p-dusk-key);
+    --key-black: var(--p-dusk-black-key);
+    --key-bed: var(--p-dusk-bed);
+    --key-rail: var(--p-dusk-rail);
+    --on-key-rail: var(--p-dusk-ink);
+    --mark-wash: 50%;
+  }
 }
 
 /*
@@ -248,12 +251,14 @@
     --key-bed: var(--p-control);
     --mark-wash: 55%;
   }
-  [data-theme='dark'] {
-    --muted-foreground: var(--p-dusk-ink);
-    --border: var(--p-dusk-control);
-    --input: var(--p-dusk-muted);
-    --hairline: var(--p-dusk-line);
-    --key-bed: var(--p-dusk-control);
-    --mark-wash: 62%;
+  @media screen {
+    [data-theme='dark'] {
+      --muted-foreground: var(--p-dusk-ink);
+      --border: var(--p-dusk-control);
+      --input: var(--p-dusk-muted);
+      --hairline: var(--p-dusk-line);
+      --key-bed: var(--p-dusk-control);
+      --mark-wash: 62%;
+    }
   }
 }

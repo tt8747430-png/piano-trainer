@@ -3,6 +3,7 @@ export const piece = {
   chords: 'Chords',
   checkChords: 'Check these chords',
   chart: 'Chart',
+  print: 'Print the chart',
   progression: 'Progression',
   practise: 'Practise',
   edit: 'Edit',

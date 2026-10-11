@@ -56,19 +56,21 @@ export function ScreenHeader({
             event.currentTarget.contains(event.relatedTarget),
         )
       }
-      className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
+      className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:px-0 duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
       {/* The title takes the line beside the actions, wrapping between its words; only where its
           longest word (Последовательности) does not fit beside them do the actions go under it. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4">
-        {back}
+        {back ? <div className="print:hidden">{back}</div> : null}
         <h1
           {...heading}
           className="min-w-[min(100%,min-content)] flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl"
         >
           {title}
         </h1>
-        {actions ? <div className="ms-auto flex shrink-0 items-center gap-2">{actions}</div> : null}
+        {actions ? (
+          <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">{actions}</div>
+        ) : null}
       </div>
       {tabs}
     </header>

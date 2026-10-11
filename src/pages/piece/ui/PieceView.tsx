@@ -1,6 +1,6 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { Link } from '@tanstack/react-router'
-import { PencilLine, Play } from 'lucide-react'
+import { PencilLine, Play, Printer } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/path'
@@ -22,6 +22,7 @@ import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
 import { ButtonLink, Pinned } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceChords } from '@/widgets/piece-chords'
 import { PieceAbout } from './PieceAbout'
@@ -57,7 +58,7 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader entry={piece} />
       <PieceFacts entry={piece} />
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 print:hidden">
         <ButtonLink
           size="pill"
           className="min-w-0 flex-1 sm:max-w-xs"
@@ -79,12 +80,21 @@ export function PieceView({ piece }: { piece: Piece }) {
           </ButtonLink>
         )}
       </div>
-      <Pinned>
+      <Pinned className="print:hidden">
         <LiveKeyboard range={playerRange(performance)} spotlight />
       </Pinned>
-      <PieceChords piece={piece} performance={performance} />
+      <div className="print:hidden">
+        <PieceChords piece={piece} performance={performance} />
+      </div>
       <section className="flex flex-col gap-3">
-        <h2 className="text-2xl">{t('chart')}</h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-2xl">{t('chart')}</h2>
+          {/* An installed app has no browser menu to print from. */}
+          <Button variant="outline" className="print:hidden" onClick={() => window.print()}>
+            <Printer aria-hidden data-icon="inline-start" />
+            {t('print')}
+          </Button>
+        </div>
         <ChordChart
           performance={performance}
           headings={headings}
@@ -94,14 +104,14 @@ export function PieceView({ piece }: { piece: Piece }) {
       </section>
       <PieceAbout entry={piece} />
       {own ? (
-        <div className="flex flex-wrap items-start gap-3">
+        <div className="flex flex-wrap items-start gap-3 print:hidden">
           {isDegreePiece(piece) ? null : (
             <ShareSongButton song={{ title, music: musicOf(piece) }} />
           )}
           <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
         </div>
       ) : hasVersion ? (
-        <div className="flex">
+        <div className="flex print:hidden">
           <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
         </div>
       ) : null}

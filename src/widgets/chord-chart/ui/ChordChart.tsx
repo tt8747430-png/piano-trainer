@@ -53,7 +53,7 @@ export function ChordChart({
           {lines.map((bars, line) => (
             <div
               key={line}
-              className="grid border-r border-input"
+              className="grid border-r border-input break-inside-avoid"
               style={{
                 gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
                 width: `${(bars.length / longest) * 100}%`,

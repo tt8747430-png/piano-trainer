@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           id="content"
           tabIndex={-1}
           data-sidebar={sidebar}
-          className="px-gutter pt-safe pb-28 outline-none lg:pb-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
+          className="px-gutter pt-safe pb-28 outline-none print:p-0 lg:pb-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
         >
           {children}
         </main>

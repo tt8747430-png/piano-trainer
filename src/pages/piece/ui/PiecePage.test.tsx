@@ -1,6 +1,6 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { readSongLink } from '@/features/share-song'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
@@ -14,6 +14,13 @@ describe('Piece', () => {
     ).toBeInTheDocument()
     expect(screen.getByText('Мир, душа, храни')).toBeInTheDocument()
     expect(screen.getByText('«Боже, спасибо» · No. 5 · p. 16')).toBeInTheDocument()
+  })
+
+  it('prints the chart, where an installed app has no browser menu to print from', async () => {
+    const print = vi.spyOn(window, 'print').mockImplementation(() => undefined)
+    await renderApp('/songs/bz5')
+    await userEvent.setup().click(await screen.findByRole('button', { name: 'Print the chart' }))
+    expect(print).toHaveBeenCalledOnce()
   })
 
   it('lists the chords the song plays, each by its own name, to tap and hear', async () => {

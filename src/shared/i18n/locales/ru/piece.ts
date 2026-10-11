@@ -4,6 +4,7 @@ export const piece: LocaleResources['piece'] = {
   chords: 'Аккорды',
   checkChords: 'Проверить эти аккорды',
   chart: 'По тактам',
+  print: 'Распечатать',
   progression: 'Последовательность',
   practise: 'Играть',
   edit: 'Изменить',
