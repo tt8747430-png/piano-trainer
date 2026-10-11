@@ -5,6 +5,7 @@ import { createListeners } from './listeners'
 import { parseMidiMessage } from './parse-message'
 import {
   ANY_KEYBOARD,
+  DEVICE_NAME_MAX,
   type MidiPort,
   type MidiStatus,
   type NoteEvent,
@@ -24,7 +25,8 @@ interface Holding {
   readonly pedals: Set<PedalKind>
 }
 
-const nameOf = (port: MIDIPort) => port.name ?? port.id
+/** A port's name (its id where it has none, or an empty one), cut to what a setting keeps. */
+const nameOf = (port: MIDIPort) => (port.name || port.id).slice(0, DEVICE_NAME_MAX)
 
 const NOTE_ON = 0x90
 const NOTE_OFF = 0x80

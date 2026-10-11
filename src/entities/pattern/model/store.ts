@@ -73,7 +73,7 @@ function sanitize(persisted: unknown): PatternsState {
     isPatternId(value) || (isOwnPatternId(value) && seen.has(value))
   const past = Math.max(0, ...own.map((pattern) => ownNumber(pattern.id))) + 1
   const next =
-    typeof saved.nextOwn === 'number' && Number.isInteger(saved.nextOwn) ? saved.nextOwn : 1
+    typeof saved.nextOwn === 'number' && Number.isSafeInteger(saved.nextOwn) ? saved.nextOwn : 1
   return {
     favourites: listOf(saved.favourites, isThere),
     hidden: listOf(saved.hidden, isPatternId),

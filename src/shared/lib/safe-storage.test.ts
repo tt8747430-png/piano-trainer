@@ -1,5 +1,11 @@
-import { describe, expect, it, vi } from 'vitest'
-import { createMemoryStorage, onFailedWrite, safeLocalStorage } from './safe-storage'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { createMemoryStorage } from './safe-storage'
+
+// The storage is chosen once a page: each test loads the module afresh, as a page would.
+const load = () => import('./safe-storage')
+beforeEach(() => {
+  vi.resetModules()
+})
 
 const blockWrites = () =>
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
@@ -7,28 +13,43 @@ const blockWrites = () =>
   })
 
 describe('safeLocalStorage', () => {
-  it('reads and writes the real localStorage when the browser allows it', () => {
+  it('reads and writes the real localStorage when the browser allows it', async () => {
+    const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()
     storage.setItem('k', 'v')
     expect(localStorage.getItem('k')).toBe('v')
     expect(storage.getItem('k')).toBe('v')
   })
 
-  it('falls back to memory when localStorage cannot be written at all', () => {
+  it('falls back to memory when localStorage cannot be written at all', async () => {
+    const { safeLocalStorage, keepsSaves } = await load()
     blockWrites()
     const storage = safeLocalStorage()
     storage.setItem('k', 'v')
     expect(storage.getItem('k')).toBe('v')
+    expect(keepsSaves(storage)).toBe(false)
   })
 
-  it('loses a write instead of throwing when storage starts failing later', () => {
+  it('keeps reading a full localStorage, its saves all there, chosen once for every caller', async () => {
+    const { safeLocalStorage, keepsSaves } = await load()
+    localStorage.setItem('pt-songs', 'kept')
+    blockWrites()
+    const storage = safeLocalStorage()
+    expect(storage.getItem('pt-songs')).toBe('kept')
+    expect(keepsSaves(storage)).toBe(true)
+    expect(safeLocalStorage()).toBe(storage)
+  })
+
+  it('loses a write instead of throwing when storage starts failing later', async () => {
+    const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()
     blockWrites()
     expect(() => storage.setItem('k', 'v')).not.toThrow()
     expect(storage.getItem('k')).toBeNull()
   })
 
-  it('says so to who listens when a write is lost, until they stop listening', () => {
+  it('says so to who listens when a write is lost, until they stop listening', async () => {
+    const { safeLocalStorage, onFailedWrite } = await load()
     const storage = safeLocalStorage()
     const heard = vi.fn()
     const stop = onFailedWrite(heard)
@@ -42,7 +63,8 @@ describe('safeLocalStorage', () => {
     expect(heard).toHaveBeenCalledOnce()
   })
 
-  it('passes every Storage operation through to localStorage while it works', () => {
+  it('passes every Storage operation through to localStorage while it works', async () => {
+    const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()
     storage.setItem('a', '1')
     storage.setItem('b', '2')
@@ -54,7 +76,8 @@ describe('safeLocalStorage', () => {
     expect(localStorage.length).toBe(0)
   })
 
-  it('swallows a failing key, remove or clear instead of throwing', () => {
+  it('swallows a failing key, remove or clear instead of throwing', async () => {
+    const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()
     const denied = () => {
       throw new DOMException('Access denied', 'SecurityError')
@@ -67,7 +90,8 @@ describe('safeLocalStorage', () => {
     expect(() => storage.clear()).not.toThrow()
   })
 
-  it('answers null instead of throwing when a read fails', () => {
+  it('answers null instead of throwing when a read fails', async () => {
+    const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new DOMException('Access denied', 'SecurityError')

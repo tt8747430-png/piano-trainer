@@ -171,6 +171,6 @@ function sanitize(persisted: unknown, current: PiecesState): PiecesState {
   })
   const past = Math.max(0, ...songs.map((song) => ownSongNumber(song.id))) + 1
   const next =
-    typeof saved.nextSong === 'number' && Number.isInteger(saved.nextSong) ? saved.nextSong : 1
+    typeof saved.nextSong === 'number' && Number.isSafeInteger(saved.nextSong) ? saved.nextSong : 1
   return { versions, songs, nextSong: Math.max(next, past, 1) }
 }

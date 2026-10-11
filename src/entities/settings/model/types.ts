@@ -113,8 +113,8 @@ export const DEFAULT_MIDI: MidiSettings = {
   pedal: 'normal',
 }
 
-/** The longest keyboard name kept. */
-export const DEVICE_NAME_MAX = 100
+/** The longest keyboard name kept: the longest the MIDI port names one. */
+export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
 

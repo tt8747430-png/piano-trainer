@@ -59,6 +59,13 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody · /)
   })
 
+  it('says the song is gone once another tab deletes it, keeping no take for it', async () => {
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('status')
+    act(() => piecesStore.setState({ songs: [] }))
+    expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
+  })
+
   it('opens the song’s key, tempo and meter from the clef and signatures at a line’s head', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })

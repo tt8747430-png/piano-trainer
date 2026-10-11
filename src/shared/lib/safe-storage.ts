@@ -12,21 +12,38 @@ export function onFailedWrite(listener: () => void): () => void {
   return () => void failedWrites.delete(listener)
 }
 
-/**
- * localStorage when this browser lets us write to it, otherwise memory (private mode, blocked site
- * data), the same memory for every caller, so a backup reads what the stores keep. Either way nothing
- * the app does with it can throw: settings then last for the session.
- */
-export function safeLocalStorage(): Storage {
+/** The storage chosen for this page, once: every store and the backup read the same one. */
+let chosen: Storage | null = null
+
+/** Whether a write failed because the device is full of what it already keeps, not barred. */
+const isFull = (error: unknown, storage: Storage): boolean =>
+  error instanceof DOMException && error.name === 'QuotaExceededError' && storage.length > 0
+
+function chooseStorage(): Storage {
+  let storage: Storage
   try {
-    const storage = window.localStorage
+    storage = window.localStorage
+  } catch {
+    return (memory ??= createMemoryStorage())
+  }
+  try {
     storage.setItem(PROBE_KEY, PROBE_KEY)
     storage.removeItem(PROBE_KEY)
     return guarded(storage)
-  } catch {
-    memory ??= createMemoryStorage()
-    return memory
+  } catch (error) {
+    // A full device still holds every save: they are read, and a write that fails says so.
+    return isFull(error, storage) ? guarded(storage) : (memory ??= createMemoryStorage())
   }
+}
+
+/**
+ * localStorage when this browser lets us keep saves in it (a full one too: what it holds is read),
+ * otherwise memory (private mode, blocked site data), chosen once and the same for every caller, so
+ * a backup reads what the stores keep. Either way nothing the app does with it can throw: settings
+ * then last for the session.
+ */
+export function safeLocalStorage(): Storage {
+  return (chosen ??= chooseStorage())
 }
 
 /** Whether saves written to `storage` outlast the page: not where the browser left only memory. */

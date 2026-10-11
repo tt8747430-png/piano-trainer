@@ -169,6 +169,6 @@ function sanitize(persisted: unknown): TakesState {
   })
   const past = Math.max(0, ...takes.map((take) => takeNumber(take.id))) + 1
   const next =
-    typeof saved.nextTake === 'number' && Number.isInteger(saved.nextTake) ? saved.nextTake : 1
+    typeof saved.nextTake === 'number' && Number.isSafeInteger(saved.nextTake) ? saved.nextTake : 1
   return { takes, nextTake: Math.max(next, past, 1) }
 }

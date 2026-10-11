@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
-import type { PieceId } from '@/entities/piece'
+import { isOwnSongId, selectOwnSong, usePiecesStoreApi, type PieceId } from '@/entities/piece'
 import { useSettingsStoreApi } from '@/entities/settings'
 import {
   midiFile,
@@ -83,6 +83,7 @@ const gridBars = (draft: Draft): GridBar[] =>
  */
 export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: string): EditorTakes {
   const takes = useTakesStoreApi()
+  const pieces = usePiecesStoreApi()
   const settings = useSettingsStoreApi()
   const { record: open } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const changeView = useViewChange<EditSearch>()
@@ -96,7 +97,9 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
 
   const recorder = useRecorder((played, plan, ending) => {
     const nothingPlayed = played.notes.length === 0
-    if (!nothingPlayed) {
+    // An own song deleted in another tab keeps no takes: one saved for it would be no one's.
+    const songGone = isOwnSongId(pieceId) && !selectOwnSong(pieces.getState(), pieceId)
+    if (!nothingPlayed && !songGone) {
       saveTake(takes, {
         pieceId,
         made: Date.now(),

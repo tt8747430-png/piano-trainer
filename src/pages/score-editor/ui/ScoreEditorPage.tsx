@@ -1,14 +1,28 @@
-import { useParams } from '@tanstack/react-router'
+import { Link, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
-import { usePiecesStoreApi } from '@/entities/piece'
+import { useTranslation } from 'react-i18next'
+import { selectOwnSong, usePieces, usePiecesStoreApi } from '@/entities/piece'
+import { ButtonLink, NotFound } from '@/shared/ui'
 import { editorTarget } from '../model/editor-target'
 import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
+  const { t } = useTranslation('common')
   // The visit opens on what the store holds now; the editor saves into it from there.
   const pieces = usePiecesStoreApi()
   const [target] = useState(() => editorTarget(pieces.getState(), id))
-  return target ? <ScoreEditor target={target} /> : null
+  // An own song deleted in another tab: nothing is left to write into.
+  const gone = usePieces(
+    (state) => target?.kind === 'song' && selectOwnSong(state, target.id) === undefined,
+  )
+  if (!target) return null
+  if (gone)
+    return (
+      <NotFound>
+        <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
+      </NotFound>
+    )
+  return <ScoreEditor target={target} />
 }
 
 /** The score editor over the route's piece: a catalog song's, study's or listing's version, or an own song. */
