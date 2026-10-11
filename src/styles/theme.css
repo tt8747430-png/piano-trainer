@@ -361,6 +361,10 @@
 @utility pl-rail {
   padding-left: calc(--spacing(20) + env(safe-area-inset-left) + var(--gutter));
 }
+/* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
+@utility min-w-longest-word {
+  min-width: min(100%, min-content);
+}
 @utility bottom-safe {
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }

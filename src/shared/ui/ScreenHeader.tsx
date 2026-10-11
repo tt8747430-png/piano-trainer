@@ -64,7 +64,7 @@ export function ScreenHeader({
         {back ? <div className="print:hidden">{back}</div> : null}
         <h1
           {...heading}
-          className="min-w-[min(100%,min-content)] flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl landscape-phone:text-2xl"
+          className="min-w-longest-word flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl landscape-phone:text-2xl"
         >
           {title}
         </h1>
