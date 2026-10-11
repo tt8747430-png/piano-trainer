@@ -7,8 +7,10 @@ import {
   type BuiltChord,
   type ChordParts,
 } from './chord-parts'
+import type { Key } from './key'
 import { note, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
+import { spellInKey } from './scale'
 import type { ChordRole, Tone } from './tone'
 
 /** The tones a hand may leave out of a chord, in the order they are said. */
@@ -111,12 +113,13 @@ const MOST_INVERSIONS = 3
 
 /**
  * The chords three or more keys make, best first: every chord the builder makes, on each pitch class
- * played as its root, the root spelled by the builder's one rule. Root position first, then a ♭5 read
+ * played as its root, the root spelled by the builder's one rule (or as `key` spells it, where the
+ * notes are written in a key). Root position first, then a ♭5 read
  * as a #11 from a 9th up, then a stacked chord before a 7th chord with an added tone, then the fewest
  * tones left out, then one the table names, then fewer notes;
  * each symbol once.
  */
-export function nameChords(keys: readonly Midi[]): FoundChord[] {
+export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
   const lowest = Math.min(...keys)
   const pcs = [...new Set(keys.map((key) => pitchClass(key)))]
   if (pcs.length < 3) return []
@@ -124,7 +127,8 @@ export function nameChords(keys: readonly Midi[]): FoundChord[] {
   const found = pcs.flatMap((rootPc: PitchClass) => {
     const shapes = SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? []
     return shapes.flatMap((shape) => {
-      const chord = buildChord(builtRootSpelling(rootPc, shape.parts), shape.parts)
+      const root = key ? spellInKey(rootPc, key) : builtRootSpelling(rootPc, shape.parts)
+      const chord = buildChord(root, shape.parts)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]
       const bass = rootPc === bassPc || !bassTone ? undefined : bassTone.note

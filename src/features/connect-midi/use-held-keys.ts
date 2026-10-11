@@ -13,7 +13,7 @@ export function useHeldKeys(): ReadonlySet<Midi> {
   const { keys, press, release } = usePresses<Midi>()
   useEffect(() => {
     if (!midi) return
-    let sustain = false
+    let sustain = midi.pedalsDown().has('sustain')
     /** The keys let go under the sustain: down until it comes up. */
     const sustained = new Set<Midi>()
     const stopNotes = midi.onNote((event) => {

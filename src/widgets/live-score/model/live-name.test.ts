@@ -27,6 +27,13 @@ describe('liveName', () => {
     expect(found.kind === 'chord' && found.found.symbol).toBe('C')
   })
 
+  it('spells a chord’s root as the key writes it, as the staff does', () => {
+    const inGFlat = named([66, 70, 73], { tonic: note('G', -1), minor: false })
+    expect(inGFlat.kind === 'chord' && inGFlat.found.symbol).toBe('G♭')
+    const inE = named([68, 72, 75], { tonic: note('E'), minor: false })
+    expect(inE.kind === 'chord' && inE.found.symbol).toBe('G#')
+  })
+
   it('names nothing the chord finder cannot', () => {
     expect(named([60, 61, 62])).toEqual({ kind: 'none' })
     expect(named([])).toEqual({ kind: 'none' })

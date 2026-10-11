@@ -183,7 +183,11 @@ export function PianoKeyboard({
                 look={look}
                 chosen={states.selected?.has(key.midi)}
                 tabStop={key.midi === tabStop}
-                onPointerPress={pointers.pointerDown}
+                onPointerPress={(at, event) => {
+                  // A key clicked takes no focus, yet Tab comes back to it.
+                  setTabStop(at)
+                  pointers.pointerDown(at, event)
+                }}
                 onClickPress={pointers.click}
                 onFocusKey={setTabStop}
               />

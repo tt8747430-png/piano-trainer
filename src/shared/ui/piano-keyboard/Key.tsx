@@ -86,6 +86,9 @@ function KeyButton({
       aria-pressed={chosen}
       tabIndex={tabStop ? 0 : -1}
       onPointerDown={(event) => onPointerPress(geometry.midi, event)}
+      // A key clicked takes no focus, so Space after it is the sustain pedal's, not a press of the
+      // key; a key reached by Tab is pressed by Space and Enter as any button.
+      onMouseDown={(event) => event.preventDefault()}
       onClick={(event) => onClickPress(geometry.midi, event.detail)}
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(

@@ -59,7 +59,9 @@ describe('PianoKeyboard', () => {
     const user = userEvent.setup()
     renderKeyboard()
     await user.click(screen.getByRole('button', { name: 'G4' }))
-    await user.tab()
+    // A click takes no focus (Space after it is the pedal's), yet Tab comes back to the key clicked.
+    expect(screen.getByRole('button', { name: 'G4' })).not.toHaveFocus()
+    screen.getByRole('button', { name: 'After' }).focus()
     await user.tab({ shift: true })
     expect(screen.getByRole('button', { name: 'G4' })).toHaveFocus()
   })

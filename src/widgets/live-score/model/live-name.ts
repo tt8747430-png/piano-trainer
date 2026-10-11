@@ -33,7 +33,8 @@ const COMPOUND: ReadonlyMap<number, ReferenceInterval> = new Map([
 /**
  * What a chord played is (spec 2026-10-09 §5.1): one note (in octaves too) its note in `key`; two
  * notes their interval from the lowest key up, compound past the octave where a chord symbol names
- * one (m9 … M13), else simple; three or more the chord finder's first name, else nothing.
+ * one (m9 … M13), else simple; three or more the chord finder's first name, spelled in `key` as the
+ * staff writes it, else nothing.
  */
 export function liveName(keys: readonly Midi[], key: Key): LiveName {
   const lowest = keys.length === 0 ? null : Math.min(...keys)
@@ -45,6 +46,6 @@ export function liveName(keys: readonly Midi[], key: Key): LiveName {
     const span = upper - lowest
     return { kind: 'interval', interval: COMPOUND.get(span) ?? spanInterval(span) }
   }
-  const [found] = nameChords(keys)
+  const [found] = nameChords(keys, key)
   return found ? { kind: 'chord', found } : NONE
 }
