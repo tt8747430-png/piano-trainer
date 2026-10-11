@@ -22,7 +22,8 @@ export function PieceAbout({ entry }: { entry: Entry }) {
       {entry.source ? <SourceLine source={entry.source} /> : null}
       <ButtonLink
         variant="link"
-        className="self-start px-0"
+        // A link is no use on paper.
+        className="self-start px-0 print:hidden"
         render={
           <Link
             to="/practice/scales"
