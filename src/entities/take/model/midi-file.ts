@@ -60,9 +60,12 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
     }),
     ...take.pedals.flatMap((press) => {
       const controller = PEDAL_CONTROLLER[press.pedal]
+      // As a key: a pedal let go within its own tick comes up on the next, never before it went down.
+      const down = tickAt(press.down)
+      const up = Math.max(tickAt(press.up), down + 1)
       return [
-        { tick: tickAt(press.down), order: 2, bytes: [CONTROL_CHANGE, controller, 127] },
-        { tick: tickAt(press.up), order: 1, bytes: [CONTROL_CHANGE, controller, 0] },
+        { tick: down, order: 2, bytes: [CONTROL_CHANGE, controller, 127] },
+        { tick: up, order: 1, bytes: [CONTROL_CHANGE, controller, 0] },
       ]
     }),
   ].sort((a, b) => a.tick - b.tick || a.order - b.order)
