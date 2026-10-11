@@ -23,6 +23,9 @@ hand off an inversion whose lowest key was the bass's; the page listed one walk.
 - **It is written one way:** lower case for the table's twelve chords with a minor 3rd, upper case with the table's
   suffix for the rest. `IIm7` typed is `ii7` under its chord. An augmented dominant is `III7#5`; `III+7` is still
   read.
+- **A flat counts from the major scale in either mode** (amended 2026-10-11): a minor key's other degrees count from
+  natural minor, but pop writes its ♭III ♭VI ♭VII against the major scale, so A minor's `♭VI` is F, as `VI` is,
+  never F♭.
 - **A chord typed is its numeral whatever its quality** (`numeralOf`): `Dm7 G7 C6` is `ii7 V7 I6`.
 - **A chord that grows takes the 9th the key has.** A triad that is not the key's own grows to its 7th chord (a major
   chord a dominant, a minor one a minor 7th), then to the 9th the key's scale has over it where the chord takes that

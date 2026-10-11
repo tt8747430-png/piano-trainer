@@ -173,12 +173,15 @@ const withOwnNinth = (quality: ChordQuality): ChordQuality => (quality === 'hd' 
  * only where it is available), and any other grows as it is: a major chord to a dominant, a minor one
  * to a minor 7th, then to the 9th the key has over it where the chord takes it (a minor key's V to
  * `7♭9`); a half-diminished chord takes its natural 9th (a minor key's ii to `m9♭5`). A major key
- * counts from the major scale, a minor key from natural minor.
+ * counts from the major scale, a minor key from natural minor, a flat in either from the major scale
+ * (A minor's ♭VI is F, not F♭).
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = keyScale(key)
   const scale = spellScale(key.tonic, kind)
-  const tone = scale[numeral.degree]
+  // A flat counts from the major scale in either mode, as pop writes a minor key's ♭III ♭VI ♭VII.
+  const from = key.minor && numeral.shift < 0 ? spellScale(key.tonic, 'major') : scale
+  const tone = from[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const root = plainRoot(
     numeral.shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: numeral.shift }),

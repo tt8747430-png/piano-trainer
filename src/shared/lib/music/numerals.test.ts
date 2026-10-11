@@ -113,6 +113,12 @@ describe('numeralChord', () => {
     expect(chords('ii', A_MINOR, 'ninths')).toEqual(['Bm7'])
   })
 
+  it('counts a flat from the major scale in a minor key, as pop writes ♭VI and ♭VII', () => {
+    expect(chords('i ♭VI ♭VII i', A_MINOR, 'triads')).toEqual(['Am', 'F', 'G', 'Am'])
+    expect(chords('i VI VII i', A_MINOR, 'triads')).toEqual(['Am', 'F', 'G', 'Am'])
+    expect(chords('♭II7 i', A_MINOR, 'triads')).toEqual(['B♭7', 'Am'])
+  })
+
   it('keeps what is written', () => {
     expect(chords('I7 IV7 V7', C, 'triads')).toEqual(['C7', 'F7', 'G7'])
     expect(chords('IMaj7 vii°7', C, 'triads')).toEqual(['CMaj7', 'B°7'])

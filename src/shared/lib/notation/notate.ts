@@ -23,9 +23,14 @@ import type {
 } from './types'
 import { separateVoices, type BarChord, type BarNote, type VoiceChords } from './voices'
 
+/**
+ * A bar as its meter counts it: from its first beat, a full bar's ticks long. A pickup's bar starts
+ * before the music, which starts `from` ticks in, so its values fall on the meter's beats.
+ */
 interface Bar {
   readonly start: Tick
   readonly ticks: Tick
+  readonly from: Tick
   readonly meter: Meter
   readonly key: Key
 }
@@ -89,7 +94,7 @@ function rests(span: Span, bar: Bar, grid: VoiceGrid, hidden: boolean): RestEven
 function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
   const grid = voiceGrid(voice.chords, bar.meter)
   const events: (DraftEvent | RestEvent)[] = []
-  let at = 0
+  let at = bar.from
   for (const chord of voice.chords) {
     const start = grid.place(chord.start)
     const end = grid.place(chord.end)
@@ -162,7 +167,12 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
     voices.length === 0
       ? [
           {
-            events: rests({ start: 0, end: bar.ticks }, bar, voiceGrid([], bar.meter), false),
+            events: rests(
+              { start: bar.from, end: bar.ticks },
+              bar,
+              voiceGrid([], bar.meter),
+              false,
+            ),
             stem: 'auto',
           },
         ]
@@ -173,7 +183,7 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
 /** A staff with nothing to write: hidden rests that hold the bar's time. */
 const blankStaff = (bar: Bar): ScoreVoice[] => [
   {
-    events: rests({ start: 0, end: bar.ticks }, bar, voiceGrid([], bar.meter), true),
+    events: rests({ start: bar.from, end: bar.ticks }, bar, voiceGrid([], bar.meter), true),
     stem: 'auto',
   },
 ]
@@ -184,10 +194,14 @@ const blankStaff = (bar: Bar): ScoreVoice[] => [
  */
 export function notate(music: TimedMusic): Score {
   const measures = music.bars.map((written, index): Measure => {
-    const pickup = beatsBefore(music.bars, index, music.meter) > 0
+    const before = beatsBefore(music.bars, index, music.meter)
+    const pickup = before > 0
+    const from = beatsToTicks(before)
+    const ticks = beatsToTicks(written.beats)
     const bar: Bar = {
-      start: written.startTick,
-      ticks: beatsToTicks(written.beats),
+      start: written.startTick - from,
+      ticks: from + ticks,
+      from,
       meter: music.meter,
       key: music.key,
     }
@@ -195,12 +209,15 @@ export function notate(music: TimedMusic): Score {
     const staff = (id: StaffId) =>
       written.blank?.includes(id) ? blankStaff(bar) : writeStaff(chords[id], bar)
     return {
-      startTick: bar.start,
-      ticks: bar.ticks,
+      startTick: written.startTick,
+      ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : written.beats, music.meter),
       staves: { treble: staff('treble'), bass: staff('bass') },
       chords: music.chords
-        .filter((chord) => chord.startTick >= bar.start && chord.startTick < bar.start + bar.ticks)
+        .filter(
+          (chord) =>
+            chord.startTick >= written.startTick && chord.startTick < written.startTick + ticks,
+        )
         .map((chord) => ({ tick: chord.startTick, symbol: chord.symbol })),
     }
   })

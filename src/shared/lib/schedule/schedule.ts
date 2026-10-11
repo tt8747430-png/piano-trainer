@@ -1,6 +1,13 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
-import { barClicks, checkedTempo, countInBeats, secondsFor } from './grid'
+import {
+  barClicks,
+  barGrid,
+  checkedTempo,
+  countInBeats,
+  secondsFor,
+  type BarsInMeter,
+} from './grid'
 import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -76,11 +83,27 @@ const LEGATO = 0.95
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
+/**
+ * Where a tick sounds swung, on its bar's beats: a pickup's beats are the full bar's it ends, and a
+ * short bar's start from its own first beat (`barGrid`), so every beat after either stays a beat.
+ */
+function swungOnGrid(music: BarsInMeter, tick: Tick): number {
+  const index = Math.max(
+    0,
+    music.bars.findLastIndex((bar) => bar.startTick <= tick),
+  )
+  const origin = barGrid(music, index).start
+  return origin + swingTick(tick - origin)
+}
+
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  const place = options.swing && !isCompound(performance.meter) ? swingTick : (tick: Tick) => tick
+  const place =
+    options.swing && !isCompound(performance.meter)
+      ? (tick: Tick) => swungOnGrid(performance, tick)
+      : (tick: Tick) => tick
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)

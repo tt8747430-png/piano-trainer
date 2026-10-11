@@ -302,6 +302,38 @@ describe('schedule: a passage and swing', () => {
     expect(rh(true).map((at) => Number(at.toFixed(4)))).toEqual([0, 0.6667, 1, 1.6667])
   })
 
+  it('swings on the bar’s beats after a pickup, not on beats counted from the pickup', () => {
+    const eighths = arrange(chart('C'), {
+      tonic: note('C'),
+      pattern: {
+        id: 'eighths',
+        rh: { kind: 'events', events: parseFigure('0/2 C,2/2 C,4/2 C,6/2 C') },
+        lh: { kind: 'events', events: parseFigure('0/16 L1') },
+      },
+    })
+    // The same bar after an 8th's pickup: every note 6 ticks on, its beats on 6, 18, …
+    const [bar] = eighths.bars
+    if (!bar) throw new Error('no bar')
+    const afterPickup: Performance = {
+      ...eighths,
+      totalTicks: eighths.totalTicks + 6,
+      bars: [
+        { ...bar, beats: 0.5, chords: [] },
+        { ...bar, startTick: 6 },
+      ],
+      notes: eighths.notes.map((n) => ({ ...n, startTick: n.startTick + 6 })),
+    }
+    const rh = [
+      ...new Set(
+        notes(
+          schedule(afterPickup, { tempo: 60, hands: audibleHands('rh'), swing: true }).sounds,
+        ).map((s) => Number(s.at.toFixed(4))),
+      ),
+    ]
+    // The pickup is the "and" of 4, swung late itself: the downbeat comes a third of a beat after it.
+    expect(rh).toEqual([0.3333, 1, 1.3333, 2])
+  })
+
   it('never swings a compound meter', () => {
     const inEighths = arrange({ ...chart('C'), meter: '6/8' }, { tonic: note('C'), pattern: BEATS })
     expect(schedule(inEighths, { tempo: 60, hands: ALL, swing: true })).toEqual(

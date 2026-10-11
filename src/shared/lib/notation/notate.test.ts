@@ -42,6 +42,30 @@ describe('notate', () => {
     ])
   })
 
+  it('writes a pickup’s values on the meter’s beats: an 8th then a quarter in a beat and a half', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 6), n(64, note('E'), 'rh', 6, 12)], {
+        bars: [
+          { startTick: 0, beats: 1.5 },
+          { startTick: 18, beats: 4 },
+        ],
+      }),
+    )
+    const [pickup] = score.measures
+    expect(pickup?.staves.treble.map((voice) => shape(voice.events))).toEqual([
+      [
+        ['notes', 0, 6],
+        ['notes', 6, 12],
+      ],
+    ])
+    expect(pickup?.staves.bass.map((voice) => shape(voice.events))).toEqual([
+      [
+        ['rest', 0, 6],
+        ['rest', 6, 12],
+      ],
+    ])
+  })
+
   it('writes a bar of C on a grand staff, with its chord symbol and time signature', () => {
     const score = notate(
       music([

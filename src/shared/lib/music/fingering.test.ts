@@ -42,6 +42,22 @@ describe('scaleFingering', () => {
     )
   })
 
+  it('never puts one finger on two notes in a row, over two octaves from any tonic', () => {
+    for (const kind of ['major', 'natural', 'harmonic', 'melodic'] as const) {
+      for (let pc = 0; pc < 12; pc++) {
+        const root = scaleRootSpelling(pitchClass(pc), kind)
+        for (const hand of ['rh', 'lh'] as const) {
+          const fingers = digits(scaleFingering(root, kind, hand, 0, 2))
+          expect(fingers, `${kind} on ${pc}, ${hand}`).not.toMatch(/(.)\1/)
+        }
+      }
+    }
+  })
+
+  it('carries A♭ major’s right hand into its second octave on 3 4, as a longer run fingers it', () => {
+    expect(digits(scaleFingering(note('A', -1), 'major', 'rh', 0, 2))).toBe('231231234123123')
+  })
+
   it('ends D♭ and F♯ major’s left hand on the finger its octave takes in a longer run', () => {
     expect(digits(scaleFingering(note('D', -1), 'major', 'lh', 0))).toBe('32143213')
     expect(digits(scaleFingering(note('F', 1), 'major', 'lh', 0))).toBe('43213214')

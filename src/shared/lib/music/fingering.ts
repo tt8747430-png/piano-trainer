@@ -153,8 +153,8 @@ function continuingFingers(root: SpelledNote, kind: ScaleKind, hand: Hand): Fing
 
 /**
  * A run from degree `start` (0 the tonic) up `octaves` octaves, fingered as the scale fingers each
- * note, read from the bottom note up: from a taught tonic its taught fingering, each octave's tonic
- * between taking the finger a longer run gives it (B♭ major's middle B♭ is 4); from any other note of
+ * note, read from the bottom note up: from a taught tonic its taught fingering, each octave between
+ * starting as a longer run does (B♭ major's middle B♭ is 4, A♭ major's middle A♭ B♭ are 3 4); from any other note of
  * a seven-note scale each note's finger in a longer run (PWJ: E to E with C major's, 3 1 2 3 4 1 2 3).
  */
 export function scaleFingering(
@@ -167,8 +167,13 @@ export function scaleFingering(
   const own = tableFor(kind, root, hand)
   if (own && start === 0) {
     const run = tableRun(own, root, hand)
-    const octave = run.slice(1, -1)
-    const turns = Array.from({ length: octaves - 1 }, () => [continuingAt(run, hand, 0), ...octave])
+    // An octave between starts as a longer run passing its tonic does, up to its first thumb: a
+    // taught first octave may start on fingers of its own (A♭ major's 2 3, where the run has 3 4).
+    const firstThumb = run.indexOf(1, 1)
+    const octave = run
+      .slice(0, -1)
+      .map((finger, degree) => (degree < firstThumb ? continuingAt(run, hand, degree) : finger))
+    const turns = Array.from({ length: octaves - 1 }, () => octave)
     return [...run.slice(0, -1), ...turns.flat(), run.at(-1) ?? 1]
   }
   if (!scaleHasChords(kind))
