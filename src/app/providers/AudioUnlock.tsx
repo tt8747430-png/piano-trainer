@@ -8,6 +8,12 @@ import { useServices } from '@/shared/lib/services'
 const GESTURES = ['pointerdown', 'pointerup', 'keydown'] as const
 
 /**
+ * Whether this event let the page start audio. A touch's press, or Shift alone, does not: audio made
+ * then starts held back, with a warning. Where the browser cannot say, every gesture is tried.
+ */
+const activated = () => navigator.userActivation?.isActive ?? true
+
+/**
  * Browsers start audio suspended, and some suspend it again (iOS after a call): every gesture anywhere
  * unlocks it, which does nothing once it runs. Renders nothing.
  */
@@ -15,7 +21,9 @@ export function AudioUnlock() {
   const { audio } = useServices()
 
   useEffect(() => {
-    const unlock = () => void audio.unlock()
+    const unlock = () => {
+      if (activated()) void audio.unlock()
+    }
     for (const gesture of GESTURES) window.addEventListener(gesture, unlock, true)
     return () => {
       for (const gesture of GESTURES) window.removeEventListener(gesture, unlock, true)
