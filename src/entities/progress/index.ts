@@ -9,7 +9,7 @@ export {
 } from './model/types'
 export { knownCount, ratingOf, skillsToCheck, stillToKnow } from './model/mastery'
 export { withAnswer, withLearned, withRun } from './model/changes'
-export { createProgressStore, type ProgressStore } from './model/store'
+export { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from './model/store'
 export {
   selectAllAnswers,
   selectAnswers,

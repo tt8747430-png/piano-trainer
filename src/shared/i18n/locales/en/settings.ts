@@ -12,4 +12,16 @@ export const settings = {
     cancel: 'Keep it',
     confirm: 'Reset',
   },
+  backup: {
+    label: 'Backup',
+    says: 'Your songs, takes, patterns, progress and settings live on this device only. Save them as a file to keep them safe or to move them to another device.',
+    save: 'Save a backup',
+    restore: 'Restore from a file',
+    notBackup: 'This file is not a Piano Trainer backup.',
+    title: 'Restore this backup?',
+    body: 'Everything on this device is replaced by the backup made on {{made}}. The app opens again.',
+    bodyUndated: 'Everything on this device is replaced by the backup. The app opens again.',
+    cancel: 'Keep what is here',
+    confirm: 'Restore',
+  },
 } as const

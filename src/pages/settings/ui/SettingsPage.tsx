@@ -9,6 +9,7 @@ import {
   useSettingsStoreApi,
   type Theme,
 } from '@/entities/settings'
+import { BackupFields } from '@/features/backup-data'
 import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
@@ -113,6 +114,9 @@ export function SettingsPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+        </Group>
+        <Group title={t('backup.label')}>
+          <BackupFields />
         </Group>
       </div>
     </div>
