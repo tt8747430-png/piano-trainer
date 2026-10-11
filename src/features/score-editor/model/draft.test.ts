@@ -8,7 +8,7 @@ import {
   type PieceMusic,
 } from '@/entities/piece'
 import { midi, note } from '@/shared/lib/music'
-import { readDraft, writeDraft } from './draft'
+import { musicToSave, readDraft, writeDraft } from './draft'
 import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
@@ -42,6 +42,16 @@ describe('the draft', () => {
       { kind: 'verse', n: 1 },
       { kind: 'chorus', last: true },
     ])
+  })
+
+  it('saves only music that reads back', () => {
+    const draft = readDraft(WRITTEN)
+    expect(musicToSave(draft)).toEqual(writeDraft(draft))
+    const [section] = draft.sections
+    if (!section) throw new Error('no section')
+    // A bar with no chord writes nothing the chart can read.
+    const unread = [{ ...section, lines: [[{ ticks: 48, chords: [], rh: false, lh: false }]] }]
+    expect(musicToSave({ ...draft, sections: unread })).toBeNull()
   })
 
   it('holds chords by where they start in their bar, the tune and hands on the timeline', () => {

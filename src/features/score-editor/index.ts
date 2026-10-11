@@ -2,6 +2,7 @@ export { barLengths, type BarRange } from './model/bars'
 export { keyChords } from './model/chords'
 export {
   isHandLayer,
+  musicToSave,
   readDraft,
   writeDraft,
   type Draft,

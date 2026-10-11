@@ -178,3 +178,17 @@ export function writeDraft(draft: Draft): PieceMusic {
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),
   }
 }
+
+/**
+ * The music to save for a draft, read back as a piece's to be sure it reads; null where it would not
+ * (an edit the format cannot hold): nothing then is saved over music that opens.
+ */
+export function musicToSave(draft: Draft): PieceMusic | null {
+  try {
+    const music = writeDraft(draft)
+    readMusic(music)
+    return music
+  } catch {
+    return null
+  }
+}

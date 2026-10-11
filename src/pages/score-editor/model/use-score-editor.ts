@@ -13,7 +13,7 @@ import {
   createEditorStore,
   isHandLayer,
   readDraft,
-  writeDraft,
+  musicToSave,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
@@ -60,9 +60,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const [chordNames, setChordNames] = useState(true)
   const [settingsOpen, openSettings] = useState(false)
   const [store] = useState(() =>
-    createEditorStore(readDraft(target.music), (draft) =>
-      saveMusic(pieces, savingTo(target), writeDraft(draft)),
-    ),
+    createEditorStore(readDraft(target.music), (draft) => {
+      const music = musicToSave(draft)
+      if (music) saveMusic(pieces, savingTo(target), music)
+    }),
   )
   const playback = usePlayback<'piece'>()
   const chordField = useRef<HTMLInputElement | null>(null)
