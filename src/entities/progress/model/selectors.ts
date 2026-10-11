@@ -45,3 +45,11 @@ export const selectTrainerRecord =
   (key: RunKey) =>
   (state: ProgressState): TrainerRecord | undefined =>
     state.trainers[key]
+
+/** The pieces opened in the Player, latest first. A new list each time: memoise it over `practised`. */
+export function byLastOpened(practised: ProgressState['practised']): PieceId[] {
+  return Object.entries(practised)
+    .flatMap(([id, at]) => (at === undefined ? [] : [{ id, at: Date.parse(at) }]))
+    .sort((a, b) => b.at - a.at)
+    .map(({ id }) => id)
+}

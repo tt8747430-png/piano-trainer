@@ -212,20 +212,20 @@ export function createWebAudioOutput({
 
   return {
     async unlock() {
-      // Called with no gesture behind it (a sound as a screen opens), it could only start held back.
-      if (!activated()) return
       recordings.prime()
       const audio = openContext()
-      if (audio && heldBack(audio)) await audio.resume()
+      // With no gesture behind it (a sound as a screen opens), resuming could only fail.
+      if (audio && heldBack(audio) && activated()) await audio.resume()
     },
     play(sounds, at) {
-      // Before any gesture nothing can be heard: a play then (a round sounded as its trainer opens)
-      // is let go, not queued on held-back audio to burst out at the first tap.
-      if ((context === undefined || (context && heldBack(context))) && !activated())
-        return NOTHING_PLAYED
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
-      if (heldBack(audio)) void audio.resume()
+      if (heldBack(audio)) {
+        // Audio held back with no gesture to start it (a round sounded as its trainer opens) is let
+        // go, not queued to burst out at the first tap; where the browser lets it run, it plays.
+        if (!activated()) return NOTHING_PLAYED
+        void audio.resume()
+      }
       const start = at ?? audio.currentTime + PLAY_DELAY
       lookahead.add(sounds, start)
       return keys.add(sounds, start)

@@ -142,13 +142,15 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators[0]?.start).toBeCloseTo(2.1)
   })
 
-  it('lets a play go before any gesture, creating no audio to hold it back', () => {
-    const { context, createContext, gesture, audio } = setUp({ activated: false })
+  it('lets a play go while audio is held back with no gesture to start it', () => {
+    const { context, gesture, audio } = setUp({ activated: false })
     void audio.unlock()
     audio.play([A4], 0.125)
-    expect(createContext).not.toHaveBeenCalled()
+    expect(context.resume).not.toHaveBeenCalled()
+    expect(context.oscillators).toHaveLength(0)
     gesture.activated = true
     audio.play([A4], 0.125)
+    expect(context.resume).toHaveBeenCalled()
     expect(context.oscillators.length).toBeGreaterThan(0)
   })
 

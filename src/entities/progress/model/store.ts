@@ -2,7 +2,7 @@ import type { StoreApi } from 'zustand/vanilla'
 import { isStepId } from '@/entities/path'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { DAYS_KEPT } from './days'
+import { keptDays } from './days'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
@@ -81,13 +81,6 @@ function trainerRecord(value: unknown): TrainerRecord | undefined {
   return { runs, last, best: Math.max(best, last), bestStreak }
 }
 
-const isDay = (value: unknown): value is string =>
-  typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
-
-/** The days that read as days, each once, oldest first, the latest DAYS_KEPT. */
-const practisedDays = (saved: unknown): readonly string[] =>
-  Array.isArray(saved) ? [...new Set(saved.filter(isDay))].sort().slice(-DAYS_KEPT) : []
-
 /**
  * Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. */
 function sanitize(persisted: unknown): ProgressState {
@@ -97,6 +90,6 @@ function sanitize(persisted: unknown): ProgressState {
     practised: kept(saved.practised, isPieceKey, dateOrNothing),
     answers: kept<SkillId, readonly Answer[]>(saved.answers, isSkillId, evidenceOrNothing),
     trainers: kept(saved.trainers, isRunKey, trainerRecord),
-    days: practisedDays(saved.days),
+    days: Array.isArray(saved.days) ? keptDays(saved.days) : [],
   }
 }

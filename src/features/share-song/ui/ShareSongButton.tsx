@@ -5,7 +5,7 @@ import type { SharedSong } from '@/entities/piece'
 import { Button } from '@/shared/ui/primitives/button'
 import { SHARED_SONG_PATH, songLinkData } from '../model/song-link'
 
-type Said = 'copied' | 'failed' | null
+type Said = 'copied' | 'failed' | 'tooLong' | null
 
 /**
  * Share on an own song: a link that carries the song (`songLinkData`), handed to the browser's share
@@ -17,8 +17,13 @@ export function ShareSongButton({ song }: { song: SharedSong }) {
   const share = async () => {
     setSaid(null)
     try {
+      const data = await songLinkData(song)
+      if (data === null) {
+        setSaid('tooLong')
+        return
+      }
       const url = new URL(SHARED_SONG_PATH, window.location.origin)
-      url.searchParams.set('song', await songLinkData(song))
+      url.searchParams.set('song', data)
       if (navigator.share) {
         await navigator.share({ title: song.title, url: url.href })
         return
@@ -38,7 +43,13 @@ export function ShareSongButton({ song }: { song: SharedSong }) {
         {t('share')}
       </Button>
       <p role="status" className="text-sm text-muted-foreground empty:hidden">
-        {said === 'copied' ? t('shareCopied') : said === 'failed' ? t('shareFailed') : ''}
+        {said === 'copied'
+          ? t('shareCopied')
+          : said === 'failed'
+            ? t('shareFailed')
+            : said === 'tooLong'
+              ? t('shareTooLong')
+              : ''}
       </p>
     </div>
   )

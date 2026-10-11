@@ -28,7 +28,7 @@ describe('entryTitles', () => {
   })
 
   it('shows a study its translated heading alone, not the printed one under it', () => {
-    const study = { kind: 'study', title: 'Урок 3: C – Dm', titleEn: 'Lesson 3: C – Dm' }
+    const study = { kind: 'study' as const, title: 'Урок 3: C – Dm', titleEn: 'Lesson 3: C – Dm' }
     expect(entryTitles(study, 'en')).toEqual({ primary: 'Lesson 3: C – Dm' })
     expect(entryTitles(study, 'ru')).toEqual({ primary: 'Урок 3: C – Dm' })
   })

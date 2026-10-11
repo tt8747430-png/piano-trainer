@@ -56,7 +56,7 @@ export function ScreenHeader({
             event.currentTarget.contains(event.relatedTarget),
         )
       }
-      className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:px-0 duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
+      className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:translate-y-0 print:px-0 duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
       {/* The title takes the line beside the actions, wrapping between its words; only where its
           longest word (Последовательности) does not fit beside them do the actions go under it. */}

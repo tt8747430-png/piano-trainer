@@ -11,7 +11,7 @@ export {
 } from './model/types'
 export { isDue, knownCount, ratingOf, skillsToCheck, stillToKnow } from './model/mastery'
 export { withAnswer, withLearned, withRun } from './model/changes'
-export { lastWeek, localDay, streak, withDay } from './model/days'
+export { dateOfDay, lastWeek, localDay, streak, withDay } from './model/days'
 export {
   createProgressStore,
   PROGRESS_STORAGE_KEY,
@@ -19,6 +19,7 @@ export {
   type ProgressStore,
 } from './model/store'
 export {
+  byLastOpened,
   selectAllAnswers,
   selectAnswers,
   selectDays,

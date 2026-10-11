@@ -1,8 +1,7 @@
-import { useId } from 'react'
+import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRepertoire } from '@/entities/piece'
-import { selectPractised, useProgress } from '@/entities/progress'
-import { byLastOpened } from '../model/recent'
+import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
 import { EntryRow } from './EntryRow'
 
 /** How many of the pieces opened last the Path lists. */
@@ -17,7 +16,8 @@ export function RecentPieces() {
   const headingId = useId()
   const practised = useProgress(selectPractised)
   const repertoire = useRepertoire()
-  const entries = byLastOpened(practised)
+  const opened = useMemo(() => byLastOpened(practised), [practised])
+  const entries = opened
     .flatMap((id) => {
       const entry = repertoire.entry(id)
       return entry ? [entry] : []

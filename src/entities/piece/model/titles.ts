@@ -1,4 +1,5 @@
 import type { Locale } from '@/shared/i18n'
+import type { Entry } from './types'
 
 interface EntryTitles {
   readonly primary: string
@@ -13,7 +14,7 @@ interface EntryTitles {
  */
 export function entryTitles(
   entry: {
-    readonly kind?: string
+    readonly kind?: Entry['kind']
     readonly title: string
     readonly titleEn?: string
     readonly titleRu?: string

@@ -31,13 +31,17 @@ const fromBase64Url = (text: string) =>
     char.charCodeAt(0),
   )
 
-/** A song as a link's text: its title and music in JSON, deflated, in base64url. */
-export async function songLinkData(song: SharedSong): Promise<string> {
+/**
+ * A song as a link's text: its title and music in JSON, deflated, in base64url; null for a song too
+ * long for a link, which `readSongLink` would read as none.
+ */
+export async function songLinkData(song: SharedSong): Promise<string | null> {
   const json = JSON.stringify({ v: FORMAT, t: song.title, m: song.music })
   const deflated = streamOf(new TextEncoder().encode(json)).pipeThrough(
     new CompressionStream('deflate-raw'),
   )
-  return toBase64Url(new Uint8Array(await new Response(deflated).arrayBuffer()))
+  const data = toBase64Url(new Uint8Array(await new Response(deflated).arrayBuffer()))
+  return data.length > LINK_LIMIT ? null : data
 }
 
 /** A stream's text, or null once it passes `limit` bytes: a crafted link cannot inflate without end. */

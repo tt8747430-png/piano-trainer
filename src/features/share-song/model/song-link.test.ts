@@ -2,6 +2,13 @@ import { describe, expect, it } from 'vitest'
 import type { SharedSong } from '@/entities/piece'
 import { readSongLink, songLinkData } from './song-link'
 
+/** A song's link text, which a song this short always has. */
+async function linkOf(song: Parameters<typeof songLinkData>[0]): Promise<string> {
+  const data = await songLinkData(song)
+  if (data === null) throw new Error('no link')
+  return data
+}
+
 const SONG: SharedSong = {
   title: 'Morning',
   music: {
@@ -16,20 +23,20 @@ const SONG: SharedSong = {
 
 describe('a song’s link', () => {
   it('carries the song there and back, in text a URL keeps as it is', async () => {
-    const data = await songLinkData(SONG)
+    const data = await linkOf(SONG)
     expect(data).toMatch(/^[A-Za-z0-9_-]+$/)
     expect(await readSongLink(data)).toEqual(SONG)
   })
 
   it('reads no song from text that is cut short, changed, or not a song', async () => {
-    const data = await songLinkData(SONG)
+    const data = await linkOf(SONG)
     expect(await readSongLink(data.slice(0, 10))).toBeNull()
     expect(await readSongLink('not-a-song')).toBeNull()
     expect(await readSongLink('')).toBeNull()
   })
 
   it('reads no song whose music would not be saved', async () => {
-    const data = await songLinkData({ ...SONG, music: { ...SONG.music, tempo: 1000 } })
+    const data = await linkOf({ ...SONG, music: { ...SONG.music, tempo: 1000 } })
     expect(await readSongLink(data)).toBeNull()
   })
 
@@ -57,7 +64,22 @@ describe('a song’s link', () => {
       ...SONG,
       music: { ...SONG.music, sections: [{ kind: 'verse', n: 1, lines }], melody: undefined },
     }
-    const back = await readSongLink(await songLinkData(long))
+    const back = await readSongLink(await linkOf(long))
     expect(back?.music.sections[0]?.lines).toHaveLength(4000)
+  })
+
+  it('makes no link of a song too long for one', async () => {
+    // Chords drawn at random, so the song deflates to more than a link holds.
+    const CHORDS = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bdim', 'C7', 'D7', 'E7', 'A7', 'B7']
+    let seed = 1
+    const next = () => (seed = (seed * 48271) % 2147483647)
+    const lines = Array.from({ length: 20000 }, () =>
+      Array.from({ length: 8 }, () => CHORDS[next() % CHORDS.length] ?? 'C').join(' '),
+    )
+    const huge: SharedSong = {
+      ...SONG,
+      music: { ...SONG.music, sections: [{ kind: 'verse', n: 1, lines }] },
+    }
+    expect(await songLinkData(huge)).toBeNull()
   })
 })

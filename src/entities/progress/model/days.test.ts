@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DAYS_KEPT, lastWeek, localDay, streak, withDay } from './days'
+import { dateOfDay, DAYS_KEPT, lastWeek, localDay, streak, withDay } from './days'
 import { EMPTY_PROGRESS } from './types'
 
 describe('localDay', () => {
@@ -14,11 +14,11 @@ describe('withDay', () => {
     const once = withDay(EMPTY_PROGRESS, '2026-10-11')
     expect(withDay(once, '2026-10-11')).toBe(once)
     expect(withDay(once, '2026-10-12').days).toEqual(['2026-10-11', '2026-10-12'])
-    const full = { ...EMPTY_PROGRESS, days: Array.from({ length: DAYS_KEPT }, (_, i) => `d${i}`) }
-    const next = withDay(full, 'z').days
+    const days = Array.from({ length: DAYS_KEPT }, (_, i) => localDay(dateOfDay('2025-01-01', i)))
+    const next = withDay({ ...EMPTY_PROGRESS, days }, '2027-01-01').days
     expect(next).toHaveLength(DAYS_KEPT)
-    expect(next.at(-1)).toBe('z')
-    expect(next[0]).toBe('d1')
+    expect(next.at(-1)).toBe('2027-01-01')
+    expect(next[0]).toBe('2025-01-02')
   })
 })
 
@@ -54,5 +54,13 @@ describe('lastWeek', () => {
       { day: '2026-10-10', practised: false },
       { day: '2026-10-11', practised: true },
     ])
+  })
+})
+
+describe('dateOfDay', () => {
+  it('is the day at noon, counted on by the calendar across a month and a clock change', () => {
+    expect(dateOfDay('2026-10-11')).toEqual(new Date(2026, 9, 11, 12))
+    expect(localDay(dateOfDay('2026-10-30', 3))).toBe('2026-11-02')
+    expect(localDay(dateOfDay('2026-03-28', 2))).toBe('2026-03-30')
   })
 })

@@ -22,6 +22,7 @@ export const piece = {
   share: 'Share',
   shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
   shareFailed: 'The link could not be made here.',
+  shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
     title: 'Delete {{title}}?',
     says: 'It is removed from Your songs, with its music and takes.',

@@ -6,6 +6,13 @@ import { untranslated } from '@/app/testing/untranslated'
 import type { SharedSong } from '@/entities/piece'
 import { songLinkData } from '@/features/share-song'
 
+/** A song's link text, which a song this short always has. */
+async function linkOf(song: Parameters<typeof songLinkData>[0]): Promise<string> {
+  const data = await songLinkData(song)
+  if (data === null) throw new Error('no link')
+  return data
+}
+
 const SONG: SharedSong = {
   title: 'Morning',
   music: {
@@ -20,7 +27,7 @@ const SONG: SharedSong = {
 describe('A shared song', () => {
   it('shows the song its link holds, and adds it to Your songs only when asked', async () => {
     const user = userEvent.setup()
-    const data = await songLinkData(SONG)
+    const data = await linkOf(SONG)
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${data}`)
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     expect(screen.getByText('G · 3/4 · 84 BPM')).toBeInTheDocument()
@@ -40,7 +47,7 @@ describe('A shared song', () => {
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    await renderApp(`/songs/shared?song=${await songLinkData(SONG)}`, { locale: 'ru' })
+    await renderApp(`/songs/shared?song=${await linkOf(SONG)}`, { locale: 'ru' })
     await screen.findByRole('button', { name: 'Добавить к вашим песням' })
     expect(untranslated(document.body)).toEqual([])
   })

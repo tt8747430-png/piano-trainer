@@ -1,8 +1,9 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { lastWeek, localDay, selectDays, streak, useProgress } from '@/entities/progress'
+import { dateOfDay, lastWeek, selectDays, streak, useProgress } from '@/entities/progress'
 import { useLocale, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
+import { useToday } from '../model/use-today'
 
 const formats = new Map<Locale, { short: Intl.DateTimeFormat; long: Intl.DateTimeFormat }>()
 function formatsOf(locale: Locale) {
@@ -16,22 +17,16 @@ function formatsOf(locale: Locale) {
   return made
 }
 
-/** A kept day as a date at noon on the learner's calendar, for naming it. */
-const dateOf = (day: string) => {
-  const [year = 0, month = 1, date = 1] = day.split('-').map(Number)
-  return new Date(year, month - 1, date, 12)
-}
-
 /**
  * The days practised: how many in a row up to today, and the last seven, today last. A run that ended
  * yesterday still counts, and says today keeps it going.
  */
-export function PracticeDays({ now = new Date() }: { now?: Date }) {
+export function PracticeDays() {
   const { t } = useTranslation('path')
   const locale = useLocale()
   const headingId = useId()
   const days = useProgress(selectDays)
-  const today = localDay(now)
+  const today = useToday()
   const run = streak(days, today)
   const week = lastWeek(days, today)
   const practisedToday = week.at(-1)?.practised ?? false
@@ -54,7 +49,7 @@ export function PracticeDays({ now = new Date() }: { now?: Date }) {
       </div>
       <ol aria-label={t('days.week')} className="flex gap-2">
         {week.map(({ day, practised }, i) => {
-          const date = dateOf(day)
+          const date = dateOfDay(day)
           const name = long.format(date)
           return (
             <li key={day} className="flex flex-col items-center gap-1">

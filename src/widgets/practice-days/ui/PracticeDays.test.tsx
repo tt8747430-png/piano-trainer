@@ -1,19 +1,23 @@
 import { act, screen, within } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { createProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { i18n } from '@/shared/i18n'
 import { createMemoryStorage } from '@/shared/lib'
 import { PracticeDays } from './PracticeDays'
 
-const NOW = new Date(2026, 9, 11, 18)
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  vi.setSystemTime(new Date(2026, 9, 11, 18))
+})
+afterEach(() => vi.useRealTimers())
 
 function renderDays(days: string[]) {
   const store = createProgressStore({ storage: createMemoryStorage() })
   store.setState({ days })
   renderWithSettings(
     <ProgressStoreProvider store={store}>
-      <PracticeDays now={NOW} />
+      <PracticeDays />
     </ProgressStoreProvider>,
   )
 }
