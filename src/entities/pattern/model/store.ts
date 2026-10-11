@@ -17,7 +17,7 @@ import {
 } from './types'
 
 export const PATTERNS_STORAGE_KEY = 'pt-patterns'
-const PATTERNS_VERSION = 1
+export const PATTERNS_VERSION = 1
 
 /** The learner's way with patterns (spec 2026-10-01-patterns §3). */
 export interface PatternsState {

@@ -24,7 +24,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-const PIECES_VERSION = 1
+export const PIECES_VERSION = 1
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {

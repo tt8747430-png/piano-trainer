@@ -37,7 +37,12 @@ export {
   type PatternRef,
 } from './model/own'
 export { BUILT_IN_PATTERNS, patternBook, type BookPattern, type PatternBook } from './model/book'
-export { PATTERNS_STORAGE_KEY, createPatternsStore, type PatternsStore } from './model/store'
+export {
+  PATTERNS_STORAGE_KEY,
+  PATTERNS_VERSION,
+  createPatternsStore,
+  type PatternsStore,
+} from './model/store'
 export {
   PatternsStoreProvider,
   usePatternBook,

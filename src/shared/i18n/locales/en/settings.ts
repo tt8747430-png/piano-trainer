@@ -21,6 +21,9 @@ export const settings = {
     title: 'Restore this backup?',
     body: 'Everything on this device is replaced by the backup made on {{made}}. The app opens again.',
     bodyUndated: 'Everything on this device is replaced by the backup. The app opens again.',
+    otherVersions: 'Some of it was saved by another version of the app: that part starts afresh.',
+    noRoom:
+      'The backup could not be restored: this device has no room for it. Nothing was changed.',
     cancel: 'Keep what is here',
     confirm: 'Restore',
   },

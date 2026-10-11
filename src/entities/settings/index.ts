@@ -9,7 +9,12 @@ export {
   type Theme,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
-export { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from './model/store'
+export {
+  createSettingsStore,
+  SETTINGS_STORAGE_KEY,
+  SETTINGS_VERSION,
+  type SettingsStore,
+} from './model/store'
 export {
   selectKeyboard,
   selectLocale,

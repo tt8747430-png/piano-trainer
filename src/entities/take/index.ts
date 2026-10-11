@@ -12,6 +12,7 @@ export {
 export {
   createTakesStore,
   TAKES_STORAGE_KEY,
+  TAKES_VERSION,
   type TakesState,
   type TakesStore,
 } from './model/store'

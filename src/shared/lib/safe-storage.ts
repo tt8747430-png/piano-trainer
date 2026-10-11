@@ -1,8 +1,12 @@
 const PROBE_KEY = '__pt_probe__'
 
+/** The memory the app keeps its saves in where the browser lets it keep none: one for every store. */
+let memory: Storage | null = null
+
 /**
  * localStorage when this browser lets us write to it, otherwise memory (private mode, blocked site
- * data). Either way nothing the app does with it can throw: settings then last for the session.
+ * data), the same memory for every caller, so a backup reads what the stores keep. Either way nothing
+ * the app does with it can throw: settings then last for the session.
  */
 export function safeLocalStorage(): Storage {
   try {
@@ -11,7 +15,8 @@ export function safeLocalStorage(): Storage {
     storage.removeItem(PROBE_KEY)
     return guarded(storage)
   } catch {
-    return createMemoryStorage()
+    memory ??= createMemoryStorage()
+    return memory
   }
 }
 

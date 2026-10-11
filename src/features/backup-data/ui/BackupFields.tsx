@@ -13,7 +13,14 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { backupName, readBackup, restoreBackup, writeBackup, type Backup } from '../model/backup'
+import {
+  backupName,
+  hasOtherVersions,
+  readBackup,
+  restoreBackup,
+  writeBackup,
+  type Backup,
+} from '../model/backup'
 
 /** Asks the browser to keep the app's storage when it runs short of room; it may say no. */
 const keepStorage = () => void navigator.storage?.persist?.().catch(() => {})
@@ -33,7 +40,7 @@ export function BackupFields({
   const locale = useLocale()
   const file = useRef<HTMLInputElement>(null)
   const [found, setFound] = useState<Backup | null>(null)
-  const [notBackup, setNotBackup] = useState(false)
+  const [failed, setFailed] = useState<'notBackup' | 'noRoom' | null>(null)
 
   const save = () => {
     const now = new Date()
@@ -47,12 +54,16 @@ export function BackupFields({
   const open = async (chosen: File | undefined) => {
     if (!chosen) return
     const backup = readBackup(await chosen.text())
-    setNotBackup(backup === null)
+    setFailed(backup === null ? 'notBackup' : null)
     setFound(backup)
   }
   const restore = () => {
     if (!found) return
-    restoreBackup(storage, found)
+    if (!restoreBackup(storage, found)) {
+      setFailed('noRoom')
+      setFound(null)
+      return
+    }
     keepStorage()
     onRestored()
   }
@@ -76,7 +87,7 @@ export function BackupFields({
           ref={file}
           type="file"
           accept="application/json,.json"
-          aria-label={t('backup.restore')}
+          aria-hidden
           className="sr-only"
           tabIndex={-1}
           onChange={(event) => {
@@ -85,9 +96,9 @@ export function BackupFields({
           }}
         />
       </div>
-      {notBackup ? (
+      {failed ? (
         <p role="alert" className="text-destructive">
-          {t('backup.notBackup')}
+          {t(`backup.${failed}`)}
         </p>
       ) : null}
       <AlertDialog
@@ -99,6 +110,7 @@ export function BackupFields({
             <AlertDialogTitle>{t('backup.title')}</AlertDialogTitle>
             <AlertDialogDescription>
               {madeText ? t('backup.body', { made: madeText }) : t('backup.bodyUndated')}
+              {found && hasOtherVersions(found) ? ` ${t('backup.otherVersions')}` : null}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

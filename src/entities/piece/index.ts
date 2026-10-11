@@ -28,6 +28,7 @@ export {
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,
+  PIECES_VERSION,
   readSharedSong,
   type PiecesState,
   type PiecesStore,

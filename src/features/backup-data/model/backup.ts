@@ -1,20 +1,21 @@
-import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
-import { PIECES_STORAGE_KEY } from '@/entities/piece'
-import { PROGRESS_STORAGE_KEY } from '@/entities/progress'
-import { SETTINGS_STORAGE_KEY } from '@/entities/settings'
-import { TAKES_STORAGE_KEY } from '@/entities/take'
-import { VIEWS_STORAGE_KEY } from '@/entities/views'
+import { PATTERNS_STORAGE_KEY, PATTERNS_VERSION } from '@/entities/pattern'
+import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
+import { PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from '@/entities/progress'
+import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
+import { TAKES_STORAGE_KEY, TAKES_VERSION } from '@/entities/take'
+import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
 import { isRecord } from '@/shared/lib'
 
-/** Every saved store, by the key it saves under: what a backup holds. */
-export const SAVE_KEYS = [
-  SETTINGS_STORAGE_KEY,
-  PROGRESS_STORAGE_KEY,
-  PIECES_STORAGE_KEY,
-  PATTERNS_STORAGE_KEY,
-  TAKES_STORAGE_KEY,
-  VIEWS_STORAGE_KEY,
-] as const
+/** Every saved store, by the key it saves under, with the version it reads: what a backup holds. */
+const STORES = {
+  [SETTINGS_STORAGE_KEY]: SETTINGS_VERSION,
+  [PROGRESS_STORAGE_KEY]: PROGRESS_VERSION,
+  [PIECES_STORAGE_KEY]: PIECES_VERSION,
+  [PATTERNS_STORAGE_KEY]: PATTERNS_VERSION,
+  [TAKES_STORAGE_KEY]: TAKES_VERSION,
+  [VIEWS_STORAGE_KEY]: VIEWS_VERSION,
+} as const
+export const SAVE_KEYS = Object.keys(STORES) as (keyof typeof STORES)[]
 
 const KIND = 'piano-trainer-backup'
 const FORMAT = 1
@@ -83,11 +84,31 @@ export function readBackup(text: string): Backup | null {
   return { made: typeof file.made === 'string' ? file.made : '', saves: kept }
 }
 
-/** Puts a backup's saves in storage in place of what is there: a store it has no save of starts afresh. */
-export function restoreBackup(storage: Storage, backup: Backup): void {
-  for (const key of SAVE_KEYS) {
+/**
+ * Whether a backup holds a save of a version its store no longer reads: that store starts afresh
+ * over it (ADR 0038), which the learner is told before they restore.
+ */
+export const hasOtherVersions = (backup: Backup): boolean =>
+  SAVE_KEYS.some((key) => {
     const save = backup.saves[key]
-    if (save) storage.setItem(key, JSON.stringify(save))
-    else storage.removeItem(key)
-  }
+    return save !== undefined && save.version !== STORES[key]
+  })
+
+/**
+ * Puts a backup's saves in storage in place of what is there: a store it has no save of starts afresh.
+ * Each write is read back; where one did not hold (the device has no room), everything is put back as
+ * it was and false is handed back, so a restore is never half done.
+ */
+export function restoreBackup(storage: Storage, backup: Backup): boolean {
+  const before = SAVE_KEYS.map((key) => [key, storage.getItem(key)] as const)
+  const put = (key: string, json: string | null) =>
+    json === null ? storage.removeItem(key) : storage.setItem(key, json)
+  const held = SAVE_KEYS.every((key) => {
+    const save = backup.saves[key]
+    const json = save ? JSON.stringify(save) : null
+    put(key, json)
+    return storage.getItem(key) === json
+  })
+  if (!held) for (const [key, json] of before) put(key, json)
+  return held
 }

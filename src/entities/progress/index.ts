@@ -11,7 +11,12 @@ export {
 } from './model/types'
 export { isDue, knownCount, ratingOf, skillsToCheck, stillToKnow } from './model/mastery'
 export { withAnswer, withLearned, withRun } from './model/changes'
-export { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from './model/store'
+export {
+  createProgressStore,
+  PROGRESS_STORAGE_KEY,
+  PROGRESS_VERSION,
+  type ProgressStore,
+} from './model/store'
 export {
   selectAllAnswers,
   selectAnswers,
