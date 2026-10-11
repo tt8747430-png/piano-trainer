@@ -95,7 +95,7 @@ describe('MultiDropdown', () => {
     expect(screen.getByRole('combobox', { name: 'Alterations' })).toHaveTextContent('Alterations♭5')
   })
 
-  it('lists groups under their labels, each item named by its title, its second word shown', async () => {
+  it('lists groups under their labels, each item named by its label and title, its second word shown', async () => {
     const user = userEvent.setup()
     render(
       <MultiDropdown
@@ -118,12 +118,12 @@ describe('MultiDropdown', () => {
     expect(button).toHaveTextContent('Chord typesm9')
     await user.click(button)
     // The list is hidden until it is placed: wait for its options to be there for a reader.
-    expect(await screen.findByRole('option', { name: 'Minor 9th' })).toHaveAttribute(
+    expect(await screen.findByRole('option', { name: 'm9 · Minor 9th' })).toHaveAttribute(
       'aria-selected',
       'true',
     )
     expect(screen.getByText('Triads')).toBeInTheDocument()
     expect(screen.getByText('9ths & more')).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: 'Major triad' })).toHaveTextContent('M Major triad')
+    expect(screen.getByRole('option', { name: 'M · Major triad' })).toHaveTextContent('M Major triad')
   })
 })

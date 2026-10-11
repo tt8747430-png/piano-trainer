@@ -360,9 +360,9 @@ const MEASURES_A_STEP = 8
  * staff or on `staff` alone, and says where everything is, in CSS pixels at `scale`.
  */
 export function engrave(score: Score, host: HTMLDivElement, options: EngraveOptions): ScoreLayout {
-  const { steps } = startEngraving(score, host, options)
+  const { next } = startEngraving(score, host, options)
   for (;;) {
-    const step = steps.next()
+    const step = next()
     if (step.done) return step.value
   }
 }
@@ -378,14 +378,14 @@ export async function engraveInSteps(
   options: EngraveOptions,
   { signal, budget = 12 }: { signal: AbortSignal; budget?: number },
 ): Promise<ScoreLayout | null> {
-  const { steps, stop } = startEngraving(score, host, options)
+  const { next, stop } = startEngraving(score, host, options)
   let since = performance.now()
   for (;;) {
     if (signal.aborted) {
       stop()
       return null
     }
-    const step = steps.next()
+    const step = next()
     if (step.done) return step.value
     if (performance.now() - since >= budget) {
       await new Promise((resolve) => setTimeout(resolve, 0))
@@ -397,7 +397,7 @@ export async function engraveInSteps(
 /**
  * The engraving, a few measures a step. It draws into a sheet of its own inside `host`, unseen, and
  * puts the drawing in place of what was there only once it is done; `stop` takes the sheet away, the
- * old drawing left as it was.
+ * old drawing left as it was. One that fails clears the host.
  */
 function startEngraving(score: Score, host: HTMLDivElement, options: EngraveOptions) {
   setUpVexFlow()
@@ -405,7 +405,19 @@ function startEngraving(score: Score, host: HTMLDivElement, options: EngraveOpti
   const sheet = host.ownerDocument.createElement('div')
   sheet.style.cssText = 'position:absolute;inset:0;visibility:hidden'
   host.append(sheet)
-  return { steps: drawn(score, host, sheet, options), stop: () => sheet.remove() }
+  const steps = drawn(score, host, sheet, options)
+  return {
+    // A score that cannot be engraved leaves nothing drawn: not the old drawing under its error.
+    next: (): IteratorResult<void, ScoreLayout> => {
+      try {
+        return steps.next()
+      } catch (error) {
+        host.replaceChildren()
+        throw error
+      }
+    },
+    stop: () => sheet.remove(),
+  }
 }
 
 function* drawn(

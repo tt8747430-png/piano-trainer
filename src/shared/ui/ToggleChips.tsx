@@ -1,4 +1,4 @@
-import type { Option, OptionValue } from './option'
+import { optionName, type Option, type OptionValue } from './option'
 import { Toggle } from './primitives/toggle'
 
 /**
@@ -21,7 +21,7 @@ export function ToggleChips<V extends OptionValue>({
       {options.map((option) => (
         <Toggle
           key={String(option.value)}
-          aria-label={option.title}
+          aria-label={optionName(option)}
           pressed={value.includes(option.value)}
           onPressedChange={(on) =>
             onChange(

@@ -11,6 +11,7 @@ import { LevelMark } from './LevelMark'
 import { NamedSegmented } from './NamedSegmented'
 import { KeyChoice } from './KeyChoice'
 import { NoteChoice } from './NoteChoice'
+import { optionName } from './option'
 import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
@@ -390,14 +391,14 @@ describe('ToggleChips', () => {
       'true',
       'false',
     ])
-    expect(screen.getByRole('button', { name: 'Flat 9th' })).toBe(chips[0])
+    expect(screen.getByRole('button', { name: '♭9 · Flat 9th' })).toBe(chips[0])
   })
 
   it('turns one on or off, reporting the chosen in the options’ order', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<ToggleChips label="Alterations" value={['s9']} options={SIGNS} onChange={onChange} />)
-    await user.click(screen.getByRole('button', { name: 'Flat 9th' }))
+    await user.click(screen.getByRole('button', { name: '♭9 · Flat 9th' }))
     expect(onChange).toHaveBeenLastCalledWith(['b9', 's9'])
     await user.click(screen.getByRole('button', { name: '#9' }))
     expect(onChange).toHaveBeenLastCalledWith([])
@@ -500,5 +501,15 @@ describe('RowGroup', () => {
     expect(screen.getByRole('region', { name: 'References' })).toContainElement(
       screen.getByText('Chords'),
     )
+  })
+})
+
+describe('optionName', () => {
+  it('names an option by its title, holding the label a voice would say (WCAG 2.5.3)', () => {
+    expect(optionName({ value: 7, label: '7', title: 'Seventh chord' })).toBe('7 · Seventh chord')
+    expect(optionName({ value: 'min', label: 'Minor', title: 'Minor triad' })).toBe('Minor triad')
+    expect(optionName({ value: 'maj', label: 'M', title: 'Major triad' })).toBe('M · Major triad')
+    expect(optionName({ value: 0, label: '∞', title: 'Until stopped' })).toBe('Until stopped')
+    expect(optionName({ value: 'c', label: 'C' })).toBeUndefined()
   })
 })

@@ -103,6 +103,8 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
   return {
     ...state,
     beatGroup,
+    // A pass begins at the start, its slips counted afresh: a loop's lap, a pass begun again.
+    slips: beatGroup === bounds(state).first ? {} : state.slips,
     arrival: state.arrival + 1,
     expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
@@ -205,6 +207,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         hands: event.hands,
         loop: event.loop,
         playing: state.playing && event.mode === state.mode,
+        // Other music, hands or loop: the slips counted were another pass's.
+        slips: {},
       }
       // The cursor keeps its moment; outside a new loop it starts at the loop's start.
       const { loop } = configured
@@ -213,9 +217,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
       return moveTo(configured, outside ? loop.first : clamp(configured, at))
     }
     case 'play':
-      // A pass begun again from the start counts its slips afresh.
       return state.outcome === 'finished'
-        ? { ...moveTo(state, bounds(state).first), playing: true, slips: {} }
+        ? { ...moveTo(state, bounds(state).first), playing: true }
         : { ...state, playing: true }
     case 'stop':
       return state.playing ? { ...state, playing: false } : state

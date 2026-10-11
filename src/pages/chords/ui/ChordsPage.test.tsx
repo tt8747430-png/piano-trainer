@@ -43,7 +43,7 @@ describe('Practice → Chords', () => {
     )
     expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
+    await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
     expect(audio.played.length).toBeGreaterThan(1)
   })
@@ -51,9 +51,9 @@ describe('Practice → Chords', () => {
   it('offers a 7th chord its 7th, and a dominant its alterations', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?size=9')
-    await user.click(await screen.findByRole('radio', { name: 'Major 7th' }))
+    await user.click(await screen.findByRole('radio', { name: '7 · Major 7th' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'CMaj9' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Minor 7th' }))
+    await user.click(screen.getByRole('radio', { name: '♭7 · Minor 7th' }))
     const alterations = await screen.findByRole('group', { name: 'Alterations' })
     expect(
       within(alterations)
@@ -104,7 +104,7 @@ describe('Practice → Chords', () => {
     const added = await screen.findByRole('group', { name: 'Added tones' })
     await user.click(within(added).getByRole('button', { name: 'add11' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
+    await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm11' })).toBeInTheDocument()
     expect(screen.queryByRole('group', { name: 'Added tones' })).not.toBeInTheDocument()
   })
@@ -138,7 +138,7 @@ describe('Practice → Chords', () => {
         .getAllByRole('radio')
         .map((option) => option.textContent),
     ).toEqual(['None', 'sus4'])
-    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
+    await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(router.state.location.search).toMatchObject({ size: 11 })
     expect(router.state.location.search).not.toHaveProperty('triad')
     expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()

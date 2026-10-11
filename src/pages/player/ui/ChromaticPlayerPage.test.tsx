@@ -37,13 +37,13 @@ describe('The chromatic walk in the Player', () => {
     const { router } = await renderApp('/play/chromatic?chords=m9&root=G')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
-    await user.click(await screen.findByRole('option', { name: 'Dominant 9th' }))
+    await user.click(await screen.findByRole('option', { name: '9 · Dominant 9th' }))
     expect(router.state.location.search).toMatchObject({ chords: 'm9.n9' })
-    await user.click(screen.getByRole('option', { name: 'Minor 9th' }))
+    await user.click(screen.getByRole('option', { name: 'm9 · Minor 9th' }))
     expect(router.state.location.search).toMatchObject({ chords: 'n9' })
-    await user.click(screen.getByRole('option', { name: 'Dominant 9th' }))
+    await user.click(screen.getByRole('option', { name: '9 · Dominant 9th' }))
     expect(router.state.location.search).toMatchObject({ chords: 'n9' })
-    expect(screen.getByRole('option', { name: 'Dominant 9th' })).toHaveAttribute(
+    expect(screen.getByRole('option', { name: '9 · Dominant 9th' })).toHaveAttribute(
       'aria-selected',
       'true',
     )

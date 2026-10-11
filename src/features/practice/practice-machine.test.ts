@@ -127,6 +127,25 @@ describe('the practice machine', () => {
       expect(run(pass, { type: 'play' }).slips).toEqual({})
     })
 
+    it('forgets the slips of a pass begun again from the start, or of other music', () => {
+      const slipped = run(
+        initialPractice(TWO_BARS_IN_HALVES, 'wait', 'lh'),
+        { type: 'play' },
+        ...press(61),
+      )
+      expect(slipped.slips).toEqual({ 0: 1 })
+      expect(run(slipped, { type: 'jumpToBeatGroup', beatGroup: 0 }).slips).toEqual({})
+      expect(
+        run(slipped, {
+          type: 'configure',
+          performance: TWO_BARS_IN_HALVES,
+          mode: 'wait',
+          hands: 'rh',
+          loop: null,
+        }).slips,
+      ).toEqual({})
+    })
+
     it('never marks a key played once the beat group is done wrong', () => {
       const done = run(waiting('rh'), ...press(60, 64, 67))
       expect(run(done, ...press(61))).toMatchObject({ outcome: 'correct', wrong: null })

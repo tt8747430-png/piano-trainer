@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import type { ChoiceGroup, OptionValue } from './option'
+import { optionName, type ChoiceGroup, type OptionValue } from './option'
 import { SelectGroup, SelectItem, SelectLabel, SelectSeparator } from './primitives/select'
 
 /**
@@ -19,7 +19,11 @@ export function OptionItems<V extends OptionValue>({
           <SelectGroup>
             {group.label ? <SelectLabel>{group.label}</SelectLabel> : null}
             {group.options.map((option) => (
-              <SelectItem key={String(option.value)} value={option.value} aria-label={option.title}>
+              <SelectItem
+                key={String(option.value)}
+                value={option.value}
+                aria-label={optionName(option)}
+              >
                 {option.label}
                 {option.detail ? (
                   <>

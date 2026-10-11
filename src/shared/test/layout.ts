@@ -48,6 +48,8 @@ export function stubScrolling({
     left: number,
   ) {
     positions.set(this, left)
+    // As a browser does, scrolled by a script or a finger.
+    this.dispatchEvent(new Event('scroll'))
   })
   Object.defineProperty(Element.prototype, 'scrollTo', {
     configurable: true,

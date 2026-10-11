@@ -1,6 +1,6 @@
 import { Radio } from '@base-ui/react/radio'
 import { RadioGroup } from '@base-ui/react/radio-group'
-import type { Option, OptionValue } from './option'
+import { optionName, type Option, type OptionValue } from './option'
 
 /**
  * One choice of a few, always one chosen: a segmented control, the chosen segment a card on its
@@ -36,7 +36,7 @@ export function Segmented<V extends OptionValue>({
         <Radio.Root
           key={String(option.value)}
           value={option.value}
-          aria-label={option.title}
+          aria-label={optionName(option)}
           className="inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-lg border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-auto wrap-break-word text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-chosen data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground"
         >
           {option.icon}

@@ -16,6 +16,19 @@ export interface Option<V extends OptionValue> {
   readonly short?: string
 }
 
+/**
+ * An option's accessible name: its title where it has one, holding the label shown, so a voice can
+ * say what it sees (WCAG 2.5.3): `7` named "7 · Seventh chord", `Maj` "Major triad" as it is, `∞` "Until stopped".
+ */
+export function optionName(option: Option<OptionValue>): string | undefined {
+  const { label, title } = option
+  if (title === undefined) return undefined
+  // A picture for a label (∞, a note's value in the music font) is no words to say.
+  const words = /[\p{L}0-9]/u.test(label)
+  const said = label.length > 1 && title.toLocaleLowerCase().includes(label.toLocaleLowerCase())
+  return !words || said ? title : `${label} · ${title}`
+}
+
 /** Options under a name: a pop-up button's group (a chord family). */
 export interface OptionGroup<V extends OptionValue> {
   readonly label: string

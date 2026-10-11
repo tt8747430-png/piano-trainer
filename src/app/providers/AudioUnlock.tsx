@@ -3,9 +3,9 @@ import { useServices } from '@/shared/lib/services'
 
 /**
  * The gestures a browser lets start audio: a mouse's press, a finger's or pen's lift, a key. A touch's
- * press does not count, so the lift must be heard too.
+ * press does not count, so the lift must be heard too, and as a touch's end, which WebKit counts.
  */
-const GESTURES = ['pointerdown', 'pointerup', 'keydown'] as const
+const GESTURES = ['pointerdown', 'pointerup', 'touchend', 'keydown'] as const
 
 /**
  * Whether this event let the page start audio. A touch's press, or Shift alone, does not: audio made
