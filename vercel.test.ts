@@ -38,4 +38,18 @@ describe('the Vercel config', () => {
       expect(cacheControlFor(path)).toBe('public, max-age=0, must-revalidate')
     },
   )
+
+  it.each(['/', '/play/bz5', '/assets/index-3f9a1c.js'])(
+    'answers %s refusing to be framed or sniffed, and offering only MIDI and the screen kept on',
+    (path) => {
+      const headers = (config.headers ?? [])
+        .filter((rule) => matches(rule.source, path))
+        .flatMap((rule) => rule.headers)
+      const value = (key: string) => headers.find((header) => header.key === key)?.value
+      expect(value('X-Content-Type-Options')).toBe('nosniff')
+      expect(value('Content-Security-Policy')).toContain("frame-ancestors 'none'")
+      expect(value('Permissions-Policy')).toContain('midi=(self)')
+      expect(value('Referrer-Policy')).toBe('strict-origin-when-cross-origin')
+    },
+  )
 })
