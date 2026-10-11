@@ -55,7 +55,7 @@ export const editor = {
   up: 'Up a semitone',
   down: 'Down a semitone',
   back: 'Back a step',
-  on: 'On a step',
+  on: 'Forward a step',
   finger: 'Finger on {{note}}',
   noFinger: 'None',
   writeOut: 'Write out',

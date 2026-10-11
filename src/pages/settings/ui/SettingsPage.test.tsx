@@ -104,8 +104,8 @@ describe('Settings', () => {
     await user.click(await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }))
     await user.click(await screen.findByRole('combobox', { name: 'Keyboard' }))
     await user.click(await screen.findByRole('option', { name: 'Keyboard' }))
-    await user.click(screen.getByRole('switch', { name: /Sound the MIDI keyboard/ }))
-    await user.click(screen.getByRole('switch', { name: /Play through the piano/ }))
+    await user.click(screen.getByRole('switch', { name: /Play MIDI keys in the app/ }))
+    await user.click(screen.getByRole('switch', { name: /Use the keyboard’s speaker/ }))
     const choose = (group: string, value: string) =>
       user.click(
         within(screen.getByRole('radiogroup', { name: group })).getByRole('radio', { name: value }),

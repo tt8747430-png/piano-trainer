@@ -4,7 +4,7 @@ export const practice = {
   chromatic: 'Chromatic walk',
   chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
   title: 'Practice',
-  // Practice's seven places, each named for what is practised.
+  // Practice's eight places, each named for what is practised.
   subjects: {
     chords: 'Chords',
     scales: 'Scales and keys',

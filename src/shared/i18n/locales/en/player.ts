@@ -61,7 +61,7 @@ export const player = {
   },
   pace: {
     of: 'Tempo: {{value}}',
-    ownPace: 'Learn at your own pace',
+    ownPace: 'Waits for your notes',
     wait: 'Wait mode',
     playAlong: 'Listen and play along',
     speed: '{{percent}}% speed',
@@ -76,7 +76,7 @@ export const player = {
     group: 'Player',
     playStop: 'Play or stop',
     back: 'A step back',
-    next: 'A step on',
+    next: 'A step forward',
     faster: 'Listen 5% faster',
     slower: 'Listen 5% slower',
     loop: 'Loop the bar, or remove the loop',

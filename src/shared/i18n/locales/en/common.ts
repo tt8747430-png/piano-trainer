@@ -58,7 +58,7 @@ export const common = {
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
-    sound: 'Sound the MIDI keyboard',
+    sound: 'Play MIDI keys in the app',
     chord: 'Chord played',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
@@ -98,9 +98,9 @@ export const common = {
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {
     device: { label: 'Keyboard', any: 'Any keyboard', away: '{{device}} (not connected)' },
-    sound: 'Sound the MIDI keyboard',
+    sound: 'Play MIDI keys in the app',
     soundNote: 'For a keyboard with no speaker',
-    throughPiano: 'Play through the piano',
+    throughPiano: 'Use the keyboard’s speaker',
     throughPianoNote: 'The app’s music on the keyboard’s own speaker',
     octaveShift: 'Octave shift',
     touch: { label: 'Touch', light: 'Light', normal: 'Normal', heavy: 'Heavy' },

@@ -111,7 +111,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     store.dispatch({ type: 'writeOut', played })
   }
 
+  // The editor reads its keys layer by layer (`shortcutOf`), and lists them for the sheet
+  // (`useEditorShortcutList`); a key another listener took, or one an IME is composing, is not its.
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    if (event.defaultPrevented || event.isComposing) return
     if (recording) {
       if (!STOPS_A_TAKE.has(event.key)) return
       event.preventDefault()

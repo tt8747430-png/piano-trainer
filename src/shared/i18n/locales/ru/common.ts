@@ -60,7 +60,7 @@ export const common: LocaleResources['common'] = {
     },
     glissando: 'Глиссандо',
     pedal: 'Педаль',
-    sound: 'Звук MIDI-клавиатуры',
+    sound: 'Озвучивать MIDI-клавиатуру',
     chord: 'Сыгранный аккорд',
   },
   keyboardSettings: {
@@ -97,9 +97,9 @@ export const common: LocaleResources['common'] = {
   },
   midiSettings: {
     device: { label: 'Клавиатура', any: 'Любая клавиатура', away: '{{device}} (не подключена)' },
-    sound: 'Звук MIDI-клавиатуры',
+    sound: 'Озвучивать MIDI-клавиатуру',
     soundNote: 'Для клавиатуры без динамика',
-    throughPiano: 'Звук через пианино',
+    throughPiano: 'Через динамик клавиатуры',
     throughPianoNote: 'Музыка приложения — в динамике клавиатуры',
     octaveShift: 'Сдвиг октавы',
     touch: { label: 'Чувствительность', light: 'Лёгкая', normal: 'Обычная', heavy: 'Тяжёлая' },

@@ -57,7 +57,7 @@ export const player: LocaleResources['player'] = {
   },
   pace: {
     of: 'Темп: {{value}}',
-    ownPace: 'В своём темпе',
+    ownPace: 'Ждёт ваших нот',
     wait: 'Ожидание',
     playAlong: 'Слушать и играть вместе',
     speed: 'Скорость {{percent}}%',
