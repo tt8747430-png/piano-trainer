@@ -9,6 +9,7 @@ import {
   type DiagramColour,
   type DiagramMark,
   type DiagramMarks,
+  useWakeLock,
 } from '@/shared/lib'
 import type { Finger, Midi } from '@/shared/lib/music'
 import { EMPTY_TRAIL, strike, type Trail } from '@/widgets/live-score'
@@ -30,6 +31,8 @@ interface FreePlay {
 }
 
 export function useFreePlay(view: FreePlayView): FreePlay {
+  // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
+  useWakeLock()
   const navigate = useNavigate({ from: '/practice/free-play' })
   const [trail, setTrail] = useState<Trail>(EMPTY_TRAIL)
   const [colour, setColour] = useState<DiagramColour>('a')

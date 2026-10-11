@@ -17,7 +17,7 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack } from '@/shared/lib'
+import { useGoBack, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -52,6 +52,8 @@ function useCloseTo(target: EditorTarget): () => void {
  * and the takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  */
 export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
+  // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
+  useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
   const [chordNames, setChordNames] = useState(true)

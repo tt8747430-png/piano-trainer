@@ -15,6 +15,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import { audibleHands, type Hands, type Recording } from '@/shared/lib/schedule'
+import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
 import type { PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
@@ -70,6 +71,8 @@ export function usePracticePlayer(
   ownTempo: number,
   recording: Recording | null = null,
 ): PracticePlayer {
+  // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
+  useWakeLock()
   const toggles = useSettings(selectPractice)
   const tempo = view.tempo ?? ownTempo
   const loop = useMemo(

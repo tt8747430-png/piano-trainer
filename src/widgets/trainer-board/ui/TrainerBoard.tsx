@@ -14,6 +14,7 @@ import {
   type Asks,
   type TrainerRun,
 } from '@/features/trainer'
+import { useWakeLock } from '@/shared/lib'
 import { noteName } from '@/shared/lib/music'
 import { RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -29,6 +30,8 @@ import { useRoundWords } from './use-round-words'
  * to the new round's prompt; the computer's keys answer too (`useRoundShortcuts`).
  */
 export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Asks }) {
+  // The screen stays on while a round is on the screen: a phone on the stand does not lock mid-song.
+  useWakeLock()
   const { t } = useTranslation(['quiz', 'common'])
   const words = useRoundWords()
   const { question, selected, result } = trainer.round

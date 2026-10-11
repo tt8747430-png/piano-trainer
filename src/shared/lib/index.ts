@@ -63,6 +63,7 @@ export {
 export { useGoBack } from './use-go-back'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { useMediaQuery } from './use-media-query'
+export { useWakeLock } from './use-wake-lock'
 export { toggled } from './toggled'
 export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
