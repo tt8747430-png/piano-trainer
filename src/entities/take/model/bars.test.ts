@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { barMs, keepBars, takeBarCount } from './bars'
+import { barMs, keepBars, takeBarCount, takeBarStart } from './bars'
 import type { Take } from './types'
 
 /** At 120 in 4/4 a bar is 2000 ms: four bars. */
@@ -12,6 +12,7 @@ const TAKE: Take = {
   meter: '4/4',
   fromBar: 3,
   length: 8000,
+  bars: [0, 2000, 4000, 6000, 8000],
   notes: [
     { midi: midi(60), at: 500, held: 400, velocity: 80 },
     { midi: midi(62), at: 2500, held: 400, velocity: 80 },
@@ -25,11 +26,16 @@ const TAKE: Take = {
 }
 
 describe('a take’s bars', () => {
-  it('lasts its meter’s beats at its tempo, a bar begun counting whole', () => {
+  it('draws a bar to its meter’s beats at its tempo, and counts the bars its barlines span', () => {
     expect(barMs(TAKE)).toBe(2000)
     expect(takeBarCount(TAKE)).toBe(4)
-    expect(takeBarCount({ ...TAKE, length: 8001 })).toBe(5)
-    expect(takeBarCount({ ...TAKE, length: 0 })).toBe(1)
+    expect(takeBarCount({ bars: [0, 1000, 5000] })).toBe(2)
+    expect(takeBarCount({ bars: [0] })).toBe(1)
+  })
+
+  it('starts each bar where its barline fell, a pickup’s bar as short as it was', () => {
+    const pickup = { bars: [0, 1000, 5000, 9000] }
+    expect([0, 1, 2].map((bar) => takeBarStart(pickup, bar))).toEqual([0, 1000, 5000])
   })
 })
 

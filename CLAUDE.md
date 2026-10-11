@@ -172,8 +172,8 @@ it. `@` → `src`.
   a key's, `LIBRARY_BY_STYLE` what its pop-up lists, `otherModeVersion` a cadence's version in the other mode, from
   `MODE_VERSIONS`), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
   `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, with the laptop's sidebar, open or collapsed, the
-  keyboard settings (with `chordNames`), the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`: a name, the bar it starts at, the three pedals' presses; saved
-  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
+  keyboard settings (with `chordNames`), the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`: a name, the bar it starts at, its barlines as the piece's bars fell, the three pedals' presses; saved
+  compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `takeBarStart`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, with each trainer level's record; the evidence rules in `model/mastery.ts`, what an answer or a mark
   changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`:
   each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read

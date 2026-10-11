@@ -17,6 +17,7 @@ const TAKE: Take = {
   tempo: 90,
   meter: '4/4',
   length: 4000,
+  bars: [0, 2667, 5333],
   notes: [
     { midi: midi(60), at: 0, held: 640, velocity: 90 },
     { midi: midi(64), at: 667, held: 600, velocity: 72 },
@@ -32,6 +33,7 @@ const SAVED_TAKE = {
   tempo: 90,
   meter: '4/4',
   length: 4000,
+  bars: [0, 2667, 5333],
   notes: [
     [60, 0, 640, 90],
     [64, 667, 600, 72],
@@ -126,7 +128,7 @@ describe('createTakesStore', () => {
     ])
   })
 
-  it('drops a take whose id, piece, time, tempo, meter or length cannot be read, or that came before', () => {
+  it('drops a take whose id, piece, time, tempo, meter, length or barlines cannot be read, or that came before', () => {
     const takes = [
       SAVED_TAKE,
       { ...SAVED_TAKE, id: 'take-1' },
@@ -138,6 +140,10 @@ describe('createTakesStore', () => {
       { ...SAVED_TAKE, id: 'take-7', length: -1 },
       { ...SAVED_TAKE, id: 'take-8', length: 11 * 60 * 1000 },
       { ...SAVED_TAKE, id: 'take-9', notes: 'none' },
+      { ...SAVED_TAKE, id: 'take-10', bars: [0, 2667] },
+      { ...SAVED_TAKE, id: 'take-11', bars: [100, 2667, 5333] },
+      { ...SAVED_TAKE, id: 'take-12', bars: [0, 5333, 2667, 8000] },
+      { ...SAVED_TAKE, id: 'take-13', bars: undefined },
       null,
     ]
     expect(restored({ takes, nextTake: 2 }).takes.map((take) => take.id)).toEqual(['take-1'])

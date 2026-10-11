@@ -12,6 +12,7 @@ const take = (id: Take['id'], pieceId: string, notes: number): Take => ({
   meter: '4/4',
   fromBar: 1,
   length: 1000,
+  bars: [0, 2667],
   notes: Array.from({ length: notes }, () => ({ midi: midi(60), at: 0, held: 10, velocity: 80 })),
   pedals: [],
 })

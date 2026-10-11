@@ -10,6 +10,7 @@ const PLAYED: Played = {
   notes: [{ midi: midi(60), at: 0, held: 500, velocity: 80 }],
   pedals: [],
   length: 1000,
+  bars: [0, 2667],
 }
 const TAKE = {
   pieceId: 'my-1',
@@ -63,7 +64,7 @@ describe('renameTake', () => {
 describe('keepTakeBars', () => {
   it('cuts a take to its bars for good, keeping the others and the next number', () => {
     const store = fresh()
-    const long = { ...TAKE, tempo: 120, length: 8000 }
+    const long = { ...TAKE, tempo: 120, length: 8000, bars: [0, 2000, 4000, 6000, 8000] }
     const first = saveTake(store, long)
     const second = saveTake(store, TAKE)
     keepTakeBars(store, first, 1, 2)

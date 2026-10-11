@@ -55,7 +55,7 @@ export function startRecorder(
   audio.stop()
   const start = audio.now() + PLAY_DELAY
   const downbeat = start + clicks.downbeat
-  const timing = { downbeat, tempo: plan.tempo }
+  const timing = { downbeat, tempo: plan.tempo, barLines: clicks.barStarts }
   const beat = 60 / plan.tempo
   const heardNow = () => audio.audioTimeAt(performance.now())
   audio.play(clicks.sounds, start)

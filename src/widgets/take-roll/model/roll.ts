@@ -1,5 +1,5 @@
-import { barMs, takeBarCount, type Take } from '@/entities/take'
-import { beatsPerBar, midi, type Midi } from '@/shared/lib/music'
+import type { Take } from '@/entities/take'
+import { midi, type Midi } from '@/shared/lib/music'
 import type { PedalKind } from '@/shared/lib/schedule'
 
 /** How hard a note was struck, in four shades: soft to loud. */
@@ -45,15 +45,14 @@ export function rollOf(take: Take): Roll {
   const keys = take.notes.map((note) => note.midi)
   const { lowest, highest } =
     keys.length === 0 ? NO_NOTES : { lowest: Math.min(...keys) - 1, highest: Math.max(...keys) + 1 }
-  const bar = barMs(take)
-  const count = takeBarCount(take)
   const beat = 60_000 / take.tempo
-  const beatsInBar = beatsPerBar(take.meter)
+  // Each bar from its barline to the next, as long as it was: a pickup's bar a beat, say.
+  const spans = take.bars.slice(0, -1).map((at, i) => ({ at, end: take.bars[i + 1] ?? at }))
   const pressesOf = (pedal: PedalKind): RollPress[] =>
     take.pedals.filter((press) => press.pedal === pedal).map(({ down, up }) => ({ down, up }))
   return {
     lanes: Array.from({ length: highest - lowest + 1 }, (_, i) => midi(highest - i)),
-    length: count * bar,
+    length: take.bars.at(-1) ?? take.length,
     notes: take.notes.map(({ midi: key, at, held, velocity }) => ({
       midi: key,
       at,
@@ -65,9 +64,12 @@ export function rollOf(take: Take): Roll {
       sostenuto: pressesOf('sostenuto'),
       soft: pressesOf('soft'),
     },
-    bars: Array.from({ length: count }, (_, i) => ({ at: i * bar, number: take.fromBar + i })),
-    beats: Array.from({ length: count }, (_, i) =>
-      Array.from({ length: beatsInBar - 1 }, (_, j) => i * bar + (j + 1) * beat),
-    ).flat(),
+    bars: spans.map(({ at }, i) => ({ at, number: take.fromBar + i })),
+    beats: spans.flatMap(({ at, end }) =>
+      Array.from(
+        { length: Math.max(0, Math.round((end - at) / beat) - 1) },
+        (_, j) => at + (j + 1) * beat,
+      ),
+    ),
   }
 }

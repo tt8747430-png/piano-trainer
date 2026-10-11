@@ -15,7 +15,7 @@ import {
 } from './types'
 
 export const TAKES_STORAGE_KEY = 'pt-takes'
-export const TAKES_VERSION = 1
+export const TAKES_VERSION = 2
 
 /** The learner's takes (ADR 0028), in the order recorded. */
 export interface TakesState {
@@ -102,11 +102,26 @@ const kept = <T>(saved: unknown, read: (each: unknown) => T | null): T[] =>
     return value === null ? [] : [value]
   })
 
+/**
+ * A take's saved barlines: whole milliseconds from 0, each after the one before, the last at or past
+ * its length, within the longest take; null otherwise.
+ */
+function barsOf(saved: unknown, length: number): number[] | null {
+  if (!Array.isArray(saved) || saved[0] !== 0 || saved.length < 2) return null
+  const lines = saved.map((each) => msWithin(each, LONGEST_TAKE_MS))
+  const rising = lines.every(
+    (at, i) => at !== null && (i === 0 || at > (lines[i - 1] ?? Number.POSITIVE_INFINITY)),
+  )
+  const closing = lines.at(-1)
+  return rising && closing != null && closing >= length ? (lines as number[]) : null
+}
+
 /** A saved take whose fields read; its notes and presses kept one by one. */
 function takeOf(saved: unknown): Take | null {
   if (!isRecord(saved)) return null
   const { id, pieceId, name, made, tempo, meter, fromBar, length, notes, pedals } = saved
   const lasting = msWithin(length, LONGEST_TAKE_MS)
+  const bars = lasting === null ? null : barsOf(saved.bars, lasting)
   const tempoRead =
     typeof tempo === 'number' &&
     Number.isInteger(tempo) &&
@@ -122,7 +137,8 @@ function takeOf(saved: unknown): Take | null {
     !isMeter(meter) ||
     lasting === null ||
     !Array.isArray(notes) ||
-    !Array.isArray(pedals)
+    !Array.isArray(pedals) ||
+    bars === null
   ) {
     return null
   }
@@ -137,6 +153,7 @@ function takeOf(saved: unknown): Take | null {
     length: lasting,
     notes: kept(notes, (each) => noteOf(each, lasting)),
     pedals: kept(pedals, (each) => pressOf(each, lasting)),
+    bars,
   }
 }
 

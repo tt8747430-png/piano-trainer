@@ -18,6 +18,7 @@ const TAKE: Take = {
   meter: '4/4',
   fromBar: 5,
   length: 8000,
+  bars: [0, 2000, 4000, 6000, 8000],
   notes: [
     { midi: midi(60), at: 0, held: 400, velocity: 80 },
     { midi: midi(64), at: 4500, held: 400, velocity: 80 },

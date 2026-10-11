@@ -46,3 +46,10 @@ learner who only wants to hear themselves back gets a score they did not ask for
   ends kept when the editor is left or the app hidden: a page may be closed without another word.
 - `deleteSong` deletes the song's takes; a version's takes stay with the piece.
 - A browser without Web MIDI (Safari) cannot record; the Recorder says so.
+
+## Amendment (2026-10-11): a take keeps its barlines
+
+A take keeps each barline it spans (`bars`, milliseconds from its downbeat, the last closing the bar Stop came in),
+as the piece's bars fell under the click. A take recorded from a pickup or over a short bar counted every bar as the
+meter's: Keep bars cut the wrong notes, and the roll and Play from a bar fell off the piece's bars. `pt-takes` is
+version 2 (ADR 0038: a version-1 save is not read).

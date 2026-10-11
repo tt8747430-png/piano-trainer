@@ -13,6 +13,7 @@ const TAKE: Take = {
   meter: '4/4',
   fromBar: 1,
   length: 4000,
+  bars: [0, 4000],
   notes: [],
   pedals: [],
 }

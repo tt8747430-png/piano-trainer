@@ -25,6 +25,16 @@ interface TakeTiming {
   readonly stop: number
   /** The click's beats a minute: a key struck half a beat before the downbeat counts as on it. */
   readonly tempo: number
+  /** Each barline the click counted, in seconds from the downbeat: the first 0. */
+  readonly barLines: readonly number[]
+}
+
+/** The barlines a take of `length` ms spans: those before its end, then the one closing its last bar. */
+function barsOf(barLines: readonly number[], length: number): number[] {
+  const lines = barLines.map((at) => Math.round(at * 1000))
+  const within = lines.filter((at) => at < length)
+  const closing = lines.find((at) => at >= length) ?? length
+  return within[0] === 0 ? [...within, closing] : [0, ...within.filter((at) => at > 0), closing]
 }
 
 /**
@@ -45,7 +55,7 @@ export const isKept = (
  */
 export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
   const { downbeat, stop } = timing
-  if (stop <= downbeat) return { notes: [], pedals: [], length: 0 }
+  if (stop <= downbeat) return { notes: [], pedals: [], length: 0, bars: [0] }
   const ms = (at: number) => Math.round((at - downbeat) * 1000)
   const length = ms(stop)
   const notes: TakeNote[] = []
@@ -89,5 +99,5 @@ export function takeOf(heard: readonly Heard[], timing: TakeTiming): Played {
   for (const pedal of [...pedalDown.keys()]) lift(pedal, stop)
   notes.sort((a, b) => a.at - b.at || a.midi - b.midi)
   pedals.sort((a, b) => a.down - b.down)
-  return { notes, pedals, length }
+  return { notes, pedals, length, bars: barsOf(timing.barLines, length) }
 }

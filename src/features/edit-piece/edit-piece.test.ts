@@ -111,6 +111,7 @@ describe('the learner’s songs', () => {
       length: 0,
       notes: [],
       pedals: [],
+      bars: [0, 2667],
     })
     takes.setState({ takes: [take('take-1', song), take('take-2', 'bz1')], nextTake: 3 })
     deleteSong(store, takes, song)

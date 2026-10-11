@@ -18,7 +18,7 @@ const pedal = (down: boolean, at: number, kind: PedalKind = 'sustain'): Heard =>
 })
 
 /** At 120 a beat is half a second: the downbeat at 10 s on the audio clock. */
-const AT_120 = { downbeat: 10, tempo: 120 }
+const AT_120 = { downbeat: 10, tempo: 120, barLines: [0, 2, 4, 6, 8] }
 
 describe('takeOf', () => {
   it('keeps each key from the downbeat, in milliseconds, with its velocity', () => {
@@ -112,7 +112,15 @@ describe('takeOf', () => {
       notes: [],
       pedals: [],
       length: 0,
+      bars: [0],
     })
+  })
+
+  it('keeps the barlines the take spans, as the piece’s bars fell: a pickup’s bar a beat long', () => {
+    const pickup = { downbeat: 10, tempo: 60, barLines: [0, 1, 5, 9, 13] }
+    expect(takeOf([], { ...pickup, stop: 15 }).bars).toEqual([0, 1000, 5000])
+    expect(takeOf([], { ...pickup, stop: 16 }).bars).toEqual([0, 1000, 5000, 9000])
+    expect(takeOf([], { ...AT_120, stop: 12 }).bars).toEqual([0, 2000])
   })
 })
 

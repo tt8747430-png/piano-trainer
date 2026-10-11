@@ -35,12 +35,18 @@ export interface PedalPress {
 
 /**
  * What was played from the first downbeat to Stop: the keys in the order struck, the pedals' presses,
- * and its length in milliseconds.
+ * its length in milliseconds, and its barlines.
  */
 export interface Played {
   readonly notes: readonly TakeNote[]
   readonly pedals: readonly PedalPress[]
   readonly length: number
+  /**
+   * Each barline the take spans, in milliseconds from its downbeat, as the piece's bars fell under
+   * the click: the first 0, the last the end of the bar Stop came in. A pickup or a short bar is as
+   * long as it was, so the take's bars are the piece's.
+   */
+  readonly bars: readonly number[]
 }
 
 /** A take (ADR 0028): what was played in a piece, to a click at `tempo` in `meter`, kept as played. */

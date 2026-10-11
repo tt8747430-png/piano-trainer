@@ -82,6 +82,7 @@ describe('startRecorder', () => {
         notes: [{ midi: 60, at: 0, held: 500, velocity: 90 }],
         pedals: [{ pedal: 'sustain', down: 0, up: 1000 }],
         length: 1000,
+        bars: [0, 2000],
       },
     ])
   })

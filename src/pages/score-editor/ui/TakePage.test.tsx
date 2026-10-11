@@ -26,6 +26,7 @@ const TAKE = {
   meter: '4/4',
   fromBar: 1,
   length: 8000,
+  bars: [0, 2000, 4000, 6000, 8000],
   notes: [
     [55, 0, 500, 80],
     [59, 2000, 500, 80],
@@ -43,7 +44,7 @@ function withTake(take: object = TAKE) {
   )
   storage.setItem(
     TAKES_STORAGE_KEY,
-    JSON.stringify({ state: { takes: [take], nextTake: 2 }, version: 1 }),
+    JSON.stringify({ state: { takes: [take], nextTake: 2 }, version: 2 }),
   )
   return storage
 }

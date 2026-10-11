@@ -12,6 +12,7 @@ const TAKE: Take = {
   meter: '3/4',
   fromBar: 3,
   length: 4000,
+  bars: [0, 1500, 3000, 4500],
   notes: [
     { midi: midi(60), at: 0, held: 400, velocity: 10 },
     { midi: midi(64), at: 500, held: 400, velocity: 40 },
@@ -50,5 +51,18 @@ describe('rollOf', () => {
       soft: [],
       sostenuto: [],
     })
+  })
+
+  it('draws each bar as long as it fell in the piece: a pickup’s bar a beat', () => {
+    const pickup = rollOf({
+      ...TAKE,
+      tempo: 60,
+      meter: '4/4',
+      length: 6000,
+      bars: [0, 1000, 5000, 9000],
+    })
+    expect(pickup.bars.map((bar) => bar.at)).toEqual([0, 1000, 5000])
+    expect(pickup.beats).toEqual([2000, 3000, 4000, 6000, 7000, 8000])
+    expect(pickup.length).toBe(9000)
   })
 })
