@@ -119,11 +119,24 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
   }
 }
 
-function songOf(saved: unknown): OwnSong | null {
-  if (!isRecord(saved) || !isOwnSongId(saved.id) || !isText(saved.title)) return null
+/** A song as it travels without an id (a shared link): its title and its music. */
+export interface SharedSong {
+  readonly title: string
+  readonly music: PieceMusic
+}
+
+/** A song from outside the app, read as a save is: a title and music that read, else null. */
+export function readSharedSong(saved: unknown): SharedSong | null {
+  if (!isRecord(saved) || !isText(saved.title)) return null
   const title = songTitle(saved.title)
   const music = musicOfSaved(saved)
-  return title && music ? { id: saved.id, title, ...music } : null
+  return title && music ? { title, music } : null
+}
+
+function songOf(saved: unknown): OwnSong | null {
+  if (!isRecord(saved) || !isOwnSongId(saved.id)) return null
+  const song = readSharedSong(saved)
+  return song ? { id: saved.id, title: song.title, ...song.music } : null
 }
 
 /** The value already held where it has the same content: a screen's memos over it hold. */

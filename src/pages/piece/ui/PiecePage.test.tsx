@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { readSongLink } from '@/features/share-song'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -142,6 +143,20 @@ describe('Piece: the learner’s own music', () => {
     expect(piecesStore.getState().versions).toEqual({})
     expect(await screen.findByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
     expect(screen.queryByText('Your version')).toBeNull()
+  })
+
+  it('shares an own song as a link that carries it, copied where there is no share sheet', async () => {
+    const user = userEvent.setup()
+    const song = { id: 'my-1', title: 'Morning', ...MUSIC }
+    await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
+    await user.click(await screen.findByRole('button', { name: 'Share' }))
+    expect(await screen.findByRole('status', { name: '' })).toHaveTextContent('Link copied.')
+    const link = new URL(await navigator.clipboard.readText())
+    expect(link.pathname).toBe('/songs/shared')
+    expect(await readSongLink(link.searchParams.get('song') ?? '')).toEqual({
+      title: 'Morning',
+      music: MUSIC,
+    })
   })
 
   it('deletes an own song once asked, back on Songs', async () => {

@@ -14,3 +14,8 @@ function readSongsSearch(raw: Raw): SongsFilter {
   }
 }
 export const songsSearch = routeSearch(readSongsSearch, SONGS_DEFAULTS)
+
+// A shared song: its link's text, only read as text here, so the router carries no decoder.
+export const validateSharedSongSearch = (raw: Raw): { song: string } => ({
+  song: readText(raw.song, ''),
+})

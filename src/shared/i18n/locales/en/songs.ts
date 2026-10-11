@@ -17,4 +17,13 @@ export const songs = {
     make: 'Make',
     makeAndRecord: 'Record',
   },
+  // A song someone shared as a link.
+  shared: {
+    title: 'A shared song',
+    reading: 'Reading the song…',
+    facts: '{{key}} · {{meter}} · {{tempo}} BPM',
+    add: 'Add to Your songs',
+    none: 'This link holds no song: it may be cut short.',
+    toSongs: 'To Songs',
+  },
 } as const

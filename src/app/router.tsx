@@ -71,7 +71,7 @@ import {
   trainerSearch,
   validateCheckSearch,
 } from './routes/practice-search'
-import { songsSearch } from './routes/songs-search'
+import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { ShellLayout } from './ShellLayout'
 
@@ -140,6 +140,12 @@ const songsRoute = createRoute({
   path: '/songs',
   ...songsSearch,
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
+})
+const sharedSongRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/shared',
+  validateSearch: validateSharedSongSearch,
+  component: lazyRouteComponent(songsScreens, 'SharedSongPage'),
 })
 const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -436,6 +442,7 @@ const routeTree = rootRoute.addChildren([
     pathRoute,
     settingsRoute,
     songsRoute,
+    sharedSongRoute,
     pieceRoute,
     learnRoute,
     chordsRoute,

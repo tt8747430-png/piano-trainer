@@ -86,7 +86,7 @@ it. `@` → `src`.
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
-  the exercise's own fields) fill; `pages/learn` is the lessons by module; `pages/practice` the eight places as rows; `pages/free-play` Free play (`useFreePlay`: Play's trail or Mark's marks, the URL's `marks`; `MarkTools`); `pages/quiz` every
+  the exercise's own fields) fill; `pages/learn` is the lessons by module; `pages/practice` the eight places as rows; `pages/shared-song` a song opened from a shared link (`/songs/shared?song=…`), added to Your songs when asked; `pages/free-play` Free play (`useFreePlay`: Play's trail or Mark's marks, the URL's `marks`; `MarkTools`); `pages/quiz` every
   trainer by group (`model/quiz-groups.ts`, held by a test to every trainer) with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords` and `pages/chord-finder` Chords' Build and Find; `pages/scales`
   Scales and keys (its Key view's songs in the key, `PiecesInKey`); `pages/progressions`, `pages/passing-chords` and
@@ -146,7 +146,7 @@ it. `@` → `src`.
   `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
   machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
   `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
-  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `metronome` (a click on its own, a bar at a time on the audio clock, `useMetronome`, with tap tempo, `MetronomeFields`; Free play's, its tempo and beats in the URL).
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `ShareSongButton`); `metronome` (a click on its own, a bar at a time on the audio clock, `useMetronome`, with tap tempo, `MetronomeFields`; Free play's, its tempo and beats in the URL).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits

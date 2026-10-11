@@ -5,6 +5,7 @@ import {
   type OwnSongId,
   type PieceMusic,
   type PiecesStore,
+  type SharedSong,
 } from '@/entities/piece'
 import { keySymbol, type Key, type Meter } from '@/shared/lib/music'
 
@@ -38,6 +39,17 @@ export function makeSong(store: PiecesStore, draft: SongDraft): OwnSongId | null
   const id = ownSongId(nextSong)
   store.setState({
     songs: [...songs, { id, title, ...chartStart(draft.key, draft.meter) }],
+    nextSong: nextSong + 1,
+  })
+  return id
+}
+
+/** Makes a song that came from elsewhere (a shared link) the learner's, under the next number. */
+export function addSong(store: PiecesStore, song: SharedSong): OwnSongId {
+  const { songs, nextSong } = store.getState()
+  const id = ownSongId(nextSong)
+  store.setState({
+    songs: [...songs, { id, title: song.title, ...song.music }],
     nextSong: nextSong + 1,
   })
   return id

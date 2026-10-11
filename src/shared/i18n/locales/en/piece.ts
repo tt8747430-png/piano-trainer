@@ -17,6 +17,10 @@ export const piece = {
     cancel: 'Keep mine',
   },
   delete: 'Delete',
+  // An own song sent on as a link: its chart, tune and written hands inside it.
+  share: 'Share',
+  shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
+  shareFailed: 'The link could not be made here.',
   deleting: {
     title: 'Delete {{title}}?',
     says: 'It is removed from Your songs, with its music and takes.',

@@ -28,8 +28,10 @@ export {
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,
+  readSharedSong,
   type PiecesState,
   type PiecesStore,
+  type SharedSong,
 } from './model/store'
 export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
 export { repertoire } from './model/repertoire'

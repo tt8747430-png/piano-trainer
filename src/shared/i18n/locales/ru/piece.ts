@@ -17,6 +17,9 @@ export const piece: LocaleResources['piece'] = {
     confirm: 'Вернуть',
     cancel: 'Оставить мою',
   },
+  share: 'Поделиться',
+  shareCopied: 'Ссылка скопирована. Открыв её, любой сможет добавить песню к своим.',
+  shareFailed: 'Здесь ссылку сделать не удалось.',
   delete: 'Удалить',
   deleting: {
     title: 'Удалить «{{title}}»?',

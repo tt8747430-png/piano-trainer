@@ -8,6 +8,7 @@ import {
   entryTitles,
   isDegreePiece,
   isOwnSongId,
+  musicOf,
   selectHasVersion,
   usePieceHeadings,
   usePieces,
@@ -16,6 +17,7 @@ import {
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
+import { ShareSongButton } from '@/features/share-song'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
@@ -92,7 +94,10 @@ export function PieceView({ piece }: { piece: Piece }) {
       </section>
       <PieceAbout entry={piece} />
       {own ? (
-        <div className="flex">
+        <div className="flex flex-wrap items-start gap-3">
+          {isDegreePiece(piece) ? null : (
+            <ShareSongButton song={{ title, music: musicOf(piece) }} />
+          )}
           <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
         </div>
       ) : hasVersion ? (
