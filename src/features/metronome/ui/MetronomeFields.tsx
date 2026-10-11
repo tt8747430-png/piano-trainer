@@ -5,7 +5,8 @@ import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
-import { METRONOME_BEATS, tappedTempo, withTap, type MetronomeBeats } from '../model/metronome'
+import { METRONOME_BEATS, type MetronomeBeats } from '@/shared/lib/schedule'
+import { tappedTempo, withTap } from '../model/metronome'
 import { useMetronome } from '../model/use-metronome'
 
 /**
