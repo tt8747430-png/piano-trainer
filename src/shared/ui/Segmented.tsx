@@ -22,7 +22,9 @@ export function Segmented<V extends OptionValue>({
   /** Shown, but not to be changed: its segments faded. */
   disabled?: boolean
 }) {
-  const crowded = options.length >= 4
+  // Four segments, or words enough for a line (Трезвучия · Септаккорды · Нонаккорды), crowd a phone.
+  const crowded =
+    options.length >= 4 || options.reduce((sum, option) => sum + option.label.length, 0) > 24
   return (
     <RadioGroup
       aria-label={label}
@@ -41,7 +43,7 @@ export function Segmented<V extends OptionValue>({
           aria-label={optionName(option)}
           className={cn(
             'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-lg border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-auto wrap-break-word text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-chosen data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground',
-            // Four segments or more share a phone's width: their words a size down, to fit.
+            // Crowded on a phone's width: the words a size down, to fit.
             crowded && 'max-sm:px-1 max-sm:text-sm',
           )}
         >
