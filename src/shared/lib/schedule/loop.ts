@@ -41,6 +41,9 @@ interface Loop {
 /** The next pass is queued this long before the last one ends, so the loop never gaps. */
 const LOOP_LEAD = 0.5
 
+/** A pass queued late (the page's timers slept past the last one's end) starts this soon after. */
+const LATE_START = 0.1
+
 const endOf = (pass: Pass): number => pass.start + pass.end
 
 function passAt(
@@ -78,13 +81,21 @@ export const startLoop = (performance: Performance, options: LoopOptions, start:
 
 /**
  * The loop at `time` on the clock: passes that are over are dropped, and the next is queued once the
- * last is within LOOP_LEAD of its end. The same loop while nothing changes.
+ * last is within LOOP_LEAD of its end (or soon, when the clock is already past it: a page whose timers
+ * slept never queues a pass in the past). The same loop while nothing changes.
  */
 export function advanceLoop(loop: Loop, time: number): Loop {
   const last = loop.passes.at(-1)
   const next =
     last && time >= endOf(last) - LOOP_LEAD
-      ? [passAt(loop.performance, loop.options, loop.queued, endOf(last))]
+      ? [
+          passAt(
+            loop.performance,
+            loop.options,
+            loop.queued,
+            Math.max(endOf(last), time + LATE_START),
+          ),
+        ]
       : []
   const passes = [...loop.passes.filter((pass) => endOf(pass) > time), ...next]
   return next.length === 0 && passes.length === loop.passes.length

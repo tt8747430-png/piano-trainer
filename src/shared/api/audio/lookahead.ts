@@ -8,6 +8,9 @@ interface Lookahead {
   readonly pending: number
 }
 
+/** A sound due this long ago is dropped: the page slept past it, and it would sound in a heap. */
+const STALE = 1
+
 interface Queued {
   readonly sound: Sound
   readonly at: number
@@ -16,7 +19,8 @@ interface Queued {
 /**
  * Hands sounds to `render` only shortly before they are due, so a long piece never builds thousands
  * of audio nodes at once. What falls within `horizon` seconds renders at once; a timer every
- * `interval` ms renders the rest as the clock reaches them, in time order.
+ * `interval` ms renders the rest as the clock reaches them, in time order; what it reaches long after
+ * they were due (a sleeping page's timers) is dropped, not played all at once.
  */
 export function createLookahead({
   now,
@@ -39,10 +43,10 @@ export function createLookahead({
   }
 
   const renderDue = () => {
-    const until = now() + horizon
-    const due = queue.filter((queued) => queued.at < until)
+    const time = now()
+    const due = queue.filter((queued) => queued.at < time + horizon)
     queue = queue.slice(due.length)
-    for (const { sound, at } of due) render(sound, at)
+    for (const { sound, at } of due) if (at >= time - STALE) render(sound, at)
     if (queue.length === 0) stopTimer()
   }
 

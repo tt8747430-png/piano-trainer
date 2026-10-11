@@ -58,6 +58,10 @@ describe('advanceLoop', () => {
     expect(advanceLoop(counted, 17.5).passes.map((pass) => pass.start)).toEqual([10, 18])
   })
 
+  it('queues a pass due while its timer slept from now, never in the past', () => {
+    expect(advanceLoop(counted, 40).passes.map((pass) => pass.start)).toEqual([40.1])
+  })
+
   it('plays the passage again from its start, with the metronome and without the count-in', () => {
     const late = startLoop(
       ONE_BAR,

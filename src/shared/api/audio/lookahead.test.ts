@@ -49,6 +49,15 @@ describe('createLookahead', () => {
     expect(lookahead.pending).toBe(0)
   })
 
+  it('drops what it reaches long after it was due, as a page whose timers slept would', () => {
+    const lookahead = setUp()
+    lookahead.add([note(1), note(5), note(6)], 0)
+    clock = 5.5
+    vi.advanceTimersByTime(25)
+    expect(rendered).toEqual([5])
+    expect(lookahead.pending).toBe(1)
+  })
+
   it('merges a later batch into the queue in time order', () => {
     const lookahead = setUp()
     lookahead.add([note(1)], 0)

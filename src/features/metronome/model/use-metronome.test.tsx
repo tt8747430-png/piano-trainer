@@ -55,4 +55,15 @@ describe('useMetronome', () => {
     expect(third?.at).toBeCloseTo(4 + PLAY_DELAY)
     expect(third?.sounds.map((sound) => sound.at)).toEqual([0, 1, 2, 3])
   })
+
+  it('skips the bars missed while its timer slept, keeping the beat', () => {
+    metronome({ on: true, tempo: 120, beats: 4 })
+    act(() => {
+      audio.setNow(61)
+      vi.advanceTimersByTime(100)
+    })
+    const late = audio.played.slice(2).map((play) => play.at)
+    expect(late.every((at) => at >= 61)).toBe(true)
+    expect(late[0]).toBeCloseTo(62 + PLAY_DELAY)
+  })
 })
