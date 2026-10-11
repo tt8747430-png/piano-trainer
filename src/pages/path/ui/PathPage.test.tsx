@@ -28,6 +28,26 @@ describe('Path', () => {
     ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
   })
 
+  it('lists the pieces practised last, latest first, and none before the first', async () => {
+    const { progressStore } = await renderApp('/')
+    expect(screen.queryByRole('region', { name: 'Recently practised' })).not.toBeInTheDocument()
+    act(() =>
+      progressStore.setState({
+        practised: {
+          bz5: '2026-09-25T10:00:00Z',
+          ode: '2026-09-27T10:00:00Z',
+          'my-404': '2026-09-28T10:00:00Z',
+        },
+      }),
+    )
+    const recent = await screen.findByRole('region', { name: 'Recently practised' })
+    expect(
+      within(recent)
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href')),
+    ).toEqual(['/songs/ode', '/songs/bz5'])
+  })
+
   it('lists level 1 with its count and marks a step learned from its row', async () => {
     const user = userEvent.setup()
     await renderApp('/')

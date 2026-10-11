@@ -8,6 +8,7 @@ export const path: LocaleResources['path'] = {
   toCheck: 'Аккордов на проверку: {{count}}',
   known: 'Знаю {{known}} из {{total}}',
   progress: '{{learned}} из {{total}}',
+  recent: 'Недавно играли',
   days: {
     title: 'Занятия',
     inARow: 'Дней подряд: {{count}}',

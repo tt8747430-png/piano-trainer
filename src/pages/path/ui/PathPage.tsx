@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { RoundLink, ScreenHeader } from '@/shared/ui'
 import { ContinueCard } from '@/widgets/continue-card'
 import { PathLevels } from '@/widgets/path-levels'
+import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
 
 export function PathPage() {
@@ -27,6 +28,7 @@ export function PathPage() {
       <div className="mt-2 flex flex-col gap-6">
         <ContinueCard />
         <PracticeDays />
+        <RecentPieces />
         <PathLevels />
       </div>
     </div>

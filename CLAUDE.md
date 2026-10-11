@@ -96,7 +96,7 @@ it. `@` → `src`.
   `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028), `tuneOf` (the song's tune under a take); its parts share one context and read the store narrowly;
   `TakePage`, a take's page: its name, `TakeRoll`, `useTakePlay` and `KeepBars`, ADR 0034).
-- **widgets/<x>/**: composite UI tied to screens (`practice-days` (the days practised in a row and the last seven, on the Path), `app-nav` (the phone's bar; the laptop's sidebar, which collapses to its icons; Alt and 1–4 go to its places, Cmd or Ctrl with B collapses it), `continue-card`, `path-levels`, `piece-list`,
+- **widgets/<x>/**: composite UI tied to screens (`practice-days` (the days practised in a row and the last seven, on the Path), `piece-list` (with `RecentPieces`, the Path's pieces practised last), `app-nav` (the phone's bar; the laptop's sidebar, which collapses to its icons; Alt and 1–4 go to its places, Cmd or Ctrl with B collapses it), `continue-card`, `path-levels`,
   `chord-chart` (a piece's lines of bars), `piece-chords` (the chords a piece plays, each to tap, `chordsOf`, and the
   Check of them), `player-setup` (the Setup: its button and sheet, its first page
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `PatternCard` (the pattern
