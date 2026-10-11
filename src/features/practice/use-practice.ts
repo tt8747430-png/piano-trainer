@@ -198,7 +198,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     }
     const timer = setTimeout(() => dispatch({ type: 'advance' }), accompany())
     return () => clearTimeout(timer)
-  }, [waiting, answered, rest, state.beatGroup, state.performance])
+  }, [waiting, answered, rest, state.arrival, state.performance])
 
   useEffect(
     () =>

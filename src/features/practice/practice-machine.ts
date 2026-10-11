@@ -14,6 +14,11 @@ export interface PracticeState {
   readonly loop: BeatGroupRange | null
   /** Where the learner is. */
   readonly beatGroup: number
+  /**
+   * How many times a beat group has been arrived at: a loop of one beat group arrives at the same one
+   * again, and the hook that plays on from it must hear that it did.
+   */
+  readonly arrival: number
   /** Listen: the transport runs. Wait mode: the app waits for notes. */
   readonly playing: boolean
   /** Wait mode: the pitch classes the practised hands play here, lowest first. */
@@ -96,6 +101,7 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
   return {
     ...state,
     beatGroup,
+    arrival: state.arrival + 1,
     expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
     ahead: [],
@@ -132,6 +138,7 @@ export function initialPractice(
     hands,
     loop,
     beatGroup: 0,
+    arrival: 0,
     playing: false,
     expected: [],
     received: [],
