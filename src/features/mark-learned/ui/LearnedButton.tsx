@@ -1,14 +1,14 @@
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { StepId } from '@/entities/path'
+import type { LearnedId } from '@/entities/progress'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 
 /**
- * A step's screen's Learned toggle: a check waiting in soft ink; pressed, it wears the learned
+ * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the learned
  * paint's wash and its check sits on the paint.
  */
-export function LearnedButton({ step }: { step: StepId }) {
+export function LearnedButton({ step }: { step: LearnedId }) {
   const { t } = useTranslation('common')
   const { learned, toggle } = useLearned(step)
   return (

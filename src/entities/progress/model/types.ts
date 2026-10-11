@@ -31,10 +31,16 @@ export interface TrainerRecord {
 /** Where a trainer keeps a level's record: `name-chord:3`, `intervals-by-ear:custom`. */
 export type RunKey = `${string}:${string}`
 
+/** What can be marked learned: a Path step, or a lesson (`lesson:triads`), which is no step. */
+export type LearnedId = StepId | `lesson:${string}`
+
+/** A lesson's learned mark. */
+export const lessonLearnedId = (lessonId: string): LearnedId => `lesson:${lessonId}`
+
 /** What the learner has done, saved on this device. Dates are ISO strings. */
 export interface ProgressState {
-  /** When each step was marked learned. */
-  readonly learned: Readonly<Partial<Record<StepId, string>>>
+  /** When each step or lesson was marked learned. */
+  readonly learned: Readonly<Partial<Record<LearnedId, string>>>
   /** Each piece's last opening in the Player. */
   readonly practised: Readonly<Partial<Record<PieceId, string>>>
   /** Each skill's evidence, oldest first, at most EVIDENCE_SIZE answers. */

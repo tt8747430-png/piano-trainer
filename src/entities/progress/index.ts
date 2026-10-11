@@ -1,5 +1,7 @@
 export {
   EMPTY_PROGRESS,
+  lessonLearnedId,
+  type LearnedId,
   type Answer,
   type ProgressState,
   type QuizAnswer,

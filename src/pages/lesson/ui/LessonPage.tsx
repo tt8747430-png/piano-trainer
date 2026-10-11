@@ -2,6 +2,8 @@ import { useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { lessonById } from '@/entities/lesson'
 import { LEVEL_NAME } from '@/entities/path'
+import { lessonLearnedId } from '@/entities/progress'
+import { LearnedButton } from '@/features/mark-learned'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { LessonView } from '@/widgets/lesson-view'
@@ -27,6 +29,10 @@ export function LessonPage() {
         {t(`learn:category.${lesson.category}`)}
       </p>
       <LessonView key={lesson.id} lesson={lesson} />
+      {/* Read to its end, the lesson is marked learned here; Learn shows it. */}
+      <div className="flex justify-end">
+        <LearnedButton step={lessonLearnedId(lesson.id)} />
+      </div>
     </div>
   )
 }

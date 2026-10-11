@@ -122,13 +122,13 @@ differently, the UI column says how.
 
 ## Path and progress
 
-| Term         | Means                                                                                      | Avoid                     |
-| ------------ | ------------------------------------------------------------------------------------------ | ------------------------- |
-| **Level**    | 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced: a Step's place on the Path        | difficulty, grade         |
-| **Path**     | Every Step in order, level by level; the one source of levels                              | course, curriculum        |
-| **Step**     | One entry on the Path: a Piece, a chord family or a scale kind (`piece:bz5`, `chords:sev`) | lesson, item, task        |
-| **Learned**  | A Step the learner marked, or a chord or scale Step marked once every Skill in it is Known | done, completed, mastered |
-| **Continue** | The one suggestion on the Path screen: what to do next                                     | resume, next up           |
+| Term         | Means                                                                                                                                                    | Avoid                     |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| **Level**    | 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced: a Step's place on the Path                                                                      | difficulty, grade         |
+| **Path**     | Every Step in order, level by level; the one source of levels                                                                                            | course, curriculum        |
+| **Step**     | One entry on the Path: a Piece, a chord family or a scale kind (`piece:bz5`, `chords:sev`)                                                               | lesson, item, task        |
+| **Learned**  | A Step or a Lesson the learner marked (`LearnedId`; a lesson is `lesson:<id>`, no Step), or a chord or scale Step marked once every Skill in it is Known | done, completed, mastered |
+| **Continue** | The one suggestion on the Path screen: what to do next                                                                                                   | resume, next up           |
 
 ## Theory gaps
 

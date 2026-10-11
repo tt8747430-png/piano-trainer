@@ -1,8 +1,8 @@
-import { pathSteps, pieceStepId, stepById, type PlacedStep, type StepId } from '@/entities/path'
+import { pathSteps, pieceStepId, stepById, type PlacedStep } from '@/entities/path'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
 import { NO_ANSWERS } from './mastery'
-import type { Answer, ProgressState, RunKey, TrainerRecord } from './types'
+import type { Answer, LearnedId, ProgressState, RunKey, TrainerRecord } from './types'
 
 export const selectLearned = (state: ProgressState) => state.learned
 export const selectPractised = (state: ProgressState) => state.practised
@@ -31,7 +31,7 @@ export function selectSuggestedStep(state: ProgressState): PlacedStep | null {
 }
 
 export const selectIsLearned =
-  (id: StepId) =>
+  (id: LearnedId) =>
   (state: ProgressState): boolean =>
     state.learned[id] !== undefined
 

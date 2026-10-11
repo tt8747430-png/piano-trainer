@@ -18,6 +18,16 @@ describe('A lesson', () => {
     ).toBeInTheDocument()
   })
 
+  it('is marked learned at its end, and Learn shows it so', async () => {
+    const user = userEvent.setup()
+    const { progressStore, router } = await renderApp('/learn/lessons/reading-chord-symbols')
+    await user.click(await screen.findByRole('button', { name: 'Learned' }))
+    expect(progressStore.getState().learned['lesson:reading-chord-symbols']).toBeDefined()
+    await act(() => router.navigate({ to: '/learn' }))
+    const row = await screen.findByRole('link', { name: /How to read chord symbols/ })
+    expect(within(row).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
+  })
+
   it('opens its exercises in the Player, walked through the keys or in an inversion', async () => {
     await renderApp('/learn/lessons/two-five-one')
     const step1 = await screen.findByRole('link', { name: /^Step 1: up by semitones/ })

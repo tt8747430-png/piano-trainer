@@ -26,7 +26,7 @@ export interface Tile {
  * Practice's own lists show a page alike.
  */
 export const PAGE_TILES = {
-  lesson: { icon: BookOpenText, paint: 'grass' },
+  lesson: { icon: BookOpenText, paint: 'sand' },
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
   keys: { icon: CircleDot, paint: 'lilac' },

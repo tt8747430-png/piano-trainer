@@ -42,7 +42,13 @@ describe('createProgressStore', () => {
     const storage = createMemoryStorage()
     const seven = Array.from({ length: 7 }, (_, i) => ({ correct: i % 2 === 0, at: DAY }))
     writeSaved(storage, {
-      learned: { 'piece:bz5': DAY, 'lesson:1': DAY, 'scale:blues': 'yesterday', 'chords:': DAY },
+      learned: {
+        'piece:bz5': DAY,
+        'lesson:triads': DAY,
+        'lesson:': DAY,
+        'scale:blues': 'yesterday',
+        'chords:': DAY,
+      },
       practised: { bz5: DAY, '': DAY, ode: 42 },
       answers: {
         'chord:m7': seven,
@@ -59,7 +65,7 @@ describe('createProgressStore', () => {
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
-      learned: { 'piece:bz5': DAY },
+      learned: { 'piece:bz5': DAY, 'lesson:triads': DAY },
       practised: { bz5: DAY },
       answers: {
         'chord:m7': seven.slice(2),

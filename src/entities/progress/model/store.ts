@@ -1,11 +1,12 @@
 import type { StoreApi } from 'zustand/vanilla'
-import { isStepId, type StepId } from '@/entities/path'
+import { isStepId } from '@/entities/path'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
   type Answer,
+  type LearnedId,
   type ProgressState,
   type RunKey,
   type TrainerRecord,
@@ -13,6 +14,10 @@ import {
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
 export const PROGRESS_VERSION = 1
+
+/** A step's id, or a lesson's: `lesson:` and an id, only checked for being there. */
+const isLearnedId = (value: unknown): value is LearnedId =>
+  isStepId(value) || (typeof value === 'string' && /^lesson:./.test(value))
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -80,7 +85,7 @@ function trainerRecord(value: unknown): TrainerRecord | undefined {
 function sanitize(persisted: unknown): ProgressState {
   const saved = savedObject<ProgressState>(persisted)
   return {
-    learned: kept<StepId, string>(saved.learned, isStepId, dateOrNothing),
+    learned: kept<LearnedId, string>(saved.learned, isLearnedId, dateOrNothing),
     practised: kept(saved.practised, isPieceKey, dateOrNothing),
     answers: kept<SkillId, readonly Answer[]>(saved.answers, isSkillId, evidenceOrNothing),
     trainers: kept(saved.trainers, isRunKey, trainerRecord),
