@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   keyFromParam,
@@ -106,9 +106,18 @@ export function LiveScore({
       ),
     [chords, key, names],
   )
+  // The newest chord stays in sight as the trail grows past the screen's width.
+  const scroller = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const element = scroller.current
+    if (element) element.scrollLeft = element.scrollWidth
+  }, [chords.length])
   return (
     <section className="flex flex-col gap-2">
-      <div className="max-w-full overflow-x-auto overscroll-x-contain pt-12 scrollbar-none">
+      <div
+        ref={scroller}
+        className="max-w-full overflow-x-auto overscroll-x-contain pt-12 scrollbar-none"
+      >
         <LazyScoreView score={score} timeBefore={NO_TIME}>
           {(layout) => <BarNames layout={layout} names={names} />}
         </LazyScoreView>

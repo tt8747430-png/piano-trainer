@@ -69,6 +69,8 @@ export function FreePlayPage() {
         }
       />
       <ExplorerKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
+      {/* What is played is the screen's point: it comes first, under the keys; the choices after. */}
+      <LiveScore chords={free.chords} keyParam={view.key} />
       <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('freePlay.mode')}>
           <Segmented
@@ -88,7 +90,6 @@ export function FreePlayPage() {
           />
         ) : null}
       </div>
-      <LiveScore chords={free.chords} keyParam={view.key} />
     </div>
   )
 }
