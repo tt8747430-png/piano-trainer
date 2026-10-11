@@ -21,11 +21,12 @@
       ;(function () {
         // Paint the saved theme before first paint, so a dark-mode learner never sees a white
         // flash. Mirrors resolveTheme (src/entities/settings/model/resolve-theme.ts) and reads what
-        // createSettingsStore saves under 'pt-settings'; src/app/theme-boot.test.ts holds them.
+        // createSettingsStore saves under 'pt-settings', at SETTINGS_VERSION: a save of another
+        // version the store discards, so this does too. src/app/theme-boot.test.ts holds them.
         var theme = 'system'
         try {
           var saved = JSON.parse(localStorage.getItem('pt-settings') || 'null')
-          var chosen = saved && saved.state && saved.state.theme
+          var chosen = saved && saved.version === 1 && saved.state && saved.state.theme
           if (chosen === 'light' || chosen === 'dark') theme = chosen
         } catch (_) {}
         if (theme === 'system') {

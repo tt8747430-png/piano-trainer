@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { createSettingsStore, SETTINGS_STORAGE_KEY } from '@/entities/settings'
+import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { setTheme } from '@/features/set-preference'
 import { THEME_COLORS } from '@/shared/config'
 import { stubMatchMedia } from '@/shared/test/match-media'
@@ -48,6 +48,16 @@ describe('the #theme-boot script in index.html', () => {
   it('asks the OS when nothing is saved', () => {
     stubMatchMedia({ dark: true })
     expect(runBoot()).toBe('dark')
+  })
+
+  it('reads the store’s version only, as the store does', () => {
+    expect(boot).toContain(`saved.version === ${SETTINGS_VERSION}`)
+    stubMatchMedia({ dark: false })
+    localStorage.setItem(
+      SETTINGS_STORAGE_KEY,
+      JSON.stringify({ version: SETTINGS_VERSION + 1, state: { theme: 'dark' } }),
+    )
+    expect(runBoot()).toBe('light')
   })
 
   it('asks the OS when the saved JSON is corrupt', () => {
