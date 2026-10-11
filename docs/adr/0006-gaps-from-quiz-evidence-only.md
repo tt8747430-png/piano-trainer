@@ -23,3 +23,9 @@ Known), in the quiz's My gaps mode, and as one line on the Continue card.
 - A Step's Check asks each Skill as often as its Evidence still lacks to be Known (`stillToKnow`, at least once),
   so a learner who answers every question right ends it with the Step learned; a Piece's Check asks its chords in
   turn, six questions or one each.
+
+## Amendment (2026-10-11): a Known skill comes back for review
+
+A Known skill whose latest answer is 14 days old or older is **Due** (`isDue`): My gaps asks it after the gaps and
+before the unknowns of opened pieces, and its count counts it. Its rating stays Known, so a learned Step is not
+taken back; a right answer makes it Known for another 14 days. Due still comes from quiz evidence only.

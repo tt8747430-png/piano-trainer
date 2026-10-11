@@ -28,6 +28,21 @@ export function stillToKnow(answers: readonly Answer[]): number {
   return more
 }
 
+/** A Known skill not answered for this long is due for a review (ADR 0006). */
+export const REVIEW_AFTER_DAYS = 14
+const DAY_MS = 24 * 60 * 60 * 1000
+
+/**
+ * Due: Known, but its latest answer is `REVIEW_AFTER_DAYS` old or older, so My gaps asks it again;
+ * a right answer makes it Known for as long again. Its rating stays Known: what was learned is not
+ * taken back, it is only looked at again.
+ */
+export function isDue(answers: readonly Answer[], now: Date): boolean {
+  const latest = answers.at(-1)
+  if (!latest || rate(answers) !== 'known') return false
+  return now.getTime() - Date.parse(latest.at) >= REVIEW_AFTER_DAYS * DAY_MS
+}
+
 /** One array for every skill with no evidence, so a subscriber never sees a new reference. */
 export const NO_ANSWERS: readonly Answer[] = []
 

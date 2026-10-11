@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { SkillId } from '@/shared/lib/music'
 import {
+  isDue,
   knownCount,
   latestEvidence,
   rate,
@@ -123,5 +124,20 @@ describe('skillsToCheck and knownCount', () => {
 
   it('counts the known ones', () => {
     expect(knownCount(['chord:maj', 'chord:min', 'chord:dim'], answers)).toBe(1)
+  })
+})
+
+describe('isDue', () => {
+  const NOW = new Date('2026-10-11T12:00:00Z')
+  const right = (at: string) => ({ correct: true, at })
+  it('is a Known skill whose latest answer is two weeks old or older', () => {
+    const known = Array.from({ length: 5 }, () => right('2026-09-27T12:00:00Z'))
+    expect(isDue(known, NOW)).toBe(true)
+    expect(isDue([...known.slice(1), right('2026-10-01T12:00:00Z')], NOW)).toBe(false)
+  })
+
+  it('is never a gap or a skill with no answers: those are asked anyway', () => {
+    expect(isDue([{ correct: false, at: '2026-01-01T00:00:00Z' }], NOW)).toBe(false)
+    expect(isDue([], NOW)).toBe(false)
   })
 })

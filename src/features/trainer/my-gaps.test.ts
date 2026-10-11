@@ -13,6 +13,20 @@ describe('myGaps', () => {
     expect(gaps.slice(1)).toEqual(skillsOfPiece(bz5))
   })
 
+  it('asks a Known skill again once its last answer is two weeks old, after the gaps', () => {
+    const known = (at: string) => Array.from({ length: 5 }, () => ({ correct: true, at }))
+    const answers = {
+      'scale:blues': wrong,
+      'chord:m7': known('2026-09-01T10:00:00Z'),
+      'chord:maj7': known('2026-09-20T10:00:00Z'),
+    }
+    expect(myGaps(answers, {}, new Date('2026-09-25T10:00:00Z'))).toEqual([
+      'scale:blues',
+      'chord:m7',
+    ])
+    expect(myGaps(answers, {}, new Date('2026-09-10T10:00:00Z'))).toEqual(['scale:blues'])
+  })
+
   it('skips a practised piece the app no longer has', () => {
     expect(myGaps({}, { gone: '2026-09-02T10:00:00Z' })).toEqual([])
   })
