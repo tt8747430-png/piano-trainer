@@ -19,3 +19,10 @@ one Step, and that work adds the test.
 
 - Re-levelling is moving a line in one file.
 - Until sub-project 6 levels the Path, everything sits at level 1.
+
+## Amendment (2026-10-11): the Path is levelled
+
+The Path holds four levels, each taught in order: level 1 the triads, the major and minor scales, the pentatonics and
+songs on a few triads; level 2 the 6th and 7th chords, the other minors and the blues scales, and songs in minor or
+with a dominant 7th; level 3 the 9ths, the modes and songs with slash chords; level 4 the altered chords, Locrian and
+songs with diminished passing chords and 9ths. A test requires every level to hold a step.

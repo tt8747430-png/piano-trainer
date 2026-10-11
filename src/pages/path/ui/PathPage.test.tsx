@@ -40,10 +40,10 @@ describe('Path', () => {
   it('opens a song from its row, and a chord step in its explorer', async () => {
     await renderApp('/')
     const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
-    expect(within(level).getByRole('link', { name: /Still, my soul, be still/ })).toHaveAttribute(
-      'href',
-      '/songs/bz5',
-    )
+    const elementary = await screen.findByRole('region', { name: 'Level 2 · Elementary' })
+    expect(
+      within(elementary).getByRole('link', { name: /Still, my soul, be still/ }),
+    ).toHaveAttribute('href', '/songs/bz5')
     expect(
       within(level)
         .getByRole('link', { name: /^Triads/ })

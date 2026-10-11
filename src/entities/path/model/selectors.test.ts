@@ -5,14 +5,15 @@ import { LEVELS, stepIdOf } from './types'
 
 describe('path selectors', () => {
   it('read a step’s level', () => {
-    expect(levelOf('piece:bz5')).toBe(1)
+    expect(levelOf('piece:bz5')).toBe(2)
+    expect(levelOf('chords:tri')).toBe(1)
     expect(levelOf('piece:nope')).toBeUndefined()
   })
 
   it('find a step on the path by its id', () => {
     expect(stepById('piece:bz5')).toEqual({
       id: 'piece:bz5',
-      level: 1,
+      level: 2,
       step: { kind: 'piece', pieceId: 'bz5' },
     })
     expect(stepById('piece:nope')).toBeUndefined()
