@@ -40,4 +40,38 @@ describe('sections', () => {
     expect(headings(setSectionKind(three, 1, 'verse'))[1]).toEqual({ kind: 'verse', n: 1 })
     expect(headings(setSectionKind(three, 0, 'chorus'))[0]).toEqual({ kind: 'chorus' })
   })
+
+  it('numbers the verses and letters the parts after a change anew, in order', () => {
+    const two = draftOf({
+      sections: [
+        { kind: 'verse', n: 1, lines: ['G C'] },
+        { kind: 'verse', n: 2, lines: ['D G'] },
+      ],
+    })
+    expect(headings(newSection(two, 1))).toEqual([
+      { kind: 'verse', n: 1 },
+      { kind: 'verse', n: 2 },
+      { kind: 'verse', n: 3 },
+    ])
+    expect(headings(joinSection(newSection(two, 1), 1))).toEqual([
+      { kind: 'verse', n: 1 },
+      { kind: 'verse', n: 2 },
+    ])
+    expect(headings(setSectionKind(two, 0, 'chorus'))).toEqual([
+      { kind: 'chorus' },
+      { kind: 'verse', n: 1 },
+    ])
+    const parts = draftOf({
+      sections: [
+        { kind: 'part', label: 'A', lines: ['G'] },
+        { kind: 'part', label: 'B', lines: ['C'] },
+        { kind: 'part', label: 'Bridge', lines: ['D'] },
+      ],
+    })
+    expect(headings(setSectionKind(parts, 0, 'intro'))).toEqual([
+      { kind: 'intro' },
+      { kind: 'part', label: 'A' },
+      { kind: 'part', label: 'Bridge' },
+    ])
+  })
 })
