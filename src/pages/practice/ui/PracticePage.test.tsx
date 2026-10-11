@@ -17,7 +17,7 @@ describe('Practice', () => {
       ['Accompaniment Called to Play · Боброва · Styles', '/practice/accompaniment'],
       ['Exercises Technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
       ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
-      ['Free play Live score · Mark', '/practice/free-play'],
+      ['Free play Live score · Mark · Metronome', '/practice/free-play'],
     ])
   })
 

@@ -1,3 +1,4 @@
+import type { MetronomeBeats } from '@/features/metronome'
 import type { KeyParam } from '@/shared/lib/music'
 
 /** Free play's two ways with the keys: play them, or mark a teaching diagram on them. */
@@ -11,4 +12,7 @@ export interface FreePlayView {
   readonly key: KeyParam
   /** Mark's marks (`diagramMarksParam`): a diagram is a link to send. */
   readonly marks: string
+  /** The metronome's tempo and beats a bar. */
+  readonly tempo: number
+  readonly beats: MetronomeBeats
 }

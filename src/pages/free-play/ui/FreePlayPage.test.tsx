@@ -27,6 +27,22 @@ describe('Practice → Free play', () => {
     expect(screen.getByRole('status')).toHaveTextContent('C Major triad')
   })
 
+  it('clicks a metronome at the URL’s tempo and beats, and tapping sets the tempo', async () => {
+    const user = userEvent.setup()
+    const { audio, router } = await renderApp('/practice/free-play?tempo=120&beats=3')
+    await user.click(await screen.findByRole('button', { name: 'Start the click' }))
+    expect(audio.played[0]?.sounds.map((sound) => sound.at)).toEqual([0, 0.5, 1])
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(audio.stops).toBeGreaterThan(0)
+    const now = vi.spyOn(performance, 'now')
+    for (const at of [0, 600, 1200]) {
+      now.mockReturnValue(at)
+      await user.click(screen.getByRole('button', { name: 'Tap the tempo' }))
+    }
+    now.mockRestore()
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ tempo: 100 }))
+  })
+
   it('writes a key played on the MIDI keyboard', async () => {
     const { midi: piano } = await renderApp('/practice/free-play')
     await screen.findByRole('heading', { level: 1, name: 'Free play' })

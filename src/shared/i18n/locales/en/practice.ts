@@ -24,7 +24,7 @@ export const practice = {
     accompaniment: 'Called to Play · Боброва · Styles',
     exercises: 'Technique · Barry Harris · Piano With Jonny',
     quiz: 'Chords · Scales and keys · By ear · Reading',
-    freePlay: 'Live score · Mark',
+    freePlay: 'Live score · Mark · Metronome',
   },
   // Chords' two pages.
   chords: { build: 'Build', find: 'Find' },

@@ -24,7 +24,7 @@ export const practice: LocaleResources['practice'] = {
     accompaniment: 'Called to Play · Боброва · Стили',
     exercises: 'Техника · Барри Харрис · Piano With Jonny',
     quiz: 'Аккорды · Гаммы и тональности · На слух · Чтение',
-    freePlay: 'Живые ноты · Отметить',
+    freePlay: 'Живые ноты · Отметить · Метроном',
   },
   chords: { build: 'Построить', find: 'Найти' },
   accompaniment: {

@@ -37,15 +37,19 @@ describe('search params', () => {
     expect(await searchAt('/practice/free-play')).toEqual(FREE_PLAY_DEFAULTS)
   })
 
-  it('read Free play’s mode, key and marks, the marks written back clean', async () => {
-    expect(await searchAt('/practice/free-play?mode=mark&key=D&marks=67b%2C60a3')).toEqual({
+  it('read Free play’s mode, key, marks and metronome, the marks written back clean', async () => {
+    expect(
+      await searchAt('/practice/free-play?mode=mark&key=D&marks=67b%2C60a3&tempo=96&beats=3'),
+    ).toEqual({
       mode: 'mark',
       key: 'D',
       marks: '60a3,67b',
+      tempo: 96,
+      beats: 3,
     })
-    expect(await searchAt('/practice/free-play?mode=draw&key=H&marks=20a%2Cx')).toEqual(
-      FREE_PLAY_DEFAULTS,
-    )
+    expect(
+      await searchAt('/practice/free-play?mode=draw&key=H&marks=20a%2Cx&tempo=400&beats=5'),
+    ).toEqual(FREE_PLAY_DEFAULTS)
   })
 
   it('open the score editor’s takes only when the URL says so', async () => {

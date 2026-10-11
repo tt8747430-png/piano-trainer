@@ -146,7 +146,7 @@ it. `@` → `src`.
   `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
   machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
   `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
-  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`).
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `metronome` (a click on its own, a bar at a time on the audio clock, `useMetronome`, with tap tempo, `MetronomeFields`; Free play's, its tempo and beats in the URL).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits

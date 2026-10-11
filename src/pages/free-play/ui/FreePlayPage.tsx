@@ -3,6 +3,7 @@ import { Eraser } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { MetronomeFields } from '@/features/metronome'
 import { useViewChange, type DiagramMarks } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import {
@@ -42,7 +43,7 @@ function diagramShown(marks: DiagramMarks, letter: (colour: 'a' | 'b') => string
  * tapped taking the colour and finger chosen, kept in the URL as a link to send. Clear starts again.
  */
 export function FreePlayPage() {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'common'])
   const view = useSearch({ from: '/shell/practice/free-play' })
   const change = useViewChange<FreePlayView>()
   const free = useFreePlay(view)
@@ -81,6 +82,9 @@ export function FreePlayPage() {
           />
         </Labelled>
         <KeyChoice value={view.key} onChange={(key) => change({ key })} />
+        <Labelled label={t('common:metronome.label')}>
+          <MetronomeFields tempo={view.tempo} beats={view.beats} onChange={change} />
+        </Labelled>
         {marking ? (
           <MarkTools
             colour={free.mark.colour}
