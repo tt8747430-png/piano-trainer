@@ -21,7 +21,8 @@ export function usePlayerShortcuts(
     label: t(by > 0 ? 'shortcuts.faster' : 'shortcuts.slower'),
     combo: by > 0 ? PLAYER_KEYS.faster : PLAYER_KEYS.slower,
     repeat: true,
-    run: () => player.listenAt(stepTempo(player.tempo, player.ownTempo, by)),
+    // From the tempo heard: speed training's climb may be past the one chosen.
+    run: () => player.listenAt(stepTempo(player.shownTempo, player.ownTempo, by)),
   })
   useShortcuts(t('shortcuts.group'), [
     {

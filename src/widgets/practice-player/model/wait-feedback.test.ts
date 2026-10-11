@@ -57,6 +57,18 @@ describe('waitFeedback', () => {
     expect(waitFeedback(bm, playing)).toEqual({ kind: 'play', notes: ['B', 'D', 'F#'] })
   })
 
+  it('orders the notes by the practised hand alone, not the bass under it', () => {
+    const feedback = waitFeedback(performance, waiting)
+    if (feedback?.kind !== 'play') throw new Error('expected a note to play')
+    const group = performance.beatGroups[waiting.beatGroup]
+    const rh = (group?.notes ?? [])
+      .flatMap((i) => performance.notes[i] ?? [])
+      .filter((n) => n.hand === 'rh')
+      .toSorted((a, b) => a.midi - b.midi)
+      .map((n) => noteName(n.spelled))
+    expect(feedback.notes).toEqual([...new Set(rh)])
+  })
+
   it('names the notes to play as they are written', () => {
     const feedback = waitFeedback(performance, waiting)
     if (feedback?.kind !== 'play') throw new Error('expected a note to play')

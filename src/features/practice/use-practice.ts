@@ -107,8 +107,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const listening = state.mode === 'listen' && state.playing
 
   // Listen's run so far, at the chosen tempo: a pass started again by a move or a change of how it
-  // plays carries speed training's climb on from the tempo sounding, with no count-in; Play, or a new
-  // tempo, starts the climb over.
+  // plays carries speed training's climb on from the tempo sounding, with no count-in; Play, a new
+  // tempo, or speed training turned off starts again from the tempo chosen.
   const run = useRef<{ readonly tempo: number; readonly sounding: number | null } | null>(null)
   // Read as a pass starts, never a reason to start one again.
   const passFrom = useEffectEvent(() => ({
@@ -124,7 +124,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       return
     }
     const first = run.current === null
-    const carried = run.current?.tempo === tempo ? run.current.sounding : null
+    const carried =
+      run.current?.tempo === tempo && upStep !== undefined ? run.current.sounding : null
     run.current = { tempo, sounding: carried }
     const from = passFrom()
     const stop = startTransport(
@@ -233,7 +234,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       void audio.unlock()
       dispatch({ type: 'play' })
     },
-    stop: () => dispatch({ type: 'stop' }),
+    stop() {
+      // Wait mode's accompaniment, queued ahead through rests, stops with it (Listen's stops with its transport).
+      if (state.mode === 'wait') audio.stop()
+      dispatch({ type: 'stop' })
+    },
     next: () => move({ type: 'next' }),
     prev: () => move({ type: 'prev' }),
     jumpToBar: (bar: number) => move({ type: 'jumpToBar', bar }),

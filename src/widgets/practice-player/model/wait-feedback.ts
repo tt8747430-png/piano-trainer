@@ -1,4 +1,9 @@
-import { spellPitchClass, type BarRange, type PracticeState } from '@/features/practice'
+import {
+  practisedHands,
+  spellPitchClass,
+  type BarRange,
+  type PracticeState,
+} from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { noteName, pitchClass, type PitchClass } from '@/shared/lib/music'
 
@@ -27,8 +32,10 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
   }
   // The notes of the beat as written, lowest first: each pitch class is named by its lowest key, and
   // named in that order (B D F♯ for a B minor chord over its bass), as the hands read it.
+  const practised = practisedHands(state.hands)
   const played = group.notes
     .flatMap((index) => performance.notes[index] ?? [])
+    .filter((note) => practised[note.hand])
     .toSorted((a, b) => a.midi - b.midi)
   const lowest = (pc: PitchClass) => played.find((n) => pitchClass(n.midi) === pc)
   const notes = state.expected
