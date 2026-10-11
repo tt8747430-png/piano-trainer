@@ -129,6 +129,16 @@ describe('createWebAudioOutput', () => {
     expect(audio.audioTimeAt(19_000)).toBeCloseTo(8.95)
   })
 
+  it('places a page’s moment by the output’s own timestamp where the browser gives one', () => {
+    const { context, audio } = setUp()
+    audio.play([CLICK])
+    context.currentTime = 10
+    Object.assign(context, {
+      getOutputTimestamp: () => ({ contextTime: 9.93, performanceTime: 40_000 }),
+    })
+    expect(audio.audioTimeAt(40_250)).toBeCloseTo(10.18)
+  })
+
   it('plays a click as one oscillator', () => {
     const { context, audio } = setUp()
     audio.play([CLICK], 0)

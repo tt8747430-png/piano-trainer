@@ -189,6 +189,18 @@ export function createWebAudioOutput({
    * reaches it (none known where a browser does not say). An element's own time is what it plays out.
    */
   const heard = () => (context ? context.currentTime - (context.outputLatency || 0) : 0)
+  /**
+   * A moment heard on both clocks, the audio's and the page's: the output's own timestamp where the
+   * browser gives one, which pairs the two exactly; else what is heard now with the page's now. The
+   * audio clock alone moves a buffer at a time, 10 to 40 ms on some systems: a key's place against
+   * the click would jitter by as much.
+   */
+  const heardPair = (): { readonly audio: number; readonly page: number } => {
+    const stamp = context?.getOutputTimestamp?.()
+    if (stamp?.contextTime !== undefined && stamp.performanceTime)
+      return { audio: stamp.contextTime, page: stamp.performanceTime }
+    return { audio: heard(), page: pageNow() }
+  }
   const lookahead = createLookahead({ now, render })
   const keys = createSoundingKeys({ now, frame })
   // By its own element, not through the AudioContext: WebKit's tap into it stalls the element about
@@ -251,7 +263,10 @@ export function createWebAudioOutput({
       piano = output
         ? createMidiSoundOutput(output, {
             // A moment of the audio clock on the page's: the piano's note heard with the click.
-            pageTimeOf: (audioTime) => pageNow() + (audioTime - heard()) * 1000,
+            pageTimeOf: (audioTime) => {
+              const pair = heardPair()
+              return pair.page + (audioTime - pair.audio) * 1000
+            },
             pageNow,
           })
         : null
@@ -260,8 +275,11 @@ export function createWebAudioOutput({
     playRecording: (src, play) => recordings.play(src, play),
     now,
     // What is heard now, moved by how long before or after now the page's moment was.
-    audioTimeAt: (pageTime) =>
-      context ? heard() + (pageTime - pageNow()) / 1000 : pageTime / 1000,
+    audioTimeAt: (pageTime) => {
+      if (!context) return pageTime / 1000
+      const pair = heardPair()
+      return pair.audio + (pageTime - pair.page) / 1000
+    },
     sounding: keys.current,
     struck: keys.struck,
     live: keys.live,

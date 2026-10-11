@@ -32,17 +32,27 @@ function nextStrikes(notes: readonly TakeNote[]): Map<TakeNote, number> {
   return next
 }
 
-/** When a note let go at `release` stops sounding: on to a sustain's up where it was down as the key
- * was let go, or to a sostenuto's that caught the key as it went down. */
+/**
+ * When a note let go stops sounding: held on while a pedal holds it at the moment it would stop, a
+ * sustain down then, or a sostenuto that caught the key while it was down, and on again from that
+ * pedal's up where another holds it there (a sostenuto's note let go into a sustain), as the
+ * dampers do (`damper.ts`).
+ */
 function soundsUntil(note: TakeNote, pedals: readonly PedalPress[]): number {
   const release = note.at + note.held
   let end = release
-  for (const press of pedals) {
-    const holds =
-      press.pedal === 'sustain'
-        ? press.down <= release && release < press.up
-        : press.pedal === 'sostenuto' && note.at <= press.down && press.down < release
-    if (holds) end = Math.max(end, press.up)
+  for (let moved = true; moved;) {
+    moved = false
+    for (const press of pedals) {
+      const holds =
+        press.pedal === 'sustain'
+          ? press.down <= end && end < press.up
+          : press.pedal === 'sostenuto' && note.at <= press.down && press.down < release
+      if (holds && press.up > end) {
+        end = press.up
+        moved = true
+      }
+    }
   }
   return end
 }

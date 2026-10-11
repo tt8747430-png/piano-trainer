@@ -377,6 +377,22 @@ describe('the keyboards’ speakers', () => {
     expect(piano.sent).toEqual([{ data: [0x80, 60, 64], at: 2000 }])
   })
 
+  it('takes the one speaker there is for a keyboard chosen whose speaker goes by another name', async () => {
+    const speaker = new FakeOutput('o1', 'MIDIOUT2 (Piano)')
+    const midi = withAccess(new FakeAccess(new FakeInput('a', 'Piano'), speaker))
+    await midi.connect()
+    midi.configure({ ...ANY, device: 'Piano' })
+    midi.noteOutput()?.noteOn(midi60, 90, 10)
+    expect(speaker.sent).toHaveLength(1)
+  })
+
+  it('names two keyboards of one name once', async () => {
+    const midi = withAccess(
+      new FakeAccess(new FakeInput('a', 'Piano'), new FakeInput('b', 'Piano')),
+    )
+    expect(await midi.connect()).toEqual({ state: 'connected', devices: ['Piano'] })
+  })
+
   it('has no speaker where no keyboard has one', async () => {
     const midi = withAccess(new FakeAccess(new FakeInput('a', 'Piano')))
     await midi.connect()

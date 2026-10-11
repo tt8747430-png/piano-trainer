@@ -116,7 +116,8 @@ export function createWebMidi(
     for (const id of [...held.keys()]) if (!heardIds.has(id)) letGo(id)
     for (const input of inputs) if (!heardIds.has(input.id)) input.onmidimessage = null
     for (const input of heard) listenTo(input)
-    const devices = inputs.map(nameOf)
+    // A keyboard is chosen by its name: two of one name are one choice.
+    const devices = [...new Set(inputs.map(nameOf))]
     if (choice.device !== null && heard.length === 0)
       return { state: 'away', device: choice.device, devices }
     return devices.length > 0 ? { state: 'connected', devices } : { state: 'no-device' }
@@ -157,11 +158,14 @@ export function createWebMidi(
       if (granted) report(hook(granted))
     },
     current: () => current,
-    outputs: () => connectedOutputs().map(nameOf),
+    outputs: () => [...new Set(connectedOutputs().map(nameOf))],
     noteOutput() {
-      const output = connectedOutputs().find(
-        (each) => choice.device === null || nameOf(each) === choice.device,
-      )
+      const outputs = connectedOutputs()
+      // The chosen keyboard's speaker by its name; where its speaker goes by another name (Windows
+      // names a keyboard's ports apart), the one speaker there is.
+      const output =
+        outputs.find((each) => choice.device === null || nameOf(each) === choice.device) ??
+        (outputs.length === 1 ? outputs[0] : undefined)
       return output ? speakerOf(output) : null
     },
     onNote: notes.add,

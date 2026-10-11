@@ -74,6 +74,21 @@ describe('takeSounds', () => {
     ])
   })
 
+  it('lets a sostenuto’s note on into a sustain down as the sostenuto comes up', () => {
+    const sounds = takeSounds(
+      {
+        ...TAKE,
+        notes: [note(60, 0, 300)],
+        pedals: [
+          { pedal: 'sostenuto', down: 200, up: 1000 },
+          { pedal: 'sustain', down: 600, up: 1500 },
+        ],
+      },
+      'normal',
+    )
+    expect(timing(sounds)).toEqual([[60, 0, 1.5]])
+  })
+
   it('sounds a key struck under the soft pedal two thirds as loud', () => {
     const [soft, full] = takeSounds(
       {
