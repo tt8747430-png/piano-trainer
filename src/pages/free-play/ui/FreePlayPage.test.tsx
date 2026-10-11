@@ -24,7 +24,7 @@ describe('Practice → Free play', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Free play' })).toBeInTheDocument()
     expect(screen.getByText('Play, and the notes appear here.')).toBeInTheDocument()
     strike('C4', 'E4', 'G4')
-    expect(screen.getByRole('status')).toHaveTextContent('C Major triad')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('C Major triad'))
   })
 
   it('clicks a metronome at the URL’s tempo and beats, and tapping sets the tempo', async () => {
@@ -47,7 +47,7 @@ describe('Practice → Free play', () => {
     const { midi: piano } = await renderApp('/practice/free-play')
     await screen.findByRole('heading', { level: 1, name: 'Free play' })
     act(() => piano.press(midi(64), { time: performance.now() }))
-    expect(screen.getByRole('status')).toHaveTextContent('E')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('E'))
   })
 
   it('empties the trail on Clear, which waits for something to clear', async () => {
@@ -64,7 +64,7 @@ describe('Practice → Free play', () => {
     await renderApp('/practice/free-play?key=D')
     await screen.findByRole('heading', { level: 1, name: 'Free play' })
     strike('F sharp 4')
-    expect(screen.getByRole('status')).toHaveTextContent('F#')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('F#'))
   })
 
   it('marks a diagram in two colours with fingers, into the URL', async () => {
@@ -87,7 +87,7 @@ describe('Practice → Free play', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('15')
     expect(within(keyboard()).getByRole('button', { name: 'C4' })).toHaveTextContent('R')
     expect(within(keyboard()).getByRole('button', { name: 'G4' })).toHaveTextContent('L')
-    expect(screen.getByRole('status')).toHaveTextContent('Perfect fifth')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Perfect fifth'))
     await choose('Colour', 'Right hand')
     await choose('Finger', '1')
     strike('C4')
@@ -99,7 +99,7 @@ describe('Practice → Free play', () => {
     const { router } = await renderApp('/practice/free-play?mode=mark&marks=60a3%2C64a%2C67b5')
     await screen.findByRole('heading', { level: 1, name: 'Free play' })
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('35')
-    expect(screen.getByRole('status')).toHaveTextContent('C Major triad')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('C Major triad'))
     await user.click(screen.getByRole('button', { name: 'Clear' }))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('marks'))
   })

@@ -8,7 +8,7 @@ const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 const chords = (...keys: number[][]) => keys.map((each) => each.map(midi))
 
 describe('LiveScore', () => {
-  it('names each chord played in order for a screen reader, and says the newest', () => {
+  it('names each chord played in order for a screen reader, and says the newest', async () => {
     renderWithSettings(<LiveScore chords={chords([60, 64, 67], [62, 65, 69])} keyParam={C_MAJOR} />)
     const names = screen.getByRole('list', { name: 'Live score' })
     expect(
@@ -16,12 +16,12 @@ describe('LiveScore', () => {
         .getAllByRole('listitem')
         .map((item) => item.textContent),
     ).toEqual(['C Major triad', 'Dm Minor triad'])
-    expect(screen.getByRole('status')).toHaveTextContent('Dm')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Dm'))
   })
 
-  it('says the tones a chord leaves out', () => {
+  it('says the tones a chord leaves out', async () => {
     renderWithSettings(<LiveScore chords={chords([60, 64, 70])} keyParam={C_MAJOR} />)
-    expect(screen.getByRole('status')).toHaveTextContent('No 5th')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('No 5th'))
   })
 
   it('names two notes by their interval, and one by its note', () => {
