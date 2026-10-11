@@ -8,12 +8,12 @@ import { createMemoryStorage } from '@/shared/lib'
 import { scaleSkill } from '@/shared/lib/music'
 
 describe('Check', () => {
-  it('checks a piece’s chords in six questions with a progress bar', async () => {
+  it('checks each of a piece’s seven chords once, with a progress bar', async () => {
     await renderApp('/check?of=piece:bz5')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Check: Still, my soul, be still' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '6')
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '7')
   })
 
   it('asks a scale the learner already knows once', async () => {

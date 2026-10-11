@@ -82,10 +82,11 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
   const current = useRef({ round, run })
   const { question, result } = round
 
-  // An ear round is asked by ear: it sounds when it is shown.
+  // An ear round is asked by ear: it sounds when it is shown, its button Stop while it does.
+  const { start } = playback
   useEffect(() => {
-    if (heardFirst(question)) play(roundSounds(question))
-  }, [question, play])
+    if (heardFirst(question)) start('round', roundSounds(question))
+  }, [question, start])
 
   // Leaving the run silences it.
   useEffect(() => () => audio.stop(), [audio])

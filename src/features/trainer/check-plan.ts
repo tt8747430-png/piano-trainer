@@ -1,5 +1,5 @@
 import { skillsOfStep, stepById, type StepId } from '@/entities/path'
-import { chordRootsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
+import { chordsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
 import { stillToKnow, type Answer } from '@/entities/progress'
 import type { SkillId } from '@/shared/lib/music'
 import type { Asks } from './draw'
@@ -33,7 +33,7 @@ function untilKnown(
 }
 
 /**
- * A Check's questions (spec §4.6): a piece's chords in turn, six questions or one each; a step's
+ * A Check's questions (spec §4.6): a piece's own chords as written, in turn, six questions or one each; a step's
  * chord family or scale until each is Known, which marks the step learned (ADR 0006).
  */
 export function checkPlan(
@@ -47,19 +47,14 @@ export function checkPlan(
     const piece = pieceById(step.pieceId)
     if (!piece) return null
     const skills = skillsOfPiece(piece)
-    const length = Math.max(PIECE_CHECK, skills.length)
+    const chords = chordsOfPiece(piece).map((chord) => ({ ...chord, inversion: null }))
+    const length = Math.max(PIECE_CHECK, chords.length)
     return {
       of,
       skills,
       length,
       marks: null,
-      asks: {
-        kind: 'skills',
-        chords: 'build-chord',
-        skills,
-        roots: chordRootsOfPiece(piece),
-        ordered: true,
-      },
+      asks: { kind: 'chords', mode: 'build-chord', chords, ordered: true },
     }
   }
   const skills = skillsOfStep(step)

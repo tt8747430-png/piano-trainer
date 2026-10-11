@@ -41,7 +41,7 @@ export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
 export { writeMelody } from './model/write-melody'
 export { fourToALine, wholeBar } from './model/chart-layout'
-export { chordRootsOfPiece, skillsOfPiece } from './model/skills'
+export { chordsOfPiece, skillsOfPiece } from './model/skills'
 export {
   choosableChordSize,
   entriesInKey,

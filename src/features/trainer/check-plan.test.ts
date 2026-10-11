@@ -1,25 +1,19 @@
 import { describe, expect, it } from 'vitest'
-import { chordRootsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
+import { chordsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
 import type { Answer } from '@/entities/progress'
 import { chordSkill, qualitiesIn, type SkillId } from '@/shared/lib/music'
 import { checkPlan } from './check-plan'
 
 describe('checkPlan', () => {
-  it('checks each of a piece’s chords in turn on its own roots, six questions or one each', () => {
+  it('checks each of a piece’s chords as written in turn, six questions or one each', () => {
     const bz5 = pieceById('bz5')
     if (!bz5) throw new Error('bz5')
-    const skills = skillsOfPiece(bz5)
+    const chords = chordsOfPiece(bz5).map((chord) => ({ ...chord, inversion: null }))
     const plan = checkPlan('piece:bz5')
-    const length = Math.max(6, skills.length)
-    expect(plan?.length).toBe(length)
+    expect(plan?.skills).toEqual(skillsOfPiece(bz5))
+    expect(plan?.length).toBe(Math.max(6, chords.length))
     expect(plan?.marks).toBeNull()
-    expect(plan?.asks).toEqual({
-      kind: 'skills',
-      chords: 'build-chord',
-      skills,
-      roots: chordRootsOfPiece(bz5),
-      ordered: true,
-    })
+    expect(plan?.asks).toEqual({ kind: 'chords', mode: 'build-chord', chords, ordered: true })
   })
 
   it('asks every quality of a family in turn, as often as each still needs to be Known', () => {

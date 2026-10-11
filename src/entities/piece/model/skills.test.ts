@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { noteName } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chordRootsOfPiece, skillsOfPiece } from './skills'
+import { chordsOfPiece, skillsOfPiece } from './skills'
 
 describe('skillsOfPiece', () => {
   it('lists the chord qualities a chart uses, in table order', () => {
@@ -20,8 +21,12 @@ describe('skillsOfPiece', () => {
   })
 })
 
-describe('chordRootsOfPiece', () => {
-  it('lists each chord root once, lowest pitch class first', () => {
-    expect(chordRootsOfPiece(testSong(['C Am7 F G7 C/E']))).toEqual([0, 5, 7, 9])
+describe('chordsOfPiece', () => {
+  it('lists each chord once as written, in order, a slash chord by its own chord', () => {
+    expect(
+      chordsOfPiece(testSong(['C Am7 F G7 C/E Ab'])).map(
+        ({ root, quality }) => `${noteName(root)} ${quality}`,
+      ),
+    ).toEqual(['C maj', 'A m7', 'F maj', 'G d7', 'A♭ maj'])
   })
 })

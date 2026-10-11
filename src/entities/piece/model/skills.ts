@@ -1,9 +1,10 @@
 import {
   CHORD_QUALITIES,
   chordSkill,
-  pitchClassOf,
-  type PitchClass,
+  noteName,
+  type ChordQuality,
   type SkillId,
+  type SpelledNote,
 } from '@/shared/lib/music'
 import { chartOf, chordsOf } from './chart'
 import type { Piece } from './types'
@@ -14,8 +15,12 @@ export function skillsOfPiece(piece: Piece): SkillId[] {
   return CHORD_QUALITIES.filter((quality) => used.has(quality)).map(chordSkill)
 }
 
-/** Each chord root once, in the piece's own key, lowest pitch class first: its check's roots. */
-export function chordRootsOfPiece(piece: Piece): PitchClass[] {
-  const roots = new Set(chordsOf(chartOf(piece)).map((chord) => pitchClassOf(chord.root)))
-  return [...roots].sort((a, b) => a - b)
+/** Each chord of a piece's chart once, as it is written (its root's spelling and quality), in order. */
+export function chordsOfPiece(piece: Piece): { root: SpelledNote; quality: ChordQuality }[] {
+  const seen = new Map<string, { root: SpelledNote; quality: ChordQuality }>()
+  for (const { root, quality } of chordsOf(chartOf(piece))) {
+    const name = `${noteName(root)} ${quality}`
+    if (!seen.has(name)) seen.set(name, { root, quality })
+  }
+  return [...seen.values()]
 }

@@ -153,6 +153,27 @@ export function checkedKeys(chosen: readonly Midi[], answer: AnswerKeys): Checke
 }
 
 /**
+ * A key's degrees, pressed in order: each key against the degree it was pressed for, so a key of the
+ * scale pressed out of turn is wrong, and only the degree it stood in for is ringed.
+ */
+function degreeKeys(degrees: readonly PlacedTone[], selected: readonly Midi[]): CheckedKeys {
+  const marks = new Map<Midi, KeyMark>()
+  const wrong = new Set<Midi>()
+  const outlined = new Set<Midi>()
+  selected.forEach((key, i) => {
+    const degree = degrees[i]
+    if (degree && pitchClass(key) === pitchClass(degree.midi)) {
+      marks.set(key, { tone: degree.tone.role, label: degree.tone.degree })
+      return
+    }
+    marks.delete(key)
+    wrong.add(key)
+    if (degree) outlined.add(degree.midi)
+  })
+  return { marks, wrong, outlined }
+}
+
+/**
  * After an answer on the keys: a build round's keys against its answer, each tone by role; a note
  * read, the key pressed against the note's; a key's degrees, each pressed against its degree.
  */
@@ -166,6 +187,7 @@ export function answerKeys(question: Question, selected: readonly Midi[]): Check
     }
   }
   const keys = placed(question)
+  if (question.mode === 'key-degrees') return degreeKeys(keys, selected)
   return checkedKeys(selected, {
     keys: keys.map((key) => key.midi),
     marks: new Map(keys.map((key) => [key.midi, { tone: key.tone.role, label: key.tone.degree }])),

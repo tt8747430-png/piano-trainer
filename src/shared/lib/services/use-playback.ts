@@ -13,6 +13,8 @@ interface Playback<Id extends string | number> {
    * `id` the sounds `sounds` works out, only then: a Stop works nothing out.
    */
   toggle(id: Id, sounds: () => readonly Sound[]): void
+  /** Cuts off what sounds and plays `sounds` as `id`, its button Stop while they sound. */
+  start(id: Id, sounds: readonly Sound[]): void
 }
 
 /**
@@ -36,19 +38,22 @@ export function usePlayback<Id extends string | number>(): Playback<Id> {
     },
     [audio],
   )
+  const start = useCallback(
+    (id: Id, sounds: readonly Sound[]) => {
+      const started = play(sounds)
+      latest.current = started
+      setStarted({ id, play: started })
+    },
+    [play],
+  )
   const toggle = useCallback(
     (id: Id, sounds: () => readonly Sound[]) => {
-      if (playing === id) {
-        audio.stop()
-        latest.current = null
-        setStarted(null)
-      } else {
-        const started = play(sounds())
-        latest.current = started
-        setStarted({ id, play: started })
-      }
+      if (playing !== id) return start(id, sounds())
+      audio.stop()
+      latest.current = null
+      setStarted(null)
     },
-    [audio, play, playing],
+    [audio, start, playing],
   )
-  return { playing, toggle }
+  return { playing, toggle, start }
 }

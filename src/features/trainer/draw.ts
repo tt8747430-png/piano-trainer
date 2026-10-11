@@ -3,6 +3,7 @@ import {
   chordFamily,
   chordSkill,
   chordSymbol,
+  INTERVAL_GROUPS,
   INTERVALS,
   keyParam,
   keySignature,
@@ -31,6 +32,7 @@ import {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
+import { EAR_QUALITIES, EAR_SCALES } from './ladders/ear'
 import type { ChordQuestion, Question } from './round-machine'
 
 /** A chord a level asks: a root and quality, and the inversion it must be built in, if any. */
@@ -61,6 +63,8 @@ export type Asks =
       readonly kind: 'chords'
       readonly mode: 'build-chord' | 'name-chord'
       readonly chords: readonly ChordItem[]
+      /** In turn, round and round (a piece's Check), rather than drawn. */
+      readonly ordered?: boolean
     }
   | {
       readonly kind: 'intervals'
@@ -120,7 +124,27 @@ const shuffled = <T>(items: readonly T[], random: () => number): T[] =>
 
 /** The answer and up to three others, the nearest first, in an order drawn from `random`. */
 const withOthers = <T>(answer: T, others: readonly T[], random: () => number): T[] =>
-  shuffled([answer, ...others.filter((other) => other !== answer).slice(0, OPTIONS - 1)], random)
+  shuffled(
+    [answer, ...[...new Set(others)].filter((other) => other !== answer).slice(0, OPTIONS - 1)],
+    random,
+  )
+
+/**
+ * An ear round's options: the level's own; a Custom of one alone is filled from any other its trainer
+ * could ask, so a round is never answered by its one button.
+ */
+const earOptions = <T>(answer: T, own: readonly T[], all: readonly T[], random: () => number) =>
+  withOthers(
+    answer,
+    [...shuffled(own, random), ...(own.length > 1 ? [] : shuffled(all, random))],
+    random,
+  )
+
+/** Every interval an ear round can ask: a level of one or two is filled from these. */
+const EAR_INTERVALS: readonly ReferenceInterval[] = [
+  ...INTERVAL_GROUPS.simple.slice(1),
+  ...INTERVAL_GROUPS.compound,
+]
 
 /** A chord on its root's key: its symbol over its bass in an inversion. */
 function chordQuestion(item: ChordItem, skill: SkillId | undefined): ChordQuestion {
@@ -209,7 +233,9 @@ function draw(asks: Asks, index: number, random: () => number): Question {
     case 'skills':
       return skillRound(asks, index, random)
     case 'chords': {
-      const item = pick(asks.chords, random)
+      const item = asks.ordered
+        ? itemAt(asks.chords, index % asks.chords.length)
+        : pick(asks.chords, random)
       const chord = chordQuestion(item, chordSkill(item.quality))
       return asks.mode === 'build-chord'
         ? { mode: 'build-chord', ...chord }
@@ -224,7 +250,7 @@ function draw(asks: Asks, index: number, random: () => number): Question {
         low,
         high: midi(low + INTERVALS[interval].semitones),
         way: pick(asks.ways, random),
-        options: withOthers(interval, shuffled(asks.intervals, random), random),
+        options: earOptions(interval, asks.intervals, EAR_INTERVALS, random),
       }
     }
     case 'qualities': {
@@ -239,7 +265,7 @@ function draw(asks: Asks, index: number, random: () => number): Question {
         keys,
         quality,
         arpeggio: asks.arpeggio,
-        options: withOthers(quality, shuffled(asks.qualities, random), random),
+        options: earOptions(quality, asks.qualities, EAR_QUALITIES, random),
       }
     }
     case 'scales': {
@@ -251,7 +277,7 @@ function draw(asks: Asks, index: number, random: () => number): Question {
         root,
         keys: asks.descending ? up.toReversed() : up,
         kind,
-        options: withOthers(kind, shuffled(asks.kinds, random), random),
+        options: earOptions(kind, asks.kinds, EAR_SCALES, random),
       }
     }
     case 'notes':

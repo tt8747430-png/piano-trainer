@@ -141,13 +141,12 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
   })
 
-  it('turns Play again into Stop while the round sounds', async () => {
+  it('says Stop while the round sounds, from the moment it is shown', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj', 'name-chord'))
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
     await user.click(screen.getByRole('button', { name: 'Play again' }))
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
-    expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument()
   })
 
   it('keeps the keyboard user’s place: on Next after an answer, on the new round after Next', async () => {
@@ -182,9 +181,11 @@ describe('TrainerBoard', () => {
     expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 
-  it('plays the round again on R', async () => {
+  it('stops and plays the round again on R', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj', 'name-chord'))
+    await user.keyboard('r')
+    expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument()
     await user.keyboard('r')
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
   })

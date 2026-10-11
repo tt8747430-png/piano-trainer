@@ -102,6 +102,19 @@ describe('round keys', () => {
     expect([...wrong.outlined]).toEqual([64])
   })
 
+  it('marks a key’s degrees each against its turn: a scale note out of turn is wrong', () => {
+    const key = { tonic: note('C'), minor: false }
+    const question: Question = {
+      mode: 'key-degrees',
+      key,
+      notes: spellScale(key.tonic, 'major'),
+    }
+    const { marks, wrong, outlined } = answerKeys(question, [midi(60), midi(64)])
+    expect([...marks].map(([k, mark]) => [k, mark.label])).toEqual([[60, '1']])
+    expect([...wrong]).toEqual([64])
+    expect([...outlined].map((k) => k % 12)).toEqual([2])
+  })
+
   it('sounds an interval as it is asked: the lower note first going up', () => {
     const question: Question = {
       mode: 'name-interval',

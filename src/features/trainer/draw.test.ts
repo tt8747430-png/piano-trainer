@@ -151,6 +151,16 @@ describe('drawRound: what a level asks', () => {
     }
   })
 
+  it('offers others beside a Custom of one, so a round is never one button', () => {
+    const question = drawRound(
+      { kind: 'intervals', intervals: ['P5'], ways: ['up'] },
+      { index: 0, random },
+    )
+    if (question.mode !== 'name-interval') throw new Error('expected an interval round')
+    expect(question.options).toHaveLength(4)
+    expect(question.options).toContain('P5')
+  })
+
   it('plays a scale by ear down when the level says so', () => {
     const question = drawRound(
       { kind: 'scales', kinds: ['major'], descending: true },

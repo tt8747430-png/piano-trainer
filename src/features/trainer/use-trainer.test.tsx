@@ -129,16 +129,17 @@ describe('useTrainer', () => {
     expect(result.current.round.result?.correct).toBe(false)
   })
 
-  it('sounds an ear round as it is shown, and again on request, stopping on a second', () => {
+  it('sounds an ear round as it is shown, stopping it on request and sounding it again', () => {
     const asks: Asks = { ...ONLY_C_MAJOR, chords: 'name-chord' }
     const { result, audio } = setup(asks)
     expect(audio.played).toHaveLength(1)
-    act(() => result.current.hear())
-    expect(audio.played).toHaveLength(2)
     expect(result.current.hearing).toBe(true)
     const stops = audio.stops
     act(() => result.current.hear())
     expect(audio.stops).toBe(stops + 1)
     expect(result.current.hearing).toBe(false)
+    act(() => result.current.hear())
+    expect(audio.played).toHaveLength(2)
+    expect(result.current.hearing).toBe(true)
   })
 })
