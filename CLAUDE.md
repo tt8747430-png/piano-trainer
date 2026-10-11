@@ -96,7 +96,7 @@ it. `@` → `src`.
   `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028), `tuneOf` (the song's tune under a take); its parts share one context and read the store narrowly;
   `TakePage`, a take's page: its name, `TakeRoll`, `useTakePlay` and `KeepBars`, ADR 0034).
-- **widgets/<x>/**: composite UI tied to screens (`app-nav` (the phone's bar; the laptop's sidebar, which collapses to its icons; Alt and 1–4 go to its places, Cmd or Ctrl with B collapses it), `continue-card`, `path-levels`, `piece-list`,
+- **widgets/<x>/**: composite UI tied to screens (`practice-days` (the days practised in a row and the last seven, on the Path), `app-nav` (the phone's bar; the laptop's sidebar, which collapses to its icons; Alt and 1–4 go to its places, Cmd or Ctrl with B collapses it), `continue-card`, `path-levels`, `piece-list`,
   `chord-chart` (a piece's lines of bars), `piece-chords` (the chords a piece plays, each to tap, `chordsOf`, and the
   Check of them), `player-setup` (the Setup: its button and sheet, its first page
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `PatternCard` (the pattern
@@ -123,7 +123,7 @@ it. `@` → `src`.
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
-  `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised`, `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete
+  `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
   song with its takes; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
   chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`; the

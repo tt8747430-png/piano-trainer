@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useProgressStoreApi, type RunKey } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
+import { recordDay } from '@/features/record-practised'
 import { recordRun } from '@/features/record-run'
 import type { Midi } from '@/shared/lib/music'
 import { usePlay, usePlayback, useServices } from '@/shared/lib/services'
@@ -107,8 +108,10 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
         : before.run,
     })
     if (!answered) return
+    const answeredAt = new Date()
+    recordDay(store, answeredAt)
     const answer = answerOf(after)
-    if (answer) recordAnswer(store, answer, new Date())
+    if (answer) recordAnswer(store, answer, answeredAt)
     if (!heardFirst(after.question)) play(roundSounds(after.question))
   }
 

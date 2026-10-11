@@ -5,6 +5,7 @@ import { NO_ANSWERS } from './mastery'
 import type { Answer, LearnedId, ProgressState, RunKey, TrainerRecord } from './types'
 
 export const selectLearned = (state: ProgressState) => state.learned
+export const selectDays = (state: ProgressState) => state.days
 export const selectPractised = (state: ProgressState) => state.practised
 export const selectTrainerRecords = (state: ProgressState) => state.trainers
 

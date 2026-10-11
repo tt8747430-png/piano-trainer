@@ -7,6 +7,17 @@ export const path = {
   toCheck: 'Chords to check: {{count}}',
   known: '{{known}} of {{total}} known',
   progress: '{{learned}} of {{total}}',
+  // The days practised: opening a piece in the Player, or answering a quiz round.
+  days: {
+    title: 'Practice',
+    inARow: 'Days in a row: {{count}}',
+    start: 'Practise today to start a run of days.',
+    keep: 'Practise today to keep it going.',
+    done: 'Practised today.',
+    week: 'The last seven days',
+    practised: '{{day}}: practised',
+    missed: '{{day}}: not practised',
+  },
   kind: {
     chords: 'Chords',
     scale: 'Scale',

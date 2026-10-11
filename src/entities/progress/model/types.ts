@@ -47,6 +47,8 @@ export interface ProgressState {
   readonly answers: Readonly<Partial<Record<SkillId, readonly Answer[]>>>
   /** Each trainer's record, by trainer and level. */
   readonly trainers: Readonly<Partial<Record<RunKey, TrainerRecord>>>
+  /** The days on the learner's calendar they practised (`2026-10-11`), oldest first, the latest DAYS_KEPT. */
+  readonly days: readonly string[]
 }
 
 export const EMPTY_PROGRESS: ProgressState = {
@@ -54,4 +56,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   practised: {},
   answers: {},
   trainers: {},
+  days: [],
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { RoundLink, ScreenHeader } from '@/shared/ui'
 import { ContinueCard } from '@/widgets/continue-card'
 import { PathLevels } from '@/widgets/path-levels'
+import { PracticeDays } from '@/widgets/practice-days'
 
 export function PathPage() {
   const { t } = useTranslation(['path', 'common'])
@@ -25,6 +26,7 @@ export function PathPage() {
       />
       <div className="mt-2 flex flex-col gap-6">
         <ContinueCard />
+        <PracticeDays />
         <PathLevels />
       </div>
     </div>

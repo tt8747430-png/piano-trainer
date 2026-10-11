@@ -33,6 +33,7 @@ describe('createProgressStore', () => {
       practised: { bz5: DAY },
       answers: { 'chord:m7': [{ correct: true, at: DAY }] },
       trainers: { 'build-chord:1': { runs: 3, last: 70, best: 90, bestStreak: 8 } },
+      days: ['2026-10-10', '2026-10-11'],
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -62,6 +63,7 @@ describe('createProgressStore', () => {
         'chords by ear': { runs: 1, last: 50, best: 50, bestStreak: 1 },
         'reading-notes:1': { runs: 1, last: 120, best: 120, bestStreak: 1 },
       },
+      days: ['2026-10-11', 'Monday', '2026-10-09', 7, '2026-10-11'],
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -72,7 +74,14 @@ describe('createProgressStore', () => {
         'scale:major': [{ correct: false, at: DAY }],
       },
       trainers: { 'name-chord:3': { runs: 2, last: 80, best: 80, bestStreak: 5 } },
+      days: ['2026-10-09', '2026-10-11'],
     })
+  })
+
+  it('reads a save from before the days were kept as no days practised', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { learned: { 'piece:bz5': DAY } })
+    expect(createProgressStore({ storage }).getState().days).toEqual([])
   })
 
   it.each([0, 2])('does not read a version-%i save', (version) => {
