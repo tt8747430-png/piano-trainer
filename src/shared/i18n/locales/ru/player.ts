@@ -87,6 +87,10 @@ export const player: LocaleResources['player'] = {
   right: 'Верно',
   notThat: 'Не {{note}}',
   finished: 'Конец',
+  finishedClean: 'Конец, без единой ошибки',
+  finishedSlips: 'Конец · ошибок: {{count}}',
+  loopBar: 'Повторять такт {{first}}',
+  loopBars: 'Повторять такты {{first}}–{{last}}',
   again: 'Ещё раз',
   exercise: {
     title: '{{name}}: {{of}}',

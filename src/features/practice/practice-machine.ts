@@ -32,6 +32,8 @@ export interface PracticeState {
   readonly outcome: Outcome
   /** The last wrong key, to show. */
   readonly wrong: Midi | null
+  /** Wait mode: the wrong keys of this pass, by bar (from 0): what its report says. */
+  readonly slips: Readonly<Partial<Record<number, number>>>
 }
 
 export type PracticeEvent =
@@ -145,6 +147,7 @@ export function initialPractice(
     ahead: [],
     outcome: 'waiting',
     wrong: null,
+    slips: {},
   }
   return moveTo(state, bounds(state).first)
 }
@@ -181,7 +184,11 @@ function noteOn(state: PracticeState, key: Midi): PracticeState {
   if (state.outcome === 'correct' || state.expected.length === 0) {
     return state.ahead.includes(pc) ? state : { ...state, ahead: [...state.ahead, pc] }
   }
-  if (!state.expected.includes(pc)) return { ...state, outcome: 'wrong', wrong: key }
+  if (!state.expected.includes(pc)) {
+    const bar = state.performance.beatGroups[state.beatGroup]?.bar ?? 0
+    const slips = { ...state.slips, [bar]: (state.slips[bar] ?? 0) + 1 }
+    return { ...state, outcome: 'wrong', wrong: key, slips }
+  }
   const received = state.received.includes(pc) ? state.received : [...state.received, pc]
   const outcome = isComplete(state.expected, received) ? 'correct' : 'waiting'
   return { ...state, received, outcome, wrong: null }
@@ -206,8 +213,9 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
       return moveTo(configured, outside ? loop.first : clamp(configured, at))
     }
     case 'play':
+      // A pass begun again from the start counts its slips afresh.
       return state.outcome === 'finished'
-        ? { ...moveTo(state, bounds(state).first), playing: true }
+        ? { ...moveTo(state, bounds(state).first), playing: true, slips: {} }
         : { ...state, playing: true }
     case 'stop':
       return state.playing ? { ...state, playing: false } : state

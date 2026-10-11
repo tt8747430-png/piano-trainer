@@ -113,6 +113,20 @@ describe('the practice machine', () => {
       expect(run(wrong, ...press(60, 64, 67)).outcome).toBe('correct')
     })
 
+    it('counts each wrong key against its bar, and starts a pass afresh', () => {
+      const answer = (keys: number[]) => [...press(...keys), { type: 'advance' } as const]
+      const pass = run(
+        initialPractice(TWO_BARS_IN_HALVES, 'wait', 'lh'),
+        { type: 'play' },
+        ...answer([61, 48]),
+        ...answer([48]),
+        ...answer([62, 63, 55]),
+        ...answer([55]),
+      )
+      expect(pass).toMatchObject({ outcome: 'finished', slips: { 0: 1, 1: 2 } })
+      expect(run(pass, { type: 'play' }).slips).toEqual({})
+    })
+
     it('never marks a key played once the beat group is done wrong', () => {
       const done = run(waiting('rh'), ...press(60, 64, 67))
       expect(run(done, ...press(61))).toMatchObject({ outcome: 'correct', wrong: null })

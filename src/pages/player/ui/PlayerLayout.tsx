@@ -97,7 +97,7 @@ export function PlayerLayout({
       </PlayerArea>
       <PlayerArea area="status" className="landscape-phone:self-end">
         {view.mode === 'wait' ? (
-          <WaitLine feedback={player.feedback} onAgain={practice.play} />
+          <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
         ) : null}
       </PlayerArea>
       <PlayerArea area="transport">

@@ -9,7 +9,7 @@ import {
   type PracticeEvent,
 } from '@/features/practice'
 import { midi, noteName } from '@/shared/lib/music'
-import { waitFeedback } from './wait-feedback'
+import { passReport, waitFeedback } from './wait-feedback'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
@@ -35,6 +35,8 @@ describe('waitFeedback', () => {
     expect(waitFeedback(performance, stopped)).toBeNull()
     expect(waitFeedback(performance, { ...stopped, outcome: 'finished' })).toEqual({
       kind: 'finished',
+      slips: 0,
+      hardest: null,
     })
   })
 
@@ -75,6 +77,17 @@ describe('waitFeedback', () => {
     expect(waitFeedback(performance, { ...waiting, outcome: 'correct' })).toEqual({ kind: 'right' })
     expect(waitFeedback(performance, { ...waiting, outcome: 'finished' })).toEqual({
       kind: 'finished',
+      slips: 0,
+      hardest: null,
     })
+  })
+})
+
+describe('passReport', () => {
+  it('counts a pass’s slips and finds the bar or two that had the most', () => {
+    expect(passReport({})).toEqual({ slips: 0, hardest: null })
+    expect(passReport({ 4: 3 })).toEqual({ slips: 3, hardest: { first: 4, last: 4 } })
+    expect(passReport({ 1: 1, 4: 3, 5: 2 })).toEqual({ slips: 6, hardest: { first: 4, last: 5 } })
+    expect(passReport({ 3: 2, 4: 3, 5: 1 })).toEqual({ slips: 6, hardest: { first: 3, last: 4 } })
   })
 })

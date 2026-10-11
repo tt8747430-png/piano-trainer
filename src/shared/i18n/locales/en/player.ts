@@ -92,6 +92,10 @@ export const player = {
   right: 'Correct',
   notThat: 'Not {{note}}',
   finished: 'Finished',
+  finishedClean: 'Finished without a slip',
+  finishedSlips: 'Finished · slips: {{count}}',
+  loopBar: 'Loop bar {{first}}',
+  loopBars: 'Loop bars {{first}}–{{last}}',
   again: 'Again',
   /** An exercise's Setup: the choices its rule takes. */
   exercise: {
