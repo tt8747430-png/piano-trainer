@@ -176,7 +176,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   inv: {
     group: 'techniques',
-    name: { en: 'Invers. · Inversions', ru: 'Обращ. · Обращения' },
+    name: { en: 'Inversions: root, 1st, 2nd', ru: 'Обращения: основной вид, 1-е, 2-е' },
     idea: {
       en: 'Root position held, then the 1st and 2nd inversion, over an arpeggio to the 12th.',
       ru: 'Выдержанный аккорд в основном виде, затем 1-е и 2-е обращения, над арпеджио до дуодецимы.',
@@ -232,7 +232,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   s6u: {
     group: 'techniques',
-    name: { en: '6th↑ · Rising sixths', ru: 'Сексты ↑ · Восходящие сексты' },
+    name: { en: 'Rising sixths', ru: 'Восходящие сексты' },
     idea: {
       en: 'Parallel sixths climb from the 3rd to the 5th over a 1–5–8–5 bass.',
       ru: 'Параллельные сексты поднимаются от терции к квинте над басом 1–5–8–5.',
@@ -246,7 +246,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   s6d: {
     group: 'techniques',
-    name: { en: '6th↓ · Falling sixths', ru: 'Сексты ↓ · Нисходящие сексты' },
+    name: { en: 'Falling sixths', ru: 'Нисходящие сексты' },
     idea: {
       en: 'Parallel sixths fall from the 5th to the 3rd over a 1–5–8–5 bass.',
       ru: 'Параллельные сексты спускаются от квинты к терции над басом 1–5–8–5.',

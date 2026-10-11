@@ -113,7 +113,7 @@ describe('Called to Play’s ways and techniques, as the book writes them', () =
     expect(written(play('c3', 'C'), 'rh')).toEqual(['0/4 C4+E4+G4', '4/4 C5+E5+G5', '8/8 C6+E6+G6'])
   })
 
-  it('Invers. · root position held, then the 1st and 2nd inversion; the bass climbs to its 12th (C)', () => {
+  it('Inversions: root position held, then the 1st and 2nd inversion; the bass climbs to its 12th (C)', () => {
     const c = play('inv', 'C')
     expect(written(c, 'rh')).toEqual(['0/8 C4+E4+G4', '8/4 E4+G4+C5', '12/4 G4+C5+E5'])
     expect(written(c, 'lh')).toEqual(['0/2 C2', '2/2 G2', '4/2 C3', '6/2 E3', '8/8 G3'])
@@ -151,7 +151,7 @@ describe('Called to Play’s ways and techniques, as the book writes them', () =
     ])
   })
 
-  it('6th↑ · sixths climb to the 5th and 3rd; 6th↓ fall to the 3rd and root (Am)', () => {
+  it('Rising sixths climb to the 5th and 3rd; falling sixths fall to the 3rd and root (Am)', () => {
     expect(written(play('s6u', 'Am'), 'rh')).toEqual([
       '0/2 C4+A4',
       '2/2 D4+B4',
