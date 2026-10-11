@@ -5,7 +5,7 @@ import { useValueWord } from './use-value-word'
 
 /** One line saying which part the caret writes, where it is and what is there; a screen reader hears it as it moves. */
 export function CaretLine() {
-  const { t } = useTranslation(['editor', 'common'])
+  const { t } = useTranslation('editor')
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
@@ -20,9 +20,7 @@ export function CaretLine() {
       : t('caret.at', { bar, beat, what })
   })()
   // Where the caret writes first: a click on the sheet chose it, so the line says which part it is.
-  // A hand is named in full: the toolbar's segments name it short under its label.
-  const part = layer === 'rh' || layer === 'lh' ? t(`common:hands.${layer}`) : t(`layers.${layer}`)
-  const text = said.kind === 'end' ? where : `${part} · ${where}`
+  const text = said.kind === 'end' ? where : `${t(`layers.${layer}`)} · ${where}`
   return (
     <p role="status" className="truncate text-sm text-muted-foreground tabular-nums">
       {text}

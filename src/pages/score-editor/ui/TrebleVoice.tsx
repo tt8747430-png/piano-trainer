@@ -11,7 +11,7 @@ const VOICES = ['melody', 'rh'] as const
  * the sheet chooses the staff, this chooses the voice (Sibelius's 1 · 2).
  */
 export function TrebleVoice() {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'common'])
   const { actions } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   if (layer !== 'melody' && layer !== 'rh') return null
@@ -22,7 +22,9 @@ export function TrebleVoice() {
         value={layer}
         options={VOICES.map((voice) => ({
           value: voice,
-          label: t(`layers.${voice}`),
+          // Short under its Voice label, named in full.
+          label: voice === 'rh' ? t('common:handsShort.rh') : t('layers.melody'),
+          title: t(`layers.${voice}`),
           icon:
             voice === 'melody' ? (
               <Music aria-hidden className="size-5" />

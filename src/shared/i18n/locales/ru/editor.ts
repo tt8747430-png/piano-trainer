@@ -9,8 +9,8 @@ export const editor: LocaleResources['editor'] = {
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',
-    rh: 'Правая',
-    lh: 'Левая',
+    rh: 'Правая рука',
+    lh: 'Левая рука',
   },
   voice: 'Голос',
   chordNames: 'Названия аккордов',
