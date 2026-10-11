@@ -203,13 +203,13 @@
       "grass-deep": {
         "role": "tertiary",
         "displayName": "Grass Deep",
-        "canonical": "#4D744E",
+        "canonical": "#44684A",
         "tonalRamp": [
           "#172317",
           "#263A27",
           "#365137",
           "#446645",
-          "#4D744E",
+          "#44684A",
           "#8BA58C",
           "#B8C7B8",
           "#E4EAE4"
@@ -465,13 +465,13 @@
       "yellow-deep": {
         "role": "tertiary",
         "displayName": "Yellow Deep",
-        "canonical": "#8B682B",
+        "canonical": "#7A5B22",
         "tonalRamp": [
           "#2A1F0D",
           "#463416",
           "#61491E",
           "#7A5C26",
-          "#8B682B",
+          "#7A5B22",
           "#B49D75",
           "#D1C3AA",
           "#EEE8DF"

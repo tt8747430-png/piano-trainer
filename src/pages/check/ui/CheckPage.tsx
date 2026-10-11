@@ -7,7 +7,7 @@ import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/
 import { MidiButton } from '@/features/connect-midi'
 import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useGoBack } from '@/shared/lib'
-import { RoundButton } from '@/shared/ui'
+import { RoundButton, usePageHeading } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
 import { TrainerBoard } from '@/widgets/trainer-board'
 import { CheckResult } from './CheckResult'
@@ -24,6 +24,8 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   )
   const close = useGoBack({ to: '/' })
   const answered = trainer.run.answered.length
+  const heading = usePageHeading<HTMLHeadingElement>(t('quiz:checkTitle', { title }))
+  const progress = t('quiz:progress', { n: trainer.number, total: plan.length })
 
   return (
     <div className="flex flex-1 flex-col gap-5 pt-2">
@@ -32,12 +34,15 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
         <Progress
           value={answered}
           max={plan.length}
-          aria-label={t('quiz:progress', { n: trainer.number, total: plan.length })}
+          aria-label={progress}
+          getAriaValueText={() => progress}
           className="flex-1"
         />
         <MidiButton />
       </header>
-      <h1 className="text-2xl">{t('quiz:checkTitle', { title })}</h1>
+      <h1 ref={heading} tabIndex={-1} className="text-2xl outline-none">
+        {t('quiz:checkTitle', { title })}
+      </h1>
       {trainer.summary ? (
         <CheckResult
           plan={plan}

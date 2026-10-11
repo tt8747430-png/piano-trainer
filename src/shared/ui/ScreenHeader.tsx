@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
+import { usePageHeading } from './use-page-heading'
 
 /**
  * A screen's large title, with an optional way back before it and actions after it, over the
@@ -15,7 +16,8 @@ export function ScreenHeader({
   actions,
   tabs,
 }: {
-  title: ReactNode
+  /** The screen's name: its large title and the page's. */
+  title: string
   back?: ReactNode
   actions?: ReactNode
   /** The subject's pages (`NavTabs`): the bar's second row, back with the title on the way up. */
@@ -23,6 +25,7 @@ export function ScreenHeader({
 }) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
+  const heading = usePageHeading<HTMLHeadingElement>(title)
   useEffect(() => {
     const element = bar.current
     if (!element) return
@@ -45,15 +48,25 @@ export function ScreenHeader({
       ref={bar}
       data-slot="screen-bar"
       data-hidden={shown ? undefined : ''}
-      onFocus={() => hold(true)}
-      onBlur={(event) => hold(event.currentTarget.contains(event.relatedTarget))}
+      // A control focused holds the bar; the heading, focused as the screen opens, does not.
+      onFocus={(event) => hold(event.target !== heading.current)}
+      onBlur={(event) =>
+        hold(
+          event.relatedTarget !== heading.current &&
+            event.currentTarget.contains(event.relatedTarget),
+        )
+      }
       className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
       {/* The title takes its own width first: where it and the actions do not fit a line, the
           actions go under it rather than squeeze a long word (Последовательности) apart. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4">
         {back}
-        <h1 className="min-w-0 flex-auto text-3xl text-balance hyphens-auto wrap-break-word sm:text-4xl lg:text-5xl">
+        <h1
+          ref={heading}
+          tabIndex={-1}
+          className="min-w-0 flex-auto outline-none text-3xl text-balance hyphens-auto wrap-break-word sm:text-4xl lg:text-5xl"
+        >
           {title}
         </h1>
         {actions ? <div className="ms-auto flex shrink-0 items-center gap-2">{actions}</div> : null}

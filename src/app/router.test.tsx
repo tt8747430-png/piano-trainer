@@ -105,6 +105,23 @@ describe('the app shell', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
   })
 
+  it('names the page after the screen, in the learner’s language', async () => {
+    await renderApp('/practice/chords')
+    await screen.findByRole('heading', { level: 1, name: 'Chords' })
+    expect(document.title).toBe('Chords · Piano Trainer')
+    cleanup()
+    await renderApp('/practice/chords', { locale: 'ru' })
+    await screen.findByRole('heading', { level: 1, name: 'Аккорды' })
+    expect(document.title).toBe('Аккорды · Тренажёр фортепиано')
+  })
+
+  it('puts the focus on a screen’s heading as a link opens it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice')
+    await user.click(await screen.findByRole('link', { name: /^Chords/ }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toHaveFocus()
+  })
+
   it('shows the theme another tab chose', async () => {
     const storage = createMemoryStorage()
     const { settingsStore } = await renderApp('/', { storage })

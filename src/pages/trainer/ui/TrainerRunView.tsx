@@ -42,6 +42,7 @@ export function TrainerRunView({
       {rounds > 0 ? (
         <Progress
           aria-label={t('progress', { n: trainer.number, total: rounds })}
+          getAriaValueText={() => t('progress', { n: trainer.number, total: rounds })}
           value={trainer.run.answered.length}
           max={rounds}
           className="-mt-2"

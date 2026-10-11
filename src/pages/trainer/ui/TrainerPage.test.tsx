@@ -55,7 +55,7 @@ describe('A trainer', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
     await user.click(within(keyboard()).getByRole('button', { name: 'C4' }))
-    expect(screen.getByText(/^(Correct|It’s F3|It’s G4)$/)).toBeInTheDocument()
+    expect(screen.getByText(/^(Correct|Not quite: it’s F3|Not quite: it’s G4)$/)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Check' })).not.toBeInTheDocument()
   })
 

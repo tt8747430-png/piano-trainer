@@ -92,7 +92,7 @@ describe('TrainerBoard', () => {
     renderBoard(skills('chord:min', 'build-chord'))
     await user.click(screen.getByRole('button', { name: 'C4' }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('It’s Cm · Minor triad')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s Cm · Minor triad')).toBeInTheDocument()
   })
 
   it('says which note must be lowest when an inversion is built in root position', async () => {
@@ -105,7 +105,7 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'Build C/E, 1st inversion' })).toBeInTheDocument()
     for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('It’s C/E · Major triad, with E lowest')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s C/E · Major triad, with E lowest')).toBeInTheDocument()
   })
 
   it('asks to name a chord from four answers', async () => {
@@ -126,7 +126,7 @@ describe('TrainerBoard', () => {
     if (!wrong) throw new Error('no wrong answer offered')
     const chosen = wrong.textContent ?? ''
     await user.click(wrong)
-    expect(screen.getByText(/^It’s C7/)).toBeInTheDocument()
+    expect(screen.getByText(/^Not quite: it’s C7/)).toBeInTheDocument()
     const answered = within(screen.getByRole('list', { name: 'Answers' })).getAllByRole('listitem')
     expect(answered.map((item) => item.textContent)).toEqual(
       options.map((option) =>
@@ -211,6 +211,6 @@ describe('TrainerBoard', () => {
     renderBoard({ kind: 'notes', notes: [{ key: midi(67), spelled: note('G'), clef: 'treble' }] })
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'A4' }))
-    expect(screen.getByText('It’s G4')).toBeInTheDocument()
+    expect(screen.getByText('Not quite: it’s G4')).toBeInTheDocument()
   })
 })

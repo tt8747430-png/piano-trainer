@@ -1,7 +1,7 @@
 import { Play, Redo2, Type, Undo2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { PlayLabel, RoundButton } from '@/shared/ui'
+import { PlayLabel, RoundButton, usePageHeading } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -19,11 +19,14 @@ export function EditorToolbar() {
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
+  const heading = usePageHeading<HTMLHeadingElement>(meta.title)
   return (
     <div className="flex flex-wrap items-center gap-2">
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <h1 className="truncate text-lg">{meta.title}</h1>
+        <h1 ref={heading} tabIndex={-1} className="truncate text-lg outline-none">
+          {meta.title}
+        </h1>
         {meta.hasVersion ? (
           <span className="text-sm text-muted-foreground">{t('editor:yourVersion')}</span>
         ) : null}

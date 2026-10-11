@@ -1,5 +1,6 @@
 export const common = {
   appName: 'Piano Trainer',
+  skipToContent: 'Skip to content',
   back: 'Back',
   nav: {
     label: 'Main navigation',

@@ -43,7 +43,11 @@ export const SheetLine = memo(function SheetLine({
     if (holdsCaret) ref.current?.scrollIntoView({ block: 'nearest' })
   }, [holdsCaret])
   return (
-    <div ref={ref} className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none">
+    <div
+      ref={ref}
+      data-slot="sheet-line"
+      className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none"
+    >
       <LazyScoreView score={sheet.score} timeBefore={sheet.timeBefore} selected={selected}>
         {(layout) => (
           <LineOverlay

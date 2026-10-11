@@ -20,11 +20,4 @@ describe('LocaleSync', () => {
     await waitFor(() => expect(i18n.language).toBe('ru'))
     expect(document.documentElement.lang).toBe('ru')
   })
-
-  it('names the page in the saved language', () => {
-    const store = renderWith('ru')
-    expect(document.title).toBe('Тренажёр фортепиано')
-    act(() => setLocale(store, 'en'))
-    expect(document.title).toBe('Piano Trainer')
-  })
 })
