@@ -34,11 +34,7 @@ export function MetronomeFields({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Button
-          variant={on ? 'secondary' : 'outline'}
-          aria-pressed={on}
-          onClick={() => setOn((going) => !going)}
-        >
+        <Button variant={on ? 'secondary' : 'outline'} onClick={() => setOn((going) => !going)}>
           {on ? <Square aria-hidden /> : <Timer aria-hidden />}
           {on ? t('stop') : t('metronome.start')}
         </Button>

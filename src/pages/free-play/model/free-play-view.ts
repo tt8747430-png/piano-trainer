@@ -1,5 +1,5 @@
-import type { MetronomeBeats } from '@/features/metronome'
 import type { KeyParam } from '@/shared/lib/music'
+import type { MetronomeBeats } from '@/shared/lib/schedule'
 
 /** Free play's two ways with the keys: play them, or mark a teaching diagram on them. */
 export const FREE_PLAY_MODES = ['play', 'mark'] as const

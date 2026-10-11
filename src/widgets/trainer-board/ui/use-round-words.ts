@@ -9,10 +9,10 @@ const POSITION = ['root', 'first', 'second', 'third'] as const
 /** A key signature's count as the options write it (`3♯`, `2♭`, `0`), read back. */
 const COUNT = /^(\d)(♯|♭)$/
 
-/** A round's words: what it asks, how each option reads, and what its answer is called. */
 /** A progression's numerals as a line to read: `I–V–vi–IV`. */
 const progressionLine = (line: string) => line.split(' ').join('–')
 
+/** A round's words: what it asks, how each option reads, and what its answer is called. */
 export function useRoundWords() {
   const { t } = useTranslation(['quiz', 'music'])
   const scaleName = useScaleName()

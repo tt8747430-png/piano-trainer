@@ -16,7 +16,7 @@ export function PlayerTitle({ title, onClose }: { title: string; onClose: () => 
         icon={X}
         onClick={onClose}
       />
-      <h1 ref={heading} tabIndex={-1} className="min-w-0 flex-1 truncate text-lg outline-none">
+      <h1 {...heading} className="min-w-0 flex-1 truncate text-lg outline-none">
         {title}
       </h1>
     </div>

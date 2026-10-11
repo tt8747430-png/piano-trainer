@@ -16,7 +16,8 @@ describe('fitScale', () => {
     expect(fitScale({ width: WIDE, height: 20 }, 210)).toBe(SHEET_SCALE.min)
   })
 
-  it('engraves at 1 before the room is measured', () => {
+  it('engraves at 1 before the room is measured, and at its least in a room with no height', () => {
     expect(fitScale({ width: 0, height: 0 }, 210)).toBe(1)
+    expect(fitScale({ width: WIDE, height: -20 }, 210)).toBe(SHEET_SCALE.min)
   })
 })

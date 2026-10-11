@@ -48,7 +48,8 @@ export const ROLE_LEVEL: Readonly<
 
 /**
  * Progressions by ear: four lines a level, each heard after its key's tonic, in a key of up to three
- * sharps or flats. Each level's lines share their chords, so a line is told by its order alone.
+ * sharps or flats. A line is told by its chords and their order; the first two levels' lines share
+ * their chords, so there by its order alone.
  */
 export const PROGRESSION_LEVELS = ['primary', 'pop', 'jazz', 'minor'] as const
 export type ProgressionLevel = (typeof PROGRESSION_LEVELS)[number]

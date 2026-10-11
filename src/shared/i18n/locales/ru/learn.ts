@@ -28,7 +28,7 @@ export const learn: LocaleResources['learn'] = {
     triads: {
       maj: 'Мажорное',
       min: 'Минорное',
-      dim: 'Уменьшенное',
+      dim: 'Уменьшённое',
       aug: 'Увеличенное',
       sus2: 'С задержанной секундой',
       sus4: 'С задержанной квартой',
@@ -45,7 +45,7 @@ export const learn: LocaleResources['learn'] = {
     sevenths: {
       minor: 'Малая септима',
       major: 'Большая септима',
-      diminished: 'Уменьшенная септима',
+      diminished: 'Уменьшённая септима',
     },
     added: 'Добавленные тоны',
     alterations: 'Альтерации',

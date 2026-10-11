@@ -1,10 +1,9 @@
 import { isStepId, type StepId } from '@/entities/path'
-import { METRONOME_BEATS } from '@/features/metronome'
 import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
 import type { FreePlayView } from '@/pages/free-play'
 import { diagramMarksParam, isOneOf, readDiagramMarks, valueOr, wholeIn } from '@/shared/lib'
 import { keyParam, parseNoteInOctave } from '@/shared/lib/music'
-import { TEMPO_RANGE } from '@/shared/lib/schedule'
+import { METRONOME_BEATS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import { C_MAJOR_PARAM, readKey, routeSearch, type Input, type Raw } from './read-search'
 
 // The Check: the step it checks; none is not found, so nothing is left out of the URL.

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { isMethodBookId, METHOD_BOOK_NAMES } from '@/entities/book'
 import { lessonLearnedId, selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { LearnedBadge, LevelMark, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
+import { LearnedBadge, LevelMark, PAGE_TILES, RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
 import { lessonGroups } from '../model/lesson-groups'
 
 /** A module's lessons are numbered in the order they are taught. */
@@ -33,8 +33,8 @@ export function LearnPage() {
                   title={localText(lesson.title, locale)}
                   detail={t(`category.${lesson.category}`)}
                   numeral={i + 1}
-                  // Grass is learned: a lesson wears it once it is, sand before.
-                  paint={done ? 'grass' : 'sand'}
+                  // Grass is learned: a lesson wears it once it is, its page's tile before.
+                  paint={done ? 'grass' : PAGE_TILES.lesson.paint}
                   trailing={
                     <>
                       <LevelMark level={lesson.level} />

@@ -53,3 +53,4 @@ export {
   type DamperEvent,
   type PedalKind,
 } from './damper'
+export { METRONOME_BEATS, type MetronomeBeats } from './metronome-beats'

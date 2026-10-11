@@ -46,4 +46,14 @@ describe('useWakeLock', () => {
     Reflect.deleteProperty(navigator, 'wakeLock')
     expect(() => renderHook(() => useWakeLock())).not.toThrow()
   })
+
+  it('asks no second time while the first is still being granted', async () => {
+    const { request, sentinels } = stubWakeLock()
+    const { unmount } = renderHook(() => useWakeLock())
+    document.dispatchEvent(new Event('visibilitychange'))
+    await waitFor(() => expect(sentinels).toHaveLength(1))
+    expect(request).toHaveBeenCalledOnce()
+    unmount()
+    await waitFor(() => expect(sentinels[0]?.released).toBe(true))
+  })
 })

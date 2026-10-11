@@ -49,10 +49,10 @@ export function ScreenHeader({
       data-slot="screen-bar"
       data-hidden={shown ? undefined : ''}
       // A control focused holds the bar; the heading, focused as the screen opens, does not.
-      onFocus={(event) => hold(event.target !== heading.current)}
+      onFocus={(event) => hold(event.target !== heading.ref.current)}
       onBlur={(event) =>
         hold(
-          event.relatedTarget !== heading.current &&
+          event.relatedTarget !== heading.ref.current &&
             event.currentTarget.contains(event.relatedTarget),
         )
       }
@@ -63,8 +63,7 @@ export function ScreenHeader({
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4">
         {back}
         <h1
-          ref={heading}
-          tabIndex={-1}
+          {...heading}
           className="min-w-0 flex-auto outline-none text-3xl text-balance hyphens-auto wrap-break-word sm:text-4xl lg:text-5xl"
         >
           {title}

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
+import { useElementSize } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { fitScale } from '../model/fit-scale'
@@ -9,24 +10,6 @@ import { SheetOverlay } from './SheetOverlay'
 
 /** The room fingers take under and over the staff (the labels' row is the section's padding). */
 const FINGERS = 36
-
-/** The size an element is given, as it changes; 0 by 0 until it is laid out. */
-function useSize(element: RefObject<HTMLElement | null>): { width: number; height: number } {
-  const [size, setSize] = useState({ width: 0, height: 0 })
-  useEffect(() => {
-    const target = element.current
-    if (!target) return
-    const observer = new ResizeObserver(([entry]) =>
-      setSize({
-        width: entry?.contentBoxSize[0]?.inlineSize ?? 0,
-        height: entry?.contentBoxSize[0]?.blockSize ?? 0,
-      }),
-    )
-    observer.observe(target)
-    return () => observer.disconnect()
-  }, [element])
-  return size
-}
 
 /**
  * A Performance as sheet music on one scrolling line of grand staff (spec §2.6): chord symbols over
@@ -62,7 +45,7 @@ export function SheetMusic({
   const { t } = useTranslation('music')
   const score = useMemo(() => notate(performance), [performance])
   const scroller = useRef<HTMLElement>(null)
-  const { width, height } = useSize(scroller)
+  const { width, height } = useElementSize(scroller)
   const room = { width, height: height - (fingers ? FINGERS : 0) }
   const scale = fitScale(room, staffHeight(muted))
   return (

@@ -1,8 +1,6 @@
 import { TEMPO_RANGE, type ClickSound } from '@/shared/lib/schedule'
 
-/** The beats a bar the metronome counts: its first accented. */
-export const METRONOME_BEATS = [2, 3, 4, 6] as const
-export type MetronomeBeats = (typeof METRONOME_BEATS)[number]
+export { METRONOME_BEATS, type MetronomeBeats } from '@/shared/lib/schedule'
 
 /** One bar of clicks at `tempo`, from 0 s: a click a beat, the first accented. */
 export const metronomeBar = (beats: number, tempo: number): ClickSound[] =>

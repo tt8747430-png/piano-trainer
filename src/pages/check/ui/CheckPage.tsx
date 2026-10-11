@@ -40,7 +40,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
         />
         <MidiButton />
       </header>
-      <h1 ref={heading} tabIndex={-1} className="text-2xl outline-none">
+      <h1 {...heading} className="text-2xl outline-none">
         {t('quiz:checkTitle', { title })}
       </h1>
       {trainer.summary ? (

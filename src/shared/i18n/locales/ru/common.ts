@@ -61,7 +61,7 @@ export const common: LocaleResources['common'] = {
     tempo: 'Темп',
     bpm: '{{tempo}} уд/мин',
     beats: 'Долей в такте',
-    tap: 'Тап',
+    tap: 'Отстучать',
     tapLabel: 'Отстучать темп',
   },
   rail: {

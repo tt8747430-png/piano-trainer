@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { PLAY_DELAY } from '@/shared/api/audio'
 import { useServices } from '@/shared/lib/services'
 import { metronomeBar } from './metronome'
@@ -9,19 +9,24 @@ const AHEAD = 0.5
 
 /**
  * Clicks a bar of `beats` at `tempo` over and over while `on`, a bar at a time on the audio clock so
- * its time never drifts; a change of tempo or beats starts it again on a downbeat. Off, what it
- * queued is silenced (the live voice plays on).
+ * its time never drifts. A new tempo or beats is taken up by the next bar queued, so a slider dragged
+ * while it clicks never stutters. Off, what it queued is silenced (the live voice plays on).
  */
 export function useMetronome({ on, tempo, beats }: { on: boolean; tempo: number; beats: number }) {
   const { audio } = useServices()
+  const latest = useRef({ tempo, beats })
+  useLayoutEffect(() => {
+    latest.current = { tempo, beats }
+  })
   useEffect(() => {
     if (!on) return
-    const bar = metronomeBar(beats, tempo)
-    const length = (beats * 60) / tempo
     let next = audio.now() + PLAY_DELAY
     const fill = () => {
-      while (next < audio.now() + length + AHEAD) {
-        audio.play(bar, next)
+      for (;;) {
+        const { tempo: now, beats: count } = latest.current
+        const length = (count * 60) / now
+        if (next >= audio.now() + length + AHEAD) return
+        audio.play(metronomeBar(count, now), next)
         next += length
       }
     }
@@ -31,5 +36,5 @@ export function useMetronome({ on, tempo, beats }: { on: boolean; tempo: number;
       clearInterval(timer)
       audio.stop()
     }
-  }, [audio, on, tempo, beats])
+  }, [audio, on])
 }

@@ -24,7 +24,7 @@ export function EditorToolbar() {
     <div className="flex flex-wrap items-center gap-2">
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <h1 ref={heading} tabIndex={-1} className="truncate text-lg outline-none">
+        <h1 {...heading} className="truncate text-lg outline-none">
           {meta.title}
         </h1>
         {meta.hasVersion ? (

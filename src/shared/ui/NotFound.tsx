@@ -11,7 +11,7 @@ export function NotFound({ children }: { children: ReactNode }) {
     <Empty className="min-h-96">
       <EmptyHeader>
         <EmptyTitle>
-          <h1 ref={heading} tabIndex={-1} className="text-3xl outline-none">
+          <h1 {...heading} className="text-3xl outline-none">
             {t('notFound.title')}
           </h1>
         </EmptyTitle>

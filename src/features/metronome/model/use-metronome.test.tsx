@@ -42,4 +42,17 @@ describe('useMetronome', () => {
     act(() => void vi.advanceTimersByTime(1000))
     expect(audio.played).toHaveLength(2)
   })
+
+  it('takes up a new tempo from the next bar it queues, without starting again', () => {
+    const { rerender } = metronome({ on: true, tempo: 120, beats: 4 })
+    rerender({ on: true, tempo: 60, beats: 4 })
+    expect(audio.stops).toBe(0)
+    act(() => {
+      audio.setNow(2)
+      vi.advanceTimersByTime(100)
+    })
+    const third = audio.played[2]
+    expect(third?.at).toBeCloseTo(4 + PLAY_DELAY)
+    expect(third?.sounds.map((sound) => sound.at)).toEqual([0, 1, 2, 3])
+  })
 })
