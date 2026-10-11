@@ -1,5 +1,5 @@
 import { Check, Square, Volume2, X } from 'lucide-react'
-import { useLayoutEffect, useRef } from 'react'
+import { useId, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
@@ -36,6 +36,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
   const words = useRoundWords()
   const { question, selected, result } = trainer.round
   const prompt = useRef<HTMLHeadingElement>(null)
+  const checkHint = useId()
 
   // Building a chord or scale: keys are chosen until checked. Reading a note or a key's degrees:
   // each key pressed is answered at once.
@@ -168,7 +169,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       ) : null}
 
       {choosing ? (
-        <div className="flex gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {selected.length > 0 ? (
             <Button variant="soft" size="pill" onClick={trainer.clear}>
               {t('quiz:clear')}
@@ -178,10 +179,16 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
             size="pill"
             className="flex-1 sm:min-w-56 sm:flex-none"
             disabled={selected.length === 0}
+            aria-describedby={selected.length === 0 ? checkHint : undefined}
             onClick={trainer.check}
           >
             {t('quiz:check')}
           </Button>
+          {selected.length === 0 ? (
+            <p id={checkHint} className="text-sm text-muted-foreground">
+              {t('quiz:checkHint')}
+            </p>
+          ) : null}
         </div>
       ) : null}
 

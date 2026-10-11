@@ -50,6 +50,8 @@ export const quiz = {
   playAgain: 'Play again',
   answers: 'Answers',
   check: 'Check',
+  // Under Check while no key is chosen: what it waits for.
+  checkHint: 'Choose the keys on the keyboard, then Check.',
   clear: 'Clear',
   next: 'Next',
   results: 'Results',

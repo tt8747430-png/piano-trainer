@@ -48,6 +48,7 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'Build C' })).toBeInTheDocument()
     const check = screen.getByRole('button', { name: 'Check' })
     expect(check).toBeDisabled()
+    expect(check).toHaveAccessibleDescription('Choose the keys on the keyboard, then Check.')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')

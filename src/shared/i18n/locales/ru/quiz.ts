@@ -48,6 +48,7 @@ export const quiz: LocaleResources['quiz'] = {
   playAgain: 'Ещё раз',
   answers: 'Ответы',
   check: 'Проверить',
+  checkHint: 'Выберите клавиши на клавиатуре, затем нажмите «Проверить».',
   clear: 'Сбросить',
   next: 'Дальше',
   results: 'Итоги',
