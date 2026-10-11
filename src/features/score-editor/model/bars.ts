@@ -2,6 +2,7 @@ import { beatsPerBar, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib
 import { ticksOf } from '@/shared/lib/notation'
 import type { HandId } from '@/entities/piece'
 import type { Draft, DraftBar, DraftNote } from './draft'
+import { versesInOrder } from './sections'
 import { barsOf } from './timeline'
 import { slotsOf, spliceAll, withSlots, type Slot } from './structure'
 
@@ -26,13 +27,21 @@ const endOf = (draft: Draft, index: number): Tick => {
   return placed ? placed.start + placed.bar.ticks : 0
 }
 
-/** Slots with new bars put in after `after`, and the notes from there moved on. */
+/**
+ * Slots with new bars put in after `after`, and the notes from there moved on. Each bar goes in as a
+ * bar of its own: an edit finds its bar by identity, so a pasted bar shared with the one it was copied
+ * from would take every edit of either.
+ */
 function insertSlots(draft: Draft, after: number, bars: readonly DraftBar[]): Draft {
   const slots = slotsOf(draft)
   const ticks = bars.reduce((sum, bar) => sum + bar.ticks, 0)
   const at = endOf(draft, after)
   return spliceAll(
-    withSlots(draft, [...slots.slice(0, after + 1), ...bars.map(plain), ...slots.slice(after + 1)]),
+    withSlots(draft, [
+      ...slots.slice(0, after + 1),
+      ...bars.map((bar) => plain({ ...bar, chords: bar.chords.map((chord) => ({ ...chord })) })),
+      ...slots.slice(after + 1),
+    ]),
     at,
     0,
     ticks,
@@ -71,7 +80,9 @@ export function deleteBars(draft: Draft, { from, to }: BarRange): Draft {
     )
   const start = barsOf(draft)[from]?.start ?? 0
   const ticks = removed.reduce((sum, slot) => sum + slot.bar.ticks, 0)
-  return spliceAll(withSlots(draft, [...slots.slice(0, from), ...after]), start, ticks, 0)
+  return versesInOrder(
+    spliceAll(withSlots(draft, [...slots.slice(0, from), ...after]), start, ticks, 0),
+  )
 }
 
 /** Bars and the notes starting in them, each note kept inside them. */
@@ -120,13 +131,47 @@ export function barLengths(meter: Meter): Tick[] {
   return Array.from({ length: full / eighth }, (_, i) => (i + 1) * eighth)
 }
 
+/** Whether bar `index` is a pickup: the first bar, shorter than the meter's. */
+const isPickup = (draft: Draft, index: number, ticks: Tick): boolean =>
+  index === 0 && ticks < beatsPerBar(draft.meter) * TICKS_PER_BEAT
+
+/**
+ * A pickup made `ticks` long from its start, as it leads into the downbeat: shorter, its first beats
+ * and the notes in them taken, the chord sounding where it now starts kept; longer, room before it,
+ * its first chord held back to the start. Its chords keep their places from its end.
+ */
+function setPickupTicks(draft: Draft, ticks: Tick): Draft {
+  const placed = barsOf(draft)[0]
+  if (!placed) return draft
+  const shift = ticks - placed.bar.ticks
+  const moved = placed.bar.chords.map((chord, i) => ({
+    ...chord,
+    at: i === 0 && shift > 0 ? 0 : chord.at + shift,
+  }))
+  const sounding = moved.findLast((chord) => chord.at <= 0)
+  const chords = moved
+    .filter((chord) => chord.at > 0 || chord === sounding)
+    .map((chord) => (chord === sounding ? { ...chord, at: 0 } : chord))
+  const bar: DraftBar = { ...placed.bar, ticks, chords }
+  const slots = slotsOf(draft)
+  const resized = withSlots(
+    draft,
+    slots.map((slot, i) => (i === 0 ? { ...slot, bar } : slot)),
+  )
+  return shift < 0
+    ? spliceAll(resized, placed.start, -shift, 0)
+    : spliceAll(resized, placed.start, 0, shift)
+}
+
 /**
  * A bar made `ticks` long: shorter, its chords and notes past the new end taken; longer, its last chord
- * held on; the notes after it moved.
+ * held on; the notes after it moved. A pickup changes at its start instead (`setPickupTicks`).
  */
 export function setBarTicks(draft: Draft, index: number, ticks: Tick): Draft {
   const placed = barsOf(draft)[index]
   if (!placed || ticks <= 0 || ticks === placed.bar.ticks) return draft
+  if (isPickup(draft, index, placed.bar.ticks) && ticks < beatsPerBar(draft.meter) * TICKS_PER_BEAT)
+    return setPickupTicks(draft, ticks)
   const slots = slotsOf(draft)
   const bar: DraftBar = {
     ...placed.bar,

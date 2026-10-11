@@ -133,6 +133,17 @@ describe('the score editor', () => {
     expect(await screen.findByRole('button', { name: 'Bar 1: F' })).toBeInTheDocument()
   })
 
+  it('writes nothing from a MIDI keyboard behind the song’s settings', async () => {
+    const user = userEvent.setup()
+    const { midi: keyboard, piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('radio', { name: 'Melody' }))
+    const before = songOf(piecesStore.getState())
+    await user.click(screen.getByRole('button', { name: 'Song settings' }))
+    await screen.findByRole('dialog')
+    act(() => keyboard.press(midi(60)))
+    expect(songOf(piecesStore.getState())).toEqual(before)
+  })
+
   it('writes the melody from the computer keyboard, a value at a time', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })

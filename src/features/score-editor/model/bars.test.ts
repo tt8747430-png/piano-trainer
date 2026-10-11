@@ -10,6 +10,7 @@ import {
   pasteBars,
   setBarTicks,
 } from './bars'
+import { deleteChord } from './chords'
 
 const sung = draftOf({
   sections: [{ kind: 'verse', lines: ['G C', 'D G'] }],
@@ -76,6 +77,46 @@ describe('copy and paste', () => {
     ])
     expect(shape(pasted.melody).slice(-3)).toEqual(['C5@192/24', 'E5@216/24', 'D5@240/48'])
     expect(shape(pasted.hands.lh)).toEqual(['C3@48/48', 'D3@96/48', 'C3@192/48', 'D3@240/48'])
+  })
+})
+
+describe('setBarTicks, a pickup', () => {
+  it('shortens and lengthens a pickup at its start, its chords kept from its end', () => {
+    const pickup = draftOf({
+      sections: [{ kind: 'verse', lines: ['G@2-D@1 C'] }],
+      melody: 'C4/1 D4/1 E4/1 | F4/4',
+    })
+    const short = setBarTicks(pickup, 0, 12)
+    expect(form(short)).toEqual([[['D@0', 'C@0']]])
+    expect(shape(short.melody)[0]).toBe('E4@0/12')
+    const long = setBarTicks(short, 0, 24)
+    expect(form(long)).toEqual([[['D@0', 'C@0']]])
+    expect(lengths(long)).toEqual([24, 48])
+  })
+})
+
+describe('deleteBars, verses', () => {
+  it('counts the verses left in order when a whole verse goes', () => {
+    const three = draftOf({
+      sections: [
+        { kind: 'verse', n: 1, lines: ['G C'] },
+        { kind: 'verse', n: 2, lines: ['D G'] },
+        { kind: 'verse', n: 3, lines: ['C G'] },
+      ],
+    })
+    const first = deleteBars(three, { from: 0, to: 1 })
+    expect(first.sections.map((section) => section.heading.n)).toEqual([1, 2])
+    const middle = deleteBars(three, { from: 2, to: 3 })
+    expect(middle.sections.map((section) => section.heading.n)).toEqual([1, 2])
+  })
+})
+
+describe('pasted bars', () => {
+  it('are bars of their own: an edit of one leaves the bar it was copied from as it was', () => {
+    const two = draftOf({ sections: [{ kind: 'verse', lines: ['G-C D'] }] })
+    const pasted = pasteBars(two, 1, copyBars(two, { from: 0, to: 0 }))
+    const edited = deleteChord(pasted, 2, 24)
+    expect(form(edited)).toEqual([[['G@0 C@24', 'D@0', 'G@0']]])
   })
 })
 

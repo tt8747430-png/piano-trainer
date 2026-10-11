@@ -50,6 +50,19 @@ describe('the song’s settings', () => {
     expect(shape(two.melody)).toEqual(['E4@0/24', 'D4@48/24'])
   })
 
+  it('keeps a pickup one, cut from its start, so the beats leading into the downbeat stay', () => {
+    const pickup = draftOf({
+      sections: [{ kind: 'verse', lines: ['G@3 C'] }],
+      melody: 'C4/1 D4/1 E4/1 | F4/4',
+    })
+    const two = setMeter(pickup, '2/4')
+    expect(two.sections[0]?.lines[0]?.[0]?.ticks).toBe(12)
+    expect(shape(two.melody)[0]).toBe('E4@0/12')
+    const three = setMeter(pickup, '3/4')
+    expect(three.sections[0]?.lines[0]?.[0]?.ticks).toBe(24)
+    expect(shape(three.melody).slice(0, 2)).toEqual(['D4@0/12', 'E4@12/12'])
+  })
+
   it('keeps a pickup bar shorter than the meter’s as it is, and changes nothing across kinds', () => {
     const pickup = draftOf({ sections: [{ kind: 'verse', lines: ['G@1 C'] }] })
     const before = pickup.sections[0]?.lines[0]?.[0]?.ticks

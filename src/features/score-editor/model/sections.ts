@@ -47,6 +47,24 @@ function countVerses(draft: Draft, from: number, atLeast: number, by: 1 | -1): D
   return changed ? { ...draft, sections } : draft
 }
 
+/**
+ * The numbered verses counted 1, 2, 3… in order: after bars are taken, a verse that went (or one whose
+ * heading gave way to the section after it) leaves no gap, nor a piece that starts at Verse 2.
+ */
+export function versesInOrder(draft: Draft): Draft {
+  let count = 0
+  let changed = false
+  const sections = draft.sections.map((section) => {
+    const { heading } = section
+    if (heading.kind !== 'verse' || heading.n === undefined) return section
+    count += 1
+    if (heading.n === count) return section
+    changed = true
+    return { ...section, heading: { ...heading, n: count } }
+  })
+  return changed ? { ...draft, sections } : draft
+}
+
 /** The verses after section `index` counted back where it was a numbered verse that goes. */
 const withoutVerse = (draft: Draft, index: number, heading: Heading | undefined): Draft =>
   heading?.kind === 'verse' && heading.n !== undefined

@@ -204,6 +204,19 @@ describe('the editor', () => {
     expect(cut.clip?.bars).toHaveLength(2)
   })
 
+  it('ends the bars chosen with an edit: Delete after a chord typed takes the chord, not the bars', () => {
+    const chords = run(
+      initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })),
+      { type: 'layer', layer: 'chords' },
+    )
+    const pasted = run(chords, { type: 'bars', edit: 'copy' }, { type: 'bars', edit: 'paste' })
+    expect(pasted.selection).not.toBeNull()
+    const typed = run(pasted, { type: 'chord', chord: parseChordSymbol('Am'), advance: 'beat' })
+    expect(typed.selection).toBeNull()
+    const deleted = run(typed, { type: 'delete' })
+    expect(form(deleted.draft)[0]?.[0]).toHaveLength(4)
+  })
+
   it('adds and deletes bars, changes a bar’s length and starts a line and a section', () => {
     const state = run(initialEditor(draftOf()), { type: 'bars', edit: 'insert' })
     expect(form(state.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])

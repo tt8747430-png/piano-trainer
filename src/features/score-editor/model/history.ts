@@ -23,6 +23,9 @@ export function commit(
     ...next,
     draft,
     caret: placed(draft, next.layer, next.caret),
+    // The bars chosen stood on the music as it was: an edit ends them unless it chooses its own (a
+    // paste), so Delete after a chord typed takes the chord, never bars chosen before it.
+    selection: 'selection' in patch ? (patch.selection ?? null) : null,
     past: joins ? state.past : [...state.past, snapshotOf(state)].slice(-HISTORY),
     future: [],
   }

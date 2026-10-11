@@ -67,8 +67,8 @@ const fullBar = (meter: Meter) => beatsPerBar(meter) * TICKS_PER_BEAT
 
 /**
  * The music in another meter of its kind: each full bar made the new meter's (shorter, its notes and
- * chords past the new end taken; longer, its last chord held on), a shorter bar (a pickup) kept as it
- * is unless it outruns the new bar.
+ * chords past the new end taken; longer, its last chord held on), a shorter bar kept as it is unless it
+ * outruns the new bar. A pickup stays one: a beat short of the new bar at most, cut from its start.
  */
 export function setMeter(draft: Draft, meter: Meter): Draft {
   if (meter === draft.meter || !metersFor(draft.meter).includes(meter)) return draft
@@ -76,6 +76,10 @@ export function setMeter(draft: Draft, meter: Meter): Draft {
   const to = fullBar(meter)
   // From the last bar back, so each bar's start is still where it was when it is resized.
   const resized = barsOf(draft).reduceRight((music, { bar }, index) => {
+    if (index === 0 && bar.ticks < from) {
+      const pickup = Math.min(bar.ticks, to - TICKS_PER_BEAT)
+      return setBarTicks(music, 0, pickup)
+    }
     const ticks = bar.ticks === from || bar.ticks > to ? to : bar.ticks
     return setBarTicks(music, index, ticks)
   }, draft)

@@ -21,6 +21,7 @@ import { useGoBack, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
+import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import { savingTo, type EditorTarget } from './editor-target'
@@ -84,7 +85,11 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const dispatch = useCallback((action: EditorAction) => store.dispatch(action), [store])
   const play = useCallback(
     (key: Midi) => {
-      if (!recording) store.dispatch({ type: 'key', key, time: performance.now() })
+      // A MIDI key writes only where the computer's keys would: never into the music behind an open
+      // sheet, or while a field (a chord typed, a name) has the focus.
+      const focus = document.activeElement
+      if (recording || isTyping(focus) || inPopUp(focus)) return
+      store.dispatch({ type: 'key', key, time: performance.now() })
     },
     [store, recording],
   )
@@ -141,12 +146,17 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  const showChordNames = (on: boolean) => {
-    setChordNames(on)
-    // With no chord row there is no chord to write: the caret goes to the tune.
-    if (!on && store.getState().layer === 'chords')
-      store.dispatch({ type: 'layer', layer: 'melody' })
-  }
+  // With no chord row there is no chord to write: the caret goes to the tune, now and whenever a
+  // step undone or redone would bring it back to the chords.
+  useEffect(() => {
+    if (chordNames) return
+    const toTune = () => {
+      if (store.getState().layer === 'chords') store.dispatch({ type: 'layer', layer: 'melody' })
+    }
+    toTune()
+    return store.subscribe(toTune)
+  }, [store, chordNames])
+  const showChordNames = (on: boolean) => setChordNames(on)
 
   return {
     store,
