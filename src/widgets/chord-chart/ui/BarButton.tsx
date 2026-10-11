@@ -44,11 +44,19 @@ export function BarButton({
       >
         {number}
       </span>
+      {/* A bar of several chords wraps them, a size down, rather than cut the last off. */}
       <span
         aria-hidden
-        className="font-display text-xl font-semibold whitespace-nowrap sm:text-2xl"
+        className={cn(
+          'flex max-w-full flex-wrap gap-x-1.5 font-display leading-tight font-semibold',
+          symbols.length > 2 ? 'text-lg sm:text-xl' : 'text-xl sm:text-2xl',
+        )}
       >
-        {symbols.join(' ')}
+        {symbols.map((symbol, i) => (
+          <span key={i} className="whitespace-nowrap">
+            {symbol}
+          </span>
+        ))}
       </span>
       {notes.length > 0 ? (
         <span aria-hidden className="text-xs whitespace-nowrap text-muted-foreground">
