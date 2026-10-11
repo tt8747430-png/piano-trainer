@@ -126,14 +126,22 @@ function songOf(saved: unknown): OwnSong | null {
   return title && music ? { id: saved.id, title, ...music } : null
 }
 
-/** Stored JSON is untrusted: music is kept only where it reads as a piece's. */
-function sanitize(persisted: unknown): PiecesState {
+/** The value already held where it has the same content: a screen's memos over it hold. */
+const same = <T>(read: T, held: T | undefined): T =>
+  held !== undefined && JSON.stringify(held) === JSON.stringify(read) ? held : read
+
+/**
+ * Stored JSON is untrusted: music is kept only where it reads as a piece's. Music as it was held
+ * stays the object held, so another tab's save of one song leaves every other piece as it was (an
+ * open Player of another goes on playing).
+ */
+function sanitize(persisted: unknown, current: PiecesState): PiecesState {
   const saved = savedObject<PiecesState>(persisted)
   const versions: Record<PieceId, PieceMusic> = {}
   if (isRecord(saved.versions)) {
     for (const [id, value] of Object.entries(saved.versions)) {
       const music = musicOfSaved(value)
-      if (music && !isOwnSongId(id)) versions[id] = music
+      if (music && !isOwnSongId(id)) versions[id] = same(music, current.versions[id])
     }
   }
   const seen = new Set<OwnSongId>()
@@ -141,7 +149,12 @@ function sanitize(persisted: unknown): PiecesState {
     const song = songOf(value)
     if (!song || seen.has(song.id)) return []
     seen.add(song.id)
-    return [song]
+    return [
+      same(
+        song,
+        current.songs.find((held) => held.id === song.id),
+      ),
+    ]
   })
   const past = Math.max(0, ...songs.map((song) => ownSongNumber(song.id))) + 1
   const next =

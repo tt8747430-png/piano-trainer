@@ -87,6 +87,16 @@ describe('typing on the computer keyboard', () => {
     expect(screen.getByRole('textbox', { name: 'Search' })).toHaveValue('a')
   })
 
+  it('plays nothing for a key pressed in a pop-up: its keys are its own', () => {
+    const { onKeyPress } = typingKeyboard()
+    const listbox = document.createElement('div')
+    listbox.setAttribute('role', 'listbox')
+    document.body.append(listbox)
+    fireEvent.keyDown(listbox, { code: 'KeyD', key: 'd' })
+    expect(onKeyPress).not.toHaveBeenCalled()
+    listbox.remove()
+  })
+
   it('keeps a key it plays from the browser (Firefox’s Quick Find on ’)', () => {
     typingKeyboard()
     const quote = createEvent.keyDown(window, { code: 'Quote', key: "'" })

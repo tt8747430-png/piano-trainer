@@ -51,6 +51,16 @@ describe('useSpacePedal', () => {
     expect(audio.voice).toEqual([])
   })
 
+  it('leaves Space to a pop-up', () => {
+    const { audio } = setUp()
+    const dialog = document.createElement('div')
+    dialog.setAttribute('role', 'dialog')
+    document.body.append(dialog)
+    fireEvent.keyDown(dialog, space)
+    expect(audio.voice).toEqual([])
+    dialog.remove()
+  })
+
   it('does nothing while it is not enabled', () => {
     const { audio } = setUp(false)
     fireEvent.keyDown(document.body, space)

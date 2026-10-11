@@ -1,4 +1,4 @@
-import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -24,6 +24,16 @@ describe('Songs', () => {
       'href',
       '/songs/bz5',
     )
+  })
+
+  it('keeps a key typed before the URL caught up with the one before it', async () => {
+    const { router } = await renderApp('/songs')
+    const box = await screen.findByRole('searchbox', { name: 'Search songs' })
+    fireEvent.change(box, { target: { value: 'д' } })
+    fireEvent.change(box, { target: { value: 'ду' } })
+    expect(box).toHaveValue('ду')
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ q: 'ду' }))
+    expect(box).toHaveValue('ду')
   })
 
   it('says so when nothing matches, and clears the filters', async () => {

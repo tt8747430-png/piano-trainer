@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useServices } from '@/shared/lib/services'
-import { takesKey } from '@/shared/lib/shortcuts'
+import { inPopUp, takesKey } from '@/shared/lib/shortcuts'
 
 /**
  * Space holds the sustain while it is held (spec 2026-10-09 §2.3), where Space has no other job: not
@@ -24,7 +24,7 @@ export function useSpacePedal({ enabled }: { enabled: boolean }): void {
         return
       }
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
-      if (takesKey(event.target)) return
+      if (takesKey(event.target) || inPopUp(event.target)) return
       event.preventDefault()
       holding = true
       audio.pedal('sustain', true)

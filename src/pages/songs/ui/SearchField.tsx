@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
@@ -9,7 +9,12 @@ import {
   InputGroupInput,
 } from '@/shared/ui/primitives/input-group'
 
-/** The Songs search: a search box with a clear button while it holds text; `/` puts the cursor in it. */
+/**
+ * The Songs search: a search box with a clear button while it holds text; `/` puts the cursor in it.
+ * It holds what is typed itself: the URL it writes to catches up later, in a transition, and a box
+ * that showed the URL would drop a key typed meanwhile and move the caret to the end. A value the
+ * URL gets from elsewhere (Back, Show all) is shown.
+ */
 export function SearchField({
   value,
   onChange,
@@ -19,6 +24,22 @@ export function SearchField({
 }) {
   const { t } = useTranslation('songs')
   const input = useRef<HTMLInputElement>(null)
+  const [text, setText] = useState(value)
+  // What was typed and not yet seen back from the URL, oldest first.
+  const pending = useRef<string[]>([])
+  useEffect(() => {
+    const seen = pending.current.indexOf(value)
+    if (seen >= 0) pending.current.splice(0, seen + 1)
+    else {
+      pending.current = []
+      setText(value)
+    }
+  }, [value])
+  const type = (next: string) => {
+    pending.current.push(next)
+    setText(next)
+    onChange(next)
+  }
   useShortcuts(t('title'), [
     { label: t('search'), combo: { key: '/' }, run: () => input.current?.focus() },
   ])
@@ -32,17 +53,20 @@ export function SearchField({
         type="search"
         aria-label={t('search')}
         placeholder={t('search')}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
+        value={text}
+        onChange={(event) => type(event.target.value)}
         className="text-base"
       />
-      {value ? (
+      {text ? (
         <InputGroupAddon align="inline-end">
           <InputGroupButton
             size="icon"
             className="rounded-full"
             aria-label={t('clearSearch')}
-            onClick={() => onChange('')}
+            onClick={() => {
+              type('')
+              input.current?.focus()
+            }}
           >
             <X aria-hidden />
           </InputGroupButton>

@@ -9,7 +9,7 @@ import {
   usePresses,
 } from '@/shared/lib'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
-import { isTyping } from '@/shared/lib/shortcuts'
+import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 
 const sameRange = (a: KeyRange | undefined, b: KeyRange | undefined) =>
   a?.from === b?.from && a?.to === b?.to
@@ -61,7 +61,7 @@ export function useTyping({
   })
   const typed = useEffectEvent((event: KeyboardEvent) => {
     if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
-    if (isTyping(event.target)) return
+    if (isTyping(event.target) || inPopUp(event.target)) return
     if (event.code === OCTAVE_DOWN || event.code === OCTAVE_UP) {
       event.preventDefault()
       const by = event.code === OCTAVE_UP ? 1 : -1

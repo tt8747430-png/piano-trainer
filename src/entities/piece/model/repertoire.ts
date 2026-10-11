@@ -38,26 +38,37 @@ export function versionOf(original: ChartPiece | Listing, music: PieceMusic): Ch
     : piece
 }
 
-const ownPiece = (song: OwnSong): ChartPiece => ({ ...song, kind: 'song' })
+/** Each own song's and version's piece, worked out once per object, so a screen's memos over it hold. */
+const ownPieces = new WeakMap<OwnSong, ChartPiece>()
+const versions = new WeakMap<PieceMusic, ChartPiece>()
+
+function ownPiece(song: OwnSong): ChartPiece {
+  const known = ownPieces.get(song)
+  if (known) return known
+  const piece: ChartPiece = { ...song, kind: 'song' }
+  ownPieces.set(song, piece)
+  return piece
+}
+
+function playedVersion(original: ChartPiece | Listing, music: PieceMusic): ChartPiece {
+  const known = versions.get(music)
+  if (known) return known
+  const version = versionOf(original, music)
+  versions.set(music, version)
+  return version
+}
 
 export function repertoire({
-  versions,
+  versions: learners,
   songs,
 }: Pick<PiecesState, 'versions' | 'songs'>): Repertoire {
   const own = new Map(songs.map((song) => [song.id, ownPiece(song)]))
-  // Each version is worked out once, so a screen's memos over it hold.
-  const played = new Map<string, ChartPiece>()
   const entry = (id: string): Entry | undefined => {
     const mine = isOwnSongId(id) ? own.get(id) : undefined
     if (mine) return mine
     const original = versionableEntry(id)
-    const music = selectVersion({ versions }, id)
-    if (!original || !music) return entryById(id)
-    const known = played.get(id)
-    if (known) return known
-    const version = versionOf(original, music)
-    played.set(id, version)
-    return version
+    const music = selectVersion({ versions: learners }, id)
+    return original && music ? playedVersion(original, music) : entryById(id)
   }
   return {
     entry,

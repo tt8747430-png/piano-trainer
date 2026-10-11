@@ -21,7 +21,7 @@ import { rememberView } from '@/features/remember-view'
 import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
-import { FullScreenLayout } from './FullScreenLayout'
+import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
@@ -488,8 +488,10 @@ export function createAppRouter({
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,
     defaultPendingMs: 300,
-    // Back returns to where the learner was on the screen they go back to.
+    // Back returns to where the learner was on the screen they go back to; a new screen starts at
+    // its top, the full screen's own scroll too.
     scrollRestoration: true,
+    scrollToTopSelectors: [`[data-scroll-restoration-id="${FULL_SCREEN_SCROLL}"]`],
   })
   router.subscribe('onResolved', ({ toLocation }) => {
     if (router.state.matches.at(-1)?.staticData.remembered) {

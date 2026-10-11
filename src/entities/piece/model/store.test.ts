@@ -89,4 +89,22 @@ describe('createPiecesStore', () => {
     )
     expect(store.getState().versions).toEqual({ bz1: MUSIC })
   })
+
+  it('keeps the music it holds as it was where another tab’s save leaves it so', () => {
+    const storage = createMemoryStorage()
+    const otherTabs = new EventTarget()
+    const store = createPiecesStore({ storage, otherTabs })
+    const savedElsewhere = (state: unknown) => {
+      const newValue = JSON.stringify({ state, version: 1 })
+      storage.setItem(PIECES_STORAGE_KEY, newValue)
+      otherTabs.dispatchEvent(new StorageEvent('storage', { key: PIECES_STORAGE_KEY, newValue }))
+    }
+    savedElsewhere({ versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2 })
+    const { versions, songs } = store.getState()
+    const other = { ...SONG, id: 'my-2', title: 'Evening' }
+    savedElsewhere({ versions: { bz1: MUSIC }, songs: [SONG, other], nextSong: 3 })
+    expect(store.getState().versions.bz1).toBe(versions.bz1)
+    expect(store.getState().songs[0]).toBe(songs[0])
+    expect(store.getState().songs[1]).toEqual(other)
+  })
 })

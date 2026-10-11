@@ -1,6 +1,7 @@
 import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { act } from 'react'
+import { describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { createProgressStore, ProgressStoreProvider } from '@/entities/progress'
 import { useTrainer, type Asks } from '@/features/trainer'
@@ -11,18 +12,18 @@ import { ServicesProvider } from '@/shared/lib/services'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { TrainerBoard } from './TrainerBoard'
 
-function Board({ asks }: { asks: Asks }) {
-  const trainer = useTrainer(asks, { rounds: 10, random: () => 0 })
+function Board({ asks, autoNext = false }: { asks: Asks; autoNext?: boolean }) {
+  const trainer = useTrainer(asks, { rounds: 10, random: () => 0, autoNext })
   return <TrainerBoard trainer={trainer} asks={asks} />
 }
 
-function renderBoard(asks: Asks) {
+function renderBoard(asks: Asks, { autoNext = false } = {}) {
   const store = createProgressStore({ storage: createMemoryStorage() })
   renderWithSettings(
     <ProgressStoreProvider store={store}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
         <ShortcutsProvider mac={false}>
-          <Board asks={asks} />
+          <Board asks={asks} autoNext={autoNext} />
         </ShortcutsProvider>
       </ServicesProvider>
     </ProgressStoreProvider>,
@@ -53,8 +54,24 @@ describe('TrainerBoard', () => {
     for (const name of ['E4', 'G4'])
       await user.click(within(keyboard).getByRole('button', { name }))
     await user.click(check)
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+  })
+
+  it('moves the focus to the next round’s prompt as auto-next goes on, not to the page', () => {
+    vi.useFakeTimers()
+    try {
+      renderBoard(skills('chord:maj', 'build-chord'), { autoNext: true })
+      const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+      for (const name of ['C4', 'E4', 'G4'])
+        fireEvent.click(within(keyboard).getByRole('button', { name }))
+      fireEvent.click(screen.getByRole('button', { name: 'Check' }))
+      expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
+      act(() => void vi.advanceTimersByTime(2000))
+      expect(screen.getByRole('heading', { name: 'Build C' })).toHaveFocus()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('names no chord played in a round, its chord names off: the name is the question', () => {
@@ -98,7 +115,7 @@ describe('TrainerBoard', () => {
     const answers = screen.getByRole('group', { name: 'Answers' })
     expect(within(answers).getAllByRole('button')).toHaveLength(4)
     await user.click(within(answers).getByRole('button', { name: 'C7' }))
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 
   it('keeps the answers in sight after a wrong choice: the one chosen and the answer marked', async () => {
@@ -148,9 +165,9 @@ describe('TrainerBoard', () => {
     const options = within(screen.getByRole('group', { name: 'Answers' })).getAllByRole('button')
     const place = options.findIndex((option) => option.textContent === 'C7') + 1
     await user.keyboard(String(place))
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
     await user.keyboard('{Enter}')
-    expect(screen.queryByText('Right')).not.toBeInTheDocument()
+    expect(screen.queryByText('Correct')).not.toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
   })
 
@@ -158,10 +175,10 @@ describe('TrainerBoard', () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj', 'build-chord'))
     await user.keyboard('{Enter}')
-    expect(screen.queryByText('Right')).not.toBeInTheDocument()
+    expect(screen.queryByText('Correct')).not.toBeInTheDocument()
     for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
     await user.keyboard('{Enter}')
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 
   it('plays the round again on R', async () => {
@@ -186,7 +203,7 @@ describe('TrainerBoard', () => {
     ).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getByRole('button', { name: '2 ♯' }))
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
   })
 
   it('reads a note on its staff, a wrong key showing the note’s name', async () => {

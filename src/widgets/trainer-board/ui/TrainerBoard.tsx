@@ -1,5 +1,5 @@
 import { Check, Square, Volume2, X } from 'lucide-react'
-import { useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
@@ -45,10 +45,19 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
   })
   const choices = isChoice(question) ? words.options(question) : null
   const hears = isChoice(question) && question.mode !== 'key-signature'
-  const goOn = () => {
-    trainer.next()
-    prompt.current?.focus()
-  }
+  // A new round, by Next or by auto-next: a keyboard user's focus, on the board or lost with the
+  // button that held it, moves to its prompt.
+  const board = useRef<HTMLElement>(null)
+  const shown = useRef(question)
+  useLayoutEffect(() => {
+    if (shown.current === question) return
+    shown.current = question
+    const focused = document.activeElement
+    if (focused === null || focused === document.body || board.current?.contains(focused)) {
+      prompt.current?.focus()
+    }
+  }, [question])
+  const goOn = trainer.next
   useRoundShortcuts({
     act: result ? goOn : choosing && selected.length > 0 ? trainer.check : null,
     answers:
@@ -82,7 +91,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         : t('quiz:itWas', { answer: words.answer(question) })
 
   return (
-    <section className="flex flex-col gap-5">
+    <section ref={board} className="flex flex-col gap-5">
       <div className="flex items-center gap-3">
         <h2
           ref={prompt}
