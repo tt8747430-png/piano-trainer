@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef } from 'react'
 import type { BarRange, Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
+import { useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import type { LineSheet } from '../model/line-sheets'
 import { LineOverlay } from './LineOverlay'
@@ -32,6 +33,8 @@ export const SheetLine = memo(function SheetLine({
   onSignature: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
+  // A line of a few bars runs the sheet's width, as a printed page's does.
+  const { width } = useElementSize(ref)
   const holdsCaret = caret !== null
   // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
   const selected =
@@ -48,7 +51,12 @@ export const SheetLine = memo(function SheetLine({
       data-slot="sheet-line"
       className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none"
     >
-      <LazyScoreView score={sheet.score} timeBefore={sheet.timeBefore} selected={selected}>
+      <LazyScoreView
+        score={sheet.score}
+        timeBefore={sheet.timeBefore}
+        selected={selected}
+        fill={width > 0 ? width : undefined}
+      >
         {(layout) => (
           <LineOverlay
             layout={layout}

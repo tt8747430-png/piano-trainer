@@ -103,6 +103,8 @@ interface BuiltMeasure {
   readonly clefs: boolean
   readonly time: boolean
   readonly width: number
+  /** What of its width its notes have, past its clef, key and time. */
+  readonly notes: number
 }
 
 function staveAt(
@@ -202,7 +204,7 @@ function buildMeasure(
   const clefs = previous === undefined
   const before = previous?.time ?? timeBefore
   const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
-  const probe = { measure, staves, formatter, clefs, time, width: 0 }
+  const probe = { measure, staves, formatter, clefs, time, width: 0, notes: 0 }
   const modifiers = Math.max(
     ...shown.map((staff) => {
       const stave = staveAt(
@@ -226,7 +228,7 @@ function buildMeasure(
     if (short <= 1) break
     notes = Math.max(notes + 1, Math.ceil(notes * short))
   }
-  return { ...probe, width: modifiers + notes }
+  return { ...probe, width: modifiers + notes, notes }
 }
 
 /**
@@ -319,6 +321,26 @@ function tagNotes(host: HTMLDivElement, voice: BuiltVoice, staff: StaffId) {
   }
 }
 
+/** A line shorter than this share of the width it may fill is left as it is: a lone bar is not a page's width. */
+const LEAST_SPREAD = 0.4
+
+/**
+ * The measures' notes given room alike, each by its share, so the line runs to `width` (VexFlow
+ * units) as a printed system is justified; the clef, key and time keep their room. A line already as
+ * wide, or far shorter, is left as it is.
+ */
+function spread(built: BuiltMeasure[], width: number | undefined): BuiltMeasure[] {
+  const natural = built.reduce((sum, measure) => sum + measure.width, 0)
+  const notes = built.reduce((sum, measure) => sum + measure.notes, 0)
+  const room = width === undefined ? 0 : width - END_MARGIN
+  if (notes <= 0 || room <= natural || natural < room * LEAST_SPREAD) return built
+  const extra = room - natural
+  return built.map((measure) => {
+    const more = (extra * measure.notes) / notes
+    return { ...measure, width: measure.width + more, notes: measure.notes + more }
+  })
+}
+
 /**
  * Engraves a score into `host` as one system of measures left to right (spec §2.5), on the grand
  * staff or on `staff` alone, and says where everything is, in CSS pixels at `scale`.
@@ -332,6 +354,7 @@ export function engrave(
     names,
     staff,
     timeBefore,
+    fill,
   }: {
     scale: number
     fingers: boolean
@@ -339,18 +362,23 @@ export function engrave(
     staff?: StaffId | undefined
     /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
     timeBefore?: TimeSignature | undefined
+    /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
+    fill?: number | undefined
   },
 ): ScoreLayout {
   setUpVexFlow()
   host.replaceChildren()
   const shown: readonly StaffId[] = staff ? [staff] : STAVES
-  const built = score.measures.map((measure, index) =>
-    buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
-      fingers,
-      names,
-      scale,
-      shown,
-    }),
+  const built = spread(
+    score.measures.map((measure, index) =>
+      buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
+        fingers,
+        names,
+        scale,
+        shown,
+      }),
+    ),
+    fill === undefined ? undefined : fill / scale,
   )
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
   const places = placesOf(built, staff)

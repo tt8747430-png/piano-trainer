@@ -308,4 +308,25 @@ describe('engrave', () => {
       expect(column(fingersIn(host))).toEqual({ 5: 105, 3: 115, 1: 125 })
     })
   })
+
+  it('spreads a line to the width it may fill, its measures widened; never a lone short one', () => {
+    const host = () => document.createElement('div')
+    const natural = engrave(score, host(), { scale: 1, fingers: false, names: false })
+    const spread = engrave(score, host(), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      fill: natural.width * 1.5,
+    })
+    expect(spread.width).toBeCloseTo(natural.width * 1.5)
+    for (const [i, measure] of spread.measures.entries())
+      expect(measure.width).toBeGreaterThan(natural.measures[i]?.width ?? 0)
+    const far = engrave(score, host(), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      fill: natural.width * 4,
+    })
+    expect(far.width).toBe(natural.width)
+  })
 })
