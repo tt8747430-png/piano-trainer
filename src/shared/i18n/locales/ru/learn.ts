@@ -34,7 +34,9 @@ export const learn: LocaleResources['learn'] = {
       sus4: 'С задержанной квартой',
     },
     triadShort: { maj: 'Маж', min: 'Мин', dim: 'Ум', aug: 'Ув' },
-    sizes: {
+    // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
+    sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
+    sizeNames: {
       triad: 'Трезвучие',
       seventh: 'Септаккорд',
       ninth: 'Нонаккорд',
@@ -76,7 +78,6 @@ export const learn: LocaleResources['learn'] = {
   },
   tempo: 'Темп',
   bpm: '{{tempo}} уд/мин',
-  together: 'Вместе',
   playUpDown: 'Вверх и вниз',
   chordsIn: 'Аккорды гаммы',
   about: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная', modeOf: 'Лад от' },

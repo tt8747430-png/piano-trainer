@@ -18,7 +18,7 @@ const triads: Lesson = {
           kind: 'text',
           text: {
             en: 'A triad stacks two 3rds on a note, its root: the root, the 3rd above it and the 5th. On the white keys it is every other key: C, skip D, E, skip F, G.',
-            ru: 'Трезвучие складывает две терции на ноте — основном тоне: основной тон, терция над ним и квинта. На белых клавишах это клавиши через одну: до, (ре), ми, (фа), соль.',
+            ru: 'Трезвучие — две терции, построенные от основного тона: сам тон, терция над ним и квинта. На белых клавишах это клавиши через одну: до, (ре), ми, (фа), соль.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
@@ -46,7 +46,7 @@ const triads: Lesson = {
           kind: 'text',
           text: {
             en: 'Two minor 3rds make a diminished triad (1 ♭3 ♭5), tense and narrow; two major 3rds make an augmented triad (1 3 ♯5), wide and unsettled.',
-            ru: 'Две малые терции дают уменьшённое трезвучие (1 ♭3 ♭5) — напряжённое и тесное; две большие — увеличенное (1 3 ♯5), широкое и неустойчивое.',
+            ru: 'Две малые терции дают уменьшённое трезвучие (1 ♭3 ♭5) — напряжённое и сжатое; две большие — увеличенное (1 3 ♯5), широкое и неустойчивое.',
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },

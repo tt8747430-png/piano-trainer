@@ -40,6 +40,8 @@ export const common = {
   },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
   hands: { both: 'Both hands', rh: 'Right hand', lh: 'Left hand' },
+  // The hands as a choice under a Hands label shows them.
+  handsShort: { both: 'Both', rh: 'Right', lh: 'Left' },
   // A piano key's name: its note and octave.
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}} sharp {{octave}}' },
   keyboard: 'Keyboard',

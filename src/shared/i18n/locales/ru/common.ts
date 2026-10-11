@@ -42,6 +42,7 @@ export const common: LocaleResources['common'] = {
   },
   rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
+  handsShort: { both: 'Обе', rh: 'Правая', lh: 'Левая' },
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
   keyState: { wrong: 'Неверно', missing: 'Не хватает', lit: 'Звучит' },

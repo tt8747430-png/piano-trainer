@@ -43,7 +43,7 @@ describe('Practice → Chords', () => {
     )
     expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: '11th' }))
+    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
     expect(audio.played.length).toBeGreaterThan(1)
   })
@@ -104,7 +104,7 @@ describe('Practice → Chords', () => {
     const added = await screen.findByRole('group', { name: 'Added tones' })
     await user.click(within(added).getByRole('button', { name: 'add11' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: '11th' }))
+    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm11' })).toBeInTheDocument()
     expect(screen.queryByRole('group', { name: 'Added tones' })).not.toBeInTheDocument()
   })
@@ -138,7 +138,7 @@ describe('Practice → Chords', () => {
         .getAllByRole('radio')
         .map((option) => option.textContent),
     ).toEqual(['None', 'sus4'])
-    await user.click(screen.getByRole('radio', { name: '11th' }))
+    await user.click(screen.getByRole('radio', { name: 'Eleventh chord' }))
     expect(router.state.location.search).toMatchObject({ size: 11 })
     expect(router.state.location.search).not.toHaveProperty('triad')
     expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()
@@ -217,11 +217,8 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'C9' })).toBeInTheDocument()
     // Two hands whatever was chosen: one hand cannot hold the stack.
     const hands = within(screen.getByRole('radiogroup', { name: 'Hands' }))
-    expect(hands.getByRole('radio', { name: 'Both hands' })).toBeChecked()
-    expect(hands.getByRole('radio', { name: 'Right hand' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    expect(hands.getByRole('radio', { name: 'Both' })).toBeChecked()
+    expect(hands.getByRole('radio', { name: 'Right' })).toHaveAttribute('aria-disabled', 'true')
     expect(screen.queryByRole('radiogroup', { name: 'Inversion' })).not.toBeInTheDocument()
     const from = within(screen.getByRole('radiogroup', { name: 'Right hand from' }))
     expect(from.getAllByRole('radio').map((radio) => radio.textContent)).toEqual(['3 E', '♭7 B♭'])

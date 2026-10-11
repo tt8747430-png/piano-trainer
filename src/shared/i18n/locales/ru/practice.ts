@@ -19,11 +19,11 @@ export const practice: LocaleResources['practice'] = {
   inside: {
     chords: 'Построить · Найти · Тенсии',
     scales: 'Гамма · Аккорды · Тональность',
-    progressions: 'В любой тональности · Проходящие аккорды · Гармонизация мелодии',
+    progressions: 'Тональности · Проходящие · Мелодия',
     intervals: 'На клавишах, вверх и вниз',
     accompaniment: 'Called to Play · Боброва · Стили',
     exercises: 'Техника · Барри Харрис · Piano With Jonny',
-    quiz: 'Аккорды · Гаммы и тональности · На слух · Чтение',
+    quiz: 'Аккорды · Гаммы · На слух · Ноты',
     freePlay: 'Живые ноты · Отметить · Метроном',
   },
   chords: { build: 'Построить', find: 'Найти' },

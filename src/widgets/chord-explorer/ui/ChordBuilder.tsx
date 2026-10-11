@@ -100,6 +100,7 @@ export function ChordBuilder({
           options={sizesOf(quality).map((size) => ({
             value: size,
             label: t(`learn:builder.sizes.${SIZE_NAMES[size]}`),
+            title: t(`learn:builder.sizeNames.${SIZE_NAMES[size]}`),
           }))}
           onChange={(size) => onChange({ size })}
         />
@@ -183,8 +184,8 @@ export function ChordBuilder({
           value={twoHands ? 'both' : chord.hands}
           disabled={twoHands}
           options={[
-            { value: 'rh', label: t('common:hands.rh') },
-            { value: 'both', label: t('common:hands.both') },
+            { value: 'rh', label: t('common:handsShort.rh') },
+            { value: 'both', label: t('common:handsShort.both') },
           ]}
           onChange={(hands) => onChange({ hands })}
         />

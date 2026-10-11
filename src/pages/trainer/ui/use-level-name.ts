@@ -1,6 +1,9 @@
+import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { CUSTOM, LADDERS, ladderOf, type TrainerId } from '@/features/trainer'
 import { isOneOf } from '@/shared/lib'
+
+type Ladder = keyof typeof LADDERS
 
 const isLevelOf = {
   chords: isOneOf(LADDERS.chords),
@@ -12,6 +15,23 @@ const isLevelOf = {
   signatures: isOneOf(LADDERS.signatures),
   degrees: isOneOf(LADDERS.degrees),
   roles: isOneOf(LADDERS.roles),
+  progressions: isOneOf(LADDERS.progressions),
+}
+
+/** Every ladder's levels by name: a ladder added without its names fails to compile. */
+const NAMES: Readonly<Record<Ladder, (level: string, t: TFunction<'quiz'>) => string | null>> = {
+  chords: (level, t) => (isLevelOf.chords(level) ? t(`levels.chords.${level}`) : null),
+  scales: (level, t) => (isLevelOf.scales(level) ? t(`levels.scales.${level}`) : null),
+  intervals: (level, t) => (isLevelOf.intervals(level) ? t(`levels.intervals.${level}`) : null),
+  qualities: (level, t) => (isLevelOf.qualities(level) ? t(`levels.qualities.${level}`) : null),
+  scalesByEar: (level, t) =>
+    isLevelOf.scalesByEar(level) ? t(`levels.scalesByEar.${level}`) : null,
+  notes: (level, t) => (isLevelOf.notes(level) ? t(`levels.notes.${level}`) : null),
+  signatures: (level, t) => (isLevelOf.signatures(level) ? t(`levels.signatures.${level}`) : null),
+  degrees: (level, t) => (isLevelOf.degrees(level) ? t(`levels.degrees.${level}`) : null),
+  roles: (level, t) => (isLevelOf.roles(level) ? t(`levels.roles.${level}`) : null),
+  progressions: (level, t) =>
+    isLevelOf.progressions(level) ? t(`levels.progressions.${level}`) : null,
 }
 
 /** A trainer's level as its name reads: its ladder's, or Custom. */
@@ -20,17 +40,6 @@ export function useLevelName(): (id: TrainerId, level: string) => string {
   return (id, level) => {
     if (level === CUSTOM) return t('custom')
     const ladder = ladderOf(id)
-    if (ladder === 'chords' && isLevelOf.chords(level)) return t(`levels.chords.${level}`)
-    if (ladder === 'scales' && isLevelOf.scales(level)) return t(`levels.scales.${level}`)
-    if (ladder === 'intervals' && isLevelOf.intervals(level)) return t(`levels.intervals.${level}`)
-    if (ladder === 'qualities' && isLevelOf.qualities(level)) return t(`levels.qualities.${level}`)
-    if (ladder === 'scalesByEar' && isLevelOf.scalesByEar(level))
-      return t(`levels.scalesByEar.${level}`)
-    if (ladder === 'notes' && isLevelOf.notes(level)) return t(`levels.notes.${level}`)
-    if (ladder === 'signatures' && isLevelOf.signatures(level))
-      return t(`levels.signatures.${level}`)
-    if (ladder === 'degrees' && isLevelOf.degrees(level)) return t(`levels.degrees.${level}`)
-    if (ladder === 'roles' && isLevelOf.roles(level)) return t(`levels.roles.${level}`)
-    return level
+    return (ladder && NAMES[ladder](level, t)) ?? level
   }
 }

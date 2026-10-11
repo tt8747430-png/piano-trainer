@@ -63,9 +63,9 @@ export function RunView({
               label={t('learn:handsLabel')}
               value={hands}
               options={[
-                { value: 'rh', label: t('common:hands.rh') },
-                { value: 'lh', label: t('common:hands.lh') },
-                { value: 'both', label: t('learn:together') },
+                { value: 'rh', label: t('common:handsShort.rh') },
+                { value: 'lh', label: t('common:handsShort.lh') },
+                { value: 'both', label: t('common:handsShort.both') },
               ]}
               onChange={(next) => onChange({ hands: next })}
             />

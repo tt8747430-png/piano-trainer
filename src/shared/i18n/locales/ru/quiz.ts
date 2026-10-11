@@ -29,7 +29,7 @@ export const quiz: LocaleResources['quiz'] = {
     signatureMinor: 'У какой минорной тональности эти знаки?',
     keyDegrees: 'Сыграйте ступени: {{key}}',
     chordRole: '{{key}}: какой это аккорд?',
-    nameProgression: '{{key}}: какая это последовательность?',
+    nameProgression: '{{key}}: что это за последовательность?',
   },
   position: {
     root: 'основной вид',
@@ -101,8 +101,8 @@ export const quiz: LocaleResources['quiz'] = {
   intervalGroups: { simple: 'В пределах октавы', compound: 'Шире октавы' },
   levels: {
     chords: {
-      'c-main': 'Главные аккорды до мажора',
-      'c-all': 'Все аккорды до мажора',
+      'c-main': 'Главные в до мажоре',
+      'c-all': 'Все в до мажоре',
       'c-first': '1-е обращение в до мажоре',
       'c-second': '2-е обращение в до мажоре',
       'c-positions': 'Все обращения в до мажоре',

@@ -18,7 +18,7 @@ const sevenTypes: Lesson = {
           kind: 'text',
           text: {
             en: 'In «Семь основных видов аккомпанемента» Боброва plays every type on one hymn, «О наш Отец на небесах». The chords stay the same; what changes is how much the piano moves, and whether it plays the tune.',
-            ru: 'В книге «Семь основных видов аккомпанемента» Боброва играет каждый вид на одном гимне — «О наш Отец на небесах». Аккорды остаются теми же; меняется то, насколько движется фортепиано и играет ли оно мелодию.',
+            ru: 'В книге «Семь основных видов аккомпанемента» Боброва играет каждый вид на одном гимне — «О наш Отец на небесах». Аккорды остаются теми же; меняются подвижность фактуры и то, звучит ли мелодия.',
           },
         },
       ],
@@ -30,7 +30,7 @@ const sevenTypes: Lesson = {
           kind: 'text',
           text: {
             en: 'The first three keep to the chords: held together, taken in turn with the bass, or repeated over it.',
-            ru: 'Первые три держатся аккордов: аккорды вместе с басом, по очереди с басом или повторяющиеся над ним.',
+            ru: 'Первые три вида строятся на аккордах: аккорды вместе с басом, по очереди с басом или повторяющиеся над ним.',
           },
         },
         { kind: 'pattern', pattern: 'r1', piece: 'otche' },
@@ -45,7 +45,7 @@ const sevenTypes: Lesson = {
           kind: 'text',
           text: {
             en: 'The fourth breaks the chord into a moving line across both hands, and its variant breaks it in the right hand over a bass of root and 5th.',
-            ru: 'Четвёртый разбивает аккорд на движущуюся линию через обе руки, а его вариант — в правой руке над басом из основного тона и квинты.',
+            ru: 'Четвёртый раскладывает аккорд в линию через обе руки; его вариант — ломаное арпеджио правой руки над басом из основного тона и квинты.',
           },
         },
         { kind: 'pattern', pattern: 'r4', piece: 'otche' },

@@ -12,6 +12,14 @@ export const music = {
     elevenths: '11ths',
     thirteenths: '13ths',
   },
+  // A chord size as five segments show it, each named in full for a screen reader.
+  chordSizeShort: {
+    triads: 'Triads',
+    sevenths: '7ths',
+    ninths: '9ths',
+    elevenths: '11ths',
+    thirteenths: '13ths',
+  },
   family: {
     tri: 'Triads',
     six: '6th & add',

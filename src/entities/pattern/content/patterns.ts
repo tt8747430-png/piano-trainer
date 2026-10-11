@@ -36,7 +36,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     name: { en: '2 · Broken chords', ru: '2 · Ломаные аккорды' },
     idea: {
       en: "The right hand rocks between the chord's upper notes and its lowest over a held octave.",
-      ru: 'Правая рука качается между верхними звуками аккорда и нижним над выдержанной октавой.',
+      ru: 'Правая рука чередует верхние звуки аккорда с нижним над выдержанной октавой.',
     },
     description: {
       en: 'Left hand holds the octave. Right hand rocks in 8ths between the upper notes of the chord it holds and its lowest: a G after C is B, then D and G.',
@@ -316,7 +316,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   r4b: {
     group: 'seven-types',
-    name: { en: '4b · Broken arpeggios', ru: '4b · Ломаные арпеджио' },
+    name: { en: '4b · Broken arpeggios', ru: '4б · Ломаные арпеджио' },
     idea: {
       en: 'The right hand breaks the chord 1–3–2–3 over a moving bass.',
       ru: 'Правая рука разбивает аккорд 1–3–2–3 над движущимся басом.',

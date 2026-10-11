@@ -4,7 +4,7 @@ export const music: LocaleResources['music'] = {
   major: 'M',
   inversion: {
     label: 'Обращение',
-    root: 'Основной вид',
+    root: 'Основной',
     first: '1-е',
     second: '2-е',
     third: '3-е',
@@ -18,6 +18,7 @@ export const music: LocaleResources['music'] = {
     elevenths: 'Ундецимаккорды',
     thirteenths: 'Терцдецимаккорды',
   },
+  chordSizeShort: { triads: '5', sevenths: '7', ninths: '9', elevenths: '11', thirteenths: '13' },
   family: {
     tri: 'Трезвучия',
     six: 'Секста и add',

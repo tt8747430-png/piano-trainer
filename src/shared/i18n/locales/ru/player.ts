@@ -33,7 +33,7 @@ export const player: LocaleResources['player'] = {
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
   ownPatternDetail: 'Левая и правая рука на ваш выбор',
-  inversion: { nearest: 'Ближайшее', own: 'Эта фактура играет свои фигуры.' },
+  inversion: { nearest: 'Плавно', own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
     label: 'По тональностям',
     one: 'Одна тональность',
@@ -57,8 +57,8 @@ export const player: LocaleResources['player'] = {
   },
   pace: {
     of: 'Темп: {{value}}',
-    ownPace: 'Ждёт ваших нот',
-    wait: 'Ожидание',
+    ownPace: 'Режим ожидания',
+    wait: 'Ждать моих нот',
     playAlong: 'Слушать и играть вместе',
     speed: 'Скорость {{percent}}%',
     own: 'Исходный темп',

@@ -20,7 +20,7 @@ export function SwitchRow({
   return (
     <label
       className={cn(
-        'flex min-h-14 items-center justify-between gap-4 border-b border-border text-lg',
+        'flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
         className,
       )}
     >

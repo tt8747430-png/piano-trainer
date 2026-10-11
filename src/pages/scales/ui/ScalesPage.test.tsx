@@ -35,7 +35,7 @@ describe('Practice → Scales and keys', () => {
     expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('4')
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
     const hands = screen.getByRole('radiogroup', { name: 'Hands' })
-    await user.click(within(hands).getByRole('radio', { name: 'Left hand' }))
+    await user.click(within(hands).getByRole('radio', { name: 'Left' }))
     expect(router.state.location.search).toMatchObject({ hands: 'lh' })
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('54321321')
     expect(screen.queryByRole('radiogroup', { name: 'Fingers' })).not.toBeInTheDocument()

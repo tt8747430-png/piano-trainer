@@ -90,7 +90,8 @@ export function ChordsView({
               value={notes}
               options={CHORD_NOTES.map((value) => ({
                 value,
-                label: t(`music:chordSize.${STACK_SIZES[value]}`),
+                label: t(`music:chordSizeShort.${STACK_SIZES[value]}`),
+                title: t(`music:chordSize.${STACK_SIZES[value]}`),
               }))}
               onChange={(next) =>
                 onChange({ chords: next, inversion: fitInversion(inversion, next) })
