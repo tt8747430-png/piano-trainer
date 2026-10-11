@@ -4,6 +4,7 @@ export default definePiece({
   id: 'amazing',
   kind: 'song',
   title: 'Amazing Grace',
+  titleRu: 'О, благодать',
   credits: [
     { role: 'words', names: 'John Newton' },
     { role: 'music', names: 'New Britain (American folk tune)' },

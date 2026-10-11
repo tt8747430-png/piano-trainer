@@ -4,6 +4,7 @@ export default definePiece({
   id: 'silent',
   kind: 'song',
   title: 'Silent Night',
+  titleRu: 'Тихая ночь',
   credits: [
     { role: 'words', names: 'Joseph Mohr' },
     { role: 'music', names: 'Franz Xaver Gruber' },

@@ -4,6 +4,7 @@ export default definePiece({
   id: 'ode',
   kind: 'song',
   title: 'Ode to Joy',
+  titleRu: 'Ода к радости',
   credits: [{ role: 'music', names: 'Beethoven' }],
   key: 'C',
   meter: '4/4',

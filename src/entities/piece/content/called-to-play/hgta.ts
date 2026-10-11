@@ -4,6 +4,7 @@ export default definePiece({
   id: 'hgta',
   kind: 'song',
   title: 'How Great Thou Art',
+  titleRu: 'Великий Бог',
   source: { book: 'called-to-play' },
   key: 'C',
   meter: '4/4',

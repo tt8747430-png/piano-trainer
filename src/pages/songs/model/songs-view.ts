@@ -5,6 +5,7 @@ import type { SongsFilter } from './songs-filter'
 const searchable = (entry: Entry): string[] => [
   entry.title,
   entry.titleEn ?? '',
+  entry.titleRu ?? '',
   ...(entry.credits ?? []).flatMap((credit) => (credit.role === 'unknown' ? [] : [credit.names])),
 ]
 

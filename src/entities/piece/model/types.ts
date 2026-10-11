@@ -65,6 +65,8 @@ interface EntryCommon {
   readonly title: string
   /** The English title, where the printed one is not English. */
   readonly titleEn?: string
+  /** The Russian title it is known by, where the printed one is not Russian. */
+  readonly titleRu?: string
   readonly credits?: readonly Credit[]
   readonly source?: Source
   readonly key: KeyText

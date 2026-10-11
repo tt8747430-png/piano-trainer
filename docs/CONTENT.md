@@ -43,6 +43,7 @@ export default definePiece({
 | `kind`                     | `'song'` or `'study'`: what it is, not how it is written                              |
 | `title`                    | As printed, in its own language                                                       |
 | `titleEn`                  | The English title, only where the printed one is not English                          |
+| `titleRu`                  | The Russian title it is known by, only where the printed one is not Russian           |
 | `credits`                  | See [Credits](#credits)                                                               |
 | `source`                   | `{ book, number?, page? }`; the books are in `entities/book`                          |
 | `key`                      | The key it is written in: a letter, `#` or `b`, then `m` for minor (`G`, `F#`, `Ebm`) |

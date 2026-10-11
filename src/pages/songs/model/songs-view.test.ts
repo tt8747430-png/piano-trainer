@@ -12,10 +12,11 @@ describe('songsView', () => {
     expect(groups.map((g) => g.shelf.id)).toEqual(COLLECTIONS.map((c) => c.id))
   })
 
-  it('finds a song by either title or a credited name, ignoring case', () => {
+  it('finds a song by any of its titles or a credited name, ignoring case', () => {
     expect(ids(songsView(COLLECTIONS, { ...ALL, q: 'ДУША' }))).toContain('bz5')
     expect(ids(songsView(COLLECTIONS, { ...ALL, q: 'still, my soul' }))).toContain('bz5')
     expect(ids(songsView(COLLECTIONS, { ...ALL, q: 'getty' }))).toContain('bz5')
+    expect(ids(songsView(COLLECTIONS, { ...ALL, q: 'тихая' }))).toContain('silent')
   })
 
   it('keeps one collection', () => {
