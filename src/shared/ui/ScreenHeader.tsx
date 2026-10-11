@@ -58,13 +58,13 @@ export function ScreenHeader({
       }
       className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
-      {/* The title takes its own width first: where it and the actions do not fit a line, the
-          actions go under it rather than squeeze a long word (Последовательности) apart. */}
+      {/* The title takes the line beside the actions, wrapping between its words; only where its
+          longest word (Последовательности) does not fit beside them do the actions go under it. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4">
         {back}
         <h1
           {...heading}
-          className="min-w-0 flex-auto outline-none text-3xl text-balance hyphens-auto wrap-break-word sm:text-4xl lg:text-5xl"
+          className="min-w-[min(100%,min-content)] flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl"
         >
           {title}
         </h1>
