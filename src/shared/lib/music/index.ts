@@ -70,7 +70,7 @@ export {
   type Key,
   type KeyParam,
 } from './key'
-export { type ChordRole, type Tone } from './tone'
+export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
 export {
   CHORD_FAMILIES,
   CHORD_QUALITIES,

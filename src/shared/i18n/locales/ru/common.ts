@@ -45,6 +45,15 @@ export const common: LocaleResources['common'] = {
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
   keyboard: 'Клавиатура',
   keyState: { wrong: 'Неверно', missing: 'Не хватает', lit: 'Звучит' },
+  role: {
+    root: 'Основной тон',
+    '3rd': 'Терция',
+    '5th': 'Квинта',
+    '7th': 'Септима',
+    '9th': 'Нона',
+    '11th': 'Ундецима',
+    '13th': 'Терцдецима',
+  },
   stop: 'Стоп',
   rail: {
     octaveDown: 'Октава вниз',

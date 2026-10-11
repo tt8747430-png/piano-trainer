@@ -96,7 +96,20 @@ export function PianoKeyboard({
   const keys = useRef<HTMLDivElement>(null)
   const names = useKeyNames()
   const words = useMemo<KeyStateWords>(
-    () => ({ wrong: t('keyState.wrong'), missing: t('keyState.missing'), lit: t('keyState.lit') }),
+    () => ({
+      wrong: t('keyState.wrong'),
+      missing: t('keyState.missing'),
+      lit: t('keyState.lit'),
+      roles: {
+        root: t('role.root'),
+        '3rd': t('role.3rd'),
+        '5th': t('role.5th'),
+        '7th': t('role.7th'),
+        '9th': t('role.9th'),
+        '11th': t('role.11th'),
+        '13th': t('role.13th'),
+      },
+    }),
     [t],
   )
   const [tabStop, setTabStop] = useState<Midi>(range.from)

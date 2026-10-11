@@ -45,6 +45,16 @@ export const common = {
   keyboard: 'Keyboard',
   // What a key is, said after its note: a quiz's wrong or missing key, Name chord's chord.
   keyState: { wrong: 'Wrong', missing: 'Missing', lit: 'Played' },
+  // A chord tone's role, said for a key that shows it.
+  role: {
+    root: 'Root',
+    '3rd': '3rd',
+    '5th': '5th',
+    '7th': '7th',
+    '9th': '9th',
+    '11th': '11th',
+    '13th': '13th',
+  },
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons and its map.

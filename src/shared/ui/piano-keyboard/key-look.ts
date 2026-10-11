@@ -5,6 +5,7 @@ import {
   pitchClass,
   plainSpelling,
   printedKeyName,
+  CHORD_ROLES,
   type ChordRole,
   type Finger,
   type Midi,
@@ -109,14 +110,21 @@ export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
 }
 
 /** The words a key's state is said in, after its note. */
-export type KeyStateWords = Readonly<Record<'wrong' | 'missing' | 'lit', string>>
+export type KeyStateWords = Readonly<Record<'wrong' | 'missing' | 'lit', string>> & {
+  /** Each chord tone's role in words: a mark's numeral alone (1, ♭7) says little aloud. */
+  readonly roles: Readonly<Record<ChordRole, string>>
+}
+
+const isChordRole = (fill: KeyFill): fill is ChordRole =>
+  (CHORD_ROLES as readonly string[]).includes(fill)
 
 /**
- * What a key says besides its note, for a screen reader: what its mark prints (a numeral over its
- * degree), and whether it is wrong, missing or the chord played. Empty where it says nothing more.
+ * What a key says besides its note, for a screen reader: a chord tone's role, what its mark prints
+ * (a numeral over its degree), and whether it is wrong, missing or the chord played. Empty where it says nothing more.
  */
 export function keyDescription(look: KeyLook, words: KeyStateWords): string {
   const { label } = look
+  const role = isChordRole(look.fill) ? [words.roles[look.fill]] : []
   const printed =
     label?.kind === 'mark' && label.text !== WRONG_MARK
       ? [...(label.caption ? [label.caption] : []), label.text]
@@ -126,7 +134,7 @@ export function keyDescription(look: KeyLook, words: KeyStateWords): string {
     ...(look.fill === 'lit' ? [words.lit] : []),
     ...(look.outlined ? [words.missing] : []),
   ]
-  return [...printed, ...states].join(', ')
+  return [...role, ...printed, ...states].join(', ')
 }
 
 /** Whether two looks draw the same key: `Key`'s memo compares every field a key shows. */

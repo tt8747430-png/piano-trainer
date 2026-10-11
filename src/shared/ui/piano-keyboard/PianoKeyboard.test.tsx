@@ -245,13 +245,13 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'E4' })).not.toHaveAttribute('data-down')
   })
 
-  it('describes what a key prints and what it is: its degree, a wrong or a missing note', () => {
+  it('describes what a key prints and what it is: its role, its degree, a wrong or a missing note', () => {
     renderKeyboard({
       marks: new Map<Midi, KeyMark>([[C4, { tone: 'root', label: '1', caption: 'I' }]]),
       wrong: new Set([midi(61)]),
       outlined: new Set([midi(64)]),
     })
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveAccessibleDescription('I, 1')
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveAccessibleDescription('Root, I, 1')
     expect(screen.getByRole('button', { name: 'C sharp 4' })).toHaveAccessibleDescription('Wrong')
     expect(screen.getByRole('button', { name: 'E4' })).toHaveAccessibleDescription('Missing')
     expect(screen.getByRole('button', { name: 'D4' })).not.toHaveAccessibleDescription()
