@@ -159,7 +159,7 @@ export const learn: LocaleResources['learn'] = {
     },
     kind: {
       secondaryDominant: {
-        name: 'Вторичная доминанта',
+        name: 'Побочная доминанта',
         why: '{{chord}} — доминантсептаккорд к {{to}}.',
       },
       tritoneSub: {
@@ -167,7 +167,7 @@ export const learn: LocaleResources['learn'] = {
         why: '{{chord}} заменяет доминанту к {{to}} и спускается в него на полутон.',
       },
       secondaryTwoFive: {
-        name: 'Вторичная II–V',
+        name: 'Побочная ii–V',
         why: '{{chord}} и {{next}} — II и V ступени для {{to}}.',
       },
       approachBelow: {
@@ -196,9 +196,9 @@ export const learn: LocaleResources['learn'] = {
         name: 'Ход по ступеням тональности',
         why: 'Бас идёт к {{to}} по ступеням, через аккорды самой тональности.',
       },
-      backdoor: { name: 'Каденция «чёрного хода»', why: '{{chord}} — ♭VII7 к {{to}}.' },
+      backdoor: { name: 'Backdoor-каденция', why: '{{chord}} — ♭VII7 к {{to}}.' },
       backdoorTwoFive: {
-        name: 'II–V «чёрного хода»',
+        name: 'Backdoor ii–V',
         why: '{{chord}} и {{next}} — iv и ♭VII7 к {{to}}, взятые из одноимённого минора.',
       },
       plagal: {

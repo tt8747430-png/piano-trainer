@@ -49,8 +49,8 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '«Ромашковые поля» is in D minor and opens Dm7 Gm9 Asus4 Dm7: i7, iv9, Vsus4, i7. The numeral says the degree, its case says major or minor, and what follows says what is added.',
-            ru: '«Ромашковые поля» — в ре миноре, и начинается песня с Dm7 Gm9 Asus4 Dm7: i7, iv9, Vsus4, i7. Цифра называет ступень, строчная или заглавная — минор или мажор, а то, что после неё, — добавленные звуки.',
+            en: '«Ромашковые поля» is in D minor and opens Dm7 Gm9 Asus4 Dm7: i7, iv9, Vsus4, i7. The numeral says the degree, its case says major or minor, and what follows says what is added or changed.',
+            ru: '«Ромашковые поля» — в ре миноре, и начинается песня с Dm7 Gm9 Asus4 Dm7: i7, iv9, Vsus4, i7. Цифра называет ступень, строчная или заглавная — минор или мажор, а то, что после неё, — что добавлено или изменено.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'Gm9', 'Asus4', 'Dm7'] },

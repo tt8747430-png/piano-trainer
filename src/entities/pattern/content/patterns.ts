@@ -302,14 +302,14 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   r4: {
     group: 'seven-types',
-    name: { en: '4 · Harmonic figuration', ru: '4 · Гармонические фигурации' },
+    name: { en: '4 · Harmonic figuration', ru: '4 · Гармоническая фигурация' },
     idea: {
-      en: 'A flowing arpeggio from the left hand into the right, 1–3–2–4–3.',
-      ru: 'Плавное арпеджио из левой руки в правую, 1–3–2–4–3.',
+      en: 'A flowing arpeggio from the left hand into the right, its chord notes 1–3–2–4–3 counted from the bottom.',
+      ru: 'Плавное арпеджио из левой руки в правую, звуки аккорда 1–3–2–4–3 считая снизу.',
     },
     description: {
-      en: 'The arpeggio passes from the left hand (1–5–8, without the 3rd) into the right hand, which plays the chord notes in the order 1–3–2–4–3. The most used type in church: it brings movement and sings.',
-      ru: 'Арпеджио переходит из левой руки (1–5–8, без терции) в правую, которая играет звуки аккорда в порядке 1–3–2–4–3. Самый употребительный тип в церкви: даёт движение и певучесть.',
+      en: 'The arpeggio passes from the left hand (1–5–8, without the 3rd) into the right hand, which plays the chord notes in the order 1–3–2–4–3, counted from the bottom. The most used type in church: it brings movement and sings.',
+      ru: 'Арпеджио переходит из левой руки (1–5–8, без терции) в правую, которая играет звуки аккорда в порядке 1–3–2–4–3, считая снизу. Самый употребительный тип в церкви: даёт движение и певучесть.',
     },
     rh: 'r4',
     lh: 'fig',
@@ -318,8 +318,8 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     group: 'seven-types',
     name: { en: '4b · Broken arpeggios', ru: '4б · Ломаные арпеджио' },
     idea: {
-      en: 'The right hand breaks the chord 1–3–2–3 over a moving bass.',
-      ru: 'Правая рука разбивает аккорд 1–3–2–3 над движущимся басом.',
+      en: 'The right hand breaks the chord over a moving bass: its lowest, top, middle and top notes.',
+      ru: 'Правая рука разбивает аккорд над движущимся басом: нижний, верхний, средний и снова верхний звук.',
     },
     description: {
       en: 'The right hand breaks the chord while the bass takes the root and the 5th in turn.',

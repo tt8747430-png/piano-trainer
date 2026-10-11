@@ -5,7 +5,7 @@ const C_MAJOR = { tonic: note('C'), minor: false }
 
 const gospelPassingChords: Lesson = {
   id: 'gospel-passing-chords',
-  title: { en: 'Gospel passing chords', ru: 'Проходящие аккорды в госпел' },
+  title: { en: 'Gospel passing chords', ru: 'Проходящие аккорды в госпеле' },
   summary: {
     en: 'The moves between chords that make a hymn sound gospel: the 1 to the 4, the raised-4th diminished, the walk-up and a ii–V into any chord.',
     ru: 'Ходы между аккордами, от которых гимн звучит как госпел: с первой на четвёртую, уменьшённый на повышенной IV, подход снизу и ii–V в любой аккорд.',
@@ -21,7 +21,7 @@ const gospelPassingChords: Lesson = {
           kind: 'text',
           text: {
             en: 'The most common gospel move: on the way from I to IV, turn I into a dominant 7th. C7 pulls into F.',
-            ru: 'Самый частый ход в госпел: по пути от I к IV превратите I в доминантсептаккорд. C7 тянет в F.',
+            ru: 'Самый частый ход в госпеле: по пути от I к IV превратите I в доминантсептаккорд. C7 тянет в F.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C7', 'F'] },

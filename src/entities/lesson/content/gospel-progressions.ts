@@ -20,8 +20,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel takes the church’s progressions and colours them: 7th and 9th chords on almost every beat, chords that lift toward the next one, and a bass that walks. The chord is the same; it only sounds fuller.',
-            ru: 'Госпел берёт церковные последовательности и раскрашивает их: септаккорды и нонаккорды почти на каждой доле, аккорды, которые тянутся к следующему, и идущий бас. Аккорд тот же, он только звучит полнее.',
+            en: 'Gospel takes the church’s progressions and colours them: 7th and 9th chords on almost every beat, chords that lift toward the next one, and a bass that walks. The function is the same; the chord is richer.',
+            ru: 'Госпел берёт церковные последовательности и раскрашивает их: септаккорды и нонаккорды почти на каждой доле, аккорды, которые тянутся к следующему, и идущий бас. Функция та же, аккорд богаче.',
           },
         },
         { kind: 'chords', symbols: ['C', 'CMaj7', 'CMaj9'] },

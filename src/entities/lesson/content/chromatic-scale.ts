@@ -63,8 +63,8 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Put the 3rd finger on every black key and the thumb on every white key; where two white keys meet (E–F, B–C) play them 1 2. The hand then barely moves.',
-            ru: 'Третий палец — на каждую чёрную клавишу, большой — на каждую белую; где встречаются две белые (ми–фа, си–до), играйте их 1 2. Рука при этом почти не двигается.',
+            en: 'Put the 3rd finger on every black key and the thumb on every white key; where two white keys meet (E–F, B–C) the right hand plays them 1 2 going up, the left hand 2 1. The hand then barely moves.',
+            ru: 'Третий палец — на каждую чёрную клавишу, большой — на каждую белую; где встречаются две белые (ми–фа, си–до), правая рука вверх играет их 1 2, левая — 2 1. Рука при этом почти не двигается.',
           },
         },
       ],

@@ -31,8 +31,8 @@ const chordFunctions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play them as a sentence: home, away, back, home. Nearly every song is built of this movement.',
-            ru: 'Сыграйте их как фразу: дом, уход, возвращение, дом. Почти любая песня построена на этом движении.',
+            en: 'Play them as a sentence: home, away, back, home. Most hymns and folk songs are built on it.',
+            ru: 'Сыграйте их как фразу: дом, уход, возвращение, дом. На этом движении построено большинство гимнов и народных песен.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },

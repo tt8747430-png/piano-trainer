@@ -59,8 +59,8 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Its broken arpeggio turns the other way: the right hand steps 1–3–2–3 through the chord, so the figure rocks instead of climbing.',
-            ru: 'Её ломаное арпеджио поворачивает иначе: правая рука идёт по аккорду 1–3–2–3, и фигура покачивается, а не поднимается.',
+            en: 'Its broken arpeggio turns the other way: the right hand plays the chord’s lowest, top, middle and top notes, so the figure rocks instead of climbing.',
+            ru: 'Его вариант, ломаное арпеджио, поворачивает иначе: правая рука играет нижний, верхний, средний и снова верхний звук аккорда, и фигура покачивается, а не поднимается.',
           },
         },
         { kind: 'pattern', pattern: 'r4b', piece: 'otche' },

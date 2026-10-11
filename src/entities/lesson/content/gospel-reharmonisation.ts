@@ -35,7 +35,7 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           text: {
             en: 'Hold the 4th over the dominant, then let it fall to the 3rd: G7sus4, G7, C. Gospel players linger on the sus.',
-            ru: 'Задержите кварту над доминантой, затем опустите её в терцию: G7sus4, G7, C. В госпел на sus задерживаются подольше.',
+            ru: 'Задержите кварту над доминантой, затем опустите её в терцию: G7sus4, G7, C. В госпеле на sus задерживаются подольше.',
           },
         },
         { kind: 'chords', symbols: ['G7sus4', 'G7', 'C'] },
@@ -68,7 +68,7 @@ const gospelReharmonisation: Lesson = {
       ],
     },
     {
-      heading: { en: 'The tensions', ru: 'Напряжения' },
+      heading: { en: 'The tensions', ru: 'Тенсии' },
       blocks: [
         {
           kind: 'text',
@@ -79,7 +79,7 @@ const gospelReharmonisation: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'G7’s tensions', ru: 'Напряжения G7' },
+          title: { en: 'G7’s tensions', ru: 'Тенсии G7' },
           target: { place: 'tensions', chord: 'd7', root: note('G') },
         },
       ],

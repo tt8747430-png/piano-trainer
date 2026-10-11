@@ -29,8 +29,8 @@ const readingChordSymbols: Lesson = {
         {
           kind: 'text',
           lead: {
-            en: 'Numbers are steps of the major scale built on the chord’s own root,',
-            ru: 'Числа — ступени мажорной гаммы от основного тона аккорда,',
+            en: 'Numbers are steps of the major scale on the chord’s own root, except 7,',
+            ru: 'Числа — ступени мажорной гаммы от основного тона аккорда, кроме 7,',
           },
           text: {
             en: 'whatever key the song is in.',
@@ -98,8 +98,8 @@ const readingChordSymbols: Lesson = {
         {
           kind: 'text',
           lead: {
-            en: 'add, 2, 4 or 6 adds only that note:',
-            ru: 'add, 2, 4 или 6 добавляют только эту ноту:',
+            en: 'add, 2 or 6 adds only that note (a plain 4, as in C4, usually means sus4):',
+            ru: 'add, 2 или 6 добавляют только эту ноту (просто 4, как в C4, обычно значит sus4):',
           },
           text: {
             en: 'C2 = Cadd2 = Cadd9 = C D E G. C6 = C E G A.',

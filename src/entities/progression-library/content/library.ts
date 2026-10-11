@@ -39,7 +39,7 @@ const LIBRARY = [
       'Самая распространённая последовательность в поп-музыке.',
     ),
   }),
-  entry('pop', 'sensitive', 'vi IV I V', 'Sensitive', 'Чувствительная'),
+  entry('pop', 'sensitive', 'vi IV I V', 'Sensitive', 'Sensitive'),
   entry('pop', 'doo-wop', 'I vi IV V', '50s doo-wop', 'Ду-воп 50-х', {
     pattern: 'flow',
     note: note(
@@ -126,7 +126,7 @@ const LIBRARY = [
     note: note('The minor-key loop of pop and rock ballads.', 'Минорный круг поп- и рок-баллад.'),
   }),
   entry('minor', 'andalusian', 'i VII VI V', 'Andalusian cadence', 'Андалузская каденция'),
-  entry('minor', 'minor-two-five', 'ii° V i', 'Minor ii–V–i', 'Минорная II–V–I', {
+  entry('minor', 'minor-two-five', 'ii° V i', 'Minor ii–V–i', 'Минорный ii–V–i', {
     pattern: 'jazz',
     size: 'ninths',
     note: note(

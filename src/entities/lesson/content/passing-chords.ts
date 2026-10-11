@@ -57,7 +57,7 @@ const passingChords: Lesson = {
           kind: 'text',
           text: {
             en: 'A diminished 7th a half step below the next chord climbs into it: F♯°7 between F and G, its F♯ rising to G.',
-            ru: 'Уменьшённый септаккорд на полтона ниже следующего аккорда поднимается в него: F♯°7 между F и G, его фа-диез поднимается в соль.',
+            ru: 'Уменьшённый септаккорд на полутон ниже следующего аккорда поднимается в него: F♯°7 между F и G, его фа-диез поднимается в соль.',
           },
         },
         { kind: 'chords', symbols: ['F', 'F#°7', 'G'] },

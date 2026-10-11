@@ -34,8 +34,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The pop progression, under countless worship songs. Here it is in G major.',
-            ru: 'Поп-последовательность, на которой построены бесчисленные песни прославления. Здесь — в соль мажоре.',
+            en: 'The pop progression, under many worship songs. Here it is in G major.',
+            ru: 'Поп-последовательность, на которой построено множество песен прославления. Здесь — в соль мажоре.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: { tonic: note('G'), minor: false } },
@@ -81,8 +81,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The minor pop progression climbs through the relative major’s chords; the Andalusian cadence steps down from i to V.',
-            ru: 'Минорная поп-последовательность проходит через аккорды параллельного мажора; андалузская каденция спускается от i к V.',
+            en: 'The minor pop progression moves through the relative major’s chords; the Andalusian cadence steps down from i to V.',
+            ru: 'Минорная поп-последовательность идёт по аккордам параллельного мажора; андалузская каденция спускается от i к V.',
           },
         },
         { kind: 'progression', numerals: 'i VI III VII', key: A_MINOR },

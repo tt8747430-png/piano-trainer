@@ -18,7 +18,7 @@ const seventhChords: Lesson = {
           kind: 'text',
           text: {
             en: 'Stack one more 3rd on a triad and the top note is a 7th above the root: a seventh chord of four notes. Five kinds cover most music:',
-            ru: 'Добавьте к трезвучию ещё одну терцию — верхняя нота окажется в септиме от основного тона: получится септаккорд из четырёх нот. Пять видов покрывают почти всю музыку:',
+            ru: 'Добавьте к трезвучию ещё одну терцию — верхняя нота окажется в септиме от основного тона: получится септаккорд из четырёх нот. Пять видов покрывают бо́льшую часть музыки:',
           },
         },
         {
@@ -34,7 +34,7 @@ const seventhChords: Lesson = {
             },
             {
               en: 'Minor 7th, Cm7: 1 ♭3 5 ♭7, a minor triad with a minor 7th, mellow.',
-              ru: 'Малый минорный, Cm7: 1 ♭3 5 ♭7 — минорное трезвучие с малой септимой, мягкий.',
+              ru: 'Малый минорный, Cm7: 1 ♭3 5 ♭7 — минорное трезвучие с малой септимой, бархатный.',
             },
             {
               en: 'Half-diminished, Cm7♭5: 1 ♭3 ♭5 ♭7, a diminished triad with a minor 7th.',
