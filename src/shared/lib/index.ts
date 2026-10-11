@@ -46,7 +46,7 @@ export {
   viewFrame,
   type ScrollMetrics,
 } from './keyboard-view'
-export { createMemoryStorage, safeLocalStorage } from './safe-storage'
+export { createMemoryStorage, onFailedWrite, safeLocalStorage } from './safe-storage'
 export { isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
 export { downloadFile } from './download-file'

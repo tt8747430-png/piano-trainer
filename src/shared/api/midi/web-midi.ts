@@ -74,11 +74,13 @@ export function createWebMidi(
     held.set(input.id, holding)
     input.onmidimessage = (event) => {
       const message = event.data
-        ? parseMidiMessage(event.data, event.timeStamp, choice.reversedPedal)
+        ? parseMidiMessage(event.data, event.timeStamp, choice.reversedPedal, holding.pedals)
         : null
       if (!message) return
       if (message.kind === 'pedal') {
         const { kind: _kind, ...pedal } = message
+        // A pedal's stream of values says down, or up, once.
+        if (pedal.down === holding.pedals.has(pedal.pedal)) return
         if (pedal.down) holding.pedals.add(pedal.pedal)
         else holding.pedals.delete(pedal.pedal)
         pedals.emit(pedal)
@@ -164,6 +166,7 @@ export function createWebMidi(
     },
     onNote: notes.add,
     onPedal: pedals.add,
+    pedalsDown: () => new Set([...held.values()].flatMap((holding) => [...holding.pedals])),
     onStatus: statuses.add,
   }
   return input

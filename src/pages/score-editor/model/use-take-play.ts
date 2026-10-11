@@ -1,4 +1,4 @@
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { selectMidi, useSettingsStoreApi } from '@/entities/settings'
 import { takeBarStart, takeSoundsFrom, type Take } from '@/entities/take'
 import { PLAY_DELAY, type PlayHandle } from '@/shared/api/audio'
@@ -28,6 +28,14 @@ export function useTakePlay(take: Take): TakePlay {
     () => (sounding && started ? { at: started.at, fromMs: started.fromMs } : null),
     [sounding, started],
   )
+  // A take left while it plays stops: no Stop on the editor would reach it.
+  const latest = useRef<PlayHandle | null>(null)
+  useEffect(
+    () => () => {
+      if (latest.current && audio.isPlaying(latest.current)) audio.stop()
+    },
+    [audio],
+  )
   return {
     playing,
     playFrom(bar) {
@@ -36,10 +44,13 @@ export function useTakePlay(take: Take): TakePlay {
       const fromMs = takeBarStart(take, bar)
       const at = audio.now() + PLAY_DELAY
       const { touch } = selectMidi(settings.getState())
-      setStarted({ handle: audio.play(takeSoundsFrom(take, touch, fromMs), at), at, fromMs })
+      const handle = audio.play(takeSoundsFrom(take, touch, fromMs), at)
+      latest.current = handle
+      setStarted({ handle, at, fromMs })
     },
     stop() {
       audio.stop()
+      latest.current = null
       setStarted(null)
     },
   }

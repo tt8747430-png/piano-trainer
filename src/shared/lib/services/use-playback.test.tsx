@@ -14,7 +14,8 @@ function setup<T>(hook: () => T, audio: AudioOutput = createFakeAudio()) {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
   )
-  return { audio, result: renderHook(hook, { wrapper }).result }
+  const rendered = renderHook(hook, { wrapper })
+  return { audio, result: rendered.result, unmount: rendered.unmount }
 }
 
 describe('usePlayback', () => {
@@ -27,6 +28,19 @@ describe('usePlayback', () => {
     expect(result.current.playing).toBe('chord')
     act(() => audio.setNow(1.2))
     expect(result.current.playing).toBeNull()
+  })
+
+  it('stops its sound as its component goes, and leaves another component’s alone', () => {
+    const audio = createFakeAudio()
+    const { result, unmount } = setup(() => usePlayback<'chord'>(), audio)
+    act(() => result.current.toggle('chord', () => [NOTE]))
+    const before = audio.stops
+    unmount()
+    expect(audio.stops).toBe(before + 1)
+    const quiet = setup(() => usePlayback<'chord'>(), audio)
+    const after = audio.stops
+    quiet.unmount()
+    expect(audio.stops).toBe(after)
   })
 
   it('stops on a second tap, even before the first note sounded', () => {

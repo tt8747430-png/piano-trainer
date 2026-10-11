@@ -30,6 +30,11 @@ export const common: LocaleResources['common'] = {
     toExercises: 'К упражнениям',
     toTakes: 'К дублям',
   },
+  storageFull: {
+    message: 'На устройстве не хватает места: последнее изменение не сохранено.',
+    help: 'Скачайте резервную копию в настройках и удалите ненужные дубли.',
+    settings: 'Настройки',
+  },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
   loading: 'Загрузка',

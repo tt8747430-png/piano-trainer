@@ -58,6 +58,8 @@ export interface MidiPort {
   reconnect(): Promise<MidiStatus | null>
   onNote(listener: (event: NoteEvent) => void): () => void
   onPedal(listener: (event: PedalEvent) => void): () => void
+  /** The pedals held down now, on the keyboards heard: a take begun with one down starts with it. */
+  pedalsDown(): ReadonlySet<PedalKind>
   onStatus(listener: (status: MidiStatus) => void): () => void
   /** The last status, or null before any connect(). */
   current(): MidiStatus | null

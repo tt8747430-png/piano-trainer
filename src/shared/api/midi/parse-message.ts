@@ -11,18 +11,24 @@ const PEDAL_CONTROLLERS: ReadonlyMap<number, PedalKind> = new Map([
   [66, 'sostenuto'],
   [67, 'soft'],
 ])
-/** A pedal is down from 64 on; a reversed one, below it. */
+/**
+ * A pedal goes down at 64 and comes up only below 40: a half pedal held near 64, sent as a stream of
+ * values, would otherwise flutter up and down, cutting the notes it holds. A reversed pedal (one that
+ * sends up when pressed) is read upside down.
+ */
 const PEDAL_DOWN = 64
+const PEDAL_UP = 40
 
 /**
  * A note-on or note-off on any channel (a note-on with velocity 0 is a note-off), or a pedal (the
  * sustain, the sostenuto or the soft; `reversedPedal` for one that sends up when pressed), at
- * `time`; anything else is null.
+ * `time`, read against the pedals `down` already; anything else is null.
  */
 export function parseMidiMessage(
   data: ArrayLike<number>,
   time: number,
   reversedPedal = false,
+  down: ReadonlySet<PedalKind> = new Set(),
 ): MidiMessage | null {
   if (data.length < 3) return null
   const command = (data[0] ?? 0) & 0xf0
@@ -31,7 +37,8 @@ export function parseMidiMessage(
   if (command === CONTROL_CHANGE) {
     const pedal = PEDAL_CONTROLLERS.get(first)
     if (!pedal) return null
-    return { kind: 'pedal', pedal, down: second >= PEDAL_DOWN !== reversedPedal, time }
+    const depth = reversedPedal ? 127 - second : second
+    return { kind: 'pedal', pedal, down: depth >= (down.has(pedal) ? PEDAL_UP : PEDAL_DOWN), time }
   }
   if ((command !== NOTE_ON && command !== NOTE_OFF) || first < 0 || first > 127) return null
   return {

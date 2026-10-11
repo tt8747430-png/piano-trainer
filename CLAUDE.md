@@ -78,7 +78,7 @@ it. `@` → `src`.
   the router's context holds the views, patterns, pieces and takes stores),
   `composition-root.ts` → `createServices()` (audio + MIDI, built once in `main.tsx`), `providers/` (`LocaleSync`,
   `ThemeProvider`, `AudioUnlock`, `MidiReconnect`, `MidiSync`: the MIDI keyboard as the settings say, ADR 0034), the layouts (`RootLayout`, the shortcuts' sheet (`ShortcutsHelp`) round its outlet; `ShellLayout` → `AppShell` with the docked tab bar and the laptop's sidebar;
-  `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `RouteError`,
+  `FullScreenLayout` for the Player and the Check, the viewport's height), `RoutePending`, `update-prompt/`, `storage-full/` (a save the device had no room for, said so), `RouteError`,
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.

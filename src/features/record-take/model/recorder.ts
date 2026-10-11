@@ -82,6 +82,9 @@ export function startRecorder(
     heard.push({ kind: 'note', midi: event.midi, on: event.on, velocity: event.velocity, at })
     if (event.on && isKept(event.midi, at, timing) && ++struck >= plan.room) stop()
   })
+  // A pedal already held as Record is pressed holds from the take's start.
+  for (const pedal of midi.pedalsDown())
+    heard.push({ kind: 'pedal', pedal, down: true, at: heardNow() })
   const stopPedal = midi.onPedal((event) => {
     heard.push({
       kind: 'pedal',

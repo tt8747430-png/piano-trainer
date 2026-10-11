@@ -29,6 +29,12 @@ export const common = {
     toTakes: 'Go to the takes',
   },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
+  // A save the device had no room for.
+  storageFull: {
+    message: 'This device is out of room: your last change was not saved.',
+    help: 'Download a backup in Settings, then delete takes you no longer need.',
+    settings: 'Settings',
+  },
   close: 'Close',
   loading: 'Loading',
   level: 'Level {{level}}',

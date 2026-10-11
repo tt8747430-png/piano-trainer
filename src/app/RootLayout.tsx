@@ -1,5 +1,6 @@
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
+import { StorageFullNotice } from './storage-full/StorageFullNotice'
 import { UpdatePrompt } from './update-prompt/UpdatePrompt'
 
 export function RootLayout() {
@@ -11,6 +12,7 @@ export function RootLayout() {
     <ShortcutsHelp>
       <Outlet />
       <UpdatePrompt offer={!fullScreen} />
+      <StorageFullNotice />
     </ShortcutsHelp>
   )
 }

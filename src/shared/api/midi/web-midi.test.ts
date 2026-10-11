@@ -127,6 +127,28 @@ describe('createWebMidi', () => {
     expect(keys).not.toHaveBeenCalled()
   })
 
+  it('hands on a pedal’s stream of values once down and once up, through a half pedal', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const midi = withAccess(new FakeAccess(piano))
+    const pedal: PedalEvent[] = []
+    midi.onPedal((event) => pedal.push(event))
+    await midi.connect()
+    for (const [value, time] of [
+      [70, 1],
+      [90, 2],
+      [63, 3],
+      [66, 4],
+      [50, 5],
+      [30, 6],
+      [10, 7],
+    ])
+      piano.send([0xb0, 64, value ?? 0], time ?? 0)
+    expect(pedal).toEqual([
+      { pedal: 'sustain', down: true, time: 1 },
+      { pedal: 'sustain', down: false, time: 6 },
+    ])
+  })
+
   it('hooks a keyboard plugged in later and reports the new status', async () => {
     const access = new FakeAccess()
     const midi = withAccess(access)

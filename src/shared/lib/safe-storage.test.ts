@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createMemoryStorage, safeLocalStorage } from './safe-storage'
+import { createMemoryStorage, onFailedWrite, safeLocalStorage } from './safe-storage'
 
 const blockWrites = () =>
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
@@ -26,6 +26,20 @@ describe('safeLocalStorage', () => {
     blockWrites()
     expect(() => storage.setItem('k', 'v')).not.toThrow()
     expect(storage.getItem('k')).toBeNull()
+  })
+
+  it('says so to who listens when a write is lost, until they stop listening', () => {
+    const storage = safeLocalStorage()
+    const heard = vi.fn()
+    const stop = onFailedWrite(heard)
+    storage.setItem('k', 'v')
+    expect(heard).not.toHaveBeenCalled()
+    blockWrites()
+    storage.setItem('k', 'w')
+    expect(heard).toHaveBeenCalledOnce()
+    stop()
+    storage.setItem('k', 'x')
+    expect(heard).toHaveBeenCalledOnce()
   })
 
   it('passes every Storage operation through to localStorage while it works', () => {

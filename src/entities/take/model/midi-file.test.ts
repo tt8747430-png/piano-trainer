@@ -91,12 +91,43 @@ describe('midiFile', () => {
   })
 
   it('counts a compound meter’s beat as a dotted quarter', () => {
-    const file = midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedals: [] })
+    const file = midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedals: [], bars: [0] })
     expect([...file.slice(22, 37)]).toEqual([
       ...[0x00, 0xff, 0x58, 0x04, 6, 3, 36, 8],
       // A dotted quarter a second: a quarter in 666,667 µs.
       ...[0x00, 0xff, 0x51, 0x03, 0x0a, 0x2c, 0x2b],
     ])
+  })
+
+  it('writes the time signature again where a bar’s length changes: a one-beat pickup, then 3/4', () => {
+    // 3/4 at 120: a beat is 500 ms; a pickup of one beat, then two whole bars.
+    const file = midiFile({
+      ...TAKE,
+      notes: [],
+      pedals: [],
+      length: 3500,
+      bars: [0, 500, 2000, 3500],
+    })
+    const bytes = [...file]
+    const signatures: number[][] = []
+    for (let i = 0; i < bytes.length - 4; i++)
+      if (bytes[i] === 0xff && bytes[i + 1] === 0x58) signatures.push(bytes.slice(i + 3, i + 5))
+    expect(signatures).toEqual([
+      [1, 2],
+      [3, 2],
+    ])
+  })
+
+  it('lets a key go before it is struck again within the same tick', () => {
+    const notes = [
+      { midi: midi(60), at: 0, held: 300, velocity: 90 },
+      { midi: midi(60), at: 0.5, held: 300, velocity: 80 },
+    ]
+    const bytes = [...midiFile({ ...TAKE, notes, pedals: [] })]
+    const statuses = bytes.flatMap((byte, i) =>
+      (byte === 0x90 || byte === 0x80) && bytes[i + 1] === 60 ? [byte] : [],
+    )
+    expect(statuses).toEqual([0x90, 0x80, 0x90, 0x80])
   })
 })
 

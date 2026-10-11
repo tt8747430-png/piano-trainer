@@ -1,4 +1,4 @@
-import { useCallback, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import type { PlayHandle } from '@/shared/api/audio'
 import type { Sound } from '@/shared/lib/schedule'
 import { usePlay } from './use-play'
@@ -28,13 +28,24 @@ export function usePlayback<Id extends string | number>(): Playback<Id> {
   const playing = useSyncExternalStore(audio.onSounding, () =>
     started !== null && audio.isPlaying(started.play) ? started.id : null,
   )
+  // What this component started stops as it goes: leaving a page leaves no example sounding on.
+  const latest = useRef<PlayHandle | null>(null)
+  useEffect(
+    () => () => {
+      if (latest.current && audio.isPlaying(latest.current)) audio.stop()
+    },
+    [audio],
+  )
   const toggle = useCallback(
     (id: Id, sounds: () => readonly Sound[]) => {
       if (playing === id) {
         audio.stop()
+        latest.current = null
         setStarted(null)
       } else {
-        setStarted({ id, play: play(sounds()) })
+        const started = play(sounds())
+        latest.current = started
+        setStarted({ id, play: started })
       }
     },
     [audio, play, playing],

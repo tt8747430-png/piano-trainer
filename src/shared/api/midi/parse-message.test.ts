@@ -20,6 +20,13 @@ describe('parseMidiMessage', () => {
     expect(parseMidiMessage(data, 7)).toEqual({ kind: 'pedal', pedal: 'sustain', down, time: 7 })
   })
 
+  it('keeps a pedal held down until it comes up below 40, so a half pedal does not flutter', () => {
+    const down = new Set(['sustain'] as const)
+    expect(parseMidiMessage([0xb0, 64, 50], 7, false, down)).toMatchObject({ down: true })
+    expect(parseMidiMessage([0xb0, 64, 39], 7, false, down)).toMatchObject({ down: false })
+    expect(parseMidiMessage([0xb0, 64, 50], 7)).toMatchObject({ down: false })
+  })
+
   it.each([
     [66, 'sostenuto'],
     [67, 'soft'],

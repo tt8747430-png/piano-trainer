@@ -73,4 +73,14 @@ describe('keepTakeBars', () => {
     expect(other?.id).toBe(second)
     expect(store.getState().nextTake).toBe(3)
   })
+
+  it('leaves alone a take another tab already cut, where the bars chosen are no longer in it', () => {
+    const store = fresh()
+    const long = { ...TAKE, tempo: 120, length: 8000, bars: [0, 2000, 4000, 6000, 8000] }
+    const id = saveTake(store, long)
+    keepTakeBars(store, id, 0, 1)
+    const cut = store.getState().takes[0]
+    expect(() => keepTakeBars(store, id, 2, 3)).not.toThrow()
+    expect(store.getState().takes[0]).toEqual(cut)
+  })
 })

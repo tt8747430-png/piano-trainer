@@ -40,6 +40,7 @@ export function createFakeMidi(
   let current: MidiStatus | null = null
   const notes = createListeners<NoteEvent>()
   const pedals = createListeners<PedalEvent>()
+  const down = new Set<PedalKind>()
   const statuses = createListeners<MidiStatus>()
   const choices: MidiChoice[] = []
   const sent: SentNote[] = []
@@ -69,8 +70,12 @@ export function createFakeMidi(
       notes.emit({ midi, on: true, velocity, time }),
     release: (midi, { time = performance.now() } = {}) =>
       notes.emit({ midi, on: false, velocity: 0, time }),
-    pedal: (down, { time = performance.now(), pedal = 'sustain' } = {}) =>
-      pedals.emit({ pedal, down, time }),
+    pedal: (isDown, { time = performance.now(), pedal = 'sustain' } = {}) => {
+      if (isDown) down.add(pedal)
+      else down.delete(pedal)
+      pedals.emit({ pedal, down: isDown, time })
+    },
+    pedalsDown: () => new Set(down),
     setStatus: report,
     configure(choice) {
       choices.push(choice)

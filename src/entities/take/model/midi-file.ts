@@ -19,7 +19,10 @@ const PEDAL_CONTROLLER: Readonly<Record<PedalKind, number>> = {
 /** The velocity a note-off carries where a keyboard sends none. */
 const RELEASE_VELOCITY = 64
 
-/** An event in the track, and the order events at one tick are written: offs, the pedals, then ons. */
+/**
+ * An event in the track, and the order events at one tick are written: a time signature, the tempo,
+ * then offs, the pedals and ons.
+ */
 interface TrackEvent {
   readonly tick: number
   readonly order: number
@@ -38,21 +41,69 @@ const bigEndian = (value: number, size: number): number[] =>
 
 const ascii = (text: string): number[] => [...text].map((char) => char.charCodeAt(0))
 
+/** The beats each whole bar of a take holds, from its barlines: a pickup's, a short bar's, the meter's. */
+function barBeats(take: Take): { readonly ms: number; readonly beats: number }[] {
+  const beatMs = 60_000 / take.tempo
+  return take.bars.slice(0, -1).map((ms, i) => ({
+    ms,
+    // To the nearest quarter of a beat: the barlines are where the click fell, in milliseconds.
+    beats: Math.round((((take.bars[i + 1] ?? ms) - ms) / beatMs) * 4) / 4,
+  }))
+}
+
 /**
  * A take as a Standard MIDI File (format 0): its tempo (a compound meter's beat a dotted quarter) and
- * time signature, each key on and off with its velocity as played, and the pedals as their
- * controllers: the sustain 64, the sostenuto 66, the soft 67.
+ * time signature, again at each barline where a bar's length changes (a pickup, a short bar), so a
+ * DAW's bars are the piece's; each key on and off with its velocity as played, and the pedals as
+ * their controllers: the sustain 64, the sostenuto 66, the soft 67.
  */
 export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
-  const { count, unit } = timeSignature(beatsPerBar(take.meter), take.meter)
   const compound = isCompound(take.meter)
   const quartersPerMinute = take.tempo * (compound ? 1.5 : 1)
   const tickAt = (ms: number) => Math.round((ms / 60_000) * quartersPerMinute * DIVISION)
+  const clocksPerClick = CLOCKS_PER_QUARTER * (compound ? 1.5 : 1)
+  const signatureOf = (beats: number): number[] => {
+    const { count, unit } = timeSignature(beats, take.meter)
+    return [0xff, 0x58, 0x04, count, Math.log2(unit), clocksPerClick, 8]
+  }
+  const signatures: TrackEvent[] = []
+  let beatsNow = beatsPerBar(take.meter)
+  signatures.push({ tick: 0, order: -2, bytes: signatureOf(barBeats(take)[0]?.beats ?? beatsNow) })
+  for (const [i, bar] of barBeats(take).entries()) {
+    if (i === 0) beatsNow = bar.beats
+    else if (bar.beats !== beatsNow) {
+      beatsNow = bar.beats
+      signatures.push({ tick: tickAt(bar.ms), order: -2, bytes: signatureOf(bar.beats) })
+    }
+  }
+  // Each note's tick, a key struck again within one tick a tick later, so it can go up between; and
+  // its next strike, so a note's end never passes it.
+  type Note = (typeof take.notes)[number]
+  const onTick = new Map<Note, number>()
+  const nextOn = new Map<Note, number>()
+  const byKey = [...take.notes].sort((a, b) => a.midi - b.midi || a.at - b.at)
+  byKey.forEach((note, i) => {
+    const before = byKey[i - 1]
+    const after = before?.midi === note.midi ? (onTick.get(before) ?? 0) + 1 : 0
+    onTick.set(note, Math.max(tickAt(note.at), after))
+    if (before?.midi === note.midi) nextOn.set(before, onTick.get(note) ?? 0)
+  })
+  const tempo: TrackEvent = {
+    tick: 0,
+    order: -1,
+    bytes: [0xff, 0x51, 0x03, ...bigEndian(Math.round(60_000_000 / quartersPerMinute), 3)],
+  }
   const events: TrackEvent[] = [
+    ...signatures,
+    tempo,
     ...take.notes.flatMap((note) => {
-      const on = tickAt(note.at)
-      // Offs come first at a tick: a key let go within its own tick goes up on the next.
-      const off = Math.max(tickAt(note.at + note.held), on + 1)
+      const on = onTick.get(note) ?? tickAt(note.at)
+      // Offs come first at a tick: a key let go within its own tick goes up on the next, though never
+      // after the same key is struck again.
+      const off = Math.min(
+        Math.max(tickAt(note.at + note.held), on + 1),
+        nextOn.get(note) ?? Infinity,
+      )
       return [
         { tick: on, order: 3, bytes: [NOTE_ON, note.midi, note.velocity] },
         { tick: off, order: 0, bytes: [NOTE_OFF, note.midi, RELEASE_VELOCITY] },
@@ -69,11 +120,7 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
       ]
     }),
   ].sort((a, b) => a.tick - b.tick || a.order - b.order)
-  const clocksPerClick = CLOCKS_PER_QUARTER * (compound ? 1.5 : 1)
-  const track: number[] = [
-    ...[0x00, 0xff, 0x58, 0x04, count, Math.log2(unit), clocksPerClick, 8],
-    ...[0x00, 0xff, 0x51, 0x03, ...bigEndian(Math.round(60_000_000 / quartersPerMinute), 3)],
-  ]
+  const track: number[] = []
   let last = 0
   for (const event of events) {
     track.push(...variableLength(event.tick - last), ...event.bytes)

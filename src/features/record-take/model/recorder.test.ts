@@ -99,6 +99,23 @@ describe('startRecorder', () => {
     expect(ended[0]?.pedals).toEqual([{ pedal: 'soft', down: 0, up: 500 }])
   })
 
+  it('holds a pedal already down as Record is pressed from the take’s start', () => {
+    const audio = createFakeAudio()
+    const keyboard = createFakeMidi()
+    const ended: (Played | null)[] = []
+    audio.setNow(1)
+    keyboard.pedal(true)
+    const stop = startRecorder(audio, keyboard, PLAN, {
+      progress: () => {},
+      ended: (played) => ended.push(played),
+    })
+    audio.setNow(3.1)
+    keyboard.press(midi(60))
+    audio.setNow(4.1)
+    stop()
+    expect(ended[0]?.pedals).toEqual([{ pedal: 'sustain', down: 0, up: 1000 }])
+  })
+
   it('plays the song’s tune under the take from its downbeat, and stops it at Stop', () => {
     const tune = [{ kind: 'note', midi: midi(72), at: 0, duration: 0.5, velocity: 0.2 }] as const
     const { audio, stop } = setUp({ ...PLAN, tune })
