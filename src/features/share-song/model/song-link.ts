@@ -14,11 +14,17 @@ const streamOf = (bytes: Uint8Array<ArrayBuffer>) =>
     },
   })
 
-const toBase64Url = (bytes: Uint8Array) =>
-  btoa(String.fromCharCode(...bytes))
-    .replaceAll('+', '-')
-    .replaceAll('/', '_')
-    .replace(/=+$/, '')
+/** The most a link's text may hold, and the most its song may inflate to: far more than any song. */
+const LINK_LIMIT = 64 * 1024
+const SONG_LIMIT = 1024 * 1024
+
+/** Bytes as base64url, a chunk at a time: spread whole, a long song's bytes overflow the stack. */
+function toBase64Url(bytes: Uint8Array): string {
+  let binary = ''
+  for (let at = 0; at < bytes.length; at += 0x8000)
+    binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000))
+  return btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '')
+}
 
 const fromBase64Url = (text: string) =>
   Uint8Array.from(atob(text.replaceAll('-', '+').replaceAll('_', '/')), (char) =>
@@ -34,16 +40,43 @@ export async function songLinkData(song: SharedSong): Promise<string> {
   return toBase64Url(new Uint8Array(await new Response(deflated).arrayBuffer()))
 }
 
+/** A stream's text, or null once it passes `limit` bytes: a crafted link cannot inflate without end. */
+async function textUpTo(stream: ReadableStream<Uint8Array>, limit: number): Promise<string | null> {
+  const reader = stream.getReader()
+  const chunks: Uint8Array[] = []
+  let size = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    size += value.byteLength
+    if (size > limit) {
+      await reader.cancel()
+      return null
+    }
+    chunks.push(value)
+  }
+  const whole = new Uint8Array(size)
+  let at = 0
+  for (const chunk of chunks) {
+    whole.set(chunk, at)
+    at += chunk.byteLength
+  }
+  return new TextDecoder().decode(whole)
+}
+
 /**
  * A link's text read back as a song, or null where it holds none: cut short, changed, or of another
  * format. What it holds is read as the pieces store reads a save (`readSharedSong`).
  */
 export async function readSongLink(data: string): Promise<SharedSong | null> {
+  if (data.length > LINK_LIMIT) return null
   try {
     const inflated = streamOf(fromBase64Url(data)).pipeThrough(
       new DecompressionStream('deflate-raw'),
     )
-    const file: unknown = JSON.parse(await new Response(inflated).text())
+    const text = await textUpTo(inflated, SONG_LIMIT)
+    if (text === null) return null
+    const file: unknown = JSON.parse(text)
     if (typeof file !== 'object' || file === null || !('v' in file) || file.v !== FORMAT)
       return null
     const { t, m } = file as { t?: unknown; m?: unknown }

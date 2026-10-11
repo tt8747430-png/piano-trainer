@@ -32,4 +32,32 @@ describe('a song’s link', () => {
     const data = await songLinkData({ ...SONG, music: { ...SONG.music, tempo: 1000 } })
     expect(await readSongLink(data)).toBeNull()
   })
+
+  it('reads no song from a link that would inflate past any song, or is too long to be one', async () => {
+    const zeros = new Response(
+      new ReadableStream<BufferSource>({
+        start(controller) {
+          controller.enqueue(new Uint8Array(4 * 1024 * 1024))
+          controller.close()
+        },
+      }).pipeThrough(new CompressionStream('deflate-raw')),
+    )
+    const bytes = new Uint8Array(await zeros.arrayBuffer())
+    const bomb = btoa(String.fromCharCode(...bytes))
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .replace(/=+$/, '')
+    expect(await readSongLink(bomb)).toBeNull()
+    expect(await readSongLink('A'.repeat(65 * 1024))).toBeNull()
+  })
+
+  it('carries a long song there and back', async () => {
+    const lines = Array.from({ length: 4000 }, (_, i) => (i % 2 ? 'G C G D' : 'Em C D G'))
+    const long: SharedSong = {
+      ...SONG,
+      music: { ...SONG.music, sections: [{ kind: 'verse', n: 1, lines }], melody: undefined },
+    }
+    const back = await readSongLink(await songLinkData(long))
+    expect(back?.music.sections[0]?.lines).toHaveLength(4000)
+  })
 })
