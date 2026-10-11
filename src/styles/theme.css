@@ -1,7 +1,7 @@
 /* `dark:` follows the app's theme attribute, not the OS, so shadcn primitives obey the setting. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
-@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px));
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
 
 @theme inline {
   --color-background: var(--background);
@@ -147,6 +147,13 @@
       color-scheme: dark;
     }
   }
+  /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music. */
+  :root {
+    --keys-most: 32dvh;
+    @variant landscape-phone {
+      --keys-most: 26dvh;
+    }
+  }
   /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
   :root {
     --gutter: --spacing(4);
@@ -209,12 +216,17 @@
     outline-offset: 2px;
   }
   /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
-     its tallest (the notch, the rail, keys at 32dvh, the finger row, its foot) and the phone's tab bar. */
+     its tallest (the notch, the rail, keys at --keys-most, the finger row, its foot) and the phone's tab bar. */
   html:has([data-slot='pinned']) {
-    scroll-padding-top: calc(32dvh + --spacing(23) + max(--spacing(4), env(safe-area-inset-top)));
+    scroll-padding-top: calc(
+      var(--keys-most) + --spacing(23) + max(--spacing(4), env(safe-area-inset-top))
+    );
   }
   html:has([data-slot='app-nav']) {
     scroll-padding-bottom: calc(--spacing(16) + env(safe-area-inset-bottom));
+    @variant landscape-phone {
+      scroll-padding-bottom: 0;
+    }
     @variant lg {
       scroll-padding-bottom: 0;
     }
@@ -337,6 +349,17 @@
 }
 @utility pl-sidebar-collapsed {
   padding-left: calc(--spacing(18) + var(--gutter));
+}
+/* A phone on its side: its places a rail down the left (5rem, clear of a notch there), the screen
+   clear of it by a gutter. */
+@utility pl-safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+@utility w-rail {
+  width: calc(--spacing(20) + env(safe-area-inset-left));
+}
+@utility pl-rail {
+  padding-left: calc(--spacing(20) + env(safe-area-inset-left) + var(--gutter));
 }
 @utility bottom-safe {
   bottom: max(--spacing(4), env(safe-area-inset-bottom));

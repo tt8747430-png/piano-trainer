@@ -130,7 +130,7 @@ export function AppNav() {
       aria-label={t('nav.label')}
       data-slot="app-nav"
       data-sidebar={sidebar}
-      className="group/nav fixed inset-x-0 bottom-0 z-30 print:hidden border-t border-border bg-card pb-safe lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
+      className="group/nav fixed inset-x-0 bottom-0 z-30 print:hidden border-t border-border bg-card pb-safe landscape-phone:inset-y-0 landscape-phone:right-auto landscape-phone:flex landscape-phone:w-rail landscape-phone:flex-col landscape-phone:justify-center landscape-phone:border-t-0 landscape-phone:border-r landscape-phone:pb-0 landscape-phone:pl-safe-left lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
     >
       <div className="hidden h-20 shrink-0 items-center gap-2 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:justify-center">
         <p
@@ -150,9 +150,9 @@ export function AppNav() {
           <ToggleIcon aria-hidden className="size-5" />
         </button>
       </div>
-      <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 lg:mx-0 lg:max-w-none lg:flex-1 lg:flex-col lg:px-3 lg:pt-0">
+      <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 landscape-phone:mx-0 landscape-phone:w-full landscape-phone:flex-col landscape-phone:px-1 landscape-phone:pt-0 lg:mx-0 lg:max-w-none lg:flex-1 lg:flex-col lg:px-3 lg:pt-0">
         {PLACES.map((place) => (
-          <li key={place.to} className="flex-1 lg:flex-none">
+          <li key={place.to} className="flex-1 landscape-phone:flex-none lg:flex-none">
             <PlaceLink place={place} collapsed={collapsed} />
           </li>
         ))}

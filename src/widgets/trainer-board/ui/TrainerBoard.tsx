@@ -100,7 +100,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         <h2
           ref={prompt}
           tabIndex={-1}
-          className="min-w-0 flex-1 text-3xl text-balance hyphens-auto wrap-break-word outline-none sm:text-4xl"
+          className="min-w-0 flex-1 text-3xl text-balance hyphens-auto wrap-break-word outline-none sm:text-4xl landscape-phone:text-2xl"
         >
           {words.prompt(question)}
         </h2>

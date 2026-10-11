@@ -28,8 +28,8 @@ const LARGE_WHITE_PX = 56
 const KEY_LENGTH = 4.4
 /** …never shorter than this… */
 const MIN_KEYS_PX = 96
-/** …nor taller than this share of the screen's height. */
-const MAX_KEYS_DVH = 32
+/** …nor taller than this share of the screen's height (`--keys-most`: less on a phone on its side). */
+const MOST_KEYS = 'var(--keys-most)'
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
@@ -169,7 +169,7 @@ export function PianoKeyboard({
           {...pointers.group}
           className="relative shrink-0 touch-none bg-key-bed select-none"
           style={{
-            height: `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MAX_KEYS_DVH}dvh)`,
+            height: `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MOST_KEYS})`,
           }}
         >
           {PIANO_LAYOUT.keys.map((key) => {

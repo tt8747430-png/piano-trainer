@@ -5,13 +5,14 @@ import { NoteTools } from './NoteTools'
 /**
  * The tool dock over the keys: the tools of where the caret writes (a click on the sheet chooses: the
  * chord row, the treble staff or the bass staff) in one row, scrolling sideways on a phone and
- * wrapping from a laptop's width, where every tool is in sight.
+ * wrapping from a laptop's width, where every tool is in sight, and in the column beside the sheet
+ * of a phone on its side.
  */
 export function EditorTools() {
   const layer = useEditorState((state) => state.layer)
   return (
     <div className="flex flex-col gap-2">
-      <div className="-mx-gutter flex items-end gap-2 overflow-x-auto px-gutter py-1 scrollbar-none lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+      <div className="-mx-gutter flex items-end gap-2 overflow-x-auto px-gutter py-1 scrollbar-none landscape-phone:mx-0 landscape-phone:flex-wrap landscape-phone:overflow-visible landscape-phone:px-0 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
         {layer === 'chords' ? <ChordTools /> : <NoteTools />}
       </div>
     </div>
