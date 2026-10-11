@@ -31,14 +31,19 @@ export function EditorCaret({
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const line = caret.current?.closest<HTMLElement>('[data-slot="sheet-line"]')
-    if (!line) return
-    const margin = line.clientWidth / 4
-    if (
-      left < line.scrollLeft + margin / 2 ||
-      right > line.scrollLeft + line.clientWidth - margin / 2
-    )
-      line.scrollLeft = Math.max(0, left - margin)
+    // In the next frame: read straight after the engraving wrote the line, its box would make the
+    // browser lay the page out within the keystroke.
+    const frame = requestAnimationFrame(() => {
+      const line = caret.current?.closest<HTMLElement>('[data-slot="sheet-line"]')
+      if (!line) return
+      const margin = line.clientWidth / 4
+      if (
+        left < line.scrollLeft + margin / 2 ||
+        right > line.scrollLeft + line.clientWidth - margin / 2
+      )
+        line.scrollLeft = Math.max(0, left - margin)
+    })
+    return () => cancelAnimationFrame(frame)
   }, [left, right])
   const box =
     layer === 'chords' || !staff

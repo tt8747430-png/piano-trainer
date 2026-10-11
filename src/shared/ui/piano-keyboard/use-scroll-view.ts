@@ -24,20 +24,35 @@ function metricsOf(element: HTMLElement | null): ScrollMetrics {
   return next
 }
 
-/** The scroller as a store: it changes as it scrolls and as the window resizes. */
+/**
+ * The scroller as a store: it changes as it scrolls, as the window resizes and as it or its keys
+ * change size. Its metrics are measured then and kept, so a render reads them without making the
+ * browser lay the page out again after what it just wrote (a key going down, each beat).
+ */
 function scrollStore(scroller: RefObject<HTMLElement | null>) {
+  let kept: ScrollMetrics | null = null
   return {
     subscribe(onChange: () => void) {
       const element = scroller.current
       if (!element) return () => {}
-      element.addEventListener('scroll', onChange, { passive: true })
-      window.addEventListener('resize', onChange)
+      const measure = () => {
+        kept = metricsOf(element)
+        onChange()
+      }
+      kept = metricsOf(element)
+      element.addEventListener('scroll', measure, { passive: true })
+      window.addEventListener('resize', measure)
+      const resized = new ResizeObserver(measure)
+      resized.observe(element)
+      if (element.firstElementChild) resized.observe(element.firstElementChild)
       return () => {
-        element.removeEventListener('scroll', onChange)
-        window.removeEventListener('resize', onChange)
+        element.removeEventListener('scroll', measure)
+        window.removeEventListener('resize', measure)
+        resized.disconnect()
+        kept = null
       }
     },
-    read: () => metricsOf(scroller.current),
+    read: () => kept ?? metricsOf(scroller.current),
   }
 }
 

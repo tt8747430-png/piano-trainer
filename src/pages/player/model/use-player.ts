@@ -31,11 +31,13 @@ export function usePlayer(
   const recording =
     piece.recording && withRecording && isOwnKey(piece, choice.tonic) ? piece.recording : null
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
+  // Read once a piece: the Player renders each beat, and a fit reads the piece's chart.
+  const fit = useMemo(() => pieceFit(piece), [piece])
   return {
     choice,
     performance,
     player,
-    fit: pieceFit(piece),
+    fit,
     headings,
     changeSetup: (change) => setSearch(searchPatch(piece, change)),
   }

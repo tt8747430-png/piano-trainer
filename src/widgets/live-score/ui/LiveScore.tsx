@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next'
-import { useEffect, useMemo, useRef } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   keyFromParam,
@@ -90,28 +90,30 @@ export function LiveScore({
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
   const key = useMemo(() => keyFromParam(keyParam), [keyParam])
+  // Engraved after the key a tap put down is painted: a busy phone keeps its keys quick.
+  const shown = useDeferredValue(chords)
   const names = useMemo(
-    () => chords.map((keys) => said(keys, key, t, about)),
-    [chords, key, t, about],
+    () => shown.map((keys) => said(keys, key, t, about)),
+    [shown, key, t, about],
   )
   // Engraved again only when the chords, the key or their names change.
   const score = useMemo(
     () =>
       notate(
         trailMusic(
-          chords,
+          shown,
           key,
           names.map((name) => name.symbol),
         ),
       ),
-    [chords, key, names],
+    [shown, key, names],
   )
   // The newest chord stays in sight as the trail grows past the screen's width.
   const scroller = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const element = scroller.current
     if (element) element.scrollLeft = element.scrollWidth
-  }, [chords.length])
+  }, [shown.length])
   return (
     <section className="flex flex-col gap-2">
       <div
