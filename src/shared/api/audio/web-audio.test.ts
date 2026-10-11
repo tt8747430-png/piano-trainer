@@ -242,7 +242,8 @@ describe('through the piano', () => {
     const { output, sent } = pianoSpeaker()
     audio.notesTo(output)
     audio.play([A4, CLICK], 0)
-    expect(sent).toEqual(['on 69 104', 'off 69'])
+    // Its off follows as it comes due.
+    expect(sent).toEqual(['on 69 104'])
     expect(context.oscillators).toHaveLength(1)
   })
 
