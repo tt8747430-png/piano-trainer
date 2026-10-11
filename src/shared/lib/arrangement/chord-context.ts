@@ -50,7 +50,7 @@ export interface ChordContext {
   readonly bassNote: SpelledNote
 }
 
-export interface ContextChord {
+interface ContextChord {
   readonly root: SpelledNote
   readonly bass: SpelledNote
   readonly tones: readonly Tone[]
@@ -95,7 +95,7 @@ export function chordContext(
 }
 
 /** A key a token plays, spelled as it is written. */
-export interface TokenNote {
+interface TokenNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
 }

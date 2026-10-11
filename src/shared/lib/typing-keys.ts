@@ -1,13 +1,13 @@
 import { MIDDLE_C, midi, PIANO, type Midi } from '@/shared/lib/music'
 
 /** A key of the computer keyboard as a piano key: semitones above the typing C, and its printed letter. */
-export interface TypingKey {
+interface TypingKey {
   readonly semitones: number
   readonly letter: string
 }
 
 /** GarageBand's Musical Typing by physical key (`KeyboardEvent.code`), so every layout plays the same notes. */
-export const TYPING_KEYS: ReadonlyMap<string, TypingKey> = new Map([
+const TYPING_KEYS: ReadonlyMap<string, TypingKey> = new Map([
   ['KeyA', { semitones: 0, letter: 'A' }],
   ['KeyW', { semitones: 1, letter: 'W' }],
   ['KeyS', { semitones: 2, letter: 'S' }],

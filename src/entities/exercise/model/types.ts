@@ -48,7 +48,6 @@ export interface ExerciseFields {
   readonly from?: true
   readonly tonality?: true
 }
-export type ExerciseField = Exclude<keyof ExerciseFields, 'root'>
 
 /** An exercise: what it is called and trains, the choices its rule takes, and how it plays when the URL names none. */
 export interface Exercise {

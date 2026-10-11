@@ -18,17 +18,8 @@ import type { StaffId } from '@/shared/lib/notation'
 import type { NoteLineMeter } from '@/shared/lib/schedule'
 
 /** What a lesson teaches, as Learn filters lessons (roadmap §3.4, §10.7). */
-export const LESSON_CATEGORIES = [
-  'chords',
-  'scales',
-  'theory',
-  'reading',
-  'rhythm',
-  'accompaniment',
-  'jazz',
-  'gospel',
-] as const
-export type LessonCategory = (typeof LESSON_CATEGORIES)[number]
+export type LessonCategory =
+  'chords' | 'scales' | 'theory' | 'reading' | 'rhythm' | 'accompaniment' | 'jazz' | 'gospel'
 
 /**
  * Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7): what is taught

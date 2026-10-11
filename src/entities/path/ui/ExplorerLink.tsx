@@ -4,7 +4,7 @@ import { qualitiesIn } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
 import type { PathStep } from '../model/types'
 
-export type ExplorerStep = Exclude<PathStep, { readonly kind: 'piece' }>
+type ExplorerStep = Exclude<PathStep, { readonly kind: 'piece' }>
 
 /** A chord or scale step's way into its explorer (spec §4.1), with the step panel open. */
 export function ExplorerLink({

@@ -117,7 +117,7 @@ interface AnswerKeys {
 }
 
 /** A round's verdict on the keys chosen, once answered. */
-export interface CheckedKeys {
+interface CheckedKeys {
   readonly marks: Map<Midi, KeyMark>
   readonly wrong: Set<Midi>
   readonly outlined: Set<Midi>

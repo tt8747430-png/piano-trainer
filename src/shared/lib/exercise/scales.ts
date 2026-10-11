@@ -26,7 +26,7 @@ import {
 } from './line'
 import { exercisePerformance, type LineNote } from './performance'
 
-export interface ScaleRun {
+interface ScaleRun {
   readonly root: SpelledNote
   readonly kind: ScaleKind
   readonly octaves: number

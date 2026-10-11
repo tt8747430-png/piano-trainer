@@ -35,7 +35,7 @@ export { runSounds, scaleRun } from './run'
 export { noteLine, type NoteLineMeter } from './note-line'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'
-export { recorderClicks, type ClickPlan, type RecorderClicks } from './recorder-clicks'
+export { recorderClicks, type ClickPlan } from './recorder-clicks'
 export type { GridBar } from './grid'
 export {
   gainVelocity,
@@ -47,7 +47,6 @@ export {
 } from './velocity'
 export {
   damp,
-  PEDALS,
   QUIET_DAMPER,
   SOFT_GAIN,
   type Damper,

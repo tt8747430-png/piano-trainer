@@ -10,7 +10,7 @@ export type RecorderStage = 'idle' | RecorderProgress['stage']
  * How a take ended: `stopped` by Stop, by itself or by the app being hidden, the screen still there;
  * `left` as the screen went, so the take is only to be kept.
  */
-export type TakeEnding = 'stopped' | 'left'
+type TakeEnding = 'stopped' | 'left'
 
 /**
  * Where a take is, as it changes beat by beat and second by second: read by the one part that shows
@@ -22,7 +22,7 @@ export interface RecorderProgressSource {
   readonly current: () => RecorderProgress | null
 }
 
-export interface Recorder {
+interface Recorder {
   readonly stage: RecorderStage
   readonly progress: RecorderProgressSource
   /** Records a take to `plan`; nothing where there is no MIDI keyboard or a take records already. */

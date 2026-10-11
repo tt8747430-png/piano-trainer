@@ -8,7 +8,7 @@ import { ServicesProvider } from '@/shared/lib/services'
 import type { KeyMark } from '@/shared/ui'
 import { LiveKeyboard } from '../ui/LiveKeyboard'
 
-export const ONE_OCTAVE = { from: midi(60), to: midi(71) }
+const ONE_OCTAVE = { from: midi(60), to: midi(71) }
 
 /** A live keyboard over C4–B4 (what a key plays as asked) with fake audio and MIDI, a fresh settings store, and a text field beside it. */
 export function renderLiveKeyboard({

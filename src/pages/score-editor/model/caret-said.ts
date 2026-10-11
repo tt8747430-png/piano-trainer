@@ -15,7 +15,7 @@ interface Place {
 }
 
 /** What the caret line says: where the caret is, and what is there. */
-export type CaretSaid =
+type CaretSaid =
   | { readonly kind: 'end' }
   | (Place & {
       readonly kind: 'notes'

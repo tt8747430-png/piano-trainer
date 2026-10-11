@@ -7,7 +7,7 @@ import type { EditorState, Struck } from './state'
 import { barAt } from './timeline'
 
 /** Keys going down within this many milliseconds of the first are struck together. */
-export const STRUCK_TOGETHER_MS = 80
+const STRUCK_TOGETHER_MS = 80
 
 /** The chord the keys make, as a chart writes it; none for fewer than three notes or no chord. */
 function chordOfKeys(keys: readonly Midi[]): Chord | undefined {

@@ -3,12 +3,9 @@ export {
   isPiece,
   isSongCollectionId,
   pieceKey,
-  type Collection,
   type CollectionId,
   type ChartPiece,
   type Entry,
-  type Hands,
-  type KeyText,
   type Listing,
   type Piece,
   type PieceId,
@@ -26,7 +23,6 @@ export {
   PIECE_TEMPO,
   songTitle,
   TITLE_MAX,
-  type OwnSong,
   type OwnSongId,
 } from './model/own'
 export {
@@ -36,7 +32,7 @@ export {
   type PiecesStore,
 } from './model/store'
 export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
-export { repertoire, type Repertoire } from './model/repertoire'
+export { repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'

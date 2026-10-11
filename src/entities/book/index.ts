@@ -2,7 +2,6 @@ export {
   BOOK_IDS,
   METHOD_BOOK_IDS,
   isMethodBookId,
-  type Book,
   type BookId,
   type MethodBookId,
 } from './model/types'

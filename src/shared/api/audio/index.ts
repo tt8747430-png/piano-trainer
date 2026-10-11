@@ -5,7 +5,5 @@ export {
   type NoteOutput,
   type PlayHandle,
 } from './types'
-export { createLookahead, type Lookahead } from './lookahead'
 export { createWebAudioOutput } from './web-audio'
 export { createFakeAudio, type FakeAudio } from './fake-audio'
-export { createRecordingPlayer, type Media, type RecordingPlayer } from './recording-player'

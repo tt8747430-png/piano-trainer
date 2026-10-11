@@ -1,6 +1,6 @@
 import type { Sound } from '@/shared/lib/schedule'
 
-export interface Lookahead {
+interface Lookahead {
   /** Queues sounds whose `at` counts from `at` on the clock. */
   add(sounds: readonly Sound[], at: number): void
   /** Drops everything queued. */

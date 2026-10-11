@@ -40,7 +40,7 @@ const allowed = <T>(value: T | undefined, allows: readonly T[] | true | undefine
   value !== undefined && (allows === true || allows?.includes(value)) ? value : own
 
 /** A root spelled by the exercise's rule: as its scale, its chord or its key. */
-export function exerciseRootSpelling(
+function exerciseRootSpelling(
   exercise: Exercise,
   pc: PitchClass,
   choice: Pick<ExerciseChoice, 'kind' | 'quality' | 'tonality'>,

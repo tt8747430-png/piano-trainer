@@ -1,9 +1,7 @@
 export {
-  LESSON_CATEGORIES,
   LESSON_MODULES,
   type Lesson,
   type LessonBlock,
-  type LessonCategory,
   type LessonLink,
   type LessonModule,
   type LessonAnswer,

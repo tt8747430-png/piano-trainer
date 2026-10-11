@@ -27,7 +27,7 @@ export const PASSING_CATEGORIES = [
 export type PassingCategory = (typeof PASSING_CATEGORIES)[number]
 
 /** The ways to get from one chord to another, each a rule from the target's root. */
-export const PASSING_KINDS = [
+const PASSING_KINDS = [
   'secondaryDominant',
   'tritoneSub',
   'secondaryTwoFive',

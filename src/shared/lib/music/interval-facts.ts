@@ -14,8 +14,7 @@ export const INTERVAL_GROUP_IDS = ['simple', 'compound'] as const satisfies read
 /** An interval the explorer writes a card for. */
 export type ReferenceInterval = (typeof INTERVAL_GROUPS)[IntervalGroup][number]
 
-export const CONSONANCES = ['perfect', 'imperfect', 'dissonance'] as const
-export type Consonance = (typeof CONSONANCES)[number]
+type Consonance = 'perfect' | 'imperfect' | 'dissonance'
 
 /** The unison, 4th and 5th: perfect when plain. */
 const PERFECT_STEPS = new Set([0, 3, 4])

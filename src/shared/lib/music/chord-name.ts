@@ -1,11 +1,11 @@
 /** A triad's suffix and its numeral's mark. */
-export interface TriadName {
+interface TriadName {
   readonly suffix: string
   readonly mark: string
 }
 
 /** A 7th chord's name around its highest number (`m` 9, `m` 7 `♭5`, `Maj` 13 `sus4`), and its numeral's mark. */
-export interface SeventhName {
+interface SeventhName {
   readonly lead: string
   readonly trail: string
   readonly mark: string

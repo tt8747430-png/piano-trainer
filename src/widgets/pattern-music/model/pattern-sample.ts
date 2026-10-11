@@ -8,7 +8,7 @@ import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
 import { unmarked, type ShownKeys } from '@/shared/ui'
 
 /** The piece a pattern that plays the tune is heard over: its lesson's (ADR 0021). */
-export const TUNE_PIECE = 'otche'
+const TUNE_PIECE = 'otche'
 /** A bar of C heard at a steady walk. */
 const SAMPLE_TEMPO = 80
 const C_MAJOR: Key = { tonic: note('C'), minor: false }

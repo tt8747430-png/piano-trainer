@@ -1,5 +1,5 @@
 /** A saved object's fields, each still to be checked: stored JSON is untrusted. */
-export type Saved<T> = Partial<Record<keyof T, unknown>>
+type Saved<T> = Partial<Record<keyof T, unknown>>
 
 /** Whether stored JSON is an object with fields: not null, not an array. */
 export const isRecord = (value: unknown): value is Record<string, unknown> =>

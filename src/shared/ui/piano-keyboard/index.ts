@@ -1,5 +1,5 @@
 export { PianoKeyboard } from './PianoKeyboard'
 export { RailButton } from './RailButton'
 export { RailGroup } from './RailGroup'
-export type { KeyMark, KeyStates, KeyTone } from './key-look'
+export type { KeyMark } from './key-look'
 export { NO_KEYS, unmarked, type ShownKeys } from './shown-keys'

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
-export type PlayerAreaName =
+type PlayerAreaName =
   'lead' | 'tempo' | 'hands' | 'actions' | 'keys' | 'sheet' | 'status' | 'transport'
 
 /** One part of the Player's screen, placed by its name. */

@@ -13,7 +13,7 @@ export interface BarsInMeter {
 }
 
 /** A beat clicked: where, and whether it is a bar's first. */
-export interface GridBeat {
+interface GridBeat {
   readonly tick: Tick
   readonly accent: boolean
 }

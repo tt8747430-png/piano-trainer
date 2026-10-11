@@ -15,7 +15,7 @@ export interface ClickPlan {
   readonly longest: number
 }
 
-export interface RecorderClicks {
+interface RecorderClicks {
   /** The count-in, then the click, from the first count-in beat (0 s). */
   readonly sounds: readonly ClickSound[]
   /** When the take's first bar starts, after the first count-in beat. */

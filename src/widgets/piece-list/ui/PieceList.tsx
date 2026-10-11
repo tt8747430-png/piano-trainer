@@ -1,7 +1,7 @@
 import type { Entry } from '@/entities/piece'
 import { EntryRow } from './EntryRow'
 
-export interface PieceGroup {
+interface PieceGroup {
   readonly id: string
   /** The collection's name, or null when the list shows one collection its tab already names. */
   readonly heading: string | null

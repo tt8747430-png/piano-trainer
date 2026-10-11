@@ -1,1 +1,1 @@
-export { PieceList, type PieceGroup } from './ui/PieceList'
+export { PieceList } from './ui/PieceList'

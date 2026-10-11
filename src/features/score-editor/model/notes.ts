@@ -14,7 +14,7 @@ import { insertBar } from './bars'
 import { barAt, barsOf, startsIn, totalTicks } from './timeline'
 
 /** A draft after writing, and where the caret goes next. */
-export interface Written {
+interface Written {
   readonly draft: Draft
   readonly end: Tick
 }

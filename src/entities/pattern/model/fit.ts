@@ -5,7 +5,7 @@ import type { PatternBook } from './book'
 import type { FigureEntry } from './types'
 
 /** What a pattern or figure may need that not all music has, in the order a closed one names it. */
-export const FIGURE_NEEDS = ['melody', 'key', 'simpleTime'] as const
+const FIGURE_NEEDS = ['melody', 'key', 'simpleTime'] as const
 export type FigureNeed = (typeof FIGURE_NEEDS)[number]
 
 /**

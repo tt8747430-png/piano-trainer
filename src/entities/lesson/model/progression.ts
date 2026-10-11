@@ -2,7 +2,7 @@ import { parseNumerals, type Key, type Numeral, type ChordSize } from '@/shared/
 import type { LessonProgression } from './types'
 
 /** A lesson's progression as the Progressions tool's row plays it: its numerals read, its size chosen. */
-export interface ProgressionInKey {
+interface ProgressionInKey {
   readonly numerals: readonly Numeral[]
   readonly key: Key
   readonly size: ChordSize

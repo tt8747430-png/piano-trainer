@@ -16,7 +16,7 @@ export const EMPTY_TRAIL: Trail = []
 export const TRAIL_CHORDS = 5
 
 /** Keys struck within this of the chord's last key are the chord: a fast roll is one chord. */
-export const CHORD_WINDOW_MS = 50
+const CHORD_WINDOW_MS = 50
 
 /** The trail after `key` is struck at `time`: into the newest chord, or a chord of its own. */
 export function strike(trail: Trail, key: Midi, time: number): Trail {

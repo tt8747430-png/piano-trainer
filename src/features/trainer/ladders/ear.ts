@@ -8,7 +8,7 @@ const FOURTHS: readonly ReferenceInterval[] = [...STEPS, 'P4', 'P5']
 const SIXTHS: readonly ReferenceInterval[] = [...FOURTHS, 'A4', 'm6', 'M6']
 /** The twelve within the octave. */
 export const SIMPLE_INTERVALS: readonly ReferenceInterval[] = [...SIXTHS, 'm7', 'M7', 'P8']
-export const COMPOUND_INTERVALS: readonly ReferenceInterval[] = [
+const COMPOUND_INTERVALS: readonly ReferenceInterval[] = [
   'm9',
   'M9',
   'A9',

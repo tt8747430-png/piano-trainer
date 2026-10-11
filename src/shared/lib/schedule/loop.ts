@@ -29,7 +29,7 @@ export interface Pass extends Scheduled {
 }
 
 /** Listen's loop (spec §2.7): passes of the passage, each queued as the last one nears its end. */
-export interface Loop {
+interface Loop {
   readonly performance: Performance
   readonly options: LoopOptions
   /** The passes queued and not yet over, in time order. */

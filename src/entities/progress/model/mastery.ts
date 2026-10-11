@@ -3,11 +3,11 @@ import type { SkillId } from '@/shared/lib/music'
 import type { Answer, ProgressState } from './types'
 
 /** How many of a skill's latest answers count as evidence. */
-export const EVIDENCE_SIZE = 5
+const EVIDENCE_SIZE = 5
 /** Right answers among the evidence that make a skill Known, the latest among them. */
 const KNOWN_AT = 4
 
-export type Rating = 'known' | 'gap' | 'unknown'
+type Rating = 'known' | 'gap' | 'unknown'
 
 export const latestEvidence = (answers: readonly Answer[]): readonly Answer[] =>
   answers.slice(-EVIDENCE_SIZE)

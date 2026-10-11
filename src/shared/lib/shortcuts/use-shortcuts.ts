@@ -38,7 +38,7 @@ export function useShortcuts(
 export const useShortcutsPlatform = (): boolean => use(ShortcutsContext)?.mac ?? false
 
 /** A group as the sheet lists it: each row's name and its keycaps. */
-export interface ListedShortcuts {
+interface ListedShortcuts {
   readonly name: string
   readonly rows: readonly { readonly label: string; readonly keys: readonly string[] }[]
 }

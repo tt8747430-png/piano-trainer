@@ -18,7 +18,7 @@ export type Heard =
       readonly at: number
     }
 
-export interface TakeTiming {
+interface TakeTiming {
   /** The first recorded bar's downbeat, on the audio clock. */
   readonly downbeat: number
   /** When Stop came, on the audio clock. */

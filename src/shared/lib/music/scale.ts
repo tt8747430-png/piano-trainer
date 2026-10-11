@@ -6,7 +6,7 @@ import { toneAbove, type Tone } from './tone'
 
 /** Major and minor; the church modes; pentatonic and blues: the Scale pop-up's groups. */
 export const SCALE_FAMILIES = ['keys', 'modes', 'blues'] as const
-export type ScaleFamily = (typeof SCALE_FAMILIES)[number]
+type ScaleFamily = (typeof SCALE_FAMILIES)[number]
 
 export const SCALE_KINDS = [
   'major',
@@ -32,7 +32,7 @@ interface BlueNote {
 type ScaleInterval = IntervalName | BlueNote
 
 /** A scale that shares its notes with another: which kind, where its tonic sits in this one, and how. */
-export interface Related {
+interface Related {
   readonly kind: ScaleKind
   /** Index into this scale's notes. */
   readonly degree: number
@@ -136,7 +136,7 @@ const SCALES: Readonly<Record<ScaleKind, ScaleEntry>> = {
   },
 }
 
-export const scaleFamily = (kind: ScaleKind): ScaleFamily => SCALES[kind].family
+const scaleFamily = (kind: ScaleKind): ScaleFamily => SCALES[kind].family
 
 /** A family's kinds, in table order. */
 export const scaleKindsIn = (family: ScaleFamily): readonly ScaleKind[] =>
@@ -175,7 +175,7 @@ export function spellScale(root: SpelledNote, kind: ScaleKind): Tone[] {
 }
 
 /** A scale that shares this one's notes, on its root. */
-export interface RelatedScale extends Related {
+interface RelatedScale extends Related {
   readonly root: SpelledNote
 }
 
@@ -214,7 +214,7 @@ export function scaleRootSpelling(pc: PitchClass, kind: ScaleKind): SpelledNote 
 }
 
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
-export type ScaleGap = 'H' | 'W' | 'W+H'
+type ScaleGap = 'H' | 'W' | 'W+H'
 const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }
 
 /** The gaps between neighbouring notes up to the octave: W, H, or W+H. */

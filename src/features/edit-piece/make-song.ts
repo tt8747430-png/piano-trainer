@@ -9,7 +9,7 @@ import {
 import { keySymbol, type Key, type Meter } from '@/shared/lib/music'
 
 /** What New song asks: a title as typed, a key and a meter. */
-export interface SongDraft {
+interface SongDraft {
   readonly title: string
   readonly key: Key
   readonly meter: Meter

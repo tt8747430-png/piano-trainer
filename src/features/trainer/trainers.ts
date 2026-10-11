@@ -90,7 +90,7 @@ export const orOwn = <T>(read: readonly T[], own: readonly T[]): readonly T[] =>
   read.length > 0 ? read : own
 
 /** Custom's chord types as the URL writes them: sizes (its own where none), then what each adds. */
-export const chordTypesOf = (view: TrainerView): ChordTypes => ({
+const chordTypesOf = (view: TrainerView): ChordTypes => ({
   sizes: orOwn(readList(view.sizes, CUSTOM_CHOICES.sizes), CUSTOM_OWN.sizes),
   suspended: readList(view.suspended, TYPE_SUSPENDED),
   added: readList(view.added, TYPE_ADDED),
@@ -270,7 +270,7 @@ export const LADDERS = {
   degrees: DEGREE_LEVELS,
   roles: ROLE_LEVELS,
 } as const
-export type Ladder = keyof typeof LADDERS
+type Ladder = keyof typeof LADDERS
 
 const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
   'build-chord': 'chords',

@@ -157,7 +157,7 @@ export const chromaticSearch = routeSearch(readChromaticSearch, CHROMATIC_DEFAUL
 export const CHROMATIC_KEPT: readonly (keyof ChromaticSearch & string)[] = ['direction', ...PLAYING]
 
 // A progression: its numerals and key, then the Player's own params; an unread line is its own.
-export const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
+const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
   ...PLAYER_DEFAULTS,
   p: PROGRESSION.numerals,
   key: C_MAJOR_PARAM,
@@ -185,7 +185,7 @@ export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = P
 
 // An exercise: the Player's own params, its swing absent for the exercise's own, then its choices,
 // each absent for the exercise's own (the page reads them against the exercise).
-export const EXERCISE_DEFAULTS: ExerciseSearch = {
+const EXERCISE_DEFAULTS: ExerciseSearch = {
   mode: PLAYER_DEFAULTS.mode,
   speedTraining: false,
   hands: PLAYER_DEFAULTS.hands,
@@ -223,5 +223,5 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
 
 // The score editor: whether its takes are open.
 export const EDIT_DEFAULTS: EditSearch = { record: false }
-export const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
+const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)

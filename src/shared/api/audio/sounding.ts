@@ -11,7 +11,7 @@ import {
 import type { PlayHandle } from './types'
 
 /** Which keys the audio output is sounding, and which plays still sound: until they end or are stopped. */
-export interface SoundingKeys {
+interface SoundingKeys {
   /** Notes the output was asked to play from `at` on the clock; returns their play. */
   add(sounds: readonly Sound[], at: number): PlayHandle
   /** Nothing sounds any more: every play stops playing. */

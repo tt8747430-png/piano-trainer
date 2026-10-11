@@ -98,14 +98,12 @@ export {
   alterationsOf,
   BUILT_SIZES,
   buildChord,
-  builtRootSpelling,
   fitParts,
   SEVENTH_DEGREE,
   SEVENTHS,
   seventhsOf,
   sizesOf,
   TRIADS,
-  triadSuffix,
   withAdded,
   withAlterations,
   type BuiltChord,
@@ -117,7 +115,7 @@ export {
   type Triad,
 } from './chord-parts'
 export { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
-export { LEFT_OUT, nameChords, type FoundChord, type LeftOut } from './chord-finder'
+export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead } from './voice-lead'
@@ -176,7 +174,6 @@ export {
   fingeringsOf,
   ownFingering,
   runFingering,
-  thumbFingering,
   type Finger,
   type Fingering,
   type Hand,

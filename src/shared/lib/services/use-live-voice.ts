@@ -4,7 +4,7 @@ import { HAND_VELOCITY } from '@/shared/lib/schedule'
 import { useServices } from './use-services'
 
 /** A hand on the keys, played through the live voice. */
-export interface HandVoice {
+interface HandVoice {
   /** A hand puts `key` down: the keys it plays (itself, or the chord it stands for) strike at `velocity`. */
   down(key: Midi, plays: readonly Midi[], velocity?: number): void
   /** A hand lets `key` go: what its press played is let go where no other press still holds it. */

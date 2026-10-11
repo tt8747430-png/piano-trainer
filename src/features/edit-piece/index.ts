@@ -1,5 +1,5 @@
 export { deleteSong } from './delete-song'
-export { chartStart, makeSong, type SongDraft } from './make-song'
+export { chartStart, makeSong } from './make-song'
 export { renameSong } from './rename-song'
 export { resetVersion } from './reset-version'
 export { saveMusic, type MusicTarget } from './save-music'

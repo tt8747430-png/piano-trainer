@@ -5,7 +5,7 @@ import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** A choice on a list page: its name, and under it what it is or why it is closed. */
-export interface SheetChoice {
+interface SheetChoice {
   readonly key: string
   readonly label: string
   readonly note?: string | undefined
@@ -15,7 +15,7 @@ export interface SheetChoice {
 }
 
 /** Choices under a name, or none. */
-export interface SheetChoiceGroup {
+interface SheetChoiceGroup {
   readonly label?: string
   readonly choices: readonly SheetChoice[]
 }

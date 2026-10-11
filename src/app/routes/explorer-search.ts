@@ -64,8 +64,8 @@ import {
 // work a thing out (the chord of the keys played, a melody note's chords, passing chords, a progression).
 
 // Chords
-export type ChordsStepId = `chords:${ChordFamily}`
-export type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
+type ChordsStepId = `chords:${ChordFamily}`
+type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = {
   root: noteParam(note('C')),
   triad: 'maj',
@@ -108,8 +108,8 @@ export const chordsSearch = routeSearch(readChordsSearch, CHORDS_DEFAULTS)
 export const CHORDS_KEPT: readonly (keyof ChordsSearch & string)[] = ['hands']
 
 // Scales
-export type ScaleStepId = `scale:${ScaleKind}`
-export type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
+type ScaleStepId = `scale:${ScaleKind}`
+type ScalesSearch = ScaleView & { readonly step?: ScaleStepId }
 export const SCALES_DEFAULTS: ScalesSearch = {
   root: noteParam(note('C')),
   kind: 'major',
@@ -182,7 +182,7 @@ export function readIntervalsSearch(raw: Raw): IntervalView {
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
 
 /** A new pattern's search: the pattern it starts from (Make your own from it), if any. */
-export interface NewPatternSearch {
+interface NewPatternSearch {
   readonly from?: PatternRef
 }
 export const validateNewPatternSearch = (input: Input<NewPatternSearch>): NewPatternSearch => {
@@ -191,14 +191,14 @@ export const validateNewPatternSearch = (input: Input<NewPatternSearch>): NewPat
 }
 
 // Chord finder: the keys chosen, each once, lowest first.
-export const FINDER_DEFAULTS: FinderView = { keys: '' }
+const FINDER_DEFAULTS: FinderView = { keys: '' }
 export function readFinderSearch(raw: Raw): FinderView {
   return { keys: keyListParam(readKeyList(raw.keys)) }
 }
 export const finderSearch = routeSearch(readFinderSearch, FINDER_DEFAULTS)
 
 // Reharmonise: a key, and a melody note spelled in it.
-export const REHARMONISE_DEFAULTS: ReharmoniseView = {
+const REHARMONISE_DEFAULTS: ReharmoniseView = {
   key: C_MAJOR_PARAM,
   note: noteParam(note('E')),
 }

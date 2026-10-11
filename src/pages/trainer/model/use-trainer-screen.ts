@@ -17,7 +17,7 @@ import {
 } from '@/features/trainer'
 
 /** A trainer's screen: the trainer, its level, what a run asks, and its record at that level. */
-export interface TrainerScreen {
+interface TrainerScreen {
   readonly trainer: Trainer
   readonly level: string
   /** What a run asks; null for My gaps with no gaps to ask. */

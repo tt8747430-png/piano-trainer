@@ -23,7 +23,6 @@ export {
   patternNeed,
   playableFigure,
   playablePattern,
-  type FigureNeed,
   type PatternFit,
 } from './model/fit'
 export {
@@ -38,12 +37,7 @@ export {
   type PatternRef,
 } from './model/own'
 export { BUILT_IN_PATTERNS, patternBook, type BookPattern, type PatternBook } from './model/book'
-export {
-  PATTERNS_STORAGE_KEY,
-  createPatternsStore,
-  type PatternsState,
-  type PatternsStore,
-} from './model/store'
+export { PATTERNS_STORAGE_KEY, createPatternsStore, type PatternsStore } from './model/store'
 export {
   PatternsStoreProvider,
   usePatternBook,
@@ -56,10 +50,9 @@ export {
   pickerShelves,
   REFERENCE_PARTS,
   referenceShelves,
-  type PatternShelf,
   type ReferencePart,
 } from './model/shelves'
-export { followsInversion, playsChord } from './model/plays-chord'
+export { followsInversion } from './model/plays-chord'
 export {
   selectFavourites,
   selectHidden,

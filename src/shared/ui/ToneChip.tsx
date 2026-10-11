@@ -3,7 +3,7 @@ import type { ChordRole } from '@/shared/lib/music'
 import { ROLE_BG } from './role-classes'
 
 /** A chip's face: a chord tone's role, or a scale's tonic or other note (the keys' own colours). */
-export type ToneFace = ChordRole | 'tonic' | 'scale'
+type ToneFace = ChordRole | 'tonic' | 'scale'
 
 const ROLE_INK = 'text-on-role'
 

@@ -94,7 +94,6 @@ export type Question =
       readonly options: readonly string[]
     }
 
-export type Mode = Question['mode']
 export type ChoiceQuestion = Extract<Question, { readonly options: readonly unknown[] }>
 
 /** Build chord and Build scale: keys are chosen, then checked. */
@@ -166,7 +165,7 @@ export const startRound = (question: Question): RoundState => ({
 })
 
 /** What a built chord or scale must hold: its notes, any octave. */
-export const tonesOf = (question: Extract<Question, { mode: 'build-chord' | 'build-scale' }>) =>
+const tonesOf = (question: Extract<Question, { mode: 'build-chord' | 'build-scale' }>) =>
   question.mode === 'build-scale' ? question.notes : question.tones
 
 function checkKeys(

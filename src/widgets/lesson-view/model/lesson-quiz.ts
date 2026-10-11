@@ -57,7 +57,7 @@ export type QuizState = {
   readonly stage: 'choosing' | 'right' | 'wrong' | 'answer'
 } | null
 
-export type QuizEvent =
+type QuizEvent =
   | { readonly type: 'open'; readonly id: string }
   | { readonly type: 'toggle'; readonly key: Midi }
   | { readonly type: 'check'; readonly right: boolean }

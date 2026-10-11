@@ -3,7 +3,7 @@ import { SCALE_KINDS, type ScaleKind } from './scale'
 
 /** Something the quiz rates: one chord quality or one scale kind. */
 export type SkillId = `chord:${ChordQuality}` | `scale:${ScaleKind}`
-export type Skill =
+type Skill =
   | { readonly kind: 'chord'; readonly quality: ChordQuality }
   | { readonly kind: 'scale'; readonly scale: ScaleKind }
 

@@ -7,7 +7,7 @@ import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
 import { type ShownKeys, unmarked } from '@/shared/ui'
 
 /** What a pattern block plays, and the keys it shows while it does. */
-export interface PatternOpening {
+interface PatternOpening {
   readonly sounds: readonly Sound[]
   readonly shown: ShownKeys
 }

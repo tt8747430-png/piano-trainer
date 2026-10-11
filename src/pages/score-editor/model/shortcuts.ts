@@ -2,7 +2,7 @@ import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/sco
 import type { KeyPress } from '@/shared/lib/shortcuts'
 
 /** A shortcut: an editor action, or the Chord field to type in. */
-export type Shortcut = EditorAction | { readonly type: 'chordField' }
+type Shortcut = EditorAction | { readonly type: 'chordField' }
 
 /** The value keys, by physical key so every layout chooses the same: 1 a whole note to 5 a sixteenth. */
 const VALUES: Readonly<Record<string, ChosenValue['value']>> = {

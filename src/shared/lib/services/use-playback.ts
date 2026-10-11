@@ -5,7 +5,7 @@ import { usePlay } from './use-play'
 import { useServices } from './use-services'
 
 /** A component's Play buttons, one id each, each turning into Stop while its sound plays. */
-export interface Playback<Id extends string | number> {
+interface Playback<Id extends string | number> {
   /** The id last played, while it plays: until its last note ends, it is stopped, or another sound cuts it off. */
   readonly playing: Id | null
   /**

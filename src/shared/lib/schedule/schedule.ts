@@ -42,7 +42,7 @@ export interface ClickSound {
 }
 export type Sound = NoteSound | ClickSound
 
-export interface ScheduleOptions {
+interface ScheduleOptions {
   /** Beats per minute. */
   readonly tempo: number
   readonly hands: Audible

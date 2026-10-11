@@ -4,7 +4,7 @@ import { pitchText } from './music'
 import { beatsText } from './write-chart'
 
 /** A bar's place on the timeline. */
-export interface BarSpan {
+interface BarSpan {
   readonly startTick: Tick
   readonly ticks: Tick
 }

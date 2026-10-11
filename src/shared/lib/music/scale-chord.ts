@@ -65,7 +65,7 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
  * 3rd leaves its natural 11th out (the Chord builder's `13`), so a stack that keeps it says so:
  * `G13(11)`.
  */
-export function stackSuffix(tones: readonly Tone[]): string {
+function stackSuffix(tones: readonly Tone[]): string {
   const semitones = tones.map((tone) => tone.semitones)
   if (tones.length === 3) return triadName(semitones.slice(1, 3)).suffix
   const seventh = seventhName(semitones.slice(1, 4))
@@ -157,7 +157,7 @@ export function scaleChordAt(
 }
 
 /** A chord a key borrows from a parallel scale, its numeral marked by how its root differs from the key's own. */
-export interface BorrowedChord extends ScaleChord {
+interface BorrowedChord extends ScaleChord {
   readonly from: ScaleKind
 }
 

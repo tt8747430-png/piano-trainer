@@ -1,7 +1,6 @@
 export { arpeggioExercise } from './arpeggio'
 export {
   arpeggiosFromTheThird,
-  CHORD_TONE_AT,
   dominantScale,
   dropTwoSevenths,
   sixthDiminishedChords,

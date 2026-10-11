@@ -9,7 +9,7 @@ export interface ScrollMetrics {
 }
 
 /** The stretch in view, in fractions (0–1) of the whole keyboard. */
-export interface ViewFrame {
+interface ViewFrame {
   readonly left: number
   readonly width: number
 }

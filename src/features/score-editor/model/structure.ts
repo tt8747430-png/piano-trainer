@@ -24,7 +24,7 @@ export function slotsOf(draft: Draft): Slot[] {
 }
 
 /** The sections the slots make: a heading starts a section, a line start a line. */
-export function sectionsOf(slots: readonly Slot[]): DraftSection[] {
+function sectionsOf(slots: readonly Slot[]): DraftSection[] {
   const sections: { heading: Heading; lines: DraftBar[][] }[] = []
   for (const slot of slots) {
     const current = sections.at(-1)
@@ -48,7 +48,7 @@ export const withSlots = (draft: Draft, slots: readonly Slot[]): Draft => ({
  * Notes after the timeline is cut at `at`: [at, at + removed) taken out and `inserted` ticks put in.
  * A note starting in what is taken goes; one held into `at` stops there; later ones move.
  */
-export function spliceNotes(
+function spliceNotes(
   notes: readonly DraftNote[],
   at: Tick,
   removed: Tick,

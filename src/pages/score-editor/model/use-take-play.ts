@@ -5,7 +5,7 @@ import { PLAY_DELAY, type PlayHandle } from '@/shared/api/audio'
 import { useServices } from '@/shared/lib/services'
 
 /** A take heard on its page: from a bar, as the Touch hears it, and where it is while it plays. */
-export interface TakePlay {
+interface TakePlay {
   /** While it plays: when on the audio clock it started, and from where in the take (ms). */
   readonly playing: { readonly at: number; readonly fromMs: number } | null
   playFrom(bar: number): void

@@ -1,7 +1,7 @@
 import type { Entry } from './types'
 
 /** The place an entry's page is on. */
-export type Shelf = 'songs' | 'practice'
+type Shelf = 'songs' | 'practice'
 
 /** Songs holds songs and listings; studies are practised (roadmap §3.9, ADR 0012). */
 export function shelfOf(kind: Entry['kind']): Shelf {

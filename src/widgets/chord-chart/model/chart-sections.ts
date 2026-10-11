@@ -14,7 +14,7 @@ export function chartSections(performance: Performance): number[][][] {
 }
 
 /** What a bar's button shows: its chords' symbols, the methods they name, and a short bar's time signature (a pickup's). */
-export interface ChartBar {
+interface ChartBar {
   readonly symbols: readonly string[]
   readonly methods: readonly MethodCode[]
   readonly signature: string | null

@@ -32,7 +32,7 @@ export function circleKey(pc: PitchClass, minor: boolean): Key {
  * Where one of a key's chords sits on the circle, with its numeral and its root as the key spells it:
  * D♭ major's IV is G♭, on the place the circle itself calls F♯ major.
  */
-export interface CircleFunction {
+interface CircleFunction {
   readonly place: number
   readonly ring: CircleRing
   readonly numeral: string

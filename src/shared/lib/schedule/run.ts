@@ -25,7 +25,7 @@ export interface RunWay {
   readonly fingers?: Readonly<Record<Hand, readonly Finger[]>>
 }
 
-export interface RunOptions {
+interface RunOptions {
   readonly rhythm: PracticeRhythm
   readonly hands: Hands
   /** The key it is written in. */

@@ -17,7 +17,7 @@ const LOWER_OCTAVE = 4
 const HALF_NOTE = 2 * TICKS_PER_BEAT
 
 /** An interval over a root: its two keys, as the keys show them, and as a staff writes them. */
-export interface IntervalExample {
+interface IntervalExample {
   readonly low: Midi
   readonly high: Midi
   readonly shown: ShownKeys

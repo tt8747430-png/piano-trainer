@@ -11,7 +11,7 @@ import {
 } from '@/shared/lib/music'
 
 /** What the live score names over a chord played. */
-export type LiveName =
+type LiveName =
   | { readonly kind: 'note'; readonly note: SpelledNote }
   | { readonly kind: 'interval'; readonly interval: ReferenceInterval }
   | { readonly kind: 'chord'; readonly found: FoundChord }

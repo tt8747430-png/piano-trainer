@@ -6,7 +6,7 @@ import type { PathStep } from '../model/types'
 
 export type StepKind = 'chords' | 'scale' | 'study' | 'song'
 
-export interface StepTitle {
+interface StepTitle {
   readonly primary: string
   readonly secondary?: string
   readonly kind: StepKind

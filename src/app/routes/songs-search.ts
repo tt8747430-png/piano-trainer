@@ -7,7 +7,7 @@ const isCollection = (value: unknown): value is SongsShelf | 'all' =>
   value === 'all' || value === 'mine' || isSongCollectionId(value)
 
 export const SONGS_DEFAULTS: SongsFilter = { q: '', collection: 'all' }
-export function readSongsSearch(raw: Raw): SongsFilter {
+function readSongsSearch(raw: Raw): SongsFilter {
   return {
     q: readText(raw.q, SONGS_DEFAULTS.q),
     collection: valueOr(isCollection, raw.collection, SONGS_DEFAULTS.collection),

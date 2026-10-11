@@ -11,7 +11,7 @@ export interface Media {
   pause(): void
 }
 
-export interface RecordingPlayer {
+interface RecordingPlayer {
   /** Makes the recording's element, so a play can start it at once. */
   load(src: string): void
   /** Queues a play; it starts when the clock reaches its `at`. */

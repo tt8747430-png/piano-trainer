@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 
 /** The key of a screen's one Play. */
-export const PLAY_KEY: Combo = { key: 'Enter' }
+const PLAY_KEY: Combo = { key: 'Enter' }
 
 /**
  * Enter plays a screen's one Play, its honey button, or stops it: `play` is the button's own tap.

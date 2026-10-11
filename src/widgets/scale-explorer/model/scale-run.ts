@@ -17,7 +17,7 @@ import { scaleRun } from '@/shared/lib/schedule'
 import type { ScaleView } from './scale-view'
 
 /** Scale view's run: its keys from the start note, how it is fingered, and the run as it plays and is written. */
-export interface ScaleRun {
+interface ScaleRun {
   readonly placed: readonly PlacedTone[]
   /** The fingering it takes, its start's own, and the ones it may take. */
   readonly fingering: Fingering

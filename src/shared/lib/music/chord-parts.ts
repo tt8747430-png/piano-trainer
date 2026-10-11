@@ -87,7 +87,7 @@ const triadSemitones = (triad: Triad): readonly number[] =>
   TRIAD_INTERVALS[triad].slice(1).map((name) => INTERVALS[name].semitones)
 
 /** A triad's own suffix: '' for major, `m`, `°`, `+`, `sus2`, `sus4`. */
-export const triadSuffix = (triad: Triad): string => triadName(triadSemitones(triad)).suffix
+const triadSuffix = (triad: Triad): string => triadName(triadSemitones(triad)).suffix
 
 /** How each 7th is written as a degree, as the keys label it: ♭7, 7, 𝄫7. */
 export const SEVENTH_DEGREE: Readonly<Record<Seventh, string>> = {

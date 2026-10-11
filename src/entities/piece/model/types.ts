@@ -52,16 +52,8 @@ export interface Source {
   readonly page?: number
 }
 
-export const CREDIT_ROLES = [
-  'authors',
-  'words-and-music',
-  'words',
-  'music',
-  'russian-text',
-  'harmony',
-  'accompaniment',
-] as const
-export type CreditRole = (typeof CREDIT_ROLES)[number]
+export type CreditRole =
+  'authors' | 'words-and-music' | 'words' | 'music' | 'russian-text' | 'harmony' | 'accompaniment'
 /** Names stay as printed; the role is shown through an interface string in the learner's language. */
 export type Credit =
   { readonly role: CreditRole; readonly names: string } | { readonly role: 'unknown' }

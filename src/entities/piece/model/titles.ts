@@ -1,6 +1,6 @@
 import type { Locale } from '@/shared/i18n'
 
-export interface EntryTitles {
+interface EntryTitles {
   readonly primary: string
   /** The printed title, under an English one. */
   readonly secondary?: string

@@ -10,7 +10,7 @@ import {
 } from '@/shared/lib/schedule'
 
 /** The keys a hand plays, sounding while held, under the pedals (spec 2026-10-09 §2.1). */
-export interface LiveVoice {
+interface LiveVoice {
   press(key: Midi, velocity: number): void
   release(key: Midi): void
   pedal(pedal: PedalKind, down: boolean): void
@@ -18,7 +18,7 @@ export interface LiveVoice {
 }
 
 /** How an adapter sounds the live voice: `strike` a key at a gain, `silence` it; `changed` after each change. */
-export interface LiveRender {
+interface LiveRender {
   strike(key: Midi, gain: number): void
   silence(key: Midi): void
   changed(damper: Damper): void

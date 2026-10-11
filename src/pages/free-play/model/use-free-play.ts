@@ -15,7 +15,7 @@ import { EMPTY_TRAIL, strike, type Trail } from '@/widgets/live-score'
 import type { FreePlayView } from './free-play-view'
 
 /** Free play's keys (spec 2026-10-09 §5): Play's trail, or Mark's diagram, and Clear. */
-export interface FreePlay {
+interface FreePlay {
   /** What the live score writes: Play's trail, or Mark's marked keys as one chord. */
   readonly chords: readonly (readonly Midi[])[]
   /** Mark's marks, as the URL holds them. */

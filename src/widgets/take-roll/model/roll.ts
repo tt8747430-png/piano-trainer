@@ -6,7 +6,7 @@ import type { PedalKind } from '@/shared/lib/schedule'
 export type Shade = 1 | 2 | 3 | 4
 
 /** A key's note on its lane: from its onset for as long as it was held (ms). */
-export interface RollNote {
+interface RollNote {
   readonly midi: Midi
   readonly at: number
   readonly held: number
@@ -14,13 +14,13 @@ export interface RollNote {
 }
 
 /** A pedal held down, from `down` to `up` (ms). */
-export interface RollPress {
+interface RollPress {
   readonly down: number
   readonly up: number
 }
 
 /** A take laid out as a piano roll (spec 2026-10-09 §4.3), in milliseconds from its downbeat. */
-export interface Roll {
+interface Roll {
   /** The lanes, highest key first: the take's keys, a key spare above and below (C4–C5 for none). */
   readonly lanes: readonly Midi[]
   /** Whole bars. */

@@ -22,7 +22,7 @@ export type RecorderProgress =
   | { readonly stage: 'counting'; readonly beat: number }
   | { readonly stage: 'recording'; readonly bar: number; readonly seconds: number }
 
-export interface RecorderEvents {
+interface RecorderEvents {
   /** Where the take is, each time it changes. */
   readonly progress: (progress: RecorderProgress) => void
   /** Once, when it stops: what was played from the downbeat, or null where it stopped in the count-in. */
