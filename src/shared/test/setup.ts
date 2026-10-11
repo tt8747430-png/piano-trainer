@@ -8,6 +8,17 @@ import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
 import { stubResizeObserver } from './resize'
 
+// jsdom lays nothing out and has no taps to keep waiting: a score is engraved at once, so a test
+// finds it drawn as soon as its font is in. engrave.test.ts tests the steps themselves.
+vi.mock('@/shared/ui/score/engrave', async (importActual) => {
+  const actual = await importActual<typeof import('@/shared/ui/score/engrave')>()
+  return {
+    ...actual,
+    engraveInSteps: (...[score, host, options]: Parameters<typeof actual.engraveInSteps>) =>
+      Promise.resolve(actual.engrave(score, host, options)),
+  }
+})
+
 beforeEach(() => {
   stubMatchMedia({ dark: false })
   stubServiceWorker({ waiting: false })

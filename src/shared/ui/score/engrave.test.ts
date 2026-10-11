@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { midi, note, type Finger } from '@/shared/lib/music'
 import { notate, type TimedNote } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
@@ -328,5 +328,51 @@ describe('engrave', () => {
       fill: natural.width * 4,
     })
     expect(far.width).toBe(natural.width)
+  })
+})
+
+describe('engraveInSteps', async () => {
+  // The test setup engraves at once; these are the steps themselves.
+  const { engraveInSteps } = await vi.importActual<typeof import('./engrave')>('./engrave')
+  const long = notate({
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    bars: Array.from({ length: 20 }, (_, i) => ({ startTick: i * 48, beats: 4 })),
+    notes: Array.from({ length: 20 }, (_, i) => n(60, 'C', i * 48, 48)),
+    chords: [],
+  })
+  const options = { scale: 1, fingers: false, names: false }
+  const hostWith = (old: string) => {
+    const host = document.createElement('div')
+    const drawing = document.createElement('p')
+    drawing.textContent = old
+    host.append(drawing)
+    document.body.append(host)
+    onTestFinished(() => host.remove())
+    return host
+  }
+
+  it('engraves what engrave does, keeping the old drawing until the new one is whole', async () => {
+    const host = hostWith('old')
+    const engraving = engraveInSteps(long, host, options, {
+      signal: new AbortController().signal,
+      budget: 0,
+    })
+    expect(host).toHaveTextContent('old')
+    const layout = await engraving
+    expect(host).not.toHaveTextContent('old')
+    expect(host.children).toHaveLength(1)
+    expect(host.firstElementChild?.tagName.toLowerCase()).toBe('svg')
+    expect(layout).toEqual(engrave(long, document.createElement('div'), options))
+  })
+
+  it('stops when told, leaving the old drawing as it was', async () => {
+    const host = hostWith('old')
+    const stopped = new AbortController()
+    const engraving = engraveInSteps(long, host, options, { signal: stopped.signal, budget: 0 })
+    stopped.abort()
+    expect(await engraving).toBeNull()
+    expect(host.children).toHaveLength(1)
+    expect(host).toHaveTextContent('old')
   })
 })

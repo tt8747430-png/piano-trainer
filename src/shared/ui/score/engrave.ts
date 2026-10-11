@@ -341,48 +341,96 @@ function spread(built: BuiltMeasure[], width: number | undefined): BuiltMeasure[
   })
 }
 
+export interface EngraveOptions {
+  readonly scale: number
+  readonly fingers: boolean
+  readonly names: boolean
+  readonly staff?: StaffId | undefined
+  /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
+  readonly timeBefore?: TimeSignature | undefined
+  /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
+  readonly fill?: number | undefined
+}
+
+/** How many measures are built, or drawn, between two chances for the browser to do something else. */
+const MEASURES_A_STEP = 8
+
 /**
  * Engraves a score into `host` as one system of measures left to right (spec §2.5), on the grand
  * staff or on `staff` alone, and says where everything is, in CSS pixels at `scale`.
  */
-export function engrave(
+export function engrave(score: Score, host: HTMLDivElement, options: EngraveOptions): ScoreLayout {
+  const { steps } = startEngraving(score, host, options)
+  for (;;) {
+    const step = steps.next()
+    if (step.done) return step.value
+  }
+}
+
+/**
+ * `engrave` a step at a time, the browser given its turn between steps that took `budget` ms, so a
+ * long score never holds a tap back. Stopped by `signal`, it leaves what was there and says null; the
+ * score appears whole once it is all drawn.
+ */
+export async function engraveInSteps(
   score: Score,
   host: HTMLDivElement,
-  {
-    scale,
-    fingers,
-    names,
-    staff,
-    timeBefore,
-    fill,
-  }: {
-    scale: number
-    fingers: boolean
-    names: boolean
-    staff?: StaffId | undefined
-    /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
-    timeBefore?: TimeSignature | undefined
-    /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
-    fill?: number | undefined
-  },
-): ScoreLayout {
+  options: EngraveOptions,
+  { signal, budget = 12 }: { signal: AbortSignal; budget?: number },
+): Promise<ScoreLayout | null> {
+  const { steps, stop } = startEngraving(score, host, options)
+  let since = performance.now()
+  for (;;) {
+    if (signal.aborted) {
+      stop()
+      return null
+    }
+    const step = steps.next()
+    if (step.done) return step.value
+    if (performance.now() - since >= budget) {
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      since = performance.now()
+    }
+  }
+}
+
+/**
+ * The engraving, a few measures a step. It draws into a sheet of its own inside `host`, unseen, and
+ * puts the drawing in place of what was there only once it is done; `stop` takes the sheet away, the
+ * old drawing left as it was.
+ */
+function startEngraving(score: Score, host: HTMLDivElement, options: EngraveOptions) {
   setUpVexFlow()
-  host.replaceChildren()
+  // Laid out though unseen: VexFlow measures its text in the drawing.
+  const sheet = host.ownerDocument.createElement('div')
+  sheet.style.cssText = 'position:absolute;inset:0;visibility:hidden'
+  host.append(sheet)
+  return { steps: drawn(score, host, sheet, options), stop: () => sheet.remove() }
+}
+
+function* drawn(
+  score: Score,
+  host: HTMLDivElement,
+  sheet: HTMLDivElement,
+  { scale, fingers, names, staff, timeBefore, fill }: EngraveOptions,
+): Generator<void, ScoreLayout, void> {
   const shown: readonly StaffId[] = staff ? [staff] : STAVES
-  const built = spread(
-    score.measures.map((measure, index) =>
+  const natural: BuiltMeasure[] = []
+  for (const [index, measure] of score.measures.entries()) {
+    natural.push(
       buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
         fingers,
         names,
         scale,
         shown,
       }),
-    ),
-    fill === undefined ? undefined : fill / scale,
-  )
+    )
+    if ((index + 1) % MEASURES_A_STEP === 0) yield
+  }
+  const built = spread(natural, fill === undefined ? undefined : fill / scale)
   const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
   const places = placesOf(built, staff)
-  const renderer = new Renderer(host, Renderer.Backends.SVG)
+  const renderer = new Renderer(sheet, Renderer.Backends.SVG)
   renderer.resize(width * scale, places.height * scale)
   const context = renderer.getContext()
   context.scale(scale, scale)
@@ -399,7 +447,8 @@ export function engrave(
   let staffBottom = 0
   const staves: { -readonly [S in StaffId]?: { top: number; bottom: number } } = {}
   let x = 0
-  for (const measure of built) {
+  for (const [index, measure] of built.entries()) {
+    if (index > 0 && index % MEASURES_A_STEP === 0) yield
     const drawn = shown.map((on) => ({
       staff: on,
       stave: staveAt(on, { x, y: places.y[on], width: measure.width }, measure, score.key),
@@ -448,6 +497,7 @@ export function engrave(
     x += measure.width
   }
   drawTies(context, built, score.meter, shown)
+  host.replaceChildren(...sheet.childNodes)
 
   return {
     width: width * scale,

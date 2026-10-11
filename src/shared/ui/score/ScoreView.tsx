@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Tick, TimeSignature } from '@/shared/lib/music'
 import type { Score, StaffId } from '@/shared/lib/notation'
-import { engrave, type ScoreLayout } from './engrave'
+import { engraveInSteps, type ScoreLayout } from './engrave'
 import { loadMusicFonts } from './music-font'
 import { staffHeight } from './size'
 import './score.css'
@@ -52,35 +52,38 @@ export function ScoreView({
   const beforeCount = timeBefore?.count
   const beforeUnit = timeBefore?.unit
 
-  // VexFlow draws into the DOM, outside React; the font must be in before it measures anything.
+  // VexFlow draws into the DOM, outside React, a few measures at a time; the font must be in before
+  // it measures anything. What was drawn stays until the new drawing is whole.
   useEffect(() => {
-    let current = true
     const element = host.current
     if (!element) return
+    const stopped = new AbortController()
     loadMusicFonts()
-      .then(() => {
-        if (current)
-          setEngraving({
-            status: 'ready',
-            layout: engrave(score, element, {
-              scale,
-              fingers,
-              names,
-              staff,
-              timeBefore:
-                beforeCount === undefined || beforeUnit === undefined
-                  ? undefined
-                  : { count: beforeCount, unit: beforeUnit },
-              fill,
-            }),
-          })
+      .then(() =>
+        engraveInSteps(
+          score,
+          element,
+          {
+            scale,
+            fingers,
+            names,
+            staff,
+            timeBefore:
+              beforeCount === undefined || beforeUnit === undefined
+                ? undefined
+                : { count: beforeCount, unit: beforeUnit },
+            fill,
+          },
+          { signal: stopped.signal },
+        ),
+      )
+      .then((layout) => {
+        if (layout && !stopped.signal.aborted) setEngraving({ status: 'ready', layout })
       })
       .catch(() => {
-        if (current) setEngraving({ status: 'error' })
+        if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
-    return () => {
-      current = false
-    }
+    return () => stopped.abort()
   }, [score, scale, fingers, names, staff, beforeCount, beforeUnit, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
