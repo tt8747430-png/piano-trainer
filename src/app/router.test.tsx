@@ -119,7 +119,8 @@ describe('the app shell', () => {
     const user = userEvent.setup()
     await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Chords/ }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toHaveFocus()
+    const heading = await screen.findByRole('heading', { level: 1, name: 'Chords' })
+    await waitFor(() => expect(heading).toHaveFocus())
   })
 
   it('shows the theme another tab chose', async () => {
