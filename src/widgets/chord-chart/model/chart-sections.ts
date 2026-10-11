@@ -1,6 +1,6 @@
 import { isMethodCode, type MethodCode } from '@/entities/pattern'
 import type { Performance } from '@/shared/lib/arrangement'
-import { beatsPerBar, timeSignature, timeSignatureText } from '@/shared/lib/music'
+import { beatsPerBar, beatsToTicks, timeSignature, timeSignatureText } from '@/shared/lib/music'
 
 /** The performance's bars (their indexes) by section, then line by line as the chart writes them. */
 export function chartSections(performance: Performance): number[][][] {
@@ -29,7 +29,7 @@ export function chartBar(performance: Performance, index: number): ChartBar | nu
     symbols: chords.map((chord) => chord.symbol),
     methods: [...new Set(chords.flatMap((chord) => chord.method ?? []))].filter(isMethodCode),
     signature:
-      bar.beats === beatsPerBar(performance.meter)
+      beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(performance.meter))
         ? null
         : timeSignatureText(timeSignature(bar.beats, performance.meter)),
   }

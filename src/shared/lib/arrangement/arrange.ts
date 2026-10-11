@@ -101,7 +101,7 @@ function layOut(chart: Chart): Layout {
   const lineEnds = new Set<number>()
   const written = chart.sections.flatMap((section) => section.lines.flat())
   // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
-  const pickup = beatsBefore(written, 0, chart.meter) * TICKS_PER_BEAT
+  const pickup = beatsToTicks(beatsBefore(written, 0, chart.meter))
   let tick = 0
   chart.sections.forEach((section, sectionIndex) =>
     section.lines.forEach((line, lineIndex) =>

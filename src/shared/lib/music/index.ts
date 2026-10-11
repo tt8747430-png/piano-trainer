@@ -66,6 +66,7 @@ export {
   tonicSpelling,
   transposeNote,
   writtenKey,
+  isWrittenKey,
   writtenKeyAccidentals,
   type Key,
   type KeyParam,

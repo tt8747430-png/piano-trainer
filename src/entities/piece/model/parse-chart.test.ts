@@ -27,6 +27,13 @@ describe('parseChart', () => {
     expect(read(['C Dm G-C'])).toEqual([['C 4'], ['Dm 4'], ['G 2', 'C 2']])
   })
 
+  it('makes a whole bar of chords sharing it in thirds of a beat, no pickup', () => {
+    const chart = parseChart(testSong(['C-Dm-Em-F-G-Am C']))
+    expect(chart.sections[0]?.lines[0]?.[0]?.beats).toBe(4)
+    const compound = parseChart(testSong(['C-Dm-Em-F-G-Am C'], { meter: '6/8' }))
+    expect(compound.sections[0]?.lines[0]?.[0]?.beats).toBe(2)
+  })
+
   it('reads given beats', () => {
     const chart = parseChart(testSong(['C@1-C/E@1-Dsus4@1-D/F#@1']))
     const bar = chart.sections[0]?.lines[0]?.[0]

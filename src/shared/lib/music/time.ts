@@ -32,7 +32,10 @@ export function beatsBefore(
 ): number {
   const bar = bars[index]
   const full = beatsPerBar(meter)
-  return index === 0 && bar !== undefined && bar.beats < full ? full - bar.beats : 0
+  // In ticks: a bar's beats summed as fractions is a pickup only when it is a tick short.
+  return index === 0 && bar !== undefined && beatsToTicks(bar.beats) < beatsToTicks(full)
+    ? full - bar.beats
+    : 0
 }
 
 /** A meter in eighths whose beat is a dotted quarter. */

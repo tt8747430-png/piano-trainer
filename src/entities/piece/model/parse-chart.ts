@@ -62,7 +62,9 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
     beats: beats ?? share,
     ...(method ? { method } : {}),
   }))
-  return { chords, beats: chords.reduce((sum, chord) => sum + chord.beats, 0) }
+  // Summed in ticks: six chords sharing 4/4 make 4 beats, never 3.9999999999999996 (a pickup).
+  const ticks = chords.reduce((sum, chord) => sum + beatsToTicks(chord.beats), 0)
+  return { chords, beats: ticks / TICKS_PER_BEAT }
 }
 
 /** The hands a bar writes, from what was read for every bar; none when it writes neither. */

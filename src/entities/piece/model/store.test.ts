@@ -37,7 +37,7 @@ describe('createPiecesStore', () => {
     expect(restored(saved)).toEqual(saved)
   })
 
-  it('drops music that does not parse, or names an unknown pattern, meter or tempo', () => {
+  it('drops music that does not parse, or names an unknown pattern, meter, tempo or a key no signature writes', () => {
     const versions = {
       bz1: MUSIC,
       bz2: { ...MUSIC, sections: [{ kind: 'verse', lines: ['Qm'] }] },
@@ -47,6 +47,7 @@ describe('createPiecesStore', () => {
       bz8: { ...MUSIC, meter: '5/4' },
       bz9: { ...MUSIC, tempo: 300 },
       bz10: { ...MUSIC, key: 'H' },
+      bz11: { ...MUSIC, key: 'A#' },
       bz12: { ...MUSIC, sections: [{ kind: 'bridge', lines: ['C'] }] },
       bz13: 'Bm A G',
     }

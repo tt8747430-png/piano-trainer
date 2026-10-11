@@ -1,7 +1,7 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { isMeter, parseKey, type Tick } from '@/shared/lib/music'
+import { isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
 import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
@@ -47,8 +47,12 @@ export const createPiecesStore = (saving: SavingOptions = {}): PiecesStore =>
   )
 
 const KEY_TEXT = /^[A-G][#b]?m?$/
-const isKeyText = (value: unknown): value is KeyText =>
-  typeof value === 'string' && KEY_TEXT.test(value) && parseKey(value) !== null
+/** A key as a song's text names it, one a signature writes (no A# major, with its ten sharps). */
+const isKeyText = (value: unknown): value is KeyText => {
+  if (typeof value !== 'string' || !KEY_TEXT.test(value)) return false
+  const key = parseKey(value)
+  return key !== null && isWrittenKey(key)
+}
 const isSectionKind = isOneOf(SECTION_KINDS)
 const isText = (value: unknown): value is string => typeof value === 'string'
 const isTempo = (value: unknown): value is number =>

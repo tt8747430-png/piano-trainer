@@ -51,7 +51,7 @@ export const keyPrefersSharps = (key: Key): boolean => keySignature(key) > 0
 const MOST_IN_SIGNATURE = 7
 
 /** Whether a signature writes the key: one of the 15 major and 15 minor keys. */
-const isWrittenKey = (key: Key): boolean => Math.abs(keySignature(key)) <= MOST_IN_SIGNATURE
+export const isWrittenKey = (key: Key): boolean => Math.abs(keySignature(key)) <= MOST_IN_SIGNATURE
 
 /** The accidentals that make a written key on a letter, in a chooser's order: D♭ major, never D♭ minor. */
 export const writtenKeyAccidentals = (letter: Letter, minor: boolean): RootAccidental[] =>
