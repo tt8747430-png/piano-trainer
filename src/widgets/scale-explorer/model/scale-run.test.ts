@@ -6,6 +6,13 @@ const C = noteParam(note('C'))
 const view = { root: C, kind: 'major', start: 1, rhythm: 'even', hands: 'rh' } as const
 
 describe('scaleRunOf', () => {
+  it('holds the run coming down, melodic minor’s natural 6th and 7th to mark', () => {
+    const run = scaleRunOf({ ...view, root: noteParam(note('A')), kind: 'melodic' })
+    const pcs = (tones: readonly { midi: number }[]) => tones.map((tone) => tone.midi % 12)
+    expect(pcs(run.placed)).toContain(6)
+    expect(pcs(run.down.placed)).toEqual(expect.arrayContaining([5, 7]))
+  })
+
   it('fingers a taught scale from its tonic as taught', () => {
     const run = scaleRunOf(view)
     expect(run.own).toBe('scale')

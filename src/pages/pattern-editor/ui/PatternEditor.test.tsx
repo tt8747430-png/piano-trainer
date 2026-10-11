@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -101,6 +101,19 @@ describe('The pattern editor', () => {
       params: { patternRef: 'M1' },
     })
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
+  })
+
+  it('keeps its changes when another tab deletes the pattern, saving them as a new one', async () => {
+    const user = userEvent.setup()
+    const { router, patternsStore } = await renderApp('/practice/patterns/new')
+    await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Monday')
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(await screen.findByRole('link', { name: 'Edit' }))
+    await screen.findByRole('heading', { level: 1, name: 'Edit pattern' })
+    act(() => patternsStore.setState({ own: [] }))
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/patterns/my-2'))
+    expect(patternsStore.getState().own.map((pattern) => pattern.name)).toEqual(['Monday'])
   })
 
   it('cancels back where it was opened from', async () => {

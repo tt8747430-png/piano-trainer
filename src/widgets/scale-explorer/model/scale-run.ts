@@ -24,6 +24,11 @@ interface ScaleRun {
   readonly own: Fingering
   readonly fingerings: readonly Fingering[]
   readonly fingers: Readonly<Record<Hand, readonly Finger[]>>
+  /** The run coming down, where its kind comes down otherwise (melodic minor's natural 6th and 7th). */
+  readonly down: {
+    readonly placed: readonly PlacedTone[]
+    readonly fingers: Readonly<Record<Hand, readonly Finger[]>>
+  }
   readonly music: TimedMusic
 }
 
@@ -47,19 +52,21 @@ export function scaleRunOf(
   const fingers = fingered(view.kind, placed)
   const downKind = kindComingDown(view.kind)
   const downNotes = placeScale(root, downKind, start)
+  const down = { placed: downNotes, fingers: fingered(downKind, downNotes) }
   return {
     placed,
     fingering,
     own,
     fingerings: fingeringsOf(view.kind, start),
     fingers,
+    down,
     music: scaleRun(
       { notes: placed, fingers },
       {
         rhythm: view.rhythm,
         hands: view.hands,
         key: scaleKey(root, view.kind),
-        down: { notes: downNotes, fingers: fingered(downKind, downNotes) },
+        down: { notes: down.placed, fingers: down.fingers },
       },
     ),
   }

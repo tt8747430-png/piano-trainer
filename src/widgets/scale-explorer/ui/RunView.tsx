@@ -40,6 +40,7 @@ export function RunView({
     () => scaleRunOf({ root, kind, start, fingering, rhythm, hands }),
     [root, kind, start, fingering, rhythm, hands],
   )
+  const hand = hands === 'lh' ? 'lh' : 'rh'
   const tonic = noteFromParam(root)
   const tones = spellScale(tonic, kind)
   return (
@@ -48,7 +49,11 @@ export function RunView({
         <ExplorerKeyboard
           shown={{
             keys: run.music.notes.map((n) => n.midi),
-            marks: scaleShown(run.placed, run.fingers[hands === 'lh' ? 'lh' : 'rh']).marks,
+            // The keys coming down marked too: melodic minor's natural 6th and 7th are no blank keys.
+            marks: new Map([
+              ...scaleShown(run.down.placed, run.down.fingers[hand]).marks,
+              ...scaleShown(run.placed, run.fingers[hand]).marks,
+            ]),
           }}
         />
       }
