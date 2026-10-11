@@ -57,7 +57,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
             const id = `${s}.${b}`
             if (block.kind !== 'quiz') return <LessonBlock key={id} block={block} onShow={show} />
             const open = quiz?.id === id ? quiz : null
-            const answerKeys = answers.get(id) ?? NO_KEYS
+            const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
             return (
               <QuizBlock
                 key={id}

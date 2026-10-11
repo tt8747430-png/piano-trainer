@@ -9,10 +9,10 @@ describe('placeExample', () => {
     expect(example.marks.get(midi(63))).toEqual({ tone: '3rd', label: '♭3' })
   })
 
-  it('puts a slash chord’s bass in the octave below, unmarked when it is no chord tone', () => {
+  it('puts a slash chord’s bass in the octave below, named by itself when it is no chord tone', () => {
     const example = placeExample('C/D')
     expect(example.keys).toEqual([50, 60, 64, 67])
-    expect(example.marks.has(midi(50))).toBe(false)
+    expect(example.marks.get(midi(50))).toEqual({ tone: 'scale', label: 'D' })
   })
 
   it('plays a slash chord over a chord tone as that inversion, from the bass nearest middle C', () => {

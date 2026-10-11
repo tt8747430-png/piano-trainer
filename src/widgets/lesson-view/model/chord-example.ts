@@ -2,6 +2,7 @@ import { chordShown } from '@/features/play-example'
 import {
   midi,
   MIDDLE_C,
+  noteName,
   parseChordSymbol,
   pitchClassOf,
   placeChord,
@@ -32,5 +33,10 @@ export function placeExample(symbol: string): ShownKeys {
   const rh = placed.map((key) => ({ tone: key.tone, midi: midi(key.midi + shift) }))
   const { keys, marks } = chordShown(rh)
   if (!bass || inversion >= 0) return { keys, marks }
-  return { keys: [midi(MIDDLE_C - 12 + pitchClassOf(bass)), ...keys], marks }
+  // A bass no tone of the chord: named by itself, as a key of no role in it.
+  const below = midi(MIDDLE_C - 12 + pitchClassOf(bass))
+  return {
+    keys: [below, ...keys],
+    marks: new Map([[below, { tone: 'scale', label: noteName(bass) }], ...marks]),
+  }
 }

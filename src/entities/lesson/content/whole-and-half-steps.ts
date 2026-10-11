@@ -62,7 +62,7 @@ const wholeAndHalfSteps: Lesson = {
             en: 'Play E and the note a whole step above it.',
             ru: 'Сыграйте ми и ноту на тон выше.',
           },
-          answer: { notes: ['E', 'F#'] },
+          answer: { notes: ['E', 'F#'], rising: true },
         },
         {
           kind: 'quiz',
@@ -70,7 +70,7 @@ const wholeAndHalfSteps: Lesson = {
             en: 'Play B and the note a half step above it.',
             ru: 'Сыграйте си и ноту на полутон выше.',
           },
-          answer: { notes: ['B', 'C'] },
+          answer: { notes: ['B', 'C'], rising: true },
         },
       ],
     },

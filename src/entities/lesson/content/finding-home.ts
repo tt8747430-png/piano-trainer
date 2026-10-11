@@ -98,7 +98,7 @@ const findingHome: Lesson = {
             en: 'Play every white key from C up to G.',
             ru: 'Сыграйте все белые клавиши от до до соль.',
           },
-          answer: { notes: ['C', 'D', 'E', 'F', 'G'] },
+          answer: { notes: ['C', 'D', 'E', 'F', 'G'], rising: true },
         },
       ],
     },

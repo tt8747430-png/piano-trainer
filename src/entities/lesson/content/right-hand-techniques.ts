@@ -100,7 +100,7 @@ const rightHandTechniques: Lesson = {
             en: 'Play the sixth from E up to C.',
             ru: 'Сыграйте сексту от ми вверх до до.',
           },
-          answer: { notes: ['E', 'C'] },
+          answer: { notes: ['E', 'C'], rising: true },
         },
       ],
     },

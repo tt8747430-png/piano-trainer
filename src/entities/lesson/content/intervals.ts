@@ -62,7 +62,7 @@ const intervals: Lesson = {
             en: 'Play D and the perfect 5th above it.',
             ru: 'Сыграйте ре и чистую квинту вверх от неё.',
           },
-          answer: { notes: ['D', 'A'] },
+          answer: { notes: ['D', 'A'], rising: true },
         },
         {
           kind: 'quiz',
@@ -70,7 +70,7 @@ const intervals: Lesson = {
             en: 'Play A and the minor 3rd above it.',
             ru: 'Сыграйте ля и малую терцию вверх от неё.',
           },
-          answer: { notes: ['A', 'C'] },
+          answer: { notes: ['A', 'C'], rising: true },
         },
         {
           kind: 'link',

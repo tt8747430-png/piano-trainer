@@ -25,6 +25,13 @@ describe('quizAnswer', () => {
     expect(third.keys).toEqual([65, 69])
     expect(third.marks.get(midi(69))).toEqual({ tone: 'scale', label: 'A' })
   })
+
+  it('places notes in their order, each the first of its name above the last', () => {
+    expect(quizAnswer({ notes: ['E', 'C'], rising: true }).keys).toEqual([64, 72])
+    expect(quizAnswer({ notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] }).keys).toEqual([
+      62, 64, 66, 67, 69, 71, 73,
+    ])
+  })
 })
 
 describe('quizAnswers', () => {
@@ -60,6 +67,14 @@ describe('isRight', () => {
     expect(isRight(keys(64, 67), E_MINOR)).toBe(false)
     expect(isRight(keys(64, 67, 71, 74), E_MINOR)).toBe(false)
     expect(isRight([], E_MINOR)).toBe(false)
+  })
+
+  it('takes a rising answer only as its notes lie, from its first note in any octave', () => {
+    const fifth = quizAnswer({ notes: ['D', 'A'], rising: true })
+    expect(isRight(keys(50, 57), fifth)).toBe(true)
+    expect(isRight(keys(62, 69), fifth)).toBe(true)
+    expect(isRight(keys(57, 62), fifth)).toBe(false)
+    expect(isRight(keys(62, 81), fifth)).toBe(false)
   })
 })
 

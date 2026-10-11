@@ -15,16 +15,29 @@ import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark, ShownKeys } from '@/shared/ui'
 import { placeExample } from './chord-example'
 
-/** A quiz's answer on the keys: a chord as the Chords explorer places it, notes from middle C up. */
-export function quizAnswer(answer: LessonAnswer): ShownKeys {
-  if ('chord' in answer) return placeExample(answer.chord)
+/** A quiz's answer on the keys, and whether its notes are played in their order. */
+export interface QuizAnswer extends ShownKeys {
+  readonly rising: boolean
+}
+
+/**
+ * A quiz's answer on the keys: a chord as the Chords explorer places it; notes in their order from
+ * the octave of middle C, each the first key of its name above the last (E up to C is a 6th).
+ */
+export function quizAnswer(answer: LessonAnswer): QuizAnswer {
+  if ('chord' in answer) return { ...placeExample(answer.chord), rising: false }
   const marks = new Map<Midi, KeyMark>()
+  let last: number | null = null
   for (const name of answer.notes) {
     const spelled = parseNoteName(name)
     if (!spelled) throw new RangeError(`A quiz answers with "${name}", which is not a note`)
-    marks.set(midi(MIDDLE_C + pitchClassOf(spelled)), { tone: 'scale', label: noteName(spelled) })
+    const pc = pitchClassOf(spelled)
+    const up = last === null ? 0 : (((pc - last) % 12) + 12) % 12 || 12
+    const key: number = last === null ? MIDDLE_C + pc : last + up
+    marks.set(midi(key), { tone: 'scale', label: noteName(spelled) })
+    last = key
   }
-  return { keys: [...marks.keys()].sort((a, b) => a - b), marks }
+  return { keys: [...marks.keys()], marks, rising: answer.rising === true }
 }
 
 /** The keys of an answer heard: a chord's together, notes as a line from the lowest. */
@@ -32,7 +45,7 @@ export const answerSounds = (answer: LessonAnswer, keys: readonly Midi[]): NoteS
   chordSounds(keys, { arpeggio: 'notes' in answer })
 
 /** Each quiz of a lesson by its place, `section.block`, with its answer on the keys. */
-export const quizAnswers = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
+export const quizAnswers = (lesson: Lesson): ReadonlyMap<string, QuizAnswer> =>
   new Map(
     lesson.sections.flatMap((section, s) =>
       section.blocks.flatMap((block, b) =>
@@ -43,8 +56,23 @@ export const quizAnswers = (lesson: Lesson): ReadonlyMap<string, ShownKeys> =>
 
 const pitchClasses = (keys: readonly Midi[]) => new Set(keys.map((key) => pitchClass(key)))
 
-/** Right: every note of the answer chosen in some octave, and nothing else. */
-export function isRight(chosen: readonly Midi[], answer: ShownKeys): boolean {
+/**
+ * Right: every note of the answer chosen in some octave, and nothing else; a rising answer's notes
+ * as its keys lie, from its first note in any octave (D and the 5th above is A above D, not below).
+ */
+export function isRight(chosen: readonly Midi[], answer: QuizAnswer): boolean {
+  if (answer.rising) {
+    const played = chosen.toSorted((a, b) => a - b)
+    const [first] = played
+    const [from] = answer.keys
+    return (
+      first !== undefined &&
+      from !== undefined &&
+      played.length === answer.keys.length &&
+      pitchClass(first) === pitchClass(from) &&
+      played.every((key, i) => key - first === (answer.keys[i] ?? NaN) - from)
+    )
+  }
   const played = pitchClasses(chosen)
   const wanted = pitchClasses(answer.keys)
   return played.size === wanted.size && [...wanted].every((pc) => played.has(pc))

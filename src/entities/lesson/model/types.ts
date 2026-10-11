@@ -41,8 +41,12 @@ export interface LessonProgression {
   readonly size?: ChordSize
 }
 
-/** What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave. */
-export type LessonAnswer = { readonly chord: string } | { readonly notes: readonly string[] }
+/**
+ * What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave; notes `rising`
+ * are played in their order, each the first of its name above the last (an interval up, a run).
+ */
+export type LessonAnswer =
+  { readonly chord: string } | { readonly notes: readonly string[]; readonly rising?: true }
 
 /** Where a lesson's link leads, by what it names; the lesson view makes it a route and its search. */
 export type LessonLink =

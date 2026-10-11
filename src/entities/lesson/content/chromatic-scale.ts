@@ -78,7 +78,7 @@ const chromaticScale: Lesson = {
             en: 'Play the chromatic scale from E up to A.',
             ru: 'Сыграйте хроматическую гамму от ми до ля.',
           },
-          answer: { notes: ['E', 'F', 'F#', 'G', 'G#', 'A'] },
+          answer: { notes: ['E', 'F', 'F#', 'G', 'G#', 'A'], rising: true },
         },
       ],
     },
