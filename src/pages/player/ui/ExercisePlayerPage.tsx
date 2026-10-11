@@ -35,7 +35,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/exercise/$exerciseId' })
-  const close = useGoBack({ to: '/practice' })
+  const close = useGoBack({ to: '/practice/exercises' })
   const setSearch = useViewChange<ExerciseSearch>()
   const { choice, performance, player, view, changeSetup } = useExercisePlayer(
     exercise,
