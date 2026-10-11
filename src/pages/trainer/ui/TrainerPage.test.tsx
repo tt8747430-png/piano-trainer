@@ -55,7 +55,9 @@ describe('A trainer', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
     await user.click(within(keyboard()).getByRole('button', { name: 'C4' }))
-    expect(screen.getByText(/^(Correct|Not quite: it’s F3|Not quite: it’s G4)$/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/^(Correct|Not quite: it’s F3|Not quite: it’s G4)$/),
+    ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Check' })).not.toBeInTheDocument()
   })
 
@@ -111,6 +113,22 @@ describe('A trainer', () => {
     await user.click(within(answers).getAllByRole('button')[0] ?? answers)
     await user.click(screen.getByRole('button', { name: 'End the run' }))
     expect(screen.getByRole('heading', { name: 'Results' })).toBeInTheDocument()
+  })
+
+  it('asks which progression is heard, its lines as numerals to choose', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/practice/trainers/progressions-by-ear?level=pop')
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /^In [A-G].* major: which progression is this\?$/,
+      }),
+    ).toBeInTheDocument()
+    const answers = screen.getByRole('group', { name: 'Answers' })
+    expect(within(answers).getByRole('button', { name: /I–V–vi–IV/ })).toBeInTheDocument()
+    expect(audio.played[0]?.sounds.length).toBeGreaterThan(0)
+    await user.click(within(answers).getAllByRole('button')[0] ?? answers)
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument()
   })
 
   it('writes a level and rounds to the URL, and starts the run again under them', async () => {

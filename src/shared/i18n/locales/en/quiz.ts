@@ -8,6 +8,7 @@ export const quiz = {
     'intervals-by-ear': 'Intervals by ear',
     'chords-by-ear': 'Chords by ear',
     'scales-by-ear': 'Scales by ear',
+    'progressions-by-ear': 'Progressions by ear',
     'reading-notes': 'Reading notes',
     'key-signatures': 'Key signatures',
     'key-degrees': 'The degrees of a key',
@@ -27,6 +28,7 @@ export const quiz = {
     signatureMinor: 'Which minor key has this signature?',
     keyDegrees: 'Play the degrees of {{key}}',
     chordRole: 'In {{key}}: which chord is this?',
+    nameProgression: 'In {{key}}: which progression is this?',
   },
   // Where a chord asked in an inversion has its lowest note.
   position: {
@@ -182,6 +184,12 @@ export const quiz = {
       'with-vi': 'With vi',
       'with-ii-iii': 'With ii and iii',
       'all-major': 'All seven, major',
+      minor: 'In minor',
+    },
+    progressions: {
+      primary: 'I, IV and V',
+      pop: 'Pop: with vi',
+      jazz: 'Jazz: ii–V',
       minor: 'In minor',
     },
   },

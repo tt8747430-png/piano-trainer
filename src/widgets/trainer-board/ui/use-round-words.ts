@@ -10,6 +10,9 @@ const POSITION = ['root', 'first', 'second', 'third'] as const
 const COUNT = /^(\d)(♯|♭)$/
 
 /** A round's words: what it asks, how each option reads, and what its answer is called. */
+/** A progression's numerals as a line to read: `I–V–vi–IV`. */
+const progressionLine = (line: string) => line.split(' ').join('–')
+
 export function useRoundWords() {
   const { t } = useTranslation(['quiz', 'music'])
   const scaleName = useScaleName()
@@ -55,6 +58,8 @@ export function useRoundWords() {
         return t('quiz:prompt.keyDegrees', { key: keyName(question.key) })
       case 'chord-role':
         return t('quiz:prompt.chordRole', { key: keyName(question.key) })
+      case 'name-progression':
+        return t('quiz:prompt.nameProgression', { key: keyName(question.key) })
     }
   }
 
@@ -78,6 +83,8 @@ export function useRoundWords() {
       case 'name-chord':
       case 'chord-role':
         return question.options.map((value) => ({ value, label: value }))
+      case 'name-progression':
+        return question.options.map((value) => ({ value, label: progressionLine(value) }))
     }
   }
 
@@ -98,6 +105,8 @@ export function useRoundWords() {
         return `${keyName(question.key)}: ${signatureCount(signatureOption(question.key))}`
       case 'chord-role':
         return `${question.numeral} · ${keyName(question.key)}`
+      case 'name-progression':
+        return `${progressionLine(question.line)} · ${keyName(question.key)}`
       case 'name-interval':
         return t(`music:interval.${question.interval}.name`)
       case 'name-quality':

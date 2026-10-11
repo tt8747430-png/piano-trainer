@@ -29,6 +29,7 @@ describe('Practice → Quiz', () => {
       '/practice/trainers/intervals-by-ear',
       '/practice/trainers/chords-by-ear',
       '/practice/trainers/scales-by-ear',
+      '/practice/trainers/progressions-by-ear',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'Reading' }))).toEqual([
       '/practice/trainers/reading-notes',

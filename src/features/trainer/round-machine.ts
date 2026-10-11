@@ -84,6 +84,16 @@ export type Question =
       readonly notes: readonly Tone[]
     }
   | {
+      readonly mode: 'name-progression'
+      readonly key: Key
+      /** The progression's numerals, as the options write them (`I V vi IV`). */
+      readonly line: string
+      /** The tonic's keys, then each chord's: what is heard. */
+      readonly tonicKeys: readonly Midi[]
+      readonly chordKeys: readonly (readonly Midi[])[]
+      readonly options: readonly string[]
+    }
+  | {
       readonly mode: 'chord-role'
       readonly key: Key
       /** The chord's numeral in the key, as the options write it. */
@@ -125,6 +135,8 @@ export function choiceAnswer(question: ChoiceQuestion): string {
       return question.answer
     case 'chord-role':
       return question.numeral
+    case 'name-progression':
+      return question.line
   }
 }
 

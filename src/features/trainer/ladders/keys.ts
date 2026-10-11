@@ -45,3 +45,19 @@ export const ROLE_LEVEL: Readonly<
   'all-major': { keys: ROLE_MAJORS, numerals: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] },
   minor: { keys: ROLE_MINORS, numerals: ['i', 'ii°', 'III', 'iv', 'V', 'VI', 'VII'] },
 }
+
+/**
+ * Progressions by ear: four lines a level, each heard after its key's tonic, in a key of up to three
+ * sharps or flats. Each level's lines share their chords, so a line is told by its order alone.
+ */
+export const PROGRESSION_LEVELS = ['primary', 'pop', 'jazz', 'minor'] as const
+export type ProgressionLevel = (typeof PROGRESSION_LEVELS)[number]
+
+export const PROGRESSION_LEVEL: Readonly<
+  Record<ProgressionLevel, { readonly keys: readonly Key[]; readonly lines: readonly string[] }>
+> = {
+  primary: { keys: ROLE_MAJORS, lines: ['I IV V I', 'I V IV I', 'I IV I V', 'I V I IV'] },
+  pop: { keys: ROLE_MAJORS, lines: ['I V vi IV', 'I vi IV V', 'I IV vi V', 'vi IV I V'] },
+  jazz: { keys: ROLE_MAJORS, lines: ['ii V I', 'I vi ii V', 'iii vi ii V', 'I IV ii V'] },
+  minor: { keys: ROLE_MINORS, lines: ['i iv V i', 'i VI VII i', 'i VII VI V', 'i iv VII III'] },
+}

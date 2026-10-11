@@ -212,4 +212,21 @@ describe('drawRound: what a level asks', () => {
     expect(question.chordKeys.map((key) => key % 12)).toEqual([0, 4, 7])
     expect(Math.min(...question.chordKeys)).toBeGreaterThan(Math.min(...question.tonicKeys))
   })
+
+  it('plays a progression after its key’s tonic, each chord on its degree, among its level’s lines', () => {
+    const lines = ['I V vi IV', 'I vi IV V', 'I IV vi V', 'vi IV I V']
+    const question = drawRound(
+      { kind: 'progressions', keys: [{ tonic: note('C'), minor: false }], lines },
+      { index: 0, random },
+    )
+    if (question.mode !== 'name-progression') throw new Error('expected a progression')
+    expect(lines).toContain(question.line)
+    expect([...question.options].sort()).toEqual([...lines].sort())
+    expect(question.tonicKeys.map((key) => key % 12)).toEqual([0, 4, 7])
+    const roots = question.chordKeys.map((keys) => (keys[0] ?? 0) % 12)
+    const degree = { I: 0, IV: 5, V: 7, vi: 9 } as const
+    expect(roots).toEqual(
+      question.line.split(' ').map((numeral) => degree[numeral as keyof typeof degree]),
+    )
+  })
 })

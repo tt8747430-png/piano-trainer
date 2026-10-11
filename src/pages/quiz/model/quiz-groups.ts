@@ -8,6 +8,6 @@ type QuizGroup = (typeof QUIZ_GROUPS)[number]
 export const QUIZ_TRAINERS: Readonly<Record<QuizGroup, readonly TrainerId[]>> = {
   chords: ['build-chord', 'name-chord', 'chord-role'],
   scales: ['build-scale', 'key-signatures', 'key-degrees'],
-  ear: ['intervals-by-ear', 'chords-by-ear', 'scales-by-ear'],
+  ear: ['intervals-by-ear', 'chords-by-ear', 'scales-by-ear', 'progressions-by-ear'],
   reading: ['reading-notes'],
 }

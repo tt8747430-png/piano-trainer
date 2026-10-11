@@ -48,6 +48,8 @@ export function targetKeys(question: Question): Midi[] {
       return [...question.keys]
     case 'chord-role':
       return [...question.chordKeys]
+    case 'name-progression':
+      return [...new Set(question.chordKeys.flat())]
     case 'read-note':
       return [question.key]
     case 'key-signature':
@@ -79,7 +81,8 @@ export const heardFirst = (question: Question): boolean =>
   question.mode === 'name-interval' ||
   question.mode === 'name-quality' ||
   question.mode === 'name-scale' ||
-  question.mode === 'chord-role'
+  question.mode === 'chord-role' ||
+  question.mode === 'name-progression'
 
 const line = (keys: readonly Midi[]) =>
   walkSounds(
@@ -98,6 +101,11 @@ export function roundSounds(question: Question): NoteSound[] {
       return line(question.keys)
     case 'chord-role':
       return walkSounds([question.tonicKeys, question.chordKeys], {
+        arpeggio: false,
+        tempo: ROLE_TEMPO,
+      })
+    case 'name-progression':
+      return walkSounds([question.tonicKeys, ...question.chordKeys], {
         arpeggio: false,
         tempo: ROLE_TEMPO,
       })

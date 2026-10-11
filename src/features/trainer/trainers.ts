@@ -27,11 +27,14 @@ import {
 import {
   DEGREE_LEVEL,
   DEGREE_LEVELS,
+  PROGRESSION_LEVEL,
+  PROGRESSION_LEVELS,
   ROLE_LEVEL,
   ROLE_LEVELS,
   SIGNATURE_LEVEL,
   SIGNATURE_LEVELS,
   type DegreeLevel,
+  type ProgressionLevel,
   type RoleLevel,
   type SignatureLevel,
 } from './ladders/keys'
@@ -233,6 +236,17 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     rates: false,
     asks: (level) => ({ kind: 'roles', ...ROLE_LEVEL[level as RoleLevel] }),
   },
+  // A progression is no skill (UBIQUITOUS_LANGUAGE): its answers rate nothing.
+  'progressions-by-ear': {
+    id: 'progressions-by-ear',
+    levels: PROGRESSION_LEVELS,
+    custom: [],
+    rates: false,
+    asks: (level) => ({
+      kind: 'progressions',
+      ...PROGRESSION_LEVEL[level as ProgressionLevel],
+    }),
+  },
 }
 
 export const trainerOf = (id: TrainerId): Trainer => TRAINERS[id]
@@ -269,6 +283,7 @@ export const LADDERS = {
   signatures: SIGNATURE_LEVELS,
   degrees: DEGREE_LEVELS,
   roles: ROLE_LEVELS,
+  progressions: PROGRESSION_LEVELS,
 } as const
 type Ladder = keyof typeof LADDERS
 
@@ -284,6 +299,7 @@ const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
   'key-signatures': 'signatures',
   'key-degrees': 'degrees',
   'chord-role': 'roles',
+  'progressions-by-ear': 'progressions',
 }
 
 /** The ladder a trainer climbs; null for My gaps. */

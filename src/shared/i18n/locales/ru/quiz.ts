@@ -9,6 +9,7 @@ export const quiz: LocaleResources['quiz'] = {
     'intervals-by-ear': 'Интервалы на слух',
     'chords-by-ear': 'Аккорды на слух',
     'scales-by-ear': 'Гаммы на слух',
+    'progressions-by-ear': 'Последовательности на слух',
     'reading-notes': 'Чтение нот',
     'key-signatures': 'Ключевые знаки',
     'key-degrees': 'Ступени тональности',
@@ -28,6 +29,7 @@ export const quiz: LocaleResources['quiz'] = {
     signatureMinor: 'У какой минорной тональности эти знаки?',
     keyDegrees: 'Сыграйте ступени: {{key}}',
     chordRole: '{{key}}: какой это аккорд?',
+    nameProgression: '{{key}}: какая это последовательность?',
   },
   position: {
     root: 'основной вид',
@@ -180,6 +182,12 @@ export const quiz: LocaleResources['quiz'] = {
       'with-vi': 'С vi',
       'with-ii-iii': 'С ii и iii',
       'all-major': 'Все семь, мажор',
+      minor: 'В миноре',
+    },
+    progressions: {
+      primary: 'I, IV и V',
+      pop: 'Поп: с vi',
+      jazz: 'Джаз: ii–V',
       minor: 'В миноре',
     },
   },

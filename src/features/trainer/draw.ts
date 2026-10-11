@@ -77,6 +77,24 @@ export type Asks =
   | { readonly kind: 'signatures'; readonly keys: readonly Key[] }
   | { readonly kind: 'degrees'; readonly keys: readonly Key[] }
   | { readonly kind: 'roles'; readonly keys: readonly Key[]; readonly numerals: readonly string[] }
+  | {
+      readonly kind: 'progressions'
+      readonly keys: readonly Key[]
+      readonly lines: readonly string[]
+    }
+
+/** A numeral's triad in a key, in root position from the tonic's octave: every chord sounds as the key's. */
+function numeralKeys(text: string, key: Key): Midi[] {
+  const [read] = parseNumerals(text) ?? []
+  if (!read) throw new RangeError(`${text} is not a numeral`)
+  const chord = numeralChord(read, key, 'triads')
+  const placed = placeChord(spellChord(chord.root, chord.quality), {
+    inversion: 0,
+    bothHands: false,
+  }).rh
+  const shift = pitchClassOf(chord.root) < pitchClassOf(key.tonic) ? 12 : 0
+  return placed.map((tone) => midi(tone.midi - 12 + shift))
+}
 
 /** A question equal to the last one is drawn again at most this many times. */
 const DRAWS = 8
@@ -269,25 +287,25 @@ function draw(asks: Asks, index: number, random: () => number): Question {
     case 'roles': {
       const key = pick(asks.keys, random)
       const numeral = pick(asks.numerals, random)
-      const keysOf = (text: string) => {
-        const [read] = parseNumerals(text) ?? []
-        if (!read) throw new RangeError(`${text} is not a numeral`)
-        const chord = numeralChord(read, key, 'triads')
-        const placed = placeChord(spellChord(chord.root, chord.quality), {
-          inversion: 0,
-          bothHands: false,
-        }).rh
-        // From the tonic's octave, so every chord sounds as the key's.
-        const shift = pitchClassOf(chord.root) < pitchClassOf(key.tonic) ? 12 : 0
-        return placed.map((tone) => midi(tone.midi - 12 + shift))
-      }
       return {
         mode: 'chord-role',
         key,
         numeral,
-        tonicKeys: keysOf(key.minor ? 'i' : 'I'),
-        chordKeys: keysOf(numeral),
+        tonicKeys: numeralKeys(key.minor ? 'i' : 'I', key),
+        chordKeys: numeralKeys(numeral, key),
         options: withOthers(numeral, shuffled(asks.numerals, random), random),
+      }
+    }
+    case 'progressions': {
+      const key = pick(asks.keys, random)
+      const line = pick(asks.lines, random)
+      return {
+        mode: 'name-progression',
+        key,
+        line,
+        tonicKeys: numeralKeys(key.minor ? 'i' : 'I', key),
+        chordKeys: line.split(' ').map((numeral) => numeralKeys(numeral, key)),
+        options: withOthers(line, shuffled(asks.lines, random), random),
       }
     }
   }
@@ -307,6 +325,8 @@ function sameQuestion(a: Question, b: Question | null | undefined): boolean {
       return b.mode === a.mode && sameKey(a.key, b.key)
     case 'chord-role':
       return b.mode === a.mode && sameKey(a.key, b.key) && a.numeral === b.numeral
+    case 'name-progression':
+      return b.mode === a.mode && sameKey(a.key, b.key) && a.line === b.line
     case 'build-scale':
     case 'name-scale':
       return b.mode === a.mode && a.kind === b.kind && sameNote(a.root, b.root)
