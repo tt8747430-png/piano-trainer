@@ -122,13 +122,15 @@ differently, the UI column says how.
 
 ## Path and progress
 
-| Term         | Means                                                                                                                                                    | Avoid                     |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| **Level**    | 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced: a Step's place on the Path                                                                      | difficulty, grade         |
-| **Path**     | Every Step in order, level by level; the one source of levels                                                                                            | course, curriculum        |
-| **Step**     | One entry on the Path: a Piece, a chord family or a scale kind (`piece:bz5`, `chords:sev`)                                                               | lesson, item, task        |
-| **Learned**  | A Step or a Lesson the learner marked (`LearnedId`; a lesson is `lesson:<id>`, no Step), or a chord or scale Step marked once every Skill in it is Known | done, completed, mastered |
-| **Continue** | The one suggestion on the Path screen: what to do next                                                                                                   | resume, next up           |
+| Term                   | Means                                                                                                                                                                                                         | Avoid                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **Level**              | 1 Beginner · 2 Elementary · 3 Intermediate · 4 Advanced: a Step's place on the Path                                                                                                                           | difficulty, grade                 |
+| **Path**               | Every Step in order, level by level; the one source of levels                                                                                                                                                 | course, curriculum                |
+| **Step**               | One entry on the Path: a Piece, a chord family or a scale kind (`piece:bz5`, `chords:sev`)                                                                                                                    | lesson, item, task                |
+| **Learned**            | A Step or a Lesson the learner marked (`LearnedId`; a lesson is `lesson:<id>`, no Step), or a chord or scale Step marked once every Skill in it is Known                                                      | done, completed, mastered         |
+| **Continue**           | The one suggestion on the Path screen: what to do next                                                                                                                                                        | resume, next up                   |
+| **Day practised**      | A day on the learner's own calendar on which they opened a piece in the Player or answered a quiz round (`days`, `recordDay`); **Days in a row** count up to today, or yesterday while today is still to come | streak (that is a Run's), session |
+| **Recently practised** | The pieces opened in the Player last, latest first, on the Path                                                                                                                                               | history, recent activity          |
 
 ## Theory gaps
 
