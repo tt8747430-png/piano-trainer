@@ -18,7 +18,11 @@ export function ChordSizeField({
       label={t('chordSize.label')}
       value={value}
       disabled={disabled}
-      options={CHORD_SIZES.map((size) => ({ value: size, label: t(`chordSize.${size}`) }))}
+      options={CHORD_SIZES.map((size) => ({
+        value: size,
+        label: t(`chordSizeShort.${size}`),
+        title: t(`chordSize.${size}`),
+      }))}
       onChange={onChange}
     />
   )
