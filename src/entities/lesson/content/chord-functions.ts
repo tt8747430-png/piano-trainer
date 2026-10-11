@@ -85,8 +85,8 @@ const chordFunctions: Lesson = {
         {
           kind: 'quiz',
           ask: {
-            en: 'Play the minor chord of C major that shares two notes with F.',
-            ru: 'Сыграйте минорный аккорд до мажора, у которого две общие ноты с F.',
+            en: 'Play the minor chord of C major that shares F and A with F.',
+            ru: 'Сыграйте минорный аккорд до мажора, у которого с F общие ноты фа и ля.',
           },
           answer: { chord: 'Dm' },
         },

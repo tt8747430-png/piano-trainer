@@ -99,8 +99,8 @@ export const EXERCISES: readonly Exercise[] = [
     level: 3,
     name: { en: '6th-diminished scale', ru: 'Секстово-уменьшённая гамма' },
     trains: {
-      en: 'Eight notes an octave: the 6th chord on the beats, the diminished 7th between',
-      ru: 'Восемь нот в октаве: секстаккорд на долях, уменьшённый септаккорд между ними',
+      en: 'Eight notes to the octave: the 6th chord on the beats, the diminished 7th between',
+      ru: 'Восемь нот в октаве: аккорд с секстой на долях, уменьшённый септаккорд между ними',
     },
     fields: { root: 'key', tonality: true, octaves: FEW_OCTAVES },
     own: { tonality: 'major', octaves: 1 },
@@ -153,7 +153,7 @@ export const EXERCISES: readonly Exercise[] = [
     id: 'drop-two',
     group: 'barryHarris',
     level: 4,
-    name: { en: 'Drop-2 7ths', ru: '7-е аккорды drop 2' },
+    name: { en: 'Drop-2 7ths', ru: 'Септаккорды drop 2' },
     trains: {
       en: 'The key’s 7th chords up and down, the second voice from the top in the left hand',
       ru: 'Септаккорды тональности вверх и вниз, второй сверху голос в левой руке',
@@ -253,7 +253,7 @@ export const EXERCISES: readonly Exercise[] = [
     level: 2,
     name: { en: 'Hanon No. 1', ru: 'Ганон № 1' },
     trains: {
-      en: 'An even, independent hand: one figure climbing two octaves and coming back',
+      en: 'Even, independent fingers: one figure climbing two octaves and coming back',
       ru: 'Ровность и независимость пальцев: одна фигура на две октавы вверх и обратно',
     },
     fields: { root: 'key' },

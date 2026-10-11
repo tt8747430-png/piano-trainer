@@ -4,7 +4,10 @@ export default definePiece({
   id: 'silent',
   kind: 'song',
   title: 'Silent Night',
-  credits: [{ role: 'music', names: 'Gruber' }],
+  credits: [
+    { role: 'words', names: 'Joseph Mohr' },
+    { role: 'music', names: 'Franz Xaver Gruber' },
+  ],
   key: 'C',
   meter: '3/4',
   tempo: 84,

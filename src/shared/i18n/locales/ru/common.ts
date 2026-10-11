@@ -23,7 +23,7 @@ export const common: LocaleResources['common'] = {
     toPath: 'К пути',
     toSongs: 'К песням',
     toLearn: 'К обучению',
-    toQuiz: 'К проверке',
+    toQuiz: 'К тестам',
     toScales: 'К гаммам и тональностям',
     toAccompaniment: 'К аккомпанементу',
     toExercises: 'К упражнениям',

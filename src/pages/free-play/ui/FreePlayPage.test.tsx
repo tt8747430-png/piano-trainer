@@ -22,7 +22,7 @@ describe('Practice → Free play', () => {
   it('writes and names a chord struck on the keys', async () => {
     await renderApp('/practice/free-play')
     expect(await screen.findByRole('heading', { level: 1, name: 'Free play' })).toBeInTheDocument()
-    expect(screen.getByText('Play, and it is written here.')).toBeInTheDocument()
+    expect(screen.getByText('Play, and the notes appear here.')).toBeInTheDocument()
     strike('C4', 'E4', 'G4')
     expect(screen.getByRole('status')).toHaveTextContent('C Major triad')
   })
@@ -41,7 +41,7 @@ describe('Practice → Free play', () => {
     expect(screen.getByRole('button', { name: 'Clear' })).toBeDisabled()
     strike('C4')
     await user.click(screen.getByRole('button', { name: 'Clear' }))
-    expect(screen.getByText('Play, and it is written here.')).toBeInTheDocument()
+    expect(screen.getByText('Play, and the notes appear here.')).toBeInTheDocument()
   })
 
   it('spells what is played in the key chosen', async () => {

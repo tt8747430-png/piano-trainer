@@ -10,7 +10,7 @@ export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEn
     book: 'called-to-play',
   },
   'seven-types': {
-    name: { en: 'The 7 types of accompaniment', ru: '7 типов аккомпанемента' },
+    name: { en: 'The seven types of accompaniment', ru: '7 видов аккомпанемента' },
     book: 'seven-types',
   },
   genres: { name: { en: 'Rhythm styles', ru: 'Ритмические стили' }, book: null },
@@ -179,7 +179,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     name: { en: 'Invers. · Inversions', ru: 'Обращ. · Обращения' },
     idea: {
       en: 'Root position held, then the 1st and 2nd inversion, over an arpeggio to the 12th.',
-      ru: 'Основной вид с задержкой, затем 1-е и 2-е обращения, над арпеджио до дуодецимы.',
+      ru: 'Выдержанный аккорд в основном виде, затем 1-е и 2-е обращения, над арпеджио до дуодецимы.',
     },
     description: {
       en: 'Technique 7: the chord in root position for a half note, then its 1st and 2nd inversion. Left hand 1–5–8–10, then the 12th held (fingers 5–2–1–2–1).',
@@ -239,7 +239,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     },
     description: {
       en: 'Technique 11, up: sixths in 8ths, the 3rd under the root, then up the scale to the 5th under the 3rd, held.',
-      ru: 'Техника 11, вверх: сексты восьмыми, терция под основным тоном, затем вверх по гамме до квинты под терцией, с задержкой.',
+      ru: 'Техника 11, вверх: сексты восьмыми, терция под основным тоном, затем вверх по гамме до квинты под терцией, выдержанной.',
     },
     rh: 's6u',
     lh: 'q',
@@ -253,7 +253,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     },
     description: {
       en: 'Technique 11, down: sixths in 8ths, the 5th under the 3rd, then down the scale to the 3rd under the root, held.',
-      ru: 'Техника 11, вниз: сексты восьмыми, квинта под терцией, затем вниз по гамме до терции под основным тоном, с задержкой.',
+      ru: 'Техника 11, вниз: сексты восьмыми, квинта под терцией, затем вниз по гамме до терции под основным тоном, выдержанной.',
     },
     rh: 's6d',
     lh: 'q',
@@ -280,8 +280,8 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Бас на сильных долях, аккорд между ними.',
     },
     description: {
-      en: 'The bass moves through the notes of the triad. A clear pulse, best for praise and joyful hymns. Play the chords lightly, the top note a little louder.',
-      ru: 'Бас движется по звукам трезвучия. Ясная пульсация, лучше всего для хвалы и радостных гимнов. Аккорды играйте легко, верхний звук чуть громче.',
+      en: 'The bass takes the root and the 5th in turn. A clear pulse, best for praise and joyful hymns. Play the chords lightly, the top note a little louder.',
+      ru: 'Бас чередует основной тон и квинту. Ясная пульсация, лучше всего для хвалы и радостных гимнов. Аккорды играйте легко, верхний звук чуть громче.',
     },
     rh: 'r2',
     lh: 'alt',
@@ -322,8 +322,8 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Правая рука разбивает аккорд 1–3–2–3 над движущимся басом.',
     },
     description: {
-      en: 'The right hand breaks the chord while the bass moves through the triad.',
-      ru: 'Правая рука играет ломаное арпеджио, а бас движется по трезвучию.',
+      en: 'The right hand breaks the chord while the bass takes the root and the 5th in turn.',
+      ru: 'Правая рука играет ломаное арпеджио, а бас чередует основной тон и квинту.',
     },
     rh: 'r4b',
     lh: 'alt',
@@ -382,7 +382,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   flow: {
     group: 'genres',
-    name: { en: 'Chord flow (I–IV–V shapes)', ru: 'Chord flow (обороты I–IV–V)' },
+    name: { en: 'Chord flow (I–IV–V shapes)', ru: 'Смена аккордов (обороты I–IV–V)' },
     idea: {
       en: "The key's I, IV and V shapes moving under a held root.",
       ru: 'Обороты I, IV и V тональности над выдержанным басом.',
@@ -475,7 +475,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     name: { en: 'Salsa montuno', ru: 'Монтуно сальсы' },
     idea: {
       en: "The montuno's off-beat chords over a tumbao bass.",
-      ru: 'Аккорды монтуно мимо долей над басом тумбао.',
+      ru: 'Аккорды монтуно между долями над басом тумбао.',
     },
     rh: 'sal',
     lh: 'sal',

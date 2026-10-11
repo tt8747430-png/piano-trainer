@@ -136,7 +136,7 @@ describe('Player', () => {
         midiKeyboard.press(midi(60 + pitchClassOf(spelled)))
       }
     })
-    expect(await screen.findByText('Right')).toBeInTheDocument()
+    expect(await screen.findByText('Correct')).toBeInTheDocument()
   })
 
   it('chooses a hand, muting the other staff', async () => {

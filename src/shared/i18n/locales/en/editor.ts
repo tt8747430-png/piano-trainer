@@ -25,7 +25,7 @@ export const editor = {
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
     pattern: 'Bar {{bar}}, beat {{beat}} · pattern',
-    end: 'End of the piece',
+    end: 'End of the song',
     values: {
       whole: 'whole',
       half: 'half',
@@ -62,7 +62,7 @@ export const editor = {
   backToPattern: 'Back to the pattern',
   chord: {
     field: 'Chord',
-    invalid: 'Not a chord the chart reads',
+    invalid: 'Chord not recognised',
     keyChords: 'Chords in the key',
     delete: 'Delete chord',
   },
@@ -147,7 +147,7 @@ export const editor = {
     dot: 'Dotted',
     rest: 'A rest',
     step: 'Move the caret',
-    bar: 'Move a bar',
+    bar: 'A bar back or forward',
     ends: 'To the start, the end',
     semitone: 'A semitone up, down',
     octave: 'An octave up, down',

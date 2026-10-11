@@ -36,7 +36,7 @@ describe('LiveScore', () => {
 
   it('says where the music is written before anything is played', () => {
     renderWithSettings(<LiveScore chords={[]} keyParam={C_MAJOR} />)
-    expect(screen.getByText('Play, and it is written here.')).toBeInTheDocument()
+    expect(screen.getByText('Play, and the notes appear here.')).toBeInTheDocument()
   })
 
   it('engraves the chords on a grand staff', async () => {

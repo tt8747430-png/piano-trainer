@@ -19,7 +19,7 @@ const chordFamily: Lesson = {
           kind: 'text',
           text: {
             en: 'Build a triad on each note of the C major scale using only the scale’s notes, and you get the key’s family of chords: three major, three minor and one diminished.',
-            ru: 'Постройте трезвучие на каждой ноте гаммы до мажор, беря только её ноты, — получится семья аккордов тональности: три мажорных, три минорных и одно уменьшённое.',
+            ru: 'Постройте трезвучие на каждой ноте гаммы до мажора, беря только её ноты, — получится семья аккордов тональности: три мажорных, три минорных и одно уменьшённое.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'] },

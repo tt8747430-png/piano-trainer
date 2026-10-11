@@ -4,6 +4,10 @@ export default definePiece({
   id: 'amazing',
   kind: 'song',
   title: 'Amazing Grace',
+  credits: [
+    { role: 'words', names: 'John Newton' },
+    { role: 'music', names: 'New Britain (American folk tune)' },
+  ],
   key: 'G',
   meter: '3/4',
   tempo: 80,

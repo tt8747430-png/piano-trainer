@@ -122,7 +122,7 @@ export const RIGHT_FIGURES = {
     figure: eventFigure('0/16 C'),
   },
   flow: {
-    name: { en: 'Chord flow: I–IV–I–V–I shapes', ru: 'Chord flow: обороты I–IV–I–V–I' },
+    name: { en: 'Chord flow: I–IV–I–V–I shapes', ru: 'Смена аккордов: обороты I–IV–I–V–I' },
     figure: eventFigure('0/4 Ka,4/2 Kb,6/2 Ka,8/2 Kc,10/6 Ka'),
   },
   sync: {

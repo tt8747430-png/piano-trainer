@@ -33,7 +33,7 @@ export const practice = {
     styles: 'Styles',
     yours: 'Yours',
     noneYours: 'Patterns you star, make or hide are kept here.',
-    allHidden: 'Every pattern here is hidden. They are kept on Yours.',
+    allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },
   // Progressions' first tab; its other two are named by their own pages.
   progression: 'Progression',
@@ -64,6 +64,6 @@ export const practice = {
     colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
     finger: { label: 'Finger', none: 'None' },
     score: 'Live score',
-    empty: 'Play, and it is written here.',
+    empty: 'Play, and the notes appear here.',
   },
 } as const

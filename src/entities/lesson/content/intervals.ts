@@ -32,8 +32,8 @@ const intervals: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The unison, the 4th, the 5th and the octave are called perfect: in a major scale they come in one size only. The 5th is the frame of every major and minor chord.',
-            ru: 'Прима, кварта, квинта и октава называются чистыми: в мажорной гамме они бывают только одного размера. Квинта — остов каждого мажорного и минорного аккорда.',
+            en: 'The unison, the 4th, the 5th and the octave are called perfect: counted up from the tonic of a major scale, they come in one size only. The 5th is the frame of every major and minor chord.',
+            ru: 'Прима, кварта, квинта и октава называются чистыми: от тоники мажорной гаммы они бывают только одного размера. Квинта — остов каждого мажорного и минорного аккорда.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P5' },

@@ -64,8 +64,8 @@ describe('Practice → Chord finder', () => {
 
   it('says so when no chord is named by the notes', async () => {
     await renderApp('/practice/chords/find?keys=60-61-62')
-    expect(await screen.findByRole('status')).toHaveTextContent('No chord is named by these notes.')
-    expect(screen.getAllByText('No chord is named by these notes.')).toHaveLength(2)
+    expect(await screen.findByRole('status')).toHaveTextContent('No chord matches these notes.')
+    expect(screen.getAllByText('No chord matches these notes.')).toHaveLength(2)
   })
 
   it('names the keys a MIDI keyboard holds, while it holds them', async () => {

@@ -42,7 +42,7 @@ describe('A trainer', () => {
     for (const name of MAIN_CHORDS[symbol] ?? [])
       await user.click(within(keyboard()).getByRole('button', { name }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Next' }))
     expect(screen.getByText('Round 2 of 10')).toBeInTheDocument()
   })
@@ -55,7 +55,7 @@ describe('A trainer', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
     await user.click(within(keyboard()).getByRole('button', { name: 'C4' }))
-    expect(screen.getByText(/^(Right|It’s F3|It’s G4)$/)).toBeInTheDocument()
+    expect(screen.getByText(/^(Correct|It’s F3|It’s G4)$/)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Check' })).not.toBeInTheDocument()
   })
 
@@ -69,7 +69,7 @@ describe('A trainer', () => {
     const key = prompt.textContent?.replace('Play the degrees of ', '') ?? ''
     for (const name of DEGREES[key] ?? [])
       await user.click(within(keyboard()).getByRole('button', { name }))
-    expect(screen.getByText('Right')).toBeInTheDocument()
+    expect(screen.getByText('Correct')).toBeInTheDocument()
     expect(
       within(screen.getByRole('list', { name: 'Degrees' })).getAllByRole('listitem'),
     ).toHaveLength(7)
@@ -182,7 +182,7 @@ describe('A trainer', () => {
   it('saves auto-next from its toggle in sight, no settings sheet', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/trainers/build-scale')
-    const autoNext = await screen.findByRole('button', { name: 'Next by itself' })
+    const autoNext = await screen.findByRole('button', { name: 'Go on automatically' })
     await user.click(autoNext)
     expect(settingsStore.getState().trainer.autoNext).toBe(true)
     expect(autoNext).toHaveAttribute('aria-pressed', 'true')

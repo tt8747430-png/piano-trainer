@@ -58,8 +58,8 @@ describe('Practice → Accompaniment', () => {
     await renderApp('/practice/accompaniment?show=seven-types')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
-    expect(shelves()).toEqual(['The 7 types of accompaniment', 'Hymns'])
-    expect(rows('The 7 types of accompaniment')).toHaveLength(8)
+    expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
+    expect(rows('The seven types of accompaniment')).toHaveLength(8)
     expect(rows('Hymns')).toEqual(['/songs/otche', '/songs/ode', '/songs/silent', '/songs/amazing'])
   })
 

@@ -84,7 +84,7 @@ describe('A lesson', () => {
       await user.click(within(keyboard).getByRole('button', { name: key }))
     }
     await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
+    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
   })
 
   it('answers a quiz from a MIDI keyboard', async () => {
@@ -96,7 +96,7 @@ describe('A lesson', () => {
       for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
     })
     await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
+    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
   })
 
   it('speaks Russian on every block of a lesson', async () => {

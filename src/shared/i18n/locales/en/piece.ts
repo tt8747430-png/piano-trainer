@@ -12,14 +12,14 @@ export const piece = {
   reset: 'Reset to the original',
   resetting: {
     title: 'Reset {{title}}?',
-    says: 'Your chords, melody and written hands for it go, and it plays as the book writes it again.',
+    says: 'Your chords, melody and written-out hands are removed, and it goes back to the book’s version.',
     confirm: 'Reset',
     cancel: 'Keep mine',
   },
   delete: 'Delete',
   deleting: {
     title: 'Delete {{title}}?',
-    says: 'It leaves Your songs, and its music and takes with it.',
+    says: 'It is removed from Your songs, with its music and takes.',
     confirm: 'Delete for good',
     cancel: 'Keep it',
   },

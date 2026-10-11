@@ -8,7 +8,7 @@ const gospelReharmonisation: Lesson = {
   title: { en: 'Gospel reharmonisation', ru: 'Госпел-реармонизация' },
   summary: {
     en: 'A hymn’s plain chords made rich: 7ths and 9ths, the sus that falls to the dominant, IV over V, the minor iv, and the tensions a chord takes.',
-    ru: 'Простые аккорды гимна становятся богаче: септаккорды и нонаккорды, sus, который разрешается в доминанту, IV над V, минорная iv и допустимые напряжения.',
+    ru: 'Простые аккорды гимна становятся богаче: септаккорды и нонаккорды, sus, который разрешается в доминанту, IV над V, минорная iv и доступные тенсии.',
   },
   level: 3,
   category: 'gospel',
@@ -74,7 +74,7 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           text: {
             en: 'A dominant 7th takes the most colour: 9ths and 13ths, altered or not. Available tensions shows which notes a chord takes and which to avoid.',
-            ru: 'Доминантсептаккорд принимает больше всего красок: ноны и терцдецимы, альтерированные и нет. Допустимые напряжения показывают, какие ноты аккорд принимает, а каких избегать.',
+            ru: 'Доминантсептаккорд принимает больше всего красок: ноны и терцдецимы, альтерированные и нет. Доступные тенсии показывают, какие ноты аккорд принимает, а каких избегать.',
           },
         },
         {

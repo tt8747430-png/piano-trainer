@@ -12,7 +12,7 @@ const sevenTypes: Lesson = {
   module: 'seven-types',
   sections: [
     {
-      heading: { en: 'One hymn, seven ways', ru: 'Один гимн — семь способов' },
+      heading: { en: 'One hymn, seven types', ru: 'Один гимн — семь видов' },
       blocks: [
         {
           kind: 'text',
@@ -44,8 +44,8 @@ const sevenTypes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The fourth breaks the chord into a moving line across both hands, and its variant breaks it in the right hand over a walking bass.',
-            ru: 'Четвёртый разбивает аккорд на движущуюся линию через обе руки, а его вариант — в правой руке над идущим басом.',
+            en: 'The fourth breaks the chord into a moving line across both hands, and its variant breaks it in the right hand over a bass of root and 5th.',
+            ru: 'Четвёртый разбивает аккорд на движущуюся линию через обе руки, а его вариант — в правой руке над басом из основного тона и квинты.',
           },
         },
         { kind: 'pattern', pattern: 'r4', piece: 'otche' },

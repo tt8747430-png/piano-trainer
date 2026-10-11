@@ -94,7 +94,7 @@ export const learn = {
   quiz: {
     answer: 'Answer on the keys',
     check: 'Check',
-    right: 'Right',
+    right: 'Correct',
     wrong: 'Not quite',
     show: 'Show the answer',
     shown: 'The answer is on the keys',
@@ -113,7 +113,7 @@ export const learn = {
   },
   finder: {
     choose: 'Choose the keys of a chord.',
-    none: 'No chord is named by these notes.',
+    none: 'No chord matches these notes.',
     also: 'Also: {{names}}',
     no3rd: 'No 3rd',
     no5th: 'No 5th',
@@ -262,7 +262,7 @@ export const learn = {
     delete: 'Delete',
     deleting: {
       title: 'Delete {{name}}?',
-      says: 'It leaves your patterns and the Player’s list. Music that plays it plays its own pattern again.',
+      says: 'It leaves your patterns and the Player’s list. Songs that used it go back to their own pattern.',
       confirm: 'Delete',
       cancel: 'Keep it',
     },

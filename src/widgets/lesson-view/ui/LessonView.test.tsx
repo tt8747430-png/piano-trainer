@@ -173,7 +173,7 @@ describe('LessonView’s worksheet', () => {
     await user.click(within(keyboard).getByRole('button', { name: 'G4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'B4' }))
     await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Right')
+    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([64, 67, 71])
   })
 

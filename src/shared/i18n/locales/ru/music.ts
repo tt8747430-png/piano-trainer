@@ -2,10 +2,16 @@ import type { LocaleResources } from '../../types'
 
 export const music: LocaleResources['music'] = {
   major: 'M',
-  inversion: { label: 'Обращение', root: 'Основной', first: '1-е', second: '2-е', third: '3-е' },
+  inversion: {
+    label: 'Обращение',
+    root: 'Основной вид',
+    first: '1-е',
+    second: '2-е',
+    third: '3-е',
+  },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
-    label: 'Размер аккорда',
+    label: 'Состав аккорда',
     triads: 'Трезвучия',
     sevenths: 'Септаккорды',
     ninths: 'Нонаккорды',
@@ -34,7 +40,7 @@ export const music: LocaleResources['music'] = {
     maj7: 'Большой мажорный септаккорд',
     m7: 'Малый минорный септаккорд',
     d7: 'Доминантсептаккорд',
-    hd: 'Полууменьшенный септаккорд',
+    hd: 'Полууменьшённый септаккорд',
     o7: 'Уменьшенный септаккорд',
     mM7: 'Большой минорный септаккорд',
     sus7: 'Доминантсептаккорд с квартой',
@@ -45,7 +51,7 @@ export const music: LocaleResources['music'] = {
     n9: 'Доминантнонаккорд',
     mM9: 'Минорный нонаккорд с большой септимой',
     M9s5: 'Увеличенный большой нонаккорд',
-    hd9: 'Полууменьшенный нонаккорд',
+    hd9: 'Полууменьшённый нонаккорд',
     m11: 'Минорный ундецимаккорд',
     n13: 'Доминантовый терцдецимаккорд',
     b9: 'Септаккорд с пониженной ноной',

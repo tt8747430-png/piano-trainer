@@ -40,7 +40,7 @@ describe('the pattern catalog', () => {
     expect(PATTERN_GROUPS.map((group) => PATTERN_GROUP_ENTRIES[group].name.en)).toEqual([
       'The 5 ways (lesson 3)',
       'Right-hand techniques',
-      'The 7 types of accompaniment',
+      'The seven types of accompaniment',
       'Rhythm styles',
     ])
   })

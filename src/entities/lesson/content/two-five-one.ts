@@ -21,8 +21,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The ii–V–I is the subdominant, the dominant and the tonic in jazz’s dress. Its subdominant is the brightest one, the ii7; and as jazz harmony is built of 7th chords, triads are rare: IIm7–V7–Imaj7.',
-            ru: 'ii–V–I — это субдоминанта, доминанта и тоника в джазовом наряде. Его субдоминанта — самая яркая, ii7; а поскольку джазовая гармония строится на септаккордах, трезвучия редки: IIm7–V7–Imaj7.',
+            en: 'The ii–V–I is the subdominant, the dominant and the tonic in jazz’s dress. Its subdominant is the ii7, whose root falls a 5th to the V; and as jazz harmony is built of 7th chords, triads are rare: ii7–V7–Imaj7.',
+            ru: 'ii–V–I — это субдоминанта, доминанта и тоника в джазовом наряде. Его субдоминанта — ii7, чей основной тон опускается на квинту к V; а поскольку джазовая гармония строится на септаккордах, трезвучия редки: ii7–V7–Imaj7.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -30,7 +30,7 @@ const twoFiveOne: Lesson = {
           kind: 'text',
           text: {
             en: 'The roots fall a 5th each time, down the circle of fifths: D, G, C. That is the letters, not the bass: the bass may take any of the chords’ notes.',
-            ru: 'Корни каждый раз опускаются на квинту, вниз по квинтовому кругу: ре, соль, до. Речь о буквах, а не о басе: бас может взять любую ноту аккорда.',
+            ru: 'Основные тоны каждый раз опускаются на квинту, вниз по квинтовому кругу: ре, соль, до. Речь о буквах, а не о басе: бас может взять любую ноту аккорда.',
           },
         },
       ],
@@ -58,8 +58,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'A 6th chord can stand for any major 7th: C6 for Cmaj7.',
-            ru: 'Секстаккорд с добавленной секстой может заменить любой большой мажорный септаккорд: C6 вместо Cmaj7.',
+            en: 'A 6th chord can stand for a major 7th: C6 for Cmaj7.',
+            ru: 'Мажорное трезвучие с секстой может заменить большой мажорный септаккорд: C6 вместо Cmaj7.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'G7', 'C6'] },
@@ -72,7 +72,7 @@ const twoFiveOne: Lesson = {
           kind: 'text',
           text: {
             en: 'In minor the ii is half-diminished (iiø7), the V needs the raised 7th to pull (V7, often V7♭9), and the tonic is often a minor 6th chord (Cm6).',
-            ru: 'В миноре ii — полууменьшённый (iiø7), доминанте для тяготения нужна повышенная VII ступень (V7, часто V7♭9), а тоникой часто бывает минорный секстаккорд с секстой (Cm6).',
+            ru: 'В миноре ii — полууменьшённый (iiø7), доминанте для тяготения нужна повышенная VII ступень (V7, часто V7♭9), а тоникой часто бывает минорное трезвучие с секстой (Cm6).',
           },
         },
         { kind: 'progression', numerals: 'iiø7 V7 i', key: C_MINOR },
