@@ -32,6 +32,14 @@ const built = (change: Partial<ChordParts>, root = note('C')) => {
 }
 
 describe('buildChord', () => {
+  it('writes a root whose chord would need a third sharp or flat as its other name', () => {
+    expect(built({ triad: 'dim', size: 7, seventh: 'diminished' }, note('C', -1))).toBe(
+      'B°7: B D F A♭',
+    )
+    expect(built({ triad: 'aug' }, note('B', 1))).toBe('C+: C E G#')
+    expect(built({ triad: 'dim', size: 7, seventh: 'diminished' }, note('D', -1))).toMatch(/^D♭°7/)
+  })
+
   it.each([
     [{}, 'C: C E G'],
     [{ triad: 'sus4' }, 'Csus4: C F G'],

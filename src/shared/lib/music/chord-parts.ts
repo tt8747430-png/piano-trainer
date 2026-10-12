@@ -1,7 +1,7 @@
 import { chordRootSpelling, qualitySuffix, qualityWithIntervals, type ChordQuality } from './chord'
 import { seventhName, triadName } from './chord-name'
-import { INTERVALS, type IntervalName, type LabelledInterval } from './interval'
-import type { SpelledNote } from './note'
+import { INTERVALS, spellsAbove, type IntervalName, type LabelledInterval } from './interval'
+import { pitchClassOf, plainSpelling, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
@@ -350,10 +350,21 @@ function ruleSuffix(parts: ChordParts): string {
   return withAddedTones(`${lead}${highestNatural(parts)}${trail}${altered}`, parts.added)
 }
 
-/** A chord from its parts on a root: its tones spelled by letter steps, named as the table or the rule names it. */
-export function buildChord(root: SpelledNote, parts: ChordParts): BuiltChord {
+/** Whether every tone sits on the letter its steps reach: none that would need a third sharp or flat. */
+const onTheirLetters = (root: SpelledNote, intervals: readonly LabelledInterval[]): boolean =>
+  intervals.every((interval) => spellsAbove(root, interval))
+
+/**
+ * A chord from its parts on a root: its tones spelled by letter steps, named as the table or the rule
+ * names it. A root whose chord would need a third sharp or flat (C♭°7's B𝄫𝄫, B♯+'s F𝄪𝄪… ) is written
+ * as its other name (B°7, C+), so no tone is written on a letter it is not.
+ */
+export function buildChord(given: SpelledNote, parts: ChordParts): BuiltChord {
   const intervals = builtIntervals(parts)
   const quality = qualityWithIntervals(intervals)
+  const root = onTheirLetters(given, intervals)
+    ? given
+    : plainSpelling(pitchClassOf(given), given.accidental < 0)
   return {
     root,
     tones: intervals.map((interval) => toneAbove(root, interval)),

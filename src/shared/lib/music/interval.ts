@@ -89,6 +89,10 @@ export const spellAbove = (from: SpelledNote, interval: Interval): SpelledNote =
     pitchClass(pitchClassOf(from) + interval.semitones),
   )
 
+/** Whether the note `interval` above `from` is written on the letter its steps reach (no third sharp or flat). */
+export const spellsAbove = (from: SpelledNote, interval: Interval): boolean =>
+  spellAbove(from, interval).letter === letterAt(letterIndex(from.letter) + interval.steps)
+
 /** The note `interval` below `from`, spelled on the letter the steps reach down: G's major 3rd below is E♭. */
 export const spellBelow = (from: SpelledNote, interval: Interval): SpelledNote =>
   spelledOn(

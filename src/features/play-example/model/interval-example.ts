@@ -4,6 +4,7 @@ import {
   midiOf,
   note,
   spellAbove,
+  spellsAbove,
   TICKS_PER_BEAT,
   type IntervalName,
   type Midi,
@@ -32,6 +33,10 @@ export function intervalRoot(root: SpelledNote): ShownKeys {
   const low = midiOf(root, LOWER_OCTAVE)
   return { keys: [low], marks: new Map([[low, TONIC]]) }
 }
+
+/** Whether the interval over a root is written on its letter (the A9 over E♯ would need F𝄪𝄪: not). */
+export const writesInterval = (root: SpelledNote, name: IntervalName): boolean =>
+  spellsAbove(root, INTERVALS[name])
 
 /**
  * An interval over a root in octave 4: the upper note spelled by letter steps from the root (the

@@ -49,7 +49,7 @@ export {
   type NoteParam,
   type SpelledNote,
 } from './note'
-export { INTERVALS, spellAbove, type IntervalName } from './interval'
+export { INTERVALS, spellAbove, spellsAbove, type IntervalName } from './interval'
 export {
   consonanceOf,
   INTERVAL_GROUP_IDS,

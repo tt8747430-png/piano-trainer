@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi, note, noteName, type IntervalName, type SpelledNote } from '@/shared/lib/music'
-import { intervalExample, intervalRoot, tonesText } from './interval-example'
+import { intervalExample, intervalRoot, tonesText, writesInterval } from './interval-example'
 
 const written = (root: SpelledNote, name: IntervalName) =>
   intervalExample(root, name).music.notes.map((n) => [n.midi, noteName(n.spelled), n.startTick])
@@ -49,5 +49,11 @@ describe('intervalRoot', () => {
 describe('tonesText', () => {
   it('writes whole tones with a half as ½', () => {
     expect([0, 1, 3, 4, 21].map(tonesText)).toEqual(['0', '½', '1½', '2', '10½'])
+  })
+
+  it('says which intervals over a root a letter writes', () => {
+    expect(writesInterval(note('E', 1), 'A9')).toBe(false)
+    expect(writesInterval(note('E', 1), 'M9')).toBe(true)
+    expect(writesInterval(note('D', -1), 'm2')).toBe(true)
   })
 })

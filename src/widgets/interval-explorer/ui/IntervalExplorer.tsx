@@ -1,12 +1,8 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { IntervalCard, intervalRoot, useShownKeys } from '@/features/play-example'
-import {
-  INTERVAL_GROUP_IDS,
-  INTERVAL_GROUPS,
-  noteFromParam,
-} from '@/shared/lib/music'
+import { IntervalCard, intervalRoot, useShownKeys, writesInterval } from '@/features/play-example'
+import { INTERVAL_GROUP_IDS, INTERVAL_GROUPS, noteFromParam } from '@/shared/lib/music'
 import { NoteChoice } from '@/shared/ui'
 import type { IntervalView } from '../model/interval-view'
 
@@ -41,11 +37,14 @@ export function IntervalExplorer({
             {t(`intervals.${group}`)}
           </h2>
           <ul className="grid-fields gap-4">
-            {INTERVAL_GROUPS[group].map((name) => (
-              <li key={name}>
-                <IntervalCard root={view.root} name={name} onShow={show} />
-              </li>
-            ))}
+            {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
+            {INTERVAL_GROUPS[group]
+              .filter((name) => writesInterval(noteFromParam(view.root), name))
+              .map((name) => (
+                <li key={name}>
+                  <IntervalCard root={view.root} name={name} onShow={show} />
+                </li>
+              ))}
           </ul>
         </section>
       ))}
