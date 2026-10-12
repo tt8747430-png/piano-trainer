@@ -1,0 +1,13 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "my-mods",
+  "owner": { "name": "tt8747430-png" },
+  "metadata": { "description": "My Claude Code mods: three built here, two served from their own repositories." },
+  "plugins": [
+    { "name": "compact-bar", "source": "./compact-bar", "description": "Cache time left, hit rate, context weather and a Compact button above the prompt." },
+    { "name": "prompt-upgrade", "source": "./prompt-upgrade", "description": "Upgrade a rough prompt with quick questions and a side-by-side review. /better." },
+    { "name": "clean-view", "source": "./clean-view", "description": "Hide routine tool rows, show one checklist, trim long command output. /simple, /lean." },
+    { "name": "next-steps", "source": { "source": "git-subdir", "url": "https://github.com/hamzafer/claude-code-mods.git", "path": "mods/next-steps" }, "description": "Likely next prompts above the prompt after each turn." },
+    { "name": "visible-compact", "source": { "source": "github", "repo": "nvsravank/visible-compact" }, "description": "Shows the conversation before and after /compact side by side." }
+  ]
+}

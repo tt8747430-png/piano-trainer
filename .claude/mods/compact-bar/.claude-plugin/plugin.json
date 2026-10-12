@@ -1,0 +1,9 @@
+{
+  "name": "compact-bar",
+  "version": "0.1.0",
+  "description": "A narrow bar above the prompt: prompt-cache time left, cache hit rate, context weather and fill, and a Compact button. Posts the compact summary into the chat.",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Local"
+  }
+}
