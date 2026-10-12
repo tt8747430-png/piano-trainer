@@ -113,8 +113,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '♭VI–♭VII–I climbs to the tonic by whole steps from the flat side: the gospel ending, borrowed from the minor key.',
-            ru: '♭VI–♭VII–I поднимается к тонике целыми тонами со стороны бемолей: госпел-окончание, взятое из минора.',
+            en: '♭VI–♭VII–I climbs to the tonic by whole steps from the flat side: the gospel ending. Its roots are borrowed from the minor key, and gospel plays each of them as a dominant 7th (A♭7–B♭7 in C).',
+            ru: '♭VI–♭VII–I поднимается к тонике целыми тонами со стороны бемолей: госпел-окончание. Его основные тоны взяты из минора, а госпел играет на каждом доминантсептаккорд (A♭7–B♭7 в C).',
           },
         },
         { kind: 'progression', numerals: '♭VI ♭VII I', key: C_MAJOR, size: 'sevenths' },

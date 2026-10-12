@@ -176,8 +176,8 @@ const LIBRARY = [
     'Stack Your Chords',
     {
       note: note(
-        'Five m7 chords move clockwise around the circle of fifths, then four major chords lead back home. Take it through all 12 keys.',
-        'Пять аккордов m7 идут по квинтовому кругу по часовой стрелке, затем четыре мажорных аккорда возвращают домой. Пройдите её во всех 12 тональностях.',
+        'Five m7 chords move clockwise around the circle of fifths, then four chords on major triads lead back home. Take it through all 12 keys.',
+        'Пять аккордов m7 идут по квинтовому кругу по часовой стрелке, затем четыре аккорда на мажорных трезвучиях возвращают домой. Пройдите её во всех 12 тональностях.',
       ),
     },
   ),
