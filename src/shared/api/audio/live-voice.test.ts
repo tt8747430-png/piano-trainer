@@ -31,6 +31,16 @@ describe('createLiveVoice', () => {
     expect(heard.at(-1)).toBe('silence 60')
   })
 
+  it('lets go of a key held from two places only when both let go', () => {
+    const { voice, heard } = setUp()
+    voice.press(C, 100)
+    voice.press(C, 100)
+    voice.release(C)
+    expect(heard.at(-1)).toBe(`strike 60 ${velocityGain(100)}`)
+    voice.release(C)
+    expect(heard.at(-1)).toBe('silence 60')
+  })
+
   it('keeps a key let go under the sustain sounding until the sustain comes up', () => {
     const { voice, heard } = setUp()
     voice.pedal('sustain', true)
