@@ -4,13 +4,15 @@ import {
   builtRootSpelling,
   CHORD_PARTS,
   highestNatural,
+  type AddedTone,
   type BuiltChord,
   type ChordParts,
 } from './chord-parts'
 import type { Key } from './key'
 import { note, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
-import { spellInKey } from './scale'
+import { keyTones } from './scale'
+import { TWO_HANDS_FROM } from './place'
 import type { ChordRole, Tone } from './tone'
 
 /** The tones a hand may leave out of a chord, in the order they are said. */
@@ -45,7 +47,10 @@ const isPlain = (tone: Tone, role: LeftOut) => tone.role === role && tone.degree
 
 /** A 6/9 over a 3rd: a suspended one keeps its 5th, or it is only stacked 4ths. */
 const isSixNine = (parts: ChordParts): boolean =>
-  parts.triad !== 'sus4' && parts.added.includes('add6') && parts.added.includes('add9')
+  parts.triad !== 'sus4' &&
+  parts.added.length === 2 &&
+  parts.added.includes('add6') &&
+  parts.added.includes('add9')
 
 /**
  * The tones of a chord a hand may leave out (spec 2026-10-05 §5): its perfect 5th, from a 7th chord
@@ -116,8 +121,8 @@ const MOST_INVERSIONS = 3
  * played as its root, the root spelled by the builder's one rule (or as `key` spells it, where the
  * notes are written in a key). Root position first, then a ♭5 read
  * as a #11 from a 9th up, then a stacked chord before a 7th chord with an added tone, then the fewest
- * tones left out, then one the table names, then fewer notes;
- * each symbol once.
+ * tones left out, then an added 2nd or 4th named as played (within the octave of the root, else a 9th
+ * or 11th), then one the table names, then fewer notes; each chord once.
  */
 export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
   const lowest = Math.min(...keys)
@@ -126,9 +131,10 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
   const bassPc = pitchClass(lowest)
   const found = pcs.flatMap((rootPc: PitchClass) => {
     const shapes = SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? []
+    // The lowest key of the root played: an added tone within an octave above it is a 2nd or 4th.
+    const rootKey = Math.min(...keys.filter((each) => pitchClass(each) === rootPc))
     return shapes.flatMap((shape) => {
-      const root = key ? spellInKey(rootPc, key) : builtRootSpelling(rootPc, shape.parts)
-      const chord = buildChord(root, shape.parts)
+      const chord = spelledChord(rootPc, shape.parts, key)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]
       const bass = rootPc === bassPc || !bassTone ? undefined : bassTone.note
@@ -139,16 +145,21 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
           ...(bass ? { bass } : {}),
           symbol: writtenSymbol(chord, bass),
           leftOut: shape.leftOut,
-          ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS ? { inversion: bassAt } : {}),
+          // The Chords explorer reads a chord of five notes or more by hands, not inversions.
+          ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS && chord.tones.length < TWO_HANDS_FROM
+            ? { inversion: bassAt }
+            : {}),
+          voicedAs: voicing(shape.parts, rootKey, keys),
         },
       ]
     })
   })
-  const rank = (each: FoundChord) => [
+  const rank = (each: (typeof found)[number]) => [
     each.bass ? 1 : 0,
     flatFiveOverTensions(each.parts) ? 1 : 0,
     addsOverSeventh(each.parts) ? 1 : 0,
     each.leftOut.length,
+    each.voicedAs,
     each.chord.quality ? 0 : 1,
     each.chord.tones.length,
   ]
@@ -157,5 +168,61 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
     const at = ra.findIndex((value, i) => value !== rb[i])
     return at < 0 ? 0 : (ra[at] ?? 0) - (rb[at] ?? 0)
   })
-  return ranked.filter((each, i) => ranked.findIndex((other) => other.symbol === each.symbol) === i)
+  // One name a chord: by its symbol, and by its tones over its bass (add2 or add9, as it is voiced).
+  const sameChord = (a: (typeof ranked)[number], b: (typeof ranked)[number]) =>
+    a.symbol === b.symbol ||
+    (a.chord.root.letter === b.chord.root.letter &&
+      a.chord.root.accidental === b.chord.root.accidental &&
+      a.bass?.letter === b.bass?.letter &&
+      a.bass?.accidental === b.bass?.accidental &&
+      a.parts.triad === b.parts.triad &&
+      a.parts.size === b.parts.size &&
+      octaveTones(a.parts) === octaveTones(b.parts))
+  return ranked
+    .filter((each, i) => ranked.findIndex((other) => sameChord(other, each)) === i)
+    .map(({ voicedAs: _voicedAs, ...chord }) => chord)
+}
+
+/** An added tone and the one an octave from it: the same note, named by where it is played. */
+const OCTAVE_OF: Readonly<Record<AddedTone, AddedTone>> = {
+  add2: 'add9',
+  add9: 'add9',
+  add4: 'add11',
+  add11: 'add11',
+  add6: 'add6',
+  addS11: 'addS11',
+  add13: 'add13',
+}
+
+/** A chord's added tones, each as the one an octave up names it: add2 and add9 are one. */
+const octaveTones = (parts: ChordParts): string =>
+  parts.added
+    .map((tone) => OCTAVE_OF[tone])
+    .toSorted()
+    .join(' ')
+
+/** How far a name's added 2nd, 4th, 9th or 11th is from how the keys voice it: 0 where each fits. */
+function voicing(parts: ChordParts, rootKey: number, keys: readonly Midi[]): number {
+  const SEMITONES: Partial<Record<AddedTone, number>> = { add2: 2, add9: 2, add4: 5, add11: 5 }
+  return parts.added.filter((tone) => {
+    const above = SEMITONES[tone]
+    if (above === undefined) return false
+    const close = keys.some((key) => key - rootKey === above)
+    return (tone === 'add2' || tone === 'add4') !== close
+  }).length
+}
+
+/**
+ * A chord on a pitch class: on a note of `key`, its root spelled as the key writes it (G♭ in G♭, G#
+ * in E), unless that writes a double sharp or flat its builder's own spelling does not; on a note
+ * outside the key, by the builder's rule (C#m in C, not D♭m with its F♭).
+ */
+function spelledChord(rootPc: PitchClass, parts: ChordParts, key: Key | undefined): BuiltChord {
+  const own = buildChord(builtRootSpelling(rootPc, parts), parts)
+  const keyRoot = key && keyTones(key).find((tone) => tone.pitchClass === rootPc)?.note
+  if (!keyRoot) return own
+  const inKey = buildChord(keyRoot, parts)
+  const doubled = (chord: BuiltChord) =>
+    chord.tones.some((tone) => Math.abs(tone.note.accidental) > 1)
+  return doubled(inKey) && !doubled(own) ? own : inKey
 }

@@ -1,11 +1,37 @@
 import { describe, expect, it } from 'vitest'
 import { nameChords } from './chord-finder'
+import { note } from './note'
 import { midi } from './pitch'
 
 const found = (...keys: number[]) => nameChords(keys.map((key) => midi(key)))
 const named = (...keys: number[]) => found(...keys).map((each) => each.symbol)
 
 describe('nameChords', () => {
+  it('spells a chord in a key as the key writes it, unless that writes more of it outside the key', () => {
+    const C = { tonic: note('C'), minor: false }
+    const E = { tonic: note('E'), minor: false }
+    const inKey = (key: typeof C, ...keys: number[]) => nameChords(keys.map(midi), key)[0]?.symbol
+    expect(inKey(C, 61, 64, 68)).toBe('C#m')
+    expect(inKey(E, 68, 72, 75)).toBe('G#')
+    expect(inKey(E, 70, 74, 77)).toBe('B♭')
+    expect(inKey({ tonic: note('G', -1), minor: false }, 66, 70, 73)).toBe('G♭')
+  })
+
+  it('names a 9th chord over its 7th before a 6/9 that leaves its 5th out and adds a tone', () => {
+    expect(named(48, 50, 52, 53, 57)[0]).not.toMatch(/6\/9/)
+  })
+
+  it('opens a chord of five notes or more in the explorer with no inversion', () => {
+    expect(found(47, 48, 52, 55, 62)[0]?.inversion).toBeUndefined()
+    expect(found(52, 55, 60)[0]?.inversion).toBe(1)
+  })
+
+  it('names an added tone once, a 2nd within the octave and a 9th past it', () => {
+    expect(named(60, 62, 64, 67).filter((symbol) => symbol.startsWith('C'))).toEqual(['Cadd2'])
+    expect(named(60, 64, 67, 74)).toContain('Cadd9')
+    expect(named(60, 64, 67, 74)).not.toContain('Cadd2')
+  })
+
   it('names a chord in root position, then what else the notes can be', () => {
     expect(named(60, 64, 67)).toEqual(['C'])
     expect(named(60, 64, 67, 69)).toEqual(['C6', 'Am7/C'])
