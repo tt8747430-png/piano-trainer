@@ -65,4 +65,26 @@ describe('arrangeProgression', () => {
     ])
     expect(performance.chords.at(-1)?.symbol).toBe('CMaj7')
   })
+
+  it('names each walked key’s chords as the key alone names them, never C♭7', () => {
+    const choice = {
+      numerals: numerals('♭VI ♭VII I'),
+      key: C,
+      pattern: 'block',
+      rh: null,
+      lh: null,
+      inversion: null,
+      chordSize: 'sevenths',
+      walk: 'semitones-up',
+    } as const
+    const symbols = arrangeProgression(choice, BUILT_IN_PATTERNS).chords.map((c) => c.symbol)
+    const inEFlat = progressionChart(
+      numerals('♭VI ♭VII I'),
+      { tonic: note('E', -1), minor: false },
+      'sevenths',
+    )
+    const alone = inEFlat.sections[0]?.lines.flat().flatMap((bar) => bar.chords.map(chordSymbol))
+    expect(symbols.slice(9, 12)).toEqual(alone)
+    expect(symbols).not.toContain('C♭7')
+  })
 })

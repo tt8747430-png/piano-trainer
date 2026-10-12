@@ -36,6 +36,7 @@ export {
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
+  plainRoot,
   plainSpelling,
   ROOT_ACCIDENTALS,
   rootSpelling,

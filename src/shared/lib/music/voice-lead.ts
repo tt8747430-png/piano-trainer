@@ -33,7 +33,7 @@ export function voiceLead(chords: readonly Chord[]): Midi[][] {
     // bigger chord inside an octave (a 13th's 3rd, 5th, 13th, 7th and 9th, not a stack an 11th wide).
     const options = held
       .map((start) =>
-        closeFrom(held, start, midi(MIDDLE_C + rootClass + (start.semitones % 12))).map(
+        closeFrom(held, start, midi(MIDDLE_C + ((rootClass + start.semitones) % 12))).map(
           (placed) => placed.midi,
         ),
       )

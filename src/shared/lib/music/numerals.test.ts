@@ -119,6 +119,20 @@ describe('numeralChord', () => {
     expect(chords('♭II7 i', A_MINOR, 'triads')).toEqual(['B♭7', 'Am'])
   })
 
+  it('grows a minor key’s ♭III, ♭VI and ♭VII as its own chords, as III, VI and VII grow', () => {
+    expect(chords('i ♭VI ♭III ♭VII', A_MINOR, 'sevenths')).toEqual(
+      chords('i VI III VII', A_MINOR, 'sevenths'),
+    )
+    expect(chords('♭VI ♭III', A_MINOR, 'sevenths')).toEqual(['FMaj7', 'CMaj7'])
+  })
+
+  it('puts a minor key’s diminished vii on its leading tone, a °7 when it grows', () => {
+    expect(chords('vii°', A_MINOR, 'triads')).toEqual(['G#°'])
+    expect(chords('vii°', A_MINOR, 'sevenths')).toEqual(['G#°7'])
+    expect(chords('vii°7', A_MINOR, 'triads')).toEqual(['G#°7'])
+    expect(chords('VII', A_MINOR, 'triads')).toEqual(['G'])
+  })
+
   it('keeps what is written', () => {
     expect(chords('I7 IV7 V7', C, 'triads')).toEqual(['C7', 'F7', 'G7'])
     expect(chords('IMaj7 vii°7', C, 'triads')).toEqual(['CMaj7', 'B°7'])

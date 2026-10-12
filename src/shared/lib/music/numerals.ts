@@ -167,14 +167,21 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
  */
 const withOwnNinth = (quality: ChordQuality): ChordQuality => (quality === 'hd' ? 'hd9' : quality)
 
+/** A diminished chord on the 7th degree, unaltered: in a minor key, on its leading tone. */
+const leadingTone = (numeral: Numeral): boolean =>
+  numeral.degree === 6 &&
+  numeral.shift === 0 &&
+  (numeral.quality === 'dim' || numeral.quality === 'o7' || numeral.quality === 'hd')
+
 /**
  * A numeral's chord in a key at a chord size. Any chord but a plain triad is played as written;
  * a triad that is the key's own chord on its degree grows as the scale's does (`scaleChordAt`: a 9th
  * only where it is available), and any other grows as it is: a major chord to a dominant, a minor one
  * to a minor 7th, then to the 9th the key has over it where the chord takes it (a minor key's V to
  * `7♭9`); a half-diminished chord takes its natural 9th (a minor key's ii to `m9♭5`). A major key
- * counts from the major scale, a minor key from natural minor, a flat in either from the major scale
- * (A minor's ♭VI is F, not F♭).
+ * counts from the major scale, a minor key from natural minor (its diminished vii from harmonic minor,
+ * on the leading tone), a flat in either from the major scale (A minor's ♭VI is F, not F♭: its own VI,
+ * grown as the key's).
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = keyScale(key)
@@ -183,14 +190,22 @@ export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord
   const from = key.minor && numeral.shift < 0 ? spellScale(key.tonic, 'major') : scale
   const tone = from[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
-  const root = plainRoot(
-    numeral.shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: numeral.shift }),
-  )
   const { quality } = numeral
+  // A minor key's diminished vii is on its leading tone, as harmonic minor has it (A minor's G♯°).
+  const shift = key.minor && leadingTone(numeral) ? 1 : numeral.shift
+  const root = plainRoot(
+    shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: shift }),
+  )
+  if (shift !== numeral.shift) {
+    if (size === 'triads' || quality !== 'dim') return { root, quality }
+    return { root, quality: 'o7' }
+  }
   if (!isPlainTriad(quality)) return { root, quality }
-  const own = scaleChords(key.tonic, kind, 3)[numeral.degree]?.quality
-  if (numeral.shift === 0 && own === quality) {
-    const grown = scaleChordAt(key.tonic, kind, numeral.degree, SIZE_NOTES[size])
+  // The key's own chord, wherever its root lies by a flat (A minor's ♭VI is its own VI, F).
+  const degree = scale.findIndex((each) => each.pitchClass === pitchClassOf(root))
+  const own = degree < 0 ? undefined : scaleChords(key.tonic, kind, 3)[degree]?.quality
+  if (own === quality) {
+    const grown = scaleChordAt(key.tonic, kind, degree, SIZE_NOTES[size])
     return size === 'ninths' ? { ...grown, quality: withOwnNinth(grown.quality) } : grown
   }
   if (size === 'triads') return { root, quality }
