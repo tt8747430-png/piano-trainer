@@ -85,4 +85,9 @@ describe('splitsTheBeat', () => {
       }),
     ).toBe(true)
   })
+
+  it('lets a figure in triplets, a shuffle, play in compound time', () => {
+    const shuffle = parseFigure('0/2 L1,2/1 L5,3/2 L1,5/1 L5', { triplets: true })
+    expect(splitsTheBeat({ kind: 'events', events: shuffle })).toBe(false)
+  })
 })

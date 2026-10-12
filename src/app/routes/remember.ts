@@ -7,8 +7,17 @@ import type { Raw } from './read-search'
 // leaves out.
 
 /**
+ * Kept params that belong to another: a link that names a pattern means the pattern's own hands and
+ * inversion, never those kept from another pattern (a pattern's Practise would else play another).
+ */
+const BOUND_TO: Readonly<Record<string, readonly string[]>> = {
+  pattern: ['rh', 'lh', 'inversion'],
+}
+
+/**
  * Opened plainly, the remembered view; opened by a link, the link's params and the kept ones it
- * leaves out. A link that names only defaults leaves the URL bare, so a bare URL alone is not plain.
+ * leaves out, but for those bound to a param it names. A link that names only defaults leaves the
+ * URL bare, so a bare URL alone is not plain.
  */
 export function viewToOpen(
   url: Raw,
@@ -18,7 +27,9 @@ export function viewToOpen(
 ): Raw {
   if (!remembered) return url
   if (plain && Object.keys(url).length === 0) return remembered
+  const bound = new Set(Object.keys(url).flatMap((param) => BOUND_TO[param] ?? []))
   const filled = kept.flatMap((param) => {
+    if (bound.has(param)) return []
     const value = remembered[param]
     return url[param] === undefined && value !== undefined ? [[param, value] as const] : []
   })

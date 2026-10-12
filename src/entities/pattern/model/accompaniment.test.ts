@@ -44,4 +44,15 @@ describe('accompanimentOptions', () => {
       inversion: 2,
     })
   })
+
+  it('plays no inversion under a pattern that plays its own shapes, as the faded field says', () => {
+    expect(
+      accompanimentOptions(BUILT_IN_PATTERNS, {
+        pattern: 'flow',
+        rh: null,
+        lh: null,
+        inversion: 2,
+      }),
+    ).toEqual({ pattern: BUILT_IN_PATTERNS.require('flow').pattern })
+  })
 })

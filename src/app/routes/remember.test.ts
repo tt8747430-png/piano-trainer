@@ -4,6 +4,15 @@ import { viewToOpen } from './remember'
 const REMEMBERED = { key: 'G', pattern: 'r4', tempo: 90 }
 
 describe('viewToOpen', () => {
+  it('fills no hands or inversion kept from another pattern when a link names a pattern', () => {
+    const kept = ['pattern', 'rh', 'lh', 'inversion', 'tempo']
+    const remembered = { pattern: 'block', rh: 'b1', inversion: 1, tempo: 80 }
+    expect(viewToOpen({ pattern: 'r5' }, remembered, kept, false)).toEqual({
+      pattern: 'r5',
+      tempo: 80,
+    })
+  })
+
   it('opens the remembered view when opened plainly', () => {
     expect(viewToOpen({}, REMEMBERED, [], true)).toBe(REMEMBERED)
   })

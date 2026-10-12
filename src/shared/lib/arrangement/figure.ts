@@ -86,13 +86,14 @@ export const playsKeyTriads = (figure: Figure): boolean =>
     events.some((event) => event.tones.some((tone) => tone.token.kind === 'key-triad')),
   )
 
+/** A third of a beat: a triplet's note, which 6/8 and 12/8 divide their beat into. */
+const THIRD = TICKS_PER_BEAT / 3
+
 /**
- * Whether a figure plays inside a beat (an 8th, a 16th): written for a beat divided in two, it cannot
- * play in 6/8 or 12/8, whose beat divides in three.
+ * Whether a figure plays inside a beat divided in two (an 8th, a 16th): it cannot play in 6/8 or
+ * 12/8, whose beat divides in three. One in triplets (a shuffle) divides it as they do, and plays.
  */
 export const splitsTheBeat = (figure: Figure): boolean =>
   eventSets(figure).some((events) =>
-    events.some(
-      (event) => event.start % TICKS_PER_BEAT !== 0 || event.duration % TICKS_PER_BEAT !== 0,
-    ),
+    events.some((event) => event.start % THIRD !== 0 || event.duration % THIRD !== 0),
   )

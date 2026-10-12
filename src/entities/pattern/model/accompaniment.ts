@@ -2,6 +2,7 @@ import type { ArrangeOptions } from '@/shared/lib/arrangement'
 import type { Inversion } from '@/shared/lib/music'
 import { LEFT_FIGURES, RIGHT_FIGURES } from '../content/figures'
 import type { PatternBook } from './book'
+import { followsInversion } from './plays-chord'
 import type { PatternRef } from './own'
 import type { LeftFigureId, RightFigureId } from './types'
 
@@ -36,6 +37,8 @@ export function accompanimentOptions(
     pattern: book.require(pattern).pattern,
     ...(rh ? { rh: RIGHT_FIGURES[rh].figure } : {}),
     ...(lh ? { lh: LEFT_FIGURES[lh].figure } : {}),
-    ...(inversion === null ? {} : { inversion }),
+    // An inversion only where the pattern follows it: one that plays its own shapes, where the
+    // Setup's inversion is faded, plays as though none were chosen.
+    ...(inversion === null || !followsInversion(book, { pattern, rh }) ? {} : { inversion }),
   }
 }
