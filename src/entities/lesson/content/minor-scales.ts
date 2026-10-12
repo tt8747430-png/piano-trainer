@@ -18,8 +18,8 @@ const minorScales: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Natural minor climbs whole, half, whole, whole, half, whole, whole. From A it uses only the white keys. Play it below.',
-            ru: 'Натуральный минор строится так: тон, полутон, тон, тон, полутон, тон, тон. От ля он идёт только по белым клавишам. Сыграйте его ниже.',
+            en: 'Natural minor climbs whole, half, whole, whole, half, whole, whole. From A: white keys only.',
+            ru: 'Натуральный минор идёт так: тон, полутон, тон, тон, полутон, тон, тон. От ля — только белые клавиши.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'natural' },
@@ -27,15 +27,8 @@ const minorScales: Lesson = {
           kind: 'text',
           lead: { en: 'A degree', ru: 'Ступень' },
           text: {
-            en: 'is a note’s place in the scale, counted from the tonic. In A minor, A is the 1st degree and G the 7th.',
-            ru: '— место ноты в гамме, считая от тоники. В ля миноре ля — первая ступень, соль — седьмая.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The 3rd degree, C, is a minor 3rd above the tonic. This minor 3rd makes minor sound darker than major.',
-            ru: 'Третья ступень, до, на малую терцию выше тоники. Эта малая терция и делает минор темнее мажора.',
+            en: 'is a note’s place from the tonic. The 3rd degree, a minor 3rd up, makes minor sound dark.',
+            ru: '— место ноты от тоники. Третья ступень, на малую терцию выше, делает минор тёмным.',
           },
         },
       ],
@@ -46,25 +39,12 @@ const minorScales: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Raise the 7th degree a half step: G♯ in A minor. Now it leads up to the tonic, as in major.',
-            ru: 'Повысьте седьмую ступень на полутон: соль-диез в ля миноре. Теперь она ведёт вверх к тонике, как в мажоре.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The raised 7th also makes the chord on the 5th degree major, as in a major key.',
-            ru: 'Аккорд на пятой ступени от этого становится мажорным, как в мажорной тональности.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Between the 6th and the raised 7th lies a step and a half, F to G♯. Listen for this leap in the scale below.',
-            ru: 'Между шестой и повышенной седьмой ступенью получается увеличенная секунда, фа — соль-диез. Услышьте этот скачок в гамме ниже.',
+            en: 'Raise the 7th degree, G♯ in A minor: it leads up to the tonic, and the chord on the 5th turns major. F to G♯ is a step and a half.',
+            ru: 'Повысьте седьмую ступень, соль-диез в ля миноре: она ведёт к тонике, а аккорд пятой ступени становится мажорным. Фа — соль-диез — увеличенная секунда.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'harmonic' },
+        { kind: 'chords', symbols: ['E', 'Am'] },
       ],
     },
     {
@@ -73,15 +53,8 @@ const minorScales: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Raise the 6th degree as well, and the step and a half is gone. In A minor that gives F♯ and G♯.',
-            ru: 'Повысьте ещё и шестую ступень — увеличенная секунда исчезнет. В ля миноре это фа-диез и соль-диез.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Classical music raises them only going up. Coming down, it plays natural minor. Jazz keeps them raised both ways.',
-            ru: 'В классике их повышают только вверх, а вниз играют натуральный минор. В джазе они остаются повышенными и вверх, и вниз.',
+            en: 'Raise the 6th too, F♯ and G♯ in A minor, and the leap is gone. Classical music raises them only going up, jazz both ways.',
+            ru: 'Повысьте и шестую, фа-диез и соль-диез в ля миноре, — скачок исчезнет. В классике их повышают только вверх, в джазе — в обе стороны.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'melodic' },
@@ -92,18 +65,14 @@ const minorScales: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Relative keys', ru: 'Параллельные тональности' },
           text: {
-            en: 'C major and A minor have the same notes and the same key signature. Keys like these are relative keys.',
-            ru: 'У до мажора и ля минора одни и те же ноты и одинаковые ключевые знаки. Такие тональности называют параллельными.',
+            en: 'share their notes and key signature, like C major and A minor. The minor tonic is a minor 3rd below the major one.',
+            ru: 'имеют одни ноты и ключевые знаки, как до мажор и ля минор. Тоника минора на малую терцию ниже тоники мажора.',
           },
         },
-        {
-          kind: 'text',
-          text: {
-            en: 'The relative minor’s tonic is a minor 3rd below the major tonic: G major and E minor.',
-            ru: 'Тоника параллельного минора на малую терцию ниже тоники мажора: соль мажор и ми минор.',
-          },
-        },
+        { kind: 'scale', root: note('C'), scale: 'major' },
+        { kind: 'interval', root: note('A'), interval: 'm3' },
         {
           kind: 'link',
           title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },

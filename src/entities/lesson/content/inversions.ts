@@ -18,8 +18,8 @@ const inversions: Lesson = {
           kind: 'text',
           lead: { en: 'Root position', ru: 'Основной вид' },
           text: {
-            en: 'means the root is the lowest note. Tap C below: C E G, with C at the bottom.',
-            ru: '— это когда основной тон звучит ниже всех. Нажмите C ниже: до, ми, соль, и до — самая нижняя.',
+            en: 'means the root is the lowest note.',
+            ru: '— это когда основной тон звучит ниже всех.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
@@ -32,25 +32,18 @@ const inversions: Lesson = {
           kind: 'text',
           lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'is the same chord with another of its notes at the bottom.',
-            ru: '— тот же аккорд, но внизу у него звучит не основной тон.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Move the root up an octave. Now the 3rd is lowest: E G C. This is the first inversion.',
-            ru: 'Перенесите основной тон на октаву вверх. Теперь внизу терция: ми, соль, до. Это первое обращение.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'A chord symbol writes the bass after a slash: C/E. Classical theory calls it a sixth chord.',
-            ru: 'В буквенном обозначении бас пишут через дробь: C/E. В классической теории это секстаккорд.',
+            en: 'puts another chord note at the bottom. Move C up an octave and the 3rd is lowest: the first inversion, written C/E.',
+            ru: '— тот же аккорд с другой нотой внизу. Перенесите до на октаву вверх, и внизу окажется терция: первое обращение, пишется C/E.',
           },
         },
         { kind: 'chords', symbols: ['C/E'] },
+        {
+          kind: 'text',
+          text: {
+            en: 'Classical theory calls it a sixth chord.',
+            ru: 'В классической теории это секстаккорд.',
+          },
+        },
       ],
     },
     {
@@ -59,8 +52,8 @@ const inversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Move the 3rd up an octave too. Now the 5th is lowest: G C E, written C/G. Classical theory calls it a six-four chord.',
-            ru: 'Перенесите вверх и терцию. Теперь внизу квинта: соль, до, ми, пишется C/G. В классической теории это квартсекстаккорд.',
+            en: 'Move the 3rd up an octave too. Now the 5th is lowest: C/G. Classical theory calls it a six-four chord.',
+            ru: 'Перенесите вверх и терцию. Теперь внизу квинта: C/G. В классической теории это квартсекстаккорд.',
           },
         },
         { kind: 'chords', symbols: ['C/G'] },
@@ -72,22 +65,8 @@ const inversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Inversions let a hand change chords while it barely moves. This is how accompanists play.',
-            ru: 'Обращения позволяют руке менять аккорды, почти не сдвигаясь. Так играют аккомпаниаторы.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Going from C to F, keep their shared note, C, where it is. Move the other notes by step: C E G becomes C F A.',
-            ru: 'При переходе от C к F оставьте общую ноту до на месте. Остальные сдвиньте на шаг: до-ми-соль становится до-фа-ля.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play the row below: the hand hardly moves from C to F, to G and back to C.',
-            ru: 'Сыграйте ряд ниже: рука почти не сдвигается от C к F, к G и обратно к C.',
+            en: 'Inversions let the hand change chords while barely moving. Keep the shared note where it is and move the others by step.',
+            ru: 'Обращения позволяют руке менять аккорды, почти не сдвигаясь. Общую ноту оставьте на месте, остальные сдвиньте на шаг.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F/C', 'G/B', 'C'] },

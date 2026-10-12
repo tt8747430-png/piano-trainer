@@ -18,18 +18,18 @@ const triads: Lesson = {
           kind: 'text',
           lead: { en: 'A triad', ru: 'Трезвучие' },
           text: {
-            en: 'is three notes stacked in 3rds. On the white keys, take every other key: C, skip D, E, skip F, G.',
-            ru: '— три ноты, сложенные терциями. На белых клавишах возьмите клавиши через одну: до, (ре), ми, (фа), соль.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The bottom note, C, is the root. E is the 3rd above it, and G is the 5th. Play the chord below.',
-            ru: 'Нижняя нота, до, — основной тон. Ми — терция над ним, соль — квинта. Сыграйте аккорд ниже.',
+            en: 'is three notes stacked in 3rds: the root, the 3rd above it and the 5th.',
+            ru: '— три ноты, сложенные терциями: основной тон, терция над ним и квинта.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
+        {
+          kind: 'text',
+          text: {
+            en: 'On the white keys, take every other key.',
+            ru: 'На белых клавишах берите клавиши через одну.',
+          },
+        },
       ],
     },
     {
@@ -37,25 +37,10 @@ const triads: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A major triad', ru: 'Мажорное трезвучие' },
+          lead: { en: 'Major and minor', ru: 'Мажорное и минорное' },
           text: {
-            en: 'is a major 3rd with a minor 3rd on top: 1 3 5. It sounds bright.',
-            ru: '— большая терция и над ней малая: 1 3 5. Оно звучит светло.',
-          },
-        },
-        {
-          kind: 'text',
-          lead: { en: 'A minor triad', ru: 'Минорное трезвучие' },
-          text: {
-            en: 'is a minor 3rd with a major 3rd on top: 1 ♭3 5. It sounds darker.',
-            ru: '— малая терция и над ней большая: 1 ♭3 5. Оно звучит темнее.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Only the middle note differs. Play C, then Cm, and listen to it move. The grids below show each triad on all twelve roots.',
-            ru: 'Отличается только средняя нота. Сыграйте C, затем Cm и послушайте, как она сдвигается. Ниже — каждое трезвучие от всех двенадцати нот.',
+            en: 'differ in the middle note. Major is a major 3rd, then a minor 3rd: 1 3 5, bright. Minor is the reverse: 1 ♭3 5, darker.',
+            ru: 'трезвучия различаются средней нотой. Мажорное — большая терция, над ней малая: 1 3 5, светло. Минорное — наоборот: 1 ♭3 5, темнее.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cm'] },
@@ -68,18 +53,13 @@ const triads: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A diminished triad', ru: 'Уменьшённое трезвучие' },
-          text: {
-            en: 'is two minor 3rds: 1 ♭3 ♭5. It sounds tense and narrow.',
-            ru: '— две малые терции: 1 ♭3 ♭5. Оно звучит напряжённо и сжато.',
+          lead: {
+            en: 'Diminished and augmented triads',
+            ru: 'Уменьшённое и увеличенное трезвучия',
           },
-        },
-        {
-          kind: 'text',
-          lead: { en: 'An augmented triad', ru: 'Увеличенное трезвучие' },
           text: {
-            en: 'is two major 3rds: 1 3 ♯5. It sounds wide and unsettled. Play both below.',
-            ru: '— две большие терции: 1 3 ♯5. Оно звучит широко и неустойчиво. Сыграйте оба ниже.',
+            en: 'stack two 3rds of one size. Diminished is two minor 3rds, 1 ♭3 ♭5: tense. Augmented is two major 3rds, 1 3 ♯5: wide and unsettled.',
+            ru: 'складывают две одинаковые терции. Уменьшённое — две малые, 1 ♭3 ♭5: напряжённо. Увеличенное — две большие, 1 3 ♯5: широко и неустойчиво.',
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },

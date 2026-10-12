@@ -5,8 +5,8 @@ const majorScales: Lesson = {
   id: 'major-scales',
   title: { en: 'How major scales work', ru: 'Как устроена мажорная гамма' },
   summary: {
-    en: 'One pattern of whole and half steps builds a major scale from any note. Then how to finger C major.',
-    ru: 'Одна схема тонов и полутонов строит мажорную гамму от любой ноты. И аппликатура до мажора.',
+    en: 'One pattern of whole and half steps builds a major scale on any note, and how to finger C major.',
+    ru: 'Одна схема тонов и полутонов строит мажорную гамму от любой ноты, и аппликатура до мажора.',
   },
   level: 1,
   category: 'scales',
@@ -22,22 +22,8 @@ const majorScales: Lesson = {
           kind: 'text',
           lead: { en: 'A major scale', ru: 'Мажорная гамма' },
           text: {
-            en: 'climbs from its tonic to the tonic an octave up. The tonic is the note the scale starts on and is named after.',
-            ru: 'поднимается от тоники до тоники октавой выше. Тоника — нота, с которой гамма начинается и по которой названа.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Its steps always follow one pattern: whole, whole, half, whole, whole, whole, half.',
-            ru: 'Её шаги всегда идут по одной схеме: тон, тон, полутон, тон, тон, тон, полутон.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'From C, the pattern lands on white keys only. Its two half steps fall where white keys meet: E–F and B–C. Play C major below.',
-            ru: 'От до схема ложится только на белые клавиши. Оба полутона приходятся на стык белых клавиш: ми–фа и си–до. Сыграйте до мажор ниже.',
+            en: 'climbs from its tonic, the note it is named after, by whole, whole, half, whole, whole, whole, half. From C that is the white keys only.',
+            ru: 'поднимается от тоники, ноты, по которой названа, так: тон, тон, полутон, тон, тон, тон, полутон. От до это только белые клавиши.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'major' },
@@ -49,15 +35,8 @@ const majorScales: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Start the pattern on G, and the 7th note needs F♯. Start it on F, and the 4th note needs B♭.',
-            ru: 'Начните схему с соль — седьмой ноте понадобится фа-диез. Начните с фа — четвёртой ноте понадобится си-бемоль.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'A scale uses every letter once, each note on its own letter. That is why G major has F♯ and not G♭. Play both scales below.',
-            ru: 'Гамма проходит каждую букву по одному разу, у каждой ноты своя буква. Поэтому в соль мажоре фа-диез, а не соль-бемоль. Сыграйте обе гаммы ниже.',
+            en: 'From G the 7th note needs F♯, from F the 4th needs B♭. Each letter comes once, so G major has F♯, not G♭.',
+            ru: 'От соль седьмой ноте нужен фа-диез, от фа четвёртой — си-бемоль. Каждая буква встречается один раз, поэтому в соль мажоре фа-диез, а не соль-бемоль.',
           },
         },
         { kind: 'scale', root: note('G'), scale: 'major' },
@@ -71,19 +50,21 @@ const majorScales: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Right hand, going up: play 1 2 3 on C D E. Pass the thumb under to F, then play 1 2 3 4 5 up to the top C.',
-              ru: 'Правая рука вверх: сыграйте 1 2 3 на до, ре, ми. Подложите большой палец на фа и сыграйте 1 2 3 4 5 до верхнего до.',
+              en: 'Right hand: 1 2 3, thumb under to F, 1 2 3 4 5.',
+              ru: 'Правая рука: 1 2 3, большой палец под руку на фа, 1 2 3 4 5.',
             },
             {
-              en: 'Left hand, going up: play 5 4 3 2 1 from C to G. Cross the 3rd finger over to A, then play 3 2 1 up to the top C.',
-              ru: 'Левая рука вверх: сыграйте 5 4 3 2 1 от до до соль. Переложите третий палец на ля и сыграйте 3 2 1 до верхнего до.',
+              en: 'Left hand: 5 4 3 2 1, 3rd finger over to A, 3 2 1.',
+              ru: 'Левая рука: 5 4 3 2 1, третий палец через большой на ля, 3 2 1.',
             },
             {
-              en: 'Coming down, play the same fingers in reverse with each hand.',
-              ru: 'Вниз каждая рука играет те же пальцы в обратном порядке.',
+              en: 'Down: the same, in reverse.',
+              ru: 'Вниз — то же в обратном порядке.',
             },
           ],
         },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
       ],
     },
     {

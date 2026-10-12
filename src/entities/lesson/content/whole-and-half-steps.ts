@@ -19,18 +19,12 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'goes from any key to the very next one, black or white.',
-            ru: '— шаг от любой клавиши до соседней, чёрной или белой.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Only two pairs of white keys are a half step apart: E–F and B–C. No black key sits between them. Play E–F below.',
-            ru: 'Только две пары белых клавиш стоят на полутон друг от друга: ми–фа и си–до. Между ними нет чёрной клавиши. Сыграйте ми–фа ниже.',
+            en: 'goes to the very next key, black or white. E–F and B–C are the only white pairs with no black key between.',
+            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные белые пары без чёрной клавиши между ними.',
           },
         },
         { kind: 'interval', root: note('E'), interval: 'm2' },
+        { kind: 'interval', root: note('B'), interval: 'm2' },
       ],
     },
     {
@@ -40,8 +34,8 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A whole step', ru: 'Тон' },
           text: {
-            en: 'is two half steps, with one key between: C–D, E–F♯. Play C–D below.',
-            ru: '— два полутона, через одну клавишу: до–ре, ми–фа♯. Сыграйте до–ре ниже.',
+            en: 'is two half steps, with one key between: C–D, E–F♯.',
+            ru: '— два полутона, через одну клавишу: до–ре, ми–фа♯.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M2' },
@@ -53,15 +47,8 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C♯ and D♭ are the same key. Play both below: they sound the same.',
-            ru: 'До-диез и ре-бемоль — одна и та же клавиша. Сыграйте обе ноты ниже: они звучат одинаково.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The name depends on the letter the music needs. Going up from C, the key is C♯. Coming down from D, it is D♭.',
-            ru: 'Имя зависит от того, какая буква нужна музыке. Вверх от до эта клавиша — до-диез. Вниз от ре — ре-бемоль.',
+            en: 'C♯ and D♭ are one key. Going up from C, call it C♯. Coming down from D, call it D♭.',
+            ru: 'До-диез и ре-бемоль — одна клавиша. Вверх от до это до-диез, вниз от ре — ре-бемоль.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C#4/2 D♭4/2' },

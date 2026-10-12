@@ -5,8 +5,8 @@ const intervals: Lesson = {
   id: 'intervals',
   title: { en: 'Intervals', ru: 'Интервалы' },
   summary: {
-    en: 'The distance between two notes. Count it in letters, measure it in half steps, hear it as calm or tense.',
-    ru: 'Расстояние между двумя нотами. Его считают буквами, измеряют полутонами и слышат как покой или напряжение.',
+    en: 'The distance between two notes: counted in letters, measured in half steps, heard as calm or tense.',
+    ru: 'Расстояние между нотами: в буквах, в полутонах, на слух — покой или напряжение.',
   },
   level: 1,
   category: 'theory',
@@ -19,22 +19,8 @@ const intervals: Lesson = {
           kind: 'text',
           lead: { en: 'An interval', ru: 'Интервал' },
           text: {
-            en: 'is the distance between two notes.',
-            ru: '— расстояние между двумя нотами.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Its number counts letters, both ends included. C to E is C D E: three letters, a 3rd.',
-            ru: 'Число интервала — количество букв, считая обе крайние. От до до ми — до, ре, ми: три буквы, терция.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Its quality counts half steps. A major 3rd spans four, a minor 3rd three. Both are 3rds, because both span three letters. Play the minor 3rd below, then the major 3rd.',
-            ru: 'Качество интервала считает полутоны. В большой терции их четыре, в малой — три. Обе — терции: обе охватывают три буквы. Сыграйте ниже малую терцию, затем большую.',
+            en: 'is the distance between two notes. Its number counts letters, both ends included: C D E is a 3rd. Its quality counts half steps: four in a major 3rd, three in a minor.',
+            ru: '— расстояние между двумя нотами. Число считает буквы вместе с крайними: до, ре, ми — терция. Качество считает полутоны: в большой терции четыре, в малой три.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'm3' },
@@ -48,52 +34,22 @@ const intervals: Lesson = {
           kind: 'text',
           lead: { en: 'Perfect intervals', ru: 'Чистые интервалы' },
           text: {
-            en: 'are the unison (one note twice), the 4th, the 5th and the octave.',
-            ru: '— прима (одна нота дважды), кварта, квинта и октава.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'They are the same in major and in minor. Turn a perfect interval upside down, and it stays perfect.',
-            ru: 'Они одинаковы в мажоре и в миноре. Если перевернуть чистый интервал, он останется чистым.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The 5th is the frame of every major and minor chord. Play C–G below.',
-            ru: 'Квинта — остов каждого мажорного и минорного аккорда. Сыграйте до–соль ниже.',
+            en: 'are the unison, the 4th, the 5th and the octave. Turned upside down, they stay perfect: C–G becomes G–C. The 5th frames every major and minor chord.',
+            ru: '— прима, кварта, квинта и октава. Перевёрнутые, они остаются чистыми: до–соль становится соль–до. Квинта — остов каждого мажорного и минорного аккорда.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P5' },
+        { kind: 'interval', root: note('G'), interval: 'P4' },
       ],
     },
     {
       heading: { en: 'Calm and tense', ru: 'Покой и напряжение' },
       blocks: [
         {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Perfect intervals sound open and still.',
-              ru: 'Чистые интервалы звучат открыто и спокойно.',
-            },
-            {
-              en: '3rds and 6ths sound warm and full. They are the imperfect consonances.',
-              ru: 'Терции и сексты звучат тепло и полно. Это несовершенные консонансы.',
-            },
-            {
-              en: '2nds and 7ths clash and want to move. They are the dissonances.',
-              ru: 'Секунды и септимы звучат резко и хотят разрешиться. Это диссонансы.',
-            },
-          ],
-        },
-        {
           kind: 'text',
           text: {
-            en: 'Play the 6th below, then the 2nd, and compare.',
-            ru: 'Сыграйте ниже сексту, затем секунду, и сравните.',
+            en: 'Perfect intervals sound open and still. 3rds and 6ths sound warm: the imperfect consonances. 2nds and 7ths clash and want to move: the dissonances.',
+            ru: 'Чистые интервалы звучат открыто и спокойно. Терции и сексты — тепло: это несовершенные консонансы. Секунды и септимы резки и хотят разрешиться: это диссонансы.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M6' },

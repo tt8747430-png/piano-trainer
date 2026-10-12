@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Find a song’s key and name each chord by its degree. Then play it in any key without working out each chord.',
-    ru: 'Найдите тональность песни и назовите каждый аккорд по ступени. Тогда её можно играть в любой тональности, не пересчитывая каждый аккорд.',
+    en: 'Find a song’s key, name each chord by its degree, and play it in any key.',
+    ru: 'Найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
   },
   level: 2,
   category: 'accompaniment',
@@ -20,31 +20,30 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Think of a song’s chords as degrees of its key, not as letters. Then you can move the song to another key quickly.',
-            ru: 'Думайте об аккордах песни как о ступенях тональности, а не как о буквах. Тогда песню можно быстро переложить в другую тональность.',
+            en: 'Chords named by degree move to any key. So first find the key.',
+            ru: 'Аккорды, названные по ступеням, переносятся в любую тональность. Поэтому сначала найдите тональность.',
           },
         },
         {
-          kind: 'text',
-          text: {
-            en: 'So first find the key.',
-            ru: 'Поэтому сначала найдите тональность.',
-          },
+          kind: 'notes',
+          clef: 'treble',
+          key: D_MINOR,
+          notes: 'A4 G4 F4 E4 D4/1',
         },
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Read the key signature. Nine times in ten it names the key: the major or its relative minor.',
-              ru: 'Посмотрите на ключевые знаки. В девяти случаях из десяти они указывают тональность: мажор или параллельный минор.',
+              en: 'The signature: its major or relative minor.',
+              ru: 'Ключевые знаки: их мажор или параллельный минор.',
             },
             {
-              en: 'Look at the first and last chords. A song usually starts and ends at home.',
-              ru: 'Посмотрите на первый и последний аккорды. Песня обычно начинается и заканчивается дома.',
+              en: 'The first and last chords: usually home.',
+              ru: 'Первый и последний аккорды: обычно это дом.',
             },
             {
-              en: 'Listen for the note the melody comes to rest on at the end. That note is usually the tonic.',
-              ru: 'Послушайте, на какой ноте мелодия останавливается в конце. Обычно это тоника.',
+              en: 'The melody’s last note: usually the tonic.',
+              ru: 'Последняя нота мелодии: обычно это тоника.',
             },
           ],
         },
@@ -56,32 +55,25 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '«Ромашковые поля» is in D minor. It opens Dm7 Gm7 Asus4 Dm7: in degrees, i7, iv7, Vsus4, i7.',
-            ru: '«Ромашковые поля» — в ре миноре. Песня начинается с Dm7 Gm7 Asus4 Dm7, по ступеням — i7, iv7, Vsus4, i7.',
-          },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            { en: 'The numeral says the degree.', ru: 'Цифра называет ступень.' },
-            {
-              en: 'Its case says major or minor: upper case major, lower case minor.',
-              ru: 'Заглавная или строчная цифра говорит, мажор это или минор.',
-            },
-            {
-              en: 'What follows it says what is added or changed.',
-              ru: 'То, что стоит после цифры, говорит, что добавлено или изменено.',
-            },
-          ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Tap the four chords below.',
-            ru: 'Нажмите четыре аккорда ниже.',
+            en: '«Ромашковые поля» is in D minor. Its opening in degrees: i7 iv7 Vsus4 i7.',
+            ru: '«Ромашковые поля» — в ре миноре. Начало по ступеням: i7 iv7 Vsus4 i7.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'Gm7', 'Asus4', 'Dm7'] },
+        {
+          kind: 'steps',
+          steps: [
+            { en: 'The numeral is the degree.', ru: 'Цифра — это ступень.' },
+            {
+              en: 'Upper case means major, lower case minor.',
+              ru: 'Заглавная — мажор, строчная — минор.',
+            },
+            {
+              en: 'What follows says what is added or changed.',
+              ru: 'То, что после цифры, говорит, что добавлено или изменено.',
+            },
+          ],
+        },
       ],
     },
     {
@@ -90,17 +82,22 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The degrees stay the same. Only the key changes. In G minor, the same i7 iv7 Vsus4 i7 is Gm7 Cm7 Dsus4 Gm7.',
-            ru: 'Ступени остаются те же, меняется только тональность. В соль миноре те же i7 iv7 Vsus4 i7 — это Gm7 Cm7 Dsus4 Gm7.',
+            en: 'The degrees stay. Only the key changes: in G minor, i7 iv7 Vsus4 i7 is Gm7 Cm7 Dsus4 Gm7.',
+            ru: 'Ступени остаются, меняется только тональность: в соль миноре i7 iv7 Vsus4 i7 — это Gm7 Cm7 Dsus4 Gm7.',
           },
         },
         { kind: 'chords', symbols: ['Gm7', 'Cm7', 'Dsus4', 'Gm7'] },
         {
           kind: 'note',
           text: {
-            en: 'Practise one progression in every key, and the numerals become a habit. The Player’s Through the keys walks it for you.',
-            ru: 'Сыграйте одну последовательность во всех тональностях — и ступени войдут в привычку. В плеере это делает «По тональностям».',
+            en: 'Practise one progression in every key, and the numerals become a habit.',
+            ru: 'Сыграйте одну последовательность во всех тональностях — и ступени войдут в привычку.',
           },
+        },
+        {
+          kind: 'link',
+          title: { en: 'i7 iv7 Vsus4 i7 through the keys', ru: 'i7 iv7 Vsus4 i7 по тональностям' },
+          target: { place: 'player', numerals: 'i7 iv7 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
         },
       ],
     },

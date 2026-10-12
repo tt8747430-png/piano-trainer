@@ -4,8 +4,8 @@ const sevenTypes: Lesson = {
   id: 'seven-types',
   title: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
   summary: {
-    en: 'Н. В. Боброва’s seven types, all on one hymn: what each is for, and how to mix them in a song.',
-    ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне: для чего каждый и как сочетать их в песне.',
+    en: 'Н. В. Боброва’s seven types on one hymn, and how to mix them.',
+    ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне и как их сочетать.',
   },
   level: 2,
   category: 'accompaniment',
@@ -18,34 +18,8 @@ const sevenTypes: Lesson = {
           kind: 'text',
           lead: { en: 'A type of accompaniment', ru: 'Вид аккомпанемента' },
           text: {
-            en: 'is one way to lay out the same chords in both hands.',
-            ru: '— это фактура: способ изложить одни и те же аккорды двумя руками.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'In «Семь основных видов аккомпанемента» Боброва plays every type on one hymn, «О наш Отец на небесах».',
-            ru: 'В книге «Семь основных видов аккомпанемента» Боброва играет каждый вид на одном гимне — «О наш Отец на небесах».',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The chords stay the same. Two things change: how much the piano moves, and whether it plays the tune.',
-            ru: 'Аккорды не меняются. Меняется другое: насколько подвижна фактура и звучит ли мелодия.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Types 1–3: chords', ru: 'Виды 1–3: аккорды' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'The first three play only the chords. Type 1 holds them together with the bass. Type 2 takes bass and chord in turn. Type 3 repeats the chord over the bass.',
-            ru: 'Первые три вида играют только аккорды. В первом аккорд звучит вместе с басом. Во втором бас и аккорд чередуются. В третьем аккорд повторяется над басом.',
+            en: 'lays out the same chords in both hands. Боброва plays all seven on one hymn. Types 1–3 play only the chords.',
+            ru: '— способ изложить одни и те же аккорды двумя руками. Боброва играет все семь на одном гимне. Виды 1–3 играют только аккорды.',
           },
         },
         { kind: 'pattern', pattern: 'r1', piece: 'otche' },
@@ -60,15 +34,8 @@ const sevenTypes: Lesson = {
           kind: 'text',
           lead: { en: 'Figuration', ru: 'Фигурация' },
           text: {
-            en: 'plays a chord’s notes one at a time, as a moving line.',
-            ru: '— это звуки аккорда по одному, движущейся линией.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Type 4 runs that line across both hands. Its variant breaks the chord in the right hand over a bass of root and 5th.',
-            ru: 'Четвёртый вид ведёт эту линию через обе руки. Его вариант — ломаное арпеджио правой руки над басом из основного тона и квинты.',
+            en: 'plays a chord’s notes one at a time, as a moving line. Type 4 runs it across both hands, its variant in the right hand over the bass.',
+            ru: '— звуки аккорда по одному, движущейся линией. Четвёртый вид ведёт её через обе руки, его вариант — в правой руке над басом.',
           },
         },
         { kind: 'pattern', pattern: 'r4', piece: 'otche' },
@@ -76,50 +43,24 @@ const sevenTypes: Lesson = {
       ],
     },
     {
-      heading: { en: 'Types 5–7: with the melody', ru: 'Виды 5–7: с мелодией' },
+      heading: { en: 'Types 5–7, and mixing them', ru: 'Виды 5–7 и их сочетание' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The last three bring in the tune. Type 5 doubles it in the right hand. Type 6 plays it only at the start and end of each phrase. Type 7 harmonises it, with chord notes under it.',
-            ru: 'Последние три вида вводят мелодию. В пятом правая рука дублирует её. В шестом она звучит только в начале и в конце фраз. В седьмом мелодия гармонизована: под ней звучат звуки аккорда.',
+            en: 'The last three bring in the tune.',
+            ru: 'Последние три вида вводят мелодию.',
           },
         },
         { kind: 'pattern', pattern: 'r5', piece: 'otche' },
         { kind: 'pattern', pattern: 'r6', piece: 'otche' },
         { kind: 'pattern', pattern: 'r7', piece: 'otche' },
-      ],
-    },
-    {
-      heading: { en: 'Mixing them', ru: 'Сочетайте их' },
-      blocks: [
         {
           kind: 'note',
           text: {
-            en: 'Don’t play a whole hymn in one type. The practicum suggests a type for each part:',
-            ru: 'Не играйте весь гимн одним видом. Практикум советует вид для каждой части:',
+            en: 'Mix them in a hymn: figuration in the verse, the chord’s pulse in the chorus, type 1 at the start and end, the tune doubled for unsure singers.',
+            ru: 'Сочетайте их в гимне: фигурация в куплете, аккордовая пульсация в припеве, первый вид в начале и конце, дублированная мелодия там, где поющие неуверенны.',
           },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'The verse: figuration (type 4).',
-              ru: 'Куплет — фигурация (четвёртый вид).',
-            },
-            {
-              en: 'The chorus: the chord’s pulse (type 3).',
-              ru: 'Припев — аккордовая пульсация (третий вид).',
-            },
-            {
-              en: 'The start and the end: the harmonic basis (type 1).',
-              ru: 'Начало и конец — гармоническая основа (первый вид).',
-            },
-            {
-              en: 'Where the singers are unsure: the melody doubled (type 5).',
-              ru: 'Там, где поющие неуверенны, — дублирование мелодии (пятый вид).',
-            },
-          ],
         },
         {
           kind: 'link',
