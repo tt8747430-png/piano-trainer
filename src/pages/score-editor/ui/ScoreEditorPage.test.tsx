@@ -108,6 +108,24 @@ describe('the score editor', () => {
     ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
   })
 
+  it('opens on what another tab saved, so its next change keeps it', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('status')
+    act(() =>
+      piecesStore.setState({
+        songs: piecesStore
+          .getState()
+          .songs.map((song) => ({ ...song, sections: [{ kind: 'verse', lines: ['G G G D'] }] })),
+      }),
+    )
+    await toChordRow(user)
+    const field = await screen.findByRole('textbox', { name: 'Chord' })
+    await user.clear(field)
+    await user.type(field, 'Am{Enter}')
+    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Am G G D'] }] })
+  })
+
   it('sets a typed chord at the caret and moves to the next bar', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

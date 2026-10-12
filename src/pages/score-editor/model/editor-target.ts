@@ -57,6 +57,15 @@ export function editorTarget(state: PiecesState, id: string): EditorTarget | und
   return { kind: 'version', id, entry, music: selectVersion(state, id) ?? original, original }
 }
 
+/** The target's music as the store holds it now; none for an own song deleted. */
+export function savedMusic(state: PiecesState, target: EditorTarget): PieceMusic | undefined {
+  if (target.kind === 'version') return selectVersion(state, target.id) ?? target.original
+  const song = selectOwnSong(state, target.id)
+  if (!song) return undefined
+  const { id: _id, title: _title, ...music } = song
+  return music
+}
+
 /** Where the editor saves what it writes. */
 export const savingTo = (target: EditorTarget): MusicTarget =>
   target.kind === 'song'

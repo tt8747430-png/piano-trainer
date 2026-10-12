@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
   entryTitles,
+  sameMusic,
   selectHasVersion,
   selectOwnSong,
   usePieces,
@@ -24,7 +25,7 @@ import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
-import { savingTo, type EditorTarget } from './editor-target'
+import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
@@ -59,11 +60,27 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const locale = useLocale()
   const [chordNames, setChordNames] = useState(true)
   const [settingsOpen, openSettings] = useState(false)
+  /** The music last saved here, or read: what the store holds unless another tab saved since. */
+  const [saved] = useState(() => ({ music: target.music }))
   const [store] = useState(() =>
     createEditorStore(readDraft(target.music), (draft) => {
       const music = musicToSave(draft)
-      if (music) saveMusic(pieces, savingTo(target), music)
+      if (!music) return
+      saved.music = music
+      saveMusic(pieces, savingTo(target), music)
     }),
+  )
+  // The same music changed in another tab: the editor opens on it, so its next change does not
+  // write over what was written there.
+  useEffect(
+    () =>
+      pieces.subscribe((state) => {
+        const now = savedMusic(state, target)
+        if (!now || sameMusic(now, saved.music)) return
+        saved.music = now
+        store.replace(readDraft(now))
+      }),
+    [pieces, store, target, saved],
   )
   const playback = usePlayback<'piece'>()
   const chordField = useRef<HTMLInputElement | null>(null)
