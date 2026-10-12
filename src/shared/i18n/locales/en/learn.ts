@@ -95,6 +95,9 @@ export const learn = {
     over: 'Played over “{{piece}}”',
     openInPlayer: 'Open in the Player',
     inProgressions: 'Open in Progressions',
+    playNotes: 'Play {{notes}}',
+    playBar: 'Play bar {{n}}',
+    tapHint: 'Tap a note or a bar to hear it.',
   },
   // A lesson's quiz, answered on its keys.
   quiz: {

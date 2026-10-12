@@ -10,12 +10,15 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { INTERVAL_WAYS, intervalSounds, type IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView, PlayLabel, type ShownKeys } from '@/shared/ui'
+import { PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { intervalExample, tonesText } from '../model/interval-example'
+import { TappableStaff } from './TappableStaff'
 
 /** A card's staff, a little smaller than an explorer's own. */
 const CARD_STAFF = 0.8
+/** A note tapped on the card's staff sounds at this tempo's half note. */
+const NOTE_TEMPO = 72
 
 /**
  * One interval over a root, as Clefs' reference writes it: its name and short name, its size and how
@@ -58,7 +61,14 @@ export function IntervalCard({
           <p>{t('learn:intervals.inChords', { degree: interval.degree })}</p>
         ) : null}
       </div>
-      <LazyScoreView score={score} scale={CARD_STAFF} staff="treble" />
+      <TappableStaff
+        music={example.music}
+        score={score}
+        staff="treble"
+        scale={CARD_STAFF}
+        tempo={NOTE_TEMPO}
+        onShow={onShow}
+      />
       <div className="mt-auto flex gap-2">
         {INTERVAL_WAYS.map((way) => (
           <Button

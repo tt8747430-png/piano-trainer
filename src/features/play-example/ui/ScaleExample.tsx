@@ -11,9 +11,10 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView, PlayLabel, type ShownKeys, ToneChip } from '@/shared/ui'
+import { PlayLabel, type ShownKeys, ToneChip } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { scaleExample } from '../model/scale-example'
+import { TappableStaff } from './TappableStaff'
 
 /** The tempo a lesson's scale runs at, in quarter notes. */
 const RUN_TEMPO = 96
@@ -55,7 +56,13 @@ export function ScaleExample({
         ))}
       </ol>
       <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
-        <LazyScoreView score={score} staff="treble" />
+        <TappableStaff
+          music={example.music}
+          score={score}
+          staff="treble"
+          tempo={RUN_TEMPO}
+          onShow={onShow}
+        />
       </div>
       <Button
         variant="soft"

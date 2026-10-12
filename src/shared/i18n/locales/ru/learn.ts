@@ -98,6 +98,9 @@ export const learn: LocaleResources['learn'] = {
     over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',
     inProgressions: 'Открыть в последовательностях',
+    playNotes: 'Сыграть {{notes}}',
+    playBar: 'Сыграть такт {{n}}',
+    tapHint: 'Нажмите на ноту или такт, чтобы услышать.',
   },
   quiz: {
     answer: 'Ответить на клавишах',

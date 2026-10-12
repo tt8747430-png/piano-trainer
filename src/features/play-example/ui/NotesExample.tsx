@@ -4,9 +4,10 @@ import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, type NoteLineMeter } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { LazyScoreView, PlayLabel, type ShownKeys } from '@/shared/ui'
+import { PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { notesShown } from '../model/notes-example'
+import { TappableStaff } from './TappableStaff'
 
 /** The tempo a lesson's line of notes plays at: slow enough to read along. */
 const LINE_TEMPO = 72
@@ -37,7 +38,7 @@ export function NotesExample({
     // Play beside the line where it fits, under it on a narrow screen.
     <figure className="flex flex-wrap items-center gap-x-6 gap-y-3 card p-4">
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-        <LazyScoreView score={score} staff={clef} />
+        <TappableStaff music={line} score={score} staff={clef} tempo={LINE_TEMPO} onShow={onShow} />
       </div>
       <Button
         variant="soft"

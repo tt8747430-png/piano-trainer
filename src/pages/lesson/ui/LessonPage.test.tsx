@@ -53,6 +53,17 @@ describe('A lesson', () => {
     for (const other of others) expect(other).toHaveAttribute('aria-pressed', 'false')
   })
 
+  it('plays a note tapped on a line’s staff, and a bar tapped over it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/learn/lessons/chromatic-scale')
+    const note = await screen.findAllByRole('button', { name: /^Play [A-G]/ })
+    const [first] = note
+    if (!first) throw new Error('a line of notes')
+    await user.click(first)
+    expect(first).toHaveAttribute('aria-pressed', 'true')
+    expect(audio.played.at(-1)?.sounds.length).toBeGreaterThan(0)
+  })
+
   it('goes back to Learn when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/lessons/reading-chord-symbols')
