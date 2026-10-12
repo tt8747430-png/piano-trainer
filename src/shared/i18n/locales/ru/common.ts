@@ -114,7 +114,7 @@ export const common: LocaleResources['common'] = {
     connecting: 'Подключение…',
     retry: 'Ещё раз',
     connected: 'Подключено: {{devices}}',
-    away: '{{device}} не подключена.',
+    away: 'Клавиатура {{device}} не подключена.',
     noDevice: 'MIDI-клавиатура не найдена.',
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',

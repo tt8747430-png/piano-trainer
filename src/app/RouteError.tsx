@@ -1,6 +1,7 @@
 import type { ErrorComponentProps } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useGoBack } from '@/shared/lib'
+import { usePageHeading } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   Empty,
@@ -20,11 +21,14 @@ type RouteErrorProps = Partial<ErrorComponentProps> & { reload?: () => void }
 export function RouteError({ reload = () => window.location.reload() }: RouteErrorProps) {
   const { t } = useTranslation('common')
   const back = useGoBack({ to: '/' })
+  const heading = usePageHeading<HTMLHeadingElement>(t('errors.title'))
   return (
     <Empty role="alert" className="min-h-96">
       <EmptyHeader>
         <EmptyTitle>
-          <h1 className="text-3xl">{t('errors.title')}</h1>
+          <h1 {...heading} className="text-3xl outline-none">
+            {t('errors.title')}
+          </h1>
         </EmptyTitle>
         {navigator.onLine ? null : (
           <EmptyDescription className="text-base">{t('errors.offline')}</EmptyDescription>

@@ -4,10 +4,7 @@ import { Button } from '@/shared/ui/primitives/button'
 export function UpdateBanner({ onUpdate, onLater }: { onUpdate: () => void; onLater: () => void }) {
   const { t } = useTranslation('common')
   return (
-    <div
-      role="status"
-      className="fixed inset-x-4 bottom-28 z-40 mx-auto flex max-w-md items-center gap-2 card p-3 shadow-lg landscape-phone:bottom-4 lg:bottom-4"
-    >
+    <div role="status" className="pointer-events-auto flex items-center gap-2 card p-3 shadow-lg">
       <p className="flex-1 font-medium">{t('update.available')}</p>
       <Button variant="ghost" onClick={onLater}>
         {t('update.later')}

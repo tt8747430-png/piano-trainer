@@ -250,7 +250,7 @@ export const learn: LocaleResources['learn'] = {
     favourite: 'Избранное',
     rightHand: 'Правая рука',
     leftHand: 'Левая рука',
-    overC: 'На такте до мажора',
+    overC: 'На такте C мажора',
     over: 'На первой строке песни «{{piece}}»',
     play: 'Сыграть',
     usedIn: 'Где звучит',

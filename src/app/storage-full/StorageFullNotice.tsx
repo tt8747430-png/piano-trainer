@@ -15,10 +15,7 @@ export function StorageFullNotice() {
   useEffect(() => onFailedWrite(() => setFull(true)), [])
   if (!full) return null
   return (
-    <div
-      role="alert"
-      className="fixed inset-x-4 bottom-28 z-40 mx-auto flex max-w-md flex-col gap-3 card p-4 shadow-lg landscape-phone:bottom-4 lg:bottom-4"
-    >
+    <div role="alert" className="pointer-events-auto flex flex-col gap-3 card p-4 shadow-lg">
       <p className="font-medium">{t('storageFull.message')}</p>
       <p className="text-sm text-muted-foreground">{t('storageFull.help')}</p>
       <div className="flex justify-end gap-2">

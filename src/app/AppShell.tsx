@@ -20,6 +20,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       <TooltipProvider>
         <a
           href="#content"
+          // Focus moves to the content without a history entry of its own: Back still goes back.
+          onClick={(event) => {
+            event.preventDefault()
+            document.getElementById('content')?.focus()
+          }}
           className="sr-only z-50 rounded-lg bg-card px-4 py-3 font-semibold focus:not-sr-only focus:fixed focus:top-[calc(env(safe-area-inset-top)+0.5rem)] focus:left-4"
         >
           {t('skipToContent')}

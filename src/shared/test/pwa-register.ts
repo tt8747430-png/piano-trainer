@@ -5,6 +5,7 @@ import { vi } from 'vitest'
 interface RegisterOptions {
   immediate?: boolean
   onRegisteredSW?: (url: string, registration: { update(): Promise<unknown> }) => void
+  onNeedReload?: () => void
 }
 
 /**

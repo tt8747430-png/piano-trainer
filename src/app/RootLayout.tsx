@@ -12,8 +12,11 @@ export function RootLayout() {
   return (
     <ShortcutsHelp>
       <Outlet />
-      <UpdatePrompt offer={!fullScreen} />
-      <StorageFullNotice />
+      {/* The app's notices, stacked above the tab bar, never over each other. */}
+      <div className="pointer-events-none fixed inset-x-4 bottom-28 z-40 mx-auto flex max-w-md flex-col gap-2 landscape-phone:bottom-4 lg:bottom-4">
+        <StorageFullNotice />
+        <UpdatePrompt offer={!fullScreen} />
+      </div>
       <ReloadOnRestore />
     </ShortcutsHelp>
   )

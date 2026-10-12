@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
@@ -18,6 +18,16 @@ describe('UpdatePrompt', () => {
     expect(updateServiceWorker).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Update' }))
     expect(updateServiceWorker).toHaveBeenCalledExactlyOnceWith(true)
+  })
+
+  it('reloads onto a version another tab took only once it may offer it again', () => {
+    const { registeredWith } = stubServiceWorker({ waiting: true })
+    const reload = vi.fn()
+    const { rerender } = render(<UpdatePrompt offer={false} reload={reload} />)
+    act(() => registeredWith().onNeedReload?.())
+    expect(reload).not.toHaveBeenCalled()
+    rerender(<UpdatePrompt offer reload={reload} />)
+    expect(reload).toHaveBeenCalledOnce()
   })
 
   it('keeps a waiting version to itself while it may not offer it', () => {
