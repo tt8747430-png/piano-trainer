@@ -2,7 +2,7 @@ import type { PatternEntry, PatternGroup, PatternGroupEntry, PatternId } from '.
 
 export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEntry>> = {
   'five-ways': {
-    name: { en: 'The 5 ways (lesson 3)', ru: '5 способов (урок 3)' },
+    name: { en: 'The five ways (lesson 3)', ru: 'Пять способов (урок 3)' },
     book: 'called-to-play',
   },
   techniques: {
@@ -10,7 +10,7 @@ export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEn
     book: 'called-to-play',
   },
   'seven-types': {
-    name: { en: 'The seven types of accompaniment', ru: '7 видов аккомпанемента' },
+    name: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
     book: 'seven-types',
   },
   genres: { name: { en: 'Rhythm styles', ru: 'Ритмические стили' }, book: null },
@@ -39,8 +39,8 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Правая рука чередует верхние звуки аккорда с нижним над выдержанной октавой.',
     },
     description: {
-      en: 'Left hand holds the octave. Right hand rocks in 8ths between the upper notes of the chord it holds and its lowest: a G after C is B, then D and G.',
-      ru: 'Левая рука держит октаву. Правая восьмыми чередует верхние звуки аккорда, который держит, и нижний: G после C — си, затем ре и соль.',
+      en: 'Left hand holds the octave. Right hand rocks in 8ths between the upper notes of the chord it holds and its lowest: for a G after C, D and G, then B.',
+      ru: 'Левая рука держит октаву. Правая восьмыми чередует верхние звуки аккорда, который держит, и нижний: G после C — ре и соль, затем си.',
     },
     rh: 'b2',
     lh: 'o',
@@ -474,8 +474,8 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     group: 'genres',
     name: { en: 'Salsa montuno', ru: 'Монтуно сальсы' },
     idea: {
-      en: "The montuno's off-beat chords over a tumbao bass.",
-      ru: 'Аккорды монтуно между долями над басом тумбао.',
+      en: "The montuno's broken chord, pushing across the beat, over a tumbao bass.",
+      ru: 'Ломаный аккорд монтуно, сдвинутый с доли, над басом тумбао.',
     },
     rh: 'sal',
     lh: 'sal',

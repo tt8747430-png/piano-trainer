@@ -118,7 +118,7 @@ describe('A progression in the Player', () => {
       expect(second).toBe(within(list).getByRole('group', { name: 'Your patterns' }))
       // Every book's shelves are in one list here, so a method book's says its book first.
       for (const name of [
-        'Called to Play · The 5 ways (lesson 3)',
+        'Called to Play · The five ways (lesson 3)',
         'Called to Play · Right-hand techniques',
         'Боброва · The seven types of accompaniment',
         'Rhythm styles',

@@ -41,9 +41,9 @@ describe('Practice → Accompaniment', () => {
       ['Styles', null],
       ['Yours', null],
     ])
-    expect(shelves()).toEqual(['The 5 ways (lesson 3)', 'Right-hand techniques', 'Studies'])
+    expect(shelves()).toEqual(['The five ways (lesson 3)', 'Right-hand techniques', 'Studies'])
     expect(
-      within(shelf('The 5 ways (lesson 3)')).getByRole('link', {
+      within(shelf('The five ways (lesson 3)')).getByRole('link', {
         name: /^1 · Bass \+ chords The chord on every beat over a held octave bass\.$/,
       }),
     ).toHaveAttribute('href', '/practice/patterns/M1')

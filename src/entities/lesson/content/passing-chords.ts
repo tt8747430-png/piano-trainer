@@ -74,8 +74,8 @@ const passingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A chromatic approach slides into the next chord by half steps. Between C and Am the bass walks down C, B, B♭, A, a dominant 7th on each step: C, B7, B♭7, Am.',
-            ru: 'Хроматический подход соскальзывает в следующий аккорд по полутонам. Между C и Am бас спускается до, си, си-бемоль, ля, с доминантсептаккордом на каждой ступени: C, B7, B♭7, Am.',
+            en: 'A chromatic approach slides into the next chord by half steps. Between C and Am the bass walks down C, B, B♭, A, a dominant 7th on each step between: B7, B♭7.',
+            ru: 'Хроматический подход соскальзывает в следующий аккорд по полутонам. Между C и Am бас спускается до, си, си-бемоль, ля, с доминантсептаккордом на каждой ступени между ними: B7, B♭7.',
           },
         },
         { kind: 'chords', symbols: ['C', 'B7', 'B♭7', 'Am'] },

@@ -30,8 +30,8 @@ const fiveWays: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each way keeps the same chords and changes what the hands do. Play them in order: each one moves a little more than the one before.',
-            ru: 'Каждый способ сохраняет те же аккорды и меняет то, что делают руки. Играйте их по порядку: каждый движется чуть больше предыдущего.',
+            en: 'Each way keeps the same chords and changes what the hands do. Play them in order: each changes what one hand does.',
+            ru: 'Каждый способ сохраняет те же аккорды и меняет то, что делают руки. Играйте их по порядку: каждый меняет то, что делает одна рука.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'ex3' },

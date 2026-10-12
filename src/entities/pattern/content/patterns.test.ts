@@ -38,7 +38,7 @@ describe('the pattern catalog', () => {
 
   it('names a group without its book: a list says the book where it mixes them', () => {
     expect(PATTERN_GROUPS.map((group) => PATTERN_GROUP_ENTRIES[group].name.en)).toEqual([
-      'The 5 ways (lesson 3)',
+      'The five ways (lesson 3)',
       'Right-hand techniques',
       'The seven types of accompaniment',
       'Rhythm styles',

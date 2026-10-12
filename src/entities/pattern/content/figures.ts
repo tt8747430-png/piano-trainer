@@ -139,7 +139,7 @@ export const RIGHT_FIGURES = {
   },
   blu: {
     name: { en: 'Blues shuffle stabs', ru: 'Короткие аккорды блюз-шаффла' },
-    figure: eventFigure('3/6 C,9/3 C', { triplets: true }),
+    figure: eventFigure('3/2 C,9/2 C', { triplets: true }),
   },
   rnb: {
     name: { en: 'R&B chords', ru: 'Аккорды R&B' },
@@ -163,7 +163,7 @@ export const RIGHT_FIGURES = {
   },
   cty: {
     name: { en: 'Country off-beats', ru: 'Кантри: слабые доли' },
-    figure: eventFigure('4/8 C,12/4 C'),
+    figure: eventFigure('4/4 C,12/4 C'),
   },
 } satisfies Readonly<Record<RightFigureId, FigureEntry<Figure>>>
 
