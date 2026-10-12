@@ -71,7 +71,8 @@ describe('Practice → Reharmonise', () => {
       .find((button) => button.textContent === 'FMaj9as 9 · in the key')
     if (!fMaj9) throw new Error('FMaj9 is missing')
     await user.click(fMaj9)
-    expect(notes(audio.played.at(-1)?.sounds)).toEqual([65, 69, 72, 76, 79, 91])
+    // Its 3rd, 5th and 7th close under the melody, the 9th: A C E G.
+    expect(notes(audio.played.at(-1)?.sounds)).toEqual([57, 60, 64, 67])
     expect(fMaj9).toHaveAttribute('aria-pressed', 'true')
   })
 

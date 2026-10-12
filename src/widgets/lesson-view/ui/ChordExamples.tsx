@@ -1,7 +1,8 @@
+import type { SpelledNote } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { PlayToggle, type ShownKeys } from '@/shared/ui'
-import { placeExample } from '../model/chord-example'
+import { placeExample, placeUnder } from '../model/chord-example'
 
 /**
  * A row of chords a lesson names, each written as the lesson writes it (C2 and Cadd9 are one chord
@@ -9,9 +10,12 @@ import { placeExample } from '../model/chord-example'
  */
 export function ChordExamples({
   symbols,
+  melody,
   onShow,
 }: {
   symbols: readonly string[]
+  /** A melody note each chord holds: each voiced close under it, the note on top. */
+  melody?: SpelledNote | undefined
   onShow: (shown: ShownKeys) => void
 }) {
   // By place: a row may write a chord twice (C F C), and each is its own button.
@@ -19,7 +23,7 @@ export function ChordExamples({
   return (
     <div className="flex flex-wrap gap-2">
       {symbols.map((symbol, place) => {
-        const example = placeExample(symbol)
+        const example = melody ? placeUnder(symbol, melody) : placeExample(symbol)
         const playing = playback.playing === place
         return (
           <PlayToggle

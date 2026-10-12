@@ -96,6 +96,8 @@ export type LessonBlock =
        * row of chords on two or more roots is played as a progression is, voice-led.
        */
       readonly apart?: true
+      /** A melody note each chord holds, voiced close under it with the note on top (E over C Am Em). */
+      readonly melody?: SpelledNote
     }
   | { readonly kind: 'grid'; readonly quality: ChordQuality }
   | { readonly kind: 'scale'; readonly root: SpelledNote; readonly scale: ScaleKind }

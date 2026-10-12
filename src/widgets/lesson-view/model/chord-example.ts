@@ -1,4 +1,4 @@
-import { chordShown } from '@/features/play-example'
+import { chordShown, voicedUnder } from '@/features/play-example'
 import {
   midi,
   MIDDLE_C,
@@ -9,6 +9,7 @@ import {
   spellChord,
   type Midi,
   type PitchClass,
+  type SpelledNote,
 } from '@/shared/lib/music'
 import type { ShownKeys } from '@/shared/ui'
 
@@ -48,3 +49,15 @@ export function placeExample(symbol: string): ShownKeys {
  */
 export const isProgressionRow = (symbols: readonly string[], apart = false): boolean =>
   !apart && new Set(symbols.map((symbol) => pitchClassOf(parseChordSymbol(symbol).root))).size > 1
+
+/** A chord symbol voiced close under a melody note it holds, the note on top by its degree. */
+export function placeUnder(symbol: string, melody: SpelledNote): ShownKeys {
+  const chord = parseChordSymbol(symbol)
+  const tones = spellChord(chord.root, chord.quality)
+  const pc = pitchClassOf(melody)
+  const tone = tones.find((each) => each.pitchClass === pc)
+  return voicedUnder(tones, pc, {
+    tone: tone?.role ?? 'scale',
+    label: tone?.degree ?? noteName(melody),
+  })
+}

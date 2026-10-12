@@ -24,7 +24,7 @@ const reharmonisingAMelody: Lesson = {
             ru: 'Ми в до мажоре — терция C, квинта Am и основной тон Em: три краски под одной нотой. Смените аккорд под долгой нотой мелодии, и строка зазвучит по-новому.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'Am', 'Em'] },
+        { kind: 'chords', symbols: ['C', 'Am', 'Em'], melody: note('E') },
         {
           kind: 'link',
           title: { en: 'E in Reharmonise', ru: 'Ми в реармонизации' },
@@ -42,7 +42,7 @@ const reharmonisingAMelody: Lesson = {
             ru: 'Септаккорды дают ещё больше вариантов: ми — септима FMaj7, нона Dm9 и терция C7, который к тому же V7 для F и ведёт в него.',
           },
         },
-        { kind: 'chords', symbols: ['FMaj7', 'Dm9', 'C7'] },
+        { kind: 'chords', symbols: ['FMaj7', 'Dm9', 'C7'], melody: note('E') },
       ],
     },
     {

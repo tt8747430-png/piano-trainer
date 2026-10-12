@@ -66,13 +66,13 @@ export function LessonBlock({
     case 'note':
       return <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
     case 'chords':
-      return isProgressionRow(block.symbols, block.apart) ? (
+      return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
         <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
           <RowChords />
           <RowPlay variant="soft" />
         </ChordRow>
       ) : (
-        <ChordExamples symbols={block.symbols} onShow={onShow} />
+        <ChordExamples symbols={block.symbols} melody={block.melody} onShow={onShow} />
       )
     case 'grid':
       return <ChordExamples symbols={gridSymbols(block.quality)} onShow={onShow} />

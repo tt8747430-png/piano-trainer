@@ -1,10 +1,9 @@
-import { chordShown, noteOnTop } from '@/features/play-example'
+import { voicedUnder } from '@/features/play-example'
 import {
   midi,
   MIDDLE_C,
   noteName,
   pitchClassOf,
-  placeChord,
   type HoldingChord,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -21,10 +20,9 @@ export function melodyAlone(
   return { keys: [key], marks: new Map([[key, { tone: 'scale', label: noteName(melody) }]]) }
 }
 
-/** A chord that holds the melody, in root position from middle C, with the melody note on top. */
+/** A chord that holds the melody, voiced close under it, the melody on top by its degree. */
 export function underMelody(holding: HoldingChord, melody: SpelledNote): ShownKeys {
-  const { rh } = placeChord(holding.chord.tones, { inversion: 0, bothHands: false })
   const pc = pitchClassOf(melody)
   const tone = holding.chord.tones.find((each) => each.pitchClass === pc)
-  return noteOnTop(chordShown(rh), pc, { tone: tone?.role ?? 'root', label: holding.degree })
+  return voicedUnder(holding.chord.tones, pc, { tone: tone?.role ?? 'root', label: holding.degree })
 }
