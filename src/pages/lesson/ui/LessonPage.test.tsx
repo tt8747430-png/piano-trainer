@@ -43,8 +43,8 @@ describe('A lesson', () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/inversions')
     await screen.findByRole('heading', { level: 1 })
-    // The row C, F/C, G/B, C: C before and after its inversions.
-    const row = screen.getByRole('button', { name: 'G/B' }).parentElement
+    // The row C, F/C, G/B, C: C before and after its inversions, played as a progression.
+    const row = screen.getByRole('button', { name: 'G/B' }).closest('ul')
     if (!row) throw new Error('the lesson writes its row of inversions')
     const [first, ...others] = within(row).getAllByRole('button', { name: /^C$/ })
     if (!first || others.length === 0) throw new Error('the row writes C twice')

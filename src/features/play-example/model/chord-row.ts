@@ -1,5 +1,6 @@
 import {
   numeralChord,
+  parseChordSymbol,
   numeralText,
   type Chord,
   type ChordSize,
@@ -11,7 +12,13 @@ import {
 export interface RowChord {
   readonly chord: Chord
   readonly caption?: string
+  /** The symbol as a lesson writes it (C2 and Cadd9 are one chord to the kernel); else its own. */
+  readonly symbol?: string
 }
+
+/** A lesson's row of chord symbols, each written as the lesson writes it. */
+export const symbolsRow = (symbols: readonly string[]): RowChord[] =>
+  symbols.map((symbol) => ({ chord: parseChordSymbol(symbol), symbol }))
 
 /** A progression's chords in a key and size, each captioned by its numeral. */
 export const progressionRow = (

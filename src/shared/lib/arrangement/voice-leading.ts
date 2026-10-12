@@ -4,6 +4,11 @@ import { midi, pitchClass, type Midi, type PitchClass, type Tone } from '@/share
 const LOWEST_BASE = 52
 const HIGHEST_BASE = 64
 const MIDDLE_C = 60
+/** Where the hand's middle is drawn, so a long piece does not drift up or down the keyboard. */
+const HOME = 64
+/** Each semitone the hand's middle strays from home, and its top voice leaps, against a voice's step. */
+const HOME_WEIGHT = 0.25
+const TOP_WEIGHT = 0.5
 
 const ascending = (a: number, b: number) => a - b
 
@@ -11,7 +16,14 @@ const ascending = (a: number, b: number) => a - b
 const voicingFrom = (base: number, pcs: readonly PitchClass[]): number[] =>
   pcs.map((pc) => base + pitchClass(pc - base)).sort(ascending)
 
-/** How far the voices move from the previous voicing (voice by voice), or how far from middle C. */
+const middleOf = (keys: readonly number[]): number =>
+  keys.reduce((sum, key) => sum + key, 0) / Math.max(keys.length, 1)
+
+/**
+ * What a voicing costs after the previous one: how far its voices move (voice by voice, a common
+ * tone held costing nothing), its top voice's leap again, and how far its middle strays from home;
+ * the first, how far it starts from middle C.
+ */
 function distance(voicing: readonly number[], before: readonly number[] | null): number {
   if (!before) return Math.abs((voicing[0] ?? MIDDLE_C) - MIDDLE_C)
   const lastVoice = before.length - 1
@@ -19,7 +31,8 @@ function distance(voicing: readonly number[], before: readonly number[] | null):
   voicing.forEach((m, i) => {
     moved += Math.abs(m - (before[Math.min(i, lastVoice)] ?? m))
   })
-  return moved
+  const top = Math.abs((voicing.at(-1) ?? 0) - (before.at(-1) ?? 0))
+  return moved + TOP_WEIGHT * top + HOME_WEIGHT * Math.abs(middleOf(voicing) - HOME)
 }
 
 /** The voicing of `pcs` that moves least from `previous`: the lowest such on a tie. */

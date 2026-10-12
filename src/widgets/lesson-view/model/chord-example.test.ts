@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { placeExample } from './chord-example'
+import { isProgressionRow, placeExample } from './chord-example'
 
 describe('placeExample', () => {
   it('places a chord from middle C, each tone marked by role and degree', () => {
@@ -26,5 +26,13 @@ describe('placeExample', () => {
     const example = placeExample('F6/D')
     expect(example.keys).toEqual([62, 65, 69, 72])
     expect(example.marks.get(midi(62))?.label).toBe('6')
+  })
+
+  it('plays a row on two roots or more as a progression, one root’s chords and a set-apart row each alone', () => {
+    expect(isProgressionRow(['C', 'F', 'G'])).toBe(true)
+    expect(isProgressionRow(['Dm7', 'G7', 'C6'])).toBe(true)
+    expect(isProgressionRow(['C', 'Cm', 'C°', 'C+'])).toBe(false)
+    expect(isProgressionRow(['C'])).toBe(false)
+    expect(isProgressionRow(['C', 'Dm', 'Em'], true)).toBe(false)
   })
 })

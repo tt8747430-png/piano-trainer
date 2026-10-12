@@ -22,7 +22,7 @@ const chordFamily: Lesson = {
             ru: 'Постройте трезвучие на каждой ноте гаммы до мажора, беря только её ноты, — получатся аккорды тональности: три мажорных, три минорных и одно уменьшённое.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'] },
+        { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'], apart: true },
       ],
     },
     {
@@ -35,7 +35,7 @@ const chordFamily: Lesson = {
             ru: 'Каждый аккорд называют по ступени: заглавной цифрой — мажорный (I, IV, V), строчной — минорный (ii, iii, vi), ° — уменьшённый (vii°). Схема одинакова во всех мажорных тональностях: I–IV–V — это C–F–G в до мажоре и G–C–D в соль мажоре.',
           },
         },
-        { kind: 'chords', symbols: ['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'] },
+        { kind: 'chords', symbols: ['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'], apart: true },
       ],
     },
     {
@@ -61,7 +61,11 @@ const chordFamily: Lesson = {
             ru: 'Добавьте к каждому трезвучию терцию из гаммы: Imaj7, ii7, iii7, IVmaj7, V7, vi7 и viiø7. Доминантсептаккорд только один — на V.',
           },
         },
-        { kind: 'chords', symbols: ['CMaj7', 'Dm7', 'Em7', 'FMaj7', 'G7', 'Am7', 'Bm7♭5'] },
+        {
+          kind: 'chords',
+          symbols: ['CMaj7', 'Dm7', 'Em7', 'FMaj7', 'G7', 'Am7', 'Bm7♭5'],
+          apart: true,
+        },
       ],
     },
     {

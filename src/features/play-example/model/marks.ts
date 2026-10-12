@@ -1,11 +1,16 @@
 import {
+  noteName,
+  pitchClass,
   rangeOf,
+  spellChord,
+  type Chord,
   type Finger,
   type KeyRange,
+  type Midi,
   type PlacedScaleChord,
   type PlacedTone,
 } from '@/shared/lib/music'
-import type { ShownKeys } from '@/shared/ui'
+import type { KeyMark, ShownKeys } from '@/shared/ui'
 
 /** A chord's keys as a page shows them: each by its role, labelled with its degree. */
 export const chordShown = (placed: readonly PlacedTone[]): ShownKeys => ({
@@ -39,3 +44,18 @@ export function scaleShown(
 /** Every key the chords play, from the tonic up: the keyboard fills its width with them. */
 export const chordsRange = (chords: readonly PlacedScaleChord[]): KeyRange | undefined =>
   rangeOf(chords.flatMap((placed) => placed.tones.map((tone) => tone.midi)))
+
+/**
+ * A chord's keys as a row voices them, each marked by its role in the chord (the bass too); a bass a
+ * slash chord writes that is no tone of the chord named by itself.
+ */
+export function voicedShown(chord: Chord, keys: readonly Midi[]): ShownKeys {
+  const tones = spellChord(chord.root, chord.quality)
+  const marks = new Map<Midi, KeyMark>()
+  for (const key of keys) {
+    const tone = tones.find((each) => each.pitchClass === pitchClass(key))
+    if (tone) marks.set(key, { tone: tone.role, label: tone.degree })
+    else if (chord.bass) marks.set(key, { tone: 'scale', label: noteName(chord.bass) })
+  }
+  return { keys, marks }
+}

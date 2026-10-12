@@ -6,6 +6,7 @@ import { usePlayback } from '@/shared/lib/services'
 import { ChordButton, PlayLabel, type ShownKeys, unmarked, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
+import { voicedShown } from '../model/marks'
 
 /** How fast a row walks, a chord each two beats. */
 const ROW_TEMPO = 84
@@ -46,7 +47,8 @@ export function ChordRow({
     playing: playback.playing,
     playChord: (place) => {
       const keys = voiced[place] ?? []
-      onShow(unmarked(keys))
+      const chord = chords[place]?.chord
+      onShow(chord ? voicedShown(chord, keys) : unmarked(keys))
       playback.toggle(place, () => chordSounds(keys, { arpeggio: false }))
     },
     playRow: () => {
@@ -67,10 +69,10 @@ export function RowChords() {
   const { chords, playing, playChord } = useRow()
   return (
     <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
-      {chords.map(({ chord, caption }, place) => (
-        <li key={`${place} ${chordSymbol(chord)}`} className="grid">
+      {chords.map(({ chord, caption, symbol = chordSymbol(chord) }, place) => (
+        <li key={`${place} ${symbol}`} className="grid">
           <ChordButton
-            symbol={chordSymbol(chord)}
+            symbol={symbol}
             numeral={caption}
             playing={playing === place}
             onClick={() => playChord(place)}

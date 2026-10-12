@@ -5,6 +5,7 @@ import {
   IntervalCard,
   NotesExample,
   ChordRow,
+  symbolsRow,
   progressionRow,
   RowChords,
   RowPlay,
@@ -12,6 +13,7 @@ import {
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyParam, note, noteParam } from '@/shared/lib/music'
+import { isProgressionRow } from '../model/chord-example'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
@@ -64,7 +66,14 @@ export function LessonBlock({
     case 'note':
       return <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
     case 'chords':
-      return <ChordExamples symbols={block.symbols} onShow={onShow} />
+      return isProgressionRow(block.symbols, block.apart) ? (
+        <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
+          <RowChords />
+          <RowPlay variant="soft" />
+        </ChordRow>
+      ) : (
+        <ChordExamples symbols={block.symbols} onShow={onShow} />
+      )
     case 'grid':
       return <ChordExamples symbols={gridSymbols(block.quality)} onShow={onShow} />
     case 'scale':

@@ -14,12 +14,47 @@ describe('voiceLead', () => {
 
   const voiced = (...symbols: string[]) => voiceLead(symbols.map(parseChordSymbol))
 
-  it('leaves a 9th chord’s root to the bass: the hand plays its 3rd, 5th, 7th and 9th', () => {
+  it('leaves a 9th chord’s root to the bass, the hands alternating the two rootless shapes', () => {
+    // Dm9 7-9-3-5 (C E F A), G9 3-5-7-9 (B D F A), CMaj9 7-9-3-5 (B D E G), around middle C.
     expect(voiced('Dm9', 'G9', 'CMaj9')).toEqual([
-      [50, 65, 69, 72, 76],
-      [55, 65, 69, 71, 74],
-      [48, 64, 67, 71, 74],
+      [50, 60, 64, 65, 69],
+      [55, 59, 62, 65, 69],
+      [48, 59, 62, 64, 67],
     ])
+  })
+
+  it('holds the tones two chords share and moves the others to the nearest: C F G C', () => {
+    expect(voiced('C', 'F', 'G', 'C').map(([, ...hand]) => hand)).toEqual([
+      [60, 64, 67],
+      [60, 65, 69],
+      [59, 62, 67],
+      [60, 64, 67],
+    ])
+  })
+
+  it('leads a ii–V–I’s 7ths down a step to the next 3rd', () => {
+    const [ii = [], v = [], one = []] = voiced('Dm7', 'G7', 'CMaj7')
+    // Dm7's 7th C falls to G7's 3rd B; G7's 7th F falls to C's 3rd E.
+    expect(ii).toContain(72)
+    expect(v).toContain(71)
+    expect(v).toContain(65)
+    expect(one).toContain(64)
+  })
+
+  it('starts a row in root position near middle C, and keeps the hand between G3 and G5', () => {
+    const rows = [
+      ['G', 'C', 'D', 'G'],
+      ['A', 'D', 'E7', 'A'],
+      ['B', 'E', 'F#7', 'B'],
+      ['Ab', 'Db', 'Eb7', 'Ab'],
+    ]
+    for (const row of rows) {
+      const voicedRow = voiced(...row)
+      for (const [, ...hand] of voicedRow) {
+        expect(Math.min(...hand), row.join(' ')).toBeGreaterThanOrEqual(55)
+        expect(Math.max(...hand), row.join(' ')).toBeLessThanOrEqual(79)
+      }
+    }
   })
 
   it('takes the nearest inversion though it starts on the root, the bass an octave under it', () => {
@@ -54,7 +89,7 @@ describe('voiceLead', () => {
 
   it('holds a big chord’s hand close, inside an octave: G13 is B D E F A, not a stack an 11th wide', () => {
     const [[, ...hand] = []] = voiced('G13')
-    expect(hand).toEqual([71, 74, 76, 77, 81])
+    expect(hand).toEqual([59, 62, 64, 65, 69])
     // Every chord of the table that one hand cannot stack.
     for (const quality of CHORD_QUALITIES.filter((each) => qualityIntervals(each).length >= 5)) {
       const [[bass = 0, ...keys] = []] = voiceLead([{ root: note('C'), quality }])

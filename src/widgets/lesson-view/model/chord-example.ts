@@ -40,3 +40,11 @@ export function placeExample(symbol: string): ShownKeys {
     marks: new Map([[below, { tone: 'scale', label: noteName(bass) }], ...marks]),
   }
 }
+
+/**
+ * Whether a lesson's row of chords is played as a progression, voice-led: two or more chords on two
+ * or more roots, unless the lesson sets them apart; a chord alone, or one root's chords (C Cm C° C+),
+ * shows each shape in root position.
+ */
+export const isProgressionRow = (symbols: readonly string[], apart = false): boolean =>
+  !apart && new Set(symbols.map((symbol) => pitchClassOf(parseChordSymbol(symbol).root))).size > 1

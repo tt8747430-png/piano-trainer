@@ -88,7 +88,15 @@ export type LessonBlock =
   | { readonly kind: 'text'; readonly lead?: LocalText; readonly text: LocalText }
   | { readonly kind: 'steps'; readonly steps: readonly LocalText[] }
   | { readonly kind: 'note'; readonly text: LocalText }
-  | { readonly kind: 'chords'; readonly symbols: readonly string[] }
+  | {
+      readonly kind: 'chords'
+      readonly symbols: readonly string[]
+      /**
+       * Each chord on its own, in root position (a key's chords, to learn each shape); otherwise a
+       * row of chords on two or more roots is played as a progression is, voice-led.
+       */
+      readonly apart?: true
+    }
   | { readonly kind: 'grid'; readonly quality: ChordQuality }
   | { readonly kind: 'scale'; readonly root: SpelledNote; readonly scale: ScaleKind }
   | { readonly kind: 'interval'; readonly root: SpelledNote; readonly interval: ReferenceInterval }
