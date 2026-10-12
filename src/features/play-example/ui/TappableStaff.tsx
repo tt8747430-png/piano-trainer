@@ -4,6 +4,7 @@ import type { Tick } from '@/shared/lib/music'
 import type { Score, StaffId, TimedMusic } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
+import { cn } from '@/shared/lib'
 import { LazyScoreView, type ShownKeys } from '@/shared/ui'
 import { notesShown } from '../model/notes-example'
 import { namesAt, noteColumns, passage } from '../model/staff-taps'
@@ -49,6 +50,7 @@ export function TappableStaff({
       music.bars.map((bar, i) => ({
         from: bar.startTick,
         to: music.bars[i + 1]?.startTick ?? Number.POSITIVE_INFINITY,
+        symbol: music.chords.find((chord) => chord.startTick === bar.startTick)?.symbol,
       })),
     [music],
   )
@@ -106,7 +108,12 @@ export function TappableStaff({
                       aria-label={t('example.playBar', { n: i + 1 })}
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to)}
-                      className="absolute z-20 flex items-start rounded-sm px-1 text-xs font-semibold text-muted-foreground tabular-nums transition-colors hover:bg-muted aria-pressed:bg-accent aria-pressed:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
+                      className={cn(
+                        'absolute z-20 flex items-start rounded-sm px-1 transition-colors hover:bg-muted aria-pressed:bg-accent aria-pressed:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring',
+                        bar.symbol
+                          ? 'font-display text-sm font-semibold text-foreground'
+                          : 'text-xs font-semibold text-muted-foreground tabular-nums',
+                      )}
                       style={{
                         left: measure.x,
                         width: measure.width,
@@ -114,7 +121,7 @@ export function TappableStaff({
                         height: BAR_BAND,
                       }}
                     >
-                      {i + 1}
+                      {bar.symbol ?? i + 1}
                     </button>
                   )
                 })
