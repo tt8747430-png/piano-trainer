@@ -63,7 +63,7 @@ describe('A pattern’s page', () => {
     expect(patternsStore.getState().favourites).toEqual(['ballad'])
     await user.click(screen.getByRole('button', { name: 'Hide from the Player' }))
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
-    expect(screen.getByText('Hidden from the Player’s list of patterns.')).toBeInTheDocument()
+    expect(screen.getByText('Hidden from the Player’s list and its book’s shelf; it stays in Yours.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Show in the Player' }))
     expect(patternsStore.getState().hidden).toEqual([])
   })

@@ -263,7 +263,7 @@ export const learn = {
     makeOwn: 'Make your own from it',
     hide: 'Hide from the Player',
     show: 'Show in the Player',
-    hiddenNote: 'Hidden from the Player’s list of patterns.',
+    hiddenNote: 'Hidden from the Player’s list and its book’s shelf; it stays in Yours.',
     edit: 'Edit',
     delete: 'Delete',
     deleting: {
