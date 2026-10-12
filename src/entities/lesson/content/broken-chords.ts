@@ -4,21 +4,36 @@ const brokenChords: Lesson = {
   id: 'broken-chords',
   title: { en: 'Broken chords and arpeggios', ru: 'Ломаные аккорды и арпеджио' },
   summary: {
-    en: 'A chord played a note at a time: broken in one hand, climbing through both, and the figuration churches use most.',
-    ru: 'Аккорд по одному звуку: ломаный в одной руке, поднимающийся через обе и фигурация, которую в церкви играют чаще всего.',
+    en: 'A chord one note at a time: broken in one hand, climbing through both, and the figure churches use most.',
+    ru: 'Аккорд по одному звуку: ломаный в одной руке, восходящий через обе и самая частая в церкви фигурация.',
   },
   level: 2,
   category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {
-      heading: { en: 'Broken, not struck', ru: 'Не ударом, а по звукам' },
+      heading: { en: 'One note at a time', ru: 'По одному звуку' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A broken chord', ru: 'Ломаный аккорд' },
           text: {
-            en: 'A chord need not be struck all at once. Played a note at a time, it keeps moving between the words and fills a slow song without getting louder. Called to Play’s second way is the first step.',
-            ru: 'Аккорд не обязательно брать разом. Сыгранный по звукам, он движется между словами и заполняет медленную песню, не становясь громче. Второй способ Called to Play — первый шаг.',
+            en: 'plays its notes one at a time instead of all at once.',
+            ru: '— аккорд, звуки которого берут по одному, а не разом.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'It keeps moving between the words. It fills a slow song without getting louder.',
+            ru: 'Он движется между словами и заполняет медленную песню, не становясь громче.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Called to Play’s second way is the first step. Play it below.',
+            ru: 'Второй способ Called to Play — первый шаг. Сыграйте его ниже.',
           },
         },
         { kind: 'pattern', pattern: 'M2', piece: 'ex3' },
@@ -29,9 +44,17 @@ const brokenChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'An arpeggio', ru: 'Арпеджио' },
           text: {
-            en: 'An arpeggio climbs the chord across both hands, one line passed from the left into the right: Called to Play’s third and fourth ways.',
-            ru: 'Арпеджио поднимается по аккорду через обе руки, одной линией из левой в правую: третий и четвёртый способы Called to Play.',
+            en: 'climbs the chord across both hands. One line passes from the left hand into the right.',
+            ru: 'поднимается по аккорду через обе руки. Одна линия переходит из левой руки в правую.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Called to Play’s third and fourth ways do this.',
+            ru: 'Так устроены третий и четвёртый способы Called to Play.',
           },
         },
         { kind: 'pattern', pattern: 'M3', piece: 'ex3' },
@@ -39,8 +62,8 @@ const brokenChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Hold the bass through the bar, with the pedal if you use it, changing it with each chord: the broken notes then sound as one chord.',
-            ru: 'Держите бас весь такт — педалью, если играете с ней, меняя её с каждым аккордом: тогда ломаные звуки сольются в один аккорд.',
+            en: 'Hold the bass through the bar, with the pedal if you use it. Change the pedal with each chord. The broken notes then sound as one chord.',
+            ru: 'Держите бас весь такт — педалью, если играете с ней. Меняйте педаль с каждым аккордом. Тогда ломаные звуки сольются в один аккорд.',
           },
         },
       ],
@@ -51,16 +74,16 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Боброва’s fourth type passes the arpeggio from hand to hand too, and turns it back on itself in the right hand.',
-            ru: 'Четвёртый вид у Бобровой тоже передаёт арпеджио из руки в руку, а в правой поворачивает его назад.',
+            en: 'Боброва’s fourth type, harmonic figuration, also passes the arpeggio from hand to hand. In the right hand it turns back down.',
+            ru: 'Четвёртый вид у Бобровой, гармоническая фигурация, тоже передаёт арпеджио из руки в руку. В правой руке оно поворачивает назад.',
           },
         },
         { kind: 'pattern', pattern: 'r4', piece: 'otche' },
         {
           kind: 'text',
           text: {
-            en: 'Its broken arpeggio turns the other way: the right hand plays the chord’s lowest, top, middle and top notes, so the figure rocks instead of climbing.',
-            ru: 'Его вариант, ломаное арпеджио, поворачивает иначе: правая рука играет нижний, верхний, средний и снова верхний звук аккорда, и фигура покачивается, а не поднимается.',
+            en: 'Its variant, the broken arpeggio, turns another way. The right hand plays the chord’s lowest, top, middle and top notes. The figure rocks instead of climbing.',
+            ru: 'Его вариант, ломаное арпеджио, поворачивает иначе. Правая рука играет нижний, верхний, средний и снова верхний звук аккорда. Фигура покачивается, а не поднимается.',
           },
         },
         { kind: 'pattern', pattern: 'r4b', piece: 'otche' },
@@ -72,8 +95,8 @@ const brokenChords: Lesson = {
         {
           kind: 'quiz',
           ask: {
-            en: 'Choose the notes A minor’s arpeggio climbs.',
-            ru: 'Выберите звуки, по которым поднимается арпеджио ля минора.',
+            en: 'Play the notes A minor’s arpeggio climbs through.',
+            ru: 'Сыграйте звуки, по которым поднимается арпеджио ля минора.',
           },
           answer: { chord: 'Am' },
         },

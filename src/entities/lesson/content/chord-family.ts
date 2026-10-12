@@ -5,8 +5,8 @@ const chordFamily: Lesson = {
   id: 'chord-family',
   title: { en: 'The chord family of a key', ru: 'Аккорды тональности' },
   summary: {
-    en: 'One scale, seven chords: their Roman numerals, the three that carry most songs, and their 7th chords.',
-    ru: 'Одна гамма — семь аккордов: их римские цифры, три главных и их септаккорды.',
+    en: 'One scale, seven chords: how Roman numerals name them, the three main chords, and the key’s 7th chords.',
+    ru: 'Одна гамма — семь аккордов: как их называют римскими цифрами, три главных аккорда и септаккорды тональности.',
   },
   level: 2,
   category: 'chords',
@@ -18,8 +18,15 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Build a triad on each note of the C major scale using only the scale’s notes, and you get the key’s family of chords: three major, three minor and one diminished.',
-            ru: 'Постройте трезвучие на каждой ноте гаммы до мажора, беря только её ноты, — получатся аккорды тональности: три мажорных, три минорных и одно уменьшённое.',
+            en: 'Build a triad on each note of the C major scale. Use only the scale’s notes.',
+            ru: 'Постройте трезвучие на каждой ноте гаммы до мажора. Берите только её ноты.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'You get the key’s family of chords: three major, three minor and one diminished. Tap each one below.',
+            ru: 'Получатся аккорды тональности: три мажорных, три минорных и одно уменьшённое трезвучие. Нажмите каждый аккорд ниже.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'], apart: true },
@@ -31,21 +38,50 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each chord is named by its degree: upper case for major (I, IV, V), lower case for minor (ii, iii, vi), ° for diminished (vii°). The pattern is the same in every major key, so I–IV–V is C–F–G in C and G–C–D in G.',
-            ru: 'Каждый аккорд называют по ступени: заглавной цифрой — мажорный (I, IV, V), строчной — минорный (ii, iii, vi), ° — уменьшённый (vii°). Схема одинакова во всех мажорных тональностях: I–IV–V — это C–F–G в до мажоре и G–C–D в соль мажоре.',
+            en: 'Each chord is named by its degree, in Roman numerals.',
+            ru: 'Каждый аккорд называют римской цифрой его ступени.',
+          },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Upper case for major: I, IV, V.',
+              ru: 'Заглавная цифра — мажорный: I, IV, V.',
+            },
+            {
+              en: 'Lower case for minor: ii, iii, vi.',
+              ru: 'Строчная — минорный: ii, iii, vi.',
+            },
+            { en: 'A ° for diminished: vii°.', ru: 'Знак ° — уменьшённый: vii°.' },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'The numerals are the same in every major key. I–IV–V is C–F–G in C and G–C–D in G. Below are G major’s seven chords.',
+            ru: 'Схема одна для всех мажорных тональностей. I–IV–V — это C–F–G в до мажоре и G–C–D в соль мажоре. Ниже — семь аккордов соль мажора.',
           },
         },
         { kind: 'chords', symbols: ['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'], apart: true },
       ],
     },
     {
-      heading: { en: 'The primary chords', ru: 'Главные трезвучия' },
+      heading: { en: 'Three main chords: I, IV, V', ru: 'Главные трезвучия: I, IV, V' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The primary chords', ru: 'Главные трезвучия' },
           text: {
-            en: 'I, IV and V between them hold every note of the scale, so any melody note fits one of them. Many hymns and folk songs use little else.',
-            ru: 'I, IV и V вместе содержат все ноты гаммы, поэтому любая нота мелодии ложится хотя бы на один из них. Многие гимны и народные песни почти ничего другого и не используют.',
+            en: 'are I, IV and V. Together they hold every note of the scale. So any melody note fits at least one of them.',
+            ru: '— это I, IV и V. Вместе они содержат все ноты гаммы. Поэтому любая нота мелодии ложится хотя бы на один из них.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Many hymns and folk songs use little else. Play C, F and G below.',
+            ru: 'Многие гимны и народные песни почти ничего другого не используют. Сыграйте C, F и G ниже.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -57,8 +93,15 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add a 3rd from the scale to each triad: Imaj7, ii7, iii7, IVmaj7, V7, vi7 and viiø7. Only V is a dominant 7th.',
-            ru: 'Добавьте к каждому трезвучию терцию из гаммы: Imaj7, ii7, iii7, IVmaj7, V7, vi7 и viiø7. Доминантсептаккорд только один — на V.',
+            en: 'Add one more 3rd from the scale to each triad. You get Imaj7, ii7, iii7, IVmaj7, V7, vi7 and viiø7.',
+            ru: 'Добавьте к каждому трезвучию ещё одну терцию из гаммы. Получатся Imaj7, ii7, iii7, IVmaj7, V7, vi7 и viiø7.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Only V is a dominant 7th.',
+            ru: 'Доминантсептаккорд среди них один — на V.',
           },
         },
         {

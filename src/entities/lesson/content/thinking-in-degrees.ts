@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Find a song’s key, name each chord by its degree, and play it in any key without working it out chord by chord.',
-    ru: 'Найдите тональность песни, назовите каждый аккорд по ступени — и играйте её в любой тональности, не пересчитывая аккорд за аккордом.',
+    en: 'Find a song’s key and name each chord by its degree. Then play it in any key without working out each chord.',
+    ru: 'Найдите тональность песни и назовите каждый аккорд по ступени. Тогда её можно играть в любой тональности, не пересчитывая каждый аккорд.',
   },
   level: 2,
   category: 'accompaniment',
@@ -20,24 +20,31 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'To move a song to another key quickly, think of its chords as degrees of its key, not as letters. So first find the key.',
-            ru: 'Чтобы быстро переложить песню в другую тональность, думайте об аккордах как о ступенях тональности, а не как о буквах. Поэтому сначала найдите тональность.',
+            en: 'Think of a song’s chords as degrees of its key, not as letters. Then you can move the song to another key quickly.',
+            ru: 'Думайте об аккордах песни как о ступенях тональности, а не как о буквах. Тогда песню можно быстро переложить в другую тональность.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'So first find the key.',
+            ru: 'Поэтому сначала найдите тональность.',
           },
         },
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Read the key signature: nine times in ten it names the key, major or its relative minor.',
-              ru: 'Посмотрите на ключевые знаки: в девяти случаях из десяти они называют тональность — мажор или параллельный минор.',
+              en: 'Read the key signature. Nine times in ten it names the key: the major or its relative minor.',
+              ru: 'Посмотрите на ключевые знаки. В девяти случаях из десяти они указывают тональность: мажор или параллельный минор.',
             },
             {
-              en: 'Look at the first and last chords: a song usually starts and ends at home.',
-              ru: 'Посмотрите на первый и последний аккорды: песня обычно начинается и заканчивается дома.',
+              en: 'Look at the first and last chords. A song usually starts and ends at home.',
+              ru: 'Посмотрите на первый и последний аккорды. Песня обычно начинается и заканчивается дома.',
             },
             {
-              en: 'Listen to where the melody’s last note comes to rest: that note is usually the tonic.',
-              ru: 'Послушайте, где успокаивается последняя нота мелодии: обычно это тоника.',
+              en: 'Listen for the note the melody comes to rest on at the end. That note is usually the tonic.',
+              ru: 'Послушайте, на какой ноте мелодия останавливается в конце. Обычно это тоника.',
             },
           ],
         },
@@ -49,8 +56,29 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '«Ромашковые поля» is in D minor and opens Dm7 Gm7 Asus4 Dm7: i7, iv7, Vsus4, i7. The numeral says the degree, its case says major or minor, and what follows says what is added or changed.',
-            ru: '«Ромашковые поля» — в ре миноре, и начинается песня с Dm7 Gm7 Asus4 Dm7: i7, iv7, Vsus4, i7. Цифра называет ступень, строчная или заглавная — минор или мажор, а то, что после неё, — что добавлено или изменено.',
+            en: '«Ромашковые поля» is in D minor. It opens Dm7 Gm7 Asus4 Dm7: in degrees, i7, iv7, Vsus4, i7.',
+            ru: '«Ромашковые поля» — в ре миноре. Песня начинается с Dm7 Gm7 Asus4 Dm7, по ступеням — i7, iv7, Vsus4, i7.',
+          },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            { en: 'The numeral says the degree.', ru: 'Цифра называет ступень.' },
+            {
+              en: 'Its case says major or minor: upper case major, lower case minor.',
+              ru: 'Заглавная или строчная цифра говорит, мажор это или минор.',
+            },
+            {
+              en: 'What follows it says what is added or changed.',
+              ru: 'То, что стоит после цифры, говорит, что добавлено или изменено.',
+            },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Tap the four chords below.',
+            ru: 'Нажмите четыре аккорда ниже.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'Gm7', 'Asus4', 'Dm7'] },
@@ -62,16 +90,16 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The degrees stay; only the key changes. In G minor the same i7 iv7 Vsus4 i7 is Gm7 Cm7 Dsus4 Gm7.',
-            ru: 'Ступени остаются, меняется только тональность. В соль миноре те же i7 iv7 Vsus4 i7 — это Gm7 Cm7 Dsus4 Gm7.',
+            en: 'The degrees stay the same. Only the key changes. In G minor, the same i7 iv7 Vsus4 i7 is Gm7 Cm7 Dsus4 Gm7.',
+            ru: 'Ступени остаются те же, меняется только тональность. В соль миноре те же i7 iv7 Vsus4 i7 — это Gm7 Cm7 Dsus4 Gm7.',
           },
         },
         { kind: 'chords', symbols: ['Gm7', 'Cm7', 'Dsus4', 'Gm7'] },
         {
           kind: 'note',
           text: {
-            en: 'Practise one progression in every key and the numerals become a habit: the Player’s Through the keys walks it for you.',
-            ru: 'Сыграйте одну последовательность во всех тональностях — и ступени войдут в привычку: в плеере это делает «По тональностям».',
+            en: 'Practise one progression in every key, and the numerals become a habit. The Player’s Through the keys walks it for you.',
+            ru: 'Сыграйте одну последовательность во всех тональностях — и ступени войдут в привычку. В плеере это делает «По тональностям».',
           },
         },
       ],

@@ -24,7 +24,8 @@ describe('The pattern editor', () => {
     // The editor gave way to the page: Back returns to the pattern it was made from.
     router.history.back()
     await waitFor(() => expect(router.state.location.pathname).toBe('/practice/patterns/M1'))
-  })
+    // A long walk through the editor, its sample's staff of buttons queried at each step.
+  }, 15_000)
 
   it('makes one the Player’s picker offers, which plays its own figures', async () => {
     const user = userEvent.setup()

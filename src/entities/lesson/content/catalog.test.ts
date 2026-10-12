@@ -332,3 +332,37 @@ describe('the lessons', () => {
     expect(modules).toEqual([...modules].sort((a, b) => a - b))
   })
 })
+
+/** Every piece of a lesson's prose, in both languages: text, steps, notes and quizzes' asks. */
+function proseOf(lesson: (typeof LESSONS)[number]): string[] {
+  const texts = (local: { readonly en: string; readonly ru: string }) => [local.en, local.ru]
+  return lesson.sections.flatMap((section) =>
+    section.blocks.flatMap((block) => {
+      switch (block.kind) {
+        case 'text':
+        case 'note':
+          return texts(block.text)
+        case 'steps':
+          return block.steps.flatMap(texts)
+        case 'quiz':
+          return texts(block.ask)
+        default:
+          return []
+      }
+    }),
+  )
+}
+
+describe('the lessons’ prose', () => {
+  it('reads in short sentences, none run on with a semicolon (the research checklist)', () => {
+    for (const lesson of LESSONS) {
+      for (const prose of proseOf(lesson)) {
+        expect(prose, lesson.id).not.toContain(';')
+        // A sentence ends at . ? or : before a capital; quoted titles and examples count too.
+        for (const sentence of prose.split(/[.?!]\s+/)) {
+          expect(sentence.split(/\s+/).length, `${lesson.id}: ${sentence}`).toBeLessThanOrEqual(30)
+        }
+      }
+    }
+  })
+})

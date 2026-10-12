@@ -5,21 +5,43 @@ const keySignatures: Lesson = {
   id: 'key-signatures',
   title: { en: 'Key signatures and the circle of fifths', ru: 'Ключевые знаки и квинтовый круг' },
   summary: {
-    en: 'A key’s sharps or flats written once, the order they come in, and the circle that orders the keys.',
-    ru: 'Знаки тональности, записанные один раз, порядок их появления и круг, упорядочивающий тональности.',
+    en: 'How a key’s sharps or flats are written once, the order they come in, and the circle of fifths.',
+    ru: 'Как знаки тональности пишут один раз, в каком порядке они идут и какой круг выстраивает тональности.',
   },
   level: 2,
   category: 'theory',
   module: 'fundamentals',
   sections: [
     {
-      heading: { en: 'Sharps or flats, once', ru: 'Знаки один раз' },
+      heading: { en: 'Sharps or flats, once a line', ru: 'Знаки в начале строки' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Rather than mark every F♯ in D major, the music writes the key’s sharps once at the start of each line, the key signature. They hold for every note of that letter, in every octave, until the signature changes.',
-            ru: 'Чтобы не ставить диез перед каждым фа в ре мажоре, знаки тональности пишут один раз в начале каждой строки — это ключевые знаки. Они действуют на все ноты с этой буквой во всех октавах, пока ключевые знаки не сменятся.',
+            en: 'D major has two sharps, F♯ and C♯. The music does not mark every F♯ and C♯.',
+            ru: 'В ре мажоре два диеза: фа-диез и до-диез. Их не ставят перед каждой нотой.',
+          },
+        },
+        {
+          kind: 'text',
+          lead: { en: 'The key signature', ru: 'Ключевые знаки' },
+          text: {
+            en: 'writes the key’s sharps once, at the start of each line.',
+            ru: '— это знаки тональности, записанные один раз в начале каждой строки.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'A sharp in the signature holds for every note of that letter, in every octave. It holds until the signature changes.',
+            ru: 'Ключевой знак действует на все ноты с этим названием во всех октавах. Он действует, пока ключевые знаки не сменятся.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the D major scale below: its F and C are sharp.',
+            ru: 'Сыграйте гамму ре мажор ниже: фа и до в ней — с диезом.',
           },
         },
         {
@@ -36,8 +58,15 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Sharps always come in the same order, F C G D A E B, each a 5th above the last. A sharp key’s tonic is a half step above its last sharp: F♯ and C♯ make D major.',
-            ru: 'Диезы всегда появляются в одном порядке — фа, до, соль, ре, ля, ми, си, — каждый на квинту выше предыдущего. Тоника диезной тональности на полутон выше последнего диеза: фа-диез и до-диез — это ре мажор.',
+            en: 'Sharps always come in the same order: F C G D A E B. Each is a 5th above the last.',
+            ru: 'Диезы всегда появляются в одном порядке: фа, до, соль, ре, ля, ми, си. Каждый — на квинту выше предыдущего.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'A sharp key’s tonic is a half step above its last sharp. F♯ and C♯ make D major.',
+            ru: 'Тоника диезной тональности на полутон выше последнего диеза. Фа-диез и до-диез — это ре мажор.',
           },
         },
       ],
@@ -48,8 +77,22 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Flats come in the reverse order, B E A D G C F. A flat key’s tonic is its second-last flat: B♭ E♭ A♭ make E♭ major. F major, with one flat, B♭, is the one to remember.',
-            ru: 'Бемоли идут в обратном порядке — си, ми, ля, ре, соль, до, фа. Тоника бемольной тональности — предпоследний бемоль: си-бемоль, ми-бемоль, ля-бемоль — это ми-бемоль мажор. Фа мажор с одним бемолем, си-бемолем, надо просто запомнить.',
+            en: 'Flats come in the reverse order: B E A D G C F.',
+            ru: 'Бемоли идут в обратном порядке: си, ми, ля, ре, соль, до, фа.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'A flat key’s tonic is its second-last flat. B♭ E♭ A♭ make E♭ major.',
+            ru: 'Тоника бемольной тональности — предпоследний бемоль. Си-бемоль, ми-бемоль, ля-бемоль — это ми-бемоль мажор.',
+          },
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'F major has one flat, B♭, so it has no second-last flat. Just remember it.',
+            ru: 'В фа мажоре один бемоль, си-бемоль, и предпоследнего нет. Фа мажор надо просто запомнить.',
           },
         },
       ],
@@ -60,8 +103,22 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Put the keys on a circle a 5th apart: each step up a 5th adds a sharp, each step down a flat, and each major key’s relative minor sits beside it. Neighbours on the circle share all but one note, which is why music moves between them so easily.',
-            ru: 'Расположите тональности по кругу через квинту: каждый шаг на квинту вверх добавляет диез, вниз — бемоль, а рядом с каждым мажором стоит его параллельный минор. Соседи по кругу различаются одной нотой, поэтому музыка так легко переходит между ними.',
+            en: 'Put the keys on a circle, a 5th apart. Each step up a 5th adds a sharp. Each step down adds a flat.',
+            ru: 'Расположите тональности по кругу через квинту. Каждый шаг на квинту вверх добавляет диез, каждый шаг вниз — бемоль.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Each major key’s relative minor sits beside it on the circle.',
+            ru: 'Рядом с каждым мажором на круге стоит его параллельный минор.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Neighbours on the circle differ by only one note. That is why music moves between them so easily.',
+            ru: 'Соседние тональности на круге различаются одной нотой. Поэтому музыка так легко переходит между ними.',
           },
         },
         {

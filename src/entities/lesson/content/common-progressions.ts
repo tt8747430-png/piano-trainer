@@ -8,8 +8,8 @@ const commonProgressions: Lesson = {
   id: 'common-progressions',
   title: { en: 'Common progressions', ru: 'Распространённые последовательности' },
   summary: {
-    en: 'The progressions under most hymns and songs, in major and in minor keys, each in Roman numerals so it plays in any key.',
-    ru: 'Последовательности, на которых держится большинство гимнов и песен, в мажоре и в миноре, записанные римскими цифрами, чтобы играть их в любой тональности.',
+    en: 'The progressions under most hymns and songs, in major and minor keys. Each is written in Roman numerals, so it plays in any key.',
+    ru: 'Последовательности, на которых держится большинство гимнов и песен, в мажоре и миноре. Каждая записана римскими цифрами, поэтому играется в любой тональности.',
   },
   level: 2,
   category: 'accompaniment',
@@ -21,8 +21,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The three primary chords and home again: the backbone of hymns and folk songs. Learn it in every key you play in.',
-            ru: 'Три главных аккорда и возвращение домой — основа гимнов и народных песен. Выучите её во всех тональностях, в которых играете.',
+            en: 'The three primary chords, then home again. Most hymns and folk songs are built on it. Learn it in every key you play in.',
+            ru: 'Три главных аккорда и возвращение домой. На ней построено большинство гимнов и народных песен. Выучите её во всех тональностях, в которых играете.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -34,8 +34,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The pop progression, under many worship songs. Here it is in G major.',
-            ru: 'Поп-последовательность, на которой построено множество песен прославления. Здесь — в соль мажоре.',
+            en: 'The pop progression. Many worship songs are built on it. Here it is in G major.',
+            ru: 'Поп-последовательность. На ней построено множество песен прославления. Здесь она в соль мажоре.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: { tonic: note('G'), minor: false } },
@@ -47,8 +47,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The 1950s progression: the minor vi softens the way from I to IV. Here it is in F major.',
-            ru: 'Последовательность 1950-х: минорная vi смягчает путь от I к IV. Здесь — в фа мажоре.',
+            en: 'The 1950s progression. The minor vi softens the move from I to IV. Here it is in F major.',
+            ru: 'Последовательность 1950-х. Минорный аккорд vi смягчает переход от I к IV. Здесь она в фа мажоре.',
           },
         },
         { kind: 'progression', numerals: 'I vi IV V', key: { tonic: note('F'), minor: false } },
@@ -59,9 +59,17 @@ const commonProgressions: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A cadence', ru: 'Каденция' },
           text: {
-            en: 'The cadence of jazz, and of many a hymn’s last line: ii leads to V, and V home. It sounds best in 7th chords.',
-            ru: 'Каденция джаза и последней строки многих гимнов: ii ведёт к V, а V — домой. Лучше всего она звучит септаккордами.',
+            en: 'is the chords that end a phrase. ii–V–I is the cadence of jazz, and of many a hymn’s last line.',
+            ru: '— аккорды, которыми заканчивается фраза. ii–V–I — каденция джаза и последней строки многих гимнов.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'ii leads to V, and V leads home. It sounds best in 7th chords, as below.',
+            ru: 'ii ведёт к V, а V — домой. Лучше всего она звучит септаккордами, как ниже.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -73,19 +81,33 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A minor key counts from its natural minor, where i, iv and v are all minor. Most minor-key songs raise the 7th to make V major, so it leads home.',
-            ru: 'Минорная тональность считается от натурального минора, где i, iv и v минорные. В большинстве минорных песен седьмую ступень повышают, и V становится мажорной — она ведёт домой.',
+            en: 'A minor key counts its numerals from natural minor. There i, iv and v are all minor.',
+            ru: 'Минорную тональность считают от натурального минора. В нём i, iv и v — минорные.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Most minor-key songs raise the 7th degree. This makes V major, so it leads home.',
+            ru: 'В большинстве минорных песен седьмую ступень повышают. Тогда аккорд V становится мажорным и ведёт домой.',
           },
         },
         { kind: 'progression', numerals: 'i iv V i', key: A_MINOR },
         {
           kind: 'text',
           text: {
-            en: 'The minor pop progression moves through the relative major’s chords; the Andalusian cadence steps down from i to V.',
-            ru: 'Минорная поп-последовательность идёт по аккордам параллельного мажора; андалузская каденция спускается от i к V.',
+            en: 'The minor pop progression moves through the chords of the relative major.',
+            ru: 'Минорная поп-последовательность идёт по аккордам параллельного мажора.',
           },
         },
         { kind: 'progression', numerals: 'i VI III VII', key: A_MINOR },
+        {
+          kind: 'text',
+          text: {
+            en: 'The Andalusian cadence steps down from i to V.',
+            ru: 'Андалузская каденция спускается по ступеням от i к V.',
+          },
+        },
         { kind: 'progression', numerals: 'i VII VI V', key: A_MINOR },
       ],
     },
