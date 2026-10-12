@@ -4,8 +4,8 @@ const chromaticScale: Lesson = {
   id: 'chromatic-scale',
   title: { en: 'The chromatic scale', ru: 'Хроматическая гамма' },
   summary: {
-    en: 'Every key in turn: how it is written going up and coming down, why it has no key, and how it is fingered.',
-    ru: 'Все клавиши подряд: как её пишут вверх и вниз, почему у неё нет тональности и какая у неё аппликатура.',
+    en: 'All twelve keys in turn: how to write it up and down, why it has no tonic, and how to finger it.',
+    ru: 'Все двенадцать клавиш подряд: как её пишут вверх и вниз, почему у неё нет тоники и как её играть.',
   },
   level: 1,
   category: 'scales',
@@ -16,9 +16,10 @@ const chromaticScale: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The chromatic scale', ru: 'Хроматическая гамма' },
           text: {
-            en: 'The chromatic scale plays every key, white and black, a half step at a time: twelve half steps to the octave.',
-            ru: 'Хроматическая гамма проходит все клавиши, белые и чёрные, по полутонам: двенадцать полутонов до октавы.',
+            en: 'plays every key, white and black, a half step at a time. An octave holds twelve half steps. Play it below.',
+            ru: 'проходит все клавиши подряд, белые и чёрные, по полутонам. В октаве двенадцать полутонов. Сыграйте её ниже.',
           },
         },
         {
@@ -34,8 +35,8 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Going up, a black key is usually written as the sharp of the note below; coming down, as the flat of the note above. Each note then leads the way it moves.',
-            ru: 'Вверх чёрную клавишу обычно пишут как диез нижней ноты, вниз — как бемоль верхней. Так каждая нота ведёт туда, куда движется мелодия.',
+            en: 'Going up, a black key is usually written as the sharp of the note below. Coming down, it is the flat of the note above. So each name points the way the line moves. Play the scale coming down below.',
+            ru: 'Вверх чёрную клавишу обычно пишут как диез нижней ноты. Вниз — как бемоль верхней. Так имя ноты показывает, куда идёт мелодия. Сыграйте ниже гамму вниз.',
           },
         },
         {
@@ -51,8 +52,8 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'With every key equally in it, the chromatic scale has no tonic and so no key. It is “a chromatic scale starting on E”, never “a chromatic scale in E”.',
-            ru: 'В хроматической гамме все клавиши равны, поэтому у неё нет тоники, а значит и тональности. Говорят «хроматическая гамма от ми», но не «в ми».',
+            en: 'Every key counts the same in the chromatic scale. So it has no tonic, and it is in no key. Call it “a chromatic scale starting on E”, never “a chromatic scale in E”.',
+            ru: 'В хроматической гамме все клавиши равны. Поэтому у неё нет тоники, а значит, нет и тональности. Говорят «хроматическая гамма от ми», но не «в ми».',
           },
         },
       ],
@@ -63,9 +64,26 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Put the 3rd finger on every black key and the thumb on every white key; where two white keys meet (E–F, B–C) the right hand plays them 1 2 going up, the left hand 2 1. The hand then barely moves.',
-            ru: 'Третий палец — на каждую чёрную клавишу, большой — на каждую белую; где встречаются две белые (ми–фа, си–до), правая рука вверх играет их 1 2, левая — 2 1. Рука при этом почти не двигается.',
+            en: 'Two fingers play most of the scale, so the hand barely moves.',
+            ru: 'Гамму играют в основном два пальца, и рука почти не двигается.',
           },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Play every black key with the 3rd finger.',
+              ru: 'Каждую чёрную клавишу играйте третьим пальцем.',
+            },
+            {
+              en: 'Play every white key with the thumb.',
+              ru: 'Каждую белую клавишу играйте большим пальцем.',
+            },
+            {
+              en: 'Where two white keys meet (E–F, B–C), going up, the right hand plays them 1 2. The left hand plays them 2 1.',
+              ru: 'Где встречаются две белые (ми–фа, си–до), вверх правая рука играет их 1 2. Левая рука играет их 2 1.',
+            },
+          ],
         },
       ],
     },
@@ -76,7 +94,7 @@ const chromaticScale: Lesson = {
           kind: 'quiz',
           ask: {
             en: 'Play the chromatic scale from E up to A.',
-            ru: 'Сыграйте хроматическую гамму от ми до ля.',
+            ru: 'Сыграйте хроматическую гамму от ми вверх до ля.',
           },
           answer: { notes: ['E', 'F', 'F#', 'G', 'G#', 'A'], rising: true },
         },

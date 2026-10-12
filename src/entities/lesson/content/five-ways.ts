@@ -4,34 +4,56 @@ const fiveWays: Lesson = {
   id: 'five-ways',
   title: { en: 'The five ways', ru: 'Пять способов' },
   summary: {
-    en: 'Called to Play’s third lesson: one progression, five ways to play it, and then a new way on every chord.',
-    ru: 'Третий урок Called to Play: одна последовательность, пять способов её сыграть, а затем новый способ на каждом аккорде.',
+    en: 'Lesson 3 of Called to Play: one progression played five ways, then a different way on each chord.',
+    ru: 'Третий урок Called to Play: одна последовательность пятью способами, затем свой способ на каждом аккорде.',
   },
   level: 1,
   category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {
-      heading: { en: 'One progression', ru: 'Одна последовательность' },
+      heading: { en: 'Four chords of C major', ru: 'Четыре аккорда до мажора' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A progression', ru: 'Последовательность' },
           text: {
-            en: 'The lesson’s progression is C, Dm, G, C, F, C, G, C: four chords of C major. Play them in blocks first, until the changes come without thinking.',
-            ru: 'Последовательность урока — C, Dm, G, C, F, C, G, C: четыре аккорда до мажора. Сначала играйте их целиком, пока смены не пойдут сами.',
+            en: 'is a series of chords played in order. This lesson’s is C, Dm, G, C, F, C, G, C.',
+            ru: '— это аккорды, которые играют друг за другом. В этом уроке она такая: C, Dm, G, C, F, C, G, C.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'It uses four chords of C major. Tap them below: each moves to the next by the nearest keys.',
+            ru: 'В ней четыре аккорда до мажора. Нажмите их ниже: каждый переходит в следующий по ближайшим клавишам.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Dm', 'G', 'F'] },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the progression in blocks first, every note of a chord together. Repeat it until the changes come without thinking.',
+            ru: 'Сначала играйте последовательность целыми аккордами, все звуки вместе. Повторяйте, пока смены не пойдут сами.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'The five ways', ru: 'Пять способов' },
+      heading: { en: 'Same chords, five ways', ru: 'Те же аккорды, пять способов' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Each way keeps the same chords and changes what the hands do. Play them in order: each changes what one hand does.',
-            ru: 'Каждый способ сохраняет те же аккорды и меняет то, что делают руки. Играйте их по порядку: каждый меняет то, что делает одна рука.',
+            en: 'Each way plays the same chords. Only what the hands do changes.',
+            ru: 'Каждый способ играет те же аккорды. Меняется только то, что делают руки.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Take them in order: each one changes what one hand does. Listen to each way below, then play it.',
+            ru: 'Берите их по порядку: каждый меняет партию одной руки. Послушайте каждый способ ниже, затем сыграйте его.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'ex3' },
@@ -47,8 +69,15 @@ const fiveWays: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Once each way is easy, the lesson’s studies write a different way over every chord, so the hands learn to change between them without stopping.',
-            ru: 'Когда каждый способ получается, этюды урока ставят над каждым аккордом другой способ — руки учатся переходить между ними без остановки.',
+            en: 'Once each way is easy, switch ways from chord to chord. The lesson’s studies write a different way over every chord.',
+            ru: 'Когда все способы получаются, меняйте их от аккорда к аккорду. В этюдах урока над каждым аккордом стоит свой способ.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the studies below. The hands learn to change ways without stopping.',
+            ru: 'Сыграйте этюды ниже. Так руки учатся менять способ без остановки.',
           },
         },
         {

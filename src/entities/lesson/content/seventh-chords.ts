@@ -4,7 +4,7 @@ const seventhChords: Lesson = {
   id: 'seventh-chords',
   title: { en: 'Seventh chords', ru: 'Септаккорды' },
   summary: {
-    en: 'A triad with a 7th on top: the five common kinds, and the one that leads home.',
+    en: 'A triad with a 7th on top: the five common kinds, and the one that leads to the tonic.',
     ru: 'Трезвучие с септимой сверху: пять распространённых видов и тот, что ведёт к тонике.',
   },
   level: 2,
@@ -16,33 +16,41 @@ const seventhChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A seventh chord', ru: 'Септаккорд' },
           text: {
-            en: 'Stack one more 3rd on a triad and the top note is a 7th above the root: a seventh chord of four notes. Five kinds cover most music:',
-            ru: 'Добавьте к трезвучию ещё одну терцию — верхняя нота окажется в септиме от основного тона: получится септаккорд из четырёх нот. Пять видов покрывают бо́льшую часть музыки:',
+            en: 'is a triad with one more 3rd on top. Its top note is a 7th above the root, so it has four notes.',
+            ru: '— трезвучие с ещё одной терцией сверху. Верхняя нота стоит в септиме от основного тона, поэтому в аккорде четыре ноты.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Five kinds cover most music. Read each one, then play it below.',
+            ru: 'Пять видов покрывают бо́льшую часть музыки. Прочитайте о каждом и сыграйте его ниже.',
           },
         },
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Major 7th, CMaj7: 1 3 5 7, a major triad with a major 7th, soft and dreamy.',
-              ru: 'Большой мажорный, CMaj7: 1 3 5 7 — мажорное трезвучие с большой септимой, мягкий и мечтательный.',
+              en: 'Major 7th, CMaj7: 1 3 5 7. A major triad with a major 7th. Soft and dreamy.',
+              ru: 'Большой мажорный, CMaj7: 1 3 5 7. Мажорное трезвучие с большой септимой. Звучит мягко и мечтательно.',
             },
             {
-              en: 'Dominant 7th, C7: 1 3 5 ♭7, a major triad with a minor 7th, pulling onward.',
-              ru: 'Малый мажорный (доминантсептаккорд), C7: 1 3 5 ♭7 — мажорное трезвучие с малой септимой, тянет дальше.',
+              en: 'Dominant 7th, C7: 1 3 5 ♭7. A major triad with a minor 7th. It pulls onward.',
+              ru: 'Малый мажорный (доминантсептаккорд), C7: 1 3 5 ♭7. Мажорное трезвучие с малой септимой. Тянет дальше.',
             },
             {
-              en: 'Minor 7th, Cm7: 1 ♭3 5 ♭7, a minor triad with a minor 7th, mellow.',
-              ru: 'Малый минорный, Cm7: 1 ♭3 5 ♭7 — минорное трезвучие с малой септимой, бархатный.',
+              en: 'Minor 7th, Cm7: 1 ♭3 5 ♭7. A minor triad with a minor 7th. Mellow.',
+              ru: 'Малый минорный, Cm7: 1 ♭3 5 ♭7. Минорное трезвучие с малой септимой. Звучит тепло и приглушённо.',
             },
             {
-              en: 'Half-diminished, Cm7♭5: 1 ♭3 ♭5 ♭7, a diminished triad with a minor 7th.',
-              ru: 'Полууменьшённый, Cm7♭5: 1 ♭3 ♭5 ♭7 — уменьшённое трезвучие с малой септимой.',
+              en: 'Half-diminished, Cm7♭5: 1 ♭3 ♭5 ♭7. A diminished triad with a minor 7th.',
+              ru: 'Полууменьшённый, Cm7♭5: 1 ♭3 ♭5 ♭7. Уменьшённое трезвучие с малой септимой.',
             },
             {
-              en: 'Diminished 7th, C°7: 1 ♭3 ♭5 𝄫7, minor 3rds all the way up.',
-              ru: 'Уменьшённый, C°7: 1 ♭3 ♭5 𝄫7 — одни малые терции.',
+              en: 'Diminished 7th, C°7: 1 ♭3 ♭5 𝄫7. Minor 3rds all the way up.',
+              ru: 'Уменьшённый, C°7: 1 ♭3 ♭5 𝄫7. Одни малые терции снизу доверху.',
             },
           ],
         },
@@ -50,14 +58,37 @@ const seventhChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'The dominant 7th leads home', ru: 'Доминантсептаккорд ведёт домой' },
+      heading: { en: 'The dominant 7th leads home', ru: 'Доминантсептаккорд ведёт к тонике' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The dominant 7th', ru: 'Доминантсептаккорд' },
           text: {
-            en: 'Built on a key’s 5th degree, the dominant 7th holds the tritone B–F in C, and it wants to resolve: B rises to C, F falls to E, and G7 lands on C.',
-            ru: 'Построенный на пятой ступени, доминантсептаккорд содержит тритон си–фа (в до мажоре) и стремится разрешиться: си поднимается к до, фа спускается к ми, и G7 приходит в C.',
+            en: 'is built on the 5th degree of a key: the 5th note of its scale. In C major it is G7.',
+            ru: 'строят на пятой ступени тональности — пятой ноте её гаммы. В до мажоре это G7.',
           },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'G7 holds B and F, a tritone apart: three whole steps. The tritone is tense and wants to resolve, to move to a stable chord.',
+            ru: 'В G7 есть си и фа. Между ними тритон — три целых тона. Тритон звучит напряжённо и стремится разрешиться — перейти в устойчивый аккорд.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play G7, then C below. Listen to where the tritone goes:',
+            ru: 'Сыграйте ниже G7, затем C. Послушайте, куда идёт тритон:',
+          },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            { en: 'B rises to C.', ru: 'Си поднимается к до.' },
+            { en: 'F falls to E.', ru: 'Фа спускается к ми.' },
+            { en: 'G7 lands on C.', ru: 'G7 приходит в C.' },
+          ],
         },
         { kind: 'chords', symbols: ['G7', 'C'] },
       ],
@@ -65,6 +96,13 @@ const seventhChords: Lesson = {
     {
       heading: { en: 'On every root', ru: 'От каждой ноты' },
       blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Below are the dominant 7th and the minor 7th on all twelve roots. Play any of them.',
+            ru: 'Ниже — доминантсептаккорд и малый минорный септаккорд от всех двенадцати нот. Сыграйте любой.',
+          },
+        },
         { kind: 'grid', quality: 'd7' },
         { kind: 'grid', quality: 'm7' },
       ],
@@ -84,7 +122,10 @@ const seventhChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'What a 7th chord takes on top', ru: 'Что звучит поверх септаккорда' },
+          title: {
+            en: 'Notes to add on top of a 7th chord',
+            ru: 'Какие ноты добавить поверх септаккорда',
+          },
           target: { place: 'tensions', chord: 'd7' },
         },
       ],

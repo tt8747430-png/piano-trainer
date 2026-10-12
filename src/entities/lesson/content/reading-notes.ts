@@ -4,8 +4,8 @@ const readingNotes: Lesson = {
   id: 'reading-notes',
   title: { en: 'The staff and reading notes', ru: 'Нотный стан и чтение нот' },
   summary: {
-    en: 'Lines and spaces, the treble and bass clefs, ledger lines, sharps and flats.',
-    ru: 'Линейки и промежутки, скрипичный и басовый ключи, добавочные линейки, диезы и бемоли.',
+    en: 'Read notes on the staff in the treble and bass clefs, on ledger lines, with sharps and flats.',
+    ru: 'Как читать ноты на стане в скрипичном и басовом ключах, на добавочных линейках, с диезами и бемолями.',
   },
   level: 1,
   category: 'reading',
@@ -16,9 +16,17 @@ const readingNotes: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The staff', ru: 'Нотный стан' },
           text: {
-            en: 'Music is written on a staff of five lines. A note sits on a line or in the space between two. Each step up the staff is the next letter and the next white key: the higher a note on the staff, the higher it is on the piano.',
-            ru: 'Музыку записывают на нотном стане из пяти линеек. Нота стоит на линейке или в промежутке между двумя. Каждый шаг вверх по стану — следующая буква и следующая белая клавиша: чем выше нота на стане, тем выше она на клавиатуре.',
+            en: 'is the five lines music is written on. A note sits on a line or in the space between two lines.',
+            ru: '— пять линеек, на которых записывают музыку. Нота стоит на линейке или в промежутке между двумя линейками.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Each step up the staff is the next letter and the next white key. The higher a note sits on the staff, the higher it sounds.',
+            ru: 'Каждый шаг вверх по стану — следующая буква и следующая белая клавиша. Чем выше нота на стане, тем выше она звучит.',
           },
         },
       ],
@@ -28,10 +36,17 @@ const readingNotes: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'The treble, or G, clef', ru: 'Скрипичный ключ, ключ соль,' },
+          lead: { en: 'The treble clef, or G clef,', ru: 'Скрипичный ключ, или ключ соль,' },
           text: {
-            en: 'curls around the second line from the bottom: that line is the G above middle C. The right hand mostly reads it. Its lines from the bottom are E G B D F, its spaces F A C E.',
-            ru: 'обвивает вторую снизу линейку: на ней соль первой октавы. По нему читает в основном правая рука. Его линейки снизу вверх — ми, соль, си, ре, фа, промежутки — фа, ля, до, ми.',
+            en: 'curls around the second line from the bottom. That line is the G above middle C. The right hand mostly reads this clef.',
+            ru: 'обвивает вторую снизу линейку. На ней стоит соль первой октавы. По этому ключу читает в основном правая рука.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Its lines from the bottom are E G B D F. Its spaces are F A C E. Play the lines below, then the spaces.',
+            ru: 'Его линейки снизу вверх — ми, соль, си, ре, фа. Промежутки — фа, ля, до, ми. Сыграйте ниже сначала линейки, потом промежутки.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 G4 B4 D5 F5/1' },
@@ -43,10 +58,17 @@ const readingNotes: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'The bass, or F, clef', ru: 'Басовый ключ, ключ фа,' },
+          lead: { en: 'The bass clef, or F clef,', ru: 'Басовый ключ, или ключ фа,' },
           text: {
-            en: 'puts its two dots either side of the fourth line: that line is the F below middle C. The left hand mostly reads it. Its lines from the bottom are G B D F A, its spaces A C E G.',
-            ru: 'ставит свои две точки по сторонам четвёртой линейки: на ней фа малой октавы. По нему читает в основном левая рука. Его линейки снизу вверх — соль, си, ре, фа, ля, промежутки — ля, до, ми, соль.',
+            en: 'puts its two dots either side of the fourth line. That line is the F below middle C. The left hand mostly reads this clef.',
+            ru: 'ставит две точки по обе стороны четвёртой линейки. На ней стоит фа малой октавы. По этому ключу читает в основном левая рука.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Its lines from the bottom are G B D F A. Its spaces are A C E G. Play the lines below, then the spaces.',
+            ru: 'Его линейки снизу вверх — соль, си, ре, фа, ля. Промежутки — ля, до, ми, соль. Сыграйте ниже сначала линейки, потом промежутки.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'G2 B2 D3 F3 A3/1' },
@@ -58,9 +80,17 @@ const readingNotes: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A ledger line', ru: 'Добавочная линейка' },
           text: {
-            en: 'A note beyond the staff gets a short line of its own, a ledger line. Middle C sits on one: just below the treble staff, and just above the bass staff. It is the same key either way.',
-            ru: 'Нота за пределами стана получает свою короткую линейку — добавочную. До первой октавы стоит на такой линейке: сразу под скрипичным станом и сразу над басовым. В обоих случаях это одна и та же клавиша.',
+            en: 'is a short line of its own for a note beyond the staff.',
+            ru: '— короткая линейка для ноты за пределами стана.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Middle C sits on one ledger line. In the treble clef it is just below the staff. In the bass clef it is just above. It is the same key either way. Play both lines below.',
+            ru: 'До первой октавы стоит на одной добавочной линейке. В скрипичном ключе она сразу под станом, в басовом — сразу над ним. В обоих случаях это одна клавиша. Сыграйте обе строки ниже.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'B3 C4 D4/2' },
@@ -72,9 +102,34 @@ const readingNotes: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Accidentals', ru: 'Случайные знаки' },
           text: {
-            en: 'A sharp (♯) raises a note to the very next key up, a flat (♭) lowers it to the very next key down, and a natural (♮) cancels either. An accidental holds for the rest of its bar.',
-            ru: 'Диез (♯) повышает ноту до соседней клавиши вверх, бемоль (♭) понижает до соседней клавиши вниз, а бекар (♮) отменяет и то и другое. Случайный знак действует до конца такта.',
+            en: 'are signs before a note that change it.',
+            ru: '— знаки перед нотой, которые её меняют.',
+          },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'A sharp (♯) raises a note to the very next key up.',
+              ru: 'Диез (♯) повышает ноту до соседней клавиши вверх.',
+            },
+            {
+              en: 'A flat (♭) lowers a note to the very next key down.',
+              ru: 'Бемоль (♭) понижает ноту до соседней клавиши вниз.',
+            },
+            {
+              en: 'A natural (♮) cancels a sharp or a flat.',
+              ru: 'Бекар (♮) отменяет диез или бемоль.',
+            },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'An accidental holds for the rest of its bar. Play the line below.',
+            ru: 'Случайный знак действует до конца такта. Сыграйте строку ниже.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4 F#4 F4/2 B4 B♭4 B4/2' },

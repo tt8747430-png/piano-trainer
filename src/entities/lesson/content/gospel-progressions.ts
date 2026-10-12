@@ -7,21 +7,42 @@ const gospelProgressions: Lesson = {
   id: 'gospel-progressions',
   title: { en: 'Gospel progressions', ru: 'Госпел-последовательности' },
   summary: {
-    en: 'The progressions gospel is built on, coloured with 7ths: the lift, the standard, the hymn, the 7–3–6, the resolution and the walk-up, and the gospel rhythm.',
-    ru: 'Последовательности, на которых строится госпел, раскрашенные септаккордами: подъём, стандарт, гимн, 7–3–6, разрешение и подход снизу, и госпел-ритм.',
+    en: 'The progressions gospel is built on, coloured with 7ths: the lift, the standard, the hymn, the 7–3–6, the resolution, the walk-up, and the gospel rhythm.',
+    ru: 'Последовательности, на которых строится госпел, с септаккордами: подъём, стандарт, гимн, 7–3–6, разрешение, подход снизу и госпел-ритм.',
   },
   level: 3,
   category: 'gospel',
   module: 'gospel',
   sections: [
     {
-      heading: { en: 'The gospel sound', ru: 'Звучание госпел' },
+      heading: { en: 'The gospel sound', ru: 'Звучание госпела' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Gospel takes the church’s progressions and colours them: 7th and 9th chords on almost every beat, chords that lift toward the next one, and a bass that walks. The function is the same; the chord is richer.',
-            ru: 'Госпел берёт церковные последовательности и раскрашивает их: септаккорды и нонаккорды почти на каждой доле, аккорды, которые тянутся к следующему, и идущий бас. Функция та же, аккорд богаче.',
+            en: 'Gospel plays the church’s progressions with richer chords. Each chord keeps its function, its role in the key. Gospel adds three things:',
+            ru: 'Госпел играет церковные последовательности более богатыми аккордами. Функция каждого аккорда, его роль в тональности, не меняется. Госпел добавляет три вещи:',
+          },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: '7th and 9th chords on almost every beat.',
+              ru: 'Септаккорды и нонаккорды почти на каждой доле.',
+            },
+            {
+              en: 'Chords that lift toward the next one.',
+              ru: 'Аккорды, которые тянутся к следующему.',
+            },
+            { en: 'A bass that walks.', ru: 'Бас, который идёт по ступеням.' },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Tap the three chords below: the same C, richer each time.',
+            ru: 'Нажмите три аккорда ниже: тот же C, каждый раз богаче.',
           },
         },
         { kind: 'chords', symbols: ['C', 'CMaj7', 'CMaj9'] },
@@ -33,8 +54,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'IV–V–iii–vi rises from the subdominant and lands on the minor vi, ready to go on.',
-            ru: 'IV–V–iii–vi поднимается от субдоминанты и приходит на минорную vi, готовую идти дальше.',
+            en: 'IV–V–iii–vi rises from the subdominant, IV, and lands on the minor vi. From there it is ready to go on.',
+            ru: 'IV–V–iii–vi поднимается от субдоминанты, IV, и приходит на минорную vi. С неё можно идти дальше.',
           },
         },
         { kind: 'progression', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
@@ -46,8 +67,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'I–iii–IV–V climbs to the dominant: up a third, then step by step. Here it is in F major.',
-            ru: 'I–iii–IV–V поднимается к доминанте: на терцию вверх, затем по ступеням. Здесь — в фа мажоре.',
+            en: 'I–iii–IV–V climbs to the dominant, V. It goes up a third, then step by step. Here it is in F major.',
+            ru: 'I–iii–IV–V поднимается к доминанте, V. Сначала на терцию вверх, затем по ступеням. Здесь — в фа мажоре.',
           },
         },
         {
@@ -64,8 +85,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'I–IV–I–V is the old hymn’s plain change, back and forth between home and its neighbours. Here it is in G major.',
-            ru: 'I–IV–I–V — простая смена старого гимна, туда и обратно между домом и соседями. Здесь — в соль мажоре.',
+            en: 'I–IV–I–V is the old hymn’s plain change. It moves back and forth between home, I, and its neighbours. Here it is in G major.',
+            ru: 'I–IV–I–V — простая смена старого гимна. Она ходит туда и обратно между тоникой, I, и её соседями. Здесь — в соль мажоре.',
           },
         },
         {
@@ -82,8 +103,15 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel players name it by its bass: the 7th, 3rd and 6th notes of the key. It is a ii–V–i into the relative minor: a half-diminished 7th, a dominant 7th, and the minor vi they pull to. In C major: Bm7♭5, E7, Am7.',
-            ru: 'Госпел-музыканты называют её по басу: VII, III и VI ступени тональности. Это ii–V–i в параллельный минор: полууменьшённый септаккорд, доминантсептаккорд и минорная vi, к которой они тянут. В до мажоре: Bm7♭5, E7, Am7.',
+            en: 'Gospel players name it by its bass: the 7th, 3rd and 6th notes of the key. In C major they are Bm7♭5, E7, Am7.',
+            ru: 'Госпел-музыканты называют её по басу: VII, III и VI ступени тональности. В до мажоре это Bm7♭5, E7, Am7.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'It is a ii–V–i into the relative minor. A half-diminished 7th and a dominant 7th pull to the minor vi.',
+            ru: 'Это ii–V–i в параллельный минор. Полууменьшённый септаккорд и доминантсептаккорд тянут к минорной vi.',
           },
         },
         { kind: 'progression', numerals: 'vii° III vi', key: C_MAJOR, size: 'sevenths' },
@@ -95,8 +123,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'V–IV–I steps back through IV on the way home, softening the dominant’s pull. Here it is in F major.',
-            ru: 'V–IV–I возвращается домой через IV и смягчает тяготение доминанты. Здесь — в фа мажоре.',
+            en: 'V–IV–I steps back through IV on the way home. This softens the dominant’s pull. Here it is in F major.',
+            ru: 'V–IV–I возвращается домой через IV. Так тяготение доминанты становится мягче. Здесь — в фа мажоре.',
           },
         },
         {
@@ -112,9 +140,17 @@ const gospelProgressions: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The walk-up,', ru: 'Подход снизу,' },
           text: {
-            en: '♭VI–♭VII–I climbs to the tonic by whole steps from the flat side: the gospel ending. Its roots are borrowed from the minor key, and gospel plays each of them as a dominant 7th (A♭7–B♭7 in C).',
-            ru: '♭VI–♭VII–I поднимается к тонике целыми тонами со стороны бемолей: госпел-окончание. Его основные тоны взяты из минора, а госпел играет на каждом доминантсептаккорд (A♭7–B♭7 в C).',
+            en: '♭VI–♭VII–I, climbs to the tonic by whole steps from the flat side. It is the gospel ending.',
+            ru: '♭VI–♭VII–I, поднимается к тонике целыми тонами со стороны бемолей. Это госпел-окончание.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Its roots are borrowed from the minor key. Gospel plays each of them as a dominant 7th: A♭7, then B♭7 in C.',
+            ru: 'Его основные тоны взяты из минора. Госпел играет на каждом доминантсептаккорд: A♭7, затем B♭7 в C.',
           },
         },
         { kind: 'progression', numerals: '♭VI ♭VII I', key: C_MAJOR, size: 'sevenths' },
@@ -126,8 +162,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The gospel rhythm plays syncopated chords over a moving bass. Hear it over a study’s plain chords.',
-            ru: 'Госпел-ритм — это синкопированные аккорды над движущимся басом. Послушайте его на простых аккордах этюда.',
+            en: 'The gospel rhythm plays syncopated chords, struck between the beats, over a moving bass. Hear it below over a study’s plain chords.',
+            ru: 'Госпел-ритм — это синкопированные аккорды над движущимся басом. Они звучат между долями. Послушайте его ниже на простых аккордах этюда.',
           },
         },
         { kind: 'pattern', pattern: 'gospel', piece: 'ex3' },
@@ -143,7 +179,7 @@ const gospelProgressions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Gospel in Progressions', ru: 'Госпел в последовательностях' },
+          title: { en: 'The 7–3–6 in Progressions', ru: '7–3–6 в «Последовательностях»' },
           target: {
             place: 'progressions',
             numerals: 'vii° III vi',

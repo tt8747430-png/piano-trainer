@@ -5,32 +5,32 @@ const findingHome: Lesson = {
   id: 'finding-home',
   title: { en: 'Finding your way on the keys', ru: 'Как ориентироваться на клавиатуре' },
   summary: {
-    en: 'The black keys’ groups, the seven letters, middle C, and a hand’s five fingers.',
-    ru: 'Группы чёрных клавиш, семь букв, до первой октавы и пять пальцев руки.',
+    en: 'Find any key by the black keys, name the white keys, find middle C and number your fingers.',
+    ru: 'Как найти клавишу по чёрным, назвать белые клавиши, найти до первой октавы и пронумеровать пальцы.',
   },
   level: 1,
   category: 'theory',
   module: 'fundamentals',
   sections: [
     {
-      heading: { en: 'Twos and threes', ru: 'Двойки и тройки' },
+      heading: { en: 'Black keys in twos and threes', ru: 'Чёрные клавиши по две и по три' },
       blocks: [
         {
           kind: 'text',
           lead: {
-            en: 'The black keys come in groups of two and three,',
-            ru: 'Чёрные клавиши идут группами по две и по три',
+            en: 'The black keys come in groups of two and three.',
+            ru: 'Чёрные клавиши идут группами по две и по три.',
           },
           text: {
-            en: 'all the way along the piano. They are how you find every other key.',
-            ru: 'по всей клавиатуре. По ним находят все остальные клавиши.',
+            en: 'The groups repeat along the whole piano. Use them to find every other key.',
+            ru: 'Группы повторяются по всей клавиатуре. По ним находят все остальные клавиши.',
           },
         },
         {
           kind: 'text',
           text: {
-            en: 'C is the white key just left of every group of two; F is the white key just left of every group of three.',
-            ru: 'До — белая клавиша слева от каждой группы из двух чёрных; фа — слева от каждой группы из трёх.',
+            en: 'C is the white key just left of each group of two. F is the white key just left of each group of three. Play the two Cs below.',
+            ru: 'До — белая клавиша слева от каждой группы из двух чёрных. Фа — белая клавиша слева от каждой группы из трёх. Сыграйте два до ниже.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2 C5/2' },
@@ -42,8 +42,15 @@ const findingHome: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The white keys are named with seven letters, A B C D E F G, and then the letters start again: after G comes A. Singers name the same notes do, re, mi, fa, sol, la, si, starting on C.',
-            ru: 'Белые клавиши называют семью буквами — A B C D E F G, — а затем буквы повторяются: после G снова идёт A. Те же ноты поют как до, ре, ми, фа, соль, ля, си, начиная с C — до.',
+            en: 'The white keys are named with seven letters: A B C D E F G. After G, the letters start again from A.',
+            ru: 'Белые клавиши называют семью буквами: A B C D E F G. После G буквы начинаются снова с A.',
+          },
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Singers name the same notes do, re, mi, fa, sol, la, si, starting on C. Play the row below, from C up to the next C.',
+            ru: 'В пении те же ноты называют до, ре, ми, фа, соль, ля, си, начиная с C. Сыграйте ряд ниже: от до вверх до следующего до.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
@@ -56,8 +63,16 @@ const findingHome: Lesson = {
           kind: 'text',
           lead: { en: 'Middle C', ru: 'До первой октавы' },
           text: {
-            en: 'is the C nearest the middle of the piano, written C4. The next C up is C5: an octave higher, eight letters and twelve keys away, the same note sounding higher.',
-            ru: '(«среднее до») — ближайшее к середине клавиатуры до, его пишут C4. Следующее до вверх — C5: на октаву выше, через восемь букв и двенадцать клавиш; та же нота, только выше.',
+            en: 'is the C nearest the middle of the piano. It is written C4.',
+            ru: '(«среднее до») — до, ближайшее к середине клавиатуры. Его пишут C4.',
+          },
+        },
+        {
+          kind: 'text',
+          lead: { en: 'An octave', ru: 'Октава' },
+          text: {
+            en: 'is the distance to the next note with the same name: eight letters and twelve keys. The next C up is C5, the same note an octave higher. Play the example below.',
+            ru: '— расстояние до следующей ноты с тем же именем: восемь букв и двенадцать клавиш. Следующее до вверх — C5, та же нота на октаву выше. Сыграйте пример ниже.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P8' },
@@ -69,17 +84,30 @@ const findingHome: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Fingers are numbered from the thumb, 1 to 5, in each hand. In a relaxed five-finger position each finger rests on its own white key: the right thumb on middle C, the left little finger on the C below.',
-            ru: 'Пальцы нумеруют от большого: 1–5 на каждой руке. В спокойной позиции пяти пальцев каждый палец лежит на своей белой клавише: большой палец правой руки — на до первой октавы, мизинец левой — на до ниже.',
+            en: 'Fingers are numbered 1 to 5 in each hand, starting from the thumb. In a relaxed five-finger position, each finger rests on its own white key.',
+            ru: 'Пальцы на каждой руке нумеруют от 1 до 5, начиная с большого. В спокойной позиции пяти пальцев каждый палец лежит на своей белой клавише.',
           },
+        },
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Right hand: put the thumb on middle C and play the upper line.',
+              ru: 'Правая рука: поставьте большой палец на до первой октавы и сыграйте верхнюю строку.',
+            },
+            {
+              en: 'Left hand: put the little finger on the C below and play the lower line.',
+              ru: 'Левая рука: поставьте мизинец на до ниже и сыграйте нижнюю строку.',
+            },
+          ],
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3/1' },
         {
           kind: 'note',
           text: {
-            en: 'Keep the fingers curved, as if holding a ball, and let the wrist float level with the keys.',
-            ru: 'Держите пальцы округлыми, как будто в ладони мяч, а запястье — на уровне клавиш.',
+            en: 'Keep the fingers curved, as if holding a ball. Keep the wrist level with the keys.',
+            ru: 'Держите пальцы округлыми, будто в ладони мяч. Запястье держите на уровне клавиш.',
           },
         },
       ],
@@ -96,7 +124,7 @@ const findingHome: Lesson = {
           kind: 'quiz',
           ask: {
             en: 'Play every white key from C up to G.',
-            ru: 'Сыграйте все белые клавиши от до до соль.',
+            ru: 'Сыграйте подряд белые клавиши от до вверх до соль.',
           },
           answer: { notes: ['C', 'D', 'E', 'F', 'G'], rising: true },
         },
