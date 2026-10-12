@@ -3,6 +3,7 @@ import type { Lesson } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { localText, useLocale } from '@/shared/i18n'
+import { cn } from '@/shared/lib'
 import { usePlay } from '@/shared/lib/services'
 import {
   answerSounds,
@@ -39,7 +40,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
     setShown(next)
   }
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
       <ExplorerKeyboard
         shown={keys}
         selected={keys.selected}
@@ -50,9 +51,13 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
       {lesson.sections.map((section, s) => (
         <section
           key={section.heading.en}
-          className="flex max-w-prose flex-col gap-3 text-lg leading-relaxed"
+          // Sections apart by a line and room; a section's text and its examples close together.
+          className={cn(
+            'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+            s > 0 && 'border-t border-border pt-8',
+          )}
         >
-          <h2 className="text-2xl">{localText(section.heading, locale)}</h2>
+          <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
           {section.blocks.map((block, b) => {
             const id = `${s}.${b}`
             if (block.kind !== 'quiz') return <LessonBlock key={id} block={block} onShow={show} />

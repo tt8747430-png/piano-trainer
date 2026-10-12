@@ -64,6 +64,13 @@ describe('A lesson', () => {
     expect(audio.played.at(-1)?.sounds.length).toBeGreaterThan(0)
   })
 
+  it('ends on Learned and the next lesson as Learn lists them', async () => {
+    await renderApp('/learn/lessons/finding-home')
+    const next = await screen.findByRole('link', { name: /Next lesson/ })
+    expect(next.getAttribute('href')).toBe('/learn/lessons/reading-notes')
+    expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
+  })
+
   it('goes back to Learn when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/lessons/reading-chord-symbols')
