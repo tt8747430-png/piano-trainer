@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { entryTitles } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { notate } from '@/shared/lib/notation'
-import { LazyScoreView } from '@/shared/ui'
+import { TappableStaff } from '@/features/play-example'
 import type { PatternSample } from '../model/pattern-sample'
 
-/** The sample on the grand staff, each hand on its own, and what it is played over. */
+/** A note or bar tapped on the sample sounds at this tempo. */
+const NOTE_TEMPO = 84
+
+/** The sample on the grand staff, each hand on its own, and what it is played over; a note or bar tapped plays. */
 export function PatternStaff({ sample }: { sample: PatternSample }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -14,7 +17,7 @@ export function PatternStaff({ sample }: { sample: PatternSample }) {
   return (
     <figure className="flex flex-col gap-2">
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-        <LazyScoreView score={score} />
+        <TappableStaff music={sample.music} score={score} tempo={NOTE_TEMPO} />
       </div>
       <figcaption className="text-sm text-muted-foreground">
         {sample.piece

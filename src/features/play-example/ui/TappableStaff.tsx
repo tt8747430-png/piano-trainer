@@ -14,24 +14,31 @@ const REACH = 16
 const BAR_BAND = 22
 
 /**
- * A staff whose notes play when tapped: each written onset is a button that plays the notes struck
- * there and shows them on the page's keys, marked on the staff while they sound; over a line of more
- * than one bar, each bar's band plays that bar. Every button is named by what it plays.
+ * A staff, or the grand staff, whose notes play when tapped: each written onset is a button that
+ * plays the notes struck there (in both hands on the grand staff) and shows them on the page's keys,
+ * marked on a single staff while they sound; over a line of more than one bar, each bar's band plays
+ * that bar. Every button is named by what it plays.
  */
 export function TappableStaff({
   music,
   score,
   staff,
   scale,
+  fingers,
+  muted,
   tempo,
   onShow,
 }: {
   music: TimedMusic
   score: Score
-  staff: StaffId
+  /** One staff of the grand staff; the grand staff where none. */
+  staff?: StaffId | undefined
   scale?: number
+  fingers?: boolean
+  muted?: StaffId | undefined
   tempo: number
-  onShow: (shown: ShownKeys) => void
+  /** Where the page's keys show what plays; none where the page has no keys to show it on. */
+  onShow?: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('learn')
   const playback = usePlayback<string>()
@@ -61,7 +68,7 @@ export function TappableStaff({
   }
   const play = (id: string, from: Tick, to: Tick) => {
     const heard = passage(music, from, to)
-    onShow(notesShown(heard))
+    onShow?.(notesShown(heard))
     playback.toggle(id, () => runSounds(heard, tempo))
   }
   const playingTick = playback.playing?.startsWith('note:')
@@ -71,11 +78,15 @@ export function TappableStaff({
     <LazyScoreView
       score={score}
       staff={staff}
+      muted={muted}
       {...(scale === undefined ? {} : { scale })}
-      selected={playingTick === null ? undefined : { staff, tick: playingTick }}
+      {...(fingers === undefined ? {} : { fingers })}
+      selected={playingTick === null || !staff ? undefined : { staff, tick: playingTick }}
     >
       {(layout) => {
-        const lines = layout.staves[staff]
+        const lines = staff
+          ? layout.staves[staff]
+          : { top: layout.staffTop, bottom: layout.staffBottom }
         if (!lines) return null
         const columns = noteColumns(layout.onsets)
         const ticks = columns.map((column) => column.tick)
