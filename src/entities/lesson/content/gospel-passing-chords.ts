@@ -20,15 +20,8 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'On the way from I to IV, turn I into a dominant 7th. In C, C becomes C7, and C7 pulls into F.',
-            ru: 'По пути от I к IV превратите I в доминантсептаккорд. В до мажоре C становится C7, и C7 тянет в F.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'It is the most common gospel move. Tap the row below.',
-            ru: 'Это самый частый ход в госпеле. Нажмите аккорды ниже.',
+            en: 'The most common gospel move: on the way to IV, turn I into a dominant 7th. C7 pulls into F.',
+            ru: 'Самый частый ход в госпеле: по пути к IV превратите I в доминантсептаккорд. C7 тянет в F.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C7', 'F'] },
@@ -45,15 +38,8 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From IV back to I, pass through the diminished 7th on the raised 4th. In C: F, F♯°7, then C over G.',
-            ru: 'От IV обратно к I пройдите через уменьшённый септаккорд на повышенной IV ступени. В до мажоре: F, F♯°7, затем C с басом соль.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'C over G, written C/G, is a C chord with G in the bass. So the bass climbs F, F♯, G.',
-            ru: 'C с басом соль пишут C/G. Поэтому бас поднимается: фа, фа-диез, соль.',
+            en: 'From IV back to I, pass through the diminished 7th on the raised 4th. With I over its 5th, C/G, the bass climbs F, F♯, G.',
+            ru: 'От IV обратно к I пройдите через уменьшённый септаккорд на повышенной IV. С I над квинтой, C/G, бас поднимается: фа, фа-диез, соль.',
           },
         },
         { kind: 'chords', symbols: ['F', 'F#°7', 'C/G'] },
@@ -89,18 +75,18 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Any chord can be approached by its own ii and V. Before Dm7, play the ii and V of D minor: Em7♭5 and A7.',
+            en: 'Any chord can be approached by its own ii and V. Before Dm7, play D minor’s: Em7♭5 and A7.',
             ru: 'К любому аккорду можно подойти через его собственные ii и V. Перед Dm7 сыграйте ii и V ре минора: Em7♭5 и A7.',
           },
         },
+        { kind: 'chords', symbols: ['C', 'Em7♭5', 'A7', 'Dm7'] },
         {
-          kind: 'text',
+          kind: 'note',
           text: {
-            en: 'The row below is C, Em7♭5, A7, Dm7. Em7 in place of Em7♭5 keeps to C major’s notes and leads in just as well.',
-            ru: 'Ниже — C, Em7♭5, A7, Dm7. Em7 вместо Em7♭5 не выходит из звуков до мажора и ведёт так же хорошо.',
+            en: 'Em7 in place of Em7♭5 keeps to C major’s notes.',
+            ru: 'Em7 вместо Em7♭5 не выходит из звуков до мажора.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'Em7♭5', 'A7', 'Dm7'] },
         {
           kind: 'link',
           title: { en: 'C to Dm7 in Passing chords', ru: 'Из C в Dm7 в «Проходящих аккордах»' },

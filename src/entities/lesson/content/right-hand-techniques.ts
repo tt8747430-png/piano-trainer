@@ -19,16 +19,10 @@ const rightHandTechniques: Lesson = {
           lead: { en: 'A technique', ru: 'Техника' },
           text: {
             en: 'keeps the chord and gives the right hand something to play until the next change.',
-            ru: 'не меняет аккорд. Она даёт правой руке движение до следующей смены.',
+            ru: 'не меняет аккорд, а даёт правой руке движение до следующей смены.',
           },
         },
-        {
-          kind: 'text',
-          text: {
-            en: 'The book teaches two or three techniques a lesson. Learn them this way:',
-            ru: 'Учебник даёт две-три техники за урок. Осваивайте их так:',
-          },
-        },
+        { kind: 'notes', clef: 'treble', notes: 'E4/8 G4/8 C5/8 G4/8 E4/8 G4/8 C5/8 G4/8' },
         {
           kind: 'steps',
           steps: [
@@ -41,13 +35,6 @@ const rightHandTechniques: Lesson = {
               ru: 'Затем выучите с ними песню урока.',
             },
           ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The book also gathers all twelve in one table. Lay it beside a song’s chords to see at a glance what to add or swap in.',
-            ru: 'Все двенадцать учебник собирает в одну таблицу. Положите её рядом с аккордами песни. Сразу видно, что добавить или чем заменить.',
-          },
         },
       ],
     },

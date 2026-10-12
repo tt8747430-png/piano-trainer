@@ -18,23 +18,16 @@ const fiveWays: Lesson = {
           kind: 'text',
           lead: { en: 'A progression', ru: 'Последовательность' },
           text: {
-            en: 'is a series of chords played in order. This lesson’s is C, Dm, G, C, F, C, G, C.',
-            ru: '— это аккорды, которые играют друг за другом. В этом уроке она такая: C, Dm, G, C, F, C, G, C.',
+            en: 'is a series of chords played in order. This one uses four chords of C major.',
+            ru: '— аккорды, которые играют друг за другом. Здесь их четыре, все из до мажора.',
           },
         },
+        { kind: 'chords', symbols: ['C', 'Dm', 'G', 'C', 'F', 'C', 'G', 'C'] },
         {
-          kind: 'text',
+          kind: 'note',
           text: {
-            en: 'It uses four chords of C major. Tap them below: each moves to the next by the nearest keys.',
-            ru: 'В ней четыре аккорда до мажора. Нажмите их ниже: каждый переходит в следующий по ближайшим клавишам.',
-          },
-        },
-        { kind: 'chords', symbols: ['C', 'Dm', 'G', 'F'] },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play the progression in blocks first, every note of a chord together. Repeat it until the changes come without thinking.',
-            ru: 'Сначала играйте последовательность целыми аккордами, все звуки вместе. Повторяйте, пока смены не пойдут сами.',
+            en: 'Play it in blocks, all notes together, until the changes come without thinking.',
+            ru: 'Играйте её целыми аккордами, пока смены не пойдут сами.',
           },
         },
       ],
@@ -45,15 +38,8 @@ const fiveWays: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each way plays the same chords. Only what the hands do changes.',
-            ru: 'Каждый способ играет те же аккорды. Меняется только то, что делают руки.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Take them in order: each one changes what one hand does. Listen to each way below, then play it.',
-            ru: 'Берите их по порядку: каждый меняет партию одной руки. Послушайте каждый способ ниже, затем сыграйте его.',
+            en: 'Each way plays the same chords and changes what one hand does. Take them in order.',
+            ru: 'Каждый способ играет те же аккорды и меняет партию одной руки. Берите их по порядку.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'ex3' },
@@ -61,23 +47,11 @@ const fiveWays: Lesson = {
         { kind: 'pattern', pattern: 'M3', piece: 'ex3' },
         { kind: 'pattern', pattern: 'M4', piece: 'ex3' },
         { kind: 'pattern', pattern: 'M5', piece: 'ex3' },
-      ],
-    },
-    {
-      heading: { en: 'A new way on every chord', ru: 'Новый способ на каждом аккорде' },
-      blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Once each way is easy, switch ways from chord to chord. The lesson’s studies write a different way over every chord.',
-            ru: 'Когда все способы получаются, меняйте их от аккорда к аккорду. В этюдах урока над каждым аккордом стоит свой способ.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play the studies below. The hands learn to change ways without stopping.',
-            ru: 'Сыграйте этюды ниже. Так руки учатся менять способ без остановки.',
+            en: 'Once each way is easy, switch ways from chord to chord, as these studies do.',
+            ru: 'Когда все способы получаются, меняйте их от аккорда к аккорду, как в этих этюдах.',
           },
         },
         {
@@ -104,11 +78,6 @@ const fiveWays: Lesson = {
           },
           target: { place: 'piece', piece: 'exm3' },
         },
-      ],
-    },
-    {
-      heading: { en: 'More on each way', ru: 'Подробнее о каждом способе' },
-      blocks: [
         {
           kind: 'link',
           title: { en: 'Bass and chords', ru: 'Бас и аккорды' },

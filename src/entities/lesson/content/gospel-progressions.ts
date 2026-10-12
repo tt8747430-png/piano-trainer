@@ -7,8 +7,8 @@ const gospelProgressions: Lesson = {
   id: 'gospel-progressions',
   title: { en: 'Gospel progressions', ru: 'Госпел-последовательности' },
   summary: {
-    en: 'The progressions gospel is built on, coloured with 7ths: the lift, the standard, the hymn, the 7–3–6, the resolution, the walk-up, and the gospel rhythm.',
-    ru: 'Последовательности, на которых строится госпел, с септаккордами: подъём, стандарт, гимн, 7–3–6, разрешение, подход снизу и госпел-ритм.',
+    en: 'The progressions gospel is built on, coloured with 7ths, and its rhythm.',
+    ru: 'Последовательности, на которых строится госпел, с септаккордами, и его ритм.',
   },
   level: 3,
   category: 'gospel',
@@ -20,29 +20,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel plays the church’s progressions with richer chords. Each chord keeps its function, its role in the key. Gospel adds three things:',
-            ru: 'Госпел играет церковные последовательности более богатыми аккордами. Функция каждого аккорда, его роль в тональности, не меняется. Госпел добавляет три вещи:',
-          },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: '7th and 9th chords on almost every beat.',
-              ru: 'Септаккорды и нонаккорды почти на каждой доле.',
-            },
-            {
-              en: 'Chords that lift toward the next one.',
-              ru: 'Аккорды, которые тянутся к следующему.',
-            },
-            { en: 'A bass that walks.', ru: 'Бас, который идёт по ступеням.' },
-          ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Tap the three chords below: the same C, richer each time.',
-            ru: 'Нажмите три аккорда ниже: тот же C, каждый раз богаче.',
+            en: 'Gospel keeps each chord’s role in the key but makes it richer: 7ths and 9ths on almost every beat, chords that lift toward the next, a walking bass.',
+            ru: 'Госпел сохраняет роль каждого аккорда в тональности, но делает его богаче: септаккорды и нонаккорды почти на каждой доле, аккорды, тянущиеся к следующему, идущий бас.',
           },
         },
         { kind: 'chords', symbols: ['C', 'CMaj7', 'CMaj9'] },
@@ -103,15 +82,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel players name it by its bass: the 7th, 3rd and 6th notes of the key. In C major they are Bm7♭5, E7, Am7.',
-            ru: 'Госпел-музыканты называют её по басу: VII, III и VI ступени тональности. В до мажоре это Bm7♭5, E7, Am7.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'It is a ii–V–i into the relative minor. A half-diminished 7th and a dominant 7th pull to the minor vi.',
-            ru: 'Это ii–V–i в параллельный минор. Полууменьшённый септаккорд и доминантсептаккорд тянут к минорной vi.',
+            en: 'Named for its bass, the key’s 7th, 3rd and 6th notes, it is a ii–V–i into the relative minor.',
+            ru: 'Она названа по басу, VII, III и VI ступеням тональности. Это ii–V–i в параллельный минор.',
           },
         },
         { kind: 'progression', numerals: 'vii° III vi', key: C_MAJOR, size: 'sevenths' },
@@ -142,15 +114,8 @@ const gospelProgressions: Lesson = {
           kind: 'text',
           lead: { en: 'The walk-up,', ru: 'Подход снизу,' },
           text: {
-            en: '♭VI–♭VII–I, climbs to the tonic by whole steps from the flat side. It is the gospel ending.',
-            ru: '♭VI–♭VII–I, поднимается к тонике целыми тонами со стороны бемолей. Это госпел-окончание.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Its roots are borrowed from the minor key. Gospel plays each of them as a dominant 7th: A♭7, then B♭7 in C.',
-            ru: 'Его основные тоны взяты из минора. Госпел играет на каждом доминантсептаккорд: A♭7, затем B♭7 в C.',
+            en: '♭VI–♭VII–I, the gospel ending, climbs home by whole steps. Its roots come from minor, each played as a dominant 7th.',
+            ru: '♭VI–♭VII–I, госпел-окончание, поднимается к тонике целыми тонами. Его основные тоны взяты из минора, и на каждом звучит доминантсептаккорд.',
           },
         },
         { kind: 'progression', numerals: '♭VI ♭VII I', key: C_MAJOR, size: 'sevenths' },

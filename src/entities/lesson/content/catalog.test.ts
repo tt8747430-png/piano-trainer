@@ -353,6 +353,24 @@ function proseOf(lesson: (typeof LESSONS)[number]): string[] {
   )
 }
 
+/** The blocks a learner reads rather than plays: a section's example is any other. */
+const READ = new Set<LessonBlock['kind']>(['text', 'note', 'steps', 'link'])
+/** The most a section says in English: two short lines and a definition, the example doing the rest. */
+const SECTION_WORDS = 35
+
+function wordsOf(block: LessonBlock): string[] {
+  switch (block.kind) {
+    case 'text':
+      return [block.lead?.en ?? '', block.text.en]
+    case 'note':
+      return [block.text.en]
+    case 'steps':
+      return block.steps.map((step) => step.en)
+    default:
+      return []
+  }
+}
+
 describe('the lessons’ prose', () => {
   it('reads in short sentences, none run on with a semicolon (the research checklist)', () => {
     for (const lesson of LESSONS) {
@@ -364,5 +382,25 @@ describe('the lessons’ prose', () => {
         }
       }
     }
+  })
+
+  it('leads each section with its example: at most one text before it, and a few lines in all', () => {
+    const problems = LESSONS.flatMap((lesson) =>
+      lesson.sections.flatMap((section) => {
+        const where = `${lesson.id} / ${section.heading.en}`
+        const first = section.blocks.findIndex((block) => !READ.has(block.kind))
+        const words = section.blocks
+          .flatMap((block) => wordsOf(block))
+          .join(' ')
+          .split(/\s+/)
+          .filter(Boolean).length
+        return [
+          ...(first < 0 ? [`${where}: shows nothing`] : []),
+          ...(first > 1 ? [`${where}: talks before it shows`] : []),
+          ...(words > SECTION_WORDS ? [`${where}: says ${words} words`] : []),
+        ]
+      }),
+    )
+    expect(problems).toEqual([])
   })
 })

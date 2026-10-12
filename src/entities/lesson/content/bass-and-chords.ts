@@ -4,8 +4,8 @@ const bassAndChords: Lesson = {
   id: 'bass-and-chords',
   title: { en: 'Bass and chords', ru: 'Бас и аккорды' },
   summary: {
-    en: 'What each hand plays from chords, the nearest chord for the right hand, and the first ways to play.',
-    ru: 'Что играет каждая рука в аккомпанементе по аккордам, ближайший аккорд для правой руки и первые способы сыграть последовательность.',
+    en: 'What each hand plays from chords, the nearest chord, and the first ways to play.',
+    ru: 'Что играет каждая рука по аккордам, ближайший аккорд и первые способы игры.',
   },
   level: 1,
   category: 'accompaniment',
@@ -16,29 +16,10 @@ const bassAndChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'From a chord chart,', ru: 'По аккордовой записи' },
           text: {
-            en: 'A chord chart writes a song’s chord symbols over its words. To accompany from it, split each chord between your hands.',
-            ru: 'В аккордовой записи буквенные обозначения аккордов стоят над словами песни. Чтобы аккомпанировать по ней, разделите каждый аккорд между руками.',
-          },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'The left hand plays the bass: the chord’s root, low on the keyboard.',
-              ru: 'Левая рука играет бас — основной тон аккорда внизу клавиатуры.',
-            },
-            {
-              en: 'The right hand plays the chord itself near the middle. There it sounds full but leaves room for the singers.',
-              ru: 'Правая играет сам аккорд в середине клавиатуры. Там он звучит полно и оставляет место поющим.',
-            },
-          ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Tap C, F and G below to hear the right hand’s part.',
-            ru: 'Нажмите C, F и G ниже — это партия правой руки.',
+            en: 'split each chord: the left hand plays its root low, the right hand the chord near the middle.',
+            ru: 'разделите каждый аккорд: левая рука берёт его основной тон внизу, правая — сам аккорд в середине.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -49,44 +30,10 @@ const bassAndChords: Lesson = {
       blocks: [
         {
           kind: 'text',
-          text: {
-            en: 'Do not jump the right hand so that every chord starts on its root. Take the nearest inversion instead.',
-            ru: 'Не перескакивайте правой рукой так, чтобы каждый аккорд начинался с основного тона. Берите ближайшее обращение.',
-          },
-        },
-        {
-          kind: 'text',
           lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'is the same chord with another of its notes at the bottom.',
-            ru: '— тот же аккорд, но внизу у него звучит другая нота.',
-          },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Keep the notes two chords share where they are.',
-              ru: 'Общие ноты двух аккордов оставьте на месте.',
-            },
-            {
-              en: 'Move the other notes by the smallest step.',
-              ru: 'Остальные сдвиньте на ближайшую ступень.',
-            },
-          ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'From C E G, the nearest F is C F A (F/C). The nearest G is B D G (G/B).',
-            ru: 'От до–ми–соль ближайший F — до–фа–ля (F/C). Ближайший G — си–ре–соль (G/B).',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play the row below: the hand hardly moves, and the chords join smoothly.',
-            ru: 'Сыграйте ряд ниже: рука почти не двигается, и аккорды связываются плавно.',
+            en: 'is the same chord with another note at the bottom. Take the nearest one: keep shared notes, move the rest by the smallest step.',
+            ru: '— тот же аккорд с другой нотой внизу. Берите ближайшее: общие ноты оставьте, остальные сдвиньте на ближайшую ступень.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F/C', 'G/B'] },

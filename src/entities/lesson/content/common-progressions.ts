@@ -61,15 +61,8 @@ const commonProgressions: Lesson = {
           kind: 'text',
           lead: { en: 'A cadence', ru: 'Каденция' },
           text: {
-            en: 'is the chords that end a phrase. ii–V–I is the cadence of jazz, and of many a hymn’s last line.',
-            ru: '— аккорды, которыми заканчивается фраза. ii–V–I — каденция джаза и последней строки многих гимнов.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'ii leads to V, and V leads home. It sounds best in 7th chords, as below.',
-            ru: 'ii ведёт к V, а V — домой. Лучше всего она звучит септаккордами, как ниже.',
+            en: 'is the chords that end a phrase. ii–V–I is the cadence of jazz and of many hymns. ii leads to V, and V leads home.',
+            ru: '— аккорды, которыми заканчивается фраза. ii–V–I — каденция джаза и многих гимнов. ii ведёт к V, а V — домой.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -81,22 +74,15 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A minor key counts its numerals from natural minor. There i, iv and v are all minor.',
-            ru: 'Минорную тональность считают от натурального минора. В нём i, iv и v — минорные.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Most minor-key songs raise the 7th degree. This makes V major, so it leads home.',
-            ru: 'В большинстве минорных песен седьмую ступень повышают. Тогда аккорд V становится мажорным и ведёт домой.',
+            en: 'Minor counts from natural minor. Raising the 7th makes V major, so it leads home.',
+            ru: 'Минор считают от натурального минора. Повышенная седьмая ступень делает V мажорным, и он ведёт домой.',
           },
         },
         { kind: 'progression', numerals: 'i iv V i', key: A_MINOR },
         {
           kind: 'text',
           text: {
-            en: 'The minor pop progression moves through the chords of the relative major.',
+            en: 'The minor pop progression uses the relative major’s chords.',
             ru: 'Минорная поп-последовательность идёт по аккордам параллельного мажора.',
           },
         },

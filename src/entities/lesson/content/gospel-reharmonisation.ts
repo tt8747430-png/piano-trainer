@@ -7,8 +7,8 @@ const gospelReharmonisation: Lesson = {
   id: 'gospel-reharmonisation',
   title: { en: 'Gospel reharmonisation', ru: 'Госпел-реармонизация' },
   summary: {
-    en: 'A hymn’s plain chords made rich: 7ths and 9ths, the sus that falls to the dominant, IV over V, the minor iv, and a chord’s tensions.',
-    ru: 'Простые аккорды гимна становятся богаче: септаккорды и нонаккорды, sus с разрешением в доминанту, IV над V, минорная iv и тенсии аккорда.',
+    en: 'A hymn’s plain chords made rich: 9ths, the sus, IV over V, the minor iv, tensions.',
+    ru: 'Простые аккорды гимна богаче: ноны, sus, IV над V, минорная iv, тенсии.',
   },
   level: 3,
   category: 'gospel',
@@ -21,22 +21,8 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           lead: { en: 'Reharmonisation', ru: 'Реармонизация' },
           text: {
-            en: 'puts new or richer chords under the same tune.',
-            ru: '— это новые или более богатые аккорды под той же мелодией.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Start from a hymn’s triads: C, F, G. Add a major 9th on I and IV, a dominant 9th on V.',
-            ru: 'Начните с трезвучий гимна: C, F, G. Добавьте большой нонаккорд на I и IV и доминантнонаккорд на V.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Tap both rows below. The harmony is the same, it only sounds fuller.',
-            ru: 'Нажмите оба ряда ниже. Гармония та же, она только звучит полнее.',
+            en: 'puts richer chords under the same tune. Add a major 9th on I and IV, a dominant 9th on V. The harmony stays, it sounds fuller.',
+            ru: '— более богатые аккорды под той же мелодией. Добавьте большой нонаккорд на I и IV, доминантнонаккорд на V. Гармония та же, но полнее.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -50,18 +36,18 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           lead: { en: 'A sus4 chord', ru: 'В аккорде sus4' },
           text: {
-            en: 'has the 4th in place of the 3rd.',
-            ru: 'кварта стоит вместо терции.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Hold the 4th over the dominant, then let it fall to the 3rd: G7sus4, G7, C. Gospel players linger on the sus.',
-            ru: 'Задержите кварту над доминантой, затем опустите её в терцию: G7sus4, G7, C. В госпеле на sus задерживаются подольше.',
+            en: 'has the 4th in place of the 3rd. Hold it over the dominant, then let it fall to the 3rd.',
+            ru: 'кварта стоит вместо терции. Задержите её над доминантой, затем опустите в терцию.',
           },
         },
         { kind: 'chords', symbols: ['G7sus4', 'G7', 'C'] },
+        {
+          kind: 'note',
+          text: {
+            en: 'Gospel players linger on the sus.',
+            ru: 'В госпеле на sus задерживаются подольше.',
+          },
+        },
       ],
     },
     {
@@ -70,15 +56,8 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play the IV chord over the dominant’s root. F/G is an F chord with G in the bass.',
-            ru: 'Сыграйте аккорд IV над основным тоном доминанты. F/G — аккорд F с басом соль.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'It is a soft dominant. It has no 3rd to push it home.',
-            ru: 'Это мягкая доминанта. В ней нет терции, которая толкает домой.',
+            en: 'Play IV over the dominant’s root: F/G. A soft dominant, it has no 3rd to push it home.',
+            ru: 'Сыграйте IV над основным тоном доминанты: F/G. Это мягкая доминанта, в ней нет терции, которая толкает домой.',
           },
         },
         { kind: 'chords', symbols: ['F/G', 'C'] },
@@ -104,24 +83,11 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           lead: { en: 'Tensions', ru: 'Тенсии' },
           text: {
-            en: 'are notes added above a 7th chord: 9ths, 11ths and 13ths.',
-            ru: '— это ноты над септаккордом: ноны, ундецимы и терцдецимы.',
+            en: 'are 9ths, 11ths and 13ths added above a 7th chord. A dominant 7th takes the most, altered or not.',
+            ru: '— ноны, ундецимы и терцдецимы над септаккордом. Больше всего их принимает доминантсептаккорд, альтерированных и нет.',
           },
         },
-        {
-          kind: 'text',
-          text: {
-            en: 'A dominant 7th takes the most colour: 9ths and 13ths, altered or not.',
-            ru: 'Больше всего красок принимает доминантсептаккорд: ноны и терцдецимы, альтерированные и нет.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Available tensions shows which notes a chord takes and which to avoid. Open G7’s below.',
-            ru: '«Доступные тенсии» показывают, какие ноты аккорд принимает, а каких избегать. Откройте тенсии G7 ниже.',
-          },
-        },
+        { kind: 'chords', symbols: ['G7', 'G9', 'G13', 'G7♭9'] },
         {
           kind: 'link',
           title: { en: 'G7’s tensions', ru: 'Тенсии G7' },

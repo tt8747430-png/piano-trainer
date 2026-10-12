@@ -54,8 +54,11 @@ describe('LessonView', () => {
     await renderLesson()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'Reading chord symbols',
+      'Numbers and 7ths',
+      '6, sus and slash chords',
       'Chord numbers: 2 or 9? 6 or 13?',
-      'Naming any chord in 7 steps',
+      '9ths, 13ths and alterations',
+      'Naming any chord',
     ])
   })
 

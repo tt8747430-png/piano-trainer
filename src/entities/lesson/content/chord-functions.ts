@@ -10,8 +10,8 @@ const chordFunctions: Lesson = {
     ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
   },
   summary: {
-    en: 'Why one chord sounds like home, one like leaving and one like coming back. The three functions, and the chords that stand in for them.',
-    ru: 'Почему один аккорд звучит как дом, другой — как уход, третий — как возвращение. Три функции и аккорды, которые их заменяют.',
+    en: 'Home, leaving and coming back: the three functions, and the chords that stand in for them.',
+    ru: 'Дом, уход и возвращение: три функции и аккорды, которые их заменяют.',
   },
   level: 2,
   category: 'theory',
@@ -22,35 +22,29 @@ const chordFunctions: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A function', ru: 'Функция' },
           text: {
-            en: 'Every chord of a key does one of three jobs. These jobs are called functions.',
-            ru: 'Каждый аккорд тональности выполняет одну из трёх задач. Эти задачи называют функциями.',
+            en: 'is one of three jobs a chord does in its key.',
+            ru: '— одна из трёх задач, которые аккорд выполняет в тональности.',
           },
         },
+        { kind: 'chords', symbols: ['C', 'F', 'G'] },
         {
           kind: 'steps',
           steps: [
             {
-              en: 'The tonic (I) is home. It sounds at rest.',
-              ru: 'Тоника (I) — дом. Она звучит устойчиво.',
+              en: 'The tonic (I) is home, at rest.',
+              ru: 'Тоника (I) — дом, покой.',
             },
             {
-              en: 'The subdominant (IV) leaves home. It sounds unsettled.',
-              ru: 'Субдоминанта (IV) уводит от дома. Она вносит движение.',
+              en: 'The subdominant (IV) leaves home.',
+              ru: 'Субдоминанта (IV) уводит от дома.',
             },
             {
-              en: 'The dominant (V) pulls back. It wants to resolve, that is, to move on to the tonic.',
-              ru: 'Доминанта (V) тянет обратно. Она хочет разрешиться, то есть перейти в тонику.',
+              en: 'The dominant (V) pulls back to the tonic.',
+              ru: 'Доминанта (V) тянет обратно к тонике.',
             },
           ],
-        },
-        { kind: 'chords', symbols: ['C', 'F', 'G'] },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play them as a sentence: home, away, back, home. Most hymns and folk songs are built on it.',
-            ru: 'Сыграйте их как фразу: дом, уход, возвращение, дом. На этом движении построено большинство гимнов и народных песен.',
-          },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
       ],
@@ -61,40 +55,27 @@ const chordFunctions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The other chords of the key share notes with these three. So they can take on their jobs.',
-            ru: 'Остальные аккорды тональности имеют общие ноты с тремя главными. Поэтому они могут брать на себя их роль.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'ii sounds like IV. Dm and F share F and A, so ii is a subdominant too. Play both below.',
-            ru: 'ii звучит как IV. У Dm и F общие ноты фа и ля, поэтому ii — тоже субдоминанта. Сыграйте оба ниже.',
+            en: 'Other chords share notes with these three and take on their jobs. ii does IV’s.',
+            ru: 'Остальные аккорды имеют общие ноты с этими тремя и берут на себя их роль. ii заменяет IV.',
           },
         },
         { kind: 'chords', symbols: ['Dm', 'F'] },
         {
           kind: 'text',
           text: {
-            en: 'vii° sounds like V. B° and G share B and D. B is the leading note, a half step below the tonic. So vii° pulls home like a dominant.',
-            ru: 'vii° звучит как V. У B° и G общие ноты си и ре. Си — вводный тон, на полутон ниже тоники. Поэтому vii° тянет к тонике, как доминанта.',
+            en: 'vii° does V’s: its B, the leading note, pulls home.',
+            ru: 'vii° заменяет V: его си, вводный тон, тянет к тонике.',
           },
         },
         { kind: 'chords', symbols: ['B°', 'G'] },
         {
           kind: 'text',
           text: {
-            en: 'vi and iii are weaker. Their sound depends on the chords around them. vi often stands in for the tonic: a softer, sadder home.',
-            ru: 'vi и iii слабее. Их окраска зависит от соседних аккордов. vi часто заменяет тонику — это более мягкий, грустный дом.',
+            en: 'vi often does I’s: a softer home.',
+            ru: 'vi часто заменяет I — это более мягкий дом.',
           },
         },
-        {
-          kind: 'text',
-          text: {
-            en: 'So I–ii–V–I is the same sentence as I–IV–V–I. Only ii takes the subdominant’s place. Play it below.',
-            ru: 'Поэтому I–ii–V–I — та же фраза, что и I–IV–V–I. Только место субдоминанты занимает ii. Сыграйте её ниже.',
-          },
-        },
+        { kind: 'chords', symbols: ['Am', 'C'] },
         { kind: 'progression', numerals: 'I ii V I', key: C_MAJOR },
       ],
     },

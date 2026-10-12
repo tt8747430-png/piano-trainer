@@ -7,8 +7,8 @@ const passingChords: Lesson = {
   id: 'passing-chords',
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },
   summary: {
-    en: 'A chord slipped between two of a hymn’s chords to lead into the second: its dominant 7th, a diminished 7th, a chromatic approach.',
-    ru: 'Аккорд между двумя аккордами гимна, который ведёт во второй: его доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
+    en: 'A chord slipped in to lead into the next: a dominant 7th, a diminished 7th, a chromatic approach.',
+    ru: 'Аккорд, который ведёт в следующий: доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
   },
   level: 3,
   category: 'accompaniment',
@@ -24,26 +24,18 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A passing chord', ru: 'Проходящий аккорд' },
           text: {
-            en: 'sits between two of a hymn’s chords and leads into the second.',
-            ru: 'стоит между двумя аккордами гимна и ведёт во второй.',
-          },
-        },
-        {
-          kind: 'text',
-          lead: { en: 'A dominant 7th', ru: 'Доминантсептаккорд' },
-          text: {
-            en: 'is a major chord with a minor 7th, built a 5th above the chord it leads to.',
-            ru: '— мажорное трезвучие с малой септимой. Он строится на квинту выше аккорда, в который ведёт.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The simplest passing chord is the second chord’s own dominant 7th. C7 leads into F: its E rises to F, and its B♭ falls to A. Tap the row below.',
-            ru: 'Самый простой проходящий аккорд — доминантсептаккорд второго аккорда. C7 ведёт в F: ми поднимается в фа, си-бемоль спускается в ля. Нажмите аккорды ниже.',
+            en: 'leads into the next chord. The simplest is its dominant 7th: a major chord with a minor 7th, a 5th above.',
+            ru: 'ведёт в следующий аккорд. Самый простой — его доминантсептаккорд: мажорное трезвучие с малой септимой, на квинту выше.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C7', 'F'] },
+        {
+          kind: 'note',
+          text: {
+            en: 'C7’s E rises to F, its B♭ falls to A.',
+            ru: 'Ми в C7 поднимается в фа, а си-бемоль спускается в ля.',
+          },
+        },
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
@@ -58,15 +50,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A secondary dominant', ru: 'Побочная доминанта' },
           text: {
-            en: 'is the V7 of a chord other than I. Any chord of the key can be led into by its own V7.',
-            ru: '— это V7 к аккорду тональности, кроме I. В любой аккорд тональности можно войти через его собственный V7.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Between C and Dm, play A7, the dominant of Dm. Its C♯ rises to D.',
-            ru: 'Между C и Dm сыграйте A7 — доминанту Dm. Его до-диез поднимается в ре.',
+            en: 'is the V7 of a chord other than I. A7 leads into Dm, its C♯ rising to D.',
+            ru: '— это V7 к аккорду тональности, кроме I. A7 ведёт в Dm: его до-диез поднимается в ре.',
           },
         },
         { kind: 'chords', symbols: ['C', 'A7', 'Dm'] },
@@ -84,15 +69,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A diminished 7th', ru: 'Уменьшённый септаккорд' },
           text: {
-            en: 'is four notes a minor 3rd apart. A half step below the next chord, it climbs into it.',
-            ru: '— четыре звука через малую терцию. Если он стоит на полутон ниже следующего аккорда, он поднимается в него.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Between F and G, play F♯°7. Its F♯ rises to G.',
-            ru: 'Между F и G сыграйте F♯°7. Его фа-диез поднимается в соль.',
+            en: 'is four notes a minor 3rd apart. A half step below the next chord, it climbs into it: F♯°7 into G.',
+            ru: '— четыре звука через малую терцию. На полутон ниже следующего аккорда он поднимается в него: F♯°7 в G.',
           },
         },
         { kind: 'chords', symbols: ['F', 'F#°7', 'G'] },
@@ -110,15 +88,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A chromatic approach', ru: 'Хроматический подход' },
           text: {
-            en: 'slides into the next chord by half steps.',
-            ru: 'ведёт в следующий аккорд по полутонам.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Between C and Am, the bass walks down C, B, B♭, A. Each step between takes a dominant 7th: B7, then B♭7.',
-            ru: 'Между C и Am бас спускается: до, си, си-бемоль, ля. На каждой ступени между ними — доминантсептаккорд: B7, затем B♭7.',
+            en: 'slides in by half steps. From C to Am the bass walks down, with a dominant 7th on each step between.',
+            ru: 'ведёт в аккорд по полутонам. Из C в Am бас спускается, и на каждой ступени между ними — доминантсептаккорд.',
           },
         },
         { kind: 'chords', symbols: ['C', 'B7', 'B♭7', 'Am'] },
@@ -126,18 +97,6 @@ const passingChords: Lesson = {
           kind: 'link',
           title: { en: 'C to Am in Passing chords', ru: 'Из C в Am в «Проходящих аккордах»' },
           target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Am' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Where to use them', ru: 'Где их ставить' },
-      blocks: [
-        {
-          kind: 'note',
-          text: {
-            en: 'A passing chord takes a beat or half a bar from the chord before it. Use one where the melody holds a long note. Don’t put one under every change.',
-            ru: 'Проходящий аккорд забирает долю или полтакта у предыдущего аккорда. Ставьте его там, где мелодия тянет долгую ноту. Не ставьте его на каждую смену.',
-          },
         },
       ],
     },
@@ -151,6 +110,13 @@ const passingChords: Lesson = {
             ru: 'Сыграйте доминантсептаккорд, который ведёт в F.',
           },
           answer: { chord: 'C7' },
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'A passing chord takes a beat or half a bar from the chord before it. Use one under a long melody note, not under every change.',
+            ru: 'Проходящий аккорд забирает долю или полтакта у предыдущего. Ставьте его под долгую ноту мелодии, а не на каждую смену.',
+          },
         },
       ],
     },

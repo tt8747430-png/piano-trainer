@@ -8,8 +8,8 @@ const twoFiveOne: Lesson = {
   id: 'two-five-one',
   title: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
   summary: {
-    en: 'Jazz’s cadence: subdominant, dominant and tonic in 7th chords. How its voices move, in major and minor, and how to practise it in every key.',
-    ru: 'Главный оборот джаза: субдоминанта, доминанта и тоника в септаккордах. Как движутся голоса, в мажоре и в миноре, и как отработать его во всех тональностях.',
+    en: 'Jazz’s cadence in 7th chords: its voices, in major and minor, in every key.',
+    ru: 'Главный оборот джаза в септаккордах: голоса, мажор и минор, все тональности.',
   },
   level: 3,
   category: 'jazz',
@@ -21,30 +21,16 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The ii–V–I is the subdominant, the dominant and the tonic, as jazz plays them. ii stands for the subdominant, and its root falls a 5th to V.',
-            ru: 'ii–V–I — это субдоминанта, доминанта и тоника в джазе. Субдоминанту здесь заменяет ii, и его основной тон опускается на квинту к V.',
-          },
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Jazz harmony is built of 7th chords, so triads are rare. Play ii7–V7–Imaj7 below.',
-            ru: 'Джазовая гармония строится на септаккордах, поэтому трезвучия редки. Сыграйте ii7–V7–Imaj7 ниже.',
+            en: 'ii stands for the subdominant. Jazz plays all three as 7th chords, the roots falling a 5th each time.',
+            ru: 'ii заменяет субдоминанту. Джаз играет все три аккорда септаккордами, и основные тоны каждый раз опускаются на квинту.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
         {
-          kind: 'text',
-          text: {
-            en: 'The roots fall a 5th each time: D, G, C. They walk down the circle of fifths.',
-            ru: 'Основные тоны каждый раз опускаются на квинту: ре, соль, до. Они идут вниз по квинтовому кругу.',
-          },
-        },
-        {
           kind: 'note',
           text: {
-            en: 'This is about the chords’ letters, not the bass. The bass may take any of the chords’ notes.',
-            ru: 'Речь о буквах аккордов, а не о басе. Бас может взять любую ноту аккорда.',
+            en: 'That is the chords’ roots. The bass may take any note of the chord.',
+            ru: 'Речь об основных тонах. Бас может взять любую ноту аккорда.',
           },
         },
       ],
@@ -53,37 +39,20 @@ const twoFiveOne: Lesson = {
       heading: { en: 'How the voices move', ru: 'Как движутся голоса' },
       blocks: [
         {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'The 3rd of one chord becomes the 7th of the next, and the 7th becomes the 3rd.',
-              ru: 'Терция одного аккорда становится септимой следующего, а септима — терцией.',
-            },
-            {
-              en: 'The tense notes fall a step: Dm7’s C falls to G7’s B, and G7’s F falls to Cmaj7’s E.',
-              ru: 'Неустойчивые звуки разрешаются на ступень вниз. До в Dm7 переходит в си в G7, фа в G7 — в ми в Cmaj7.',
-            },
-            {
-              en: 'Common notes stay where they are.',
-              ru: 'Общие звуки остаются на месте.',
-            },
-          ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'A 6th chord can stand for a major 7th: C6 for Cmaj7.',
-            ru: 'Мажорное трезвучие с секстой может заменить большой мажорный септаккорд: C6 вместо Cmaj7.',
-          },
-        },
-        {
           kind: 'text',
           text: {
-            en: 'Play the row below and follow each voice.',
-            ru: 'Сыграйте ряд ниже и проследите за каждым голосом.',
+            en: 'The 3rd of each chord becomes the 7th of the next, and the 7th becomes the 3rd.',
+            ru: 'Терция каждого аккорда становится септимой следующего, а септима — терцией.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'G7', 'C6'] },
+        {
+          kind: 'note',
+          text: {
+            en: 'Tense notes fall a step and common notes stay. C6 can stand for Cmaj7.',
+            ru: 'Неустойчивые звуки опускаются на ступень, общие остаются. C6 может заменить Cmaj7.',
+          },
+        },
       ],
     },
     {
@@ -92,34 +61,17 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In minor, each of the three chords changes.',
-            ru: 'В миноре меняется каждый из трёх аккордов.',
+            en: 'In minor, ii is half-diminished, V takes the raised 7th degree, often with a ♭9, and the tonic is often a minor 6th chord.',
+            ru: 'В миноре ii полууменьшённый, V берёт повышенную VII ступень, часто с ♭9, а тоникой часто бывает минорный аккорд с секстой.',
           },
-        },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'ii is half-diminished: iiø7.',
-              ru: 'ii — полууменьшённый: iiø7.',
-            },
-            {
-              en: 'V needs the raised 7th degree to pull home: V7, often V7♭9.',
-              ru: 'Доминанте для тяготения нужна повышенная VII ступень: V7, часто V7♭9.',
-            },
-            {
-              en: 'The tonic is often a minor 6th chord: Cm6.',
-              ru: 'Тоникой часто бывает минорное трезвучие с секстой: Cm6.',
-            },
-          ],
         },
         { kind: 'progression', numerals: 'iiø7 V7 i', key: C_MINOR },
         { kind: 'chords', symbols: ['Dm7♭5', 'G7♭9', 'Cm6'] },
         {
           kind: 'text',
           text: {
-            en: 'A ii–V can also visit another key for a moment. Em7♭5–A7 is the minor ii–V of D minor, and it leads to Dm7.',
-            ru: 'ii–V может и ненадолго увести в другую тональность. Em7♭5–A7 — минорный ii–V ре минора, и он ведёт в Dm7.',
+            en: 'Em7♭5–A7, D minor’s ii–V, visits another key for a moment.',
+            ru: 'Em7♭5–A7, ii–V ре минора, ненадолго уводит в другую тональность.',
           },
         },
         { kind: 'chords', symbols: ['Em7♭5', 'A7', 'Dm7'] },
@@ -131,23 +83,11 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play the ii–V–I in close position, each chord within one octave.',
-            ru: 'Играйте ii–V–I в тесном расположении, каждый аккорд в пределах октавы.',
+            en: 'Play it in close position, up by semitones, then down by whole tones. Going down, each I turns into the next ii.',
+            ru: 'Играйте его в тесном расположении, вверх по полутонам, затем вниз по тонам. При спуске каждый I становится следующим ii.',
           },
         },
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Move it up by semitones: Dm7 G7 Cmaj7, then E♭m7 A♭7 D♭maj7…',
-              ru: 'Ведите его вверх по полутонам: Dm7 G7 Cmaj7, затем E♭m7 A♭7 D♭maj7…',
-            },
-            {
-              en: 'Move it down by whole tones. Each key’s I becomes the next key’s ii: Cmaj7 turns into Cm7.',
-              ru: 'Ведите его вниз по тонам. I каждой тональности становится ii следующей: Cmaj7 превращается в Cm7.',
-            },
-          ],
-        },
+        { kind: 'chords', symbols: ['Dm7', 'G7', 'Cmaj7', 'Cm7', 'F7', 'B♭maj7'] },
         {
           kind: 'link',
           title: { en: 'Step 1: up by semitones', ru: 'Шаг 1: вверх по полутонам' },
@@ -178,22 +118,14 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Now play 9th chords, with the root left to the bass.',
-            ru: 'Теперь играйте нонаккорды, основной тон оставьте в басу.',
+            en: 'Leave the root to the bass. Play each 9th chord from its 3rd (3-5-7-9), then from its 7th (7-9-3-5).',
+            ru: 'Основной тон оставьте басу. Играйте каждый нонаккорд от терции (3-5-7-9), затем от септимы (7-9-3-5).',
           },
         },
         {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Play each chord from its 3rd: 3-5-7-9. Dm9 is F A C E.',
-              ru: 'Играйте каждый аккорд от терции: 3-5-7-9. Dm9 — это фа, ля, до, ми.',
-            },
-            {
-              en: 'Then play it from its 7th: 7-9-3-5, so C E F A.',
-              ru: 'Затем играйте его от септимы: 7-9-3-5, то есть до, ми, фа, ля.',
-            },
-          ],
+          kind: 'quiz',
+          ask: { en: 'Play Dm9 from its 3rd.', ru: 'Сыграйте Dm9 от терции.' },
+          answer: { notes: ['F', 'A', 'C', 'E'] },
         },
         {
           kind: 'link',
