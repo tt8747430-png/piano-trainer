@@ -1,6 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
-import { ChordRow, progressionRow, RowChords, RowPlay, useShownKeys } from '@/features/play-example'
+import {
+  ChordRow,
+  progressionRow,
+  RowChords,
+  RowStaff,
+  RowPlay,
+  useShownKeys,
+} from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyFromParam, numeralGrows, parseNumerals } from '@/shared/lib/music'
 import { ChordSizeField, KeyChoice, Labelled, NO_KEYS } from '@/shared/ui'
@@ -38,6 +45,7 @@ export function ProgressionsTool({
       <ExplorerKeyboard shown={shown} />
       <ChordRow chords={progressionRow(numerals, key, view.size)} onShow={setShown}>
         <RowChords />
+        <RowStaff />
         <RowPlay variant="default" />
         {named?.note ? (
           <p className="max-w-prose text-muted-foreground">{localText(named.note, locale)}</p>

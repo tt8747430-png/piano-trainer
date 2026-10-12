@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ChordRow, RowChords, RowPlay } from '@/features/play-example'
+import { ChordRow, RowChords, RowStaff, RowPlay } from '@/features/play-example'
 import { chordSymbol, type Chord, type PassingChords } from '@/shared/lib/music'
 import type { ShownKeys } from '@/shared/ui'
 
@@ -36,6 +36,7 @@ export function SuggestionCard({
           </span>
         </header>
         <RowChords />
+        <RowStaff />
         <p className="text-muted-foreground">
           {t(`passing.kind.${way.kind}.why`, {
             chord: first ? chordSymbol(first) : '',

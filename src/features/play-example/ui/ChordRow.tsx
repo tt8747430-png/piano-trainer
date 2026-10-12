@@ -1,12 +1,15 @@
-import { createContext, use, type ReactNode } from 'react'
+import { createContext, use, useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chordSymbol, voiceLead } from '@/shared/lib/music'
+import { chordSymbol, voiceLead, type Midi } from '@/shared/lib/music'
+import { notate } from '@/shared/lib/notation'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ChordButton, PlayLabel, type ShownKeys, unmarked, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
+import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
+import { TappableStaff } from './TappableStaff'
 
 /** How fast a row walks, a chord each two beats. */
 const ROW_TEMPO = 84
@@ -14,6 +17,9 @@ const ROW_TEMPO = 84
 /** What a row's parts share: its chords, which of them plays, and how each plays. */
 interface RowPlayback {
   readonly chords: readonly RowChord[]
+  /** Each chord's keys as the row voices them, the bass first. */
+  readonly voiced: readonly (readonly Midi[])[]
+  readonly onShow: (shown: ShownKeys) => void
   readonly playing: number | 'row' | null
   playChord(place: number): void
   playRow(): void
@@ -28,8 +34,9 @@ function useRow(): RowPlayback {
 }
 
 /**
- * A row of chords voiced smoothly (a progression, a way between two chords): its parts, `RowChords`
- * and `RowPlay`, play a chord as the row voices it or the whole row, and show it on the page's keys.
+ * A row of chords voiced smoothly (a progression, a way between two chords): its parts, `RowChords`,
+ * `RowStaff` and `RowPlay`, play a chord as the row voices it or the whole row, write it on the grand
+ * staff, and show it on the page's keys.
  */
 export function ChordRow({
   chords,
@@ -41,9 +48,11 @@ export function ChordRow({
   children: ReactNode
 }) {
   const playback = usePlayback<number | 'row'>()
-  const voiced = voiceLead(chords.map(({ chord }) => chord))
+  const voiced = useMemo(() => voiceLead(chords.map(({ chord }) => chord)), [chords])
   const row: RowPlayback = {
     chords,
+    voiced,
+    onShow,
     playing: playback.playing,
     playChord: (place) => {
       const keys = voiced[place] ?? []
@@ -80,6 +89,34 @@ export function RowChords() {
         </li>
       ))}
     </ul>
+  )
+}
+
+/** A chord tapped on the row's staff sounds for its bar at this tempo. */
+const STAFF_TEMPO = 120
+
+/**
+ * The row on the grand staff as its keys play it: the bass on the bass staff, the hand on the treble,
+ * each chord's symbol over its bar; a chord tapped plays.
+ */
+export function RowStaff() {
+  const { chords, voiced, onShow } = useRow()
+  const music = useMemo(
+    () =>
+      chordsMusic(
+        chords.map(({ chord, symbol = chordSymbol(chord) }, place) => ({
+          chord,
+          symbol,
+          keys: voiced[place] ?? [],
+        })),
+      ),
+    [chords, voiced],
+  )
+  const score = useMemo(() => notate(music), [music])
+  return (
+    <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
+      <TappableStaff music={music} score={score} tempo={STAFF_TEMPO} onShow={onShow} />
+    </div>
   )
 }
 

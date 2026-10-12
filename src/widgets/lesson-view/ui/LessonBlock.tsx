@@ -8,6 +8,7 @@ import {
   symbolsRow,
   progressionRow,
   RowChords,
+  RowStaff,
   RowPlay,
   ScaleExample,
 } from '@/features/play-example'
@@ -69,6 +70,7 @@ export function LessonBlock({
       return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
         <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
           <RowChords />
+          <RowStaff />
           <RowPlay variant="soft" />
         </ChordRow>
       ) : (
@@ -101,6 +103,7 @@ export function LessonBlock({
         <div className="flex flex-col gap-3">
           <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
             <RowChords />
+            <RowStaff />
             <RowPlay variant="soft" />
           </ChordRow>
           <LinkCard
