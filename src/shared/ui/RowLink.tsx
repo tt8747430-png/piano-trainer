@@ -34,8 +34,9 @@ export function RowLink({
     render,
     props: {
       className: cn(
-        // The whole card is the link: its hover fills the card to its line, never a box inside it.
-        'group/row flex min-h-16 min-w-0 items-center gap-3 rounded-3xl py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+        // The whole card is the link: its hover fills the card to its line, never a box inside it,
+        // and beside a taller card in its row it stays centred in its own.
+        'group/row flex h-full min-h-16 min-w-0 items-center gap-3 rounded-3xl py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
         // A row without a tile keeps its text off the card's edge.
         paint ? 'pl-2' : 'pl-4',
       ),

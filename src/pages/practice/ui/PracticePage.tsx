@@ -52,24 +52,26 @@ export function PracticePage() {
       </span>
     ) : undefined
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-2">
       <ScreenHeader title={t('title')} />
-      <ul className="grid-cards gap-2 *:card">
-        {THINGS.map((page) => (
-          <li key={page}>
-            <PageRow page={page} />
-          </li>
-        ))}
-      </ul>
-      {PRACTICE_GROUPS.map((group) => (
-        <RowGroup key={group.id} title={t(`groups.${group.id}`)}>
-          {group.pages.map((page) => (
+      <div className="flex flex-col gap-8">
+        <ul className="grid-cards gap-2 *:card">
+          {THINGS.map((page) => (
             <li key={page}>
-              <PageRow page={page} trailing={page === 'quiz' ? toCheck : undefined} />
+              <PageRow page={page} />
             </li>
           ))}
-        </RowGroup>
-      ))}
+        </ul>
+        {PRACTICE_GROUPS.map((group) => (
+          <RowGroup key={group.id} title={t(`groups.${group.id}`)}>
+            {group.pages.map((page) => (
+              <li key={page}>
+                <PageRow page={page} trailing={page === 'quiz' ? toCheck : undefined} />
+              </li>
+            ))}
+          </RowGroup>
+        ))}
+      </div>
     </div>
   )
 }
