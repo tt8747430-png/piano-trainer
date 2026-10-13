@@ -5,6 +5,14 @@ export const music = {
   inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
+    from: {
+      '3rd': 'From the 3rd',
+      '5th': 'From the 5th',
+      '7th': 'From the 7th',
+      '9th': 'From the 9th',
+      '11th': 'From the 11th',
+      '13th': 'From the 13th',
+    },
     first: 'First chord',
     nearest: 'Nearest',
     nearestOn: 'Each next chord moves the least it can',

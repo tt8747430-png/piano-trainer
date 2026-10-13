@@ -4,9 +4,16 @@ import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/li
 import { notate } from '@/shared/lib/notation'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton, PlayLabel, type ShownKeys, unmarked, usePlayKey } from '@/shared/ui'
+import {
+  ChordButton,
+  INVERSION_NAMES,
+  PlayLabel,
+  type ShownKeys,
+  unmarked,
+  usePlayKey,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import type { RowChord } from '../model/chord-row'
+import { handPosition, type RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
 import { TappableStaff } from './TappableStaff'
@@ -83,17 +90,28 @@ export function ChordRow({
   )
 }
 
-/** The row's chords, each its symbol over its caption, playing alone. */
-export function RowChords() {
-  const { t } = useTranslation('learn')
-  const { chords, playing, playChord } = useRow()
+/**
+ * The row's chords, each its symbol over its caption, playing alone; with `positions`, each says how
+ * the row plays it: its inversion, or the tension a rootless hand starts on.
+ */
+export function RowChords({ positions = false }: { positions?: boolean }) {
+  const { t } = useTranslation(['learn', 'music'])
+  const { chords, voiced, playing, playChord } = useRow()
+  const positionOf = (chord: RowChord['chord'], place: number): string | undefined => {
+    const position = positions ? handPosition(chord, voiced[place] ?? []) : null
+    if (!position) return undefined
+    if ('inversion' in position)
+      return t(`music:inversion.${INVERSION_NAMES[position.inversion] ?? 'root'}`)
+    return t(`music:position.from.${position.from}`)
+  }
   return (
-    <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
+    <ul aria-label={t('learn:progressions.chords')} className="grid grid-cols-4 gap-2">
       {chords.map(({ chord, caption, symbol = chordSymbol(chord) }, place) => (
         <li key={`${place} ${symbol}`} className="grid">
           <ChordButton
             symbol={symbol}
             numeral={caption}
+            detail={positionOf(chord, place)}
             playing={playing === place}
             onClick={() => playChord(place)}
           />

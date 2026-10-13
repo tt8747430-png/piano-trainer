@@ -7,7 +7,17 @@ import type { Sound } from '@/shared/lib/schedule'
 const row = () =>
   within(screen.getByRole('list', { name: 'Chords' }))
     .getAllByRole('button')
-    .map((button) => button.textContent)
+    .map((button) =>
+      [...button.children]
+        .filter((part) => !part.hasAttribute('data-detail'))
+        .map((part) => part.textContent)
+        .join(''),
+    )
+/** How the row plays each chord, as the line under its numeral says. */
+const positions = () =>
+  within(screen.getByRole('list', { name: 'Chords' }))
+    .getAllByRole('button')
+    .map((button) => button.querySelector('[data-detail]')?.textContent)
 const onsets = (sounds: readonly Sound[] = []) =>
   new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.at] : []))).size
 
@@ -280,5 +290,15 @@ describe('Practice → Progressions', () => {
     await user.click(screen.getByRole('switch', { name: /Nearest/ }))
     expect(router.state.location.search).toMatchObject({ inversion: 2, nearest: false })
     expect(await lowestHands()).toEqual([7, 0, 2, 7]) // every chord from its 5th
+  })
+
+  it('says under each chord the inversion the row plays it in', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions?p=I-IV-V-I')
+    await screen.findByRole('list', { name: 'Chords' })
+    expect(positions()[0]).toBe('Root')
+    await user.click(screen.getByRole('radio', { name: '1st' }))
+    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(positions()).toEqual(['1st', '1st', '1st', '1st'])
   })
 })

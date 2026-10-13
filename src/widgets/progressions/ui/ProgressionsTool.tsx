@@ -51,7 +51,7 @@ export function ProgressionsTool({
         position={{ inversion: view.inversion, nearest: view.nearest }}
         onShow={setShown}
       >
-        <RowChords />
+        <RowChords positions />
         <RowStaff />
         <RowPlay variant="default" />
         {named?.note ? (

@@ -11,6 +11,14 @@ export const music: LocaleResources['music'] = {
   },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
+    from: {
+      '3rd': 'От терции',
+      '5th': 'От квинты',
+      '7th': 'От септимы',
+      '9th': 'От ноны',
+      '11th': 'От ундецимы',
+      '13th': 'От терцдецимы',
+    },
     first: 'Первый аккорд',
     nearest: 'Плавно',
     nearestOn: 'Каждый следующий аккорд сдвигается как можно меньше',

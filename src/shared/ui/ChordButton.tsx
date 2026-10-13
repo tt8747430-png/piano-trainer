@@ -1,18 +1,21 @@
 import { PlayToggle } from './PlayToggle'
 
 /**
- * A chord to tap in a grid of chords: its symbol over its numeral where it has one, pressed while it
+ * A chord to tap in a grid of chords: its symbol over its numeral and a detail where it has them, pressed while it
  * sounds (a square: tap again to stop), ringed when it holds the note heard.
  */
 export function ChordButton({
   symbol,
   numeral,
+  detail,
   playing,
   holds = false,
   onClick,
 }: {
   symbol: string
   numeral?: string | undefined
+  /** A line under the numeral: how the chord is played (its inversion). */
+  detail?: string | undefined
   playing: boolean
   holds?: boolean
   onClick: () => void
@@ -28,6 +31,11 @@ export function ChordButton({
         {symbol}
       </span>
       {numeral ? <span className="text-sm text-muted-foreground">{numeral}</span> : null}
+      {detail ? (
+        <span data-detail="" className="text-xs text-muted-foreground">
+          {detail}
+        </span>
+      ) : null}
     </PlayToggle>
   )
 }
