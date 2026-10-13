@@ -199,11 +199,23 @@ describe('Practice → Progressions', () => {
       'Down by semitones',
       'Up by whole tones',
       'Down by whole tones',
-      'Round the circle of fifths',
+      'Down the circle of fifths: C F B♭',
+      'Up the circle of fifths: C G D',
+      'Up by minor thirds',
+      'Up by major thirds',
     ])
     expect(
       walks.map((link) => /walk=([a-z-]+)/.exec(link.getAttribute('href') ?? '')?.[1]),
-    ).toEqual(['semitones-up', 'semitones-down', 'tones-up', 'tones-down', 'fifths'])
+    ).toEqual([
+      'semitones-up',
+      'semitones-down',
+      'tones-up',
+      'tones-down',
+      'fifths',
+      'fifths-up',
+      'minor-thirds',
+      'major-thirds',
+    ])
     for (const link of walks)
       expect(link.getAttribute('href')).toMatch(/^\/play\/progression\?.*p=ii-V-I/)
     expect(screen.getByRole('link', { name: 'In C major' }).getAttribute('href')).not.toMatch(

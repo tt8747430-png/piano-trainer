@@ -75,4 +75,11 @@ describe('walkKeys', () => {
       'Am',
     ])
   })
+
+  it('walks up the circle of fifths, and by thirds round the octave', () => {
+    expect(names(walkKeys(C, 'fifths-up')).slice(0, 4)).toEqual(['C', 'G', 'D', 'A'])
+    expect(walkKeys(C, 'fifths-up')).toHaveLength(13)
+    expect(names(walkKeys(C, 'minor-thirds'))).toEqual(['C', 'E♭', 'F#', 'A', 'C'])
+    expect(names(walkKeys(C, 'major-thirds'))).toEqual(['C', 'E', 'A♭', 'C'])
+  })
 })
