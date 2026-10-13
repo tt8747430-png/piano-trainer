@@ -59,9 +59,11 @@ describe('Path', () => {
   })
 
   it('opens a song from its row, and a chord step in its explorer', async () => {
+    const user = userEvent.setup()
     await renderApp('/')
     const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
     const elementary = await screen.findByRole('region', { name: 'Level 2 · Elementary' })
+    await user.click(within(elementary).getByRole('button', { name: /Level 2/ }))
     expect(
       within(elementary).getByRole('link', { name: /Still, my soul, be still/ }),
     ).toHaveAttribute('href', '/songs/bz5')
@@ -70,5 +72,21 @@ describe('Path', () => {
         .getByRole('link', { name: /^Triads/ })
         .getAttribute('href'),
     ).toMatch(/^\/practice\/chords\?.*step=chords(%3A|:)tri/)
+  })
+
+  it('opens the level the learner is at, the others folded until opened', async () => {
+    const user = userEvent.setup()
+    await renderApp('/')
+    const beginner = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
+    const elementary = screen.getByRole('region', { name: 'Level 2 · Elementary' })
+    expect(within(beginner).getByRole('button', { name: /Level 1/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+    expect(within(elementary).queryByRole('list')).not.toBeInTheDocument()
+    await user.click(within(elementary).getByRole('button', { name: /Level 2/ }))
+    expect(within(elementary).getByRole('list')).toBeInTheDocument()
+    await user.click(within(beginner).getByRole('button', { name: /Level 1/ }))
+    expect(within(beginner).queryByRole('list')).not.toBeInTheDocument()
   })
 })
