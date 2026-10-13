@@ -68,18 +68,16 @@ export function IntervalExplorer({
               {t(`intervals.${group}`)}
             </button>
           </h2>
-          {open.has(group) ? (
-            <ul id={`${id}-${group}-list`} className="grid-fields gap-4">
-              {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
-              {INTERVAL_GROUPS[group]
-                .filter((name) => writesInterval(noteFromParam(view.root), name))
-                .map((name) => (
-                  <li key={name}>
-                    <IntervalCard root={view.root} name={name} onShow={show} />
-                  </li>
-                ))}
-            </ul>
-          ) : null}
+          <ul id={`${id}-${group}-list`} hidden={!open.has(group)} className="grid-fields gap-4">
+            {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
+            {INTERVAL_GROUPS[group]
+              .filter((name) => writesInterval(noteFromParam(view.root), name))
+              .map((name) => (
+                <li key={name}>
+                  <IntervalCard root={view.root} name={name} onShow={show} />
+                </li>
+              ))}
+          </ul>
         </section>
       ))}
     </div>
