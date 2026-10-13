@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { WALK, type WalkChoice } from '@/features/practice'
 import { noteParam } from '@/shared/lib/music'
-import { ChordSizeField, NoteChoice, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { WalkChange } from '../model/walk-search'
@@ -18,7 +18,7 @@ export function WalkSetup({
   onChange: (change: WalkChange) => void
   onSwing: (on: boolean) => void
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   return (
     <PlayerSetup figures={choice} fit={WALK.fit} onFigures={onChange}>
       <NoteChoice
@@ -27,8 +27,13 @@ export function WalkSetup({
 
         onChange={(root) => onChange({ root })}
       />
+      <Labelled label={t('music:chordSize.label')}>
+        <ChordSizeField
+          value={choice.chordSize}
+          onChange={(chordSize) => onChange({ chordSize })}
+        />
+      </Labelled>
       <PatternCard />
-      <ChordSizeField value={choice.chordSize} onChange={(chordSize) => onChange({ chordSize })} />
       <ToggleGrid label={t('playing')}>
         <PlayingToggles swing={swing} onSwing={onSwing} />
       </ToggleGrid>

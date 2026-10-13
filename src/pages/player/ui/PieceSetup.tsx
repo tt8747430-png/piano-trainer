@@ -4,7 +4,7 @@ import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, NoteChoice, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -32,7 +32,7 @@ export function PieceSetup({
   onChange: (change: SetupChange) => void
   onSwing: (on: boolean) => void
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   const keyName = useKeyName()
   const own = pieceKey(piece)
   const chordSize = choosableChordSize(piece)
@@ -46,13 +46,15 @@ export function PieceSetup({
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
-      <PatternCard />
       {chordSize ? (
-        <ChordSizeField
-          value={choice.chordSize ?? chordSize}
-          onChange={(next) => onChange({ chordSize: next })}
-        />
+        <Labelled label={t('music:chordSize.label')}>
+          <ChordSizeField
+            value={choice.chordSize ?? chordSize}
+            onChange={(next) => onChange({ chordSize: next })}
+          />
+        </Labelled>
       ) : null}
+      <PatternCard />
       <ToggleGrid label={t('playing')}>
         <PlayingToggles swing={swing} onSwing={onSwing} />
         {fit.melody ? <MelodyToggle /> : null}
