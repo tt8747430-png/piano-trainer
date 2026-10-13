@@ -61,6 +61,8 @@ describe('Remembered views', () => {
         p: 'I-IV-V',
         key: 'G',
         pattern: 'jazz',
+        inversion: 0,
+        nearest: true,
       }),
     )
   })
