@@ -41,6 +41,17 @@ describe('ScoreView', () => {
     expect(document.querySelector('[data-slot="score"] svg')).toBe(engraved)
   })
 
+  it('keeps what lies over it in its own layers, under what the page pins', async () => {
+    render(
+      <ScoreView score={score} scale={1} fingers={false}>
+        {() => <button type="button">Play C</button>}
+      </ScoreView>,
+    )
+    const over = await screen.findByRole('button', { name: 'Play C' })
+    expect(over.parentElement).toHaveClass('isolate')
+    expect(over.parentElement).toContainElement(document.querySelector('[data-slot="score"]'))
+  })
+
   it('names the staff it mutes', async () => {
     render(<ScoreView score={score} scale={1} fingers={false} muted="bass" />)
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'bass')

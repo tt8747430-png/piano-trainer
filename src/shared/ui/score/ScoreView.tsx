@@ -106,7 +106,8 @@ export function ScoreView({
       ? { width: engraving.layout.width, height: engraving.layout.height }
       : { height: staffHeight(staff) * scale }
   return (
-    <div className="relative" style={size}>
+    // Its layers are its own: what lies over the engraving stays under what the page pins.
+    <div className="relative isolate" style={size}>
       <div
         ref={host}
         data-slot="score"
