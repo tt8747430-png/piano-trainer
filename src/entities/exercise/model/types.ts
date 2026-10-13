@@ -15,6 +15,7 @@ export const EXERCISE_IDS = [
   'groups',
   'contrary',
   'arpeggio',
+  'inversions',
   'sixth-diminished',
   'sixth-diminished-chords',
   'dominant-scale',

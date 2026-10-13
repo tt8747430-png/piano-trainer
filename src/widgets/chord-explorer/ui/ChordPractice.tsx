@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { AudioWaveform, Footprints } from 'lucide-react'
+import { AudioWaveform, Footprints, Layers } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { exerciseOf, isArpeggioQuality } from '@/entities/exercise'
 import { chordsParam } from '@/features/practice'
@@ -8,9 +8,11 @@ import { isInversion, noteParam, type ChordQuality, type SpelledNote } from '@/s
 import { RowGroup, RowLink } from '@/shared/ui'
 
 const ARPEGGIO = exerciseOf('arpeggio')
+const INVERSIONS = exerciseOf('inversions')
 
 /**
- * A chord the table names, practised in the Player: its arpeggio where the exercise plays it, and the
+ * A chord the table names, practised in the Player: its arpeggio and its inversions where the
+ * exercises play it, and the
  * chord walked a semitone at a time from its root, every chord in the inversion shown.
  */
 export function ChordPractice({
@@ -38,6 +40,23 @@ export function ChordPractice({
               <Link
                 to="/play/exercise/$exerciseId"
                 params={{ exerciseId: ARPEGGIO.id }}
+                search={{ root: noteParam(root), quality }}
+              />
+            }
+          />
+        </li>
+      ) : null}
+      {isArpeggioQuality(quality) ? (
+        <li>
+          <RowLink
+            title={localText(INVERSIONS.name, locale)}
+            detail={localText(INVERSIONS.trains, locale)}
+            icon={Layers}
+            paint="sky"
+            render={
+              <Link
+                to="/play/exercise/$exerciseId"
+                params={{ exerciseId: INVERSIONS.id }}
                 search={{ root: noteParam(root), quality }}
               />
             }

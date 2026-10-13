@@ -9,6 +9,7 @@ import {
   fiveFinger,
   hanon,
   innerVoice,
+  inversionsExercise,
   modes,
   rapidSwitch,
   scaleExercise,
@@ -39,6 +40,8 @@ export function arrangeExercise(id: ExerciseId, choice: ExerciseChoice): Perform
       return contraryExercise(choice)
     case 'arpeggio':
       return arpeggioExercise(choice)
+    case 'inversions':
+      return inversionsExercise(choice)
     case 'sixth-diminished':
       return sixthDiminishedScale({ root, minor, octaves: choice.octaves })
     case 'sixth-diminished-chords':

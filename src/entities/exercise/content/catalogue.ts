@@ -94,6 +94,20 @@ export const EXERCISES: readonly Exercise[] = [
     swing: false,
   },
   {
+    id: 'inversions',
+    group: 'arpeggios',
+    level: 1,
+    name: { en: 'Inversions', ru: 'Обращения' },
+    trains: {
+      en: 'A chord climbing through its inversions to the octave and back',
+      ru: 'Аккорд поднимается по обращениям до октавы и обратно',
+    },
+    fields: { root: 'chord', quality: true },
+    own: { quality: 'maj' },
+    tempo: 60,
+    swing: false,
+  },
+  {
     id: 'sixth-diminished',
     group: 'barryHarris',
     level: 3,
