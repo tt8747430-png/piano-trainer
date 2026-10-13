@@ -153,6 +153,8 @@ export const learn: LocaleResources['learn'] = {
     to: 'К',
     unread: 'Этот аккорд не читается.',
     inKey: 'В тональности',
+    onlyInKey: 'Только в тональности',
+    noneInKey: 'Между этими аккордами нет пути внутри тональности.',
     chromatic: 'Хроматический',
     category: {
       dominant: 'Доминантовые',

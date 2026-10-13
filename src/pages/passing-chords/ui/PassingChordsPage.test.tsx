@@ -115,4 +115,14 @@ describe('Practice → Passing chords', () => {
       'page',
     )
   })
+
+  it('shows only the ways in the key while In the key only is pressed, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions/passing?from=C&to=F')
+    await screen.findByRole('heading', { level: 2, name: 'Diatonic' })
+    await user.click(screen.getByRole('button', { name: 'In the key only' }))
+    expect(router.state.location.search).toMatchObject({ inKey: true })
+    expect(screen.queryByRole('heading', { level: 2, name: 'Chromatic' })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Diatonic' })).toBeInTheDocument()
+  })
 })

@@ -10,12 +10,14 @@ import {
   readChordSymbol,
 } from '@/shared/lib/music'
 import { KeyChoice, NO_KEYS } from '@/shared/ui'
+import { Toggle } from '@/shared/ui/primitives/toggle'
 import type { PassingView } from '../model/passing-view'
 import { ChordField } from './ChordField'
 import { SuggestionCard } from './SuggestionCard'
 
 /**
- * Passing chords: two chords typed and a key; the ways between them by category, each row voice-led
+ * Passing chords: two chords typed and a key; the ways between them by category (with In the key only,
+ * those whose chords are all the key's), each row voice-led
  * and played, each chord of it played as the row voices it, on the keys pinned above.
  */
 export function PassingChordsTool({
@@ -30,7 +32,11 @@ export function PassingChordsTool({
   const key = keyFromParam(view.key)
   const from = readChordSymbol(view.from)
   const to = readChordSymbol(view.to)
-  const ways = from && to ? passingChords(from, to, key) : []
+  const inKey = (way: ReturnType<typeof passingChords>[number]) =>
+    way.chords.every((chord) => chordInKey(chord, key))
+  const ways = (from && to ? passingChords(from, to, key) : []).filter(
+    (way) => !view.inKey || inKey(way),
+  )
   const at = `${view.key} ${view.from} ${view.to}`
   const [shown, setShown] = useShownKeys(at, NO_KEYS)
   return (
@@ -47,6 +53,16 @@ export function PassingChordsTool({
         </div>
         <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
+      <Toggle
+        className="self-start"
+        pressed={view.inKey}
+        onPressedChange={(next) => onChange({ inKey: next })}
+      >
+        {t('passing.onlyInKey')}
+      </Toggle>
+      {from && to && ways.length === 0 ? (
+        <p className="text-muted-foreground">{t('passing.noneInKey')}</p>
+      ) : null}
       {from && to
         ? PASSING_CATEGORIES.map((category) => {
             const inCategory = ways.filter((way) => way.category === category)
@@ -66,7 +82,7 @@ export function PassingChordsTool({
                       way={way}
                       from={from}
                       to={to}
-                      inKey={way.chords.every((chord) => chordInKey(chord, key))}
+                      inKey={inKey(way)}
                       onShow={setShown}
                     />
                   ))}

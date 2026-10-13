@@ -151,6 +151,8 @@ export const learn = {
     to: 'To',
     unread: 'This chord can’t be read.',
     inKey: 'In the key',
+    onlyInKey: 'In the key only',
+    noneInKey: 'No way between these chords stays in the key.',
     chromatic: 'Chromatic',
     category: {
       dominant: 'Dominant',

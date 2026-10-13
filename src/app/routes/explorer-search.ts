@@ -216,13 +216,19 @@ export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
 export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
 
 // Passing chords: two chords as they were typed, each read (one that cannot be read is the default), and a key.
-export const PASSING_DEFAULTS: PassingView = { key: C_MAJOR_PARAM, from: 'C', to: 'F' }
+export const PASSING_DEFAULTS: PassingView = {
+  key: C_MAJOR_PARAM,
+  from: 'C',
+  to: 'F',
+  inKey: false,
+}
 export function readPassingSearch(raw: Raw): PassingView {
   const key = readKey(raw.key)
   return {
     key: key ? keyParam(key) : PASSING_DEFAULTS.key,
     from: readTypedChord(raw.from, PASSING_DEFAULTS.from),
     to: readTypedChord(raw.to, PASSING_DEFAULTS.to),
+    inKey: raw.inKey === true,
   }
 }
 export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
