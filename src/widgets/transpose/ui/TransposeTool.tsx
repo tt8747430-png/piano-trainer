@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { ChordRow, RowChords, RowPlay, RowStaff, useShownKeys } from '@/features/play-example'
@@ -8,7 +9,7 @@ import {
   noteParam,
   numeralsParam,
   numeralText,
-  readChordLine,
+  chordsOfLine,
   writtenKeyAccidentals,
   type Numeral,
 } from '@/shared/lib/music'
@@ -41,8 +42,11 @@ export function TransposeTool({
   const { t } = useTranslation('practice')
   const keyName = useKeyName()
   const [shown, setShown] = useShownKeys(`${view.chords} ${view.key} ${view.to}`, NO_KEYS)
-  const { chords } = readChordLine(view.chords)
-  const shownChords = transposition(chords, view)
+  const chords = useMemo(() => chordsOfLine(view.chords) ?? [], [view.chords])
+  const shownChords = useMemo(
+    () => transposition(chords, { key: view.key, to: view.to }),
+    [chords, view.key, view.to],
+  )
   const numerals = shownChords?.chords.map(({ numeral }) => numeral)
   const degrees = numerals?.every((numeral): numeral is Numeral => numeral !== null)
     ? numerals

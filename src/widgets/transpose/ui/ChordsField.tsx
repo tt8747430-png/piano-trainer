@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { readChordLine } from '@/shared/lib/music'
+import { chordsOfLine, readChordLine } from '@/shared/lib/music'
 import { TypedField } from '@/shared/ui'
-
-/** Whether every word of a line is a chord, and there is one: what the URL may hold. */
-const readsWhole = (text: string): boolean => {
-  const { chords, unread } = readChordLine(text)
-  return chords.length > 0 && unread.length === 0
-}
 
 /**
  * A line of chords typed: each change that reads whole sets the chords; what the learner typed stays
@@ -32,7 +26,7 @@ export function ChordsField({
       value={text}
       error={unread.length > 0 ? t('transpose.unread', { words: unread.join(' ') }) : null}
       onChange={(next) => {
-        const reads = readsWhole(next)
+        const reads = chordsOfLine(next) !== null
         setTyped({ text: next, for: reads ? next : chords })
         if (reads && next !== chords) onChange(next)
       }}

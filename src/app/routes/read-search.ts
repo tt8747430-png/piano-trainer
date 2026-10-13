@@ -10,7 +10,7 @@ import {
   numeralsParam,
   parseKey,
   parseNumerals,
-  readChordLine,
+  chordsOfLine,
   readChordSymbol,
   SCALE_KINDS,
   writtenKey,
@@ -65,9 +65,7 @@ export function readNumerals(raw: unknown, fallback: string): string {
 
 /** A line of chords from the URL as it was typed, every word of it a chord; the fallback for any other. */
 export function readTypedChords(raw: unknown, fallback: string): string {
-  if (typeof raw !== 'string') return fallback
-  const { chords, unread } = readChordLine(raw)
-  return chords.length > 0 && unread.length === 0 ? raw : fallback
+  return typeof raw === 'string' && chordsOfLine(raw) ? raw : fallback
 }
 
 /** A chord from the URL as it was typed; the fallback for one that cannot be read. */

@@ -68,6 +68,12 @@ export interface ChordLine {
   readonly unread: readonly string[]
 }
 
+/** A line's chords where every word of it is one and it has one; null for any other line. */
+export function chordsOfLine(text: string): readonly Chord[] | null {
+  const { chords, unread } = readChordLine(text)
+  return chords.length > 0 && unread.length === 0 ? chords : null
+}
+
 /** Reads `Dm7, G7 | C`: chords apart by spaces, commas or bar lines; a hyphen stays a chord's minus. */
 export function readChordLine(text: string): ChordLine {
   const chords: Chord[] = []

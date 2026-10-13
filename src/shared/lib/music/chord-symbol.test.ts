@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, qualitySpellings } from './chord'
-import { ChordSymbolError, parseChordSymbol, readChordLine, readChordSymbol } from './chord-symbol'
+import {
+  ChordSymbolError,
+  chordsOfLine,
+  parseChordSymbol,
+  readChordLine,
+  readChordSymbol,
+} from './chord-symbol'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
 
@@ -87,6 +93,15 @@ describe('readChordLine', () => {
       ],
       unread: [],
     })
+  })
+
+  it('gives a line’s chords only where every word is one', () => {
+    expect(chordsOfLine('C | G7')).toEqual([
+      { root: note('C'), quality: 'maj' },
+      { root: note('G'), quality: 'd7' },
+    ])
+    expect(chordsOfLine('C Qx')).toBeNull()
+    expect(chordsOfLine(' ')).toBeNull()
   })
 
   it('names the words it cannot read, and reads nothing in an empty line', () => {

@@ -118,6 +118,7 @@ export {
 } from './chord-parts'
 export {
   ChordSymbolError,
+  chordsOfLine,
   parseChordSymbol,
   readChordLine,
   readChordSymbol,
