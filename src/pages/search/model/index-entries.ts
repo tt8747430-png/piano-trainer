@@ -13,7 +13,9 @@ import { localText, type Locale, type LocalText } from '@/shared/i18n'
 import { matchesQuery } from '@/shared/lib'
 import {
   CHORD_QUALITIES,
+  chordsOfLine,
   chordSymbol,
+  keysOfChords,
   note,
   pitchClassOf,
   qualitySpellings,
@@ -22,6 +24,7 @@ import {
   writtenSymbol,
   type ChordQuality,
   type ChordSize,
+  type Key,
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -58,6 +61,8 @@ export type IndexTarget =
   | { readonly opens: 'pattern'; readonly ref: PatternRef }
   | { readonly opens: 'exercise'; readonly exercise: ExerciseId }
   | { readonly opens: 'trainer'; readonly trainer: TrainerId }
+  /** A line of chords typed, on Transpose: as typed. */
+  | { readonly opens: 'transpose'; readonly chords: string }
 
 /** One named thing of the app: what it is called, a line on it, and what it opens. */
 export interface IndexEntry {
@@ -78,6 +83,7 @@ export interface IndexNames {
   readonly scale: (kind: ScaleKind) => string
   readonly trainer: (trainer: TrainerId) => { readonly title: string; readonly about: string }
   readonly module: (module: LessonModule) => string
+  readonly key: (key: Key) => string
 }
 
 /** What the index is projected from, besides the content every learner has. */
@@ -199,20 +205,34 @@ export function indexEntries({ locale, names, pieces, patterns }: IndexSources):
 }
 
 /**
- * The chord a typed symbol names (`F#m7b5`), as an entry that opens it; none for what is no chord
- * symbol, and none for a chord on C, which the index already shows.
+ * What a typed query names besides the index's own entries: a chord symbol (`F#m7b5`), as an entry
+ * that opens it, none for a chord on C, which the index already shows; or a line of chords (`Dm7 Gm9
+ * Asus4`), as Transpose on them, with the key they are in (ADR 0045); none for anything else.
  */
-export function typedChord(query: string, names: IndexNames): IndexEntry | undefined {
+export function typedEntry(query: string, names: IndexNames): IndexEntry | undefined {
   const chord = readChordSymbol(query)
-  if (!chord || pitchClassOf(chord.root) === pitchClassOf(C)) return undefined
-  const { root, quality } = chord
+  if (chord) {
+    if (pitchClassOf(chord.root) === pitchClassOf(C)) return undefined
+    const { root, quality } = chord
+    return {
+      id: 'chords:typed',
+      kind: 'chords',
+      title: chordSymbol({ root, quality }),
+      detail: names.quality(quality),
+      words: [],
+      target: { opens: 'chord', root, quality },
+    }
+  }
+  const line = chordsOfLine(query)
+  const [found] = line ? keysOfChords(line) : []
+  if (!line || !found) return undefined
   return {
-    id: 'chords:typed',
-    kind: 'chords',
-    title: chordSymbol({ root, quality }),
-    detail: names.quality(quality),
+    id: 'pages:transpose-typed',
+    kind: 'pages',
+    title: line.map(chordSymbol).join(' '),
+    detail: `${names.page('transpose').title} · ${names.key(found.key)}`,
     words: [],
-    target: { opens: 'chord', root, quality },
+    target: { opens: 'transpose', chords: query.trim() },
   }
 }
 
@@ -225,7 +245,7 @@ export interface IndexGroup {
 /**
  * What a query finds, by kind in the index's order, the kinds with nothing left out; with no query,
  * the whole index. A title, a line or another name holds the query, in either case and without
- * accents. A typed chord leads: first of the chords, and they first of the kinds.
+ * accents. What was typed leads: first of its kind, and its kind first of the kinds.
  */
 export function searchIndex(
   entries: readonly IndexEntry[],
@@ -236,7 +256,7 @@ export function searchIndex(
     matchesQuery([entry.title, entry.detail ?? '', ...entry.words], query),
   )
   const kinds: readonly IndexKind[] = typed
-    ? ['chords', ...INDEX_KINDS.filter((kind) => kind !== 'chords')]
+    ? [typed.kind, ...INDEX_KINDS.filter((kind) => kind !== typed.kind)]
     : INDEX_KINDS
   return kinds
     .map((kind) => ({

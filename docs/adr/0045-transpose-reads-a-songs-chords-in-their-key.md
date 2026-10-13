@@ -27,13 +27,13 @@ musictheory.net have no tool for it (`.scratch/things-and-tools/research.md`).
   (`V/iv`, read as the Progressions page reads it), any other by its root's degree (`I` in D minor, `♭VII`), marked
   out of the key.
 - **Transposing keeps letters and basses** (`transposeChord`: the interval between tonics, the bass with it), into
-  a tonic chosen in the read key's mode. Its numerals open Progressions in either key, to practise them in the
+  a tonic chosen in the read key's mode. Its numerals open Progressions in the key played, to practise them in the
   Player; a slash chord's bass stays behind there, as numerals write none.
 - **A lesson can open it on chords** (`opens: 'transpose'`): «Мышление ступенями» opens it on «Ромашковые поля».
 
 ## Consequences
 
 - Practice's Tools read Chord finder · Passing chords · Reharmonise · Transpose · Free play; Search finds it as a
-  page.
+  page, and reads a line of chords typed into it as Transpose on them, with the key they are in.
 - The URL holds `chords` as typed, the read `key` where the learner chose one, and the tonic played `to` where it
   differs from the read key's.

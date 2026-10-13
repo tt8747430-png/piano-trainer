@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useModuleName } from '@/entities/lesson'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { COLLECTIONS, useRepertoire } from '@/entities/piece'
-import { useLocale } from '@/shared/i18n'
+import { useKeyName, useLocale } from '@/shared/i18n'
 import { usePageWords } from '@/widgets/practice-pages'
 import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
 
@@ -12,6 +12,7 @@ export function useIndexNames(): IndexNames {
   const { t } = useTranslation(['music', 'quiz'])
   const page = usePageWords()
   const module = useModuleName()
+  const key = useKeyName()
   return useMemo(
     () => ({
       page,
@@ -22,8 +23,9 @@ export function useIndexNames(): IndexNames {
         about: t(`quiz:about.${trainer}`),
       }),
       module,
+      key,
     }),
-    [t, page, module],
+    [t, page, module, key],
   )
 }
 

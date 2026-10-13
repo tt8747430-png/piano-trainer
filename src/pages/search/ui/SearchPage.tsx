@@ -5,14 +5,15 @@ import { useViewChange } from '@/shared/lib'
 import { BackButton, RowGroup, ScreenHeader, SearchField } from '@/shared/ui'
 import { Empty, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { EntryRow } from '@/widgets/piece-list'
-import { searchIndex, typedChord } from '../model/index-entries'
+import { searchIndex, typedEntry } from '../model/index-entries'
 import type { SearchView } from '../model/search-view'
 import { useIndex, useIndexNames } from '../model/use-index'
 import { IndexRow } from './IndexRow'
 
 /**
  * Search (ADR 0044): one field over every named thing the app has, by kind, each a row to its page.
- * With nothing typed it is the whole index; a chord symbol typed is read as the chord.
+ * With nothing typed it is the whole index; a chord symbol typed is read as the chord, a line of
+ * chords as a song's to transpose.
  */
 export function SearchPage() {
   const { t } = useTranslation('search')
@@ -22,7 +23,7 @@ export function SearchPage() {
   const names = useIndexNames()
   const index = useIndex(names)
   const groups = useMemo(
-    () => searchIndex(index, query, typedChord(query, names)),
+    () => searchIndex(index, query, typedEntry(query, names)),
     [index, query, names],
   )
   return (

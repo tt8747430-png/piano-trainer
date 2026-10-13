@@ -5,13 +5,13 @@ import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
 import { LIBRARY_BY_STYLE } from '@/entities/progression-library'
 import { TRAINER_IDS } from '@/features/trainer'
-import { CHORD_QUALITIES, SCALE_KINDS } from '@/shared/lib/music'
+import { CHORD_QUALITIES, keySymbol, SCALE_KINDS } from '@/shared/lib/music'
 import { PRACTICE_PAGE_IDS } from '@/widgets/practice-pages'
 import {
   INDEX_KINDS,
   indexEntries,
   searchIndex,
-  typedChord,
+  typedEntry,
   type IndexEntry,
   type IndexNames,
   type IndexSources,
@@ -24,6 +24,7 @@ const names: IndexNames = {
   scale: (kind) => `scale ${kind}`,
   trainer: (trainer) => ({ title: `trainer ${trainer}`, about: `asks ${trainer}` }),
   module: (module) => `module ${module}`,
+  key: (key) => `key ${keySymbol(key)}`,
 }
 const pieces = COLLECTIONS.flatMap((collection) => collection.entries)
 const patterns = PATTERN_IDS.map((id) => BUILT_IN_PATTERNS.require(id))
@@ -164,7 +165,7 @@ describe('searchIndex', () => {
   })
 
   it('leads with the chord a typed symbol names, its group first', () => {
-    const typed = typedChord('F#m7b5', names)
+    const typed = typedEntry('F#m7b5', names)
     expect(typed).toMatchObject({
       kind: 'chords',
       title: 'F#m7♭5',
@@ -176,10 +177,24 @@ describe('searchIndex', () => {
     expect(groups[0]?.entries[0]).toBe(typed)
   })
 
+  it('reads a line of chords typed as a song’s, to transpose in the key it is in, its group first', () => {
+    const typed = typedEntry('Dm7, Gm9 | Asus Dm7', names)
+    expect(typed).toMatchObject({
+      kind: 'pages',
+      title: 'Dm7 Gm9 Asus4 Dm7',
+      detail: 'page transpose · key Dm',
+      target: { opens: 'transpose', chords: 'Dm7, Gm9 | Asus Dm7' },
+    })
+    const groups = searchIndex(all, 'Dm7, Gm9 | Asus Dm7', typed)
+    expect(groups[0]?.kind).toBe('pages')
+    expect(groups[0]?.entries[0]).toBe(typed)
+  })
+
   it('reads no chord from a word, and adds none the index already opens', () => {
-    expect(typedChord('blues', names)).toBeUndefined()
-    expect(typedChord('', names)).toBeUndefined()
+    expect(typedEntry('blues', names)).toBeUndefined()
+    expect(typedEntry('Amazing Grace', names)).toBeUndefined()
+    expect(typedEntry('', names)).toBeUndefined()
     // C7 is the dominant 7th the index shows on C: one row, not two.
-    expect(typedChord('C7', names)).toBeUndefined()
+    expect(typedEntry('C7', names)).toBeUndefined()
   })
 })

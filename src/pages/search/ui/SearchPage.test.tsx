@@ -67,6 +67,16 @@ describe('Search', () => {
     expect(headings()[0]).toBe('Chords')
   })
 
+  it('reads a line of chords typed as a song’s, and leads with Transpose on it', async () => {
+    await renderApp('/search?q=Am+F+C+G')
+    const pages = await screen.findByRole('region', { name: 'Practice' })
+    const [first] = within(pages).getAllByRole('link')
+    expect(first).toHaveTextContent('Am F C G')
+    expect(first).toHaveTextContent('Transpose · A minor')
+    expect(first?.getAttribute('href')).toBe('/practice/transpose?chords=Am+F+C+G')
+    expect(headings()[0]).toBe('Practice')
+  })
+
   it('finds a lesson by its title in the other language', async () => {
     await renderApp('/search?q=Трезвучия')
     const lessons = await screen.findByRole('region', { name: 'Lessons' })
