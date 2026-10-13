@@ -3,7 +3,6 @@ import type { LocaleResources } from '../../types'
 export const songs: LocaleResources['songs'] = {
   title: 'Песни',
   search: 'Поиск песен',
-  clearSearch: 'Очистить поиск',
   collection: 'Сборник',
   all: 'Все',
   noChart: 'Аккордов пока нет',

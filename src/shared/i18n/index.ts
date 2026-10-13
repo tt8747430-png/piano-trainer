@@ -13,6 +13,7 @@ const NAMESPACES = [
   'learn',
   'practice',
   'quiz',
+  'search',
   'settings',
   'editor',
 ] as const

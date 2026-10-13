@@ -10,6 +10,7 @@ export const common: LocaleResources['common'] = {
     songs: 'Песни',
     learn: 'Обучение',
     practice: 'Практика',
+    search: 'Поиск',
     settings: 'Настройки',
     collapse: 'Свернуть боковую панель',
     open: 'Развернуть боковую панель',
@@ -37,6 +38,7 @@ export const common: LocaleResources['common'] = {
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
+  clearSearch: 'Очистить поиск',
   loading: 'Загрузка',
   level: 'Уровень {{level}}',
   levelName: {

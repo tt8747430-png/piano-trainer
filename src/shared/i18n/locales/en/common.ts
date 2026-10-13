@@ -8,6 +8,7 @@ export const common = {
     songs: 'Songs',
     learn: 'Learn',
     practice: 'Practice',
+    search: 'Search',
     settings: 'Settings',
     collapse: 'Collapse the sidebar',
     open: 'Open the sidebar',
@@ -36,6 +37,8 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A search box's button that empties it.
+  clearSearch: 'Clear search',
   loading: 'Loading',
   level: 'Level {{level}}',
   levelName: {

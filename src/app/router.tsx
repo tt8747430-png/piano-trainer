@@ -64,6 +64,7 @@ import {
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { learnSearch, readLearnSearch } from './routes/learn-search'
 import { pathSearch } from './routes/path-search'
+import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import {
@@ -83,6 +84,7 @@ import { ShellLayout } from './ShellLayout'
 // chunk and out of the first paint.
 const homeScreens = () => import('./routes/home-screens')
 const settingsScreens = () => import('./routes/settings-screens')
+const searchScreens = () => import('./routes/search-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const learnScreens = () => import('./routes/learn-screens')
@@ -140,6 +142,13 @@ const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
+})
+// Search: every named thing the app has, found by name (ADR 0044).
+const searchRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/search',
+  ...searchSearch,
+  component: lazyRouteComponent(searchScreens, 'SearchPage'),
 })
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -451,6 +460,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     pathRoute,
     settingsRoute,
+    searchRoute,
     songsRoute,
     sharedSongRoute,
     pieceRoute,

@@ -6,6 +6,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Route,
+  Search,
   Settings,
   type LucideIcon,
 } from 'lucide-react'
@@ -17,8 +18,9 @@ import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/share
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/learn' | '/practice' | '/settings'
-  readonly label: 'nav.path' | 'nav.songs' | 'nav.learn' | 'nav.practice' | 'nav.settings'
+  readonly to: '/' | '/songs' | '/learn' | '/practice' | '/search' | '/settings'
+  readonly label:
+    'nav.path' | 'nav.songs' | 'nav.learn' | 'nav.practice' | 'nav.search' | 'nav.settings'
   readonly icon: LucideIcon
   readonly exact: boolean
   /** The place's shortcut: Alt and its number. */
@@ -52,8 +54,20 @@ const PLACES: readonly Place[] = [
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
-/** Settings: at the sidebar's foot on a laptop, behind the Path's gear on a phone. */
-const SETTINGS: Place = { to: '/settings', label: 'nav.settings', icon: Settings, exact: false }
+/**
+ * What sits at the sidebar's foot on a laptop, and in the Path's bar on a phone: Search, on the
+ * platform's modifier and K from anywhere, and Settings.
+ */
+const FOOT: readonly Place[] = [
+  {
+    to: '/search',
+    label: 'nav.search',
+    icon: Search,
+    exact: false,
+    key: { code: 'KeyK', mod: true },
+  },
+  { to: '/settings', label: 'nav.settings', icon: Settings, exact: false },
+]
 
 const PLACE_LINK =
   'flex h-14 flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent text-sm font-medium text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted/60 hover:text-foreground focus-visible:-outline-offset-3 data-[status=active]:border-border data-[status=active]:bg-muted data-[status=active]:font-semibold data-[status=active]:text-foreground lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
@@ -100,8 +114,9 @@ function PlaceLink({
 
 /**
  * The main navigation: a bar docked along the bottom on phones; from 1024px a sidebar that collapses
- * to its icons and remembers it, with Settings at its foot. From the computer's keys, Alt and a
- * place's number goes there, and the platform's modifier with B collapses or opens the sidebar.
+ * to its icons and remembers it, with Search and Settings at its foot. From the computer's keys, Alt
+ * and a place's number goes there, the platform's modifier with K opens Search, and with B collapses
+ * or opens the sidebar.
  */
 export function AppNav() {
   const { t } = useTranslation('common')
@@ -116,7 +131,7 @@ export function AppNav() {
   useShortcuts(
     t('shortcuts.app'),
     [
-      ...PLACES.flatMap(({ to, label, key }) =>
+      ...[...PLACES, ...FOOT].flatMap(({ to, label, key }) =>
         key
           ? [{ label: t(label), combo: key, run: () => void navigate({ to, state: OPEN_PLAINLY }) }]
           : [],
@@ -157,7 +172,13 @@ export function AppNav() {
           </li>
         ))}
         <li className="hidden lg:mt-auto lg:block lg:pb-4">
-          <PlaceLink place={SETTINGS} collapsed={collapsed} />
+          <ul className="flex flex-col gap-1">
+            {FOOT.map((place) => (
+              <li key={place.to}>
+                <PlaceLink place={place} collapsed={collapsed} />
+              </li>
+            ))}
+          </ul>
         </li>
       </ul>
     </nav>

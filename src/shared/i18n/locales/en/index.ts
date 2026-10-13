@@ -7,6 +7,7 @@ import { piece } from './piece'
 import { player } from './player'
 import { practice } from './practice'
 import { quiz } from './quiz'
+import { search } from './search'
 import { settings } from './settings'
 import { songs } from './songs'
 
@@ -20,6 +21,7 @@ export const en = {
   learn,
   practice,
   quiz,
+  search,
   settings,
   editor,
 } as const

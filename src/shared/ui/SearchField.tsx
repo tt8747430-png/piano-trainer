@@ -7,10 +7,10 @@ import {
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from '@/shared/ui/primitives/input-group'
+} from './primitives/input-group'
 
 /**
- * The Songs search: a search box with a clear button while it holds text; `/` puts the cursor in it.
+ * A screen's search box, with a clear button while it holds text; `/` puts the cursor in it.
  * It holds what is typed itself: the URL it writes to catches up later, in a transition, and a box
  * that showed the URL would drop a key typed meanwhile and move the caret to the end. A value the
  * URL gets from elsewhere (Back, Show all) is shown.
@@ -18,11 +18,20 @@ import {
 export function SearchField({
   value,
   onChange,
+  label,
+  screen,
+  autoFocus = false,
 }: {
   value: string
   onChange: (value: string) => void
+  /** What it searches, its name and its placeholder: "Search songs". */
+  label: string
+  /** The screen it is on, which the shortcuts' sheet lists its key under. */
+  screen: string
+  /** The cursor starts in it, on a screen that is for searching. */
+  autoFocus?: boolean
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation('common')
   const input = useRef<HTMLInputElement>(null)
   const [text, setText] = useState(value)
   // What was typed and not yet seen back from the URL, oldest first.
@@ -40,9 +49,7 @@ export function SearchField({
     setText(next)
     onChange(next)
   }
-  useShortcuts(t('title'), [
-    { label: t('search'), combo: { key: '/' }, run: () => input.current?.focus() },
-  ])
+  useShortcuts(screen, [{ label, combo: { key: '/' }, run: () => input.current?.focus() }])
   return (
     <InputGroup className="h-12 rounded-2xl bg-card">
       <InputGroupAddon>
@@ -51,8 +58,9 @@ export function SearchField({
       <InputGroupInput
         ref={input}
         type="search"
-        aria-label={t('search')}
-        placeholder={t('search')}
+        aria-label={label}
+        placeholder={label}
+        autoFocus={autoFocus}
         value={text}
         onChange={(event) => type(event.target.value)}
         className="text-base"

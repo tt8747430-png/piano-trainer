@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import { ScreenHeader } from '@/shared/ui'
+import { ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -13,7 +13,6 @@ import { PieceList } from '@/widgets/piece-list'
 import type { SongsFilter, SongsShelf } from '../model/songs-filter'
 import { songsView } from '../model/songs-view'
 import { NewSongSheet } from './NewSongSheet'
-import { SearchField } from './SearchField'
 
 /**
  * Songs: a search and With chords (no song whose chart is still to come), the collections as tabs (the learner's own songs first, All before them), and the
@@ -52,7 +51,12 @@ export function SongsPage() {
       <ScreenHeader title={t('title')} actions={<NewSongSheet />} />
       <div className="flex items-center gap-2 lg:max-w-xl">
         <div className="min-w-0 flex-1">
-          <SearchField value={search.q} onChange={(q) => set({ q })} />
+          <SearchField
+            value={search.q}
+            onChange={(q) => set({ q })}
+            label={t('search')}
+            screen={t('title')}
+          />
         </div>
         <Toggle pressed={search.withChords} onPressedChange={(withChords) => set({ withChords })}>
           {t('withChords')}

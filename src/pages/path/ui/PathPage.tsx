@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
+import { Search, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useViewChange } from '@/shared/lib'
 import { RoundLink, ScreenHeader } from '@/shared/ui'
@@ -18,8 +18,13 @@ export function PathPage() {
       <ScreenHeader
         title={t('path:title')}
         actions={
-          // A laptop's sidebar has Settings at its foot.
-          <div className="lg:hidden">
+          // A laptop's sidebar has Search and Settings at its foot.
+          <div className="flex gap-2 lg:hidden">
+            <RoundLink
+              label={t('common:nav.search')}
+              icon={Search}
+              render={<Link to="/search" />}
+            />
             <RoundLink
               label={t('common:nav.settings')}
               icon={Settings}

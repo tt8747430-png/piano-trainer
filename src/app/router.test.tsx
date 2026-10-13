@@ -29,6 +29,7 @@ const ROUTES = [
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
   ['/practice/quiz/build-chord', '/practice/quiz/$trainerId'],
   ['/settings', '/settings'],
+  ['/search?q=dorian', '/search'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
   ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
@@ -161,6 +162,7 @@ describe('the app shell', () => {
       'Songs',
       'Learn',
       'Practice',
+      'Search',
       'Settings',
     ])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')

@@ -1,7 +1,6 @@
 export const songs = {
   title: 'Songs',
   search: 'Search songs',
-  clearSearch: 'Clear search',
   collection: 'Collection',
   all: 'All',
   noChart: 'No chart yet',
