@@ -55,6 +55,7 @@ export {
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   spanInterval,
+  type IntervalGroup,
   type ReferenceInterval,
 } from './interval-facts'
 export {
