@@ -121,6 +121,7 @@ export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead, type RowPosition } from './voice-lead'
+export { handPosition, type FromTone, type HandPosition } from './hand-position'
 export {
   numeralChord,
   numeralGrows,

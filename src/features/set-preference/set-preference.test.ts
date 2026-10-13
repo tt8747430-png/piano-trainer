@@ -48,6 +48,7 @@ describe('set-preference', () => {
     expect(saved(storage).practice).toEqual({
       fingerNumbers: false,
       namedNotes: false,
+      positions: false,
       melody: false,
       metronome: true,
       countIn: false,

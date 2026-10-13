@@ -24,6 +24,7 @@ export function SheetMusic({
   loop,
   fingers,
   names,
+  positions,
   muted,
   onJump,
   onLoopChange,
@@ -37,6 +38,8 @@ export function SheetMusic({
   fingers: boolean
   /** Each notehead carries its note's name. */
   names: boolean
+  /** Each chord symbol says how the right hand plays it: its inversion. */
+  positions: boolean
   /** The staff of the hand not heard or practised. */
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
@@ -61,6 +64,7 @@ export function SheetMusic({
             scroller={scroller}
             performance={performance}
             headings={headings}
+            positions={positions}
             current={current}
             loop={loop}
             onJump={onJump}

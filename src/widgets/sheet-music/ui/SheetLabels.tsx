@@ -1,23 +1,33 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
+import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { chordPositions } from '../model/chord-positions'
 
 /** A bar's number sits this far right of its barline, clear of the line. */
 const NUMBER_INSET_PX = 4
 
 /**
  * Over the staff: each bar's number, a section's name at its first bar, and each chord symbol at its
- * onset (spec §2.6). The bars' buttons carry the same words for a screen reader.
+ * onset (spec §2.6), with Chord positions how the right hand plays it. The bars' buttons carry the
+ * same words for a screen reader.
  */
 export const SheetLabels = memo(function SheetLabels({
   layout,
   performance,
   headings,
+  positions,
 }: {
   layout: ScoreLayout
   performance: Performance
   headings: readonly string[]
+  positions: boolean
 }) {
+  const positionName = usePositionName()
+  const placed = useMemo(
+    () => (positions ? chordPositions(performance) : []),
+    [positions, performance],
+  )
   return (
     <div aria-hidden className="absolute inset-x-0 bottom-full h-11">
       {layout.measures.map((measure, index) => {
@@ -41,6 +51,11 @@ export const SheetLabels = memo(function SheetLabels({
           style={{ left: xAtTick(layout, chord.startTick) }}
         >
           {chord.symbol}
+          {placed[index] ? (
+            <span className="ml-1 font-sans text-xs font-normal text-muted-foreground">
+              {positionName(placed[index])}
+            </span>
+          ) : null}
         </span>
       ))}
     </div>

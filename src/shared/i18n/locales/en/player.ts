@@ -59,6 +59,7 @@ export const player = {
   toggles: {
     fingerNumbers: 'Finger numbers',
     namedNotes: 'Named notes',
+    positions: 'Chord positions',
     melody: 'Melody',
     metronome: 'Metronome',
     countIn: 'Count-in',

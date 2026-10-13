@@ -90,6 +90,7 @@ export function PlayerLayout({
           loop={player.loop}
           fingers={player.fingers}
           names={player.names}
+          positions={player.positions}
           muted={player.muted}
           onJump={practice.jumpToBeatGroup}
           onLoopChange={player.setLoop}

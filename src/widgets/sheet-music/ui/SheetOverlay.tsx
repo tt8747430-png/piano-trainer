@@ -14,6 +14,7 @@ export function SheetOverlay({
   scroller,
   performance,
   headings,
+  positions,
   current,
   loop,
   onJump,
@@ -23,6 +24,7 @@ export function SheetOverlay({
   scroller: RefObject<HTMLElement | null>
   performance: Performance
   headings: readonly string[]
+  positions: boolean
   current: number
   loop: BarRange | null
   onJump: (beatGroup: number) => void
@@ -34,7 +36,12 @@ export function SheetOverlay({
   useFollow(scroller, cursor, x)
   return (
     <>
-      <SheetLabels layout={layout} performance={performance} headings={headings} />
+      <SheetLabels
+        layout={layout}
+        performance={performance}
+        headings={headings}
+        positions={positions}
+      />
       {loop ? <LoopBand layout={layout} loop={loop} onChange={onLoopChange} /> : null}
       {x === null ? null : <SheetCursor ref={cursor} x={x} layout={layout} />}
       <BarTargets layout={layout} performance={performance} current={group?.bar} onJump={onJump} />

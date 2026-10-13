@@ -37,6 +37,7 @@ describe('createSettingsStore', () => {
     expect(DEFAULT_PRACTICE).toEqual({
       fingerNumbers: false,
       namedNotes: false,
+      positions: false,
       melody: false,
       metronome: false,
       countIn: false,
@@ -71,6 +72,7 @@ describe('createSettingsStore', () => {
       practice: {
         fingerNumbers: true,
         namedNotes: true,
+        positions: true,
         melody: false,
         metronome: true,
         countIn: false,

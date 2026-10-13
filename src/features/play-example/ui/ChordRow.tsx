@@ -1,19 +1,25 @@
 import { createContext, use, useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  handPosition,
+  voiceLead,
+  type Midi,
+  type RowPosition,
+} from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
   ChordButton,
-  INVERSION_NAMES,
+  usePositionName,
   PlayLabel,
   type ShownKeys,
   unmarked,
   usePlayKey,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { handPosition, type RowChord } from '../model/chord-row'
+import type { RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
 import { TappableStaff } from './TappableStaff'
@@ -95,17 +101,15 @@ export function ChordRow({
  * the row plays it: its inversion, or the tension a rootless hand starts on.
  */
 export function RowChords({ positions = false }: { positions?: boolean }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation('learn')
   const { chords, voiced, playing, playChord } = useRow()
+  const positionName = usePositionName()
   const positionOf = (chord: RowChord['chord'], place: number): string | undefined => {
-    const position = positions ? handPosition(chord, voiced[place] ?? []) : null
-    if (!position) return undefined
-    if ('inversion' in position)
-      return t(`music:inversion.${INVERSION_NAMES[position.inversion] ?? 'root'}`)
-    return t(`music:position.from.${position.from}`)
+    const position = positions ? handPosition(chord, (voiced[place] ?? []).slice(1)) : null
+    return position ? positionName(position) : undefined
   }
   return (
-    <ul aria-label={t('learn:progressions.chords')} className="grid grid-cols-4 gap-2">
+    <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
       {chords.map(({ chord, caption, symbol = chordSymbol(chord) }, place) => (
         <li key={`${place} ${symbol}`} className="grid">
           <ChordButton
