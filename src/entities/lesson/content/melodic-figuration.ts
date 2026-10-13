@@ -87,6 +87,11 @@ const melodicFiguration: Lesson = {
         },
         { kind: 'chords', symbols: ['Cm7', 'Dsus4', 'D', 'Gm9', 'Gm/F', 'E♭Maj7'] },
         {
+          kind: 'link',
+          title: { en: '«Опять метель» in the Player', ru: '«Опять метель» в плеере' },
+          target: { place: 'piece', piece: 'metel' },
+        },
+        {
           kind: 'note',
           text: {
             en: 'A pause is a chance, not a duty.',

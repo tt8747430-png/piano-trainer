@@ -246,6 +246,11 @@ const twoFiveOne: Lesson = {
             ru: 'F♯7♯9 звучит резко: по краям правой руки большая септима.',
           },
         },
+        {
+          kind: 'link',
+          title: { en: '“As the Deer” in the Player', ru: '«Как олень спешит к воде» в плеере' },
+          target: { place: 'piece', piece: 'olen' },
+        },
       ],
     },
     {

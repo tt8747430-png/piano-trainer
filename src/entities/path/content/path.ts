@@ -45,5 +45,9 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     scale('phrygian'),
     ...pieces('bz6', 'bz8', 'bz10', 'bz12', 'bz15'),
   ],
-  4: [chords('alt'), scale('locrian'), ...pieces('bz13', 'bz16', 'bz17', 'bz18', 'romashki')],
+  4: [
+    chords('alt'),
+    scale('locrian'),
+    ...pieces('bz13', 'bz16', 'bz17', 'bz18', 'romashki', 'olen', 'metel'),
+  ],
 }

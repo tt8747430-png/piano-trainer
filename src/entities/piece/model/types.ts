@@ -127,7 +127,7 @@ export const COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
   'hymns',
-  'other',
+  'gorshkov',
   'studies',
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]
@@ -141,7 +141,7 @@ export const SONG_COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
   'hymns',
-  'other',
+  'gorshkov',
 ] as const satisfies readonly CollectionId[]
 export const isSongCollectionId = isOneOf<CollectionId>(SONG_COLLECTION_IDS)
 export interface Collection {

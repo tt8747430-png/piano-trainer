@@ -6,6 +6,7 @@ export default definePiece({
   kind: 'song',
   title: 'Ромашковые поля',
   titleEn: 'Daisy fields',
+  source: { book: 'gorshkov' },
   key: 'Dm',
   meter: '4/4',
   tempo: 72,

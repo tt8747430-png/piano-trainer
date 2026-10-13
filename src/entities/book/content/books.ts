@@ -5,6 +5,7 @@ export const BOOKS: Readonly<Record<BookId, Book>> = {
   'bozhe-spasibo': { title: '«Боже, спасибо»', author: 'Надежда Боброва' },
   'called-to-play': { title: 'Called to Play for Him', author: 'A. Savchenko' },
   'seven-types': { title: 'Семь основных видов аккомпанемента', author: 'Н. В. Боброва' },
+  gorshkov: { title: 'Курс по аккомпанементу', author: 'Василий Горшков' },
 }
 
 /** What a method book is called for short, in either language: its title, or its author's name. */
