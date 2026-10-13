@@ -14,6 +14,21 @@ export const quiz = {
     'key-degrees': 'The degrees of a key',
     'chord-role': 'A chord’s role',
   },
+  /** What each trainer asks, a line under its name. */
+  about: {
+    'build-chord': 'Play the chord named on the keys',
+    'name-chord': 'Name the chord on the keys',
+    'build-scale': 'Play the scale named, note by note',
+    gaps: 'The skills you miss most, asked again',
+    'intervals-by-ear': 'Hear two notes, name the interval',
+    'chords-by-ear': 'Hear a chord, name its kind',
+    'scales-by-ear': 'Hear a scale, name its kind',
+    'progressions-by-ear': 'Hear a progression, name it',
+    'reading-notes': 'Read a note on the staff, play it',
+    'key-signatures': 'Name the key a signature writes',
+    'key-degrees': 'Find a degree of a key',
+    'chord-role': 'Say what a chord does in its key',
+  },
   prompt: {
     buildChord: 'Build {{symbol}}',
     buildChordIn: 'Build {{symbol}}, {{position}}',

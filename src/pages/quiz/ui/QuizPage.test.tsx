@@ -43,7 +43,11 @@ describe('Practice → Quiz', () => {
       recordRun(progressStore, 'reading-notes:anchors', { accuracy: 90, streak: 9 })
       recordRun(progressStore, 'reading-notes:treble', { accuracy: 70, streak: 3 })
     })
-    expect(screen.getByRole('link', { name: 'Reading notes Runs: 2' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', {
+        name: 'Reading notes Read a note on the staff, play it · Runs: 2',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('keeps My gaps in its bar, saying how many skills it holds to check', async () => {
@@ -58,7 +62,7 @@ describe('Practice → Quiz', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Quiz / }))
-    await user.click(await screen.findByRole('link', { name: 'Build chord' }))
+    await user.click(await screen.findByRole('link', { name: /^Build chord/ }))
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Build chord' }),
     ).toBeInTheDocument()

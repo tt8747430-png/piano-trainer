@@ -14,7 +14,10 @@ function runsOf(records: ReturnType<typeof selectTrainerRecords>, id: TrainerId)
   )
 }
 
-/** A group of trainers under its heading: each row opens its trainer as it was left, saying how many runs it has. */
+/**
+ * A group of trainers under its heading: each row opens its trainer as it was left, saying what it
+ * asks and how many runs it has.
+ */
 export function TrainerList({
   title,
   trainers,
@@ -32,7 +35,11 @@ export function TrainerList({
           <li key={id}>
             <RowLink
               title={t(`trainers.${id}`)}
-              detail={runs > 0 ? t('record.runs', { count: runs }) : undefined}
+              detail={
+                runs > 0
+                  ? `${t(`about.${id}`)} · ${t('record.runs', { count: runs })}`
+                  : t(`about.${id}`)
+              }
               {...TRAINER_TILE[id]}
               render={
                 <Link
