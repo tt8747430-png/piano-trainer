@@ -6,13 +6,13 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('Learn', () => {
-  it('lists the subjects’ lessons under their modules, each with what it is about and its level', async () => {
+  it('lists the subjects’ lessons under their modules, each by its title and its level', async () => {
     await renderApp('/learn')
     const fundamentals = await screen.findByRole('region', { name: 'Fundamentals' })
-    const lesson = within(fundamentals).getByRole('link', {
-      name: /^How to read chord symbols Chords/,
-    })
+    const lesson = within(fundamentals).getByRole('link', { name: /^How to read chord symbols/ })
     expect(lesson).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
+    // Its number and its title: the module's heading already says where it belongs.
+    expect(lesson).toHaveTextContent(/^\d+\s*How to read chord symbols\s*$/)
     expect(within(lesson).getByRole('img', { name: 'Level 1' })).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 2 }).map((each) => each.textContent)).toEqual([
       expect.stringContaining('Fundamentals'),

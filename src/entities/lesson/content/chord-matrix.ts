@@ -12,7 +12,6 @@ const chordMatrix: Lesson = {
     ru: 'Семья аккордов тональности, доминанты, ведущие к ним, и аккорды, взятые из минора.',
   },
   level: 3,
-  category: 'theory',
   module: 'accompaniment',
   sections: [
     {

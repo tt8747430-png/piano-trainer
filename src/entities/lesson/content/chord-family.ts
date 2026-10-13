@@ -9,7 +9,6 @@ const chordFamily: Lesson = {
     ru: 'Одна гамма — семь аккордов: их римские цифры, три главных и септаккорды тональности.',
   },
   level: 2,
-  category: 'chords',
   module: 'fundamentals',
   sections: [
     {

@@ -8,7 +8,6 @@ const readingChordSymbols: Lesson = {
     ru: 'Что говорит каждая часть обозначения аккорда, что значат числа и как назвать любой аккорд.',
   },
   level: 1,
-  category: 'chords',
   module: 'fundamentals',
   sections: [
     {

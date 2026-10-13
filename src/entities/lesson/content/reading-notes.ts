@@ -8,7 +8,6 @@ const readingNotes: Lesson = {
     ru: 'Ноты на стане в скрипичном и басовом ключах, на добавочных линейках, с диезами и бемолями.',
   },
   level: 1,
-  category: 'reading',
   module: 'fundamentals',
   sections: [
     {

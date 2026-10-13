@@ -9,7 +9,6 @@ const playingByChords: Lesson = {
     ru: 'Called to Play, урок 1: зачем играть аккордами, аккорды над словами и ноты, трезвучие до мажор.',
   },
   level: 1,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

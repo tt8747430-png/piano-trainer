@@ -14,7 +14,6 @@ const scalesThroughTheChanges: Lesson = {
     ru: 'Гамма для каждого аккорда от одного звука, чтобы двигались только различия, и аккорды, составленные из лада.',
   },
   level: 4,
-  category: 'jazz',
   module: 'accompaniment',
   sections: [
     {

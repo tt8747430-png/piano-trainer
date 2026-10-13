@@ -12,7 +12,6 @@ const artOfAccompaniment: Lesson = {
     ru: 'Called to Play, урок 10: не мешать пению, заполнять долгие ноты, начинать песню со вступления и выбирать из двенадцати техник.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

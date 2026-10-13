@@ -59,8 +59,7 @@ export function LessonPage() {
         {localText(lesson.summary, locale)}
       </p>
       <p className="-mt-2 text-muted-foreground">
-        {t(`common:levelName.${LEVEL_NAME[lesson.level]}`)} ·{' '}
-        {t(`learn:category.${lesson.category}`)}
+        {t(`common:levelName.${LEVEL_NAME[lesson.level]}`)}
       </p>
       <p className="max-w-prose text-muted-foreground print:hidden">{t('learn:example.tapHint')}</p>
       <LessonView key={lesson.id} lesson={lesson} />

@@ -15,7 +15,6 @@ const jazzVoicings: Lesson = {
     ru: 'Дополнительный лист Горшкова: расположения мажорных, минорных и доминантовых аккордов, альтерированная доминанта, слэш-аккорды и drop 2.',
   },
   level: 4,
-  category: 'jazz',
   module: 'gorshkov',
   sections: [
     {

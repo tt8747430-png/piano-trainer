@@ -9,7 +9,6 @@ const keySignatures: Lesson = {
     ru: 'Знаки тональности, записанные один раз, их порядок и квинтовый круг.',
   },
   level: 2,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {

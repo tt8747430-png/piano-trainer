@@ -12,7 +12,6 @@ const commonProgressions: Lesson = {
     ru: 'Последовательности, на которых держится большинство гимнов и песен, в мажоре и миноре. Каждая записана римскими цифрами, поэтому играется в любой тональности.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

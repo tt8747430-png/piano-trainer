@@ -9,7 +9,6 @@ const calledToPlayExam: Lesson = {
     ru: 'Итоговый экзамен Called to Play: два куплета «Long I Wandered in the Shadows» по своему плану, с солистом.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

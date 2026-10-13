@@ -10,7 +10,6 @@ const majorAndMinorChords: Lesson = {
     ru: 'Called to Play, урок 2: мажор звучит светло, минор — мягко, а 4 или 3 полутона их различают.',
   },
   level: 1,
-  category: 'chords',
   module: 'called-to-play',
   sections: [
     {

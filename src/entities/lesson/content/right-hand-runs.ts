@@ -9,7 +9,6 @@ const rightHandRuns: Lesson = {
     ru: 'Called to Play, урок 6: пассаж вниз к основному тону и пассаж вверх 1–2–3–5, затем песня по своему плану.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

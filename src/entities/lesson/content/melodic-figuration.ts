@@ -12,7 +12,6 @@ const melodicFiguration: Lesson = {
     ru: 'Урок 5 Горшкова: самостоятельная линия внутри аккомпанемента, которая отвечает мелодии там, где есть место.',
   },
   level: 3,
-  category: 'accompaniment',
   module: 'gorshkov',
   sections: [
     {

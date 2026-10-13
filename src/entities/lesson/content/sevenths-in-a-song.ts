@@ -13,7 +13,6 @@ const seventhsInASong: Lesson = {
     ru: 'Урок 1 Горшкова, практика: три основных септаккорда, какой взять вместо трезвучия песни, и каждый по полутонам вверх и вниз.',
   },
   level: 2,
-  category: 'chords',
   module: 'gorshkov',
   sections: [
     {

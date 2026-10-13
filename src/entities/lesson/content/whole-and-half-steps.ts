@@ -9,7 +9,6 @@ const wholeAndHalfSteps: Lesson = {
     ru: 'Самый маленький шаг на клавиатуре, шаг вдвое больше и почему у одной клавиши бывает два имени.',
   },
   level: 1,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {

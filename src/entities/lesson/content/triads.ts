@@ -8,7 +8,6 @@ const triads: Lesson = {
     ru: 'Три ноты, сложенные терциями, и четыре вида трезвучий.',
   },
   level: 1,
-  category: 'chords',
   module: 'fundamentals',
   sections: [
     {

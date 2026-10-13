@@ -19,10 +19,6 @@ import type {
 import type { StaffId } from '@/shared/lib/notation'
 import type { NoteLineMeter, WrittenVoicing } from '@/shared/lib/schedule'
 
-/** What a lesson teaches, as Learn filters lessons (roadmap §3.4, §10.7). */
-export type LessonCategory =
-  'chords' | 'scales' | 'theory' | 'reading' | 'rhythm' | 'accompaniment' | 'jazz' | 'gospel'
-
 /** The modules that teach by subject: one track, read in turn (ADR 0042). */
 export const SUBJECT_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
 
@@ -163,7 +159,6 @@ export interface Lesson {
   readonly summary: LocalText
   /** On the Path's scale, so a lesson and a step say "Beginner" alike. */
   readonly level: Level
-  readonly category: LessonCategory
   readonly module: LessonModule
   readonly sections: readonly LessonSection[]
 }

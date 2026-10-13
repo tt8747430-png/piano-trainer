@@ -9,7 +9,6 @@ const rightHandTechniques: Lesson = {
     ru: 'Called to Play, урок 5: правая рука заполняет аккорд, пока левая держит бас. Аккорд и скачки на октаву, арпеджио на две октавы вверх.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

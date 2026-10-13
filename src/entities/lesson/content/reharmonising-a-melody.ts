@@ -11,7 +11,6 @@ const reharmonisingAMelody: Lesson = {
     ru: 'Нота мелодии входит в разные аккорды: в трезвучия тональности и в септаккорды. Как найти их и выбрать.',
   },
   level: 3,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

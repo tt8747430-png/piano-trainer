@@ -9,7 +9,6 @@ const minorScales: Lesson = {
     ru: 'Три вида минора — натуральный, гармонический и мелодический — и мажор с теми же нотами.',
   },
   level: 2,
-  category: 'scales',
   module: 'fundamentals',
   sections: [
     {

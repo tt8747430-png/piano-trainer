@@ -12,7 +12,6 @@ const rightHandFive: Lesson = {
     ru: 'Called to Play, урок 8: пятый способ с голосом, который движется внутри аккорда. ♭7 под основным тоном, нисходящая линия, движущаяся терция.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

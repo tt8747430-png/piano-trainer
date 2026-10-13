@@ -12,7 +12,6 @@ const chordPulse: Lesson = {
     ru: 'Урок 4 Горшкова: гармония превращается в фактуру. Пульсация аккордов, четвёртый звук, ломаные аккорды и гармоническая фигурация.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'gorshkov',
   sections: [
     {

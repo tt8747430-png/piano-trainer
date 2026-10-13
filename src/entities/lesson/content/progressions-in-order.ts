@@ -19,7 +19,6 @@ const progressionsInOrder: Lesson = {
     ru: 'Порядок изучения piano.org: десять шагов от I–IV–V до тритоновой замены, каждый — в до мажоре и по тональностям.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

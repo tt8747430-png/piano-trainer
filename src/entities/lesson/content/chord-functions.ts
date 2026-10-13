@@ -14,7 +14,6 @@ const chordFunctions: Lesson = {
     ru: 'Дом, уход и возвращение: три функции и аккорды, которые их заменяют.',
   },
   level: 2,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {

@@ -11,7 +11,6 @@ const gospelReharmonisation: Lesson = {
     ru: 'Простые аккорды гимна богаче: ноны, sus, IV над V, минорная iv, тенсии.',
   },
   level: 3,
-  category: 'gospel',
   module: 'gospel',
   sections: [
     {

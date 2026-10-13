@@ -9,7 +9,6 @@ const songsByPlan: Lesson = {
     ru: 'Called to Play, урок 4: три песни по плану — цифра у аккорда называет способ.',
   },
   level: 1,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

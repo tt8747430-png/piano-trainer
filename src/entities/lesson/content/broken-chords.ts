@@ -8,7 +8,6 @@ const brokenChords: Lesson = {
     ru: 'Аккорд по одному звуку: ломаный в одной руке, восходящий через обе и фигурация.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

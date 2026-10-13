@@ -10,7 +10,6 @@ const jazzChordSymbols: Lesson = {
     ru: 'Урок 1 Горшкова, теория: буквы для нот, знаки для трезвучий и цифры — ступени мажорной гаммы.',
   },
   level: 2,
-  category: 'chords',
   module: 'gorshkov',
   sections: [
     {

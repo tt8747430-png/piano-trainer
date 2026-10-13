@@ -9,7 +9,6 @@ const ninthChords: Lesson = {
     ru: 'Урок 2 Горшкова: три нонаккорда, каждый — два трезвучия друг на друге, над одним басом, в двух расположениях.',
   },
   level: 3,
-  category: 'chords',
   module: 'gorshkov',
   sections: [
     {

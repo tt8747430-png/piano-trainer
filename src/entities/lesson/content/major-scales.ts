@@ -9,7 +9,6 @@ const majorScales: Lesson = {
     ru: 'Одна схема тонов и полутонов строит мажорную гамму от любой ноты, и аппликатура до мажора.',
   },
   level: 1,
-  category: 'scales',
   module: 'fundamentals',
   sections: [
     {

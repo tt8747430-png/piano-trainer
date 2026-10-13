@@ -7,7 +7,6 @@ const lesson = (id: string, module: Lesson['module']): Lesson => ({
   title: { en: id, ru: id },
   summary: { en: id, ru: id },
   level: 1,
-  category: 'chords',
   module,
   sections: [],
 })

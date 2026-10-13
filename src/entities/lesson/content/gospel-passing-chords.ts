@@ -11,7 +11,6 @@ const gospelPassingChords: Lesson = {
     ru: 'Ходы между аккордами, от которых гимн звучит как госпел: с I на IV, уменьшённый на повышенной IV, подход снизу и ii–V в любой аккорд.',
   },
   level: 3,
-  category: 'gospel',
   module: 'gospel',
   sections: [
     {

@@ -8,7 +8,6 @@ const chromaticScale: Lesson = {
     ru: 'Все двенадцать клавиш подряд: как её пишут вверх и вниз, почему у неё нет тоники и как её играть.',
   },
   level: 1,
-  category: 'scales',
   module: 'fundamentals',
   sections: [
     {

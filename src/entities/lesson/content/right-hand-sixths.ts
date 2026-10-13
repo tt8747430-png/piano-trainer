@@ -9,7 +9,6 @@ const rightHandSixths: Lesson = {
     ru: 'Called to Play, урок 9: сексты вверх или вниз по гамме, затем песня по своему плану.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

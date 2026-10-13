@@ -8,7 +8,6 @@ const bassAndChords: Lesson = {
     ru: 'Что играет каждая рука по аккордам, ближайший аккорд и первые способы игры.',
   },
   level: 1,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

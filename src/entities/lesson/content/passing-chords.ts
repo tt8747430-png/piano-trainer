@@ -11,7 +11,6 @@ const passingChords: Lesson = {
     ru: 'Аккорд, который ведёт в следующий: доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
   },
   level: 3,
-  category: 'accompaniment',
   module: 'accompaniment',
   sections: [
     {

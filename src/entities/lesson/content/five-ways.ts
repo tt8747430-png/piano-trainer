@@ -8,7 +8,6 @@ const fiveWays: Lesson = {
     ru: 'Третий урок Called to Play: одна последовательность пятью способами, затем свой способ на каждом аккорде.',
   },
   level: 1,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

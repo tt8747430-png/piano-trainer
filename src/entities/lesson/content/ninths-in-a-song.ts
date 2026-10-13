@@ -15,7 +15,6 @@ const ninthsInASong: Lesson = {
     ru: 'Урок 2 Горшкова, практика: нонаккорды по полутонам, на «Ромашковых полях» и разрешение доминантового нонаккорда.',
   },
   level: 3,
-  category: 'chords',
   module: 'gorshkov',
   sections: [
     {

@@ -9,7 +9,6 @@ const seventhChords: Lesson = {
     ru: 'Трезвучие с септимой сверху: пять распространённых видов и тот, что ведёт к тонике.',
   },
   level: 2,
-  category: 'chords',
   module: 'fundamentals',
   sections: [
     {

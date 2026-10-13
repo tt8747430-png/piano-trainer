@@ -11,7 +11,6 @@ const thinkingInDegrees: Lesson = {
     ru: 'Урок 3 Горшкова: найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'gorshkov',
   sections: [
     {

@@ -8,7 +8,6 @@ const sevenTypes: Lesson = {
     ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне и как их сочетать.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'seven-types',
   sections: [
     {

@@ -12,7 +12,6 @@ const rightHandChords: Lesson = {
     ru: 'Called to Play, урок 7: пунктирный аккорд, три аккорда вверх по клавиатуре и аккорд, который поднимается по обращениям.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'called-to-play',
   sections: [
     {

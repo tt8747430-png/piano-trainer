@@ -22,7 +22,6 @@ const twoFiveOne: Lesson = {
     ru: 'Урок 3 Горшкова: главный оборот джаза в септаккордах — голоса, мажор и минор, все тональности и песня.',
   },
   level: 3,
-  category: 'jazz',
   module: 'gorshkov',
   sections: [
     {

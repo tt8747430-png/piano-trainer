@@ -9,7 +9,6 @@ const intervals: Lesson = {
     ru: 'Расстояние между нотами: в буквах, в полутонах, на слух — покой или напряжение.',
   },
   level: 1,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {

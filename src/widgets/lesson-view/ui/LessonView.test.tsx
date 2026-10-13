@@ -97,7 +97,6 @@ const WORKSHEET: Lesson = {
   title: { en: 'A worksheet', ru: 'Листок' },
   summary: { en: 'Every block.', ru: 'Каждый блок.' },
   level: 1,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {
@@ -250,7 +249,6 @@ const ACCOMPANIMENT: Lesson = {
   title: { en: 'Accompaniment', ru: 'Аккомпанемент' },
   summary: { en: 'Patterns.', ru: 'Фактуры.' },
   level: 1,
-  category: 'accompaniment',
   module: 'fundamentals',
   sections: [
     {

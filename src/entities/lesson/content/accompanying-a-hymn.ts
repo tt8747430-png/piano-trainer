@@ -11,7 +11,6 @@ const accompanyingAHymn: Lesson = {
     ru: 'От аккордов к служению: подготовка, вступление, куплет и припев, окончание.',
   },
   level: 2,
-  category: 'accompaniment',
   module: 'seven-types',
   sections: [
     {

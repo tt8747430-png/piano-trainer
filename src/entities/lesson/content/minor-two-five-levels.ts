@@ -12,7 +12,6 @@ const minorTwoFiveLevels: Lesson = {
     ru: 'Один оборот в до миноре в четырёх уровнях: двузвучия, ноны и ундецимы, альтерированные доминанты, тритоновая замена.',
   },
   level: 4,
-  category: 'jazz',
   module: 'accompaniment',
   sections: [
     {

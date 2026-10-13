@@ -8,7 +8,6 @@ const rhythmAndMeter: Lesson = {
     ru: 'Как чувствовать долю, читать длительности нот, понимать размер и считать вслух.',
   },
   level: 1,
-  category: 'rhythm',
   module: 'fundamentals',
   sections: [
     {

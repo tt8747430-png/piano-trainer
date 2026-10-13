@@ -21,8 +21,7 @@ import { lessonGroups } from '../model/lesson-groups'
 /**
  * Learn (ADR 0042): its two tabs, the subjects and the courses; under the tab, the lesson to continue
  * with once something in it is learned, then its modules, each folding under its name, what it is and
- * its count learned, its lessons numbered in the order they are taught with what each is about and
- * its level.
+ * its count learned, its lessons numbered in the order they are taught, each with its level.
  */
 export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
@@ -67,7 +66,6 @@ export function LearnPage() {
                 <li key={lesson.id}>
                   <RowLink
                     title={localText(lesson.title, locale)}
-                    detail={t(`category.${lesson.category}`)}
                     numeral={i + 1}
                     // Grass is learned: a lesson wears it once it is, its page's tile before.
                     paint={learnedIt ? 'grass' : PAGE_TILES.lesson.paint}

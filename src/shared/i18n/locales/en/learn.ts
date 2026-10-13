@@ -22,16 +22,6 @@ export const learn = {
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',
   contents: 'In this lesson',
-  category: {
-    chords: 'Chords',
-    scales: 'Scales',
-    theory: 'Theory',
-    reading: 'Reading',
-    rhythm: 'Rhythm',
-    accompaniment: 'Accompaniment',
-    jazz: 'Jazz',
-    gospel: 'Gospel',
-  },
   // The other ways a chord symbol is written on this root.
   written: 'Also written',
   show: { scale: 'Scale', chords: 'Chords', key: 'Key' },

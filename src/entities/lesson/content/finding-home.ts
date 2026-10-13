@@ -9,7 +9,6 @@ const findingHome: Lesson = {
     ru: 'Найти клавишу по чёрным, назвать белые, найти до первой октавы, пронумеровать пальцы.',
   },
   level: 1,
-  category: 'theory',
   module: 'fundamentals',
   sections: [
     {

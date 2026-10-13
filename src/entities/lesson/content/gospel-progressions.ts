@@ -11,7 +11,6 @@ const gospelProgressions: Lesson = {
     ru: 'Последовательности, на которых строится госпел, с септаккордами, и его ритм.',
   },
   level: 3,
-  category: 'gospel',
   module: 'gospel',
   sections: [
     {

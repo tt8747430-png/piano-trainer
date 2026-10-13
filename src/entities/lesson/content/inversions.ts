@@ -9,7 +9,6 @@ const inversions: Lesson = {
     ru: 'Какая нота аккорда звучит внизу, как это пишет буквенное обозначение и зачем обращения аккомпаниатору.',
   },
   level: 2,
-  category: 'chords',
   module: 'fundamentals',
   sections: [
     {
