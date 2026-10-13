@@ -115,6 +115,14 @@ const commonProgressions: Lesson = {
         },
         {
           kind: 'link',
+          title: {
+            en: 'Progressions in the order to learn them',
+            ru: 'Последовательности в порядке изучения',
+          },
+          target: { place: 'lesson', lesson: 'progressions-in-order' },
+        },
+        {
+          kind: 'link',
           title: { en: 'Every style in Progressions', ru: 'Все стили в последовательностях' },
           target: { place: 'progressions', numerals: 'I IV V I', key: C_MAJOR },
         },

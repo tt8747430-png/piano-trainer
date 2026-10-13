@@ -183,6 +183,11 @@ describe('the progressions library', () => {
     expect(name('complete-cadence')).toEqual({ en: 'Complete cadence', ru: 'Полная каденция' })
   })
 
+  it('holds the borrowed ♭VII and the tritone substitution of the learning order', () => {
+    expect(chordsOf('borrowed-flat-seven', C_MAJOR, 'triads')).toEqual(['C', 'B♭', 'F', 'C'])
+    expect(chordsOf('tritone-substitution', C_MAJOR, 'sevenths')).toEqual(['Dm7', 'D♭7', 'CMaj7'])
+  })
+
   it('holds the Andalusian cadence the lessons teach: a minor key stepping down to its major V', () => {
     expect(libraryProgression('i-VII-VI-V', true)?.name.en).toBe('Andalusian cadence')
     expect(chordsOf('andalusian', A_MINOR, 'triads')).toEqual(['Am', 'G', 'F', 'E'])

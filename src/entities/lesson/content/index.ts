@@ -29,6 +29,7 @@ import ninthChords from './ninth-chords'
 import ninthsInASong from './ninths-in-a-song'
 import passingChords from './passing-chords'
 import playingByChords from './playing-by-chords'
+import progressionsInOrder from './progressions-in-order'
 import readingChordSymbols from './reading-chord-symbols'
 import readingNotes from './reading-notes'
 import reharmonisingAMelody from './reharmonising-a-melody'
@@ -72,6 +73,7 @@ export const LESSONS: readonly Lesson[] = [
   bassAndChords,
   brokenChords,
   commonProgressions,
+  progressionsInOrder,
   chordMatrix,
   minorTwoFiveLevels,
   passingChords,

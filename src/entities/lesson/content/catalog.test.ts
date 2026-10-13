@@ -249,6 +249,7 @@ describe('the lessons', () => {
       'bass-and-chords',
       'broken-chords',
       'common-progressions',
+      'progressions-in-order',
       'chord-matrix',
       'minor-two-five-levels',
       'passing-chords',

@@ -95,6 +95,19 @@ const LIBRARY = [
   }),
   entry('rock', 'wild-thing', { major: 'I IV V IV' }, 'Wild Thing', 'Wild Thing'),
   entry(
+    'rock',
+    'borrowed-flat-seven',
+    { major: 'I ♭VII IV I' },
+    'Borrowed ♭VII',
+    'Заимствованная ♭VII',
+    {
+      note: note(
+        'B♭ is borrowed from C minor, the key’s parallel world: rock’s bluesy step down from I.',
+        'B♭ взят из до минора, параллельного мира тональности: блюзовый шаг рока вниз от I.',
+      ),
+    },
+  ),
+  entry(
     'jazz',
     'jazz-cadence',
     { major: 'ii V I', minor: 'ii° V i' },
@@ -145,6 +158,20 @@ const LIBRARY = [
   ),
   entry('jazz', 'full-turnaround', { major: 'iii vi ii V' }, 'Full turnaround', 'Полный оборот'),
   entry('jazz', 'sweet-jazz', { major: 'I IV ii V' }, 'Sweet jazz', 'Мягкий джаз'),
+  entry(
+    'jazz',
+    'tritone-substitution',
+    { major: 'ii7 ♭II7 Imaj7' },
+    'Tritone substitution',
+    'Тритоновая замена',
+    {
+      size: 'sevenths',
+      note: note(
+        'D♭7 stands for G7, a tritone away: the same 3rd and 7th, and the bass falls by semitones into I.',
+        'D♭7 заменяет G7, отстоящий на тритон: те же терция и септима, а бас спускается к I по полутонам.',
+      ),
+    },
+  ),
   entry(
     'jazz',
     'flat-nine-resolution',
