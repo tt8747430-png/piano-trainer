@@ -20,6 +20,7 @@ export const learn: LocaleResources['learn'] = {
   continue: 'Продолжить',
   place: 'Урок {{n}} из {{total}}',
   placeLabel: 'Где этот урок',
+  contents: 'В этом уроке',
   category: {
     chords: 'Аккорды',
     scales: 'Гаммы',

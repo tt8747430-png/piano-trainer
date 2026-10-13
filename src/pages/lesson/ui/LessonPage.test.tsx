@@ -76,6 +76,32 @@ describe('A lesson', () => {
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
   })
 
+  it('lists its sections at its top, each a link to its heading', async () => {
+    await renderApp('/learn/lessons/ninth-chords')
+    const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
+    const links = within(contents).getAllByRole('link')
+    expect(links.map((link) => link.textContent)).toEqual([
+      'A 7th chord and one more 3rd',
+      'Two triads stacked',
+      'Bass left, 7th chord right',
+      'The second position',
+      'Split the root',
+      'Try it',
+    ])
+    const href = links[3]?.getAttribute('href') ?? ''
+    expect(href).toBe('/learn/lessons/ninth-chords#section-4')
+    const section = document.getElementById(href.split('#')[1] ?? '')
+    expect(section).toContainElement(
+      screen.getByRole('heading', { level: 2, name: 'The second position' }),
+    )
+  })
+
+  it('lists no contents for a lesson of two sections', async () => {
+    await renderApp('/learn/lessons/right-hand-five')
+    await screen.findByRole('heading', { level: 1 })
+    expect(screen.queryByRole('navigation', { name: 'In this lesson' })).not.toBeInTheDocument()
+  })
+
   it('leads back to the lesson before it', async () => {
     await renderApp('/learn/lessons/reading-notes')
     const previous = await screen.findByRole('link', { name: /Previous lesson/ })

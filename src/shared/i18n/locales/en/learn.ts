@@ -21,6 +21,7 @@ export const learn = {
   // Where a lesson is, and the lessons either side of it along its track.
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',
+  contents: 'In this lesson',
   category: {
     chords: 'Chords',
     scales: 'Scales',

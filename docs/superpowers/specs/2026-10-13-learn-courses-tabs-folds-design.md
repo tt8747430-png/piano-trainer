@@ -40,9 +40,9 @@ last, along its track.
 into Accompaniment into Gospel); a course is a track of its own, so its last lesson leads back to its list, never
 into another teacher's.
 
-**Gorshkov's course is a module of Learn** (`gorshkov`), named by its author as Боброва's is. It is not a method
-book: it has no pattern groups and no studies, so Practice's Accompaniment does not gain a tab. Its lessons, in its
-order, numbered as its sheets are:
+**Gorshkov's course is a module of Learn** (`gorshkov`), named by its author as Боброва's is. A follow-up made it a
+method book (ADR 0043): its six textures are a pattern group, its three songs its pieces, and Practice's Accompaniment
+gains its tab. Its lessons, in its order, numbered as its sheets are:
 
 | #   | Lesson                    | Sheet                                                           |
 | --- | ------------------------- | --------------------------------------------------------------- |
@@ -68,7 +68,9 @@ the borrowed ♭VII (I–♭VII–IV–I, rock) and the tritone substitution (ii
 secondary dominant stay out of the library (ADR 0041: a twin of the complete cadence, a lead-in's line); the
 lesson plays them as blocks.
 
-## Not done
+## Done after
 
-- No contents list inside a lesson: its keyboard is pinned, so a jump would hide the heading under it.
-- Gorshkov's songs beyond «Ромашковые поля» are not pieces; their chords play in the lessons.
+- Gorshkov's course became a method book with its textures and songs (ADR 0043); «Как олень спешит к воде» and
+  «Опять метель» are songs with their melodies.
+- A lesson lists its sections at its top, each a link that lands its heading clear of the screen's bar and the
+  pinned keys.
