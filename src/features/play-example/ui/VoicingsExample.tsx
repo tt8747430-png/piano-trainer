@@ -33,7 +33,7 @@ export function VoicingsExample({
   musicKey?: Key | undefined
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const playback = usePlayback<number | 'row'>()
   const keys = useMemo(() => voicings.map(({ hands }) => voicingKeys(hands)), [voicings])
   const music = useMemo(() => voicingsMusic(voicings, musicKey), [voicings, musicKey])
@@ -44,7 +44,7 @@ export function VoicingsExample({
   }
   return (
     <div className="flex flex-col gap-3">
-      <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
+      <ul aria-label={t('rowChords')} className="grid grid-cols-4 gap-2">
         {voicings.map(({ symbol, caption, degrees }, place) => (
           <li key={`${place} ${symbol}`} className="grid">
             <ChordButton

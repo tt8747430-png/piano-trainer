@@ -7,7 +7,7 @@ import { PatternEditor } from './PatternEditor'
 
 /** One of the learner's own patterns changed: its name and figures to start from. */
 function Editing({ patternRef }: { patternRef: string }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation(['common', 'practice'])
   const now = usePatterns((state) =>
     isOwnPatternId(patternRef) ? selectOwnPattern(patternRef)(state) : undefined,
   )
@@ -25,7 +25,7 @@ function Editing({ patternRef }: { patternRef: string }) {
   }
   return (
     <PatternEditor
-      title={t('patterns.editor.editTitle')}
+      title={t('practice:patterns.editor.editTitle')}
       start={{ name: pattern.name, rh: pattern.rh, lh: pattern.lh }}
       id={pattern.id}
     />

@@ -27,7 +27,7 @@ export function PassingChordsTool({
   view: PassingView
   onChange: (change: Partial<PassingView>) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const id = useId()
   const key = keyFromParam(view.key)
   const from = readChordSymbol(view.from)

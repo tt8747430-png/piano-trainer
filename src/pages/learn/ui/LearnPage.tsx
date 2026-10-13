@@ -36,12 +36,12 @@ export function LearnPage() {
   return (
     <div className="flex flex-col gap-8">
       <ScreenHeader
-        title={t('title')}
+        title={t('learn:title')}
         tabs={
-          <NavTabs label={t('tabs.label')}>
+          <NavTabs label={t('learn:tabs.label')}>
             {LEARN_TABS.map((tab) => (
               <NavTab key={tab} to="/learn" search={{ tab }} replace current={tab === view.tab}>
-                {t(`tabs.${tab}`)}
+                {t(`learn:tabs.${tab}`)}
               </NavTab>
             ))}
           </NavTabs>
@@ -54,8 +54,8 @@ export function LearnPage() {
           <FoldGroup
             key={module}
             title={moduleName(module)}
-            detail={t(`moduleAbout.${module}`)}
-            count={t('progress', { learned: done, total: lessons.length })}
+            detail={t(`learn:moduleAbout.${module}`)}
+            count={t('learn:progress', { learned: done, total: lessons.length })}
             progress={done / lessons.length}
             open={open.has(module)}
             onToggle={() => set({ open: withToggled(open, module) })}

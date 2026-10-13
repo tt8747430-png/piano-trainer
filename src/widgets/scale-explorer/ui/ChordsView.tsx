@@ -42,7 +42,7 @@ export function ChordsView({
   choice: ReactNode
   facts: ReactNode
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['music', 'practice'])
   const { root, kind, chords: notes, inversion, keysPlay } = scale
   const listening = keysPlay === 'notes'
   const { note, hear } = useHeardNote(listening, [root, kind, notes, inversion, keysPlay].join(' '))
@@ -105,21 +105,24 @@ export function ChordsView({
               onChange={(next) => onChange({ inversion: next })}
             />
           </Labelled>
-          <Labelled label={t('learn:keysPlay.label')}>
+          <Labelled label={t('practice:keysPlay.label')}>
             <Segmented
-              label={t('learn:keysPlay.label')}
+              label={t('practice:keysPlay.label')}
               value={keysPlay}
-              options={KEYS_PLAY.map((value) => ({ value, label: t(`learn:keysPlay.${value}`) }))}
+              options={KEYS_PLAY.map((value) => ({
+                value,
+                label: t(`practice:keysPlay.${value}`),
+              }))}
               onChange={(next) => onChange({ keysPlay: next })}
             />
           </Labelled>
-          <Labelled label={t('learn:walk.played')}>
+          <Labelled label={t('practice:walk.played')}>
             <Segmented
-              label={t('learn:walk.played')}
+              label={t('practice:walk.played')}
               value={scale.arpeggio ? 'arpeggio' : 'block'}
               options={[
-                { value: 'block', label: t('learn:walk.block') },
-                { value: 'arpeggio', label: t('learn:arpeggio') },
+                { value: 'block', label: t('practice:walk.block') },
+                { value: 'arpeggio', label: t('practice:arpeggio') },
               ]}
               onChange={(played) => onChange({ arpeggio: played === 'arpeggio' })}
             />

@@ -28,7 +28,7 @@ export function ProgressionField({
   musicKey: Key
   onChange: (progression: string) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const [typed, setTyped] = useState<{ text: string; for: string } | null>(null)
   // Chords mean their numerals in one key: in another, the field writes the numerals the row plays.
   const meaning = (numerals: string) => `${numerals} ${keyParam(musicKey)}`

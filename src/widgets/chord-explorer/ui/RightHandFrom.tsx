@@ -15,7 +15,7 @@ export function RightHandFrom({
   value: number
   onChange: (inversion: number) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   return (
     <Segmented
       label={t('builder.handFrom')}

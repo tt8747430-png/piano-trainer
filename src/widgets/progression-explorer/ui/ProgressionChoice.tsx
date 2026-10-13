@@ -31,7 +31,7 @@ export function ProgressionChoice({
   minor: boolean
   onChoose: (progression: LibraryProgression) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const locale = useLocale()
   const library = LIBRARY_BY_STYLE.map(({ style, progressions }) => ({
     label: t(`progressions.style.${style}`),

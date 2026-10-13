@@ -22,20 +22,26 @@ export function ScaleFacts({
   kind: ScaleKind
   tones: readonly Tone[]
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['practice', 'music'])
   const scaleName = useScaleName()
   const related = relatedScale(root, kind)
   return (
     <dl className="flex flex-col gap-2">
-      <Fact term={t('learn:about.formula')}>{tones.map((tone) => tone.degree).join(' ')}</Fact>
-      <Fact term={t('learn:about.gaps')}>
+      <Fact term={t('practice:scaleFacts.formula')}>
+        {tones.map((tone) => tone.degree).join(' ')}
+      </Fact>
+      <Fact term={t('practice:scaleFacts.gaps')}>
         {scaleGaps(kind)
           .map((gap) => t(`music:gap.${gap}`))
           .join(' ')}
       </Fact>
       {related ? (
         <Fact
-          term={t(related.relation === 'parent' ? 'learn:about.modeOf' : 'learn:about.relative')}
+          term={t(
+            related.relation === 'parent'
+              ? 'practice:scaleFacts.modeOf'
+              : 'practice:scaleFacts.relative',
+          )}
         >
           <ButtonLink
             variant="link"

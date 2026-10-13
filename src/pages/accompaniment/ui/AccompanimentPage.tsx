@@ -14,16 +14,16 @@ import { PatternShelves } from './PatternShelves'
  * the bar.
  */
 export function AccompanimentPage() {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation('practice')
   const { show } = useSearch({ from: '/shell/practice/accompaniment' })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('practice:pages.accompaniment')}
+        title={t('pages.accompaniment')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           <RoundLink
-            label={t('learn:patterns.new')}
+            label={t('patterns.new')}
             icon={Plus}
             render={<Link to="/practice/accompaniment/patterns/new" />}
           />

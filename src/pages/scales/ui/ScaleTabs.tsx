@@ -8,9 +8,9 @@ import type { ScaleShow } from '@/widgets/scale-explorer'
  * Only the views the scale has are offered; a tab keeps the scale and changes the view in place.
  */
 export function ScaleTabs({ shows, current }: { shows: readonly ScaleShow[]; current: ScaleShow }) {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation('practice')
   return (
-    <NavTabs label={t('practice:pages.scales')}>
+    <NavTabs label={t('pages.scales')}>
       {shows.map((show) => (
         <NavTab
           key={show}
@@ -20,7 +20,7 @@ export function ScaleTabs({ shows, current }: { shows: readonly ScaleShow[]; cur
           {...IN_PLACE}
           current={show === current}
         >
-          {t(`learn:show.${show}`)}
+          {t(`show.${show}`)}
         </NavTab>
       ))}
     </NavTabs>

@@ -10,7 +10,7 @@ import { ProgressionSetup } from './ProgressionSetup'
 
 /** A progression in the Player: numerals in any key, a chord a bar, with a song's patterns. */
 export function ProgressionPlayerPage() {
-  const { t } = useTranslation(['player', 'music'])
+  const { t } = useTranslation('player')
   const search = useSearch({ from: '/full-screen/play/progression' })
   const setSearch = useViewChange<ProgressionSearch>()
   const { choice, performance, player, fit, headings, changeSetup } = useProgressionPlayer(
@@ -27,8 +27,8 @@ export function ProgressionPlayerPage() {
     <PlayerLayout
       title={
         choice.walk
-          ? t('player:progression.walking', { ...named, walk: t(`player:walking.${choice.walk}`) })
-          : t('player:progression.title', named)
+          ? t('progression.walking', { ...named, walk: t(`walking.${choice.walk}`) })
+          : t('progression.title', named)
       }
       headings={headings}
       onClose={close}

@@ -27,7 +27,7 @@ export function NotesExample({
   keyParam: KeyParam
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const playback = usePlayback<'line'>()
   const line = useMemo(
     () => noteLine(notes, { hand: HAND_OF[clef], meter, key: keyFromParam(keyParam) }),
@@ -47,7 +47,7 @@ export function NotesExample({
           playback.toggle('line', () => runSounds(line, LINE_TEMPO))
         }}
       >
-        <PlayLabel playing={playback.playing === 'line'}>{t('example.play')}</PlayLabel>
+        <PlayLabel playing={playback.playing === 'line'}>{t('play')}</PlayLabel>
       </Button>
     </figure>
   )

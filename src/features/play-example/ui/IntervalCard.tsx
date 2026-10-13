@@ -33,32 +33,32 @@ export function IntervalCard({
   name: ReferenceInterval
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation('music')
   const titleId = useId()
   const playback = usePlayback<IntervalWay>()
   const example = useMemo(() => intervalExample(noteFromParam(root), name), [root, name])
   const score = useMemo(() => notate(example.music), [example])
   const interval = INTERVALS[name]
   const size = [
-    t('learn:intervals.semitones', { n: interval.semitones }),
-    t('learn:intervals.tones', { n: tonesText(interval.semitones) }),
+    t('intervalCard.semitones', { n: interval.semitones }),
+    t('intervalCard.tones', { n: tonesText(interval.semitones) }),
   ]
   return (
     <article aria-labelledby={titleId} className="flex h-full flex-col gap-3 card p-4">
       <header className="flex items-baseline justify-between gap-3">
         <h3 id={titleId} className="text-xl">
-          {t(`music:interval.${name}.name`)}
+          {t(`interval.${name}.name`)}
         </h3>
         <span className="shrink-0 font-semibold text-muted-foreground">
-          {t(`music:interval.${name}.short`)}
+          {t(`interval.${name}.short`)}
         </span>
       </header>
       {/* A line each, so the cards of a row keep their staves level. */}
       <div className="text-sm text-muted-foreground">
         <p>{size.join(' · ')}</p>
-        <p>{t(`music:consonance.${consonanceOf(interval)}`)}</p>
+        <p>{t(`consonance.${consonanceOf(interval)}`)}</p>
         {interval.semitones > 12 ? (
-          <p>{t('learn:intervals.inChords', { degree: interval.degree })}</p>
+          <p>{t('intervalCard.inChords', { degree: interval.degree })}</p>
         ) : null}
       </div>
       <TappableStaff
@@ -80,7 +80,7 @@ export function IntervalCard({
               playback.toggle(way, () => intervalSounds(example.low, example.high, way))
             }}
           >
-            <PlayLabel playing={playback.playing === way}>{t(`learn:intervals.${way}`)}</PlayLabel>
+            <PlayLabel playing={playback.playing === way}>{t(`intervalCard.${way}`)}</PlayLabel>
           </Button>
         ))}
       </div>

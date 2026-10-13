@@ -23,7 +23,7 @@ export function KeyChords({
   note: Midi | null
   holding: readonly PlacedScaleChord[]
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const locale = useLocale()
   const holds = new Set(holding.map((placed) => placed.chord.degree))
   const said =

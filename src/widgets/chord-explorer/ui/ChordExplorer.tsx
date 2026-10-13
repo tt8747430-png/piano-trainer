@@ -41,7 +41,7 @@ export function ChordExplorer({
   chord: ChordView
   onChange: (view: ChordView) => void
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['music', 'practice'])
   const play = usePlay()
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
@@ -83,7 +83,7 @@ export function ChordExplorer({
           </ol>
           {others.length > 0 ? (
             <p className="flex flex-wrap items-baseline gap-x-4">
-              <span className="text-muted-foreground">{t('learn:written')}</span>
+              <span className="text-muted-foreground">{t('practice:written')}</span>
               <span className="font-display text-xl font-semibold">
                 {others.map((suffix) => writtenSymbol({ root: built.root, suffix })).join(' · ')}
               </span>
@@ -94,10 +94,12 @@ export function ChordExplorer({
           <ChordSheet placed={placed} />
           <div className="flex gap-3">
             <Button size="pill" onClick={() => sound('chord')}>
-              <PlayLabel playing={playback.playing === 'chord'}>{t('learn:play')}</PlayLabel>
+              <PlayLabel playing={playback.playing === 'chord'}>{t('music:play')}</PlayLabel>
             </Button>
             <Button size="pill" variant="soft" onClick={() => sound('arpeggio')}>
-              <PlayLabel playing={playback.playing === 'arpeggio'}>{t('learn:arpeggio')}</PlayLabel>
+              <PlayLabel playing={playback.playing === 'arpeggio'}>
+                {t('practice:arpeggio')}
+              </PlayLabel>
             </Button>
           </div>
         </div>

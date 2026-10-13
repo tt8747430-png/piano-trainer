@@ -30,7 +30,7 @@ export function PatternEditor({
   /** The pattern changed; none for a new one. */
   id?: OwnPatternId
 }) {
-  const { t } = useTranslation(['learn', 'player'])
+  const { t } = useTranslation(['practice', 'player'])
   const locale = useLocale()
   const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
@@ -48,14 +48,14 @@ export function PatternEditor({
         }}
       >
         <NameField
-          label={t('patterns.editor.name')}
+          label={t('practice:patterns.editor.name')}
           value={draft.name}
           maxLength={OWN_NAME_MAX}
           onChange={(event) => change({ name: event.target.value })}
         />
         <div className="flex flex-wrap gap-2">
           <Dropdown
-            label={t('patterns.rightHand')}
+            label={t('practice:patterns.rightHand')}
             value={draft.rh}
             groups={RIGHT_FIGURE_GROUPS.map((group) => ({
               label: t(`player:rhGroup.${group.id}`),
@@ -67,7 +67,7 @@ export function PatternEditor({
             onChange={(rh) => change({ rh })}
           />
           <Dropdown
-            label={t('patterns.leftHand')}
+            label={t('practice:patterns.leftHand')}
             value={draft.lh}
             groups={LEFT_FIGURE_GROUPS.map((group) => ({
               label: t(`player:lhGroup.${group.id}`),
@@ -85,10 +85,10 @@ export function PatternEditor({
         </section>
         <div className="flex flex-wrap gap-3">
           <Button type="submit" disabled={!savable}>
-            {t('patterns.editor.save')}
+            {t('practice:patterns.editor.save')}
           </Button>
           <Button type="button" variant="outline" onClick={cancel}>
-            {t('patterns.editor.cancel')}
+            {t('practice:patterns.editor.cancel')}
           </Button>
         </div>
       </form>

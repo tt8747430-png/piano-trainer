@@ -41,7 +41,7 @@ export function TappableStaff({
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
   onShow?: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const playback = usePlayback<string>()
   /** The note Tab comes to: the one played last, else the first (one stop for the whole line). */
   const [stop, setStop] = useState<Tick | null>(null)
@@ -105,7 +105,7 @@ export function TappableStaff({
                     <button
                       key={id}
                       type="button"
-                      aria-label={t('example.playBar', { n: i + 1 })}
+                      aria-label={t('playBar', { n: i + 1 })}
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to)}
                       className={cn(
@@ -137,7 +137,7 @@ export function TappableStaff({
                   tabIndex={(stop ?? onsets[0]?.tick) === column.tick ? 0 : -1}
                   onKeyDown={step}
                   onFocus={() => setStop(column.tick)}
-                  aria-label={t('example.playNotes', { notes: namesAt(music, column.tick) })}
+                  aria-label={t('playNotes', { notes: namesAt(music, column.tick) })}
                   aria-pressed={playback.playing === id}
                   onClick={() => play(id, column.tick, next ?? Number.POSITIVE_INFINITY)}
                   className="absolute z-20 rounded-md transition-colors hover:bg-muted/60 focus-visible:outline-2 focus-visible:outline-ring"

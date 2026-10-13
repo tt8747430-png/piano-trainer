@@ -162,4 +162,16 @@ export const music: LocaleResources['music'] = {
   },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
   patternPart: { styles: 'Стили', yours: 'Свои' },
+  play: 'Сыграть',
+  playNotes: 'Сыграть {{notes}}',
+  playBar: 'Сыграть такт {{n}}',
+  rowChords: 'Аккорды',
+  intervalCard: {
+    semitones: 'Полутонов: {{n}}',
+    tones: 'Тонов: {{n}}',
+    inChords: 'В аккордах: {{degree}}',
+    up: 'Вверх',
+    down: 'Вниз',
+    together: 'Вместе',
+  },
 }

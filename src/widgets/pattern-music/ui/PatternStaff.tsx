@@ -11,7 +11,7 @@ const NOTE_TEMPO = 84
 
 /** The sample on the grand staff, each hand on its own, and what it is played over; a note or bar tapped plays. */
 export function PatternStaff({ sample }: { sample: PatternSample }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const locale = useLocale()
   const score = useMemo(() => notate(sample.music), [sample.music])
   return (

@@ -15,11 +15,11 @@ const LEFT_OUT_WORDS = {
  * same function until the language changes.
  */
 export function useChordAbout(): (found: FoundChord) => string[] {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['music', 'practice'])
   return useCallback(
     (found) => [
       ...(found.chord.quality ? [t(`music:quality.${found.chord.quality}`)] : []),
-      ...found.leftOut.map((tone) => t(`learn:finder.${LEFT_OUT_WORDS[tone]}`)),
+      ...found.leftOut.map((tone) => t(`practice:finder.${LEFT_OUT_WORDS[tone]}`)),
     ],
     [t],
   )

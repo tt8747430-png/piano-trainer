@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /** Play up and down, its card's one action, turning into Stop while it sounds; Enter is its key. */
 export function PlayUpDown({ sounds }: { sounds: readonly Sound[] }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const playback = usePlayback<'up-down'>()
   const play = () => playback.toggle('up-down', () => sounds)
   usePlayKey(play)

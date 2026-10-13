@@ -28,7 +28,7 @@ export function ChordTensions({
   /** A note chosen: the chord with it on top, as the page's keys show it. */
   onPlay: (tone: TensionTone, shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const id = useId()
   const tones = tensionTones(root, quality)
   const chord = tensionChord(root, quality)

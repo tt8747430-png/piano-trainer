@@ -34,7 +34,7 @@ export function KeyView({
   musicKey: Key
   choice: ReactNode
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   // The key's own scale: the notes its signature writes (a minor key's natural minor).
   const { tonic } = musicKey
   const kind = keyScale(musicKey)

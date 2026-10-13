@@ -14,20 +14,20 @@ const listed = (names: readonly string[]) => names.join(' · ')
  * line of their own.
  */
 export function usePageAbout(): (page: PracticePageId) => string {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation('practice')
   const partName = usePartName()
   return (page) => {
     switch (page) {
       case 'scales':
-        return listed(SCALE_SHOWS.map((show) => t(`learn:show.${show}`)))
+        return listed(SCALE_SHOWS.map((show) => t(`show.${show}`)))
       case 'accompaniment':
         return listed(ACCOMPANIMENT_PARTS.map(partName))
       case 'exercises':
-        return listed(LISTED_GROUPS.map((group) => t(`practice:exerciseGroups.${group}`)))
+        return listed(LISTED_GROUPS.map((group) => t(`exerciseGroups.${group}`)))
       case 'quiz':
-        return listed(QUIZ_GROUPS.map((group) => t(`practice:quizGroups.${group}`)))
+        return listed(QUIZ_GROUPS.map((group) => t(`quizGroups.${group}`)))
       default:
-        return t(`practice:about.${page}`)
+        return t(`about.${page}`)
     }
   }
 }

@@ -12,7 +12,7 @@ import { walkPreview } from '../model/walk-preview'
  * through the keys, a row for each walk the Player has, saying the chords it plays first.
  */
 export function ProgressionPractice({ musicKey, inPlayer }: { musicKey: Key; inPlayer: InPlayer }) {
-  const { t } = useTranslation(['practice', 'learn', 'player', 'music'])
+  const { t } = useTranslation(['practice', 'music', 'player'])
   const keyName = useKeyName()
   const numerals = parseNumerals(inPlayer.p) ?? []
   const size = inPlayer.chordSize ?? 'triads'
@@ -28,7 +28,7 @@ export function ProgressionPractice({ musicKey, inPlayer }: { musicKey: Key; inP
           />
         </li>
       </RowGroup>
-      <RowGroup title={t('learn:progressions.throughKeys')}>
+      <RowGroup title={t('practice:progressions.throughKeys')}>
         {KEY_WALKS.map((walk) => (
           <li key={walk}>
             <RowLink

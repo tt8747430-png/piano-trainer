@@ -21,7 +21,7 @@ export function SuggestionCard({
   inKey: boolean
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const titleId = useId()
   const [first, second] = way.chords
   return (

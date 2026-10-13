@@ -42,7 +42,7 @@ import { PieceList } from '@/widgets/piece-list'
 
 /** The star in the bar: a favourite comes first in the Player's list. */
 function FavouriteButton({ pattern }: { pattern: BookPattern }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
   const favourite = usePatterns(selectIsFavourite(pattern.ref))
   return (
@@ -58,7 +58,7 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
 
 /** A built-in pattern's own actions: a pattern of the learner's own from it, and hiding it from the Player. */
 function BuiltInActions({ id }: { id: PatternId }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
   const hidden = usePatterns(selectIsHidden(id))
   return (
@@ -81,7 +81,7 @@ function BuiltInActions({ id }: { id: PatternId }) {
 
 /** The learner's pattern's own actions: Edit, and Delete once asked. */
 function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
   const [asking, setAsking] = useState(false)
@@ -133,7 +133,7 @@ function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
  * the learner's own from it (or, for their own, Edit and Delete).
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const locale = useLocale()
   const sample = usePatternSample(pattern, book)
   const [shown, show] = useShownKeys(pattern.ref, sample.shown)
@@ -187,7 +187,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
                 )
               }
             >
-              {t('patterns.practise')}
+              {t('inPlayer')}
             </ButtonLink>
             {isOwnPatternId(pattern.ref) ? (
               <OwnActions id={pattern.ref} name={name} />

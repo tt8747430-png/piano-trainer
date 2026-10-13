@@ -24,7 +24,7 @@ export function ChordFinder({
   view: FinderView
   onChange: (change: Partial<FinderView>) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['music', 'practice'])
   const playback = usePlayback<'chord'>()
   const held = useHeldKeys()
   const chosen = readKeyList(view.keys)
@@ -50,7 +50,7 @@ export function ChordFinder({
       </p>
       <div className="flex flex-wrap gap-3">
         <Button size="pill" disabled={keys.length === 0} onClick={play}>
-          <PlayLabel playing={playback.playing === 'chord'}>{t('play')}</PlayLabel>
+          <PlayLabel playing={playback.playing === 'chord'}>{t('music:play')}</PlayLabel>
         </Button>
         <Button
           size="pill"
@@ -58,7 +58,7 @@ export function ChordFinder({
           disabled={chosen.length === 0}
           onClick={() => onChange({ keys: '' })}
         >
-          {t('finder.clear')}
+          {t('practice:finder.clear')}
         </Button>
         {best ? (
           <ButtonLink
@@ -75,7 +75,7 @@ export function ChordFinder({
               />
             }
           >
-            {t('finder.open')}
+            {t('practice:finder.open')}
           </ButtonLink>
         ) : null}
       </div>

@@ -34,7 +34,7 @@ export function RunView({
   /** What the scale is made of, under its name. */
   facts: ReactNode
 }) {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation(['practice', 'common'])
   const { root, kind, start, fingering, rhythm, hands } = scale
   const run = useMemo(
     () => scaleRunOf({ root, kind, start, fingering, rhythm, hands }),
@@ -63,9 +63,9 @@ export function RunView({
       fields={
         <>
           {choice}
-          <Labelled label={t('learn:handsLabel')}>
+          <Labelled label={t('practice:handsLabel')}>
             <Segmented
-              label={t('learn:handsLabel')}
+              label={t('practice:handsLabel')}
               value={hands}
               options={[
                 { value: 'rh', label: t('common:handsShort.rh') },
@@ -75,35 +75,35 @@ export function RunView({
               onChange={(next) => onChange({ hands: next })}
             />
           </Labelled>
-          <Labelled label={t('learn:startOn')}>
+          <Labelled label={t('practice:startOn')}>
             <Segmented
-              label={t('learn:startOn')}
+              label={t('practice:startOn')}
               value={start}
               options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
               onChange={(next) => onChange({ start: next })}
             />
           </Labelled>
           {run.fingerings.length > 1 ? (
-            <Labelled label={t('learn:fingering.label')}>
+            <Labelled label={t('practice:fingering.label')}>
               <Segmented
-                label={t('learn:fingering.label')}
+                label={t('practice:fingering.label')}
                 value={run.fingering}
                 options={run.fingerings.map((value) => ({
                   value,
-                  label: t(`learn:fingering.${value}`),
+                  label: t(`practice:fingering.${value}`),
                 }))}
                 onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
               />
             </Labelled>
           ) : null}
-          <Labelled label={t('learn:rhythmLabel')}>
+          <Labelled label={t('practice:rhythmLabel')}>
             <Dropdown
               bare
-              label={t('learn:rhythmLabel')}
+              label={t('practice:rhythmLabel')}
               value={rhythm}
               options={PRACTICE_RHYTHM_IDS.map((r) => ({
                 value: r,
-                label: t(`learn:rhythm.${r}`),
+                label: t(`practice:rhythm.${r}`),
               }))}
               onChange={(next) => onChange({ rhythm: next })}
               className="w-full"

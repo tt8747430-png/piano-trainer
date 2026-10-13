@@ -23,7 +23,7 @@ export function PatternExample({
   piece: Piece
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'music'])
   const locale = useLocale()
   const titleId = useId()
   const playback = usePlayback<'opening'>()
@@ -35,7 +35,7 @@ export function PatternExample({
       </h3>
       {description ? <p className="text-base">{localText(description, locale)}</p> : null}
       <p className="text-sm text-muted-foreground">
-        {t('example.over', { piece: entryTitles(piece, locale).primary })}
+        {t('learn:example.over', { piece: entryTitles(piece, locale).primary })}
       </p>
       <div className="flex flex-wrap gap-2">
         <Button
@@ -50,13 +50,13 @@ export function PatternExample({
             })
           }
         >
-          <PlayLabel playing={playback.playing === 'opening'}>{t('example.play')}</PlayLabel>
+          <PlayLabel playing={playback.playing === 'opening'}>{t('music:play')}</PlayLabel>
         </Button>
         <ButtonLink
           variant="outline"
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} search={{ pattern }} />}
         >
-          {t('example.openInPlayer')}
+          {t('learn:example.openInPlayer')}
         </ButtonLink>
       </div>
     </article>

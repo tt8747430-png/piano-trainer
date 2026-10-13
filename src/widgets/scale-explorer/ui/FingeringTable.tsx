@@ -11,7 +11,7 @@ export function FingeringTable({
   rh: readonly Finger[]
   lh: readonly Finger[]
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const row = (label: string, cells: readonly (string | number)[]) => (
     <tr>
       <th scope="row" className="pr-3 text-left text-sm font-semibold text-muted-foreground">

@@ -32,7 +32,7 @@ export function ScaleExample({
   kind: ScaleKind
   onShow: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const scaleName = useScaleName()
   const captionId = useId()
   const playback = usePlayback<'run'>()
@@ -72,7 +72,7 @@ export function ScaleExample({
           playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
         }}
       >
-        <PlayLabel playing={playback.playing === 'run'}>{t('example.play')}</PlayLabel>
+        <PlayLabel playing={playback.playing === 'run'}>{t('play')}</PlayLabel>
       </Button>
     </figure>
   )

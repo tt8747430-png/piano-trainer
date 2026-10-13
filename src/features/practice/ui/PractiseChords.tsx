@@ -47,7 +47,7 @@ export function PractiseChords({
       <RowGroup title={t('inPlayer')}>
         <li>
           <RowLink
-            title={t('walk')}
+            title={t('walk.title')}
             icon={Footprints}
             paint="lilac"
             render={

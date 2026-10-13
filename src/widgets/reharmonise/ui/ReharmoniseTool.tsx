@@ -35,7 +35,7 @@ export function ReharmoniseTool({
   view: ReharmoniseView
   onChange: (change: Partial<ReharmoniseView>) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const playback = usePlayback<string>()
   const [chosenOn, setChosenOn] = useState<Midi | null>(null)
   const key = keyFromParam(view.key)

@@ -15,7 +15,7 @@ export function PatternPlay({
   /** The page's one action (the pattern's page), or soft beside another (the editor). */
   variant: 'default' | 'soft'
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const playback = usePlayback<'sample'>()
   return (
     <Button
@@ -28,7 +28,7 @@ export function PatternPlay({
         })
       }
     >
-      <PlayLabel playing={playback.playing === 'sample'}>{t('patterns.play')}</PlayLabel>
+      <PlayLabel playing={playback.playing === 'sample'}>{t('play')}</PlayLabel>
     </Button>
   )
 }

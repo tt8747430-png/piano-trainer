@@ -15,19 +15,19 @@ import { ScaleTabs } from './ScaleTabs'
  * Key view, a random key from the bar, the key's tool, and the songs and studies written in the key.
  */
 export function ScalesPage() {
-  const { t } = useTranslation(['practice', 'learn'])
+  const { t } = useTranslation('practice')
   const { step, ...scale } = useSearch({ from: '/shell/practice/scales' })
   const onChange = useViewChange<ScaleView>()
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('practice:pages.scales')}
+        title={t('pages.scales')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           key ? (
             <RoundButton
-              label={t('learn:keys.random')}
+              label={t('keys.random')}
               icon={Dices}
               onClick={() => {
                 const next = randomKey(Math.random, key)

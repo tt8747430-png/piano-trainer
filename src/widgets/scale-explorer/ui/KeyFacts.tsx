@@ -16,7 +16,7 @@ import { ButtonLink, Fact } from '@/shared/ui'
 
 /** A key's signature and notes, its relative (shown as a key too) and the modes that share its notes (each as a scale). */
 export function KeyFacts({ value }: { value: Key }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const scaleName = useScaleName()
   const keyName = useKeyName()
   const signature = signatureNotes(value)
@@ -28,7 +28,7 @@ export function KeyFacts({ value }: { value: Key }) {
         {signature.length === 0 ? t('keys.noSignature') : signature.map(noteName).join(' ')}
       </Fact>
       <Fact term={t('keys.notes')}>{notes.map((tone) => noteName(tone.note)).join(' ')}</Fact>
-      <Fact term={t('about.relative')}>
+      <Fact term={t('scaleFacts.relative')}>
         <ButtonLink
           variant="link"
           className="px-0"

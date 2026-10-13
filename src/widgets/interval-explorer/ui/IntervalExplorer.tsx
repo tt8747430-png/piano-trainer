@@ -23,7 +23,7 @@ export function IntervalExplorer({
   view: IntervalView
   onChange: (change: Partial<IntervalView>) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
   const [open, setOpen] = useState<ReadonlySet<IntervalGroup>>(
     () => new Set(INTERVAL_GROUP_IDS.slice(0, 1)),

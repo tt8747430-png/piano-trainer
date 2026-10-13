@@ -27,7 +27,7 @@ const moduleOnLearn = (lesson: Lesson) =>
  * either side of it along its track (ADR 0042); a course's last leads back to the course's list.
  */
 export function LessonPage() {
-  const { t } = useTranslation(['common', 'learn'])
+  const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const moduleName = useModuleName()
   const { lessonId } = useParams({ from: '/shell/learn/lessons/$lessonId' })

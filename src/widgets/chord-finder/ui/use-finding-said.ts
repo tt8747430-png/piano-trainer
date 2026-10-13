@@ -5,7 +5,7 @@ import { useChordAbout } from './use-chord-about'
 
 /** What the keys make, in words for a screen reader: the note, the interval, or the chord and what it is. */
 export function useFindingSaid(finding: Finding): string {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['music', 'practice'])
   const aboutOf = useChordAbout()
   switch (finding.kind) {
     case 'empty':
@@ -15,7 +15,7 @@ export function useFindingSaid(finding: Finding): string {
     case 'interval':
       return t(`music:interval.${finding.interval}.name`)
     case 'none':
-      return t('learn:finder.none')
+      return t('practice:finder.none')
     case 'chord':
       return [finding.best.symbol, ...aboutOf(finding.best)].join(' · ')
   }

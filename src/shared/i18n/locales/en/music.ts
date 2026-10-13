@@ -174,4 +174,19 @@ export const music = {
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
   // Accompaniment's parts after its method books', which their books name.
   patternPart: { styles: 'Styles', yours: 'Yours' },
+  // What plays on a page's keys, a lesson's and an explorer's alike: its Play, a line's and a bar's.
+  play: 'Play',
+  playNotes: 'Play {{notes}}',
+  playBar: 'Play bar {{n}}',
+  // A row of chords that play, named for a screen reader.
+  rowChords: 'Chords',
+  // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
+  intervalCard: {
+    semitones: 'Semitones: {{n}}',
+    tones: 'Tones: {{n}}',
+    inChords: 'In chords: {{degree}}',
+    up: 'Up',
+    down: 'Down',
+    together: 'Together',
+  },
 } as const

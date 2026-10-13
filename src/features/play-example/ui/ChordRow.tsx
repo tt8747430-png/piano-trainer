@@ -101,7 +101,7 @@ export function ChordRow({
  * the row plays it: its inversion, or the tension a rootless hand starts on.
  */
 export function RowChords({ positions = false }: { positions?: boolean }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const { chords, voiced, playing, playChord } = useRow()
   const positionName = usePositionName()
   const positionOf = (chord: RowChord['chord'], place: number): string | undefined => {
@@ -109,7 +109,7 @@ export function RowChords({ positions = false }: { positions?: boolean }) {
     return position ? positionName(position) : undefined
   }
   return (
-    <ul aria-label={t('progressions.chords')} className="grid grid-cols-4 gap-2">
+    <ul aria-label={t('rowChords')} className="grid grid-cols-4 gap-2">
       {chords.map(({ chord, caption, symbol = chordSymbol(chord) }, place) => (
         <li key={`${place} ${symbol}`} className="grid">
           <ChordButton
@@ -158,7 +158,7 @@ export function RowStaff() {
  * which Enter plays too; soft beside other examples.
  */
 export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('music')
   const { playing, playRow } = useRow()
   usePlayKey(playRow, variant === 'default')
   return (

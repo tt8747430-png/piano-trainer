@@ -30,7 +30,7 @@ const WEDGE = {
  * its numeral (C, F, G outside and Dm, Em, Am, B° inside for C).
  */
 export function CircleOfFifths({ current }: { current: Key }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const functions = circleFunctions(current)
   const chordAt = (place: number, ring: CircleRing) =>
     functions.find((at) => at.place === place && at.ring === ring)

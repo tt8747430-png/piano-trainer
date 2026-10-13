@@ -36,7 +36,7 @@ export function ProgressionExplorer({
   view: ProgressionsView
   onChange: (change: Partial<ProgressionsView>) => void
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['music', 'practice'])
   const locale = useLocale()
   const [shown, setShown] = useShownKeys(
     `${view.key} ${view.p} ${view.size} ${view.inversion} ${view.nearest} ${view.lead}`,
@@ -80,13 +80,13 @@ export function ProgressionExplorer({
             onChange={(size) => change({ size })}
           />
         </Labelled>
-        <Labelled label={t('progressions.lead.label')}>
+        <Labelled label={t('practice:progressions.lead.label')}>
           <Segmented
-            label={t('progressions.lead.label')}
+            label={t('practice:progressions.lead.label')}
             value={view.lead ?? 'none'}
             options={(['none', ...LEAD_INS] as const).map((lead) => ({
               value: lead,
-              label: t(`progressions.lead.${lead}`),
+              label: t(`practice:progressions.lead.${lead}`),
             }))}
             onChange={(lead) => change({ lead: lead === 'none' ? undefined : lead })}
           />

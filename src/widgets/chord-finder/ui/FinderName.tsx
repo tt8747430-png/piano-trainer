@@ -9,16 +9,16 @@ import { useChordAbout } from './use-chord-about'
  * degree and the other names they have; or no chord at all.
  */
 export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: Finding }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['practice', 'music'])
   switch (finding.kind) {
     case 'empty':
-      return <p className="text-lg text-muted-foreground">{t('learn:finder.choose')}</p>
+      return <p className="text-lg text-muted-foreground">{t('practice:finder.choose')}</p>
     case 'note':
       return <h2 className="text-7xl">{noteName(finding.note)}</h2>
     case 'interval':
       return <h2 className="text-5xl">{t(`music:interval.${finding.interval}.name`)}</h2>
     case 'none':
-      return <p className="text-lg text-muted-foreground">{t('learn:finder.none')}</p>
+      return <p className="text-lg text-muted-foreground">{t('practice:finder.none')}</p>
   }
   return <FoundName keys={keys} best={finding.best} others={finding.others} />
 }
@@ -33,7 +33,7 @@ function FoundName({
   best: FoundChord
   others: readonly FoundChord[]
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const about = useChordAbout()(best)
   return (
     <div className="flex flex-col gap-3">

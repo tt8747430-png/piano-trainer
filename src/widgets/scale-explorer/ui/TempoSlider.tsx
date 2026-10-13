@@ -10,7 +10,7 @@ export function TempoSlider({
   tempo: number
   onChange: (tempo: number) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   return (
     <Slider
       min={TEMPO_RANGE.min}

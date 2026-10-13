@@ -9,7 +9,7 @@ const PLAIN = { rh: 'x1', lh: 'r' } as const
 
 /** A new pattern of the learner's own: from a pattern (Make your own from it), or from plain whole notes. */
 export function NewPatternPage() {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const locale = useLocale()
   const { from } = useSearch({ from: '/shell/practice/accompaniment/patterns/new' })
   const book = usePatternBook()

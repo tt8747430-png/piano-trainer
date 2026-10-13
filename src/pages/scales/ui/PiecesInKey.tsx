@@ -6,7 +6,7 @@ import { PieceList } from '@/widgets/piece-list'
 
 /** The songs written in a key, and the studies apart from them; one line where no song is. */
 export function PiecesInKey({ musicKey }: { musicKey: Key }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const songsId = useId()
   const inKey = entriesInKey(musicKey)
   const songs = inKey.filter((entry) => shelfOf(entry.kind) === 'songs')

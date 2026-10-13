@@ -11,21 +11,21 @@ export function ScaleChoice({
   scale: ScaleView
   onChange: (change: Partial<ScaleView>) => void
 }) {
-  const { t } = useTranslation(['learn', 'music'])
+  const { t } = useTranslation(['practice', 'music'])
   return (
     <>
       <div className="col-span-full">
         <NoteChoice
-          label={t('learn:root')}
+          label={t('practice:root')}
           value={scale.root}
 
           onChange={(root) => onChange({ root })}
         />
       </div>
-      <Labelled label={t('learn:scaleLabel')}>
+      <Labelled label={t('practice:scaleLabel')}>
         <Dropdown
           bare
-          label={t('learn:scaleLabel')}
+          label={t('practice:scaleLabel')}
           value={scale.kind}
           groups={SCALE_FAMILIES.map((family) => ({
             label: t(`music:scaleFamily.${family}`),

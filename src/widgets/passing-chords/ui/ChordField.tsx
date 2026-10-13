@@ -18,7 +18,7 @@ export function ChordField({
   chord: string
   onChange: (chord: string) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const [typed, setTyped] = useState<{ text: string; for: string } | null>(null)
   const text = typed && typed.for === chord ? typed.text : chord
   return (

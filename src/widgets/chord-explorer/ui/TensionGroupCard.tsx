@@ -23,7 +23,7 @@ export function TensionGroupCard({
   isPlaying: (tone: TensionTone) => boolean
   onPlay: (tone: TensionTone) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation('practice')
   const id = useId()
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3 card p-4">
