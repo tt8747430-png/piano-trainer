@@ -231,6 +231,7 @@ export const learn: LocaleResources['learn'] = {
     throughKeys: 'По тональностям',
     choose: 'Последовательность',
     typed: 'Набрана',
+    lead: { label: 'Подвести к каждому аккорду', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
     style: {
       pop: 'Поп',
       rock: 'Рок',

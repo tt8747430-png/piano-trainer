@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { progressionById, type LibraryProgression } from '@/entities/progression-library'
-import { keyParam, note, type ChordSize } from '@/shared/lib/music'
-import { changedView, chosenView, playerSearch, type ProgressionsView } from './progressions-view'
+import { keyParam, note, numeralText, type ChordSize } from '@/shared/lib/music'
+import {
+  changedView,
+  chosenView,
+  playedNumerals,
+  playerSearch,
+  viewProgression,
+  type ProgressionsView,
+} from './progressions-view'
 
 const major = (...tonic: Parameters<typeof note>) =>
   keyParam({ tonic: note(...tonic), minor: false })
@@ -130,5 +137,27 @@ describe('the hand’s position', () => {
       inversion: 1,
       nearest: false,
     })
+  })
+})
+
+describe('a lead-in', () => {
+  it('plays each chord after its own V or ii–V, the line shown kept as written', () => {
+    const shown = { ...view(major('C'), 'I-ii', 'sevenths'), lead: 'ii-v' as const }
+    expect(playedNumerals(shown).map(numeralText)).toEqual([
+      ...['ii', 'V', 'I'],
+      ...['ii°/ii', 'V/ii', 'ii'],
+    ])
+    expect(playedNumerals({ ...shown, lead: undefined }).map(numeralText)).toEqual(['I', 'ii'])
+  })
+
+  it('opens the Player on the chords played, its lead-ins written out', () => {
+    const shown = { ...view(major('C'), 'I-vi', 'triads'), lead: 'v' as const }
+    expect(playerSearch(shown).p).toBe('V-I-V/vi-vi')
+  })
+
+  it('keeps naming the library’s progression it leads into, and is kept as a progression is chosen', () => {
+    const shown = { ...view(major('C'), 'I-ii-iii-IV-V-vi-vii°', 'triads'), lead: 'v' as const }
+    expect(viewProgression(shown)?.id).toBe('key-chords')
+    expect(chosenView(shown, library('axis')).lead).toBe('v')
   })
 })

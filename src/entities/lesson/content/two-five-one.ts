@@ -1,16 +1,18 @@
-import { note } from '@/shared/lib/music'
+import { note, numeralsParam, parseNumerals, withLeadIns } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 const C_MINOR = { tonic: note('C'), minor: true }
 const D_MAJOR = { tonic: note('D'), minor: false }
 
+/** A line of C major's chords, each led into by its own ii–V, as the Progressions page leads it. */
+const ledByTwoFive = (line: string): string =>
+  numeralsParam(withLeadIns(parseNumerals(line) ?? [], 'ii-v', C_MAJOR))
+
 /** A ii–V–I to each chord of the key, up its scale. */
-const TO_EVERY_CHORD =
-  'ii V I ii°/ii V/ii ii ii°/iii V/iii iii ii/IV V/IV IV ii/V V/V V ii°/vi V/vi vi ii°/vii V/vii vii°'
+const TO_EVERY_CHORD = ledByTwoFive('I ii iii IV V vi vii°')
 /** The same, the key's chords a 5th apart. */
-const ROUND_THE_KEY =
-  'ii V I ii/IV V/IV IV ii°/vii V/vii vii° ii°/iii V/iii iii ii°/vi V/vi vi ii°/ii V/ii ii ii/V V/V V'
+const ROUND_THE_KEY = ledByTwoFive('I IV vii° iii vi ii V')
 
 const twoFiveOne: Lesson = {
   id: 'two-five-one',

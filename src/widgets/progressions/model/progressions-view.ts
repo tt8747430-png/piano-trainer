@@ -8,15 +8,21 @@ import type { PatternId } from '@/entities/pattern'
 import {
   keyFromParam,
   keyParam,
+  numeralsParam,
+  parseNumerals,
+  withLeadIns,
   writtenKey,
   type ChordSize,
   type Inversion,
   type KeyParam,
+  type LeadIn,
+  type Numeral,
 } from '@/shared/lib/music'
 
 /**
  * What the Progressions tool shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
- * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion.
+ * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion;
+ * and what leads into each chord, where something does.
  */
 export interface ProgressionsView {
   readonly key: KeyParam
@@ -24,6 +30,13 @@ export interface ProgressionsView {
   readonly size: ChordSize
   readonly inversion: Inversion
   readonly nearest: boolean
+  readonly lead?: LeadIn
+}
+
+/** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0041). */
+export function playedNumerals(view: ProgressionsView): Numeral[] {
+  const numerals = parseNumerals(view.p) ?? []
+  return view.lead ? withLeadIns(numerals, view.lead, keyFromParam(view.key)) : numerals
 }
 
 /** The library's progression a view shows; none for a line a learner typed. */
@@ -82,11 +95,14 @@ export interface InPlayer {
   readonly nearest: boolean
 }
 
-/** The Player's search for the view shown, with the pattern the library's progression is practised in. */
+/**
+ * The Player's search for the view shown: the chords it plays, lead-ins written out, with the pattern
+ * the library's progression is practised in.
+ */
 export function playerSearch(view: ProgressionsView): InPlayer {
   const pattern = viewProgression(view)?.pattern
   return {
-    p: view.p,
+    p: numeralsParam(playedNumerals(view)),
     key: view.key,
     ...(view.size === 'triads' ? {} : { chordSize: view.size }),
     ...(pattern ? { pattern } : {}),

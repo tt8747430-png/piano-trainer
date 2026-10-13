@@ -235,6 +235,8 @@ export const learn = {
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',
+    /** What leads into each chord of the progression (ADR 0041). */
+    lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     style: {
       pop: 'Pop',
       rock: 'Rock',

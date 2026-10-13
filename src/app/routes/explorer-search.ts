@@ -52,6 +52,7 @@ import {
   C_MAJOR_PARAM,
   isChordSize,
   isHands,
+  isLeadIn,
   isScaleKind,
   readKey,
   readNumerals,
@@ -233,7 +234,8 @@ export function readPassingSearch(raw: Raw): PassingView {
 }
 export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
 
-// Progressions: numerals in a key at a chord size; an unread line is the Player's own.
+// Progressions: numerals in a key at a chord size, and what leads into each chord, where something
+// does; an unread line is the Player's own.
 export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   key: C_MAJOR_PARAM,
   p: PROGRESSION.numerals,
@@ -249,6 +251,7 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
     inversion: valueOr(isInversion, raw.inversion, PROGRESSIONS_DEFAULTS.inversion),
     nearest: raw.nearest !== false,
+    lead: isLeadIn(raw.lead) ? raw.lead : undefined,
   }
 }
 export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)

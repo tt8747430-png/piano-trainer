@@ -9,11 +9,12 @@ import {
   useShownKeys,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyFromParam, numeralGrows, parseNumerals } from '@/shared/lib/music'
-import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField } from '@/shared/ui'
+import { keyFromParam, LEAD_INS, numeralGrows, parseNumerals } from '@/shared/lib/music'
+import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField, Segmented } from '@/shared/ui'
 import {
   changedView,
   chosenView,
+  playedNumerals,
   playerSearch,
   viewProgression,
   type ProgressionsView,
@@ -24,7 +25,8 @@ import { ProgressionPractice } from './ProgressionPractice'
 
 /**
  * A progression in any key, read top to bottom: the keys, its row of chords that play with Play, what
- * it is (the library's or typed, its key, its chord size), then its ways into the Player.
+ * it is (the library's or typed, its key, its chord size, what leads into each chord), then its ways
+ * into the Player.
  */
 export function ProgressionsTool({
   view,
@@ -36,18 +38,19 @@ export function ProgressionsTool({
   const { t } = useTranslation(['learn', 'music'])
   const locale = useLocale()
   const [shown, setShown] = useShownKeys(
-    `${view.key} ${view.p} ${view.size} ${view.inversion} ${view.nearest}`,
+    `${view.key} ${view.p} ${view.size} ${view.inversion} ${view.nearest} ${view.lead}`,
     NO_KEYS,
   )
   const key = keyFromParam(view.key)
   const numerals = parseNumerals(view.p) ?? []
+  const played = playedNumerals(view)
   const named = viewProgression(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
       <ChordRow
-        chords={progressionRow(numerals, key, view.size)}
+        chords={progressionRow(played, key, view.size)}
         position={{ inversion: view.inversion, nearest: view.nearest }}
         onShow={setShown}
       >
@@ -72,8 +75,19 @@ export function ProgressionsTool({
         <Labelled label={t('music:chordSize.label')}>
           <ChordSizeField
             value={view.size}
-            disabled={!numerals.some(numeralGrows)}
+            disabled={!played.some(numeralGrows)}
             onChange={(size) => change({ size })}
+          />
+        </Labelled>
+        <Labelled label={t('progressions.lead.label')}>
+          <Segmented
+            label={t('progressions.lead.label')}
+            value={view.lead ?? 'none'}
+            options={(['none', ...LEAD_INS] as const).map((lead) => ({
+              value: lead,
+              label: t(`progressions.lead.${lead}`),
+            }))}
+            onChange={(lead) => change({ lead: lead === 'none' ? undefined : lead })}
           />
         </Labelled>
         <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />

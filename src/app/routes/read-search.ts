@@ -5,6 +5,7 @@ import {
   type Key,
   KEY_WALKS,
   keyParam,
+  LEAD_INS,
   note,
   numeralsParam,
   parseKey,
@@ -43,6 +44,7 @@ export const isHands = isOneOf(HANDS)
 export const isScaleKind = isOneOf(SCALE_KINDS)
 export const isChordSize = isOneOf(CHORD_SIZES)
 export const isKeyWalk = isOneOf(KEY_WALKS)
+export const isLeadIn = isOneOf(LEAD_INS)
 
 /** The key a tool or a progression opens in. */
 export const C_MAJOR: Key = { tonic: note('C'), minor: false }

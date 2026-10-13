@@ -195,6 +195,32 @@ describe('Practice → Progressions', () => {
     expect(row()).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
   })
 
+  it('leads into each chord by its own ii–V, kept in the URL, played and sent to the Player', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?p=I-ii&size=sevenths')
+    const lead = within(await screen.findByRole('radiogroup', { name: 'Lead into each chord' }))
+    expect(lead.getByRole('radio', { name: 'No' })).toBeChecked()
+    await user.click(lead.getByRole('radio', { name: 'By its ii–V' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ lead: 'ii-v' }))
+    expect(row()).toEqual([...['Dm7ii', 'G7V', 'CMaj7I'], ...['Em7♭5ii°/ii', 'A7V/ii', 'Dm7ii']])
+    expect(screen.getByRole('textbox', { name: 'Numerals or chords' })).toHaveValue('I ii')
+    const practise = screen.getByRole('link', { name: 'In C major' })
+    expect(decodeURIComponent(practise.getAttribute('href') ?? '')).toMatch(
+      /p=ii-V-I-ii°\/ii-V\/ii-ii/,
+    )
+  })
+
+  it('leads into each chord of the key by its own dominant: the secondary dominants', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions?p=I-ii-iii-IV-V-vi-vii°&size=sevenths')
+    const lead = within(await screen.findByRole('radiogroup', { name: 'Lead into each chord' }))
+    await user.click(lead.getByRole('radio', { name: 'By its V' }))
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent(
+      'The chords of the key',
+    )
+    expect(row().slice(0, 6)).toEqual(['G7V', 'CMaj7I', 'A7V/ii', 'Dm7ii', 'B7V/iii', 'Em7iii'])
+  })
+
   it('lists each progression once, never again for the minor key', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/progressions')

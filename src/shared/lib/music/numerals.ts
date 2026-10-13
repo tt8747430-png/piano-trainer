@@ -69,6 +69,9 @@ const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, str
   ['hd9', 'ø9'],
 ])
 const LOWER_QUALITIES = new Map([...LOWER_TAILS].map(([quality, tail]) => [tail, quality] as const))
+
+/** Whether a chord has a minor 3rd, so a numeral writes it in lower case (`ii7`, `vii°`). */
+export const hasMinorThird = (quality: ChordQuality): boolean => LOWER_TAILS.has(quality)
 /** Other ways a lower-case numeral's tail is typed. */
 const TAIL_ALIASES: ReadonlyMap<string, string> = new Map([
   ['o', '°'],

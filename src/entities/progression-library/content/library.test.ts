@@ -80,6 +80,12 @@ describe('the progressions library', () => {
       ).toBe(true)
   })
 
+  it('holds no line a lead-in writes: secondary dominants and ii–Vs to every chord are a way to play', () => {
+    const names = PROGRESSION_LIBRARY.map((each) => each.name.en)
+    expect(names).not.toContain('Secondary dominants')
+    expect(names).not.toContain('ii–V–I to every chord of the key')
+  })
+
   it('holds an idea once: its minor version is its own line, never another progression', () => {
     expect(listed('jazz-cadence').minor).toBe('ii° V i')
     expect(listed('complete-cadence').minor).toBe('i iv V i')
@@ -182,37 +188,7 @@ describe('the progressions library', () => {
     expect(chordsOf('andalusian', A_MINOR, 'triads')).toEqual(['Am', 'G', 'F', 'E'])
   })
 
-  it('walks a ii–V–I to every chord of the key, up the scale and round its circle', () => {
-    expect(chordsOf('two-five-through-the-key', C_MAJOR, 'sevenths')).toEqual([
-      ...['Dm7', 'G7', 'CMaj7'],
-      ...['Em7♭5', 'A7', 'Dm7'],
-      ...['F#m7♭5', 'B7', 'Em7'],
-      ...['Gm7', 'C7', 'FMaj7'],
-      ...['Am7', 'D7', 'G7'],
-      ...['Bm7♭5', 'E7', 'Am7'],
-      ...['C#m7♭5', 'F#7', 'Bm7♭5'],
-    ])
-    expect(chordsOf('two-five-round-the-circle', C_MAJOR, 'triads')).toEqual([
-      ...['Dm', 'G', 'C'],
-      ...['Gm', 'C', 'F'],
-      ...['C#°', 'F#', 'B°'],
-      ...['F#°', 'B', 'Em'],
-      ...['B°', 'E', 'Am'],
-      ...['E°', 'A', 'Dm'],
-      ...['Am', 'D', 'G'],
-    ])
-    expect(chordsOf('two-five-through-the-key', C_MINOR, 'sevenths').slice(0, 9)).toEqual([
-      ...['Dm7♭5', 'G7', 'Cm7'],
-      ...['Em7♭5', 'A7', 'Dm7♭5'],
-      ...['Fm7', 'B♭7', 'E♭Maj7'],
-    ])
-  })
-
-  it('leads each secondary dominant to its chord, as the chord matrix’s arrows do', () => {
-    expect(chordsOf('secondary-dominants', C_MAJOR, 'sevenths')).toEqual([
-      ...['CMaj7', 'A7', 'Dm7', 'B7', 'Em7', 'C7', 'FMaj7', 'D7', 'G7', 'E7', 'Am7'],
-      ...['G7', 'CMaj7'],
-    ])
+  it('plays the songs’ applied chords and the ii–V chain as the sheets write them', () => {
     expect(chordsOf('fly-me-to-the-moon', C_MAJOR, 'sevenths')).toEqual([
       ...['Am7', 'Dm7', 'G7', 'CMaj7', 'C7', 'FMaj7', 'Bm7♭5', 'E7', 'Am7'],
     ])

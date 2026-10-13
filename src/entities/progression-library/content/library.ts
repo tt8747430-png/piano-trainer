@@ -111,44 +111,6 @@ const LIBRARY = [
   ),
   entry(
     'jazz',
-    'two-five-through-the-key',
-    {
-      major:
-        'ii V I ii°/ii V/ii ii ii°/iii V/iii iii ii/IV V/IV IV ii/V V/V V ii°/vi V/vi vi ii°/vii V/vii vii°',
-      minor:
-        'ii° V i ii°/ii V/ii ii° ii/III V/III III ii°/iv V/iv iv ii°/v V/v v ii/VI V/VI VI ii/VII V/VII VII',
-    },
-    'ii–V–I to every chord of the key',
-    'ii–V–I к каждому аккорду тональности',
-    {
-      pattern: 'jazz',
-      size: 'sevenths',
-      note: note(
-        'Up the scale, each chord of the key in turn is home: a ii–V–I to I, then to ii, iii, IV, V, vi and vii, every one in the key’s own notes but its ii and V. A minor chord takes the minor ii–V.',
-        'Вверх по гамме каждый аккорд тональности по очереди становится тоникой: ii–V–I к I, затем к ii, iii, IV, V, vi и vii, всё в звуках тональности, кроме своих ii и V. К минорному аккорду ведёт минорный ii–V.',
-      ),
-    },
-  ),
-  entry(
-    'jazz',
-    'two-five-round-the-circle',
-    {
-      major:
-        'ii V I ii/IV V/IV IV ii°/vii V/vii vii° ii°/iii V/iii iii ii°/vi V/vi vi ii°/ii V/ii ii ii/V V/V V',
-    },
-    'ii–V–I round the circle in the key',
-    'ii–V–I по квинтовому кругу в тональности',
-    {
-      pattern: 'jazz',
-      size: 'sevenths',
-      note: note(
-        'The key’s chords a 5th apart (I IV vii iii vi ii V), each reached by its own ii–V: the circle of fifths without leaving the key.',
-        'Аккорды тональности через квинту (I IV vii iii vi ii V), к каждому — свой ii–V: квинтовый круг, не выходя из тональности.',
-      ),
-    },
-  ),
-  entry(
-    'jazz',
     'two-five-chain',
     { major: 'iiø7/iii V7♭9/iii iii7 V7/ii ii7 V7 I6' },
     'ii–V chain',
@@ -292,6 +254,12 @@ const LIBRARY = [
     { major: 'I ii iii IV V vi vii°', minor: 'i ii° III iv v VI VII' },
     'The chords of the key',
     'Аккорды тональности',
+    {
+      note: note(
+        'Lead into each by its V for the secondary dominants, or by its ii–V for a ii–V–I to every chord of the key.',
+        'Подведите к каждому через его V — получатся вторичные доминанты, или через его ii–V — ii–V–I к каждому аккорду тональности.',
+      ),
+    },
   ),
   entry(
     'theory',
@@ -302,22 +270,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'Every degree of the key a 5th apart, home to I: the circle of fifths in the key’s own chords. In 7ths each 3rd falls to the next chord’s 7th. In minor, from iv, it is Autumn Leaves.',
-        'Все ступени тональности через квинту и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда переходит в септиму следующего. В миноре, от iv, это Autumn Leaves.',
-      ),
-    },
-  ),
-  entry(
-    'theory',
-    'secondary-dominants',
-    { major: 'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I' },
-    'Secondary dominants',
-    'Вторичные доминанты',
-    {
-      size: 'sevenths',
-      note: note(
-        'The chord matrix’s second row: each chord of the key led to by its own dominant, a 5th above it (A7 to Dm, B7 to Em, C7 to F, D7 to G, E7 to Am).',
-        'Второй ряд матрицы аккордов: к каждому аккорду тональности ведёт своя доминанта, на квинту выше (A7 к Dm, B7 к Em, C7 к F, D7 к G, E7 к Am).',
+        'Every degree of the key a 5th apart, home to I: the circle of fifths in the key’s own chords. In 7ths each 3rd falls to the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Lead into each by its ii–V to go round the circle by ii–V–Is.',
+        'Все ступени тональности через квинту и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда переходит в септиму следующего. В миноре, от iv, это Autumn Leaves. Подведите к каждому через его ii–V — пройдёте круг оборотами ii–V–I.',
       ),
     },
   ),

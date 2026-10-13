@@ -124,6 +124,7 @@ export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } fro
 export { voiceLead, type RowPosition } from './voice-lead'
 export { handPosition, type FromTone, type HandPosition } from './hand-position'
 export {
+  hasMinorThird,
   numeralChord,
   numeralGrows,
   numeralOf,
@@ -211,3 +212,4 @@ export {
   type CircleRing,
 } from './circle'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
+export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
