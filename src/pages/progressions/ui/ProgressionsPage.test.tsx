@@ -301,4 +301,16 @@ describe('Practice → Progressions', () => {
     await user.click(screen.getByRole('switch', { name: /Nearest/ }))
     expect(positions()).toEqual(['1st', '1st', '1st', '1st'])
   })
+
+  it('opens the Player in the position shown, not one kept from an earlier visit', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(
+      '/play/progression?p=I-V-vi-IV&key=C&inversion=2&nearest=false',
+    )
+    await screen.findByRole('button', { name: 'Setup' })
+    await router.navigate({ to: '/practice/progressions' })
+    await user.click(await screen.findByRole('link', { name: 'In C major' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/play/progression'))
+    expect(router.state.location.search).toMatchObject({ inversion: 0, nearest: true })
+  })
 })

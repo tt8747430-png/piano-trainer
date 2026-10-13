@@ -10,8 +10,8 @@ export interface SetupParams {
   readonly chordSize?: ChordSize
   /** The right hand's first chord in this inversion; absent, in root position. */
   readonly inversion?: Inversion
-  /** `false`: every chord in the first one's inversion; absent, each after it nearest the last. */
-  readonly nearest?: false
+  /** `false`: every chord in the first one's inversion; absent or `true`, each after it nearest the last. */
+  readonly nearest?: boolean
   /** A progression through the keys and home; absent, in its key alone. */
   readonly walk?: KeyWalk
 }

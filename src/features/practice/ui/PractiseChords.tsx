@@ -56,9 +56,7 @@ export function PractiseChords({
                   root: noteParam(root),
                   kind,
                   ...(chordSize === WALK.chordSize ? {} : { chordSize }),
-                  ...(notes <= 4 && isInversion(inversion) && inversion > 0
-                    ? { inversion, nearest: false }
-                    : {}),
+                  ...(notes <= 4 && isInversion(inversion) ? { inversion, nearest: false } : {}),
                 }}
               />
             }

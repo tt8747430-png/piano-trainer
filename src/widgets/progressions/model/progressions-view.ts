@@ -65,16 +65,17 @@ export function chosenView(
 }
 
 /**
- * What the Player opens on: the progression, its key, and its chord size, pattern and the hand's
- * position where they are not the Player's own.
+ * What the Player opens on: the progression, its key, the hand's position (always named, so the
+ * Player plays what the row showed, not a position kept from before), and its chord size and pattern
+ * where they are not the Player's own.
  */
 export interface InPlayer {
   readonly p: string
   readonly key: KeyParam
   readonly chordSize?: Exclude<ChordSize, 'triads'>
   readonly pattern?: PatternId
-  readonly inversion?: Exclude<Inversion, 0>
-  readonly nearest?: false
+  readonly inversion: Inversion
+  readonly nearest: boolean
 }
 
 /** The Player's search for the view shown, with the pattern the library's progression is practised in. */
@@ -85,7 +86,7 @@ export function playerSearch(view: ProgressionsView): InPlayer {
     key: view.key,
     ...(view.size === 'triads' ? {} : { chordSize: view.size }),
     ...(pattern ? { pattern } : {}),
-    ...(view.inversion === 0 ? {} : { inversion: view.inversion }),
-    ...(view.nearest ? {} : { nearest: false }),
+    inversion: view.inversion,
+    nearest: view.nearest,
   }
 }

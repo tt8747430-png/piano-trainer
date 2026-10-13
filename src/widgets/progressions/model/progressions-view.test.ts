@@ -83,6 +83,8 @@ describe('playerSearch', () => {
       key: major('C'),
       chordSize: 'sevenths',
       pattern: 'jazz',
+      inversion: 0,
+      nearest: true,
     })
   })
 
@@ -90,6 +92,8 @@ describe('playerSearch', () => {
     expect(playerSearch(view(major('G'), 'I-I-IV', 'triads'))).toEqual({
       p: 'I-I-IV',
       key: major('G'),
+      inversion: 0,
+      nearest: true,
     })
   })
 })
@@ -104,10 +108,9 @@ describe('the hand’s position', () => {
     expect(chosenView(shown, library('axis'))).toMatchObject({ inversion: 2, nearest: false })
   })
 
-  it('takes it into the Player where it is not the Player’s own', () => {
+  it('takes it into the Player, named even where it is the Player’s own', () => {
     const shown = view(major('C'), 'I-V-vi-IV', 'triads')
-    expect(playerSearch(shown)).not.toHaveProperty('inversion')
-    expect(playerSearch(shown)).not.toHaveProperty('nearest')
+    expect(playerSearch(shown)).toMatchObject({ inversion: 0, nearest: true })
     expect(playerSearch({ ...shown, inversion: 1, nearest: false })).toMatchObject({
       inversion: 1,
       nearest: false,

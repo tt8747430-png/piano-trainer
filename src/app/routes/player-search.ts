@@ -78,7 +78,7 @@ function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversi
     rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
     lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
     inversion: isInversion(raw.inversion) ? raw.inversion : undefined,
-    nearest: raw.nearest === false ? false : undefined,
+    nearest: typeof raw.nearest === 'boolean' ? raw.nearest : undefined,
   }
 }
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)

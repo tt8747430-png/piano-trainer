@@ -56,7 +56,7 @@ export function ChordPractice({
               search={{
                 chords: chordsParam([quality]),
                 root: noteParam(root),
-                ...(isInversion(inversion) && inversion > 0 ? { inversion } : {}),
+                ...(isInversion(inversion) ? { inversion } : {}),
                 nearest: false,
               }}
             />
