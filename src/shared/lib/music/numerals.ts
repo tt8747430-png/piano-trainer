@@ -58,6 +58,7 @@ const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, str
   ['min', ''],
   ['m6', '6'],
   ['m69', '6/9'],
+  ['madd9', 'add9'],
   ['m7', '7'],
   ['mM7', 'Maj7'],
   ['m9', '9'],

@@ -58,6 +58,7 @@ describe('parseNumerals', () => {
     expect(texts('Im7 IVm9 Vsus4 Im7')).toEqual(['i7', 'iv9', 'Vsus4', 'i7'])
     expect(texts('IIm7b5 V7b9 Im6')).toEqual(['iiø7', 'V7♭9', 'i6'])
     expect(texts('iim7 V7 IMaj7')).toEqual(['ii7', 'V7', 'IMaj7'])
+    expect(texts('Imadd2 V13b9 Iadd2')).toEqual(['iadd9', 'V13♭9', 'Iadd9'])
   })
 
   it('still reads a line written the old way', () => {

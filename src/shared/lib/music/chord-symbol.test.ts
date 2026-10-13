@@ -59,6 +59,14 @@ describe('parseChordSymbol', () => {
   )
 })
 
+describe('the chords Gorshkov prints', () => {
+  it('reads a minor add2 and a 13♭9', () => {
+    expect(parseChordSymbol('Gmadd2')).toEqual({ root: note('G'), quality: 'madd9' })
+    expect(parseChordSymbol('Cm(add9)')).toEqual({ root: note('C'), quality: 'madd9' })
+    expect(parseChordSymbol('A13b9')).toEqual({ root: note('A'), quality: 'b9n13' })
+  })
+})
+
 describe('readChordSymbol', () => {
   it('reads what is typed, spaces around it left out, and nothing it cannot read', () => {
     expect(readChordSymbol(' Dm7 ')).toEqual({ root: note('D'), quality: 'm7' })

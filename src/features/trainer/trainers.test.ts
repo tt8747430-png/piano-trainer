@@ -44,6 +44,7 @@ describe('Custom', () => {
       'chord:six',
       'chord:m6',
       'chord:add9',
+      'chord:madd9',
     ])
   })
 

@@ -106,7 +106,7 @@ describe('buildChord', () => {
     [{ triad: 'min', size: 7, added: ['add11', 'add13'] }, 'Cm7(add11,add13): C E♭ G B♭ F A'],
     [{ triad: 'min', size: 9, added: ['add13'] }, 'Cm9(add13): C E♭ G B♭ D A'],
     [{ triad: 'dim', size: 7, added: ['add11'] }, 'Cm7♭5(add11): C E♭ G♭ B♭ F'],
-    [{ size: 7, alterations: ['b9'], added: ['add13'] }, 'C7♭9(add13): C E G B♭ D♭ A'],
+    [{ size: 7, alterations: ['s9'], added: ['add13'] }, 'C7#9(add13): C E G B♭ D# A'],
   ] as const)('adds to a 7th chord a tone its stack skipped: %o → %s', (change, expected) => {
     expect(built(change)).toBe(expected)
   })

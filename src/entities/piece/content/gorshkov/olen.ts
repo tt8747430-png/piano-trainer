@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 70,
   pattern: 'ballad',
   note: {
-    en: 'From Vasily Gorshkov’s course, with the ii–V–Is his sheet adds where a phrase holds a long note. Bar 13’s printed A13♭9 plays as A7♭9, and bar 12’s C♯7♭5 as C♯m7♭5, the ii of B minor.',
-    ru: 'Из курса Василия Горшкова, с оборотами 2-5-1, которые его лист добавляет там, где фраза тянет долгую ноту. Напечатанный в 13-м такте A13♭9 звучит как A7♭9, а C♯7♭5 в 12-м — как C♯m7♭5, II ступень си минора.',
+    en: 'From Vasily Gorshkov’s course, with the ii–V–Is his sheet adds where a phrase holds a long note. Bar 12’s printed C♯7♭5 plays as C♯m7♭5, the ii of B minor his sheet names.',
+    ru: 'Из курса Василия Горшкова, с оборотами 2-5-1, которые его лист добавляет там, где фраза тянет долгую ноту. Напечатанный в 12-м такте C♯7♭5 звучит как C♯m7♭5 — II ступень си минора, как называет её его лист.',
   },
   sections: [
     {
@@ -25,7 +25,7 @@ export default definePiece({
     {
       kind: 'chorus',
       lines: [
-        'Bm9@2-Bm/A@2 G@2-D/F#@2 G@2-G/F#@2 Em@1-C#m7b5@1 F#sus4@3-A7b9@1',
+        'Bm9@2-Bm/A@2 G@2-D/F#@2 G@2-G/F#@2 Em@1-C#m7b5@1 F#sus4@3-A13b9@1',
         'Dmaj7@2-A/C#@2 Bm@2-D/F#@2 Em@2-Asus4@2 D',
       ],
     },

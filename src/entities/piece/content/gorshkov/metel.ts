@@ -11,14 +11,14 @@ export default definePiece({
   tempo: 72,
   pattern: 'pop8',
   note: {
-    en: 'From Vasily Gorshkov’s course, the song of his lesson on melodic figuration: its chorus holds long notes for a line to answer. Bar 4’s printed Gm add2 plays as Gm.',
-    ru: 'Из курса Василия Горшкова, песня его урока о мелодической фигурации: в припеве долгие ноты, на которые может ответить линия. Напечатанный в 4-м такте Gm add2 звучит как Gm.',
+    en: 'From Vasily Gorshkov’s course, the song of his lesson on melodic figuration: its chorus holds long notes for a line to answer.',
+    ru: 'Из курса Василия Горшкова, песня его урока о мелодической фигурации: в припеве долгие ноты, на которые может ответить линия.',
   },
   sections: [
     {
       kind: 'verse',
       lines: [
-        'Cm7@2-Dsus4@1-D7@1 Gm9 Cm7@2-Dsus4@1-D7@1 Gm',
+        'Cm7@2-Dsus4@1-D7@1 Gm9 Cm7@2-Dsus4@1-D7@1 Gm(add9)',
         'Cm7@2-Dsus4@1-D@1 Ebmaj7 Cm7@2-Dsus4@1-D7@1 Gm6',
       ],
     },

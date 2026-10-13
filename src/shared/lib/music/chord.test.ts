@@ -23,9 +23,9 @@ const names = (root: SpelledNote, quality: ChordQuality) =>
   spellChord(root, quality).map((tone) => noteName(tone.note))
 
 describe('chord qualities', () => {
-  it('are 36, in five families', () => {
-    expect(CHORD_QUALITIES).toHaveLength(36)
-    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 5, 9, 8, 8])
+  it('are 38, in five families', () => {
+    expect(CHORD_QUALITIES).toHaveLength(38)
+    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 6, 9, 8, 9])
     expect(qualitiesIn('sev').every((quality) => chordFamily(quality) === 'sev')).toBe(true)
   })
 
@@ -75,6 +75,11 @@ describe('spellChord', () => {
 
   it('spells the altered dominant', () => {
     expect(names(note('C'), 'alt')).toEqual(['C', 'E', 'G♭', 'G#', 'B♭', 'D♭', 'D#'])
+  })
+
+  it('spells the minor triad with an added 9th and the 13th with a flat 9th, as Gorshkov prints them', () => {
+    expect(names(note('G'), 'madd9')).toEqual(['G', 'B♭', 'D', 'A'])
+    expect(names(note('A'), 'b9n13')).toEqual(['A', 'C#', 'E', 'G', 'B♭', 'F#'])
   })
 
   it('calls a suspended 2nd a 9th', () => {

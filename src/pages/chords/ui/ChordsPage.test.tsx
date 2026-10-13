@@ -71,22 +71,22 @@ describe('Practice → Chords', () => {
 
   it('adds tones to a triad as chips, several at once, and names a chord the table lacks by rule', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/chords?triad=min&added=add9')
-    expect(await screen.findByRole('heading', { level: 2, name: 'Cm(add9)' })).toBeInTheDocument()
+    const { router } = await renderApp('/practice/chords?triad=min&added=add11')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm(add11)' })).toBeInTheDocument()
     const added = screen.getByRole('group', { name: 'Added tones' })
     expect(
       within(added)
         .getAllByRole('button')
         .map((chip) => chip.textContent),
     ).toEqual(['add2', 'add4', 'add6', 'add9', 'add11'])
-    expect(within(added).getByRole('button', { name: 'add9' })).toHaveAttribute(
+    expect(within(added).getByRole('button', { name: 'add11' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     expect(screen.queryByText('Also written')).not.toBeInTheDocument()
     await user.click(within(added).getByRole('button', { name: 'add6' }))
-    expect(router.state.location.search).toMatchObject({ added: 'add6add9' })
-    expect(await screen.findByRole('heading', { level: 2, name: 'Cm6/9' })).toBeInTheDocument()
+    expect(router.state.location.search).toMatchObject({ added: 'add6add11' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm6(add11)' })).toBeInTheDocument()
   })
 
   it('takes the tone chosen last of two an octave apart', async () => {
