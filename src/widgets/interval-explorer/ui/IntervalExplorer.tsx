@@ -1,16 +1,14 @@
-import { ChevronDown } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExplorerKeyboard } from '@/features/live-keyboard'
 import { IntervalCard, intervalRoot, useShownKeys, writesInterval } from '@/features/play-example'
-import { cn } from '@/shared/lib'
 import {
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   noteFromParam,
   type IntervalGroup,
 } from '@/shared/lib/music'
-import { NoteChoice } from '@/shared/ui'
+import { FoldGroup, NoteChoice } from '@/shared/ui'
 import type { IntervalView } from '../model/interval-view'
 
 /**
@@ -26,7 +24,6 @@ export function IntervalExplorer({
   onChange: (change: Partial<IntervalView>) => void
 }) {
   const { t } = useTranslation('learn')
-  const id = useId()
   const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
   const [open, setOpen] = useState<ReadonlySet<IntervalGroup>>(
     () => new Set(INTERVAL_GROUP_IDS.slice(0, 1)),
@@ -49,36 +46,22 @@ export function IntervalExplorer({
         />
       </div>
       {INTERVAL_GROUP_IDS.map((group) => (
-        <section key={group} aria-labelledby={`${id}-${group}`} className="flex flex-col gap-3">
-          <h2 id={`${id}-${group}`} className="text-2xl">
-            <button
-              type="button"
-              aria-expanded={open.has(group)}
-              aria-controls={`${id}-${group}-list`}
-              onClick={() => toggle(group)}
-              className="flex items-center gap-2 rounded-lg text-left"
-            >
-              <ChevronDown
-                aria-hidden
-                className={cn(
-                  'size-5 text-muted-foreground transition-transform duration-200 ease-out',
-                  open.has(group) ? '' : '-rotate-90',
-                )}
-              />
-              {t(`intervals.${group}`)}
-            </button>
-          </h2>
-          <ul id={`${id}-${group}-list`} hidden={!open.has(group)} className="grid-fields gap-4">
-            {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
-            {INTERVAL_GROUPS[group]
-              .filter((name) => writesInterval(noteFromParam(view.root), name))
-              .map((name) => (
-                <li key={name}>
-                  <IntervalCard root={view.root} name={name} onShow={show} />
-                </li>
-              ))}
-          </ul>
-        </section>
+        <FoldGroup
+          key={group}
+          title={t(`intervals.${group}`)}
+          open={open.has(group)}
+          onToggle={() => toggle(group)}
+          listClassName="grid-fields gap-4"
+        >
+          {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
+          {INTERVAL_GROUPS[group]
+            .filter((name) => writesInterval(noteFromParam(view.root), name))
+            .map((name) => (
+              <li key={name}>
+                <IntervalCard root={view.root} name={name} onShow={show} />
+              </li>
+            ))}
+        </FoldGroup>
       ))}
     </div>
   )

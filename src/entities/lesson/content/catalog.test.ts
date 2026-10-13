@@ -249,29 +249,28 @@ describe('the lessons', () => {
       'bass-and-chords',
       'broken-chords',
       'common-progressions',
-      'thinking-in-degrees',
       'chord-matrix',
-      'two-five-one',
       'minor-two-five-levels',
-      'jazz-voicings',
       'passing-chords',
       'reharmonising-a-melody',
       'scales-through-the-changes',
     ])
   })
 
-  it('teach each method book’s own lessons under it, after accompaniment and before gospel', () => {
+  it('teach the subjects, then each course’s own lessons in its order', () => {
     expect(LESSON_MODULES).toEqual([
       'fundamentals',
       'accompaniment',
+      'gospel',
       'called-to-play',
       'seven-types',
-      'gospel',
+      'gorshkov',
     ])
     const lessonsOf = (module: Lesson['module']) =>
       LESSONS.filter((lesson) => lesson.module === module).map((lesson) => lesson.id)
     expect(lessonsOf('called-to-play')).toEqual(['five-ways', 'right-hand-techniques'])
     expect(lessonsOf('seven-types')).toEqual(['seven-types', 'accompanying-a-hymn'])
+    expect(lessonsOf('gorshkov')).toEqual(['thinking-in-degrees', 'two-five-one', 'jazz-voicings'])
   })
 
   it('teach gospel’s progressions, passing chords and reharmonisation', () => {

@@ -1,4 +1,5 @@
 import { METHOD_BOOK_IDS } from '@/entities/book'
+import { isOneOf } from '@/shared/lib'
 import type { ArpeggioQuality, ExerciseId } from '@/entities/exercise'
 import type { Level } from '@/entities/path'
 import type { PatternId } from '@/entities/pattern'
@@ -22,17 +23,33 @@ import type { NoteLineMeter, WrittenVoicing } from '@/shared/lib/schedule'
 export type LessonCategory =
   'chords' | 'scales' | 'theory' | 'reading' | 'rhythm' | 'accompaniment' | 'jazz' | 'gospel'
 
+/** The modules that teach by subject: one track, read in turn (ADR 0042). */
+export const SUBJECT_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
+
+/**
+ * The courses: each a module that follows one teacher's material in its order, a track of its own.
+ * Each method book's, then Gorshkov's accompaniment course, which is no method book (ADR 0042).
+ */
+export const COURSE_MODULES = [...METHOD_BOOK_IDS, 'gorshkov'] as const
+
 /**
  * Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7): what is taught
- * by subject, and each method book's own lessons under its book.
+ * by subject, then each course's own lessons.
  */
-export const LESSON_MODULES = [
-  'fundamentals',
-  'accompaniment',
-  ...METHOD_BOOK_IDS,
-  'gospel',
-] as const
+export const LESSON_MODULES = [...SUBJECT_MODULES, ...COURSE_MODULES] as const
 export type LessonModule = (typeof LESSON_MODULES)[number]
+export const isLessonModule = isOneOf(LESSON_MODULES)
+export const isCourse = isOneOf(COURSE_MODULES)
+
+/** Learn's two tabs: the subjects' modules, and the courses' (ADR 0042). */
+export const LEARN_TABS = ['subjects', 'courses'] as const
+export type LearnTab = (typeof LEARN_TABS)[number]
+export const isLearnTab = isOneOf(LEARN_TABS)
+export const TAB_MODULES: Readonly<Record<LearnTab, readonly LessonModule[]>> = {
+  subjects: SUBJECT_MODULES,
+  courses: COURSE_MODULES,
+}
+export const tabOf = (module: LessonModule): LearnTab => (isCourse(module) ? 'courses' : 'subjects')
 
 /** A progression a lesson plays or opens in the tool: numerals in a key, triads when it names no size. */
 export interface LessonProgression {

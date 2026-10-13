@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { lessonsIn } from '@/entities/lesson'
 import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
@@ -71,7 +72,34 @@ describe('A lesson', () => {
     await renderApp('/learn/lessons/finding-home')
     const next = await screen.findByRole('link', { name: /Next lesson/ })
     expect(next.getAttribute('href')).toBe('/learn/lessons/reading-notes')
+    expect(screen.queryByRole('link', { name: /Previous lesson/ })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
+  })
+
+  it('leads back to the lesson before it', async () => {
+    await renderApp('/learn/lessons/reading-notes')
+    const previous = await screen.findByRole('link', { name: /Previous lesson/ })
+    expect(previous.getAttribute('href')).toBe('/learn/lessons/finding-home')
+  })
+
+  it('says its module and its number in it, its module a link to it open on Learn', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn/lessons/two-five-one')
+    const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
+    const inGorshkov = lessonsIn('gorshkov')
+    const n = inGorshkov.findIndex((each) => each.id === 'two-five-one') + 1
+    expect(place).toHaveTextContent(`Lesson ${n} of ${inGorshkov.length}`)
+    await user.click(within(place).getByRole('link', { name: 'Gorshkov' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    expect(router.state.location.search).toMatchObject({ tab: 'courses', open: 'gorshkov' })
+  })
+
+  it('ends a course on its list, never in another course', async () => {
+    const last = lessonsIn('seven-types').at(-1)
+    await renderApp(`/learn/lessons/${last?.id ?? ''}`)
+    const all = await screen.findByRole('link', { name: /All lessons of Боброва/ })
+    expect(all.getAttribute('href')).toBe('/learn?tab=courses&open=seven-types')
+    expect(screen.queryByRole('link', { name: /Next lesson/ })).not.toBeInTheDocument()
   })
 
   it('goes back to Learn when it was opened directly', async () => {

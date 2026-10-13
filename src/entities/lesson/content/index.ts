@@ -34,9 +34,9 @@ import twoFiveOne from './two-five-one'
 import wholeAndHalfSteps from './whole-and-half-steps'
 
 /**
- * Every lesson, in the order Learn lists them: the Fundamentals, from the keys to key signatures; then
- * Accompaniment, from bass and chords to scales through the changes; each method book's own lessons, Called
- * to Play's and Боброва's; then Gospel.
+ * Every lesson, in the order Learn lists them: the subjects, Fundamentals from the keys to key
+ * signatures, Accompaniment from bass and chords to scales through the changes, then Gospel; then the
+ * courses, each in its own order: Called to Play's, Боброва's, Gorshkov's.
  */
 export const LESSONS: readonly Lesson[] = [
   findingHome,
@@ -57,19 +57,19 @@ export const LESSONS: readonly Lesson[] = [
   bassAndChords,
   brokenChords,
   commonProgressions,
-  thinkingInDegrees,
   chordMatrix,
-  twoFiveOne,
   minorTwoFiveLevels,
-  jazzVoicings,
   passingChords,
   reharmonisingAMelody,
   scalesThroughTheChanges,
+  gospelProgressions,
+  gospelPassingChords,
+  gospelReharmonisation,
   fiveWays,
   rightHandTechniques,
   sevenTypes,
   accompanyingAHymn,
-  gospelProgressions,
-  gospelPassingChords,
-  gospelReharmonisation,
+  thinkingInDegrees,
+  twoFiveOne,
+  jazzVoicings,
 ]

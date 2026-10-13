@@ -1,9 +1,8 @@
-import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LEVEL_NAME, LEVELS, pathSteps, type Level } from '@/entities/path'
 import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progress'
-import { cn } from '@/shared/lib'
+import { FoldGroup } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import type { PathView } from '../model/path-view'
 import { StepRow } from './StepRow'
@@ -48,50 +47,22 @@ export function PathLevels({
       {levels.map(({ level, inLevel, done }) => {
         const name = `${t('common:level', { level })} · ${t(`common:levelName.${LEVEL_NAME[level]}`)}`
         const open = toggled.get(level) ?? level === current
-        const listId = `path-level-${level}`
         return (
-          <section key={level} aria-label={name} className="flex flex-col gap-2">
-            <h2 className="text-2xl">
-              <button
-                type="button"
-                aria-expanded={open}
-                aria-controls={listId}
-                onClick={() => setToggled((before) => new Map(before).set(level, !open))}
-                className="flex w-full items-baseline justify-between gap-3 rounded-lg text-left"
-              >
-                <span className="flex items-center gap-2">
-                  <ChevronDown
-                    aria-hidden
-                    className={cn(
-                      'size-5 self-center text-muted-foreground transition-transform duration-200 ease-out',
-                      open ? '' : '-rotate-90',
-                    )}
-                  />
-                  {name}
-                </span>
-                <span className="font-sans text-base text-muted-foreground tabular-nums">
-                  {t('path:progress', { learned: done, total: inLevel.length })}
-                </span>
-              </button>
-            </h2>
-            <div aria-hidden className="h-1 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
-                style={{ width: `${(done / inLevel.length) * 100}%` }}
-              />
-            </div>
-            <ul
-              id={listId}
-              hidden={!open}
-              className="flex flex-col divide-y divide-hairline card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2"
-            >
-              {inLevel
-                .filter((placed) => !view.hideLearned || learned[placed.id] === undefined)
-                .map((placed) => (
-                  <StepRow key={placed.id} placed={placed} answers={answers} />
-                ))}
-            </ul>
-          </section>
+          <FoldGroup
+            key={level}
+            title={name}
+            count={t('path:progress', { learned: done, total: inLevel.length })}
+            progress={done / inLevel.length}
+            open={open}
+            onToggle={() => setToggled((before) => new Map(before).set(level, !open))}
+            listClassName="flex flex-col divide-y divide-hairline card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2"
+          >
+            {inLevel
+              .filter((placed) => !view.hideLearned || learned[placed.id] === undefined)
+              .map((placed) => (
+                <StepRow key={placed.id} placed={placed} answers={answers} />
+              ))}
+          </FoldGroup>
         )
       })}
     </div>

@@ -16,7 +16,7 @@ const jazzVoicings: Lesson = {
   },
   level: 4,
   category: 'jazz',
-  module: 'accompaniment',
+  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Major: triads, 6ths and 9ths', ru: 'Мажор: трезвучия, сексты и ноны' },

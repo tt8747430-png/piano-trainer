@@ -72,6 +72,7 @@ import {
   trainerSearch,
   validateCheckSearch,
 } from './routes/practice-search'
+import { learnSearch, readLearnSearch } from './routes/learn-search'
 import { pathSearch } from './routes/path-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
@@ -222,10 +223,12 @@ const studyRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-// Learn: its lessons.
+// Learn: its lessons, by subject or by course, each module folding (ADR 0042).
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn',
+  ...learnSearch,
+  ...remembered(readLearnSearch, []),
   component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
 // What Practice explores with: each page shows a thing on the keys or works it out.

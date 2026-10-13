@@ -1,17 +1,30 @@
 import { LESSONS } from '../content'
-import { LESSON_MODULES, type Lesson } from './types'
+import { isCourse, LESSON_MODULES, SUBJECT_MODULES, type Lesson, type LessonModule } from './types'
 
 const LESSON_BY_ID = new Map(LESSONS.map((lesson) => [lesson.id, lesson]))
 
 export const lessonById = (id: string): Lesson | undefined => LESSON_BY_ID.get(id)
 
-/** The lessons in the order Learn lists them: module by module, each in its own order. */
-const IN_ORDER = LESSON_MODULES.flatMap((module) =>
-  LESSONS.filter((lesson) => lesson.module === module),
-)
+/** A module's lessons in the order they are taught. */
+export const lessonsIn = (module: LessonModule): readonly Lesson[] =>
+  LESSONS.filter((lesson) => lesson.module === module)
 
-/** The lesson after this one as Learn lists them, into the next module at a module's end; none after the last. */
-export const nextLesson = (id: string): Lesson | undefined => {
-  const at = IN_ORDER.findIndex((lesson) => lesson.id === id)
-  return at < 0 ? undefined : IN_ORDER[at + 1]
+/** What a lesson is read among (ADR 0042): its course alone, or the subjects' modules in turn. */
+const trackOf = (module: LessonModule): readonly Lesson[] =>
+  isCourse(module) ? lessonsIn(module) : SUBJECT_MODULES.flatMap(lessonsIn)
+
+const TRACKS = new Map(LESSON_MODULES.map((module) => [module, trackOf(module)]))
+
+/** The lesson `step` places along this one's track; none past either end, or for an unknown id. */
+function along(id: string, step: 1 | -1): Lesson | undefined {
+  const lesson = lessonById(id)
+  const track = lesson ? (TRACKS.get(lesson.module) ?? []) : []
+  const at = track.findIndex((each) => each.id === id)
+  return at < 0 ? undefined : track[at + step]
 }
+
+/** The lesson after this one along its track: into the next subject at a module's end, never past a course. */
+export const nextLesson = (id: string): Lesson | undefined => along(id, 1)
+
+/** The lesson before this one along its track. */
+export const previousLesson = (id: string): Lesson | undefined => along(id, -1)

@@ -1,10 +1,12 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { lessonsIn } from '@/entities/lesson'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('Learn', () => {
-  it('lists the lessons under their module, each with what it is about and its level', async () => {
+  it('lists the subjects’ lessons under their modules, each with what it is about and its level', async () => {
     await renderApp('/learn')
     const fundamentals = await screen.findByRole('region', { name: 'Fundamentals' })
     const lesson = within(fundamentals).getByRole('link', {
@@ -13,29 +15,67 @@ describe('Learn', () => {
     expect(lesson).toHaveAttribute('href', '/learn/lessons/reading-chord-symbols')
     expect(within(lesson).getByRole('img', { name: 'Level 1' })).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 2 }).map((each) => each.textContent)).toEqual([
-      'Fundamentals',
-      'Accompaniment',
-      'Called to Play',
-      'Боброва',
-      'Gospel',
+      expect.stringContaining('Fundamentals'),
+      expect.stringContaining('Accompaniment'),
+      expect.stringContaining('Gospel'),
     ])
   })
 
-  it('gathers each method book’s lessons in a section of its own', async () => {
-    await renderApp('/learn')
-    const lessonsOf = (name: string) =>
-      within(screen.getByRole('region', { name }))
-        .getAllByRole('link')
-        .map((link) => link.getAttribute('href'))
-    await screen.findByRole('region', { name: 'Fundamentals' })
-    expect(lessonsOf('Called to Play')).toEqual([
-      '/learn/lessons/five-ways',
-      '/learn/lessons/right-hand-techniques',
-    ])
-    expect(lessonsOf('Боброва')).toEqual([
-      '/learn/lessons/seven-types',
-      '/learn/lessons/accompanying-a-hymn',
-    ])
+  it('has two tabs: the subjects, and the courses, each in its own order', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn')
+    const tabs = await screen.findByRole('navigation', { name: 'Lessons' })
+    expect(within(tabs).getByRole('link', { name: 'Subjects' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+    await user.click(within(tabs).getByRole('link', { name: 'Courses' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ tab: 'courses' }))
+    expect(
+      (await screen.findAllByRole('region')).map((each) => each.getAttribute('aria-label')),
+    ).toEqual(['Called to Play', 'Боброва', 'Gorshkov'])
+  })
+
+  it('folds each module under its heading, the one the learner is at open', async () => {
+    await renderApp('/learn?tab=courses')
+    const calledToPlay = await screen.findByRole('region', { name: 'Called to Play' })
+    const gorshkov = screen.getByRole('region', { name: 'Gorshkov' })
+    expect(within(calledToPlay).getByRole('button', { name: /Called to Play/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+    expect(within(gorshkov).getByRole('button', { name: /Gorshkov/ })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(within(gorshkov).queryByRole('link')).not.toBeInTheDocument()
+    expect(
+      within(calledToPlay).getByText(`0 of ${lessonsIn('called-to-play').length} learned`),
+    ).toBeInTheDocument()
+    expect(within(gorshkov).getByText(/Vasily Gorshkov’s accompaniment course/)).toBeInTheDocument()
+  })
+
+  it('opens a folded module into the URL, so Back from a lesson finds it open', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/learn?tab=courses')
+    const gorshkov = await screen.findByRole('region', { name: 'Gorshkov' })
+    await user.click(within(gorshkov).getByRole('button', { name: /Gorshkov/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({ open: 'called-to-play.gorshkov' }),
+    )
+    const first = lessonsIn('gorshkov')[0]
+    await user.click(
+      within(gorshkov).getByRole('link', { name: new RegExp(`^${first?.title.en ?? ''}`) }),
+    )
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe(`/learn/lessons/${first?.id ?? ''}`),
+    )
+    router.history.back()
+    const back = await screen.findByRole('region', { name: 'Gorshkov' })
+    expect(within(back).getByRole('button', { name: /Gorshkov/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
   })
 
   it('numbers a module’s lessons in the order they are taught', async () => {
@@ -43,9 +83,20 @@ describe('Learn', () => {
     const gospel = await screen.findByRole('region', { name: 'Gospel' })
     expect(
       within(gospel)
-        .getAllByRole('link')
+        .getAllByRole('link', { hidden: true })
         .map((link) => link.querySelector('[data-slot="row-tile"]')?.textContent),
     ).toEqual(['1', '2', '3'])
+  })
+
+  it('heads a tab with the lesson to continue with, once something in it is learned', async () => {
+    const { progressStore } = await renderApp('/learn')
+    await screen.findByRole('region', { name: 'Fundamentals' })
+    expect(screen.queryByRole('region', { name: 'Continue' })).not.toBeInTheDocument()
+    act(() =>
+      progressStore.setState({ learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' } }),
+    )
+    const next = within(await screen.findByRole('region', { name: 'Continue' })).getByRole('link')
+    expect(next).toHaveAttribute('href', '/learn/lessons/reading-notes')
   })
 
   it('holds lessons only: what is explored and practised is on Practice', async () => {
@@ -55,8 +106,8 @@ describe('Learn', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
   })
 
-  it('reads in Russian, with nothing left in English', async () => {
-    await renderApp('/learn', { locale: 'ru' })
+  it('reads in Russian, with nothing left in English, on either tab', async () => {
+    await renderApp('/learn?tab=courses', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })

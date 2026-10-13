@@ -2,7 +2,25 @@ import type { LocaleResources } from '../../types'
 
 export const learn: LocaleResources['learn'] = {
   title: 'Обучение',
-  module: { fundamentals: 'Основы', accompaniment: 'Аккомпанемент', gospel: 'Госпел' },
+  module: {
+    fundamentals: 'Основы',
+    accompaniment: 'Аккомпанемент',
+    gospel: 'Госпел',
+    gorshkov: 'Горшков',
+  },
+  tabs: { label: 'Уроки', subjects: 'Темы', courses: 'Курсы' },
+  moduleAbout: {
+    fundamentals: 'Ноты, гаммы, аккорды и тональности — с первой клавиши.',
+    accompaniment: 'Бас и аккорды, последовательности, проходящие аккорды и реармонизация.',
+    gospel: 'Последовательности, проходящие аккорды и реармонизация госпела.',
+    'called-to-play': '«Призван играть для Него» Александра Савченко, уровень 1.',
+    'seven-types': '«Семь основных видов аккомпанемента» Н. В. Бобровой, на гимнах.',
+    gorshkov: 'Курс по аккомпанементу Василия Горшкова: септаккорды и нонаккорды, 2-5-1, фактура.',
+  },
+  progress: 'Изучено {{learned}} из {{total}}',
+  continue: 'Продолжить',
+  place: 'Урок {{n}} из {{total}}',
+  placeLabel: 'Где этот урок',
   category: {
     chords: 'Аккорды',
     scales: 'Гаммы',
@@ -102,6 +120,8 @@ export const learn: LocaleResources['learn'] = {
     playBar: 'Сыграть такт {{n}}',
     tapHint: 'Нажмите на аккорд, ноту или такт: он прозвучит и появится на клавишах.',
     next: 'Следующий урок',
+    previous: 'Предыдущий урок',
+    allLessons: 'Все уроки: {{module}}',
   },
   quiz: {
     answer: 'Ответить на клавишах',

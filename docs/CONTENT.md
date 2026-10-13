@@ -264,8 +264,9 @@ is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
 A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts` in the order Learn
 shows it: an `id`, a `title` and `summary` in both languages, a `level` on the Path's scale, a `category`, a `module`
 and its `sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button. A lesson
-that teaches one method book's own (its ways, its types) is in that book's module; one that teaches by subject and
-quotes the books stays in Accompaniment.
+that teaches one course's own (a method book's ways, its types; a sheet of Gorshkov's course) is in that course's
+module, listed in the course's order so Learn numbers it as the course does; one that teaches by subject and quotes
+the books stays in Accompaniment. A course's lessons are its track: Previous and Next never leave it (ADR 0042).
 
 | Block         | Content                                                                                  | Shows                                                     |
 | ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |

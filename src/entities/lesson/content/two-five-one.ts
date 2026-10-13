@@ -23,7 +23,7 @@ const twoFiveOne: Lesson = {
   },
   level: 3,
   category: 'jazz',
-  module: 'accompaniment',
+  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Subdominant, dominant, tonic', ru: 'Субдоминанта, доминанта, тоника' },

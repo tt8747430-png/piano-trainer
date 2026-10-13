@@ -12,7 +12,7 @@ const thinkingInDegrees: Lesson = {
   },
   level: 2,
   category: 'accompaniment',
-  module: 'accompaniment',
+  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Find the key first', ru: 'Сначала найдите тональность' },
