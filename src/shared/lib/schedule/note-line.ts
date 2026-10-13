@@ -10,19 +10,21 @@ import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 /** The meters a line of notes is written in: simple ones, whose beat is a quarter note. */
 export type NoteLineMeter = '2/4' | '3/4' | '4/4'
 
-/** A value's length in quarter notes: 1 a whole note, 8 an eighth. */
+/** A value's length in quarter notes: 1 a whole note, 16 a sixteenth. */
 const QUARTERS = new Map([
   ['1', 4],
   ['2', 2],
   ['4', 1],
   ['8', 0.5],
+  ['16', 0.25],
 ])
 const TOKEN = /^([^/]+)(?:\/(\d+)(\.?))?$/
 
 /**
  * A line of notes as a lesson writes it, `E4 G4/2 B4/8.`: each note with its octave, then its value
- * after a slash (1 whole, 2 half, 4 quarter, 8 eighth; a quarter when left out) and a dot for half as
- * long again; in whole bars of its meter, one hand's, in a key.
+ * after a slash (1 whole, 2 half, 4 quarter, 8 eighth, 16 sixteenth; a quarter when left out) and a
+ * dot for half as long again (not a sixteenth's, which falls between ticks); in whole bars of its
+ * meter, one hand's, in a key.
  */
 export function noteLine(
   text: string,
@@ -38,6 +40,7 @@ export function noteLine(
     const quarters = QUARTERS.get(value)
     if (!read || quarters === undefined) throw new RangeError(`Cannot read "${token}" as a note`)
     const length = quarters * TICKS_PER_BEAT * (dot ? 1.5 : 1)
+    if (!Number.isInteger(length)) throw new RangeError(`"${token}" falls between ticks`)
     notes.push({
       midi: read.midi,
       spelled: read.note,

@@ -282,8 +282,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Two 5ths in the left hand, and a minor triad a minor 3rd above the root in the right. Roll the left hand up.',
-            ru: 'В левой руке две квинты подряд, в правой — минорное трезвучие на малую терцию выше основного тона. Левую руку играйте арпеджато.',
+            en: 'Two 5ths in the left hand. In the right, a minor triad or 7th a major 3rd up: Am over F. Roll the left hand up.',
+            ru: 'В левой руке две квинты подряд. В правой — минорное трезвучие или септаккорд на большую терцию выше: Am над фа. Левую руку играйте арпеджато.',
           },
         },
         {

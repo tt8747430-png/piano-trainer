@@ -281,16 +281,17 @@ the books stays in Accompaniment. A course's lessons are its track: Previous and
 | `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                     | the pattern over the piece's first line, Play, the Player |
 | `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?: 'sevenths' }`                    | the Progressions page's row, its link                     |
 | `quiz`        | `{ kind: 'quiz', ask, answer: { chord: 'Em' } }` or `answer: { notes: ['F', 'A'] }`      | answered on the keys                                      |
-| `link`        | `{ kind: 'link', title, target: { place: 'scales', root: note('D'), scale: 'dorian' } }` | a row into a reference, a lesson, a tool or the Player    |
+| `link`        | `{ kind: 'link', title, target: { opens: 'scales', root: note('D'), scale: 'dorian' } }` | a row into an explorer, a lesson, a tool or the Player    |
 
 A line of notes names each note with its octave (`C4` is middle C), then after a slash its value (`1` whole, `2`
-half, `4` quarter, the default, `8` eighth) and a dot for half as long again; its meter is 2/4, 3/4 or 4/4, and its
-`key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key` objects (`{ tonic: note('E', -1),
-minor: false }`). A link's `place` is `chords` (a symbol), `scales` (a root, a kind, `show?`), `keys`, `intervals`,
-`tensions` (a chord, a root: the chord builder opens on it), `lesson` (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key,
-`from` and `to` as symbols), `reharmonise` (a key, a melody note), `piece` (a piece in the Player, `pattern?`) or
-`player` (a progression in the Player, ready to practise: numerals, a key, `size?`, `walk?` through the keys,
-`inversion?` 0–3).
+half, `4` quarter, the default, `8` eighth, `16` sixteenth) and a dot for half as long again (not on a sixteenth); its
+meter is 2/4, 3/4 or 4/4, and its `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key`
+objects (`{ tonic: note('E', -1), minor: false }`). A link `opens` `chords` (a symbol), `scales` (a root, a kind,
+`show?`), `key` (a key), `intervals` (`root?`), `tensions` (a chord, a root: the chord builder opens on it), `lesson`
+(an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key, `from` and `to` as symbols),
+`reharmonise` (a key, a melody note), `piece` (a piece in the Player, `pattern?`), `exercise` (an exercise in the
+Player, `root?`, `quality?`) or `player` (a progression in the Player, ready to practise: numerals, a key, `size?`,
+`walk?` through the keys, `inversion?` 0–3).
 
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
 lesson's study, Боброва's seven over `otche`, a rhythm style over a study's plain chords. A pattern that plays the tune (`r5`,

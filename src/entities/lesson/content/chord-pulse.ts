@@ -1,4 +1,7 @@
+import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
+
+const C_MAJOR = { tonic: note('C'), minor: false }
 
 /**
  * Gorshkov's lesson 4, «Аранжировка аккомпанемента: аккордовая пульсация»: harmony turned into
@@ -137,6 +140,19 @@ const chordPulse: Lesson = {
           },
         },
         { kind: 'pattern', pattern: 'g5', piece: 'romashki' },
+      ],
+    },
+    {
+      heading: { en: 'A ii–V on a held note', ru: '2-5 на долгой ноте' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Where the melody holds a long note on V before I, the bar can take the whole ii–V. Gorshkov’s «What a Friend» writes II and V over its G, then I on C.',
+            ru: 'Там, где мелодия тянет долгую ноту на V перед I, такт может вместить весь оборот 2-5. В «What a Friend» Горшков пишет II и V над его G, затем I на C.',
+          },
+        },
+        { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
       ],
     },
     {

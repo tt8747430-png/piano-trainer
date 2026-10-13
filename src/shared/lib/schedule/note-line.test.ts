@@ -26,6 +26,20 @@ describe('noteLine', () => {
     ])
   })
 
+  it('writes sixteenths, four to a beat', () => {
+    expect(timed('C5/16 B4/16 C5/16 G5/16 C5')).toEqual([
+      [72, 0, 3],
+      [71, 3, 3],
+      [72, 6, 3],
+      [79, 9, 3],
+      [72, 12, 12],
+    ])
+  })
+
+  it('refuses a dotted sixteenth, which falls between ticks', () => {
+    expect(() => timed('C5/16. D5/32')).toThrow(RangeError)
+  })
+
   it('makes a dotted note half as long again', () => {
     expect(timed('C4/4. D4/8 E4/2')).toEqual([
       [60, 0, 18],

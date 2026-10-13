@@ -19,8 +19,8 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Chords named by degree move to any key. So first find the key.',
-            ru: 'Аккорды, названные по ступеням, переносятся в любую тональность. Поэтому сначала найдите тональность.',
+            en: 'Degrees carry a song to any key. First find its key.',
+            ru: 'Ступени переносят песню в любую тональность, поэтому сначала найдите её тональность.',
           },
         },
         {
@@ -33,18 +33,39 @@ const thinkingInDegrees: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'The signature: its major or relative minor.',
-              ru: 'Ключевые знаки: их мажор или параллельный минор.',
+              en: 'The signature: right nine times in ten.',
+              ru: 'Ключевые знаки: верны в девяти случаях из десяти.',
+            },
+            {
+              en: 'The melody’s last note: often the tonic.',
+              ru: 'Последняя нота мелодии: обычно это тоника.',
             },
             {
               en: 'The first and last chords: usually home.',
               ru: 'Первый и последний аккорды: обычно это дом.',
             },
-            {
-              en: 'The melody’s last note: usually the tonic.',
-              ru: 'Последняя нота мелодии: обычно это тоника.',
-            },
           ],
+        },
+        {
+          kind: 'note',
+          text: { en: 'Hints, not rules.', ru: 'Это подсказки, а не правила.' },
+        },
+      ],
+    },
+    {
+      heading: { en: 'The key’s chords', ru: 'Аккорды тональности' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: '«Ромашковые поля» is in D minor. Each degree of its scale carries a chord, V with the raised 7th, C♯.',
+            ru: '«Ромашковые поля» — в ре миноре. На каждой ступени его гаммы стоит аккорд, на V — с повышенной VII ступенью, до-диезом.',
+          },
+        },
+        {
+          kind: 'chords',
+          symbols: ['Dm7', 'Em7♭5', 'FMaj7', 'Gm7', 'A7', 'B♭Maj7', 'C7'],
+          apart: true,
         },
       ],
     },
@@ -54,11 +75,11 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '«Ромашковые поля» is in D minor. Its opening in degrees: i7 iv7 Vsus4 i7.',
-            ru: '«Ромашковые поля» — в ре миноре. Начало по ступеням: i7 iv7 Vsus4 i7.',
+            en: 'Each chord takes its degree’s numeral: i7 iv9 Vsus4 i7.',
+            ru: 'Каждый аккорд получает цифру своей ступени: i7 iv9 Vsus4 i7.',
           },
         },
-        { kind: 'chords', symbols: ['Dm7', 'Gm7', 'Asus4', 'Dm7'] },
+        { kind: 'chords', symbols: ['Dm7', 'Gm9', 'Asus4', 'Dm7'] },
         {
           kind: 'steps',
           steps: [
@@ -67,11 +88,15 @@ const thinkingInDegrees: Lesson = {
               en: 'Upper case means major, lower case minor.',
               ru: 'Заглавная — мажор, строчная — минор.',
             },
-            {
-              en: 'What follows says what is added or changed.',
-              ru: 'То, что после цифры, говорит, что добавлено или изменено.',
-            },
+            { en: 'What follows names the rest.', ru: 'Остальное — после цифры.' },
           ],
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'Gorshkov writes Im7 IVm9 Vsus4 Im7.',
+            ru: 'Горшков пишет так: Im7 IVm9 Vsus4 Im7.',
+          },
         },
       ],
     },
@@ -81,11 +106,11 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The degrees stay. Only the key changes: in G minor, i7 iv7 Vsus4 i7 is Gm7 Cm7 Dsus4 Gm7.',
-            ru: 'Ступени остаются, меняется только тональность: в соль миноре i7 iv7 Vsus4 i7 — это Gm7 Cm7 Dsus4 Gm7.',
+            en: 'The degrees stay. Only the key changes: in G minor, i7 iv9 Vsus4 i7 is Gm7 Cm9 Dsus4 Gm7.',
+            ru: 'Ступени остаются, меняется только тональность: в соль миноре i7 iv9 Vsus4 i7 — это Gm7 Cm9 Dsus4 Gm7.',
           },
         },
-        { kind: 'chords', symbols: ['Gm7', 'Cm7', 'Dsus4', 'Gm7'] },
+        { kind: 'chords', symbols: ['Gm7', 'Cm9', 'Dsus4', 'Gm7'] },
         {
           kind: 'note',
           text: {
@@ -95,8 +120,8 @@ const thinkingInDegrees: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'i7 iv7 Vsus4 i7 through the keys', ru: 'i7 iv7 Vsus4 i7 по тональностям' },
-          target: { opens: 'player', numerals: 'i7 iv7 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
+          title: { en: 'i7 iv9 Vsus4 i7 through the keys', ru: 'i7 iv9 Vsus4 i7 по тональностям' },
+          target: { opens: 'player', numerals: 'i7 iv9 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
         },
       ],
     },

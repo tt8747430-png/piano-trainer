@@ -50,7 +50,7 @@ const melodicFiguration: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The 3rd and the 7th say most about a chord, so a line rests on them. The 5th and the 9th help.',
+            en: 'The 3rd and 7th say most about a chord, so a line rests on them. The 5th and 9th help.',
             ru: 'Терция и септима больше всего говорят об аккорде, поэтому на них опирается линия. Помогают квинта и нона.',
           },
         },
@@ -58,8 +58,8 @@ const melodicFiguration: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Passing notes lead to the goal. They are not the goal.',
-            ru: 'Проходящие звуки ведут к цели, но сами целью не являются.',
+            en: 'Above, B♭ and F anchor Gm7, a 5th apart. Passing notes lead to the goal.',
+            ru: 'Выше си-бемоль и фа — опоры Gm7, на квинту друг от друга. Проходящие звуки ведут к цели.',
           },
         },
       ],
@@ -131,15 +131,14 @@ const melodicFiguration: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'One motif can run through a whole progression. C and G are Am7’s 3rd and 7th, then other degrees of the next chords.',
-            ru: 'Один мотив может пронизывать всю последовательность. C и G — терция и септима Am7, а в следующих аккордах — другие ступени.',
+            en: 'One motif can run through a progression. Over A minor’s i–VI–III–VII, C and G are Am7’s 3rd and 7th, then other degrees of each chord.',
+            ru: 'Один мотив может пронизывать всю последовательность. В i–VI–III–VII ля минора до и соль — терция и септима Am7, затем другие ступени каждого аккорда.',
           },
         },
         {
           kind: 'notes',
           clef: 'treble',
-          notes:
-            'C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8 C5/8 B4/8 C5/8 G5/8',
+          notes: Array.from({ length: 16 }, () => 'C5/16 B4/16 C5/16 G5/16').join(' '),
         },
         { kind: 'chords', symbols: ['Am7', 'FMaj7', 'C', 'G'] },
         {

@@ -76,14 +76,19 @@ const twoFiveOne: Lesson = {
         },
         { kind: 'progression', numerals: 'iiø7 V7 i', key: C_MINOR },
         { kind: 'chords', symbols: ['Dm7♭5', 'G7♭9', 'Cm6'] },
+      ],
+    },
+    {
+      heading: { en: 'ii–Vs everywhere', ru: 'Обороты 2-5 повсюду' },
+      blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Em7♭5–A7, D minor’s ii–V, visits another key for a moment.',
-            ru: 'Em7♭5–A7, ii–V ре минора, ненадолго уводит в другую тональность.',
+            en: 'A ii–V, or the whole ii–V–I, can visit another key for a moment, so it is often not counted in the home key. See the dominants fall a 5th too.',
+            ru: 'Оборот 2-5 или весь 2-5-1 может ненадолго уводить в другую тональность, поэтому его часто не соотносят с основной. Посмотрите: доминанты тоже идут вниз на квинту.',
           },
         },
-        { kind: 'chords', symbols: ['Em7♭5', 'A7', 'Dm7'] },
+        { kind: 'chords', symbols: ['Em7♭5', 'A7♭9', 'Dm7', 'G7', 'Cm7', 'F7', 'B♭6'] },
       ],
     },
     {
@@ -96,7 +101,7 @@ const twoFiveOne: Lesson = {
             ru: 'Играйте его в тесном расположении вверх по полутонам или тонам. Затем идите вниз по квинтовому кругу: каждый I превращается в ii следующей тональности, и тональности опускаются на тон (C, B♭, A♭…).',
           },
         },
-        { kind: 'chords', symbols: ['Dm7', 'G7', 'Cmaj7', 'Cm7', 'F7', 'B♭maj7'] },
+        { kind: 'chords', symbols: ['Dm7', 'G7', 'CMaj7', 'Cm7', 'F7', 'B♭Maj7'] },
         {
           kind: 'link',
           title: { en: 'Step 1: up by semitones', ru: 'Шаг 1: вверх по полутонам' },
@@ -258,8 +263,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A13♭9 is easy to find as two chords: A7 in the left hand, an F♯ major triad in the right.',
-            ru: 'A13♭9 легко найти как два аккорда: A7 в левой руке, фа-диез мажорное трезвучие в правой.',
+            en: 'A13♭9 is two chords: A7’s root and 7th in the left hand, F♯ major in the right.',
+            ru: 'A13♭9 — это два аккорда: основной тон и септима A7 в левой руке, фа-диез мажор в правой.',
           },
         },
         {

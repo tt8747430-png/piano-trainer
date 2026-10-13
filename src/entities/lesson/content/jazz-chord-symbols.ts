@@ -24,6 +24,11 @@ const jazzChordSymbols: Lesson = {
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
         {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C♯4 D♭4 D♯4 E♭4 F♯4 G♭4 G♯4 A♭4 A♯4 B♭4',
+        },
+        {
           kind: 'note',
           text: {
             en: 'Dur, moll, es and is are not used.',
@@ -42,7 +47,11 @@ const jazzChordSymbols: Lesson = {
             ru: 'Заглавная буква — мажор. m или «−» делают его минорным, ° или dim — уменьшённым, + или aug — увеличенным.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'Cm', 'C°', 'C+'], apart: true },
+        {
+          kind: 'chords',
+          symbols: ['C', 'Cm', 'E♭−', 'C°', 'E♭dim', 'C+', 'E♭aug'],
+          apart: true,
+        },
       ],
     },
     {
@@ -112,6 +121,19 @@ const jazzChordSymbols: Lesson = {
       ],
     },
     {
+      heading: { en: 'Maj7 on other triads', ru: 'Maj7 на других трезвучиях' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'On a minor triad Maj7 makes the minor-major 7th, 1 ♭3 5 7. On an augmented one, 1 3 ♯5 7.',
+            ru: 'На минорном трезвучии Maj7 даёт большой минорный септаккорд, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
+          },
+        },
+        { kind: 'chords', symbols: ['Cm(maj7)', 'C+Maj7'], apart: true },
+      ],
+    },
+    {
       heading: { en: 'Half-diminished and diminished', ru: 'Полууменьшённый и уменьшённый' },
       blocks: [
         {
@@ -145,6 +167,26 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'note',
           text: { en: 'The 6th is always major.', ru: 'Секста всегда большая.' },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Other signs', ru: 'Другие обозначения' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Books also write Δ for Maj7, − for m, ø for m7♭5, sus for sus4, (−9) for ♭9.',
+            ru: 'В нотах пишут и так: Δ вместо Maj7, «−» вместо m, ø вместо m7♭5, sus вместо sus4, (−9) вместо ♭9.',
+          },
+        },
+        { kind: 'chords', symbols: ['CΔ7', 'C−7', 'Cø', 'Csus', 'C7(−9)'], apart: true },
+        {
+          kind: 'note',
+          text: {
+            en: 'A slash chord, C/E: the chord, then its bass.',
+            ru: 'Слэш-аккорд, C/E: слева аккорд, справа бас.',
+          },
         },
       ],
     },
