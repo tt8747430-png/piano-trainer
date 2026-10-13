@@ -139,6 +139,7 @@ export const learn: LocaleResources['learn'] = {
     note: 'Нота мелодии',
     as: 'как {{degree}}',
     inKey: 'в тональности',
+    onlyInKey: 'Только в тональности',
     group: {
       triads: 'Трезвучия',
       major: 'Мажорные септаккорды',

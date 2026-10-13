@@ -137,6 +137,7 @@ export const learn = {
     note: 'Melody note',
     as: 'as {{degree}}',
     inKey: 'in the key',
+    onlyInKey: 'In the key only',
     group: {
       triads: 'Triads',
       major: 'Major 7ths',

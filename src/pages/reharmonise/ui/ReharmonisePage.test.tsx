@@ -83,4 +83,14 @@ describe('Practice → Reharmonise', () => {
       'page',
     )
   })
+
+  it('shows only the key’s chords while In the key only is pressed, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions/reharmonise')
+    expect((await screen.findAllByRole('button', { name: /^C#m/ })).length).toBeGreaterThan(0)
+    await user.click(screen.getByRole('button', { name: 'In the key only' }))
+    expect(router.state.location.search).toMatchObject({ inKey: true })
+    expect(screen.queryByRole('button', { name: /^C#m/ })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /^Am/ }).length).toBeGreaterThan(0)
+  })
 })

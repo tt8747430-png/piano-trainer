@@ -202,11 +202,16 @@ export const finderSearch = routeSearch(readFinderSearch, FINDER_DEFAULTS)
 const REHARMONISE_DEFAULTS: ReharmoniseView = {
   key: C_MAJOR_PARAM,
   note: noteParam(note('E')),
+  inKey: false,
 }
 export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
   const key = readKey(raw.key) ?? C_MAJOR
   const melody = readNote(raw.note) ?? note('E')
-  return { key: keyParam(key), note: noteParam(spellInKey(pitchClassOf(melody), key)) }
+  return {
+    key: keyParam(key),
+    note: noteParam(spellInKey(pitchClassOf(melody), key)),
+    inKey: raw.inKey === true,
+  }
 }
 export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
 

@@ -18,13 +18,15 @@ import {
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { KeyChoice, NoteChoice } from '@/shared/ui'
+import { Toggle } from '@/shared/ui/primitives/toggle'
 import { melodyAlone, underMelody } from '../model/holding-keys'
 import type { ReharmoniseView } from '../model/reharmonise-view'
 import { HoldingGroupCard } from './HoldingGroupCard'
 
 /**
  * Reharmonise: a melody note in a key, and every chord that holds it (the owner's table, carried past
- * the key), each played under it. A tapped or MIDI key chooses the note.
+ * the key; with In the key only, the key's alone), each played under it. A tapped or MIDI key chooses
+ * the note.
  */
 export function ReharmoniseTool({
   view,
@@ -65,20 +67,32 @@ export function ReharmoniseTool({
         />
         <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
+      <Toggle
+        className="self-start"
+        pressed={view.inKey}
+        onPressedChange={(inKey) => onChange({ inKey })}
+      >
+        {t('reharmonise.onlyInKey')}
+      </Toggle>
       <div className="grid-fields gap-6">
-        {HOLDING_GROUPS.map((group) => (
-          <HoldingGroupCard
-            key={group}
-            group={group}
-            chords={held[group]}
-            isPlaying={(index) => playback.playing === idOf(group, index)}
-            onPlay={(holding, index) => {
-              const next = underMelody(holding, melody)
-              show(next)
-              playback.toggle(idOf(group, index), () => chordSounds(next.keys, { arpeggio: false }))
-            }}
-          />
-        ))}
+        {HOLDING_GROUPS.map((group) => {
+          const chords = view.inKey ? held[group].filter((holding) => holding.inKey) : held[group]
+          return chords.length === 0 ? null : (
+            <HoldingGroupCard
+              key={group}
+              group={group}
+              chords={chords}
+              isPlaying={(index) => playback.playing === idOf(group, index)}
+              onPlay={(holding, index) => {
+                const next = underMelody(holding, melody)
+                show(next)
+                playback.toggle(idOf(group, index), () =>
+                  chordSounds(next.keys, { arpeggio: false }),
+                )
+              }}
+            />
+          )
+        })}
       </div>
     </div>
   )
