@@ -12,4 +12,5 @@ export const BOOKS: Readonly<Record<BookId, Book>> = {
 export const METHOD_BOOK_NAMES: Readonly<Record<MethodBookId, string>> = {
   'called-to-play': 'Called to Play',
   'seven-types': 'Боброва',
+  gorshkov: 'Горшков',
 }

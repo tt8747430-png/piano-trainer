@@ -6,7 +6,7 @@ import romashki from './romashki'
 /** The songs of Vasily Gorshkov's accompaniment course, in the order its lessons teach on them. */
 const gorshkov: Collection = {
   id: 'gorshkov',
-  name: { en: 'Gorshkov’s course', ru: 'Курс Горшкова' },
+  name: { en: 'Gorshkov’s songs', ru: 'Песни курса Горшкова' },
   entries: [romashki, olen, metel],
 }
 

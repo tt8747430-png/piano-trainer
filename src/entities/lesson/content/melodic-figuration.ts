@@ -116,6 +116,7 @@ const melodicFiguration: Lesson = {
           key: G_MINOR,
           notes: 'B♭4/2 A5/8 F5/8 D5/8 B♭4/8',
         },
+        { kind: 'pattern', pattern: 'g6', piece: 'metel' },
         {
           kind: 'note',
           text: {

@@ -13,6 +13,10 @@ export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEn
     name: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
     book: 'seven-types',
   },
+  gorshkov: {
+    name: { en: 'Arranging the accompaniment', ru: 'Аранжировка аккомпанемента' },
+    book: 'gorshkov',
+  },
   genres: { name: { en: 'Rhythm styles', ru: 'Ритмические стили' }, book: null },
 }
 
@@ -369,6 +373,90 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     },
     rh: 'melH',
     lh: 'q',
+  },
+  g1: {
+    group: 'gorshkov',
+    name: { en: '1 · Chord pulse', ru: '1 · Аккордовая пульсация' },
+    idea: {
+      en: 'The chord on every beat, beats 1 and 4 brighter, over the root held.',
+      ru: 'Аккорд на каждую долю, 1-я и 4-я ярче, над выдержанным басом.',
+    },
+    description: {
+      en: 'The simplest movement: the harmony kept and placed in time. The chord does not sound the same all bar: beats 1 and 4 are brighter, 2 and 3 softer.',
+      ru: 'Самая простая форма движения: гармония сохраняется и организуется во времени. Аккорд не звучит весь такт одинаково: 1-я и 4-я доли ярче, 2-я и 3-я мягче.',
+    },
+    rh: 'g1',
+    lh: 'r',
+  },
+  g2: {
+    group: 'gorshkov',
+    name: { en: '2 · Pulse with the 2nd', ru: '2 · Пульсация с секундой' },
+    idea: {
+      en: 'Each chord gains its 2nd, D in C, and pulses on every beat over the root.',
+      ru: 'Каждый аккорд получает секунду, ре в до мажоре, и пульсирует на каждую долю над басом.',
+    },
+    description: {
+      en: 'A fourth note keeps the pulse from sounding plain: a major triad adds its 2nd, add2, and a minor one grows to its 9th.',
+      ru: 'Четвёртый звук не даёт пульсации звучать плоско: мажорное трезвучие получает вторую ступень, add2, минорное расширяется до ноны.',
+    },
+    rh: 'g2',
+    lh: 'r',
+  },
+  g3: {
+    group: 'gorshkov',
+    name: { en: '3 · Broken in 8ths', ru: '3 · Ломаные аккорды восьмыми' },
+    idea: {
+      en: 'The 3rd and 5th, then the 2nd under them, in 8ths: a new section’s texture.',
+      ru: 'Терция и квинта, затем секунда под ними, восьмыми: фактура нового раздела.',
+    },
+    description: {
+      en: 'Songs fall into phrases of 4, 8 or 16 bars. A new section is marked by a new texture: from quarters to broken chords in 8ths.',
+      ru: 'Песни строятся из фраз по 4, 8 или 16 тактов. Новый раздел отмечают новой фактурой: от пульсации четвертями к ломаным аккордам восьмыми.',
+    },
+    rh: 'g3',
+    lh: 'r',
+  },
+  g4: {
+    group: 'gorshkov',
+    name: { en: '4 · Harmonic figuration', ru: '4 · Гармоническая фигурация' },
+    idea: {
+      en: 'Sixteenths through the chord: its 5th, then up its 1, 2 and 3.',
+      ru: 'Шестнадцатые по звукам аккорда: квинта, затем вверх 1, 2 и 3.',
+    },
+    description: {
+      en: 'The chord’s notes in turn: a way to lead the song on once broken chords have had their turn.',
+      ru: 'Звуки аккорда по очереди: способ вести песню дальше, когда ломаные аккорды уже прозвучали.',
+    },
+    rh: 'g4',
+    lh: 'r',
+  },
+  g5: {
+    group: 'gorshkov',
+    name: { en: '5 · Pulse, then a run', ru: '5 · Пульсация, затем пассаж' },
+    idea: {
+      en: 'The chord on beats 1 to 3, then a run down 5–3–2–1 on beat 4.',
+      ru: 'Аккорд на 1–3 доли, затем пассаж вниз 5–3–2–1 на 4-ю долю.',
+    },
+    description: {
+      en: 'Chord pulse and harmonic figuration together: the pulse on the first three beats, a figure on the fourth into the next bar.',
+      ru: 'Сочетание аккордовой пульсации и гармонической фигурации: пульсация на первые три доли, фигура на четвёртую — в следующий такт.',
+    },
+    rh: 'g5',
+    lh: 'r',
+  },
+  g6: {
+    group: 'gorshkov',
+    name: { en: '6 · A line on beats 3 and 4', ru: '6 · Линия на 3-ю и 4-ю доли' },
+    idea: {
+      en: 'The chord holds two beats, then a line runs down its 9th, 7th, 5th and 3rd.',
+      ru: 'Аккорд держит две доли, затем линия спускается по ноне, септиме, квинте и терции.',
+    },
+    description: {
+      en: 'The simplest melodic figuration: the harmony on the strong beats, then a short way out into the next bar, down the notes of a 9th chord.',
+      ru: 'Самая простая мелодическая фигурация: гармоническая опора на сильных долях, затем короткий выход в следующий такт, вниз по звукам нонаккорда.',
+    },
+    rh: 'g6',
+    lh: 'r',
   },
   block: {
     group: 'genres',

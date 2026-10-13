@@ -89,7 +89,7 @@ describe('A lesson', () => {
     const inGorshkov = lessonsIn('gorshkov')
     const n = inGorshkov.findIndex((each) => each.id === 'two-five-one') + 1
     expect(place).toHaveTextContent(`Lesson ${n} of ${inGorshkov.length}`)
-    await user.click(within(place).getByRole('link', { name: 'Gorshkov' }))
+    await user.click(within(place).getByRole('link', { name: 'Горшков' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
     expect(router.state.location.search).toMatchObject({ tab: 'courses', open: 'gorshkov' })
   })

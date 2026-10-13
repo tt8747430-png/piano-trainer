@@ -33,18 +33,18 @@ describe('Learn', () => {
     await waitFor(() => expect(router.state.location.search).toMatchObject({ tab: 'courses' }))
     expect(
       (await screen.findAllByRole('region')).map((each) => each.getAttribute('aria-label')),
-    ).toEqual(['Called to Play', 'Боброва', 'Gorshkov'])
+    ).toEqual(['Called to Play', 'Боброва', 'Горшков'])
   })
 
   it('folds each module under its heading, the one the learner is at open', async () => {
     await renderApp('/learn?tab=courses')
     const calledToPlay = await screen.findByRole('region', { name: 'Called to Play' })
-    const gorshkov = screen.getByRole('region', { name: 'Gorshkov' })
+    const gorshkov = screen.getByRole('region', { name: 'Горшков' })
     expect(within(calledToPlay).getByRole('button', { name: /Called to Play/ })).toHaveAttribute(
       'aria-expanded',
       'true',
     )
-    expect(within(gorshkov).getByRole('button', { name: /Gorshkov/ })).toHaveAttribute(
+    expect(within(gorshkov).getByRole('button', { name: /Горшков/ })).toHaveAttribute(
       'aria-expanded',
       'false',
     )
@@ -58,8 +58,8 @@ describe('Learn', () => {
   it('opens a folded module into the URL, so Back from a lesson finds it open', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn?tab=courses')
-    const gorshkov = await screen.findByRole('region', { name: 'Gorshkov' })
-    await user.click(within(gorshkov).getByRole('button', { name: /Gorshkov/ }))
+    const gorshkov = await screen.findByRole('region', { name: 'Горшков' })
+    await user.click(within(gorshkov).getByRole('button', { name: /Горшков/ }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ open: 'called-to-play.gorshkov' }),
     )
@@ -71,8 +71,8 @@ describe('Learn', () => {
       expect(router.state.location.pathname).toBe(`/learn/lessons/${first?.id ?? ''}`),
     )
     router.history.back()
-    const back = await screen.findByRole('region', { name: 'Gorshkov' })
-    expect(within(back).getByRole('button', { name: /Gorshkov/ })).toHaveAttribute(
+    const back = await screen.findByRole('region', { name: 'Горшков' })
+    expect(within(back).getByRole('button', { name: /Горшков/ })).toHaveAttribute(
       'aria-expanded',
       'true',
     )

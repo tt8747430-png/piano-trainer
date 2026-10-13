@@ -216,7 +216,7 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 ## Patterns and figures
 
-`src/entities/pattern`: the ids in `model/types.ts`, the figures in `content/figures.ts`, the 39 patterns in
+`src/entities/pattern`: the ids in `model/types.ts`, the figures in `content/figures.ts`, the 45 patterns in
 `content/patterns.ts`, the method codes in `content/methods.ts`. The compiler demands an entry for every id.
 
 - **A figure** (one hand's part): its id in `RIGHT_FIGURE_IDS` or `LEFT_FIGURE_IDS`, then
@@ -320,7 +320,7 @@ entry's alone: `tsc` holds every id a table names.
 ## What the tests check
 
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
-  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 39 patterns, its melody
+  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 45 patterns, its melody
   doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
   accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both
   languages.

@@ -17,6 +17,7 @@ export interface Book {
 export const METHOD_BOOK_IDS = [
   'called-to-play',
   'seven-types',
+  'gorshkov',
 ] as const satisfies readonly BookId[]
 export type MethodBookId = (typeof METHOD_BOOK_IDS)[number]
 export const isMethodBookId = isOneOf(METHOD_BOOK_IDS)

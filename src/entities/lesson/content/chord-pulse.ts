@@ -67,7 +67,7 @@ const chordPulse: Lesson = {
             ru: 'Сохраните гармонию и расположите её во времени, аккорд на каждую долю. Первую и четвёртую доли играйте ярче, вторую и третью — мягче.',
           },
         },
-        { kind: 'pattern', pattern: 'r3', piece: 'romashki' },
+        { kind: 'pattern', pattern: 'g1', piece: 'romashki' },
       ],
     },
     {
@@ -80,6 +80,7 @@ const chordPulse: Lesson = {
             ru: 'Добавьте в аккорд четвёртый звук. Мажорное трезвучие получает вторую ступень, add2. Минорное расширяется до септ- или нонаккорда.',
           },
         },
+        { kind: 'pattern', pattern: 'g2', piece: 'romashki' },
         {
           kind: 'voicings',
           voicings: [
@@ -108,7 +109,7 @@ const chordPulse: Lesson = {
             ru: 'Песни строятся из фраз по 4, 8 или 16 тактов. Отметьте новый раздел новой фактурой: разложите аккорды восьмыми.',
           },
         },
-        { kind: 'pattern', pattern: 'M2', piece: 'romashki' },
+        { kind: 'pattern', pattern: 'g3', piece: 'romashki' },
         {
           kind: 'note',
           text: {
@@ -128,7 +129,7 @@ const chordPulse: Lesson = {
             ru: 'Дальше переходите к гармонической фигурации: звуки аккорда по очереди.',
           },
         },
-        { kind: 'pattern', pattern: 'r4', piece: 'romashki' },
+        { kind: 'pattern', pattern: 'g4', piece: 'romashki' },
         {
           kind: 'note',
           text: {
@@ -136,6 +137,7 @@ const chordPulse: Lesson = {
             ru: 'Хорошо сочетать пульсацию на первые три доли и фигурацию на четвёртую.',
           },
         },
+        { kind: 'pattern', pattern: 'g5', piece: 'romashki' },
       ],
     },
     {
@@ -187,7 +189,7 @@ const chordPulse: Lesson = {
             en: 'What a Friend We Have in Jesus in the Player',
             ru: 'What a Friend We Have in Jesus в плеере',
           },
-          target: { place: 'piece', piece: 'friend', pattern: 'r3' },
+          target: { place: 'piece', piece: 'friend', pattern: 'g2' },
         },
       ],
     },

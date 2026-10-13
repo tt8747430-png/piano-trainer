@@ -11,11 +11,13 @@ export const SONG_COLLECTIONS: readonly Collection[] = [bozheSpasibo, calledToPl
 
 /**
  * The pieces a method book's patterns are practised on: Called to Play's lesson pieces, the studies, on
- * Practice (roadmap §3.9); for Боброва's seven types the hymns, songs that stay on Songs.
+ * Practice (roadmap §3.9); for Боброва's seven types the hymns, and for Gorshkov's course its songs,
+ * songs that stay on Songs.
  */
 export const METHOD_BOOK_PIECES: Readonly<Record<MethodBookId, Collection>> = {
   'called-to-play': studies,
   'seven-types': hymns,
+  gorshkov,
 }
 
 /** Every collection, in `COLLECTION_IDS` order. */

@@ -159,14 +159,14 @@ it. `@` → `src`.
   `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`: their
   versions by piece id and their own songs (`my-<n>`), read through the repertoire (`repertoire`, `useRepertoire`):
   the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read;
-  `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (39 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
+  `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (45 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
   `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`:
   favourites, hidden, own; `PATTERN_GROUP_BOOK`; `referenceShelves` (a part of `REFERENCE_PARTS`) /
   `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, voicings as written (each hand's keys, ADR 0040), grids, scales, intervals and lines of notes that play, quizzes answered on
   the keys, patterns over their pieces and progressions in any key, links by name to the explorers and
-  the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: the subjects (`SUBJECT_MODULES`: Fundamentals, Accompaniment, Gospel, one track), then the courses (`COURSE_MODULES`: each method book's, then Gorshkov's, each a track of its own; `LEARN_TABS`, `tabOf`, `lessonsIn`, `nextLesson`/`previousLesson` along a track, `useModuleName`),
+  the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: the subjects (`SUBJECT_MODULES`: Fundamentals, Accompaniment, Gospel, one track), then the courses (`COURSE_MODULES`: each method book's, Called to Play's, Боброва's and Gorshkov's, each a track of its own; `LEARN_TABS`, `tabOf`, `lessonsIn`, `nextLesson`/`previousLesson` along a track, `useModuleName`),
   `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033), `progression-library` (the one model of a progression that is practised, ADR 0041: one entry for each idea,
   named, by style, its line in each mode it has (`major`, `minor`), with its note, pattern and chord size; `libraryProgression` names a line,
   `progressionMode` the mode one is shown in, `COMMON_PROGRESSIONS` a key's, `LIBRARY_BY_STYLE` what its pop-up lists), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;

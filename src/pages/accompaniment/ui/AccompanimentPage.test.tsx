@@ -38,6 +38,7 @@ describe('Practice → Accompaniment', () => {
     expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
       ['Called to Play', 'page'],
       ['Боброва', null],
+      ['Горшков', null],
       ['Styles', null],
       ['Yours', null],
     ])
@@ -61,6 +62,17 @@ describe('Practice → Accompaniment', () => {
     expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
     expect(rows('Hymns')).toEqual(['/songs/otche', '/songs/ode', '/songs/silent', '/songs/amazing'])
+  })
+
+  it('lists on Горшков his textures and the songs his lessons play them on', async () => {
+    await renderApp('/practice/accompaniment?show=gorshkov')
+    await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
+    expect(screen.getByRole('link', { name: 'Горшков' })).toHaveAttribute('aria-current', 'page')
+    expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs'])
+    expect(rows('Arranging the accompaniment')).toEqual(
+      ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/patterns/${id}`),
+    )
+    expect(rows('Gorshkov’s songs')).toEqual(['/songs/romashki', '/songs/olen', '/songs/metel'])
   })
 
   it('lists the rhythm styles on Styles, each pattern with its idea', async () => {
@@ -133,6 +145,7 @@ describe('Practice → Accompaniment', () => {
     expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
       ['Called to Play', null],
       ['Боброва', null],
+      ['Горшков', null],
       ['Styles', 'page'],
       ['Yours', null],
     ])
@@ -157,7 +170,7 @@ describe('Practice → Accompaniment', () => {
     expect(router.state.location.pathname).toBe('/practice/patterns/new')
   })
 
-  it.each(['called-to-play', 'seven-types', 'styles', 'yours'])(
+  it.each(['called-to-play', 'seven-types', 'gorshkov', 'styles', 'yours'])(
     'reads in Russian on %s, with nothing left in English',
     async (show) => {
       await renderApp(`/practice/accompaniment?show=${show}`, { locale: 'ru' })
@@ -168,7 +181,7 @@ describe('Practice → Accompaniment', () => {
         within(screen.getByRole('navigation', { name: 'Аккомпанемент' }))
           .getAllByRole('link')
           .map((tab) => tab.textContent),
-      ).toEqual(['Called to Play', 'Боброва', 'Стили', 'Свои'])
+      ).toEqual(['Called to Play', 'Боброва', 'Горшков', 'Стили', 'Свои'])
       expect(untranslated(document.body)).toEqual([])
     },
   )

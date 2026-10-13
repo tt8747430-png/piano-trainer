@@ -9,7 +9,13 @@ import {
 } from '@/shared/lib/arrangement'
 
 /** Groups use the glossary's words; their displayed names keep the source's wording. */
-export const PATTERN_GROUPS = ['five-ways', 'techniques', 'seven-types', 'genres'] as const
+export const PATTERN_GROUPS = [
+  'five-ways',
+  'techniques',
+  'seven-types',
+  'gorshkov',
+  'genres',
+] as const
 export type PatternGroup = (typeof PATTERN_GROUPS)[number]
 export const isPatternGroup = isOneOf(PATTERN_GROUPS)
 
@@ -35,6 +41,12 @@ export const RIGHT_FIGURE_IDS = [
   'r3',
   'r4',
   'r4b',
+  'g1',
+  'g2',
+  'g3',
+  'g4',
+  'g5',
+  'g6',
   'mel',
   'melE',
   'melH',
@@ -111,6 +123,12 @@ export const PATTERN_IDS = [
   'r5',
   'r6',
   'r7',
+  'g1',
+  'g2',
+  'g3',
+  'g4',
+  'g5',
+  'g6',
   'block',
   'flow',
   'pop8',

@@ -1,7 +1,7 @@
 # ADR 0042 — Learn is Subjects and Courses, each module folds, and a lesson leads along its track
 
 - **Status:** accepted · **Date:** 2026-10-13 · **Amends:** ADR 0029 (Learn's one list), ADR 0033 (Learn's
-  modules)
+  modules) · **Amended by:** ADR 0043 (Gorshkov's course is a method book)
 
 ## Context
 

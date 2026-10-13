@@ -6,7 +6,6 @@ export const learn: LocaleResources['learn'] = {
     fundamentals: 'Основы',
     accompaniment: 'Аккомпанемент',
     gospel: 'Госпел',
-    gorshkov: 'Горшков',
   },
   tabs: { label: 'Уроки', subjects: 'Темы', courses: 'Курсы' },
   moduleAbout: {

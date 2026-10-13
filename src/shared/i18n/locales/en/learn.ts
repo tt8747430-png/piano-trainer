@@ -4,7 +4,6 @@ export const learn = {
     fundamentals: 'Fundamentals',
     accompaniment: 'Accompaniment',
     gospel: 'Gospel',
-    gorshkov: 'Gorshkov',
   },
   // Learn's tabs (ADR 0042): lessons by subject, and each course's own in its order.
   tabs: { label: 'Lessons', subjects: 'Subjects', courses: 'Courses' },

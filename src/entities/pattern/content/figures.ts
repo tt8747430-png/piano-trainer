@@ -105,6 +105,41 @@ export const RIGHT_FIGURES = {
     name: { en: 'Broken arpeggio 1–3–2–3', ru: 'Ломаное арпеджио 1–3–2–3' },
     figure: R4B,
   },
+  g1: {
+    name: { en: 'Chord pulse, beats 1 and 4 brighter', ru: 'Пульсация, 1-я и 4-я доли ярче' },
+    figure: eventFigure('0/4 C!,4/4 C,8/4 C,12/4 C!'),
+  },
+  g2: {
+    name: { en: 'Pulse with the 2nd added', ru: 'Пульсация с добавленной секундой' },
+    figure: eventFigure('0/4 s1+3+5!,4/4 s1+3+5,8/4 s1+3+5,12/4 s1+3+5!'),
+  },
+  g3: {
+    name: {
+      en: 'Broken in 8ths: 3rd and 5th, then the 2nd',
+      ru: 'Ломаный восьмыми: терция и квинта, затем секунда',
+    },
+    figure: eventFigure('0/2 3+5,2/2 s1,4/2 3+5,6/2 s1,8/2 3+5,10/2 s1,12/2 3+5,14/2 s1'),
+  },
+  g4: {
+    name: {
+      en: 'Figuration in 16ths: 5, then 1–2–3',
+      ru: 'Фигурация шестнадцатыми: 5, затем 1–2–3',
+    },
+    figure: eventFigure(
+      '0/1 5,1/1 1,2/1 s1,3/1 3,4/1 5,5/1 1,6/1 s1,7/1 3,8/1 5,9/1 1,10/1 s1,11/1 3,12/1 5,13/1 1,14/1 s1,15/1 3',
+    ),
+  },
+  g5: {
+    name: { en: 'Pulse on 1–3, a run down on 4', ru: 'Пульсация на 1–3, пассаж вниз на 4' },
+    figure: eventFigure('0/4 s1+3+5!,4/4 s1+3+5,8/4 s1+3+5,12/1 5,13/1 3,14/1 s1,15/1 1'),
+  },
+  g6: {
+    name: {
+      en: 'A line down 9–7–5–3 on beats 3 and 4',
+      ru: 'Линия вниз 9–7–5–3 на 3-ю и 4-ю доли',
+    },
+    figure: eventFigure('0/4 s1+3+5,4/4 s1+3+5,8/2 9,10/2 7,12/2 5,14/2 3'),
+  },
   mel: {
     name: { en: 'Melody (doubling the tune)', ru: 'Мелодия (дублирование напева)' },
     figure: { kind: 'melody', use: 'double', withoutMelody: R4 },
@@ -308,11 +343,11 @@ export type LeftFigureGroup = (typeof LEFT_FIGURE_GROUPS)[number]['id']
 
 /** The right hand's figures as the Setup lists them, by what they do; every figure in one group. */
 export const RIGHT_FIGURE_GROUPS = [
-  { id: 'chords', figures: ['x1', 'r1', 'b1', 'r3', 'r2', 'sync'] },
-  { id: 'broken', figures: ['b2', 'b3', 'b4', 'r4', 'r4b', 'bal', 't2', 't4'] },
+  { id: 'chords', figures: ['x1', 'r1', 'b1', 'r3', 'r2', 'g1', 'g2', 'sync'] },
+  { id: 'broken', figures: ['b2', 'b3', 'b4', 'r4', 'r4b', 'g3', 'g4', 'bal', 't2', 't4'] },
   {
     id: 'moving',
-    figures: ['inv', 'c3', 't1', 't3', 't5', 'p51', 'p52', 'p53', 's6u', 's6d', 'flow'],
+    figures: ['inv', 'c3', 't1', 't3', 't5', 'p51', 'p52', 'p53', 's6u', 's6d', 'g5', 'g6', 'flow'],
   },
   { id: 'melody', figures: ['mel', 'melE', 'melH'] },
   { id: 'styles', figures: ['rock', 'blu', 'rnb', 'jaz', 'hip', 'sal', 'fun', 'cty'] },
