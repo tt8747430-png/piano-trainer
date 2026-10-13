@@ -336,10 +336,6 @@
 @utility top-screen-bar {
   top: var(--screen-bar, 0px);
 }
-/* A heading jumped to lands clear of the screen's bar and of what is pinned under it. */
-@utility scroll-mt-pinned {
-  scroll-margin-top: calc(var(--screen-bar, 0px) + var(--pinned, 0px) + --spacing(4));
-}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }

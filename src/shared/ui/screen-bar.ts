@@ -3,9 +3,6 @@ import { createContext, use } from 'react'
 /** The CSS variable what stays at the top reads: how far below the bar it sits. */
 export const SCREEN_BAR_VAR = '--screen-bar'
 
-/** The CSS variable a jump to a heading reads: how tall what is pinned under the bar stands. */
-export const PINNED_VAR = '--pinned'
-
 /** The bar measured: its rows, which pinned content sits under, and its whole box, clear of the notch. */
 export interface ScreenBarSize {
   readonly rows: number
@@ -22,12 +19,10 @@ export interface ScreenBar {
   report(size: ScreenBarSize): void
   /** Focus is inside the bar: it stays. */
   hold(held: boolean): void
-  /** What is pinned under the bar measured: 0 once it is gone. */
-  pin(height: number): void
 }
 
 /** Outside a `ScreenBarProvider`: a bar that always shows, nothing offset. */
-const NO_BAR: ScreenBar = { shown: true, report: () => {}, hold: () => {}, pin: () => {} }
+const NO_BAR: ScreenBar = { shown: true, report: () => {}, hold: () => {} }
 export const ScreenBarContext = createContext<ScreenBar>(NO_BAR)
 
 /** The screen's bar, for its header. */

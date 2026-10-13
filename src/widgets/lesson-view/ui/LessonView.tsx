@@ -27,9 +27,9 @@ const CONTENTS_FROM = 3
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
- * quiz, whose answer the learner chooses on it. Its sections are listed at its top, each a link that
- * lands its heading clear of the bar and the keys; a jump replaces the page's entry, so Back still
- * leaves the lesson.
+ * quiz, whose answer the learner chooses on it. Its sections are listed at its top, each a link to
+ * its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
+ * replaces the page's entry, so Back still leaves the lesson.
  */
 export function LessonView({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('learn')
@@ -93,7 +93,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
           id={sectionId(s)}
           // Sections apart by a line and room; a section's text and its examples close together.
           className={cn(
-            'flex max-w-prose scroll-mt-pinned flex-col gap-4 text-lg leading-relaxed',
+            'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
             s > 0 && 'border-t border-border pt-8',
           )}
         >

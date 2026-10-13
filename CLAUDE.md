@@ -118,7 +118,7 @@ it. `@` → `src`.
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progressions` (a progression in any key: its row of chords, `ProgressionChoice`
   (the library behind one pop-up), the typed field and the lead-in into each chord (`playedNumerals`); `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys, each saying the chords it plays first (`walkPreview`); its pure `changedView` (a key turned minor or major shows a
-  progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: every block, one open quiz in
+  progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.

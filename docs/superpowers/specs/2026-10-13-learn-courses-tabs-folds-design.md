@@ -72,5 +72,5 @@ lesson plays them as blocks.
 
 - Gorshkov's course became a method book with its textures and songs (ADR 0043); «Как олень спешит к воде» and
   «Опять метель» are songs with their melodies.
-- A lesson lists its sections at its top, each a link that lands its heading clear of the screen's bar and the
-  pinned keys.
+- A lesson lists its sections at its top, each a link to its heading. The page's scroll padding, already there for
+  a focused control, lands the heading clear of the pinned keys: the worry that kept the list out was unfounded.
