@@ -78,7 +78,12 @@ describe('Practice → Accompaniment', () => {
     expect(rows('Arranging the accompaniment')).toEqual(
       ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
     )
-    expect(rows('Gorshkov’s songs')).toEqual(['/songs/romashki', '/songs/olen', '/songs/metel'])
+    expect(rows('Gorshkov’s songs')).toEqual([
+      '/songs/romashki',
+      '/songs/olen',
+      '/songs/wafriend',
+      '/songs/metel',
+    ])
   })
 
   it('leads from a method book’s part to its lessons, open on Learn', async () => {

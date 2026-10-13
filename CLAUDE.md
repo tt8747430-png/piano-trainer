@@ -154,7 +154,7 @@ it. `@` → `src`.
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
   and section headings, `PieceLink` to a piece's page on its shelf; a step's title and `ExplorerLink`), `index.ts`.
-  Content: `piece` (44 pieces, 7 listings; a chart's parser and the parser of a song written in degrees (`isDegreePiece`:
+  Content: `piece` (45 pieces, 7 listings; a chart's parser and the parser of a song written in degrees (`isDegreePiece`:
   a piece's format is not its kind), a piece's `recording`; `SONG_COLLECTIONS` on Songs, `METHOD_BOOK_PIECES` (a method book's: the studies on
   Practice, the hymns),
   `entriesInKey`, `pieceFit`, `choosableChordSize`,
