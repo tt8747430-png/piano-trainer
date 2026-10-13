@@ -93,8 +93,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play it in close position, up by semitones, then down by whole tones. Going down, each I turns into the next ii.',
-            ru: 'Играйте его в тесном расположении, вверх по полутонам, затем вниз по тонам. При спуске каждый I становится следующим ii.',
+            en: 'Play it in close position, up by semitones or tones. Then go down the circle of fifths: each I turns into the next key’s ii, so the keys fall a tone (C, B♭, A♭…).',
+            ru: 'Играйте его в тесном расположении вверх по полутонам или тонам. Затем идите вниз по квинтовому кругу: каждый I превращается в ii следующей тональности, и тональности опускаются на тон (C, B♭, A♭…).',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'G7', 'Cmaj7', 'Cm7', 'F7', 'B♭maj7'] },
@@ -111,24 +111,16 @@ const twoFiveOne: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Step 2: down by whole tones', ru: 'Шаг 2: вниз по тонам' },
+          title: {
+            en: 'Step 2: down the circle of fifths, each I the next ii',
+            ru: 'Шаг 2: вниз по квинтовому кругу, каждый I — следующий ii',
+          },
           target: {
             place: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'sevenths',
             walk: 'tones-down',
-          },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Round the circle of fifths', ru: 'По квинтовому кругу' },
-          target: {
-            place: 'player',
-            numerals: 'ii V I',
-            key: C_MAJOR,
-            size: 'sevenths',
-            walk: 'fifths',
           },
         },
       ],
@@ -190,24 +182,32 @@ const twoFiveOne: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '9ths from the 3rd', ru: 'Ноны от терции' },
+          title: {
+            en: 'Step 1: from the 3rd, up by semitones',
+            ru: 'Шаг 1: от терции, вверх по полутонам',
+          },
           target: {
             place: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'ninths',
             inversion: 1,
+            walk: 'semitones-up',
           },
         },
         {
           kind: 'link',
-          title: { en: '9ths from the 7th', ru: 'Ноны от септимы' },
+          title: {
+            en: 'Step 2: from the 7th, down the circle of fifths',
+            ru: 'Шаг 2: от септимы, вниз по квинтовому кругу',
+          },
           target: {
             place: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'ninths',
             inversion: 3,
+            walk: 'tones-down',
           },
         },
       ],

@@ -32,8 +32,13 @@ describe('A lesson', () => {
     expect(step1.getAttribute('href')).toBe(
       '/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up',
     )
-    expect(screen.getByRole('link', { name: /^9ths from the 7th/ }).getAttribute('href')).toBe(
-      '/play/progression?p=ii-V-I&chordSize=ninths&inversion=3&nearest=false',
+    const step2 = screen.getByRole('link', { name: /^Step 2: down the circle of fifths/ })
+    expect(step2.getAttribute('href')).toBe(
+      '/play/progression?p=ii-V-I&chordSize=sevenths&walk=tones-down',
+    )
+    const ninths = screen.getByRole('link', { name: /^Step 2: from the 7th/ })
+    expect(ninths.getAttribute('href')).toBe(
+      '/play/progression?p=ii-V-I&chordSize=ninths&walk=tones-down&inversion=3&nearest=false',
     )
   })
 

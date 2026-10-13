@@ -263,16 +263,19 @@ describe('Practice → Progressions', () => {
     const walks = within(
       await screen.findByRole('region', { name: 'Through the keys' }),
     ).getAllByRole('link')
-    expect(walks.map((link) => link.textContent)).toEqual([
-      'Up by semitones',
-      'Down by semitones',
-      'Up by whole tones',
-      'Down by whole tones',
-      'Down the circle of fifths: C F B♭',
-      'Up the circle of fifths: C G D',
-      'Up by minor thirds',
-      'Up by major thirds',
-    ])
+    // Each row is its walk's name, then the chords it plays first.
+    expect(walks.map((link) => link.textContent)).toEqual(
+      [
+        'Up by semitones',
+        'Down by semitones',
+        'Up by whole tones',
+        'Down by whole tones',
+        'Down the circle of fifths: C F B♭',
+        'Up the circle of fifths: C G D',
+        'Up by minor thirds',
+        'Up by major thirds',
+      ].map((name) => expect.stringMatching(new RegExp(`^${name} Dm7 G7 CMaj7 · `))),
+    )
     expect(
       walks.map((link) => /walk=([a-z-]+)/.exec(link.getAttribute('href') ?? '')?.[1]),
     ).toEqual([
@@ -289,6 +292,17 @@ describe('Practice → Progressions', () => {
       expect(link.getAttribute('href')).toMatch(/^\/play\/progression\?.*p=ii-V-I/)
     expect(screen.getByRole('link', { name: 'In C major' }).getAttribute('href')).not.toMatch(
       /walk=/,
+    )
+  })
+
+  it('says the chords each walk plays first: the sheet’s Шаг 2 is the ii–V–I down by whole tones', async () => {
+    await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
+    const walks = within(await screen.findByRole('region', { name: 'Through the keys' }))
+    expect(walks.getByRole('link', { name: /^Down by whole tones/ })).toHaveTextContent(
+      'Dm7 G7 CMaj7 · Cm7 F7 B♭Maj7 …',
+    )
+    expect(walks.getByRole('link', { name: /^Down the circle of fifths/ })).toHaveTextContent(
+      'Dm7 G7 CMaj7 · Gm7 C7 FMaj7 …',
     )
   })
 
