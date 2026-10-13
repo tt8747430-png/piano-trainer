@@ -50,7 +50,8 @@ One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest ru
 ## Architecture — FSD (lint-enforced)
 
 `app → pages → widgets → features → entities → shared`. Import from your own layer or below, never above; another
-slice only through its `index.ts`, by alias or relative path alike. Inside shared, the kernel is fenced tighter:
+slice only through its `index.ts`, by alias or relative path alike. A page imports no other page: what two pages
+share is a widget. Inside shared, the kernel is fenced tighter:
 `shared/lib/music` imports only itself, `shared/lib/arrangement` and `shared/lib/notation` only music,
 `shared/lib/exercise` music and arrangement's types, and none of them imports a package.
 `eslint-plugin-boundaries` and `no-restricted-imports` enforce all of it, and `src/app/architecture.test.ts` proves
@@ -87,8 +88,8 @@ it. `@` → `src`.
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
-  the exercise's own fields) fill; `pages/learn` is the lessons by Subjects · Courses, each module a `FoldGroup` (`model/learn-view.ts`: the modules open, `lessonToContinue`); `pages/lesson` a lesson, its module and number over it, Previous and Next along its track at its end; `pages/practice` Practice's pages as rows in its three groups (`model/practice-pages.ts`: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS`; `usePageAbout`, a row's line, a page of tabs or groups saying those in its own words); `pages/search` Search (`model/index-entries.ts`: `indexEntries`, one projection of the registries, held to each by a test; `searchIndex`, `typedChord`; `useIndex`; `IndexRow`); `pages/shared-song` a song opened from a shared link (`/songs/shared?song=…`), added to Your songs when asked; `pages/free-play` Free play (`useFreePlay`: Play's trail or Mark's marks, the URL's `marks`; `MarkTools`); `pages/quiz` every
-  trainer by group (`model/quiz-groups.ts`, held by a test to every trainer) with My gaps in its bar; `pages/exercises`
+  the exercise's own fields) fill; `pages/learn` is the lessons by Subjects · Courses, each module a `FoldGroup` (`model/learn-view.ts`: the modules open, `lessonToContinue`); `pages/lesson` a lesson, its module and number over it, Previous and Next along its track at its end; `pages/practice` Practice's pages as rows in its three groups; `pages/search` Search (`model/index-entries.ts`: `indexEntries`, one projection of the registries, held to each by a test; `searchIndex`, `typedChord`; `useIndex`; `IndexRow`); `pages/shared-song` a song opened from a shared link (`/songs/shared?song=…`), added to Your songs when asked; `pages/free-play` Free play (`useFreePlay`: Play's trail or Mark's marks, the URL's `marks`; `MarkTools`); `pages/quiz` every
+  trainer by group with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords`, `pages/intervals` and `pages/progressions` three explorers' pages; `pages/scales`
   Scales and keys (`ScaleTabs`, its views; its Key view's tool, `KeyTools`, and songs in the key, `PiecesInKey`);
   `pages/chord-finder`, `pages/passing-chords` and `pages/reharmonise` three tools' pages; `pages/accompaniment`
@@ -121,7 +122,7 @@ it. `@` → `src`.
   (the library behind one pop-up), the typed field and the lead-in into each chord (`playedNumerals`); `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys, each saying the chords it plays first (`walkPreview`); `ProgressionTools` (Passing chords between its first two chords, `passingBetween`, and Reharmonise, in its key); its pure `changedView` (a key turned minor or major shows a
   progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open quiz in
   `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
-  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, and `GapsLink`, My gaps in Quiz's bar), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
+  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS` in `model/`; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete

@@ -27,6 +27,14 @@ describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
     expect(broken).not.toContain('boundaries/dependencies')
   })
 
+  it('refuse a page importing another page: what two share sits below them', async () => {
+    const broken = await rulesBrokenBy(
+      'src/pages/search/ui/Example.tsx',
+      "import { PracticePage } from '@/pages/practice'\nexport const example = PracticePage\n",
+    )
+    expect(broken).toContain('boundaries/dependencies')
+  })
+
   it('let a slice import its own files by any path', async () => {
     const broken = await rulesBrokenBy(
       'src/pages/settings/ui/Example.tsx',

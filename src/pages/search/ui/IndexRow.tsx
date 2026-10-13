@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { PRACTICE_PAGES } from '@/pages/practice'
-import { OPEN_PLAINLY, qualityParams } from '@/shared/lib'
+import { qualityParams } from '@/shared/lib'
 import { keyParam, note, noteParam } from '@/shared/lib/music'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
+import { PageRow } from '@/widgets/practice-pages'
 import type { IndexTarget } from '../model/index-entries'
 
 /**
@@ -20,10 +20,8 @@ export function IndexRow({
 }) {
   const row = { title, detail }
   switch (target.opens) {
-    case 'page': {
-      const { to, tile } = PRACTICE_PAGES[target.page]
-      return <RowLink {...row} {...tile} render={<Link to={to} state={OPEN_PLAINLY} />} />
-    }
+    case 'page':
+      return <PageRow page={target.page} />
     case 'lesson':
       return (
         <RowLink

@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { BackButton, ScreenHeader } from '@/shared/ui'
-import { GapsLink, TrainerList } from '@/widgets/trainer-list'
-import { QUIZ_GROUPS, QUIZ_TRAINERS } from '../model/quiz-groups'
+import { GapsLink, QUIZ_GROUPS, QUIZ_TRAINERS, TrainerList } from '@/widgets/trainer-list'
 
 /**
  * Quiz: every trainer, grouped by what it asks, each row opening its trainer as it was left. My gaps,

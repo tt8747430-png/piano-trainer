@@ -34,6 +34,14 @@ const fsdDependencyRules = [
       { to: { type: 'exercise' } },
     ],
   },
+  // A page is one route's screen and imports no other page: what two pages share sits below them,
+  // in a widget (boundaries does not check a slice's imports of its own files).
+  {
+    from: { type: 'pages' },
+    disallow: { to: { type: 'pages' } },
+    message:
+      'A page imports no other page: move what they share into a widget. See CLAUDE.md → Architecture.',
+  },
   // Another slice only through its index.ts, whatever the import path (boundaries does not check a
   // slice's imports of its own files). Rules are last-match-wins, so this narrows the ones above.
   {

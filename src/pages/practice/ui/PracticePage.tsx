@@ -1,39 +1,15 @@
-import { Link } from '@tanstack/react-router'
-import { useMemo, type ReactNode } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectAllAnswers, selectPractised, useProgress } from '@/entities/progress'
 import { myGaps } from '@/features/trainer'
-import { OPEN_PLAINLY } from '@/shared/lib'
-import { RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
-import {
-  PRACTICE_GROUPS,
-  PRACTICE_PAGES,
-  THINGS,
-  type PracticePageId,
-} from '../model/practice-pages'
-import { usePageAbout } from './use-page-about'
+import { RowGroup, ScreenHeader } from '@/shared/ui'
+import { PageRow, PRACTICE_GROUPS, THINGS } from '@/widgets/practice-pages'
 
 /** How many skills My gaps holds to check. */
 function useGapsCount(): number {
   const answers = useProgress(selectAllAnswers)
   const practised = useProgress(selectPractised)
   return useMemo(() => myGaps(answers, practised).length, [answers, practised])
-}
-
-/** A page's row: its name, what it says of itself, its tile. It opens as it was left. */
-function PageRow({ page, trailing }: { page: PracticePageId; trailing?: ReactNode }) {
-  const { t } = useTranslation('practice')
-  const about = usePageAbout()
-  const { to, tile } = PRACTICE_PAGES[page]
-  return (
-    <RowLink
-      title={t(`pages.${page}`)}
-      detail={about(page)}
-      {...tile}
-      trailing={trailing}
-      render={<Link to={to} state={OPEN_PLAINLY} />}
-    />
-  )
 }
 
 /**

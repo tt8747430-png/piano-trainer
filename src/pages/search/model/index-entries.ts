@@ -9,7 +9,6 @@ import {
   progressionMode,
 } from '@/entities/progression-library'
 import { TRAINER_IDS, type TrainerId } from '@/features/trainer'
-import { PRACTICE_PAGE_IDS, type PracticePageId } from '@/pages/practice'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
 import { matchesQuery } from '@/shared/lib'
 import {
@@ -26,6 +25,7 @@ import {
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
+import { PRACTICE_PAGE_IDS, type PracticePageId } from '@/widgets/practice-pages'
 
 /** The kinds of thing the index holds, in the order Search lists them. */
 export const INDEX_KINDS = [

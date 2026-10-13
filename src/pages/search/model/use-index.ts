@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { useModuleName } from '@/entities/lesson'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { COLLECTIONS, useRepertoire } from '@/entities/piece'
-import { usePageAbout } from '@/pages/practice'
 import { useLocale } from '@/shared/i18n'
+import { usePageWords } from '@/widgets/practice-pages'
 import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
 
 /** The names the interface gives what content does not name itself, in the learner's language. */
 export function useIndexNames(): IndexNames {
-  const { t } = useTranslation(['practice', 'music', 'quiz'])
-  const about = usePageAbout()
+  const { t } = useTranslation(['music', 'quiz'])
+  const page = usePageWords()
   const module = useModuleName()
   return useMemo(
     () => ({
-      page: (page) => ({ title: t(`practice:pages.${page}`), about: about(page) }),
+      page,
       quality: (quality) => t(`music:quality.${quality}`),
       scale: (kind) => t(`music:scaleKind.${kind}`),
       trainer: (trainer) => ({
@@ -23,7 +23,7 @@ export function useIndexNames(): IndexNames {
       }),
       module,
     }),
-    [t, about, module],
+    [t, page, module],
   )
 }
 

@@ -5,8 +5,8 @@ import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
 import { LIBRARY_BY_STYLE } from '@/entities/progression-library'
 import { TRAINER_IDS } from '@/features/trainer'
-import { PRACTICE_PAGE_IDS } from '@/pages/practice'
 import { CHORD_QUALITIES, SCALE_KINDS } from '@/shared/lib/music'
+import { PRACTICE_PAGE_IDS } from '@/widgets/practice-pages'
 import {
   INDEX_KINDS,
   indexEntries,
