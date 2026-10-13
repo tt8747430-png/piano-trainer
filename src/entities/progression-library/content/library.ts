@@ -39,6 +39,24 @@ const LIBRARY = [
       'Самая распространённая последовательность в поп-музыке.',
     ),
   }),
+  entry('pop', 'let-it-be', 'I V vi IV I V IV I', 'Let It Be', 'Let It Be', {
+    note: note(
+      'Only the chords of the key, the chord family: most pop songs need no other.',
+      'Только аккорды тональности, «семья аккордов»: большинству поп-песен других не нужно.',
+    ),
+  }),
+  entry('pop', 'yesterday', 'I V/vi vi IV V I vi V/V IV I', 'Yesterday', 'Yesterday', {
+    note: note(
+      'Two secondary dominants: E7 pulls to Am, D7 to G — which never comes. A broken expectation is a deceptive cadence.',
+      'Две вторичные доминанты: E7 тянет к Am, D7 — к G, который так и не приходит. Обманутое ожидание — прерванная каденция.',
+    ),
+  }),
+  entry('pop', 'clocks', 'I v v ii', 'Clocks', 'Clocks', {
+    note: note(
+      'Gm is borrowed from C minor, the key’s darker parallel world: a chord of modal interchange.',
+      'Gm взят из до минора, тёмного параллельного мира тональности: аккорд модального смешения.',
+    ),
+  }),
   entry('pop', 'sensitive', 'vi IV I V', 'Sensitive', 'Sensitive'),
   entry('pop', 'doo-wop', 'I vi IV V', '50s doo-wop', 'Ду-воп 50-х', {
     pattern: 'flow',
@@ -61,6 +79,63 @@ const LIBRARY = [
       'Основная джазовая каденция. С нонаккордами: m9 → 9 → Maj9.',
     ),
   }),
+  entry(
+    'jazz',
+    'two-five-through-the-key',
+    'ii V I ii°/ii V/ii ii ii°/iii V/iii iii ii/IV V/IV IV ii/V V/V V ii°/vi V/vi vi ii°/vii V/vii vii°',
+    'ii–V–I to every chord of the key',
+    'ii–V–I к каждому аккорду тональности',
+    {
+      pattern: 'jazz',
+      size: 'sevenths',
+      note: note(
+        'Up the scale, each chord of the key in turn is home: a ii–V–I to I, then to ii, iii, IV, V, vi and vii, every one in the key’s own notes but its ii and V. A minor chord takes the minor ii–V.',
+        'Вверх по гамме каждый аккорд тональности по очереди становится тоникой: ii–V–I к I, затем к ii, iii, IV, V, vi и vii, всё в звуках тональности, кроме своих ii и V. К минорному аккорду ведёт минорный ii–V.',
+      ),
+    },
+  ),
+  entry(
+    'jazz',
+    'two-five-round-the-circle',
+    'ii V I ii/IV V/IV IV ii°/vii V/vii vii° ii°/iii V/iii iii ii°/vi V/vi vi ii°/ii V/ii ii ii/V V/V V',
+    'ii–V–I round the circle in the key',
+    'ii–V–I по квинтовому кругу в тональности',
+    {
+      pattern: 'jazz',
+      size: 'sevenths',
+      note: note(
+        'The key’s chords a 5th apart (I IV vii iii vi ii V), each reached by its own ii–V: the circle of fifths without leaving the key.',
+        'Аккорды тональности через квинту (I IV vii iii vi ii V), к каждому — свой ii–V: квинтовый круг, не выходя из тональности.',
+      ),
+    },
+  ),
+  entry(
+    'jazz',
+    'two-five-chain',
+    'iiø7/iii V7♭9/iii iii7 V7/ii ii7 V7 I6',
+    'ii–V chain',
+    'Цепочка ii–V',
+    {
+      note: note(
+        'From the 2-5-1 sheet: ii–Vs visit other keys for a moment, every dominant falling a 5th, until the last one leads home.',
+        'Из листа 2-5-1: обороты ii–V ненадолго уводят в другие тональности, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
+      ),
+    },
+  ),
+  entry(
+    'jazz',
+    'fly-me-to-the-moon',
+    'vi ii V I V/IV IV ii°/vi V/vi vi',
+    'Fly Me to the Moon',
+    'Fly Me to the Moon',
+    {
+      size: 'sevenths',
+      note: note(
+        'From the chord matrix: C7 leads to F, then Bø–E7 is the minor ii–V into Am.',
+        'Из матрицы аккордов: C7 ведёт к F, затем Bø–E7 — минорный ii–V в Am.',
+      ),
+    },
+  ),
   entry('jazz', 'rhythm-changes', 'I vi ii V', 'Rhythm changes', 'Rhythm changes'),
   entry('jazz', 'full-turnaround', 'iii vi ii V', 'Full turnaround', 'Полный оборот'),
   entry('jazz', 'autumn-leaves', 'ii V I IV', 'Autumn Leaves', 'Autumn Leaves'),
@@ -125,6 +200,21 @@ const LIBRARY = [
     pattern: 'pop8',
     note: note('The minor-key loop of pop and rock ballads.', 'Минорный круг поп- и рок-баллад.'),
   }),
+  entry(
+    'minor',
+    'minor-two-five-through-the-key',
+    'ii° V i ii°/ii V/ii ii° ii/III V/III III ii°/iv V/iv iv ii°/v V/v v ii/VI V/VI VI ii/VII V/VII VII',
+    'ii–V–i to every chord of the minor key',
+    'ii–V–i к каждому аккорду минорной тональности',
+    {
+      pattern: 'jazz',
+      size: 'sevenths',
+      note: note(
+        'Natural minor’s chords in turn, each with its own ii–V: minor ones by the minor ii–V, major ones by the major.',
+        'Аккорды натурального минора по очереди, к каждому свой ii–V: к минорным — минорный, к мажорным — мажорный.',
+      ),
+    },
+  ),
   entry('minor', 'andalusian', 'i VII VI V', 'Andalusian cadence', 'Андалузская каденция'),
   entry('minor', 'minor-two-five', 'ii° V i', 'Minor ii–V–i', 'Минорный ii–V–i', {
     pattern: 'jazz',
@@ -162,9 +252,24 @@ const LIBRARY = [
     'Round the circle',
     'По квинтовому кругу',
     {
+      size: 'sevenths',
       note: note(
-        'Every degree of the key a 5th apart, home to I.',
-        'Все ступени тональности через квинту и домой к I.',
+        'Every degree of the key a 5th apart, home to I: the circle of fifths in the key’s own chords. In 7ths each 3rd falls to the next chord’s 7th.',
+        'Все ступени тональности через квинту и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда переходит в септиму следующего.',
+      ),
+    },
+  ),
+  entry(
+    'theory',
+    'secondary-dominants',
+    'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I',
+    'Secondary dominants',
+    'Вторичные доминанты',
+    {
+      size: 'sevenths',
+      note: note(
+        'The chord matrix’s second row: each chord of the key led to by its own dominant, a 5th above it (A7 to Dm, B7 to Em, C7 to F, D7 to G, E7 to Am).',
+        'Второй ряд матрицы аккордов: к каждому аккорду тональности ведёт своя доминанта, на квинту выше (A7 к Dm, B7 к Em, C7 к F, D7 к G, E7 к Am).',
       ),
     },
   ),
@@ -197,4 +302,5 @@ export const MODE_VERSIONS: readonly (readonly [major: ProgressionId, minor: Pro
   ['jazz-cadence', 'minor-two-five'],
   ['flat-nine-resolution', 'minor-flat-nine-resolution'],
   ['complete-cadence', 'minor-cadence'],
+  ['two-five-through-the-key', 'minor-two-five-through-the-key'],
 ]

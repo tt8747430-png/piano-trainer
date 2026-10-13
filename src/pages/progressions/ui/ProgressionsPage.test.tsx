@@ -56,6 +56,17 @@ describe('Practice → Progressions', () => {
     expect(row()).toEqual(['C6/9I6/9', 'G7#9V7#9', 'E+III+'])
   })
 
+  it('reads an applied chord, the ii–V of another chord of the key, typed and in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
+    await user.clear(field)
+    await user.type(field, 'ii°/vi V/vi vi')
+    await user.click(screen.getByRole('radio', { name: '7ths' }))
+    expect(router.state.location.search).toMatchObject({ p: 'ii°/vi-V/vi-vi' })
+    expect(row()).toEqual(['Bm7♭5ii°/vi', 'E7V/vi', 'Am7vi'])
+  })
+
   it('writes typed chords as numerals again once the key changes, as the row plays them', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/progressions')

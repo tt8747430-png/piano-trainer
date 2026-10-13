@@ -24,10 +24,24 @@ export interface Numeral {
   readonly degree: number
   readonly shift: -1 | 0 | 1
   readonly quality: ChordQuality
+  /** The degree whose key it is read in (`V/ii`, A in C), where it is applied to another chord. */
+  readonly of?: AppliedDegree
+}
+
+/**
+ * The degree an applied numeral is read from, after its slash: its index and shift, and its key's mode,
+ * minor under lower case (`/ii`, D minor in C), major under upper (`/IV`).
+ */
+export interface AppliedDegree {
+  readonly degree: number
+  readonly shift: -1 | 0 | 1
+  readonly minor: boolean
 }
 
 const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
 const TOKEN = /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(.*)$/
+/** What follows an applied numeral's slash: a degree alone, so a `6/9` is still a chord. */
+const APPLIED = /^(.*)\/([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)$/
 const SHIFTS = new Map<string, -1 | 0 | 1>([
   ['', 0],
   ['b', -1],
@@ -116,9 +130,24 @@ export function readDegree(
  * One numeral: a degree, then what a chord symbol writes after its root. Upper case takes any chord
  * as the table spells it (`V7`, `IMaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
  * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `iMaj7`),
- * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`).
+ * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`). After a slash, the degree whose key it is
+ * read in (`V/ii`, `ii°/vi`): an applied chord.
  */
 export function parseNumeral(token: string): Numeral | null {
+  const applied = APPLIED.exec(token)
+  if (applied) {
+    const [, own = '', sign = '', roman = ''] = applied
+    const numeral = parseOwnNumeral(own)
+    const of = readDegree(sign, roman)
+    return !numeral || !of
+      ? null
+      : { ...numeral, of: { ...of, minor: roman !== roman.toUpperCase() } }
+  }
+  return parseOwnNumeral(token)
+}
+
+/** A numeral of the key itself, with no slash. */
+function parseOwnNumeral(token: string): Numeral | null {
   const match = TOKEN.exec(token)
   if (!match) return null
   const [, sign = '', roman = '', tail = ''] = match
@@ -147,10 +176,16 @@ export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
   const roman = ROMANS[numeral.degree] ?? ''
   const tail = LOWER_TAILS.get(numeral.quality)
-  return (
+  const own =
     sign +
     (tail === undefined ? roman + qualitySuffix(numeral.quality) : roman.toLowerCase() + tail)
-  )
+  return numeral.of ? `${own}/${appliedText(numeral.of)}` : own
+}
+
+/** The degree after an applied numeral's slash, lower case for a minor key. */
+function appliedText(of: AppliedDegree): string {
+  const roman = ROMANS[of.degree] ?? ''
+  return (of.shift < 0 ? '♭' : of.shift > 0 ? '#' : '') + (of.minor ? roman.toLowerCase() : roman)
 }
 
 /** Numerals as a line to read, a dash between them: `ii–V–I`. */
@@ -184,6 +219,25 @@ const leadingTone = (numeral: Numeral): boolean =>
  * grown as the key's).
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
+  const { of, ...own } = numeral
+  return of ? ownChord(own, appliedKey(of, key), size) : ownChord(own, key, size)
+}
+
+/**
+ * The key an applied numeral is read in: the tonic on its degree, where the key's chord on that degree
+ * has its root (a minor key's `/vii` on its leading tone, as its vii° is), in the mode it writes.
+ */
+function appliedKey(of: AppliedDegree, key: Key): Key {
+  const tonic = ownChord(
+    { degree: of.degree, shift: of.shift, quality: of.minor ? 'dim' : 'maj' },
+    key,
+    'triads',
+  ).root
+  return { tonic, minor: of.minor }
+}
+
+/** A numeral's chord in the key it is written in. */
+function ownChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const kind = keyScale(key)
   const scale = spellScale(key.tonic, kind)
   // A flat counts from the major scale in either mode, as pop writes a minor key's ♭III ♭VI ♭VII.

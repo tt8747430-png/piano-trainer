@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note, placeScale, scaleKey } from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
-import { noteLine, scaleRun } from '@/shared/lib/schedule'
+import { noteLine, scaleRun, voicingsMusic } from '@/shared/lib/schedule'
 import { engrave } from '@/shared/ui/score/engrave'
 import { LESSONS } from '../index'
 
@@ -62,6 +62,21 @@ describe('every lesson’s staves', () => {
           const host = document.createElement('div')
           engrave(score, host, { scale: 1, fingers: false, names: false, staff: 'treble' })
           expect(host.querySelector('svg'), lesson.id).not.toBeNull()
+        }
+      }
+    }
+  })
+
+  it('write each row of voicings whole, on the grand staff', () => {
+    for (const lesson of LESSONS) {
+      for (const section of lesson.sections) {
+        for (const block of section.blocks) {
+          if (block.kind !== 'voicings') continue
+          const score = notate(voicingsMusic(block.voicings, block.key))
+          expectWritten(score)
+          const host = document.createElement('div')
+          engrave(score, host, { scale: 1, fingers: false, names: false })
+          expect(host.querySelector('svg'), `${lesson.id}: ${section.heading.en}`).not.toBeNull()
         }
       }
     }

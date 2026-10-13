@@ -155,6 +155,60 @@ describe('numeralChord', () => {
   })
 })
 
+describe('an applied numeral', () => {
+  it('reads and writes a chord of another degree’s key after a slash', () => {
+    expect(texts('V/ii ii°/vi V7♭9/iii IV/IV ii/♭VI')).toEqual([
+      'V/ii',
+      'ii°/vi',
+      'V7♭9/iii',
+      'IV/IV',
+      'ii/♭VI',
+    ])
+    expect(numeralsParam(parseNumerals('ii°/vi V/vi vi') ?? [])).toBe('ii°/vi-V/vi-vi')
+    expect(parseNumerals(numeralsParam(parseNumerals('V/♭VI') ?? []))).toEqual(
+      parseNumerals('V/♭VI'),
+    )
+    expect(texts('I6/9 i6/9')).toEqual(['I6/9', 'i6/9'])
+  })
+
+  it('reads no slash to anything but a degree', () => {
+    for (const token of ['V/', 'V/x', 'V/ii/ii', 'V/IIm7'])
+      expect(parseNumeral(token), token).toBeNull()
+  })
+
+  it('plays it in the key on that degree, a major key under upper case and a minor one under lower', () => {
+    expect(chords('V/ii ii ii°/iii V/iii iii V/IV V/V', C, 'triads')).toEqual([
+      'A',
+      'Dm',
+      'F#°',
+      'B',
+      'Em',
+      'C',
+      'D',
+    ])
+    expect(chords('ii°/ii V/ii ii ii/IV V/IV IV', C, 'sevenths')).toEqual([
+      'Em7♭5',
+      'A7',
+      'Dm7',
+      'Gm7',
+      'C7',
+      'FMaj7',
+    ])
+    expect(chords('ii°/vi V/vi vi', C, 'ninths')).toEqual(['Bm9♭5', 'E7♭9', 'Am9'])
+    expect(chords('ii°/vii V/vii vii°', C, 'sevenths')).toEqual(['C#m7♭5', 'F#7', 'Bm7♭5'])
+  })
+
+  it('keeps what is written in the other key', () => {
+    expect(
+      chords(
+        'iiø7/iii V7♭9/iii iii7 V7/ii ii7 V7 I6',
+        { tonic: note('B', -1), minor: false },
+        'ninths',
+      ),
+    ).toEqual(['Em7♭5', 'A7♭9', 'Dm7', 'G7', 'Cm7', 'F7', 'B♭6'])
+  })
+})
+
 describe('numeralGrows', () => {
   it('says a plain triad grows with the chord size, and a chord written out does not', () => {
     const grows = (text: string) => (parseNumerals(text) ?? []).map(numeralGrows)

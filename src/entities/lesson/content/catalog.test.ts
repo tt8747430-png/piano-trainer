@@ -13,7 +13,7 @@ import {
   passingChords,
   writtenSymbol,
 } from '@/shared/lib/music'
-import { noteLine } from '@/shared/lib/schedule'
+import { noteLine, voicingsMusic } from '@/shared/lib/schedule'
 import {
   lessonById,
   LESSON_MODULES,
@@ -80,6 +80,10 @@ function problemsOf(block: LessonBlock): string[] {
             key: block.key ?? C_MAJOR,
           }),
         block.notes,
+      )
+    case 'voicings':
+      return block.voicings.flatMap((voicing) =>
+        unread(() => voicingsMusic([voicing], block.key), voicing.hands),
       )
     case 'pattern':
       return pieceProblems(block.piece, block.pattern)
@@ -238,7 +242,7 @@ describe('the lessons', () => {
     }
   })
 
-  it('teach accompaniment from bass and chords to reharmonising a melody', () => {
+  it('teach accompaniment from bass and chords to scales through the changes', () => {
     expect(
       LESSONS.filter((lesson) => lesson.module === 'accompaniment').map((lesson) => lesson.id),
     ).toEqual([
@@ -246,9 +250,13 @@ describe('the lessons', () => {
       'broken-chords',
       'common-progressions',
       'thinking-in-degrees',
+      'chord-matrix',
       'two-five-one',
+      'minor-two-five-levels',
+      'jazz-voicings',
       'passing-chords',
       'reharmonising-a-melody',
+      'scales-through-the-changes',
     ])
   })
 

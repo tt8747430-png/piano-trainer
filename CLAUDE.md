@@ -133,7 +133,7 @@ it. `@` → `src`.
   settings: keys go down as they sound or are held on MIDI, a touched or typed key sounds while held (`useLiveVoice`), `PedalToggle` and `useSpacePedal` hold the sustain, `spotlight` puts down only
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings, every one in sight as a picture (`KeyZoom`, `NamedKeysToggle`, `ChordNamesToggle`, `TypingToggle`, ADR 0036), the chord a hand holds named in the rail unless `namesChords` is off (a round, ADR 0037), and `KeyboardSettingsFields`, the same as fields in
   Settings; `use-typing`, the computer keyboard as a piano; `ExplorerKeyboard`, the explorers' and a lesson's pinned one; `GlissandoToggle`, the rail's own), `play-example` (the examples an explorer and a
-  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `ChordRow` (any row of
+  lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `VoicingsExample`, `ChordRow` (any row of
   chords voiced smoothly: a progression's by `progressionRow`, a passing chords way) with its parts `RowChords` and
   `RowPlay` (honey in the tool, soft beside other examples), `ScaleChordGrid`, `chordShown` / `scaleShown`, and
   `useShownKeys` (the example played last, forgotten when what it stood on changes)), and the
@@ -164,7 +164,7 @@ it. `@` → `src`.
   favourites, hidden, own; `PATTERN_GROUP_BOOK`; `referenceShelves` (a part of `REFERENCE_PARTS`) /
   `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
-  worksheets: text, steps, notes, chords, grids, scales, intervals and lines of notes that play, quizzes answered on
+  worksheets: text, steps, notes, chords, voicings as written (each hand's keys, ADR 0040), grids, scales, intervals and lines of notes that play, quizzes answered on
   the keys, patterns over their pieces and progressions in any key, links by name to the explorers and
   the Player (a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: Fundamentals, Accompaniment,
   each method book, Gospel), `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033), `progression-library` (the one model of a progression that is practised: named, by style, in numerals,
@@ -192,7 +192,7 @@ it. `@` → `src`.
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones (from five notes in two hands, the root and a 13th's 5th in the left, the rest close in the right; `chordInversions`, ADR 0035), `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
+  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032; applied, `V/ii`, read in that degree's key, ADR 0040), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`
@@ -201,7 +201,7 @@ it. `@` → `src`.
   `chartInKeys`, a chart once per key; `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's
-  run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a hand's keys, an interval up, down or
+  run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a lesson's voicings (`voicingsMusic`), a hand's keys, an interval up, down or
   together (`intervalSounds`), which keys sound when and which were struck last; `damper.ts`, the three pedals over held keys; `velocity.ts`, `velocityGain`, `touchVelocity`), `services`
   (`ServicesProvider`, `useServices`, `usePlay`, `usePlayback` (a Play button's Stop), `useLiveVoice` (a hand's keys: a tap's key or
   the chord a key stands for, sounding while held), `usePedal`, `useSoundingKeys` (the music's, the struck, the live voice's)), `shortcuts` (ADR 0036: `ShortcutsProvider`, the one key listener; `useShortcuts(group, shortcuts)`, what a screen binds and the sheet lists; a `Combo` by physical key or by name, `keyHint`; the guards `isTyping`, `takesKey`, `inPopUp`, which typing and the Space pedal share)), `config` (`THEME_COLORS`, `PRECACHE_FILE_LIMIT`), `api` (the `audio` and `midi` ports, their browser adapters and

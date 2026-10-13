@@ -16,7 +16,7 @@ import type {
   TensionChord,
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import type { NoteLineMeter } from '@/shared/lib/schedule'
+import type { NoteLineMeter, WrittenVoicing } from '@/shared/lib/schedule'
 
 /** What a lesson teaches, as Learn filters lessons (roadmap §3.4, §10.7). */
 export type LessonCategory =
@@ -88,8 +88,8 @@ export type LessonLink =
 
 /**
  * One part of a lesson's section: prose, numbered steps, a note to read; or an example that plays in
- * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff, a
- * pattern over a piece, a progression in a key); a quiz answered on the keys; a link into an explorer,
+ * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff,
+ * voicings as written, a pattern over a piece, a progression in a key); a quiz answered on the keys; a link into an explorer,
  * a tool or the Player.
  */
 export type LessonBlock =
@@ -117,6 +117,15 @@ export type LessonBlock =
       readonly notes: string
       readonly meter?: NoteLineMeter
       /** The key its signature writes; C major (none) when left out. */
+      readonly key?: Key
+    }
+  /**
+   * Voicings exactly as a sheet writes them, each hand's keys given (`D3 A♭3 | C4 F4`), on the grand
+   * staff in a key (C major, every accidental written, when left out).
+   */
+  | {
+      readonly kind: 'voicings'
+      readonly voicings: readonly WrittenVoicing[]
       readonly key?: Key
     }
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */

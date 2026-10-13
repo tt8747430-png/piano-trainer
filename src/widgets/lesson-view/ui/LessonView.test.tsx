@@ -107,6 +107,14 @@ const WORKSHEET: Lesson = {
         { kind: 'scale', root: note('D'), scale: 'dorian' },
         { kind: 'interval', root: note('C'), interval: 'M3' },
         { kind: 'notes', clef: 'bass', notes: 'G2 B2 D3 F3 A3' },
+        {
+          kind: 'voicings',
+          key: { tonic: note('C'), minor: true },
+          voicings: [
+            { symbol: 'Dm7♭5', caption: 'iiø7', degrees: '1 ♭5 | ♭7 ♭3', hands: 'D3 A♭3 | C4 F4' },
+            { symbol: 'G7♭13', caption: 'V7♭13', hands: 'F3 B3 | E♭4 G4' },
+          ],
+        },
       ],
     },
     {
@@ -143,6 +151,19 @@ describe('LessonView’s worksheet', () => {
     const { audio } = await renderLesson(WORKSHEET)
     await user.click(screen.getByRole('button', { name: 'G#m' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([68, 71, 75])
+  })
+
+  it('plays voicings exactly as written, each alone and the whole row', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const chord = screen.getByRole('button', { name: /Dm7♭5/ })
+    expect(chord).toHaveTextContent('iiø7')
+    expect(chord).toHaveTextContent('1 ♭5 | ♭7 ♭3')
+    await user.click(chord)
+    expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65])
+    const row = screen.getByRole('button', { name: /G7♭13/ }).closest('ul')?.parentElement
+    await user.click(within(row ?? document.body).getByRole('button', { name: 'Play' }))
+    expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65, 53, 59, 63, 67])
   })
 
   it('runs a scale and a line of notes on the keys', async () => {

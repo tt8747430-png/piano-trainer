@@ -11,6 +11,7 @@ import {
   RowStaff,
   RowPlay,
   ScaleExample,
+  VoicingsExample,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyParam, note, noteParam } from '@/shared/lib/music'
@@ -92,6 +93,8 @@ export function LessonBlock({
           onShow={onShow}
         />
       )
+    case 'voicings':
+      return <VoicingsExample voicings={block.voicings} musicKey={block.key} onShow={onShow} />
     case 'pattern': {
       const piece = pieceById(block.piece)
       if (!piece) throw new RangeError(`A lesson plays a pattern over "${block.piece}": no piece`)
