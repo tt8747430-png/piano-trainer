@@ -27,7 +27,7 @@ export function ScalesPage() {
         actions={
           key ? (
             <RoundButton
-              label={t('keys.random')}
+              label={t('scales.key.random')}
               icon={Dices}
               onClick={() => {
                 const next = randomKey(Math.random, key)

@@ -32,7 +32,7 @@ export function GapsLink() {
           {' '}
           <span className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground tabular-nums">
             <span aria-hidden className="size-2.5 rounded-full bg-attention" />
-            {t('practice:gaps', { count: gaps })}
+            {t('practice:quiz.gaps', { count: gaps })}
           </span>
         </>
       ) : null}

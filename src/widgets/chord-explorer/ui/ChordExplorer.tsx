@@ -83,7 +83,7 @@ export function ChordExplorer({
           </ol>
           {others.length > 0 ? (
             <p className="flex flex-wrap items-baseline gap-x-4">
-              <span className="text-muted-foreground">{t('practice:written')}</span>
+              <span className="text-muted-foreground">{t('practice:chords.written')}</span>
               <span className="font-display text-xl font-semibold">
                 {others.map((suffix) => writtenSymbol({ root: built.root, suffix })).join(' · ')}
               </span>

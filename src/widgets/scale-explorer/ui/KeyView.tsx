@@ -63,7 +63,7 @@ export function KeyView({
         </div>
       </div>
       <section className="flex flex-col gap-3">
-        <h3 className="text-2xl">{t('keys.borrowed')}</h3>
+        <h3 className="text-2xl">{t('scales.key.borrowed')}</h3>
         <ScaleChordGrid chords={borrowed} />
       </section>
     </ScaleLayout>

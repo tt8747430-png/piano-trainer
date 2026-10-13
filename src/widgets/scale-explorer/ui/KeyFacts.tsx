@@ -24,11 +24,11 @@ export function KeyFacts({ value }: { value: Key }) {
   const notes = spellScale(value.tonic, keyScale(value))
   return (
     <dl className="flex flex-col gap-2">
-      <Fact term={t('keys.signature')}>
-        {signature.length === 0 ? t('keys.noSignature') : signature.map(noteName).join(' ')}
+      <Fact term={t('scales.key.signature')}>
+        {signature.length === 0 ? t('scales.key.noSignature') : signature.map(noteName).join(' ')}
       </Fact>
-      <Fact term={t('keys.notes')}>{notes.map((tone) => noteName(tone.note)).join(' ')}</Fact>
-      <Fact term={t('scaleFacts.relative')}>
+      <Fact term={t('scales.key.notes')}>{notes.map((tone) => noteName(tone.note)).join(' ')}</Fact>
+      <Fact term={t('scales.facts.relative')}>
         <ButtonLink
           variant="link"
           className="px-0"
@@ -48,7 +48,7 @@ export function KeyFacts({ value }: { value: Key }) {
           {keyName(relative)}
         </ButtonLink>
       </Fact>
-      <Fact term={t('keys.modes')}>
+      <Fact term={t('scales.key.modes')}>
         <span className="flex flex-wrap gap-x-4">
           {modesOfKey(value).map(({ root, kind }) => (
             <ButtonLink

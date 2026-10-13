@@ -58,7 +58,7 @@ export function ChordFinder({
           disabled={chosen.length === 0}
           onClick={() => onChange({ keys: '' })}
         >
-          {t('practice:finder.clear')}
+          {t('practice:chordFinder.clear')}
         </Button>
         {best ? (
           <ButtonLink
@@ -75,7 +75,7 @@ export function ChordFinder({
               />
             }
           >
-            {t('practice:finder.open')}
+            {t('practice:chordFinder.open')}
           </ButtonLink>
         ) : null}
       </div>

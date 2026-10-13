@@ -25,7 +25,7 @@ export function ChordField({
     <TypedField
       label={label}
       value={text}
-      error={readChordSymbol(text) === null ? t('passing.unread') : null}
+      error={readChordSymbol(text) === null ? t('passingChords.unread') : null}
       onChange={(next) => {
         const reads = readChordSymbol(next) !== null
         setTyped({ text: next, for: reads ? next : chord })

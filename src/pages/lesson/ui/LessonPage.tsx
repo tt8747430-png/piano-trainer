@@ -73,7 +73,7 @@ export function LessonPage() {
             <li>
               <RowLink
                 title={localText(next.title, locale)}
-                detail={t('learn:example.next')}
+                detail={t('learn:track.next')}
                 icon={ArrowRight}
                 paint={PAGE_TILES.lesson.paint}
                 render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />}
@@ -82,7 +82,7 @@ export function LessonPage() {
           ) : (
             <li>
               <RowLink
-                title={t('learn:example.allLessons', { module: moduleName(lesson.module) })}
+                title={t('learn:track.all', { module: moduleName(lesson.module) })}
                 icon={List}
                 paint={PAGE_TILES.lesson.paint}
                 render={<Link {...moduleOnLearn(lesson)} />}
@@ -93,7 +93,7 @@ export function LessonPage() {
             <li>
               <RowLink
                 title={localText(previous.title, locale)}
-                detail={t('learn:example.previous')}
+                detail={t('learn:track.previous')}
                 icon={ArrowLeft}
                 paint={PAGE_TILES.lesson.paint}
                 render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: previous.id }} />}

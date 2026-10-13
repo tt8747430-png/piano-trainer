@@ -15,7 +15,7 @@ export function ChordTools({ keys }: { keys: readonly Midi[] }) {
       <li>
         <RowLink
           title={t('pages.chordFinder')}
-          detail={t('theseKeys')}
+          detail={t('chords.theseKeys')}
           {...PAGE_TILES.chordFinder}
           render={<Link to="/practice/chord-finder" search={{ keys: keyListParam(keys) }} />}
         />

@@ -12,13 +12,13 @@ export function FinderName({ keys, finding }: { keys: readonly Midi[]; finding: 
   const { t } = useTranslation(['practice', 'music'])
   switch (finding.kind) {
     case 'empty':
-      return <p className="text-lg text-muted-foreground">{t('practice:finder.choose')}</p>
+      return <p className="text-lg text-muted-foreground">{t('practice:chordFinder.choose')}</p>
     case 'note':
       return <h2 className="text-7xl">{noteName(finding.note)}</h2>
     case 'interval':
       return <h2 className="text-5xl">{t(`music:interval.${finding.interval}.name`)}</h2>
     case 'none':
-      return <p className="text-lg text-muted-foreground">{t('practice:finder.none')}</p>
+      return <p className="text-lg text-muted-foreground">{t('practice:chordFinder.none')}</p>
   }
   return <FoundName keys={keys} best={finding.best} others={finding.others} />
 }
@@ -53,7 +53,7 @@ function FoundName({
       </ol>
       {others.length > 0 ? (
         <p>
-          {t('finder.also', {
+          {t('chordFinder.also', {
             names: others
               .slice(0, 4)
               .map((each) => each.symbol)

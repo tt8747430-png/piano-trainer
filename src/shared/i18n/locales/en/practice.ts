@@ -1,7 +1,4 @@
 export const practice = {
-  inPlayer: 'Practise in the Player',
-  chromatic: 'Chromatic walk',
-  chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
   title: 'Practice',
   // Practice's groups of pages (ADR 0044). The things come first, under no heading.
   groups: { tools: 'Tools', training: 'Training' },
@@ -30,116 +27,163 @@ export const practice = {
     reharmonise: 'The chords that hold a melody note',
     freePlay: 'A live score, marks and a metronome',
   },
+  // Words the explorers share.
+  root: 'Root',
+  hands: 'Hands',
+  arpeggio: 'Arpeggio',
+  inPlayer: 'Practise in the Player',
+  checkYourself: 'Check yourself',
+  // Chords: the chord built, its tensions, and its ways on.
+  chords: {
+    // The other ways a chord symbol is written on this root.
+    written: 'Also written',
+    // Chords builds a chord part by part.
+    builder: {
+      quality: 'Quality',
+      suspension: 'Suspension',
+      none: 'None',
+      // A chord of five notes or more, its root left to the bass: where its right hand starts.
+      handFrom: 'Right hand from',
+      triads: {
+        maj: 'Major',
+        min: 'Minor',
+        dim: 'Diminished',
+        aug: 'Augmented',
+        sus2: 'Suspended 2nd',
+        sus4: 'Suspended 4th',
+      },
+      triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug' },
+      sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
+      sizeNames: {
+        triad: 'Triad',
+        seventh: 'Seventh chord',
+        ninth: 'Ninth chord',
+        eleventh: 'Eleventh chord',
+        thirteenth: 'Thirteenth chord',
+      },
+      seventh: '7th',
+      sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
+      added: 'Added tones',
+      alterations: 'Alterations',
+    },
+    tensions: {
+      title: 'Available tensions',
+      group: {
+        weak: { title: 'Weak', says: 'They add nothing to its sound.' },
+        strong: { title: 'Strong', says: 'They name the chord.' },
+        tension: { title: 'Tensions', says: 'They colour it.' },
+        avoid: { title: 'Avoid', says: 'They clash with it.' },
+      },
+    },
+    chromatic: 'Chromatic walk',
+    chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
+    // Chords' row to the Chord finder, which opens on the chord's own keys.
+    theseKeys: 'Every name these keys have',
+  },
+  // Scales and keys: the run, the chords, the key.
+  scales: {
+    show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
+    label: 'Scale',
+    startOn: 'Start on',
+    fingering: {
+      label: 'Fingering',
+      thumb: 'From the thumb',
+      scale: 'As the scale',
+      note: 'Note',
+      rh: 'RH',
+      lh: 'LH',
+    },
+    rhythmLabel: 'Rhythm',
+    rhythm: {
+      even: 'Even',
+      'long-short': 'Long, short',
+      'short-long': 'Short, long',
+      'long-short-short-short': 'Long, 3 short',
+      'short-short-short-long': '3 short, long',
+    },
+    tempo: 'Tempo',
+    bpm: '{{tempo}} BPM',
+    playUpDown: 'Play up and down',
+    facts: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
+    chordsIn: 'Chords in this scale',
+    keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
+    holds: '{{note}} is in {{chords}}',
+    holdsNone: 'No chord of the scale holds {{note}}',
+    walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
+    key: {
+      circle: 'Circle of fifths',
+      random: 'A random key',
+      signature: 'Signature',
+      noSignature: 'No sharps or flats',
+      notes: 'Notes',
+      modes: 'Modes',
+      borrowed: 'Borrowed chords',
+      songs: 'Songs in this key',
+      studies: 'Studies in this key',
+      noSongs: 'No songs are in this key.',
+    },
+    // A scale's page: its key's common progressions, each opening Progressions in this key.
+    keyProgressions: 'Progressions in this key',
+  },
+  intervals: {
+    simple: 'Within the octave',
+    compound: 'Past the octave',
+  },
+  progressions: {
+    field: 'Numerals or chords',
+    unread: 'This progression can’t be read.',
+    throughKeys: 'Through the keys',
+    choose: 'Progression',
+    typed: 'Typed',
+    /** What leads into each chord of the progression (ADR 0041). */
+    lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    style: {
+      pop: 'Pop',
+      rock: 'Rock',
+      jazz: 'Jazz',
+      blues: 'Blues',
+      classical: 'Classical',
+      soul: 'R&B / Soul',
+      gospel: 'Gospel',
+      theory: 'Theory',
+    },
+  },
   // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },
-  // Chords' row to the Chord finder, which opens on the chord's own keys.
-  theseKeys: 'Every name these keys have',
-  // A scale's page: its key's common progressions, each opening Progressions in this key.
-  keyProgressions: 'Progressions in this key',
-  // The Exercises page's groups (roadmap §10.5).
-  exerciseGroups: {
-    technique: 'Finger technique',
-    barryHarris: 'Barry Harris',
-    jonny: 'Piano With Jonny',
-  },
-  // The Quiz page's groups of trainers.
-  quizGroups: {
-    chords: 'Chords',
-    scales: 'Scales and keys',
-    ear: 'By ear',
-    reading: 'Reading',
-  },
-  // The count after a colon reads right for any number, in both languages.
-  gaps: 'To check: {{count}}',
-  // Free play: the piano played freely, written and named.
-  freePlay: {
-    mode: 'Mode',
-    play: 'Play',
-    mark: 'Mark',
-    clear: 'Clear',
-    colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
-    finger: { label: 'Finger', none: 'None' },
-    score: 'Live score',
-    empty: 'Play, and the notes appear here.',
-  },
-  // From here on, the explorers' and the tools' own words (ADR 0044).
-  // The other ways a chord symbol is written on this root.
-  written: 'Also written',
-  show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
-  keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
-  holds: '{{note}} is in {{chords}}',
-  holdsNone: 'No chord of the scale holds {{note}}',
-  // Chords builds a chord part by part.
-  builder: {
-    quality: 'Quality',
-    suspension: 'Suspension',
-    none: 'None',
-    // A chord of five notes or more, its root left to the bass: where its right hand starts.
-    handFrom: 'Right hand from',
-    triads: {
-      maj: 'Major',
-      min: 'Minor',
-      dim: 'Diminished',
-      aug: 'Augmented',
-      sus2: 'Suspended 2nd',
-      sus4: 'Suspended 4th',
+  // Patterns: each explained and heard, the learner's favourites, hidden and own.
+  patterns: {
+    new: 'New pattern',
+    favourite: 'Favourite',
+    rightHand: 'Right hand',
+    leftHand: 'Left hand',
+    overC: 'Over a bar of C major',
+    over: 'Over the first line of {{piece}}',
+    usedIn: 'Used in',
+    makeOwn: 'Make your own from it',
+    hide: 'Hide from the Player',
+    show: 'Show in the Player',
+    hiddenNote: 'Hidden from the Player’s list and its book’s shelf; it stays in Yours.',
+    edit: 'Edit',
+    delete: 'Delete',
+    deleting: {
+      title: 'Delete {{name}}?',
+      says: 'It leaves your patterns and the Player’s list. Songs that used it go back to their own pattern.',
+      confirm: 'Delete',
+      cancel: 'Keep it',
     },
-    triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug' },
-    sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
-    sizeNames: {
-      triad: 'Triad',
-      seventh: 'Seventh chord',
-      ninth: 'Ninth chord',
-      eleventh: 'Eleventh chord',
-      thirteenth: 'Thirteenth chord',
+    editor: {
+      newTitle: 'New pattern',
+      editTitle: 'Edit pattern',
+      name: 'Name',
+      mine: '{{name}} (mine)',
+      save: 'Save',
+      cancel: 'Cancel',
     },
-    seventh: '7th',
-    sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
-    added: 'Added tones',
-    alterations: 'Alterations',
   },
-  root: 'Root',
-  handsLabel: 'Hands',
-  arpeggio: 'Arpeggio',
-  checkYourself: 'Check yourself',
-  scaleLabel: 'Scale',
-  startOn: 'Start on',
-  fingering: {
-    label: 'Fingering',
-    thumb: 'From the thumb',
-    scale: 'As the scale',
-    note: 'Note',
-    rh: 'RH',
-    lh: 'LH',
-  },
-  rhythmLabel: 'Rhythm',
-  rhythm: {
-    even: 'Even',
-    'long-short': 'Long, short',
-    'short-long': 'Short, long',
-    'long-short-short-short': 'Long, 3 short',
-    'short-short-short-long': '3 short, long',
-  },
-  tempo: 'Tempo',
-  bpm: '{{tempo}} BPM',
-  playUpDown: 'Play up and down',
-  chordsIn: 'Chords in this scale',
-  keys: {
-    circle: 'Circle of fifths',
-    random: 'A random key',
-    signature: 'Signature',
-    noSignature: 'No sharps or flats',
-    notes: 'Notes',
-    modes: 'Modes',
-    borrowed: 'Borrowed chords',
-    songs: 'Songs in this key',
-    studies: 'Studies in this key',
-    noSongs: 'No songs are in this key.',
-  },
-  finder: {
+  chordFinder: {
     choose: 'Choose the keys of a chord.',
     none: 'No chord matches these notes.',
     also: 'Also: {{names}}',
@@ -150,19 +194,7 @@ export const practice = {
     clear: 'Clear',
     open: 'Open in Chords',
   },
-  reharmonise: {
-    note: 'Melody note',
-    as: 'as {{degree}}',
-    inKey: 'in the key',
-    onlyInKey: 'In the key only',
-    group: {
-      triads: 'Triads',
-      major: 'Major 7ths',
-      minor: 'Minor 7ths',
-      dominant: 'Dominant 7ths',
-    },
-  },
-  passing: {
+  passingChords: {
     from: 'From',
     to: 'To',
     unread: 'This chord can’t be read.',
@@ -242,68 +274,46 @@ export const practice = {
       },
     },
   },
-  tensions: {
-    title: 'Available tensions',
+  reharmonise: {
+    note: 'Melody note',
+    as: 'as {{degree}}',
+    inKey: 'in the key',
+    onlyInKey: 'In the key only',
     group: {
-      weak: { title: 'Weak', says: 'They add nothing to its sound.' },
-      strong: { title: 'Strong', says: 'They name the chord.' },
-      tension: { title: 'Tensions', says: 'They colour it.' },
-      avoid: { title: 'Avoid', says: 'They clash with it.' },
+      triads: 'Triads',
+      major: 'Major 7ths',
+      minor: 'Minor 7ths',
+      dominant: 'Dominant 7ths',
     },
   },
-  // Patterns: each explained and heard, the learner's favourites, hidden and own.
-  patterns: {
-    new: 'New pattern',
-    favourite: 'Favourite',
-    rightHand: 'Right hand',
-    leftHand: 'Left hand',
-    overC: 'Over a bar of C major',
-    over: 'Over the first line of {{piece}}',
-    usedIn: 'Used in',
-    makeOwn: 'Make your own from it',
-    hide: 'Hide from the Player',
-    show: 'Show in the Player',
-    hiddenNote: 'Hidden from the Player’s list and its book’s shelf; it stays in Yours.',
-    edit: 'Edit',
-    delete: 'Delete',
-    deleting: {
-      title: 'Delete {{name}}?',
-      says: 'It leaves your patterns and the Player’s list. Songs that used it go back to their own pattern.',
-      confirm: 'Delete',
-      cancel: 'Keep it',
-    },
-    editor: {
-      newTitle: 'New pattern',
-      editTitle: 'Edit pattern',
-      name: 'Name',
-      mine: '{{name}} (mine)',
-      save: 'Save',
-      cancel: 'Cancel',
+  // Free play: the piano played freely, written and named.
+  freePlay: {
+    mode: 'Mode',
+    play: 'Play',
+    mark: 'Mark',
+    clear: 'Clear',
+    colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
+    finger: { label: 'Finger', none: 'None' },
+    score: 'Live score',
+    empty: 'Play, and the notes appear here.',
+  },
+  exercises: {
+    // The Exercises page's groups (roadmap §10.5).
+    groups: {
+      technique: 'Finger technique',
+      barryHarris: 'Barry Harris',
+      jonny: 'Piano With Jonny',
     },
   },
-  scaleFacts: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
-  walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
-  intervals: {
-    simple: 'Within the octave',
-    compound: 'Past the octave',
-  },
-  progressions: {
-    field: 'Numerals or chords',
-    unread: 'This progression can’t be read.',
-    throughKeys: 'Through the keys',
-    choose: 'Progression',
-    typed: 'Typed',
-    /** What leads into each chord of the progression (ADR 0041). */
-    lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
-    style: {
-      pop: 'Pop',
-      rock: 'Rock',
-      jazz: 'Jazz',
-      blues: 'Blues',
-      classical: 'Classical',
-      soul: 'R&B / Soul',
-      gospel: 'Gospel',
-      theory: 'Theory',
+  quiz: {
+    // The Quiz page's groups of trainers.
+    groups: {
+      chords: 'Chords',
+      scales: 'Scales and keys',
+      ear: 'By ear',
+      reading: 'Reading',
     },
+    // The count after a colon reads right for any number, in both languages.
+    gaps: 'To check: {{count}}',
   },
 } as const

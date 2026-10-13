@@ -35,7 +35,7 @@ export function ChordTensions({
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
       <h2 id={id} className="text-2xl">
-        {t('tensions.title')}
+        {t('chords.tensions.title')}
       </h2>
       <div className="grid-fields gap-4">
         {TENSION_GROUPS.map((group) => (

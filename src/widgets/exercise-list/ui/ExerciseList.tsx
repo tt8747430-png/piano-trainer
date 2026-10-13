@@ -18,7 +18,7 @@ export function ExerciseList() {
   return (
     <div className="flex flex-col gap-8">
       {LISTED_GROUPS.map((group) => (
-        <RowGroup key={group} title={t(`exerciseGroups.${group}`)}>
+        <RowGroup key={group} title={t(`exercises.groups.${group}`)}>
           {exercisesIn(group).map((exercise) => (
             <li key={exercise.id}>
               <ExerciseRow exercise={exercise} {...GROUP_TILE[group]} />

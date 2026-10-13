@@ -30,15 +30,15 @@ export function KeyChords({
     note === null
       ? ''
       : holding.length === 0
-        ? t('holdsNone', { note: heardName(note, root, kind) })
-        : t('holds', {
+        ? t('scales.holdsNone', { note: heardName(note, root, kind) })
+        : t('scales.holds', {
             note: heardName(note, root, kind),
             chords: new Intl.ListFormat(locale, { type: 'conjunction' }).format(
               holding.map((placed) => placed.symbol),
             ),
           })
   return (
-    <section aria-label={t('chordsIn')} className="flex flex-col gap-3">
+    <section aria-label={t('scales.chordsIn')} className="flex flex-col gap-3">
       <ScaleChordGrid chords={chords} holds={holds} />
       {listening ? (
         <p aria-live="polite" className="min-h-7 text-lg">

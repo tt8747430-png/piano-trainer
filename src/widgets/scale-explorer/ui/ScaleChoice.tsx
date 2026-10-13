@@ -22,10 +22,10 @@ export function ScaleChoice({
           onChange={(root) => onChange({ root })}
         />
       </div>
-      <Labelled label={t('practice:scaleLabel')}>
+      <Labelled label={t('practice:scales.label')}>
         <Dropdown
           bare
-          label={t('practice:scaleLabel')}
+          label={t('practice:scales.label')}
           value={scale.kind}
           groups={SCALE_FAMILIES.map((family) => ({
             label: t(`music:scaleFamily.${family}`),

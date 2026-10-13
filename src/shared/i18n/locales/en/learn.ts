@@ -22,15 +22,18 @@ export const learn = {
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',
   contents: 'In this lesson',
-  // A lesson's example: the piece a pattern plays over, where it opens; and the ways along its track.
+  // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {
     over: 'Played over “{{piece}}”',
     openInPlayer: 'Open in the Player',
     inProgressions: 'Open in Progressions',
     tapHint: 'Tap a chord, a note or a bar to hear it and see it on the keys.',
+  },
+  // The ways along a lesson's track, at its end.
+  track: {
     next: 'Next lesson',
     previous: 'Previous lesson',
-    allLessons: 'All lessons of {{module}}',
+    all: 'All lessons of {{module}}',
   },
   // A lesson's quiz, answered on its keys.
   quiz: {

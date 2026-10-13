@@ -29,16 +29,16 @@ export function SuggestionCard({
       <ChordRow chords={[from, ...way.chords, to].map((chord) => ({ chord }))} onShow={onShow}>
         <header className="flex items-baseline justify-between gap-3">
           <h3 id={titleId} className="text-xl">
-            {t(`passing.kind.${way.kind}.name`)}
+            {t(`passingChords.kind.${way.kind}.name`)}
           </h3>
           <span className="shrink-0 text-sm text-muted-foreground">
-            {t(inKey ? 'passing.inKey' : 'passing.chromatic')}
+            {t(inKey ? 'passingChords.inKey' : 'passingChords.chromatic')}
           </span>
         </header>
         <RowChords />
         <RowStaff />
         <p className="text-muted-foreground">
-          {t(`passing.kind.${way.kind}.why`, {
+          {t(`passingChords.kind.${way.kind}.why`, {
             chord: first ? chordSymbol(first) : '',
             next: second ? chordSymbol(second) : '',
             to: chordSymbol(to),

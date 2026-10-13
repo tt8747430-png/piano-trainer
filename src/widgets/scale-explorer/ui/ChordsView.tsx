@@ -105,23 +105,23 @@ export function ChordsView({
               onChange={(next) => onChange({ inversion: next })}
             />
           </Labelled>
-          <Labelled label={t('practice:keysPlay.label')}>
+          <Labelled label={t('practice:scales.keysPlay.label')}>
             <Segmented
-              label={t('practice:keysPlay.label')}
+              label={t('practice:scales.keysPlay.label')}
               value={keysPlay}
               options={KEYS_PLAY.map((value) => ({
                 value,
-                label: t(`practice:keysPlay.${value}`),
+                label: t(`practice:scales.keysPlay.${value}`),
               }))}
               onChange={(next) => onChange({ keysPlay: next })}
             />
           </Labelled>
-          <Labelled label={t('practice:walk.played')}>
+          <Labelled label={t('practice:scales.walk.played')}>
             <Segmented
-              label={t('practice:walk.played')}
+              label={t('practice:scales.walk.played')}
               value={scale.arpeggio ? 'arpeggio' : 'block'}
               options={[
-                { value: 'block', label: t('practice:walk.block') },
+                { value: 'block', label: t('practice:scales.walk.block') },
                 { value: 'arpeggio', label: t('practice:arpeggio') },
               ]}
               onChange={(played) => onChange({ arpeggio: played === 'arpeggio' })}

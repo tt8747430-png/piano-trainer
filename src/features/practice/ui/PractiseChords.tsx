@@ -47,7 +47,7 @@ export function PractiseChords({
       <RowGroup title={t('inPlayer')}>
         <li>
           <RowLink
-            title={t('walk.title')}
+            title={t('scales.walk.title')}
             icon={Footprints}
             paint="lilac"
             render={
@@ -65,7 +65,7 @@ export function PractiseChords({
         </li>
       </RowGroup>
       {mode ? (
-        <RowGroup title={t('keyProgressions')}>
+        <RowGroup title={t('scales.keyProgressions')}>
           {COMMON_PROGRESSIONS.map((progression) => (
             <li key={progression.id}>
               <RowLink

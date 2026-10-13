@@ -11,10 +11,10 @@ export function PiecesInKey({ musicKey }: { musicKey: Key }) {
   const inKey = entriesInKey(musicKey)
   const songs = inKey.filter((entry) => shelfOf(entry.kind) === 'songs')
   const groups = [
-    { id: 'songs-in-key', heading: t('keys.songs'), entries: songs },
+    { id: 'songs-in-key', heading: t('scales.key.songs'), entries: songs },
     {
       id: 'studies-in-key',
-      heading: t('keys.studies'),
+      heading: t('scales.key.studies'),
       entries: inKey.filter((entry) => entry.kind === 'study'),
     },
   ].filter((group) => group.entries.length > 0)
@@ -23,9 +23,9 @@ export function PiecesInKey({ musicKey }: { musicKey: Key }) {
       {songs.length > 0 ? null : (
         <section aria-labelledby={songsId} className="flex flex-col gap-2">
           <h2 id={songsId} className="text-2xl">
-            {t('keys.songs')}
+            {t('scales.key.songs')}
           </h2>
-          <p className="text-muted-foreground">{t('keys.noSongs')}</p>
+          <p className="text-muted-foreground">{t('scales.key.noSongs')}</p>
         </section>
       )}
       {groups.length > 0 ? <PieceList groups={groups} /> : null}

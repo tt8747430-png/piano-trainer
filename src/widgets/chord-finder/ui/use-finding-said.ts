@@ -15,7 +15,7 @@ export function useFindingSaid(finding: Finding): string {
     case 'interval':
       return t(`music:interval.${finding.interval}.name`)
     case 'none':
-      return t('practice:finder.none')
+      return t('practice:chordFinder.none')
     case 'chord':
       return [finding.best.symbol, ...aboutOf(finding.best)].join(' · ')
   }

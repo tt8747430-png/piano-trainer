@@ -27,10 +27,10 @@ export function ScaleFacts({
   const related = relatedScale(root, kind)
   return (
     <dl className="flex flex-col gap-2">
-      <Fact term={t('practice:scaleFacts.formula')}>
+      <Fact term={t('practice:scales.facts.formula')}>
         {tones.map((tone) => tone.degree).join(' ')}
       </Fact>
-      <Fact term={t('practice:scaleFacts.gaps')}>
+      <Fact term={t('practice:scales.facts.gaps')}>
         {scaleGaps(kind)
           .map((gap) => t(`music:gap.${gap}`))
           .join(' ')}
@@ -39,8 +39,8 @@ export function ScaleFacts({
         <Fact
           term={t(
             related.relation === 'parent'
-              ? 'practice:scaleFacts.modeOf'
-              : 'practice:scaleFacts.relative',
+              ? 'practice:scales.facts.modeOf'
+              : 'practice:scales.facts.relative',
           )}
         >
           <ButtonLink

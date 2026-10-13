@@ -19,7 +19,7 @@ export function QuizPage() {
         {QUIZ_GROUPS.map((group) => (
           <TrainerList
             key={group}
-            title={t(`quizGroups.${group}`)}
+            title={t(`quiz.groups.${group}`)}
             trainers={QUIZ_TRAINERS[group]}
           />
         ))}

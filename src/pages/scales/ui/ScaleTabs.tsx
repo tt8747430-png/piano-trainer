@@ -20,7 +20,7 @@ export function ScaleTabs({ shows, current }: { shows: readonly ScaleShow[]; cur
           {...IN_PLACE}
           current={show === current}
         >
-          {t(`show.${show}`)}
+          {t(`scales.show.${show}`)}
         </NavTab>
       ))}
     </NavTabs>

@@ -12,7 +12,7 @@ export function PlayUpDown({ sounds }: { sounds: readonly Sound[] }) {
   usePlayKey(play)
   return (
     <Button size="pill" onClick={play}>
-      <PlayLabel playing={playback.playing === 'up-down'}>{t('playUpDown')}</PlayLabel>
+      <PlayLabel playing={playback.playing === 'up-down'}>{t('scales.playUpDown')}</PlayLabel>
     </Button>
   )
 }

@@ -28,13 +28,13 @@ export function usePageWords(): (page: PracticePageId) => PageWords {
       const about = () => {
         switch (page) {
           case 'scales':
-            return listed(SCALE_SHOWS.map((show) => t(`show.${show}`)))
+            return listed(SCALE_SHOWS.map((show) => t(`scales.show.${show}`)))
           case 'accompaniment':
             return listed(ACCOMPANIMENT_PARTS.map(partName))
           case 'exercises':
-            return listed(LISTED_GROUPS.map((group) => t(`exerciseGroups.${group}`)))
+            return listed(LISTED_GROUPS.map((group) => t(`exercises.groups.${group}`)))
           case 'quiz':
-            return listed(QUIZ_GROUPS.map((group) => t(`quizGroups.${group}`)))
+            return listed(QUIZ_GROUPS.map((group) => t(`quiz.groups.${group}`)))
           default:
             return t(`about.${page}`)
         }

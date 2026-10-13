@@ -19,7 +19,7 @@ export function useChordAbout(): (found: FoundChord) => string[] {
   return useCallback(
     (found) => [
       ...(found.chord.quality ? [t(`music:quality.${found.chord.quality}`)] : []),
-      ...found.leftOut.map((tone) => t(`practice:finder.${LEFT_OUT_WORDS[tone]}`)),
+      ...found.leftOut.map((tone) => t(`practice:chordFinder.${LEFT_OUT_WORDS[tone]}`)),
     ],
     [t],
   )

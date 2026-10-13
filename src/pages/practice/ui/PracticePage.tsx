@@ -24,7 +24,7 @@ export function PracticePage() {
     gaps > 0 ? (
       <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-muted-foreground tabular-nums">
         <span aria-hidden className="size-2.5 rounded-full bg-attention" />
-        {t('gaps', { count: gaps })}
+        {t('quiz.gaps', { count: gaps })}
       </span>
     ) : undefined
   return (

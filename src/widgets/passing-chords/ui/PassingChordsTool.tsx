@@ -45,11 +45,15 @@ export function PassingChordsTool({
       <div className="grid-fields gap-x-10 gap-y-6">
         <div className="grid grid-cols-2 items-start gap-3">
           <ChordField
-            label={t('passing.from')}
+            label={t('passingChords.from')}
             chord={view.from}
             onChange={(from) => onChange({ from })}
           />
-          <ChordField label={t('passing.to')} chord={view.to} onChange={(to) => onChange({ to })} />
+          <ChordField
+            label={t('passingChords.to')}
+            chord={view.to}
+            onChange={(to) => onChange({ to })}
+          />
         </div>
         <KeyChoice value={view.key} onChange={(next) => onChange({ key: next })} />
       </div>
@@ -58,10 +62,10 @@ export function PassingChordsTool({
         pressed={view.inKey}
         onPressedChange={(next) => onChange({ inKey: next })}
       >
-        {t('passing.onlyInKey')}
+        {t('passingChords.onlyInKey')}
       </Toggle>
       {from && to && ways.length === 0 ? (
-        <p className="text-muted-foreground">{t('passing.noneInKey')}</p>
+        <p className="text-muted-foreground">{t('passingChords.noneInKey')}</p>
       ) : null}
       {from && to
         ? PASSING_CATEGORIES.map((category) => {
@@ -73,7 +77,7 @@ export function PassingChordsTool({
                 className="flex flex-col gap-3"
               >
                 <h2 id={`${id}-${category}`} className="text-2xl">
-                  {t(`passing.category.${category}`)}
+                  {t(`passingChords.category.${category}`)}
                 </h2>
                 <div className="grid-fields gap-4">
                   {inCategory.map((way) => (

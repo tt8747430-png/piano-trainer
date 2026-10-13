@@ -63,9 +63,9 @@ export function RunView({
       fields={
         <>
           {choice}
-          <Labelled label={t('practice:handsLabel')}>
+          <Labelled label={t('practice:hands')}>
             <Segmented
-              label={t('practice:handsLabel')}
+              label={t('practice:hands')}
               value={hands}
               options={[
                 { value: 'rh', label: t('common:handsShort.rh') },
@@ -75,35 +75,35 @@ export function RunView({
               onChange={(next) => onChange({ hands: next })}
             />
           </Labelled>
-          <Labelled label={t('practice:startOn')}>
+          <Labelled label={t('practice:scales.startOn')}>
             <Segmented
-              label={t('practice:startOn')}
+              label={t('practice:scales.startOn')}
               value={start}
               options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
               onChange={(next) => onChange({ start: next })}
             />
           </Labelled>
           {run.fingerings.length > 1 ? (
-            <Labelled label={t('practice:fingering.label')}>
+            <Labelled label={t('practice:scales.fingering.label')}>
               <Segmented
-                label={t('practice:fingering.label')}
+                label={t('practice:scales.fingering.label')}
                 value={run.fingering}
                 options={run.fingerings.map((value) => ({
                   value,
-                  label: t(`practice:fingering.${value}`),
+                  label: t(`practice:scales.fingering.${value}`),
                 }))}
                 onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
               />
             </Labelled>
           ) : null}
-          <Labelled label={t('practice:rhythmLabel')}>
+          <Labelled label={t('practice:scales.rhythmLabel')}>
             <Dropdown
               bare
-              label={t('practice:rhythmLabel')}
+              label={t('practice:scales.rhythmLabel')}
               value={rhythm}
               options={PRACTICE_RHYTHM_IDS.map((r) => ({
                 value: r,
-                label: t(`practice:rhythm.${r}`),
+                label: t(`practice:scales.rhythm.${r}`),
               }))}
               onChange={(next) => onChange({ rhythm: next })}
               className="w-full"

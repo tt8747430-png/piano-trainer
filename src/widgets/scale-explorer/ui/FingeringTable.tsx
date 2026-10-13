@@ -28,9 +28,9 @@ export function FingeringTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <tbody>
-          {row(t('fingering.note'), notes)}
-          {row(t('fingering.rh'), rh)}
-          {row(t('fingering.lh'), lh)}
+          {row(t('scales.fingering.note'), notes)}
+          {row(t('scales.fingering.rh'), rh)}
+          {row(t('scales.fingering.lh'), lh)}
         </tbody>
       </table>
     </div>

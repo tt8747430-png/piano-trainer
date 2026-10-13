@@ -65,8 +65,8 @@ export function ChordPractice({
       ) : null}
       <li>
         <RowLink
-          title={t('chromatic')}
-          detail={t('chromaticDetail')}
+          title={t('chords.chromatic')}
+          detail={t('chords.chromaticDetail')}
           icon={Footprints}
           paint="lilac"
           render={

@@ -81,14 +81,14 @@ export function ChordBuilder({
           onChange={(root) => onChange({ root })}
         />
       </div>
-      <Labelled label={t('practice:builder.quality')}>
+      <Labelled label={t('practice:chords.builder.quality')}>
         <Segmented
-          label={t('practice:builder.quality')}
+          label={t('practice:chords.builder.quality')}
           value={quality}
           options={QUALITIES.map((each) => ({
             value: each,
-            label: t(`practice:builder.triadShort.${each}`),
-            title: t(`practice:builder.triads.${each}`),
+            label: t(`practice:chords.builder.triadShort.${each}`),
+            title: t(`practice:chords.builder.triads.${each}`),
           }))}
           onChange={(next) => onChange({ triad: next })}
         />
@@ -99,37 +99,37 @@ export function ChordBuilder({
           value={parts.size}
           options={sizesOf(quality).map((size) => ({
             value: size,
-            label: t(`practice:builder.sizes.${SIZE_NAMES[size]}`),
-            title: t(`practice:builder.sizeNames.${SIZE_NAMES[size]}`),
+            label: t(`practice:chords.builder.sizes.${SIZE_NAMES[size]}`),
+            title: t(`practice:chords.builder.sizeNames.${SIZE_NAMES[size]}`),
           }))}
           onChange={(size) => onChange({ size })}
         />
       </Labelled>
       {parts.size > 5 && sevenths.length > 1 ? (
-        <Labelled label={t('practice:builder.seventh')}>
+        <Labelled label={t('practice:chords.builder.seventh')}>
           <Segmented
-            label={t('practice:builder.seventh')}
+            label={t('practice:chords.builder.seventh')}
             value={parts.seventh}
             options={sevenths.map((seventh) => ({
               value: seventh,
               label: SEVENTH_DEGREE[seventh],
-              title: t(`practice:builder.sevenths.${seventh}`),
+              title: t(`practice:chords.builder.sevenths.${seventh}`),
             }))}
             onChange={(seventh) => onChange({ seventh })}
           />
         </Labelled>
       ) : null}
       {suspensions.length > 0 ? (
-        <Labelled label={t('practice:builder.suspension')}>
+        <Labelled label={t('practice:chords.builder.suspension')}>
           <Segmented<Triad>
-            label={t('practice:builder.suspension')}
+            label={t('practice:chords.builder.suspension')}
             value={parts.triad}
             options={[
-              { value: 'maj', label: t('practice:builder.none') },
+              { value: 'maj', label: t('practice:chords.builder.none') },
               ...suspensions.map((each) => ({
                 value: each,
                 label: each,
-                title: t(`practice:builder.triads.${each}`),
+                title: t(`practice:chords.builder.triads.${each}`),
               })),
             ]}
             onChange={(triad) => onChange({ triad })}
@@ -137,9 +137,9 @@ export function ChordBuilder({
         </Labelled>
       ) : null}
       {added.length > 0 ? (
-        <Labelled label={t('practice:builder.added')}>
+        <Labelled label={t('practice:chords.builder.added')}>
           <ToggleChips
-            label={t('practice:builder.added')}
+            label={t('practice:chords.builder.added')}
             value={parts.added}
             options={added.map((tone) => ({ value: tone, label: ADDED_NAME[tone] }))}
             onChange={(chosen) => onChange(partsParams(withAdded(parts, chosen)))}
@@ -147,9 +147,9 @@ export function ChordBuilder({
         </Labelled>
       ) : null}
       {alterations.length > 0 ? (
-        <Labelled label={t('practice:builder.alterations')}>
+        <Labelled label={t('practice:chords.builder.alterations')}>
           <ToggleChips
-            label={t('practice:builder.alterations')}
+            label={t('practice:chords.builder.alterations')}
             value={parts.alterations}
             options={alterations.map((alteration) => ({
               value: alteration,
@@ -161,7 +161,7 @@ export function ChordBuilder({
       ) : null}
       {twoHands ? (
         chordInversions(tones).length > 1 ? (
-          <Labelled label={t('practice:builder.handFrom')}>
+          <Labelled label={t('practice:chords.builder.handFrom')}>
             <RightHandFrom
               tones={tones}
               value={chord.inversion}
@@ -178,9 +178,9 @@ export function ChordBuilder({
           />
         </Labelled>
       )}
-      <Labelled label={t('practice:handsLabel')}>
+      <Labelled label={t('practice:hands')}>
         <Segmented
-          label={t('practice:handsLabel')}
+          label={t('practice:hands')}
           value={twoHands ? 'both' : chord.hands}
           disabled={twoHands}
           options={[

@@ -18,7 +18,7 @@ export function RightHandFrom({
   const { t } = useTranslation('practice')
   return (
     <Segmented
-      label={t('builder.handFrom')}
+      label={t('chords.builder.handFrom')}
       value={value}
       options={chordInversions(tones).flatMap((inversion) => {
         const [start] = placeChord(tones, { inversion, bothHands: true }).rh

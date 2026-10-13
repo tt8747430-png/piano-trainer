@@ -21,8 +21,8 @@ export function TempoSlider({
       className="flex flex-col gap-3"
     >
       <div className="flex justify-between">
-        <SliderLabel>{t('tempo')}</SliderLabel>
-        <span className="font-semibold tabular-nums">{t('bpm', { tempo })}</span>
+        <SliderLabel>{t('scales.tempo')}</SliderLabel>
+        <span className="font-semibold tabular-nums">{t('scales.bpm', { tempo })}</span>
       </div>
     </Slider>
   )

@@ -29,9 +29,9 @@ export function TensionGroupCard({
     <section aria-labelledby={id} className="flex flex-col gap-3 card p-4">
       <hgroup>
         <h3 id={id} className="text-xl">
-          {t(`tensions.group.${group}.title`)}
+          {t(`chords.tensions.group.${group}.title`)}
         </h3>
-        <p className="text-sm text-muted-foreground">{t(`tensions.group.${group}.says`)}</p>
+        <p className="text-sm text-muted-foreground">{t(`chords.tensions.group.${group}.says`)}</p>
       </hgroup>
       <ul className="flex flex-wrap gap-2">
         {tones.map((tone) => {

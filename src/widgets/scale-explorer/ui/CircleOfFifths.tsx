@@ -36,7 +36,10 @@ export function CircleOfFifths({ current }: { current: Key }) {
     functions.find((at) => at.place === place && at.ring === ring)
   const name = useKeyName()
   return (
-    <nav aria-label={t('keys.circle')} className="relative mx-auto aspect-square w-full max-w-sm">
+    <nav
+      aria-label={t('scales.key.circle')}
+      className="relative mx-auto aspect-square w-full max-w-sm"
+    >
       <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 size-full">
         {CIRCLE_OF_FIFTHS.flatMap((place, i) =>
           RINGS.map((ring) => (
