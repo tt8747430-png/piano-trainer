@@ -41,6 +41,24 @@ describe('walkKeys', () => {
     ])
   })
 
+  it('walks up by semitones to the octave, then down them home', () => {
+    expect(names(walkKeys(C, 'semitones-up-down'))).toEqual([
+      ...names(walkKeys(C, 'semitones-up')),
+      'B',
+      'B♭',
+      'A',
+      'A♭',
+      'G',
+      'F#',
+      'F',
+      'E',
+      'E♭',
+      'D',
+      'D♭',
+      'C',
+    ])
+  })
+
   it('walks by whole tones, six keys and home', () => {
     expect(names(walkKeys(C, 'tones-up'))).toEqual(['C', 'D', 'E', 'F#', 'A♭', 'B♭', 'C'])
     expect(names(walkKeys(C, 'tones-down'))).toEqual(['C', 'B♭', 'A♭', 'F#', 'E', 'D', 'C'])

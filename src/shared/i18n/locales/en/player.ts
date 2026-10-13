@@ -9,6 +9,7 @@ export const player = {
   walking: {
     'semitones-up': 'up by semitones',
     'semitones-down': 'down by semitones',
+    'semitones-up-down': 'up and down by semitones',
     'tones-up': 'up by whole tones',
     'tones-down': 'down by whole tones',
     fifths: 'down the circle of fifths',
@@ -46,6 +47,7 @@ export const player = {
     one: 'One key',
     'semitones-up': 'Up by semitones',
     'semitones-down': 'Down by semitones',
+    'semitones-up-down': 'Up and down by semitones',
     'tones-up': 'Up by whole tones',
     'tones-down': 'Down by whole tones',
     fifths: 'Down the circle of fifths: C F B♭',

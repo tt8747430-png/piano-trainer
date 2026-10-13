@@ -65,7 +65,7 @@ const ninthsInASong: Lesson = {
             numerals: 'V',
             key: C_MAJOR,
             size: 'ninths',
-            walk: 'semitones-up',
+            walk: 'semitones-up-down',
           },
         },
       ],

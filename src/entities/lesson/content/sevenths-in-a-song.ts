@@ -126,17 +126,17 @@ const seventhsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: 'Step 1: the minor 7th', ru: 'Шаг 1: малый минорный' },
-          target: { opens: 'player', numerals: 'i7', key: C_MINOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'i7', key: C_MINOR, walk: 'semitones-up-down' },
         },
         {
           kind: 'link',
           title: { en: 'Step 2: the major 7th', ru: 'Шаг 2: большой мажорный' },
-          target: { opens: 'player', numerals: 'Imaj7', key: C_MAJOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'Imaj7', key: C_MAJOR, walk: 'semitones-up-down' },
         },
         {
           kind: 'link',
           title: { en: 'Step 3: the dominant 7th', ru: 'Шаг 3: доминантовый' },
-          target: { opens: 'player', numerals: 'I7', key: C_MAJOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'I7', key: C_MAJOR, walk: 'semitones-up-down' },
         },
       ],
     },

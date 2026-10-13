@@ -268,6 +268,7 @@ describe('Practice → Progressions', () => {
       [
         'Up by semitones',
         'Down by semitones',
+        'Up and down by semitones',
         'Up by whole tones',
         'Down by whole tones',
         'Down the circle of fifths: C F B♭',
@@ -281,6 +282,7 @@ describe('Practice → Progressions', () => {
     ).toEqual([
       'semitones-up',
       'semitones-down',
+      'semitones-up-down',
       'tones-up',
       'tones-down',
       'fifths',

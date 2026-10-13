@@ -9,6 +9,7 @@ export const player: LocaleResources['player'] = {
   walking: {
     'semitones-up': 'вверх по полутонам',
     'semitones-down': 'вниз по полутонам',
+    'semitones-up-down': 'вверх и вниз по полутонам',
     'tones-up': 'вверх по тонам',
     'tones-down': 'вниз по тонам',
     fifths: 'вниз по квинтовому кругу',
@@ -42,6 +43,7 @@ export const player: LocaleResources['player'] = {
     one: 'Одна тональность',
     'semitones-up': 'Вверх по полутонам',
     'semitones-down': 'Вниз по полутонам',
+    'semitones-up-down': 'Вверх и вниз по полутонам',
     'tones-up': 'Вверх по тонам',
     'tones-down': 'Вниз по тонам',
     fifths: 'Вниз по квинтовому кругу: C F B♭',
