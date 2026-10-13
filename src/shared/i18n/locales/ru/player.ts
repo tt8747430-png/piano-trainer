@@ -52,6 +52,13 @@ export const player: LocaleResources['player'] = {
   ownKeyOnly: 'Только в тональности {{key}}',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },
+  lhGroup: {
+    held: 'Выдержанные',
+    octaves: 'Октавы',
+    arpeggios: 'Арпеджио',
+    lines: 'Басовые линии',
+    styles: 'Стили',
+  },
   toggles: {
     fingerNumbers: 'Аппликатура',
     namedNotes: 'Ноты с названиями',

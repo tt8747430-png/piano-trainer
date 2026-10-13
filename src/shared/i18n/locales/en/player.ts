@@ -56,6 +56,14 @@ export const player = {
   ownKeyOnly: 'Only in {{key}}',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },
+  /** The left hand's figures in the Setup, by what they do. */
+  lhGroup: {
+    held: 'Held',
+    octaves: 'Octaves',
+    arpeggios: 'Arpeggios',
+    lines: 'Bass lines',
+    styles: 'Styles',
+  },
   toggles: {
     fingerNumbers: 'Finger numbers',
     namedNotes: 'Named notes',

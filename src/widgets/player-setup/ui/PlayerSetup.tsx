@@ -2,6 +2,7 @@ import { SlidersHorizontal } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  LEFT_FIGURE_GROUPS,
   LEFT_FIGURE_IDS,
   LEFT_FIGURES,
   RIGHT_FIGURE_IDS,
@@ -90,6 +91,10 @@ export function PlayerSetup({
           <FigurePage
             label={t('lh')}
             ids={LEFT_FIGURE_IDS}
+            sections={LEFT_FIGURE_GROUPS.map((group) => ({
+              label: t(`lhGroup.${group.id}`),
+              ids: group.figures,
+            }))}
             figures={LEFT_FIGURES}
             value={figures.lh}
             fit={fit}

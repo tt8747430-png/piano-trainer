@@ -65,7 +65,12 @@ export {
   selectIsHidden,
   selectOwnPattern,
 } from './model/selectors'
-export { LEFT_FIGURES, RIGHT_FIGURES } from './content/figures'
+export {
+  LEFT_FIGURE_GROUPS,
+  LEFT_FIGURES,
+  RIGHT_FIGURES,
+  type LeftFigureGroup,
+} from './content/figures'
 export { PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
 export { useFullShelfName } from './ui/use-full-shelf-name'
