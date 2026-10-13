@@ -1,26 +1,17 @@
 import { Link } from '@tanstack/react-router'
-import { Dumbbell, ListChecks } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectAllAnswers, selectPractised, useProgress } from '@/entities/progress'
 import { myGaps } from '@/features/trainer'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { PAGE_TILES, RowLink, ScreenHeader, type Tile } from '@/shared/ui'
-
-/**
- * Practice's eight places, in the order they are listed: each one page for a thing practised, wearing
- * that page's tile.
- */
-const SUBJECTS = [
-  { id: 'chords', to: '/practice/chords', tile: PAGE_TILES.chords },
-  { id: 'scales', to: '/practice/scales', tile: PAGE_TILES.scales },
-  { id: 'progressions', to: '/practice/progressions', tile: PAGE_TILES.progressions },
-  { id: 'intervals', to: '/practice/intervals', tile: PAGE_TILES.intervals },
-  { id: 'accompaniment', to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
-  { id: 'exercises', to: '/practice/exercises', tile: { icon: Dumbbell, paint: 'sand' } },
-  { id: 'quiz', to: '/practice/quiz', tile: { icon: ListChecks, paint: 'lilac' } },
-  { id: 'freePlay', to: '/practice/free-play', tile: PAGE_TILES.freePlay },
-] as const satisfies readonly { id: string; to: string; tile: Tile }[]
+import { RowGroup, RowLink, ScreenHeader } from '@/shared/ui'
+import {
+  PRACTICE_GROUPS,
+  PRACTICE_PAGES,
+  THINGS,
+  type PracticePageId,
+} from '../model/practice-pages'
+import { usePageAbout } from './use-page-about'
 
 /** How many skills My gaps holds to check. */
 function useGapsCount(): number {
@@ -29,9 +20,25 @@ function useGapsCount(): number {
   return useMemo(() => myGaps(answers, practised).length, [answers, practised])
 }
 
+/** A page's row: its name, what it says of itself, its tile. It opens as it was left. */
+function PageRow({ page, trailing }: { page: PracticePageId; trailing?: ReactNode }) {
+  const { t } = useTranslation('practice')
+  const about = usePageAbout()
+  const { to, tile } = PRACTICE_PAGES[page]
+  return (
+    <RowLink
+      title={t(`pages.${page}`)}
+      detail={about(page)}
+      {...tile}
+      trailing={trailing}
+      render={<Link to={to} state={OPEN_PLAINLY} />}
+    />
+  )
+}
+
 /**
- * Practice: eight places, each named for what is practised and saying what is inside it. Each opens
- * as it was left.
+ * Practice (ADR 0044): the things first, under no heading, each a page that shows one on the keys;
+ * then the tools, which work something out from what they are given; then the training.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')
@@ -45,21 +52,24 @@ export function PracticePage() {
       </span>
     ) : undefined
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-8">
       <ScreenHeader title={t('title')} />
       <ul className="grid-cards gap-2 *:card">
-        {SUBJECTS.map(({ id, to, tile }) => (
-          <li key={id}>
-            <RowLink
-              title={t(`subjects.${id}`)}
-              detail={t(`inside.${id}`)}
-              {...tile}
-              trailing={id === 'quiz' ? toCheck : undefined}
-              render={<Link to={to} state={OPEN_PLAINLY} />}
-            />
+        {THINGS.map((page) => (
+          <li key={page}>
+            <PageRow page={page} />
           </li>
         ))}
       </ul>
+      {PRACTICE_GROUPS.map((group) => (
+        <RowGroup key={group.id} title={t(`groups.${group.id}`)}>
+          {group.pages.map((page) => (
+            <li key={page}>
+              <PageRow page={page} trailing={page === 'quiz' ? toCheck : undefined} />
+            </li>
+          ))}
+        </RowGroup>
+      ))}
     </div>
   )
 }

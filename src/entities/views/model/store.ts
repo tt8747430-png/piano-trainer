@@ -3,7 +3,7 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { latestViews, viewOf, type RememberedView, type Views } from './view'
 
 export const VIEWS_STORAGE_KEY = 'pt-views'
-export const VIEWS_VERSION = 1
+export const VIEWS_VERSION = 2
 
 export interface ViewsState {
   readonly views: Views

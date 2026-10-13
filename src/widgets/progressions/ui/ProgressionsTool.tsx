@@ -22,11 +22,12 @@ import {
 import { ProgressionChoice } from './ProgressionChoice'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionPractice } from './ProgressionPractice'
+import { ProgressionTools } from './ProgressionTools'
 
 /**
  * A progression in any key, read top to bottom: the keys, its row of chords that play with Play, what
  * it is (the library's or typed, its key, its chord size, what leads into each chord), then its ways
- * into the Player.
+ * into the Player and its tools.
  */
 export function ProgressionsTool({
   view,
@@ -93,6 +94,7 @@ export function ProgressionsTool({
         <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
       </div>
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
+      <ProgressionTools view={view} />
     </div>
   )
 }

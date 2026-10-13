@@ -118,6 +118,8 @@ export const music = {
     label: 'Key',
     major: '{{tonic}} major',
     minor: '{{tonic}} minor',
+    // A row that opens something in a key.
+    in: 'In {{key}}',
     mode: 'Mode',
     majorMode: 'Major',
     minorMode: 'Minor',
@@ -168,6 +170,8 @@ export const music = {
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
   },
-  // A list of patterns, the Patterns reference's and the Setup's: the learner's shelves round the groups.
+  // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
+  // Accompaniment's parts after its method books', which their books name.
+  patternPart: { styles: 'Styles', yours: 'Yours' },
 } as const

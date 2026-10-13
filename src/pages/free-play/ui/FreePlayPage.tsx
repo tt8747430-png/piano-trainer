@@ -58,7 +58,7 @@ export function FreePlayPage() {
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('freePlay.title')}
+        title={t('pages.freePlay')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           <RoundButton

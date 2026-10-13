@@ -50,12 +50,12 @@ export {
   usePatternsStoreApi,
 } from './model/context'
 export {
-  isReferencePart,
+  ACCOMPANIMENT_PARTS,
+  isAccompanimentPart,
   partOfShelf,
+  partShelves,
   pickerShelves,
-  REFERENCE_PARTS,
-  referenceShelves,
-  type ReferencePart,
+  type AccompanimentPart,
 } from './model/shelves'
 export { followsInversion } from './model/plays-chord'
 export {
@@ -75,4 +75,5 @@ export {
 export { PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
 export { useFullShelfName } from './ui/use-full-shelf-name'
+export { usePartName } from './ui/use-part-name'
 export { useShelfName } from './ui/use-shelf-name'

@@ -4,43 +4,44 @@ export const practice = {
   chromatic: 'Chromatic walk',
   chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
   title: 'Practice',
-  // Practice's eight places, each named for what is practised.
-  subjects: {
+  // Practice's groups of pages (ADR 0044). The things come first, under no heading.
+  groups: { tools: 'Tools', training: 'Training' },
+  // Its pages, each by its name: the things, the tools, the training.
+  pages: {
     chords: 'Chords',
     scales: 'Scales and keys',
-    progressions: 'Progressions',
     intervals: 'Intervals',
+    progressions: 'Progressions',
     accompaniment: 'Accompaniment',
+    chordFinder: 'Chord finder',
+    passingChords: 'Passing chords',
+    reharmonise: 'Reharmonise',
+    freePlay: 'Free play',
     exercises: 'Exercises',
     quiz: 'Quiz',
-    freePlay: 'Free play',
   },
-  // What is inside each, in a line.
-  inside: {
-    chords: 'Build · Find · Tensions',
-    scales: 'Scale · Chords · Key',
-    progressions: 'In any key · Passing chords · Reharmonise',
+  // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
+  // of tabs or of groups says those, in their own words, so it has no line here.
+  about: {
+    chords: 'Triads to 13ths · Inversions · Tensions',
     intervals: 'On the keys, up and down',
-    accompaniment: 'Called to Play · Боброва · Styles',
-    exercises: 'Technique · Barry Harris · Piano With Jonny',
-    quiz: 'Chords · Scales and keys · By ear · Reading',
-    freePlay: 'Live score · Mark · Metronome',
+    progressions: 'From the library or typed, in any key',
+    chordFinder: 'Names the keys you play',
+    passingChords: 'The ways from one chord to the next',
+    reharmonise: 'The chords that hold a melody note',
+    freePlay: 'A live score, marks and a metronome',
   },
-  // Chords' two pages.
-  chords: { build: 'Build', find: 'Find' },
-  // Accompaniment's pages after its method books', and the line of a page with no pattern to show.
+  // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
-    styles: 'Styles',
-    yours: 'Yours',
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },
-  // Progressions' first tab; its other two are named by their own pages.
-  progression: 'Progression',
+  // Chords' row to the Chord finder, which opens on the chord's own keys.
+  theseKeys: 'Every name these keys have',
   // A scale's page: its key's common progressions, each opening Progressions in this key.
   keyProgressions: 'Progressions in this key',
   // The Exercises page's groups (roadmap §10.5).
-  groups: {
+  exerciseGroups: {
     technique: 'Finger technique',
     barryHarris: 'Barry Harris',
     jonny: 'Piano With Jonny',
@@ -56,7 +57,6 @@ export const practice = {
   gaps: 'To check: {{count}}',
   // Free play: the piano played freely, written and named.
   freePlay: {
-    title: 'Free play',
     mode: 'Mode',
     play: 'Play',
     mark: 'Mark',

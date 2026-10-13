@@ -21,15 +21,15 @@ export interface PatternShelf {
 }
 
 /**
- * The reference's parts, each a page of Accompaniment: a method book's groups, the rhythm styles, and
- * what the learner starred, made and hid.
+ * Accompaniment's parts, each a tab of its page: a method book's groups, the rhythm styles, and what
+ * the learner starred, made and hid.
  */
-export const REFERENCE_PARTS = [...METHOD_BOOK_IDS, 'styles', 'yours'] as const
-export type ReferencePart = (typeof REFERENCE_PARTS)[number]
-export const isReferencePart = isOneOf(REFERENCE_PARTS)
+export const ACCOMPANIMENT_PARTS = [...METHOD_BOOK_IDS, 'styles', 'yours'] as const
+export type AccompanimentPart = (typeof ACCOMPANIMENT_PARTS)[number]
+export const isAccompanimentPart = isOneOf(ACCOMPANIMENT_PARTS)
 
 /** The part a shelf is on: a group's book's, Styles for a group of no book, Yours for the learner's. */
-export const partOfShelf = (shelf: PatternShelf['shelf']): ReferencePart =>
+export const partOfShelf = (shelf: PatternShelf['shelf']): AccompanimentPart =>
   isPatternGroup(shelf) ? (PATTERN_GROUP_ENTRIES[shelf].book ?? 'styles') : 'yours'
 
 type Choices = Pick<PatternsState, 'favourites' | 'hidden'>
@@ -64,14 +64,13 @@ function shelves(
 }
 
 /**
- * One part of the reference, Accompaniment's list: a book's groups or the rhythm styles without the
- * hidden; on Yours the favourites, the learner's own, and the hidden at the end, so one can be found
- * and shown again.
+ * One part of Accompaniment: a book's groups or the rhythm styles without the hidden; on Yours the
+ * favourites, the learner's own, and the hidden at the end, so one can be found and shown again.
  */
-export function referenceShelves(
+export function partShelves(
   book: PatternBook,
   choices: Choices,
-  part: ReferencePart,
+  part: AccompanimentPart,
 ): PatternShelf[] {
   const hidden = new Set(choices.hidden)
   const shown = shelves(book, choices, (id) => hidden.has(id))
@@ -81,7 +80,7 @@ export function referenceShelves(
   return all.filter(({ shelf }) => partOfShelf(shelf) === part)
 }
 
-/** The Setup's picker: as the reference, but the hidden are left out, all but the one playing now. */
+/** The Setup's picker: every part's shelves together, the hidden left out, all but the one playing now. */
 export function pickerShelves(
   book: PatternBook,
   choices: Choices,

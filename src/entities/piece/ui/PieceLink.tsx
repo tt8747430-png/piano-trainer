@@ -10,7 +10,7 @@ export function PieceLink({
   const params = { pieceId: entry.id }
   switch (entry.kind) {
     case 'study':
-      return <Link to="/practice/studies/$pieceId" params={params} {...props} />
+      return <Link to="/practice/accompaniment/studies/$pieceId" params={params} {...props} />
     case 'song':
     case 'listing':
       return <Link to="/songs/$pieceId" params={params} {...props} />

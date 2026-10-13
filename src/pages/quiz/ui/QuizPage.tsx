@@ -12,7 +12,7 @@ export function QuizPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader
-        title={t('subjects.quiz')}
+        title={t('pages.quiz')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={<GapsLink />}
       />

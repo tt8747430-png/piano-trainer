@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { VIEWS_STORAGE_KEY } from '@/entities/views'
+import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
 import { createMemoryStorage } from '@/shared/lib'
 import { renderApp } from './testing/render-app'
 
@@ -42,9 +42,9 @@ describe('Remembered views', () => {
 
   it('keeps a screen as it is when its own tab is tapped', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/chords?root=D&triad=min')
-    await user.click(await screen.findByRole('link', { name: 'Build' }))
-    expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' })
+    const { router } = await renderApp('/practice/scales?root=D&kind=dorian')
+    await user.click(await screen.findByRole('link', { name: 'Scale' }))
+    expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
   })
 
   it('opens the progression the tool names, played the learner’s way, in the key alone', async () => {
@@ -102,7 +102,7 @@ describe('Remembered views', () => {
       VIEWS_STORAGE_KEY,
       JSON.stringify({
         state: { views: { '/play/bz5': { key: 'A', tempo: 'fast' } } },
-        version: 1,
+        version: VIEWS_VERSION,
       }),
     )
     const { router } = await renderApp('/songs/bz5', { storage })

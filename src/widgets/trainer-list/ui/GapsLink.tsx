@@ -22,11 +22,7 @@ export function GapsLink() {
     <ButtonLink
       variant="outline"
       render={
-        <Link
-          to="/practice/trainers/$trainerId"
-          params={{ trainerId: 'gaps' }}
-          state={OPEN_PLAINLY}
-        />
+        <Link to="/practice/quiz/$trainerId" params={{ trainerId: 'gaps' }} state={OPEN_PLAINLY} />
       }
     >
       <Icon data-icon="inline-start" aria-hidden />

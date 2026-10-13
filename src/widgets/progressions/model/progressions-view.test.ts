@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { progressionById, type LibraryProgression } from '@/entities/progression-library'
-import { keyParam, note, numeralText, type ChordSize } from '@/shared/lib/music'
+import {
+  LIBRARY_BY_STYLE,
+  libraryParam,
+  progressionById,
+  type LibraryProgression,
+} from '@/entities/progression-library'
+import { keyParam, note, numeralText, readChordSymbol, type ChordSize } from '@/shared/lib/music'
 import {
   changedView,
   chosenView,
+  passingBetween,
   playedNumerals,
   playerSearch,
   viewProgression,
@@ -159,5 +165,49 @@ describe('a lead-in', () => {
     const shown = { ...view(major('C'), 'I-ii-iii-IV-V-vi-vii°', 'triads'), lead: 'v' as const }
     expect(viewProgression(shown)?.id).toBe('key-chords')
     expect(chosenView(shown, library('axis')).lead).toBe('v')
+  })
+})
+
+describe('passingBetween', () => {
+  it('names the line’s first two chords in its key, as the Passing chords tool reads them', () => {
+    expect(passingBetween(view(major('G'), 'I-IV-V', 'triads'))).toEqual({
+      key: 'G',
+      from: 'G',
+      to: 'C',
+    })
+  })
+
+  it('names them at the chord size shown', () => {
+    expect(passingBetween(view(major('C'), 'ii-V-I', 'sevenths'))).toEqual({
+      key: 'C',
+      from: 'Dm7',
+      to: 'G7',
+    })
+  })
+
+  it('names the chords as played: the first after what leads into it', () => {
+    const led = { ...view(major('C'), 'I-IV', 'triads'), lead: 'v' as const }
+    expect(passingBetween(led)).toMatchObject({ from: 'G', to: 'C' })
+  })
+
+  it('has no way between chords for a line of one chord', () => {
+    expect(passingBetween(view(major('C'), 'I', 'triads'))).toBeUndefined()
+  })
+
+  it('writes chords the tool reads, for every line of the library in both sizes', () => {
+    for (const progression of LIBRARY_BY_STYLE.flatMap((style) => style.progressions)) {
+      for (const minorKey of [false, true]) {
+        const mode = progression[minorKey ? 'minor' : 'major']
+        if (!mode) continue
+        for (const size of ['triads', 'sevenths'] as const) {
+          const between = passingBetween(
+            view(minorKey ? minor('A') : major('C'), libraryParam(progression, minorKey), size),
+          )
+          if (!between) continue
+          expect(readChordSymbol(between.from), `${progression.id} from`).not.toBeNull()
+          expect(readChordSymbol(between.to), `${progression.id} to`).not.toBeNull()
+        }
+      }
+    }
   })
 })

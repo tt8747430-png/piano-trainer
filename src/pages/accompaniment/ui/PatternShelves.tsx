@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  referenceShelves,
+  partShelves,
   selectFavourites,
   selectHidden,
   usePatternBook,
   usePatterns,
   useShelfName,
-  type ReferencePart,
+  type AccompanimentPart,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { RowGroup, RowLink } from '@/shared/ui'
@@ -19,14 +19,14 @@ import { Empty, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
  * the pattern's page. With no shelf to show, the one line that says why: nothing kept yet on Yours,
  * every pattern hidden elsewhere.
  */
-export function PatternShelves({ part }: { part: ReferencePart }) {
+export function PatternShelves({ part }: { part: AccompanimentPart }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
   const shelves = useMemo(
-    () => referenceShelves(book, { favourites, hidden }, part),
+    () => partShelves(book, { favourites, hidden }, part),
     [book, favourites, hidden, part],
   )
   const shelfName = useShelfName()
@@ -49,7 +49,10 @@ export function PatternShelves({ part }: { part: ReferencePart }) {
             title={localText(pattern.name, locale)}
             detail={localText(pattern.idea, locale)}
             render={
-              <Link to="/practice/patterns/$patternRef" params={{ patternRef: pattern.ref }} />
+              <Link
+                to="/practice/accompaniment/patterns/$patternRef"
+                params={{ patternRef: pattern.ref }}
+              />
             }
           />
         </li>

@@ -264,16 +264,24 @@ describe('Practice → Chords', () => {
     )
   })
 
-  it('is the first of Chords’ two tabs, under a header with a way back', async () => {
+  it('is the builder alone, under a header with a way back and no tabs', async () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
-    const tabs = within(screen.getByRole('navigation', { name: 'Chords' })).getAllByRole('link')
-    expect(tabs.map((tab) => [tab.textContent, tab.getAttribute('href')])).toEqual([
-      ['Build', '/practice/chords'],
-      ['Find', '/practice/chords/find'],
-    ])
-    expect(tabs[0]).toHaveAttribute('aria-current', 'page')
+    expect(
+      within(screen.getByRole('main')).queryByRole('link', { current: 'page' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('leads to the Chord finder on the chord’s own keys, which names it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chords?root=D&triad=min')
+    const tools = await screen.findByRole('region', { name: 'Tools' })
+    await user.click(within(tools).getByRole('link', { name: /^Chord finder / }))
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Chord finder' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Dm' })).toBeInTheDocument()
   })
 
   it('names every choice on screen, in the order a chord is built', async () => {

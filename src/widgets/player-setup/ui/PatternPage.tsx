@@ -81,7 +81,7 @@ export function PatternPage({
         detail={t('ownPatternDetail')}
         icon={Plus}
         paint="grass"
-        render={<Link to="/practice/patterns/new" />}
+        render={<Link to="/practice/accompaniment/patterns/new" />}
       />
       <RowLink
         title={t('allPatterns')}

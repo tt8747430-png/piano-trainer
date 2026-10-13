@@ -451,6 +451,14 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(await screen.findByText('No songs are in this key.')).toBeInTheDocument()
   })
 
+  it('leads to Reharmonise in the key', async () => {
+    await renderApp('/practice/scales?root=G&show=key')
+    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
+    expect(tools.map((tool) => [tool.textContent, tool.getAttribute('href')])).toEqual([
+      ['Reharmonise In G major', '/practice/reharmonise?key=G'],
+    ])
+  })
+
   it('takes a random key from the header, staying on the Key view', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')

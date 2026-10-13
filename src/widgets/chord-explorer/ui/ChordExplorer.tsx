@@ -19,6 +19,7 @@ import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
 import { ChordTensions } from './ChordTensions'
+import { ChordTools } from './ChordTools'
 
 const takesTensions = isOneOf(TENSION_CHORDS)
 
@@ -31,7 +32,7 @@ const keysOf = (view: ChordView): Midi[] => {
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
  * is (its symbol, its tones, the other ways it is written, the chord on a staff) with Play and Arpeggio;
- * its choices; a 7th chord's available tensions; and its ways into the Player.
+ * its choices; a 7th chord's available tensions; its ways into the Player; and its tool.
  */
 export function ChordExplorer({
   chord,
@@ -122,6 +123,7 @@ export function ChordExplorer({
           inversion={built.tones.length <= 4 ? chord.inversion : 0}
         />
       ) : null}
+      <ChordTools keys={keysOf(chord)} />
     </div>
   )
 }

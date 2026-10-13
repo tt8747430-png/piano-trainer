@@ -22,7 +22,7 @@ const keyboard = () => screen.getByRole('group', { name: 'Keyboard' })
 
 describe('A trainer', () => {
   it('opens at its first level, ten rounds, asking the first round', async () => {
-    await renderApp('/practice/trainers/build-chord')
+    await renderApp('/practice/quiz/build-chord')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Build chord' }),
     ).toBeInTheDocument()
@@ -36,7 +36,7 @@ describe('A trainer', () => {
 
   it('takes a level’s chord built on the keys', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/trainers/build-chord')
+    await renderApp('/practice/quiz/build-chord')
     const prompt = await screen.findByRole('heading', { level: 2, name: /^Build [CFG]$/ })
     const symbol = prompt.textContent?.replace('Build ', '') ?? ''
     for (const name of MAIN_CHORDS[symbol] ?? [])
@@ -49,7 +49,7 @@ describe('A trainer', () => {
 
   it('reads a note from the staff, answered by the one key pressed', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/trainers/reading-notes')
+    await renderApp('/practice/quiz/reading-notes')
     expect(
       await screen.findByRole('heading', { level: 2, name: 'Play this note' }),
     ).toBeInTheDocument()
@@ -63,7 +63,7 @@ describe('A trainer', () => {
 
   it('takes a key’s degrees in order on the keys', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/trainers/key-degrees')
+    await renderApp('/practice/quiz/key-degrees')
     const prompt = await screen.findByRole('heading', {
       level: 2,
       name: /^Play the degrees of [CGF] major$/,
@@ -79,7 +79,7 @@ describe('A trainer', () => {
 
   it('sounds an ear round as it is shown, and is answered by a choice', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/trainers/intervals-by-ear')
+    const { audio } = await renderApp('/practice/quiz/intervals-by-ear')
     expect(
       await screen.findByRole('heading', { level: 2, name: 'Which interval is this?' }),
     ).toBeInTheDocument()
@@ -92,7 +92,7 @@ describe('A trainer', () => {
 
   it('runs a level to its results and keeps its record', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/trainers/key-signatures')
+    await renderApp('/practice/quiz/key-signatures')
     for (let round = 1; round <= 10; round++) {
       const answers = await screen.findByRole('group', { name: 'Answers' })
       await user.click(within(answers).getAllByRole('button')[0] ?? answers)
@@ -107,7 +107,7 @@ describe('A trainer', () => {
 
   it('ends a run when the learner stops, with the rounds answered so far', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/trainers/chord-role?rounds=0')
+    await renderApp('/practice/quiz/chord-role?rounds=0')
     expect(await screen.findByText('Round: 1')).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getAllByRole('button')[0] ?? answers)
@@ -117,7 +117,7 @@ describe('A trainer', () => {
 
   it('asks which progression is heard, its lines as numerals to choose', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/trainers/progressions-by-ear?level=pop')
+    const { audio } = await renderApp('/practice/quiz/progressions-by-ear?level=pop')
     expect(
       await screen.findByRole('heading', {
         level: 2,
@@ -133,7 +133,7 @@ describe('A trainer', () => {
 
   it('writes a level and rounds to the URL, and starts the run again under them', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/trainers/chords-by-ear')
+    const { router } = await renderApp('/practice/quiz/chords-by-ear')
     await user.click(await screen.findByRole('combobox', { name: /^Level/ }))
     await user.click(await screen.findByRole('option', { name: '7th chords' }))
     expect(router.state.location.search).toMatchObject({ level: 'sevenths' })
@@ -144,7 +144,7 @@ describe('A trainer', () => {
 
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/trainers/intervals-by-ear?level=custom')
+    const { router } = await renderApp('/practice/quiz/intervals-by-ear?level=custom')
     const heard = await screen.findByRole('group', { name: 'Heard' })
     await user.click(within(heard).getByRole('button', { name: 'Together' }))
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
@@ -152,7 +152,7 @@ describe('A trainer', () => {
 
   it('asks Build chord’s types as the chord trainer’s sheet names them, each in sight', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/trainers/build-chord?level=custom')
+    const { router } = await renderApp('/practice/quiz/build-chord?level=custom')
     const sizes = await screen.findByRole('group', { name: 'Sizes' })
     expect(
       within(sizes)
@@ -177,29 +177,27 @@ describe('A trainer', () => {
   })
 
   it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
-    const { router, viewsStore } = await renderApp(
-      '/practice/trainers/reading-notes?level=everything',
-    )
+    const { router, viewsStore } = await renderApp('/practice/quiz/reading-notes?level=everything')
     expect(await screen.findByRole('combobox', { name: /^Level/ })).toHaveTextContent(
       'The three anchors',
     )
     expect(router.state.location.search).toEqual({})
-    expect(viewsStore.getState().views['/practice/trainers/reading-notes']).toEqual({})
+    expect(viewsStore.getState().views['/practice/quiz/reading-notes']).toEqual({})
   })
 
   it('writes its first level as no level, and Custom only for a trainer that has it', async () => {
-    const first = await renderApp('/practice/trainers/build-chord?level=c-main')
+    const first = await renderApp('/practice/quiz/build-chord?level=c-main')
     await screen.findByRole('heading', { level: 1, name: 'Build chord' })
     expect(first.router.state.location.search).toEqual({})
     first.unmount()
-    const gaps = await renderApp('/practice/trainers/gaps?level=custom&rounds=20')
+    const gaps = await renderApp('/practice/quiz/gaps?level=custom&rounds=20')
     await screen.findByRole('heading', { level: 1, name: 'My gaps' })
     expect(gaps.router.state.location.search).toEqual({ rounds: 20 })
   })
 
   it('saves auto-next from its toggle in sight, no settings sheet', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/practice/trainers/build-scale')
+    const { settingsStore } = await renderApp('/practice/quiz/build-scale')
     const autoNext = await screen.findByRole('button', { name: 'Go on automatically' })
     await user.click(autoNext)
     expect(settingsStore.getState().trainer.autoNext).toBe(true)
@@ -208,11 +206,11 @@ describe('A trainer', () => {
   })
 
   it('says My gaps has none yet, with a way to a trainer', async () => {
-    await renderApp('/practice/trainers/gaps')
+    await renderApp('/practice/quiz/gaps')
     expect(await screen.findByText('No gaps found yet.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Build chords' })).toHaveAttribute(
       'href',
-      '/practice/trainers/build-chord',
+      '/practice/quiz/build-chord',
     )
     expect(screen.queryByRole('combobox', { name: /^Level/ })).not.toBeInTheDocument()
   })
@@ -230,7 +228,7 @@ describe('A trainer', () => {
 
   it('goes back to Quiz from its Back', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/trainers/build-chord')
+    const { router } = await renderApp('/practice/quiz/build-chord')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     expect(router.state.location.pathname).toBe('/practice/quiz')
   })

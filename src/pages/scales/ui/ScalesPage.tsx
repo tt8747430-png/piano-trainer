@@ -6,27 +6,28 @@ import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
 import { StepPanel } from '@/widgets/step-panel'
-import { ScalesTabs } from '@/widgets/subject-tabs'
+import { KeyTools } from './KeyTools'
 import { PiecesInKey } from './PiecesInKey'
+import { ScaleTabs } from './ScaleTabs'
 
 /**
  * Scales and keys: any scale on any root, with its path step's panel when opened from one; in its
- * Key view, a random key from the bar and the songs and studies written in the key.
+ * Key view, a random key from the bar, the key's tool, and the songs and studies written in the key.
  */
 export function ScalesPage() {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['practice', 'learn'])
   const { step, ...scale } = useSearch({ from: '/shell/practice/scales' })
   const onChange = useViewChange<ScaleView>()
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('scales')}
+        title={t('practice:pages.scales')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           key ? (
             <RoundButton
-              label={t('keys.random')}
+              label={t('learn:keys.random')}
               icon={Dices}
               onClick={() => {
                 const next = randomKey(Math.random, key)
@@ -35,10 +36,11 @@ export function ScalesPage() {
             />
           ) : null
         }
-        tabs={<ScalesTabs shows={showsOf(scale.kind)} current={scale.show} />}
+        tabs={<ScaleTabs shows={showsOf(scale.kind)} current={scale.show} />}
       />
       {step ? <StepPanel step={step} /> : null}
       <ScaleExplorer scale={scale} onChange={onChange} />
+      {key ? <KeyTools musicKey={key} /> : null}
       {key ? <PiecesInKey musicKey={key} /> : null}
     </div>
   )

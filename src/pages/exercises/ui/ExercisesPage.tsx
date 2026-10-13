@@ -11,7 +11,7 @@ export function ExercisesPage() {
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader
-        title={t('subjects.exercises')}
+        title={t('pages.exercises')}
         back={<BackButton fallback={{ to: '/practice' }} />}
       />
       <ExerciseList />

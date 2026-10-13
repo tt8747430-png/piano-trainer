@@ -21,19 +21,19 @@ const ROUTES = [
   ['/practice/chords', '/practice/chords'],
   ['/practice/scales', '/practice/scales'],
   ['/practice/intervals', '/practice/intervals'],
-  ['/practice/chords/find', '/practice/chords/find'],
-  ['/practice/progressions/reharmonise', '/practice/progressions/reharmonise'],
-  ['/practice/progressions/passing', '/practice/progressions/passing'],
+  ['/practice/chord-finder', '/practice/chord-finder'],
+  ['/practice/reharmonise', '/practice/reharmonise'],
+  ['/practice/passing-chords', '/practice/passing-chords'],
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
   ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
-  ['/practice/trainers/build-chord', '/practice/trainers/$trainerId'],
+  ['/practice/quiz/build-chord', '/practice/quiz/$trainerId'],
   ['/settings', '/settings'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
   ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
-  ['/practice/patterns/M1', '/practice/patterns/$patternRef'],
-  ['/practice/studies/ex3', '/practice/studies/$pieceId'],
+  ['/practice/accompaniment/patterns/M1', '/practice/accompaniment/patterns/$patternRef'],
+  ['/practice/accompaniment/studies/ex3', '/practice/accompaniment/studies/$pieceId'],
 ] as const
 
 async function open(path: string) {
@@ -75,13 +75,16 @@ describe('routes', () => {
     '/theory',
     '/theory/chords',
     '/learn/lessons/nothing',
-    '/practice/trainers/nothing',
-    '/practice/quiz/gaps',
+    '/practice/quiz/nothing',
     '/practice/progressions/flow',
-    '/practice/passing-chords',
-    '/practice/reharmonise',
     '/practice/tensions',
-    '/practice/chord-finder',
+    // Where a page was before ADR 0044: no redirect, the address is not there.
+    '/practice/chords/find',
+    '/practice/progressions/passing',
+    '/practice/progressions/reharmonise',
+    '/practice/trainers/build-chord',
+    '/practice/patterns/M1',
+    '/practice/studies/ex3',
   ])('shows not found at %s', async (path) => {
     await renderApp(path)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
@@ -166,7 +169,7 @@ describe('the app shell', () => {
   it.each([
     ['/practice/scales', 'Practice'],
     ['/learn/lessons/reading-chord-symbols', 'Learn'],
-    ['/practice/trainers/gaps', 'Practice'],
+    ['/practice/quiz/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
@@ -187,10 +190,14 @@ describe('the app shell', () => {
     ['/play/nothing', 'Go to Songs', '/songs'],
     ['/edit/nothing', 'Go to Songs', '/songs'],
     ['/learn/lessons/nothing', 'Go to Learn', '/learn'],
-    ['/practice/trainers/nothing', 'Go to Quiz', '/practice/quiz'],
-    ['/practice/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
-    ['/practice/patterns/my-9/edit', 'Go to Accompaniment', '/practice/accompaniment'],
-    ['/practice/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/practice/quiz/nothing', 'Go to Quiz', '/practice/quiz'],
+    ['/practice/accompaniment/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    [
+      '/practice/accompaniment/patterns/my-9/edit',
+      'Go to Accompaniment',
+      '/practice/accompaniment',
+    ],
+    ['/practice/accompaniment/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
     ['/check?of=nothing', 'Go to Path', '/'],
@@ -327,16 +334,18 @@ describe('routes that name a piece', () => {
 })
 
 describe('shelves', () => {
-  it.each(['/songs/ex3', '/songs/flow', '/practice/studies/bz5', '/practice/progressions/ex3'])(
-    'show not found for a piece on the wrong shelf: %s',
-    async (path) => {
-      await renderApp(path)
-      expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
-    },
-  )
+  it.each([
+    '/songs/ex3',
+    '/songs/flow',
+    '/practice/accompaniment/studies/bz5',
+    '/practice/progressions/ex3',
+  ])('show not found for a piece on the wrong shelf: %s', async (path) => {
+    await renderApp(path)
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+  })
 
   it('opens a study on Practice, which the navigation marks', async () => {
-    await renderApp('/practice/studies/ex3')
+    await renderApp('/practice/accompaniment/studies/ex3')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     expect(within(nav).getByRole('link', { name: 'Practice' })).toHaveAttribute(
       'aria-current',
@@ -346,7 +355,7 @@ describe('shelves', () => {
 
   it('goes back from a study opened directly to Accompaniment, on the page of its studies', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/studies/ex3')
+    const { router } = await renderApp('/practice/accompaniment/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.href).toBe('/practice/accompaniment'))
     expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()

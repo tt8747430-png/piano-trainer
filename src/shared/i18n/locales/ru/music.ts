@@ -117,6 +117,7 @@ export const music: LocaleResources['music'] = {
     label: 'Тональность',
     major: '{{tonic}} мажор',
     minor: '{{tonic}} минор',
+    in: 'В тональности {{key}}',
     mode: 'Лад',
     majorMode: 'Мажор',
     minorMode: 'Минор',
@@ -160,4 +161,5 @@ export const music: LocaleResources['music'] = {
     loopEnd: 'Конец повтора',
   },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
+  patternPart: { styles: 'Стили', yours: 'Свои' },
 }

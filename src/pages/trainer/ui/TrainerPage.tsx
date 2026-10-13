@@ -13,14 +13,14 @@ import { useLevelName } from './use-level-name'
 
 /** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {
-  const { trainerId } = useParams({ from: '/shell/practice/trainers/$trainerId' })
+  const { trainerId } = useParams({ from: '/shell/practice/quiz/$trainerId' })
   return isTrainerId(trainerId) ? <TrainerScreenView key={trainerId} id={trainerId} /> : null
 }
 
 /** A trainer under its name, with its level, rounds and record, and a run of it. */
 function TrainerScreenView({ id }: { id: TrainerId }) {
   const { t } = useTranslation('quiz')
-  const view = useSearch({ from: '/shell/practice/trainers/$trainerId' })
+  const view = useSearch({ from: '/shell/practice/quiz/$trainerId' })
   const setView = useViewChange<TrainerView>()
   const close = useGoBack({ to: '/practice/quiz' })
   const { trainer, level, asks, runKey, runId, record } = useTrainerScreen(id, view)
@@ -75,9 +75,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           <p className="text-lg">{t('gaps.none')}</p>
           <ButtonLink
             variant="soft"
-            render={
-              <Link to="/practice/trainers/$trainerId" params={{ trainerId: 'build-chord' }} />
-            }
+            render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'build-chord' }} />}
           >
             {t('gaps.toBuildChord')}
           </ButtonLink>

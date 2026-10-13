@@ -47,10 +47,10 @@ describe('Practice → Accompaniment', () => {
       within(shelf('The five ways (lesson 3)')).getByRole('link', {
         name: /^1 · Bass \+ chords The chord on every beat over a held octave bass\.$/,
       }),
-    ).toHaveAttribute('href', '/practice/patterns/M1')
+    ).toHaveAttribute('href', '/practice/accompaniment/patterns/M1')
     expect(rows('Studies')).toEqual(
       ['ex3', 'exm1', 'exm2', 'exm3', 'ex5', 'ex6', 'ex7', 'ex8', 'ex9'].map(
-        (id) => `/practice/studies/${id}`,
+        (id) => `/practice/accompaniment/studies/${id}`,
       ),
     )
   })
@@ -70,7 +70,7 @@ describe('Practice → Accompaniment', () => {
     expect(screen.getByRole('link', { name: 'Горшков' })).toHaveAttribute('aria-current', 'page')
     expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs'])
     expect(rows('Arranging the accompaniment')).toEqual(
-      ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/patterns/${id}`),
+      ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
     )
     expect(rows('Gorshkov’s songs')).toEqual(['/songs/romashki', '/songs/olen', '/songs/metel'])
   })
@@ -83,7 +83,7 @@ describe('Practice → Accompaniment', () => {
       within(shelf('Rhythm styles')).getByRole('link', {
         name: /^Ballad arpeggio A gentle arpeggio over the root and 5th\.$/,
       }),
-    ).toHaveAttribute('href', '/practice/patterns/ballad')
+    ).toHaveAttribute('href', '/practice/accompaniment/patterns/ballad')
   })
 
   it('lists on Yours what the learner starred, made and hid, and leaves the hidden out of its group', async () => {
@@ -98,10 +98,10 @@ describe('Practice → Accompaniment', () => {
     })
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     expect(shelves()).toEqual(['Favourites', 'Your patterns', 'Hidden'])
-    expect(rows('Favourites')).toEqual(['/practice/patterns/ballad'])
+    expect(rows('Favourites')).toEqual(['/practice/accompaniment/patterns/ballad'])
     expect(within(shelf('Your patterns')).getByRole('link', { name: /^Sunday/ })).toHaveAttribute(
       'href',
-      '/practice/patterns/my-1',
+      '/practice/accompaniment/patterns/my-1',
     )
     expect(within(shelf('Hidden')).getByRole('link', { name: /^Funk/ })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Styles' }))
@@ -167,7 +167,7 @@ describe('Practice → Accompaniment', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'New pattern' }),
     ).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/practice/patterns/new')
+    expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/new')
   })
 
   it.each(['called-to-play', 'seven-types', 'gorshkov', 'styles', 'yours'])(

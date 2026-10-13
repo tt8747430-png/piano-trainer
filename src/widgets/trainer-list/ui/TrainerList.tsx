@@ -43,7 +43,7 @@ export function TrainerList({
               {...TRAINER_TILE[id]}
               render={
                 <Link
-                  to="/practice/trainers/$trainerId"
+                  to="/practice/quiz/$trainerId"
                   params={{ trainerId: id }}
                   state={OPEN_PLAINLY}
                 />

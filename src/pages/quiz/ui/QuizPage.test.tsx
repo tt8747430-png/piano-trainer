@@ -16,23 +16,23 @@ describe('Practice → Quiz', () => {
     await renderApp('/practice/quiz')
     expect(await screen.findByRole('heading', { level: 1, name: 'Quiz' })).toBeInTheDocument()
     expect(hrefs(screen.getByRole('region', { name: 'Chords' }))).toEqual([
-      '/practice/trainers/build-chord',
-      '/practice/trainers/name-chord',
-      '/practice/trainers/chord-role',
+      '/practice/quiz/build-chord',
+      '/practice/quiz/name-chord',
+      '/practice/quiz/chord-role',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'Scales and keys' }))).toEqual([
-      '/practice/trainers/build-scale',
-      '/practice/trainers/key-signatures',
-      '/practice/trainers/key-degrees',
+      '/practice/quiz/build-scale',
+      '/practice/quiz/key-signatures',
+      '/practice/quiz/key-degrees',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'By ear' }))).toEqual([
-      '/practice/trainers/intervals-by-ear',
-      '/practice/trainers/chords-by-ear',
-      '/practice/trainers/scales-by-ear',
-      '/practice/trainers/progressions-by-ear',
+      '/practice/quiz/intervals-by-ear',
+      '/practice/quiz/chords-by-ear',
+      '/practice/quiz/scales-by-ear',
+      '/practice/quiz/progressions-by-ear',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'Reading' }))).toEqual([
-      '/practice/trainers/reading-notes',
+      '/practice/quiz/reading-notes',
     ])
   })
 
@@ -53,7 +53,7 @@ describe('Practice → Quiz', () => {
   it('keeps My gaps in its bar, saying how many skills it holds to check', async () => {
     const { progressStore } = await renderApp('/practice/quiz')
     const gaps = await screen.findByRole('link', { name: 'My gaps' })
-    expect(gaps).toHaveAttribute('href', '/practice/trainers/gaps')
+    expect(gaps).toHaveAttribute('href', '/practice/quiz/gaps')
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
     expect(screen.getByRole('link', { name: 'My gaps To check: 1' })).toBeInTheDocument()
   })

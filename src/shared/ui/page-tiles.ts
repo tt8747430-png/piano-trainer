@@ -4,8 +4,10 @@ import {
   BookOpenText,
   ChartNoAxesColumnIncreasing,
   CircleDot,
+  Dumbbell,
   KeyboardMusic,
   Layers,
+  ListChecks,
   ListMusic,
   Piano,
   Ruler,
@@ -38,4 +40,6 @@ export const PAGE_TILES = {
   passingChords: { icon: Waypoints, paint: 'yellow' },
   progressions: { icon: ListMusic, paint: 'grass' },
   freePlay: { icon: Piano, paint: 'sky' },
+  exercises: { icon: Dumbbell, paint: 'sand' },
+  quiz: { icon: ListChecks, paint: 'lilac' },
 } as const satisfies Readonly<Record<string, Tile>>

@@ -306,17 +306,29 @@ describe('Practice → Progressions', () => {
     )
   })
 
-  it('is the first of Progressions’ three tabs, each a page', async () => {
+  it('is the progression alone, with no tabs', async () => {
     await renderApp('/practice/progressions')
-    const tabs = within(
-      await screen.findByRole('navigation', { name: 'Progressions' }),
-    ).getAllByRole('link')
-    expect(tabs.map((tab) => [tab.textContent, tab.getAttribute('href')])).toEqual([
-      ['Progression', '/practice/progressions'],
-      ['Passing chords', '/practice/progressions/passing'],
-      ['Reharmonise', '/practice/progressions/reharmonise'],
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
+    ).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('main')).queryByRole('link', { current: 'page' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('leads to its tools in its key: Passing chords between its first two chords, and Reharmonise', async () => {
+    await renderApp('/practice/progressions?p=I-IV-V&key=G')
+    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
+    expect(tools.map((tool) => [tool.textContent, tool.getAttribute('href')])).toEqual([
+      ['Passing chords G → C', '/practice/passing-chords?key=G&from=G&to=C'],
+      ['Reharmonise In G major', '/practice/reharmonise?key=G'],
     ])
-    expect(tabs[0]).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('offers no way between chords where the line has one chord', async () => {
+    await renderApp('/practice/progressions?p=I&key=G')
+    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
+    expect(tools.map((tool) => tool.textContent)).toEqual(['Reharmonise In G major'])
   })
 
   it('takes a library progression in place: Back then leaves for Practice', async () => {

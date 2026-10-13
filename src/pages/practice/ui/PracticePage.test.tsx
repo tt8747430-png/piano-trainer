@@ -4,28 +4,53 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { recordAnswer } from '@/features/record-answer'
 
+/** A list's rows: what each says, and where it leads. */
+const rowsOf = (list: HTMLElement) =>
+  within(list)
+    .getAllByRole('link')
+    .map((row) => [row.textContent, row.getAttribute('href')])
+
 describe('Practice', () => {
-  it('lists its eight places, each a link to one page that says what is inside it', async () => {
+  it('lists the things first, under no heading, each saying what is inside it', async () => {
     await renderApp('/practice')
     expect(await screen.findByRole('heading', { level: 1, name: 'Practice' })).toBeInTheDocument()
-    const rows = within(screen.getByRole('main')).getAllByRole('link')
-    expect(rows.map((row) => [row.textContent, row.getAttribute('href')])).toEqual([
-      ['Chords Build · Find · Tensions', '/practice/chords'],
+    const [things] = within(screen.getByRole('main')).getAllByRole('list')
+    expect(rowsOf(things!)).toEqual([
+      ['Chords Triads to 13ths · Inversions · Tensions', '/practice/chords'],
       ['Scales and keys Scale · Chords · Key', '/practice/scales'],
-      ['Progressions In any key · Passing chords · Reharmonise', '/practice/progressions'],
       ['Intervals On the keys, up and down', '/practice/intervals'],
-      ['Accompaniment Called to Play · Боброва · Styles', '/practice/accompaniment'],
-      ['Exercises Technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
-      ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
-      ['Free play Live score · Mark · Metronome', '/practice/free-play'],
+      ['Progressions From the library or typed, in any key', '/practice/progressions'],
+      [
+        'Accompaniment Called to Play · Боброва · Горшков · Styles · Yours',
+        '/practice/accompaniment',
+      ],
     ])
   })
 
-  it('has no tabs and no second list: a place is reached one way', async () => {
+  it('lists the tools under Tools, each saying what it works out', async () => {
+    await renderApp('/practice')
+    const tools = await screen.findByRole('region', { name: 'Tools' })
+    expect(rowsOf(tools)).toEqual([
+      ['Chord finder Names the keys you play', '/practice/chord-finder'],
+      ['Passing chords The ways from one chord to the next', '/practice/passing-chords'],
+      ['Reharmonise The chords that hold a melody note', '/practice/reharmonise'],
+      ['Free play A live score, marks and a metronome', '/practice/free-play'],
+    ])
+  })
+
+  it('lists Exercises and Quiz under Training, each saying its groups', async () => {
+    await renderApp('/practice')
+    const training = await screen.findByRole('region', { name: 'Training' })
+    expect(rowsOf(training)).toEqual([
+      ['Exercises Finger technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
+      ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
+    ])
+  })
+
+  it('has no tabs: a page is reached one way', async () => {
     await renderApp('/practice')
     await screen.findByRole('heading', { level: 1, name: 'Practice' })
     expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
-    expect(within(screen.getByRole('main')).queryByRole('heading', { level: 2 })).toBeNull()
   })
 
   it('says on the Quiz row how many skills My gaps holds to check', async () => {
@@ -36,9 +61,14 @@ describe('Practice', () => {
     expect(screen.getByRole('link', { name: /^Quiz .* To check: 1$/ })).toBeInTheDocument()
   })
 
-  it('reads in Russian, with nothing left in English', async () => {
+  it('reads in Russian, a row’s line in the words its page uses', async () => {
     await renderApp('/practice', { locale: 'ru' })
-    expect(await screen.findByRole('link', { name: /^Гаммы и тональности / })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('link', {
+        name: 'Тесты Аккорды · Гаммы и тональности · На слух · Чтение',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Инструменты' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 })

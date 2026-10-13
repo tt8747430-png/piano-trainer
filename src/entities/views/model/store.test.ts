@@ -24,6 +24,12 @@ describe('createViewsStore', () => {
     })
   })
 
+  it('forgets what was saved before Practice’s pages moved (ADR 0044): a version-1 save', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { views: { '/practice/chords/find': { keys: '60-64-67' } } }, 1)
+    expect(createViewsStore({ storage }).getState()).toEqual({ views: {} })
+  })
+
   it('keeps a screen’s params that are text, numbers or switches', () => {
     expect(
       restored({ views: { '/play/bz5': { key: 'A', tempo: 80, swing: true, inversion: 1 } } }),

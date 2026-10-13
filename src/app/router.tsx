@@ -163,7 +163,7 @@ const pieceRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
 
-// Practice's seven places; Quiz with its trainers, Exercises, and the studies that are practised there.
+// Practice (ADR 0044): its list, then its training, Exercises and Quiz with its trainers.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
@@ -192,7 +192,7 @@ const exercisesRoute = createRoute({
 const restoreTrainer = restoreView(readTrainerSearch, [])
 const trainerRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/trainers/$trainerId',
+  path: '/practice/quiz/$trainerId',
   notFoundComponent: notFoundIn('quiz'),
   ...trainerSearch,
   staticData: { remembered: true },
@@ -204,7 +204,7 @@ const trainerRoute = createRoute({
     const own = ownTrainerView(trainerOf(trainerId), context.search)
     if (own !== context.search) {
       throw redirect({
-        to: '/practice/trainers/$trainerId',
+        to: '/practice/quiz/$trainerId',
         params: { trainerId },
         search: own,
         replace: true,
@@ -215,7 +215,7 @@ const trainerRoute = createRoute({
 })
 const studyRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/studies/$pieceId',
+  path: '/practice/accompaniment/studies/$pieceId',
   notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: async ({ params, context }) => {
     const { entryIn } = await songsScreens()
@@ -255,21 +255,21 @@ const intervalsRoute = createRoute({
 })
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/chords/find',
+  path: '/practice/chord-finder',
   ...finderSearch,
   ...remembered(readFinderSearch, []),
   component: lazyRouteComponent(explorerScreens, 'ChordFinderPage'),
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/progressions/reharmonise',
+  path: '/practice/reharmonise',
   ...reharmoniseSearch,
   ...remembered(readReharmoniseSearch, []),
   component: lazyRouteComponent(explorerScreens, 'ReharmonisePage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/progressions/passing',
+  path: '/practice/passing-chords',
   ...passingSearch,
   ...remembered(readPassingSearch, []),
   component: lazyRouteComponent(explorerScreens, 'PassingChordsPage'),
@@ -297,13 +297,13 @@ const inBook = (ref: string, patterns: PatternsStore) =>
   (!isOwnPatternId(ref) || selectOwnPattern(ref)(patterns.getState()) !== undefined)
 const newPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/patterns/new',
+  path: '/practice/accompaniment/patterns/new',
   validateSearch: validateNewPatternSearch,
   component: lazyRouteComponent(explorerScreens, 'NewPatternPage'),
 })
 const patternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/patterns/$patternRef',
+  path: '/practice/accompaniment/patterns/$patternRef',
   notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: ({ params, context }) => {
     if (!inBook(params.patternRef, context.patterns)) throw notFound()
@@ -312,7 +312,7 @@ const patternRoute = createRoute({
 })
 const editPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/patterns/$patternRef/edit',
+  path: '/practice/accompaniment/patterns/$patternRef/edit',
   notFoundComponent: notFoundIn('accompaniment'),
   beforeLoad: ({ params, context }) => {
     if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {

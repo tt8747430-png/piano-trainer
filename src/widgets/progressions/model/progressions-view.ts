@@ -6,8 +6,10 @@ import {
 } from '@/entities/progression-library'
 import type { PatternId } from '@/entities/pattern'
 import {
+  chordSymbol,
   keyFromParam,
   keyParam,
+  numeralChord,
   numeralsParam,
   parseNumerals,
   withLeadIns,
@@ -109,4 +111,23 @@ export function playerSearch(view: ProgressionsView): InPlayer {
     inversion: view.inversion,
     nearest: view.nearest,
   }
+}
+
+/** What the Passing chords tool opens on: a key and two chords, each as its field reads it. */
+export interface PassingBetween {
+  readonly key: KeyParam
+  readonly from: string
+  readonly to: string
+}
+
+/**
+ * The view's first two chords as played, in its key and at its chord size, for the Passing chords tool
+ * to find the ways between; none for a line of one chord.
+ */
+export function passingBetween(view: ProgressionsView): PassingBetween | undefined {
+  const key = keyFromParam(view.key)
+  const [from, to] = playedNumerals(view).map((numeral) =>
+    chordSymbol(numeralChord(numeral, key, view.size)),
+  )
+  return from !== undefined && to !== undefined ? { key: view.key, from, to } : undefined
 }

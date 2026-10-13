@@ -33,7 +33,7 @@ export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
     const saved = saveOwnPattern(store, draft, id)
     if (!saved) return
     void navigate({
-      to: '/practice/patterns/$patternRef',
+      to: '/practice/accompaniment/patterns/$patternRef',
       params: { patternRef: saved },
       replace: true,
     })

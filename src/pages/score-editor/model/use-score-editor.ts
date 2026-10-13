@@ -44,7 +44,7 @@ const STOPS_A_TAKE = new Set([' ', 'Escape'])
 function useCloseTo(target: EditorTarget): () => void {
   const params = { pieceId: target.id }
   const toSongs = useGoBack({ to: '/songs/$pieceId', params })
-  const toStudies = useGoBack({ to: '/practice/studies/$pieceId', params })
+  const toStudies = useGoBack({ to: '/practice/accompaniment/studies/$pieceId', params })
   return target.kind === 'version' && target.entry.kind === 'study' ? toStudies : toSongs
 }
 

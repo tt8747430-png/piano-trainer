@@ -31,8 +31,6 @@ export const learn: LocaleResources['learn'] = {
     jazz: 'Джаз',
     gospel: 'Госпел',
   },
-  chords: 'Аккорды',
-  scales: 'Гаммы и тональности',
   written: 'Другие обозначения',
   show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
   keysPlay: { label: 'Клавиши играют', chords: 'Аккорды', notes: 'Ноты' },
@@ -133,7 +131,6 @@ export const learn: LocaleResources['learn'] = {
     again: 'Ещё раз',
   },
   intervals: {
-    title: 'Интервалы',
     simple: 'В пределах октавы',
     compound: 'Шире октавы',
     semitones: 'Полутонов: {{n}}',
@@ -155,7 +152,6 @@ export const learn: LocaleResources['learn'] = {
     open: 'Открыть в аккордах',
   },
   reharmonise: {
-    title: 'Гармонизация мелодии',
     note: 'Нота мелодии',
     as: 'как {{degree}}',
     inKey: 'в тональности',
@@ -168,7 +164,6 @@ export const learn: LocaleResources['learn'] = {
     },
   },
   passing: {
-    title: 'Проходящие аккорды',
     from: 'От',
     to: 'К',
     unread: 'Этот аккорд не читается.',
@@ -243,11 +238,9 @@ export const learn: LocaleResources['learn'] = {
     },
   },
   progressions: {
-    title: 'Последовательности',
     field: 'Ступени или аккорды',
     unread: 'Эта последовательность не читается.',
     chords: 'Аккорды',
-    inKey: 'В тональности {{key}}',
     throughKeys: 'По тональностям',
     choose: 'Последовательность',
     typed: 'Набрана',

@@ -33,6 +33,8 @@ function Editing({ patternRef }: { patternRef: string }) {
 }
 
 export function EditPatternPage() {
-  const { patternRef } = useParams({ from: '/shell/practice/patterns/$patternRef/edit' })
+  const { patternRef } = useParams({
+    from: '/shell/practice/accompaniment/patterns/$patternRef/edit',
+  })
   return <Editing key={patternRef} patternRef={patternRef} />
 }

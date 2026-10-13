@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
 import { BackButton, RoundLink, ScreenHeader } from '@/shared/ui'
-import { AccompanimentTabs } from '@/widgets/subject-tabs'
+import { AccompanimentTabs } from './AccompanimentTabs'
 import { BookPieces } from './BookPieces'
 import { PatternShelves } from './PatternShelves'
 
@@ -19,13 +19,13 @@ export function AccompanimentPage() {
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
-        title={t('practice:subjects.accompaniment')}
+        title={t('practice:pages.accompaniment')}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
           <RoundLink
             label={t('learn:patterns.new')}
             icon={Plus}
-            render={<Link to="/practice/patterns/new" />}
+            render={<Link to="/practice/accompaniment/patterns/new" />}
           />
         }
         tabs={<AccompanimentTabs current={show} />}

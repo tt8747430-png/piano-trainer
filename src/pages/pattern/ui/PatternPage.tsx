@@ -65,7 +65,7 @@ function BuiltInActions({ id }: { id: PatternId }) {
     <>
       <ButtonLink
         variant="outline"
-        render={<Link to="/practice/patterns/new" search={{ from: id }} />}
+        render={<Link to="/practice/accompaniment/patterns/new" search={{ from: id }} />}
       >
         {t('patterns.makeOwn')}
       </ButtonLink>
@@ -97,7 +97,12 @@ function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
     <>
       <ButtonLink
         variant="outline"
-        render={<Link to="/practice/patterns/$patternRef/edit" params={{ patternRef: id }} />}
+        render={
+          <Link
+            to="/practice/accompaniment/patterns/$patternRef/edit"
+            params={{ patternRef: id }}
+          />
+        }
       >
         {t('patterns.edit')}
       </ButtonLink>
@@ -202,7 +207,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
 /** A pattern's page: the route's pattern, built-in or the learner's own (gone once deleted in another tab). */
 export function PatternPage() {
   const { t } = useTranslation('common')
-  const { patternRef } = useParams({ from: '/shell/practice/patterns/$patternRef' })
+  const { patternRef } = useParams({ from: '/shell/practice/accompaniment/patterns/$patternRef' })
   const book = usePatternBook()
   const pattern = isPatternRef(patternRef) ? book.get(patternRef) : undefined
   return pattern ? (

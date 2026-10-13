@@ -32,8 +32,6 @@ export const learn = {
     jazz: 'Jazz',
     gospel: 'Gospel',
   },
-  chords: 'Chords',
-  scales: 'Scales and keys',
   // The other ways a chord symbol is written on this root.
   written: 'Also written',
   show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
@@ -134,7 +132,6 @@ export const learn = {
     again: 'Try again',
   },
   intervals: {
-    title: 'Intervals',
     simple: 'Within the octave',
     compound: 'Past the octave',
     semitones: 'Semitones: {{n}}',
@@ -156,7 +153,6 @@ export const learn = {
     open: 'Open in Chords',
   },
   reharmonise: {
-    title: 'Reharmonise',
     note: 'Melody note',
     as: 'as {{degree}}',
     inKey: 'in the key',
@@ -169,7 +165,6 @@ export const learn = {
     },
   },
   passing: {
-    title: 'Passing chords',
     from: 'From',
     to: 'To',
     unread: 'This chord can’t be read.',
@@ -250,11 +245,9 @@ export const learn = {
     },
   },
   progressions: {
-    title: 'Progressions',
     field: 'Numerals or chords',
     unread: 'This progression can’t be read.',
     chords: 'Chords',
-    inKey: 'In {{key}}',
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',

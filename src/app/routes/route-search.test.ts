@@ -261,11 +261,11 @@ describe('search params', () => {
   })
 
   it('keep the chords typed for Passing chords, and take the default for one that cannot be read', async () => {
-    expect(await searchAt('/practice/progressions/passing?from=G7&to=Am7b5')).toEqual({
+    expect(await searchAt('/practice/passing-chords?from=G7&to=Am7b5')).toEqual({
       ...PASSING_DEFAULTS,
       from: 'G7',
       to: 'Am7b5',
     })
-    expect(await searchAt('/practice/progressions/passing?from=Hm&to=Qx')).toEqual(PASSING_DEFAULTS)
+    expect(await searchAt('/practice/passing-chords?from=Hm&to=Qx')).toEqual(PASSING_DEFAULTS)
   })
 })

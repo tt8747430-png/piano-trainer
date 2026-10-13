@@ -6,7 +6,7 @@ export function useClose(piece: Piece): () => void {
   const params = { pieceId: piece.id }
   const closeTo = {
     song: useGoBack({ to: '/songs/$pieceId', params }),
-    study: useGoBack({ to: '/practice/studies/$pieceId', params }),
+    study: useGoBack({ to: '/practice/accompaniment/studies/$pieceId', params }),
   }
   return closeTo[piece.kind]
 }
