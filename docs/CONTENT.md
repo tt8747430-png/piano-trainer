@@ -246,6 +246,7 @@ Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` 
 | `sN`            | N steps up the chord's major or minor scale from the root (`s0` the root)                                                |
 | `LN`            | Degree N above the bass, in the left hand's register                                                                     |
 | `Ka` `Kb` `Kc`  | The key's I, IV and V triads (minor i and iv in a minor key), voice-led                                                  |
+| `Sh`            | Over the bass, the chord's 7th, or its 5th where it has none: a jazz shell                                               |
 | `A`             | A semitone under the next bass, near this one: a chord's last bar leads to the next chord, any other bar back to its own |
 
 `0/4 C,4/4 C,8/4 C,12/4 C` is a chord on every beat; `0/16 L1+L8` an octave held for the bar. Events of two to four

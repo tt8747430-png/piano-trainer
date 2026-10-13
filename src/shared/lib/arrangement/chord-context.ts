@@ -242,6 +242,11 @@ export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote
           context.root - token.semitones,
         ),
       ]
+    case 'shell': {
+      const sevenths = context.tones.some((tone) => tone.role === '7th')
+      const stack = stackFromBass(context)
+      return spellInChord(context, [context.bass + (sevenths ? stack.seventh : stack.fifth)])
+    }
     case 'approach': {
       // A semitone under the bass to come, the octave nearest this bass.
       const under = pitchClass(context.nextBass - 1)

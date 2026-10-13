@@ -280,6 +280,14 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
       inThree: '0/4 L1^5,4/4 L5^2,8/4 A^1',
     }),
   },
+  shell: {
+    name: { en: 'Shell: root and 7th, whole note', ru: 'Шелл: основной тон и септима целой нотой' },
+    figure: eventFigure('0/16 L1^5+Sh^1'),
+  },
+  chs: {
+    name: { en: 'Charleston shells', ru: 'Шеллы в ритме чарльстона' },
+    figure: eventFigure('0/6 L1^5+Sh^1,6/10 L1^5+Sh^1'),
+  },
   str: {
     name: { en: 'Stride: bass, chord, 5th, chord', ru: 'Страйд: бас, аккорд, квинта, аккорд' },
     figure: eventFigure('0/4 L1^5,4/4 L10+L12+L15,8/4 L5^5,12/4 L10+L12+L15', {

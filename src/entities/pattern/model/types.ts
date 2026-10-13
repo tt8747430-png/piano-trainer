@@ -78,6 +78,8 @@ export const LEFT_FIGURE_IDS = [
   'tenth',
   'step',
   'wlk',
+  'shell',
+  'chs',
   'str',
 ] as const
 export type LeftFigureId = (typeof LEFT_FIGURE_IDS)[number]

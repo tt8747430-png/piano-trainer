@@ -239,6 +239,15 @@ describe('arrange', () => {
     expect(midisAt(performance, 'rh', 0)).toHaveLength(4) // the root kept: D F A C from F
   })
 
+  it('plays a shell: the 7th over the bass, or the 5th where the chord has none', () => {
+    const SHELL = pattern('shell', '0/16 C', '0/16 L1+Sh')
+    const lh = (symbol: string) =>
+      notesOf(arrange(chart([[symbol]]), { tonic: C, pattern: SHELL }), 'lh').map((n) => n.midi)
+    expect(lh('Dm7')).toEqual([38, 48]) // D2 C3
+    expect(lh('CMaj7')).toEqual([36, 47]) // C2 B2
+    expect(lh('F')).toEqual([41, 48]) // F2 C3
+  })
+
   describe('a walking bass', () => {
     const WALK = pattern('walk', '0/16 C', '0/4 L1,4/4 L3,8/4 L5,12/4 A')
     const lhOf = (symbols: string[][]) =>

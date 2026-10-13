@@ -72,6 +72,8 @@ export type FigureToken =
   | { readonly kind: 'bass-degree'; readonly degree: number }
   /** `Ka` `Kb` `Kc`: the key's I, IV or V triad, voice-led from the chord */
   | { readonly kind: 'key-triad'; readonly triad: 'I' | 'IV' | 'V' }
+  /** `Sh`: a jazz shell's top over the bass: the chord's 7th above it, or its 5th where it has none */
+  | { readonly kind: 'shell' }
   /** `A`: in the left hand's register, a semitone under the bass coming next (a walking bass's approach) */
   | { readonly kind: 'approach' }
 export interface FigureTone {
