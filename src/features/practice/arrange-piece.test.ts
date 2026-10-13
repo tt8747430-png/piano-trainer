@@ -19,6 +19,7 @@ describe('ownChoice', () => {
       rh: null,
       lh: null,
       inversion: null,
+      nearest: true,
       chordSize: null,
       melody: false,
     })

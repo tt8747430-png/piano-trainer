@@ -16,6 +16,7 @@ describe('chromaticChoice', () => {
       rh: null,
       lh: null,
       inversion: null,
+      nearest: true,
     })
   })
 

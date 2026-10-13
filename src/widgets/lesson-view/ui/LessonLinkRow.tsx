@@ -155,7 +155,10 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
                 key: keyParam(key),
                 ...(size === 'triads' ? {} : { chordSize: size }),
                 ...(target.walk ? { walk: target.walk } : {}),
-                ...(target.inversion === undefined ? {} : { inversion: target.inversion }),
+                // A lesson's inversion is every chord's: Nearest off.
+                ...(target.inversion === undefined
+                  ? {}
+                  : { inversion: target.inversion, nearest: false }),
               }}
             />
           }

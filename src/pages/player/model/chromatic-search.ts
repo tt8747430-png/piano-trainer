@@ -33,7 +33,7 @@ export type ChromaticSearch = PracticeView & {
 export function chromaticChoice(
   search: Pick<
     ChromaticSearch,
-    'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh' | 'inversion'
+    'chords' | 'root' | 'direction' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'nearest'
   >,
   book: PatternBook,
 ): ChromaticChoice {
@@ -45,6 +45,7 @@ export function chromaticChoice(
     rh: playableFigure(search.rh, RIGHT_FIGURES, CHROMATIC.fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, CHROMATIC.fit),
     inversion: search.inversion ?? null,
+    nearest: search.nearest !== false,
   }
 }
 

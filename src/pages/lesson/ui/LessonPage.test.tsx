@@ -33,7 +33,7 @@ describe('A lesson', () => {
       '/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up',
     )
     expect(screen.getByRole('link', { name: /^9ths from the 7th/ }).getAttribute('href')).toBe(
-      '/play/progression?p=ii-V-I&chordSize=ninths&inversion=3',
+      '/play/progression?p=ii-V-I&chordSize=ninths&inversion=3&nearest=false',
     )
   })
 

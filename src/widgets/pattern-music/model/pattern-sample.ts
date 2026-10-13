@@ -60,6 +60,7 @@ export function patternSample(pattern: BookPattern, book: PatternBook): PatternS
           rh: null,
           lh: null,
           inversion: null,
+          nearest: true,
         }),
       })
   const { music, from, to } = firstLine(performance)

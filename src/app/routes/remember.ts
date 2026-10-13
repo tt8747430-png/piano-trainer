@@ -11,7 +11,7 @@ import type { Raw } from './read-search'
  * inversion, never those kept from another pattern (a pattern's Practise would else play another).
  */
 const BOUND_TO: Readonly<Record<string, readonly string[]>> = {
-  pattern: ['rh', 'lh', 'inversion'],
+  pattern: ['rh', 'lh', 'inversion', 'nearest'],
 }
 
 /**

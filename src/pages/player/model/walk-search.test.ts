@@ -15,6 +15,7 @@ describe('walkChoice', () => {
       rh: null,
       lh: null,
       inversion: null,
+      nearest: true,
       chordSize: WALK.chordSize,
     })
   })

@@ -96,6 +96,7 @@ describe('arrangeChromatic', () => {
             rh: null,
             lh: null,
             inversion: null,
+            nearest: true,
           },
           BUILT_IN_PATTERNS,
         )

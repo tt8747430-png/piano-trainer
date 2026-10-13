@@ -19,6 +19,7 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   rh: null,
   lh: null,
   inversion: null,
+  nearest: true,
   chordSize: null,
   melody: false,
 })
@@ -41,6 +42,7 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
       rh: choice.rh,
       lh: choice.lh,
       inversion: choice.inversion,
+      nearest: choice.nearest,
     }),
     ...(fromChart ? { methods: METHOD_PATTERNS } : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),

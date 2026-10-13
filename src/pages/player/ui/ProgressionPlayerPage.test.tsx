@@ -29,13 +29,13 @@ describe('A progression in the Player', () => {
     expect(router.state.location.search).toMatchObject({ key: 'G', p: 'ii-V-I' })
   })
 
-  it('keeps every chord in the inversion chosen in the Setup', async () => {
+  it('starts in the inversion chosen in the Setup', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp(
       '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh',
     )
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(screen.getByRole('radio', { name: 'Nearest' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(router.state.location.search).toMatchObject({ inversion: 1 })
     await user.keyboard('{Escape}')
@@ -46,6 +46,28 @@ describe('A progression in the Player', () => {
       sound.kind === 'note' && sound.at === 0 ? [sound.midi] : [],
     )
     expect(first?.toSorted((a, b) => a - b)).toEqual([53, 57, 60, 62])
+  })
+
+  it('keeps every chord in the first one’s inversion with Nearest off', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp(
+      '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh&inversion=1',
+    )
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(router.state.location.search).toMatchObject({ inversion: 1, nearest: false })
+    await user.keyboard('{Escape}')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await waitFor(() => expect(audio.played).not.toHaveLength(0))
+    const sounds = audio.played[0]?.sounds ?? []
+    const starts = [...new Set(sounds.flatMap((s) => (s.kind === 'note' ? [s.at] : [])))].sort(
+      (a, b) => a - b,
+    )
+    const lowest = starts.map((at) =>
+      Math.min(...sounds.flatMap((s) => (s.kind === 'note' && s.at === at ? [s.midi] : []))),
+    )
+    const changes = lowest.map((m) => m % 12).filter((pc, i, all) => pc !== all[i - 1])
+    expect(changes.slice(0, 3)).toEqual([5, 11, 4]) // F, B, E: each from its 3rd
   })
 
   it('fades the inversion under a pattern that plays its own shapes', async () => {

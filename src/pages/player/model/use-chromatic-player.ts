@@ -16,10 +16,10 @@ export function useChromaticPlayer(
   setSearch: (patch: Partial<ChromaticSearch>) => void,
 ): PlayerOf<ChromaticChoice, ChromaticChange> {
   const book = usePatternBook()
-  const { chords, root, direction, pattern, rh, lh, inversion } = search
+  const { chords, root, direction, pattern, rh, lh, inversion, nearest } = search
   const choice = useMemo(
-    () => chromaticChoice({ chords, root, direction, pattern, rh, lh, inversion }, book),
-    [chords, root, direction, pattern, rh, lh, inversion, book],
+    () => chromaticChoice({ chords, root, direction, pattern, rh, lh, inversion, nearest }, book),
+    [chords, root, direction, pattern, rh, lh, inversion, nearest, book],
   )
   const performance = useMemo(() => arrangeChromatic(choice, book), [choice, book])
   const player = usePracticePlayer(performance, search, setSearch, CHROMATIC.tempo)

@@ -11,10 +11,10 @@ export function useWalkPlayer(
   setSearch: (patch: Partial<WalkSearch>) => void,
 ): PlayerOf<WalkChoice, WalkChange> {
   const book = usePatternBook()
-  const { root, kind, pattern, rh, lh, inversion, chordSize } = search
+  const { root, kind, pattern, rh, lh, inversion, nearest, chordSize } = search
   const choice = useMemo(
-    () => walkChoice({ root, kind, pattern, rh, lh, inversion, chordSize }, book),
-    [root, kind, pattern, rh, lh, inversion, chordSize, book],
+    () => walkChoice({ root, kind, pattern, rh, lh, inversion, nearest, chordSize }, book),
+    [root, kind, pattern, rh, lh, inversion, nearest, chordSize, book],
   )
   const performance = useMemo(() => arrangeWalk(choice, book), [choice, book])
   const player = usePracticePlayer(performance, search, setSearch, WALK.tempo)

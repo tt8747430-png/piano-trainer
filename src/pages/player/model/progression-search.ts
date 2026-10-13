@@ -31,7 +31,7 @@ export const progressionFit = (walk: KeyWalk | null): PatternFit =>
 export function progressionChoice(
   search: Pick<
     ProgressionSearch,
-    'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'chordSize' | 'walk'
+    'p' | 'key' | 'pattern' | 'rh' | 'lh' | 'inversion' | 'nearest' | 'chordSize' | 'walk'
   >,
   book: PatternBook,
 ): ProgressionChoice {
@@ -44,6 +44,7 @@ export function progressionChoice(
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
     inversion: search.inversion ?? null,
+    nearest: search.nearest !== false,
     chordSize: search.chordSize ?? PROGRESSION.chordSize,
     walk,
   }

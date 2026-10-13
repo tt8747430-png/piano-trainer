@@ -33,7 +33,13 @@ export const player: LocaleResources['player'] = {
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
   ownPatternDetail: 'Левая и правая рука на ваш выбор',
-  inversion: { nearest: 'Плавно', own: 'Эта фактура играет свои фигуры.' },
+  inversion: {
+    label: 'Первый аккорд',
+    nearest: 'Плавно',
+    nearestOn: 'Каждый следующий аккорд сдвигается как можно меньше',
+    nearestOff: 'Все аккорды в положении первого',
+    own: 'Эта фактура играет свои фигуры.',
+  },
   keyWalk: {
     label: 'По тональностям',
     one: 'Одна тональность',

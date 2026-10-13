@@ -59,12 +59,17 @@ interface ContextChord {
 const within = (semitones: number | undefined, fallback: number) =>
   semitones === undefined ? fallback : semitones % 12
 
+/**
+ * Where the right hand's chord stands: in an inversion; `'nearest'`, its notes as an inversion
+ * stacks them, voiced nearest the last; `null`, the hand's own notes voice-led from the last.
+ */
+export type RightHandPosition = Inversion | 'nearest' | null
+
 export function chordContext(
   chord: ContextChord,
   previous: readonly Midi[] | null,
   key: Key,
-  /** Every chord in this inversion; `null` voice-leads each from the last. */
-  inversion: Inversion | null,
+  position: RightHandPosition,
 ): ChordContext {
   const rootPc = pitchClassOf(chord.root)
   const bassPc = pitchClassOf(chord.bass)
@@ -73,9 +78,11 @@ export function chordContext(
   const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
   const root = midi(55 + pitchClass(rootPc - 7))
   const voiced =
-    inversion === null
+    position === null
       ? voiceLead(previous, rightHandPitchClasses(chord.tones))
-      : voiceInversion(previous, inversionPitchClasses(chord.tones), inversion)
+      : position === 'nearest'
+        ? voiceLead(previous, inversionPitchClasses(chord.tones))
+        : voiceInversion(previous, inversionPitchClasses(chord.tones), position)
   return {
     third,
     fifth,

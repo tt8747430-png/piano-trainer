@@ -19,10 +19,11 @@ export function usePlayer(
   const { melody, recording: withRecording } = useSettings(selectPractice)
   const progress = useProgressStoreApi()
   const book = usePatternBook()
-  const { key, pattern, rh, lh, inversion, chordSize } = search
+  const { key, pattern, rh, lh, inversion, nearest, chordSize } = search
   const choice = useMemo(
-    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, chordSize }, melody, book),
-    [piece, key, pattern, rh, lh, inversion, chordSize, melody, book],
+    () =>
+      resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, melody, book),
+    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, melody, book],
   )
   const performance = useMemo(() => arrangePiece(piece, choice, book), [piece, choice, book])
   const headings = usePieceHeadings(piece)

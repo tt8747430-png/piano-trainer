@@ -24,7 +24,7 @@ async function renderSetup(
   const onFigures = vi.fn()
   const view = await renderRouted(
     <PlayerSetup
-      figures={{ pattern: 'block', rh: null, lh: null, inversion: null, ...figures }}
+      figures={{ pattern: 'block', rh: null, lh: null, inversion: null, nearest: true, ...figures }}
       fit={{ ...SONG, ...fit }}
       onFigures={onFigures}
     >
@@ -83,11 +83,22 @@ describe('PlayerSetup', () => {
     ).toBeInTheDocument()
   })
 
-  it('draws each inversion as its stack of notes, and keeps Nearest by default', async () => {
+  it('starts the first chord in root position, each after it nearest, by default', async () => {
     const { user, onFigures } = await renderSetup()
-    expect(screen.getByRole('radio', { name: 'Nearest' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
+    expect(screen.getByRole('switch', { name: /Nearest/ })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
+    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(onFigures).toHaveBeenCalledWith({ nearest: false })
+  })
+
+  it('turns Nearest back on, the URL’s own', async () => {
+    const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
+    expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
+    expect(screen.getByText('Every chord in the first one’s position')).toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 
   it('chooses a pattern from its group, keeping melody patterns from music without a tune', async () => {

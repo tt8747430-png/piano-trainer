@@ -35,8 +35,14 @@ export const player = {
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
   ownPatternDetail: 'A left hand and a right hand of your choice',
-  /** The right hand's chord: each nearest the last, or one inversion every time. */
-  inversion: { nearest: 'Nearest', own: 'This pattern plays its own shapes.' },
+  /** The right hand's chord: the first in an inversion, then each nearest the last or all in it. */
+  inversion: {
+    label: 'First chord',
+    nearest: 'Nearest',
+    nearestOn: 'Each next chord moves the least it can',
+    nearestOff: 'Every chord in the first one’s position',
+    own: 'This pattern plays its own shapes.',
+  },
   /** A progression through the keys, back home at the end. */
   keyWalk: {
     label: 'Through the keys',

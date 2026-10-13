@@ -62,6 +62,7 @@ describe('arrangeWalk', () => {
         rh: null,
         lh: null,
         inversion: null,
+        nearest: true,
         chordSize: 'sevenths',
       },
       BUILT_IN_PATTERNS,

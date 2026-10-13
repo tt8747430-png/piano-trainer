@@ -21,6 +21,7 @@ import {
 import {
   autoFingers,
   chordContext,
+  type RightHandPosition,
   spellInChord,
   tokenNotes,
   type ChordContext,
@@ -60,8 +61,13 @@ export interface ArrangeOptions {
   readonly melody?: Melody
   /** Also play the tune an octave up (hand 'melody'). */
   readonly doubleMelody?: boolean
-  /** The right hand's chord in this inversion every time; left out, each voice-led from the last. */
+  /**
+   * The right hand's chord in this inversion every time; with `nearest`, the first only, each after
+   * it nearest the last. Left out, each chord voice-led from the last, the first near middle C.
+   */
   readonly inversion?: Inversion
+  /** After the first chord in `inversion`, each nearest the last. */
+  readonly nearest?: boolean
 }
 
 const VELOCITY = {
@@ -328,6 +334,12 @@ function playWritten(
   })
 }
 
+/** How chord `index` is voiced: in the inversion asked, nearest the last after the first, or freely. */
+function positionOf({ inversion, nearest }: ArrangeOptions, index: number): RightHandPosition {
+  if (inversion === undefined) return null
+  return index === 0 || !nearest ? inversion : 'nearest'
+}
+
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const key: Key = { tonic: options.tonic, minor: chart.key.minor }
@@ -351,7 +363,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
       key,
-      options.inversion ?? null,
+      positionOf(options, index),
     )
     previous = context.voiced
     const { method } = placed.chord

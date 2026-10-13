@@ -35,6 +35,7 @@ describe('arrangeProgression', () => {
         rh: null,
         lh: null,
         inversion: null,
+        nearest: true,
         chordSize: 'triads',
         walk: null,
       },
@@ -52,6 +53,7 @@ describe('arrangeProgression', () => {
         rh: null,
         lh: null,
         inversion: null,
+        nearest: true,
         chordSize: 'sevenths',
         walk: 'semitones-up',
       },
@@ -74,6 +76,7 @@ describe('arrangeProgression', () => {
       rh: null,
       lh: null,
       inversion: null,
+      nearest: true,
       chordSize: 'sevenths',
       walk: 'semitones-up',
     } as const

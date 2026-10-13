@@ -35,6 +35,7 @@ export function resolveChoice(
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
     inversion: search.inversion ?? null,
+    nearest: search.nearest !== false,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
     melody,
   }

@@ -239,6 +239,36 @@ describe('arrange', () => {
     expect(midisAt(performance, 'rh', 0)).toHaveLength(4) // the root kept: D F A C from F
   })
 
+  describe('from an inversion, nearest after', () => {
+    const performance = (inversion: 0 | 1 | 2) =>
+      arrange(chart([['C', 'F', 'G', 'C']]), { tonic: C, pattern: BLOCK, inversion, nearest: true })
+    const rh = (inversion: 0 | 1 | 2, tick: number) =>
+      midisAt(performance(inversion), 'rh', tick).toSorted((a, b) => a - b)
+
+    it('starts on the inversion asked for', () => {
+      expect(rh(0, 0)).toEqual([60, 64, 67]) // C4 E4 G4
+      expect(rh(1, 0)).toEqual([64, 67, 72]) // E4 G4 C5
+      expect(rh(2, 0)).toEqual([55, 60, 64]) // G3 C4 E4
+    })
+
+    it('moves each chord after it to the nearest voicing, common tones held', () => {
+      expect(rh(0, 48)).toEqual([60, 65, 69]) // C F A: C held
+      expect(rh(0, 96)).toEqual([59, 62, 67]) // B D G
+      expect(rh(2, 48)).toEqual([57, 60, 65]) // A C F, from G C E
+    })
+
+    it('keeps a 7th chord whole, as the inversions do', () => {
+      const sevenths = arrange(chart([['Dm7', 'G7', 'Cmaj7']]), {
+        tonic: C,
+        pattern: BLOCK,
+        inversion: 1,
+        nearest: true,
+      })
+      for (const tick of [0, 48, 96]) expect(midisAt(sevenths, 'rh', tick)).toHaveLength(4)
+      expect(Math.min(...midisAt(sevenths, 'rh', 0)) % 12).toBe(5) // F: the 1st inversion
+    })
+  })
+
   it('keeps the right hand in range for every quality on every root', () => {
     const symbols = CHORD_QUALITIES.flatMap((quality) =>
       Array.from({ length: 12 }, (_, pc) =>

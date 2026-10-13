@@ -7,14 +7,16 @@ import type { PatternRef } from './own'
 import type { LeftFigureId, RightFigureId } from './types'
 
 /**
- * How the hands accompany: a pattern, a figure of its own for either hand over it, and the inversion
- * the right hand's chord keeps (`null`: each chord voice-led from the last).
+ * How the hands accompany: a pattern, a figure of its own for either hand over it, and where the
+ * right hand's chord stands: the first chord's inversion (`null`: root position), each after it
+ * nearest the last or, without `nearest`, in that inversion too.
  */
 export interface Accompaniment {
   readonly pattern: PatternRef
   readonly rh: RightFigureId | null
   readonly lh: LeftFigureId | null
   readonly inversion: Inversion | null
+  readonly nearest: boolean
 }
 
 /** A pattern as the Player's Setup chooses it: one for every chord, or From the chart (the chart's own methods). */
@@ -31,14 +33,14 @@ export interface AccompanimentChoice extends Omit<Accompaniment, 'pattern'> {
  */
 export function accompanimentOptions(
   book: PatternBook,
-  { pattern, rh, lh, inversion }: Accompaniment,
-): Pick<ArrangeOptions, 'pattern' | 'rh' | 'lh' | 'inversion'> {
+  { pattern, rh, lh, inversion, nearest }: Accompaniment,
+): Pick<ArrangeOptions, 'pattern' | 'rh' | 'lh' | 'inversion' | 'nearest'> {
   return {
     pattern: book.require(pattern).pattern,
     ...(rh ? { rh: RIGHT_FIGURES[rh].figure } : {}),
     ...(lh ? { lh: LEFT_FIGURES[lh].figure } : {}),
-    // An inversion only where the pattern follows it: one that plays its own shapes, where the
-    // Setup's inversion is faded, plays as though none were chosen.
-    ...(inversion === null || !followsInversion(book, { pattern, rh }) ? {} : { inversion }),
+    // A position only where the pattern follows it: one that plays its own shapes, where the
+    // Setup's position is faded, plays as though none were chosen.
+    ...(followsInversion(book, { pattern, rh }) ? { inversion: inversion ?? 0, nearest } : {}),
   }
 }

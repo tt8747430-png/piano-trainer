@@ -72,12 +72,13 @@ function practiceView(raw: Raw): PracticeView {
   }
 }
 /** The pattern and the hands' figures a Setup chooses, whatever the Player plays. */
-function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversion'> {
+function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversion' | 'nearest'> {
   return {
     pattern: isPlayerPattern(raw.pattern) ? raw.pattern : undefined,
     rh: isRightFigureId(raw.rh) ? raw.rh : undefined,
     lh: isLeftFigureId(raw.lh) ? raw.lh : undefined,
     inversion: isInversion(raw.inversion) ? raw.inversion : undefined,
+    nearest: raw.nearest === false ? false : undefined,
   }
 }
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)
@@ -100,6 +101,7 @@ const PLAYING = [
   'rh',
   'lh',
   'inversion',
+  'nearest',
   'tempo',
   'hands',
   'mode',
