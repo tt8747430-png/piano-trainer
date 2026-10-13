@@ -63,6 +63,35 @@ chord name". The five groups:
   ten stages, and "every stage links a page that already exists here".
 - Flashcards (https://piano.org/flashcards/) is "six topics, six tools": a doorway to the drills, not a seventh.
 
+## 1b. musictheory.net and musicca.com
+
+Fetched 2026-10-13. Both keep three kinds of page apart, under the same words piano.org uses.
+
+**musictheory.net** has three places and nothing else: Lessons · Exercises · Tools.
+
+- Lessons (https://www.musictheory.net/lessons): 40, in eight groups (The Basics, Rhythm and Meter, Scales and Key
+  Signatures, Intervals, Chords, Diatonic Chords, Chord Progressions, Neapolitan Chords), each a title and one line.
+- Exercises (https://www.musictheory.net/exercises): named for the thing and the act, grouped by where the answer is
+  given: Staff Identification, Staff Construction, Keyboard Identification, Fretboard Identification, Ear Training.
+  "Chord Identification" and "Chord Construction" are the app's Name chord and Build chord.
+- Tools (https://www.musictheory.net/tools): Calculators (accidental, interval, scale, chord, analysis, matrix) and
+  Utilities (tempo tapper, staff paper, a pop-up piano). A calculator "displays the chord for a specified starting
+  note, chord type, and key": what it takes, what it gives.
+
+**musicca.com** has Exercises · Instruments · Tools, then Lessons and a Dictionary under More.
+
+- Exercises (https://www.musicca.com/exercises) by thing: Notes, Rhythms, Intervals, Chords, Scales, Key signatures.
+- Tools (https://www.musicca.com/tools) in three groups: Equipment (chord player, metronome, tuner), Finders (note,
+  interval, chord, scale) and Other (circle of fifths, musical terms, staff paper). Its "finder" goes from a name to
+  the keys, which the app calls building; piano.org's Chord Finder does both, "Forward: name to keys" and "Reverse:
+  keys to name".
+- The Dictionary (https://www.musicca.com/dictionary) is a search field over notes, chords and scales by name.
+- In Russian (https://www.musicca.com/ru) Instruments are «Инструменты», so its Tools became «Аксессуары».
+
+**What the three agree on.** Lessons teach, exercises or drills train, tools work something out, and each tool says
+what it takes and gives. Only piano.org also holds a page per thing. None of them puts a tool behind a tab of a
+thing.
+
 ## 2. The app through the same lens
 
 ADR 0019 already has the test: "A reference is looked things up in; a tool works something out from what the learner
