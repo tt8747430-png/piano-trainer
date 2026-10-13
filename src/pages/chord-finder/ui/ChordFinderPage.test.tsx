@@ -91,6 +91,29 @@ describe('Practice → Chord finder', () => {
     expect(await screen.findByText('Choose the keys of a chord.')).toBeInTheDocument()
   })
 
+  it('lists the keys that hold the chord found, its numeral in each, each opening the key', async () => {
+    await renderApp('/practice/chord-finder?keys=62-65-69')
+    const keys = within(await screen.findByRole('region', { name: 'In these keys' }))
+    const rows = keys.getAllByRole('link')
+    expect(rows.map((row) => row.textContent)).toEqual([
+      'C major ii',
+      'B♭ major iii',
+      'F major vi',
+      'A minor iv',
+      'C minor ii',
+      'G minor v',
+      'D minor i',
+    ])
+    expect(rows[0]).toHaveAttribute('href', '/practice/scales?show=key')
+    expect(rows[3]).toHaveAttribute('href', '/practice/scales?root=A&kind=natural&show=key')
+  })
+
+  it('lists no keys while no chord is named', async () => {
+    await renderApp('/practice/chord-finder?keys=60-64')
+    await screen.findByRole('heading', { level: 2 })
+    expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
+  })
+
   it('is a tool with a page of its own: its name, a way back, no tabs', async () => {
     await renderApp('/practice/chord-finder?keys=60-64-67')
     expect(

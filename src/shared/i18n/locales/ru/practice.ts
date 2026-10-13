@@ -20,7 +20,7 @@ export const practice: LocaleResources['practice'] = {
     chords: 'От трезвучий до терцдецимаккордов · Обращения · Тенсии',
     intervals: 'На клавишах, вверх и вниз',
     progressions: 'Из библиотеки или своя, в любой тональности',
-    chordFinder: 'Называет клавиши, которые вы играете',
+    chordFinder: 'Называет аккорд и тональности, где он есть',
     passingChords: 'Пути от одного аккорда к другому',
     reharmonise: 'Аккорды, в которых есть нота мелодии',
     freePlay: 'Живые ноты, отметки и метроном',
@@ -186,6 +186,7 @@ export const practice: LocaleResources['practice'] = {
     no11th: 'Без ундецимы',
     clear: 'Очистить',
     open: 'Открыть в аккордах',
+    inKeys: 'В тональностях',
   },
   passingChords: {
     from: 'От',

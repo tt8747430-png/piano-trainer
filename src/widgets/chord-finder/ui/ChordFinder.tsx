@@ -10,12 +10,13 @@ import { ButtonLink, PlayLabel, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { FinderView } from '../model/finder-view'
 import { findChord, findingMarks } from '../model/finding'
+import { ChordKeys } from './ChordKeys'
 import { FinderName } from './FinderName'
 import { useFindingSaid } from './use-finding-said'
 
 /**
  * The Chord finder: keys tapped on (or held on a MIDI keyboard) are named as a chord, each key marked
- * by its degree in it; played, cleared, or opened in the Chords explorer.
+ * by its degree in it; played, cleared, or opened in the Chords explorer; and the keys that hold it.
  */
 export function ChordFinder({
   view,
@@ -79,6 +80,7 @@ export function ChordFinder({
           </ButtonLink>
         ) : null}
       </div>
+      {best ? <ChordKeys found={best} /> : null}
     </div>
   )
 }

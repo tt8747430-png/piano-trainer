@@ -22,7 +22,7 @@ export const practice = {
     chords: 'Triads to 13ths · Inversions · Tensions',
     intervals: 'On the keys, up and down',
     progressions: 'From the library or typed, in any key',
-    chordFinder: 'Names the keys you play',
+    chordFinder: 'Names a chord, and the keys it is in',
     passingChords: 'The ways from one chord to the next',
     reharmonise: 'The chords that hold a melody note',
     freePlay: 'A live score, marks and a metronome',
@@ -194,6 +194,8 @@ export const practice = {
     no11th: 'No 11th',
     clear: 'Clear',
     open: 'Open in Chords',
+    // The keys that hold the chord found, its numeral in each.
+    inKeys: 'In these keys',
   },
   passingChords: {
     from: 'From',

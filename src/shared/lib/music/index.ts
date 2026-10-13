@@ -209,5 +209,6 @@ export {
   sameKey,
   type CircleRing,
 } from './circle'
+export { keysHolding, type KeyHolding } from './keys-holding'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'

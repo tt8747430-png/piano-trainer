@@ -31,7 +31,7 @@ describe('Practice', () => {
     await renderApp('/practice')
     const tools = await screen.findByRole('region', { name: 'Tools' })
     expect(rowsOf(tools)).toEqual([
-      ['Chord finder Names the keys you play', '/practice/chord-finder'],
+      ['Chord finder Names a chord, and the keys it is in', '/practice/chord-finder'],
       ['Passing chords The ways from one chord to the next', '/practice/passing-chords'],
       ['Reharmonise The chords that hold a melody note', '/practice/reharmonise'],
       ['Free play A live score, marks and a metronome', '/practice/free-play'],
