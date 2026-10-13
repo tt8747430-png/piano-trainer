@@ -355,6 +355,12 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const notes: PerformanceNote[] = []
   const playsTune: boolean[] = []
   let previous: readonly Midi[] | null = null
+  // Each chord's bass, in the key played: what a walking bass approaches from the chord before.
+  const basses = layout.chords.map(({ chord }) => {
+    const { bass, root } = transposeChord(chord, chart.key.tonic, options.tonic)
+    return pitchClassOf(bass ?? root)
+  })
+  const nextBasses = basses.map((_, index) => basses[index + 1])
 
   layout.chords.forEach((placed, index) => {
     const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
@@ -396,12 +402,15 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       const from = at === placed.startTick && picksUp ? placed.offsetInBar % meterTicks : 0
       const length = Math.min(meterTicks - from, end - at)
       const window: Window = { from, to: from + length, at, chord: index }
+      // The last stretch of a chord leads to the next chord's bass; the others back to its own.
+      const ahead = at + length >= end ? nextBasses[index] : undefined
+      const stretch = ahead === undefined ? context : { ...context, nextBass: ahead }
       // A hand written in this bar plays its written notes instead (after the chords).
       if (!written?.rh) {
-        if (rh.kind === 'events') notes.push(...playFigure(rh, context, 'rh', window, barBeats))
-        else if (melody) notes.push(...playTune(rh, melody, context, window))
+        if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barBeats))
+        else if (melody) notes.push(...playTune(rh, melody, stretch, window))
       }
-      if (!written?.lh) notes.push(...playFigure(lh, context, 'lh', window, barBeats))
+      if (!written?.lh) notes.push(...playFigure(lh, stretch, 'lh', window, barBeats))
       at += length
     }
   })

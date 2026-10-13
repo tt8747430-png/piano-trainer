@@ -234,18 +234,19 @@ could not see: where the chords came from, a quirk of the printed score, what th
 of a 4/4 bar (triplet 8ths with `triplets: true`); `inThree` replaces them in 3/4, `onMajor` on major chords.
 Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
 
-| Token           | Plays                                                                            |
-| --------------- | -------------------------------------------------------------------------------- |
-| `C`             | The chord, voice-led from the last one                                           |
-| `T` `T1` `T2`   | The close triad from the root, or its 1st or 2nd inversion                       |
-| `T8` `T15`      | The close triad one or two octaves up                                            |
-| `U`             | The chord's upper notes as `C` voices it, all but its lowest (`v1`)              |
-| `1`–`15`        | A degree above the root, on the chord's own 3rd, 5th and 7th (`8` is the octave) |
-| `vN`            | The Nth note of the voiced chord from the bottom; past its top, an octave up     |
-| `_7` `_b7` `_6` | 1, 2 or 3 semitones below the root                                               |
-| `sN`            | N steps up the chord's major or minor scale from the root (`s0` the root)        |
-| `LN`            | Degree N above the bass, in the left hand's register                             |
-| `Ka` `Kb` `Kc`  | The key's I, IV and V triads (minor i and iv in a minor key), voice-led          |
+| Token           | Plays                                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `C`             | The chord, voice-led from the last one                                                                                   |
+| `T` `T1` `T2`   | The close triad from the root, or its 1st or 2nd inversion                                                               |
+| `T8` `T15`      | The close triad one or two octaves up                                                                                    |
+| `U`             | The chord's upper notes as `C` voices it, all but its lowest (`v1`)                                                      |
+| `1`–`15`        | A degree above the root, on the chord's own 3rd, 5th and 7th (`8` is the octave)                                         |
+| `vN`            | The Nth note of the voiced chord from the bottom; past its top, an octave up                                             |
+| `_7` `_b7` `_6` | 1, 2 or 3 semitones below the root                                                                                       |
+| `sN`            | N steps up the chord's major or minor scale from the root (`s0` the root)                                                |
+| `LN`            | Degree N above the bass, in the left hand's register                                                                     |
+| `Ka` `Kb` `Kc`  | The key's I, IV and V triads (minor i and iv in a minor key), voice-led                                                  |
+| `A`             | A semitone under the next bass, near this one: a chord's last bar leads to the next chord, any other bar back to its own |
 
 `0/4 C,4/4 C,8/4 C,12/4 C` is a chord on every beat; `0/16 L1+L8` an octave held for the bar. Events of two to four
 notes with no finger written are fingered automatically. Each chord plays its figures in windows of one meter bar;

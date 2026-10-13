@@ -48,6 +48,8 @@ export interface ChordContext {
   /** The root and the bass as the chord spells them. */
   readonly rootNote: SpelledNote
   readonly bassNote: SpelledNote
+  /** The bass that comes after this stretch of the chord: the next chord's, or its own again. */
+  readonly nextBass: PitchClass
 }
 
 interface ContextChord {
@@ -98,6 +100,7 @@ export function chordContext(
     tones: chord.tones,
     rootNote: chord.root,
     bassNote: chord.bass,
+    nextBass: bassPc,
   }
 }
 
@@ -239,6 +242,12 @@ export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote
           context.root - token.semitones,
         ),
       ]
+    case 'approach': {
+      // A semitone under the bass to come, the octave nearest this bass.
+      const under = pitchClass(context.nextBass - 1)
+      const key = context.bass + ((((under - context.bass) % 12) + 18) % 12) - 6
+      return [{ midi: midi(key), spelled: spellInKey(pitchClass(key), context.key) }]
+    }
     case 'chord-degree':
       return [
         stepsFrom(

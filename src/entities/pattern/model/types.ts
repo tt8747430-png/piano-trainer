@@ -74,6 +74,11 @@ export const LEFT_FIGURE_IDS = [
   'sal',
   'fun',
   'gos',
+  'fifth',
+  'tenth',
+  'step',
+  'wlk',
+  'str',
 ] as const
 export type LeftFigureId = (typeof LEFT_FIGURE_IDS)[number]
 

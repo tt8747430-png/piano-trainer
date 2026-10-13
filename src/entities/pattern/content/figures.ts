@@ -257,4 +257,33 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
     name: { en: 'Gospel octaves', ru: 'Госпел-октавы' },
     figure: eventFigure('0/3 L1+L8,3/3 L1+L8,6/4 L1+L8,10/3 L1+L8,13/3 L1+L8'),
   },
+  fifth: {
+    name: { en: 'Open 5th 1–5, whole note', ru: 'Пустая квинта 1–5 целой нотой' },
+    figure: eventFigure('0/16 L1^5+L5^1'),
+  },
+  tenth: {
+    name: { en: 'Tenth: root and the 3rd above', ru: 'Децима: основной тон и терция над ним' },
+    figure: eventFigure('0/16 L1^5+L10^1'),
+  },
+  step: {
+    name: { en: 'Stepping up 1–2–3–5', ru: 'Шаги вверх 1–2–3–5' },
+    figure: eventFigure('0/4 L1^5,4/4 L2^4,8/4 L3^3,12/4 L5^1', {
+      inThree: '0/4 L1^5,4/4 L3^3,8/4 L5^1',
+    }),
+  },
+  wlk: {
+    name: {
+      en: 'Walking bass 1–3–5, a step into the next chord',
+      ru: 'Шагающий бас 1–3–5, шаг к следующему аккорду',
+    },
+    figure: eventFigure('0/4 L1^5,4/4 L3^3,8/4 L5^2,12/4 A^1', {
+      inThree: '0/4 L1^5,4/4 L5^2,8/4 A^1',
+    }),
+  },
+  str: {
+    name: { en: 'Stride: bass, chord, 5th, chord', ru: 'Страйд: бас, аккорд, квинта, аккорд' },
+    figure: eventFigure('0/4 L1^5,4/4 L10+L12+L15,8/4 L5^5,12/4 L10+L12+L15', {
+      inThree: '0/4 L1^5,4/4 L10+L12+L15,8/4 L10+L12+L15',
+    }),
+  },
 }

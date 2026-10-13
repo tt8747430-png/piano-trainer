@@ -239,6 +239,23 @@ describe('arrange', () => {
     expect(midisAt(performance, 'rh', 0)).toHaveLength(4) // the root kept: D F A C from F
   })
 
+  describe('a walking bass', () => {
+    const WALK = pattern('walk', '0/16 C', '0/4 L1,4/4 L3,8/4 L5,12/4 A')
+    const lhOf = (symbols: string[][]) =>
+      notesOf(arrange(chart(symbols), { tonic: C, pattern: WALK }), 'lh').map((n) => n.midi)
+
+    it('steps a semitone under the next chord’s bass on the last beat', () => {
+      const lh = lhOf([['C'], ['F'], ['G']])
+      expect(lh.slice(0, 4)).toEqual([36, 40, 43, 40]) // C2 E2 G2, E2 into F
+      expect(lh.slice(4, 8)).toEqual([41, 45, 48, 42]) // F2 A2 C3, F♯2 into G
+      expect(lh.slice(8)).toEqual([31, 35, 38, 30]) // G1 B1 D2, F♯1 back to G
+    })
+
+    it('leads a chord over two bars back to its own bass first, then to the next', () => {
+      expect(lhOf([['C'], ['C'], ['F']]).filter((_, i) => i % 4 === 3)).toEqual([35, 40, 40])
+    })
+  })
+
   describe('from an inversion, nearest after', () => {
     const performance = (inversion: 0 | 1 | 2) =>
       arrange(chart([['C', 'F', 'G', 'C']]), { tonic: C, pattern: BLOCK, inversion, nearest: true })

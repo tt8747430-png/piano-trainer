@@ -15,6 +15,7 @@ const FIXED_TOKENS = new Map<string, FigureToken>([
   ['_7', { kind: 'below-root', semitones: 1 }],
   ['_b7', { kind: 'below-root', semitones: 2 }],
   ['_6', { kind: 'below-root', semitones: 3 }],
+  ['A', { kind: 'approach' }],
 ])
 
 const isDegree = (n: number) => n >= 1 && n <= 15

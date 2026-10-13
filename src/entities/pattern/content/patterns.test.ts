@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { arrange, type Chart } from '@/shared/lib/arrangement'
+import { note } from '@/shared/lib/music'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { BUILT_IN_PATTERNS } from '../model/book'
 import { patternNeed } from '../model/fit'
@@ -17,11 +19,11 @@ import { METHOD_PATTERNS, METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
 describe('the pattern catalog', () => {
-  it('has 39 patterns in four groups, built from 36 right-hand and 20 left-hand figures', () => {
+  it('has 39 patterns in four groups, built from 36 right-hand and 25 left-hand figures', () => {
     expect(PATTERN_IDS).toHaveLength(39)
     expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 12, 8, 14])
     expect(Object.keys(RIGHT_FIGURES)).toHaveLength(36)
-    expect(Object.keys(LEFT_FIGURES)).toHaveLength(20)
+    expect(Object.keys(LEFT_FIGURES)).toHaveLength(25)
     expect(Object.keys(METHODS)).toHaveLength(17)
   })
 
@@ -123,5 +125,35 @@ describe('the pattern catalog', () => {
       expect(text.en.trim(), `${path}.en`).not.toBe('')
       expect(text.ru.trim(), `${path}.ru`).not.toBe('')
     }
+  })
+})
+
+describe('the left hand’s own figures', () => {
+  const C_BAR: Chart = {
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    sections: [
+      { lines: [[{ chords: [{ root: note('C'), quality: 'maj', beats: 4 }], beats: 4 }]] },
+    ],
+  }
+  const lhAt = (lh: keyof typeof LEFT_FIGURES, tick: number) =>
+    arrange(C_BAR, {
+      tonic: note('C'),
+      pattern: BUILT_IN_PATTERNS.require('block').pattern,
+      lh: LEFT_FIGURES[lh].figure,
+    })
+      .notes.filter((n) => n.hand === 'lh' && n.startTick === tick)
+      .map((n) => n.midi)
+      .toSorted((a, b) => a - b)
+
+  it('strides: the bass, then the chord an octave and more above it', () => {
+    expect(lhAt('str', 0)).toEqual([36]) // C2
+    expect(lhAt('str', 12)).toEqual([52, 55, 60]) // E3 G3 C4
+    expect(lhAt('str', 24)).toEqual([43]) // G2
+  })
+
+  it('opens a 5th and a 10th over the bass', () => {
+    expect(lhAt('fifth', 0)).toEqual([36, 43])
+    expect(lhAt('tenth', 0)).toEqual([36, 52])
   })
 })
