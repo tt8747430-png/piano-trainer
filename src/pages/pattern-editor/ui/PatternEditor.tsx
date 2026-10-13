@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import {
-  LEFT_FIGURE_IDS,
+  LEFT_FIGURE_GROUPS,
   LEFT_FIGURES,
   OWN_NAME_MAX,
-  RIGHT_FIGURE_IDS,
+  RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURES,
   type OwnPatternId,
 } from '@/entities/pattern'
@@ -30,7 +30,7 @@ export function PatternEditor({
   /** The pattern changed; none for a new one. */
   id?: OwnPatternId
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'player'])
   const locale = useLocale()
   const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
@@ -57,18 +57,24 @@ export function PatternEditor({
           <Dropdown
             label={t('patterns.rightHand')}
             value={draft.rh}
-            options={RIGHT_FIGURE_IDS.map((figure) => ({
-              value: figure,
-              label: localText(RIGHT_FIGURES[figure].name, locale),
+            groups={RIGHT_FIGURE_GROUPS.map((group) => ({
+              label: t(`player:rhGroup.${group.id}`),
+              options: group.figures.map((figure) => ({
+                value: figure,
+                label: localText(RIGHT_FIGURES[figure].name, locale),
+              })),
             }))}
             onChange={(rh) => change({ rh })}
           />
           <Dropdown
             label={t('patterns.leftHand')}
             value={draft.lh}
-            options={LEFT_FIGURE_IDS.map((figure) => ({
-              value: figure,
-              label: localText(LEFT_FIGURES[figure].name, locale),
+            groups={LEFT_FIGURE_GROUPS.map((group) => ({
+              label: t(`player:lhGroup.${group.id}`),
+              options: group.figures.map((figure) => ({
+                value: figure,
+                label: localText(LEFT_FIGURES[figure].name, locale),
+              })),
             }))}
             onChange={(lh) => change({ lh })}
           />
