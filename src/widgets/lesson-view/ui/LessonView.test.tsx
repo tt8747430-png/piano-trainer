@@ -132,12 +132,12 @@ const WORKSHEET: Lesson = {
         {
           kind: 'link',
           title: { en: 'D Dorian in Scales', ru: 'Ре дорийский в гаммах' },
-          target: { place: 'scales', root: note('D'), scale: 'dorian' },
+          target: { opens: 'scales', root: note('D'), scale: 'dorian' },
         },
         {
           kind: 'link',
           title: { en: 'Cm7 in Chords', ru: 'Cm7 в аккордах' },
-          target: { place: 'chords', chord: 'Cm7' },
+          target: { opens: 'chords', chord: 'Cm7' },
         },
       ],
     },
@@ -259,17 +259,17 @@ const ACCOMPANIMENT: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
         },
         {
           kind: 'link',
           title: { en: 'E in Reharmonise', ru: 'Ми в реармонизации' },
-          target: { place: 'reharmonise', key: C_MAJOR, note: note('E') },
+          target: { opens: 'reharmonise', key: C_MAJOR, note: note('E') },
         },
         {
           kind: 'link',
           title: { en: 'The hymn in the Player', ru: 'Гимн в плеере' },
-          target: { place: 'piece', piece: 'otche', pattern: 'r4' },
+          target: { opens: 'piece', piece: 'otche', pattern: 'r4' },
         },
       ],
     },

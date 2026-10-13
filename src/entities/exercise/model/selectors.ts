@@ -1,5 +1,5 @@
 import { isOneOf } from '@/shared/lib'
-import { EXERCISES } from '../content/catalogue'
+import { EXERCISES } from '../content/catalog'
 import { EXERCISE_IDS, type Exercise, type ExerciseGroup, type ExerciseId } from './types'
 
 /** Whether a value names an exercise. */
@@ -14,6 +14,6 @@ export function exerciseOf(id: ExerciseId): Exercise {
   return exercise
 }
 
-/** A group's exercises, in the catalogue's order. */
+/** A group's exercises, in the catalog's order. */
 export const exercisesIn = (group: ExerciseGroup): readonly Exercise[] =>
   EXERCISES.filter((exercise) => exercise.group === group)

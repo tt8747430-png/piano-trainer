@@ -327,7 +327,7 @@ describe('routes that name a piece', () => {
 
   it('show not found for a listing in the Player', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
-    if (!listing) throw new Error('the catalogue has no listing')
+    if (!listing) throw new Error('the catalog has no listing')
     await renderApp(`/play/${listing.id}`)
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })

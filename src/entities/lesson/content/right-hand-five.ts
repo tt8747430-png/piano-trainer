@@ -56,12 +56,12 @@ const rightHandFive: Lesson = {
         {
           kind: 'link',
           title: { en: 'The lesson’s study', ru: 'Этюд урока' },
-          target: { place: 'piece', piece: 'ex8' },
+          target: { opens: 'piece', piece: 'ex8' },
         },
         {
           kind: 'link',
           title: { en: 'Heaven Awaits Me', ru: 'Heaven Awaits Me' },
-          target: { place: 'piece', piece: 'heaven' },
+          target: { opens: 'piece', piece: 'heaven' },
         },
       ],
     },

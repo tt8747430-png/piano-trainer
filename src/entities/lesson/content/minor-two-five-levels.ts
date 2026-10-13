@@ -200,7 +200,7 @@ const minorTwoFiveLevels: Lesson = {
           kind: 'link',
           title: { en: 'Round the circle of fifths', ru: 'По квинтовому кругу' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii° V i',
             key: C_MINOR,
             size: 'ninths',
@@ -214,7 +214,7 @@ const minorTwoFiveLevels: Lesson = {
             ru: 'К каждому аккорду минорной тональности',
           },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals:
               'ii° V i ii°/ii V/ii ii° ii/III V/III III ii°/iv V/iv iv ii°/v V/v v ii/VI V/VI VI ii/VII V/VII VII',
             key: C_MINOR,

@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useHeldKeys } from '@/features/connect-midi'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { keyListParam, partsParams, readKeyList, toggled } from '@/shared/lib'
 import { noteParam, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
@@ -38,7 +38,7 @@ export function ChordFinder({
   usePlayKey(play, keys.length > 0)
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard
+      <PinnedKeyboard
         shown={{ keys, marks: findingMarks(finding, keys) }}
         selected={new Set(chosen)}
         onKeyPress={toggle}

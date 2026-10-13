@@ -90,7 +90,7 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'link',
           title: { en: 'G7’s tensions', ru: 'Тенсии G7' },
-          target: { place: 'tensions', chord: 'd7', root: note('G') },
+          target: { opens: 'tensions', chord: 'd7', root: note('G') },
         },
       ],
     },
@@ -108,7 +108,7 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'link',
           title: { en: 'C in Reharmonise', ru: 'До в «Гармонизации мелодии»' },
-          target: { place: 'reharmonise', key: C_MAJOR, note: note('C') },
+          target: { opens: 'reharmonise', key: C_MAJOR, note: note('C') },
         },
       ],
     },

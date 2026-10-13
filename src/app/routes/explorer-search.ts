@@ -1,14 +1,10 @@
-import { isPatternRef, isAccompanimentPart, type PatternRef } from '@/entities/pattern'
 import { isStepId } from '@/entities/path'
 import { PROGRESSION } from '@/features/practice'
-import type { AccompanimentView } from '@/pages/accompaniment'
 import {
   isOneOf,
-  keyListParam,
   partsParams,
   readAdded,
   readAlterations,
-  readKeyList,
   readNote,
   valueOr,
   wholeIn,
@@ -31,24 +27,18 @@ import {
   note,
   noteParam,
   ownFingering,
-  pitchClassOf,
   scaleHasChords,
   scaleIntervals,
   type ScaleKind,
   SEVENTHS,
-  spellInKey,
   TRIADS,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
-import type { FinderView } from '@/widgets/chord-finder'
 import type { IntervalView } from '@/widgets/interval-explorer'
-import type { PassingView } from '@/widgets/passing-chords'
-import type { ProgressionsView } from '@/widgets/progressions'
-import type { ReharmoniseView } from '@/widgets/reharmonise'
+import type { ProgressionsView } from '@/widgets/progression-explorer'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
 import {
-  C_MAJOR,
   C_MAJOR_PARAM,
   isChordSize,
   isHands,
@@ -56,14 +46,12 @@ import {
   isScaleKind,
   readKey,
   readNumerals,
-  readTypedChord,
   routeSearch,
-  type Input,
   type Raw,
 } from './read-search'
 
-// The pages Practice explores with: a chord, a scale and its key, intervals, tensions, and the pages that
-// work a thing out (the chord of the keys played, a melody note's chords, passing chords, a progression).
+// Practice's explorers (ADR 0044), each a page that shows a thing on the keys: a chord, a scale and its
+// key, the intervals over a root, a progression.
 
 // Chords
 type ChordsStepId = `chords:${ChordFamily}`
@@ -183,57 +171,6 @@ export function readIntervalsSearch(raw: Raw): IntervalView {
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
 
-/** A new pattern's search: the pattern it starts from (Make your own from it), if any. */
-interface NewPatternSearch {
-  readonly from?: PatternRef
-}
-export const validateNewPatternSearch = (input: Input<NewPatternSearch>): NewPatternSearch => {
-  const raw: Raw = input
-  return { from: isPatternRef(raw.from) ? raw.from : undefined }
-}
-
-// Chord finder: the keys chosen, each once, lowest first.
-const FINDER_DEFAULTS: FinderView = { keys: '' }
-export function readFinderSearch(raw: Raw): FinderView {
-  return { keys: keyListParam(readKeyList(raw.keys)) }
-}
-export const finderSearch = routeSearch(readFinderSearch, FINDER_DEFAULTS)
-
-// Reharmonise: a key, and a melody note spelled in it.
-const REHARMONISE_DEFAULTS: ReharmoniseView = {
-  key: C_MAJOR_PARAM,
-  note: noteParam(note('E')),
-  inKey: false,
-}
-export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
-  const key = readKey(raw.key) ?? C_MAJOR
-  const melody = readNote(raw.note) ?? note('E')
-  return {
-    key: keyParam(key),
-    note: noteParam(spellInKey(pitchClassOf(melody), key)),
-    inKey: raw.inKey === true,
-  }
-}
-export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
-
-// Passing chords: two chords as they were typed, each read (one that cannot be read is the default), and a key.
-export const PASSING_DEFAULTS: PassingView = {
-  key: C_MAJOR_PARAM,
-  from: 'C',
-  to: 'F',
-  inKey: false,
-}
-export function readPassingSearch(raw: Raw): PassingView {
-  const key = readKey(raw.key)
-  return {
-    key: key ? keyParam(key) : PASSING_DEFAULTS.key,
-    from: readTypedChord(raw.from, PASSING_DEFAULTS.from),
-    to: readTypedChord(raw.to, PASSING_DEFAULTS.to),
-    inKey: raw.inKey === true,
-  }
-}
-export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
-
 // Progressions: numerals in a key at a chord size, and what leads into each chord, where something
 // does; an unread line is the Player's own.
 export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
@@ -255,10 +192,3 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
   }
 }
 export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)
-
-// Accompaniment: the page of it shown, its first method book's unless the URL names another.
-const ACCOMPANIMENT_DEFAULTS: AccompanimentView = { show: 'called-to-play' }
-export function readAccompanimentSearch(raw: Raw): AccompanimentView {
-  return { show: valueOr(isAccompanimentPart, raw.show, ACCOMPANIMENT_DEFAULTS.show) }
-}
-export const accompanimentSearch = routeSearch(readAccompanimentSearch, ACCOMPANIMENT_DEFAULTS)

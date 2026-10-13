@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { useShownKeys } from '@/features/play-example'
 import {
   chordsHolding,
@@ -57,7 +57,7 @@ export function ReharmoniseTool({
   return (
     <div className="flex flex-col gap-6">
       {/* A note is chosen where a hand is: the range stays, so the keys hold still under it. */}
-      <ExplorerKeyboard shown={shown} range={MIDDLE_OCTAVES} onKeyPress={choose} />
+      <PinnedKeyboard shown={shown} range={MIDDLE_OCTAVES} onKeyPress={choose} />
       <div className="grid-fields gap-x-10 gap-y-6">
         <NoteChoice
           label={t('reharmonise.note')}

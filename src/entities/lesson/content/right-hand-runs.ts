@@ -45,12 +45,12 @@ const rightHandRuns: Lesson = {
         {
           kind: 'link',
           title: { en: 'The lesson’s study', ru: 'Этюд урока' },
-          target: { place: 'piece', piece: 'ex6' },
+          target: { opens: 'piece', piece: 'ex6' },
         },
         {
           kind: 'link',
           title: { en: 'What a Fellowship', ru: 'What a Fellowship' },
-          target: { place: 'piece', piece: 'fellow' },
+          target: { opens: 'piece', piece: 'fellow' },
         },
       ],
     },
@@ -68,7 +68,7 @@ const rightHandRuns: Lesson = {
         {
           kind: 'link',
           title: { en: 'You Came for Me, O Saviour', ru: 'You Came for Me, O Saviour' },
-          target: { place: 'piece', piece: 'came' },
+          target: { opens: 'piece', piece: 'came' },
         },
       ],
     },

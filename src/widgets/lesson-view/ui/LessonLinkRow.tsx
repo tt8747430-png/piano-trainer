@@ -12,7 +12,7 @@ import { PAGE_TILES, RowLink } from '@/shared/ui'
  * own tile.
  */
 export function LessonLinkRow({ title, target }: { title: string; target: LessonLink }) {
-  switch (target.place) {
+  switch (target.opens) {
     case 'chords': {
       const chord = parseChordSymbol(target.chord)
       return (

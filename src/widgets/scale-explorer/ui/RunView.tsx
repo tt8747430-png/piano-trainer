@@ -1,6 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { scaleShown } from '@/features/play-example'
 import { noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
@@ -46,7 +46,7 @@ export function RunView({
   return (
     <ScaleLayout
       keyboard={
-        <ExplorerKeyboard
+        <PinnedKeyboard
           shown={{
             keys: run.music.notes.map((n) => n.midi),
             // The keys coming down marked too: melodic minor's natural 6th and 7th are no blank keys.

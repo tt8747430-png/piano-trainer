@@ -32,7 +32,7 @@ const playingByChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'How Great Thou Art in the Player', ru: 'How Great Thou Art в плеере' },
-          target: { place: 'piece', piece: 'hgta' },
+          target: { opens: 'piece', piece: 'hgta' },
         },
       ],
     },

@@ -101,7 +101,7 @@ const twoFiveOne: Lesson = {
           kind: 'link',
           title: { en: 'Step 1: up by semitones', ru: 'Шаг 1: вверх по полутонам' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'sevenths',
@@ -115,7 +115,7 @@ const twoFiveOne: Lesson = {
             ru: 'Шаг 2: вниз по квинтовому кругу, каждый I — следующий ii',
           },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'sevenths',
@@ -150,13 +150,13 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: { en: 'Up the scale in the Player', ru: 'Вверх по гамме в плеере' },
-          target: { place: 'player', numerals: TO_EVERY_CHORD, key: C_MAJOR, size: 'sevenths' },
+          target: { opens: 'player', numerals: TO_EVERY_CHORD, key: C_MAJOR, size: 'sevenths' },
         },
         {
           kind: 'link',
           title: { en: 'Round the circle in the key', ru: 'По квинтовому кругу в тональности' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: ROUND_THE_KEY,
             key: C_MAJOR,
             size: 'sevenths',
@@ -186,7 +186,7 @@ const twoFiveOne: Lesson = {
             ru: 'Шаг 1: от терции, вверх по полутонам',
           },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'ninths',
@@ -201,7 +201,7 @@ const twoFiveOne: Lesson = {
             ru: 'Шаг 2: от септимы, вниз по квинтовому кругу',
           },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'ninths',
@@ -248,7 +248,7 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: { en: '“As the Deer” in the Player', ru: '«Как олень спешит к воде» в плеере' },
-          target: { place: 'piece', piece: 'olen' },
+          target: { opens: 'piece', piece: 'olen' },
         },
       ],
     },
@@ -300,7 +300,7 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: { en: 'The ii–V–I in the Player', ru: 'ii–V–I в плеере' },
-          target: { place: 'player', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
+          target: { opens: 'player', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
         },
       ],
     },

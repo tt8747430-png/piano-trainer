@@ -8,7 +8,7 @@ const MINE: OwnPattern = { id: 'my-1', name: 'Sunday', rh: 'jaz', lh: 'walk' }
 const book = patternBook([MINE])
 
 describe('patternBook', () => {
-  it('finds a built-in pattern by its id, as the catalogue writes it', () => {
+  it('finds a built-in pattern by its id, as the catalog writes it', () => {
     const ballad = book.get('ballad')
     expect(ballad).toMatchObject({
       ref: 'ballad',

@@ -1,6 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordsRange, ScaleChordGrid, scaleShown } from '@/features/play-example'
 import {
   fitInversion,
@@ -51,7 +51,7 @@ export function KeyView({
   )
   return (
     <ScaleLayout
-      keyboard={<ExplorerKeyboard shown={scaleShown(placeScale(tonic, kind))} range={range} />}
+      keyboard={<PinnedKeyboard shown={scaleShown(placeScale(tonic, kind))} range={range} />}
       name={name}
       fields={choice}
     >

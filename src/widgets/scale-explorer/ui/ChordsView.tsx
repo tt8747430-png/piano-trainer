@@ -1,6 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordsRange } from '@/features/play-example'
 import { PractiseChords } from '@/features/practice'
 import {
@@ -60,7 +60,7 @@ export function ChordsView({
   return (
     <ScaleLayout
       keyboard={
-        <ExplorerKeyboard
+        <PinnedKeyboard
           shown={{
             keys: placeScale(tonic, kind).map((key) => key.midi),
             marks: chordMarks(chords),

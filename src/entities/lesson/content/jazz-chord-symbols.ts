@@ -169,7 +169,7 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'link',
           title: { en: 'How to read chord symbols', ru: 'Как читать обозначения аккордов' },
-          target: { place: 'lesson', lesson: 'reading-chord-symbols' },
+          target: { opens: 'lesson', lesson: 'reading-chord-symbols' },
         },
       ],
     },

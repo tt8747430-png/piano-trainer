@@ -159,7 +159,7 @@ const ninthChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'G9 in Chords', ru: 'G9 в разделе «Аккорды»' },
-          target: { place: 'chords', chord: 'G9' },
+          target: { opens: 'chords', chord: 'G9' },
         },
       ],
     },

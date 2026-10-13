@@ -97,7 +97,7 @@ function problemsOf(block: LessonBlock): string[] {
     }
     case 'link': {
       const { target } = block
-      switch (target.place) {
+      switch (target.opens) {
         case 'chords':
           return unread(() => parseChordSymbol(target.chord), target.chord)
         case 'lesson':
@@ -155,14 +155,14 @@ describe('the lessons', () => {
       problemsOf({
         kind: 'link',
         title: { en: 'a', ru: 'а' },
-        target: { place: 'lesson', lesson: 'nowhere' },
+        target: { opens: 'lesson', lesson: 'nowhere' },
       }),
     ).toEqual(['nowhere'])
     expect(
       problemsOf({
         kind: 'link',
         title: { en: 'a', ru: 'а' },
-        target: { place: 'player', numerals: 'ii Q', key: C_MAJOR },
+        target: { opens: 'player', numerals: 'ii Q', key: C_MAJOR },
       }),
     ).toEqual(['ii Q'])
   })
@@ -180,28 +180,28 @@ describe('the lessons', () => {
       problemsOf({
         kind: 'link',
         title,
-        target: { place: 'progressions', numerals: 'I Q', key: C_MAJOR },
+        target: { opens: 'progressions', numerals: 'I Q', key: C_MAJOR },
       }),
     ).toEqual(['I Q'])
     expect(
       problemsOf({
         kind: 'link',
         title,
-        target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Hq' },
+        target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Hq' },
       }),
     ).toEqual(['Hq'])
     expect(
-      problemsOf({ kind: 'link', title, target: { place: 'piece', piece: 'nowhere' } }),
+      problemsOf({ kind: 'link', title, target: { opens: 'piece', piece: 'nowhere' } }),
     ).toEqual(['nowhere'])
     expect(
       problemsOf({
         kind: 'link',
         title,
-        target: { place: 'piece', piece: 'otche', pattern: 'r4' },
+        target: { opens: 'piece', piece: 'otche', pattern: 'r4' },
       }),
     ).toEqual([])
     expect(
-      problemsOf({ kind: 'link', title, target: { place: 'piece', piece: 'ex3', pattern: 'r5' } }),
+      problemsOf({ kind: 'link', title, target: { opens: 'piece', piece: 'ex3', pattern: 'r5' } }),
     ).toEqual(['r5 over ex3'])
   })
 
@@ -338,7 +338,7 @@ describe('the lessons', () => {
           block.kind === 'chords' ? block.symbols : [],
         )
         return section.blocks.flatMap((block) =>
-          block.kind === 'link' && block.target.place === 'passing-chords'
+          block.kind === 'link' && block.target.opens === 'passing-chords'
             ? [{ at: `${lesson.id}: ${row.join(' ')}`, row, target: block.target }]
             : [],
         )

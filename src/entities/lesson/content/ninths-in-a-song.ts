@@ -39,7 +39,7 @@ const ninthsInASong: Lesson = {
           kind: 'link',
           title: { en: 'Step 1: minor 9ths', ru: 'Шаг 1: малые минорные нонаккорды' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'i',
             key: G_MINOR,
             size: 'ninths',
@@ -50,7 +50,7 @@ const ninthsInASong: Lesson = {
           kind: 'link',
           title: { en: 'Step 2: major 9ths', ru: 'Шаг 2: большие мажорные нонаккорды' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'I',
             key: G_MAJOR,
             size: 'ninths',
@@ -61,7 +61,7 @@ const ninthsInASong: Lesson = {
           kind: 'link',
           title: { en: 'Step 3: dominant 9ths', ru: 'Шаг 3: доминантовые нонаккорды' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'V',
             key: C_MAJOR,
             size: 'ninths',
@@ -158,7 +158,7 @@ const ninthsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
-          target: { place: 'piece', piece: 'romashki' },
+          target: { opens: 'piece', piece: 'romashki' },
         },
       ],
     },
@@ -178,7 +178,7 @@ const ninthsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: 'V7♭9 into i in Progressions', ru: 'V7♭9 в i в последовательностях' },
-          target: { place: 'progressions', numerals: 'V7♭9 i', key: G_MINOR },
+          target: { opens: 'progressions', numerals: 'V7♭9 i', key: G_MINOR },
         },
       ],
     },

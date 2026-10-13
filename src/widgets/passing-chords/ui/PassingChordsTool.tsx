@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { useShownKeys } from '@/features/play-example'
 import {
   chordInKey,
@@ -41,7 +41,7 @@ export function PassingChordsTool({
   const [shown, setShown] = useShownKeys(at, NO_KEYS)
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <div className="grid-fields gap-x-10 gap-y-6">
         <div className="grid grid-cols-2 items-start gap-3">
           <ChordField

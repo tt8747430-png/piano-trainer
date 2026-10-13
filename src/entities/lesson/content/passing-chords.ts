@@ -38,7 +38,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
         },
       ],
     },
@@ -57,7 +57,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Dm in Passing chords', ru: 'Из C в Dm в «Проходящих аккордах»' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm' },
+          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm' },
         },
       ],
     },
@@ -76,7 +76,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'F to G in Passing chords', ru: 'Из F в G в «Проходящих аккордах»' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
+          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
         },
       ],
     },
@@ -95,7 +95,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Am in Passing chords', ru: 'Из C в Am в «Проходящих аккордах»' },
-          target: { place: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Am' },
+          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Am' },
         },
       ],
     },

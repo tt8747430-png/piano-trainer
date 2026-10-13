@@ -49,7 +49,7 @@ const rightHandChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'The lesson’s study', ru: 'Этюд урока' },
-          target: { place: 'piece', piece: 'ex7' },
+          target: { opens: 'piece', piece: 'ex7' },
         },
         {
           kind: 'link',
@@ -57,12 +57,12 @@ const rightHandChords: Lesson = {
             en: 'For Love, For Mercy, For Salvation',
             ru: 'For Love, For Mercy, For Salvation',
           },
-          target: { place: 'piece', piece: 'mercy' },
+          target: { opens: 'piece', piece: 'mercy' },
         },
         {
           kind: 'link',
           title: { en: 'Inversions', ru: 'Обращения' },
-          target: { place: 'lesson', lesson: 'inversions' },
+          target: { opens: 'lesson', lesson: 'inversions' },
         },
       ],
     },

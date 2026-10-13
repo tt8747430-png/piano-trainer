@@ -11,12 +11,12 @@ import { Pinned, type ShownKeys } from '@/shared/ui'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
- * An explorer's keyboard, pinned while the page scrolls: `range` fills its width (by default the
+ * A page's keyboard, pinned while the page scrolls (an explorer's, a tool's, a lesson's): `range` fills its width (by default the
  * middle octaves grown to hold the keys it opened on and the keys the app shows), and it keeps the
  * keys the app shows in view. A key a hand chooses (`selected`) never moves it: the keys hold still
  * under the finger (ADR 0009).
  */
-export function ExplorerKeyboard({
+export function PinnedKeyboard({
   shown,
   range,
   keyPlays,
@@ -39,7 +39,7 @@ export function ExplorerKeyboard({
   wrong?: ReadonlySet<Midi> | undefined
   /** What a key means besides its sound (Notes view: the note). */
   onKeyPress?: ((key: Midi) => void) | undefined
-  /** Where it sits in the explorer's layout (a laptop's full-width row). */
+  /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
   const { keys, marks } = shown

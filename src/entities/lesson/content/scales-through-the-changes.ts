@@ -177,12 +177,12 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'link',
           title: { en: 'C Lydian in Scales', ru: 'До лидийский в гаммах' },
-          target: { place: 'scales', root: note('C'), scale: 'lydian' },
+          target: { opens: 'scales', root: note('C'), scale: 'lydian' },
         },
         {
           kind: 'link',
           title: { en: 'G7alt in Chords', ru: 'G7alt в аккордах' },
-          target: { place: 'chords', chord: 'G7alt' },
+          target: { opens: 'chords', chord: 'G7alt' },
         },
       ],
     },

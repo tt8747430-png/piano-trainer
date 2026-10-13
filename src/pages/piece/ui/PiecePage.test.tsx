@@ -97,7 +97,7 @@ describe('Piece', () => {
 
   it('shows a listing without a chart: its one action writes it', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
-    if (!listing) throw new Error('the catalogue has no listing')
+    if (!listing) throw new Error('the catalog has no listing')
     await renderApp(`/songs/${listing.id}`)
     expect(await screen.findByRole('link', { name: 'Write the chart' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Practise' })).not.toBeInTheDocument()

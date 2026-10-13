@@ -28,7 +28,7 @@ const calledToPlayExam: Lesson = {
             en: 'Long I Wandered in the Shadows',
             ru: 'Long I Wandered in the Shadows',
           },
-          target: { place: 'piece', piece: 'wander' },
+          target: { opens: 'piece', piece: 'wander' },
         },
       ],
     },

@@ -154,7 +154,7 @@ export function RowStaff() {
 }
 
 /**
- * Play for the whole row, turning into Stop: honey where it is the screen's one action (the tool),
+ * Play for the whole row, turning into Stop: honey where it is the screen's one action (Progressions),
  * which Enter plays too; soft beside other examples.
  */
 export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {

@@ -2,7 +2,7 @@ import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useViewChange } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
-import { ProgressionsTool, type ProgressionsView } from '@/widgets/progressions'
+import { ProgressionExplorer, type ProgressionsView } from '@/widgets/progression-explorer'
 
 /** Progressions: one from the library or typed, in any key, played and sent to the Player. */
 export function ProgressionsPage() {
@@ -15,7 +15,7 @@ export function ProgressionsPage() {
         title={t('pages.progressions')}
         back={<BackButton fallback={{ to: '/practice' }} />}
       />
-      <ProgressionsTool view={view} onChange={onChange} />
+      <ProgressionExplorer view={view} onChange={onChange} />
     </div>
   )
 }

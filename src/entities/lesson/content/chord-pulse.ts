@@ -188,7 +188,7 @@ const chordPulse: Lesson = {
             en: 'What a Friend We Have in Jesus in the Player',
             ru: 'What a Friend We Have in Jesus в плеере',
           },
-          target: { place: 'piece', piece: 'friend', pattern: 'g2' },
+          target: { opens: 'piece', piece: 'friend', pattern: 'g2' },
         },
       ],
     },

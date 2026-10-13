@@ -7,7 +7,7 @@ import {
   RIGHT_FIGURES,
   type OwnPatternId,
 } from '@/entities/pattern'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import type { OwnPatternDraft } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, Dropdown, NameField, ScreenHeader } from '@/shared/ui'
@@ -17,7 +17,7 @@ import { usePatternEditor } from '../model/use-pattern-editor'
 
 /**
  * A pattern of the learner's own made or changed: its name and a figure for each hand from the
- * catalogue, heard and on the staff as they change. Save keeps it and opens its page in the editor's
+ * catalog, heard and on the staff as they change. Save keeps it and opens its page in the editor's
  * place; Cancel leaves it unsaved.
  */
 export function PatternEditor({
@@ -39,7 +39,7 @@ export function PatternEditor({
         title={title}
         back={<BackButton fallback={{ to: '/practice/accompaniment' }} />}
       />
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <form
         className="flex max-w-prose flex-col gap-5"
         onSubmit={(event) => {

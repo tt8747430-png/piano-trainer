@@ -59,7 +59,7 @@ const fiveWays: Lesson = {
             en: 'A new way on every chord, in C',
             ru: 'Новый способ на каждом аккорде, до мажор',
           },
-          target: { place: 'piece', piece: 'exm1' },
+          target: { opens: 'piece', piece: 'exm1' },
         },
         {
           kind: 'link',
@@ -67,7 +67,7 @@ const fiveWays: Lesson = {
             en: 'A new way on every chord, in A minor',
             ru: 'Новый способ на каждом аккорде, ля минор',
           },
-          target: { place: 'piece', piece: 'exm2' },
+          target: { opens: 'piece', piece: 'exm2' },
         },
         {
           kind: 'link',
@@ -75,17 +75,17 @@ const fiveWays: Lesson = {
             en: 'A new way on every chord, in D minor',
             ru: 'Новый способ на каждом аккорде, ре минор',
           },
-          target: { place: 'piece', piece: 'exm3' },
+          target: { opens: 'piece', piece: 'exm3' },
         },
         {
           kind: 'link',
           title: { en: 'Bass and chords', ru: 'Бас и аккорды' },
-          target: { place: 'lesson', lesson: 'bass-and-chords' },
+          target: { opens: 'lesson', lesson: 'bass-and-chords' },
         },
         {
           kind: 'link',
           title: { en: 'Broken chords and arpeggios', ru: 'Ломаные аккорды и арпеджио' },
-          target: { place: 'lesson', lesson: 'broken-chords' },
+          target: { opens: 'lesson', lesson: 'broken-chords' },
         },
       ],
     },

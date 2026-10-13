@@ -125,17 +125,17 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'link',
           title: { en: 'Soon, Soon Our Savior Will Come', ru: 'Soon, Soon Our Savior Will Come' },
-          target: { place: 'piece', piece: 'soon' },
+          target: { opens: 'piece', piece: 'soon' },
         },
         {
           kind: 'link',
           title: { en: 'A Three-Story Old House', ru: 'A Three-Story Old House' },
-          target: { place: 'piece', piece: 'house' },
+          target: { opens: 'piece', piece: 'house' },
         },
         {
           kind: 'link',
           title: { en: 'Together We Believed', ru: 'Together We Believed' },
-          target: { place: 'piece', piece: 'together' },
+          target: { opens: 'piece', piece: 'together' },
         },
         {
           kind: 'link',
@@ -143,7 +143,7 @@ const artOfAccompaniment: Lesson = {
             en: 'How Wonderful Is All That’s Yours',
             ru: 'How Wonderful Is All That’s Yours',
           },
-          target: { place: 'piece', piece: 'wonder' },
+          target: { opens: 'piece', piece: 'wonder' },
         },
       ],
     },

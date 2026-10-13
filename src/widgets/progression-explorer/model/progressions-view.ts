@@ -22,7 +22,7 @@ import {
 } from '@/shared/lib/music'
 
 /**
- * What the Progressions tool shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
+ * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
  * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion;
  * and what leads into each chord, where something does.
  */

@@ -64,7 +64,7 @@ const sevenTypes: Lesson = {
         {
           kind: 'link',
           title: { en: 'The hymn in the Player', ru: 'Гимн в плеере' },
-          target: { place: 'piece', piece: 'otche' },
+          target: { opens: 'piece', piece: 'otche' },
         },
       ],
     },

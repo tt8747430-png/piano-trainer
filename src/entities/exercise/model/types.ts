@@ -3,7 +3,7 @@ import type { LocalText } from '@/shared/i18n'
 import type { Inversion, ScaleKind } from '@/shared/lib/music'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'
 
-/** The exercise groups, in the catalogue's order: a scale's and a chord's open from their pages, the rest from Exercises. */
+/** The exercise groups, in the catalog's order: a scale's and a chord's open from their pages, the rest from Exercises. */
 export const EXERCISE_GROUPS = ['scales', 'arpeggios', 'barryHarris', 'jonny', 'technique'] as const
 export type ExerciseGroup = (typeof EXERCISE_GROUPS)[number]
 

@@ -97,7 +97,7 @@ const chordFunctions: Lesson = {
         {
           kind: 'link',
           title: { en: 'C major in Keys', ru: 'До мажор в тональностях' },
-          target: { place: 'keys', key: C_MAJOR },
+          target: { opens: 'keys', key: C_MAJOR },
         },
       ],
     },

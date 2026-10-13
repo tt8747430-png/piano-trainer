@@ -180,7 +180,7 @@ export const progressionPlayerSearch = routeSearch(
   PROGRESSION_PLAYER_DEFAULTS,
 )
 /**
- * Not its numerals, key, chord size or walk: the Progressions tool names them, its triads by leaving the
+ * Not its numerals, key, chord size or walk: Progressions names them, its triads by leaving the
  * size out and the key alone by leaving the walk out.
  */
 export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = PLAYING

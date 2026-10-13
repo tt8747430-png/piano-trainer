@@ -75,7 +75,7 @@ const minorScales: Lesson = {
         {
           kind: 'link',
           title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },
-          target: { place: 'keys', key: { tonic: note('A'), minor: true } },
+          target: { opens: 'keys', key: { tonic: note('A'), minor: true } },
         },
       ],
     },

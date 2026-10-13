@@ -35,7 +35,7 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'link',
           title: { en: 'E in Reharmonise', ru: 'Ми в «Гармонизации мелодии»' },
-          target: { place: 'reharmonise', key: C_MAJOR, note: note('E') },
+          target: { opens: 'reharmonise', key: C_MAJOR, note: note('E') },
         },
       ],
     },
@@ -73,7 +73,7 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'link',
           title: { en: 'G in Reharmonise', ru: 'Соль в «Гармонизации мелодии»' },
-          target: { place: 'reharmonise', key: C_MAJOR, note: note('G') },
+          target: { opens: 'reharmonise', key: C_MAJOR, note: note('G') },
         },
       ],
     },

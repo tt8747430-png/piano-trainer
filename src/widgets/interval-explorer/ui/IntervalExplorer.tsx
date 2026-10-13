@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { IntervalCard, intervalRoot, useShownKeys, writesInterval } from '@/features/play-example'
 import {
   INTERVAL_GROUP_IDS,
@@ -36,7 +36,7 @@ export function IntervalExplorer({
     })
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <div className="grid-fields">
         <NoteChoice
           label={t('root')}

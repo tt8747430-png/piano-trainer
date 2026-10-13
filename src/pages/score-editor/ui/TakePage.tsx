@@ -3,7 +3,7 @@ import { Play } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isTakeId, selectTake, useTakes, type Take } from '@/entities/take'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { BackButton, ButtonLink, NotFound, PlayLabel, ScreenHeader, unmarked } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { TakeRoll } from '@/widgets/take-roll'
@@ -37,7 +37,7 @@ function TakeView({ take }: { take: Take }) {
           />
         }
       />
-      <ExplorerKeyboard shown={unmarked(take.notes.map((note) => note.midi))} />
+      <PinnedKeyboard shown={unmarked(take.notes.map((note) => note.midi))} />
       <TakeNameField take={take} />
       <section className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3">

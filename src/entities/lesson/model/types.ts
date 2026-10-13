@@ -47,7 +47,7 @@ export const TAB_MODULES: Readonly<Record<LearnTab, readonly LessonModule[]>> = 
 }
 export const tabOf = (module: LessonModule): LearnTab => (isCourse(module) ? 'courses' : 'subjects')
 
-/** A progression a lesson plays or opens in the tool: numerals in a key, triads when it names no size. */
+/** A progression a lesson plays or opens on Progressions: numerals in a key, triads when it names no size. */
 export interface LessonProgression {
   /** As `parseNumerals` reads them: `ii V I`. */
   readonly numerals: string
@@ -64,37 +64,37 @@ export type LessonAnswer =
 
 /** Where a lesson's link leads, by what it names; the lesson view makes it a route and its search. */
 export type LessonLink =
-  | { readonly place: 'chords'; readonly chord: string }
+  | { readonly opens: 'chords'; readonly chord: string }
   | {
-      readonly place: 'scales'
+      readonly opens: 'scales'
       readonly root: SpelledNote
       readonly scale: ScaleKind
       readonly show?: 'scale' | 'chords'
     }
-  | { readonly place: 'keys'; readonly key: Key }
-  | { readonly place: 'intervals'; readonly root?: SpelledNote }
-  | { readonly place: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
-  | { readonly place: 'lesson'; readonly lesson: string }
-  | ({ readonly place: 'progressions' } & LessonProgression)
+  | { readonly opens: 'keys'; readonly key: Key }
+  | { readonly opens: 'intervals'; readonly root?: SpelledNote }
+  | { readonly opens: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
+  | { readonly opens: 'lesson'; readonly lesson: string }
+  | ({ readonly opens: 'progressions' } & LessonProgression)
   | {
-      readonly place: 'passing-chords'
+      readonly opens: 'passing-chords'
       readonly key: Key
       /** Chord symbols, as the tool's fields take them. */
       readonly from: string
       readonly to: string
     }
-  | { readonly place: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
+  | { readonly opens: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
   /** A piece in the Player, with a pattern or its own. */
-  | { readonly place: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
+  | { readonly opens: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
   /** An exercise in the Player, on a root and a chord where it takes them. */
   | {
-      readonly place: 'exercise'
+      readonly opens: 'exercise'
       readonly exercise: ExerciseId
       readonly root?: SpelledNote
       readonly quality?: ArpeggioQuality
     }
   /** A progression in the Player, ready to practise: walked through the keys, in an inversion. */
-  | ({ readonly place: 'player' } & LessonProgression & {
+  | ({ readonly opens: 'player' } & LessonProgression & {
         readonly walk?: KeyWalk
         readonly inversion?: Inversion
       })

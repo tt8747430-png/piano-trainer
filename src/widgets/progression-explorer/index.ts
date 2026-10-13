@@ -1,2 +1,2 @@
 export type { ProgressionsView } from './model/progressions-view'
-export { ProgressionsTool } from './ui/ProgressionsTool'
+export { ProgressionExplorer } from './ui/ProgressionExplorer'

@@ -25,7 +25,7 @@ const songsByPlan: Lesson = {
         {
           kind: 'link',
           title: { en: 'The five ways', ru: 'Пять способов' },
-          target: { place: 'lesson', lesson: 'five-ways' },
+          target: { opens: 'lesson', lesson: 'five-ways' },
         },
       ],
     },
@@ -76,17 +76,17 @@ const songsByPlan: Lesson = {
         {
           kind: 'link',
           title: { en: 'How Great Thou Art', ru: 'How Great Thou Art' },
-          target: { place: 'piece', piece: 'hgta' },
+          target: { opens: 'piece', piece: 'hgta' },
         },
         {
           kind: 'link',
           title: { en: 'The Name of Jesus Is So Sweet', ru: 'The Name of Jesus Is So Sweet' },
-          target: { place: 'piece', piece: 'nojs' },
+          target: { opens: 'piece', piece: 'nojs' },
         },
         {
           kind: 'link',
           title: { en: 'What a Friend We Have in Jesus', ru: 'What a Friend We Have in Jesus' },
-          target: { place: 'piece', piece: 'friend' },
+          target: { opens: 'piece', piece: 'friend' },
         },
       ],
     },

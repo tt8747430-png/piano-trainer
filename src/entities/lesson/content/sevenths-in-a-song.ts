@@ -108,7 +108,7 @@ const seventhsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
-          target: { place: 'piece', piece: 'romashki' },
+          target: { opens: 'piece', piece: 'romashki' },
         },
       ],
     },
@@ -126,17 +126,17 @@ const seventhsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: 'Step 1: the minor 7th', ru: 'Шаг 1: малый минорный' },
-          target: { place: 'player', numerals: 'i7', key: C_MINOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'i7', key: C_MINOR, walk: 'semitones-up' },
         },
         {
           kind: 'link',
           title: { en: 'Step 2: the major 7th', ru: 'Шаг 2: большой мажорный' },
-          target: { place: 'player', numerals: 'Imaj7', key: C_MAJOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'Imaj7', key: C_MAJOR, walk: 'semitones-up' },
         },
         {
           kind: 'link',
           title: { en: 'Step 3: the dominant 7th', ru: 'Шаг 3: доминантовый' },
-          target: { place: 'player', numerals: 'I7', key: C_MAJOR, walk: 'semitones-up' },
+          target: { opens: 'player', numerals: 'I7', key: C_MAJOR, walk: 'semitones-up' },
         },
       ],
     },
@@ -161,7 +161,7 @@ const seventhsInASong: Lesson = {
         {
           kind: 'link',
           title: { en: 'Seventh chords in Chords', ru: 'Септаккорды в разделе «Аккорды»' },
-          target: { place: 'chords', chord: 'CMaj7' },
+          target: { opens: 'chords', chord: 'CMaj7' },
         },
       ],
     },

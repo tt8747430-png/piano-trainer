@@ -91,7 +91,7 @@ const chordFamily: Lesson = {
         {
           kind: 'link',
           title: { en: 'C major’s chords in Scales', ru: 'Аккорды до мажора в гаммах' },
-          target: { place: 'scales', root: note('C'), scale: 'major', show: 'chords' },
+          target: { opens: 'scales', root: note('C'), scale: 'major', show: 'chords' },
         },
       ],
     },

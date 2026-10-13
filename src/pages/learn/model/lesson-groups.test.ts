@@ -37,7 +37,7 @@ describe('lessonGroups', () => {
     ).toEqual(['accompaniment'])
   })
 
-  it('holds every lesson of the catalogue once, in one tab or the other', () => {
+  it('holds every lesson of the catalog once, in one tab or the other', () => {
     const ids = (['subjects', 'courses'] as const).flatMap((tab) =>
       lessonGroups(tab).flatMap((group) => group.lessons.map((each) => each.id)),
     )

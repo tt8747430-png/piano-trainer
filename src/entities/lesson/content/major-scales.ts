@@ -77,7 +77,7 @@ const majorScales: Lesson = {
         {
           kind: 'link',
           title: { en: 'C major in Scales', ru: 'До мажор в гаммах' },
-          target: { place: 'scales', root: note('C'), scale: 'major' },
+          target: { opens: 'scales', root: note('C'), scale: 'major' },
         },
       ],
     },

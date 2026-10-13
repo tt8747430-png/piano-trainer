@@ -105,12 +105,12 @@ const accompanyingAHymn: Lesson = {
         {
           kind: 'link',
           title: { en: 'Amazing Grace in the Player', ru: '«О, благодать» в плеере' },
-          target: { place: 'piece', piece: 'amazing' },
+          target: { opens: 'piece', piece: 'amazing' },
         },
         {
           kind: 'link',
           title: { en: 'Silent Night in the Player', ru: '«Тихая ночь» в плеере' },
-          target: { place: 'piece', piece: 'silent' },
+          target: { opens: 'piece', piece: 'silent' },
         },
       ],
     },

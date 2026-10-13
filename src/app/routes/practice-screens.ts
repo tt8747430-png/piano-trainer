@@ -1,7 +1,6 @@
 export { checkPlan, isTrainerId, ownTrainerView, trainerOf } from '@/features/trainer'
 export { CheckPage } from '@/pages/check'
 export { ExercisesPage } from '@/pages/exercises'
-export { FreePlayPage } from '@/pages/free-play'
 export { PracticePage } from '@/pages/practice'
 export { QuizPage } from '@/pages/quiz'
 export { TrainerPage } from '@/pages/trainer'

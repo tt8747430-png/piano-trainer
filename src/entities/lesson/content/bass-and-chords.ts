@@ -39,7 +39,7 @@ const bassAndChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'Inversions', ru: 'Обращения' },
-          target: { place: 'lesson', lesson: 'inversions' },
+          target: { opens: 'lesson', lesson: 'inversions' },
         },
       ],
     },
@@ -107,7 +107,7 @@ const bassAndChords: Lesson = {
             en: 'Lesson 3’s progression in the Player',
             ru: 'Последовательность урока 3 в плеере',
           },
-          target: { place: 'piece', piece: 'ex3' },
+          target: { opens: 'piece', piece: 'ex3' },
         },
       ],
     },

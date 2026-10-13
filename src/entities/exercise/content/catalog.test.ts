@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { note, noteParam } from '@/shared/lib/music'
 import { exerciseChoice } from '../model/resolve'
 import { EXERCISE_GROUPS, EXERCISE_IDS } from '../model/types'
-import { EXERCISES } from './catalogue'
+import { EXERCISES } from './catalog'
 
 describe('the exercises', () => {
   it('names each exercise once', () => {

@@ -88,7 +88,7 @@ const melodicFiguration: Lesson = {
         {
           kind: 'link',
           title: { en: '«Опять метель» in the Player', ru: '«Опять метель» в плеере' },
-          target: { place: 'piece', piece: 'metel' },
+          target: { opens: 'piece', piece: 'metel' },
         },
         {
           kind: 'note',
@@ -196,7 +196,7 @@ const melodicFiguration: Lesson = {
         {
           kind: 'link',
           title: { en: 'Chord pulse', ru: 'Аккордовая пульсация' },
-          target: { place: 'lesson', lesson: 'chord-pulse' },
+          target: { opens: 'lesson', lesson: 'chord-pulse' },
         },
         {
           kind: 'link',
@@ -204,7 +204,7 @@ const melodicFiguration: Lesson = {
             en: 'Called to Play: the art of accompaniment',
             ru: 'Called to Play: искусство аккомпанемента',
           },
-          target: { place: 'lesson', lesson: 'art-of-accompaniment' },
+          target: { opens: 'lesson', lesson: 'art-of-accompaniment' },
         },
       ],
     },

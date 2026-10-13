@@ -2,7 +2,7 @@ import { useSearch } from '@tanstack/react-router'
 import { Eraser } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { MetronomeFields } from '@/features/metronome'
 import { useViewChange, type DiagramMarks } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
@@ -69,7 +69,7 @@ export function FreePlayPage() {
           />
         }
       />
-      <ExplorerKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
+      <PinnedKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
       {/* What is played is the screen's point: it comes first, under the keys; the choices after. */}
       <LiveScore chords={free.chords} keyParam={view.key} />
       <div className="grid-fields gap-x-10 gap-y-5">

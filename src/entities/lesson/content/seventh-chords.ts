@@ -80,7 +80,7 @@ const seventhChords: Lesson = {
             en: 'Notes to add on top of a 7th chord',
             ru: 'Какие ноты добавить поверх септаккорда',
           },
-          target: { place: 'tensions', chord: 'd7' },
+          target: { opens: 'tensions', chord: 'd7' },
         },
       ],
     },

@@ -37,8 +37,8 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
 
 /**
  * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
- * plays on the lesson's keys (a pattern over its piece, a progression as the tool's row), or a link
- * into an explorer or the Player. A quiz is the view's, which keeps its state.
+ * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row), or a link
+ * into an explorer, a tool or the Player. A quiz is the view's, which keeps its state.
  */
 export function LessonBlock({
   block,
@@ -111,7 +111,7 @@ export function LessonBlock({
           </ChordRow>
           <LinkCard
             title={t('example.inProgressions')}
-            target={{ place: 'progressions', numerals: block.numerals, key, size }}
+            target={{ opens: 'progressions', numerals: block.numerals, key, size }}
           />
         </div>
       )

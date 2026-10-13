@@ -341,12 +341,12 @@ const jazzVoicings: Lesson = {
         {
           kind: 'link',
           title: { en: 'G7alt in Chords', ru: 'G7alt в аккордах' },
-          target: { place: 'chords', chord: 'G7alt' },
+          target: { opens: 'chords', chord: 'G7alt' },
         },
         {
           kind: 'link',
           title: { en: 'The tensions of G7', ru: 'Надстройки G7' },
-          target: { place: 'tensions', chord: 'd7', root: note('G') },
+          target: { opens: 'tensions', chord: 'd7', root: note('G') },
         },
       ],
     },

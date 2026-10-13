@@ -67,7 +67,7 @@ export function entriesInKey(key: Key): Entry[] {
 
 const PLAYING = new Map<PatternId, readonly Piece[]>()
 
-/** The songs, studies and progressions that play a built-in pattern, in catalogue order. */
+/** The songs, studies and progressions that play a built-in pattern, in catalog order. */
 export function piecesPlaying(pattern: PatternId): readonly Piece[] {
   const known = PLAYING.get(pattern)
   if (known) return known

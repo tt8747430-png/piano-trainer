@@ -5,12 +5,11 @@ import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   INTERVALS_DEFAULTS,
-  PASSING_DEFAULTS,
   PROGRESSIONS_DEFAULTS,
   SCALES_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
-import { FREE_PLAY_DEFAULTS } from './practice-search'
+import { FREE_PLAY_DEFAULTS, PASSING_DEFAULTS } from './tool-search'
 import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */

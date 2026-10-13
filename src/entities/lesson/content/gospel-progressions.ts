@@ -145,7 +145,7 @@ const gospelProgressions: Lesson = {
           kind: 'link',
           title: { en: 'The 7–3–6 in Progressions', ru: '7–3–6 в «Последовательностях»' },
           target: {
-            place: 'progressions',
+            opens: 'progressions',
             numerals: 'vii° III vi',
             key: C_MAJOR,
             size: 'sevenths',

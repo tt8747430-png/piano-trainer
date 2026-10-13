@@ -3,7 +3,7 @@ import { isPatternId, type LeftFigureId, type PatternId, type RightFigureId } fr
 /** An own pattern's id: `my-` and its number, never reused. */
 export type OwnPatternId = `my-${number}`
 
-/** A pattern the learner made: a name of their own over a figure for each hand from the catalogue. */
+/** A pattern the learner made: a name of their own over a figure for each hand from the catalog. */
 export interface OwnPattern {
   readonly id: OwnPatternId
   readonly name: string

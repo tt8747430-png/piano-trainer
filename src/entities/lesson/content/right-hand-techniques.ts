@@ -46,12 +46,12 @@ const rightHandTechniques: Lesson = {
         {
           kind: 'link',
           title: { en: 'The lesson’s study', ru: 'Этюд урока' },
-          target: { place: 'piece', piece: 'ex5' },
+          target: { opens: 'piece', piece: 'ex5' },
         },
         {
           kind: 'link',
           title: { en: 'All Glory to God in This World', ru: 'All Glory to God in This World' },
-          target: { place: 'piece', piece: 'glory' },
+          target: { opens: 'piece', piece: 'glory' },
         },
       ],
     },

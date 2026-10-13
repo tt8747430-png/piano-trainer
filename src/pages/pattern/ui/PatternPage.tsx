@@ -20,7 +20,7 @@ import {
   type PatternId,
 } from '@/entities/pattern'
 import { piecesPlaying } from '@/entities/piece'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
@@ -153,7 +153,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         }
         actions={<FavouriteButton pattern={pattern} />}
       />
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex max-w-prose flex-col gap-5">
           <p className="text-xl text-balance">{localText(pattern.idea, locale)}</p>

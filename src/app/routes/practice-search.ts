@@ -1,10 +1,8 @@
 import { isStepId, type StepId } from '@/entities/path'
 import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
-import type { FreePlayView } from '@/pages/free-play'
-import { diagramMarksParam, isOneOf, readDiagramMarks, valueOr, wholeIn } from '@/shared/lib'
-import { keyParam, parseNoteInOctave } from '@/shared/lib/music'
-import { METRONOME_BEATS, TEMPO_RANGE } from '@/shared/lib/schedule'
-import { C_MAJOR_PARAM, readKey, routeSearch, type Input, type Raw } from './read-search'
+import { valueOr } from '@/shared/lib'
+import { parseNoteInOctave } from '@/shared/lib/music'
+import { routeSearch, type Input, type Raw } from './read-search'
 
 // The Check: the step it checks; none is not found, so nothing is left out of the URL.
 interface CheckSearch {
@@ -43,25 +41,3 @@ export function readTrainerSearch(raw: Raw): TrainerView {
   }
 }
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
-
-// Free play: Play or Mark, the key the live score spells in, Mark's marks written back clean, and
-// the metronome's tempo and beats.
-export const FREE_PLAY_DEFAULTS: FreePlayView = {
-  mode: 'play',
-  key: C_MAJOR_PARAM,
-  marks: '',
-  tempo: 80,
-  beats: 4,
-}
-const isBeats = isOneOf(METRONOME_BEATS)
-export function readFreePlaySearch(raw: Raw): FreePlayView {
-  const key = readKey(raw.key)
-  return {
-    mode: raw.mode === 'mark' ? 'mark' : 'play',
-    key: key ? keyParam(key) : FREE_PLAY_DEFAULTS.key,
-    marks: typeof raw.marks === 'string' ? diagramMarksParam(readDiagramMarks(raw.marks)) : '',
-    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, FREE_PLAY_DEFAULTS.tempo),
-    beats: valueOr(isBeats, raw.beats, FREE_PLAY_DEFAULTS.beats),
-  }
-}
-export const freePlaySearch = routeSearch(readFreePlaySearch, FREE_PLAY_DEFAULTS)

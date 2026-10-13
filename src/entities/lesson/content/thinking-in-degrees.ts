@@ -96,7 +96,7 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'link',
           title: { en: 'i7 iv7 Vsus4 i7 through the keys', ru: 'i7 iv7 Vsus4 i7 по тональностям' },
-          target: { place: 'player', numerals: 'i7 iv7 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
+          target: { opens: 'player', numerals: 'i7 iv7 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
         },
       ],
     },
@@ -119,12 +119,12 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'link',
           title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
-          target: { place: 'piece', piece: 'romashki' },
+          target: { opens: 'piece', piece: 'romashki' },
         },
         {
           kind: 'link',
           title: { en: 'D minor in Keys', ru: 'Ре минор в тональностях' },
-          target: { place: 'keys', key: D_MINOR },
+          target: { opens: 'keys', key: D_MINOR },
         },
         {
           kind: 'link',
@@ -132,7 +132,7 @@ const thinkingInDegrees: Lesson = {
             en: 'Chord functions: tonic, subdominant, dominant',
             ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
           },
-          target: { place: 'lesson', lesson: 'chord-functions' },
+          target: { opens: 'lesson', lesson: 'chord-functions' },
         },
       ],
     },

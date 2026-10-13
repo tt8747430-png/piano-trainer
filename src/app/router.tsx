@@ -28,24 +28,20 @@ import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import {
   accompanimentSearch,
+  readAccompanimentSearch,
+  validateNewPatternSearch,
+} from './routes/accompaniment-search'
+import {
   CHORDS_KEPT,
   chordsSearch,
-  finderSearch,
   intervalsSearch,
-  passingSearch,
   progressionsSearch,
-  readAccompanimentSearch,
   readChordsSearch,
-  readFinderSearch,
   readIntervalsSearch,
-  readPassingSearch,
   readProgressionsSearch,
-  readReharmoniseSearch,
   readScalesSearch,
-  reharmoniseSearch,
   SCALES_KEPT,
   scalesSearch,
-  validateNewPatternSearch,
 } from './routes/explorer-search'
 import {
   CHROMATIC_KEPT,
@@ -65,17 +61,21 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import {
-  freePlaySearch,
-  readFreePlaySearch,
-  readTrainerSearch,
-  trainerSearch,
-  validateCheckSearch,
-} from './routes/practice-search'
+import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { learnSearch, readLearnSearch } from './routes/learn-search'
 import { pathSearch } from './routes/path-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
+import {
+  finderSearch,
+  freePlaySearch,
+  passingSearch,
+  readFinderSearch,
+  readFreePlaySearch,
+  readPassingSearch,
+  readReharmoniseSearch,
+  reharmoniseSearch,
+} from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -87,6 +87,8 @@ const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
 const learnScreens = () => import('./routes/learn-screens')
 const explorerScreens = () => import('./routes/explorer-screens')
+const toolScreens = () => import('./routes/tool-screens')
+const accompanimentScreens = () => import('./routes/accompaniment-screens')
 const practiceScreens = () => import('./routes/practice-screens')
 
 /** An unknown address keeps the main navigation, so the learner is never stranded. */
@@ -174,14 +176,6 @@ const quizRoute = createRoute({
   path: '/practice/quiz',
   component: lazyRouteComponent(practiceScreens, 'QuizPage'),
 })
-// Free play: the piano played freely, written and named, or marked as a teaching diagram.
-const freePlayRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/free-play',
-  ...freePlaySearch,
-  ...remembered(readFreePlaySearch, []),
-  component: lazyRouteComponent(practiceScreens, 'FreePlayPage'),
-})
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
@@ -231,7 +225,7 @@ const learnRoute = createRoute({
   ...remembered(readLearnSearch, []),
   component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
-// What Practice explores with: each page shows a thing on the keys or works it out.
+// Practice's explorers: each page shows a thing on the keys.
 const chordsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/chords',
@@ -253,33 +247,43 @@ const intervalsRoute = createRoute({
   ...remembered(readIntervalsSearch, []),
   component: lazyRouteComponent(explorerScreens, 'IntervalsPage'),
 })
-const chordFinderRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/chord-finder',
-  ...finderSearch,
-  ...remembered(readFinderSearch, []),
-  component: lazyRouteComponent(explorerScreens, 'ChordFinderPage'),
-})
-const reharmoniseRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/reharmonise',
-  ...reharmoniseSearch,
-  ...remembered(readReharmoniseSearch, []),
-  component: lazyRouteComponent(explorerScreens, 'ReharmonisePage'),
-})
-const passingChordsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/passing-chords',
-  ...passingSearch,
-  ...remembered(readPassingSearch, []),
-  component: lazyRouteComponent(explorerScreens, 'PassingChordsPage'),
-})
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/progressions',
   ...progressionsSearch,
   ...remembered(readProgressionsSearch, []),
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
+})
+
+// Practice's tools: each page works something out from what the learner gives it. Free play is the
+// piano played freely, written and named, or marked as a teaching diagram.
+const chordFinderRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/chord-finder',
+  ...finderSearch,
+  ...remembered(readFinderSearch, []),
+  component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
+})
+const passingChordsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/passing-chords',
+  ...passingSearch,
+  ...remembered(readPassingSearch, []),
+  component: lazyRouteComponent(toolScreens, 'PassingChordsPage'),
+})
+const reharmoniseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/reharmonise',
+  ...reharmoniseSearch,
+  ...remembered(readReharmoniseSearch, []),
+  component: lazyRouteComponent(toolScreens, 'ReharmonisePage'),
+})
+const freePlayRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/free-play',
+  ...freePlaySearch,
+  ...remembered(readFreePlaySearch, []),
+  component: lazyRouteComponent(toolScreens, 'FreePlayPage'),
 })
 
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
@@ -289,7 +293,7 @@ const accompanimentRoute = createRoute({
   path: '/practice/accompaniment',
   ...accompanimentSearch,
   ...remembered(readAccompanimentSearch, []),
-  component: lazyRouteComponent(explorerScreens, 'AccompanimentPage'),
+  component: lazyRouteComponent(accompanimentScreens, 'AccompanimentPage'),
 })
 /** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
 const inBook = (ref: string, patterns: PatternsStore) =>
@@ -299,7 +303,7 @@ const newPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/accompaniment/patterns/new',
   validateSearch: validateNewPatternSearch,
-  component: lazyRouteComponent(explorerScreens, 'NewPatternPage'),
+  component: lazyRouteComponent(accompanimentScreens, 'NewPatternPage'),
 })
 const patternRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -308,7 +312,7 @@ const patternRoute = createRoute({
   beforeLoad: ({ params, context }) => {
     if (!inBook(params.patternRef, context.patterns)) throw notFound()
   },
-  component: lazyRouteComponent(explorerScreens, 'PatternPage'),
+  component: lazyRouteComponent(accompanimentScreens, 'PatternPage'),
 })
 const editPatternRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -319,7 +323,7 @@ const editPatternRoute = createRoute({
       throw notFound()
     }
   },
-  component: lazyRouteComponent(explorerScreens, 'EditPatternPage'),
+  component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
 
 const lessonRoute = createRoute({

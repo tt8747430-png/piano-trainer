@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
 import {
@@ -65,7 +65,7 @@ export function ChordExplorer({
 
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-4">
         <div className="flex min-w-0 flex-col gap-3">
           <hgroup>

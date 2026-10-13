@@ -177,7 +177,7 @@ const chordMatrix: Lesson = {
           kind: 'link',
           title: { en: 'Secondary dominants in the Player', ru: 'Вторичные доминанты в плеере' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I',
             key: C_MAJOR,
             size: 'sevenths',
@@ -187,7 +187,7 @@ const chordMatrix: Lesson = {
           kind: 'link',
           title: { en: 'In all 12 keys', ru: 'Во всех 12 тональностях' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I',
             key: C_MAJOR,
             size: 'sevenths',

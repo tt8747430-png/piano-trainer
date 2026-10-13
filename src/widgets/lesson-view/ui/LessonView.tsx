@@ -3,7 +3,7 @@ import { useMemo, useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { usePlay } from '@/shared/lib/services'
@@ -52,7 +52,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   }
   return (
     <div className="flex flex-col gap-10">
-      <ExplorerKeyboard
+      <PinnedKeyboard
         shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}

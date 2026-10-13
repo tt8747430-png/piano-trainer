@@ -77,7 +77,7 @@ const intervals: Lesson = {
         {
           kind: 'link',
           title: { en: 'Every interval', ru: 'Все интервалы' },
-          target: { place: 'intervals' },
+          target: { opens: 'intervals' },
         },
       ],
     },

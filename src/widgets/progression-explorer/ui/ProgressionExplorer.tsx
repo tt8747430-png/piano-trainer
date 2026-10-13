@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { ExplorerKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import {
   ChordRow,
   progressionRow,
@@ -29,7 +29,7 @@ import { ProgressionTools } from './ProgressionTools'
  * it is (the library's or typed, its key, its chord size, what leads into each chord), then its ways
  * into the Player and its tools.
  */
-export function ProgressionsTool({
+export function ProgressionExplorer({
   view,
   onChange,
 }: {
@@ -49,7 +49,7 @@ export function ProgressionsTool({
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
   return (
     <div className="flex flex-col gap-6">
-      <ExplorerKeyboard shown={shown} />
+      <PinnedKeyboard shown={shown} />
       <ChordRow
         chords={progressionRow(played, key, view.size)}
         position={{ inversion: view.inversion, nearest: view.nearest }}

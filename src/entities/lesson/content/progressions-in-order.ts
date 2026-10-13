@@ -35,7 +35,7 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'link',
           title: { en: 'I–IV–V–I in C, G, D…', ru: 'I–IV–V–I в до, соль, ре…' },
-          target: { place: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths-up' },
+          target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths-up' },
         },
       ],
     },
@@ -66,7 +66,7 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'link',
           title: { en: 'I–V–vi–IV in C, G, D…', ru: 'I–V–vi–IV в до, соль, ре…' },
-          target: { place: 'player', numerals: 'I V vi IV', key: C_MAJOR, walk: 'fifths-up' },
+          target: { opens: 'player', numerals: 'I V vi IV', key: C_MAJOR, walk: 'fifths-up' },
         },
       ],
     },
@@ -84,7 +84,7 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'link',
           title: { en: 'I–vi–IV–V in C, G, D…', ru: 'I–vi–IV–V в до, соль, ре…' },
-          target: { place: 'player', numerals: 'I vi IV V', key: C_MAJOR, walk: 'fifths-up' },
+          target: { opens: 'player', numerals: 'I vi IV V', key: C_MAJOR, walk: 'fifths-up' },
         },
       ],
     },
@@ -125,7 +125,7 @@ const progressionsInOrder: Lesson = {
           kind: 'link',
           title: { en: 'ii–V–I round the cycle of fourths', ru: 'ii–V–I по кругу кварт' },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'ii V I',
             key: C_MAJOR,
             size: 'sevenths',
@@ -135,7 +135,7 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'link',
           title: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
-          target: { place: 'lesson', lesson: 'two-five-one' },
+          target: { opens: 'lesson', lesson: 'two-five-one' },
         },
       ],
     },
@@ -161,7 +161,7 @@ const progressionsInOrder: Lesson = {
             ru: '12-тактовый блюз в до, фа, си-бемоль…',
           },
           target: {
-            place: 'player',
+            opens: 'player',
             numerals: 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7',
             key: C_MAJOR,
             walk: 'fifths',
@@ -193,7 +193,7 @@ const progressionsInOrder: Lesson = {
             en: 'Borrowed ♭VII in Progressions',
             ru: 'Заимствованная ♭VII в последовательностях',
           },
-          target: { place: 'progressions', numerals: 'I ♭VII IV I', key: C_MAJOR },
+          target: { opens: 'progressions', numerals: 'I ♭VII IV I', key: C_MAJOR },
         },
       ],
     },
@@ -227,7 +227,7 @@ const progressionsInOrder: Lesson = {
             en: 'The tritone substitution in Progressions',
             ru: 'Тритоновая замена в последовательностях',
           },
-          target: { place: 'progressions', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
+          target: { opens: 'progressions', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
         },
       ],
     },

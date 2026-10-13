@@ -81,12 +81,12 @@ const brokenChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
-          target: { place: 'lesson', lesson: 'right-hand-techniques' },
+          target: { opens: 'lesson', lesson: 'right-hand-techniques' },
         },
         {
           kind: 'link',
           title: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
-          target: { place: 'lesson', lesson: 'seven-types' },
+          target: { opens: 'lesson', lesson: 'seven-types' },
         },
       ],
     },

@@ -46,12 +46,12 @@ const rightHandSixths: Lesson = {
         {
           kind: 'link',
           title: { en: 'The lesson’s study', ru: 'Этюд урока' },
-          target: { place: 'piece', piece: 'ex9' },
+          target: { opens: 'piece', piece: 'ex9' },
         },
         {
           kind: 'link',
           title: { en: 'Face to Face with Christ', ru: 'Face to Face with Christ' },
-          target: { place: 'piece', piece: 'face' },
+          target: { opens: 'piece', piece: 'face' },
         },
       ],
     },
@@ -69,7 +69,7 @@ const rightHandSixths: Lesson = {
         {
           kind: 'link',
           title: { en: 'I Lift My Eyes to Heaven', ru: 'I Lift My Eyes to Heaven' },
-          target: { place: 'piece', piece: 'lift' },
+          target: { opens: 'piece', piece: 'lift' },
         },
       ],
     },
