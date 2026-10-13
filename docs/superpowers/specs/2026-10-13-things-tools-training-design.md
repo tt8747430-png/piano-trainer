@@ -111,7 +111,7 @@ mark and learned badge.
 **One word, one meaning.**
 
 - **Place** is one of the nav's four. Practice has **pages**, in three **groups**. A lesson link's discriminant
-  `place` becomes `to`.
+  `place` becomes `opens` (`to` is already Passing chords' second chord).
 - **Subject** is Learn's: its first tab and that tab's modules.
 - **Explorer** is a Practice page that shows a thing on the keys: Chords, Scales and keys, Intervals, Progressions.
   **Tool** is one that works something out from what it is given: Chord finder, Passing chords, Reharmonise, Free

@@ -266,3 +266,31 @@ This is a design change, so it needs a brainstorm and a spec before code (CLAUDE
    pages, the chunk files and the route nesting (items 6 to 8, 10, 12 to 14).
 4. The index of §3, after the names are settled, since it prints them.
 5. New tools, cheapest first by what the kernel has: chords → numerals in a key, a key finder, an interval finder.
+
+## 6. What was done (2026-10-13)
+
+Spec: `docs/superpowers/specs/2026-10-13-things-tools-training-design.md`. Decision: ADR 0044.
+
+| Finding of §4                                    | Now                                                                                     |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| 1. Rows promise what the pages do not show       | Fixed: a row's line is built from its page's own tabs or groups (`usePageAbout`)        |
+| 2. Tabs mean four things                         | Fixed: tabs are the views of one thing; a tool is a page of its own                     |
+| 3. A lesson's row repeats its module             | Fixed: the category is gone                                                             |
+| 4. A method book has three homes                 | Open: a page for a book whole is its own spec                                           |
+| 5. Only Songs can be searched                    | Fixed: Search (`/search`), one projection of the registries                             |
+| 6. "Place" means three things                    | Fixed: the nav's alone; Practice has pages, a lesson link names what it `opens`         |
+| 7. "Subject" means two things                    | Fixed: Learn's alone; `widgets/subject-tabs` is gone                                    |
+| 8. "Reference" and "tool" used though avoided    | Fixed: Tool is a term; Progressions is an explorer; the parts are `ACCOMPANIMENT_PARTS` |
+| 9. "Quiz" means four things                      | Open: the place, a lesson's block, the evidence and the namespace still share the word  |
+| 10. Practice's pages read `learn`                | Fixed: they read `practice`; shared words are `music`'s                                 |
+| 11. One name, two keys                           | Fixed: one key each                                                                     |
+| 12. Three naming schemes for widgets             | Fixed: `*-explorer` for the four things; the tools by their names                       |
+| 13. Route chunks named for a split that is gone  | Fixed: `explorer-*`, `tool-*`, `accompaniment-*`, `practice-*`, `search-*`              |
+| 14. Routes nest for some children only           | Fixed: a trainer, a pattern and a study sit under their page; `/check` stays the Path's |
+| 15. `catalogue` beside `catalog`                 | Fixed: `catalog`                                                                        |
+| 16. Tiles nothing wears, tiles outside the table | Fixed: every row Practice lists has its tile in `PAGE_TILES`                            |
+| 17. Links to `keys` and `tensions`               | Kept: each names a view a lesson opens (a key's, a chord's tensions), not a page        |
+| 18. "seven places" in the router                 | Fixed                                                                                   |
+| 19. The docs' list of Accompaniment's tabs       | Fixed                                                                                   |
+
+Still to do from §5: new tools (chords to numerals, a key finder, an interval finder), each a spec of its own.

@@ -47,6 +47,6 @@ searched.
 - A remembered view under a path that moved is forgotten.
 - Links to the Chord finder, Passing chords, Reharmonise, a trainer, a pattern and a study name their new paths.
 - Practice's pages read the `practice` strings; `learn` holds Learn's and a lesson's.
-- The lesson link's `place` is `to`; the pattern entity's `REFERENCE_PARTS` are `ACCOMPANIMENT_PARTS`.
+- The lesson link's `place` is `opens`; the pattern entity's `REFERENCE_PARTS` are `ACCOMPANIMENT_PARTS`.
 - New tools (chords to numerals, a key finder, an interval finder) each need a spec; Practice's Tools group is where
   they go.

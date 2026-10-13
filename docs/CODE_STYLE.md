@@ -29,17 +29,23 @@ A container wires data to presentational children. One job each.
   `listKey`: Base UI checks a list changed in place against the value it held before, and reports a choice nobody
   made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
   then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
-  one field of a page's `grid-fields`), `NavTabs` with `NavTab` (a subject's pages as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
+  one field of a page's `grid-fields`), `NavTabs` with `NavTab` (one thing's views as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
   its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
-  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `PAINT`
+  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
   with its chevron.
+- **A thing's page and a tool's are two pages** (ADR 0044). An explorer's URL names the thing it shows; a tool's holds
+  what the learner gave it. A tool is never a tab of a thing: tabs are the views of one thing. An explorer ends with
+  its ways into the Player, then a Tools group whose rows open each tool on what the page shows. A new page of
+  Practice is a row in `PRACTICE_PAGES`, in its group, with its tile in `PAGE_TILES`; Search finds it from there.
+- **Whatever has a name is found by Search.** The index is `indexEntries` (`pages/search`), one projection of the
+  registries; a new kind of named thing is a kind there, and its test holds the count to its registry.
 - **Choosing** (Apple's Human Interface Guidelines): five or fewer short nouns are a `Segmented`; more, or longer
   names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
   settings changed less often a `Sheet`; a popover anchored to its button for a few quick choices whose effect shows
@@ -297,7 +303,10 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
   errors get one short line. The one exception is **lessons** (`entities/lesson`, Learn): a lesson teaches music, in
   prose with examples that play, and never explains a button.
 - Every interface string goes through i18next, in **both** `en` and `ru`
-  (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English).
+  (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English). A namespace is a place's:
+  `learn` holds Learn's and a lesson's, `practice` Practice's pages', and a word two places share is `music`'s
+  (Play, a row of chords, an interval's card). One string, one key: a page's title is `practice:pages.<page>`
+  wherever it is shown.
 - Content text a learner reads is `LocalText { en, ru }`, read through `localText(text, locale)`. Credits stay as
   printed ([CONTENT](CONTENT.md)).
 - Note and chord names are the same in both languages (B, not H).
