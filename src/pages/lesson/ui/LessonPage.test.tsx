@@ -130,4 +130,10 @@ describe('A lesson', () => {
     await screen.findByRole('heading', { level: 1 })
     expect(untranslated(document.body)).toEqual([])
   })
+
+  it('opens an exercise a lesson links to on its chord', async () => {
+    await renderApp('/learn/lessons/inversions')
+    const link = await screen.findByRole('link', { name: /^Climb C through its inversions/ })
+    expect(link.getAttribute('href')).toBe('/play/exercise/inversions?root=C&quality=maj')
+  })
 })

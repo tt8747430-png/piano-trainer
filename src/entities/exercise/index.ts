@@ -11,6 +11,7 @@ export {
   isVoicing,
   TONALITIES,
   VOICINGS,
+  type ArpeggioQuality,
   type ExerciseChoice,
 } from './model/choice'
 export { type Exercise, type ExerciseGroup, type ExerciseId } from './model/types'

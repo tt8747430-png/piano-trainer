@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CirclePlay } from 'lucide-react'
+import { CirclePlay, Layers } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
 import { STEP_PAINT } from '@/entities/path'
 import { pieceById } from '@/entities/piece'
@@ -165,6 +165,24 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         />
       )
     }
+    case 'exercise':
+      return (
+        <RowLink
+          title={title}
+          icon={Layers}
+          paint="sky"
+          render={
+            <Link
+              to="/play/exercise/$exerciseId"
+              params={{ exerciseId: target.exercise }}
+              search={{
+                ...(target.root ? { root: noteParam(target.root) } : {}),
+                ...(target.quality ? { quality: target.quality } : {}),
+              }}
+            />
+          }
+        />
+      )
     case 'piece': {
       const piece = pieceById(target.piece)
       if (!piece) throw new RangeError(`A lesson links to "${target.piece}": no piece`)

@@ -1,4 +1,5 @@
 import { METHOD_BOOK_IDS } from '@/entities/book'
+import type { ArpeggioQuality, ExerciseId } from '@/entities/exercise'
 import type { Level } from '@/entities/path'
 import type { PatternId } from '@/entities/pattern'
 import type { PieceId } from '@/entities/piece'
@@ -72,6 +73,13 @@ export type LessonLink =
   | { readonly place: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
   /** A piece in the Player, with a pattern or its own. */
   | { readonly place: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
+  /** An exercise in the Player, on a root and a chord where it takes them. */
+  | {
+      readonly place: 'exercise'
+      readonly exercise: ExerciseId
+      readonly root?: SpelledNote
+      readonly quality?: ArpeggioQuality
+    }
   /** A progression in the Player, ready to practise: walked through the keys, in an inversion. */
   | ({ readonly place: 'player' } & LessonProgression & {
         readonly walk?: KeyWalk

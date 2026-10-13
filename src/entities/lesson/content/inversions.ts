@@ -1,3 +1,4 @@
+import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
 const inversions: Lesson = {
@@ -87,6 +88,11 @@ const inversions: Lesson = {
           kind: 'link',
           title: { en: 'Inversions in Chords', ru: 'Обращения в аккордах' },
           target: { place: 'chords', chord: 'C' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Climb C through its inversions', ru: 'До мажор по обращениям' },
+          target: { place: 'exercise', exercise: 'inversions', root: note('C'), quality: 'maj' },
         },
       ],
     },
