@@ -70,7 +70,6 @@ export {
   LEFT_FIGURES,
   RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURES,
-  type LeftFigureGroup,
 } from './content/figures'
 export { PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'

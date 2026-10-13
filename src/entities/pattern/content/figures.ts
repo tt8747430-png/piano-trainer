@@ -339,7 +339,6 @@ export const LEFT_FIGURE_GROUPS = [
   { id: 'lines', figures: ['pop', 'bal', 'alt', 'walk', 'step', 'wlk'] },
   { id: 'styles', figures: ['sync', 'shuf', 'rnb', 'sal', 'fun', 'chs', 'str'] },
 ] as const satisfies readonly { id: string; figures: readonly LeftFigureId[] }[]
-export type LeftFigureGroup = (typeof LEFT_FIGURE_GROUPS)[number]['id']
 
 /** The right hand's figures as the Setup lists them, by what they do; every figure in one group. */
 export const RIGHT_FIGURE_GROUPS = [
