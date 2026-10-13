@@ -11,6 +11,7 @@ import {
   parseNoteName,
   parseNumerals,
   passingChords,
+  readChordLine,
   writtenSymbol,
 } from '@/shared/lib/music'
 import { noteLine, voicingsMusic } from '@/shared/lib/schedule'
@@ -111,6 +112,10 @@ function problemsOf(block: LessonBlock): string[] {
           )
         case 'piece':
           return pieceProblems(target.piece, target.pattern)
+        case 'transpose': {
+          const { chords, unread } = readChordLine(target.chords)
+          return chords.length > 0 && unread.length === 0 ? [] : [target.chords]
+        }
         default:
           return []
       }

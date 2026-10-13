@@ -14,11 +14,13 @@ import { METRONOME_BEATS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { FinderView } from '@/widgets/chord-finder'
 import type { PassingView } from '@/widgets/passing-chords'
 import type { ReharmoniseView } from '@/widgets/reharmonise'
+import type { TransposeView } from '@/widgets/transpose'
 import {
   C_MAJOR,
   C_MAJOR_PARAM,
   readKey,
   readTypedChord,
+  readTypedChords,
   routeSearch,
   type Raw,
 } from './read-search'
@@ -68,6 +70,20 @@ export function readPassingSearch(raw: Raw): PassingView {
   }
 }
 export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
+
+// Transpose: a song's chords as typed (any line that does not read is «Ромашковые поля»'s opening),
+// the key they are read in where one was chosen, and the tonic they are played on where it is another.
+const TRANSPOSE_DEFAULTS: TransposeView = { chords: 'Dm7 Gm9 Asus4 Dm7' }
+export function readTransposeSearch(raw: Raw): TransposeView {
+  const key = readKey(raw.key)
+  const to = readNote(raw.to)
+  return {
+    chords: readTypedChords(raw.chords, TRANSPOSE_DEFAULTS.chords),
+    key: key ? keyParam(key) : undefined,
+    to: to ? noteParam(to) : undefined,
+  }
+}
+export const transposeSearch = routeSearch(readTransposeSearch, TRANSPOSE_DEFAULTS)
 
 // Free play: Play or Mark, the key the live score spells in, Mark's marks written back clean, and
 // the metronome's tempo and beats.

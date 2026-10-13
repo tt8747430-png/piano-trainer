@@ -84,6 +84,8 @@ export type LessonLink =
       readonly to: string
     }
   | { readonly opens: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
+  /** A song's chords on Transpose, read in their key: as typed, spaces between them. */
+  | { readonly opens: 'transpose'; readonly chords: string }
   /** A piece in the Player, with a pattern or its own. */
   | { readonly opens: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
   /** An exercise in the Player, on a root and a chord where it takes them. */

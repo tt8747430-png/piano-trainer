@@ -75,7 +75,9 @@ import {
   readFreePlaySearch,
   readPassingSearch,
   readReharmoniseSearch,
+  readTransposeSearch,
   reharmoniseSearch,
+  transposeSearch,
 } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
 
@@ -287,6 +289,13 @@ const reharmoniseRoute = createRoute({
   ...remembered(readReharmoniseSearch, []),
   component: lazyRouteComponent(toolScreens, 'ReharmonisePage'),
 })
+const transposeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/transpose',
+  ...transposeSearch,
+  ...remembered(readTransposeSearch, []),
+  component: lazyRouteComponent(toolScreens, 'TransposePage'),
+})
 const freePlayRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/free-play',
@@ -471,6 +480,7 @@ const routeTree = rootRoute.addChildren([
     chordFinderRoute,
     reharmoniseRoute,
     passingChordsRoute,
+    transposeRoute,
     progressionsRoute,
     accompanimentRoute,
     newPatternRoute,

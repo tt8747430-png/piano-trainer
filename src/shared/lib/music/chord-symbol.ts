@@ -61,3 +61,21 @@ export function readChordSymbol(typed: string): Chord | null {
     throw error
   }
 }
+
+/** A line of chords as a learner types it: the chords read, and the words that cannot be. */
+export interface ChordLine {
+  readonly chords: readonly Chord[]
+  readonly unread: readonly string[]
+}
+
+/** Reads `Dm7, G7 | C`: chords apart by spaces, commas or bar lines; a hyphen stays a chord's minus. */
+export function readChordLine(text: string): ChordLine {
+  const chords: Chord[] = []
+  const unread: string[] = []
+  for (const word of text.split(/[\s,|]+/).filter(Boolean)) {
+    const chord = readChordSymbol(word)
+    if (chord) chords.push(chord)
+    else unread.push(word)
+  }
+  return { chords, unread }
+}

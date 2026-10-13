@@ -12,6 +12,7 @@ export const practice = {
     chordFinder: 'Chord finder',
     passingChords: 'Passing chords',
     reharmonise: 'Reharmonise',
+    transpose: 'Transpose',
     freePlay: 'Free play',
     exercises: 'Exercises',
     quiz: 'Quiz',
@@ -25,6 +26,7 @@ export const practice = {
     chordFinder: 'Names a chord, and the keys it is in',
     passingChords: 'The ways from one chord to the next',
     reharmonise: 'The chords that hold a melody note',
+    transpose: 'A song’s chords: their key, degrees and any key',
     freePlay: 'A live score, marks and a metronome',
   },
   // Words the explorers share.
@@ -276,6 +278,17 @@ export const practice = {
         why: '{{chord}} and {{next}} climb by whole steps into {{to}}, borrowed from its minor.',
       },
     },
+  },
+  // Transpose (ADR 0045): a song's chords typed, read in their key as degrees, played in any key.
+  transpose: {
+    field: 'Chords',
+    unread: 'Can’t read: {{words}}',
+    readIn: 'Their key',
+    held: 'In the key: {{held}} of {{count}}',
+    playIn: 'Play in',
+    outside: 'Out of the key',
+    none: 'No key holds these chords.',
+    inProgressions: 'Practise these degrees',
   },
   reharmonise: {
     note: 'Melody note',

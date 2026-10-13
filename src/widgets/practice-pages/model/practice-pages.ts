@@ -13,6 +13,7 @@ export const PRACTICE_PAGES = {
   chordFinder: { to: '/practice/chord-finder', tile: PAGE_TILES.chordFinder },
   passingChords: { to: '/practice/passing-chords', tile: PAGE_TILES.passingChords },
   reharmonise: { to: '/practice/reharmonise', tile: PAGE_TILES.reharmonise },
+  transpose: { to: '/practice/transpose', tile: PAGE_TILES.transpose },
   freePlay: { to: '/practice/free-play', tile: PAGE_TILES.freePlay },
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
@@ -30,7 +31,7 @@ export const THINGS = [
 
 /** The groups listed under a heading, in order: the tools, then the training. */
 export const PRACTICE_GROUPS = [
-  { id: 'tools', pages: ['chordFinder', 'passingChords', 'reharmonise', 'freePlay'] },
+  { id: 'tools', pages: ['chordFinder', 'passingChords', 'reharmonise', 'transpose', 'freePlay'] },
   { id: 'training', pages: ['exercises', 'quiz'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 

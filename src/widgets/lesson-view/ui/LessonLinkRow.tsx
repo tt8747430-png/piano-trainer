@@ -140,6 +140,14 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           }
         />
       )
+    case 'transpose':
+      return (
+        <RowLink
+          title={title}
+          {...PAGE_TILES.transpose}
+          render={<Link to="/practice/transpose" search={{ chords: target.chords }} />}
+        />
+      )
     case 'player': {
       const { numerals, key, size } = readProgression(target)
       return (

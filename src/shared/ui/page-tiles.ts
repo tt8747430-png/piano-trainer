@@ -1,4 +1,5 @@
 import {
+  ArrowDownUp,
   AudioWaveform,
   Blend,
   BookOpenText,
@@ -39,6 +40,7 @@ export const PAGE_TILES = {
   chordFinder: { icon: ScanSearch, paint: 'sky' },
   reharmonise: { icon: Blend, paint: 'lilac' },
   passingChords: { icon: Waypoints, paint: 'yellow' },
+  transpose: { icon: ArrowDownUp, paint: 'grass' },
   progressions: { icon: ListMusic, paint: 'grass' },
   freePlay: { icon: Piano, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },

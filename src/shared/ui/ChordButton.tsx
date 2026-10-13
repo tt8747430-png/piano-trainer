@@ -14,7 +14,7 @@ export function ChordButton({
 }: {
   symbol: string
   numeral?: string | undefined
-  /** A line under the numeral: how the chord is played (its inversion). */
+  /** A line under the numeral: how the chord is played (its inversion), or that it is out of the key. */
   detail?: string | undefined
   playing: boolean
   holds?: boolean

@@ -14,6 +14,8 @@ export interface RowChord {
   readonly caption?: string
   /** The symbol as a lesson writes it (C2 and Cadd9 are one chord to the kernel); else its own. */
   readonly symbol?: string
+  /** What is said under it where the row says no position: a chord out of the key. */
+  readonly detail?: string
 }
 
 /** A lesson's row of chord symbols, each written as the lesson writes it. */

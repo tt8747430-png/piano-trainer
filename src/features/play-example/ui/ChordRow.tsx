@@ -98,7 +98,7 @@ export function ChordRow({
 
 /**
  * The row's chords, each its symbol over its caption, playing alone; with `positions`, each says how
- * the row plays it: its inversion, or the tension a rootless hand starts on.
+ * the row plays it: its inversion, or the tension a rootless hand starts on; else its own detail.
  */
 export function RowChords({ positions = false }: { positions?: boolean }) {
   const { t } = useTranslation('music')
@@ -110,12 +110,12 @@ export function RowChords({ positions = false }: { positions?: boolean }) {
   }
   return (
     <ul aria-label={t('rowChords')} className="grid grid-cols-4 gap-2">
-      {chords.map(({ chord, caption, symbol = chordSymbol(chord) }, place) => (
+      {chords.map(({ chord, caption, detail, symbol = chordSymbol(chord) }, place) => (
         <li key={`${place} ${symbol}`} className="grid">
           <ChordButton
             symbol={symbol}
             numeral={caption}
-            detail={positionOf(chord, place)}
+            detail={positionOf(chord, place) ?? detail}
             playing={playing === place}
             onClick={() => playChord(place)}
           />

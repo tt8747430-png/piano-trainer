@@ -148,6 +148,17 @@ const thinkingInDegrees: Lesson = {
         },
         {
           kind: 'link',
+          title: {
+            en: '«Ромашковые поля»’s chords in any key',
+            ru: 'Аккорды «Ромашковых полей» в любой тональности',
+          },
+          target: {
+            opens: 'transpose',
+            chords: 'Dm7 Gm9 Asus4 Dm9 Gm9 Csus4 Am7 D D/F# Gm7 Csus4 FMaj9 Bb Gm Em7b5 Asus4 A',
+          },
+        },
+        {
+          kind: 'link',
           title: { en: 'D minor in Keys', ru: 'Ре минор в тональностях' },
           target: { opens: 'key', key: D_MINOR },
         },

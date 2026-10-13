@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, qualitySpellings } from './chord'
-import { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
+import { ChordSymbolError, parseChordSymbol, readChordLine, readChordSymbol } from './chord-symbol'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
 
@@ -65,5 +65,24 @@ describe('readChordSymbol', () => {
     expect(readChordSymbol('Dm7/')).toBeNull()
     expect(readChordSymbol('Qx')).toBeNull()
     expect(readChordSymbol('')).toBeNull()
+  })
+})
+
+describe('readChordLine', () => {
+  it('reads chords apart by spaces, commas or bar lines, a minus kept for minor', () => {
+    expect(readChordLine('Dm7, G7 | C-7  |F/A')).toEqual({
+      chords: [
+        { root: note('D'), quality: 'm7' },
+        { root: note('G'), quality: 'd7' },
+        { root: note('C'), quality: 'm7' },
+        { root: note('F'), quality: 'maj', bass: note('A') },
+      ],
+      unread: [],
+    })
+  })
+
+  it('names the words it cannot read, and reads nothing in an empty line', () => {
+    expect(readChordLine('C Qx G Dm7/')).toMatchObject({ unread: ['Qx', 'Dm7/'] })
+    expect(readChordLine(' | ')).toEqual({ chords: [], unread: [] })
   })
 })

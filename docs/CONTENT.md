@@ -289,7 +289,8 @@ meter is 2/4, 3/4 or 4/4, and its `key` writes a signature. Notes are kernel val
 objects (`{ tonic: note('E', -1), minor: false }`). A link `opens` `chords` (a symbol), `scales` (a root, a kind,
 `show?`), `key` (a key), `intervals` (`root?`), `tensions` (a chord, a root: the chord builder opens on it), `lesson`
 (an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key, `from` and `to` as symbols),
-`reharmonise` (a key, a melody note), `piece` (a piece in the Player, `pattern?`), `exercise` (an exercise in the
+`reharmonise` (a key, a melody note), `transpose` (a song's `chords` as typed), `piece` (a piece in the Player,
+`pattern?`), `exercise` (an exercise in the
 Player, `root?`, `quality?`) or `player` (a progression in the Player, ready to practise: numerals, a key, `size?`,
 `walk?` through the keys, `inversion?` 0–3).
 

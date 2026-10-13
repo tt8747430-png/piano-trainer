@@ -116,7 +116,13 @@ export {
   type Seventh,
   type Triad,
 } from './chord-parts'
-export { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-symbol'
+export {
+  ChordSymbolError,
+  parseChordSymbol,
+  readChordLine,
+  readChordSymbol,
+  type ChordLine,
+} from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
@@ -210,5 +216,6 @@ export {
   type CircleRing,
 } from './circle'
 export { keysHolding, type KeyHolding } from './keys-holding'
+export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'

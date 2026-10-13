@@ -64,7 +64,8 @@ it. `@` → `src`.
   (`/practice/accompaniment`, its parts Called to Play · Боброва · Горшков · Styles · Yours as tabs, ADR 0033; a
   pattern's page `…/patterns/$patternRef`, the editor `…/patterns/new` and `…/patterns/$patternRef/edit`; a study's
   page `…/studies/$pieceId`); the tools, each working something out from what it is given, the Chord finder
-  (`/practice/chord-finder`), Passing chords (`/practice/passing-chords`), Reharmonise (`/practice/reharmonise`) and
+  (`/practice/chord-finder`), Passing chords (`/practice/passing-chords`), Reharmonise (`/practice/reharmonise`), Transpose
+  (`/practice/transpose`, a song's chords read in their key and played in any, ADR 0045) and
   Free play (`/practice/free-play`, Play · Mark, ADR 0034); the training, Exercises (`/practice/exercises`) and Quiz
   (`/practice/quiz`, its trainers `/practice/quiz/$trainerId`); Search (`/search?q=`, every named thing by kind); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
@@ -92,7 +93,7 @@ it. `@` → `src`.
   trainer by group with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords`, `pages/intervals` and `pages/progressions` three explorers' pages; `pages/scales`
   Scales and keys (`ScaleTabs`, its views; its Key view's tool, `KeyTools`, and songs in the key, `PiecesInKey`);
-  `pages/chord-finder`, `pages/passing-chords` and `pages/reharmonise` three tools' pages; `pages/accompaniment`
+  `pages/chord-finder`, `pages/passing-chords`, `pages/reharmonise` and `pages/transpose` four tools' pages; `pages/accompaniment`
   Accompaniment (`AccompanimentTabs` over its URL's `AccompanimentView`, a part's `PatternShelves`, a method book's
   `BookPieces`, and its lessons on Learn, `BookLessons`; Learn's course ends with a row back to it), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
@@ -114,7 +115,7 @@ it. `@` → `src`.
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
   facts and borrowed chords; its pure marks, plays, `scaleRunOf`, `keyOfScale` and `showsOf` in `model/`), `interval-explorer` (every interval over a root
-  as Clefs' cards), `chord-finder` (keys tapped or held named as a chord, and the keys that hold it with its numeral in each, `ChordKeys` over `keysHolding`), `reharmonise` (the chords that hold a melody note),
+  as Clefs' cards), `chord-finder` (keys tapped or held named as a chord, and the keys that hold it with its numeral in each, `ChordKeys` over `keysHolding`), `reharmonise` (the chords that hold a melody note), `transpose` (`TransposeTool`: a song's chords typed, `transposition`, their key and numerals, played on any tonic),
   `passing-chords` (the ways between two chords, each row voice-led), `score-sheet` (the score editor's sheet: a line of
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, `LISTED_GROUPS`, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
@@ -193,7 +194,7 @@ it. `@` → `src`.
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones (from five notes in two hands, the root and a 13th's 5th in the left, the rest close in the right; `chordInversions`, ADR 0035), `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032; applied, `V/ii`, read in that degree's key, ADR 0040), `keys-holding.ts` (`keysHolding`, the keys that hold a chord, each with its numeral), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home); `lead-in.ts` (`withLeadIns`, each chord after its own V or ii–V, ADR 0041);
+  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032; applied, `V/ii`, read in that degree's key, ADR 0040), `keys-holding.ts` (`keysHolding`, the keys that hold a chord, each with its numeral), `key-of-chords.ts` (`keysOfChords`, the keys a line of chords is in, most likely first; `readInKey`, each chord's numeral there, an applied dominant as `V/iv`), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home); `lead-in.ts` (`withLeadIns`, each chord after its own V or ii–V, ADR 0041);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`
