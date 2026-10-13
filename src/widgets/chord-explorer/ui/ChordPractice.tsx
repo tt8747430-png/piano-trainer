@@ -4,16 +4,25 @@ import { useTranslation } from 'react-i18next'
 import { exerciseOf, isArpeggioQuality } from '@/entities/exercise'
 import { chordsParam } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
-import { noteParam, type ChordQuality, type SpelledNote } from '@/shared/lib/music'
+import { isInversion, noteParam, type ChordQuality, type SpelledNote } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 
 const ARPEGGIO = exerciseOf('arpeggio')
 
 /**
  * A chord the table names, practised in the Player: its arpeggio where the exercise plays it, and the
- * chord walked a semitone at a time from its root.
+ * chord walked a semitone at a time from its root, every chord in the inversion shown.
  */
-export function ChordPractice({ root, quality }: { root: SpelledNote; quality: ChordQuality }) {
+export function ChordPractice({
+  root,
+  quality,
+  inversion,
+}: {
+  root: SpelledNote
+  quality: ChordQuality
+  /** The inversion shown, where the Player's right hand plays it the same: a chord of up to four notes. */
+  inversion: number
+}) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
   return (
@@ -44,7 +53,12 @@ export function ChordPractice({ root, quality }: { root: SpelledNote; quality: C
           render={
             <Link
               to="/play/chromatic"
-              search={{ chords: chordsParam([quality]), root: noteParam(root) }}
+              search={{
+                chords: chordsParam([quality]),
+                root: noteParam(root),
+                ...(isInversion(inversion) && inversion > 0 ? { inversion } : {}),
+                nearest: false,
+              }}
             />
           }
         />

@@ -115,7 +115,13 @@ export function ChordExplorer({
           }}
         />
       ) : null}
-      {quality ? <ChordPractice root={built.root} quality={quality} /> : null}
+      {quality ? (
+        <ChordPractice
+          root={built.root}
+          quality={quality}
+          inversion={built.tones.length <= 4 ? chord.inversion : 0}
+        />
+      ) : null}
     </div>
   )
 }

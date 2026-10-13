@@ -327,6 +327,14 @@ describe('Practice → Scales and keys', () => {
     expect(within(inKey).getAllByRole('link')).toHaveLength(4)
   })
 
+  it('walks the chords in the Player in the inversion shown, every chord in it', async () => {
+    await renderApp('/practice/scales?root=D&show=chords&chords=4&inversion=1')
+    const walk = await screen.findByRole('link', { name: 'Walk the chords' })
+    const query = new URLSearchParams(walk.getAttribute('href')?.split('?')[1])
+    expect(query.get('inversion')).toBe('1')
+    expect(query.get('nearest')).toBe('false')
+  })
+
   it('offers a mode the walk alone', async () => {
     await renderApp('/practice/scales?root=D&kind=dorian&show=chords')
     expect(await screen.findByRole('link', { name: 'Walk the chords' })).toBeInTheDocument()

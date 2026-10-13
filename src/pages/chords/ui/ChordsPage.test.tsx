@@ -304,6 +304,15 @@ describe('Practice → Chords', () => {
     expect(path).toBe('/play/chromatic')
     expect(new URLSearchParams(query).get('chords')).toBe('m9')
     expect(new URLSearchParams(query).get('root')).toBe('G')
+    expect(new URLSearchParams(query).get('nearest')).toBe('false')
+  })
+
+  it('walks the chord chromatically in the inversion shown, the same shape each semitone', async () => {
+    await renderApp('/practice/chords?root=D&triad=min&size=7&inversion=2')
+    const walk = await screen.findByRole('link', { name: /^Chromatic walk/ })
+    const query = new URLSearchParams(walk.getAttribute('href')?.split('?')[1])
+    expect(query.get('inversion')).toBe('2')
+    expect(query.get('nearest')).toBe('false')
   })
 
   it('offers no chromatic walk for a chord the table does not name', async () => {

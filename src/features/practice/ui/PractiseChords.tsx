@@ -5,6 +5,7 @@ import { COMMON_PROGRESSIONS, libraryLine, libraryParam } from '@/entities/progr
 import { localText, useLocale } from '@/shared/i18n'
 import {
   circleKey,
+  isInversion,
   keyMode,
   keyParam,
   noteParam,
@@ -19,17 +20,20 @@ import { PAGE_TILES, RowGroup, RowLink } from '@/shared/ui'
 import { WALK } from '../walk'
 
 /**
- * What a scale's chords are practised in: walked up and down in the Player, and for a major or minor
- * key its common progressions, each opening Progressions in this key at the chord size shown.
+ * What a scale's chords are practised in: walked up and down in the Player (every chord in the
+ * inversion shown, where the Player's hand plays it the same: up to four notes), and for a major or
+ * minor key its common progressions, each opening Progressions in this key at the chord size shown.
  */
 export function PractiseChords({
   root,
   kind,
   notes,
+  inversion = 0,
 }: {
   root: SpelledNote
   kind: ScaleKind
   notes: ChordNotes
+  inversion?: number
 }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
@@ -52,6 +56,9 @@ export function PractiseChords({
                   root: noteParam(root),
                   kind,
                   ...(chordSize === WALK.chordSize ? {} : { chordSize }),
+                  ...(notes <= 4 && isInversion(inversion) && inversion > 0
+                    ? { inversion, nearest: false }
+                    : {}),
                 }}
               />
             }

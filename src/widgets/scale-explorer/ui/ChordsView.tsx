@@ -136,7 +136,7 @@ export function ChordsView({
         note={note}
         holding={holding}
       />
-      <PractiseChords root={tonic} kind={kind} notes={notes} />
+      <PractiseChords root={tonic} kind={kind} notes={notes} inversion={inversion} />
     </ScaleLayout>
   )
 }
