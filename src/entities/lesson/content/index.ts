@@ -5,6 +5,7 @@ import brokenChords from './broken-chords'
 import chordFamily from './chord-family'
 import chordFunctions from './chord-functions'
 import chordMatrix from './chord-matrix'
+import chordPulse from './chord-pulse'
 import chromaticScale from './chromatic-scale'
 import commonProgressions from './common-progressions'
 import findingHome from './finding-home'
@@ -13,12 +14,16 @@ import gospelPassingChords from './gospel-passing-chords'
 import gospelProgressions from './gospel-progressions'
 import gospelReharmonisation from './gospel-reharmonisation'
 import intervals from './intervals'
+import jazzChordSymbols from './jazz-chord-symbols'
 import jazzVoicings from './jazz-voicings'
 import inversions from './inversions'
 import keySignatures from './key-signatures'
 import majorScales from './major-scales'
+import melodicFiguration from './melodic-figuration'
 import minorScales from './minor-scales'
 import minorTwoFiveLevels from './minor-two-five-levels'
+import ninthChords from './ninth-chords'
+import ninthsInASong from './ninths-in-a-song'
 import passingChords from './passing-chords'
 import readingChordSymbols from './reading-chord-symbols'
 import readingNotes from './reading-notes'
@@ -27,6 +32,7 @@ import rhythmAndMeter from './rhythm-and-meter'
 import rightHandTechniques from './right-hand-techniques'
 import scalesThroughTheChanges from './scales-through-the-changes'
 import sevenTypes from './seven-types'
+import seventhsInASong from './sevenths-in-a-song'
 import seventhChords from './seventh-chords'
 import thinkingInDegrees from './thinking-in-degrees'
 import triads from './triads'
@@ -69,7 +75,13 @@ export const LESSONS: readonly Lesson[] = [
   rightHandTechniques,
   sevenTypes,
   accompanyingAHymn,
+  jazzChordSymbols,
+  seventhsInASong,
+  ninthChords,
+  ninthsInASong,
   thinkingInDegrees,
   twoFiveOne,
+  chordPulse,
+  melodicFiguration,
   jazzVoicings,
 ]

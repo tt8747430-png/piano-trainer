@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Find a song’s key, name each chord by its degree, and play it in any key.',
-    ru: 'Найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
+    en: 'Gorshkov’s lesson 3: find a song’s key, name each chord by its degree, and play it in any key.',
+    ru: 'Урок 3 Горшкова: найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
   },
   level: 2,
   category: 'accompaniment',
@@ -126,6 +126,14 @@ const thinkingInDegrees: Lesson = {
           kind: 'link',
           title: { en: 'D minor in Keys', ru: 'Ре минор в тональностях' },
           target: { place: 'keys', key: D_MINOR },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Chord functions: tonic, subdominant, dominant',
+            ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
+          },
+          target: { place: 'lesson', lesson: 'chord-functions' },
         },
       ],
     },

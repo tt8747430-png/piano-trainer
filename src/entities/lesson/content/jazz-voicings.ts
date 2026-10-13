@@ -11,8 +11,8 @@ const jazzVoicings: Lesson = {
   id: 'jazz-voicings',
   title: { en: 'Jazz voicings', ru: 'Джазовые расположения' },
   summary: {
-    en: 'Major, minor and dominant voicings, the altered dominant, slash chords over it, and drop 2.',
-    ru: 'Расположения мажорных, минорных и доминантовых аккордов, альтерированная доминанта, слэш-аккорды и drop 2.',
+    en: 'Gorshkov’s extra sheet: major, minor and dominant voicings, the altered dominant, slash chords over it, and drop 2.',
+    ru: 'Дополнительный лист Горшкова: расположения мажорных, минорных и доминантовых аккордов, альтерированная доминанта, слэш-аккорды и drop 2.',
   },
   level: 4,
   category: 'jazz',

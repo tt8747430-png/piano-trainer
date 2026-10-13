@@ -270,7 +270,17 @@ describe('the lessons', () => {
       LESSONS.filter((lesson) => lesson.module === module).map((lesson) => lesson.id)
     expect(lessonsOf('called-to-play')).toEqual(['five-ways', 'right-hand-techniques'])
     expect(lessonsOf('seven-types')).toEqual(['seven-types', 'accompanying-a-hymn'])
-    expect(lessonsOf('gorshkov')).toEqual(['thinking-in-degrees', 'two-five-one', 'jazz-voicings'])
+    expect(lessonsOf('gorshkov')).toEqual([
+      'jazz-chord-symbols',
+      'sevenths-in-a-song',
+      'ninth-chords',
+      'ninths-in-a-song',
+      'thinking-in-degrees',
+      'two-five-one',
+      'chord-pulse',
+      'melodic-figuration',
+      'jazz-voicings',
+    ])
   })
 
   it('teach gospel’s progressions, passing chords and reharmonisation', () => {

@@ -18,8 +18,8 @@ const twoFiveOne: Lesson = {
   id: 'two-five-one',
   title: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
   summary: {
-    en: 'Jazz’s cadence in 7th chords: its voices, in major and minor, in every key.',
-    ru: 'Главный оборот джаза в септаккордах: голоса, мажор и минор, все тональности.',
+    en: 'Gorshkov’s lesson 3: jazz’s cadence in 7th chords, its voices, in major and minor, in every key and in a song.',
+    ru: 'Урок 3 Горшкова: главный оборот джаза в септаккордах — голоса, мажор и минор, все тональности и песня.',
   },
   level: 3,
   category: 'jazz',
