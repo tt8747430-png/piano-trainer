@@ -13,6 +13,9 @@ import type { LineNote } from './performance'
 import { exercisePerformance } from './performance'
 import { HALF } from './time'
 
+/** The top of the climb: C6. */
+const HIGHEST = 84
+
 /** At most a 7th chord's four tones: a bigger chord climbs as its 7th chord. */
 const MOST_TONES = 4
 
@@ -37,8 +40,9 @@ export function inversionsExercise(choice: {
   const tones = spellChord(root, quality).slice(0, MOST_TONES)
   const count = tones.length
   const pc = pitchClassOf(root)
-  // From middle C up to F♯, from below it past that: the top stays within C6.
-  const rootKey = MIDDLE_C + pc - (pc >= 7 ? 12 : 0)
+  // From middle C, or an octave below where the top chord (root position an octave up) would pass C6.
+  const top = 12 + Math.max(...tones.map((tone) => tone.semitones))
+  const rootKey = MIDDLE_C + pc + top > HIGHEST ? MIDDLE_C + pc - 12 : MIDDLE_C + pc
   const steps = [
     ...Array.from({ length: count + 1 }, (_, i) => i),
     ...Array.from({ length: count }, (_, i) => count - 1 - i),

@@ -45,10 +45,11 @@ describe('inversionsExercise', () => {
     expect(exercise.chords.map((chord) => chord.symbol)).toEqual(['B♭7'])
   })
 
-  it('keeps a high root in the middle of the keyboard', () => {
-    const top = Math.max(
-      ...inversionsExercise({ root: note('A'), quality: 'maj7' }).notes.map((n) => n.midi),
-    )
-    expect(top).toBeLessThanOrEqual(84)
+  it('keeps every root’s chord under C6', () => {
+    for (const letter of ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const)
+      for (const quality of ['maj', 'maj7', 'd7'] as const) {
+        const keys = inversionsExercise({ root: note(letter, 1), quality }).notes.map((n) => n.midi)
+        expect(Math.max(...keys)).toBeLessThanOrEqual(84)
+      }
   })
 })

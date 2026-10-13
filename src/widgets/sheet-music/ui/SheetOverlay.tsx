@@ -44,7 +44,13 @@ export function SheetOverlay({
       />
       {loop ? <LoopBand layout={layout} loop={loop} onChange={onLoopChange} /> : null}
       {x === null ? null : <SheetCursor ref={cursor} x={x} layout={layout} />}
-      <BarTargets layout={layout} performance={performance} current={group?.bar} onJump={onJump} />
+      <BarTargets
+        layout={layout}
+        performance={performance}
+        positions={positions}
+        current={group?.bar}
+        onJump={onJump}
+      />
     </>
   )
 }

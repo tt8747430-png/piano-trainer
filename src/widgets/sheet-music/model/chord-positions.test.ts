@@ -34,4 +34,14 @@ describe('chordPositions', () => {
     expect(chordPositions(performance)[0]).toEqual({ inversion: 0 })
     expect(chordPositions(performance)[1]).toEqual({ inversion: 2 }) // C F A over F
   })
+
+  it('names nothing where the right hand plays no voiced chord', () => {
+    const tune: EventPattern = {
+      id: 'tune',
+      rh: { kind: 'events', events: parseFigure('0/4 T,4/4 T1') },
+      lh: { kind: 'events', events: parseFigure('0/16 L1') },
+    }
+    const performance = arrange(CHART, { tonic: C, pattern: tune, inversion: 2 })
+    expect(chordPositions(performance)).toEqual([null, null, null])
+  })
 })

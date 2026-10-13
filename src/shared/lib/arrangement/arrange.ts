@@ -181,6 +181,13 @@ export function transposeNotes<N extends { readonly midi: Midi; readonly spelled
   }))
 }
 
+/** The tokens that play the voiced chord, or a part of it, as it stands. */
+const VOICED_TOKENS = new Set(['chord', 'upper-voices', 'voice'])
+
+/** Whether a figure plays the voiced chord, so its position is the chord's. */
+const playsVoiced = (figure: EventFigure): boolean =>
+  figure.events.some((event) => event.tones.some((tone) => VOICED_TOKENS.has(tone.token.kind)))
+
 const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
 
 function patternFor(method: string | undefined, options: ArrangeOptions, hasMelody: boolean) {
@@ -390,6 +397,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       bar: placed.bar,
       ...(method ? { method } : {}),
       pattern: pattern.id,
+      ...(rh.kind === 'events' && !written?.rh && playsVoiced(rh) ? { hand: context.voiced } : {}),
     })
 
     // A chord plays its pattern in windows of one meter bar. A chord shorter than two beats, or in a

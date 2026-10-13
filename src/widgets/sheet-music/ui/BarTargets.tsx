@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Performance } from '@/shared/lib/arrangement'
+import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { chordPositions } from '../model/chord-positions'
 import { nearestBeatGroup } from '../model/nearest-beat-group'
 
 /**
@@ -11,27 +13,33 @@ import { nearestBeatGroup } from '../model/nearest-beat-group'
 export function BarTargets({
   layout,
   performance,
+  positions,
   current,
   onJump,
 }: {
   layout: ScoreLayout
   performance: Performance
+  /** Each chord named with how the right hand plays it, as the labels over the staff say. */
+  positions: boolean
   /** The bar the cursor is in. */
   current: number | undefined
   onJump: (beatGroup: number) => void
 }) {
   const { t } = useTranslation('music')
+  const positionName = usePositionName()
   // Named once per score: the cursor's move re-renders the bars, and only the current one changes.
-  const names = useMemo(
-    () =>
-      layout.measures.map((_, bar) => {
-        const chords = (performance.bars[bar]?.chords ?? []).flatMap(
-          (index) => performance.chords[index]?.symbol ?? [],
-        )
-        return t('sheet.barChords', { n: bar + 1, chords: chords.join(' ') })
-      }),
-    [layout, performance, t],
-  )
+  const names = useMemo(() => {
+    const placed = positions ? chordPositions(performance) : []
+    return layout.measures.map((_, bar) => {
+      const chords = (performance.bars[bar]?.chords ?? []).flatMap((index) => {
+        const symbol = performance.chords[index]?.symbol
+        if (!symbol) return []
+        const position = placed[index]
+        return position ? `${symbol} ${positionName(position)}` : symbol
+      })
+      return t('sheet.barChords', { n: bar + 1, chords: chords.join(' ') })
+    })
+  }, [layout, performance, positions, positionName, t])
   return layout.measures.map((measure, bar) => (
     <button
       key={bar}

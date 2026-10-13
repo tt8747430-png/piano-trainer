@@ -19,4 +19,9 @@ describe('handPosition', () => {
   it('names nothing for an empty hand', () => {
     expect(handPosition(chord('C'), [])).toBeNull()
   })
+
+  it('counts a held root’s chord in its own order: a sus4 from its 4th, a 6 chord from its 6th', () => {
+    expect(handPosition(chord('Gsus4'), [60, 62, 67])).toEqual({ inversion: 1 })
+    expect(handPosition(chord('C6'), [57, 60, 64, 67])).toEqual({ inversion: 3 })
+  })
 })

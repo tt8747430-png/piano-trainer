@@ -134,6 +134,8 @@ export interface PerformedChord extends Chord {
   readonly method?: string
   /** The id of the pattern that played it. */
   readonly pattern: string
+  /** The right hand's chord as voiced, where its figure plays the voiced chord (not a tune, nor its own shapes). */
+  readonly hand?: readonly Midi[]
 }
 export interface PerformanceBar {
   readonly startTick: Tick

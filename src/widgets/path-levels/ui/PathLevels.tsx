@@ -21,7 +21,8 @@ export function PathLevels() {
     const done = inLevel.filter((s) => learned[s.id] !== undefined).length
     return { level, inLevel, done }
   }).filter(({ inLevel }) => inLevel.length > 0)
-  const current = levels.find(({ inLevel, done }) => done < inLevel.length)?.level
+  // The first level not all learned; with every one learned, the first.
+  const current = (levels.find(({ inLevel, done }) => done < inLevel.length) ?? levels[0])?.level
   // What the learner opened or folded; any other level is open when it is the one they are at.
   const [toggled, setToggled] = useState<ReadonlyMap<Level, boolean>>(new Map())
   return (
@@ -61,16 +62,15 @@ export function PathLevels() {
                 style={{ width: `${(done / inLevel.length) * 100}%` }}
               />
             </div>
-            {open ? (
-              <ul
-                id={listId}
-                className="flex flex-col divide-y divide-hairline card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2"
-              >
-                {inLevel.map((placed) => (
-                  <StepRow key={placed.id} placed={placed} answers={answers} />
-                ))}
-              </ul>
-            ) : null}
+            <ul
+              id={listId}
+              hidden={!open}
+              className="flex flex-col divide-y divide-hairline card px-2 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:divide-y-0 lg:px-4 lg:py-2"
+            >
+              {inLevel.map((placed) => (
+                <StepRow key={placed.id} placed={placed} answers={answers} />
+              ))}
+            </ul>
           </section>
         )
       })}
