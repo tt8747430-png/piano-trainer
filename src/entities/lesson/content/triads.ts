@@ -68,17 +68,17 @@ const triads: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play E major.', ru: 'Сыграйте ми мажор.' },
           answer: { chord: 'E' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play B diminished.', ru: 'Сыграйте уменьшённое трезвучие от си.' },
           answer: { chord: 'B°' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play F augmented.', ru: 'Сыграйте увеличенное трезвучие от фа.' },
           answer: { chord: 'F+' },
         },

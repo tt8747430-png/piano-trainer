@@ -65,12 +65,12 @@ const seventhChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play D7.', ru: 'Сыграйте D7.' },
           answer: { chord: 'D7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Am7.', ru: 'Сыграйте Am7.' },
           answer: { chord: 'Am7' },
         },

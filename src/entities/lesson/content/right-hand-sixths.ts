@@ -77,7 +77,7 @@ const rightHandSixths: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the sixth from E up to C: E, then the C above it.',
             ru: 'Сыграйте сексту ми–до: сначала ми, затем до над ней.',

@@ -81,12 +81,12 @@ const playingByChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play C major: C, E and G.', ru: 'Сыграйте до мажор: до, ми и соль.' },
           answer: { chord: 'C' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the chord on F, white keys only.',
             ru: 'Сыграйте аккорд от фа только на белых клавишах.',

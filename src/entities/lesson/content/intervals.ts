@@ -59,7 +59,7 @@ const intervals: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play D and the perfect 5th above it.',
             ru: 'Сыграйте ре и чистую квинту вверх от неё.',
@@ -67,7 +67,7 @@ const intervals: Lesson = {
           answer: { notes: ['D', 'A'], rising: true },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play A and the minor 3rd above it.',
             ru: 'Сыграйте ля и малую терцию вверх от неё.',

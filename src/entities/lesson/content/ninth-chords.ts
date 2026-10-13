@@ -142,17 +142,17 @@ const ninthChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Gm9.', ru: 'Сыграйте Gm9.' },
           answer: { chord: 'Gm9' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play CMaj9.', ru: 'Сыграйте CMaj9.' },
           answer: { chord: 'CMaj9' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play G9.', ru: 'Сыграйте G9.' },
           answer: { chord: 'G9' },
         },

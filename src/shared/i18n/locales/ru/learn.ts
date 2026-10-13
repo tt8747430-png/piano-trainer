@@ -32,7 +32,7 @@ export const learn: LocaleResources['learn'] = {
     previous: 'Предыдущий урок',
     all: 'Все уроки: {{module}}',
   },
-  quiz: {
+  question: {
     answer: 'Ответить на клавишах',
     check: 'Проверить',
     right: 'Верно',

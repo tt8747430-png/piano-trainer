@@ -39,7 +39,7 @@ const texts = (lesson: Lesson) => [
           return [block.text]
         case 'steps':
           return block.steps
-        case 'quiz':
+        case 'question':
           return [block.ask]
         case 'link':
           return [block.title]
@@ -89,7 +89,7 @@ function problemsOf(block: LessonBlock): string[] {
       return pieceProblems(block.piece, block.pattern)
     case 'progression':
       return unread(() => readProgression(block), block.numerals)
-    case 'quiz': {
+    case 'question': {
       const { answer } = block
       return 'chord' in answer
         ? unread(() => parseChordSymbol(answer.chord), answer.chord)
@@ -137,7 +137,7 @@ describe('the lessons', () => {
     }
   })
 
-  it('give only examples, quizzes and links the kernel reads', () => {
+  it('give only examples, questions and links the kernel reads', () => {
     for (const lesson of LESSONS) {
       for (const section of lesson.sections) {
         for (const block of section.blocks) expect(problemsOf(block), lesson.id).toEqual([])
@@ -149,7 +149,7 @@ describe('the lessons', () => {
     expect(problemsOf({ kind: 'chords', symbols: ['Cm', 'Cq'] })).toEqual(['Cq'])
     expect(problemsOf({ kind: 'notes', clef: 'treble', notes: 'C4 X9' })).toEqual(['C4 X9'])
     expect(
-      problemsOf({ kind: 'quiz', ask: { en: 'a', ru: 'а' }, answer: { notes: ['F', 'H'] } }),
+      problemsOf({ kind: 'question', ask: { en: 'a', ru: 'а' }, answer: { notes: ['F', 'H'] } }),
     ).toEqual(['H'])
     expect(
       problemsOf({
@@ -363,7 +363,7 @@ describe('the lessons', () => {
   })
 })
 
-/** Every piece of a lesson's prose, in both languages: text, steps, notes and quizzes' asks. */
+/** Every piece of a lesson's prose, in both languages: text, steps, notes and questions' asks. */
 function proseOf(lesson: (typeof LESSONS)[number]): string[] {
   const texts = (local: { readonly en: string; readonly ru: string }) => [local.en, local.ru]
   return lesson.sections.flatMap((section) =>
@@ -374,7 +374,7 @@ function proseOf(lesson: (typeof LESSONS)[number]): string[] {
           return texts(block.text)
         case 'steps':
           return block.steps.flatMap(texts)
-        case 'quiz':
+        case 'question':
           return texts(block.ask)
         default:
           return []

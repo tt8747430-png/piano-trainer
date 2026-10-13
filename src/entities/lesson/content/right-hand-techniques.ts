@@ -59,7 +59,7 @@ const rightHandTechniques: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play E major, the chord that leads back to Am.',
             ru: 'Сыграйте ми мажор — аккорд, который ведёт обратно к Am.',

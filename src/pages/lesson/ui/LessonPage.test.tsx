@@ -146,42 +146,42 @@ describe('A lesson', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/five-ways'))
   })
 
-  it('keeps a keyboard user on the quiz’s button as it opens, shows the answer and starts again', async () => {
+  it('keeps a keyboard user on the question’s button as it opens, shows the answer and starts again', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/triads')
-    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
-    within(quiz).getByRole('button', { name: 'Answer on the keys' }).focus()
+    const question = await screen.findByRole('group', { name: 'Play E major.' })
+    within(question).getByRole('button', { name: 'Answer on the keys' }).focus()
     await user.keyboard('{Enter}')
-    expect(within(quiz).getByRole('button', { name: 'Check' })).toHaveFocus()
+    expect(within(question).getByRole('button', { name: 'Check' })).toHaveFocus()
     await user.click(screen.getByRole('button', { name: 'E4' }))
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    await user.click(within(quiz).getByRole('button', { name: 'Show the answer' }))
-    expect(within(quiz).getByRole('button', { name: 'Try again' })).toHaveFocus()
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
+    expect(within(question).getByRole('button', { name: 'Try again' })).toHaveFocus()
   })
 
-  it('answers a Fundamentals quiz on its keys', async () => {
+  it('answers a Fundamentals question on its keys', async () => {
     const user = userEvent.setup()
     await renderApp('/learn/lessons/triads')
-    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const question = await screen.findByRole('group', { name: 'Play E major.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     for (const key of ['E4', 'G sharp 4', 'B4']) {
       await user.click(within(keyboard).getByRole('button', { name: key }))
     }
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('Correct')
   })
 
-  it('answers a quiz from a MIDI keyboard', async () => {
+  it('answers a question from a MIDI keyboard', async () => {
     const user = userEvent.setup()
     const { midi: midiKeyboard } = await renderApp('/learn/lessons/triads')
-    const quiz = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const question = await screen.findByRole('group', { name: 'Play E major.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
     act(() => {
       for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
     })
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('Correct')
   })
 
   it('speaks Russian on every block of a lesson', async () => {

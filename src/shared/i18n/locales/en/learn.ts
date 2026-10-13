@@ -35,8 +35,8 @@ export const learn = {
     previous: 'Previous lesson',
     all: 'All lessons of {{module}}',
   },
-  // A lesson's quiz, answered on its keys.
-  quiz: {
+  // A lesson's question, answered on its keys.
+  question: {
     answer: 'Answer on the keys',
     check: 'Check',
     right: 'Correct',

@@ -94,7 +94,7 @@ const bassAndChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play F major as an accompanist does: a low F in the bass, the chord above it.',
             ru: 'Сыграйте фа мажор, как аккомпаниатор: внизу бас фа, над ним аккорд.',

@@ -80,12 +80,12 @@ const findingHome: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play any F.', ru: 'Сыграйте любое фа.' },
           answer: { notes: ['F'] },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play every white key from C up to G.',
             ru: 'Сыграйте подряд белые клавиши от до вверх до соль.',

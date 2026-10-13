@@ -144,17 +144,17 @@ const seventhsInASong: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Dm7.', ru: 'Сыграйте Dm7.' },
           answer: { chord: 'Dm7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play FMaj7.', ru: 'Сыграйте FMaj7.' },
           answer: { chord: 'FMaj7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play D7.', ru: 'Сыграйте D7.' },
           answer: { chord: 'D7' },
         },

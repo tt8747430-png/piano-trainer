@@ -10,13 +10,13 @@ import { usePlay } from '@/shared/lib/services'
 import {
   answerSounds,
   isRight,
-  quizAnswers,
-  quizKeys,
-  quizReducer,
-  type QuizKeys,
-} from '../model/lesson-quiz'
+  questionAnswers,
+  questionKeys,
+  questionReducer,
+  type QuestionKeys,
+} from '../model/lesson-question'
 import { LessonBlock } from './LessonBlock'
-import { QuizBlock } from './QuizBlock'
+import { QuestionBlock } from './QuestionBlock'
 import { NO_KEYS, type ShownKeys } from '@/shared/ui'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
@@ -27,7 +27,7 @@ const CONTENTS_FROM = 3
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
- * quiz, whose answer the learner chooses on it. Its sections are listed at its top, each a link to
+ * question, whose answer the learner chooses on it. Its sections are listed at its top, each a link to
  * its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
  * replaces the page's entry, so Back still leaves the lesson.
  */
@@ -36,16 +36,16 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
-  const [quiz, dispatch] = useReducer(quizReducer, null)
-  const answers = useMemo(() => quizAnswers(lesson), [lesson])
-  const answer = quiz ? answers.get(quiz.id) : undefined
-  const keys: QuizKeys = quiz && answer ? quizKeys(quiz, answer) : shown
-  const choosing = quiz !== null && quiz.stage !== 'answer'
-  // The open quiz is answered on the MIDI keyboard as on the screen's keys.
+  const [question, dispatch] = useReducer(questionReducer, null)
+  const answers = useMemo(() => questionAnswers(lesson), [lesson])
+  const answer = question ? answers.get(question.id) : undefined
+  const keys: QuestionKeys = question && answer ? questionKeys(question, answer) : shown
+  const choosing = question !== null && question.stage !== 'answer'
+  // The open question is answered on the MIDI keyboard as on the screen's keys.
   useMidiKeyDown((key) => {
     if (choosing) dispatch({ type: 'toggle', key })
   })
-  // An example played closes the open quiz: the keys show the example.
+  // An example played closes the open question: the keys show the example.
   const show = (next: ShownKeys) => {
     dispatch({ type: 'close' })
     setShown(next)
@@ -100,11 +100,12 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
           <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
           {section.blocks.map((block, b) => {
             const id = `${s}.${b}`
-            if (block.kind !== 'quiz') return <LessonBlock key={id} block={block} onShow={show} />
-            const open = quiz?.id === id ? quiz : null
+            if (block.kind !== 'question')
+              return <LessonBlock key={id} block={block} onShow={show} />
+            const open = question?.id === id ? question : null
             const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
             return (
-              <QuizBlock
+              <QuestionBlock
                 key={id}
                 ask={block.ask}
                 stage={open ? open.stage : 'closed'}

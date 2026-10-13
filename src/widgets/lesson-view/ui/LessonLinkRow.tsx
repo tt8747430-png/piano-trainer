@@ -45,11 +45,11 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           }
         />
       )
-    case 'keys':
+    case 'key':
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.keys}
+          {...PAGE_TILES.key}
           render={
             <Link
               to="/practice/scales"

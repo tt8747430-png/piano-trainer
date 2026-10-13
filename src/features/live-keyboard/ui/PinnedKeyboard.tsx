@@ -31,11 +31,11 @@ export function PinnedKeyboard({
   range?: KeyRange | undefined
   /** What a key plays (Chords view: a degree's chord). */
   keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
-  /** Keys ringed inside: the chords that hold the note, a quiz answer's missing notes. */
+  /** Keys ringed inside: the chords that hold the note, an answer's missing notes. */
   outlined?: ReadonlySet<Midi> | undefined
-  /** A lesson quiz's chosen keys: the keys become toggles. */
+  /** A lesson question's chosen keys: the keys become toggles. */
   selected?: ReadonlySet<Midi> | undefined
-  /** A quiz answer's extra keys. */
+  /** An answer's extra keys. */
   wrong?: ReadonlySet<Midi> | undefined
   /** What a key means besides its sound (Notes view: the note). */
   onKeyPress?: ((key: Midi) => void) | undefined

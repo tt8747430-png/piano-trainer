@@ -87,17 +87,17 @@ const majorAndMinorChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play D major.', ru: 'Сыграйте ре мажор.' },
           answer: { chord: 'D' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play D minor.', ru: 'Сыграйте ре минор.' },
           answer: { chord: 'Dm' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play E major: it takes a black key.',
             ru: 'Сыграйте ми мажор: в нём есть чёрная клавиша.',

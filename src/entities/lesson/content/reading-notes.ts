@@ -87,7 +87,7 @@ const readingNotes: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the note on the treble staff’s middle line.',
             ru: 'Сыграйте ноту на средней линейке скрипичного стана.',
@@ -95,7 +95,7 @@ const readingNotes: Lesson = {
           answer: { notes: ['B'] },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the note in the bass staff’s top space.',
             ru: 'Сыграйте ноту в верхнем промежутке басового стана.',

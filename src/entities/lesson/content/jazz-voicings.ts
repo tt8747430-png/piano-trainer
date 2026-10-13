@@ -329,12 +329,12 @@ const jazzVoicings: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Cm7♭5.', ru: 'Сыграйте Cm7♭5.' },
           answer: { chord: 'Cm7♭5' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play G7 with a raised 9th.', ru: 'Сыграйте G7 с повышенной ноной.' },
           answer: { chord: 'G7#9' },
         },

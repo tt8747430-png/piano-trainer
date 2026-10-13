@@ -56,7 +56,7 @@ const reharmonisingAMelody: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'G is in the melody. Play the minor chord of C major that holds it.',
             ru: 'В мелодии соль. Сыграйте минорный аккорд до мажора, в который она входит.',

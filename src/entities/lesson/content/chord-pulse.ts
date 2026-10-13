@@ -170,7 +170,7 @@ const chordPulse: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play Cadd2: C major with its 2nd.',
             ru: 'Сыграйте Cadd2: до мажор со второй ступенью.',
@@ -178,7 +178,7 @@ const chordPulse: Lesson = {
           answer: { chord: 'Cadd2' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Am9.', ru: 'Сыграйте Am9.' },
           answer: { chord: 'Am9' },
         },

@@ -152,17 +152,17 @@ const jazzChordSymbols: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Cm7.', ru: 'Сыграйте Cm7.' },
           answer: { chord: 'Cm7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play C6.', ru: 'Сыграйте C6.' },
           answer: { chord: 'C6' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Cm7♭5.', ru: 'Сыграйте Cm7♭5.' },
           answer: { chord: 'Cm7♭5' },
         },

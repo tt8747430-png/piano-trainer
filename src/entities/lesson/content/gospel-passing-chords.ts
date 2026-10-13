@@ -97,7 +97,7 @@ const gospelPassingChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the diminished 7th between F and G.',
             ru: 'Сыграйте уменьшённый септаккорд между F и G.',

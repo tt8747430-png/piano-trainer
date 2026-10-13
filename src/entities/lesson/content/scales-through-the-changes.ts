@@ -167,7 +167,7 @@ const scalesThroughTheChanges: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the note that makes F Dorian from C Dorian’s notes.',
             ru: 'Сыграйте звук, который превращает до дорийский в фа дорийский.',

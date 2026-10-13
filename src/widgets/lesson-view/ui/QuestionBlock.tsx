@@ -3,10 +3,10 @@ import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
 import { Button } from '@/shared/ui/primitives/button'
-import type { QuizState } from '../model/lesson-quiz'
+import type { QuestionState } from '../model/lesson-question'
 
-/** The quiz's first button at each stage: one button, so a keyboard user's focus stays on it. */
-interface QuizAction {
+/** The question's first button at each stage: one button, so a keyboard user's focus stays on it. */
+interface QuestionAction {
   readonly variant: 'soft' | 'default'
   readonly label: string
   readonly disabled: boolean
@@ -19,7 +19,7 @@ interface QuizAction {
  * button through every stage, so a keyboard user's focus stays on it; the verdict's region stays in
  * the page, empty, so its words are heard when they come.
  */
-export function QuizBlock({
+export function QuestionBlock({
   ask,
   stage,
   canCheck,
@@ -29,8 +29,8 @@ export function QuizBlock({
   onRetry,
 }: {
   ask: LocalText
-  /** This quiz's stage, or `closed` while another is open or none is. */
-  stage: NonNullable<QuizState>['stage'] | 'closed'
+  /** This question's stage, or `closed` while another is open or none is. */
+  stage: NonNullable<QuestionState>['stage'] | 'closed'
   canCheck: boolean
   onOpen: () => void
   onCheck: () => void
@@ -41,12 +41,12 @@ export function QuizBlock({
   const locale = useLocale()
   const id = useId()
   const first = useRef<HTMLButtonElement>(null)
-  const action: QuizAction =
+  const action: QuestionAction =
     stage === 'closed'
-      ? { variant: 'soft', label: t('quiz.answer'), disabled: false, onClick: onOpen }
+      ? { variant: 'soft', label: t('question.answer'), disabled: false, onClick: onOpen }
       : stage === 'answer'
-        ? { variant: 'soft', label: t('quiz.again'), disabled: false, onClick: onRetry }
-        : { variant: 'default', label: t('quiz.check'), disabled: !canCheck, onClick: onCheck }
+        ? { variant: 'soft', label: t('question.again'), disabled: false, onClick: onRetry }
+        : { variant: 'default', label: t('question.check'), disabled: !canCheck, onClick: onCheck }
   return (
     <div role="group" aria-labelledby={id} className="flex flex-col gap-3 card p-4">
       <p id={id} className="font-semibold">
@@ -56,15 +56,15 @@ export function QuizBlock({
         {stage === 'right' ? (
           <>
             <Check aria-hidden className="size-5 text-learned" />
-            {t('quiz.right')}
+            {t('question.right')}
           </>
         ) : stage === 'wrong' ? (
           <>
             <X aria-hidden className="size-5 text-destructive" />
-            {t('quiz.wrong')}
+            {t('question.wrong')}
           </>
         ) : stage === 'answer' ? (
-          t('quiz.shown')
+          t('question.shown')
         ) : null}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -85,7 +85,7 @@ export function QuizBlock({
               first.current?.focus()
             }}
           >
-            {t('quiz.show')}
+            {t('question.show')}
           </Button>
         ) : null}
       </div>

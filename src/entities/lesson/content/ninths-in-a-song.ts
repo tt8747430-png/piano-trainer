@@ -166,12 +166,12 @@ const ninthsInASong: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Dm9.', ru: 'Сыграйте Dm9.' },
           answer: { chord: 'Dm9' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play D7♭9.', ru: 'Сыграйте D7♭9.' },
           answer: { chord: 'D7♭9' },
         },

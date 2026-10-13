@@ -24,14 +24,15 @@ export interface Tile {
 }
 
 /**
- * The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup and
- * Practice's own lists show a page alike.
+ * The tile each page wears on every row that leads to it, so a lesson's link, the Player's Setup,
+ * Practice's own lists and Search show a page alike. A view a lesson opens has its own: a key's (the
+ * Key view of Scales), a chord's tensions.
  */
 export const PAGE_TILES = {
   lesson: { icon: BookOpenText, paint: 'sand' },
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
-  keys: { icon: CircleDot, paint: 'lilac' },
+  key: { icon: CircleDot, paint: 'lilac' },
   intervals: { icon: Ruler, paint: 'yellow' },
   tensions: { icon: Layers, paint: 'grass' },
   patterns: { icon: AudioWaveform, paint: 'yellow' },

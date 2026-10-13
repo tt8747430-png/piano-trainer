@@ -82,12 +82,12 @@ const chordFunctions: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the subdominant of G major.', ru: 'Сыграйте субдоминанту соль мажора.' },
           answer: { chord: 'C' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the minor chord of C major that shares F and A with F.',
             ru: 'Сыграйте минорный аккорд до мажора, у которого с F общие ноты фа и ля.',
@@ -97,7 +97,7 @@ const chordFunctions: Lesson = {
         {
           kind: 'link',
           title: { en: 'C major in Keys', ru: 'До мажор в тональностях' },
-          target: { opens: 'keys', key: C_MAJOR },
+          target: { opens: 'key', key: C_MAJOR },
         },
       ],
     },

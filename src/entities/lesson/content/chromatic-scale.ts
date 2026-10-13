@@ -87,7 +87,7 @@ const chromaticScale: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the chromatic scale from E up to A.',
             ru: 'Сыграйте хроматическую гамму от ми вверх до ля.',

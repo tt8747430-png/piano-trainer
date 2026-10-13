@@ -57,7 +57,7 @@ const wholeAndHalfSteps: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play E and the note a whole step above it.',
             ru: 'Сыграйте ми и ноту на тон выше.',
@@ -65,7 +65,7 @@ const wholeAndHalfSteps: Lesson = {
           answer: { notes: ['E', 'F#'], rising: true },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play B and the note a half step above it.',
             ru: 'Сыграйте си и ноту на полутон выше.',

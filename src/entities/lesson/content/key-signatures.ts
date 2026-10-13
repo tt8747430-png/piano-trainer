@@ -87,7 +87,7 @@ const keySignatures: Lesson = {
         {
           kind: 'link',
           title: { en: 'The circle of fifths in Keys', ru: 'Квинтовый круг в тональностях' },
-          target: { opens: 'keys', key: { tonic: note('C'), minor: false } },
+          target: { opens: 'key', key: { tonic: note('C'), minor: false } },
         },
       ],
     },
@@ -95,7 +95,7 @@ const keySignatures: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the sharps of A major’s signature.',
             ru: 'Сыграйте ключевые диезы ля мажора.',

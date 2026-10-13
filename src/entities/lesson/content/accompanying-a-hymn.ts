@@ -95,7 +95,7 @@ const accompanyingAHymn: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the chord a hymn in G major ends on.',
             ru: 'Сыграйте аккорд, которым заканчивается гимн в соль мажоре.',

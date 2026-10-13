@@ -4,43 +4,43 @@ import { lessonById } from '@/entities/lesson'
 import {
   answerSounds,
   isRight,
-  quizAnswer,
-  quizKeys,
-  quizAnswers,
-  quizReducer,
-  type QuizState,
-} from './lesson-quiz'
+  questionAnswer,
+  questionKeys,
+  questionAnswers,
+  questionReducer,
+  type QuestionState,
+} from './lesson-question'
 
 const keys = (...numbers: number[]) => numbers.map((n) => midi(n))
-const E_MINOR = quizAnswer({ chord: 'Em' })
+const E_MINOR = questionAnswer({ chord: 'Em' })
 
-describe('quizAnswer', () => {
+describe('questionAnswer', () => {
   it('places a chord answer as the Chords explorer does, each tone by role', () => {
     expect(E_MINOR.keys).toEqual([64, 67, 71])
     expect(E_MINOR.marks.get(midi(67))).toEqual({ tone: '3rd', label: '♭3' })
   })
 
   it('places notes from middle C up, each with its name', () => {
-    const third = quizAnswer({ notes: ['F', 'A'] })
+    const third = questionAnswer({ notes: ['F', 'A'] })
     expect(third.keys).toEqual([65, 69])
     expect(third.marks.get(midi(69))).toEqual({ tone: 'scale', label: 'A' })
   })
 
   it('places notes in their order, each the first of its name above the last', () => {
-    expect(quizAnswer({ notes: ['E', 'C'], rising: true }).keys).toEqual([64, 72])
-    expect(quizAnswer({ notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] }).keys).toEqual([
+    expect(questionAnswer({ notes: ['E', 'C'], rising: true }).keys).toEqual([64, 72])
+    expect(questionAnswer({ notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] }).keys).toEqual([
       62, 64, 66, 67, 69, 71, 73,
     ])
   })
 })
 
-describe('quizAnswers', () => {
-  it('holds each quiz of a lesson by its place, section.block, with its answer on the keys', () => {
+describe('questionAnswers', () => {
+  it('holds each question of a lesson by its place, section.block, with its answer on the keys', () => {
     const lesson = lessonById('bass-and-chords')
     if (!lesson) throw new Error('the lesson is missing')
-    const answers = quizAnswers(lesson)
+    const answers = questionAnswers(lesson)
     const places = lesson.sections.flatMap((section, s) =>
-      section.blocks.flatMap((block, b) => (block.kind === 'quiz' ? [`${s}.${b}`] : [])),
+      section.blocks.flatMap((block, b) => (block.kind === 'question' ? [`${s}.${b}`] : [])),
     )
     expect([...answers.keys()]).toEqual(places)
     expect(places.length).toBeGreaterThan(0)
@@ -70,7 +70,7 @@ describe('isRight', () => {
   })
 
   it('takes a rising answer only as its notes lie, from its first note in any octave', () => {
-    const fifth = quizAnswer({ notes: ['D', 'A'], rising: true })
+    const fifth = questionAnswer({ notes: ['D', 'A'], rising: true })
     expect(isRight(keys(50, 57), fifth)).toBe(true)
     expect(isRight(keys(62, 69), fifth)).toBe(true)
     expect(isRight(keys(57, 62), fifth)).toBe(false)
@@ -78,12 +78,12 @@ describe('isRight', () => {
   })
 })
 
-describe('quizReducer', () => {
-  const open = quizReducer(null, { type: 'open', id: '0.2' })
+describe('questionReducer', () => {
+  const open = questionReducer(null, { type: 'open', id: '0.2' })
 
-  it('opens one quiz at a time, with nothing chosen', () => {
+  it('opens one question at a time, with nothing chosen', () => {
     expect(open).toEqual({ id: '0.2', chosen: [], stage: 'choosing' })
-    const moved = quizReducer(
+    const moved = questionReducer(
       { id: '0.2', chosen: keys(64), stage: 'wrong' },
       { type: 'open', id: '1.0' },
     )
@@ -91,11 +91,11 @@ describe('quizReducer', () => {
   })
 
   it('toggles a key, and a change after a verdict clears it', () => {
-    const one = quizReducer(open, { type: 'toggle', key: midi(64) })
+    const one = questionReducer(open, { type: 'toggle', key: midi(64) })
     expect(one?.chosen).toEqual([64])
-    expect(quizReducer(one, { type: 'toggle', key: midi(64) })?.chosen).toEqual([])
-    const judged: QuizState = { id: '0.2', chosen: keys(64), stage: 'wrong' }
-    expect(quizReducer(judged, { type: 'toggle', key: midi(67) })).toEqual({
+    expect(questionReducer(one, { type: 'toggle', key: midi(64) })?.chosen).toEqual([])
+    const judged: QuestionState = { id: '0.2', chosen: keys(64), stage: 'wrong' }
+    expect(questionReducer(judged, { type: 'toggle', key: midi(67) })).toEqual({
       id: '0.2',
       chosen: [64, 67],
       stage: 'choosing',
@@ -103,34 +103,36 @@ describe('quizReducer', () => {
   })
 
   it('judges a check, shows the answer, and starts again', () => {
-    const chosen: QuizState = { id: '0.2', chosen: keys(64), stage: 'choosing' }
-    expect(quizReducer(chosen, { type: 'check', right: false })?.stage).toBe('wrong')
-    expect(quizReducer(chosen, { type: 'check', right: true })?.stage).toBe('right')
-    expect(quizReducer(chosen, { type: 'reveal' })?.stage).toBe('answer')
+    const chosen: QuestionState = { id: '0.2', chosen: keys(64), stage: 'choosing' }
+    expect(questionReducer(chosen, { type: 'check', right: false })?.stage).toBe('wrong')
+    expect(questionReducer(chosen, { type: 'check', right: true })?.stage).toBe('right')
+    expect(questionReducer(chosen, { type: 'reveal' })?.stage).toBe('answer')
     expect(
-      quizReducer({ id: '0.2', chosen: keys(64), stage: 'answer' }, { type: 'retry' }),
+      questionReducer({ id: '0.2', chosen: keys(64), stage: 'answer' }, { type: 'retry' }),
     ).toEqual({ id: '0.2', chosen: [], stage: 'choosing' })
   })
 
   it('closes, when an example plays', () => {
-    expect(quizReducer(open, { type: 'close' })).toBeNull()
+    expect(questionReducer(open, { type: 'close' })).toBeNull()
   })
 
-  it('ignores a key while the answer is shown, and anything when no quiz is open', () => {
-    const shown: QuizState = { id: '0.2', chosen: [], stage: 'answer' }
-    expect(quizReducer(shown, { type: 'toggle', key: midi(60) })).toBe(shown)
-    expect(quizReducer(null, { type: 'check', right: true })).toBeNull()
+  it('ignores a key while the answer is shown, and anything when no question is open', () => {
+    const shown: QuestionState = { id: '0.2', chosen: [], stage: 'answer' }
+    expect(questionReducer(shown, { type: 'toggle', key: midi(60) })).toBe(shown)
+    expect(questionReducer(null, { type: 'check', right: true })).toBeNull()
   })
 })
 
-describe('quizKeys', () => {
+describe('questionKeys', () => {
   it('shows the chosen keys while choosing, the verdict after a check, the answer when shown', () => {
-    expect(quizKeys({ id: 'q', chosen: keys(64), stage: 'choosing' }, E_MINOR).selected).toEqual(
-      new Set([64]),
-    )
-    const wrong = quizKeys({ id: 'q', chosen: keys(64, 68), stage: 'wrong' }, E_MINOR)
+    expect(
+      questionKeys({ id: 'q', chosen: keys(64), stage: 'choosing' }, E_MINOR).selected,
+    ).toEqual(new Set([64]))
+    const wrong = questionKeys({ id: 'q', chosen: keys(64, 68), stage: 'wrong' }, E_MINOR)
     expect(wrong.wrong).toEqual(new Set([68]))
     expect(wrong.outlined).toEqual(new Set([67, 71]))
-    expect(quizKeys({ id: 'q', chosen: [], stage: 'answer' }, E_MINOR).keys).toEqual([64, 67, 71])
+    expect(questionKeys({ id: 'q', chosen: [], stage: 'answer' }, E_MINOR).keys).toEqual([
+      64, 67, 71,
+    ])
   })
 })

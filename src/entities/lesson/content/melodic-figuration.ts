@@ -184,12 +184,12 @@ const melodicFiguration: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the 3rd and the 7th of Am7.', ru: 'Сыграйте терцию и септиму Am7.' },
           answer: { notes: ['C', 'G'] },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Gm9.', ru: 'Сыграйте Gm9.' },
           answer: { chord: 'Gm9' },
         },

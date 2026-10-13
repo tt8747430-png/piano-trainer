@@ -56,7 +56,7 @@ export interface LessonProgression {
 }
 
 /**
- * What a lesson's quiz asks to be played: a chord's notes, or notes, in any octave; notes `rising`
+ * What a lesson's question asks to be played: a chord's notes, or notes, in any octave; notes `rising`
  * are played in their order, each the first of its name above the last (an interval up, a run).
  */
 export type LessonAnswer =
@@ -71,7 +71,7 @@ export type LessonLink =
       readonly scale: ScaleKind
       readonly show?: 'scale' | 'chords'
     }
-  | { readonly opens: 'keys'; readonly key: Key }
+  | { readonly opens: 'key'; readonly key: Key }
   | { readonly opens: 'intervals'; readonly root?: SpelledNote }
   | { readonly opens: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
   | { readonly opens: 'lesson'; readonly lesson: string }
@@ -102,7 +102,7 @@ export type LessonLink =
 /**
  * One part of a lesson's section: prose, numbered steps, a note to read; or an example that plays in
  * place (chords, one chord on all twelve roots, a scale, an interval, a line of notes on a staff,
- * voicings as written, a pattern over a piece, a progression in a key); a quiz answered on the keys; a link into an explorer,
+ * voicings as written, a pattern over a piece, a progression in a key); a question answered on the keys; a link into an explorer,
  * a tool or the Player.
  */
 export type LessonBlock =
@@ -144,7 +144,7 @@ export type LessonBlock =
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
   | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }
   | ({ readonly kind: 'progression' } & LessonProgression)
-  | { readonly kind: 'quiz'; readonly ask: LocalText; readonly answer: LessonAnswer }
+  | { readonly kind: 'question'; readonly ask: LocalText; readonly answer: LessonAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }
 
 export interface LessonSection {

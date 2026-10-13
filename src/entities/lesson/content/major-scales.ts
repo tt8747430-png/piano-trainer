@@ -70,7 +70,7 @@ const majorScales: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the notes of D major.', ru: 'Сыграйте ноты ре мажора.' },
           answer: { notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] },
         },

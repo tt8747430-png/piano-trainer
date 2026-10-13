@@ -175,7 +175,7 @@ const twoFiveOne: Lesson = {
           },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play Dm9 from its 3rd.', ru: 'Сыграйте Dm9 от терции.' },
           answer: { notes: ['F', 'A', 'C', 'E'] },
         },
@@ -288,12 +288,12 @@ const twoFiveOne: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the ii7 of B♭ major.', ru: 'Сыграйте ii7 си-бемоль мажора.' },
           answer: { chord: 'Cm7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the V7 of F major.', ru: 'Сыграйте V7 фа мажора.' },
           answer: { chord: 'C7' },
         },

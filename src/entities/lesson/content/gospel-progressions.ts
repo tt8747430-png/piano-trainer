@@ -137,7 +137,7 @@ const gospelProgressions: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the iii7 of C major.', ru: 'Сыграйте iii7 до мажора.' },
           answer: { chord: 'Em7' },
         },

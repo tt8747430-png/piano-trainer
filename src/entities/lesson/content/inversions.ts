@@ -76,7 +76,7 @@ const inversions: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the notes of F major, in any inversion.',
             ru: 'Сыграйте ноты фа мажора в любом обращении.',

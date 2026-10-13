@@ -71,7 +71,7 @@ const brokenChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the notes A minor’s arpeggio climbs through.',
             ru: 'Сыграйте звуки, по которым поднимается арпеджио ля минора.',

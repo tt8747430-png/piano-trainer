@@ -227,7 +227,7 @@ const minorTwoFiveLevels: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the ii of C minor as a 7th chord.',
             ru: 'Сыграйте ii до минора септаккордом.',
@@ -235,7 +235,7 @@ const minorTwoFiveLevels: Lesson = {
           answer: { chord: 'Dm7♭5' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the shell of G7: its 3rd and 7th.',
             ru: 'Сыграйте основу G7: терцию и септиму.',

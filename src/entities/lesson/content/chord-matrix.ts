@@ -158,7 +158,7 @@ const chordMatrix: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the dominant that leads to Dm.',
             ru: 'Сыграйте доминанту, ведущую к Dm.',
@@ -166,7 +166,7 @@ const chordMatrix: Lesson = {
           answer: { chord: 'A7' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play C major’s chord borrowed from C minor on the 6th degree.',
             ru: 'Сыграйте аккорд VI ступени, взятый до мажором из до минора.',

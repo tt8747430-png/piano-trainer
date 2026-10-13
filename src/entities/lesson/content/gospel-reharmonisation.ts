@@ -98,7 +98,7 @@ const gospelReharmonisation: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play C major’s iv chord, borrowed from the minor.',
             ru: 'Сыграйте аккорд iv ступени до мажора, взятый из минора.',

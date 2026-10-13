@@ -103,7 +103,7 @@ const passingChords: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the dominant 7th that leads into F.',
             ru: 'Сыграйте доминантсептаккорд, который ведёт в F.',

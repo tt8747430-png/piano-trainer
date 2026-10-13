@@ -120,12 +120,12 @@ const WORKSHEET: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play E minor.', ru: 'Сыграйте ми минор.' },
           answer: { chord: 'Em' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play a major third above F.', ru: 'Большая терция от фа.' },
           answer: { notes: ['F', 'A'] },
         },
@@ -178,11 +178,11 @@ describe('LessonView’s worksheet', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([43, 47, 50, 53, 57])
   })
 
-  it('answers a quiz on the keys: chosen, checked, fixed and right', async () => {
+  it('answers a question on the keys: chosen, checked, fixed and right', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
-    const quiz = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const question = screen.getByRole('group', { name: 'Play E minor.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'E4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'G sharp 4' }))
@@ -190,30 +190,30 @@ describe('LessonView’s worksheet', () => {
       'aria-pressed',
       'true',
     )
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Not quite')
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('Not quite')
     await user.click(within(keyboard).getByRole('button', { name: 'G sharp 4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'G4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'B4' }))
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    expect(within(quiz).getByRole('status')).toHaveTextContent('Correct')
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('Correct')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([64, 67, 71])
   })
 
   it('plays a notes answer as a line, one note after another', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
-    const quiz = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(quiz).getByRole('button', { name: 'Answer on the keys' }))
+    const question = screen.getByRole('group', { name: 'Play a major third above F.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
-    await user.click(within(quiz).getByRole('button', { name: 'Check' }))
-    await user.click(within(quiz).getByRole('button', { name: 'Show the answer' }))
+    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
   })
 
-  it('shows a quiz’s answer, and opening another quiz closes the first', async () => {
+  it('shows a question’s answer, and opening another question closes the first', async () => {
     const user = userEvent.setup()
     await renderLesson(WORKSHEET)
     const first = screen.getByRole('group', { name: 'Play E minor.' })

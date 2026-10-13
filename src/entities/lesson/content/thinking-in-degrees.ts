@@ -104,7 +104,7 @@ const thinkingInDegrees: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the vi chord of G major.',
             ru: 'Сыграйте аккорд vi ступени соль мажора.',
@@ -112,7 +112,7 @@ const thinkingInDegrees: Lesson = {
           answer: { chord: 'Em' },
         },
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: { en: 'Play the IV chord of D major.', ru: 'Сыграйте аккорд IV ступени ре мажора.' },
           answer: { chord: 'G' },
         },
@@ -124,7 +124,7 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'link',
           title: { en: 'D minor in Keys', ru: 'Ре минор в тональностях' },
-          target: { opens: 'keys', key: D_MINOR },
+          target: { opens: 'key', key: D_MINOR },
         },
         {
           kind: 'link',

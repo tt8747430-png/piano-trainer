@@ -75,7 +75,7 @@ const minorScales: Lesson = {
         {
           kind: 'link',
           title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },
-          target: { opens: 'keys', key: { tonic: note('A'), minor: true } },
+          target: { opens: 'key', key: { tonic: note('A'), minor: true } },
         },
       ],
     },
@@ -83,7 +83,7 @@ const minorScales: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
-          kind: 'quiz',
+          kind: 'question',
           ask: {
             en: 'Play the notes of E natural minor.',
             ru: 'Сыграйте ноты натурального ми минора.',

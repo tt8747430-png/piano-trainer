@@ -38,13 +38,13 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
 /**
  * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
  * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row), or a link
- * into an explorer, a tool or the Player. A quiz is the view's, which keeps its state.
+ * into an explorer, a tool or the Player. A question is the view's, which keeps its state.
  */
 export function LessonBlock({
   block,
   onShow,
 }: {
-  block: Exclude<Block, { kind: 'quiz' }>
+  block: Exclude<Block, { kind: 'question' }>
   onShow: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('learn')
