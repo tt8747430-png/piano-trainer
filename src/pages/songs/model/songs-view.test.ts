@@ -4,7 +4,7 @@ import { songsView } from './songs-view'
 
 const ids = (groups: ReturnType<typeof songsView>) =>
   groups.flatMap((g) => g.entries.map((e) => e.id))
-const ALL = { q: '', collection: 'all' } as const
+const ALL = { q: '', collection: 'all', withChords: false } as const
 
 describe('songsView', () => {
   it('shows every entry, by collection, when nothing filters', () => {
@@ -26,5 +26,13 @@ describe('songsView', () => {
 
   it('drops collections left empty', () => {
     expect(songsView(COLLECTIONS, { ...ALL, q: 'zzzz' })).toEqual([])
+  })
+
+  it('keeps only the songs with chords when asked, none whose chart is to come', () => {
+    const every = songsView(COLLECTIONS, ALL).flatMap((g) => g.entries)
+    const playable = songsView(COLLECTIONS, { ...ALL, withChords: true }).flatMap((g) => g.entries)
+    expect(every.some((entry) => entry.kind === 'listing')).toBe(true)
+    expect(playable.some((entry) => entry.kind === 'listing')).toBe(false)
+    expect(playable).toHaveLength(every.filter((entry) => entry.kind !== 'listing').length)
   })
 })

@@ -9,7 +9,7 @@ const searchable = (entry: Entry): string[] => [
   ...(entry.credits ?? []).flatMap((credit) => (credit.role === 'unknown' ? [] : [credit.names])),
 ]
 
-/** The Songs list: shelves in order, their entries filtered by search and shelf. */
+/** The Songs list: shelves in order, their entries filtered by search and shelf, and to those with chords. */
 export function songsView<
   Shelf extends { readonly id: string; readonly entries: readonly Entry[] },
 >(shelves: readonly Shelf[], filter: SongsFilter): { shelf: Shelf; entries: Entry[] }[] {
@@ -17,7 +17,11 @@ export function songsView<
     .filter((shelf) => filter.collection === 'all' || shelf.id === filter.collection)
     .map((shelf) => ({
       shelf,
-      entries: shelf.entries.filter((entry) => matchesQuery(searchable(entry), filter.q)),
+      entries: shelf.entries.filter(
+        (entry) =>
+          (!filter.withChords || entry.kind !== 'listing') &&
+          matchesQuery(searchable(entry), filter.q),
+      ),
     }))
     .filter((group) => group.entries.length > 0)
 }

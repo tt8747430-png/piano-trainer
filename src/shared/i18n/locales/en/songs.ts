@@ -7,6 +7,7 @@ export const songs = {
   noChart: 'No chart yet',
   learned: 'Learned',
   empty: 'No songs match.',
+  withChords: 'With chords',
   clearFilters: 'Clear filters',
   yours: 'Your songs',
   newSong: 'New song',

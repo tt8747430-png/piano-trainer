@@ -144,4 +144,14 @@ describe('Songs: your own', () => {
     const row = await screen.findByRole('link', { name: /Как лань желает/ })
     expect(row).not.toHaveTextContent('No chart yet')
   })
+
+  it('shows only the songs with chords while With chords is pressed, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs')
+    await screen.findByRole('tablist', { name: 'Collection' })
+    expect(screen.getAllByText('No chart yet').length).toBeGreaterThan(0)
+    await user.click(screen.getByRole('button', { name: 'With chords' }))
+    expect(router.state.location.search).toMatchObject({ withChords: true })
+    expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
+  })
 })

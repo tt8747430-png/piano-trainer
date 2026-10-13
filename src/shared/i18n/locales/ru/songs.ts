@@ -18,6 +18,7 @@ export const songs: LocaleResources['songs'] = {
     make: 'Создать',
     makeAndRecord: 'Записать',
   },
+  withChords: 'С аккордами',
   clearFilters: 'Сбросить фильтры',
   shared: {
     title: 'Песня по ссылке',
