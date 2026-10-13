@@ -89,4 +89,16 @@ describe('Path', () => {
     await user.click(within(beginner).getByRole('button', { name: /Level 1/ }))
     expect(within(beginner).queryByRole('list')).not.toBeInTheDocument()
   })
+
+  it('leaves the learned steps out with Hide learned, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/')
+    const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
+    expect(screen.queryByRole('button', { name: 'Hide learned' })).not.toBeInTheDocument()
+    await user.click(within(level).getByRole('button', { name: 'Triads: learned' }))
+    await user.click(screen.getByRole('button', { name: 'Hide learned' }))
+    expect(router.state.location.search).toMatchObject({ hideLearned: true })
+    expect(within(level).queryByRole('link', { name: /^Triads/ })).not.toBeInTheDocument()
+    expect(within(level).getByText(/^1 of /)).toBeInTheDocument()
+  })
 })

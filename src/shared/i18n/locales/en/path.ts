@@ -7,6 +7,7 @@ export const path = {
   toCheck: 'Chords to check: {{count}}',
   known: '{{known}} of {{total}} known',
   progress: '{{learned}} of {{total}}',
+  hideLearned: 'Hide learned',
   recent: 'Recently practised',
   // The days practised: opening a piece in the Player, or answering a quiz round.
   days: {

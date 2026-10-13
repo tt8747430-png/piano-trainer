@@ -72,6 +72,7 @@ import {
   trainerSearch,
   validateCheckSearch,
 } from './routes/practice-search'
+import { pathSearch } from './routes/path-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { ShellLayout } from './ShellLayout'
@@ -129,6 +130,7 @@ const shellRoute = createRoute({
 const pathRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
+  ...pathSearch,
   component: lazyRouteComponent(homeScreens, 'PathPage'),
 })
 const settingsRoute = createRoute({

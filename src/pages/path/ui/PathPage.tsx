@@ -1,14 +1,17 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useSearch } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useViewChange } from '@/shared/lib'
 import { RoundLink, ScreenHeader } from '@/shared/ui'
 import { ContinueCard } from '@/widgets/continue-card'
-import { PathLevels } from '@/widgets/path-levels'
+import { PathLevels, type PathView } from '@/widgets/path-levels'
 import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
 
 export function PathPage() {
   const { t } = useTranslation(['path', 'common'])
+  const view = useSearch({ from: '/shell/' })
+  const set = useViewChange<PathView>()
   return (
     <div className="flex flex-col">
       {/* The screen's bar spans the page, so it sticks while the levels scroll under it. */}
@@ -29,7 +32,7 @@ export function PathPage() {
         <ContinueCard />
         <PracticeDays />
         <RecentPieces />
-        <PathLevels />
+        <PathLevels view={view} onChange={set} />
       </div>
     </div>
   )
