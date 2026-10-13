@@ -33,10 +33,16 @@ describe('changedView', () => {
     )
   })
 
-  it('keeps a line the library holds in one mode only, and a line a learner typed', () => {
+  it('shows a pop loop’s minor line, the same loop from its relative minor', () => {
     expect(changedView(view(major('C'), 'I-V-vi-IV', 'triads'), { key: minor('C') }).p).toBe(
-      'I-V-vi-IV',
+      'i-VI-III-VII',
     )
+  })
+
+  it('keeps a line the library holds in one mode only, and a line a learner typed', () => {
+    expect(
+      changedView(view(major('C'), 'I-V-vi-iii-IV-I-IV-V', 'triads'), { key: minor('C') }).p,
+    ).toBe('I-V-vi-iii-IV-I-IV-V')
     expect(changedView(view(major('C'), 'I-I-IV', 'triads'), { key: minor('C') }).p).toBe('I-I-IV')
   })
 
@@ -54,23 +60,32 @@ describe('changedView', () => {
 })
 
 describe('chosenView', () => {
-  it('takes a progression in the key of the same tonic and its mode, at its own chord size', () => {
-    expect(chosenView(view(major('A'), 'I-V-vi-IV', 'triads'), library('minor-two-five'))).toEqual(
-      view(minor('A'), 'ii°-V-i', 'ninths'),
+  it('takes a progression in the key’s mode, at its own chord size', () => {
+    expect(chosenView(view(minor('A'), 'i-iv-V-i', 'triads'), library('jazz-cadence'))).toEqual(
+      view(minor('A'), 'ii°-V-i', 'sevenths'),
+    )
+    expect(chosenView(view(major('A'), 'I-IV-V-I', 'triads'), library('jazz-cadence'))).toEqual(
+      view(major('A'), 'ii-V-I', 'sevenths'),
+    )
+  })
+
+  it('takes a progression of one mode in the key of the same tonic and that mode', () => {
+    expect(chosenView(view(major('A'), 'I-V-vi-IV', 'triads'), library('andalusian'))).toEqual(
+      view(minor('A'), 'i-VII-VI-V', 'triads'),
     )
   })
 
   it('keeps the chord size shown where the progression has none of its own', () => {
     expect(chosenView(view(minor('A'), 'i-iv-V-i', 'sevenths'), library('axis'))).toEqual(
-      view(major('A'), 'I-V-vi-IV', 'sevenths'),
+      view(minor('A'), 'i-VI-III-VII', 'sevenths'),
     )
   })
 
   it('keeps the tonic as it is written, respelled only where no signature writes the key', () => {
-    expect(chosenView(view(major('C', 1), 'I-V-vi-IV', 'triads'), library('basic-rock')).key).toBe(
+    expect(chosenView(view(major('C', 1), 'I-V-vi-IV', 'triads'), library('wild-thing')).key).toBe(
       major('C', 1),
     )
-    expect(chosenView(view(major('D', -1), 'I-V-vi-IV', 'triads'), library('minor-pop')).key).toBe(
+    expect(chosenView(view(major('D', -1), 'I-V-vi-IV', 'triads'), library('andalusian')).key).toBe(
       minor('C', 1),
     )
   })

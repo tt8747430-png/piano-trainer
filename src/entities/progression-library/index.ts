@@ -5,6 +5,6 @@ export {
   libraryLine,
   libraryParam,
   libraryProgression,
-  otherModeVersion,
   progressionById,
+  progressionMode,
 } from './model/selectors'

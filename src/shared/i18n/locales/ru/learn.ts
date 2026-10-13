@@ -239,7 +239,6 @@ export const learn: LocaleResources['learn'] = {
       classical: 'Классика',
       soul: 'R&B и соул',
       gospel: 'Госпел',
-      minor: 'Минорные тональности',
       theory: 'Теория',
     },
   },

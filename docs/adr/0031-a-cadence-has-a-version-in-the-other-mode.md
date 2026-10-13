@@ -1,6 +1,6 @@
 # ADR 0031 — A cadence has a version in the other mode, and the key's mode takes it
 
-- **Status:** accepted · **Date:** 2026-10-08 · **Amends:** ADR 0020 (the tool's key), ADR 0030 (the Progressions
+- **Status:** superseded by ADR 0041 (one progression, a line in each mode) · **Date:** 2026-10-08 · **Amends:** ADR 0020 (the tool's key), ADR 0030 (the Progressions
   page)
 
 ## Context

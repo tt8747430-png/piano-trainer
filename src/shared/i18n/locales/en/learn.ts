@@ -243,7 +243,6 @@ export const learn = {
       classical: 'Classical',
       soul: 'R&B / Soul',
       gospel: 'Gospel',
-      minor: 'Minor keys',
       theory: 'Theory',
     },
   },

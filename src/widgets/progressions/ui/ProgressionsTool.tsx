@@ -63,6 +63,7 @@ export function ProgressionsTool({
           <ProgressionChoice
             named={named}
             numerals={numerals}
+            minor={key.minor}
             onChoose={(progression) => onChange(chosenView(view, progression))}
           />
           <ProgressionField progression={view.p} musicKey={key} onChange={(p) => change({ p })} />

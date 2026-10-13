@@ -300,17 +300,21 @@ chord symbol writes after its root (`V7`, `I6`, `Vsus4`, `ii9`, `iiø7`), lower 
 
 ## The progressions library
 
-`src/entities/progression-library/content/library.ts` is the one list of the progressions that are practised: a style
-(`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `gospel`, `minor`, `theory`), an id, the numerals as
-`parseNumerals` reads them (`I V vi IV`, `ii° V i`, `♭VI ♭VII I`) and the name in both languages; and, where it
-has them, a `note` (what it teaches, in a line, by the [copy rule](#text)), the `pattern` its Player opens with and the
-chord `size` it opens at. A progression of the `minor` style is read in a minor key. Write a chord where the style
-plays it whatever the chord size (the blues' `I7`, a resolution's `V7♭9`, a tonic's `I6`); leave a triad plain where
-the chord should grow with the size (the minor ii–V–i is `ii° V i`: Dm7♭5 G7 Cm7 at 7ths, Dm9♭5 G7♭9 Cm9 at 9ths). **A line of numerals is written once in its mode**: the page names the progression it shows by its
-line, so a second name for the same line is left out, and so is a loop with a chord held (`I IV V V`). **A name is the
-one musicians give those chords** (Autumn Leaves is `ii V I IV`; Louie Louie's v is minor, so `I IV V IV` is Wild Thing). **A cadence's version in the minor key of the same tonic** is
-a pair in `MODE_VERSIONS`, the major one first (the jazz cadence and the minor ii–V–i): on the page, a key turned minor
-or major takes one to the other (ADR 0031). An id is its entry's alone: `tsc` holds every id a table names.
+`src/entities/progression-library/content/library.ts` is the one list of the progressions that are practised, **one
+entry for each idea** (ADR 0041): a style (`pop`, `rock`, `jazz`, `blues`, `classical`, `soul`, `gospel`, `theory`), an
+id, its lines as `parseNumerals` reads them, `major` (`I V vi IV`, `♭VI ♭VII I`) and `minor` (`ii° V i`, counted from
+natural minor), one at least, and the name in both languages; and, where it has them, a `note` (what it teaches, in a
+line, by the [copy rule](#text)), the `pattern` its Player opens with and the chord `size` it opens at. **A minor version
+is the entry's `minor` line, never another entry**: a cadence's is its minor-key version (`ii° V i`, `i iv V i`), a pop
+loop's the same loop heard from its relative minor (the Axis's `i VI III VII`); the key's Major · Minor shows one or the
+other. Write a chord where the style plays it whatever the chord size (the blues' `I7`, a resolution's `V7♭9`, a tonic's
+`I6`); leave a triad plain where the chord should grow with the size (the minor ii–V–i is `ii° V i`: Dm7♭5 G7 Cm7 at 7ths,
+Dm9♭5 G7♭9 Cm9 at 9ths). **No line is another as a loop** (in 7th chords, in the same key or the relative one): not
+from another chord (`vi IV I V` is the Axis), not with a chord held (`I IV V` is the complete cadence), not at another
+chord size (`V I` at 9ths is the authentic cadence); a test holds it. **What a way of playing writes is not an entry**:
+a walk through the keys, a lead-in to each chord (secondary dominants, a ii–V–I to every chord of the key), a chord size.
+**A name is the one musicians give those chords** (Louie Louie's v is minor, so `I IV V IV` is Wild Thing). An id is its
+entry's alone: `tsc` holds every id a table names.
 
 ## What the tests check
 
@@ -325,9 +329,9 @@ or major takes one to the other (ADR 0031). An id is its entry's alone: `tsc` ho
   listing, every chord family and scale kind.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
 - **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
-  every line read and written once in its mode and no loop again with a chord held, every style used, minor ones in
-  their style, every note in both languages, each pair of versions in opposite modes, and the chords a name plays
-  (Autumn Leaves, Wild Thing, the gospel 7–3–6, the cadences, the Andalusian cadence).
+  every line read and named in its mode, no two lines one loop (from another chord, a chord held or the relative
+  minor), every style used, every note in both languages, the common progressions in both modes, and the chords a name
+  plays (Wild Thing, the gospel 7–3–6, round the circle in minor, the cadences, the Andalusian cadence).
 - **Lessons' patterns** (`src/widgets/lesson-view/model/pattern-example.test.ts`): every pattern block plays over its
   piece from its first beat.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,

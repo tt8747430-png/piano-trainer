@@ -11,23 +11,26 @@ export const PROGRESSION_STYLES = [
   'classical',
   'soul',
   'gospel',
-  'minor',
   'theory',
 ] as const
 export type ProgressionStyle = (typeof PROGRESSION_STYLES)[number]
 
 /**
- * A named progression in Roman numerals, read in any key: the one model of a progression that is
- * practised. A line of numerals names one progression in its mode, so the page knows which is shown.
+ * A progression's lines of numerals as `parseNumerals` reads them, one for each mode it has (ADR 0041):
+ * a major key's (`I V vi IV`), a minor key's counted from natural minor (`i VI III VII`), or both.
  */
-export interface LibraryProgression {
+export type ModeLines =
+  | { readonly major: string; readonly minor?: string }
+  | { readonly major?: undefined; readonly minor: string }
+
+/**
+ * A named progression in Roman numerals, read in any key: the one model of a progression that is
+ * practised, one idea with its line in each mode it has, so the key's Major · Minor shows the other.
+ */
+export type LibraryProgression = ModeLines & {
   readonly id: string
   readonly style: ProgressionStyle
   readonly name: LocalText
-  /** As `parseNumerals` reads them: `I V vi IV`. */
-  readonly numerals: string
-  /** Written in a minor key, counted from natural minor. */
-  readonly minor: boolean
   /** What it teaches, in a line. */
   readonly note?: LocalText
   /** The pattern its Player opens with, where it has one of its own. */

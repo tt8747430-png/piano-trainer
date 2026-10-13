@@ -1,7 +1,7 @@
 import {
   libraryParam,
   libraryProgression,
-  otherModeVersion,
+  progressionMode,
   type LibraryProgression,
 } from '@/entities/progression-library'
 import type { PatternId } from '@/entities/pattern'
@@ -31,9 +31,9 @@ export const viewProgression = (view: ProgressionsView): LibraryProgression | un
   libraryProgression(view.p, keyFromParam(view.key).minor)
 
 /**
- * A view changed. A key turned minor or major takes the library's progression shown to its version
- * in that mode, where it has one (the jazz cadence to the minor ii–V–i, and back), at the chord size
- * shown; any other line stays as it is written.
+ * A view changed. A key turned minor or major shows the library's progression in that mode's line,
+ * where it has one (the jazz cadence's ii°–V–i, and back), at the chord size shown; any other line
+ * stays as it is written (ADR 0041).
  */
 export function changedView(
   view: ProgressionsView,
@@ -41,25 +41,29 @@ export function changedView(
 ): ProgressionsView {
   const next = { ...view, ...change }
   if (change.p !== undefined) return next
-  if (keyFromParam(next.key).minor === keyFromParam(view.key).minor) return next
+  const { minor } = keyFromParam(next.key)
+  if (minor === keyFromParam(view.key).minor) return next
   const shown = viewProgression(view)
-  const version = shown && otherModeVersion(shown)
-  return version ? { ...next, p: libraryParam(version) } : next
+  return shown && progressionMode(shown, minor) === minor
+    ? { ...next, p: libraryParam(shown, minor) }
+    : next
 }
 
 /**
- * A view with a library progression chosen: its line in the key of the same tonic and its mode
- * (respelled only where no signature writes that key), at its chord size where it has one.
+ * A view with a library progression chosen: its line in the key's mode where it has one, else in the
+ * key of the same tonic and the mode it has (respelled only where no signature writes that key), at
+ * its chord size where it has one.
  */
 export function chosenView(
   view: ProgressionsView,
   progression: LibraryProgression,
 ): ProgressionsView {
-  const { tonic } = keyFromParam(view.key)
+  const { tonic, minor } = keyFromParam(view.key)
+  const mode = progressionMode(progression, minor)
   return {
     ...view,
-    key: keyParam(writtenKey({ tonic, minor: progression.minor })),
-    p: libraryParam(progression),
+    key: mode === minor ? view.key : keyParam(writtenKey({ tonic, minor: mode })),
+    p: libraryParam(progression, mode),
     size: progression.size ?? view.size,
   }
 }

@@ -15,16 +15,20 @@ const TYPED = 'typed'
 /**
  * The progression shown, chosen from the library by style behind one pop-up button under its name: it
  * names the library's progression the line is, or the line itself when the learner typed their own.
+ * Each progression reads as its line in the key's mode, where it has one.
  */
 export function ProgressionChoice({
   named,
   numerals,
+  minor,
   onChoose,
 }: {
   /** The library's progression shown; none for a line the learner typed. */
   named: LibraryProgression | undefined
   /** The line shown. */
   numerals: readonly Numeral[]
+  /** Whether the key shown is minor. */
+  minor: boolean
   onChoose: (progression: LibraryProgression) => void
 }) {
   const { t } = useTranslation('learn')
@@ -34,7 +38,7 @@ export function ProgressionChoice({
     options: progressions.map((each) => ({
       value: each.id,
       label: localText(each.name, locale),
-      detail: libraryLine(each),
+      detail: libraryLine(each, minor),
     })),
   }))
   return (

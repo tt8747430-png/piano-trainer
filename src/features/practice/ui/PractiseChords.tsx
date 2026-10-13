@@ -39,8 +39,9 @@ export function PractiseChords({
   const locale = useLocale()
   if (!scaleHasChords(kind)) return null
   const chordSize = sizeOfNotes(notes)
-  // A key's scale has its key's common progressions; a mode has none.
+  // A key's scale has its key's common progressions, in its mode; a mode has none.
   const mode = keyMode(kind)
+  const minor = mode === 'minor'
   return (
     <>
       <RowGroup title={t('inPlayer')}>
@@ -65,18 +66,18 @@ export function PractiseChords({
       </RowGroup>
       {mode ? (
         <RowGroup title={t('keyProgressions')}>
-          {COMMON_PROGRESSIONS[mode].map((progression) => (
+          {COMMON_PROGRESSIONS.map((progression) => (
             <li key={progression.id}>
               <RowLink
                 title={localText(progression.name, locale)}
-                detail={libraryLine(progression)}
+                detail={libraryLine(progression, minor)}
                 {...PAGE_TILES.progressions}
                 render={
                   <Link
                     to="/practice/progressions"
                     search={{
-                      key: keyParam(circleKey(pitchClassOf(root), progression.minor)),
-                      p: libraryParam(progression),
+                      key: keyParam(circleKey(pitchClassOf(root), minor)),
+                      p: libraryParam(progression, minor),
                       size: chordSize === 'triads' ? (progression.size ?? chordSize) : chordSize,
                     }}
                   />

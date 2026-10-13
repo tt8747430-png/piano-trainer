@@ -145,22 +145,35 @@ describe('Practice → Progressions', () => {
     expect(links.filter((href) => href.startsWith('/practice/progressions?'))).toEqual([])
   })
 
-  it('takes a minor progression in the minor key of the same tonic, at its own chord size', async () => {
+  it('takes a progression in the key’s mode, at its own chord size: in A minor the minor ii–V–i', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/progressions?key=A')
+    const { router } = await renderApp('/practice/progressions?key=Am')
     await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    await user.click(await screen.findByRole('option', { name: /^Minor ii–V–i/ }))
+    const jazz = within(await screen.findByRole('group', { name: 'Jazz' }))
+    expect(jazz.getByRole('option', { name: /^Jazz cadence/ })).toHaveTextContent('ii°–V–i')
+    await user.click(jazz.getByRole('option', { name: /^Jazz cadence/ }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         key: 'Am',
         p: 'ii°-V-i',
-        size: 'ninths',
+        size: 'sevenths',
       }),
     )
-    expect(row()).toEqual(['Bm9♭5ii°', 'E7♭9V', 'Am9i'])
+    expect(row()).toEqual(['Bm7♭5ii°', 'E7V', 'Am7i'])
   })
 
-  it('takes the jazz cadence to its minor version when the key turns minor, and back', async () => {
+  it('takes a progression of one mode in the key of the same tonic and that mode', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?key=A')
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    await user.click(await screen.findByRole('option', { name: /^Andalusian cadence/ }))
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({ key: 'Am', p: 'i-VII-VI-V' }),
+    )
+    expect(row()).toEqual(['Ami', 'GVII', 'FVI', 'EV'])
+  })
+
+  it('shows the jazz cadence’s minor line when the key turns minor, and back', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
     const mode = within(await screen.findByRole('radiogroup', { name: 'Mode' }))
@@ -172,7 +185,7 @@ describe('Practice → Progressions', () => {
         size: 'sevenths',
       }),
     )
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Minor ii–V–i')
+    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
     expect(row()).toEqual(['Dm7♭5ii°', 'G7V', 'Cm7i'])
     await user.click(mode.getByRole('radio', { name: 'Major' }))
     await waitFor(() =>
@@ -180,6 +193,15 @@ describe('Practice → Progressions', () => {
     )
     expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
     expect(row()).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
+  })
+
+  it('lists each progression once, never again for the minor key', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions')
+    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
+    const names = (await screen.findAllByRole('option')).map((option) => option.textContent)
+    expect(names.filter((name) => name?.startsWith('Jazz cadence'))).toHaveLength(1)
+    expect(screen.queryByRole('group', { name: 'Minor keys' })).not.toBeInTheDocument()
   })
 
   it('takes a library progression in place of a typed line, and closes its pop-up', async () => {
