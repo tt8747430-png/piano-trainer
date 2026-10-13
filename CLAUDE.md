@@ -94,7 +94,7 @@ it. `@` → `src`.
   Scales and keys (`ScaleTabs`, its views; its Key view's tool, `KeyTools`, and songs in the key, `PiecesInKey`);
   `pages/chord-finder`, `pages/passing-chords` and `pages/reharmonise` three tools' pages; `pages/accompaniment`
   Accompaniment (`AccompanimentTabs` over its URL's `AccompanimentView`, a part's `PatternShelves`, a method book's
-  `BookPieces`), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
+  `BookPieces`, and its lessons on Learn, `BookLessons`; Learn's course ends with a row back to it), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
   `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028), `tuneOf` (the song's tune under a take); its parts share one context and read the store narrowly;
@@ -114,14 +114,14 @@ it. `@` → `src`.
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
   facts and borrowed chords; its pure marks, plays, `scaleRunOf`, `keyOfScale` and `showsOf` in `model/`), `interval-explorer` (every interval over a root
-  as Clefs' cards), `chord-finder` (keys tapped or held named as a chord), `reharmonise` (the chords that hold a melody note),
+  as Clefs' cards), `chord-finder` (keys tapped or held named as a chord, and the keys that hold it with its numeral in each, `ChordKeys` over `keysHolding`), `reharmonise` (the chords that hold a melody note),
   `passing-chords` (the ways between two chords, each row voice-led), `score-sheet` (the score editor's sheet: a line of
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, `LISTED_GROUPS`, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progression-explorer` (`ProgressionExplorer`, a progression in any key: its row of chords, `ProgressionChoice`
   (the library behind one pop-up), the typed field and the lead-in into each chord (`playedNumerals`); `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys, each saying the chords it plays first (`walkPreview`); `ProgressionTools` (Passing chords between its first two chords, `passingBetween`, and Reharmonise, in its key); its pure `changedView` (a key turned minor or major shows a
-  progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open quiz in
-  `lesson-quiz.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
+  progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open question in
+  `lesson-question.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS` in `model/`; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
@@ -166,7 +166,7 @@ it. `@` → `src`.
   favourites, hidden, own; `PATTERN_GROUP_BOOK`; `partShelves` (a part of `ACCOMPANIMENT_PARTS`, named by `usePartName`) /
   `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
-  worksheets: text, steps, notes, chords, voicings as written (each hand's keys, ADR 0040), grids, scales, intervals and lines of notes that play, quizzes answered on
+  worksheets: text, steps, notes, chords, voicings as written (each hand's keys, ADR 0040), grids, scales, intervals and lines of notes that play, questions answered on
   the keys, patterns over their pieces and progressions in any key, links by what each opens (`opens`: an explorer, a tool or
   the Player; a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: the subjects (`SUBJECT_MODULES`: Fundamentals, Accompaniment, Gospel, one track), then the courses (`COURSE_MODULES`: each method book's, Called to Play's, Боброва's and Gorshkov's, each a track of its own; `LEARN_TABS`, `tabOf`, `lessonsIn`, `nextLesson`/`previousLesson` along a track, `useModuleName`),
   `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033), `progression-library` (the one model of a progression that is practised, ADR 0041: one entry for each idea,
@@ -193,7 +193,7 @@ it. `@` → `src`.
   a hand leaves out, `leftOut`; `circle.ts`, the circle of fifths;
   `placeChord` over any tones (from five notes in two hands, the root and a 13th's 5th in the left, the rest close in the right; `chordInversions`, ADR 0035), `placeScale`, `placeScaleChords` and `walkChords`; `interval-facts.ts`,
   the Intervals explorer's intervals and `consonanceOf`; `tensions.ts`, the one source of available tensions; `chord-finder.ts`, `reharmonise.ts`,
-  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032; applied, `V/ii`, read in that degree's key, ADR 0040), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home); `lead-in.ts` (`withLeadIns`, each chord after its own V or ii–V, ADR 0041);
+  `passing-chords.ts`, `hand-position.ts` (`handPosition`: a hand's inversion, or the tone a rootless hand starts from), `voice-lead.ts` (a row's hands, from a `RowPosition` where one is chosen: a 9th's root left to the bass, a slash chord over the bass it writes, the bass under the hand) and `numerals.ts` (a degree with any chord of the table, read the sheets' way, ADR 0032; applied, `V/ii`, read in that degree's key, ADR 0040), `keys-holding.ts` (`keysHolding`, the keys that hold a chord, each with its numeral), the tools' kernel; `key-walk.ts` (`walkKeys`, a progression's keys and home); `lead-in.ts` (`withLeadIns`, each chord after its own V or ii–V, ADR 0041);
   `INVERSIONS`; `spellBelow`, `plainRoot`, `tonesInKey` (a key's spelled notes), `kindComingDown`, `circleKey`, `beatsBefore` (a pickup)), `exercise` (the exercises' rules, each a choice → a Performance laid out by
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`

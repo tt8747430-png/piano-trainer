@@ -276,12 +276,12 @@ Spec: `docs/superpowers/specs/2026-10-13-things-tools-training-design.md`. Decis
 | 1. Rows promise what the pages do not show       | Fixed: a row's line is built from its page's own tabs or groups (`usePageAbout`)        |
 | 2. Tabs mean four things                         | Fixed: tabs are the views of one thing; a tool is a page of its own                     |
 | 3. A lesson's row repeats its module             | Fixed: the category is gone                                                             |
-| 4. A method book has three homes                 | Open: a page for a book whole is its own spec                                           |
+| 4. A method book has three homes                 | Fixed: its course on Learn and its part of Accompaniment lead to each other             |
 | 5. Only Songs can be searched                    | Fixed: Search (`/search`), one projection of the registries                             |
 | 6. "Place" means three things                    | Fixed: the nav's alone; Practice has pages, a lesson link names what it `opens`         |
 | 7. "Subject" means two things                    | Fixed: Learn's alone; `widgets/subject-tabs` is gone                                    |
 | 8. "Reference" and "tool" used though avoided    | Fixed: Tool is a term; Progressions is an explorer; the parts are `ACCOMPANIMENT_PARTS` |
-| 9. "Quiz" means four things                      | Open: the place, a lesson's block, the evidence and the namespace still share the word  |
+| 9. "Quiz" means four things                      | Fixed: a lesson's block is a question; the namespace and the evidence are the Quiz's    |
 | 10. Practice's pages read `learn`                | Fixed: they read `practice`; shared words are `music`'s                                 |
 | 11. One name, two keys                           | Fixed: one key each                                                                     |
 | 12. Three naming schemes for widgets             | Fixed: `*-explorer` for the four things; the tools by their names                       |
@@ -289,8 +289,14 @@ Spec: `docs/superpowers/specs/2026-10-13-things-tools-training-design.md`. Decis
 | 14. Routes nest for some children only           | Fixed: a trainer, a pattern and a study sit under their page; `/check` stays the Path's |
 | 15. `catalogue` beside `catalog`                 | Fixed: `catalog`                                                                        |
 | 16. Tiles nothing wears, tiles outside the table | Fixed: every row Practice lists has its tile in `PAGE_TILES`                            |
-| 17. Links to `keys` and `tensions`               | Kept: each names a view a lesson opens (a key's, a chord's tensions), not a page        |
+| 17. Links to `keys` and `tensions`               | Kept as views a lesson opens: `opens: 'key'` (a key's), `tensions` (a chord's)          |
 | 18. "seven places" in the router                 | Fixed                                                                                   |
 | 19. The docs' list of Accompaniment's tabs       | Fixed                                                                                   |
 
-Still to do from §5: new tools (chords to numerals, a key finder, an interval finder), each a spec of its own.
+The tools of §2 the app lacked, decided 2026-10-14:
+
+- **Key finder:** on the Chord finder, the keys that hold the chord found, each with its numeral (`keysHolding`).
+- **Chords to numerals (piano.org's analyzer):** already there: Progressions' field reads chords typed as numerals in
+  the key (`readProgression`).
+- **Interval finder:** already there: the Chord finder names two keys' interval.
+- Left out, as the app has no use for them: tuners, a tone generator, temperaments, staff paper, a MIDI monitor.
