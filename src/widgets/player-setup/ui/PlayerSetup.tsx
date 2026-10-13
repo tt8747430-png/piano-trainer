@@ -5,6 +5,7 @@ import {
   LEFT_FIGURE_GROUPS,
   LEFT_FIGURE_IDS,
   LEFT_FIGURES,
+  RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURE_IDS,
   RIGHT_FIGURES,
   type AccompanimentChoice,
@@ -80,6 +81,10 @@ export function PlayerSetup({
           <FigurePage
             label={t('rh')}
             ids={RIGHT_FIGURE_IDS}
+            sections={RIGHT_FIGURE_GROUPS.map((group) => ({
+              label: t(`rhGroup.${group.id}`),
+              ids: group.figures,
+            }))}
             figures={RIGHT_FIGURES}
             value={figures.rh}
             fit={fit}

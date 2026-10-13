@@ -68,6 +68,7 @@ export {
 export {
   LEFT_FIGURE_GROUPS,
   LEFT_FIGURES,
+  RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURES,
   type LeftFigureGroup,
 } from './content/figures'

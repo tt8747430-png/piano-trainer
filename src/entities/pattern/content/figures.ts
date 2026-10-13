@@ -305,3 +305,15 @@ export const LEFT_FIGURE_GROUPS = [
   { id: 'styles', figures: ['sync', 'shuf', 'rnb', 'sal', 'fun', 'chs', 'str'] },
 ] as const satisfies readonly { id: string; figures: readonly LeftFigureId[] }[]
 export type LeftFigureGroup = (typeof LEFT_FIGURE_GROUPS)[number]['id']
+
+/** The right hand's figures as the Setup lists them, by what they do; every figure in one group. */
+export const RIGHT_FIGURE_GROUPS = [
+  { id: 'chords', figures: ['x1', 'r1', 'b1', 'r3', 'r2', 'sync'] },
+  { id: 'broken', figures: ['b2', 'b3', 'b4', 'r4', 'r4b', 'bal', 't2', 't4'] },
+  {
+    id: 'moving',
+    figures: ['inv', 'c3', 't1', 't3', 't5', 'p51', 'p52', 'p53', 's6u', 's6d', 'flow'],
+  },
+  { id: 'melody', figures: ['mel', 'melE', 'melH'] },
+  { id: 'styles', figures: ['rock', 'blu', 'rnb', 'jaz', 'hip', 'sal', 'fun', 'cty'] },
+] as const satisfies readonly { id: string; figures: readonly RightFigureId[] }[]

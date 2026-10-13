@@ -14,7 +14,7 @@ import {
   PATTERN_GROUPS,
   PATTERN_IDS,
 } from '../model/types'
-import { LEFT_FIGURE_GROUPS, LEFT_FIGURES, RIGHT_FIGURES } from './figures'
+import { LEFT_FIGURE_GROUPS, LEFT_FIGURES, RIGHT_FIGURE_GROUPS, RIGHT_FIGURES } from './figures'
 import { METHOD_PATTERNS, METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
@@ -132,6 +132,11 @@ describe('the left hand’s own figures', () => {
   it('lists every figure in one group', () => {
     const grouped = LEFT_FIGURE_GROUPS.flatMap((group) => group.figures)
     expect(grouped.toSorted()).toEqual(Object.keys(LEFT_FIGURES).toSorted())
+  })
+
+  it('lists every right-hand figure in one group too', () => {
+    const grouped = RIGHT_FIGURE_GROUPS.flatMap((group) => group.figures)
+    expect(grouped.toSorted()).toEqual(Object.keys(RIGHT_FIGURES).toSorted())
   })
 
   const C_BAR: Chart = {
