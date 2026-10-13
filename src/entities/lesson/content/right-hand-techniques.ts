@@ -1,11 +1,12 @@
 import type { Lesson } from '../model/types'
 
+/** Called to Play's lesson 5: the right hand's first two techniques, on its study and its song. */
 const rightHandTechniques: Lesson = {
   id: 'right-hand-techniques',
-  title: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
+  title: { en: 'Right-hand techniques: ♪♩ and ♪♪♪♪', ru: 'Техники правой руки: ♪♩ и ♪♪♪♪' },
   summary: {
-    en: 'Called to Play’s ways to fill a chord while the left hand keeps the bass. Each comes with its lesson’s study.',
-    ru: 'Приёмы Called to Play, которые заполняют аккорд, пока левая рука держит бас. Каждый — на этюде своего урока.',
+    en: 'Called to Play, lesson 5: the right hand fills a chord while the left keeps the bass. A chord and octave jumps, and an arpeggio up two octaves.',
+    ru: 'Called to Play, урок 5: правая рука заполняет аккорд, пока левая держит бас. Аккорд и скачки на октаву, арпеджио на две октавы вверх.',
   },
   level: 2,
   category: 'accompaniment',
@@ -22,95 +23,36 @@ const rightHandTechniques: Lesson = {
             ru: 'не меняет аккорд, а даёт правой руке движение до следующей смены.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'E4/8 G4/8 C5/8 G4/8 E4/8 G4/8 C5/8 G4/8' },
+        { kind: 'pattern', pattern: 't1', piece: 'ex5' },
+        { kind: 'pattern', pattern: 't2', piece: 'ex5' },
+      ],
+    },
+    {
+      heading: { en: 'Practice', ru: 'Практика' },
+      blocks: [
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Play the lesson’s study with each technique in turn.',
-              ru: 'Сыграйте этюд урока каждой техникой по очереди.',
+              en: 'Play Am – Dm – E – Am – F – C – Dm – E – Am with both techniques.',
+              ru: 'Сыграйте Am – Dm – E – Am – F – C – Dm – E – Am обеими техниками.',
             },
             {
-              en: 'Then learn the lesson’s song with them.',
-              ru: 'Затем выучите с ними песню урока.',
+              en: 'Learn «All Glory to God in This World» with them.',
+              ru: 'Выучите с ними «All Glory to God in This World».',
             },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Lesson 5: ♪♩ and ♪♪♪♪', ru: 'Урок 5: ♪♩ и ♪♪♪♪' },
-      blocks: [
-        { kind: 'pattern', pattern: 't1', piece: 'ex5' },
-        { kind: 'pattern', pattern: 't2', piece: 'ex5' },
+        { kind: 'chords', symbols: ['Am', 'Dm', 'E', 'Am', 'F', 'C', 'Dm', 'E', 'Am'] },
+        {
+          kind: 'link',
+          title: { en: 'The lesson’s study', ru: 'Этюд урока' },
+          target: { place: 'piece', piece: 'ex5' },
+        },
         {
           kind: 'link',
           title: { en: 'All Glory to God in This World', ru: 'All Glory to God in This World' },
           target: { place: 'piece', piece: 'glory' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Lesson 6: runs down and up', ru: 'Урок 6: пассажи вниз и вверх' },
-      blocks: [
-        { kind: 'pattern', pattern: 't3', piece: 'ex6' },
-        { kind: 'pattern', pattern: 't4', piece: 'ex6' },
-        {
-          kind: 'link',
-          title: { en: 'What a Fellowship', ru: 'What a Fellowship' },
-          target: { place: 'piece', piece: 'fellow' },
-        },
-      ],
-    },
-    {
-      heading: {
-        en: 'Lesson 7: chords up the keyboard',
-        ru: 'Урок 7: аккорды вверх по клавиатуре',
-      },
-      blocks: [
-        { kind: 'pattern', pattern: 't5', piece: 'ex7' },
-        { kind: 'pattern', pattern: 'c3', piece: 'ex7' },
-        { kind: 'pattern', pattern: 'inv', piece: 'ex7' },
-        {
-          kind: 'link',
-          title: {
-            en: 'For Love, For Mercy, For Salvation',
-            ru: 'For Love, For Mercy, For Salvation',
-          },
-          target: { place: 'piece', piece: 'mercy' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Lesson 8: 5.1, 5.2 and 5.3', ru: 'Урок 8: 5.1, 5.2 и 5.3' },
-      blocks: [
-        { kind: 'pattern', pattern: 'p51', piece: 'ex8' },
-        { kind: 'pattern', pattern: 'p52', piece: 'ex8' },
-        { kind: 'pattern', pattern: 'p53', piece: 'ex8' },
-        {
-          kind: 'link',
-          title: { en: 'Heaven Awaits Me', ru: 'Heaven Awaits Me' },
-          target: { place: 'piece', piece: 'heaven' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Lesson 9: sixths', ru: 'Урок 9: сексты' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A sixth', ru: 'Секста' },
-          text: {
-            en: 'spans six letter names, counting both ends: E up to C is a sixth. These techniques move sixths up or down the scale.',
-            ru: 'охватывает шесть ступеней, считая обе крайние: от ми вверх до до. Эти техники ведут сексты вверх или вниз по гамме.',
-          },
-        },
-        { kind: 'pattern', pattern: 's6u', piece: 'ex9' },
-        { kind: 'pattern', pattern: 's6d', piece: 'ex9' },
-        {
-          kind: 'link',
-          title: { en: 'Face to Face with Christ', ru: 'Face to Face with Christ' },
-          target: { place: 'piece', piece: 'face' },
         },
       ],
     },
@@ -120,10 +62,10 @@ const rightHandTechniques: Lesson = {
         {
           kind: 'quiz',
           ask: {
-            en: 'Play the sixth from E up to C: E, then the C above it.',
-            ru: 'Сыграйте сексту ми–до: сначала ми, затем до над ней.',
+            en: 'Play E major, the chord that leads back to Am.',
+            ru: 'Сыграйте ми мажор — аккорд, который ведёт обратно к Am.',
           },
-          answer: { notes: ['E', 'C'], rising: true },
+          answer: { chord: 'E' },
         },
       ],
     },

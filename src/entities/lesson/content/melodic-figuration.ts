@@ -193,6 +193,14 @@ const melodicFiguration: Lesson = {
           title: { en: 'Chord pulse', ru: 'Аккордовая пульсация' },
           target: { place: 'lesson', lesson: 'chord-pulse' },
         },
+        {
+          kind: 'link',
+          title: {
+            en: 'Called to Play: the art of accompaniment',
+            ru: 'Called to Play: искусство аккомпанемента',
+          },
+          target: { place: 'lesson', lesson: 'art-of-accompaniment' },
+        },
       ],
     },
   ],

@@ -268,7 +268,19 @@ describe('the lessons', () => {
     ])
     const lessonsOf = (module: Lesson['module']) =>
       LESSONS.filter((lesson) => lesson.module === module).map((lesson) => lesson.id)
-    expect(lessonsOf('called-to-play')).toEqual(['five-ways', 'right-hand-techniques'])
+    expect(lessonsOf('called-to-play')).toEqual([
+      'playing-by-chords',
+      'major-and-minor-chords',
+      'five-ways',
+      'songs-by-plan',
+      'right-hand-techniques',
+      'right-hand-runs',
+      'right-hand-chords',
+      'right-hand-five',
+      'right-hand-sixths',
+      'art-of-accompaniment',
+      'called-to-play-exam',
+    ])
     expect(lessonsOf('seven-types')).toEqual(['seven-types', 'accompanying-a-hymn'])
     expect(lessonsOf('gorshkov')).toEqual([
       'jazz-chord-symbols',

@@ -1,7 +1,9 @@
 import type { Lesson } from '../model/types'
 import accompanyingAHymn from './accompanying-a-hymn'
+import artOfAccompaniment from './art-of-accompaniment'
 import bassAndChords from './bass-and-chords'
 import brokenChords from './broken-chords'
+import calledToPlayExam from './called-to-play-exam'
 import chordFamily from './chord-family'
 import chordFunctions from './chord-functions'
 import chordMatrix from './chord-matrix'
@@ -18,6 +20,7 @@ import jazzChordSymbols from './jazz-chord-symbols'
 import jazzVoicings from './jazz-voicings'
 import inversions from './inversions'
 import keySignatures from './key-signatures'
+import majorAndMinorChords from './major-and-minor-chords'
 import majorScales from './major-scales'
 import melodicFiguration from './melodic-figuration'
 import minorScales from './minor-scales'
@@ -25,15 +28,21 @@ import minorTwoFiveLevels from './minor-two-five-levels'
 import ninthChords from './ninth-chords'
 import ninthsInASong from './ninths-in-a-song'
 import passingChords from './passing-chords'
+import playingByChords from './playing-by-chords'
 import readingChordSymbols from './reading-chord-symbols'
 import readingNotes from './reading-notes'
 import reharmonisingAMelody from './reharmonising-a-melody'
 import rhythmAndMeter from './rhythm-and-meter'
+import rightHandChords from './right-hand-chords'
+import rightHandFive from './right-hand-five'
+import rightHandRuns from './right-hand-runs'
+import rightHandSixths from './right-hand-sixths'
 import rightHandTechniques from './right-hand-techniques'
 import scalesThroughTheChanges from './scales-through-the-changes'
 import sevenTypes from './seven-types'
 import seventhsInASong from './sevenths-in-a-song'
 import seventhChords from './seventh-chords'
+import songsByPlan from './songs-by-plan'
 import thinkingInDegrees from './thinking-in-degrees'
 import triads from './triads'
 import twoFiveOne from './two-five-one'
@@ -71,8 +80,17 @@ export const LESSONS: readonly Lesson[] = [
   gospelProgressions,
   gospelPassingChords,
   gospelReharmonisation,
+  playingByChords,
+  majorAndMinorChords,
   fiveWays,
+  songsByPlan,
   rightHandTechniques,
+  rightHandRuns,
+  rightHandChords,
+  rightHandFive,
+  rightHandSixths,
+  artOfAccompaniment,
+  calledToPlayExam,
   sevenTypes,
   accompanyingAHymn,
   jazzChordSymbols,
