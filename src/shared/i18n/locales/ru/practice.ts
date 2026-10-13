@@ -143,6 +143,7 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   accompaniment: {
+    lessons: 'Уроки курса',
     noneYours: 'Здесь хранятся фактуры, которые вы отметили, создали или скрыли.',
     allHidden: 'Все фактуры здесь скрыты. Они хранятся на странице «Свои».',
   },

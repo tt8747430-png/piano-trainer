@@ -17,6 +17,8 @@ export const learn = {
     gorshkov: 'Vasily Gorshkov’s accompaniment course: 7th and 9th chords, the ii–V–I, texture.',
   },
   progress: '{{learned}} of {{total}} learned',
+  // A course's last row: its patterns and pieces, on its part of Accompaniment.
+  coursePractice: 'Patterns and pieces',
   continue: 'Continue',
   // Where a lesson is, and the lessons either side of it along its track.
   place: 'Lesson {{n}} of {{total}}',

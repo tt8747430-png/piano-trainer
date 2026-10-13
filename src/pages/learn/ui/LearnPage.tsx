@@ -1,6 +1,7 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isMethodBookId } from '@/entities/book'
 import { LEARN_TABS, lessonsIn, useModuleName, type Lesson } from '@/entities/lesson'
 import { lessonLearnedId, selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
@@ -21,10 +22,11 @@ import { lessonGroups } from '../model/lesson-groups'
 /**
  * Learn (ADR 0042): its two tabs, the subjects and the courses; under the tab, the lesson to continue
  * with once something in it is learned, then its modules, each folding under its name, what it is and
- * its count learned, its lessons numbered in the order they are taught, each with its level.
+ * its count learned, its lessons numbered in the order they are taught, each with its level; a
+ * course's last row leads to its patterns and pieces.
  */
 export function LearnPage() {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation(['learn', 'common', 'practice'])
   const locale = useLocale()
   const view = useSearch({ from: '/shell/learn' })
   const set = useViewChange<LearnView>()
@@ -80,6 +82,17 @@ export function LearnPage() {
                 </li>
               )
             })}
+            {/* A course's patterns and pieces are on its part of Accompaniment: one course, two places. */}
+            {isMethodBookId(module) ? (
+              <li>
+                <RowLink
+                  title={t('learn:coursePractice')}
+                  detail={t('practice:pages.accompaniment')}
+                  {...PAGE_TILES.patterns}
+                  render={<Link to="/practice/accompaniment" search={{ show: module }} />}
+                />
+              </li>
+            ) : null}
           </FoldGroup>
         )
       })}

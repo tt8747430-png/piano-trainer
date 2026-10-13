@@ -1,8 +1,9 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { lessonsIn } from '@/entities/lesson'
 import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -42,7 +43,12 @@ describe('Practice → Accompaniment', () => {
       ['Styles', null],
       ['Yours', null],
     ])
-    expect(shelves()).toEqual(['The five ways (lesson 3)', 'Right-hand techniques', 'Studies'])
+    expect(shelves()).toEqual([
+      'The five ways (lesson 3)',
+      'Right-hand techniques',
+      'Studies',
+      'Its lessons',
+    ])
     expect(
       within(shelf('The five ways (lesson 3)')).getByRole('link', {
         name: /^1 · Bass \+ chords The chord on every beat over a held octave bass\.$/,
@@ -59,7 +65,7 @@ describe('Practice → Accompaniment', () => {
     await renderApp('/practice/accompaniment?show=seven-types')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
-    expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
+    expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns', 'Its lessons'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
     expect(rows('Hymns')).toEqual(['/songs/otche', '/songs/ode', '/songs/silent', '/songs/amazing'])
   })
@@ -68,11 +74,29 @@ describe('Practice → Accompaniment', () => {
     await renderApp('/practice/accompaniment?show=gorshkov')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     expect(screen.getByRole('link', { name: 'Горшков' })).toHaveAttribute('aria-current', 'page')
-    expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs'])
+    expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs', 'Its lessons'])
     expect(rows('Arranging the accompaniment')).toEqual(
       ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
     )
     expect(rows('Gorshkov’s songs')).toEqual(['/songs/romashki', '/songs/olen', '/songs/metel'])
+  })
+
+  it('leads from a method book’s part to its lessons, open on Learn', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/accompaniment?show=gorshkov')
+    const lessons = await screen.findByRole('region', { name: 'Its lessons' })
+    const course = within(lessons).getByRole('link', { name: /^Горшков/ })
+    expect(course).toHaveTextContent(`0 of ${lessonsIn('gorshkov').length} learned`)
+    await user.click(course)
+    await waitFor(() =>
+      expect(router.state.location.search).toEqual({ tab: 'courses', open: 'gorshkov' }),
+    )
+  })
+
+  it('has no lessons on Styles or Yours, which no book teaches', async () => {
+    await renderApp('/practice/accompaniment?show=styles')
+    await screen.findByRole('region', { name: 'Rhythm styles' })
+    expect(screen.queryByRole('region', { name: 'Its lessons' })).not.toBeInTheDocument()
   })
 
   it('lists the rhythm styles on Styles, each pattern with its idea', async () => {

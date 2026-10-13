@@ -148,8 +148,9 @@ export const practice = {
       theory: 'Theory',
     },
   },
-  // The line of a part of Accompaniment with no pattern to show.
+  // A part of Accompaniment: a method book's lessons, and the line of a part with no pattern to show.
   accompaniment: {
+    lessons: 'Its lessons',
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },

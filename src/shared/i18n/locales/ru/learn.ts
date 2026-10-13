@@ -16,6 +16,7 @@ export const learn: LocaleResources['learn'] = {
     'seven-types': '«Семь основных видов аккомпанемента» Н. В. Бобровой, на гимнах.',
     gorshkov: 'Курс по аккомпанементу Василия Горшкова: септаккорды и нонаккорды, 2-5-1, фактура.',
   },
+  coursePractice: 'Фактуры и пьесы',
   progress: 'Изучено {{learned}} из {{total}}',
   continue: 'Продолжить',
   place: 'Урок {{n}} из {{total}}',

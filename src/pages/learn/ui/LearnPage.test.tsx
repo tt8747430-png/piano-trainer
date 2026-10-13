@@ -55,6 +55,19 @@ describe('Learn', () => {
     expect(within(gorshkov).getByText(/Vasily Gorshkov’s accompaniment course/)).toBeInTheDocument()
   })
 
+  it('ends a course with its patterns and pieces, on its part of Accompaniment', async () => {
+    await renderApp('/learn?tab=courses&open=called-to-play.gorshkov')
+    // Called to Play is Accompaniment's first part: its URL names none.
+    for (const [course, href] of [
+      ['Called to Play', '/practice/accompaniment'],
+      ['Горшков', '/practice/accompaniment?show=gorshkov'],
+    ] as const) {
+      const links = within(await screen.findByRole('region', { name: course })).getAllByRole('link')
+      expect(links.at(-1)).toHaveTextContent('Patterns and pieces')
+      expect(links.at(-1)).toHaveAttribute('href', href)
+    }
+  })
+
   it('opens a folded module into the URL, so Back from a lesson finds it open', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn?tab=courses')
