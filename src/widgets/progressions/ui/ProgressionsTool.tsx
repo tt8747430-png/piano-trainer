@@ -10,7 +10,7 @@ import {
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { keyFromParam, numeralGrows, parseNumerals } from '@/shared/lib/music'
-import { ChordSizeField, KeyChoice, Labelled, NO_KEYS } from '@/shared/ui'
+import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField } from '@/shared/ui'
 import {
   changedView,
   chosenView,
@@ -35,7 +35,10 @@ export function ProgressionsTool({
 }) {
   const { t } = useTranslation(['learn', 'music'])
   const locale = useLocale()
-  const [shown, setShown] = useShownKeys(`${view.key} ${view.p} ${view.size}`, NO_KEYS)
+  const [shown, setShown] = useShownKeys(
+    `${view.key} ${view.p} ${view.size} ${view.inversion} ${view.nearest}`,
+    NO_KEYS,
+  )
   const key = keyFromParam(view.key)
   const numerals = parseNumerals(view.p) ?? []
   const named = viewProgression(view)
@@ -43,7 +46,11 @@ export function ProgressionsTool({
   return (
     <div className="flex flex-col gap-6">
       <ExplorerKeyboard shown={shown} />
-      <ChordRow chords={progressionRow(numerals, key, view.size)} onShow={setShown}>
+      <ChordRow
+        chords={progressionRow(numerals, key, view.size)}
+        position={{ inversion: view.inversion, nearest: view.nearest }}
+        onShow={setShown}
+      >
         <RowChords />
         <RowStaff />
         <RowPlay variant="default" />
@@ -68,6 +75,7 @@ export function ProgressionsTool({
             onChange={(size) => change({ size })}
           />
         </Labelled>
+        <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
       </div>
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
     </div>

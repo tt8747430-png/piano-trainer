@@ -246,11 +246,17 @@ describe('search params', () => {
     expect(
       await searchAt('/practice/progressions?p=ii7%20V7%20IMaj7&key=Am&size=sevenths'),
     ).toEqual({
+      ...PROGRESSIONS_DEFAULTS,
       p: 'ii7-V7-IMaj7',
       key: 'Am',
       size: 'sevenths',
     })
     expect(await searchAt('/practice/progressions?p=Q')).toEqual(PROGRESSIONS_DEFAULTS)
+    expect(await searchAt('/practice/progressions?inversion=2&nearest=false')).toMatchObject({
+      inversion: 2,
+      nearest: false,
+    })
+    expect(await searchAt('/practice/progressions?inversion=7')).toMatchObject({ inversion: 0 })
   })
 
   it('keep the chords typed for Passing chords, and take the default for one that cannot be read', async () => {

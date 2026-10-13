@@ -9,6 +9,13 @@ export const music: LocaleResources['music'] = {
     second: '2-е',
     third: '3-е',
   },
+  // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
+  position: {
+    first: 'Первый аккорд',
+    nearest: 'Плавно',
+    nearestOn: 'Каждый следующий аккорд сдвигается как можно меньше',
+    nearestOff: 'Все аккорды в положении первого',
+  },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
     label: 'Состав аккорда',

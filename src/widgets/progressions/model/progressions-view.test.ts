@@ -11,6 +11,8 @@ const view = (key: ProgressionsView['key'], p: string, size: ChordSize): Progres
   key,
   p,
   size,
+  inversion: 0,
+  nearest: true,
 })
 const library = (id: string): LibraryProgression => {
   const progression = progressionById(id)
@@ -88,6 +90,27 @@ describe('playerSearch', () => {
     expect(playerSearch(view(major('G'), 'I-I-IV', 'triads'))).toEqual({
       p: 'I-I-IV',
       key: major('G'),
+    })
+  })
+})
+
+describe('the hand’s position', () => {
+  it('keeps it as a progression is chosen', () => {
+    const shown = {
+      ...view(major('C'), 'I-V-vi-IV', 'triads'),
+      inversion: 2 as const,
+      nearest: false,
+    }
+    expect(chosenView(shown, library('axis'))).toMatchObject({ inversion: 2, nearest: false })
+  })
+
+  it('takes it into the Player where it is not the Player’s own', () => {
+    const shown = view(major('C'), 'I-V-vi-IV', 'triads')
+    expect(playerSearch(shown)).not.toHaveProperty('inversion')
+    expect(playerSearch(shown)).not.toHaveProperty('nearest')
+    expect(playerSearch({ ...shown, inversion: 1, nearest: false })).toMatchObject({
+      inversion: 1,
+      nearest: false,
     })
   })
 })

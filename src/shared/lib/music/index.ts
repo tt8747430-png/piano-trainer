@@ -120,7 +120,7 @@ export { ChordSymbolError, parseChordSymbol, readChordSymbol } from './chord-sym
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
-export { voiceLead } from './voice-lead'
+export { voiceLead, type RowPosition } from './voice-lead'
 export {
   numeralChord,
   numeralGrows,

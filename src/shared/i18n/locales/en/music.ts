@@ -3,6 +3,13 @@ export const music = {
   // The major triad's label where a chord's suffix names it: its own suffix is empty.
   major: 'M',
   inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
+  position: {
+    first: 'First chord',
+    nearest: 'Nearest',
+    nearestOn: 'Each next chord moves the least it can',
+    nearestOff: 'Every chord in the first one’s position',
+  },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
     label: 'Chord size',

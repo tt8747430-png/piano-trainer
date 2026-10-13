@@ -23,6 +23,7 @@ import {
   fingeringsOf,
   fitParts,
   INVERSIONS,
+  isInversion,
   keyMode,
   keyParam,
   lastInversion,
@@ -226,6 +227,8 @@ export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   key: C_MAJOR_PARAM,
   p: PROGRESSION.numerals,
   size: 'triads',
+  inversion: 0,
+  nearest: true,
 }
 export function readProgressionsSearch(raw: Raw): ProgressionsView {
   const key = readKey(raw.key)
@@ -233,6 +236,8 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     key: key ? keyParam(key) : PROGRESSIONS_DEFAULTS.key,
     p: readNumerals(raw.p, PROGRESSIONS_DEFAULTS.p),
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
+    inversion: valueOr(isInversion, raw.inversion, PROGRESSIONS_DEFAULTS.inversion),
+    nearest: raw.nearest !== false,
   }
 }
 export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)

@@ -1,6 +1,6 @@
 import { createContext, use, useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chordSymbol, voiceLead, type Midi } from '@/shared/lib/music'
+import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -34,21 +34,32 @@ function useRow(): RowPlayback {
 }
 
 /**
- * A row of chords voiced smoothly (a progression, a way between two chords): its parts, `RowChords`,
- * `RowStaff` and `RowPlay`, play a chord as the row voices it or the whole row, write it on the grand
- * staff, and show it on the page's keys.
+ * A row of chords voiced smoothly (a progression, a way between two chords), from a `position` where
+ * one is chosen: its parts, `RowChords`, `RowStaff` and `RowPlay`, play a chord as the row voices it
+ * or the whole row, write it on the grand staff, and show it on the page's keys.
  */
 export function ChordRow({
   chords,
+  position,
   onShow,
   children,
 }: {
   chords: readonly RowChord[]
+  position?: RowPosition | undefined
   onShow: (shown: ShownKeys) => void
   children: ReactNode
 }) {
   const playback = usePlayback<number | 'row'>()
-  const voiced = useMemo(() => voiceLead(chords.map(({ chord }) => chord)), [chords])
+  const inversion = position?.inversion
+  const nearest = position?.nearest
+  const voiced = useMemo(
+    () =>
+      voiceLead(
+        chords.map(({ chord }) => chord),
+        inversion === undefined || nearest === undefined ? undefined : { inversion, nearest },
+      ),
+    [chords, inversion, nearest],
+  )
   const row: RowPlayback = {
     chords,
     voiced,

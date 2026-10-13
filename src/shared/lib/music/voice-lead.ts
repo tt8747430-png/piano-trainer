@@ -12,6 +12,9 @@ const BASS_FROM = 48
 /** A chord of this many notes leaves its root to the bass. */
 const ROOTLESS_FROM = 5
 
+/** Root position and at most the first three inversions, as the Player offers. */
+const MOST_INVERSIONS = 3
+
 /**
  * Where the hand sits: its lowest key no lower than G3 (a close 3rd below it turns muddy) nor higher
  * than C5, its top no higher than G5, and its middle drawn towards E4.
@@ -75,24 +78,60 @@ function cost(voicing: Voicing, before: Voicing | null): number {
   )
 }
 
-/** Every close position of the hand's tones the hand may take: each tone lowest, in each octave. */
-function handsFor(chord: Chord): { hands: number[][]; rootPosition: number[][] } {
+/** The tones a chord adds above its 7th. */
+const TENSIONS = new Set(['9th', '11th', '13th'])
+
+/** A hand the chord may take, and which of its inversions it is. */
+interface Hand {
+  readonly keys: number[]
+  /** The place of its lowest tone in the hand's order: 0 is root position. */
+  readonly inversion: number
+}
+
+/**
+ * Every close position of the hand's tones the hand may take: each tone lowest, in each octave. A
+ * rootless hand's order puts its first tension where the root was, as the Player's inversions do.
+ */
+function handsFor(chord: Chord): { hands: Hand[]; rootPosition: Hand[] } {
   const tones = spellChord(chord.root, chord.quality)
-  const held = tones.length >= ROOTLESS_FROM && !chord.bass ? tones.slice(1) : tones
-  const hands: number[][] = []
-  const rootPosition: number[][] = []
-  for (const start of held) {
+  const rootless = tones.length >= ROOTLESS_FROM && !chord.bass
+  const held = rootless ? tones.slice(1) : tones
+  const tension = rootless ? held.find((tone) => TENSIONS.has(tone.role)) : undefined
+  const order = tension ? [tension, ...held.filter((tone) => tone !== tension)] : held
+  const hands: Hand[] = []
+  const rootPosition: Hand[] = []
+  order.forEach((start, inversion) => {
     for (let base = HAND.lowest; base <= HAND.highestStart; base++) {
       if (base % 12 !== start.pitchClass) continue
       // A bigger chord stays inside an octave: a 13th's 3rd, 5th, 13th, 7th and 9th, not a stack an
       // 11th wide.
-      const hand = closeFrom(held, start, midi(base)).map((placed) => placed.midi)
-      if (Math.max(...hand) > HAND.top) continue
-      hands.push(hand)
-      if (start === tones[0]) rootPosition.push(hand)
+      const keys = closeFrom(held, start, midi(base)).map((placed) => placed.midi)
+      if (Math.max(...keys) > HAND.top) continue
+      hands.push({ keys, inversion })
+      if (start === tones[0]) rootPosition.push({ keys, inversion })
     }
-  }
+  })
   return { hands, rootPosition }
+}
+
+/**
+ * Where a row's hand stands: its first chord in `inversion` (a smaller chord in its last), then each
+ * chord nearest the last or, without `nearest`, in that inversion too.
+ */
+export interface RowPosition {
+  readonly inversion: number
+  readonly nearest: boolean
+}
+
+/** The hands a chord of the row may take: those in the inversion the position keeps, where it keeps one. */
+function choicesFor(chord: Chord, first: boolean, position: RowPosition | undefined): Hand[] {
+  const { hands, rootPosition } = handsFor(chord)
+  if (!position) return first && rootPosition.length > 0 ? rootPosition : hands
+  if (!first && position.nearest) return hands
+  const last = Math.max(...hands.map((hand) => hand.inversion))
+  const kept = Math.min(position.inversion, last, MOST_INVERSIONS)
+  const inKept = hands.filter((hand) => hand.inversion === kept)
+  return inKept.length > 0 ? inKept : hands
 }
 
 /** The bass under a hand: the root, or the bass a slash chord writes, from C3, an octave down below the hand. */
@@ -107,17 +146,16 @@ function bassUnder(chord: Chord, hand: readonly number[]): number {
  * over its root in the bass (or the bass a slash chord writes), the right hand in the close position
  * that holds the tones the chords share and moves the others least, its top voice above all, kept
  * between G3 and G5 around E4, with no parallel 5ths or octaves against the bass. The first chord is
- * in root position nearest E4. A chord of five notes or more leaves its root to the bass (a 9th
- * chord's hand is its 3rd, 5th, 7th and 9th).
+ * in root position nearest E4, or in the `position` asked. A chord of five notes or more leaves its root
+ * to the bass (a 9th chord's hand is its 3rd, 5th, 7th and 9th).
  */
-export function voiceLead(chords: readonly Chord[]): Midi[][] {
+export function voiceLead(chords: readonly Chord[], position?: RowPosition): Midi[][] {
   let before: Voicing | null = null
   return chords.map((chord) => {
-    const { hands, rootPosition } = handsFor(chord)
-    const choices = before === null && rootPosition.length > 0 ? rootPosition : hands
+    const choices = choicesFor(chord, before === null, position)
     let best: Voicing | null = null
     let lowest = Infinity
-    for (const hand of choices) {
+    for (const { keys: hand } of choices) {
       const voicing = { bass: bassUnder(chord, hand), hand }
       const each = cost(voicing, before)
       if (each < lowest) {

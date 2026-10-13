@@ -113,4 +113,36 @@ describe('voiceLead', () => {
       }
     }
   })
+
+  describe('from a position', () => {
+    const row = ['C', 'F', 'G', 'C'].map(parseChordSymbol)
+    const hands = (inversion: number, nearest: boolean) =>
+      voiceLead(row, { inversion, nearest }).map((keys) => keys.slice(1))
+    const lowestOf = (inversion: number, nearest: boolean) =>
+      hands(inversion, nearest).map((hand) => pitchClass(Math.min(...hand)))
+
+    it('starts on the inversion asked for', () => {
+      expect(lowestOf(0, true)[0]).toBe(0) // C
+      expect(lowestOf(1, true)[0]).toBe(4) // E
+      expect(lowestOf(2, true)[0]).toBe(7) // G
+    })
+
+    it('moves each chord after it to the nearest hand with Nearest', () => {
+      expect(lowestOf(1, true)).toEqual([4, 5, 2, 4]) // E G C, F A C, D G B, E G C
+    })
+
+    it('keeps every chord in it without Nearest', () => {
+      expect(lowestOf(1, false)).toEqual([4, 9, 11, 4]) // each from its 3rd
+      expect(lowestOf(2, false)).toEqual([7, 0, 2, 7]) // each from its 5th
+    })
+
+    it('gives a triad asked for its 3rd inversion its 2nd', () => {
+      expect(lowestOf(3, false)).toEqual([7, 0, 2, 7])
+    })
+
+    it('starts a rootless 9th chord on its 9th, where the root was', () => {
+      const [dm9] = voiceLead([parseChordSymbol('Dm9')], { inversion: 0, nearest: true })
+      expect(pitchClass(Math.min(...(dm9 ?? []).slice(1)))).toBe(4) // E
+    })
+  })
 })

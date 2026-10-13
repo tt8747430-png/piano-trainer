@@ -11,16 +11,22 @@ import { Segmented } from './Segmented'
 export function InversionChoice({
   notes,
   value,
+  label,
+  disabled = false,
   onChange,
 }: {
   notes: number
   value: number
+  /** What a screen reader calls the choice: Inversion, unless it is named otherwise. */
+  label?: string
+  disabled?: boolean
   onChange: (inversion: number) => void
 }) {
   const { t } = useTranslation('music')
   return (
     <Segmented
-      label={t('inversion.label')}
+      label={label ?? t('inversion.label')}
+      disabled={disabled}
       value={value}
       options={INVERSION_NAMES.slice(0, lastInversion(notes) + 1).map((name, inversion) => ({
         value: inversion,

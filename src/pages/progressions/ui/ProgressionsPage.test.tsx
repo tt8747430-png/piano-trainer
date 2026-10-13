@@ -243,4 +243,30 @@ describe('Practice → Progressions', () => {
       await screen.findByRole('heading', { level: 1, name: 'Последовательности' }),
     ).toBeInTheDocument()
   })
+
+  it('starts the row in the inversion chosen, each chord after it nearest or all in it', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp('/practice/progressions?p=I-IV-V-I')
+    await user.click(await screen.findByRole('radio', { name: '2nd' }))
+    expect(router.state.location.search).toMatchObject({ inversion: 2 })
+    const lowestHands = async () => {
+      const before = audio.played.length
+      await user.click(screen.getByRole('button', { name: 'Play' }))
+      await waitFor(() => expect(audio.played.length).toBeGreaterThan(before))
+      const sounds = audio.played.at(-1)?.sounds ?? []
+      const starts = [...new Set(sounds.flatMap((s) => (s.kind === 'note' ? [s.at] : [])))]
+      await user.click(screen.getByRole('button', { name: 'Stop' }))
+      // Each chord's keys, the bass first: the hand's lowest is the second.
+      return starts.map((at) => {
+        const keys = sounds
+          .flatMap((s) => (s.kind === 'note' && s.at === at ? [s.midi] : []))
+          .toSorted((a, b) => a - b)
+        return (keys[1] ?? 0) % 12
+      })
+    }
+    expect((await lowestHands())[0]).toBe(7) // G: C from its 5th
+    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(router.state.location.search).toMatchObject({ inversion: 2, nearest: false })
+    expect(await lowestHands()).toEqual([7, 0, 2, 7]) // every chord from its 5th
+  })
 })
