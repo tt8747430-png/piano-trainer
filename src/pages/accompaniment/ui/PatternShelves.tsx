@@ -15,7 +15,7 @@ import { RowGroup, RowLink } from '@/shared/ui'
 import { Empty, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
 /**
- * One part of the patterns' reference: its shelves, each row a name and its idea in a line, opening
+ * One part of Accompaniment: its shelves, each row a name and its idea in a line, opening
  * the pattern's page. With no shelf to show, the one line that says why: nothing kept yet on Yours,
  * every pattern hidden elsewhere.
  */

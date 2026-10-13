@@ -16,7 +16,7 @@ import { TWO_HANDS_FROM } from './place'
 import type { ChordRole, Tone } from './tone'
 
 /** The tones a hand may leave out of a chord, in the order they are said. */
-export const LEFT_OUT = ['3rd', '5th', '9th', '11th'] as const satisfies readonly ChordRole[]
+const LEFT_OUT = ['3rd', '5th', '9th', '11th'] as const satisfies readonly ChordRole[]
 export type LeftOut = (typeof LEFT_OUT)[number]
 
 /** A chord the notes played make: its parts, its bass when not its root, and the tones left out. */

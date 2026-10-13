@@ -27,8 +27,7 @@ import {
 import { barsOf, chordsAt, startsIn, type PlacedBar } from './timeline'
 
 /** What the editor writes (spec §6.1): the chords, the melody or a hand. */
-export const LAYERS = ['chords', 'melody', ...HAND_IDS] as const
-export type Layer = (typeof LAYERS)[number]
+export type Layer = 'chords' | 'melody' | HandId
 /** A layer of notes: the melody or a hand. */
 export type NoteLayer = Exclude<Layer, 'chords'>
 /** Whether a layer is a hand's (written bar by bar, else the pattern's). */

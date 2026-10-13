@@ -1,11 +1,8 @@
 export {
-  COURSE_MODULES,
-  isCourse,
   isLearnTab,
   isLessonModule,
   LEARN_TABS,
   LESSON_MODULES,
-  SUBJECT_MODULES,
   TAB_MODULES,
   tabOf,
   type LearnTab,

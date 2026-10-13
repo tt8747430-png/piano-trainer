@@ -4,7 +4,7 @@ import { routeSearch, type Raw } from './read-search'
 
 // Learn (ADR 0042): its tab, and the modules open in it, kept in Learn's order; none named is the
 // module the learner is at, an empty list none.
-export const LEARN_DEFAULTS: LearnView = { tab: 'subjects', open: undefined }
+const LEARN_DEFAULTS: LearnView = { tab: 'subjects', open: undefined }
 
 /** The modules the URL names, in Learn's order, an unknown one left out. */
 function readOpen(raw: unknown): string | undefined {

@@ -198,7 +198,7 @@ it. `@` → `src`.
   five-finger position, Hanon No. 1), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling, the right hand's chord voice-led or
   in one inversion (`voiceInversion`, `inversionPitchClasses`); a bar's written hands in place of the pattern's;
-  `chartInKeys`, a chart once per key; `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
+  `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a lesson's voicings (`voicingsMusic`), a hand's keys, an interval up, down or

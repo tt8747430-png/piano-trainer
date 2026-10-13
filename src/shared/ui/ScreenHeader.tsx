@@ -3,8 +3,8 @@ import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
 
 /**
- * A screen's large title, with an optional way back before it and actions after it, over the
- * subject's tabs where the screen is one of several: the screen's bar. It stays at the top, clear of
+ * A screen's large title, with an optional way back before it and actions after it, over its page's
+ * tabs where it has views: the screen's bar. It stays at the top, clear of
  * the notch, slides away once the page has scrolled down past it and comes back as soon as it
  * scrolls up; it stays while focus is inside it.
  *
@@ -20,7 +20,7 @@ export function ScreenHeader({
   title: string
   back?: ReactNode
   actions?: ReactNode
-  /** The subject's pages (`NavTabs`): the bar's second row, back with the title on the way up. */
+  /** The page's views (`NavTabs`): the bar's second row, back with the title on the way up. */
   tabs?: ReactNode
 }) {
   const { shown, report, hold } = useScreenBar()

@@ -1,8 +1,7 @@
 import type { Midi } from '@/shared/lib/music'
 
 /** A piano's three pedals: the sustain lifts every damper, the sostenuto those of the keys down. */
-export const PEDALS = ['sustain', 'soft', 'sostenuto'] as const
-export type PedalKind = (typeof PEDALS)[number]
+export type PedalKind = 'sustain' | 'soft' | 'sostenuto'
 
 /** A key struck under the soft pedal sounds at two thirds of its gain. */
 export const SOFT_GAIN = 2 / 3

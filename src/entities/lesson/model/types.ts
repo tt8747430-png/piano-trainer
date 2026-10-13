@@ -26,7 +26,7 @@ export const SUBJECT_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as co
  * The courses: each a module that follows one teacher's material in its order, a track of its own:
  * each method book's (ADR 0042, 0043).
  */
-export const COURSE_MODULES = METHOD_BOOK_IDS
+const COURSE_MODULES = METHOD_BOOK_IDS
 
 /**
  * Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7): what is taught

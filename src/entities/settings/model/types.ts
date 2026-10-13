@@ -55,7 +55,7 @@ export interface KeyboardSettings {
   readonly typing: boolean
 }
 
-export const SIDEBARS = ['open', 'collapsed'] as const
+const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
 export type Sidebar = (typeof SIDEBARS)[number]
 

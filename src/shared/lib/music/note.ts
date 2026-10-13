@@ -4,7 +4,7 @@ export const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const
 export type Letter = (typeof LETTERS)[number]
 
 /** Semitones from the letter: −2 double flat … 2 double sharp. */
-export const ACCIDENTALS = [-2, -1, 0, 1, 2] as const
+const ACCIDENTALS = [-2, -1, 0, 1, 2] as const
 export type Accidental = (typeof ACCIDENTALS)[number]
 export const isAccidental = (semitones: number): semitones is Accidental =>
   ACCIDENTALS.some((accidental) => accidental === semitones)

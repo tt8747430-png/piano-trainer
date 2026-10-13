@@ -8,8 +8,7 @@ import {
 import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 
 /** The meters a line of notes is written in: simple ones, whose beat is a quarter note. */
-export const NOTE_LINE_METERS = ['2/4', '3/4', '4/4'] as const
-export type NoteLineMeter = (typeof NOTE_LINE_METERS)[number]
+export type NoteLineMeter = '2/4' | '3/4' | '4/4'
 
 /** A value's length in quarter notes: 1 a whole note, 8 an eighth. */
 const QUARTERS = new Map([

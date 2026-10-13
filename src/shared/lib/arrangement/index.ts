@@ -1,5 +1,4 @@
 export { arrange, transposeChord, transposeNotes, type ArrangeOptions } from './arrange'
-export { chartInKeys } from './chart-in-keys'
 export { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
 export {
   type BeatGroup,

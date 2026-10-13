@@ -34,7 +34,7 @@ export const ARPEGGIO_QUALITIES = [
 export type ArpeggioQuality = (typeof ARPEGGIO_QUALITIES)[number]
 
 /** A sequence's figures, named by the degrees they play from where they start. */
-export const FIGURE_IDS = ['1234', '1324', '1235', '1353', '3212'] as const
+const FIGURE_IDS = ['1234', '1324', '1235', '1353', '3212'] as const
 export type FigureId = (typeof FIGURE_IDS)[number]
 
 /** Each figure's degrees from where it starts (0 is that note). */

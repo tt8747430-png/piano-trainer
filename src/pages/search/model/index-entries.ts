@@ -39,7 +39,7 @@ export const INDEX_KINDS = [
   'exercises',
   'quiz',
 ] as const
-export type IndexKind = (typeof INDEX_KINDS)[number]
+type IndexKind = (typeof INDEX_KINDS)[number]
 
 /** What an entry opens, by what it names; Search's row makes it a link. */
 export type IndexTarget =

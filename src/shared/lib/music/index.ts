@@ -36,7 +36,6 @@ export {
   parseNoteInOctave,
   parseNoteName,
   pitchClassOf,
-  plainRoot,
   plainSpelling,
   ROOT_ACCIDENTALS,
   rootSpelling,
@@ -124,7 +123,6 @@ export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } fro
 export { voiceLead, type RowPosition } from './voice-lead'
 export { handPosition, type FromTone, type HandPosition } from './hand-position'
 export {
-  hasMinorThird,
   numeralChord,
   numeralGrows,
   numeralOf,

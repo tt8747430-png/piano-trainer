@@ -150,7 +150,7 @@ export function sixthDiminishedChords(choice: {
 }
 
 /** Where each of a 7th chord's tones sits in the bebop dominant scale (1 2 3 4 5 6 ♭7 7). */
-export const CHORD_TONE_AT = { root: 0, third: 2, fifth: 4, seventh: 6 } as const
+const CHORD_TONE_AT = { root: 0, third: 2, fifth: 4, seventh: 6 } as const
 export type ChordToneFrom = keyof typeof CHORD_TONE_AT
 
 const BEBOP_DOMINANT: readonly IntervalName[] = ['r', 'M2', 'M3', 'P4', 'P5', 'M6', 'm7', 'M7']

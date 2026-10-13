@@ -29,7 +29,7 @@ export function stillToKnow(answers: readonly Answer[]): number {
 }
 
 /** A Known skill not answered for this long is due for a review (ADR 0006). */
-export const REVIEW_AFTER_DAYS = 14
+const REVIEW_AFTER_DAYS = 14
 const DAY_MS = 24 * 60 * 60 * 1000
 
 /**
