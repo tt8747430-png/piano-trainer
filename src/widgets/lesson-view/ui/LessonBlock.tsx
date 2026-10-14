@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+import { ArrowUpRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { readProgression, type LessonBlock as Block, type LessonLink } from '@/entities/lesson'
 import { pieceById } from '@/entities/piece'
@@ -14,13 +16,13 @@ import {
   VoicingsExample,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyParam, note, noteParam } from '@/shared/lib/music'
+import { keyParam, note, noteParam, numeralsParam } from '@/shared/lib/music'
 import { isProgressionRow } from '../model/chord-example'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
-import type { ShownKeys } from '@/shared/ui'
+import { ButtonLink, type ShownKeys } from '@/shared/ui'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 
@@ -37,7 +39,8 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
 
 /**
  * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
- * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row), or a link
+ * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row, beside a
+ * way into Progressions), or a link
  * into an explorer, a tool or the Player. A question is the view's, which keeps its state.
  */
 export function LessonBlock({
@@ -103,17 +106,27 @@ export function LessonBlock({
     case 'progression': {
       const { numerals, key, size } = readProgression(block)
       return (
-        <div className="flex flex-col gap-3">
-          <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
-            <RowChords />
-            <RowStaff />
+        <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
+          <RowChords />
+          <RowStaff />
+          {/* Play here, and the same row in Progressions to take further: in any key, walked. */}
+          <div className="flex flex-wrap gap-2">
             <RowPlay variant="soft" />
-          </ChordRow>
-          <LinkCard
-            title={t('example.inProgressions')}
-            target={{ opens: 'progressions', numerals: block.numerals, key, size }}
-          />
-        </div>
+            <ButtonLink
+              variant="soft"
+              size="pill"
+              render={
+                <Link
+                  to="/practice/progressions"
+                  search={{ key: keyParam(key), p: numeralsParam(numerals), size }}
+                />
+              }
+            >
+              {t('example.inProgressions')}
+              <ArrowUpRight aria-hidden data-icon="inline-end" />
+            </ButtonLink>
+          </div>
+        </ChordRow>
       )
     }
     case 'link':
