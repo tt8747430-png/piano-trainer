@@ -22,6 +22,9 @@ export const METHODS: Readonly<Record<MethodCode, MethodEntry>> = {
   '5.3': { pattern: 'p53', label: numbered('5.3') },
   '6u': { pattern: 's6u', label: { en: '6th↑', ru: 'Сексты ↑' } },
   '6d': { pattern: 's6d', label: { en: '6th↓', ru: 'Сексты ↓' } },
+  oct: { pattern: 'oct', label: { en: 'Octaves', ru: 'Октавы' } },
+  octs: { pattern: 'octs', label: { en: 'Octaves (scale)', ru: 'Октавы (гамма)' } },
+  ch: { pattern: 'chd', label: { en: 'Chords', ru: 'Аккорды' } },
 }
 
 /** The chart's own plan, as `arrange` takes it: each method code's pattern. */

@@ -117,6 +117,27 @@ export const RIGHT_FIGURES = {
       inCompound: eachHalf('0/4 s4+s9,4/2 s3+s8,6/6 s2+s7'),
     }),
   },
+  oc: {
+    name: { en: 'Octaves 1–2–3–5, two octaves up', ru: 'Октавы 1–2–3–5 на две октавы вверх' },
+    figure: eventFigure(
+      '0/2 1+8,2/2 2+9,4/2 3+10,6/2 5+12,8/2 8+15,10/2 9+16,12/2 10+17,14/2 12+19',
+      { inCompound: eachHalf('0/2 1+8,2/2 2+9,4/2 3+10,6/2 5+12,8/2 8+15,10/2 9+16') },
+    ),
+  },
+  ocs: {
+    name: { en: 'Octaves up the scale', ru: 'Октавы вверх по гамме' },
+    figure: eventFigure(
+      '0/2 s0+s7,2/2 s1+s8,4/2 s2+s9,6/2 s3+s10,8/2 s4+s11,10/2 s5+s12,12/2 s6+s13,14/2 s7+s14',
+      { inCompound: eachHalf('0/2 s0+s7,2/2 s1+s8,4/2 s2+s9,6/2 s3+s10,8/2 s4+s11,10/2 s5+s12') },
+    ),
+  },
+  chd: {
+    name: {
+      en: 'Chord with its octave, the outer notes up a step and back',
+      ru: 'Аккорд с октавой, крайние звуки на ступень вверх и обратно',
+    },
+    figure: eventFigure('0/4 1+3+5+8,4/4 2+3+5+9,8/4 2+3+5+9,12/4 1+3+5+8'),
+  },
   r1: {
     name: { en: 'Held chords (half notes)', ru: 'Выдержанные аккорды (половинные)' },
     figure: eventFigure('0/8 C,8/8 C'),
@@ -386,10 +407,28 @@ export const LEFT_FIGURE_GROUPS = [
 /** The right hand's figures as the Setup lists them, by what they do; every figure in one group. */
 export const RIGHT_FIGURE_GROUPS = [
   { id: 'chords', figures: ['x1', 'r1', 'b1', 'r3', 'r2', 'g1', 'g2', 'sync'] },
-  { id: 'broken', figures: ['b2', 'b3', 'b4', 'r4', 'r4b', 'g3', 'g4', 'bal', 't2', 't4'] },
+  {
+    id: 'broken',
+    figures: ['b2', 'b3', 'b4', 'r4', 'r4b', 'g3', 'g4', 'bal', 't2', 't4', 'oc', 'ocs'],
+  },
   {
     id: 'moving',
-    figures: ['inv', 'c3', 't1', 't3', 't5', 'p51', 'p52', 'p53', 's6u', 's6d', 'g5', 'g6', 'flow'],
+    figures: [
+      'inv',
+      'c3',
+      't1',
+      't3',
+      't5',
+      'p51',
+      'p52',
+      'p53',
+      's6u',
+      's6d',
+      'chd',
+      'g5',
+      'g6',
+      'flow',
+    ],
   },
   { id: 'melody', figures: ['mel', 'melE', 'melH'] },
   { id: 'styles', figures: ['rock', 'blu', 'rnb', 'jaz', 'hip', 'sal', 'fun', 'cty'] },

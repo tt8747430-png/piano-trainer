@@ -262,6 +262,48 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     rh: 's6d',
     lh: 'q',
   },
+  oct: {
+    group: 'techniques',
+    name: { en: 'Octaves', ru: 'Октавы' },
+    idea: {
+      en: 'The right hand climbs 1–2–3–5 in octaves, twice, over a held octave bass.',
+      ru: 'Правая рука поднимается октавами 1–2–3–5, дважды, над выдержанной октавой в басу.',
+    },
+    description: {
+      en: 'Level 2, lesson 2, by the chord: octaves in 8ths with a loose wrist, black keys mostly with the 4th finger.',
+      ru: 'Уровень 2, урок 2, по аккорду: октавы восьмыми свободной кистью, чёрные клавиши чаще 4-м пальцем.',
+    },
+    rh: 'oc',
+    lh: 'o',
+  },
+  octs: {
+    group: 'techniques',
+    name: { en: 'Octaves (scale)', ru: 'Октавы (гамма)' },
+    idea: {
+      en: 'The right hand runs up the scale in octaves over a held octave bass.',
+      ru: 'Правая рука идёт октавами вверх по гамме над выдержанной октавой в басу.',
+    },
+    description: {
+      en: 'Level 2, lesson 2, as a scale: eight octaves in 8ths from the chord’s root to its octave.',
+      ru: 'Уровень 2, урок 2, гаммой: восемь октав восьмыми от основного тона аккорда до его октавы.',
+    },
+    rh: 'ocs',
+    lh: 'o',
+  },
+  chd: {
+    group: 'techniques',
+    name: { en: 'Chords', ru: 'Аккорды' },
+    idea: {
+      en: 'Four-note chords on every beat, the outer notes up a step and back, over a climbing arpeggio.',
+      ru: 'Четырёхзвучные аккорды на каждую долю, крайние звуки на ступень вверх и обратно, над восходящим арпеджио.',
+    },
+    description: {
+      en: 'Level 2, lesson 2: the chord with its octave, then its root and top note a step higher, twice, and back.',
+      ru: 'Уровень 2, урок 2: аккорд с октавой, затем основной тон и верхний звук на ступень выше, дважды, и обратно.',
+    },
+    rh: 'chd',
+    lh: 'climb',
+  },
   r1: {
     group: 'seven-types',
     name: { en: '1 · Harmonic basis', ru: '1 · Гармоническая основа' },

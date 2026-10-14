@@ -19,12 +19,12 @@ import { METHOD_PATTERNS, METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
 describe('the pattern catalog', () => {
-  it('has 45 patterns in five groups, built from 42 right-hand and 27 left-hand figures', () => {
-    expect(PATTERN_IDS).toHaveLength(45)
-    expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 12, 8, 6, 14])
-    expect(Object.keys(RIGHT_FIGURES)).toHaveLength(42)
+  it('has 48 patterns in five groups, built from 45 right-hand and 27 left-hand figures', () => {
+    expect(PATTERN_IDS).toHaveLength(48)
+    expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 15, 8, 6, 14])
+    expect(Object.keys(RIGHT_FIGURES)).toHaveLength(45)
     expect(Object.keys(LEFT_FIGURES)).toHaveLength(27)
-    expect(Object.keys(METHODS)).toHaveLength(17)
+    expect(Object.keys(METHODS)).toHaveLength(20)
   })
 
   it('says which method book teaches each group, the rhythm styles no book’s', () => {

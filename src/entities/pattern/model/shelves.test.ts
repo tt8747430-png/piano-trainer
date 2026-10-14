@@ -19,7 +19,7 @@ describe('partShelves', () => {
   it('lists a method book’s groups on its part', () => {
     expect(outline(partShelves(book, choices, 'called-to-play'))).toEqual([
       ['five-ways', 5],
-      ['techniques', 12],
+      ['techniques', 15],
     ])
     expect(outline(partShelves(book, choices, 'seven-types'))).toEqual([['seven-types', 8]])
   })

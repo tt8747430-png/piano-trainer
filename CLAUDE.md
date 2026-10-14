@@ -162,7 +162,7 @@ it. `@` → `src`.
   `writeMelody`, `writeHand`, `PieceMusic`, `readMusic`); the learner's own, ADR 0027: `pt-pieces`: their
   versions by piece id and their own songs (`my-<n>`), read through the repertoire (`repertoire`, `useRepertoire`):
   the catalog in the learner's versions and their songs, what the router, Songs, a piece's page and the Player read;
-  `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (45 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
+  `selectVersion`, `selectHasVersion`, `selectOwnSong`), `pattern` (48 patterns, each with its idea in a line; the pattern book (`patternBook`, `BUILT_IN_PATTERNS`,
   `usePatternBook`, ADR 0026) over the learner's own (`OwnPattern`, `my-<n>`), looked up by `PatternRef`; `pt-patterns`:
   favourites, hidden, own; `PATTERN_GROUP_BOOK`; `partShelves` (a part of `ACCOMPANIMENT_PARTS`, named by `usePartName`) /
   `pickerShelves`, named by `useShelfName` / `useFullShelfName`; `PatternFit` and `patternNeed` /

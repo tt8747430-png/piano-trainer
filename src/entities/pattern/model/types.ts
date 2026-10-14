@@ -36,6 +36,9 @@ export const RIGHT_FIGURE_IDS = [
   'p53',
   's6u',
   's6d',
+  'oc',
+  'ocs',
+  'chd',
   'r1',
   'r2',
   'r3',
@@ -115,6 +118,9 @@ export const PATTERN_IDS = [
   'p53',
   's6u',
   's6d',
+  'oct',
+  'octs',
+  'chd',
   'r1',
   'r2',
   'r3',
@@ -165,6 +171,9 @@ export const METHOD_CODES = [
   '5.3',
   '6u',
   '6d',
+  'oct',
+  'octs',
+  'ch',
 ] as const
 export type MethodCode = (typeof METHOD_CODES)[number]
 

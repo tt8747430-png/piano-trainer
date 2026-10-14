@@ -245,6 +245,66 @@ describe('the sixths in 6/8 (lesson 7)', () => {
   })
 })
 
+describe('the octaves and chords of lesson 2', () => {
+  const C = note('C')
+  const inFour = (pattern: PatternId) => {
+    const chart: Chart = {
+      key: { tonic: C, minor: false },
+      meter: '4/4',
+      sections: [{ lines: [[{ chords: [{ root: C, quality: 'maj', beats: 4 }], beats: 4 }]] }],
+    }
+    return play(pattern, chart)
+  }
+
+  it('Октавы · octaves by the chord, 1–2–3–5 through two octaves in 8ths', () => {
+    expect(hand(inFour('oct'), 'rh')).toEqual([
+      '0:C4+C5/6',
+      '6:D4+D5/6',
+      '12:E4+E5/6',
+      '18:G4+G5/6',
+      '24:C5+C6/6',
+      '30:D5+D6/6',
+      '36:E5+E6/6',
+      '42:G5+G6/6',
+    ])
+  })
+
+  it('Октавы (гамма) · octaves up the scale in 8ths', () => {
+    expect(hand(inFour('octs'), 'rh')).toEqual([
+      '0:C4+C5/6',
+      '6:D4+D5/6',
+      '12:E4+E5/6',
+      '18:F4+F5/6',
+      '24:G4+G5/6',
+      '30:A4+A5/6',
+      '36:B4+B5/6',
+      '42:C5+C6/6',
+    ])
+  })
+
+  it('Chords · the chord with its octave, its outer notes stepping up and back', () => {
+    const played = inFour('chd')
+    expect(hand(played, 'rh')).toEqual([
+      '0:C4+E4+G4+C5/12',
+      '12:D4+E4+G4+D5/12',
+      '24:D4+E4+G4+D5/12',
+      '36:C4+E4+G4+C5/12',
+    ])
+    expect(hand(played, 'lh')).toEqual(['0:C2/6', '6:G2/6', '12:C3/6', '18:E3/6', '24:G3/24'])
+  })
+
+  it('plays six octaves to a bar of 6/8', () => {
+    expect(hand(play('oct', bar(D, '6/8')), 'rh')).toEqual([
+      '0:D4+D5/4',
+      '4:E4+E5/4',
+      '8:F4+F5/4',
+      '12:A4+A5/4',
+      '16:D5+D6/4',
+      '20:E5+E6/4',
+    ])
+  })
+})
+
 describe('the methods in compound time', () => {
   it('all play in 6/8 and 12/8', () => {
     const compound = { methodCodes: true, melody: false, key: true, simpleTime: false }

@@ -96,7 +96,8 @@ Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must
 alike. A hyphen separates chords, so write the minus of `7(−9)` as `−` (or write `7b9`). Note names are
 international: B, never H.
 
-**Method codes** are the source book's techniques: `1`–`5`, `t1`–`t5`, `3ch`, `inv`, `5.1`–`5.3`, `6u`, `6d`
+**Method codes** are the source book's techniques: `1`–`5`, `t1`–`t5`, `3ch`, `inv`, `5.1`–`5.3`, `6u`, `6d`, and
+level 2's `oct`, `octs`, `ch`
 (`METHODS` in `src/entities/pattern/content/methods.ts`).
 
 ## The melody
@@ -216,7 +217,7 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 ## Patterns and figures
 
-`src/entities/pattern`: the ids in `model/types.ts`, the figures in `content/figures.ts`, the 45 patterns in
+`src/entities/pattern`: the ids in `model/types.ts`, the figures in `content/figures.ts`, the 48 patterns in
 `content/patterns.ts`, the method codes in `content/methods.ts`. The compiler demands an entry for every id.
 
 - **A figure** (one hand's part): its id in `RIGHT_FIGURE_IDS` or `LEFT_FIGURE_IDS`, then
@@ -325,7 +326,7 @@ entry's alone: `tsc` holds every id a table names.
 ## What the tests check
 
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
-  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 45 patterns, its melody
+  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 48 patterns, its melody
   doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
   accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both
   languages.
