@@ -205,6 +205,20 @@ describe('arrange', () => {
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48, 72])
   })
 
+  it('plays a figure’s 6/8 version in a 6/8 bar, where its 12/8 bar is no two bars of 6/8', () => {
+    const steps: EventPattern = {
+      id: 'steps',
+      rh: figure('0/4 C,4/4 C,8/4 C,12/4 C', {
+        inSix: parseFigure('0/4 C,4/2 C', { perBeat: 6 }),
+      }),
+      lh: figure('0/16 L1'),
+    }
+    const inMeter = (meter: '6/8' | '12/8') =>
+      onsets(arrange(chart([['Am']], { meter }), { tonic: C, pattern: steps }), 'rh')
+    expect(inMeter('6/8')).toEqual([0, 8])
+    expect(inMeter('12/8')).toEqual([0, 12, 24, 36])
+  })
+
   it('clips a figure to a two-beat meter', () => {
     const performance = arrange(chart([['C']], { meter: '2/4' }), {
       tonic: C,

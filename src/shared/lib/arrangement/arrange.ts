@@ -222,10 +222,15 @@ interface BarMeter {
   readonly compound: boolean
 }
 
-/** The events a figure plays in a meter: its compound version in compound time, its 3/4 one in three. */
+/**
+ * The events a figure plays in a meter: in compound time its 6/8 form in a two-beat bar, else its
+ * compound version; its 3/4 one in three.
+ */
 function eventsIn(figure: EventFigure, meter: BarMeter, major: boolean): readonly FigureEvent[] {
   const compound = meter.compound
-    ? ((major ? figure.inCompoundOnMajor : undefined) ?? figure.inCompound)
+    ? ((meter.beats === 2 ? figure.inSix : undefined) ??
+      (major ? figure.inCompoundOnMajor : undefined) ??
+      figure.inCompound)
     : undefined
   return (
     compound ??

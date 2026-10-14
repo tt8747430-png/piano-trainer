@@ -213,8 +213,9 @@ export const isMethodCode = isOneOf(METHOD_CODES)
 /**
  * A hand's figure in the figure notation: `events` for a 4/4 bar, `inThree` for 3/4, `onMajor` for
  * major chords, all in 16ths (in triplet 8ths with `triplets`, a shuffle); `inCompound` for a 12/8 bar
- * (a 6/8 bar plays its first half) and `inCompoundOnMajor` for major chords there, in 16ths of the
- * compound beat, six to a dotted quarter.
+ * (a 6/8 bar plays its first half), `inCompoundOnMajor` for major chords there and `inSix` for a 6/8
+ * bar alone (a figure of four beats in its two-beat form), in 16ths of the compound beat, six to a
+ * dotted quarter.
  */
 export function eventFigure(
   events: string,
@@ -224,6 +225,7 @@ export function eventFigure(
     triplets?: boolean
     inCompound?: string
     inCompoundOnMajor?: string
+    inSix?: string
   } = {},
 ): EventFigure {
   const perBeat = options.triplets ? 3 : 4
@@ -238,5 +240,6 @@ export function eventFigure(
     ...(options.inCompoundOnMajor
       ? { inCompoundOnMajor: compound(options.inCompoundOnMajor) }
       : {}),
+    ...(options.inSix ? { inSix: compound(options.inSix) } : {}),
   }
 }

@@ -89,6 +89,7 @@ const eventSets = (figure: Figure): (readonly FigureEvent[])[] =>
     each.onMajor ?? [],
     each.inCompound ?? [],
     each.inCompoundOnMajor ?? [],
+    each.inSix ?? [],
   ])
 
 /** Whether a figure plays the key's triads (`Ka` `Kb` `Kc`): only a source in a key can play it. */

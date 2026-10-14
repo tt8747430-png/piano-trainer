@@ -93,7 +93,7 @@ export const RIGHT_FIGURES = {
   },
   p51: {
     name: { en: '5.1 The ♭7 under the root', ru: '5.1 ♭7 под основным тоном' },
-    figure: eventFigure('0/4 T,4/4 T,8/4 _b7+T,12/4 _b7+T'),
+    figure: eventFigure('0/4 T,4/4 T,8/4 _b7+T,12/4 _b7+T', { inSix: '0/6 T,6/6 _b7+T' }),
   },
   p52: {
     name: { en: '5.2 Falling line 1–7–♭7–6', ru: '5.2 Нисходящая линия 1–7–♭7–6' },

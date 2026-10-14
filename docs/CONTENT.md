@@ -231,12 +231,13 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 ### The figure notation
 
-`eventFigure(events, { inThree?, onMajor?, triplets?, inCompound?, inCompoundOnMajor? })`. `events` are
+`eventFigure(events, { inThree?, onMajor?, triplets?, inCompound?, inCompoundOnMajor?, inSix? })`. `events` are
 comma-separated `start/length tones` in 16ths of a 4/4 bar (triplet 8ths with `triplets: true`); `inThree` replaces
 them in 3/4, `onMajor` on major chords. `inCompound` replaces them in 6/8 and 12/8, written for a 12/8 bar in 16ths of
 the compound beat (six to a dotted quarter, 24 to the bar; a 6/8 bar plays the first twelve), and
 `inCompoundOnMajor` on major chords there. A figure whose events all fall on beats needs no compound version: a
-compound beat is a beat. Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
+compound beat is a beat; `inSix` gives one of four beats its two-beat form for a 6/8 bar (`5.1`: the chord, then
+the chord over its ♭7). Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
 
 | Token           | Plays                                                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------ |

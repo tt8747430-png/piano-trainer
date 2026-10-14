@@ -222,6 +222,14 @@ describe('the right hand’s ways in 12/8 (lesson 6)', () => {
   })
 })
 
+describe('5.1 in 6/8, as the workbook’s 6/8 songs name it', () => {
+  it('plays the chord, then the chord with the ♭7 under it, over long–short octaves', () => {
+    const played = play('p51', bar(E, '6/8'))
+    expect(hand(played, 'rh')).toEqual(['0:E4+G4+B4/12', '12:D4+E4+G4+B4/12'])
+    expect(hand(played, 'lh')).toEqual(['0:E2+E3/20', '20:E2+E3/4'])
+  })
+})
+
 describe('the sixths in 6/8 (lesson 7)', () => {
   it('rise a quarter, an 8th and a dotted quarter over 1–5–8–10–8–5', () => {
     const played = play('s6u', bar(A, '6/8'))
