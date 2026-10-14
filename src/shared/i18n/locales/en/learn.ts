@@ -31,12 +31,10 @@ export const learn = {
     over: 'Played over “{{piece}}”',
     openInPlayer: 'Open in the Player',
     inProgressions: 'Open in Progressions',
-    tapHint: 'Tap a chord, a note or a bar to hear it and see it on the keys.',
   },
   // The ways along a lesson's track, at its end.
   track: {
     next: 'Next lesson',
-    previous: 'Previous lesson',
     all: 'All lessons of {{module}}',
   },
   // A lesson's question, answered on its keys.

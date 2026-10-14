@@ -28,11 +28,9 @@ export const learn: LocaleResources['learn'] = {
     over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',
     inProgressions: 'Открыть в последовательностях',
-    tapHint: 'Нажмите на аккорд, ноту или такт: он прозвучит и появится на клавишах.',
   },
   track: {
     next: 'Следующий урок',
-    previous: 'Предыдущий урок',
     all: 'Все уроки: {{module}}',
   },
   question: {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { lessonById, lessonsIn, nextLesson, previousLesson } from './selectors'
+import { lessonById, lessonsIn, nextLesson } from './selectors'
 
 describe('nextLesson', () => {
   it('follows a subject’s lesson with the next, into the next subject at a module’s end', () => {
@@ -17,16 +17,6 @@ describe('nextLesson', () => {
       (course) => lessonsIn(course).at(-1)?.id ?? '',
     )
     for (const last of lastOfEach) expect(nextLesson(last), last).toBeUndefined()
-  })
-})
-
-describe('previousLesson', () => {
-  it('goes back along the same track, none before a track’s first', () => {
-    expect(previousLesson('reading-notes')?.id).toBe('finding-home')
-    expect(previousLesson('finding-home')).toBeUndefined()
-    expect(previousLesson(lessonsIn('accompaniment')[0]?.id ?? '')?.id).toBe('key-signatures')
-    expect(previousLesson(lessonsIn('gorshkov')[0]?.id ?? '')).toBeUndefined()
-    expect(previousLesson('no-such-lesson')).toBeUndefined()
   })
 })
 

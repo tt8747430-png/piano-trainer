@@ -9,7 +9,6 @@ import { useViewChange } from '@/shared/lib'
 import {
   FoldGroup,
   LearnedBadge,
-  LevelMark,
   NavTab,
   NavTabs,
   PAGE_TILES,
@@ -22,7 +21,7 @@ import { lessonGroups } from '../model/lesson-groups'
 /**
  * Learn (ADR 0042): its two tabs, the subjects and the courses; under the tab, the lesson to continue
  * with once something in it is learned, then its modules, each folding under its name, what it is and
- * its count learned, its lessons numbered in the order they are taught, each with its level; a
+ * its count learned, its lessons numbered in the order they are taught; a
  * course's last row leads to its patterns and pieces.
  */
 export function LearnPage() {
@@ -72,10 +71,7 @@ export function LearnPage() {
                     // Grass is learned: a lesson wears it once it is, its page's tile before.
                     paint={learnedIt ? 'grass' : PAGE_TILES.lesson.paint}
                     trailing={
-                      <>
-                        <LevelMark level={lesson.level} />
-                        {learnedIt ? <LearnedBadge label={t('common:learned.done')} /> : null}
-                      </>
+                      learnedIt ? <LearnedBadge label={t('common:learned.done')} /> : undefined
                     }
                     render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
                   />

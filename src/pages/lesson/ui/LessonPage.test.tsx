@@ -13,7 +13,6 @@ describe('A lesson', () => {
       await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' }),
     ).toBeInTheDocument()
     expect(screen.getByText(/what its numbers mean/)).toBeInTheDocument()
-    expect(screen.getByText('Beginner')).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
@@ -59,7 +58,7 @@ describe('A lesson', () => {
 
   it('plays a note tapped on a line’s staff, and a bar tapped over it', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/lessons/chromatic-scale')
+    const { audio } = await renderApp('/learn/lessons/whole-and-half-steps')
     const note = await screen.findAllByRole('button', { name: /^Play [A-G]/ })
     const [first] = note
     if (!first) throw new Error('a line of notes')
@@ -72,8 +71,25 @@ describe('A lesson', () => {
     await renderApp('/learn/lessons/finding-home')
     const next = await screen.findByRole('link', { name: /Next lesson/ })
     expect(next.getAttribute('href')).toBe('/learn/lessons/reading-notes')
-    expect(screen.queryByRole('link', { name: /Previous lesson/ })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
+  })
+
+  it('is learned once the learner goes on to the next lesson', async () => {
+    const user = userEvent.setup()
+    const { progressStore, router } = await renderApp('/learn/lessons/finding-home')
+    await user.click(await screen.findByRole('link', { name: /Next lesson/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/reading-notes'))
+    expect(progressStore.getState().learned['lesson:finding-home']).toBeDefined()
+  })
+
+  it('ends a course on its list of lessons, the last one learned on the way', async () => {
+    const user = userEvent.setup()
+    const last = lessonsIn('gorshkov').at(-1)
+    if (!last) throw new Error('a course has lessons')
+    const { progressStore, router } = await renderApp(`/learn/lessons/${last.id}`)
+    await user.click(await screen.findByRole('link', { name: /All lessons of Горшков/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    expect(progressStore.getState().learned[`lesson:${last.id}`]).toBeDefined()
   })
 
   it('lists its sections at its top, each a link to its heading', async () => {
@@ -100,12 +116,6 @@ describe('A lesson', () => {
     await renderApp('/learn/lessons/right-hand-five')
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('navigation', { name: 'In this lesson' })).not.toBeInTheDocument()
-  })
-
-  it('leads back to the lesson before it', async () => {
-    await renderApp('/learn/lessons/reading-notes')
-    const previous = await screen.findByRole('link', { name: /Previous lesson/ })
-    expect(previous.getAttribute('href')).toBe('/learn/lessons/finding-home')
   })
 
   it('says its module and its number in it, its module a link to it open on Learn', async () => {

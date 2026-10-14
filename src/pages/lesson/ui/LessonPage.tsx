@@ -1,20 +1,18 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight, List } from 'lucide-react'
+import { ArrowRight, List } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   lessonById,
   lessonsIn,
   nextLesson,
-  previousLesson,
   tabOf,
   useModuleName,
   type Lesson,
 } from '@/entities/lesson'
-import { LEVEL_NAME } from '@/entities/path'
 import { lessonLearnedId } from '@/entities/progress'
-import { LearnedButton } from '@/features/mark-learned'
+import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, PAGE_TILES, RowLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView } from '@/widgets/lesson-view'
 
 /** Learn as it shows a lesson's module: its tab, the module open. */
@@ -23,85 +21,82 @@ const moduleOnLearn = (lesson: Lesson) =>
 
 /**
  * A lesson: where it is (its module, a link to it on Learn, and its number in it), its title and
- * summary and what its examples do, then the lesson itself, and at its end Learned and the lessons
- * either side of it along its track (ADR 0042); a course's last leads back to the course's list.
+ * summary, then the lesson itself, and at its end Learned and the way on along its track (ADR 0042):
+ * the next lesson, or a course's list after its last. Going on marks the lesson learned.
  */
 export function LessonPage() {
-  const { t } = useTranslation(['learn', 'common'])
+  const { t } = useTranslation('learn')
   const locale = useLocale()
   const moduleName = useModuleName()
   const { lessonId } = useParams({ from: '/shell/learn/lessons/$lessonId' })
   const lesson = lessonById(lessonId)
   if (!lesson) return null
   const inModule = lessonsIn(lesson.module)
-  const previous = previousLesson(lesson.id)
-  const next = nextLesson(lesson.id)
   return (
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={localText(lesson.title, locale)}
         back={<BackButton fallback={moduleOnLearn(lesson)} />}
       />
-      <nav aria-label={t('learn:placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
+      <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         <Link
           {...moduleOnLearn(lesson)}
           className="rounded-sm font-semibold text-foreground underline-offset-4 hover:underline"
         >
           {moduleName(lesson.module)}
         </Link>{' '}
-        ·{' '}
-        {t('learn:place', {
-          n: inModule.indexOf(lesson) + 1,
-          total: inModule.length,
-        })}
+        · {t('place', { n: inModule.indexOf(lesson) + 1, total: inModule.length })}
       </nav>
-      <p className="max-w-prose text-lg text-muted-foreground">
+      <p className="max-w-prose text-lg text-pretty text-muted-foreground">
         {localText(lesson.summary, locale)}
       </p>
-      <p className="-mt-2 text-muted-foreground">
-        {t(`common:levelName.${LEVEL_NAME[lesson.level]}`)}
-      </p>
-      <p className="max-w-prose text-muted-foreground print:hidden">{t('learn:example.tapHint')}</p>
       <LessonView key={lesson.id} lesson={lesson} />
-      {/* Read to its end, the lesson is marked learned here (Learn shows it), and the next one opens. */}
-      <footer className="mt-6 flex max-w-prose flex-col gap-4 border-t border-border pt-8 print:hidden">
-        <div className="self-start">
-          <LearnedButton step={lessonLearnedId(lesson.id)} />
-        </div>
-        <ul className="flex flex-col gap-2 *:card">
-          {next ? (
-            <li>
-              <RowLink
-                title={localText(next.title, locale)}
-                detail={t('learn:track.next')}
-                icon={ArrowRight}
-                paint={PAGE_TILES.lesson.paint}
-                render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />}
-              />
-            </li>
-          ) : (
-            <li>
-              <RowLink
-                title={t('learn:track.all', { module: moduleName(lesson.module) })}
-                icon={List}
-                paint={PAGE_TILES.lesson.paint}
-                render={<Link {...moduleOnLearn(lesson)} />}
-              />
-            </li>
-          )}
-          {previous ? (
-            <li>
-              <RowLink
-                title={localText(previous.title, locale)}
-                detail={t('learn:track.previous')}
-                icon={ArrowLeft}
-                paint={PAGE_TILES.lesson.paint}
-                render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: previous.id }} />}
-              />
-            </li>
-          ) : null}
-        </ul>
-      </footer>
+      <LessonEnd lesson={lesson} />
     </div>
+  )
+}
+
+/** A lesson's end: its Learned toggle beside the one way on, which learns it on the way. */
+function LessonEnd({ lesson }: { lesson: Lesson }) {
+  const { t } = useTranslation('learn')
+  const locale = useLocale()
+  const moduleName = useModuleName()
+  const step = lessonLearnedId(lesson.id)
+  const { learn } = useLearned(step)
+  const next = nextLesson(lesson.id)
+  return (
+    <footer className="mt-6 flex max-w-prose flex-wrap items-center gap-3 border-t border-border pt-8 print:hidden">
+      <ButtonLink
+        size="pill"
+        onClick={learn}
+        className="h-auto min-h-14 min-w-0 flex-1 basis-64 justify-between gap-4 py-3 text-left whitespace-normal"
+        render={
+          next ? (
+            <Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />
+          ) : (
+            <Link {...moduleOnLearn(lesson)} />
+          )
+        }
+      >
+        {next ? (
+          <span className="flex min-w-0 flex-col">
+            <span className="text-sm font-medium">{t('track.next')}</span>
+            <span className="font-display text-xl text-balance">
+              {localText(next.title, locale)}
+            </span>
+          </span>
+        ) : (
+          <span className="font-display text-xl text-balance">
+            {t('track.all', { module: moduleName(lesson.module) })}
+          </span>
+        )}
+        {next ? (
+          <ArrowRight aria-hidden className="size-5" />
+        ) : (
+          <List aria-hidden className="size-5" />
+        )}
+      </ButtonLink>
+      <LearnedButton step={step} />
+    </footer>
   )
 }

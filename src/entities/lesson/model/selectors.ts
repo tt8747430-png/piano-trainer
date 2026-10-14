@@ -15,16 +15,10 @@ const trackOf = (module: LessonModule): readonly Lesson[] =>
 
 const TRACKS = new Map(LESSON_MODULES.map((module) => [module, trackOf(module)]))
 
-/** The lesson `step` places along this one's track; none past either end, or for an unknown id. */
-function along(id: string, step: 1 | -1): Lesson | undefined {
+/** The lesson after this one along its track: into the next subject at a module's end, never past a course. */
+export function nextLesson(id: string): Lesson | undefined {
   const lesson = lessonById(id)
   const track = lesson ? (TRACKS.get(lesson.module) ?? []) : []
   const at = track.findIndex((each) => each.id === id)
-  return at < 0 ? undefined : track[at + step]
+  return at < 0 ? undefined : track[at + 1]
 }
-
-/** The lesson after this one along its track: into the next subject at a module's end, never past a course. */
-export const nextLesson = (id: string): Lesson | undefined => along(id, 1)
-
-/** The lesson before this one along its track. */
-export const previousLesson = (id: string): Lesson | undefined => along(id, -1)
