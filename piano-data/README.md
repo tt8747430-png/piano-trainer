@@ -11,7 +11,6 @@ links. Nothing here ships with the app; content is written from it into `src/ent
 | [`scores/`](scores)                 | Sheet music                                                                          |
 | [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app, numbered in viewing order |
 | [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`) and images (`images/`)            |
-| [`_not-piano/`](_not-piano)         | Files that are not piano material and were found here                                |
 
 ## Method books
 
