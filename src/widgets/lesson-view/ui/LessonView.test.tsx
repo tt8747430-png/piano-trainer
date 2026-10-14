@@ -4,7 +4,7 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { lessonById, type Lesson } from '@/entities/lesson'
@@ -60,6 +60,16 @@ describe('LessonView', () => {
       '9ths, 13ths and alterations',
       'Naming any chord',
     ])
+  })
+
+  it('marks the section being read in its contents', async () => {
+    await renderLesson()
+    const contents = screen.getByRole('navigation', { name: 'In this lesson' })
+    const [first, second] = within(contents).getAllByRole('link')
+    await waitFor(() => expect(first).toHaveAttribute('data-reading'))
+    expect(second).not.toHaveAttribute('data-reading')
+    // None is where the page is until its hash names one.
+    expect(first).not.toHaveAttribute('aria-current')
   })
 
   it('plays a chord example and marks its tones on the keys', async () => {

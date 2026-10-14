@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useMemo, useReducer, useState } from 'react'
+import { useMemo, useReducer, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -18,6 +18,7 @@ import {
 } from '../model/lesson-question'
 import { LessonBlock } from './LessonBlock'
 import { QuestionBlock } from './QuestionBlock'
+import { usePinnedHeight, useReadingSection } from './use-reading-section'
 import { NO_KEYS, type ShownKeys } from '@/shared/ui'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
@@ -47,6 +48,9 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
+  const root = useRef<HTMLDivElement>(null)
+  const pinned = usePinnedHeight(root)
+  const reading = useReadingSection(lesson.sections.map((_, s) => sectionId(s)))
   const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
   const saidAnswers = useMemo(() => lessonAnswers(lesson), [lesson])
@@ -72,75 +76,87 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
     setShown(next)
   }
   return (
-    <div className="flex flex-col gap-10">
+    <div ref={root} className="flex flex-col gap-10">
       <PinnedKeyboard
         shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}
         onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
       />
-      {lesson.sections.length >= CONTENTS_FROM ? (
-        <nav aria-label={t('contents')} className="max-w-prose print:hidden">
-          {/* The nav says its name to a screen reader: the caption is for the eye. */}
-          <p aria-hidden className="mb-2 text-sm font-semibold text-muted-foreground">
-            {t('contents')}
-          </p>
-          <ol className="flex flex-col gap-1">
-            {lesson.sections.map((section, s) => (
-              <li key={section.heading.en} className="flex gap-3">
-                <span
-                  aria-hidden
-                  className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
-                >
-                  {s + 1}
-                </span>
-                <Link
-                  to="."
-                  hash={sectionId(s)}
-                  replace
-                  className="rounded-sm underline-offset-4 hover:underline"
-                >
-                  {localText(section.heading, locale)}
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
-      {lesson.sections.map((section, s) => (
-        <section
-          key={section.heading.en}
-          id={sectionId(s)}
-          // Sections apart by a line and room; a section's text and its examples close together.
-          className={cn(
-            'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
-            s > 0 && 'border-t border-border pt-8',
-          )}
-        >
-          <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
-          {section.blocks.map((block, b) => {
-            const id = `${s}.${b}`
-            if (block.kind !== 'question')
-              return <LessonBlock key={id} block={block} onShow={show} />
-            const open = question?.id === id ? question : null
-            const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
-            return (
-              <QuestionBlock
-                key={id}
-                ask={block.ask}
-                stage={open ? open.stage : 'closed'}
-                count={chosenOf(open?.chosen ?? [], answerKeys)}
-                onOpen={() => dispatch({ type: 'open', id })}
-                onReveal={() => {
-                  dispatch({ type: 'reveal' })
-                  play(answerSounds(block.answer, answerKeys.keys))
-                }}
-                onRetry={() => dispatch({ type: 'retry' })}
-              />
-            )
-          })}
-        </section>
-      ))}
+      <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,65ch)_minmax(0,1fr)] lg:gap-x-16">
+        {lesson.sections.length >= CONTENTS_FROM ? (
+          <nav
+            aria-label={t('contents')}
+            // On a laptop the contents keep to the column beside the lesson, under the pinned keys.
+            style={{ '--pinned': `${pinned}px` } as CSSProperties}
+            className="max-w-prose print:hidden lg:sticky lg:top-[calc(var(--screen-bar)+var(--pinned)+--spacing(6))] lg:col-start-2 lg:row-start-1 lg:self-start"
+          >
+            {/* The nav says its name to a screen reader: the caption is for the eye. */}
+            <p aria-hidden className="mb-2 text-sm font-semibold text-muted-foreground">
+              {t('contents')}
+            </p>
+            <ol className="flex flex-col gap-1">
+              {lesson.sections.map((section, s) => (
+                <li key={section.heading.en} className="flex gap-3">
+                  <span
+                    aria-hidden
+                    className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
+                  >
+                    {s + 1}
+                  </span>
+                  <Link
+                    to="."
+                    hash={sectionId(s)}
+                    replace
+                    // Every link is to this page: only the one its hash names is where it is.
+                    activeOptions={{ includeHash: true }}
+                    data-reading={reading === sectionId(s) || undefined}
+                    className="rounded-sm underline-offset-4 hover:underline data-reading:font-semibold"
+                  >
+                    {localText(section.heading, locale)}
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        ) : null}
+        <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-1">
+          {lesson.sections.map((section, s) => (
+            <section
+              key={section.heading.en}
+              id={sectionId(s)}
+              // Sections apart by a line and room; a section's text and its examples close together.
+              className={cn(
+                'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+                s > 0 && 'border-t border-border pt-8',
+              )}
+            >
+              <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
+              {section.blocks.map((block, b) => {
+                const id = `${s}.${b}`
+                if (block.kind !== 'question')
+                  return <LessonBlock key={id} block={block} onShow={show} />
+                const open = question?.id === id ? question : null
+                const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
+                return (
+                  <QuestionBlock
+                    key={id}
+                    ask={block.ask}
+                    stage={open ? open.stage : 'closed'}
+                    count={chosenOf(open?.chosen ?? [], answerKeys)}
+                    onOpen={() => dispatch({ type: 'open', id })}
+                    onReveal={() => {
+                      dispatch({ type: 'reveal' })
+                      play(answerSounds(block.answer, answerKeys.keys))
+                    }}
+                    onRetry={() => dispatch({ type: 'retry' })}
+                  />
+                )
+              })}
+            </section>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
