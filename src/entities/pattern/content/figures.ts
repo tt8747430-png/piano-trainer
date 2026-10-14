@@ -13,6 +13,19 @@ const R4 = eventFigure('6/2 v1,8/2 v3,10/2 v2,12/2 v4,14/2 v3', {
 })
 const R4B = eventFigure('0/2 v1,2/2 v3,4/2 v2,6/2 v3,8/2 v1,10/2 v3,12/2 v2,14/2 v3')
 
+/**
+ * A 6/8 bar's events, written once, as the compound version plays them: in each half of a 12/8 bar,
+ * the second twelve 16ths on (Called to Play's level 2 writes its ways for one bar of 6/8).
+ */
+const eachHalf = (sixEight: string): string =>
+  [0, 12]
+    .flatMap((from) =>
+      sixEight
+        .split(',')
+        .map((event) => event.replace(/^(\d+)/, (start) => String(Number(start) + from))),
+    )
+    .join(',')
+
 export const RIGHT_FIGURES = {
   b1: {
     name: { en: 'Chord on every beat', ru: 'Аккорд на каждую долю' },
@@ -20,40 +33,55 @@ export const RIGHT_FIGURES = {
   },
   b2: {
     name: { en: 'Broken chord: upper notes, lowest', ru: 'Ломаный аккорд: верхние звуки, нижний' },
-    figure: eventFigure('0/2 U,2/2 v1^1,4/2 U,6/2 v1^1,8/2 U,10/2 v1^1,12/2 U,14/2 v1^1'),
+    figure: eventFigure('0/2 U,2/2 v1^1,4/2 U,6/2 v1^1,8/2 U,10/2 v1^1,12/2 U,14/2 v1^1', {
+      inCompound: eachHalf('0/4 U,4/2 v1^1,6/4 U,10/2 v1^1'),
+    }),
   },
   b3: {
     name: { en: 'Arpeggio: 3rd, then 5th + octave', ru: 'Арпеджио: терция, затем квинта + октава' },
-    figure: eventFigure('6/2 3^1,8/8 5^2+8^5'),
+    figure: eventFigure('6/2 3^1,8/8 5^2+8^5', { inCompound: eachHalf('6/6 3^1+5^2+8^5') }),
   },
   b4: {
     name: { en: 'Arpeggio 3–5–8–5–3', ru: 'Арпеджио 3–5–8–5–3' },
-    figure: eventFigure('6/2 3^1,8/2 5^2,10/2 8^5,12/2 5^2,14/2 3^1'),
+    figure: eventFigure('6/2 3^1,8/2 5^2,10/2 8^5,12/2 5^2,14/2 3^1', {
+      inCompound: eachHalf('6/2 3^1,8/2 5^2,10/2 8^5'),
+    }),
   },
   t1: {
     name: { en: '♪♩ Chord, then octave jumps', ru: '♪♩ Аккорд, затем скачки на октаву' },
-    figure: eventFigure('0/6 T,6/2 8^1,8/4 15^5,12/4 8^1'),
+    figure: eventFigure('0/6 T,6/2 8^1,8/4 15^5,12/4 8^1', {
+      inCompound: eachHalf('0/4 T,4/2 8^1,6/6 15^5'),
+    }),
   },
   t2: {
     name: { en: '♪♪♪♪ Arpeggio up two octaves', ru: '♪♪♪♪ Арпеджио вверх на две октавы' },
-    figure: eventFigure('0/2 1^1,2/2 3^2,4/2 5^3,6/2 8^5,8/2 8^1,10/2 10^2,12/2 12^3,14/2 15^5'),
+    figure: eventFigure('0/2 1^1,2/2 3^2,4/2 5^3,6/2 8^5,8/2 8^1,10/2 10^2,12/2 12^3,14/2 15^5', {
+      inCompound: eachHalf('0/2 1^1,2/2 3^2,4/2 5^3,6/2 8^1,8/2 10^2,10/2 12^3'),
+    }),
   },
   t3: {
     name: { en: '♬ 2nd and 5th, then down 3–2–1', ru: '♬ Секунда и квинта, затем вниз 3–2–1' },
     figure: eventFigure(
       '0/2 9^2+12^5,2/2 10^3,4/2 9^2,6/2 8^1,8/2 2^2+5^5,10/2 3^3,12/2 2^2,14/2 1^1',
+      { inCompound: eachHalf('0/2 9^2+12^5,2/2 10^3,4/2 8^1,6/2 2^2+5^5,8/2 3^3,10/2 1^1') },
     ),
   },
   t4: {
     name: { en: '♫ Up 1–2–3–5 over two octaves', ru: '♫ Вверх 1–2–3–5 на две октавы' },
-    figure: eventFigure('0/2 1^1,2/2 2^2,4/2 3^3,6/2 5^5,8/2 8^1,10/2 9^2,12/2 10^3,14/2 12^5'),
+    figure: eventFigure('0/2 1^1,2/2 2^2,4/2 3^3,6/2 5^5,8/2 8^1,10/2 9^2,12/2 10^3,14/2 12^5', {
+      inCompound: eachHalf(
+        '0/1 1^1,1/1 2^2,2/1 3^3,3/1 5^5,4/1 8^1,5/1 9^2,6/1 10^3,7/1 12^5,8/1 15^1,9/1 16^2,10/1 17^3,11/1 19^5',
+      ),
+    }),
   },
   t5: {
     name: {
       en: '♩.♪♩ Dotted chord, then an octave up',
       ru: '♩.♪♩ Пунктирный аккорд, затем октавой выше',
     },
-    figure: eventFigure('0/6 T,6/2 T8,8/8 T8'),
+    figure: eventFigure('0/6 T,6/2 T8,8/8 T8', {
+      inCompound: eachHalf('0/4 T+8,4/2 T8+15,6/6 T8+15'),
+    }),
   },
   c3: {
     name: { en: '3 chords an octave apart', ru: '3 аккорда через октаву' },
@@ -61,7 +89,7 @@ export const RIGHT_FIGURES = {
   },
   inv: {
     name: { en: 'Inversions: root, 1st, 2nd', ru: 'Обращения: основной вид, 1-е, 2-е' },
-    figure: eventFigure('0/8 T,8/4 T1,12/4 T2'),
+    figure: eventFigure('0/8 T,8/4 T1,12/4 T2', { inCompound: eachHalf('0/6 T,6/6 T1') }),
   },
   p51: {
     name: { en: '5.1 The ♭7 under the root', ru: '5.1 ♭7 под основным тоном' },
@@ -79,11 +107,15 @@ export const RIGHT_FIGURES = {
   },
   s6u: {
     name: { en: '6th↑ Rising sixths', ru: 'Сексты ↑ Восходящие сексты' },
-    figure: eventFigure('0/2 s2+s7,2/2 s3+s8,4/2 s3+s8,6/2 s4+s9,8/8 s4+s9'),
+    figure: eventFigure('0/2 s2+s7,2/2 s3+s8,4/2 s3+s8,6/2 s4+s9,8/8 s4+s9', {
+      inCompound: eachHalf('0/4 s2+s7,4/2 s3+s8,6/6 s4+s9'),
+    }),
   },
   s6d: {
     name: { en: '6th↓ Falling sixths', ru: 'Сексты ↓ Нисходящие сексты' },
-    figure: eventFigure('0/2 s4+s9,2/2 s3+s8,4/2 s3+s8,6/2 s2+s7,8/8 s2+s7'),
+    figure: eventFigure('0/2 s4+s9,2/2 s3+s8,4/2 s3+s8,6/2 s2+s7,8/8 s2+s7', {
+      inCompound: eachHalf('0/4 s4+s9,4/2 s3+s8,6/6 s2+s7'),
+    }),
   },
   r1: {
     name: { en: 'Held chords (half notes)', ru: 'Выдержанные аккорды (половинные)' },
@@ -217,19 +249,28 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
   },
   dot: {
     name: { en: 'Dotted octaves ♩. ♪', ru: 'Пунктирные октавы ♩. ♪' },
-    figure: eventFigure('0/6 L1+L8,6/2 L1+L8,8/6 L1+L8,14/2 L1+L8'),
+    figure: eventFigure('0/6 L1+L8,6/2 L1+L8,8/6 L1+L8,14/2 L1+L8', {
+      inCompound: eachHalf('0/10 L1+L8,10/2 L1+L8'),
+    }),
   },
   wide: {
     name: { en: 'Wide arpeggio 1–5–8–10–12–10', ru: 'Широкое арпеджио 1–5–8–10–12–10' },
-    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/4 L12^1,12/4 L10^2'),
+    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/4 L12^1,12/4 L10^2', {
+      inCompound:
+        '0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/2 L12^1,10/2 L10^2,12/2 L1^5,14/2 L5^2,16/2 L8^1,18/6 L10^2',
+    }),
   },
   climb: {
     name: { en: 'Arpeggio 1–5–8–10, the 12th held', ru: 'Арпеджио 1–5–8–10, дуодецима выдержана' },
-    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/8 L12^1'),
+    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/8 L12^1', {
+      inCompound: eachHalf('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^4,8/2 L12^2,10/2 L15^1'),
+    }),
   },
   q: {
     name: { en: '1–5–8–5 in quarters', ru: '1–5–8–5 четвертями' },
-    figure: eventFigure('0/4 L1^5,4/4 L5^2,8/4 L8^1,12/4 L5^2'),
+    figure: eventFigure('0/4 L1^5,4/4 L5^2,8/4 L8^1,12/4 L5^2', {
+      inCompound: eachHalf('0/2 L1^5,2/2 L5^2,4/2 L8^1,6/2 L10^2,8/2 L8^1,10/2 L5^2'),
+    }),
   },
   alt: {
     name: {
@@ -244,7 +285,9 @@ export const LEFT_FIGURES: Readonly<Record<LeftFigureId, FigureEntry<EventFigure
   },
   fig: {
     name: { en: 'Arpeggio 1–5–8 (no 3rd)', ru: 'Арпеджио 1–5–8 (без терции)' },
-    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1'),
+    figure: eventFigure('0/2 L1^5,2/2 L5^2,4/2 L8^1', {
+      inCompound: eachHalf('0/2 L1^5,2/2 L5^2,4/2 L8^1'),
+    }),
   },
   bro: {
     name: { en: 'Broken chord 1–5–10–5', ru: 'Ломаный аккорд 1–5–10–5' },

@@ -1,0 +1,256 @@
+import { describe, expect, it } from 'vitest'
+import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
+import { note, type Meter, type SpelledNote } from '@/shared/lib/music'
+import { BUILT_IN_PATTERNS } from '../model/book'
+import { patternNeed } from '../model/fit'
+import { METHOD_CODES, type PatternId } from '../model/types'
+import { METHODS } from './methods'
+
+// Called to Play's level 2 plays level 1's methods in 6/8 and 12/8 (spec 2026-10-14): each figure
+// below is the book's, a dotted-quarter beat 12 ticks, an 8th 4, a 16th 2.
+
+const NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+const keyName = (midi: number) => `${NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`
+
+/** One bar of a minor chord, or a major one, in a compound meter. */
+const bar = (root: SpelledNote, meter: Meter, quality: 'min' | 'maj' = 'min'): Chart => {
+  const beats = meter === '12/8' ? 4 : 2
+  return {
+    key: { tonic: root, minor: quality === 'min' },
+    meter,
+    sections: [{ lines: [[{ chords: [{ root, quality, beats }], beats }]] }],
+  }
+}
+const play = (pattern: PatternId, chart: Chart): Performance =>
+  arrange(chart, {
+    tonic: chart.key.tonic,
+    pattern: BUILT_IN_PATTERNS.require(pattern).pattern,
+  })
+/** A hand's notes as the book writes them: each onset, its keys lowest first, its length. */
+const hand = (performance: Performance, which: 'rh' | 'lh') => {
+  const notes = performance.notes.filter((n) => n.hand === which)
+  return [...new Set(notes.map((n) => n.startTick))]
+    .toSorted((a, b) => a - b)
+    .map((tick) => {
+      const struck = notes.filter((n) => n.startTick === tick).toSorted((a, b) => a.midi - b.midi)
+      return `${tick}:${struck.map((n) => keyName(n.midi)).join('+')}/${struck[0]?.durationTicks}`
+    })
+}
+const A = note('A')
+const D = note('D')
+const E = note('E')
+
+describe('the five ways in 6/8 (lesson 3)', () => {
+  it('1 · the chord on each beat over a held octave', () => {
+    const played = play('M1', bar(A, '6/8'))
+    expect(hand(played, 'rh').map((event) => event.split(':')[0])).toEqual(['0', '12'])
+    expect(hand(played, 'lh')).toEqual(['0:A1+A2/24'])
+  })
+
+  it('2 · the upper notes a quarter, the lowest an 8th, on each beat', () => {
+    const rh = hand(play('M2', bar(A, '6/8')), 'rh')
+    expect(rh.map((event) => [event.split(':')[0], event.split('/')[1]])).toEqual([
+      ['0', '8'],
+      ['8', '4'],
+      ['12', '8'],
+      ['20', '4'],
+    ])
+    expect(rh[0]).toContain('+')
+    expect(rh[1]).not.toContain('+')
+  })
+
+  it('3 · 1–5–8 in 8ths in the left hand, then the chord on beat 2', () => {
+    const played = play('M3', bar(A, '6/8'))
+    expect(hand(played, 'lh')).toEqual(['0:A1/4', '4:E2/4', '8:A2/4'])
+    expect(hand(played, 'rh')).toEqual(['12:C4+E4+A4/12'])
+  })
+
+  it('4 · 1–5–8 in the left hand, 3–5–8 in the right, all 8ths', () => {
+    const played = play('M4', bar(A, '6/8'))
+    expect(hand(played, 'lh')).toEqual(['0:A1/4', '4:E2/4', '8:A2/4'])
+    expect(hand(played, 'rh')).toEqual(['12:C4/4', '16:E4/4', '20:A4/4'])
+  })
+
+  it('5 · the chord on each beat over octaves long, then short', () => {
+    const played = play('M5', bar(A, '6/8'))
+    expect(hand(played, 'lh')).toEqual(['0:A1+A2/20', '20:A1+A2/4'])
+    expect(hand(played, 'rh').map((event) => event.split(':')[0])).toEqual(['0', '12'])
+  })
+
+  it('plays a 12/8 bar as two bars of 6/8', () => {
+    const played = play('M4', bar(A, '12/8'))
+    expect(hand(played, 'lh').map((event) => event.split(':')[0])).toEqual([
+      '0',
+      '4',
+      '8',
+      '24',
+      '28',
+      '32',
+    ])
+    expect(hand(played, 'rh').map((event) => event.split(':')[0])).toEqual([
+      '12',
+      '16',
+      '20',
+      '36',
+      '40',
+      '44',
+    ])
+  })
+})
+
+describe('the right hand’s ways in 6/8 (lessons 4 and 5)', () => {
+  it('1 (♪♩) · the chord, its octave, then the octave above that', () => {
+    expect(hand(play('t1', bar(D, '6/8')), 'rh')).toEqual(['0:D4+F4+A4/8', '8:D5/4', '12:D6/12'])
+  })
+
+  it('2 · the arpeggio up two octaves in 8ths', () => {
+    expect(hand(play('t2', bar(D, '6/8')), 'rh')).toEqual([
+      '0:D4/4',
+      '4:F4/4',
+      '8:A4/4',
+      '12:D5/4',
+      '16:F5/4',
+      '20:A5/4',
+    ])
+  })
+
+  it('3 · the 2nd and 5th, then down 3–1, an octave lower on beat 2', () => {
+    expect(hand(play('t3', bar(D, '6/8')), 'rh')).toEqual([
+      '0:E5+A5/4',
+      '4:F5/4',
+      '8:D5/4',
+      '12:E4+A4/4',
+      '16:F4/4',
+      '20:D4/4',
+    ])
+  })
+
+  it('4 · 1–2–3–5 through three octaves in 16ths', () => {
+    expect(hand(play('t4', bar(D, '6/8')), 'rh')).toEqual([
+      '0:D4/2',
+      '2:E4/2',
+      '4:F4/2',
+      '6:A4/2',
+      '8:D5/2',
+      '10:E5/2',
+      '12:F5/2',
+      '14:A5/2',
+      '16:D6/2',
+      '18:E6/2',
+      '20:F6/2',
+      '22:A6/2',
+    ])
+  })
+
+  it('5 · the chord with its octave, then an octave up, short and held', () => {
+    const played = play('t5', bar(D, '6/8'))
+    expect(hand(played, 'rh')).toEqual(['0:D4+F4+A4+D5/8', '8:D5+F5+A5+D6/4', '12:D5+F5+A5+D6/12'])
+    expect(hand(played, 'lh')).toEqual([
+      '0:D2/4',
+      '4:A2/4',
+      '8:D3/4',
+      '12:F3/4',
+      '16:A3/4',
+      '20:F3/4',
+    ])
+  })
+
+  it('6 (Invers.) · root position, then the first inversion, over the left hand’s climb', () => {
+    const played = play('inv', bar(D, '6/8'))
+    expect(hand(played, 'rh')).toEqual(['0:D4+F4+A4/12', '12:F4+A4+D5/12'])
+    expect(hand(played, 'lh')).toEqual([
+      '0:D2/4',
+      '4:A2/4',
+      '8:D3/4',
+      '12:F3/4',
+      '16:A3/4',
+      '20:D4/4',
+    ])
+  })
+})
+
+describe('the right hand’s ways in 12/8 (lesson 6)', () => {
+  const OCTAVES = ['0:E2+E3/20', '20:E2+E3/4', '24:E2+E3/20', '44:E2+E3/4']
+
+  it('7 (5.1) · the chord twice, then twice with the ♭7 under it', () => {
+    const played = play('p51', bar(E, '12/8'))
+    expect(hand(played, 'rh')).toEqual([
+      '0:E4+G4+B4/12',
+      '12:E4+G4+B4/12',
+      '24:D4+E4+G4+B4/12',
+      '36:D4+E4+G4+B4/12',
+    ])
+    expect(hand(played, 'lh')).toEqual(OCTAVES)
+  })
+
+  it('8 (5.2) · the root falls 1–7–♭7–6; over a major chord only the first three', () => {
+    expect(hand(play('p52', bar(E, '12/8')), 'rh')).toEqual([
+      '0:E4+G4+B4/12',
+      '12:Eb4+G4+B4/12',
+      '24:D4+G4+B4/12',
+      '36:C#4+G4+B4/12',
+    ])
+    expect(hand(play('p52', bar(E, '12/8', 'maj')), 'rh')).toHaveLength(3)
+  })
+
+  it('9 (5.3) · the 3rd moves 3–2–4–3', () => {
+    const played = play('p53', bar(E, '12/8'))
+    expect(hand(played, 'rh')).toEqual([
+      '0:E4+G4+B4/12',
+      '12:E4+F#4+B4/12',
+      '24:E4+A4+B4/12',
+      '36:E4+G4+B4/12',
+    ])
+    expect(hand(played, 'lh')).toEqual(OCTAVES)
+  })
+
+  it('10 (3 chords) · three chords an octave apart over the wide arpeggio', () => {
+    const played = play('c3', bar(E, '12/8'))
+    expect(hand(played, 'rh')).toEqual(['0:E4+G4+B4/12', '12:E5+G5+B5/12', '24:E6+G6+B6/24'])
+    expect(hand(played, 'lh')).toEqual([
+      '0:E2/4',
+      '4:B2/4',
+      '8:E3/4',
+      '12:G3/4',
+      '16:B3/4',
+      '20:G3/4',
+      '24:E2/4',
+      '28:B2/4',
+      '32:E3/4',
+      '36:G3/12',
+    ])
+  })
+})
+
+describe('the sixths in 6/8 (lesson 7)', () => {
+  it('rise a quarter, an 8th and a dotted quarter over 1–5–8–10–8–5', () => {
+    const played = play('s6u', bar(A, '6/8'))
+    expect(hand(played, 'rh')).toEqual(['0:C4+A4/8', '8:D4+B4/4', '12:E4+C5/12'])
+    expect(hand(played, 'lh')).toEqual([
+      '0:A1/4',
+      '4:E2/4',
+      '8:A2/4',
+      '12:C3/4',
+      '16:A2/4',
+      '20:E2/4',
+    ])
+  })
+
+  it('fall the same way', () => {
+    expect(hand(play('s6d', bar(A, '6/8')), 'rh')).toEqual([
+      '0:E4+C5/8',
+      '8:D4+B4/4',
+      '12:C4+A4/12',
+    ])
+  })
+})
+
+describe('the methods in compound time', () => {
+  it('all play in 6/8 and 12/8', () => {
+    const compound = { methodCodes: true, melody: false, key: true, simpleTime: false }
+    for (const code of METHOD_CODES) {
+      const entry = BUILT_IN_PATTERNS.require(METHODS[code].pattern)
+      expect(patternNeed(entry, compound), code).toBeNull()
+    }
+  })
+})
