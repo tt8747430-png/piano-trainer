@@ -63,7 +63,7 @@ export function SearchField({
         autoFocus={autoFocus}
         value={text}
         onChange={(event) => type(event.target.value)}
-        className="text-base"
+        className="text-base [&::-webkit-search-cancel-button]:appearance-none"
       />
       {text ? (
         <InputGroupAddon align="inline-end">
