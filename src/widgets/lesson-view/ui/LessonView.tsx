@@ -18,7 +18,8 @@ import {
 } from '../model/lesson-question'
 import { LessonBlock } from './LessonBlock'
 import { QuestionBlock } from './QuestionBlock'
-import { usePinnedHeight, useReadingSection } from './use-reading-section'
+import { usePinnedHeight } from './use-pinned-height'
+import { useReadingSection } from './use-reading-section'
 import { NO_KEYS, type ShownKeys } from '@/shared/ui'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
