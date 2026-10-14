@@ -12,6 +12,7 @@ import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
   ChordButton,
+  FitWidth,
   usePositionName,
   PlayLabel,
   type ShownKeys,
@@ -128,27 +129,39 @@ export function RowChords({ positions = false }: { positions?: boolean }) {
 /** A chord tapped on the row's staff sounds for its bar at this tempo. */
 const STAFF_TEMPO = 120
 
+/** Bars on a line of the row's staff: the chords on a line of its buttons over it. */
+const BARS_A_LINE = 4
+
 /**
- * The row on the grand staff as its keys play it: the bass on the bass staff, the hand on the treble,
- * each chord's symbol over its bar; a chord tapped plays.
+ * The row on the grand staff as its keys play it, a line under each line of its buttons: the bass on
+ * the bass staff, the hand on the treble, each chord's symbol over its bar; a chord tapped plays.
  */
 export function RowStaff() {
   const { chords, voiced, onShow } = useRow()
-  const music = useMemo(
-    () =>
-      chordsMusic(
-        chords.map(({ chord, symbol = chordSymbol(chord) }, place) => ({
-          chord,
-          symbol,
-          keys: voiced[place] ?? [],
-        })),
-      ),
-    [chords, voiced],
-  )
-  const score = useMemo(() => notate(music), [music])
+  const lines = useMemo(() => {
+    const bars = chords.map(({ chord, symbol = chordSymbol(chord) }, place) => ({
+      chord,
+      symbol,
+      keys: voiced[place] ?? [],
+    }))
+    return Array.from({ length: Math.ceil(bars.length / BARS_A_LINE) }, (_, line) => {
+      const music = chordsMusic(bars.slice(line * BARS_A_LINE, (line + 1) * BARS_A_LINE))
+      return { music, score: notate(music) }
+    })
+  }, [chords, voiced])
   return (
-    <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-      <TappableStaff music={music} score={score} tempo={STAFF_TEMPO} onShow={onShow} />
+    <div className="flex flex-col gap-2">
+      {lines.map(({ music, score }, line) => (
+        <FitWidth key={line}>
+          <TappableStaff
+            music={music}
+            score={score}
+            firstBar={line * BARS_A_LINE + 1}
+            tempo={STAFF_TEMPO}
+            onShow={onShow}
+          />
+        </FitWidth>
+      ))}
     </div>
   )
 }

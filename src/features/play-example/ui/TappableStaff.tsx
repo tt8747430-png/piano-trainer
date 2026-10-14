@@ -17,8 +17,8 @@ const BAR_BAND = 22
 /**
  * A staff, or the grand staff, whose notes play when tapped: each written onset is a button that
  * plays the notes struck there (in both hands on the grand staff) and shows them on the page's keys,
- * marked on a single staff while they sound; over a line of more than one bar, each bar's band plays
- * that bar. Every button is named by what it plays.
+ * marked on a single staff while they sound; over a line of more than one bar (or a passage's later
+ * line), each bar's band plays that bar. Every button is named by what it plays.
  */
 export function TappableStaff({
   music,
@@ -27,6 +27,7 @@ export function TappableStaff({
   scale,
   fingers,
   muted,
+  firstBar = 1,
   tempo,
   onShow,
 }: {
@@ -37,6 +38,8 @@ export function TappableStaff({
   scale?: number
   fingers?: boolean
   muted?: StaffId | undefined
+  /** The number of its first bar, for a line of a longer passage. */
+  firstBar?: number
   tempo: number
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
   onShow?: (shown: ShownKeys) => void
@@ -96,7 +99,8 @@ export function TappableStaff({
         const onsets = columns.filter((column) => namesAt(music, column.tick) !== '')
         return (
           <>
-            {bars.length > 1
+            {/* A passage's last line keeps its bar however short. */}
+            {bars.length > 1 || firstBar > 1
               ? layout.measures.map((measure, i) => {
                   const bar = bars[i]
                   if (!bar) return null
@@ -105,7 +109,7 @@ export function TappableStaff({
                     <button
                       key={id}
                       type="button"
-                      aria-label={t('playBar', { n: i + 1 })}
+                      aria-label={t('playBar', { n: firstBar + i })}
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to)}
                       className={cn(
@@ -121,7 +125,7 @@ export function TappableStaff({
                         height: BAR_BAND,
                       }}
                     >
-                      {bar.symbol ?? i + 1}
+                      {bar.symbol ?? firstBar + i}
                     </button>
                   )
                 })

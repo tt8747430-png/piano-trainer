@@ -277,6 +277,26 @@ const ACCOMPANIMENT: Lesson = {
 }
 
 describe('LessonView’s accompaniment', () => {
+  it('writes a long row of chords on lines of four bars, as its chords are laid out over it', async () => {
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'A long row', ru: 'Длинный ряд' },
+          blocks: [{ kind: 'progression', numerals: 'I vi ii V iii vi ii V I', key: C_MAJOR }],
+        },
+      ],
+    })
+    // Numbered on from line to line, each bar's button once; the engraver's first staves take a while.
+    const bars = await screen.findAllByRole('button', { name: /^Play bar \d+$/ }, { timeout: 5000 })
+    expect(bars.map((bar) => bar.ariaLabel)).toEqual(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `Play bar ${n}`),
+    )
+    const [first, , , fourth, fifth] = bars
+    expect(fourth?.parentElement).toBe(first?.parentElement)
+    expect(fifth?.parentElement).not.toBe(fourth?.parentElement)
+  })
+
   it('plays a pattern over its piece, and opens the piece in the Player with it', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(ACCOMPANIMENT)
