@@ -35,7 +35,7 @@ export const learn: LocaleResources['learn'] = {
   },
   question: {
     answer: 'Ответить на клавишах',
-    check: 'Проверить',
+    chosen: 'Нот: {{chosen}} из {{total}}',
     right: 'Верно',
     wrong: 'Не совсем',
     show: 'Показать ответ',

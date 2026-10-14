@@ -78,6 +78,19 @@ export function isRight(chosen: readonly Midi[], answer: QuestionAnswer): boolea
   return played.size === wanted.size && [...wanted].every((pc) => played.has(pc))
 }
 
+/**
+ * How many notes are chosen, and how many the answer has: a chord's or a set's notes each once in
+ * any octave, a rising answer's every key.
+ */
+export function chosenOf(
+  chosen: readonly Midi[],
+  answer: QuestionAnswer,
+): { readonly chosen: number; readonly total: number } {
+  return answer.rising
+    ? { chosen: chosen.length, total: answer.keys.length }
+    : { chosen: pitchClasses(chosen).size, total: pitchClasses(answer.keys).size }
+}
+
 /** The one open question of a lesson: its keys chosen, and where it stands. */
 export type QuestionState = {
   readonly id: string
@@ -87,26 +100,26 @@ export type QuestionState = {
 
 type QuestionEvent =
   | { readonly type: 'open'; readonly id: string }
-  | { readonly type: 'toggle'; readonly key: Midi }
-  | { readonly type: 'check'; readonly right: boolean }
+  | { readonly type: 'toggle'; readonly key: Midi; readonly answer: QuestionAnswer }
   | { readonly type: 'reveal' }
   | { readonly type: 'retry' }
   | { readonly type: 'close' }
 
-/** One question open at a time; a key chosen after a verdict takes the learner back to choosing. */
+/**
+ * One question open at a time. A key chosen or let go chooses again, and the keys are judged as soon
+ * as they are as many notes as the answer's: no Check to press.
+ */
 export function questionReducer(state: QuestionState, event: QuestionEvent): QuestionState {
   if (event.type === 'open') return { id: event.id, chosen: [], stage: 'choosing' }
   if (event.type === 'close' || !state) return null
   switch (event.type) {
-    case 'toggle':
+    case 'toggle': {
       if (state.stage === 'answer') return state
-      return {
-        ...state,
-        stage: 'choosing',
-        chosen: toggled(state.chosen, event.key),
-      }
-    case 'check':
-      return { ...state, stage: event.right ? 'right' : 'wrong' }
+      const chosen = toggled(state.chosen, event.key)
+      const { chosen: count, total } = chosenOf(chosen, event.answer)
+      const stage = count < total ? 'choosing' : isRight(chosen, event.answer) ? 'right' : 'wrong'
+      return { ...state, chosen, stage }
+    }
     case 'reveal':
       return { ...state, stage: 'answer' }
     case 'retry':
@@ -120,18 +133,20 @@ export interface QuestionKeys {
   readonly marks: ReadonlyMap<Midi, KeyMark>
   readonly selected?: ReadonlySet<Midi>
   readonly wrong?: ReadonlySet<Midi>
-  readonly outlined?: ReadonlySet<Midi>
 }
 
-/** Choosing: the chosen keys. After Check: the verdict on them. The answer shown: the answer. */
+/**
+ * Choosing: the chosen keys. Judged: the verdict on them, a wrong key marked and the missing ones
+ * left for the learner to find. The answer shown: the answer.
+ */
 export function questionKeys(state: NonNullable<QuestionState>, answer: ShownKeys): QuestionKeys {
   switch (state.stage) {
     case 'choosing':
       return { keys: state.chosen, marks: new Map(), selected: new Set(state.chosen) }
     case 'right':
     case 'wrong': {
-      const checked = checkedKeys(state.chosen, answer)
-      return { keys: [...state.chosen, ...checked.outlined], ...checked }
+      const { marks, wrong } = checkedKeys(state.chosen, answer)
+      return { keys: state.chosen, marks, wrong }
     }
     case 'answer':
       return { keys: answer.keys, marks: answer.marks }

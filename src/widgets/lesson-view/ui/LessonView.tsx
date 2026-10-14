@@ -1,15 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import { useMemo, useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Lesson } from '@/entities/lesson'
+import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import {
   answerSounds,
-  isRight,
+  chosenOf,
   questionAnswers,
   questionKeys,
   questionReducer,
@@ -21,6 +22,16 @@ import { NO_KEYS, type ShownKeys } from '@/shared/ui'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
 const sectionId = (index: number) => `section-${index + 1}`
+
+/** Each question of a lesson by its place, `section.block`, with its answer as the lesson says it. */
+const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
+  new Map(
+    lesson.sections.flatMap((section, s) =>
+      section.blocks.flatMap((block, b) =>
+        block.kind === 'question' ? [[`${s}.${b}`, block.answer] as const] : [],
+      ),
+    ),
+  )
 
 /** A lesson lists its sections at its top once it has more than two. */
 const CONTENTS_FROM = 3
@@ -38,12 +49,22 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
+  const saidAnswers = useMemo(() => lessonAnswers(lesson), [lesson])
   const answer = question ? answers.get(question.id) : undefined
   const keys: QuestionKeys = question && answer ? questionKeys(question, answer) : shown
   const choosing = question !== null && question.stage !== 'answer'
+  // A key chosen for the open question; the answer heard once it is right.
+  const choose = (key: Midi, said: LessonAnswer) => {
+    if (!question || !answer) return
+    const event = { type: 'toggle', key, answer } as const
+    const next = questionReducer(question, event)
+    dispatch(event)
+    if (next?.stage === 'right') play(answerSounds(said, next.chosen))
+  }
+  const openAnswer = question ? saidAnswers.get(question.id) : undefined
   // The open question is answered on the MIDI keyboard as on the screen's keys.
   useMidiKeyDown((key) => {
-    if (choosing) dispatch({ type: 'toggle', key })
+    if (choosing && openAnswer) choose(key, openAnswer)
   })
   // An example played closes the open question: the keys show the example.
   const show = (next: ShownKeys) => {
@@ -56,8 +77,7 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
         shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}
-        outlined={keys.outlined}
-        onKeyPress={choosing ? (key) => dispatch({ type: 'toggle', key }) : undefined}
+        onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
       />
       {lesson.sections.length >= CONTENTS_FROM ? (
         <nav aria-label={t('contents')} className="max-w-prose print:hidden">
@@ -109,13 +129,8 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
                 key={id}
                 ask={block.ask}
                 stage={open ? open.stage : 'closed'}
-                canCheck={(open?.chosen.length ?? 0) > 0}
+                count={chosenOf(open?.chosen ?? [], answerKeys)}
                 onOpen={() => dispatch({ type: 'open', id })}
-                onCheck={() => {
-                  const right = open !== null && isRight(open.chosen, answerKeys)
-                  dispatch({ type: 'check', right })
-                  if (open && right) play(answerSounds(block.answer, open.chosen))
-                }}
                 onReveal={() => {
                   dispatch({ type: 'reveal' })
                   play(answerSounds(block.answer, answerKeys.keys))

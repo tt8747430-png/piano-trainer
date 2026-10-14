@@ -178,24 +178,24 @@ describe('LessonView’s worksheet', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([43, 47, 50, 53, 57])
   })
 
-  it('answers a question on the keys: chosen, checked, fixed and right', async () => {
+  it('answers a question on the keys: counted, judged at its last note, fixed and right', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
     await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     await user.click(within(keyboard).getByRole('button', { name: 'E4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'G sharp 4' }))
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('2 of 3 notes')
+    await user.click(within(keyboard).getByRole('button', { name: 'B4' }))
     expect(within(question).getByRole('status')).toHaveTextContent('Not quite')
     await user.click(within(keyboard).getByRole('button', { name: 'G sharp 4' }))
     await user.click(within(keyboard).getByRole('button', { name: 'G4' }))
-    await user.click(within(keyboard).getByRole('button', { name: 'B4' }))
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
     expect(within(question).getByRole('status')).toHaveTextContent('Correct')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([64, 67, 71])
   })
@@ -205,9 +205,6 @@ describe('LessonView’s worksheet', () => {
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play a major third above F.' })
     await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
     await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
@@ -220,7 +217,6 @@ describe('LessonView’s worksheet', () => {
     await user.click(within(first).getByRole('button', { name: 'Answer on the keys' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
-    await user.click(within(first).getByRole('button', { name: 'Check' }))
     await user.click(within(first).getByRole('button', { name: 'Show the answer' }))
     expect(within(keyboard).getByRole('button', { name: 'G4' })).toHaveTextContent('♭3')
     const second = screen.getByRole('group', { name: 'Play a major third above F.' })

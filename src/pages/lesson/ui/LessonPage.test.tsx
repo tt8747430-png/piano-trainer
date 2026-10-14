@@ -59,7 +59,8 @@ describe('A lesson', () => {
   it('plays a note tapped on a line’s staff, and a bar tapped over it', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/learn/lessons/whole-and-half-steps')
-    const note = await screen.findAllByRole('button', { name: /^Play [A-G]/ })
+    // The notes are buttons once the staff is engraved, which takes a while under a full run.
+    const note = await screen.findAllByRole('button', { name: /^Play [A-G]/ }, { timeout: 5000 })
     const [first] = note
     if (!first) throw new Error('a line of notes')
     await user.click(first)
@@ -162,10 +163,8 @@ describe('A lesson', () => {
     const question = await screen.findByRole('group', { name: 'Play E major.' })
     within(question).getByRole('button', { name: 'Answer on the keys' }).focus()
     await user.keyboard('{Enter}')
-    expect(within(question).getByRole('button', { name: 'Check' })).toHaveFocus()
-    await user.click(screen.getByRole('button', { name: 'E4' }))
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
-    await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
+    expect(within(question).getByRole('button', { name: 'Show the answer' })).toHaveFocus()
+    await user.keyboard('{Enter}')
     expect(within(question).getByRole('button', { name: 'Try again' })).toHaveFocus()
   })
 
@@ -178,7 +177,6 @@ describe('A lesson', () => {
     for (const key of ['E4', 'G sharp 4', 'B4']) {
       await user.click(within(keyboard).getByRole('button', { name: key }))
     }
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
     expect(within(question).getByRole('status')).toHaveTextContent('Correct')
   })
 
@@ -190,7 +188,6 @@ describe('A lesson', () => {
     act(() => {
       for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
     })
-    await user.click(within(question).getByRole('button', { name: 'Check' }))
     expect(within(question).getByRole('status')).toHaveTextContent('Correct')
   })
 

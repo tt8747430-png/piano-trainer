@@ -40,7 +40,7 @@ export const learn = {
   // A lesson's question, answered on its keys.
   question: {
     answer: 'Answer on the keys',
-    check: 'Check',
+    chosen: '{{chosen}} of {{total}} notes',
     right: 'Correct',
     wrong: 'Not quite',
     show: 'Show the answer',
