@@ -13,7 +13,13 @@ describe('parseFigure', () => {
   })
 
   it('reads positions in triplet 8ths', () => {
-    const [event] = parseFigure('3/6 C', { triplets: true })
+    const [event] = parseFigure('3/6 C', { perBeat: 3 })
+    expect(event?.start).toBe(12)
+    expect(event?.duration).toBe(24)
+  })
+
+  it('reads positions in 16ths of compound time, six to a beat', () => {
+    const [event] = parseFigure('6/12 C', { perBeat: 6 })
     expect(event?.start).toBe(12)
     expect(event?.duration).toBe(24)
   })
@@ -39,6 +45,7 @@ describe('parseFigure', () => {
     ['_b7', { kind: 'below-root', semitones: 2 }],
     ['_6', { kind: 'below-root', semitones: 3 }],
     ['15', { kind: 'chord-degree', degree: 15 }],
+    ['22', { kind: 'chord-degree', degree: 22 }],
   ])('reads the token %s', (text, token) => {
     expect(parseFigure(`0/4 ${text}`)[0]?.tones).toEqual([{ token }])
   })
@@ -50,7 +57,7 @@ describe('parseFigure', () => {
     expect(parseFigure('8/8 5^2+8^5')[0]?.tones.map((tone) => tone.finger)).toEqual([2, 5])
   })
 
-  it.each(['0/4 Q', '0 C', '0/4', '0/4 1^6', 'x/4 C', '0/0 C', '0/4 16', '0/4 C?', '0/4 C~'])(
+  it.each(['0/4 Q', '0 C', '0/4', '0/4 1^6', 'x/4 C', '0/0 C', '0/4 23', '0/4 C?', '0/4 C~'])(
     'names the event it cannot read: %j',
     (text) => {
       expect(() => parseFigure(text)).toThrow(`"${text}"`)
@@ -87,7 +94,13 @@ describe('splitsTheBeat', () => {
   })
 
   it('lets a figure in triplets, a shuffle, play in compound time', () => {
-    const shuffle = parseFigure('0/2 L1,2/1 L5,3/2 L1,5/1 L5', { triplets: true })
+    const shuffle = parseFigure('0/2 L1,2/1 L5,3/2 L1,5/1 L5', { perBeat: 3 })
     expect(splitsTheBeat({ kind: 'events', events: shuffle })).toBe(false)
+  })
+
+  it('lets a figure with a compound version play in compound time: that version is written for it', () => {
+    const eighths = parseFigure('0/2 C,2/2 C')
+    const inThrees = parseFigure('0/2 C,2/2 C,4/2 C', { perBeat: 6 })
+    expect(splitsTheBeat({ kind: 'events', events: eighths, inCompound: inThrees })).toBe(false)
   })
 })

@@ -19,7 +19,8 @@ const FIXED_TOKENS = new Map<string, FigureToken>([
   ['Sh', { kind: 'shell' }],
 ])
 
-const isDegree = (n: number) => n >= 1 && n <= 15
+/** A degree from the root (or bass) up, through three octaves: 1 to 22. */
+const isDegree = (n: number) => n >= 1 && n <= 22
 
 function readToken(text: string): FigureToken | null {
   const fixed = FIXED_TOKENS.get(text)
@@ -49,11 +50,12 @@ function readTone(text: string): FigureTone | null {
 const EVENT = /^(\d+)\/(\d+) (\S+?)(!?)$/
 
 /**
- * Reads the figure notation: comma-separated `start/length tones` events in 16ths (triplet 8ths with
- * `triplets`); tones joined by `+`, each optionally `^finger`; an event ending `!` is accented.
+ * Reads the figure notation: comma-separated `start/length tones` events, counted in notes `perBeat` (4,
+ * 16ths, unless 3, triplet 8ths, or 6, 16ths of a compound beat); tones joined by `+`, each optionally
+ * `^finger`; an event ending `!` is accented.
  */
-export function parseFigure(text: string, options: { triplets?: boolean } = {}): FigureEvent[] {
-  const unit = TICKS_PER_BEAT / (options.triplets ? 3 : 4)
+export function parseFigure(text: string, options: { perBeat?: 3 | 4 | 6 } = {}): FigureEvent[] {
+  const unit = TICKS_PER_BEAT / (options.perBeat ?? 4)
   return text.split(',').map((written) => {
     const event = written.trim()
     const match = EVENT.exec(event)
@@ -71,16 +73,23 @@ export function parseFigure(text: string, options: { triplets?: boolean } = {}):
   })
 }
 
-/** Every set of events a figure can play: its own, its 3/4 and major variants, a tune figure's accompaniment. */
-function eventSets(figure: Figure): (readonly FigureEvent[])[] {
-  const eventFigures: readonly EventFigure[] =
-    figure.kind === 'events'
-      ? [figure]
-      : figure.use === 'ends'
-        ? [figure.between, figure.withoutMelody]
-        : [figure.withoutMelody]
-  return eventFigures.flatMap((each) => [each.events, each.inThree ?? [], each.onMajor ?? []])
-}
+/** The event figures a figure plays: its own, or a tune figure's accompaniment. */
+const eventFiguresOf = (figure: Figure): readonly EventFigure[] =>
+  figure.kind === 'events'
+    ? [figure]
+    : figure.use === 'ends'
+      ? [figure.between, figure.withoutMelody]
+      : [figure.withoutMelody]
+
+/** Every set of events a figure can play: its own and every variant. */
+const eventSets = (figure: Figure): (readonly FigureEvent[])[] =>
+  eventFiguresOf(figure).flatMap((each) => [
+    each.events,
+    each.inThree ?? [],
+    each.onMajor ?? [],
+    each.inCompound ?? [],
+    each.inCompoundOnMajor ?? [],
+  ])
 
 /** Whether a figure plays the key's triads (`Ka` `Kb` `Kc`): only a source in a key can play it. */
 export const playsKeyTriads = (figure: Figure): boolean =>
@@ -92,10 +101,16 @@ export const playsKeyTriads = (figure: Figure): boolean =>
 const THIRD = TICKS_PER_BEAT / 3
 
 /**
- * Whether a figure plays inside a beat divided in two (an 8th, a 16th): it cannot play in 6/8 or
- * 12/8, whose beat divides in three. One in triplets (a shuffle) divides it as they do, and plays.
+ * Whether a figure would play inside a beat divided in two (an 8th, a 16th of simple time) in 6/8 or
+ * 12/8, whose beat divides in three: one that has no compound version and plays off the triplet grid.
+ * A compound version is written for compound time, and a figure in triplets (a shuffle) divides the
+ * beat as it does: both play.
  */
 export const splitsTheBeat = (figure: Figure): boolean =>
-  eventSets(figure).some((events) =>
-    events.some((event) => event.start % THIRD !== 0 || event.duration % THIRD !== 0),
+  eventFiguresOf(figure).some(
+    (each) =>
+      !each.inCompound &&
+      [each.events, each.onMajor ?? []].some((events) =>
+        events.some((event) => event.start % THIRD !== 0 || event.duration % THIRD !== 0),
+      ),
   )

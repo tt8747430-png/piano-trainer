@@ -174,6 +174,37 @@ describe('arrange', () => {
     expect(performance.totalTicks).toBe(36)
   })
 
+  it('plays a figure’s compound version in 12/8, and its first half in 6/8', () => {
+    const rocking: EventPattern = {
+      id: 'rocking',
+      rh: figure('0/2 C,2/2 C', {
+        inCompound: parseFigure('0/4 C,4/2 C,12/4 C,16/2 C', { perBeat: 6 }),
+      }),
+      lh: figure('0/16 L1'),
+    }
+    const inMeter = (meter: '4/4' | '6/8' | '12/8') =>
+      onsets(arrange(chart([['Am']], { meter }), { tonic: C, pattern: rocking }), 'rh')
+    expect(inMeter('12/8')).toEqual([0, 8, 24, 32])
+    expect(inMeter('6/8')).toEqual([0, 8])
+    expect(inMeter('4/4')).toEqual([0, 6])
+  })
+
+  it('plays a major chord’s compound version in compound time, where it has one', () => {
+    const lighter: EventPattern = {
+      id: 'lighter',
+      rh: figure('0/4 C', {
+        inCompound: parseFigure('0/6 C,6/6 C,12/6 C,18/6 C', { perBeat: 6 }),
+        inCompoundOnMajor: parseFigure('0/12 C,12/12 C', { perBeat: 6 }),
+      }),
+      lh: figure('0/16 L1'),
+    }
+    const performance = arrange(chart([['Am', 'C']], { meter: '12/8' }), {
+      tonic: C,
+      pattern: lighter,
+    })
+    expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48, 72])
+  })
+
   it('clips a figure to a two-beat meter', () => {
     const performance = arrange(chart([['C']], { meter: '2/4' }), {
       tonic: C,

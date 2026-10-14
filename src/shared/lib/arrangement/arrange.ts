@@ -4,6 +4,7 @@ import {
   beatsToTicks,
   chordBass,
   chordSymbol,
+  isCompound,
   midi,
   pitchClass,
   pitchClassOf,
@@ -33,6 +34,7 @@ import type {
   EventFigure,
   EventPattern,
   Figure,
+  FigureEvent,
   HandNote,
   Melody,
   MelodyFigure,
@@ -214,17 +216,33 @@ interface Window {
   readonly chord: number
 }
 
+/** How a bar's meter plays a figure: its beats, and whether each divides in three (6/8, 12/8). */
+interface BarMeter {
+  readonly beats: number
+  readonly compound: boolean
+}
+
+/** The events a figure plays in a meter: its compound version in compound time, its 3/4 one in three. */
+function eventsIn(figure: EventFigure, meter: BarMeter, major: boolean): readonly FigureEvent[] {
+  const compound = meter.compound
+    ? ((major ? figure.inCompoundOnMajor : undefined) ?? figure.inCompound)
+    : undefined
+  return (
+    compound ??
+    (meter.beats === 3 ? figure.inThree : undefined) ??
+    (major ? figure.onMajor : undefined) ??
+    figure.events
+  )
+}
+
 function playFigure(
   figure: EventFigure,
   context: ChordContext,
   hand: Hand,
   window: Window,
-  barBeats: number,
+  meter: BarMeter,
 ): PerformanceNote[] {
-  const events =
-    (barBeats === 3 ? figure.inThree : undefined) ??
-    (context.major ? figure.onMajor : undefined) ??
-    figure.events
+  const events = eventsIn(figure, meter, context.major)
   return events.flatMap((event) => {
     if (event.start < window.from || event.start >= window.to) return []
     const duration = Math.min(event.duration, window.to - event.start)
@@ -358,6 +376,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const layout = layOut(chart)
   const barBeats = beatsPerBar(chart.meter)
   const meterTicks = barBeats * TICKS_PER_BEAT
+  const barMeter: BarMeter = { beats: barBeats, compound: isCompound(chart.meter) }
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
   const playsTune: boolean[] = []
@@ -415,10 +434,10 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       const stretch = ahead === undefined ? context : { ...context, nextBass: ahead }
       // A hand written in this bar plays its written notes instead (after the chords).
       if (!written?.rh) {
-        if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barBeats))
+        if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barMeter))
         else if (melody) notes.push(...playTune(rh, melody, stretch, window))
       }
-      if (!written?.lh) notes.push(...playFigure(lh, stretch, 'lh', window, barBeats))
+      if (!written?.lh) notes.push(...playFigure(lh, stretch, 'lh', window, barMeter))
       at += length
     }
   })

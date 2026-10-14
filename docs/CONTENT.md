@@ -230,9 +230,12 @@ could not see: where the chords came from, a quirk of the printed score, what th
 
 ### The figure notation
 
-`eventFigure(events, { inThree?, onMajor?, triplets? })`. `events` are comma-separated `start/length tones` in 16ths
-of a 4/4 bar (triplet 8ths with `triplets: true`); `inThree` replaces them in 3/4, `onMajor` on major chords.
-Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
+`eventFigure(events, { inThree?, onMajor?, triplets?, inCompound?, inCompoundOnMajor? })`. `events` are
+comma-separated `start/length tones` in 16ths of a 4/4 bar (triplet 8ths with `triplets: true`); `inThree` replaces
+them in 3/4, `onMajor` on major chords. `inCompound` replaces them in 6/8 and 12/8, written for a 12/8 bar in 16ths of
+the compound beat (six to a dotted quarter, 24 to the bar; a 6/8 bar plays the first twelve), and
+`inCompoundOnMajor` on major chords there. A figure whose events all fall on beats needs no compound version: a
+compound beat is a beat. Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` is accented.
 
 | Token           | Plays                                                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -240,7 +243,7 @@ Tones are joined by `+`, each optionally `^finger` (1–5); an event ending `!` 
 | `T` `T1` `T2`   | The close triad from the root, or its 1st or 2nd inversion                                                               |
 | `T8` `T15`      | The close triad one or two octaves up                                                                                    |
 | `U`             | The chord's upper notes as `C` voices it, all but its lowest (`v1`)                                                      |
-| `1`–`15`        | A degree above the root, on the chord's own 3rd, 5th and 7th (`8` is the octave)                                         |
+| `1`–`22`        | A degree above the root, on the chord's own 3rd, 5th and 7th (`8` is the octave, `15` two)                               |
 | `vN`            | The Nth note of the voiced chord from the bottom; past its top, an octave up                                             |
 | `_7` `_b7` `_6` | 1, 2 or 3 semitones below the root                                                                                       |
 | `sN`            | N steps up the chord's major or minor scale from the root (`s0` the root)                                                |

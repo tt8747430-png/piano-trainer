@@ -87,11 +87,17 @@ export interface FigureEvent {
   readonly accent: boolean
 }
 /** A hand's figure as fixed events for a 4/4 bar; `inThree` replaces them in 3/4, `onMajor` on major chords. */
+/**
+ * A hand's figure as events in a 4/4 bar; with what it plays instead in 3/4, over a major chord, and in
+ * compound time (6/8, 12/8: a 12/8 bar, whose first half a 6/8 bar plays), over a major chord there too.
+ */
 export interface EventFigure {
   readonly kind: 'events'
   readonly events: readonly FigureEvent[]
   readonly inThree?: readonly FigureEvent[]
   readonly onMajor?: readonly FigureEvent[]
+  readonly inCompound?: readonly FigureEvent[]
+  readonly inCompoundOnMajor?: readonly FigureEvent[]
 }
 /**
  * A right hand that plays the tune: doubled, only at a line's ends, or harmonised under long notes.
