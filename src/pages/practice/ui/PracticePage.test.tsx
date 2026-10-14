@@ -21,7 +21,7 @@ describe('Practice', () => {
       ['Intervals On the keys, up and down', '/practice/intervals'],
       ['Progressions From the library or typed, in any key', '/practice/progressions'],
       [
-        'Accompaniment Called to Play · Боброва · Горшков · Styles · Yours',
+        'Accompaniment Called to Play · Called to Play 2 · Боброва · Горшков · Styles · Yours',
         '/practice/accompaniment',
       ],
     ])

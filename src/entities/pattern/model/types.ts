@@ -12,6 +12,7 @@ import {
 export const PATTERN_GROUPS = [
   'five-ways',
   'techniques',
+  'octaves',
   'seven-types',
   'gorshkov',
   'genres',

@@ -12,6 +12,7 @@ export const BOOKS: Readonly<Record<BookId, Book>> = {
 /** What a method book is called for short, in either language: its title, or its author's name. */
 export const METHOD_BOOK_NAMES: Readonly<Record<MethodBookId, string>> = {
   'called-to-play': 'Called to Play',
+  'called-to-play-2': 'Called to Play 2',
   'seven-types': 'Боброва',
   gorshkov: 'Горшков',
 }

@@ -61,7 +61,7 @@ it. `@` → `src`.
   its lessons (`/learn`, its tabs Subjects · Courses and the modules open in `?tab=`/`?open=`, ADR 0042; `/learn/lessons/$lessonId`); Practice is its pages in three groups (ADR 0044; `/practice` lists them and remembers nothing), a page's URL under its page's: the things, each an explorer that shows one on the
   keys, Chords (`/practice/chords`), Scales and keys (`/practice/scales`, its Scale · Chords · Key views as tabs),
   Intervals (`/practice/intervals`), Progressions (`/practice/progressions`) and Accompaniment
-  (`/practice/accompaniment`, its parts Called to Play · Боброва · Горшков · Styles · Yours as tabs, ADR 0033; a
+  (`/practice/accompaniment`, its parts Called to Play · Called to Play 2 · Боброва · Горшков · Styles · Yours as tabs, ADR 0033, 0047; a
   pattern's page `…/patterns/$patternRef`, the editor `…/patterns/new` and `…/patterns/$patternRef/edit`; a study's
   page `…/studies/$pieceId`); the tools, each working something out from what it is given, the Chord finder
   (`/practice/chord-finder`), Passing chords (`/practice/passing-chords`), Reharmonise (`/practice/reharmonise`), Transpose
@@ -169,8 +169,8 @@ it. `@` → `src`.
   `playablePattern`, what music can play; `followsInversion`, whether an inversion changes it), `path` (with `LEVEL_NAME`), `lesson` (lessons as content,
   worksheets: text, steps, notes, chords, voicings as written (each hand's keys, ADR 0040), grids, scales, intervals and lines of notes that play, questions answered on
   the keys, patterns over their pieces and progressions in any key, links by what each opens (`opens`: an explorer, a tool or
-  the Player; a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: the subjects (`SUBJECT_MODULES`: Fundamentals, Accompaniment, Gospel, one track), then the courses (`COURSE_MODULES`: each method book's, Called to Play's, Боброва's and Gorshkov's, each a track of its own; `LEARN_TABS`, `tabOf`, `lessonsIn`, `nextLesson`/`previousLesson` along a track, `useModuleName`),
-  `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033), `progression-library` (the one model of a progression that is practised, ADR 0041: one entry for each idea,
+  the Player; a `player` link opens a progression walked through the keys or in an inversion); `readProgression` reads a progression block or link; `LESSON_MODULES`: the subjects (`SUBJECT_MODULES`: Fundamentals, Accompaniment, Gospel, one track), then the courses (`COURSE_MODULES`: each method book's, Called to Play's two levels, Боброва's and Gorshkov's, each a track of its own; `LEARN_TABS`, `tabOf`, `lessonsIn`, `nextLesson`/`previousLesson` along a track, `useModuleName`),
+  `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033, 0047), `progression-library` (the one model of a progression that is practised, ADR 0041: one entry for each idea,
   named, by style, its line in each mode it has (`major`, `minor`), with its note, pattern and chord size; `libraryProgression` names a line,
   `progressionMode` the mode one is shown in, `COMMON_PROGRESSIONS` a key's, `LIBRARY_BY_STYLE` what its pop-up lists), `exercise` (the exercises: groups, levels, names, the fields each rule takes and its own choice;
   `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, with the laptop's sidebar, open or collapsed, the
@@ -199,7 +199,8 @@ it. `@` → `src`.
   `exercisePerformance`: scales, sequences, contrary motion, arpeggios, Barry Harris's, Piano With Jonny's, the
   five-finger position, Hanon No. 1), `arrangement`
   (`arrange`, a chart → a Performance: each note's written onset, roll and spelling, the right hand's chord voice-led or
-  in one inversion (`voiceInversion`, `inversionPitchClasses`); a bar's written hands in place of the pattern's;
+  in one inversion (`voiceInversion`, `inversionPitchClasses`); a figure's compound version in 6/8 and 12/8 and its
+  6/8 form (`inCompound`, `inSix`, ADR 0047); a bar's written hands in place of the pattern's;
   `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
   Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's

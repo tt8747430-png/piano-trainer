@@ -269,6 +269,7 @@ describe('the lessons', () => {
       'accompaniment',
       'gospel',
       'called-to-play',
+      'called-to-play-2',
       'seven-types',
       'gorshkov',
     ])
@@ -286,6 +287,19 @@ describe('the lessons', () => {
       'right-hand-sixths',
       'art-of-accompaniment',
       'called-to-play-exam',
+    ])
+    expect(lessonsOf('called-to-play-2')).toEqual([
+      'seventh-by-the-key',
+      'octaves-and-chords',
+      'six-eight-and-twelve-eight',
+      'right-hand-in-six-eight',
+      'chords-and-inversions-in-six-eight',
+      'right-hand-in-twelve-eight',
+      'sixths-in-compound-time',
+      'joining-chords',
+      'left-hand-ways',
+      'balance-of-accompaniment',
+      'called-to-play-two-exam',
     ])
     expect(lessonsOf('seven-types')).toEqual(['seven-types', 'accompanying-a-hymn'])
     expect(lessonsOf('gorshkov')).toEqual([

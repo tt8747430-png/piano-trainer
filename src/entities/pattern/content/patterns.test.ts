@@ -19,9 +19,9 @@ import { METHOD_PATTERNS, METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
 describe('the pattern catalog', () => {
-  it('has 48 patterns in five groups, built from 45 right-hand and 27 left-hand figures', () => {
+  it('has 48 patterns in six groups, built from 45 right-hand and 27 left-hand figures', () => {
     expect(PATTERN_IDS).toHaveLength(48)
-    expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 15, 8, 6, 14])
+    expect(PATTERN_GROUPS.map((group) => patternsIn(group).length)).toEqual([5, 12, 3, 8, 6, 14])
     expect(Object.keys(RIGHT_FIGURES)).toHaveLength(45)
     expect(Object.keys(LEFT_FIGURES)).toHaveLength(27)
     expect(Object.keys(METHODS)).toHaveLength(20)
@@ -31,6 +31,7 @@ describe('the pattern catalog', () => {
     expect(PATTERN_GROUPS.map((group) => [group, PATTERN_GROUP_ENTRIES[group].book])).toEqual([
       ['five-ways', 'called-to-play'],
       ['techniques', 'called-to-play'],
+      ['octaves', 'called-to-play-2'],
       ['seven-types', 'seven-types'],
       ['gorshkov', 'gorshkov'],
       ['genres', null],
@@ -43,6 +44,7 @@ describe('the pattern catalog', () => {
     expect(PATTERN_GROUPS.map((group) => PATTERN_GROUP_ENTRIES[group].name.en)).toEqual([
       'The five ways (lesson 3)',
       'Right-hand techniques',
+      'Octaves and chords (level 2)',
       'The seven types of accompaniment',
       'Arranging the accompaniment',
       'Rhythm styles',

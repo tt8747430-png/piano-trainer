@@ -19,8 +19,9 @@ describe('partShelves', () => {
   it('lists a method book’s groups on its part', () => {
     expect(outline(partShelves(book, choices, 'called-to-play'))).toEqual([
       ['five-ways', 5],
-      ['techniques', 15],
+      ['techniques', 12],
     ])
+    expect(outline(partShelves(book, choices, 'called-to-play-2'))).toEqual([['octaves', 3]])
     expect(outline(partShelves(book, choices, 'seven-types'))).toEqual([['seven-types', 8]])
   })
 
@@ -53,6 +54,7 @@ describe('partShelves', () => {
   it('puts every shelf on one part: a group on its book’s or on Styles, the learner’s on Yours', () => {
     expect(ACCOMPANIMENT_PARTS).toEqual([
       'called-to-play',
+      'called-to-play-2',
       'seven-types',
       'gorshkov',
       'styles',

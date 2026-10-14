@@ -13,6 +13,8 @@ export const learn = {
     accompaniment: 'Bass and chords, progressions, passing chords and reharmonising.',
     gospel: 'Gospel’s progressions, passing chords and reharmonisation.',
     'called-to-play': 'Aleksandr Savchenko’s Called to Play for Him, level 1.',
+    'called-to-play-2':
+      'Its level 2: the same ways in 6/8 and 12/8, octaves, joining chords, balance.',
     'seven-types': 'N. V. Bobrova’s seven types of accompaniment, on hymns.',
     gorshkov: 'Vasily Gorshkov’s accompaniment course: 7th and 9th chords, the ii–V–I, texture.',
   },

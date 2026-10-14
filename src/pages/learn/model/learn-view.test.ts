@@ -45,7 +45,7 @@ describe('openModules', () => {
     const allCalledToPlay = learnedOn(
       lessonsIn('called-to-play').map((each) => [each.id, '2026-10-01'] as const),
     )
-    expect([...openModules({ tab: 'courses' }, allCalledToPlay)]).toEqual(['seven-types'])
+    expect([...openModules({ tab: 'courses' }, allCalledToPlay)]).toEqual(['called-to-play-2'])
   })
 
   it('opens what the URL says, none when it says none, only the tab’s own', () => {

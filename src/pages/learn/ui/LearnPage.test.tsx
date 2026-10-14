@@ -33,7 +33,7 @@ describe('Learn', () => {
     await waitFor(() => expect(router.state.location.search).toMatchObject({ tab: 'courses' }))
     expect(
       (await screen.findAllByRole('region')).map((each) => each.getAttribute('aria-label')),
-    ).toEqual(['Called to Play', 'Боброва', 'Горшков'])
+    ).toEqual(['Called to Play', 'Called to Play 2', 'Боброва', 'Горшков'])
   })
 
   it('folds each module under its heading, the one the learner is at open', async () => {

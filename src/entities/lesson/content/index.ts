@@ -48,11 +48,22 @@ import thinkingInDegrees from './thinking-in-degrees'
 import triads from './triads'
 import twoFiveOne from './two-five-one'
 import wholeAndHalfSteps from './whole-and-half-steps'
+import balanceOfAccompaniment from './balance-of-accompaniment'
+import calledToPlayTwoExam from './called-to-play-two-exam'
+import chordsAndInversionsInSixEight from './chords-and-inversions-in-six-eight'
+import joiningChords from './joining-chords'
+import leftHandWays from './left-hand-ways'
+import octavesAndChords from './octaves-and-chords'
+import rightHandInSixEight from './right-hand-in-six-eight'
+import rightHandInTwelveEight from './right-hand-in-twelve-eight'
+import seventhByTheKey from './seventh-by-the-key'
+import sixEightAndTwelveEight from './six-eight-and-twelve-eight'
+import sixthsInCompoundTime from './sixths-in-compound-time'
 
 /**
  * Every lesson, in the order Learn lists them: the subjects, Fundamentals from the keys to key
  * signatures, Accompaniment from bass and chords to scales through the changes, then Gospel; then the
- * courses, each in its own order: Called to Play's, Боброва's, Gorshkov's.
+ * courses, each in its own order: Called to Play's two levels, Боброва's, Gorshkov's.
  */
 export const LESSONS: readonly Lesson[] = [
   findingHome,
@@ -93,6 +104,17 @@ export const LESSONS: readonly Lesson[] = [
   rightHandSixths,
   artOfAccompaniment,
   calledToPlayExam,
+  seventhByTheKey,
+  octavesAndChords,
+  sixEightAndTwelveEight,
+  rightHandInSixEight,
+  chordsAndInversionsInSixEight,
+  rightHandInTwelveEight,
+  sixthsInCompoundTime,
+  joiningChords,
+  leftHandWays,
+  balanceOfAccompaniment,
+  calledToPlayTwoExam,
   sevenTypes,
   accompanyingAHymn,
   jazzChordSymbols,

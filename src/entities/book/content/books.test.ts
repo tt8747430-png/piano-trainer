@@ -10,10 +10,16 @@ describe('the books', () => {
     }
   })
 
-  it('count three method books among them, each with the name its learners call it', () => {
-    expect(METHOD_BOOK_IDS).toEqual(['called-to-play', 'seven-types', 'gorshkov'])
+  it('count four method books among them, each with the name its learners call it', () => {
+    expect(METHOD_BOOK_IDS).toEqual([
+      'called-to-play',
+      'called-to-play-2',
+      'seven-types',
+      'gorshkov',
+    ])
     expect(METHOD_BOOK_IDS.map((id) => METHOD_BOOK_NAMES[id])).toEqual([
       'Called to Play',
+      'Called to Play 2',
       'Боброва',
       'Горшков',
     ])

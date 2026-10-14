@@ -22,6 +22,7 @@ export interface Book {
  */
 export const METHOD_BOOK_IDS = [
   'called-to-play',
+  'called-to-play-2',
   'seven-types',
   'gorshkov',
 ] as const satisfies readonly BookId[]

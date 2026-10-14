@@ -9,6 +9,10 @@ export const PATTERN_GROUP_ENTRIES: Readonly<Record<PatternGroup, PatternGroupEn
     name: { en: 'Right-hand techniques', ru: 'Техники правой руки' },
     book: 'called-to-play',
   },
+  octaves: {
+    name: { en: 'Octaves and chords (level 2)', ru: 'Октавы и аккорды (уровень 2)' },
+    book: 'called-to-play-2',
+  },
   'seven-types': {
     name: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
     book: 'seven-types',
@@ -263,7 +267,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     lh: 'q',
   },
   oct: {
-    group: 'techniques',
+    group: 'octaves',
     name: { en: 'Octaves', ru: 'Октавы' },
     idea: {
       en: 'The right hand climbs 1–2–3–5 in octaves, twice, over a held octave bass.',
@@ -277,7 +281,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     lh: 'o',
   },
   octs: {
-    group: 'techniques',
+    group: 'octaves',
     name: { en: 'Octaves (scale)', ru: 'Октавы (гамма)' },
     idea: {
       en: 'The right hand runs up the scale in octaves over a held octave bass.',
@@ -291,7 +295,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     lh: 'o',
   },
   chd: {
-    group: 'techniques',
+    group: 'octaves',
     name: { en: 'Chords', ru: 'Аккорды' },
     idea: {
       en: 'Four-note chords on every beat, the outer notes up a step and back, over a climbing arpeggio.',
