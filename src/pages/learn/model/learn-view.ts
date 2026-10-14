@@ -1,6 +1,6 @@
 import {
+  lessonAfterLast,
   LESSON_MODULES,
-  nextLesson,
   TAB_MODULES,
   type LearnTab,
   type Lesson,
@@ -28,21 +28,11 @@ const isLearned = (learned: Learned, lesson: Lesson) =>
  * The lesson to continue with in a tab: the first not learned after the one learned last, along its
  * track; none where nothing in the tab is learned, or nothing after it is left.
  */
-export function lessonToContinue(tab: LearnTab, learned: Learned): Lesson | undefined {
-  const last = lessonGroups(tab)
-    .flatMap((group) => group.lessons)
-    .flatMap((lesson) => {
-      const date = learned[lessonLearnedId(lesson.id)]
-      return date === undefined ? [] : [{ lesson, date }]
-    })
-    .reduce<{ lesson: Lesson; date: string } | undefined>(
-      (latest, each) => (latest === undefined || each.date > latest.date ? each : latest),
-      undefined,
-    )
-  let next = last ? nextLesson(last.lesson.id) : undefined
-  while (next && isLearned(learned, next)) next = nextLesson(next.id)
-  return next
-}
+export const lessonToContinue = (tab: LearnTab, learned: Learned): Lesson | undefined =>
+  lessonAfterLast(
+    lessonGroups(tab).flatMap((group) => group.lessons),
+    (lesson) => learned[lessonLearnedId(lesson.id)],
+  )
 
 /**
  * The modules open in a tab: the URL's, of this tab; else the one of the lesson to continue with, else

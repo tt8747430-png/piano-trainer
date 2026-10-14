@@ -13,6 +13,13 @@ export {
   type LessonAnswer,
 } from './model/types'
 export { readProgression } from './model/progression'
-export { lessonById, lessonsIn, nextLesson } from './model/selectors'
+export {
+  lessonAfterLast,
+  lessonById,
+  lessonsIn,
+  lessonUpNext,
+  nextLesson,
+  type LearnedOn,
+} from './model/selectors'
 export { LESSONS } from './content'
 export { useModuleName } from './ui/use-module-name'

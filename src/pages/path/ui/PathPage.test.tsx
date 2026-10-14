@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { lessonsIn } from '@/entities/lesson'
 
 describe('Path', () => {
   it('suggests the first step on a first run, saying what it is and how far along', async () => {
@@ -11,6 +12,20 @@ describe('Path', () => {
     expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
       /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
     )
+  })
+
+  it('suggests the next lesson beside it: the first, then on from the one learned last', async () => {
+    const { progressStore } = await renderApp('/')
+    const lesson = await screen.findByRole('region', { name: 'Next lesson' })
+    const link = within(lesson).getByRole('link', { name: /Finding your way on the keys/ })
+    expect(link).toHaveAttribute('href', '/learn/lessons/finding-home')
+    expect(link).toHaveTextContent(`Fundamentals · Lesson 1 of ${lessonsIn('fundamentals').length}`)
+    act(() =>
+      progressStore.setState({ learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' } }),
+    )
+    expect(
+      within(screen.getByRole('region', { name: 'Next lesson' })).getByRole('link'),
+    ).toHaveAttribute('href', '/learn/lessons/reading-notes')
   })
 
   it('suggests the song practised last, with the chords it has to check', async () => {

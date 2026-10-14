@@ -2,7 +2,7 @@ import { Link, useSearch } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
-import { LEARN_TABS, lessonsIn, useModuleName, type Lesson } from '@/entities/lesson'
+import { LEARN_TABS, useModuleName, type Lesson } from '@/entities/lesson'
 import { lessonLearnedId, selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
@@ -15,6 +15,7 @@ import {
   RowLink,
   ScreenHeader,
 } from '@/shared/ui'
+import { LessonCard } from '@/widgets/next-lesson'
 import { lessonToContinue, openModules, withToggled, type LearnView } from '../model/learn-view'
 import { lessonGroups } from '../model/lesson-groups'
 
@@ -96,30 +97,16 @@ export function LearnPage() {
   )
 }
 
-/** The lesson to continue with: its title, its module and its number in it. */
+/** The lesson to continue with in the tab. */
 function ContinueRow({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('learn')
-  const locale = useLocale()
-  const moduleName = useModuleName()
   const id = useId()
-  const inModule = lessonsIn(lesson.module)
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
       <h2 id={id} className="text-2xl">
         {t('continue')}
       </h2>
-      <div className="card">
-        <RowLink
-          title={localText(lesson.title, locale)}
-          detail={`${moduleName(lesson.module)} · ${t('place', {
-            n: inModule.indexOf(lesson) + 1,
-            total: inModule.length,
-          })}`}
-          icon={PAGE_TILES.lesson.icon}
-          paint={PAGE_TILES.lesson.paint}
-          render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-        />
-      </div>
+      <LessonCard lesson={lesson} />
     </section>
   )
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useViewChange } from '@/shared/lib'
 import { RoundLink, ScreenHeader } from '@/shared/ui'
 import { ContinueCard } from '@/widgets/continue-card'
+import { NextLesson } from '@/widgets/next-lesson'
 import { PathLevels, type PathView } from '@/widgets/path-levels'
 import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
@@ -35,6 +36,7 @@ export function PathPage() {
       />
       <div className="mt-2 flex flex-col gap-6">
         <ContinueCard />
+        <NextLesson />
         <PracticeDays />
         <RecentPieces />
         <PathLevels view={view} onChange={set} />
