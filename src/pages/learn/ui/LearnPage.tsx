@@ -3,7 +3,8 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
 import { LEARN_TABS, useModuleName, type Lesson } from '@/entities/lesson'
-import { lessonLearnedId, selectLearned, useProgress } from '@/entities/progress'
+import { selectLearned, useProgress } from '@/entities/progress'
+import { lessonStepId } from '@/entities/path'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import {
@@ -15,9 +16,9 @@ import {
   RowLink,
   ScreenHeader,
 } from '@/shared/ui'
-import { LessonCard } from '@/widgets/next-lesson'
 import { lessonToContinue, openModules, withToggled, type LearnView } from '../model/learn-view'
 import { lessonGroups } from '../model/lesson-groups'
+import { LessonCard } from './LessonCard'
 
 /**
  * Learn (ADR 0042): its two tabs, the subjects and the courses; under the tab, the lesson to continue
@@ -32,7 +33,7 @@ export function LearnPage() {
   const set = useViewChange<LearnView>()
   const learned = useProgress(selectLearned)
   const moduleName = useModuleName()
-  const isLearned = (lesson: Lesson) => learned[lessonLearnedId(lesson.id)] !== undefined
+  const isLearned = (lesson: Lesson) => learned[lessonStepId(lesson.id)] !== undefined
   const open = openModules(view, learned)
   const next = lessonToContinue(view.tab, learned)
   return (

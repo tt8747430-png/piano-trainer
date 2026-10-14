@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { Play } from 'lucide-react'
+import { BookOpenText, Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  ExplorerLink,
+  StepLink,
   LEVEL_NAME,
   skillsOfStep,
   STEP_PAINT,
@@ -22,7 +22,7 @@ import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { keySymbol } from '@/shared/lib/music'
 import { ButtonLink, PAINT } from '@/shared/ui'
 
-/** The card's one action: a piece opens in the Player, a chord or scale step in its explorer. */
+/** The card's one action: a lesson opens to be read, a piece in the Player, a chord or scale step in its explorer. */
 function ContinueButton({ step, label }: { step: PathStep; label: string }) {
   return (
     <ButtonLink
@@ -32,11 +32,16 @@ function ContinueButton({ step, label }: { step: PathStep; label: string }) {
         step.kind === 'piece' ? (
           <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
         ) : (
-          <ExplorerLink step={step} />
+          <StepLink step={step} />
         )
       }
     >
-      <Play data-icon="inline-start" />
+      {/* A lesson is read, everything else played. */}
+      {step.kind === 'lesson' ? (
+        <BookOpenText data-icon="inline-start" />
+      ) : (
+        <Play data-icon="inline-start" />
+      )}
       {label}
     </ButtonLink>
   )
@@ -69,7 +74,7 @@ export function ContinueCard() {
   const toCheck = piece ? skillsToCheck(skillsOfPiece(piece), answers).length : 0
   const skills = skillsOfStep(suggested.step)
   const detail = [
-    piece ? title.secondary : t(`kind.${title.kind}`),
+    piece || suggested.step.kind === 'lesson' ? title.secondary : t(`kind.${title.kind}`),
     piece ? keySymbol(pieceKey(piece)) : null,
     suggested.step.kind === 'chords'
       ? t('known', { known: knownCount(skills, answers), total: skills.length })

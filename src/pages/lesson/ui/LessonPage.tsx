@@ -9,7 +9,7 @@ import {
   useModuleName,
   type Lesson,
 } from '@/entities/lesson'
-import { lessonLearnedId } from '@/entities/progress'
+import { lessonStepId } from '@/entities/path'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
@@ -61,7 +61,7 @@ function LessonEnd({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const moduleName = useModuleName()
-  const step = lessonLearnedId(lesson.id)
+  const step = lessonStepId(lesson.id)
   const { learn } = useLearned(step)
   const next = nextLesson(lesson.id)
   return (

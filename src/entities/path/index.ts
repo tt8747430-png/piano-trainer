@@ -2,6 +2,7 @@ export {
   LEVEL_NAME,
   LEVELS,
   isStepId,
+  lessonStepId,
   pieceStepId,
   stepIdOf,
   type Level,
@@ -12,5 +13,5 @@ export { levelOf, pathSteps, stepById, type PlacedStep } from './model/selectors
 export { skillsOfStep, stepOfSkill } from './model/skills'
 
 export { useStepTitle, type StepKind } from './ui/use-step-title'
-export { ExplorerLink } from './ui/ExplorerLink'
+export { StepLink } from './ui/StepLink'
 export { STEP_PAINT } from './ui/step-paint'

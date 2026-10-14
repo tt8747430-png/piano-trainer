@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { LESSONS, lessonsIn, SUBJECT_MODULES } from '@/entities/lesson'
 import { COLLECTIONS, PIECES, entryById, isPiece } from '@/entities/piece'
 import { CHORD_FAMILIES, SCALE_KINDS } from '@/shared/lib/music'
 import { pathSteps } from '../model/selectors'
@@ -37,6 +38,36 @@ describe('the path', () => {
         `level ${level}`,
       ).toBeGreaterThan(0)
     }
+  })
+
+  it('reads every subject’s lesson at its level, before the level’s practice, in the order taught', () => {
+    // The subjects' one track (ADR 0042): Fundamentals, Accompaniment, Gospel.
+    const subjects = SUBJECT_MODULES.flatMap(lessonsIn)
+    const onPath = steps.flatMap(({ step, level }) =>
+      step.kind === 'lesson' ? [{ id: step.lessonId, level }] : [],
+    )
+    expect(onPath).toEqual(
+      LEVELS.flatMap((level) =>
+        subjects
+          .filter((lesson) => lesson.level === level)
+          .map((lesson) => ({ id: lesson.id, level })),
+      ),
+    )
+    for (const level of LEVELS) {
+      const kinds = steps.filter((placed) => placed.level === level).map(({ step }) => step.kind)
+      const lastLesson = kinds.lastIndexOf('lesson')
+      expect(
+        kinds.slice(0, lastLesson + 1).every((kind) => kind === 'lesson'),
+        `level ${level}`,
+      ).toBe(true)
+    }
+  })
+
+  it('leaves a course’s lessons to their course', () => {
+    const subjects = new Set(SUBJECT_MODULES.flatMap(lessonsIn))
+    const courses = LESSONS.filter((lesson) => !subjects.has(lesson))
+    const lessonIds = steps.flatMap(({ step }) => (step.kind === 'lesson' ? [step.lessonId] : []))
+    for (const lesson of courses) expect(lessonIds).not.toContain(lesson.id)
   })
 
   it('gives each step one id', () => {

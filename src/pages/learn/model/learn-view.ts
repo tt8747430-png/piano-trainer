@@ -6,7 +6,7 @@ import {
   type Lesson,
   type LessonModule,
 } from '@/entities/lesson'
-import { lessonLearnedId } from '@/entities/progress'
+import { lessonStepId } from '@/entities/path'
 import { lessonGroups } from './lesson-groups'
 
 /**
@@ -22,7 +22,7 @@ export interface LearnView {
 type Learned = Readonly<Partial<Record<string, string>>>
 
 const isLearned = (learned: Learned, lesson: Lesson) =>
-  learned[lessonLearnedId(lesson.id)] !== undefined
+  learned[lessonStepId(lesson.id)] !== undefined
 
 /**
  * The lesson to continue with in a tab: the first not learned after the one learned last, along its
@@ -31,7 +31,7 @@ const isLearned = (learned: Learned, lesson: Lesson) =>
 export const lessonToContinue = (tab: LearnTab, learned: Learned): Lesson | undefined =>
   lessonAfterLast(
     lessonGroups(tab).flatMap((group) => group.lessons),
-    (lesson) => learned[lessonLearnedId(lesson.id)],
+    (lesson) => learned[lessonStepId(lesson.id)],
   )
 
 /**

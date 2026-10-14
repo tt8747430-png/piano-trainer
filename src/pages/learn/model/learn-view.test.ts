@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { lessonsIn } from '@/entities/lesson'
-import { lessonLearnedId } from '@/entities/progress'
+import { lessonStepId } from '@/entities/path'
 import { lessonToContinue, openModules, withToggled } from './learn-view'
 
 const learnedOn = (entries: readonly (readonly [string, string])[]) =>
-  Object.fromEntries(entries.map(([id, date]) => [lessonLearnedId(id), date]))
+  Object.fromEntries(entries.map(([id, date]) => [lessonStepId(id), date]))
 
 describe('lessonToContinue', () => {
   it('is none in a tab where nothing is learned', () => {

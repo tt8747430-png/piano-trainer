@@ -1,14 +1,10 @@
-import {
-  selectIsLearned,
-  useProgress,
-  useProgressStoreApi,
-  type LearnedId,
-} from '@/entities/progress'
+import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/progress'
+import { type StepId } from '@/entities/path'
 import { markLearned } from '../mark-learned'
 import { unmarkLearned } from '../unmark-learned'
 
 /** Whether a step is learned, the tap that marks or unmarks it, and the step that only marks it. */
-export function useLearned(step: LearnedId): {
+export function useLearned(step: StepId): {
   readonly learned: boolean
   toggle(): void
   learn(): void

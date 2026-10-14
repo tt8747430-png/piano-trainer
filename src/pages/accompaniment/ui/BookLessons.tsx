@@ -2,7 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import type { MethodBookId } from '@/entities/book'
 import { lessonsIn, useModuleName } from '@/entities/lesson'
-import { lessonLearnedId, selectLearned, useProgress } from '@/entities/progress'
+import { selectLearned, useProgress } from '@/entities/progress'
+import { lessonStepId } from '@/entities/path'
 import { PAGE_TILES, RowGroup, RowLink } from '@/shared/ui'
 
 /**
@@ -14,7 +15,7 @@ export function BookLessons({ book }: { book: MethodBookId }) {
   const moduleName = useModuleName()
   const learned = useProgress(selectLearned)
   const lessons = lessonsIn(book)
-  const done = lessons.filter((lesson) => learned[lessonLearnedId(lesson.id)] !== undefined)
+  const done = lessons.filter((lesson) => learned[lessonStepId(lesson.id)] !== undefined)
   return (
     <RowGroup title={t('practice:accompaniment.lessons')}>
       <li>

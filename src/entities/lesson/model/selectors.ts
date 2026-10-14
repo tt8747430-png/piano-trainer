@@ -47,7 +47,3 @@ export function lessonAfterLast(
   while (next && learnedOn(next) !== undefined) next = nextLesson(next.id)
   return next
 }
-
-/** The lesson to read next of all: on from the one learned last, else the first not learned. */
-export const lessonUpNext = (learnedOn: LearnedOn): Lesson | undefined =>
-  lessonAfterLast(LESSONS, learnedOn) ?? LESSONS.find((lesson) => learnedOn(lesson) === undefined)

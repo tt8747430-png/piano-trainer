@@ -20,6 +20,7 @@ export const path = {
     missed: '{{day}}: not practised',
   },
   kind: {
+    lesson: 'Lesson',
     chords: 'Chords',
     scale: 'Scale',
     study: 'Study',

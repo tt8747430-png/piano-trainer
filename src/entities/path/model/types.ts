@@ -14,19 +14,26 @@ export const LEVEL_NAME = {
   4: 'advanced',
 } as const satisfies Record<Level, string>
 
-/** One entry on the Path. Steps refer to content and never copy it. */
+/** One entry on the Path: a lesson to read, or what to practise. Steps refer to content and never copy it. */
 export type PathStep =
+  | { readonly kind: 'lesson'; readonly lessonId: string }
   | { readonly kind: 'piece'; readonly pieceId: PieceId }
   | { readonly kind: 'chords'; readonly family: ChordFamily }
   | { readonly kind: 'scale'; readonly scale: ScaleKind }
 
-export type StepId = `piece:${PieceId}` | `chords:${ChordFamily}` | `scale:${ScaleKind}`
+export type StepId =
+  `lesson:${string}` | `piece:${PieceId}` | `chords:${ChordFamily}` | `scale:${ScaleKind}`
 
 /** A piece's step: what its learned mark and its Check are kept under. */
 export const pieceStepId = (id: PieceId): StepId => `piece:${id}`
 
+/** A lesson's step: what its learned mark is kept under, on the Path or off it (a course's). */
+export const lessonStepId = (id: string): StepId => `lesson:${id}`
+
 export function stepIdOf(step: PathStep): StepId {
   switch (step.kind) {
+    case 'lesson':
+      return lessonStepId(step.lessonId)
     case 'piece':
       return pieceStepId(step.pieceId)
     case 'chords':
@@ -39,8 +46,8 @@ export function stepIdOf(step: PathStep): StepId {
 const isChordFamily = isOneOf(CHORD_FAMILIES)
 const isScaleKind = isOneOf(SCALE_KINDS)
 
-/** Whether a value is written as a step id. A piece id is only checked for being there: a saved
- *  one may name a piece a later version removed. */
+/** Whether a value is written as a step id. A piece's or a lesson's id is only checked for being
+ *  there: a saved one may name one a later version removed. */
 export function isStepId(value: unknown): value is StepId {
   if (typeof value !== 'string') return false
   const colon = value.indexOf(':')
@@ -48,6 +55,7 @@ export function isStepId(value: unknown): value is StepId {
   const kind = value.slice(0, colon)
   const name = value.slice(colon + 1)
   switch (kind) {
+    case 'lesson':
     case 'piece':
       return name !== ''
     case 'chords':

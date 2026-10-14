@@ -1,9 +1,10 @@
 import { latestEvidence, stepCompletedBy } from './mastery'
 import { selectAnswers, selectIsLearned } from './selectors'
-import type { LearnedId, ProgressState, QuizAnswer, RunKey, RunResult } from './types'
+import type { ProgressState, QuizAnswer, RunKey, RunResult } from './types'
+import type { StepId } from '@/entities/path'
 
 /** The progress with a step or lesson learned on `at` (an ISO date), keeping the day it was first marked. */
-export const withLearned = (state: ProgressState, id: LearnedId, at: string): ProgressState =>
+export const withLearned = (state: ProgressState, id: StepId, at: string): ProgressState =>
   selectIsLearned(id)(state) ? state : { ...state, learned: { ...state.learned, [id]: at } }
 
 /**

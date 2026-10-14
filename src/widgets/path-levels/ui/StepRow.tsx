@@ -1,4 +1,5 @@
 import {
+  BookOpenText,
   ChartNoAxesColumnIncreasing,
   KeyboardMusic,
   Music,
@@ -8,7 +9,7 @@ import {
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  ExplorerLink,
+  StepLink,
   skillsOfStep,
   STEP_PAINT,
   useStepTitle,
@@ -22,6 +23,7 @@ import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
 
 const ICON: Readonly<Record<StepKind, LucideIcon>> = {
+  lesson: BookOpenText,
   chords: KeyboardMusic,
   scale: ChartNoAxesColumnIncreasing,
   study: Repeat2,
@@ -30,7 +32,10 @@ const ICON: Readonly<Record<StepKind, LucideIcon>> = {
 const ROW_LINK =
   'flex min-h-16 min-w-0 flex-1 items-center gap-4 rounded-2xl px-1 py-1.5 transition-colors duration-200 ease-out hover:bg-muted'
 
-/** A step on the Path: what it is, how far along it is, and its learned toggle. A piece opens its page on its shelf. */
+/**
+ * A step on the Path: what it is, how far along it is, and its learned toggle. A lesson opens to be
+ * read, a piece its page on its shelf.
+ */
 export function StepRow({
   placed,
   answers,
@@ -45,7 +50,8 @@ export function StepRow({
   const Icon = ICON[title.kind]
   const skills = skillsOfStep(step)
   const subtitle = [
-    t(`kind.${title.kind}`),
+    // A lesson's line says it is a lesson: where it is read.
+    step.kind === 'lesson' ? null : t(`kind.${title.kind}`),
     step.kind === 'chords'
       ? t('known', { known: knownCount(skills, answers), total: skills.length })
       : null,
@@ -73,9 +79,9 @@ export function StepRow({
   return (
     <li className="flex items-center gap-2">
       {step.kind !== 'piece' ? (
-        <ExplorerLink step={step} className={ROW_LINK}>
+        <StepLink step={step} className={ROW_LINK}>
           {body}
-        </ExplorerLink>
+        </StepLink>
       ) : piece ? (
         <PieceLink entry={piece} className={ROW_LINK}>
           {body}
@@ -84,7 +90,8 @@ export function StepRow({
         // A step naming a piece that is not there (the path's content test forbids it) leads nowhere.
         <span className={ROW_LINK}>{body}</span>
       )}
-      <LearnedCheck step={placed.id} title={title.primary} />
+      {/* Named with its kind: a lesson and a chord step may share a name (Triads). */}
+      <LearnedCheck step={placed.id} title={`${title.primary} · ${t(`kind.${title.kind}`)}`} />
     </li>
   )
 }

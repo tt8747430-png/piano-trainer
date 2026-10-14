@@ -1,7 +1,8 @@
 # ADR 0005 — Levels live on the Path, nowhere else
 
 - **Status:** accepted · **Date:** 2026-09-24 · amended by [ADR 0018](0018-a-lesson-is-a-worksheet.md): a lesson,
-  which is no Step, carries its own level on the Path's four
+  which is no Step, carries its own level on the Path's four; and by [ADR 0048](0048-the-path-reads-the-subjects-lessons.md):
+  a subject's lesson is a Step, placed on the Path by that level
 
 ## Context
 

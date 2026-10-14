@@ -16,9 +16,12 @@ export function stepOfSkill(id: SkillId): PathStep {
     : { kind: 'scale', scale: skill.scale }
 }
 
-/** What a step's check asks: every quality of a chord family, a scale's one skill, none for a piece. */
+/** What a step's check asks: every quality of a chord family, a scale's one skill, none for a piece
+ *  or a lesson. */
 export function skillsOfStep(step: PathStep): SkillId[] {
   switch (step.kind) {
+    case 'lesson':
+      return []
     case 'chords':
       return qualitiesIn(step.family).map(chordSkill)
     case 'scale':

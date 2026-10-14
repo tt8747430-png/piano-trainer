@@ -20,6 +20,7 @@ export const path: LocaleResources['path'] = {
     missed: '{{day}}: не занимались',
   },
   kind: {
+    lesson: 'Урок',
     chords: 'Аккорды',
     scale: 'Гамма',
     study: 'Этюд',

@@ -1,3 +1,4 @@
+import { lessonsIn, SUBJECT_MODULES } from '@/entities/lesson'
 import type { PieceId } from '@/entities/piece'
 import type { ChordFamily, ScaleKind } from '@/shared/lib/music'
 import type { Level, PathStep } from '../model/types'
@@ -6,17 +7,25 @@ const chords = (family: ChordFamily): PathStep => ({ kind: 'chords', family })
 const scale = (kind: ScaleKind): PathStep => ({ kind: 'scale', scale: kind })
 const pieces = (...ids: PieceId[]): PathStep[] => ids.map((pieceId) => ({ kind: 'piece', pieceId }))
 
+/** A level's lessons to read first: the subjects' (one track, ADR 0042) at that level, as taught. */
+const lessons = (level: Level): PathStep[] =>
+  SUBJECT_MODULES.flatMap(lessonsIn)
+    .filter((lesson) => lesson.level === level)
+    .map((lesson) => ({ kind: 'lesson', lessonId: lesson.id }))
+
 /**
  * The one source of levels (ADR 0005): a step's level is the list it sits in, each list taught in
  * order (Continue suggests the first step not learned). Level 1 is triads, the major and minor
  * scales and the pentatonics, and songs on three to five triads; level 2 adds 6th and 7th chords,
  * the other minors and the blues scales, and songs in minor keys or with a dominant 7th; level 3
  * the 9ths, the modes and songs with slash chords and inversions; level 4 the altered chords,
- * Locrian, and songs with diminished passing chords and 9ths. Adding a piece: one step here, in
- * the place it should be learned.
+ * Locrian, and songs with diminished passing chords and 9ths. Each level opens with the subjects'
+ * lessons at that level (a course's stay on their course), read before its practice. Adding a piece:
+ * one step here, in the place it should be learned; a lesson takes its place from its level.
  */
 export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
   1: [
+    ...lessons(1),
     chords('tri'),
     scale('major'),
     scale('natural'),
@@ -27,6 +36,7 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     ...pieces('hgta', 'nojs', 'came', 'fellow', 'friend'),
   ],
   2: [
+    ...lessons(2),
     chords('six'),
     chords('sev'),
     scale('harmonic'),
@@ -40,6 +50,7 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     ...pieces('brat', 'prosti', 'posylaet', 'derznovenie', 'skala'),
   ],
   3: [
+    ...lessons(3),
     chords('nin'),
     scale('dorian'),
     scale('mixolydian'),
@@ -50,6 +61,7 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     ...pieces('milost', 'nuzhdayus', 'vselennaya', 'letom', 'prostil', 'nebesa'),
   ],
   4: [
+    ...lessons(4),
     chords('alt'),
     scale('locrian'),
     ...pieces('bz13', 'bz16', 'bz17', 'bz18', 'romashki', 'olen', 'wafriend', 'metel'),

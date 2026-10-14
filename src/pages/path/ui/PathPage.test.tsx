@@ -3,29 +3,36 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { lessonsIn } from '@/entities/lesson'
+import { pathSteps } from '@/entities/path'
 
 describe('Path', () => {
-  it('suggests the first step on a first run, saying what it is and how far along', async () => {
+  it('suggests the first lesson on a first run, saying where it is read', async () => {
     await renderApp('/')
+    const card = await screen.findByRole('region', { name: 'Finding your way on the keys' })
+    expect(card).toHaveTextContent(
+      `Fundamentals · Lesson 1 of ${lessonsIn('fundamentals').length} · Beginner`,
+    )
+    expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
+      'href',
+      '/learn/lessons/finding-home',
+    )
+  })
+
+  it('goes on to a level’s practice once its lessons are learned', async () => {
+    const { progressStore } = await renderApp('/')
+    const lessons = pathSteps().filter(
+      (placed) => placed.level === 1 && placed.step.kind === 'lesson',
+    )
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries(lessons.map(({ id }) => [id, '2026-10-01T10:00:00Z'])),
+      }),
+    )
     const card = await screen.findByRole('region', { name: 'Triads' })
     expect(within(card).getByText('Chords · 0 of 6 known · Beginner')).toBeInTheDocument()
     expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
       /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
     )
-  })
-
-  it('suggests the next lesson beside it: the first, then on from the one learned last', async () => {
-    const { progressStore } = await renderApp('/')
-    const lesson = await screen.findByRole('region', { name: 'Next lesson' })
-    const link = within(lesson).getByRole('link', { name: /Finding your way on the keys/ })
-    expect(link).toHaveAttribute('href', '/learn/lessons/finding-home')
-    expect(link).toHaveTextContent(`Fundamentals · Lesson 1 of ${lessonsIn('fundamentals').length}`)
-    act(() =>
-      progressStore.setState({ learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' } }),
-    )
-    expect(
-      within(screen.getByRole('region', { name: 'Next lesson' })).getByRole('link'),
-    ).toHaveAttribute('href', '/learn/lessons/reading-notes')
   })
 
   it('suggests the song practised last, with the chords it has to check', async () => {
@@ -69,7 +76,7 @@ describe('Path', () => {
     const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
     const total = within(level).getAllByRole('listitem').length
     expect(within(level).getByText(`0 of ${total}`)).toBeInTheDocument()
-    await user.click(within(level).getByRole('button', { name: 'Triads: learned' }))
+    await user.click(within(level).getByRole('button', { name: 'Triads · Chords: learned' }))
     expect(within(level).getByText(`1 of ${total}`)).toBeInTheDocument()
   })
 
@@ -84,7 +91,7 @@ describe('Path', () => {
     ).toHaveAttribute('href', '/songs/bz5')
     expect(
       within(level)
-        .getByRole('link', { name: /^Triads/ })
+        .getByRole('link', { name: /^Triads\s*Chords/ })
         .getAttribute('href'),
     ).toMatch(/^\/practice\/chords\?.*step=chords(%3A|:)tri/)
   })
@@ -110,10 +117,10 @@ describe('Path', () => {
     const { router } = await renderApp('/')
     const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
     expect(screen.queryByRole('button', { name: 'Hide learned' })).not.toBeInTheDocument()
-    await user.click(within(level).getByRole('button', { name: 'Triads: learned' }))
+    await user.click(within(level).getByRole('button', { name: 'Triads · Chords: learned' }))
     await user.click(screen.getByRole('button', { name: 'Hide learned' }))
     expect(router.state.location.search).toMatchObject({ hideLearned: true })
-    expect(within(level).queryByRole('link', { name: /^Triads/ })).not.toBeInTheDocument()
+    expect(within(level).queryByRole('link', { name: /^Triads\s*Chords/ })).not.toBeInTheDocument()
     expect(within(level).getByText(/^1 of /)).toBeInTheDocument()
   })
 })

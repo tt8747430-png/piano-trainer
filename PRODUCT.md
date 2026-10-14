@@ -36,7 +36,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 
 ## Capabilities and Constraints
 
-- Screens, in four places (Path · Songs · Learn · Practice): Path (Continue + levels 1–4; Settings behind its gear on
+- Screens, in four places (Path · Songs · Learn · Practice): Path (Continue, the first step not learned: a lesson to read, a chord or scale to practise or a song; levels 1–4, each opening with its lessons; Settings behind its gear on
   a phone, at the sidebar's foot on a laptop), Songs (the songs by collection, chosen from tabs, and the learner's own
   songs, made from New song), a Piece (its facts, Practise, the chords it plays to tap and hear, its chart), the Player
   (sheet music as it plays; Listen or Wait mode, a loop, speed training, swing; a piece, or a scale's chords walked

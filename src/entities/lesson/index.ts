@@ -3,6 +3,7 @@ export {
   isLessonModule,
   LEARN_TABS,
   LESSON_MODULES,
+  SUBJECT_MODULES,
   TAB_MODULES,
   tabOf,
   type LearnTab,
@@ -17,7 +18,6 @@ export {
   lessonAfterLast,
   lessonById,
   lessonsIn,
-  lessonUpNext,
   nextLesson,
   type LearnedOn,
 } from './model/selectors'
