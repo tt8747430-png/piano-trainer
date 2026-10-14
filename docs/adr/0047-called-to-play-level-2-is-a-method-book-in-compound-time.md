@@ -5,7 +5,7 @@
 
 ## Context
 
-`piano-data/Called to play/prizvan-igrat-uroven-2-ru.pdf` is the second workbook of Савченко's course: ten
+`piano-data/method-books/called-to-play/level-2-ru.pdf` is the second workbook of Савченко's course: ten
 lessons and an exam over 25 Russian hymns, each printed with a way over every chord. It keeps level 1's methods
 and plays them in 6/8 and 12/8, adds octaves and chords, joining I–IV–V by the nearest notes, ten left-hand ways
 under a tune and the balance of bass, melody and filling. The app taught level 1 only, and a figure written for 4/4

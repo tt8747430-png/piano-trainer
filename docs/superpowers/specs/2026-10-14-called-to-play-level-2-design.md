@@ -1,6 +1,6 @@
 # Called to Play, level 2: the same methods in 6/8 and 12/8
 
-- **Date:** 2026-10-14 · **Source:** `piano-data/Called to play/prizvan-igrat-uroven-2-ru.pdf` (А. Савченко,
+- **Date:** 2026-10-14 · **Source:** `piano-data/method-books/called-to-play/level-2-ru.pdf` (А. Савченко,
   «Призван играть для Него», рабочая тетрадь, уровень 2, 52 pages)
 
 ## What the book is

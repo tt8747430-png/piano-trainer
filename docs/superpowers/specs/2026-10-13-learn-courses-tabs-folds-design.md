@@ -7,7 +7,7 @@
 
 "Make the lessons of this course separate lessons in the Learn tab, and add foldings and tabs to Learn and better
 navigation. The same for Called to Play level 1's lessons." The course is Vasily Gorshkov's accompaniment course
-(`piano-data/Course`: five lessons of sheets, two extra sheets); Called to Play is its level 1 workbook (ten lessons,
+(`piano-data/courses/gorshkov`: five lessons of sheets, two extra sheets); Called to Play is its level 1 workbook (ten lessons,
 song introductions, the table of embellishments, the final exam). Also: "read piano.org's learning order for an
 information update".
 
