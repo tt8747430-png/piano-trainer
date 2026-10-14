@@ -5,8 +5,8 @@ const rightHandTechniques: Lesson = {
   id: 'right-hand-techniques',
   title: { en: 'Right-hand techniques: ♪♩ and ♪♪♪♪', ru: 'Техники правой руки: ♪♩ и ♪♪♪♪' },
   summary: {
-    en: 'Called to Play, lesson 5: the right hand fills a chord while the left keeps the bass. A chord and octave jumps, and an arpeggio up two octaves.',
-    ru: 'Called to Play, урок 5: правая рука заполняет аккорд, пока левая держит бас. Аккорд и скачки на октаву, арпеджио на две октавы вверх.',
+    en: 'The right hand fills a chord while the left keeps the bass. A chord and octave jumps, and an arpeggio up two octaves.',
+    ru: 'Правая рука заполняет аккорд, пока левая держит бас. Аккорд и скачки на октаву, арпеджио на две октавы вверх.',
   },
   level: 2,
   module: 'called-to-play',

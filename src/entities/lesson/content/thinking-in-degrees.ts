@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Gorshkov’s lesson 3: find a song’s key, name each chord by its degree, and play it in any key.',
-    ru: 'Урок 3 Горшкова: найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
+    en: 'Find a song’s key, name each chord by its degree, and play it in any key.',
+    ru: 'Найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
   },
   level: 2,
   module: 'gorshkov',

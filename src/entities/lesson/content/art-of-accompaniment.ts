@@ -8,8 +8,8 @@ const artOfAccompaniment: Lesson = {
   id: 'art-of-accompaniment',
   title: { en: 'The art of accompaniment', ru: 'Искусство аккомпанемента' },
   summary: {
-    en: 'Called to Play, lesson 10: never get in the singer’s way, fill the long notes, open a song with an introduction, and choose from the twelve techniques.',
-    ru: 'Called to Play, урок 10: не мешать пению, заполнять долгие ноты, начинать песню со вступления и выбирать из двенадцати техник.',
+    en: 'Never get in the singer’s way, fill the long notes, open a song with an introduction, and choose from the twelve techniques.',
+    ru: 'Не мешать пению, заполнять долгие ноты, начинать песню со вступления и выбирать из двенадцати техник.',
   },
   level: 2,
   module: 'called-to-play',

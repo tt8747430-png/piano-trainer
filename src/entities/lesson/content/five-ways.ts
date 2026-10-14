@@ -4,8 +4,8 @@ const fiveWays: Lesson = {
   id: 'five-ways',
   title: { en: 'The five ways', ru: 'Пять способов' },
   summary: {
-    en: 'Lesson 3 of Called to Play: one progression played five ways, then a different way on each chord.',
-    ru: 'Третий урок Called to Play: одна последовательность пятью способами, затем свой способ на каждом аккорде.',
+    en: 'One progression played five ways, then a different way on each chord.',
+    ru: 'Одна последовательность пятью способами, затем свой способ на каждом аккорде.',
   },
   level: 1,
   module: 'called-to-play',

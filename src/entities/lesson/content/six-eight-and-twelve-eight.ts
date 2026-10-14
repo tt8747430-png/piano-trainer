@@ -5,8 +5,8 @@ const sixEightAndTwelveEight: Lesson = {
   id: 'six-eight-and-twelve-eight',
   title: { en: '6/8 and 12/8', ru: 'Размеры 6/8 и 12/8' },
   summary: {
-    en: 'Called to Play 2, lesson 3: what a meter says, how 6/8 and 12/8 are counted, and the five ways in 6/8.',
-    ru: 'Called to Play 2, урок 3: что показывает размер, как считать 6/8 и 12/8 и пять видов в 6/8.',
+    en: 'What a meter says, how 6/8 and 12/8 are counted, and the five ways in 6/8.',
+    ru: 'Что показывает размер, как считать 6/8 и 12/8 и пять видов в 6/8.',
   },
   level: 2,
   module: 'called-to-play-2',

@@ -5,8 +5,8 @@ const songsByPlan: Lesson = {
   id: 'songs-by-plan',
   title: { en: 'Songs by their plan', ru: 'Песни по плану' },
   summary: {
-    en: 'Called to Play, lesson 4: three songs played by their plan, the number by each chord naming its way.',
-    ru: 'Called to Play, урок 4: три песни по плану — цифра у аккорда называет способ.',
+    en: 'Three songs played by their plan, the number by each chord naming its way.',
+    ru: 'Три песни по плану — цифра у аккорда называет способ.',
   },
   level: 1,
   module: 'called-to-play',

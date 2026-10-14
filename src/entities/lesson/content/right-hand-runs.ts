@@ -5,8 +5,8 @@ const rightHandRuns: Lesson = {
   id: 'right-hand-runs',
   title: { en: 'Right-hand techniques: runs', ru: 'Техники правой руки: пассажи' },
   summary: {
-    en: 'Called to Play, lesson 6: a run down to the root and a run up 1–2–3–5, then a song with your own plan.',
-    ru: 'Called to Play, урок 6: пассаж вниз к основному тону и пассаж вверх 1–2–3–5, затем песня по своему плану.',
+    en: 'A run down to the root and a run up 1–2–3–5, then a song with your own plan.',
+    ru: 'Пассаж вниз к основному тону и пассаж вверх 1–2–3–5, затем песня по своему плану.',
   },
   level: 2,
   module: 'called-to-play',

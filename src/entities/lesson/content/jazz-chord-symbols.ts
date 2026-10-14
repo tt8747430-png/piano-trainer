@@ -6,8 +6,8 @@ const jazzChordSymbols: Lesson = {
   id: 'jazz-chord-symbols',
   title: { en: 'Jazz chord symbols', ru: 'Джазовые обозначения' },
   summary: {
-    en: 'Gorshkov’s lesson 1, theory: letters for notes, signs for triads, and numbers that count up the major scale.',
-    ru: 'Урок 1 Горшкова, теория: буквы для нот, знаки для трезвучий и цифры — ступени мажорной гаммы.',
+    en: 'Letters for notes, signs for triads, and numbers that count up the major scale.',
+    ru: 'Буквы для нот, знаки для трезвучий и цифры — ступени мажорной гаммы.',
   },
   level: 2,
   module: 'gorshkov',

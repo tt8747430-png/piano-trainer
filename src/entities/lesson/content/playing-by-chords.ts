@@ -5,8 +5,8 @@ const playingByChords: Lesson = {
   id: 'playing-by-chords',
   title: { en: 'Introduction to chord playing', ru: 'Введение в игру аккордами' },
   summary: {
-    en: 'Called to Play, lesson 1: why play by chords, a chord chart beside sheet music, and the C major triad.',
-    ru: 'Called to Play, урок 1: зачем играть аккордами, аккорды над словами и ноты, трезвучие до мажор.',
+    en: 'Why play by chords, a chord chart beside sheet music, and the C major triad.',
+    ru: 'Зачем играть аккордами, аккорды над словами и ноты, трезвучие до мажор.',
   },
   level: 1,
   module: 'called-to-play',

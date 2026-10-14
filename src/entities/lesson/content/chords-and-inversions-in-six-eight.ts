@@ -5,8 +5,8 @@ const chordsAndInversionsInSixEight: Lesson = {
   id: 'chords-and-inversions-in-six-eight',
   title: { en: 'Chords and inversions in 6/8', ru: 'Аккорды и обращения в 6/8' },
   summary: {
-    en: 'Called to Play 2, lesson 5: two more right-hand ways in 6/8, the chord with its octave and the chord in two positions.',
-    ru: 'Called to Play 2, урок 5: ещё два вида для правой руки в 6/8 — аккорд с октавой и аккорд в двух расположениях.',
+    en: 'Two more right-hand ways in 6/8, the chord with its octave and the chord in two positions.',
+    ru: 'Ещё два вида для правой руки в 6/8 — аккорд с октавой и аккорд в двух расположениях.',
   },
   level: 2,
   module: 'called-to-play-2',

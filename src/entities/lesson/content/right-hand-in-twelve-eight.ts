@@ -5,8 +5,8 @@ const rightHandInTwelveEight: Lesson = {
   id: 'right-hand-in-twelve-eight',
   title: { en: 'Right-hand ways in 12/8', ru: 'Виды игры правой рукой в 12/8' },
   summary: {
-    en: 'Called to Play 2, lesson 6: ways 7 to 10 fill a bar of 12/8, a chord on each of its four beats.',
-    ru: 'Called to Play 2, урок 6: виды 7–10 заполняют такт 12/8, аккорд на каждую из четырёх долей.',
+    en: 'Ways 7 to 10 fill a bar of 12/8, a chord on each of its four beats.',
+    ru: 'Виды 7–10 заполняют такт 12/8, аккорд на каждую из четырёх долей.',
   },
   level: 2,
   module: 'called-to-play-2',

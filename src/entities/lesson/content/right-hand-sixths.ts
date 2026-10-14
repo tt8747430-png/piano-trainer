@@ -5,8 +5,8 @@ const rightHandSixths: Lesson = {
   id: 'right-hand-sixths',
   title: { en: 'Right-hand techniques: sixths', ru: 'Техники правой руки: сексты' },
   summary: {
-    en: 'Called to Play, lesson 9: sixths moving up or down the scale, then a song with your own plan.',
-    ru: 'Called to Play, урок 9: сексты вверх или вниз по гамме, затем песня по своему плану.',
+    en: 'Sixths moving up or down the scale, then a song with your own plan.',
+    ru: 'Сексты вверх или вниз по гамме, затем песня по своему плану.',
   },
   level: 2,
   module: 'called-to-play',

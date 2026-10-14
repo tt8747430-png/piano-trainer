@@ -11,8 +11,8 @@ const chordPulse: Lesson = {
   id: 'chord-pulse',
   title: { en: 'Chord pulse', ru: 'Аккордовая пульсация' },
   summary: {
-    en: 'Gorshkov’s lesson 4: harmony into texture. Pulse the chords, give them a fourth note, then break them and figure them.',
-    ru: 'Урок 4 Горшкова: гармония превращается в фактуру. Пульсация аккордов, четвёртый звук, ломаные аккорды и гармоническая фигурация.',
+    en: 'Harmony into texture. Pulse the chords, give them a fourth note, then break them and figure them.',
+    ru: 'Гармония превращается в фактуру. Пульсация аккордов, четвёртый звук, ломаные аккорды и гармоническая фигурация.',
   },
   level: 2,
   module: 'gorshkov',

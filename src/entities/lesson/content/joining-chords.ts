@@ -9,8 +9,8 @@ const joiningChords: Lesson = {
   id: 'joining-chords',
   title: { en: 'Joining chords', ru: 'Соединение аккордов' },
   summary: {
-    en: 'Called to Play 2, lesson 8: the three main chords of a key, joined so every note moves to its nearest neighbour.',
-    ru: 'Called to Play 2, урок 8: три главных аккорда тональности, соединённые так, что каждый звук идёт в ближайший соседний.',
+    en: 'The three main chords of a key, joined so every note moves to its nearest neighbour.',
+    ru: 'Три главных аккорда тональности, соединённые так, что каждый звук идёт в ближайший соседний.',
   },
   level: 3,
   module: 'called-to-play-2',

@@ -9,8 +9,8 @@ const seventhsInASong: Lesson = {
   id: 'sevenths-in-a-song',
   title: { en: 'Seventh chords in a song', ru: 'Септаккорды в песне' },
   summary: {
-    en: 'Gorshkov’s lesson 1, practice: the three main 7th chords, which one a song’s triad takes, and each up and down by semitones.',
-    ru: 'Урок 1 Горшкова, практика: три основных септаккорда, какой взять вместо трезвучия песни, и каждый по полутонам вверх и вниз.',
+    en: 'The three main 7th chords, which one a song’s triad takes, and each up and down by semitones.',
+    ru: 'Три основных септаккорда, какой взять вместо трезвучия песни, и каждый по полутонам вверх и вниз.',
   },
   level: 2,
   module: 'gorshkov',

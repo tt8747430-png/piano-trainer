@@ -5,8 +5,8 @@ const calledToPlayExam: Lesson = {
   id: 'called-to-play-exam',
   title: { en: 'Final exam', ru: 'Итоговый экзамен' },
   summary: {
-    en: 'Called to Play’s final exam: two verses of «Long I Wandered in the Shadows» with your own plan, accompanying a singer.',
-    ru: 'Итоговый экзамен Called to Play: два куплета «Long I Wandered in the Shadows» по своему плану, с солистом.',
+    en: 'Two verses of «Long I Wandered in the Shadows» with your own plan, accompanying a singer.',
+    ru: 'Два куплета «Long I Wandered in the Shadows» по своему плану, с солистом.',
   },
   level: 2,
   module: 'called-to-play',

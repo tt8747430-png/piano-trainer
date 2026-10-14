@@ -5,8 +5,8 @@ const leftHandWays: Lesson = {
   id: 'left-hand-ways',
   title: { en: 'Left-hand ways', ru: 'Виды игры для левой руки' },
   summary: {
-    en: 'Called to Play 2, lesson 9: ten ways for the left hand under a tune the right hand plays from the notes.',
-    ru: 'Called to Play 2, урок 9: десять видов для левой руки под мелодией, которую правая играет по нотам.',
+    en: 'Ten ways for the left hand under a tune the right hand plays from the notes.',
+    ru: 'Десять видов для левой руки под мелодией, которую правая играет по нотам.',
   },
   level: 3,
   module: 'called-to-play-2',

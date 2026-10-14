@@ -5,8 +5,8 @@ const balanceOfAccompaniment: Lesson = {
   id: 'balance-of-accompaniment',
   title: { en: 'The balance of accompaniment', ru: 'Баланс аккомпанемента' },
   summary: {
-    en: 'Called to Play 2, lesson 10: bass and melody louder, everything between them softer, the “musical cake”.',
-    ru: 'Called to Play 2, урок 10: бас и мелодия громче, всё между ними тише — «музыкальный торт».',
+    en: 'Bass and melody louder, everything between them softer, the “musical cake”.',
+    ru: 'Бас и мелодия громче, всё между ними тише — «музыкальный торт».',
   },
   level: 3,
   module: 'called-to-play-2',

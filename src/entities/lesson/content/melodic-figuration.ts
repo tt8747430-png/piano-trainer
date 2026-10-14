@@ -8,8 +8,8 @@ const melodicFiguration: Lesson = {
   id: 'melodic-figuration',
   title: { en: 'Melodic figuration', ru: 'Мелодическая фигурация' },
   summary: {
-    en: 'Gorshkov’s lesson 5: a line of its own inside the accompaniment, answering the melody where it leaves room.',
-    ru: 'Урок 5 Горшкова: самостоятельная линия внутри аккомпанемента, которая отвечает мелодии там, где есть место.',
+    en: 'A line of its own inside the accompaniment, answering the melody where it leaves room.',
+    ru: 'Самостоятельная линия внутри аккомпанемента, которая отвечает мелодии там, где есть место.',
   },
   level: 3,
   module: 'gorshkov',

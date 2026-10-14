@@ -5,8 +5,8 @@ const octavesAndChords: Lesson = {
   id: 'octaves-and-chords',
   title: { en: 'Octaves and chords', ru: 'Октавы и аккорды' },
   summary: {
-    en: 'Called to Play 2, lesson 2: octaves in the right hand, up the scale and by the chord, and full chords that step.',
-    ru: 'Called to Play 2, урок 2: октавы в правой руке — гаммой и по аккорду — и полные аккорды с движением.',
+    en: 'Octaves in the right hand, up the scale and by the chord, and full chords that step.',
+    ru: 'Октавы в правой руке — гаммой и по аккорду — и полные аккорды с движением.',
   },
   level: 2,
   module: 'called-to-play-2',

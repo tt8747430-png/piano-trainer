@@ -5,8 +5,8 @@ const sixthsInCompoundTime: Lesson = {
   id: 'sixths-in-compound-time',
   title: { en: 'Sixths in 6/8 and 12/8', ru: 'Сексты в 6/8 и 12/8' },
   summary: {
-    en: 'Called to Play 2, lesson 7: sixths that rise or fall through a bar of 6/8, twice in a bar of 12/8.',
-    ru: 'Called to Play 2, урок 7: сексты, которые поднимаются или опускаются в такте 6/8 и дважды — в такте 12/8.',
+    en: 'Sixths that rise or fall through a bar of 6/8, twice in a bar of 12/8.',
+    ru: 'Сексты, которые поднимаются или опускаются в такте 6/8 и дважды — в такте 12/8.',
   },
   level: 2,
   module: 'called-to-play-2',

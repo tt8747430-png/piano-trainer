@@ -5,8 +5,8 @@ const rightHandInSixEight: Lesson = {
   id: 'right-hand-in-six-eight',
   title: { en: 'Right-hand ways in 6/8', ru: 'Виды игры правой рукой в 6/8' },
   summary: {
-    en: 'Called to Play 2, lesson 4: the right hand’s first four ways, each in a bar of 6/8.',
-    ru: 'Called to Play 2, урок 4: первые четыре вида игры правой рукой, каждый в такте 6/8.',
+    en: 'The right hand’s first four ways, each in a bar of 6/8.',
+    ru: 'Первые четыре вида игры правой рукой, каждый в такте 6/8.',
   },
   level: 2,
   module: 'called-to-play-2',

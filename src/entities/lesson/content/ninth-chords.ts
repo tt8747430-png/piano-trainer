@@ -5,8 +5,8 @@ const ninthChords: Lesson = {
   id: 'ninth-chords',
   title: { en: 'Ninth chords', ru: 'Нонаккорды' },
   summary: {
-    en: 'Gorshkov’s lesson 2: three 9th chords, each two triads stacked, played over the bass alone, in two positions.',
-    ru: 'Урок 2 Горшкова: три нонаккорда, каждый — два трезвучия друг на друге, над одним басом, в двух расположениях.',
+    en: 'Three 9th chords, each two triads stacked, played over the bass alone, in two positions.',
+    ru: 'Три нонаккорда, каждый — два трезвучия друг на друге, над одним басом, в двух расположениях.',
   },
   level: 3,
   module: 'gorshkov',

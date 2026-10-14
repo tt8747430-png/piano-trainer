@@ -8,8 +8,8 @@ const rightHandChords: Lesson = {
     ru: 'Техники правой руки: аккорды вверх по клавиатуре',
   },
   summary: {
-    en: 'Called to Play, lesson 7: a dotted chord, three chords up the keys, and a chord climbing through its inversions.',
-    ru: 'Called to Play, урок 7: пунктирный аккорд, три аккорда вверх по клавиатуре и аккорд, который поднимается по обращениям.',
+    en: 'A dotted chord, three chords up the keys, and a chord climbing through its inversions.',
+    ru: 'Пунктирный аккорд, три аккорда вверх по клавиатуре и аккорд, который поднимается по обращениям.',
   },
   level: 2,
   module: 'called-to-play',

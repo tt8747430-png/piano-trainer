@@ -5,8 +5,8 @@ const seventhByTheKey: Lesson = {
   id: 'seventh-by-the-key',
   title: { en: 'The 7th chord in a key', ru: 'Септаккорд по тональности' },
   summary: {
-    en: 'Called to Play 2, lesson 1: maj7 or 7, as the key’s notes decide, with the 7th taken under the chord.',
-    ru: 'Called to Play 2, урок 1: maj7 или 7 — как подскажут знаки тональности, с септимой под аккордом.',
+    en: 'Maj7 or 7, as the key’s notes decide, with the 7th taken under the chord.',
+    ru: 'Maj7 или 7 — как подскажут знаки тональности, с септимой под аккордом.',
   },
   level: 2,
   module: 'called-to-play-2',
