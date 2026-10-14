@@ -23,11 +23,15 @@ function renderDays(days: string[]) {
 }
 
 describe('PracticeDays', () => {
-  it('invites a first day when none is practised', () => {
-    renderDays([])
-    expect(screen.getByRole('heading', { name: 'Practice' })).toBeInTheDocument()
+  it('shows nothing until a day of the last seven is practised', () => {
+    renderDays(['2026-09-30'])
+    expect(screen.queryByRole('heading', { name: 'Practice' })).not.toBeInTheDocument()
+  })
+
+  it('shows a week of a run that ended, with no run to count', () => {
+    renderDays(['2026-10-07'])
     expect(screen.queryByText(/Days in a row/)).not.toBeInTheDocument()
-    expect(screen.getByText('Practise today to start a run of days.')).toBeInTheDocument()
+    expect(screen.getByRole('list', { name: 'The last seven days' })).toBeInTheDocument()
   })
 
   it('counts the days in a row and names each of the last seven, today last', () => {

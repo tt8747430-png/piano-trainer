@@ -18,8 +18,8 @@ function formatsOf(locale: Locale) {
 }
 
 /**
- * The days practised: how many in a row up to today, and the last seven, today last. A run that ended
- * yesterday still counts, and says today keeps it going.
+ * The days practised: how many in a row up to today, and the last seven, today last; nothing until a
+ * day of them is practised. A run that ended yesterday still counts, and says today keeps it going.
  */
 export function PracticeDays() {
   const { t } = useTranslation('path')
@@ -31,7 +31,7 @@ export function PracticeDays() {
   const week = lastWeek(days, today)
   const practisedToday = week.at(-1)?.practised ?? false
   const { short, long } = formatsOf(locale)
-  const note = run === 0 ? t('days.start') : practisedToday ? t('days.done') : t('days.keep')
+  if (!week.some(({ practised }) => practised)) return null
 
   return (
     <section
@@ -45,7 +45,11 @@ export function PracticeDays() {
         {run > 0 ? (
           <p className="font-display text-2xl font-semibold">{t('days.inARow', { count: run })}</p>
         ) : null}
-        <p className="text-muted-foreground">{note}</p>
+        {run > 0 ? (
+          <p className="text-muted-foreground">
+            {practisedToday ? t('days.done') : t('days.keep')}
+          </p>
+        ) : null}
       </div>
       <ol aria-label={t('days.week')} className="flex gap-2">
         {week.map(({ day, practised }, i) => {

@@ -13,7 +13,6 @@ export const path = {
   days: {
     title: 'Practice',
     inARow: 'Days in a row: {{count}}',
-    start: 'Practise today to start a run of days.',
     keep: 'Practise today to keep it going.',
     done: 'Practised today.',
     week: 'The last seven days',
