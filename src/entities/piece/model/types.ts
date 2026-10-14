@@ -126,6 +126,7 @@ export type Entry = Piece | Listing
 export const COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
+  'called-to-play-2',
   'hymns',
   'gorshkov',
   'studies',
@@ -140,6 +141,7 @@ export const isCollectionId = isOneOf(COLLECTION_IDS)
 export const SONG_COLLECTION_IDS = [
   'bozhe-spasibo',
   'called-to-play',
+  'called-to-play-2',
   'hymns',
   'gorshkov',
 ] as const satisfies readonly CollectionId[]

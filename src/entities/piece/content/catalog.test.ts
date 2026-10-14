@@ -100,9 +100,10 @@ describe('the catalog', () => {
   it('leaves the Player’s own words free: no piece is called walk', () => {
     expect(pieceById('walk')).toBeUndefined()
   })
-  it('holds 45 pieces and 7 listings in 5 collections, each id once', () => {
+  it('holds 70 pieces and 7 listings in 6 collections, each id once', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual([...COLLECTION_IDS])
-    expect(PIECES).toHaveLength(45)
+    expect(COLLECTIONS).toHaveLength(6)
+    expect(PIECES).toHaveLength(70)
     // One song is written in degrees, as its course teaches it; it is a song all the same.
     expect(PIECES.filter(isDegreePiece).map((piece) => [piece.id, piece.kind])).toEqual([
       ['romashki', 'song'],

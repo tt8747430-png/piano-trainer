@@ -1,7 +1,13 @@
 import { isOneOf } from '@/shared/lib'
 
 /** The printed songbooks and methods a Source cites. */
-export const BOOK_IDS = ['bozhe-spasibo', 'called-to-play', 'seven-types', 'gorshkov'] as const
+export const BOOK_IDS = [
+  'bozhe-spasibo',
+  'called-to-play',
+  'called-to-play-2',
+  'seven-types',
+  'gorshkov',
+] as const
 export type BookId = (typeof BOOK_IDS)[number]
 
 export interface Book {

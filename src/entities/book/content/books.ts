@@ -4,6 +4,7 @@ import type { Book, BookId, MethodBookId } from '../model/types'
 export const BOOKS: Readonly<Record<BookId, Book>> = {
   'bozhe-spasibo': { title: '«Боже, спасибо»', author: 'Надежда Боброва' },
   'called-to-play': { title: 'Called to Play for Him', author: 'A. Savchenko' },
+  'called-to-play-2': { title: 'Призван играть для Него. Уровень 2', author: 'Александр Савченко' },
   'seven-types': { title: 'Семь основных видов аккомпанемента', author: 'Н. В. Боброва' },
   gorshkov: { title: 'Курс по аккомпанементу', author: 'Василий Горшков' },
 }

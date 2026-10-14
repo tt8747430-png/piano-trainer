@@ -36,6 +36,8 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     ...pieces('ex7', 'ex8', 'ex9'),
     ...pieces('glory', 'face', 'together', 'mercy', 'wander', 'wonder', 'soon', 'house', 'lift'),
     ...pieces('heaven', 'otche', 'bz1', 'bz2', 'bz3', 'bz5'),
+    ...pieces('molitva', 'zemlya', 'otchizna', 'dveri', 'angely', 'idti', 'posmotri'),
+    ...pieces('brat', 'prosti', 'posylaet', 'derznovenie', 'skala'),
   ],
   3: [
     chords('nin'),
@@ -44,6 +46,8 @@ export const PATH: Readonly<Record<Level, readonly PathStep[]>> = {
     scale('lydian'),
     scale('phrygian'),
     ...pieces('bz6', 'bz8', 'bz10', 'bz12', 'bz15'),
+    ...pieces('vyshina', 'legenda', 'ktoya', 'vboge', 'buri', 'kryl', 'potoki'),
+    ...pieces('milost', 'nuzhdayus', 'vselennaya', 'letom', 'prostil', 'nebesa'),
   ],
   4: [
     chords('alt'),
