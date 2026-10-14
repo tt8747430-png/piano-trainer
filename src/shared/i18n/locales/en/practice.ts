@@ -91,9 +91,6 @@ export const practice = {
       label: 'Fingering',
       thumb: 'From the thumb',
       scale: 'As the scale',
-      note: 'Note',
-      rh: 'RH',
-      lh: 'LH',
     },
     rhythmLabel: 'Rhythm',
     rhythm: {

@@ -17,7 +17,7 @@ describe('Practice → Scales and keys', () => {
     expect(
       await screen.findByRole('heading', { level: 2, name: 'E♭ harmonic minor' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('table')).toHaveTextContent('C♭')
+    expect(screen.getByRole('radiogroup', { name: 'Start on' })).toHaveTextContent('C♭')
     expect(screen.getByText('W H W W H W+H H')).toBeInTheDocument()
   })
 
@@ -218,7 +218,10 @@ describe('Practice → Scales and keys', () => {
 
   it('fingers a scale with no taught fingering from the thumb', async () => {
     await renderApp('/practice/scales?kind=mpent&root=A')
-    expect(await screen.findByRole('table')).toHaveTextContent('RH')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent(/^1/)
+    // The fingers are under the keys and on the staff: no table says them a third time.
+    expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
 
   it('has no Chords view for a scale without seven notes', async () => {

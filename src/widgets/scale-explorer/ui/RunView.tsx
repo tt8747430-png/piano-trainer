@@ -7,7 +7,6 @@ import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
 import { Dropdown, Labelled, Segmented } from '@/shared/ui'
 import { scaleRunOf } from '../model/scale-run'
 import type { ScaleView } from '../model/scale-view'
-import { FingeringTable } from './FingeringTable'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
 import { ScaleLayout } from './ScaleLayout'
@@ -16,8 +15,8 @@ import { TempoSlider } from './TempoSlider'
 
 /**
  * Scale view: the run from its start note, its keys marked by degree with the playing hand's fingers
- * (the right hand's when both play), played up and down; on the staff and in a table of both hands'
- * fingers; and its exercises in the Player.
+ * (the right hand's when both play), played up and down; on the staff with its hands' fingers; and its
+ * exercises in the Player.
  */
 export function RunView({
   scale,
@@ -114,11 +113,6 @@ export function RunView({
       }
     >
       <ScaleSheet music={run.music} hands={hands} fingers />
-      <FingeringTable
-        notes={run.placed.map((key) => noteName(key.tone.note))}
-        rh={run.fingers.rh}
-        lh={run.fingers.lh}
-      />
       <ScaleExercises root={tonic} kind={kind} />
     </ScaleLayout>
   )

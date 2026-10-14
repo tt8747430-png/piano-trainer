@@ -87,9 +87,6 @@ export const practice: LocaleResources['practice'] = {
       label: 'Аппликатура',
       thumb: 'От первого пальца',
       scale: 'Как в гамме',
-      note: 'Нота',
-      rh: 'ПР',
-      lh: 'ЛР',
     },
     rhythmLabel: 'Ритм',
     rhythm: {
