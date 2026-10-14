@@ -13,7 +13,7 @@ async function rulesBrokenBy(file: string, code: string) {
 describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
   it('let a page import an entity through its barrel', async () => {
     const broken = await rulesBrokenBy(
-      'src/pages/path/ui/Example.tsx',
+      'src/pages/learn/ui/Example.tsx',
       "import { selectTheme } from '@/entities/settings'\nexport const example = selectTheme\n",
     )
     expect(broken).not.toContain('boundaries/dependencies')
@@ -54,7 +54,7 @@ describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
   it('refuse an import from a higher layer', async () => {
     const broken = await rulesBrokenBy(
       'src/entities/settings/model/example.ts',
-      "import { PathPage } from '@/pages/path'\nexport const example = PathPage\n",
+      "import { LearnPage } from '@/pages/learn'\nexport const example = LearnPage\n",
     )
     expect(broken).toContain('boundaries/dependencies')
   })
@@ -72,7 +72,7 @@ describe('architecture rules (eslint)', { timeout: 60_000 }, () => {
     ['a relative path', '../../../entities/settings/model/store'],
   ])('refuse a deep import into another slice through %s', async (_how, source) => {
     const broken = await rulesBrokenBy(
-      'src/pages/path/ui/Example.tsx',
+      'src/pages/learn/ui/Example.tsx',
       `import { createSettingsStore } from '${source}'\nexport const example = createSettingsStore\n`,
     )
     expect(broken).toContain('boundaries/dependencies')

@@ -7,15 +7,13 @@ describe('the shell’s shortcuts', () => {
   it('goes to a place on Alt and its number', async () => {
     const user = userEvent.setup()
     await renderApp('/')
-    await screen.findByRole('heading', { level: 1, name: 'Path' })
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Alt>}2{/Alt}')
     expect(await screen.findByRole('heading', { level: 1, name: 'Songs' })).toBeInTheDocument()
-    await user.keyboard('{Alt>}4{/Alt}')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Practice' })).toBeInTheDocument()
     await user.keyboard('{Alt>}3{/Alt}')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Practice' })).toBeInTheDocument()
     await user.keyboard('{Alt>}1{/Alt}')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
   })
 
   it('collapses and opens the sidebar on Ctrl and B, and says so on its button', async () => {

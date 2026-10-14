@@ -1,2 +1,2 @@
 export { LearnPage } from './ui/LearnPage'
-export type { LearnView } from './model/learn-view'
+export { isLearnView, LEARN_VIEWS, type LearnView } from './model/learn-view'

@@ -1,12 +1,10 @@
 export {
-  isLearnTab,
   isLessonModule,
-  LEARN_TABS,
+  MODULE_SHELVES,
   LESSON_MODULES,
   SUBJECT_MODULES,
-  TAB_MODULES,
-  tabOf,
-  type LearnTab,
+  SHELF_MODULES,
+  type ModuleShelf,
   type Lesson,
   type LessonBlock,
   type LessonLink,
@@ -17,9 +15,11 @@ export { readProgression } from './model/progression'
 export {
   lessonAfterLast,
   lessonById,
+  lessonInModule,
   lessonsIn,
   nextLesson,
   type LearnedOn,
 } from './model/selectors'
 export { LESSONS } from './content'
 export { useModuleName } from './ui/use-module-name'
+export { MODULE_LOOK } from './ui/module-look'

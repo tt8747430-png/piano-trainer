@@ -7,7 +7,7 @@ const SCREENS = [
   '/',
   '/songs',
   '/songs/bz5',
-  '/learn',
+  '/learn/fundamentals',
   '/learn/lessons/reading-chord-symbols',
   '/practice',
   '/practice/chords',

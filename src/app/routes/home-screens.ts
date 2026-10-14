@@ -1,1 +1,1 @@
-export { PathPage } from '@/pages/path'
+export { LearnPage } from '@/pages/learn'

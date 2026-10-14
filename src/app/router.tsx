@@ -20,6 +20,7 @@ import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
+import { isLessonModule } from '@/entities/lesson'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
@@ -63,7 +64,6 @@ import {
 } from './routes/player-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { learnSearch, readLearnSearch } from './routes/learn-search'
-import { pathSearch } from './routes/path-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
@@ -134,11 +134,13 @@ const shellRoute = createRoute({
   id: 'shell',
   component: ShellLayout,
 })
-const pathRoute = createRoute({
+// Learn, the first place (ADR 0049): Continue, then the Journey or the Courses.
+const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
-  ...pathSearch,
-  component: lazyRouteComponent(homeScreens, 'PathPage'),
+  ...learnSearch,
+  ...remembered(readLearnSearch, []),
+  component: lazyRouteComponent(homeScreens, 'LearnPage'),
 })
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -227,14 +229,6 @@ const studyRoute = createRoute({
     if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'study') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
-})
-// Learn: its lessons, by subject or by course, each module folding (ADR 0042).
-const learnRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/learn',
-  ...learnSearch,
-  ...remembered(readLearnSearch, []),
-  component: lazyRouteComponent(learnScreens, 'LearnPage'),
 })
 // Practice's explorers: each page shows a thing on the keys.
 const chordsRoute = createRoute({
@@ -344,6 +338,15 @@ const editPatternRoute = createRoute({
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
 
+const courseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/learn/$module',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: ({ params }) => {
+    if (!isLessonModule(params.module)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CoursePage'),
+})
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/learn/lessons/$lessonId',
@@ -456,7 +459,7 @@ const takeRoute = createRoute({
 const checkRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/check',
-  notFoundComponent: notFoundIn('path'),
+  notFoundComponent: notFoundIn('learn'),
   validateSearch: validateCheckSearch,
   beforeLoad: async ({ search }) => {
     const { checkPlan } = await practiceScreens()
@@ -467,13 +470,13 @@ const checkRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
-    pathRoute,
+    learnRoute,
     settingsRoute,
     searchRoute,
     songsRoute,
     sharedSongRoute,
     pieceRoute,
-    learnRoute,
+    courseRoute,
     chordsRoute,
     scalesRoute,
     intervalsRoute,

@@ -6,7 +6,6 @@ export const common: LocaleResources['common'] = {
   back: 'Назад',
   nav: {
     label: 'Основная навигация',
-    path: 'Путь',
     songs: 'Песни',
     learn: 'Обучение',
     practice: 'Практика',
@@ -22,7 +21,6 @@ export const common: LocaleResources['common'] = {
   },
   notFound: {
     title: 'Страница не найдена',
-    toPath: 'К пути',
     toSongs: 'К песням',
     toLearn: 'К обучению',
     toQuiz: 'К тестам',

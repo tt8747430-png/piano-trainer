@@ -37,15 +37,13 @@ export type LessonModule = (typeof LESSON_MODULES)[number]
 export const isLessonModule = isOneOf(LESSON_MODULES)
 export const isCourse = isOneOf(COURSE_MODULES)
 
-/** Learn's two tabs: the subjects' modules, and the courses' (ADR 0042). */
-export const LEARN_TABS = ['subjects', 'courses'] as const
-export type LearnTab = (typeof LEARN_TABS)[number]
-export const isLearnTab = isOneOf(LEARN_TABS)
-export const TAB_MODULES: Readonly<Record<LearnTab, readonly LessonModule[]>> = {
+/** Learn's Courses view's two shelves: the subjects' modules, and the courses' (ADR 0049). */
+export const MODULE_SHELVES = ['subjects', 'courses'] as const
+export type ModuleShelf = (typeof MODULE_SHELVES)[number]
+export const SHELF_MODULES: Readonly<Record<ModuleShelf, readonly LessonModule[]>> = {
   subjects: SUBJECT_MODULES,
   courses: COURSE_MODULES,
 }
-export const tabOf = (module: LessonModule): LearnTab => (isCourse(module) ? 'courses' : 'subjects')
 
 /** A progression a lesson plays or opens on Progressions: numerals in a key, triads when it names no size. */
 export interface LessonProgression {

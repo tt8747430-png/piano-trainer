@@ -7,7 +7,7 @@ import { lessonStepId } from '@/entities/path'
 import { PAGE_TILES, RowGroup, RowLink } from '@/shared/ui'
 
 /**
- * A method book's lessons, from its part of Accompaniment: its course on Learn, open, with how much of
+ * A method book's lessons, from its part of Accompaniment: its course's page on Learn, with how much of
  * it is learned. A book's patterns, pieces and lessons are one course, reached from either place.
  */
 export function BookLessons({ book }: { book: MethodBookId }) {
@@ -23,7 +23,7 @@ export function BookLessons({ book }: { book: MethodBookId }) {
           title={moduleName(book)}
           detail={t('learn:progress', { learned: done.length, total: lessons.length })}
           {...PAGE_TILES.lesson}
-          render={<Link to="/learn" search={{ tab: 'courses', open: book }} />}
+          render={<Link to="/learn/$module" params={{ module: book }} />}
         />
       </li>
     </RowGroup>

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { LESSONS } from '../content'
 import type { Lesson } from './types'
-import { lessonAfterLast, lessonById, lessonsIn, nextLesson } from './selectors'
+import { lessonAfterLast, lessonById, lessonInModule, lessonsIn, nextLesson } from './selectors'
 
 const learnedOn =
   (entries: Readonly<Record<string, string>>) =>
@@ -50,5 +50,29 @@ describe('lessonAfterLast', () => {
     expect(
       lessonAfterLast(lessonsIn('gorshkov'), learnedOn({ 'finding-home': '2026-10-01' })),
     ).toBe(undefined)
+  })
+})
+
+describe('lessonInModule', () => {
+  it('is a course’s first lesson, then the one after the last learned, then the first not learned', () => {
+    const [first, second, third] = lessonsIn('gorshkov')
+    expect(lessonInModule('gorshkov', learnedOn({}))).toBe(first)
+    expect(lessonInModule('gorshkov', learnedOn({ [first?.id ?? '']: '2026-10-01' }))).toBe(second)
+    // The last learned is the third: on to the fourth, the second still to come back to after.
+    const third_ = learnedOn({ [third?.id ?? '']: '2026-10-02' })
+    expect(lessonInModule('gorshkov', third_)).toBe(lessonsIn('gorshkov')[3])
+  })
+
+  it('is none once every lesson of the module is learned', () => {
+    const all = Object.fromEntries(lessonsIn('gospel').map((lesson) => [lesson.id, '2026-10-01']))
+    expect(lessonInModule('gospel', learnedOn(all))).toBeUndefined()
+  })
+
+  it('stays in the module, never into the next subject', () => {
+    const fundamentals = lessonsIn('fundamentals')
+    const last = fundamentals.at(-1)?.id ?? ''
+    expect(lessonInModule('fundamentals', learnedOn({ [last]: '2026-10-01' }))).toBe(
+      fundamentals[0],
+    )
   })
 })

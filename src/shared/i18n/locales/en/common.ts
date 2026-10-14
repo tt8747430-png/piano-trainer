@@ -4,7 +4,6 @@ export const common = {
   back: 'Back',
   nav: {
     label: 'Main navigation',
-    path: 'Path',
     songs: 'Songs',
     learn: 'Learn',
     practice: 'Practice',
@@ -20,7 +19,6 @@ export const common = {
   },
   notFound: {
     title: 'Page not found',
-    toPath: 'Go to Path',
     toSongs: 'Go to Songs',
     toLearn: 'Go to Learn',
     toQuiz: 'Go to Quiz',

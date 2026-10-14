@@ -5,8 +5,17 @@ export const learn = {
     accompaniment: 'Accompaniment',
     gospel: 'Gospel',
   },
-  // Learn's tabs (ADR 0042): lessons by subject, and each course's own in its order.
-  tabs: { label: 'Lessons', subjects: 'Subjects', courses: 'Courses' },
+  // Learn's two views (ADR 0049): the Path's levels as a journey, or every module as a course.
+  views: { label: 'Show', journey: 'Journey', courses: 'Courses' },
+  // The Courses view's shelves: what is taught by subject, then each teacher's course.
+  shelves: { subjects: 'Subjects', courses: 'Courses' },
+  // A course's page: its one way in, and its lessons.
+  course: {
+    start: 'Start',
+    continue: 'Continue',
+    lessons: 'Lessons',
+    count: '{{count}} lessons',
+  },
   // A module's line under its heading: what it teaches, or whose course it is.
   moduleAbout: {
     fundamentals: 'Notes, scales, chords and keys, from the first key on.',
@@ -21,7 +30,6 @@ export const learn = {
   progress: '{{learned}} of {{total}} learned',
   // A course's last row: its patterns and pieces, on its part of Accompaniment.
   coursePractice: 'Patterns and pieces',
-  continue: 'Continue',
   // Where a lesson is, and the lessons either side of it along its track.
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',

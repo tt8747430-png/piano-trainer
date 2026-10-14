@@ -1,14 +1,12 @@
 import type { LocaleResources } from '../../types'
 
 export const path: LocaleResources['path'] = {
-  title: 'Путь',
   continue: 'Продолжить',
-  allLearned: 'Весь путь пройден.',
+  allLearned: 'Всё изучено.',
   toSongs: 'Открыть песни',
   toCheck: 'Аккордов на проверку: {{count}}',
   known: 'Знаю {{known}} из {{total}}',
   progress: '{{learned}} из {{total}}',
-  hideLearned: 'Скрыть изученное',
   recent: 'Недавно играли',
   days: {
     title: 'Занятия',

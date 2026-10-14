@@ -1,11 +1,10 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import {
-  BookOpen,
+  GraduationCap,
   Metronome,
   Music,
   PanelLeftClose,
   PanelLeftOpen,
-  Route,
   Search,
   Settings,
   type LucideIcon,
@@ -18,18 +17,26 @@ import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/share
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/learn' | '/practice' | '/search' | '/settings'
-  readonly label:
-    'nav.path' | 'nav.songs' | 'nav.learn' | 'nav.practice' | 'nav.search' | 'nav.settings'
+  readonly to: '/' | '/songs' | '/practice' | '/search' | '/settings'
+  readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.search' | 'nav.settings'
   readonly icon: LucideIcon
   readonly exact: boolean
+  /** Where else the place is the current one: Learn's courses and lessons, under `/learn`. */
+  readonly also?: '/learn'
   /** The place's shortcut: Alt and its number. */
   readonly key?: Combo
 }
 
-/** The four places, each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
+/** The three places (ADR 0049), each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
 const PLACES: readonly Place[] = [
-  { to: '/', label: 'nav.path', icon: Route, exact: true, key: { code: 'Digit1', alt: true } },
+  {
+    to: '/',
+    label: 'nav.learn',
+    icon: GraduationCap,
+    exact: true,
+    also: '/learn',
+    key: { code: 'Digit1', alt: true },
+  },
   {
     to: '/songs',
     label: 'nav.songs',
@@ -38,24 +45,17 @@ const PLACES: readonly Place[] = [
     key: { code: 'Digit2', alt: true },
   },
   {
-    to: '/learn',
-    label: 'nav.learn',
-    icon: BookOpen,
-    exact: false,
-    key: { code: 'Digit3', alt: true },
-  },
-  {
     to: '/practice',
     label: 'nav.practice',
     icon: Metronome,
     exact: false,
-    key: { code: 'Digit4', alt: true },
+    key: { code: 'Digit3', alt: true },
   },
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /**
- * What sits at the sidebar's foot on a laptop, and in the Path's bar on a phone: Search, on the
+ * What sits at the sidebar's foot on a laptop, and in Learn's bar on a phone: Search, on the
  * platform's modifier and K from anywhere, and Settings.
  */
 const FOOT: readonly Place[] = [
@@ -77,13 +77,19 @@ const PLACE_LINK =
  * alone (its name in a tooltip, and still its link's name) while the sidebar is collapsed.
  */
 function PlaceLink({
-  place: { to, label, icon: Icon, exact },
+  place: { to, label, icon: Icon, exact, also },
   collapsed,
 }: {
   place: Place
   collapsed: boolean
 }) {
   const { t } = useTranslation('common')
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  // The place is current under its other prefix too, as the router marks its own address.
+  const current =
+    also && pathname.startsWith(`${also}/`)
+      ? ({ 'data-status': 'active', 'aria-current': 'page' } as const)
+      : {}
   const content = (
     <>
       <Icon aria-hidden className="size-6 shrink-0 lg:size-5" />
@@ -92,7 +98,13 @@ function PlaceLink({
   )
   if (!collapsed)
     return (
-      <Link to={to} activeOptions={{ exact }} state={OPEN_PLAINLY} className={PLACE_LINK}>
+      <Link
+        to={to}
+        activeOptions={{ exact }}
+        {...current}
+        state={OPEN_PLAINLY}
+        className={PLACE_LINK}
+      >
         {content}
       </Link>
     )
@@ -100,7 +112,13 @@ function PlaceLink({
     <Tooltip>
       <TooltipTrigger
         render={
-          <Link to={to} activeOptions={{ exact }} state={OPEN_PLAINLY} className={PLACE_LINK} />
+          <Link
+            to={to}
+            activeOptions={{ exact }}
+            {...current}
+            state={OPEN_PLAINLY}
+            className={PLACE_LINK}
+          />
         }
       >
         {content}

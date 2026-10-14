@@ -94,7 +94,7 @@ describe('Player', () => {
     expect(audio.sounding().size).toBeGreaterThan(0)
     const stops = audio.stops
     await act(() => router.navigate({ to: '/' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(audio.stops).toBeGreaterThan(stops)
     expect(audio.sounding().size).toBe(0)
   })

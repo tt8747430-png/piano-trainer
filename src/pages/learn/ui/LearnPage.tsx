@@ -1,113 +1,62 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { useId } from 'react'
+import { Search, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { isMethodBookId } from '@/entities/book'
-import { LEARN_TABS, useModuleName, type Lesson } from '@/entities/lesson'
-import { selectLearned, useProgress } from '@/entities/progress'
-import { lessonStepId } from '@/entities/path'
-import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import {
-  FoldGroup,
-  LearnedBadge,
-  NavTab,
-  NavTabs,
-  PAGE_TILES,
-  RowLink,
-  ScreenHeader,
-} from '@/shared/ui'
-import { lessonToContinue, openModules, withToggled, type LearnView } from '../model/learn-view'
-import { lessonGroups } from '../model/lesson-groups'
-import { LessonCard } from './LessonCard'
+import { RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
+import { ContinueCard } from '@/widgets/continue-card'
+import { Journey } from '@/widgets/journey'
+import { RecentPieces } from '@/widgets/piece-list'
+import { PracticeDays } from '@/widgets/practice-days'
+import { LEARN_VIEWS, type LearnView } from '../model/learn-view'
+import { CourseShelves } from './CourseShelves'
 
 /**
- * Learn (ADR 0042): its two tabs, the subjects and the courses; under the tab, the lesson to continue
- * with once something in it is learned, then its modules, each folding under its name, what it is and
- * its count learned, its lessons numbered in the order they are taught; a
- * course's last row leads to its patterns and pieces.
+ * Learn (ADR 0049), the app's first place: Continue, the days practised and the songs played last,
+ * then the curriculum as a Journey (the Path's levels as a map) or as Courses (every module on its
+ * shelf), the view in the URL.
  */
 export function LearnPage() {
-  const { t } = useTranslation(['learn', 'common', 'practice'])
-  const locale = useLocale()
-  const view = useSearch({ from: '/shell/learn' })
+  const { t } = useTranslation(['learn', 'common'])
+  const { view } = useSearch({ from: '/shell/' })
   const set = useViewChange<LearnView>()
-  const learned = useProgress(selectLearned)
-  const moduleName = useModuleName()
-  const isLearned = (lesson: Lesson) => learned[lessonStepId(lesson.id)] !== undefined
-  const open = openModules(view, learned)
-  const next = lessonToContinue(view.tab, learned)
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col">
       <ScreenHeader
         title={t('learn:title')}
-        tabs={
-          <NavTabs label={t('learn:tabs.label')}>
-            {LEARN_TABS.map((tab) => (
-              <NavTab key={tab} to="/learn" search={{ tab }} replace current={tab === view.tab}>
-                {t(`learn:tabs.${tab}`)}
-              </NavTab>
-            ))}
-          </NavTabs>
+        actions={
+          // A laptop's sidebar has Search and Settings at its foot.
+          <div className="flex gap-2 lg:hidden">
+            <RoundLink
+              label={t('common:nav.search')}
+              icon={Search}
+              render={<Link to="/search" />}
+            />
+            <RoundLink
+              label={t('common:nav.settings')}
+              icon={Settings}
+              render={<Link to="/settings" />}
+            />
+          </div>
         }
       />
-      {next ? <ContinueRow lesson={next} /> : null}
-      {lessonGroups(view.tab).map(({ module, lessons }) => {
-        const done = lessons.filter(isLearned).length
-        return (
-          <FoldGroup
-            key={module}
-            title={moduleName(module)}
-            detail={t(`learn:moduleAbout.${module}`)}
-            count={t('learn:progress', { learned: done, total: lessons.length })}
-            progress={done / lessons.length}
-            open={open.has(module)}
-            onToggle={() => set({ open: withToggled(open, module) })}
-          >
-            {lessons.map((lesson, i) => {
-              const learnedIt = isLearned(lesson)
-              return (
-                <li key={lesson.id}>
-                  <RowLink
-                    title={localText(lesson.title, locale)}
-                    numeral={i + 1}
-                    // Grass is learned: a lesson wears it once it is, its page's tile before.
-                    paint={learnedIt ? 'grass' : PAGE_TILES.lesson.paint}
-                    trailing={
-                      learnedIt ? <LearnedBadge label={t('common:learned.done')} /> : undefined
-                    }
-                    render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-                  />
-                </li>
-              )
-            })}
-            {/* A course's patterns and pieces are on its part of Accompaniment: one course, two places. */}
-            {isMethodBookId(module) ? (
-              <li>
-                <RowLink
-                  title={t('learn:coursePractice')}
-                  detail={t('practice:pages.accompaniment')}
-                  {...PAGE_TILES.patterns}
-                  render={<Link to="/practice/accompaniment" search={{ show: module }} />}
-                />
-              </li>
-            ) : null}
-          </FoldGroup>
-        )
-      })}
+      <div className="mt-2 flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
+          <ContinueCard />
+          <PracticeDays />
+          <RecentPieces />
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="max-w-sm">
+            <Segmented
+              label={t('learn:views.label')}
+              value={view}
+              options={LEARN_VIEWS.map((value) => ({ value, label: t(`learn:views.${value}`) }))}
+              onChange={(next) => set({ view: next })}
+            />
+          </div>
+          {view === 'journey' ? <Journey /> : <CourseShelves />}
+        </div>
+      </div>
     </div>
-  )
-}
-
-/** The lesson to continue with in the tab. */
-function ContinueRow({ lesson }: { lesson: Lesson }) {
-  const { t } = useTranslation('learn')
-  const id = useId()
-  return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
-        {t('continue')}
-      </h2>
-      <LessonCard lesson={lesson} />
-    </section>
   )
 }

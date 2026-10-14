@@ -106,16 +106,14 @@ describe('Practice → Accompaniment', () => {
     ])
   })
 
-  it('leads from a method book’s part to its lessons, open on Learn', async () => {
+  it('leads from a method book’s part to its course’s page on Learn', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment?show=gorshkov')
     const lessons = await screen.findByRole('region', { name: 'Its lessons' })
     const course = within(lessons).getByRole('link', { name: /^Горшков/ })
     expect(course).toHaveTextContent(`0 of ${lessonsIn('gorshkov').length} learned`)
     await user.click(course)
-    await waitFor(() =>
-      expect(router.state.location.search).toEqual({ tab: 'courses', open: 'gorshkov' }),
-    )
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/gorshkov'))
   })
 
   it('has no lessons on Styles or Yours, which no book teaches', async () => {

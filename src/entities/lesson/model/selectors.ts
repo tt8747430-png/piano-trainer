@@ -47,3 +47,15 @@ export function lessonAfterLast(
   while (next && learnedOn(next) !== undefined) next = nextLesson(next.id)
   return next
 }
+
+/**
+ * The lesson to read in a module: on from the one learned last within it, else its first not learned;
+ * none once all are. A subject's last lesson leads to no other subject here: its page is its own.
+ */
+export function lessonInModule(module: LessonModule, learnedOn: LearnedOn): Lesson | undefined {
+  const lessons = lessonsIn(module)
+  const after = lessonAfterLast(lessons, learnedOn)
+  return after && after.module === module
+    ? after
+    : lessons.find((lesson) => learnedOn(lesson) === undefined)
+}

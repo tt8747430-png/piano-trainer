@@ -1,3 +1,3 @@
 export { lessonById } from '@/entities/lesson'
-export { LearnPage } from '@/pages/learn'
+export { CoursePage } from '@/pages/course'
 export { LessonPage } from '@/pages/lesson'

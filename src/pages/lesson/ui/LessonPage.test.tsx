@@ -16,12 +16,12 @@ describe('A lesson', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
-  it('is marked learned at its end, and Learn shows it so', async () => {
+  it('is marked learned at its end, and its course shows it so', async () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/learn/lessons/reading-chord-symbols')
     await user.click(await screen.findByRole('button', { name: 'Learned' }))
     expect(progressStore.getState().learned['lesson:reading-chord-symbols']).toBeDefined()
-    await act(() => router.navigate({ to: '/learn' }))
+    await act(() => router.navigate({ to: '/learn/$module', params: { module: 'fundamentals' } }))
     const row = await screen.findByRole('link', { name: /How to read chord symbols/ })
     expect(within(row).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
   })
@@ -89,7 +89,7 @@ describe('A lesson', () => {
     if (!last) throw new Error('a course has lessons')
     const { progressStore, router } = await renderApp(`/learn/lessons/${last.id}`)
     await user.click(await screen.findByRole('link', { name: /All lessons of Горшков/ }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/gorshkov'))
     expect(progressStore.getState().learned[`lesson:${last.id}`]).toBeDefined()
   })
 
@@ -119,7 +119,7 @@ describe('A lesson', () => {
     expect(screen.queryByRole('navigation', { name: 'In this lesson' })).not.toBeInTheDocument()
   })
 
-  it('says its module and its number in it, its module a link to it open on Learn', async () => {
+  it('says its course and its number in it, its course a link to its page', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/lessons/two-five-one')
     const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
@@ -127,23 +127,22 @@ describe('A lesson', () => {
     const n = inGorshkov.findIndex((each) => each.id === 'two-five-one') + 1
     expect(place).toHaveTextContent(`Lesson ${n} of ${inGorshkov.length}`)
     await user.click(within(place).getByRole('link', { name: 'Горшков' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
-    expect(router.state.location.search).toMatchObject({ tab: 'courses', open: 'gorshkov' })
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/gorshkov'))
   })
 
   it('ends a course on its list, never in another course', async () => {
     const last = lessonsIn('seven-types').at(-1)
     await renderApp(`/learn/lessons/${last?.id ?? ''}`)
     const all = await screen.findByRole('link', { name: /All lessons of Боброва/ })
-    expect(all.getAttribute('href')).toBe('/learn?tab=courses&open=seven-types')
+    expect(all.getAttribute('href')).toBe('/learn/seven-types')
     expect(screen.queryByRole('link', { name: /Next lesson/ })).not.toBeInTheDocument()
   })
 
-  it('goes back to Learn when it was opened directly', async () => {
+  it('goes back to its course when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/learn/lessons/reading-chord-symbols')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/fundamentals'))
   })
 
   it('opens a pattern’s piece in the Player with it, and closes back to the lesson', async () => {

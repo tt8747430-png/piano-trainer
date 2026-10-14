@@ -1,23 +1,16 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { ArrowRight, List } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  lessonById,
-  lessonsIn,
-  nextLesson,
-  tabOf,
-  useModuleName,
-  type Lesson,
-} from '@/entities/lesson'
+import { lessonById, lessonsIn, nextLesson, useModuleName, type Lesson } from '@/entities/lesson'
 import { lessonStepId } from '@/entities/path'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView } from '@/widgets/lesson-view'
 
-/** Learn as it shows a lesson's module: its tab, the module open. */
-const moduleOnLearn = (lesson: Lesson) =>
-  ({ to: '/learn', search: { tab: tabOf(lesson.module), open: lesson.module } }) as const
+/** A lesson's course: its page on Learn. */
+const courseOf = (lesson: Lesson) =>
+  ({ to: '/learn/$module', params: { module: lesson.module } }) as const
 
 /**
  * A lesson: where it is (its module, a link to it on Learn, and its number in it), its title and
@@ -36,11 +29,11 @@ export function LessonPage() {
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={localText(lesson.title, locale)}
-        back={<BackButton fallback={moduleOnLearn(lesson)} />}
+        back={<BackButton fallback={courseOf(lesson)} />}
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         <Link
-          {...moduleOnLearn(lesson)}
+          {...courseOf(lesson)}
           className="rounded-sm font-semibold text-foreground underline-offset-4 hover:underline"
         >
           {moduleName(lesson.module)}
@@ -74,7 +67,7 @@ function LessonEnd({ lesson }: { lesson: Lesson }) {
           next ? (
             <Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />
           ) : (
-            <Link {...moduleOnLearn(lesson)} />
+            <Link {...courseOf(lesson)} />
           )
         }
       >

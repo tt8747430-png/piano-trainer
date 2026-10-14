@@ -7,7 +7,14 @@ export const learn: LocaleResources['learn'] = {
     accompaniment: 'Аккомпанемент',
     gospel: 'Госпел',
   },
-  tabs: { label: 'Уроки', subjects: 'Темы', courses: 'Курсы' },
+  views: { label: 'Показать', journey: 'Путь', courses: 'Курсы' },
+  shelves: { subjects: 'Темы', courses: 'Курсы' },
+  course: {
+    start: 'Начать',
+    continue: 'Продолжить',
+    lessons: 'Уроки',
+    count: 'Уроков: {{count}}',
+  },
   moduleAbout: {
     fundamentals: 'Ноты, гаммы, аккорды и тональности — с первой клавиши.',
     accompaniment: 'Бас и аккорды, последовательности, проходящие аккорды и реармонизация.',
@@ -20,7 +27,6 @@ export const learn: LocaleResources['learn'] = {
   },
   coursePractice: 'Фактуры и пьесы',
   progress: 'Изучено {{learned}} из {{total}}',
-  continue: 'Продолжить',
   place: 'Урок {{n}} из {{total}}',
   placeLabel: 'Где этот урок',
   contents: 'В этом уроке',

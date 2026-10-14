@@ -17,7 +17,7 @@ const ROUTES = [
   ['/play/bz5', '/play/$pieceId'],
   ['/play/walk', '/play/walk'],
   ['/play/chromatic', '/play/chromatic'],
-  ['/learn', '/learn'],
+  ['/learn/fundamentals', '/learn/$module'],
   ['/practice/chords', '/practice/chords'],
   ['/practice/scales', '/practice/scales'],
   ['/practice/intervals', '/practice/intervals'],
@@ -104,9 +104,9 @@ describe('routes', () => {
 })
 
 describe('the app shell', () => {
-  it('shows the Path screen at /', async () => {
+  it('shows Learn at /', async () => {
     await renderApp('/')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
   })
 
   it('names the page after the screen, in the learner’s language', async () => {
@@ -158,9 +158,8 @@ describe('the app shell', () => {
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
     expect(links.map((link) => link.textContent)).toEqual([
-      'Path',
-      'Songs',
       'Learn',
+      'Songs',
       'Practice',
       'Search',
       'Settings',
@@ -171,6 +170,7 @@ describe('the app shell', () => {
   it.each([
     ['/practice/scales', 'Practice'],
     ['/learn/lessons/reading-chord-symbols', 'Learn'],
+    ['/learn/gorshkov', 'Learn'],
     ['/practice/quiz/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
@@ -178,7 +178,7 @@ describe('the app shell', () => {
     expect(within(nav).getByRole('link', { name: place })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('reaches Settings from the Path screen', async () => {
+  it('reaches Settings from Learn', async () => {
     const user = userEvent.setup()
     await renderApp('/')
     await user.click(
@@ -191,7 +191,8 @@ describe('the app shell', () => {
     ['/songs/nothing', 'Go to Songs', '/songs'],
     ['/play/nothing', 'Go to Songs', '/songs'],
     ['/edit/nothing', 'Go to Songs', '/songs'],
-    ['/learn/lessons/nothing', 'Go to Learn', '/learn'],
+    ['/learn/lessons/nothing', 'Go to Learn', '/'],
+    ['/learn/nothing', 'Go to Learn', '/'],
     ['/practice/quiz/nothing', 'Go to Quiz', '/practice/quiz'],
     ['/practice/accompaniment/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     [
@@ -202,7 +203,7 @@ describe('the app shell', () => {
     ['/practice/accompaniment/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
-    ['/check?of=nothing', 'Go to Path', '/'],
+    ['/check?of=nothing', 'Go to Learn', '/'],
     ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?record=true'],
     ['/edit/nothing/takes/nothing', 'Go to Songs', '/songs'],
   ])('shows not found at %s with the way back to its place', async (path, way, href) => {
@@ -219,7 +220,7 @@ describe('the app shell', () => {
 
   it('speaks Russian when the learner chose it', async () => {
     await renderApp('/', { locale: 'ru' })
-    expect(await screen.findByRole('heading', { level: 1, name: 'Путь' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
   })
 
   it('still opens when the browser blocks storage', async () => {
@@ -227,7 +228,7 @@ describe('the app shell', () => {
       throw new DOMException('blocked', 'SecurityError')
     })
     await renderApp('/', { storage: safeLocalStorage() })
-    expect(await screen.findByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
   })
 
   it('relabels the app as soon as the learner switches to Russian', async () => {
@@ -235,7 +236,7 @@ describe('the app shell', () => {
     await renderApp('/settings')
     await user.click(await screen.findByRole('radio', { name: 'Русский' }))
     const nav = await screen.findByRole('navigation', { name: 'Основная навигация' })
-    expect(within(nav).getByRole('link', { name: 'Путь' })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: 'Обучение' })).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('ru')
   })
 
@@ -259,7 +260,7 @@ describe('the Player', () => {
   it('goes back to where the learner came from', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/')
-    await screen.findByRole('heading', { level: 1, name: 'Path' })
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await act(() => router.navigate({ to: '/play/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
@@ -285,7 +286,7 @@ describe('a Piece', () => {
   it('goes back to where the learner came from', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/')
-    await screen.findByRole('heading', { level: 1, name: 'Path' })
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))

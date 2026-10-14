@@ -1,13 +1,11 @@
 export const path = {
-  title: 'Path',
   continue: 'Continue',
-  allLearned: 'Everything on the path is learned.',
+  allLearned: 'Everything is learned.',
   toSongs: 'Open Songs',
   // The count after a colon reads right for any number, in both languages.
   toCheck: 'Chords to check: {{count}}',
   known: '{{known}} of {{total}} known',
   progress: '{{learned}} of {{total}}',
-  hideLearned: 'Hide learned',
   recent: 'Recently practised',
   // The days practised: opening a piece in the Player, or answering a quiz round.
   days: {

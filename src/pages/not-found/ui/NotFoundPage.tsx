@@ -4,9 +4,8 @@ import { ButtonLink, NotFound } from '@/shared/ui'
 
 /** The place a page that is not there belongs to, and the way back to it. */
 const WAYS = {
-  path: { to: '/', label: 'notFound.toPath' },
   songs: { to: '/songs', label: 'notFound.toSongs' },
-  learn: { to: '/learn', label: 'notFound.toLearn' },
+  learn: { to: '/', label: 'notFound.toLearn' },
   quiz: { to: '/practice/quiz', label: 'notFound.toQuiz' },
   scales: { to: '/practice/scales', label: 'notFound.toScales' },
   accompaniment: { to: '/practice/accompaniment', label: 'notFound.toAccompaniment' },

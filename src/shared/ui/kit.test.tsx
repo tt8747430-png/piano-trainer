@@ -35,8 +35,8 @@ const MODES = [
 
 describe('ScreenHeader', () => {
   it('titles the screen with its level-1 heading and holds its actions', () => {
-    render(<ScreenHeader title="Path" actions={<button type="button">Settings</button>} />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Path' })).toBeInTheDocument()
+    render(<ScreenHeader title="Learn" actions={<button type="button">Settings</button>} />)
+    expect(screen.getByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
