@@ -160,6 +160,37 @@ describe('searchIndex', () => {
     expect(found.map((entry) => entry.id)).toContain('lessons:triads')
   })
 
+  it('ranks a group: the title itself, one starting with it, a word of it, then anywhere', () => {
+    const entry = (kind: IndexEntry['kind'], title: string, words: string[] = []): IndexEntry => ({
+      id: `${kind}:${title}`,
+      kind,
+      title,
+      words,
+      target: { opens: 'lesson', lesson: title },
+    })
+    const entries = [
+      entry('lessons', 'Arc'),
+      entry('lessons', 'Some lines', ['an arc in them']),
+      entry('lessons', 'The arch'),
+      entry('lessons', 'Arcs and lines'),
+      entry('lessons', 'Arc'.padEnd(3)),
+      entry('songs', 'Marc'),
+    ]
+    const [first, second] = searchIndex(entries, 'arc')
+    expect(first?.entries.map((each) => each.title)).toEqual([
+      'Arc',
+      'Arc',
+      'Arcs and lines',
+      'The arch',
+      'Some lines',
+    ])
+    // The group with the closer match leads: a word of a title beats a part of a word.
+    expect([first?.kind, second?.kind]).toEqual(['lessons', 'songs'])
+    expect(searchIndex([entry('songs', 'Marc'), entry('lessons', 'Arc')], 'arc')[0]?.kind).toBe(
+      'lessons',
+    )
+  })
+
   it('finds nothing for what no entry answers to', () => {
     expect(searchIndex(all, 'zzzz no such thing')).toEqual([])
   })

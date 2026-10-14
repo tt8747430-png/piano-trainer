@@ -16,7 +16,7 @@ export {
   type DiagramMark,
   type DiagramMarks,
 } from './diagram-marks'
-export { matchesQuery } from './fold-text'
+export { foldText, matchesQuery } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'

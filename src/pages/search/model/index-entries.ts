@@ -10,7 +10,7 @@ import {
 } from '@/entities/progression-library'
 import { TRAINER_IDS, type TrainerId } from '@/features/trainer'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
-import { matchesQuery } from '@/shared/lib'
+import { foldText, matchesQuery } from '@/shared/lib'
 import {
   CHORD_QUALITIES,
   chordsOfLine,
@@ -247,24 +247,52 @@ export interface IndexGroup {
  * the whole index. A title, a line or another name holds the query, in either case and without
  * accents. What was typed leads: first of its kind, and its kind first of the kinds.
  */
+/** Where a word of a name starts: after a space or a mark between words. */
+const WORD_BREAK = /[\s\-–—·,.:;()/«»"“”]+/
+
+/**
+ * How near an entry answers a folded query, lowest nearest: its title or another of its names itself
+ * (a chord's symbol), a title starting with it, a word of its title, a word of another of its names,
+ * a part of any.
+ */
+function nearness(entry: IndexEntry, wanted: string): number {
+  const title = foldText(entry.title)
+  const others = [entry.detail ?? '', ...entry.words]
+  if (title === wanted || others.some((name) => foldText(name) === wanted)) return 0
+  if (title.startsWith(wanted)) return 1
+  const startsAWord = (field: string) =>
+    foldText(field)
+      .split(WORD_BREAK)
+      .some((word) => word.startsWith(wanted))
+  if (startsAWord(entry.title)) return 2
+  if (others.some(startsAWord)) return 3
+  return 4
+}
+
+/**
+ * The entries a query finds, by kind: each kind's nearest first, and the kind with the nearest entry
+ * first (the kinds' own order between equals), a typed chord's or song's kind before all. No query
+ * lists the whole index in its order.
+ */
 export function searchIndex(
   entries: readonly IndexEntry[],
   query: string,
   typed?: IndexEntry,
 ): IndexGroup[] {
-  const found = entries.filter((entry) =>
-    matchesQuery([entry.title, entry.detail ?? '', ...entry.words], query),
-  )
-  const kinds: readonly IndexKind[] = typed
-    ? [typed.kind, ...INDEX_KINDS.filter((kind) => kind !== typed.kind)]
-    : INDEX_KINDS
-  return kinds
-    .map((kind) => ({
+  const wanted = foldText(query.trim())
+  const found = entries
+    .filter((entry) => matchesQuery([entry.title, entry.detail ?? '', ...entry.words], query))
+    .map((entry) => ({ entry, near: wanted === '' ? 0 : nearness(entry, wanted) }))
+    .toSorted((a, b) => a.near - b.near)
+  return INDEX_KINDS.map((kind) => {
+    const ofKind = found.filter(({ entry }) => entry.kind === kind)
+    return {
       kind,
-      entries: [
-        ...(typed?.kind === kind ? [typed] : []),
-        ...found.filter((entry) => entry.kind === kind),
-      ],
-    }))
+      near: typed?.kind === kind ? -1 : (ofKind[0]?.near ?? Infinity),
+      entries: [...(typed?.kind === kind ? [typed] : []), ...ofKind.map(({ entry }) => entry)],
+    }
+  })
     .filter((group) => group.entries.length > 0)
+    .toSorted((a, b) => a.near - b.near)
+    .map(({ kind, entries: inKind }) => ({ kind, entries: inKind }))
 }

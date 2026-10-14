@@ -32,9 +32,25 @@ describe('Search', () => {
     ])
   })
 
+  it('shows a group’s first eight, the nearest, and the rest on Show all', async () => {
+    const user = userEvent.setup()
+    await renderApp('/search?q=C')
+    const songs = await screen.findByRole('region', { name: 'Songs' })
+    expect(within(songs).getAllByRole('link')).toHaveLength(8)
+    const all = within(songs).getByRole('button', { name: /^Show all \d+$/ })
+    const count = Number(all.textContent?.match(/\d+/)?.[0])
+    await user.click(all)
+    expect(within(songs).getAllByRole('link')).toHaveLength(count)
+    expect(within(songs).queryByRole('button', { name: /^Show all/ })).not.toBeInTheDocument()
+    // The chord typed leads: C itself, before anything only holding a C.
+    expect(headings()[0]).toBe('Chords')
+  })
+
   it('opens each kind of thing where it lives', async () => {
+    const user = userEvent.setup()
     await renderApp('/search')
     await screen.findByRole('heading', { level: 1, name: 'Search' })
+    for (const more of screen.getAllByRole('button', { name: /^Show all/ })) await user.click(more)
     expect(hrefOf('Practice', /^Chord finder/)).toBe('/practice/chord-finder')
     expect(hrefOf('Songs', /^Still, my soul, be still/)).toBe('/songs/bz5')
     expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe(
