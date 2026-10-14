@@ -2,7 +2,7 @@ import { Square, Timer } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
-import { Segmented } from '@/shared/ui'
+import { Labelled, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { METRONOME_BEATS, type MetronomeBeats } from '@/shared/lib/schedule'
@@ -56,12 +56,14 @@ export function MetronomeFields({
           <span className="font-semibold tabular-nums">{t('metronome.bpm', { tempo })}</span>
         </div>
       </Slider>
-      <Segmented
-        label={t('metronome.beats')}
-        value={beats}
-        options={METRONOME_BEATS.map((value) => ({ value, label: String(value) }))}
-        onChange={(value) => onChange({ beats: value })}
-      />
+      <Labelled label={t('metronome.beats')}>
+        <Segmented
+          label={t('metronome.beats')}
+          value={beats}
+          options={METRONOME_BEATS.map((value) => ({ value, label: String(value) }))}
+          onChange={(value) => onChange({ beats: value })}
+        />
+      </Labelled>
     </div>
   )
 }
