@@ -321,9 +321,10 @@ describe('the score editor’s takes', () => {
   ) {
     const at = (beats: number) => act(() => audio.setNow(DOWNBEAT + beats * BEAT))
     at(0.03)
+    // The bass first: two presses in one step may fall a moment apart on the clock.
     act(() => {
-      keyboard.press(midi(67), { velocity: 90 })
       keyboard.press(midi(43), { velocity: 70 })
+      keyboard.press(midi(67), { velocity: 90 })
     })
     at(0.99)
     act(() => {
