@@ -25,6 +25,5 @@ export const path: LocaleResources['path'] = {
     scale: 'Гамма',
     study: 'Этюд',
     song: 'Песня',
-    progression: 'Последовательность',
   },
 }

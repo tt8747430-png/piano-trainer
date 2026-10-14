@@ -25,6 +25,5 @@ export const path = {
     scale: 'Scale',
     study: 'Study',
     song: 'Song',
-    progression: 'Progression',
   },
 } as const
