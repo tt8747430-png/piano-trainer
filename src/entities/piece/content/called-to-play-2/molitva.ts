@@ -15,7 +15,7 @@ export default definePiece({
     ru: 'Песня урока 1: припев идёт септаккордами. Вид 5 напечатан один раз над припевом и держится до вида 2.',
   },
   sections: [
-    { kind: 'verse', lines: ['Em:3 Am:t3', 'Em:2-B Em:t4', 'Em:5.2 Am:5.3', 'Em:3-B Em:2-E'] },
+    { kind: 'verse', lines: ['Em:3 Am:t3', 'Em:2-B Em:t2', 'Em:5.2 Am:5.3', 'Em:3-B Em:2-E'] },
     {
       kind: 'chorus',
       lines: ['Am7:5-D7 Gmaj7-Em7', 'Am7-B7 Em7-E7', 'Am7-D7 Gmaj7-Cmaj7', 'Am:2-B Em:3ch'],

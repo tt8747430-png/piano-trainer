@@ -16,7 +16,7 @@ export default definePiece({
   },
   sections: [
     { kind: 'verse', n: 1, lines: ['C:3 Dm:t3', 'G:5.1 C:6u', 'C:4 Dm:6d', 'G:t5 G:3-C:oct'] },
-    { kind: 'chorus', lines: ['C:4 Dm:inv', 'G:ch C:t4', 'C:2-F G7:5-C', 'C:6u-F G7 C:3'] },
-    { kind: 'verse', n: 2, lines: ['C:t1 Dm:5.2', 'G:4 C:t3', 'C:inv Dm:t2', 'G:3ch G:3-C:oct'] },
+    { kind: 'chorus', lines: ['C:4 Dm:inv', 'G:ch C:t2', 'C:2-F G7:5-C', 'C:6u-F G7 C:3'] },
+    { kind: 'verse', n: 2, lines: ['C:t1 Dm:5.2', 'G:4 C:t3', 'C:inv Dm:t4', 'G:3ch G:3-C:oct'] },
   ],
 })

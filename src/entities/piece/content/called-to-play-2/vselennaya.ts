@@ -11,7 +11,7 @@ export default definePiece({
   tempo: 84,
   pattern: 'M1',
   sections: [
-    { kind: 'verse', n: 1, lines: ['Am:t1 Dm:t2', 'E:3 Am:t4', 'G:t5 C:t3', 'Dm:5-Dm/B E:ch'] },
+    { kind: 'verse', n: 1, lines: ['Am:t1 Dm:t4', 'E:3 Am:t2', 'G:t5 C:t3', 'Dm:5-Dm/B E:ch'] },
     {
       kind: 'chorus',
       lines: ['Am:3ch E:4', 'E:5.1 Am:inv F7:1-E7', 'Am:oct A:5-Dm:3', 'Am:5-E Am:2'],

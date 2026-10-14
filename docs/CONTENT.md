@@ -102,7 +102,9 @@ level 2's `oct`, `octs`, `ch`
 
 **A workbook's plan as a chart.** Called to Play writes a way over each chord of a song's words. Each chord is a
 bar; chords joined by a dash share it; a chord that names two ways (`3 | ♪♩`) is written twice, each for half its bar
-(`Dm:3-Dm:t1`). A rhythm icon is its `t` code, `Invers.` is `inv`, `3 chords` `3ch`, `6th↑` and `6th↓` `6u` and `6d`,
+(`Dm:3-Dm:t1`). A rhythm icon is its `t` code, in the order the workbook's table of ornaments draws them (♪♩ `t1`,
+the rising staircase `t2`, the run down from two notes `t3`, the four flat-beamed notes `t4`, the chords `t5`),
+`Invers.` is `inv`, `3 chords` `3ch`, `6th↑` and `6th↓` `6u` and `6d`,
 and level 2's `Октавы`, `Октавы (гамма)` and `Chords` are `oct`, `octs` and `ch`. A way printed once over a run of
 chords holds for them: such a song's `pattern` is that way. What the codes cannot say (`3↑`, an octave higher;
 `x 1`; `(melody)`) goes in the piece's `note`.
