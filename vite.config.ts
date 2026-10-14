@@ -86,6 +86,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: false,
     setupFiles: ['./src/shared/test/setup.ts'],
+    // A file's first app test loads every screen's chunk first (renderApp): seconds on a busy runner.
+    testTimeout: 15_000,
     css: false,
     include: ['src/**/*.test.{ts,tsx}', '*.test.ts'],
     alias: {
