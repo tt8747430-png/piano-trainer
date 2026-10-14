@@ -3,14 +3,14 @@
 The owner's source material for Piano Trainer: the books its courses follow, reference apps' screens, scores and
 links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`.
 
-| Folder                              | What it holds                                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------------------ |
-| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses        |
-| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson    |
-| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                     |
-| [`scores/`](scores)                 | Sheet music                                                                          |
-| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app, numbered in viewing order |
-| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`) and images (`images/`)            |
+| Folder                              | What it holds                                                                                      |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                      |
+| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                  |
+| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                   |
+| [`scores/`](scores)                 | Sheet music                                                                                        |
+| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order |
+| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`) and images (`images/`)                          |
 
 ## Method books
 
@@ -73,17 +73,19 @@ by (ADR 0046).
 
 ## Reference apps
 
-| App                                                      | Screens | What they show                                                                                           |
-| -------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| [`chord-trainer/`](reference-apps/chord-trainer)         | 9       | a chord trainer: quiz on a staff, answer sheets of chord types, the chord builder                        |
-| [`clefs/`](reference-apps/clefs)                         | 4       | Clefs: practice home, a course chapter of lessons, a note-on-staff exercise, results                     |
-| [`duolingo-music/`](reference-apps/duolingo-music)       | 7       | Duolingo Music: course sections, exercises with labelled keys                                            |
-| [`flat-score-editor/`](reference-apps/flat-score-editor) | 5       | Flat: the score editor's note toolbar, palette, keyboard input, instruments                              |
-| [`flowkey/`](reference-apps/flowkey)                     | 9       | Flowkey: home, continue learning, courses, the player                                                    |
-| [`piano-trainer/`](reference-apps/piano-trainer)         | 6       | Piano Trainer itself, as it looked: the Player's pattern sheet, Practice, Progressions, the score editor |
-| [`sibelius/`](reference-apps/sibelius)                   | 3       | Sibelius: note input with its keypad, a passage chosen                                                   |
-| [`theory-trainer/`](reference-apps/theory-trainer)       | 3       | a theory app: home, an article (the chromatic scale), interval reference cards                           |
-| [`ultimate-piano/`](reference-apps/ultimate-piano)       | 18      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords                       |
+| App                                                      | Screens | What they show                                                                                                                                                                                            |
+| -------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`chord-trainer/`](reference-apps/chord-trainer)         | 9       | a chord trainer: quiz on a staff, answer sheets of chord types, the chord builder                                                                                                                         |
+| [`clefs/`](reference-apps/clefs)                         | 4       | Clefs: practice home, a course chapter of lessons, a note-on-staff exercise, results                                                                                                                      |
+| [`courses-app/`](reference-apps/courses-app)             | 51      | a dark courses app (its name is not on its screens): the course carousel, then each course's page and lessons (Introduction to the Piano to Improvising with Chords), one folder each                     |
+| [`duolingo-music/`](reference-apps/duolingo-music)       | 7       | Duolingo Music: course sections, exercises with labelled keys                                                                                                                                             |
+| [`flat-score-editor/`](reference-apps/flat-score-editor) | 5       | Flat: the score editor's note toolbar, palette, keyboard input, instruments                                                                                                                               |
+| [`flowkey/`](reference-apps/flowkey)                     | 9       | Flowkey: home, continue learning, courses, the player                                                                                                                                                     |
+| [`journey-app/`](reference-apps/journey-app)             | 84      | a theory app (its name is not on its screens): its four journeys as maps of chapters and nodes, Settings, and its tools (Key Explorer, Circle of Fifths, Chord Builder, Progression Lab), one folder each |
+| [`piano-trainer/`](reference-apps/piano-trainer)         | 6       | Piano Trainer itself, as it looked: the Player's pattern sheet, Practice, Progressions, the score editor                                                                                                  |
+| [`sibelius/`](reference-apps/sibelius)                   | 3       | Sibelius: note input with its keypad, a passage chosen                                                                                                                                                    |
+| [`theory-trainer/`](reference-apps/theory-trainer)       | 3       | a theory app: home, an article (the chromatic scale), interval reference cards                                                                                                                            |
+| [`ultimate-piano/`](reference-apps/ultimate-piano)       | 18      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords                                                                                                                        |
 
 ## Web references
 
