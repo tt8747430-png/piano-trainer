@@ -14,7 +14,7 @@ const onsets = (sounds: readonly Sound[] = []) =>
 
 describe('Practice → Transpose', () => {
   it('reads «Ромашковые поля»’s opening in D minor, each chord over its numeral', async () => {
-    await renderApp('/practice/transpose')
+    await renderApp('/practice/progressions/transpose')
     await screen.findByRole('list', { name: 'Chords' })
     expect(row()).toEqual(['Dm7 i7', 'Gm9 iv9', 'Asus4 Vsus4', 'Dm7 i7'])
     const theirKey = screen.getByRole('radiogroup', { name: 'Their key' })
@@ -29,7 +29,7 @@ describe('Practice → Transpose', () => {
 
   it('plays the chords on the tonic chosen, a slash chord’s bass with them', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/transpose?chords=Dm+D/F%23+Gm+A7+Dm')
+    const { router } = await renderApp('/practice/progressions/transpose?chords=Dm+D/F%23+Gm+A7+Dm')
     const playIn = await screen.findByRole('group', { name: 'Play in' })
     await user.click(within(playIn).getByRole('radio', { name: 'G' }))
     expect(router.state.location.search).toMatchObject({ to: 'G' })
@@ -38,14 +38,14 @@ describe('Practice → Transpose', () => {
 
   it('reads the chords in another key found, when asked', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/transpose')
+    await renderApp('/practice/progressions/transpose')
     await user.click(await screen.findByRole('radio', { name: 'F major' }))
     expect(row()).toEqual(['Dm7 vi7', 'Gm9 ii9', 'Asus4 IIIsus4', 'Dm7 vi7'])
   })
 
   it('reads a line typed whole, and names the words it cannot read', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/transpose')
+    const { router } = await renderApp('/practice/progressions/transpose')
     const field = await screen.findByRole('textbox', { name: 'Chords' })
     await user.clear(field)
     await user.type(field, 'C F G7 C')
@@ -58,25 +58,24 @@ describe('Practice → Transpose', () => {
 
   it('plays the row, a chord at a time', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/transpose')
+    const { audio } = await renderApp('/practice/progressions/transpose')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
   })
 
   it('opens its degrees on Progressions, in the key played', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/transpose?to=G')
+    const { router } = await renderApp('/practice/progressions/transpose?to=G')
     await user.click(await screen.findByRole('link', { name: /Practise these degrees/ }))
     expect(router.state.location.pathname).toBe('/practice/progressions')
     expect(router.state.location.search).toMatchObject({ key: 'Gm', p: 'i7-iv9-Vsus4-i7' })
   })
 
-  it('is listed with Practice’s tools', async () => {
-    await renderApp('/practice')
-    const tools = await screen.findByRole('region', { name: 'Tools' })
-    expect(within(tools).getByRole('link', { name: /Transpose/ })).toHaveAttribute(
+  it('is a tab of Progressions, found by Search', async () => {
+    await renderApp('/search?q=transpose')
+    expect(await screen.findByRole('link', { name: /^Transpose/ })).toHaveAttribute(
       'href',
-      '/practice/transpose',
+      '/practice/progressions/transpose',
     )
   })
 })

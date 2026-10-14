@@ -7,6 +7,7 @@ import {
   placeChord,
   TWO_HANDS_FROM,
   type BuiltChord,
+  type Midi,
   type NoteParam,
   type PlacedChord,
   type Triad,
@@ -35,6 +36,12 @@ export function viewChord(view: ChordView): { chord: BuiltChord; placed: PlacedC
     bothHands: view.hands === 'both' || takesTwoHands(chord.tones.length),
   })
   return { chord, placed }
+}
+
+/** The keys a chord's placement strikes, the left hand's first: what the Find tab opens on. */
+export function chordKeys(view: ChordView): Midi[] {
+  const { placed } = viewChord(view)
+  return [...placed.lh, ...placed.rh].map((key) => key.midi)
 }
 
 /** A suspended triad: its 3rd's place taken by a 2nd or 4th. */

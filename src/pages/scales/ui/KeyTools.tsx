@@ -15,7 +15,9 @@ export function KeyTools({ musicKey }: { musicKey: Key }) {
           title={t('practice:pages.reharmonise')}
           detail={t('music:key.in', { key: keyName(musicKey) })}
           {...PAGE_TILES.reharmonise}
-          render={<Link to="/practice/reharmonise" search={{ key: keyParam(musicKey) }} />}
+          render={
+            <Link to="/practice/progressions/reharmonise" search={{ key: keyParam(musicKey) }} />
+          }
         />
       </li>
     </RowGroup>

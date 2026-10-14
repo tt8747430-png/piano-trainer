@@ -260,32 +260,33 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
-// Practice's tools: each page works something out from what the learner gives it. Free play is the
-// piano played freely, written and named, or marked as a teaching diagram.
+// Practice's tools: each page works something out from what the learner gives it, most a tab of the
+// thing it works on (ADR 0050). Free play is the piano played freely, written and named, or marked as
+// a teaching diagram.
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/chord-finder',
+  path: '/practice/chords/find',
   ...finderSearch,
   ...remembered(readFinderSearch, []),
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 const passingChordsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/passing-chords',
+  path: '/practice/progressions/passing',
   ...passingSearch,
   ...remembered(readPassingSearch, []),
   component: lazyRouteComponent(toolScreens, 'PassingChordsPage'),
 })
 const reharmoniseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/reharmonise',
+  path: '/practice/progressions/reharmonise',
   ...reharmoniseSearch,
   ...remembered(readReharmoniseSearch, []),
   component: lazyRouteComponent(toolScreens, 'ReharmonisePage'),
 })
 const transposeRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/transpose',
+  path: '/practice/progressions/transpose',
   ...transposeSearch,
   ...remembered(readTransposeSearch, []),
   component: lazyRouteComponent(toolScreens, 'TransposePage'),

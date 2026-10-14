@@ -308,29 +308,55 @@ describe('Practice → Progressions', () => {
     )
   })
 
-  it('is the progression alone, with no tabs', async () => {
+  it('is the Play tab of Progressions, its tools the others', async () => {
     await renderApp('/practice/progressions')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
     ).toBeInTheDocument()
+    const tabs = screen.getByRole('navigation', { name: 'Progressions' })
     expect(
-      within(screen.getByRole('main')).queryByRole('link', { current: 'page' }),
-    ).not.toBeInTheDocument()
+      within(tabs)
+        .getAllByRole('link')
+        .map((tab) => tab.textContent),
+    ).toEqual(['Play', 'Passing chords', 'Reharmonise', 'Transpose'])
+    expect(within(tabs).getByRole('link', { current: 'page' })).toHaveTextContent('Play')
   })
 
-  it('leads to its tools in its key: Passing chords between its first two chords, and Reharmonise', async () => {
+  it('opens its tools on the progression in its key', async () => {
     await renderApp('/practice/progressions?p=I-IV-V&key=G')
-    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
-    expect(tools.map((tool) => [tool.textContent, tool.getAttribute('href')])).toEqual([
-      ['Passing chords G → C', '/practice/passing-chords?key=G&from=G&to=C'],
-      ['Reharmonise In G major', '/practice/reharmonise?key=G'],
-    ])
+    const tabs = within(await screen.findByRole('navigation', { name: 'Progressions' }))
+    const href = (name: string) => tabs.getByRole('link', { name }).getAttribute('href')
+    expect(href('Passing chords')).toBe('/practice/progressions/passing?key=G&from=G&to=C')
+    expect(href('Reharmonise')).toBe('/practice/progressions/reharmonise?key=G')
+    expect(href('Transpose')).toBe('/practice/progressions/transpose?chords=G+C+D&key=G')
   })
 
-  it('offers no way between chords where the line has one chord', async () => {
+  it('opens Passing chords in its key alone where the line has one chord', async () => {
     await renderApp('/practice/progressions?p=I&key=G')
-    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
-    expect(tools.map((tool) => tool.textContent)).toEqual(['Reharmonise In G major'])
+    const tabs = within(await screen.findByRole('navigation', { name: 'Progressions' }))
+    expect(tabs.getByRole('link', { name: 'Passing chords' })).toHaveAttribute(
+      'href',
+      '/practice/progressions/passing?key=G',
+    )
+  })
+
+  it('keeps the key from one tool to the next, and comes back to the progression as left', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?p=I-vi-IV-V&key=D')
+    const tabs = () => within(screen.getByRole('navigation', { name: 'Progressions' }))
+    await screen.findByRole('navigation', { name: 'Progressions' })
+    await user.click(tabs().getByRole('link', { name: 'Reharmonise' }))
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/practice/progressions/reharmonise'),
+    )
+    await user.click(tabs().getByRole('link', { name: 'Passing chords' }))
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/practice/progressions/passing'),
+    )
+    expect(router.state.location.search).toMatchObject({ key: 'D' })
+    await user.click(tabs().getByRole('link', { name: 'Play' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/progressions'))
+    expect(router.state.location.search).toMatchObject({ p: 'I-vi-IV-V', key: 'D' })
   })
 
   it('takes a library progression in place: Back then leaves for Practice', async () => {

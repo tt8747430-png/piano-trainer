@@ -27,14 +27,10 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists the tools under Tools, each saying what it works out', async () => {
+  it('lists Free play under Tools: the others are tabs of what they work on', async () => {
     await renderApp('/practice')
     const tools = await screen.findByRole('region', { name: 'Tools' })
     expect(rowsOf(tools)).toEqual([
-      ['Chord finder Names a chord, and the keys it is in', '/practice/chord-finder'],
-      ['Passing chords The ways from one chord to the next', '/practice/passing-chords'],
-      ['Reharmonise The chords that hold a melody note', '/practice/reharmonise'],
-      ['Transpose A song’s chords: their key, degrees and any key', '/practice/transpose'],
       ['Free play A live score, marks and a metronome', '/practice/free-play'],
     ])
   })

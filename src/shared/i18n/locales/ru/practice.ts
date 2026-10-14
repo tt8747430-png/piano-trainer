@@ -17,6 +17,7 @@ export const practice: LocaleResources['practice'] = {
     exercises: 'Упражнения',
     quiz: 'Тесты',
   },
+  tabs: { build: 'Собрать', find: 'Найти', play: 'Играть' },
   about: {
     chords: 'От трезвучий до терцдецимаккордов · Обращения · Тенсии',
     intervals: 'На клавишах, вверх и вниз',
@@ -77,7 +78,6 @@ export const practice: LocaleResources['practice'] = {
     },
     chromatic: 'По полутонам',
     chromaticDetail: 'Аккорд на каждый такт, по полутону от его основного тона',
-    theseKeys: 'Все названия этих клавиш',
   },
   scales: {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },

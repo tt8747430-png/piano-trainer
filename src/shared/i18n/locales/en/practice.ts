@@ -17,6 +17,8 @@ export const practice = {
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
+  // A workspace's tabs (ADR 0050) that are not a tool's own name: a tool's tab is its page's name.
+  tabs: { build: 'Build', find: 'Find', play: 'Play' },
   // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
   // of tabs or of groups says those, in their own words, so it has no line here.
   about: {
@@ -80,7 +82,6 @@ export const practice = {
     chromatic: 'Chromatic walk',
     chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
-    theseKeys: 'Every name these keys have',
   },
   // Scales and keys: the run, the chords, the key.
   scales: {

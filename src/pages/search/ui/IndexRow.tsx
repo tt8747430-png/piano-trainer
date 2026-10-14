@@ -94,7 +94,7 @@ export function IndexRow({
         <RowLink
           {...row}
           {...PAGE_TILES.transpose}
-          render={<Link to="/practice/transpose" search={{ chords: target.chords }} />}
+          render={<Link to="/practice/progressions/transpose" search={{ chords: target.chords }} />}
         />
       )
     case 'trainer':

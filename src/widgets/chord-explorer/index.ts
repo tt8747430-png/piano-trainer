@@ -1,2 +1,2 @@
-export type { ChordView } from './model/chord-view'
+export { chordKeys, type ChordView } from './model/chord-view'
 export { ChordExplorer } from './ui/ChordExplorer'

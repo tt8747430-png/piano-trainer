@@ -3,36 +3,23 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
-import {
-  type Midi,
-  noteName,
-  qualitySpellings,
-  TENSION_CHORDS,
-  writtenSymbol,
-} from '@/shared/lib/music'
+import { noteName, qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import { ChordHeading, PlayLabel, ToneChip, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { changedView, viewChord, type ChordView } from '../model/chord-view'
+import { changedView, chordKeys, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
 import { ChordTensions } from './ChordTensions'
-import { ChordTools } from './ChordTools'
 
 const takesTensions = isOneOf(TENSION_CHORDS)
-
-/** The keys a chord's placement strikes, the left hand's first. */
-const keysOf = (view: ChordView): Midi[] => {
-  const { placed } = viewChord(view)
-  return [...placed.lh, ...placed.rh].map((key) => key.midi)
-}
 
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
  * is (its symbol, its tones, the other ways it is written, the chord on a staff) with Play and Arpeggio;
- * its choices; a 7th chord's available tensions; its ways into the Player; and its tool.
+ * its choices; a 7th chord's available tensions; and its ways into the Player.
  */
 export function ChordExplorer({
   chord,
@@ -57,10 +44,10 @@ export function ChordExplorer({
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    play(chordSounds(keysOf(view), { arpeggio: false }))
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
   }
   const sound = (id: 'chord' | 'arpeggio') =>
-    playback.toggle(id, () => chordSounds(keysOf(chord), { arpeggio: id === 'arpeggio' }))
+    playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))
   usePlayKey(() => sound('chord'))
 
   return (
@@ -125,7 +112,6 @@ export function ChordExplorer({
           inversion={built.tones.length <= 4 ? chord.inversion : 0}
         />
       ) : null}
-      <ChordTools keys={keysOf(chord)} />
     </div>
   )
 }

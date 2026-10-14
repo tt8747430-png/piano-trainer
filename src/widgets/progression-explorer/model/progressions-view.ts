@@ -113,6 +113,12 @@ export function playerSearch(view: ProgressionsView): InPlayer {
   }
 }
 
+/** The chords a view plays, each by its symbol in the view's key and at its chord size. */
+export function progressionChords(view: ProgressionsView): string[] {
+  const key = keyFromParam(view.key)
+  return playedNumerals(view).map((numeral) => chordSymbol(numeralChord(numeral, key, view.size)))
+}
+
 /** What the Passing chords tool opens on: a key and two chords, each as its field reads it. */
 export interface PassingBetween {
   readonly key: KeyParam
@@ -125,9 +131,6 @@ export interface PassingBetween {
  * to find the ways between; none for a line of one chord.
  */
 export function passingBetween(view: ProgressionsView): PassingBetween | undefined {
-  const key = keyFromParam(view.key)
-  const [from, to] = playedNumerals(view).map((numeral) =>
-    chordSymbol(numeralChord(numeral, key, view.size)),
-  )
+  const [from, to] = progressionChords(view)
   return from !== undefined && to !== undefined ? { key: view.key, from, to } : undefined
 }

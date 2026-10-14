@@ -78,7 +78,7 @@ describe('the shell’s shortcuts', () => {
 
   it('plays the chord found on Enter, once keys are chosen', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/chord-finder')
+    const { audio } = await renderApp('/practice/chords/find')
     await user.click(await screen.findByRole('button', { name: 'C4' }))
     const played = audio.played.length
     await user.keyboard('{Enter}')

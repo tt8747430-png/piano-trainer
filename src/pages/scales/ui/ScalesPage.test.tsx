@@ -458,7 +458,7 @@ describe('Practice → Scales and keys, Key view', () => {
     await renderApp('/practice/scales?root=G&show=key')
     const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
     expect(tools.map((tool) => [tool.textContent, tool.getAttribute('href')])).toEqual([
-      ['Reharmonise In G major', '/practice/reharmonise?key=G'],
+      ['Reharmonise In G major', '/practice/progressions/reharmonise?key=G'],
     ])
   })
 

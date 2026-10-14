@@ -15,7 +15,7 @@ const keysOf = (sounds: readonly Sound[]): [number, number][] =>
 
 describe('Practice → Passing chords', () => {
   it('suggests chords from C to E♭ by category, each in the key or chromatic, with its reason', async () => {
-    await renderApp('/practice/passing-chords?from=C&to=Eb')
+    await renderApp('/practice/progressions/passing?from=C&to=Eb')
     const dominant = await screen.findByRole('region', { name: 'Dominant' })
     const secondary = within(dominant).getByRole('article', { name: 'Secondary dominant' })
     expect(within(secondary).getByRole('button', { name: 'B♭7' })).toBeInTheDocument()
@@ -26,7 +26,7 @@ describe('Practice → Passing chords', () => {
 
   it('plays a suggestion’s row, voice-led, and a chord of it alone', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/passing-chords?from=C&to=Eb')
+    const { audio } = await renderApp('/practice/progressions/passing?from=C&to=Eb')
     const twoFive = await screen.findByRole('article', { name: 'Secondary ii–V' })
     await user.click(within(twoFive).getByRole('button', { name: 'Play' }))
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
@@ -36,7 +36,7 @@ describe('Practice → Passing chords', () => {
 
   it('plays a chord of a row as the row voices it', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/passing-chords?from=C&to=Eb')
+    const { audio } = await renderApp('/practice/progressions/passing?from=C&to=Eb')
     const twoFive = await screen.findByRole('article', { name: 'Secondary ii–V' })
     await user.click(within(twoFive).getByRole('button', { name: 'Play' }))
     const row = audio.played.at(-1)?.sounds ?? []
@@ -49,7 +49,7 @@ describe('Practice → Passing chords', () => {
 
   it('says so when a chord typed cannot be read, and keeps the ways of the last one read', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/passing-chords')
+    const { router } = await renderApp('/practice/progressions/passing')
     const to = await screen.findByRole('textbox', { name: 'To' })
     await user.clear(to)
     await user.type(to, 'Eb')
@@ -66,14 +66,14 @@ describe('Practice → Passing chords', () => {
   })
 
   it('marks a row whose chords are all the key’s', async () => {
-    await renderApp('/practice/passing-chords?from=C&to=Am')
+    await renderApp('/practice/progressions/passing?from=C&to=Am')
     const plagal = await screen.findByRole('article', { name: 'Plagal cadence' })
     expect(within(plagal).getByRole('button', { name: 'Dm' })).toBeInTheDocument()
     expect(plagal).toHaveTextContent('In the key')
   })
 
   it('walks through the key between two of its chords, under Diatonic', async () => {
-    await renderApp('/practice/passing-chords?from=C&to=F')
+    await renderApp('/practice/progressions/passing?from=C&to=F')
     const diatonic = await screen.findByRole('region', { name: 'Diatonic' })
     const walk = within(diatonic).getByRole('article', { name: 'Walking through the key' })
     expect(within(walk).getByRole('button', { name: 'Dm' })).toBeInTheDocument()
@@ -84,7 +84,7 @@ describe('Practice → Passing chords', () => {
 
   it('leads a diminished 7th into a slash chord’s bass, and plays the bass it writes', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/passing-chords?from=F&to=C/G')
+    const { audio } = await renderApp('/practice/progressions/passing?from=F&to=C/G')
     const diminished = await screen.findByRole('article', { name: 'Diminished approach' })
     expect(diminished).toHaveTextContent('F#°7 leads up a half step into C/G.')
     await user.click(within(diminished).getByRole('button', { name: 'Play' }))
@@ -94,27 +94,31 @@ describe('Practice → Passing chords', () => {
     expect(basses).toEqual([53, 54, 55])
   })
 
-  it('is a tool with a page of its own: its name, a way back, no tabs', async () => {
-    await renderApp('/practice/passing-chords')
+  it('is a tab of Progressions: the workspace’s name, a way back, its tab shown', async () => {
+    await renderApp('/practice/progressions/passing')
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Passing chords' }),
+      await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
-    expect(
-      within(screen.getByRole('main')).queryByRole('link', { current: 'page' }),
-    ).not.toBeInTheDocument()
+    const tabs = screen.getByRole('navigation', { name: 'Progressions' })
+    expect(within(tabs).getByRole('link', { current: 'page' })).toHaveTextContent('Passing chords')
   })
 
   it('speaks Russian', async () => {
-    await renderApp('/practice/passing-chords', { locale: 'ru' })
+    await renderApp('/practice/progressions/passing', { locale: 'ru' })
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Проходящие аккорды' }),
+      await screen.findByRole('heading', { level: 1, name: 'Последовательности' }),
     ).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Последовательности' })).getByRole('link', {
+        current: 'page',
+      }),
+    ).toHaveTextContent('Проходящие аккорды')
   })
 
   it('shows only the ways in the key while In the key only is pressed, kept in the URL', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/passing-chords?from=C&to=F')
+    const { router } = await renderApp('/practice/progressions/passing?from=C&to=F')
     await screen.findByRole('heading', { level: 2, name: 'Diatonic' })
     await user.click(screen.getByRole('button', { name: 'In the key only' }))
     expect(router.state.location.search).toMatchObject({ inKey: true })

@@ -63,9 +63,9 @@ it. `@` → `src`.
   Intervals (`/practice/intervals`), Progressions (`/practice/progressions`) and Accompaniment
   (`/practice/accompaniment`, its parts Called to Play · Called to Play 2 · Боброва · Горшков · Styles · Yours as tabs, ADR 0033, 0047; a
   pattern's page `…/patterns/$patternRef`, the editor `…/patterns/new` and `…/patterns/$patternRef/edit`; a study's
-  page `…/studies/$pieceId`); the tools, each working something out from what it is given, the Chord finder
-  (`/practice/chord-finder`), Passing chords (`/practice/passing-chords`), Reharmonise (`/practice/reharmonise`), Transpose
-  (`/practice/transpose`, a song's chords read in their key and played in any, ADR 0045) and
+  page `…/studies/$pieceId`); the tools, each working something out from what it is given, most a tab of what it works on (ADR 0050): Chords' Build · Find (the Chord finder,
+  `/practice/chords/find`), Progressions' Play · Passing chords (`…/progressions/passing`) · Reharmonise (`…/reharmonise`) · Transpose
+  (`…/transpose`, a song's chords read in their key and played in any, ADR 0045), and
   Free play (`/practice/free-play`, Play · Mark, ADR 0034); the training, Exercises (`/practice/exercises`) and Quiz
   (`/practice/quiz`, its trainers `/practice/quiz/$trainerId`); Search (`/search?q=`, every named thing by kind); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
@@ -93,7 +93,7 @@ it. `@` → `src`.
   trainer by group with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords`, `pages/intervals` and `pages/progressions` three explorers' pages; `pages/scales`
   Scales and keys (`ScaleTabs`, its views; its Key view's tool, `KeyTools`, and songs in the key, `PiecesInKey`);
-  `pages/chord-finder`, `pages/passing-chords`, `pages/reharmonise` and `pages/transpose` four tools' pages; `pages/accompaniment`
+  `pages/chord-finder`, `pages/passing-chords`, `pages/reharmonise` and `pages/transpose` four tools' pages, each a tab of its workspace; `pages/accompaniment`
   Accompaniment (`AccompanimentTabs` over its URL's `AccompanimentView`, a part's `PatternShelves`, a method book's
   `BookPieces`, and its lessons on Learn, `BookLessons`; Learn's course ends with a row back to it), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
@@ -110,7 +110,7 @@ it. `@` → `src`.
   (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
   chord builder, read top to bottom: `ChordBuilder` (its choices as labelled fields), `ChordSheet`, `ChordTensions`
   (a 7th chord's twelve notes in the owner's table's four groups, each played on top), `ChordPractice` (its arpeggio
-  and chromatic walk in the Player), `ChordTools` (the Chord finder on its keys), `viewChord`, `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
+  and chromatic walk in the Player), `viewChord`, `chordKeys` (what Find opens on), `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
   `ScaleLayout`'s one flow, `RunView`, the run from any Start on note, the playing hand's fingers under the keys, on a
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
@@ -120,10 +120,10 @@ it. `@` → `src`.
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, `LISTED_GROUPS`, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progression-explorer` (`ProgressionExplorer`, a progression in any key: its row of chords, `ProgressionChoice`
-  (the library behind one pop-up), the typed field and the lead-in into each chord (`playedNumerals`); `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys, each saying the chords it plays first (`walkPreview`); `ProgressionTools` (Passing chords between its first two chords, `passingBetween`, and Reharmonise, in its key); its pure `changedView` (a key turned minor or major shows a
+  (the library behind one pop-up), the typed field and the lead-in into each chord (`playedNumerals`); `ProgressionPractice`, a row into the Player for the key alone and for each walk through the keys, each saying the chords it plays first (`walkPreview`); `passingBetween` and `progressionChords`, what its tools' tabs open on; its pure `changedView` (a key turned minor or major shows a
   progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open question in
   `lesson-question.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
-  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS` in `model/`; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
+  `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS`, `TABS` in `model/`; the workspaces' tab strips, `ChordTabs` and `ProgressionTabs`, ADR 0050; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete

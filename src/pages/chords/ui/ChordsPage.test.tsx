@@ -264,24 +264,33 @@ describe('Practice → Chords', () => {
     )
   })
 
-  it('is the builder alone, under a header with a way back and no tabs', async () => {
+  it('is the Build tab of Chords, under a header with a way back', async () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
+    const tabs = screen.getByRole('navigation', { name: 'Chords' })
     expect(
-      within(screen.getByRole('main')).queryByRole('link', { current: 'page' }),
-    ).not.toBeInTheDocument()
+      within(tabs)
+        .getAllByRole('link')
+        .map((tab) => tab.textContent),
+    ).toEqual(['Build', 'Find'])
+    expect(within(tabs).getByRole('link', { current: 'page' })).toHaveTextContent('Build')
   })
 
-  it('leads to the Chord finder on the chord’s own keys, which names it', async () => {
+  it('finds on the chord’s own keys, which names it, and comes back to it', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/chords?root=D&triad=min')
-    const tools = await screen.findByRole('region', { name: 'Tools' })
-    await user.click(within(tools).getByRole('link', { name: /^Chord finder / }))
-    expect(
-      await screen.findByRole('heading', { level: 1, name: 'Chord finder' }),
-    ).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 2, name: 'Dm' })).toBeInTheDocument()
+    const { router } = await renderApp('/practice/chords?root=D&triad=min')
+    const tabs = await screen.findByRole('navigation', { name: 'Chords' })
+    await user.click(within(tabs).getByRole('link', { name: 'Find' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/chords/find'))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Dm' })).toBeInTheDocument()
+    await user.click(
+      within(screen.getByRole('navigation', { name: 'Chords' })).getByRole('link', {
+        name: 'Build',
+      }),
+    )
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/chords'))
+    expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' })
   })
 
   it('names every choice on screen, in the order a chord is built', async () => {

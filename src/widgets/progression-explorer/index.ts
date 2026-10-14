@@ -1,2 +1,2 @@
-export type { ProgressionsView } from './model/progressions-view'
+export { passingBetween, progressionChords, type ProgressionsView } from './model/progressions-view'
 export { ProgressionExplorer } from './ui/ProgressionExplorer'

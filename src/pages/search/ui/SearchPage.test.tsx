@@ -51,7 +51,7 @@ describe('Search', () => {
     await renderApp('/search')
     await screen.findByRole('heading', { level: 1, name: 'Search' })
     for (const more of screen.getAllByRole('button', { name: /^Show all/ })) await user.click(more)
-    expect(hrefOf('Practice', /^Chord finder/)).toBe('/practice/chord-finder')
+    expect(hrefOf('Practice', /^Chord finder/)).toBe('/practice/chords/find')
     expect(hrefOf('Songs', /^Still, my soul, be still/)).toBe('/songs/bz5')
     expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe(
       '/learn/lessons/reading-chord-symbols',
@@ -89,7 +89,7 @@ describe('Search', () => {
     const [first] = within(pages).getAllByRole('link')
     expect(first).toHaveTextContent('Am F C G')
     expect(first).toHaveTextContent('Transpose · A minor')
-    expect(first?.getAttribute('href')).toBe('/practice/transpose?chords=Am+F+C+G')
+    expect(first?.getAttribute('href')).toBe('/practice/progressions/transpose?chords=Am+F+C+G')
     expect(headings()[0]).toBe('Practice')
   })
 
