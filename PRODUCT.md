@@ -36,12 +36,12 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 
 ## Capabilities and Constraints
 
-- Screens, in three places (Learn · Songs · Practice): Learn (Continue, the first step not learned: a lesson to read,
-  a chord or scale to practise or a song; then the curriculum, beginner to professional, in four stages of courses:
-  First steps, Reading music, Scales and keys, Chords and _Called to Play_; Accompaniment, Sixths and sevenths,
-  _Called to Play 2_ and Боброва's seven types; Progressions, Gorshkov's course, Gospel and Modes; Jazz harmony and
-  Improvisation. A course's page lists its lessons, then what to practise: its songs, studies, chords and scales. Each
-  lesson is a worksheet: examples that play in place, questions answered on the keys, links into Practice, the Quiz
+- Screens, in three places (Learn · Songs · Practice): Learn (its header's toggle between two things kept apart,
+  ADR 0053: the Lessons, four journeys from Foundations to Mastery laid out as the journey-app's, chapters of theory
+  lessons as zigzags of nodes; and the Courses, shelves as the courses-app's: beginner, intermediate, technique, chords
+  and improvising, and the method books (_Called to Play_, its level 2, Боброва, Gorshkov), each course its level,
+  weeks, its own lessons and its guided songs. Continue goes on in the track last learned on. Each lesson is a
+  worksheet: examples that play in place, questions answered on the keys, links into Practice, the Quiz
   and the Player; Settings behind its gear on a phone, at the sidebar's foot on a laptop), Songs (the songs by collection, chosen from tabs, and the learner's own
   songs, made from New song), a Piece (its facts, Practise, the chords it plays to tap and hear, its chart), the Player
   (sheet music as it plays; Listen or Wait mode, a loop, speed training, swing; a piece, or a scale's chords walked

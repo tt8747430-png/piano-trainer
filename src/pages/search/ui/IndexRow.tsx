@@ -27,7 +27,28 @@ export function IndexRow({
         <RowLink
           {...row}
           {...PAGE_TILES.lesson}
-          render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+          render={<Link to="/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+        />
+      )
+    case 'course':
+      return (
+        <RowLink
+          {...row}
+          {...PAGE_TILES.course}
+          render={<Link to="/courses/$courseId" params={{ courseId: target.course }} />}
+        />
+      )
+    case 'course-lesson':
+      return (
+        <RowLink
+          {...row}
+          {...PAGE_TILES.lesson}
+          render={
+            <Link
+              to="/courses/$courseId/$lessonId"
+              params={{ courseId: target.course, lessonId: target.lesson }}
+            />
+          }
         />
       )
     case 'chord':

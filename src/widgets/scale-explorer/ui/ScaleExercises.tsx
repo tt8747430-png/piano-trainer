@@ -1,4 +1,4 @@
-import { StageMark } from '@/entities/course'
+import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
 import { Spline } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

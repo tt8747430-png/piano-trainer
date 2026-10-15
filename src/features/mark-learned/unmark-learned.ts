@@ -1,5 +1,5 @@
 import type { ProgressStore } from '@/entities/progress'
-import type { StepId } from '@/entities/course'
+import type { StepId } from '@/entities/step'
 
 export function unmarkLearned(store: ProgressStore, id: StepId): void {
   store.setState((state) => {

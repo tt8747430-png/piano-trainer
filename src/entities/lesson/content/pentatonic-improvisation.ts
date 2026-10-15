@@ -116,6 +116,20 @@ const pentatonicImprovisation: Lesson = {
           },
           answer: { notes: ['E', 'G', 'A'], rising: true },
         },
+        {
+          kind: 'link',
+          title: { en: 'A minor pentatonic', ru: 'Минорная пентатоника от ля' },
+          target: { opens: 'scales', root: note('A'), scale: 'mpent' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'A blues in the Player', ru: 'Блюз в ля в плеере' },
+          target: {
+            opens: 'player',
+            numerals: 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7',
+            key: { tonic: note('A'), minor: false },
+          },
+        },
       ],
     },
   ],

@@ -100,11 +100,6 @@ const readingNotes: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 E4 C5 A4 F4 D5 B4 C4' },
-        {
-          kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
-          target: { opens: 'quiz', trainer: 'reading-notes' },
-        },
       ],
     },
     {
@@ -133,6 +128,11 @@ const readingNotes: Lesson = {
             ru: 'Сыграйте ноту на первой добавочной линейке над станом.',
           },
           answer: { notes: ['A'] },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],
     },

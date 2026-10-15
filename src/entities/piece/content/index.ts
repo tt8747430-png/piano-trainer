@@ -5,10 +5,12 @@ import calledToPlay from './called-to-play'
 import calledToPlayTwo from './called-to-play-2'
 import gorshkov from './gorshkov'
 import hymns from './hymns'
+import learningSongs from './learning-songs'
 import studies from './studies'
 
 /** The collections Songs lists, in order. */
 export const SONG_COLLECTIONS: readonly Collection[] = [
+  learningSongs,
   bozheSpasibo,
   calledToPlay,
   calledToPlayTwo,

@@ -1,4 +1,4 @@
-import { isStepId } from '@/entities/course'
+import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
 import {
   isOneOf,

@@ -7,6 +7,7 @@ export const search = {
     pages: 'Practice',
     songs: 'Songs',
     lessons: 'Lessons',
+    courses: 'Courses',
     chords: 'Chords',
     scales: 'Scales',
     progressions: 'Progressions',

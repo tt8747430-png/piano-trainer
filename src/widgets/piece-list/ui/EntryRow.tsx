@@ -1,6 +1,7 @@
 import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { pieceStepId, stageOf, StageMark } from '@/entities/course'
+import { pieceStage } from '@/entities/course'
+import { pieceStepId, StageMark } from '@/entities/step'
 import { entryTitles, PieceLink, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
@@ -25,7 +26,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
   const learned = useProgress(selectIsLearned(step))
-  const stage = stageOf(step)
+  const stage = pieceStage(entry.id)
   const tile = KIND_TILE[entry.kind]
   const number = entry.source?.number
   return (

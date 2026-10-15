@@ -31,6 +31,34 @@ const seventhChords: Lesson = {
       ],
     },
     {
+      heading: { en: 'What each is made of', ru: 'Из чего каждый состоит' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Read each kind from its root by degrees. A flat lowers that note a half step from the major scale’s.',
+            ru: 'Читайте каждый вид от основного тона по ступеням. Бемоль понижает звук на полутон относительно мажорной гаммы.',
+          },
+        },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'CMaj7', degrees: '1 3 5 7', hands: 'C4 E4 G4 B4' },
+            { symbol: 'C7', degrees: '1 3 5 ♭7', hands: 'C4 E4 G4 B♭4' },
+            { symbol: 'Cm7', degrees: '1 ♭3 5 ♭7', hands: 'C4 E♭4 G4 B♭4' },
+            { symbol: 'Cm7♭5', degrees: '1 ♭3 ♭5 ♭7', hands: 'C4 E♭4 G♭4 B♭4' },
+          ],
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'The diminished 7th lowers the 7th once more: on B, B D F A♭.',
+            ru: 'Уменьшённый септаккорд понижает септиму ещё раз: от си — си, ре, фа, ля-бемоль.',
+          },
+        },
+      ],
+    },
+    {
       heading: { en: 'The dominant 7th leads home', ru: 'Доминантсептаккорд ведёт к тонике' },
       blocks: [
         {

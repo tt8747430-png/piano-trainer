@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { StepId } from '@/entities/course'
+import type { StepId } from '@/entities/step'
 import { LearnedMark } from './LearnedMark'
 import { useLearned } from './use-learned'
 

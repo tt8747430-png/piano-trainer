@@ -107,6 +107,11 @@ const minorScales: Lesson = {
           },
           answer: { notes: ['E', 'F#', 'G', 'A', 'B', 'C', 'D'] },
         },
+        {
+          kind: 'link',
+          title: { en: 'A harmonic minor', ru: 'Ля гармонический минор' },
+          target: { opens: 'scales', root: note('A'), scale: 'harmonic' },
+        },
       ],
     },
   ],

@@ -1,4 +1,4 @@
-import type { Stage } from '@/entities/course'
+import type { Stage } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
 import type { Inversion, ScaleKind } from '@/shared/lib/music'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'

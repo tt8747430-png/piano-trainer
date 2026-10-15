@@ -128,6 +128,16 @@ const rhythmAndMeter: Lesson = {
           },
           answer: { notes: ['C', 'E', 'G'], rising: true },
         },
+        {
+          kind: 'link',
+          title: { en: 'Dotted notes, ties and the pickup', ru: 'Точки, лиги и затакт' },
+          target: { opens: 'lesson', lesson: 'dotted-notes-and-ties' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
+        },
       ],
     },
   ],

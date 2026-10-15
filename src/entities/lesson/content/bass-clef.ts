@@ -93,11 +93,6 @@ const bassClef: Lesson = {
             { symbol: 'C', hands: 'C3 | E4 G4' },
           ],
         },
-        {
-          kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
-          target: { opens: 'quiz', trainer: 'reading-notes' },
-        },
       ],
     },
     {
@@ -118,6 +113,11 @@ const bassClef: Lesson = {
             ru: 'Сыграйте линейки басового стана снизу вверх.',
           },
           answer: { notes: ['G', 'B', 'D', 'F', 'A'], rising: true },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],
     },

@@ -113,6 +113,16 @@ const wholeAndHalfSteps: Lesson = {
           ask: { en: 'Play B♭.', ru: 'Сыграйте си-бемоль.' },
           answer: { notes: ['B♭'] },
         },
+        {
+          kind: 'link',
+          title: { en: 'Build a scale in the Quiz', ru: 'Построение гамм в тестах' },
+          target: { opens: 'quiz', trainer: 'build-scale' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'The C major scale in the Player', ru: 'Гамма до мажор в плеере' },
+          target: { opens: 'exercise', exercise: 'scale', root: note('C') },
+        },
       ],
     },
   ],

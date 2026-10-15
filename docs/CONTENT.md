@@ -1,6 +1,6 @@
 # Content
 
-How pieces, listings, collections, patterns, lessons and the curriculum are written. Content is code
+How pieces, listings, collections, patterns, lessons, journeys and courses are written. Content is code
 ([ADR 0002](adr/0002-content-as-code-one-file-per-piece.md)): one TypeScript file per piece, checked by tests that
 refuse anything that would not play (see [What the tests check](#what-the-tests-check)). Words follow
 [UBIQUITOUS_LANGUAGE](UBIQUITOUS_LANGUAGE.md).
@@ -9,7 +9,7 @@ refuse anything that would not play (see [What the tests check](#what-the-tests-
 
 1. **One file**, `src/entities/piece/content/<collection>/<id>.ts`, exporting `definePiece({ … })`.
 2. **One line** in that collection's `index.ts`: import it and put it in `entries`, in the collection's order.
-3. **One step** in `src/entities/course/content/courses.ts`: `...pieces('<id>')` in the practice of the course where it should be learned.
+3. **Optionally a guided song** of one course: its id in that course's `songs` (`src/entities/course/content/<course>/index.ts`).
 4. Raise the counts in `src/entities/piece/content/catalog.test.ts` (it pins how many pieces there are), then run
    `npm run test`.
 
@@ -61,7 +61,7 @@ every other chord plays `pattern`.
 ## Add a listing, a collection
 
 - **A listing** is a songbook entry with no chart yet: `defineListing({ id, title, titleEn, credits, source, key,
-meter, note })`. It shows in Songs and never opens in the Player; it has no step in the curriculum.
+meter, note })`. It shows in Songs and never opens in the Player; no course has it as a song.
 - **A collection** is a folder under `content/` whose `index.ts` exports `{ id, name, entries }` typed `Collection`.
   Add its id to `CollectionId` (`model/types.ts`) and the collection to `COLLECTIONS` (`content/index.ts`), in the
   order Songs lists them.
@@ -267,23 +267,24 @@ the chord over its ♭7). Tones are joined by `+`, each optionally `^finger` (1�
 notes with no finger written are fingered automatically. Each chord plays its figures in windows of one meter bar;
 a chord shorter than two beats picks the pattern up where it sits in the bar.
 
-## The curriculum
+## Lessons and courses
 
-`src/entities/course/content/courses.ts` is the curriculum ([ADR 0051](adr/0051-one-curriculum-of-stages-and-courses.md)):
-every course in the order it is taught, stage by stage (`beginner`, `intermediate`, `advanced`, `professional`). A
-course has an `id`, its `stage`, a `title` and `summary` in both languages, its `lessons` by id in the order taught,
-and its `practice`: `chords('sev')`, `...scales('harmonic')`, `...pieces('bz5')`. Every lesson is in exactly one
-course, every piece practised exactly once (listings never), every chord family and scale kind once. A method book's
-course takes its book's title. A step's stage is its course's; the order suggests, nothing is locked. A course's
-icon is in `ui/course-look.ts`.
+Two kinds of lesson, kept apart ([ADR 0053](adr/0053-lessons-and-courses-apart.md)); `src/app/content/` tests both.
 
-## Lessons
+- **A journey's lesson** is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts`
+  and placed in a chapter of `content/journeys.ts`: four journeys, one to a level, each in chapters of lessons and
+  then the chord families or scales the chapter's Check asks. It teaches theory: it plays no piece, shows no
+  pattern, names no method book and links only journey lessons and Practice. Its way on is the journey's next
+  lesson, into the next chapter.
+- **A course** is a folder `src/entities/course/content/<course>/`: `index.ts` (a `Course`: `id`, `shelf`, `stage`,
+  `title`, `summary`, `weeks`, its `lessons` in order and its guided `songs`) and one file per lesson. A course's
+  lesson links no lesson, plays only its course's songs and shows only its own book's patterns (level 2 of Called to
+  Play also level 1's). A piece is a song of one course at most. A method book's course keeps its book's content and
+  order. The scale and arpeggio courses build a lesson per key from the kernel (`content/scale-lessons.ts`). A
+  course's icon is in `ui/course-look.ts`.
 
-A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts`: an `id`, a
-`title` and `summary` in both languages and its `sections`, each a heading over blocks. Its course and number are the
-curriculum's: add its id to a course's `lessons`, where it is taught. A lesson teaches music; it never explains a
-button. A method book's own lessons (its ways, its types; a sheet of Gorshkov's course) keep their book's content and
-order. A lesson's way on is the next lesson of its course, then its course's practice.
+A lesson teaches music; it never explains a button. Each lesson is an `id`, a `title` and `summary` in both
+languages and its `sections`, each a heading over blocks.
 
 **How a lesson reads** (the research checklist, `.scratch/learn-pages/research.md`, held by the catalog test): each
 section shows something within its first two blocks (an example, a question) and says at most 35 words in English;
@@ -308,8 +309,9 @@ from longer prose.
 | `link`        | `{ kind: 'link', title, target: { opens: 'scales', root: note('D'), scale: 'dorian' } }` | a row into an explorer, a lesson, a tool or the Player    |
 
 A line of notes names each note with its octave (`C4` is middle C), then after a slash its value (`1` whole, `2`
-half, `4` quarter, the default, `8` eighth, `16` sixteenth) and a dot for half as long again (not on a sixteenth); its
-meter is 2/4, 3/4 or 4/4, and its `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key`
+half, `4` quarter, the default, `8` eighth, `16` sixteenth) and a dot for half as long again (not on a sixteenth); `r`
+is a rest (`r/4`) and `~` ties a note to the next of its pitch (`G4/2~ G4/4`); its meter is 2/4, 3/4, 4/4, 6/8 or
+12/8, in whole bars, and its `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key`
 objects (`{ tonic: note('E', -1), minor: false }`). A link `opens` `chords` (a symbol), `scales` (a root, a kind,
 `show?`), `key` (a key), `intervals` (`root?`), `tensions` (a chord, a root: the chord builder opens on it), `lesson`
 (an id), `progressions` (numerals, a key, `size?`), `between` (a key, `from` and `to` as symbols: Progressions'

@@ -4,6 +4,7 @@ import {
   ChartNoAxesColumnIncreasing,
   CircleDot,
   Dumbbell,
+  GraduationCap,
   KeyboardMusic,
   Layers,
   ListChecks,
@@ -27,6 +28,7 @@ export interface Tile {
  */
 export const PAGE_TILES = {
   lesson: { icon: BookOpenText, paint: 'sand' },
+  course: { icon: GraduationCap, paint: 'sky' },
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
   key: { icon: CircleDot, paint: 'lilac' },

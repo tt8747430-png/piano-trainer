@@ -1,18 +1,39 @@
 export const learn = {
   title: 'Learn',
-  // The curriculum (ADR 0051): what each stage is for, in a line under its name.
-  stageGoal: {
-    beginner: 'Find your way on the keys, read music, and play your first chords.',
-    intermediate: 'Accompany a song from its chord chart, in any style it asks for.',
-    advanced: 'Colour and movement: progressions, 9th chords, gospel and the modes.',
-    professional: 'Jazz harmony, and melodies of your own over the changes.',
+  // The header's toggle (ADR 0053): the Lessons' journeys, or the Courses.
+  views: {
+    label: 'What Learn shows',
+    lessons: 'Lessons',
+    courses: 'Courses',
   },
-  curriculum: 'The curriculum',
-  coursesDone: '{{done}} of {{total}} courses',
-  courseNumber: 'Course {{n}}',
+  // The Lessons: four journeys, beginner to professional, each in chapters.
+  journey: {
+    stage: '{{stage}} journey',
+    learned: '{{learned}} of {{total}} learned',
+    previous: 'Previous journey',
+    next: 'Next journey',
+    chapter: 'Chapter {{n}}: {{title}}',
+    chapterLearned: '{{learned}} of {{total}}',
+  },
+  // The Courses, shelf by shelf.
+  shelves: {
+    beginner: 'Beginner courses',
+    intermediate: 'Intermediate courses',
+    technique: 'Technique and exercises',
+    chords: 'Chords and improvisation',
+    'method-books': 'Method books',
+  },
+  shelfAbout: {
+    beginner: 'Sit at the piano, play with both hands, read music and count.',
+    intermediate: 'Wider hands, new keys and meters, and the sustain pedal.',
+    technique: 'Scales, arpeggios and reading drills in every key.',
+    chords: 'Build any chord, then accompany and improvise with them.',
+    'method-books': 'Accompaniment as the books teach it, on their own songs and studies.',
+  },
   progress: '{{learned}} of {{total}} learned',
+  lessonNumber: 'Lesson {{n}}',
   current: 'You are here',
-  // Continue: the next step of the curriculum, in one tap.
+  // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   allLearned: 'Everything is learned.',
   toSongs: 'Open Songs',
@@ -37,19 +58,21 @@ export const learn = {
     study: 'Study',
     song: 'Song',
   },
-  // A course's page: its one way in, its lessons, and what to practise once they are read.
+  // A course's page: its facts, its one way in, its lessons and its guided songs.
   course: {
-    start: 'Start',
+    start: 'Start course',
     continue: 'Continue',
     review: 'Review',
     lessons: 'Lessons',
-    practise: 'Practise',
-    practiseAbout: 'Songs, studies, chords and scales that use what the lessons taught.',
-    next: 'Next course',
+    songs: 'Guided songs',
+    songsAbout: 'Strengthen your new skills with these songs.',
+    weeks: 'Weeks: {{count}}',
+    lessonCount: 'Lessons: {{count}}',
+    songCount: 'Songs: {{count}}',
     done: 'Course complete',
-    count: '{{count}} lessons',
+    facts: 'About this course',
   },
-  // Where a lesson is.
+  // Where a lesson is: a journey's chapter, or a course.
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',
   contents: 'In this lesson',
@@ -59,10 +82,12 @@ export const learn = {
     openInPlayer: 'Open in the Player',
     inProgressions: 'Open in Progressions',
   },
-  // The way on, at a lesson's end: the next lesson of its course, or its course's practice.
+  // The way on, at a lesson's end: the next lesson, or back to the journey or the course.
   track: {
     next: 'Next lesson',
-    practise: 'Practise what this course taught',
+    toJourney: 'Back to the journey',
+    toCourse: 'On to the guided songs',
+    courseDone: 'Back to the course',
   },
   // A lesson's question, answered on its keys.
   question: {

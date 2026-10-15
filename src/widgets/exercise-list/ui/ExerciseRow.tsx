@@ -1,4 +1,4 @@
-import { StageMark } from '@/entities/course'
+import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import type { Exercise } from '@/entities/exercise'

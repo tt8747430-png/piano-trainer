@@ -59,12 +59,14 @@ export type LessonLink =
   | { readonly opens: 'song-chords'; readonly chords: string }
   /** A piece in the Player, with a pattern or its own. */
   | { readonly opens: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
-  /** An exercise in the Player, on a root and a chord where it takes them. */
+  /** An exercise in the Player, on a root, a chord and a scale where it takes them. */
   | {
       readonly opens: 'exercise'
       readonly exercise: ExerciseId
       readonly root?: SpelledNote
       readonly quality?: ArpeggioQuality
+      /** The scale a scale exercise runs, where it takes one: a minor scale's form. */
+      readonly kind?: ScaleKind
     }
   /** A Quiz trainer, by its id (the catalog's test holds it to one there is), to practise what was read. */
   | { readonly opens: 'quiz'; readonly trainer: string }
@@ -129,7 +131,7 @@ export interface LessonSection {
 
 /**
  * A Learn page that teaches music, in both languages, with examples that play (content as code, ADR
- * 0002). Its course and number are the curriculum's (ADR 0051): a lesson does not name them.
+ * 0002): a journey's (its chapter places it) or a course's own (ADR 0053); it names neither.
  */
 export interface Lesson {
   readonly id: string

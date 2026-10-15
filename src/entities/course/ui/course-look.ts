@@ -1,49 +1,43 @@
 import {
   AudioLines,
   BookOpen,
-  Church,
+  Dumbbell,
   Footprints,
-  Layers,
+  Hand,
+  HandHelping,
   Library,
   Lightbulb,
-  ListMusic,
   Music2,
-  Palette,
   Piano,
-  Sparkles,
+  Timer,
+  TrendingDown,
+  TrendingUp,
   Waves,
+  Workflow,
   type LucideIcon,
 } from 'lucide-react'
-import type { Paint } from '@/shared/ui'
-import type { Stage } from '../model/types'
-
-/** Each stage's paint, worn by its courses' cards and pages (DESIGN: one meaning per paint). */
-export const STAGE_PAINT: Readonly<Record<Stage, Paint>> = {
-  beginner: 'sky',
-  intermediate: 'grass',
-  advanced: 'lilac',
-  professional: 'sand',
-}
 
 /** Each course's icon, its card's and its page's; a method book's an open book. */
 export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
-  'first-steps': Footprints,
-  'reading-music': Music2,
-  'scales-and-keys': Waves,
-  'chord-basics': Piano,
+  'introduction-to-the-piano': Footprints,
+  'playing-with-both-hands': HandHelping,
+  'intro-to-music-reading': Music2,
+  'rhythm-basics': Timer,
+  'intermediate-piano-playing': Hand,
+  'the-sustain-pedal': AudioLines,
+  'first-exercises-for-both-hands': Dumbbell,
+  'major-scales': TrendingUp,
+  'minor-scales': TrendingDown,
+  'music-reading-training': Library,
+  'major-arpeggios': Waves,
+  'minor-arpeggios': Workflow,
+  'mastering-chords': Piano,
+  'improvising-with-chords': Lightbulb,
   'called-to-play': BookOpen,
-  accompaniment: Layers,
-  'sixths-and-sevenths': ListMusic,
   'called-to-play-2': BookOpen,
   'seven-types': BookOpen,
-  progressions: AudioLines,
-  gorshkov: Library,
-  gospel: Church,
-  modes: Palette,
-  'jazz-harmony': Sparkles,
-  improvisation: Lightbulb,
+  gorshkov: BookOpen,
 }
 
-/** A course's icon; the curriculum's test holds every course to one. */
+/** A course's icon; the courses' test holds every course to one. */
 export const courseIcon = (id: string): LucideIcon => COURSE_ICON[id] ?? BookOpen
-export const COURSE_ICON_IDS = Object.keys(COURSE_ICON)

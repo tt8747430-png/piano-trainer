@@ -1,63 +1,39 @@
 import { act, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { courseById, COURSES, lessonStepId } from '@/entities/course'
+import { COURSES, courseById, coursesOn } from '@/entities/course'
+import { JOURNEYS } from '@/entities/lesson'
+
+const at = '2026-10-01T10:00:00Z'
 
 describe('Learn', () => {
   it('suggests the first lesson on a first run, saying where it is read', async () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     const card = await screen.findByRole('region', { name: 'Finding your way on the keys' })
-    expect(card).toHaveTextContent('First steps at the piano · Lesson 1 of 4 · Beginner')
+    expect(card).toHaveTextContent('Foundations · The keyboard and the staff · Beginner')
     expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
       'href',
-      '/learn/lessons/finding-home',
+      '/lessons/finding-home',
     )
   })
 
-  it('goes on to a course’s practice once its lessons are learned', async () => {
+  it('continues in the course whose lesson was learned last', async () => {
     const { progressStore } = await renderApp('/')
-    const learned = (ids: readonly string[]) =>
-      Object.fromEntries(ids.map((id) => [lessonStepId(id), '2026-10-01T10:00:00Z']))
-    const before = COURSES.slice(0, 3).flatMap((course) => [
-      ...course.lessons.map(lessonStepId),
-      ...course.practice.map((step) =>
-        step.kind === 'piece'
-          ? `piece:${step.pieceId}`
-          : step.kind === 'scale'
-            ? `scale:${step.scale}`
-            : `chords:${step.family}`,
-      ),
-    ])
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
     act(() =>
       progressStore.setState({
-        learned: {
-          ...Object.fromEntries(before.map((id) => [id, '2026-10-01T10:00:00Z'])),
-          ...learned(courseById('chord-basics')?.lessons ?? []),
-        },
+        learned: { 'course:gorshkov/sevenths-in-a-song': at, 'lesson:finding-home': '2026-09-01' },
       }),
     )
-    const card = await screen.findByRole('region', { name: 'Triads' })
-    expect(within(card).getByText('Chords · 0 of 6 known · Chords · Beginner')).toBeInTheDocument()
-    expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
-      /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
-    )
-  })
-
-  it('suggests the song practised last, with the chords it has to check', async () => {
-    const { progressStore } = await renderApp('/')
-    act(() => progressStore.setState({ practised: { bz5: '2026-09-25T10:00:00Z' } }))
-    const card = await screen.findByRole('region', { name: 'Still, my soul, be still' })
+    const second = courseById('gorshkov')?.lessons[1]
+    const card = await screen.findByRole('region', { name: second?.title.en })
     expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
       'href',
-      '/play/bz5',
+      `/courses/gorshkov/${second?.id}`,
     )
-    expect(
-      within(card)
-        .getByRole('link', { name: /^Chords to check: \d+$/ })
-        .getAttribute('href'),
-    ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
   })
 
   it('lists the pieces practised last, latest first, and none before the first', async () => {
@@ -81,48 +57,73 @@ describe('Learn', () => {
     ).toEqual(['/songs/ode', '/songs/bz5'])
   })
 
-  describe('its curriculum', () => {
-    it('lists the four stages in order, each its courses on one line', async () => {
+  describe('its Lessons', () => {
+    it('show the current journey’s chapters, each a run of nodes, Continue’s marked', async () => {
       await renderApp('/')
-      await screen.findByRole('heading', { level: 1, name: 'Learn' })
-      const stages = ['Beginner', 'Intermediate', 'Advanced', 'Professional'].map((name) =>
-        screen.getByRole('region', { name }),
+      const journey = JOURNEYS[0]!
+      expect(
+        await screen.findByRole('heading', { level: 2, name: 'Foundations' }),
+      ).toBeInTheDocument()
+      const chapters = journey.chapters.map((chapter, i) =>
+        screen.getByRole('region', { name: `Chapter ${i + 1}: ${chapter.title.en}` }),
       )
-      const hrefs = stages.flatMap((stage) =>
-        within(stage)
-          .getAllByRole('link')
-          .map((link) => link.getAttribute('href')),
-      )
-      expect(hrefs).toEqual(COURSES.map((course) => `/learn/${course.id}`))
-      expect(within(stages[0] ?? document.body).getByText('0 of 5 courses')).toBeInTheDocument()
+      const first = within(chapters[0]!).getAllByRole('link')[0]
+      expect(first).toHaveAttribute('href', '/lessons/finding-home')
+      expect(first).toHaveAttribute('aria-current', 'step')
     })
 
-    it('marks the course Continue is in, and counts each course’s steps learned', async () => {
-      const { progressStore } = await renderApp('/')
-      const beginner = await screen.findByRole('region', { name: 'Beginner' })
-      const [first, second] = within(beginner).getAllByRole('listitem')
-      expect(first).toHaveAttribute('aria-current', 'step')
-      expect(first).toHaveTextContent('0 of 5 learned')
-      const firstSteps = courseById('first-steps')
-      act(() =>
-        progressStore.setState({
-          learned: Object.fromEntries(
-            [...(firstSteps?.lessons.map(lessonStepId) ?? []), 'piece:ode'].map((id) => [
-              id,
-              '2026-10-01T10:00:00Z',
-            ]),
-          ),
-        }),
-      )
-      expect(first).toHaveTextContent('Course complete')
-      expect(second).toHaveAttribute('aria-current', 'step')
+    it('step to the next journey and back with the arrows', async () => {
+      const user = userEvent.setup()
+      const { router } = await renderApp('/')
+      await user.click(await screen.findByRole('link', { name: 'Next journey: Fluency' }))
+      expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
+      expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
+      await user.click(screen.getByRole('link', { name: 'Previous journey: Foundations' }))
+      expect(
+        await screen.findByRole('heading', { level: 2, name: 'Foundations' }),
+      ).toBeInTheDocument()
     })
   })
 
-  it('reads in Russian, with nothing left in English', async () => {
+  describe('its Courses', () => {
+    it('come up from the header’s toggle, shelf by shelf', async () => {
+      const user = userEvent.setup()
+      const { router } = await renderApp('/')
+      const toggle = await screen.findByRole('navigation', { name: 'What Learn shows' })
+      expect(within(toggle).getByRole('link', { name: 'Lessons' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      )
+      await user.click(within(toggle).getByRole('link', { name: 'Courses' }))
+      expect(router.state.location.search).toMatchObject({ view: 'courses' })
+      const shelf = await screen.findByRole('region', { name: 'Beginner courses' })
+      expect(
+        within(shelf)
+          .getAllByRole('link')
+          .map((link) => link.getAttribute('href')),
+      ).toEqual(coursesOn('beginner').map((course) => `/courses/${course.id}`))
+      const all = screen
+        .getAllByRole('link')
+        .filter((link) => /^\/courses\/[^/]+$/.test(link.getAttribute('href') ?? ''))
+      expect(all).toHaveLength(COURSES.length)
+      expect(screen.getByRole('region', { name: 'Method books' })).toBeInTheDocument()
+    })
+
+    it('ring the course Continue is in', async () => {
+      const { progressStore } = await renderApp('/?view=courses')
+      await screen.findByRole('region', { name: 'Method books' })
+      act(() => progressStore.setState({ learned: { 'course:gorshkov/sevenths-in-a-song': at } }))
+      const card = screen
+        .getAllByRole('link')
+        .find((link) => link.getAttribute('href') === '/courses/gorshkov')
+      expect(card).toHaveAttribute('aria-current', 'step')
+    })
+  })
+
+  it('reads in Russian, with nothing left in English, either way it shows', async () => {
     await renderApp('/', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
-    await screen.findByRole('region', { name: 'Начальный' })
+    await screen.findByRole('heading', { level: 2, name: 'Основы' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

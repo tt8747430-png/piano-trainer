@@ -1,6 +1,59 @@
 import { LESSONS } from '../content'
+import { JOURNEYS } from '../content/journeys'
+import type { Chapter, Journey } from './journey'
 import type { Lesson } from './types'
 
 const LESSON_BY_ID = new Map(LESSONS.map((lesson) => [lesson.id, lesson]))
+const JOURNEY_BY_ID = new Map(JOURNEYS.map((journey) => [journey.id, journey]))
 
 export const lessonById = (id: string): Lesson | undefined => LESSON_BY_ID.get(id)
+
+export const journeyById = (id: string): Journey | undefined => JOURNEY_BY_ID.get(id)
+
+/** Where a lesson is read: its journey and chapter, and its number in the journey from 1. */
+export interface LessonPlace {
+  readonly journey: Journey
+  readonly chapter: Chapter
+  readonly n: number
+  readonly total: number
+}
+
+const lessonIdsOf = (journey: Journey): string[] =>
+  journey.chapters.flatMap((chapter) =>
+    chapter.steps.flatMap((step) => (step.kind === 'lesson' ? [step.lessonId] : [])),
+  )
+
+const PLACES = new Map(
+  JOURNEYS.flatMap((journey) => {
+    const ids = lessonIdsOf(journey)
+    return journey.chapters.flatMap((chapter) =>
+      chapter.steps.flatMap((step): [string, LessonPlace][] =>
+        step.kind === 'lesson'
+          ? [
+              [
+                step.lessonId,
+                { journey, chapter, n: ids.indexOf(step.lessonId) + 1, total: ids.length },
+              ],
+            ]
+          : [],
+      ),
+    )
+  }),
+)
+
+/** A lesson's journey, chapter and number; undefined for a lesson no journey has. */
+export const lessonPlace = (lessonId: string): LessonPlace | undefined => PLACES.get(lessonId)
+
+/** The lesson after this one in its journey, into its next chapter; none after the journey's last. */
+export function nextLessonId(lessonId: string): string | undefined {
+  const place = lessonPlace(lessonId)
+  return place ? lessonIdsOf(place.journey)[place.n] : undefined
+}
+
+/** The journey after this one; none after the last. */
+export const nextJourney = (journey: Journey): Journey | undefined =>
+  JOURNEYS[JOURNEYS.indexOf(journey) + 1]
+
+/** The journey before this one; none before the first. */
+export const previousJourney = (journey: Journey): Journey | undefined =>
+  JOURNEYS[JOURNEYS.indexOf(journey) - 1]

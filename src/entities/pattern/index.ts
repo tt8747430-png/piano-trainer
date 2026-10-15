@@ -51,6 +51,7 @@ export {
 } from './model/context'
 export {
   ACCOMPANIMENT_PARTS,
+  bookOfPattern,
   isAccompanimentPart,
   partOfShelf,
   partShelves,

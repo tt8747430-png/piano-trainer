@@ -215,13 +215,13 @@ const twoFiveOne: Lesson = {
       ],
     },
     {
-      heading: { en: 'In a song', ru: 'В песне' },
+      heading: { en: 'Two cadences in a row', ru: 'Две каденции подряд' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'In “As the Deer” ii–V–Is close the phrases on a long note. The second leads to Bm, so its ii and V are B minor’s.',
-            ru: 'В песне «Как олень спешит к воде» обороты ii–V–I завершают фразы на долгой ноте. Второй ведёт в си минор, поэтому его ii и V — из си минора.',
+            en: 'Songs close their phrases with ii–V–Is. Below, the first lands on D. The second leads to Bm, so its ii and V are B minor’s.',
+            ru: 'Песни завершают фразы оборотами ii–V–I. Ниже первый приходит в ре мажор. Второй ведёт в си минор, поэтому его ii и V — из си минора.',
           },
         },
         {
@@ -250,8 +250,13 @@ const twoFiveOne: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '“As the Deer” in the Player', ru: '«Как олень спешит к воде» в плеере' },
-          target: { opens: 'piece', piece: 'olen' },
+          title: { en: 'Both cadences in the Player', ru: 'Обе каденции в плеере' },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I iiø/vi V/vi vi',
+            key: D_MAJOR,
+            size: 'sevenths',
+          },
         },
       ],
     },

@@ -1,3 +1,4 @@
+import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
 const chromaticScale: Lesson = {
@@ -91,6 +92,16 @@ const chromaticScale: Lesson = {
             ru: 'Сыграйте хроматическую гамму от ми вверх до ля.',
           },
           answer: { notes: ['E', 'F', 'F#', 'G', 'G#', 'A'], rising: true },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Half steps and every interval', ru: 'Полутоны и все интервалы' },
+          target: { opens: 'intervals', root: note('C') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],
     },

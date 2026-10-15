@@ -124,11 +124,28 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The gospel rhythm plays syncopated chords, struck between the beats, over a moving bass. Hear it below over a study’s plain chords.',
-            ru: 'Госпел-ритм — это синкопированные аккорды над движущимся басом. Они звучат между долями. Послушайте его ниже на простых аккордах этюда.',
+            en: 'The right hand strikes between the beats and ties over one. The bass walks on every beat.',
+            ru: 'Правая рука берёт аккорды между долями и один тянет через долю. Бас шагает на каждую долю.',
           },
         },
-        { kind: 'pattern', pattern: 'gospel', piece: 'ex3' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'r/8 E5/8 r/8 E5/8~ E5/8 E5/8 r/4 r/8 F5/8 r/8 F5/8~ F5/8 F5/8 r/4',
+        },
+        { kind: 'notes', clef: 'bass', notes: 'C3 G2 C3 E3 F3 C3 F3 F♯3' },
+        {
+          kind: 'note',
+          text: {
+            en: 'The top line is each chord’s top note. F♯ walks the bass up to G.',
+            ru: 'Верхняя строка — верхний звук аккордов. Фа-диез ведёт бас вверх, к соль.',
+          },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Syncopation and swing', ru: 'Синкопа и свинг' },
+          target: { opens: 'lesson', lesson: 'syncopation-and-swing' },
+        },
       ],
     },
     {
@@ -138,6 +155,19 @@ const gospelProgressions: Lesson = {
           kind: 'question',
           ask: { en: 'Play the iii7 of C major.', ru: 'Сыграйте iii7 до мажора.' },
           answer: { chord: 'Em7' },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the 7–3–6’s first chord in C: the half-diminished 7th on B.',
+            ru: 'Сыграйте первый аккорд 7–3–6 в до мажоре: полууменьшённый септаккорд от си.',
+          },
+          answer: { chord: 'Bm7♭5' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'The lift in the Player', ru: 'Подъём в плеере' },
+          target: { opens: 'player', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
         },
         {
           kind: 'link',

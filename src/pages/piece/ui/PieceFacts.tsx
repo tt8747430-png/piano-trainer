@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { pieceStepId, stageOf, StageMark } from '@/entities/course'
+import { pieceStage } from '@/entities/course'
+import { StageMark } from '@/entities/step'
 import { entryTitles, pieceKey, selectHasVersion, usePieces, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
@@ -22,7 +23,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
   const { secondary } = entryTitles(entry, locale)
-  const stage = entry.kind === 'listing' ? undefined : stageOf(pieceStepId(entry.id))
+  const stage = entry.kind === 'listing' ? undefined : pieceStage(entry.id)
   const hasVersion = usePieces((state) => selectHasVersion(state, entry.id))
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

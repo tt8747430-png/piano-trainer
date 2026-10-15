@@ -23,6 +23,7 @@ describe('Search', () => {
       'Practice',
       'Songs',
       'Lessons',
+      'Courses',
       'Chords',
       'Scales',
       'Progressions',
@@ -53,9 +54,11 @@ describe('Search', () => {
     for (const more of screen.getAllByRole('button', { name: /^Show all/ })) await user.click(more)
     expect(hrefOf('Practice', /^Free play/)).toBe('/practice/free-play')
     expect(hrefOf('Songs', /^Still, my soul, be still/)).toBe('/songs/bz5')
-    expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe(
-      '/learn/lessons/reading-chord-symbols',
+    expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe('/lessons/reading-chord-symbols')
+    expect(hrefOf('Courses', /^Introduction to the Piano/)).toBe(
+      '/courses/introduction-to-the-piano',
     )
+    expect(hrefOf('Courses', /^Chord pulse/)).toBe('/courses/gorshkov/chord-pulse')
     expect(hrefOf('Chords', /^Minor 7th/)).toMatch(/^\/practice\/chords\?/)
     expect(hrefOf('Scales', /^Dorian/)).toBe('/practice/scales?kind=dorian')
     expect(hrefOf('Progressions', /^Let It Be/)).toBe('/practice/progressions?p=I-V-vi-IV-I-V-IV-I')

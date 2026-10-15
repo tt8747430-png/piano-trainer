@@ -21,8 +21,8 @@ interface Place {
   readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.search' | 'nav.settings'
   readonly icon: LucideIcon
   readonly exact: boolean
-  /** Where else the place is the current one: Learn's courses and lessons, under `/learn`. */
-  readonly also?: '/learn'
+  /** Where else the place is the current one: Learn's lessons and courses (ADR 0053). */
+  readonly also?: readonly ('/lessons' | '/courses')[]
   /** The place's shortcut: Alt and its number. */
   readonly key?: Combo
 }
@@ -34,7 +34,7 @@ const PLACES: readonly Place[] = [
     label: 'nav.learn',
     icon: GraduationCap,
     exact: true,
-    also: '/learn',
+    also: ['/lessons', '/courses'],
     key: { code: 'Digit1', alt: true },
   },
   {
@@ -86,10 +86,9 @@ function PlaceLink({
   const { t } = useTranslation('common')
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   // The place is current under its other prefix too, as the router marks its own address.
-  const current =
-    also && pathname.startsWith(`${also}/`)
-      ? ({ 'data-status': 'active', 'aria-current': 'page' } as const)
-      : {}
+  const current = also?.some((prefix) => pathname.startsWith(`${prefix}/`))
+    ? ({ 'data-status': 'active', 'aria-current': 'page' } as const)
+    : {}
   const content = (
     <>
       <Icon aria-hidden className="size-6 shrink-0 lg:size-5" />

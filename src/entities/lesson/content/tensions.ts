@@ -84,11 +84,6 @@ const tensions: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['G9', 'G13', 'G7♭9', 'G7#11'] },
-        {
-          kind: 'link',
-          title: { en: 'G7’s tensions on Chords', ru: 'Тенсии G7 в разделе «Аккорды»' },
-          target: { opens: 'tensions', chord: 'd7', root: note('G') },
-        },
       ],
     },
     {
@@ -124,6 +119,16 @@ const tensions: Lesson = {
           kind: 'question',
           ask: { en: 'Play G13.', ru: 'Сыграйте G13.' },
           answer: { chord: 'G13' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'G7’s tensions on Chords', ru: 'Тенсии G7 в разделе «Аккорды»' },
+          target: { opens: 'tensions', chord: 'd7', root: note('G') },
         },
       ],
     },

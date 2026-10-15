@@ -1,6 +1,6 @@
 import type { Lesson } from '../model/types'
 
-/** Gorshkov's lesson 2, «Нонаккорды»: three 9th chords, as two triads, in his two positions. */
+/** Three 9th chords, each two triads stacked over the bass, in two positions. */
 const ninthChords: Lesson = {
   id: 'ninth-chords',
   title: { en: 'Ninth chords', ru: 'Нонаккорды' },

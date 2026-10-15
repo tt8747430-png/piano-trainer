@@ -5,6 +5,16 @@ export {
   type LessonLink,
   type LessonProgression,
 } from './model/types'
+export { type Chapter, type Journey, type JourneyStep } from './model/journey'
 export { readProgression } from './model/progression'
-export { lessonById } from './model/selectors'
+export {
+  journeyById,
+  lessonById,
+  lessonPlace,
+  nextJourney,
+  nextLessonId,
+  previousJourney,
+  type LessonPlace,
+} from './model/selectors'
 export { LESSONS } from './content'
+export { JOURNEYS } from './content/journeys'

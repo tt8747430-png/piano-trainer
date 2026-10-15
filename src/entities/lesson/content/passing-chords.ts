@@ -115,6 +115,11 @@ const passingChords: Lesson = {
             ru: 'Проходящий аккорд забирает долю или полтакта у предыдущего. Ставьте его под долгую ноту мелодии, а не на каждую смену.',
           },
         },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
+        },
       ],
     },
   ],

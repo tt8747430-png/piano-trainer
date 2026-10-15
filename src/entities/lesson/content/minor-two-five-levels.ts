@@ -240,6 +240,20 @@ const minorTwoFiveLevels: Lesson = {
           },
           answer: { notes: ['B', 'F'] },
         },
+        {
+          kind: 'link',
+          title: {
+            en: 'The minor ii–V–i through the keys',
+            ru: 'Минорный ii–V–i по всем тональностям',
+          },
+          target: {
+            opens: 'player',
+            numerals: 'ii° V i',
+            key: { tonic: note('C'), minor: true },
+            size: 'sevenths',
+            walk: 'fifths',
+          },
+        },
       ],
     },
   ],

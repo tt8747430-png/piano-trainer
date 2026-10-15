@@ -24,7 +24,6 @@ export {
   selectIsLearned,
   selectLearned,
   selectPractised,
-  selectSuggestedStep,
   selectTrainerRecord,
   selectTrainerRecords,
 } from './model/selectors'

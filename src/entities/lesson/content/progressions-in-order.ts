@@ -250,6 +250,42 @@ const progressionsInOrder: Lesson = {
         },
       ],
     },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
+        {
+          kind: 'question',
+          ask: { en: 'Play V7/V in C major.', ru: 'Сыграйте V7/V в до мажоре.' },
+          answer: { chord: 'D7' },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the tritone substitute for G7.',
+            ru: 'Сыграйте тритоновую замену G7.',
+          },
+          answer: { chord: 'D♭7' },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play vi in G major.', ru: 'Сыграйте vi в соль мажоре.' },
+          answer: { chord: 'Em' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'I–IV–V–I through the keys', ru: 'I–IV–V–I по всем тональностям' },
+          target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths' },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Progressions by ear in the Quiz',
+            ru: 'Последовательности на слух в тестах',
+          },
+          target: { opens: 'quiz', trainer: 'progressions-by-ear' },
+        },
+      ],
+    },
   ],
 }
 

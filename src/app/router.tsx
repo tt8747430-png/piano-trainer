@@ -61,6 +61,7 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
+import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
@@ -121,10 +122,12 @@ const shellRoute = createRoute({
   id: 'shell',
   component: ShellLayout,
 })
-// Learn, the first place (ADR 0049): Continue, then the Journey or the Courses.
+// Learn, the first place (ADR 0053): the Lessons' journeys or the Courses, as its toggle says.
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
+  ...learnSearch,
+  ...remembered(readLearnSearch, LEARN_KEPT),
   component: lazyRouteComponent(homeScreens, 'LearnPage'),
 })
 const settingsRoute = createRoute({
@@ -296,9 +299,20 @@ const editPatternRoute = createRoute({
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
 
+// A lesson of the Lessons' journeys; a course and its own lessons (ADR 0053).
+const lessonRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonPage'),
+})
 const courseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/$courseId',
+  path: '/courses/$courseId',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params }) => {
     const { courseById } = await learnScreens()
@@ -306,15 +320,15 @@ const courseRoute = createRoute({
   },
   component: lazyRouteComponent(learnScreens, 'CoursePage'),
 })
-const lessonRoute = createRoute({
+const courseLessonRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/lessons/$lessonId',
+  path: '/courses/$courseId/$lessonId',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
   },
-  component: lazyRouteComponent(learnScreens, 'LessonPage'),
+  component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
 
 // Screens that take the whole screen, with their own way back.
@@ -445,6 +459,7 @@ const routeTree = rootRoute.addChildren([
     patternRoute,
     editPatternRoute,
     lessonRoute,
+    courseLessonRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,

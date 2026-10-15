@@ -110,6 +110,16 @@ const modalHarmony: Lesson = {
           ask: { en: 'Play ♭II in E Phrygian.', ru: 'Сыграйте ♭II в ми фригийском.' },
           answer: { chord: 'F' },
         },
+        {
+          kind: 'link',
+          title: { en: 'D Dorian', ru: 'Ре дорийский' },
+          target: { opens: 'scales', root: note('D'), scale: 'dorian' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
+        },
       ],
     },
   ],

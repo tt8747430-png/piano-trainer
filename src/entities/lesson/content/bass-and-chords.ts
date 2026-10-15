@@ -1,10 +1,13 @@
+import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
+
+const C_MAJOR = { tonic: note('C'), minor: false }
 
 const bassAndChords: Lesson = {
   id: 'bass-and-chords',
   title: { en: 'Bass and chords', ru: 'Бас и аккорды' },
   summary: {
-    en: 'What each hand plays from chords, the nearest chord, and the first ways to play.',
+    en: 'What each hand plays from chords, the nearest chord, and the first ways to play them.',
     ru: 'Что играет каждая рука по аккордам, ближайший аккорд и первые способы игры.',
   },
   sections: [
@@ -19,7 +22,14 @@ const bassAndChords: Lesson = {
             ru: 'разделите каждый аккорд: левая рука берёт его основной тон внизу, правая — сам аккорд в середине.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'F', 'G'] },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
+            { symbol: 'F', degrees: '1 | 1 3 5', hands: 'F2 | F4 A4 C5' },
+            { symbol: 'G', degrees: '1 | 1 3 5', hands: 'G2 | G4 B4 D5' },
+          ],
+        },
       ],
     },
     {
@@ -33,7 +43,15 @@ const bassAndChords: Lesson = {
             ru: '— тот же аккорд с другой нотой внизу. Берите ближайшее: общие ноты оставьте, остальные сдвиньте на ближайшую ступень.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'F/C', 'G/B'] },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
+            { symbol: 'F', degrees: '1 | 5 1 3', hands: 'F2 | C4 F4 A4' },
+            { symbol: 'G', degrees: '1 | 3 5 1', hands: 'G2 | B3 D4 G4' },
+            { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
+          ],
+        },
         {
           kind: 'link',
           title: { en: 'Inversions', ru: 'Обращения' },
@@ -42,29 +60,45 @@ const bassAndChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Way 1: bass and chords', ru: 'Способ 1: бас и аккорды' },
+      heading: { en: 'Bass and chord together', ru: 'Бас и аккорд вместе' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Called to Play’s first way is the steadiest of its five. Start every new chart with it.',
-            ru: 'Первый из пяти способов Called to Play — самый ровный. С него начинайте любую новую последовательность.',
+            en: 'The steadiest way: strike the bass and the chord together on the first beat, then the chord alone on each beat after.',
+            ru: 'Самый ровный способ: бас и аккорд вместе на первую долю, затем аккорд один на каждую следующую.',
           },
         },
-        { kind: 'pattern', pattern: 'M1', piece: 'ex3' },
+        { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
+        {
+          kind: 'link',
+          title: { en: 'I–IV–V–I in the Player', ru: 'I–IV–V–I в плеере' },
+          target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR },
+        },
       ],
     },
     {
-      heading: { en: 'Way 5: a dotted bass', ru: 'Способ 5: пунктирный бас' },
+      heading: { en: 'A moving bass', ru: 'Подвижный бас' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Way 5 keeps the right hand as it was and sets the bass moving. It carries a march or a lively hymn forward.',
-            ru: 'Пятый способ оставляет правую руку как была, а бас приводит в движение. Он ведёт вперёд марш или бодрый гимн.',
+            en: 'Let the right hand hold the chord and set the bass moving. Root, 5th below, root, 5th below: one note to a beat.',
+            ru: 'Пусть правая рука держит аккорд, а бас движется. Основной тон, квинта вниз, снова основной тон и квинта: по ноте на долю.',
           },
         },
-        { kind: 'pattern', pattern: 'M5', piece: 'ex3' },
+        {
+          kind: 'notes',
+          clef: 'bass',
+          notes: 'C3 G2 C3 G2 F2 C2 F2 C2 G2 D2 G2 D2 C3/1',
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'The 5th below is the chord’s own 5th, so it never clashes.',
+            ru: 'Квинта внизу — квинта самого аккорда, поэтому она не спорит с ним.',
+          },
+        },
       ],
     },
     {
@@ -72,20 +106,23 @@ const bassAndChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Oom-pah:', ru: 'Бас — аккорд:' },
           text: {
-            en: 'In Н. В. Боброва’s second type, the hands take turns instead of sounding together.',
-            ru: 'Во втором виде у Н. В. Бобровой руки звучат по очереди, а не вместе.',
+            en: 'the hands take turns. In a waltz the bass sounds on 1, the chord on 2 and 3. In a march, bass on 1 and 3, chord on 2 and 4.',
+            ru: 'руки звучат по очереди. В вальсе бас — на раз, аккорд — на два и три. В марше бас — на раз и три, аккорд — на два и четыре.',
           },
         },
-        { kind: 'pattern', pattern: 'r2', piece: 'otche' },
         {
-          kind: 'text',
-          text: {
-            en: 'Her third type turns it round. The right hand keeps going, and the bass comes in less often.',
-            ru: 'Её третий вид — наоборот. Правая рука не останавливается, а бас вступает реже.',
-          },
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'C', caption: '1', hands: 'C3 |' },
+            { symbol: 'C', caption: '2', hands: '| E4 G4 C5' },
+            { symbol: 'C', caption: '3', hands: '| E4 G4 C5' },
+            { symbol: 'G7', caption: '1', hands: 'G2 |' },
+            { symbol: 'G7', caption: '2', hands: '| D4 F4 B4' },
+            { symbol: 'G7', caption: '3', hands: '| D4 F4 B4' },
+          ],
         },
-        { kind: 'pattern', pattern: 'r3', piece: 'otche' },
       ],
     },
     {
@@ -100,12 +137,22 @@ const bassAndChords: Lesson = {
           answer: { chord: 'F' },
         },
         {
-          kind: 'link',
-          title: {
-            en: 'Lesson 3’s progression in the Player',
-            ru: 'Последовательность урока 3 в плеере',
+          kind: 'question',
+          ask: {
+            en: 'Play G major over its 3rd, B, in the bass.',
+            ru: 'Сыграйте соль мажор с терцией си в басу.',
           },
-          target: { opens: 'piece', piece: 'ex3' },
+          answer: { chord: 'G/B' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'I–vi–IV–V in the Player', ru: 'I–vi–IV–V в плеере' },
+          target: { opens: 'player', numerals: 'I vi IV V', key: C_MAJOR },
+        },
+        {
+          kind: 'link',
+          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          target: { opens: 'quiz', trainer: 'chord-role' },
         },
       ],
     },

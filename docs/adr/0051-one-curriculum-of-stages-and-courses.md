@@ -1,6 +1,6 @@
 # ADR 0051 — One curriculum: stages, courses, lessons and practice
 
-- **Status:** accepted · **Date:** 2026-10-14 · **Supersedes:** ADR 0049 (a Journey and Courses), ADR 0048 (the
+- **Status:** superseded by ADR 0053 · **Date:** 2026-10-14 · **Supersedes:** ADR 0049 (a Journey and Courses), ADR 0048 (the
   Path reads the subjects' lessons), ADR 0042 (lesson modules and tracks), ADR 0005's levels
 
 ## Context

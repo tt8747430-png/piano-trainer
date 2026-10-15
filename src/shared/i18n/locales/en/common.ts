@@ -38,7 +38,7 @@ export const common = {
   // A search box's button that empties it.
   clearSearch: 'Clear search',
   loading: 'Loading',
-  // The curriculum's four stages (ADR 0051).
+  // The four levels, a journey's and a course's (ADR 0053).
   stage: {
     beginner: 'Beginner',
     intermediate: 'Intermediate',

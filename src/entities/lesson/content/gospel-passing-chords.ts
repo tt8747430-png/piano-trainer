@@ -102,6 +102,21 @@ const gospelPassingChords: Lesson = {
           },
           answer: { chord: 'F#°7' },
         },
+        {
+          kind: 'link',
+          title: { en: 'I–IV–I–V in the Player', ru: 'I–IV–I–V в плеере' },
+          target: {
+            opens: 'player',
+            numerals: 'I IV I V',
+            key: { tonic: note('C'), minor: false },
+            size: 'sevenths',
+          },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
+        },
       ],
     },
   ],

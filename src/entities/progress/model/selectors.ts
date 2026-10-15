@@ -1,9 +1,8 @@
-import { curriculumSteps, pieceStepId, stepById, type PlacedStep } from '@/entities/course'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
 import { NO_ANSWERS } from './mastery'
 import type { Answer, ProgressState, RunKey, TrainerRecord } from './types'
-import type { StepId } from '@/entities/course'
+import type { StepId } from '@/entities/step'
 
 export const selectLearned = (state: ProgressState) => state.learned
 export const selectDays = (state: ProgressState) => state.days
@@ -11,26 +10,6 @@ export const selectPractised = (state: ProgressState) => state.practised
 export const selectTrainerRecords = (state: ProgressState) => state.trainers
 
 export const selectAllAnswers = (state: ProgressState) => state.answers
-
-/** The pieces opened in the Player, the most recent first. */
-function practisedByRecency(practised: ProgressState['practised']): PieceId[] {
-  return Object.entries(practised)
-    .map(([id, date]) => ({ id, at: Date.parse(date ?? '') }))
-    .sort((a, b) => b.at - a.at)
-    .map(({ id }) => id)
-}
-
-/**
- * Continue (spec §5): the most recently practised piece still on the path, while it is not learned;
- * else the first unlearned step in path order; null when everything is learned.
- */
-export function selectSuggestedStep(state: ProgressState): PlacedStep | null {
-  const onPath = practisedByRecency(state.practised)
-    .map((id) => stepById(pieceStepId(id)))
-    .find((placed) => placed !== undefined)
-  if (onPath && state.learned[onPath.id] === undefined) return onPath
-  return curriculumSteps().find((placed) => state.learned[placed.id] === undefined) ?? null
-}
 
 export const selectIsLearned =
   (id: StepId) =>

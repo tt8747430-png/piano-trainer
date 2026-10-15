@@ -127,6 +127,19 @@ const findingHome: Lesson = {
           },
           answer: { notes: ['C', 'C'], rising: true },
         },
+        {
+          kind: 'link',
+          title: {
+            en: 'The five-finger position in the Player',
+            ru: 'Позиция пяти пальцев в плеере',
+          },
+          target: { opens: 'exercise', exercise: 'five-finger', root: note('C') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
+        },
       ],
     },
   ],

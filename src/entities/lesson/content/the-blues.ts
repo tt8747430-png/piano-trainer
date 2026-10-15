@@ -111,6 +111,21 @@ const theBlues: Lesson = {
           ask: { en: 'Play the blues’ V7 in C.', ru: 'Сыграйте блюзовый V7 в до мажоре.' },
           answer: { chord: 'G7' },
         },
+        {
+          kind: 'link',
+          title: { en: 'The C blues scale', ru: 'Блюзовая гамма от до' },
+          target: { opens: 'scales', root: note('C'), scale: 'blues' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'The blues through the keys', ru: 'Блюз по всем тональностям' },
+          target: {
+            opens: 'player',
+            numerals: 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7',
+            key: { tonic: note('C'), minor: false },
+            walk: 'fifths',
+          },
+        },
       ],
     },
   ],

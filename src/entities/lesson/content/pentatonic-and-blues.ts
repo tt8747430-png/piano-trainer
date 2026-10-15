@@ -118,6 +118,16 @@ const pentatonicAndBlues: Lesson = {
           },
           answer: { notes: ['C', 'E♭', 'F', 'G♭', 'G', 'B♭'], rising: true },
         },
+        {
+          kind: 'link',
+          title: { en: 'The C blues scale', ru: 'Блюзовая гамма от до' },
+          target: { opens: 'scales', root: note('C'), scale: 'blues' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
+        },
       ],
     },
   ],

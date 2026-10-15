@@ -36,7 +36,13 @@ const cadences: Lesson = {
             ru: 'Добавьте к V септиму, и тяготение усилится. В до мажоре си поднимается в до, а фа опускается в ми.',
           },
         },
-        { kind: 'chords', symbols: ['G7', 'C'] },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'G7', caption: 'V7', degrees: '1 | 5 ♭7 3', hands: 'G2 | D4 F4 B4' },
+            { symbol: 'C', caption: 'I', degrees: '1 | 1 3 1', hands: 'C3 | C4 E4 C5' },
+          ],
+        },
       ],
     },
     {
@@ -95,20 +101,20 @@ const cadences: Lesson = {
       ],
     },
     {
-      heading: { en: 'Hear them in a hymn', ru: 'Услышьте их в гимне' },
+      heading: { en: 'Question and answer', ru: 'Вопрос и ответ' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Most hymn lines end on V or I. Find each line’s cadence as you play Silent Night.',
-            ru: 'Большинство фраз гимна заканчиваются на V или I. Находите каденцию каждой фразы, играя «Тихую ночь».',
+            en: 'Many tunes ask, then answer. The first line stops on V, a half cadence. The second ends V–I, an authentic one.',
+            ru: 'Многие мелодии спрашивают и отвечают. Первая фраза останавливается на V — это половинная каденция. Вторая кончается V – I, полной.',
           },
         },
-        { kind: 'progression', numerals: 'I V I IV I V I', key: C_MAJOR },
+        { kind: 'progression', numerals: 'I IV I V I IV V I', key: C_MAJOR },
         {
           kind: 'link',
-          title: { en: 'Silent Night in the Player', ru: '«Тихая ночь» в плеере' },
-          target: { opens: 'piece', piece: 'silent' },
+          title: { en: 'Both lines in the Player', ru: 'Обе фразы в плеере' },
+          target: { opens: 'player', numerals: 'I IV I V I IV V I', key: C_MAJOR },
         },
         {
           kind: 'link',
@@ -137,6 +143,11 @@ const cadences: Lesson = {
           kind: 'question',
           ask: { en: 'Play V7 in C major.', ru: 'Сыграйте V7 в до мажоре.' },
           answer: { chord: 'G7' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          target: { opens: 'quiz', trainer: 'chord-role' },
         },
       ],
     },

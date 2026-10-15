@@ -124,6 +124,11 @@ const keySignatures: Lesson = {
           },
           answer: { notes: ['F#', 'C#', 'G#'] },
         },
+        {
+          kind: 'link',
+          title: { en: 'D major’s key', ru: 'Тональность ре мажор' },
+          target: { opens: 'key', key: { tonic: note('D'), minor: false } },
+        },
       ],
     },
   ],

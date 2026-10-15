@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { CirclePlay, Layers } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
-import { STEP_PAINT } from '@/entities/course'
+import { STEP_PAINT } from '@/entities/step'
 import { pieceById } from '@/entities/piece'
 import {
   keyParam,
@@ -104,7 +104,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         <RowLink
           title={title}
           {...PAGE_TILES.lesson}
-          render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+          render={<Link to="/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
         />
       )
     case 'progressions': {
@@ -202,6 +202,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
               search={{
                 ...(target.root ? { root: noteParam(target.root) } : {}),
                 ...(target.quality ? { quality: target.quality } : {}),
+                ...(target.kind ? { kind: target.kind } : {}),
               }}
             />
           }

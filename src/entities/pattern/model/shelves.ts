@@ -1,6 +1,6 @@
-import { METHOD_BOOK_IDS } from '@/entities/book'
+import { METHOD_BOOK_IDS, type MethodBookId } from '@/entities/book'
 import { isOneOf } from '@/shared/lib'
-import { PATTERN_GROUP_ENTRIES } from '../content/patterns'
+import { PATTERN_GROUP_ENTRIES, PATTERNS } from '../content/patterns'
 import type { PatternChoice } from './accompaniment'
 import type { BookPattern, PatternBook } from './book'
 import type { PatternRef } from './own'
@@ -89,3 +89,7 @@ export function pickerShelves(
   const hidden = new Set(choices.hidden)
   return shelves(book, choices, (id) => hidden.has(id) && id !== chosen)
 }
+
+/** The method book that teaches a built-in pattern; null for a style, which is no book's. */
+export const bookOfPattern = (id: PatternId): MethodBookId | null =>
+  PATTERN_GROUP_ENTRIES[PATTERNS[id].group].book

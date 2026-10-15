@@ -8,6 +8,7 @@ export const search: LocaleResources['search'] = {
     pages: 'Практика',
     songs: 'Песни',
     lessons: 'Уроки',
+    courses: 'Курсы',
     chords: 'Аккорды',
     scales: 'Гаммы',
     progressions: 'Последовательности',

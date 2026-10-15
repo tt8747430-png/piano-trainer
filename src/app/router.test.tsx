@@ -17,13 +17,14 @@ const ROUTES = [
   ['/play/bz5', '/play/$pieceId'],
   ['/play/walk', '/play/walk'],
   ['/play/chromatic', '/play/chromatic'],
-  ['/learn/chord-basics', '/learn/$courseId'],
+  ['/courses/gorshkov', '/courses/$courseId'],
+  ['/courses/gorshkov/chord-pulse', '/courses/$courseId/$lessonId'],
   ['/practice/chords', '/practice/chords'],
   ['/practice/scales', '/practice/scales'],
   ['/practice/intervals', '/practice/intervals'],
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
-  ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
+  ['/lessons/reading-chord-symbols', '/lessons/$lessonId'],
   ['/practice/quiz/build-chord', '/practice/quiz/$trainerId'],
   ['/settings', '/settings'],
   ['/search?q=dorian', '/search'],
@@ -72,7 +73,9 @@ describe('routes', () => {
   it.each([
     '/theory',
     '/theory/chords',
-    '/learn/lessons/nothing',
+    '/lessons/nothing',
+    '/lessons/five-ways',
+    '/courses/gorshkov/five-ways',
     '/practice/quiz/nothing',
     '/practice/progressions/flow',
     '/practice/tensions',
@@ -85,6 +88,9 @@ describe('routes', () => {
     '/practice/chords/find',
     '/practice/progressions/passing',
     '/learn/fundamentals',
+    // Where a course and a lesson were before ADR 0053.
+    '/learn/gorshkov',
+    '/learn/lessons/triads',
     '/practice/trainers/build-chord',
     '/practice/patterns/M1',
     '/practice/studies/ex3',
@@ -171,8 +177,9 @@ describe('the app shell', () => {
 
   it.each([
     ['/practice/scales', 'Practice'],
-    ['/learn/lessons/reading-chord-symbols', 'Learn'],
-    ['/learn/gorshkov', 'Learn'],
+    ['/lessons/reading-chord-symbols', 'Learn'],
+    ['/courses/gorshkov', 'Learn'],
+    ['/courses/gorshkov/chord-pulse', 'Learn'],
     ['/practice/quiz/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
@@ -193,8 +200,9 @@ describe('the app shell', () => {
     ['/songs/nothing', 'Go to Songs', '/songs'],
     ['/play/nothing', 'Go to Songs', '/songs'],
     ['/edit/nothing', 'Go to Songs', '/songs'],
-    ['/learn/lessons/nothing', 'Go to Learn', '/'],
-    ['/learn/nothing', 'Go to Learn', '/'],
+    ['/lessons/nothing', 'Go to Learn', '/'],
+    ['/courses/nothing', 'Go to Learn', '/'],
+    ['/courses/gorshkov/nothing', 'Go to Learn', '/'],
     ['/practice/quiz/nothing', 'Go to Quiz', '/practice/quiz'],
     ['/practice/accompaniment/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     [

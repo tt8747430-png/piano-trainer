@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { EXERCISES } from '@/entities/exercise'
+import { COURSES } from '@/entities/course'
 import { LESSONS } from '@/entities/lesson'
 import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
@@ -47,6 +48,9 @@ describe('indexEntries', () => {
     expect(ofKind('pages')).toHaveLength(PRACTICE_PAGE_IDS.length)
     expect(ofKind('songs')).toHaveLength(pieces.length)
     expect(ofKind('lessons')).toHaveLength(LESSONS.length)
+    expect(ofKind('courses')).toHaveLength(
+      COURSES.length + COURSES.reduce((sum, course) => sum + course.lessons.length, 0),
+    )
     expect(ofKind('chords')).toHaveLength(CHORD_QUALITIES.length)
     expect(ofKind('scales')).toHaveLength(SCALE_KINDS.length)
     expect(ofKind('progressions')).toHaveLength(
@@ -84,13 +88,13 @@ describe('indexEntries', () => {
     })
   })
 
-  it('names a lesson in the learner’s language under its course, and answers to the other', () => {
+  it('names a lesson in the learner’s language under its journey, and answers to the other', () => {
     const triads = LESSONS.find((lesson) => lesson.id === 'triads')
     if (!triads) throw new RangeError('no triads lesson')
     const english = titled(triads.title.en)
     expect(english).toMatchObject({
       kind: 'lessons',
-      detail: 'Chords',
+      detail: 'Foundations · Your first chords',
       target: { opens: 'lesson', lesson: 'triads' },
     })
     expect(english.words).toContain(triads.title.ru)

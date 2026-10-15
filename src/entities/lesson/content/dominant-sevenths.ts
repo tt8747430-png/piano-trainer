@@ -136,6 +136,16 @@ const dominantSevenths: Lesson = {
           },
           answer: { chord: 'C7' },
         },
+        {
+          kind: 'link',
+          title: { en: 'G7 in Chords', ru: 'G7 в разделе «Аккорды»' },
+          target: { opens: 'chords', chord: 'G7' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
       ],
     },
   ],

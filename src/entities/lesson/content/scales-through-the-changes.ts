@@ -117,8 +117,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep one shape and move it so its top note sings the melody, whatever key each chord lands in. Here an augmented triad sings Silent Night.',
-            ru: 'Сохраняйте одну фигуру и двигайте её так, чтобы верхний звук пел мелодию, в какую бы тональность ни попал аккорд. Здесь увеличенное трезвучие поёт «Тихую ночь».',
+            en: 'Keep one shape and move it so its top note sings the melody, whatever key each chord lands in. Here an augmented triad carries the melody on top.',
+            ru: 'Сохраняйте одну фигуру и двигайте её так, чтобы верхний звук пел мелодию, в какую бы тональность ни попал аккорд. Здесь мелодию сверху ведёт увеличенное трезвучие.',
           },
         },
         {

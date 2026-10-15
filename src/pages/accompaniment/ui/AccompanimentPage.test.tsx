@@ -43,11 +43,7 @@ describe('Practice → Accompaniment', () => {
       ['Styles', null],
       ['Yours', null],
     ])
-    expect(shelves()).toEqual([
-      'The five ways (lesson 3)',
-      'Right-hand techniques',
-      'Studies',
-    ])
+    expect(shelves()).toEqual(['The five ways (lesson 3)', 'Right-hand techniques', 'Studies'])
     expect(
       within(shelf('The five ways (lesson 3)')).getByRole('link', {
         name: /^1 · Bass \+ chords The chord on every beat over a held octave bass\.$/,
@@ -76,10 +72,7 @@ describe('Practice → Accompaniment', () => {
       'aria-current',
       'page',
     )
-    expect(shelves()).toEqual([
-      'Octaves and chords (level 2)',
-      'Called to Play, level 2',
-    ])
+    expect(shelves()).toEqual(['Octaves and chords (level 2)', 'Called to Play, level 2'])
     expect(rows('Octaves and chords (level 2)')).toEqual(
       ['oct', 'octs', 'chd'].map((id) => `/practice/accompaniment/patterns/${id}`),
     )

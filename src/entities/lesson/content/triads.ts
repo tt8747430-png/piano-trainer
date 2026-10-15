@@ -46,6 +46,20 @@ const triads: Lesson = {
       ],
     },
     {
+      heading: { en: 'Every other letter', ru: 'Через букву' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'A triad’s letters always skip one: D F A, E G B. Sharps and flats then set its kind. D major is D F♯ A, D minor D F A.',
+            ru: 'Буквы трезвучия всегда идут через одну: ре фа ля, ми соль си. Диезы и бемоли задают его вид. Ре мажор — ре, фа-диез, ля, ре минор — ре, фа, ля.',
+          },
+        },
+        { kind: 'chords', symbols: ['D', 'Dm'] },
+        { kind: 'chords', symbols: ['A', 'Am'] },
+      ],
+    },
+    {
       heading: { en: 'Diminished and augmented', ru: 'Уменьшённое и увеличенное' },
       blocks: [
         {
@@ -60,16 +74,6 @@ const triads: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },
-        {
-          kind: 'link',
-          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
-          target: { opens: 'quiz', trainer: 'build-chord' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
-          target: { opens: 'quiz', trainer: 'chords-by-ear' },
-        },
       ],
     },
     {
@@ -89,6 +93,16 @@ const triads: Lesson = {
           kind: 'question',
           ask: { en: 'Play F augmented.', ru: 'Сыграйте увеличенное трезвучие от фа.' },
           answer: { chord: 'F+' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
         },
       ],
     },

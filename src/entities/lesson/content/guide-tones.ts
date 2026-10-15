@@ -124,6 +124,11 @@ const guideTones: Lesson = {
           ask: { en: 'Play the 3rd and 7th of CMaj7.', ru: 'Сыграйте терцию и септиму CMaj7.' },
           answer: { notes: ['E', 'B'] },
         },
+        {
+          kind: 'link',
+          title: { en: 'Name a chord in the Quiz', ru: 'Названия аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'name-chord' },
+        },
       ],
     },
   ],

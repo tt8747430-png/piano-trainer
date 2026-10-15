@@ -125,6 +125,22 @@ const alteredDominants: Lesson = {
           },
           answer: { chord: 'D♭7' },
         },
+        {
+          kind: 'link',
+          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'ii–V–I through the keys', ru: 'ii–V–I по всем тональностям' },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I',
+            key: { tonic: note('C'), minor: false },
+            size: 'sevenths',
+            walk: 'fifths',
+          },
+        },
       ],
     },
   ],

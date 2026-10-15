@@ -211,6 +211,10 @@ describe('arpeggioFingering', () => {
     expect(digits(arpeggioFingering(arpeggio(56, [4, 3, 5], 1), 'lh'))).toBe('2142')
   })
 
+  it('counts up to the right hand’s first thumb from two black keys: B♭ minor 2 3 1', () => {
+    expect(digits(arpeggioFingering(arpeggio(70, [3, 4, 5], 2), 'rh'))).toBe('2312312')
+  })
+
   it('uses only fingers 1–5 on every root and shape', () => {
     const shapes = [
       [4, 3, 5],

@@ -135,6 +135,11 @@ const modes: Lesson = {
           ask: { en: 'Play F Lydian up from F.', ru: 'Сыграйте фа лидийский вверх от фа.' },
           answer: { notes: ['F', 'G', 'A', 'B', 'C', 'D', 'E'], rising: true },
         },
+        {
+          kind: 'link',
+          title: { en: 'The modes in the Player', ru: 'Лады в плеере' },
+          target: { opens: 'exercise', exercise: 'modes', root: note('C') },
+        },
       ],
     },
   ],

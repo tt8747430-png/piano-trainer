@@ -5,86 +5,94 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { courseById } from '@/entities/course'
 
+const gorshkov = courseById('gorshkov')!
+
 describe('A course', () => {
-  it('lists its lessons in order under one way in, its first', async () => {
-    await renderApp('/learn/gorshkov')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Горшков' })).toBeInTheDocument()
-    const lessons = courseById('gorshkov')?.lessons ?? []
+  it('lists its own lessons in order under one way in, its first', async () => {
+    await renderApp('/courses/gorshkov')
+    expect(
+      await screen.findByRole('heading', { level: 1, name: gorshkov.title.en }),
+    ).toBeInTheDocument()
     const region = screen.getByRole('region', { name: 'Lessons' })
     const hrefs = within(region)
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'))
-    expect(hrefs).toEqual(lessons.map((id) => `/learn/lessons/${id}`))
-    expect(screen.getByRole('link', { name: /^Start/ })).toHaveAttribute('href', hrefs[0])
-    expect(screen.getByText(`0 of ${lessons.length + 5} learned`)).toBeInTheDocument()
-    expect(screen.getByText('Advanced · 9 lessons')).toBeInTheDocument()
+    expect(hrefs).toEqual(gorshkov.lessons.map((lesson) => `/courses/gorshkov/${lesson.id}`))
+    expect(screen.getByRole('link', { name: /^Start course/ })).toHaveAttribute('href', hrefs[0])
+    const total = gorshkov.lessons.length + gorshkov.songs.length
+    expect(screen.getByText(`0 of ${total} learned`)).toBeInTheDocument()
+    const facts = screen.getByRole('list', { name: 'About this course' })
+    expect(facts).toHaveTextContent(`Advanced`)
+    expect(facts).toHaveTextContent(`Weeks: ${gorshkov.weeks}`)
+    expect(facts).toHaveTextContent(`Lessons: ${gorshkov.lessons.length}`)
+    expect(facts).toHaveTextContent(`Songs: ${gorshkov.songs.length}`)
   })
 
-  it('lists what to practise after its lessons: its chords and songs', async () => {
-    await renderApp('/learn/gorshkov')
-    const practise = await screen.findByRole('region', { name: 'Practise' })
-    const links = within(practise).getAllByRole('link')
-    expect(links[0]?.getAttribute('href')).toMatch(/^\/practice\/chords\?.*step=chords(%3A|:)nin/)
-    expect(links.slice(1).map((link) => link.getAttribute('href'))).toEqual([
-      '/songs/romashki',
-      '/songs/olen',
-      '/songs/wafriend',
-      '/songs/metel',
-    ])
+  it('ends on its guided songs', async () => {
+    await renderApp('/courses/gorshkov')
+    const songs = await screen.findByRole('region', { name: 'Guided songs' })
+    expect(
+      within(songs)
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href')),
+    ).toEqual(gorshkov.songs.map((id) => `/songs/${id}`))
   })
 
-  it('continues with the first step not learned, and says what is learned', async () => {
-    const { progressStore } = await renderApp('/learn/first-steps')
-    await screen.findByRole('heading', { level: 1, name: 'First steps at the piano' })
+  it('continues with the first lesson not learned, then its songs, then offers a review', async () => {
+    const { progressStore } = await renderApp('/courses/gorshkov')
+    await screen.findByRole('heading', { level: 1 })
+    const [first, second] = gorshkov.lessons
     act(() =>
-      progressStore.setState({ learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' } }),
+      progressStore.setState({ learned: { [`course:gorshkov/${first?.id}`]: '2026-10-01' } }),
     )
     expect(screen.getByRole('link', { name: /^Continue/ })).toHaveAttribute(
       'href',
-      '/learn/lessons/hands-and-fingers',
+      `/courses/gorshkov/${second?.id}`,
     )
-    const [first] = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('listitem')
-    expect(first).toHaveTextContent(/Learned/)
-  })
-
-  it('offers a review once every step is learned', async () => {
-    const { progressStore } = await renderApp('/learn/gospel')
-    await screen.findByRole('heading', { level: 1, name: 'Gospel' })
-    const lessons = courseById('gospel')?.lessons ?? []
+    const [row] = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')
+    expect(row).not.toHaveAttribute('aria-current')
     act(() =>
       progressStore.setState({
-        learned: Object.fromEntries(lessons.map((id) => [`lesson:${id}`, '2026-10-01'])),
+        learned: Object.fromEntries(
+          gorshkov.lessons.map((lesson) => [`course:gorshkov/${lesson.id}`, '2026-10-01']),
+        ),
+      }),
+    )
+    expect(screen.getByRole('link', { name: /^Continue/ })).toHaveAttribute(
+      'href',
+      `/play/${gorshkov.songs[0]}`,
+    )
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries([
+          ...gorshkov.lessons.map((lesson) => [`course:gorshkov/${lesson.id}`, '2026-10-01']),
+          ...gorshkov.songs.map((id) => [`piece:${id}`, '2026-10-01']),
+        ]),
       }),
     )
     expect(screen.getByRole('link', { name: /^Review/ })).toHaveAttribute(
       'href',
-      `/learn/lessons/${lessons[0]}`,
+      `/courses/gorshkov/${first?.id}`,
     )
     expect(screen.getByText('Course complete')).toBeInTheDocument()
   })
 
-  it('leads on to the next course, into the next stage at a stage’s end', async () => {
-    await renderApp('/learn/called-to-play')
-    const next = await screen.findByRole('region', { name: 'Next course' })
-    expect(within(next).getByRole('link')).toHaveAttribute('href', '/learn/accompaniment')
-    expect(next).toHaveTextContent('Intermediate · Course 6')
-  })
-
-  it('goes back to Learn when opened directly', async () => {
+  it('goes back to the Courses when opened directly', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/gospel')
+    const { router } = await renderApp('/courses/gorshkov')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(router.state.location.search).toMatchObject({ view: 'courses' })
   })
 
-  it('is not found for a course there is not', async () => {
-    await renderApp('/learn/nothing')
+  it('is not found for a course there is not, nor a lesson it does not have', async () => {
+    await renderApp('/courses/nothing')
     expect(await screen.findByText('Page not found')).toBeInTheDocument()
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    await renderApp('/learn/accompaniment', { locale: 'ru' })
-    await screen.findByRole('heading', { level: 1, name: 'Аккомпанемент' })
+    await renderApp('/courses/seven-types', { locale: 'ru' })
+    await screen.findByRole('heading', { level: 1, name: courseById('seven-types')?.title.ru })
     expect(untranslated(document.body)).toEqual([])
   })
 })
