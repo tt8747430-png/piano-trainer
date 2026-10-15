@@ -107,4 +107,27 @@ describe('nameChords', () => {
     expect(named(61, 64, 68)[0]).toBe('C#m')
     expect(named(61, 65, 68)[0]).toBe('D♭')
   })
+
+  it('names an inversion only whole: a slash chord leaves no tone out but the 5th over its 3rd or 7th', () => {
+    expect(named(48, 50, 52)).toEqual([])
+    expect(named(48, 53, 55)).toEqual(['Csus4', 'Fsus2/C'])
+    expect(named(48, 50, 55)).toEqual(['Csus2', 'Gsus4/C'])
+    expect(named(48, 52, 54, 58)).toEqual(['C7♭5', 'F#7♭5/C'])
+    expect(named(52, 58, 60)).toEqual(['C7/E'])
+    expect(named(48, 52, 53, 55)).toEqual(['Cadd4'])
+  })
+
+  it('names a slash chord with no added tone but its 6th', () => {
+    expect(named(48, 52, 55, 58, 62)).toEqual(['C9'])
+    expect(named(48, 52, 55, 62)).toEqual(['Cadd9'])
+    expect(named(48, 52, 55, 69)).toEqual(['C6', 'Am7/C'])
+    expect(named(48, 52, 55, 59, 62)).toEqual(['CMaj9'])
+  })
+
+  it('spells the bass of a slash chord as the key writes it, never with a double accidental or B# for C', () => {
+    const C = { tonic: note('C'), minor: false }
+    const inKey = (...keys: number[]) => nameChords(keys.map(midi), C).map((each) => each.symbol)
+    expect(inKey(48, 52, 56)).toEqual(['C+', 'E+/C', 'A♭+/C'])
+    expect(inKey(48, 51, 54, 57)).toEqual(['C°7', 'E♭°7/C', 'F#°7/C', 'A°7/C'])
+  })
 })

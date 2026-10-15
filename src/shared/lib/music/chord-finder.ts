@@ -9,9 +9,9 @@ import {
   type ChordParts,
 } from './chord-parts'
 import type { Key } from './key'
-import { note, type SpelledNote } from './note'
+import { note, pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
-import { keyTones } from './scale'
+import { keyTones, spellInKey } from './scale'
 import { TWO_HANDS_FROM } from './place'
 import type { ChordRole, Tone } from './tone'
 
@@ -113,6 +113,29 @@ const flatFiveOverTensions = (parts: ChordParts): boolean =>
  */
 const addsOverSeventh = (parts: ChordParts): boolean => parts.size >= 7 && parts.added.length > 0
 
+/**
+ * A chord over a bass not its root is read whole, as a plain chord: no added tone but a 6th, on a
+ * major or minor triad, a suspended one only a triad, and no tone left out but the 5th over its 3rd
+ * or 7th (`C7/E` with no 5th).
+ * Else the notes read as a cluster under a name no one writes: C D E as `D7sus2/C` with no 5th.
+ */
+function plainInversion({ parts, leftOut }: Shape, bass: Tone): boolean {
+  const triadic = parts.triad === 'maj' || parts.triad === 'min'
+  const added = parts.added.every((tone) => tone === 'add6' && triadic)
+  const whole =
+    leftOut.length === 0 ||
+    (leftOut.length === 1 &&
+      leftOut[0] === '5th' &&
+      triadic &&
+      (bass.role === '3rd' || bass.role === '7th'))
+  const suspended = parts.triad === 'sus2' || parts.triad === 'sus4'
+  return added && whole && !(suspended && parts.size >= 7)
+}
+
+/** A slash chord's bass written as a reader looks for it: C, not B# or D𝄫, under an E+ or an E♭°7. */
+const bassSpelling = (bass: SpelledNote, key: Key | undefined): SpelledNote =>
+  plainRoot(bass) === bass ? bass : key ? spellInKey(pitchClassOf(bass), key) : plainRoot(bass)
+
 /** The Chords explorer shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
@@ -137,7 +160,8 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
       const chord = spelledChord(rootPc, shape.parts, key)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]
-      const bass = rootPc === bassPc || !bassTone ? undefined : bassTone.note
+      if (rootPc !== bassPc && !(bassTone && plainInversion(shape, bassTone))) return []
+      const bass = rootPc === bassPc || !bassTone ? undefined : bassSpelling(bassTone.note, key)
       return [
         {
           chord,
