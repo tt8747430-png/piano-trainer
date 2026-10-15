@@ -1,7 +1,10 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
-import { createSavedStore, savedObject, type SavingOptions } from '@/shared/lib'
+import { createSavedStore, readKeyList, savedObject, type SavingOptions } from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
 import {
+  CHORD_KEYS_MAX,
+  DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -9,6 +12,7 @@ import {
   DEFAULT_TRAINER,
   DEVICE_NAME_MAX,
   PRACTICE_TOGGLES,
+  REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
   isKeySize,
@@ -19,6 +23,7 @@ import {
   isSwipe,
   isTheme,
   isTouch,
+  type ChordFinderSettings,
   type KeyboardSettings,
   type MidiSettings,
   type PracticeToggles,
@@ -54,6 +59,7 @@ export function createSettingsStore({
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
         midi: DEFAULT_MIDI,
+        chordFinder: DEFAULT_CHORD_FINDER,
       },
       read: sanitize,
     },
@@ -107,6 +113,28 @@ function midiSettings(value: unknown): MidiSettings {
   }
 }
 
+/** A chord remembered: its keys on the piano, each once, lowest first; none past two hands' worth. */
+function rememberedChord(value: unknown): Midi[] {
+  if (!Array.isArray(value) || value.length > CHORD_KEYS_MAX) return []
+  return value.every((key) => typeof key === 'number') ? readKeyList(value.join('-')) : []
+}
+
+/** The Chord finder's switches keep what was saved; its chords keep each one still a chord's keys. */
+function chordFinderSettings(value: unknown): ChordFinderSettings {
+  const saved = savedObject<ChordFinderSettings>(value)
+  const chords: unknown = saved.chords
+  return {
+    remember: typeof saved.remember === 'boolean' ? saved.remember : DEFAULT_CHORD_FINDER.remember,
+    inKeys: typeof saved.inKeys === 'boolean' ? saved.inKeys : DEFAULT_CHORD_FINDER.inKeys,
+    chords: Array.isArray(chords)
+      ? chords
+          .map(rememberedChord)
+          .filter((keys) => keys.length > 0)
+          .slice(-REMEMBERED_CHORDS)
+      : [],
+  }
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -135,5 +163,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     midi: midiSettings(saved.midi),
+    chordFinder: chordFinderSettings(saved.chordFinder),
   }
 }

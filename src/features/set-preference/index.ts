@@ -1,4 +1,5 @@
 export { setAutoNext } from './set-auto-next'
+export { rememberChords, setChordFinder } from './set-chord-finder'
 export { setKeyboard } from './set-keyboard'
 export { setLocale } from './set-locale'
 export { setMidi } from './set-midi'

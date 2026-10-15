@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  selectChordFinder,
   selectKeyboard,
   selectMidi,
   selectPractice,
@@ -8,6 +9,7 @@ import {
   selectTrainer,
 } from './selectors'
 import {
+  DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -27,6 +29,7 @@ describe('settings selectors', () => {
       recorder: DEFAULT_RECORDER,
       sidebar: 'collapsed',
       midi: DEFAULT_MIDI,
+      chordFinder: DEFAULT_CHORD_FINDER,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
@@ -34,5 +37,6 @@ describe('settings selectors', () => {
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)
+    expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
   })
 })

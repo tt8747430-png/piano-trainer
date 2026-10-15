@@ -3,12 +3,24 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 
 const keyboard = () => screen.getByRole('group', { name: 'Keyboard' })
 const key = (name: string) => within(keyboard()).getByRole('button', { name })
 const name = () => screen.getAllByRole('heading', { level: 2 })[0]
 const played = () => screen.getByRole('region', { name: 'Played' })
+const playedNames = () =>
+  within(played())
+    .getAllByRole('listitem')
+    .map((item) => item.textContent?.split(' ')[0])
+
+/** Turns on remembering the chords played, in the Chord finder's settings. */
+async function remember(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
+  await user.click(screen.getByRole('switch', { name: /Remember the chords played/ }))
+  await user.click(screen.getByRole('button', { name: 'Close' }))
+}
 
 describe('Practice → Chord finder', () => {
   it('names the keys tapped, keeps them in the URL, and reads them every way they read', async () => {
@@ -35,9 +47,72 @@ describe('Practice → Chord finder', () => {
     )
   })
 
-  it('names a chord held on the MIDI keyboard, and reads it on once it is let go', async () => {
+  it('writes only the chord down now on the staff, and nothing once it is let go', async () => {
     const { midi: piano } = await renderApp('/practice/chord-finder')
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    const staff = () => screen.getByRole('region', { name: 'On the staff' })
+    expect(within(staff()).getByText('The chord you play is written here.')).toBeInTheDocument()
+    act(() => {
+      for (const each of [48, 52, 55]) piano.press(midi(each))
+    })
+    await waitFor(() =>
+      expect(
+        within(staff())
+          .getAllByRole('listitem')
+          .map((item) => item.textContent),
+      ).toEqual(['C Major triad']),
+    )
+    act(() => {
+      for (const each of [48, 52, 55]) piano.release(midi(each))
+    })
+    await waitFor(() =>
+      expect(within(staff()).getByText('The chord you play is written here.')).toBeInTheDocument(),
+    )
+    expect(name()).toHaveTextContent(/^C$/)
+  })
+
+  it('remembers the chords played where asked, on the device too, and forgets them once not', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/practice/chord-finder', { storage })
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
+    for (const chord of [[48, 52, 55], [60], [53, 57, 60]]) {
+      act(() => {
+        for (const each of chord) first.midi.press(midi(each))
+      })
+      act(() => {
+        for (const each of chord) first.midi.release(midi(each))
+      })
+      await waitFor(() => expect(screen.queryByText(/^Held/)).not.toBeInTheDocument())
+    }
+    await waitFor(() => expect(playedNames()).toEqual(['C', 'F']))
+    first.unmount()
+    await renderApp('/practice/chord-finder', { storage })
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    expect(playedNames()).toEqual(['C', 'F'])
+    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
+    await user.click(screen.getByRole('switch', { name: /Remember the chords played/ }))
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.getByRole('region', { name: 'On the staff' })).toBeInTheDocument()
+    expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
+  })
+
+  it('hides the keys a chord is in, where asked', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=60-64-67')
+    expect(await screen.findByRole('region', { name: 'In these keys' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
+    await user.click(screen.getByRole('switch', { name: 'Show the keys it is in' }))
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
+  })
+
+  it('names a chord held on the MIDI keyboard, and reads it on once it is let go', async () => {
+    const user = userEvent.setup()
+    const { midi: piano } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
     act(() => {
       for (const each of [48, 52, 55, 58]) piano.press(midi(each))
     })
@@ -55,13 +130,7 @@ describe('Practice → Chord finder', () => {
       for (const each of [53, 57, 60]) piano.press(midi(each))
     })
     await waitFor(() => expect(name()).toHaveTextContent(/^F$/))
-    await waitFor(() =>
-      expect(
-        within(played())
-          .getAllByRole('listitem')
-          .map((item) => item.textContent?.split(' ')[0]),
-      ).toEqual(['C7', 'F']),
-    )
+    await waitFor(() => expect(playedNames()).toEqual(['C7', 'F']))
   })
 
   it('names a 5th as its power chord', async () => {
@@ -83,7 +152,7 @@ describe('Practice → Chord finder', () => {
     await user.click(key('C4'))
     await user.click(screen.getByRole('button', { name: 'Clear' }))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
-    expect(screen.getByText('Each chord you play is written here.')).toBeInTheDocument()
+    expect(screen.getByText('The chord you play is written here.')).toBeInTheDocument()
   })
 
   it('opens the chord in Chords, and the keys that hold it', async () => {

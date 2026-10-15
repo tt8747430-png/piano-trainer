@@ -1,7 +1,9 @@
 export {
   PLAYING_TOGGLES,
+  REMEMBERED_CHORDS,
   THEMES,
   defaultKeyboard,
+  type ChordFinderSettings,
   type KeyboardSettings,
   type MidiSettings,
   type PracticeToggle,
@@ -16,6 +18,7 @@ export {
   type SettingsStore,
 } from './model/store'
 export {
+  selectChordFinder,
   selectKeyboard,
   selectLocale,
   selectMidi,

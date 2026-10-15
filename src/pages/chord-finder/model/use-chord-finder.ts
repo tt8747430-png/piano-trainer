@@ -1,12 +1,15 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useHeldKeys } from '@/features/connect-midi'
+import { rememberChords, setChordFinder } from '@/features/set-preference'
 import { IN_PLACE, keyListParam, readKeyList, toggled, useWakeLock } from '@/shared/lib'
 import { keyFromParam, type Key, type Midi } from '@/shared/lib/music'
 import {
   EMPTY_LOG,
   findChord,
   logKeys,
+  namesChord,
   type ChordLog,
   type ChordSource,
   type Finding,
@@ -22,8 +25,17 @@ interface ChordFinder {
   readonly source: ChordSource
   readonly musicKey: Key
   readonly finding: Finding
-  /** The chords played, oldest first, the one shown last. */
-  readonly played: readonly (readonly Midi[])[]
+  /**
+   * What the staff writes: the chords played, oldest first, where they are remembered; else the
+   * chord down now alone, and nothing once it is let go.
+   */
+  readonly staff: readonly (readonly Midi[])[]
+  /** Whether the chords played are remembered, on the staff and on the device. */
+  readonly remember: boolean
+  setRemember(on: boolean): void
+  /** Whether the keys the chord is in are shown. */
+  readonly inKeys: boolean
+  setInKeys(on: boolean): void
   /** The reading chosen among the chord's names. */
   readonly reading: number
   setReading(at: number): void
@@ -36,19 +48,24 @@ const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...keys].sort((a, b) => a
 
 /**
  * The chord a MIDI keyboard plays, as its keys went down, read on once they are let go; else the keys
- * tapped. Each change of the keys down is logged, so the staff writes the chords played in turn.
+ * tapped. Each change of the keys down is logged; where the chords are remembered, the staff writes
+ * them in turn and the device keeps them, else it writes the chord down now.
  */
 export function useChordFinder(view: ChordFinderView): ChordFinder {
   // The screen stays on while the finder is open: a phone on the stand does not lock mid-chord.
   useWakeLock()
   const navigate = useNavigate({ from: '/practice/chord-finder' })
   const held = useHeldKeys()
+  const store = useSettingsStoreApi()
+  const settings = useSettings(selectChordFinder)
   const tapped = readKeyList(view.keys)
   const down = held.size > 0 ? lowestFirst(held) : tapped
   const downKey = keyListParam(down)
 
   // The log hears each change of the keys down, as it happens (React's "adjust state on change").
-  const [log, setLog] = useState<ChordLog>(EMPTY_LOG)
+  const [log, setLog] = useState<ChordLog>(() =>
+    settings.remember ? { ...EMPTY_LOG, chords: settings.chords } : EMPTY_LOG,
+  )
   const [heard, setHeard] = useState('')
   if (downKey !== heard) {
     setHeard(downKey)
@@ -66,6 +83,19 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
   const [reading, setReading] = useState({ keys: shownKey, at: 0 })
   const at = reading.keys === shownKey ? reading.at : 0
 
+  // The device keeps the chords played that name one: not a note on the way to the next.
+  const { remember } = settings
+  useEffect(() => {
+    if (remember) rememberChords(store, log.chords.filter(namesChord))
+  }, [store, remember, log.chords])
+
+  const forget = () => {
+    // The keys down now are heard already: the log starts empty, not from them again.
+    setLog(EMPTY_LOG)
+    setHeard(downKey)
+  }
+  const now = held.size > 0 ? [last] : tapped.length > 0 ? [tapped] : []
+
   const write = (keysParam: string) =>
     void navigate({ search: (prev) => ({ ...prev, keys: keysParam }), ...IN_PLACE })
 
@@ -75,15 +105,20 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     source,
     musicKey,
     finding: findChord(keys, musicKey),
-    played: log.chords,
+    staff: remember ? log.chords : now,
+    remember,
+    setRemember: (on) => {
+      if (!on) forget()
+      setChordFinder(store, { remember: on })
+    },
+    inKeys: settings.inKeys,
+    setInKeys: (on) => setChordFinder(store, { inKeys: on }),
     reading: at,
     setReading: (next) => setReading({ keys: shownKey, at: next }),
     tap: (key) => write(keyListParam(toggled(tapped, key))),
-    canClear: keys.length > 0 || log.chords.length > 0,
+    canClear: keys.length > 0 || (remember && log.chords.length > 0),
     clear: () => {
-      // The keys down now are heard already: the log starts empty, not from them again.
-      setLog(EMPTY_LOG)
-      setHeard(downKey)
+      forget()
       write('')
     },
   }

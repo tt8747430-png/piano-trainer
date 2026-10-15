@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
 import {
+  DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -28,6 +29,7 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   midi: DEFAULT_MIDI,
+  chordFinder: DEFAULT_CHORD_FINDER,
 }
 
 describe('createSettingsStore', () => {
@@ -96,8 +98,32 @@ describe('createSettingsStore', () => {
         touch: 'light',
         pedal: 'normal',
       },
+      chordFinder: {
+        remember: true,
+        inKeys: false,
+        chords: [
+          [48, 52, 55],
+          [53, 57, 60],
+        ],
+      },
     }
     expect(restored(saved)).toEqual(saved)
+  })
+
+  it('keeps each chord remembered that is still the keys of one, the newest at most', () => {
+    const chords = [[60, 64, 67], 'C', [60, 'E'], [], [200, 60, 64], Array(11).fill(60)]
+    expect(restored({ chordFinder: { remember: 'yes', chords } }).chordFinder).toEqual({
+      remember: false,
+      inKeys: true,
+      chords: [
+        [60, 64, 67],
+        [60, 64],
+      ],
+    })
+    const many = Array.from({ length: 30 }, (_, i) => [40 + i])
+    const kept = restored({ chordFinder: { chords: many } }).chordFinder.chords
+    expect(kept).toHaveLength(24)
+    expect(kept.at(-1)).toEqual([69])
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {

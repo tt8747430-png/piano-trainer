@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
+import { midi } from '@/shared/lib/music'
 import {
+  rememberChords,
   setAutoNext,
+  setChordFinder,
   setKeyboard,
   setLocale,
   setPracticeToggle,
@@ -97,5 +100,19 @@ describe('set-preference', () => {
       namedKeys: 'all',
     })
     expect(saved(storage).keyboard).toEqual(store.getState().keyboard)
+  })
+
+  it('setChordFinder saves a switch; turned off, the Chord finder forgets its chords', () => {
+    const { storage, store } = setUp()
+    const C = [midi(60), midi(64), midi(67)]
+    rememberChords(store, [C])
+    expect(saved(storage).chordFinder.chords).toEqual([])
+    setChordFinder(store, { remember: true })
+    rememberChords(store, [C, C])
+    expect(saved(storage).chordFinder).toEqual({ remember: true, inKeys: true, chords: [C, C] })
+    setChordFinder(store, { inKeys: false })
+    expect(store.getState().chordFinder.chords).toEqual([C, C])
+    setChordFinder(store, { remember: false })
+    expect(saved(storage).chordFinder).toEqual({ remember: false, inKeys: false, chords: [] })
   })
 })

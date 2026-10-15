@@ -202,6 +202,13 @@ export const practice = {
     state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
     played: 'Played',
     playedEmpty: 'Each chord you play is written here.',
+    // The staff where the chords are not remembered: the chord down now, else nothing.
+    staff: 'On the staff',
+    staffEmpty: 'The chord you play is written here.',
+    settings: 'Chord finder settings',
+    remember: 'Remember the chords played',
+    rememberDetail: 'The staff keeps the last {{count}}, and so does this device',
+    inKeysShown: 'Show the keys it is in',
   },
   passingChords: {
     inKey: 'In the key',

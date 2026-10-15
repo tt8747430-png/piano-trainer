@@ -12,6 +12,7 @@ import {
   type PedalWay,
   type Swipe,
 } from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
 import { TOUCHES, type Touch } from '@/shared/lib/schedule'
 
 export const THEMES = ['system', 'light', 'dark'] as const
@@ -81,6 +82,21 @@ export interface MidiSettings {
   readonly pedal: PedalWay
 }
 
+/** The Chord finder's own settings (ADR 0054), and the chords it remembers. */
+export interface ChordFinderSettings {
+  /** The staff keeps the chords played in turn, and so does the device; else it writes only the chord down now. */
+  readonly remember: boolean
+  /** The keys the chord is in, each with its numeral, shown under it. */
+  readonly inKeys: boolean
+  /** The chords remembered, oldest first, each its keys lowest first. */
+  readonly chords: readonly (readonly Midi[])[]
+}
+
+/** The most chords the Chord finder remembers: the newest are kept. */
+export const REMEMBERED_CHORDS = 24
+/** The most keys a chord remembered holds: two hands'. */
+export const CHORD_KEYS_MAX = 10
+
 export interface SettingsState {
   theme: Theme
   locale: Locale
@@ -90,6 +106,7 @@ export interface SettingsState {
   recorder: RecorderSettings
   sidebar: Sidebar
   midi: MidiSettings
+  chordFinder: ChordFinderSettings
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -120,6 +137,13 @@ export const DEFAULT_MIDI: MidiSettings = {
 export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
+
+/** The staff writes only the chord down now; the keys it is in are shown. */
+export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
+  remember: false,
+  inKeys: true,
+  chords: [],
+}
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

@@ -1,5 +1,6 @@
 import {
   nameChords,
+  note,
   noteName,
   pitchClass,
   spanInterval,
@@ -61,6 +62,15 @@ export function findChord(keys: readonly Midi[], key: Key): Finding {
   const [best, ...others] = nameChords(keys, key)
   return best ? { kind: 'chord', readings: [best, ...others] } : { kind: 'none' }
 }
+
+/** Whether the keys name a chord: three notes or more that read as one, or a power chord. */
+export function namesChord(keys: readonly Midi[]): boolean {
+  const kind = findChord(keys, C_MAJOR)
+  return kind.kind === 'chord' || (kind.kind === 'interval' && kind.power !== undefined)
+}
+
+/** Any key: whether keys name a chord is not a matter of how they are spelled. */
+const C_MAJOR: Key = { tonic: note('C'), minor: false }
 
 /** The tone of a reading a key plays. */
 export const toneOfKey = (found: FoundChord, key: Midi): Tone | undefined =>

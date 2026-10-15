@@ -50,14 +50,16 @@ function BarNames({ layout, names }: { layout: ScoreLayout; names: readonly Said
 /**
  * The chords played (ADR 0054), oldest first, each a whole note in a bar of its own on a grand staff,
  * spelled in the key chosen and named over its bar, the newest last; for a screen reader, the names
- * in order.
+ * in order. Where the chords are not remembered, it writes the one chord down now.
  */
 export function ChordTrail({
   chords,
   musicKey,
+  remember,
 }: {
   chords: readonly (readonly Midi[])[]
   musicKey: Key
+  remember: boolean
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
@@ -112,7 +114,7 @@ export function ChordTrail({
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3 card p-4">
       <h2 id={id} className="text-2xl">
-        {t('practice:chordFinder.played')}
+        {remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')}
       </h2>
       <div
         ref={scroller}
@@ -123,7 +125,9 @@ export function ChordTrail({
         </LazyScoreView>
       </div>
       {chords.length === 0 ? (
-        <p className="text-muted-foreground">{t('practice:chordFinder.playedEmpty')}</p>
+        <p className="text-muted-foreground">
+          {remember ? t('practice:chordFinder.playedEmpty') : t('practice:chordFinder.staffEmpty')}
+        </p>
       ) : (
         <ol className="sr-only">
           {names.map((name, i) => (

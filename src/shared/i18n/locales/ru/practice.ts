@@ -191,6 +191,12 @@ export const practice: LocaleResources['practice'] = {
     state: { held: 'Зажат', last: 'Последний', tapped: 'Нажат' },
     played: 'Сыграно',
     playedEmpty: 'Здесь записывается каждый сыгранный аккорд.',
+    staff: 'На нотном стане',
+    staffEmpty: 'Здесь записывается аккорд, который вы играете.',
+    settings: 'Настройки определителя аккордов',
+    remember: 'Запоминать сыгранные аккорды',
+    rememberDetail: 'Нотный стан хранит последние {{count}}, и это устройство тоже',
+    inKeysShown: 'Показывать тональности аккорда',
   },
   passingChords: {
     inKey: 'В тональности',
