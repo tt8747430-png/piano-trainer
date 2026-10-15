@@ -8,8 +8,6 @@ const rightHandRuns: Lesson = {
     en: 'A run down to the root and a run up 1–2–3–5, then a song with your own plan.',
     ru: 'Пассаж вниз к основному тону и пассаж вверх 1–2–3–5, затем песня по своему плану.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Down and up', ru: 'Вниз и вверх' },

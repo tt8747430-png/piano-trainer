@@ -8,8 +8,6 @@ const chordFamily: Lesson = {
     en: 'One scale, seven chords: their Roman numerals, the three main ones and the key’s 7th chords.',
     ru: 'Одна гамма — семь аккордов: их римские цифры, три главных и септаккорды тональности.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'One scale, seven chords', ru: 'Одна гамма — семь аккордов' },
@@ -72,6 +70,11 @@ const chordFamily: Lesson = {
           kind: 'chords',
           symbols: ['CMaj7', 'Dm7', 'Em7', 'FMaj7', 'G7', 'Am7', 'Bm7♭5'],
           apart: true,
+        },
+        {
+          kind: 'link',
+          title: { en: 'A key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
+          target: { opens: 'quiz', trainer: 'key-degrees' },
         },
       ],
     },

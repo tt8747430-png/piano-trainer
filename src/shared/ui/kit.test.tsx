@@ -7,7 +7,7 @@ import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { InversionChoice } from './InversionChoice'
-import { LevelMark } from './LevelMark'
+import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
 import { KeyChoice } from './KeyChoice'
 import { NoteChoice } from './NoteChoice'
@@ -284,9 +284,9 @@ describe('marks', () => {
     expect(screen.getByText('Gap')).toHaveClass('sr-only')
   })
 
-  it('names a level in words', () => {
-    render(<LevelMark level={2} />)
-    expect(screen.getByRole('img', { name: 'Level 2' })).toBeInTheDocument()
+  it('names a rank by its label', () => {
+    render(<RankMark rank={2} label="Intermediate" />)
+    expect(screen.getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
   })
 })
 

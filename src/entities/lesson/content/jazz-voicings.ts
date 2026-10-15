@@ -14,8 +14,6 @@ const jazzVoicings: Lesson = {
     en: 'Major, minor and dominant voicings, the altered dominant, slash chords over it, and drop 2.',
     ru: 'Расположения мажорных, минорных и доминантовых аккордов, альтерированная доминанта, слэш-аккорды и drop 2.',
   },
-  level: 4,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Major: triads, 6ths and 9ths', ru: 'Мажор: трезвучия, сексты и ноны' },

@@ -89,12 +89,12 @@ export function IndexRow({
           render={<Link to="/play/exercise/$exerciseId" params={{ exerciseId: target.exercise }} />}
         />
       )
-    case 'transpose':
+    case 'typed-line':
       return (
         <RowLink
           {...row}
-          {...PAGE_TILES.transpose}
-          render={<Link to="/practice/progressions/transpose" search={{ chords: target.chords }} />}
+          {...PAGE_TILES.progressions}
+          render={<Link to="/practice/progressions" search={{ key: target.key, p: target.p }} />}
         />
       )
     case 'trainer':

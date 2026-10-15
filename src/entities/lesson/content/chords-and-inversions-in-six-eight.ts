@@ -8,8 +8,6 @@ const chordsAndInversionsInSixEight: Lesson = {
     en: 'Two more right-hand ways in 6/8, the chord with its octave and the chord in two positions.',
     ru: 'Ещё два вида для правой руки в 6/8 — аккорд с октавой и аккорд в двух расположениях.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'Way 5: the chord, then higher', ru: 'Вид 5: аккорд, затем выше' },

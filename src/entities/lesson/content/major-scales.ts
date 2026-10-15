@@ -8,8 +8,6 @@ const majorScales: Lesson = {
     en: 'One pattern of whole and half steps builds a major scale on any note, and how to finger C major.',
     ru: 'Одна схема тонов и полутонов строит мажорную гамму от любой ноты, и аппликатура до мажора.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: {
@@ -64,6 +62,56 @@ const majorScales: Lesson = {
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
+      ],
+    },
+    {
+      heading: { en: 'Each note has a degree', ru: 'У каждой ноты своя ступень' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'Scale degrees', ru: 'Ступени' },
+          text: {
+            en: 'number the notes 1 to 7 from the tonic. Degree 1 is the tonic, 5 the dominant, 4 the subdominant.',
+            ru: 'нумеруют ноты от 1 до 7 начиная с тоники. 1 — тоника, 5 — доминанта, 4 — субдоминанта.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        {
+          kind: 'note',
+          text: {
+            en: 'Degree 7 leans hard into the tonic above it: the leading note.',
+            ru: 'Седьмая ступень тяготеет к тонике над ней: это вводный тон.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Every key, a little a day', ru: 'Все тональности понемногу' },
+      blocks: [
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Learn one new key a day round the circle: C, G, D, A, then F, B♭, E♭.',
+              ru: 'Учите одну тональность в день по кругу: до, соль, ре, ля, затем фа, си-бемоль, ми-бемоль.',
+            },
+            {
+              en: 'Hands apart, then together, two octaves.',
+              ru: 'Каждой рукой отдельно, затем вместе, на две октавы.',
+            },
+          ],
+        },
+        { kind: 'scale', root: note('D'), scale: 'major' },
+        {
+          kind: 'link',
+          title: { en: 'Any scale in the Player', ru: 'Любая гамма в плеере' },
+          target: { opens: 'exercise', exercise: 'scale', root: note('D') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build scales in the Quiz', ru: 'Построение гамм в тестах' },
+          target: { opens: 'quiz', trainer: 'build-scale' },
+        },
       ],
     },
     {

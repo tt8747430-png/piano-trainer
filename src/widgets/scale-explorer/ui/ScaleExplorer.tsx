@@ -12,7 +12,7 @@ import { ScaleFacts } from './ScaleFacts'
  * Any scale on any root, in the view its page's tab chose. Scale: its run from any note, fingered, on
  * the keys and on the staff, and its exercises. Chords: each degree's chord on its key, walked, and
  * the chords that hold a note. Key (a major or minor scale): its key on the circle of fifths, its
- * signature, relative and modes, and the chords it borrows.
+ * signature, relative and modes, the chords it borrows, and a melody note harmonised in it.
  */
 export function ScaleExplorer({
   scale,
@@ -29,7 +29,15 @@ export function ScaleExplorer({
   const musicKey = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   // The Key view is the key's: named as the key, whichever of its scales chose it.
   if (musicKey)
-    return <KeyView scale={scale} name={keyName(musicKey)} musicKey={musicKey} choice={choice} />
+    return (
+      <KeyView
+        scale={scale}
+        name={keyName(musicKey)}
+        musicKey={musicKey}
+        choice={choice}
+        onChange={onChange}
+      />
+    )
   const facts = <ScaleFacts root={root} kind={scale.kind} tones={spellScale(root, scale.kind)} />
   return scale.show === 'chords' ? (
     <ChordsView scale={scale} name={name} onChange={onChange} choice={choice} facts={facts} />

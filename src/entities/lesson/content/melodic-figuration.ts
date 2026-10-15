@@ -11,8 +11,6 @@ const melodicFiguration: Lesson = {
     en: 'A line of its own inside the accompaniment, answering the melody where it leaves room.',
     ru: 'Самостоятельная линия внутри аккомпанемента, которая отвечает мелодии там, где есть место.',
   },
-  level: 3,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'A line, not a chord', ru: 'Линия, а не аккорд' },

@@ -2,14 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { BookOpenText, Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  StepLink,
-  LEVEL_NAME,
-  skillsOfStep,
-  STEP_PAINT,
-  useStepTitle,
-  type PathStep,
-} from '@/entities/path'
+import { StepLink, skillsOfStep, STEP_PAINT, useStepTitle, type Step } from '@/entities/course'
 import { pieceById, pieceKey, skillsOfPiece } from '@/entities/piece'
 import {
   knownCount,
@@ -18,16 +11,17 @@ import {
   skillsToCheck,
   useProgress,
 } from '@/entities/progress'
+import { localText, useLocale } from '@/shared/i18n'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { keySymbol } from '@/shared/lib/music'
 import { ButtonLink, PAINT } from '@/shared/ui'
 
 /** The card's one action: a lesson opens to be read, a piece in the Player, a chord or scale step in its explorer. */
-function ContinueButton({ step, label }: { step: PathStep; label: string }) {
+function ContinueButton({ step, label }: { step: Step; label: string }) {
   return (
     <ButtonLink
       size="pill"
-      className="lg:min-w-64"
+      className="w-full"
       render={
         step.kind === 'piece' ? (
           <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
@@ -48,15 +42,16 @@ function ContinueButton({ step, label }: { step: PathStep; label: string }) {
 }
 
 /**
- * What to play next (spec §5), in one tap: what the step is, its level, how many of a chord step's
+ * What to play next (spec §5), in one tap: what the step is, its course and stage, how many of a chord step's
  * chords are known; the chords a song still has to check.
  */
 export function ContinueCard() {
-  const { t } = useTranslation(['path', 'common'])
+  const { t } = useTranslation(['learn', 'common'])
   const headingId = useId()
   const suggested = useProgress(selectSuggestedStep)
   const answers = useProgress(selectAllAnswers)
   const stepTitle = useStepTitle()
+  const locale = useLocale()
 
   if (!suggested) {
     return (
@@ -79,7 +74,9 @@ export function ContinueCard() {
     suggested.step.kind === 'chords'
       ? t('known', { known: knownCount(skills, answers), total: skills.length })
       : null,
-    t(`common:levelName.${LEVEL_NAME[suggested.level]}`),
+    // A practice step says the course it closes; a lesson's course is in its place already.
+    suggested.step.kind === 'lesson' ? null : localText(suggested.course.title, locale),
+    t(`common:stage.${suggested.stage}`),
   ]
     .filter(Boolean)
     .join(' · ')
@@ -96,8 +93,7 @@ export function ContinueCard() {
       >
         {title.primary}
       </h2>
-      {/* On a laptop the card runs the page's width: what the step is on the left, Continue on the right. */}
-      <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+      <div className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-2">
           <p className="text-lg">{detail}</p>
           {toCheck > 0 ? (

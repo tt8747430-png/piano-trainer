@@ -5,14 +5,12 @@ const findingHome: Lesson = {
   id: 'finding-home',
   title: { en: 'Finding your way on the keys', ru: 'Как ориентироваться на клавиатуре' },
   summary: {
-    en: 'Find any key by the black keys, name the white keys, find middle C, number your fingers.',
-    ru: 'Найти клавишу по чёрным, назвать белые, найти до первой октавы, пронумеровать пальцы.',
+    en: 'The keyboard is one pattern of twelve keys, repeated. Find any key from the black keys, without counting.',
+    ru: 'Клавиатура — один узор из двенадцати клавиш, повторённый много раз. Находите любую клавишу по чёрным, не считая.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
-      heading: { en: 'Black keys in twos and threes', ru: 'Чёрные клавиши по две и по три' },
+      heading: { en: 'C sits left of every two', ru: 'До — слева от каждой пары' },
       blocks: [
         {
           kind: 'text',
@@ -21,24 +19,49 @@ const findingHome: Lesson = {
             ru: 'Чёрные клавиши идут по две и по три.',
           },
           text: {
-            en: 'C is the white key just left of each two, F just left of each three, all the way up.',
-            ru: 'До — белая клавиша слева от каждых двух, фа — слева от каждых трёх, по всей клавиатуре.',
+            en: 'C is the white key just left of every two. F is just left of every three.',
+            ru: 'До — белая клавиша слева от каждой пары. Фа — слева от каждой тройки.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 F4 C5 F5' },
+        { kind: 'notes', clef: 'treble', notes: 'C4/2 F4/2 C5/2 F5/2' },
+        {
+          kind: 'question',
+          ask: { en: 'Play any C.', ru: 'Сыграйте любое до.' },
+          answer: { notes: ['C'] },
+        },
       ],
     },
     {
-      heading: { en: 'Seven letters', ru: 'Семь букв' },
+      heading: { en: 'Seven letters, round and round', ru: 'Семь букв по кругу' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The white keys are named A to G, then the letters start again. From C, singers call them do, re, mi, fa, sol, la, si.',
-            ru: 'Белые клавиши называют буквами от A до G, потом буквы идут сначала. От C в пении это до, ре, ми, фа, соль, ля, си.',
+            en: 'The white keys are named A to G, then the letters start again. Up from C: C D E F G A B C.',
+            ru: 'Белые клавиши называют буквами от A до G, потом буквы идут сначала. Вверх от до: C D E F G A B C.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        {
+          kind: 'note',
+          text: {
+            en: 'Singers say do re mi fa sol la si.',
+            ru: 'В пении это до, ре, ми, фа, соль, ля, си.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'E–F and B–C touch', ru: 'Ми–фа и си–до соседствуют' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Two pairs of white keys have no black key between them: E–F and B–C. Every scale you learn depends on them.',
+            ru: 'Между двумя парами белых клавиш нет чёрной: ми–фа и си–до. От них зависит каждая гамма, которую вы выучите.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'E4/2 F4/2 B4/2 C5/2' },
       ],
     },
     {
@@ -48,32 +71,31 @@ const findingHome: Lesson = {
           kind: 'text',
           lead: { en: 'Middle C (C4)', ru: 'До первой октавы (C4)' },
           text: {
-            en: 'is the C nearest the middle of the piano. An octave up is C5: the same name, eight letters and twelve keys higher.',
-            ru: '— до у середины клавиатуры. Октавой выше — C5: то же имя, на восемь букв и двенадцать клавиш выше.',
+            en: 'is the C nearest the middle of the piano. C5 is the next C up: an octave higher.',
+            ru: '— до у середины клавиатуры. C5 — следующее до вверх, на октаву выше.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P8' },
+        {
+          kind: 'note',
+          text: {
+            en: 'A full piano has 88 keys, from A0 to C8.',
+            ru: 'У полного фортепиано 88 клавиш, от A0 до C8.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'Five fingers', ru: 'Пять пальцев' },
+      heading: { en: 'Higher to the right', ru: 'Вправо — выше' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Fingers are numbered 1 to 5 from the thumb. Right thumb on middle C, left little finger on the C below.',
-            ru: 'Пальцы нумеруют от 1 до 5, начиная с большого. Правый большой — на до первой октавы, левый мизинец — на до ниже.',
+            en: 'Keys sound higher to the right and lower to the left. Notes climb the staff the same way.',
+            ru: 'Вправо звук выше, влево ниже. Ноты на нотном стане поднимаются так же.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Keep the fingers curved and the wrist level with the keys.',
-            ru: 'Пальцы округлые, запястье на уровне клавиш.',
-          },
-        },
+        { kind: 'notes', clef: 'treble', notes: 'C4 E4 G4 C5 C5 G4 E4 C4' },
       ],
     },
     {
@@ -86,11 +108,24 @@ const findingHome: Lesson = {
         },
         {
           kind: 'question',
+          ask: { en: 'Play any B.', ru: 'Сыграйте любое си.' },
+          answer: { notes: ['B'] },
+        },
+        {
+          kind: 'question',
           ask: {
             en: 'Play every white key from C up to G.',
             ru: 'Сыграйте подряд белые клавиши от до вверх до соль.',
           },
           answer: { notes: ['C', 'D', 'E', 'F', 'G'], rising: true },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play a C, then the C an octave above it.',
+            ru: 'Сыграйте до, а потом до октавой выше.',
+          },
+          answer: { notes: ['C', 'C'], rising: true },
         },
       ],
     },

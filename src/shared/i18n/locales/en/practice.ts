@@ -1,7 +1,7 @@
 export const practice = {
   title: 'Practice',
   // Practice's groups of pages (ADR 0044). The things come first, under no heading.
-  groups: { tools: 'Tools', training: 'Training' },
+  groups: { atTheKeys: 'At the keys', training: 'Training' },
   // Its pages, each by its name: the things, the tools, the training.
   pages: {
     chords: 'Chords',
@@ -9,27 +9,17 @@ export const practice = {
     intervals: 'Intervals',
     progressions: 'Progressions',
     accompaniment: 'Accompaniment',
-    chordFinder: 'Chord finder',
-    passingChords: 'Passing chords',
-    reharmonise: 'Reharmonise',
-    transpose: 'Transpose',
     freePlay: 'Free play',
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
-  // A workspace's tabs (ADR 0050) that are not a tool's own name: a tool's tab is its page's name.
-  tabs: { build: 'Build', find: 'Find', play: 'Play' },
   // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
   // of tabs or of groups says those, in their own words, so it has no line here.
   about: {
     chords: 'Triads to 13ths · Inversions · Tensions',
     intervals: 'On the keys, up and down',
     progressions: 'From the library or typed, in any key',
-    chordFinder: 'Names a chord, and the keys it is in',
-    passingChords: 'The ways from one chord to the next',
-    reharmonise: 'The chords that hold a melody note',
-    transpose: 'A song’s chords: their key, degrees and any key',
-    freePlay: 'A live score, marks and a metronome',
+    freePlay: 'A live score, chord names, marks and a metronome',
   },
   // Words the explorers share.
   root: 'Root',
@@ -121,6 +111,9 @@ export const practice = {
       songs: 'Songs in this key',
       studies: 'Studies in this key',
       noSongs: 'No songs are in this key.',
+      harmonise: 'Harmonise a melody note',
+      harmoniseAbout:
+        'Every chord that holds the note, played under it: the key’s own and borrowed ones.',
     },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
@@ -137,6 +130,11 @@ export const practice = {
     typed: 'Typed',
     /** What leads into each chord of the progression (ADR 0041). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    between: {
+      title: 'Between two chords',
+      about: 'Passing chords that lead from one chord of the row into the next.',
+      pair: 'From chord to chord',
+    },
     style: {
       pop: 'Pop',
       rock: 'Rock',
@@ -148,9 +146,8 @@ export const practice = {
       theory: 'Theory',
     },
   },
-  // A part of Accompaniment: a method book's lessons, and the line of a part with no pattern to show.
+  // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
-    lessons: 'Its lessons',
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },
@@ -192,15 +189,11 @@ export const practice = {
     no5th: 'No 5th',
     no9th: 'No 9th',
     no11th: 'No 11th',
-    clear: 'Clear',
     open: 'Open in Chords',
     // The keys that hold the chord found, its numeral in each.
     inKeys: 'In these keys',
   },
   passingChords: {
-    from: 'From',
-    to: 'To',
-    unread: 'This chord can’t be read.',
     inKey: 'In the key',
     onlyInKey: 'In the key only',
     noneInKey: 'No way between these chords stays in the key.',
@@ -277,17 +270,7 @@ export const practice = {
       },
     },
   },
-  // Transpose (ADR 0045): a song's chords typed, read in their key as degrees, played in any key.
-  transpose: {
-    field: 'Chords',
-    unread: 'Can’t read: {{words}}',
-    readIn: 'Their key',
-    held: 'In the key: {{held}} of {{count}}',
-    playIn: 'Play in',
-    outside: 'Out of the key',
-    none: 'No key holds these chords.',
-    inProgressions: 'Practise these degrees',
-  },
+
   reharmonise: {
     note: 'Melody note',
     as: 'as {{degree}}',
@@ -304,6 +287,7 @@ export const practice = {
   freePlay: {
     mode: 'Mode',
     play: 'Play',
+    find: 'Find',
     mark: 'Mark',
     clear: 'Clear',
     colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },

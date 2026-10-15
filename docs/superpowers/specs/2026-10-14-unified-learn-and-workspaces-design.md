@@ -1,5 +1,7 @@
 # Unified Learn and the tool workspaces
 
+> Superseded by `2026-10-14-curriculum-and-workspaces-design.md`.
+
 - **Date:** 2026-10-14 · **Owner's ask:** one view for learning instead of the Path and Learn tabs, a carousel of
   courses and a journey map to switch between, and tools grouped so the learner stops jumping between pages.
 - **References:** `piano-data/reference-apps/courses-app` (a carousel of courses, each course its own page of

@@ -1,38 +1,45 @@
-import { act, screen, waitFor, within } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { act, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { lessonsIn } from '@/entities/lesson'
-import { pathSteps } from '@/entities/path'
-import { OPEN_PLAINLY } from '@/shared/lib'
+import { courseById, COURSES, lessonStepId } from '@/entities/course'
 
 describe('Learn', () => {
   it('suggests the first lesson on a first run, saying where it is read', async () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     const card = await screen.findByRole('region', { name: 'Finding your way on the keys' })
-    expect(card).toHaveTextContent(
-      `Fundamentals · Lesson 1 of ${lessonsIn('fundamentals').length} · Beginner`,
-    )
+    expect(card).toHaveTextContent('First steps at the piano · Lesson 1 of 4 · Beginner')
     expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
       'href',
       '/learn/lessons/finding-home',
     )
   })
 
-  it('goes on to a level’s practice once its lessons are learned', async () => {
+  it('goes on to a course’s practice once its lessons are learned', async () => {
     const { progressStore } = await renderApp('/')
-    const lessons = pathSteps().filter(
-      (placed) => placed.level === 1 && placed.step.kind === 'lesson',
-    )
+    const learned = (ids: readonly string[]) =>
+      Object.fromEntries(ids.map((id) => [lessonStepId(id), '2026-10-01T10:00:00Z']))
+    const before = COURSES.slice(0, 3).flatMap((course) => [
+      ...course.lessons.map(lessonStepId),
+      ...course.practice.map((step) =>
+        step.kind === 'piece'
+          ? `piece:${step.pieceId}`
+          : step.kind === 'scale'
+            ? `scale:${step.scale}`
+            : `chords:${step.family}`,
+      ),
+    ])
     act(() =>
       progressStore.setState({
-        learned: Object.fromEntries(lessons.map(({ id }) => [id, '2026-10-01T10:00:00Z'])),
+        learned: {
+          ...Object.fromEntries(before.map((id) => [id, '2026-10-01T10:00:00Z'])),
+          ...learned(courseById('chord-basics')?.lessons ?? []),
+        },
       }),
     )
     const card = await screen.findByRole('region', { name: 'Triads' })
-    expect(within(card).getByText('Chords · 0 of 6 known · Beginner')).toBeInTheDocument()
+    expect(within(card).getByText('Chords · 0 of 6 known · Chords · Beginner')).toBeInTheDocument()
     expect(within(card).getByRole('link', { name: 'Continue' }).getAttribute('href')).toMatch(
       /^\/practice\/chords\?.*step=chords(%3A|:)tri/,
     )
@@ -74,90 +81,48 @@ describe('Learn', () => {
     ).toEqual(['/songs/ode', '/songs/bz5'])
   })
 
-  describe('its Journey', () => {
-    it('draws level 1 as a line of steps, the one Continue opens lit, its count learned', async () => {
-      const { progressStore } = await renderApp('/')
-      const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
-      const steps = within(level).getAllByRole('listitem')
-      expect(within(level).getByText(`0 of ${steps.length}`)).toBeInTheDocument()
-      expect(steps[0]).toHaveAttribute('aria-current', 'step')
-      expect(within(steps[0] ?? level).getByRole('link')).toHaveAttribute(
-        'href',
-        '/learn/lessons/finding-home',
-      )
-      act(() =>
-        progressStore.setState({
-          learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' },
-        }),
-      )
-      expect(within(level).getByText(`1 of ${steps.length}`)).toBeInTheDocument()
-      expect(within(level).getAllByRole('listitem')[1]).toHaveAttribute('aria-current', 'step')
-      expect(within(level).getAllByRole('listitem')[0]).toHaveTextContent(/^Finding.*Learned/)
-    })
-
-    it('opens a song from its node, and a chord step in its explorer', async () => {
-      const user = userEvent.setup()
+  describe('its curriculum', () => {
+    it('lists the four stages in order, each its courses on one line', async () => {
       await renderApp('/')
-      const level = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
-      const elementary = screen.getByRole('region', { name: 'Level 2 · Elementary' })
-      await user.click(within(elementary).getByRole('button', { name: /Level 2/ }))
-      expect(
-        within(elementary).getByRole('link', { name: /Still, my soul, be still/ }),
-      ).toHaveAttribute('href', '/songs/bz5')
-      expect(
-        within(level)
-          .getByRole('link', { name: /^Triads\s*Chords/ })
-          .getAttribute('href'),
-      ).toMatch(/^\/practice\/chords\?.*step=chords(%3A|:)tri/)
-    })
-
-    it('opens the level the learner is at, the others folded until opened', async () => {
-      const user = userEvent.setup()
-      await renderApp('/')
-      const beginner = await screen.findByRole('region', { name: 'Level 1 · Beginner' })
-      const elementary = screen.getByRole('region', { name: 'Level 2 · Elementary' })
-      expect(within(beginner).getByRole('button', { name: /Level 1/ })).toHaveAttribute(
-        'aria-expanded',
-        'true',
+      await screen.findByRole('heading', { level: 1, name: 'Learn' })
+      const stages = ['Beginner', 'Intermediate', 'Advanced', 'Professional'].map((name) =>
+        screen.getByRole('region', { name }),
       )
-      expect(within(elementary).queryByRole('list')).not.toBeInTheDocument()
-      await user.click(within(elementary).getByRole('button', { name: /Level 2/ }))
-      expect(within(elementary).getByRole('list')).toBeInTheDocument()
-    })
-  })
-
-  describe('its Courses', () => {
-    it('shelves every module as a course, subjects then courses, kept in the URL', async () => {
-      const user = userEvent.setup()
-      const { router } = await renderApp('/')
-      await user.click(await screen.findByRole('radio', { name: 'Courses' }))
-      await waitFor(() => expect(router.state.location.search).toMatchObject({ view: 'courses' }))
-      const subjects = screen.getByRole('region', { name: 'Subjects' })
-      expect(
-        within(subjects)
+      const hrefs = stages.flatMap((stage) =>
+        within(stage)
           .getAllByRole('link')
           .map((link) => link.getAttribute('href')),
-      ).toEqual(['/learn/fundamentals', '/learn/accompaniment', '/learn/gospel'])
-      const courses = screen.getByRole('region', { name: 'Courses' })
-      const gorshkov = within(courses).getByRole('link', { name: /Горшков/ })
-      expect(gorshkov).toHaveTextContent(`0 of ${lessonsIn('gorshkov').length} learned`)
-      expect(screen.queryByRole('region', { name: 'Level 1 · Beginner' })).not.toBeInTheDocument()
+      )
+      expect(hrefs).toEqual(COURSES.map((course) => `/learn/${course.id}`))
+      expect(within(stages[0] ?? document.body).getByText('0 of 5 courses')).toBeInTheDocument()
     })
 
-    it('opens as it was left', async () => {
-      const { router } = await renderApp('/?view=courses')
-      await screen.findByRole('region', { name: 'Subjects' })
-      await act(() => router.navigate({ to: '/songs' }))
-      // As the navigation opens a place: plainly.
-      await act(() => router.navigate({ to: '/', state: OPEN_PLAINLY }))
-      expect(await screen.findByRole('region', { name: 'Subjects' })).toBeInTheDocument()
+    it('marks the course Continue is in, and counts each course’s steps learned', async () => {
+      const { progressStore } = await renderApp('/')
+      const beginner = await screen.findByRole('region', { name: 'Beginner' })
+      const [first, second] = within(beginner).getAllByRole('listitem')
+      expect(first).toHaveAttribute('aria-current', 'step')
+      expect(first).toHaveTextContent('0 of 5 learned')
+      const firstSteps = courseById('first-steps')
+      act(() =>
+        progressStore.setState({
+          learned: Object.fromEntries(
+            [...(firstSteps?.lessons.map(lessonStepId) ?? []), 'piece:ode'].map((id) => [
+              id,
+              '2026-10-01T10:00:00Z',
+            ]),
+          ),
+        }),
+      )
+      expect(first).toHaveTextContent('Course complete')
+      expect(second).toHaveAttribute('aria-current', 'step')
     })
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    await renderApp('/?view=courses', { locale: 'ru' })
+    await renderApp('/', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Обучение' })).toBeInTheDocument()
-    await screen.findByRole('region', { name: 'Темы' })
+    await screen.findByRole('region', { name: 'Начальный' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

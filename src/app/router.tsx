@@ -20,7 +20,6 @@ import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
-import { isLessonModule } from '@/entities/lesson'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
@@ -63,22 +62,10 @@ import {
   walkSearch,
 } from './routes/player-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
-import { learnSearch, readLearnSearch } from './routes/learn-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
-import {
-  finderSearch,
-  freePlaySearch,
-  passingSearch,
-  readFinderSearch,
-  readFreePlaySearch,
-  readPassingSearch,
-  readReharmoniseSearch,
-  readTransposeSearch,
-  reharmoniseSearch,
-  transposeSearch,
-} from './routes/tool-search'
+import { freePlaySearch, readFreePlaySearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -138,8 +125,6 @@ const shellRoute = createRoute({
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
-  ...learnSearch,
-  ...remembered(readLearnSearch, []),
   component: lazyRouteComponent(homeScreens, 'LearnPage'),
 })
 const settingsRoute = createRoute({
@@ -263,34 +248,6 @@ const progressionsRoute = createRoute({
 // Practice's tools: each page works something out from what the learner gives it, most a tab of the
 // thing it works on (ADR 0050). Free play is the piano played freely, written and named, or marked as
 // a teaching diagram.
-const chordFinderRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/chords/find',
-  ...finderSearch,
-  ...remembered(readFinderSearch, []),
-  component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
-})
-const passingChordsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/passing',
-  ...passingSearch,
-  ...remembered(readPassingSearch, []),
-  component: lazyRouteComponent(toolScreens, 'PassingChordsPage'),
-})
-const reharmoniseRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/reharmonise',
-  ...reharmoniseSearch,
-  ...remembered(readReharmoniseSearch, []),
-  component: lazyRouteComponent(toolScreens, 'ReharmonisePage'),
-})
-const transposeRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/transpose',
-  ...transposeSearch,
-  ...remembered(readTransposeSearch, []),
-  component: lazyRouteComponent(toolScreens, 'TransposePage'),
-})
 const freePlayRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/free-play',
@@ -341,10 +298,11 @@ const editPatternRoute = createRoute({
 
 const courseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/$module',
+  path: '/learn/$courseId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: ({ params }) => {
-    if (!isLessonModule(params.module)) throw notFound()
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
   },
   component: lazyRouteComponent(learnScreens, 'CoursePage'),
 })
@@ -353,8 +311,8 @@ const lessonRoute = createRoute({
   path: '/learn/lessons/$lessonId',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params }) => {
-    const { lessonById } = await learnScreens()
-    if (!lessonById(params.lessonId)) throw notFound()
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
   },
   component: lazyRouteComponent(learnScreens, 'LessonPage'),
 })
@@ -481,10 +439,6 @@ const routeTree = rootRoute.addChildren([
     chordsRoute,
     scalesRoute,
     intervalsRoute,
-    chordFinderRoute,
-    reharmoniseRoute,
-    passingChordsRoute,
-    transposeRoute,
     progressionsRoute,
     accompanimentRoute,
     newPatternRoute,

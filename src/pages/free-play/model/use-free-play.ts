@@ -15,7 +15,7 @@ import type { Finger, Midi } from '@/shared/lib/music'
 import { EMPTY_TRAIL, strike, type Trail } from '@/widgets/live-score'
 import type { FreePlayView } from './free-play-view'
 
-/** Free play's keys (spec 2026-10-09 §5): Play's trail, or Mark's diagram, and Clear. */
+/** Free play's keys (spec 2026-10-09 §5): Play's trail, or Mark's diagram, and Clear (Find's keys too). */
 interface FreePlay {
   /** What the live score writes: Play's trail, or Mark's marked keys as one chord. */
   readonly chords: readonly (readonly Midi[])[]
@@ -25,8 +25,10 @@ interface FreePlay {
   readonly mark: DiagramMark
   setColour(colour: DiagramColour): void
   setFinger(finger: Finger | null): void
-  /** A key tapped or typed: struck now, or marked. */
+  /** A key tapped or typed: struck now, or marked. Find's keyboard is the Chord finder's own. */
   press(key: Midi): void
+  /** Whether Clear has anything to clear in the mode shown. */
+  readonly canClear: boolean
   clear(): void
 }
 
@@ -52,7 +54,7 @@ export function useFreePlay(view: FreePlayView): FreePlay {
 
   const press = (key: Midi, time: number) => {
     if (view.mode === 'mark') writeMarks((current) => markKey(current, key, mark))
-    else setTrail((current) => strike(current, key, time))
+    else if (view.mode === 'play') setTrail((current) => strike(current, key, time))
   }
   useMidiKeyDown(press)
 
@@ -72,6 +74,12 @@ export function useFreePlay(view: FreePlayView): FreePlay {
     setColour,
     setFinger,
     press: (key) => press(key, performance.now()),
-    clear: () => (view.mode === 'mark' ? writeMarks(() => new Map()) : setTrail(EMPTY_TRAIL)),
+    canClear: view.mode === 'find' ? view.keys !== '' : chords.length > 0,
+    clear: () => {
+      if (view.mode === 'mark') writeMarks(() => new Map())
+      else if (view.mode === 'find')
+        void navigate({ search: (prev) => ({ ...prev, keys: '' }), ...IN_PLACE })
+      else setTrail(EMPTY_TRAIL)
+    },
   }
 }

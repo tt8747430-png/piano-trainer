@@ -8,33 +8,33 @@ import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { ButtonLink, PlayLabel, usePlayKey } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import type { FinderView } from '../model/finder-view'
 import { findChord, findingMarks } from '../model/finding'
 import { ChordKeys } from './ChordKeys'
 import { FinderName } from './FinderName'
 import { useFindingSaid } from './use-finding-said'
 
 /**
- * The Chord finder: keys tapped on (or held on a MIDI keyboard) are named as a chord, each key marked
- * by its degree in it; played, cleared, or opened in the Chords explorer; and the keys that hold it.
+ * The Chord finder, Free play's Find (ADR 0052): keys tapped on (or held on a MIDI keyboard) are named
+ * as a chord, each key marked by its degree in it; played, or opened in the Chords explorer; and the
+ * keys that hold it. Its keys are written `60-64-67`, lowest first.
  */
 export function ChordFinder({
-  view,
+  keys: written,
   onChange,
 }: {
-  view: FinderView
-  onChange: (change: Partial<FinderView>) => void
+  keys: string
+  onChange: (keys: string) => void
 }) {
   const { t } = useTranslation(['music', 'practice'])
   const playback = usePlayback<'chord'>()
   const held = useHeldKeys()
-  const chosen = readKeyList(view.keys)
+  const chosen = readKeyList(written)
   // A MIDI keyboard's held keys are the chord while any is held.
   const keys = held.size > 0 ? [...held].sort((a, b) => a - b) : chosen
   const finding = findChord(keys)
   const said = useFindingSaid(finding)
   const best = finding.kind === 'chord' ? finding.best : undefined
-  const toggle = (key: Midi) => onChange({ keys: keyListParam(toggled(chosen, key)) })
+  const toggle = (key: Midi) => onChange(keyListParam(toggled(chosen, key)))
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
   return (
@@ -52,14 +52,6 @@ export function ChordFinder({
       <div className="flex flex-wrap gap-3">
         <Button size="pill" disabled={keys.length === 0} onClick={play}>
           <PlayLabel playing={playback.playing === 'chord'}>{t('music:play')}</PlayLabel>
-        </Button>
-        <Button
-          size="pill"
-          variant="soft"
-          disabled={chosen.length === 0}
-          onClick={() => onChange({ keys: '' })}
-        >
-          {t('practice:chordFinder.clear')}
         </Button>
         {best ? (
           <ButtonLink

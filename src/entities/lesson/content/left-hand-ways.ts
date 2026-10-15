@@ -8,8 +8,6 @@ const leftHandWays: Lesson = {
     en: 'Ten ways for the left hand under a tune the right hand plays from the notes.',
     ru: 'Десять видов для левой руки под мелодией, которую правая играет по нотам.',
   },
-  level: 3,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'An octave, or one note', ru: 'Октава или одна нота' },

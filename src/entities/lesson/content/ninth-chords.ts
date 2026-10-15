@@ -8,8 +8,6 @@ const ninthChords: Lesson = {
     en: 'Three 9th chords, each two triads stacked, played over the bass alone, in two positions.',
     ru: 'Три нонаккорда, каждый — два трезвучия друг на друге, над одним басом, в двух расположениях.',
   },
-  level: 3,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'A 7th chord and one more 3rd', ru: 'Септаккорд и ещё одна терция' },

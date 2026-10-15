@@ -12,8 +12,6 @@ const seventhsInASong: Lesson = {
     en: 'The three main 7th chords, which one a song’s triad takes, and each up and down by semitones.',
     ru: 'Три основных септаккорда, какой взять вместо трезвучия песни, и каждый по полутонам вверх и вниз.',
   },
-  level: 2,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Three main 7th chords', ru: 'Три основных септаккорда' },

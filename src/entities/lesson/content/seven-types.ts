@@ -7,8 +7,6 @@ const sevenTypes: Lesson = {
     en: 'Н. В. Боброва’s seven types on one hymn, and how to mix them.',
     ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне и как их сочетать.',
   },
-  level: 2,
-  module: 'seven-types',
   sections: [
     {
       heading: { en: 'One hymn, seven types', ru: 'Один гимн — семь видов' },

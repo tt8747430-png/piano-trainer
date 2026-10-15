@@ -10,8 +10,6 @@ const accompanyingAHymn: Lesson = {
     en: 'From the chord chart to the service: prepare, introduce, verse and chorus, end.',
     ru: 'От аккордов к служению: подготовка, вступление, куплет и припев, окончание.',
   },
-  level: 2,
-  module: 'seven-types',
   sections: [
     {
       heading: { en: 'Before you play', ru: 'Прежде чем играть' },

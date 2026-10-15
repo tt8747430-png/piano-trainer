@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { PencilLine, Play, Printer } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceStepId } from '@/entities/path'
+import { pieceStepId } from '@/entities/course'
 import {
   entryTitles,
   isDegreePiece,

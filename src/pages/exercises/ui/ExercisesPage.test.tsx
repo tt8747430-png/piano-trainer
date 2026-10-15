@@ -15,12 +15,12 @@ describe('Practice → Exercises', () => {
     ).toEqual(['Finger technique', 'Barry Harris', 'Piano With Jonny'])
   })
 
-  it('marks an exercise’s level, says what it trains and opens it in the Player', async () => {
+  it('marks an exercise’s stage, says what it trains and opens it in the Player', async () => {
     await renderApp('/practice/exercises')
     const harris = await screen.findByRole('region', { name: 'Barry Harris' })
     const row = within(harris).getByRole('link', { name: /^Drop-2 7ths \S/ })
     expect(row).toHaveAttribute('href', '/play/exercise/drop-two')
-    expect(within(row).getByRole('img', { name: 'Level 4' })).toBeInTheDocument()
+    expect(within(row).getByRole('img', { name: 'Professional' })).toBeInTheDocument()
   })
 
   it('leaves a scale’s and a chord’s exercises to their own pages', async () => {

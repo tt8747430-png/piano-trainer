@@ -14,8 +14,6 @@ const chordPulse: Lesson = {
     en: 'Harmony into texture. Pulse the chords, give them a fourth note, then break them and figure them.',
     ru: 'Гармония превращается в фактуру. Пульсация аккордов, четвёртый звук, ломаные аккорды и гармоническая фигурация.',
   },
-  level: 2,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'From harmony to accompaniment', ru: 'От гармонии к аккомпанементу' },

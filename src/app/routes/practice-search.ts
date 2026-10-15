@@ -1,4 +1,4 @@
-import { isStepId, type StepId } from '@/entities/path'
+import { isStepId, type StepId } from '@/entities/course'
 import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
 import { valueOr } from '@/shared/lib'
 import { parseNoteInOctave } from '@/shared/lib/music'

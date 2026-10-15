@@ -10,8 +10,6 @@ const gospelReharmonisation: Lesson = {
     en: 'A hymn’s plain chords made rich: 9ths, the sus, IV over V, the minor iv, tensions.',
     ru: 'Простые аккорды гимна богаче: ноны, sus, IV над V, минорная iv, тенсии.',
   },
-  level: 3,
-  module: 'gospel',
   sections: [
     {
       heading: { en: 'Plain chords made rich', ru: 'Простые аккорды — богаче' },
@@ -108,7 +106,7 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'link',
           title: { en: 'C in Reharmonise', ru: 'До в «Гармонизации мелодии»' },
-          target: { opens: 'reharmonise', key: C_MAJOR, note: note('C') },
+          target: { opens: 'harmonise', key: C_MAJOR, note: note('C') },
         },
       ],
     },

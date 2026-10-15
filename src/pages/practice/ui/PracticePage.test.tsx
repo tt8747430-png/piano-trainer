@@ -27,11 +27,11 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists Free play under Tools: the others are tabs of what they work on', async () => {
+  it('lists Free play at the keys: the tools are on the pages of what they work on', async () => {
     await renderApp('/practice')
-    const tools = await screen.findByRole('region', { name: 'Tools' })
-    expect(rowsOf(tools)).toEqual([
-      ['Free play A live score, marks and a metronome', '/practice/free-play'],
+    const keys = await screen.findByRole('region', { name: 'At the keys' })
+    expect(rowsOf(keys)).toEqual([
+      ['Free play A live score, chord names, marks and a metronome', '/practice/free-play'],
     ])
   })
 
@@ -65,7 +65,7 @@ describe('Practice', () => {
         name: 'Тесты Аккорды · Гаммы и тональности · На слух · Чтение',
       }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Инструменты' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'За клавиатурой' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 })

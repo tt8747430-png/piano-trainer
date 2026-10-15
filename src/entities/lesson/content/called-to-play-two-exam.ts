@@ -8,8 +8,6 @@ const calledToPlayTwoExam: Lesson = {
     en: 'Two songs with plans of your own, one in 4/4 and one in 6/8, accompanying a singer.',
     ru: 'Две песни по собственному плану, в 4/4 и в 6/8, с солистом.',
   },
-  level: 3,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'The assignment', ru: 'Задание' },

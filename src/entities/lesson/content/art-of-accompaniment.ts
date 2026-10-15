@@ -11,8 +11,6 @@ const artOfAccompaniment: Lesson = {
     en: 'Never get in the singer’s way, fill the long notes, open a song with an introduction, and choose from the twelve techniques.',
     ru: 'Не мешать пению, заполнять долгие ноты, начинать песню со вступления и выбирать из двенадцати техник.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Never in the singer’s way', ru: 'Не мешать пению' },

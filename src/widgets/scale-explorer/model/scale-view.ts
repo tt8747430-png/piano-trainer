@@ -44,4 +44,8 @@ export interface ScaleView {
   readonly keysPlay: 'chords' | 'notes'
   /** Walk the chords rolled upwards rather than struck together. */
   readonly arpeggio: boolean
+  /** The melody note the Key view harmonises; the key's 3rd when none is chosen. */
+  readonly melody?: NoteParam
+  /** Whether the Key view harmonises with the key's chords only. */
+  readonly onlyInKey?: boolean
 }

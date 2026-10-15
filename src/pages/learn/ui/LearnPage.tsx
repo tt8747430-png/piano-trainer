@@ -1,24 +1,18 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Search, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useViewChange } from '@/shared/lib'
-import { RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
+import { RoundLink, ScreenHeader } from '@/shared/ui'
 import { ContinueCard } from '@/widgets/continue-card'
-import { Journey } from '@/widgets/journey'
+import { CurriculumMap } from '@/widgets/curriculum'
 import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
-import { LEARN_VIEWS, type LearnView } from '../model/learn-view'
-import { CourseShelves } from './CourseShelves'
 
 /**
- * Learn (ADR 0049), the app's first place: Continue, the days practised and the songs played last,
- * then the curriculum as a Journey (the Path's levels as a map) or as Courses (every module on its
- * shelf), the view in the URL.
+ * Learn (ADR 0051), the app's first place: Continue, then the curriculum from beginner to
+ * professional, stage by stage, course by course; the days practised and the songs played last.
  */
 export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
-  const { view } = useSearch({ from: '/shell/' })
-  const set = useViewChange<LearnView>()
   return (
     <div className="flex flex-col">
       <ScreenHeader
@@ -39,22 +33,19 @@ export function LearnPage() {
           </div>
         }
       />
-      <div className="mt-2 flex flex-col gap-8">
-        <div className="flex flex-col gap-6">
+      {/* On a phone: Continue, the curriculum, then the days and the songs played last. On a
+          laptop the curriculum runs down the left, Continue and the rest stand on the right. */}
+      <div className="mt-2 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_1fr] lg:gap-x-12">
+        <div className="lg:col-start-2 lg:row-start-1">
           <ContinueCard />
+        </div>
+        <div className="flex max-w-3xl flex-col gap-4 lg:col-start-1 lg:row-span-2 lg:row-start-1">
+          <h2 className="sr-only">{t('learn:curriculum')}</h2>
+          <CurriculumMap />
+        </div>
+        <div className="flex flex-col gap-6 lg:col-start-2 lg:row-start-2">
           <PracticeDays />
           <RecentPieces />
-        </div>
-        <div className="flex flex-col gap-6">
-          <div className="max-w-sm">
-            <Segmented
-              label={t('learn:views.label')}
-              value={view}
-              options={LEARN_VIEWS.map((value) => ({ value, label: t(`learn:views.${value}`) }))}
-              onChange={(next) => set({ view: next })}
-            />
-          </div>
-          {view === 'journey' ? <Journey /> : <CourseShelves />}
         </div>
       </div>
     </div>

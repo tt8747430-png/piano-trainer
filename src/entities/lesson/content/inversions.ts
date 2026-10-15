@@ -8,8 +8,6 @@ const inversions: Lesson = {
     en: 'Which note of a chord is lowest, how a chord symbol writes it, and why accompanists use inversions.',
     ru: 'Какая нота аккорда звучит внизу, как это пишет буквенное обозначение и зачем обращения аккомпаниатору.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Root position', ru: 'Основной вид' },
@@ -70,6 +68,11 @@ const inversions: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['C', 'F/C', 'G/B', 'C'] },
+        {
+          kind: 'link',
+          title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'name-chord' },
+        },
       ],
     },
     {

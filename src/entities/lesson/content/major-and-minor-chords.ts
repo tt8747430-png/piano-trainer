@@ -9,8 +9,6 @@ const majorAndMinorChords: Lesson = {
     en: 'Major chords sound bright, minor ones soft, and 4 or 3 semitones tell them apart.',
     ru: 'Мажор звучит светло, минор — мягко, а 4 или 3 полутона их различают.',
   },
-  level: 1,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Major and minor', ru: 'Мажор и минор' },

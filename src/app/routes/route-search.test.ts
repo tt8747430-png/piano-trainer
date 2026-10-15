@@ -9,7 +9,7 @@ import {
   SCALES_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
-import { FREE_PLAY_DEFAULTS, PASSING_DEFAULTS } from './tool-search'
+import { FREE_PLAY_DEFAULTS } from './tool-search'
 import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
@@ -42,6 +42,7 @@ describe('search params', () => {
     ).toEqual({
       mode: 'mark',
       key: 'D',
+      keys: '',
       marks: '60a3,67b',
       tempo: 96,
       beats: 3,
@@ -49,6 +50,10 @@ describe('search params', () => {
     expect(
       await searchAt('/practice/free-play?mode=draw&key=H&marks=20a%2Cx&tempo=400&beats=5'),
     ).toEqual(FREE_PLAY_DEFAULTS)
+    expect(await searchAt('/practice/free-play?mode=find&keys=67-60-64-60')).toMatchObject({
+      mode: 'find',
+      keys: '60-64-67',
+    })
   })
 
   it('open the score editor’s takes only when the URL says so', async () => {
@@ -259,12 +264,18 @@ describe('search params', () => {
     expect(await searchAt('/practice/progressions?inversion=7')).toMatchObject({ inversion: 0 })
   })
 
-  it('keep the chords typed for Passing chords, and take the default for one that cannot be read', async () => {
-    expect(await searchAt('/practice/progressions/passing?from=G7&to=Am7b5')).toEqual({
-      ...PASSING_DEFAULTS,
-      from: 'G7',
-      to: 'Am7b5',
+  it('read the pair Between looks at and In the key only, and the Key view’s melody note', async () => {
+    expect(await searchAt('/practice/progressions?p=I-IV-V&between=1&inKey=true')).toMatchObject({
+      between: 1,
+      inKey: true,
     })
-    expect(await searchAt('/practice/progressions/passing?from=Hm&to=Qx')).toEqual(PASSING_DEFAULTS)
+    expect(await searchAt('/practice/progressions?between=-2&inKey=yes')).toEqual(
+      PROGRESSIONS_DEFAULTS,
+    )
+    expect(await searchAt('/practice/scales?show=key&melody=F%23&onlyInKey=true')).toMatchObject({
+      show: 'key',
+      melody: 'F#',
+      onlyInKey: true,
+    })
   })
 })

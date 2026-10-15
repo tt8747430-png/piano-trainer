@@ -17,6 +17,7 @@ import {
   type KeyMark,
   type ShownKeys,
 } from '@/shared/ui'
+import { ChordFinder } from '@/widgets/chord-finder'
 import { LiveScore } from '@/widgets/live-score'
 import { FREE_PLAY_MODES, type FreePlayView } from '../model/free-play-view'
 import { useFreePlay } from '../model/use-free-play'
@@ -38,9 +39,10 @@ function diagramShown(marks: DiagramMarks, letter: (colour: 'a' | 'b') => string
 }
 
 /**
- * Free play (spec 2026-10-09 §5): the piano played freely, the keyboard at its widest and the live
- * score over it. Play writes and names each chord played; Mark makes a teaching diagram, each key
- * tapped taking the colour and finger chosen, kept in the URL as a link to send. Clear starts again.
+ * Free play (spec 2026-10-09 §5, ADR 0052): the piano played freely. Play writes and names each chord
+ * played on a live score over the keyboard at its widest; Find names the chord of the keys tapped or
+ * held and the keys it is in; Mark makes a teaching diagram, each key tapped taking the colour and
+ * finger chosen, kept in the URL as a link to send. Clear starts again.
  */
 export function FreePlayPage() {
   const { t } = useTranslation(['practice', 'common'])
@@ -64,14 +66,20 @@ export function FreePlayPage() {
           <RoundButton
             label={t('freePlay.clear')}
             icon={Eraser}
-            disabled={free.chords.length === 0}
+            disabled={!free.canClear}
             onClick={free.clear}
           />
         }
       />
-      <PinnedKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
       {/* What is played is the screen's point: it comes first, under the keys; the choices after. */}
-      <LiveScore chords={free.chords} keyParam={view.key} />
+      {view.mode === 'find' ? (
+        <ChordFinder keys={view.keys} onChange={(keys) => change({ keys })} />
+      ) : (
+        <>
+          <PinnedKeyboard shown={shown} range={WIDEST} onKeyPress={free.press} />
+          <LiveScore chords={free.chords} keyParam={view.key} />
+        </>
+      )}
       <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('freePlay.mode')}>
           <Segmented

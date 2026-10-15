@@ -12,7 +12,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'scale',
     group: 'scales',
-    level: 1,
+    stage: 'beginner',
     name: { en: 'Scale', ru: 'Гамма' },
     trains: {
       en: 'Any scale up and down, from any of its notes, over one to four octaves',
@@ -26,7 +26,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'thirds',
     group: 'scales',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'In 3rds', ru: 'Терциями' },
     trains: {
       en: 'The scale in broken 3rds: each note and the one a 3rd above',
@@ -40,7 +40,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'sixths',
     group: 'scales',
-    level: 3,
+    stage: 'advanced',
     name: { en: 'In 6ths', ru: 'Секстами' },
     trains: {
       en: 'The scale in broken 6ths: a wider reach, the same way up and back',
@@ -54,7 +54,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'groups',
     group: 'scales',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'In groups', ru: 'Группами' },
     trains: {
       en: 'A group of four notes restarted on each degree, up and mirrored down',
@@ -68,7 +68,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'contrary',
     group: 'scales',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'Contrary motion', ru: 'Расходящееся движение' },
     trains: {
       en: 'Both hands from one note, moving apart and back together',
@@ -82,7 +82,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'arpeggio',
     group: 'arpeggios',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'Arpeggio', ru: 'Арпеджио' },
     trains: {
       en: 'A chord’s notes one by one over the octaves, from any inversion',
@@ -96,7 +96,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'inversions',
     group: 'arpeggios',
-    level: 1,
+    stage: 'beginner',
     name: { en: 'Inversions', ru: 'Обращения' },
     trains: {
       en: 'A chord climbing through its inversions to the octave and back',
@@ -110,7 +110,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'sixth-diminished',
     group: 'barryHarris',
-    level: 3,
+    stage: 'advanced',
     name: { en: '6th-diminished scale', ru: 'Секстово-уменьшённая гамма' },
     trains: {
       en: 'Eight notes to the octave: the 6th chord on the beats, the diminished 7th between',
@@ -124,7 +124,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'sixth-diminished-chords',
     group: 'barryHarris',
-    level: 4,
+    stage: 'professional',
     name: { en: '6th-diminished chords', ru: 'Секстово-уменьшённые аккорды' },
     trains: {
       en: 'Each note of the 6th-diminished scale harmonised, close or in drop 2',
@@ -138,7 +138,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'dominant-scale',
     group: 'barryHarris',
-    level: 3,
+    stage: 'advanced',
     name: { en: 'Dominant scale down', ru: 'Доминантовая гамма вниз' },
     trains: {
       en: 'The V7’s scale down with a half step that puts its chord tones on the beats',
@@ -152,7 +152,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'from-third',
     group: 'barryHarris',
-    level: 4,
+    stage: 'professional',
     name: { en: 'Arpeggios from the 3rd', ru: 'Арпеджио от терции' },
     trains: {
       en: 'Over a ii–V–I: each chord’s 3-5-7-9, then the scale down into the next',
@@ -166,7 +166,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'drop-two',
     group: 'barryHarris',
-    level: 4,
+    stage: 'professional',
     name: { en: 'Drop-2 7ths', ru: 'Септаккорды drop 2' },
     trains: {
       en: 'The key’s 7th chords up and down, the second voice from the top in the left hand',
@@ -180,7 +180,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'two-five-one-scale',
     group: 'jonny',
-    level: 1,
+    stage: 'beginner',
     name: { en: '2-5-1 scale', ru: 'Гамма 2-5-1' },
     trains: {
       en: 'The scale in swung 8ths over the left hand’s shells of a ii–V–I',
@@ -194,7 +194,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'inner-voice',
     group: 'jonny',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'Inner voice', ru: 'Внутренний голос' },
     trains: {
       en: 'The key’s 7th chords: the 3rd held on top, the 7th stepping down to the 6th',
@@ -208,7 +208,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'modes',
     group: 'jonny',
-    level: 3,
+    stage: 'advanced',
     name: { en: 'Modes', ru: 'Лады' },
     trains: {
       en: 'The scale from each of its degrees, Ionian to Locrian, fingered as the scale',
@@ -222,7 +222,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'rapid-switch',
     group: 'jonny',
-    level: 4,
+    stage: 'professional',
     name: { en: 'Rapid switch', ru: 'Быстрая смена' },
     trains: {
       en: 'One unbroken line through all twelve keys round the circle of fifths',
@@ -236,7 +236,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'pattern-shifting',
     group: 'jonny',
-    level: 4,
+    stage: 'professional',
     name: { en: 'Pattern shifting', ru: 'Перенос фигуры' },
     trains: {
       en: 'A short figure restarted on each degree, its shape kept: a melodic sequence',
@@ -250,7 +250,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'five-finger',
     group: 'technique',
-    level: 1,
+    stage: 'beginner',
     name: { en: 'Five-finger position', ru: 'Позиция пяти пальцев' },
     trains: {
       en: 'A finger on each of the first five notes of a key, up and down',
@@ -264,7 +264,7 @@ export const EXERCISES: readonly Exercise[] = [
   {
     id: 'hanon',
     group: 'technique',
-    level: 2,
+    stage: 'intermediate',
     name: { en: 'Hanon No. 1', ru: 'Ганон № 1' },
     trains: {
       en: 'Even, independent fingers: one figure climbing two octaves and coming back',

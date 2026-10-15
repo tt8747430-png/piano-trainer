@@ -12,8 +12,6 @@ const joiningChords: Lesson = {
     en: 'The three main chords of a key, joined so every note moves to its nearest neighbour.',
     ru: 'Три главных аккорда тональности, соединённые так, что каждый звук идёт в ближайший соседний.',
   },
-  level: 3,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'Three main chords', ru: 'Три главных аккорда' },

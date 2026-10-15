@@ -8,8 +8,6 @@ const sixEightAndTwelveEight: Lesson = {
     en: 'What a meter says, how 6/8 and 12/8 are counted, and the five ways in 6/8.',
     ru: 'Что показывает размер, как считать 6/8 и 12/8 и пять видов в 6/8.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'What a meter says', ru: 'Что показывает размер' },

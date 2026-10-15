@@ -1,62 +1,62 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, List } from 'lucide-react'
+import { ArrowRight, Dumbbell } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { lessonById, lessonsIn, nextLesson, useModuleName, type Lesson } from '@/entities/lesson'
-import { lessonStepId } from '@/entities/path'
+import { lessonPlace, lessonStepId, nextLessonId, type LessonPlace } from '@/entities/course'
+import { lessonById, type Lesson } from '@/entities/lesson'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView } from '@/widgets/lesson-view'
 
 /** A lesson's course: its page on Learn. */
-const courseOf = (lesson: Lesson) =>
-  ({ to: '/learn/$module', params: { module: lesson.module } }) as const
+const courseOf = (place: LessonPlace) =>
+  ({ to: '/learn/$courseId', params: { courseId: place.course.id } }) as const
 
 /**
- * A lesson: where it is (its module, a link to it on Learn, and its number in it), its title and
- * summary, then the lesson itself, and at its end Learned and the way on along its track (ADR 0042):
- * the next lesson, or a course's list after its last. Going on marks the lesson learned.
+ * A lesson: where it is (its course, a link to its page, and its number there), its title and
+ * summary, then the lesson itself, and at its end Learned and the way on (ADR 0051): the next lesson
+ * of its course, or after its last the course's page with what to practise. Going on learns it.
  */
 export function LessonPage() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const moduleName = useModuleName()
   const { lessonId } = useParams({ from: '/shell/learn/lessons/$lessonId' })
   const lesson = lessonById(lessonId)
-  if (!lesson) return null
-  const inModule = lessonsIn(lesson.module)
+  const place = lessonPlace(lessonId)
+  // The route finds no lesson that no course teaches.
+  if (!lesson || !place) return null
   return (
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={localText(lesson.title, locale)}
-        back={<BackButton fallback={courseOf(lesson)} />}
+        back={<BackButton fallback={courseOf(place)} />}
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         <Link
-          {...courseOf(lesson)}
+          {...courseOf(place)}
           className="rounded-sm font-semibold text-foreground underline-offset-4 hover:underline"
         >
-          {moduleName(lesson.module)}
+          {localText(place.course.title, locale)}
         </Link>{' '}
-        · {t('place', { n: inModule.indexOf(lesson) + 1, total: inModule.length })}
+        · {t('place', { n: place.n, total: place.total })}
       </nav>
       <p className="max-w-prose text-lg text-pretty text-muted-foreground">
         {localText(lesson.summary, locale)}
       </p>
       <LessonView key={lesson.id} lesson={lesson} />
-      <LessonEnd lesson={lesson} />
+      <LessonEnd lesson={lesson} place={place} />
     </div>
   )
 }
 
 /** A lesson's end: its Learned toggle beside the one way on, which learns it on the way. */
-function LessonEnd({ lesson }: { lesson: Lesson }) {
+function LessonEnd({ lesson, place }: { lesson: Lesson; place: LessonPlace }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const moduleName = useModuleName()
   const step = lessonStepId(lesson.id)
   const { learn } = useLearned(step)
-  const next = nextLesson(lesson.id)
+  const nextId = nextLessonId(lesson.id)
+  const next = nextId === undefined ? undefined : lessonById(nextId)
   return (
     <footer className="mt-6 flex max-w-prose flex-wrap items-center gap-3 border-t border-border pt-8 print:hidden">
       <ButtonLink
@@ -67,7 +67,7 @@ function LessonEnd({ lesson }: { lesson: Lesson }) {
           next ? (
             <Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />
           ) : (
-            <Link {...courseOf(lesson)} />
+            <Link {...courseOf(place)} />
           )
         }
       >
@@ -79,14 +79,12 @@ function LessonEnd({ lesson }: { lesson: Lesson }) {
             </span>
           </span>
         ) : (
-          <span className="font-display text-xl text-balance">
-            {t('track.all', { module: moduleName(lesson.module) })}
-          </span>
+          <span className="font-display text-xl text-balance">{t('track.practise')}</span>
         )}
         {next ? (
           <ArrowRight aria-hidden className="size-5" />
         ) : (
-          <List aria-hidden className="size-5" />
+          <Dumbbell aria-hidden className="size-5" />
         )}
       </ButtonLink>
       <LearnedButton step={step} />

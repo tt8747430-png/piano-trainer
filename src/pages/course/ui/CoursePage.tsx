@@ -1,123 +1,137 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
+import type { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isMethodBookId } from '@/entities/book'
 import {
-  isLessonModule,
-  lessonInModule,
-  lessonsIn,
-  MODULE_LOOK,
-  useModuleName,
-} from '@/entities/lesson'
-import { lessonStepId } from '@/entities/path'
+  courseById,
+  CourseIcon,
+  courseIcon,
+  courseNumber,
+  firstOpenStep,
+  nextCourse,
+  STAGE_PAINT,
+  StepLink,
+  useStepTitle,
+  type Course,
+  type Step,
+} from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
-import {
-  BackButton,
-  ButtonLink,
-  LearnedBadge,
-  PAGE_TILES,
-  PAINT,
-  RowLink,
-  ScreenHeader,
-} from '@/shared/ui'
+import { cn, OPEN_PLAINLY } from '@/shared/lib'
+import { BackButton, ButtonLink, PAINT, RowLink, ScreenHeader } from '@/shared/ui'
+import { courseProgress, CourseSteps, isComplete } from '@/widgets/curriculum'
+
+/** The way a step is opened from its course's one button: a piece in the Player, any other on its own page. */
+function StepButtonLink({ step, ...props }: { step: Step } & Omit<ComponentProps<'a'>, 'href'>) {
+  return step.kind === 'piece' ? (
+    <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} {...props} />
+  ) : (
+    <StepLink step={step} {...props} />
+  )
+}
+
+/** The course's one honey way in: Start, or Continue with the step to take; Review once all are learned. */
+function CourseAction({ course }: { course: Course }) {
+  const { t } = useTranslation('learn')
+  const learned = useProgress(selectLearned)
+  const stepTitle = useStepTitle()
+  const progress = courseProgress(course, learned)
+  const open = firstOpenStep(course, (id) => learned[id] !== undefined)
+  const first: Step = { kind: 'lesson', lessonId: course.lessons[0] ?? '' }
+  const step = open ?? first
+  const label = open
+    ? progress.done === 0
+      ? t('course.start')
+      : t('course.continue')
+    : t('course.review')
+  return (
+    <ButtonLink
+      size="pill"
+      variant={open ? 'default' : 'outline'}
+      className="h-auto min-h-14 justify-between gap-4 py-3 text-left whitespace-normal sm:min-w-80 sm:self-start"
+      render={<StepButtonLink step={step} />}
+    >
+      <span className="flex min-w-0 flex-col">
+        <span className="text-sm font-medium">{label}</span>
+        <span className="font-display text-xl text-balance">{stepTitle(step).primary}</span>
+      </span>
+      <ArrowRight aria-hidden className="size-5 shrink-0" />
+    </ButtonLink>
+  )
+}
 
 /**
- * A course's page (ADR 0049): its band, what it teaches and how much of it is learned, one honey way in
- * (Start, or Continue with the lesson to read), then its lessons numbered as taught; a method book's
- * ends with its patterns and pieces on Practice's Accompaniment.
+ * A course's page (ADR 0051): its stage and number, what it teaches and how much of it is learned, one
+ * way in, its lessons numbered as taught, what to practise after them, and the course after it.
  */
 export function CoursePage() {
-  const { t } = useTranslation(['learn', 'common', 'practice'])
+  const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
-  const moduleName = useModuleName()
-  const { module } = useParams({ from: '/shell/learn/$module' })
+  const { courseId } = useParams({ from: '/shell/learn/$courseId' })
   const learned = useProgress(selectLearned)
-  if (!isLessonModule(module)) return null
-  const lessons = lessonsIn(module)
-  const isLearned = (id: string) => learned[lessonStepId(id)] !== undefined
-  const done = lessons.filter((lesson) => isLearned(lesson.id)).length
-  const next = lessonInModule(module, (lesson) => learned[lessonStepId(lesson.id)])
-  const { paint, icon: Icon } = MODULE_LOOK[module]
+  const course = courseById(courseId)
+  if (!course) return null
+  const progress = courseProgress(course, learned)
+  const paint = PAINT[STAGE_PAINT[course.stage]]
+  const after = nextCourse(course)
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <ScreenHeader
-        title={moduleName(module)}
-        back={<BackButton fallback={{ to: '/', search: { view: 'courses' } }} />}
+        title={localText(course.title, locale)}
+        back={<BackButton fallback={{ to: '/' }} />}
       />
-      <section className="flex max-w-3xl flex-col overflow-hidden card lg:flex-row">
+      <section className="flex max-w-3xl flex-col overflow-hidden card sm:flex-row">
         <span
           className={cn(
-            'grid h-28 shrink-0 place-items-center lg:h-auto lg:w-40',
-            PAINT[paint].fill,
+            'flex h-24 shrink-0 items-center justify-between px-5 sm:h-auto sm:w-40 sm:flex-col sm:justify-center sm:gap-2',
+            paint.fill,
           )}
         >
-          <Icon aria-hidden className={cn('size-12', PAINT[paint].ink)} strokeWidth={1.5} />
+          <CourseIcon courseId={course.id} className={cn('size-10', paint.ink)} strokeWidth={1.5} />
+          <span className={cn('text-sm font-semibold', paint.ink)}>
+            {t('learn:courseNumber', { n: courseNumber(course) })}
+          </span>
         </span>
         <div className="flex flex-1 flex-col gap-4 p-5">
-          <p className="text-lg text-pretty">{t(`learn:moduleAbout.${module}`)}</p>
+          <p className="text-sm font-medium text-muted-foreground">
+            {t(`common:stage.${course.stage}`)} ·{' '}
+            {t('learn:course.count', { count: course.lessons.length })}
+          </p>
+          <p className="-mt-2 text-lg text-pretty">{localText(course.summary, locale)}</p>
           <div className="flex flex-col gap-2">
             <span className="text-sm text-muted-foreground tabular-nums">
-              {t('learn:progress', { learned: done, total: lessons.length })}
+              {isComplete(progress)
+                ? t('learn:course.done')
+                : t('learn:progress', { learned: progress.done, total: progress.total })}
             </span>
             <span aria-hidden className="h-1.5 overflow-hidden rounded-full bg-muted">
               <span
                 className="block h-full rounded-full bg-learned"
-                style={{ width: `${(done / lessons.length) * 100}%` }}
+                style={{ width: `${(progress.done / progress.total) * 100}%` }}
               />
             </span>
           </div>
-          {next ? (
-            <ButtonLink
-              size="pill"
-              className="h-auto min-h-14 justify-between gap-4 py-3 text-left whitespace-normal sm:self-start sm:min-w-80"
-              render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />}
-            >
-              <span className="flex min-w-0 flex-col">
-                <span className="text-sm font-medium">
-                  {done === 0 ? t('learn:course.start') : t('learn:course.continue')}
-                </span>
-                <span className="font-display text-xl text-balance">
-                  {localText(next.title, locale)}
-                </span>
-              </span>
-              <ArrowRight aria-hidden className="size-5" />
-            </ButtonLink>
-          ) : null}
+          <CourseAction course={course} />
         </div>
       </section>
-      <section aria-label={t('learn:course.lessons')} className="flex max-w-3xl flex-col gap-3">
-        <h2 className="text-2xl">{t('learn:course.lessons')}</h2>
-        <ol className="flex flex-col divide-y divide-hairline card px-2">
-          {lessons.map((lesson, i) => (
-            <li key={lesson.id} aria-current={lesson === next ? 'step' : undefined}>
-              <RowLink
-                title={localText(lesson.title, locale)}
-                numeral={i + 1}
-                // Grass is learned: a lesson wears it once it is, its course's paint before.
-                paint={isLearned(lesson.id) ? 'grass' : paint}
-                trailing={
-                  isLearned(lesson.id) ? (
-                    <LearnedBadge label={t('common:learned.done')} />
-                  ) : undefined
-                }
-                render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-              />
-            </li>
-          ))}
-        </ol>
-      </section>
-      {/* A course's patterns and pieces are on its part of Accompaniment: one course, two places. */}
-      {isMethodBookId(module) ? (
-        <div className="card">
-          <RowLink
-            title={t('learn:coursePractice')}
-            detail={t('practice:pages.accompaniment')}
-            {...PAGE_TILES.patterns}
-            render={<Link to="/practice/accompaniment" search={{ show: module }} />}
-          />
-        </div>
+      <div className="max-w-3xl">
+        <CourseSteps course={course} />
+      </div>
+      {after ? (
+        <section aria-label={t('learn:course.next')} className="flex max-w-3xl flex-col gap-2">
+          <h2 className="text-2xl">{t('learn:course.next')}</h2>
+          <div className="card">
+            <RowLink
+              title={localText(after.title, locale)}
+              detail={`${t(`common:stage.${after.stage}`)} · ${t('learn:courseNumber', {
+                n: courseNumber(after),
+              })}`}
+              icon={courseIcon(after.id)}
+              paint={STAGE_PAINT[after.stage]}
+              render={<Link to="/learn/$courseId" params={{ courseId: after.id }} />}
+            />
+          </div>
+        </section>
       ) : null}
     </div>
   )

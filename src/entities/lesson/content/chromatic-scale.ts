@@ -7,8 +7,6 @@ const chromaticScale: Lesson = {
     en: 'All twelve keys in turn: how to write it up and down, why it has no tonic, and how to finger it.',
     ru: 'Все двенадцать клавиш подряд: как её пишут вверх и вниз, почему у неё нет тоники и как её играть.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Every key in turn', ru: 'Все клавиши подряд' },

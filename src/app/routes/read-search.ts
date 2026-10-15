@@ -10,8 +10,6 @@ import {
   numeralsParam,
   parseKey,
   parseNumerals,
-  chordsOfLine,
-  readChordSymbol,
   SCALE_KINDS,
   writtenKey,
 } from '@/shared/lib/music'
@@ -61,14 +59,4 @@ export function readKey(raw: unknown): Key | null {
 export function readNumerals(raw: unknown, fallback: string): string {
   const numerals = typeof raw === 'string' ? parseNumerals(raw) : null
   return numerals ? numeralsParam(numerals) : fallback
-}
-
-/** A line of chords from the URL as it was typed, every word of it a chord; the fallback for any other. */
-export function readTypedChords(raw: unknown, fallback: string): string {
-  return typeof raw === 'string' && chordsOfLine(raw) ? raw : fallback
-}
-
-/** A chord from the URL as it was typed; the fallback for one that cannot be read. */
-export function readTypedChord(raw: unknown, fallback: string): string {
-  return typeof raw === 'string' && readChordSymbol(raw) ? raw : fallback
 }

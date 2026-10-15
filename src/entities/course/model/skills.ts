@@ -1,0 +1,32 @@
+import {
+  chordFamily,
+  chordSkill,
+  qualitiesIn,
+  scaleSkill,
+  skillOf,
+  type SkillId,
+} from '@/shared/lib/music'
+import type { Step } from './types'
+
+/** The step a skill is learned on: a chord quality's family, or its scale. */
+export function stepOfSkill(id: SkillId): Step {
+  const skill = skillOf(id)
+  return skill.kind === 'chord'
+    ? { kind: 'chords', family: chordFamily(skill.quality) }
+    : { kind: 'scale', scale: skill.scale }
+}
+
+/** What a step's check asks: every quality of a chord family, a scale's one skill, none for a piece
+ *  or a lesson. */
+export function skillsOfStep(step: Step): SkillId[] {
+  switch (step.kind) {
+    case 'lesson':
+      return []
+    case 'chords':
+      return qualitiesIn(step.family).map(chordSkill)
+    case 'scale':
+      return [scaleSkill(step.scale)]
+    case 'piece':
+      return []
+  }
+}

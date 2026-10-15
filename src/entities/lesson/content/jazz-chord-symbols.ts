@@ -9,8 +9,6 @@ const jazzChordSymbols: Lesson = {
     en: 'Letters for notes, signs for triads, and numbers that count up the major scale.',
     ru: 'Буквы для нот, знаки для трезвучий и цифры — ступени мажорной гаммы.',
   },
-  level: 2,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Notes by letter', ru: 'Ноты буквами' },

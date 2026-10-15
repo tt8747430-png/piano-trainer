@@ -11,8 +11,6 @@ const minorTwoFiveLevels: Lesson = {
     en: 'One cadence in C minor, voiced at four levels: shells, 9ths and 11ths, altered dominants, a tritone substitute.',
     ru: 'Один оборот в до миноре в четырёх уровнях: двузвучия, ноны и ундецимы, альтерированные доминанты, тритоновая замена.',
   },
-  level: 4,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'Level 1: Beginner', ru: 'Уровень 1: новичок' },

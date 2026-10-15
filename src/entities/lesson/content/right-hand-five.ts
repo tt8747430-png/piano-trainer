@@ -11,8 +11,6 @@ const rightHandFive: Lesson = {
     en: 'Way 5 with a voice moving inside the chord. The ♭7 under the root, a falling line, a moving 3rd.',
     ru: 'Пятый способ с голосом, который движется внутри аккорда. ♭7 под основным тоном, нисходящая линия, движущаяся терция.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'A voice inside the chord', ru: 'Голос внутри аккорда' },

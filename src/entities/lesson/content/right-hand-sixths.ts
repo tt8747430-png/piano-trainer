@@ -8,8 +8,6 @@ const rightHandSixths: Lesson = {
     en: 'Sixths moving up or down the scale, then a song with your own plan.',
     ru: 'Сексты вверх или вниз по гамме, затем песня по своему плану.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Sixths up and down', ru: 'Сексты вверх и вниз' },

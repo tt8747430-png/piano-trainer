@@ -7,8 +7,6 @@ const brokenChords: Lesson = {
     en: 'A chord one note at a time: broken in one hand, climbing through both, and figuration.',
     ru: 'Аккорд по одному звуку: ломаный в одной руке, восходящий через обе и фигурация.',
   },
-  level: 2,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'One note at a time', ru: 'По одному звуку' },

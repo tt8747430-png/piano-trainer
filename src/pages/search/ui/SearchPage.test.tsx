@@ -51,7 +51,7 @@ describe('Search', () => {
     await renderApp('/search')
     await screen.findByRole('heading', { level: 1, name: 'Search' })
     for (const more of screen.getAllByRole('button', { name: /^Show all/ })) await user.click(more)
-    expect(hrefOf('Practice', /^Chord finder/)).toBe('/practice/chords/find')
+    expect(hrefOf('Practice', /^Free play/)).toBe('/practice/free-play')
     expect(hrefOf('Songs', /^Still, my soul, be still/)).toBe('/songs/bz5')
     expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe(
       '/learn/lessons/reading-chord-symbols',
@@ -83,14 +83,14 @@ describe('Search', () => {
     expect(headings()[0]).toBe('Chords')
   })
 
-  it('reads a line of chords typed as a song’s, and leads with Transpose on it', async () => {
-    await renderApp('/search?q=Am+F+C+G')
-    const pages = await screen.findByRole('region', { name: 'Practice' })
-    const [first] = within(pages).getAllByRole('link')
-    expect(first).toHaveTextContent('Am F C G')
-    expect(first).toHaveTextContent('Transpose · A minor')
-    expect(first?.getAttribute('href')).toBe('/practice/progressions/transpose?chords=Am+F+C+G')
-    expect(headings()[0]).toBe('Practice')
+  it('reads a line of chords typed as a song’s, and leads with it on Progressions', async () => {
+    await renderApp('/search?q=Dm7+Gm9+Asus4+Dm7')
+    const progressions = await screen.findByRole('region', { name: 'Progressions' })
+    const [first] = within(progressions).getAllByRole('link')
+    expect(first).toHaveTextContent('Dm7 Gm9 Asus4 Dm7')
+    expect(first).toHaveTextContent('Progressions · D minor')
+    expect(first?.getAttribute('href')).toBe('/practice/progressions?key=Dm&p=i7-iv9-Vsus4-i7')
+    expect(headings()[0]).toBe('Progressions')
   })
 
   it('finds a lesson by its title in the other language', async () => {

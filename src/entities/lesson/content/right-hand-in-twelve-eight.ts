@@ -8,8 +8,6 @@ const rightHandInTwelveEight: Lesson = {
     en: 'Ways 7 to 10 fill a bar of 12/8, a chord on each of its four beats.',
     ru: 'Виды 7–10 заполняют такт 12/8, аккорд на каждую из четырёх долей.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'Ways 7 and 8', ru: 'Виды 7 и 8' },

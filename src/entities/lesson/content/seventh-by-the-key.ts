@@ -8,8 +8,6 @@ const seventhByTheKey: Lesson = {
     en: 'Maj7 or 7, as the key’s notes decide, with the 7th taken under the chord.',
     ru: 'Maj7 или 7 — как подскажут знаки тональности, с септимой под аккордом.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'One more note', ru: 'Ещё одна нота' },

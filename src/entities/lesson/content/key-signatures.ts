@@ -8,8 +8,6 @@ const keySignatures: Lesson = {
     en: 'A key’s sharps or flats written once, the order they come in, and the circle of fifths.',
     ru: 'Знаки тональности, записанные один раз, их порядок и квинтовый круг.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Sharps or flats, once a line', ru: 'Знаки в начале строки' },
@@ -88,6 +86,30 @@ const keySignatures: Lesson = {
           kind: 'link',
           title: { en: 'The circle of fifths in Keys', ru: 'Квинтовый круг в тональностях' },
           target: { opens: 'key', key: { tonic: note('C'), minor: false } },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Name the key from its signature', ru: 'Тональность по ключевым знакам' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'With sharps, the key is a half step above the last sharp. With flats, it is the next-to-last flat.',
+            ru: 'При диезах тоника на полутон выше последнего диеза. При бемолях тоника — предпоследний бемоль.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', key: { tonic: note('A'), minor: false }, notes: 'A4/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          key: { tonic: note('E', -1), minor: false },
+          notes: 'E♭4/1',
+        },
+        {
+          kind: 'link',
+          title: { en: 'Key signatures in the Quiz', ru: 'Ключевые знаки в тестах' },
+          target: { opens: 'quiz', trainer: 'key-signatures' },
         },
       ],
     },

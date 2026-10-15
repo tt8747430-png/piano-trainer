@@ -1,10 +1,11 @@
+import { StageMark } from '@/entities/course'
 import { Link } from '@tanstack/react-router'
 import { Spline } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { exercisesIn } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
 import { noteParam, type ScaleKind, type SpelledNote } from '@/shared/lib/music'
-import { LevelMark, RowGroup, RowLink } from '@/shared/ui'
+import { RowGroup, RowLink } from '@/shared/ui'
 
 const SCALE_EXERCISES = exercisesIn('scales')
 
@@ -24,7 +25,7 @@ export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleK
             detail={localText(exercise.trains, locale)}
             icon={Spline}
             paint="sky"
-            trailing={<LevelMark level={exercise.level} />}
+            trailing={<StageMark stage={exercise.stage} />}
             render={
               <Link
                 to="/play/exercise/$exerciseId"

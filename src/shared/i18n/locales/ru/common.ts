@@ -38,12 +38,11 @@ export const common: LocaleResources['common'] = {
   close: 'Закрыть',
   clearSearch: 'Очистить поиск',
   loading: 'Загрузка',
-  level: 'Уровень {{level}}',
-  levelName: {
+  stage: {
     beginner: 'Начальный',
-    elementary: 'Базовый',
     intermediate: 'Средний',
     advanced: 'Продвинутый',
+    professional: 'Профессиональный',
   },
   rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pathSteps } from '@/entities/path'
+import { curriculumSteps } from '@/entities/course'
 import {
   byLastOpened,
   selectAnswers,
@@ -52,7 +52,7 @@ describe('progress selectors', () => {
 })
 
 describe('selectSuggestedStep', () => {
-  const steps = pathSteps()
+  const steps = curriculumSteps()
   const first = steps[0]
   const bz5 = steps.find((s) => s.id === 'piece:bz5')
 

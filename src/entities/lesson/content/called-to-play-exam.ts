@@ -8,8 +8,6 @@ const calledToPlayExam: Lesson = {
     en: 'Two verses of «Long I Wandered in the Shadows» with your own plan, accompanying a singer.',
     ru: 'Два куплета «Long I Wandered in the Shadows» по своему плану, с солистом.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'The assignment', ru: 'Задание' },

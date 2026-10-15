@@ -13,8 +13,6 @@ const scalesThroughTheChanges: Lesson = {
     en: 'A scale for each chord, written from one note so only the differences move, and chords made from a mode.',
     ru: 'Гамма для каждого аккорда от одного звука, чтобы двигались только различия, и аккорды, составленные из лада.',
   },
-  level: 4,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'A scale for each chord', ru: 'Гамма для каждого аккорда' },

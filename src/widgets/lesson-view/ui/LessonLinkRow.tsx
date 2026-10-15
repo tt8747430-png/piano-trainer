@@ -1,11 +1,19 @@
 import { Link } from '@tanstack/react-router'
 import { CirclePlay, Layers } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
-import { STEP_PAINT } from '@/entities/path'
+import { STEP_PAINT } from '@/entities/course'
 import { pieceById } from '@/entities/piece'
-import { keyParam, keyScale, noteParam, numeralsParam, parseChordSymbol } from '@/shared/lib/music'
+import {
+  keyParam,
+  keyScale,
+  note,
+  noteParam,
+  numeralsParam,
+  parseChordSymbol,
+} from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
+import { typedSearch } from '@/widgets/progression-explorer'
 
 /**
  * A row leading to what a lesson names, on the page or in the Player that shows it, with that page's
@@ -114,40 +122,48 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         />
       )
     }
-    case 'passing-chords':
+    case 'between': {
+      // The two chords as a typed line in their key: Between opens on the row's first change.
+      const search = typedSearch(`${target.from} ${target.to}`, target.key)
+      if (!search)
+        throw new RangeError(`A lesson's chords "${target.from} ${target.to}" do not read`)
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.passingChords}
+          {...PAGE_TILES.progressions}
+          render={<Link to="/practice/progressions" search={search} />}
+        />
+      )
+    }
+    case 'harmonise':
+      return (
+        <RowLink
+          title={title}
+          {...PAGE_TILES.key}
           render={
             <Link
-              to="/practice/progressions/passing"
-              search={{ key: keyParam(target.key), from: target.from, to: target.to }}
+              to="/practice/scales"
+              search={{
+                root: noteParam(target.key.tonic),
+                kind: keyScale(target.key),
+                show: 'key',
+                melody: noteParam(target.note),
+              }}
             />
           }
         />
       )
-    case 'reharmonise':
+    case 'song-chords': {
+      const search = typedSearch(target.chords, { tonic: note('C'), minor: false })
+      if (!search) throw new RangeError(`A lesson's chords "${target.chords}" do not read`)
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.reharmonise}
-          render={
-            <Link
-              to="/practice/progressions/reharmonise"
-              search={{ key: keyParam(target.key), note: noteParam(target.note) }}
-            />
-          }
+          {...PAGE_TILES.progressions}
+          render={<Link to="/practice/progressions" search={search} />}
         />
       )
-    case 'transpose':
-      return (
-        <RowLink
-          title={title}
-          {...PAGE_TILES.transpose}
-          render={<Link to="/practice/progressions/transpose" search={{ chords: target.chords }} />}
-        />
-      )
+    }
     case 'player': {
       const { numerals, key, size } = readProgression(target)
       return (
@@ -189,6 +205,14 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
               }}
             />
           }
+        />
+      )
+    case 'quiz':
+      return (
+        <RowLink
+          title={title}
+          {...PAGE_TILES.quiz}
+          render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: target.trainer }} />}
         />
       )
     case 'piece': {

@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { stepById, useStepTitle, type StepId } from '@/entities/path'
+import { stepById, useStepTitle, type StepId } from '@/entities/course'
 import { LearnedButton } from '@/features/mark-learned'
 import { ButtonLink } from '@/shared/ui'
 

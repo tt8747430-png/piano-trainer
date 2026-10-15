@@ -10,8 +10,6 @@ const gospelPassingChords: Lesson = {
     en: 'The moves between chords that make a hymn sound gospel: I to IV, the raised-4th diminished, the walk-up, and a ii–V into any chord.',
     ru: 'Ходы между аккордами, от которых гимн звучит как госпел: с I на IV, уменьшённый на повышенной IV, подход снизу и ii–V в любой аккорд.',
   },
-  level: 3,
-  module: 'gospel',
   sections: [
     {
       heading: { en: 'From I to IV', ru: 'С I на IV' },
@@ -27,7 +25,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
       ],
     },
@@ -45,7 +43,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'F to C/G in Passing chords', ru: 'Из F в C/G в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C/G' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'C/G' },
         },
       ],
     },
@@ -64,7 +62,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'F to C in Passing chords', ru: 'Из F в C в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'C' },
         },
       ],
     },
@@ -89,7 +87,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Dm7 in Passing chords', ru: 'Из C в Dm7 в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm7' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Dm7' },
         },
       ],
     },

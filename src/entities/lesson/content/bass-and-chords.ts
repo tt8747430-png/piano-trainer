@@ -7,8 +7,6 @@ const bassAndChords: Lesson = {
     en: 'What each hand plays from chords, the nearest chord, and the first ways to play.',
     ru: 'Что играет каждая рука по аккордам, ближайший аккорд и первые способы игры.',
   },
-  level: 1,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'Two hands, two jobs', ru: 'Две руки — две задачи' },

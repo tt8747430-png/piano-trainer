@@ -1,6 +1,5 @@
 import { common } from './common'
 import { editor } from './editor'
-import { path } from './path'
 import { learn } from './learn'
 import { music } from './music'
 import { piece } from './piece'
@@ -13,7 +12,6 @@ import { songs } from './songs'
 
 export const en = {
   common,
-  path,
   songs,
   piece,
   player,

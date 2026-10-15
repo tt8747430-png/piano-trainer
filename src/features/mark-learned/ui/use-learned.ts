@@ -1,5 +1,5 @@
 import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/progress'
-import { type StepId } from '@/entities/path'
+import { type StepId } from '@/entities/course'
 import { markLearned } from '../mark-learned'
 import { unmarkLearned } from '../unmark-learned'
 

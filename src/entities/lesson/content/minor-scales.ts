@@ -8,8 +8,6 @@ const minorScales: Lesson = {
     en: 'Natural, harmonic and melodic minor, and the major key that has the same notes as each minor key.',
     ru: 'Три вида минора — натуральный, гармонический и мелодический — и мажор с теми же нотами.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Natural minor', ru: 'Натуральный минор' },
@@ -76,6 +74,25 @@ const minorScales: Lesson = {
           kind: 'link',
           title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },
           target: { opens: 'key', key: { tonic: note('A'), minor: true } },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Hear major and minor', ru: 'Слышать мажор и минор' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Play C major, then C minor. Only the 3rd, 6th and 7th change, and the colour darkens.',
+            ru: 'Сыграйте до мажор, затем до минор. Меняются только третья, шестая и седьмая ступени, и звучание темнеет.',
+          },
+        },
+        { kind: 'scale', root: note('C'), scale: 'major' },
+        { kind: 'scale', root: note('C'), scale: 'natural' },
+        {
+          kind: 'link',
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],
     },

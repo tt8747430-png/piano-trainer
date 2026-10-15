@@ -1,7 +1,6 @@
 import type { LocaleResources } from '../../types'
 import { common } from './common'
 import { editor } from './editor'
-import { path } from './path'
 import { learn } from './learn'
 import { music } from './music'
 import { piece } from './piece'
@@ -14,7 +13,6 @@ import { songs } from './songs'
 
 export const ru: LocaleResources = {
   common,
-  path,
   songs,
   piece,
   player,

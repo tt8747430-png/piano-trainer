@@ -11,8 +11,6 @@ const commonProgressions: Lesson = {
     en: 'The progressions under most hymns and songs, in major and minor keys. Each is written in Roman numerals, so it plays in any key.',
     ru: 'Последовательности, на которых держится большинство гимнов и песен, в мажоре и миноре. Каждая записана римскими цифрами, поэтому играется в любой тональности.',
   },
-  level: 2,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'I–IV–V–I', ru: 'I–IV–V–I' },

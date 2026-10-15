@@ -8,8 +8,6 @@ const rightHandInSixEight: Lesson = {
     en: 'The right hand’s first four ways, each in a bar of 6/8.',
     ru: 'Первые четыре вида игры правой рукой, каждый в такте 6/8.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'Ways 1 and 2', ru: 'Виды 1 и 2' },

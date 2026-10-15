@@ -8,8 +8,6 @@ const playingByChords: Lesson = {
     en: 'Why play by chords, a chord chart beside sheet music, and the C major triad.',
     ru: 'Зачем играть аккордами, аккорды над словами и ноты, трезвучие до мажор.',
   },
-  level: 1,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Chords over the words', ru: 'Аккорды над словами' },

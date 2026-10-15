@@ -18,8 +18,6 @@ const progressionsInOrder: Lesson = {
     en: 'piano.org’s learning order: ten steps from I–IV–V to the tritone substitution, each heard in C and walked through the keys.',
     ru: 'Порядок изучения piano.org: десять шагов от I–IV–V до тритоновой замены, каждый — в до мажоре и по тональностям.',
   },
-  level: 2,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'Step 1: I–IV–V, three chords', ru: 'Шаг 1: I–IV–V, три аккорда' },

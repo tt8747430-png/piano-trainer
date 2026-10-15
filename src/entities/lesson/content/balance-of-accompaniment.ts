@@ -8,8 +8,6 @@ const balanceOfAccompaniment: Lesson = {
     en: 'Bass and melody louder, everything between them softer, the “musical cake”.',
     ru: 'Бас и мелодия громче, всё между ними тише — «музыкальный торт».',
   },
-  level: 3,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'The musical cake', ru: 'Музыкальный торт' },

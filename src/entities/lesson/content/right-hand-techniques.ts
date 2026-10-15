@@ -8,8 +8,6 @@ const rightHandTechniques: Lesson = {
     en: 'The right hand fills a chord while the left keeps the bass. A chord and octave jumps, and an arpeggio up two octaves.',
     ru: 'Правая рука заполняет аккорд, пока левая держит бас. Аккорд и скачки на октаву, арпеджио на две октавы вверх.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'The chord stays, the hand moves', ru: 'Аккорд тот же, рука движется' },

@@ -10,8 +10,6 @@ const gospelProgressions: Lesson = {
     en: 'The progressions gospel is built on, coloured with 7ths, and its rhythm.',
     ru: 'Последовательности, на которых строится госпел, с септаккордами, и его ритм.',
   },
-  level: 3,
-  module: 'gospel',
   sections: [
     {
       heading: { en: 'The gospel sound', ru: 'Звучание госпела' },

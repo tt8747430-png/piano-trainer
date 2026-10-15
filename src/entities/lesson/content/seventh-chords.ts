@@ -8,8 +8,6 @@ const seventhChords: Lesson = {
     en: 'A triad with a 7th on top: the five common kinds, and the one that leads to the tonic.',
     ru: 'Трезвучие с септимой сверху: пять распространённых видов и тот, что ведёт к тонике.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'A triad and a 7th', ru: 'Трезвучие и септима' },

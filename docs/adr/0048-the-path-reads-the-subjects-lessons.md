@@ -1,6 +1,6 @@
 # ADR 0048 — The Path reads the subjects' lessons, and Continue is one way on
 
-- **Status:** accepted · **Date:** 2026-10-14 · **Amends:** ADR 0005 (the Path's levels), ADR 0042 (a lesson's
+- **Status:** superseded by ADR 0051 · **Date:** 2026-10-14 · **Amends:** ADR 0005 (the Path's levels), ADR 0042 (a lesson's
   track)
 
 ## Context

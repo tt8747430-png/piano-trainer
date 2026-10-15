@@ -21,8 +21,6 @@ const twoFiveOne: Lesson = {
     en: 'Jazz’s cadence in 7th chords, its voices, in major and minor, in every key and in a song.',
     ru: 'Главный оборот джаза в септаккордах — голоса, мажор и минор, все тональности и песня.',
   },
-  level: 3,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Subdominant, dominant, tonic', ru: 'Субдоминанта, доминанта, тоника' },

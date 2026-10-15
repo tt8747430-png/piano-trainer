@@ -13,8 +13,6 @@ const chordFunctions: Lesson = {
     en: 'Home, leaving and coming back: the three functions, and the chords that stand in for them.',
     ru: 'Дом, уход и возвращение: три функции и аккорды, которые их заменяют.',
   },
-  level: 2,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Rest, unsettle, pull', ru: 'Покой, движение, тяготение' },
@@ -76,6 +74,19 @@ const chordFunctions: Lesson = {
         },
         { kind: 'chords', symbols: ['Am', 'C'] },
         { kind: 'progression', numerals: 'I ii V I', key: C_MAJOR },
+        {
+          kind: 'link',
+          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          target: { opens: 'quiz', trainer: 'chord-role' },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Progressions by ear in the Quiz',
+            ru: 'Последовательности на слух в тестах',
+          },
+          target: { opens: 'quiz', trainer: 'progressions-by-ear' },
+        },
       ],
     },
     {

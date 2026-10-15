@@ -23,7 +23,6 @@ const names: IndexNames = {
   quality: (quality) => `quality ${quality}`,
   scale: (kind) => `scale ${kind}`,
   trainer: (trainer) => ({ title: `trainer ${trainer}`, about: `asks ${trainer}` }),
-  module: (module) => `module ${module}`,
   key: (key) => `key ${keySymbol(key)}`,
 }
 const pieces = COLLECTIONS.flatMap((collection) => collection.entries)
@@ -61,10 +60,10 @@ describe('indexEntries', () => {
   })
 
   it('names a page by its row on Practice, and opens it', () => {
-    expect(titled('page chordFinder')).toMatchObject({
+    expect(titled('page freePlay')).toMatchObject({
       kind: 'pages',
-      detail: 'about chordFinder',
-      target: { opens: 'page', page: 'chordFinder' },
+      detail: 'about freePlay',
+      target: { opens: 'page', page: 'freePlay' },
     })
   })
 
@@ -85,13 +84,13 @@ describe('indexEntries', () => {
     })
   })
 
-  it('names a lesson in the learner’s language under its module, and answers to the other', () => {
+  it('names a lesson in the learner’s language under its course, and answers to the other', () => {
     const triads = LESSONS.find((lesson) => lesson.id === 'triads')
     if (!triads) throw new RangeError('no triads lesson')
     const english = titled(triads.title.en)
     expect(english).toMatchObject({
       kind: 'lessons',
-      detail: 'module fundamentals',
+      detail: 'Chords',
       target: { opens: 'lesson', lesson: 'triads' },
     })
     expect(english.words).toContain(triads.title.ru)
@@ -208,16 +207,16 @@ describe('searchIndex', () => {
     expect(groups[0]?.entries[0]).toBe(typed)
   })
 
-  it('reads a line of chords typed as a song’s, to transpose in the key it is in, its group first', () => {
+  it('reads a line of chords typed as a song’s, on Progressions in the key it is in, its group first', () => {
     const typed = typedEntry('Dm7, Gm9 | Asus Dm7', names)
     expect(typed).toMatchObject({
-      kind: 'pages',
+      kind: 'progressions',
       title: 'Dm7 Gm9 Asus4 Dm7',
-      detail: 'page transpose · key Dm',
-      target: { opens: 'transpose', chords: 'Dm7, Gm9 | Asus Dm7' },
+      detail: 'page progressions · key Dm',
+      target: { opens: 'typed-line', key: 'Dm', p: 'i7-iv9-Vsus4-i7' },
     })
     const groups = searchIndex(all, 'Dm7, Gm9 | Asus Dm7', typed)
-    expect(groups[0]?.kind).toBe('pages')
+    expect(groups[0]?.kind).toBe('progressions')
     expect(groups[0]?.entries[0]).toBe(typed)
   })
 

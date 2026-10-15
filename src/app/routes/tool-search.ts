@@ -5,101 +5,39 @@ import {
   keyListParam,
   readDiagramMarks,
   readKeyList,
-  readNote,
   valueOr,
   wholeIn,
 } from '@/shared/lib'
-import { keyParam, note, noteParam, pitchClassOf, spellInKey } from '@/shared/lib/music'
+import { keyParam } from '@/shared/lib/music'
 import { METRONOME_BEATS, TEMPO_RANGE } from '@/shared/lib/schedule'
-import type { FinderView } from '@/widgets/chord-finder'
-import type { PassingView } from '@/widgets/passing-chords'
-import type { ReharmoniseView } from '@/widgets/reharmonise'
-import type { TransposeView } from '@/widgets/transpose'
-import {
-  C_MAJOR,
-  C_MAJOR_PARAM,
-  readKey,
-  readTypedChord,
-  readTypedChords,
-  routeSearch,
-  type Raw,
-} from './read-search'
+import { C_MAJOR_PARAM, readKey, routeSearch, type Raw } from './read-search'
 
-// Practice's tools (ADR 0044), each a page that works something out from what the learner gives it:
-// the chord of the keys played, the chords that hold a melody note, the ways between two chords, and
-// the piano played freely.
+// Practice's one page of its own beside its things (ADR 0052): Free play, the piano played, named and
+// marked.
 
-// Chord finder: the keys chosen, each once, lowest first.
-const FINDER_DEFAULTS: FinderView = { keys: '' }
-export function readFinderSearch(raw: Raw): FinderView {
-  return { keys: keyListParam(readKeyList(raw.keys)) }
-}
-export const finderSearch = routeSearch(readFinderSearch, FINDER_DEFAULTS)
-
-// Reharmonise: a key, and a melody note spelled in it.
-const REHARMONISE_DEFAULTS: ReharmoniseView = {
-  key: C_MAJOR_PARAM,
-  note: noteParam(note('E')),
-  inKey: false,
-}
-export function readReharmoniseSearch(raw: Raw): ReharmoniseView {
-  const key = readKey(raw.key) ?? C_MAJOR
-  const melody = readNote(raw.note) ?? note('E')
-  return {
-    key: keyParam(key),
-    note: noteParam(spellInKey(pitchClassOf(melody), key)),
-    inKey: raw.inKey === true,
-  }
-}
-export const reharmoniseSearch = routeSearch(readReharmoniseSearch, REHARMONISE_DEFAULTS)
-
-// Passing chords: two chords as they were typed, each read (one that cannot be read is the default), and a key.
-export const PASSING_DEFAULTS: PassingView = {
-  key: C_MAJOR_PARAM,
-  from: 'C',
-  to: 'F',
-  inKey: false,
-}
-export function readPassingSearch(raw: Raw): PassingView {
-  const key = readKey(raw.key)
-  return {
-    key: key ? keyParam(key) : PASSING_DEFAULTS.key,
-    from: readTypedChord(raw.from, PASSING_DEFAULTS.from),
-    to: readTypedChord(raw.to, PASSING_DEFAULTS.to),
-    inKey: raw.inKey === true,
-  }
-}
-export const passingSearch = routeSearch(readPassingSearch, PASSING_DEFAULTS)
-
-// Transpose: a song's chords as typed (any line that does not read is «Ромашковые поля»'s opening),
-// the key they are read in where one was chosen, and the tonic they are played on where it is another.
-const TRANSPOSE_DEFAULTS: TransposeView = { chords: 'Dm7 Gm9 Asus4 Dm7' }
-export function readTransposeSearch(raw: Raw): TransposeView {
-  const key = readKey(raw.key)
-  const to = readNote(raw.to)
-  return {
-    chords: readTypedChords(raw.chords, TRANSPOSE_DEFAULTS.chords),
-    key: key ? keyParam(key) : undefined,
-    to: to ? noteParam(to) : undefined,
-  }
-}
-export const transposeSearch = routeSearch(readTransposeSearch, TRANSPOSE_DEFAULTS)
-
-// Free play: Play or Mark, the key the live score spells in, Mark's marks written back clean, and
-// the metronome's tempo and beats.
+// Free play: Play, Find or Mark, the key the live score spells in, Find's keys and Mark's marks
+// written back clean, and the metronome's tempo and beats.
 export const FREE_PLAY_DEFAULTS: FreePlayView = {
   mode: 'play',
   key: C_MAJOR_PARAM,
+  keys: '',
   marks: '',
   tempo: 80,
   beats: 4,
 }
 const isBeats = isOneOf(METRONOME_BEATS)
+// Free play's modes, as its page names them: the router imports no page code.
+const isFreePlayMode = isOneOf([
+  'play',
+  'find',
+  'mark',
+] as const satisfies readonly FreePlayView['mode'][])
 export function readFreePlaySearch(raw: Raw): FreePlayView {
   const key = readKey(raw.key)
   return {
-    mode: raw.mode === 'mark' ? 'mark' : 'play',
+    mode: valueOr(isFreePlayMode, raw.mode, FREE_PLAY_DEFAULTS.mode),
     key: key ? keyParam(key) : FREE_PLAY_DEFAULTS.key,
+    keys: keyListParam(readKeyList(raw.keys)),
     marks: typeof raw.marks === 'string' ? diagramMarksParam(readDiagramMarks(raw.marks)) : '',
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, FREE_PLAY_DEFAULTS.tempo),
     beats: valueOr(isBeats, raw.beats, FREE_PLAY_DEFAULTS.beats),

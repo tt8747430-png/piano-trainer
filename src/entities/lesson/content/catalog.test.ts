@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { BUILT_IN_PATTERNS, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
+import { isTrainerId } from '@/features/trainer'
 import {
   chordsHolding,
   chordSymbol,
@@ -15,14 +16,7 @@ import {
   writtenSymbol,
 } from '@/shared/lib/music'
 import { noteLine, voicingsMusic } from '@/shared/lib/schedule'
-import {
-  lessonById,
-  LESSON_MODULES,
-  LESSONS,
-  readProgression,
-  type Lesson,
-  type LessonBlock,
-} from '../index'
+import { lessonById, LESSONS, readProgression, type Lesson, type LessonBlock } from '../index'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 
@@ -103,16 +97,18 @@ function problemsOf(block: LessonBlock): string[] {
           return unread(() => parseChordSymbol(target.chord), target.chord)
         case 'lesson':
           return lessonById(target.lesson) ? [] : [target.lesson]
+        case 'quiz':
+          return isTrainerId(target.trainer) ? [] : [target.trainer]
         case 'progressions':
         case 'player':
           return unread(() => readProgression(target), target.numerals)
-        case 'passing-chords':
+        case 'between':
           return [target.from, target.to].flatMap((symbol) =>
             unread(() => parseChordSymbol(symbol), symbol),
           )
         case 'piece':
           return pieceProblems(target.piece, target.pattern)
-        case 'transpose': {
+        case 'song-chords': {
           const { chords, unread } = readChordLine(target.chords)
           return chords.length > 0 && unread.length === 0 ? [] : [target.chords]
         }
@@ -192,7 +188,7 @@ describe('the lessons', () => {
       problemsOf({
         kind: 'link',
         title,
-        target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Hq' },
+        target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Hq' },
       }),
     ).toEqual(['Hq'])
     expect(
@@ -208,117 +204,6 @@ describe('the lessons', () => {
     expect(
       problemsOf({ kind: 'link', title, target: { opens: 'piece', piece: 'ex3', pattern: 'r5' } }),
     ).toEqual(['r5 over ex3'])
-  })
-
-  it('each belong to a module, every module with a lesson', () => {
-    for (const module of LESSON_MODULES) {
-      expect(
-        LESSONS.some((lesson) => lesson.module === module),
-        module,
-      ).toBe(true)
-    }
-  })
-
-  it('teach the fundamentals in order, from finding home to key signatures', () => {
-    expect(
-      LESSONS.filter((lesson) => lesson.module === 'fundamentals').map((lesson) => lesson.id),
-    ).toEqual([
-      'finding-home',
-      'reading-notes',
-      'rhythm-and-meter',
-      'whole-and-half-steps',
-      'major-scales',
-      'chromatic-scale',
-      'intervals',
-      'triads',
-      'seventh-chords',
-      'reading-chord-symbols',
-      'inversions',
-      'minor-scales',
-      'chord-family',
-      'chord-functions',
-      'key-signatures',
-    ])
-  })
-
-  it('start at the beginning: every fundamentals lesson a Beginner’s or an Elementary one', () => {
-    for (const lesson of LESSONS.filter((each) => each.module === 'fundamentals')) {
-      expect([1, 2], lesson.id).toContain(lesson.level)
-    }
-  })
-
-  it('teach accompaniment from bass and chords to scales through the changes', () => {
-    expect(
-      LESSONS.filter((lesson) => lesson.module === 'accompaniment').map((lesson) => lesson.id),
-    ).toEqual([
-      'bass-and-chords',
-      'broken-chords',
-      'common-progressions',
-      'progressions-in-order',
-      'chord-matrix',
-      'minor-two-five-levels',
-      'passing-chords',
-      'reharmonising-a-melody',
-      'scales-through-the-changes',
-    ])
-  })
-
-  it('teach the subjects, then each course’s own lessons in its order', () => {
-    expect(LESSON_MODULES).toEqual([
-      'fundamentals',
-      'accompaniment',
-      'gospel',
-      'called-to-play',
-      'called-to-play-2',
-      'seven-types',
-      'gorshkov',
-    ])
-    const lessonsOf = (module: Lesson['module']) =>
-      LESSONS.filter((lesson) => lesson.module === module).map((lesson) => lesson.id)
-    expect(lessonsOf('called-to-play')).toEqual([
-      'playing-by-chords',
-      'major-and-minor-chords',
-      'five-ways',
-      'songs-by-plan',
-      'right-hand-techniques',
-      'right-hand-runs',
-      'right-hand-chords',
-      'right-hand-five',
-      'right-hand-sixths',
-      'art-of-accompaniment',
-      'called-to-play-exam',
-    ])
-    expect(lessonsOf('called-to-play-2')).toEqual([
-      'seventh-by-the-key',
-      'octaves-and-chords',
-      'six-eight-and-twelve-eight',
-      'right-hand-in-six-eight',
-      'chords-and-inversions-in-six-eight',
-      'right-hand-in-twelve-eight',
-      'sixths-in-compound-time',
-      'joining-chords',
-      'left-hand-ways',
-      'balance-of-accompaniment',
-      'called-to-play-two-exam',
-    ])
-    expect(lessonsOf('seven-types')).toEqual(['seven-types', 'accompanying-a-hymn'])
-    expect(lessonsOf('gorshkov')).toEqual([
-      'jazz-chord-symbols',
-      'sevenths-in-a-song',
-      'ninth-chords',
-      'ninths-in-a-song',
-      'thinking-in-degrees',
-      'two-five-one',
-      'chord-pulse',
-      'melodic-figuration',
-      'jazz-voicings',
-    ])
-  })
-
-  it('teach gospel’s progressions, passing chords and reharmonisation', () => {
-    expect(
-      LESSONS.filter((lesson) => lesson.module === 'gospel').map((lesson) => lesson.id),
-    ).toEqual(['gospel-progressions', 'gospel-passing-chords', 'gospel-reharmonisation'])
   })
 
   it('teach the gospel 7–3–6 as it is played: a half-diminished 7, a dominant 3, the minor 6', () => {
@@ -357,7 +242,7 @@ describe('the lessons', () => {
           block.kind === 'chords' ? block.symbols : [],
         )
         return section.blocks.flatMap((block) =>
-          block.kind === 'link' && block.target.opens === 'passing-chords'
+          block.kind === 'link' && block.target.opens === 'between'
             ? [{ at: `${lesson.id}: ${row.join(' ')}`, row, target: block.target }]
             : [],
         )
@@ -374,11 +259,6 @@ describe('the lessons', () => {
       ).map((way) => way.chords.map(chordSymbol))
       expect(ways, at).toContainEqual(between)
     }
-  })
-
-  it('list the modules in order, each lesson after the one before it', () => {
-    const modules = LESSONS.map((lesson) => LESSON_MODULES.indexOf(lesson.module))
-    expect(modules).toEqual([...modules].sort((a, b) => a - b))
   })
 })
 

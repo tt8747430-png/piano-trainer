@@ -1,6 +1,6 @@
 # Content
 
-How pieces, listings, collections, patterns and the path are written. Content is code
+How pieces, listings, collections, patterns, lessons and the curriculum are written. Content is code
 ([ADR 0002](adr/0002-content-as-code-one-file-per-piece.md)): one TypeScript file per piece, checked by tests that
 refuse anything that would not play (see [What the tests check](#what-the-tests-check)). Words follow
 [UBIQUITOUS_LANGUAGE](UBIQUITOUS_LANGUAGE.md).
@@ -9,7 +9,7 @@ refuse anything that would not play (see [What the tests check](#what-the-tests-
 
 1. **One file**, `src/entities/piece/content/<collection>/<id>.ts`, exporting `definePiece({ … })`.
 2. **One line** in that collection's `index.ts`: import it and put it in `entries`, in the collection's order.
-3. **One step** in `src/entities/path/content/path.ts`: `...pieces('<id>')` where it should be learned.
+3. **One step** in `src/entities/course/content/courses.ts`: `...pieces('<id>')` in the practice of the course where it should be learned.
 4. Raise the counts in `src/entities/piece/content/catalog.test.ts` (it pins how many pieces there are), then run
    `npm run test`.
 
@@ -61,7 +61,7 @@ every other chord plays `pattern`.
 ## Add a listing, a collection
 
 - **A listing** is a songbook entry with no chart yet: `defineListing({ id, title, titleEn, credits, source, key,
-meter, note })`. It shows in Songs and never opens in the Player; it has no path step.
+meter, note })`. It shows in Songs and never opens in the Player; it has no step in the curriculum.
 - **A collection** is a folder under `content/` whose `index.ts` exports `{ id, name, entries }` typed `Collection`.
   Add its id to `CollectionId` (`model/types.ts`) and the collection to `COLLECTIONS` (`content/index.ts`), in the
   order Songs lists them.
@@ -267,20 +267,30 @@ the chord over its ♭7). Tones are joined by `+`, each optionally `^finger` (1�
 notes with no finger written are fingered automatically. Each chord plays its figures in windows of one meter bar;
 a chord shorter than two beats picks the pattern up where it sits in the bar.
 
-## The path
+## The curriculum
 
-`src/entities/path/content/path.ts` lists each level's steps in order: `chords('sev')`, `scale('harmonic')`,
-`...pieces('bz5')`. Every piece appears exactly once, listings never; a chord family or scale kind appears once. It
-is the one source of levels ([ADR 0005](adr/0005-levels-live-on-the-path.md)).
+`src/entities/course/content/courses.ts` is the curriculum ([ADR 0051](adr/0051-one-curriculum-of-stages-and-courses.md)):
+every course in the order it is taught, stage by stage (`beginner`, `intermediate`, `advanced`, `professional`). A
+course has an `id`, its `stage`, a `title` and `summary` in both languages, its `lessons` by id in the order taught,
+and its `practice`: `chords('sev')`, `...scales('harmonic')`, `...pieces('bz5')`. Every lesson is in exactly one
+course, every piece practised exactly once (listings never), every chord family and scale kind once. A method book's
+course takes its book's title. A step's stage is its course's; the order suggests, nothing is locked. A course's
+icon is in `ui/course-look.ts`.
 
 ## Lessons
 
-A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts` in the order Learn
-shows it: an `id`, a `title` and `summary` in both languages, a `level` on the Path's scale, a `module` and its
-`sections`, each a heading over blocks. A lesson teaches music in prose; it never explains a button. A lesson
-that teaches one course's own (a method book's ways, its types; a sheet of Gorshkov's course) is in that course's
-module, listed in the course's order so Learn numbers it as the course does; one that teaches by subject and quotes
-the books stays in Accompaniment. A course's lessons are its track: Previous and Next never leave it (ADR 0042).
+A lesson is a file in `src/entities/lesson/content/` (a `Lesson`), listed in `content/index.ts`: an `id`, a
+`title` and `summary` in both languages and its `sections`, each a heading over blocks. Its course and number are the
+curriculum's: add its id to a course's `lessons`, where it is taught. A lesson teaches music; it never explains a
+button. A method book's own lessons (its ways, its types; a sheet of Gorshkov's course) keep their book's content and
+order. A lesson's way on is the next lesson of its course, then its course's practice.
+
+**How a lesson reads** (the research checklist, `.scratch/learn-pages/research.md`, held by the catalog test): each
+section shows something within its first two blocks (an example, a question) and says at most 35 words in English;
+sentences stay under 30 words (aim for 20, 15–18 in Russian), with no semicolons; a term is defined in bold (`lead`)
+where it first appears; a section ends with something to play. A lesson ends on **Try it**: questions answered on the
+keys, then links into the Quiz or the Player to practise. Depth comes from more sections, examples and questions, never
+from longer prose.
 
 | Block         | Content                                                                                  | Shows                                                     |
 | ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
@@ -302,8 +312,9 @@ half, `4` quarter, the default, `8` eighth, `16` sixteenth) and a dot for half a
 meter is 2/4, 3/4 or 4/4, and its `key` writes a signature. Notes are kernel values (`note('B', -1)`), keys `Key`
 objects (`{ tonic: note('E', -1), minor: false }`). A link `opens` `chords` (a symbol), `scales` (a root, a kind,
 `show?`), `key` (a key), `intervals` (`root?`), `tensions` (a chord, a root: the chord builder opens on it), `lesson`
-(an id), `progressions` (numerals, a key, `size?`), `passing-chords` (a key, `from` and `to` as symbols),
-`reharmonise` (a key, a melody note), `transpose` (a song's `chords` as typed), `piece` (a piece in the Player,
+(an id), `progressions` (numerals, a key, `size?`), `between` (a key, `from` and `to` as symbols: Progressions'
+passing chords between them), `harmonise` (a key, a melody note: the Key view harmonising it), `song-chords` (a song's
+`chords` as typed: Progressions reads them in their key), `quiz` (a trainer's id), `piece` (a piece in the Player,
 `pattern?`), `exercise` (an exercise in the
 Player, `root?`, `quality?`) or `player` (a progression in the Player, ready to practise: numerals, a key, `size?`,
 `walk?` through the keys, `inversion?` 0–3).
@@ -342,8 +353,8 @@ entry's alone: `tsc` holds every id a table names.
   languages.
 - **Notation** (`src/features/practice/notate-pieces.test.ts`): every piece is written as sheet music and engraved in
   its own key and pattern (its tune doubled too), and every pattern in 4/4, 3/4 and 12/8, each voice filling its bar.
-- **Path** (`src/entities/path/content/path.test.ts`): every step names a piece that exists, every piece once, no
-  listing, every chord family and scale kind.
+- **Curriculum** (`src/entities/course/content/courses.test.ts`): every lesson in one course, every step names a piece
+  that exists, every piece once, no listing, every chord family and scale kind, every stage with courses in order.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.
 - **Progressions library** (`src/entities/progression-library/content/library.test.ts`): ids, both languages,
   every line read and named in its mode, no two lines one loop (from another chord, a chord held or the relative
@@ -352,6 +363,6 @@ entry's alone: `tsc` holds every id a table names.
 - **Lessons' patterns** (`src/widgets/lesson-view/model/pattern-example.test.ts`): every pattern block plays over its
   piece from its first beat.
 - **Lessons** (`src/entities/lesson/content/catalog.test.ts`): ids, every text in both languages, every chord symbol,
-  line of notes, quiz answer and link read by the kernel, every module with a lesson.
+  line of notes, question's answer and link read by the kernel (a trainer's id among them), and the prose rules above.
 
 A mistake names its place: `bz10 · section 2, line 1, bar 3: unknown chord symbol "Qm"`.

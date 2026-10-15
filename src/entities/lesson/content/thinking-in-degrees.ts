@@ -10,8 +10,6 @@ const thinkingInDegrees: Lesson = {
     en: 'Find a song’s key, name each chord by its degree, and play it in any key.',
     ru: 'Найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
   },
-  level: 2,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Find the key first', ru: 'Сначала найдите тональность' },
@@ -153,7 +151,7 @@ const thinkingInDegrees: Lesson = {
             ru: 'Аккорды «Ромашковых полей» в любой тональности',
           },
           target: {
-            opens: 'transpose',
+            opens: 'song-chords',
             chords: 'Dm7 Gm9 Asus4 Dm9 Gm9 Csus4 Am7 D D/F# Gm7 Csus4 FMaj9 Bb Gm Em7b5 Asus4 A',
           },
         },

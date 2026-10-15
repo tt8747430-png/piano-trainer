@@ -1,7 +1,5 @@
 import {
-  ArrowDownUp,
   AudioWaveform,
-  Blend,
   BookOpenText,
   ChartNoAxesColumnIncreasing,
   CircleDot,
@@ -12,8 +10,6 @@ import {
   ListMusic,
   Piano,
   Ruler,
-  ScanSearch,
-  Waypoints,
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from './paint'
@@ -37,10 +33,6 @@ export const PAGE_TILES = {
   intervals: { icon: Ruler, paint: 'yellow' },
   tensions: { icon: Layers, paint: 'grass' },
   patterns: { icon: AudioWaveform, paint: 'yellow' },
-  chordFinder: { icon: ScanSearch, paint: 'sky' },
-  reharmonise: { icon: Blend, paint: 'lilac' },
-  passingChords: { icon: Waypoints, paint: 'yellow' },
-  transpose: { icon: ArrowDownUp, paint: 'grass' },
   progressions: { icon: ListMusic, paint: 'grass' },
   freePlay: { icon: Piano, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },

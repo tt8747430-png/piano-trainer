@@ -59,6 +59,7 @@ describe('LessonView', () => {
       'Chord numbers: 2 or 9? 6 or 13?',
       '9ths, 13ths and alterations',
       'Naming any chord',
+      'Try it',
     ])
   })
 
@@ -106,8 +107,6 @@ const WORKSHEET: Lesson = {
   id: 'worksheet',
   title: { en: 'A worksheet', ru: 'Листок' },
   summary: { en: 'Every block.', ru: 'Каждый блок.' },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Examples', ru: 'Примеры' },
@@ -254,8 +253,6 @@ const ACCOMPANIMENT: Lesson = {
   id: 'accompaniment',
   title: { en: 'Accompaniment', ru: 'Аккомпанемент' },
   summary: { en: 'Patterns.', ru: 'Фактуры.' },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Ways', ru: 'Способы' },
@@ -264,13 +261,13 @@ const ACCOMPANIMENT: Lesson = {
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
         {
           kind: 'link',
-          title: { en: 'C to F in Passing chords', ru: 'Из C в F' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          title: { en: 'C to F, between', ru: 'Из C в F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
         {
           kind: 'link',
-          title: { en: 'E in Reharmonise', ru: 'Ми в реармонизации' },
-          target: { opens: 'reharmonise', key: C_MAJOR, note: note('E') },
+          title: { en: 'E harmonised', ru: 'Ми, гармонизованная' },
+          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
         },
         {
           kind: 'link',
@@ -333,13 +330,16 @@ describe('LessonView’s accompaniment', () => {
 
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
-    const passing = screen.getByRole('link', { name: 'C to F in Passing chords' })
-    expect(passing.getAttribute('href')).toMatch(/^\/practice\/progressions\/passing\?/)
-    expect(passing.getAttribute('href')).toMatch(/[?&]from=C(&|$)/)
-    expect(passing.getAttribute('href')).toMatch(/[?&]to=F(&|$)/)
-    const reharmonise = screen.getByRole('link', { name: 'E in Reharmonise' }).getAttribute('href')
-    expect(reharmonise).toMatch(/^\/practice\/progressions\/reharmonise\?/)
-    expect(reharmonise).toMatch(/[?&]note=E(&|$)/)
+    // Between two chords, on Progressions: the pair as a line in its key.
+    expect(screen.getByRole('link', { name: 'C to F, between' })).toHaveAttribute(
+      'href',
+      '/practice/progressions?key=C&p=I-IV',
+    )
+    // A melody note harmonised, on the Key view of its key.
+    expect(screen.getByRole('link', { name: 'E harmonised' })).toHaveAttribute(
+      'href',
+      '/practice/scales?root=C&kind=major&show=key&melody=E',
+    )
     expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
       '/play/otche?pattern=r4',
     )

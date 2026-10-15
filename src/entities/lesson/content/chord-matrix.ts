@@ -11,8 +11,6 @@ const chordMatrix: Lesson = {
     en: 'A key’s family of chords, the dominants that lead to them, and chords borrowed from minor.',
     ru: 'Семья аккордов тональности, доминанты, ведущие к ним, и аккорды, взятые из минора.',
   },
-  level: 3,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'The chord family', ru: 'Семья аккордов' },

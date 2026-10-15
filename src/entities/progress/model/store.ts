@@ -1,5 +1,5 @@
 import type { StoreApi } from 'zustand/vanilla'
-import { isStepId, type StepId } from '@/entities/path'
+import { isStepId, type StepId } from '@/entities/course'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { keptDays } from './days'

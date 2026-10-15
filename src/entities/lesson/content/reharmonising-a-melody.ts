@@ -10,8 +10,6 @@ const reharmonisingAMelody: Lesson = {
     en: 'A melody note fits more than one chord: the key’s triads that hold it, the 7th chords beyond them, and how to choose.',
     ru: 'Нота мелодии входит в разные аккорды: в трезвучия тональности и в септаккорды. Как найти их и выбрать.',
   },
-  level: 3,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'One note, many chords', ru: 'Одна нота — много аккордов' },
@@ -35,7 +33,7 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'link',
           title: { en: 'E in Reharmonise', ru: 'Ми в «Гармонизации мелодии»' },
-          target: { opens: 'reharmonise', key: C_MAJOR, note: note('E') },
+          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
         },
       ],
     },
@@ -73,7 +71,7 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'link',
           title: { en: 'G in Reharmonise', ru: 'Соль в «Гармонизации мелодии»' },
-          target: { opens: 'reharmonise', key: C_MAJOR, note: note('G') },
+          target: { opens: 'harmonise', key: C_MAJOR, note: note('G') },
         },
       ],
     },

@@ -7,8 +7,6 @@ const fiveWays: Lesson = {
     en: 'One progression played five ways, then a different way on each chord.',
     ru: 'Одна последовательность пятью способами, затем свой способ на каждом аккорде.',
   },
-  level: 1,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Four chords of C major', ru: 'Четыре аккорда до мажора' },

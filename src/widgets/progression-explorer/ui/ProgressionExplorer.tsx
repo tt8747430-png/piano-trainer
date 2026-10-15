@@ -9,7 +9,14 @@ import {
   useShownKeys,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyFromParam, LEAD_INS, numeralGrows, parseNumerals } from '@/shared/lib/music'
+import {
+  keyFromParam,
+  keyParam,
+  LEAD_INS,
+  numeralChord,
+  numeralGrows,
+  parseNumerals,
+} from '@/shared/lib/music'
 import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField, Segmented } from '@/shared/ui'
 import {
   changedView,
@@ -19,14 +26,16 @@ import {
   viewProgression,
   type ProgressionsView,
 } from '../model/progressions-view'
+import { ProgressionBetween } from './ProgressionBetween'
 import { ProgressionChoice } from './ProgressionChoice'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionPractice } from './ProgressionPractice'
 
 /**
- * A progression in any key, read top to bottom: the keys, its row of chords that play with Play, what
- * it is (the library's or typed, its key, its chord size, what leads into each chord), then its ways
- * into the Player and its tools.
+ * A progression in any key, read top to bottom (ADR 0052): the keys, its row of chords that play with
+ * Play, what it is (the library's, or numerals or a song's chords typed and read in their key; its key,
+ * its chord size, what leads into each chord), its ways into the Player, and the passing chords
+ * between two of its chords.
  */
 export function ProgressionExplorer({
   view,
@@ -69,7 +78,11 @@ export function ProgressionExplorer({
             minor={key.minor}
             onChoose={(progression) => onChange(chosenView(view, progression))}
           />
-          <ProgressionField progression={view.p} musicKey={key} onChange={(p) => change({ p })} />
+          <ProgressionField
+            progression={view.p}
+            musicKey={key}
+            onChange={(p, read) => change({ p, key: keyParam(read) })}
+          />
         </div>
         <KeyChoice value={view.key} onChange={(next) => change({ key: next })} />
         <Labelled label={t('music:chordSize.label')}>
@@ -93,6 +106,14 @@ export function ProgressionExplorer({
         <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
       </div>
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
+      <ProgressionBetween
+        chords={played.map((numeral) => numeralChord(numeral, key, view.size))}
+        musicKey={key}
+        at={view.between}
+        inKey={view.inKey === true}
+        onChange={onChange}
+        onShow={setShown}
+      />
     </div>
   )
 }

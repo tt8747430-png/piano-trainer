@@ -8,8 +8,6 @@ const octavesAndChords: Lesson = {
     en: 'Octaves in the right hand, up the scale and by the chord, and full chords that step.',
     ru: 'Октавы в правой руке — гаммой и по аккорду — и полные аккорды с движением.',
   },
-  level: 2,
-  module: 'called-to-play-2',
   sections: [
     {
       heading: { en: 'An octave', ru: 'Октава' },

@@ -7,8 +7,6 @@ const readingChordSymbols: Lesson = {
     en: 'What each part of a chord symbol says, what its numbers mean, and how to name any chord.',
     ru: 'Что говорит каждая часть обозначения аккорда, что значат числа и как назвать любой аккорд.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Reading chord symbols', ru: 'Чтение обозначений аккордов' },
@@ -146,6 +144,31 @@ const readingChordSymbols: Lesson = {
             en: 'The same notes can have two names.',
             ru: 'У одних и тех же нот может быть два названия.',
           },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
+        {
+          kind: 'question',
+          ask: { en: 'Play Dm7.', ru: 'Сыграйте Dm7.' },
+          answer: { chord: 'Dm7' },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play G7.', ru: 'Сыграйте G7.' },
+          answer: { chord: 'G7' },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play FMaj7.', ru: 'Сыграйте FMaj7.' },
+          answer: { chord: 'FMaj7' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'name-chord' },
         },
       ],
     },

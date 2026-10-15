@@ -10,8 +10,6 @@ const passingChords: Lesson = {
     en: 'A chord slipped in to lead into the next: a dominant 7th, a diminished 7th, a chromatic approach.',
     ru: 'Аккорд, который ведёт в следующий: доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
   },
-  level: 3,
-  module: 'accompaniment',
   sections: [
     {
       heading: {
@@ -38,7 +36,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
       ],
     },
@@ -57,7 +55,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Dm in Passing chords', ru: 'Из C в Dm в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Dm' },
         },
       ],
     },
@@ -76,7 +74,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'F to G in Passing chords', ru: 'Из F в G в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'G' },
         },
       ],
     },
@@ -95,7 +93,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Am in Passing chords', ru: 'Из C в Am в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Am' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Am' },
         },
       ],
     },

@@ -7,8 +7,6 @@ const triads: Lesson = {
     en: 'Three notes stacked in 3rds, and the four kinds of triad.',
     ru: 'Три ноты, сложенные терциями, и четыре вида трезвучий.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Three notes in thirds', ru: 'Три ноты по терциям' },
@@ -62,6 +60,16 @@ const triads: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },
+        {
+          kind: 'link',
+          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
+        },
       ],
     },
     {

@@ -14,9 +14,9 @@ import { readProgression } from '../model/typed-progression'
 const written = (numerals: readonly Numeral[]): string => numerals.map(numeralText).join(' ')
 
 /**
- * Numerals or chords typed: each change that reads sets the progression; what the learner typed
- * stays while it means the progression shown in the key it was typed in, and a line says when it
- * cannot be read.
+ * Numerals or a song's chords typed (ADR 0052): each change that reads sets the progression, chords
+ * in the key they are read in; what the learner typed stays while it means the progression shown in
+ * the key it was typed in, and a line says when it cannot be read.
  */
 export function ProgressionField({
   progression,
@@ -26,26 +26,29 @@ export function ProgressionField({
   /** The progression's numerals as the URL holds them. */
   progression: string
   musicKey: Key
-  onChange: (progression: string) => void
+  onChange: (progression: string, key: Key) => void
 }) {
   const { t } = useTranslation('practice')
-  const [typed, setTyped] = useState<{ text: string; for: string } | null>(null)
+  // What was typed, what it means, and the key the typing began in: each keystroke is read from that
+  // key, so a key the line chose part-way does not hold the rest of the line to it.
+  const [typed, setTyped] = useState<{ text: string; for: string; from: Key } | null>(null)
   // Chords mean their numerals in one key: in another, the field writes the numerals the row plays.
   const meaning = (numerals: string) => `${numerals} ${keyParam(musicKey)}`
-  const text =
-    typed && typed.for === meaning(progression)
-      ? typed.text
-      : written(parseNumerals(progression) ?? [])
+  const typing = typed !== null && typed.for === meaning(progression)
+  const text = typing ? typed.text : written(parseNumerals(progression) ?? [])
+  const from = typing ? typed.from : musicKey
   return (
     <TypedField
       label={t('progressions.field')}
       value={text}
-      error={readProgression(text, musicKey) === null ? t('progressions.unread') : null}
+      error={readProgression(text, from) === null ? t('progressions.unread') : null}
       onChange={(next) => {
-        const numerals = readProgression(next, musicKey)
-        const param = numerals ? numeralsParam(numerals) : progression
-        setTyped({ text: next, for: meaning(param) })
-        if (numerals && param !== progression) onChange(param)
+        const read = readProgression(next, from)
+        const param = read ? numeralsParam(read.numerals) : progression
+        const key = read?.key ?? musicKey
+        setTyped({ text: next, for: `${param} ${keyParam(key)}`, from })
+        if (read && (param !== progression || keyParam(key) !== keyParam(musicKey)))
+          onChange(param, key)
       }}
     />
   )

@@ -8,8 +8,6 @@ const intervals: Lesson = {
     en: 'The distance between two notes: counted in letters, measured in half steps, heard as calm or tense.',
     ru: 'Расстояние между нотами: в буквах, в полутонах, на слух — покой или напряжение.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Letters and half steps', ru: 'Буквы и полутоны' },
@@ -53,6 +51,11 @@ const intervals: Lesson = {
         },
         { kind: 'interval', root: note('C'), interval: 'M6' },
         { kind: 'interval', root: note('C'), interval: 'm2' },
+        {
+          kind: 'link',
+          title: { en: 'Intervals by ear in the Quiz', ru: 'Интервалы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'intervals-by-ear' },
+        },
       ],
     },
     {

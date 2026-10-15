@@ -57,11 +57,11 @@ describe('Songs', () => {
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
   })
 
-  it('shows a song’s key, its level and, once learned, that it is', async () => {
+  it('shows a song’s key, its stage and, once learned, that it is', async () => {
     const { progressStore } = await renderApp('/songs')
     const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
     expect(song).toHaveTextContent('G')
-    expect(within(song).getByRole('img', { name: /^Level/ })).toBeInTheDocument()
+    expect(within(song).getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
     expect(within(song).queryByRole('img', { name: 'Learned' })).not.toBeInTheDocument()
     act(() => markLearned(progressStore, 'piece:bz5', new Date()))
     expect(within(song).getByRole('img', { name: 'Learned' })).toBeInTheDocument()

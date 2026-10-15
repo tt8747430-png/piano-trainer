@@ -14,8 +14,6 @@ const ninthsInASong: Lesson = {
     en: '9th chords by semitones, on «Ромашковые поля», and the dominant 9th’s way into the next chord.',
     ru: 'Нонаккорды по полутонам, на «Ромашковых полях» и разрешение доминантового нонаккорда.',
   },
-  level: 3,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Exercise 2: by semitones', ru: 'Упражнение 2: по полутонам' },

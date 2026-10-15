@@ -11,8 +11,6 @@ const rightHandChords: Lesson = {
     en: 'A dotted chord, three chords up the keys, and a chord climbing through its inversions.',
     ru: 'Пунктирный аккорд, три аккорда вверх по клавиатуре и аккорд, который поднимается по обращениям.',
   },
-  level: 2,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'Root position or inversions', ru: 'Основной вид или обращения' },

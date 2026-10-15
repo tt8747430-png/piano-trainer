@@ -1,5 +1,6 @@
 import { EXERCISES, type ExerciseId } from '@/entities/exercise'
-import { LESSONS, type LessonModule } from '@/entities/lesson'
+import { lessonPlace } from '@/entities/course'
+import { LESSONS } from '@/entities/lesson'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry } from '@/entities/piece'
 import {
@@ -15,7 +16,7 @@ import {
   CHORD_QUALITIES,
   chordsOfLine,
   chordSymbol,
-  keysOfChords,
+  keyFromParam,
   note,
   pitchClassOf,
   qualitySpellings,
@@ -25,10 +26,12 @@ import {
   type ChordQuality,
   type ChordSize,
   type Key,
+  type KeyParam,
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
 import { PRACTICE_PAGE_IDS, type PracticePageId } from '@/widgets/practice-pages'
+import { typedSearch } from '@/widgets/progression-explorer'
 
 /** The kinds of thing the index holds, in the order Search lists them. */
 export const INDEX_KINDS = [
@@ -61,8 +64,8 @@ export type IndexTarget =
   | { readonly opens: 'pattern'; readonly ref: PatternRef }
   | { readonly opens: 'exercise'; readonly exercise: ExerciseId }
   | { readonly opens: 'trainer'; readonly trainer: TrainerId }
-  /** A line of chords typed, on Transpose: as typed. */
-  | { readonly opens: 'transpose'; readonly chords: string }
+  /** A line of chords typed, on Progressions: its numerals in the key it is read in (ADR 0052). */
+  | { readonly opens: 'typed-line'; readonly key: KeyParam; readonly p: string }
 
 /** One named thing of the app: what it is called, a line on it, and what it opens. */
 export interface IndexEntry {
@@ -82,7 +85,6 @@ export interface IndexNames {
   readonly quality: (quality: ChordQuality) => string
   readonly scale: (kind: ScaleKind) => string
   readonly trainer: (trainer: TrainerId) => { readonly title: string; readonly about: string }
-  readonly module: (module: LessonModule) => string
   readonly key: (key: Key) => string
 }
 
@@ -137,7 +139,7 @@ export function indexEntries({ locale, names, pieces, patterns }: IndexSources):
       id: `lessons:${lesson.id}`,
       kind: 'lessons',
       ...named(lesson.title, locale),
-      detail: names.module(lesson.module),
+      detail: localText(lessonPlace(lesson.id)?.course.title ?? lesson.title, locale),
       target: { opens: 'lesson', lesson: lesson.id },
     })),
     ...CHORD_QUALITIES.map((quality): IndexEntry => {
@@ -207,7 +209,7 @@ export function indexEntries({ locale, names, pieces, patterns }: IndexSources):
 /**
  * What a typed query names besides the index's own entries: a chord symbol (`F#m7b5`), as an entry
  * that opens it, none for a chord on C, which the index already shows; or a line of chords (`Dm7 Gm9
- * Asus4`), as Transpose on them, with the key they are in (ADR 0045); none for anything else.
+ * Asus4`), on Progressions in the key it is read in (ADR 0052); none for anything else.
  */
 export function typedEntry(query: string, names: IndexNames): IndexEntry | undefined {
   const chord = readChordSymbol(query)
@@ -224,15 +226,15 @@ export function typedEntry(query: string, names: IndexNames): IndexEntry | undef
     }
   }
   const line = chordsOfLine(query)
-  const [found] = line ? keysOfChords(line) : []
-  if (!line || !found) return undefined
+  const search = line ? typedSearch(query, { tonic: C, minor: false }) : null
+  if (!line || !search) return undefined
   return {
-    id: 'pages:transpose-typed',
-    kind: 'pages',
+    id: 'progressions:typed',
+    kind: 'progressions',
     title: line.map(chordSymbol).join(' '),
-    detail: `${names.page('transpose').title} · ${names.key(found.key)}`,
+    detail: `${names.page('progressions').title} · ${names.key(keyFromParam(search.key))}`,
     words: [],
-    target: { opens: 'transpose', chords: query.trim() },
+    target: { opens: 'typed-line', ...search },
   }
 }
 

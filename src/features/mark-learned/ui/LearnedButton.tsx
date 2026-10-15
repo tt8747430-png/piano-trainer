@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { StepId } from '@/entities/path'
+import type { StepId } from '@/entities/course'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 

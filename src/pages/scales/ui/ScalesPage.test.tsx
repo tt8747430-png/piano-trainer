@@ -454,12 +454,19 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(await screen.findByText('No songs are in this key.')).toBeInTheDocument()
   })
 
-  it('leads to Reharmonise in the key', async () => {
-    await renderApp('/practice/scales?root=G&show=key')
-    const tools = within(await screen.findByRole('region', { name: 'Tools' })).getAllByRole('link')
-    expect(tools.map((tool) => [tool.textContent, tool.getAttribute('href')])).toEqual([
-      ['Reharmonise In G major', '/practice/progressions/reharmonise?key=G'],
-    ])
+  it('harmonises a melody note in the key, its 3rd until another is chosen, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales?root=G&show=key')
+    const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })
+    // B, G major's 3rd: G holds it as its 3rd, Em as its 5th.
+    expect(
+      within(harmonise).getByRole('button', { name: 'Gas 3 · in the key' }),
+    ).toBeInTheDocument()
+    expect(
+      within(harmonise).getByRole('button', { name: 'Emas 5 · in the key' }),
+    ).toBeInTheDocument()
+    await user.click(within(harmonise).getByRole('radio', { name: 'D' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ melody: 'D' }))
   })
 
   it('takes a random key from the header, staying on the Key view', async () => {

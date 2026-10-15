@@ -1,4 +1,4 @@
-import type { StepId } from '@/entities/path'
+import type { StepId } from '@/entities/course'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
 

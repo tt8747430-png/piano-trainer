@@ -8,8 +8,6 @@ const songsByPlan: Lesson = {
     en: 'Three songs played by their plan, the number by each chord naming its way.',
     ru: 'Три песни по плану — цифра у аккорда называет способ.',
   },
-  level: 1,
-  module: 'called-to-play',
   sections: [
     {
       heading: { en: 'A number names the way', ru: 'Цифра называет способ' },
