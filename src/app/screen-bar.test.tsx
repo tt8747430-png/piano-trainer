@@ -22,7 +22,7 @@ const SCREENS = [
   '/practice/exercises',
   '/practice/quiz',
   '/practice/quiz/build-chord',
-  '/practice/free-play',
+  '/practice/chord-finder',
   '/settings',
 ] as const
 

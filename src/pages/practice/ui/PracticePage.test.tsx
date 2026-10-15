@@ -27,11 +27,11 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists Free play at the keys: the tools are on the pages of what they work on', async () => {
+  it('lists the Chord finder at the keys, a tool of its own', async () => {
     await renderApp('/practice')
     const keys = await screen.findByRole('region', { name: 'At the keys' })
     expect(rowsOf(keys)).toEqual([
-      ['Free play A live score, chord names, marks and a metronome', '/practice/free-play'],
+      ['Chord finder Any chord named, spelled and written', '/practice/chord-finder'],
     ])
   })
 

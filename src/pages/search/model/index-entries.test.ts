@@ -64,10 +64,10 @@ describe('indexEntries', () => {
   })
 
   it('names a page by its row on Practice, and opens it', () => {
-    expect(titled('page freePlay')).toMatchObject({
+    expect(titled('page chordFinder')).toMatchObject({
       kind: 'pages',
-      detail: 'about freePlay',
-      target: { opens: 'page', page: 'freePlay' },
+      detail: 'about chordFinder',
+      target: { opens: 'page', page: 'chordFinder' },
     })
   })
 

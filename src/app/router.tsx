@@ -66,7 +66,7 @@ import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
-import { freePlaySearch, readFreePlaySearch } from './routes/tool-search'
+import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -248,15 +248,13 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
-// Practice's tools: each page works something out from what the learner gives it, most a tab of the
-// thing it works on (ADR 0050). Free play is the piano played freely, written and named, or marked as
-// a teaching diagram.
-const freePlayRoute = createRoute({
+// The Chord finder (ADR 0054): a tool of its own, any chord played or tapped named, spelled and written.
+const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/free-play',
-  ...freePlaySearch,
-  ...remembered(readFreePlaySearch, []),
-  component: lazyRouteComponent(toolScreens, 'FreePlayPage'),
+  path: '/practice/chord-finder',
+  ...chordFinderSearch,
+  ...remembered(readChordFinderSearch, CHORD_FINDER_KEPT),
+  component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
@@ -463,7 +461,7 @@ const routeTree = rootRoute.addChildren([
     practiceRoute,
     quizRoute,
     exercisesRoute,
-    freePlayRoute,
+    chordFinderRoute,
     trainerRoute,
     studyRoute,
     takeRoute,

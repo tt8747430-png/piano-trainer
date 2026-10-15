@@ -1,1 +1,1 @@
-export { FreePlayPage } from '@/pages/free-play'
+export { ChordFinderPage } from '@/pages/chord-finder'

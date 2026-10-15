@@ -60,15 +60,6 @@ export const common: LocaleResources['common'] = {
     '13th': 'Терцдецима',
   },
   stop: 'Стоп',
-  metronome: {
-    label: 'Метроном',
-    start: 'Включить метроном',
-    tempo: 'Темп',
-    bpm: '{{tempo}} уд/мин',
-    beats: 'Долей в такте',
-    tap: 'Отстучать',
-    tapLabel: 'Отстучать темп',
-  },
   rail: {
     octaveDown: 'Октава вниз',
     octaveUp: 'Октава вверх',

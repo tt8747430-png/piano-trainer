@@ -66,16 +66,6 @@ export const common = {
   },
   // What a Play button says while its sound plays.
   stop: 'Stop',
-  // The metronome on its own: its click, tempo, beats a bar and tap tempo.
-  metronome: {
-    label: 'Metronome',
-    start: 'Start the click',
-    tempo: 'Tempo',
-    bpm: '{{tempo}} BPM',
-    beats: 'Beats a bar',
-    tap: 'Tap',
-    tapLabel: 'Tap the tempo',
-  },
   // The keyboard's rail: its buttons and its map.
   rail: {
     octaveDown: 'Octave down',

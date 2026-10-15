@@ -7,15 +7,6 @@ export {
   readAlterations,
   type PartsParams,
 } from './chord-params'
-export {
-  DIAGRAM_COLOURS,
-  diagramMarksParam,
-  markKey,
-  readDiagramMarks,
-  type DiagramColour,
-  type DiagramMark,
-  type DiagramMarks,
-} from './diagram-marks'
 export { foldText, matchesQuery } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'

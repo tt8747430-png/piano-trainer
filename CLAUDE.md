@@ -65,7 +65,7 @@ it. `@` → `src`.
   pattern's page `…/patterns/$patternRef`, the editor `…/patterns/new` and `…/patterns/$patternRef/edit`; a study's
   page `…/studies/$pieceId`), each page holding the tools that work on it, never a tab or page of its own (ADR 0052): Progressions'
   typed line read in its key (`?key=&p=`) and its Between (`?between=&inKey=`), the Key view's Harmonise (`?melody=&onlyInKey=`); at the keys,
-  Free play (`/practice/free-play`, Play · Find · Mark, `?mode=&keys=&marks=`, ADR 0034, 0052); the training, Exercises (`/practice/exercises`) and Quiz
+  the Chord finder (`/practice/chord-finder`, `?keys=&key=`, ADR 0054); the training, Exercises (`/practice/exercises`) and Quiz
   (`/practice/quiz`, its trainers `/practice/quiz/$trainerId`); Search (`/search?q=`, every named thing by kind); the Player's `/play/$pieceId`, `/play/walk`,
   `/play/chromatic`, `/play/progression` and `/play/exercise/$exerciseId`; the score editor's `/edit/$pieceId` (`?record=true`
   opens its takes) and, in the shell, a take's page `/edit/$pieceId/takes/$takeId`; screens are
@@ -88,7 +88,7 @@ it. `@` → `src`.
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
-  the exercise's own fields) fill; `pages/learn` Learn: its header's toggle (`LearnViewToggle`), the Lessons (`JourneyMap`) or the Courses (`CourseShelves`), Continue, the days practised and the songs played last; `pages/course` a course's page as the courses-app has it: its cover, facts (level, weeks, lessons, songs), one honey Start course, Continue or Review, its lessons (`CourseLessons`) and its guided songs (`GuidedSongs`); `pages/lesson` a lesson of either kind over `LessonLayout`: `LessonPage` (its journey, chapter and number; the journey's next lesson, else back to the journey) and `CourseLessonPage` (its course and number; the course's next lesson, else on to its songs), going on learns it (ADR 0053); `pages/practice` Practice's pages as rows in its three groups; `pages/search` Search (`model/index-entries.ts`: `indexEntries`, one projection of the registries, held to each by a test; `searchIndex`, `typedChord`; `useIndex`; `IndexRow`); `pages/shared-song` a song opened from a shared link (`/songs/shared?song=…`), added to Your songs when asked; `pages/free-play` Free play (`useFreePlay`: Play's trail, Find's keys (the `ChordFinder`) or Mark's marks, the URL's `keys` and `marks`; `MarkTools`); `pages/quiz` every
+  the exercise's own fields) fill; `pages/learn` Learn: its header's toggle (`LearnViewToggle`), the Lessons (`JourneyMap`) or the Courses (`CourseShelves`), Continue, the days practised and the songs played last; `pages/course` a course's page as the courses-app has it: its cover, facts (level, weeks, lessons, songs), one honey Start course, Continue or Review, its lessons (`CourseLessons`) and its guided songs (`GuidedSongs`); `pages/lesson` a lesson of either kind over `LessonLayout`: `LessonPage` (its journey, chapter and number; the journey's next lesson, else back to the journey) and `CourseLessonPage` (its course and number; the course's next lesson, else on to its songs), going on learns it (ADR 0053); `pages/practice` Practice's pages as rows in its three groups; `pages/search` Search (`model/index-entries.ts`: `indexEntries`, one projection of the registries, held to each by a test; `searchIndex`, `typedChord`; `useIndex`; `IndexRow`); `pages/shared-song` a song opened from a shared link (`/songs/shared?song=…`), added to Your songs when asked; `pages/chord-finder` the Chord finder (`useChordFinder`: the chord a MIDI keyboard holds as it grew, read on once let go, else the keys tapped; its log; the reading chosen); `pages/quiz` every
   trainer by group with My gaps in its bar; `pages/exercises`
   the drills of no other page; `pages/chords`, `pages/intervals` and `pages/progressions` three explorers' pages; `pages/scales`
   Scales and keys (`ScaleTabs`, its views; songs in the key, `PiecesInKey`); `pages/accompaniment`
@@ -113,7 +113,7 @@ it. `@` → `src`.
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
   facts and borrowed chords; its pure marks, plays, `scaleRunOf`, `keyOfScale` and `showsOf` in `model/`), `interval-explorer` (every interval over a root
-  as Clefs' cards), `chord-finder` (Free play's Find: keys tapped or held named as a chord, and the keys that hold it with its numeral in each, `ChordKeys` over `keysHolding`), `score-sheet` (the score editor's sheet: a line of
+  as Clefs' cards), `chord-finder` (ADR 0054: `findChord`, a note, an interval or power chord, or every reading of a chord, spelled in a key; `logKeys`, the chords played in turn; `trailMusic`; `ChordName`, the chord as large as the page allows with its readings; `ChordTrail`, the chords played on a grand staff; `ChordKeys` over `keysHolding`), `score-sheet` (the score editor's sheet: a line of
   grand staff per chart line, `lineMusic`, the caret, the bars chosen, Pattern marks, bars as buttons), `exercise-list` (the Exercises page's groups, `LISTED_GROUPS`, each
   row opening its Player), `pattern-music` (a pattern heard: `patternSample` over a bar of C or a tune's first line,
   `PatternStaff`, `PatternPlay`), `progression-explorer` (`ProgressionExplorer`, a progression in any key: its row of chords, `ProgressionChoice`
@@ -121,7 +121,7 @@ it. `@` → `src`.
   progression's line in that mode, ADR 0041), `chosenView` and `playerSearch` in `model/`), `lesson-view` (a worksheet under its pinned keys: its sections listed at its top, each a link to its heading; every block, one open question in
   `lesson-question.ts`, `PatternExample` over `patternOpening` (a piece's first line with a pattern), `LessonLinkRow`), `step-panel`, `trainer-board` (one round of a trainer and a run's results, the Check's board too; `useRoundShortcuts`: Enter, 1–9, R),
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS` in `model/`; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
-  moved by the audio clock), `live-score` (`LiveScore`: the trail of chords played, `strike` within 50 ms, `trailMusic`, `liveName`)), each owning in `model/` the view type a route's URL holds.
+  moved by the audio clock)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
   `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
@@ -146,7 +146,7 @@ it. `@` → `src`.
   `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
   machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
   `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
-  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `ShareSongButton`); `metronome` (a click on its own, a bar at a time on the audio clock, `useMetronome`, with tap tempo, `MetronomeFields`; Free play's, its tempo and beats in the URL).
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `ShareSongButton`).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
@@ -177,10 +177,10 @@ it. `@` → `src`.
   each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
   by one sanitiser for its version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
-  `useScrollMotion`, `useWakeLock` (the screen kept on while the Player, the editor, Free play or a round is open), `useElementSize`, `useShownOnScrollUp` (the screen bar's hide and show, once the page has scrolled past it), `IN_PLACE` (a navigation that changes the
+  `useScrollMotion`, `useWakeLock` (the screen kept on while the Player, the editor, the Chord finder or a round is open), `useElementSize`, `useShownOnScrollUp` (the screen bar's hide and show, once the page has scrolled past it), `IN_PLACE` (a navigation that changes the
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
-  `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options, the key sizes smallest first: `zoomKeySize`, `nextNamedKeys`), `midi-choices` (the MIDI keyboard's), `diagram-marks` (a teaching diagram's marks in a URL, `markKey`),
+  `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options, the key sizes smallest first: `zoomKeySize`, `nextNamedKeys`), `midi-choices` (the MIDI keyboard's),
   `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords explorer's URL holds
   them), `foldText`; and with
   barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,

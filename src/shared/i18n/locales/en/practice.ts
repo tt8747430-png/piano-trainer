@@ -9,7 +9,7 @@ export const practice = {
     intervals: 'Intervals',
     progressions: 'Progressions',
     accompaniment: 'Accompaniment',
-    freePlay: 'Free play',
+    chordFinder: 'Chord finder',
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
@@ -19,7 +19,7 @@ export const practice = {
     chords: 'Triads to 13ths · Inversions · Tensions',
     intervals: 'On the keys, up and down',
     progressions: 'From the library or typed, in any key',
-    freePlay: 'A live score, chord names, marks and a metronome',
+    chordFinder: 'Any chord named, spelled and written',
   },
   // Words the explorers share.
   root: 'Root',
@@ -181,10 +181,15 @@ export const practice = {
       cancel: 'Cancel',
     },
   },
+  // The Chord finder (ADR 0054): a chord played or tapped, named, spelled and written.
   chordFinder: {
-    choose: 'Choose the keys of a chord.',
+    prompt: 'Play a chord on your keyboard, or tap its keys.',
     none: 'No chord matches these notes.',
-    also: 'Also: {{names}}',
+    note: 'One note',
+    powerChord: 'Power chord',
+    readings: 'Also read as',
+    reading: 'Read as {{symbol}}',
+    tones: 'Its notes, from the bass up',
     no3rd: 'No 3rd',
     no5th: 'No 5th',
     no9th: 'No 9th',
@@ -192,6 +197,11 @@ export const practice = {
     open: 'Open in Chords',
     // The keys that hold the chord found, its numeral in each.
     inKeys: 'In these keys',
+    clear: 'Clear',
+    // Where the chord shown comes from: keys held on the keyboard, the last chord, keys tapped.
+    state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
+    played: 'Played',
+    playedEmpty: 'Each chord you play is written here.',
   },
   passingChords: {
     inKey: 'In the key',
@@ -282,18 +292,6 @@ export const practice = {
       minor: 'Minor 7ths',
       dominant: 'Dominant 7ths',
     },
-  },
-  // Free play: the piano played freely, written and named.
-  freePlay: {
-    mode: 'Mode',
-    play: 'Play',
-    find: 'Find',
-    mark: 'Mark',
-    clear: 'Clear',
-    colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
-    finger: { label: 'Finger', none: 'None' },
-    score: 'Live score',
-    empty: 'Play, and the notes appear here.',
   },
   exercises: {
     // The Exercises page's groups (roadmap §10.5).

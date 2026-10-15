@@ -18,9 +18,9 @@ export function ChordKeys({ found }: { found: FoundChord }) {
   if (keys.length === 0) return null
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h3 id={id} className="text-xl">
+      <h2 id={id} className="text-2xl">
         {t('chordFinder.inKeys')}
-      </h3>
+      </h2>
       <ul className="grid-cards gap-2 *:card">
         {keys.map(({ key, numeral }) => (
           <li key={keyName(key)}>

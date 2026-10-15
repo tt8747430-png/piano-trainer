@@ -1,2 +1,6 @@
-export { ChordFinder } from './ui/ChordFinder'
+export { EMPTY_LOG, logKeys, type ChordLog } from './model/chord-log'
+export { findChord, readingAt, readingMarks, type Finding } from './model/finding'
+export { ChordKeys } from './ui/ChordKeys'
+export { ChordName, type ChordSource } from './ui/ChordName'
+export { ChordTrail } from './ui/ChordTrail'
 export { useChordAbout } from './ui/use-chord-about'

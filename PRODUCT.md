@@ -64,8 +64,10 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   Jonny's 2-5-1 scale, inner voice, modes, rapid switch and pattern shifting. **Quiz:** every trainer, each a ladder
   of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's role, Build
   scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
-  them, in its bar. **Free play:** the piano at its widest under a live score, each chord played written on a grand
-  staff and named; Find names the keys tapped or held, and the keys they are in; Mark makes a teaching diagram, keys in two colours with fingers, sent as a link),
+  them, in its bar. **Chord finder:** any chord played on a MIDI keyboard or tapped
+  on the keys named at once, large, in every reading it has (an inversion over its bass, tones left out, a 5th as a
+  power chord), its notes by degree, read on once let go; the chords played written in turn on a grand staff, spelled
+  in the key chosen; and the keys that hold it),
   the score editor (the learner's version of any song or study, or the chart of a
   listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
   staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody

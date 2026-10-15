@@ -9,7 +9,7 @@ import {
   SCALES_DEFAULTS,
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
-import { FREE_PLAY_DEFAULTS } from './tool-search'
+import { CHORD_FINDER_DEFAULTS } from './tool-search'
 import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
@@ -33,27 +33,15 @@ describe('search params', () => {
     expect(await searchAt('/practice/intervals')).toEqual(INTERVALS_DEFAULTS)
     expect(await searchAt('/practice/progressions')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/edit/bz5')).toEqual(EDIT_DEFAULTS)
-    expect(await searchAt('/practice/free-play')).toEqual(FREE_PLAY_DEFAULTS)
+    expect(await searchAt('/practice/chord-finder')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
-  it('read Free play’s mode, key, marks and metronome, the marks written back clean', async () => {
-    expect(
-      await searchAt('/practice/free-play?mode=mark&key=D&marks=67b%2C60a3&tempo=96&beats=3'),
-    ).toEqual({
-      mode: 'mark',
-      key: 'D',
-      keys: '',
-      marks: '60a3,67b',
-      tempo: 96,
-      beats: 3,
-    })
-    expect(
-      await searchAt('/practice/free-play?mode=draw&key=H&marks=20a%2Cx&tempo=400&beats=5'),
-    ).toEqual(FREE_PLAY_DEFAULTS)
-    expect(await searchAt('/practice/free-play?mode=find&keys=67-60-64-60')).toMatchObject({
-      mode: 'find',
+  it('read the Chord finder’s keys lowest first, each once, and its key', async () => {
+    expect(await searchAt('/practice/chord-finder?keys=67-60-64-60&key=D')).toEqual({
       keys: '60-64-67',
+      key: 'D',
     })
+    expect(await searchAt('/practice/chord-finder?keys=x-500&key=H')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
   it('open the score editor’s takes only when the URL says so', async () => {

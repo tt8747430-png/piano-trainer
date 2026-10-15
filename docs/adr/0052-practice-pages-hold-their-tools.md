@@ -1,7 +1,7 @@
 # ADR 0052 — A Practice page holds the tools that work on its subject
 
 - **Status:** accepted · **Date:** 2026-10-14 · **Supersedes:** ADR 0050 (a tool is a tab), ADR 0045 (Transpose's
-  page) · **Amends:** ADR 0044 (Practice's groups)
+  page) · **Amends:** ADR 0044 (Practice's groups) · **Free play superseded by:** ADR 0054
 
 ## Context
 

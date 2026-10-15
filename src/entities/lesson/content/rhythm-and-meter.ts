@@ -111,8 +111,8 @@ const rhythmAndMeter: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Free play has a metronome with tap tempo.',
-            ru: 'В свободной игре есть метроном с заданием темпа касанием.',
+            en: 'Tap your foot on every beat.',
+            ru: 'Отстукивайте ногой каждую долю.',
           },
         },
       ],

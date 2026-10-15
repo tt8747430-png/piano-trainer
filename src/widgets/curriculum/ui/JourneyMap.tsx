@@ -4,10 +4,10 @@ import { Fragment, useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { nextJourney, previousJourney, type Chapter, type Journey } from '@/entities/lesson'
 import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progress'
-import { STAGE_PAINT, stepIdOf, type StepId } from '@/entities/step'
+import { stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { PAINT, RoundLink } from '@/shared/ui'
+import { RoundLink } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
@@ -58,15 +58,9 @@ function ChapterSection({
   const answers = useProgress(selectAllAnswers)
   const ids = chapter.steps.map(stepIdOf)
   const done = ids.filter((each) => learned[each] !== undefined).length
-  const paint = PAINT[STAGE_PAINT[journey.stage]]
   return (
     <section aria-labelledby={id} className="flex flex-col gap-6">
-      <div
-        className={cn(
-          'flex items-baseline justify-between gap-4 border-l-4 border-current pl-4',
-          paint.ink,
-        )}
-      >
+      <div className="flex items-baseline justify-between gap-4 border-b border-border pb-2">
         <h3 id={id} className="text-2xl text-balance text-foreground">
           {t('journey.chapter', { n, title: localText(chapter.title, locale) })}
         </h3>

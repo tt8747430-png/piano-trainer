@@ -52,7 +52,7 @@ describe('Search', () => {
     await renderApp('/search')
     await screen.findByRole('heading', { level: 1, name: 'Search' })
     for (const more of screen.getAllByRole('button', { name: /^Show all/ })) await user.click(more)
-    expect(hrefOf('Practice', /^Free play/)).toBe('/practice/free-play')
+    expect(hrefOf('Practice', /^Chord finder/)).toBe('/practice/chord-finder')
     expect(hrefOf('Songs', /^Still, my soul, be still/)).toBe('/songs/bz5')
     expect(hrefOf('Lessons', /^How to read chord symbols/)).toBe('/lessons/reading-chord-symbols')
     expect(hrefOf('Courses', /^Introduction to the Piano/)).toBe(

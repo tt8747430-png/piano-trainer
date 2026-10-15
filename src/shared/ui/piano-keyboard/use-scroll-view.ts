@@ -10,7 +10,9 @@ const metricsOf = (element: HTMLElement): ScrollMetrics => ({
 })
 
 const same = (a: ScrollMetrics, b: ScrollMetrics) =>
-  a.scrollLeft === b.scrollLeft && a.clientWidth === b.clientWidth && a.scrollWidth === b.scrollWidth
+  a.scrollLeft === b.scrollLeft &&
+  a.clientWidth === b.clientWidth &&
+  a.scrollWidth === b.scrollWidth
 
 interface ScrollStore {
   readonly subscribe: (onChange: () => void) => () => void

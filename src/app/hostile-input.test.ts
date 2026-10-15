@@ -4,7 +4,6 @@ import { readMusic, readSharedSong, type ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { notate } from '@/shared/lib/notation'
 import { parseKey, parseNoteName, parseNumerals, readChordSymbol } from '@/shared/lib/music'
-import { readDiagramMarks } from '@/shared/lib'
 
 let seed = 7
 const rand = () => (seed = (seed * 48271) % 2147483647) / 2147483647
@@ -75,7 +74,6 @@ describe('hostile input', () => {
         ['parseNoteName', () => parseNoteName(text)],
         ['parseNumerals', () => parseNumerals(text)],
         ['readChordSymbol', () => readChordSymbol(text)],
-        ['readDiagramMarks', () => readDiagramMarks(text)],
       ] as const) {
         try {
           f()

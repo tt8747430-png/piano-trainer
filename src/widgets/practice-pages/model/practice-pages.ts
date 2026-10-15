@@ -2,8 +2,8 @@ import { PAGE_TILES, type Tile } from '@/shared/ui'
 
 /**
  * Practice's pages (ADR 0044), each where it is and the tile it wears: the things a page shows on the
- * keys, each holding the tools that work on it (ADR 0052); Free play, the piano played, named and
- * marked; and the training.
+ * keys, each holding the tools that work on it (ADR 0052); the Chord finder, any chord played named
+ * (ADR 0054); and the training.
  */
 export const PRACTICE_PAGES = {
   chords: { to: '/practice/chords', tile: PAGE_TILES.chords },
@@ -11,7 +11,7 @@ export const PRACTICE_PAGES = {
   intervals: { to: '/practice/intervals', tile: PAGE_TILES.intervals },
   progressions: { to: '/practice/progressions', tile: PAGE_TILES.progressions },
   accompaniment: { to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
-  freePlay: { to: '/practice/free-play', tile: PAGE_TILES.freePlay },
+  chordFinder: { to: '/practice/chord-finder', tile: PAGE_TILES.chordFinder },
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
@@ -26,9 +26,9 @@ export const THINGS = [
   'accompaniment',
 ] as const satisfies readonly PracticePageId[]
 
-/** The groups listed under a heading, in order: the piano played freely, then the training. */
+/** The groups listed under a heading, in order: the tool at the keys, then the training. */
 export const PRACTICE_GROUPS = [
-  { id: 'atTheKeys', pages: ['freePlay'] },
+  { id: 'atTheKeys', pages: ['chordFinder'] },
   { id: 'training', pages: ['exercises', 'quiz'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 

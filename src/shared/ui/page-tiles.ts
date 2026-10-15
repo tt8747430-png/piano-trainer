@@ -9,7 +9,7 @@ import {
   Layers,
   ListChecks,
   ListMusic,
-  Piano,
+  ScanSearch,
   Ruler,
   type LucideIcon,
 } from 'lucide-react'
@@ -36,7 +36,7 @@ export const PAGE_TILES = {
   tensions: { icon: Layers, paint: 'grass' },
   patterns: { icon: AudioWaveform, paint: 'yellow' },
   progressions: { icon: ListMusic, paint: 'grass' },
-  freePlay: { icon: Piano, paint: 'sky' },
+  chordFinder: { icon: ScanSearch, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },
   quiz: { icon: ListChecks, paint: 'lilac' },
 } as const satisfies Readonly<Record<string, Tile>>
