@@ -133,7 +133,9 @@ function Found({
       </div>
       {listed.length > 1 ? (
         <div className="flex flex-col gap-2">
-          <h3 className="text-base font-semibold">{t('chordFinder.readings')}</h3>
+          <h3 className="font-sans text-sm font-medium text-muted-foreground">
+            {t('chordFinder.readings')}
+          </h3>
           <ul className="flex flex-wrap gap-2">
             {listed.map(({ at, label }) => (
               <li key={label}>

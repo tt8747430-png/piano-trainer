@@ -185,10 +185,6 @@ export const practice = {
   chordFinder: {
     prompt: 'Play a chord on your keyboard, or tap its keys.',
     promptFolded: 'Play a chord on your MIDI keyboard, or show the keys to tap one.',
-    hidden: 'Hidden here',
-    showKeys: 'The keys',
-    showStaff: 'The staff',
-    showInKeys: 'The keys it is in',
     none: 'No chord matches these notes.',
     note: 'One note',
     powerChord: 'Power chord',
@@ -205,17 +201,14 @@ export const practice = {
     // Where the chord shown comes from: keys held on the keyboard, the last chord, keys tapped.
     state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
     played: 'Played',
-    playedEmpty: 'Each chord you play is written here.',
     // The staff where the chords are not remembered: the chord down now, else nothing.
     staff: 'On the staff',
-    staffEmpty: 'The chord you play is written here.',
     settings: 'Chord finder settings',
-    remember: 'Remember the chords played',
-    rememberDetail: 'The staff keeps the last {{count}}, and so does this device',
-    inKeysShown: 'Show the keys it is in',
-    staffShown: 'Show the staff',
-    slash: 'Name an inversion over its bass',
-    slashDetail: 'C/E, else C with its inversion said',
+    remember: 'Remember',
+    rememberDetail: 'The last {{count}}',
+    inKeysShown: 'Its keys',
+    staffShown: 'Staff',
+    slash: 'Over the bass',
     // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
     inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
     bass: '{{note}} in the bass',

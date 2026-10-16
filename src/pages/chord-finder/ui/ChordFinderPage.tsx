@@ -1,5 +1,14 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Eraser, Music2, Play, SlidersHorizontal, Square } from 'lucide-react'
+import {
+  Eraser,
+  History,
+  KeyRound,
+  Music,
+  Music2,
+  Play,
+  SlidersHorizontal,
+  Square,
+} from 'lucide-react'
 import { REMEMBERED_CHORDS } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
@@ -19,18 +28,19 @@ import {
   SheetTrigger,
   SpeedDial,
   SpeedDialAction,
-  SwitchRow,
+  ToggleGrid,
+  ToggleTile,
   usePlayKey,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ChordKeys, ChordName, ChordTrail, readingAt, readingMarks } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
-import { HiddenParts, type HiddenPart } from './HiddenParts'
 
 /**
- * The Chord finder's settings, in a sheet off its bar: the key it spells in, whether it remembers the
- * chords played, and whether it shows the keys a chord is in.
+ * The Chord finder's settings, in a sheet off its bar: the key it spells in, then its on-or-offs as
+ * tiles: whether it remembers the chords played, names an inversion over its bass, and shows the
+ * staff and the keys a chord is in.
  */
 function FinderSettings({
   finder,
@@ -50,32 +60,35 @@ function FinderSettings({
         <SlidersHorizontal aria-hidden />
       </SheetTrigger>
       <SheetContent title={t('chordFinder.settings')}>
-        <div className="flex flex-col gap-4 pt-2">
+        <div className="flex flex-col gap-5 pt-2">
           <KeyChoice value={view.key} onChange={onKey} />
-          <div>
-            <SwitchRow
+          <ToggleGrid label={t('chordFinder.settings')}>
+            <ToggleTile
+              icon={History}
               label={t('chordFinder.remember')}
               detail={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
-              checked={finder.remember}
-              onCheckedChange={finder.setRemember}
+              pressed={finder.remember}
+              onPressedChange={finder.setRemember}
             />
-            <SwitchRow
+            <ToggleTile
+              glyph="C/E"
               label={t('chordFinder.slash')}
-              detail={t('chordFinder.slashDetail')}
-              checked={finder.slash}
-              onCheckedChange={finder.setSlash}
+              pressed={finder.slash}
+              onPressedChange={finder.setSlash}
             />
-            <SwitchRow
+            <ToggleTile
+              icon={Music}
               label={t('chordFinder.staffShown')}
-              checked={finder.staffShown}
-              onCheckedChange={finder.setStaffShown}
+              pressed={finder.staffShown}
+              onPressedChange={finder.setStaffShown}
             />
-            <SwitchRow
+            <ToggleTile
+              icon={KeyRound}
               label={t('chordFinder.inKeysShown')}
-              checked={finder.inKeys}
-              onCheckedChange={finder.setInKeys}
+              pressed={finder.inKeys}
+              onPressedChange={finder.setInKeys}
             />
-          </div>
+          </ToggleGrid>
         </div>
       </SheetContent>
     </Sheet>
@@ -85,8 +98,8 @@ function FinderSettings({
 /**
  * The Chord finder (ADR 0054), a tool of its own: a chord played on a MIDI keyboard or tapped on the
  * keys is named at once, as large as the page allows, in every reading it has, its keys marked by
- * degree; the staff writes it, spelled in the key chosen, and where the chords are remembered those
- * played before it; then the keys that hold it. Play, floating in the thumb's reach, hears it; the
+ * degree; beside it the staff writes it, spelled in the key chosen, and where the chords are
+ * remembered those played before it; then the keys that hold it. What the learner turns off is gone. Play, floating in the thumb's reach, hears it; the
  * dial beside it opens it in Chords or clears the keys. Its settings are a sheet off its bar.
  */
 export function ChordFinderPage() {
@@ -99,31 +112,7 @@ export function ChordFinderPage() {
   const reading = finding.kind === 'chord' ? readingAt(finding.readings, finder.reading) : undefined
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
-  const { folded, fold } = useFoldKeys()
-  // What the learner hid says so where it was, each a way to bring it back.
-  const hidden: HiddenPart[] = [
-    ...(folded
-      ? [{ id: 'keys', label: t('practice:chordFinder.showKeys'), onShow: () => fold(false) }]
-      : []),
-    ...(finder.staffShown
-      ? []
-      : [
-          {
-            id: 'staff',
-            label: t('practice:chordFinder.showStaff'),
-            onShow: () => finder.setStaffShown(true),
-          },
-        ]),
-    ...(finder.inKeys
-      ? []
-      : [
-          {
-            id: 'inKeys',
-            label: t('practice:chordFinder.showInKeys'),
-            onShow: () => finder.setInKeys(true),
-          },
-        ]),
-  ]
+  const { folded } = useFoldKeys()
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -141,41 +130,29 @@ export function ChordFinderPage() {
         selected={finder.tapped}
         onKeyPress={finder.tap}
       />
-      <div
-        className={
-          finder.inKeys && reading
-            ? 'grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-x-12'
-            : 'flex flex-col gap-10'
-        }
-      >
-        <div className="flex min-w-0 flex-col gap-8">
-          <section aria-live="polite" className="flex min-h-36 flex-col gap-6">
-            <ChordName
-              finding={finding}
-              keys={keys}
-              source={finder.source}
-              reading={finder.reading}
-              onReading={finder.setReading}
-              slash={finder.slash}
-              keysFolded={folded}
-            />
-          </section>
-          {finder.staffShown ? (
-            <ChordTrail
-              chords={finder.staff}
-              musicKey={finder.musicKey}
-              remember={finder.remember}
-              slash={finder.slash}
-            />
-          ) : null}
-          <HiddenParts parts={hidden} />
-        </div>
-        {finder.inKeys && reading ? (
-          <aside className="flex flex-col gap-8">
-            <ChordKeys found={reading} />
-          </aside>
+      {/* The chord's name, and beside it from a tablet the staff that writes it, as wide as its bars. */}
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-10">
+        <section aria-live="polite" className="min-w-0 md:flex-1">
+          <ChordName
+            finding={finding}
+            keys={keys}
+            source={finder.source}
+            reading={finder.reading}
+            onReading={finder.setReading}
+            slash={finder.slash}
+            keysFolded={folded}
+          />
+        </section>
+        {finder.staffShown ? (
+          <ChordTrail
+            chords={finder.staff}
+            musicKey={finder.musicKey}
+            remember={finder.remember}
+            slash={finder.slash}
+          />
         ) : null}
       </div>
+      {finder.inKeys && reading ? <ChordKeys found={reading} /> : null}
       <FloatingActions>
         {finder.canClear ? (
           <SpeedDial>

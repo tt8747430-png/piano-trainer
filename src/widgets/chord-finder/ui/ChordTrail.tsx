@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useId, useMemo, useRef } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   noteName,
@@ -9,6 +9,7 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
+import { cn } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { findChord, type Finding } from '../model/finding'
@@ -50,7 +51,8 @@ function BarNames({ layout, names }: { layout: ScoreLayout; names: readonly Said
 /**
  * The chords played (ADR 0054), oldest first, each a whole note in a bar of its own on a grand staff,
  * spelled in the key chosen and named over its bar, the newest last; for a screen reader, the names
- * in order. Where the chords are not remembered, it writes the one chord down now.
+ * in order, as wide as its bars. Where the chords are not remembered, it writes the one chord down
+ * now; nothing at all before a chord is played.
  */
 export function ChordTrail({
   chords,
@@ -66,7 +68,6 @@ export function ChordTrail({
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
-  const id = useId()
   // Engraved after the key a tap put down is painted: a busy phone keeps its keys quick.
   const shown = useDeferredValue(chords)
   const names = useMemo(
@@ -116,33 +117,30 @@ export function ChordTrail({
     const element = scroller.current
     if (element) element.scrollLeft = element.scrollWidth
   }, [shown.length])
+  // Nothing played: no staff, the page's prompt says what to do.
+  if (chords.length === 0) return null
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3 card p-4">
-      <h2 id={id} className="text-2xl">
-        {remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')}
-      </h2>
-      {/* Nothing played yet: its line says what will be written, under no blank staff. */}
-      {chords.length > 0 ? (
-        <div
-          ref={scroller}
-          className="max-w-full overflow-x-auto overscroll-x-contain pt-14 scrollbar-none"
-        >
-          <LazyScoreView score={score} timeBefore={NO_TIME} scale={1.35}>
-            {(layout) => <BarNames layout={layout} names={names} />}
-          </LazyScoreView>
-        </div>
-      ) : null}
-      {chords.length === 0 ? (
-        <p className="text-muted-foreground">
-          {remember ? t('practice:chordFinder.playedEmpty') : t('practice:chordFinder.staffEmpty')}
-        </p>
-      ) : (
-        <ol className="sr-only">
-          {names.map((name, i) => (
-            <li key={i}>{name.heard}</li>
-          ))}
-        </ol>
-      )}
+    <section
+      aria-label={remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')}
+      className="w-fit max-w-full self-start card px-3 pb-2"
+    >
+      <div
+        ref={scroller}
+        className={cn(
+          'max-w-full overflow-x-auto overscroll-x-contain scrollbar-none',
+          remember && 'pt-12',
+        )}
+      >
+        {/* One chord alone is named over the page already: only a trail names its bars. */}
+        <LazyScoreView score={score} timeBefore={NO_TIME} scale={1.1}>
+          {remember ? (layout) => <BarNames layout={layout} names={names} /> : undefined}
+        </LazyScoreView>
+      </div>
+      <ol className="sr-only">
+        {names.map((name, i) => (
+          <li key={i}>{name.heard}</li>
+        ))}
+      </ol>
     </section>
   )
 }

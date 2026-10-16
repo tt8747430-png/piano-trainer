@@ -18,7 +18,7 @@ const playedNames = () =>
 /** Turns on remembering the chords played, in the Chord finder's settings. */
 async function remember(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-  await user.click(screen.getByRole('switch', { name: /Remember the chords played/ }))
+  await user.click(screen.getByRole('button', { name: /^Remember/ }))
   await user.click(screen.getByRole('button', { name: 'Close' }))
 }
 
@@ -52,7 +52,7 @@ describe('Practice → Chord finder', () => {
     const { midi: piano } = await renderApp('/practice/chord-finder')
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     const staff = () => screen.getByRole('region', { name: 'On the staff' })
-    expect(within(staff()).getByText('The chord you play is written here.')).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument()
     act(() => {
       for (const each of [48, 52, 55]) piano.press(midi(each))
     })
@@ -67,7 +67,7 @@ describe('Practice → Chord finder', () => {
       for (const each of [48, 52, 55]) piano.release(midi(each))
     })
     await waitFor(() =>
-      expect(within(staff()).getByText('The chord you play is written here.')).toBeInTheDocument(),
+      expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument(),
     )
     expect(name()).toHaveTextContent(/^C$/)
   })
@@ -93,9 +93,9 @@ describe('Practice → Chord finder', () => {
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     expect(playedNames()).toEqual(['C', 'F'])
     await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('switch', { name: /Remember the chords played/ }))
+    await user.click(screen.getByRole('button', { name: /^Remember/ }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(screen.getByRole('region', { name: 'On the staff' })).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Played' })).not.toBeInTheDocument()
     expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
   })
 
@@ -157,38 +157,35 @@ describe('Practice → Chord finder', () => {
     )
   })
 
-  it('says what is hidden where it was, each a way back, and asks for MIDI with the keys folded', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/practice/chord-finder')
+  it('leaves what is turned off blank, and asks for MIDI with the keys folded', async () => {
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
     await screen.findByRole('group', { name: 'Keyboard' })
-    expect(screen.queryByRole('region', { name: 'Hidden here' })).not.toBeInTheDocument()
     act(() =>
       settingsStore.setState((state) => ({
         keyboard: { ...state.keyboard, folded: true },
         chordFinder: { ...state.chordFinder, staff: false },
       })),
     )
+    expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Keys' })).toHaveLength(1)
+  })
+
+  it('asks for MIDI with the keys folded and nothing tapped', async () => {
+    const { settingsStore } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    act(() =>
+      settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, folded: true } })),
+    )
     expect(
       screen.getByText('Play a chord on your MIDI keyboard, or show the keys to tap one.'),
     ).toBeInTheDocument()
-    const hidden = screen.getByRole('region', { name: 'Hidden here' })
-    expect(
-      within(hidden)
-        .getAllByRole('button')
-        .map((button) => button.textContent),
-    ).toEqual(['The keys', 'The staff'])
-    await user.click(within(hidden).getByRole('button', { name: 'The keys' }))
-    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
-    await user.click(within(hidden).getByRole('button', { name: 'The staff' }))
-    expect(settingsStore.getState().chordFinder.staff).toBe(true)
-    expect(screen.queryByRole('region', { name: 'Hidden here' })).not.toBeInTheDocument()
   })
 
   it('hides the staff, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
     await user.click(await screen.findByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('switch', { name: 'Show the staff' }))
+    await user.click(screen.getByRole('button', { name: 'Staff' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument()
   })
@@ -198,7 +195,7 @@ describe('Practice → Chord finder', () => {
     await renderApp('/practice/chord-finder?keys=60-64-67')
     expect(await screen.findByRole('region', { name: 'In these keys' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('switch', { name: 'Show the keys it is in' }))
+    await user.click(screen.getByRole('button', { name: 'Its keys' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })
@@ -209,7 +206,7 @@ describe('Practice → Chord finder', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'C/E' })).toBeInTheDocument()
     expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('switch', { name: /^Name an inversion over its bass/ }))
+    await user.click(screen.getByRole('button', { name: 'Over the bass' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.getByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
@@ -279,7 +276,7 @@ describe('Practice → Chord finder', () => {
     await user.click(screen.getByRole('button', { name: 'Clear' }))
     expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument()
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
-    expect(screen.getByText('The chord you play is written here.')).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument()
   })
 
   it('opens the chord in Chords, and the keys that hold it', async () => {
