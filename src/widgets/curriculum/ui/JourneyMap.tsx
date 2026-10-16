@@ -12,6 +12,7 @@ import { continueStep } from '../model/continue-step'
 import { journeyProgress } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
 import { JourneyNode } from './JourneyNode'
+import { LearnedBar } from './LearnedMeter'
 
 /** The dashed path from one node down to the next, across the map's three columns. */
 function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
@@ -34,18 +35,6 @@ function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
         vectorEffect="non-scaling-stroke"
       />
     </svg>
-  )
-}
-
-/** A bar of how much is learned, in the learned paint. */
-function Meter({ done, total }: { done: number; total: number }) {
-  return (
-    <span aria-hidden className="block h-1 overflow-hidden rounded-full bg-muted">
-      <span
-        className="block h-full rounded-full bg-learned transition-[width] duration-300 ease-out"
-        style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }}
-      />
-    </span>
   )
 }
 
@@ -86,7 +75,7 @@ function JourneyTabs({ shown }: { shown: Journey }) {
                     {t('journey.count', { learned: progress.done, total: progress.total })}
                   </span>
                 </span>
-                <Meter done={progress.done} total={progress.total} />
+                <LearnedBar progress={progress} />
               </Link>
             </li>
           )
