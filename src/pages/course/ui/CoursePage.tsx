@@ -1,5 +1,5 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, Play, RotateCcw } from 'lucide-react'
+import { ArrowRight, Check, Play, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
@@ -41,7 +41,7 @@ function CourseAction({ course }: { course: Course }) {
     <ButtonLink
       size="lg"
       variant={open ? 'default' : 'outline'}
-      className="self-start"
+      className="w-full sm:w-auto sm:min-w-48"
       render={
         step.kind === 'piece' ? (
           <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
@@ -60,9 +60,9 @@ function CourseAction({ course }: { course: Course }) {
 }
 
 /**
- * A course's page (ADR 0053): its icon on its level's paint beside what it teaches, its weeks,
- * lessons and songs as pictures, how much is learned and its one way in; then its lessons numbered
- * as taught, the next ringed, and its guided songs.
+ * A course's page (ADR 0053, 0058): one card, its icon on its level's paint beside what it teaches
+ * and its facts in words, and along its foot how much is learned and its one way in; then its
+ * lessons numbered as taught, the next ringed, and its guided songs.
  */
 export function CoursePage() {
   const { t } = useTranslation('learn')
@@ -81,23 +81,31 @@ export function CoursePage() {
         title={localText(course.title, locale)}
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
       />
-      <section className="-mt-2 flex max-w-3xl items-start gap-5">
-        <span
-          className={cn(
-            'grid size-20 shrink-0 place-items-center rounded-3xl sm:size-24',
-            paint.fill,
-            paint.ink,
-          )}
-        >
-          <CourseIcon courseId={course.id} className="size-10 sm:size-12" strokeWidth={1.5} />
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <p className="text-pretty">{localText(course.summary, locale)}</p>
-          <CourseFacts course={course} level />
+      {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
+      <section className="-mt-2 flex max-w-3xl flex-col overflow-hidden card">
+        <div className="flex items-start gap-4 p-5">
+          <span
+            className={cn(
+              'grid size-16 shrink-0 place-items-center rounded-2xl',
+              paint.fill,
+              paint.ink,
+            )}
+          >
+            <CourseIcon courseId={course.id} className="size-8" strokeWidth={1.5} />
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            <p className="text-pretty">{localText(course.summary, locale)}</p>
+            <CourseFacts course={course} level className="text-sm" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5 sm:flex-row sm:items-center">
           {isComplete(progress) ? (
-            <p className="font-semibold text-learned">{t('course.done')}</p>
+            <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
+              <Check aria-hidden className="size-5" strokeWidth={3} />
+              {t('course.done')}
+            </p>
           ) : (
-            <LearnedMeter progress={progress} className="max-w-xs" />
+            <LearnedMeter progress={progress} className="flex-1" />
           )}
           <CourseAction course={course} />
         </div>

@@ -27,8 +27,17 @@ interface Floating {
 
 const FloatingContext = createContext<Floating>({ column: null, place: 'right', labels: true })
 
-/** How a column's actions line up, as the place they stand in. */
+/**
+ * How the actions line up, as the place they stand in: down an edge in a column, its main one
+ * lowest; in the middle in a row along the foot, so none climbs over the page's middle.
+ */
 const ALIGN: Readonly<Record<FloatingPlace, string>> = {
+  left: 'flex-col items-start',
+  center: 'flex-row items-end',
+  right: 'flex-col items-end',
+}
+/** A dial's own stack stands over its button wherever the actions are. */
+const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
   left: 'items-start',
   center: 'items-center',
   right: 'items-end',
@@ -36,8 +45,9 @@ const ALIGN: Readonly<Record<FloatingPlace, string>> = {
 
 /**
  * The one column every screen's floating actions stand in, at the foot of the screen over the tab
- * bar and the keys docked there, the width of the screen beside a rail or a sidebar: at its left,
- * its middle or its right, as the learner chose, each action with its name or its icon alone.
+ * bar and the keys docked there, the width of the screen beside a rail or a sidebar: down its left
+ * or its right edge, or in a row in its middle, as the learner chose, each action with its name or
+ * its icon alone.
  */
 export function FloatingHost({
   place,
@@ -63,7 +73,7 @@ export function FloatingHost({
         <div
           ref={setColumn}
           data-slot="floating-actions"
-          className={cn('vt-floating flex flex-col gap-3 [&>*]:pointer-events-auto', ALIGN[place])}
+          className={cn('vt-floating flex gap-3 [&>*]:pointer-events-auto', ALIGN[place])}
         />
       </div>
     </FloatingContext.Provider>
@@ -96,7 +106,7 @@ export function FloatingActions({
   const { column, place } = useContext(FloatingContext)
   if (!column) return null
   return createPortal(
-    <div className={cn('flex flex-col gap-3', ALIGN[place], last && 'order-last', className)}>
+    <div className={cn('flex gap-3', ALIGN[place], last && 'order-last', className)}>
       {children}
     </div>,
     column,
@@ -216,7 +226,7 @@ export function SpeedDial({
         <div aria-hidden className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
       ) : null}
       <div
-        className={cn('flex flex-col gap-3', ALIGN[place])}
+        className={cn('flex flex-col gap-3', DIAL_ALIGN[place])}
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || !open) return
           event.stopPropagation()
@@ -224,7 +234,7 @@ export function SpeedDial({
         }}
       >
         {open ? (
-          <ul id={id} aria-label={name} className={cn('flex flex-col gap-1.5', ALIGN[place])}>
+          <ul id={id} aria-label={name} className={cn('flex flex-col gap-1.5', DIAL_ALIGN[place])}>
             {children}
           </ul>
         ) : null}

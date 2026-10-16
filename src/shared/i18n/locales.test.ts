@@ -13,12 +13,17 @@ function leaves(tree: Tree, prefix = ''): [key: string, text: string][] {
 }
 
 describe('locales', () => {
-  it('give Russian exactly the keys English has', () => {
+  it('give Russian exactly the keys English has, and every plural form a count needs', () => {
     const keys = (tree: Tree) =>
       leaves(tree)
         .map(([key]) => key)
         .sort()
-    expect(keys(ru)).toEqual(keys(en))
+    const english = keys(en)
+    const counted = english.flatMap((key) => (key.endsWith('_other') ? [key.slice(0, -6)] : []))
+    // Russian counts in one, few, many and other: those beyond English's are its own.
+    const more = counted.flatMap((base) => [`${base}_few`, `${base}_many`])
+    expect(keys(ru).filter((key) => !more.includes(key))).toEqual(english)
+    for (const key of more) expect(keys(ru), key).toContain(key)
   })
 
   it('leave no string empty in either language', () => {

@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { FoldBody } from './FoldBody'
 
 /** Whether a section shows its body, and how its heading changes that. */
 export interface Fold {
@@ -56,10 +57,10 @@ export function FoldSection({
           title
         )}
       </h2>
-      <div id={bodyId} hidden={!open} className="contents">
+      <FoldBody id={bodyId} open={open} className="flex flex-col gap-3">
         {detail}
         {children}
-      </div>
+      </FoldBody>
     </section>
   )
 }

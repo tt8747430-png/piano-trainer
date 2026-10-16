@@ -7,7 +7,8 @@ import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progres
 import { stepIdOf, type StepId } from '@/entities/step'
 import { useFold } from '@/features/fold-section'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, IN_PLACE } from '@/shared/lib'
+import { FoldBody } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
@@ -60,7 +61,7 @@ function JourneyTabs({ shown }: { shown: Journey }) {
               <Link
                 to="/"
                 search={{ view: 'lessons', journey: journey.id }}
-                replace
+                {...IN_PLACE}
                 aria-current={current ? 'page' : undefined}
                 className={cn(
                   'flex min-w-28 flex-col gap-1.5 rounded-xl border px-3 py-2 transition-colors duration-200 ease-out',
@@ -148,41 +149,43 @@ function ChapterSection({
           />
         </button>
       </h3>
-      <ol id={bodyId} hidden={!fold.open} className="flex flex-col pt-4 pb-2">
-        {chapter.steps.map((step, i) => {
-          const stepId = stepIdOf(step)
-          const column = columnOf(i)
-          const before = i === 0 ? undefined : columnOf(i - 1)
-          return (
-            <Fragment key={stepId}>
-              {before === undefined ? null : (
-                <li aria-hidden className="list-none">
-                  <Path from={before} to={column} />
+      <FoldBody id={bodyId} open={fold.open}>
+        <ol className="flex flex-col pt-4 pb-2">
+          {chapter.steps.map((step, i) => {
+            const stepId = stepIdOf(step)
+            const column = columnOf(i)
+            const before = i === 0 ? undefined : columnOf(i - 1)
+            return (
+              <Fragment key={stepId}>
+                {before === undefined ? null : (
+                  <li aria-hidden className="list-none">
+                    <Path from={before} to={column} />
+                  </li>
+                )}
+                <li className="grid grid-cols-3">
+                  <div
+                    className={cn(
+                      'flex justify-center',
+                      column === 0 && 'col-start-1',
+                      column === 1 && 'col-start-2',
+                      column === 2 && 'col-start-3',
+                    )}
+                  >
+                    <JourneyNode
+                      step={step}
+                      stage={journey.stage}
+                      number={numbers.get(stepId)}
+                      learned={learned[stepId] !== undefined}
+                      next={stepId === next}
+                      answers={answers}
+                    />
+                  </div>
                 </li>
-              )}
-              <li className="grid grid-cols-3">
-                <div
-                  className={cn(
-                    'flex justify-center',
-                    column === 0 && 'col-start-1',
-                    column === 1 && 'col-start-2',
-                    column === 2 && 'col-start-3',
-                  )}
-                >
-                  <JourneyNode
-                    step={step}
-                    stage={journey.stage}
-                    number={numbers.get(stepId)}
-                    learned={learned[stepId] !== undefined}
-                    next={stepId === next}
-                    answers={answers}
-                  />
-                </div>
-              </li>
-            </Fragment>
-          )
-        })}
-      </ol>
+              </Fragment>
+            )
+          })}
+        </ol>
+      </FoldBody>
     </section>
   )
 }
