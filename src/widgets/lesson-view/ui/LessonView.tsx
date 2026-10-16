@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { ListOrdered } from 'lucide-react'
-import { useMemo, useReducer, useRef, useState, type CSSProperties } from 'react'
+import { ChevronLeft, ChevronRight, ListOrdered } from 'lucide-react'
+import { useMemo, useReducer, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -22,6 +22,7 @@ import { QuestionBlock } from './QuestionBlock'
 import { usePinnedHeight } from './use-pinned-height'
 import { useReadingSection } from './use-reading-section'
 import {
+  ButtonLink,
   FloatingActions,
   NO_KEYS,
   Sheet,
@@ -85,47 +86,88 @@ function SectionLinks({
 }
 
 /**
- * The contents on a phone: a floating button saying which section is being read of how many, its
- * sheet the sections' links; one followed closes it.
+ * The lesson's sections one by one, floating in the thumb's reach: ‹ the section before, which one is
+ * being read of how many, › the next. On a phone the count opens the contents in a sheet, one link
+ * followed closing it; a laptop keeps the contents beside the lesson, so there it is a count alone.
  */
-function ContentsSheet({ lesson, reading }: { lesson: Lesson; reading: string | null }) {
+function SectionStepper({ lesson, reading }: { lesson: Lesson; reading: string | null }) {
   const { t } = useTranslation('learn')
   const [open, setOpen] = useState(false)
-  const at = lesson.sections.findIndex((_, s) => sectionId(s) === reading)
+  const at = Math.max(
+    lesson.sections.findIndex((_, s) => sectionId(s) === reading),
+    0,
+  )
   const of = lesson.sections.length
-  return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <Button
-            variant="surface"
-            size="lg"
-            aria-label={t('contentsAt', { at: Math.max(at, 0) + 1, of })}
-            className="rounded-full shadow-md shadow-foreground/10"
-          />
-        }
+  const count = `${at + 1} / ${of}`
+  // A jump replaces the page's entry, as a contents link does: Back still leaves the lesson.
+  const step = (to: number, label: string, Icon: typeof ChevronLeft) =>
+    to >= 0 && to < of ? (
+      <ButtonLink
+        variant="ghost"
+        size="icon"
+        aria-label={label}
+        title={label}
+        className="rounded-full"
+        render={<Link to="." hash={sectionId(to)} replace />}
       >
-        <ListOrdered aria-hidden />
-        <span aria-hidden className="tabular-nums">
-          {Math.max(at, 0) + 1} / {of}
-        </span>
-      </SheetTrigger>
-      <SheetContent title={t('contents')}>
-        <nav aria-label={t('contents')} className="text-lg">
-          <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
-        </nav>
-      </SheetContent>
-    </Sheet>
+        <Icon aria-hidden />
+      </ButtonLink>
+    ) : (
+      <Button variant="ghost" size="icon" aria-label={label} disabled className="rounded-full">
+        <Icon aria-hidden />
+      </Button>
+    )
+  return (
+    <div
+      role="group"
+      aria-label={t('contentsAt', { at: at + 1, of })}
+      className="flex items-center rounded-full border border-input bg-card p-0.5 shadow-md shadow-foreground/10"
+    >
+      {step(at - 1, t('previousSection'), ChevronLeft)}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger
+          render={
+            <Button
+              variant="ghost"
+              aria-label={t('contentsAt', { at: at + 1, of })}
+              className="rounded-full px-3 lg:hidden"
+            />
+          }
+        >
+          <ListOrdered aria-hidden />
+          <span aria-hidden className="tabular-nums">
+            {count}
+          </span>
+        </SheetTrigger>
+        <SheetContent title={t('contents')}>
+          <nav aria-label={t('contents')} className="text-lg">
+            <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
+          </nav>
+        </SheetContent>
+      </Sheet>
+      <span aria-hidden className="hidden px-2 font-semibold tabular-nums lg:inline">
+        {count}
+      </span>
+      {step(at + 1, t('nextSection'), ChevronRight)}
+    </div>
   )
 }
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
  * question, whose answer the learner chooses on it. Its sections are listed beside it on a laptop and
- * in a sheet off a floating button on a phone, each a link to its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
- * replaces the page's entry, so Back still leaves the lesson.
+ * in a sheet on a phone, each a link to its heading, which the page's scroll padding lands clear of
+ * the pinned keys (`theme.css`); floating in the thumb's reach, the sections go one by one, under the
+ * lesson's own `options`. A jump replaces the page's entry, so Back still leaves the lesson.
  */
-export function LessonView({ lesson }: { lesson: Lesson }) {
+export function LessonView({
+  lesson,
+  options,
+}: {
+  lesson: Lesson
+  /** The lesson's options floating over its sections' stepper (a `SpeedDial`). */
+  options?: ReactNode
+}) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const play = usePlay()
@@ -218,13 +260,12 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
           ))}
         </div>
       </div>
-      {lesson.sections.length >= CONTENTS_FROM ? (
-        <div className="lg:hidden">
-          <FloatingActions>
-            <ContentsSheet lesson={lesson} reading={reading} />
-          </FloatingActions>
-        </div>
-      ) : null}
+      <FloatingActions>
+        {options}
+        {lesson.sections.length >= CONTENTS_FROM ? (
+          <SectionStepper lesson={lesson} reading={reading} />
+        ) : null}
+      </FloatingActions>
     </div>
   )
 }

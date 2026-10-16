@@ -49,12 +49,20 @@ describe('Settings', () => {
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 4)).toEqual([
+    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 5)).toEqual([
       'Theme',
       'Layout',
       'Keyboard',
+      'Lessons',
       'MIDI keyboard',
     ])
+  })
+
+  it('shows or hides a lesson’s fingers, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    await user.click(await screen.findByRole('switch', { name: /^Show the fingers/ }))
+    expect(settingsStore.getState().lesson.fingers).toBe(false)
   })
 
   it('makes every screen’s title small, saved', async () => {

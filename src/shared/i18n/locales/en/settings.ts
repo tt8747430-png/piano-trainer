@@ -5,6 +5,11 @@ export const settings = {
   layout: { label: 'Layout', titles: { label: 'Page titles', large: 'Large', small: 'Small' } },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',
+  lessons: {
+    label: 'Lessons',
+    fingers: 'Show the fingers',
+    fingersNote: 'A lesson’s scales carry the fingers that play them, on the keys and the staff',
+  },
   progress: {
     label: 'Progress',
     reset: 'Reset progress',

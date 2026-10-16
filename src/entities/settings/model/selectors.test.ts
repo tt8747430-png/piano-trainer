@@ -7,6 +7,7 @@ import {
   selectRecorder,
   selectSidebar,
   selectTrainer,
+  selectLesson,
   selectSectionFolded,
 } from './selectors'
 import {
@@ -27,6 +28,7 @@ describe('settings selectors', () => {
       locale: 'en',
       practice: DEFAULT_PRACTICE,
       trainer: DEFAULT_TRAINER,
+      lesson: { fingers: false },
       keyboard: defaultKeyboard(false),
       recorder: DEFAULT_RECORDER,
       foldedSections: ['chords.tensions'],
@@ -36,6 +38,7 @@ describe('settings selectors', () => {
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
+    expect(selectLesson(state)).toEqual({ fingers: false })
     expect(selectKeyboard(state)).toBe(state.keyboard)
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')

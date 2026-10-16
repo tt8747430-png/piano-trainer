@@ -36,6 +36,7 @@ const COLUMN_ID = 'floating-actions'
  */
 export function FloatingActions({
   last = false,
+  className,
   children,
 }: {
   /**
@@ -43,10 +44,14 @@ export function FloatingActions({
    * from there.
    */
   last?: boolean
+  /** Where it shows: `lg:hidden` for what a laptop's page keeps in sight elsewhere. */
+  className?: string
   children: ReactNode
 }) {
   return createPortal(
-    <div className={cn('flex flex-col items-end gap-3', last && 'order-last')}>{children}</div>,
+    <div className={cn('flex flex-col items-end gap-3', last && 'order-last', className)}>
+      {children}
+    </div>,
     floatingColumn(),
   )
 }
@@ -176,8 +181,8 @@ export function SpeedDial({
 }
 
 /**
- * One of a dial's actions: its words beside its icon. A button, or what `render` makes it (a link);
- * either folds the dial once chosen.
+ * One of a dial's actions: its words beside its icon. A button, or what `render` makes it (a link,
+ * which may do something on the way, `onClick`); either folds the dial once chosen.
  */
 export function SpeedDialAction({
   label,
@@ -204,7 +209,16 @@ export function SpeedDialAction({
   return (
     <li>
       {render ? (
-        <ButtonLink variant="surface" size="lg" render={render} onClick={close} className={look}>
+        <ButtonLink
+          variant="surface"
+          size="lg"
+          render={render}
+          onClick={() => {
+            onClick?.()
+            close()
+          }}
+          className={look}
+        >
           {words}
         </ButtonLink>
       ) : (

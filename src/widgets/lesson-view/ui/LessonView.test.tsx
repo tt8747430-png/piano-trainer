@@ -84,6 +84,16 @@ describe('LessonView', () => {
     )
   })
 
+  it('steps through its sections from a floating ‹ ›, the first’s ‹ off', async () => {
+    await renderLesson()
+    const stepper = screen.getByRole('group', { name: /^In this lesson: section 1 of 7$/ })
+    expect(within(stepper).getByRole('button', { name: 'Previous section' })).toBeDisabled()
+    expect(within(stepper).getByRole('link', { name: 'Next section' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/#section-2$/),
+    )
+  })
+
   it('plays a chord example and marks its tones on the keys', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()

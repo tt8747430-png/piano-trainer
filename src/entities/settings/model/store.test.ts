@@ -8,6 +8,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
+  DEFAULT_LESSON,
   defaultKeyboard,
 } from './types'
 
@@ -26,6 +27,7 @@ const DEFAULTS = {
   titles: 'large',
   practice: DEFAULT_PRACTICE,
   trainer: DEFAULT_TRAINER,
+  lesson: DEFAULT_LESSON,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
@@ -84,6 +86,7 @@ describe('createSettingsStore', () => {
         recording: false,
       },
       trainer: { autoNext: true },
+      lesson: { fingers: false },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
@@ -254,6 +257,11 @@ describe('createSettingsStore', () => {
 
   it('turns an auto-next that is not a boolean off', () => {
     expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
+  })
+
+  it('shows a lesson’s fingers unless a save says otherwise', () => {
+    expect(restored({ lesson: { fingers: 'no' } }).lesson).toEqual({ fingers: true })
+    expect(restored({ lesson: { fingers: false } }).lesson).toEqual({ fingers: false })
   })
 
   it('gives a setting never saved its default, keeping the rest', () => {

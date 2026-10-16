@@ -55,6 +55,12 @@ export interface TrainerSettings {
   readonly autoNext: boolean
 }
 
+/** How every lesson shows its examples. */
+export interface LessonSettings {
+  /** A scale's keys and staff carry the fingers that play it. */
+  readonly fingers: boolean
+}
+
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
@@ -130,6 +136,7 @@ export interface SettingsState {
   locale: Locale
   practice: PracticeToggles
   trainer: TrainerSettings
+  lesson: LessonSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
@@ -150,6 +157,8 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
+
+export const DEFAULT_LESSON: LessonSettings = { fingers: true }
 
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 

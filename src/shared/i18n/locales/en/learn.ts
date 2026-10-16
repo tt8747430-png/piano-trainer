@@ -77,6 +77,12 @@ export const learn = {
   placeLabel: 'Where this lesson is',
   contents: 'In this lesson',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
+  // A lesson's floating actions: its sections one by one, and its options.
+  previousSection: 'Previous section',
+  nextSection: 'Next section',
+  lessonOptions: 'Lesson options',
+  showFingers: 'Show the fingers',
+  hideFingers: 'Hide the fingers',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {
     over: 'Played over “{{piece}}”',

@@ -16,6 +16,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
+  DEFAULT_LESSON,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
@@ -40,6 +41,7 @@ import {
   type PracticeToggles,
   type RecorderSettings,
   type SettingsState,
+  type LessonSettings,
   type TrainerSettings,
 } from './types'
 
@@ -67,6 +69,7 @@ export function createSettingsStore({
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
         trainer: DEFAULT_TRAINER,
+        lesson: DEFAULT_LESSON,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
@@ -89,6 +92,12 @@ function practiceToggles(value: unknown): PracticeToggles {
       return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
     }),
   ) as Record<keyof PracticeToggles, boolean>
+}
+
+/** A lesson setting keeps what was saved; one never saved, or not valid, takes its default. */
+function lessonSettings(value: unknown): LessonSettings {
+  const saved = savedObject<LessonSettings>(value)
+  return { fingers: typeof saved.fingers === 'boolean' ? saved.fingers : DEFAULT_LESSON.fingers }
 }
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
@@ -189,6 +198,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     trainer: trainerSettings(saved.trainer),
+    lesson: lessonSettings(saved.lesson),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,

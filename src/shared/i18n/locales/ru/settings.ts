@@ -10,6 +10,11 @@ export const settings: LocaleResources['settings'] = {
   },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
+  lessons: {
+    label: 'Уроки',
+    fingers: 'Показывать аппликатуру',
+    fingersNote: 'Гаммы урока показывают пальцы на клавишах и на нотном стане',
+  },
   progress: {
     label: 'Прогресс',
     reset: 'Сбросить прогресс',

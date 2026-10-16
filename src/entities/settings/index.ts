@@ -23,6 +23,7 @@ export {
 export {
   selectChordFinder,
   selectKeyboard,
+  selectLesson,
   selectLocale,
   selectMidi,
   selectPractice,

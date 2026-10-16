@@ -77,6 +77,23 @@ describe('A lesson', () => {
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
   })
 
+  it('floats its options: the fingers on its scales hidden or shown, and the way on', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/lessons/minor-scales')
+    await user.click(await screen.findByRole('button', { name: 'Lesson options' }))
+    const options = screen.getByRole('list', { name: 'Lesson options' })
+    expect(within(options).getByRole('link', { name: /^Next lesson/ })).toBeInTheDocument()
+    await user.click(within(options).getByRole('button', { name: 'Hide the fingers' }))
+    expect(settingsStore.getState().lesson.fingers).toBe(false)
+  })
+
+  it('offers no fingers where it plays no scale', async () => {
+    const user = userEvent.setup()
+    await renderApp('/lessons/reading-chord-symbols')
+    await user.click(await screen.findByRole('button', { name: 'Lesson options' }))
+    expect(screen.queryByRole('button', { name: /the fingers$/ })).not.toBeInTheDocument()
+  })
+
   it('is learned once the learner goes on to the next lesson', async () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/lessons/finding-home')

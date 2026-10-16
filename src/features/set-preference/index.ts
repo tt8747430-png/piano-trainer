@@ -1,6 +1,7 @@
 export { setAutoNext } from './set-auto-next'
 export { rememberChords, setChordFinder } from './set-chord-finder'
 export { setKeyboard } from './set-keyboard'
+export { setLessonFingers } from './set-lesson-fingers'
 export { setLocale } from './set-locale'
 export { setMidi } from './set-midi'
 export { setPracticeToggle } from './set-practice-toggle'

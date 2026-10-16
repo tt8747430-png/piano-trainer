@@ -1,12 +1,14 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, CornerDownLeft } from 'lucide-react'
+import { ArrowRight, CornerDownLeft, Hand } from 'lucide-react'
 import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
+import { selectLesson, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import type { StepId } from '@/entities/step'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
+import { setLessonFingers } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
-import { ButtonLink, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, ScreenHeader, SpeedDial, SpeedDialAction } from '@/shared/ui'
 import { LessonView } from '@/widgets/lesson-view'
 
 /** Where a lesson's way on leads: the next lesson, or back to what it is part of. */
@@ -47,9 +49,45 @@ export function LessonLayout({
       <p className="max-w-prose text-lg text-pretty text-muted-foreground">
         {localText(lesson.summary, locale)}
       </p>
-      <LessonView key={lesson.id} lesson={lesson} />
+      <LessonView
+        key={lesson.id}
+        lesson={lesson}
+        options={<LessonOptions lesson={lesson} step={step} way={way} />}
+      />
       <LessonEnd step={step} way={way} />
     </div>
+  )
+}
+
+/** Whether a lesson plays a scale: the examples that carry fingers. */
+const hasFingers = (lesson: Lesson) =>
+  lesson.sections.some((section) => section.blocks.some((block) => block.kind === 'scale'))
+
+/**
+ * A lesson's options, floating over its sections: the fingers on its scales shown or hidden, where
+ * it has a scale; and the way on, which learns it on the way, as its end does.
+ */
+function LessonOptions({ lesson, step, way }: { lesson: Lesson; step: StepId; way: WayOn }) {
+  const { t } = useTranslation('learn')
+  const store = useSettingsStoreApi()
+  const { fingers } = useSettings(selectLesson)
+  const { learn } = useLearned(step)
+  return (
+    <SpeedDial label={t('lessonOptions')}>
+      {hasFingers(lesson) ? (
+        <SpeedDialAction
+          label={t(fingers ? 'hideFingers' : 'showFingers')}
+          icon={Hand}
+          onClick={() => setLessonFingers(store, !fingers)}
+        />
+      ) : null}
+      <SpeedDialAction
+        label={way.next ? `${way.label}: ${way.next}` : way.label}
+        icon={way.next ? ArrowRight : CornerDownLeft}
+        render={way.link}
+        onClick={learn}
+      />
+    </SpeedDial>
   )
 }
 

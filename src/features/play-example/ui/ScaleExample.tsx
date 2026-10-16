@@ -14,16 +14,19 @@ import { TappableStaff } from './TappableStaff'
 const RUN_TEMPO = 96
 
 /**
- * A scale in a lesson: its name, its notes with their degrees, its run up and back on one staff, and
- * Play, which runs it on the page's keys.
+ * A scale in a lesson: its name, its run up and back on one staff (fingered, where the learner shows
+ * the fingers), and Play, which runs it on the page's keys, each key with its degree and finger.
  */
 export function ScaleExample({
   root,
   kind,
+  fingers,
   onShow,
 }: {
   root: NoteParam
   kind: ScaleKind
+  /** The keys and the staff carry the right hand's fingers. */
+  fingers: boolean
   onShow: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('music')
@@ -31,7 +34,7 @@ export function ScaleExample({
   const captionId = useId()
   const playback = usePlayback<'run'>()
   const tonic = useMemo(() => noteFromParam(root), [root])
-  const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
+  const example = useMemo(() => scaleExample(tonic, kind, fingers), [tonic, kind, fingers])
   const score = useMemo(() => notate(example.music), [example])
   return (
     <figure aria-labelledby={captionId} className="flex flex-col gap-3 card p-4">
@@ -43,6 +46,7 @@ export function ScaleExample({
           music={example.music}
           score={score}
           staff="treble"
+          fingers={fingers}
           tempo={RUN_TEMPO}
           follow={playback.playing === 'run' ? playback.handle : null}
           onShow={onShow}

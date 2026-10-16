@@ -5,6 +5,7 @@ import { midi } from '@/shared/lib/music'
 import {
   rememberChords,
   setAutoNext,
+  setLessonFingers,
   setChordFinder,
   setKeyboard,
   setLocale,
@@ -92,6 +93,13 @@ describe('set-preference', () => {
     setMidi(store, { device: 'Piano' })
     setMidi(store, { touch: 'light' })
     expect(saved(storage).midi).toMatchObject({ device: 'Piano', touch: 'light', sound: false })
+  })
+
+  it('setLessonFingers saves whether a lesson’s scales carry their fingers', () => {
+    const storage = createMemoryStorage()
+    const store = createSettingsStore({ storage, languages: ['en'] })
+    setLessonFingers(store, false)
+    expect(saved(storage).lesson).toEqual({ fingers: false })
   })
 
   it('setAutoNext saves whether a trainer moves on by itself', () => {

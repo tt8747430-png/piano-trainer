@@ -71,6 +71,11 @@ export const learn: LocaleResources['learn'] = {
   placeLabel: 'Где этот урок',
   contents: 'В этом уроке',
   contentsAt: 'В этом уроке: раздел {{at}} из {{of}}',
+  previousSection: 'Предыдущий раздел',
+  nextSection: 'Следующий раздел',
+  lessonOptions: 'Настройки урока',
+  showFingers: 'Показать аппликатуру',
+  hideFingers: 'Скрыть аппликатуру',
   example: {
     over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',

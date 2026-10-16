@@ -9,6 +9,7 @@ import type {
   Sidebar,
   Theme,
   TitleSize,
+  LessonSettings,
   TrainerSettings,
 } from './types'
 
@@ -17,6 +18,7 @@ export const selectTitles = (state: SettingsState): TitleSize => state.titles
 export const selectLocale = (state: SettingsState): Locale => state.locale
 export const selectPractice = (state: SettingsState): PracticeToggles => state.practice
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
+export const selectLesson = (state: SettingsState): LessonSettings => state.lesson
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar

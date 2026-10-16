@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import {
+  selectLesson,
   selectLocale,
   selectTheme,
   selectTitles,
@@ -15,10 +16,10 @@ import { BackupFields } from '@/features/backup-data'
 import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
-import { setLocale, setTheme, setTitles } from '@/features/set-preference'
+import { setLessonFingers, setLocale, setTheme, setTitles } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader, Segmented, SettingField } from '@/shared/ui'
+import { BackButton, ScreenHeader, Segmented, SettingField, SwitchRow } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -67,6 +68,7 @@ export function SettingsPage() {
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
   const titles = useSettings(selectTitles)
+  const lesson = useSettings(selectLesson)
   const [confirming, setConfirming] = useState(false)
   const reset = () => {
     resetProgress(progress)
@@ -104,6 +106,15 @@ export function SettingsPage() {
         </Group>
         <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
           <KeyboardSettingsFields />
+        </Group>
+        <Group title={t('lessons.label')}>
+          <SwitchRow
+            label={t('lessons.fingers')}
+            detail={t('lessons.fingersNote')}
+            checked={lesson.fingers}
+            onCheckedChange={(on) => setLessonFingers(settings, on)}
+            className="border-b-0"
+          />
         </Group>
         <Group title={t('midi')}>
           <MidiControl />
