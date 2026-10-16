@@ -37,26 +37,3 @@ export const PRACTICE_PAGE_IDS: readonly PracticePageId[] = [
   ...THINGS,
   ...PRACTICE_GROUPS.flatMap((group) => group.pages),
 ]
-
-/** How many pages Practice offers to go back to. */
-export const RECENT_PAGES = 3
-
-/**
- * The pages used last, the latest first, at most `most`: from the screens remembered in the order
- * they were used (`pt-views`, ADR 0022), the latest last.
- */
-export function recentPages(
-  usedPaths: readonly string[],
-  most: number = RECENT_PAGES,
-): PracticePageId[] {
-  const byPath = new Map<string, PracticePageId>(
-    PRACTICE_PAGE_IDS.map((page) => [PRACTICE_PAGES[page].to, page]),
-  )
-  return usedPaths
-    .toReversed()
-    .flatMap((path) => {
-      const page = byPath.get(path)
-      return page ? [page] : []
-    })
-    .slice(0, most)
-}

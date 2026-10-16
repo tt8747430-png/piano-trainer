@@ -161,9 +161,7 @@ describe('Practice → Accompaniment', () => {
     await screen.findByRole('region', { name: 'Hymns' })
     const nav = screen.getByRole('navigation', { name: 'Main navigation' })
     await user.click(within(nav).getByRole('link', { name: 'Practice' }))
-    // It is the page used last: Practice offers it first, to pick up where the learner left off.
-    const recent = await screen.findByRole('region', { name: 'Pick up where you left off' })
-    await user.click(within(recent).getByRole('link', { name: /^Accompaniment / }))
+    await user.click(await screen.findByRole('link', { name: /^Accompaniment / }))
     expect(await screen.findByRole('region', { name: 'Hymns' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
   })
