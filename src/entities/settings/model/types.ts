@@ -24,6 +24,10 @@ import { TOUCHES, type Touch } from '@/shared/lib/schedule'
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
 
+export const TITLE_SIZES = ['large', 'small'] as const
+/** How large a screen's title is: large, or small, leaving the page more of the screen. */
+export type TitleSize = (typeof TITLE_SIZES)[number]
+
 /** The Setup's saved switches. */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
@@ -120,6 +124,7 @@ export const CHORD_KEYS_MAX = 10
 
 export interface SettingsState {
   theme: Theme
+  titles: TitleSize
   locale: Locale
   practice: PracticeToggles
   trainer: TrainerSettings
@@ -184,6 +189,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
 })
 
 export const isTheme = isOneOf(THEMES)
+export const isTitleSize = isOneOf(TITLE_SIZES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isKeyDock = isOneOf(KEY_DOCKS)

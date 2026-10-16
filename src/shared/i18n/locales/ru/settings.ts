@@ -4,6 +4,10 @@ export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
+  layout: {
+    label: 'Вид',
+    titles: { label: 'Заголовки страниц', large: 'Крупные', small: 'Мелкие' },
+  },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
   progress: {

@@ -481,3 +481,10 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Small titles (Settings, `data-titles`): every screen's title the size of a section's, its bar a row
+   shorter. Outside the layers, so it wins over the title's own sizes. */
+html[data-titles='small'] [data-slot='screen-bar'] h1 {
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+}

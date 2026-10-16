@@ -4,7 +4,9 @@ import { useProgressStoreApi } from '@/entities/progress'
 import {
   selectLocale,
   selectTheme,
+  selectTitles,
   THEMES,
+  TITLE_SIZES,
   useSettings,
   useSettingsStoreApi,
   type Theme,
@@ -13,10 +15,10 @@ import { BackupFields } from '@/features/backup-data'
 import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
-import { setLocale, setTheme } from '@/features/set-preference'
+import { setLocale, setTheme, setTitles } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader, Segmented } from '@/shared/ui'
+import { BackButton, ScreenHeader, Segmented, SettingField } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,6 +66,7 @@ export function SettingsPage() {
   const progress = useProgressStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
+  const titles = useSettings(selectTitles)
   const [confirming, setConfirming] = useState(false)
   const reset = () => {
     resetProgress(progress)
@@ -88,6 +91,16 @@ export function SettingsPage() {
             options={THEMES.map((value) => ({ value, label: t(`${THEME_LABEL[value]}`) }))}
             onChange={(value) => setTheme(settings, value)}
           />
+        </Group>
+        <Group title={t('layout.label')}>
+          <SettingField label={t('layout.titles.label')}>
+            <Segmented
+              label={t('layout.titles.label')}
+              value={titles}
+              options={TITLE_SIZES.map((value) => ({ value, label: t(`layout.titles.${value}`) }))}
+              onChange={(value) => setTitles(settings, value)}
+            />
+          </SettingField>
         </Group>
         <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
           <KeyboardSettingsFields />

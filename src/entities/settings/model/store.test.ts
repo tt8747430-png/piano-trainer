@@ -23,6 +23,7 @@ const restored = (state: unknown, version = SETTINGS_VERSION) => {
 
 // The test setup's matchMedia answers false: no fine pointer, so no typing by default.
 const DEFAULTS = {
+  titles: 'large',
   practice: DEFAULT_PRACTICE,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
@@ -71,6 +72,7 @@ describe('createSettingsStore', () => {
   it('restores what was saved', () => {
     const saved = {
       theme: 'light',
+      titles: 'small',
       locale: 'ru',
       practice: {
         fingerNumbers: true,

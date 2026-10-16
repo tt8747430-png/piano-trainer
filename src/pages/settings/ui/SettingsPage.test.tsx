@@ -49,11 +49,21 @@ describe('Settings', () => {
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 3)).toEqual([
+    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 4)).toEqual([
       'Theme',
+      'Layout',
       'Keyboard',
       'MIDI keyboard',
     ])
+  })
+
+  it('makes every screen’s title small, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const titles = await screen.findByRole('radiogroup', { name: 'Page titles' })
+    await user.click(within(titles).getByRole('radio', { name: 'Small' }))
+    expect(settingsStore.getState().titles).toBe('small')
+    expect(document.documentElement.dataset['titles']).toBe('small')
   })
 
   it('sets up the keyboard, and saves each change', async () => {

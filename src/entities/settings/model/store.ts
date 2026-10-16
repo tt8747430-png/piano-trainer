@@ -27,6 +27,7 @@ import {
   isSidebar,
   isSwipe,
   isTheme,
+  isTitleSize,
   isTouch,
   type ChordFinderSettings,
   type KeyboardSettings,
@@ -57,6 +58,7 @@ export function createSettingsStore({
       version: SETTINGS_VERSION,
       initial: {
         theme: 'system',
+        titles: 'large',
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
         trainer: DEFAULT_TRAINER,
@@ -177,6 +179,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
   return {
     theme: isTheme(saved.theme) ? saved.theme : current.theme,
+    titles: isTitleSize(saved.titles) ? saved.titles : current.titles,
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     trainer: trainerSettings(saved.trainer),

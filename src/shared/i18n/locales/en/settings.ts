@@ -2,6 +2,7 @@ export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
+  layout: { label: 'Layout', titles: { label: 'Page titles', large: 'Large', small: 'Small' } },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',
   progress: {

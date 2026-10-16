@@ -23,6 +23,7 @@ describe('settings selectors', () => {
   it('return the practice toggles, the trainer, keyboard, recorder and MIDI settings and the sidebar as saved', () => {
     const state: SettingsState = {
       theme: 'system',
+      titles: 'small',
       locale: 'en',
       practice: DEFAULT_PRACTICE,
       trainer: DEFAULT_TRAINER,

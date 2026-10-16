@@ -3,6 +3,7 @@ export {
   FOLDED_MAX,
   REMEMBERED_CHORDS,
   THEMES,
+  TITLE_SIZES,
   defaultKeyboard,
   type ChordFinderSettings,
   type KeyboardSettings,
@@ -10,6 +11,7 @@ export {
   type PracticeToggle,
   type Sidebar,
   type Theme,
+  type TitleSize,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
 export {
@@ -28,6 +30,7 @@ export {
   selectSectionFolded,
   selectSidebar,
   selectTheme,
+  selectTitles,
   selectTrainer,
 } from './model/selectors'
 export { SettingsStoreProvider, useSettings, useSettingsStoreApi } from './model/context'
