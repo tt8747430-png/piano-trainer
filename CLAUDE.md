@@ -134,7 +134,7 @@ it. `@` → `src`.
   the keys struck last, `keyPlays` makes a key play more than itself; the rail's settings, every one in sight as a picture (`KeyZoom`, `NamedKeysToggle`, `ChordNamesToggle`, `TypingToggle`, ADR 0036), the chord a hand holds named in the rail unless `namesChords` is off (a round, ADR 0037), and `KeyboardSettingsFields`, the same as fields in
   Settings; `use-typing`, the computer keyboard as a piano; `PinnedKeyboard`, a page's pinned one (an explorer's, a tool's, a lesson's), docked at the foot or the top and folded as the keyboard settings say (ADR 0055); folded, a Keys button floating where they were (lowest of the screen's actions at the foot, under the screen's bar at the top), which they morph into and out of (`morph`, `vt-keys`); `GlissandoToggle`, the rail's own), `play-example` (the examples an explorer and a
   lesson share, each shown on the page's keys: `IntervalCard`, `ScaleExample`, `NotesExample`, `VoicingsExample`, `ChordRow` (any row of
-  chords voiced smoothly: a progression's by `progressionRow`, a passing chords way) with its parts `RowChords` and
+  chords voiced smoothly: a progression's by `progressionRow`, a passing chords way) with its parts `RowStaff` (each bar naming, numbering and playing its chord, ADR 0059) and
   `RowPlay` (honey in the tool, soft beside other examples), `ScaleChordGrid`, `chordShown` / `scaleShown`, and
   `useShownKeys` (the example played last, forgotten when what it stood on changes)), and the
   machines:
@@ -181,7 +181,7 @@ it. `@` → `src`.
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `morph` (a change made in a view transition, at once under reduced motion), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options, the key sizes smallest first: `zoomKeySize`, `nextNamedKeys`), `midi-choices` (the MIDI keyboard's),
-  `keyboard-view` (the view's frame, an octave's scroll), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords explorer's URL holds
+  `keyboard-view` (the view's frame, an octave's scroll, `scrollToReveal` and `keepCentre`: keys that hold still, ADR 0059), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords explorer's URL holds
   them), `foldText`; and with
   barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
   `scaleKey`, `relatedScale`; fingerings from any start and over several octaves, `thumbFingering`, `arpeggioFingering`; `scale-chord.ts`, a scale's chords stacked
