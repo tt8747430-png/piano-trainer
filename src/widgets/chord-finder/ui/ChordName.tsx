@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib'
 import { ChordHeading, ToneChip } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { readingAt, toneOfKey, type Finding } from '../model/finding'
-import { useChordAbout } from './use-chord-about'
+import { chordLabel, useChordAbout } from './use-chord-about'
 
 /** Where the chord shown comes from: keys held on the keyboard, the chord last played, keys tapped. */
 export type ChordSource = 'held' | 'last' | 'tapped'
@@ -37,6 +37,7 @@ export function ChordName({
   source,
   reading,
   onReading,
+  slash,
 }: {
   finding: Finding
   keys: readonly Midi[]
@@ -44,6 +45,8 @@ export function ChordName({
   /** The reading chosen, by its place among the chord's readings. */
   reading: number
   onReading: (at: number) => void
+  /** An inversion named over its bass; else by its root, its inversion said. */
+  slash: boolean
 }) {
   const { t } = useTranslation(['practice', 'music'])
   switch (finding.kind) {
@@ -88,6 +91,7 @@ export function ChordName({
           reading={reading}
           source={source}
           onReading={onReading}
+          slash={slash}
         />
       )
   }
@@ -100,20 +104,28 @@ function Found({
   reading,
   source,
   onReading,
+  slash,
 }: {
   keys: readonly Midi[]
   readings: readonly [FoundChord, ...FoundChord[]]
   reading: number
   source: ChordSource
   onReading: (at: number) => void
+  slash: boolean
 }) {
   const { t } = useTranslation('practice')
   const shown = readingAt(readings, reading)
-  const about = useChordAbout()(shown)
+  const about = useChordAbout()(shown, { keys, slash })
+  // Each reading once by how it is written: by its root alone, two inversions may read alike.
+  const listed = readings.flatMap((each, at) =>
+    readings.findIndex((other) => chordLabel(other, slash) === chordLabel(each, slash)) === at
+      ? [{ at, label: chordLabel(each, slash) }]
+      : [],
+  )
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <ChordHeading symbol={shown.symbol} />
+        <ChordHeading symbol={chordLabel(shown, slash)} />
         <SourceLine source={source}>{about.join(' · ')}</SourceLine>
       </div>
       <ol aria-label={t('chordFinder.tones')} className="flex flex-wrap gap-2">
@@ -126,19 +138,19 @@ function Found({
           ) : null
         })}
       </ol>
-      {readings.length > 1 ? (
+      {listed.length > 1 ? (
         <div className="flex flex-col gap-2">
           <h3 className="text-base font-semibold">{t('chordFinder.readings')}</h3>
           <ul className="flex flex-wrap gap-2">
-            {readings.map((each, at) => (
-              <li key={each.symbol}>
+            {listed.map(({ at, label }) => (
+              <li key={label}>
                 <Toggle
-                  pressed={each === shown}
-                  aria-label={t('chordFinder.reading', { symbol: each.symbol })}
+                  pressed={label === chordLabel(shown, slash)}
+                  aria-label={t('chordFinder.reading', { symbol: label })}
                   onPressedChange={() => onReading(at)}
                   className="min-w-14 font-display text-lg font-semibold"
                 >
-                  {each.symbol}
+                  {label}
                 </Toggle>
               </li>
             ))}

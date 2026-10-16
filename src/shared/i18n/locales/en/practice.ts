@@ -209,6 +209,22 @@ export const practice = {
     remember: 'Remember the chords played',
     rememberDetail: 'The staff keeps the last {{count}}, and so does this device',
     inKeysShown: 'Show the keys it is in',
+    slash: 'Name an inversion over its bass',
+    slashDetail: 'C/E, else C with its inversion said',
+    // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
+    inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
+    bass: '{{note}} in the bass',
+    // How the keys are laid out, as jazz pianists name it.
+    voicing: {
+      quartal: 'Stacked 4ths',
+      soWhat: 'So What voicing',
+      shell: 'Shell voicing',
+      drop2: 'Drop 2',
+      drop3: 'Drop 3',
+      close: 'Close voicing',
+      open: 'Open voicing',
+    },
+    altered: 'Altered dominant: {{symbol}}',
   },
   passingChords: {
     inKey: 'In the key',

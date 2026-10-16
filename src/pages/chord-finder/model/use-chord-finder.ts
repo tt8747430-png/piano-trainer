@@ -36,6 +36,9 @@ interface ChordFinder {
   /** Whether the keys the chord is in are shown. */
   readonly inKeys: boolean
   setInKeys(on: boolean): void
+  /** Whether an inversion is named over its bass. */
+  readonly slash: boolean
+  setSlash(on: boolean): void
   /** The reading chosen among the chord's names. */
   readonly reading: number
   setReading(at: number): void
@@ -113,6 +116,8 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     },
     inKeys: settings.inKeys,
     setInKeys: (on) => setChordFinder(store, { inKeys: on }),
+    slash: settings.slash,
+    setSlash: (on) => setChordFinder(store, { slash: on }),
     reading: at,
     setReading: (next) => setReading({ keys: shownKey, at: next }),
     tap: (key) => write(keyListParam(toggled(tapped, key))),

@@ -109,10 +109,22 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder.chords).toEqual([])
     setChordFinder(store, { remember: true })
     rememberChords(store, [C, C])
-    expect(saved(storage).chordFinder).toEqual({ remember: true, inKeys: true, chords: [C, C] })
+    expect(saved(storage).chordFinder).toEqual({
+      remember: true,
+      inKeys: true,
+      slash: true,
+      chords: [C, C],
+    })
     setChordFinder(store, { inKeys: false })
     expect(store.getState().chordFinder.chords).toEqual([C, C])
+    setChordFinder(store, { slash: false })
+    expect(store.getState().chordFinder.slash).toBe(false)
     setChordFinder(store, { remember: false })
-    expect(saved(storage).chordFinder).toEqual({ remember: false, inKeys: false, chords: [] })
+    expect(saved(storage).chordFinder).toEqual({
+      remember: false,
+      inKeys: false,
+      slash: false,
+      chords: [],
+    })
   })
 })

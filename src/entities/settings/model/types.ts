@@ -88,6 +88,8 @@ export interface ChordFinderSettings {
   readonly remember: boolean
   /** The keys the chord is in, each with its numeral, shown under it. */
   readonly inKeys: boolean
+  /** An inversion named over its bass (`C/E`); else by its root alone (`C`), its inversion said. */
+  readonly slash: boolean
   /** The chords remembered, oldest first, each its keys lowest first. */
   readonly chords: readonly (readonly Midi[])[]
 }
@@ -142,6 +144,7 @@ export const DEFAULT_SIDEBAR: Sidebar = 'open'
 export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
   remember: false,
   inKeys: true,
+  slash: true,
   chords: [],
 }
 

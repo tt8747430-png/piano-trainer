@@ -3,4 +3,4 @@ export { findChord, namesChord, readingAt, readingMarks, type Finding } from './
 export { ChordKeys } from './ui/ChordKeys'
 export { ChordName, type ChordSource } from './ui/ChordName'
 export { ChordTrail } from './ui/ChordTrail'
-export { useChordAbout } from './ui/use-chord-about'
+export { chordLabel, useChordAbout } from './ui/use-chord-about'

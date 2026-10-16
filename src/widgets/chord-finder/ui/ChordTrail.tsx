@@ -13,7 +13,7 @@ import { LazyScoreView } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { findChord, type Finding } from '../model/finding'
 import { BAR_TICKS, trailMusic } from '../model/trail-music'
-import { useChordAbout } from './use-chord-about'
+import { chordLabel, useChordAbout } from './use-chord-about'
 
 /** Four beats a bar, never printed: each chord is a whole note on its own. */
 const NO_TIME: TimeSignature = { count: 4, unit: 4 }
@@ -56,10 +56,13 @@ export function ChordTrail({
   chords,
   musicKey,
   remember,
+  slash,
 }: {
   chords: readonly (readonly Midi[])[]
   musicKey: Key
   remember: boolean
+  /** An inversion named over its bass; else by its root. */
+  slash: boolean
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
@@ -73,8 +76,10 @@ export function ChordTrail({
         switch (finding.kind) {
           case 'chord': {
             const [best] = finding.readings
-            const detail = about(best).join(' · ')
-            return { symbol: best.symbol, detail, heard: `${best.symbol} ${detail}`.trim() }
+            // Under its bar, what the chord is; how the keys lay it out is the name's to say.
+            const detail = about(best, { slash }).join(' · ')
+            const symbol = chordLabel(best, slash)
+            return { symbol, detail, heard: `${symbol} ${detail}`.trim() }
           }
           case 'interval':
             return {
@@ -92,7 +97,7 @@ export function ChordTrail({
             }
         }
       }),
-    [shown, musicKey, t, about],
+    [shown, musicKey, t, about, slash],
   )
   const score = useMemo(
     () =>

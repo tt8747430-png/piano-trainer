@@ -7,7 +7,7 @@ import type { Midi } from '@/shared/lib/music'
  */
 export function setChordFinder(
   store: SettingsStore,
-  change: { readonly remember?: boolean; readonly inKeys?: boolean },
+  change: { readonly remember?: boolean; readonly inKeys?: boolean; readonly slash?: boolean },
 ): void {
   store.setState((state) => ({
     chordFinder: {

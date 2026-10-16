@@ -108,6 +108,34 @@ describe('Practice → Chord finder', () => {
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })
 
+  it('says an inversion, and names it by its root alone where asked', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=52-60-67')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C/E' })).toBeInTheDocument()
+    expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
+    await user.click(screen.getByRole('switch', { name: /^Name an inversion over its bass/ }))
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.getByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
+    expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
+  })
+
+  it('says how the keys are laid out: drop 2, a shell, stacked 4ths', async () => {
+    const { router } = await renderApp('/practice/chord-finder?keys=48-55-59-64')
+    expect(await screen.findByText(/^Tapped · Major 7th · Drop 2$/)).toBeInTheDocument()
+    await act(() => router.navigate({ to: '/practice/chord-finder', search: { keys: '48-64-70' } }))
+    expect(await screen.findByText(/^Tapped · .*Shell voicing$/)).toBeInTheDocument()
+    await act(() =>
+      router.navigate({ to: '/practice/chord-finder', search: { keys: '50-55-60-65' } }),
+    )
+    expect(await screen.findByText(/^Tapped · .*Stacked 4ths$/)).toBeInTheDocument()
+  })
+
+  it('names an altered dominant as a chart writes it', async () => {
+    await renderApp('/practice/chord-finder?keys=48-64-70-73-75-80')
+    expect(await screen.findByText(/^Tapped · .*Altered dominant: C7alt$/)).toBeInTheDocument()
+  })
+
   it('names a chord held on the MIDI keyboard, and reads it on once it is let go', async () => {
     const user = userEvent.setup()
     const { midi: piano } = await renderApp('/practice/chord-finder')
