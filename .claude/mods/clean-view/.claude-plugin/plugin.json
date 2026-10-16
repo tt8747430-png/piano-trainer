@@ -1,7 +1,0 @@
-{
-  "name": "clean-view",
-  "version": "0.1.0",
-  "description": "A calm screen while Claude works: routine tool rows hidden, one live checklist above the prompt, and long command output trimmed before it enters the context. /simple and /lean.",
-  "author": { "name": "Local" },
-  "types": "./types/index.d.ts"
-}
