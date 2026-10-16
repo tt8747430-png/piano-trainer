@@ -377,11 +377,16 @@ describe('LessonView’s accompaniment', () => {
 
   it('plays a progression as the tool’s row, and opens it in Progressions', async () => {
     await renderLesson(ACCOMPANIMENT)
-    expect(
-      within(screen.getByRole('list', { name: 'Chords' }))
-        .getAllByRole('button')
-        .map((button) => button.textContent),
-    ).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
+    const row = screen.getAllByRole('group', { name: 'Chords' })[0] ?? document.body
+    await waitFor(
+      () =>
+        expect(
+          within(row)
+            .getAllByRole('button', { name: /^Play bar \d+, / })
+            .map((button) => button.textContent),
+        ).toEqual(['Dm7ii', 'G7V', 'CMaj7I']),
+      { timeout: 5000 },
+    )
     const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
     expect(tool).toMatch(/^\/practice\/progressions\?/)
     expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)

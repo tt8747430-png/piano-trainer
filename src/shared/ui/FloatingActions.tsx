@@ -2,6 +2,7 @@ import { Ellipsis, Play, Square, type LucideIcon } from 'lucide-react'
 import {
   createContext,
   useContext,
+  useEffect,
   useId,
   useState,
   type ComponentProps,
@@ -54,20 +55,22 @@ export function FloatingHost({
   const [column, setColumn] = useState<HTMLElement | null>(null)
   const [hiddenOn, setHiddenOn] = useState<string | null>(null)
   const hidden = hiddenOn === screen
+  // A tap on the screen's page, heard at the document: the page's own markup stays as it is.
+  useEffect(() => {
+    const tap = (event: MouseEvent) => {
+      const target = event.target
+      if (!(target instanceof Element) || !target.closest('main') || target.closest(CONTROLS))
+        return
+      // A word chosen to read is no tap.
+      if (window.getSelection()?.toString()) return
+      setHiddenOn((was) => (was === screen ? null : screen))
+    }
+    document.addEventListener('click', tap)
+    return () => document.removeEventListener('click', tap)
+  }, [screen])
   return (
     <FloatingContext.Provider value={{ column, place, labels }}>
-      <div
-        className="contents"
-        onClick={(event) => {
-          const target = event.target
-          if (!(target instanceof Element) || target.closest(CONTROLS)) return
-          // A word chosen to read, or the end of a scroll, is no tap.
-          if (window.getSelection()?.toString()) return
-          setHiddenOn(hidden ? null : screen)
-        }}
-      >
-        {children}
-      </div>
+      {children}
       <div
         data-hidden={hidden || undefined}
         className={cn(

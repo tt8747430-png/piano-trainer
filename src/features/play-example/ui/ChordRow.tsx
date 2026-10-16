@@ -95,6 +95,7 @@ const BARS_A_LINE = 4
  * it. Every line is drawn at the same size, shrunk as the first, full line must be to fit.
  */
 export function RowStaff() {
+  const { t } = useTranslation('music')
   const { chords, voiced, onShow } = useRow()
   const lines = useMemo(() => {
     const bars = chords.map(({ chord, symbol = chordSymbol(chord) }, place) => ({
@@ -114,7 +115,12 @@ export function RowStaff() {
   const { width: lineWidth } = useElementSize(first)
   const zoom = roomWidth > 0 && lineWidth > roomWidth ? roomWidth / lineWidth : 1
   return (
-    <div ref={room} className="flex max-w-full flex-col gap-2">
+    <div
+      ref={room}
+      role="group"
+      aria-label={t('rowChords')}
+      className="flex max-w-full flex-col gap-2"
+    >
       {lines.map(({ from, music, score }, line) => (
         <div
           key={line}

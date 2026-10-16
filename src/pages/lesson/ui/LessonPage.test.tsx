@@ -7,12 +7,12 @@ import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('A lesson', () => {
-  it('shows its title and summary over its sections', async () => {
+  it('shows its title over its sections, and no summary', async () => {
     await renderApp('/lessons/reading-chord-symbols')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/name the chords you play/)).toBeInTheDocument()
+    expect(screen.queryByText(/name the chords you play/)).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
@@ -49,9 +49,16 @@ describe('A lesson', () => {
     await renderApp('/lessons/inversions')
     await screen.findByRole('heading', { level: 1 })
     // The row C, F/C, G/B, C: C before and after its inversions, played as a progression.
-    const row = screen.getByRole('button', { name: 'G/B' }).closest('ul')
+    const bar = await screen.findByRole(
+      'button',
+      { name: /^Play bar \d+, G\/B$/ },
+      { timeout: 5000 },
+    )
+    const row = bar.closest('[role="group"]')
     if (!row) throw new Error('the lesson writes its row of inversions')
-    const [first, ...others] = within(row).getAllByRole('button', { name: /^C$/ })
+    const [first, ...others] = within(row as HTMLElement).getAllByRole('button', {
+      name: /^Play bar \d+, C$/,
+    })
     if (!first || others.length === 0) throw new Error('the row writes C twice')
     await user.click(first)
     expect(first).toHaveAttribute('aria-pressed', 'true')
