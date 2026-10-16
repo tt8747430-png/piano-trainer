@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
@@ -87,7 +87,8 @@ describe('Remembered views', () => {
     const storage = createMemoryStorage()
     await useScreen('/practice/chords?root=D&triad=min', storage)
     const { router } = await renderApp('/practice', { storage })
-    await user.click(await screen.findByRole('link', { name: /^Chords / }))
+    const recent = await screen.findByRole('region', { name: 'Pick up where you left off' })
+    await user.click(within(recent).getByRole('link', { name: /^Chords / }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' }),
     )
