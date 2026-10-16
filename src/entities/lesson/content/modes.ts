@@ -5,8 +5,8 @@ const modes: Lesson = {
   id: 'modes',
   title: { en: 'The seven modes', ru: 'Семь ладов' },
   summary: {
-    en: 'The major scale started from each of its notes, and the one note that gives each mode its colour.',
-    ru: 'Мажорная гамма от каждой своей ноты и та единственная нота, которая даёт каждому ладу его окраску.',
+    en: 'Play the seven modes and hear the note that colours each.',
+    ru: 'Играть семь ладов и слышать ноту, которая окрашивает каждый.',
   },
   sections: [
     {
@@ -40,20 +40,20 @@ const modes: Lesson = {
             ru: 'Дорийский лад — натуральный минор с повышенной шестой ступенью. Он минорный, но светлее.',
           },
         },
-        { kind: 'scale', root: note('C'), scale: 'dorian' },
+        { kind: 'scale', root: note('A'), scale: 'dorian' },
       ],
     },
     {
-      heading: { en: 'Phrygian: minor with a ♭2', ru: 'Фригийский: минор с ♭2' },
+      heading: { en: 'Mixolydian: major with a ♭7', ru: 'Миксолидийский: мажор с ♭7' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Phrygian lowers the natural minor’s 2nd. The half step above the tonic sounds dark and Spanish.',
-            ru: 'Фригийский лад понижает вторую ступень натурального минора. Полутон над тоникой звучит мрачно, по-испански.',
+            en: 'Mixolydian lowers the major scale’s 7th. Its tonic chord is a dominant 7th that needs no resolving.',
+            ru: 'Миксолидийский лад понижает седьмую ступень мажора. Его тонический аккорд — доминантсептаккорд, которому не нужно разрешаться.',
           },
         },
-        { kind: 'scale', root: note('E'), scale: 'phrygian' },
+        { kind: 'scale', root: note('G'), scale: 'mixolydian' },
       ],
     },
     {
@@ -70,16 +70,16 @@ const modes: Lesson = {
       ],
     },
     {
-      heading: { en: 'Mixolydian: major with a ♭7', ru: 'Миксолидийский: мажор с ♭7' },
+      heading: { en: 'Phrygian: minor with a ♭2', ru: 'Фригийский: минор с ♭2' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Mixolydian lowers the major scale’s 7th. Its tonic chord is a dominant 7th that never has to resolve.',
-            ru: 'Миксолидийский лад понижает седьмую ступень мажора. Его тонический аккорд — доминантсептаккорд, которому не нужно разрешаться.',
+            en: 'Phrygian lowers the natural minor’s 2nd. The half step above the tonic sounds dark and Spanish.',
+            ru: 'Фригийский лад понижает вторую ступень натурального минора. Полутон над тоникой звучит мрачно, по-испански.',
           },
         },
-        { kind: 'scale', root: note('G'), scale: 'mixolydian' },
+        { kind: 'scale', root: note('E'), scale: 'phrygian' },
       ],
     },
     {
@@ -101,17 +101,13 @@ const modes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play C Lydian, C Mixolydian and C Dorian one after another. Listen for the one note that changes each time.',
-            ru: 'Сыграйте подряд до лидийский, до миксолидийский и до дорийский. Слушайте, какая нота меняется каждый раз.',
+            en: 'Play C major, C Mixolydian and C Dorian in turn. Each lowers one more note: B, then E.',
+            ru: 'Сыграйте подряд до мажор, до миксолидийский и до дорийский. Каждый понижает ещё одну ноту: си, затем ми.',
           },
         },
-        { kind: 'scale', root: note('C'), scale: 'lydian' },
+        { kind: 'scale', root: note('C'), scale: 'major' },
         { kind: 'scale', root: note('C'), scale: 'mixolydian' },
-        {
-          kind: 'link',
-          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
-          target: { opens: 'quiz', trainer: 'scales-by-ear' },
-        },
+        { kind: 'scale', root: note('C'), scale: 'dorian' },
       ],
     },
     {
@@ -139,6 +135,11 @@ const modes: Lesson = {
           kind: 'link',
           title: { en: 'The modes in the Player', ru: 'Лады в плеере' },
           target: { opens: 'exercise', exercise: 'modes', root: note('C') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],
     },

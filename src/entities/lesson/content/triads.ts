@@ -4,8 +4,8 @@ const triads: Lesson = {
   id: 'triads',
   title: { en: 'Triads', ru: 'Трезвучия' },
   summary: {
-    en: 'Three notes stacked in 3rds, and the four kinds of triad.',
-    ru: 'Три ноты, сложенные терциями, и четыре вида трезвучий.',
+    en: 'Build the four kinds of triad on any note.',
+    ru: 'Строить четыре вида трезвучий от любой ноты.',
   },
   sections: [
     {
@@ -15,18 +15,11 @@ const triads: Lesson = {
           kind: 'text',
           lead: { en: 'A triad', ru: 'Трезвучие' },
           text: {
-            en: 'is three notes stacked in 3rds: the root, the 3rd above it and the 5th.',
-            ru: '— три ноты, сложенные терциями: основной тон, терция над ним и квинта.',
+            en: 'is three notes stacked in 3rds: the root, the 3rd and the 5th. On the white keys, take every other key.',
+            ru: '— три ноты, сложенные терциями: основной тон, терция и квинта. На белых клавишах берите клавиши через одну.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
-        {
-          kind: 'text',
-          text: {
-            en: 'On the white keys, take every other key.',
-            ru: 'На белых клавишах берите клавиши через одну.',
-          },
-        },
       ],
     },
     {
@@ -51,12 +44,11 @@ const triads: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A triad’s letters always skip one: D F A, E G B. Sharps and flats then set its kind. D major is D F♯ A, D minor D F A.',
-            ru: 'Буквы трезвучия всегда идут через одну: ре фа ля, ми соль си. Диезы и бемоли задают его вид. Ре мажор — ре, фа-диез, ля, ре минор — ре, фа, ля.',
+            en: 'A triad’s letters always skip one: D F A. Sharps and flats then set its kind: D major is D F♯ A.',
+            ru: 'Буквы трезвучия всегда идут через одну: ре, фа, ля. Диезы и бемоли задают его вид: ре мажор — ре, фа-диез, ля.',
           },
         },
         { kind: 'chords', symbols: ['D', 'Dm'] },
-        { kind: 'chords', symbols: ['A', 'Am'] },
       ],
     },
     {
@@ -69,8 +61,8 @@ const triads: Lesson = {
             ru: 'Уменьшённое и увеличенное трезвучия',
           },
           text: {
-            en: 'stack two 3rds of one size. Diminished is two minor 3rds, 1 ♭3 ♭5: tense. Augmented is two major 3rds, 1 3 ♯5: wide and unsettled.',
-            ru: 'складывают две одинаковые терции. Уменьшённое — две малые, 1 ♭3 ♭5: напряжённо. Увеличенное — две большие, 1 3 ♯5: широко и неустойчиво.',
+            en: 'stack two 3rds of one size. Diminished is two minor 3rds, 1 ♭3 ♭5: tense. Augmented is two major 3rds, 1 3 ♯5: unsettled.',
+            ru: 'складывают две одинаковые терции. Уменьшённое — две малые, 1 ♭3 ♭5: напряжённо. Увеличенное — две большие, 1 3 ♯5: неустойчиво.',
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },

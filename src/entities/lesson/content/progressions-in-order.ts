@@ -15,8 +15,8 @@ const progressionsInOrder: Lesson = {
     ru: 'Последовательности в порядке изучения',
   },
   summary: {
-    en: 'piano.org’s learning order: ten steps from I–IV–V to the tritone substitution, each heard in C and walked through the keys.',
-    ru: 'Порядок изучения piano.org: десять шагов от I–IV–V до тритоновой замены, каждый — в до мажоре и по тональностям.',
+    en: 'Learn ten progressions in order, from I–IV–V to the tritone substitution.',
+    ru: 'Выучить десять последовательностей по порядку, от I–IV–V до тритоновой замены.',
   },
   sections: [
     {
@@ -25,8 +25,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Three chords carry thousands of folk, country, blues and early rock songs. Start in C, then G and D: the shape stays, the names change.',
-            ru: 'Три аккорда держат тысячи народных, кантри-, блюзовых и ранних рок-песен. Начните в до, затем соль и ре: форма та же, меняются названия.',
+            en: 'Three chords carry thousands of folk, blues and rock songs. Start in C, then G and D.',
+            ru: 'Три аккорда держат тысячи народных, блюзовых и рок-песен. Начните в до, затем соль и ре.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -43,8 +43,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'V to I is the perfect authentic cadence, the strongest sound of arriving. Learn to hear it in C, G and F.',
-            ru: 'V–I — совершенная автентическая каденция, самое сильное ощущение прихода. Научитесь слышать её в до, соль и фа.',
+            en: 'V to I, the authentic cadence, is the strongest sound of arriving.',
+            ru: 'V–I, автентическая каденция, — самое сильное ощущение прихода.',
           },
         },
         { kind: 'progression', numerals: 'V I', key: C_MAJOR },
@@ -56,8 +56,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add vi, the relative minor, and you have pop’s most played four-chord loop. Songwriting can start here.',
-            ru: 'Добавьте vi, параллельный минор, и получите самый частый круг из четырёх аккордов в поп-музыке. Отсюда можно начинать сочинять.',
+            en: 'Add vi, the relative minor, and you have pop’s most played four-chord loop.',
+            ru: 'Добавьте vi, параллельный минор, и получите самый частый круг из четырёх аккордов в поп-музыке.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: C_MAJOR },
@@ -74,8 +74,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The same four chords reordered: the doo-wop and slow-dance loop. With step 3 it covers most pop and ballads.',
-            ru: 'Те же четыре аккорда в другом порядке: круг ду-вопа и медленных танцев. Вместе с шагом 3 он покрывает большую часть попа и баллад.',
+            en: 'The same four chords reordered: the doo-wop and ballad loop.',
+            ru: 'Те же четыре аккорда в другом порядке: круг ду-вопа и баллад.',
           },
         },
         { kind: 'progression', numerals: 'I vi IV V', key: C_MAJOR },
@@ -92,20 +92,13 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Cadences are music’s punctuation: authentic V–I, plagal IV–I, a half cadence on V, and deceptive V–vi, where V expects I but gets vi.',
-            ru: 'Каденции — знаки препинания музыки: автентическая V–I, плагальная IV–I, половинная на V и прерванная V–vi, где V ждёт I, а приходит vi.',
+            en: 'Cadences end phrases. Beside V–I come the plagal IV–I, the half cadence on V and the deceptive V–vi.',
+            ru: 'Каденции завершают фразы. Кроме V–I есть плагальная IV–I, половинная на V и прерванная V–vi.',
           },
         },
         { kind: 'progression', numerals: 'I IV I', key: C_MAJOR },
         { kind: 'progression', numerals: 'I IV V', key: C_MAJOR },
         { kind: 'progression', numerals: 'I IV V vi', key: C_MAJOR },
-        {
-          kind: 'note',
-          text: {
-            en: 'With steps 1 to 5, most folk and pop plays by ear.',
-            ru: 'С шагами 1–5 большая часть народной музыки и попа играется на слух.',
-          },
-        },
       ],
     },
     {
@@ -114,8 +107,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The most common jazz progression, the building block of standards. Play it in all twelve keys round the cycle of fourths.',
-            ru: 'Самая частая последовательность джаза, кирпичик стандартов. Играйте её во всех двенадцати тональностях по кварто-квинтовому кругу.',
+            en: 'The building block of jazz standards. Play it in all twelve keys round the cycle of fourths.',
+            ru: 'Кирпичик джазовых стандартов. Играйте её во всех двенадцати тональностях по кругу кварт.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -143,8 +136,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Dominant 7ths on I, IV and V bend the key’s usual pull. Start in C, then F, B♭ and E♭.',
-            ru: 'Доминантсептаккорды на I, IV и V нарушают привычное тяготение тональности. Начните в до, затем фа, си-бемоль и ми-бемоль.',
+            en: 'Dominant 7ths on I, IV and V. Start in C, then F, B♭ and E♭.',
+            ru: 'Доминантсептаккорды на I, IV и V. Начните в до, затем фа, си-бемоль и ми-бемоль.',
           },
         },
         {
@@ -165,13 +158,6 @@ const progressionsInOrder: Lesson = {
             walk: 'fifths',
           },
         },
-        {
-          kind: 'note',
-          text: {
-            en: 'Now you can join a blues jam.',
-            ru: 'Теперь можно играть на блюзовом джеме.',
-          },
-        },
       ],
     },
     {
@@ -180,8 +166,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Borrow ♭VII from the parallel minor for rock’s bluesy colour: C–B♭–F–C.',
-            ru: 'Возьмите ♭VII из одноимённого минора для блюзовой краски рока: C–B♭–F–C.',
+            en: 'Borrow ♭VII from the parallel minor for rock’s colour: C–B♭–F–C.',
+            ru: 'Возьмите ♭VII из одноимённого минора для краски рока: C–B♭–F–C.',
           },
         },
         { kind: 'progression', numerals: 'I ♭VII IV I', key: C_MAJOR },
@@ -201,8 +187,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'V/V is the V of V: D7, borrowed from G major, leads into G. It visits another key without leaving home.',
-            ru: 'V/V — это V от V: D7, взятый из соль мажора, ведёт в G. Он ненадолго заходит в другую тональность, не уходя из своей.',
+            en: 'V/V is the V of V: D7 leads into G, visiting G major for a moment.',
+            ru: 'V/V — это V от V: D7 ведёт в G, ненадолго заходя в соль мажор.',
           },
         },
         { kind: 'progression', numerals: 'I V7/V V I', key: C_MAJOR },
@@ -214,8 +200,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '♭II7 stands in for V7, a tritone away, and the bass falls by semitones into I. Now any jazz standard’s harmony reads.',
-            ru: '♭II7 заменяет V7, отстоящий на тритон, и бас спускается к I по полутонам. Теперь читается гармония любого джазового стандарта.',
+            en: '♭II7 stands in for V7, a tritone away, and the bass falls by semitones into I.',
+            ru: '♭II7 заменяет V7, отстоящий на тритон, и бас спускается к I по полутонам.',
           },
         },
         { kind: 'progression', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
@@ -270,11 +256,6 @@ const progressionsInOrder: Lesson = {
           kind: 'question',
           ask: { en: 'Play vi in G major.', ru: 'Сыграйте vi в соль мажоре.' },
           answer: { chord: 'Em' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'I–IV–V–I through the keys', ru: 'I–IV–V–I по всем тональностям' },
-          target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths' },
         },
         {
           kind: 'link',

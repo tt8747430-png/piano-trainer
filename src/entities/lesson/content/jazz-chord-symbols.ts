@@ -1,13 +1,12 @@
-import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
-/** Gorshkov's lesson 1, its theory sheet «Джазовые обозначения»: how the course writes notes and chords. */
+/** The jazz way of writing notes and chords: letters, signs for triads, the 7th and its other signs. */
 const jazzChordSymbols: Lesson = {
   id: 'jazz-chord-symbols',
   title: { en: 'Jazz chord symbols', ru: 'Джазовые обозначения' },
   summary: {
-    en: 'Letters for notes, signs for triads, and numbers that count up the major scale.',
-    ru: 'Буквы для нот, знаки для трезвучий и цифры — ступени мажорной гаммы.',
+    en: 'Read any jazz chord symbol, in every way books write it.',
+    ru: 'Читать любое джазовое обозначение аккорда в любой записи.',
   },
   sections: [
     {
@@ -16,23 +15,11 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The course names notes by letter. B is B, never H. Sharps and flats are ♯ and ♭.',
-            ru: 'В курсе ноты называют буквами. Си — это B, а не H. Диезы и бемоли — ♯ и ♭.',
+            en: 'Jazz names notes by letter. B is B, never H.',
+            ru: 'В джазе ноты называют буквами. Си — это B, а не H.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
-        {
-          kind: 'notes',
-          clef: 'treble',
-          notes: 'C♯4 D♭4 D♯4 E♭4 F♯4 G♭4 G♯4 A♭4 A♯4 B♭4',
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'Dur, moll, es and is are not used.',
-            ru: 'Обозначения dur, moll, es и is не используются.',
-          },
-        },
       ],
     },
     {
@@ -41,47 +28,14 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A capital letter alone is major. m or − makes it minor, ° or dim diminished, + or aug augmented.',
-            ru: 'Заглавная буква — мажор. m или «−» делают его минорным, ° или dim — уменьшённым, + или aug — увеличенным.',
+            en: 'A letter alone is major. m or − makes it minor, ° or dim diminished, + or aug augmented.',
+            ru: 'Буква без знака — мажор. m или «−» — минор, ° или dim — уменьшённое, + или aug — увеличенное.',
           },
         },
         {
           kind: 'chords',
           symbols: ['C', 'Cm', 'E♭−', 'C°', 'E♭dim', 'C+', 'E♭aug'],
           apart: true,
-        },
-      ],
-    },
-    {
-      heading: { en: 'Sus chords', ru: 'Sus-аккорды' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Sus leaves out the 3rd. A 2nd takes its place in sus2, a 4th in sus4.',
-            ru: 'Sus означает, что терции нет. Её место занимает секунда в sus2 или кварта в sus4.',
-          },
-        },
-        { kind: 'chords', symbols: ['Csus2', 'Fsus2', 'E♭sus4', 'Bsus4'], apart: true },
-      ],
-    },
-    {
-      heading: { en: 'Numbers are degrees', ru: 'Цифры — это ступени' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'A number counts up the major scale from the chord’s own root, whatever the key. 8, 10, 14 and 15 are not used.',
-            ru: 'Цифра считает ступени мажорной гаммы от основного тона самого аккорда, в любой тональности. 8, 10, 14 и 15 не используются.',
-          },
-        },
-        { kind: 'scale', root: note('C'), scale: 'major' },
-        {
-          kind: 'note',
-          text: {
-            en: 'D9 is a chord stacked in 3rds up to the 9th.',
-            ru: 'D9 — аккорд, построенный по терциям до ноны.',
-          },
         },
       ],
     },
@@ -104,31 +58,11 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '7 adds the minor 7th to the triad: C7, Cm7. Maj7 adds the major 7th: CMaj7. Maj means the 7th, not major.',
-            ru: '7 добавляет к трезвучию малую септиму: C7, Cm7. Maj7 добавляет большую: CMaj7. Maj — это септима, а не мажор.',
+            en: '7 adds the minor 7th: C7, Cm7. Maj7 adds the major 7th: CMaj7. Maj names the 7th, not the triad.',
+            ru: '7 добавляет малую септиму: C7, Cm7. Maj7 добавляет большую: CMaj7. Maj говорит о септиме, а не о трезвучии.',
           },
         },
         { kind: 'chords', symbols: ['C7', 'Cm7', 'CMaj7'], apart: true },
-        {
-          kind: 'note',
-          text: {
-            en: 'C7 is also called the dominant 7th.',
-            ru: 'C7 называют также доминантсептаккордом.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Maj7 on other triads', ru: 'Maj7 на других трезвучиях' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'On a minor triad Maj7 makes the minor-major 7th, 1 ♭3 5 7. On an augmented one, 1 3 ♯5 7.',
-            ru: 'На минорном трезвучии Maj7 даёт большой минорный септаккорд, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
-          },
-        },
-        { kind: 'chords', symbols: ['Cm(maj7)', 'C+Maj7'], apart: true },
       ],
     },
     {
@@ -142,30 +76,32 @@ const jazzChordSymbols: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['Cm7♭5', 'C°7'], apart: true },
-        {
-          kind: 'note',
-          text: {
-            en: 'Jazz simplifies enharmonics: double flats and sharps are rare.',
-            ru: 'Джаз упрощает энгармонизмы: дубль-бемоли и дубль-диезы почти не встречаются.',
-          },
-        },
       ],
     },
     {
-      heading: { en: 'Sixth chords', ru: 'Секстаккорды' },
+      heading: { en: 'Maj7 on other triads', ru: 'Maj7 на других трезвучиях' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'In jazz, 6 adds the major 6th to a triad: C6, Cm6. In classical harmony a sixth chord is a first inversion.',
-            ru: 'В джазе 6 добавляет к трезвучию большую сексту: C6, Cm6. В классической гармонии секстаккорд — это первое обращение.',
+            en: 'On a minor triad Maj7 makes the minor-major 7th, 1 ♭3 5 7. On an augmented one, 1 3 ♯5 7.',
+            ru: 'На минорном трезвучии Maj7 даёт минорный с большой септимой, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
+          },
+        },
+        { kind: 'chords', symbols: ['Cm(maj7)', 'C+Maj7'], apart: true },
+      ],
+    },
+    {
+      heading: { en: 'Sixth chords', ru: 'Аккорды с секстой' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: '6 adds the major 6th to a triad, major or minor: C6, Cm6.',
+            ru: '6 добавляет к трезвучию, мажорному или минорному, большую сексту: C6, Cm6.',
           },
         },
         { kind: 'chords', symbols: ['C6', 'Cm6'], apart: true },
-        {
-          kind: 'note',
-          text: { en: 'The 6th is always major.', ru: 'Секста всегда большая.' },
-        },
       ],
     },
     {
@@ -174,18 +110,11 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Books also write Δ for Maj7, − for m, ø for m7♭5, sus for sus4, (−9) for ♭9.',
+            en: 'Books also write Δ for Maj7, − for m, ø for m7♭5, sus for sus4 and (−9) for ♭9.',
             ru: 'В нотах пишут и так: Δ вместо Maj7, «−» вместо m, ø вместо m7♭5, sus вместо sus4, (−9) вместо ♭9.',
           },
         },
         { kind: 'chords', symbols: ['CΔ7', 'C−7', 'Cø', 'Csus', 'C7(−9)'], apart: true },
-        {
-          kind: 'note',
-          text: {
-            en: 'A slash chord, C/E: the chord, then its bass.',
-            ru: 'Слэш-аккорд, C/E: слева аккорд, справа бас.',
-          },
-        },
       ],
     },
     {
@@ -193,23 +122,23 @@ const jazzChordSymbols: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play Cm7.', ru: 'Сыграйте Cm7.' },
+          ask: { en: 'Play C−7.', ru: 'Сыграйте C−7.' },
           answer: { chord: 'Cm7' },
         },
         {
           kind: 'question',
-          ask: { en: 'Play C6.', ru: 'Сыграйте C6.' },
-          answer: { chord: 'C6' },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play Cm7♭5.', ru: 'Сыграйте Cm7♭5.' },
+          ask: { en: 'Play Cø.', ru: 'Сыграйте Cø.' },
           answer: { chord: 'Cm7♭5' },
         },
         {
+          kind: 'question',
+          ask: { en: 'Play E♭Δ7.', ru: 'Сыграйте E♭Δ7.' },
+          answer: { chord: 'E♭Maj7' },
+        },
+        {
           kind: 'link',
-          title: { en: 'How to read chord symbols', ru: 'Как читать обозначения аккордов' },
-          target: { opens: 'lesson', lesson: 'reading-chord-symbols' },
+          title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'name-chord' },
         },
       ],
     },

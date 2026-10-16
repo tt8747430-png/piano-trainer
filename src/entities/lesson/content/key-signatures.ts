@@ -5,8 +5,8 @@ const keySignatures: Lesson = {
   id: 'key-signatures',
   title: { en: 'Key signatures and the circle of fifths', ru: 'Ключевые знаки и квинтовый круг' },
   summary: {
-    en: 'A key’s sharps or flats written once, the order they come in, and the circle of fifths.',
-    ru: 'Знаки тональности, записанные один раз, их порядок и квинтовый круг.',
+    en: 'Name a key from its signature and find it on the circle.',
+    ru: 'Узнавать тональность по ключевым знакам и находить её на круге.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const keySignatures: Lesson = {
           kind: 'text',
           lead: { en: 'The key signature', ru: 'Ключевые знаки' },
           text: {
-            en: 'writes a key’s sharps or flats once, at the start of each line. D major’s F♯ and C♯ hold for every F and C, in every octave.',
-            ru: '— знаки тональности, записанные один раз в начале каждой строки. Фа-диез и до-диез ре мажора действуют на все фа и до во всех октавах.',
+            en: 'writes a key’s sharps or flats once, at the start of each line. D major’s F♯ and C♯ hold for every F and C.',
+            ru: '— знаки тональности, записанные один раз в начале каждой строки. Фа-диез и до-диез ре мажора действуют на все фа и до.',
           },
         },
         {
@@ -34,8 +34,8 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Sharps come in one order: F C G D A E B, each a 5th above the last. The tonic is a half step above the last sharp: D♯ gives E major.',
-            ru: 'Диезы идут в одном порядке: фа, до, соль, ре, ля, ми, си — каждый на квинту выше предыдущего. Тоника на полутон выше последнего диеза: ре-диез даёт ми мажор.',
+            en: 'Sharps come in one order: F C G D A E B. The key is a half step above the last sharp: D♯ gives E major.',
+            ru: 'Диезы идут в одном порядке: фа, до, соль, ре, ля, ми, си. Тоника на полутон выше последнего диеза: ре-диез даёт ми мажор.',
           },
         },
         {
@@ -52,7 +52,7 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Flats come in the reverse order: B E A D G C F. The tonic is the second-last flat: B♭ E♭ A♭ give E♭ major.',
+            en: 'Flats come in the reverse order: B E A D G C F. The key is the second-last flat: B♭ E♭ A♭ give E♭ major.',
             ru: 'Бемоли идут в обратном порядке: си, ми, ля, ре, соль, до, фа. Тоника — предпоследний бемоль: си-, ми-, ля-бемоль дают ми-бемоль мажор.',
           },
         },
@@ -65,8 +65,8 @@ const keySignatures: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'F major has one flat, B♭. Just remember it.',
-            ru: 'В фа мажоре один бемоль, си-бемоль. Его надо просто запомнить.',
+            en: 'F major’s one flat, B♭, has no second-last: remember it.',
+            ru: 'У фа мажора один бемоль, си-бемоль, и предпоследнего нет: его надо запомнить.',
           },
         },
       ],
@@ -77,8 +77,8 @@ const keySignatures: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Set the keys round a circle, a 5th apart. Each step up a 5th adds a sharp, each step down a flat. Neighbours differ by one note.',
-            ru: 'Расположите тональности по кругу через квинту. Шаг на квинту вверх добавляет диез, шаг вниз — бемоль. Соседи различаются одной нотой.',
+            en: 'Set the keys round a circle, a 5th apart. Each 5th up adds a sharp, each 5th down a flat.',
+            ru: 'Расположите тональности по кругу через квинту. Каждая квинта вверх добавляет диез, каждая квинта вниз — бемоль.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P5' },
@@ -86,30 +86,6 @@ const keySignatures: Lesson = {
           kind: 'link',
           title: { en: 'The circle of fifths in Keys', ru: 'Квинтовый круг в тональностях' },
           target: { opens: 'key', key: { tonic: note('C'), minor: false } },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Name the key from its signature', ru: 'Тональность по ключевым знакам' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'With sharps, the key is a half step above the last sharp. With flats, it is the next-to-last flat.',
-            ru: 'При диезах тоника на полутон выше последнего диеза. При бемолях тоника — предпоследний бемоль.',
-          },
-        },
-        { kind: 'notes', clef: 'treble', key: { tonic: note('A'), minor: false }, notes: 'A4/1' },
-        {
-          kind: 'notes',
-          clef: 'treble',
-          key: { tonic: note('E', -1), minor: false },
-          notes: 'E♭4/1',
-        },
-        {
-          kind: 'link',
-          title: { en: 'Key signatures in the Quiz', ru: 'Ключевые знаки в тестах' },
-          target: { opens: 'quiz', trainer: 'key-signatures' },
         },
       ],
     },
@@ -125,9 +101,17 @@ const keySignatures: Lesson = {
           answer: { notes: ['F#', 'C#', 'G#'] },
         },
         {
+          kind: 'question',
+          ask: {
+            en: 'Play the flats of B♭ major’s signature.',
+            ru: 'Сыграйте ключевые бемоли си-бемоль мажора.',
+          },
+          answer: { notes: ['B♭', 'E♭'] },
+        },
+        {
           kind: 'link',
-          title: { en: 'D major’s key', ru: 'Тональность ре мажор' },
-          target: { opens: 'key', key: { tonic: note('D'), minor: false } },
+          title: { en: 'Key signatures in the Quiz', ru: 'Ключевые знаки в тестах' },
+          target: { opens: 'quiz', trainer: 'key-signatures' },
         },
       ],
     },

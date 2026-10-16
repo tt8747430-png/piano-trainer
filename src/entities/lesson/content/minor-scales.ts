@@ -5,8 +5,8 @@ const minorScales: Lesson = {
   id: 'minor-scales',
   title: { en: 'The minor scales', ru: 'Минорные гаммы' },
   summary: {
-    en: 'Natural, harmonic and melodic minor, and the major key that has the same notes as each minor key.',
-    ru: 'Три вида минора — натуральный, гармонический и мелодический — и мажор с теми же нотами.',
+    en: 'Play natural, harmonic and melodic minor and find the relative major.',
+    ru: 'Играть натуральный, гармонический и мелодический минор и находить параллельный мажор.',
   },
   sections: [
     {
@@ -14,19 +14,31 @@ const minorScales: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Natural minor', ru: 'Натуральный минор' },
           text: {
-            en: 'Natural minor climbs whole, half, whole, whole, half, whole, whole. From A: white keys only.',
-            ru: 'Натуральный минор идёт так: тон, полутон, тон, тон, полутон, тон, тон. От ля — только белые клавиши.',
+            en: 'climbs whole, half, whole, whole, half, whole, whole. From A it is the white keys.',
+            ru: 'идёт так: тон, полутон, тон, тон, полутон, тон, тон. От ля это белые клавиши.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'natural' },
+      ],
+    },
+    {
+      heading: { en: 'Relative keys', ru: 'Параллельные тональности' },
+      blocks: [
         {
           kind: 'text',
-          lead: { en: 'A degree', ru: 'Ступень' },
+          lead: { en: 'Relative keys', ru: 'Параллельные тональности' },
           text: {
-            en: 'is a note’s place from the tonic. The 3rd degree, a minor 3rd up, makes minor sound dark.',
-            ru: '— место ноты от тоники. Третья ступень, на малую терцию выше, делает минор тёмным.',
+            en: 'share their notes and signature, like A minor and C major. The minor tonic is a minor 3rd below.',
+            ru: 'имеют одни ноты и ключевые знаки, как ля минор и до мажор. Тоника минора на малую терцию ниже.',
           },
+        },
+        { kind: 'interval', root: note('A'), interval: 'm3' },
+        {
+          kind: 'link',
+          title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },
+          target: { opens: 'key', key: { tonic: note('A'), minor: true } },
         },
       ],
     },
@@ -35,9 +47,10 @@ const minorScales: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Harmonic minor', ru: 'Гармонический минор' },
           text: {
-            en: 'Raise the 7th degree, G♯ in A minor: it leads up to the tonic, and the chord on the 5th turns major. F to G♯ is a step and a half.',
-            ru: 'Повысьте седьмую ступень, соль-диез в ля миноре: она ведёт к тонике, а аккорд пятой ступени становится мажорным. Фа — соль-диез — увеличенная секунда.',
+            en: 'raises the 7th, G♯ in A minor. It leads up to the tonic, and the chord on the 5th turns major.',
+            ru: 'повышает седьмую ступень, соль-диез в ля миноре. Она ведёт к тонике, а аккорд пятой ступени становится мажорным.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'harmonic' },
@@ -49,51 +62,13 @@ const minorScales: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Melodic minor', ru: 'Мелодический минор' },
           text: {
-            en: 'Raise the 6th too, F♯ and G♯ in A minor, and the leap is gone. Classical music raises them only going up, jazz both ways.',
-            ru: 'Повысьте и шестую, фа-диез и соль-диез в ля миноре, — скачок исчезнет. В классике их повышают только вверх, в джазе — в обе стороны.',
+            en: 'raises the 6th too, smoothing the leap from F to G♯. Classical music raises them going up only, jazz both ways.',
+            ru: 'повышает и шестую, сглаживая скачок от фа к соль-диезу. В классике их повышают только вверх, в джазе — в обе стороны.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'melodic' },
-      ],
-    },
-    {
-      heading: { en: 'Relative keys', ru: 'Параллельные тональности' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'Relative keys', ru: 'Параллельные тональности' },
-          text: {
-            en: 'share their notes and key signature, like C major and A minor. The minor tonic is a minor 3rd below the major one.',
-            ru: 'имеют одни ноты и ключевые знаки, как до мажор и ля минор. Тоника минора на малую терцию ниже тоники мажора.',
-          },
-        },
-        { kind: 'scale', root: note('C'), scale: 'major' },
-        { kind: 'interval', root: note('A'), interval: 'm3' },
-        {
-          kind: 'link',
-          title: { en: 'A minor in Keys', ru: 'Ля минор в тональностях' },
-          target: { opens: 'key', key: { tonic: note('A'), minor: true } },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Hear major and minor', ru: 'Слышать мажор и минор' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Play C major, then C minor. Only the 3rd, 6th and 7th change, and the colour darkens.',
-            ru: 'Сыграйте до мажор, затем до минор. Меняются только третья, шестая и седьмая ступени, и звучание темнеет.',
-          },
-        },
-        { kind: 'scale', root: note('C'), scale: 'major' },
-        { kind: 'scale', root: note('C'), scale: 'natural' },
-        {
-          kind: 'link',
-          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
-          target: { opens: 'quiz', trainer: 'scales-by-ear' },
-        },
       ],
     },
     {
@@ -108,9 +83,17 @@ const minorScales: Lesson = {
           answer: { notes: ['E', 'F#', 'G', 'A', 'B', 'C', 'D'] },
         },
         {
+          kind: 'question',
+          ask: {
+            en: 'Play the tonic of A minor’s relative major.',
+            ru: 'Сыграйте тонику мажора, параллельного ля минору.',
+          },
+          answer: { notes: ['C'] },
+        },
+        {
           kind: 'link',
-          title: { en: 'A harmonic minor', ru: 'Ля гармонический минор' },
-          target: { opens: 'scales', root: note('A'), scale: 'harmonic' },
+          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],
     },

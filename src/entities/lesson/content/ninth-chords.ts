@@ -5,8 +5,8 @@ const ninthChords: Lesson = {
   id: 'ninth-chords',
   title: { en: 'Ninth chords', ru: 'Нонаккорды' },
   summary: {
-    en: 'Three 9th chords, each two triads stacked, played over the bass alone, in two positions.',
-    ru: 'Три нонаккорда, каждый — два трезвучия друг на друге, над одним басом, в двух расположениях.',
+    en: 'Build minor, major and dominant 9ths and voice them two ways.',
+    ru: 'Строить минорный, мажорный и доминантовый нонаккорды в двух расположениях.',
   },
   sections: [
     {
@@ -14,9 +14,10 @@ const ninthChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A 9th chord', ru: 'Нонаккорд' },
           text: {
-            en: 'A 9th chord is a 7th chord with one more 3rd on top. It is no new chord, only a richer one.',
-            ru: 'Нонаккорд — это септаккорд и ещё одна терция сверху. Это не новый аккорд, а его расширение, более насыщенное.',
+            en: 'is a 7th chord with one more 3rd on top.',
+            ru: '— септаккорд и ещё одна терция сверху.',
           },
         },
         {
@@ -68,32 +69,13 @@ const ninthChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Bass left, 7th chord right', ru: 'Бас слева, септаккорд справа' },
+      heading: { en: 'Bass left, two positions', ru: 'Бас слева, два расположения' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The two triads are only a shortcut. Think of a 7th chord and a 3rd: the bass in the left hand, the other four notes in the right.',
-            ru: 'Два трезвучия — лишь шпаргалка. Думайте о септаккорде и терции: бас в левой руке, остальные четыре ноты в правой.',
-          },
-        },
-        {
-          kind: 'voicings',
-          voicings: [
-            { symbol: 'Cm9', degrees: '1 | ♭3 5 ♭7 9', hands: 'C3 | E♭4 G4 B♭4 D5' },
-            { symbol: 'CMaj9', degrees: '1 | 3 5 7 9', hands: 'C3 | E4 G4 B4 D5' },
-          ],
-        },
-      ],
-    },
-    {
-      heading: { en: 'The second position', ru: 'Второе расположение' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Move the top 3rd down an octave. These two positions are the core of pop and jazz accompaniment.',
-            ru: 'Перенесите верхнюю терцию на октаву вниз. Эти два расположения — основа эстрадно-джазового аккомпанемента.',
+            en: 'Play the root in the left hand and the other four notes in the right. Then move the top 3rd down an octave.',
+            ru: 'Основной тон играйте левой рукой, остальные четыре ноты — правой. Затем перенесите верхнюю терцию на октаву вниз.',
           },
         },
         {
@@ -113,8 +95,8 @@ const ninthChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A quick way to the close 9th: take the triad and split its root into its two neighbours in the scale.',
-            ru: 'Быстрый путь к нонаккорду в тесном расположении: возьмите трезвучие и расщепите основной тон на два соседних звука гаммы.',
+            en: 'A quick way to the second position: split the triad’s root into its two neighbours, the 7th and the 9th.',
+            ru: 'Быстрый путь ко второму расположению: расщепите основной тон трезвучия на два соседних звука, септиму и нону.',
           },
         },
         {
@@ -126,13 +108,6 @@ const ninthChords: Lesson = {
             { symbol: 'CMaj9', degrees: '1 | 7 9 3 5', hands: 'C3 | B3 D4 E4 G4' },
             { symbol: 'C9', degrees: '1 | ♭7 9 3 5', hands: 'C3 | B♭3 D4 E4 G4' },
           ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'The root steps down to the 7th and up to the 9th.',
-            ru: 'Основной тон уходит вниз к септиме и вверх к ноне.',
-          },
         },
       ],
     },

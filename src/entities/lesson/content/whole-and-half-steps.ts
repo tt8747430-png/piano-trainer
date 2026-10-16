@@ -5,8 +5,8 @@ const wholeAndHalfSteps: Lesson = {
   id: 'whole-and-half-steps',
   title: { en: 'Half steps, whole steps, sharps and flats', ru: 'Полутоны, тоны, диезы и бемоли' },
   summary: {
-    en: 'The two steps every scale is built from, the black keys’ two names, and the signs that raise and lower a note.',
-    ru: 'Два шага, из которых строится любая гамма, два имени чёрных клавиш и знаки, повышающие и понижающие ноту.',
+    en: 'Find half and whole steps and name sharps and flats.',
+    ru: 'Находить полутоны и тоны и называть диезы и бемоли.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'goes to the very next key, black or white. E–F and B–C are half steps between white keys.',
-            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — полутоны между белыми клавишами.',
+            en: 'goes to the very next key, black or white. E–F and B–C are the only white-key half steps.',
+            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные полутоны между белыми клавишами.',
           },
         },
         { kind: 'interval', root: note('E'), interval: 'm2' },
@@ -45,8 +45,8 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A sharp (♯) raises a note a half step. A flat (♭) lowers it. A natural (♮) cancels either.',
-            ru: 'Диез (♯) повышает ноту на полутон. Бемоль (♭) понижает. Бекар (♮) отменяет и то и другое.',
+            en: 'A sharp (♯) raises a note a half step, a flat (♭) lowers it, and a natural (♮) cancels either.',
+            ru: 'Диез (♯) повышает ноту на полутон, бемоль (♭) понижает, а бекар (♮) отменяет и то и другое.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4 F#4 F4/2 B4 B♭4 B4/2' },
@@ -78,8 +78,8 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play every key from C to the next C: twelve half steps. Spell them with sharps going up.',
-            ru: 'Сыграйте все клавиши от до до следующего до: двенадцать полутонов. Вверх пишите их с диезами.',
+            en: 'Every key from C to the next C is twelve half steps.',
+            ru: 'Все клавиши от до до следующего до — двенадцать полутонов.',
           },
         },
         {

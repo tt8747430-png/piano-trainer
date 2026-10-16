@@ -8,8 +8,8 @@ const theBlues: Lesson = {
   id: 'the-blues',
   title: { en: 'The twelve-bar blues', ru: 'Двенадцатитактовый блюз' },
   summary: {
-    en: 'The form under a thousand songs: three dominant 7ths in twelve bars, a shuffle in the left hand, and the blues scale over all of it.',
-    ru: 'Форма, на которой стоит тысяча песен: три доминантсептаккорда в двенадцати тактах, шаффл в левой руке и блюзовая гамма над всем этим.',
+    en: 'Play the twelve-bar blues with a shuffle and the blues scale.',
+    ru: 'Играть двенадцатитактовый блюз с шаффлом и блюзовой гаммой.',
   },
   sections: [
     {
@@ -18,16 +18,11 @@ const theBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The blues uses I, IV and V, each a dominant 7th. In C: C7, F7 and G7, four beats a bar.',
-            ru: 'Блюз использует I, IV и V, каждый — доминантсептаккорд. В до мажоре: C7, F7 и G7, по четыре доли в такте.',
+            en: 'The blues plays I, IV and V, each a dominant 7th: in C, C7, F7 and G7.',
+            ru: 'Блюз играет I, IV и V, каждый — доминантсептаккорд: в до мажоре C7, F7 и G7.',
           },
         },
         { kind: 'progression', numerals: TWELVE_BARS, key: C_MAJOR },
-      ],
-    },
-    {
-      heading: { en: 'Its shape', ru: 'Его схема' },
-      blocks: [
         {
           kind: 'steps',
           steps: [
@@ -36,7 +31,6 @@ const theBlues: Lesson = {
             { en: 'Bars 9–12: V, IV, I, V.', ru: 'Такты 9–12: V, IV, I, V.' },
           ],
         },
-        { kind: 'chords', symbols: ['C7', 'F7', 'G7'], apart: true },
       ],
     },
     {
@@ -45,8 +39,8 @@ const theBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Rock between the 5th and the 6th over the root, a pair of notes to each beat. Swing the eighths: long, short.',
-            ru: 'Покачивайтесь между квинтой и секстой над основным тоном, по паре нот на долю. Свингуйте восьмые: длинная, короткая.',
+            en: 'Rock between the 5th and the 6th over the root, a pair to each beat. Swing the eighths: long, short.',
+            ru: 'Покачивайтесь между квинтой и секстой над основным тоном, по паре на долю. Свингуйте восьмые: длинная, короткая.',
           },
         },
         {
@@ -98,11 +92,6 @@ const theBlues: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play C7.', ru: 'Сыграйте C7.' },
-          answer: { chord: 'C7' },
-        },
-        {
-          kind: 'question',
           ask: { en: 'Play the blues’ IV7 in C.', ru: 'Сыграйте блюзовый IV7 в до мажоре.' },
           answer: { chord: 'F7' },
         },
@@ -121,8 +110,8 @@ const theBlues: Lesson = {
           title: { en: 'The blues through the keys', ru: 'Блюз по всем тональностям' },
           target: {
             opens: 'player',
-            numerals: 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7',
-            key: { tonic: note('C'), minor: false },
+            numerals: TWELVE_BARS,
+            key: C_MAJOR,
             walk: 'fifths',
           },
         },

@@ -4,8 +4,8 @@ const readingChordSymbols: Lesson = {
   id: 'reading-chord-symbols',
   title: { en: 'How to read chord symbols', ru: 'Как читать буквенные обозначения' },
   summary: {
-    en: 'What each part of a chord symbol says, what its numbers mean, and how to name any chord.',
-    ru: 'Что говорит каждая часть обозначения аккорда, что значат числа и как назвать любой аккорд.',
+    en: 'Read any chord symbol and name the chords you play.',
+    ru: 'Читать любое обозначение аккорда и называть сыгранные аккорды.',
   },
   sections: [
     {
@@ -83,13 +83,6 @@ const readingChordSymbols: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['C2', 'Cadd9', 'C6'] },
-        {
-          kind: 'note',
-          text: {
-            en: 'A plain 4, as in C4, usually means sus4.',
-            ru: 'Просто 4, как в C4, обычно значит sus4.',
-          },
-        },
       ],
     },
     {
@@ -107,7 +100,7 @@ const readingChordSymbols: Lesson = {
         {
           kind: 'note',
           text: {
-            en: '13 chords usually leave out the 11: it clashes with the 3rd.',
+            en: '13 chords leave out the 11, which clashes with the 3rd.',
             ru: 'В аккордах с 13 обычно нет 11: она резко звучит с терцией.',
           },
         },
@@ -141,8 +134,8 @@ const readingChordSymbols: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The same notes can have two names.',
-            ru: 'У одних и тех же нот может быть два названия.',
+            en: 'Dm7 and F6/D are the same notes.',
+            ru: 'Dm7 и F6/D — одни и те же ноты.',
           },
         },
       ],

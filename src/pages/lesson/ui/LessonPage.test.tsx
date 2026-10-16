@@ -12,7 +12,7 @@ describe('A lesson', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/what its numbers mean/)).toBeInTheDocument()
+    expect(screen.getByText(/name the chords you play/)).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
@@ -135,8 +135,7 @@ describe('A lesson', () => {
     expect(links.map((link) => link.textContent?.replace(/^\d+/, ''))).toEqual([
       'A 7th chord and one more 3rd',
       'Two triads stacked',
-      'Bass left, 7th chord right',
-      'The second position',
+      'Bass left, two positions',
       'Split the root',
       'Try it',
     ])
@@ -144,7 +143,7 @@ describe('A lesson', () => {
     expect(href).toBe('/lessons/ninth-chords#section-4')
     const section = document.getElementById(href.split('#')[1] ?? '')
     expect(section).toContainElement(
-      screen.getByRole('heading', { level: 2, name: 'The second position', hidden: true }),
+      screen.getByRole('heading', { level: 2, name: 'Split the root', hidden: true }),
     )
   })
 

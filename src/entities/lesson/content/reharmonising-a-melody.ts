@@ -7,8 +7,8 @@ const reharmonisingAMelody: Lesson = {
   id: 'reharmonising-a-melody',
   title: { en: 'Reharmonising a melody note', ru: 'Новая гармония для ноты мелодии' },
   summary: {
-    en: 'A melody note fits more than one chord: the key’s triads that hold it, the 7th chords beyond them, and how to choose.',
-    ru: 'Нота мелодии входит в разные аккорды: в трезвучия тональности и в септаккорды. Как найти их и выбрать.',
+    en: 'Find several chords for one melody note and choose between them.',
+    ru: 'Подбирать к одной ноте мелодии разные аккорды и выбирать из них.',
   },
   sections: [
     {
@@ -18,18 +18,11 @@ const reharmonisingAMelody: Lesson = {
           kind: 'text',
           lead: { en: 'Reharmonising', ru: 'Реармонизация' },
           text: {
-            en: 'means a new chord under a melody note. In C major, E sits in C, Am and Em.',
-            ru: '— это новый аккорд под нотой мелодии. В до мажоре ми входит в C, Am и Em.',
+            en: 'puts a new chord under a melody note. In C major, E sits in C, Am and Em.',
+            ru: '— новый аккорд под нотой мелодии. В до мажоре ми входит в C, Am и Em.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Am', 'Em'], melody: note('E') },
-        {
-          kind: 'text',
-          text: {
-            en: 'Change the chord under a long melody note, and the line sounds new.',
-            ru: 'Смените аккорд под долгой нотой мелодии, и строка зазвучит по-новому.',
-          },
-        },
         {
           kind: 'link',
           title: { en: 'E in Reharmonise', ru: 'Ми в «Гармонизации мелодии»' },
@@ -64,8 +57,8 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Choose a chord whose bass moves well from the one before to the one after. Keep the melody on top, and reharmonise long notes, not quick ones.',
-            ru: 'Выбирайте аккорд, бас которого хорошо идёт от предыдущего к следующему. Держите мелодию сверху и меняйте гармонию на долгих нотах, а не на быстрых.',
+            en: 'Choose the chord whose bass moves well between its neighbours. Reharmonise long notes, not quick ones.',
+            ru: 'Выбирайте аккорд, бас которого хорошо идёт между соседними. Меняйте гармонию на долгих нотах, а не на быстрых.',
           },
         },
         {

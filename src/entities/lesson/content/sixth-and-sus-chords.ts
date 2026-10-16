@@ -7,8 +7,8 @@ const sixthAndSusChords: Lesson = {
     ru: 'Аккорды с секстой, добавленными тонами и задержанием',
   },
   summary: {
-    en: 'Colours added to a triad: the 6th, the added 9th, and the suspended chords that hold back the 3rd.',
-    ru: 'Краски, добавленные к трезвучию: секста, добавленная нона и задержания, которые откладывают терцию.',
+    en: 'Colour a triad with a 6th, an added 9th or a sus.',
+    ru: 'Окрашивать трезвучие секстой, добавленной ноной или задержанием.',
   },
   sections: [
     {
@@ -16,25 +16,13 @@ const sixthAndSusChords: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A 6th chord (C6)', ru: 'Аккорд с секстой (C6)' },
+          lead: { en: 'A 6th chord', ru: 'Аккорд с секстой' },
           text: {
-            en: 'adds the 6th to a major triad: C E G A. It ends a song warmly, with no pull onward.',
-            ru: 'добавляет к мажорному трезвучию сексту: до, ми, соль, ля. Он тепло завершает песню и никуда не тянет.',
+            en: 'adds the major 6th to a triad: C E G A. It rests warmly, with no pull onward.',
+            ru: 'добавляет к трезвучию большую сексту: до, ми, соль, ля. Он звучит тепло и никуда не тянет.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C6'] },
-      ],
-    },
-    {
-      heading: { en: 'The minor 6th', ru: 'Минорный с секстой' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Cm6 adds the major 6th to a minor triad: C E♭ G A. Gospel and jazz minors use it.',
-            ru: 'Cm6 добавляет к минорному трезвучию большую сексту: до, ми-бемоль, соль, ля. Он звучит в госпеле и джазе.',
-          },
-        },
         { kind: 'chords', symbols: ['Cm', 'Cm6'] },
       ],
     },
@@ -44,8 +32,8 @@ const sixthAndSusChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Cadd9 adds the 9th, D, to the triad without a 7th. C6/9 adds both the 6th and the 9th.',
-            ru: 'Cadd9 добавляет к трезвучию нону, ре, без септимы. C6/9 добавляет и сексту, и нону.',
+            en: 'Cadd9 adds the 9th, D, without a 7th. C6/9 adds both the 6th and the 9th.',
+            ru: 'Cadd9 добавляет нону, ре, без септимы. C6/9 добавляет и сексту, и нону.',
           },
         },
         { kind: 'chords', symbols: ['Cadd9', 'C6/9'] },
@@ -58,8 +46,8 @@ const sixthAndSusChords: Lesson = {
           kind: 'text',
           lead: { en: 'A suspended chord', ru: 'Аккорд с задержанием' },
           text: {
-            en: 'replaces the 3rd. In sus4 the 4th, F, wants to fall back to E: Csus4 to C.',
-            ru: 'заменяет терцию. В sus4 кварта, фа, стремится вернуться в ми: Csus4 в C.',
+            en: 'replaces the 3rd. In Csus4 the 4th, F, wants to fall back to E.',
+            ru: 'заменяет терцию. В Csus4 кварта, фа, стремится вернуться в ми.',
           },
         },
         { kind: 'chords', symbols: ['Csus4', 'C'] },
@@ -96,8 +84,8 @@ const sixthAndSusChords: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play C6.', ru: 'Сыграйте C6.' },
-          answer: { chord: 'C6' },
+          ask: { en: 'Play Cm6.', ru: 'Сыграйте Cm6.' },
+          answer: { chord: 'Cm6' },
         },
         {
           kind: 'question',
