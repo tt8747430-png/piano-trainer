@@ -66,10 +66,19 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
   const downKey = keyListParam(down)
 
   // The log hears each change of the keys down, as it happens (React's "adjust state on change").
-  const [log, setLog] = useState<ChordLog>(() =>
-    settings.remember ? { ...EMPTY_LOG, chords: settings.chords } : EMPTY_LOG,
+  // A page opened on the chord remembered last (a reload, Back) has heard it already: a key tapped
+  // grows it.
+  const [opened] = useState(
+    () => settings.remember && keyListParam(settings.chords.at(-1) ?? []) === downKey,
   )
-  const [heard, setHeard] = useState('')
+  const [log, setLog] = useState<ChordLog>(() =>
+    !settings.remember
+      ? EMPTY_LOG
+      : opened
+        ? { chords: settings.chords, held: down, letGo: false }
+        : { ...EMPTY_LOG, chords: settings.chords },
+  )
+  const [heard, setHeard] = useState(opened ? downKey : '')
   if (downKey !== heard) {
     setHeard(downKey)
     setLog((current) => logKeys(current, down))

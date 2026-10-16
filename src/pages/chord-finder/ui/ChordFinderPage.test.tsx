@@ -98,6 +98,26 @@ describe('Practice → Chord finder', () => {
     expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
   })
 
+  it('keeps a chord tapped once, however often the page opens on it', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/practice/chord-finder', { storage })
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
+    for (const each of ['C4', 'E4', 'G4']) await user.click(key(each))
+    await waitFor(() => expect(playedNames()).toEqual(['C']))
+    first.unmount()
+    for (let visit = 0; visit < 2; visit++) {
+      const again = await renderApp('/practice/chord-finder?keys=60-64-67', { storage })
+      await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+      expect(playedNames()).toEqual(['C'])
+      again.unmount()
+    }
+    expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([
+      [60, 64, 67],
+    ])
+  })
+
   it('hides the keys a chord is in, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
