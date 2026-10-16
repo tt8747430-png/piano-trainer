@@ -1,5 +1,5 @@
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFold } from '@/features/fold-section'
 import { noteOnTop } from '@/features/play-example'
 import {
   TENSION_GROUPS,
@@ -8,7 +8,7 @@ import {
   type TensionChord,
   type TensionTone,
 } from '@/shared/lib/music'
-import type { ShownKeys } from '@/shared/ui'
+import { FoldSection, type ShownKeys } from '@/shared/ui'
 import { tensionChord, tensionMark } from '../model/tension-keys'
 import { TensionGroupCard } from './TensionGroupCard'
 
@@ -29,14 +29,11 @@ export function ChordTensions({
   onPlay: (tone: TensionTone, shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('practice')
-  const id = useId()
+  const fold = useFold('chords.tensions')
   const tones = tensionTones(root, quality)
   const chord = tensionChord(root, quality)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
-        {t('chords.tensions.title')}
-      </h2>
+    <FoldSection title={t('chords.tensions.title')} fold={fold}>
       <div className="grid-fields gap-4">
         {TENSION_GROUPS.map((group) => (
           <TensionGroupCard
@@ -48,6 +45,6 @@ export function ChordTensions({
           />
         ))}
       </div>
-    </section>
+    </FoldSection>
   )
 }

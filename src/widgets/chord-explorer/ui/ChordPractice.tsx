@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { AudioWaveform, Footprints, Layers } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useFold } from '@/features/fold-section'
 import { exerciseOf, isArpeggioQuality } from '@/entities/exercise'
 import { chordsParam } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
@@ -27,8 +28,9 @@ export function ChordPractice({
 }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
+  const fold = useFold('chords.practice')
   return (
-    <RowGroup title={t('inPlayer')}>
+    <RowGroup title={t('inPlayer')} fold={fold}>
       {isArpeggioQuality(quality) ? (
         <li>
           <RowLink

@@ -7,6 +7,7 @@ import {
   selectRecorder,
   selectSidebar,
   selectTrainer,
+  selectSectionFolded,
 } from './selectors'
 import {
   DEFAULT_CHORD_FINDER,
@@ -27,6 +28,7 @@ describe('settings selectors', () => {
       trainer: DEFAULT_TRAINER,
       keyboard: defaultKeyboard(false),
       recorder: DEFAULT_RECORDER,
+      foldedSections: ['chords.tensions'],
       sidebar: 'collapsed',
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
@@ -38,5 +40,11 @@ describe('settings selectors', () => {
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)
     expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
+  })
+
+  it('says whether a section is folded away', () => {
+    const state = { foldedSections: ['chords.tensions'] } as unknown as SettingsState
+    expect(selectSectionFolded('chords.tensions')(state)).toBe(true)
+    expect(selectSectionFolded('chords.practice')(state)).toBe(false)
   })
 })

@@ -1,5 +1,6 @@
 export {
   PLAYING_TOGGLES,
+  FOLDED_MAX,
   REMEMBERED_CHORDS,
   THEMES,
   defaultKeyboard,
@@ -24,6 +25,7 @@ export {
   selectMidi,
   selectPractice,
   selectRecorder,
+  selectSectionFolded,
   selectSidebar,
   selectTheme,
   selectTrainer,

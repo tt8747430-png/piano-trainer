@@ -109,6 +109,10 @@ export interface ChordFinderSettings {
   readonly chords: readonly (readonly Midi[])[]
 }
 
+/** The most sections kept folded, and the longest id one has. */
+export const FOLDED_MAX = 100
+export const SECTION_ID_MAX = 64
+
 /** The most chords the Chord finder remembers: the newest are kept. */
 export const REMEMBERED_CHORDS = 24
 /** The most keys a chord remembered holds: two hands'. */
@@ -124,6 +128,8 @@ export interface SettingsState {
   sidebar: Sidebar
   midi: MidiSettings
   chordFinder: ChordFinderSettings
+  /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
+  foldedSections: readonly string[]
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {

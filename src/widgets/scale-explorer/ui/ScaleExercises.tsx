@@ -2,6 +2,7 @@ import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
 import { Spline } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useFold } from '@/features/fold-section'
 import { exercisesIn } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
 import { noteParam, type ScaleKind, type SpelledNote } from '@/shared/lib/music'
@@ -16,8 +17,9 @@ const SCALE_EXERCISES = exercisesIn('scales')
 export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleKind }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
+  const fold = useFold('scales.exercises')
   return (
-    <RowGroup title={t('inPlayer')}>
+    <RowGroup title={t('inPlayer')} fold={fold}>
       {SCALE_EXERCISES.map((exercise) => (
         <li key={exercise.id}>
           <RowLink

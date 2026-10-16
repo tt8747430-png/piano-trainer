@@ -25,6 +25,9 @@ used over and over (Play, New song, Clear) scattered through the page.
   **`SpeedDial`** beside it (the Chord finder's Open in Chords and Clear), each named in words once open. A
   lesson's contents are a floating button saying the section being read (`2 / 7`) whose sheet lists the
   sections on a phone; a laptop keeps them in the column beside the lesson.
+- **A page's secondary sections fold** from their headings (`FoldSection`, `RowGroup`'s `fold`): Chords' tensions
+  and Practise in the Player, a scale's exercises, Progressions' Player rows, walks and Between. What is folded is
+  saved by section id (`foldedSections` in `pt-settings`, `useFold`) and stays folded on every visit.
 - A staff's notes are marked as they sound (`usePlayhead` over a play's start on the audio clock): a lesson's
   line or run played whole, or a bar tapped.
 

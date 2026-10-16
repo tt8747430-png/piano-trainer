@@ -30,6 +30,7 @@ const DEFAULTS = {
   sidebar: DEFAULT_SIDEBAR,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
+  foldedSections: [],
 }
 
 describe('createSettingsStore', () => {
@@ -112,6 +113,7 @@ describe('createSettingsStore', () => {
           [53, 57, 60],
         ],
       },
+      foldedSections: ['chords.tensions'],
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -186,6 +188,23 @@ describe('createSettingsStore', () => {
       keyLength: 'long',
       rail: 'compact',
     })
+  })
+
+  it('keeps each section folded once, an id a section could have, the newest at most', () => {
+    const ids = [
+      'chords.tensions',
+      7,
+      '',
+      'x'.repeat(65),
+      'chords.tensions',
+      'progressions.between',
+    ]
+    expect(restored({ foldedSections: ids }).foldedSections).toEqual([
+      'chords.tensions',
+      'progressions.between',
+    ])
+    const many = Array.from({ length: 120 }, (_, i) => `s${i}`)
+    expect(restored({ foldedSections: many }).foldedSections).toHaveLength(100)
   })
 
   it('keeps valid saved fields and defaults the ones it does not recognise', () => {

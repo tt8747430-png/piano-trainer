@@ -12,6 +12,7 @@ import {
   setMidi,
   setRecorderClick,
   setRecorderTune,
+  setSectionFolded,
   setSidebar,
   setTheme,
 } from './index'
@@ -29,6 +30,16 @@ describe('set-preference', () => {
     setTheme(store, 'dark')
     expect(store.getState().theme).toBe('dark')
     expect(saved(storage).theme).toBe('dark')
+  })
+
+  it('setSectionFolded folds a section away once, and opens it again, saved', () => {
+    const { storage, store } = setUp()
+    setSectionFolded(store, 'chords.tensions', true)
+    setSectionFolded(store, 'chords.tensions', true)
+    setSectionFolded(store, 'progressions.between', true)
+    expect(saved(storage).foldedSections).toEqual(['chords.tensions', 'progressions.between'])
+    setSectionFolded(store, 'chords.tensions', false)
+    expect(store.getState().foldedSections).toEqual(['progressions.between'])
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {

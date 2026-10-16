@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { setMidi } from '@/features/set-preference'
-import { SHORTEST_PRESS_MS } from '@/shared/lib'
+import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 
@@ -15,6 +15,22 @@ describe('Practice → Chords', () => {
     vi.mocked(window.scrollTo).mockClear()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(window.scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('folds a section away from its heading, folded still on the next visit', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/practice/chords', { storage })
+    const heading = await screen.findByRole('button', { name: 'Practise in the Player' })
+    expect(heading).toHaveAttribute('aria-expanded', 'true')
+    await user.click(heading)
+    expect(screen.queryByRole('link', { name: /^Arpeggio/ })).not.toBeInTheDocument()
+    first.unmount()
+    await renderApp('/practice/chords', { storage })
+    const again = await screen.findByRole('button', { name: 'Practise in the Player' })
+    expect(again).toHaveAttribute('aria-expanded', 'false')
+    await user.click(again)
+    expect(screen.getByRole('link', { name: /^Arpeggio/ })).toBeInTheDocument()
   })
 
   it('shows C major by default, named, its keys labelled by degree', async () => {

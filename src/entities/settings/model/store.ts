@@ -11,6 +11,8 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
   DEVICE_NAME_MAX,
+  FOLDED_MAX,
+  SECTION_ID_MAX,
   PRACTICE_TOGGLES,
   REMEMBERED_CHORDS,
   defaultKeyboard,
@@ -63,6 +65,7 @@ export function createSettingsStore({
         sidebar: DEFAULT_SIDEBAR,
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
+        foldedSections: [],
       },
       read: sanitize,
     },
@@ -140,6 +143,15 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
   }
 }
 
+/** The sections folded: each an id a section could have, once; the newest kept. */
+function foldedSections(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  const ids = value.filter(
+    (id): id is string => typeof id === 'string' && id.length > 0 && id.length <= SECTION_ID_MAX,
+  )
+  return [...new Set(ids)].slice(-FOLDED_MAX)
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -173,5 +185,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
+    foldedSections: foldedSections(saved.foldedSections),
   }
 }
