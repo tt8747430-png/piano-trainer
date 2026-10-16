@@ -1,5 +1,7 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, type RefObject } from 'react'
 import {
+  keepCentre,
+  scrollToReveal,
   spanOf,
   useScrollMotion,
   type KeyGeometry,
@@ -22,18 +24,11 @@ function centre(
   element.scrollTo({ left: middle - clientWidth / 2, behavior })
 }
 
-/** Whether all of `span` is in the keyboard's visible part. */
-function inSight({ scrollLeft, clientWidth, scrollWidth }: ScrollMetrics, span: KeySpan): boolean {
-  return (
-    (span.left / 100) * scrollWidth >= scrollLeft &&
-    (span.right / 100) * scrollWidth <= scrollLeft + clientWidth
-  )
-}
-
 /**
  * The keyboard's scrolling: it opens centred on `inView` (else on `span`, where the range that fills
- * its width sits), and centres again when the range or the key size changes; `inView` is scrolled
- * to whenever part of it is out of sight.
+ * its width sits), and centres again when the key size changes. When the range changes the keys
+ * keep the same point in the middle, and `inView` is brought into sight moving no further than that
+ * (`scrollToReveal`): the keys never swing from one hand's notes to the other's.
  */
 export function useKeyboardScroll(
   scroller: RefObject<HTMLElement | null>,
@@ -64,15 +59,28 @@ export function useKeyboardScroll(
   useLayoutEffect(() => {
     const element = scroller.current
     if (element) centreOnRange(element)
-  }, [scroller, span, keySize])
+  }, [scroller, keySize])
+
+  // The range grown or shrunk: the point in the middle stays there, measured before and after.
+  const spanLeft = span.left
+  const spanRight = span.right
+  const keptSpan = useRef({ left: spanLeft, right: spanRight })
+  useLayoutEffect(() => {
+    const element = scroller.current
+    const kept = keptSpan.current
+    if (!element || (kept.left === spanLeft && kept.right === spanRight)) return
+    keptSpan.current = { left: spanLeft, right: spanRight }
+    const before = metrics.read()
+    if (before.scrollWidth > 0)
+      element.scrollTo({ left: keepCentre(before, element.scrollWidth), behavior: 'instant' })
+  }, [scroller, metrics, spanLeft, spanRight])
 
   const viewFrom = inView?.from
   const viewTo = inView?.to
   useEffect(() => {
     const element = scroller.current
     if (!element || viewFrom === undefined || viewTo === undefined) return
-    const view = spanOf(keys, { from: viewFrom, to: viewTo })
-    const seen = metrics.read()
-    if (!inSight(seen, view)) centre(element, seen, view, motion)
+    const left = scrollToReveal(metrics.read(), spanOf(keys, { from: viewFrom, to: viewTo }))
+    if (left !== null) element.scrollTo({ left, behavior: motion })
   }, [scroller, metrics, keys, viewFrom, viewTo, motion])
 }

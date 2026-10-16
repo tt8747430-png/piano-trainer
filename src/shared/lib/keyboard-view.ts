@@ -43,3 +43,41 @@ export function keysInView(keys: readonly KeyGeometry[], frame: ViewFrame): KeyR
   const last = whites.at(-1)
   return first && last ? { from: first.midi, to: last.midi } : null
 }
+
+/** How far clear of the view's edge keys brought into it stand: a percent of the keyboard. */
+const MARGIN = 1
+
+/**
+ * Where to scroll so a stretch of keys (`span`, in percent of the keyboard) is in view, moving no
+ * further than that, a little clear of the edge it comes in at; null where it is in view already. A
+ * stretch wider than the view stays where part of it shows, and is centred only where none does.
+ */
+export function scrollToReveal(
+  metrics: ScrollMetrics,
+  span: { readonly left: number; readonly right: number },
+): number | null {
+  const { scrollLeft, clientWidth, scrollWidth } = metrics
+  if (scrollWidth <= clientWidth) return null
+  const left = (span.left / 100) * scrollWidth
+  const right = (span.right / 100) * scrollWidth
+  const margin = (MARGIN / 100) * scrollWidth
+  const viewRight = scrollLeft + clientWidth
+  if (right - left > clientWidth) {
+    const shows = right > scrollLeft && left < viewRight
+    return shows ? null : scrollToCentre(metrics, (span.left + span.right) / 200)
+  }
+  if (left >= scrollLeft && right <= viewRight) return null
+  return within(metrics, left < scrollLeft ? left - margin : right + margin - clientWidth)
+}
+
+/** Where to scroll once the keyboard is `scrollWidth` wide, so the point in the middle stays there. */
+export function keepCentre(
+  { scrollLeft, clientWidth, scrollWidth }: ScrollMetrics,
+  nextWidth: number,
+): number {
+  const middle = (scrollLeft + clientWidth / 2) / scrollWidth
+  return within(
+    { scrollLeft, clientWidth, scrollWidth: nextWidth },
+    middle * nextWidth - clientWidth / 2,
+  )
+}

@@ -38,6 +38,8 @@ export {
   type KeySpan,
 } from './keyboard-layout'
 export {
+  keepCentre,
+  scrollToReveal,
   keysInView,
   scrollByOctave,
   scrollToCentre,

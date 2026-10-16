@@ -24,8 +24,8 @@ import { LiveKeyboard } from './LiveKeyboard'
 
 /**
  * A page's keyboard, pinned while the page scrolls (an explorer's, a tool's, a lesson's): `range` fills its width (by default the
- * middle octaves grown to hold the keys it opened on and the keys the app shows), and it keeps the
- * keys the app shows in view. A key a hand chooses (`selected`) never moves it: the keys hold still
+ * middle octaves grown to hold the keys it opened on, so the keys never change size as a page shows
+ * other keys), and it scrolls the keys the app shows into view, no further than that. A key a hand chooses (`selected`) never moves it: the keys hold still
  * under the finger (ADR 0009). It stays where the keyboard settings dock it, at the screen's foot over
  * the tab bar or at its top under the screen's bar; folded from its rail, it is a button floating
  * where it was (lowest among the screen's actions at the foot, under the screen's bar at the top)
@@ -86,7 +86,7 @@ export function PinnedKeyboard({
   }
   const body = (
     <LiveKeyboard
-      range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
+      range={range ?? keyboardRange(opened, MIDDLE_OCTAVES)}
       inView={rangeOf(showing) ?? rangeOf(opened)}
       marks={marks}
       outlined={outlined}
