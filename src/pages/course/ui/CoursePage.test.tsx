@@ -23,9 +23,9 @@ describe('A course', () => {
     expect(screen.getByText(`0 of ${total} learned`)).toBeInTheDocument()
     const facts = screen.getByRole('list', { name: 'About this course' })
     expect(facts).toHaveTextContent(`Advanced`)
-    expect(facts).toHaveTextContent(`Weeks: ${gorshkov.weeks}`)
-    expect(facts).toHaveTextContent(`Lessons: ${gorshkov.lessons.length}`)
-    expect(facts).toHaveTextContent(`Songs: ${gorshkov.songs.length}`)
+    expect(facts).toHaveTextContent(`${gorshkov.weeks} weeks`)
+    expect(facts).toHaveTextContent(`${gorshkov.lessons.length} lessons`)
+    expect(facts).toHaveTextContent(`${gorshkov.songs.length} songs`)
   })
 
   it('ends on its guided songs', async () => {

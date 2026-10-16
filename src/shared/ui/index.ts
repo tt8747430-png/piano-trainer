@@ -20,12 +20,11 @@ export {
   FabPill,
   FloatingActions,
   FloatingHost,
-  useFloatingLabels,
-  type FloatingPlace,
   PlayFab,
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
+export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
 export { MultiDropdown } from './MultiDropdown'

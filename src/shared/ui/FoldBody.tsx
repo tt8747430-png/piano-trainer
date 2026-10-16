@@ -22,6 +22,7 @@ export function FoldBody({
     <div
       id={id}
       inert={!open}
+      aria-hidden={!open || undefined}
       className={cn(
         'grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none',
         open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',

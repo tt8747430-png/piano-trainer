@@ -5,7 +5,11 @@ import { renderApp } from '@/app/testing/render-app'
 import type { Sound } from '@/shared/lib/schedule'
 
 /** The row's own Play: the first, before Between's ways each play theirs. */
-const playButton = () => screen.getAllByRole('button', { name: 'Play' })[0] ?? document.body
+/** The row's own Play, floating at the screen's foot. */
+const playButton = () =>
+  within(
+    document.querySelector<HTMLElement>('[data-slot="floating-actions"]') ?? document.body,
+  ).getByRole('button', { name: 'Play' })
 /** The progression's own row: the first on the page, before the rows Between shows. */
 const rowList = () => screen.getAllByRole('list', { name: 'Chords' })[0] ?? document.body
 const row = () =>

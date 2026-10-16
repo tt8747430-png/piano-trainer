@@ -12,20 +12,8 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
+import { FloatingContext, useFloatingLabels, type FloatingPlace } from './floating-context'
 import { Button } from './primitives/button'
-
-/** Where a screen's floating actions stand along its foot. */
-export type FloatingPlace = 'left' | 'center' | 'right'
-
-interface Floating {
-  /** The column they stand in; none until the host has drawn it. */
-  readonly column: HTMLElement | null
-  readonly place: FloatingPlace
-  /** Each says its name beside its icon; else the name is its tooltip and its screen reader's. */
-  readonly labels: boolean
-}
-
-const FloatingContext = createContext<Floating>({ column: null, place: 'right', labels: true })
 
 /**
  * How the actions line up, as the place they stand in: down an edge in a column, its main one
@@ -79,9 +67,6 @@ export function FloatingHost({
     </FloatingContext.Provider>
   )
 }
-
-/** Whether the floating actions say their names beside their icons. */
-export const useFloatingLabels = (): boolean => useContext(FloatingContext).labels
 
 /**
  * A screen's actions in the thumb's reach, floating at the foot of the screen over the page: its

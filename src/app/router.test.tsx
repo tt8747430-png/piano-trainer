@@ -3,7 +3,7 @@ import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
-import { SETTINGS_STORAGE_KEY } from '@/entities/settings'
+import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
 import { testContext } from '@/app/testing/test-context'
@@ -140,7 +140,7 @@ describe('the app shell', () => {
     const { settingsStore } = await renderApp('/', { storage })
     const newValue = JSON.stringify({
       state: { ...settingsStore.getState(), theme: 'dark' },
-      version: 1,
+      version: SETTINGS_VERSION,
     })
     storage.setItem(SETTINGS_STORAGE_KEY, newValue)
     act(
