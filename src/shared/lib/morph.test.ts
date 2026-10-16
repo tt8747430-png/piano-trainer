@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { morph } from './morph'
 
+let finish = () => {}
 const startViewTransition = vi.fn((update: () => void) => {
   update()
-  return {} as ViewTransition
+  const finished = new Promise<void>((resolve) => (finish = resolve))
+  return { finished } as ViewTransition
 })
 
 afterEach(() => {
@@ -36,5 +38,15 @@ describe('morph', () => {
     expect(startViewTransition).not.toHaveBeenCalled()
     expect(change).toHaveBeenCalledOnce()
     reduced.mockRestore()
+  })
+
+  it('names the way it goes on the page while it runs, so the motion can follow it', async () => {
+    Object.assign(document, { startViewTransition })
+    morph(() => {}, 'keys-unfold')
+    expect(document.documentElement.dataset['morph']).toBe('keys-unfold')
+    finish()
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(document.documentElement.dataset['morph']).toBeUndefined()
   })
 })

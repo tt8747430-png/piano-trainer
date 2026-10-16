@@ -22,7 +22,7 @@ function floatingColumn(): HTMLElement {
   column.id = COLUMN_ID
   column.dataset['slot'] = 'floating-actions'
   column.className =
-    'pointer-events-none fixed right-gutter bottom-docked z-20 mb-3 flex flex-col items-end gap-3 print:hidden landscape-phone:mb-safe-4 lg:mb-safe-4 [&>*]:pointer-events-auto'
+    'vt-floating pointer-events-none fixed right-gutter bottom-docked z-20 mb-3 flex flex-col items-end gap-3 print:hidden landscape-phone:mb-safe-4 lg:mb-safe-4 [&>*]:pointer-events-auto'
   document.body.append(column)
   return column
 }

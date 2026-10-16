@@ -391,7 +391,10 @@
   padding-bottom: calc(--spacing(--value(integer)) + var(--docked, 0px));
 }
 /* The keys and the button they fold into share one name, so folding morphs one into the other
-   (`morph`); the page under them changes at once. */
+   (`morph`); the page under them changes at once. The two are never stretched into each other's
+   shape: each keeps its own size in a frame that grows or shrinks from the corner they share (the
+   foot's right, or the top's), rounding as it nears the button, while the one leaving fades out
+   first and the one coming fades in after it. */
 @utility vt-keys {
   view-transition-name: keys;
 }
@@ -399,9 +402,74 @@
 ::view-transition-new(root) {
   animation: none;
 }
-::view-transition-group(keys) {
-  animation-duration: 260ms;
-  animation-timing-function: var(--ease-out);
+/* The screen's floating actions ride up and down with the keys under them, never jumping. */
+@utility vt-floating {
+  view-transition-name: floating-actions;
+}
+::view-transition-group(keys),
+::view-transition-group(floating-actions) {
+  animation-duration: 340ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-image-pair(keys) {
+  overflow: clip;
+}
+::view-transition-old(keys),
+::view-transition-new(keys) {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: right bottom;
+  mix-blend-mode: normal;
+}
+/* The actions keep their size, held from the column's top, so the button nearest the keys is the only
+   one to come or go. */
+::view-transition-old(floating-actions),
+::view-transition-new(floating-actions) {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: right top;
+}
+:root[data-morph$='-top']::view-transition-old(keys),
+:root[data-morph$='-top']::view-transition-new(keys) {
+  object-position: right top;
+}
+:root[data-morph^='keys-unfold']::view-transition-image-pair(keys) {
+  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+:root[data-morph^='keys-fold']::view-transition-image-pair(keys) {
+  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) reverse both;
+}
+:root[data-morph^='keys-unfold']::view-transition-old(keys) {
+  animation: keys-leave 120ms ease-out both;
+}
+:root[data-morph^='keys-unfold']::view-transition-new(keys) {
+  animation: keys-come 220ms 80ms ease-out both;
+}
+:root[data-morph^='keys-fold']::view-transition-old(keys) {
+  animation: keys-leave 180ms ease-out both;
+}
+:root[data-morph^='keys-fold']::view-transition-new(keys) {
+  animation: keys-come 180ms 160ms ease-out both;
+}
+@keyframes keys-square {
+  from {
+    border-radius: 1.75rem;
+  }
+  to {
+    border-radius: 0;
+  }
+}
+@keyframes keys-leave {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes keys-come {
+  from {
+    opacity: 0;
+  }
 }
 
 /* What is docked beside the rail or the sidebar starts where the screen does. */
