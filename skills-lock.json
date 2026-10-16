@@ -1,18 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "angular-developer": {
-      "source": "angular/skills",
-      "sourceType": "github",
-      "skillPath": "angular-developer/SKILL.md",
-      "computedHash": "258cc410839924d8c2b31afe9dd7349a1c03b9215ddba7942a87ce976c894adb"
-    },
-    "angular-new-app": {
-      "source": "angular/skills",
-      "sourceType": "github",
-      "skillPath": "angular-new-app/SKILL.md",
-      "computedHash": "49bd84ab08bd3498c52f476bed48fbb942dc6dbc0925607e84549adbed34bccf"
-    },
     "ask-matt": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -294,12 +282,6 @@
       "sourceType": "github",
       "skillPath": "skills/react-best-practices/SKILL.md",
       "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
-    },
-    "vercel-react-native-skills": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/react-native-skills/SKILL.md",
-      "computedHash": "41d24eafa7c3d82e270439808f7cfbc4d51aeb2d14f2809a2267c16275784d06"
     },
     "vercel-react-view-transitions": {
       "source": "vercel-labs/agent-skills",
