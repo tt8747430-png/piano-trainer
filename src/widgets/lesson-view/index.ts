@@ -1,1 +1,1 @@
-export { LessonView, type LessonTrack, type TrackLink } from './ui/LessonView'
+export { LessonView, type UpLink } from './ui/LessonView'

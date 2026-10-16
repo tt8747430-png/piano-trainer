@@ -5,10 +5,13 @@ export const settings = {
   layout: { label: 'Layout', titles: { label: 'Page titles', large: 'Large', small: 'Small' } },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',
-  lessons: {
-    label: 'Lessons',
-    fingers: 'Show the fingers',
-    fingersNote: 'A lesson’s scales carry the fingers that play them, on the keys and the staff',
+  // A screen's floating actions (ADR 0058): where they stand, and whether they say their names.
+  floating: {
+    label: 'Floating buttons',
+    place: 'Where they stand',
+    places: { left: 'Left', center: 'Middle', right: 'Right' },
+    labels: 'Show their names',
+    labelsNote: 'Else each is its icon alone; its name shows when you point at it',
   },
   progress: {
     label: 'Progress',

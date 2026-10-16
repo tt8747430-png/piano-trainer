@@ -48,11 +48,36 @@ function BarNames({ layout, names }: { layout: ScoreLayout; names: readonly Said
   )
 }
 
+/** The two staves' lines, top to bottom, and where each clef sits, in the drawing's units. */
+const TREBLE_LINES = [20, 30, 40, 50, 60]
+const BASS_LINES = [100, 110, 120, 130, 140]
+
+/** A grand staff with nothing on it yet, faint: where the chords played will be written. */
+function EmptyStaff({ label }: { label: string }) {
+  return (
+    <section aria-label={label} className="w-full max-w-sm text-muted-foreground/45">
+      <svg aria-hidden viewBox="0 0 320 160" className="h-32 w-full" preserveAspectRatio="none">
+        {[...TREBLE_LINES, ...BASS_LINES].map((y) => (
+          <line key={y} x1="0" x2="320" y1={y} y2={y} stroke="currentColor" strokeWidth="1" />
+        ))}
+        <line x1="0.5" x2="0.5" y1="20" y2="140" stroke="currentColor" />
+        <line x1="319.5" x2="319.5" y1="20" y2="140" stroke="currentColor" />
+        <text x="6" y="58" fontFamily="Noto Music" fontSize="46" fill="currentColor">
+          𝄞
+        </text>
+        <text x="6" y="122" fontFamily="Noto Music" fontSize="40" fill="currentColor">
+          𝄢
+        </text>
+      </svg>
+    </section>
+  )
+}
+
 /**
  * The chords played (ADR 0054), oldest first, each a whole note in a bar of its own on a grand staff,
  * spelled in the key chosen and named over its bar, the newest last; for a screen reader, the names
  * in order, as wide as its bars. Where the chords are not remembered, it writes the one chord down
- * now; nothing at all before a chord is played.
+ * now; before a chord is played, an empty grand staff.
  */
 export function ChordTrail({
   chords,
@@ -117,13 +142,11 @@ export function ChordTrail({
     const element = scroller.current
     if (element) element.scrollLeft = element.scrollWidth
   }, [shown.length])
-  // Nothing played: no staff, the page's prompt says what to do.
-  if (chords.length === 0) return null
+  const name = remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')
+  // Nothing played: the grand staff waits, its lines faint, for the first chord.
+  if (chords.length === 0) return <EmptyStaff label={name} />
   return (
-    <section
-      aria-label={remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')}
-      className="w-fit max-w-full self-start card px-3 pb-2"
-    >
+    <section aria-label={name} className="max-w-full">
       <div
         ref={scroller}
         className={cn(

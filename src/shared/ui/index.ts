@@ -19,6 +19,9 @@ export {
   Fab,
   FabPill,
   FloatingActions,
+  FloatingHost,
+  useFloatingLabels,
+  type FloatingPlace,
   PlayFab,
   SpeedDial,
   SpeedDialAction,
@@ -36,6 +39,7 @@ export { Docked } from './Docked'
 export { Pinned } from './Pinned'
 export { PlayLabel } from './PlayLabel'
 export { PlayButton } from './PlayButton'
+export { SheetOption } from './SheetOption'
 export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {

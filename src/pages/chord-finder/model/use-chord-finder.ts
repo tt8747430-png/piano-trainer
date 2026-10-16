@@ -35,9 +35,6 @@ interface ChordFinder {
   setRemember(on: boolean): void
   /** Whether the keys the chord is in are shown. */
   readonly inKeys: boolean
-  /** Whether the staff is shown. */
-  readonly staffShown: boolean
-  setStaffShown(on: boolean): void
   setInKeys(on: boolean): void
   /** Whether an inversion is named over its bass. */
   readonly slash: boolean
@@ -127,8 +124,6 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
       setChordFinder(store, { remember: on })
     },
     inKeys: settings.inKeys,
-    staffShown: settings.staff,
-    setStaffShown: (on) => setChordFinder(store, { staff: on }),
     setInKeys: (on) => setChordFinder(store, { inKeys: on }),
     slash: settings.slash,
     setSlash: (on) => setChordFinder(store, { slash: on }),

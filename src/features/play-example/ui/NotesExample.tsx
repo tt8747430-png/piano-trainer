@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, type NoteLineMeter } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayButton, type ShownKeys } from '@/shared/ui'
+import { PlayButton, SheetOption, type ShownKeys } from '@/shared/ui'
 import { barOf, barShown } from '../model/notes-example'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
 import { TappableStaff } from './TappableStaff'
@@ -16,7 +16,7 @@ const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { treble: 'rh', bass: 'l
 /**
  * A line of notes to read, on the staff it is read on, and Play beside it, which plays it on the
  * page's keys a bar at a time: each note marked on the staff as it sounds, the keys showing only the
- * bar it is in.
+ * bar it is in. Its notes' names show on the staff from its own toggle.
  */
 export function NotesExample({
   notes,
@@ -38,6 +38,7 @@ export function NotesExample({
     [notes, clef, meter, keyParam],
   )
   const score = useMemo(() => notate(line), [line])
+  const [names, setNames] = useState(false)
   const follow = playback.playing === 'line' ? playback.handle : null
   const at = useStaffPlayhead(follow, line, LINE_TEMPO)
   // As the line plays the keys turn to each bar it reaches, once each.
@@ -57,9 +58,16 @@ export function NotesExample({
           staff={clef}
           tempo={LINE_TEMPO}
           follow={follow}
+          names={names}
           onShow={onShow}
         />
       </div>
+      <SheetOption
+        glyph="C E"
+        label={t('sheet.noteNames')}
+        pressed={names}
+        onPressedChange={setNames}
+      />
       <PlayButton
         label={t('play')}
         playing={playback.playing === 'line'}

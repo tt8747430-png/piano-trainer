@@ -14,25 +14,70 @@ import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
 import { Button } from './primitives/button'
 
-/** The one column every screen's floating actions stand in, made once, at the end of the page. */
-function floatingColumn(): HTMLElement {
-  const made = document.getElementById(COLUMN_ID)
-  if (made) return made
-  const column = document.createElement('div')
-  column.id = COLUMN_ID
-  column.dataset['slot'] = 'floating-actions'
-  column.className =
-    'vt-floating pointer-events-none fixed right-gutter bottom-docked z-20 mb-3 flex flex-col items-end gap-3 print:hidden landscape-phone:mb-safe-4 lg:mb-safe-4 [&>*]:pointer-events-auto'
-  document.body.append(column)
-  return column
+/** Where a screen's floating actions stand along its foot. */
+export type FloatingPlace = 'left' | 'center' | 'right'
+
+interface Floating {
+  /** The column they stand in; none until the host has drawn it. */
+  readonly column: HTMLElement | null
+  readonly place: FloatingPlace
+  /** Each says its name beside its icon; else the name is its tooltip and its screen reader's. */
+  readonly labels: boolean
 }
-const COLUMN_ID = 'floating-actions'
+
+const FloatingContext = createContext<Floating>({ column: null, place: 'right', labels: true })
+
+/** How a column's actions line up, as the place they stand in. */
+const ALIGN: Readonly<Record<FloatingPlace, string>> = {
+  left: 'items-start',
+  center: 'items-center',
+  right: 'items-end',
+}
 
 /**
- * A screen's actions in the thumb's reach, floating at the foot of the screen over the page, the tab
- * bar and the keys docked there: its main one a large round `Fab`, the rest folded into a
- * `SpeedDial` beside it. Every part of a screen that floats an action stands in one column, the
- * first to come highest, so none covers another. The page under it pads its foot clear of them.
+ * The one column every screen's floating actions stand in, at the foot of the screen over the tab
+ * bar and the keys docked there, the width of the screen beside a rail or a sidebar: at its left,
+ * its middle or its right, as the learner chose, each action with its name or its icon alone.
+ */
+export function FloatingHost({
+  place,
+  labels,
+  children,
+}: {
+  place: FloatingPlace
+  labels: boolean
+  children: ReactNode
+}) {
+  const [column, setColumn] = useState<HTMLElement | null>(null)
+  return (
+    <FloatingContext.Provider value={{ column, place, labels }}>
+      {children}
+      <div
+        className={cn(
+          'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter print:hidden landscape-phone:left-rail landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+          place === 'left' && 'justify-start',
+          place === 'center' && 'justify-center',
+          place === 'right' && 'justify-end',
+        )}
+      >
+        <div
+          ref={setColumn}
+          data-slot="floating-actions"
+          className={cn('vt-floating flex flex-col gap-3 [&>*]:pointer-events-auto', ALIGN[place])}
+        />
+      </div>
+    </FloatingContext.Provider>
+  )
+}
+
+/** Whether the floating actions say their names beside their icons. */
+export const useFloatingLabels = (): boolean => useContext(FloatingContext).labels
+
+/**
+ * A screen's actions in the thumb's reach, floating at the foot of the screen over the page: its
+ * main one a large round `Fab`, the rest folded into a `SpeedDial` beside it. Every part of a screen
+ * that floats an action stands in the host's one column, the first to come highest, so none covers
+ * another. The page under it pads its foot clear of them.
  */
 export function FloatingActions({
   last = false,
@@ -48,11 +93,13 @@ export function FloatingActions({
   className?: string
   children: ReactNode
 }) {
+  const { column, place } = useContext(FloatingContext)
+  if (!column) return null
   return createPortal(
-    <div className={cn('flex flex-col items-end gap-3', last && 'order-last', className)}>
+    <div className={cn('flex flex-col gap-3', ALIGN[place], last && 'order-last', className)}>
       {children}
     </div>,
-    floatingColumn(),
+    column,
   )
 }
 
@@ -99,16 +146,33 @@ export function PlayFab({
   )
 }
 
-/** A second action beside the main one, always in sight: its words and its icon on a floating pill. */
+/**
+ * A second action beside the main one, always in sight: its words and its icon on a floating pill,
+ * or its icon alone on a round button where the floating actions say no names.
+ */
 export function FabPill({
   label,
   icon: Icon,
   className,
   ...props
-}: { label: string; icon?: LucideIcon } & Omit<
+}: { label: string; icon: LucideIcon } & Omit<
   ComponentProps<typeof Button>,
   'children' | 'size' | 'variant'
 >) {
+  const labels = useFloatingLabels()
+  if (!labels)
+    return (
+      <Button
+        variant="surface"
+        size="icon-lg"
+        aria-label={label}
+        title={label}
+        className={cn('rounded-full shadow-md shadow-foreground/10', className)}
+        {...props}
+      >
+        <Icon aria-hidden />
+      </Button>
+    )
   return (
     <Button
       variant="surface"
@@ -117,7 +181,7 @@ export function FabPill({
       {...props}
     >
       {label}
-      {Icon ? <Icon data-icon="inline-end" aria-hidden /> : null}
+      <Icon data-icon="inline-end" aria-hidden />
     </Button>
   )
 }
@@ -141,6 +205,7 @@ export function SpeedDial({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
+  const { place } = useContext(FloatingContext)
   const [open, setOpen] = useState(false)
   const id = useId()
   const name = label ?? t('moreActions')
@@ -151,7 +216,7 @@ export function SpeedDial({
         <div aria-hidden className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
       ) : null}
       <div
-        className="flex flex-col items-end gap-3"
+        className={cn('flex flex-col gap-3', ALIGN[place])}
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || !open) return
           event.stopPropagation()
@@ -159,7 +224,7 @@ export function SpeedDial({
         }}
       >
         {open ? (
-          <ul id={id} aria-label={name} className="flex flex-col items-end gap-1.5">
+          <ul id={id} aria-label={name} className={cn('flex flex-col gap-1.5', ALIGN[place])}>
             {children}
           </ul>
         ) : null}
@@ -182,7 +247,7 @@ export function SpeedDial({
 
 /**
  * One of a dial's actions: a small round icon with its name in a quiet chip beside it, the two one
- * target. A button, or what `render` makes it (a link, which may do something on the way,
+ * target; the icon alone where the floating actions say no names. A button, or what `render` makes it (a link, which may do something on the way,
  * `onClick`); either folds the dial once chosen.
  */
 export function SpeedDialAction({
@@ -200,6 +265,7 @@ export function SpeedDialAction({
   disabled?: boolean
 }) {
   const close = useContext(CloseDial)
+  const { place, labels } = useContext(FloatingContext)
   const look =
     'group/action h-12 gap-2 rounded-full border-0 bg-transparent p-0 shadow-none hover:bg-transparent motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-150'
   const choose = () => {
@@ -208,7 +274,12 @@ export function SpeedDialAction({
   }
   const face = (
     <>
-      <span className="rounded-full border border-border bg-card px-2.5 py-1 text-sm font-medium shadow-sm shadow-foreground/10">
+      <span
+        className={cn(
+          'rounded-full border border-border bg-card px-2.5 py-1 text-sm font-medium shadow-sm shadow-foreground/10',
+          !labels && 'sr-only',
+        )}
+      >
         {label}
       </span>
       <span className="grid size-12 place-items-center rounded-full border border-input bg-card shadow-md shadow-foreground/10 transition-colors group-hover/action:bg-muted">
@@ -219,11 +290,23 @@ export function SpeedDialAction({
   return (
     <li>
       {render ? (
-        <ButtonLink variant="ghost" render={render} onClick={choose} className={look}>
+        <ButtonLink
+          variant="ghost"
+          render={render}
+          onClick={choose}
+          title={labels ? undefined : label}
+          className={cn(look, place === 'left' && 'flex-row-reverse')}
+        >
           {face}
         </ButtonLink>
       ) : (
-        <Button variant="ghost" disabled={disabled} onClick={choose} className={look}>
+        <Button
+          variant="ghost"
+          disabled={disabled}
+          onClick={choose}
+          title={labels ? undefined : label}
+          className={cn(look, place === 'left' && 'flex-row-reverse')}
+        >
           {face}
         </Button>
       )}

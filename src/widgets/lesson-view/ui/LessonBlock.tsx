@@ -1,4 +1,3 @@
-import { selectLesson, useSettings } from '@/entities/settings'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -53,7 +52,6 @@ export function LessonBlock({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const { fingers } = useSettings(selectLesson)
   switch (block.kind) {
     case 'text':
       return (
@@ -85,14 +83,7 @@ export function LessonBlock({
     case 'grid':
       return <ChordExamples symbols={gridSymbols(block.quality)} onShow={onShow} />
     case 'scale':
-      return (
-        <ScaleExample
-          root={noteParam(block.root)}
-          kind={block.scale}
-          fingers={fingers}
-          onShow={onShow}
-        />
-      )
+      return <ScaleExample root={noteParam(block.root)} kind={block.scale} onShow={onShow} />
     case 'interval':
       return <IntervalCard root={noteParam(block.root)} name={block.interval} onShow={onShow} />
     case 'notes':

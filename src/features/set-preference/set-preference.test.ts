@@ -5,7 +5,7 @@ import { midi } from '@/shared/lib/music'
 import {
   rememberChords,
   setAutoNext,
-  setLessonFingers,
+  setFloating,
   setChordFinder,
   setKeyboard,
   setLocale,
@@ -95,11 +95,12 @@ describe('set-preference', () => {
     expect(saved(storage).midi).toMatchObject({ device: 'Piano', touch: 'light', sound: false })
   })
 
-  it('setLessonFingers saves whether a lesson’s scales carry their fingers', () => {
-    const storage = createMemoryStorage()
-    const store = createSettingsStore({ storage, languages: ['en'] })
-    setLessonFingers(store, false)
-    expect(saved(storage).lesson).toEqual({ fingers: false })
+  it('setFloating saves where the floating actions stand and keeps whether they say their names', () => {
+    const { storage, store } = setUp()
+    setFloating(store, { place: 'right' })
+    expect(saved(storage).floating).toEqual({ place: 'right', labels: false })
+    setFloating(store, { labels: true })
+    expect(store.getState().floating).toEqual({ place: 'right', labels: true })
   })
 
   it('setAutoNext saves whether a trainer moves on by itself', () => {
@@ -131,7 +132,6 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: true,
       inKeys: true,
-      staff: true,
       slash: true,
       chords: [C, C],
     })
@@ -143,7 +143,6 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: false,
       inKeys: false,
-      staff: true,
       slash: false,
       chords: [],
     })

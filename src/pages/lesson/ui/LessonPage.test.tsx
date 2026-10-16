@@ -77,29 +77,28 @@ describe('A lesson', () => {
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
   })
 
-  it('shows or hides the fingers on its scales from its bar', async () => {
+  it('shows or hides the fingers on each scale from its own card', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/lessons/minor-scales')
-    const bar = await screen.findByRole('toolbar', { name: 'Lesson' })
-    const fingers = within(bar).getByRole('button', { name: 'Fingers on the scales' })
-    expect(fingers).toHaveAttribute('aria-pressed', 'true')
-    await user.click(fingers)
-    expect(settingsStore.getState().lesson.fingers).toBe(false)
+    await renderApp('/lessons/minor-scales')
+    const [first, second] = await screen.findAllByRole('button', { name: 'Fingers' })
+    expect(first).toHaveAttribute('aria-pressed', 'true')
+    await user.click(first!)
+    expect(first).toHaveAttribute('aria-pressed', 'false')
+    expect(second).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('offers no fingers where it plays no scale', async () => {
-    await renderApp('/lessons/reading-chord-symbols')
-    await screen.findByRole('toolbar', { name: 'Lesson' })
-    expect(screen.queryByRole('button', { name: 'Fingers on the scales' })).not.toBeInTheDocument()
+  it('has Learned in its bar', async () => {
+    const user = userEvent.setup()
+    const { progressStore } = await renderApp('/lessons/reading-chord-symbols')
+    await user.click(await screen.findByRole('button', { name: 'Learned' }))
+    expect(progressStore.getState().learned['lesson:reading-chord-symbols']).toBeDefined()
   })
 
   it('leads back to the lesson before it, and has none before its journey’s first', async () => {
     await renderApp('/lessons/reading-notes')
-    const before = await screen.findAllByRole('link', { name: /^Previous lesson/ })
-    expect(before.map((link) => link.getAttribute('href'))).toEqual([
-      '/lessons/finding-home',
-      '/lessons/finding-home',
-    ])
+    expect(
+      (await screen.findByRole('link', { name: /^Previous lesson/ })).getAttribute('href'),
+    ).toBe('/lessons/finding-home')
   })
 
   it('is learned once the learner goes on to the next lesson', async () => {

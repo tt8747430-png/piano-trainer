@@ -8,7 +8,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
-  DEFAULT_LESSON,
+  DEFAULT_FLOATING,
   defaultKeyboard,
 } from './types'
 
@@ -27,7 +27,7 @@ const DEFAULTS = {
   titles: 'large',
   practice: DEFAULT_PRACTICE,
   trainer: DEFAULT_TRAINER,
-  lesson: DEFAULT_LESSON,
+  floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
@@ -86,7 +86,7 @@ describe('createSettingsStore', () => {
         recording: false,
       },
       trainer: { autoNext: true },
-      lesson: { fingers: false },
+      floating: { place: 'right', labels: true },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
@@ -112,7 +112,6 @@ describe('createSettingsStore', () => {
       chordFinder: {
         remember: true,
         inKeys: false,
-        staff: false,
         slash: false,
         chords: [
           [48, 52, 55],
@@ -129,7 +128,6 @@ describe('createSettingsStore', () => {
     expect(restored({ chordFinder: { remember: 'yes', chords } }).chordFinder).toEqual({
       remember: false,
       inKeys: true,
-      staff: true,
       slash: true,
       chords: [
         [60, 64, 67],
@@ -259,9 +257,15 @@ describe('createSettingsStore', () => {
     expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
   })
 
-  it('shows a lesson’s fingers unless a save says otherwise', () => {
-    expect(restored({ lesson: { fingers: 'no' } }).lesson).toEqual({ fingers: true })
-    expect(restored({ lesson: { fingers: false } }).lesson).toEqual({ fingers: false })
+  it('keeps the floating actions where saved, in the middle and wordless where not valid', () => {
+    expect(restored({ floating: { place: 'top', labels: 'yes' } }).floating).toEqual({
+      place: 'center',
+      labels: false,
+    })
+    expect(restored({ floating: { place: 'left', labels: true } }).floating).toEqual({
+      place: 'left',
+      labels: true,
+    })
   })
 
   it('gives a setting never saved its default, keeping the rest', () => {

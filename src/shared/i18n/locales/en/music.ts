@@ -165,6 +165,10 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
+    // A staff's own options, inline on its card (ADR 0058).
+    fingers: 'Fingers',
+    noteNames: 'Note names',
+    chordNames: 'Chord names',
     loading: 'Loading the music',
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',
@@ -180,6 +184,7 @@ export const music = {
   play: 'Play',
   playNotes: 'Play {{notes}}',
   playBar: 'Play bar {{n}}',
+  playBarChord: 'Play bar {{n}}, {{symbol}}',
   // A row of chords that play, named for a screen reader.
   rowChords: 'Chords',
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.

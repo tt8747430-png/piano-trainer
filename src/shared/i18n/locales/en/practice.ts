@@ -183,8 +183,9 @@ export const practice = {
   },
   // The Chord finder (ADR 0054): a chord played or tapped, named, spelled and written.
   chordFinder: {
-    prompt: 'Play a chord on your keyboard, or tap its keys.',
-    promptFolded: 'Play a chord on your MIDI keyboard, or show the keys to tap one.',
+    promptTitle: 'Play a chord',
+    prompt: 'On your MIDI keyboard, or tap its keys.',
+    promptFolded: 'On your MIDI keyboard, or show the keys to tap one.',
     none: 'No chord matches these notes.',
     note: 'One note',
     powerChord: 'Power chord',
@@ -207,7 +208,6 @@ export const practice = {
     remember: 'Remember',
     rememberDetail: 'The last {{count}}',
     inKeysShown: 'Its keys',
-    staffShown: 'Staff',
     slash: 'Over the bass',
     // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
     inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },

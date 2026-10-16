@@ -1,13 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  CornerLeftUp,
-  ListOrdered,
-} from 'lucide-react'
-import { useMemo, useReducer, useState, type ReactElement, type ReactNode } from 'react'
+import { ChevronLeft, ChevronRight, CornerLeftUp, ListOrdered } from 'lucide-react'
+import { useMemo, useReducer, useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -51,25 +44,14 @@ const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
     ),
   )
 
-/** A way out of a lesson, a router `Link`: what it is part of, the lesson before it, the way on. */
-export interface TrackLink {
+/** Where a lesson leads up to, a router `Link`: what it is part of, by name. */
+export interface UpLink {
   readonly link: ReactElement
-  /** What the way is: Previous lesson, Next lesson, Back to the journey. */
+  /** Where it goes: The course, Back to the journey. */
   readonly label: string
-  /** The lesson or the place it leads to, by name. */
-  readonly title?: string
-  /** Done on the way: going on learns the lesson. */
-  readonly onGo?: () => void
+  /** What it is part of, by name. */
+  readonly title: string
 }
-
-/** Where a lesson leads: up to what it is part of, back to the lesson before, on to the next. */
-export interface LessonTrack {
-  readonly up: TrackLink
-  readonly previous?: TrackLink
-  readonly next: TrackLink
-}
-
-const named = (way: TrackLink) => (way.title ? `${way.label}: ${way.title}` : way.label)
 
 /** A lesson's sections, each a link to its heading, the one being read in bold. */
 function SectionLinks({
@@ -111,30 +93,19 @@ function SectionLinks({
   )
 }
 
-/** A way out of the lesson as a row of the contents' sheet: its picture, what it is, where to. */
-function TrackRow({
-  way,
-  icon: Icon,
-  onGo,
-}: {
-  way: TrackLink
-  icon: typeof ChevronLeft
-  onGo: () => void
-}) {
+/** What the lesson is part of, as the contents' last row: its picture, where it goes, by name. */
+function UpRow({ up, onGo }: { up: UpLink; onGo: () => void }) {
   return (
     <ButtonLink
       variant="ghost"
-      onClick={() => {
-        way.onGo?.()
-        onGo()
-      }}
+      onClick={onGo}
       className="h-auto min-h-12 justify-start gap-3 rounded-xl px-2 py-2 text-left whitespace-normal"
-      render={way.link}
+      render={up.link}
     >
-      <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <CornerLeftUp aria-hidden className="size-5 shrink-0 text-muted-foreground" />
       <span className="flex min-w-0 flex-col">
-        <span className="text-xs font-medium text-muted-foreground">{way.label}</span>
-        {way.title ? <span className="font-semibold text-pretty">{way.title}</span> : null}
+        <span className="text-xs font-medium text-muted-foreground">{up.label}</span>
+        <span className="font-semibold text-pretty">{up.title}</span>
       </span>
     </ButtonLink>
   )
@@ -144,21 +115,17 @@ const DOCK_BUTTON = 'rounded-full'
 
 /**
  * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
- * how many (opening the contents, with the ways out of the lesson), › the next; before the first
- * section ‹ is the lesson before, past the last › is the way on, in honey, which learns the lesson.
- * Then the lesson's own `tools`. A jump between sections replaces the page's entry, as a contents link
- * does: Back still leaves the lesson.
+ * how many (opening the contents, and what the lesson is part of), › the next. A jump between
+ * sections replaces the page's entry, as a contents link does: Back still leaves the lesson.
  */
 function LessonBar({
   lesson,
   reading,
-  track,
-  tools,
+  up,
 }: {
   lesson: Lesson
   reading: string | null
-  track: LessonTrack
-  tools?: ReactNode
+  up: UpLink
 }) {
   const { t } = useTranslation('learn')
   const [open, setOpen] = useState(false)
@@ -167,64 +134,37 @@ function LessonBar({
     lesson.sections.findIndex((_, s) => sectionId(s) === reading),
     0,
   )
-  const section = (to: number, label: string, Icon: typeof ChevronLeft) => (
-    <ButtonLink
-      variant="ghost"
-      size="icon"
-      aria-label={label}
-      title={label}
-      className={DOCK_BUTTON}
-      render={<Link to="." hash={sectionId(to)} replace />}
-    >
-      <Icon aria-hidden />
-    </ButtonLink>
-  )
-  const leave = (way: TrackLink, Icon: typeof ChevronLeft, primary: boolean) => (
-    <ButtonLink
-      variant={primary ? 'default' : 'ghost'}
-      size="icon"
-      aria-label={named(way)}
-      title={named(way)}
-      onClick={way.onGo}
-      className={DOCK_BUTTON}
-      render={way.link}
-    >
-      <Icon aria-hidden />
-    </ButtonLink>
-  )
-  const back =
-    at > 0 ? (
-      section(at - 1, t('previousSection'), ChevronLeft)
-    ) : track.previous ? (
-      leave(track.previous, ChevronsLeft, false)
-    ) : (
-      <Button
+  const section = (to: number, label: string, Icon: typeof ChevronLeft) =>
+    to >= 0 && to < of ? (
+      <ButtonLink
         variant="ghost"
         size="icon"
-        aria-label={t('previousSection')}
-        disabled
+        aria-label={label}
+        title={label}
         className={DOCK_BUTTON}
+        render={<Link to="." hash={sectionId(to)} replace />}
       >
-        <ChevronLeft aria-hidden />
+        <Icon aria-hidden />
+      </ButtonLink>
+    ) : (
+      <Button variant="ghost" size="icon" aria-label={label} disabled className={DOCK_BUTTON}>
+        <Icon aria-hidden />
       </Button>
     )
-  const on =
-    at < of - 1
-      ? section(at + 1, t('nextSection'), ChevronRight)
-      : leave(track.next, ArrowRight, true)
   return (
     <div
       role="toolbar"
       aria-label={t('lessonBar')}
       className="flex items-center gap-0.5 rounded-full border border-input bg-card p-1 shadow-lg shadow-foreground/15"
     >
-      {back}
+      {section(at - 1, t('previousSection'), ChevronLeft)}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           render={
             <Button
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
+              title={t('contents')}
               className="rounded-full px-3"
             />
           }
@@ -234,30 +174,13 @@ function LessonBar({
             {at + 1}/{of}
           </span>
         </SheetTrigger>
-        <SheetContent
-          title={t('contents')}
-          footer={
-            <nav aria-label={t('track.label')} className="flex flex-col gap-1">
-              {track.previous ? (
-                <TrackRow way={track.previous} icon={ChevronsLeft} onGo={() => setOpen(false)} />
-              ) : null}
-              <TrackRow way={track.next} icon={ArrowRight} onGo={() => setOpen(false)} />
-              <TrackRow way={track.up} icon={CornerLeftUp} onGo={() => setOpen(false)} />
-            </nav>
-          }
-        >
+        <SheetContent title={t('contents')} footer={<UpRow up={up} onGo={() => setOpen(false)} />}>
           <nav aria-label={t('contents')}>
             <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
           </nav>
         </SheetContent>
       </Sheet>
-      {on}
-      {tools ? (
-        <>
-          <span aria-hidden className="mx-1 h-6 w-px bg-border" />
-          {tools}
-        </>
-      ) : null}
+      {section(at + 1, t('nextSection'), ChevronRight)}
     </div>
   )
 }
@@ -265,19 +188,10 @@ function LessonBar({
 /**
  * A lesson read top to bottom over the page's keys: they show the example played last, or the open
  * question, whose answer the learner chooses on them. Its bar floats in the thumb's reach: the
- * sections one by one, its contents and the ways out of it (`track`), and its own `tools`. A jump
- * lands its heading clear of pinned keys by the page's scroll padding (`theme.css`).
+ * sections one by one and its contents, with what it is part of (`up`). A jump lands its heading
+ * clear of pinned keys by the page's scroll padding (`theme.css`).
  */
-export function LessonView({
-  lesson,
-  track,
-  tools,
-}: {
-  lesson: Lesson
-  track: LessonTrack
-  /** The lesson's own buttons at the end of its bar (the fingers on its scales). */
-  tools?: ReactNode
-}) {
+export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
@@ -351,7 +265,7 @@ export function LessonView({
         ))}
       </div>
       <FloatingActions>
-        <LessonBar lesson={lesson} reading={reading} track={track} tools={tools} />
+        <LessonBar lesson={lesson} reading={reading} up={up} />
       </FloatingActions>
     </div>
   )

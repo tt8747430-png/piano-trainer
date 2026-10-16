@@ -1,3 +1,4 @@
+import { AudioLines, Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
@@ -97,6 +98,7 @@ export function ChordExplorer({
       <FloatingActions>
         <FabPill
           label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
+          icon={playback.playing === 'arpeggio' ? Square : AudioLines}
           aria-pressed={playback.playing === 'arpeggio'}
           onClick={() => sound('arpeggio')}
         />

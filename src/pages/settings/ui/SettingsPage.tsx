@@ -1,8 +1,10 @@
+import { ArrowDown, ArrowDownLeft, ArrowDownRight } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import {
-  selectLesson,
+  FLOATING_PLACES,
+  selectFloating,
   selectLocale,
   selectTheme,
   selectTitles,
@@ -16,7 +18,7 @@ import { BackupFields } from '@/features/backup-data'
 import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { resetProgress } from '@/features/reset-progress'
-import { setLessonFingers, setLocale, setTheme, setTitles } from '@/features/set-preference'
+import { setFloating, setLocale, setTheme, setTitles } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { BackButton, ScreenHeader, Segmented, SettingField, SwitchRow } from '@/shared/ui'
@@ -61,6 +63,13 @@ function Group({
   )
 }
 
+/** Each place the floating actions can stand, drawn as the corner of the screen's foot it is. */
+const PLACE_ICON = {
+  left: ArrowDownLeft,
+  center: ArrowDown,
+  right: ArrowDownRight,
+} as const
+
 export function SettingsPage() {
   const { t } = useTranslation('settings')
   const settings = useSettingsStoreApi()
@@ -68,7 +77,7 @@ export function SettingsPage() {
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
   const titles = useSettings(selectTitles)
-  const lesson = useSettings(selectLesson)
+  const floating = useSettings(selectFloating)
   const [confirming, setConfirming] = useState(false)
   const reset = () => {
     resetProgress(progress)
@@ -107,12 +116,27 @@ export function SettingsPage() {
         <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
           <KeyboardSettingsFields />
         </Group>
-        <Group title={t('lessons.label')}>
+        <Group title={t('floating.label')}>
+          <SettingField label={t('floating.place')}>
+            <Segmented
+              label={t('floating.place')}
+              value={floating.place}
+              options={FLOATING_PLACES.map((value) => {
+                const Icon = PLACE_ICON[value]
+                return {
+                  value,
+                  label: t(`floating.places.${value}`),
+                  icon: <Icon aria-hidden className="size-5" />,
+                }
+              })}
+              onChange={(place) => setFloating(settings, { place })}
+            />
+          </SettingField>
           <SwitchRow
-            label={t('lessons.fingers')}
-            detail={t('lessons.fingersNote')}
-            checked={lesson.fingers}
-            onCheckedChange={(on) => setLessonFingers(settings, on)}
+            label={t('floating.labels')}
+            detail={t('floating.labelsNote')}
+            checked={floating.labels}
+            onCheckedChange={(labels) => setFloating(settings, { labels })}
             className="border-b-0"
           />
         </Group>

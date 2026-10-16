@@ -56,9 +56,16 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-export interface LessonSettings {
-  /** A scale's keys and staff carry the fingers that play it. */
-  readonly fingers: boolean
+/** Where a screen's floating actions stand along its foot (ADR 0058). */
+export const FLOATING_PLACES = ['left', 'center', 'right'] as const
+export type FloatingPlace = (typeof FLOATING_PLACES)[number]
+export const isFloatingPlace = (value: unknown): value is FloatingPlace =>
+  FLOATING_PLACES.includes(value as FloatingPlace)
+
+/** A screen's floating actions: where they stand, and whether each says its name beside its icon. */
+export interface FloatingSettings {
+  readonly place: FloatingPlace
+  readonly labels: boolean
 }
 
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
@@ -113,8 +120,6 @@ export interface ChordFinderSettings {
   readonly remember: boolean
   /** The keys the chord is in, each with its numeral, shown under it. */
   readonly inKeys: boolean
-  /** The staff that writes the chords down is shown. */
-  readonly staff: boolean
   /** An inversion named over its bass (`C/E`); else by its root alone (`C`), its inversion said. */
   readonly slash: boolean
   /** The chords remembered, oldest first, each its keys lowest first. */
@@ -136,7 +141,7 @@ export interface SettingsState {
   locale: Locale
   practice: PracticeToggles
   trainer: TrainerSettings
-  lesson: LessonSettings
+  floating: FloatingSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
@@ -158,7 +163,8 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
-export const DEFAULT_LESSON: LessonSettings = { fingers: true }
+/** In the thumbs' middle, icons alone: a name is the button's tooltip and its screen reader's. */
+export const DEFAULT_FLOATING: FloatingSettings = { place: 'center', labels: false }
 
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
@@ -181,7 +187,6 @@ export const DEFAULT_SIDEBAR: Sidebar = 'open'
 export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
   remember: false,
   inKeys: true,
-  staff: true,
   slash: true,
   chords: [],
 }

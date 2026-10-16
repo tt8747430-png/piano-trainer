@@ -16,7 +16,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
-  DEFAULT_LESSON,
+  DEFAULT_FLOATING,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
@@ -24,6 +24,7 @@ import {
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
+  isFloatingPlace,
   isKeyDock,
   isKeyLength,
   isKeySize,
@@ -41,13 +42,13 @@ import {
   type PracticeToggles,
   type RecorderSettings,
   type SettingsState,
-  type LessonSettings,
+  type FloatingSettings,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 1
+export const SETTINGS_VERSION = 2
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -69,7 +70,7 @@ export function createSettingsStore({
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
         trainer: DEFAULT_TRAINER,
-        lesson: DEFAULT_LESSON,
+        floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
@@ -94,10 +95,13 @@ function practiceToggles(value: unknown): PracticeToggles {
   ) as Record<keyof PracticeToggles, boolean>
 }
 
-/** A lesson setting keeps what was saved; one never saved, or not valid, takes its default. */
-function lessonSettings(value: unknown): LessonSettings {
-  const saved = savedObject<LessonSettings>(value)
-  return { fingers: typeof saved.fingers === 'boolean' ? saved.fingers : DEFAULT_LESSON.fingers }
+/** Where the floating actions stand and whether they say their names, each as saved where valid. */
+function floatingSettings(value: unknown): FloatingSettings {
+  const saved = savedObject<FloatingSettings>(value)
+  return {
+    place: isFloatingPlace(saved.place) ? saved.place : DEFAULT_FLOATING.place,
+    labels: typeof saved.labels === 'boolean' ? saved.labels : DEFAULT_FLOATING.labels,
+  }
 }
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
@@ -149,7 +153,6 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
     remember: typeof saved.remember === 'boolean' ? saved.remember : DEFAULT_CHORD_FINDER.remember,
     inKeys: typeof saved.inKeys === 'boolean' ? saved.inKeys : DEFAULT_CHORD_FINDER.inKeys,
     slash: typeof saved.slash === 'boolean' ? saved.slash : DEFAULT_CHORD_FINDER.slash,
-    staff: typeof saved.staff === 'boolean' ? saved.staff : DEFAULT_CHORD_FINDER.staff,
     chords: Array.isArray(chords)
       ? chords
           .map(rememberedChord)
@@ -198,7 +201,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     trainer: trainerSettings(saved.trainer),
-    lesson: lessonSettings(saved.lesson),
+    floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,

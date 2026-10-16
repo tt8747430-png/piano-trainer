@@ -53,16 +53,18 @@ describe('Settings', () => {
       'Theme',
       'Layout',
       'Keyboard',
-      'Lessons',
+      'Floating buttons',
       'MIDI keyboard',
     ])
   })
 
-  it('shows or hides a lesson’s fingers, saved', async () => {
+  it('stands the floating buttons where chosen and has them say their names, saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
-    await user.click(await screen.findByRole('switch', { name: /^Show the fingers/ }))
-    expect(settingsStore.getState().lesson.fingers).toBe(false)
+    await user.click(await screen.findByRole('radio', { name: 'Right' }))
+    expect(settingsStore.getState().floating.place).toBe('right')
+    await user.click(screen.getByRole('switch', { name: /^Show their names/ }))
+    expect(settingsStore.getState().floating.labels).toBe(true)
   })
 
   it('makes every screen’s title small, saved', async () => {

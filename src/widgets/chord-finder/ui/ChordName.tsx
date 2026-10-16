@@ -1,3 +1,4 @@
+import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { noteName, type FoundChord, type Midi } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
@@ -13,7 +14,7 @@ export type ChordSource = 'held' | 'last' | 'tapped'
 function SourceLine({ source, children }: { source: ChordSource; children?: string }) {
   const { t } = useTranslation('practice')
   return (
-    <p className="flex items-center gap-2 text-muted-foreground">
+    <p className="flex items-center justify-center gap-2 text-muted-foreground">
       <span
         aria-hidden
         className={cn(
@@ -55,20 +56,30 @@ export function ChordName({
   switch (finding.kind) {
     case 'empty':
       return (
-        <p className="max-w-[20ch] font-display text-3xl text-balance text-muted-foreground">
-          {t(keysFolded ? 'practice:chordFinder.promptFolded' : 'practice:chordFinder.prompt')}
-        </p>
+        <div className="flex flex-col items-center gap-3">
+          <span className="grid size-14 place-items-center rounded-full bg-muted text-muted-foreground">
+            <Piano aria-hidden className="size-7" strokeWidth={1.5} />
+          </span>
+          <div className="flex flex-col gap-1">
+            <p className="font-display text-3xl font-semibold text-balance">
+              {t('practice:chordFinder.promptTitle')}
+            </p>
+            <p className="text-pretty text-muted-foreground">
+              {t(keysFolded ? 'practice:chordFinder.promptFolded' : 'practice:chordFinder.prompt')}
+            </p>
+          </div>
+        </div>
       )
     case 'note':
       return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-center gap-1">
           <h2 className="text-7xl">{noteName(finding.note)}</h2>
           <SourceLine source={source}>{t('practice:chordFinder.note')}</SourceLine>
         </div>
       )
     case 'interval':
       return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-center gap-1">
           <h2 className={finding.power ? 'text-7xl' : 'text-5xl'}>
             {finding.power ?? t(`music:interval.${finding.interval}.name`)}
           </h2>
@@ -81,7 +92,7 @@ export function ChordName({
       )
     case 'none':
       return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-center gap-1">
           <p className="font-display text-3xl text-balance">{t('practice:chordFinder.none')}</p>
           <SourceLine source={source} />
         </div>
@@ -126,17 +137,17 @@ function Found({
       : [],
   )
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-1">
+    <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center gap-1">
         <ChordHeading symbol={chordLabel(shown, slash)} />
         <SourceLine source={source}>{about.join(' · ')}</SourceLine>
       </div>
       {listed.length > 1 ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-2">
           <h3 className="font-sans text-sm font-medium text-muted-foreground">
             {t('chordFinder.readings')}
           </h3>
-          <ul className="flex flex-wrap gap-2">
+          <ul className="flex flex-wrap justify-center gap-2">
             {listed.map(({ at, label }) => (
               <li key={label}>
                 <Toggle

@@ -16,7 +16,8 @@ import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
-import { LessonView, type LessonTrack } from './LessonView'
+import { FloatingHost } from '@/shared/ui'
+import { LessonView, type UpLink } from './LessonView'
 
 function firstLesson(): Lesson {
   const lesson = lessonById('reading-chord-symbols')
@@ -24,10 +25,7 @@ function firstLesson(): Lesson {
   return lesson
 }
 
-const TRACK: LessonTrack = {
-  up: { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' },
-  next: { link: <Link to="/" />, label: 'Next lesson', title: 'Inversions' },
-}
+const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
 async function renderLesson(lesson: Lesson = firstLesson()) {
@@ -38,13 +36,15 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
     finePointer: false,
   })
   const router = createRouter({
-    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} track={TRACK} /> }),
+    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} up={UP} /> }),
     history: createMemoryHistory(),
   })
   render(
     <SettingsStoreProvider store={store}>
       <ServicesProvider services={{ audio, midi: createFakeMidi() }}>
-        <RouterProvider router={router} />
+        <FloatingHost place="center" labels={false}>
+          <RouterProvider router={router} />
+        </FloatingHost>
       </ServicesProvider>
     </SettingsStoreProvider>,
   )
@@ -81,24 +81,19 @@ describe('LessonView', () => {
     expect(first).not.toHaveAttribute('aria-current')
   })
 
-  it('opens its contents in a sheet off its bar, with the ways out, which a link followed closes', async () => {
+  it('opens its contents in a sheet off its bar, with what it is part of, which a link followed closes', async () => {
     const user = userEvent.setup()
     await renderLesson()
     await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
     const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
-    const ways = within(sheet).getByRole('navigation', { name: 'Ways out of this lesson' })
-    expect(
-      within(ways)
-        .getAllByRole('link')
-        .map((link) => link.textContent),
-    ).toEqual(['Next lessonInversions', 'Back to the journeyFoundations'])
+    expect(within(sheet).getByRole('link', { name: /^Back to the journey/ })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'In this lesson' })).not.toBeInTheDocument(),
     )
   })
 
-  it('steps through its sections from its floating bar, the first’s ‹ off with no lesson before', async () => {
+  it('steps through its sections from its floating bar, the first’s ‹ off', async () => {
     await renderLesson()
     const stepper = screen.getByRole('toolbar', { name: 'Lesson' })
     expect(within(stepper).getByRole('button', { name: 'Previous section' })).toBeDisabled()
@@ -111,7 +106,7 @@ describe('LessonView', () => {
   it('plays a chord example and marks its tones on the keys', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
-    const cm = screen.getByRole('button', { name: 'Cm' })
+    const cm = await screen.findByRole('button', { name: /^Play bar \d+, Cm$/ }, { timeout: 5000 })
     await user.click(cm)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([60, 63, 67])
     expect(cm).toHaveAttribute('aria-pressed', 'true')
@@ -122,10 +117,11 @@ describe('LessonView', () => {
   it('stops an example on a second tap', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
-    await user.click(screen.getByRole('button', { name: 'C9' }))
-    await user.click(screen.getByRole('button', { name: 'C9' }))
+    const c9 = await screen.findByRole('button', { name: /^Play bar \d+, C9$/ }, { timeout: 5000 })
+    await user.click(c9)
+    await user.click(c9)
     expect(audio.stops).toBeGreaterThan(0)
-    expect(screen.getByRole('button', { name: 'C9' })).toHaveAttribute('aria-pressed', 'false')
+    expect(c9).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('writes each example as the lesson does, though the kernel names two of them alike', async () => {
@@ -133,7 +129,13 @@ describe('LessonView', () => {
     const numbers = screen.getByRole('heading', { name: 'Chord numbers: 2 or 9? 6 or 13?' })
     const section = numbers.parentElement ?? document.body
     for (const name of ['C2', 'Cadd9', 'C6']) {
-      expect(within(section).getByRole('button', { name })).toBeInTheDocument()
+      expect(
+        await within(section).findByRole(
+          'button',
+          { name: new RegExp(`^Play bar \\d+, ${name}$`) },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument()
     }
   })
 })
@@ -204,7 +206,7 @@ describe('LessonView’s worksheet', () => {
     expect(chord).toHaveTextContent('1 ♭5 | ♭7 ♭3')
     await user.click(chord)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65])
-    const row = screen.getByRole('button', { name: /G7♭13/ }).closest('ul')?.parentElement
+    const row = screen.getByRole('button', { name: /^G7♭13/ }).closest('ul')?.parentElement
     await user.click(within(row ?? document.body).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65, 53, 59, 63, 67])
   })
@@ -342,10 +344,18 @@ describe('LessonView’s accompaniment', () => {
       ],
     })
     // Numbered on from line to line, each bar's button once; the engraver's first staves take a while.
-    const bars = await screen.findAllByRole('button', { name: /^Play bar \d+$/ }, { timeout: 5000 })
-    expect(bars.map((bar) => bar.ariaLabel)).toEqual(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `Play bar ${n}`),
-    )
+    const bars = await screen.findAllByRole('button', { name: /^Play bar \d+/ }, { timeout: 5000 })
+    expect(bars.map((bar) => bar.ariaLabel?.match(/^Play bar (\d+)/)?.[1])).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+    ])
     const [first, , , fourth, fifth] = bars
     expect(fourth?.parentElement).toBe(first?.parentElement)
     expect(fifth?.parentElement).not.toBe(fourth?.parentElement)

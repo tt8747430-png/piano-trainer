@@ -1,11 +1,12 @@
-import { useId, useMemo } from 'react'
+import { Hand } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
 import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayButton, type ShownKeys } from '@/shared/ui'
+import { PlayButton, SheetOption, type ShownKeys } from '@/shared/ui'
 import { scaleExample } from '../model/scale-example'
 import { TappableStaff } from './TappableStaff'
 
@@ -13,25 +14,25 @@ import { TappableStaff } from './TappableStaff'
 const RUN_TEMPO = 96
 
 /**
- * A scale in a lesson: its name, its run up and back on one staff (fingered, where the learner shows
- * the fingers), and Play, which runs it on the page's keys, each key with its degree and finger.
+ * A scale in a lesson: its name, its run up and back on one staff, and on its card its own options
+ * (the fingers, the notes' names) and Play, which runs it on the page's keys, each key with its
+ * degree and, where shown, its finger.
  */
 export function ScaleExample({
   root,
   kind,
-  fingers,
   onShow,
 }: {
   root: NoteParam
   kind: ScaleKind
-  /** The keys and the staff carry the right hand's fingers. */
-  fingers: boolean
   onShow: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('music')
   const scaleName = useScaleName()
   const captionId = useId()
   const playback = usePlayback<'run'>()
+  const [fingers, setFingers] = useState(true)
+  const [names, setNames] = useState(false)
   const tonic = useMemo(() => noteFromParam(root), [root])
   const example = useMemo(() => scaleExample(tonic, kind, fingers), [tonic, kind, fingers])
   const score = useMemo(() => notate(example.music), [example])
@@ -41,14 +42,28 @@ export function ScaleExample({
         <figcaption id={captionId} className="font-display text-xl font-semibold">
           {scaleName(tonic, kind)}
         </figcaption>
-        <PlayButton
-          label={t('play')}
-          playing={playback.playing === 'run'}
-          onClick={() => {
-            onShow(example.shown)
-            playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
-          }}
-        />
+        <div className="flex items-center gap-1">
+          <SheetOption
+            icon={Hand}
+            label={t('sheet.fingers')}
+            pressed={fingers}
+            onPressedChange={setFingers}
+          />
+          <SheetOption
+            glyph="C E"
+            label={t('sheet.noteNames')}
+            pressed={names}
+            onPressedChange={setNames}
+          />
+          <PlayButton
+            label={t('play')}
+            playing={playback.playing === 'run'}
+            onClick={() => {
+              onShow(example.shown)
+              playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
+            }}
+          />
+        </div>
       </div>
       <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
         <TappableStaff
@@ -56,6 +71,7 @@ export function ScaleExample({
           score={score}
           staff="treble"
           fingers={fingers}
+          names={names}
           tempo={RUN_TEMPO}
           follow={playback.playing === 'run' ? playback.handle : null}
           onShow={onShow}

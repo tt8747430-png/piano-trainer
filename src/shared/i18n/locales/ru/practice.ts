@@ -174,8 +174,9 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   chordFinder: {
-    prompt: 'Сыграйте аккорд на клавиатуре или нажмите его клавиши.',
-    promptFolded: 'Сыграйте аккорд на MIDI-клавиатуре или покажите клавиши, чтобы нажать его.',
+    promptTitle: 'Сыграйте аккорд',
+    prompt: 'На MIDI-клавиатуре или нажмите его клавиши.',
+    promptFolded: 'На MIDI-клавиатуре или покажите клавиши, чтобы нажать его.',
     none: 'Ни один аккорд не состоит из этих нот.',
     note: 'Одна нота',
     powerChord: 'Квинтовый аккорд',
@@ -208,7 +209,6 @@ export const practice: LocaleResources['practice'] = {
     },
     altered: 'Альтерированная доминанта: {{symbol}}',
     inKeysShown: 'Тональности',
-    staffShown: 'Нотный стан',
   },
   passingChords: {
     inKey: 'В тональности',

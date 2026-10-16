@@ -10,10 +10,12 @@ export const settings: LocaleResources['settings'] = {
   },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
-  lessons: {
-    label: 'Уроки',
-    fingers: 'Показывать аппликатуру',
-    fingersNote: 'Гаммы урока показывают пальцы на клавишах и на нотном стане',
+  floating: {
+    label: 'Плавающие кнопки',
+    place: 'Где они стоят',
+    places: { left: 'Слева', center: 'Посередине', right: 'Справа' },
+    labels: 'Подписывать их',
+    labelsNote: 'Иначе у каждой только значок; название видно при наведении',
   },
   progress: {
     label: 'Прогресс',

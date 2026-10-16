@@ -29,10 +29,13 @@ export function TappableStaff({
   staff,
   scale,
   fingers,
+  names = false,
+  symbols = true,
   muted,
   firstBar = 1,
   tempo,
   follow = null,
+  barShown,
   onShow,
 }: {
   music: TimedMusic
@@ -41,12 +44,18 @@ export function TappableStaff({
   staff?: StaffId | undefined
   scale?: number
   fingers?: boolean
+  /** Each notehead carries its note's name. */
+  names?: boolean
+  /** Each bar's band names its chord, where it has one; else its number. */
+  symbols?: boolean
   muted?: StaffId | undefined
   /** The number of its first bar, for a line of a longer passage. */
   firstBar?: number
   tempo: number
   /** The whole music played from its first tick at `tempo` by a Play beside it: its notes marked as they sound. */
   follow?: PlayHandle | null
+  /** What the keys show for a bar tapped, by its place, where not its notes by name: a chord's degrees. */
+  barShown?: ((bar: number) => ShownKeys | undefined) | undefined
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
   onShow?: (shown: ShownKeys) => void
 }) {
@@ -59,9 +68,11 @@ export function TappableStaff({
       music.bars.map((bar, i) => ({
         from: bar.startTick,
         to: music.bars[i + 1]?.startTick ?? Number.POSITIVE_INFINITY,
-        symbol: music.chords.find((chord) => chord.startTick === bar.startTick)?.symbol,
+        symbol: symbols
+          ? music.chords.find((chord) => chord.startTick === bar.startTick)?.symbol
+          : undefined,
       })),
-    [music],
+    [music, symbols],
   )
   // The arrows move between the notes, as between the keys of the keyboard.
   const step = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -77,9 +88,9 @@ export function TappableStaff({
     next.focus()
     setStop(Number(next.dataset['note']))
   }
-  const play = (id: string, from: Tick, to: Tick) => {
+  const play = (id: string, from: Tick, to: Tick, shown?: ShownKeys) => {
     const heard = passage(music, from, to)
-    onShow?.(notesShown(heard))
+    onShow?.(shown ?? notesShown(heard))
     playback.toggle(id, () => runSounds(heard, tempo))
   }
   const playingTick = playback.playing?.startsWith('note:')
@@ -106,6 +117,7 @@ export function TappableStaff({
       score={score}
       staff={staff}
       muted={muted}
+      names={names}
       {...(scale === undefined ? {} : { scale })}
       {...(fingers === undefined ? {} : { fingers })}
       selected={
@@ -133,9 +145,13 @@ export function TappableStaff({
                     <button
                       key={id}
                       type="button"
-                      aria-label={t('playBar', { n: firstBar + i })}
+                      aria-label={
+                        bar.symbol
+                          ? t('playBarChord', { n: firstBar + i, symbol: bar.symbol })
+                          : t('playBar', { n: firstBar + i })
+                      }
                       aria-pressed={playback.playing === id}
-                      onClick={() => play(id, bar.from, bar.to)}
+                      onClick={() => play(id, bar.from, bar.to, barShown?.(i))}
                       className={cn(
                         'absolute z-20 flex items-start rounded-sm px-1 transition-colors hover:bg-muted aria-pressed:bg-accent aria-pressed:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring',
                         bar.symbol
