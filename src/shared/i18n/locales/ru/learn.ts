@@ -70,6 +70,7 @@ export const learn: LocaleResources['learn'] = {
   place: 'Урок {{n}} из {{total}}',
   placeLabel: 'Где этот урок',
   contents: 'В этом уроке',
+  contentsAt: 'В этом уроке: раздел {{at}} из {{of}}',
   example: {
     over: 'На аккордах «{{piece}}»',
     openInPlayer: 'Открыть в плеере',

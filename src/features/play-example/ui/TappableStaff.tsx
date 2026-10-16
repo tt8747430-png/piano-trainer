@@ -1,5 +1,6 @@
 import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { PlayHandle } from '@/shared/api/audio'
 import type { Tick } from '@/shared/lib/music'
 import type { Score, StaffId, TimedMusic } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
@@ -7,7 +8,8 @@ import { usePlayback } from '@/shared/lib/services'
 import { cn } from '@/shared/lib'
 import { LazyScoreView, type ShownKeys } from '@/shared/ui'
 import { notesShown } from '../model/notes-example'
-import { namesAt, noteColumns, passage } from '../model/staff-taps'
+import { namesAt, noteColumns, passage, staffAt } from '../model/staff-taps'
+import { useStaffPlayhead } from '../model/use-staff-playhead'
 
 /** How far a note's column reaches past the staff's lines, for notes on ledger lines. */
 const REACH = 16
@@ -17,8 +19,9 @@ const BAR_BAND = 22
 /**
  * A staff, or the grand staff, whose notes play when tapped: each written onset is a button that
  * plays the notes struck there (in both hands on the grand staff) and shows them on the page's keys,
- * marked on a single staff while they sound; over a line of more than one bar (or a passage's later
- * line), each bar's band plays that bar. Every button is named by what it plays.
+ * marked while they sound; over a line of more than one bar (or a passage's later line), each bar's
+ * band plays that bar, its notes marked one by one as they sound, as the whole line's are while a
+ * Play beside it plays it (`follow`). Every button is named by what it plays.
  */
 export function TappableStaff({
   music,
@@ -29,6 +32,7 @@ export function TappableStaff({
   muted,
   firstBar = 1,
   tempo,
+  follow = null,
   onShow,
 }: {
   music: TimedMusic
@@ -41,6 +45,8 @@ export function TappableStaff({
   /** The number of its first bar, for a line of a longer passage. */
   firstBar?: number
   tempo: number
+  /** The whole music played from its first tick at `tempo` by a Play beside it: its notes marked as they sound. */
+  follow?: PlayHandle | null
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
   onShow?: (shown: ShownKeys) => void
 }) {
@@ -79,6 +85,22 @@ export function TappableStaff({
   const playingTick = playback.playing?.startsWith('note:')
     ? Number(playback.playing.slice('note:'.length))
     : null
+  // A bar played marks its notes in turn; the whole line played beside it, the line's.
+  const playingBar = playback.playing?.startsWith('bar:')
+    ? bars[Number(playback.playing.slice('bar:'.length))]
+    : undefined
+  const barMusic = useMemo(
+    () => (playingBar ? passage(music, playingBar.from, playingBar.to) : music),
+    [music, playingBar],
+  )
+  const inBar = useStaffPlayhead(
+    playingBar ? playback.handle : null,
+    barMusic,
+    tempo,
+    playingBar?.from,
+  )
+  const inLine = useStaffPlayhead(follow, music, tempo)
+  const marked = playingTick ?? inBar ?? inLine
   return (
     <LazyScoreView
       score={score}
@@ -86,7 +108,9 @@ export function TappableStaff({
       muted={muted}
       {...(scale === undefined ? {} : { scale })}
       {...(fingers === undefined ? {} : { fingers })}
-      selected={playingTick === null || !staff ? undefined : { staff, tick: playingTick }}
+      selected={
+        marked === null ? undefined : { staff: staff ?? staffAt(music, marked), tick: marked }
+      }
     >
       {(layout) => {
         const lines = staff

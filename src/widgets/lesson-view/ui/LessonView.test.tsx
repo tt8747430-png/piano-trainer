@@ -4,7 +4,7 @@ import {
   createRouter,
   RouterProvider,
 } from '@tanstack/react-router'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { lessonById, type Lesson } from '@/entities/lesson'
@@ -71,6 +71,17 @@ describe('LessonView', () => {
     expect(second).not.toHaveAttribute('data-reading')
     // None is where the page is until its hash names one.
     expect(first).not.toHaveAttribute('aria-current')
+  })
+
+  it('opens its contents in a sheet off a floating button, which a link followed closes', async () => {
+    const user = userEvent.setup()
+    await renderLesson()
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
+    await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: 'In this lesson' })).not.toBeInTheDocument(),
+    )
   })
 
   it('plays a chord example and marks its tones on the keys', async () => {
@@ -185,6 +196,22 @@ describe('LessonView’s worksheet', () => {
     const figures = screen.getAllByRole('figure')
     await user.click(within(figures.at(-1) ?? document.body).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([43, 47, 50, 53, 57])
+  })
+
+  it('marks each note of a line on its staff as it sounds', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const line = screen.getAllByRole('figure').at(-1) ?? document.body
+    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    await user.click(within(line).getByRole('button', { name: 'Play' }))
+    const started = audio.played.at(-1)
+    const second = started?.sounds[1]
+    act(() => audio.setNow((started?.at ?? 0) + (second?.at ?? 0)))
+    const marked = () => [...line.querySelectorAll('.vf-selected[data-tick]')]
+    await waitFor(() => expect(marked().length).toBeGreaterThan(0))
+    const first = marked()[0]?.getAttribute('data-tick')
+    act(() => audio.setNow((started?.at ?? 0) + (started?.sounds[2]?.at ?? 0)))
+    await waitFor(() => expect(marked()[0]?.getAttribute('data-tick')).not.toBe(first))
   })
 
   it('answers a question on the keys: counted, judged at its last note, fixed and right', async () => {

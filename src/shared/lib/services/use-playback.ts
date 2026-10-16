@@ -15,6 +15,8 @@ interface Playback<Id extends string | number> {
   toggle(id: Id, sounds: () => readonly Sound[]): void
   /** Cuts off what sounds and plays `sounds` as `id`, its button Stop while they sound. */
   start(id: Id, sounds: readonly Sound[]): void
+  /** The play of the id playing, while it plays: where it started on the audio clock. */
+  readonly handle: PlayHandle | null
 }
 
 /**
@@ -55,5 +57,5 @@ export function usePlayback<Id extends string | number>(): Playback<Id> {
     },
     [audio, start, playing],
   )
-  return { playing, toggle, start }
+  return { playing, toggle, start, handle: playing === null ? null : (started?.play ?? null) }
 }

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { ListOrdered } from 'lucide-react'
 import { useMemo, useReducer, useRef, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
@@ -20,7 +21,15 @@ import { LessonBlock } from './LessonBlock'
 import { QuestionBlock } from './QuestionBlock'
 import { usePinnedHeight } from './use-pinned-height'
 import { useReadingSection } from './use-reading-section'
-import { NO_KEYS, type ShownKeys } from '@/shared/ui'
+import {
+  FloatingActions,
+  NO_KEYS,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  type ShownKeys,
+} from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
 const sectionId = (index: number) => `section-${index + 1}`
@@ -35,13 +44,85 @@ const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
     ),
   )
 
-/** A lesson lists its sections at its top once it has more than two. */
+/** A lesson lists its sections once it has more than two. */
 const CONTENTS_FROM = 3
+
+/** A lesson's sections, each a link to its heading, the one being read in bold. */
+function SectionLinks({
+  lesson,
+  reading,
+  onGo,
+}: {
+  lesson: Lesson
+  reading: string | null
+  /** A link followed: the sheet it is in closes. */
+  onGo?: () => void
+}) {
+  const locale = useLocale()
+  return (
+    <ol className="flex flex-col gap-1">
+      {lesson.sections.map((section, s) => (
+        <li key={section.heading.en} className="flex gap-3">
+          <span aria-hidden className="w-5 shrink-0 text-right text-muted-foreground tabular-nums">
+            {s + 1}
+          </span>
+          <Link
+            to="."
+            hash={sectionId(s)}
+            replace
+            // Every link is to this page: only the one its hash names is where it is.
+            activeOptions={{ includeHash: true }}
+            data-reading={reading === sectionId(s) || undefined}
+            onClick={onGo}
+            className="rounded-sm underline-offset-4 hover:underline data-reading:font-semibold"
+          >
+            {localText(section.heading, locale)}
+          </Link>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+/**
+ * The contents on a phone: a floating button saying which section is being read of how many, its
+ * sheet the sections' links; one followed closes it.
+ */
+function ContentsSheet({ lesson, reading }: { lesson: Lesson; reading: string | null }) {
+  const { t } = useTranslation('learn')
+  const [open, setOpen] = useState(false)
+  const at = lesson.sections.findIndex((_, s) => sectionId(s) === reading)
+  const of = lesson.sections.length
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        render={
+          <Button
+            variant="surface"
+            size="lg"
+            aria-label={t('contentsAt', { at: Math.max(at, 0) + 1, of })}
+            className="rounded-full shadow-md shadow-foreground/10"
+          />
+        }
+      >
+        <ListOrdered aria-hidden />
+        <span aria-hidden className="tabular-nums">
+          {Math.max(at, 0) + 1} / {of}
+        </span>
+      </SheetTrigger>
+      <SheetContent title={t('contents')}>
+        <nav aria-label={t('contents')} className="text-lg">
+          <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
+        </nav>
+      </SheetContent>
+    </Sheet>
+  )
+}
 
 /**
  * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
- * question, whose answer the learner chooses on it. Its sections are listed at its top, each a link to
- * its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
+ * question, whose answer the learner chooses on it. Its sections are listed beside it on a laptop and
+ * in a sheet off a floating button on a phone, each a link to its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
  * replaces the page's entry, so Back still leaves the lesson.
  */
 export function LessonView({ lesson }: { lesson: Lesson }) {
@@ -88,37 +169,16 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
         {lesson.sections.length >= CONTENTS_FROM ? (
           <nav
             aria-label={t('contents')}
-            // On a laptop the contents keep to the column beside the lesson, under the pinned keys.
+            // On a laptop the contents keep to the column beside the lesson, under the pinned keys; on
+            // a phone they are a sheet off the floating button.
             style={{ '--pinned': `${pinned}px` } as CSSProperties}
-            className="max-w-prose print:hidden lg:sticky lg:top-[calc(var(--screen-bar)+var(--pinned)+--spacing(6))] lg:col-start-2 lg:row-start-1 lg:self-start"
+            className="hidden max-w-prose print:hidden lg:sticky lg:top-[calc(var(--screen-bar)+var(--pinned)+--spacing(6))] lg:col-start-2 lg:row-start-1 lg:block lg:self-start"
           >
             {/* The nav says its name to a screen reader: the caption is for the eye. */}
             <p aria-hidden className="mb-2 text-sm font-semibold text-muted-foreground">
               {t('contents')}
             </p>
-            <ol className="flex flex-col gap-1">
-              {lesson.sections.map((section, s) => (
-                <li key={section.heading.en} className="flex gap-3">
-                  <span
-                    aria-hidden
-                    className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
-                  >
-                    {s + 1}
-                  </span>
-                  <Link
-                    to="."
-                    hash={sectionId(s)}
-                    replace
-                    // Every link is to this page: only the one its hash names is where it is.
-                    activeOptions={{ includeHash: true }}
-                    data-reading={reading === sectionId(s) || undefined}
-                    className="rounded-sm underline-offset-4 hover:underline data-reading:font-semibold"
-                  >
-                    {localText(section.heading, locale)}
-                  </Link>
-                </li>
-              ))}
-            </ol>
+            <SectionLinks lesson={lesson} reading={reading} />
           </nav>
         ) : null}
         <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-1">
@@ -158,6 +218,13 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
           ))}
         </div>
       </div>
+      {lesson.sections.length >= CONTENTS_FROM ? (
+        <div className="lg:hidden">
+          <FloatingActions>
+            <ContentsSheet lesson={lesson} reading={reading} />
+          </FloatingActions>
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -33,7 +33,7 @@ interface SoundingKeys {
 }
 
 /** The play of sounds with no notes, or of sounds nothing could play: it never plays. */
-export const NOTHING_PLAYED: PlayHandle = { until: 0 }
+export const NOTHING_PLAYED: PlayHandle = { from: 0, until: 0 }
 
 const NONE: ReadonlySet<Midi> = new Set()
 
@@ -91,7 +91,7 @@ export function createSoundingKeys({
     add(sounds, at) {
       const added = keyWindows(sounds, at)
       if (added.length === 0) return NOTHING_PLAYED
-      const play: PlayHandle = { until: Math.max(...added.map((window) => window.to)) }
+      const play: PlayHandle = { from: at, until: Math.max(...added.map((window) => window.to)) }
       windows = [...windows, ...added]
       playing.add(play)
       update()

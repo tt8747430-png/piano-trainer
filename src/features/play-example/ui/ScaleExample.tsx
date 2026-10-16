@@ -61,6 +61,7 @@ export function ScaleExample({
           score={score}
           staff="treble"
           tempo={RUN_TEMPO}
+          follow={playback.playing === 'run' ? playback.handle : null}
           onShow={onShow}
         />
       </div>

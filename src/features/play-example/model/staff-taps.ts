@@ -1,5 +1,5 @@
-import { noteName, type Tick } from '@/shared/lib/music'
-import type { TimedMusic } from '@/shared/lib/notation'
+import { noteName, TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import type { StaffId, TimedMusic } from '@/shared/lib/notation'
 
 /** A written onset's column on the staff: where a tap on it plays the notes struck there. */
 export interface NoteColumn {
@@ -49,3 +49,17 @@ export const namesAt = (music: TimedMusic, tick: Tick): string =>
     .toSorted((a, b) => a.midi - b.midi)
     .map((n) => noteName(n.spelled))
     .join(' ')
+
+/** Where music's notes start, each once, earliest first: by tick, and in seconds at `tempo`. */
+export function onsetsOf(
+  music: TimedMusic,
+  tempo: number,
+): { readonly ticks: readonly Tick[]; readonly seconds: readonly number[] } {
+  const ticks = [...new Set(music.notes.map((n) => n.startTick))].toSorted((a, b) => a - b)
+  const perTick = 60 / (tempo * TICKS_PER_BEAT)
+  return { ticks, seconds: ticks.map((tick) => tick * perTick) }
+}
+
+/** The staff a note struck at `tick` is marked on: the right hand's treble where it plays then. */
+export const staffAt = (music: TimedMusic, tick: Tick): StaffId =>
+  music.notes.some((n) => n.startTick === tick && n.hand === 'rh') ? 'treble' : 'bass'

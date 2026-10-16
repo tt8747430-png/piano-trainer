@@ -13,7 +13,10 @@ import { TappableStaff } from './TappableStaff'
 const LINE_TEMPO = 72
 const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { treble: 'rh', bass: 'lh' }
 
-/** A line of notes to read, on the staff it is read on, and Play, which plays it on the page's keys. */
+/**
+ * A line of notes to read, on the staff it is read on, and Play, which plays it on the page's keys,
+ * each note marked on the staff as it sounds.
+ */
 export function NotesExample({
   notes,
   clef,
@@ -38,7 +41,14 @@ export function NotesExample({
     // Play beside the line where it fits, under it on a narrow screen.
     <figure className="flex flex-wrap items-center gap-x-6 gap-y-3 card p-4">
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-        <TappableStaff music={line} score={score} staff={clef} tempo={LINE_TEMPO} onShow={onShow} />
+        <TappableStaff
+          music={line}
+          score={score}
+          staff={clef}
+          tempo={LINE_TEMPO}
+          follow={playback.playing === 'line' ? playback.handle : null}
+          onShow={onShow}
+        />
       </div>
       <Button
         variant="soft"
