@@ -14,8 +14,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Intermediate Piano Playing', ru: 'Игра на фортепиано: средний уровень' },
   summary: {
-    en: 'Fingering for phrases longer than five notes, sharps, flats and naturals, dotted rhythms, 3/4 and 6/8, and leaps across the keys, played in four folk and classical songs.',
-    ru: 'Аппликатура для фраз длиннее пяти нот, диезы, бемоли и бекары, пунктирный ритм, размеры 3/4 и 6/8 и скачки по клавиатуре — в четырёх народных и классических пьесах.',
+    en: 'Fingering for phrases longer than five notes, sharps, flats and naturals, the dotted rhythm, 3/4 and 6/8, and leaps across the keys. You practise them in four folk and classical songs.',
+    ru: 'Аппликатура для фраз длиннее пяти нот, диезы, бемоли и бекары, пунктирный ритм, размеры 3/4 и 6/8 и скачки по клавиатуре. Всё это вы отрабатываете на четырёх народных и классических пьесах.',
   },
   weeks: 8,
   lessons: [

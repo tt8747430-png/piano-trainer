@@ -113,7 +113,11 @@ describe('Practice → Progressions', () => {
       }),
     )
     expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('12-bar blues')
-    expect(screen.getByText('Great with the blues scale on top.')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'The most common blues form: twelve bars of I7, IV7 and V7. Try the blues scale on top.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('keeps the progression chosen while the key turns minor and major again', async () => {

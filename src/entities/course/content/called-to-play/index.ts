@@ -17,8 +17,8 @@ const course: Course = {
   stage: 'beginner',
   title: { en: 'Called to Play for Him', ru: 'Призван играть для Него' },
   summary: {
-    en: 'A. Savchenko’s method of accompaniment: the five ways of the left hand, songs played by their plan, and the right hand’s techniques, each on its study.',
-    ru: 'Метод аккомпанемента А. Савченко: пять способов левой руки, песни по плану и приёмы правой руки, каждый на своём этюде.',
+    en: 'A. Savchenko’s method for accompanying a song from its chords. Learn five ways to lay out a chord, play songs by a written plan, then add one right-hand technique at a time, each on its own study.',
+    ru: 'Метод А. Савченко: как аккомпанировать песне по аккордам. Вы освоите пять способов изложить аккорд, сыграете песни по готовому плану и добавите техники правой руки, по одной на каждый этюд.',
   },
   weeks: 11,
   lessons: [

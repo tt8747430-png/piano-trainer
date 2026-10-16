@@ -5,8 +5,8 @@ const sixthAndAddNine: Lesson = {
   id: 'sixth-and-add-nine',
   title: { en: 'Sixth and added ninth chords', ru: 'Аккорды с секстой и добавленной ноной' },
   summary: {
-    en: 'Colour a major chord with a 6th, a 9th or both.',
-    ru: 'Раскрасьте мажорный аккорд секстой, ноной или обеими.',
+    en: 'Add a 6th, a 9th or both to a major chord, and hear how each one changes its colour.',
+    ru: 'Добавьте к мажорному трезвучию сексту, нону или обе и услышьте, как меняется его окраска.',
   },
   sections: [
     {
@@ -14,10 +14,10 @@ const sixthAndAddNine: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Sixth chord:', ru: 'Аккорд с секстой:' },
+          lead: { en: 'A sixth chord', ru: 'Аккорд с секстой' },
           text: {
-            en: 'a major triad with its 6th added. C6 is C, E, G, A. It sounds sweet and settled.',
-            ru: 'мажорное трезвучие с добавленной секстой. C6 — это до, ми, соль, ля. Звучит нежно и устойчиво.',
+            en: 'is a major triad with its 6th added. C6 is C, E, G and A. Compare it with plain C: it sounds sweet and settled.',
+            ru: '— мажорное трезвучие с добавленной секстой. C6 — это до, ми, соль и ля. Сравните с простым C: звучит нежно и устойчиво.',
           },
         },
         {
@@ -42,8 +42,8 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C6 and Am7 share the same four notes. The bass decides: C below makes C6, A below makes Am7.',
-            ru: 'В C6 и Am7 одни и те же четыре звука. Решает бас: до внизу даёт C6, ля внизу — Am7.',
+            en: 'C6 and Am7 have the same four notes. The bass decides which chord you hear. With C below it is C6, and with A below it is Am7.',
+            ru: 'В C6 и Am7 одни и те же четыре звука. Какой аккорд вы слышите, решает бас. С до внизу это C6, с ля внизу — Am7.',
           },
         },
       ],
@@ -53,10 +53,10 @@ const sixthAndAddNine: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Added 9th:', ru: 'Аккорд с добавленной ноной:' },
+          lead: { en: 'An added 9th chord', ru: 'Аккорд с добавленной ноной' },
           text: {
-            en: 'a triad with the 9th, D over C, and no 7th. It sounds open and bright.',
-            ru: 'трезвучие с ноной, ре над до, без септимы. Звучит открыто и светло.',
+            en: 'is a triad plus the 9th, with no 7th. The 9th of C is D. Play it on top or tucked under the 3rd. It sounds open and bright.',
+            ru: '— трезвучие с ноной, но без септимы. Нона от до — это ре. Играйте её сверху или под терцией. Звучит открыто и светло.',
           },
         },
         {
@@ -74,8 +74,8 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C6/9 holds both: C, E, G, A, D. Spread it over two hands and it rings.',
-            ru: 'В C6/9 обе краски: до, ми, соль, ля, ре. Разложите его на две руки, и он зазвенит.',
+            en: 'C6/9 holds both colours: C, E, G, A and D. Spread it over two hands, with C and G in the left, so it rings.',
+            ru: 'В C6/9 обе краски: до, ми, соль, ля и ре. Разложите его на две руки, до и соль в левой, и он зазвенит.',
           },
         },
         {
@@ -91,8 +91,8 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'End a song on 6/9 instead of a plain triad. Try it on the last chord of Michael, Row the Boat Ashore.',
-            ru: 'Закончите песню на 6/9 вместо простого трезвучия. Попробуйте на последнем аккорде «Michael, Row the Boat Ashore».',
+            en: 'Use 6/9 for a song’s last chord in place of a plain triad. Try it at the end of Michael, Row the Boat Ashore.',
+            ru: 'Возьмите 6/9 на последнем аккорде песни вместо простого трезвучия. Попробуйте в конце «Michael, Row the Boat Ashore».',
           },
         },
         {

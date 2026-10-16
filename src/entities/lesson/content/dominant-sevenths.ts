@@ -7,8 +7,8 @@ const dominantSevenths: Lesson = {
   id: 'dominant-sevenths',
   title: { en: 'The dominant 7th and where it pulls', ru: 'Доминантсептаккорд и его тяготение' },
   summary: {
-    en: 'Build V7, resolve its tritone, and lead into any chord.',
-    ru: 'Стройте V7, разрешайте его тритон и подводите к любому аккорду.',
+    en: 'Build the dominant 7th, hear why it pulls home, and use it to lead into any chord of the key.',
+    ru: 'Постройте доминантсептаккорд, услышьте, почему он тянет домой, и подводите им к любому аккорду тональности.',
   },
   sections: [
     {
@@ -21,21 +21,22 @@ const dominantSevenths: Lesson = {
           kind: 'text',
           lead: { en: 'The dominant 7th', ru: 'Доминантсептаккорд' },
           text: {
-            en: 'is the major triad on degree 5 with a minor 7th on top. In C: G B D F.',
-            ru: '— мажорное трезвучие на пятой ступени с малой септимой сверху. В до мажоре: соль, си, ре, фа.',
+            en: 'is the chord on the key’s 5th note: a major triad with a minor 7th on top. In C major it is G B D F.',
+            ru: '— аккорд на пятой ступени: мажорное трезвучие с малой септимой сверху. В до мажоре это соль, си, ре, фа.',
           },
         },
         { kind: 'chords', symbols: ['G7'] },
       ],
     },
     {
-      heading: { en: 'The tritone resolves', ru: 'Тритон разрешается' },
+      heading: { en: 'Why it pulls: the tritone', ru: 'Почему он тянет: тритон' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A tritone', ru: 'Тритон' },
           text: {
-            en: 'Its 3rd and 7th, B and F, clash a tritone apart. B rises to C, F falls to E, and the clash is gone.',
-            ru: 'Его терция и септима, си и фа, звучат напряжённо, на расстоянии тритона. Си поднимается в до, фа опускается в ми, и напряжение снимается.',
+            en: 'is three whole steps. G7’s 3rd and 7th, B and F, are a tritone apart and clash. B rises to C, F falls to E, and the clash resolves.',
+            ru: '— это интервал в три тона. Терция и септима G7, си и фа, стоят на тритон друг от друга и звучат остро. Си поднимается в до, фа опускается в ми, и напряжение уходит.',
           },
         },
         {
@@ -54,8 +55,8 @@ const dominantSevenths: Lesson = {
           kind: 'text',
           lead: { en: 'A secondary dominant', ru: 'Побочная доминанта' },
           text: {
-            en: 'is the V7 of a chord other than I. A7 leads to Dm as G7 leads to C. It is written V7/ii.',
-            ru: '— V7 к аккорду, который не является I. A7 ведёт в Dm, как G7 ведёт в C. Её пишут V7/ii.',
+            en: 'is the V7 of a chord other than I. A7 leads to Dm the way G7 leads to C. It is written V7/ii, five of two.',
+            ru: '— это V7 к аккорду, который не является I. A7 ведёт в Dm так же, как G7 ведёт в C. Её пишут V7/ii: доминанта ко второй ступени.',
           },
         },
         { kind: 'progression', numerals: 'I V7/ii ii V7 I', key: C_MAJOR },
@@ -67,8 +68,8 @@ const dominantSevenths: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each major and minor chord of the key can take its own dominant before it.',
-            ru: 'Перед каждым мажорным и минорным аккордом тональности может стоять его собственная доминанта.',
+            en: 'Every major and minor chord of the key can have its own dominant in front of it. Here each one gets its dominant in turn.',
+            ru: 'Перед каждым мажорным и минорным аккордом тональности может стоять своя доминанта. Здесь каждый получает её по очереди.',
           },
         },
         {
@@ -79,13 +80,13 @@ const dominantSevenths: Lesson = {
       ],
     },
     {
-      heading: { en: 'Spot them in a chart', ru: 'Найдите их в аккордах песни' },
+      heading: { en: 'Spot them in a song', ru: 'Найдите их в песне' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A 7th chord whose root is a 5th above the next chord is a dominant: E7 to Am, D7 to G.',
-            ru: 'Септаккорд, корень которого на квинту выше следующего аккорда, — доминанта: E7 в Am, D7 в G.',
+            en: 'In a song’s chords, look for a 7th chord whose root is a 5th above the next chord. It is a dominant: E7 to Am, D7 to G.',
+            ru: 'В аккордах песни ищите септаккорд, основной тон которого на квинту выше следующего аккорда. Это доминанта: E7 в Am, D7 в G.',
           },
         },
         { kind: 'chords', symbols: ['C', 'E7', 'Am', 'D7', 'G7', 'C'] },
@@ -113,14 +114,14 @@ const dominantSevenths: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'Lead into each chord on Progressions',
+            en: 'Lead into each chord in Progressions',
             ru: 'Вводные доминанты в разделе «Последовательности»',
           },
           target: { opens: 'progressions', numerals: 'I IV V vi', key: C_MAJOR },
         },
         {
           kind: 'link',
-          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
         },
       ],

@@ -5,8 +5,8 @@ const understanding: Lesson = {
   id: 'understanding',
   title: { en: 'Understanding minor arpeggios', ru: 'Как устроены минорные арпеджио' },
   summary: {
-    en: 'Play a minor arpeggio and hear how it differs from major.',
-    ru: 'Играть минорное арпеджио и слышать его отличие от мажорного.',
+    en: 'Build a minor triad, hear how it differs from major, and play its arpeggio evenly.',
+    ru: 'Строить минорное трезвучие, слышать его отличие от мажорного и ровно играть его арпеджио.',
   },
   sections: [
     {
@@ -16,21 +16,21 @@ const understanding: Lesson = {
           kind: 'text',
           lead: { en: 'A minor triad', ru: 'Минорное трезвучие' },
           text: {
-            en: 'stacks a minor 3rd, then a major 3rd: A, C and E. Its arpeggio plays them one at a time.',
-            ru: '— малая терция, а над ней большая: ля, до и ми. Арпеджио играет их по одному.',
+            en: 'is a minor 3rd with a major 3rd on top. A minor is A, C and E. Its arpeggio plays them one at a time.',
+            ru: '— это малая терция, а над ней большая. Ля минор: ля, до и ми. Арпеджио играет эти звуки по одному.',
           },
         },
         { kind: 'chords', symbols: ['Am'] },
       ],
     },
     {
-      heading: { en: 'One note from major', ru: 'Одна нота от мажора' },
+      heading: { en: 'One note away from major', ru: 'Одна нота от мажора' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'C major and C minor differ only in the 3rd, E or E♭. Lower it a half step and the colour turns dark.',
-            ru: 'До мажор и до минор отличаются только терцией: ми или ми-бемоль. Понизьте её на полутон, и окраска темнеет.',
+            en: 'C major and C minor share C and G. Only the 3rd differs: E in major, E♭ in minor. Lowering it a semitone darkens the sound.',
+            ru: 'У до мажора и до минора общие до и соль. Различается только терция: ми в мажоре, ми-бемоль в миноре. На полутон ниже, и звук темнеет.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/8 E4/8 G4/8 C5/8 C4/8 E♭4/8 G4/8 C5/8 C4/1' },
@@ -43,12 +43,12 @@ const understanding: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'White-key minors finger like C major: right hand 1-2-3-1-2-3-5, left hand 5-4-2-1-4-2-1.',
-              ru: 'Миноры от белых клавиш играются как до мажор: правая рука 1-2-3-1-2-3-5, левая 5-4-2-1-4-2-1.',
+              en: 'Minor arpeggios on white roots use C major’s fingers: right hand 1-2-3-1-2-3-5, left hand 5-4-2-1-4-2-1.',
+              ru: 'Минорные арпеджио от белых клавиш играются пальцами до мажора: правая рука 1-2-3-1-2-3-5, левая 5-4-2-1-4-2-1.',
             },
             {
-              en: 'With a black root, the thumb takes the first white key: A in F♯ minor.',
-              ru: 'Если тоника на чёрной клавише, большой палец берёт первую белую: ля в фа-диез миноре.',
+              en: 'On a black root, the thumb takes the first white key. In F♯ minor that is A.',
+              ru: 'Если тоника на чёрной клавише, большой палец берёт первую белую. В фа-диез миноре это ля.',
             },
           ],
         },
@@ -65,8 +65,8 @@ const understanding: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play slowly, every note as loud as the next. Listen where the thumb passes under: the bump hides there.',
-            ru: 'Играйте медленно, все звуки одинаково громко. Слушайте место, где подкладывается большой палец: там прячется толчок.',
+            en: 'Play slowly, every note as loud as the one before. Listen where the thumb passes under, because that is where a bump hides.',
+            ru: 'Играйте медленно, все звуки одинаково громко. Слушайте место, где подкладывается большой палец: там и прячется толчок.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'D4/8 F4/8 A4/8 D5/8 A4/8 F4/8 D4/4' },

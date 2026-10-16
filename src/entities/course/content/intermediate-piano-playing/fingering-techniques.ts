@@ -6,19 +6,19 @@ const fingeringTechniques: Lesson = {
   id: 'fingering-techniques',
   title: { en: 'Fingering techniques', ru: 'Приёмы аппликатуры' },
   summary: {
-    en: 'Pass the thumb under, cross over, swap and stretch fingers.',
-    ru: 'Подкладывать и перекладывать пальцы, подменять их и растягивать руку.',
+    en: 'Play past five keys without jumping: pass the thumb under, cross over, swap fingers and stretch.',
+    ru: 'Выходить за пять клавиш без скачка: подкладывать и перекладывать пальцы, подменять их и растягивать руку.',
   },
   sections: [
     {
-      heading: { en: 'The thumb passes under', ru: 'Подкладывание первого пальца' },
+      heading: { en: 'Passing the thumb under', ru: 'Подкладывание первого пальца' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Thumb under:', ru: 'Подкладывание:' },
+          lead: { en: 'Passing the thumb under:', ru: 'Подкладывание:' },
           text: {
-            en: 'the thumb slides beneath the hand to the next key. Up C major, play C D E with 1-2-3, then the thumb takes F.',
-            ru: 'первый палец проходит под ладонью к следующей клавише. Вверх по до мажору: до, ре, ми пальцами 1-2-3, затем первый берёт фа.',
+            en: 'the thumb slides beneath the hand to the next key. Going up C major, the right hand plays C D E with 1-2-3. Then the thumb takes F.',
+            ru: 'первый палец проходит под ладонью к следующей клавише. Вверх по до мажору правая рука играет до, ре, ми пальцами 1-2-3. Затем первый берёт фа.',
           },
         },
         {
@@ -29,14 +29,14 @@ const fingeringTechniques: Lesson = {
       ],
     },
     {
-      heading: { en: 'A finger crosses over', ru: 'Перекладывание пальца' },
+      heading: { en: 'Crossing over', ru: 'Перекладывание пальца' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Finger crossing:', ru: 'Перекладывание:' },
+          lead: { en: 'Crossing over:', ru: 'Перекладывание:' },
           text: {
-            en: 'coming down, a finger reaches over the thumb. Play C B A G F with 5-4-3-2-1, then 3 crosses onto E.',
-            ru: 'при движении вниз палец переносится через первый. До, си, ля, соль, фа пальцами 5-4-3-2-1, затем третий — на ми.',
+            en: 'coming down, a finger reaches over the thumb. The right hand plays C B A G F with 5-4-3-2-1. Then finger 3 crosses over to E.',
+            ru: 'при движении вниз палец переносится через первый. Правая рука играет до, си, ля, соль, фа пальцами 5-4-3-2-1. Затем третий переносится на ми.',
           },
         },
         {
@@ -52,8 +52,8 @@ const fingeringTechniques: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand mirrors the right. Up C major it plays 5-4-3-2-1, then 3 crosses over the thumb onto A.',
-            ru: 'Левая рука зеркальна правой. Вверх по до мажору: 5-4-3-2-1, затем третий палец через первый на ля.',
+            en: 'The left hand mirrors the right. Going up C major, it plays C D E F G with 5-4-3-2-1. Then finger 3 crosses over the thumb to A.',
+            ru: 'Левая рука действует зеркально. Вверх по до мажору она играет до, ре, ми, фа, соль пальцами 5-4-3-2-1. Затем третий переносится через первый на ля.',
           },
         },
         {
@@ -64,35 +64,35 @@ const fingeringTechniques: Lesson = {
       ],
     },
     {
-      heading: { en: 'Swap fingers on a key', ru: 'Подмена пальца' },
+      heading: { en: 'Swapping fingers on a key', ru: 'Подмена пальца' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Finger substitution:', ru: 'Подмена пальца:' },
           text: {
-            en: 'changing fingers on a held key. Hold E with 3, slip the thumb onto it, and 2-3-4-5 reach up to B.',
-            ru: 'смена пальца на звучащей клавише. Держите ми третьим, подставьте первый, и пальцы 2-3-4-5 дотянутся до си.',
+            en: 'changing fingers on a key you are holding. Hold E with finger 3 and slip the thumb onto it. Now fingers 2-3-4-5 reach F, G, A and B.',
+            ru: 'смена пальца на клавише, которую вы держите. Держите ми третьим пальцем и подставьте первый. Теперь пальцы 2-3-4-5 достают фа, соль, ля и си.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/2~ E4/2 F4 G4 A4 B4' },
       ],
     },
     {
-      heading: { en: 'Stretch the hand', ru: 'Растяжка' },
+      heading: { en: 'Stretching the hand', ru: 'Растяжка' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Extension:', ru: 'Растяжка:' },
           text: {
-            en: 'a finger reaches past the position while the hand stays put. Keep the thumb on C and stretch 5 up to A.',
-            ru: 'палец выходит за позицию, а рука остаётся на месте. Держите первый палец на до и дотянитесь пятым до ля.',
+            en: 'one finger reaches past the five keys under the hand, and the hand stays where it is. Keep the thumb on C and stretch finger 5 up to A.',
+            ru: 'один палец выходит за пять клавиш позиции, а рука остаётся на месте. Держите первый палец на до и дотянитесь пятым до ля.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 G4 A4 G4 E4 C4/2' },
       ],
     },
     {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
+      heading: { en: 'Planning a phrase', ru: 'Как спланировать фразу' },
       blocks: [
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 G4 F4 E4 D4 C4/2' },
         {
@@ -103,19 +103,24 @@ const fingeringTechniques: Lesson = {
               ru: 'Найдите самый низкий и самый высокий звук фразы.',
             },
             {
-              en: 'Plan where the thumb passes under: here onto F.',
-              ru: 'Решите, где подложить первый палец: здесь на фа.',
+              en: 'Decide where the thumb passes under. Here it is on F.',
+              ru: 'Решите, где подложить первый палец. Здесь это фа.',
             },
             {
-              en: 'Keep the same fingers every time.',
-              ru: 'Играйте одними и теми же пальцами каждый раз.',
+              en: 'Play it with the same fingers every time.',
+              ru: 'Играйте её одними и теми же пальцами каждый раз.',
             },
           ],
         },
+      ],
+    },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
         {
           kind: 'question',
           ask: {
-            en: 'Play C major up an octave, the thumb passing under onto F.',
+            en: 'Play C major up an octave, passing the thumb under to F.',
             ru: 'Сыграйте до мажор вверх на октаву, подкладывая первый палец на фа.',
           },
           answer: { notes: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'], rising: true },
@@ -123,15 +128,15 @@ const fingeringTechniques: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Coming down, play the note finger 3 crosses onto.',
-            ru: 'При движении вниз сыграйте ноту, на которую перекладывается третий палец.',
+            en: 'Coming down C major, play the note that finger 3 crosses over to.',
+            ru: 'Вниз по до мажору сыграйте ноту, на которую переносится третий палец.',
           },
           answer: { notes: ['E'] },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Keep the thumb on C and play C, E, G and A upwards.',
+            en: 'Keep the thumb on C and play C, E, G and A going up.',
             ru: 'Держите первый палец на до и сыграйте вверх до, ми, соль и ля.',
           },
           answer: { notes: ['C', 'E', 'G', 'A'], rising: true },

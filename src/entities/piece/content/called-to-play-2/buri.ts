@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 84,
   pattern: 'M1',
   note: {
-    en: 'The octaves that close each verse are marked “x 1”, played once; the chorus’s sixths “melody”, following the tune.',
-    ru: 'Октавы в конце каждого куплета помечены «x 1» — один раз; сексты в припеве помечены «melody» — они идут за мелодией.',
+    en: 'The octaves at the end of each verse are marked “x 1”: play them once. The sixths in the chorus are marked “melody”: they follow the tune.',
+    ru: 'Октавы в конце каждого куплета помечены «x 1»: их играют один раз. Сексты в припеве помечены «melody»: они идут за мелодией.',
   },
   sections: [
     { kind: 'verse', n: 1, lines: ['C:3 Dm:t3', 'G:5.1 C:6u', 'C:4 Dm:6d', 'G:t5 G:3-C:oct'] },

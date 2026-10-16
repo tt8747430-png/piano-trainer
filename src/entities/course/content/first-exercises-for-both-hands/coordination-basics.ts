@@ -7,8 +7,8 @@ const coordinationBasics: Lesson = {
   id: 'coordination-basics',
   title: { en: 'Coordination basics', ru: 'Основы координации' },
   summary: {
-    en: 'Play five-finger patterns with both hands, together and in mirror.',
-    ru: 'Играть позицию пяти пальцев двумя руками, вместе и зеркально.',
+    en: 'Play the five-finger position with both hands, the same way and in mirror, on C, G and D.',
+    ru: 'Играть позицию пяти пальцев двумя руками, в одну сторону и зеркально, от до, соль и ре.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const coordinationBasics: Lesson = {
           kind: 'text',
           lead: { en: 'Parallel motion', ru: 'Параллельное движение' },
           text: {
-            en: 'moves both hands the same way, an octave apart. The right plays 1 2 3 4 5 while the left plays 5 4 3 2 1.',
-            ru: '— обе руки идут в одну сторону на октаву друг от друга. Правая играет 1 2 3 4 5, левая — 5 4 3 2 1.',
+            en: 'means both hands move the same way, an octave apart. Same notes, mirrored fingers: the right plays 1 2 3 4 5 while the left plays 5 4 3 2 1.',
+            ru: '— обе руки идут в одну сторону на октаву друг от друга. Ноты одинаковые, а пальцы зеркальные: правая играет 1 2 3 4 5, левая — 5 4 3 2 1.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
@@ -41,8 +41,8 @@ const coordinationBasics: Lesson = {
           kind: 'text',
           lead: { en: 'Contrary motion', ru: 'Противоположное движение' },
           text: {
-            en: 'moves the hands apart and back. Both start on the thumb, so both use the same finger at each moment.',
-            ru: '— руки расходятся и сходятся. Обе начинают с большого пальца и всё время играют одинаковыми пальцами.',
+            en: 'means the hands move apart and back again. Both start on the thumb, so both hands use the same finger at every moment.',
+            ru: '— руки расходятся и снова сходятся. Обе начинают с большого пальца, поэтому в каждый момент играют одинаковыми пальцами.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
@@ -60,8 +60,8 @@ const coordinationBasics: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Up a 3rd, back a step. Keep the hands together through the skips.',
-            ru: 'На терцию вверх, на шаг назад. Руки остаются вместе и на скачках.',
+            en: 'Now go up a 3rd, then back a step. Keep the hands exactly together, even on the skips.',
+            ru: 'Теперь шаг на терцию вверх, затем на ступень назад. Руки идут строго вместе, даже на скачках.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 D4 F4 E4 G4 F4 D4 C4/1' },
@@ -69,12 +69,12 @@ const coordinationBasics: Lesson = {
       ],
     },
     {
-      heading: { en: 'The G position', ru: 'Позиция соль' },
+      heading: { en: 'Moving to G', ru: 'Позиция соль' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Move both hands up to G. The pattern is the same, so the fingers are too.',
+            en: 'Move both hands up to G. The pattern is the same, so the fingers are the same too.',
             ru: 'Перенесите обе руки к соль. Фигура та же, значит, и пальцы те же.',
           },
         },
@@ -85,6 +85,14 @@ const coordinationBasics: Lesson = {
           title: { en: 'The five-finger position on G', ru: 'Позиция пяти пальцев от соль' },
           target: { opens: 'exercise', exercise: 'five-finger', root: note('G') },
         },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the five notes of the G position, up from G.',
+            ru: 'Сыграйте пять звуков позиции соль вверх от соль.',
+          },
+          answer: { notes: ['G', 'A', 'B', 'C', 'D'], rising: true },
+        },
       ],
     },
     {
@@ -93,8 +101,8 @@ const coordinationBasics: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'D major’s five notes are D, E, F♯, G, A. Finger 3 plays the black key, a little further in.',
-            ru: 'Пять звуков ре мажора: ре, ми, фа-диез, соль, ля. Третий палец берёт чёрную клавишу, чуть глубже.',
+            en: 'In D major the five notes are D, E, F♯, G, A. Finger 3 plays the black key, so reach a little further in.',
+            ru: 'В ре мажоре пять звуков: ре, ми, фа-диез, соль, ля. Третий палец берёт чёрную клавишу, поэтому ставьте его чуть глубже.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'D4 E4 F#4 G4 A4 G4 F#4 E4 D4/1', key: D_MAJOR },
@@ -103,6 +111,14 @@ const coordinationBasics: Lesson = {
           kind: 'link',
           title: { en: 'The five-finger position on D', ru: 'Позиция пяти пальцев от ре' },
           target: { opens: 'exercise', exercise: 'five-finger', root: note('D') },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the five notes of the D major position, up from D.',
+            ru: 'Сыграйте пять звуков позиции ре мажора вверх от ре.',
+          },
+          answer: { notes: ['D', 'E', 'F♯', 'G', 'A'], rising: true },
         },
       ],
     },
@@ -113,7 +129,7 @@ const coordinationBasics: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Set a slow beat and count aloud.',
+              en: 'Pick a slow beat and count aloud.',
               ru: 'Возьмите медленный темп и считайте вслух.',
             },
             {
@@ -122,31 +138,15 @@ const coordinationBasics: Lesson = {
             },
             {
               en: 'Keep every finger equally loud.',
-              ru: 'Ни один палец не громче других.',
+              ru: 'Следите, чтобы ни один палец не звучал громче других.',
             },
           ],
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play the five notes of the G position, up from G.',
-            ru: 'Сыграйте пять звуков позиции соль вверх от соль.',
-          },
-          answer: { notes: ['G', 'A', 'B', 'C', 'D'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the five notes of D major’s position, up from D.',
-            ru: 'Сыграйте пять звуков позиции ре мажора вверх от ре.',
-          },
-          answer: { notes: ['D', 'E', 'F♯', 'G', 'A'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play both starting thumbs of contrary motion, G and C.',
-            ru: 'Сыграйте оба больших пальца начала противоположного движения: соль и до.',
+            en: 'Play the two starting thumb notes of contrary motion, G and C.',
+            ru: 'Сыграйте две начальные ноты больших пальцев в противоположном движении: соль и до.',
           },
           answer: { notes: ['G', 'C'] },
         },

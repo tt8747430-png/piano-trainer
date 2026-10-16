@@ -44,7 +44,7 @@ export default definePiece({
     },
   ],
   note: {
-    en: 'From Vasily Gorshkov’s accompaniment course, the chorus written out twice: with its 1st ending, then its 2nd. With 9ths only the 7th chords grow, as the course teaches: Dm9, Gm9, FMaj9, and D7♭9 into Gm.',
-    ru: 'Из курса по аккомпанементу Василия Горшкова; припев выписан дважды: с первой вольтой, затем со второй. С нонаккордами растут только септаккорды, как учит курс: Dm9, Gm9, FMaj9 и D7♭9 перед Gm.',
+    en: 'From Vasily Gorshkov’s accompaniment course. The chorus is written out twice: first with its 1st ending, then with its 2nd. With 9ths, only the 7th chords grow, as the course teaches: they become Dm9, Gm9, FMaj9, and D7♭9 before Gm.',
+    ru: 'Из курса по аккомпанементу Василия Горшкова. Припев выписан дважды: сначала с первой вольтой, затем со второй. С нонаккордами растут только септаккорды, как учит курс: они становятся Dm9, Gm9, FMaj9 и D7♭9 перед Gm.',
   },
 })

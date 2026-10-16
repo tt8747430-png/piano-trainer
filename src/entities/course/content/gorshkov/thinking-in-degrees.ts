@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Name a song’s chords by degree and play it in any key.',
-    ru: 'Называйте аккорды песни ступенями и играйте её в любой тональности.',
+    en: 'Find a song’s key, name its chords by degree, and play it in any key.',
+    ru: 'Найти тональность песни, назвать её аккорды ступенями и сыграть её в любой тональности.',
   },
   sections: [
     {
@@ -17,8 +17,8 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Degrees carry a song to any key. First find its key.',
-            ru: 'Ступени переносят песню в любую тональность, поэтому сначала найдите её тональность.',
+            en: 'Degrees carry a song into any key, so first find its key.',
+            ru: 'Ступени переносят песню в любую тональность, поэтому сначала найдите, в какой она тональности.',
           },
         },
         {
@@ -31,22 +31,18 @@ const thinkingInDegrees: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'The signature: right nine times in ten.',
+              en: 'The key signature, right nine times in ten.',
               ru: 'Ключевые знаки: верны в девяти случаях из десяти.',
             },
             {
-              en: 'The melody’s last note: often the tonic.',
-              ru: 'Последняя нота мелодии: обычно это тоника.',
+              en: 'The melody’s last note, often the tonic.',
+              ru: 'Последняя нота мелодии: часто это тоника.',
             },
             {
-              en: 'The first and last chords: usually home.',
-              ru: 'Первый и последний аккорды: обычно это дом.',
+              en: 'The first and last chords, usually home.',
+              ru: 'Первый и последний аккорды: обычно это тонический аккорд.',
             },
           ],
-        },
-        {
-          kind: 'note',
-          text: { en: 'Hints, not rules.', ru: 'Это подсказки, а не правила.' },
         },
       ],
     },
@@ -55,9 +51,10 @@ const thinkingInDegrees: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A degree', ru: 'Ступень' },
           text: {
-            en: '“Ромашковые поля” is in D minor. Each degree of its scale carries a chord, V with the raised 7th, C♯.',
-            ru: '«Ромашковые поля» — в ре миноре. На каждой ступени его гаммы стоит аккорд, на V — с повышенной VII ступенью, до-диезом.',
+            en: 'is a note’s place in the key’s scale, numbered I to VII. “Ромашковые поля” is in D minor, and each degree carries a chord. V uses the raised 7th, C♯.',
+            ru: '— место звука в гамме тональности, от I до VII. «Ромашковые поля» — в ре миноре, и на каждой ступени стоит аккорд. На V — с повышенной VII ступенью, до-диезом.',
           },
         },
         {
@@ -73,8 +70,8 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each chord takes its degree’s numeral: i7 iv9 Vsus4 i7.',
-            ru: 'Каждый аккорд получает цифру своей ступени: i7 iv9 Vsus4 i7.',
+            en: 'Each chord becomes its degree’s numeral: i7 iv9 Vsus4 i7.',
+            ru: 'Каждый аккорд записывается цифрой своей ступени: i7 iv9 Vsus4 i7.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'Gm9', 'Asus4', 'Dm7'] },
@@ -83,10 +80,13 @@ const thinkingInDegrees: Lesson = {
           steps: [
             { en: 'The numeral is the degree.', ru: 'Цифра — это ступень.' },
             {
-              en: 'Upper case means major, lower case minor.',
-              ru: 'Заглавная — мажор, строчная — минор.',
+              en: 'Upper case is major, lower case minor.',
+              ru: 'Заглавная цифра — мажор, строчная — минор.',
             },
-            { en: 'What follows names the rest.', ru: 'Остальное — после цифры.' },
+            {
+              en: 'The rest of the chord follows it.',
+              ru: 'Всё остальное в аккорде пишется после цифры.',
+            },
           ],
         },
         {
@@ -104,8 +104,8 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The degrees stay. Only the key changes: in G minor, i7 iv9 Vsus4 i7 is Gm7 Cm9 Dsus4 Gm7.',
-            ru: 'Ступени остаются, меняется только тональность: в соль миноре i7 iv9 Vsus4 i7 — это Gm7 Cm9 Dsus4 Gm7.',
+            en: 'The degrees stay the same and only the key changes. In G minor, i7 iv9 Vsus4 i7 is Gm7 Cm9 Dsus4 Gm7.',
+            ru: 'Ступени остаются, меняется только тональность. В соль миноре i7 iv9 Vsus4 i7 — это Gm7 Cm9 Dsus4 Gm7.',
           },
         },
         { kind: 'chords', symbols: ['Gm7', 'Cm9', 'Dsus4', 'Gm7'] },

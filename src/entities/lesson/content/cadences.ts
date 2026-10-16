@@ -8,8 +8,8 @@ const cadences: Lesson = {
   id: 'cadences',
   title: { en: 'Cadences', ru: 'Каденции' },
   summary: {
-    en: 'Hear and play the four cadences that end a line.',
-    ru: 'Слушайте и играйте четыре каденции, которыми кончаются фразы.',
+    en: 'A cadence is the pair of chords that ends a phrase. Learn the four kinds by ear and on the keys.',
+    ru: 'Каденция — это пара аккордов в конце фразы. Узнайте четыре вида на слух и на клавишах.',
   },
   sections: [
     {
@@ -19,8 +19,8 @@ const cadences: Lesson = {
           kind: 'text',
           lead: { en: 'An authentic cadence', ru: 'Полная (совершенная) каденция' },
           text: {
-            en: 'ends on the tonic from the dominant, V to I. It sounds finished.',
-            ru: 'приходит на тонику от доминанты, V – I. Она звучит завершённо.',
+            en: 'goes from V, the dominant, to I, the tonic. It sounds finished, like a full stop.',
+            ru: 'идёт от V, доминанты, к I, тонике. Она звучит законченно, как точка в конце предложения.',
           },
         },
         { kind: 'progression', numerals: 'V I', key: C_MAJOR },
@@ -32,8 +32,8 @@ const cadences: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add the 7th to V and the pull grows. In C, B rises to C and F falls to E.',
-            ru: 'Добавьте к V септиму, и тяготение усилится. В до мажоре си поднимается в до, а фа опускается в ми.',
+            en: 'Add a 7th to V and it pulls harder toward I. In C major, watch two notes move: B rises to C, and F falls to E.',
+            ru: 'Добавьте к V септиму, и тяготение к I станет сильнее. В до мажоре следите за двумя звуками: си поднимается в до, фа опускается в ми.',
           },
         },
         {
@@ -52,8 +52,8 @@ const cadences: Lesson = {
           kind: 'text',
           lead: { en: 'A plagal cadence', ru: 'Плагальная каденция' },
           text: {
-            en: 'comes to I from IV. It is softer than V–I: the Amen at a hymn’s end.',
-            ru: 'приходит к I от IV. Она мягче, чем V – I: это «аминь» в конце гимна.',
+            en: 'goes from IV to I. It sounds softer than V to I. It is the Amen sung at the end of many hymns.',
+            ru: 'идёт от IV к I. Она звучит мягче, чем V – I. Это «аминь», которым кончаются многие гимны.',
           },
         },
         { kind: 'progression', numerals: 'IV I', key: C_MAJOR },
@@ -66,8 +66,8 @@ const cadences: Lesson = {
           kind: 'text',
           lead: { en: 'A half cadence', ru: 'Половинная каденция' },
           text: {
-            en: 'stops on V. The line sounds like a question, and the next line answers it.',
-            ru: 'останавливается на V. Фраза звучит как вопрос, а следующая на него отвечает.',
+            en: 'stops on V instead of going home. The phrase sounds unfinished, like a question.',
+            ru: 'останавливается на V и не возвращается домой. Фраза звучит незаконченно, как вопрос.',
           },
         },
         { kind: 'progression', numerals: 'I vi IV V', key: C_MAJOR },
@@ -80,8 +80,8 @@ const cadences: Lesson = {
           kind: 'text',
           lead: { en: 'A deceptive cadence', ru: 'Прерванная каденция' },
           text: {
-            en: 'leads you to expect I, then vi arrives. The song goes on for one more line.',
-            ru: 'заставляет ждать I, а приходит vi. Песня продолжается ещё на одну фразу.',
+            en: 'goes from V to vi. Your ear expects I, and the minor vi arrives instead. The song has to carry on.',
+            ru: 'идёт от V к vi. Слух ждёт I, а вместо неё звучит минорная vi. Песне приходится продолжаться.',
           },
         },
         { kind: 'progression', numerals: 'IV V vi', key: C_MAJOR },
@@ -93,8 +93,8 @@ const cadences: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A minor key raises its 7th so that V is major. In A minor, E leads home to Am.',
-            ru: 'В миноре седьмую ступень повышают, чтобы V была мажорной. В ля миноре ми мажор ведёт к ля минору.',
+            en: 'In a minor key, the 7th note is raised so that V becomes major. In A minor, G becomes G♯, and E major leads home to Am.',
+            ru: 'В миноре седьмую ступень повышают, чтобы V стала мажорной. В ля миноре соль становится соль-диезом, и ми мажор ведёт домой, к ля минору.',
           },
         },
         { kind: 'progression', numerals: 'iv V i', key: A_MINOR },
@@ -106,8 +106,8 @@ const cadences: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Many tunes ask, then answer. The first line stops on V, a half cadence. The second ends V–I.',
-            ru: 'Многие мелодии спрашивают и отвечают. Первая фраза останавливается на V, вторая кончается V – I.',
+            en: 'Many tunes come in pairs of phrases. The first stops on V, a half cadence, like a question. The second answers with V to I.',
+            ru: 'Многие мелодии состоят из пар фраз. Первая останавливается на V, как вопрос. Вторая отвечает каденцией V – I.',
           },
         },
         { kind: 'progression', numerals: 'I IV I V I IV V I', key: C_MAJOR },
@@ -142,13 +142,13 @@ const cadences: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Both lines in the Player', ru: 'Обе фразы в плеере' },
+          title: { en: 'Play both phrases in the Player', ru: 'Обе фразы в плеере' },
           target: { opens: 'player', numerals: 'I IV I V I IV V I', key: C_MAJOR },
         },
         {
           kind: 'link',
           title: {
-            en: 'Progressions by ear in the Quiz',
+            en: 'Hear progressions in the Quiz',
             ru: 'Последовательности на слух в тестах',
           },
           target: { opens: 'quiz', trainer: 'progressions-by-ear' },

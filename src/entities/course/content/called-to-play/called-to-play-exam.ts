@@ -5,8 +5,8 @@ const calledToPlayExam: Lesson = {
   id: 'called-to-play-exam',
   title: { en: 'Final exam', ru: 'Итоговый экзамен' },
   summary: {
-    en: 'Accompany a singer in a song of your own plan.',
-    ru: 'Аккомпанируйте солисту в песне по своему плану.',
+    en: 'Write your own plan for a song and accompany a singer with it.',
+    ru: 'Составьте свой план песни и аккомпанируйте по нему солисту.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const calledToPlayExam: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Prepare two verses of “Long I Wandered in the Shadows” with your own plan: its introduction, ways, dynamics and embellishments.',
-            ru: 'Подготовьте два куплета «Long I Wandered in the Shadows» по своему плану: вступление, способы, динамику и украшения.',
+            en: 'Prepare two verses of “Long I Wandered in the Shadows” with a plan of your own. Choose its introduction, ways, dynamics and embellishments.',
+            ru: 'Подготовьте два куплета «Long I Wandered in the Shadows» по собственному плану. Выберите вступление, способы, динамику и украшения.',
           },
         },
         { kind: 'chords', symbols: ['Am', 'Dm', 'G', 'C', 'F', 'Dm', 'E'] },
@@ -37,14 +37,14 @@ const calledToPlayExam: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Find a soloist: they sing, you accompany.',
+              en: 'Find a soloist to sing while you accompany.',
               ru: 'Найдите солиста: он поёт, вы аккомпанируете.',
             },
             {
-              en: 'Show the song’s meaning without covering the voice.',
+              en: 'Bring out the meaning of the song without covering the voice.',
               ru: 'Раскройте смысл песни, не заглушая голос.',
             },
-            { en: 'Record a video of it.', ru: 'Запишите это на видео.' },
+            { en: 'Record a video of your performance.', ru: 'Запишите исполнение на видео.' },
           ],
         },
         { kind: 'pattern', pattern: 'M4', piece: 'wander' },

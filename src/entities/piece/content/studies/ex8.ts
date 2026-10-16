@@ -10,6 +10,9 @@ export default definePiece({
   meter: '4/4',
   tempo: 72,
   pattern: 'p51',
-  note: { en: 'Use 5.1, 5.2 and 5.3.', ru: 'Используйте 5.1, 5.2 и 5.3.' },
+  note: {
+    en: 'Use the three new right-hand techniques: 5.1, 5.2 and 5.3.',
+    ru: 'Используйте три новые техники правой руки: 5.1, 5.2 и 5.3.',
+  },
   sections: [{ kind: 'practice', lines: ['Dm Gm A Dm', 'D Gm A Dm'] }],
 })

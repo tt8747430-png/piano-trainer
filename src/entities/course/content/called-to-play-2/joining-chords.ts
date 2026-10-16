@@ -9,27 +9,27 @@ const joiningChords: Lesson = {
   id: 'joining-chords',
   title: { en: 'Joining chords', ru: 'Соединение аккордов' },
   summary: {
-    en: 'Join I, IV and V by their nearest notes.',
-    ru: 'Соединяйте I, IV и V через ближайшие звуки.',
+    en: 'Move from I to IV to V by the nearest notes, starting from each position of the first chord.',
+    ru: 'Переходите от I к IV и V через ближайшие звуки, начиная с каждого расположения первого аккорда.',
   },
   sections: [
     {
-      heading: { en: 'Three main chords', ru: 'Три главных аккорда' },
+      heading: { en: 'The three main chords', ru: 'Три главных аккорда' },
       blocks: [
         {
           kind: 'steps',
           steps: [
             {
-              en: 'I, the tonic: the centre, at rest.',
-              ru: 'I, тоника: опора, центр звучания.',
+              en: 'I, the tonic: home, at rest.',
+              ru: 'I, тоника: опора, покой.',
             },
             {
-              en: 'IV, the subdominant: a move aside, a preparation.',
-              ru: 'IV, субдоминанта: движение в сторону, подготовка.',
+              en: 'IV, the subdominant: a step away from home, a preparation.',
+              ru: 'IV, субдоминанта: шаг в сторону от опоры, подготовка.',
             },
             {
-              en: 'V, the dominant: tension, wanting home.',
-              ru: 'V, доминанта: напряжение, стремление вернуться домой.',
+              en: 'V, the dominant: tension that wants to go home.',
+              ru: 'V, доминанта: напряжение, которое стремится домой.',
             },
           ],
         },
@@ -37,13 +37,13 @@ const joiningChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'The nearest note', ru: 'Ближайший звук' },
+      heading: { en: 'Move to the nearest note', ru: 'Ведите в ближайший звук' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Move each note to its nearest neighbour, never jumping across the keyboard. The join sounds smooth.',
-            ru: 'Ведите каждый звук в ближайший соседний, не прыгая через клавиатуру. Соединение звучит плавно.',
+            en: 'Move each right-hand note to the nearest note of the next chord. A shared note stays put: C, from C to F.',
+            ru: 'Ведите каждый звук правой руки в ближайший звук следующего аккорда. Общий звук остаётся на месте: до при переходе от C к F.',
           },
         },
         {
@@ -55,16 +55,23 @@ const joiningChords: Lesson = {
             { symbol: 'C', hands: 'C3 | C4 E4 G4' },
           ],
         },
+        {
+          kind: 'note',
+          text: {
+            en: 'The hand barely moves, so the change sounds smooth.',
+            ru: 'Рука почти не сдвигается, поэтому смена звучит плавно.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'Three positions', ru: 'Три вида соединения' },
+      heading: { en: 'Start from each position', ru: 'Начните с каждого расположения' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The same join starts from each position of the first chord.',
-            ru: 'То же соединение начинают с каждого расположения первого аккорда.',
+            en: 'Begin the same join with E at the bottom of the first chord, then with G. Each start gives the top voice a new line.',
+            ru: 'Начните то же соединение с ми внизу первого аккорда, затем с соль. Каждое начало даёт верхнему голосу новую линию.',
           },
         },
         {
@@ -94,11 +101,11 @@ const joiningChords: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Play the three joins in other keys, major and minor.',
-              ru: 'Играйте три вида соединения в других тональностях, мажорных и минорных.',
+              en: 'Play the three joins in other keys, major and minor, like C minor below.',
+              ru: 'Играйте три вида соединения в других тональностях, мажорных и минорных, например в до миноре.',
             },
             {
-              en: 'Play two songs with way 5, joining the chords by their nearest notes.',
+              en: 'Play two songs in way 5, joining the chords by their nearest notes.',
               ru: 'Сыграйте две песни 5-м видом, соединяя аккорды через ближайшие звуки.',
             },
           ],

@@ -6,7 +6,7 @@ const accidentals: Lesson = {
   id: 'accidentals',
   title: { en: 'Accidentals', ru: 'Знаки альтерации' },
   summary: {
-    en: 'Read sharps, flats and naturals, and name every black key.',
+    en: 'Read sharps, flats and naturals, and give every black key its names.',
     ru: 'Читать диезы, бемоли и бекары и называть любую чёрную клавишу.',
   },
   sections: [
@@ -17,8 +17,8 @@ const accidentals: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'goes from one key to the very next, black or white. E to F and B to C are half steps too.',
-            ru: '— от клавиши до соседней, чёрной или белой. Ми — фа и си — до тоже полутоны.',
+            en: 'is the move to the key right beside it, black or white. It is the smallest step on the piano. E to F and B to C are half steps too.',
+            ru: '— расстояние от клавиши до самой близкой соседней, чёрной или белой. Это самый маленький шаг на фортепиано. Ми — фа и си — до тоже полутоны.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'm2' },
@@ -31,8 +31,8 @@ const accidentals: Lesson = {
           kind: 'text',
           lead: { en: 'A sharp (♯)', ru: 'Диез (♯)' },
           text: {
-            en: 'raises a note a half step, to the next key on the right. F♯ is the black key just right of F.',
-            ru: 'повышает ноту на полутон, до соседней клавиши справа. Фа-диез — чёрная клавиша справа от фа.',
+            en: 'raises a note a half step, to the next key on the right. F♯ is the black key just right of F. The sign goes before the note.',
+            ru: 'повышает ноту на полутон, до соседней клавиши справа. Фа-диез — чёрная клавиша справа от фа. Знак пишут перед нотой.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4 F#4 G4/2' },
@@ -59,21 +59,22 @@ const accidentals: Lesson = {
           kind: 'text',
           lead: { en: 'A natural (♮)', ru: 'Бекар (♮)' },
           text: {
-            en: 'cancels a sharp or a flat. The note goes back to its white key.',
-            ru: 'отменяет диез или бемоль. Нота возвращается на свою белую клавишу.',
+            en: 'cancels a sharp or a flat, so the note goes back to its white key. Here F♯ returns to F.',
+            ru: 'отменяет диез или бемоль, и нота возвращается на свою белую клавишу. Здесь фа-диез снова становится фа.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F#4 G4 F4/2' },
       ],
     },
     {
-      heading: { en: 'To the barline', ru: 'До тактовой черты' },
+      heading: { en: 'A sign lasts to the barline', ru: 'Знак действует до тактовой черты' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'An accidental', ru: 'Случайный знак' },
           text: {
-            en: 'An accidental lasts to the end of its bar, so a second C♯ there needs no sign. In the next bar, C is C again.',
-            ru: 'Знак действует до конца такта: второму до-диезу знак не нужен. В следующем такте до — снова до.',
+            en: 'is a sharp, flat or natural before a note. It lasts to the end of its bar, so the second C♯ needs no sign. The next bar starts fresh.',
+            ru: '— диез, бемоль или бекар перед нотой. Он действует до конца такта, поэтому второму до-диезу знак не нужен. В следующем такте до снова без знака.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5 C#5 D5 C#5 C5 D5 C5/2' },
@@ -86,8 +87,8 @@ const accidentals: Lesson = {
           kind: 'text',
           lead: { en: 'Enharmonic notes', ru: 'Энгармонически равные звуки' },
           text: {
-            en: 'sound the same but are written differently. F♯ and G♭ are one key, and so are E♯ and F.',
-            ru: 'звучат одинаково, но пишутся по-разному. Фа-диез и соль-бемоль — одна клавиша, ми-диез и фа — тоже.',
+            en: 'sound the same but are written differently. F♯ and G♭ are the same black key. E♯ and F are the same white key.',
+            ru: 'звучат одинаково, но пишутся по-разному. Фа-диез и соль-бемоль — одна и та же чёрная клавиша. Ми-диез и фа — одна белая.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F#4/2 Gb4/2 E4/2 E#4/2' },
@@ -100,8 +101,8 @@ const accidentals: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each bar writes its own flats: the E♭ in the third bar needs its sign again.',
-            ru: 'В каждом такте свои бемоли: ми-бемолю в третьем такте снова нужен знак.',
+            en: 'A new bar starts without accidentals, so the E♭ in the third bar needs its sign again.',
+            ru: 'Новый такт начинается без случайных знаков, поэтому ми-бемолю в третьем такте снова нужен знак.',
           },
         },
         {
@@ -124,7 +125,7 @@ const accidentals: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {

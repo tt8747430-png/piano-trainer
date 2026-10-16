@@ -11,18 +11,19 @@ const jazzVoicings: Lesson = {
   id: 'jazz-voicings',
   title: { en: 'Jazz voicings', ru: 'Джазовые расположения' },
   summary: {
-    en: 'Voice major, minor and altered dominant chords the jazz way.',
-    ru: 'Располагать мажорные, минорные и альтерированные доминантовые аккорды по-джазовому.',
+    en: 'Spread major, minor and dominant chords over two hands, then alter a dominant with a simple triad on top.',
+    ru: 'Раскладывать мажорные, минорные и доминантовые аккорды на две руки и альтерировать доминанту простым трезвучием сверху.',
   },
   sections: [
     {
-      heading: { en: 'Major: triads, 6ths and 9ths', ru: 'Мажор: трезвучия, сексты и ноны' },
+      heading: { en: 'Major: 6ths and 9ths', ru: 'Мажор: сексты и ноны' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A voicing', ru: 'Расположение' },
           text: {
-            en: 'Spread the chord over both hands. For a major 7th, swap the top C for B.',
-            ru: 'Разложите аккорд на обе руки. Для большого септаккорда замените верхнее до на си.',
+            en: 'is which notes each hand plays. Here the left hand keeps the root low. The right hand changes the colour on top.',
+            ru: '— это какие звуки играет каждая рука, снизу вверх. Здесь левая держит основной тон внизу. Правая меняет окраску сверху.',
           },
         },
         {
@@ -39,8 +40,64 @@ const jazzVoicings: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'A minor chord takes the same shapes with E♭ for E.',
-            ru: 'Минорный аккорд берёт те же расположения с ми-бемолем вместо ми.',
+            en: 'For minor, play the same shapes with E♭ for E.',
+            ru: 'Для минорного аккорда играйте те же фигуры с ми-бемолем вместо ми.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Wide major 9ths', ru: 'Широкие мажорные ноны' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'The left hand plays two 5ths stacked: F, C, G. The right hand plays A minor, a major 3rd above F.',
+            ru: 'Левая рука играет две квинты друг над другом: фа, до, соль. Правая играет ля минор, на большую терцию выше фа.',
+          },
+        },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'FMaj9', degrees: '1 5 9 | 3 5 7', hands: 'F2 C3 G3 | A3 C4 E4' },
+            { symbol: 'FMaj9', degrees: '1 5 9 | 3 5 7 9', hands: 'F2 C3 G3 | A3 C4 E4 G4' },
+            { symbol: 'F6/9', degrees: '1 5 9 | 3 6', hands: 'F2 C3 G3 | A3 D4' },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play all three. The left hand never moves.',
+            ru: 'Сыграйте все три. Левая рука не двигается.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Drop 2', ru: 'Drop 2' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'Drop 2', ru: 'Drop 2' },
+          text: {
+            en: 'moves the chord’s 3rd an octave down into the left hand. The 2nd takes its place in the right.',
+            ru: 'переносит терцию аккорда на октаву вниз, в левую руку. Её место в правой занимает вторая ступень.',
+          },
+        },
+        {
+          kind: 'voicings',
+          voicings: [
+            { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
+            { symbol: 'Cadd9', degrees: '1 3 | 9 5 1', hands: 'C3 E3 | D4 G4 C5' },
+            { symbol: 'Fadd9', degrees: '1 3 | 9 5 1', hands: 'F2 A2 | G3 C4 F4' },
+            { symbol: 'Gadd9', degrees: '1 3 | 9 5 1', hands: 'G2 B2 | A3 D4 G4' },
+          ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play C, then Cadd9, and follow the E down.',
+            ru: 'Сыграйте C, затем Cadd9 и проследите, как ми уходит вниз.',
           },
         },
       ],
@@ -51,8 +108,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Cm11 is two triads, C minor and B♭ major. Spread wide, each hand plays two 5ths.',
-            ru: 'Cm11 — это два трезвучия, до минор и си-бемоль мажор. В широком расположении каждая рука играет две квинты.',
+            en: 'Cm11 is two triads stacked: C minor, then B♭ major. Spread wide, each hand plays two 5ths.',
+            ru: 'Cm11 — это два трезвучия друг над другом: до минор и си-бемоль мажор. В широком расположении каждая рука играет две квинты.',
           },
         },
         {
@@ -62,6 +119,13 @@ const jazzVoicings: Lesson = {
             { symbol: 'Cm11', degrees: '1 5 9 | ♭3 ♭7 11', hands: 'C3 G3 D4 | E♭4 B♭4 F5' },
           ],
         },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the close shape, then the wide one.',
+            ru: 'Сыграйте тесное расположение, затем широкое.',
+          },
+        },
       ],
     },
     {
@@ -70,8 +134,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The minor 6th sounds dramatic, more so with its 9th. CmMaj9 hides a tense augmented triad: E♭ G B.',
-            ru: 'Минор с секстой звучит драматично, а с ноной — ещё больше. В CmMaj9 спрятано напряжённое увеличенное трезвучие: ми-бемоль, соль, си.',
+            en: 'A minor chord with a 6th sounds dramatic, more so with its 9th. CmMaj9 hides a tense augmented triad: E♭ G B.',
+            ru: 'Минор с секстой звучит драматично, а с ноной ещё сильнее. В CmMaj9 спрятано напряжённое увеличенное трезвучие: ми-бемоль, соль, си.',
           },
         },
         {
@@ -81,6 +145,13 @@ const jazzVoicings: Lesson = {
             { symbol: 'Cm6/9', degrees: '1 5 | ♭3 6 9', hands: 'C3 G3 | E♭4 A4 D5' },
             { symbol: 'CmMaj9', degrees: '1 | ♭3 5 7 9', hands: 'C3 | E♭4 G4 B4 D5' },
           ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the three and compare their colours.',
+            ru: 'Сыграйте все три и сравните их окраску.',
+          },
         },
       ],
     },
@@ -93,8 +164,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Think of Cm7♭5 as C in the bass under an E♭ minor triad. It begins the minor ii–V–I.',
-            ru: 'Думайте о Cm7♭5 как о до в басу под ми-бемоль минорным трезвучием. С него начинается минорный ii–V–I.',
+            en: 'Think of Cm7♭5 as C in the bass under an E♭ minor triad. It is the ii of the minor ii–V–I.',
+            ru: 'Думайте о Cm7♭5 как о до в басу под ми-бемоль минорным трезвучием. Это ii в минорном ii–V–I.',
           },
         },
         {
@@ -106,16 +177,24 @@ const jazzVoicings: Lesson = {
             { symbol: 'B♭6', caption: 'I', degrees: '1 | 3 6 1', hands: 'B♭2 | D4 G4 B♭4' },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Dominants: the tritone', ru: 'Доминанты: тритон' },
-      blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A dominant’s 3rd and 7th make a tritone, which never changes. The 5th can go.',
-            ru: 'Терция и септима доминанты образуют тритон, который не меняется. Квинту можно пропустить.',
+            en: 'Play the three chords in order.',
+            ru: 'Сыграйте три аккорда по порядку.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Dominants: keep the tritone', ru: 'Доминанты: тритон на месте' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A tritone', ru: 'Тритон' },
+          text: {
+            en: 'is six half steps. A dominant’s 3rd and 7th are a tritone apart. Keep them in every voicing. The 5th can go.',
+            ru: '— это шесть полутонов. Терция и септима доминанты отстоят на тритон. Держите их в любом расположении. Квинту можно опустить.',
           },
         },
         {
@@ -128,6 +207,13 @@ const jazzVoicings: Lesson = {
             { symbol: 'G13', degrees: '1 | ♭7 9 3 13', hands: 'G2 | F3 A3 B3 E4' },
           ],
         },
+        {
+          kind: 'text',
+          text: {
+            en: 'Find B and F in each one.',
+            ru: 'Найдите си и фа в каждом.',
+          },
+        },
       ],
     },
     {
@@ -135,9 +221,10 @@ const jazzVoicings: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Altering', ru: 'Альтерация' },
           text: {
-            en: 'Any note but the root and the tritone can change: the 5th and 9th up or down, the 11th up, the 13th down.',
-            ru: 'Меняться может любой звук, кроме основного тона и тритона: квинта и нона вверх или вниз, 11 вверх, 13 вниз.',
+            en: 'moves a note a half step. A dominant’s 5th and 9th go up or down, its 11th up, its 13th down.',
+            ru: '— это сдвиг звука на полутон. У доминанты квинта и нона идут вверх или вниз, 11 вверх, 13 вниз.',
           },
         },
         {
@@ -148,8 +235,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'G7alt alters all it can: A♭, A♯ and E♭.',
-            ru: 'В G7alt изменено всё, что можно: ля-бемоль, ля-диез и ми-бемоль.',
+            en: 'The root and tritone stay. G7alt alters what it can: A♭, A♯, E♭.',
+            ru: 'Основной тон и тритон остаются. В G7alt изменено всё, что можно: ля-бемоль, ля-диез, ми-бемоль.',
           },
         },
       ],
@@ -160,8 +247,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A right-hand triad over the root and 7th: an altered dominant as two simple shapes.',
-            ru: 'Трезвучие в правой руке над основным тоном и септимой: альтерированная доминанта как две простые фигуры.',
+            en: 'The left hand holds G and F, the root and 7th. A triad in the right hand adds the altered notes.',
+            ru: 'Левая рука держит соль и фа, основной тон и септиму. Трезвучие в правой добавляет альтерированные звуки.',
           },
         },
         {
@@ -202,20 +289,20 @@ const jazzVoicings: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Avoid melody notes a semitone from the chord’s notes.',
+            en: 'Keep the melody off notes a half step from the chord’s notes.',
             ru: 'Мелодия не должна звучать на полутон от звуков аккорда.',
           },
         },
       ],
     },
     {
-      heading: { en: 'Slash chords resolving', ru: 'Разрешение слэш-аккордов' },
+      heading: { en: 'Where slash chords resolve', ru: 'Куда разрешаются слэш-аккорды' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Major triads over G lead to major. A♭m/G resolves to minor and major alike.',
-            ru: 'Мажорные трезвучия над соль ведут в мажор. A♭m/G разрешается и в минор, и в мажор.',
+            en: 'A major triad over G leads to a major chord. A♭m/G can resolve to minor or to major.',
+            ru: 'Мажорное трезвучие над соль ведёт в мажорный аккорд. A♭m/G разрешается и в минор, и в мажор.',
           },
         },
         {
@@ -229,46 +316,12 @@ const jazzVoicings: Lesson = {
             { symbol: 'C6/9', degrees: '1 6 | 9 3 5', hands: 'C3 A3 | D4 E4 G4' },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Wide major 9ths', ru: 'Широкие мажорные ноны' },
-      blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Two 5ths in the left hand. In the right, a minor triad a major 3rd up: Am over F.',
-            ru: 'В левой руке две квинты подряд. В правой — минорное трезвучие на большую терцию выше: Am над фа.',
+            en: 'Play each pair: the slash chord, then where it lands.',
+            ru: 'Сыграйте каждую пару: слэш-аккорд, затем аккорд разрешения.',
           },
-        },
-        {
-          kind: 'voicings',
-          voicings: [
-            { symbol: 'FMaj9', degrees: '1 5 9 | 3 5 7', hands: 'F2 C3 G3 | A3 C4 E4' },
-            { symbol: 'FMaj9', degrees: '1 5 9 | 3 5 7 9', hands: 'F2 C3 G3 | A3 C4 E4 G4' },
-            { symbol: 'F6/9', degrees: '1 5 9 | 3 6', hands: 'F2 C3 G3 | A3 D4' },
-          ],
-        },
-      ],
-    },
-    {
-      heading: { en: 'Drop 2', ru: 'Drop 2' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'The chord’s 3rd drops an octave into the left hand, and the 2nd takes its place in the right.',
-            ru: 'Терция аккорда переносится на октаву вниз, в левую руку, а её место в правой занимает вторая ступень.',
-          },
-        },
-        {
-          kind: 'voicings',
-          voicings: [
-            { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
-            { symbol: 'Cadd9', degrees: '1 3 | 9 5 1', hands: 'C3 E3 | D4 G4 C5' },
-            { symbol: 'Fadd9', degrees: '1 3 | 9 5 1', hands: 'F2 A2 | G3 C4 F4' },
-            { symbol: 'Gadd9', degrees: '1 3 | 9 5 1', hands: 'G2 B2 | A3 D4 G4' },
-          ],
         },
       ],
     },

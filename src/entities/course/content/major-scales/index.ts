@@ -8,8 +8,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Major Scales', ru: 'Мажорные гаммы' },
   summary: {
-    en: 'All twelve major scales round the circle of fifths: each key’s notes, signature, fingering in both hands and primary chords.',
-    ru: 'Все двенадцать мажорных гамм по квинтовому кругу: ноты каждой тональности, ключевые знаки, аппликатура обеих рук и главные трезвучия.',
+    en: 'All twelve major scales, one key at a time round the circle of fifths. For each key, learn its notes and key signature, the fingering for each hand and its three primary chords.',
+    ru: 'Все двенадцать мажорных гамм, по одной тональности, по квинтовому кругу. В каждой вы выучите ноты и ключевые знаки, аппликатуру каждой руки и три главных трезвучия.',
   },
   weeks: 13,
   lessons: [understanding, ...MAJOR_TONICS.map((tonic) => majorScaleLesson(tonic))],

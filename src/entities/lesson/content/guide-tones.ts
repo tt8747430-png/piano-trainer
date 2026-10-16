@@ -7,8 +7,8 @@ const guideTones: Lesson = {
   id: 'guide-tones',
   title: { en: 'Guide tones through the changes', ru: 'Направляющие тоны по гармонии' },
   summary: {
-    en: 'Voice ii–V–I with 3rds and 7ths, and solo along them.',
-    ru: 'Ведите ii–V–I по терциям и септимам и импровизируйте по ним.',
+    en: 'Find the two notes that define each chord in a ii V I, and use them for voicings and melodies.',
+    ru: 'Найдите две ноты, которые определяют каждый аккорд в ii–V–I, и стройте на них аккорды и мелодии.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const guideTones: Lesson = {
           kind: 'text',
           lead: { en: 'Guide tones', ru: 'Направляющие тоны' },
           text: {
-            en: 'are a chord’s 3rd and 7th. They say whether it is major, minor or dominant.',
-            ru: '— терция и септима аккорда. Они говорят, мажорный он, минорный или доминантовый.',
+            en: 'are a chord’s 3rd and 7th. These two notes tell you whether the chord is major, minor or dominant.',
+            ru: '— терция и септима аккорда. Именно эти две ноты показывают, мажорный аккорд, минорный или доминантовый.',
           },
         },
         {
@@ -33,13 +33,13 @@ const guideTones: Lesson = {
       ],
     },
     {
-      heading: { en: 'A step or nothing', ru: 'Шаг или на месте' },
+      heading: { en: 'Move a step, or stay', ru: 'Шаг или на месте' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'From Dm7 to G7, F stays and C falls to B. From G7 to CMaj7, F falls to E and B stays.',
-            ru: 'От Dm7 к G7 фа стоит, а до опускается в си. От G7 к CMaj7 фа опускается в ми, а си стоит.',
+            en: 'Guide tones barely move. Dm7 to G7: F stays, C falls to B. G7 to CMaj7: F falls to E, B stays.',
+            ru: 'Направляющие тоны почти не двигаются. От Dm7 к G7 фа стоит, до опускается в си. От G7 к CMaj7 фа опускается в ми, си стоит.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -52,8 +52,8 @@ const guideTones: Lesson = {
           kind: 'text',
           lead: { en: 'A shell', ru: 'Шелл' },
           text: {
-            en: 'is the root with the 3rd or the 7th. The left hand holds the harmony, the right is free to play.',
-            ru: '— основной тон с терцией или септимой. Левая рука держит гармонию, правая свободна для мелодии.',
+            en: 'is the root with only its 3rd or its 7th. The left hand holds the harmony with it, so the right hand is free for a melody.',
+            ru: '— это основной тон только с терцией или только с септимой. Левая рука держит им гармонию, а правая свободна для мелодии.',
           },
         },
         {
@@ -72,8 +72,8 @@ const guideTones: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Join one guide tone of each chord into a slow melody: C, B, B. It traces the changes by itself.',
-            ru: 'Соедините по одному направляющему тону каждого аккорда в медленную мелодию: до, си, си. Она сама рисует гармонию.',
+            en: 'Take one guide tone from each chord and hold it for a bar: C, B, B. This slow line outlines the chords on its own.',
+            ru: 'Возьмите по одному направляющему тону от каждого аккорда и держите его такт: до, си, си. Эта медленная линия сама рисует аккорды.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/1 B4/1 B4/1' },
@@ -85,8 +85,8 @@ const guideTones: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep a guide tone on each beat 1 and fill the beats between with scale notes.',
-            ru: 'Оставьте направляющий тон на каждой первой доле, а доли между ними заполните нотами гаммы.',
+            en: 'Keep a guide tone on beat 1 of each bar. Fill the other beats with notes of the scale.',
+            ru: 'Оставьте направляющий тон на первой доле каждого такта. Остальные доли заполните нотами гаммы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5 D5 E5 C5 B4 A4 G4 F4 E4/1' },
@@ -113,7 +113,7 @@ const guideTones: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'ii–V–I through the keys in the Player',
+            en: 'Practise ii–V–I through the keys in the Player',
             ru: 'ii–V–I по тональностям в плеере',
           },
           target: {
@@ -126,7 +126,7 @@ const guideTones: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Name a chord in the Quiz', ru: 'Названия аккордов в тестах' },
+          title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'name-chord' },
         },
       ],

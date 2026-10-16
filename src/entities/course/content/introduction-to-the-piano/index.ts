@@ -10,8 +10,8 @@ const course: Course = {
   stage: 'beginner',
   title: { en: 'Introduction to the Piano', ru: 'Знакомство с фортепиано' },
   summary: {
-    en: 'Your first weeks at the keys: posture, finger numbers and the C position, then easy tunes in each hand and the notes above G.',
-    ru: 'Первые недели за инструментом: посадка, номера пальцев и позиция до, затем простые мелодии каждой рукой и ноты выше соль.',
+    en: 'Your first weeks at the keys. Learn how to sit, number your fingers and find the C position. Then play easy tunes with each hand and reach the notes above G.',
+    ru: 'Первые недели за инструментом. Вы научитесь сидеть, узнаете номера пальцев и позицию до. Потом сыграете простые мелодии каждой рукой и освоите ноты выше соль.',
   },
   weeks: 4,
   lessons: [firstSteps, rightHandSongs, leftHand, newRightHandNotes],

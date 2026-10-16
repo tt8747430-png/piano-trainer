@@ -5,18 +5,19 @@ const seventhByTheKey: Lesson = {
   id: 'seventh-by-the-key',
   title: { en: 'The 7th chord in a key', ru: 'Септаккорд по тональности' },
   summary: {
-    en: 'Let the key choose Maj7 or 7, and add the 7th below the chord.',
-    ru: 'Пусть тональность выберет Maj7 или 7, а септиму добавляйте под аккордом.',
+    en: 'Add a fourth note to a chord. The key tells you whether it is Maj7 or 7.',
+    ru: 'Добавьте к аккорду четвёртый звук. Тональность подскажет, Maj7 это или 7.',
   },
   sections: [
     {
-      heading: { en: 'One more note', ru: 'Ещё одна нота' },
+      heading: { en: 'One more note', ru: 'Ещё один звук' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A 7th chord', ru: 'Септаккорд' },
           text: {
-            en: 'A 7th chord is a major or minor chord plus the 7th above its root. Maj7 sounds soft and bright, 7 tenser.',
-            ru: 'Септаккорд — это мажорный или минорный аккорд плюс септима от основного тона. Maj7 звучит мягко и светло, 7 — напряжённее.',
+            en: 'is a major or minor chord plus the 7th above its root. CMaj7 adds B and sounds soft and bright. C7 adds B♭ and sounds tenser.',
+            ru: '— это мажорный или минорный аккорд плюс септима от основного тона. CMaj7 добавляет си и звучит мягко и светло. C7 добавляет си-бемоль и звучит напряжённее.',
           },
         },
         { kind: 'chords', symbols: ['C7', 'CMaj7'], apart: true },
@@ -28,16 +29,16 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The song’s key tells you which 7th to take: the chord is built from the key’s own notes.',
-            ru: 'Какой септаккорд взять, подсказывает тональность песни: аккорд строится из её звуков.',
+            en: 'Build every 7th chord from the key’s own notes. E minor has one sharp, F♯, so you get these:',
+            ru: 'Стройте каждый септаккорд из звуков тональности. В ми миноре один диез, фа-диез, и получаются такие аккорды:',
           },
         },
         { kind: 'chords', symbols: ['Am7', 'D7', 'GMaj7', 'Em7'] },
         {
           kind: 'note',
           text: {
-            en: 'In E minor, with its one sharp: Am7, D7, GMaj7, Em7.',
-            ru: 'В ми миноре с одним диезом: Am7, D7, GMaj7, Em7.',
+            en: 'D7 takes C and GMaj7 takes F♯: both are notes of E minor.',
+            ru: 'В D7 звучит до, а в GMaj7 фа-диез: оба звука из ми минора.',
           },
         },
       ],
@@ -48,8 +49,8 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In a song, add the note below the chord, as in way 5.1, and it is a 7th chord.',
-            ru: 'В песне добавьте ноту под аккордом, как в виде 5.1, — и получится септаккорд.',
+            en: 'In a song, play the 7th just below the chord in the right hand, as way 5.1 does. The chord itself stays in place.',
+            ru: 'В песне берите септиму правой рукой прямо под аккордом, как в виде 5.1. Сам аккорд остаётся на месте.',
           },
         },
         {
@@ -82,8 +83,8 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play Am7.',
-            ru: 'Сыграйте Am7.',
+            en: 'Play Am7: A, C, E and G.',
+            ru: 'Сыграйте Am7: ля, до, ми и соль.',
           },
           answer: { chord: 'Am7' },
         },

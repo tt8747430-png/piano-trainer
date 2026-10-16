@@ -7,25 +7,33 @@ const whenToChange: Lesson = {
   id: 'when-to-change',
   title: { en: 'When to change the pedal', ru: 'Когда менять педаль' },
   summary: {
-    en: 'Change the pedal with the harmony, and use less of it over runs.',
-    ru: 'Менять педаль со сменой гармонии, а на пассажах брать меньше.',
+    en: 'Change the pedal when the chord changes, and use less of it over runs and low notes.',
+    ru: 'Менять педаль со сменой аккорда и брать её меньше на пассажах и низких звуках.',
   },
   sections: [
     {
-      heading: { en: 'Change with the harmony', ru: 'Смена с гармонией' },
+      heading: { en: 'Change when the chord changes', ru: 'Смена вместе с аккордом' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Harmony', ru: 'Гармония' },
           text: {
-            en: 'is the chord under the music. Notes of one chord ring well together, so change only when the chord does: here once a bar.',
-            ru: '— аккорд, на котором стоит музыка. Звуки одного аккорда звучат вместе, поэтому меняйте педаль со сменой аккорда: здесь раз в такт.',
+            en: 'is the chord under the music. Notes of one chord sound well together, so change the pedal only when the chord changes. Here that is once a bar.',
+            ru: '— аккорд, на котором стоит музыка. Звуки одного аккорда хорошо звучат вместе, поэтому меняйте педаль только со сменой аккорда. Здесь это раз в такт.',
           },
         },
         {
           kind: 'notes',
           clef: 'treble',
           notes: 'C4 E4 G4 E4 F4 A4 C5 A4 G4 B4 D5 B4 C5/1',
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the notes that can share one pedal over the C chord.',
+            ru: 'Сыграйте звуки, которые могут звучать на одной педали над аккордом C.',
+          },
+          answer: { notes: ['C', 'E', 'G'] },
         },
       ],
     },
@@ -36,11 +44,19 @@ const whenToChange: Lesson = {
           kind: 'text',
           lead: { en: 'A passing note', ru: 'Проходящий звук' },
           text: {
-            en: 'steps between chord notes from outside the chord. Under a held pedal, a run of steps blurs, so scales take little or none.',
-            ru: 'соединяет звуки аккорда, не входя в него. На педали поступенный пассаж превращается в пятно, поэтому гаммы играют почти без неё.',
+            en: 'is a note outside the chord that steps between chord notes. Under a held pedal, a run of steps blurs. So scales get little pedal or none.',
+            ru: 'не входит в аккорд и соединяет его звуки шагом. На педали поступенный пассаж сливается в пятно, поэтому гаммы играют почти без неё.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the passing note between C and E.',
+            ru: 'Сыграйте проходящий звук между до и ми.',
+          },
+          answer: { notes: ['D'] },
+        },
       ],
     },
     {
@@ -49,8 +65,8 @@ const whenToChange: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The same chord sounds thick low down and clear up high. In the bass, change more often or use less pedal.',
-            ru: 'Один аккорд внизу звучит густо, а наверху прозрачно. В басу меняйте педаль чаще или берите её мельче.',
+            en: 'The same chord sounds thick low down and clear up high. In the bass, change the pedal more often or press it less deep.',
+            ru: 'Один и тот же аккорд внизу звучит густо, а наверху прозрачно. В басу меняйте педаль чаще или нажимайте её мельче.',
           },
         },
         {
@@ -63,20 +79,23 @@ const whenToChange: Lesson = {
       ],
     },
     {
-      heading: { en: 'Read the song', ru: 'Прочитайте песню' },
+      heading: { en: 'Plan the pedal in a song', ru: 'Педаль в песне' },
       blocks: [
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Mark each chord change, even two in a bar.',
-              ru: 'Отметьте каждую смену аккорда, даже две в такте.',
+              en: 'Mark each chord change, even two in one bar.',
+              ru: 'Отметьте каждую смену аккорда, даже если их две в такте.',
             },
             {
               en: 'Change the pedal just after each mark.',
               ru: 'Меняйте педаль сразу после каждой отметки.',
             },
-            { en: 'Over a run, lift or take less.', ru: 'На пассаже снимайте или берите мельче.' },
+            {
+              en: 'Over a run, lift the pedal or press it less.',
+              ru: 'На пассаже снимайте педаль или берите её мельче.',
+            },
           ],
         },
         { kind: 'progression', numerals: 'I vi IV V', key: C_MAJOR },
@@ -93,26 +112,10 @@ const whenToChange: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the notes that can share one pedal over the C chord.',
-            ru: 'Сыграйте звуки, которые могут звучать на одной педали над аккордом C.',
-          },
-          answer: { notes: ['C', 'E', 'G'] },
-        },
-        {
-          kind: 'question',
-          ask: {
             en: 'Play the chord that comes after C in I vi IV V.',
             ru: 'Сыграйте аккорд, который идёт после C в I vi IV V.',
           },
           answer: { chord: 'Am' },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the passing note between C and E.',
-            ru: 'Сыграйте проходящий звук между до и ми.',
-          },
-          answer: { notes: ['D'] },
         },
         {
           kind: 'link',

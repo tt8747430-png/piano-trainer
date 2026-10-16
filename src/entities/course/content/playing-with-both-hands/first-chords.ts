@@ -5,21 +5,21 @@ const C_MAJOR = { tonic: note('C'), minor: false }
 
 const firstChords: Lesson = {
   id: 'first-chords',
-  title: { en: 'Playing chords', ru: 'Играем аккорды' },
+  title: { en: 'Your first chords', ru: 'Первые аккорды' },
   summary: {
-    en: 'Play the C, F and G chords and a tune over them.',
-    ru: 'Играть аккорды C, F и G и мелодию над ними.',
+    en: 'Build the C, F and G chords, move between them with little hand movement, and play a tune over them.',
+    ru: 'Построить аккорды C, F и G, переходить между ними почти без движения руки и сыграть над ними мелодию.',
   },
   sections: [
     {
-      heading: { en: 'A chord', ru: 'Аккорд' },
+      heading: { en: 'What a chord is', ru: 'Что такое аккорд' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A chord', ru: 'Аккорд' },
           text: {
-            en: 'is three or more notes played together. Stack two 3rds on C: C, E, G, fingers 1, 3 and 5.',
-            ru: '— три и более звука вместе. Поставьте две терции на до: до, ми, соль, пальцы 1, 3 и 5.',
+            en: 'is three or more notes played together. To build C, stack two 3rds: C, E, G. Play them with right-hand fingers 1, 3 and 5.',
+            ru: '— три звука или больше, взятые вместе. Чтобы построить C, поставьте две терции друг на друга: до, ми, соль. Играйте их правой рукой, пальцами 1, 3 и 5.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
@@ -32,8 +32,8 @@ const firstChords: Lesson = {
           kind: 'text',
           lead: { en: 'The root', ru: 'Основной тон' },
           text: {
-            en: 'names the chord and sits at its bottom, the 3rd and 5th above. C, F and G carry most songs in C.',
-            ru: 'даёт аккорду имя и стоит внизу, над ним терция и квинта. На C, F и G держится большинство песен в до мажоре.',
+            en: 'is the note a chord is named after. It sits at the bottom, with the 3rd and the 5th above it. Many songs in C need only these three chords.',
+            ru: '— звук, по которому назван аккорд. Он стоит внизу, над ним терция и квинта. Многим песням в до мажоре хватает этих трёх аккордов.',
           },
         },
         {
@@ -44,17 +44,22 @@ const firstChords: Lesson = {
             { symbol: 'G', degrees: '| 1 3 5', hands: '| G4 B4 D5' },
           ],
         },
+        {
+          kind: 'question',
+          ask: { en: 'Play the G chord.', ru: 'Сыграйте аккорд G.' },
+          answer: { chord: 'G' },
+        },
       ],
     },
     {
-      heading: { en: 'Close moves', ru: 'Близкие соединения' },
+      heading: { en: 'Short moves between chords', ru: 'Короткие переходы между аккордами' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'puts another chord note at the bottom. Play F as C F A and G as B D G: the hand barely moves.',
-            ru: '— аккорд, где внизу не основной тон. Сыграйте F как до-фа-ля, G как си-ре-соль: рука почти не двигается.',
+            en: 'puts a different note of the chord at the bottom. Play F as C, F, A and G as B, D, G. The hand barely moves.',
+            ru: '— аккорд, в котором внизу стоит не основной тон. Сыграйте F как до, фа, ля, а G как си, ре, соль. Рука почти не двигается.',
           },
         },
         {
@@ -66,17 +71,25 @@ const firstChords: Lesson = {
             { symbol: 'C', hands: 'C3 | C4 E4 G4' },
           ],
         },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play G as B, D, G, from the bottom up.',
+            ru: 'Сыграйте G как си, ре, соль, снизу вверх.',
+          },
+          answer: { notes: ['B', 'D', 'G'], rising: true },
+        },
       ],
     },
     {
-      heading: { en: 'I, IV, V, I', ru: 'I, IV, V, I' },
+      heading: { en: 'Chords by number: I, IV, V, I', ru: 'Аккорды по номерам: I, IV, V, I' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Roman numerals', ru: 'Римские цифры' },
           text: {
-            en: 'name a chord by the scale step of its root. In C, C is I, F is IV and G is V.',
-            ru: 'называют аккорд по ступени его основного тона. В до мажоре C — I, F — IV, G — V.',
+            en: 'name a chord by the step of the scale its root stands on. In C major, C is I, F is IV and G is V.',
+            ru: 'называют аккорд по ступени гаммы, на которой стоит его основной тон. В до мажоре C — это I, F — IV, G — V.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -93,8 +106,8 @@ const firstChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand takes the chord, the right plays the tune: E, D, C over C, G and C.',
-            ru: 'Левая рука берёт аккорд, правая играет мелодию: ми, ре, до над C, G и C.',
+            en: 'Now share the work. The left hand plays the chord and the right hand plays the tune: E, D, C over C, G and C.',
+            ru: 'Теперь разделите работу. Левая рука берёт аккорд, правая играет мелодию: ми, ре, до над C, G и C.',
           },
         },
         {
@@ -117,21 +130,8 @@ const firstChords: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play the G chord.', ru: 'Сыграйте аккорд G.' },
-          answer: { chord: 'G' },
-        },
-        {
-          kind: 'question',
           ask: { en: 'Play the IV chord in C.', ru: 'Сыграйте аккорд IV ступени в до мажоре.' },
           answer: { chord: 'F' },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play G as B, D, G, from the bottom up.',
-            ru: 'Сыграйте G как си, ре, соль, снизу вверх.',
-          },
-          answer: { notes: ['B', 'D', 'G'], rising: true },
         },
         {
           kind: 'link',

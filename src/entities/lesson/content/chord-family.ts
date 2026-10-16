@@ -5,8 +5,8 @@ const chordFamily: Lesson = {
   id: 'chord-family',
   title: { en: 'The chord family of a key', ru: 'Аккорды тональности' },
   summary: {
-    en: 'Name a key’s seven chords by Roman numeral and play them.',
-    ru: 'Называйте семь аккордов тональности римскими цифрами и играйте их.',
+    en: 'Build the seven chords of a major key, name them with Roman numerals, and play them.',
+    ru: 'Постройте семь аккордов мажорной тональности, назовите их римскими цифрами и сыграйте.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Build a triad on each note of C major from the scale’s notes only. You get three major, three minor and one diminished.',
-            ru: 'Постройте трезвучие на каждой ноте до мажора только из нот гаммы. Получатся три мажорных, три минорных и одно уменьшённое.',
+            en: 'Stack a triad on each note of C major, using only white keys: skip a key, take a key. You get three major chords, three minor and one diminished.',
+            ru: 'Постройте трезвучие на каждой ноте до мажора только на белых клавишах: через одну. Получатся три мажорных аккорда, три минорных и один уменьшённый.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'], apart: true },
@@ -28,8 +28,8 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each chord is named by its degree: upper case for major, lower case for minor, ° for diminished. G major has the same numerals.',
-            ru: 'Аккорд называют цифрой его ступени: заглавной — мажорный, строчной — минорный, со знаком ° — уменьшённый. В соль мажоре цифры те же.',
+            en: 'A numeral names a chord by the scale note it stands on. Upper case is major (I), lower case minor (ii), ° diminished (vii°). G major follows the same pattern.',
+            ru: 'Цифра называет аккорд по ступени, на которой он стоит. Заглавная — мажорный (I), строчная — минорный (ii), знак ° — уменьшённый (vii°). В соль мажоре порядок тот же.',
           },
         },
         { kind: 'chords', symbols: ['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'], apart: true },
@@ -42,8 +42,8 @@ const chordFamily: Lesson = {
           kind: 'text',
           lead: { en: 'The primary chords', ru: 'Главные трезвучия' },
           text: {
-            en: 'are I, IV and V. Together they hold every note of the scale, so any melody note fits one of them.',
-            ru: '— это I, IV и V. Вместе они содержат все ноты гаммы, поэтому любая нота мелодии ложится хотя бы на один из них.',
+            en: 'are I, IV and V. Between them they hold all seven notes of the scale. So every melody note in the key belongs to at least one of them.',
+            ru: '— это I, IV и V. Вместе в них все семь нот гаммы. Поэтому любая нота мелодии в тональности входит хотя бы в один из них.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -55,8 +55,8 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add one more scale 3rd to each triad: Imaj7, ii7, iii7, IVmaj7, V7, vi7, viiø7. Only V7 is a dominant 7th.',
-            ru: 'Добавьте к каждому трезвучию ещё одну терцию из гаммы: Imaj7, ii7, iii7, IVmaj7, V7, vi7, viiø7. Доминантсептаккорд среди них один — V7.',
+            en: 'Stack one more scale note on top of each triad, again skipping a key. You get Imaj7, ii7, iii7, IVmaj7, V7, vi7 and viiø7. Only V7 is a dominant 7th.',
+            ru: 'Добавьте наверх каждого трезвучия ещё одну ноту гаммы, снова через клавишу. Получатся Imaj7, ii7, iii7, IVmaj7, V7, vi7 и viiø7. Доминантсептаккорд среди них один: V7.',
           },
         },
         {
@@ -81,12 +81,12 @@ const chordFamily: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'A key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
+          title: { en: 'Practise a key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
           target: { opens: 'quiz', trainer: 'key-degrees' },
         },
         {
           kind: 'link',
-          title: { en: 'C major’s chords in Scales', ru: 'Аккорды до мажора в гаммах' },
+          title: { en: 'See C major’s chords in Scales', ru: 'Аккорды до мажора в гаммах' },
           target: { opens: 'scales', root: note('C'), scale: 'major', show: 'chords' },
         },
       ],

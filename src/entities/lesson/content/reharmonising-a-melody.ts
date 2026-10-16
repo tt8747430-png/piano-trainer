@@ -7,8 +7,8 @@ const reharmonisingAMelody: Lesson = {
   id: 'reharmonising-a-melody',
   title: { en: 'Reharmonising a melody note', ru: 'Новая гармония для ноты мелодии' },
   summary: {
-    en: 'Find several chords for one melody note and choose between them.',
-    ru: 'Подбирать к одной ноте мелодии разные аккорды и выбирать из них.',
+    en: 'Find the chords that hold one melody note, from triads to 7th chords, and choose between them.',
+    ru: 'Находить аккорды, в которые входит нота мелодии, от трезвучий до септаккордов, и выбирать из них.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const reharmonisingAMelody: Lesson = {
           kind: 'text',
           lead: { en: 'Reharmonising', ru: 'Реармонизация' },
           text: {
-            en: 'puts a new chord under a melody note. In C major, E sits in C, Am and Em.',
-            ru: '— новый аккорд под нотой мелодии. В до мажоре ми входит в C, Am и Em.',
+            en: 'means putting a new chord under a melody note. The note must be in the chord. In C major, E is in C, Am and Em.',
+            ru: '— это новый аккорд под нотой мелодии. Нота должна входить в аккорд. В до мажоре ми есть в C, Am и Em.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Am', 'Em'], melody: note('E') },
@@ -36,8 +36,8 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '7th chords hold E in more ways: the 7th of FMaj7, the 9th of Dm9, the 3rd of C7, which leads on to F.',
-            ru: 'Септаккорды дают больше вариантов: ми — септима FMaj7, нона Dm9 и терция C7, который ведёт в F.',
+            en: 'Larger chords give more choices. E is the 7th of FMaj7, the 9th of Dm9 and the 3rd of C7. C7 then leads on to F.',
+            ru: 'Аккорды побольше дают больше вариантов. Ми — септима FMaj7, нона Dm9 и терция C7. А C7 ведёт дальше в F.',
           },
         },
         { kind: 'chords', symbols: ['FMaj7', 'Dm9', 'C7'], melody: note('E') },
@@ -57,8 +57,8 @@ const reharmonisingAMelody: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Choose the chord whose bass moves well between its neighbours. Reharmonise long notes, not quick ones.',
-            ru: 'Выбирайте аккорд, бас которого хорошо идёт между соседними. Меняйте гармонию на долгих нотах, а не на быстрых.',
+            en: 'To choose, play the chords before and after. Pick the one whose bass moves smoothly. Change the chord under long notes only.',
+            ru: 'Чтобы выбрать, сыграйте аккорды до и после. Берите тот, где бас движется плавно. Меняйте аккорд только под долгими нотами.',
           },
         },
         {

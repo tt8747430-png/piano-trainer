@@ -10,8 +10,8 @@ const naturalSign: Lesson = {
   id: 'natural-sign',
   title: { en: 'The natural sign', ru: 'Знак бекара' },
   summary: {
-    en: 'Read a natural that cancels the key’s sharp or flat.',
-    ru: 'Читать бекар, отменяющий ключевой диез или бемоль.',
+    en: 'Read a natural sign that cancels the key’s sharp or flat until the end of the bar.',
+    ru: 'Читать бекар, который отменяет ключевой диез или бемоль до конца такта.',
   },
   sections: [
     {
@@ -21,21 +21,21 @@ const naturalSign: Lesson = {
           kind: 'text',
           lead: { en: 'Natural (♮):', ru: 'Бекар (♮):' },
           text: {
-            en: 'cancels a sharp or a flat. In G major every F is F♯, until a natural makes it F.',
-            ru: 'отменяет диез или бемоль. В соль мажоре каждое фа — фа-диез, пока бекар не сделает его просто фа.',
+            en: 'cancels a sharp or a flat. In G major every F is F♯, until a natural turns it back into plain F.',
+            ru: 'отменяет диез или бемоль. В соль мажоре каждое фа — фа-диез, пока бекар не вернёт его к простому фа.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 F#4 G4/2 G4 F4 E4/2', key: G_MAJOR },
       ],
     },
     {
-      heading: { en: 'It lasts the bar', ru: 'Действует до конца такта' },
+      heading: { en: 'It lasts until the bar line', ru: 'Действует до конца такта' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'In F every B is B♭. The natural in bar 1 makes both its Bs plain. In bar 2, B is B♭ again.',
-            ru: 'В фа мажоре каждое си — си-бемоль. Бекар в первом такте делает оба си простыми. Во втором такте снова си-бемоль.',
+            en: 'In F major every B is B♭. The natural in bar 1 makes both Bs in that bar plain B. In bar 2, B is B♭ again.',
+            ru: 'В фа мажоре каждое си — си-бемоль. Бекар в первом такте делает оба си этого такта простыми. Во втором такте снова си-бемоль.',
           },
         },
         {
@@ -52,8 +52,8 @@ const naturalSign: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In G major, F♮ added to G makes G7. It pulls to C, the IV chord.',
-            ru: 'В соль мажоре фа-бекар, добавленный к G, даёт G7. Он тянется к C, аккорду IV ступени.',
+            en: 'In G major, adding F♮ to the G chord makes G7. G7 pulls towards C, the IV chord.',
+            ru: 'В соль мажоре фа-бекар, добавленный к аккорду G, даёт G7. G7 тянется к C, аккорду IV ступени.',
           },
         },
         { kind: 'chords', symbols: ['G', 'G7', 'C'] },
@@ -65,7 +65,7 @@ const naturalSign: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Scarborough Fair is written in D minor, whose signature flats every B. Its tune sings B♮ instead.',
+            en: 'Scarborough Fair is written in D minor, whose signature makes every B a B♭. Its tune sings B♮ instead.',
             ru: '«Ярмарка в Скарборо» записана в ре миноре, где в ключе си-бемоль. А мелодия поёт си-бекар.',
           },
         },
@@ -102,7 +102,7 @@ const naturalSign: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the chord F♮ turns G into.',
+            en: 'Play the chord that F♮ turns G into.',
             ru: 'Сыграйте аккорд, в который фа-бекар превращает G.',
           },
           answer: { chord: 'G7' },

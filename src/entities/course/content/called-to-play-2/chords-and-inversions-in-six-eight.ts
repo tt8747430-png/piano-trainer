@@ -5,8 +5,8 @@ const chordsAndInversionsInSixEight: Lesson = {
   id: 'chords-and-inversions-in-six-eight',
   title: { en: 'Chords and inversions in 6/8', ru: 'Аккорды и обращения в 6/8' },
   summary: {
-    en: 'Play a chord with its octave, and in two positions, in 6/8.',
-    ru: 'Играйте аккорд с октавой и в двух расположениях в 6/8.',
+    en: 'Play the whole chord in 6/8: an octave higher, then in two positions.',
+    ru: 'Играйте весь аккорд в 6/8: октавой выше, затем в двух расположениях.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const chordsAndInversionsInSixEight: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The chord with its octave, then the same an octave up, short and held. The left hand climbs under it.',
-            ru: 'Аккорд с октавой, затем он же октавой выше — коротко и с выдержкой. Левая рука поднимается под ним.',
+            en: 'Play the chord with its octave, then the same chord an octave up, short and then held. The left hand climbs under it.',
+            ru: 'Сыграйте аккорд с октавой, затем тот же аккорд октавой выше, коротко и с выдержкой. Левая рука поднимается под ним.',
           },
         },
         { kind: 'pattern', pattern: 't5', piece: 'brat' },
@@ -28,8 +28,8 @@ const chordsAndInversionsInSixEight: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Root position on the first beat, the first inversion on the second. The left hand climbs 1–5–8–10–12–15.',
-            ru: 'Основной вид на первую долю, первое обращение на вторую. Левая рука поднимается 1–5–8–10–12–15.',
+            en: 'Play root position on the first beat and the first inversion on the second. The left hand climbs 1–5–8–10–12–15.',
+            ru: 'Сыграйте основной вид на первую долю, первое обращение на вторую. Левая рука поднимается 1–5–8–10–12–15.',
           },
         },
         { kind: 'pattern', pattern: 'inv', piece: 'brat' },
@@ -42,8 +42,8 @@ const chordsAndInversionsInSixEight: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Play this row of chords with both ways.',
-              ru: 'Сыграйте эту цепочку аккордов обоими видами.',
+              en: 'Play this row of chords with way 5, then way 6.',
+              ru: 'Сыграйте эту цепочку аккордов видом 5, затем видом 6.',
             },
             {
               en: 'Learn two songs by their plans.',

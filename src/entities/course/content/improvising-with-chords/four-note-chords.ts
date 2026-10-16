@@ -8,8 +8,8 @@ const fourNoteChords: Lesson = {
   id: 'four-note-chords',
   title: { en: 'Four-note chords', ru: 'Четырёхзвучные аккорды' },
   summary: {
-    en: 'Colour a song’s chords with maj7, 7 and m7.',
-    ru: 'Раскрасьте аккорды песни септаккордами maj7, 7 и m7.',
+    en: 'Add a 7th to a triad and learn the three 7th chords a song uses most: maj7, 7 and m7.',
+    ru: 'Добавьте к трезвучию септиму и выучите три самых частых в песнях септаккорда: maj7, 7 и m7.',
   },
   sections: [
     {
@@ -17,23 +17,23 @@ const fourNoteChords: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Seventh chord:', ru: 'Септаккорд:' },
+          lead: { en: 'A seventh chord', ru: 'Септаккорд' },
           text: {
-            en: 'a triad with one more 3rd on top. The new note, the 7th, gives the chord its colour.',
-            ru: 'трезвучие с ещё одной терцией сверху. Новый звук, септима, даёт аккорду окраску.',
+            en: 'is a triad with one more 3rd stacked on top. The new note is the 7th, and it gives the chord its colour.',
+            ru: '— трезвучие, над которым надстроена ещё одна терция. Новый звук называется септимой, он и даёт аккорду окраску.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cmaj7', 'C7', 'Cm7'], apart: true },
       ],
     },
     {
-      heading: { en: 'Major 7th on I and IV', ru: 'Большой мажорный на I и IV' },
+      heading: { en: 'Major 7th: soft, on I and IV', ru: 'Большой мажорный: мягкий, на I и IV' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Cmaj7 adds B, a semitone below the top C. It sounds soft and dreamy.',
-            ru: 'Cmaj7 добавляет си, на полутон ниже верхнего до. Он звучит мягко и мечтательно.',
+            en: 'Cmaj7 adds B to C major, a semitone below the C an octave up. It sounds soft and dreamy. In a major key it suits the I and IV chords.',
+            ru: 'Cmaj7 добавляет к до мажору си, на полутон ниже до октавой выше. Звучит мягко и мечтательно. В мажоре он подходит к I и IV ступеням.',
           },
         },
         {
@@ -46,13 +46,13 @@ const fourNoteChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Dominant 7th on V', ru: 'Доминантсептаккорд на V' },
+      heading: { en: 'Dominant 7th: restless, on V', ru: 'Доминантсептаккорд: неустойчивый, на V' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'G7 adds F, a whole tone below the top G. It sounds restless and pulls to C.',
-            ru: 'G7 добавляет фа, на тон ниже верхнего соль. Он звучит неустойчиво и тянется к C.',
+            en: 'G7 adds F to G major, a whole tone below the G an octave up. It sounds restless and pulls towards C. Play it on V.',
+            ru: 'G7 добавляет к соль мажору фа, на тон ниже соль октавой выше. Звучит неустойчиво и тянется к C. Играйте его на V ступени.',
           },
         },
         {
@@ -65,13 +65,16 @@ const fourNoteChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Minor 7th on ii, iii and vi', ru: 'Малый минорный на II, III и VI' },
+      heading: {
+        en: 'Minor 7th: warm, on ii, iii and vi',
+        ru: 'Малый минорный: тёплый, на II, III и VI',
+      },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Am7 adds G to A minor. It sounds warm and relaxed.',
-            ru: 'Am7 добавляет соль к ля минору. Он звучит тепло и спокойно.',
+            en: 'Am7 adds G to A minor. It sounds warm and relaxed. In a major key it suits the minor chords on ii, iii and vi.',
+            ru: 'Am7 добавляет соль к ля минору. Звучит тепло и спокойно. В мажоре он подходит к минорным аккордам II, III и VI ступеней.',
           },
         },
         {
@@ -89,8 +92,8 @@ const fourNoteChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Every chord of a key can take its 7th. In C, I–vi–ii–V becomes Cmaj7, Am7, Dm7, G7.',
-            ru: 'Любой аккорд тональности может получить септиму. В до мажоре I–vi–ii–V превращается в Cmaj7, Am7, Dm7, G7.',
+            en: 'Every chord of a key can take its own 7th. In C major, I vi ii V becomes Cmaj7, Am7, Dm7 and G7.',
+            ru: 'Любой аккорд тональности может получить свою септиму. В до мажоре I vi ii V превращается в Cmaj7, Am7, Dm7 и G7.',
           },
         },
         { kind: 'progression', numerals: 'I vi ii V', key: C_MAJOR, size: 'sevenths' },
@@ -111,8 +114,8 @@ const fourNoteChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a song’s chords plain, then with maj7 on I and IV and 7 on V. The melody stays the same.',
-            ru: 'Сыграйте аккорды песни просто, затем с maj7 на I и IV и с 7 на V. Мелодия остаётся прежней.',
+            en: 'First play a song’s chords as plain triads. Then play maj7 on I and IV, and 7 on V. The melody stays the same while the harmony grows richer.',
+            ru: 'Сначала сыграйте аккорды песни простыми трезвучиями. Затем возьмите maj7 на I и IV и 7 на V. Мелодия остаётся прежней, а гармония становится богаче.',
           },
         },
         {

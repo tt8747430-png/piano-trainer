@@ -15,8 +15,8 @@ export default definePiece({
   tempo: 88,
   pattern: 'r2',
   note: {
-    en: 'The Csus4 → C7 at the end of each line is the sound of the cadence: hold the sus4 and let it fall to the 3rd.',
-    ru: 'Csus4 → C7 в конце каждой строки — звучание каденции: задержите кварту и дайте ей разрешиться в терцию.',
+    en: 'Each line ends on Csus4 → C7, and that move is the cadence. Hold the 4th of Csus4, then let it fall to the 3rd of C7.',
+    ru: 'Каждая строка заканчивается на Csus4 → C7: так звучит каденция. Задержите кварту Csus4, затем дайте ей опуститься в терцию C7.',
   },
   sections: [
     {

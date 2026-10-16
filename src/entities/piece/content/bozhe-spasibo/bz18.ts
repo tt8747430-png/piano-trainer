@@ -15,8 +15,8 @@ export default definePiece({
   tempo: 72,
   pattern: 'r4',
   note: {
-    en: 'Bar 7 of the verse is printed “C♯/A” in the score: C♯–E–G over A, which is A7. Gm/H = Gm/B.',
-    ru: 'Седьмой такт куплета напечатан в нотах как «C♯/A»: C♯–E–G над A, то есть A7. Gm/H = Gm/B.',
+    en: 'The score prints bar 7 of the verse as “C♯/A”: C♯, E and G over A, which makes A7. Its Gm/H means Gm/B.',
+    ru: 'Седьмой такт куплета напечатан в нотах как «C♯/A»: C♯, E и G над A, то есть A7. А Gm/H означает Gm/B.',
   },
   sections: [
     {

@@ -9,8 +9,8 @@ const course: Course = {
   stage: 'beginner',
   title: { en: 'First Exercises for Both Hands', ru: 'Первые упражнения для двух рук' },
   summary: {
-    en: 'Daily drills that teach the hands to work together and apart: five-finger patterns, a tune over simple chords, and Hanon.',
-    ru: 'Ежедневные упражнения, которые учат руки играть вместе и независимо: позиция пяти пальцев, мелодия над простыми аккордами и Ганон.',
+    en: 'Short daily drills that teach the hands to play together and on their own: five-finger patterns, a tune over simple chords, and Hanon.',
+    ru: 'Короткие ежедневные упражнения, которые учат руки играть вместе и независимо: позиция пяти пальцев, мелодия над простыми аккордами и Ганон.',
   },
   weeks: 3,
   lessons: [coordinationBasics, simpleHarmonies, handIndependence],

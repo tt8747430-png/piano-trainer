@@ -29,10 +29,14 @@ describe('A pattern’s page', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: '1 · Bass + chords' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('The chord on every beat over a held octave bass.')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'The right hand plays the chord on every beat over an octave held in the left.',
+      ),
+    ).toBeInTheDocument()
     expect(screen.getByText('Chord on every beat')).toBeInTheDocument()
     expect(screen.getByText('Octave, whole note')).toBeInTheDocument()
-    expect(screen.getByText(/Left hand holds the bass in octaves/)).toBeInTheDocument()
+    expect(screen.getByText(/The left hand plays the bass note as an octave/)).toBeInTheDocument()
     expect(screen.getByText('Over a bar of C major')).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Used in' })).toBeInTheDocument()
   })
@@ -64,7 +68,9 @@ describe('A pattern’s page', () => {
     await user.click(screen.getByRole('button', { name: 'Hide from the Player' }))
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
     expect(
-      screen.getByText('Hidden from the Player’s list and its book’s shelf; it stays in Yours.'),
+      screen.getByText(
+        'Hidden from the Player’s list and from its book’s shelf. You can still find it under Yours.',
+      ),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Show in the Player' }))
     expect(patternsStore.getState().hidden).toEqual([])

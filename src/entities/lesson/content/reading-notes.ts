@@ -4,8 +4,8 @@ const readingNotes: Lesson = {
   id: 'reading-notes',
   title: { en: 'The staff and the treble clef', ru: 'Нотный стан и скрипичный ключ' },
   summary: {
-    en: 'Read the treble staff’s notes and find them on the keys.',
-    ru: 'Читать ноты скрипичного ключа и находить их на клавиатуре.',
+    en: 'Read the notes of the treble staff, from three landmarks, and find each one on the keys.',
+    ru: 'Читать ноты в скрипичном ключе от трёх ориентиров и находить каждую на клавиатуре.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const readingNotes: Lesson = {
           kind: 'text',
           lead: { en: 'The staff', ru: 'Нотный стан' },
           text: {
-            en: 'is five lines. Each step up, line to space, is the next letter and the next white key.',
-            ru: '— пять линеек. Каждый шаг вверх, с линейки на промежуток, — следующая буква и следующая белая клавиша.',
+            en: 'is five lines with spaces between. Each step up, from a line to the space above, is the next letter and the next white key.',
+            ru: '— это пять линеек с промежутками между ними. Каждый шаг вверх, с линейки на промежуток, — следующая буква и следующая белая клавиша.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4 A4 B4 C5 D5 E5' },
@@ -29,8 +29,8 @@ const readingNotes: Lesson = {
           kind: 'text',
           lead: { en: 'The treble clef', ru: 'Скрипичный ключ' },
           text: {
-            en: 'curls round the second line: the G above middle C.',
-            ru: 'обвивает вторую линейку — соль первой октавы.',
+            en: 'is the sign at the start of the staff. It curls round the second line, marking it as G above middle C.',
+            ru: '— знак в начале стана. Он обвивает вторую линейку и отмечает её как соль первой октавы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1' },
@@ -47,8 +47,8 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The lines read E G B D F from the bottom. The spaces spell F A C E. Line to line skips a key.',
-            ru: 'Линейки снизу: ми, соль, си, ре, фа. Промежутки: фа, ля, до, ми. С линейки на линейку — через клавишу.',
+            en: 'From the bottom, the lines are E G B D F. The spaces spell F A C E. Each line to the next skips one white key.',
+            ru: 'Линейки снизу: ми, соль, си, ре, фа. Промежутки: фа, ля, до, ми. От линейки к линейке — через одну белую клавишу.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 G4 B4 D5 F5/1' },
@@ -61,8 +61,8 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Know middle C below the staff, G on the second line and C in the third space. Read other notes from the nearest.',
-            ru: 'Запомните до под станом, соль на второй линейке и до в третьем промежутке. Остальное читайте шагами от ближайшего.',
+            en: 'Learn three notes by sight: middle C below the staff, G on the second line, C in the third space. Count from the nearest one.',
+            ru: 'Запомните три ноты: до под станом, соль на второй линейке, до в третьем промежутке. Остальные считайте от ближайшей.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 C5/1' },
@@ -75,8 +75,8 @@ const readingNotes: Lesson = {
           kind: 'text',
           lead: { en: 'A ledger line', ru: 'Добавочная линейка' },
           text: {
-            en: 'is a short line for a note beyond the staff. Count on in steps: G5 above the staff, A5 on the first ledger line.',
-            ru: '— короткая линейка для ноты за пределами стана. Считайте дальше шагами: соль над станом, ля на первой добавочной.',
+            en: 'is a short extra line for a note above or below the staff. Keep counting steps: G sits above the top line, A on the first ledger line.',
+            ru: '— короткая линейка для ноты выше или ниже стана. Считайте шаги дальше: соль над верхней линейкой, ля на первой добавочной.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F5 G5 A5 B5 C6/1' },
@@ -88,8 +88,8 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Name each note below, then play it. Speed comes from many notes, read quickly.',
-            ru: 'Назовите каждую ноту ниже и сыграйте её. Скорость приходит, когда читаешь много нот быстро.',
+            en: 'Name each note below aloud, then play it. Repeat the line a little faster each time.',
+            ru: 'Назовите каждую ноту вслух и сыграйте её. Повторяйте строчку, каждый раз чуть быстрее.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 E4 C5 A4 F4 D5 B4 C4' },

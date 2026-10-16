@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 72,
   pattern: 'ballad',
   note: {
-    en: 'An American sea shanty; its last bar is a bar of three beats.',
-    ru: 'Американская матросская песня; её последний такт — на три доли.',
+    en: 'An American sea shanty. Its last bar has only three beats.',
+    ru: 'Американская матросская песня. В её последнем такте только три доли.',
   },
   sections: [{ kind: 'verse', lines: ['C@1 C F@2-C@2 F C', 'Am F C G@1-C@3 G7@1-C@2'] }],
   melody:

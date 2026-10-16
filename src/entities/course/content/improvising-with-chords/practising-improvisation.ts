@@ -9,18 +9,19 @@ const practisingImprovisation: Lesson = {
   id: 'practising-improvisation',
   title: { en: 'Practising improvisation', ru: 'Учимся импровизировать' },
   summary: {
-    en: 'Make up a melody over a four-chord loop.',
-    ru: 'Сочиняйте мелодию над кругом из четырёх аккордов.',
+    en: 'Make up your own melody over a loop of four chords, using five safe notes and a few simple rules.',
+    ru: 'Сочиняйте свою мелодию над кругом из четырёх аккордов: пять надёжных звуков и несколько простых правил.',
   },
   sections: [
     {
-      heading: { en: 'The loop', ru: 'Гармонический круг' },
+      heading: { en: 'Learn the loop', ru: 'Выучите круг' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A loop', ru: 'Гармонический круг' },
           text: {
-            en: 'Play C, Am, F, G with the left hand, a bar each, until it plays itself.',
-            ru: 'Играйте C, Am, F, G левой рукой, по такту на аккорд, пока рука не запомнит.',
+            en: 'is a short row of chords played over and over. Play C, Am, F and G with the left hand, one bar each, until you no longer think about it.',
+            ru: '— короткий ряд аккордов, который повторяется снова и снова. Играйте C, Am, F и G левой рукой, по такту на аккорд, пока рука не запомнит.',
           },
         },
         { kind: 'progression', numerals: LOOP, key: C_MAJOR },
@@ -31,10 +32,10 @@ const practisingImprovisation: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Pentatonic:', ru: 'Пентатоника:' },
+          lead: { en: 'A pentatonic scale', ru: 'Пентатоника' },
           text: {
-            en: 'a five-note scale with no semitones. C major pentatonic sounds good over every chord of the loop.',
-            ru: 'гамма из пяти звуков без полутонов. Мажорная пентатоника от до хорошо звучит над каждым аккордом круга.',
+            en: 'has five notes and no semitones between them. C major pentatonic is C, D, E, G and A. Any of them sounds good over every chord of the loop.',
+            ru: '— гамма из пяти звуков без полутонов между ними. Мажорная пентатоника от до: до, ре, ми, соль и ля. Любой из них хорошо звучит над каждым аккордом круга.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'pent' },
@@ -45,10 +46,10 @@ const practisingImprovisation: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Chord tone:', ru: 'Аккордовый звук:' },
+          lead: { en: 'A chord tone', ru: 'Аккордовый звук' },
           text: {
-            en: 'a note of the chord sounding now. End each bar on one and the line sounds sure.',
-            ru: 'звук аккорда, который звучит сейчас. Заканчивайте каждый такт на нём, и линия звучит уверенно.',
+            en: 'is a note of the chord sounding right now. End each bar on one, and your melody will sound sure of itself.',
+            ru: '— звук аккорда, который звучит в эту секунду. Заканчивайте каждый такт на таком звуке, и мелодия зазвучит уверенно.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 A4 G4 E4 D4 E4 C4/2 C4 D4 A4/2 G4 E4 D4/2' },
@@ -59,10 +60,10 @@ const practisingImprovisation: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Call and response:', ru: 'Вопрос и ответ:' },
+          lead: { en: 'Call and response', ru: 'Вопрос и ответ' },
           text: {
-            en: 'a short phrase, then one that answers it. The call climbs, the answer comes back down.',
-            ru: 'короткая фраза и фраза, которая на неё отвечает. Вопрос поднимается, ответ возвращается вниз.',
+            en: 'pairs a short phrase with a second one that answers it. Here the call climbs and the answer comes back down.',
+            ru: '— короткая фраза и вторая, которая на неё отвечает. Здесь вопрос поднимается, а ответ возвращается вниз.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 G4 A4/2 G4/2 A4 G4 E4 D4 E4 D4/2.' },
@@ -79,8 +80,8 @@ const practisingImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'One rhythm in every bar, new notes each time. The repeat holds the line together.',
-            ru: 'Один ритм в каждом такте, а звуки каждый раз новые. Повтор связывает линию.',
+            en: 'Every bar here has the same rhythm with new notes. Repeating a rhythm holds a melody together, so you can change the notes freely.',
+            ru: 'Здесь в каждом такте один и тот же ритм, а звуки новые. Повтор ритма связывает мелодию, поэтому звуки можно менять свободно.',
           },
         },
       ],

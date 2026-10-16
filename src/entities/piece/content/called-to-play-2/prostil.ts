@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 80,
   pattern: 'M1',
   note: {
-    en: 'An exam song: no ways are printed, the plan is yours, for two verses, with an intro and an ending. The chorus repeats, written out; its last E7 comes home to Am.',
-    ru: 'Экзаменационная песня: виды не напечатаны, план нужно составить самому, на два куплета, со вступлением и окончанием. Припев повторяется и выписан дважды; последний E7 приходит в Am.',
+    en: 'An exam song. No ways are printed, so the plan is yours: two verses, with an intro and an ending. The chorus repeats and is written out twice; its last E7 resolves to Am.',
+    ru: 'Экзаменационная песня. Виды не напечатаны, план составляете вы сами: два куплета, вступление и окончание. Припев повторяется и выписан дважды; последний E7 разрешается в Am.',
   },
   sections: [
     { kind: 'verse', n: 1, lines: ['C C', 'Am Am', 'Dm Dm', 'F E'] },

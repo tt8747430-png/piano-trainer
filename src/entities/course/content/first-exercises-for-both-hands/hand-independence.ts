@@ -5,8 +5,8 @@ const handIndependence: Lesson = {
   id: 'hand-independence',
   title: { en: 'Hand independence', ru: 'Независимость рук' },
   summary: {
-    en: 'Give each hand its own touch and rhythm, then play Hanon.',
-    ru: 'Дать каждой руке своё касание и ритм, затем сыграть Ганона.',
+    en: 'Give each hand its own touch and its own rhythm, then play Hanon’s first exercise.',
+    ru: 'Дать каждой руке своё касание и свой ритм, затем сыграть первое упражнение Ганона.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const handIndependence: Lesson = {
           kind: 'text',
           lead: { en: 'Legato', ru: 'Легато' },
           text: {
-            en: 'joins notes: one key comes up as the next goes down. Staccato is short and detached, the key bouncing up at once.',
-            ru: '— связная игра: клавиша поднимается, когда опускается следующая. Стаккато — коротко и отрывисто, клавиша сразу отскакивает.',
+            en: 'means smooth and joined: one key comes up as the next goes down. Staccato means short and detached: the key bounces up at once.',
+            ru: '— связная игра: клавиша поднимается, когда опускается следующая. Стаккато — коротко и отрывисто: клавиша сразу отскакивает.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
@@ -34,8 +34,8 @@ const handIndependence: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Together: the right hand sings legato while the left plays short, light notes.',
-            ru: 'Вместе: правая рука поёт легато, а левая играет коротко и легко.',
+            en: 'Now play both touches at once. The right hand sings legato while the left plays short, light notes.',
+            ru: 'Теперь оба касания вместе. Правая рука поёт легато, а левая играет коротко и легко.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4 E4 D4 E4 C4/2' },
@@ -47,17 +47,25 @@ const handIndependence: Lesson = {
       ],
     },
     {
-      heading: { en: 'One holds, one moves', ru: 'Одна держит, другая движется' },
+      heading: { en: 'One hand holds, one moves', ru: 'Одна рука держит, другая движется' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The right hand holds a long note to the end of the bar while the left keeps moving.',
-            ru: 'Правая рука держит долгую ноту до конца такта, а левая продолжает двигаться.',
+            en: 'The right hand holds a long note to the end of the bar. Meanwhile the left hand keeps moving.',
+            ru: 'Правая рука держит долгую ноту до конца такта. Тем временем левая продолжает двигаться.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1 E4/1' },
         { kind: 'notes', clef: 'bass', notes: 'C3 E3 G3 E3 C3 E3 G3 E3' },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Hold G in the right hand and play C, E, G below it.',
+            ru: 'Держите соль правой рукой и сыграйте под ней до, ми, соль.',
+          },
+          answer: { notes: ['C', 'E', 'G'] },
+        },
       ],
     },
     {
@@ -66,8 +74,8 @@ const handIndependence: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand plays eighths, two to a beat. The left plays quarters, one to a beat. Count “1 and 2 and”.',
-            ru: 'Правая рука играет восьмыми, по две на долю, левая — четвертями. Считайте «раз-и, два-и».',
+            en: 'The right hand plays eighth notes, two to a beat. The left plays quarter notes, one to a beat. Count “1 and 2 and”.',
+            ru: 'Правая рука играет восьмыми, по две на долю. Левая играет четвертями, по одной на долю. Считайте «раз-и, два-и».',
           },
         },
         {
@@ -85,8 +93,8 @@ const handIndependence: Lesson = {
           kind: 'text',
           lead: { en: 'Hanon No. 1', ru: 'Ганон № 1' },
           text: {
-            en: 'repeats one figure, a step higher each time, both hands an octave apart. It trains even, independent fingers.',
-            ru: 'повторяет одну фигуру, каждый раз на ступень выше, руки в октаву. Оно развивает ровные, независимые пальцы.',
+            en: 'repeats one short figure, starting a step higher each time, with the hands an octave apart. It trains even, independent fingers.',
+            ru: 'повторяет одну короткую фигуру, каждый раз на ступень выше, руки в октаву. Оно развивает ровные, независимые пальцы.',
           },
         },
         {
@@ -104,6 +112,14 @@ const handIndependence: Lesson = {
           title: { en: 'Hanon No. 1 in the Player', ru: 'Ганон № 1 в плеере' },
           target: { opens: 'exercise', exercise: 'hanon', root: note('C') },
         },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the first five notes of Hanon No. 1 in C.',
+            ru: 'Сыграйте первые пять нот Ганона № 1 от до.',
+          },
+          answer: { notes: ['C', 'E', 'F', 'G', 'A'], rising: true },
+        },
       ],
     },
     {
@@ -113,7 +129,7 @@ const handIndependence: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Play each hand alone until it is easy.',
+              en: 'Play each hand alone until it feels easy.',
               ru: 'Играйте каждую руку отдельно, пока не станет легко.',
             },
             {
@@ -121,32 +137,16 @@ const handIndependence: Lesson = {
               ru: 'Соединяйте очень медленно, слушая то одну, то другую руку.',
             },
             {
-              en: 'Speed up only when both sound as you meant.',
-              ru: 'Ускоряйтесь, только когда обе звучат как задумано.',
+              en: 'Speed up only when both hands sound the way you want.',
+              ru: 'Ускоряйтесь, только когда обе руки звучат так, как вы хотите.',
             },
           ],
         },
         {
           kind: 'question',
           ask: {
-            en: 'Hold G in the right hand and play C, E, G below it.',
-            ru: 'Держите соль в правой руке и сыграйте под ней до, ми, соль.',
-          },
-          answer: { notes: ['C', 'E', 'G'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the first five notes of Hanon No. 1 in C.',
-            ru: 'Сыграйте пять первых нот Ганона № 1 от до.',
-          },
-          answer: { notes: ['C', 'E', 'F', 'G', 'A'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the note the figure starts on the second time.',
-            ru: 'Сыграйте ноту, с которой фигура начинается во второй раз.',
+            en: 'In Hanon No. 1, play the note the figure starts on the second time.',
+            ru: 'Сыграйте ноту, с которой фигура Ганона № 1 начинается во второй раз.',
           },
           answer: { notes: ['D'] },
         },

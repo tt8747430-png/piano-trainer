@@ -61,9 +61,12 @@ describe('LessonView', () => {
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'Reading chord symbols',
       'Numbers and 7ths',
-      '6, sus and slash chords',
+      'Sixth chords',
+      'Sus chords',
+      'Slash chords',
       'Chord numbers: 2 or 9? 6 or 13?',
-      '9ths, 13ths and alterations',
+      '9ths and 13ths',
+      'Alterations',
       'Naming any chord',
       'Try it',
     ])
@@ -72,7 +75,7 @@ describe('LessonView', () => {
   it('marks the section being read in its contents', async () => {
     const user = userEvent.setup()
     await renderLesson()
-    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d+ of 10$/ }))
     const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const [first, second] = within(contents).getAllByRole('link')
     await waitFor(() => expect(first).toHaveAttribute('data-reading'))
@@ -84,7 +87,7 @@ describe('LessonView', () => {
   it('opens its contents in a sheet off its bar, with what it is part of, which a link followed closes', async () => {
     const user = userEvent.setup()
     await renderLesson()
-    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d+ of 10$/ }))
     const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
     expect(within(sheet).getByRole('link', { name: /^Back to the journey/ })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
@@ -365,7 +368,9 @@ describe('LessonView’s accompaniment', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(ACCOMPANIMENT)
     const card = screen.getByRole('article', { name: '2 · Broken chords' })
-    expect(card).toHaveTextContent('Right hand rocks in 8ths between the upper notes')
+    expect(card).toHaveTextContent(
+      'The right hand keeps its chord under the fingers and rocks in 8ths',
+    )
     expect(card).toHaveTextContent('Lesson 3: C – Dm – G – C – F – C – G – C')
     await user.click(within(card).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? []).length).toBeGreaterThan(8)

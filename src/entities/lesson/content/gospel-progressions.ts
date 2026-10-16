@@ -9,8 +9,8 @@ const gospelProgressions: Lesson = {
   id: 'gospel-progressions',
   title: { en: 'Gospel progressions', ru: 'Госпел-последовательности' },
   summary: {
-    en: 'Play the progressions gospel is built on, in 7th chords.',
-    ru: 'Играйте последовательности, на которых строится госпел, септаккордами.',
+    en: 'Play the chord progressions gospel is built on, with 7th chords and a gospel rhythm.',
+    ru: 'Играйте последовательности, на которых строится госпел, септаккордами и в госпел-ритме.',
   },
   sections: [
     {
@@ -19,47 +19,47 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel keeps each chord’s role in the key but makes it richer: 7ths and 9ths on almost every beat.',
-            ru: 'Госпел сохраняет роль каждого аккорда в тональности, но делает его богаче: септаккорды и нонаккорды почти на каждой доле.',
+            en: 'Gospel keeps each chord’s job in the key but makes the chord fuller. Players add 7ths and 9ths on almost every beat.',
+            ru: 'Госпел сохраняет задачу каждого аккорда в тональности, но делает его полнее. Септимы и ноны звучат почти на каждой доле.',
           },
         },
         { kind: 'chords', symbols: ['C', 'CMaj7', 'CMaj9'] },
       ],
     },
     {
-      heading: { en: 'The hymn', ru: 'Гимн' },
+      heading: { en: 'The hymn: I–IV–I–V', ru: 'Гимн: I–IV–I–V' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'I–IV–I–V is the old hymn’s plain change, back and forth between home and its neighbours.',
-            ru: 'I–IV–I–V — простая смена старого гимна: туда и обратно между тоникой и её соседями.',
+            en: 'Old hymns use this plain change. It moves back and forth between home and its two neighbours, IV and V.',
+            ru: 'Это простая смена аккордов старых гимнов. Она ходит туда и обратно между тоникой и её соседями, IV и V.',
           },
         },
         { kind: 'progression', numerals: 'I IV I V', key: G_MAJOR, size: 'sevenths' },
       ],
     },
     {
-      heading: { en: 'The standard', ru: 'Стандарт' },
+      heading: { en: 'The standard: I–iii–IV–V', ru: 'Стандарт: I–iii–IV–V' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'I–iii–IV–V climbs to the dominant: up a third, then step by step.',
-            ru: 'I–iii–IV–V поднимается к доминанте: сначала на терцию, затем по ступеням.',
+            en: 'This one climbs toward the dominant. The roots go up a 3rd, then one step at a time.',
+            ru: 'Эта последовательность поднимается к доминанте. Основные тоны идут вверх на терцию, затем по одной ступени.',
           },
         },
         { kind: 'progression', numerals: 'I iii IV V', key: F_MAJOR, size: 'sevenths' },
       ],
     },
     {
-      heading: { en: 'The lift', ru: 'Подъём' },
+      heading: { en: 'The lift: IV–V–iii–vi', ru: 'Подъём: IV–V–iii–vi' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'IV–V–iii–vi rises from IV and lands on the minor vi, ready to go on.',
-            ru: 'IV–V–iii–vi поднимается от IV и приходит на минорную vi, откуда можно идти дальше.',
+            en: 'This one starts on IV and lands on the minor vi instead of home. From there the song can go on.',
+            ru: 'Эта последовательность начинается с IV и приходит не домой, а на минорную vi. Оттуда песня может идти дальше.',
           },
         },
         { kind: 'progression', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
@@ -71,21 +71,21 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Named for its bass, the key’s 7th, 3rd and 6th notes, it is a ii–V–i into the relative minor.',
-            ru: 'Она названа по басу, VII, III и VI ступеням тональности. Это ii–V–i в параллельный минор.',
+            en: 'It is named for its bass notes, the key’s 7th, 3rd and 6th. In C they are B, E and A. Together they make a minor ii V i into Am.',
+            ru: 'Она названа по басу: VII, III и VI ступени тональности. В до мажоре это си, ми и ля. Вместе они дают минорный ii–V–i в Am.',
           },
         },
         { kind: 'progression', numerals: 'vii° III vi', key: C_MAJOR, size: 'sevenths' },
       ],
     },
     {
-      heading: { en: 'The resolution', ru: 'Разрешение' },
+      heading: { en: 'The resolution: V–IV–I', ru: 'Разрешение: V–IV–I' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'V–IV–I steps back through IV on the way home, softening the dominant’s pull.',
-            ru: 'V–IV–I возвращается домой через IV, и тяготение доминанты становится мягче.',
+            en: 'Here V goes home through IV instead of straight to I. That softens the dominant’s pull.',
+            ru: 'Здесь V идёт домой не прямо, а через IV. От этого тяготение доминанты мягче.',
           },
         },
         { kind: 'progression', numerals: 'V IV I', key: F_MAJOR, size: 'sevenths' },
@@ -96,10 +96,10 @@ const gospelProgressions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'The walk-up,', ru: 'Подход снизу,' },
+          lead: { en: 'The walk-up', ru: 'Подход снизу' },
           text: {
-            en: '♭VI–♭VII–I, the gospel ending, climbs home by whole steps. Its roots come from minor, each played as a dominant 7th.',
-            ru: '♭VI–♭VII–I, госпел-окончание, поднимается к тонике целыми тонами. Его основные тоны взяты из минора, и на каждом звучит доминантсептаккорд.',
+            en: 'is a gospel ending that climbs home by whole steps: ♭VI, ♭VII, I. Its first two roots come from minor, each played as a dominant 7th.',
+            ru: '— госпел-окончание, которое поднимается к тонике целыми тонами: ♭VI, ♭VII, I. Первые два основных тона взяты из минора, на каждом звучит доминантсептаккорд.',
           },
         },
         { kind: 'progression', numerals: '♭VI ♭VII I', key: C_MAJOR, size: 'sevenths' },
@@ -111,8 +111,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand strikes between the beats and ties over one. The bass walks on every beat.',
-            ru: 'Правая рука берёт аккорды между долями и один тянет через долю. Бас шагает на каждую долю.',
+            en: 'The right hand plays between the beats and holds one chord over a beat. The bass walks on every beat.',
+            ru: 'Правая рука играет между долями и тянет один аккорд через следующую долю. Левая шагает басом на каждую долю.',
           },
         },
         {
@@ -124,8 +124,8 @@ const gospelProgressions: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The top line is each chord’s top note. F♯ walks the bass up to G.',
-            ru: 'Верхняя строка — верхний звук аккордов. Фа-диез ведёт бас вверх, к соль.',
+            en: 'The top staff shows each chord’s top note. F♯ walks the bass up to G.',
+            ru: 'На верхнем стане только верхний звук каждого аккорда. Фа-диез ведёт бас вверх, к соль.',
           },
         },
       ],
@@ -148,12 +148,12 @@ const gospelProgressions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'The lift in the Player', ru: 'Подъём в плеере' },
+          title: { en: 'Practise the lift in the Player', ru: 'Подъём в плеере' },
           target: { opens: 'player', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
         },
         {
           kind: 'link',
-          title: { en: 'The 7–3–6 through the keys', ru: '7–3–6 по всем тональностям' },
+          title: { en: 'The 7–3–6 through all the keys', ru: '7–3–6 по всем тональностям' },
           target: {
             opens: 'player',
             numerals: 'vii° III vi',

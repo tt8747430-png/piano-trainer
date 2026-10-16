@@ -8,8 +8,8 @@ const theBlues: Lesson = {
   id: 'the-blues',
   title: { en: 'The twelve-bar blues', ru: 'Двенадцатитактовый блюз' },
   summary: {
-    en: 'Play the twelve-bar blues with a shuffle and the blues scale.',
-    ru: 'Играть двенадцатитактовый блюз с шаффлом и блюзовой гаммой.',
+    en: 'Learn the twelve-bar blues chord by chord, add a left-hand shuffle, then phrase over it with the blues scale.',
+    ru: 'Выучить двенадцатитактовый блюз по аккордам, добавить шаффл в левой руке и строить фразы на блюзовой гамме.',
   },
   sections: [
     {
@@ -18,17 +18,17 @@ const theBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The blues plays I, IV and V, each a dominant 7th: in C, C7, F7 and G7.',
-            ru: 'Блюз играет I, IV и V, каждый — доминантсептаккорд: в до мажоре C7, F7 и G7.',
+            en: 'Three dominant 7ths, on I, IV and V. In C: C7, F7, G7.',
+            ru: 'Три доминантсептаккорда, на I, IV и V. В до: C7, F7, G7.',
           },
         },
         { kind: 'progression', numerals: TWELVE_BARS, key: C_MAJOR },
         {
           kind: 'steps',
           steps: [
-            { en: 'Bars 1–4: I.', ru: 'Такты 1–4: I.' },
-            { en: 'Bars 5–6: IV. Bars 7–8: I.', ru: 'Такты 5–6: IV. Такты 7–8: I.' },
-            { en: 'Bars 9–12: V, IV, I, V.', ru: 'Такты 9–12: V, IV, I, V.' },
+            { en: 'Bars 1 to 4: I.', ru: 'Такты 1–4: I.' },
+            { en: 'Bars 5, 6: IV. Bars 7, 8: I.', ru: 'Такты 5–6: IV. Такты 7–8: I.' },
+            { en: 'Bars 9 to 12: V, IV, I, V.', ru: 'Такты 9–12: V, IV, I, V.' },
           ],
         },
       ],
@@ -38,9 +38,10 @@ const theBlues: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A shuffle', ru: 'Шаффл' },
           text: {
-            en: 'Rock between the 5th and the 6th over the root, a pair to each beat. Swing the eighths: long, short.',
-            ru: 'Покачивайтесь между квинтой и секстой над основным тоном, по паре на долю. Свингуйте восьмые: длинная, короткая.',
+            en: 'rocks the left hand between root and 5th, then root and 6th, a pair to each beat. Swing the eighths: long, short.',
+            ru: '— это покачивание левой руки: основной тон с квинтой, затем с секстой, по паре на долю. Свингуйте восьмые: длинная, короткая.',
           },
         },
         {
@@ -58,8 +59,8 @@ const theBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The C blues scale fits C7, F7 and G7. Slide from E♭ up to E over C7 for the blues’ bent sound.',
-            ru: 'Блюзовая гамма от до подходит к C7, F7 и G7. Над C7 скользите от ми-бемоля к ми: так звучит блюзовый «изгиб».',
+            en: 'The C blues scale fits over C7, F7 and G7. Over C7, slide from E♭ up to E. That slide is the bent sound of the blues.',
+            ru: 'Блюзовая гамма от до подходит к C7, F7 и G7. Над C7 скользите от ми-бемоля к ми. Так звучит блюзовый «изгиб».',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'blues' },
@@ -72,8 +73,8 @@ const theBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The blues sings in three lines of four bars. Play a phrase in bars 1–2 and rest in 3–4.',
-            ru: 'Блюз поётся тремя строками по четыре такта. Играйте фразу в тактах 1–2 и молчите в 3–4.',
+            en: 'A blues is sung in three lines of four bars. In each line, play a phrase in bars 1 and 2. Rest in bars 3 and 4.',
+            ru: 'Блюз поют тремя строками по четыре такта. В каждой играйте фразу в тактах 1–2. В тактах 3–4 молчите.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/8 B♭4/8 C5 B♭4/8 G4/8 E♭4 C4/1' },

@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 100,
   pattern: 'block',
   note: {
-    en: 'The German children’s song “Hänschen klein”.',
-    ru: 'Немецкая детская песенка «Hänschen klein».',
+    en: 'The tune of the German children’s song “Hänschen klein”.',
+    ru: 'Мелодия немецкой детской песенки «Hänschen klein».',
   },
   sections: [
     { kind: 'part', label: 'A', lines: ['C G7 C C', 'C G7 C C'] },

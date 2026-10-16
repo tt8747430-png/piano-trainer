@@ -9,8 +9,8 @@ const seventhsInASong: Lesson = {
   id: 'sevenths-in-a-song',
   title: { en: 'Seventh chords in a song', ru: 'Септаккорды в песне' },
   summary: {
-    en: 'Turn a song’s triads into the 7th chords that fit.',
-    ru: 'Превращайте трезвучия песни в подходящие септаккорды.',
+    en: 'Learn the three main 7th chords and choose the one that fits each triad of a song.',
+    ru: 'Выучить три основных септаккорда и подобрать подходящий к каждому трезвучию песни.',
   },
   sections: [
     {
@@ -18,9 +18,10 @@ const seventhsInASong: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A 7th chord', ru: 'Септаккорд' },
           text: {
-            en: 'A 7th chord keeps the harmony and adds colour and tension. The main three: the minor 7th, the major 7th and the dominant 7th.',
-            ru: 'Септаккорд сохраняет гармонию и добавляет краску и напряжение. Три основных: малый минорный, большой мажорный и доминантовый.',
+            en: 'adds a fourth note, a 7th above the root. It keeps the harmony and adds colour and tension. The main three are the minor 7th, major 7th and dominant 7th.',
+            ru: '— аккорд с четвёртым звуком, септимой от основного тона. Он сохраняет гармонию и добавляет краску и напряжение. Три основных: малый минорный, большой мажорный и доминантовый.',
           },
         },
         {
@@ -40,7 +41,7 @@ const seventhsInASong: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'A minor triad becomes a minor 7th: Dm to Dm7.',
+              en: 'A minor triad takes a minor 7th: Dm7.',
               ru: 'Минорное трезвучие становится малым минорным септаккордом: Dm в Dm7.',
             },
             {
@@ -48,8 +49,8 @@ const seventhsInASong: Lesson = {
               ru: 'Устойчивое мажорное трезвучие получает Maj7.',
             },
             {
-              en: 'A major triad that pushes forward takes 7.',
-              ru: 'Мажорное трезвучие, которое движет вперёд, получает 7.',
+              en: 'A major triad that pushes forward takes a dominant 7th.',
+              ru: 'Мажорное трезвучие, которое движет вперёд, становится доминантовым септаккордом.',
             },
           ],
         },
@@ -57,8 +58,8 @@ const seventhsInASong: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Only where it truly fits the song.',
-            ru: 'Только там, где это действительно уместно.',
+            en: 'Use them only where they fit the song.',
+            ru: 'Используйте их только там, где они уместны в песне.',
           },
         },
       ],
@@ -69,8 +70,8 @@ const seventhsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The verse’s triads, grown into 7th chords where they sound right.',
-            ru: 'Трезвучия куплета, ставшие септаккордами там, где это звучит уместно.',
+            en: 'Here is the verse, its triads grown into 7th chords where they sound right.',
+            ru: 'Вот куплет: его трезвучия стали септаккордами там, где это звучит уместно.',
           },
         },
         {
@@ -92,7 +93,7 @@ const seventhsInASong: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Sus4 suits the place of a major triad, or comes just before one. Here it sounds better than sus2.',
+            en: 'Sus4 works in place of a major triad, or just before one. Here it sounds better than sus2.',
             ru: 'Sus4 хорошо встаёт вместо мажорного трезвучия или перед ним. Здесь он звучит лучше, чем sus2.',
           },
         },
@@ -109,8 +110,8 @@ const seventhsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play each 7th chord up and down by semitones, with its bass. Step 1 is the minor 7th, step 2 the major, step 3 the dominant.',
-            ru: 'Играйте каждый септаккорд по полутонам вверх и вниз, с басом. Шаг 1 — малый минорный, шаг 2 — большой мажорный, шаг 3 — доминантовый.',
+            en: 'Play each 7th chord with its bass, moving up and then down by semitones. Step 1 is the minor 7th, step 2 the major 7th, step 3 the dominant 7th.',
+            ru: 'Играйте каждый септаккорд с басом, по полутонам вверх и затем вниз. Шаг 1 — малый минорный, шаг 2 — большой мажорный, шаг 3 — доминантовый.',
           },
         },
         { kind: 'chords', symbols: ['Cm7', 'C♯m7', 'Dm7', 'E♭m7'], apart: true },

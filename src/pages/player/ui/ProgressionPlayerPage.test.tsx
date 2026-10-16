@@ -149,7 +149,7 @@ describe('A progression in the Player', () => {
       }
       if (!first) throw new Error('the favourites')
       expect(
-        within(first).getByRole('option', { name: /^Rock Driving 8th-note chords/ }),
+        within(first).getByRole('option', { name: /^Rock Driving chords in 8ths/ }),
       ).toBeInTheDocument()
       await user.click(within(list).getByRole('option', { name: /^Sunday/ }))
       expect(router.state.location.search).toMatchObject({ pattern: 'my-1' })

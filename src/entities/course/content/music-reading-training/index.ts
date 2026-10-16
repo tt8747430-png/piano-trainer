@@ -14,8 +14,8 @@ const course: Course = {
   stage: 'beginner',
   title: { en: 'Music Reading Training', ru: 'Тренировка чтения нот' },
   summary: {
-    en: 'Reading drills by hand position: the right hand from middle C, the left hand across the bass staff, then mixed lines in both clefs to read on sight.',
-    ru: 'Упражнения в чтении по позициям руки: правая рука от до первой октавы, левая по всему басовому стану, затем смешанные строки в обоих ключах для чтения с листа.',
+    en: 'Reading drills, one hand position at a time. The right hand starts on middle C, the left hand moves across the bass staff, and mixed lines in both clefs train sight-reading.',
+    ru: 'Упражнения в чтении нот, по одной позиции руки за раз. Правая рука начинает с до первой октавы, левая проходит весь басовый стан, а смешанные строки в обоих ключах тренируют чтение с листа.',
   },
   weeks: 8,
   lessons: [rhCDE, rhFG, lhCBA, lhGF, bassEDC, bassBAGF, practiceOne, practiceTwo],

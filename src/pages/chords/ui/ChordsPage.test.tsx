@@ -308,7 +308,7 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords?root=G&triad=min&size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm9' })).toBeInTheDocument()
     const walk = screen.getByRole('link', {
-      name: 'Chromatic walk The chord a bar each, a semitone at a time from its root',
+      name: 'Chromatic walk The chord moved a semitone at a time from its root, one bar each',
     })
     const href = walk.getAttribute('href') ?? ''
     const [path, query] = href.split('?')

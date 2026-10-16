@@ -41,27 +41,27 @@ const LIBRARY = [
     {
       pattern: 'pop8',
       note: note(
-        'The most common pop progression. In a minor key it is heard from the relative minor: i–VI–III–VII, the ballads’ minor loop.',
-        'Самая распространённая последовательность в поп-музыке. В миноре её слышат от параллельного минора: i–VI–III–VII, минорный круг баллад.',
+        'The most used pop progression. Started from the relative minor, it becomes i–VI–III–VII, the minor loop of many ballads.',
+        'Самая распространённая последовательность в поп-музыке. Если начать её от параллельного минора, получится i–VI–III–VII, минорный круг многих баллад.',
       ),
     },
   ),
   entry('pop', 'let-it-be', { major: 'I V vi IV I V IV I' }, 'Let It Be', 'Let It Be', {
     note: note(
-      'Only the chords of the key, the chord family: most pop songs need no other.',
-      'Только аккорды тональности, «семья аккордов»: большинству поп-песен других не нужно.',
+      'Only the key’s own chords, its chord family. Most pop songs need no others.',
+      'Только аккорды самой тональности, её «семья аккордов». Большинству поп-песен других не нужно.',
     ),
   }),
   entry('pop', 'yesterday', { major: 'I V/vi vi IV V I vi V/V IV I' }, 'Yesterday', 'Yesterday', {
     note: note(
-      'Two secondary dominants: E7 pulls to Am, and D7 to G, which never comes. That broken expectation is a deceptive cadence.',
-      'Две вторичные доминанты: E7 тянет к Am, D7 — к G, который так и не приходит. Обманутое ожидание — прерванная каденция.',
+      'Two secondary dominants: chords that act as the V of a chord other than I. In C, E7 pulls to Am, and D7 pulls to G, which never comes. That broken expectation is a deceptive cadence.',
+      'Две побочные доминанты: аккорды, которые служат V не для I, а для другого аккорда. В до мажоре E7 тянет к Am, а D7 к G, который так и не приходит. Обманутое ожидание — это прерванная каденция.',
     ),
   }),
   entry('pop', 'clocks', { major: 'I v v ii' }, 'Clocks', 'Clocks', {
     note: note(
-      'Gm is borrowed from C minor, the parallel minor, and darkens the key: a chord of modal interchange.',
-      'Gm взят из одноимённого до минора и затемняет тональность: аккорд модального смешения.',
+      'The v is borrowed from the parallel minor, the minor key on the same tonic. In C that is Gm, from C minor, and it darkens the sound. This borrowing is called modal interchange.',
+      'Аккорд v взят из одноимённого минора, минорной тональности с той же тоникой. В до мажоре это Gm из до минора, и он затемняет звучание. Такое заимствование называют модальным смешением.',
     ),
   }),
   entry(
@@ -73,24 +73,35 @@ const LIBRARY = [
     {
       pattern: 'flow',
       note: note(
-        'From the Chord Flow sheet: the left hand stays on the bass while the right hand moves through the key’s primary triads (I, IV, V) over every chord. In a minor key the same loop is heard from its vi, R&B’s vi–IV–V–I.',
-        'Из листа Chord Flow: левая рука остаётся на басу, а правая над каждым аккордом движется по главным трезвучиям тональности (I, IV, V). В миноре тот же круг слышат от vi, как vi–IV–V–I в R&B.',
+        'From the Chord Flow sheet. The left hand stays on the bass while the right hand moves through the key’s main triads, I, IV and V, over every chord. In a minor key the same loop is heard from its vi, as R&B’s vi–IV–V–I.',
+        'Из листа Chord Flow. Левая рука остаётся на басу, а правая над каждым аккордом движется по главным трезвучиям тональности: I, IV и V. В миноре тот же круг слышат от vi, как vi–IV–V–I в R&B.',
       ),
     },
   ),
   entry('pop', 'alternative-pop', { major: 'I IV vi V' }, 'Alternative pop', 'Альтернативный поп'),
-  entry('pop', 'royal-road', { major: 'IV V iii vi' }, 'Royal Road', 'Royal Road'),
+  entry('pop', 'royal-road', { major: 'IV V iii vi' }, 'Royal Road', 'Royal Road', {
+    note: note(
+      'A favourite of Japanese pop, where it is called the Royal Road.',
+      'Любимая последовательность японской поп-музыки, где её называют «Королевской дорогой».',
+    ),
+  }),
   entry(
     'pop',
     'pachelbel',
     { major: 'I V vi iii IV I IV V' },
     'Pachelbel’s Canon',
     'Канон Пахельбеля',
+    {
+      note: note(
+        'The chords over the bass line of Pachelbel’s Canon, used in many pop songs since.',
+        'Аккорды над басовой линией Канона Пахельбеля. С тех пор они звучат во многих поп-песнях.',
+      ),
+    },
   ),
   entry('rock', 'rock-shuffle', { major: 'I V IV' }, 'Rock shuffle', 'Рок-шаффл', {
     note: note(
-      'Down from the dominant through the subdominant: V–IV–I closes rock and gospel songs alike.',
-      'Вниз от доминанты через субдоминанту: V–IV–I завершает и рок-, и госпел-песни.',
+      'Down from the dominant (V) through the subdominant (IV) to the tonic (I). This V–IV–I ending closes rock and gospel songs alike.',
+      'Вниз от доминанты (V) через субдоминанту (IV) к тонике (I). Таким окончанием V–IV–I завершаются и рок-, и госпел-песни.',
     ),
   }),
   entry('rock', 'wild-thing', { major: 'I IV V IV' }, 'Wild Thing', 'Wild Thing'),
@@ -102,8 +113,8 @@ const LIBRARY = [
     'Заимствованная ♭VII',
     {
       note: note(
-        'B♭ is borrowed from C minor, the parallel minor: rock’s bluesy step down from I.',
-        'B♭ взят из одноимённого до минора: блюзовый шаг рока вниз от I.',
+        'The ♭VII is borrowed from the parallel minor. In C it is B♭, from C minor: rock’s bluesy step down from I.',
+        'Аккорд ♭VII взят из одноимённого минора. В до мажоре это B♭ из до минора: блюзовый шаг рока вниз от I.',
       ),
     },
   ),
@@ -117,8 +128,8 @@ const LIBRARY = [
       pattern: 'jazz',
       size: 'sevenths',
       note: note(
-        'The basic jazz cadence: m7 → 7 → Maj7. In minor the ii is half-diminished and the dominant major, its ♭9 at 9ths, pulling into the minor chord.',
-        'Основная джазовая каденция: m7 → 7 → Maj7. В миноре ii полууменьшённый, а доминанта мажорная, с ♭9 у нонаккордов, и тянет в минорный аккорд.',
+        'The basic jazz cadence: m7, then 7, then Maj7. In minor the ii is half-diminished and the V stays major, with a ♭9 at 9ths, so it pulls into the minor tonic.',
+        'Основная джазовая каденция: m7, затем 7, затем Maj7. В миноре ii полууменьшённый, а V остаётся мажорной, с ♭9 у нонаккордов, и тянет в минорную тонику.',
       ),
     },
   ),
@@ -130,8 +141,8 @@ const LIBRARY = [
     'Цепочка ii–V',
     {
       note: note(
-        'From the 2-5-1 sheet: ii–Vs visit other keys for a moment, every dominant falling a 5th, until the last one leads home.',
-        'Из листа 2-5-1: обороты ii–V ненадолго уводят в другие тональности, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
+        'From the 2-5-1 sheet. Each ii–V visits another key for a moment, every dominant falling a 5th, until the last one leads home.',
+        'Из листа 2-5-1. Каждый оборот ii–V ненадолго уводит в другую тональность, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
       ),
     },
   ),
@@ -144,8 +155,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'From the chord matrix: C7 leads to F, then Bø–E7 is the minor ii–V into Am.',
-        'Из матрицы аккордов: C7 ведёт к F, затем Bø–E7 — минорный ii–V в Am.',
+        'From the chord matrix. In C, C7 leads to F, then Bø and E7 are the minor ii–V into Am.',
+        'Из матрицы аккордов. В до мажоре C7 ведёт к F, затем Bø и E7 — минорный ii–V в Am.',
       ),
     },
   ),
@@ -155,6 +166,12 @@ const LIBRARY = [
     { major: 'I vi ii V', minor: 'i VI ii° V' },
     'Rhythm changes',
     'Rhythm changes',
+    {
+      note: note(
+        'The opening chords of Gershwin’s “I Got Rhythm”, the basis of many jazz tunes.',
+        'Начальные аккорды песни Гершвина «I Got Rhythm», основа многих джазовых пьес.',
+      ),
+    },
   ),
   entry('jazz', 'full-turnaround', { major: 'iii vi ii V' }, 'Full turnaround', 'Полный оборот'),
   entry('jazz', 'sweet-jazz', { major: 'I IV ii V' }, 'Sweet jazz', 'Мягкий джаз'),
@@ -167,8 +184,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'D♭7 stands for G7, a tritone away: the same 3rd and 7th, and the bass falls by semitones into I.',
-        'D♭7 заменяет G7, отстоящий на тритон: те же терция и септима, а бас спускается к I по полутонам.',
+        'In C, D♭7 stands in for G7, a tritone away. Both have the same 3rd and 7th, and the bass now falls by half steps into I.',
+        'В до мажоре D♭7 заменяет G7, который отстоит от него на тритон. У них одни и те же терция и септима, а бас теперь спускается к I по полутонам.',
       ),
     },
   ),
@@ -181,8 +198,8 @@ const LIBRARY = [
     {
       size: 'ninths',
       note: note(
-        'Into major the ♭9 adds tension and slides down to the 5th of I. Into minor it is the key’s own 9th: use it right away. The top four notes of V7♭9 form a diminished 7th chord.',
-        'В мажор ♭9 добавляет напряжения и соскальзывает на квинту I. В минор это собственная нона тональности: берите её сразу. Четыре верхних звука V7♭9 образуют уменьшённый септаккорд.',
+        'Into major, the ♭9 adds tension and slides down to the 5th of I. Into minor, it is the key’s own 9th: use it right away. The top four notes of V7♭9 form a diminished 7th chord.',
+        'В мажоре ♭9 добавляет напряжения и соскальзывает на квинту I. В миноре это собственная нона тональности: берите её сразу. Четыре верхних звука V7♭9 образуют уменьшённый септаккорд.',
       ),
     },
   ),
@@ -201,7 +218,10 @@ const LIBRARY = [
     'Блюз, 12 тактов',
     {
       pattern: 'blues',
-      note: note('Great with the blues scale on top.', 'Хорошо звучит с блюзовой гаммой сверху.'),
+      note: note(
+        'The most common blues form: twelve bars of I7, IV7 and V7. Try the blues scale on top.',
+        'Самая распространённая форма блюза: двенадцать тактов на I7, IV7 и V7. Попробуйте сверху блюзовую гамму.',
+      ),
     },
   ),
   entry(
@@ -212,8 +232,8 @@ const LIBRARY = [
     'Полная каденция',
     {
       note: note(
-        'Home, away to the subdominant and the dominant, and home. In minor the dominant is major, from harmonic minor, and leads home.',
-        'Тоника, субдоминанта, доминанта и снова тоника. В миноре доминанта мажорная, из гармонического минора, и ведёт к тонике.',
+        'Home on I, away to the subdominant (IV) and the dominant (V), then home again. In minor the V is major, taken from harmonic minor, so it leads home.',
+        'Тоника, затем субдоминанта (IV) и доминанта (V), и снова тоника. В миноре V мажорная, из гармонического минора, поэтому ведёт к тонике.',
       ),
     },
   ),
@@ -225,8 +245,8 @@ const LIBRARY = [
     'Автентическая каденция',
     {
       note: note(
-        'V–I closes home. At 9ths the dominant takes the key’s own 9th: a plain 9 into major, smooth and bright; the ♭9 into minor.',
-        'V–I замыкает на тонике. У нонаккордов доминанта берёт нону тональности: простую в мажор, мягко и светло; ♭9 в минор.',
+        'V to I closes on home. At 9ths the dominant takes the key’s own 9th: a plain 9 into major, smooth and bright, and a ♭9 into minor.',
+        'V–I замыкает на тонике. У нонаккордов доминанта берёт нону тональности: простую в мажоре, мягко и светло, и ♭9 в миноре.',
       ),
     },
   ),
@@ -236,6 +256,12 @@ const LIBRARY = [
     { major: 'I IV V vi', minor: 'i iv V VI' },
     'Deceptive cadence',
     'Прерванная каденция',
+    {
+      note: note(
+        'V sets up a return home, but the progression lands on vi instead of I. In minor it lands on VI.',
+        'V готовит возвращение к тонике, но последовательность приходит на vi вместо I. В миноре она приходит на VI.',
+      ),
+    },
   ),
   entry(
     'classical',
@@ -243,6 +269,12 @@ const LIBRARY = [
     { major: 'I IV I', minor: 'i iv i' },
     'Plagal cadence',
     'Плагальная каденция',
+    {
+      note: note(
+        'IV goes straight to I, with no V between. It is the “Amen” sung at the end of hymns.',
+        'IV переходит прямо в I, без V. Это «аминь», которое поют в конце гимнов.',
+      ),
+    },
   ),
   entry(
     'classical',
@@ -250,6 +282,12 @@ const LIBRARY = [
     { minor: 'i VII VI V' },
     'Andalusian cadence',
     'Андалузская каденция',
+    {
+      note: note(
+        'Four chords stepping down from the minor tonic to a major V. In A minor: Am, G, F, E.',
+        'Четыре аккорда спускаются от минорной тоники к мажорной V. В ля миноре: Am, G, F, E.',
+      ),
+    },
   ),
   entry('soul', 'neo-soul', { major: 'vi V IV V', minor: 'i VII VI VII' }, 'Neo-soul', 'Нео-соул'),
   entry('gospel', 'gospel-standard', { major: 'I iii IV V' }, 'Gospel standard', 'Госпел-стандарт'),
@@ -263,8 +301,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'Named by its bass, the 7th, 3rd and 6th notes of the key: a ii–V–i into the relative minor, then ii–V–I home.',
-        'Названа по басу, VII, III и VI ступеням тональности: ii–V–i в параллельный минор, затем ii–V–I домой.',
+        'Named after its bass notes, the 7th, 3rd and 6th degrees of the key. It is a ii–V–i into the relative minor, then a ii–V–I home.',
+        'Названа по басу: VII, III и VI ступени тональности. Это ii–V–i в параллельный минор, затем ii–V–I домой.',
       ),
     },
   ),
@@ -274,6 +312,12 @@ const LIBRARY = [
     { major: '♭VI ♭VII I', minor: 'VI VII i' },
     'Gospel walk-up',
     'Госпел-подход',
+    {
+      note: note(
+        'The bass climbs by whole steps into I. In major, ♭VI and ♭VII are borrowed from the parallel minor.',
+        'Бас поднимается к I целыми тонами. В мажоре ♭VI и ♭VII взяты из одноимённого минора.',
+      ),
+    },
   ),
   entry(
     'theory',
@@ -283,8 +327,8 @@ const LIBRARY = [
     'Аккорды тональности',
     {
       note: note(
-        'Lead into each by its V for the secondary dominants, or by its ii–V for a ii–V–I to every chord of the key.',
-        'Подведите к каждому через его V — получатся вторичные доминанты, или через его ii–V — ii–V–I к каждому аккорду тональности.',
+        'Lead into each chord by its V to hear the secondary dominants, or by its ii–V for a ii–V–I into every chord of the key.',
+        'Подведите к каждому аккорду через его V, и прозвучат побочные доминанты. Через его ii–V получится ii–V–I к каждому аккорду тональности.',
       ),
     },
   ),
@@ -297,8 +341,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'Every degree of the key a 5th apart, home to I: the circle of fifths in the key’s own chords. In 7ths each 3rd falls to the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Lead into each by its ii–V to go round the circle by ii–V–Is.',
-        'Все ступени тональности через квинту и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда переходит в септиму следующего. В миноре, от iv, это Autumn Leaves. Подведите к каждому через его ii–V — пройдёте круг оборотами ii–V–I.',
+        'Every degree of the key, each a 5th from the last, back home to I: the circle of fifths in the key’s own chords. In 7th chords, each chord’s 3rd becomes the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Lead into each chord by its ii–V to go round the circle in ii–V–Is.',
+        'Все ступени тональности, каждая через квинту от предыдущей, и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда становится септимой следующего. В миноре, от iv, это Autumn Leaves. Подведите к каждому аккорду через его ii–V, и круг пройдёт оборотами ii–V–I.',
       ),
     },
   ),
@@ -310,7 +354,7 @@ const LIBRARY = [
     'Stack Your Chords',
     {
       note: note(
-        'Five m7 chords move clockwise around the circle of fifths, then four chords on major triads lead back home. Take it through all 12 keys.',
+        'Five m7 chords move clockwise round the circle of fifths, then four chords on major triads lead back home. Take it through all 12 keys.',
         'Пять аккордов m7 идут по квинтовому кругу по часовой стрелке, затем четыре аккорда на мажорных трезвучиях возвращают домой. Пройдите её во всех 12 тональностях.',
       ),
     },

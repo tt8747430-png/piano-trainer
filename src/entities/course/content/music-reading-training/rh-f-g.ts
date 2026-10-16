@@ -6,8 +6,8 @@ const rhFG: Lesson = {
   id: 'rh-f-g',
   title: { en: 'F and G in the right hand', ru: 'Фа и соль в правой руке' },
   summary: {
-    en: 'Read and play the five notes from C to G on sight.',
-    ru: 'Читать с листа и играть пять нот от до до соль.',
+    en: 'Add F and G to fill the right hand’s C position, one finger for each note from C to G.',
+    ru: 'Добавить фа и соль и занять всю позицию до в правой руке: по пальцу на каждую ноту от до до соль.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const rhFG: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Thumb on middle C. Finger 4 takes F4 in the first space, finger 5 takes G4 on the second line.',
-            ru: 'Первый палец на до. Четвёртый берёт фа в первом промежутке, пятый — соль на второй линейке.',
+            en: 'Keep the thumb on middle C. Finger 4 plays F, in the first space. Finger 5 plays G, on the second line. Now each finger has its own note.',
+            ru: 'Первый палец остаётся на до. Четвёртый играет фа в первом промежутке, пятый — соль на второй линейке. Теперь у каждого пальца своя нота.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
@@ -29,8 +29,8 @@ const rhFG: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep fingers 4 and 5 curved and let them play as firmly as the thumb.',
-            ru: 'Держите четвёртый и пятый пальцы округлыми, пусть играют так же уверенно, как первый.',
+            en: 'Fingers 4 and 5 are the weakest. Keep them curved and play them as firmly as the thumb.',
+            ru: 'Четвёртый и пятый пальцы самые слабые. Держите их округлыми и играйте ими так же уверенно, как первым.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4/2 G4 F4 E4/2 F4 G4 F4 E4 D4/1' },
@@ -43,34 +43,34 @@ const rhFG: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Line to line or space to space is a skip. C–E, E–G and D–F each leave one finger out.',
-            ru: 'С линейки на линейку или из промежутка в промежуток — скачок. До — ми, ми — соль и ре — фа пропускают палец.',
+            en: 'A skip goes line to line or space to space, and skips one finger. C to E, E to G and D to F are skips.',
+            ru: 'Скачок идёт с линейки на линейку или из промежутка в промежуток и пропускает один палец. До — ми, ми — соль и ре — фа — скачки.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 G4/2 E4 G4 E4 C4 D4 F4 D4 F4 E4/1' },
       ],
     },
     {
-      heading: { en: 'C to G', ru: 'От до к соль' },
+      heading: { en: 'C to G: the whole hand', ru: 'От до к соль: вся рука' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'C to G spans the whole hand, thumb to finger 5: ledger line to second line.',
-            ru: 'До — соль охватывает всю руку, от первого пальца до пятого: от добавочной линейки до второй.',
+            en: 'C to G spans the whole hand, thumb to finger 5. On the staff it goes from the ledger line to the second line. Keep the hand still.',
+            ru: 'До — соль охватывает всю руку, от первого пальца до пятого. На стане это от добавочной линейки до второй. Рука остаётся на месте.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 G4 E4 C4/2 C4 G4 F4 D4 C4/1' },
       ],
     },
     {
-      heading: { en: 'Read on sight', ru: 'Чтение с листа' },
+      heading: { en: 'Sight-reading', ru: 'Чтение с листа' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Look a note ahead as you play. The eye leads, the hand follows.',
-            ru: 'Смотрите на ноту вперёд. Глаз ведёт, рука следует.',
+            en: 'As you play one note, look ahead to the next. Your eyes stay a little ahead of your hand.',
+            ru: 'Играя одну ноту, смотрите уже на следующую. Глаза всегда чуть впереди руки.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 D4 F4 E4 G4 F4/2 G4 F4 E4 D4 C4/1' },
@@ -104,12 +104,12 @@ const rhFG: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {
           kind: 'link',
-          title: { en: 'The C position in the Player', ru: 'Позиция до в плеере' },
+          title: { en: 'Play the C position in the Player', ru: 'Позиция до в плеере' },
           target: { opens: 'exercise', exercise: 'five-finger', root: note('C') },
         },
       ],

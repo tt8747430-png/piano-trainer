@@ -8,8 +8,8 @@ const pentatonicImprovisation: Lesson = {
   id: 'pentatonic-improvisation',
   title: { en: 'Improvising with the pentatonic', ru: 'Импровизация на пентатонике' },
   summary: {
-    en: 'Improvise melodies over a progression with five safe notes.',
-    ru: 'Импровизировать мелодии над последовательностью на пяти надёжных нотах.',
+    en: 'Make up melodies over a chord loop with five notes that always fit, step by step.',
+    ru: 'Сочинять мелодии на ходу над повторяющимися аккордами, на пяти нотах, которые всегда подходят.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Over C, F, G and Am, every note of the C major pentatonic sounds right.',
-            ru: 'На аккордах C, F, G и Am любая нота до-мажорной пентатоники звучит верно.',
+            en: 'Over C, F, G and Am, every note of the C major pentatonic sounds right. Start your solos with these five.',
+            ru: 'На аккордах C, F, G и Am любая нота до-мажорной пентатоники звучит верно. Начинайте импровизацию с этих пяти.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'pent' },
@@ -31,11 +31,18 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a short phrase, rest, then answer it with a changed copy.',
-            ru: 'Сыграйте короткую фразу, сделайте паузу и ответьте её изменённой копией.',
+            en: 'Play a short phrase and rest. Then answer it: play it again with the ending changed.',
+            ru: 'Сыграйте короткую фразу и сделайте паузу. Затем ответьте: повторите её с другим окончанием.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/8 G4/8 A4 G4/2 E4/8 G4/8 A4 C5/2' },
+        {
+          kind: 'text',
+          text: {
+            en: 'Here the call ends on G, the answer on C.',
+            ru: 'Здесь вопрос кончается на соль, ответ — на до.',
+          },
+        },
       ],
     },
     {
@@ -44,7 +51,7 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'End each phrase on a note of the chord under it: E or G over C, A or C over F.',
+            en: 'End each phrase on a note of the chord below it: E or G over C, A or C over F.',
             ru: 'Заканчивайте каждую фразу нотой аккорда под ней: ми или соль на C, ля или до на F.',
           },
         },
@@ -58,8 +65,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hold one rhythm and change only the notes. Then keep the notes and change the rhythm.',
-            ru: 'Сохраняйте один ритм и меняйте только ноты. Потом оставьте ноты и меняйте ритм.',
+            en: 'Keep one rhythm and change only the notes. Then keep the notes and change the rhythm.',
+            ru: 'Сохраните один ритм и меняйте только ноты. Потом оставьте ноты и меняйте ритм.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/8 A4/8 G4 E4/2 D5/8 C5/8 A4 G4/2' },
@@ -71,8 +78,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Loop I–V–vi–IV in the left hand and improvise in the right. Start with two notes, then add one at a time.',
-            ru: 'Повторяйте I–V–vi–IV левой рукой и импровизируйте правой. Начните с двух нот, затем добавляйте по одной.',
+            en: 'Repeat I V vi IV in the left hand and improvise in the right. Start with two notes. Add one at a time.',
+            ru: 'Повторяйте I V vi IV левой рукой и импровизируйте правой. Начните с двух нот. Добавляйте по одной.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: C_MAJOR },
@@ -89,8 +96,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Over Am, Dm and Em, play the A minor pentatonic: C’s notes, centred on A.',
-            ru: 'На Am, Dm и Em играйте ля-минорную пентатонику: ноты до-мажорной с центром на ля.',
+            en: 'Over Am, Dm and Em, play the A minor pentatonic. It has the same notes, but A is now home.',
+            ru: 'На Am, Dm и Em играйте ля-минорную пентатонику. Ноты те же, но опора теперь на ля.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'mpent' },
@@ -118,7 +125,7 @@ const pentatonicImprovisation: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'A blues in the Player', ru: 'Блюз в ля в плеере' },
+          title: { en: 'A blues in A in the Player', ru: 'Блюз в ля в плеере' },
           target: {
             opens: 'player',
             numerals: 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7',

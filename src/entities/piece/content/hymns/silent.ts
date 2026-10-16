@@ -14,8 +14,8 @@ export default definePiece({
   tempo: 84,
   pattern: 'r4',
   note: {
-    en: 'In 3/4 the figuration becomes 1–5–8 in the left hand and 1–3–2 in the right: one smooth wave per bar.',
-    ru: 'На 3/4 фигурация становится 1–5–8 в левой руке и 1–3–2 в правой: одна плавная волна на такт.',
+    en: 'In 3/4 the figuration changes: 1–5–8 in the left hand and 1–3–2 in the right, one smooth wave in each bar.',
+    ru: 'На 3/4 фигурация меняется: 1–5–8 в левой руке и 1–3–2 в правой, одна плавная волна на такт.',
   },
   sections: [
     {

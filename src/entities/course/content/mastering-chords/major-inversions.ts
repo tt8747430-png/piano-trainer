@@ -8,8 +8,8 @@ const majorInversions: Lesson = {
   id: 'major-inversions',
   title: { en: 'Major chord inversions', ru: 'Обращения мажорного аккорда' },
   summary: {
-    en: 'Play a major chord in three positions and reach the nearest.',
-    ru: 'Играйте мажорный аккорд в трёх видах и берите ближайший.',
+    en: 'Play a major chord in its three positions, tell them apart and move to the nearest one.',
+    ru: 'Играйте мажорное трезвучие в трёх видах, различайте их и переходите к ближайшему.',
   },
   sections: [
     {
@@ -17,10 +17,10 @@ const majorInversions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Root position:', ru: 'Основной вид:' },
+          lead: { en: 'Root position', ru: 'Основной вид' },
           text: {
-            en: 'the root at the bottom, then the 3rd and the 5th.',
-            ru: 'основной тон внизу, над ним терция и квинта.',
+            en: 'puts the root at the bottom, with the 3rd and the 5th above it. This is how you built chords in the first two lessons.',
+            ru: '— основной тон внизу, над ним терция и квинта. Так вы строили трезвучия в первых двух уроках.',
           },
         },
         {
@@ -38,10 +38,10 @@ const majorInversions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'First inversion:', ru: 'Первое обращение (секстаккорд):' },
+          lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'move the root up an octave. The 3rd is now at the bottom: E, G, C.',
-            ru: 'перенесите основной тон на октаву вверх. Внизу теперь терция: ми, соль, до.',
+            en: 'keeps a chord’s notes but puts a different one at the bottom. For first inversion, move the root up an octave. The 3rd is now lowest: E, G, C.',
+            ru: '— те же звуки аккорда, но внизу другой. Для первого обращения (секстаккорда) перенесите основной тон на октаву вверх. Внизу теперь терция: ми, соль, до.',
           },
         },
         {
@@ -59,10 +59,10 @@ const majorInversions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Second inversion:', ru: 'Второе обращение (квартсекстаккорд):' },
+          lead: { en: 'Second inversion', ru: 'Второе обращение (квартсекстаккорд)' },
           text: {
-            en: 'move the 3rd up too. The 5th is now at the bottom: G, C, E.',
-            ru: 'перенесите вверх и терцию. Внизу теперь квинта: соль, до, ми.',
+            en: 'moves the 3rd up an octave as well. Now the 5th is at the bottom: G, C, E.',
+            ru: '— перенесите вверх ещё и терцию. Теперь внизу квинта: соль, до, ми.',
           },
         },
         {
@@ -76,7 +76,7 @@ const majorInversions: Lesson = {
       ],
     },
     {
-      heading: { en: 'The 4th points to the root', ru: 'Кварта указывает на основной тон' },
+      heading: { en: 'Find the root', ru: 'Найдите основной тон' },
       blocks: [
         {
           kind: 'voicings',
@@ -89,8 +89,8 @@ const majorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A 4th on top means first inversion, a 4th at the bottom second. The 4th’s upper note is the root.',
-            ru: 'Кварта сверху — первое обращение, кварта снизу — второе. Верхний звук кварты — основной тон.',
+            en: 'In an inversion, two neighbouring notes sit a 4th apart, five semitones. The upper note of the 4th is the root. A 4th on top means first inversion, at the bottom second.',
+            ru: 'В обращении два соседних звука стоят через кварту, пять полутонов. Верхний звук кварты — основной тон. Кварта сверху — первое обращение, снизу — второе.',
           },
         },
       ],
@@ -110,8 +110,8 @@ const majorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the note two chords share and move the others a step. The left hand plays each root.',
-            ru: 'Оставьте общий звук двух аккордов, а остальные сдвиньте на ступень. Левая рука берёт основной тон.',
+            en: 'Inversions let the right hand move as little as possible. Keep the note two chords share and move the others by step. The left hand plays each root below.',
+            ru: 'Обращения позволяют правой руке двигаться как можно меньше. Оставьте общий звук двух аккордов, остальные сдвиньте на ступень. Левая рука берёт основной тон внизу.',
           },
         },
         {

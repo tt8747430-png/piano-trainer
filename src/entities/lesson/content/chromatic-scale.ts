@@ -5,8 +5,8 @@ const chromaticScale: Lesson = {
   id: 'chromatic-scale',
   title: { en: 'The chromatic scale', ru: 'Хроматическая гамма' },
   summary: {
-    en: 'Play and finger the chromatic scale from any note.',
-    ru: 'Играйте хроматическую гамму от любой ноты с верной аппликатурой.',
+    en: 'Play every key in turn, with a fingering that works from any note.',
+    ru: 'Играйте все клавиши подряд с аппликатурой, которая подходит от любой ноты.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const chromaticScale: Lesson = {
           kind: 'text',
           lead: { en: 'The chromatic scale', ru: 'Хроматическая гамма' },
           text: {
-            en: 'plays every key, white and black, a half step at a time: twelve to the octave.',
-            ru: 'проходит все клавиши подряд, белые и чёрные, по полутонам: двенадцать в октаве.',
+            en: 'plays every key in order, white and black. Each step is a half step, the smallest on the piano. An octave has twelve of them.',
+            ru: 'проходит все клавиши подряд, белые и чёрные. Каждый шаг — полутон, самый маленький на фортепиано. В октаве их двенадцать.',
           },
         },
         {
@@ -33,11 +33,11 @@ const chromaticScale: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Black keys: the 3rd finger.', ru: 'Чёрные клавиши — третий палец.' },
-            { en: 'White keys: the thumb.', ru: 'Белые клавиши — большой палец.' },
+            { en: 'Black keys: finger 3.', ru: 'Чёрные клавиши: третий палец.' },
+            { en: 'White keys: the thumb.', ru: 'Белые клавиши: большой палец.' },
             {
-              en: 'Two white keys together (E–F, B–C), going up: right hand 1 2, left hand 2 1.',
-              ru: 'Две белые подряд (ми–фа, си–до) вверх: правая рука 1 2, левая 2 1.',
+              en: 'Except where two white keys sit together, E F or B C. Going up, play them right hand 1 2, left hand 2 1.',
+              ru: 'Кроме двух белых рядом: ми фа или си до. Вверх их играют правой рукой 1 2, левой 2 1.',
             },
           ],
         },
@@ -54,8 +54,8 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Going up, a black key is usually the sharp of the note below. Coming down, it is the flat of the note above.',
-            ru: 'Вверх чёрную клавишу обычно пишут как диез нижней ноты, вниз — как бемоль верхней.',
+            en: 'A black key has two names. Going up, it is usually written as a sharp of the note below. Coming down, as a flat of the note above.',
+            ru: 'У чёрной клавиши два имени. Вверх её обычно пишут как диез нижней ноты. Вниз — как бемоль верхней.',
           },
         },
         {
@@ -71,8 +71,8 @@ const chromaticScale: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Every key counts the same, so the scale has no tonic. Say “a chromatic scale starting on E”, not “in E”.',
-            ru: 'Все клавиши в ней равны, поэтому у неё нет тоники. Говорят «хроматическая гамма от ми», а не «в ми».',
+            en: 'All twelve keys are equal here, so the scale has no home note. You can start it on any key. This one starts on E.',
+            ru: 'Все двенадцать клавиш здесь равны, поэтому у гаммы нет тоники. Начинать можно с любой клавиши. Эта начинается с ми.',
           },
         },
         {
@@ -95,12 +95,12 @@ const chromaticScale: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Half steps and every interval', ru: 'Полутоны и все интервалы' },
+          title: { en: 'Count half steps in Intervals', ru: 'Полутоны и все интервалы' },
           target: { opens: 'intervals', root: note('C') },
         },
         {
           kind: 'link',
-          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          title: { en: 'Hear scales in the Quiz', ru: 'Гаммы на слух в тестах' },
           target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],

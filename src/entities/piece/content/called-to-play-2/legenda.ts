@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 56,
   pattern: 'M1',
   note: {
-    en: 'The workbook writes 3↑ where way 3 goes an octave higher; it plays here as 3.',
-    ru: 'Тетрадь пишет 3↑ там, где вид 3 играют октавой выше; здесь он звучит как 3.',
+    en: 'Where way 3 goes an octave higher, the workbook writes 3↑. Here it plays as plain way 3.',
+    ru: 'Там, где вид 3 играют октавой выше, тетрадь пишет 3↑. Здесь он звучит как обычный вид 3.',
   },
   sections: [
     { kind: 'verse', lines: ['F:4 Gm:5.2', 'C:3 F:inv-C:t1', 'F:t4 Gm:4', 'C:5.1 F:oct'] },

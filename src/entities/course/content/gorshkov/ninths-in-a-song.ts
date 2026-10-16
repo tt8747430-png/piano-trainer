@@ -11,8 +11,8 @@ const ninthsInASong: Lesson = {
   id: 'ninths-in-a-song',
   title: { en: 'Ninth chords in a song', ru: 'Нонаккорды в песне' },
   summary: {
-    en: 'Grow 7th chords into 9ths and resolve the dominant 9th.',
-    ru: 'Превращайте септаккорды в нонаккорды и разрешайте доминантовый нонаккорд.',
+    en: 'Grow 7th chords into 9ths, then resolve the dominant 9th into minor and into major.',
+    ru: 'Превратить септаккорды в нонаккорды, затем разрешить доминантовый нонаккорд в минор и в мажор.',
   },
   sections: [
     {
@@ -20,9 +20,10 @@ const ninthsInASong: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A 9th chord', ru: 'Нонаккорд' },
           text: {
-            en: 'Step 1: minor 9ths up by semitones. Step 2: major 9ths. Step 3: dominant 9ths, up and down.',
-            ru: 'Шаг 1: малые минорные нонаккорды вверх по полутонам. Шаг 2: большие мажорные. Шаг 3: доминантовые, вверх и вниз.',
+            en: 'is a 7th chord with one more 3rd on top. Step 1: minor 9ths, up by semitones. Step 2: major 9ths, also up. Step 3: dominant 9ths, up and down.',
+            ru: '— септаккорд с ещё одной терцией сверху. Шаг 1: малые минорные нонаккорды вверх по полутонам. Шаг 2: большие мажорные, тоже вверх. Шаг 3: доминантовые, вверх и вниз.',
           },
         },
         {
@@ -74,8 +75,8 @@ const ninthsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Any 7th chord of the song can become a 9th: add one more 3rd on top.',
-            ru: 'Любой септаккорд песни можно превратить в нонаккорд: добавьте ещё одну терцию сверху.',
+            en: 'Any 7th chord in the song can become a 9th. Add one more 3rd on top.',
+            ru: 'Любой септаккорд песни можно превратить в нонаккорд. Добавьте сверху ещё одну терцию.',
           },
         },
         {
@@ -91,7 +92,7 @@ const ninthsInASong: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Mix the root and close positions for smoother voice leading.',
+            en: 'Mix root position with close voicings, and the voices move more smoothly.',
             ru: 'Чередуйте основное и тесное расположения, и голосоведение станет плавнее.',
           },
         },
@@ -111,8 +112,8 @@ const ninthsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Into a minor chord, the dominant takes the flat 9th: D7, D7♭9, Gm9.',
-            ru: 'В минорный аккорд доминанта идёт с пониженной ноной: D7, D7♭9, Gm9.',
+            en: 'Into a minor chord, the dominant takes the flat 9th: D7, then D7♭9, then Gm9.',
+            ru: 'В минорный аккорд доминанта идёт с пониженной ноной: D7, затем D7♭9, затем Gm9.',
           },
         },
         {
@@ -127,8 +128,8 @@ const ninthsInASong: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Over the bass, D7♭9 is a diminished 7th on its 3rd: F♯ A C E♭, all minor 3rds.',
-            ru: 'Над басом D7♭9 — это уменьшённый септаккорд от терции: F♯ A C E♭, все терции малые.',
+            en: 'Above the bass, D7♭9 is a diminished 7th chord on its 3rd: F♯ A C E♭, all minor 3rds.',
+            ru: 'Над басом D7♭9 — это уменьшённый септаккорд от его терции: F♯ A C E♭, все терции малые.',
           },
         },
       ],
@@ -139,8 +140,8 @@ const ninthsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Into a major chord, either 9th works: D9 or D7♭9 into GMaj9.',
-            ru: 'В мажорный аккорд подходят обе ноны: D9 или D7♭9 в GMaj9.',
+            en: 'Into a major chord, either 9th works: D9 or D7♭9, then GMaj9.',
+            ru: 'В мажорный аккорд подходят обе ноны: D9 или D7♭9, затем GMaj9.',
           },
         },
         {

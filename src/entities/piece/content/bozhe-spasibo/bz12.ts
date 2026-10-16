@@ -12,8 +12,8 @@ export default definePiece({
   tempo: 76,
   pattern: 'r4',
   note: {
-    en: 'The score writes B as H (German style): H7 = B7, Hsus4 = Bsus4.',
-    ru: 'В нотах B записано как H (по-немецки): H7 = B7, Hsus4 = Bsus4.',
+    en: 'The score uses the German letter H for B: H7 means B7, and Hsus4 means Bsus4.',
+    ru: 'В нотах си обозначено немецкой буквой H: H7 — это B7, а Hsus4 — Bsus4.',
   },
   sections: [
     {

@@ -10,30 +10,30 @@ const chordFunctions: Lesson = {
     ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
   },
   summary: {
-    en: 'Tell tonic, subdominant and dominant chords apart, and their substitutes.',
-    ru: 'Различайте тонику, субдоминанту, доминанту и их заместителей.',
+    en: 'Every chord in a key does one of three jobs. Learn the three, and which chords can stand in for each.',
+    ru: 'Каждый аккорд в тональности выполняет одну из трёх задач. Узнайте их и какие аккорды могут друг друга заменять.',
   },
   sections: [
     {
-      heading: { en: 'Rest, unsettle, pull', ru: 'Покой, движение, тяготение' },
+      heading: { en: 'Rest, move away, pull back', ru: 'Покой, уход, возвращение' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A function', ru: 'Функция' },
           text: {
-            en: 'is one of three jobs a chord does in its key.',
-            ru: '— одна из трёх задач, которые аккорд выполняет в тональности.',
+            en: 'is the job a chord does in its key. There are three.',
+            ru: '— это задача, которую аккорд выполняет в тональности. Их три.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
         {
           kind: 'steps',
           steps: [
-            { en: 'The tonic (I) is home, at rest.', ru: 'Тоника (I) — дом, покой.' },
-            { en: 'The subdominant (IV) leaves home.', ru: 'Субдоминанта (IV) уводит от дома.' },
+            { en: 'Tonic, I: home, at rest.', ru: 'Тоника, I: дом, покой.' },
+            { en: 'Subdominant, IV: moves away.', ru: 'Субдоминанта, IV: уход от дома.' },
             {
-              en: 'The dominant (V) pulls back to the tonic.',
-              ru: 'Доминанта (V) тянет обратно к тонике.',
+              en: 'Dominant, V: pulls back home.',
+              ru: 'Доминанта, V: тянет обратно домой.',
             },
           ],
         },
@@ -46,8 +46,8 @@ const chordFunctions: Lesson = {
           kind: 'text',
           lead: { en: 'A substitute', ru: 'Заместитель' },
           text: {
-            en: 'shares notes with a main chord and takes on its job. Dm holds F and A, two of F’s three notes.',
-            ru: 'имеет общие ноты с главным аккордом и берёт на себя его роль. В Dm есть фа и ля — две из трёх нот F.',
+            en: 'shares notes with a main chord, so it can do the same job. Dm holds F and A, two of the three notes of F.',
+            ru: '— это аккорд с общими нотами с главным, поэтому он может выполнять ту же задачу. В Dm есть фа и ля, две из трёх нот F.',
           },
         },
         { kind: 'chords', symbols: ['F', 'Dm'] },
@@ -60,8 +60,8 @@ const chordFunctions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'B° is G7 without its root. Its B, the leading note, still pulls up to C.',
-            ru: 'B° — это G7 без основного тона. Его си, вводный тон, всё так же тянется вверх, к до.',
+            en: 'B° is G7 without its root G. It keeps B, the leading note, a half step below C. So it still pulls up to C.',
+            ru: 'B° — это G7 без основного тона соль. В нём остаётся си, вводный тон, на полутон ниже до. Поэтому он так же тянется вверх, к до.',
           },
         },
         { kind: 'chords', symbols: ['G7', 'B°', 'C'] },
@@ -73,22 +73,22 @@ const chordFunctions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Am shares C and E with C: a softer home. After V, it surprises the ear that waited for I.',
-            ru: 'У Am с C общие до и ми: это более мягкий дом. После V он удивляет слух, который ждал I.',
+            en: 'Am shares C and E with the C chord, so it works as a softer home. After V the ear expects I, and Am surprises it.',
+            ru: 'У Am с аккордом C общие до и ми, поэтому он звучит как более мягкий дом. После V слух ждёт I, а Am его удивляет.',
           },
         },
         { kind: 'progression', numerals: 'I IV V vi', key: C_MAJOR },
       ],
     },
     {
-      heading: { en: 'The three families', ru: 'Три группы' },
+      heading: { en: 'All three groups', ru: 'Все три группы' },
       blocks: [
         {
           kind: 'steps',
           steps: [
-            { en: 'Tonic: I, vi and iii.', ru: 'Тоника: I, vi и iii.' },
-            { en: 'Subdominant: IV and ii.', ru: 'Субдоминанта: IV и ii.' },
-            { en: 'Dominant: V and vii°.', ru: 'Доминанта: V и vii°.' },
+            { en: 'Tonic, home: I, vi and iii.', ru: 'Тоника, дом: I, vi и iii.' },
+            { en: 'Subdominant, away: IV and ii.', ru: 'Субдоминанта, уход: IV и ii.' },
+            { en: 'Dominant, pull home: V and vii°.', ru: 'Доминанта, тяготение домой: V и vii°.' },
           ],
         },
         { kind: 'progression', numerals: 'I vi ii V I', key: C_MAJOR },
@@ -112,12 +112,12 @@ const chordFunctions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          title: { en: 'Name a chord’s function in the Quiz', ru: 'Функция аккорда в тестах' },
           target: { opens: 'quiz', trainer: 'chord-role' },
         },
         {
           kind: 'link',
-          title: { en: 'C major in Keys', ru: 'До мажор в тональностях' },
+          title: { en: 'See C major in Keys', ru: 'До мажор в тональностях' },
           target: { opens: 'key', key: C_MAJOR },
         },
       ],

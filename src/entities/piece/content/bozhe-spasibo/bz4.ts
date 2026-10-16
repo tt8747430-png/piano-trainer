@@ -9,7 +9,7 @@ export default defineListing({
   key: 'Cm',
   meter: '3/4',
   note: {
-    en: 'The score has finger numbers for both hands.',
-    ru: 'В нотах есть аппликатура для обеих рук.',
+    en: 'The printed score gives finger numbers for both hands.',
+    ru: 'В нотах проставлена аппликатура для обеих рук.',
   },
 })

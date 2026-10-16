@@ -4,10 +4,10 @@ import type { Lesson } from '@/entities/lesson'
 /** Mastering Chords, lesson 2: a minor chord on any root, three semitones then four. */
 const buildMinorChords: Lesson = {
   id: 'build-minor-chords',
-  title: { en: 'Build any minor chord', ru: 'Минорный аккорд от любой ноты' },
+  title: { en: 'Build any minor chord', ru: 'Минорное трезвучие от любой ноты' },
   summary: {
-    en: 'Build a minor chord on any of the twelve roots.',
-    ru: 'Стройте минорный аккорд от любой из двенадцати нот.',
+    en: 'Count 3 semitones, then 4, to build a minor chord on any of the twelve roots.',
+    ru: 'Отсчитайте 3 полутона, затем 4, и постройте минорное трезвучие от любой из двенадцати нот.',
   },
   sections: [
     {
@@ -15,10 +15,10 @@ const buildMinorChords: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Minor chord:', ru: 'Минорное трезвучие:' },
+          lead: { en: 'A minor chord', ru: 'Минорное трезвучие' },
           text: {
-            en: 'a root, the note 3 semitones above it, and the note 4 above that. From A: C, then E.',
-            ru: 'основной тон, звук на 3 полутона выше и звук ещё на 4 выше. От ля: до, затем ми.',
+            en: 'swaps the major chord’s steps: 3 semitones from the root, then 4. From A, count three up to C, then four more to E.',
+            ru: 'меняет местами шаги мажорного: 3 полутона от основного тона, затем 4. От ля отсчитайте три до до, затем ещё четыре до ми.',
           },
         },
         { kind: 'interval', root: note('A'), interval: 'm3' },
@@ -31,21 +31,21 @@ const buildMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Lower a major chord’s 3rd a semitone and it turns minor. C, E, G becomes C, E♭, G.',
-            ru: 'Опустите терцию мажорного аккорда на полутон — и он станет минорным. До, ми, соль превращается в до, ми-бемоль, соль.',
+            en: 'Any major chord turns minor when you lower its 3rd by a semitone. C, E, G becomes C, E♭, G. The root and 5th stay put.',
+            ru: 'Мажорное трезвучие становится минорным, если опустить терцию на полутон. До, ми, соль превращается в до, ми-бемоль, соль. Прима и квинта остаются на месте.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cm', 'G', 'Gm'], apart: true },
       ],
     },
     {
-      heading: { en: 'On the white keys', ru: 'От белых клавиш' },
+      heading: { en: 'Roots on the white keys', ru: 'От белых клавиш' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'D, E and A minor are all white. C, F and G minor have one black key in the middle. B minor’s 5th is F♯.',
-            ru: 'Ре, ми и ля минор — только белые клавиши. В до, фа и соль миноре посередине одна чёрная. Квинта си минора — фа-диез.',
+            en: 'D, E and A minor are all white. C, F and G minor have a black key in the middle. B minor has one black key on top, F♯.',
+            ru: 'Ре, ми и ля минор — только белые клавиши. В до, фа и соль миноре посередине чёрная. В си миноре одна чёрная сверху, фа-диез.',
           },
         },
         {
@@ -56,12 +56,12 @@ const buildMinorChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'On the black keys', ru: 'От чёрных клавиш' },
+      heading: { en: 'Roots on the black keys', ru: 'От чёрных клавиш' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'C♯, F♯ and G♯ minor go black, white, black. E♭ minor is all black. B♭ minor is black, black, white.',
+            en: 'C♯, F♯ and G♯ minor go black, white, black. E♭ minor is all black. B♭ minor goes black, black, white.',
             ru: 'До-диез, фа-диез и соль-диез минор — чёрная, белая, чёрная. Ми-бемоль минор — все чёрные. Си-бемоль минор — чёрная, чёрная, белая.',
           },
         },
@@ -74,8 +74,8 @@ const buildMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play each beside its major chord and hear only the 3rd move.',
-            ru: 'Играйте каждый рядом с мажорным и слушайте, как сдвигается только терция.',
+            en: 'Play each minor chord right after its major chord. Only the middle note moves, and the mood turns darker.',
+            ru: 'Играйте каждое минорное трезвучие сразу после мажорного. Сдвигается только средний звук, и звучание становится темнее.',
           },
         },
         { kind: 'grid', quality: 'min' },

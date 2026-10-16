@@ -5,8 +5,8 @@ const balanceOfAccompaniment: Lesson = {
   id: 'balance-of-accompaniment',
   title: { en: 'The balance of accompaniment', ru: 'Баланс аккомпанемента' },
   summary: {
-    en: 'Play bass and melody louder, what lies between softer.',
-    ru: 'Играйте бас и мелодию громче, всё между ними тише.',
+    en: 'Play the bass and the melody louder, and everything between them softer.',
+    ru: 'Играйте бас и мелодию громче, а всё, что между ними, тише.',
   },
   sections: [
     {
@@ -33,7 +33,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Too much cream, and the cake cannot be eaten.',
+            en: 'With too much cream, nobody can eat the cake.',
             ru: 'Если крема слишком много, торт невозможно есть.',
           },
         },
@@ -45,7 +45,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Bass and melody always sound brighter. Play chords, filling and ornaments 20 to 30 per cent quieter, as a background.',
+            en: 'The bass and the melody always sound brighter. Play the chords, fills and ornaments 20 to 30 per cent quieter, as a background.',
             ru: 'Бас и мелодия всегда звучат ярче. Аккорды, заполнение и украшения играйте на 20–30 % тише, как фон.',
           },
         },
@@ -58,8 +58,8 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A master is known by the sound, not by speed or the number of notes. Like a painter, place light and shade. And listen.',
-            ru: 'Мастера узнают по звуку, а не по скорости или количеству нот. Как художник, расставляйте свет и тень. И слушайте.',
+            en: 'A master is judged by the sound, more than by speed or the number of notes. Place light and shade as a painter does, and listen as you play.',
+            ru: 'Мастера узнают по звуку больше, чем по скорости или количеству нот. Расставляйте свет и тень, как художник, и слушайте себя во время игры.',
           },
         },
         { kind: 'pattern', pattern: 'M4', piece: 'nuzhdayus' },
@@ -76,8 +76,8 @@ const balanceOfAccompaniment: Lesson = {
               ru: 'Выучите четыре песни по плану: две в 4/4 и две в 6/8.',
             },
             {
-              en: 'Work on the balance and on how the sound is led.',
-              ru: 'Работайте над балансом и звуковедением.',
+              en: 'In each one, work on the balance and on a singing, connected sound.',
+              ru: 'В каждой работайте над балансом и звуковедением.',
             },
           ],
         },

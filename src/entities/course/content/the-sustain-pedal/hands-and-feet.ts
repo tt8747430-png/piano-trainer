@@ -5,40 +5,40 @@ const C_MAJOR = { tonic: note('C'), minor: false }
 
 const handsAndFeet: Lesson = {
   id: 'hands-and-feet',
-  title: { en: 'Coordinating hands and feet', ru: 'Согласование рук и ног' },
+  title: { en: 'Hands and foot together', ru: 'Руки и нога вместе' },
   summary: {
-    en: 'Pedal in time with the chords and hold a bass with it.',
-    ru: 'Педализировать вместе с аккордами и держать педалью бас.',
+    en: 'Press the pedal in time with the chords, then use it to hold a low bass note.',
+    ru: 'Нажимать педаль вместе с аккордами, затем держать ею низкий бас.',
   },
   sections: [
     {
-      heading: { en: 'Down with the hands', ru: 'Вместе с руками' },
+      heading: { en: 'Down with the chord', ru: 'Вместе с аккордом' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'The rhythmic pedal', ru: 'Прямая педаль' },
           text: {
-            en: 'goes down with each chord and up as the hands lift. It adds ring but leaves a small gap between chords.',
-            ru: 'нажимается вместе с аккордом и снимается вместе с руками. Она добавляет звучности, но между аккордами остаётся щель.',
+            en: 'goes down with each chord and comes up as the hands lift. It adds ring, but leaves a short gap between the chords.',
+            ru: 'нажимается вместе с аккордом и снимается, когда поднимаются руки. Она добавляет звучности, но между аккордами остаётся короткая щель.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G', 'C'] },
       ],
     },
     {
-      heading: { en: 'The foot alone', ru: 'Одна нога' },
+      heading: { en: 'The foot on its own', ru: 'Сначала одна нога' },
       blocks: [
         {
           kind: 'steps',
           steps: [
             { en: 'Count four beats aloud.', ru: 'Считайте вслух четыре доли.' },
             {
-              en: 'Press the pedal on 1, lift it on 4.',
-              ru: 'На «раз» нажмите, на «четыре» снимите.',
+              en: 'Press the pedal on 1 and lift it on 4.',
+              ru: 'На «раз» нажмите педаль, на «четыре» снимите.',
             },
             {
-              en: 'Then add the left hand, one bass note a bar.',
-              ru: 'Затем добавьте левую руку, по басу на такт.',
+              en: 'Then add the left hand, one bass note per bar.',
+              ru: 'Затем добавьте левую руку, по одной басовой ноте на такт.',
             },
           ],
         },
@@ -51,14 +51,22 @@ const handsAndFeet: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A low bass lies too far from the notes above for one hand. Catch it with the pedal and let the hand climb. Change at each new bass.',
-            ru: 'Низкий бас слишком далеко от звуков над ним. Поймайте его педалью, и рука пойдёт вверх. Меняйте педаль на каждом новом басу.',
+            en: 'A low bass note sits too far from the notes above for one hand to hold. Catch it with the pedal and let the hand climb. Change at each new bass note.',
+            ru: 'Низкий бас слишком далеко от звуков над ним, одна рука его не удержит. Поймайте его педалью, и рука пойдёт вверх. Меняйте педаль на каждом новом басу.',
           },
         },
         {
           kind: 'notes',
           clef: 'bass',
           notes: 'C2 G2 E3/2 F2 C3 A3/2 G2 D3 B3/2 C2 G2 E3/2',
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Catch a low C with the pedal, then play E and G above it, one at a time.',
+            ru: 'Поймайте педалью низкое до, затем сыграйте над ним по одной ми и соль.',
+          },
+          answer: { notes: ['C', 'E', 'G'], rising: true },
         },
       ],
     },
@@ -68,8 +76,8 @@ const handsAndFeet: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand plays the root, the right the chord, and the foot follows both.',
-            ru: 'Левая рука играет основной тон, правая — аккорд, нога следует за обеими.',
+            en: 'The left hand plays the root low down. The right hand plays the chord. The foot follows both.',
+            ru: 'Левая рука играет основной тон внизу. Правая берёт аккорд. Нога следует за обеими.',
           },
         },
         {
@@ -95,8 +103,8 @@ const handsAndFeet: Lesson = {
             },
             { en: 'Join them slowly, counting aloud.', ru: 'Соединяйте медленно, считая вслух.' },
             {
-              en: 'A gap or a blur means the foot is early or late.',
-              ru: 'Щель или грязь значит, что нога поспешила или опоздала.',
+              en: 'If you hear a gap or a blur, the foot came too early or too late.',
+              ru: 'Если слышна щель или грязь, нога поспешила или опоздала.',
             },
           ],
         },
@@ -107,14 +115,6 @@ const handsAndFeet: Lesson = {
             ru: 'Сыграйте аккорд F, нажимая педаль вместе с клавишами.',
           },
           answer: { chord: 'F' },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Catch a low C with the pedal, then play E and G above it, one at a time.',
-            ru: 'Поймайте педалью низкое до, затем сыграйте над ним по одной ми и соль.',
-          },
-          answer: { notes: ['C', 'E', 'G'], rising: true },
         },
         {
           kind: 'link',

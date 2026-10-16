@@ -10,8 +10,8 @@ const chordMatrix: Lesson = {
   id: 'chord-matrix',
   title: { en: 'The chord matrix', ru: 'Матрица аккордов' },
   summary: {
-    en: 'Find a key’s chords, the dominants leading to them, and borrowed chords.',
-    ru: 'Находите аккорды тональности, доминанты к ним и аккорды из минора.',
+    en: 'Map the chords a song in one key can use: its own seven, the dominants that lead to them, and chords borrowed from minor.',
+    ru: 'Карта аккордов для песни в одной тональности: свои семь, доминанты к ним и аккорды из минора.',
   },
   sections: [
     {
@@ -20,8 +20,8 @@ const chordMatrix: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A key’s seven chords are its family. Most pop songs, Let It Be among them, use no others.',
-            ru: 'Семь аккордов тональности — её семья. Большинству поп-песен, и Let It Be тоже, других не нужно.',
+            en: 'The seven chords built on a key’s scale are its family. Most pop songs use only these. Let It Be is one of them.',
+            ru: 'Семь аккордов, построенных на гамме тональности, — её семья. Большинство поп-песен обходятся только ими. Let It Be — одна из таких.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'], apart: true },
@@ -35,8 +35,8 @@ const chordMatrix: Lesson = {
           kind: 'text',
           lead: { en: 'A secondary dominant', ru: 'Вторичная доминанта' },
           text: {
-            en: 'is the dominant of a chord other than I, a 5th above it. Every chord but B° has one.',
-            ru: '— доминанта к аккорду, который не является I, на квинту выше него. Она есть у каждого аккорда, кроме B°.',
+            en: 'is a dominant 7th that leads to a chord other than I. It stands a 5th above that chord: E7 leads to Am, A7 to Dm. Every chord but B° has one.',
+            ru: '— доминантсептаккорд, который ведёт не к I, а к другому аккорду. Он стоит на квинту выше него: E7 ведёт к Am, A7 к Dm. Такая доминанта есть у каждого аккорда, кроме B°.',
           },
         },
         { kind: 'progression', numerals: SECONDARY_DOMINANTS, key: C_MAJOR, size: 'sevenths' },
@@ -48,8 +48,8 @@ const chordMatrix: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'After a secondary dominant the ear expects its chord. Here E leads to Am, but D, promising G, goes to F.',
-            ru: 'После вторичной доминанты слух ждёт её аккорд. Здесь E ведёт к Am, а D обещает G, но уходит в F.',
+            en: 'A secondary dominant makes the ear expect its chord. Here E goes to Am, as expected. D promises G, then moves to F instead.',
+            ru: 'После вторичной доминанты слух ждёт её аккорд. Здесь E приходит в Am, как и ожидалось. D обещает G, но уходит в F.',
           },
         },
         { kind: 'progression', numerals: 'I V/vi vi IV V I vi V/V IV I', key: C_MAJOR },
@@ -61,8 +61,8 @@ const chordMatrix: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A secondary dominant can bring its own ii: a minor 7th, or half-diminished when its chord is minor.',
-            ru: 'Вторичная доминанта может привести свой ii: малый септаккорд или полууменьшённый, если её аккорд минорный.',
+            en: 'A secondary dominant can bring its own ii first: a minor 7th, or half-diminished when its target is minor.',
+            ru: 'Перед вторичной доминантой может стоять свой ii. Это малый септаккорд, а если она ведёт к минорному аккорду, полууменьшённый.',
           },
         },
         {
@@ -74,8 +74,8 @@ const chordMatrix: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Fly Me to the Moon: C7 leads to F, then Bø–E7 is a minor ii–V into Am.',
-            ru: 'Fly Me to the Moon: C7 ведёт к F, затем Bø–E7 — минорный ii–V в Am.',
+            en: 'Fly Me to the Moon: C7 leads to F, later Bø and E7 lead into Am.',
+            ru: 'Fly Me to the Moon: C7 ведёт к F, позже Bø и E7 ведут в Am.',
           },
         },
       ],
@@ -87,8 +87,8 @@ const chordMatrix: Lesson = {
           kind: 'text',
           lead: { en: 'A borrowed chord', ru: 'Заимствованный аккорд' },
           text: {
-            en: 'comes from the minor key on the same tonic. One sounds dark and magical: Clocks borrows Gm.',
-            ru: 'берут из одноимённого минора. Один такой аккорд звучит темно и волшебно: Clocks берёт Gm.',
+            en: 'comes from the minor key on the same tonic, C minor in C major. Used once, it sounds dark and magical. Clocks borrows Gm.',
+            ru: '— это аккорд из одноимённого минора: из до минора в до мажоре. Взятый один раз, он звучит темно и волшебно. Clocks берёт Gm.',
           },
         },
         { kind: 'chords', symbols: ['Cm', 'D°', 'E♭', 'Fm', 'Gm', 'A♭', 'B♭'], apart: true },
@@ -96,8 +96,8 @@ const chordMatrix: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Borrow sparingly, or the magic is lost.',
-            ru: 'Берите их скупо, иначе волшебство пропадёт.',
+            en: 'Borrow rarely, or the effect wears off.',
+            ru: 'Берите их редко, иначе эффект пропадёт.',
           },
         },
       ],
@@ -115,16 +115,16 @@ const chordMatrix: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Start on C or Am. Fill 16 bars from the matrix.',
-              ru: 'Начните с C или Am. Заполните 16 тактов из матрицы.',
+              en: 'Start on C or Am. Fill 16 bars with chords from this lesson.',
+              ru: 'Начните с C или Am. Заполните 16 тактов аккордами из этого урока.',
             },
             {
-              en: 'Resolve each secondary dominant where its arrow points.',
-              ru: 'Разрешайте каждую вторичную доминанту туда, куда указывает её стрелка.',
+              en: 'Follow each secondary dominant with its chord.',
+              ru: 'После каждой вторичной доминанты ставьте её аккорд.',
             },
             {
               en: 'Use mostly the family. Borrow from minor once or twice.',
-              ru: 'В основном берите семью. Из минора — раз или два.',
+              ru: 'В основном берите аккорды семьи. Из минора берите раз или два.',
             },
           ],
         },
@@ -151,7 +151,10 @@ const chordMatrix: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Secondary dominants in the Player', ru: 'Вторичные доминанты в плеере' },
+          title: {
+            en: 'Practise secondary dominants in the Player',
+            ru: 'Вторичные доминанты в плеере',
+          },
           target: {
             opens: 'player',
             numerals: SECONDARY_DOMINANTS,
@@ -161,7 +164,7 @@ const chordMatrix: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'In all 12 keys', ru: 'Во всех 12 тональностях' },
+          title: { en: 'The same through all 12 keys', ru: 'То же во всех 12 тональностях' },
           target: {
             opens: 'player',
             numerals: SECONDARY_DOMINANTS,

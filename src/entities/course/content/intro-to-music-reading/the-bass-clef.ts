@@ -5,8 +5,8 @@ const theBassClef: Lesson = {
   id: 'the-bass-clef',
   title: { en: 'The bass clef', ru: 'Басовый ключ' },
   summary: {
-    en: 'Read every note on the bass staff and find middle C.',
-    ru: 'Читать любую ноту басового стана и находить до первой октавы.',
+    en: 'Name every note on the bass staff, and see how middle C joins it to the treble staff.',
+    ru: 'Называть любую ноту басового стана и видеть, как до первой октавы связывает его со скрипичным.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const theBassClef: Lesson = {
           kind: 'text',
           lead: { en: 'The bass clef', ru: 'Басовый ключ' },
           text: {
-            en: '(the F clef) puts its two dots either side of the fourth line. That line is F3, the F below middle C.',
-            ru: '(ключ фа) ставит две точки по сторонам четвёртой линейки. На ней стоит фа малой октавы.',
+            en: 'is also called the F clef. Its two dots sit either side of the fourth line, and that line is F3, the F below middle C. The left hand usually reads it.',
+            ru: 'называют ещё ключом фа. Его две точки стоят по сторонам четвёртой линейки, и на ней стоит фа малой октавы. Обычно по нему читает левая рука.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F3/1' },
@@ -29,8 +29,8 @@ const theBassClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From the bottom, the lines are G, B, D, F, A: Good Boys Do Fine Always.',
-            ru: 'Снизу вверх на линейках: соль и си большой октавы, ре, фа и ля малой.',
+            en: 'From the bottom up, the lines are G, B, D, F, A. Remember them as Good Boys Do Fine Always.',
+            ru: 'Снизу вверх на линейках стоят соль и си большой октавы, ре, фа и ля малой.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'G2/2 B2/2 D3/2 F3/2 A3/1' },
@@ -42,8 +42,8 @@ const theBassClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From the bottom, the spaces are A, C, E, G: All Cows Eat Grass.',
-            ru: 'Снизу вверх в промежутках: ля большой октавы, до, ми и соль малой.',
+            en: 'From the bottom up, the spaces are A, C, E, G. Remember them as All Cows Eat Grass.',
+            ru: 'Снизу вверх в промежутках стоят ля большой октавы, до, ми и соль малой.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A2/2 C3/2 E3/2 G3/2' },
@@ -55,8 +55,8 @@ const theBassClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Know three on sight: G2 on the bottom line, C3 in the second space, F3 on the clef’s line. C3 is an octave below middle C.',
-            ru: 'Узнавайте сразу три ноты: соль на нижней линейке, до во втором промежутке, фа на линейке ключа. Это до — октавой ниже до первой.',
+            en: 'Learn three on sight: G2 on the bottom line, C3 in the second space and F3 on the clef’s line. C3 is an octave below middle C.',
+            ru: 'Выучите три ориентира: соль на нижней линейке, до во втором промежутке и фа на линейке ключа. Это до на октаву ниже до первой октавы.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'G2/2 C3/2 F3/1' },
@@ -69,8 +69,8 @@ const theBassClef: Lesson = {
           kind: 'text',
           lead: { en: 'The grand staff', ru: 'Фортепианная система' },
           text: {
-            en: 'joins the two staves with a brace. Middle C is one key on a ledger line between them, written from either staff.',
-            ru: '— два стана, соединённые скобкой. До первой октавы — одна клавиша на добавочной линейке между ними, её пишут на любом стане.',
+            en: 'is the treble and bass staves joined by a brace. Middle C sits on a ledger line between them. Either staff can write it, and it is the same key.',
+            ru: '— скрипичный и басовый станы, соединённые скобкой. До первой октавы стоит на добавочной линейке между ними. Её можно записать на любом стане, клавиша та же.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A3 B3 C4/2' },
@@ -84,8 +84,8 @@ const theBassClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Find G2, C3 and F3 first, then read the rest as steps and skips from them.',
-            ru: 'Сначала найдите соль, до и фа, затем читайте остальное шагами и скачками от них.',
+            en: 'Find the landmarks G2, C3 and F3 first. Then read the other notes as steps and skips from them.',
+            ru: 'Сначала найдите ориентиры: соль, до и фа. Остальные ноты читайте шагами и скачками от них.',
           },
         },
         {
@@ -114,7 +114,7 @@ const theBassClef: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {

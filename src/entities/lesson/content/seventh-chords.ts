@@ -5,8 +5,8 @@ const seventhChords: Lesson = {
   id: 'seventh-chords',
   title: { en: 'Seventh chords', ru: 'Септаккорды' },
   summary: {
-    en: 'Build the five common 7th chords on any root.',
-    ru: 'Строить пять основных септаккордов от любой ноты.',
+    en: 'Build the five common 7th chords on any root, and hear how the dominant 7th leads home.',
+    ru: 'Строить пять основных септаккордов от любой ноты и слышать, как доминантсептаккорд ведёт к тонике.',
   },
   sections: [
     {
@@ -16,11 +16,18 @@ const seventhChords: Lesson = {
           kind: 'text',
           lead: { en: 'A seventh chord', ru: 'Септаккорд' },
           text: {
-            en: 'is a triad with one more 3rd on top. Five kinds cover most music.',
-            ru: '— трезвучие с ещё одной терцией сверху. Пять видов покрывают бо́льшую часть музыки.',
+            en: 'is a triad with one more 3rd on top. That new note is the 7th. Five kinds cover most music.',
+            ru: '— это трезвучие и ещё одна терция сверху. Новый звук — септима. Пять видов покрывают бо́льшую часть музыки.',
           },
         },
         { kind: 'chords', symbols: ['CMaj7', 'C7', 'Cm7', 'Cm7♭5', 'C°7'] },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play all five on C and hear how each one differs.',
+            ru: 'Сыграйте все пять от до и послушайте, чем они отличаются.',
+          },
+        },
       ],
     },
     {
@@ -29,8 +36,8 @@ const seventhChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Count each from its root in the major scale. A flat lowers that degree a half step.',
-            ru: 'Считайте каждый от основного тона по мажорной гамме. Бемоль понижает ступень на полутон.',
+            en: 'Number each note by its root’s major scale. A flat lowers that note a half step.',
+            ru: 'Нумеруйте звуки по мажорной гамме от основного тона. Бемоль перед числом понижает звук на полутон.',
           },
         },
         {
@@ -45,8 +52,8 @@ const seventhChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The diminished 7th lowers the 7th once more: on B, B D F A♭.',
-            ru: 'Уменьшённый септаккорд понижает септиму ещё раз: от си — си, ре, фа, ля-бемоль.',
+            en: 'The diminished 7th lowers the 7th once more. On B it is B D F A♭.',
+            ru: 'Уменьшённый септаккорд понижает септиму ещё раз. От си это си, ре, фа, ля-бемоль.',
           },
         },
       ],
@@ -58,8 +65,8 @@ const seventhChords: Lesson = {
           kind: 'text',
           lead: { en: 'The dominant 7th', ru: 'Доминантсептаккорд' },
           text: {
-            en: 'sits on the 5th degree: G7 in C major. Its B and F, a tense tritone, resolve: B up to C, F down to E.',
-            ru: 'строят на пятой ступени: в до мажоре это G7. Его си и фа, напряжённый тритон, разрешаются: си вверх в до, фа вниз в ми.',
+            en: 'is built on the 5th degree: G7 in C major. Its B and F form a tense tritone. B rises to C and F falls to E.',
+            ru: 'строят на пятой ступени: в до мажоре это G7. Его си и фа образуют напряжённый тритон. Си идёт вверх в до, фа вниз в ми.',
           },
         },
         { kind: 'chords', symbols: ['G7', 'C'] },
@@ -69,6 +76,13 @@ const seventhChords: Lesson = {
     {
       heading: { en: 'On every root', ru: 'От каждой ноты' },
       blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Each grid shows one kind on all twelve roots: dominant 7ths, then minor 7ths. Play along a row.',
+            ru: 'Каждая таблица показывает один вид от всех двенадцати нот: доминантсептаккорды, затем малые минорные. Сыграйте ряд подряд.',
+          },
+        },
         { kind: 'grid', quality: 'd7' },
         { kind: 'grid', quality: 'm7' },
       ],

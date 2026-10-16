@@ -11,45 +11,52 @@ const alteredDominants: Lesson = {
     ru: 'Альтерированные доминанты и тритоновая замена',
   },
   summary: {
-    en: 'Play altered dominants and the tritone sub that replaces V7.',
-    ru: 'Играйте альтерированные доминанты и тритоновую замену V7.',
+    en: 'Add tension to V7 by moving its 5th or 9th, or swap it for the chord a tritone away.',
+    ru: 'Добавьте V7 напряжения, сдвинув квинту или нону, или замените его аккордом через тритон.',
   },
   sections: [
     {
-      heading: { en: 'Raise or lower the 5th and 9th', ru: 'Повысьте или понизьте квинту и нону' },
+      heading: { en: 'What an altered dominant is', ru: 'Что такое альтерированная доминанта' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'An altered dominant', ru: 'Альтерированная доминанта' },
           text: {
-            en: 'moves its 5th or 9th by a half step. Each altered note then lies a half step from the next chord.',
-            ru: 'сдвигает квинту или нону на полутон. Каждая такая нота оказывается в полутоне от следующего аккорда.',
+            en: 'is a dominant 7th with its 5th or 9th moved a half step. The new note adds tension for the next chord to release.',
+            ru: '— это доминантсептаккорд, у которого квинта или нона сдвинута на полутон. Новая нота даёт напряжение, а следующий аккорд его снимает.',
           },
         },
         { kind: 'chords', symbols: ['G7', 'G7♭9', 'C'] },
+        {
+          kind: 'note',
+          text: {
+            en: 'Hear the extra pull in the middle chord.',
+            ru: 'Услышьте, как сильнее тянет средний аккорд.',
+          },
+        },
       ],
     },
     {
-      heading: { en: '♭9 leads to minor', ru: '♭9 ведёт в минор' },
+      heading: { en: '♭9 in a minor key', ru: '♭9 в миноре' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'In a minor key V7 takes its ♭9 from the scale. G7♭9’s A♭ falls to G.',
-            ru: 'В миноре V7 берёт ♭9 из самой гаммы. Ля-бемоль в G7♭9 опускается в соль.',
+            en: 'C minor already has A♭ in its scale. So its V7 takes a ♭9 by itself: G7♭9. The A♭ then falls a half step to G.',
+            ru: 'В гамме до минора уже есть ля-бемоль. Поэтому его V7 сам берёт ♭9: G7♭9. Ля-бемоль затем спускается на полутон в соль.',
           },
         },
         { kind: 'progression', numerals: 'V7♭9 i', key: C_MINOR },
       ],
     },
     {
-      heading: { en: '♯9: the blues dominant', ru: '♯9: блюзовая доминанта' },
+      heading: { en: '♯9, the blues dominant', ru: '♯9, блюзовая доминанта' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'G7♯9 sounds the major 3rd, B, under B♭ on top: major and minor at once.',
-            ru: 'В G7♯9 большая терция си звучит под си-бемолем наверху: мажор и минор сразу.',
+            en: 'G7♯9 keeps its major 3rd, B, and puts B♭ on top. You hear major and minor at once.',
+            ru: 'G7♯9 сохраняет большую терцию си и ставит наверх си-бемоль. Мажор и минор звучат одновременно.',
           },
         },
         { kind: 'chords', symbols: ['G7#9'] },
@@ -61,21 +68,21 @@ const alteredDominants: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'G7♯5 raises D to D♯, which rises on to E, the 3rd of C.',
-            ru: 'G7♯5 повышает ре до ре-диеза, и он поднимается дальше в ми, терцию до мажора.',
+            en: 'G7♯5 raises its 5th, D, to D♯. Then D♯ rises one more half step to E, the 3rd of C.',
+            ru: 'G7♯5 повышает квинту ре до ре-диеза. Затем ре-диез поднимается ещё на полутон в ми, терцию до мажора.',
           },
         },
         { kind: 'chords', symbols: ['G7#5', 'C'] },
       ],
     },
     {
-      heading: { en: 'The altered chord', ru: 'Альтерированный аккорд' },
+      heading: { en: 'All of them at once: alt', ru: 'Всё сразу: alt' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'G7alt takes ♭9, ♯9, ♭5 and ♭13 together. Its scale is A♭ melodic minor played from G.',
-            ru: 'G7alt берёт ♭9, ♯9, ♭5 и ♭13 сразу. Его гамма — ля-бемоль мелодический минор от соль.',
+            en: 'G7alt uses ♭9, ♯9, ♭5 and ♭13 together. Its notes come from A♭ melodic minor, played from G.',
+            ru: 'G7alt берёт ♭9, ♯9, ♭5 и ♭13 вместе. Его звуки — из ля-бемоль мелодического минора, сыгранного от соль.',
           },
         },
         { kind: 'chords', symbols: ['G7alt', 'C'] },
@@ -89,11 +96,18 @@ const alteredDominants: Lesson = {
           kind: 'text',
           lead: { en: 'A tritone substitute', ru: 'Тритоновая замена' },
           text: {
-            en: 'shares the dominant’s tritone. D♭7 holds G7’s F and B, so it replaces G7, its bass falling a half step to C.',
-            ru: 'имеет тот же тритон, что и доминанта. В D♭7 есть фа и си из G7, поэтому он заменяет G7, а бас спускается на полутон в до.',
+            en: 'is the dominant 7th three whole steps away. D♭7 shares G7’s F and B, so it can replace G7.',
+            ru: '— это доминантсептаккорд на три тона дальше. В D♭7 те же фа и си, что в G7, поэтому он может заменить G7.',
           },
         },
         { kind: 'progression', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
+        {
+          kind: 'note',
+          text: {
+            en: 'Its bass falls by half steps: D, D♭, C.',
+            ru: 'Бас спускается по полутонам: ре, ре-бемоль, до.',
+          },
+        },
       ],
     },
     {
@@ -120,14 +134,14 @@ const alteredDominants: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'The tritone sub through the keys',
-            ru: 'Тритоновая замена по всем тональностям',
+            en: 'The tritone sub through all the keys',
+            ru: 'Тритоновая замена во всех тональностях',
           },
           target: { opens: 'player', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR, walk: 'fifths' },
         },
         {
           kind: 'link',
-          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
         },
       ],

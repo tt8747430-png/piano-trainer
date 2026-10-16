@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 80,
   pattern: 'g2',
   note: {
-    en: 'From Vasily Gorshkov’s lesson on chord pulse. Over the G of bars 4 and 12 he marks II and V: the held note takes a whole ii–V into C.',
-    ru: 'Из урока Василия Горшкова об аккордовой пульсации. Над G в 4-м и 12-м тактах он отмечает II и V: долгая нота вмещает весь оборот 2-5 в C.',
+    en: 'From Vasily Gorshkov’s lesson on chord pulse. Over the held G in bars 4 and 12 he marks II and V: the long note has room for a whole ii–V into C.',
+    ru: 'Из урока Василия Горшкова об аккордовой пульсации. Над долгой G в 4-м и 12-м тактах он отмечает II и V: пока она тянется, успевает пройти весь оборот 2-5 в C.',
   },
   sections: [
     { kind: 'verse', lines: ['C F C G', 'C@2-C7@2 F@2-Dm@2 C/G@2-G7@2 C'] },

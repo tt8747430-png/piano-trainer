@@ -4,34 +4,21 @@ import type { Lesson } from '@/entities/lesson'
 /** Mastering Chords, lesson 1: a major chord on any root, by counting semitones. */
 const buildMajorChords: Lesson = {
   id: 'build-major-chords',
-  title: { en: 'Build any major chord', ru: 'Мажорный аккорд от любой ноты' },
+  title: { en: 'Build any major chord', ru: 'Мажорное трезвучие от любой ноты' },
   summary: {
-    en: 'Build a major chord on any of the twelve roots.',
-    ru: 'Стройте мажорный аккорд от любой из двенадцати нот.',
+    en: 'Count 4 semitones, then 3, to build a major chord on any of the twelve roots.',
+    ru: 'Отсчитайте 4 полутона, затем 3, и постройте мажорное трезвучие от любой из двенадцати нот.',
   },
   sections: [
     {
-      heading: { en: 'Four semitones, then three', ru: 'Четыре полутона, затем три' },
+      heading: { en: 'Count in semitones', ru: 'Считайте полутонами' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Major chord:', ru: 'Мажорное трезвучие:' },
+          lead: { en: 'A semitone', ru: 'Полутон' },
           text: {
-            en: 'a root, the note 4 semitones above it, and the note 3 semitones above that. They are the root, the 3rd and the 5th.',
-            ru: 'основной тон, звук на 4 полутона выше и звук ещё на 3 полутона выше. Это прима, терция и квинта.',
-          },
-        },
-        { kind: 'chords', symbols: ['C', 'F', 'G'], apart: true },
-      ],
-    },
-    {
-      heading: { en: 'Count it from C', ru: 'Отсчитайте от до' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'From C, count four semitones up to E. From E, count three more up to G.',
-            ru: 'От до отсчитайте четыре полутона вверх до ми. От ми — ещё три до соль.',
+            en: 'is the step from one key to the very next, black or white. From C, count four semitones up to E. From E, count three more to G.',
+            ru: '— шаг на соседнюю клавишу, чёрную или белую. От до отсчитайте четыре полутона вверх до ми. От ми ещё три до соль.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M3' },
@@ -39,25 +26,39 @@ const buildMajorChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'On the white keys', ru: 'От белых клавиш' },
+      heading: { en: 'Four semitones, then three', ru: 'Четыре полутона, затем три' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A major chord', ru: 'Мажорное трезвучие' },
+          text: {
+            en: 'stacks those two steps on a root: 4 semitones, then 3. Its three notes are called the root, the 3rd and the 5th.',
+            ru: 'складывает эти два шага от основного тона: 4 полутона, затем 3. Его три звука называются прима, терция и квинта.',
+          },
+        },
+        { kind: 'chords', symbols: ['C', 'F', 'G'], apart: true },
+      ],
+    },
+    {
+      heading: { en: 'Roots on the white keys', ru: 'От белых клавиш' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'C, F and G are all white. D, E and A have one black key in the middle. B has two.',
-            ru: 'C, F и G — только белые клавиши. В D, E и A посередине одна чёрная. В B две чёрные.',
+            en: 'Look at the colour of each chord’s keys. C, F and G are all white. D, E and A have a black key in the middle. B has two black keys.',
+            ru: 'Посмотрите на цвет клавиш каждого аккорда. C, F и G — только белые. В D, E и A посередине чёрная. В B две чёрные.',
           },
         },
         { kind: 'chords', symbols: ['C', 'D', 'E', 'F', 'G', 'A', 'B'], apart: true },
       ],
     },
     {
-      heading: { en: 'On the black keys', ru: 'От чёрных клавиш' },
+      heading: { en: 'Roots on the black keys', ru: 'От чёрных клавиш' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'D♭, E♭ and A♭ go black, white, black. G♭ is all black. B♭ is black, white, white.',
+            en: 'D♭, E♭ and A♭ go black, white, black. G♭ is all black. B♭ goes black, white, white.',
             ru: 'D♭, E♭ и A♭ — чёрная, белая, чёрная. G♭ — все чёрные. B♭ — чёрная, белая, белая.',
           },
         },
@@ -70,8 +71,8 @@ const buildMajorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play them a 5th apart: C, G, D, A and on. Each chord shares a note with the last.',
-            ru: 'Играйте их через квинту: C, G, D, A и дальше. У соседних аккордов есть общий звук.',
+            en: 'Play the chords a 5th apart: C, G, D, A and on round. Each chord shares one note with the chord before it.',
+            ru: 'Играйте аккорды через квинту: C, G, D, A и дальше по кругу. У каждого есть общий звук с предыдущим.',
           },
         },
         { kind: 'grid', quality: 'maj' },

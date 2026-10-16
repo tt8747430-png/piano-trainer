@@ -9,8 +9,8 @@ const sharps: Lesson = {
   id: 'sharps',
   title: { en: 'Sharps', ru: 'Диезы' },
   summary: {
-    en: 'Play in G major and read its one sharp, F♯.',
-    ru: 'Играть в соль мажоре и читать его диез, фа-диез.',
+    en: 'Learn what a sharp does, why G major needs F♯, and how a key signature writes it.',
+    ru: 'Узнать, что делает диез, зачем соль мажору фа-диез и как его пишут ключевые знаки.',
   },
   sections: [
     {
@@ -20,21 +20,21 @@ const sharps: Lesson = {
           kind: 'text',
           lead: { en: 'Sharp (♯):', ru: 'Диез (♯):' },
           text: {
-            en: 'raises a note a semitone, to the next key on the right. F♯ is the black key just above F.',
-            ru: 'повышает звук на полутон, к соседней клавише справа. Фа-диез — чёрная клавиша сразу над фа.',
+            en: 'raises a note by a semitone, the very next key to the right. F♯ is the black key just right of F.',
+            ru: 'повышает звук на полутон, то есть на соседнюю клавишу справа. Фа-диез — чёрная клавиша сразу справа от фа.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4/2 F#4/2 C4/2 C#4/2' },
       ],
     },
     {
-      heading: { en: 'G major needs F♯', ru: 'Соль мажору нужен фа-диез' },
+      heading: { en: 'Why G major needs F♯', ru: 'Зачем соль мажору фа-диез' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A major scale has a semitone between its 7th note and the top. From G, that 7th note is F♯.',
-            ru: 'В мажорной гамме между седьмой ступенью и тоникой — полутон. От соль седьмая ступень — фа-диез.',
+            en: 'In a major scale, the 7th note sits a semitone below the top note. From G, a semitone below the top G is F♯, so F♯ is the 7th.',
+            ru: 'В мажорной гамме седьмая ступень на полутон ниже верхней тоники. От соль на полутон ниже верхнего соль стоит фа-диез: это и есть седьмая ступень.',
           },
         },
         { kind: 'scale', root: note('G'), scale: 'major' },
@@ -47,8 +47,8 @@ const sharps: Lesson = {
           kind: 'text',
           lead: { en: 'Key signature:', ru: 'Ключевые знаки:' },
           text: {
-            en: 'the sharps written once at the start of each line. A sharp on the F line makes every F an F♯.',
-            ru: 'знаки в начале каждой строки. Диез на линейке фа делает каждое фа фа-диезом в любой октаве.',
+            en: 'the sharps or flats written once at the start of every line. G major has one sharp, on the F line, so every F is F♯.',
+            ru: 'диезы или бемоли в начале каждой строки. В соль мажоре один диез, на линейке фа, поэтому каждое фа в любой октаве — фа-диез.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'D5 E5 F#5 G5 F#5 E5 D5/2', key: G_MAJOR },
@@ -60,8 +60,8 @@ const sharps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Put the right thumb on G, a finger on each key up to D. For F♯ below, the thumb shifts down.',
-            ru: 'Поставьте первый палец на соль, по пальцу на каждую клавишу до ре. Для фа-диеза внизу рука сдвигается.',
+            en: 'Put the right thumb on G and one finger on each key up to D. When the tune dips to F♯, move the thumb down onto it.',
+            ru: 'Поставьте первый палец правой руки на соль, по пальцу на каждую клавишу до ре. Когда мелодия опускается на фа-диез, сдвиньте на него первый палец.',
           },
         },
         {
@@ -78,8 +78,8 @@ const sharps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The main chords of G are G, C and D. D holds the F♯, so the sharp sounds in the harmony too.',
-            ru: 'Главные аккорды соль мажора — G, C и D. В D звучит фа-диез, так что он слышен и в гармонии.',
+            en: 'G major’s three main chords are G, C and D. The D chord holds F♯, so you hear the sharp in the harmony too.',
+            ru: 'Три главных аккорда соль мажора — G, C и D. В аккорде D есть фа-диез, поэтому диез слышен и в гармонии.',
           },
         },
         { kind: 'progression', numerals: 'I IV V7 I', key: G_MAJOR },
@@ -91,8 +91,8 @@ const sharps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each key a 5th higher adds one sharp. D major has F♯ and C♯. Sharps always come in the order F C G D A E B.',
-            ru: 'Каждая тональность квинтой выше добавляет диез. В ре мажоре фа-диез и до-диез. Порядок диезов всегда один: фа, до, соль, ре, ля, ми, си.',
+            en: 'Each key a 5th higher adds one sharp. D major has F♯ and C♯. Sharps always arrive in the order F C G D A E B.',
+            ru: 'Каждая тональность квинтой выше добавляет один диез. В ре мажоре фа-диез и до-диез. Диезы всегда идут в одном порядке: фа, до, соль, ре, ля, ми, си.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'D4 E4 F#4 G4 A4 B4 C#5 D5', key: D_MAJOR },
@@ -112,8 +112,8 @@ const sharps: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the chord of G major that holds the F♯.',
-            ru: 'Сыграйте аккорд соль мажора, в котором есть фа-диез.',
+            en: 'Play the main chord of G major that holds F♯.',
+            ru: 'Сыграйте главный аккорд соль мажора, в котором есть фа-диез.',
           },
           answer: { chord: 'D' },
         },

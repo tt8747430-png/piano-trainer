@@ -5,8 +5,8 @@ const intervals: Lesson = {
   id: 'intervals',
   title: { en: 'Intervals', ru: 'Интервалы' },
   summary: {
-    en: 'Count an interval by letters and half steps, and hear it.',
-    ru: 'Считайте интервал по буквам и полутонам и узнавайте его на слух.',
+    en: 'Measure the distance between two notes by letter names and half steps, and learn how it sounds.',
+    ru: 'Измеряйте расстояние между двумя нотами по названиям и полутонам и узнавайте, как оно звучит.',
   },
   sections: [
     {
@@ -17,7 +17,7 @@ const intervals: Lesson = {
           lead: { en: 'An interval', ru: 'Интервал' },
           text: {
             en: 'is the distance between two notes. Its number counts letters, both ends included: C D E is a 3rd. Its quality counts half steps.',
-            ru: '— расстояние между двумя нотами. Число считает буквы вместе с крайними: до, ре, ми — терция. Качество считает полутоны.',
+            ru: '— расстояние между двумя нотами. Число считает названия нот вместе с крайними: до, ре, ми — терция. Качество зависит от числа полутонов.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'm3' },
@@ -25,8 +25,8 @@ const intervals: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'A major 3rd has four, a minor 3rd three.',
-            ru: 'В большой терции их четыре, в малой — три.',
+            en: 'A major 3rd has four, a minor three.',
+            ru: 'В большой терции четыре полутона, в малой три.',
           },
         },
       ],
@@ -38,8 +38,8 @@ const intervals: Lesson = {
           kind: 'text',
           lead: { en: 'Perfect intervals', ru: 'Чистые интервалы' },
           text: {
-            en: 'are the unison, the 4th, the 5th and the octave. The 5th frames every major and minor chord.',
-            ru: '— прима, кварта, квинта и октава. Квинта — остов каждого мажорного и минорного аккорда.',
+            en: 'are the unison, the 4th, the 5th and the octave. They have no major or minor form. The 5th is the frame of every major and minor chord.',
+            ru: '— прима, кварта, квинта и октава. Больших и малых среди них нет. Квинта — остов каждого мажорного и минорного аккорда.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P5' },
@@ -52,8 +52,8 @@ const intervals: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Perfect intervals sound open. 3rds and 6ths sound warm. 2nds and 7ths clash and want to move.',
-            ru: 'Чистые интервалы звучат открыто. Терции и сексты — тепло. Секунды и септимы резки и хотят разрешиться.',
+            en: 'Perfect intervals sound open and hollow. 3rds and 6ths sound warm. 2nds and 7ths clash and want to move on.',
+            ru: 'Чистые интервалы звучат открыто и пусто. Терции и сексты звучат тепло. Секунды и септимы резкие и хотят разрешиться.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M6' },
@@ -81,12 +81,12 @@ const intervals: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Intervals by ear in the Quiz', ru: 'Интервалы на слух в тестах' },
+          title: { en: 'Hear intervals in the Quiz', ru: 'Интервалы на слух в тестах' },
           target: { opens: 'quiz', trainer: 'intervals-by-ear' },
         },
         {
           kind: 'link',
-          title: { en: 'Every interval', ru: 'Все интервалы' },
+          title: { en: 'See every interval', ru: 'Все интервалы' },
           target: { opens: 'intervals' },
         },
       ],

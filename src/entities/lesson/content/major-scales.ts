@@ -5,25 +5,29 @@ const majorScales: Lesson = {
   id: 'major-scales',
   title: { en: 'How major scales work', ru: 'Как устроена мажорная гамма' },
   summary: {
-    en: 'Build a major scale on any note and finger C major.',
-    ru: 'Строить мажорную гамму от любой ноты и играть до мажор с аппликатурой.',
+    en: 'Build a major scale on any note from one pattern of steps, number its degrees and finger C major.',
+    ru: 'Строить мажорную гамму от любой ноты по одной схеме, нумеровать её ступени и играть до мажор с аппликатурой.',
   },
   sections: [
     {
-      heading: {
-        en: 'Whole, whole, half, whole, whole, whole, half',
-        ru: 'Тон, тон, полутон, тон, тон, тон, полутон',
-      },
+      heading: { en: 'One pattern of steps', ru: 'Одна схема шагов' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A major scale', ru: 'Мажорная гамма' },
           text: {
-            en: 'climbs from its tonic by whole, whole, half, whole, whole, whole, half. From C that is the white keys.',
-            ru: 'поднимается от тоники так: тон, тон, полутон, тон, тон, тон, полутон. От до это белые клавиши.',
+            en: 'climbs from its tonic, the first note, by whole, whole, half, whole, whole, whole, half. From C: the white keys.',
+            ru: 'поднимается от тоники, первой ноты, так: тон, тон, полутон, тон, тон, тон, полутон. От до — белые клавиши.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'major' },
+        {
+          kind: 'text',
+          text: {
+            en: 'The half steps are E to F and B to C.',
+            ru: 'Полутоны здесь: ми–фа и си–до.',
+          },
+        },
       ],
     },
     {
@@ -32,33 +36,12 @@ const majorScales: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From G the 7th note needs F♯, from F the 4th needs B♭. Each letter comes once, so G major has F♯, not G♭.',
-            ru: 'От соль седьмой ноте нужен фа-диез, от фа четвёртой — си-бемоль. Каждая буква встречается один раз, поэтому в соль мажоре фа-диез, а не соль-бемоль.',
+            en: 'From G, the 7th note must be F♯. From F, the 4th note must be B♭. Each letter appears once, so G major has F♯, not G♭.',
+            ru: 'От соль седьмой нотой должен быть фа-диез. От фа четвёртой нотой должен быть си-бемоль. Каждая буква встречается один раз, поэтому в соль мажоре фа-диез, а не соль-бемоль.',
           },
         },
         { kind: 'scale', root: note('G'), scale: 'major' },
         { kind: 'scale', root: note('F'), scale: 'major' },
-      ],
-    },
-    {
-      heading: { en: 'Fingering C major', ru: 'Аппликатура до мажора' },
-      blocks: [
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Right hand: 1 2 3, thumb under to F, 1 2 3 4 5.',
-              ru: 'Правая рука: 1 2 3, большой палец под руку на фа, 1 2 3 4 5.',
-            },
-            {
-              en: 'Left hand: 5 4 3 2 1, 3rd finger over to A, 3 2 1.',
-              ru: 'Левая рука: 5 4 3 2 1, третий палец через большой на ля, 3 2 1.',
-            },
-            { en: 'Down: the same, in reverse.', ru: 'Вниз — то же в обратном порядке.' },
-          ],
-        },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
       ],
     },
     {
@@ -80,6 +63,27 @@ const majorScales: Lesson = {
             ru: 'Седьмая ступень, вводный тон, тянется вверх к тонике.',
           },
         },
+      ],
+    },
+    {
+      heading: { en: 'Fingering C major', ru: 'Аппликатура до мажора' },
+      blocks: [
+        {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Right hand: 1 2 3, thumb under to F, then 1 2 3 4 5.',
+              ru: 'Правая рука: 1 2 3, большой палец под руку на фа, затем 1 2 3 4 5.',
+            },
+            {
+              en: 'Left hand: 5 4 3 2 1, 3rd finger over to A, then 3 2 1.',
+              ru: 'Левая рука: 5 4 3 2 1, третий палец через большой на ля, затем 3 2 1.',
+            },
+            { en: 'Coming down, reverse it.', ru: 'Вниз — в обратном порядке.' },
+          ],
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
       ],
     },
     {

@@ -5,8 +5,8 @@ const theTrebleClef: Lesson = {
   id: 'the-treble-clef',
   title: { en: 'The treble clef', ru: 'Скрипичный ключ' },
   summary: {
-    en: 'Read every note on the treble staff from three landmarks.',
-    ru: 'Читать любую ноту скрипичного стана от трёх ориентиров.',
+    en: 'Name every note on the treble staff, starting from three notes you know on sight.',
+    ru: 'Называть любую ноту скрипичного стана, отталкиваясь от трёх нот, которые узнаёте сразу.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const theTrebleClef: Lesson = {
           kind: 'text',
           lead: { en: 'The treble clef', ru: 'Скрипичный ключ' },
           text: {
-            en: '(the G clef) curls round the second line. That line is G4, the G above middle C.',
-            ru: '(ключ соль) обвивает вторую линейку. На ней стоит соль первой октавы.',
+            en: 'is also called the G clef. Its curl wraps round the second line, and that line is G4, the G just above middle C. The right hand usually reads it.',
+            ru: 'называют ещё ключом соль. Его завиток обвивает вторую линейку, и на ней стоит соль первой октавы. Обычно по нему читает правая рука.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1' },
@@ -29,8 +29,8 @@ const theTrebleClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From the bottom, the lines are E, G, B, D, F: Every Good Boy Does Fine.',
-            ru: 'Снизу вверх на линейках: ми, соль, си первой октавы, ре и фа второй.',
+            en: 'From the bottom up, the lines are E, G, B, D, F. Remember them as Every Good Boy Does Fine.',
+            ru: 'Снизу вверх на линейках стоят ми, соль, си первой октавы, ре и фа второй. Каждая следующая — через одну белую клавишу.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/2 G4/2 B4/2 D5/2 F5/1' },
@@ -42,8 +42,8 @@ const theTrebleClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From the bottom, the spaces spell FACE.',
-            ru: 'Снизу вверх в промежутках: фа, ля первой октавы, до и ми второй.',
+            en: 'From the bottom up, the spaces spell the word FACE: F, A, C, E.',
+            ru: 'Снизу вверх в промежутках стоят фа, ля первой октавы, до и ми второй.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4/2 A4/2 C5/2 E5/2' },
@@ -56,8 +56,8 @@ const theTrebleClef: Lesson = {
           kind: 'text',
           lead: { en: 'A landmark note', ru: 'Нота-ориентир' },
           text: {
-            en: 'is one you know on sight: G4 on the second line, C5 in the third space, F5 on the top line.',
-            ru: '— нота, которую узнаёте сразу: соль на второй линейке, до в третьем промежутке, фа на верхней.',
+            en: 'is a note you know on sight. Learn three: G4 on the second line, C5 in the third space and F5 on the top line.',
+            ru: '— нота, которую узнаёте сразу. Выучите три: соль на второй линейке, до в третьем промежутке и фа на верхней линейке.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/2 C5/2 F5/1' },
@@ -69,8 +69,8 @@ const theTrebleClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Read any other note as a step or skip from the nearest landmark. A4 is a step above G.',
-            ru: 'Любую другую ноту читайте шагом или скачком от ближайшего ориентира. Ля — шаг над соль.',
+            en: 'Find the nearest landmark, then count steps or skips from it. A4 is a step above G4. E5 is a step below F5.',
+            ru: 'Найдите ближайший ориентир и отсчитайте от него шаги или скачки. Ля — шаг над соль. Ми второй октавы — шаг под фа.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 A4 G4 B4 C5 D5 C5 E5 F5 E5 F5/2' },
@@ -82,8 +82,8 @@ const theTrebleClef: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'D4 hangs under the bottom line. Middle C sits below it, on a short line of its own.',
-            ru: 'Ре первой октавы висит под нижней линейкой. Ниже, на своей короткой линейке, — до первой октавы.',
+            en: 'D4 hangs just under the bottom line. Middle C sits one step lower, on a short extra line of its own.',
+            ru: 'Ре первой октавы висит прямо под нижней линейкой. На шаг ниже, на своей короткой линейке, стоит до первой октавы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
@@ -96,9 +96,15 @@ const theTrebleClef: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Find the landmarks first.', ru: 'Сначала найдите ориентиры.' },
+            {
+              en: 'Find the landmarks first: G, C and F.',
+              ru: 'Сначала найдите ориентиры: соль, до и фа.',
+            },
             { en: 'Name the other notes from them.', ru: 'Назовите остальные ноты от них.' },
-            { en: 'Play it slowly, without stopping.', ru: 'Сыграйте медленно, без остановок.' },
+            {
+              en: 'Play the line slowly, without stopping.',
+              ru: 'Сыграйте строку медленно, без остановок.',
+            },
           ],
         },
         {
@@ -127,7 +133,7 @@ const theTrebleClef: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {
