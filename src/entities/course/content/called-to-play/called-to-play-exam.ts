@@ -5,8 +5,8 @@ const calledToPlayExam: Lesson = {
   id: 'called-to-play-exam',
   title: { en: 'Final exam', ru: 'Итоговый экзамен' },
   summary: {
-    en: 'Two verses of «Long I Wandered in the Shadows» with your own plan, accompanying a singer.',
-    ru: 'Два куплета «Long I Wandered in the Shadows» по своему плану, с солистом.',
+    en: 'Accompany a singer in a song of your own plan.',
+    ru: 'Аккомпанируйте солисту в песне по своему плану.',
   },
   sections: [
     {

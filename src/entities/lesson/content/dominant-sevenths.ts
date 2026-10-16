@@ -7,8 +7,8 @@ const dominantSevenths: Lesson = {
   id: 'dominant-sevenths',
   title: { en: 'The dominant 7th and where it pulls', ru: 'Доминантсептаккорд и его тяготение' },
   summary: {
-    en: 'Why V7 wants to resolve, how its two leading notes move, and the secondary dominants that lead to any chord of the key.',
-    ru: 'Почему V7 стремится разрешиться, как движутся два его неустойчивых звука, и побочные доминанты, ведущие к любому аккорду тональности.',
+    en: 'Build V7, resolve its tritone, and lead into any chord.',
+    ru: 'Стройте V7, разрешайте его тритон и подводите к любому аккорду.',
   },
   sections: [
     {
@@ -48,19 +48,6 @@ const dominantSevenths: Lesson = {
       ],
     },
     {
-      heading: { en: 'Close to the next chord', ru: 'Рядом со следующим аккордом' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Take G7 in the position nearest C. Two keys move a half step, the others stay or step.',
-            ru: 'Возьмите G7 в положении, ближайшем к до мажору. Две клавиши сдвигаются на полутон, остальные стоят или делают шаг.',
-          },
-        },
-        { kind: 'chords', symbols: ['C', 'G7', 'C'] },
-      ],
-    },
-    {
       heading: { en: 'A V7 for any chord', ru: 'V7 к любому аккорду' },
       blocks: [
         {
@@ -89,14 +76,6 @@ const dominantSevenths: Lesson = {
           numerals: 'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I',
           key: C_MAJOR,
         },
-        {
-          kind: 'link',
-          title: {
-            en: 'Lead into each chord on Progressions',
-            ru: 'Вводные доминанты в разделе «Последовательности»',
-          },
-          target: { opens: 'progressions', numerals: 'I IV V vi', key: C_MAJOR },
-        },
       ],
     },
     {
@@ -117,11 +96,6 @@ const dominantSevenths: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play G7.', ru: 'Сыграйте G7.' },
-          answer: { chord: 'G7' },
-        },
-        {
-          kind: 'question',
           ask: {
             en: 'Play the dominant 7th that leads to Dm.',
             ru: 'Сыграйте доминантсептаккорд, который ведёт в Dm.',
@@ -138,8 +112,11 @@ const dominantSevenths: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'G7 in Chords', ru: 'G7 в разделе «Аккорды»' },
-          target: { opens: 'chords', chord: 'G7' },
+          title: {
+            en: 'Lead into each chord on Progressions',
+            ru: 'Вводные доминанты в разделе «Последовательности»',
+          },
+          target: { opens: 'progressions', numerals: 'I IV V vi', key: C_MAJOR },
         },
         {
           kind: 'link',

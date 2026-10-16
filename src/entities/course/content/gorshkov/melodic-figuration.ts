@@ -8,8 +8,8 @@ const melodicFiguration: Lesson = {
   id: 'melodic-figuration',
   title: { en: 'Melodic figuration', ru: 'Мелодическая фигурация' },
   summary: {
-    en: 'A line of its own inside the accompaniment, answering the melody where it leaves room.',
-    ru: 'Самостоятельная линия внутри аккомпанемента, которая отвечает мелодии там, где есть место.',
+    en: 'Weave a line into the accompaniment that answers the melody.',
+    ru: 'Ведите в аккомпанементе линию, которая отвечает мелодии.',
   },
   sections: [
     {

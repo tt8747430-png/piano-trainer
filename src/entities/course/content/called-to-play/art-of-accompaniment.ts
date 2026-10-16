@@ -8,8 +8,8 @@ const artOfAccompaniment: Lesson = {
   id: 'art-of-accompaniment',
   title: { en: 'The art of accompaniment', ru: 'Искусство аккомпанемента' },
   summary: {
-    en: 'Never get in the singer’s way, fill the long notes, open a song with an introduction, and choose from the twelve techniques.',
-    ru: 'Не мешать пению, заполнять долгие ноты, начинать песню со вступления и выбирать из двенадцати техник.',
+    en: 'Support a singer, fill the long notes, introduce the song.',
+    ru: 'Поддерживайте пение, заполняйте долгие ноты, начинайте со вступления.',
   },
   sections: [
     {
@@ -18,7 +18,7 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The golden rule: the accompaniment never gets in the singer’s way. It supports the song and draws no attention away from it.',
+            en: 'The golden rule: the accompaniment never gets in the singer’s way. It supports the song and draws no attention from it.',
             ru: 'Золотое правило: аккомпанемент не мешает пению. Он поддерживает песню и не отвлекает от неё внимание.',
           },
         },
@@ -31,28 +31,11 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Place techniques and embellishments where the voice holds a long note or rests. There the pianist has room.',
-            ru: 'Ставьте техники и украшения туда, где голос тянет долгую ноту или молчит. Там у пианиста есть место.',
+            en: 'Place techniques and embellishments where the voice holds a long note or rests.',
+            ru: 'Ставьте техники и украшения туда, где голос тянет долгую ноту или молчит.',
           },
         },
         { kind: 'pattern', pattern: 't3', piece: 'soon' },
-      ],
-    },
-    {
-      heading: { en: 'An accompanist, not a soloist', ru: 'Аккомпаниатор, а не солист' },
-      blocks: [
-        {
-          kind: 'steps',
-          steps: [
-            { en: 'Listen more than you show.', ru: 'Больше слушайте, чем показывайте себя.' },
-            { en: 'Read the lyrics first.', ru: 'Сначала прочитайте слова песни.' },
-            {
-              en: 'Let their meaning choose the dynamics, the character and the embellishments.',
-              ru: 'Пусть их смысл подскажет динамику, характер и украшения.',
-            },
-          ],
-        },
-        { kind: 'pattern', pattern: 's6u', piece: 'together' },
       ],
     },
     {
@@ -77,6 +60,23 @@ const artOfAccompaniment: Lesson = {
             },
           ],
         },
+      ],
+    },
+    {
+      heading: { en: 'An accompanist, not a soloist', ru: 'Аккомпаниатор, а не солист' },
+      blocks: [
+        {
+          kind: 'steps',
+          steps: [
+            { en: 'Listen more than you show.', ru: 'Больше слушайте, чем показывайте себя.' },
+            { en: 'Read the lyrics first.', ru: 'Сначала прочитайте слова песни.' },
+            {
+              en: 'Let their meaning choose the dynamics, the character and the embellishments.',
+              ru: 'Пусть их смысл подскажет динамику, характер и украшения.',
+            },
+          ],
+        },
+        { kind: 'pattern', pattern: 's6u', piece: 'together' },
       ],
     },
     {

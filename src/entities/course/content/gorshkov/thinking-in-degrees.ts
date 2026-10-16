@@ -7,8 +7,8 @@ const thinkingInDegrees: Lesson = {
   id: 'thinking-in-degrees',
   title: { en: 'Thinking in degrees', ru: 'Мышление ступенями' },
   summary: {
-    en: 'Find a song’s key, name each chord by its degree, and play it in any key.',
-    ru: 'Найдите тональность песни, назовите аккорды по ступеням и играйте её в любой тональности.',
+    en: 'Name a song’s chords by degree and play it in any key.',
+    ru: 'Называйте аккорды песни ступенями и играйте её в любой тональности.',
   },
   sections: [
     {
@@ -110,13 +110,6 @@ const thinkingInDegrees: Lesson = {
         },
         { kind: 'chords', symbols: ['Gm7', 'Cm9', 'Dsus4', 'Gm7'] },
         {
-          kind: 'note',
-          text: {
-            en: 'Practise one progression in every key, and the numerals become a habit.',
-            ru: 'Сыграйте одну последовательность во всех тональностях — и ступени войдут в привычку.',
-          },
-        },
-        {
           kind: 'link',
           title: { en: 'i7 iv9 Vsus4 i7 through the keys', ru: 'i7 iv9 Vsus4 i7 по тональностям' },
           target: { opens: 'player', numerals: 'i7 iv9 Vsus4 i7', key: D_MINOR, walk: 'fifths' },
@@ -154,11 +147,6 @@ const thinkingInDegrees: Lesson = {
             opens: 'song-chords',
             chords: 'Dm7 Gm9 Asus4 Dm9 Gm9 Csus4 Am7 D D/F# Gm7 Csus4 FMaj9 Bb Gm Em7b5 Asus4 A',
           },
-        },
-        {
-          kind: 'link',
-          title: { en: 'D minor in Keys', ru: 'Ре минор в тональностях' },
-          target: { opens: 'key', key: D_MINOR },
         },
       ],
     },

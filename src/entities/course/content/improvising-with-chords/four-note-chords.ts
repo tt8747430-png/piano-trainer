@@ -8,8 +8,8 @@ const fourNoteChords: Lesson = {
   id: 'four-note-chords',
   title: { en: 'Four-note chords', ru: 'Четырёхзвучные аккорды' },
   summary: {
-    en: 'Add a 7th to a triad and it gains a colour: dreamy maj7, restless 7, mellow m7. Learn where each fits in a song.',
-    ru: 'Добавьте к трезвучию септиму, и у него появится окраска: мечтательный maj7, беспокойный 7, мягкий m7. Узнайте, где каждый уместен в песне.',
+    en: 'Colour a song’s chords with maj7, 7 and m7.',
+    ru: 'Раскрасьте аккорды песни септаккордами maj7, 7 и m7.',
   },
   sections: [
     {
@@ -19,21 +19,21 @@ const fourNoteChords: Lesson = {
           kind: 'text',
           lead: { en: 'Seventh chord:', ru: 'Септаккорд:' },
           text: {
-            en: 'a triad with one more 3rd on top, four notes in all. The new note, the 7th, gives the chord its colour.',
-            ru: 'трезвучие с ещё одной терцией сверху, всего четыре звука. Новый звук, септима, придаёт аккорду окраску.',
+            en: 'a triad with one more 3rd on top. The new note, the 7th, gives the chord its colour.',
+            ru: 'трезвучие с ещё одной терцией сверху. Новый звук, септима, даёт аккорду окраску.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cmaj7', 'C7', 'Cm7'], apart: true },
       ],
     },
     {
-      heading: { en: 'Major 7th: dreamy', ru: 'Большой мажорный: мечтательный' },
+      heading: { en: 'Major 7th on I and IV', ru: 'Большой мажорный на I и IV' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Cmaj7 adds B, a semitone below the top C. It sounds soft and dreamy. It suits the I and IV chords.',
-            ru: 'Cmaj7 добавляет си, на полутон ниже верхнего до. Он звучит мягко и мечтательно. Подходит для аккордов I и IV ступеней.',
+            en: 'Cmaj7 adds B, a semitone below the top C. It sounds soft and dreamy.',
+            ru: 'Cmaj7 добавляет си, на полутон ниже верхнего до. Он звучит мягко и мечтательно.',
           },
         },
         {
@@ -46,13 +46,13 @@ const fourNoteChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Dominant 7th: restless', ru: 'Доминантсептаккорд: беспокойный' },
+      heading: { en: 'Dominant 7th on V', ru: 'Доминантсептаккорд на V' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'G7 adds F, a whole tone below the top G. It sounds restless and wants to move to C. It belongs on V.',
-            ru: 'G7 добавляет фа, на тон ниже верхнего соль. Он звучит неустойчиво и стремится к C. Его место — на V ступени.',
+            en: 'G7 adds F, a whole tone below the top G. It sounds restless and pulls to C.',
+            ru: 'G7 добавляет фа, на тон ниже верхнего соль. Он звучит неустойчиво и тянется к C.',
           },
         },
         {
@@ -65,13 +65,13 @@ const fourNoteChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Minor 7th: mellow', ru: 'Малый минорный: мягкий' },
+      heading: { en: 'Minor 7th on ii, iii and vi', ru: 'Малый минорный на II, III и VI' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Am7 adds G to A minor. It sounds warm and relaxed. It suits the ii, iii and vi chords.',
-            ru: 'Am7 добавляет соль к ля минору. Он звучит тепло и спокойно. Подходит для аккордов II, III и VI ступеней.',
+            en: 'Am7 adds G to A minor. It sounds warm and relaxed.',
+            ru: 'Am7 добавляет соль к ля минору. Он звучит тепло и спокойно.',
           },
         },
         {
@@ -84,7 +84,7 @@ const fourNoteChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'A key in four colours', ru: 'Тональность в четырёх красках' },
+      heading: { en: 'A key in 7ths', ru: 'Тональность септаккордами' },
       blocks: [
         {
           kind: 'text',
@@ -111,8 +111,8 @@ const fourNoteChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a song’s chords plain, then add 7ths: maj7 on I and IV, a 7th on V. Keep the melody and listen to it glow.',
-            ru: 'Сыграйте аккорды песни просто, затем добавьте септимы: maj7 на I и IV, доминантсептаккорд на V. Мелодия та же, а звучит теплее.',
+            en: 'Play a song’s chords plain, then with maj7 on I and IV and 7 on V. The melody stays the same.',
+            ru: 'Сыграйте аккорды песни просто, затем с maj7 на I и IV и с 7 на V. Мелодия остаётся прежней.',
           },
         },
         {
@@ -140,11 +140,6 @@ const fourNoteChords: Lesson = {
         },
         {
           kind: 'question',
-          ask: { en: 'Play Am7.', ru: 'Сыграйте Am7.' },
-          answer: { chord: 'Am7' },
-        },
-        {
-          kind: 'question',
           ask: {
             en: 'Play the IV chord of C as a major 7th.',
             ru: 'Сыграйте аккорд IV ступени до мажора как большой мажорный септаккорд.',
@@ -155,11 +150,6 @@ const fourNoteChords: Lesson = {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Cmaj7 arpeggio in the Player', ru: 'Арпеджио Cmaj7 в плеере' },
-          target: { opens: 'exercise', exercise: 'arpeggio', root: note('C'), quality: 'maj7' },
         },
         {
           kind: 'link',

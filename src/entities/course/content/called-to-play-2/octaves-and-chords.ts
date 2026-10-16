@@ -5,8 +5,8 @@ const octavesAndChords: Lesson = {
   id: 'octaves-and-chords',
   title: { en: 'Octaves and chords', ru: 'Октавы и аккорды' },
   summary: {
-    en: 'Octaves in the right hand, up the scale and by the chord, and full chords that step.',
-    ru: 'Октавы в правой руке — гаммой и по аккорду — и полные аккорды с движением.',
+    en: 'Play right-hand octaves up the scale and by the chord.',
+    ru: 'Играйте октавы правой рукой гаммой и по аккорду.',
   },
   sections: [
     {
@@ -39,8 +39,8 @@ const octavesAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Octaves go two ways: up the scale, step by step, or by the chord, on its 1st, 2nd, 3rd and 5th notes.',
-            ru: 'Октавами играют двумя способами: гаммой, ступень за ступенью, или по аккорду — по его 1, 2, 3 и 5-й ступеням.',
+            en: 'Octaves go up the scale step by step, or by the chord: its 1st, 2nd, 3rd and 5th.',
+            ru: 'Октавы идут гаммой, ступень за ступенью, или по аккорду: по его 1, 2, 3 и 5-й ступеням.',
           },
         },
         { kind: 'pattern', pattern: 'oct', piece: 'zemlya' },

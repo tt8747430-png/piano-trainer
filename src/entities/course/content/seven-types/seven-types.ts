@@ -4,8 +4,8 @@ const sevenTypes: Lesson = {
   id: 'seven-types',
   title: { en: 'The seven types of accompaniment', ru: 'Семь видов аккомпанемента' },
   summary: {
-    en: 'Н. В. Боброва’s seven types on one hymn, and how to mix them.',
-    ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне и как их сочетать.',
+    en: 'Play a hymn in N. V. Bobrova’s seven types, then mix them.',
+    ru: 'Играйте гимн семью видами Н. В. Бобровой, затем сочетайте их.',
   },
   sections: [
     {
@@ -15,7 +15,7 @@ const sevenTypes: Lesson = {
           kind: 'text',
           lead: { en: 'A type of accompaniment', ru: 'Вид аккомпанемента' },
           text: {
-            en: 'lays out the same chords in both hands. Боброва plays all seven on one hymn. Types 1–3 play only the chords.',
+            en: 'lays out the same chords in both hands. Bobrova plays all seven on one hymn. Types 1–3 play only the chords.',
             ru: '— способ изложить одни и те же аккорды двумя руками. Боброва играет все семь на одном гимне. Виды 1–3 играют только аккорды.',
           },
         },
@@ -55,8 +55,8 @@ const sevenTypes: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Mix them in a hymn: figuration in the verse, the chord’s pulse in the chorus, type 1 at the start and end, the tune doubled for unsure singers.',
-            ru: 'Сочетайте их в гимне: фигурация в куплете, аккордовая пульсация в припеве, первый вид в начале и конце, дублированная мелодия там, где поющие неуверенны.',
+            en: 'Mix them in a hymn: type 1 at the start and end, figuration in the verse, the pulse in the chorus, the tune doubled for unsure singers.',
+            ru: 'Сочетайте их в гимне: первый вид в начале и конце, фигурация в куплете, пульсация в припеве, дублированная мелодия там, где поющие неуверенны.',
           },
         },
         {

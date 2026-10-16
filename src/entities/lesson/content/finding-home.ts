@@ -5,8 +5,8 @@ const findingHome: Lesson = {
   id: 'finding-home',
   title: { en: 'Finding your way on the keys', ru: 'Как ориентироваться на клавиатуре' },
   summary: {
-    en: 'The keyboard is one pattern of twelve keys, repeated. Find any key from the black keys, without counting.',
-    ru: 'Клавиатура — один узор из двенадцати клавиш, повторённый много раз. Находите любую клавишу по чёрным, не считая.',
+    en: 'Find any key by the black keys, without counting.',
+    ru: 'Находите любую клавишу по чёрным, не считая.',
   },
   sections: [
     {
@@ -42,13 +42,6 @@ const findingHome: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Singers say do re mi fa sol la si.',
-            ru: 'В пении это до, ре, ми, фа, соль, ля, си.',
-          },
-        },
       ],
     },
     {
@@ -57,8 +50,8 @@ const findingHome: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Two pairs of white keys have no black key between them: E–F and B–C. Every scale you learn depends on them.',
-            ru: 'Между двумя парами белых клавиш нет чёрной: ми–фа и си–до. От них зависит каждая гамма, которую вы выучите.',
+            en: 'Two pairs of white keys have no black key between them: E–F and B–C.',
+            ru: 'Между двумя парами белых клавиш нет чёрной: ми–фа и си–до.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/2 F4/2 B4/2 C5/2' },
@@ -76,13 +69,6 @@ const findingHome: Lesson = {
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P8' },
-        {
-          kind: 'note',
-          text: {
-            en: 'A full piano has 88 keys, from A0 to C8.',
-            ru: 'У полного фортепиано 88 клавиш, от A0 до C8.',
-          },
-        },
       ],
     },
     {
@@ -108,24 +94,11 @@ const findingHome: Lesson = {
         },
         {
           kind: 'question',
-          ask: { en: 'Play any B.', ru: 'Сыграйте любое си.' },
-          answer: { notes: ['B'] },
-        },
-        {
-          kind: 'question',
           ask: {
             en: 'Play every white key from C up to G.',
             ru: 'Сыграйте подряд белые клавиши от до вверх до соль.',
           },
           answer: { notes: ['C', 'D', 'E', 'F', 'G'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play a C, then the C an octave above it.',
-            ru: 'Сыграйте до, а потом до октавой выше.',
-          },
-          answer: { notes: ['C', 'C'], rising: true },
         },
         {
           kind: 'link',

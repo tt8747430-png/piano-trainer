@@ -11,8 +11,8 @@ const chordPulse: Lesson = {
   id: 'chord-pulse',
   title: { en: 'Chord pulse', ru: 'Аккордовая пульсация' },
   summary: {
-    en: 'Harmony into texture. Pulse the chords, give them a fourth note, then break them and figure them.',
-    ru: 'Гармония превращается в фактуру. Пульсация аккордов, четвёртый звук, ломаные аккорды и гармоническая фигурация.',
+    en: 'Turn chords into texture: pulse, added notes, broken chords, figuration.',
+    ru: 'Превращайте аккорды в фактуру: пульсация, добавочные звуки, ломаные аккорды, фигурация.',
   },
   sections: [
     {
@@ -21,8 +21,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Fine chords alone are not yet an accompaniment. The task is to turn harmony into texture, with four elements.',
-            ru: 'Красивые аккорды сами по себе ещё не аккомпанемент. Задача — превратить гармонию в фактуру с помощью четырёх элементов.',
+            en: 'Chords alone are not yet an accompaniment. Four elements turn harmony into texture.',
+            ru: 'Аккорды сами по себе ещё не аккомпанемент. Гармонию превращают в фактуру четыре элемента.',
           },
         },
         { kind: 'chords', symbols: ['C', 'G', 'Am', 'F'] },
@@ -43,8 +43,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Texture follows the song. Start plain and add movement as it grows. Find its sections, its build and its peak first.',
-            ru: 'Фактура следует за песней. Начинайте просто и добавляйте движение по мере её развития. Сначала найдите разделы, нарастание и кульминацию.',
+            en: 'Start plain and add movement as the song grows. Find its sections, its build and its peak first.',
+            ru: 'Начинайте просто и добавляйте движение по мере развития песни. Сначала найдите разделы, нарастание и кульминацию.',
           },
         },
         { kind: 'pattern', pattern: 'block', piece: 'romashki' },
@@ -63,8 +63,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the harmony and place it in time, a chord on every beat. Play beats 1 and 4 brighter, 2 and 3 softer.',
-            ru: 'Сохраните гармонию и расположите её во времени, аккорд на каждую долю. Первую и четвёртую доли играйте ярче, вторую и третью — мягче.',
+            en: 'A chord on every beat. Play beats 1 and 4 brighter, 2 and 3 softer.',
+            ru: 'Аккорд на каждую долю. Первую и четвёртую доли играйте ярче, вторую и третью — мягче.',
           },
         },
         { kind: 'pattern', pattern: 'g1', piece: 'romashki' },
@@ -125,8 +125,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Then move to harmonic figuration: the chord’s notes in turn.',
-            ru: 'Дальше переходите к гармонической фигурации: звуки аккорда по очереди.',
+            en: 'The chord’s notes played in turn.',
+            ru: 'Звуки аккорда по очереди.',
           },
         },
         { kind: 'pattern', pattern: 'g4', piece: 'romashki' },
@@ -167,16 +167,6 @@ const chordPulse: Lesson = {
         {
           kind: 'chords',
           symbols: ['A', 'E/G♯', 'F♯m7', 'Asus4/E', 'D', 'Bm9', 'Esus4', 'E'],
-        },
-        {
-          kind: 'steps',
-          steps: [
-            { en: 'Position and inversion.', ru: 'Расположение и обращение.' },
-            { en: 'Add2 and other added notes.', ru: 'Add2 и другие добавочные тоны.' },
-            { en: '7th and 9th chords.', ru: 'Септаккорды и нонаккорды.' },
-            { en: 'Broken chords.', ru: 'Ломаные аккорды.' },
-            { en: 'Harmonic figuration.', ru: 'Гармоническая фигурация.' },
-          ],
         },
       ],
     },

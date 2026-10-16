@@ -1,7 +1,6 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const A_MINOR = { tonic: note('A'), minor: true }
 
 /** Mastering Chords, lesson 4: a minor chord's three positions, told apart and joined smoothly. */
@@ -9,8 +8,8 @@ const minorInversions: Lesson = {
   id: 'minor-inversions',
   title: { en: 'Minor chord inversions', ru: 'Обращения минорного аккорда' },
   summary: {
-    en: 'A minor chord inverts just as a major one does. Find its root in any position, tell it from its major neighbour, and join it smoothly.',
-    ru: 'Минорный аккорд обращается так же, как мажорный. Находите его основной тон в любом виде, отличайте от мажорного соседа и соединяйте плавно.',
+    en: 'Play a minor chord in three positions and join it smoothly.',
+    ru: 'Играйте минорный аккорд в трёх видах и соединяйте плавно.',
   },
   sections: [
     {
@@ -19,8 +18,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Root position puts A at the bottom. First inversion puts the 3rd, C, at the bottom. Second inversion puts the 5th, E, there.',
-            ru: 'В основном виде внизу ля. В первом обращении внизу терция, до. Во втором обращении внизу квинта, ми.',
+            en: 'A minor chord inverts as a major one does. At the bottom: the root A, then the 3rd C, then the 5th E.',
+            ru: 'Минорный аккорд обращается так же, как мажорный. Внизу: основной тон ля, затем терция до, затем квинта ми.',
           },
         },
         {
@@ -34,10 +33,7 @@ const minorInversions: Lesson = {
       ],
     },
     {
-      heading: {
-        en: 'The 4th still points to the root',
-        ru: 'Кварта по-прежнему указывает на основной тон',
-      },
+      heading: { en: 'The 4th points to the root', ru: 'Кварта указывает на основной тон' },
       blocks: [
         {
           kind: 'voicings',
@@ -50,8 +46,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In each inversion of D minor, find the 4th, A to D. Its upper note, D, is the root.',
-            ru: 'В каждом обращении ре минора найдите кварту ля – ре. Её верхний звук, ре, и есть основной тон.',
+            en: 'Find the 4th, A to D, in each. Its upper note, D, is the root.',
+            ru: 'Найдите в каждом кварту ля – ре. Её верхний звук, ре, — основной тон.',
           },
         },
       ],
@@ -69,14 +65,14 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Both have E at the bottom and C on top. Find the root above the 4th, then count up to its 3rd: four semitones is major, three is minor.',
-            ru: 'В обоих внизу ми, а сверху до. Найдите основной тон над квартой и отсчитайте до терции: четыре полутона — мажор, три — минор.',
+            en: 'Both have E at the bottom and C on top. Find the root, then count to its 3rd: four semitones is major, three minor.',
+            ru: 'В обоих внизу ми, а сверху до. Найдите основной тон и отсчитайте до терции: четыре полутона — мажор, три — минор.',
           },
         },
       ],
     },
     {
-      heading: { en: 'The nearest inversion in A minor', ru: 'Ближайшее обращение в ля миноре' },
+      heading: { en: 'The nearest inversion', ru: 'Ближайшее обращение' },
       blocks: [
         {
           kind: 'voicings',
@@ -91,23 +87,10 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand holds A over Am and Dm, then slips down to G♯ for E major. It hardly moves at all.',
-            ru: 'Правая рука держит ля в Am и Dm, затем опускается на соль-диез в ми мажоре. Она почти не двигается.',
+            en: 'The right hand holds A over Am and Dm, then slips down to G♯ for E major.',
+            ru: 'Правая рука держит ля в Am и Dm, затем опускается на соль-диез в ми мажоре.',
           },
         },
-      ],
-    },
-    {
-      heading: { en: 'Minor chords in a row', ru: 'Минорные аккорды в ряду' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'A row of chords joins each by its nearest inversion. Listen to Am and Dm settle between C and G.',
-            ru: 'В ряду аккорды соединяются ближайшими обращениями. Послушайте, как Am и Dm встают между C и G.',
-          },
-        },
-        { kind: 'progression', numerals: 'I vi ii V', key: C_MAJOR },
         {
           kind: 'link',
           title: { en: 'i–iv–V–i in the Player', ru: 'i–iv–V–i в плеере' },
@@ -121,26 +104,18 @@ const minorInversions: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play A minor in first inversion: C at the bottom.',
-            ru: 'Сыграйте ля минор в первом обращении: до внизу.',
+            en: 'Play A minor in first inversion.',
+            ru: 'Сыграйте ля минор в первом обращении.',
           },
           answer: { notes: ['C', 'E', 'A'], rising: true },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play D minor in second inversion: A at the bottom.',
-            ru: 'Сыграйте ре минор во втором обращении: ля внизу.',
+            en: 'Play D minor in second inversion.',
+            ru: 'Сыграйте ре минор во втором обращении.',
           },
           answer: { notes: ['A', 'D', 'F'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play E minor in first inversion.',
-            ru: 'Сыграйте ми минор в первом обращении.',
-          },
-          answer: { notes: ['G', 'B', 'E'], rising: true },
         },
         {
           kind: 'question',
@@ -159,11 +134,6 @@ const minorInversions: Lesson = {
           kind: 'link',
           title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'name-chord' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'A minor in Chords', ru: 'Ля минор в разделе «Аккорды»' },
-          target: { opens: 'chords', chord: 'Am' },
         },
       ],
     },

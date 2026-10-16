@@ -9,8 +9,8 @@ const seventhsInASong: Lesson = {
   id: 'sevenths-in-a-song',
   title: { en: 'Seventh chords in a song', ru: 'Септаккорды в песне' },
   summary: {
-    en: 'The three main 7th chords, which one a song’s triad takes, and each up and down by semitones.',
-    ru: 'Три основных септаккорда, какой взять вместо трезвучия песни, и каждый по полутонам вверх и вниз.',
+    en: 'Turn a song’s triads into the 7th chords that fit.',
+    ru: 'Превращайте трезвучия песни в подходящие септаккорды.',
   },
   sections: [
     {
@@ -19,8 +19,8 @@ const seventhsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Jazz standards are full of 7th chords. The harmony stays, with a new colour and more tension: C becomes CMaj7.',
-            ru: 'В джазовых стандартах много септаккордов. Гармония та же, но с новой краской и большим напряжением: C становится CMaj7.',
+            en: 'A 7th chord keeps the harmony and adds colour and tension. The main three: the minor 7th, the major 7th and the dominant 7th.',
+            ru: 'Септаккорд сохраняет гармонию и добавляет краску и напряжение. Три основных: малый минорный, большой мажорный и доминантовый.',
           },
         },
         {
@@ -30,13 +30,6 @@ const seventhsInASong: Lesson = {
             { symbol: 'CMaj7', degrees: '1 | 1 3 5 7', hands: 'C3 | C4 E4 G4 B4' },
             { symbol: 'C7', degrees: '1 | 1 3 5 ♭7', hands: 'C3 | C4 E4 G4 B♭4' },
           ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'The minor 7th, the major 7th and the dominant 7th.',
-            ru: 'Малый минорный, большой мажорный и малый мажорный, доминантовый.',
-          },
         },
       ],
     },
@@ -76,8 +69,8 @@ const seventhsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each triad of the verse can grow into a 7th chord where it sounds right.',
-            ru: 'Каждое трезвучие куплета может стать септаккордом там, где это звучит уместно.',
+            en: 'The verse’s triads, grown into 7th chords where they sound right.',
+            ru: 'Трезвучия куплета, ставшие септаккордами там, где это звучит уместно.',
           },
         },
         {
@@ -116,7 +109,7 @@ const seventhsInASong: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play each 7th chord up and down by semitones, the bass under it. Step 1 is the minor 7th, Step 2 the major, Step 3 the dominant.',
+            en: 'Play each 7th chord up and down by semitones, with its bass. Step 1 is the minor 7th, step 2 the major, step 3 the dominant.',
             ru: 'Играйте каждый септаккорд по полутонам вверх и вниз, с басом. Шаг 1 — малый минорный, шаг 2 — большой мажорный, шаг 3 — доминантовый.',
           },
         },

@@ -2,13 +2,15 @@ import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
+const F_MAJOR = { tonic: note('F'), minor: false }
+const G_MAJOR = { tonic: note('G'), minor: false }
 
 const gospelProgressions: Lesson = {
   id: 'gospel-progressions',
   title: { en: 'Gospel progressions', ru: 'Госпел-последовательности' },
   summary: {
-    en: 'The progressions gospel is built on, coloured with 7ths, and its rhythm.',
-    ru: 'Последовательности, на которых строится госпел, с септаккордами, и его ритм.',
+    en: 'Play the progressions gospel is built on, in 7th chords.',
+    ru: 'Играйте последовательности, на которых строится госпел, септаккордами.',
   },
   sections: [
     {
@@ -17,42 +19,11 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Gospel keeps each chord’s role in the key but makes it richer: 7ths and 9ths on almost every beat, chords that lift toward the next, a walking bass.',
-            ru: 'Госпел сохраняет роль каждого аккорда в тональности, но делает его богаче: септаккорды и нонаккорды почти на каждой доле, аккорды, тянущиеся к следующему, идущий бас.',
+            en: 'Gospel keeps each chord’s role in the key but makes it richer: 7ths and 9ths on almost every beat.',
+            ru: 'Госпел сохраняет роль каждого аккорда в тональности, но делает его богаче: септаккорды и нонаккорды почти на каждой доле.',
           },
         },
         { kind: 'chords', symbols: ['C', 'CMaj7', 'CMaj9'] },
-      ],
-    },
-    {
-      heading: { en: 'The lift', ru: 'Подъём' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'IV–V–iii–vi rises from the subdominant, IV, and lands on the minor vi. From there it is ready to go on.',
-            ru: 'IV–V–iii–vi поднимается от субдоминанты, IV, и приходит на минорную vi. С неё можно идти дальше.',
-          },
-        },
-        { kind: 'progression', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
-      ],
-    },
-    {
-      heading: { en: 'The standard', ru: 'Стандарт' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'I–iii–IV–V climbs to the dominant, V. It goes up a third, then step by step. Here it is in F major.',
-            ru: 'I–iii–IV–V поднимается к доминанте, V. Сначала на терцию вверх, затем по ступеням. Здесь — в фа мажоре.',
-          },
-        },
-        {
-          kind: 'progression',
-          numerals: 'I iii IV V',
-          key: { tonic: note('F'), minor: false },
-          size: 'sevenths',
-        },
       ],
     },
     {
@@ -61,16 +32,37 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'I–IV–I–V is the old hymn’s plain change. It moves back and forth between home, I, and its neighbours. Here it is in G major.',
-            ru: 'I–IV–I–V — простая смена старого гимна. Она ходит туда и обратно между тоникой, I, и её соседями. Здесь — в соль мажоре.',
+            en: 'I–IV–I–V is the old hymn’s plain change, back and forth between home and its neighbours.',
+            ru: 'I–IV–I–V — простая смена старого гимна: туда и обратно между тоникой и её соседями.',
           },
         },
+        { kind: 'progression', numerals: 'I IV I V', key: G_MAJOR, size: 'sevenths' },
+      ],
+    },
+    {
+      heading: { en: 'The standard', ru: 'Стандарт' },
+      blocks: [
         {
-          kind: 'progression',
-          numerals: 'I IV I V',
-          key: { tonic: note('G'), minor: false },
-          size: 'sevenths',
+          kind: 'text',
+          text: {
+            en: 'I–iii–IV–V climbs to the dominant: up a third, then step by step.',
+            ru: 'I–iii–IV–V поднимается к доминанте: сначала на терцию, затем по ступеням.',
+          },
         },
+        { kind: 'progression', numerals: 'I iii IV V', key: F_MAJOR, size: 'sevenths' },
+      ],
+    },
+    {
+      heading: { en: 'The lift', ru: 'Подъём' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'IV–V–iii–vi rises from IV and lands on the minor vi, ready to go on.',
+            ru: 'IV–V–iii–vi поднимается от IV и приходит на минорную vi, откуда можно идти дальше.',
+          },
+        },
+        { kind: 'progression', numerals: 'IV V iii vi', key: C_MAJOR, size: 'sevenths' },
       ],
     },
     {
@@ -92,16 +84,11 @@ const gospelProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'V–IV–I steps back through IV on the way home. This softens the dominant’s pull. Here it is in F major.',
-            ru: 'V–IV–I возвращается домой через IV. Так тяготение доминанты становится мягче. Здесь — в фа мажоре.',
+            en: 'V–IV–I steps back through IV on the way home, softening the dominant’s pull.',
+            ru: 'V–IV–I возвращается домой через IV, и тяготение доминанты становится мягче.',
           },
         },
-        {
-          kind: 'progression',
-          numerals: 'V IV I',
-          key: { tonic: note('F'), minor: false },
-          size: 'sevenths',
-        },
+        { kind: 'progression', numerals: 'V IV I', key: F_MAJOR, size: 'sevenths' },
       ],
     },
     {
@@ -141,11 +128,6 @@ const gospelProgressions: Lesson = {
             ru: 'Верхняя строка — верхний звук аккордов. Фа-диез ведёт бас вверх, к соль.',
           },
         },
-        {
-          kind: 'link',
-          title: { en: 'Syncopation and swing', ru: 'Синкопа и свинг' },
-          target: { opens: 'lesson', lesson: 'syncopation-and-swing' },
-        },
       ],
     },
     {
@@ -171,12 +153,13 @@ const gospelProgressions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'The 7–3–6 in Progressions', ru: '7–3–6 в «Последовательностях»' },
+          title: { en: 'The 7–3–6 through the keys', ru: '7–3–6 по всем тональностям' },
           target: {
-            opens: 'progressions',
+            opens: 'player',
             numerals: 'vii° III vi',
             key: C_MAJOR,
             size: 'sevenths',
+            walk: 'fifths',
           },
         },
       ],

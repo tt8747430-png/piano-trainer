@@ -5,8 +5,8 @@ const sixEightAndTwelveEight: Lesson = {
   id: 'six-eight-and-twelve-eight',
   title: { en: '6/8 and 12/8', ru: 'Размеры 6/8 и 12/8' },
   summary: {
-    en: 'What a meter says, how 6/8 and 12/8 are counted, and the five ways in 6/8.',
-    ru: 'Что показывает размер, как считать 6/8 и 12/8 и пять видов в 6/8.',
+    en: 'Count 6/8 and 12/8 and play the five ways in 6/8.',
+    ru: 'Считайте 6/8 и 12/8 и играйте пять видов в 6/8.',
   },
   sections: [
     {
@@ -20,13 +20,6 @@ const sixEightAndTwelveEight: Lesson = {
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'zemlya' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Level 1 kept to 4/4.',
-            ru: 'На первом уровне все песни были в 4/4.',
-          },
-        },
       ],
     },
     {
@@ -35,8 +28,8 @@ const sixEightAndTwelveEight: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Six eighths, felt as two big beats, each of three. Count one-two-three, four-five-six. It rocks gently.',
-            ru: 'Шесть восьмых, которые слышатся как две большие доли по три. Считайте: раз-два-три, четыре-пять-шесть. Это плавное покачивание.',
+            en: 'Six eighths, felt as two big beats of three. Count one-two-three, four-five-six.',
+            ru: 'Шесть восьмых, которые слышатся как две большие доли по три. Считайте: раз-два-три, четыре-пять-шесть.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'dveri' },

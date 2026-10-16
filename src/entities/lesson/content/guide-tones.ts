@@ -7,8 +7,8 @@ const guideTones: Lesson = {
   id: 'guide-tones',
   title: { en: 'Guide tones through the changes', ru: 'Направляющие тоны по гармонии' },
   summary: {
-    en: 'The 3rd and 7th of each chord make a line that moves by a step or not at all. Voice with them, solo along them.',
-    ru: 'Терции и септимы аккордов образуют линию, которая движется на шаг или стоит на месте. Стройте на них голосоведение и соло.',
+    en: 'Voice ii–V–I with 3rds and 7ths, and solo along them.',
+    ru: 'Ведите ii–V–I по терциям и септимам и импровизируйте по ним.',
   },
   sections: [
     {
@@ -85,11 +85,31 @@ const guideTones: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the guide tones on beat 1 and fill the beats between with scale notes.',
-            ru: 'Оставьте направляющие тоны на первой доле, а доли между ними заполните нотами гаммы.',
+            en: 'Keep a guide tone on each beat 1 and fill the beats between with scale notes.',
+            ru: 'Оставьте направляющий тон на каждой первой доле, а доли между ними заполните нотами гаммы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5 D5 E5 C5 B4 A4 G4 F4 E4/1' },
+      ],
+    },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
+        {
+          kind: 'question',
+          ask: { en: 'Play the 3rd and 7th of Dm7.', ru: 'Сыграйте терцию и септиму Dm7.' },
+          answer: { notes: ['F', 'C'] },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play the 3rd and 7th of G7.', ru: 'Сыграйте терцию и септиму G7.' },
+          answer: { notes: ['B', 'F'] },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play the 3rd and 7th of CMaj7.', ru: 'Сыграйте терцию и септиму CMaj7.' },
+          answer: { notes: ['E', 'B'] },
+        },
         {
           kind: 'link',
           title: {
@@ -103,26 +123,6 @@ const guideTones: Lesson = {
             size: 'sevenths',
             walk: 'tones-down',
           },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
-        {
-          kind: 'question',
-          ask: { en: 'Play the 3rd and 7th of G7.', ru: 'Сыграйте терцию и септиму G7.' },
-          answer: { notes: ['B', 'F'] },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play the 3rd and 7th of Dm7.', ru: 'Сыграйте терцию и септиму Dm7.' },
-          answer: { notes: ['F', 'C'] },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play the 3rd and 7th of CMaj7.', ru: 'Сыграйте терцию и септиму CMaj7.' },
-          answer: { notes: ['E', 'B'] },
         },
         {
           kind: 'link',

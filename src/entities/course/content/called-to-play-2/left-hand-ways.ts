@@ -5,8 +5,8 @@ const leftHandWays: Lesson = {
   id: 'left-hand-ways',
   title: { en: 'Left-hand ways', ru: 'Виды игры для левой руки' },
   summary: {
-    en: 'Ten ways for the left hand under a tune the right hand plays from the notes.',
-    ru: 'Десять видов для левой руки под мелодией, которую правая играет по нотам.',
+    en: 'Accompany with the left hand while the right plays the tune.',
+    ru: 'Аккомпанируйте левой рукой, пока правая играет мелодию.',
   },
   sections: [
     {
@@ -15,18 +15,11 @@ const leftHandWays: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand plays the bass as an octave, or as one note in its place.',
-            ru: 'В левой руке можно играть октавный бас или одну ноту вместо октавы.',
+            en: 'The right hand plays the tune, the left the chords. Its bass is an octave, or one note in its place.',
+            ru: 'Правая рука играет мелодию, левая — аккорды. Её бас — октава или одна нота вместо октавы.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'skala' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Here the right hand plays the tune, the left the chords.',
-            ru: 'Здесь правая рука играет мелодию, левая — аккорды.',
-          },
-        },
       ],
     },
     {

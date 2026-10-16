@@ -5,8 +5,8 @@ const accompanimentPatterns: Lesson = {
   id: 'accompaniment-patterns',
   title: { en: 'Accompaniment patterns', ru: 'Фактуры аккомпанемента' },
   summary: {
-    en: 'The same chords, four ways: struck together, broken, as an Alberti bass, or as a bass note answered by the chord.',
-    ru: 'Одни и те же аккорды четырьмя способами: вместе, разложенными, альбертиевыми басами или басом, на который отвечает аккорд.',
+    en: 'Play the same chords four ways under a song.',
+    ru: 'Играйте одни и те же аккорды под песню четырьмя способами.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const accompanimentPatterns: Lesson = {
           kind: 'text',
           lead: { en: 'Block chords:', ru: 'Аккордовая фактура:' },
           text: {
-            en: 'every note of the chord struck together. On each beat or each bar, they sound steady and full under a spiritual.',
-            ru: 'все звуки аккорда берутся одновременно. На каждую долю или на каждый такт они звучат ровно и полно под спиричуэлс.',
+            en: 'every note of the chord struck together, on each beat or each bar. Steady and full.',
+            ru: 'все звуки аккорда берутся вместе, на каждую долю или на каждый такт. Ровно и полно.',
           },
         },
         {
@@ -38,8 +38,8 @@ const accompanimentPatterns: Lesson = {
           kind: 'text',
           lead: { en: 'Broken chord:', ru: 'Разложенный аккорд:' },
           text: {
-            en: 'the chord’s notes played one after another. Up and back down in eighths, C and then F, it flows like water.',
-            ru: 'звуки аккорда играются один за другим. Вверх и обратно восьмыми, сначала до мажор, затем фа мажор, — и музыка течёт.',
+            en: 'the chord’s notes one after another. Here C, then F, up and back down in eighths.',
+            ru: 'звуки аккорда один за другим. Здесь до мажор, затем фа мажор, вверх и вниз восьмыми.',
           },
         },
         {
@@ -56,8 +56,8 @@ const accompanimentPatterns: Lesson = {
           kind: 'text',
           lead: { en: 'Alberti bass:', ru: 'Альбертиевы басы:' },
           text: {
-            en: 'a chord broken low, high, middle, high, in even eighths. The classical sonata’s favourite left hand.',
-            ru: 'аккорд, разложенный в порядке «низ, верх, середина, верх», ровными восьмыми. Любимая левая рука классической сонаты.',
+            en: 'a chord broken low, high, middle, high, in even eighths.',
+            ru: 'аккорд, разложенный в порядке «низ, верх, середина, верх», ровными восьмыми.',
           },
         },
         {
@@ -74,7 +74,7 @@ const accompanimentPatterns: Lesson = {
           kind: 'text',
           text: {
             en: 'The bass plays the root on beat 1 and the 5th on beat 3. The right hand answers with the chord on beats 2 and 4.',
-            ru: 'Бас играет основной тон на первую долю и квинту на третью. Правая рука отвечает аккордом на вторую и четвёртую доли.',
+            ru: 'Бас играет основной тон на первую долю и квинту на третью. Правая рука отвечает аккордом на вторую и четвёртую.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 r/4 G2 r/4 F2 r/4 C3 r/4' },
@@ -95,16 +95,11 @@ const accompanimentPatterns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hear one song with a plain pattern of block chords. Then open it in the Player and try each way from this lesson.',
-            ru: 'Послушайте песню с простой аккордовой фактурой. Затем откройте её в плеере и попробуйте каждый способ из этого урока.',
+            en: 'Hear the song in block chords. Then open it in the Player and try each way.',
+            ru: 'Послушайте песню с аккордами целиком. Затем откройте её в плеере и попробуйте каждый способ.',
           },
         },
         { kind: 'pattern', pattern: 'block', piece: 'kumbaya' },
-        {
-          kind: 'link',
-          title: { en: 'Kumbaya in the Player', ru: '«Кумбая» в плеере' },
-          target: { opens: 'piece', piece: 'kumbaya', pattern: 'block' },
-        },
       ],
     },
     {
@@ -125,14 +120,6 @@ const accompanimentPatterns: Lesson = {
             ru: 'Сыграйте фа мажор разложенным аккордом вверх от фа.',
           },
           answer: { notes: ['F', 'A', 'C'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play G7, the chord that leads back to C.',
-            ru: 'Сыграйте G7, аккорд, ведущий обратно к C.',
-          },
-          answer: { chord: 'G7' },
         },
         {
           kind: 'link',

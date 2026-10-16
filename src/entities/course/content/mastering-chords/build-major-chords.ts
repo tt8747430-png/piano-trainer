@@ -6,49 +6,36 @@ const buildMajorChords: Lesson = {
   id: 'build-major-chords',
   title: { en: 'Build any major chord', ru: 'Мажорный аккорд от любой ноты' },
   summary: {
-    en: 'Four semitones, then three: one rule builds a major chord on every one of the twelve roots, white keys and black.',
-    ru: 'Четыре полутона, затем три: одно правило строит мажорный аккорд от каждой из двенадцати нот, белых и чёрных.',
+    en: 'Build a major chord on any of the twelve roots.',
+    ru: 'Стройте мажорный аккорд от любой из двенадцати нот.',
   },
   sections: [
     {
-      heading: { en: 'Four plus three', ru: 'Четыре плюс три' },
+      heading: { en: 'Four semitones, then three', ru: 'Четыре полутона, затем три' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Major chord:', ru: 'Мажорное трезвучие:' },
           text: {
-            en: 'a root, a note 4 semitones above it, and another 3 semitones above that. The three notes are the root, the 3rd and the 5th.',
-            ru: 'основной тон, звук на 4 полутона выше и ещё один на 3 полутона выше него. Эти три звука — прима, терция и квинта.',
+            en: 'a root, the note 4 semitones above it, and the note 3 semitones above that. They are the root, the 3rd and the 5th.',
+            ru: 'основной тон, звук на 4 полутона выше и звук ещё на 3 полутона выше. Это прима, терция и квинта.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'], apart: true },
       ],
     },
     {
-      heading: { en: 'The 3rd: four semitones', ru: 'Терция: четыре полутона' },
+      heading: { en: 'Count it from C', ru: 'Отсчитайте от до' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'From C count C♯, D, D♯, E: four semitones. E is the major 3rd, the note that makes the chord bright.',
-            ru: 'От до считайте до-диез, ре, ре-диез, ми: четыре полутона. Ми — большая терция, звук, от которого аккорд звучит светло.',
+            en: 'From C, count four semitones up to E. From E, count three more up to G.',
+            ru: 'От до отсчитайте четыре полутона вверх до ми. От ми — ещё три до соль.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M3' },
-      ],
-    },
-    {
-      heading: { en: 'The 5th: three more', ru: 'Квинта: ещё три' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'From E count F, F♯, G: three more semitones. G is the 5th, seven semitones above C.',
-            ru: 'От ми считайте фа, фа-диез, соль: ещё три полутона. Соль — квинта, на семь полутонов выше до.',
-          },
-        },
         { kind: 'interval', root: note('E'), interval: 'm3' },
-        { kind: 'interval', root: note('C'), interval: 'P5' },
       ],
     },
     {
@@ -57,7 +44,7 @@ const buildMajorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C, F and G are all white. D, E and A take one black key in the middle. B takes two.',
+            en: 'C, F and G are all white. D, E and A have one black key in the middle. B has two.',
             ru: 'C, F и G — только белые клавиши. В D, E и A посередине одна чёрная. В B две чёрные.',
           },
         },
@@ -83,8 +70,8 @@ const buildMajorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The major chord on every root. Play them a 5th apart, C, G, D, A, and on: each shares a note with the last.',
-            ru: 'Мажорное трезвучие от каждой ноты. Играйте их через квинту, C, G, D, A и дальше: у соседних аккордов есть общий звук.',
+            en: 'Play them a 5th apart: C, G, D, A and on. Each chord shares a note with the last.',
+            ru: 'Играйте их через квинту: C, G, D, A и дальше. У соседних аккордов есть общий звук.',
           },
         },
         { kind: 'grid', quality: 'maj' },
@@ -105,29 +92,13 @@ const buildMajorChords: Lesson = {
         },
         {
           kind: 'question',
-          ask: {
-            en: 'Play B major: two black keys.',
-            ru: 'Сыграйте си мажор: две чёрные клавиши.',
-          },
+          ask: { en: 'Play B major.', ru: 'Сыграйте си мажор.' },
           answer: { chord: 'B' },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play G♭ major, all black.',
-            ru: 'Сыграйте соль-бемоль мажор, только чёрные.',
-          },
-          answer: { chord: 'G♭' },
         },
         {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Major chords in Chords', ru: 'Мажорные аккорды в разделе «Аккорды»' },
-          target: { opens: 'chords', chord: 'C' },
         },
         {
           kind: 'link',

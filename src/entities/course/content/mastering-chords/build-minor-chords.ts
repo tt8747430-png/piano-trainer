@@ -1,28 +1,27 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
-
 /** Mastering Chords, lesson 2: a minor chord on any root, three semitones then four. */
 const buildMinorChords: Lesson = {
   id: 'build-minor-chords',
   title: { en: 'Build any minor chord', ru: 'Минорный аккорд от любой ноты' },
   summary: {
-    en: 'Three semitones, then four: the major chord’s rule turned round builds a minor chord on all twelve roots.',
-    ru: 'Три полутона, затем четыре: правило мажорного аккорда наоборот строит минорный от всех двенадцати нот.',
+    en: 'Build a minor chord on any of the twelve roots.',
+    ru: 'Стройте минорный аккорд от любой из двенадцати нот.',
   },
   sections: [
     {
-      heading: { en: 'Three plus four', ru: 'Три плюс четыре' },
+      heading: { en: 'Three semitones, then four', ru: 'Три полутона, затем четыре' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Minor chord:', ru: 'Минорное трезвучие:' },
           text: {
-            en: 'a root, a note 3 semitones above it, and another 4 above that. The 5th is the same as major, only the 3rd is lower.',
-            ru: 'основной тон, звук на 3 полутона выше и ещё один на 4 выше него. Квинта та же, что в мажоре, ниже только терция.',
+            en: 'a root, the note 3 semitones above it, and the note 4 above that. From A: C, then E.',
+            ru: 'основной тон, звук на 3 полутона выше и звук ещё на 4 выше. От ля: до, затем ми.',
           },
         },
+        { kind: 'interval', root: note('A'), interval: 'm3' },
         { kind: 'chords', symbols: ['Am', 'Dm', 'Em'], apart: true },
       ],
     },
@@ -32,25 +31,11 @@ const buildMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Any major chord turns minor when its 3rd drops a semitone. C, E, G becomes C, E♭, G.',
-            ru: 'Любой мажорный аккорд становится минорным, если опустить терцию на полутон. До, ми, соль превращается в до, ми-бемоль, соль.',
+            en: 'Lower a major chord’s 3rd a semitone and it turns minor. C, E, G becomes C, E♭, G.',
+            ru: 'Опустите терцию мажорного аккорда на полутон — и он станет минорным. До, ми, соль превращается в до, ми-бемоль, соль.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cm', 'G', 'Gm'], apart: true },
-      ],
-    },
-    {
-      heading: { en: 'The 3rd: three semitones', ru: 'Терция: три полутона' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'From A count B♭, B, C: three semitones, a minor 3rd. Then C to E is four, the major 3rd on top.',
-            ru: 'От ля считайте си-бемоль, си, до: три полутона, малая терция. Затем от до до ми четыре, большая терция сверху.',
-          },
-        },
-        { kind: 'interval', root: note('A'), interval: 'm3' },
-        { kind: 'interval', root: note('C'), interval: 'M3' },
       ],
     },
     {
@@ -59,7 +44,7 @@ const buildMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'D, E and A minor are all white. C, F and G minor take one black key in the middle. B minor’s 5th is F♯.',
+            en: 'D, E and A minor are all white. C, F and G minor have one black key in the middle. B minor’s 5th is F♯.',
             ru: 'Ре, ми и ля минор — только белые клавиши. В до, фа и соль миноре посередине одна чёрная. Квинта си минора — фа-диез.',
           },
         },
@@ -84,26 +69,13 @@ const buildMinorChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Minor chords in a major key', ru: 'Минорные аккорды в мажоре' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'A major key holds three minor chords, on its 2nd, 3rd and 6th notes. In C they are Dm, Em and Am.',
-            ru: 'В мажорной тональности три минорных аккорда: на второй, третьей и шестой ступенях. В до мажоре это Dm, Em и Am.',
-          },
-        },
-        { kind: 'progression', numerals: 'I vi ii iii', key: C_MAJOR },
-      ],
-    },
-    {
       heading: { en: 'All twelve', ru: 'Все двенадцать' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The minor chord on every root. Play each beside its major chord and hear only the 3rd move.',
-            ru: 'Минорное трезвучие от каждой ноты. Играйте каждое рядом с мажорным и слушайте, как сдвигается только терция.',
+            en: 'Play each beside its major chord and hear only the 3rd move.',
+            ru: 'Играйте каждый рядом с мажорным и слушайте, как сдвигается только терция.',
           },
         },
         { kind: 'grid', quality: 'min' },
@@ -128,11 +100,6 @@ const buildMinorChords: Lesson = {
           answer: { chord: 'B♭m' },
         },
         {
-          kind: 'question',
-          ask: { en: 'Play E♭ minor, all black.', ru: 'Сыграйте ми-бемоль минор, только чёрные.' },
-          answer: { chord: 'E♭m' },
-        },
-        {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
@@ -141,11 +108,6 @@ const buildMinorChords: Lesson = {
           kind: 'link',
           title: { en: 'Major or minor by ear', ru: 'Мажор или минор на слух' },
           target: { opens: 'quiz', trainer: 'chords-by-ear' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'A minor arpeggio in the Player', ru: 'Арпеджио ля минор в плеере' },
-          target: { opens: 'exercise', exercise: 'arpeggio', root: note('A'), quality: 'min' },
         },
       ],
     },

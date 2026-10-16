@@ -6,8 +6,8 @@ const majorAndMinorChords: Lesson = {
   id: 'major-and-minor-chords',
   title: { en: 'Major and minor chords', ru: 'Мажорные и минорные аккорды' },
   summary: {
-    en: 'Major chords sound bright, minor ones soft, and 4 or 3 semitones tell them apart.',
-    ru: 'Мажор звучит светло, минор — мягко, а 4 или 3 полутона их различают.',
+    en: 'Tell major from minor by ear and by semitones.',
+    ru: 'Отличайте мажор от минора на слух и по полутонам.',
   },
   sections: [
     {
@@ -16,15 +16,15 @@ const majorAndMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A major chord sounds joyful and bright, written as a capital letter: C. A minor chord sounds soft and thoughtful, written with m: Cm.',
-            ru: 'Мажорный аккорд звучит радостно и светло, пишется заглавной буквой: C. Минорный звучит мягко и задумчиво, пишется с m: Cm.',
+            en: 'A major chord sounds bright and is written as a letter: C. A minor chord sounds soft and is written with m: Cm.',
+            ru: 'Мажорный аккорд звучит светло и пишется буквой: C. Минорный звучит мягко и пишется с m: Cm.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cm'], apart: true },
       ],
     },
     {
-      heading: { en: 'How to tell them apart', ru: 'Как быстро различить' },
+      heading: { en: '4 or 3 semitones', ru: '4 или 3 полутона' },
       blocks: [
         {
           kind: 'text',
@@ -43,8 +43,8 @@ const majorAndMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a major and a minor chord on every white key, each hand alone, then both together.',
-            ru: 'Сыграйте мажорный и минорный аккорд от каждой белой клавиши, каждой рукой отдельно, затем вместе.',
+            en: 'Play both on every white key, each hand alone, then together.',
+            ru: 'Сыграйте оба от каждой белой клавиши, каждой рукой отдельно, затем вместе.',
           },
         },
         {
@@ -60,8 +60,8 @@ const majorAndMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Choose four chords you like and play them in turn. Join them smoothly, all three notes together, evenly and softly.',
-            ru: 'Выберите четыре понравившихся аккорда и сыграйте их по очереди. Соединяйте плавно, все три звука вместе, ровно и мягко.',
+            en: 'Choose four chords you like and play them in turn: smoothly, evenly and softly.',
+            ru: 'Выберите четыре понравившихся аккорда и сыграйте их по очереди: плавно, ровно и мягко.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Am', 'F', 'G'] },
@@ -73,8 +73,8 @@ const majorAndMinorChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each chord on all twelve roots, to look up as you play.',
-            ru: 'Каждый аккорд от всех двенадцати звуков — чтобы сверяться во время игры.',
+            en: 'Both chords on all twelve roots, to look up as you play.',
+            ru: 'Оба аккорда от всех двенадцати звуков — чтобы сверяться во время игры.',
           },
         },
         { kind: 'grid', quality: 'maj' },

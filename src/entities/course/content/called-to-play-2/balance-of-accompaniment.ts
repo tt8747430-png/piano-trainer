@@ -5,8 +5,8 @@ const balanceOfAccompaniment: Lesson = {
   id: 'balance-of-accompaniment',
   title: { en: 'The balance of accompaniment', ru: 'Баланс аккомпанемента' },
   summary: {
-    en: 'Bass and melody louder, everything between them softer, the “musical cake”.',
-    ru: 'Бас и мелодия громче, всё между ними тише — «музыкальный торт».',
+    en: 'Play bass and melody louder, what lies between softer.',
+    ru: 'Играйте бас и мелодию громче, всё между ними тише.',
   },
   sections: [
     {
@@ -45,8 +45,8 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Bass and melody always sound brighter. Chords, filling and ornaments stay softer, a background. Play them 20 to 30 per cent quieter.',
-            ru: 'Бас и мелодия всегда звучат ярче. Аккорды, заполнение и украшения — мягче, как фон. Играйте их на 20–30 % тише.',
+            en: 'Bass and melody always sound brighter. Play chords, filling and ornaments 20 to 30 per cent quieter, as a background.',
+            ru: 'Бас и мелодия всегда звучат ярче. Аккорды, заполнение и украшения играйте на 20–30 % тише, как фон.',
           },
         },
         { kind: 'pattern', pattern: 'M3', piece: 'milost' },

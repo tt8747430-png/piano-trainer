@@ -5,8 +5,8 @@ const sixthAndAddNine: Lesson = {
   id: 'sixth-and-add-nine',
   title: { en: 'Sixth and added ninth chords', ru: 'Аккорды с секстой и добавленной ноной' },
   summary: {
-    en: 'Three colours for a major chord with no 7th: the sweet 6th, the open add9 and the ringing 6/9, and why C6 and Am7 are twins.',
-    ru: 'Три краски мажорного аккорда без септимы: нежная секста, открытая add9 и звонкий 6/9, а также почему C6 и Am7 — близнецы.',
+    en: 'Colour a major chord with a 6th, a 9th or both.',
+    ru: 'Раскрасьте мажорный аккорд секстой, ноной или обеими.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const sixthAndAddNine: Lesson = {
           kind: 'text',
           lead: { en: 'Sixth chord:', ru: 'Аккорд с секстой:' },
           text: {
-            en: 'a major triad with its 6th added. C6 is C, E, G, A. It sounds sweet and settled, a classic last chord.',
-            ru: 'мажорное трезвучие с добавленной секстой. C6 — это до, ми, соль, ля. Звучит нежно и устойчиво, классический заключительный аккорд.',
+            en: 'a major triad with its 6th added. C6 is C, E, G, A. It sounds sweet and settled.',
+            ru: 'мажорное трезвучие с добавленной секстой. C6 — это до, ми, соль, ля. Звучит нежно и устойчиво.',
           },
         },
         {
@@ -42,8 +42,8 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C6 and Am7 share the same four notes: C, E, G, A. The bass decides. C below makes C6, A below makes Am7.',
-            ru: 'В C6 и Am7 одни и те же четыре звука: до, ми, соль, ля. Решает бас. До внизу даёт C6, ля внизу — Am7.',
+            en: 'C6 and Am7 share the same four notes. The bass decides: C below makes C6, A below makes Am7.',
+            ru: 'В C6 и Am7 одни и те же четыре звука. Решает бас: до внизу даёт C6, ля внизу — Am7.',
           },
         },
       ],
@@ -55,8 +55,8 @@ const sixthAndAddNine: Lesson = {
           kind: 'text',
           lead: { en: 'Added 9th:', ru: 'Аккорд с добавленной ноной:' },
           text: {
-            en: 'a triad with the 9th, D over C, and no 7th. Open and bright, it is a favourite of pop ballads.',
-            ru: 'трезвучие с ноной, ре над до, без септимы. Открытый и светлый, он любим в поп-балладах.',
+            en: 'a triad with the 9th, D over C, and no 7th. It sounds open and bright.',
+            ru: 'трезвучие с ноной, ре над до, без септимы. Звучит открыто и светло.',
           },
         },
         {
@@ -74,26 +74,13 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C6/9 holds both colours: C, E, G, A, D. Spread it over two hands and it rings like a bell.',
-            ru: 'В C6/9 обе краски: до, ми, соль, ля, ре. Разложите его на две руки, и он зазвенит, как колокол.',
+            en: 'C6/9 holds both: C, E, G, A, D. Spread it over two hands and it rings.',
+            ru: 'В C6/9 обе краски: до, ми, соль, ля, ре. Разложите его на две руки, и он зазвенит.',
           },
         },
         {
           kind: 'voicings',
           voicings: [{ symbol: 'C6/9', degrees: '1 5 | 3 6 9', hands: 'C3 G3 | E4 A4 D5' }],
-        },
-      ],
-    },
-    {
-      heading: { en: 'One root, four colours', ru: 'Один бас, четыре краски' },
-      blocks: [
-        { kind: 'chords', symbols: ['C', 'C6', 'Cadd9', 'C6/9'], apart: true },
-        {
-          kind: 'text',
-          text: {
-            en: 'Play each in turn, then choose one for a song’s last chord. Each colours the ending in its own way.',
-            ru: 'Сыграйте каждый по очереди, затем выберите один для последнего аккорда песни. Каждый по-своему окрашивает окончание.',
-          },
         },
       ],
     },
@@ -134,15 +121,10 @@ const sixthAndAddNine: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play C6’s twin with A in the bass.',
-            ru: 'Сыграйте близнеца C6 с ля в басу.',
+            en: 'Play C6’s notes over A in the bass.',
+            ru: 'Сыграйте звуки C6 над ля в басу.',
           },
           answer: { chord: 'Am7' },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play F6: F, A, C and D.', ru: 'Сыграйте F6: фа, ля, до и ре.' },
-          answer: { chord: 'F6' },
         },
         {
           kind: 'link',
@@ -153,11 +135,6 @@ const sixthAndAddNine: Lesson = {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
           target: { opens: 'quiz', trainer: 'build-chord' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Kumbaya in the Player', ru: '«Кумбая» в плеере' },
-          target: { opens: 'piece', piece: 'kumbaya' },
         },
       ],
     },

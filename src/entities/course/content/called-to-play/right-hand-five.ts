@@ -8,8 +8,8 @@ const rightHandFive: Lesson = {
     ru: 'Техники правой руки: 5.1, 5.2 и 5.3',
   },
   summary: {
-    en: 'Way 5 with a voice moving inside the chord. The ♭7 under the root, a falling line, a moving 3rd.',
-    ru: 'Пятый способ с голосом, который движется внутри аккорда. ♭7 под основным тоном, нисходящая линия, движущаяся терция.',
+    en: 'Move one voice inside the chord over way 5’s bass.',
+    ru: 'Ведите один голос внутри аккорда над басом пятого способа.',
   },
   sections: [
     {

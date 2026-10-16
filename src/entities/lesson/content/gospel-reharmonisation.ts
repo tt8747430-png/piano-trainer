@@ -7,8 +7,8 @@ const gospelReharmonisation: Lesson = {
   id: 'gospel-reharmonisation',
   title: { en: 'Gospel reharmonisation', ru: 'Госпел-реармонизация' },
   summary: {
-    en: 'A hymn’s plain chords made rich: 9ths, the sus, IV over V, the minor iv, tensions.',
-    ru: 'Простые аккорды гимна богаче: ноны, sus, IV над V, минорная iv, тенсии.',
+    en: 'Turn a hymn’s plain chords into rich gospel ones.',
+    ru: 'Превращайте простые аккорды гимна в богатые госпел-аккорды.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           lead: { en: 'Reharmonisation', ru: 'Реармонизация' },
           text: {
-            en: 'puts richer chords under the same tune. Add a major 9th on I and IV, a dominant 9th on V. The harmony stays, it sounds fuller.',
-            ru: '— более богатые аккорды под той же мелодией. Добавьте большой нонаккорд на I и IV, доминантнонаккорд на V. Гармония та же, но полнее.',
+            en: 'puts richer chords under the same tune. Play a major 9th on I and IV, a dominant 9th on V.',
+            ru: '— более богатые аккорды под той же мелодией. Сыграйте большой нонаккорд на I и IV, доминантнонаккорд на V.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -38,13 +38,6 @@ const gospelReharmonisation: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['G7sus4', 'G7', 'C'] },
-        {
-          kind: 'note',
-          text: {
-            en: 'Gospel players linger on the sus.',
-            ru: 'В госпеле на sus задерживаются подольше.',
-          },
-        },
       ],
     },
     {
@@ -95,6 +88,14 @@ const gospelReharmonisation: Lesson = {
     {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play IV over V in C major.',
+            ru: 'Сыграйте IV над V в до мажоре.',
+          },
+          answer: { chord: 'F/G' },
+        },
         {
           kind: 'question',
           ask: {
