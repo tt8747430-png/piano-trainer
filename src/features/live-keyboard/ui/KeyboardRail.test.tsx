@@ -27,6 +27,20 @@ describe('the keyboard’s rail', () => {
     expect(screen.queryByRole('radio')).not.toBeInTheDocument()
   })
 
+  it('leaves how the keys look to Settings when compact', () => {
+    const { settingsStore } = setUp()
+    act(() =>
+      settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, rail: 'compact' } })),
+    )
+    for (const name of ['Smaller keys', 'Larger keys', 'Glissando', 'Pedal']) {
+      expect(screen.getByRole('button', { name })).toBeInTheDocument()
+    }
+    expect(screen.queryByRole('button', { name: /^Note names/ })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Play from the computer keyboard' }),
+    ).not.toBeInTheDocument()
+  })
+
   it('zooms the keys a step at a time, saved, the button at an end off', async () => {
     const user = userEvent.setup()
     const { settingsStore } = setUp()

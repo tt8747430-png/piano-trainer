@@ -23,3 +23,15 @@ export type NamedKeys = (typeof NAMED_KEYS)[number]
 export function nextNamedKeys(named: NamedKeys): NamedKeys {
   return NAMED_KEYS[(NAMED_KEYS.indexOf(named) + 1) % NAMED_KEYS.length] ?? named
 }
+
+export const KEY_DOCKS = ['bottom', 'top'] as const
+/** Where a page's keys stay while it scrolls: over the tab bar, or under the screen's bar. */
+export type KeyDock = (typeof KEY_DOCKS)[number]
+
+export const KEY_LENGTHS = ['long', 'short'] as const
+/** How long the keys are: a piano's proportion, or short, leaving the page more of the screen. */
+export type KeyLength = (typeof KEY_LENGTHS)[number]
+
+export const RAILS = ['full', 'compact'] as const
+/** What the rail holds: every setting in sight, or only how the keys play (the rest in Settings). */
+export type Rail = (typeof RAILS)[number]

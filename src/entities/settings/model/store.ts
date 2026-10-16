@@ -15,10 +15,13 @@ import {
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
+  isKeyDock,
+  isKeyLength,
   isKeySize,
   isNamedKeys,
   isOctaveShift,
   isPedalWay,
+  isRail,
   isSidebar,
   isSwipe,
   isTheme,
@@ -145,6 +148,10 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
     chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
+    dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
+    folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
+    keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
+    rail: isRail(saved.rail) ? saved.rail : current.rail,
   }
 }
 

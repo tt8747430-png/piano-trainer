@@ -1,4 +1,4 @@
-import { useMemo, type ComponentProps } from 'react'
+import { useMemo, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
@@ -22,7 +22,8 @@ const ALONE = (key: Midi): readonly Midi[] => [key]
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Its rail holds every setting in sight, as pictures: how the keys
+ * else the screen makes it mean. Its rail holds its settings in sight, as pictures (a compact rail
+ * only their size and how they play, the rest in Settings): how the keys
  * look (their size as a zoom, their names, the chord names, the typing letters), then how they play
  * (a MIDI keyboard's sound, glissando, the pedal). With chord names on, the rail names the chord a
  * hand holds (three notes or more, held or on under the pedal; never what the app sounds). Unless the
@@ -38,10 +39,19 @@ export function LiveKeyboard({
   spotlight = false,
   spacePedal = true,
   namesChords = true,
+  railEnd,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
-  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'letters' | 'caption' | 'children' | 'onKeyPress'
+  | 'down'
+  | 'keySize'
+  | 'swipe'
+  | 'namedKeys'
+  | 'keyLength'
+  | 'letters'
+  | 'caption'
+  | 'children'
+  | 'onKeyPress'
 > & {
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
@@ -51,8 +61,12 @@ export function LiveKeyboard({
   spacePedal?: boolean
   /** The rail may name the chord a hand holds: off where its name is the question (a round). */
   namesChords?: boolean
+  /** The rail's last control: a page's keys fold away from it. */
+  railEnd?: ReactNode
 }) {
-  const { typing, chordNames, ...settings } = useSettings(selectKeyboard)
+  const { typing, chordNames, rail, keySize, swipe, namedKeys, keyLength } =
+    useSettings(selectKeyboard)
+  const settings = { keySize, swipe, namedKeys, keyLength }
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const live = useSoundingKeys('live')
   const held = useHeldKeys()
@@ -110,15 +124,21 @@ export function LiveKeyboard({
     >
       <RailGroup>
         <KeyZoom />
-        <NamedKeysToggle />
-        <ChordNamesToggle disabled={!namesChords} />
-        <TypingToggle />
+        {/* A compact rail leaves how the keys look to Settings. */}
+        {rail === 'full' ? (
+          <>
+            <NamedKeysToggle />
+            <ChordNamesToggle disabled={!namesChords} />
+            <TypingToggle />
+          </>
+        ) : null}
       </RailGroup>
       <RailGroup>
         <MidiSoundToggle />
         <GlissandoToggle />
         <PedalToggle />
       </RailGroup>
+      {railEnd}
     </PianoKeyboard>
   )
 }

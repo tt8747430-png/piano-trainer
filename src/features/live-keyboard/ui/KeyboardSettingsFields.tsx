@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import { ShortcutsButton } from '@/features/shortcuts-help'
-import { KEY_SIZES, NAMED_KEYS } from '@/shared/lib'
+import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, RAILS } from '@/shared/lib'
 import { Segmented, SettingField, SwitchRow } from '@/shared/ui'
 
 /**
  * The keyboard settings, saved for every keyboard, as Settings lists them (the rail sets them in
- * place, as pictures). How a swipe plays is the rail's own toggle, beside the keys it changes. Under
+ * place, as pictures): the keys' size and names, where a page's keys stay, how long they are, what
+ * the rail holds, and whether a page's keys are folded away. How a swipe plays is the rail's own toggle, beside the keys it changes. Under
  * them, the way to the computer's shortcuts.
  */
 export function KeyboardSettingsFields() {
@@ -38,6 +39,46 @@ export function KeyboardSettingsFields() {
           onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
         />
       </SettingField>
+      <SettingField label={t('keyboardSettings.dock.label')}>
+        <Segmented
+          label={t('keyboardSettings.dock.label')}
+          value={keyboard.dock}
+          options={KEY_DOCKS.map((value) => ({
+            value,
+            label: t(`keyboardSettings.dock.${value}`),
+          }))}
+          onChange={(dock) => setKeyboard(store, { dock })}
+        />
+      </SettingField>
+      <SettingField label={t('keyboardSettings.keyLength.label')}>
+        <Segmented
+          label={t('keyboardSettings.keyLength.label')}
+          value={keyboard.keyLength}
+          options={KEY_LENGTHS.map((value) => ({
+            value,
+            label: t(`keyboardSettings.keyLength.${value}`),
+          }))}
+          onChange={(keyLength) => setKeyboard(store, { keyLength })}
+        />
+      </SettingField>
+      <SettingField label={t('keyboardSettings.rail.label')}>
+        <Segmented
+          label={t('keyboardSettings.rail.label')}
+          value={keyboard.rail}
+          options={RAILS.map((value) => ({
+            value,
+            label: t(`keyboardSettings.rail.${value}`),
+          }))}
+          onChange={(rail) => setKeyboard(store, { rail })}
+        />
+      </SettingField>
+      <SwitchRow
+        label={t('keyboardSettings.folded')}
+        detail={t('keyboardSettings.foldedNote')}
+        checked={keyboard.folded}
+        onCheckedChange={(folded) => setKeyboard(store, { folded })}
+        className="border-b-0"
+      />
       <SwitchRow
         label={t('keyboardSettings.chordNames')}
         checked={keyboard.chordNames}

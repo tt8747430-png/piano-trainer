@@ -5,13 +5,21 @@ import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong } from '@/features/edit-piece'
 import { keyFromParam, keyParam, METERS, note, type Meter } from '@/shared/lib/music'
-import { KeyChoice, NameField, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import {
+  Fab,
+  KeyChoice,
+  NameField,
+  Segmented,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 
 /**
- * New song: its title, its key among the twelve notes and its meter, each a tap; then Make, which
+ * New song, the Songs page's floating button: its title, its key among the twelve notes and its meter, each a tap; then Make, which
  * opens it in the score editor, or Record beside it, which opens it on its takes.
  */
 export function NewSongSheet() {
@@ -30,9 +38,7 @@ export function NewSongSheet() {
   const untitled = songTitle(title) === null
   return (
     <Sheet>
-      <SheetTrigger render={<Button variant="surface" size="icon" aria-label={t('newSong')} />}>
-        <Plus aria-hidden />
-      </SheetTrigger>
+      <SheetTrigger render={<Fab label={t('newSong')} icon={Plus} />} />
       <SheetContent
         title={t('making.title')}
         footer={

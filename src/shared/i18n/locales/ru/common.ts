@@ -59,6 +59,7 @@ export const common: LocaleResources['common'] = {
     '11th': 'Ундецима',
     '13th': 'Терцдецима',
   },
+  moreActions: 'Ещё действия',
   stop: 'Стоп',
   rail: {
     octaveDown: 'Октава вниз',
@@ -76,6 +77,8 @@ export const common: LocaleResources['common'] = {
     pedal: 'Педаль',
     sound: 'Озвучивать MIDI-клавиатуру',
     chord: 'Сыгранный аккорд',
+    fold: 'Спрятать клавиши',
+    unfold: 'Клавиши',
   },
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
@@ -83,6 +86,11 @@ export const common: LocaleResources['common'] = {
     chordNames: 'Называть сыгранные аккорды',
     typing: 'Играть с клавиатуры компьютера',
     typingHint: 'Z X · октава',
+    dock: { label: 'Клавиши страницы', bottom: 'Внизу', top: 'Вверху' },
+    keyLength: { label: 'Длина клавиш', long: 'Длинные', short: 'Короткие' },
+    rail: { label: 'Над клавишами', full: 'Все настройки', compact: 'Только главное' },
+    folded: 'Прятать клавиши страницы',
+    foldedNote: 'Кнопка «Клавиши» вернёт их',
   },
   shortcuts: {
     title: 'Горячие клавиши',

@@ -154,6 +154,17 @@
       --keys-most: 26dvh;
     }
   }
+  /* The phone's tab bar, docked at the bottom (its border, its top padding, its 56px places, the
+     home indicator): what sits at the screen's foot stays above it. Beside a rail or a sidebar, nothing. */
+  :root {
+    --nav-bar: calc(1px + --spacing(1.5) + --spacing(14) + env(safe-area-inset-bottom));
+    @variant landscape-phone {
+      --nav-bar: 0px;
+    }
+    @variant lg {
+      --nav-bar: 0px;
+    }
+  }
   /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
   :root {
     --gutter: --spacing(4);
@@ -302,6 +313,10 @@
 @utility -mx-gutter {
   margin-inline: calc(-1 * var(--gutter));
 }
+/* What floats at the screen's side, in from its edge by a gutter. */
+@utility right-gutter {
+  right: max(var(--gutter), env(safe-area-inset-right));
+}
 /* A grid of cards that takes the width it is given: as many columns of at least 18rem as fit. */
 @utility grid-cards {
   display: grid;
@@ -364,6 +379,27 @@
 /* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
+}
+/* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
+@utility bottom-nav-bar {
+  bottom: var(--nav-bar);
+}
+@utility bottom-docked {
+  bottom: calc(var(--nav-bar) + var(--docked, 0px));
+}
+/* A page's foot padding, and the keys docked at its foot clear of it: `pb-docked-28`. */
+@utility pb-docked-* {
+  padding-bottom: calc(--spacing(--value(integer)) + var(--docked, 0px));
+}
+/* What is docked beside the rail or the sidebar starts where the screen does. */
+@utility left-rail {
+  left: calc(--spacing(20) + env(safe-area-inset-left));
+}
+@utility left-sidebar {
+  left: --spacing(64);
+}
+@utility left-sidebar-collapsed {
+  left: --spacing(18);
 }
 @utility bottom-safe {
   bottom: max(--spacing(4), env(safe-area-inset-bottom));

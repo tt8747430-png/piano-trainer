@@ -12,13 +12,19 @@ export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
+  KEY_DOCKS,
+  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   nextNamedKeys,
+  RAILS,
   SWIPES,
   zoomKeySize,
+  type KeyDock,
+  type KeyLength,
   type KeySize,
   type NamedKeys,
+  type Rail,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'

@@ -118,6 +118,18 @@ describe('Practice → Chord finder', () => {
     ])
   })
 
+  it('folds its keys away to a button that brings them back, remembered', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
+    await user.click(await screen.findByRole('button', { name: 'Hide the keys' }))
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
+    expect(settingsStore.getState().keyboard.folded).toBe(true)
+    expect(screen.getByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keys' }))
+    expect(keyboard()).toBeInTheDocument()
+    expect(settingsStore.getState().keyboard.folded).toBe(false)
+  })
+
   it('hides the keys a chord is in, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
@@ -196,16 +208,22 @@ describe('Practice → Chord finder', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chord-finder')
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    expect(screen.getByRole('button', { name: 'Clear' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'More actions' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Play' })).not.toBeInTheDocument()
     await user.click(key('C4'))
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
     await user.click(screen.getByRole('button', { name: 'Clear' }))
+    expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument()
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
     expect(screen.getByText('The chord you play is written here.')).toBeInTheDocument()
   })
 
   it('opens the chord in Chords, and the keys that hold it', async () => {
+    const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
-    const open = await screen.findByRole('link', { name: 'Open in Chords' })
+    await user.click(await screen.findByRole('button', { name: 'More actions' }))
+    const open = screen.getByRole('link', { name: 'Open in Chords' })
     expect(open.getAttribute('href')).toMatch(/^\/practice\/chords/)
     expect(screen.getByRole('region', { name: 'In these keys' })).toBeInTheDocument()
   })

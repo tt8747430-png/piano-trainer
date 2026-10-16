@@ -1,4 +1,8 @@
+import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setKeyboard } from '@/features/set-preference'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -7,14 +11,17 @@ import {
   type Midi,
 } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
-import { Pinned, type ShownKeys } from '@/shared/ui'
+import { Docked, Pinned, RailButton, RailGroup, type ShownKeys } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
  * A page's keyboard, pinned while the page scrolls (an explorer's, a tool's, a lesson's): `range` fills its width (by default the
  * middle octaves grown to hold the keys it opened on and the keys the app shows), and it keeps the
  * keys the app shows in view. A key a hand chooses (`selected`) never moves it: the keys hold still
- * under the finger (ADR 0009).
+ * under the finger (ADR 0009). It stays where the keyboard settings dock it, at the screen's foot over
+ * the tab bar or at its top under the screen's bar; folded from its rail, it is a button that brings
+ * it back, and stays folded on every page until then.
  */
 export function PinnedKeyboard({
   shown,
@@ -42,24 +49,44 @@ export function PinnedKeyboard({
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
+  const { t } = useTranslation('common')
+  const store = useSettingsStoreApi()
+  const { dock, folded } = useSettings(selectKeyboard)
   const { keys, marks } = shown
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
-  return (
-    // The rail's strip is as tall as its buttons' targets and draws only its lower part: the rest is
-    // already the gap over the keys, so the keyboard sits that much nearer what is above it.
-    <Pinned className={cn('-mt-2', className)}>
-      <LiveKeyboard
-        range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
-        inView={rangeOf(showing) ?? rangeOf(opened)}
-        marks={marks}
-        outlined={outlined}
-        selected={selected}
-        wrong={wrong}
-        keyPlays={keyPlays}
-        onKeyPress={onKeyPress}
-        spotlight
-      />
-    </Pinned>
+  const fold = (on: boolean) => setKeyboard(store, { folded: on })
+  const body = folded ? (
+    <div className={cn('flex', dock === 'bottom' ? 'justify-end' : 'justify-end pt-2')}>
+      <Button variant="soft" size="pill" onClick={() => fold(false)}>
+        <Piano aria-hidden />
+        {t('rail.unfold')}
+      </Button>
+    </div>
+  ) : (
+    <LiveKeyboard
+      range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
+      inView={rangeOf(showing) ?? rangeOf(opened)}
+      marks={marks}
+      outlined={outlined}
+      selected={selected}
+      wrong={wrong}
+      keyPlays={keyPlays}
+      onKeyPress={onKeyPress}
+      spotlight
+      railEnd={
+        <RailGroup>
+          <RailButton
+            label={t('rail.fold')}
+            icon={dock === 'bottom' ? ChevronDown : ChevronUp}
+            onClick={() => fold(true)}
+          />
+        </RailGroup>
+      }
+    />
   )
+  if (dock === 'bottom') return <Docked>{body}</Docked>
+  // The rail's strip is as tall as its buttons' targets and draws only its lower part: the rest is
+  // already the gap over the keys, so the keyboard sits that much nearer what is above it.
+  return <Pinned className={cn('-mt-2', className)}>{body}</Pinned>
 }

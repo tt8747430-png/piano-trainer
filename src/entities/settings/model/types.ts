@@ -1,15 +1,21 @@
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import {
   isOneOf,
+  KEY_DOCKS,
+  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
+  RAILS,
   SWIPES,
+  type KeyDock,
+  type KeyLength,
   type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
+  type Rail,
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -54,6 +60,13 @@ export interface KeyboardSettings {
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
+  /** Where a page's keys stay while it scrolls. */
+  readonly dock: KeyDock
+  /** A page's keys folded away to a button that brings them back. */
+  readonly folded: boolean
+  readonly keyLength: KeyLength
+  /** What the rail holds besides how the keys play. */
+  readonly rail: Rail
 }
 
 const SIDEBARS = ['open', 'collapsed'] as const
@@ -155,11 +168,18 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   namedKeys: 'c',
   chordNames: true,
   typing: finePointer,
+  dock: 'bottom',
+  folded: false,
+  keyLength: 'long',
+  rail: 'full',
 })
 
 export const isTheme = isOneOf(THEMES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
+export const isKeyDock = isOneOf(KEY_DOCKS)
+export const isKeyLength = isOneOf(KEY_LENGTHS)
+export const isRail = isOneOf(RAILS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

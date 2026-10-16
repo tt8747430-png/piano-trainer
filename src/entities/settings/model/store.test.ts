@@ -87,6 +87,10 @@ describe('createSettingsStore', () => {
         namedKeys: 'none',
         chordNames: false,
         typing: true,
+        dock: 'top',
+        folded: true,
+        keyLength: 'short',
+        rail: 'compact',
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
@@ -149,6 +153,10 @@ describe('createSettingsStore', () => {
       namedKeys: 'c',
       chordNames: true,
       typing: true,
+      dock: 'bottom',
+      folded: false,
+      keyLength: 'long',
+      rail: 'full',
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -160,6 +168,10 @@ describe('createSettingsStore', () => {
       namedKeys: 'all',
       chordNames: 'no',
       typing: 'yes',
+      dock: 'top',
+      folded: true,
+      keyLength: 'tiny',
+      rail: 'compact',
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
@@ -167,6 +179,10 @@ describe('createSettingsStore', () => {
       namedKeys: 'all',
       chordNames: true,
       typing: false,
+      dock: 'top',
+      folded: true,
+      keyLength: 'long',
+      rail: 'compact',
     })
   })
 

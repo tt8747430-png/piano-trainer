@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Eraser, SlidersHorizontal } from 'lucide-react'
+import { Eraser, Music2, Play, SlidersHorizontal, Square } from 'lucide-react'
 import { REMEMBERED_CHORDS } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
@@ -10,14 +10,15 @@ import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
   BackButton,
-  ButtonLink,
+  Fab,
+  FloatingActions,
   KeyChoice,
-  PlayLabel,
-  RoundButton,
   ScreenHeader,
   Sheet,
   SheetContent,
   SheetTrigger,
+  SpeedDial,
+  SpeedDialAction,
   SwitchRow,
   usePlayKey,
 } from '@/shared/ui'
@@ -79,11 +80,11 @@ function FinderSettings({
  * The Chord finder (ADR 0054), a tool of its own: a chord played on a MIDI keyboard or tapped on the
  * keys is named at once, as large as the page allows, in every reading it has, its keys marked by
  * degree; the staff writes it, spelled in the key chosen, and where the chords are remembered those
- * played before it; then the keys that hold it. Play hears it; Open in Chords builds it there. Its
- * settings are a sheet off its bar.
+ * played before it; then the keys that hold it. Play, floating in the thumb's reach, hears it; the
+ * dial beside it opens it in Chords or clears the keys. Its settings are a sheet off its bar.
  */
 export function ChordFinderPage() {
-  const { t } = useTranslation(['practice', 'music'])
+  const { t } = useTranslation(['practice', 'music', 'common'])
   const view = useSearch({ from: '/shell/practice/chord-finder' })
   const change = useViewChange<ChordFinderView>()
   const finder = useChordFinder(view)
@@ -101,12 +102,6 @@ export function ChordFinderPage() {
           <div className="flex gap-2">
             <MidiButton />
             <FinderSettings finder={finder} view={view} onKey={(key) => change({ key })} />
-            <RoundButton
-              label={t('practice:chordFinder.clear')}
-              icon={Eraser}
-              disabled={!finder.canClear}
-              onClick={finder.clear}
-            />
           </div>
         }
       />
@@ -123,7 +118,7 @@ export function ChordFinderPage() {
         }
       >
         <div className="flex min-w-0 flex-col gap-8">
-          <section aria-live="polite" className="flex min-h-48 flex-col gap-6">
+          <section aria-live="polite" className="flex min-h-36 flex-col gap-6">
             <ChordName
               finding={finding}
               keys={keys}
@@ -132,31 +127,6 @@ export function ChordFinderPage() {
               onReading={finder.setReading}
               slash={finder.slash}
             />
-            {keys.length > 0 ? (
-              <div className="flex flex-wrap gap-3">
-                <Button size="pill" onClick={play}>
-                  <PlayLabel playing={playback.playing === 'chord'}>{t('music:play')}</PlayLabel>
-                </Button>
-                {reading ? (
-                  <ButtonLink
-                    size="pill"
-                    variant="soft"
-                    render={
-                      <Link
-                        to="/practice/chords"
-                        search={{
-                          root: noteParam(reading.chord.root),
-                          ...partsParams(reading.parts),
-                          ...(reading.inversion ? { inversion: reading.inversion } : {}),
-                        }}
-                      />
-                    }
-                  >
-                    {t('practice:chordFinder.open')}
-                  </ButtonLink>
-                ) : null}
-              </div>
-            ) : null}
           </section>
           <ChordTrail
             chords={finder.staff}
@@ -171,6 +141,40 @@ export function ChordFinderPage() {
           </aside>
         ) : null}
       </div>
+      <FloatingActions>
+        {finder.canClear ? (
+          <SpeedDial>
+            {reading ? (
+              <SpeedDialAction
+                label={t('practice:chordFinder.open')}
+                icon={Music2}
+                render={
+                  <Link
+                    to="/practice/chords"
+                    search={{
+                      root: noteParam(reading.chord.root),
+                      ...partsParams(reading.parts),
+                      ...(reading.inversion ? { inversion: reading.inversion } : {}),
+                    }}
+                  />
+                }
+              />
+            ) : null}
+            <SpeedDialAction
+              label={t('practice:chordFinder.clear')}
+              icon={Eraser}
+              onClick={finder.clear}
+            />
+          </SpeedDial>
+        ) : null}
+        {keys.length > 0 ? (
+          <Fab
+            label={playback.playing === 'chord' ? t('common:stop') : t('music:play')}
+            icon={playback.playing === 'chord' ? Square : Play}
+            onClick={play}
+          />
+        ) : null}
+      </FloatingActions>
     </div>
   )
 }

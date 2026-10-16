@@ -8,7 +8,14 @@ import {
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PIANO_LAYOUT, spanOf, type KeySize, type NamedKeys, type Swipe } from '@/shared/lib'
+import {
+  PIANO_LAYOUT,
+  spanOf,
+  type KeyLength,
+  type KeySize,
+  type NamedKeys,
+  type Swipe,
+} from '@/shared/lib'
 import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
@@ -26,6 +33,8 @@ const MAX_WHITE_PX = 48
 const LARGE_WHITE_PX = 56
 /** A key is this many times as long as a white key is wide, on every screen: a piano's proportion… */
 const KEY_LENGTH = 4.4
+/** Short keys: about two thirds as long, leaving the page more of the screen. */
+const SHORT_KEY_LENGTH = 3
 /** …never shorter than this… */
 const MIN_KEYS_PX = 96
 /** …nor taller than this share of the screen's height (`--keys-most`: less on a phone on its side). */
@@ -59,6 +68,7 @@ export function PianoKeyboard({
   keySize = 'fit',
   swipe = 'scroll',
   namedKeys = 'c',
+  keyLength = 'long',
   letters,
   caption,
   keyPlays,
@@ -75,6 +85,8 @@ export function PianoKeyboard({
   swipe?: Swipe
   /** Which keys carry their note's name: every C (the default), every key, or none. */
   namedKeys?: NamedKeys
+  /** A piano's proportion (the default), or short keys, at most two thirds as tall. */
+  keyLength?: KeyLength
   /** The computer keyboard's letters on the keys it plays. */
   letters?: ReadonlyMap<Midi, string> | undefined
   /** What the rail says of the keys a hand holds (their chord): nothing while its `text` is empty. */
@@ -169,7 +181,10 @@ export function PianoKeyboard({
           {...pointers.group}
           className="relative shrink-0 touch-none bg-key-bed select-none"
           style={{
-            height: `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MOST_KEYS})`,
+            height:
+              keyLength === 'short'
+                ? `clamp(${MIN_KEYS_PX}px, calc(${white} * ${SHORT_KEY_LENGTH}), calc(${MOST_KEYS} * 2 / 3))`
+                : `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MOST_KEYS})`,
           }}
         >
           {PIANO_LAYOUT.keys.map((key) => {

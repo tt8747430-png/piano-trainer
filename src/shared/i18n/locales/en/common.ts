@@ -64,6 +64,8 @@ export const common = {
     '11th': '11th',
     '13th': '13th',
   },
+  // A screen's other actions, folded into one floating button.
+  moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons and its map.
@@ -79,6 +81,8 @@ export const common = {
     pedal: 'Pedal',
     sound: 'Play MIDI keys in the app',
     chord: 'Chord played',
+    fold: 'Hide the keys',
+    unfold: 'Keys',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
@@ -87,6 +91,11 @@ export const common = {
     chordNames: 'Name the chords played',
     typing: 'Play from the computer keyboard',
     typingHint: 'Z X · octave',
+    dock: { label: 'A page’s keys', bottom: 'At the bottom', top: 'At the top' },
+    keyLength: { label: 'Key length', long: 'Long', short: 'Short' },
+    rail: { label: 'Above the keys', full: 'Every setting', compact: 'Only the essentials' },
+    folded: 'Hide a page’s keys',
+    foldedNote: 'The Keys button brings them back',
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {
