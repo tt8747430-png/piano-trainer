@@ -252,8 +252,8 @@ describe('Practice → Chord finder', () => {
     await user.click(key('C4'))
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More actions' }))
-    await user.click(screen.getByRole('button', { name: 'Clear' }))
-    expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Clear the keys' }))
+    expect(screen.queryByRole('button', { name: 'Clear the keys' })).not.toBeInTheDocument()
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
     expect(
       within(screen.getByRole('region', { name: 'On the staff' })).queryAllByRole('listitem'),

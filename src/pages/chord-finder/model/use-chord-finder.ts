@@ -4,12 +4,13 @@ import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/
 import { useHeldKeys } from '@/features/connect-midi'
 import { rememberChords, setChordFinder } from '@/features/set-preference'
 import { IN_PLACE, keyListParam, readKeyList, toggled, useWakeLock } from '@/shared/lib'
-import { keyFromParam, type Key, type Midi } from '@/shared/lib/music'
+import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
 import {
   EMPTY_LOG,
   findChord,
   logKeys,
   namesChord,
+  readingAt,
   type ChordLog,
   type ChordSource,
   type Finding,
@@ -43,8 +44,14 @@ interface ChordFinder {
   readonly reading: number
   setReading(at: number): void
   tap(key: Midi): void
+  /** Whether there are keys down or tapped to clear. */
   readonly canClear: boolean
+  /** Lets the keys tapped go; the chords played stay remembered. */
   clear(): void
+  /** Whether there are chords played to forget. */
+  readonly canForget: boolean
+  /** Forgets the chords played, on the staff and on the device. */
+  forget(): void
 }
 
 const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...keys].sort((a, b) => a - b)
@@ -106,6 +113,10 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     setLog(EMPTY_LOG)
     setHeard(downKey)
   }
+  // The chord's root tapped again lets the whole chord go; any other key tapped comes or goes alone.
+  const finding = findChord(keys, musicKey)
+  const root =
+    finding.kind === 'chord' ? pitchClassOf(readingAt(finding.readings, at).chord.root) : null
   const now = held.size > 0 ? [last] : tapped.length > 0 ? [tapped] : []
 
   const write = (keysParam: string) =>
@@ -116,7 +127,7 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     tapped: new Set(tapped),
     source,
     musicKey,
-    finding: findChord(keys, musicKey),
+    finding,
     staff: remember ? log.chords : now,
     remember,
     setRemember: (on) => {
@@ -129,11 +140,18 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     setSlash: (on) => setChordFinder(store, { slash: on }),
     reading: at,
     setReading: (next) => setReading({ keys: shownKey, at: next }),
-    tap: (key) => write(keyListParam(toggled(tapped, key))),
-    canClear: keys.length > 0 || (remember && log.chords.length > 0),
-    clear: () => {
+    tap: (key) =>
+      write(
+        tapped.includes(key) && root !== null && pitchClass(key) === root
+          ? ''
+          : keyListParam(toggled(tapped, key)),
+      ),
+    canClear: tapped.length > 0,
+    clear: () => write(''),
+    canForget: remember && log.chords.length > 0,
+    forget: () => {
       forget()
-      write('')
+      rememberChords(store, [])
     },
   }
 }

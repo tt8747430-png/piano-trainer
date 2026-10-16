@@ -198,7 +198,8 @@ export const practice = {
     open: 'Open in Chords',
     // The keys that hold the chord found, its numeral in each.
     inKeys: 'In these keys',
-    clear: 'Clear',
+    clear: 'Clear the keys',
+    forget: 'Forget the chords played',
     // Where the chord shown comes from: keys held on the keyboard, the last chord, keys tapped.
     state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
     played: 'Played',

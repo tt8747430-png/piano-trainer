@@ -1,5 +1,14 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Eraser, History, KeyRound, Music2, Play, SlidersHorizontal, Square } from 'lucide-react'
+import {
+  Eraser,
+  History,
+  ListX,
+  KeyRound,
+  Music2,
+  Play,
+  SlidersHorizontal,
+  Square,
+} from 'lucide-react'
 import { REMEMBERED_CHORDS } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
@@ -154,7 +163,7 @@ export function ChordFinderPage() {
         </div>
       ) : null}
       <FloatingActions>
-        {finder.canClear ? (
+        {reading || finder.canClear || finder.canForget ? (
           <SpeedDial>
             {reading ? (
               <SpeedDialAction
@@ -172,11 +181,20 @@ export function ChordFinderPage() {
                 }
               />
             ) : null}
-            <SpeedDialAction
-              label={t('practice:chordFinder.clear')}
-              icon={Eraser}
-              onClick={finder.clear}
-            />
+            {finder.canClear ? (
+              <SpeedDialAction
+                label={t('practice:chordFinder.clear')}
+                icon={Eraser}
+                onClick={finder.clear}
+              />
+            ) : null}
+            {finder.canForget ? (
+              <SpeedDialAction
+                label={t('practice:chordFinder.forget')}
+                icon={ListX}
+                onClick={finder.forget}
+              />
+            ) : null}
           </SpeedDial>
         ) : null}
         {keys.length > 0 ? (
