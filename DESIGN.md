@@ -213,11 +213,6 @@ components:
     backgroundColor: '{colors.paper-card}'
     rounded: '{rounded.card}'
     padding: '20px'
-  continue-band:
-    backgroundColor: '{colors.wash-yellow}'
-    textColor: '{colors.ink}'
-    typography: '{typography.title-1}'
-    padding: '12px 20px'
   step-tile:
     backgroundColor: '{colors.wash-sand}'
     textColor: '{colors.sand-deep}'
@@ -349,7 +344,7 @@ Seven paints at one lightness (`paint-brick`, `paint-yellow`, `paint-grass`, `pa
 - **On keys, as the Player's hands:** right brick, left lilac, tune grass; the Player only.
 - **On the chrome, as the book's paints:** sand, yellow, grass, sky and lilac name places and kinds of step, always as
   their wash with their deep shade on it for the icon (the on-colour): the step tiles (chords sand, scale sky, study
-  grass, song yellow, progression lilac) and the Continue card's sky header band, which carries the ink title. By
+  grass, song yellow, progression lilac) and a course's tile. By
   night each wash is a dusk tint (`dusk-sand`, `dusk-yellow`, `dusk-grass`, `dusk-sky`, `dusk-lilac`) under its light
   shade (`sand-light`, `yellow-light`, `grass-light`, `sky-light`, `lilac-light`). Brick and teal are never on the
   chrome.
@@ -422,7 +417,7 @@ system, in rem, so it grows with the reader's own text size.
   (`ChordHeading`).
 - **Display** (Literata 600, 44px, 1.1): each screen's title from 1024px, the scale's name.
 - **Large Title** (Literata 600, 34px, 1.15): each screen's title on a phone.
-- **Title 1** (Literata 600, 28px, 1.2): the Continue card's band.
+- **Title 1** (Literata 600, 28px, 1.2): a large sheet's title.
 - **Title 2** (Literata 600, 22px, 1.3): level and section headings, sheet titles, the sidebar's name, a lesson's
   chord example, a chart's chord from 640px.
 - **Title 3** (Literata 600, 20px, 1.25): a settings group's title, a chart's chord on a phone.
@@ -486,7 +481,9 @@ How each screen uses its width:
 - **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
   alone on a phone), the keyboard pinned, then
   Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
-- **Learn:** the lessons, module by module, as row cards in a grid, each numbered in the order taught.
+- **Learn:** the journeys as tabs over the shown journey's chapters, each folding under its heading, its lessons a
+  zigzag of nodes; or the courses, shelf by shelf, as compact cards (icon tile, name, facts as pictures); Continue
+  floats. A lesson's bar floats too: sections ‹ n/m ›, the lessons either side at its ends, its tools.
 - **Practice:** seven rows, one for each place (Chords, Scales and keys, Progressions, Intervals, Accompaniment,
   Exercises, Quiz), each saying what is inside it in a line; Quiz and Exercises are titled grids of row cards.
 - **A subject's pages** (Chords' Build · Find, Scales' Scale · Chords · Key, Progressions' three, Accompaniment's
@@ -536,7 +533,7 @@ hairline.
 
 Plain, clear, one of them coloured.
 
-- **Shape:** 12px corners, Onest 600 16px; 44px tall, 48px large, a 56px pill (17px) for the Continue card's action.
+- **Shape:** 12px corners, Onest 600 16px; 44px tall, 48px large, a 56px pill (17px) for a primary action that stands alone.
 - **Primary:** honey, borderless, ink label; hover darkens to 95%, press nudges down 1px.
 - **Soft / Outline:** card paper in the 1px control line, ink label: the second action (Arpeggio, the Player's tempo
   with its gauge, Again).
@@ -596,9 +593,8 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
 
 - **Card** (card paper, 14px, the 1px soft line): grouped rows, the practice card, a settings group (its title on a
   sand band over a 1px line).
-- **Continue card:** a card whose Literata title sits on a header band in its step's wash (a song yellow, a chord
-  step sand, a scale sky: the same paint as its tile, `STEP_PAINT` in `entities/path`) over a 1px line, then the step's detail
-  and the honey pill Continue (beside it from 1024px).
+- **Continue** (ADR 0057): one honey button floating over Learn in the thumb's reach, 56px and round-ended: a
+  round tile with its step's icon (read or play), then Continue over the step's title in Literata, truncated.
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
 - **Row link** (64px): a 48px tile in its paint's wash with a 20px icon in its deep shade, or its number in a
