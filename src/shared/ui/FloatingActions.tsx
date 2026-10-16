@@ -1,4 +1,4 @@
-import { Ellipsis, type LucideIcon } from 'lucide-react'
+import { Ellipsis, Play, Square, type LucideIcon } from 'lucide-react'
 import {
   createContext,
   useContext,
@@ -44,6 +44,53 @@ export function Fab({
   return (
     <Button size="icon" aria-label={label} title={label} className={cn(FAB, className)} {...props}>
       <Icon aria-hidden />
+    </Button>
+  )
+}
+
+/**
+ * A screen's one Play as its main floating button, named by what it plays, Stop while it sounds; the
+ * screen's Enter plays it (`usePlayKey`).
+ */
+export function PlayFab({
+  label,
+  playing,
+  onClick,
+}: {
+  label: string
+  playing: boolean
+  onClick: () => void
+}) {
+  const { t } = useTranslation('common')
+  return (
+    <Fab
+      label={playing ? t('stop') : label}
+      icon={playing ? Square : Play}
+      aria-pressed={playing}
+      onClick={onClick}
+    />
+  )
+}
+
+/** A second action beside the main one, always in sight: its words and its icon on a floating pill. */
+export function FabPill({
+  label,
+  icon: Icon,
+  className,
+  ...props
+}: { label: string; icon?: LucideIcon } & Omit<
+  ComponentProps<typeof Button>,
+  'children' | 'size' | 'variant'
+>) {
+  return (
+    <Button
+      variant="surface"
+      size="lg"
+      className={cn('rounded-full shadow-md shadow-foreground/10', className)}
+      {...props}
+    >
+      {label}
+      {Icon ? <Icon data-icon="inline-end" aria-hidden /> : null}
     </Button>
   )
 }

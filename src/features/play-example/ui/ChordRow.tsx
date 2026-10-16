@@ -14,6 +14,8 @@ import {
   ChordButton,
   FitWidth,
   usePositionName,
+  FloatingActions,
+  PlayFab,
   PlayLabel,
   type ShownKeys,
   unmarked,
@@ -174,6 +176,13 @@ export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
   const { t } = useTranslation('music')
   const { playing, playRow } = useRow()
   usePlayKey(playRow, variant === 'default')
+  // The tool's row plays from a floating button; beside other examples, from the row.
+  if (variant === 'default')
+    return (
+      <FloatingActions>
+        <PlayFab label={t('play')} playing={playing === 'row'} onClick={playRow} />
+      </FloatingActions>
+    )
   return (
     <Button variant={variant} size="pill" className="self-start" onClick={playRow}>
       <PlayLabel playing={playing === 'row'}>{t('play')}</PlayLabel>

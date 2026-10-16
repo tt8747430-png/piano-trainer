@@ -15,7 +15,14 @@ export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
 export { FitWidth } from './FitWidth'
-export { Fab, FloatingActions, SpeedDial, SpeedDialAction } from './FloatingActions'
+export {
+  Fab,
+  FabPill,
+  FloatingActions,
+  PlayFab,
+  SpeedDial,
+  SpeedDialAction,
+} from './FloatingActions'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
 export { MultiDropdown } from './MultiDropdown'
