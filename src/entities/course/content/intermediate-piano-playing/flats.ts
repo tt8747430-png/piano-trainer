@@ -9,8 +9,8 @@ const flats: Lesson = {
   id: 'flats',
   title: { en: 'Flats', ru: 'Бемоли' },
   summary: {
-    en: 'A flat lowers a note a semitone. F major needs one, B♭, and its fingering puts the 4th finger on it.',
-    ru: 'Бемоль понижает звук на полутон. Фа мажору нужен один бемоль, си-бемоль, и в аппликатуре на него ложится четвёртый палец.',
+    en: 'Play in F major, its B♭ under the 4th finger.',
+    ru: 'Играть в фа мажоре, си-бемоль — четвёртым пальцем.',
   },
   sections: [
     {
@@ -20,8 +20,8 @@ const flats: Lesson = {
           kind: 'text',
           lead: { en: 'Flat (♭):', ru: 'Бемоль (♭):' },
           text: {
-            en: 'lowers a note by a semitone, to the very next key on the left. B♭ is the black key just below B.',
-            ru: 'понижает звук на полутон, к ближайшей клавише слева. Си-бемоль — чёрная клавиша сразу под си.',
+            en: 'lowers a note a semitone, to the next key on the left. B♭ is the black key just below B.',
+            ru: 'понижает звук на полутон, к соседней клавише слева. Си-бемоль — чёрная клавиша сразу под си.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'B4/2 Bb4/2 E4/2 Eb4/2' },
@@ -33,8 +33,8 @@ const flats: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A major scale has a semitone between its 3rd and 4th notes. From F the 3rd is A, so the 4th must be B♭.',
-            ru: 'В мажорной гамме между третьей и четвёртой ступенями полутон. От фа третья ступень — ля, значит, четвёртая должна быть си-бемоль.',
+            en: 'A major scale has a semitone between its 3rd and 4th notes. From F the 3rd is A, so the 4th is B♭.',
+            ru: 'В мажорной гамме между третьей и четвёртой ступенями — полутон. От фа третья — ля, значит, четвёртая — си-бемоль.',
           },
         },
         { kind: 'scale', root: note('F'), scale: 'major' },
@@ -46,8 +46,8 @@ const flats: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'F major writes one flat, on the B line, at the start of every line. Every B you read is then B♭.',
-            ru: 'В фа мажоре в начале каждой строки стоит один бемоль на линейке си. Каждое си, которое вы читаете, — си-бемоль.',
+            en: 'F major writes one flat, on the B line, at the start of every line. Every B is then B♭.',
+            ru: 'В фа мажоре в начале каждой строки стоит бемоль на линейке си. Каждое си — си-бемоль.',
           },
         },
         {
@@ -62,17 +62,17 @@ const flats: Lesson = {
       heading: { en: 'Fingering F major', ru: 'Аппликатура фа мажора' },
       blocks: [
         {
+          kind: 'text',
+          text: {
+            en: 'The right hand plays 1-2-3-4, 1-2-3-4: finger 4 takes B♭, the thumb passes under onto C. The left plays 5-4-3-2-1, 3-2-1.',
+            ru: 'Правая рука: 1-2-3-4, 1-2-3-4. Четвёртый палец берёт си-бемоль, первый подкладывается на до. Левая: 5-4-3-2-1, 3-2-1.',
+          },
+        },
+        {
           kind: 'notes',
           clef: 'treble',
           notes: 'F4/8 G4/8 A4/8 Bb4/8 C5/8 D5/8 E5/8 F5/8 F5/1',
           key: F_MAJOR,
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'The right hand plays 1-2-3-4, 1-2-3-4. The 4th finger takes B♭ and the thumb passes under onto C. The left hand plays 5-4-3-2-1, 3-2-1.',
-            ru: 'Правая рука играет 1-2-3-4, 1-2-3-4. Четвёртый палец берёт си-бемоль, а первый подкладывается на до. Левая играет 5-4-3-2-1, 3-2-1.',
-          },
         },
       ],
     },
@@ -86,7 +86,6 @@ const flats: Lesson = {
             ru: 'Главные аккорды фа мажора — F, B♭ и C. Си-бемоль мажор строится от самого бемоля: си-бемоль, ре, фа.',
           },
         },
-        { kind: 'chords', symbols: ['F', 'B♭', 'C'], apart: true },
         { kind: 'progression', numerals: 'I IV V7 I', key: F_MAJOR },
       ],
     },
@@ -96,11 +95,10 @@ const flats: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each key a 5th lower adds one flat. B♭ major has B♭ and E♭. Flats arrive in the order B E A D G C F.',
-            ru: 'Каждая тональность квинтой ниже добавляет один бемоль. В си-бемоль мажоре си-бемоль и ми-бемоль. Бемоли появляются в порядке си, ми, ля, ре, соль, до, фа.',
+            en: 'Each key a 5th lower adds one flat. B♭ major has B♭ and E♭. Flats come in the order B E A D G C F.',
+            ru: 'Каждая тональность квинтой ниже добавляет бемоль. В си-бемоль мажоре си-бемоль и ми-бемоль. Порядок бемолей: си, ми, ля, ре, соль, до, фа.',
           },
         },
-        { kind: 'scale', root: note('B', -1), scale: 'major' },
         {
           kind: 'notes',
           clef: 'treble',
@@ -112,11 +110,6 @@ const flats: Lesson = {
     {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
-        {
-          kind: 'question',
-          ask: { en: 'Play B♭.', ru: 'Сыграйте си-бемоль.' },
-          answer: { notes: ['Bb'] },
-        },
         {
           kind: 'question',
           ask: {

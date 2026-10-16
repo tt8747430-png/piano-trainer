@@ -5,102 +5,66 @@ const firstSteps: Lesson = {
   id: 'first-steps',
   title: { en: 'First steps', ru: 'Первые шаги' },
   summary: {
-    en: 'Sit well at the keys, shape a round hand, learn the finger numbers, then find middle C and the C position.',
-    ru: 'Правильная посадка, округлая рука, номера пальцев, до первой октавы и позиция до.',
+    en: 'Sit well, number your fingers and find the C position.',
+    ru: 'Сесть за инструмент, знать номера пальцев и найти позицию до.',
   },
   sections: [
     {
-      heading: { en: 'Sit at the piano', ru: 'Посадка за инструментом' },
+      heading: { en: 'Sit and shape the hand', ru: 'Посадка и рука' },
       blocks: [
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Sit on the front half of the bench, facing the middle.',
-              ru: 'Сядьте на переднюю половину банкетки напротив середины клавиатуры.',
+              en: 'Sit on the front half of the bench, facing the middle, feet flat.',
+              ru: 'Сядьте на край банкетки напротив середины, стопы на полу.',
             },
             {
               en: 'Keep the forearms level with the keys.',
-              ru: 'Предплечья на уровне клавиш.',
+              ru: 'Предплечья — на уровне клавиш.',
             },
             {
-              en: 'Rest both feet flat on the floor. Let the shoulders hang loose.',
-              ru: 'Обе стопы стоят на полу. Плечи свободны.',
+              en: 'Curve the fingers as if holding a ball. Play on the fingertips.',
+              ru: 'Округлите пальцы, будто держите мяч. Играйте кончиками.',
             },
           ],
         },
         {
           kind: 'question',
           ask: {
-            en: 'Sitting straight, play the C nearest the middle of the keyboard.',
-            ru: 'Сидя ровно, сыграйте до, ближайшее к середине клавиатуры.',
-          },
-          answer: { notes: ['C'] },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Numbers for the fingers', ru: 'Номера пальцев' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'Finger numbers', ru: 'Номера пальцев' },
-          text: {
-            en: 'count from the thumb: 1 thumb, 2 index, 3 middle, 4 ring, 5 little finger. Both hands use the same numbers.',
-            ru: 'считаются от большого: 1 большой, 2 указательный, 3 средний, 4 безымянный, 5 мизинец. В обеих руках номера одни и те же.',
-          },
-        },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'A small number over a note is the finger that plays it.',
-            ru: 'Маленькая цифра над нотой — палец, которым её играют.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'A round hand', ru: 'Округлая рука' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A round hand', ru: 'Округлая рука' },
-          text: {
-            en: 'curves its fingers as if holding a ball. Play on the fingertips, the thumb on its side, the wrist level with the hand.',
-            ru: 'держит пальцы так, будто в ладони мяч. Играйте кончиками пальцев, большой палец — на боковой стороне, запястье на уровне кисти.',
-          },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'With a round hand, play C, E and G together with fingers 1, 3 and 5.',
-            ru: 'Округлой рукой сыграйте вместе до, ми и соль пальцами 1, 3 и 5.',
+            en: 'With a round hand, play C, E and G together.',
+            ru: 'Округлой рукой сыграйте вместе до, ми и соль.',
           },
           answer: { chord: 'C' },
         },
       ],
     },
     {
-      heading: { en: 'Find middle C', ru: 'Найдите до первой октавы' },
+      heading: { en: 'Middle C', ru: 'До первой октавы' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Middle C', ru: 'До первой октавы' },
           text: {
             en: 'is the C nearest the middle of the keyboard. Every C sits just left of a pair of black keys.',
-            ru: '— до, ближайшее к середине клавиатуры. Каждое до стоит слева от пары чёрных клавиш.',
+            ru: '— до у середины клавиатуры. Каждое до стоит слева от пары чёрных клавиш.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/1' },
+      ],
+    },
+    {
+      heading: { en: 'Finger numbers', ru: 'Номера пальцев' },
+      blocks: [
         {
-          kind: 'question',
-          ask: {
-            en: 'Find a pair of black keys and play the white key to its left.',
-            ru: 'Найдите две чёрные клавиши рядом и сыграйте белую слева от них.',
+          kind: 'text',
+          lead: { en: 'Finger numbers', ru: 'Номера пальцев' },
+          text: {
+            en: 'count from the thumb, 1, to the little finger, 5. Both hands use the same numbers.',
+            ru: 'идут от большого (1) к мизинцу (5). В обеих руках они одинаковы.',
           },
-          answer: { notes: ['C'] },
         },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
       ],
     },
     {
@@ -110,39 +74,25 @@ const firstSteps: Lesson = {
           kind: 'text',
           lead: { en: 'The C position', ru: 'Позиция до' },
           text: {
-            en: 'puts the right thumb on middle C and one finger on each white key up to G.',
-            ru: '— большой палец правой руки на до первой октавы, по пальцу на каждой белой клавише до соль.',
+            en: 'puts the right thumb on middle C and one finger on each white key up to G. The hand stays still.',
+            ru: '— большой палец правой руки на до, по пальцу на каждой белой клавише до соль. Рука не сдвигается.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Each finger keeps its own key. The hand stays still.',
-            ru: 'У каждого пальца своя клавиша. Рука не сдвигается.',
-          },
-        },
       ],
     },
     {
-      heading: { en: 'Count as you play', ru: 'Считайте вслух' },
+      heading: { en: 'Count the beat', ru: 'Считайте доли' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A beat', ru: 'Доля' },
           text: {
             en: 'is the steady count under music. A quarter note lasts one beat, a half note two, a whole note four.',
-            ru: '— ровный счёт, на котором держится музыка. Четверть длится одну долю, половинная — две, целая — четыре.',
+            ru: '— ровный счёт музыки. Четверть длится долю, половинная — две, целая — четыре.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/2 G4/2 G4 F4 E4 D4 C4/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Count “1 2 3 4” aloud in every bar.',
-            ru: 'В каждом такте считайте вслух: «раз, два, три, четыре».',
-          },
-        },
       ],
     },
     {
@@ -159,18 +109,10 @@ const firstSteps: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the key under finger 3 in the C position.',
-            ru: 'Сыграйте клавишу под третьим пальцем в позиции до.',
+            en: 'Play the key under finger 3.',
+            ru: 'Сыграйте клавишу под третьим пальцем.',
           },
           answer: { notes: ['E'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the keys under fingers 2 and 4 together.',
-            ru: 'Сыграйте вместе клавиши под вторым и четвёртым пальцами.',
-          },
-          answer: { notes: ['D', 'F'] },
         },
         {
           kind: 'link',

@@ -5,8 +5,8 @@ const newNoteValues: Lesson = {
   id: 'new-note-values',
   title: { en: 'New note values', ru: 'Новые длительности' },
   summary: {
-    en: 'Split the beat into eighth notes counted 1 and 2 and, read them beamed, and hold the dotted half for three beats.',
-    ru: 'Делите долю на восьмые со счётом «раз-и, два-и», читайте их под ребром и выдерживайте половинную с точкой три доли.',
+    en: 'Count eighth notes and hold dotted halves for three beats.',
+    ru: 'Считать восьмые и выдерживать половинные с точкой три доли.',
   },
   sections: [
     {
@@ -17,7 +17,7 @@ const newNoteValues: Lesson = {
           lead: { en: 'An eighth note', ru: 'Восьмая нота' },
           text: {
             en: 'lasts half a beat, so two fill one beat. Alone it has a flag on its stem.',
-            ru: 'длится половину доли, поэтому две восьмые заполняют одну долю. Одиночная восьмая пишется с флажком.',
+            ru: 'длится полдоли: две восьмые заполняют долю. Одиночная восьмая пишется с флажком.',
           },
         },
         {
@@ -28,23 +28,16 @@ const newNoteValues: Lesson = {
       ],
     },
     {
-      heading: { en: 'Counting 1 and', ru: 'Счёт «раз-и»' },
+      heading: { en: 'Count 1 and', ru: 'Счёт «раз-и»' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Count eighths with “and” between the numbers: 1 and 2 and 3 and 4 and. A note on “and” falls halfway between beats.',
-            ru: 'Восьмые считайте с «и» между числами: «раз-и, два-и, три-и, четыре-и». Нота на «и» звучит ровно между долями.',
+            en: 'Count eighths with “and” between the numbers: 1 and 2 and. A note on “and” falls halfway between beats.',
+            ru: 'Восьмые считайте с «и» между числами: «раз-и, два-и». Нота на «и» звучит ровно между долями.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 C4/8 D4/8 E4 E4/8 F4/8 G4/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Say “and” even under a quarter note, to keep the beat even.',
-            ru: 'Говорите «и» даже под четвертью, чтобы доли оставались ровными.',
-          },
-        },
       ],
     },
     {
@@ -54,8 +47,8 @@ const newNoteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A beam', ru: 'Ребро' },
           text: {
-            en: 'joins eighth notes by their stems in place of flags. It groups them so each beat shows at a glance.',
-            ru: 'соединяет штили восьмых вместо флажков. Оно группирует их так, чтобы каждая доля была видна сразу.',
+            en: 'joins eighth notes by their stems in place of flags, so each beat shows at a glance.',
+            ru: 'соединяет штили восьмых вместо флажков, чтобы каждая доля была видна сразу.',
           },
         },
         {
@@ -66,41 +59,21 @@ const newNoteValues: Lesson = {
       ],
     },
     {
-      heading: { en: 'The dot', ru: 'Точка' },
+      heading: { en: 'The dotted half', ru: 'Половинная с точкой' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A dot', ru: 'Точка' },
           text: {
-            en: 'after a note adds half its value again. A half note lasts two beats, so a dotted half lasts three.',
-            ru: 'после ноты увеличивает её длительность на половину. Половинная длится две доли, значит, половинная с точкой — три.',
+            en: 'after a note adds half its value again, so a dotted half lasts three beats. Count 1 2 3 on it, then play on 4.',
+            ru: 'после ноты добавляет половину её длительности: половинная с точкой длится три доли. Считайте «раз, два, три», играйте на «четыре».',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2. D4 E4/2. C4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Count 1 2 3 on the dotted half, then play on 4.',
-            ru: 'Считайте «раз, два, три» на половинной с точкой и играйте на «четыре».',
-          },
-        },
       ],
     },
     {
-      heading: { en: 'Dotted halves in a tune', ru: 'Половинные с точкой в мелодии' },
-      blocks: [
-        { kind: 'notes', clef: 'treble', notes: 'E4/2. G4 A4/2. B4 C5/1' },
-        {
-          kind: 'text',
-          text: {
-            en: 'Hold each dotted half through three counts. The quarter on 4 leads on to the next bar.',
-            ru: 'Держите каждую половинную с точкой три счёта. Четверть на «четыре» ведёт в следующий такт.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'All the values together', ru: 'Все длительности вместе' },
+      heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
           kind: 'notes',
@@ -110,22 +83,11 @@ const newNoteValues: Lesson = {
         {
           kind: 'steps',
           steps: [
-            {
-              en: 'Count the line aloud before you play.',
-              ru: 'Просчитайте строку вслух перед игрой.',
-            },
-            {
-              en: 'Clap it, saying the counts.',
-              ru: 'Прохлопайте её, проговаривая счёт.',
-            },
+            { en: 'Count the line aloud.', ru: 'Просчитайте строку вслух.' },
+            { en: 'Clap it, saying the counts.', ru: 'Прохлопайте её, проговаривая счёт.' },
             { en: 'Play it slowly, still counting.', ru: 'Сыграйте медленно, продолжая считать.' },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
         {
           kind: 'question',
           ask: {
@@ -137,18 +99,10 @@ const newNoteValues: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play E as a dotted half, counting three, then G on 4.',
-            ru: 'Сыграйте ми половинной с точкой на три счёта, затем соль на «четыре».',
+            en: 'Play E as a dotted half, then G on 4.',
+            ru: 'Сыграйте ми половинной с точкой, затем соль на «четыре».',
           },
           answer: { notes: ['E', 'G'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play G, F, E, D as eighths down the staff.',
-            ru: 'Сыграйте соль, фа, ми, ре восьмыми вниз.',
-          },
-          answer: { notes: ['G', 'F', 'E', 'D'] },
         },
         {
           kind: 'link',

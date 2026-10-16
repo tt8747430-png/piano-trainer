@@ -5,24 +5,10 @@ const quarterRestAndTie: Lesson = {
   id: 'quarter-rest-and-tie',
   title: { en: 'Quarter rest and tie', ru: 'Четвертная пауза и лига' },
   summary: {
-    en: 'Count silence as you count notes, with the quarter rest, and hold a note across the barline with a tie.',
-    ru: 'Считайте тишину так же, как ноты, с четвертной паузой, и продлевайте ноту через тактовую черту лигой.',
+    en: 'Count quarter rests and hold tied notes across the barline.',
+    ru: 'Считать четвертные паузы и держать ноты под лигой через такт.',
   },
   sections: [
-    {
-      heading: { en: 'Silence counts', ru: 'Тишина тоже считается' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A rest', ru: 'Пауза' },
-          text: {
-            en: 'is a stretch of silence, counted like a note. Lift your hand from the key for it.',
-            ru: '— отрезок тишины, который считают так же, как ноту. На паузе снимите руку с клавиши.',
-          },
-        },
-        { kind: 'notes', clef: 'treble', notes: 'C4 r/4 E4 r/4 G4 r/4 G4/2' },
-      ],
-    },
     {
       heading: { en: 'The quarter rest', ru: 'Четвертная пауза' },
       blocks: [
@@ -30,18 +16,11 @@ const quarterRestAndTie: Lesson = {
           kind: 'text',
           lead: { en: 'A quarter rest', ru: 'Четвертная пауза' },
           text: {
-            en: 'lasts one beat, as long as a quarter note. Its sign is an upright zigzag.',
-            ru: 'длится одну долю, как четвертная нота. Её знак похож на вертикальный зигзаг.',
+            en: 'is one beat of silence, counted like a note. Lift the hand from the key and say the count aloud.',
+            ru: '— доля тишины, её считают, как ноту. Снимите руку с клавиши и произнесите счёт вслух.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4 r/4 G4 F4 E4 r/4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Say the count of a rest aloud, so it lasts its full beat.',
-            ru: 'Произносите счёт паузы вслух, чтобы она длилась целую долю.',
-          },
-        },
       ],
     },
     {
@@ -51,7 +30,7 @@ const quarterRestAndTie: Lesson = {
           kind: 'text',
           text: {
             en: 'A rest can fall on any beat, even beat 1. Count it and come in on the next beat.',
-            ru: 'Пауза может стоять на любой доле, даже на первой. Отсчитайте её и вступайте на следующую.',
+            ru: 'Пауза может стоять на любой доле, даже на первой. Отсчитайте её и вступайте на следующей.',
           },
         },
         {
@@ -68,18 +47,11 @@ const quarterRestAndTie: Lesson = {
           kind: 'text',
           lead: { en: 'A tie', ru: 'Лига' },
           text: {
-            en: 'is a curve joining two notes of the same pitch. Play the first and hold it for both values.',
-            ru: '— дуга между двумя нотами одной высоты. Сыграйте первую и держите её на обе длительности.',
+            en: 'is a curve joining two notes of the same pitch. Play once and hold for both: this G lasts four beats.',
+            ru: '— дуга между двумя нотами одной высоты. Сыграйте один раз и держите обе: эта соль длится четыре доли.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4/2~ G4/2 E4 C4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'The G sounds once and lasts four beats.',
-            ru: 'Соль звучит один раз и длится четыре доли.',
-          },
-        },
       ],
     },
     {
@@ -88,22 +60,15 @@ const quarterRestAndTie: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'One note cannot cross a barline, but a tie can. It carries the sound into the next bar.',
-            ru: 'Одна нота не может пересечь тактовую черту, а лига может. Она переносит звук в следующий такт.',
+            en: 'A tie carries a note into the next bar. Count 1 2 3 4, (1) 2 3 4: the bracketed beat is held.',
+            ru: 'Лига переносит звук в следующий такт. Считайте «раз, два, три, четыре, (раз), два, три, четыре»: доля в скобках выдерживается.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4~ F4 E4 D4 C4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Count it 1 2 3 4, (1) 2 3 4: the bracketed beat is held, not played.',
-            ru: 'Считайте «раз, два, три, четыре, (раз), два, три, четыре»: доля в скобках выдерживается, а не играется.',
-          },
-        },
       ],
     },
     {
-      heading: { en: 'Counting held notes', ru: 'Счёт долгих нот' },
+      heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         { kind: 'notes', clef: 'treble', notes: 'C4/2 E4/2~ E4 r/4 G4/2~ G4/2. r/4' },
         {
@@ -114,51 +79,22 @@ const quarterRestAndTie: Lesson = {
               en: 'Hold a tied note through all its beats.',
               ru: 'Держите залигованную ноту на все её доли.',
             },
-            {
-              en: 'Lift exactly on the rest that follows.',
-              ru: 'Снимайте руку точно на следующей паузе.',
-            },
+            { en: 'Lift exactly on the rest.', ru: 'Снимайте руку точно на паузе.' },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Rests and ties in 3/4', ru: 'Паузы и лиги в 3/4' },
-      blocks: [
-        { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'r/4 E4 G4~ G4 A4 G4 F4/2 D4 C4/2.' },
-        {
-          kind: 'text',
-          text: {
-            en: 'The line begins with a rest and ties G over the first barline. Count it in threes.',
-            ru: 'Строка начинается с паузы, а соль залигована через первую тактовую черту. Считайте на три.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
         {
           kind: 'question',
           ask: {
-            en: 'Play C, rest a beat, then play E: count 1 2 3.',
-            ru: 'Сыграйте до, выдержите паузу на долю и сыграйте ми: «раз, два, три».',
+            en: 'Play C, rest a beat, then play E.',
+            ru: 'Сыграйте до, выдержите паузу на долю и сыграйте ми.',
           },
           answer: { notes: ['C', 'E'], rising: true },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play the tied G once and hold it four beats.',
-            ru: 'Сыграйте залигованную соль один раз и держите четыре доли.',
-          },
-          answer: { notes: ['G'] },
-        },
-        {
-          kind: 'question',
-          ask: {
             en: 'Play C, D, E, then F tied across the barline.',
-            ru: 'Сыграйте до, ре, ми, затем фа, залигованную через тактовую черту.',
+            ru: 'Сыграйте до, ре, ми, затем фа под лигой через тактовую черту.',
           },
           answer: { notes: ['C', 'D', 'E', 'F'], rising: true },
         },
@@ -169,11 +105,6 @@ const quarterRestAndTie: Lesson = {
             ru: 'Выдерживайте долгие ноты в песне «Долина Красной реки»',
           },
           target: { opens: 'piece', piece: 'red-river-valley' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Count Auld Lang Syne', ru: 'Считайте доли в песне «Старая дружба»' },
-          target: { opens: 'piece', piece: 'auld-lang-syne' },
         },
       ],
     },

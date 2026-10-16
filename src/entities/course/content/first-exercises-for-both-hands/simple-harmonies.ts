@@ -8,8 +8,8 @@ const simpleHarmonies: Lesson = {
   id: 'simple-harmonies',
   title: { en: 'Simple harmonies', ru: 'Простая гармонизация' },
   summary: {
-    en: 'A tune in the right hand over the left hand’s intervals and triads, on the chords I, IV and V.',
-    ru: 'Мелодия в правой руке над интервалами и трезвучиями в левой, на аккордах I, IV и V.',
+    en: 'Play a tune over I, IV and V in the left hand.',
+    ru: 'Играть мелодию над I, IV и V в левой руке.',
   },
   sections: [
     {
@@ -18,7 +18,7 @@ const simpleHarmonies: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand holds C and G, fingers 5 and 1. The right hand plays over it, E, D, C.',
+            en: 'The left hand holds C and G, fingers 5 and 1. The right plays E, D, C over it.',
             ru: 'Левая рука держит до и соль пальцами 5 и 1. Правая играет над ними ми, ре, до.',
           },
         },
@@ -52,8 +52,8 @@ const simpleHarmonies: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Two notes in the left hand can stand for a chord. The thumb moves up to A for IV and the little finger down to B for V.',
-            ru: 'Два звука в левой руке могут обозначать аккорд. Для IV большой палец переходит на ля, для V мизинец — на си.',
+            en: 'Two left-hand notes can stand for a chord. The thumb moves up to A for IV, the little finger down to B for V.',
+            ru: 'Два звука левой руки могут заменить аккорд. Для IV большой палец переходит на ля, для V мизинец — на си.',
           },
         },
         {
@@ -74,8 +74,8 @@ const simpleHarmonies: Lesson = {
           kind: 'text',
           lead: { en: 'A triad', ru: 'Трезвучие' },
           text: {
-            en: 'is a chord of three notes. Keep C at the bottom for C and F, then B for G7.',
-            ru: '— аккорд из трёх звуков. Для C и F внизу остаётся до, для G7 — си.',
+            en: 'is a chord of three notes. Keep C at the bottom for C and F, B for G7. Fingers 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
+            ru: '— аккорд из трёх звуков. Для C и F внизу до, для G7 — си. Пальцы: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
           },
         },
         {
@@ -86,13 +86,6 @@ const simpleHarmonies: Lesson = {
             { symbol: 'G7', hands: 'B2 F3 G3 | D4' },
             { symbol: 'C', hands: 'C3 E3 G3 | C4' },
           ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'Left-hand fingers: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
-            ru: 'Пальцы левой руки: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
-          },
         },
       ],
     },

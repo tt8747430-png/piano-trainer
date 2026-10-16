@@ -7,8 +7,8 @@ const coordinationBasics: Lesson = {
   id: 'coordination-basics',
   title: { en: 'Coordination basics', ru: 'Основы координации' },
   summary: {
-    en: 'Five-finger patterns with both hands together, the same way and in mirror, then in other keys.',
-    ru: 'Упражнения в позиции пяти пальцев двумя руками вместе: в одну сторону и зеркально, затем в других тональностях.',
+    en: 'Play five-finger patterns with both hands, together and in mirror.',
+    ru: 'Играть позицию пяти пальцев двумя руками, вместе и зеркально.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const coordinationBasics: Lesson = {
           kind: 'text',
           lead: { en: 'Parallel motion', ru: 'Параллельное движение' },
           text: {
-            en: 'moves both hands the same way, an octave apart. The right hand plays 1 2 3 4 5 while the left plays 5 4 3 2 1.',
-            ru: '— обе руки идут в одну сторону на расстоянии октавы. Правая играет 1 2 3 4 5, а левая — 5 4 3 2 1.',
+            en: 'moves both hands the same way, an octave apart. The right plays 1 2 3 4 5 while the left plays 5 4 3 2 1.',
+            ru: '— обе руки идут в одну сторону на октаву друг от друга. Правая играет 1 2 3 4 5, левая — 5 4 3 2 1.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
@@ -42,7 +42,7 @@ const coordinationBasics: Lesson = {
           lead: { en: 'Contrary motion', ru: 'Противоположное движение' },
           text: {
             en: 'moves the hands apart and back. Both start on the thumb, so both use the same finger at each moment.',
-            ru: '— руки расходятся и сходятся. Обе начинают с большого пальца, поэтому в каждый момент играют одинаковыми пальцами.',
+            ru: '— руки расходятся и сходятся. Обе начинают с большого пальца и всё время играют одинаковыми пальцами.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
@@ -55,43 +55,13 @@ const coordinationBasics: Lesson = {
       ],
     },
     {
-      heading: { en: 'Slow and even', ru: 'Медленно и ровно' },
-      blocks: [
-        {
-          kind: 'steps',
-          steps: [
-            {
-              en: 'Set a slow beat and count aloud.',
-              ru: 'Возьмите медленный темп и считайте вслух.',
-            },
-            {
-              en: 'Both hands land exactly together, like one sound.',
-              ru: 'Руки попадают строго вместе, как один звук.',
-            },
-            {
-              en: 'Listen for even notes: no finger louder than the rest.',
-              ru: 'Слушайте ровность: ни один палец не громче других.',
-            },
-          ],
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play C in both hands together, an octave apart.',
-            ru: 'Сыграйте до обеими руками вместе, на расстоянии октавы.',
-          },
-          answer: { notes: ['C'] },
-        },
-      ],
-    },
-    {
       heading: { en: 'Skips in both hands', ru: 'Скачки в обеих руках' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Now a pattern of skips and steps: up a 3rd, back a step. Keep the hands together through the skips.',
-            ru: 'Теперь фигура из скачков и шагов: на терцию вверх, на шаг назад. Руки остаются вместе и на скачках.',
+            en: 'Up a 3rd, back a step. Keep the hands together through the skips.',
+            ru: 'На терцию вверх, на шаг назад. Руки остаются вместе и на скачках.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 D4 F4 E4 G4 F4 D4 C4/1' },
@@ -140,6 +110,23 @@ const coordinationBasics: Lesson = {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Set a slow beat and count aloud.',
+              ru: 'Возьмите медленный темп и считайте вслух.',
+            },
+            {
+              en: 'Land both hands exactly together.',
+              ru: 'Попадайте обеими руками строго вместе.',
+            },
+            {
+              en: 'Keep every finger equally loud.',
+              ru: 'Ни один палец не громче других.',
+            },
+          ],
+        },
+        {
           kind: 'question',
           ask: {
             en: 'Play the five notes of the G position, up from G.',
@@ -158,23 +145,10 @@ const coordinationBasics: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Start contrary motion: play both thumbs, G and C.',
-            ru: 'Начало противоположного движения: сыграйте оба больших пальца, соль и до.',
+            en: 'Play both starting thumbs of contrary motion, G and C.',
+            ru: 'Сыграйте оба больших пальца начала противоположного движения: соль и до.',
           },
           answer: { notes: ['G', 'C'] },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'The five-finger position in the Player',
-            ru: 'Позиция пяти пальцев в плеере',
-          },
-          target: { opens: 'exercise', exercise: 'five-finger', root: note('C') },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Contrary motion in the Player', ru: 'Противоположное движение в плеере' },
-          target: { opens: 'exercise', exercise: 'contrary', root: note('C') },
         },
       ],
     },

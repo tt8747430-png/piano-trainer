@@ -5,8 +5,8 @@ const handIndependence: Lesson = {
   id: 'hand-independence',
   title: { en: 'Hand independence', ru: 'Независимость рук' },
   summary: {
-    en: 'Each hand doing something of its own: legato against staccato, held notes against moving ones, two rhythms at once, and Hanon.',
-    ru: 'У каждой руки своя задача: легато против стаккато, выдержанные ноты против подвижных, два ритма сразу и Ганон.',
+    en: 'Give each hand its own touch and rhythm, then play Hanon.',
+    ru: 'Дать каждой руке своё касание и ритм, затем сыграть Ганона.',
   },
   sections: [
     {
@@ -17,7 +17,7 @@ const handIndependence: Lesson = {
           lead: { en: 'Legato', ru: 'Легато' },
           text: {
             en: 'joins notes: one key comes up as the next goes down. Staccato is short and detached, the key bouncing up at once.',
-            ru: '— связная игра: одна клавиша поднимается, когда опускается следующая. Стаккато — коротко и отрывисто, клавиша сразу отскакивает.',
+            ru: '— связная игра: клавиша поднимается, когда опускается следующая. Стаккато — коротко и отрывисто, клавиша сразу отскакивает.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
@@ -34,8 +34,8 @@ const handIndependence: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Now together: the right hand sings legato while the left plays short notes. Keep the left light and dry.',
-            ru: 'Теперь вместе: правая рука поёт легато, а левая играет коротко. Держите левую лёгкой и сухой.',
+            en: 'Together: the right hand sings legato while the left plays short, light notes.',
+            ru: 'Вместе: правая рука поёт легато, а левая играет коротко и легко.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4 E4 D4 E4 C4/2' },
@@ -52,8 +52,8 @@ const handIndependence: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand holds a long note while the left keeps moving. Feel the held key stay down to the end of the bar.',
-            ru: 'Правая рука держит долгую ноту, а левая продолжает двигаться. Чувствуйте, как клавиша остаётся нажатой до конца такта.',
+            en: 'The right hand holds a long note to the end of the bar while the left keeps moving.',
+            ru: 'Правая рука держит долгую ноту до конца такта, а левая продолжает двигаться.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1 E4/1' },
@@ -67,7 +67,7 @@ const handIndependence: Lesson = {
           kind: 'text',
           text: {
             en: 'The right hand plays eighths, two to a beat. The left plays quarters, one to a beat. Count “1 and 2 and”.',
-            ru: 'Правая рука играет восьмыми, по две на долю. Левая — четвертями, по одной. Считайте «раз-и, два-и».',
+            ru: 'Правая рука играет восьмыми, по две на долю, левая — четвертями. Считайте «раз-и, два-и».',
           },
         },
         {
@@ -83,10 +83,10 @@ const handIndependence: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Hanon', ru: 'Ганон' },
+          lead: { en: 'Hanon No. 1', ru: 'Ганон № 1' },
           text: {
-            en: 'wrote exercises for even, independent fingers. The first repeats one figure, a step higher each time, both hands an octave apart.',
-            ru: 'написал упражнения для ровных и независимых пальцев. В первом одна фигура повторяется, каждый раз на ступень выше, руки в октаву.',
+            en: 'repeats one figure, a step higher each time, both hands an octave apart. It trains even, independent fingers.',
+            ru: 'повторяет одну фигуру, каждый раз на ступень выше, руки в октаву. Оно развивает ровные, независимые пальцы.',
           },
         },
         {
@@ -107,7 +107,7 @@ const handIndependence: Lesson = {
       ],
     },
     {
-      heading: { en: 'Practising independence', ru: 'Как развивать независимость' },
+      heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
           kind: 'steps',
@@ -121,8 +121,8 @@ const handIndependence: Lesson = {
               ru: 'Соединяйте очень медленно, слушая то одну, то другую руку.',
             },
             {
-              en: 'Raise the speed only when both sound as you meant.',
-              ru: 'Ускоряйтесь, только когда обе звучат так, как задумано.',
+              en: 'Speed up only when both sound as you meant.',
+              ru: 'Ускоряйтесь, только когда обе звучат как задумано.',
             },
           ],
         },
@@ -134,11 +134,6 @@ const handIndependence: Lesson = {
           },
           answer: { notes: ['C', 'E', 'G'] },
         },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
         {
           kind: 'question',
           ask: {
@@ -154,16 +149,6 @@ const handIndependence: Lesson = {
             ru: 'Сыграйте ноту, с которой фигура начинается во второй раз.',
           },
           answer: { notes: ['D'] },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Hanon No. 1 in the Player', ru: 'Ганон № 1 в плеере' },
-          target: { opens: 'exercise', exercise: 'hanon', root: note('C') },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Contrary motion in the Player', ru: 'Противоположное движение в плеере' },
-          target: { opens: 'exercise', exercise: 'contrary', root: note('C') },
         },
       ],
     },

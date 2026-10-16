@@ -5,8 +5,8 @@ const bothHandsIntro: Lesson = {
   id: 'both-hands-intro',
   title: { en: 'Intro to playing with both hands', ru: 'Введение в игру двумя руками' },
   summary: {
-    en: 'Both hands on the keys at once, taking turns: a tune passed from one hand to the other, with rests counted.',
-    ru: 'Обе руки на клавиатуре по очереди: мелодия переходит из руки в руку, паузы считаются.',
+    en: 'Pass a tune between the hands, counting the rests.',
+    ru: 'Передавать мелодию из руки в руку, считая паузы.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const bothHandsIntro: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand takes the C position from the C below middle C. The right takes it from middle C. The thumbs nearly meet.',
-            ru: 'Левая рука ставится в позицию до от до малой октавы, правая — от до первой октавы. Большие пальцы почти встречаются.',
+            en: 'The left hand takes the C position from the C below middle C, the right from middle C.',
+            ru: 'Левая рука — в позиции до от до малой октавы, правая — от до первой.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3/1' },
@@ -24,14 +24,14 @@ const bothHandsIntro: Lesson = {
       ],
     },
     {
-      heading: { en: 'Taking turns', ru: 'По очереди' },
+      heading: { en: 'Rests', ru: 'Паузы' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A rest', ru: 'Пауза' },
           text: {
-            en: 'is a silent beat, counted like a note. While one hand plays, the other rests on its keys.',
-            ru: '— беззвучная доля, её считают, как ноту. Пока одна рука играет, другая лежит на своих клавишах.',
+            en: 'is a silent beat, counted like a note. While one hand plays, the other waits on its keys.',
+            ru: '— беззвучная доля, её считают, как ноту. Пока одна рука играет, другая ждёт на своих клавишах.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 D4 C4/2 r/1 E4 D4 C4/2 r/1' },
@@ -44,8 +44,8 @@ const bothHandsIntro: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'London Bridge passes its tune between the hands. The right hand calls, the left answers an octave lower with fingers 4 3 2 1.',
-            ru: '«Лондонский мост» передаёт мелодию из руки в руку. Правая спрашивает, левая отвечает октавой ниже пальцами 4 3 2 1.',
+            en: 'In London Bridge the right hand calls and the left answers an octave lower, fingers 4 3 2 1.',
+            ru: 'В «Лондонском мосте» правая рука спрашивает, левая отвечает октавой ниже пальцами 4 3 2 1.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/4. A4/8 G4 F4 E4 F4 G4/2 r/1 r/1' },
@@ -63,8 +63,8 @@ const bothHandsIntro: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Frère Jacques ends by dipping to the G below middle C. Let the left thumb play it while the right thumb stays on C.',
-            ru: '«Братец Яков» в конце опускается к соль малой октавы. Её берёт большой палец левой руки, а правый остаётся на до.',
+            en: 'Frère Jacques dips to the G below middle C. The left thumb plays it while the right stays on C.',
+            ru: '«Братец Яков» опускается к соль малой октавы. Её берёт левый большой палец, правый остаётся на до.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 G3 C4/2 C4 G3 C4/2' },
@@ -76,7 +76,7 @@ const bothHandsIntro: Lesson = {
       ],
     },
     {
-      heading: { en: 'Ready before the entry', ru: 'Готовность к вступлению' },
+      heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
           kind: 'steps',
@@ -85,10 +85,7 @@ const bothHandsIntro: Lesson = {
               en: 'Rest the waiting hand on its keys.',
               ru: 'Держите ожидающую руку на её клавишах.',
             },
-            {
-              en: 'Count through its rests aloud.',
-              ru: 'Считайте её паузы вслух.',
-            },
+            { en: 'Count through its rests aloud.', ru: 'Считайте её паузы вслух.' },
             {
               en: 'Play its first note exactly on the beat.',
               ru: 'Первую ноту играйте точно в долю.',
@@ -103,44 +100,13 @@ const bothHandsIntro: Lesson = {
           },
           answer: { notes: ['D', 'E', 'F'], rising: true },
         },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
         {
           kind: 'question',
           ask: {
             en: 'Play the note the left thumb takes in Frère Jacques.',
-            ru: 'Сыграйте ноту, которую в «Братце Якове» берёт большой палец левой руки.',
+            ru: 'Сыграйте ноту левого большого пальца в «Братце Якове».',
           },
           answer: { notes: ['G'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'With the left hand, play D, E, F, G from finger 4 to the thumb.',
-            ru: 'Левой рукой сыграйте ре, ми, фа, соль от четвёртого пальца к большому.',
-          },
-          answer: { notes: ['D', 'E', 'F', 'G'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the notes of London Bridge’s first bar: G, A and F.',
-            ru: 'Сыграйте ноты первого такта «Лондонского моста»: соль, ля и фа.',
-          },
-          answer: { notes: ['G', 'A', 'F'] },
-        },
-        {
-          kind: 'link',
-          title: { en: 'London Bridge in the Player', ru: '«Лондонский мост» в плеере' },
-          target: { opens: 'piece', piece: 'london-bridge' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Frère Jacques in the Player', ru: '«Братец Яков» в плеере' },
-          target: { opens: 'piece', piece: 'frere-jacques' },
         },
         {
           kind: 'link',
