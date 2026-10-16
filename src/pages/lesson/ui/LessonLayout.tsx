@@ -27,7 +27,7 @@ export interface LessonTrack {
 
 /**
  * A lesson, a journey's or a course's (ADR 0053, 0058), in one column in the middle of the screen:
- * its title with Learned in its bar, where it is (`place`), its summary, the lesson under its
+ * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it.
  */
 export function LessonLayout({
@@ -56,9 +56,6 @@ export function LessonLayout({
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}
       </nav>
-      <p className="max-w-prose text-lg text-pretty text-muted-foreground">
-        {localText(lesson.summary, locale)}
-      </p>
       <LessonView key={lesson.id} lesson={lesson} up={track.up} />
       <LessonEnd step={step} track={track} />
     </div>

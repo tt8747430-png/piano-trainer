@@ -15,14 +15,11 @@ import { ButtonLink } from './ButtonLink'
 import { FloatingContext, useFloatingLabels, type FloatingPlace } from './floating-context'
 import { Button } from './primitives/button'
 
-/**
- * How the actions line up, as the place they stand in: down an edge in a column, its main one
- * lowest; in the middle in a row along the foot, so none climbs over the page's middle.
- */
+/** The actions stand in a row along the foot wherever they are, so none climbs over the page. */
 const ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'flex-col items-start',
+  left: 'flex-row items-end',
   center: 'flex-row items-end',
-  right: 'flex-col items-end',
+  right: 'flex-row items-end',
 }
 /** A dial's own stack stands over its button wherever the actions are. */
 const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
@@ -31,28 +28,50 @@ const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
   right: 'items-end',
 }
 
+/** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
+const CONTROLS =
+  'a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=radio],[role=switch],[role=slider],[role=tab],[role=option],[role=checkbox],[role=dialog],[contenteditable],[data-slot=docked],[data-slot=pinned]'
+
 /**
- * The one column every screen's floating actions stand in, at the foot of the screen over the tab
- * bar and the keys docked there, the width of the screen beside a rail or a sidebar: down its left
- * or its right edge, or in a row in its middle, as the learner chose, each action with its name or
- * its icon alone.
+ * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
+ * and the keys docked there, the width of the screen beside a rail or a sidebar: at its left, its
+ * middle or its right, as the learner chose, each action with its name or its icon alone. A tap on
+ * the page (on no control and on no key) folds them away out of the reading's way, and the next
+ * brings them back; a new `screen` brings them back too.
  */
 export function FloatingHost({
   place,
   labels,
+  screen,
   children,
 }: {
   place: FloatingPlace
   labels: boolean
+  /** The screen shown: its actions show whenever it changes. */
+  screen: string
   children: ReactNode
 }) {
   const [column, setColumn] = useState<HTMLElement | null>(null)
+  const [hiddenOn, setHiddenOn] = useState<string | null>(null)
+  const hidden = hiddenOn === screen
   return (
     <FloatingContext.Provider value={{ column, place, labels }}>
-      {children}
       <div
+        className="contents"
+        onClick={(event) => {
+          const target = event.target
+          if (!(target instanceof Element) || target.closest(CONTROLS)) return
+          // A word chosen to read, or the end of a scroll, is no tap.
+          if (window.getSelection()?.toString()) return
+          setHiddenOn(hidden ? null : screen)
+        }}
+      >
+        {children}
+      </div>
+      <div
+        data-hidden={hidden || undefined}
         className={cn(
-          'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter print:hidden landscape-phone:left-rail landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+          'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
           place === 'left' && 'justify-start',
           place === 'center' && 'justify-center',
           place === 'right' && 'justify-end',
@@ -61,7 +80,12 @@ export function FloatingHost({
         <div
           ref={setColumn}
           data-slot="floating-actions"
-          className={cn('vt-floating flex gap-3 [&>*]:pointer-events-auto', ALIGN[place])}
+          inert={hidden}
+          className={cn(
+            'vt-floating flex gap-3',
+            !hidden && '[&>*]:pointer-events-auto',
+            ALIGN[place],
+          )}
         />
       </div>
     </FloatingContext.Provider>
@@ -159,10 +183,10 @@ export function FabPill({
     return (
       <Button
         variant="surface"
-        size="icon-lg"
+        size="icon"
         aria-label={label}
         title={label}
-        className={cn('rounded-full shadow-md shadow-foreground/10', className)}
+        className={cn(FAB, className)}
         {...props}
       >
         <Icon aria-hidden />
@@ -172,7 +196,7 @@ export function FabPill({
     <Button
       variant="surface"
       size="lg"
-      className={cn('rounded-full shadow-md shadow-foreground/10', className)}
+      className={cn('h-14 rounded-full px-5 shadow-md shadow-foreground/10', className)}
       {...props}
     >
       {label}
@@ -231,7 +255,7 @@ export function SpeedDial({
           aria-expanded={open}
           aria-controls={open ? id : undefined}
           onClick={() => setOpen((was) => !was)}
-          className="size-12 rounded-full shadow-md shadow-foreground/10"
+          className={FAB}
         >
           <Icon aria-hidden className={cn('transition-transform', open && 'rotate-90')} />
         </Button>

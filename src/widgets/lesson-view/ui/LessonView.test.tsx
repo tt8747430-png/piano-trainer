@@ -42,7 +42,7 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
   render(
     <SettingsStoreProvider store={store}>
       <ServicesProvider services={{ audio, midi: createFakeMidi() }}>
-        <FloatingHost place="center" labels={false}>
+        <FloatingHost place="center" labels={false} screen="/">
           <RouterProvider router={router} />
         </FloatingHost>
       </ServicesProvider>

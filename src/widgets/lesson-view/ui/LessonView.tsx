@@ -111,7 +111,7 @@ function UpRow({ up, onGo }: { up: UpLink; onGo: () => void }) {
   )
 }
 
-const DOCK_BUTTON = 'rounded-full'
+const DOCK_BUTTON = 'size-12 rounded-full'
 
 /**
  * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
@@ -155,7 +155,7 @@ function LessonBar({
     <div
       role="toolbar"
       aria-label={t('lessonBar')}
-      className="flex items-center gap-0.5 rounded-full border border-input bg-card p-1 shadow-lg shadow-foreground/15"
+      className="flex h-14 items-center gap-0.5 rounded-full border border-input bg-card px-1 shadow-lg shadow-foreground/15"
     >
       {section(at - 1, t('previousSection'), ChevronLeft)}
       <Sheet open={open} onOpenChange={setOpen}>
@@ -165,7 +165,7 @@ function LessonBar({
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
               title={t('contents')}
-              className="rounded-full px-3"
+              className="h-12 rounded-full px-3"
             />
           }
         >

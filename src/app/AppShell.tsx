@@ -1,3 +1,4 @@
+import { useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectFloating, selectSidebar, useSettings } from '@/entities/settings'
@@ -17,6 +18,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation('common')
   const sidebar = useSettings(selectSidebar)
   const floating = useSettings(selectFloating)
+  const screen = useRouterState({ select: (state) => state.location.pathname })
   return (
     <ScreenBarProvider>
       <TooltipProvider>
@@ -38,7 +40,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           data-sidebar={sidebar}
           className="group/main px-gutter pt-safe pb-docked-28 outline-none print:p-0 landscape-phone:pb-docked-8 landscape-phone:pl-rail lg:pb-docked-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
         >
-          <FloatingHost place={floating.place} labels={floating.labels}>
+          <FloatingHost place={floating.place} labels={floating.labels} screen={screen}>
             {children}
           </FloatingHost>
         </main>
