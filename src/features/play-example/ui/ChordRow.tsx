@@ -16,12 +16,11 @@ import {
   usePositionName,
   FloatingActions,
   PlayFab,
-  PlayLabel,
+  PlayButton,
   type ShownKeys,
   unmarked,
   usePlayKey,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
@@ -184,8 +183,11 @@ export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
       </FloatingActions>
     )
   return (
-    <Button variant={variant} size="pill" className="self-start" onClick={playRow}>
-      <PlayLabel playing={playing === 'row'}>{t('play')}</PlayLabel>
-    </Button>
+    <PlayButton
+      label={t('play')}
+      playing={playing === 'row'}
+      onClick={playRow}
+      className="self-start"
+    />
   )
 }

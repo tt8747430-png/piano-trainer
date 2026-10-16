@@ -35,6 +35,7 @@ export { PAINT, type Paint } from './paint'
 export { Docked } from './Docked'
 export { Pinned } from './Pinned'
 export { PlayLabel } from './PlayLabel'
+export { PlayButton } from './PlayButton'
 export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {

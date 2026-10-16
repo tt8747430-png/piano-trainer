@@ -12,6 +12,7 @@ export {
   lessonById,
   lessonPlace,
   nextLessonId,
+  previousLessonId,
   type LessonPlace,
 } from './model/selectors'
 export { LESSONS } from './content'

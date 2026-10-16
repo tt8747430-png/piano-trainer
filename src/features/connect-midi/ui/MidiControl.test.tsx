@@ -40,7 +40,7 @@ describe('MidiControl', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Connect a MIDI keyboard' }))
     expect(await screen.findByText('MIDI access was blocked.')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Again' })).toBeInTheDocument()
   })
 
   it('names a keyboard chosen that is away', async () => {

@@ -31,6 +31,10 @@ export function courseLesson(courseId: string, lessonId: string): CourseLessonPl
 export const nextCourseLesson = (place: CourseLessonPlace): Lesson | undefined =>
   place.course.lessons[place.n]
 
+/** The lesson before this one in its course; none before its first. */
+export const previousCourseLesson = (place: CourseLessonPlace): Lesson | undefined =>
+  place.n > 1 ? place.course.lessons[place.n - 2] : undefined
+
 /** A course's steps in the order they are taken: its lessons, then its songs. */
 export const courseStepIds = (course: Course): readonly StepId[] => [
   ...course.lessons.map((lesson) => courseLessonStepId(course.id, lesson.id)),

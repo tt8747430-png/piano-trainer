@@ -1,6 +1,6 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, CornerDownLeft, Hand } from 'lucide-react'
-import type { ReactElement, ReactNode } from 'react'
+import { ArrowRight, ChevronsLeft, Hand } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { selectLesson, useSettings, useSettingsStoreApi } from '@/entities/settings'
@@ -8,38 +8,34 @@ import type { StepId } from '@/entities/step'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { setLessonFingers } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
-import { ButtonLink, ScreenHeader, SpeedDial, SpeedDialAction } from '@/shared/ui'
-import { LessonView } from '@/widgets/lesson-view'
-
-/** Where a lesson's way on leads: the next lesson, or back to what it is part of. */
-export interface WayOn {
-  /** The link it is: a router `Link`. */
-  readonly link: ReactElement
-  /** The next lesson's title; none where the way leads back. */
-  readonly next?: string
-  readonly label: string
-}
+import { ButtonLink, ScreenHeader } from '@/shared/ui'
+import { Toggle } from '@/shared/ui/primitives/toggle'
+import { LessonView, type LessonTrack, type TrackLink } from '@/widgets/lesson-view'
 
 /**
  * A lesson, a journey's or a course's (ADR 0053): its title, where it is (`place`), its summary, the
- * lesson itself, and at its end Learned beside the one way on, which learns it on the way.
+ * lesson itself under its floating bar, and at its end Learned over the lesson before and the way
+ * on, which learns it on the way.
  */
 export function LessonLayout({
   lesson,
   step,
   place,
   back,
-  way,
+  track,
 }: {
   lesson: Lesson
   step: StepId
   place: ReactNode
   /** The screen's Back (`BackButton`). */
   back: ReactNode
-  way: WayOn
+  /** Where it leads; the way on learns it, which the layout adds. */
+  track: LessonTrack
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
+  const { learn } = useLearned(step)
+  const learning: LessonTrack = { ...track, next: { ...track.next, onGo: learn } }
   return (
     <div className="flex flex-col gap-4">
       <ScreenHeader title={localText(lesson.title, locale)} back={back} />
@@ -52,9 +48,10 @@ export function LessonLayout({
       <LessonView
         key={lesson.id}
         lesson={lesson}
-        options={<LessonOptions lesson={lesson} step={step} way={way} />}
+        track={learning}
+        tools={hasFingers(lesson) ? <FingersToggle /> : undefined}
       />
-      <LessonEnd step={step} way={way} />
+      <LessonEnd step={step} track={learning} />
     </div>
   )
 }
@@ -63,60 +60,62 @@ export function LessonLayout({
 const hasFingers = (lesson: Lesson) =>
   lesson.sections.some((section) => section.blocks.some((block) => block.kind === 'scale'))
 
-/**
- * A lesson's options, floating over its sections: the fingers on its scales shown or hidden, where
- * it has a scale; and the way on, which learns it on the way, as its end does.
- */
-function LessonOptions({ lesson, step, way }: { lesson: Lesson; step: StepId; way: WayOn }) {
+/** The fingers on a lesson's scales, shown or not, from the lesson's bar: a hand, pressed while shown. */
+function FingersToggle() {
   const { t } = useTranslation('learn')
   const store = useSettingsStoreApi()
   const { fingers } = useSettings(selectLesson)
-  const { learn } = useLearned(step)
   return (
-    <SpeedDial label={t('lessonOptions')}>
-      {hasFingers(lesson) ? (
-        <SpeedDialAction
-          label={t(fingers ? 'hideFingers' : 'showFingers')}
-          icon={Hand}
-          onClick={() => setLessonFingers(store, !fingers)}
-        />
-      ) : null}
-      <SpeedDialAction
-        label={way.next ? `${way.label}: ${way.next}` : way.label}
-        icon={way.next ? ArrowRight : CornerDownLeft}
-        render={way.link}
-        onClick={learn}
-      />
-    </SpeedDial>
+    <Toggle
+      pressed={fingers}
+      onPressedChange={(on) => setLessonFingers(store, on)}
+      aria-label={t('fingers')}
+      title={t('fingers')}
+      className="size-11 rounded-full border-transparent bg-transparent px-0 aria-pressed:border-transparent"
+    >
+      <Hand aria-hidden />
+    </Toggle>
   )
 }
 
-/** A lesson's end: its Learned toggle beside the one way on, which learns it on the way. */
-function LessonEnd({ step, way }: { step: StepId; way: WayOn }) {
-  const { learn } = useLearned(step)
+/** One of a lesson's ends as a card: which way it is, the lesson it leads to, its arrow. */
+function EndLink({ way, primary }: { way: TrackLink; primary: boolean }) {
   return (
-    <footer className="mt-6 flex max-w-prose flex-wrap items-center gap-3 border-t border-border pt-8 print:hidden">
-      <ButtonLink
-        size="pill"
-        onClick={learn}
-        className="h-auto min-h-14 min-w-0 flex-1 basis-64 justify-between gap-4 py-3 text-left whitespace-normal"
-        render={way.link}
-      >
-        {way.next ? (
-          <span className="flex min-w-0 flex-col">
-            <span className="text-sm font-medium">{way.label}</span>
-            <span className="font-display text-xl text-balance">{way.next}</span>
-          </span>
+    <ButtonLink
+      variant={primary ? 'default' : 'surface'}
+      onClick={way.onGo}
+      render={way.link}
+      className={
+        primary
+          ? 'h-auto min-h-16 justify-between gap-3 rounded-2xl px-4 py-3 text-left whitespace-normal'
+          : 'h-auto min-h-16 justify-start gap-3 rounded-2xl px-4 py-3 text-left whitespace-normal'
+      }
+    >
+      {primary ? null : <ChevronsLeft aria-hidden className="shrink-0" />}
+      <span className="flex min-w-0 flex-col">
+        <span className="text-xs font-medium opacity-80">{way.label}</span>
+        <span className="font-display text-lg text-balance">{way.title ?? way.label}</span>
+      </span>
+      {primary ? <ArrowRight aria-hidden className="shrink-0" /> : null}
+    </ButtonLink>
+  )
+}
+
+/** A lesson's end: its Learned toggle, then the lesson before and the way on side by side. */
+function LessonEnd({ step, track }: { step: StepId; track: LessonTrack }) {
+  return (
+    <footer className="mt-8 flex max-w-prose flex-col gap-4 border-t border-border pt-6 print:hidden">
+      <div className="self-start">
+        <LearnedButton step={step} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {track.previous ? (
+          <EndLink way={track.previous} primary={false} />
         ) : (
-          <span className="font-display text-xl text-balance">{way.label}</span>
+          <span aria-hidden className="hidden sm:block" />
         )}
-        {way.next ? (
-          <ArrowRight aria-hidden className="size-5" />
-        ) : (
-          <CornerDownLeft aria-hidden className="size-5" />
-        )}
-      </ButtonLink>
-      <LearnedButton step={step} />
+        <EndLink way={track.next} primary />
+      </div>
     </footer>
   )
 }

@@ -49,3 +49,9 @@ export function nextLessonId(lessonId: string): string | undefined {
   const place = lessonPlace(lessonId)
   return place ? lessonIdsOf(place.journey)[place.n] : undefined
 }
+
+/** The lesson before this one in its journey, back into its chapter before; none before its first. */
+export function previousLessonId(lessonId: string): string | undefined {
+  const place = lessonPlace(lessonId)
+  return place && place.n > 1 ? lessonIdsOf(place.journey)[place.n - 2] : undefined
+}

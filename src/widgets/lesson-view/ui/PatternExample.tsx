@@ -6,8 +6,7 @@ import { entryTitles, type Piece } from '@/entities/piece'
 
 import { localText, useLocale } from '@/shared/i18n'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink, PlayLabel, type ShownKeys } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { ButtonLink, PlayButton, type ShownKeys } from '@/shared/ui'
 import { patternOpening } from '../model/pattern-example'
 
 /**
@@ -37,9 +36,10 @@ export function PatternExample({
       <p className="text-sm text-muted-foreground">
         {t('learn:example.over', { piece: entryTitles(piece, locale).primary })}
       </p>
-      <div className="flex flex-wrap gap-2">
-        <Button
-          variant="soft"
+      <div className="flex flex-wrap items-center gap-2">
+        <PlayButton
+          label={t('music:play')}
+          playing={playback.playing === 'opening'}
           onClick={() =>
             // Arranged when Play starts, never on the page or for a Stop: a lesson shows many
             // patterns and plays few.
@@ -49,9 +49,7 @@ export function PatternExample({
               return opening.sounds
             })
           }
-        >
-          <PlayLabel playing={playback.playing === 'opening'}>{t('music:play')}</PlayLabel>
-        </Button>
+        />
         <ButtonLink
           variant="outline"
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} search={{ pattern }} />}

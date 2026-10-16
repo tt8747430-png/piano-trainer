@@ -25,7 +25,7 @@ describe('A lesson', () => {
       router.navigate({ to: '/', search: { view: 'lessons', journey: 'foundations' } }),
     )
     const chapter = await screen.findByRole('region', { name: /Your first chords/ })
-    expect(chapter).toHaveTextContent('1 of 3')
+    expect(chapter).toHaveTextContent('1/3')
   })
 
   it('opens its exercises in the Player, walked through the keys or in an inversion', async () => {
@@ -77,21 +77,29 @@ describe('A lesson', () => {
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
   })
 
-  it('floats its options: the fingers on its scales hidden or shown, and the way on', async () => {
+  it('shows or hides the fingers on its scales from its bar', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/lessons/minor-scales')
-    await user.click(await screen.findByRole('button', { name: 'Lesson options' }))
-    const options = screen.getByRole('list', { name: 'Lesson options' })
-    expect(within(options).getByRole('link', { name: /^Next lesson/ })).toBeInTheDocument()
-    await user.click(within(options).getByRole('button', { name: 'Hide the fingers' }))
+    const bar = await screen.findByRole('toolbar', { name: 'Lesson' })
+    const fingers = within(bar).getByRole('button', { name: 'Fingers on the scales' })
+    expect(fingers).toHaveAttribute('aria-pressed', 'true')
+    await user.click(fingers)
     expect(settingsStore.getState().lesson.fingers).toBe(false)
   })
 
   it('offers no fingers where it plays no scale', async () => {
-    const user = userEvent.setup()
     await renderApp('/lessons/reading-chord-symbols')
-    await user.click(await screen.findByRole('button', { name: 'Lesson options' }))
-    expect(screen.queryByRole('button', { name: /the fingers$/ })).not.toBeInTheDocument()
+    await screen.findByRole('toolbar', { name: 'Lesson' })
+    expect(screen.queryByRole('button', { name: 'Fingers on the scales' })).not.toBeInTheDocument()
+  })
+
+  it('leads back to the lesson before it, and has none before its journey’s first', async () => {
+    await renderApp('/lessons/reading-notes')
+    const before = await screen.findAllByRole('link', { name: /^Previous lesson/ })
+    expect(before.map((link) => link.getAttribute('href'))).toEqual([
+      '/lessons/finding-home',
+      '/lessons/finding-home',
+    ])
   })
 
   it('is learned once the learner goes on to the next lesson', async () => {
@@ -118,11 +126,14 @@ describe('A lesson', () => {
     expect(progressStore.getState().learned['lesson:pentatonic-improvisation']).toBeDefined()
   })
 
-  it('lists its sections at its top, each a link to its heading', async () => {
+  it('lists its sections in its contents, each a link to its heading', async () => {
+    const user = userEvent.setup()
     await renderApp('/lessons/ninth-chords')
+    await user.click(await screen.findByRole('button', { name: /^In this lesson: section/ }))
     const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const links = within(contents).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual([
+    // Each link says its number, then its heading.
+    expect(links.map((link) => link.textContent?.replace(/^\d+/, ''))).toEqual([
       'A 7th chord and one more 3rd',
       'Two triads stacked',
       'Bass left, 7th chord right',
@@ -134,7 +145,7 @@ describe('A lesson', () => {
     expect(href).toBe('/lessons/ninth-chords#section-4')
     const section = document.getElementById(href.split('#')[1] ?? '')
     expect(section).toContainElement(
-      screen.getByRole('heading', { level: 2, name: 'The second position' }),
+      screen.getByRole('heading', { level: 2, name: 'The second position', hidden: true }),
     )
   })
 
@@ -166,18 +177,18 @@ describe('A lesson', () => {
     const user = userEvent.setup()
     await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    within(question).getByRole('button', { name: 'Answer on the keys' }).focus()
+    within(question).getByRole('button', { name: 'Answer' }).focus()
     await user.keyboard('{Enter}')
     expect(within(question).getByRole('button', { name: 'Show the answer' })).toHaveFocus()
     await user.keyboard('{Enter}')
-    expect(within(question).getByRole('button', { name: 'Try again' })).toHaveFocus()
+    expect(within(question).getByRole('button', { name: 'Again' })).toHaveFocus()
   })
 
   it('answers a Fundamentals question on its keys', async () => {
     const user = userEvent.setup()
     await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     for (const key of ['E4', 'G sharp 4', 'B4']) {
       await user.click(within(keyboard).getByRole('button', { name: key }))
@@ -189,7 +200,7 @@ describe('A lesson', () => {
     const user = userEvent.setup()
     const { midi: midiKeyboard } = await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     act(() => {
       for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
     })

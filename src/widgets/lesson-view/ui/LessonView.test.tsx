@@ -2,6 +2,7 @@ import {
   createMemoryHistory,
   createRootRoute,
   createRouter,
+  Link,
   RouterProvider,
 } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
@@ -15,12 +16,17 @@ import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
-import { LessonView } from './LessonView'
+import { LessonView, type LessonTrack } from './LessonView'
 
 function firstLesson(): Lesson {
   const lesson = lessonById('reading-chord-symbols')
   if (!lesson) throw new Error('the first lesson is missing')
   return lesson
+}
+
+const TRACK: LessonTrack = {
+  up: { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' },
+  next: { link: <Link to="/" />, label: 'Next lesson', title: 'Inversions' },
 }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
@@ -32,7 +38,7 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
     finePointer: false,
   })
   const router = createRouter({
-    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} /> }),
+    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} track={TRACK} /> }),
     history: createMemoryHistory(),
   })
   render(
@@ -64,8 +70,10 @@ describe('LessonView', () => {
   })
 
   it('marks the section being read in its contents', async () => {
+    const user = userEvent.setup()
     await renderLesson()
-    const contents = screen.getByRole('navigation', { name: 'In this lesson' })
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const [first, second] = within(contents).getAllByRole('link')
     await waitFor(() => expect(first).toHaveAttribute('data-reading'))
     expect(second).not.toHaveAttribute('data-reading')
@@ -73,20 +81,26 @@ describe('LessonView', () => {
     expect(first).not.toHaveAttribute('aria-current')
   })
 
-  it('opens its contents in a sheet off a floating button, which a link followed closes', async () => {
+  it('opens its contents in a sheet off its bar, with the ways out, which a link followed closes', async () => {
     const user = userEvent.setup()
     await renderLesson()
     await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
     const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
+    const ways = within(sheet).getByRole('navigation', { name: 'Ways out of this lesson' })
+    expect(
+      within(ways)
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual(['Next lessonInversions', 'Back to the journeyFoundations'])
     await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'In this lesson' })).not.toBeInTheDocument(),
     )
   })
 
-  it('steps through its sections from a floating ‹ ›, the first’s ‹ off', async () => {
+  it('steps through its sections from its floating bar, the first’s ‹ off with no lesson before', async () => {
     await renderLesson()
-    const stepper = screen.getByRole('group', { name: /^In this lesson: section 1 of 7$/ })
+    const stepper = screen.getByRole('toolbar', { name: 'Lesson' })
     expect(within(stepper).getByRole('button', { name: 'Previous section' })).toBeDisabled()
     expect(within(stepper).getByRole('link', { name: 'Next section' })).toHaveAttribute(
       'href',
@@ -228,7 +242,7 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     await user.click(within(keyboard).getByRole('button', { name: 'E4' }))
@@ -250,7 +264,7 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
@@ -260,14 +274,14 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     await renderLesson(WORKSHEET)
     const first = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(first).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(first).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     await user.click(within(first).getByRole('button', { name: 'Show the answer' }))
     expect(within(keyboard).getByRole('button', { name: 'G4' })).toHaveTextContent('♭3')
     const second = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(second).getByRole('button', { name: 'Answer on the keys' }))
-    expect(within(first).getByRole('button', { name: 'Answer on the keys' })).toBeInTheDocument()
+    await user.click(within(second).getByRole('button', { name: 'Answer' }))
+    expect(within(first).getByRole('button', { name: 'Answer' })).toBeInTheDocument()
     expect(within(keyboard).getByRole('button', { name: 'G4' })).not.toHaveTextContent('♭3')
   })
 

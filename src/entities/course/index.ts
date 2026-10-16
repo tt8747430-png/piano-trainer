@@ -6,6 +6,7 @@ export {
   coursesOn,
   courseStepIds,
   nextCourseLesson,
+  previousCourseLesson,
   pieceStage,
   type CourseLessonPlace,
 } from './model/selectors'

@@ -119,11 +119,10 @@ export function LessonBlock({
           <RowChords />
           <RowStaff />
           {/* Play here, and the same row in Progressions to take further: in any key, walked. */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <RowPlay variant="soft" />
             <ButtonLink
-              variant="soft"
-              size="pill"
+              variant="outline"
               render={
                 <Link
                   to="/practice/progressions"

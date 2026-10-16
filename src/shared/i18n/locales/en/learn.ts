@@ -69,9 +69,8 @@ export const learn = {
   // A lesson's floating actions: its sections one by one, and its options.
   previousSection: 'Previous section',
   nextSection: 'Next section',
-  lessonOptions: 'Lesson options',
-  showFingers: 'Show the fingers',
-  hideFingers: 'Hide the fingers',
+  lessonBar: 'Lesson',
+  fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {
     over: 'Played over “{{piece}}”',
@@ -80,19 +79,22 @@ export const learn = {
   },
   // The way on, at a lesson's end: the next lesson, or back to the journey or the course.
   track: {
+    label: 'Ways out of this lesson',
+    previous: 'Previous lesson',
     next: 'Next lesson',
+    toCourseLessons: 'The course',
     toJourney: 'Back to the journey',
     toCourse: 'On to the guided songs',
     courseDone: 'Back to the course',
   },
   // A lesson's question, answered on its keys.
   question: {
-    answer: 'Answer on the keys',
+    answer: 'Answer',
     chosen: '{{chosen}} of {{total}} notes',
     right: 'Correct',
     wrong: 'Not quite',
     show: 'Show the answer',
     shown: 'The answer is on the keys',
-    again: 'Try again',
+    again: 'Again',
   },
 } as const

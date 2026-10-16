@@ -1,6 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronLeft, ChevronRight, ListOrdered } from 'lucide-react'
-import { useMemo, useReducer, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  CornerLeftUp,
+  ListOrdered,
+} from 'lucide-react'
+import { useMemo, useReducer, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -19,7 +26,6 @@ import {
 } from '../model/lesson-question'
 import { LessonBlock } from './LessonBlock'
 import { QuestionBlock } from './QuestionBlock'
-import { usePinnedHeight } from './use-pinned-height'
 import { useReadingSection } from './use-reading-section'
 import {
   ButtonLink,
@@ -45,8 +51,25 @@ const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
     ),
   )
 
-/** A lesson lists its sections once it has more than two. */
-const CONTENTS_FROM = 3
+/** A way out of a lesson, a router `Link`: what it is part of, the lesson before it, the way on. */
+export interface TrackLink {
+  readonly link: ReactElement
+  /** What the way is: Previous lesson, Next lesson, Back to the journey. */
+  readonly label: string
+  /** The lesson or the place it leads to, by name. */
+  readonly title?: string
+  /** Done on the way: going on learns the lesson. */
+  readonly onGo?: () => void
+}
+
+/** Where a lesson leads: up to what it is part of, back to the lesson before, on to the next. */
+export interface LessonTrack {
+  readonly up: TrackLink
+  readonly previous?: TrackLink
+  readonly next: TrackLink
+}
+
+const named = (way: TrackLink) => (way.title ? `${way.label}: ${way.title}` : way.label)
 
 /** A lesson's sections, each a link to its heading, the one being read in bold. */
 function SectionLinks({
@@ -61,12 +84,9 @@ function SectionLinks({
 }) {
   const locale = useLocale()
   return (
-    <ol className="flex flex-col gap-1">
+    <ol className="flex flex-col">
       {lesson.sections.map((section, s) => (
-        <li key={section.heading.en} className="flex gap-3">
-          <span aria-hidden className="w-5 shrink-0 text-right text-muted-foreground tabular-nums">
-            {s + 1}
-          </span>
+        <li key={section.heading.en}>
           <Link
             to="."
             hash={sectionId(s)}
@@ -75,8 +95,14 @@ function SectionLinks({
             activeOptions={{ includeHash: true }}
             data-reading={reading === sectionId(s) || undefined}
             onClick={onGo}
-            className="rounded-sm underline-offset-4 hover:underline data-reading:font-semibold"
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
           >
+            <span
+              aria-hidden
+              className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
+            >
+              {s + 1}
+            </span>
             {localText(section.heading, locale)}
           </Link>
         </li>
@@ -85,95 +111,176 @@ function SectionLinks({
   )
 }
 
+/** A way out of the lesson as a row of the contents' sheet: its picture, what it is, where to. */
+function TrackRow({
+  way,
+  icon: Icon,
+  onGo,
+}: {
+  way: TrackLink
+  icon: typeof ChevronLeft
+  onGo: () => void
+}) {
+  return (
+    <ButtonLink
+      variant="ghost"
+      onClick={() => {
+        way.onGo?.()
+        onGo()
+      }}
+      className="h-auto min-h-12 justify-start gap-3 rounded-xl px-2 py-2 text-left whitespace-normal"
+      render={way.link}
+    >
+      <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <span className="flex min-w-0 flex-col">
+        <span className="text-xs font-medium text-muted-foreground">{way.label}</span>
+        {way.title ? <span className="font-semibold text-pretty">{way.title}</span> : null}
+      </span>
+    </ButtonLink>
+  )
+}
+
+const DOCK_BUTTON = 'rounded-full'
+
 /**
- * The lesson's sections one by one, floating in the thumb's reach: ‹ the section before, which one is
- * being read of how many, › the next. On a phone the count opens the contents in a sheet, one link
- * followed closing it; a laptop keeps the contents beside the lesson, so there it is a count alone.
+ * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
+ * how many (opening the contents, with the ways out of the lesson), › the next; before the first
+ * section ‹ is the lesson before, past the last › is the way on, in honey, which learns the lesson.
+ * Then the lesson's own `tools`. A jump between sections replaces the page's entry, as a contents link
+ * does: Back still leaves the lesson.
  */
-function SectionStepper({ lesson, reading }: { lesson: Lesson; reading: string | null }) {
+function LessonBar({
+  lesson,
+  reading,
+  track,
+  tools,
+}: {
+  lesson: Lesson
+  reading: string | null
+  track: LessonTrack
+  tools?: ReactNode
+}) {
   const { t } = useTranslation('learn')
   const [open, setOpen] = useState(false)
+  const of = lesson.sections.length
   const at = Math.max(
     lesson.sections.findIndex((_, s) => sectionId(s) === reading),
     0,
   )
-  const of = lesson.sections.length
-  const count = `${at + 1} / ${of}`
-  // A jump replaces the page's entry, as a contents link does: Back still leaves the lesson.
-  const step = (to: number, label: string, Icon: typeof ChevronLeft) =>
-    to >= 0 && to < of ? (
-      <ButtonLink
+  const section = (to: number, label: string, Icon: typeof ChevronLeft) => (
+    <ButtonLink
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      title={label}
+      className={DOCK_BUTTON}
+      render={<Link to="." hash={sectionId(to)} replace />}
+    >
+      <Icon aria-hidden />
+    </ButtonLink>
+  )
+  const leave = (way: TrackLink, Icon: typeof ChevronLeft, primary: boolean) => (
+    <ButtonLink
+      variant={primary ? 'default' : 'ghost'}
+      size="icon"
+      aria-label={named(way)}
+      title={named(way)}
+      onClick={way.onGo}
+      className={DOCK_BUTTON}
+      render={way.link}
+    >
+      <Icon aria-hidden />
+    </ButtonLink>
+  )
+  const back =
+    at > 0 ? (
+      section(at - 1, t('previousSection'), ChevronLeft)
+    ) : track.previous ? (
+      leave(track.previous, ChevronsLeft, false)
+    ) : (
+      <Button
         variant="ghost"
         size="icon"
-        aria-label={label}
-        title={label}
-        className="rounded-full"
-        render={<Link to="." hash={sectionId(to)} replace />}
+        aria-label={t('previousSection')}
+        disabled
+        className={DOCK_BUTTON}
       >
-        <Icon aria-hidden />
-      </ButtonLink>
-    ) : (
-      <Button variant="ghost" size="icon" aria-label={label} disabled className="rounded-full">
-        <Icon aria-hidden />
+        <ChevronLeft aria-hidden />
       </Button>
     )
+  const on =
+    at < of - 1
+      ? section(at + 1, t('nextSection'), ChevronRight)
+      : leave(track.next, ArrowRight, true)
   return (
     <div
-      role="group"
-      aria-label={t('contentsAt', { at: at + 1, of })}
-      className="flex items-center rounded-full border border-input bg-card p-0.5 shadow-md shadow-foreground/10"
+      role="toolbar"
+      aria-label={t('lessonBar')}
+      className="flex items-center gap-0.5 rounded-full border border-input bg-card p-1 shadow-lg shadow-foreground/15"
     >
-      {step(at - 1, t('previousSection'), ChevronLeft)}
+      {back}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           render={
             <Button
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
-              className="rounded-full px-3 lg:hidden"
+              className="rounded-full px-3"
             />
           }
         >
           <ListOrdered aria-hidden />
-          <span aria-hidden className="tabular-nums">
-            {count}
+          <span aria-hidden className="font-semibold tabular-nums">
+            {at + 1}/{of}
           </span>
         </SheetTrigger>
-        <SheetContent title={t('contents')}>
-          <nav aria-label={t('contents')} className="text-lg">
+        <SheetContent
+          title={t('contents')}
+          footer={
+            <nav aria-label={t('track.label')} className="flex flex-col gap-1">
+              {track.previous ? (
+                <TrackRow way={track.previous} icon={ChevronsLeft} onGo={() => setOpen(false)} />
+              ) : null}
+              <TrackRow way={track.next} icon={ArrowRight} onGo={() => setOpen(false)} />
+              <TrackRow way={track.up} icon={CornerLeftUp} onGo={() => setOpen(false)} />
+            </nav>
+          }
+        >
+          <nav aria-label={t('contents')}>
             <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
           </nav>
         </SheetContent>
       </Sheet>
-      <span aria-hidden className="hidden px-2 font-semibold tabular-nums lg:inline">
-        {count}
-      </span>
-      {step(at + 1, t('nextSection'), ChevronRight)}
+      {on}
+      {tools ? (
+        <>
+          <span aria-hidden className="mx-1 h-6 w-px bg-border" />
+          {tools}
+        </>
+      ) : null}
     </div>
   )
 }
 
 /**
- * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
- * question, whose answer the learner chooses on it. Its sections are listed beside it on a laptop and
- * in a sheet on a phone, each a link to its heading, which the page's scroll padding lands clear of
- * the pinned keys (`theme.css`); floating in the thumb's reach, the sections go one by one, under the
- * lesson's own `options`. A jump replaces the page's entry, so Back still leaves the lesson.
+ * A lesson read top to bottom over the page's keys: they show the example played last, or the open
+ * question, whose answer the learner chooses on them. Its bar floats in the thumb's reach: the
+ * sections one by one, its contents and the ways out of it (`track`), and its own `tools`. A jump
+ * lands its heading clear of pinned keys by the page's scroll padding (`theme.css`).
  */
 export function LessonView({
   lesson,
-  options,
+  track,
+  tools,
 }: {
   lesson: Lesson
-  /** The lesson's options floating over its sections' stepper (a `SpeedDial`). */
-  options?: ReactNode
+  track: LessonTrack
+  /** The lesson's own buttons at the end of its bar (the fingers on its scales). */
+  tools?: ReactNode
 }) {
-  const { t } = useTranslation('learn')
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
-  const root = useRef<HTMLDivElement>(null)
-  const pinned = usePinnedHeight(root)
   const reading = useReadingSection(lesson.sections.map((_, s) => sectionId(s)))
   const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
@@ -200,71 +307,51 @@ export function LessonView({
     setShown(next)
   }
   return (
-    <div ref={root} className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10">
       <PinnedKeyboard
         shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}
         onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
       />
-      <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,65ch)_minmax(0,1fr)] lg:gap-x-16">
-        {lesson.sections.length >= CONTENTS_FROM ? (
-          <nav
-            aria-label={t('contents')}
-            // On a laptop the contents keep to the column beside the lesson, under the pinned keys; on
-            // a phone they are a sheet off the floating button.
-            style={{ '--pinned': `${pinned}px` } as CSSProperties}
-            className="hidden max-w-prose print:hidden lg:sticky lg:top-[calc(var(--screen-bar)+var(--pinned)+--spacing(6))] lg:col-start-2 lg:row-start-1 lg:block lg:self-start"
+      <div className="flex flex-col gap-10">
+        {lesson.sections.map((section, s) => (
+          <section
+            key={section.heading.en}
+            id={sectionId(s)}
+            // Sections apart by a line and room; a section's text and its examples close together.
+            className={cn(
+              'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+              s > 0 && 'border-t border-border pt-8',
+            )}
           >
-            {/* The nav says its name to a screen reader: the caption is for the eye. */}
-            <p aria-hidden className="mb-2 text-sm font-semibold text-muted-foreground">
-              {t('contents')}
-            </p>
-            <SectionLinks lesson={lesson} reading={reading} />
-          </nav>
-        ) : null}
-        <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-1">
-          {lesson.sections.map((section, s) => (
-            <section
-              key={section.heading.en}
-              id={sectionId(s)}
-              // Sections apart by a line and room; a section's text and its examples close together.
-              className={cn(
-                'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
-                s > 0 && 'border-t border-border pt-8',
-              )}
-            >
-              <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
-              {section.blocks.map((block, b) => {
-                const id = `${s}.${b}`
-                if (block.kind !== 'question')
-                  return <LessonBlock key={id} block={block} onShow={show} />
-                const open = question?.id === id ? question : null
-                const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
-                return (
-                  <QuestionBlock
-                    key={id}
-                    ask={block.ask}
-                    stage={open ? open.stage : 'closed'}
-                    count={chosenOf(open?.chosen ?? [], answerKeys)}
-                    onOpen={() => dispatch({ type: 'open', id })}
-                    onReveal={() => {
-                      dispatch({ type: 'reveal' })
-                      play(answerSounds(block.answer, answerKeys.keys))
-                    }}
-                    onRetry={() => dispatch({ type: 'retry' })}
-                  />
-                )
-              })}
-            </section>
-          ))}
-        </div>
+            <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
+            {section.blocks.map((block, b) => {
+              const id = `${s}.${b}`
+              if (block.kind !== 'question')
+                return <LessonBlock key={id} block={block} onShow={show} />
+              const open = question?.id === id ? question : null
+              const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
+              return (
+                <QuestionBlock
+                  key={id}
+                  ask={block.ask}
+                  stage={open ? open.stage : 'closed'}
+                  count={chosenOf(open?.chosen ?? [], answerKeys)}
+                  onOpen={() => dispatch({ type: 'open', id })}
+                  onReveal={() => {
+                    dispatch({ type: 'reveal' })
+                    play(answerSounds(block.answer, answerKeys.keys))
+                  }}
+                  onRetry={() => dispatch({ type: 'retry' })}
+                />
+              )
+            })}
+          </section>
+        ))}
       </div>
       <FloatingActions>
-        {options}
-        {lesson.sections.length >= CONTENTS_FROM ? (
-          <SectionStepper lesson={lesson} reading={reading} />
-        ) : null}
+        <LessonBar lesson={lesson} reading={reading} track={track} tools={tools} />
       </FloatingActions>
     </div>
   )

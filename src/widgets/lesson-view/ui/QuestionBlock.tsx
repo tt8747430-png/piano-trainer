@@ -1,4 +1,4 @@
-import { Check, X } from 'lucide-react'
+import { Check, Eye, Piano, RotateCcw, X, type LucideIcon } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
@@ -8,6 +8,7 @@ import type { QuestionState } from '../model/lesson-question'
 /** The question's one button at each stage, so a keyboard user's focus stays on it. */
 interface QuestionAction {
   readonly label: string
+  readonly icon: LucideIcon
   onClick(): void
 }
 
@@ -40,35 +41,45 @@ export function QuestionBlock({
   const id = useId()
   const action: QuestionAction =
     stage === 'closed'
-      ? { label: t('question.answer'), onClick: onOpen }
+      ? { label: t('question.answer'), icon: Piano, onClick: onOpen }
       : stage === 'choosing' || stage === 'wrong'
-        ? { label: t('question.show'), onClick: onReveal }
-        : { label: t('question.again'), onClick: onRetry }
+        ? { label: t('question.show'), icon: Eye, onClick: onReveal }
+        : { label: t('question.again'), icon: RotateCcw, onClick: onRetry }
+  const Icon = action.icon
   return (
-    <div role="group" aria-labelledby={id} className="flex flex-col gap-3 card p-4">
-      <p id={id} className="font-semibold">
+    <div
+      role="group"
+      aria-labelledby={id}
+      className="flex flex-wrap items-center gap-x-4 gap-y-2 card px-4 py-3 text-base"
+    >
+      <p id={id} className="min-w-0 flex-1 basis-64 font-semibold text-pretty">
         {localText(ask, locale)}
       </p>
-      <p role="status" className="flex items-center gap-2 empty:sr-only">
-        {stage === 'right' ? (
-          <>
-            <Check aria-hidden className="size-5 text-learned" />
-            {t('question.right')}
-          </>
-        ) : stage === 'wrong' ? (
-          <>
-            <X aria-hidden className="size-5 text-destructive" />
-            {t('question.wrong')}
-          </>
-        ) : stage === 'answer' ? (
-          t('question.shown')
-        ) : stage === 'choosing' ? (
-          <span className="text-muted-foreground tabular-nums">{t('question.chosen', count)}</span>
-        ) : null}
-      </p>
-      <Button variant="soft" className="self-start" onClick={action.onClick}>
-        {action.label}
-      </Button>
+      <div className="flex items-center gap-3">
+        <p role="status" className="flex items-center gap-1.5 text-sm empty:sr-only">
+          {stage === 'right' ? (
+            <>
+              <Check aria-hidden className="size-5 text-learned" />
+              {t('question.right')}
+            </>
+          ) : stage === 'wrong' ? (
+            <>
+              <X aria-hidden className="size-5 text-destructive" />
+              {t('question.wrong')}
+            </>
+          ) : stage === 'answer' ? (
+            t('question.shown')
+          ) : stage === 'choosing' ? (
+            <span className="text-muted-foreground tabular-nums">
+              {t('question.chosen', count)}
+            </span>
+          ) : null}
+        </p>
+        <Button variant="soft" className="rounded-full" onClick={action.onClick}>
+          <Icon data-icon="inline-start" aria-hidden />
+          {action.label}
+        </Button>
+      </div>
     </div>
   )
 }

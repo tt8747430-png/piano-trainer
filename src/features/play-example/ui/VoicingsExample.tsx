@@ -10,8 +10,7 @@ import {
   type WrittenVoicing,
 } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ChordButton, PlayLabel, type ShownKeys, unmarked } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { ChordButton, PlayButton, type ShownKeys, unmarked } from '@/shared/ui'
 import { TappableStaff } from './TappableStaff'
 
 /** How fast the voicings walk, a chord each two beats, as a row of chords does. */
@@ -61,12 +60,12 @@ export function VoicingsExample({
           </li>
         ))}
       </ul>
-      <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
-        <TappableStaff music={music} score={score} tempo={STAFF_TEMPO} onShow={onShow} />
+      <div className="flex items-center gap-3">
+        <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none">
+          <TappableStaff music={music} score={score} tempo={STAFF_TEMPO} onShow={onShow} />
+        </div>
+        <PlayButton label={t('play')} playing={playback.playing === 'row'} onClick={playRow} />
       </div>
-      <Button variant="soft" size="pill" className="self-start" onClick={playRow}>
-        <PlayLabel playing={playback.playing === 'row'}>{t('play')}</PlayLabel>
-      </Button>
     </div>
   )
 }

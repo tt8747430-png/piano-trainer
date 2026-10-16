@@ -5,8 +5,7 @@ import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/musi
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayLabel, type ShownKeys } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { PlayButton, type ShownKeys } from '@/shared/ui'
 import { scaleExample } from '../model/scale-example'
 import { TappableStaff } from './TappableStaff'
 
@@ -38,9 +37,19 @@ export function ScaleExample({
   const score = useMemo(() => notate(example.music), [example])
   return (
     <figure aria-labelledby={captionId} className="flex flex-col gap-3 card p-4">
-      <figcaption id={captionId} className="font-display text-xl font-semibold">
-        {scaleName(tonic, kind)}
-      </figcaption>
+      <div className="flex items-center justify-between gap-3">
+        <figcaption id={captionId} className="font-display text-xl font-semibold">
+          {scaleName(tonic, kind)}
+        </figcaption>
+        <PlayButton
+          label={t('play')}
+          playing={playback.playing === 'run'}
+          onClick={() => {
+            onShow(example.shown)
+            playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
+          }}
+        />
+      </div>
       <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
         <TappableStaff
           music={example.music}
@@ -52,16 +61,6 @@ export function ScaleExample({
           onShow={onShow}
         />
       </div>
-      <Button
-        variant="soft"
-        className="self-start"
-        onClick={() => {
-          onShow(example.shown)
-          playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
-        }}
-      >
-        <PlayLabel playing={playback.playing === 'run'}>{t('play')}</PlayLabel>
-      </Button>
     </figure>
   )
 }
