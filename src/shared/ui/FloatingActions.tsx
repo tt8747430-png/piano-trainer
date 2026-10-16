@@ -35,15 +35,18 @@ const COLUMN_ID = 'floating-actions'
  * first to come highest, so none covers another. The page under it pads its foot clear of them.
  */
 export function FloatingActions({
-  first = false,
+  last = false,
   children,
 }: {
-  /** Highest in the column whenever it came: what stands apart from the screen's own actions (Keys). */
-  first?: boolean
+  /**
+   * Lowest in the column whenever it came, nearest the screen's foot: the folded keys, which unfold
+   * from there.
+   */
+  last?: boolean
   children: ReactNode
 }) {
   return createPortal(
-    <div className={cn('flex flex-col items-end gap-3', first && 'order-first')}>{children}</div>,
+    <div className={cn('flex flex-col items-end gap-3', last && 'order-last')}>{children}</div>,
     floatingColumn(),
   )
 }

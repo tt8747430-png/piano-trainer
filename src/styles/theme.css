@@ -390,6 +390,20 @@
 @utility pb-docked-* {
   padding-bottom: calc(--spacing(--value(integer)) + var(--docked, 0px));
 }
+/* The keys and the button they fold into share one name, so folding morphs one into the other
+   (`morph`); the page under them changes at once. */
+@utility vt-keys {
+  view-transition-name: keys;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(keys) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out);
+}
+
 /* What is docked beside the rail or the sidebar starts where the screen does. */
 @utility left-rail {
   left: calc(--spacing(20) + env(safe-area-inset-left));

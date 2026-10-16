@@ -10,7 +10,7 @@ import {
   type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { cn } from '@/shared/lib'
+import { cn, morph } from '@/shared/lib'
 import {
   Docked,
   FabPill,
@@ -20,7 +20,6 @@ import {
   RailGroup,
   type ShownKeys,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
@@ -28,8 +27,10 @@ import { LiveKeyboard } from './LiveKeyboard'
  * middle octaves grown to hold the keys it opened on and the keys the app shows), and it keeps the
  * keys the app shows in view. A key a hand chooses (`selected`) never moves it: the keys hold still
  * under the finger (ADR 0009). It stays where the keyboard settings dock it, at the screen's foot over
- * the tab bar or at its top under the screen's bar; folded from its rail, it is a button that brings
- * it back, and stays folded on every page until then.
+ * the tab bar or at its top under the screen's bar; folded from its rail, it is a button floating
+ * where it was (lowest among the screen's actions at the foot, under the screen's bar at the top)
+ * that brings it back, and stays folded on every page until then. Folding and unfolding morph the
+ * keys into the button and back.
  */
 export function PinnedKeyboard({
   shown,
@@ -63,23 +64,27 @@ export function PinnedKeyboard({
   const { keys, marks } = shown
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
-  const fold = (on: boolean) => setKeyboard(store, { folded: on })
-  const unfold = (
-    <Button variant="soft" size="pill" onClick={() => fold(false)}>
-      <Piano aria-hidden />
-      {t('rail.unfold')}
-    </Button>
-  )
-  // Folded at the foot, the keys are a floating button beside the screen's actions; at the top, a
-  // button where they were.
-  if (folded)
-    return dock === 'bottom' ? (
-      <FloatingActions first>
-        <FabPill label={t('rail.unfold')} icon={Piano} onClick={() => fold(false)} />
-      </FloatingActions>
-    ) : (
-      <div className={cn('flex justify-end pt-2', className)}>{unfold}</div>
+  const fold = (on: boolean) => morph(() => setKeyboard(store, { folded: on }))
+  if (folded) {
+    const unfold = (
+      <FabPill
+        label={t('rail.unfold')}
+        icon={Piano}
+        onClick={() => fold(false)}
+        className="vt-keys"
+      />
     )
+    // Folded, the keys float where they were and take no room of the page's: at the foot, nearest it
+    // of the screen's actions; at the top, under the screen's bar, moving with it (fixed, out of the
+    // page's flow, where `--screen-bar` reaches it).
+    return dock === 'bottom' ? (
+      <FloatingActions last>{unfold}</FloatingActions>
+    ) : (
+      <div className="fixed top-screen-bar right-gutter z-20 pt-safe duration-200 ease-out print:hidden motion-safe:transition-[top]">
+        {unfold}
+      </div>
+    )
+  }
   const body = (
     <LiveKeyboard
       range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
@@ -102,8 +107,8 @@ export function PinnedKeyboard({
       }
     />
   )
-  if (dock === 'bottom') return <Docked>{body}</Docked>
+  if (dock === 'bottom') return <Docked className="vt-keys">{body}</Docked>
   // The rail's strip is as tall as its buttons' targets and draws only its lower part: the rest is
   // already the gap over the keys, so the keyboard sits that much nearer what is above it.
-  return <Pinned className={cn('-mt-2', className)}>{body}</Pinned>
+  return <Pinned className={cn('vt-keys -mt-2', className)}>{body}</Pinned>
 }

@@ -131,6 +131,32 @@ describe('Practice → Chord finder', () => {
     expect(settingsStore.getState().keyboard.folded).toBe(false)
   })
 
+  it('floats the folded keys lowest among its actions, nearest the foot they unfold to', async () => {
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    act(() =>
+      settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, folded: true } })),
+    )
+    const keys = screen.getByRole('button', { name: 'Keys' })
+    expect(screen.getByRole('main')).not.toContainElement(keys)
+    expect(keys.closest('[data-slot="floating-actions"] > *')).toHaveClass('order-last')
+  })
+
+  it('floats the folded keys under the screen’s bar where they dock at the top, taking no row', async () => {
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    act(() =>
+      settingsStore.setState((state) => ({
+        keyboard: { ...state.keyboard, dock: 'top', folded: true },
+      })),
+    )
+    // Fixed, it stands out of the page's flow, under the screen's bar.
+    expect(screen.getByRole('button', { name: 'Keys' }).parentElement).toHaveClass(
+      'fixed',
+      'top-screen-bar',
+    )
+  })
+
   it('hides the staff, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
