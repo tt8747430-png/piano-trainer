@@ -593,8 +593,12 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
 
 - **Card** (card paper, 14px, the 1px soft line): grouped rows, the practice card, a settings group (its title on a
   sand band over a 1px line).
-- **Continue** (ADR 0057): one honey button floating over Learn in the thumb's reach, 56px and round-ended: a
-  round tile with its step's icon (read or play), then Continue over the step's title in Literata, truncated.
+- **Continue** (ADR 0057, 0058): one honey button floating over Learn, 56px and round: its step's icon (read or
+  play) alone, named by its tooltip; with names asked, a pill with Continue over the step's title in Literata.
+- **Floating buttons** (ADR 0058) stand where Settings says: down the left or right edge in a column, or in a row
+  in the middle (the default), each its icon alone unless names are asked.
+- **A staff's options** sit on its card as small round toggles drawn as what they show (a hand, `C E`, `C7`),
+  sand when on.
 - **Step row:** a 48px tile in its kind's wash, no border, with a 20px icon in its deep shade; the title in Onest 600
   17px; the learned toggle at the end.
 - **Row link** (64px): a 48px tile in its paint's wash with a 20px icon in its deep shade, or its number in a
