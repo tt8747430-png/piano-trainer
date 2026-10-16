@@ -100,7 +100,7 @@ const rightHandSongs: Lesson = {
           kind: 'text',
           text: {
             en: 'C, D and E, with one skip from C to E in the third bar, fingers 1 to 3.',
-            ru: 'До, ре и ми, в третьем такте скачок от до к ми, пальцы 1 и 3.',
+            ru: 'До, ре и ми, в третьем такте скачок от до к ми, пальцы с 1 по 3.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 C4 C4 D4 E4/2 D4/2 C4 E4 D4 D4 C4/1' },

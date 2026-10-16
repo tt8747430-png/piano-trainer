@@ -47,8 +47,8 @@ const understanding: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Right hand, up: 1-2-3-1-2-3-5. The thumb passes under to the middle C.',
-              ru: 'Правая рука вверх: 1-2-3-1-2-3-5. Большой палец подкладывается на среднее до.',
+              en: 'Right hand, up: 1-2-3-1-2-3-5. The thumb passes under to the C halfway up.',
+              ru: 'Правая рука вверх: 1-2-3-1-2-3-5. Большой палец подкладывается на до посередине.',
             },
             {
               en: 'Left hand, up: 5-4-2-1-4-2-1. Finger 4 crosses over the thumb to E.',

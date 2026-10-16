@@ -111,8 +111,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'Step 2: down the circle of fifths, each I the next ii',
-            ru: 'Шаг 2: вниз по квинтовому кругу, каждый I — следующий ii',
+            en: 'Step 2: down by whole tones, each I the next ii',
+            ru: 'Шаг 2: вниз по целым тонам, каждый I — следующий ii',
           },
           target: {
             opens: 'player',
@@ -197,8 +197,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'Step 2: from the 7th, down the circle of fifths',
-            ru: 'Шаг 2: от септимы, вниз по квинтовому кругу',
+            en: 'Step 2: from the 7th, down by whole tones',
+            ru: 'Шаг 2: от септимы, вниз по целым тонам',
           },
           target: {
             opens: 'player',

@@ -55,7 +55,7 @@ const chordsAndInversionsInSixEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Брат, напомни мне опять» in the Player',
+            en: '“Брат, напомни мне опять” in the Player',
             ru: '«Брат, напомни мне опять» в плеере',
           },
           target: { opens: 'piece', piece: 'brat' },
@@ -63,7 +63,7 @@ const chordsAndInversionsInSixEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Прости меня, Боже» in the Player',
+            en: '“Прости меня, Боже” in the Player',
             ru: '«Прости меня, Боже» в плеере',
           },
           target: { opens: 'piece', piece: 'prosti' },

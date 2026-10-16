@@ -56,7 +56,7 @@ const sixthsInCompoundTime: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Кто я в этом мире, что Ты помнишь меня?» in the Player',
+            en: '“Кто я в этом мире, что Ты помнишь меня?” in the Player',
             ru: '«Кто я в этом мире, что Ты помнишь меня?» в плеере',
           },
           target: { opens: 'piece', piece: 'ktoya' },
@@ -64,7 +64,7 @@ const sixthsInCompoundTime: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«В Боге одном лишь душа найдет» in the Player',
+            en: '“В Боге одном лишь душа найдет” in the Player',
             ru: '«В Боге одном лишь душа найдет» в плеере',
           },
           target: { opens: 'piece', piece: 'vboge' },
@@ -72,7 +72,7 @@ const sixthsInCompoundTime: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Если в бурях жизни дух твой удручён» in the Player',
+            en: '“Если в бурях жизни дух твой удручён” in the Player',
             ru: '«Если в бурях жизни дух твой удручён» в плеере',
           },
           target: { opens: 'piece', piece: 'buri' },

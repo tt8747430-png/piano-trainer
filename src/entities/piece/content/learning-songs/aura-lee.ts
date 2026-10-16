@@ -13,7 +13,7 @@ export default definePiece({
   tempo: 76,
   pattern: 'ballad',
   note: {
-    en: 'A song of 1861, whose tune became Elvis Presley’s «Love Me Tender».',
+    en: 'A song of 1861, whose tune became Elvis Presley’s “Love Me Tender”.',
     ru: 'Песня 1861 года, мелодия которой стала песней Элвиса Пресли «Love Me Tender».',
   },
   sections: [

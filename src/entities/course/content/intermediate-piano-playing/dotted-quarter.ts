@@ -29,7 +29,7 @@ const dottedQuarter: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A dotted quarter and an eighth fill two beats. Count «1 – 2 and»: the eighth falls on the «and». Bar 1 is even, bar 2 dotted.',
+            en: 'A dotted quarter and an eighth fill two beats. Count “1 – 2 and”: the eighth falls on the “and”. Bar 1 is even, bar 2 dotted.',
             ru: 'Четверть с точкой и восьмая занимают две доли. Считайте «раз – два и»: восьмая звучит на «и». Первый такт ровный, второй — с точкой.',
           },
         },
@@ -44,7 +44,7 @@ const dottedQuarter: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Clap the rhythm, counting «1 – 2 and 3 4» aloud.',
+              en: 'Clap the rhythm, counting “1 – 2 and 3 4” aloud.',
               ru: 'Прохлопайте ритм, считая вслух «раз – два и три четыре».',
             },
             {

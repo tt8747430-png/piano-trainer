@@ -35,7 +35,7 @@ const rightHandSixths: Lesson = {
               ru: 'Сыграйте Dm – Gm – A – Dm – D – Gm – A – Dm секстами.',
             },
             {
-              en: 'Learn «Face to Face with Christ» by its plan.',
+              en: 'Learn “Face to Face with Christ” by its plan.',
               ru: 'Выучите «Face to Face with Christ» по плану.',
             },
           ],
@@ -59,7 +59,7 @@ const rightHandSixths: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Make your own plan for «I Lift My Eyes to Heaven», with the earlier songs as a model.',
+            en: 'Make your own plan for “I Lift My Eyes to Heaven”, with the earlier songs as a model.',
             ru: 'Составьте свой план для «I Lift My Eyes to Heaven», по образцу прежних песен.',
           },
         },

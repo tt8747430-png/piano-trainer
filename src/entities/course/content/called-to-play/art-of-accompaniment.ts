@@ -68,7 +68,7 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Listen more than you show.', ru: 'Больше слушайте, чем показывайте себя.' },
+            { en: 'Listen more than you show off.', ru: 'Больше слушайте, чем показывайте себя.' },
             { en: 'Read the lyrics first.', ru: 'Сначала прочитайте слова песни.' },
             {
               en: 'Let their meaning choose the dynamics, the character and the embellishments.',

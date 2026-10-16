@@ -179,7 +179,7 @@ describe('A trainer', () => {
   it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
     const { router, viewsStore } = await renderApp('/practice/quiz/reading-notes?level=everything')
     expect(await screen.findByRole('combobox', { name: /^Level/ })).toHaveTextContent(
-      'The three anchors',
+      'The three landmarks',
     )
     expect(router.state.location.search).toEqual({})
     expect(viewsStore.getState().views['/practice/quiz/reading-notes']).toEqual({})

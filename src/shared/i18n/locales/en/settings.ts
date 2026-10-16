@@ -11,7 +11,7 @@ export const settings = {
     place: 'Where they stand',
     places: { left: 'Left', center: 'Middle', right: 'Right' },
     labels: 'Show their names',
-    labelsNote: 'Else each is its icon alone; its name shows when you point at it',
+    labelsNote: 'Otherwise each shows its icon only, and its name appears when you point at it',
   },
   progress: {
     label: 'Progress',

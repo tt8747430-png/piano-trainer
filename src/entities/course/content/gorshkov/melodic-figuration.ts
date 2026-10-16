@@ -13,7 +13,7 @@ const melodicFiguration: Lesson = {
   },
   sections: [
     {
-      heading: { en: 'A line, not a chord', ru: 'Линия, а не аккорд' },
+      heading: { en: 'A line through the chords', ru: 'Линия через аккорды' },
       blocks: [
         {
           kind: 'text',
@@ -85,14 +85,14 @@ const melodicFiguration: Lesson = {
         { kind: 'chords', symbols: ['Cm7', 'Dsus4', 'D', 'Gm9', 'Gm/F', 'E♭Maj7'] },
         {
           kind: 'link',
-          title: { en: '«Опять метель» in the Player', ru: '«Опять метель» в плеере' },
+          title: { en: '“Опять метель” in the Player', ru: '«Опять метель» в плеере' },
           target: { opens: 'piece', piece: 'metel' },
         },
         {
           kind: 'note',
           text: {
-            en: 'A pause is a chance, not a duty.',
-            ru: 'Пауза — возможность, а не обязанность.',
+            en: 'A pause invites a figure but never demands one.',
+            ru: 'Пауза позволяет вставить фигуру, но не требует её.',
           },
         },
       ],

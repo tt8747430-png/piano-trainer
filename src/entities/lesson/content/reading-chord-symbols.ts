@@ -78,8 +78,8 @@ const readingChordSymbols: Lesson = {
           kind: 'text',
           lead: { en: 'Three notes have two numbers:', ru: 'У трёх нот по два числа:' },
           text: {
-            en: '2 = 9, 4 = 11, 6 = 13. Add, 2 or 6 adds just that note.',
-            ru: '2 = 9, 4 = 11, 6 = 13. add, 2 или 6 добавляют только эту ноту.',
+            en: '2 = 9, 4 = 11, 6 = 13. A symbol with add, 2 or 6 adds just that note, with no 7th.',
+            ru: '2 = 9, 4 = 11, 6 = 13. Обозначение с add, 2 или 6 добавляет только эту ноту, без септимы.',
           },
         },
         { kind: 'chords', symbols: ['C2', 'Cadd9', 'C6'] },

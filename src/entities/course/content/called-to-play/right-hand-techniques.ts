@@ -35,7 +35,7 @@ const rightHandTechniques: Lesson = {
               ru: 'Сыграйте Am – Dm – E – Am – F – C – Dm – E – Am обеими техниками.',
             },
             {
-              en: 'Learn «All Glory to God in This World» with them.',
+              en: 'Learn “All Glory to God in This World” with them.',
               ru: 'Выучите с ними «All Glory to God in This World».',
             },
           ],

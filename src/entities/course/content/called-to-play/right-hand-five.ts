@@ -45,7 +45,7 @@ const rightHandFive: Lesson = {
               ru: 'Сыграйте Dm – Gm – A – Dm – D – Gm – A – Dm тремя техниками.',
             },
             {
-              en: 'Learn both verses of «Heaven Awaits Me» by its plan.',
+              en: 'Learn both verses of “Heaven Awaits Me” by its plan.',
               ru: 'Выучите оба куплета «Heaven Awaits Me» по плану.',
             },
           ],

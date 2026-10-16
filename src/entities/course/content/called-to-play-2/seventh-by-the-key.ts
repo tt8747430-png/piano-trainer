@@ -5,8 +5,8 @@ const seventhByTheKey: Lesson = {
   id: 'seventh-by-the-key',
   title: { en: 'The 7th chord in a key', ru: 'Септаккорд по тональности' },
   summary: {
-    en: 'Choose maj7 or 7 by the key, the 7th under the chord.',
-    ru: 'Выбирайте maj7 или 7 по тональности, септиму — под аккордом.',
+    en: 'Let the key choose Maj7 or 7, and add the 7th below the chord.',
+    ru: 'Пусть тональность выберет Maj7 или 7, а септиму добавляйте под аккордом.',
   },
   sections: [
     {
@@ -90,7 +90,7 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«О молитва, о молитва!» in the Player',
+            en: '“О молитва, о молитва!” in the Player',
             ru: '«О молитва, о молитва!» в плеере',
           },
           target: { opens: 'piece', piece: 'molitva' },

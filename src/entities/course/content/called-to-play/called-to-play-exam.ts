@@ -15,7 +15,7 @@ const calledToPlayExam: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Prepare two verses of «Long I Wandered in the Shadows» with your own plan: its introduction, ways, dynamics and embellishments.',
+            en: 'Prepare two verses of “Long I Wandered in the Shadows” with your own plan: its introduction, ways, dynamics and embellishments.',
             ru: 'Подготовьте два куплета «Long I Wandered in the Shadows» по своему плану: вступление, способы, динамику и украшения.',
           },
         },

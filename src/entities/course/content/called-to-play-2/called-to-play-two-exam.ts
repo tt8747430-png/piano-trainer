@@ -23,7 +23,7 @@ const calledToPlayTwoExam: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Когда Христос меня простил» in the Player',
+            en: '“Когда Христос меня простил” in the Player',
             ru: '«Когда Христос меня простил» в плеере',
           },
           target: { opens: 'piece', piece: 'prostil' },
@@ -31,7 +31,7 @@ const calledToPlayTwoExam: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Твои небеса и Твоя земля» in the Player',
+            en: '“Твои небеса и Твоя земля” in the Player',
             ru: '«Твои небеса и Твоя земля» в плеере',
           },
           target: { opens: 'piece', piece: 'nebesa' },

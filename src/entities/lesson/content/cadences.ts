@@ -9,7 +9,7 @@ const cadences: Lesson = {
   title: { en: 'Cadences', ru: 'Каденции' },
   summary: {
     en: 'Hear and play the four cadences that end a line.',
-    ru: 'Слышите и играйте четыре каденции, которыми кончаются фразы.',
+    ru: 'Слушайте и играйте четыре каденции, которыми кончаются фразы.',
   },
   sections: [
     {

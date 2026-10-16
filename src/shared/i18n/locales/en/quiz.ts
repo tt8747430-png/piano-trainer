@@ -166,8 +166,8 @@ export const quiz = {
       descending: 'Coming down',
     },
     notes: {
-      anchors: 'The three anchors',
-      'anchors-everywhere': 'Anchors everywhere',
+      anchors: 'The three landmarks',
+      'anchors-everywhere': 'Landmarks everywhere',
       'treble-five': 'Treble: five fingers',
       'treble-lines': 'Treble: lines',
       'treble-spaces': 'Treble: spaces',

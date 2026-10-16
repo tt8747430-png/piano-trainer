@@ -37,8 +37,8 @@ const pentatonicAndBlues: Lesson = {
           kind: 'text',
           lead: { en: 'The minor pentatonic', ru: 'Минорная пентатоника' },
           text: {
-            en: 'holds the notes of the major pentatonic a minor 3rd up. A minor shares C major’s.',
-            ru: 'состоит из нот мажорной пентатоники на малую терцию выше. У ля минорной те же ноты, что у до мажорной.',
+            en: 'has the same notes as the major pentatonic a minor 3rd above it: A minor shares C major’s.',
+            ru: 'состоит из тех же нот, что мажорная пентатоника на малую терцию выше: у ля минорной те же ноты, что у до мажорной.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'mpent' },

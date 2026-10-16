@@ -56,7 +56,7 @@ const thinkingInDegrees: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '«Ромашковые поля» is in D minor. Each degree of its scale carries a chord, V with the raised 7th, C♯.',
+            en: '“Ромашковые поля” is in D minor. Each degree of its scale carries a chord, V with the raised 7th, C♯.',
             ru: '«Ромашковые поля» — в ре миноре. На каждой ступени его гаммы стоит аккорд, на V — с повышенной VII ступенью, до-диезом.',
           },
         },
@@ -134,13 +134,13 @@ const thinkingInDegrees: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
+          title: { en: '“Ромашковые поля” in the Player', ru: '«Ромашковые поля» в плеере' },
           target: { opens: 'piece', piece: 'romashki' },
         },
         {
           kind: 'link',
           title: {
-            en: '«Ромашковые поля»’s chords in any key',
+            en: '“Ромашковые поля”’s chords in any key',
             ru: 'Аккорды «Ромашковых полей» в любой тональности',
           },
           target: {

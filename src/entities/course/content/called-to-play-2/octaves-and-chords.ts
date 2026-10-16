@@ -39,8 +39,8 @@ const octavesAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Octaves go up the scale step by step, or by the chord: its 1st, 2nd, 3rd and 5th.',
-            ru: 'Октавы идут гаммой, ступень за ступенью, или по аккорду: по его 1, 2, 3 и 5-й ступеням.',
+            en: 'Octaves go up the scale step by step, or through the chord’s figure 1–2–3–5.',
+            ru: 'Октавы идут гаммой, ступень за ступенью, или по аккорду фигурой 1–2–3–5.',
           },
         },
         { kind: 'pattern', pattern: 'oct', piece: 'zemlya' },
@@ -75,7 +75,7 @@ const octavesAndChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Пусть земля вся утверждает» in the Player',
+            en: '“Пусть земля вся утверждает” in the Player',
             ru: '«Пусть земля вся утверждает» в плеере',
           },
           target: { opens: 'piece', piece: 'zemlya' },
@@ -83,7 +83,7 @@ const octavesAndChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«В небесах моя отчизна» in the Player',
+            en: '“В небесах моя отчизна” in the Player',
             ru: '«В небесах моя отчизна» в плеере',
           },
           target: { opens: 'piece', piece: 'otchizna' },

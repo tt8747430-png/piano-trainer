@@ -38,7 +38,7 @@ const rightHandChords: Lesson = {
               ru: 'Сыграйте Am – Dm – E – Am – G – F – E – Am тремя техниками.',
             },
             {
-              en: 'Learn «For Love, For Mercy, For Salvation» by its plan.',
+              en: 'Learn “For Love, For Mercy, For Salvation” by its plan.',
               ru: 'Выучите «For Love, For Mercy, For Salvation» по плану.',
             },
           ],

@@ -19,7 +19,7 @@ const threeFour: Lesson = {
           kind: 'text',
           lead: { en: '3/4:', ru: '3/4:' },
           text: {
-            en: 'three quarter-note beats in every bar. Count «1 2 3» and lean on 1: ONE two three.',
+            en: 'three quarter-note beats in every bar. Count “1 2 3” and lean on 1: ONE two three.',
             ru: 'три четвертные доли в каждом такте. Считайте «раз-два-три» с опорой на первую: РАЗ-два-три.',
           },
         },
@@ -37,7 +37,7 @@ const threeFour: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A whole note is too long for 3/4. A note that fills the bar is a dotted half: hold it «1 2 3».',
+            en: 'A whole note is too long for 3/4. A note that fills the bar is a dotted half: hold it “1 2 3”.',
             ru: 'Целая нота для 3/4 слишком долгая. Звук на весь такт — половинная с точкой: держите её «раз-два-три».',
           },
         },
@@ -101,7 +101,7 @@ const threeFour: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the chord an oom-pah-pah on C spreads out.',
+            en: 'Play the whole chord that an oom-pah-pah on C breaks up.',
             ru: 'Сыграйте целиком аккорд, из которого строится вальсовый бас от до.',
           },
           answer: { chord: 'C' },
@@ -109,7 +109,7 @@ const threeFour: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play G7’s «pah»: its 7th and 3rd, F and B.',
+            en: 'Play G7’s “pah”: its 7th and 3rd, F and B.',
             ru: 'Сыграйте аккордовую часть G7: септиму и терцию, фа и си.',
           },
           answer: { notes: ['F', 'B'] },

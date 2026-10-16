@@ -70,8 +70,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Minor counts from natural minor. Raising the 7th makes V major, so it leads home.',
-            ru: 'Минор считают от натурального минора. Повышенная седьмая ступень делает V мажорным, и он ведёт домой.',
+            en: 'Minor-key numerals count from natural minor. Raising the 7th makes V major, so it leads home.',
+            ru: 'В миноре ступени считают от натурального минора. Повышенная седьмая ступень делает V мажорным, и он ведёт домой.',
           },
         },
         { kind: 'progression', numerals: 'i iv V i', key: A_MINOR },

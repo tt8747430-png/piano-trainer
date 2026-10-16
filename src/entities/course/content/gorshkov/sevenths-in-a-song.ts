@@ -64,7 +64,7 @@ const seventhsInASong: Lesson = {
       ],
     },
     {
-      heading: { en: 'On «Ромашковые поля»', ru: 'На песне «Ромашковые поля»' },
+      heading: { en: 'On “Ромашковые поля”', ru: 'На песне «Ромашковые поля»' },
       blocks: [
         {
           kind: 'text',
@@ -98,7 +98,7 @@ const seventhsInASong: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
+          title: { en: '“Ромашковые поля” in the Player', ru: '«Ромашковые поля» в плеере' },
           target: { opens: 'piece', piece: 'romashki' },
         },
       ],

@@ -358,7 +358,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
       ru: 'Плавное арпеджио из левой руки в правую, звуки аккорда 1–3–2–4–3 считая снизу.',
     },
     description: {
-      en: 'The arpeggio passes from the left hand (1–5–8, without the 3rd) into the right hand, which plays the chord notes in the order 1–3–2–4–3, counted from the bottom. The most used type in church: it brings movement and sings.',
+      en: 'The arpeggio passes from the left hand (1–5–8, without the 3rd) into the right hand, which plays the chord notes in the order 1–3–2–4–3, counted from the bottom. The most used type in church: it keeps the song moving and singing.',
       ru: 'Арпеджио переходит из левой руки (1–5–8, без терции) в правую, которая играет звуки аккорда в порядке 1–3–2–4–3, считая снизу. Самый употребительный тип в церкви: даёт движение и певучесть.',
     },
     rh: 'r4',
@@ -424,7 +424,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     group: 'gorshkov',
     name: { en: '1 · Chord pulse', ru: '1 · Аккордовая пульсация' },
     idea: {
-      en: 'The chord on every beat, beats 1 and 4 brighter, over the root held.',
+      en: 'The chord on every beat, beats 1 and 4 brighter, over the held root.',
       ru: 'Аккорд на каждую долю, 1-я и 4-я ярче, над выдержанным басом.',
     },
     description: {

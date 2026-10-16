@@ -146,7 +146,7 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Where the melody holds a long note on V before I, the bar can take the whole ii–V. Gorshkov’s «What a Friend» writes II and V over its G, then I on C.',
+            en: 'Where the melody holds a long note on V before I, the bar can take the whole ii–V. Gorshkov’s “What a Friend” writes II and V over its G, then I on C.',
             ru: 'Там, где мелодия тянет долгую ноту на V перед I, такт может вместить весь оборот 2-5. В «What a Friend» Горшков пишет II и V над его G, затем I на C.',
           },
         },
@@ -188,7 +188,7 @@ const chordPulse: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '«What a Friend» in the Player', ru: '«What a Friend» в плеере' },
+          title: { en: '“What a Friend” in the Player', ru: '«What a Friend» в плеере' },
           target: { opens: 'piece', piece: 'wafriend' },
         },
       ],

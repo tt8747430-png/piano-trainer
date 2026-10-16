@@ -7,7 +7,7 @@ const whenToChange: Lesson = {
   id: 'when-to-change',
   title: { en: 'When to change the pedal', ru: 'Когда менять педаль' },
   summary: {
-    en: 'Change the pedal with the harmony, and less over runs.',
+    en: 'Change the pedal with the harmony, and use less of it over runs.',
     ru: 'Менять педаль со сменой гармонии, а на пассажах брать меньше.',
   },
   sections: [

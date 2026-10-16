@@ -15,8 +15,8 @@ const rightHandRuns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The third technique runs down to the root in pairs. The fourth runs up the chord’s 1, 2, 3 and 5.',
-            ru: 'Третья техника спускается к основному тону парами. Четвёртая поднимается по 1, 2, 3 и 5 ступеням аккорда.',
+            en: 'The third technique takes the 2nd and 5th together, then runs down 3–2–1 to the root. The fourth runs up the chord’s 1, 2, 3 and 5.',
+            ru: 'Третья техника берёт вместе секунду и квинту, затем спускается 3–2–1 к основному тону. Четвёртая поднимается по 1, 2, 3 и 5 ступеням аккорда.',
           },
         },
         { kind: 'pattern', pattern: 't3', piece: 'ex6' },
@@ -34,7 +34,7 @@ const rightHandRuns: Lesson = {
               ru: 'Сыграйте G – C – D – Em – Am – D – G обоими пассажами.',
             },
             {
-              en: 'Learn «What a Fellowship» by its plan.',
+              en: 'Learn “What a Fellowship” by its plan.',
               ru: 'Выучите «What a Fellowship» по плану.',
             },
           ],
@@ -58,7 +58,7 @@ const rightHandRuns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Make your own plan for «You Came for Me, O Saviour»: a way or a technique on each chord.',
+            en: 'Make your own plan for “You Came for Me, O Saviour”: a way or a technique on each chord.',
             ru: 'Составьте свой план для «You Came for Me, O Saviour»: способ или технику на каждый аккорд.',
           },
         },

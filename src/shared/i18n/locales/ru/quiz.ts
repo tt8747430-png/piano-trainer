@@ -162,8 +162,8 @@ export const quiz: LocaleResources['quiz'] = {
       descending: 'Сверху вниз',
     },
     notes: {
-      anchors: 'Три опорные ноты',
-      'anchors-everywhere': 'Опорные ноты везде',
+      anchors: 'Три ориентира',
+      'anchors-everywhere': 'Ориентиры везде',
       'treble-five': 'Скрипичный: пять пальцев',
       'treble-lines': 'Скрипичный: линейки',
       'treble-spaces': 'Скрипичный: промежутки',

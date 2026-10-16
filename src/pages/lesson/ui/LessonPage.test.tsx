@@ -34,7 +34,7 @@ describe('A lesson', () => {
     expect(step1.getAttribute('href')).toBe(
       '/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up',
     )
-    const step2 = screen.getByRole('link', { name: /^Step 2: down the circle of fifths/ })
+    const step2 = screen.getByRole('link', { name: /^Step 2: down by whole tones/ })
     expect(step2.getAttribute('href')).toBe(
       '/play/progression?p=ii-V-I&chordSize=sevenths&walk=tones-down',
     )

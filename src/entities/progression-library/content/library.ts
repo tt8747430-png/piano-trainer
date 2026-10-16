@@ -54,14 +54,14 @@ const LIBRARY = [
   }),
   entry('pop', 'yesterday', { major: 'I V/vi vi IV V I vi V/V IV I' }, 'Yesterday', 'Yesterday', {
     note: note(
-      'Two secondary dominants: E7 pulls to Am, D7 to G — which never comes. A broken expectation is a deceptive cadence.',
+      'Two secondary dominants: E7 pulls to Am, and D7 to G, which never comes. That broken expectation is a deceptive cadence.',
       'Две вторичные доминанты: E7 тянет к Am, D7 — к G, который так и не приходит. Обманутое ожидание — прерванная каденция.',
     ),
   }),
   entry('pop', 'clocks', { major: 'I v v ii' }, 'Clocks', 'Clocks', {
     note: note(
-      'Gm is borrowed from C minor, the key’s darker parallel world: a chord of modal interchange.',
-      'Gm взят из до минора, тёмного параллельного мира тональности: аккорд модального смешения.',
+      'Gm is borrowed from C minor, the parallel minor, and darkens the key: a chord of modal interchange.',
+      'Gm взят из одноимённого до минора и затемняет тональность: аккорд модального смешения.',
     ),
   }),
   entry(
@@ -102,8 +102,8 @@ const LIBRARY = [
     'Заимствованная ♭VII',
     {
       note: note(
-        'B♭ is borrowed from C minor, the key’s parallel world: rock’s bluesy step down from I.',
-        'B♭ взят из до минора, параллельного мира тональности: блюзовый шаг рока вниз от I.',
+        'B♭ is borrowed from C minor, the parallel minor: rock’s bluesy step down from I.',
+        'B♭ взят из одноимённого до минора: блюзовый шаг рока вниз от I.',
       ),
     },
   ),

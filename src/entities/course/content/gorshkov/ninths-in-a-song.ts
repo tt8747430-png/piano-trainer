@@ -155,7 +155,7 @@ const ninthsInASong: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '«Ромашковые поля» in the Player', ru: '«Ромашковые поля» в плеере' },
+          title: { en: '“Ромашковые поля” in the Player', ru: '«Ромашковые поля» в плеере' },
           target: { opens: 'piece', piece: 'romashki' },
         },
       ],

@@ -85,7 +85,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Боже, лишь на милость уповаю я Твою» in the Player',
+            en: '“Боже, лишь на милость уповаю я Твою” in the Player',
             ru: '«Боже, лишь на милость уповаю я Твою» в плеере',
           },
           target: { opens: 'piece', piece: 'milost' },
@@ -93,7 +93,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Я нуждаюсь в Тебе, мой Спаситель» in the Player',
+            en: '“Я нуждаюсь в Тебе, мой Спаситель” in the Player',
             ru: '«Я нуждаюсь в Тебе, мой Спаситель» в плеере',
           },
           target: { opens: 'piece', piece: 'nuzhdayus' },
@@ -101,7 +101,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Господи, вселенную премудро Ты создал!» in the Player',
+            en: '“Господи, вселенную премудро Ты создал!” in the Player',
             ru: '«Господи, вселенную премудро Ты создал!» в плеере',
           },
           target: { opens: 'piece', piece: 'vselennaya' },
@@ -109,7 +109,7 @@ const balanceOfAccompaniment: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Так уж бывает летней порой» in the Player',
+            en: '“Так уж бывает летней порой” in the Player',
             ru: '«Так уж бывает летней порой» в плеере',
           },
           target: { opens: 'piece', piece: 'letom' },
