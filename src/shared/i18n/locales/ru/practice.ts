@@ -211,6 +211,7 @@ export const practice: LocaleResources['practice'] = {
     },
     altered: 'Альтерированная доминанта: {{symbol}}',
     inKeysShown: 'Показывать тональности аккорда',
+    staffShown: 'Показывать нотный стан',
   },
   passingChords: {
     inKey: 'В тональности',

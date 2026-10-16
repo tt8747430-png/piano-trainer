@@ -112,6 +112,7 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: true,
       inKeys: true,
+      staff: true,
       slash: true,
       chords: [C, C],
     })
@@ -123,6 +124,7 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: false,
       inKeys: false,
+      staff: true,
       slash: false,
       chords: [],
     })

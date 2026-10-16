@@ -65,6 +65,11 @@ function FinderSettings({
               onCheckedChange={finder.setSlash}
             />
             <SwitchRow
+              label={t('chordFinder.staffShown')}
+              checked={finder.staffShown}
+              onCheckedChange={finder.setStaffShown}
+            />
+            <SwitchRow
               label={t('chordFinder.inKeysShown')}
               checked={finder.inKeys}
               onCheckedChange={finder.setInKeys}
@@ -128,12 +133,14 @@ export function ChordFinderPage() {
               slash={finder.slash}
             />
           </section>
-          <ChordTrail
-            chords={finder.staff}
-            musicKey={finder.musicKey}
-            remember={finder.remember}
-            slash={finder.slash}
-          />
+          {finder.staffShown ? (
+            <ChordTrail
+              chords={finder.staff}
+              musicKey={finder.musicKey}
+              remember={finder.remember}
+              slash={finder.slash}
+            />
+          ) : null}
         </div>
         {finder.inKeys && reading ? (
           <aside className="flex flex-col gap-8">

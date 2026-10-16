@@ -105,6 +105,7 @@ describe('createSettingsStore', () => {
       chordFinder: {
         remember: true,
         inKeys: false,
+        staff: false,
         slash: false,
         chords: [
           [48, 52, 55],
@@ -120,6 +121,7 @@ describe('createSettingsStore', () => {
     expect(restored({ chordFinder: { remember: 'yes', chords } }).chordFinder).toEqual({
       remember: false,
       inKeys: true,
+      staff: true,
       slash: true,
       chords: [
         [60, 64, 67],

@@ -209,6 +209,7 @@ export const practice = {
     remember: 'Remember the chords played',
     rememberDetail: 'The staff keeps the last {{count}}, and so does this device',
     inKeysShown: 'Show the keys it is in',
+    staffShown: 'Show the staff',
     slash: 'Name an inversion over its bass',
     slashDetail: 'C/E, else C with its inversion said',
     // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.

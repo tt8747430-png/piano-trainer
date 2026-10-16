@@ -130,6 +130,7 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
     remember: typeof saved.remember === 'boolean' ? saved.remember : DEFAULT_CHORD_FINDER.remember,
     inKeys: typeof saved.inKeys === 'boolean' ? saved.inKeys : DEFAULT_CHORD_FINDER.inKeys,
     slash: typeof saved.slash === 'boolean' ? saved.slash : DEFAULT_CHORD_FINDER.slash,
+    staff: typeof saved.staff === 'boolean' ? saved.staff : DEFAULT_CHORD_FINDER.staff,
     chords: Array.isArray(chords)
       ? chords
           .map(rememberedChord)

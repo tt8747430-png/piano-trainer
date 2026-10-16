@@ -130,6 +130,15 @@ describe('Practice → Chord finder', () => {
     expect(settingsStore.getState().keyboard.folded).toBe(false)
   })
 
+  it('hides the staff, where asked', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=60-64-67')
+    await user.click(await screen.findByRole('button', { name: 'Chord finder settings' }))
+    await user.click(screen.getByRole('switch', { name: 'Show the staff' }))
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('region', { name: 'On the staff' })).not.toBeInTheDocument()
+  })
+
   it('hides the keys a chord is in, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')
