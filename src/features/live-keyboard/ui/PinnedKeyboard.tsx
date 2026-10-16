@@ -1,8 +1,7 @@
 import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { setKeyboard } from '@/features/set-preference'
+import { selectKeyboard, useSettings } from '@/entities/settings'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -10,7 +9,7 @@ import {
   type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { cn, morph } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import {
   Docked,
   FabPill,
@@ -20,6 +19,7 @@ import {
   RailGroup,
   type ShownKeys,
 } from '@/shared/ui'
+import { useFoldKeys } from '../model/use-fold-keys'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
@@ -59,12 +59,11 @@ export function PinnedKeyboard({
   className?: string
 }) {
   const { t } = useTranslation('common')
-  const store = useSettingsStoreApi()
-  const { dock, folded } = useSettings(selectKeyboard)
+  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const { folded, fold } = useFoldKeys()
   const { keys, marks } = shown
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
-  const fold = (on: boolean) => morph(() => setKeyboard(store, { folded: on }))
   if (folded) {
     const unfold = (
       <FabPill

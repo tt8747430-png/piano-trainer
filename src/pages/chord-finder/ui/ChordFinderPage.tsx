@@ -3,7 +3,7 @@ import { Eraser, Music2, Play, SlidersHorizontal, Square } from 'lucide-react'
 import { REMEMBERED_CHORDS } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useViewChange } from '@/shared/lib'
 import { noteParam } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
@@ -26,6 +26,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { ChordKeys, ChordName, ChordTrail, readingAt, readingMarks } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
+import { HiddenParts, type HiddenPart } from './HiddenParts'
 
 /**
  * The Chord finder's settings, in a sheet off its bar: the key it spells in, whether it remembers the
@@ -98,6 +99,31 @@ export function ChordFinderPage() {
   const reading = finding.kind === 'chord' ? readingAt(finding.readings, finder.reading) : undefined
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
+  const { folded, fold } = useFoldKeys()
+  // What the learner hid says so where it was, each a way to bring it back.
+  const hidden: HiddenPart[] = [
+    ...(folded
+      ? [{ id: 'keys', label: t('practice:chordFinder.showKeys'), onShow: () => fold(false) }]
+      : []),
+    ...(finder.staffShown
+      ? []
+      : [
+          {
+            id: 'staff',
+            label: t('practice:chordFinder.showStaff'),
+            onShow: () => finder.setStaffShown(true),
+          },
+        ]),
+    ...(finder.inKeys
+      ? []
+      : [
+          {
+            id: 'inKeys',
+            label: t('practice:chordFinder.showInKeys'),
+            onShow: () => finder.setInKeys(true),
+          },
+        ]),
+  ]
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -131,6 +157,7 @@ export function ChordFinderPage() {
               reading={finder.reading}
               onReading={finder.setReading}
               slash={finder.slash}
+              keysFolded={folded}
             />
           </section>
           {finder.staffShown ? (
@@ -141,6 +168,7 @@ export function ChordFinderPage() {
               slash={finder.slash}
             />
           ) : null}
+          <HiddenParts parts={hidden} />
         </div>
         {finder.inKeys && reading ? (
           <aside className="flex flex-col gap-8">

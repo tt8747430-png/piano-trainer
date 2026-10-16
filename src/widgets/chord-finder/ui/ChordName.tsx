@@ -28,8 +28,8 @@ function SourceLine({ source, children }: { source: ChordSource; children?: stri
 
 /**
  * What the keys make (ADR 0054), as large as the page allows: the chord's symbol in the reading chosen,
- * what it is and leaves out, its notes from the bass up by degree, and every other reading to choose
- * from; else the note, the interval (a 5th as its power chord), or no chord.
+ * what it is and leaves out, and every other reading to choose from (its notes by degree are on the
+ * keys); else the note, the interval (a 5th as its power chord), or no chord.
  */
 export function ChordName({
   finding,
@@ -38,6 +38,7 @@ export function ChordName({
   reading,
   onReading,
   slash,
+  keysFolded,
 }: {
   finding: Finding
   keys: readonly Midi[]
@@ -47,13 +48,15 @@ export function ChordName({
   onReading: (at: number) => void
   /** An inversion named over its bass; else by its root, its inversion said. */
   slash: boolean
+  /** The page's keys are folded away: a chord comes from a MIDI keyboard, or the keys come back. */
+  keysFolded: boolean
 }) {
   const { t } = useTranslation(['practice', 'music'])
   switch (finding.kind) {
     case 'empty':
       return (
         <p className="max-w-[20ch] font-display text-3xl text-balance text-muted-foreground">
-          {t('practice:chordFinder.prompt')}
+          {t(keysFolded ? 'practice:chordFinder.promptFolded' : 'practice:chordFinder.prompt')}
         </p>
       )
     case 'note':
@@ -97,7 +100,7 @@ export function ChordName({
   }
 }
 
-/** A chord found: its symbol, what it is, its notes by degree, and its other readings. */
+/** A chord found: its symbol, what it is, and its other readings (its notes are on the keys). */
 function Found({
   keys,
   readings,

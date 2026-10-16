@@ -184,6 +184,11 @@ export const practice = {
   // The Chord finder (ADR 0054): a chord played or tapped, named, spelled and written.
   chordFinder: {
     prompt: 'Play a chord on your keyboard, or tap its keys.',
+    promptFolded: 'Play a chord on your MIDI keyboard, or show the keys to tap one.',
+    hidden: 'Hidden here',
+    showKeys: 'The keys',
+    showStaff: 'The staff',
+    showInKeys: 'The keys it is in',
     none: 'No chord matches these notes.',
     note: 'One note',
     powerChord: 'Power chord',

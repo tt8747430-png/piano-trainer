@@ -157,6 +157,33 @@ describe('Practice → Chord finder', () => {
     )
   })
 
+  it('says what is hidden where it was, each a way back, and asks for MIDI with the keys folded', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(screen.queryByRole('region', { name: 'Hidden here' })).not.toBeInTheDocument()
+    act(() =>
+      settingsStore.setState((state) => ({
+        keyboard: { ...state.keyboard, folded: true },
+        chordFinder: { ...state.chordFinder, staff: false },
+      })),
+    )
+    expect(
+      screen.getByText('Play a chord on your MIDI keyboard, or show the keys to tap one.'),
+    ).toBeInTheDocument()
+    const hidden = screen.getByRole('region', { name: 'Hidden here' })
+    expect(
+      within(hidden)
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['The keys', 'The staff'])
+    await user.click(within(hidden).getByRole('button', { name: 'The keys' }))
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
+    await user.click(within(hidden).getByRole('button', { name: 'The staff' }))
+    expect(settingsStore.getState().chordFinder.staff).toBe(true)
+    expect(screen.queryByRole('region', { name: 'Hidden here' })).not.toBeInTheDocument()
+  })
+
   it('hides the staff, where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')

@@ -175,6 +175,11 @@ export const practice: LocaleResources['practice'] = {
   },
   chordFinder: {
     prompt: 'Сыграйте аккорд на клавиатуре или нажмите его клавиши.',
+    promptFolded: 'Сыграйте аккорд на MIDI-клавиатуре или покажите клавиши, чтобы нажать его.',
+    hidden: 'Скрыто здесь',
+    showKeys: 'Клавиши',
+    showStaff: 'Нотный стан',
+    showInKeys: 'Тональности аккорда',
     none: 'Ни один аккорд не состоит из этих нот.',
     note: 'Одна нота',
     powerChord: 'Квинтовый аккорд',
