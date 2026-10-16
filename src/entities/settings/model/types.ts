@@ -60,6 +60,8 @@ export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
+  /** A key a page marks (a chord's, a scale's) names its note under its degree. */
+  readonly markNotes: boolean
   /** The rail names the chord a hand holds. */
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
@@ -180,6 +182,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   keySize: 'fit',
   swipe: 'scroll',
   namedKeys: 'c',
+  markNotes: true,
   chordNames: true,
   typing: finePointer,
   dock: 'bottom',

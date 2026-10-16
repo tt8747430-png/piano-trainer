@@ -189,7 +189,6 @@ export const practice = {
     powerChord: 'Power chord',
     readings: 'Also read as',
     reading: 'Read as {{symbol}}',
-    tones: 'Its notes, from the bass up',
     no3rd: 'No 3rd',
     no5th: 'No 5th',
     no9th: 'No 9th',

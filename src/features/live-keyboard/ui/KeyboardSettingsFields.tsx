@@ -39,6 +39,13 @@ export function KeyboardSettingsFields() {
           onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
         />
       </SettingField>
+      <SwitchRow
+        label={t('keyboardSettings.markNotes')}
+        detail={t('keyboardSettings.markNotesNote')}
+        checked={keyboard.markNotes}
+        onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
+        className="border-b-0"
+      />
       <SettingField label={t('keyboardSettings.dock.label')}>
         <Segmented
           label={t('keyboardSettings.dock.label')}

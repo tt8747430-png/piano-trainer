@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
-import { noteName, qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
+import { qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChordHeading, FabPill, FloatingActions, PlayFab, ToneChip, usePlayKey } from '@/shared/ui'
+import { ChordHeading, FabPill, FloatingActions, PlayFab, usePlayKey } from '@/shared/ui'
 import { changedView, chordKeys, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
@@ -60,13 +60,6 @@ export function ChordExplorer({
               <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
             ) : null}
           </hgroup>
-          <ol className="flex flex-wrap gap-2">
-            {built.tones.map((tone) => (
-              <li key={tone.degree}>
-                <ToneChip face={tone.role} degree={tone.degree} note={noteName(tone.note)} />
-              </li>
-            ))}
-          </ol>
           {others.length > 0 ? (
             <p className="flex flex-wrap items-baseline gap-x-4">
               <span className="text-muted-foreground">{t('practice:chords.written')}</span>

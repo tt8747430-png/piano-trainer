@@ -68,6 +68,7 @@ export function PianoKeyboard({
   keySize = 'fit',
   swipe = 'scroll',
   namedKeys = 'c',
+  markNotes = true,
   keyLength = 'long',
   letters,
   caption,
@@ -85,6 +86,8 @@ export function PianoKeyboard({
   swipe?: Swipe
   /** Which keys carry their note's name: every C (the default), every key, or none. */
   namedKeys?: NamedKeys
+  /** A marked key names its note under its degree (the default), or shows its degree alone. */
+  markNotes?: boolean
   /** A piano's proportion (the default), or short keys, at most two thirds as tall. */
   keyLength?: KeyLength
   /** The computer keyboard's letters on the keys it plays. */
@@ -188,7 +191,7 @@ export function PianoKeyboard({
           }}
         >
           {PIANO_LAYOUT.keys.map((key) => {
-            const look = keyLook(key.midi, { ...states, down }, { namedKeys, letters })
+            const look = keyLook(key.midi, { ...states, down }, { namedKeys, letters, markNotes })
             return (
               <Key
                 key={key.midi}

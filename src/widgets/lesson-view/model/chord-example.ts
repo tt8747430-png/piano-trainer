@@ -11,7 +11,7 @@ import {
   type PitchClass,
   type SpelledNote,
 } from '@/shared/lib/music'
-import type { ShownKeys } from '@/shared/ui'
+import { toneMark, type ShownKeys } from '@/shared/ui'
 
 /** A pitch class's key nearest middle C: from the F♯ below to the F above. */
 const nearMiddleC = (pc: PitchClass): Midi => midi(MIDDLE_C + (pc > 5 ? pc - 12 : pc))
@@ -56,8 +56,5 @@ export function placeUnder(symbol: string, melody: SpelledNote): ShownKeys {
   const tones = spellChord(chord.root, chord.quality)
   const pc = pitchClassOf(melody)
   const tone = tones.find((each) => each.pitchClass === pc)
-  return voicedUnder(tones, pc, {
-    tone: tone?.role ?? 'scale',
-    label: tone?.degree ?? noteName(melody),
-  })
+  return voicedUnder(tones, pc, tone ? toneMark(tone) : { tone: 'scale', label: noteName(melody) })
 }

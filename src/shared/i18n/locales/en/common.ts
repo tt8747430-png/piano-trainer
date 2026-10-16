@@ -88,6 +88,8 @@ export const common = {
   keyboardSettings: {
     keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
     namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },
+    markNotes: 'Name the marked notes',
+    markNotesNote: 'A chord’s or a scale’s keys say their note under their degree',
     chordNames: 'Name the chords played',
     typing: 'Play from the computer keyboard',
     typingHint: 'Z X · octave',

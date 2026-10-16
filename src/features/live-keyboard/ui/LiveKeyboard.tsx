@@ -47,6 +47,7 @@ export function LiveKeyboard({
   | 'keySize'
   | 'swipe'
   | 'namedKeys'
+  | 'markNotes'
   | 'keyLength'
   | 'letters'
   | 'caption'
@@ -64,9 +65,9 @@ export function LiveKeyboard({
   /** The rail's last control: a page's keys fold away from it. */
   railEnd?: ReactNode
 }) {
-  const { typing, chordNames, rail, keySize, swipe, namedKeys, keyLength } =
+  const { typing, chordNames, rail, keySize, swipe, namedKeys, markNotes, keyLength } =
     useSettings(selectKeyboard)
-  const settings = { keySize, swipe, namedKeys, keyLength }
+  const settings = { keySize, swipe, namedKeys, markNotes, keyLength }
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const live = useSoundingKeys('live')
   const held = useHeldKeys()

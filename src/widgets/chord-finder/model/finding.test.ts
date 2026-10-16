@@ -73,7 +73,7 @@ describe('readings', () => {
     const found = findChord(keys(57, 60, 64, 67), C_MAJOR)
     if (found.kind !== 'chord') throw new Error('a chord')
     const am7 = readingMarks(found.readings[0], keys(57, 60, 64, 67))
-    expect(am7.get(midi(57))).toEqual({ tone: 'root', label: '1' })
+    expect(am7.get(midi(57))).toEqual({ tone: 'root', label: '1', note: 'A' })
     const c6 = readingAt(
       found.readings,
       found.readings.findIndex((r) => r.symbol === 'C6/A'),

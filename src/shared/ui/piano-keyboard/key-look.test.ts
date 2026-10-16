@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import type { NamedKeys } from '@/shared/lib'
-import { midi, type Midi } from '@/shared/lib/music'
-import { keyLook, sameLook, type KeyMark, type KeyText } from './key-look'
+import { midi, note, spellChord, type Midi } from '@/shared/lib/music'
+import { keyLook, sameLook, toneMark, type KeyMark, type KeyText } from './key-look'
 
 const C4 = midi(60)
 const CS4 = midi(61)
 const root = new Map<Midi, KeyMark>([[C4, { tone: 'root', label: '1' }]])
-const UNNAMED: KeyText = { namedKeys: 'none' }
+const UNNAMED: KeyText = { namedKeys: 'none', markNotes: false }
 
 describe('keyLook', () => {
   it('leaves a key with nothing on it white or black', () => {
@@ -41,7 +41,8 @@ describe('keyLook', () => {
   })
 
   it('names every C, every key, or none, and a mark’s label wins', () => {
-    const name = (key: Midi, namedKeys: NamedKeys) => keyLook(key, {}, { namedKeys }).label
+    const name = (key: Midi, namedKeys: NamedKeys) =>
+      keyLook(key, {}, { namedKeys, markNotes: false }).label
     expect(name(C4, 'c')).toEqual({ kind: 'name', text: 'C4' })
     expect(name(midi(62), 'c')).toBeUndefined()
     expect([name(C4, 'all'), name(CS4, 'all')]).toEqual([
@@ -49,14 +50,29 @@ describe('keyLook', () => {
       { kind: 'name', text: 'C#' },
     ])
     expect(name(C4, 'none')).toBeUndefined()
-    expect(keyLook(C4, { marks: root }, { namedKeys: 'all' }).label).toEqual({
+    expect(keyLook(C4, { marks: root }, { namedKeys: 'all', markNotes: false }).label).toEqual({
       kind: 'mark',
       text: '1',
     })
   })
 
+  it('names a marked key’s note under its degree while marked notes are named', () => {
+    const marks = new Map<Midi, KeyMark>([[midi(64), toneMark(spellChord(note('C'), 'maj')[1]!)]])
+    expect(keyLook(midi(64), { marks }, { namedKeys: 'none', markNotes: true }).label).toEqual({
+      kind: 'mark',
+      text: '3',
+      note: 'E',
+    })
+    expect(keyLook(midi(64), { marks }, UNNAMED).label).toEqual({ kind: 'mark', text: '3' })
+    expect(toneMark(spellChord(note('C'), 'maj')[0]!, 'tonic')).toEqual({
+      tone: 'tonic',
+      label: '1',
+      note: 'C',
+    })
+  })
+
   it('carries a typing key’s letter', () => {
-    expect(keyLook(C4, {}, { namedKeys: 'none', letters: new Map([[C4, 'A']]) }).letter).toBe('A')
+    expect(keyLook(C4, {}, { ...UNNAMED, letters: new Map([[C4, 'A']]) }).letter).toBe('A')
   })
 
   it('puts a key down over whatever it shows, its mark and label kept', () => {

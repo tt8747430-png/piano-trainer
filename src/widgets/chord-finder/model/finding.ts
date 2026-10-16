@@ -12,7 +12,7 @@ import {
   type SpelledNote,
   type Tone,
 } from '@/shared/lib/music'
-import type { KeyMark } from '@/shared/ui'
+import { toneMark, type KeyMark } from '@/shared/ui'
 
 /**
  * What the keys make (ADR 0054): nothing yet, one note, two notes as an interval (a 5th also as its
@@ -83,7 +83,7 @@ export function readingMarks(found: FoundChord, keys: readonly Midi[]): Map<Midi
   const marks = new Map<Midi, KeyMark>()
   for (const key of keys) {
     const tone = toneOfKey(found, key)
-    if (tone) marks.set(key, { tone: tone.role, label: tone.degree })
+    if (tone) marks.set(key, toneMark(tone))
   }
   return marks
 }

@@ -6,7 +6,7 @@ describe('placeExample', () => {
   it('places a chord from middle C, each tone marked by role and degree', () => {
     const example = placeExample('Cm7')
     expect(example.keys).toEqual([60, 63, 67, 70])
-    expect(example.marks.get(midi(63))).toEqual({ tone: '3rd', label: '♭3' })
+    expect(example.marks.get(midi(63))).toEqual({ tone: '3rd', label: '♭3', note: 'E♭' })
   })
 
   it('puts a slash chord’s bass in the octave below, named by itself when it is no chord tone', () => {
@@ -40,6 +40,10 @@ describe('placeExample', () => {
     expect(placeUnder('C', note('E')).keys).toEqual([67, 72, 76])
     expect(placeUnder('Am', note('E')).keys).toEqual([69, 72, 76])
     expect(placeUnder('Em', note('E')).keys).toEqual([67, 71, 76])
-    expect(placeUnder('Em', note('E')).marks.get(midi(76))).toEqual({ tone: 'root', label: '1' })
+    expect(placeUnder('Em', note('E')).marks.get(midi(76))).toEqual({
+      tone: 'root',
+      label: '1',
+      note: 'E',
+    })
   })
 })

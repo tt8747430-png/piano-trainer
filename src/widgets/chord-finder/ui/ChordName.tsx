@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { noteName, type FoundChord, type Midi } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
-import { ChordHeading, ToneChip } from '@/shared/ui'
+import { ChordHeading } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
-import { readingAt, toneOfKey, type Finding } from '../model/finding'
+import { readingAt, type Finding } from '../model/finding'
 import { chordLabel, useChordAbout } from './use-chord-about'
 
 /** Where the chord shown comes from: keys held on the keyboard, the chord last played, keys tapped. */
@@ -128,16 +128,6 @@ function Found({
         <ChordHeading symbol={chordLabel(shown, slash)} />
         <SourceLine source={source}>{about.join(' · ')}</SourceLine>
       </div>
-      <ol aria-label={t('chordFinder.tones')} className="flex flex-wrap gap-2">
-        {keys.map((key) => {
-          const tone = toneOfKey(shown, key)
-          return tone ? (
-            <li key={key}>
-              <ToneChip face={tone.role} degree={tone.degree} note={noteName(tone.note)} />
-            </li>
-          ) : null
-        })}
-      </ol>
       {listed.length > 1 ? (
         <div className="flex flex-col gap-2">
           <h3 className="text-base font-semibold">{t('chordFinder.readings')}</h3>

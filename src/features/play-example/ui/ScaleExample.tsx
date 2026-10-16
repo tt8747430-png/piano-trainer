@@ -1,17 +1,11 @@
 import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
-import {
-  noteFromParam,
-  noteName,
-  spellScale,
-  type NoteParam,
-  type ScaleKind,
-} from '@/shared/lib/music'
+import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayLabel, type ShownKeys, ToneChip } from '@/shared/ui'
+import { PlayLabel, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { scaleExample } from '../model/scale-example'
 import { TappableStaff } from './TappableStaff'
@@ -44,17 +38,6 @@ export function ScaleExample({
       <figcaption id={captionId} className="font-display text-xl font-semibold">
         {scaleName(tonic, kind)}
       </figcaption>
-      <ol className="flex flex-wrap gap-2">
-        {spellScale(tonic, kind).map((tone) => (
-          <li key={tone.degree}>
-            <ToneChip
-              face={tone.role === 'root' ? 'tonic' : 'scale'}
-              degree={tone.degree}
-              note={noteName(tone.note)}
-            />
-          </li>
-        ))}
-      </ol>
       <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
         <TappableStaff
           music={example.music}

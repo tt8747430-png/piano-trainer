@@ -161,6 +161,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
     swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
+    markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
     chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,

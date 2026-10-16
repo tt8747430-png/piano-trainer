@@ -180,7 +180,6 @@ export const practice: LocaleResources['practice'] = {
     powerChord: 'Квинтовый аккорд',
     readings: 'Можно прочитать как',
     reading: 'Читать как {{symbol}}',
-    tones: 'Его ноты снизу вверх',
     no3rd: 'Без терции',
     no5th: 'Без квинты',
     no9th: 'Без ноны',

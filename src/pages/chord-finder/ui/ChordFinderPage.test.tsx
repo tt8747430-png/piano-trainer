@@ -33,12 +33,13 @@ describe('Practice → Chord finder', () => {
     for (const each of ['A3', 'C4', 'E4', 'G4']) await user.click(key(each))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ keys: '57-60-64-67' }))
     expect(screen.getByRole('heading', { level: 2, name: 'Am7' })).toBeInTheDocument()
-    const tones = screen.getByRole('list', { name: 'Its notes, from the bass up' })
-    expect(
-      within(tones)
-        .getAllByRole('listitem')
-        .map((item) => item.textContent),
-    ).toEqual(['1A', '♭3C', '5E', '♭7G'])
+    // Each key says its degree and, under it, its note.
+    expect(['A3', 'C4', 'E4', 'G4'].map((each) => key(each).textContent)).toEqual([
+      expect.stringMatching(/1A$/),
+      expect.stringMatching(/♭3C$/),
+      expect.stringMatching(/5E$/),
+      expect.stringMatching(/♭7G$/),
+    ])
     await user.click(screen.getByRole('button', { name: 'Read as C6/A' }))
     expect(screen.getByRole('heading', { level: 2, name: 'C6/A' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Read as C6/A' })).toHaveAttribute(

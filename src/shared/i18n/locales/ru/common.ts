@@ -83,6 +83,8 @@ export const common: LocaleResources['common'] = {
   keyboardSettings: {
     keySize: { label: 'Клавиши', fit: 'По ширине', large: 'Крупные', piano: 'Весь рояль' },
     namedKeys: { label: 'Названия нот', c: 'C', all: 'Все', none: 'Нет' },
+    markNotes: 'Называть отмеченные ноты',
+    markNotesNote: 'Клавиши аккорда или гаммы показывают ноту под ступенью',
     chordNames: 'Называть сыгранные аккорды',
     typing: 'Играть с клавиатуры компьютера',
     typingHint: 'Z X · октава',

@@ -42,6 +42,7 @@ export {
   PianoKeyboard,
   RailButton,
   RailGroup,
+  toneMark,
   unmarked,
   type KeyMark,
   type ShownKeys,
@@ -65,7 +66,6 @@ export { SettingField } from './SettingField'
 export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
 export { ToggleGrid, ToggleTile } from './ToggleTile'
-export { ToneChip } from './ToneChip'
 export { ToolButton } from './ToolButton'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'

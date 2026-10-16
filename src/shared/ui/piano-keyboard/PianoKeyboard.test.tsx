@@ -73,6 +73,16 @@ describe('PianoKeyboard', () => {
     expect(d).toHaveClass('bg-role-root-wash')
   })
 
+  it('names a marked key’s note under its degree, unless marked notes go unnamed', () => {
+    const marks = new Map<Midi, KeyMark>([[midi(64), { tone: '3rd', label: '3', note: 'E' }]])
+    const { rerender } = renderKeyboard({ marks })
+    expect(screen.getByRole('button', { name: 'E4' })).toHaveTextContent(/3E$/)
+    rerender(
+      <PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} marks={marks} markNotes={false} />,
+    )
+    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveTextContent('E')
+  })
+
   it('colours a scale’s keys whole, black keys too, each with its degree', () => {
     renderKeyboard({
       marks: new Map<Midi, KeyMark>([

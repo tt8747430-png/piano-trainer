@@ -18,7 +18,7 @@ const E_MINOR = questionAnswer({ chord: 'Em' })
 describe('questionAnswer', () => {
   it('places a chord answer as the Chords explorer does, each tone by role', () => {
     expect(E_MINOR.keys).toEqual([64, 67, 71])
-    expect(E_MINOR.marks.get(midi(67))).toEqual({ tone: '3rd', label: '♭3' })
+    expect(E_MINOR.marks.get(midi(67))).toEqual({ tone: '3rd', label: '♭3', note: 'G' })
   })
 
   it('places notes from middle C up, each with its name', () => {

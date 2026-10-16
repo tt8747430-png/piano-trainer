@@ -6,9 +6,9 @@ describe('scaleExample', () => {
   it('shows the scale up an octave from its root, the tonic in its own colour', () => {
     const { shown } = scaleExample(note('D'), 'dorian')
     expect(shown.keys).toEqual([62, 64, 65, 67, 69, 71, 72, 74])
-    expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: '1' })
-    expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: '♭3' })
-    expect(shown.marks.get(midi(74))).toEqual({ tone: 'tonic', label: '1' })
+    expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: '1', note: 'D' })
+    expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: '♭3', note: 'F' })
+    expect(shown.marks.get(midi(74))).toEqual({ tone: 'tonic', label: '1', note: 'D' })
   })
 
   it('runs it up and back in the scale’s key, one hand', () => {

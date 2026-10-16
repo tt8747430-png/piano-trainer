@@ -1,5 +1,5 @@
 import { midi, pitchClass, type Midi, type PitchClass, type Tone } from '@/shared/lib/music'
-import type { KeyMark, ShownKeys } from '@/shared/ui'
+import { toneMark, type KeyMark, type ShownKeys } from '@/shared/ui'
 
 /** The melody is played from G4 up to F#5, the chord close beneath it. */
 const MELODY_FROM = 67
@@ -24,6 +24,6 @@ export function voicedUnder(tones: readonly Tone[], melody: PitchClass, mark: Ke
     .map((each) => ({ each, key: midi(top - (pitchClass(melody - each.pitchClass) || 12)) }))
     .toSorted((a, b) => a.key - b.key)
   const marks = new Map<Midi, KeyMark>([[top, mark]])
-  for (const { each, key } of below) marks.set(key, { tone: each.role, label: each.degree })
+  for (const { each, key } of below) marks.set(key, toneMark(each))
   return { keys: [...below.map(({ key }) => key), top], marks }
 }
