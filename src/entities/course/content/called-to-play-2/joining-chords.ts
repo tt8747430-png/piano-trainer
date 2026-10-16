@@ -9,8 +9,8 @@ const joiningChords: Lesson = {
   id: 'joining-chords',
   title: { en: 'Joining chords', ru: 'Соединение аккордов' },
   summary: {
-    en: 'The three main chords of a key, joined so every note moves to its nearest neighbour.',
-    ru: 'Три главных аккорда тональности, соединённые так, что каждый звук идёт в ближайший соседний.',
+    en: 'Join I, IV and V by their nearest notes.',
+    ru: 'Соединяйте I, IV и V через ближайшие звуки.',
   },
   sections: [
     {
@@ -42,8 +42,8 @@ const joiningChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Join chords so each note moves to its nearest neighbour, never jumping across the keyboard. Then the music sounds smooth.',
-            ru: 'Соединяйте аккорды так, чтобы каждый звук переходил в ближайший соседний, не прыгая через клавиатуру. Тогда музыка звучит плавно.',
+            en: 'Move each note to its nearest neighbour, never jumping across the keyboard. The join sounds smooth.',
+            ru: 'Ведите каждый звук в ближайший соседний, не прыгая через клавиатуру. Соединение звучит плавно.',
           },
         },
         {

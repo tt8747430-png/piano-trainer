@@ -8,8 +8,8 @@ const majorInversions: Lesson = {
   id: 'major-inversions',
   title: { en: 'Major chord inversions', ru: 'Обращения мажорного аккорда' },
   summary: {
-    en: 'The same three notes stacked three ways. Learn to spot each by its 4th, and to reach the nearest one so chords join smoothly.',
-    ru: 'Те же три звука, сложенные тремя способами. Научитесь узнавать каждый по кварте и брать ближайший, чтобы аккорды соединялись плавно.',
+    en: 'Play a major chord in three positions and reach the nearest.',
+    ru: 'Играйте мажорный аккорд в трёх видах и берите ближайший.',
   },
   sections: [
     {
@@ -19,8 +19,8 @@ const majorInversions: Lesson = {
           kind: 'text',
           lead: { en: 'Root position:', ru: 'Основной вид:' },
           text: {
-            en: 'the root at the bottom, then the 3rd and the 5th. Two 3rds stacked: C, E, G.',
-            ru: 'основной тон внизу, над ним терция и квинта. Две терции одна над другой: до, ми, соль.',
+            en: 'the root at the bottom, then the 3rd and the 5th.',
+            ru: 'основной тон внизу, над ним терция и квинта.',
           },
         },
         {
@@ -40,8 +40,8 @@ const majorInversions: Lesson = {
           kind: 'text',
           lead: { en: 'First inversion:', ru: 'Первое обращение (секстаккорд):' },
           text: {
-            en: 'the root moves up an octave, so the 3rd is at the bottom. C becomes E, G, C.',
-            ru: 'основной тон переносится на октаву вверх, и внизу оказывается терция. C превращается в ми, соль, до.',
+            en: 'move the root up an octave. The 3rd is now at the bottom: E, G, C.',
+            ru: 'перенесите основной тон на октаву вверх. Внизу теперь терция: ми, соль, до.',
           },
         },
         {
@@ -61,8 +61,8 @@ const majorInversions: Lesson = {
           kind: 'text',
           lead: { en: 'Second inversion:', ru: 'Второе обращение (квартсекстаккорд):' },
           text: {
-            en: 'the 3rd moves up too, so the 5th is at the bottom. C becomes G, C, E.',
-            ru: 'вверх переносится и терция, и внизу оказывается квинта. C превращается в соль, до, ми.',
+            en: 'move the 3rd up too. The 5th is now at the bottom: G, C, E.',
+            ru: 'перенесите вверх и терцию. Внизу теперь квинта: соль, до, ми.',
           },
         },
         {
@@ -76,7 +76,7 @@ const majorInversions: Lesson = {
       ],
     },
     {
-      heading: { en: 'Find the 4th', ru: 'Найдите кварту' },
+      heading: { en: 'The 4th points to the root', ru: 'Кварта указывает на основной тон' },
       blocks: [
         {
           kind: 'voicings',
@@ -89,8 +89,8 @@ const majorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Root position has two 3rds. A 4th on top means first inversion, a 4th at the bottom second. The root is always the 4th’s upper note.',
-            ru: 'В основном виде две терции. Кварта сверху — первое обращение, кварта снизу — второе. Основной тон всегда верхний звук кварты.',
+            en: 'A 4th on top means first inversion, a 4th at the bottom second. The 4th’s upper note is the root.',
+            ru: 'Кварта сверху — первое обращение, кварта снизу — второе. Верхний звук кварты — основной тон.',
           },
         },
       ],
@@ -101,39 +101,18 @@ const majorInversions: Lesson = {
         {
           kind: 'voicings',
           voicings: [
-            { symbol: 'C', degrees: '1 3 5', hands: 'C4 E4 G4' },
-            { symbol: 'F/C', degrees: '5 1 3', hands: 'C4 F4 A4' },
-            { symbol: 'G/B', degrees: '3 5 1', hands: 'B3 D4 G4' },
-            { symbol: 'C', degrees: '1 3 5', hands: 'C4 E4 G4' },
-          ],
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'From C to F, keep the shared C and step the others up a little: C, F, A. Every chord stays under the hand.',
-            ru: 'От C к F оставьте общий звук до, а остальные чуть сдвиньте вверх: до, фа, ля. Каждый аккорд остаётся под рукой.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'With a bass', ru: 'С басом' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'The left hand plays each root low. The right hand takes the nearest inversion, so the chords join smoothly.',
-            ru: 'Левая рука берёт основной тон в басу. Правая играет ближайшее обращение, и аккорды соединяются плавно.',
-          },
-        },
-        {
-          kind: 'voicings',
-          voicings: [
             { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
             { symbol: 'F', degrees: '1 | 5 1 3', hands: 'F2 | C4 F4 A4' },
             { symbol: 'G', degrees: '1 | 3 5 1', hands: 'G2 | B3 D4 G4' },
             { symbol: 'C', degrees: '1 | 1 3 5', hands: 'C3 | C4 E4 G4' },
           ],
+        },
+        {
+          kind: 'text',
+          text: {
+            en: 'Keep the note two chords share and move the others a step. The left hand plays each root.',
+            ru: 'Оставьте общий звук двух аккордов, а остальные сдвиньте на ступень. Левая рука берёт основной тон.',
+          },
         },
         {
           kind: 'link',
@@ -148,26 +127,18 @@ const majorInversions: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play C major in first inversion: E at the bottom.',
-            ru: 'Сыграйте до мажор в первом обращении: ми внизу.',
+            en: 'Play C major in first inversion.',
+            ru: 'Сыграйте до мажор в первом обращении.',
           },
           answer: { notes: ['E', 'G', 'C'], rising: true },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play F major in second inversion: C at the bottom.',
-            ru: 'Сыграйте фа мажор во втором обращении: до внизу.',
+            en: 'Play F major in second inversion.',
+            ru: 'Сыграйте фа мажор во втором обращении.',
           },
           answer: { notes: ['C', 'F', 'A'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play G major in first inversion.',
-            ru: 'Сыграйте соль мажор в первом обращении.',
-          },
-          answer: { notes: ['B', 'D', 'G'], rising: true },
         },
         {
           kind: 'question',
@@ -189,10 +160,7 @@ const majorInversions: Lesson = {
         },
         {
           kind: 'link',
-          title: {
-            en: 'I–IV–V–I through every key',
-            ru: 'I–IV–V–I во всех тональностях',
-          },
+          title: { en: 'I–IV–V–I through every key', ru: 'I–IV–V–I во всех тональностях' },
           target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths' },
         },
       ],

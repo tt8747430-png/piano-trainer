@@ -8,8 +8,8 @@ const rightHandChords: Lesson = {
     ru: 'Техники правой руки: аккорды вверх по клавиатуре',
   },
   summary: {
-    en: 'A dotted chord, three chords up the keys, and a chord climbing through its inversions.',
-    ru: 'Пунктирный аккорд, три аккорда вверх по клавиатуре и аккорд, который поднимается по обращениям.',
+    en: 'Climb the keyboard with dotted chords, three chords and inversions.',
+    ru: 'Поднимайтесь по клавиатуре пунктиром, тремя аккордами и обращениями.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const rightHandChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A chord can be played in root position or in an inversion. These three techniques climb the keyboard with it.',
-            ru: 'Аккорд можно играть в основном виде или в обращении. Эти три техники поднимаются с ним по клавиатуре.',
+            en: 'These three techniques climb the keyboard with the chord, in root position or an inversion.',
+            ru: 'Эти три техники поднимаются с аккордом по клавиатуре, в основном виде или в обращении.',
           },
         },
         { kind: 'pattern', pattern: 't5', piece: 'ex7' },

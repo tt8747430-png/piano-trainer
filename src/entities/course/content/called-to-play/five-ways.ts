@@ -4,8 +4,8 @@ const fiveWays: Lesson = {
   id: 'five-ways',
   title: { en: 'The five ways', ru: 'Пять способов' },
   summary: {
-    en: 'One progression played five ways, then a different way on each chord.',
-    ru: 'Одна последовательность пятью способами, затем свой способ на каждом аккорде.',
+    en: 'Play one progression five ways, then change ways chord by chord.',
+    ru: 'Играйте одну последовательность пятью способами, затем меняйте их.',
   },
   sections: [
     {
@@ -23,7 +23,7 @@ const fiveWays: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Play it in blocks, all notes together, until the changes come without thinking.',
+            en: 'Play it in blocks until the changes come without thinking.',
             ru: 'Играйте её целыми аккордами, пока смены не пойдут сами.',
           },
         },
@@ -35,8 +35,8 @@ const fiveWays: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each way plays the same chords and changes what one hand does. Take them in order.',
-            ru: 'Каждый способ играет те же аккорды и меняет партию одной руки. Берите их по порядку.',
+            en: 'Each way keeps the chords and changes what one hand does. Learn them in order.',
+            ru: 'Каждый способ сохраняет аккорды и меняет партию одной руки. Учите их по порядку.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'ex3' },

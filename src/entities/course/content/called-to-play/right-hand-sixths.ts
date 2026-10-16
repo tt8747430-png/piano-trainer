@@ -5,8 +5,8 @@ const rightHandSixths: Lesson = {
   id: 'right-hand-sixths',
   title: { en: 'Right-hand techniques: sixths', ru: 'Техники правой руки: сексты' },
   summary: {
-    en: 'Sixths moving up or down the scale, then a song with your own plan.',
-    ru: 'Сексты вверх или вниз по гамме, затем песня по своему плану.',
+    en: 'Play sixths up and down the scale over a chord.',
+    ru: 'Играйте сексты вверх и вниз по гамме над аккордом.',
   },
   sections: [
     {
@@ -16,7 +16,7 @@ const rightHandSixths: Lesson = {
           kind: 'text',
           lead: { en: 'A sixth', ru: 'Секста' },
           text: {
-            en: 'spans six letter names, counting both ends: E up to C is a sixth. These techniques move sixths up or down the scale.',
+            en: 'spans six letter names, counting both ends: E up to C. These techniques move sixths up or down the scale.',
             ru: 'охватывает шесть ступеней, считая обе крайние: от ми вверх до до. Эти техники ведут сексты вверх или вниз по гамме.',
           },
         },

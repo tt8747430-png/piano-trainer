@@ -5,8 +5,8 @@ const calledToPlayTwoExam: Lesson = {
   id: 'called-to-play-two-exam',
   title: { en: 'Level 2 final exam', ru: 'Экзамен второго курса' },
   summary: {
-    en: 'Two songs with plans of your own, one in 4/4 and one in 6/8, accompanying a singer.',
-    ru: 'Две песни по собственному плану, в 4/4 и в 6/8, с солистом.',
+    en: 'Accompany a singer in two songs of your own plan.',
+    ru: 'Аккомпанируйте солисту в двух песнях по своему плану.',
   },
   sections: [
     {

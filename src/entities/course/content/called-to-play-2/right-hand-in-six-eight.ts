@@ -5,8 +5,8 @@ const rightHandInSixEight: Lesson = {
   id: 'right-hand-in-six-eight',
   title: { en: 'Right-hand ways in 6/8', ru: 'Виды игры правой рукой в 6/8' },
   summary: {
-    en: 'The right hand’s first four ways, each in a bar of 6/8.',
-    ru: 'Первые четыре вида игры правой рукой, каждый в такте 6/8.',
+    en: 'Play the right hand’s first four ways in 6/8.',
+    ru: 'Играйте первые четыре вида правой руки в 6/8.',
   },
   sections: [
     {

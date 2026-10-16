@@ -11,8 +11,8 @@ const ninthsInASong: Lesson = {
   id: 'ninths-in-a-song',
   title: { en: 'Ninth chords in a song', ru: 'Нонаккорды в песне' },
   summary: {
-    en: '9th chords by semitones, on «Ромашковые поля», and the dominant 9th’s way into the next chord.',
-    ru: 'Нонаккорды по полутонам, на «Ромашковых полях» и разрешение доминантового нонаккорда.',
+    en: 'Grow 7th chords into 9ths and resolve the dominant 9th.',
+    ru: 'Превращайте септаккорды в нонаккорды и разрешайте доминантовый нонаккорд.',
   },
   sections: [
     {

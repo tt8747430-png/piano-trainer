@@ -7,8 +7,8 @@ const accompanyingAHymn: Lesson = {
   id: 'accompanying-a-hymn',
   title: { en: 'Accompanying a hymn', ru: 'Аккомпанемент гимна' },
   summary: {
-    en: 'From the chord chart to the service: prepare, introduce, verse and chorus, end.',
-    ru: 'От аккордов к служению: подготовка, вступление, куплет и припев, окончание.',
+    en: 'Accompany a hymn from its chords, introduction to ending.',
+    ru: 'Аккомпанируйте гимну по аккордам, от вступления до окончания.',
   },
   sections: [
     {
@@ -40,8 +40,8 @@ const accompanyingAHymn: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a short introduction in the harmonic basis (type 1): the hymn’s last line, or I–IV–V–I. The singers hear key and tempo, and breathe on its last chord.',
-            ru: 'Сыграйте короткое вступление гармонической основой (первый вид): последнюю строку гимна или I–IV–V–I. Поющие услышат тональность и темп и вдохнут на последнем аккорде.',
+            en: 'Play the hymn’s last line, or I–IV–V–I, in the harmonic basis (type 1). The singers hear key and tempo and breathe on its last chord.',
+            ru: 'Сыграйте последнюю строку гимна или I–IV–V–I гармонической основой (первый вид). Поющие услышат тональность и темп и вдохнут на последнем аккорде.',
           },
         },
         { kind: 'progression', numerals: 'vi V I', key: G_MAJOR },
@@ -61,7 +61,7 @@ const accompanyingAHymn: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play the verse lightly with figuration (type 4), the chorus fuller with the chord’s pulse (type 3). For a quiet prayer, keep the harmonic basis.',
+            en: 'Play the verse lightly in figuration (type 4), the chorus fuller in the chord’s pulse (type 3). For a quiet prayer, keep the harmonic basis.',
             ru: 'Куплет играйте легко, фигурацией (четвёртый вид), припев — полнее, аккордовой пульсацией (третий вид). Для тихой молитвы оставайтесь в гармонической основе.',
           },
         },

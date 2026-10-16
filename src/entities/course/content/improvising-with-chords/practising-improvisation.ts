@@ -9,8 +9,8 @@ const practisingImprovisation: Lesson = {
   id: 'practising-improvisation',
   title: { en: 'Practising improvisation', ru: 'Учимся импровизировать' },
   summary: {
-    en: 'Loop four chords, take five safe notes, land on the chord, ask and answer: a way to make up a melody from the first minute.',
-    ru: 'Зациклите четыре аккорда, возьмите пять надёжных звуков, опирайтесь на аккорд, спрашивайте и отвечайте: так мелодия рождается с первой минуты.',
+    en: 'Make up a melody over a four-chord loop.',
+    ru: 'Сочиняйте мелодию над кругом из четырёх аккордов.',
   },
   sections: [
     {
@@ -19,16 +19,11 @@ const practisingImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Improvising starts with a loop. Play C, Am, F, G with the left hand, a bar each, until it plays itself.',
-            ru: 'Импровизация начинается с повторяющейся гармонии. Играйте C, Am, F, G левой рукой, по такту на аккорд, пока рука не запомнит.',
+            en: 'Play C, Am, F, G with the left hand, a bar each, until it plays itself.',
+            ru: 'Играйте C, Am, F, G левой рукой, по такту на аккорд, пока рука не запомнит.',
           },
         },
         { kind: 'progression', numerals: LOOP, key: C_MAJOR },
-        {
-          kind: 'link',
-          title: { en: 'The loop on Progressions', ru: 'Этот круг в разделе «Прогрессии»' },
-          target: { opens: 'progressions', numerals: LOOP, key: C_MAJOR },
-        },
       ],
     },
     {
@@ -38,8 +33,8 @@ const practisingImprovisation: Lesson = {
           kind: 'text',
           lead: { en: 'Pentatonic:', ru: 'Пентатоника:' },
           text: {
-            en: 'a five-note scale with no semitones. C major pentatonic, C D E G A, sits well over every chord of the loop.',
-            ru: 'гамма из пяти звуков без полутонов. Мажорная пентатоника от до, до-ре-ми-соль-ля, хорошо звучит над каждым аккордом круга.',
+            en: 'a five-note scale with no semitones. C major pentatonic sounds good over every chord of the loop.',
+            ru: 'гамма из пяти звуков без полутонов. Мажорная пентатоника от до хорошо звучит над каждым аккордом круга.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'pent' },
@@ -52,12 +47,11 @@ const practisingImprovisation: Lesson = {
           kind: 'text',
           lead: { en: 'Chord tone:', ru: 'Аккордовый звук:' },
           text: {
-            en: 'a note of the chord sounding now. End each bar on one and the line sounds sure of itself.',
+            en: 'a note of the chord sounding now. End each bar on one and the line sounds sure.',
             ru: 'звук аккорда, который звучит сейчас. Заканчивайте каждый такт на нём, и линия звучит уверенно.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 A4 G4 E4 D4 E4 C4/2 C4 D4 A4/2 G4 E4 D4/2' },
-        { kind: 'chords', symbols: ['C', 'Am', 'F', 'G'], apart: true },
       ],
     },
     {
@@ -67,8 +61,8 @@ const practisingImprovisation: Lesson = {
           kind: 'text',
           lead: { en: 'Call and response:', ru: 'Вопрос и ответ:' },
           text: {
-            en: 'a short phrase, then a phrase that answers it. The call climbs, the answer comes back down to rest.',
-            ru: 'короткая фраза и фраза, которая на неё отвечает. Вопрос поднимается, ответ возвращается вниз и успокаивается.',
+            en: 'a short phrase, then one that answers it. The call climbs, the answer comes back down.',
+            ru: 'короткая фраза и фраза, которая на неё отвечает. Вопрос поднимается, ответ возвращается вниз.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 G4 A4/2 G4/2 A4 G4 E4 D4 E4 D4/2.' },
@@ -85,27 +79,9 @@ const practisingImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'One rhythm in every bar, new notes each time. The repeat holds the line together. The long notes are chord tones.',
-            ru: 'Один и тот же ритм в каждом такте, а звуки каждый раз новые. Повтор связывает линию. Долгие звуки — аккордовые.',
+            en: 'One rhythm in every bar, new notes each time. The repeat holds the line together.',
+            ru: 'Один ритм в каждом такте, а звуки каждый раз новые. Повтор связывает линию.',
           },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Over the loop in the Player', ru: 'Над кругом в плеере' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Let the Player keep the loop. Improvise with the right hand, two bars of call and two of answer.',
-            ru: 'Пусть плеер держит гармонию. Импровизируйте правой рукой: два такта вопроса и два такта ответа.',
-          },
-        },
-        { kind: 'chords', symbols: ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G'] },
-        {
-          kind: 'link',
-          title: { en: 'I–vi–IV–V in the Player', ru: 'I–vi–IV–V в плеере' },
-          target: { opens: 'player', numerals: LOOP, key: C_MAJOR },
         },
       ],
     },
@@ -128,18 +104,18 @@ const practisingImprovisation: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the three notes of the loop’s V chord upwards.',
-            ru: 'Сыграйте вверх три звука аккорда V ступени из круга.',
+            en: 'Play the loop’s V chord upwards, note by note.',
+            ru: 'Сыграйте аккорд V ступени из круга вверх, по звуку.',
           },
           answer: { notes: ['G', 'B', 'D'], rising: true },
         },
         {
           kind: 'link',
           title: {
-            en: 'C major pentatonic in Scales',
-            ru: 'Пентатоника до мажор в разделе «Гаммы»',
+            en: 'Improvise over I–vi–IV–V in the Player',
+            ru: 'Импровизация над I–vi–IV–V в плеере',
           },
-          target: { opens: 'scales', root: note('C'), scale: 'pent' },
+          target: { opens: 'player', numerals: LOOP, key: C_MAJOR },
         },
         {
           kind: 'link',
@@ -150,14 +126,6 @@ const practisingImprovisation: Lesson = {
           kind: 'link',
           title: { en: 'Improvise over Swing Low', ru: 'Импровизация над «Swing Low»' },
           target: { opens: 'piece', piece: 'swing-low' },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'Improvise over Michael, Row the Boat',
-            ru: 'Импровизация над «Michael, Row the Boat»',
-          },
-          target: { opens: 'piece', piece: 'michael-row' },
         },
       ],
     },

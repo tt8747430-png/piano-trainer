@@ -5,8 +5,8 @@ const seventhByTheKey: Lesson = {
   id: 'seventh-by-the-key',
   title: { en: 'The 7th chord in a key', ru: 'Септаккорд по тональности' },
   summary: {
-    en: 'Maj7 or 7, as the key’s notes decide, with the 7th taken under the chord.',
-    ru: 'Maj7 или 7 — как подскажут знаки тональности, с септимой под аккордом.',
+    en: 'Choose maj7 or 7 by the key, the 7th under the chord.',
+    ru: 'Выбирайте maj7 или 7 по тональности, септиму — под аккордом.',
   },
   sections: [
     {
@@ -15,18 +15,11 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A 7th chord is a major or minor chord with one more note, the 7th above its root. It makes the chord richer, with a light tension.',
-            ru: 'Септаккорд — это мажорный или минорный аккорд с ещё одной нотой, седьмой от основного тона. Она делает аккорд богаче и даёт лёгкое напряжение.',
+            en: 'A 7th chord is a major or minor chord plus the 7th above its root. Maj7 sounds soft and bright, 7 tenser.',
+            ru: 'Септаккорд — это мажорный или минорный аккорд плюс септима от основного тона. Maj7 звучит мягко и светло, 7 — напряжённее.',
           },
         },
         { kind: 'chords', symbols: ['C7', 'CMaj7'], apart: true },
-        {
-          kind: 'note',
-          text: {
-            en: 'Maj7 sounds soft and bright, 7 tenser.',
-            ru: 'Maj7 звучит мягко и светло, 7 — напряжённее.',
-          },
-        },
       ],
     },
     {
@@ -35,8 +28,8 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Which 7th to take, the song’s key tells you: the chord is built from the key’s own notes.',
-            ru: 'Какой септаккорд взять, подсказывают знаки тональности песни: аккорд строится из её звуков.',
+            en: 'The song’s key tells you which 7th to take: the chord is built from the key’s own notes.',
+            ru: 'Какой септаккорд взять, подсказывает тональность песни: аккорд строится из её звуков.',
           },
         },
         { kind: 'chords', symbols: ['Am7', 'D7', 'GMaj7', 'Em7'] },

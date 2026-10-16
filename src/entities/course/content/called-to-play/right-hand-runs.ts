@@ -5,8 +5,8 @@ const rightHandRuns: Lesson = {
   id: 'right-hand-runs',
   title: { en: 'Right-hand techniques: runs', ru: 'Техники правой руки: пассажи' },
   summary: {
-    en: 'A run down to the root and a run up 1–2–3–5, then a song with your own plan.',
-    ru: 'Пассаж вниз к основному тону и пассаж вверх 1–2–3–5, затем песня по своему плану.',
+    en: 'Play runs down to the root and up 1–2–3–5.',
+    ru: 'Играйте пассажи вниз к основному тону и вверх 1–2–3–5.',
   },
   sections: [
     {
@@ -58,8 +58,8 @@ const rightHandRuns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Make a plan for «You Came for Me, O Saviour» yourself: a way or a technique on each chord, as the earlier songs do.',
-            ru: 'Составьте план для «You Came for Me, O Saviour» сами: способ или технику на каждый аккорд, как в прежних песнях.',
+            en: 'Make your own plan for «You Came for Me, O Saviour»: a way or a technique on each chord.',
+            ru: 'Составьте свой план для «You Came for Me, O Saviour»: способ или технику на каждый аккорд.',
           },
         },
         { kind: 'chords', symbols: ['G', 'C', 'D', 'G'] },
