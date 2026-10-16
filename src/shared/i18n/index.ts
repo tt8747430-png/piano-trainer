@@ -5,7 +5,6 @@ import { ru } from './locales/ru'
 
 const NAMESPACES = [
   'common',
-  'path',
   'songs',
   'piece',
   'player',

@@ -22,7 +22,7 @@ function formatsOf(locale: Locale) {
  * day of them is practised. A run that ended yesterday still counts, and says today keeps it going.
  */
 export function PracticeDays() {
-  const { t } = useTranslation('path')
+  const { t } = useTranslation('learn')
   const locale = useLocale()
   const headingId = useId()
   const days = useProgress(selectDays)

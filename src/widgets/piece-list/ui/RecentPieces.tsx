@@ -12,7 +12,7 @@ const RECENT = 3
  * piece no longer there (an own song deleted) is passed over.
  */
 export function RecentPieces() {
-  const { t } = useTranslation('path')
+  const { t } = useTranslation('learn')
   const headingId = useId()
   const practised = useProgress(selectPractised)
   const repertoire = useRepertoire()

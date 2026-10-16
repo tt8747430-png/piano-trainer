@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { LESSONS } from '@/entities/lesson'
+import { COURSES } from '@/entities/course'
 import { pieceById, type Piece } from '@/entities/piece'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { patternOpening } from './pattern-example'
@@ -48,7 +48,7 @@ describe('patternOpening', () => {
   })
 
   it('plays every lesson’s pattern over its piece, from its first chord', () => {
-    const blocks = LESSONS.flatMap((lesson) =>
+    const blocks = COURSES.flatMap((course) => course.lessons).flatMap((lesson) =>
       lesson.sections.flatMap((section) =>
         section.blocks.flatMap((block) => (block.kind === 'pattern' ? [block] : [])),
       ),

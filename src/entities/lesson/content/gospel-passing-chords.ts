@@ -7,11 +7,9 @@ const gospelPassingChords: Lesson = {
   id: 'gospel-passing-chords',
   title: { en: 'Gospel passing chords', ru: 'Проходящие аккорды в госпеле' },
   summary: {
-    en: 'The moves between chords that make a hymn sound gospel: I to IV, the raised-4th diminished, the walk-up, and a ii–V into any chord.',
-    ru: 'Ходы между аккордами, от которых гимн звучит как госпел: с I на IV, уменьшённый на повышенной IV, подход снизу и ii–V в любой аккорд.',
+    en: 'Join a hymn’s chords with gospel passing chords.',
+    ru: 'Связывайте аккорды гимна проходящими аккордами госпела.',
   },
-  level: 3,
-  module: 'gospel',
   sections: [
     {
       heading: { en: 'From I to IV', ru: 'С I на IV' },
@@ -27,7 +25,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
       ],
     },
@@ -37,15 +35,15 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From IV back to I, pass through the diminished 7th on the raised 4th. With I over its 5th, C/G, the bass climbs F, F♯, G.',
-            ru: 'От IV обратно к I пройдите через уменьшённый септаккорд на повышенной IV. С I над квинтой, C/G, бас поднимается: фа, фа-диез, соль.',
+            en: 'From IV back to I, pass through the diminished 7th on the raised 4th. With I over its 5th, the bass climbs F, F♯, G.',
+            ru: 'От IV обратно к I пройдите через уменьшённый септаккорд на повышенной IV. С I над квинтой бас поднимается: фа, фа-диез, соль.',
           },
         },
         { kind: 'chords', symbols: ['F', 'F#°7', 'C/G'] },
         {
           kind: 'link',
           title: { en: 'F to C/G in Passing chords', ru: 'Из F в C/G в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C/G' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'C/G' },
         },
       ],
     },
@@ -56,15 +54,15 @@ const gospelPassingChords: Lesson = {
           kind: 'text',
           lead: { en: 'The walk-up', ru: 'Подход снизу' },
           text: {
-            en: 'approaches I from ♭VI and ♭VII: A♭, B♭, C. In a hymn’s last bar it sounds like a choir’s final rise.',
-            ru: 'ведёт к I от ♭VI и ♭VII: A♭, B♭, C. В последнем такте гимна он звучит как финальный подъём хора.',
+            en: 'approaches I from ♭VI and ♭VII: A♭, B♭, C. It is the gospel ending.',
+            ru: 'ведёт к I от ♭VI и ♭VII: A♭, B♭, C. Это госпел-окончание.',
           },
         },
         { kind: 'chords', symbols: ['A♭', 'B♭', 'C'] },
         {
           kind: 'link',
           title: { en: 'F to C in Passing chords', ru: 'Из F в C в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'C' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'C' },
         },
       ],
     },
@@ -89,7 +87,7 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Dm7 in Passing chords', ru: 'Из C в Dm7 в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm7' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Dm7' },
         },
       ],
     },
@@ -99,10 +97,28 @@ const gospelPassingChords: Lesson = {
         {
           kind: 'question',
           ask: {
+            en: 'Play the chord that turns C toward F.',
+            ru: 'Сыграйте аккорд, который поворачивает C к F.',
+          },
+          answer: { chord: 'C7' },
+        },
+        {
+          kind: 'question',
+          ask: {
             en: 'Play the diminished 7th between F and G.',
             ru: 'Сыграйте уменьшённый септаккорд между F и G.',
           },
           answer: { chord: 'F#°7' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'I–IV–I–V in the Player', ru: 'I–IV–I–V в плеере' },
+          target: { opens: 'player', numerals: 'I IV I V', key: C_MAJOR, size: 'sevenths' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
         },
       ],
     },

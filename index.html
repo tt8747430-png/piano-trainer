@@ -26,8 +26,11 @@
         var theme = 'system'
         try {
           var saved = JSON.parse(localStorage.getItem('pt-settings') || 'null')
-          var chosen = saved && saved.version === 1 && saved.state && saved.state.theme
+          var chosen = saved && saved.version === 2 && saved.state && saved.state.theme
           if (chosen === 'light' || chosen === 'dark') theme = chosen
+          // Small titles too, so a screen's title never jumps a size as the app starts (TitlesSync).
+          if (saved && saved.version === 2 && saved.state && saved.state.titles === 'small')
+            document.documentElement.dataset.titles = 'small'
         } catch (_) {}
         if (theme === 'system') {
           try {

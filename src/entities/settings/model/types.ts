@@ -1,21 +1,32 @@
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import {
   isOneOf,
+  KEY_DOCKS,
+  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
+  RAIL_CONTROLS,
   SWIPES,
+  type KeyDock,
+  type KeyLength,
   type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
+  type RailControl,
   type Swipe,
 } from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
 import { TOUCHES, type Touch } from '@/shared/lib/schedule'
 
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
+
+export const TITLE_SIZES = ['large', 'small'] as const
+/** How large a screen's title is: large, or small, leaving the page more of the screen. */
+export type TitleSize = (typeof TITLE_SIZES)[number]
 
 /** The Setup's saved switches. */
 export const PRACTICE_TOGGLES = [
@@ -44,15 +55,37 @@ export interface TrainerSettings {
   readonly autoNext: boolean
 }
 
+/** How every lesson shows its examples. */
+/** Where a screen's floating actions stand along its foot (ADR 0058). */
+export const FLOATING_PLACES = ['left', 'center', 'right'] as const
+export type FloatingPlace = (typeof FLOATING_PLACES)[number]
+export const isFloatingPlace = (value: unknown): value is FloatingPlace =>
+  FLOATING_PLACES.includes(value as FloatingPlace)
+
+/** A screen's floating actions: where they stand, and whether each says its name beside its icon. */
+export interface FloatingSettings {
+  readonly place: FloatingPlace
+  readonly labels: boolean
+}
+
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
+  /** A key a page marks (a chord's, a scale's) names its note under its degree. */
+  readonly markNotes: boolean
   /** The rail names the chord a hand holds. */
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
+  /** Where a page's keys stay while it scrolls. */
+  readonly dock: KeyDock
+  /** A page's keys folded away to a button that brings them back. */
+  readonly folded: boolean
+  readonly keyLength: KeyLength
+  /** The controls the keys' rail holds, in its order. */
+  readonly railControls: readonly RailControl[]
 }
 
 const SIDEBARS = ['open', 'collapsed'] as const
@@ -81,15 +114,41 @@ export interface MidiSettings {
   readonly pedal: PedalWay
 }
 
+/** The Chord finder's own settings (ADR 0054), and the chords it remembers. */
+export interface ChordFinderSettings {
+  /** The staff keeps the chords played in turn, and so does the device; else it writes only the chord down now. */
+  readonly remember: boolean
+  /** The keys the chord is in, each with its numeral, shown under it. */
+  readonly inKeys: boolean
+  /** An inversion named over its bass (`C/E`); else by its root alone (`C`), its inversion said. */
+  readonly slash: boolean
+  /** The chords remembered, oldest first, each its keys lowest first. */
+  readonly chords: readonly (readonly Midi[])[]
+}
+
+/** The most sections kept folded, and the longest id one has. */
+export const FOLDED_MAX = 100
+export const SECTION_ID_MAX = 64
+
+/** The most chords the Chord finder remembers: the newest are kept. */
+export const REMEMBERED_CHORDS = 24
+/** The most keys a chord remembered holds: two hands'. */
+export const CHORD_KEYS_MAX = 10
+
 export interface SettingsState {
   theme: Theme
+  titles: TitleSize
   locale: Locale
   practice: PracticeToggles
   trainer: TrainerSettings
+  floating: FloatingSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
   midi: MidiSettings
+  chordFinder: ChordFinderSettings
+  /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
+  foldedSections: readonly string[]
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
@@ -103,6 +162,9 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
+
+/** In the thumbs' middle, icons alone: a name is the button's tooltip and its screen reader's. */
+export const DEFAULT_FLOATING: FloatingSettings = { place: 'center', labels: false }
 
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
@@ -121,18 +183,34 @@ export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
 
+/** The staff writes only the chord down now; the keys it is in are shown. */
+export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
+  remember: false,
+  inKeys: true,
+  slash: true,
+  chords: [],
+}
+
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   keySize: 'fit',
   swipe: 'scroll',
   namedKeys: 'c',
+  markNotes: true,
   chordNames: true,
   typing: finePointer,
+  dock: 'bottom',
+  folded: false,
+  keyLength: 'long',
+  railControls: RAIL_CONTROLS,
 })
 
 export const isTheme = isOneOf(THEMES)
+export const isTitleSize = isOneOf(TITLE_SIZES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
+export const isKeyDock = isOneOf(KEY_DOCKS)
+export const isKeyLength = isOneOf(KEY_LENGTHS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

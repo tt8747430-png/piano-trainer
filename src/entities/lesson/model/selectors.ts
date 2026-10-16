@@ -1,61 +1,57 @@
 import { LESSONS } from '../content'
-import { isCourse, LESSON_MODULES, SUBJECT_MODULES, type Lesson, type LessonModule } from './types'
+import { JOURNEYS } from '../content/journeys'
+import type { Chapter, Journey } from './journey'
+import type { Lesson } from './types'
 
 const LESSON_BY_ID = new Map(LESSONS.map((lesson) => [lesson.id, lesson]))
+const JOURNEY_BY_ID = new Map(JOURNEYS.map((journey) => [journey.id, journey]))
 
 export const lessonById = (id: string): Lesson | undefined => LESSON_BY_ID.get(id)
 
-/** A module's lessons in the order they are taught. */
-export const lessonsIn = (module: LessonModule): readonly Lesson[] =>
-  LESSONS.filter((lesson) => lesson.module === module)
+export const journeyById = (id: string): Journey | undefined => JOURNEY_BY_ID.get(id)
 
-/** What a lesson is read among (ADR 0042): its course alone, or the subjects' modules in turn. */
-const trackOf = (module: LessonModule): readonly Lesson[] =>
-  isCourse(module) ? lessonsIn(module) : SUBJECT_MODULES.flatMap(lessonsIn)
-
-const TRACKS = new Map(LESSON_MODULES.map((module) => [module, trackOf(module)]))
-
-/** The lesson after this one along its track: into the next subject at a module's end, never past a course. */
-export function nextLesson(id: string): Lesson | undefined {
-  const lesson = lessonById(id)
-  const track = lesson ? (TRACKS.get(lesson.module) ?? []) : []
-  const at = track.findIndex((each) => each.id === id)
-  return at < 0 ? undefined : track[at + 1]
+/** Where a lesson is read: its journey and chapter, and its number in the journey from 1. */
+export interface LessonPlace {
+  readonly journey: Journey
+  readonly chapter: Chapter
+  readonly n: number
+  readonly total: number
 }
 
-/** When a lesson was marked learned, as saved; none if it is not. */
-export type LearnedOn = (lesson: Lesson) => string | undefined
+const lessonIdsOf = (journey: Journey): string[] =>
+  journey.chapters.flatMap((chapter) =>
+    chapter.steps.flatMap((step) => (step.kind === 'lesson' ? [step.lessonId] : [])),
+  )
 
-/**
- * The lesson to go on with among `lessons`: the first not learned after the one learned last, along
- * its track; none where none of them is learned, or nothing after it is left.
- */
-export function lessonAfterLast(
-  lessons: readonly Lesson[],
-  learnedOn: LearnedOn,
-): Lesson | undefined {
-  const last = lessons
-    .flatMap((lesson) => {
-      const date = learnedOn(lesson)
-      return date === undefined ? [] : [{ lesson, date }]
-    })
-    .reduce<{ lesson: Lesson; date: string } | undefined>(
-      (latest, each) => (latest === undefined || each.date > latest.date ? each : latest),
-      undefined,
+const PLACES = new Map(
+  JOURNEYS.flatMap((journey) => {
+    const ids = lessonIdsOf(journey)
+    return journey.chapters.flatMap((chapter) =>
+      chapter.steps.flatMap((step): [string, LessonPlace][] =>
+        step.kind === 'lesson'
+          ? [
+              [
+                step.lessonId,
+                { journey, chapter, n: ids.indexOf(step.lessonId) + 1, total: ids.length },
+              ],
+            ]
+          : [],
+      ),
     )
-  let next = last ? nextLesson(last.lesson.id) : undefined
-  while (next && learnedOn(next) !== undefined) next = nextLesson(next.id)
-  return next
+  }),
+)
+
+/** A lesson's journey, chapter and number; undefined for a lesson no journey has. */
+export const lessonPlace = (lessonId: string): LessonPlace | undefined => PLACES.get(lessonId)
+
+/** The lesson after this one in its journey, into its next chapter; none after the journey's last. */
+export function nextLessonId(lessonId: string): string | undefined {
+  const place = lessonPlace(lessonId)
+  return place ? lessonIdsOf(place.journey)[place.n] : undefined
 }
 
-/**
- * The lesson to read in a module: on from the one learned last within it, else its first not learned;
- * none once all are. A subject's last lesson leads to no other subject here: its page is its own.
- */
-export function lessonInModule(module: LessonModule, learnedOn: LearnedOn): Lesson | undefined {
-  const lessons = lessonsIn(module)
-  const after = lessonAfterLast(lessons, learnedOn)
-  return after && after.module === module
-    ? after
-    : lessons.find((lesson) => learnedOn(lesson) === undefined)
+/** The lesson before this one in its journey, back into its chapter before; none before its first. */
+export function previousLessonId(lessonId: string): string | undefined {
+  const place = lessonPlace(lessonId)
+  return place && place.n > 1 ? lessonIdsOf(place.journey)[place.n - 2] : undefined
 }

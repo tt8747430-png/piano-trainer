@@ -2,32 +2,34 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { lessonsIn } from '@/entities/lesson'
+import { lessonPlace } from '@/entities/lesson'
 import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('A lesson', () => {
-  it('shows its title and summary over its sections', async () => {
-    await renderApp('/learn/lessons/reading-chord-symbols')
+  it('shows its title over its sections, and no summary', async () => {
+    await renderApp('/lessons/reading-chord-symbols')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/what its numbers mean/)).toBeInTheDocument()
+    expect(screen.queryByText(/name the chords you play/)).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
-  it('is marked learned at its end, and its course shows it so', async () => {
+  it('is marked learned at its end, and its journey shows it so', async () => {
     const user = userEvent.setup()
-    const { progressStore, router } = await renderApp('/learn/lessons/reading-chord-symbols')
+    const { progressStore, router } = await renderApp('/lessons/reading-chord-symbols')
     await user.click(await screen.findByRole('button', { name: 'Learned' }))
     expect(progressStore.getState().learned['lesson:reading-chord-symbols']).toBeDefined()
-    await act(() => router.navigate({ to: '/learn/$module', params: { module: 'fundamentals' } }))
-    const row = await screen.findByRole('link', { name: /How to read chord symbols/ })
-    expect(within(row).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
+    await act(() =>
+      router.navigate({ to: '/', search: { view: 'lessons', journey: 'foundations' } }),
+    )
+    const chapter = await screen.findByRole('region', { name: /Your first chords/ })
+    expect(chapter).toHaveTextContent('1/3')
   })
 
   it('opens its exercises in the Player, walked through the keys or in an inversion', async () => {
-    await renderApp('/learn/lessons/two-five-one')
+    await renderApp('/lessons/two-five-one')
     const step1 = await screen.findByRole('link', { name: /^Step 1: up by semitones/ })
     expect(step1.getAttribute('href')).toBe(
       '/play/progression?p=ii-V-I&chordSize=sevenths&walk=semitones-up',
@@ -44,12 +46,19 @@ describe('A lesson', () => {
 
   it('plays one of a chord written twice, pressing only the one tapped', async () => {
     const user = userEvent.setup()
-    await renderApp('/learn/lessons/inversions')
+    await renderApp('/lessons/inversions')
     await screen.findByRole('heading', { level: 1 })
     // The row C, F/C, G/B, C: C before and after its inversions, played as a progression.
-    const row = screen.getByRole('button', { name: 'G/B' }).closest('ul')
+    const bar = await screen.findByRole(
+      'button',
+      { name: /^Play bar \d+, G\/B$/ },
+      { timeout: 5000 },
+    )
+    const row = bar.closest('[role="group"]')
     if (!row) throw new Error('the lesson writes its row of inversions')
-    const [first, ...others] = within(row).getAllByRole('button', { name: /^C$/ })
+    const [first, ...others] = within(row as HTMLElement).getAllByRole('button', {
+      name: /^Play bar \d+, C$/,
+    })
     if (!first || others.length === 0) throw new Error('the row writes C twice')
     await user.click(first)
     expect(first).toHaveAttribute('aria-pressed', 'true')
@@ -58,7 +67,7 @@ describe('A lesson', () => {
 
   it('plays a note tapped on a line’s staff, and a bar tapped over it', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/learn/lessons/whole-and-half-steps')
+    const { audio } = await renderApp('/lessons/whole-and-half-steps')
     // The notes are buttons once the staff is engraved, which takes a while under a full run.
     const note = await screen.findAllByRole('button', { name: /^Play [A-G]/ }, { timeout: 5000 })
     const [first] = note
@@ -68,110 +77,123 @@ describe('A lesson', () => {
     expect(audio.played.at(-1)?.sounds.length).toBeGreaterThan(0)
   })
 
-  it('ends on Learned and the next lesson as Learn lists them', async () => {
-    await renderApp('/learn/lessons/finding-home')
+  it('ends on Learned and the next lesson of its journey', async () => {
+    await renderApp('/lessons/finding-home')
     const next = await screen.findByRole('link', { name: /Next lesson/ })
-    expect(next.getAttribute('href')).toBe('/learn/lessons/reading-notes')
+    expect(next.getAttribute('href')).toBe('/lessons/reading-notes')
     expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
+  })
+
+  it('shows or hides the fingers on each scale from its own card', async () => {
+    const user = userEvent.setup()
+    await renderApp('/lessons/minor-scales')
+    const [first, second] = await screen.findAllByRole('button', { name: 'Fingers' })
+    expect(first).toHaveAttribute('aria-pressed', 'true')
+    await user.click(first!)
+    expect(first).toHaveAttribute('aria-pressed', 'false')
+    expect(second).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('has Learned in its bar', async () => {
+    const user = userEvent.setup()
+    const { progressStore } = await renderApp('/lessons/reading-chord-symbols')
+    await user.click(await screen.findByRole('button', { name: 'Learned' }))
+    expect(progressStore.getState().learned['lesson:reading-chord-symbols']).toBeDefined()
+  })
+
+  it('leads back to the lesson before it, and has none before its journey’s first', async () => {
+    await renderApp('/lessons/reading-notes')
+    expect(
+      (await screen.findByRole('link', { name: /^Previous lesson/ })).getAttribute('href'),
+    ).toBe('/lessons/finding-home')
   })
 
   it('is learned once the learner goes on to the next lesson', async () => {
     const user = userEvent.setup()
-    const { progressStore, router } = await renderApp('/learn/lessons/finding-home')
+    const { progressStore, router } = await renderApp('/lessons/finding-home')
     await user.click(await screen.findByRole('link', { name: /Next lesson/ }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/reading-notes'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/reading-notes'))
     expect(progressStore.getState().learned['lesson:finding-home']).toBeDefined()
   })
 
-  it('ends a course on its list of lessons, the last one learned on the way', async () => {
-    const user = userEvent.setup()
-    const last = lessonsIn('gorshkov').at(-1)
-    if (!last) throw new Error('a course has lessons')
-    const { progressStore, router } = await renderApp(`/learn/lessons/${last.id}`)
-    await user.click(await screen.findByRole('link', { name: /All lessons of Горшков/ }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/gorshkov'))
-    expect(progressStore.getState().learned[`lesson:${last.id}`]).toBeDefined()
+  it('goes on into the next chapter, and ends a journey back on its map', async () => {
+    await renderApp('/lessons/bass-clef')
+    expect((await screen.findByRole('link', { name: /Next lesson/ })).getAttribute('href')).toBe(
+      '/lessons/rhythm-and-meter',
+    )
   })
 
-  it('lists its sections at its top, each a link to its heading', async () => {
-    await renderApp('/learn/lessons/ninth-chords')
+  it('ends a journey’s last lesson on the way back to the journey', async () => {
+    const user = userEvent.setup()
+    const { progressStore, router } = await renderApp('/lessons/pentatonic-improvisation')
+    await user.click(await screen.findByRole('link', { name: /Back to the journey/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(router.state.location.search).toMatchObject({ journey: 'mastery' })
+    expect(progressStore.getState().learned['lesson:pentatonic-improvisation']).toBeDefined()
+  })
+
+  it('lists its sections in its contents, each a link to its heading', async () => {
+    const user = userEvent.setup()
+    await renderApp('/lessons/ninth-chords')
+    await user.click(await screen.findByRole('button', { name: /^In this lesson: section/ }))
     const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const links = within(contents).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual([
+    // Each link says its number, then its heading.
+    expect(links.map((link) => link.textContent?.replace(/^\d+/, ''))).toEqual([
       'A 7th chord and one more 3rd',
       'Two triads stacked',
-      'Bass left, 7th chord right',
-      'The second position',
+      'Bass left, two positions',
       'Split the root',
       'Try it',
     ])
     const href = links[3]?.getAttribute('href') ?? ''
-    expect(href).toBe('/learn/lessons/ninth-chords#section-4')
+    expect(href).toBe('/lessons/ninth-chords#section-4')
     const section = document.getElementById(href.split('#')[1] ?? '')
     expect(section).toContainElement(
-      screen.getByRole('heading', { level: 2, name: 'The second position' }),
+      screen.getByRole('heading', { level: 2, name: 'Split the root', hidden: true }),
     )
   })
 
-  it('lists no contents for a lesson of two sections', async () => {
-    await renderApp('/learn/lessons/right-hand-five')
-    await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('navigation', { name: 'In this lesson' })).not.toBeInTheDocument()
-  })
-
-  it('says its course and its number in it, its course a link to its page', async () => {
+  it('says its journey, chapter and number, its journey a link to its map', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/lessons/two-five-one')
+    const { router } = await renderApp('/lessons/two-five-one')
     const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
-    const inGorshkov = lessonsIn('gorshkov')
-    const n = inGorshkov.findIndex((each) => each.id === 'two-five-one') + 1
-    expect(place).toHaveTextContent(`Lesson ${n} of ${inGorshkov.length}`)
-    await user.click(within(place).getByRole('link', { name: 'Горшков' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/gorshkov'))
+    const where = lessonPlace('two-five-one')!
+    expect(place).toHaveTextContent(`Mastery · The ii–V–I · Lesson ${where.n} of ${where.total}`)
+    await user.click(within(place).getByRole('link', { name: 'Mastery' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(router.state.location.search).toMatchObject({ journey: 'mastery' })
   })
 
-  it('ends a course on its list, never in another course', async () => {
-    const last = lessonsIn('seven-types').at(-1)
-    await renderApp(`/learn/lessons/${last?.id ?? ''}`)
-    const all = await screen.findByRole('link', { name: /All lessons of Боброва/ })
-    expect(all.getAttribute('href')).toBe('/learn/seven-types')
-    expect(screen.queryByRole('link', { name: /Next lesson/ })).not.toBeInTheDocument()
-  })
-
-  it('goes back to its course when it was opened directly', async () => {
+  it('goes back to its journey when it was opened directly', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/lessons/reading-chord-symbols')
+    const { router } = await renderApp('/lessons/reading-chord-symbols')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/fundamentals'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(router.state.location.search).toMatchObject({ journey: 'foundations' })
   })
 
-  it('opens a pattern’s piece in the Player with it, and closes back to the lesson', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/learn/lessons/five-ways')
-    const card = await screen.findByRole('article', { name: '1 · Bass + chords' })
-    await user.click(within(card).getByRole('link', { name: 'Open in the Player' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/play/ex3'))
-    expect(router.state.location.search).toMatchObject({ pattern: 'M1' })
-    await user.click(await screen.findByRole('button', { name: 'Close' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/learn/lessons/five-ways'))
+  it('is not found for a lesson no journey has: a course’s is its course’s', async () => {
+    await renderApp('/lessons/five-ways')
+    expect(await screen.findByText('Page not found')).toBeInTheDocument()
   })
 
   it('keeps a keyboard user on the question’s button as it opens, shows the answer and starts again', async () => {
     const user = userEvent.setup()
-    await renderApp('/learn/lessons/triads')
+    await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    within(question).getByRole('button', { name: 'Answer on the keys' }).focus()
+    within(question).getByRole('button', { name: 'Answer' }).focus()
     await user.keyboard('{Enter}')
     expect(within(question).getByRole('button', { name: 'Show the answer' })).toHaveFocus()
     await user.keyboard('{Enter}')
-    expect(within(question).getByRole('button', { name: 'Try again' })).toHaveFocus()
+    expect(within(question).getByRole('button', { name: 'Again' })).toHaveFocus()
   })
 
   it('answers a Fundamentals question on its keys', async () => {
     const user = userEvent.setup()
-    await renderApp('/learn/lessons/triads')
+    await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     for (const key of ['E4', 'G sharp 4', 'B4']) {
       await user.click(within(keyboard).getByRole('button', { name: key }))
@@ -181,9 +203,9 @@ describe('A lesson', () => {
 
   it('answers a question from a MIDI keyboard', async () => {
     const user = userEvent.setup()
-    const { midi: midiKeyboard } = await renderApp('/learn/lessons/triads')
+    const { midi: midiKeyboard } = await renderApp('/lessons/triads')
     const question = await screen.findByRole('group', { name: 'Play E major.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     act(() => {
       for (const key of [64, 68, 71]) midiKeyboard.press(midi(key))
     })
@@ -191,13 +213,13 @@ describe('A lesson', () => {
   })
 
   it('speaks Russian on every block of a lesson', async () => {
-    await renderApp('/learn/lessons/inversions', { locale: 'ru' })
+    await renderApp('/lessons/inversions', { locale: 'ru' })
     await screen.findByRole('heading', { level: 1 })
     expect(untranslated(document.body)).toEqual([])
   })
 
   it('opens an exercise a lesson links to on its chord', async () => {
-    await renderApp('/learn/lessons/inversions')
+    await renderApp('/lessons/inversions')
     const link = await screen.findByRole('link', { name: /^Climb C through its inversions/ })
     expect(link.getAttribute('href')).toBe('/play/exercise/inversions?root=C&quality=maj')
   })

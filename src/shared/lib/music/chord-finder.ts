@@ -9,9 +9,9 @@ import {
   type ChordParts,
 } from './chord-parts'
 import type { Key } from './key'
-import { note, type SpelledNote } from './note'
+import { note, pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
-import { keyTones } from './scale'
+import { keyTones, spellInKey } from './scale'
 import { TWO_HANDS_FROM } from './place'
 import type { ChordRole, Tone } from './tone'
 
@@ -52,20 +52,30 @@ const isSixNine = (parts: ChordParts): boolean =>
   parts.added.includes('add6') &&
   parts.added.includes('add9')
 
+/** A suspended chord that is not a 7sus4 (a sus2, a Maj7sus4): its 5th holds it, or it is a cluster. */
+const looselySuspended = (parts: ChordParts): boolean =>
+  parts.triad === 'sus2' || (parts.triad === 'sus4' && parts.seventh !== 'minor')
+
 /**
  * The tones of a chord a hand may leave out (spec 2026-10-05 §5): its perfect 5th, from a 7th chord
  * up and from a 6/9; its natural 9th and 11th under its highest number (a 13th's, an 11th's 9th); and
- * the major 3rd of an unaltered 7th chord, where the 5th is played. Never the root, the 7th, the
+ * the major 3rd of a plain 7th chord, where the 5th is played. Never the root, the 7th, the
  * highest number or an alteration: they are what the name says. A 6th or an added tone keeps its 5th,
- * or its name would be invented.
+ * or its name would be invented; so does a suspended chord but the 7sus4 (`C F B♭` is C7sus4, `C D B♭`
+ * no C7sus2); and an 11th over a major 3rd keeps its 9th, or the 11th sits a ♭9 over the 3rd.
  */
 function leavable(parts: ChordParts, tones: readonly Tone[]): LeftOut[] {
+  if (looselySuspended(parts)) return []
   const has = (role: LeftOut) => tones.some((tone) => isPlain(tone, role))
   const top = parts.size === 5 ? 5 : highestNatural(parts)
   const rules: Readonly<Record<LeftOut, boolean>> = {
-    '3rd': parts.size === 7 && parts.triad === 'maj' && parts.alterations.length === 0,
+    '3rd':
+      parts.size === 7 &&
+      parts.triad === 'maj' &&
+      parts.alterations.length === 0 &&
+      parts.added.length === 0,
     '5th': parts.size >= 7 || isSixNine(parts),
-    '9th': top >= 11,
+    '9th': top >= 11 && !(top === 11 && parts.triad === 'maj'),
     '11th': top === 13,
   }
   return LEFT_OUT.filter((role) => rules[role] && has(role))
@@ -113,6 +123,35 @@ const flatFiveOverTensions = (parts: ChordParts): boolean =>
  */
 const addsOverSeventh = (parts: ChordParts): boolean => parts.size >= 7 && parts.added.length > 0
 
+/** The tones a slash chord stands on: its 3rd, 5th or 7th, or the 6th a 6th chord adds (`C6/A`). */
+const standsOn = (bass: Tone): boolean =>
+  bass.role === '3rd' || bass.role === '5th' || bass.role === '7th' || bass.degree === '6'
+
+/**
+ * A chord over a bass not its root is read whole, as a plain chord: no added tone but a 6th, on a
+ * major or minor triad, a suspended one only a triad, over its 3rd, 5th, 7th or 6th (never a tension
+ * or a suspended tone: not `E♭Maj13/C`, not `Gsus4/C`), and no tone left out but the 5th over its 3rd
+ * or minor 7th (`C7/E` with no 5th; a major 7th a semitone under its root is a cluster: `B C E`).
+ * Else the notes read as a cluster under a name no one writes: C D E as `D7sus2/C` with no 5th.
+ */
+function plainInversion({ parts, leftOut }: Shape, bass: Tone): boolean {
+  const triadic = parts.triad === 'maj' || parts.triad === 'min'
+  const added = parts.added.every((tone) => tone === 'add6' && triadic)
+  const whole =
+    leftOut.length === 0 ||
+    (leftOut.length === 1 &&
+      leftOut[0] === '5th' &&
+      triadic &&
+      parts.seventh === 'minor' &&
+      (bass.role === '3rd' || bass.role === '7th'))
+  const suspended = parts.triad === 'sus2' || parts.triad === 'sus4'
+  return standsOn(bass) && added && whole && !(suspended && parts.size >= 7)
+}
+
+/** A slash chord's bass written as a reader looks for it: C, not B# or D𝄫, under an E+ or an E♭°7. */
+const bassSpelling = (bass: SpelledNote, key: Key | undefined): SpelledNote =>
+  plainRoot(bass) === bass ? bass : key ? spellInKey(pitchClassOf(bass), key) : plainRoot(bass)
+
 /** The Chords explorer shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
@@ -137,7 +176,8 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
       const chord = spelledChord(rootPc, shape.parts, key)
       const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
       const bassTone = chord.tones[bassAt]
-      const bass = rootPc === bassPc || !bassTone ? undefined : bassTone.note
+      if (rootPc !== bassPc && !(bassTone && plainInversion(shape, bassTone))) return []
+      const bass = rootPc === bassPc || !bassTone ? undefined : bassSpelling(bassTone.note, key)
       return [
         {
           chord,
@@ -201,12 +241,15 @@ const octaveTones = (parts: ChordParts): string =>
     .toSorted()
     .join(' ')
 
-/** How far a name's added 2nd, 4th, 9th or 11th is from how the keys voice it: 0 where each fits. */
+/**
+ * How far a name's added 2nd, 4th, 9th or 11th is from how the keys voice it: 0 where each fits. A
+ * 6/9's 9th fits anywhere: `C D E G A` is C6/9, not C6(add2).
+ */
 function voicing(parts: ChordParts, rootKey: number, keys: readonly Midi[]): number {
   const SEMITONES: Partial<Record<AddedTone, number>> = { add2: 2, add9: 2, add4: 5, add11: 5 }
   return parts.added.filter((tone) => {
     const above = SEMITONES[tone]
-    if (above === undefined) return false
+    if (above === undefined || (tone === 'add9' && isSixNine(parts))) return false
     const close = keys.some((key) => key - rootKey === above)
     return (tone === 'add2' || tone === 'add4') !== close
   }).length

@@ -3,56 +3,96 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { lessonsIn } from '@/entities/lesson'
+import { courseById } from '@/entities/course'
+
+const gorshkov = courseById('gorshkov')!
 
 describe('A course', () => {
-  it('lists its lessons in order under one way in, its first', async () => {
-    await renderApp('/learn/gorshkov')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Горшков' })).toBeInTheDocument()
-    const lessons = screen.getByRole('region', { name: 'Lessons' })
-    const ids = within(lessons)
+  it('lists its own lessons in order under one way in, its first', async () => {
+    await renderApp('/courses/gorshkov')
+    expect(
+      await screen.findByRole('heading', { level: 1, name: gorshkov.title.en }),
+    ).toBeInTheDocument()
+    const region = screen.getByRole('region', { name: 'Lessons' })
+    const hrefs = within(region)
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'))
-    expect(ids).toEqual(lessonsIn('gorshkov').map((lesson) => `/learn/lessons/${lesson.id}`))
-    const start = screen.getByRole('link', { name: /^Start/ })
-    expect(start).toHaveAttribute('href', ids[0])
-    expect(screen.getByText(`0 of ${lessonsIn('gorshkov').length} learned`)).toBeInTheDocument()
+    expect(hrefs).toEqual(gorshkov.lessons.map((lesson) => `/courses/gorshkov/${lesson.id}`))
+    expect(screen.getByRole('link', { name: /^Start course/ })).toHaveAttribute('href', hrefs[0])
+    const total = gorshkov.lessons.length + gorshkov.songs.length
+    expect(screen.getByText(`0 of ${total} learned`)).toBeInTheDocument()
+    const facts = screen.getByRole('list', { name: 'About this course' })
+    expect(facts).toHaveTextContent(`Advanced`)
+    expect(facts).toHaveTextContent(`${gorshkov.weeks} weeks`)
+    expect(facts).toHaveTextContent(`${gorshkov.lessons.length} lessons`)
+    expect(facts).toHaveTextContent(`${gorshkov.songs.length} songs`)
   })
 
-  it('continues after the lesson learned last, and says it is learned', async () => {
-    const { progressStore } = await renderApp('/learn/fundamentals')
-    await screen.findByRole('heading', { level: 1, name: 'Fundamentals' })
+  it('ends on its guided songs', async () => {
+    await renderApp('/courses/gorshkov')
+    const songs = await screen.findByRole('region', { name: 'Guided songs' })
+    expect(
+      within(songs)
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href')),
+    ).toEqual(gorshkov.songs.map((id) => `/songs/${id}`))
+  })
+
+  it('continues with the first lesson not learned, then its songs, then offers a review', async () => {
+    const { progressStore } = await renderApp('/courses/gorshkov')
+    await screen.findByRole('heading', { level: 1 })
+    const [first, second] = gorshkov.lessons
     act(() =>
-      progressStore.setState({ learned: { 'lesson:finding-home': '2026-10-01T10:00:00Z' } }),
+      progressStore.setState({ learned: { [`course:gorshkov/${first?.id}`]: '2026-10-01' } }),
     )
-    const go = screen.getByRole('link', { name: /^Continue/ })
-    expect(go).toHaveAttribute('href', '/learn/lessons/reading-notes')
-    const first = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')[0]
-    expect(within(first ?? document.body).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^Continue/ })).toHaveAttribute(
+      'href',
+      `/courses/gorshkov/${second?.id}`,
+    )
+    const [row] = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')
+    expect(row).not.toHaveAttribute('aria-current')
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries(
+          gorshkov.lessons.map((lesson) => [`course:gorshkov/${lesson.id}`, '2026-10-01']),
+        ),
+      }),
+    )
+    expect(screen.getByRole('link', { name: /^Continue/ })).toHaveAttribute(
+      'href',
+      `/play/${gorshkov.songs[0]}`,
+    )
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries([
+          ...gorshkov.lessons.map((lesson) => [`course:gorshkov/${lesson.id}`, '2026-10-01']),
+          ...gorshkov.songs.map((id) => [`piece:${id}`, '2026-10-01']),
+        ]),
+      }),
+    )
+    expect(screen.getByRole('link', { name: /^Review/ })).toHaveAttribute(
+      'href',
+      `/courses/gorshkov/${first?.id}`,
+    )
+    expect(screen.getByText('Course complete')).toBeInTheDocument()
   })
 
-  it('leads a method book to its patterns and pieces', async () => {
-    await renderApp('/learn/called-to-play-2')
-    const link = await screen.findByRole('link', { name: /Patterns and pieces/ })
-    expect(link).toHaveAttribute('href', '/practice/accompaniment?show=called-to-play-2')
-  })
-
-  it('goes back to Learn’s courses when opened directly', async () => {
+  it('goes back to the Courses when opened directly', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/learn/gospel')
+    const { router } = await renderApp('/courses/gorshkov')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     expect(router.state.location.search).toMatchObject({ view: 'courses' })
   })
 
-  it('is not found for a module there is not', async () => {
-    await renderApp('/learn/nothing')
+  it('is not found for a course there is not, nor a lesson it does not have', async () => {
+    await renderApp('/courses/nothing')
     expect(await screen.findByText('Page not found')).toBeInTheDocument()
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    await renderApp('/learn/accompaniment', { locale: 'ru' })
-    await screen.findByRole('heading', { level: 1, name: 'Аккомпанемент' })
+    await renderApp('/courses/seven-types', { locale: 'ru' })
+    await screen.findByRole('heading', { level: 1, name: courseById('seven-types')?.title.ru })
     expect(untranslated(document.body)).toEqual([])
   })
 })

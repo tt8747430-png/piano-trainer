@@ -2,8 +2,8 @@ import { PAGE_TILES, type Tile } from '@/shared/ui'
 
 /**
  * Practice's pages (ADR 0044), each where it is and the tile it wears: the things a page shows on the
- * keys, the tools that work something out from what they are given (most a tab of a thing's page,
- * ADR 0050), and the training.
+ * keys, each holding the tools that work on it (ADR 0052); the Chord finder, any chord played named
+ * (ADR 0054); and the training.
  */
 export const PRACTICE_PAGES = {
   chords: { to: '/practice/chords', tile: PAGE_TILES.chords },
@@ -11,11 +11,7 @@ export const PRACTICE_PAGES = {
   intervals: { to: '/practice/intervals', tile: PAGE_TILES.intervals },
   progressions: { to: '/practice/progressions', tile: PAGE_TILES.progressions },
   accompaniment: { to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
-  chordFinder: { to: '/practice/chords/find', tile: PAGE_TILES.chordFinder },
-  passingChords: { to: '/practice/progressions/passing', tile: PAGE_TILES.passingChords },
-  reharmonise: { to: '/practice/progressions/reharmonise', tile: PAGE_TILES.reharmonise },
-  transpose: { to: '/practice/progressions/transpose', tile: PAGE_TILES.transpose },
-  freePlay: { to: '/practice/free-play', tile: PAGE_TILES.freePlay },
+  chordFinder: { to: '/practice/chord-finder', tile: PAGE_TILES.chordFinder },
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
@@ -30,26 +26,14 @@ export const THINGS = [
   'accompaniment',
 ] as const satisfies readonly PracticePageId[]
 
-/** The groups listed under a heading, in order: the tools, then the training. */
+/** The groups listed under a heading, in order: the tool at the keys, then the training. */
 export const PRACTICE_GROUPS = [
-  { id: 'tools', pages: ['freePlay'] },
+  { id: 'atTheKeys', pages: ['chordFinder'] },
   { id: 'training', pages: ['exercises', 'quiz'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
-/**
- * The tools that are a tab of a thing's page (ADR 0050): Practice lists the thing, not them; Search
- * finds each and opens it on its tab.
- */
-export const TABS = [
-  'chordFinder',
-  'passingChords',
-  'reharmonise',
-  'transpose',
-] as const satisfies readonly PracticePageId[]
-
-/** Every page of Practice: the ones it lists, in order, then the tabs. */
+/** Every page of Practice, in the order it lists them. */
 export const PRACTICE_PAGE_IDS: readonly PracticePageId[] = [
   ...THINGS,
   ...PRACTICE_GROUPS.flatMap((group) => group.pages),
-  ...TABS,
 ]

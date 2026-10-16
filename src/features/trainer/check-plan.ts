@@ -1,4 +1,4 @@
-import { skillsOfStep, stepById, type StepId } from '@/entities/path'
+import { skillsOfStep, stepOf, type StepId } from '@/entities/step'
 import { chordsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
 import { stillToKnow, type Answer } from '@/entities/progress'
 import type { SkillId } from '@/shared/lib/music'
@@ -40,9 +40,9 @@ export function checkPlan(
   of: StepId,
   answersOf: (skill: SkillId) => readonly Answer[] = NO_EVIDENCE,
 ): CheckPlan | null {
-  const placed = stepById(of)
-  if (!placed) return null
-  const { step } = placed
+  const step = stepOf(of)
+  // A lesson is read, never checked.
+  if (!step || step.kind === 'lesson' || step.kind === 'course-lesson') return null
   if (step.kind === 'piece') {
     const piece = pieceById(step.pieceId)
     if (!piece) return null

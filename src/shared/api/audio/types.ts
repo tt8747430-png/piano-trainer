@@ -9,6 +9,8 @@ export type LiveEvent =
 
 /** One call to `play()`: the port says whether it still sounds (`isPlaying`). */
 export interface PlayHandle {
+  /** When it starts on the audio clock: its sounds' `at` counts from here. */
+  readonly from: number
   /** When its last note ends on the audio clock. */
   readonly until: number
 }

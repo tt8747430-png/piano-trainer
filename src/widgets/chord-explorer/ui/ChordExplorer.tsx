@@ -1,13 +1,13 @@
+import { AudioLines, Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
-import { noteName, qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
+import { qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChordHeading, PlayLabel, ToneChip, usePlayKey } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { ChordHeading, FabPill, FloatingActions, PlayFab, usePlayKey } from '@/shared/ui'
 import { changedView, chordKeys, viewChord, type ChordView } from '../model/chord-view'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
@@ -18,7 +18,7 @@ const takesTensions = isOneOf(TENSION_CHORDS)
 
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
- * is (its symbol, its tones, the other ways it is written, the chord on a staff) with Play and Arpeggio;
+ * is (its symbol, its tones, the other ways it is written, the chord on a staff), Play and Arpeggio floating;
  * its choices; a 7th chord's available tensions; and its ways into the Player.
  */
 export function ChordExplorer({
@@ -28,7 +28,7 @@ export function ChordExplorer({
   chord: ChordView
   onChange: (view: ChordView) => void
 }) {
-  const { t } = useTranslation(['music', 'practice'])
+  const { t } = useTranslation(['music', 'practice', 'common'])
   const play = usePlay()
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
@@ -61,13 +61,6 @@ export function ChordExplorer({
               <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
             ) : null}
           </hgroup>
-          <ol className="flex flex-wrap gap-2">
-            {built.tones.map((tone) => (
-              <li key={tone.degree}>
-                <ToneChip face={tone.role} degree={tone.degree} note={noteName(tone.note)} />
-              </li>
-            ))}
-          </ol>
           {others.length > 0 ? (
             <p className="flex flex-wrap items-baseline gap-x-4">
               <span className="text-muted-foreground">{t('practice:chords.written')}</span>
@@ -79,16 +72,6 @@ export function ChordExplorer({
         </div>
         <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
           <ChordSheet placed={placed} />
-          <div className="flex gap-3">
-            <Button size="pill" onClick={() => sound('chord')}>
-              <PlayLabel playing={playback.playing === 'chord'}>{t('music:play')}</PlayLabel>
-            </Button>
-            <Button size="pill" variant="soft" onClick={() => sound('arpeggio')}>
-              <PlayLabel playing={playback.playing === 'arpeggio'}>
-                {t('practice:arpeggio')}
-              </PlayLabel>
-            </Button>
-          </div>
         </div>
       </div>
       <ChordBuilder chord={chord} tones={built.tones} onChange={change} />
@@ -112,6 +95,19 @@ export function ChordExplorer({
           inversion={built.tones.length <= 4 ? chord.inversion : 0}
         />
       ) : null}
+      <FloatingActions>
+        <FabPill
+          label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
+          icon={playback.playing === 'arpeggio' ? Square : AudioLines}
+          aria-pressed={playback.playing === 'arpeggio'}
+          onClick={() => sound('arpeggio')}
+        />
+        <PlayFab
+          label={t('music:play')}
+          playing={playback.playing === 'chord'}
+          onClick={() => sound('chord')}
+        />
+      </FloatingActions>
     </div>
   )
 }

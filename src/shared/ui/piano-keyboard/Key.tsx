@@ -151,6 +151,9 @@ function KeyButton({
           >
             {look.label.text}
           </span>
+          {look.label.note ? (
+            <span className="text-xs font-semibold opacity-80">{look.label.note}</span>
+          ) : null}
         </span>
       ) : null}
     </button>

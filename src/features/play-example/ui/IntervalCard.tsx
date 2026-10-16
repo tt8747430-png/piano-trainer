@@ -10,19 +10,27 @@ import {
 import { notate } from '@/shared/lib/notation'
 import { INTERVAL_WAYS, intervalSounds, type IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayLabel, type ShownKeys } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { PlayButton, type ShownKeys } from '@/shared/ui'
+import { ArrowDown, ArrowUp, Layers, type LucideIcon } from 'lucide-react'
 import { intervalExample, tonesText } from '../model/interval-example'
 import { TappableStaff } from './TappableStaff'
 
 /** A card's staff, a little smaller than an explorer's own. */
 const CARD_STAFF = 0.8
+/** Each way to hear an interval as its picture: the high note after the low, before it, or with it. */
+const WAY_ICON: Readonly<Record<IntervalWay, LucideIcon>> = {
+  up: ArrowUp,
+  down: ArrowDown,
+  together: Layers,
+}
+
 /** A note tapped on the card's staff sounds at this tempo's half note. */
 const NOTE_TEMPO = 72
 
 /**
  * One interval over a root, as Clefs' reference writes it: its name and short name, its size and how
- * it sounds, the two notes on a staff, and Up, Down and Together, each shown on the page's keys.
+ * it sounds in a line, the two notes on a staff and beside them Up, Down and Together as pictures,
+ * each shown on the page's keys.
  */
 export function IntervalCard({
   root,
@@ -53,36 +61,41 @@ export function IntervalCard({
           {t(`interval.${name}.short`)}
         </span>
       </header>
-      {/* A line each, so the cards of a row keep their staves level. */}
-      <div className="text-sm text-muted-foreground">
-        <p>{size.join(' · ')}</p>
-        <p>{t(`consonance.${consonanceOf(interval)}`)}</p>
-        {interval.semitones > 12 ? (
-          <p>{t('intervalCard.inChords', { degree: interval.degree })}</p>
-        ) : null}
-      </div>
-      <TappableStaff
-        music={example.music}
-        score={score}
-        staff="treble"
-        scale={CARD_STAFF}
-        tempo={NOTE_TEMPO}
-        onShow={onShow}
-      />
-      <div className="mt-auto flex gap-2">
-        {INTERVAL_WAYS.map((way) => (
-          <Button
-            key={way}
-            variant="soft"
-            className="flex-1 px-2"
-            onClick={() => {
-              onShow(example.shown)
-              playback.toggle(way, () => intervalSounds(example.low, example.high, way))
-            }}
-          >
-            <PlayLabel playing={playback.playing === way}>{t(`intervalCard.${way}`)}</PlayLabel>
-          </Button>
-        ))}
+      <p className="-mt-2 text-sm text-pretty text-muted-foreground">
+        {[
+          ...size,
+          t(`consonance.${consonanceOf(interval)}`),
+          ...(interval.semitones > 12
+            ? [t('intervalCard.inChords', { degree: interval.degree })]
+            : []),
+        ].join(' · ')}
+      </p>
+      {/* The two notes, and the three ways to hear them beside them, each its picture. */}
+      <div className="mt-auto flex items-end gap-2">
+        <div className="min-w-0 flex-1">
+          <TappableStaff
+            music={example.music}
+            score={score}
+            staff="treble"
+            scale={CARD_STAFF}
+            tempo={NOTE_TEMPO}
+            onShow={onShow}
+          />
+        </div>
+        <div className="flex shrink-0 gap-1.5 pb-2">
+          {INTERVAL_WAYS.map((way) => (
+            <PlayButton
+              key={way}
+              label={t(`intervalCard.${way}`)}
+              icon={WAY_ICON[way]}
+              playing={playback.playing === way}
+              onClick={() => {
+                onShow(example.shown)
+                playback.toggle(way, () => intervalSounds(example.low, example.high, way))
+              }}
+            />
+          ))}
+        </div>
       </div>
     </article>
   )

@@ -24,7 +24,7 @@ import {
 /**
  * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
  * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion;
- * and what leads into each chord, where something does.
+ * what leads into each chord, where something does; and the two chords Between looks at.
  */
 export interface ProgressionsView {
   readonly key: KeyParam
@@ -33,6 +33,10 @@ export interface ProgressionsView {
   readonly inversion: Inversion
   readonly nearest: boolean
   readonly lead?: LeadIn
+  /** Between: the chord the passing chords lead from, by its place in the row; the next one after it. */
+  readonly between?: number
+  /** Between: only the ways whose chords are all the key's. */
+  readonly inKey?: boolean
 }
 
 /** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0041). */

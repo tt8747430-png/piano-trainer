@@ -258,8 +258,9 @@ export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   const last = thumbs.at(-1) ?? 0
   const gapBelow = (i: number) => (keys[i] ?? 0) - (keys[i - 1] ?? keys[i] ?? 0)
   return keys.map((_, i): Finger => {
-    // Before the right hand's first thumb, fingers count down to it: the hand starts there.
-    if (hand === 'rh' && i < first) return toFinger(first - i + 1)
+    // Before the right hand's first thumb, fingers count up from 2 to it, so the thumb passes under
+    // the last of them (B♭ minor: 2 3 1).
+    if (hand === 'rh' && i < first) return toFinger(i + 2)
     // A note's place from its thumb: up from the thumb before it (right hand), or down from the
     // thumb after it (left hand); past the last thumb the left hand counts to the next octave's.
     const place =

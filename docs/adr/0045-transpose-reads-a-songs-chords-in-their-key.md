@@ -1,6 +1,6 @@
 # ADR 0045 — Transpose reads a song's chords in their key, then plays them in any key
 
-- **Status:** accepted · **Date:** 2026-10-14 · **Amends:** ADR 0044 (Practice's tools)
+- **Status:** superseded by ADR 0052 · **Date:** 2026-10-14 · **Amends:** ADR 0044 (Practice's tools)
 
 ## Context
 

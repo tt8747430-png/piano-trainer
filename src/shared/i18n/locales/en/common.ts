@@ -38,12 +38,12 @@ export const common = {
   // A search box's button that empties it.
   clearSearch: 'Clear search',
   loading: 'Loading',
-  level: 'Level {{level}}',
-  levelName: {
+  // The four levels, a journey's and a course's (ADR 0053).
+  stage: {
     beginner: 'Beginner',
-    elementary: 'Elementary',
     intermediate: 'Intermediate',
     advanced: 'Advanced',
+    professional: 'Professional',
   },
   rating: { known: 'Known', gap: 'Gap', unknown: 'Not checked yet' },
   hands: { both: 'Both hands', rh: 'Right hand', lh: 'Left hand' },
@@ -64,18 +64,10 @@ export const common = {
     '11th': '11th',
     '13th': '13th',
   },
+  // A screen's other actions, folded into one floating button.
+  moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',
-  // The metronome on its own: its click, tempo, beats a bar and tap tempo.
-  metronome: {
-    label: 'Metronome',
-    start: 'Start the click',
-    tempo: 'Tempo',
-    bpm: '{{tempo}} BPM',
-    beats: 'Beats a bar',
-    tap: 'Tap',
-    tapLabel: 'Tap the tempo',
-  },
   // The keyboard's rail: its buttons and its map.
   rail: {
     octaveDown: 'Octave down',
@@ -87,16 +79,70 @@ export const common = {
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
-    sound: 'Play MIDI keys in the app',
+    sound: 'Hear what you play in the app',
     chord: 'Chord played',
+    fold: 'Hide the keys',
+    unfold: 'Keys',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
-    keySize: { label: 'Keys', fit: 'Fit', large: 'Large', piano: 'Whole piano' },
-    namedKeys: { label: 'Note names', c: 'C', all: 'All', none: 'None' },
+    look: 'How the keys look',
+    place: 'Where a page’s keys sit',
+    play: 'How they play',
+    bar: 'The bar over the keys',
+    keySize: {
+      label: 'Key size',
+      detail: 'Fit fills the width with the keys a page shows; the rest scroll in beside them',
+      fit: 'Fit',
+      large: 'Large',
+      piano: 'Whole piano',
+    },
+    keyLength: {
+      label: 'Key length',
+      detail: 'Short keys leave more of the page in sight',
+      long: 'Long',
+      short: 'Short',
+    },
+    namedKeys: {
+      label: 'Note names',
+      detail: 'Which keys say their note',
+      c: 'Every C',
+      all: 'Every key',
+      none: 'None',
+    },
+    markNotes: 'Name the marked notes',
+    markNotesNote: 'A chord’s or a scale’s keys say their note under their degree',
     chordNames: 'Name the chords played',
+    chordNamesNote: 'The bar over the keys names the chord your hand holds',
+    dock: {
+      label: 'Keys on a page',
+      detail: 'Over the tab bar, or under the page’s title',
+      bottom: 'At the bottom',
+      top: 'At the top',
+    },
+    folded: 'Hide a page’s keys',
+    foldedNote: 'They fold into a Keys button that brings them back',
+    swipe: {
+      label: 'A swipe on the keys',
+      detail: 'Scrolls the keyboard, or plays each key it crosses (glissando)',
+      scroll: 'Scrolls',
+      glissando: 'Plays',
+    },
     typing: 'Play from the computer keyboard',
-    typingHint: 'Z X · octave',
+    typingNote: 'The letter keys play the piano',
+    typingHint: 'Z X move an octave · Space holds the pedal',
+  },
+  // Which controls the bar over the keys holds: each by the picture it wears there.
+  railControls: {
+    label: 'Buttons on the bar',
+    detail: 'Keep the ones you use; the rest stay here',
+    zoom: { label: 'Key size', detail: 'Smaller or larger keys' },
+    noteNames: { label: 'Note names', detail: 'Every C, every key or none' },
+    chordNames: { label: 'Chord names', detail: 'Names the chord you hold' },
+    typing: { label: 'Computer keys', detail: 'Letters play the piano' },
+    midiSound: { label: 'MIDI sound', detail: 'Hear a MIDI keyboard here' },
+    glissando: { label: 'Glissando', detail: 'A swipe plays the keys' },
+    pedal: { label: 'Pedal', detail: 'Holds the notes on' },
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {
@@ -126,13 +172,32 @@ export const common = {
   },
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {
-    device: { label: 'Keyboard', any: 'Any keyboard', away: '{{device}} (not connected)' },
-    sound: 'Play MIDI keys in the app',
-    soundNote: 'For a keyboard with no speaker',
-    throughPiano: 'Use the keyboard’s speaker',
-    throughPianoNote: 'The app’s music on the keyboard’s own speaker',
-    octaveShift: 'Octave shift',
-    touch: { label: 'Touch', light: 'Light', normal: 'Normal', heavy: 'Heavy' },
-    pedal: { label: 'Pedal', normal: 'Normal', reversed: 'Reversed' },
+    device: {
+      label: 'Keyboard listened to',
+      detail: 'With more than one connected, the app hears only this one',
+      any: 'Any keyboard',
+      away: '{{device}} (not connected)',
+    },
+    sound: 'Hear what you play in the app',
+    soundNote: 'For a keyboard without speakers: the app sounds the keys you press',
+    throughPiano: 'Play the app’s music on the keyboard',
+    throughPianoNote: 'Songs and examples sound from the keyboard’s own speakers',
+    octaveShift: {
+      label: 'Octave shift',
+      detail: 'Moves what the keyboard plays up or down, for a short keyboard',
+    },
+    touch: {
+      label: 'Touch',
+      detail: 'How hard a key must be struck to sound loud',
+      light: 'Light',
+      normal: 'Normal',
+      heavy: 'Heavy',
+    },
+    pedal: {
+      label: 'Pedal',
+      detail: 'Reversed, for a pedal that holds the notes while it is up',
+      normal: 'Normal',
+      reversed: 'Reversed',
+    },
   },
 } as const

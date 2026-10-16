@@ -124,6 +124,8 @@ describe('MultiDropdown', () => {
     )
     expect(screen.getByText('Triads')).toBeInTheDocument()
     expect(screen.getByText('9ths & more')).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: 'M · Major triad' })).toHaveTextContent('M Major triad')
+    expect(screen.getByRole('option', { name: 'M · Major triad' })).toHaveTextContent(
+      'M Major triad',
+    )
   })
 })

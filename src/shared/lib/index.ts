@@ -7,27 +7,25 @@ export {
   readAlterations,
   type PartsParams,
 } from './chord-params'
-export {
-  DIAGRAM_COLOURS,
-  diagramMarksParam,
-  markKey,
-  readDiagramMarks,
-  type DiagramColour,
-  type DiagramMark,
-  type DiagramMarks,
-} from './diagram-marks'
 export { foldText, matchesQuery } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
+  KEY_DOCKS,
+  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   nextNamedKeys,
+  RAIL_CONTROLS,
+  railControls,
   SWIPES,
   zoomKeySize,
+  type KeyDock,
+  type KeyLength,
   type KeySize,
   type NamedKeys,
+  type RailControl,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
@@ -40,6 +38,8 @@ export {
   type KeySpan,
 } from './keyboard-layout'
 export {
+  keepCentre,
+  scrollToReveal,
   keysInView,
   scrollByOctave,
   scrollToCentre,
@@ -69,3 +69,4 @@ export { toggled } from './toggled'
 export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useViewChange } from './use-view-change'
+export { morph } from './morph'

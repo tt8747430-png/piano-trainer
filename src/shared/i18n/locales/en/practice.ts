@@ -1,7 +1,7 @@
 export const practice = {
   title: 'Practice',
   // Practice's groups of pages (ADR 0044). The things come first, under no heading.
-  groups: { tools: 'Tools', training: 'Training' },
+  groups: { atTheKeys: 'At the keys', training: 'Training' },
   // Its pages, each by its name: the things, the tools, the training.
   pages: {
     chords: 'Chords',
@@ -10,26 +10,16 @@ export const practice = {
     progressions: 'Progressions',
     accompaniment: 'Accompaniment',
     chordFinder: 'Chord finder',
-    passingChords: 'Passing chords',
-    reharmonise: 'Reharmonise',
-    transpose: 'Transpose',
-    freePlay: 'Free play',
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
-  // A workspace's tabs (ADR 0050) that are not a tool's own name: a tool's tab is its page's name.
-  tabs: { build: 'Build', find: 'Find', play: 'Play' },
   // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
   // of tabs or of groups says those, in their own words, so it has no line here.
   about: {
     chords: 'Triads to 13ths · Inversions · Tensions',
     intervals: 'On the keys, up and down',
     progressions: 'From the library or typed, in any key',
-    chordFinder: 'Names a chord, and the keys it is in',
-    passingChords: 'The ways from one chord to the next',
-    reharmonise: 'The chords that hold a melody note',
-    transpose: 'A song’s chords: their key, degrees and any key',
-    freePlay: 'A live score, marks and a metronome',
+    chordFinder: 'Any chord named, spelled and written',
   },
   // Words the explorers share.
   root: 'Root',
@@ -121,6 +111,9 @@ export const practice = {
       songs: 'Songs in this key',
       studies: 'Studies in this key',
       noSongs: 'No songs are in this key.',
+      harmonise: 'Harmonise a melody note',
+      harmoniseAbout:
+        'Every chord that holds the note, played under it: the key’s own and borrowed ones.',
     },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
@@ -137,6 +130,11 @@ export const practice = {
     typed: 'Typed',
     /** What leads into each chord of the progression (ADR 0041). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    between: {
+      title: 'Between two chords',
+      about: 'Passing chords that lead from one chord of the row into the next.',
+      pair: 'From chord to chord',
+    },
     style: {
       pop: 'Pop',
       rock: 'Rock',
@@ -148,9 +146,8 @@ export const practice = {
       theory: 'Theory',
     },
   },
-  // A part of Accompaniment: a method book's lessons, and the line of a part with no pattern to show.
+  // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
-    lessons: 'Its lessons',
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. Find them under Yours.',
   },
@@ -184,23 +181,51 @@ export const practice = {
       cancel: 'Cancel',
     },
   },
+  // The Chord finder (ADR 0054): a chord played or tapped, named, spelled and written.
   chordFinder: {
-    choose: 'Choose the keys of a chord.',
+    promptTitle: 'Play a chord',
+    prompt: 'On your MIDI keyboard, or tap its keys.',
+    promptFolded: 'On your MIDI keyboard, or show the keys to tap one.',
     none: 'No chord matches these notes.',
-    also: 'Also: {{names}}',
+    note: 'One note',
+    powerChord: 'Power chord',
+    readings: 'Also read as',
+    reading: 'Read as {{symbol}}',
     no3rd: 'No 3rd',
     no5th: 'No 5th',
     no9th: 'No 9th',
     no11th: 'No 11th',
-    clear: 'Clear',
     open: 'Open in Chords',
     // The keys that hold the chord found, its numeral in each.
     inKeys: 'In these keys',
+    clear: 'Clear the keys',
+    forget: 'Forget the chords played',
+    // Where the chord shown comes from: keys held on the keyboard, the last chord, keys tapped.
+    state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
+    played: 'Played',
+    // The staff where the chords are not remembered: the chord down now, else nothing.
+    staff: 'On the staff',
+    settings: 'Chord finder settings',
+    remember: 'Remember',
+    rememberDetail: 'The last {{count}}',
+    inKeysShown: 'Its keys',
+    slash: 'Over the bass',
+    // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
+    inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
+    bass: '{{note}} in the bass',
+    // How the keys are laid out, as jazz pianists name it.
+    voicing: {
+      quartal: 'Stacked 4ths',
+      soWhat: 'So What voicing',
+      shell: 'Shell voicing',
+      drop2: 'Drop 2',
+      drop3: 'Drop 3',
+      close: 'Close voicing',
+      open: 'Open voicing',
+    },
+    altered: 'Altered dominant: {{symbol}}',
   },
   passingChords: {
-    from: 'From',
-    to: 'To',
-    unread: 'This chord can’t be read.',
     inKey: 'In the key',
     onlyInKey: 'In the key only',
     noneInKey: 'No way between these chords stays in the key.',
@@ -277,17 +302,7 @@ export const practice = {
       },
     },
   },
-  // Transpose (ADR 0045): a song's chords typed, read in their key as degrees, played in any key.
-  transpose: {
-    field: 'Chords',
-    unread: 'Can’t read: {{words}}',
-    readIn: 'Their key',
-    held: 'In the key: {{held}} of {{count}}',
-    playIn: 'Play in',
-    outside: 'Out of the key',
-    none: 'No key holds these chords.',
-    inProgressions: 'Practise these degrees',
-  },
+
   reharmonise: {
     note: 'Melody note',
     as: 'as {{degree}}',
@@ -299,17 +314,6 @@ export const practice = {
       minor: 'Minor 7ths',
       dominant: 'Dominant 7ths',
     },
-  },
-  // Free play: the piano played freely, written and named.
-  freePlay: {
-    mode: 'Mode',
-    play: 'Play',
-    mark: 'Mark',
-    clear: 'Clear',
-    colour: { label: 'Colour', a: 'Right hand', b: 'Left hand', aLetter: 'R', bLetter: 'L' },
-    finger: { label: 'Finger', none: 'None' },
-    score: 'Live score',
-    empty: 'Play, and the notes appear here.',
   },
   exercises: {
     // The Exercises page's groups (roadmap §10.5).

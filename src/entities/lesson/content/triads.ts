@@ -4,11 +4,9 @@ const triads: Lesson = {
   id: 'triads',
   title: { en: 'Triads', ru: 'Трезвучия' },
   summary: {
-    en: 'Three notes stacked in 3rds, and the four kinds of triad.',
-    ru: 'Три ноты, сложенные терциями, и четыре вида трезвучий.',
+    en: 'Build the four kinds of triad on any note.',
+    ru: 'Строить четыре вида трезвучий от любой ноты.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Three notes in thirds', ru: 'Три ноты по терциям' },
@@ -17,18 +15,11 @@ const triads: Lesson = {
           kind: 'text',
           lead: { en: 'A triad', ru: 'Трезвучие' },
           text: {
-            en: 'is three notes stacked in 3rds: the root, the 3rd above it and the 5th.',
-            ru: '— три ноты, сложенные терциями: основной тон, терция над ним и квинта.',
+            en: 'is three notes stacked in 3rds: the root, the 3rd and the 5th. On the white keys, take every other key.',
+            ru: '— три ноты, сложенные терциями: основной тон, терция и квинта. На белых клавишах берите клавиши через одну.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
-        {
-          kind: 'text',
-          text: {
-            en: 'On the white keys, take every other key.',
-            ru: 'На белых клавишах берите клавиши через одну.',
-          },
-        },
       ],
     },
     {
@@ -48,6 +39,19 @@ const triads: Lesson = {
       ],
     },
     {
+      heading: { en: 'Every other letter', ru: 'Через букву' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'A triad’s letters always skip one: D F A. Sharps and flats then set its kind: D major is D F♯ A.',
+            ru: 'Буквы трезвучия всегда идут через одну: ре, фа, ля. Диезы и бемоли задают его вид: ре мажор — ре, фа-диез, ля.',
+          },
+        },
+        { kind: 'chords', symbols: ['D', 'Dm'] },
+      ],
+    },
+    {
       heading: { en: 'Diminished and augmented', ru: 'Уменьшённое и увеличенное' },
       blocks: [
         {
@@ -57,8 +61,8 @@ const triads: Lesson = {
             ru: 'Уменьшённое и увеличенное трезвучия',
           },
           text: {
-            en: 'stack two 3rds of one size. Diminished is two minor 3rds, 1 ♭3 ♭5: tense. Augmented is two major 3rds, 1 3 ♯5: wide and unsettled.',
-            ru: 'складывают две одинаковые терции. Уменьшённое — две малые, 1 ♭3 ♭5: напряжённо. Увеличенное — две большие, 1 3 ♯5: широко и неустойчиво.',
+            en: 'stack two 3rds of one size. Diminished is two minor 3rds, 1 ♭3 ♭5: tense. Augmented is two major 3rds, 1 3 ♯5: unsettled.',
+            ru: 'складывают две одинаковые терции. Уменьшённое — две малые, 1 ♭3 ♭5: напряжённо. Увеличенное — две большие, 1 3 ♯5: неустойчиво.',
           },
         },
         { kind: 'chords', symbols: ['C°', 'C+'] },
@@ -81,6 +85,16 @@ const triads: Lesson = {
           kind: 'question',
           ask: { en: 'Play F augmented.', ru: 'Сыграйте увеличенное трезвучие от фа.' },
           answer: { chord: 'F+' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
+          target: { opens: 'quiz', trainer: 'build-chord' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
         },
       ],
     },

@@ -1,14 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
+import { midi } from '@/shared/lib/music'
 import {
+  rememberChords,
   setAutoNext,
+  setFloating,
+  setChordFinder,
   setKeyboard,
   setLocale,
   setPracticeToggle,
   setMidi,
   setRecorderClick,
   setRecorderTune,
+  setSectionFolded,
   setSidebar,
   setTheme,
 } from './index'
@@ -26,6 +31,16 @@ describe('set-preference', () => {
     setTheme(store, 'dark')
     expect(store.getState().theme).toBe('dark')
     expect(saved(storage).theme).toBe('dark')
+  })
+
+  it('setSectionFolded folds a section away once, and opens it again, saved', () => {
+    const { storage, store } = setUp()
+    setSectionFolded(store, 'chords.tensions', true)
+    setSectionFolded(store, 'chords.tensions', true)
+    setSectionFolded(store, 'progressions.between', true)
+    expect(saved(storage).foldedSections).toEqual(['chords.tensions', 'progressions.between'])
+    setSectionFolded(store, 'chords.tensions', false)
+    expect(store.getState().foldedSections).toEqual(['progressions.between'])
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {
@@ -80,6 +95,14 @@ describe('set-preference', () => {
     expect(saved(storage).midi).toMatchObject({ device: 'Piano', touch: 'light', sound: false })
   })
 
+  it('setFloating saves where the floating actions stand and keeps whether they say their names', () => {
+    const { storage, store } = setUp()
+    setFloating(store, { place: 'right' })
+    expect(saved(storage).floating).toEqual({ place: 'right', labels: false })
+    setFloating(store, { labels: true })
+    expect(store.getState().floating).toEqual({ place: 'right', labels: true })
+  })
+
   it('setAutoNext saves whether a trainer moves on by itself', () => {
     const { storage, store } = setUp()
     setAutoNext(store, true)
@@ -97,5 +120,31 @@ describe('set-preference', () => {
       namedKeys: 'all',
     })
     expect(saved(storage).keyboard).toEqual(store.getState().keyboard)
+  })
+
+  it('setChordFinder saves a switch; turned off, the Chord finder forgets its chords', () => {
+    const { storage, store } = setUp()
+    const C = [midi(60), midi(64), midi(67)]
+    rememberChords(store, [C])
+    expect(saved(storage).chordFinder.chords).toEqual([])
+    setChordFinder(store, { remember: true })
+    rememberChords(store, [C, C])
+    expect(saved(storage).chordFinder).toEqual({
+      remember: true,
+      inKeys: true,
+      slash: true,
+      chords: [C, C],
+    })
+    setChordFinder(store, { inKeys: false })
+    expect(store.getState().chordFinder.chords).toEqual([C, C])
+    setChordFinder(store, { slash: false })
+    expect(store.getState().chordFinder.slash).toBe(false)
+    setChordFinder(store, { remember: false })
+    expect(saved(storage).chordFinder).toEqual({
+      remember: false,
+      inKeys: false,
+      slash: false,
+      chords: [],
+    })
   })
 })

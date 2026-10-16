@@ -4,11 +4,9 @@ const rhythmAndMeter: Lesson = {
   id: 'rhythm-and-meter',
   title: { en: 'Rhythm and meter', ru: 'Ритм и размер' },
   summary: {
-    en: 'Feel the beat, read how long each note lasts, read a time signature and count aloud.',
-    ru: 'Как чувствовать долю, читать длительности нот, понимать размер и считать вслух.',
+    en: 'Count the beat and read note values and time signatures.',
+    ru: 'Считать доли и читать длительности нот и размер.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'The beat', ru: 'Доля' },
@@ -66,8 +64,8 @@ const rhythmAndMeter: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Most songs are in 4/4. A waltz is in 3/4, a march in 2/4.',
-            ru: 'Большинство песен — в 4/4. Вальс — в 3/4, марш — в 2/4.',
+            en: 'Most songs are in 4/4, a waltz in 3/4.',
+            ru: 'Большинство песен — в 4/4, вальс — в 3/4.',
           },
         },
       ],
@@ -83,12 +81,43 @@ const rhythmAndMeter: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/4. A4/8 B4/2' },
+      ],
+    },
+    {
+      heading: { en: 'Keep a steady beat', ru: 'Держите ровную долю' },
+      blocks: [
         {
-          kind: 'note',
-          text: {
-            en: 'In 6/8 a bar has two beats, each a dotted quarter of three eighths.',
-            ru: 'В 6/8 в такте две доли, каждая — четвертная с точкой из трёх восьмых.',
+          kind: 'steps',
+          steps: [
+            {
+              en: 'Set a slow click, about 60 beats a minute.',
+              ru: 'Включите медленный метроном, около 60 ударов в минуту.',
+            },
+            { en: 'Count the bar aloud with the click.', ru: 'Считайте такт вслух вместе с ним.' },
+            {
+              en: 'Play the line below without stopping, even after a slip.',
+              ru: 'Сыграйте строку ниже без остановок, даже если ошиблись.',
+            },
+          ],
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C5/2 G4 G4 A4/4. B4/8 C5/2 G4/1' },
+      ],
+    },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play C, E, G, one beat each, counting 1 2 3.',
+            ru: 'Сыграйте до, ми, соль по доле на каждую, считая «раз, два, три».',
           },
+          answer: { notes: ['C', 'E', 'G'], rising: true },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],
     },

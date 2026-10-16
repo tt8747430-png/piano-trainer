@@ -1,6 +1,6 @@
 # ADR 0049 — Learn is one place: Continue, a Journey and Courses
 
-- **Status:** accepted · **Date:** 2026-10-14 · **Supersedes:** ADR 0042 (Learn's tabs and folds) · **Amends:**
+- **Status:** superseded by ADR 0051 · **Date:** 2026-10-14 · **Supersedes:** ADR 0042 (Learn's tabs and folds) · **Amends:**
   ADR 0029 (the four places), ADR 0048 (the Path)
 
 ## Context

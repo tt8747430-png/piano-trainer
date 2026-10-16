@@ -1,16 +1,32 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
-import { createSavedStore, savedObject, type SavingOptions } from '@/shared/lib'
 import {
+  createSavedStore,
+  railControls,
+  readKeyList,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
+import {
+  CHORD_KEYS_MAX,
+  DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
+  DEFAULT_FLOATING,
   DEVICE_NAME_MAX,
+  FOLDED_MAX,
+  SECTION_ID_MAX,
   PRACTICE_TOGGLES,
+  REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
+  isFloatingPlace,
+  isKeyDock,
+  isKeyLength,
   isKeySize,
   isNamedKeys,
   isOctaveShift,
@@ -18,18 +34,21 @@ import {
   isSidebar,
   isSwipe,
   isTheme,
+  isTitleSize,
   isTouch,
+  type ChordFinderSettings,
   type KeyboardSettings,
   type MidiSettings,
   type PracticeToggles,
   type RecorderSettings,
   type SettingsState,
+  type FloatingSettings,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 1
+export const SETTINGS_VERSION = 2
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -47,13 +66,17 @@ export function createSettingsStore({
       version: SETTINGS_VERSION,
       initial: {
         theme: 'system',
+        titles: 'large',
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
         trainer: DEFAULT_TRAINER,
+        floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
         midi: DEFAULT_MIDI,
+        chordFinder: DEFAULT_CHORD_FINDER,
+        foldedSections: [],
       },
       read: sanitize,
     },
@@ -70,6 +93,15 @@ function practiceToggles(value: unknown): PracticeToggles {
       return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
     }),
   ) as Record<keyof PracticeToggles, boolean>
+}
+
+/** Where the floating actions stand and whether they say their names, each as saved where valid. */
+function floatingSettings(value: unknown): FloatingSettings {
+  const saved = savedObject<FloatingSettings>(value)
+  return {
+    place: isFloatingPlace(saved.place) ? saved.place : DEFAULT_FLOATING.place,
+    labels: typeof saved.labels === 'boolean' ? saved.labels : DEFAULT_FLOATING.labels,
+  }
 }
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
@@ -107,6 +139,38 @@ function midiSettings(value: unknown): MidiSettings {
   }
 }
 
+/** A chord remembered: its keys on the piano, each once, lowest first; none past two hands' worth. */
+function rememberedChord(value: unknown): Midi[] {
+  if (!Array.isArray(value) || value.length > CHORD_KEYS_MAX) return []
+  return value.every((key) => typeof key === 'number') ? readKeyList(value.join('-')) : []
+}
+
+/** The Chord finder's switches keep what was saved; its chords keep each one still a chord's keys. */
+function chordFinderSettings(value: unknown): ChordFinderSettings {
+  const saved = savedObject<ChordFinderSettings>(value)
+  const chords: unknown = saved.chords
+  return {
+    remember: typeof saved.remember === 'boolean' ? saved.remember : DEFAULT_CHORD_FINDER.remember,
+    inKeys: typeof saved.inKeys === 'boolean' ? saved.inKeys : DEFAULT_CHORD_FINDER.inKeys,
+    slash: typeof saved.slash === 'boolean' ? saved.slash : DEFAULT_CHORD_FINDER.slash,
+    chords: Array.isArray(chords)
+      ? chords
+          .map(rememberedChord)
+          .filter((keys) => keys.length > 0)
+          .slice(-REMEMBERED_CHORDS)
+      : [],
+  }
+}
+
+/** The sections folded: each an id a section could have, once; the newest kept. */
+function foldedSections(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  const ids = value.filter(
+    (id): id is string => typeof id === 'string' && id.length > 0 && id.length <= SECTION_ID_MAX,
+  )
+  return [...new Set(ids)].slice(-FOLDED_MAX)
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -114,8 +178,13 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
     swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
+    markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
     chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
+    dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
+    folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
+    keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
+    railControls: railControls(saved.railControls, current.railControls),
   }
 }
 
@@ -128,12 +197,16 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
   return {
     theme: isTheme(saved.theme) ? saved.theme : current.theme,
+    titles: isTitleSize(saved.titles) ? saved.titles : current.titles,
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     trainer: trainerSettings(saved.trainer),
+    floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     midi: midiSettings(saved.midi),
+    chordFinder: chordFinderSettings(saved.chordFinder),
+    foldedSections: foldedSections(saved.foldedSections),
   }
 }

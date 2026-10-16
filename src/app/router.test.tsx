@@ -3,7 +3,7 @@ import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
-import { SETTINGS_STORAGE_KEY } from '@/entities/settings'
+import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
 import { testContext } from '@/app/testing/test-context'
@@ -17,16 +17,14 @@ const ROUTES = [
   ['/play/bz5', '/play/$pieceId'],
   ['/play/walk', '/play/walk'],
   ['/play/chromatic', '/play/chromatic'],
-  ['/learn/fundamentals', '/learn/$module'],
+  ['/courses/gorshkov', '/courses/$courseId'],
+  ['/courses/gorshkov/chord-pulse', '/courses/$courseId/$lessonId'],
   ['/practice/chords', '/practice/chords'],
   ['/practice/scales', '/practice/scales'],
   ['/practice/intervals', '/practice/intervals'],
-  ['/practice/chords/find', '/practice/chords/find'],
-  ['/practice/progressions/reharmonise', '/practice/progressions/reharmonise'],
-  ['/practice/progressions/passing', '/practice/progressions/passing'],
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
-  ['/learn/lessons/reading-chord-symbols', '/learn/lessons/$lessonId'],
+  ['/lessons/reading-chord-symbols', '/lessons/$lessonId'],
   ['/practice/quiz/build-chord', '/practice/quiz/$trainerId'],
   ['/settings', '/settings'],
   ['/search?q=dorian', '/search'],
@@ -75,16 +73,24 @@ describe('routes', () => {
   it.each([
     '/theory',
     '/theory/chords',
-    '/learn/lessons/nothing',
+    '/lessons/nothing',
+    '/lessons/five-ways',
+    '/courses/gorshkov/five-ways',
     '/practice/quiz/nothing',
     '/practice/progressions/flow',
     '/practice/tensions',
-    // Where a page was before ADR 0044, and a tool's page before ADR 0050: no redirect, the address
+    // Where a page was before ADR 0044, and a tool's page before ADR 0052: no redirect, the address
     // is not there.
-    '/practice/chord-finder',
+    '/practice/free-play',
     '/practice/passing-chords',
     '/practice/reharmonise',
     '/practice/transpose',
+    '/practice/chords/find',
+    '/practice/progressions/passing',
+    '/learn/fundamentals',
+    // Where a course and a lesson were before ADR 0053.
+    '/learn/gorshkov',
+    '/learn/lessons/triads',
     '/practice/trainers/build-chord',
     '/practice/patterns/M1',
     '/practice/studies/ex3',
@@ -134,7 +140,7 @@ describe('the app shell', () => {
     const { settingsStore } = await renderApp('/', { storage })
     const newValue = JSON.stringify({
       state: { ...settingsStore.getState(), theme: 'dark' },
-      version: 1,
+      version: SETTINGS_VERSION,
     })
     storage.setItem(SETTINGS_STORAGE_KEY, newValue)
     act(
@@ -171,8 +177,9 @@ describe('the app shell', () => {
 
   it.each([
     ['/practice/scales', 'Practice'],
-    ['/learn/lessons/reading-chord-symbols', 'Learn'],
-    ['/learn/gorshkov', 'Learn'],
+    ['/lessons/reading-chord-symbols', 'Learn'],
+    ['/courses/gorshkov', 'Learn'],
+    ['/courses/gorshkov/chord-pulse', 'Learn'],
     ['/practice/quiz/gaps', 'Practice'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
@@ -193,8 +200,9 @@ describe('the app shell', () => {
     ['/songs/nothing', 'Go to Songs', '/songs'],
     ['/play/nothing', 'Go to Songs', '/songs'],
     ['/edit/nothing', 'Go to Songs', '/songs'],
-    ['/learn/lessons/nothing', 'Go to Learn', '/'],
-    ['/learn/nothing', 'Go to Learn', '/'],
+    ['/lessons/nothing', 'Go to Learn', '/'],
+    ['/courses/nothing', 'Go to Learn', '/'],
+    ['/courses/gorshkov/nothing', 'Go to Learn', '/'],
     ['/practice/quiz/nothing', 'Go to Quiz', '/practice/quiz'],
     ['/practice/accompaniment/patterns/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
     [

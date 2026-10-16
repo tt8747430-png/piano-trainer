@@ -13,8 +13,8 @@ function useGapsCount(): number {
 }
 
 /**
- * Practice (ADR 0044): the things first, under no heading, each a page that shows one on the keys;
- * then the tools, which work something out from what they are given; then the training.
+ * Practice (ADR 0044): the things, under no heading, each a page that shows one on the keys; then
+ * the Chord finder at the keys; then the training.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')

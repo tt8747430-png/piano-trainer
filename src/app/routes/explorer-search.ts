@@ -1,4 +1,4 @@
-import { isStepId } from '@/entities/path'
+import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
 import {
   isOneOf,
@@ -137,6 +137,7 @@ function chosenFingering(kind: ScaleKind, start: number, raw: unknown): Fingerin
 export function readScalesSearch(raw: Raw): ScalesSearch {
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
+  const melody = readNote(raw.melody)
   const start = wholeIn(raw.start, 1, scaleIntervals(kind).length, SCALES_DEFAULTS.start)
   const chords = scaleHasChords(kind)
     ? valueOr(isChordNotes, raw.chords, SCALES_DEFAULTS.chords)
@@ -154,6 +155,8 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     inversion: wholeIn(raw.inversion, 0, lastInversion(chords), SCALES_DEFAULTS.inversion),
     keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
     arpeggio: raw.arpeggio === true,
+    melody: melody ? noteParam(melody) : undefined,
+    onlyInKey: raw.onlyInKey === true ? true : undefined,
     step: isScaleStep(raw.step) ? raw.step : undefined,
   }
 }
@@ -189,6 +192,11 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     inversion: valueOr(isInversion, raw.inversion, PROGRESSIONS_DEFAULTS.inversion),
     nearest: raw.nearest !== false,
     lead: isLeadIn(raw.lead) ? raw.lead : undefined,
+    between:
+      typeof raw.between === 'number' && Number.isInteger(raw.between) && raw.between > 0
+        ? raw.between
+        : undefined,
+    inKey: raw.inKey === true ? true : undefined,
   }
 }
 export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)

@@ -2,13 +2,14 @@ import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { stepById, useStepTitle, type StepId } from '@/entities/path'
+import { stepOf, type StepId } from '@/entities/step'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { MidiButton } from '@/features/connect-midi'
 import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useGoBack } from '@/shared/lib'
 import { RoundButton, usePageHeading } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
+import { useStepTitle } from '@/widgets/curriculum'
 import { TrainerBoard } from '@/widgets/trainer-board'
 import { CheckResult } from './CheckResult'
 
@@ -16,8 +17,8 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const { t } = useTranslation(['quiz', 'common'])
   const store = useProgressStoreApi()
   const stepTitle = useStepTitle()
-  const step = stepById(plan.of)
-  const title = step ? stepTitle(step.step).primary : ''
+  const step = stepOf(plan.of)
+  const title = step ? stepTitle(step).primary : ''
   const trainer = useTrainer(plan.asks, { rounds: plan.length })
   const [learnedBefore] = useState(
     () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),

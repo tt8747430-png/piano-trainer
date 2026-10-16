@@ -1,6 +1,6 @@
 # ADR 0050 — A tool is a tab of what it works on
 
-- **Status:** accepted · **Date:** 2026-10-14 · **Amends:** ADR 0044 (Practice's three groups), ADR 0045
+- **Status:** superseded by ADR 0052 · **Date:** 2026-10-14 · **Amends:** ADR 0044 (Practice's three groups), ADR 0045
   (Transpose's place)
 
 ## Context

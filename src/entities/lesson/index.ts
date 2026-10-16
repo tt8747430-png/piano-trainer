@@ -1,25 +1,19 @@
 export {
-  isLessonModule,
-  MODULE_SHELVES,
-  LESSON_MODULES,
-  SUBJECT_MODULES,
-  SHELF_MODULES,
-  type ModuleShelf,
   type Lesson,
+  type LessonAnswer,
   type LessonBlock,
   type LessonLink,
-  type LessonModule,
-  type LessonAnswer,
+  type LessonProgression,
 } from './model/types'
+export { type Chapter, type Journey, type JourneyStep } from './model/journey'
 export { readProgression } from './model/progression'
 export {
-  lessonAfterLast,
+  journeyById,
   lessonById,
-  lessonInModule,
-  lessonsIn,
-  nextLesson,
-  type LearnedOn,
+  lessonPlace,
+  nextLessonId,
+  previousLessonId,
+  type LessonPlace,
 } from './model/selectors'
 export { LESSONS } from './content'
-export { useModuleName } from './ui/use-module-name'
-export { MODULE_LOOK } from './ui/module-look'
+export { JOURNEYS } from './content/journeys'

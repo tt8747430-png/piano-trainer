@@ -155,6 +155,9 @@ export const music: LocaleResources['music'] = {
   // Ноты: нотный стан плеера.
   sheet: {
     label: 'Ноты',
+    fingers: 'Аппликатура',
+    noteNames: 'Названия нот',
+    chordNames: 'Названия аккордов',
     loading: 'Загрузка нот',
     error: 'Ноты не удаётся показать.',
     bar: 'Такт {{n}}',
@@ -167,6 +170,7 @@ export const music: LocaleResources['music'] = {
   play: 'Сыграть',
   playNotes: 'Сыграть {{notes}}',
   playBar: 'Сыграть такт {{n}}',
+  playBarChord: 'Сыграть такт {{n}}, {{symbol}}',
   rowChords: 'Аккорды',
   intervalCard: {
     semitones: 'Полутонов: {{n}}',

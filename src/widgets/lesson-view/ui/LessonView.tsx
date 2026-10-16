@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { useMemo, useReducer, useRef, useState, type CSSProperties } from 'react'
+import { ChevronLeft, ChevronRight, CornerLeftUp, ListOrdered } from 'lucide-react'
+import { useMemo, useReducer, useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -18,9 +19,17 @@ import {
 } from '../model/lesson-question'
 import { LessonBlock } from './LessonBlock'
 import { QuestionBlock } from './QuestionBlock'
-import { usePinnedHeight } from './use-pinned-height'
 import { useReadingSection } from './use-reading-section'
-import { NO_KEYS, type ShownKeys } from '@/shared/ui'
+import {
+  ButtonLink,
+  FloatingActions,
+  NO_KEYS,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  type ShownKeys,
+} from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
 const sectionId = (index: number) => `section-${index + 1}`
@@ -35,22 +44,157 @@ const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
     ),
   )
 
-/** A lesson lists its sections at its top once it has more than two. */
-const CONTENTS_FROM = 3
+/** Where a lesson leads up to, a router `Link`: what it is part of, by name. */
+export interface UpLink {
+  readonly link: ReactElement
+  /** Where it goes: The course, Back to the journey. */
+  readonly label: string
+  /** What it is part of, by name. */
+  readonly title: string
+}
+
+/** A lesson's sections, each a link to its heading, the one being read in bold. */
+function SectionLinks({
+  lesson,
+  reading,
+  onGo,
+}: {
+  lesson: Lesson
+  reading: string | null
+  /** A link followed: the sheet it is in closes. */
+  onGo?: () => void
+}) {
+  const locale = useLocale()
+  return (
+    <ol className="flex flex-col">
+      {lesson.sections.map((section, s) => (
+        <li key={section.heading.en}>
+          <Link
+            to="."
+            hash={sectionId(s)}
+            replace
+            // Every link is to this page: only the one its hash names is where it is.
+            activeOptions={{ includeHash: true }}
+            data-reading={reading === sectionId(s) || undefined}
+            onClick={onGo}
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
+          >
+            <span
+              aria-hidden
+              className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
+            >
+              {s + 1}
+            </span>
+            {localText(section.heading, locale)}
+          </Link>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+/** What the lesson is part of, as the contents' last row: its picture, where it goes, by name. */
+function UpRow({ up, onGo }: { up: UpLink; onGo: () => void }) {
+  return (
+    <ButtonLink
+      variant="ghost"
+      onClick={onGo}
+      className="h-auto min-h-12 justify-start gap-3 rounded-xl px-2 py-2 text-left whitespace-normal"
+      render={up.link}
+    >
+      <CornerLeftUp aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <span className="flex min-w-0 flex-col">
+        <span className="text-xs font-medium text-muted-foreground">{up.label}</span>
+        <span className="font-semibold text-pretty">{up.title}</span>
+      </span>
+    </ButtonLink>
+  )
+}
+
+const DOCK_BUTTON = 'size-12 rounded-full'
 
 /**
- * A lesson read top to bottom under a pinned keyboard: it shows the example played last, or the open
- * question, whose answer the learner chooses on it. Its sections are listed at its top, each a link to
- * its heading, which the page's scroll padding lands clear of the pinned keys (`theme.css`); a jump
- * replaces the page's entry, so Back still leaves the lesson.
+ * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
+ * how many (opening the contents, and what the lesson is part of), › the next. A jump between
+ * sections replaces the page's entry, as a contents link does: Back still leaves the lesson.
  */
-export function LessonView({ lesson }: { lesson: Lesson }) {
+function LessonBar({
+  lesson,
+  reading,
+  up,
+}: {
+  lesson: Lesson
+  reading: string | null
+  up: UpLink
+}) {
   const { t } = useTranslation('learn')
+  const [open, setOpen] = useState(false)
+  const of = lesson.sections.length
+  const at = Math.max(
+    lesson.sections.findIndex((_, s) => sectionId(s) === reading),
+    0,
+  )
+  const section = (to: number, label: string, Icon: typeof ChevronLeft) =>
+    to >= 0 && to < of ? (
+      <ButtonLink
+        variant="ghost"
+        size="icon"
+        aria-label={label}
+        title={label}
+        className={DOCK_BUTTON}
+        render={<Link to="." hash={sectionId(to)} replace />}
+      >
+        <Icon aria-hidden />
+      </ButtonLink>
+    ) : (
+      <Button variant="ghost" size="icon" aria-label={label} disabled className={DOCK_BUTTON}>
+        <Icon aria-hidden />
+      </Button>
+    )
+  return (
+    <div
+      role="toolbar"
+      aria-label={t('lessonBar')}
+      className="flex h-14 items-center gap-0.5 rounded-full border border-input bg-card px-1 shadow-lg shadow-foreground/15"
+    >
+      {section(at - 1, t('previousSection'), ChevronLeft)}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger
+          render={
+            <Button
+              variant="ghost"
+              aria-label={t('contentsAt', { at: at + 1, of })}
+              title={t('contents')}
+              className="h-12 rounded-full px-3"
+            />
+          }
+        >
+          <ListOrdered aria-hidden />
+          <span aria-hidden className="font-semibold tabular-nums">
+            {at + 1}/{of}
+          </span>
+        </SheetTrigger>
+        <SheetContent title={t('contents')} footer={<UpRow up={up} onGo={() => setOpen(false)} />}>
+          <nav aria-label={t('contents')}>
+            <SectionLinks lesson={lesson} reading={reading} onGo={() => setOpen(false)} />
+          </nav>
+        </SheetContent>
+      </Sheet>
+      {section(at + 1, t('nextSection'), ChevronRight)}
+    </div>
+  )
+}
+
+/**
+ * A lesson read top to bottom over the page's keys: they show the example played last, or the open
+ * question, whose answer the learner chooses on them. Its bar floats in the thumb's reach: the
+ * sections one by one and its contents, with what it is part of (`up`). A jump lands its heading
+ * clear of pinned keys by the page's scroll padding (`theme.css`).
+ */
+export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
-  const root = useRef<HTMLDivElement>(null)
-  const pinned = usePinnedHeight(root)
   const reading = useReadingSection(lesson.sections.map((_, s) => sectionId(s)))
   const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
@@ -77,87 +221,52 @@ export function LessonView({ lesson }: { lesson: Lesson }) {
     setShown(next)
   }
   return (
-    <div ref={root} className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10">
       <PinnedKeyboard
         shown={keys}
         selected={keys.selected}
         wrong={keys.wrong}
         onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
       />
-      <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,65ch)_minmax(0,1fr)] lg:gap-x-16">
-        {lesson.sections.length >= CONTENTS_FROM ? (
-          <nav
-            aria-label={t('contents')}
-            // On a laptop the contents keep to the column beside the lesson, under the pinned keys.
-            style={{ '--pinned': `${pinned}px` } as CSSProperties}
-            className="max-w-prose print:hidden lg:sticky lg:top-[calc(var(--screen-bar)+var(--pinned)+--spacing(6))] lg:col-start-2 lg:row-start-1 lg:self-start"
+      <div className="flex flex-col gap-10">
+        {lesson.sections.map((section, s) => (
+          <section
+            key={section.heading.en}
+            id={sectionId(s)}
+            // Sections apart by a line and room; a section's text and its examples close together.
+            className={cn(
+              'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+              s > 0 && 'border-t border-border pt-8',
+            )}
           >
-            {/* The nav says its name to a screen reader: the caption is for the eye. */}
-            <p aria-hidden className="mb-2 text-sm font-semibold text-muted-foreground">
-              {t('contents')}
-            </p>
-            <ol className="flex flex-col gap-1">
-              {lesson.sections.map((section, s) => (
-                <li key={section.heading.en} className="flex gap-3">
-                  <span
-                    aria-hidden
-                    className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
-                  >
-                    {s + 1}
-                  </span>
-                  <Link
-                    to="."
-                    hash={sectionId(s)}
-                    replace
-                    // Every link is to this page: only the one its hash names is where it is.
-                    activeOptions={{ includeHash: true }}
-                    data-reading={reading === sectionId(s) || undefined}
-                    className="rounded-sm underline-offset-4 hover:underline data-reading:font-semibold"
-                  >
-                    {localText(section.heading, locale)}
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        ) : null}
-        <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-1">
-          {lesson.sections.map((section, s) => (
-            <section
-              key={section.heading.en}
-              id={sectionId(s)}
-              // Sections apart by a line and room; a section's text and its examples close together.
-              className={cn(
-                'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
-                s > 0 && 'border-t border-border pt-8',
-              )}
-            >
-              <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
-              {section.blocks.map((block, b) => {
-                const id = `${s}.${b}`
-                if (block.kind !== 'question')
-                  return <LessonBlock key={id} block={block} onShow={show} />
-                const open = question?.id === id ? question : null
-                const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
-                return (
-                  <QuestionBlock
-                    key={id}
-                    ask={block.ask}
-                    stage={open ? open.stage : 'closed'}
-                    count={chosenOf(open?.chosen ?? [], answerKeys)}
-                    onOpen={() => dispatch({ type: 'open', id })}
-                    onReveal={() => {
-                      dispatch({ type: 'reveal' })
-                      play(answerSounds(block.answer, answerKeys.keys))
-                    }}
-                    onRetry={() => dispatch({ type: 'retry' })}
-                  />
-                )
-              })}
-            </section>
-          ))}
-        </div>
+            <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
+            {section.blocks.map((block, b) => {
+              const id = `${s}.${b}`
+              if (block.kind !== 'question')
+                return <LessonBlock key={id} block={block} onShow={show} />
+              const open = question?.id === id ? question : null
+              const answerKeys = answers.get(id) ?? { ...NO_KEYS, rising: false }
+              return (
+                <QuestionBlock
+                  key={id}
+                  ask={block.ask}
+                  stage={open ? open.stage : 'closed'}
+                  count={chosenOf(open?.chosen ?? [], answerKeys)}
+                  onOpen={() => dispatch({ type: 'open', id })}
+                  onReveal={() => {
+                    dispatch({ type: 'reveal' })
+                    play(answerSounds(block.answer, answerKeys.keys))
+                  }}
+                  onRetry={() => dispatch({ type: 'retry' })}
+                />
+              )
+            })}
+          </section>
+        ))}
       </div>
+      <FloatingActions>
+        <LessonBar lesson={lesson} reading={reading} up={up} />
+      </FloatingActions>
     </div>
   )
 }

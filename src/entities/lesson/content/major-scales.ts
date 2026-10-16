@@ -5,11 +5,9 @@ const majorScales: Lesson = {
   id: 'major-scales',
   title: { en: 'How major scales work', ru: 'Как устроена мажорная гамма' },
   summary: {
-    en: 'One pattern of whole and half steps builds a major scale on any note, and how to finger C major.',
-    ru: 'Одна схема тонов и полутонов строит мажорную гамму от любой ноты, и аппликатура до мажора.',
+    en: 'Build a major scale on any note and finger C major.',
+    ru: 'Строить мажорную гамму от любой ноты и играть до мажор с аппликатурой.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: {
@@ -21,8 +19,8 @@ const majorScales: Lesson = {
           kind: 'text',
           lead: { en: 'A major scale', ru: 'Мажорная гамма' },
           text: {
-            en: 'climbs from its tonic, the note it is named after, by whole, whole, half, whole, whole, whole, half. From C that is the white keys only.',
-            ru: 'поднимается от тоники, ноты, по которой названа, так: тон, тон, полутон, тон, тон, тон, полутон. От до это только белые клавиши.',
+            en: 'climbs from its tonic by whole, whole, half, whole, whole, whole, half. From C that is the white keys.',
+            ru: 'поднимается от тоники так: тон, тон, полутон, тон, тон, тон, полутон. От до это белые клавиши.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'major' },
@@ -56,14 +54,32 @@ const majorScales: Lesson = {
               en: 'Left hand: 5 4 3 2 1, 3rd finger over to A, 3 2 1.',
               ru: 'Левая рука: 5 4 3 2 1, третий палец через большой на ля, 3 2 1.',
             },
-            {
-              en: 'Down: the same, in reverse.',
-              ru: 'Вниз — то же в обратном порядке.',
-            },
+            { en: 'Down: the same, in reverse.', ru: 'Вниз — то же в обратном порядке.' },
           ],
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
+      ],
+    },
+    {
+      heading: { en: 'Each note has a degree', ru: 'У каждой ноты своя ступень' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'Scale degrees', ru: 'Ступени' },
+          text: {
+            en: 'number the notes 1 to 7 from the tonic. 1 is the tonic, 4 the subdominant, 5 the dominant.',
+            ru: 'нумеруют ноты от 1 до 7 начиная с тоники. 1 — тоника, 4 — субдоминанта, 5 — доминанта.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        {
+          kind: 'note',
+          text: {
+            en: 'Degree 7, the leading note, pulls up to the tonic.',
+            ru: 'Седьмая ступень, вводный тон, тянется вверх к тонике.',
+          },
+        },
       ],
     },
     {
@@ -76,8 +92,13 @@ const majorScales: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'C major in Scales', ru: 'До мажор в гаммах' },
-          target: { opens: 'scales', root: note('C'), scale: 'major' },
+          title: { en: 'Any scale in the Player', ru: 'Любая гамма в плеере' },
+          target: { opens: 'exercise', exercise: 'scale', root: note('D') },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build scales in the Quiz', ru: 'Построение гамм в тестах' },
+          target: { opens: 'quiz', trainer: 'build-scale' },
         },
       ],
     },

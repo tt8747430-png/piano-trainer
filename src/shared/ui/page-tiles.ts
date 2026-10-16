@@ -1,19 +1,16 @@
 import {
-  ArrowDownUp,
   AudioWaveform,
-  Blend,
   BookOpenText,
   ChartNoAxesColumnIncreasing,
   CircleDot,
   Dumbbell,
+  GraduationCap,
   KeyboardMusic,
   Layers,
   ListChecks,
   ListMusic,
-  Piano,
-  Ruler,
   ScanSearch,
-  Waypoints,
+  Ruler,
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from './paint'
@@ -31,18 +28,15 @@ export interface Tile {
  */
 export const PAGE_TILES = {
   lesson: { icon: BookOpenText, paint: 'sand' },
+  course: { icon: GraduationCap, paint: 'sky' },
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
   key: { icon: CircleDot, paint: 'lilac' },
   intervals: { icon: Ruler, paint: 'yellow' },
   tensions: { icon: Layers, paint: 'grass' },
   patterns: { icon: AudioWaveform, paint: 'yellow' },
-  chordFinder: { icon: ScanSearch, paint: 'sky' },
-  reharmonise: { icon: Blend, paint: 'lilac' },
-  passingChords: { icon: Waypoints, paint: 'yellow' },
-  transpose: { icon: ArrowDownUp, paint: 'grass' },
   progressions: { icon: ListMusic, paint: 'grass' },
-  freePlay: { icon: Piano, paint: 'sky' },
+  chordFinder: { icon: ScanSearch, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },
   quiz: { icon: ListChecks, paint: 'lilac' },
 } as const satisfies Readonly<Record<string, Tile>>

@@ -1,18 +1,12 @@
-import { useId, useMemo } from 'react'
+import { Hand } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
-import {
-  noteFromParam,
-  noteName,
-  spellScale,
-  type NoteParam,
-  type ScaleKind,
-} from '@/shared/lib/music'
+import { noteFromParam, type NoteParam, type ScaleKind } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { PlayLabel, type ShownKeys, ToneChip } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { PlayButton, SheetOption, type ShownKeys } from '@/shared/ui'
 import { scaleExample } from '../model/scale-example'
 import { TappableStaff } from './TappableStaff'
 
@@ -20,8 +14,9 @@ import { TappableStaff } from './TappableStaff'
 const RUN_TEMPO = 96
 
 /**
- * A scale in a lesson: its name, its notes with their degrees, its run up and back on one staff, and
- * Play, which runs it on the page's keys.
+ * A scale in a lesson: its name, its run up and back on one staff, and on its card its own options
+ * (the fingers, the notes' names) and Play, which runs it on the page's keys, each key with its
+ * degree and, where shown, its finger.
  */
 export function ScaleExample({
   root,
@@ -36,44 +31,52 @@ export function ScaleExample({
   const scaleName = useScaleName()
   const captionId = useId()
   const playback = usePlayback<'run'>()
+  const [fingers, setFingers] = useState(true)
+  const [names, setNames] = useState(false)
   const tonic = useMemo(() => noteFromParam(root), [root])
-  const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
+  const example = useMemo(() => scaleExample(tonic, kind, fingers), [tonic, kind, fingers])
   const score = useMemo(() => notate(example.music), [example])
   return (
     <figure aria-labelledby={captionId} className="flex flex-col gap-3 card p-4">
-      <figcaption id={captionId} className="font-display text-xl font-semibold">
-        {scaleName(tonic, kind)}
-      </figcaption>
-      <ol className="flex flex-wrap gap-2">
-        {spellScale(tonic, kind).map((tone) => (
-          <li key={tone.degree}>
-            <ToneChip
-              face={tone.role === 'root' ? 'tonic' : 'scale'}
-              degree={tone.degree}
-              note={noteName(tone.note)}
-            />
-          </li>
-        ))}
-      </ol>
+      <div className="flex items-center justify-between gap-3">
+        <figcaption id={captionId} className="font-display text-xl font-semibold">
+          {scaleName(tonic, kind)}
+        </figcaption>
+        <div className="flex items-center gap-1">
+          <SheetOption
+            icon={Hand}
+            label={t('sheet.fingers')}
+            pressed={fingers}
+            onPressedChange={setFingers}
+          />
+          <SheetOption
+            glyph="C E"
+            label={t('sheet.noteNames')}
+            pressed={names}
+            onPressedChange={setNames}
+          />
+          <PlayButton
+            label={t('play')}
+            playing={playback.playing === 'run'}
+            onClick={() => {
+              onShow(example.shown)
+              playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
+            }}
+          />
+        </div>
+      </div>
       <div className="-mx-gutter overflow-x-auto overscroll-x-contain px-gutter scrollbar-none">
         <TappableStaff
           music={example.music}
           score={score}
           staff="treble"
+          fingers={fingers}
+          names={names}
           tempo={RUN_TEMPO}
+          follow={playback.playing === 'run' ? playback.handle : null}
           onShow={onShow}
         />
       </div>
-      <Button
-        variant="soft"
-        className="self-start"
-        onClick={() => {
-          onShow(example.shown)
-          playback.toggle('run', () => runSounds(example.music, RUN_TEMPO))
-        }}
-      >
-        <PlayLabel playing={playback.playing === 'run'}>{t('play')}</PlayLabel>
-      </Button>
     </figure>
   )
 }

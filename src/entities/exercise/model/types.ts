@@ -1,4 +1,4 @@
-import type { Level } from '@/entities/path'
+import type { Stage } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
 import type { Inversion, ScaleKind } from '@/shared/lib/music'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'
@@ -54,7 +54,7 @@ export interface ExerciseFields {
 export interface Exercise {
   readonly id: ExerciseId
   readonly group: ExerciseGroup
-  readonly level: Level
+  readonly stage: Stage
   readonly name: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText

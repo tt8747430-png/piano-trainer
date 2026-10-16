@@ -1,7 +1,4 @@
-import { METHOD_BOOK_IDS } from '@/entities/book'
-import { isOneOf } from '@/shared/lib'
 import type { ArpeggioQuality, ExerciseId } from '@/entities/exercise'
-import type { Level } from '@/entities/path'
 import type { PatternId } from '@/entities/pattern'
 import type { PieceId } from '@/entities/piece'
 import type { LocalText } from '@/shared/i18n'
@@ -18,32 +15,6 @@ import type {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { NoteLineMeter, WrittenVoicing } from '@/shared/lib/schedule'
-
-/** The modules that teach by subject: one track, read in turn (ADR 0042). */
-export const SUBJECT_MODULES = ['fundamentals', 'accompaniment', 'gospel'] as const
-
-/**
- * The courses: each a module that follows one teacher's material in its order, a track of its own:
- * each method book's (ADR 0042, 0043).
- */
-const COURSE_MODULES = METHOD_BOOK_IDS
-
-/**
- * Learn's groups of lessons, in the order they are listed (TJPS's shape, roadmap §10.7): what is taught
- * by subject, then each course's own lessons.
- */
-export const LESSON_MODULES = [...SUBJECT_MODULES, ...COURSE_MODULES] as const
-export type LessonModule = (typeof LESSON_MODULES)[number]
-export const isLessonModule = isOneOf(LESSON_MODULES)
-export const isCourse = isOneOf(COURSE_MODULES)
-
-/** Learn's Courses view's two shelves: the subjects' modules, and the courses' (ADR 0049). */
-export const MODULE_SHELVES = ['subjects', 'courses'] as const
-export type ModuleShelf = (typeof MODULE_SHELVES)[number]
-export const SHELF_MODULES: Readonly<Record<ModuleShelf, readonly LessonModule[]>> = {
-  subjects: SUBJECT_MODULES,
-  courses: COURSE_MODULES,
-}
 
 /** A progression a lesson plays or opens on Progressions: numerals in a key, triads when it names no size. */
 export interface LessonProgression {
@@ -74,25 +45,31 @@ export type LessonLink =
   | { readonly opens: 'tensions'; readonly chord: TensionChord; readonly root?: SpelledNote }
   | { readonly opens: 'lesson'; readonly lesson: string }
   | ({ readonly opens: 'progressions' } & LessonProgression)
+  /** Progressions' Between on two chords of a key: the passing chords from one to the other. */
   | {
-      readonly opens: 'passing-chords'
+      readonly opens: 'between'
       readonly key: Key
-      /** Chord symbols, as the tool's fields take them. */
+      /** Chord symbols, as a typed line takes them. */
       readonly from: string
       readonly to: string
     }
-  | { readonly opens: 'reharmonise'; readonly key: Key; readonly note: SpelledNote }
-  /** A song's chords on Transpose, read in their key: as typed, spaces between them. */
-  | { readonly opens: 'transpose'; readonly chords: string }
+  /** The Key view harmonising a melody note in its key. */
+  | { readonly opens: 'harmonise'; readonly key: Key; readonly note: SpelledNote }
+  /** A song's chords on Progressions, read in their key: as typed, spaces between them. */
+  | { readonly opens: 'song-chords'; readonly chords: string }
   /** A piece in the Player, with a pattern or its own. */
   | { readonly opens: 'piece'; readonly piece: PieceId; readonly pattern?: PatternId }
-  /** An exercise in the Player, on a root and a chord where it takes them. */
+  /** An exercise in the Player, on a root, a chord and a scale where it takes them. */
   | {
       readonly opens: 'exercise'
       readonly exercise: ExerciseId
       readonly root?: SpelledNote
       readonly quality?: ArpeggioQuality
+      /** The scale a scale exercise runs, where it takes one: a minor scale's form. */
+      readonly kind?: ScaleKind
     }
+  /** A Quiz trainer, by its id (the catalog's test holds it to one there is), to practise what was read. */
+  | { readonly opens: 'quiz'; readonly trainer: string }
   /** A progression in the Player, ready to practise: walked through the keys, in an inversion. */
   | ({ readonly opens: 'player' } & LessonProgression & {
         readonly walk?: KeyWalk
@@ -152,13 +129,13 @@ export interface LessonSection {
   readonly blocks: readonly LessonBlock[]
 }
 
-/** A Learn page that teaches music, in both languages, with examples that play (content as code, ADR 0002). */
+/**
+ * A Learn page that teaches music, in both languages, with examples that play (content as code, ADR
+ * 0002): a journey's (its chapter places it) or a course's own (ADR 0053); it names neither.
+ */
 export interface Lesson {
   readonly id: string
   readonly title: LocalText
   readonly summary: LocalText
-  /** On the Path's scale, so a lesson and a step say "Beginner" alike. */
-  readonly level: Level
-  readonly module: LessonModule
   readonly sections: readonly LessonSection[]
 }

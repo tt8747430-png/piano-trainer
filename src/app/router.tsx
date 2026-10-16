@@ -20,7 +20,6 @@ import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
-import { isLessonModule } from '@/entities/lesson'
 import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
@@ -62,23 +61,12 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
+import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
-import { learnSearch, readLearnSearch } from './routes/learn-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
-import {
-  finderSearch,
-  freePlaySearch,
-  passingSearch,
-  readFinderSearch,
-  readFreePlaySearch,
-  readPassingSearch,
-  readReharmoniseSearch,
-  readTransposeSearch,
-  reharmoniseSearch,
-  transposeSearch,
-} from './routes/tool-search'
+import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -134,12 +122,12 @@ const shellRoute = createRoute({
   id: 'shell',
   component: ShellLayout,
 })
-// Learn, the first place (ADR 0049): Continue, then the Journey or the Courses.
+// Learn, the first place (ADR 0053): the Lessons' journeys or the Courses, as its toggle says.
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
   ...learnSearch,
-  ...remembered(readLearnSearch, []),
+  ...remembered(readLearnSearch, LEARN_KEPT),
   component: lazyRouteComponent(homeScreens, 'LearnPage'),
 })
 const settingsRoute = createRoute({
@@ -260,43 +248,13 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
-// Practice's tools: each page works something out from what the learner gives it, most a tab of the
-// thing it works on (ADR 0050). Free play is the piano played freely, written and named, or marked as
-// a teaching diagram.
+// The Chord finder (ADR 0054): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/chords/find',
-  ...finderSearch,
-  ...remembered(readFinderSearch, []),
+  path: '/practice/chord-finder',
+  ...chordFinderSearch,
+  ...remembered(readChordFinderSearch, CHORD_FINDER_KEPT),
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
-})
-const passingChordsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/passing',
-  ...passingSearch,
-  ...remembered(readPassingSearch, []),
-  component: lazyRouteComponent(toolScreens, 'PassingChordsPage'),
-})
-const reharmoniseRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/reharmonise',
-  ...reharmoniseSearch,
-  ...remembered(readReharmoniseSearch, []),
-  component: lazyRouteComponent(toolScreens, 'ReharmonisePage'),
-})
-const transposeRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/transpose',
-  ...transposeSearch,
-  ...remembered(readTransposeSearch, []),
-  component: lazyRouteComponent(toolScreens, 'TransposePage'),
-})
-const freePlayRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/free-play',
-  ...freePlaySearch,
-  ...remembered(readFreePlaySearch, []),
-  component: lazyRouteComponent(toolScreens, 'FreePlayPage'),
 })
 
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
@@ -339,24 +297,36 @@ const editPatternRoute = createRoute({
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
 
+// A lesson of the Lessons' journeys; a course and its own lessons (ADR 0053).
+const lessonRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonPage'),
+})
 const courseRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/$module',
+  path: '/courses/$courseId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: ({ params }) => {
-    if (!isLessonModule(params.module)) throw notFound()
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
   },
   component: lazyRouteComponent(learnScreens, 'CoursePage'),
 })
-const lessonRoute = createRoute({
+const courseLessonRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/learn/lessons/$lessonId',
+  path: '/courses/$courseId/$lessonId',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params }) => {
-    const { lessonById } = await learnScreens()
-    if (!lessonById(params.lessonId)) throw notFound()
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
   },
-  component: lazyRouteComponent(learnScreens, 'LessonPage'),
+  component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
 
 // Screens that take the whole screen, with their own way back.
@@ -481,20 +451,17 @@ const routeTree = rootRoute.addChildren([
     chordsRoute,
     scalesRoute,
     intervalsRoute,
-    chordFinderRoute,
-    reharmoniseRoute,
-    passingChordsRoute,
-    transposeRoute,
     progressionsRoute,
     accompanimentRoute,
     newPatternRoute,
     patternRoute,
     editPatternRoute,
     lessonRoute,
+    courseLessonRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,
-    freePlayRoute,
+    chordFinderRoute,
     trainerRoute,
     studyRoute,
     takeRoute,

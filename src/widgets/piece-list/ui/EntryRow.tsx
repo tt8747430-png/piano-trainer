@@ -1,11 +1,12 @@
 import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { levelOf, pieceStepId } from '@/entities/path'
+import { pieceStage } from '@/entities/course'
+import { pieceStepId, StageMark } from '@/entities/step'
 import { entryTitles, PieceLink, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
-import { LearnedBadge, LevelMark, RowLink, type Paint } from '@/shared/ui'
+import { LearnedBadge, RowLink, type Paint } from '@/shared/ui'
 
 /** A kind of entry's tile where the book gives it no number: a song yellow, a study grass. */
 const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint }>> = {
@@ -17,7 +18,7 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
 /**
  * A piece or listing in a list, linking to its page on its shelf: its number in its book on its tile
  * (else its kind's icon), its title over its second one (a listing: "no chart yet"), then its key, its
- * level's mark and, once learned, the learned badge.
+ * stage's mark and, once learned, the learned badge.
  */
 export function EntryRow({ entry }: { entry: Entry }) {
   const { t } = useTranslation('songs')
@@ -25,7 +26,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
   const learned = useProgress(selectIsLearned(step))
-  const level = levelOf(step)
+  const stage = pieceStage(entry.id)
   const tile = KIND_TILE[entry.kind]
   const number = entry.source?.number
   return (
@@ -40,7 +41,7 @@ export function EntryRow({ entry }: { entry: Entry }) {
               <span className="shrink-0 font-display font-semibold tabular-nums">
                 {keySymbol(pieceKey(entry))}
               </span>
-              {level ? <LevelMark level={level} /> : null}
+              {stage ? <StageMark stage={stage} /> : null}
               {learned ? <LearnedBadge label={t('learned')} /> : null}
             </>
           )

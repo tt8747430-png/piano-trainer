@@ -1,95 +1,59 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, List } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { lessonById, lessonsIn, nextLesson, useModuleName, type Lesson } from '@/entities/lesson'
-import { lessonStepId } from '@/entities/path'
-import { LearnedButton, useLearned } from '@/features/mark-learned'
+import { lessonById, lessonPlace, nextLessonId, previousLessonId } from '@/entities/lesson'
+import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
-import { LessonView } from '@/widgets/lesson-view'
-
-/** A lesson's course: its page on Learn. */
-const courseOf = (lesson: Lesson) =>
-  ({ to: '/learn/$module', params: { module: lesson.module } }) as const
+import { BackButton } from '@/shared/ui'
+import { LessonLayout, PlaceLink } from './LessonLayout'
 
 /**
- * A lesson: where it is (its module, a link to it on Learn, and its number in it), its title and
- * summary, then the lesson itself, and at its end Learned and the way on along its track (ADR 0042):
- * the next lesson, or a course's list after its last. Going on marks the lesson learned.
+ * A lesson of the Lessons (ADR 0053): its journey and chapter over it, its number along the journey;
+ * the lesson before it, and on to the journey's next lesson, or after its last back to the journey.
  */
 export function LessonPage() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const moduleName = useModuleName()
-  const { lessonId } = useParams({ from: '/shell/learn/lessons/$lessonId' })
+  const { lessonId } = useParams({ from: '/shell/lessons/$lessonId' })
   const lesson = lessonById(lessonId)
-  if (!lesson) return null
-  const inModule = lessonsIn(lesson.module)
+  const place = lessonPlace(lessonId)
+  // The route finds no lesson that no journey has.
+  if (!lesson || !place) return null
+  const journey = { to: '/', search: { view: 'lessons', journey: place.journey.id } } as const
+  const lessonAt = (id: string | undefined) => (id === undefined ? undefined : lessonById(id))
+  const next = lessonAt(nextLessonId(lesson.id))
+  const previous = lessonAt(previousLessonId(lesson.id))
+  const journeyTitle = localText(place.journey.title, locale)
   return (
-    <div className="flex flex-col gap-4">
-      <ScreenHeader
-        title={localText(lesson.title, locale)}
-        back={<BackButton fallback={courseOf(lesson)} />}
-      />
-      <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
-        <Link
-          {...courseOf(lesson)}
-          className="rounded-sm font-semibold text-foreground underline-offset-4 hover:underline"
-        >
-          {moduleName(lesson.module)}
-        </Link>{' '}
-        · {t('place', { n: inModule.indexOf(lesson) + 1, total: inModule.length })}
-      </nav>
-      <p className="max-w-prose text-lg text-pretty text-muted-foreground">
-        {localText(lesson.summary, locale)}
-      </p>
-      <LessonView key={lesson.id} lesson={lesson} />
-      <LessonEnd lesson={lesson} />
-    </div>
-  )
-}
-
-/** A lesson's end: its Learned toggle beside the one way on, which learns it on the way. */
-function LessonEnd({ lesson }: { lesson: Lesson }) {
-  const { t } = useTranslation('learn')
-  const locale = useLocale()
-  const moduleName = useModuleName()
-  const step = lessonStepId(lesson.id)
-  const { learn } = useLearned(step)
-  const next = nextLesson(lesson.id)
-  return (
-    <footer className="mt-6 flex max-w-prose flex-wrap items-center gap-3 border-t border-border pt-8 print:hidden">
-      <ButtonLink
-        size="pill"
-        onClick={learn}
-        className="h-auto min-h-14 min-w-0 flex-1 basis-64 justify-between gap-4 py-3 text-left whitespace-normal"
-        render={
-          next ? (
-            <Link to="/learn/lessons/$lessonId" params={{ lessonId: next.id }} />
-          ) : (
-            <Link {...courseOf(lesson)} />
-          )
-        }
-      >
-        {next ? (
-          <span className="flex min-w-0 flex-col">
-            <span className="text-sm font-medium">{t('track.next')}</span>
-            <span className="font-display text-xl text-balance">
-              {localText(next.title, locale)}
-            </span>
-          </span>
-        ) : (
-          <span className="font-display text-xl text-balance">
-            {t('track.all', { module: moduleName(lesson.module) })}
-          </span>
-        )}
-        {next ? (
-          <ArrowRight aria-hidden className="size-5" />
-        ) : (
-          <List aria-hidden className="size-5" />
-        )}
-      </ButtonLink>
-      <LearnedButton step={step} />
-    </footer>
+    <LessonLayout
+      lesson={lesson}
+      step={lessonStepId(lesson.id)}
+      back={<BackButton fallback={journey} />}
+      place={
+        <>
+          <PlaceLink {...journey}>{journeyTitle}</PlaceLink> ·{' '}
+          {localText(place.chapter.title, locale)} ·{' '}
+          {t('place', { n: place.n, total: place.total })}
+        </>
+      }
+      track={{
+        up: { link: <Link {...journey} />, label: t('track.toJourney'), title: journeyTitle },
+        ...(previous
+          ? {
+              previous: {
+                link: <Link to="/lessons/$lessonId" params={{ lessonId: previous.id }} />,
+                label: t('track.previous'),
+                title: localText(previous.title, locale),
+              },
+            }
+          : {}),
+        next: next
+          ? {
+              link: <Link to="/lessons/$lessonId" params={{ lessonId: next.id }} />,
+              label: t('track.next'),
+              title: localText(next.title, locale),
+            }
+          : { link: <Link {...journey} />, label: t('track.toJourney'), title: journeyTitle },
+      }}
+    />
   )
 }

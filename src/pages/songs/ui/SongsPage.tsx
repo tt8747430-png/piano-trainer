@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import { ScreenHeader, SearchField } from '@/shared/ui'
+import { FloatingActions, ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -48,7 +48,7 @@ export function SongsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <ScreenHeader title={t('title')} actions={<NewSongSheet />} />
+      <ScreenHeader title={t('title')} />
       <div className="flex items-center gap-2 lg:max-w-xl">
         <div className="min-w-0 flex-1">
           <SearchField
@@ -91,6 +91,9 @@ export function SongsPage() {
           </Empty>
         )}
       </Tabs>
+      <FloatingActions>
+        <NewSongSheet />
+      </FloatingActions>
     </div>
   )
 }

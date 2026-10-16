@@ -27,6 +27,26 @@ describe('the keyboard’s rail', () => {
     expect(screen.queryByRole('radio')).not.toBeInTheDocument()
   })
 
+  it('holds only the controls the learner chose to keep on it', () => {
+    const { settingsStore } = setUp()
+    act(() =>
+      settingsStore.setState((state) => ({
+        keyboard: { ...state.keyboard, railControls: ['zoom', 'pedal'] },
+      })),
+    )
+    for (const name of ['Smaller keys', 'Larger keys', 'Pedal']) {
+      expect(screen.getByRole('button', { name })).toBeInTheDocument()
+    }
+    for (const name of [
+      /^Note names/,
+      'Name the chords played',
+      'Play from the computer keyboard',
+      'Glissando',
+    ]) {
+      expect(screen.queryByRole('button', { name })).not.toBeInTheDocument()
+    }
+  })
+
   it('zooms the keys a step at a time, saved, the button at an end off', async () => {
     const user = userEvent.setup()
     const { settingsStore } = setUp()
@@ -71,7 +91,7 @@ describe('the keyboard’s rail', () => {
   it('offers Sound the MIDI keyboard only while one is connected, and saves it', async () => {
     const user = userEvent.setup()
     const { settingsStore, midiKeyboard } = setUp()
-    const sound = () => screen.queryByRole('button', { name: 'Play MIDI keys in the app' })
+    const sound = () => screen.queryByRole('button', { name: 'Hear what you play in the app' })
     expect(sound()).not.toBeInTheDocument()
     await act(() => midiKeyboard.connect())
     await user.click(sound() ?? document.body)

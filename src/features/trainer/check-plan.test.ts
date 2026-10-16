@@ -61,5 +61,7 @@ describe('checkPlan', () => {
 
   it('has no plan for a piece that is not there', () => {
     expect(checkPlan('piece:gone')).toBeNull()
+    expect(checkPlan('lesson:triads')).toBeNull()
+    expect(checkPlan('course:rhythm-basics/note-values')).toBeNull()
   })
 })

@@ -1,25 +1,18 @@
-import { createContext, use, useMemo, type ReactNode } from 'react'
+import { createContext, use, useMemo, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  chordSymbol,
-  handPosition,
-  voiceLead,
-  type Midi,
-  type RowPosition,
-} from '@/shared/lib/music'
+import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import { chordSounds, walkSounds } from '@/shared/lib/schedule'
+import { walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
+import { useElementSize } from '@/shared/lib'
 import {
-  ChordButton,
-  FitWidth,
-  usePositionName,
-  PlayLabel,
+  FloatingActions,
+  PlayFab,
+  PlayButton,
   type ShownKeys,
   unmarked,
   usePlayKey,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import type { RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
@@ -28,14 +21,13 @@ import { TappableStaff } from './TappableStaff'
 /** How fast a row walks, a chord each two beats. */
 const ROW_TEMPO = 84
 
-/** What a row's parts share: its chords, which of them plays, and how each plays. */
+/** What a row's parts share: its chords as voiced, whether it plays, and how. */
 interface RowPlayback {
   readonly chords: readonly RowChord[]
   /** Each chord's keys as the row voices them, the bass first. */
   readonly voiced: readonly (readonly Midi[])[]
   readonly onShow: (shown: ShownKeys) => void
-  readonly playing: number | 'row' | null
-  playChord(place: number): void
+  readonly playing: 'row' | null
   playRow(): void
 }
 
@@ -49,8 +41,8 @@ function useRow(): RowPlayback {
 
 /**
  * A row of chords voiced smoothly (a progression, a way between two chords), from a `position` where
- * one is chosen: its parts, `RowChords`, `RowStaff` and `RowPlay`, play a chord as the row voices it
- * or the whole row, write it on the grand staff, and show it on the page's keys.
+ * one is chosen: its parts, `RowStaff` and `RowPlay`, write it on the grand staff, each bar playing
+ * its chord as the row voices it, play the whole row, and show it on the page's keys.
  */
 export function ChordRow({
   chords,
@@ -63,7 +55,7 @@ export function ChordRow({
   onShow: (shown: ShownKeys) => void
   children: ReactNode
 }) {
-  const playback = usePlayback<number | 'row'>()
+  const playback = usePlayback<'row'>()
   const inversion = position?.inversion
   const nearest = position?.nearest
   const voiced = useMemo(
@@ -79,12 +71,6 @@ export function ChordRow({
     voiced,
     onShow,
     playing: playback.playing,
-    playChord: (place) => {
-      const keys = voiced[place] ?? []
-      const chord = chords[place]?.chord
-      onShow(chord ? voicedShown(chord, keys) : unmarked(keys))
-      playback.toggle(place, () => chordSounds(keys, { arpeggio: false }))
-    },
     playRow: () => {
       onShow(unmarked(voiced.flat()))
       playback.toggle('row', () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
@@ -97,46 +83,19 @@ export function ChordRow({
   )
 }
 
-/**
- * The row's chords, each its symbol over its caption, playing alone; with `positions`, each says how
- * the row plays it: its inversion, or the tension a rootless hand starts on; else its own detail.
- */
-export function RowChords({ positions = false }: { positions?: boolean }) {
-  const { t } = useTranslation('music')
-  const { chords, voiced, playing, playChord } = useRow()
-  const positionName = usePositionName()
-  const positionOf = (chord: RowChord['chord'], place: number): string | undefined => {
-    const position = positions ? handPosition(chord, (voiced[place] ?? []).slice(1)) : null
-    return position ? positionName(position) : undefined
-  }
-  return (
-    <ul aria-label={t('rowChords')} className="grid grid-cols-4 gap-2">
-      {chords.map(({ chord, caption, detail, symbol = chordSymbol(chord) }, place) => (
-        <li key={`${place} ${symbol}`} className="grid">
-          <ChordButton
-            symbol={symbol}
-            numeral={caption}
-            detail={positionOf(chord, place) ?? detail}
-            playing={playing === place}
-            onClick={() => playChord(place)}
-          />
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 /** A chord tapped on the row's staff sounds for its bar at this tempo. */
 const STAFF_TEMPO = 120
 
-/** Bars on a line of the row's staff: the chords on a line of its buttons over it. */
+/** Bars on a line of the row's staff. */
 const BARS_A_LINE = 4
 
 /**
- * The row on the grand staff as its keys play it, a line under each line of its buttons: the bass on
- * the bass staff, the hand on the treble, each chord's symbol over its bar; a chord tapped plays.
+ * The row on the grand staff as its keys play it, four bars a line: the bass on the bass staff, the
+ * hand on the treble, each chord's symbol and numeral over its bar, which plays it as the row voices
+ * it. Every line is drawn at the same size, shrunk as the first, full line must be to fit.
  */
 export function RowStaff() {
+  const { t } = useTranslation('music')
   const { chords, voiced, onShow } = useRow()
   const lines = useMemo(() => {
     const bars = chords.map(({ chord, symbol = chordSymbol(chord) }, place) => ({
@@ -145,22 +104,44 @@ export function RowStaff() {
       keys: voiced[place] ?? [],
     }))
     return Array.from({ length: Math.ceil(bars.length / BARS_A_LINE) }, (_, line) => {
-      const music = chordsMusic(bars.slice(line * BARS_A_LINE, (line + 1) * BARS_A_LINE))
-      return { music, score: notate(music) }
+      const from = line * BARS_A_LINE
+      const music = chordsMusic(bars.slice(from, from + BARS_A_LINE))
+      return { from, music, score: notate(music) }
     })
   }, [chords, voiced])
+  const room = useRef<HTMLDivElement>(null)
+  const first = useRef<HTMLDivElement>(null)
+  const { width: roomWidth } = useElementSize(room)
+  const { width: lineWidth } = useElementSize(first)
+  const zoom = roomWidth > 0 && lineWidth > roomWidth ? roomWidth / lineWidth : 1
   return (
-    <div className="flex flex-col gap-2">
-      {lines.map(({ music, score }, line) => (
-        <FitWidth key={line}>
+    <div
+      ref={room}
+      role="group"
+      aria-label={t('rowChords')}
+      className="flex max-w-full flex-col gap-2"
+    >
+      {lines.map(({ from, music, score }, line) => (
+        <div
+          key={line}
+          ref={line === 0 ? first : undefined}
+          className="w-max max-w-none"
+          style={zoom < 1 ? { zoom } : undefined}
+        >
           <TappableStaff
             music={music}
             score={score}
-            firstBar={line * BARS_A_LINE + 1}
+            firstBar={from + 1}
             tempo={STAFF_TEMPO}
+            captions={chords.slice(from, from + BARS_A_LINE).map((chord) => chord.caption)}
+            barShown={(bar) => {
+              const chord = chords[from + bar]?.chord
+              const keys = voiced[from + bar] ?? []
+              return chord ? voicedShown(chord, keys) : unmarked(keys)
+            }}
             onShow={onShow}
           />
-        </FitWidth>
+        </div>
       ))}
     </div>
   )
@@ -174,9 +155,19 @@ export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
   const { t } = useTranslation('music')
   const { playing, playRow } = useRow()
   usePlayKey(playRow, variant === 'default')
+  // The tool's row plays from a floating button; beside other examples, from the row.
+  if (variant === 'default')
+    return (
+      <FloatingActions>
+        <PlayFab label={t('play')} playing={playing === 'row'} onClick={playRow} />
+      </FloatingActions>
+    )
   return (
-    <Button variant={variant} size="pill" className="self-start" onClick={playRow}>
-      <PlayLabel playing={playing === 'row'}>{t('play')}</PlayLabel>
-    </Button>
+    <PlayButton
+      label={t('play')}
+      playing={playing === 'row'}
+      onClick={playRow}
+      className="self-start"
+    />
   )
 }

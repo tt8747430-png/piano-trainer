@@ -36,26 +36,27 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
 
 ## Capabilities and Constraints
 
-- Screens, in four places (Path · Songs · Learn · Practice): Path (Continue, the first step not learned: a lesson to read, a chord or scale to practise or a song; levels 1–4, each opening with its lessons; Settings behind its gear on
-  a phone, at the sidebar's foot on a laptop), Songs (the songs by collection, chosen from tabs, and the learner's own
+- Screens, in three places (Learn · Songs · Practice): Learn (its header's toggle between two things kept apart,
+  ADR 0053: the Lessons, four journeys from Foundations to Mastery laid out as the journey-app's, chapters of theory
+  lessons as zigzags of nodes; and the Courses, shelves as the courses-app's: beginner, intermediate, technique, chords
+  and improvising, and the method books (_Called to Play_, its level 2, Боброва, Gorshkov), each course its level,
+  weeks, its own lessons and its guided songs. Continue goes on in the track last learned on. Each lesson is a
+  worksheet: examples that play in place, questions answered on the keys, links into Practice, the Quiz
+  and the Player; Settings behind its gear on a phone, at the sidebar's foot on a laptop), Songs (the songs by collection, chosen from tabs, and the learner's own
   songs, made from New song), a Piece (its facts, Practise, the chords it plays to tap and hear, its chart), the Player
   (sheet music as it plays; Listen or Wait mode, a loop, speed training, swing; a piece, or a scale's chords walked
   with a song's patterns; its Setup a key picker, the pattern with its two hands, drawn inversions and toggle tiles),
-  Learn (the lessons only, as worksheets, module by module in the order taught: the Fundamentals module's fourteen,
-  from finding your way on the keys to key signatures; Accompaniment's eleven, from bass and chords through the five
-  ways, the right-hand techniques and Боброва's seven types to hymns, common progressions, passing chords and
-  reharmonising; Gospel's three; each with examples that play in place (a pattern over its piece, a progression in
-  any key) and quizzes answered on the keys), Practice (eight places, each one page for a thing practised. **Chords:** Build makes any chord from its
+  Practice (each page one thing with the tools that work on it. **Chords:** one page that makes any chord from its
   root (letter and accidental), quality, size, 7th, suspension, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
   in sight, on the keys and a staff, with a 7th chord's available tensions
-  (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player; Find names the keys played.
+  (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player.
   **Scales and keys:** thirteen scale kinds with the modes and both blues; its Scale view starts the run on any note,
   fingered from the thumb or as the scale, on a staff, and opens the scale's exercises in the Player (over one to four
   octaves, in 3rds, 6ths and groups, in contrary motion); its Chords view stacks the scale's chords to 13ths in any
   inversion and walks them; its Key view (a major or minor scale) is the circle of fifths with the key's signature,
-  relative, modes, borrowed chords and songs. **Progressions:** one library by style, or a line typed in numerals or
-  chords, in any key and chord size, played and opened in the Player in the key or through the keys; Passing chords,
-  the ways between two chords; Reharmonise, the chords that hold a melody note. **Intervals:** every interval over a
+  relative, modes, borrowed chords, songs, and a melody note harmonised by every chord that holds it. **Progressions:** one library by style, or a line typed in numerals or a
+  song's chords (read in the key they are in), in any key and chord size, played and opened in the Player in the key or
+  through the keys; Between, the passing chords from any chord of the row to the next. **Intervals:** every interval over a
   root on a staff, heard up, down and together. **Accompaniment:** Patterns, each pattern's page explaining and
   playing it, with favourites, hiding from the Player's list, and the learner's own made from any two figures; and
   the Studies they are practised on. **Exercises:** the five-finger position and Hanon No. 1; Barry Harris's
@@ -63,8 +64,10 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   Jonny's 2-5-1 scale, inner voice, modes, rapid switch and pattern shifting. **Quiz:** every trainer, each a ladder
   of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's role, Build
   scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
-  them, in its bar. **Free play:** the piano at its widest under a live score, each chord played written on a grand
-  staff and named; Mark makes a teaching diagram, keys in two colours with fingers, sent as a link),
+  them, in its bar. **Chord finder:** any chord played on a MIDI keyboard or tapped
+  on the keys named at once, large, in every reading it has (an inversion over its bass, tones left out, a 5th as a
+  power chord), its notes by degree, read on once let go; the chords played written in turn on a grand staff, spelled
+  in the key chosen; and the keys that hold it),
   the score editor (the learner's version of any song or study, or the chart of a
   listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
   staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody
@@ -78,7 +81,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   Pedal or Space. The keyboard's rail holds every keyboard setting in sight as a picture (a zoom, the note names,
   typing, glissando, the pedal) beside its map. The computer's keys drive the app: Space, the arrows, R, Home and
   Escape in the Player, Enter for a screen's one Play and a round's one action, numbers for a round's answers, Alt
-  and 1–4 for the four places, and `?` for the sheet that lists them. Full behaviour:
+  and 1–3 for the three places, and `?` for the sheet that lists them. Full behaviour:
   `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs 0012–0036.
 - English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
 - Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").

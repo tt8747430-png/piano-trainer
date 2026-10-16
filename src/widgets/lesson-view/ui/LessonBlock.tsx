@@ -9,7 +9,6 @@ import {
   ChordRow,
   symbolsRow,
   progressionRow,
-  RowChords,
   RowStaff,
   RowPlay,
   ScaleExample,
@@ -73,7 +72,6 @@ export function LessonBlock({
     case 'chords':
       return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
         <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
-          <RowChords />
           <RowStaff />
           <RowPlay variant="soft" />
         </ChordRow>
@@ -107,14 +105,12 @@ export function LessonBlock({
       const { numerals, key, size } = readProgression(block)
       return (
         <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
-          <RowChords />
           <RowStaff />
           {/* Play here, and the same row in Progressions to take further: in any key, walked. */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <RowPlay variant="soft" />
             <ButtonLink
-              variant="soft"
-              size="pill"
+              variant="outline"
               render={
                 <Link
                   to="/practice/progressions"

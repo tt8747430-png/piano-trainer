@@ -15,7 +15,17 @@ export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
 export { FitWidth } from './FitWidth'
-export { LevelMark } from './LevelMark'
+export {
+  Fab,
+  FabPill,
+  FloatingActions,
+  FloatingHost,
+  PlayFab,
+  SpeedDial,
+  SpeedDialAction,
+} from './FloatingActions'
+export { useFloatingLabels, type FloatingPlace } from './floating-context'
+export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
 export { MultiDropdown } from './MultiDropdown'
 export { NameField } from './NameField'
@@ -24,8 +34,12 @@ export { NavTab, NavTabs } from './NavTabs'
 export { NoteChoice } from './NoteChoice'
 
 export { PAINT, type Paint } from './paint'
+export { Docked } from './Docked'
 export { Pinned } from './Pinned'
 export { PlayLabel } from './PlayLabel'
+export { PlayButton } from './PlayButton'
+export { SheetOption } from './SheetOption'
+export { FoldBody } from './FoldBody'
 export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {
@@ -33,6 +47,7 @@ export {
   PianoKeyboard,
   RailButton,
   RailGroup,
+  toneMark,
   unmarked,
   type KeyMark,
   type ShownKeys,
@@ -42,6 +57,7 @@ export { ROLE_BG } from './role-classes'
 export { RoundButton } from './RoundButton'
 export { RoundLink } from './RoundLink'
 export { FoldGroup } from './FoldGroup'
+export { FoldSection, type Fold } from './FoldSection'
 export { RowGroup } from './RowGroup'
 export { RowLink } from './RowLink'
 export { loadScoreView } from './score/load'
@@ -55,7 +71,6 @@ export { SettingField } from './SettingField'
 export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
 export { ToggleGrid, ToggleTile } from './ToggleTile'
-export { ToneChip } from './ToneChip'
 export { ToolButton } from './ToolButton'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'

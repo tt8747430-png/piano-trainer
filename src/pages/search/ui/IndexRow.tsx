@@ -27,7 +27,28 @@ export function IndexRow({
         <RowLink
           {...row}
           {...PAGE_TILES.lesson}
-          render={<Link to="/learn/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+          render={<Link to="/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
+        />
+      )
+    case 'course':
+      return (
+        <RowLink
+          {...row}
+          {...PAGE_TILES.course}
+          render={<Link to="/courses/$courseId" params={{ courseId: target.course }} />}
+        />
+      )
+    case 'course-lesson':
+      return (
+        <RowLink
+          {...row}
+          {...PAGE_TILES.lesson}
+          render={
+            <Link
+              to="/courses/$courseId/$lessonId"
+              params={{ courseId: target.course, lessonId: target.lesson }}
+            />
+          }
         />
       )
     case 'chord':
@@ -89,12 +110,12 @@ export function IndexRow({
           render={<Link to="/play/exercise/$exerciseId" params={{ exerciseId: target.exercise }} />}
         />
       )
-    case 'transpose':
+    case 'typed-line':
       return (
         <RowLink
           {...row}
-          {...PAGE_TILES.transpose}
-          render={<Link to="/practice/progressions/transpose" search={{ chords: target.chords }} />}
+          {...PAGE_TILES.progressions}
+          render={<Link to="/practice/progressions" search={{ key: target.key, p: target.p }} />}
         />
       )
     case 'trainer':

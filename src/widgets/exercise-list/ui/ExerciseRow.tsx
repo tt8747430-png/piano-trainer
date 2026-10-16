@@ -1,11 +1,12 @@
+import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import type { Exercise } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { LevelMark, RowLink, type Paint } from '@/shared/ui'
+import { RowLink, type Paint } from '@/shared/ui'
 
-/** An exercise's row: its name over what it trains, its level's mark, opening it in the Player as it was left; its group's tile. */
+/** An exercise's row: its name over what it trains, its stage's mark, opening it in the Player as it was left; its group's tile. */
 export function ExerciseRow({
   exercise,
   icon,
@@ -22,7 +23,7 @@ export function ExerciseRow({
       detail={localText(exercise.trains, locale)}
       icon={icon}
       paint={paint}
-      trailing={<LevelMark level={exercise.level} />}
+      trailing={<StageMark stage={exercise.stage} />}
       render={
         <Link
           to="/play/exercise/$exerciseId"

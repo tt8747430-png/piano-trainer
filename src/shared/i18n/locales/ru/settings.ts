@@ -4,8 +4,19 @@ export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
+  layout: {
+    label: 'Вид',
+    titles: { label: 'Заголовки страниц', large: 'Крупные', small: 'Мелкие' },
+  },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
+  floating: {
+    label: 'Плавающие кнопки',
+    place: 'Где они стоят',
+    places: { left: 'Слева', center: 'Посередине', right: 'Справа' },
+    labels: 'Подписывать их',
+    labelsNote: 'Иначе у каждой только значок; название видно при наведении',
+  },
   progress: {
     label: 'Прогресс',
     reset: 'Сбросить прогресс',

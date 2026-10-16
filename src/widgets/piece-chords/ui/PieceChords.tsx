@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Target } from 'lucide-react'
 import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceStepId, stepById } from '@/entities/path'
+import { pieceStepId } from '@/entities/step'
 import type { Piece } from '@/entities/piece'
 import type { Performance } from '@/shared/lib/arrangement'
 import { placeChord } from '@/shared/lib/music'
@@ -27,12 +27,10 @@ export function PieceChords({ piece, performance }: { piece: Piece; performance:
         <h2 id={headingId} className="text-2xl">
           {t('chords')}
         </h2>
-        {stepById(step) ? (
-          <ButtonLink variant="outline" render={<Link to="/check" search={{ of: step }} />}>
-            <Target data-icon="inline-start" aria-hidden />
-            {t('checkChords')}
-          </ButtonLink>
-        ) : null}
+        <ButtonLink variant="outline" render={<Link to="/check" search={{ of: step }} />}>
+          <Target data-icon="inline-start" aria-hidden />
+          {t('checkChords')}
+        </ButtonLink>
       </div>
       <ul className="grid-chords gap-2">
         {chords.map((chord) => (

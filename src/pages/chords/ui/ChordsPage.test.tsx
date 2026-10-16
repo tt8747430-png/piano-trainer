@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { setMidi } from '@/features/set-preference'
-import { SHORTEST_PRESS_MS } from '@/shared/lib'
+import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 
@@ -15,6 +15,22 @@ describe('Practice → Chords', () => {
     vi.mocked(window.scrollTo).mockClear()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(window.scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('folds a section away from its heading, folded still on the next visit', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/practice/chords', { storage })
+    const heading = await screen.findByRole('button', { name: 'Practise in the Player' })
+    expect(heading).toHaveAttribute('aria-expanded', 'true')
+    await user.click(heading)
+    expect(screen.queryByRole('link', { name: /^Arpeggio/ })).not.toBeInTheDocument()
+    first.unmount()
+    await renderApp('/practice/chords', { storage })
+    const again = await screen.findByRole('button', { name: 'Practise in the Player' })
+    expect(again).toHaveAttribute('aria-expanded', 'false')
+    await user.click(again)
+    expect(screen.getByRole('link', { name: /^Arpeggio/ })).toBeInTheDocument()
   })
 
   it('shows C major by default, named, its keys labelled by degree', async () => {
@@ -264,33 +280,11 @@ describe('Practice → Chords', () => {
     )
   })
 
-  it('is the Build tab of Chords, under a header with a way back', async () => {
+  it('is one page under a header with a way back, with no tabs', async () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
-    const tabs = screen.getByRole('navigation', { name: 'Chords' })
-    expect(
-      within(tabs)
-        .getAllByRole('link')
-        .map((tab) => tab.textContent),
-    ).toEqual(['Build', 'Find'])
-    expect(within(tabs).getByRole('link', { current: 'page' })).toHaveTextContent('Build')
-  })
-
-  it('finds on the chord’s own keys, which names it, and comes back to it', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/practice/chords?root=D&triad=min')
-    const tabs = await screen.findByRole('navigation', { name: 'Chords' })
-    await user.click(within(tabs).getByRole('link', { name: 'Find' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/chords/find'))
-    expect(await screen.findByRole('heading', { level: 2, name: 'Dm' })).toBeInTheDocument()
-    await user.click(
-      within(screen.getByRole('navigation', { name: 'Chords' })).getByRole('link', {
-        name: 'Build',
-      }),
-    )
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/chords'))
-    expect(router.state.location.search).toMatchObject({ root: 'D', triad: 'min' })
+    expect(screen.queryByRole('navigation', { name: 'Chords' })).not.toBeInTheDocument()
   })
 
   it('names every choice on screen, in the order a chord is built', async () => {

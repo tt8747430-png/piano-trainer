@@ -10,11 +10,9 @@ const scalesThroughTheChanges: Lesson = {
   id: 'scales-through-the-changes',
   title: { en: 'Scales through the changes', ru: 'Гаммы сквозь гармонию' },
   summary: {
-    en: 'A scale for each chord, written from one note so only the differences move, and chords made from a mode.',
-    ru: 'Гамма для каждого аккорда от одного звука, чтобы двигались только различия, и аккорды, составленные из лада.',
+    en: 'Solo through changes by moving only the notes that change.',
+    ru: 'Играть соло по гармонии, меняя только те звуки, что меняются.',
   },
-  level: 4,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'A scale for each chord', ru: 'Гамма для каждого аккорда' },
@@ -22,8 +20,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Common practice gives each chord a scale. Major: Ionian or Lydian. Minor: Dorian. Dominant: Mixolydian, or altered for ♭9, ♯9 and ♭13.',
-            ru: 'Общая практика даёт каждому аккорду гамму. Мажор: ионийский или лидийский. Минор: дорийский. Доминанта: миксолидийский или альтерированный для ♭9, ♯9 и ♭13.',
+            en: 'Each chord takes a scale. Major: Ionian or Lydian. Minor: Dorian. Dominant: Mixolydian, or altered for ♭9, ♯9 and ♭13.',
+            ru: 'Каждому аккорду — своя гамма. Мажор: ионийский или лидийский. Минор: дорийский. Доминанта: миксолидийский или альтерированный для ♭9, ♯9 и ♭13.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'lydian' },
@@ -32,8 +30,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Half-diminished takes Locrian ♮2. Each chord alone makes a solo sound boxed.',
-            ru: 'Полууменьшённому — локрийский ♮2. Если думать о каждом аккорде отдельно, соло звучит «в коробке».',
+            en: 'Half-diminished takes Locrian ♮2.',
+            ru: 'Полууменьшённому — локрийский ♮2.',
           },
         },
       ],
@@ -44,8 +42,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Write each chord’s scale from the same note. In Blue Bossa, from G: C Dorian, F Dorian, D Locrian ♮2, G altered.',
-            ru: 'Пишите гамму каждого аккорда от одного звука. В Blue Bossa от соль: до дорийский, фа дорийский, ре локрийский ♮2, соль альтерированный.',
+            en: 'Play each chord’s scale from the same note. From G: C Dorian, F Dorian, D Locrian ♮2, G altered.',
+            ru: 'Играйте гамму каждого аккорда от одного звука. От соль: до дорийский, фа дорийский, ре локрийский ♮2, соль альтерированный.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/8 A4/8 B♭4/8 C5/8 D5/8 E♭5/8 F5/8 G5/8' },
@@ -61,8 +59,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From Cm7 to Fm7 only A becomes A♭. To Dm7♭5, E♭ becomes E. The scales share most notes, so learn what changes.',
-            ru: 'От Cm7 к Fm7 только ля становится ля-бемолем. К Dm7♭5 ми-бемоль становится ми. Гаммы почти совпадают, поэтому учите то, что меняется.',
+            en: 'From Cm7 to Fm7 only A becomes A♭. To Dm7♭5, E♭ becomes E. Learn only what changes.',
+            ru: 'От Cm7 к Fm7 только ля становится ля-бемолем. К Dm7♭5 ми-бемоль становится ми. Учите только то, что меняется.',
           },
         },
       ],
@@ -73,8 +71,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Take three notes of each scale and one short rhythm off the beat. Play it over every chord: the voices lead themselves.',
-            ru: 'Возьмите три звука каждой гаммы и один короткий ритм не с сильной доли. Играйте его на каждом аккорде: голоса поведут себя сами.',
+            en: 'Take three notes of each scale and one short rhythm off the beat. Play it over every chord, a bar each.',
+            ru: 'Возьмите три звука каждой гаммы и один короткий ритм не с сильной доли. Играйте его на каждом аккорде, по такту.',
           },
         },
         {
@@ -82,13 +80,6 @@ const scalesThroughTheChanges: Lesson = {
           clef: 'treble',
           notes:
             'B♭4/8 C5/8 D5/2. A♭4/8 C5/8 D5/2. A♭4/8 C5/8 E5/2. A♭4/8 B4/8 E♭5/2. B♭4/8 C5/8 D5/2.',
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'One bar per chord of the row above.',
-            ru: 'Один такт на каждый аккорд ряда выше.',
-          },
         },
       ],
     },
@@ -98,8 +89,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Pick four notes of a chord’s mode, even without its root or 3rd. Look for the semitones: C Lydian has F♯–G and B–C.',
-            ru: 'Возьмите четыре звука из лада аккорда, даже без основного тона или терции. Ищите полутоны: в до лидийском это фа-диез–соль и си–до.',
+            en: 'Pick four notes of a chord’s mode, even without its root or 3rd. Use its semitones: C Lydian has F♯–G and B–C.',
+            ru: 'Возьмите четыре звука из лада аккорда, даже без основного тона или терции. Используйте его полутоны: в до лидийском это фа-диез–соль и си–до.',
           },
         },
         {
@@ -119,8 +110,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep one shape and move it so its top note sings the melody, whatever key each chord lands in. Here an augmented triad sings Silent Night.',
-            ru: 'Сохраняйте одну фигуру и двигайте её так, чтобы верхний звук пел мелодию, в какую бы тональность ни попал аккорд. Здесь увеличенное трезвучие поёт «Тихую ночь».',
+            en: 'Keep one shape and move it so its top note sings the melody. Here an augmented triad over the bass carries it.',
+            ru: 'Сохраняйте одну фигуру и двигайте её так, чтобы верхний звук пел мелодию. Здесь её ведёт увеличенное трезвучие над басом.',
           },
         },
         {
@@ -153,13 +144,6 @@ const scalesThroughTheChanges: Lesson = {
             { symbol: 'IV', hands: '| F♯4 B4 E5 A5' },
             { symbol: 'V', hands: '| G4 C5 F♯5 B5' },
           ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'Try both on a simple tune: Happy Birthday, or a Christmas song.',
-            ru: 'Попробуйте оба способа на простой мелодии: «С днём рождения» или рождественской песне.',
-          },
         },
       ],
     },

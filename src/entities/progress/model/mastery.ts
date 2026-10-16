@@ -1,4 +1,4 @@
-import { skillsOfStep, stepIdOf, stepOfSkill, type StepId } from '@/entities/path'
+import { skillsOfStep, stepIdOf, stepOfSkill, type StepId } from '@/entities/step'
 import type { SkillId } from '@/shared/lib/music'
 import type { Answer, ProgressState } from './types'
 

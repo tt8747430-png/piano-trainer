@@ -9,6 +9,7 @@ import {
   type ChordRole,
   type Finger,
   type Midi,
+  type Tone,
 } from '@/shared/lib/music'
 
 /** A chord tone's role, a hand in the Player, or a scale's note: its tonic or another (roles stay on chord tones). */
@@ -18,6 +19,8 @@ export interface KeyMark {
   readonly label?: string
   /** A second, smaller line over the label: a degree's numeral over its chord. */
   readonly caption?: string
+  /** The note it marks, as the page spells it (E, F♯), named under the label while marked notes are named. */
+  readonly note?: string
   /** A finger number, drawn in the finger row under the keys. */
   readonly finger?: Finger
 }
@@ -41,6 +44,8 @@ export interface KeyStates {
 export interface KeyText {
   readonly namedKeys: NamedKeys
   readonly letters?: ReadonlyMap<Midi, string> | undefined
+  /** A marked key names its note under its label. */
+  readonly markNotes: boolean
 }
 
 export type KeyFill = 'white' | 'black' | 'lit' | 'selected' | 'wrong' | KeyTone
@@ -51,6 +56,8 @@ export interface KeyLabel {
   readonly text: string
   /** A mark's second line, over its text. */
   readonly caption?: string
+  /** A mark's note, under its text. */
+  readonly note?: string
 }
 
 /** One key's face: its fill, whether it is down or outlined, its label and its letter. */
@@ -85,20 +92,31 @@ function labelOf(
   key: Midi,
   mark: KeyMark | undefined,
   wrong: boolean,
-  namedKeys: NamedKeys,
+  text: KeyText,
 ): KeyLabel | undefined {
   if (mark?.label) {
-    return { kind: 'mark', text: mark.label, ...(mark.caption ? { caption: mark.caption } : {}) }
+    return {
+      kind: 'mark',
+      text: mark.label,
+      ...(mark.caption ? { caption: mark.caption } : {}),
+      ...(mark.note && text.markNotes ? { note: mark.note } : {}),
+    }
   }
   if (wrong) return { kind: 'mark', text: WRONG_MARK }
-  const name = nameOf(key, namedKeys)
+  const name = nameOf(key, text.namedKeys)
   return name === undefined ? undefined : { kind: 'name', text: name }
 }
+
+/** A chord's or a scale's tone marked on its key: its role's colour (or `tone`), its degree and its spelled note. */
+export const toneMark = (
+  tone: Pick<Tone, 'role' | 'degree' | 'note'>,
+  face: KeyTone = tone.role,
+): KeyMark => ({ tone: face, label: tone.degree, note: noteName(tone.note) })
 
 /** How a key looks: a wrong key over a lit one, a lit one over a mark, a mark over a selection; down over all. */
 export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
   const mark = states.marks?.get(key)
-  const label = labelOf(key, mark, states.wrong?.has(key) ?? false, text.namedKeys)
+  const label = labelOf(key, mark, states.wrong?.has(key) ?? false, text)
   const letter = text.letters?.get(key)
   return {
     fill: fillOf(key, states, mark),
@@ -145,4 +163,5 @@ export const sameLook = (a: KeyLook, b: KeyLook): boolean =>
   a.label?.kind === b.label?.kind &&
   a.label?.text === b.label?.text &&
   a.label?.caption === b.label?.caption &&
+  a.label?.note === b.label?.note &&
   a.letter === b.letter

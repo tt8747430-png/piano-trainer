@@ -2,11 +2,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
 import {
+  DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_TRAINER,
+  DEFAULT_FLOATING,
   defaultKeyboard,
 } from './types'
 
@@ -22,12 +24,16 @@ const restored = (state: unknown, version = SETTINGS_VERSION) => {
 
 // The test setup's matchMedia answers false: no fine pointer, so no typing by default.
 const DEFAULTS = {
+  titles: 'large',
   practice: DEFAULT_PRACTICE,
   trainer: DEFAULT_TRAINER,
+  floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   midi: DEFAULT_MIDI,
+  chordFinder: DEFAULT_CHORD_FINDER,
+  foldedSections: [],
 }
 
 describe('createSettingsStore', () => {
@@ -68,6 +74,7 @@ describe('createSettingsStore', () => {
   it('restores what was saved', () => {
     const saved = {
       theme: 'light',
+      titles: 'small',
       locale: 'ru',
       practice: {
         fingerNumbers: true,
@@ -79,12 +86,18 @@ describe('createSettingsStore', () => {
         recording: false,
       },
       trainer: { autoNext: true },
+      floating: { place: 'right', labels: true },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
         namedKeys: 'none',
+        markNotes: false,
         chordNames: false,
         typing: true,
+        dock: 'top',
+        folded: true,
+        keyLength: 'short',
+        railControls: ['zoom', 'pedal'],
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
@@ -96,8 +109,35 @@ describe('createSettingsStore', () => {
         touch: 'light',
         pedal: 'normal',
       },
+      chordFinder: {
+        remember: true,
+        inKeys: false,
+        slash: false,
+        chords: [
+          [48, 52, 55],
+          [53, 57, 60],
+        ],
+      },
+      foldedSections: ['chords.tensions'],
     }
     expect(restored(saved)).toEqual(saved)
+  })
+
+  it('keeps each chord remembered that is still the keys of one, the newest at most', () => {
+    const chords = [[60, 64, 67], 'C', [60, 'E'], [], [200, 60, 64], Array(11).fill(60)]
+    expect(restored({ chordFinder: { remember: 'yes', chords } }).chordFinder).toEqual({
+      remember: false,
+      inKeys: true,
+      slash: true,
+      chords: [
+        [60, 64, 67],
+        [60, 64],
+      ],
+    })
+    const many = Array.from({ length: 30 }, (_, i) => [40 + i])
+    const kept = restored({ chordFinder: { chords: many } }).chordFinder.chords
+    expect(kept).toHaveLength(24)
+    expect(kept.at(-1)).toEqual([69])
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
@@ -119,8 +159,21 @@ describe('createSettingsStore', () => {
       keySize: 'fit',
       swipe: 'scroll',
       namedKeys: 'c',
+      markNotes: true,
       chordNames: true,
       typing: true,
+      dock: 'bottom',
+      folded: false,
+      keyLength: 'long',
+      railControls: [
+        'zoom',
+        'noteNames',
+        'chordNames',
+        'typing',
+        'midiSound',
+        'glissando',
+        'pedal',
+      ],
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -130,16 +183,43 @@ describe('createSettingsStore', () => {
       keySize: 'huge',
       swipe: 'glissando',
       namedKeys: 'all',
+      markNotes: 'no',
       chordNames: 'no',
       typing: 'yes',
+      dock: 'top',
+      folded: true,
+      keyLength: 'tiny',
+      railControls: ['pedal', 'pedal', 'nope'],
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
       swipe: 'glissando',
       namedKeys: 'all',
+      markNotes: true,
       chordNames: true,
       typing: false,
+      dock: 'top',
+      folded: true,
+      keyLength: 'long',
+      railControls: ['pedal'],
     })
+  })
+
+  it('keeps each section folded once, an id a section could have, the newest at most', () => {
+    const ids = [
+      'chords.tensions',
+      7,
+      '',
+      'x'.repeat(65),
+      'chords.tensions',
+      'progressions.between',
+    ]
+    expect(restored({ foldedSections: ids }).foldedSections).toEqual([
+      'chords.tensions',
+      'progressions.between',
+    ])
+    const many = Array.from({ length: 120 }, (_, i) => `s${i}`)
+    expect(restored({ foldedSections: many }).foldedSections).toHaveLength(100)
   })
 
   it('keeps valid saved fields and defaults the ones it does not recognise', () => {
@@ -175,6 +255,17 @@ describe('createSettingsStore', () => {
 
   it('turns an auto-next that is not a boolean off', () => {
     expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
+  })
+
+  it('keeps the floating actions where saved, in the middle and wordless where not valid', () => {
+    expect(restored({ floating: { place: 'top', labels: 'yes' } }).floating).toEqual({
+      place: 'center',
+      labels: false,
+    })
+    expect(restored({ floating: { place: 'left', labels: true } }).floating).toEqual({
+      place: 'left',
+      labels: true,
+    })
   })
 
   it('gives a setting never saved its default, keeping the rest', () => {

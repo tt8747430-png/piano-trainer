@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { KEY_SIZES, nextNamedKeys, zoomKeySize } from './keyboard-choices'
+import {
+  KEY_SIZES,
+  nextNamedKeys,
+  railControls,
+  RAIL_CONTROLS,
+  zoomKeySize,
+} from './keyboard-choices'
 
 describe('the key sizes', () => {
   it('run from the whole piano to large keys, as a zoom does', () => {
@@ -21,5 +27,19 @@ describe('the named keys', () => {
     expect(nextNamedKeys('c')).toBe('all')
     expect(nextNamedKeys('all')).toBe('none')
     expect(nextNamedKeys('none')).toBe('c')
+  })
+})
+
+describe('the rail’s controls', () => {
+  it('reads a saved list as the controls it names, each once, in the rail’s order', () => {
+    expect(railControls(['pedal', 'zoom', 'pedal', 'nope', 3], RAIL_CONTROLS)).toEqual([
+      'zoom',
+      'pedal',
+    ])
+    expect(railControls([], RAIL_CONTROLS)).toEqual([])
+  })
+
+  it('keeps the current controls where the save is no list', () => {
+    expect(railControls('full', ['zoom'])).toEqual(['zoom'])
   })
 })

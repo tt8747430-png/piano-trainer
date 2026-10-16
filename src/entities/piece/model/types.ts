@@ -124,6 +124,7 @@ export type Entry = Piece | Listing
 
 /** The collections, songs first (in the order Songs lists them), then Practice's studies. */
 export const COLLECTION_IDS = [
+  'learning-songs',
   'bozhe-spasibo',
   'called-to-play',
   'called-to-play-2',
@@ -139,6 +140,7 @@ export const isCollectionId = isOneOf(COLLECTION_IDS)
  * holds `SONG_COLLECTIONS` to them).
  */
 export const SONG_COLLECTION_IDS = [
+  'learning-songs',
   'bozhe-spasibo',
   'called-to-play',
   'called-to-play-2',

@@ -7,11 +7,9 @@ const passingChords: Lesson = {
   id: 'passing-chords',
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },
   summary: {
-    en: 'A chord slipped in to lead into the next: a dominant 7th, a diminished 7th, a chromatic approach.',
-    ru: 'Аккорд, который ведёт в следующий: доминантсептаккорд, уменьшённый септаккорд, хроматический подход.',
+    en: 'Lead into any chord with a dominant, diminished or chromatic passing chord.',
+    ru: 'Вести в любой аккорд через доминанту, уменьшённый или хроматический аккорд.',
   },
-  level: 3,
-  module: 'accompaniment',
   sections: [
     {
       heading: {
@@ -23,8 +21,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A passing chord', ru: 'Проходящий аккорд' },
           text: {
-            en: 'leads into the next chord. The simplest is its dominant 7th: a major chord with a minor 7th, a 5th above.',
-            ru: 'ведёт в следующий аккорд. Самый простой — его доминантсептаккорд: мажорное трезвучие с малой септимой, на квинту выше.',
+            en: 'leads into the next chord. The simplest is that chord’s dominant 7th, a 5th above it.',
+            ru: 'ведёт в следующий аккорд. Самый простой — доминантсептаккорд к нему, на квинту выше.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C7', 'F'] },
@@ -38,7 +36,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to F in Passing chords', ru: 'Из C в F в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
       ],
     },
@@ -57,7 +55,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Dm in Passing chords', ru: 'Из C в Dm в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Dm' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Dm' },
         },
       ],
     },
@@ -76,7 +74,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'F to G in Passing chords', ru: 'Из F в G в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'F', to: 'G' },
+          target: { opens: 'between', key: C_MAJOR, from: 'F', to: 'G' },
         },
       ],
     },
@@ -95,7 +93,7 @@ const passingChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'C to Am in Passing chords', ru: 'Из C в Am в «Проходящих аккордах»' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'Am' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'Am' },
         },
       ],
     },
@@ -113,9 +111,14 @@ const passingChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'A passing chord takes a beat or half a bar from the chord before it. Use one under a long melody note, not under every change.',
-            ru: 'Проходящий аккорд забирает долю или полтакта у предыдущего. Ставьте его под долгую ноту мелодии, а не на каждую смену.',
+            en: 'A passing chord takes a beat from the chord before. Save it for a long melody note.',
+            ru: 'Проходящий аккорд забирает долю у предыдущего. Берегите его для долгой ноты мелодии.',
           },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'chords-by-ear' },
         },
       ],
     },

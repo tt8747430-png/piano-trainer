@@ -1,0 +1,83 @@
+import type { Lesson } from '@/entities/lesson'
+
+const fiveWays: Lesson = {
+  id: 'five-ways',
+  title: { en: 'The five ways', ru: 'Пять способов' },
+  summary: {
+    en: 'Play one progression five ways, then change ways chord by chord.',
+    ru: 'Играйте одну последовательность пятью способами, затем меняйте их.',
+  },
+  sections: [
+    {
+      heading: { en: 'Four chords of C major', ru: 'Четыре аккорда до мажора' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A progression', ru: 'Последовательность' },
+          text: {
+            en: 'is a series of chords played in order. This one uses four chords of C major.',
+            ru: '— аккорды, которые играют друг за другом. Здесь их четыре, все из до мажора.',
+          },
+        },
+        { kind: 'chords', symbols: ['C', 'Dm', 'G', 'C', 'F', 'C', 'G', 'C'] },
+        {
+          kind: 'note',
+          text: {
+            en: 'Play it in blocks until the changes come without thinking.',
+            ru: 'Играйте её целыми аккордами, пока смены не пойдут сами.',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Same chords, five ways', ru: 'Те же аккорды, пять способов' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Each way keeps the chords and changes what one hand does. Learn them in order.',
+            ru: 'Каждый способ сохраняет аккорды и меняет партию одной руки. Учите их по порядку.',
+          },
+        },
+        { kind: 'pattern', pattern: 'M1', piece: 'ex3' },
+        { kind: 'pattern', pattern: 'M2', piece: 'ex3' },
+        { kind: 'pattern', pattern: 'M3', piece: 'ex3' },
+        { kind: 'pattern', pattern: 'M4', piece: 'ex3' },
+        { kind: 'pattern', pattern: 'M5', piece: 'ex3' },
+        {
+          kind: 'text',
+          text: {
+            en: 'Once each way is easy, switch ways from chord to chord, as these studies do.',
+            ru: 'Когда все способы получаются, меняйте их от аккорда к аккорду, как в этих этюдах.',
+          },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'A new way on every chord, in C',
+            ru: 'Новый способ на каждом аккорде, до мажор',
+          },
+          target: { opens: 'piece', piece: 'exm1' },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'A new way on every chord, in A minor',
+            ru: 'Новый способ на каждом аккорде, ля минор',
+          },
+          target: { opens: 'piece', piece: 'exm2' },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'A new way on every chord, in D minor',
+            ru: 'Новый способ на каждом аккорде, ре минор',
+          },
+          target: { opens: 'piece', piece: 'exm3' },
+        },
+      ],
+    },
+  ],
+}
+
+export default fiveWays

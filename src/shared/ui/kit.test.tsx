@@ -7,7 +7,7 @@ import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { InversionChoice } from './InversionChoice'
-import { LevelMark } from './LevelMark'
+import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
 import { KeyChoice } from './KeyChoice'
 import { NoteChoice } from './NoteChoice'
@@ -24,7 +24,6 @@ import { ScreenHeader } from './ScreenHeader'
 import { Segmented } from './Segmented'
 import { SwitchRow } from './SwitchRow'
 import { ToggleChips } from './ToggleChips'
-import { ToneChip } from './ToneChip'
 import { TypedField } from './TypedField'
 
 const MODES = [
@@ -216,20 +215,6 @@ describe('ChordSizeField', () => {
   })
 })
 
-describe('ToneChip', () => {
-  it('shows a tone’s degree in its colour, then its note', () => {
-    render(
-      <>
-        <ToneChip face="3rd" degree="♭3" note="E♭" />
-        <ToneChip face="tonic" degree="1" note="C" />
-      </>,
-    )
-    expect(screen.getByText('♭3')).toHaveClass('bg-role-3rd')
-    expect(screen.getByText('♭3').parentElement).toHaveTextContent('♭3E♭')
-    expect(screen.getByText('1')).toHaveClass('bg-key-tonic')
-  })
-})
-
 describe('TypedField', () => {
   it('reports what is typed, and says under it why it cannot be read', async () => {
     const user = userEvent.setup()
@@ -284,9 +269,9 @@ describe('marks', () => {
     expect(screen.getByText('Gap')).toHaveClass('sr-only')
   })
 
-  it('names a level in words', () => {
-    render(<LevelMark level={2} />)
-    expect(screen.getByRole('img', { name: 'Level 2' })).toBeInTheDocument()
+  it('names a rank by its label', () => {
+    render(<RankMark rank={2} label="Intermediate" />)
+    expect(screen.getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
   })
 })
 

@@ -18,11 +18,9 @@ const twoFiveOne: Lesson = {
   id: 'two-five-one',
   title: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
   summary: {
-    en: 'Jazz’s cadence in 7th chords, its voices, in major and minor, in every key and in a song.',
-    ru: 'Главный оборот джаза в септаккордах — голоса, мажор и минор, все тональности и песня.',
+    en: 'Play the ii–V–I in major and minor, in every key.',
+    ru: 'Играть ii–V–I в мажоре и миноре во всех тональностях.',
   },
-  level: 3,
-  module: 'gorshkov',
   sections: [
     {
       heading: { en: 'Subdominant, dominant, tonic', ru: 'Субдоминанта, доминанта, тоника' },
@@ -35,13 +33,6 @@ const twoFiveOne: Lesson = {
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
-        {
-          kind: 'note',
-          text: {
-            en: 'That is the chords’ roots. The bass may take any note of the chord.',
-            ru: 'Речь об основных тонах. Бас может взять любую ноту аккорда.',
-          },
-        },
       ],
     },
     {
@@ -58,8 +49,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Tense notes fall a step and common notes stay. C6 can stand for Cmaj7.',
-            ru: 'Неустойчивые звуки опускаются на ступень, общие остаются. C6 может заменить Cmaj7.',
+            en: 'Tense notes fall a step and common notes stay. C6 can stand in for CMaj7.',
+            ru: 'Неустойчивые звуки опускаются на ступень, общие остаются. C6 может заменить CMaj7.',
           },
         },
       ],
@@ -70,22 +61,26 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In minor, ii is half-diminished, V takes the raised 7th degree, often with a ♭9, and the tonic is often a minor 6th chord.',
-            ru: 'В миноре ii полууменьшённый, V берёт повышенную VII ступень, часто с ♭9, а тоникой часто бывает минорный аккорд с секстой.',
+            en: 'In minor, ii is half-diminished and V is major, often with a ♭9. The tonic is often a minor 6th chord.',
+            ru: 'В миноре ii полууменьшённый, а V мажорный, часто с ♭9. Тоникой часто бывает минорный аккорд с секстой.',
           },
         },
-        { kind: 'progression', numerals: 'iiø7 V7 i', key: C_MINOR },
         { kind: 'chords', symbols: ['Dm7♭5', 'G7♭9', 'Cm6'] },
+        {
+          kind: 'link',
+          title: { en: 'The minor ii–V–i in the Player', ru: 'Минорный ii–V–i в плеере' },
+          target: { opens: 'player', numerals: 'ii° V i', key: C_MINOR, size: 'sevenths' },
+        },
       ],
     },
     {
-      heading: { en: 'ii–Vs everywhere', ru: 'Обороты 2-5 повсюду' },
+      heading: { en: 'ii–Vs everywhere', ru: 'Обороты ii–V повсюду' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A ii–V, or the whole ii–V–I, can visit another key for a moment, so it is often not counted in the home key. See the dominants fall a 5th too.',
-            ru: 'Оборот 2-5 или весь 2-5-1 может ненадолго уводить в другую тональность, поэтому его часто не соотносят с основной. Посмотрите: доминанты тоже идут вниз на квинту.',
+            en: 'A ii–V can visit another key for a moment. Chained, each lands on the next ii, the roots still falling in 5ths.',
+            ru: 'Оборот ii–V может ненадолго уводить в другую тональность. В цепочке каждый приходит в следующий ii, а основные тоны по-прежнему идут вниз по квинтам.',
           },
         },
         { kind: 'chords', symbols: ['Em7♭5', 'A7♭9', 'Dm7', 'G7', 'Cm7', 'F7', 'B♭6'] },
@@ -97,8 +92,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play it in close position, up by semitones or tones. Then go down the circle of fifths: each I turns into the next key’s ii, so the keys fall a tone (C, B♭, A♭…).',
-            ru: 'Играйте его в тесном расположении вверх по полутонам или тонам. Затем идите вниз по квинтовому кругу: каждый I превращается в ii следующей тональности, и тональности опускаются на тон (C, B♭, A♭…).',
+            en: 'Play it in close position, up by semitones. Then turn each I into the next key’s ii, so the keys fall a tone: C, B♭, A♭.',
+            ru: 'Играйте его в тесном расположении вверх по полутонам. Затем делайте каждый I следующим ii, и тональности опускаются на тон: C, B♭, A♭.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'G7', 'CMaj7', 'Cm7', 'F7', 'B♭Maj7'] },
@@ -217,13 +212,13 @@ const twoFiveOne: Lesson = {
       ],
     },
     {
-      heading: { en: 'In a song', ru: 'В песне' },
+      heading: { en: 'Two cadences in a row', ru: 'Две каденции подряд' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'In “As the Deer” ii–V–Is close the phrases on a long note. The second leads to Bm, so its ii and V are B minor’s.',
-            ru: 'В песне «Как олень спешит к воде» обороты ii–V–I завершают фразы на долгой ноте. Второй ведёт в си минор, поэтому его ii и V — из си минора.',
+            en: 'Songs close phrases with ii–V–Is. Below, the first lands on D. The second leads to Bm, so its ii and V are B minor’s.',
+            ru: 'Песни завершают фразы оборотами ii–V–I. Ниже первый приходит в ре мажор. Второй ведёт в си минор, поэтому его ii и V — из си минора.',
           },
         },
         {
@@ -244,47 +239,13 @@ const twoFiveOne: Lesson = {
           ],
         },
         {
-          kind: 'note',
-          text: {
-            en: 'F♯7♯9 sounds sharp: a major 7th spans the right hand.',
-            ru: 'F♯7♯9 звучит резко: по краям правой руки большая септима.',
-          },
-        },
-        {
           kind: 'link',
-          title: { en: '“As the Deer” in the Player', ru: '«Как олень спешит к воде» в плеере' },
-          target: { opens: 'piece', piece: 'olen' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'A13♭9 as two chords', ru: 'A13♭9 как два аккорда' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'A13♭9 is two chords: A7’s root and 7th in the left hand, F♯ major in the right.',
-            ru: 'A13♭9 — это два аккорда: основной тон и септима A7 в левой руке, фа-диез мажор в правой.',
-          },
-        },
-        {
-          kind: 'voicings',
-          key: D_MAJOR,
-          voicings: [
-            {
-              symbol: 'A13♭9',
-              caption: 'V',
-              degrees: '1 ♭7 | 13 ♭9 3',
-              hands: 'A2 G3 | F♯4 A♯4 C♯5',
-            },
-            { symbol: 'DMaj9', caption: 'I', degrees: '1 | 3 5 7 9', hands: 'D3 | F♯4 A4 C♯5 E5' },
-          ],
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'Start with plain triads and 7ths. Add alterations slowly, choosing those that suit the melody.',
-            ru: 'Начинайте с простых трезвучий и септаккордов. Альтерации добавляйте постепенно, выбирая те, что дополняют мелодию.',
+          title: { en: 'Both cadences in the Player', ru: 'Обе каденции в плеере' },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I iiø/vi V/vi vi',
+            key: D_MAJOR,
+            size: 'sevenths',
           },
         },
       ],

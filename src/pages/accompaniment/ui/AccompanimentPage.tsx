@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
 import { BackButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { AccompanimentTabs } from './AccompanimentTabs'
-import { BookLessons } from './BookLessons'
 import { BookPieces } from './BookPieces'
 import { PatternShelves } from './PatternShelves'
 
@@ -34,7 +33,6 @@ export function AccompanimentPage() {
       <div className="flex flex-col gap-8">
         <PatternShelves part={show} />
         {isMethodBookId(show) ? <BookPieces book={show} /> : null}
-        {isMethodBookId(show) ? <BookLessons book={show} /> : null}
       </div>
     </div>
   )

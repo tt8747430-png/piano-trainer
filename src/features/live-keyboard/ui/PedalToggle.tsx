@@ -4,7 +4,7 @@ import { usePedal, useServices } from '@/shared/lib/services'
 import { RailButton } from '@/shared/ui'
 
 /** The pedal mark a score prints under the staff (𝆮, in the music font). */
-const PEDAL_MARK = '\u{1D1AE}'
+export const PEDAL_MARK = '\u{1D1AE}'
 
 /**
  * The rail's sustain pedal, for a touch screen or a mouse: a tap puts it down or up; it shows the

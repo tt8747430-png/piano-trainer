@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
-import { noteLine } from './note-line'
+import { noteLine, type NoteLineMeter } from './note-line'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
-const timed = (text: string, meter: '2/4' | '3/4' | '4/4' = '4/4') =>
+const timed = (text: string, meter: NoteLineMeter = '4/4') =>
   noteLine(text, { hand: 'rh', meter, key: C_MAJOR }).notes.map((n) => [
     n.midi,
     n.startTick,
@@ -76,5 +76,43 @@ describe('noteLine', () => {
     expect(() => timed('X4')).toThrow(/X4/)
     expect(() => timed('C4/3')).toThrow(/C4\/3/)
     expect(() => timed('')).toThrow(RangeError)
+  })
+
+  it('leaves a rest’s beats silent', () => {
+    expect(timed('C4 r/4 E4/2')).toEqual([
+      [60, 0, 12],
+      [64, 24, 24],
+    ])
+  })
+
+  it('ties a note to the next of its pitch, into one note', () => {
+    expect(timed('C4/2 E4/2~ E4/4 D4/4 C4/2')).toEqual([
+      [60, 0, 24],
+      [64, 24, 36],
+      [62, 60, 12],
+      [60, 72, 24],
+    ])
+    expect(() => timed('C4/2~ D4/2')).toThrow(RangeError)
+    expect(() => timed('C4/2 C4/2~')).toThrow(RangeError)
+    expect(() => timed('r/2~ C4/2')).toThrow(RangeError)
+  })
+
+  it('counts a compound meter in dotted quarters: an eighth a third of the beat', () => {
+    expect(timed('C4/8 D4/8 E4/8 F4/4. G4/4 A4/8 G4/4.', '6/8')).toEqual([
+      [60, 0, 4],
+      [62, 4, 4],
+      [64, 8, 4],
+      [65, 12, 12],
+      [67, 24, 8],
+      [69, 32, 4],
+      [67, 36, 12],
+    ])
+    expect(noteLine('C4/4. D4/4.', { hand: 'rh', meter: '6/8', key: C_MAJOR }).bars).toEqual([
+      { startTick: 0, beats: 2 },
+    ])
+  })
+
+  it('needs a note, not only rests', () => {
+    expect(() => timed('r/1')).toThrow(RangeError)
   })
 })

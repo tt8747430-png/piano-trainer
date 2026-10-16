@@ -3,13 +3,11 @@ import type { Lesson } from '../model/types'
 
 const wholeAndHalfSteps: Lesson = {
   id: 'whole-and-half-steps',
-  title: { en: 'Whole and half steps', ru: 'Тоны и полутоны' },
+  title: { en: 'Half steps, whole steps, sharps and flats', ru: 'Полутоны, тоны, диезы и бемоли' },
   summary: {
-    en: 'The smallest step on the piano, the step of two, and why one key can have two names.',
-    ru: 'Самый маленький шаг на клавиатуре, шаг вдвое больше и почему у одной клавиши бывает два имени.',
+    en: 'Find half and whole steps and name sharps and flats.',
+    ru: 'Находить полутоны и тоны и называть диезы и бемоли.',
   },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'The half step', ru: 'Полутон' },
@@ -18,8 +16,8 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'goes to the very next key, black or white. E–F and B–C are the only white pairs with no black key between.',
-            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные белые пары без чёрной клавиши между ними.',
+            en: 'goes to the very next key, black or white. E–F and B–C are the only white-key half steps.',
+            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные полутоны между белыми клавишами.',
           },
         },
         { kind: 'interval', root: note('E'), interval: 'm2' },
@@ -38,6 +36,27 @@ const wholeAndHalfSteps: Lesson = {
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M2' },
+        { kind: 'interval', root: note('E'), interval: 'M2' },
+      ],
+    },
+    {
+      heading: { en: 'Sharp, flat, natural', ru: 'Диез, бемоль, бекар' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'A sharp (♯) raises a note a half step, a flat (♭) lowers it, and a natural (♮) cancels either.',
+            ru: 'Диез (♯) повышает ноту на полутон, бемоль (♭) понижает, а бекар (♮) отменяет и то и другое.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'F4 F#4 F4/2 B4 B♭4 B4/2' },
+        {
+          kind: 'note',
+          text: {
+            en: 'A sign written in a bar holds to the end of that bar.',
+            ru: 'Знак, написанный в такте, действует до конца этого такта.',
+          },
+        },
       ],
     },
     {
@@ -51,6 +70,23 @@ const wholeAndHalfSteps: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C#4/2 D♭4/2' },
+      ],
+    },
+    {
+      heading: { en: 'Twelve half steps make an octave', ru: 'Двенадцать полутонов — октава' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Every key from C to the next C is twelve half steps.',
+            ru: 'Все клавиши от до до следующего до — двенадцать полутонов.',
+          },
+        },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4/8 C#4/8 D4/8 D#4/8 E4/8 F4/8 F#4/8 G4/8 G#4/8 A4/8 A#4/8 B4/8 C5/2',
+        },
       ],
     },
     {
@@ -71,6 +107,21 @@ const wholeAndHalfSteps: Lesson = {
             ru: 'Сыграйте си и ноту на полутон выше.',
           },
           answer: { notes: ['B', 'C'], rising: true },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play B♭.', ru: 'Сыграйте си-бемоль.' },
+          answer: { notes: ['B♭'] },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Build a scale in the Quiz', ru: 'Построение гамм в тестах' },
+          target: { opens: 'quiz', trainer: 'build-scale' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'The C major scale in the Player', ru: 'Гамма до мажор в плеере' },
+          target: { opens: 'exercise', exercise: 'scale', root: note('C') },
         },
       ],
     },

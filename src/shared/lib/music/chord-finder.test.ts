@@ -107,4 +107,71 @@ describe('nameChords', () => {
     expect(named(61, 64, 68)[0]).toBe('C#m')
     expect(named(61, 65, 68)[0]).toBe('D♭')
   })
+
+  it('names an inversion only whole: a slash chord leaves no tone out but the 5th over its 3rd or 7th', () => {
+    expect(named(48, 50, 52)).toEqual([])
+    expect(named(48, 53, 55)).toEqual(['Csus4', 'Fsus2/C'])
+    expect(named(48, 50, 55)).toEqual(['Csus2'])
+    expect(named(48, 52, 54, 58)).toEqual(['C7♭5', 'F#7♭5/C'])
+    expect(named(52, 58, 60)).toEqual(['C7/E'])
+    expect(named(48, 52, 53, 55)).toEqual(['Cadd4'])
+  })
+
+  it('names a slash chord with no added tone but its 6th', () => {
+    expect(named(48, 52, 55, 58, 62)).toEqual(['C9'])
+    expect(named(48, 52, 55, 62)).toEqual(['Cadd9'])
+    expect(named(48, 52, 55, 69)).toEqual(['C6', 'Am7/C'])
+    expect(named(48, 52, 55, 59, 62)).toEqual(['CMaj9'])
+  })
+
+  it('leaves the 5th out of a suspended chord only as a 7sus4', () => {
+    expect(named(48, 53, 58)[0]).toBe('C7sus4')
+    expect(named(48, 53, 58, 62)[0]).toBe('C9sus4')
+    expect(named(48, 50, 58)).toEqual([])
+    expect(named(48, 50, 59)).toEqual([])
+    expect(named(48, 53, 59)).toEqual([])
+    expect(named(48, 50, 53, 59)).toEqual([])
+    expect(named(48, 53, 57, 59)).toEqual([])
+  })
+
+  it('leaves the 3rd out of a plain 7th chord alone, never one that adds a tone', () => {
+    expect(named(51, 58, 60, 62)).toEqual(['Cm9/E♭'])
+    expect(named(49, 56, 58, 60)).toEqual(['B♭m9/D♭'])
+    expect(named(51, 58, 60, 62)).not.toContain('E♭7(add13)')
+  })
+
+  it('keeps the 9th of an 11th chord over a major 3rd, where the 11th clashes with it', () => {
+    expect(named(48, 52, 53, 58)).not.toContain('C11')
+    expect(named(48, 52, 53, 59)).not.toContain('CMaj11')
+    expect(named(48, 52, 55, 58, 62, 65)[0]).toBe('C11')
+  })
+
+  it('leaves the 5th out of a slash chord only under a minor 7th', () => {
+    expect(named(60, 61, 64)).toEqual([])
+    expect(named(59, 60, 64)).toEqual([])
+    expect(named(48, 55, 56)).toEqual([])
+    expect(named(47, 48, 50, 52)).toEqual([])
+    expect(named(46, 52, 60)).toEqual(['C7/B♭'])
+    expect(named(48, 50, 54)).toEqual(['D7/C'])
+  })
+
+  it('names a slash chord over its 3rd, 5th, 7th or added 6th, never over a tension or a suspended tone', () => {
+    expect(named(48, 51, 55, 58, 62, 65)).toEqual(['Cm11'])
+    expect(named(48, 50, 55)).toEqual(['Csus2'])
+    expect(named(53, 55, 60)).toEqual(['Fsus2'])
+    expect(named(43, 48, 50)).toEqual(['Gsus4', 'Csus2/G'])
+    expect(named(57, 60, 64, 67)).toEqual(['Am7', 'C6/A'])
+  })
+
+  it('names a 6/9 as one, however close its 9th', () => {
+    expect(named(60, 62, 64, 67, 69)[0]).toBe('C6/9')
+    expect(named(60, 62, 63, 67, 69)[0]).toBe('Cm6/9')
+  })
+
+  it('spells the bass of a slash chord as the key writes it, never with a double accidental or B# for C', () => {
+    const C = { tonic: note('C'), minor: false }
+    const inKey = (...keys: number[]) => nameChords(keys.map(midi), C).map((each) => each.symbol)
+    expect(inKey(48, 52, 56)).toEqual(['C+', 'E+/C', 'A♭+/C'])
+    expect(inKey(48, 51, 54, 57)).toEqual(['C°7', 'E♭°7/C', 'F#°7/C', 'A°7/C'])
+  })
 })

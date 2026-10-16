@@ -49,32 +49,78 @@ describe('Settings', () => {
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 3)).toEqual([
+    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 5)).toEqual([
       'Theme',
+      'Layout',
       'Keyboard',
+      'Floating buttons',
       'MIDI keyboard',
     ])
+  })
+
+  it('stands the floating buttons where chosen and has them say their names, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    await user.click(await screen.findByRole('radio', { name: 'Right' }))
+    expect(settingsStore.getState().floating.place).toBe('right')
+    await user.click(screen.getByRole('switch', { name: /^Show their names/ }))
+    expect(settingsStore.getState().floating.labels).toBe(true)
+  })
+
+  it('makes every screen’s title small, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const titles = await screen.findByRole('radiogroup', { name: 'Page titles' })
+    await user.click(within(titles).getByRole('radio', { name: 'Small' }))
+    expect(settingsStore.getState().titles).toBe('small')
+    expect(document.documentElement.dataset['titles']).toBe('small')
   })
 
   it('sets up the keyboard, and saves each change', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
-    const keys = await screen.findByRole('radiogroup', { name: 'Keys' })
+    const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: 'Play from the computer keyboard' }))
-    await user.click(screen.getByRole('switch', { name: 'Name the chords played' }))
+    await user.click(screen.getByRole('switch', { name: /^Play from the computer keyboard/ }))
+    await user.click(screen.getByRole('switch', { name: /^Name the chords played/ }))
+    const swipe = screen.getByRole('radiogroup', { name: 'A swipe on the keys' })
+    await user.click(within(swipe).getByRole('radio', { name: 'Plays' }))
     expect(settingsStore.getState().keyboard).toMatchObject({
       keySize: 'large',
       typing: true,
       chordNames: false,
+      swipe: 'glissando',
     })
   })
 
-  it('names each keyboard choice as a row of its group, not as a second heading', async () => {
+  it('says what each keyboard choice does, under its name', async () => {
     await renderApp('/settings')
-    const keys = await screen.findByText('Keys')
+    const [keys] = await screen.findAllByText('Key size')
     expect(keys).toHaveClass('text-foreground')
-    expect(keys).not.toHaveClass('text-muted-foreground')
+    expect(keys?.nextElementSibling).toHaveTextContent(/fills the width/)
+  })
+
+  it('keeps on the bar over the keys only the buttons chosen, in the bar’s order', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const bar = await screen.findByRole('group', { name: 'Buttons on the bar' })
+    await user.click(within(bar).getByRole('button', { name: /^Glissando/ }))
+    expect(within(bar).getByRole('button', { name: /^Glissando/ })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+    await user.click(within(bar).getByRole('button', { name: /^Glissando/ }))
+    expect(settingsStore.getState().keyboard.railControls).toEqual([
+      'zoom',
+      'noteNames',
+      'chordNames',
+      'typing',
+      'midiSound',
+      'glissando',
+      'pedal',
+    ])
+    await user.click(within(bar).getByRole('button', { name: /^Note names/ }))
+    expect(settingsStore.getState().keyboard.railControls).not.toContain('noteNames')
   })
 
   it('saves a new language', async () => {
@@ -102,10 +148,10 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }))
-    await user.click(await screen.findByRole('combobox', { name: 'Keyboard' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Keyboard listened to' }))
     await user.click(await screen.findByRole('option', { name: 'Keyboard' }))
-    await user.click(screen.getByRole('switch', { name: /Play MIDI keys in the app/ }))
-    await user.click(screen.getByRole('switch', { name: /Use the keyboard’s speaker/ }))
+    await user.click(screen.getByRole('switch', { name: /Hear what you play in the app/ }))
+    await user.click(screen.getByRole('switch', { name: /Play the app’s music on the keyboard/ }))
     const choose = (group: string, value: string) =>
       user.click(
         within(screen.getByRole('radiogroup', { name: group })).getByRole('radio', { name: value }),
@@ -130,7 +176,7 @@ describe('Settings', () => {
     act(() => setMidi(settingsStore, { device: 'Piano' }))
     act(() => midi.setStatus({ state: 'away', device: 'Piano', devices: ['Keyboard'] }))
     expect(await screen.findByText('Piano is not connected.')).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Keyboard' }))
+    await user.click(screen.getByRole('combobox', { name: 'Keyboard listened to' }))
     expect(await screen.findByRole('option', { name: 'Piano (not connected)' })).toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: 'Any keyboard' }))
     expect(settingsStore.getState().midi.device).toBeNull()

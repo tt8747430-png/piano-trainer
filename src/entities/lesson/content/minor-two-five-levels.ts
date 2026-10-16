@@ -8,11 +8,9 @@ const minorTwoFiveLevels: Lesson = {
   id: 'minor-two-five-levels',
   title: { en: 'Minor ii–V–i: beginner to pro', ru: 'Минорный ii–V–i: от новичка до профи' },
   summary: {
-    en: 'One cadence in C minor, voiced at four levels: shells, 9ths and 11ths, altered dominants, a tritone substitute.',
-    ru: 'Один оборот в до миноре в четырёх уровнях: двузвучия, ноны и ундецимы, альтерированные доминанты, тритоновая замена.',
+    en: 'Voice the minor ii–V–i four ways, each richer than the last.',
+    ru: 'Играть минорный ii–V–i в четырёх расположениях, каждое богаче прежнего.',
   },
-  level: 4,
-  module: 'accompaniment',
   sections: [
     {
       heading: { en: 'Level 1: Beginner', ru: 'Уровень 1: новичок' },
@@ -20,8 +18,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Two notes in each hand. The numbers say what each key is, left hand first.',
-            ru: 'По два звука в каждой руке. Цифры говорят, чем является каждый звук, начиная с левой руки.',
+            en: 'Two notes in each hand. The numbers name each note’s degree, left hand first.',
+            ru: 'По два звука в каждой руке. Цифры называют ступень каждого звука, начиная с левой руки.',
           },
         },
         {
@@ -74,8 +72,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Between the chords the right hand sings a note: F, the ♭3, after the ii, and A♭, the ♭9, after the V.',
-            ru: 'Между аккордами правая рука поёт звук: фа, ♭3, после ii, и ля-бемоль, ♭9, после V.',
+            en: 'Between chords the right hand sings one note: F after the ii, A♭ after the V.',
+            ru: 'Между аккордами правая рука поёт один звук: фа после ii, ля-бемоль после V.',
           },
         },
       ],
@@ -113,8 +111,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Melody notes between: F after the ii, B, the 3rd, after the V, and C after the i.',
-            ru: 'Звуки мелодии между аккордами: фа после ii, си, терция, после V и до после i.',
+            en: 'Notes between: F after the ii, B after the V, C after the i.',
+            ru: 'Звуки между аккордами: фа после ii, си после V, до после i.',
           },
         },
       ],
@@ -125,8 +123,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A♭13 slides into G7: the tritone substitute of G’s own dominant. Then the dominant changes colour, and the i moves inside.',
-            ru: 'A♭13 соскальзывает в G7: тритоновая замена доминанты к G. Затем доминанта меняет краску, а i движется внутри.',
+            en: 'A♭13, the tritone substitute for G’s own dominant, slides into G7. The dominant then changes colour, and the i moves inside.',
+            ru: 'A♭13, тритоновая замена доминанты к G, соскальзывает в G7. Затем доминанта меняет краску, а i движется внутри.',
           },
         },
         {
@@ -186,44 +184,6 @@ const minorTwoFiveLevels: Lesson = {
       ],
     },
     {
-      heading: { en: 'In every key', ru: 'Во всех тональностях' },
-      blocks: [
-        { kind: 'progression', numerals: 'ii° V i', key: C_MINOR, size: 'ninths' },
-        {
-          kind: 'text',
-          text: {
-            en: 'Take one level at a time round the circle of fifths. Say each chord’s numbers as you play.',
-            ru: 'Проходите по одному уровню по квинтовому кругу. Называйте цифры каждого аккорда, пока играете.',
-          },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Round the circle of fifths', ru: 'По квинтовому кругу' },
-          target: {
-            opens: 'player',
-            numerals: 'ii° V i',
-            key: C_MINOR,
-            size: 'ninths',
-            walk: 'fifths',
-          },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'To every chord of the minor key',
-            ru: 'К каждому аккорду минорной тональности',
-          },
-          target: {
-            opens: 'player',
-            numerals:
-              'ii° V i ii°/ii V/ii ii° ii/III V/III III ii°/iv V/iv iv ii°/v V/v v ii/VI V/VI VI ii/VII V/VII VII',
-            key: C_MINOR,
-            size: 'sevenths',
-          },
-        },
-      ],
-    },
-    {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
@@ -241,6 +201,34 @@ const minorTwoFiveLevels: Lesson = {
             ru: 'Сыграйте основу G7: терцию и септиму.',
           },
           answer: { notes: ['B', 'F'] },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'The minor ii–V–i round the circle of fifths',
+            ru: 'Минорный ii–V–i по квинтовому кругу',
+          },
+          target: {
+            opens: 'player',
+            numerals: 'ii° V i',
+            key: C_MINOR,
+            size: 'ninths',
+            walk: 'fifths',
+          },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'A ii–V–i to every chord of the minor key',
+            ru: 'ii–V–i к каждому аккорду минорной тональности',
+          },
+          target: {
+            opens: 'player',
+            numerals:
+              'ii° V i ii°/ii V/ii ii° ii/III V/III III ii°/iv V/iv iv ii°/v V/v v ii/VI V/VI VI ii/VII V/VII VII',
+            key: C_MINOR,
+            size: 'sevenths',
+          },
         },
       ],
     },

@@ -2,9 +2,10 @@ import {
   createMemoryHistory,
   createRootRoute,
   createRouter,
+  Link,
   RouterProvider,
 } from '@tanstack/react-router'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { lessonById, type Lesson } from '@/entities/lesson'
@@ -15,13 +16,16 @@ import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
-import { LessonView } from './LessonView'
+import { FloatingHost } from '@/shared/ui'
+import { LessonView, type UpLink } from './LessonView'
 
 function firstLesson(): Lesson {
   const lesson = lessonById('reading-chord-symbols')
   if (!lesson) throw new Error('the first lesson is missing')
   return lesson
 }
+
+const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
 async function renderLesson(lesson: Lesson = firstLesson()) {
@@ -32,13 +36,15 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
     finePointer: false,
   })
   const router = createRouter({
-    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} /> }),
+    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} up={UP} /> }),
     history: createMemoryHistory(),
   })
   render(
     <SettingsStoreProvider store={store}>
       <ServicesProvider services={{ audio, midi: createFakeMidi() }}>
-        <RouterProvider router={router} />
+        <FloatingHost place="center" labels={false} screen="/">
+          <RouterProvider router={router} />
+        </FloatingHost>
       </ServicesProvider>
     </SettingsStoreProvider>,
   )
@@ -59,12 +65,15 @@ describe('LessonView', () => {
       'Chord numbers: 2 or 9? 6 or 13?',
       '9ths, 13ths and alterations',
       'Naming any chord',
+      'Try it',
     ])
   })
 
   it('marks the section being read in its contents', async () => {
+    const user = userEvent.setup()
     await renderLesson()
-    const contents = screen.getByRole('navigation', { name: 'In this lesson' })
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    const contents = await screen.findByRole('navigation', { name: 'In this lesson' })
     const [first, second] = within(contents).getAllByRole('link')
     await waitFor(() => expect(first).toHaveAttribute('data-reading'))
     expect(second).not.toHaveAttribute('data-reading')
@@ -72,10 +81,32 @@ describe('LessonView', () => {
     expect(first).not.toHaveAttribute('aria-current')
   })
 
+  it('opens its contents in a sheet off its bar, with what it is part of, which a link followed closes', async () => {
+    const user = userEvent.setup()
+    await renderLesson()
+    await user.click(screen.getByRole('button', { name: /^In this lesson: section \d of 7$/ }))
+    const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
+    expect(within(sheet).getByRole('link', { name: /^Back to the journey/ })).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('link', { name: 'Numbers and 7ths' }))
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: 'In this lesson' })).not.toBeInTheDocument(),
+    )
+  })
+
+  it('steps through its sections from its floating bar, the first’s ‹ off', async () => {
+    await renderLesson()
+    const stepper = screen.getByRole('toolbar', { name: 'Lesson' })
+    expect(within(stepper).getByRole('button', { name: 'Previous section' })).toBeDisabled()
+    expect(within(stepper).getByRole('link', { name: 'Next section' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/#section-2$/),
+    )
+  })
+
   it('plays a chord example and marks its tones on the keys', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
-    const cm = screen.getByRole('button', { name: 'Cm' })
+    const cm = await screen.findByRole('button', { name: /^Play bar \d+, Cm$/ }, { timeout: 5000 })
     await user.click(cm)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([60, 63, 67])
     expect(cm).toHaveAttribute('aria-pressed', 'true')
@@ -86,10 +117,11 @@ describe('LessonView', () => {
   it('stops an example on a second tap', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
-    await user.click(screen.getByRole('button', { name: 'C9' }))
-    await user.click(screen.getByRole('button', { name: 'C9' }))
+    const c9 = await screen.findByRole('button', { name: /^Play bar \d+, C9$/ }, { timeout: 5000 })
+    await user.click(c9)
+    await user.click(c9)
     expect(audio.stops).toBeGreaterThan(0)
-    expect(screen.getByRole('button', { name: 'C9' })).toHaveAttribute('aria-pressed', 'false')
+    expect(c9).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('writes each example as the lesson does, though the kernel names two of them alike', async () => {
@@ -97,7 +129,13 @@ describe('LessonView', () => {
     const numbers = screen.getByRole('heading', { name: 'Chord numbers: 2 or 9? 6 or 13?' })
     const section = numbers.parentElement ?? document.body
     for (const name of ['C2', 'Cadd9', 'C6']) {
-      expect(within(section).getByRole('button', { name })).toBeInTheDocument()
+      expect(
+        await within(section).findByRole(
+          'button',
+          { name: new RegExp(`^Play bar \\d+, ${name}$`) },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument()
     }
   })
 })
@@ -106,8 +144,6 @@ const WORKSHEET: Lesson = {
   id: 'worksheet',
   title: { en: 'A worksheet', ru: 'Листок' },
   summary: { en: 'Every block.', ru: 'Каждый блок.' },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Examples', ru: 'Примеры' },
@@ -170,7 +206,7 @@ describe('LessonView’s worksheet', () => {
     expect(chord).toHaveTextContent('1 ♭5 | ♭7 ♭3')
     await user.click(chord)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65])
-    const row = screen.getByRole('button', { name: /G7♭13/ }).closest('ul')?.parentElement
+    const row = screen.getByRole('button', { name: /^G7♭13/ }).closest('ul')?.parentElement
     await user.click(within(row ?? document.body).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65, 53, 59, 63, 67])
   })
@@ -188,11 +224,27 @@ describe('LessonView’s worksheet', () => {
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([43, 47, 50, 53, 57])
   })
 
+  it('marks each note of a line on its staff as it sounds', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const line = screen.getAllByRole('figure').at(-1) ?? document.body
+    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    await user.click(within(line).getByRole('button', { name: 'Play' }))
+    const started = audio.played.at(-1)
+    const second = started?.sounds[1]
+    act(() => audio.setNow((started?.at ?? 0) + (second?.at ?? 0)))
+    const marked = () => [...line.querySelectorAll('.vf-selected[data-tick]')]
+    await waitFor(() => expect(marked().length).toBeGreaterThan(0))
+    const first = marked()[0]?.getAttribute('data-tick')
+    act(() => audio.setNow((started?.at ?? 0) + (started?.sounds[2]?.at ?? 0)))
+    await waitFor(() => expect(marked()[0]?.getAttribute('data-tick')).not.toBe(first))
+  })
+
   it('answers a question on the keys: counted, judged at its last note, fixed and right', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     await user.click(within(keyboard).getByRole('button', { name: 'E4' }))
@@ -214,7 +266,7 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const question = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(question).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
     await user.click(within(question).getByRole('button', { name: 'Show the answer' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(new Set(sounds.map((sound) => (sound.kind === 'note' ? sound.at : null))).size).toBe(2)
@@ -224,14 +276,14 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     await renderLesson(WORKSHEET)
     const first = screen.getByRole('group', { name: 'Play E minor.' })
-    await user.click(within(first).getByRole('button', { name: 'Answer on the keys' }))
+    await user.click(within(first).getByRole('button', { name: 'Answer' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     await user.click(within(first).getByRole('button', { name: 'Show the answer' }))
     expect(within(keyboard).getByRole('button', { name: 'G4' })).toHaveTextContent('♭3')
     const second = screen.getByRole('group', { name: 'Play a major third above F.' })
-    await user.click(within(second).getByRole('button', { name: 'Answer on the keys' }))
-    expect(within(first).getByRole('button', { name: 'Answer on the keys' })).toBeInTheDocument()
+    await user.click(within(second).getByRole('button', { name: 'Answer' }))
+    expect(within(first).getByRole('button', { name: 'Answer' })).toBeInTheDocument()
     expect(within(keyboard).getByRole('button', { name: 'G4' })).not.toHaveTextContent('♭3')
   })
 
@@ -254,8 +306,6 @@ const ACCOMPANIMENT: Lesson = {
   id: 'accompaniment',
   title: { en: 'Accompaniment', ru: 'Аккомпанемент' },
   summary: { en: 'Patterns.', ru: 'Фактуры.' },
-  level: 1,
-  module: 'fundamentals',
   sections: [
     {
       heading: { en: 'Ways', ru: 'Способы' },
@@ -264,13 +314,13 @@ const ACCOMPANIMENT: Lesson = {
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
         {
           kind: 'link',
-          title: { en: 'C to F in Passing chords', ru: 'Из C в F' },
-          target: { opens: 'passing-chords', key: C_MAJOR, from: 'C', to: 'F' },
+          title: { en: 'C to F, between', ru: 'Из C в F' },
+          target: { opens: 'between', key: C_MAJOR, from: 'C', to: 'F' },
         },
         {
           kind: 'link',
-          title: { en: 'E in Reharmonise', ru: 'Ми в реармонизации' },
-          target: { opens: 'reharmonise', key: C_MAJOR, note: note('E') },
+          title: { en: 'E harmonised', ru: 'Ми, гармонизованная' },
+          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
         },
         {
           kind: 'link',
@@ -294,10 +344,18 @@ describe('LessonView’s accompaniment', () => {
       ],
     })
     // Numbered on from line to line, each bar's button once; the engraver's first staves take a while.
-    const bars = await screen.findAllByRole('button', { name: /^Play bar \d+$/ }, { timeout: 5000 })
-    expect(bars.map((bar) => bar.ariaLabel)).toEqual(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `Play bar ${n}`),
-    )
+    const bars = await screen.findAllByRole('button', { name: /^Play bar \d+/ }, { timeout: 5000 })
+    expect(bars.map((bar) => bar.ariaLabel?.match(/^Play bar (\d+)/)?.[1])).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+    ])
     const [first, , , fourth, fifth] = bars
     expect(fourth?.parentElement).toBe(first?.parentElement)
     expect(fifth?.parentElement).not.toBe(fourth?.parentElement)
@@ -319,11 +377,16 @@ describe('LessonView’s accompaniment', () => {
 
   it('plays a progression as the tool’s row, and opens it in Progressions', async () => {
     await renderLesson(ACCOMPANIMENT)
-    expect(
-      within(screen.getByRole('list', { name: 'Chords' }))
-        .getAllByRole('button')
-        .map((button) => button.textContent),
-    ).toEqual(['Dm7ii', 'G7V', 'CMaj7I'])
+    const row = screen.getAllByRole('group', { name: 'Chords' })[0] ?? document.body
+    await waitFor(
+      () =>
+        expect(
+          within(row)
+            .getAllByRole('button', { name: /^Play bar \d+, / })
+            .map((button) => button.textContent),
+        ).toEqual(['Dm7ii', 'G7V', 'CMaj7I']),
+      { timeout: 5000 },
+    )
     const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
     expect(tool).toMatch(/^\/practice\/progressions\?/)
     expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)
@@ -333,13 +396,16 @@ describe('LessonView’s accompaniment', () => {
 
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
-    const passing = screen.getByRole('link', { name: 'C to F in Passing chords' })
-    expect(passing.getAttribute('href')).toMatch(/^\/practice\/progressions\/passing\?/)
-    expect(passing.getAttribute('href')).toMatch(/[?&]from=C(&|$)/)
-    expect(passing.getAttribute('href')).toMatch(/[?&]to=F(&|$)/)
-    const reharmonise = screen.getByRole('link', { name: 'E in Reharmonise' }).getAttribute('href')
-    expect(reharmonise).toMatch(/^\/practice\/progressions\/reharmonise\?/)
-    expect(reharmonise).toMatch(/[?&]note=E(&|$)/)
+    // Between two chords, on Progressions: the pair as a line in its key.
+    expect(screen.getByRole('link', { name: 'C to F, between' })).toHaveAttribute(
+      'href',
+      '/practice/progressions?key=C&p=I-IV',
+    )
+    // A melody note harmonised, on the Key view of its key.
+    expect(screen.getByRole('link', { name: 'E harmonised' })).toHaveAttribute(
+      'href',
+      '/practice/scales?root=C&kind=major&show=key&melody=E',
+    )
     expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
       '/play/otche?pattern=r4',
     )

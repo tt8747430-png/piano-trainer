@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { FoldBody } from './FoldBody'
 
 /**
  * A titled group that folds under its heading: the heading is its button, with what the group holds
@@ -64,9 +65,9 @@ export function FoldGroup({
           />
         </div>
       )}
-      <ul id={listId} hidden={!open} className={cn('mt-1', listClassName)}>
-        {children}
-      </ul>
+      <FoldBody id={listId} open={open}>
+        <ul className={cn('mt-1', listClassName)}>{children}</ul>
+      </FoldBody>
     </section>
   )
 }

@@ -6,7 +6,6 @@ import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
 import { StepPanel } from '@/widgets/step-panel'
-import { KeyTools } from './KeyTools'
 import { PiecesInKey } from './PiecesInKey'
 import { ScaleTabs } from './ScaleTabs'
 
@@ -40,7 +39,6 @@ export function ScalesPage() {
       />
       {step ? <StepPanel step={step} /> : null}
       <ScaleExplorer scale={scale} onChange={onChange} />
-      {key ? <KeyTools musicKey={key} /> : null}
       {key ? <PiecesInKey musicKey={key} /> : null}
     </div>
   )
