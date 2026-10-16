@@ -5,8 +5,8 @@ const chordFamily: Lesson = {
   id: 'chord-family',
   title: { en: 'The chord family of a key', ru: 'Аккорды тональности' },
   summary: {
-    en: 'One scale, seven chords: their Roman numerals, the three main ones and the key’s 7th chords.',
-    ru: 'Одна гамма — семь аккордов: их римские цифры, три главных и септаккорды тональности.',
+    en: 'Name a key’s seven chords by Roman numeral and play them.',
+    ru: 'Называйте семь аккордов тональности римскими цифрами и играйте их.',
   },
   sections: [
     {
@@ -15,7 +15,7 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Build a triad on each note of C major, from the scale’s notes only. You get three major, three minor and one diminished.',
+            en: 'Build a triad on each note of C major from the scale’s notes only. You get three major, three minor and one diminished.',
             ru: 'Постройте трезвучие на каждой ноте до мажора только из нот гаммы. Получатся три мажорных, три минорных и одно уменьшённое.',
           },
         },
@@ -28,8 +28,8 @@ const chordFamily: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each chord is named by its degree: upper case for major, lower case for minor, ° for diminished. The numerals are the same in every major key.',
-            ru: 'Каждый аккорд называют цифрой его ступени: заглавной — мажорный, строчной — минорный, со знаком ° — уменьшённый. Цифры одни для всех мажорных тональностей.',
+            en: 'Each chord is named by its degree: upper case for major, lower case for minor, ° for diminished. G major has the same numerals.',
+            ru: 'Аккорд называют цифрой его ступени: заглавной — мажорный, строчной — минорный, со знаком ° — уменьшённый. В соль мажоре цифры те же.',
           },
         },
         { kind: 'chords', symbols: ['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'], apart: true },
@@ -47,13 +47,6 @@ const chordFamily: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
-        {
-          kind: 'text',
-          text: {
-            en: 'Many hymns and folk songs use little else.',
-            ru: 'Многим гимнам и народным песням других почти не нужно.',
-          },
-        },
       ],
     },
     {
@@ -71,11 +64,6 @@ const chordFamily: Lesson = {
           symbols: ['CMaj7', 'Dm7', 'Em7', 'FMaj7', 'G7', 'Am7', 'Bm7♭5'],
           apart: true,
         },
-        {
-          kind: 'link',
-          title: { en: 'A key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
-          target: { opens: 'quiz', trainer: 'key-degrees' },
-        },
       ],
     },
     {
@@ -90,6 +78,11 @@ const chordFamily: Lesson = {
           kind: 'question',
           ask: { en: 'Play the ii chord of F major.', ru: 'Сыграйте аккорд ii ступени фа мажора.' },
           answer: { chord: 'Gm' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'A key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
+          target: { opens: 'quiz', trainer: 'key-degrees' },
         },
         {
           kind: 'link',

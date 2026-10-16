@@ -4,8 +4,8 @@ const dottedNotesAndTies: Lesson = {
   id: 'dotted-notes-and-ties',
   title: { en: 'Dotted notes, ties and the pickup', ru: 'Точки, лиги и затакт' },
   summary: {
-    en: 'Lengths the plain values cannot write: the dot, the tie across the barline, the pickup before the first bar, and a rest for every value.',
-    ru: 'Длительности, которых нет среди простых: точка, лига через тактовую черту, затакт перед первым тактом и пауза каждой длительности.',
+    en: 'Read and count dots, ties, rests and the pickup.',
+    ru: 'Читайте и считайте точки, лиги, паузы и затакт.',
   },
   sections: [
     {
@@ -20,13 +20,70 @@ const dottedNotesAndTies: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/2. G4 C5/4. D5/8 E5/2' },
+      ],
+    },
+    {
+      heading: { en: 'Ties', ru: 'Лиги' },
+      blocks: [
         {
-          kind: 'note',
+          kind: 'text',
+          lead: { en: 'A tie', ru: 'Лига' },
           text: {
-            en: 'A dotted half fills a bar of 3/4.',
-            ru: 'Половинная с точкой заполняет такт на 3/4.',
+            en: 'joins two notes of the same pitch. Play the first and hold it through the second, even across a barline.',
+            ru: 'соединяет две ноты одной высоты. Сыграйте первую и держите её всю длину второй, даже через тактовую черту.',
           },
         },
+        { kind: 'notes', clef: 'treble', notes: 'E4 G4 C5/2~ C5/2 B4/2 C5/1' },
+      ],
+    },
+    {
+      heading: { en: 'Tie or dot?', ru: 'Лига или точка?' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'These two bars sound the same. Inside a bar, the dot is quicker to read. Across a barline, only a tie will do.',
+            ru: 'Эти два такта звучат одинаково. Внутри такта точку читать проще. Через тактовую черту годится только лига.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C5/4. D5/8 E5/2' },
+        { kind: 'notes', clef: 'treble', notes: 'C5/4~ C5/8 D5/8 E5/2' },
+      ],
+    },
+    {
+      heading: { en: 'Rests', ru: 'Паузы' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A rest', ru: 'Пауза' },
+          text: {
+            en: 'is a silence with a value. Each note value has its rest, and a dot lengthens a rest as it does a note.',
+            ru: '— молчание определённой длительности. У каждой ноты своя пауза, и точка удлиняет паузу так же, как ноту.',
+          },
+        },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'r/1 C5/2 r/2 C5 r C5 r C5/8 r/8 C5/8 r/8 C5/4. r/8',
+        },
+        {
+          kind: 'note',
+          text: { en: 'Lift the hand on a rest.', ru: 'На паузе снимайте руку.' },
+        },
+      ],
+    },
+    {
+      heading: { en: 'The pickup', ru: 'Затакт' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A pickup', ru: 'Затакт' },
+          text: {
+            en: 'comes before the first full bar. Here rests stand for the missing beats: count “1 2”, play on 3.',
+            ru: '— звуки перед первым полным тактом. Здесь недостающие доли заменяют паузы: сосчитайте «раз, два» и вступайте на «три».',
+          },
+        },
+        { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'r/2 G4 C5/2 E5 D5/2 B4 C5/2 r/4' },
       ],
     },
     {
@@ -54,90 +111,8 @@ const dottedNotesAndTies: Lesson = {
       ],
     },
     {
-      heading: { en: 'Ties', ru: 'Лиги' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A tie', ru: 'Лига' },
-          text: {
-            en: 'joins two notes of the same pitch. Play the first and hold it through the second. A tie can cross a barline, where a dot cannot.',
-            ru: 'соединяет две ноты одной высоты. Сыграйте первую и держите её всю длину второй. Лига может перейти тактовую черту, а точка не может.',
-          },
-        },
-        { kind: 'notes', clef: 'treble', notes: 'E4 G4 C5/2~ C5/2 B4/2 C5/1' },
-      ],
-    },
-    {
-      heading: { en: 'Tie or dot?', ru: 'Лига или точка?' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'These two bars sound the same. Inside a bar, the dot is shorter to read. Across a barline, only a tie will do.',
-            ru: 'Эти два такта звучат одинаково. Внутри такта точку читать проще. Через тактовую черту годится только лига.',
-          },
-        },
-        { kind: 'notes', clef: 'treble', notes: 'C5/4. D5/8 E5/2' },
-        { kind: 'notes', clef: 'treble', notes: 'C5/4~ C5/8 D5/8 E5/2' },
-      ],
-    },
-    {
-      heading: { en: 'The pickup', ru: 'Затакт' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A pickup', ru: 'Затакт' },
-          text: {
-            en: 'comes before the first full bar. Rests here stand for the missing beats: count “1 2”, play on 3.',
-            ru: '— звуки перед первым полным тактом. Здесь недостающие доли заменяют паузы: сосчитайте «раз, два» и вступайте на «три».',
-          },
-        },
-        { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'r/2 G4 C5/2 E5 D5/2 B4 C5/2 r/4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'The last bar holds only two beats, giving the pickup its one back.',
-            ru: 'В последнем такте только две доли: третью он отдаёт затакту.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Rests', ru: 'Паузы' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'A rest', ru: 'Пауза' },
-          text: {
-            en: 'is a silence with a value. Each note value has its rest: whole, half, quarter, eighth. A dot lengthens a rest as it does a note.',
-            ru: '— молчание определённой длительности. У каждой ноты своя пауза: целая, половинная, четвертная, восьмая. Точка удлиняет паузу так же, как ноту.',
-          },
-        },
-        {
-          kind: 'notes',
-          clef: 'treble',
-          notes: 'r/1 C5/2 r/2 C5 r C5 r C5/8 r/8 C5/8 r/8 C5/4. r/8',
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'Lift the hand on a rest.',
-            ru: 'На паузе снимайте руку.',
-          },
-        },
-      ],
-    },
-    {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the pickup line’s first three notes: G, then the C and E above it.',
-            ru: 'Сыграйте первые три ноты строки с затактом: соль, затем до и ми над ней.',
-          },
-          answer: { notes: ['G', 'C', 'E'], rising: true },
-        },
         {
           kind: 'question',
           ask: {
@@ -147,14 +122,17 @@ const dottedNotesAndTies: Lesson = {
           answer: { notes: ['C', 'D', 'E'], rising: true },
         },
         {
-          kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
-          target: { opens: 'quiz', trainer: 'reading-notes' },
+          kind: 'question',
+          ask: {
+            en: 'Play the pickup line’s first three notes: G, then the C and E above it.',
+            ru: 'Сыграйте первые три ноты строки с затактом: соль, затем до и ми над ней.',
+          },
+          answer: { notes: ['G', 'C', 'E'], rising: true },
         },
         {
           kind: 'link',
-          title: { en: 'Compound meter: 6/8 and 12/8', ru: 'Сложные размеры: 6/8 и 12/8' },
-          target: { opens: 'lesson', lesson: 'compound-meter' },
+          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],
     },

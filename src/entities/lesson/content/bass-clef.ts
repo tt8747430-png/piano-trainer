@@ -4,8 +4,8 @@ const bassClef: Lesson = {
   id: 'bass-clef',
   title: { en: 'The bass clef and the grand staff', ru: 'Басовый ключ и большой нотный стан' },
   summary: {
-    en: 'Read the left hand’s notes, then both staves together, with middle C between them.',
-    ru: 'Читайте ноты левой руки, затем оба стана вместе, с до первой октавы между ними.',
+    en: 'Read the left hand’s notes in the bass clef and grand staff.',
+    ru: 'Читайте ноты левой руки в басовом ключе и на большом стане.',
   },
   sections: [
     {

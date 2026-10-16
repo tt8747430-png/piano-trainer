@@ -5,8 +5,8 @@ const intervalQuality: Lesson = {
   id: 'interval-quality',
   title: { en: 'Interval quality and inversion', ru: 'Качество интервалов и обращение' },
   summary: {
-    en: 'Major, minor, perfect, augmented and diminished: an interval’s exact size, what it turns into upside down, and the intervals wider than an octave.',
-    ru: 'Большие, малые, чистые, увеличенные и уменьшённые: точная величина интервала, во что он превращается при обращении, и интервалы шире октавы.',
+    en: 'Name any interval’s exact quality, and invert it.',
+    ru: 'Определяйте точное качество любого интервала и обращайте его.',
   },
   sections: [
     {
@@ -121,24 +121,13 @@ const intervalQuality: Lesson = {
         { kind: 'interval', root: note('C'), interval: 'M9' },
         {
           kind: 'note',
-          text: {
-            en: 'In C9, the 9 is D.',
-            ru: 'В C9 нона — это ре.',
-          },
+          text: { en: 'In C9, the 9 is D.', ru: 'В C9 нона — это ре.' },
         },
       ],
     },
     {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play E and the minor 3rd above it.',
-            ru: 'Сыграйте ми и малую терцию вверх от неё.',
-          },
-          answer: { notes: ['E', 'G'], rising: true },
-        },
         {
           kind: 'question',
           ask: {
@@ -158,7 +147,7 @@ const intervalQuality: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Invert A up to C, a minor 3rd: play C and the A above it.',
+            en: 'Invert the minor 3rd A–C: play C and the A above it.',
             ru: 'Обратите малую терцию ля–до: сыграйте до и ля над ней.',
           },
           answer: { notes: ['C', 'A'], rising: true },

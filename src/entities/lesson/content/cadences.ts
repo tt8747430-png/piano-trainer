@@ -6,10 +6,10 @@ const A_MINOR = { tonic: note('A'), minor: true }
 
 const cadences: Lesson = {
   id: 'cadences',
-  title: { en: 'Cadences: how lines end', ru: 'Каденции: как заканчиваются фразы' },
+  title: { en: 'Cadences', ru: 'Каденции' },
   summary: {
-    en: 'The four endings every song uses: a full stop, an Amen, a question and a surprise.',
-    ru: 'Четыре окончания, которые есть в каждой песне: точка, «аминь», вопрос и неожиданность.',
+    en: 'Hear and play the four cadences that end a line.',
+    ru: 'Слышите и играйте четыре каденции, которыми кончаются фразы.',
   },
   sections: [
     {
@@ -32,7 +32,7 @@ const cadences: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add the 7th to V and the pull doubles. In C, B rises to C and F falls to E.',
+            en: 'Add the 7th to V and the pull grows. In C, B rises to C and F falls to E.',
             ru: 'Добавьте к V септиму, и тяготение усилится. В до мажоре си поднимается в до, а фа опускается в ми.',
           },
         },
@@ -52,8 +52,8 @@ const cadences: Lesson = {
           kind: 'text',
           lead: { en: 'A plagal cadence', ru: 'Плагальная каденция' },
           text: {
-            en: 'comes to I from IV. It is softer than V–I. Hymns sing their Amen on it.',
-            ru: 'приходит к I от IV. Она мягче, чем V – I. На ней поют «аминь» в конце гимна.',
+            en: 'comes to I from IV. It is softer than V–I: the Amen at a hymn’s end.',
+            ru: 'приходит к I от IV. Она мягче, чем V – I: это «аминь» в конце гимна.',
           },
         },
         { kind: 'progression', numerals: 'IV I', key: C_MAJOR },
@@ -106,11 +106,40 @@ const cadences: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Many tunes ask, then answer. The first line stops on V, a half cadence. The second ends V–I, an authentic one.',
-            ru: 'Многие мелодии спрашивают и отвечают. Первая фраза останавливается на V — это половинная каденция. Вторая кончается V – I, полной.',
+            en: 'Many tunes ask, then answer. The first line stops on V, a half cadence. The second ends V–I.',
+            ru: 'Многие мелодии спрашивают и отвечают. Первая фраза останавливается на V, вторая кончается V – I.',
           },
         },
         { kind: 'progression', numerals: 'I IV I V I IV V I', key: C_MAJOR },
+      ],
+    },
+    {
+      heading: { en: 'Try it', ru: 'Попробуйте' },
+      blocks: [
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the chord a deceptive cadence lands on in C major.',
+            ru: 'Сыграйте аккорд, на который приходит прерванная каденция в до мажоре.',
+          },
+          answer: { chord: 'Am' },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the chord a half cadence stops on in G major.',
+            ru: 'Сыграйте аккорд, на котором останавливается половинная каденция в соль мажоре.',
+          },
+          answer: { chord: 'D' },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the chord before I in a plagal cadence in F major.',
+            ru: 'Сыграйте аккорд перед I в плагальной каденции фа мажора.',
+          },
+          answer: { chord: 'B♭' },
+        },
         {
           kind: 'link',
           title: { en: 'Both lines in the Player', ru: 'Обе фразы в плеере' },
@@ -123,31 +152,6 @@ const cadences: Lesson = {
             ru: 'Последовательности на слух в тестах',
           },
           target: { opens: 'quiz', trainer: 'progressions-by-ear' },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
-        {
-          kind: 'question',
-          ask: { en: 'Play V in G major.', ru: 'Сыграйте V в соль мажоре.' },
-          answer: { chord: 'D' },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play IV in F major.', ru: 'Сыграйте IV в фа мажоре.' },
-          answer: { chord: 'B♭' },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play V7 in C major.', ru: 'Сыграйте V7 в до мажоре.' },
-          answer: { chord: 'G7' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
-          target: { opens: 'quiz', trainer: 'chord-role' },
         },
       ],
     },

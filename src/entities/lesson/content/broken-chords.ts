@@ -1,14 +1,12 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
-
 const brokenChords: Lesson = {
   id: 'broken-chords',
   title: { en: 'Broken chords and arpeggios', ru: 'Ломаные аккорды и арпеджио' },
   summary: {
-    en: 'A chord one note at a time: broken in one hand, climbing through both, rocking and rolling in 6/8.',
-    ru: 'Аккорд по одному звуку: ломаный в одной руке, восходящий через обе, покачивающийся и катящийся в 6/8.',
+    en: 'Play a chord one note at a time, in one hand or both.',
+    ru: 'Играйте аккорд по одному звуку — одной рукой или двумя.',
   },
   sections: [
     {
@@ -18,8 +16,8 @@ const brokenChords: Lesson = {
           kind: 'text',
           lead: { en: 'A broken chord', ru: 'Ломаный аккорд' },
           text: {
-            en: 'plays its notes one at a time, not all at once. It keeps a slow song moving without getting louder.',
-            ru: '— аккорд, звуки которого берут по одному, а не разом. Он движет медленную песню, не делая её громче.',
+            en: 'plays its notes one at a time. It keeps a slow song moving without getting louder.',
+            ru: '— аккорд, звуки которого берут по одному. Он движет медленную песню, не делая её громче.',
           },
         },
         {
@@ -27,6 +25,25 @@ const brokenChords: Lesson = {
           clef: 'treble',
           meter: '3/4',
           notes: 'C4 E4 G4 C4 F4 A4 B3 D4 G4 C4/2.',
+        },
+      ],
+    },
+    {
+      heading: { en: 'The Alberti bass', ru: 'Альбертиев бас' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'The Alberti bass', ru: 'Альбертиев бас' },
+          text: {
+            en: 'rocks instead of climbing: lowest, top, middle, top. Keep the hand still over the chord.',
+            ru: 'покачивается, а не поднимается: нижний, верхний, средний, верхний. Рука лежит над аккордом неподвижно.',
+          },
+        },
+        {
+          kind: 'notes',
+          clef: 'bass',
+          notes:
+            'C3/8 G3/8 E3/8 G3/8 C3/8 G3/8 E3/8 G3/8 C3/8 A3/8 F3/8 A3/8 C3/8 A3/8 F3/8 A3/8 B2/8 G3/8 D3/8 G3/8 B2/8 G3/8 D3/8 G3/8 C3/1',
         },
       ],
     },
@@ -53,50 +70,6 @@ const brokenChords: Lesson = {
           text: {
             en: 'Catch the bass with the pedal and change it with each chord.',
             ru: 'Берите бас на педаль и меняйте её с каждым аккордом.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Up and back down', ru: 'Вверх и обратно' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'An arpeggio need not stop at the top. Turn back down before the next chord, eight eighths to a bar.',
-            ru: 'Арпеджио не обязано останавливаться наверху. Повернув вниз, вернитесь к следующему аккорду: восемь восьмых в такте.',
-          },
-        },
-        {
-          kind: 'notes',
-          clef: 'treble',
-          notes:
-            'C4/8 E4/8 G4/8 C5/8 E5/8 C5/8 G4/8 E4/8 C4/8 F4/8 A4/8 C5/8 F5/8 C5/8 A4/8 F4/8 B3/8 D4/8 G4/8 B4/8 D5/8 B4/8 G4/8 D4/8 C4/1',
-        },
-      ],
-    },
-    {
-      heading: { en: 'The Alberti bass', ru: 'Альбертиев бас' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'The Alberti bass', ru: 'Альбертиев бас' },
-          text: {
-            en: 'rocks instead of climbing: lowest, top, middle, top. Keep the hand still over the chord.',
-            ru: 'покачивается, а не поднимается: нижний, верхний, средний, верхний. Рука лежит над аккордом неподвижно.',
-          },
-        },
-        {
-          kind: 'notes',
-          clef: 'bass',
-          notes:
-            'C3/8 G3/8 E3/8 G3/8 C3/8 G3/8 E3/8 G3/8 C3/8 A3/8 F3/8 A3/8 C3/8 A3/8 F3/8 A3/8 B2/8 G3/8 D3/8 G3/8 B2/8 G3/8 D3/8 G3/8 C3/1',
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'C, then F over C, then G over B: the nearest chords, so the hand barely moves.',
-            ru: 'До мажор, затем фа мажор над до, потом соль мажор над си: ближайшие аккорды, рука почти не сдвигается.',
           },
         },
       ],
@@ -143,11 +116,6 @@ const brokenChords: Lesson = {
           kind: 'link',
           title: { en: 'C major’s arpeggio in the Player', ru: 'Арпеджио до мажора в плеере' },
           target: { opens: 'exercise', exercise: 'arpeggio', root: note('C'), quality: 'maj' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'I–vi–IV–V in the Player', ru: 'I–vi–IV–V в плеере' },
-          target: { opens: 'player', numerals: 'I vi IV V', key: C_MAJOR },
         },
       ],
     },

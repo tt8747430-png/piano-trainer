@@ -10,8 +10,8 @@ const chordFunctions: Lesson = {
     ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
   },
   summary: {
-    en: 'Home, leaving and coming back: the three functions, and the chords that stand in for them.',
-    ru: 'Дом, уход и возвращение: три функции и аккорды, которые их заменяют.',
+    en: 'Tell tonic, subdominant and dominant chords apart, and their substitutes.',
+    ru: 'Различайте тонику, субдоминанту, доминанту и их заместителей.',
   },
   sections: [
     {
@@ -25,25 +25,18 @@ const chordFunctions: Lesson = {
             ru: '— одна из трёх задач, которые аккорд выполняет в тональности.',
           },
         },
-        { kind: 'chords', symbols: ['C', 'F', 'G'] },
+        { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
         {
           kind: 'steps',
           steps: [
-            {
-              en: 'The tonic (I) is home, at rest.',
-              ru: 'Тоника (I) — дом, покой.',
-            },
-            {
-              en: 'The subdominant (IV) leaves home.',
-              ru: 'Субдоминанта (IV) уводит от дома.',
-            },
+            { en: 'The tonic (I) is home, at rest.', ru: 'Тоника (I) — дом, покой.' },
+            { en: 'The subdominant (IV) leaves home.', ru: 'Субдоминанта (IV) уводит от дома.' },
             {
               en: 'The dominant (V) pulls back to the tonic.',
               ru: 'Доминанта (V) тянет обратно к тонике.',
             },
           ],
         },
-        { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
       ],
     },
     {
@@ -99,11 +92,6 @@ const chordFunctions: Lesson = {
           ],
         },
         { kind: 'progression', numerals: 'I vi ii V I', key: C_MAJOR },
-        {
-          kind: 'link',
-          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
-          target: { opens: 'quiz', trainer: 'chord-role' },
-        },
       ],
     },
     {
@@ -117,23 +105,20 @@ const chordFunctions: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the minor chord of C major that shares F and A with F.',
-            ru: 'Сыграйте минорный аккорд до мажора, у которого с F общие ноты фа и ля.',
+            en: 'Play the minor chord of C major that stands in for F.',
+            ru: 'Сыграйте минорный аккорд до мажора, который заменяет F.',
           },
           answer: { chord: 'Dm' },
         },
         {
           kind: 'link',
-          title: { en: 'C major in Keys', ru: 'До мажор в тональностях' },
-          target: { opens: 'key', key: C_MAJOR },
+          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          target: { opens: 'quiz', trainer: 'chord-role' },
         },
         {
           kind: 'link',
-          title: {
-            en: 'Progressions by ear in the Quiz',
-            ru: 'Последовательности на слух в тестах',
-          },
-          target: { opens: 'quiz', trainer: 'progressions-by-ear' },
+          title: { en: 'C major in Keys', ru: 'До мажор в тональностях' },
+          target: { opens: 'key', key: C_MAJOR },
         },
       ],
     },

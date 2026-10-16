@@ -8,8 +8,8 @@ const commonProgressions: Lesson = {
   id: 'common-progressions',
   title: { en: 'Common progressions', ru: 'Распространённые последовательности' },
   summary: {
-    en: 'The progressions under most hymns and songs, in major and minor keys. Each is written in Roman numerals, so it plays in any key.',
-    ru: 'Последовательности, на которых держится большинство гимнов и песен, в мажоре и миноре. Каждая записана римскими цифрами, поэтому играется в любой тональности.',
+    en: 'Play the progressions most songs use, in any key.',
+    ru: 'Играйте последовательности, на которых держится большинство песен.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The three primary chords, then home again. Most hymns and folk songs are built on it. Learn it in every key you play in.',
-            ru: 'Три главных аккорда и возвращение домой. На ней построено большинство гимнов и народных песен. Выучите её во всех тональностях, в которых играете.',
+            en: 'The three primary chords, then home. Most hymns and folk songs are built on it.',
+            ru: 'Три главных аккорда и возвращение домой. На ней построено большинство гимнов и народных песен.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -31,8 +31,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The pop progression. Many worship songs are built on it. Here it is in G major.',
-            ru: 'Поп-последовательность. На ней построено множество песен прославления. Здесь она в соль мажоре.',
+            en: 'The pop progression, under countless pop and worship songs.',
+            ru: 'Поп-последовательность, на ней стоят бесчисленные поп-песни и песни прославления.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: { tonic: note('G'), minor: false } },
@@ -44,8 +44,8 @@ const commonProgressions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The 1950s progression. The minor vi softens the move from I to IV. Here it is in F major.',
-            ru: 'Последовательность 1950-х. Минорный аккорд vi смягчает переход от I к IV. Здесь она в фа мажоре.',
+            en: 'The 1950s progression. The minor vi softens the move from I to IV.',
+            ru: 'Последовательность 1950-х. Минорный аккорд vi смягчает переход от I к IV.',
           },
         },
         { kind: 'progression', numerals: 'I vi IV V', key: { tonic: note('F'), minor: false } },
@@ -56,10 +56,9 @@ const commonProgressions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A cadence', ru: 'Каденция' },
           text: {
-            en: 'is the chords that end a phrase. ii–V–I is the cadence of jazz and of many hymns. ii leads to V, and V leads home.',
-            ru: '— аккорды, которыми заканчивается фраза. ii–V–I — каденция джаза и многих гимнов. ii ведёт к V, а V — домой.',
+            en: 'The cadence of jazz and of many hymns. ii leads to V, and V leads home.',
+            ru: 'Каденция джаза и многих гимнов. ii ведёт к V, а V — домой.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -112,11 +111,8 @@ const commonProgressions: Lesson = {
         },
         {
           kind: 'link',
-          title: {
-            en: 'Progressions in the order to learn them',
-            ru: 'Последовательности в порядке изучения',
-          },
-          target: { opens: 'lesson', lesson: 'progressions-in-order' },
+          title: { en: 'I–IV–V–I through the keys', ru: 'I–IV–V–I по всем тональностям' },
+          target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR, walk: 'fifths' },
         },
         {
           kind: 'link',

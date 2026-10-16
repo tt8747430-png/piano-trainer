@@ -5,8 +5,8 @@ const compoundMeter: Lesson = {
   id: 'compound-meter',
   title: { en: 'Compound meter: 6/8 and 12/8', ru: 'Сложные размеры: 6/8 и 12/8' },
   summary: {
-    en: 'Beats that split in three: the dotted-quarter beat, counting 6/8, telling it from 3/4, and the slow rock of 12/8.',
-    ru: 'Доли, которые делятся на три: доля — четвертная с точкой, счёт в 6/8, чем он отличается от 3/4, и неспешное покачивание 12/8.',
+    en: 'Count and play 6/8 and 12/8, whose beats split in three.',
+    ru: 'Считайте и играйте 6/8 и 12/8, где доля делится на три.',
   },
   sections: [
     {
@@ -30,8 +30,8 @@ const compoundMeter: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In 6/8 the beat is a dotted quarter, three eighths long. A bar has two such beats. 9/8 has three, 12/8 four.',
-            ru: 'В 6/8 доля — четвертная с точкой, длиной в три восьмые. В такте две такие доли. В 9/8 их три, в 12/8 — четыре.',
+            en: 'In 6/8 the beat is a dotted quarter, three eighths long. A bar has two such beats, a bar of 12/8 four.',
+            ru: 'В 6/8 доля — четвертная с точкой, длиной в три восьмые. В такте две такие доли, в такте 12/8 — четыре.',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '6/8', notes: 'C5/4. G4/4. E4/4. C4/4.' },
@@ -44,7 +44,7 @@ const compoundMeter: Lesson = {
           kind: 'text',
           text: {
             en: 'Count every eighth, leaning on 1 and 4. A quarter then an eighth is long–short: it sounds on 1 and 3.',
-            ru: 'Считайте каждую восьмую, опираясь на «раз» и «четыре». Четвертная и восьмая — это долгая и короткая: они звучат на «раз» и «три».',
+            ru: 'Считайте каждую восьмую, опираясь на «раз» и «четыре». Четвертная и восьмая — долгая и короткая: они звучат на «раз» и «три».',
           },
         },
         {
@@ -80,32 +80,13 @@ const compoundMeter: Lesson = {
       ],
     },
     {
-      heading: { en: 'The siciliano lilt', ru: 'Покачивание сицилианы' },
-      blocks: [
-        {
-          kind: 'text',
-          lead: { en: 'The siciliano rhythm', ru: 'Ритм сицилианы' },
-          text: {
-            en: 'fills a beat with a dotted eighth, a sixteenth and an eighth. It rocks like a slow boat.',
-            ru: 'заполняет долю восьмой с точкой, шестнадцатой и восьмой. Он покачивается, как неторопливая лодка.',
-          },
-        },
-        {
-          kind: 'notes',
-          clef: 'treble',
-          meter: '6/8',
-          notes: 'E4/8. F4/16 E4/8 G4/4. F4/8. G4/16 F4/8 D4/4. E4/8. F4/16 E4/8 C4/4. C4/2.',
-        },
-      ],
-    },
-    {
       heading: { en: '12/8 ballads', ru: 'Баллады в 12/8' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A slow 12/8 has four beats, each of three eighths. Ballads and slow blues set the right hand rocking in triplets over a steady bass.',
-            ru: 'Медленный 12/8 — это четыре доли, каждая из трёх восьмых. В балладах и медленном блюзе правая рука покачивается триолями над ровным басом.',
+            en: 'In a slow 12/8 the right hand rocks in threes over a steady bass, one bass note to a beat.',
+            ru: 'В медленном 12/8 правая рука покачивается тройками над ровным басом, по басовой ноте на долю.',
           },
         },
         {
@@ -146,11 +127,6 @@ const compoundMeter: Lesson = {
           kind: 'link',
           title: { en: 'F major’s arpeggio in the Player', ru: 'Арпеджио фа мажора в плеере' },
           target: { opens: 'exercise', exercise: 'arpeggio', root: note('F'), quality: 'maj' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Syncopation and swing', ru: 'Синкопа и свинг' },
-          target: { opens: 'lesson', lesson: 'syncopation-and-swing' },
         },
       ],
     },
