@@ -159,7 +159,7 @@ export function SpeedDial({
         }}
       >
         {open ? (
-          <ul id={id} aria-label={name} className="flex flex-col items-end gap-2">
+          <ul id={id} aria-label={name} className="flex flex-col items-end gap-1.5">
             {children}
           </ul>
         ) : null}
@@ -181,8 +181,9 @@ export function SpeedDial({
 }
 
 /**
- * One of a dial's actions: its words beside its icon. A button, or what `render` makes it (a link,
- * which may do something on the way, `onClick`); either folds the dial once chosen.
+ * One of a dial's actions: a small round icon with its name in a quiet chip beside it, the two one
+ * target. A button, or what `render` makes it (a link, which may do something on the way,
+ * `onClick`); either folds the dial once chosen.
  */
 export function SpeedDialAction({
   label,
@@ -199,40 +200,31 @@ export function SpeedDialAction({
   disabled?: boolean
 }) {
   const close = useContext(CloseDial)
-  const look = 'rounded-full shadow-md shadow-foreground/10'
-  const words = (
+  const look =
+    'group/action h-12 gap-2 rounded-full border-0 bg-transparent p-0 shadow-none hover:bg-transparent motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-150'
+  const choose = () => {
+    onClick?.()
+    close()
+  }
+  const face = (
     <>
-      {label}
-      <Icon data-icon="inline-end" aria-hidden />
+      <span className="rounded-full border border-border bg-card px-2.5 py-1 text-sm font-medium shadow-sm shadow-foreground/10">
+        {label}
+      </span>
+      <span className="grid size-12 place-items-center rounded-full border border-input bg-card shadow-md shadow-foreground/10 transition-colors group-hover/action:bg-muted">
+        <Icon aria-hidden className="size-5" />
+      </span>
     </>
   )
   return (
     <li>
       {render ? (
-        <ButtonLink
-          variant="surface"
-          size="lg"
-          render={render}
-          onClick={() => {
-            onClick?.()
-            close()
-          }}
-          className={look}
-        >
-          {words}
+        <ButtonLink variant="ghost" render={render} onClick={choose} className={look}>
+          {face}
         </ButtonLink>
       ) : (
-        <Button
-          variant="surface"
-          size="lg"
-          disabled={disabled}
-          onClick={() => {
-            onClick?.()
-            close()
-          }}
-          className={look}
-        >
-          {words}
+        <Button variant="ghost" disabled={disabled} onClick={choose} className={look}>
+          {face}
         </Button>
       )}
     </li>
