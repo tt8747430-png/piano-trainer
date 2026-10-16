@@ -1,13 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import {
-  ChordRow,
-  progressionRow,
-  RowChords,
-  RowStaff,
-  RowPlay,
-  useShownKeys,
-} from '@/features/play-example'
+import { ChordRow, progressionRow, RowStaff, RowPlay, useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   keyFromParam,
@@ -63,7 +56,6 @@ export function ProgressionExplorer({
         position={{ inversion: view.inversion, nearest: view.nearest }}
         onShow={setShown}
       >
-        <RowChords positions />
         <RowStaff />
         <RowPlay variant="default" />
         {named?.note ? (

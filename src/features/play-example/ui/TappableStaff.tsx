@@ -36,6 +36,7 @@ export function TappableStaff({
   tempo,
   follow = null,
   barShown,
+  captions,
   onShow,
 }: {
   music: TimedMusic
@@ -54,6 +55,8 @@ export function TappableStaff({
   tempo: number
   /** The whole music played from its first tick at `tempo` by a Play beside it: its notes marked as they sound. */
   follow?: PlayHandle | null
+  /** A word after each bar's chord on its band, by its place: the chord's numeral in its key. */
+  captions?: readonly (string | undefined)[] | undefined
   /** What the keys show for a bar tapped, by its place, where not its notes by name: a chord's degrees. */
   barShown?: ((bar: number) => ShownKeys | undefined) | undefined
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
@@ -166,6 +169,11 @@ export function TappableStaff({
                       }}
                     >
                       {bar.symbol ?? firstBar + i}
+                      {bar.symbol && captions?.[i] ? (
+                        <span className="ml-1 font-sans text-xs font-medium text-muted-foreground">
+                          {captions[i]}
+                        </span>
+                      ) : null}
                     </button>
                   )
                 })
