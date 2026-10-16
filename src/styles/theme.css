@@ -227,20 +227,19 @@
     outline-offset: 2px;
   }
   /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
-     its tallest (the notch, the rail, keys at --keys-most, the finger row, its foot) and the phone's tab bar. */
+     its tallest (the notch, the rail, keys at --keys-most, the finger row, its foot), and at the foot the
+     phone's tab bar and the keys docked over it. */
   html:has([data-slot='pinned']) {
     scroll-padding-top: calc(
       var(--keys-most) + --spacing(23) + max(--spacing(4), env(safe-area-inset-top))
     );
   }
   html:has([data-slot='app-nav']) {
-    scroll-padding-bottom: calc(--spacing(16) + env(safe-area-inset-bottom));
-    @variant landscape-phone {
-      scroll-padding-bottom: 0;
-    }
-    @variant lg {
-      scroll-padding-bottom: 0;
-    }
+    scroll-padding-bottom: calc(var(--nav-bar) + var(--docked, 0px));
+  }
+  /* Keys docked at the foot leave the top to the screen's bar alone. */
+  html:has([data-slot='docked']) {
+    scroll-padding-top: calc(--spacing(20) + max(--spacing(4), env(safe-area-inset-top)));
   }
 }
 
