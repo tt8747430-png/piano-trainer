@@ -94,7 +94,7 @@ describe('createSettingsStore', () => {
         dock: 'top',
         folded: true,
         keyLength: 'short',
-        rail: 'compact',
+        railControls: ['zoom', 'pedal'],
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
@@ -164,7 +164,15 @@ describe('createSettingsStore', () => {
       dock: 'bottom',
       folded: false,
       keyLength: 'long',
-      rail: 'full',
+      railControls: [
+        'zoom',
+        'noteNames',
+        'chordNames',
+        'typing',
+        'midiSound',
+        'glissando',
+        'pedal',
+      ],
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -180,7 +188,7 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       keyLength: 'tiny',
-      rail: 'compact',
+      railControls: ['pedal', 'pedal', 'nope'],
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
@@ -192,7 +200,7 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       keyLength: 'long',
-      rail: 'compact',
+      railControls: ['pedal'],
     })
   })
 

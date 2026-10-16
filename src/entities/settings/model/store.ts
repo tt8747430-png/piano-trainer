@@ -1,6 +1,12 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
-import { createSavedStore, readKeyList, savedObject, type SavingOptions } from '@/shared/lib'
+import {
+  createSavedStore,
+  railControls,
+  readKeyList,
+  savedObject,
+  type SavingOptions,
+} from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import {
   CHORD_KEYS_MAX,
@@ -23,7 +29,6 @@ import {
   isNamedKeys,
   isOctaveShift,
   isPedalWay,
-  isRail,
   isSidebar,
   isSwipe,
   isTheme,
@@ -167,7 +172,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
-    rail: isRail(saved.rail) ? saved.rail : current.rail,
+    railControls: railControls(saved.railControls, current.railControls),
   }
 }
 

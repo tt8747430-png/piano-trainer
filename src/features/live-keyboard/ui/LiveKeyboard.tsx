@@ -1,8 +1,9 @@
-import { useMemo, type ComponentProps, type ReactNode } from 'react'
+import { Fragment, useMemo, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
 import { nameChords, rangeOf, type Midi } from '@/shared/lib/music'
+import type { RailControl } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard, RailGroup } from '@/shared/ui'
@@ -22,8 +23,8 @@ const ALONE = (key: Midi): readonly Midi[] => [key]
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Its rail holds its settings in sight, as pictures (a compact rail
- * only their size and how they play, the rest in Settings): how the keys
+ * else the screen makes it mean. Its rail holds its settings in sight, as pictures (those the learner
+ * keeps on it, `railControls`; every one is in Settings too): how the keys
  * look (their size as a zoom, their names, the chord names, the typing letters), then how they play
  * (a MIDI keyboard's sound, glissando, the pedal). With chord names on, the rail names the chord a
  * hand holds (three notes or more, held or on under the pedal; never what the app sounds). Unless the
@@ -65,7 +66,7 @@ export function LiveKeyboard({
   /** The rail's last control: a page's keys fold away from it. */
   railEnd?: ReactNode
 }) {
-  const { typing, chordNames, rail, keySize, swipe, namedKeys, markNotes, keyLength } =
+  const { typing, chordNames, railControls, keySize, swipe, namedKeys, markNotes, keyLength } =
     useSettings(selectKeyboard)
   const settings = { keySize, swipe, namedKeys, markNotes, keyLength }
   const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
@@ -111,6 +112,21 @@ export function LiveKeyboard({
     () => (namesChords && chordNames ? (nameChords([...live, ...held])[0]?.symbol ?? '') : null),
     [namesChords, chordNames, live, held],
   )
+  // The rail holds the controls the learner keeps on it, how the keys look apart from how they play.
+  const kept = new Set(railControls)
+  const control = (id: RailControl, element: ReactNode) =>
+    kept.has(id) ? <Fragment key={id}>{element}</Fragment> : null
+  const lookControls = [
+    control('zoom', <KeyZoom />),
+    control('noteNames', <NamedKeysToggle />),
+    control('chordNames', <ChordNamesToggle disabled={!namesChords} />),
+    control('typing', <TypingToggle />),
+  ].filter(Boolean)
+  const playControls = [
+    control('midiSound', <MidiSoundToggle />),
+    control('glissando', <GlissandoToggle />),
+    control('pedal', <PedalToggle />),
+  ].filter(Boolean)
   return (
     <PianoKeyboard
       {...keyboard}
@@ -123,22 +139,8 @@ export function LiveKeyboard({
       onKeyPress={play}
       onKeyRelease={letGo}
     >
-      <RailGroup>
-        <KeyZoom />
-        {/* A compact rail leaves how the keys look to Settings. */}
-        {rail === 'full' ? (
-          <>
-            <NamedKeysToggle />
-            <ChordNamesToggle disabled={!namesChords} />
-            <TypingToggle />
-          </>
-        ) : null}
-      </RailGroup>
-      <RailGroup>
-        <MidiSoundToggle />
-        <GlissandoToggle />
-        <PedalToggle />
-      </RailGroup>
+      {lookControls.length > 0 ? <RailGroup>{lookControls}</RailGroup> : null}
+      {playControls.length > 0 ? <RailGroup>{playControls}</RailGroup> : null}
       {railEnd}
     </PianoKeyboard>
   )

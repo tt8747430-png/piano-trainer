@@ -7,7 +7,7 @@ import {
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
-  RAILS,
+  RAIL_CONTROLS,
   SWIPES,
   type KeyDock,
   type KeyLength,
@@ -15,7 +15,7 @@ import {
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type Rail,
+  type RailControl,
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -71,8 +71,8 @@ export interface KeyboardSettings {
   /** A page's keys folded away to a button that brings them back. */
   readonly folded: boolean
   readonly keyLength: KeyLength
-  /** What the rail holds besides how the keys play. */
-  readonly rail: Rail
+  /** The controls the keys' rail holds, in its order. */
+  readonly railControls: readonly RailControl[]
 }
 
 const SIDEBARS = ['open', 'collapsed'] as const
@@ -188,7 +188,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   dock: 'bottom',
   folded: false,
   keyLength: 'long',
-  rail: 'full',
+  railControls: RAIL_CONTROLS,
 })
 
 export const isTheme = isOneOf(THEMES)
@@ -197,7 +197,6 @@ export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isKeyLength = isOneOf(KEY_LENGTHS)
-export const isRail = isOneOf(RAILS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

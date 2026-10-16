@@ -17,14 +17,15 @@ export {
   KEY_SIZES,
   NAMED_KEYS,
   nextNamedKeys,
-  RAILS,
+  RAIL_CONTROLS,
+  railControls,
   SWIPES,
   zoomKeySize,
   type KeyDock,
   type KeyLength,
   type KeySize,
   type NamedKeys,
-  type Rail,
+  type RailControl,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
