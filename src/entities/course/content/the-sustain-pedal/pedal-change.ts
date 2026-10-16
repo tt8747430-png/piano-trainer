@@ -7,8 +7,8 @@ const pedalChange: Lesson = {
   id: 'pedal-change',
   title: { en: 'The pedal change', ru: 'Смена педали' },
   summary: {
-    en: 'The legato pedal: play the new chord, then lift and press again, so chords join without a gap or a blur.',
-    ru: 'Запаздывающая педаль: сначала новый аккорд, потом снять и снова нажать, чтобы аккорды связывались без щели и грязи.',
+    en: 'Change the pedal just after each chord, joining chords cleanly.',
+    ru: 'Менять педаль сразу после аккорда, чисто связывая аккорды.',
   },
   sections: [
     {
@@ -17,7 +17,7 @@ const pedalChange: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hold the pedal through C and then G, and the two chords ring into each other. The sound turns muddy.',
+            en: 'Hold the pedal through C and then G, and the chords ring into each other. The sound turns muddy.',
             ru: 'Держите педаль через C и G, и аккорды наплывают друг на друга. Звук становится грязным.',
           },
         },
@@ -31,18 +31,11 @@ const pedalChange: Lesson = {
           kind: 'text',
           lead: { en: 'The legato pedal', ru: 'Запаздывающая педаль' },
           text: {
-            en: 'changes just after the new chord sounds. Play the chord, then lift the pedal and press it again at once.',
-            ru: 'меняется сразу после нового аккорда. Возьмите аккорд, затем снимите педаль и тут же нажмите снова.',
+            en: 'changes just after the new chord sounds: play it, lift the pedal, press again at once. Say “chord, up, down”.',
+            ru: 'меняется сразу после нового аккорда: возьмите его, снимите педаль и тут же нажмите. Проговаривайте: «аккорд, вверх, вниз».',
           },
         },
-        { kind: 'chords', symbols: ['C', 'F', 'G', 'C'] },
-        {
-          kind: 'note',
-          text: {
-            en: 'Say it as you play: “chord, up, down”.',
-            ru: 'Проговаривайте: «аккорд, вверх, вниз».',
-          },
-        },
+        { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
       ],
     },
     {
@@ -60,12 +53,19 @@ const pedalChange: Lesson = {
               ru: 'Снимете вместе с аккордом — старый просочится в новый.',
             },
             {
-              en: 'Lift just after it, and the sound joins cleanly.',
-              ru: 'Снимете сразу после — звук свяжется чисто.',
+              en: 'Lift just after it, all the way up, and the sound joins cleanly.',
+              ru: 'Снимете сразу после, до конца, — звук свяжется чисто.',
             },
           ],
         },
-        { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the Am chord, then change the pedal while you hold it.',
+            ru: 'Сыграйте аккорд Am и смените педаль, держа его.',
+          },
+          answer: { chord: 'Am' },
+        },
       ],
     },
     {
@@ -74,8 +74,8 @@ const pedalChange: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'With a chord a bar, play on “1”, lift on “and”, press again by “2”. Meanwhile the hands keep the chord down.',
-            ru: 'Если аккорд на такт: играйте на «раз», снимайте на «и», нажимайте снова к «двум». Руки тем временем держат звук.',
+            en: 'With a chord a bar, play on “1”, lift on “and”, press again by “2”. The hands keep the chord down.',
+            ru: 'Если аккорд на такт: играйте на «раз», снимайте на «и», нажимайте к «двум». Руки держат аккорд.',
           },
         },
         {
@@ -90,33 +90,13 @@ const pedalChange: Lesson = {
       ],
     },
     {
-      heading: { en: 'A full lift', ru: 'Полное снятие' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Lift far enough for the dampers to touch the strings. A half lift leaves a haze of the old chord. Keep the heel down.',
-            ru: 'Снимайте настолько, чтобы демпферы легли на струны. Неполное снятие оставляет призвук старого аккорда. Пятка остаётся на полу.',
-          },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the Am chord, then change the pedal while you hold it.',
-            ru: 'Сыграйте аккорд Am и смените педаль, держа его.',
-          },
-          answer: { chord: 'Am' },
-        },
-      ],
-    },
-    {
       heading: { en: 'In a song', ru: 'В песне' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Shenandoah moves slowly, a chord or two a bar. Change after each new chord and let the tune sing over it.',
-            ru: '«Шенандоа» движется медленно, один-два аккорда в такте. Меняйте педаль после каждого нового аккорда, и мелодия запоёт.',
+            en: 'Shenandoah moves slowly, a chord or two a bar. Change after each new chord.',
+            ru: '«Шенандоа» движется медленно, один-два аккорда в такте. Меняйте педаль после каждого нового аккорда.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'C', 'G'] },
@@ -141,15 +121,10 @@ const pedalChange: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play G with B on top, then change the pedal.',
-            ru: 'Сыграйте G с си наверху и смените педаль.',
+            en: 'Play G, then change the pedal.',
+            ru: 'Сыграйте G и смените педаль.',
           },
           answer: { chord: 'G' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Shenandoah in the Player', ru: '«Шенандоа» в плеере' },
-          target: { opens: 'piece', piece: 'shenandoah' },
         },
         {
           kind: 'link',

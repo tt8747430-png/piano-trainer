@@ -5,8 +5,8 @@ const noteValues: Lesson = {
   id: 'note-values',
   title: { en: 'Note value and rhythm', ru: 'Длительности и ритм' },
   summary: {
-    en: 'Feel the beat, hold quarter, half and whole notes for their counts, and count bars of 4/4 aloud.',
-    ru: 'Почувствуйте долю, выдерживайте четверти, половинные и целые на свой счёт и считайте вслух такты в размере 4/4.',
+    en: 'Count 4/4 aloud and hold quarter, half and whole notes.',
+    ru: 'Считать вслух 4/4 и выдерживать четверти, половинные и целые.',
   },
   sections: [
     {
@@ -16,18 +16,11 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'The beat', ru: 'Доля' },
           text: {
-            en: 'is the steady pulse you tap your foot to. Every note is placed on it and held for some of it.',
-            ru: '— ровная пульсация, под которую хочется притопывать. Каждая нота встаёт на неё и длится какую-то её часть.',
+            en: 'is the steady pulse you tap your foot to. Tap along and count it aloud: 1, 2, 3, 4.',
+            ru: '— ровная пульсация, под которую притопывают. Отстукивайте и считайте вслух: раз, два, три, четыре.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 C4 C4 C4 C4 C4 C4 C4' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Tap along and count each beat aloud: 1, 2, 3, 4.',
-            ru: 'Отстукивайте и считайте каждую долю вслух: раз, два, три, четыре.',
-          },
-        },
       ],
     },
     {
@@ -42,14 +35,6 @@ const noteValues: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4' },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the line’s first bar: four quarter notes up from C.',
-            ru: 'Сыграйте первый такт: четыре четверти вверх от до.',
-          },
-          answer: { notes: ['C', 'D', 'E', 'F'], rising: true },
-        },
       ],
     },
     {
@@ -59,8 +44,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A half note', ru: 'Половинная нота' },
           text: {
-            en: 'has a hollow head and a stem. It lasts two beats: play it on 1 and hold it through 2.',
-            ru: 'имеет пустую головку и штиль. Она длится две доли: играйте на «раз» и держите на «два».',
+            en: 'has a hollow head and a stem. It lasts two beats: play on 1, hold through 2.',
+            ru: 'имеет пустую головку и штиль. Она длится две доли: играйте на «раз», держите на «два».',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/2 G4/2 E4/2 C4/2' },
@@ -73,8 +58,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A whole note', ru: 'Целая нота' },
           text: {
-            en: 'has a hollow head and no stem. It lasts four beats: play on 1 and hold through 2, 3 and 4.',
-            ru: 'имеет пустую головку без штиля. Она длится четыре доли: играйте на «раз» и держите на «два, три, четыре».',
+            en: 'has a hollow head and no stem. It lasts four beats: play on 1, hold through 2, 3 and 4.',
+            ru: 'имеет пустую головку без штиля. Она длится четыре доли: играйте на «раз», держите до «четырёх».',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1 C4/1' },
@@ -87,8 +72,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A time signature', ru: 'Размер' },
           text: {
-            en: 'says how many beats fill a bar. In 4/4 there are four, each a quarter note. Bar lines mark the bars off.',
-            ru: 'показывает, сколько долей в такте. В 4/4 их четыре, каждая — четверть. Тактовые черты разделяют такты.',
+            en: 'says how many beats fill a bar. In 4/4 every bar holds four quarter-note beats.',
+            ru: 'показывает, сколько долей в такте. В 4/4 в каждом такте четыре доли по четверти.',
           },
         },
         {
@@ -97,17 +82,10 @@ const noteValues: Lesson = {
           notes: 'C4 E4 G4/2 F4/2 D4/2 E4 D4 C4/2 C4/1',
           meter: '4/4',
         },
-        {
-          kind: 'note',
-          text: {
-            en: 'Every bar adds up to four beats.',
-            ru: 'Каждый такт складывается в четыре доли.',
-          },
-        },
       ],
     },
     {
-      heading: { en: 'Counting aloud', ru: 'Счёт вслух' },
+      heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         { kind: 'notes', clef: 'treble', notes: 'G4/2 G4 A4 G4/1 E4 F4 G4/2 C4/1' },
         {
@@ -127,34 +105,29 @@ const noteValues: Lesson = {
             },
           ],
         },
-      ],
-    },
-    {
-      heading: { en: 'Try it', ru: 'Попробуйте' },
-      blocks: [
         {
           kind: 'question',
           ask: {
-            en: 'Play the whole note on the treble staff’s second line, holding it for four counts.',
-            ru: 'Сыграйте целую ноту на второй линейке скрипичного стана и держите её четыре счёта.',
+            en: 'Play four quarter notes up from C, one count each.',
+            ru: 'Сыграйте четыре четверти вверх от до, по счёту на каждую.',
           },
-          answer: { notes: ['G'] },
+          answer: { notes: ['C', 'D', 'E', 'F'], rising: true },
         },
         {
           kind: 'question',
           ask: {
             en: 'Play two half notes, E then C, two counts each.',
-            ru: 'Сыграйте две половинные, ми и до, по два счёта каждую.',
+            ru: 'Сыграйте две половинные, ми и до, по два счёта.',
           },
           answer: { notes: ['E', 'C'] },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play four quarter notes down from G, one count each.',
-            ru: 'Сыграйте четыре четверти вниз от соль, по одному счёту.',
+            en: 'Play G as a whole note, holding it for four counts.',
+            ru: 'Сыграйте соль целой нотой, держа её четыре счёта.',
           },
-          answer: { notes: ['G', 'F', 'E', 'D'] },
+          answer: { notes: ['G'] },
         },
         {
           kind: 'link',
@@ -163,11 +136,6 @@ const noteValues: Lesson = {
             ru: 'Считайте доли в песне «Старая дружба»',
           },
           target: { opens: 'piece', piece: 'auld-lang-syne' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
-          target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],
     },

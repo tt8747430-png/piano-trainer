@@ -5,8 +5,8 @@ const practiceTwo: Lesson = {
   id: 'practice-two',
   title: { en: 'Practice and repetition 2', ru: 'Практика и повторение 2' },
   summary: {
-    en: 'Harder mixed reading: leaps across the hand, a hand moving between positions, eighth notes and lines for both hands in turn.',
-    ru: 'Более трудное смешанное чтение: скачки на всю руку, смена позиций, восьмые и строки для обеих рук по очереди.',
+    en: 'Read leaps, eighths and position shifts in both clefs.',
+    ru: 'Читать скачки, восьмые и смену позиций в обоих ключах.',
   },
   sections: [
     {
@@ -30,19 +30,11 @@ const practiceTwo: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Bottom line to second space is G2 to C3, a fourth. Under the staff to second space is F2 to C3, a fifth.',
+            en: 'Bottom line to second space is G2 to C3, a 4th. Under the staff to second space is F2 to C3, a 5th.',
             ru: 'С нижней линейки во второй промежуток — соль — до, кварта. Из-под стана во второй промежуток — фа — до, квинта.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 F2 G2 C3 A2 F2 C3/2 G2 C3 B2 F2 G2/1' },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the leap from F2 up to C3.',
-            ru: 'Сыграйте скачок от фа большой октавы вверх к до малой.',
-          },
-          answer: { notes: ['F', 'C'], rising: true },
-        },
       ],
     },
     {
@@ -101,15 +93,15 @@ const practiceTwo: Lesson = {
     {
       heading: { en: 'Rests and long notes', ru: 'Паузы и долгие ноты' },
       blocks: [
-        { kind: 'notes', clef: 'treble', notes: 'C4 r/4 G4 r/4 E4/2. r/4 F4 D4 G4/2 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'r/4 C3 G2 C3 F2/2. r/4 A2 B2 G2/2 C3/1' },
         {
-          kind: 'note',
+          kind: 'text',
           text: {
             en: 'Count the rests as firmly as the notes.',
             ru: 'Отсчитывайте паузы так же твёрдо, как ноты.',
           },
         },
+        { kind: 'notes', clef: 'treble', notes: 'C4 r/4 G4 r/4 E4/2. r/4 F4 D4 G4/2 C4/1' },
+        { kind: 'notes', clef: 'bass', notes: 'r/4 C3 G2 C3 F2/2. r/4 A2 B2 G2/2 C3/1' },
       ],
     },
     {
@@ -126,26 +118,10 @@ const practiceTwo: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the bass clef’s F, then middle C above it.',
-            ru: 'Сыграйте фа басового ключа, затем до первой октавы над ней.',
+            en: 'Play the leap from F2 up to C3.',
+            ru: 'Сыграйте скачок от фа большой октавы вверх к до малой.',
           },
           answer: { notes: ['F', 'C'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the bottom line of the bass staff, then the second space.',
-            ru: 'Сыграйте нижнюю линейку басового стана, затем второй промежуток.',
-          },
-          answer: { notes: ['G', 'C'], rising: true },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the treble staff’s second line, then the first space below it.',
-            ru: 'Сыграйте вторую линейку скрипичного стана, затем первый промежуток под ней.',
-          },
-          answer: { notes: ['G', 'F'] },
         },
         {
           kind: 'question',

@@ -6,8 +6,8 @@ const practiceOne: Lesson = {
   id: 'practice-one',
   title: { en: 'Practice and repetition 1', ru: 'Практика и повторение 1' },
   summary: {
-    en: 'Mixed reading in both clefs: the right hand’s C to G and the left hand’s notes from F2 to middle C, line after line.',
-    ru: 'Смешанное чтение в обоих ключах: от до до соль в правой руке и ноты левой руки от фа большой октавы до до первой, строка за строкой.',
+    en: 'Read mixed lines in both clefs on sight.',
+    ru: 'Читать с листа смешанные строки в обоих ключах.',
   },
   sections: [
     {
@@ -50,16 +50,6 @@ const practiceOne: Lesson = {
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 E4/2 C4/2' },
         { kind: 'notes', clef: 'bass', notes: 'C4/2 F3/2 A3/2 C4/2' },
-        {
-          kind: 'question',
-          ask: { en: 'Play the treble clef’s note.', ru: 'Сыграйте ноту скрипичного ключа.' },
-          answer: { notes: ['G'] },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play the bass clef’s note.', ru: 'Сыграйте ноту басового ключа.' },
-          answer: { notes: ['F'] },
-        },
       ],
     },
     {
@@ -93,15 +83,15 @@ const practiceOne: Lesson = {
     {
       heading: { en: 'In 3/4', ru: 'В размере 3/4' },
       blocks: [
-        { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'C4 E4 G4 F4/2 D4 E4 G4 E4 C4/2.' },
-        { kind: 'notes', clef: 'bass', meter: '3/4', notes: 'C3 A2 F2 G2/2 B2 A2 F2 A2 C3/2.' },
         {
-          kind: 'note',
+          kind: 'text',
           text: {
             en: 'Lean on beat 1 of each bar and keep the count going.',
             ru: 'Опирайтесь на первую долю каждого такта и не теряйте счёт.',
           },
         },
+        { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'C4 E4 G4 F4/2 D4 E4 G4 E4 C4/2.' },
+        { kind: 'notes', clef: 'bass', meter: '3/4', notes: 'C3 A2 F2 G2/2 B2 A2 F2 A2 C3/2.' },
       ],
     },
     {
@@ -114,22 +104,6 @@ const practiceOne: Lesson = {
             ru: 'Сыграйте нижнюю линейку скрипичного стана, затем басового.',
           },
           answer: { notes: ['E', 'G'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the treble staff’s first space.',
-            ru: 'Сыграйте первый промежуток скрипичного стана.',
-          },
-          answer: { notes: ['F'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the bass staff’s first space.',
-            ru: 'Сыграйте первый промежуток басового стана.',
-          },
-          answer: { notes: ['A'] },
         },
         {
           kind: 'question',

@@ -5,8 +5,8 @@ const dottedQuarter: Lesson = {
   id: 'dotted-quarter',
   title: { en: 'The dotted quarter note', ru: 'Четверть с точкой' },
   summary: {
-    en: 'A dot makes a note half as long again. A dotted quarter and an eighth fill two beats, long then short, counted «1 – 2 and».',
-    ru: 'Точка удлиняет ноту наполовину. Четверть с точкой и восьмая занимают две доли, долго и коротко, и считаются «раз – два и».',
+    en: 'Count and play the dotted quarter and eighth: long, then short.',
+    ru: 'Считать и играть четверть с точкой и восьмую: долго, затем коротко.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const dottedQuarter: Lesson = {
           kind: 'text',
           lead: { en: 'Dot:', ru: 'Точка:' },
           text: {
-            en: 'adds half a note’s value to it. A dotted half lasts three beats. A dotted quarter lasts one and a half.',
-            ru: 'прибавляет к ноте половину её длительности. Половинная с точкой звучит три доли, четверть с точкой — полторы.',
+            en: 'adds half a note’s value to it. A dotted half lasts three beats, a dotted quarter one and a half.',
+            ru: 'прибавляет к ноте половину её длительности. Половинная с точкой — три доли, четверть с точкой — полторы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2. C4 C4/4. C4/8 C4/2' },
@@ -29,24 +29,11 @@ const dottedQuarter: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A dotted quarter and an eighth fill two beats. Count «1 – 2 and»: the dotted quarter holds through beat 2, the eighth falls on its «and».',
-            ru: 'Четверть с точкой и восьмая занимают две доли. Считайте «раз – два и»: четверть с точкой тянется через вторую долю, восьмая звучит на «и».',
+            en: 'A dotted quarter and an eighth fill two beats. Count «1 – 2 and»: the eighth falls on the «and». Bar 1 is even, bar 2 dotted.',
+            ru: 'Четверть с точкой и восьмая занимают две доли. Считайте «раз – два и»: восьмая звучит на «и». Первый такт ровный, второй — с точкой.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4/4. D4/8 E4/2 E4/4. F4/8 G4/2' },
-      ],
-    },
-    {
-      heading: { en: 'Even, then dotted', ru: 'Ровно, затем с точкой' },
-      blocks: [
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4/2 C4/4. D4/8 E4/2' },
-        {
-          kind: 'text',
-          text: {
-            en: 'Bar 1 plays two even quarters. Bar 2 plays the same notes dotted: the first grows longer and the second hurries into beat 3.',
-            ru: 'В первом такте две ровные четверти. Во втором те же звуки с точкой: первый становится длиннее, а второй спешит к третьей доле.',
-          },
-        },
       ],
     },
     {
@@ -64,7 +51,6 @@ const dottedQuarter: Lesson = {
               en: 'Play it on one key, still counting.',
               ru: 'Сыграйте его на одной клавише, не переставая считать.',
             },
-            { en: 'Then play the tune below.', ru: 'Затем сыграйте мелодию ниже.' },
           ],
         },
       ],
@@ -73,39 +59,16 @@ const dottedQuarter: Lesson = {
       heading: { en: 'In a tune', ru: 'В мелодии' },
       blocks: [
         {
+          kind: 'text',
+          text: {
+            en: 'Three bars start with the same long-short pair. Keep the eighth light, leading on to the next note.',
+            ru: 'Три такта начинаются парой «долго – коротко». Играйте восьмую легко, пусть она ведёт к следующему звуку.',
+          },
+        },
+        {
           kind: 'notes',
           clef: 'treble',
           notes: 'C4/4. D4/8 E4 C4 E4/4. F4/8 G4/2 A4/4. G4/8 F4 E4 D4/1',
-        },
-        {
-          kind: 'text',
-          text: {
-            en: 'Three bars start with the same long-short pair. Keep the eighth light and let it lead on to the next note.',
-            ru: 'Три такта начинаются одной и той же парой «долго – коротко». Играйте восьмую легко, пусть она ведёт к следующему звуку.',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'In the course’s songs', ru: 'В песнях курса' },
-      blocks: [
-        { kind: 'notes', clef: 'treble', notes: 'E4/4. E4/8 D4 C4 D4/4. E4/8 C4/2' },
-        {
-          kind: 'text',
-          text: {
-            en: 'Folk tunes love long-short pairs. Listen for them in Greensleeves and Scarborough Fair, then play along.',
-            ru: 'Народные мелодии любят пары «долго – коротко». Найдите их на слух в «Гринсливз» и «Ярмарке в Скарборо», затем сыграйте вместе с плеером.',
-          },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Greensleeves in the Player', ru: '«Гринсливз» в плеере' },
-          target: { opens: 'piece', piece: 'greensleeves' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Scarborough Fair in the Player', ru: '«Ярмарка в Скарборо» в плеере' },
-          target: { opens: 'piece', piece: 'scarborough-fair' },
         },
       ],
     },
@@ -115,8 +78,8 @@ const dottedQuarter: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the first bar of the tune: C long, D short, then E and C.',
-            ru: 'Сыграйте первый такт мелодии: до долго, ре коротко, затем ми и до.',
+            en: 'Play the tune’s first bar: C long, D short, then E.',
+            ru: 'Сыграйте начало мелодии: до долго, ре коротко, затем ми.',
           },
           answer: { notes: ['C', 'D', 'E'], rising: true },
         },
@@ -130,13 +93,13 @@ const dottedQuarter: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Read notes in the Quiz', ru: 'Чтение нот в тестах' },
-          target: { opens: 'quiz', trainer: 'reading-notes' },
+          title: { en: 'Greensleeves in the Player', ru: '«Гринсливз» в плеере' },
+          target: { opens: 'piece', piece: 'greensleeves' },
         },
         {
           kind: 'link',
-          title: { en: 'Greensleeves in the Player', ru: '«Гринсливз» в плеере' },
-          target: { opens: 'piece', piece: 'greensleeves' },
+          title: { en: 'Scarborough Fair in the Player', ru: '«Ярмарка в Скарборо» в плеере' },
+          target: { opens: 'piece', piece: 'scarborough-fair' },
         },
       ],
     },
