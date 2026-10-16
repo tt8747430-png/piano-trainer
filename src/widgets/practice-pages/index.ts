@@ -1,6 +1,7 @@
 export {
   PRACTICE_GROUPS,
   PRACTICE_PAGE_IDS,
+  recentPages,
   THINGS,
   type PracticePageId,
 } from './model/practice-pages'

@@ -1,6 +1,7 @@
 import type { LocaleResources } from '../../types'
 
 export const practice: LocaleResources['practice'] = {
+  recent: 'Продолжить с того места',
   title: 'Практика',
   groups: { atTheKeys: 'За клавиатурой', training: 'Тренировка' },
   pages: {

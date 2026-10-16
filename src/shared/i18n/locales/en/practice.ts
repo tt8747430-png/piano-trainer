@@ -1,4 +1,5 @@
 export const practice = {
+  recent: 'Pick up where you left off',
   title: 'Practice',
   // Practice's groups of pages (ADR 0044). The things come first, under no heading.
   groups: { atTheKeys: 'At the keys', training: 'Training' },

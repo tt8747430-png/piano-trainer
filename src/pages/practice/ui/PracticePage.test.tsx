@@ -27,6 +27,20 @@ describe('Practice', () => {
     ])
   })
 
+  it('offers the pages used last first, the latest at the top, none on a first visit', async () => {
+    const { router } = await renderApp('/practice')
+    await screen.findByRole('heading', { level: 1, name: 'Practice' })
+    expect(screen.queryByRole('region', { name: 'Pick up where you left off' })).toBeNull()
+    for (const to of ['/practice/scales', '/practice/chord-finder', '/practice'] as const) {
+      await act(() => router.navigate({ to }))
+    }
+    const recent = await screen.findByRole('region', { name: 'Pick up where you left off' })
+    expect(rowsOf(recent).map(([, href]) => href)).toEqual([
+      '/practice/chord-finder',
+      '/practice/scales',
+    ])
+  })
+
   it('lists the Chord finder at the keys, a tool of its own', async () => {
     await renderApp('/practice')
     const keys = await screen.findByRole('region', { name: 'At the keys' })
