@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
 import { Fragment, useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { nextJourney, previousJourney, type Chapter, type Journey } from '@/entities/lesson'
+import { JOURNEYS, type Chapter, type Journey } from '@/entities/lesson'
 import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progress'
 import { stepIdOf, type StepId } from '@/entities/step'
+import { useFold } from '@/features/fold-section'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { RoundLink } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
@@ -22,7 +22,7 @@ function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
       aria-hidden
       viewBox="0 0 100 40"
       preserveAspectRatio="none"
-      className="-my-1 block h-14 w-full text-border"
+      className="-my-1 block h-8 w-full text-border"
     >
       <path
         d={`M ${x1} 0 C ${x1} 22, ${x2} 18, ${x2} 40`}
@@ -37,7 +37,70 @@ function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
   )
 }
 
-/** A chapter: its number and title on its stage's bar, how much of it is learned, its nodes in a zigzag. */
+/** A bar of how much is learned, in the learned paint. */
+function Meter({ done, total }: { done: number; total: number }) {
+  return (
+    <span aria-hidden className="block h-1 overflow-hidden rounded-full bg-muted">
+      <span
+        className="block h-full rounded-full bg-learned transition-[width] duration-300 ease-out"
+        style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }}
+      />
+    </span>
+  )
+}
+
+/**
+ * The four journeys side by side, the one shown a card-paper tab on the sand track (the neutral
+ * chosen), each with how much of it is learned; scrolled across where the screen is narrow.
+ */
+function JourneyTabs({ shown }: { shown: Journey }) {
+  const { t } = useTranslation('learn')
+  const locale = useLocale()
+  const learned = useProgress(selectLearned)
+  return (
+    <nav
+      aria-label={t('journey.label')}
+      className="-mx-gutter overflow-x-auto px-gutter scrollbar-none"
+    >
+      <ul className="flex min-w-max gap-1 rounded-2xl bg-muted p-1 sm:min-w-0">
+        {JOURNEYS.map((journey) => {
+          const progress = journeyProgress(journey, learned)
+          const current = journey.id === shown.id
+          return (
+            <li key={journey.id} className="flex-1">
+              <Link
+                to="/"
+                search={{ view: 'lessons', journey: journey.id }}
+                replace
+                aria-current={current ? 'page' : undefined}
+                className={cn(
+                  'flex min-w-28 flex-col gap-1.5 rounded-xl border px-3 py-2 transition-colors duration-200 ease-out',
+                  current
+                    ? 'border-input bg-card text-foreground'
+                    : 'border-transparent text-muted-foreground hover:bg-background/60 hover:text-foreground',
+                )}
+              >
+                <span className="flex items-baseline gap-2">
+                  <span className="font-semibold">{localText(journey.title, locale)}</span>
+                  <span className="text-xs tabular-nums">
+                    {t('journey.count', { learned: progress.done, total: progress.total })}
+                  </span>
+                </span>
+                <Meter done={progress.done} total={progress.total} />
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}
+
+/**
+ * A chapter: its heading the button that folds it (its number, or a check once it is all learned;
+ * its title; how much is learned; a chevron), its nodes in a zigzag. Folded or open as the learner
+ * left it, on every visit.
+ */
 function ChapterSection({
   chapter,
   n,
@@ -53,22 +116,50 @@ function ChapterSection({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const id = useId()
+  const bodyId = useId()
+  const fold = useFold(`journey.${journey.id}.${chapter.id}`)
   const learned = useProgress(selectLearned)
   const answers = useProgress(selectAllAnswers)
   const ids = chapter.steps.map(stepIdOf)
   const done = ids.filter((each) => learned[each] !== undefined).length
+  const complete = done === ids.length
+  const title = localText(chapter.title, locale)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-6">
-      <div className="flex items-baseline justify-between gap-4 border-b border-border pb-2">
-        <h3 id={id} className="text-2xl text-balance text-foreground">
-          {t('journey.chapter', { n, title: localText(chapter.title, locale) })}
-        </h3>
-        <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
-          {t('journey.chapterLearned', { learned: done, total: ids.length })}
-        </span>
-      </div>
-      <ol className="flex flex-col">
+    <section aria-label={t('journey.chapter', { n, title })} className="flex flex-col">
+      <h3 className="font-sans text-base">
+        <button
+          type="button"
+          aria-expanded={fold.open}
+          aria-controls={bodyId}
+          aria-label={t('journey.chapter', { n, title })}
+          onClick={fold.toggle}
+          className="group flex w-full items-center gap-3 rounded-2xl py-2 text-left"
+        >
+          <span
+            aria-hidden
+            className={cn(
+              'grid size-9 shrink-0 place-items-center rounded-full font-semibold tabular-nums',
+              complete ? 'bg-learned text-learned-foreground' : 'bg-muted text-foreground',
+            )}
+          >
+            {complete ? <Check className="size-4" strokeWidth={3} /> : n}
+          </span>
+          <span className="min-w-0 flex-1 font-display text-xl font-semibold text-balance">
+            {title}
+          </span>
+          <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
+            {t('journey.count', { learned: done, total: ids.length })}
+          </span>
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover:text-foreground',
+              !fold.open && '-rotate-90',
+            )}
+          />
+        </button>
+      </h3>
+      <ol id={bodyId} hidden={!fold.open} className="flex flex-col pt-4 pb-2">
         {chapter.steps.map((step, i) => {
           const stepId = stepIdOf(step)
           const column = columnOf(i)
@@ -108,64 +199,37 @@ function ChapterSection({
 }
 
 /**
- * The Lessons (ADR 0053), as the journey-app lays them out: one journey at a time, its name between
- * arrows to the journeys before and after it, how much of it is learned and what it is for, then its
- * chapters, each a zigzag of nodes joined by a dashed path. Every node opens; the order only suggests.
+ * The Lessons (ADR 0053), as the journey-app lays them out: the four journeys as tabs, then the one
+ * shown, its chapters each folding under its heading, a zigzag of nodes joined by a dashed path.
+ * Every node opens; the order only suggests.
  */
 export function JourneyMap({ journey }: { journey: Journey }) {
-  const { t } = useTranslation(['learn', 'common'])
-  const locale = useLocale()
   const learned = useProgress(selectLearned)
-  const progress = journeyProgress(journey, learned)
+  const locale = useLocale()
   const next = continueStep(learned)?.id
-  const before = previousJourney(journey)
-  const after = nextJourney(journey)
   const numbers = new Map(
     journey.chapters
       .flatMap((chapter) => chapter.steps)
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
-  const arrow = (to: Journey | undefined, label: string, icon: typeof ArrowLeft) =>
-    to ? (
-      <RoundLink
-        label={`${label}: ${localText(to.title, locale)}`}
-        icon={icon}
-        render={<Link to="/" search={{ view: 'lessons', journey: to.id }} replace />}
-      />
-    ) : (
-      <span aria-hidden className="size-11" />
-    )
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          {arrow(before, t('learn:journey.previous'), ArrowLeft)}
-          <div className="flex min-w-0 flex-col items-center text-center">
-            <span className="text-sm font-medium text-muted-foreground">
-              {t('learn:journey.stage', { stage: t(`common:stage.${journey.stage}`) })}
-            </span>
-            <h2 className="text-4xl text-balance">{localText(journey.title, locale)}</h2>
-            <span className="text-muted-foreground tabular-nums">
-              {t('learn:journey.learned', { learned: progress.done, total: progress.total })}
-            </span>
+    <div className="flex flex-col gap-6">
+      <JourneyTabs shown={journey} />
+      <h2 className="sr-only">{localText(journey.title, locale)}</h2>
+      <div className="flex flex-col divide-y divide-border">
+        {journey.chapters.map((chapter, i) => (
+          <div key={chapter.id} className="py-2">
+            <ChapterSection
+              chapter={chapter}
+              n={i + 1}
+              journey={journey}
+              numbers={numbers}
+              next={next}
+            />
           </div>
-          {arrow(after, t('learn:journey.next'), ArrowRight)}
-        </div>
-        <p className="mx-auto max-w-prose text-center text-lg text-pretty">
-          {localText(journey.goal, locale)}
-        </p>
+        ))}
       </div>
-      {journey.chapters.map((chapter, i) => (
-        <ChapterSection
-          key={chapter.id}
-          chapter={chapter}
-          n={i + 1}
-          journey={journey}
-          numbers={numbers}
-          next={next}
-        />
-      ))}
     </div>
   )
 }

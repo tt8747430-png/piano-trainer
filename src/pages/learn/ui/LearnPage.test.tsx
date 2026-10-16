@@ -9,15 +9,12 @@ import { JOURNEYS } from '@/entities/lesson'
 const at = '2026-10-01T10:00:00Z'
 
 describe('Learn', () => {
-  it('suggests the first lesson on a first run, saying where it is read', async () => {
+  it('floats Continue onto the first lesson on a first run', async () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
-    const card = await screen.findByRole('region', { name: 'Finding your way on the keys' })
-    expect(card).toHaveTextContent('Foundations · The keyboard and the staff · Beginner')
-    expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
-      'href',
-      '/lessons/finding-home',
-    )
+    expect(
+      await screen.findByRole('link', { name: /^Continue\s*Finding your way on the keys$/ }),
+    ).toHaveAttribute('href', '/lessons/finding-home')
   })
 
   it('continues in the course whose lesson was learned last', async () => {
@@ -29,11 +26,9 @@ describe('Learn', () => {
       }),
     )
     const second = courseById('gorshkov')?.lessons[1]
-    const card = await screen.findByRole('region', { name: second?.title.en })
-    expect(within(card).getByRole('link', { name: 'Continue' })).toHaveAttribute(
-      'href',
-      `/courses/gorshkov/${second?.id}`,
-    )
+    expect(
+      await screen.findByRole('link', { name: new RegExp(`^Continue\\s*${second?.title.en}$`) }),
+    ).toHaveAttribute('href', `/courses/gorshkov/${second?.id}`)
   })
 
   it('lists the pieces practised last, latest first, and none before the first', async () => {
@@ -72,16 +67,24 @@ describe('Learn', () => {
       expect(first).toHaveAttribute('aria-current', 'step')
     })
 
-    it('step to the next journey and back with the arrows', async () => {
+    it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
       const user = userEvent.setup()
-      const { router } = await renderApp('/')
-      await user.click(await screen.findByRole('link', { name: 'Next journey: Fluency' }))
+      const { router, settingsStore } = await renderApp('/')
+      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
+      expect(within(tabs).getAllByRole('link')).toHaveLength(JOURNEYS.length)
+      await user.click(within(tabs).getByRole('link', { name: /^Fluency/ }))
       expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
       expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
-      await user.click(screen.getByRole('link', { name: 'Previous journey: Foundations' }))
-      expect(
-        await screen.findByRole('heading', { level: 2, name: 'Foundations' }),
-      ).toBeInTheDocument()
+      expect(within(tabs).getByRole('link', { name: /^Fluency/ })).toHaveAttribute(
+        'aria-current',
+        'page',
+      )
+      const chapter = JOURNEYS[1]!.chapters[0]!
+      const heading = screen.getByRole('button', { name: `Chapter 1: ${chapter.title.en}` })
+      expect(heading).toHaveAttribute('aria-expanded', 'true')
+      await user.click(heading)
+      expect(heading).toHaveAttribute('aria-expanded', 'false')
+      expect(settingsStore.getState().foldedSections).toContain(`journey.fluency.${chapter.id}`)
     })
   })
 

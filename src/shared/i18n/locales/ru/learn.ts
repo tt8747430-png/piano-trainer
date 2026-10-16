@@ -8,12 +8,9 @@ export const learn: LocaleResources['learn'] = {
     courses: 'Курсы',
   },
   journey: {
-    stage: 'Ступень: {{stage}}',
-    learned: 'Изучено {{learned}} из {{total}}',
-    previous: 'Предыдущая ступень',
-    next: 'Следующая ступень',
+    label: 'Ступени',
     chapter: 'Глава {{n}}. {{title}}',
-    chapterLearned: '{{learned}} из {{total}}',
+    count: '{{learned}}/{{total}}',
   },
   shelves: {
     beginner: 'Курсы для начинающих',

@@ -8,12 +8,9 @@ export const learn = {
   },
   // The Lessons: four journeys, beginner to professional, each in chapters.
   journey: {
-    stage: '{{stage}} journey',
-    learned: '{{learned}} of {{total}} learned',
-    previous: 'Previous journey',
-    next: 'Next journey',
+    label: 'Journeys',
     chapter: 'Chapter {{n}}: {{title}}',
-    chapterLearned: '{{learned}} of {{total}}',
+    count: '{{learned}}/{{total}}',
   },
   // The Courses, shelf by shelf.
   shelves: {

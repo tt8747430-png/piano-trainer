@@ -62,21 +62,24 @@ export function JourneyNode({
         className={cn(
           'grid place-items-center rounded-full border-4 border-background transition-transform duration-200 ease-out group-hover:scale-105 group-active:scale-95',
           next
-            ? 'size-24 shadow-[0_4px_16px_-4px_var(--color-primary)] ring-4 ring-primary'
-            : 'size-20',
+            ? 'size-20 shadow-[0_4px_16px_-4px_var(--color-primary)] ring-4 ring-primary'
+            : 'size-16',
           learned ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
-          step.kind !== 'lesson' && !learned && 'rounded-[1.75rem]',
+          step.kind !== 'lesson' && !learned && 'rounded-3xl',
         )}
       >
-        <Icon aria-hidden className={next ? 'size-9' : 'size-8'} strokeWidth={learned ? 3 : 1.75} />
+        <Icon aria-hidden className={next ? 'size-8' : 'size-7'} strokeWidth={learned ? 3 : 1.75} />
       </span>
       <span
-        className={cn('font-semibold text-balance', next ? 'font-display text-lg' : 'text-base')}
+        className={cn(
+          'text-sm leading-snug font-semibold text-balance',
+          next && 'font-display text-base',
+        )}
       >
         {title.primary}
       </span>
       {detail ? (
-        <span className="-mt-1.5 text-sm text-muted-foreground tabular-nums">{detail}</span>
+        <span className="-mt-1 text-xs text-muted-foreground tabular-nums">{detail}</span>
       ) : null}
     </StepLink>
   )

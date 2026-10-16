@@ -49,11 +49,3 @@ export function nextLessonId(lessonId: string): string | undefined {
   const place = lessonPlace(lessonId)
   return place ? lessonIdsOf(place.journey)[place.n] : undefined
 }
-
-/** The journey after this one; none after the last. */
-export const nextJourney = (journey: Journey): Journey | undefined =>
-  JOURNEYS[JOURNEYS.indexOf(journey) + 1]
-
-/** The journey before this one; none before the first. */
-export const previousJourney = (journey: Journey): Journey | undefined =>
-  JOURNEYS[JOURNEYS.indexOf(journey) - 1]

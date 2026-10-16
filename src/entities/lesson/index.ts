@@ -11,9 +11,7 @@ export {
   journeyById,
   lessonById,
   lessonPlace,
-  nextJourney,
   nextLessonId,
-  previousJourney,
   type LessonPlace,
 } from './model/selectors'
 export { LESSONS } from './content'
