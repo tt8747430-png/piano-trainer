@@ -11,7 +11,15 @@ import {
   type Midi,
 } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
-import { Docked, Pinned, RailButton, RailGroup, type ShownKeys } from '@/shared/ui'
+import {
+  Docked,
+  FabPill,
+  FloatingActions,
+  Pinned,
+  RailButton,
+  RailGroup,
+  type ShownKeys,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { LiveKeyboard } from './LiveKeyboard'
 
@@ -56,14 +64,23 @@ export function PinnedKeyboard({
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
   const fold = (on: boolean) => setKeyboard(store, { folded: on })
-  const body = folded ? (
-    <div className={cn('flex', dock === 'bottom' ? 'justify-end' : 'justify-end pt-2')}>
-      <Button variant="soft" size="pill" onClick={() => fold(false)}>
-        <Piano aria-hidden />
-        {t('rail.unfold')}
-      </Button>
-    </div>
-  ) : (
+  const unfold = (
+    <Button variant="soft" size="pill" onClick={() => fold(false)}>
+      <Piano aria-hidden />
+      {t('rail.unfold')}
+    </Button>
+  )
+  // Folded at the foot, the keys are a floating button beside the screen's actions; at the top, a
+  // button where they were.
+  if (folded)
+    return dock === 'bottom' ? (
+      <FloatingActions first>
+        <FabPill label={t('rail.unfold')} icon={Piano} onClick={() => fold(false)} />
+      </FloatingActions>
+    ) : (
+      <div className={cn('flex justify-end pt-2', className)}>{unfold}</div>
+    )
+  const body = (
     <LiveKeyboard
       range={range ?? keyboardRange([...opened, ...showing], MIDDLE_OCTAVES)}
       inView={rangeOf(showing) ?? rangeOf(opened)}

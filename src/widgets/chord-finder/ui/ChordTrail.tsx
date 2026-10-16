@@ -121,14 +121,17 @@ export function ChordTrail({
       <h2 id={id} className="text-2xl">
         {remember ? t('practice:chordFinder.played') : t('practice:chordFinder.staff')}
       </h2>
-      <div
-        ref={scroller}
-        className="max-w-full overflow-x-auto overscroll-x-contain pt-14 scrollbar-none"
-      >
-        <LazyScoreView score={score} timeBefore={NO_TIME} scale={1.35}>
-          {(layout) => <BarNames layout={layout} names={names} />}
-        </LazyScoreView>
-      </div>
+      {/* Nothing played yet: its line says what will be written, under no blank staff. */}
+      {chords.length > 0 ? (
+        <div
+          ref={scroller}
+          className="max-w-full overflow-x-auto overscroll-x-contain pt-14 scrollbar-none"
+        >
+          <LazyScoreView score={score} timeBefore={NO_TIME} scale={1.35}>
+            {(layout) => <BarNames layout={layout} names={names} />}
+          </LazyScoreView>
+        </div>
+      ) : null}
       {chords.length === 0 ? (
         <p className="text-muted-foreground">
           {remember ? t('practice:chordFinder.playedEmpty') : t('practice:chordFinder.staffEmpty')}

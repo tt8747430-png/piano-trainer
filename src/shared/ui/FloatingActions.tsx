@@ -8,24 +8,43 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
 import { Button } from './primitives/button'
 
+/** The one column every screen's floating actions stand in, made once, at the end of the page. */
+function floatingColumn(): HTMLElement {
+  const made = document.getElementById(COLUMN_ID)
+  if (made) return made
+  const column = document.createElement('div')
+  column.id = COLUMN_ID
+  column.dataset['slot'] = 'floating-actions'
+  column.className =
+    'pointer-events-none fixed right-gutter bottom-docked z-20 mb-3 flex flex-col items-end gap-3 print:hidden landscape-phone:mb-safe-4 lg:mb-safe-4 [&>*]:pointer-events-auto'
+  document.body.append(column)
+  return column
+}
+const COLUMN_ID = 'floating-actions'
+
 /**
  * A screen's actions in the thumb's reach, floating at the foot of the screen over the page, the tab
  * bar and the keys docked there: its main one a large round `Fab`, the rest folded into a
- * `SpeedDial` beside it. The page under it pads its foot clear of them already.
+ * `SpeedDial` beside it. Every part of a screen that floats an action stands in one column, the
+ * first to come highest, so none covers another. The page under it pads its foot clear of them.
  */
-export function FloatingActions({ children }: { children: ReactNode }) {
-  return (
-    <div
-      data-slot="floating-actions"
-      className="pointer-events-none fixed right-gutter bottom-docked z-20 mb-3 flex flex-col items-end gap-3 print:hidden landscape-phone:mb-safe-4 lg:mb-safe-4 [&>*]:pointer-events-auto"
-    >
-      {children}
-    </div>
+export function FloatingActions({
+  first = false,
+  children,
+}: {
+  /** Highest in the column whenever it came: what stands apart from the screen's own actions (Keys). */
+  first?: boolean
+  children: ReactNode
+}) {
+  return createPortal(
+    <div className={cn('flex flex-col items-end gap-3', first && 'order-first')}>{children}</div>,
+    floatingColumn(),
   )
 }
 
