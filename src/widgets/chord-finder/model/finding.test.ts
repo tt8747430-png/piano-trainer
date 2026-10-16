@@ -25,6 +25,7 @@ describe('findChord', () => {
     expect(findChord(keys(60, 64), C_MAJOR)).toEqual({ kind: 'interval', interval: 'M3' })
     expect(findChord(keys(60, 74), C_MAJOR)).toEqual({ kind: 'interval', interval: 'M9' })
     expect(findChord(keys(60, 76), C_MAJOR)).toEqual({ kind: 'interval', interval: 'M3' })
+    expect(findChord(keys(60, 75), C_MAJOR)).toEqual({ kind: 'interval', interval: 'm3' })
   })
 
   it('names a perfect 5th also as its power chord', () => {
@@ -53,7 +54,7 @@ describe('findChord', () => {
     expect(symbols([48, 64, 70, 74, 81])[0]).toBe('C13')
     expect(symbols([48, 64, 70, 73])[0]).toBe('C7♭9')
     expect(symbols([48, 64, 67, 69, 74])[0]).toBe('C6/9')
-    expect(symbols([60, 62, 64, 67, 69])[0]).toBe('C6(add2)')
+    expect(symbols([60, 62, 64, 67, 69])[0]).toBe('C6/9')
   })
 
   it('names an inversion over its bass, and spells it as the key writes it', () => {

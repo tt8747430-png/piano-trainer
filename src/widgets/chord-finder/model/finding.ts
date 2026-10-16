@@ -30,11 +30,13 @@ export type Finding =
   | { readonly kind: 'chord'; readonly readings: readonly [FoundChord, ...FoundChord[]] }
   | { readonly kind: 'none' }
 
-/** The compound intervals a chord symbol names (♭9 … 13), by their span in semitones. */
+/**
+ * The compound intervals a chord symbol names (♭9 … 13), by their span in semitones: not the #9,
+ * whose span two notes alone read as the minor 10th, a minor 3rd.
+ */
 const COMPOUND: ReadonlyMap<number, ReferenceInterval> = new Map([
   [13, 'm9'],
   [14, 'M9'],
-  [15, 'A9'],
   [17, 'P11'],
   [18, 'A11'],
   [20, 'm13'],
