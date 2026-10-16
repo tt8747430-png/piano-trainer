@@ -5,8 +5,8 @@ const modalHarmony: Lesson = {
   id: 'modal-harmony',
   title: { en: 'Chords of the modes', ru: 'Аккорды ладов' },
   summary: {
-    en: 'A mode is heard through two chords: its tonic, and the chord that holds its colour note.',
-    ru: 'Лад слышен через два аккорда: тонический и тот, в котором звучит его характерная нота.',
+    en: 'Make a mode heard with its tonic and its colour chord.',
+    ru: 'Показывать лад его тоникой и аккордом с характерной нотой.',
   },
   sections: [
     {
@@ -14,9 +14,10 @@ const modalHarmony: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A modal vamp', ru: 'Ладовый вамп' },
           text: {
-            en: 'Swing between Dm and G. The B in G is Dorian’s raised 6th.',
-            ru: 'Чередуйте Dm и G. Си в аккорде G — повышенная шестая ступень дорийского лада.',
+            en: 'swings between the tonic and the chord holding the mode’s colour note. In D Dorian, the B in G is the raised 6th.',
+            ru: 'чередует тонику и аккорд с характерной нотой лада. В ре дорийском си в аккорде G — повышенная шестая ступень.',
           },
         },
         { kind: 'progression', numerals: 'i IV i IV', key: { tonic: note('D'), minor: true } },
@@ -33,6 +34,19 @@ const modalHarmony: Lesson = {
           },
         },
         { kind: 'progression', numerals: 'I ♭VII IV I', key: { tonic: note('G'), minor: false } },
+      ],
+    },
+    {
+      heading: { en: 'Aeolian: i, ♭VI, ♭VII', ru: 'Эолийский: i, ♭VI, ♭VII' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'The natural minor climbs Am, F, G back to Am, with no major V to pull it home.',
+            ru: 'Натуральный минор идёт Am, F, G и снова Am, без мажорной V, которая тянет к тонике.',
+          },
+        },
+        { kind: 'progression', numerals: 'i VI VII i', key: { tonic: note('A'), minor: true } },
       ],
     },
     {
@@ -62,37 +76,6 @@ const modalHarmony: Lesson = {
       ],
     },
     {
-      heading: { en: 'Aeolian: i, ♭VI, ♭VII', ru: 'Эолийский: i, ♭VI, ♭VII' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'The natural minor climbs Am, F, G back to Am, with no major V to pull it home.',
-            ru: 'Натуральный минор идёт Am, F, G и снова Am, без мажорной V, которая тянет к тонике.',
-          },
-        },
-        { kind: 'progression', numerals: 'i VI VII i', key: { tonic: note('A'), minor: true } },
-      ],
-    },
-    {
-      heading: { en: 'Stay on the vamp', ru: 'Оставайтесь на вампе' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Modal music stays on its two chords for a long time. Improvise over the vamp with the mode’s notes.',
-            ru: 'Ладовая музыка долго стоит на своих двух аккордах. Импровизируйте над вампом нотами лада.',
-          },
-        },
-        { kind: 'scale', root: note('D'), scale: 'dorian' },
-        {
-          kind: 'link',
-          title: { en: 'D Dorian on Scales and keys', ru: 'Ре дорийский в разделе «Гаммы»' },
-          target: { opens: 'scales', root: note('D'), scale: 'dorian', show: 'chords' },
-        },
-      ],
-    },
-    {
       heading: { en: 'Try it', ru: 'Попробуйте' },
       blocks: [
         {
@@ -112,8 +95,8 @@ const modalHarmony: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'D Dorian', ru: 'Ре дорийский' },
-          target: { opens: 'scales', root: note('D'), scale: 'dorian' },
+          title: { en: 'The chords of D Dorian', ru: 'Аккорды ре дорийского' },
+          target: { opens: 'scales', root: note('D'), scale: 'dorian', show: 'chords' },
         },
         {
           kind: 'link',

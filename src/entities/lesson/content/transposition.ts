@@ -10,8 +10,8 @@ const transposition: Lesson = {
   id: 'transposition',
   title: { en: 'Transposition', ru: 'Транспонирование' },
   summary: {
-    en: 'Moving a tune and its chords into another key: by an interval, by degrees, and for a singer.',
-    ru: 'Как перенести мелодию и её аккорды в другую тональность: на интервал, по ступеням и под голос певца.',
+    en: 'Move a tune and its chords into any key.',
+    ru: 'Переносить мелодию и её аккорды в любую тональность.',
   },
   sections: [
     {
@@ -21,8 +21,8 @@ const transposition: Lesson = {
           kind: 'text',
           lead: { en: 'Transposing', ru: 'Транспонировать' },
           text: {
-            en: 'moves music into another key, every note by the same interval. Below, a tune in C, then up a 5th in G.',
-            ru: 'значит перенести музыку в другую тональность, каждую ноту на один и тот же интервал. Ниже мелодия в до мажоре, затем на квинту выше, в соль мажоре.',
+            en: 'moves every note by the same interval into another key. Below, a tune in C, then up a 5th in G.',
+            ru: '— переносить каждую ноту на один и тот же интервал, в другую тональность. Ниже мелодия в до мажоре, затем на квинту выше, в соль мажоре.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 G4 E4 F4 D4 C4/2' },
@@ -35,8 +35,8 @@ const transposition: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Easier still, read the tune as degrees: 1 3 5 3 4 2 1. Then play the same degrees in the new key’s scale.',
-            ru: 'Ещё проще читать мелодию ступенями: 1 3 5 3 4 2 1. Затем сыграйте те же ступени в гамме новой тональности.',
+            en: 'Easier still, read the tune as degrees: 1 3 5 3 4 2 1. Then play those degrees in the new key.',
+            ru: 'Ещё проще читать мелодию ступенями: 1 3 5 3 4 2 1. Затем сыграйте те же ступени в новой тональности.',
           },
         },
         { kind: 'notes', clef: 'treble', key: F_MAJOR, notes: 'F4 A4 C5 A4 B♭4 G4 F4/2' },
@@ -55,8 +55,8 @@ const transposition: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Numerals do not change with the key. I–IV–V–I is C F G C in C major, D G A D in D major.',
-            ru: 'Римские цифры от тональности не зависят. I–IV–V–I в до мажоре — это C F G C, в ре мажоре — D G A D.',
+            en: 'Numerals stay the same in every key. I–IV–V–I is C F G C in C major, D G A D in D major.',
+            ru: 'Римские цифры в любой тональности одни. I–IV–V–I в до мажоре — это C F G C, в ре мажоре — D G A D.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -89,18 +89,11 @@ const transposition: Lesson = {
           kind: 'text',
           text: {
             en: 'If a tune climbs too high for a voice, move it down. Here a line in D comes down a whole step to C.',
-            ru: 'Если мелодия поднимается слишком высоко для голоса, опустите её. Здесь фраза из ре мажора опускается на тон, в до мажор.',
+            ru: 'Если мелодия слишком высока для голоса, опустите её. Здесь фраза из ре мажора опускается на тон, в до мажор.',
           },
         },
         { kind: 'notes', clef: 'treble', key: D_MAJOR, notes: 'A4 D5 F♯5 E5 D5/1' },
         { kind: 'notes', clef: 'treble', notes: 'G4 C5 E5 D5 C5/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Choose a key where its highest note sits easily.',
-            ru: 'Выберите тональность, где её верхний звук поётся свободно.',
-          },
-        },
       ],
     },
     {
@@ -109,8 +102,8 @@ const transposition: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Practise a progression in every key: the same numerals, a 5th lower each time, round the circle home.',
-            ru: 'Играйте последовательность во всех тональностях: те же ступени, каждый раз на квинту ниже, по кругу домой.',
+            en: 'Practise a progression in every key, a 5th lower each time, round the circle home.',
+            ru: 'Играйте последовательность во всех тональностях, каждый раз на квинту ниже, по кругу домой.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: F_MAJOR },
@@ -146,11 +139,6 @@ const transposition: Lesson = {
           kind: 'link',
           title: { en: 'Degrees of a key in the Quiz', ru: 'Ступени тональности в тестах' },
           target: { opens: 'quiz', trainer: 'key-degrees' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'I–vi–IV–V in Progressions', ru: 'I–vi–IV–V в «Последовательностях»' },
-          target: { opens: 'progressions', numerals: 'I vi IV V', key: G_MAJOR },
         },
       ],
     },

@@ -8,8 +8,8 @@ const pentatonicImprovisation: Lesson = {
   id: 'pentatonic-improvisation',
   title: { en: 'Improvising with the pentatonic', ru: 'Импровизация на пентатонике' },
   summary: {
-    en: 'Make your own melodies over a progression: five safe notes, phrases that answer each other, and landing on the chord.',
-    ru: 'Сочиняйте свои мелодии над последовательностью: пять надёжных нот, фразы, отвечающие друг другу, и опора на аккорд.',
+    en: 'Improvise melodies over a progression with five safe notes.',
+    ru: 'Импровизировать мелодии над последовательностью на пяти надёжных нотах.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Over C, F, G and Am, every note of the C major pentatonic sounds right. Start there.',
-            ru: 'На аккордах C, F, G и Am любая нота до-мажорной пентатоники звучит верно. Начните с неё.',
+            en: 'Over C, F, G and Am, every note of the C major pentatonic sounds right.',
+            ru: 'На аккордах C, F, G и Am любая нота до-мажорной пентатоники звучит верно.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'pent' },
@@ -31,8 +31,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play a short phrase, rest, then answer it with a changed copy. Space between phrases is part of the music.',
-            ru: 'Сыграйте короткую фразу, сделайте паузу и ответьте её изменённой копией. Паузы между фразами — тоже музыка.',
+            en: 'Play a short phrase, rest, then answer it with a changed copy.',
+            ru: 'Сыграйте короткую фразу, сделайте паузу и ответьте её изменённой копией.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/8 G4/8 A4 G4/2 E4/8 G4/8 A4 C5/2' },
@@ -71,8 +71,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Loop I–V–vi–IV in the left hand and improvise in the right. Begin with two notes, add one at a time.',
-            ru: 'Повторяйте I–V–vi–IV левой рукой и импровизируйте правой. Начните с двух нот и добавляйте по одной.',
+            en: 'Loop I–V–vi–IV in the left hand and improvise in the right. Start with two notes, then add one at a time.',
+            ru: 'Повторяйте I–V–vi–IV левой рукой и импровизируйте правой. Начните с двух нот, затем добавляйте по одной.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: C_MAJOR },
@@ -89,8 +89,8 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Over Am, Dm and Em, play the A minor pentatonic. It holds the same notes as C’s, centred on A.',
-            ru: 'На Am, Dm и Em играйте ля-минорную пентатонику. В ней те же ноты, что в до-мажорной, но с центром на ля.',
+            en: 'Over Am, Dm and Em, play the A minor pentatonic: C’s notes, centred on A.',
+            ru: 'На Am, Dm и Em играйте ля-минорную пентатонику: ноты до-мажорной с центром на ля.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'mpent' },
@@ -111,15 +111,10 @@ const pentatonicImprovisation: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play a rising phrase from the pentatonic: E, G, A.',
-            ru: 'Сыграйте восходящую фразу из пентатоники: ми, соль, ля.',
+            en: 'Play the two pentatonic notes that end a phrase over F.',
+            ru: 'Сыграйте две ноты пентатоники, которыми заканчивают фразу на F.',
           },
-          answer: { notes: ['E', 'G', 'A'], rising: true },
-        },
-        {
-          kind: 'link',
-          title: { en: 'A minor pentatonic', ru: 'Минорная пентатоника от ля' },
-          target: { opens: 'scales', root: note('A'), scale: 'mpent' },
+          answer: { notes: ['A', 'C'] },
         },
         {
           kind: 'link',

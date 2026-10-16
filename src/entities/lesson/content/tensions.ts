@@ -5,8 +5,8 @@ const tensions: Lesson = {
   id: 'tensions',
   title: { en: 'Available tensions', ru: 'Доступные тенсии' },
   summary: {
-    en: 'The 9ths, 11ths and 13ths each kind of 7th chord can take, and the one note each must avoid.',
-    ru: 'Ноны, ундецимы и терцдецимы, которые может взять каждый вид септаккорда, и нота, которой каждому следует избегать.',
+    en: 'Add the right 9ths, 11ths and 13ths to any 7th chord.',
+    ru: 'Добавлять к любому септаккорду подходящие ноны, ундецимы и терцдецимы.',
   },
   sections: [
     {
@@ -29,8 +29,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A tension fits when it sits a whole step above a chord tone. A half step above one clashes: that is an avoid note.',
-            ru: 'Тенсия подходит, если стоит на тон выше звука аккорда. На полутон выше — она режет слух: это нота, которой избегают.',
+            en: 'A tension fits a whole step above a chord tone. A half step above one, it clashes: an avoid note.',
+            ru: 'Тенсия подходит на тон выше звука аккорда. На полутон выше она режет слух: это нота, которой избегают.',
           },
         },
         {
@@ -92,8 +92,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Ten fingers rarely hold every note. Drop the 5th first, then the root, which the bass already plays.',
-            ru: 'Десяти пальцам редко хватает на все ноты. Сначала опустите квинту, затем основной тон: его уже играет бас.',
+            en: 'To make room, drop the 5th first, then the root, which the bass already plays.',
+            ru: 'Чтобы освободить место, сначала опустите квинту, затем основной тон: его уже играет бас.',
           },
         },
         {

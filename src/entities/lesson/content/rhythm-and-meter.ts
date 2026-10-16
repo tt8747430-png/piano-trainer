@@ -4,8 +4,8 @@ const rhythmAndMeter: Lesson = {
   id: 'rhythm-and-meter',
   title: { en: 'Rhythm and meter', ru: 'Ритм и размер' },
   summary: {
-    en: 'Feel the beat, read how long each note lasts, read a time signature and count aloud.',
-    ru: 'Как чувствовать долю, читать длительности нот, понимать размер и считать вслух.',
+    en: 'Count the beat and read note values and time signatures.',
+    ru: 'Считать доли и читать длительности нот и размер.',
   },
   sections: [
     {
@@ -64,8 +64,8 @@ const rhythmAndMeter: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Most songs are in 4/4. A waltz is in 3/4, a march in 2/4.',
-            ru: 'Большинство песен — в 4/4. Вальс — в 3/4, марш — в 2/4.',
+            en: 'Most songs are in 4/4, a waltz in 3/4.',
+            ru: 'Большинство песен — в 4/4, вальс — в 3/4.',
           },
         },
       ],
@@ -81,13 +81,6 @@ const rhythmAndMeter: Lesson = {
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/4. A4/8 B4/2' },
-        {
-          kind: 'note',
-          text: {
-            en: 'In 6/8 a bar has two beats, each a dotted quarter of three eighths.',
-            ru: 'В 6/8 в такте две доли, каждая — четвертная с точкой из трёх восьмых.',
-          },
-        },
       ],
     },
     {
@@ -108,13 +101,6 @@ const rhythmAndMeter: Lesson = {
           ],
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/2 G4 G4 A4/4. B4/8 C5/2 G4/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Tap your foot on every beat.',
-            ru: 'Отстукивайте ногой каждую долю.',
-          },
-        },
       ],
     },
     {
@@ -127,11 +113,6 @@ const rhythmAndMeter: Lesson = {
             ru: 'Сыграйте до, ми, соль по доле на каждую, считая «раз, два, три».',
           },
           answer: { notes: ['C', 'E', 'G'], rising: true },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Dotted notes, ties and the pickup', ru: 'Точки, лиги и затакт' },
-          target: { opens: 'lesson', lesson: 'dotted-notes-and-ties' },
         },
         {
           kind: 'link',

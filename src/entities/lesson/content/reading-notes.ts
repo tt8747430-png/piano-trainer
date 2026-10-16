@@ -4,8 +4,8 @@ const readingNotes: Lesson = {
   id: 'reading-notes',
   title: { en: 'The staff and the treble clef', ru: 'Нотный стан и скрипичный ключ' },
   summary: {
-    en: 'Read the right hand’s notes: lines and spaces, three landmarks to read from, and notes above the staff.',
-    ru: 'Читайте ноты правой руки: линейки и промежутки, три ориентира и ноты над станом.',
+    en: 'Read the treble staff’s notes and find them on the keys.',
+    ru: 'Читать ноты скрипичного ключа и находить их на клавиатуре.',
   },
   sections: [
     {
@@ -29,8 +29,8 @@ const readingNotes: Lesson = {
           kind: 'text',
           lead: { en: 'The treble clef', ru: 'Скрипичный ключ' },
           text: {
-            en: 'curls round the second line: the G above middle C. The right hand reads it.',
-            ru: 'обвивает вторую линейку — соль первой октавы. По нему читает правая рука.',
+            en: 'curls round the second line: the G above middle C.',
+            ru: 'обвивает вторую линейку — соль первой октавы.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1' },
@@ -47,8 +47,8 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The lines read E G B D F from the bottom. The spaces spell F A C E.',
-            ru: 'Линейки снизу: ми, соль, си, ре, фа. Промежутки: фа, ля, до, ми.',
+            en: 'The lines read E G B D F from the bottom. The spaces spell F A C E. Line to line skips a key.',
+            ru: 'Линейки снизу: ми, соль, си, ре, фа. Промежутки: фа, ля, до, ми. С линейки на линейку — через клавишу.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 G4 B4 D5 F5/1' },
@@ -61,18 +61,11 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Know middle C below the staff, G on the second line, C5 in the third space. Read other notes from the nearest.',
-            ru: 'Запомните до первой октавы под станом, соль на второй линейке и до второй октавы в третьем промежутке. Остальное читайте шагами от ближайшего.',
+            en: 'Know middle C below the staff, G on the second line and C in the third space. Read other notes from the nearest.',
+            ru: 'Запомните до под станом, соль на второй линейке и до в третьем промежутке. Остальное читайте шагами от ближайшего.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 C5/1' },
-        {
-          kind: 'note',
-          text: {
-            en: 'Line to line skips a key, as does space to space.',
-            ru: 'С линейки на линейку и с промежутка на промежуток — через клавишу.',
-          },
-        },
       ],
     },
     {
@@ -95,8 +88,8 @@ const readingNotes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Reading gets fast by naming many notes quickly. Name each note below, then play it.',
-            ru: 'Чтение ускоряется, когда называешь много нот быстро. Назовите каждую ноту ниже и сыграйте её.',
+            en: 'Name each note below, then play it. Speed comes from many notes, read quickly.',
+            ru: 'Назовите каждую ноту ниже и сыграйте её. Скорость приходит, когда читаешь много нот быстро.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4 E4 C5 A4 F4 D5 B4 C4' },

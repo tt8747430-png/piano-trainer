@@ -8,8 +8,8 @@ const syncopationAndSwing: Lesson = {
   id: 'syncopation-and-swing',
   title: { en: 'Syncopation and swing', ru: 'Синкопа и свинг' },
   summary: {
-    en: 'Rhythm that leans off the beat: accents between the beats, ties over them, the anticipation, and eighths played long–short.',
-    ru: 'Ритм, который смещается с доли: акценты между долями, лиги через долю, антиципация и восьмые, сыгранные «долго — коротко».',
+    en: 'Play off the beat, push chords early and swing your eighths.',
+    ru: 'Играть мимо доли, брать аккорды раньше и свинговать восьмые.',
   },
   sections: [
     {
@@ -19,8 +19,8 @@ const syncopationAndSwing: Lesson = {
           kind: 'text',
           lead: { en: 'Syncopation', ru: 'Синкопа' },
           text: {
-            en: 'puts the weight where the beat does not expect it. Below, a quarter starts on the “and” of 1 and sounds through beat 2.',
-            ru: '— ударение там, где доля его не ждёт. Ниже четвертная начинается на «и» после «раз» и звучит через вторую долю.',
+            en: 'puts the weight between the beats. Below, a quarter starts on the “and” of 1 and sounds through beat 2.',
+            ru: '— ударение между долями. Ниже четвертная начинается на «и» после «раз» и звучит через вторую долю.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/8 E5/4 E5/8 G5/4 E5/4 C5/1' },
@@ -32,8 +32,8 @@ const syncopationAndSwing: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A tie from an “and” over the next beat hides that beat. You hear the note early and feel the beat silently.',
-            ru: 'Лига с «и» через следующую долю прячет эту долю. Звук приходит раньше, а долю вы чувствуете про себя.',
+            en: 'A tie from an “and” over the next beat hides that beat. Feel it silently.',
+            ru: 'Лига с «и» через следующую долю прячет эту долю. Чувствуйте её про себя.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'r/8 G4/8 C5/8 E5/8~ E5/8 D5/8 C5 G4/1' },
@@ -62,8 +62,8 @@ const syncopationAndSwing: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The bass still changes on the beat. Only the tune runs ahead.',
-            ru: 'Бас по-прежнему меняется на долю. Вперёд забегает только мелодия.',
+            en: 'The bass still changes on the beat.',
+            ru: 'Бас по-прежнему меняется на долю.',
           },
         },
       ],
@@ -74,8 +74,8 @@ const syncopationAndSwing: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Pop and gospel push whole chords the same way. Strike the next chord on the last “and” and hold it over the bar. Below, each chord’s top note.',
-            ru: 'В попе и госпеле так же сдвигают целые аккорды. Возьмите следующий аккорд на последнее «и» и держите через такт. Ниже — верхний звук каждого.',
+            en: 'Pop and gospel push whole chords the same way: the next chord on the last “and”, held over the bar. Below, each chord’s top note.',
+            ru: 'В попе и госпеле так же сдвигают целые аккорды: следующий берут на последнее «и» и держат через такт. Ниже — верхний звук каждого.',
           },
         },
         {
@@ -93,8 +93,8 @@ const syncopationAndSwing: Lesson = {
           kind: 'text',
           lead: { en: 'Swing', ru: 'Свинг' },
           text: {
-            en: 'plays a pair of eighths long–short, as the first and last notes of a triplet. Written straight, they sound as the 12/8 line below.',
-            ru: '— исполнение пары восьмых «долго — коротко», как первой и последней ноты триоли. Записанные ровно, они звучат как строка в 12/8 ниже.',
+            en: 'plays a pair of eighths long–short, as a triplet’s first and last notes. Swung, the first line sounds like the 12/8 one.',
+            ru: '— пара восьмых «долго — коротко», как первая и последняя ноты триоли. В свинге первая строка звучит как строка в 12/8.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C5/8 D5/8 E5/8 F5/8 G5/8 F5/8 E5/8 D5/8 C5/1' },
@@ -112,8 +112,8 @@ const syncopationAndSwing: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Classical, rock and most pop play eighths straight. Jazz, blues and gospel swing them. A chart marks it over the first bar: “Swing”.',
-            ru: 'Классика, рок и почти весь поп играют восьмые ровно. Джаз, блюз и госпел их свингуют. На листе это пишут над первым тактом: «Swing».',
+            en: 'Classical, rock and most pop play eighths straight. Jazz, blues and gospel swing them.',
+            ru: 'Классика, рок и почти весь поп играют восьмые ровно. Джаз, блюз и госпел их свингуют.',
           },
         },
         { kind: 'progression', numerals: TWELVE_BARS, key: C_MAJOR },
@@ -137,14 +137,6 @@ const syncopationAndSwing: Lesson = {
             ru: 'Сыграйте звук, который антиципация взяла раньше.',
           },
           answer: { notes: ['F'] },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play C7, the chord the blues swings on first.',
-            ru: 'Сыграйте C7 — первый аккорд блюза.',
-          },
-          answer: { chord: 'C7' },
         },
         {
           kind: 'link',
