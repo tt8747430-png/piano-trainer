@@ -1,4 +1,4 @@
-import { Check, Eye, Piano, RotateCcw, X, type LucideIcon } from 'lucide-react'
+import { Check, CircleHelp, Eye, Piano, RotateCcw, X, type LucideIcon } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
@@ -13,8 +13,9 @@ interface QuestionAction {
 }
 
 /**
- * A question answered on the lesson's keys (Pianote's pop quiz): Answer opens it, and the keys tapped
- * are judged as soon as they are as many notes as the answer's, counted as they are chosen; a wrong
+ * A question answered on the lesson's keys (Pianote's pop quiz), marked with a question's sign: Answer
+ * opens it (ringed while open), and the keys tapped are judged as soon as they are as many notes as
+ * the answer's, each chosen filling one of its dots; a wrong
  * answer can be fixed on the keys or shown. Its button stays one button through every stage, so a
  * keyboard user's focus stays on it; the verdict's region stays in the page, so its words are heard
  * when they come.
@@ -46,33 +47,57 @@ export function QuestionBlock({
         ? { label: t('question.show'), icon: Eye, onClick: onReveal }
         : { label: t('question.again'), icon: RotateCcw, onClick: onRetry }
   const Icon = action.icon
+  const open = stage !== 'closed'
   return (
     <div
       role="group"
       aria-labelledby={id}
-      className="flex flex-wrap items-center gap-x-4 gap-y-2 card px-4 py-3 text-base"
+      data-open={open || undefined}
+      className="flex flex-col gap-3 card p-4 text-base transition-shadow duration-200 ease-out data-open:ring-2 data-open:ring-ring"
     >
-      <p id={id} className="min-w-0 flex-1 basis-64 font-semibold text-pretty">
-        {localText(ask, locale)}
-      </p>
-      <div className="flex items-center gap-3">
-        <p role="status" className="flex items-center gap-1.5 text-sm empty:sr-only">
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-lilac text-on-paint-lilac"
+        >
+          <CircleHelp className="size-5" />
+        </span>
+        <p id={id} className="min-w-0 flex-1 pt-2 font-semibold text-pretty">
+          {localText(ask, locale)}
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pl-13">
+        <p role="status" className="flex min-h-6 items-center gap-2 text-sm empty:sr-only">
           {stage === 'right' ? (
-            <>
-              <Check aria-hidden className="size-5 text-learned" />
+            <span className="inline-flex items-center gap-1.5 font-semibold text-learned">
+              <Check aria-hidden className="size-5" strokeWidth={3} />
               {t('question.right')}
-            </>
+            </span>
           ) : stage === 'wrong' ? (
-            <>
-              <X aria-hidden className="size-5 text-destructive" />
+            <span className="inline-flex items-center gap-1.5 font-semibold text-destructive">
+              <X aria-hidden className="size-5" strokeWidth={3} />
               {t('question.wrong')}
-            </>
+            </span>
           ) : stage === 'answer' ? (
             t('question.shown')
           ) : stage === 'choosing' ? (
-            <span className="text-muted-foreground tabular-nums">
-              {t('question.chosen', count)}
-            </span>
+            <>
+              <Piano aria-hidden className="size-4 text-muted-foreground" />
+              <span className="text-muted-foreground">{t('question.onKeys')}</span>
+              <span aria-hidden className="flex gap-1">
+                {Array.from({ length: count.total }, (_, i) => (
+                  <span
+                    key={i}
+                    className={
+                      i < count.chosen
+                        ? 'size-2.5 rounded-full bg-primary'
+                        : 'size-2.5 rounded-full border border-input'
+                    }
+                  />
+                ))}
+              </span>
+              <span className="sr-only">{t('question.chosen', count)}</span>
+            </>
           ) : null}
         </p>
         <Button variant="soft" className="rounded-full" onClick={action.onClick}>

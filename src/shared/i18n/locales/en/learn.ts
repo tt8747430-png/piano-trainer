@@ -90,6 +90,7 @@ export const learn = {
   // A lesson's question, answered on its keys.
   question: {
     answer: 'Answer',
+    onKeys: 'Choose on the keys',
     chosen: '{{chosen}} of {{total}} notes',
     right: 'Correct',
     wrong: 'Not quite',

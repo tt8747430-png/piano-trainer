@@ -80,6 +80,7 @@ export const learn: LocaleResources['learn'] = {
   },
   question: {
     answer: 'Ответить',
+    onKeys: 'Выберите на клавишах',
     chosen: 'Нот: {{chosen}} из {{total}}',
     right: 'Верно',
     wrong: 'Не совсем',
