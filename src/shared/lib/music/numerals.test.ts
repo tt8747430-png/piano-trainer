@@ -131,6 +131,22 @@ describe('numeralChord', () => {
     expect(chords('vii°', A_MINOR, 'triads')).toEqual(['G#°'])
     expect(chords('vii°', A_MINOR, 'sevenths')).toEqual(['G#°7'])
     expect(chords('vii°7', A_MINOR, 'triads')).toEqual(['G#°7'])
+  })
+
+  it('spells the leading tone as the key does, though it is a white key (E♯, B♯)', () => {
+    const F_SHARP_MINOR: Key = { tonic: note('F', 1), minor: true }
+    const C_SHARP_MINOR: Key = { tonic: note('C', 1), minor: true }
+    expect(chords('vii°', F_SHARP_MINOR, 'triads')).toEqual(['E#°'])
+    expect(chords('vii°', F_SHARP_MINOR, 'sevenths')).toEqual(['E#°7'])
+    expect(chords('vii°', C_SHARP_MINOR, 'triads')).toEqual(['B#°'])
+    expect(chords('vii° IV', { tonic: note('C', 1), minor: false }, 'triads')).toEqual([
+      'B#°',
+      'F#',
+    ])
+    expect(chords('IV IV7', { tonic: note('G', -1), minor: false }, 'triads')).toEqual([
+      'C♭',
+      'C♭7',
+    ])
     expect(chords('VII', A_MINOR, 'triads')).toEqual(['G'])
   })
 

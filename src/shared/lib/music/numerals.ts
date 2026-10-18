@@ -249,15 +249,18 @@ function ownChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   const tone = from[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const { quality } = numeral
-  // A minor key's diminished vii is on its leading tone, as harmonic minor has it (A minor's G♯°).
-  const shift = key.minor && leadingTone(numeral) ? 1 : numeral.shift
-  const root = plainRoot(
-    shift === 0 ? tone.note : spellAbove(tone.note, { steps: 0, semitones: shift }),
-  )
-  if (shift !== numeral.shift) {
+  // A minor key's diminished vii is on its leading tone, as harmonic minor has it (A minor's G♯°,
+  // F♯ minor's E♯°), spelled as the key spells it.
+  if (key.minor && leadingTone(numeral)) {
+    const root = spellAbove(tone.note, { steps: 0, semitones: 1 })
     if (size === 'triads' || quality !== 'dim') return { root, quality }
     return { root, quality: 'o7' }
   }
+  // The key's own degree as the key spells it (C♯ major's B♯); a chromatic one plain.
+  const root =
+    numeral.shift === 0
+      ? tone.note
+      : plainRoot(spellAbove(tone.note, { steps: 0, semitones: numeral.shift }))
   if (!isPlainTriad(quality)) return { root, quality }
   // The key's own chord, wherever its root lies by a flat (A minor's ♭VI is its own VI, F).
   const degree = scale.findIndex((each) => each.pitchClass === pitchClassOf(root))
