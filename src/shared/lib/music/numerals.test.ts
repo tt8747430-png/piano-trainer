@@ -262,6 +262,24 @@ describe('numeralOf', () => {
     expect(written(['Dm7', 'Gm9', 'Asus4'], D_MINOR)).toEqual(['i7', 'iv9', 'Vsus4'])
   })
 
+  it('writes a minor key’s chords on its raised 6th and 7th as its own degrees', () => {
+    const written = (symbols: string[]) =>
+      symbols.map((symbol) => {
+        const numeral = numeralOf(parseChordSymbol(symbol), A_MINOR)
+        return numeral ? numeralText(numeral) : null
+      })
+    expect(written(['G#°', 'G#°7', 'G#m7♭5', 'F#°', 'F#m7♭5'])).toEqual([
+      'vii°',
+      'vii°7',
+      'viiø7',
+      'vi°',
+      'viø7',
+    ])
+    expect(written(['G', 'F', 'G#'])).toEqual(['VII', 'VI', '#VII'])
+    expect(chords('vii° vi° viø7', A_MINOR, 'triads')).toEqual(['G#°', 'F#°', 'F#m7♭5'])
+    expect(chords('vii° vi°', A_MINOR, 'sevenths')).toEqual(['G#°7', 'F#m7♭5'])
+  })
+
   it('writes none for a chord whose root is no degree’s, sharpened or flattened', () => {
     expect(numeralOf(parseChordSymbol('F##'), C)).toBeNull()
   })

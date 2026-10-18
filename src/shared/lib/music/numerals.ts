@@ -206,11 +206,18 @@ export const numeralsParam = (numerals: readonly Numeral[]): string =>
  */
 const withOwnNinth = (quality: ChordQuality): ChordQuality => (quality === 'hd' ? 'hd9' : quality)
 
-/** A diminished chord on the 7th degree, unaltered: in a minor key, on its leading tone. */
+/**
+ * Whether a minor key's chord on this degree stands on its raised 6th or 7th, as melodic and
+ * harmonic minor have them: a diminished or half-diminished chord on the 6th (A minor's F♯°, F♯ø7),
+ * or any diminished one on the 7th (G♯°, G♯°7, G♯ø7).
+ */
+const onRaisedDegree = (degree: number, quality: ChordQuality): boolean =>
+  (degree === 6 && (quality === 'dim' || quality === 'o7' || quality === 'hd')) ||
+  (degree === 5 && (quality === 'dim' || quality === 'hd'))
+
+/** A diminished chord on the 6th or 7th degree, unaltered: in a minor key, on its raised degree. */
 const leadingTone = (numeral: Numeral): boolean =>
-  numeral.degree === 6 &&
-  numeral.shift === 0 &&
-  (numeral.quality === 'dim' || numeral.quality === 'o7' || numeral.quality === 'hd')
+  numeral.shift === 0 && onRaisedDegree(numeral.degree, numeral.quality)
 
 /**
  * A numeral's chord in a key at a chord size. Any chord but a plain triad is played as written;
@@ -219,7 +226,7 @@ const leadingTone = (numeral: Numeral): boolean =>
  * to a minor 7th, then to the 9th the key has over it where the chord takes it (a minor key's V to
  * `7♭9`); a half-diminished chord takes its natural 9th (a minor key's ii to `m9♭5`). A major key
  * counts from the major scale, a minor key from natural minor (its diminished vii from harmonic minor,
- * on the leading tone), a flat in either from the major scale (A minor's ♭VI is F, not F♭: its own VI,
+ * on the leading tone, and its diminished vi from melodic minor, on the raised 6th), a flat in either from the major scale (A minor's ♭VI is F, not F♭: its own VI,
  * grown as the key's).
  */
 export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
@@ -250,11 +257,12 @@ function ownChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const { quality } = numeral
   // A minor key's diminished vii is on its leading tone, as harmonic minor has it (A minor's G♯°,
-  // F♯ minor's E♯°), spelled as the key spells it.
+  // F♯ minor's E♯°), and its vi° on its raised 6th (F♯°), spelled as the key spells it.
   if (key.minor && leadingTone(numeral)) {
     const root = spellAbove(tone.note, { steps: 0, semitones: 1 })
     if (size === 'triads' || quality !== 'dim') return { root, quality }
-    return { root, quality: 'o7' }
+    // Grown, the leading tone's is a °7 (G♯°7), the raised 6th's a ø7 (F♯ø7: melodic minor's).
+    return { root, quality: numeral.degree === 6 ? 'o7' : 'hd' }
   }
   // The key's own degree as the key spells it (C♯ major's B♯); a chromatic one plain.
   const root =
@@ -275,12 +283,19 @@ function ownChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
   return { root, quality: withOwnNinth(grownNinth(seventh, keyNinth(root, scale))) }
 }
 
-/** A chord as its numeral in a key (Am in C is vi, C6 is I6); none where its root is more than a semitone from its degree. */
+/**
+ * A chord as its numeral in a key (Am in C is vi, C6 is I6); none where its root is more than a
+ * semitone from its degree. A minor key's diminished chord on its raised 6th or 7th is that degree's
+ * own (G♯° in A minor is vii°), as `numeralChord` reads it back.
+ */
 export function numeralOf(chord: Chord, key: Key): Numeral | null {
   const degree = (letterIndex(chord.root.letter) - letterIndex(key.tonic.letter) + 7) % 7
   const tone = spellScale(key.tonic, keyScale(key))[degree]
   if (!tone) return null
   const distance = pitchClass(pitchClassOf(chord.root) - tone.pitchClass)
+  if (key.minor && distance === 1 && onRaisedDegree(degree, chord.quality)) {
+    return { degree, shift: 0, quality: chord.quality }
+  }
   const shift = distance === 0 ? 0 : distance === 1 ? 1 : distance === 11 ? -1 : null
   return shift === null ? null : { degree, shift, quality: chord.quality }
 }

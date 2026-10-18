@@ -102,11 +102,18 @@ describe('readInKey', () => {
     expect(numerals('D Bb A D', D)[1]).toBe('♭VI')
   })
 
+  it('reads a minor key’s chords on its raised 6th and 7th as its own', () => {
+    const A_MINOR: Key = { tonic: note('A'), minor: true }
+    expect(numerals('Am G#dim Am', A_MINOR)).toEqual(['i', 'vii°', 'i'])
+    expect(numerals('F#m7b5 E7 Am', A_MINOR)).toEqual(['viø7', 'V7', 'i'])
+  })
+
   it('reads every chord back: its numeral in the key is the chord', () => {
     const lines: [string, Key][] = [
       ['Dm Gm Asus4 Dm Gm Csus4 Am D D/F# Gm Csus4 C F Bb Gm Em7b5 A Dm6', D_MINOR],
       ['C A7 Dm G7 C E7 Am Fm6 C', { tonic: note('C'), minor: false }],
       ['Em9 A7b9 DMaj9 C#m7b5 F#7#9 Bm9', { tonic: note('D'), minor: false }],
+      ['Am F#m7b5 G#dim7 Am G#m7b5 E7 Am', { tonic: note('A'), minor: true }],
     ]
     for (const [line, key] of lines) {
       for (const { chord, numeral } of readInKey(chords(line), key)) {
