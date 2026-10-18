@@ -3,6 +3,7 @@ import { pitchClassOf } from './note'
 import { keysOfChords, readInKey } from './key-of-chords'
 import { keySymbol, type Key } from './key'
 import { parseChordSymbol } from './chord-symbol'
+import { chordSymbol } from './chord'
 import { note } from './note'
 import { numeralChord, numeralText } from './numerals'
 
@@ -82,6 +83,23 @@ describe('readInKey', () => {
   it('spells each chord as the key does, its bass with it', () => {
     const [chord] = readInKey(chords('A#/D'), D_MINOR).map((reading) => reading.chord)
     expect(chord).toEqual({ root: note('B', -1), quality: 'maj', bass: note('D') })
+  })
+
+  it('keeps a chord out of the key as typed, its numeral from its letter', () => {
+    const G: Key = { tonic: note('G'), minor: false }
+    const C: Key = { tonic: note('C'), minor: false }
+    const E_FLAT: Key = { tonic: note('E', -1), minor: false }
+    const D: Key = { tonic: note('D'), minor: false }
+    const symbols = (line: string, key: Key) =>
+      readInKey(chords(line), key).map(({ chord }) => chordSymbol(chord))
+    expect(symbols('G Bb C G', G)).toEqual(['G', 'B♭', 'C', 'G'])
+    expect(numerals('G Bb C G', G)).toEqual(['I', '♭III', 'IV', 'I'])
+    expect(symbols('C F#m7b5 B7 Em', C)[1]).toBe('F#m7♭5')
+    expect(numerals('C F#m7b5 B7 Em', C)[1]).toBe('#ivø7')
+    expect(symbols('Eb Cb Ab Bb7', E_FLAT)[1]).toBe('C♭')
+    expect(numerals('Eb Cb Ab Bb7', E_FLAT)[1]).toBe('♭VI')
+    expect(symbols('D Bb A D', D)[1]).toBe('B♭')
+    expect(numerals('D Bb A D', D)[1]).toBe('♭VI')
   })
 
   it('reads every chord back: its numeral in the key is the chord', () => {

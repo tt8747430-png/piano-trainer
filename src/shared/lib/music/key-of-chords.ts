@@ -42,15 +42,20 @@ const isTonic = (chord: Chord | undefined, key: Key): boolean =>
   hasInterval(chord.quality, 2, key.minor ? 3 : 4) &&
   hasInterval(chord.quality, 4, 7)
 
-/** A chord spelled as the key spells its root and bass. */
+/**
+ * A chord spelled as the key spells its root and bass, where that makes every note of it the key's
+ * (`A#` in D minor is B♭); any other chord as it was typed (`B♭` in G stays B♭, its ♭III).
+ */
 function spelledIn(chord: Chord, key: Key): Chord {
   const root = spellInKey(pitchClassOf(chord.root), key)
-  if (!chord.bass) return { root, quality: chord.quality }
-  return {
-    root,
-    quality: chord.quality,
-    bass: chordBass(root, chord.quality, spellInKey(pitchClassOf(chord.bass), key)),
-  }
+  const respelled: Chord = chord.bass
+    ? {
+        root,
+        quality: chord.quality,
+        bass: chordBass(root, chord.quality, spellInKey(pitchClassOf(chord.bass), key)),
+      }
+    : { root, quality: chord.quality }
+  return chordInKey(respelled, key) ? respelled : chord
 }
 
 /**
