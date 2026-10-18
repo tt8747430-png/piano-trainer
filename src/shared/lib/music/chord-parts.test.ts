@@ -246,9 +246,16 @@ describe('builtRootSpelling', () => {
     expect(builtRootSpelling(pitchClass(1), parts({ size: 13, alterations: ['b9'] }))).toEqual(
       note('C', 1),
     )
-    expect(builtRootSpelling(pitchClass(1), parts({ triad: 'sus4', size: 9 }))).toEqual(
+    expect(builtRootSpelling(pitchClass(1), parts({ triad: 'sus4', size: 5 }))).toEqual(
       note('D', -1),
     )
+  })
+
+  it('names a root by the plainer spelling of the chord, where one is plainer', () => {
+    expect(builtRootSpelling(pitchClass(1), parts({ triad: 'sus4', size: 9 }))).toEqual(
+      note('C', 1),
+    )
+    expect(builtRootSpelling(pitchClass(3), parts({ triad: 'dim', size: 5 }))).toEqual(note('D', 1))
   })
 })
 

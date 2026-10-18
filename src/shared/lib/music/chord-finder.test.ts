@@ -17,6 +17,11 @@ describe('nameChords', () => {
     expect(inKey({ tonic: note('G', -1), minor: false }, 66, 70, 73)).toBe('G♭')
   })
 
+  it('names a chord from the root that spells it plainly, with no key to decide', () => {
+    expect(named(63, 66, 69)[0]).toBe('D#°')
+    expect(named(58, 61, 64, 67)[0]).toBe('A#°7')
+  })
+
   it('names a 9th chord over its 7th before a 6/9 that leaves its 5th out and adds a tone', () => {
     expect(named(48, 50, 52, 53, 57)[0]).not.toMatch(/6\/9/)
   })
@@ -172,6 +177,6 @@ describe('nameChords', () => {
     const C = { tonic: note('C'), minor: false }
     const inKey = (...keys: number[]) => nameChords(keys.map(midi), C).map((each) => each.symbol)
     expect(inKey(48, 52, 56)).toEqual(['C+', 'E+/C', 'A♭+/C'])
-    expect(inKey(48, 51, 54, 57)).toEqual(['C°7', 'E♭°7/C', 'F#°7/C', 'A°7/C'])
+    expect(inKey(48, 51, 54, 57)).toEqual(['C°7', 'D#°7/C', 'F#°7/C', 'A°7/C'])
   })
 })
