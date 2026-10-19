@@ -600,6 +600,53 @@
   }
 }
 
+/* The score editor's screen (pages/score-editor; spec §6): its parts placed by `data-area`. Upright and
+   from a laptop's width, a column: the toolbar, the sheet taking what is left, the tools and the keys.
+   A phone on its side has no height for them all in a column: the sheet keeps the whole height over
+   the keys, so a line's grand staff is in sight, and the toolbar and the tools stand right of it, the
+   tools one row under the toolbar, scrolling sideways. */
+@utility editor-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: 'bar' 'sheet' 'tools' 'keys';
+  & > [data-area='bar'] {
+    grid-area: bar;
+  }
+  & > [data-area='sheet'] {
+    grid-area: sheet;
+  }
+  & > [data-area='tools'] {
+    grid-area: tools;
+  }
+  & > [data-area='keys'] {
+    grid-area: keys;
+  }
+  @variant landscape-phone {
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'sheet bar'
+      'sheet tools'
+      'keys keys';
+  }
+}
+
+/* A row that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
+@utility fade-scroll-x {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--strip-fade-start),
+      #000 calc(100% - var(--strip-fade-end)),
+      transparent
+    );
+    animation: strip-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+}
+
 /* Paper: the page's own margins, as a printed chart has. */
 @page {
   margin: 16mm;

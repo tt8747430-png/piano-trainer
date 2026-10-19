@@ -10,8 +10,8 @@ import { RecorderSheet } from './RecorderSheet'
 
 /**
  * The editor's toolbar: Close and the title, Undo and Redo, Chord names, MIDI, the takes, the song's settings, and
- * Play (on a phone, the tools in a row of their own under the title and Play); while a take records,
- * only Close and MIDI.
+ * Play (on a phone, and beside the sheet of a phone on its side, the tools in a row of their own under
+ * the title and Play); while a take records, only Close and MIDI.
  */
 export function EditorToolbar() {
   const { t } = useTranslation(['editor', 'common'])
@@ -31,8 +31,8 @@ export function EditorToolbar() {
           <span className="text-sm text-muted-foreground">{t('editor:yourVersion')}</span>
         ) : null}
       </div>
-      {/* On a phone the tools take a row of their own under the title and Play. */}
-      <div className="order-last flex w-full items-center gap-2 sm:order-none sm:w-auto">
+      {/* On a phone, and in the column of a phone on its side, the tools take a row of their own under the title and Play. */}
+      <div className="order-last flex w-full items-center gap-2 sm:order-none sm:w-auto landscape-phone:order-last landscape-phone:w-full landscape-phone:justify-between landscape-phone:gap-1">
         <RoundButton
           label={t('editor:undo')}
           icon={Undo2}
