@@ -16,7 +16,9 @@ const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { treble: 'rh', bass: 'l
 /**
  * A line of notes to read, on the staff it is read on, and Play beside it, which plays it on the
  * page's keys a bar at a time: each note marked on the staff as it sounds, the keys showing only the
- * bar it is in. Its notes' names show on the staff from its own toggle.
+ * bar it is in. Its notes' names show on the staff from its own toggle. Each bar it reaches goes to
+ * `onFollow`, `onShow` unless given: the line moving on is not the learner's choice, so a lesson
+ * keeps a question opened as it plays.
  */
 export function NotesExample({
   notes,
@@ -24,12 +26,14 @@ export function NotesExample({
   meter,
   keyParam,
   onShow,
+  onFollow = onShow,
 }: {
   notes: string
   clef: StaffId
   meter: NoteLineMeter
   keyParam: KeyParam
   onShow: (shown: ShownKeys) => void
+  onFollow?: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('music')
   const playback = usePlayback<'line'>()
@@ -47,8 +51,8 @@ export function NotesExample({
   useEffect(() => {
     if (bar === null || bar === shownBar.current) return
     shownBar.current = bar
-    onShow(barShown(line, bar))
-  }, [bar, line, onShow])
+    onFollow(barShown(line, bar))
+  }, [bar, line, onFollow])
   return (
     <figure className="flex w-fit max-w-full items-center gap-4 card p-3 pl-4">
       <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none">

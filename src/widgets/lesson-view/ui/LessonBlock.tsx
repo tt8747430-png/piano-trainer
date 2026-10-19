@@ -40,14 +40,17 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
  * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
  * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row, beside a
  * way into Progressions), or a link
- * into an explorer, a tool or the Player. A question is the view's, which keeps its state.
+ * into an explorer, a tool or the Player. A question is the view's, which keeps its state. What a
+ * line of notes shows as it plays on goes to `onFollow`, `onShow` unless given.
  */
 export function LessonBlock({
   block,
   onShow,
+  onFollow = onShow,
 }: {
   block: Exclude<Block, { kind: 'question' }>
   onShow: (shown: ShownKeys) => void
+  onFollow?: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -92,6 +95,7 @@ export function LessonBlock({
           meter={block.meter ?? '4/4'}
           keyParam={keyParam(block.key ?? C_MAJOR)}
           onShow={onShow}
+          onFollow={onFollow}
         />
       )
     case 'voicings':

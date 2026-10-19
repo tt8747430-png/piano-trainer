@@ -243,6 +243,21 @@ describe('LessonView’s worksheet', () => {
     await waitFor(() => expect(marked()[0]?.getAttribute('data-tick')).not.toBe(first))
   })
 
+  it('keeps a question opened while a line plays, as the line reaches its next bar', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const line = screen.getAllByRole('figure').at(-1) ?? document.body
+    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    await user.click(within(line).getByRole('button', { name: 'Play' }))
+    const started = audio.played.at(-1)
+    const question = screen.getByRole('group', { name: 'Play E minor.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
+    act(() => audio.setNow((started?.at ?? 0) + (started?.sounds.at(-1)?.at ?? 0)))
+    await waitFor(() => expect(line.querySelector('.vf-selected[data-tick]')).not.toBeNull())
+    expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
+  })
+
   it('answers a question on the keys: counted, judged at its last note, fixed and right', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)

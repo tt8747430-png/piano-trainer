@@ -220,7 +220,8 @@ export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
   useMidiKeyDown((key) => {
     if (choosing && openAnswer) choose(key, openAnswer)
   })
-  // An example played closes the open question: the keys show the example.
+  // An example played closes the open question: the keys show the example. A line playing on to
+  // its next bar is no new example: the keys follow it without closing the question.
   const show = (next: ShownKeys) => {
     dispatch({ type: 'close' })
     setShown(next)
@@ -248,7 +249,7 @@ export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
             {section.blocks.map((block, b) => {
               const id = `${s}.${b}`
               if (block.kind !== 'question')
-                return <LessonBlock key={id} block={block} onShow={show} />
+                return <LessonBlock key={id} block={block} onShow={show} onFollow={setShown} />
               const open = question?.id === id ? question : null
               const answerKeys = answers.get(id) ?? { ...NO_KEYS, inOrder: false }
               return (
