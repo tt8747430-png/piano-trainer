@@ -22,7 +22,7 @@ interface SheetChoiceGroup {
 
 /**
  * One of the sheet's lists, as a page of it, with the way back to the first page: it opens on the
- * choice it holds, so a keyboard user starts where they are. `children` follow the list (a way out).
+ * choice it holds, so a keyboard user starts where they are, Back kept at its top. `children` follow the list (a way out).
  */
 export function ListPage({
   label,
@@ -38,14 +38,19 @@ export function ListPage({
   const { t } = useTranslation('player')
   const list = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    list.current?.querySelector<HTMLElement>('[role="option"][tabindex="0"]')?.focus()
+    const chosen = list.current?.querySelector<HTMLElement>('[role="option"][tabindex="0"]')
+    chosen?.focus({ preventScroll: true })
+    chosen?.scrollIntoView?.({ block: 'center' })
   }, [])
   return (
     <div ref={list} className="flex flex-col gap-4">
-      <Button variant="ghost" className="-ml-3 self-start" onClick={onBack}>
-        <ChevronLeft data-icon="inline-start" />
-        {t('back')}
-      </Button>
+      {/* Back stays at the top of the sheet however far down the list it opened. */}
+      <div className="sticky top-0 z-10 -mx-5 border-b border-hairline bg-card px-5 py-1">
+        <Button variant="ghost" className="-ml-3" onClick={onBack}>
+          <ChevronLeft data-icon="inline-start" />
+          {t('back')}
+        </Button>
+      </div>
       <Listbox
         label={label}
         className="gap-4"
