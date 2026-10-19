@@ -1,5 +1,5 @@
 import { skillsOfStep, stepOf, type StepId } from '@/entities/step'
-import { chordsOfPiece, pieceById, skillsOfPiece } from '@/entities/piece'
+import { chordsOfPiece, pieceById, skillsOfPiece, type Piece } from '@/entities/piece'
 import { stillToKnow, type Answer } from '@/entities/progress'
 import type { SkillId } from '@/shared/lib/music'
 import type { Asks } from './draw'
@@ -34,17 +34,19 @@ function untilKnown(
 
 /**
  * A Check's questions (spec §4.6): a piece's own chords as written, in turn, six questions or one each; a step's
- * chord family or scale until each is Known, which marks the step learned (ADR 0006).
+ * chord family or scale until each is Known, which marks the step learned (ADR 0006). A piece is looked up in
+ * `pieceOf`: the repertoire's, so a learner's version and own song are checked as they play.
  */
 export function checkPlan(
   of: StepId,
   answersOf: (skill: SkillId) => readonly Answer[] = NO_EVIDENCE,
+  pieceOf: (id: string) => Piece | undefined = pieceById,
 ): CheckPlan | null {
   const step = stepOf(of)
   // A lesson is read, never checked.
   if (!step || step.kind === 'lesson' || step.kind === 'course-lesson') return null
   if (step.kind === 'piece') {
-    const piece = pieceById(step.pieceId)
+    const piece = pieceOf(step.pieceId)
     if (!piece) return null
     const skills = skillsOfPiece(piece)
     const chords = chordsOfPiece(piece).map((chord) => ({ ...chord, inversion: null }))

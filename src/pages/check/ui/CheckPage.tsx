@@ -2,6 +2,7 @@ import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRepertoire } from '@/entities/piece'
 import { stepOf, type StepId } from '@/entities/step'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { MidiButton } from '@/features/connect-midi'
@@ -62,7 +63,10 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
 /** The check's questions, drawn once from the evidence as it opens: each skill as often as it still needs. */
 function CheckDraw({ of }: { of: StepId }) {
   const progress = useProgressStoreApi()
-  const [plan] = useState(() => checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())))
+  const pieces = useRepertoire()
+  const [plan] = useState(() =>
+    checkPlan(of, (skill) => selectAnswers(skill)(progress.getState()), pieces.piece),
+  )
   return plan ? <CheckFlow plan={plan} /> : null
 }
 

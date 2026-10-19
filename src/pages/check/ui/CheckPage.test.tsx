@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
 import { createMemoryStorage } from '@/shared/lib'
@@ -57,6 +58,38 @@ describe('Check', () => {
       await user.click(screen.getByRole('button', { name: /^(Next|Results)$/ }))
     }
     expect(screen.getByText('Minor blues is now marked learned.')).toBeInTheDocument()
+  })
+
+  describe('the learner’s own music', () => {
+    const MUSIC = {
+      key: 'G',
+      meter: '3/4',
+      tempo: 80,
+      pattern: 'r2',
+      sections: [{ kind: 'verse', lines: ['Em Bm C G'] }],
+    }
+    const saved = (state: object) => {
+      const storage = createMemoryStorage()
+      storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
+      return storage
+    }
+
+    it('checks an own song’s chords', async () => {
+      const song = { id: 'my-1', title: 'Morning', ...MUSIC }
+      await renderApp('/check?of=piece:my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
+      expect(
+        await screen.findByRole('heading', { level: 1, name: 'Check: Morning' }),
+      ).toBeInTheDocument()
+      expect(screen.getByText('Build Em')).toBeInTheDocument()
+    })
+
+    it('checks the chords of the learner’s version of a song, not the original’s', async () => {
+      await renderApp('/check?of=piece:amazing', {
+        storage: saved({ versions: { amazing: MUSIC } }),
+      })
+      await screen.findByRole('progressbar')
+      expect(screen.getByText('Build Em')).toBeInTheDocument()
+    })
   })
 
   it.each(['/check?of=piece:gone', '/check', '/check?of=nothing'])(
