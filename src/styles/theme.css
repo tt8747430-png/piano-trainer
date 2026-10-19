@@ -156,11 +156,12 @@
       color-scheme: dark;
     }
   }
-  /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music. */
+  /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music,
+     its keys, their rail and their foot together under half its height. */
   :root {
     --keys-most: 32dvh;
     @variant landscape-phone {
-      --keys-most: 26dvh;
+      --keys-most: 22dvh;
     }
   }
   /* The phone's tab bar, docked at the bottom (its border, its top padding, its 56px places, the
@@ -395,6 +396,9 @@
 /* The same with a floor: a sheet's footer keeps its inset where there is no home indicator. */
 @utility pb-safe-4 {
   padding-bottom: max(--spacing(4), env(safe-area-inset-bottom));
+}
+@utility pb-safe-2 {
+  padding-bottom: max(--spacing(2), env(safe-area-inset-bottom));
 }
 /* A screen beside the laptop's sidebar: clear of it, open (16rem) or collapsed (4.5rem), by a gutter. */
 @utility pl-sidebar {

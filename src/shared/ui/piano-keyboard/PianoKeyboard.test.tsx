@@ -189,6 +189,21 @@ describe('PianoKeyboard', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
   })
 
+  it('is never longer than the screen’s share for the keys, though that is under the shortest keys', () => {
+    renderKeyboard()
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    // A phone on its side keeps the music more room than the shortest keys would leave it.
+    expect(keys.style.height).toMatch(
+      /^clamp\(min\(96px, var\(--keys-most\)\), .*, var\(--keys-most\)\)$/,
+    )
+  })
+
+  it('keeps short keys within their own share of the screen too', () => {
+    renderKeyboard({ keyLength: 'short' })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(keys.style.height).toMatch(/^clamp\(min\(96px, calc\(var\(--keys-most\) \* 2 \/ 3\)\), /)
+  })
+
   it('scrolls from its rail: the rail moves with the keys, its controls kept in view', () => {
     renderKeyboard()
     const scroller = document.querySelector('[data-slot="keys-scroller"]')

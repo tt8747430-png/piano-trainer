@@ -35,10 +35,15 @@ const LARGE_WHITE_PX = 56
 const KEY_LENGTH = 4.4
 /** Short keys: about two thirds as long, leaving the page more of the screen. */
 const SHORT_KEY_LENGTH = 3
-/** …never shorter than this… */
+/** …never shorter than this, unless the screen's share for them is less… */
 const MIN_KEYS_PX = 96
 /** …nor taller than this share of the screen's height (`--keys-most`: less on a phone on its side). */
 const MOST_KEYS = 'var(--keys-most)'
+/** Short keys' share: two thirds of the keys'. */
+const MOST_SHORT_KEYS = `calc(${MOST_KEYS} * 2 / 3)`
+/** The keys' length between their shortest and `most`: on a short screen the share wins. */
+const keysLength = (length: string, most: string) =>
+  `clamp(min(${MIN_KEYS_PX}px, ${most}), ${length}, ${most})`
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
@@ -186,8 +191,8 @@ export function PianoKeyboard({
           style={{
             height:
               keyLength === 'short'
-                ? `clamp(${MIN_KEYS_PX}px, calc(${white} * ${SHORT_KEY_LENGTH}), calc(${MOST_KEYS} * 2 / 3))`
-                : `clamp(${MIN_KEYS_PX}px, calc(${white} * ${KEY_LENGTH}), ${MOST_KEYS})`,
+                ? keysLength(`calc(${white} * ${SHORT_KEY_LENGTH})`, MOST_SHORT_KEYS)
+                : keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS),
           }}
         >
           {PIANO_LAYOUT.keys.map((key) => {
