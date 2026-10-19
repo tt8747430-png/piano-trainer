@@ -26,6 +26,8 @@ links. Nothing here ships with the app; content is written from it into `src/ent
     German translation (Alexander Ecke)
   - `five-triad-figurations.png`: five harmonic figurations on triads, from her Telegram channel
   - `kak-lan-zhelaet-four-hands.pdf`: _Как лань желает_, her arrangement for piano four hands
+  - `sbornik-bozhe-spasibo.pdf`: _Боже, спасибо_, her collection (signed Н.Б.)
+  - `arrangements/<meter>/`: her piano accompaniments of church songs, by time signature (`4-4`, `6-8`, `12-8`)
 
 ## Gorshkov's course
 
@@ -111,13 +113,13 @@ Sibelius (`.sib`), Finale (`.musx`), Encore (`.enc`), MuseScore (`.mscz`), Music
 and MIDI files and recordings. Names are the titles transliterated.
 
 - `hymns/arrangements/<meter>/`: piano and ensemble arrangements by time signature (`2-2`, `3-4`, `4-4`, `6-8`,
-  `12-8`); a song with several files has its own folder
+  `12-8`); a song with several files has its own folder. Боброва's own are in `method-books/bobrova/`
 - `hymns/arrangements/adam-cand-s-a-trezit-petru-braila/`: Petru Braila's arrangement for strings, with its recording
 - `hymns/choir/`: choir arrangements; `m-a-aflat-al-meu-pastor/` holds _Come, Thou Fount_ (its tune) in several keys
   and arrangements (Jason Tonioli, Kaleb Brasee)
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
-- `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; _Боже, спасибо_; the _Free Worship Piano Collection_
+- `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
 
 `hymns/arrangements/6-8/converted-score.musicxml` is an untitled conversion of one of the 6/8 songs.
 
