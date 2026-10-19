@@ -41,6 +41,20 @@ describe('Practice → Progressions', () => {
     expect(screen.getByText('This progression can’t be read.')).toBeInTheDocument()
   })
 
+  it('says when typed numerals are a major key’s in a minor key, and plays them in its major', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?key=F%23m')
+    const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
+    await user.clear(field)
+    await user.type(field, 'ii V I')
+    expect(screen.getByText('These numerals are a major key’s.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Play them in F# major' }))
+    await waitFor(() =>
+      expect(router.state.location.search).toMatchObject({ key: 'F#', p: 'ii-V-I' }),
+    )
+    expect(screen.queryByText('These numerals are a major key’s.')).not.toBeInTheDocument()
+  })
+
   it('reads a 6th chord typed', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions')

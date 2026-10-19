@@ -120,6 +120,9 @@ export const practice: LocaleResources['practice'] = {
   progressions: {
     field: 'Ступени или аккорды',
     unread: 'Эта последовательность не читается.',
+    majorLine: 'Эти ступени — мажорной тональности.',
+    minorLine: 'Эти ступени — минорной тональности.',
+    playIn: 'Сыграть в тональности {{key}}',
     throughKeys: 'По тональностям',
     choose: 'Последовательность',
     typed: 'Набрана',

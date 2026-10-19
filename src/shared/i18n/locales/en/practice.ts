@@ -125,6 +125,9 @@ export const practice = {
   progressions: {
     field: 'Numerals or chords',
     unread: 'This progression can’t be read.',
+    majorLine: 'These numerals are a major key’s.',
+    minorLine: 'These numerals are a minor key’s.',
+    playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',
