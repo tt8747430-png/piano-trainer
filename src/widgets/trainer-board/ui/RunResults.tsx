@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { RunSummary } from '@/features/trainer'
+import { formatDecimal, useLocale } from '@/shared/i18n'
 import { Button } from '@/shared/ui/primitives/button'
 import { useRoundWords } from './use-round-words'
 
@@ -19,6 +20,7 @@ export function RunResults({
 }) {
   const { t } = useTranslation('quiz')
   const words = useRoundWords()
+  const locale = useLocale()
   const title = useRef<HTMLHeadingElement>(null)
   // The run ended under the learner's finger: the results take the focus.
   useEffect(() => title.current?.focus(), [])
@@ -26,7 +28,7 @@ export function RunResults({
     { term: t('summary.right'), value: t('summary.percent', { percent: summary.accuracy }) },
     {
       term: t('summary.averageTime'),
-      value: t('summary.seconds', { seconds: (summary.averageMs / 1000).toFixed(1) }),
+      value: t('summary.seconds', { seconds: formatDecimal(locale, summary.averageMs / 1000) }),
     },
     { term: t('summary.bestStreak'), value: String(summary.bestStreak) },
   ]

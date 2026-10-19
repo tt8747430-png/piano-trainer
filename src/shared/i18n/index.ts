@@ -30,6 +30,7 @@ void i18n.use(initReactI18next).init({
 
 export { i18n }
 
+export { formatDecimal, formatPercent } from './format-number'
 export { localText, type LocalText } from './local-text'
 export { LOCALES, type Locale } from './locale'
 export { useLocale } from './use-locale'
