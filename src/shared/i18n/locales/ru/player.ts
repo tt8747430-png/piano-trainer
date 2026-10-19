@@ -127,7 +127,7 @@ export const player: LocaleResources['player'] = {
     voicings: { close: 'Тесное', drop2: 'Drop 2' },
     from: 'От',
     chordTones: { root: 'Основного тона', third: 'Терции', fifth: 'Квинты', seventh: 'Септимы' },
-    tonality: 'Мажор или минор',
+    tonality: 'Лад',
     tonalities: { major: 'Мажор', minor: 'Минор' },
   },
 }

@@ -15,7 +15,7 @@ import {
   scaleKindsIn,
   spellScale,
 } from '@/shared/lib/music'
-import { Dropdown, NoteChoice, Segmented } from '@/shared/ui'
+import { Dropdown, NamedSegmented, NoteChoice } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /** The arpeggio types by feel's families: triads, then 7ths. */
@@ -44,51 +44,53 @@ export function ExerciseMusicFields({
 
         onChange={(root) => onChange({ root: noteFromParam(root) })}
       />
-      <div className="flex flex-wrap gap-2">
-        {fields.kind ? (
-          <Dropdown
-            label={t('player:exercise.scale')}
-            value={choice.kind}
-            groups={SCALE_FAMILIES.map((family) => ({
-              label: t(`music:scaleFamily.${family}`),
-              options: scaleKindsIn(family)
-                .filter((kind) => fields.kind?.includes(kind))
-                .map((kind) => ({ value: kind, label: t(`music:scaleKind.${kind}`) })),
-            })).filter((group) => group.options.length > 0)}
-            onChange={(kind) => onChange({ kind })}
-          />
-        ) : null}
-        {fields.quality ? (
-          <Dropdown
-            label={t('player:exercise.chord')}
-            value={choice.quality}
-            groups={ARPEGGIO_GROUPS.map(({ family, qualities }) => ({
-              label: t(`music:family.${family}`),
-              options: qualities.map((quality) => ({
-                value: quality,
-                label: qualitySuffix(quality) || t('music:major'),
-                title: t(`music:quality.${quality}`),
-                detail: t(`music:quality.${quality}`),
-              })),
-            }))}
-            onChange={(quality) => onChange({ quality })}
-          />
-        ) : null}
-        {fields.start ? (
-          <Dropdown
-            label={t('player:exercise.startOn')}
-            value={choice.start}
-            options={spellScale(choice.root, choice.kind).map((tone, i) => ({
-              value: i,
-              label: noteName(tone.note),
-              detail: tone.degree,
-            }))}
-            onChange={(start) => onChange({ start })}
-          />
-        ) : null}
-      </div>
+      {fields.kind || fields.quality || fields.start ? (
+        <div className="flex flex-wrap gap-2">
+          {fields.kind ? (
+            <Dropdown
+              label={t('player:exercise.scale')}
+              value={choice.kind}
+              groups={SCALE_FAMILIES.map((family) => ({
+                label: t(`music:scaleFamily.${family}`),
+                options: scaleKindsIn(family)
+                  .filter((kind) => fields.kind?.includes(kind))
+                  .map((kind) => ({ value: kind, label: t(`music:scaleKind.${kind}`) })),
+              })).filter((group) => group.options.length > 0)}
+              onChange={(kind) => onChange({ kind })}
+            />
+          ) : null}
+          {fields.quality ? (
+            <Dropdown
+              label={t('player:exercise.chord')}
+              value={choice.quality}
+              groups={ARPEGGIO_GROUPS.map(({ family, qualities }) => ({
+                label: t(`music:family.${family}`),
+                options: qualities.map((quality) => ({
+                  value: quality,
+                  label: qualitySuffix(quality) || t('music:major'),
+                  title: t(`music:quality.${quality}`),
+                  detail: t(`music:quality.${quality}`),
+                })),
+              }))}
+              onChange={(quality) => onChange({ quality })}
+            />
+          ) : null}
+          {fields.start ? (
+            <Dropdown
+              label={t('player:exercise.startOn')}
+              value={choice.start}
+              options={spellScale(choice.root, choice.kind).map((tone, i) => ({
+                value: i,
+                label: noteName(tone.note),
+                detail: tone.degree,
+              }))}
+              onChange={(start) => onChange({ start })}
+            />
+          ) : null}
+        </div>
+      ) : null}
       {fields.tonality ? (
-        <Segmented
+        <NamedSegmented
           label={t('player:exercise.tonality')}
           value={choice.tonality}
           options={TONALITIES.map((tonality) => ({

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -35,6 +35,17 @@ describe('An exercise in the Player', () => {
     expect(router.state.location.search).toMatchObject({ tonality: 'minor' })
     await user.click(screen.getByRole('radio', { name: 'Close' }))
     expect(router.state.location.search).not.toHaveProperty('voicing')
+  })
+
+  it('names its mode on screen, and leaves no gap where it has no scale, chord or start', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/exercise/sixth-diminished')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Setup' })
+    expect(within(sheet).getByRole('radiogroup', { name: 'Mode' })).toBeInTheDocument()
+    expect(within(sheet).getByText('Mode')).toBeVisible()
+    expect(within(sheet).queryByRole('combobox')).not.toBeInTheDocument()
+    expect(sheet.querySelector('.flex-wrap:empty')).toBeNull()
   })
 
   it('starts a scale on another note, fingered from the thumb', async () => {
