@@ -328,7 +328,7 @@ export function majorScaleLesson(tonic: SpelledNote): Lesson {
           { kind: 'scale', root: tonic, scale: 'major' },
           say({
             en: `${names.en} starts on ${enNote(tonic)} and climbs by the major pattern: whole, whole, half, whole, whole, whole, half. Its notes are ${notes.map(enNote).join(' ')}.`,
-            ru: `${capital(names.ru)} начинается с ${ruNote(tonic)} и поднимается по схеме мажора: тон, тон, полутон, тон, тон, тон, полутон.`,
+            ru: `${capital(names.ru)} начинается с ${ruNote(tonic)} и поднимается по схеме мажора: тон, тон, полутон, тон, тон, тон, полутон. Его ноты: ${notes.map(ruNote).join(', ')}.`,
           }),
         ],
       },
@@ -502,7 +502,7 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
           { kind: 'scale', root: tonic, scale: 'natural' },
           say({
             en: `Natural ${names.en} starts on ${enNote(tonic)} and climbs whole, half, whole, whole, half, whole, whole. Its notes are ${notes.map(enNote).join(' ')}.`,
-            ru: `Натуральный ${names.ru} начинается с ${ruNote(tonic)} и поднимается так: тон, полутон, тон, тон, полутон, тон, тон.`,
+            ru: `Натуральный ${names.ru} начинается с ${ruNote(tonic)} и поднимается так: тон, полутон, тон, тон, полутон, тон, тон. Его ноты: ${notes.map(ruNote).join(', ')}.`,
           }),
         ],
       },
@@ -573,7 +573,7 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
             lead: PRIMARY,
             text: {
               en: `are the chords on the 1st, 4th and 5th notes: ${enList(primary.map(shown))}, or i, iv and V. The V chord is major because it takes harmonic minor’s raised 7th.`,
-              ru: `— трезвучия на i, iv и V ступенях: ${ruList(primary.map(shown))}. Трезвучие V ступени мажорное, потому что берёт повышенную седьмую ступень гармонического минора.`,
+              ru: `— трезвучия на I, IV и V ступенях (i, iv, V): ${ruList(primary.map(shown))}. Трезвучие V ступени мажорное, потому что берёт повышенную седьмую ступень гармонического минора.`,
             },
           },
         ],

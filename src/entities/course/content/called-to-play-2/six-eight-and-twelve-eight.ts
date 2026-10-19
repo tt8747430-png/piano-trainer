@@ -16,8 +16,8 @@ const sixEightAndTwelveEight: Lesson = {
           kind: 'text',
           lead: { en: 'A time signature', ru: 'Размер' },
           text: {
-            en: 'is two numbers at the start. The top one counts the beats in a bar. The bottom one is the note that gets a beat: 4 a quarter, 8 an eighth.',
-            ru: '— это два числа в начале нот. Верхнее показывает, сколько долей в такте. Нижнее — какая нота равна доле: 4 — четверть, 8 — восьмая.',
+            en: 'is two numbers at the start. The top one counts the beats in a bar. The bottom one names the note value counted: 4, quarters, 8, eighths.',
+            ru: '— это два числа в начале нот. Верхнее показывает, сколько долей в такте. Нижнее — какой длительностью считают: 4 — четвертями, 8 — восьмыми.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'zemlya' },

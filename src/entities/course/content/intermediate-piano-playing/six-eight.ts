@@ -78,8 +78,8 @@ const sixEight: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand often breaks a chord into six eighths: three going up, three coming back. Here it plays A minor, then C major.',
-            ru: 'Левая рука часто раскладывает аккорд на шесть восьмых: три вверх, три обратно. Здесь она играет ля минор, затем до мажор.',
+            en: 'The left hand often breaks a chord into six eighths: four going up, two coming back. Here it plays A minor, then C major.',
+            ru: 'Левая рука часто раскладывает аккорд на шесть восьмых: четыре вверх, две обратно. Здесь она играет ля минор, затем до мажор.',
           },
         },
         {
