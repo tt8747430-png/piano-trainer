@@ -2,6 +2,7 @@ import { Gauge } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PracticeMode } from '@/features/practice'
+import { formatPercent, useLocale } from '@/shared/i18n'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -36,11 +37,10 @@ export function TempoButton({
   onSpeedTraining: (on: boolean) => void
 }) {
   const { t } = useTranslation('player')
+  const locale = useLocale()
   const [open, setOpen] = useState(false)
   const value =
-    mode === 'wait'
-      ? t('pace.waitShort')
-      : t('pace.percent', { percent: percentOf(shownTempo, ownTempo) })
+    mode === 'wait' ? t('pace.waitShort') : formatPercent(locale, percentOf(shownTempo, ownTempo))
   const choose = (act: () => void) => {
     act()
     setOpen(false)
@@ -79,7 +79,10 @@ export function TempoButton({
                 return {
                   key: String(share),
                   selected: mode === 'listen' && tempo === speed,
-                  content: share === 1 ? t('pace.own') : t('pace.speed', { percent: share * 100 }),
+                  content:
+                    share === 1
+                      ? t('pace.own')
+                      : t('pace.speed', { percent: formatPercent(locale, share * 100) }),
                   onChoose: () => choose(() => onTempo(speed)),
                 }
               }),

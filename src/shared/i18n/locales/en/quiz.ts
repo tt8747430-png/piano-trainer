@@ -85,11 +85,10 @@ export const quiz = {
   roundOf: 'Round {{n}} of {{total}}',
   stop: 'End the run',
   autoNext: 'Go on automatically',
-  record: { runs: 'Runs: {{count}}', best: 'Best: {{percent}}%', last: 'Last: {{percent}}%' },
+  record: { runs: 'Runs: {{count}}', best: 'Best: {{percent}}', last: 'Last: {{percent}}' },
   summary: {
     title: 'Results',
     right: 'Correct',
-    percent: '{{percent}}%',
     averageTime: 'Average time',
     seconds: '{{seconds}} s',
     bestStreak: 'Best streak',

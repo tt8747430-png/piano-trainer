@@ -81,13 +81,12 @@ export const quiz: LocaleResources['quiz'] = {
   autoNext: 'Автопереход',
   record: {
     runs: 'Попыток: {{count}}',
-    best: 'Лучший: {{percent}}%',
-    last: 'Последний: {{percent}}%',
+    best: 'Лучший: {{percent}}',
+    last: 'Последний: {{percent}}',
   },
   summary: {
     title: 'Итоги',
     right: 'Верно',
-    percent: '{{percent}}%',
     averageTime: 'Среднее время',
     seconds: '{{seconds}} с',
     bestStreak: 'Лучшая серия',

@@ -23,9 +23,10 @@ describe('RunResults', () => {
     expect(screen.getByText('50%')).toBeInTheDocument()
   })
 
-  it('writes them the Russian way: a decimal comma', () => {
+  it('writes them the Russian way: a decimal comma, a spaced percent', () => {
     act(() => void i18n.changeLanguage('ru'))
     renderResults()
     expect(screen.getByText('2,5 с')).toBeInTheDocument()
+    expect(screen.getByText('50 %')).toBeInTheDocument()
   })
 })
