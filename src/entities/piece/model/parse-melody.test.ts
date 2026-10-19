@@ -23,7 +23,7 @@ describe('parseMelody', () => {
     expect(parseMelody(testSong(['C']))).toBeUndefined()
   })
 
-  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/17', 'E4/1e8'])(
+  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/17', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
     'names the note it cannot read: %j',
     (token) => {
       let caught: unknown
