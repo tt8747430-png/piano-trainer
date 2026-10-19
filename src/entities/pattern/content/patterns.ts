@@ -89,7 +89,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     name: { en: '5 · Bass + chords (dotted bass)', ru: '5 · Бас + аккорды (пунктирный бас)' },
     idea: {
       en: 'The right hand plays the chord on every beat over left-hand octaves in a long, short rhythm.',
-      ru: 'Правая рука играет аккорд на каждую долю над октавами левой в ритме «долгая, короткая».',
+      ru: 'Правая рука играет аккорд на каждую долю над октавами левой в ритме «длинная, короткая».',
     },
     description: {
       en: 'The right hand plays as in way 1: the chord on every beat. The left hand plays octaves in a dotted rhythm, a dotted quarter and then an 8th (♩. ♪).',
@@ -214,11 +214,11 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     group: 'techniques',
     name: { en: '5.2 · Falling line 1–7–♭7–6', ru: '5.2 · Нисходящая линия 1–7–♭7–6' },
     idea: {
-      en: 'The lowest note of the chord falls by half steps: 1, 7, ♭7, 6.',
+      en: 'The lowest note of the chord falls by semitones: 1, 7, ♭7, 6.',
       ru: 'Нижний звук аккорда спускается по полутонам: 1, 7, ♭7, 6.',
     },
     description: {
-      en: 'Technique 9. The 3rd and the 5th stay. Under them the root falls a half step at a time, one note per beat: 1, 7, ♭7, 6. Over a major chord, play only the first three and hold the last.',
+      en: 'Technique 9. The 3rd and the 5th stay. Under them the root falls a semitone at a time, one note per beat: 1, 7, ♭7, 6. Over a major chord, play only the first three and hold the last.',
       ru: 'Техника 9. Терция и квинта остаются на месте. Под ними основной тон спускается по полутонам, по звуку на долю: 1, 7, ♭7, 6. На мажорном аккорде играйте только первые три и держите последний.',
     },
     rh: 'p52',
@@ -598,7 +598,7 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
     group: 'genres',
     name: { en: 'Hip-hop', ru: 'Хип-хоп' },
     idea: {
-      en: 'Few, syncopated chords over a held root.',
+      en: 'A few syncopated chords over a held root.',
       ru: 'Редкие синкопированные аккорды над выдержанным басом.',
     },
     rh: 'hip',
