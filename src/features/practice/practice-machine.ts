@@ -210,6 +210,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         // Other music, hands or loop: the slips counted were another pass's.
         slips: {},
       }
+      // A finished pass starts again at the start.
+      if (state.outcome === 'finished') return moveTo(configured, bounds(configured).first)
       // The cursor keeps its moment; outside a new loop it starts at the loop's start.
       const { loop } = configured
       const at = sameMoment(state, configured)

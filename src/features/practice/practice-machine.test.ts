@@ -202,6 +202,24 @@ describe('the practice machine', () => {
     it('stays at the start going back', () => {
       expect(run(waiting('rh'), { type: 'prev' }).beatGroup).toBe(0)
     })
+
+    it('starts again from the start when set up anew after finishing', () => {
+      const finish = (state: PracticeState) =>
+        run(state, { type: 'jumpToBeatGroup', beatGroup: 7 }, { type: 'next' })
+      const finished = finish(run(initialPractice(TWO_BARS, 'wait', 'rh'), { type: 'play' }))
+      expect(finished.outcome).toBe('finished')
+      const configure = (hands: 'rh' | 'lh', loop: { first: number; last: number } | null) =>
+        run(
+          finished,
+          { type: 'configure', performance: TWO_BARS, mode: 'wait', hands, loop },
+          { type: 'play' },
+        )
+      expect(configure('lh', null)).toMatchObject({ beatGroup: 0, outcome: 'waiting' })
+      expect(configure('rh', { first: 4, last: 7 })).toMatchObject({
+        beatGroup: 4,
+        outcome: 'waiting',
+      })
+    })
   })
 
   describe('configure', () => {
