@@ -292,6 +292,8 @@ export const practice: LocaleResources['practice'] = {
     as: 'как {{degree}}',
     inKey: 'в тональности',
     onlyInKey: 'Только в тональности',
+    noneInKey: 'Ни один аккорд тональности не содержит {{note}}.',
+    showBorrowed: 'Показать и заимствованные аккорды',
     group: {
       triads: 'Трезвучия',
       major: 'Мажорные септаккорды',

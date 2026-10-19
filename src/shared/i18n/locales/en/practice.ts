@@ -312,6 +312,8 @@ export const practice = {
     as: 'as {{degree}}',
     inKey: 'in the key',
     onlyInKey: 'In the key only',
+    noneInKey: 'No chord of the key holds {{note}}.',
+    showBorrowed: 'Show borrowed chords too',
     group: {
       triads: 'Triads',
       major: 'Major 7ths',

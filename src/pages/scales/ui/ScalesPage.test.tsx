@@ -469,6 +469,18 @@ describe('Practice → Scales and keys, Key view', () => {
     await waitFor(() => expect(router.state.location.search).toMatchObject({ melody: 'D' }))
   })
 
+  it('says so when no chord of the key holds the note, and offers the borrowed chords', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(
+      '/practice/scales?root=F%23&kind=natural&show=key&melody=A%23&onlyInKey=true',
+    )
+    const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })
+    expect(within(harmonise).getByText('No chord of the key holds A#.')).toBeInTheDocument()
+    await user.click(within(harmonise).getByRole('button', { name: 'Show borrowed chords too' }))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('onlyInKey', true))
+    expect(within(harmonise).queryByText('No chord of the key holds A#.')).not.toBeInTheDocument()
+  })
+
   it('takes a random key from the header, staying on the Key view', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
