@@ -344,6 +344,22 @@ describe('the keyboard heard', () => {
     expect(pedal.at(-1)).toMatchObject({ pedal: 'sustain', down: true })
   })
 
+  it('lets go of every key a keyboard holds on its All Notes Off or All Sound Off, and only its own', async () => {
+    const { piano, pads, heard } = await twoKeyboards()
+    piano.send([0x90, 60, 90])
+    piano.send([0x90, 64, 90])
+    pads.send([0x90, 67, 90])
+    heard.length = 0
+    piano.send([0xb0, 123, 0], 20)
+    expect(heard).toEqual([
+      { midi: 60, on: false, velocity: 0, time: 20 },
+      { midi: 64, on: false, velocity: 0, time: 20 },
+    ])
+    piano.send([0x80, 60, 0])
+    pads.send([0xb0, 120, 0], 30)
+    expect(heard.slice(2)).toEqual([{ midi: 67, on: false, velocity: 0, time: 30 }])
+  })
+
   it('lets go of no key a keyboard never put down', async () => {
     const { piano, heard } = await twoKeyboards()
     piano.send([0x80, 60, 0])

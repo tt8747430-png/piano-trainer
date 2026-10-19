@@ -43,9 +43,11 @@ export interface PedalEvent {
   readonly time: number
 }
 
-/** A message the app reads: a key, or a pedal. */
+/** A message the app reads: a key, a pedal, or every key let go (All Sound Off, All Notes Off). */
 export type MidiMessage =
-  ({ readonly kind: 'note' } & NoteEvent) | ({ readonly kind: 'pedal' } & PedalEvent)
+  | ({ readonly kind: 'note' } & NoteEvent)
+  | ({ readonly kind: 'pedal' } & PedalEvent)
+  | { readonly kind: 'all-off'; readonly time: number }
 
 /**
  * The MIDI keyboards: the keys and pedals played on them, and their speakers. Built once in

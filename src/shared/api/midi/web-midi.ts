@@ -88,6 +88,12 @@ export function createWebMidi(
         pedals.emit(pedal)
         return
       }
+      if (message.kind === 'all-off') {
+        for (const key of holding.keys)
+          notes.emit({ midi: key, on: false, velocity: 0, time: message.time })
+        holding.keys.clear()
+        return
+      }
       const { kind: _kind, ...note } = message
       const shifted = note.midi + 12 * choice.octaveShift
       if (shifted < PIANO.from || shifted > PIANO.to) return

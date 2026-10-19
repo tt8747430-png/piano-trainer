@@ -18,11 +18,14 @@ const PEDAL_CONTROLLERS: ReadonlyMap<number, PedalKind> = new Map([
  */
 const PEDAL_DOWN = 64
 const PEDAL_UP = 40
+/** All Sound Off and All Notes Off: every key the keyboard holds is let go. */
+const ALL_OFF_CONTROLLERS: ReadonlySet<number> = new Set([120, 123])
 
 /**
  * A note-on or note-off on any channel (a note-on with velocity 0 is a note-off), or a pedal (the
  * sustain, the sostenuto or the soft; `reversedPedal` for one that sends up when pressed), at
- * `time`, read against the pedals `down` already; anything else is null.
+ * `time`, read against the pedals `down` already; All Sound Off or All Notes Off as `all-off`; anything
+ * else is null.
  */
 export function parseMidiMessage(
   data: ArrayLike<number>,
@@ -35,6 +38,7 @@ export function parseMidiMessage(
   const first = data[1] ?? -1
   const second = data[2] ?? 0
   if (command === CONTROL_CHANGE) {
+    if (ALL_OFF_CONTROLLERS.has(first)) return { kind: 'all-off', time }
     const pedal = PEDAL_CONTROLLERS.get(first)
     if (!pedal) return null
     const depth = reversedPedal ? 127 - second : second
