@@ -115,6 +115,23 @@ describe('A pattern’s page', () => {
     await waitFor(() => expect(router.state.location.href).toBe(page))
   })
 
+  it('goes back from a hidden pattern, opened directly, to Yours, where Hidden lists it', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    storage.setItem(
+      PATTERNS_STORAGE_KEY,
+      JSON.stringify({
+        state: { favourites: [], hidden: ['ballad'], own: [], nextOwn: 1 },
+        version: 1,
+      }),
+    )
+    const { router } = await renderApp('/practice/accompaniment/patterns/ballad', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() =>
+      expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
+    )
+  })
+
   it('is not found once another tab deletes it, with the way back to Accompaniment', async () => {
     const { patternsStore } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
