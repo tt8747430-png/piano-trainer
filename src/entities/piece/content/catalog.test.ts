@@ -11,6 +11,7 @@ import {
   noteName,
   pitchClass,
   tonicSpelling,
+  type ChordRole,
   type ChordSize,
 } from '@/shared/lib/music'
 import {
@@ -62,6 +63,17 @@ describe('the collections', () => {
 const LISTINGS = ENTRIES.filter((entry) => !isPiece(entry))
 /** What would make a performance wrong to play: notes off the piano or outside the piece, a root
  *  spelled with two accidentals, a bar where nothing starts. Plain loops: 24,000 of these run. */
+const LETTERS = 'CDEFGAB'
+const ROLE_STEPS: Readonly<Record<ChordRole, number>> = {
+  root: 0,
+  '9th': 1,
+  '3rd': 2,
+  '11th': 3,
+  '5th': 4,
+  '13th': 5,
+  '7th': 6,
+}
+
 function problemsIn(performance: Performance): string[] {
   const problems: string[] = []
   for (const n of performance.notes) {
@@ -70,9 +82,15 @@ function problemsIn(performance: Performance): string[] {
       problems.push(`a note at ${n.startTick} lasting ${n.durationTicks} is outside the piece`)
     }
   }
+  // A chord's root may take a double sharp or flat where the key writes one (F𝄪° in C♯ minor), as
+  // the written notes do; every tone of it must still be written on the letter its role reaches.
   for (const chord of performance.chords) {
-    if (Math.abs(chord.root.accidental) > 1)
-      problems.push(`${chordSymbol(chord)} has two accidentals`)
+    for (const tone of chord.tones) {
+      const steps = ROLE_STEPS[tone.role]
+      const letter = LETTERS[(LETTERS.indexOf(chord.root.letter) + steps) % 7]
+      if (tone.note.letter !== letter)
+        problems.push(`${chordSymbol(chord)} writes its ${tone.role} on ${tone.note.letter}`)
+    }
   }
   const barsHeard = new Set(performance.beatGroups.map((group) => group.bar))
   performance.bars.forEach((_bar, i) => {

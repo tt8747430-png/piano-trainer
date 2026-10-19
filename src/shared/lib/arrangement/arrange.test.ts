@@ -16,7 +16,7 @@ import {
   type Meter,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { arrange } from './arrange'
+import { arrange, transposeChord } from './arrange'
 import { parseFigure } from './figure'
 import type {
   Chart,
@@ -667,7 +667,7 @@ describe('arrange', () => {
   it.each([
     ['D/F#', 'G', note('A', -1), 'E♭/G'],
     ['D#/G', 'G#m', note('A', 1), 'E#/G𝄪'],
-    ['A#dim7', 'C', note('C', 1), 'B°7'],
+    ['A#dim7', 'C', note('C', 1), 'A𝄪°7'],
   ])('transposes %s in %s to %j as %s', (symbol, key, to, expected) => {
     const performance = arrange(chart([[symbol]], { key }), { tonic: to, pattern: BLOCK })
     expect(performance.chords[0]?.symbol).toBe(expected)
@@ -828,5 +828,16 @@ describe('a hand written into a bar', () => {
       [36, 0, 72],
       [43, 72, 24],
     ])
+  })
+})
+
+describe('transposeChord', () => {
+  it('spells a chord as the written notes are, a double sharp where the key writes one', () => {
+    const moved = transposeChord(
+      { root: note('F', 1), quality: 'dim', bass: note('A') },
+      note('G'),
+      note('D', 1),
+    )
+    expect(moved).toEqual({ root: note('C', 2), quality: 'dim', bass: note('E', 1) })
   })
 })
