@@ -40,6 +40,7 @@ export {
 export {
   keepCentre,
   scrollToReveal,
+  scrollToShow,
   keysInView,
   scrollByOctave,
   scrollToCentre,

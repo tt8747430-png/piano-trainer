@@ -6,6 +6,7 @@ import {
   scrollByOctave,
   scrollToCentre,
   scrollToReveal,
+  scrollToShow,
   viewFrame,
 } from './keyboard-view'
 
@@ -57,9 +58,26 @@ describe('revealing keys', () => {
     expect(scrollToReveal(at(1300), span(10, 12))).toBeCloseTo(520 - 52)
   })
 
-  it('keeps a stretch wider than the view where part of it shows, else centres it', () => {
-    expect(scrollToReveal(at(1300), span(20, 60))).toBeNull()
-    expect(scrollToReveal(at(0), span(60, 95))).toBe(scrollToCentre(at(0), 0.775))
+  it('keeps the top of a stretch wider than the view in sight: the melody, the right hand', () => {
+    // 20–60% is 1040–3120px; the view 1300–2600 shows its middle: it moves right to its top.
+    expect(scrollToReveal(at(1300), span(20, 60))).toBeCloseTo(3120 + 52 - 1300)
+    // Its top in view already, a little clear of the edge: the keys hold still.
+    expect(scrollToReveal(at(1900), span(20, 60))).toBeNull()
+    // 60–95% is 3120–4940px, the view 0–1300: it moves no further than brings the top in.
+    expect(scrollToReveal(at(0), span(60, 95))).toBeCloseTo(4940 + 52 - 1300)
+  })
+})
+
+describe('opening on keys', () => {
+  const span = (left: number, right: number) => ({ left, right, whites: 0 })
+
+  it('centres a stretch the view holds', () => {
+    expect(scrollToShow(at(0), span(30, 40))).toBe(scrollToCentre(at(0), 0.35))
+  })
+
+  it('opens on the top of a stretch wider than the view, a little clear of its edge', () => {
+    // 20–60% is 1040–3120px: the view ends 1% past its top.
+    expect(scrollToShow(at(0), span(20, 60))).toBeCloseTo(3120 + 52 - 1300)
   })
 })
 
