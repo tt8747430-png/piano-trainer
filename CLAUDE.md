@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Answer style
 
 Concise. Answer first. No preamble, no recap.
@@ -41,6 +43,8 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
 
 ## Commands
 
+Node 24 (`.nvmrc`, `nvm use`). CI (`.github/workflows/ci.yml`) runs `typecheck`, `lint`, `test:cov` and `build`
+on every push and PR; Vercel previews each PR and deploys `main`.
 `dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` / `test:watch` / `test:cov`
 (90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from
 `public/favicon.svg`).
