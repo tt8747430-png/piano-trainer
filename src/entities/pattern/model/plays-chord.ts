@@ -1,4 +1,4 @@
-import type { Figure, FigureEvent } from '@/shared/lib/arrangement'
+import type { EventFigure, Figure, FigureEvent } from '@/shared/lib/arrangement'
 import { RIGHT_FIGURES } from '../content/figures'
 import type { AccompanimentChoice } from './accompaniment'
 import type { PatternBook } from './book'
@@ -9,13 +9,17 @@ const VOICED = new Set(['chord', 'voice'])
 const voices = (events: readonly FigureEvent[] | undefined) =>
   events?.some((event) => event.tones.some((tone) => VOICED.has(tone.token.kind))) ?? false
 
+const voicesChord = (figure: EventFigure) =>
+  voices(figure.events) || voices(figure.inThree) || voices(figure.onMajor)
+
 /**
  * Whether a right hand plays the chord as it is voiced, so an inversion changes what it plays; one
- * that plays its own shapes (triads from the root, the key's triads) or the tune does not.
+ * that plays its own shapes (triads from the root, the key's triads) or the tune does not, unless
+ * its figuration between a line's ends does.
  */
 export function playsChord(figure: Figure): boolean {
-  if (figure.kind === 'melody') return false
-  return voices(figure.events) || voices(figure.inThree) || voices(figure.onMajor)
+  if (figure.kind === 'events') return voicesChord(figure)
+  return figure.use === 'ends' && voicesChord(figure.between)
 }
 
 /**
