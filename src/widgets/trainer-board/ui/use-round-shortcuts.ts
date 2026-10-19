@@ -24,7 +24,7 @@ export function useRoundShortcuts({
   answers,
   hear,
 }: {
-  /** The round's action now; null while there is nothing to check yet. */
+  /** The round's action now; null while there is nothing to check yet, leaving Enter unbound. */
   act: (() => void) | null
   /** Choosing each answer offered, in their places; none once answered. */
   answers: readonly (() => void)[]
@@ -39,7 +39,8 @@ export function useRoundShortcuts({
       : []
   })
   useShortcuts(t('shortcuts.group'), [
-    { label: t('shortcuts.act'), combo: { key: 'Enter' }, run: () => act?.() },
+    // Enter is bound only while there is something to do: else it is the focused control's.
+    ...(act ? [{ label: t('shortcuts.act'), combo: { key: 'Enter' }, run: act }] : []),
     ...chosen,
     ...(chosen.length > 0 ? [{ label: t('shortcuts.answer'), shown: ['1', '–', '9'] }] : []),
     ...(hear ? [{ label: t('shortcuts.hear'), combo: { code: 'KeyR' }, run: hear }] : []),
