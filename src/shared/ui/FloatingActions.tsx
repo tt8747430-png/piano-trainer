@@ -178,6 +178,32 @@ export function Fab({
 }
 
 /**
+ * The screen's main action where it opens a page (Practise, Write the chart): the `Fab` as a link,
+ * `render` the link (a router `Link`).
+ */
+export function FabLink({
+  label,
+  icon: Icon,
+  className,
+  ...props
+}: { label: string; icon: LucideIcon } & Omit<
+  ComponentProps<typeof ButtonLink>,
+  'children' | 'size' | 'aria-label'
+>) {
+  return (
+    <ButtonLink
+      size="icon"
+      aria-label={label}
+      title={label}
+      className={cn(FAB, className)}
+      {...props}
+    >
+      <Icon aria-hidden />
+    </ButtonLink>
+  )
+}
+
+/**
  * A screen's one Play as its main floating button, named by what it plays, Stop while it sounds; the
  * screen's Enter plays it (`usePlayKey`).
  */
@@ -312,7 +338,9 @@ export function SpeedDial({
 /**
  * One of a dial's actions: a small round icon with its name in a quiet chip beside it, the two one
  * target; the icon alone where the floating actions say no names. A button, or what `render` makes it (a link, which may do something on the way,
- * `onClick`); either folds the dial once chosen.
+ * `onClick`); either folds the dial once chosen. One that opens a dialog (Delete, Reset) sets the
+ * page's own `open` state in `onClick`: the dialog is the page's, controlled and with no trigger, so
+ * it stays open once the dial has folded.
  */
 export function SpeedDialAction({
   label,

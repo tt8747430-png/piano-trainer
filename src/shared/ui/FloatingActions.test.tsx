@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { Play } from 'lucide-react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { stubResizeObserver } from '@/shared/test/resize'
-import { Fab, FloatingActions, FloatingHost } from './FloatingActions'
+import { Fab, FabLink, FloatingActions, FloatingHost } from './FloatingActions'
 import type { FloatingPlace } from './floating-context'
 
 const root = () => document.documentElement.style
@@ -43,5 +43,15 @@ describe('FloatingHost', () => {
     unmount()
     expect(root().getPropertyValue('--floating-block')).toBe('')
     expect(root().getPropertyValue('--floating-inline')).toBe('')
+  })
+})
+
+describe('FabLink', () => {
+  it('is a link named by its label, looking like the main floating button', () => {
+    render(<FabLink label="Practise" icon={Play} render={<a href="/play/ode" />} />)
+    const link = screen.getByRole('link', { name: 'Practise' })
+    expect(link).toHaveAttribute('href', '/play/ode')
+    expect(link).toHaveAttribute('title', 'Practise')
+    expect(link).toHaveClass('size-14', 'rounded-full', 'bg-primary')
   })
 })

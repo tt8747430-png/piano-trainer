@@ -17,6 +17,7 @@ export { PAGE_TILES, type Tile } from './page-tiles'
 export { FitWidth } from './FitWidth'
 export {
   Fab,
+  FabLink,
   FabPill,
   FloatingActions,
   FloatingHost,
@@ -24,6 +25,7 @@ export {
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
+export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'

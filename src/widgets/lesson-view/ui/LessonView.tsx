@@ -31,6 +31,8 @@ import { useReadingSection } from './use-reading-section'
 import {
   ButtonLink,
   FloatingActions,
+  FloatingBar,
+  FloatingBarButton,
   NO_KEYS,
   Sheet,
   SheetContent,
@@ -119,8 +121,6 @@ function UpRow({ up, onGo }: { up: UpLink; onGo: () => void }) {
   )
 }
 
-const DOCK_BUTTON = 'size-12 rounded-full'
-
 /**
  * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
  * how many (opening the contents, and what the lesson is part of), › the next. A jump between
@@ -152,27 +152,16 @@ function LessonBar({
   )
   const section = (to: number, label: string, icons: ReactNode) =>
     to >= 0 && to < of ? (
-      <ButtonLink
-        variant="ghost"
-        size="icon"
-        aria-label={label}
-        title={label}
-        className={DOCK_BUTTON}
-        render={<Link to="." hash={sectionId(to)} replace />}
-      >
+      <FloatingBarButton label={label} render={<Link to="." hash={sectionId(to)} replace />}>
         {icons}
-      </ButtonLink>
+      </FloatingBarButton>
     ) : (
-      <Button variant="ghost" size="icon" aria-label={label} disabled className={DOCK_BUTTON}>
+      <FloatingBarButton label={label} disabled>
         {icons}
-      </Button>
+      </FloatingBarButton>
     )
   return (
-    <div
-      role="toolbar"
-      aria-label={t('lessonBar')}
-      className="flex h-14 items-center gap-0.5 rounded-full border border-input bg-card px-1 shadow-lg shadow-foreground/15 aside:h-auto aside:w-14 aside:flex-col aside:px-0 aside:py-1"
-    >
+    <FloatingBar label={t('lessonBar')} orientation="aside">
       {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
@@ -197,7 +186,7 @@ function LessonBar({
         </SheetContent>
       </Sheet>
       {section(at + 1, t('nextSection'), arrows(ChevronRight, ChevronDown))}
-    </div>
+    </FloatingBar>
   )
 }
 
