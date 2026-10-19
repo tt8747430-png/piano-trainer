@@ -164,7 +164,7 @@ export const practice = {
     hide: 'Hide from the Player',
     show: 'Show in the Player',
     hiddenNote:
-      'Hidden from the Player’s list and from its book’s shelf. You can still find it under Yours.',
+      'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
     edit: 'Edit',
     delete: 'Delete',
     deleting: {

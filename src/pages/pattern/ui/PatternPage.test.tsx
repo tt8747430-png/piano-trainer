@@ -69,7 +69,7 @@ describe('A pattern’s page', () => {
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
     expect(
       screen.getByText(
-        'Hidden from the Player’s list and from its book’s shelf. You can still find it under Yours.',
+        'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
       ),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Show in the Player' }))
