@@ -138,6 +138,15 @@ describe('arrange', () => {
     expect(performance.key).toEqual({ tonic: C, minor: false })
   })
 
+  it('keeps the left hand’s figure under the right hand, an octave lower where it climbs over', () => {
+    const performance = arrange(chart([['C']]), {
+      tonic: C,
+      pattern: pattern('climb', '0/16 C', '0/16 L1+L17'),
+    })
+    expect(midisAt(performance, 'rh', 0)).toEqual([60, 64, 67])
+    expect(midisAt(performance, 'lh', 0)).toEqual([36, 52])
+  })
+
   it('plays the 7th the key gives a chord written without one', () => {
     const SEVENTH = pattern('seventh', '0/16 7', '0/16 L1')
     const sevenths = (symbols: string) =>

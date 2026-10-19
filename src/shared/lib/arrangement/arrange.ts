@@ -364,6 +364,49 @@ function playWritten(
   })
 }
 
+/** The right hand's notes by onset, and the longest of them, to find those sounding at a time. */
+interface RightHand {
+  readonly notes: readonly PerformanceNote[]
+  readonly longest: Tick
+}
+
+/** The lowest right-hand key sounding at any time in [start, end). */
+function lowestRightBetween(right: RightHand, start: Tick, end: Tick): number {
+  // The first note that can still sound at `start`: none earlier is held that long.
+  let low = 0
+  let high = right.notes.length
+  while (low < high) {
+    const middle = Math.floor((low + high) / 2)
+    if ((right.notes[middle]?.startTick ?? start) + right.longest <= start) low = middle + 1
+    else high = middle
+  }
+  let lowest = Infinity
+  for (let i = low; i < right.notes.length; i++) {
+    const n = right.notes[i]
+    if (!n || n.startTick >= end) break
+    if (n.startTick + n.durationTicks > start) lowest = Math.min(lowest, n.midi)
+  }
+  return lowest
+}
+
+/**
+ * The left hand's figure kept under the right hand: a note it plays above a key the right hand
+ * sounds with it goes down an octave, and again, until it is not (a figure climbing from a low bass
+ * into a right hand voiced low). The right hand keeps its voicing, which the tune and the voice
+ * leading set.
+ */
+function keepUnder(notes: PerformanceNote[], left: ReadonlySet<PerformanceNote>) {
+  const sorted = notes.filter((n) => n.hand === 'rh').sort((a, b) => a.startTick - b.startTick)
+  const right = { notes: sorted, longest: Math.max(0, ...sorted.map((n) => n.durationTicks)) }
+  notes.forEach((n, i) => {
+    if (!left.has(n)) return
+    const lowest = lowestRightBetween(right, n.startTick, n.startTick + n.durationTicks)
+    let key: number = n.midi
+    while (key > lowest) key -= 12
+    if (key !== n.midi) notes[i] = { ...n, midi: midi(key) }
+  })
+}
+
 /** How chord `index` is voiced: in the inversion asked, nearest the last after the first, or freely. */
 function positionOf({ inversion, nearest }: ArrangeOptions, index: number): RightHandPosition {
   if (inversion === undefined) return null
@@ -384,6 +427,8 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const barMeter: BarMeter = { beats: barBeats, compound: isCompound(chart.meter) }
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
+  // The left hand's notes its figure plays, kept under the right hand once both are placed.
+  const leftFigure = new Set<PerformanceNote>()
   const playsTune: boolean[] = []
   let previous: readonly Midi[] | null = null
   // Each chord's bass, in the key played: what a walking bass approaches from the chord before.
@@ -442,7 +487,11 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barMeter))
         else if (melody) notes.push(...playTune(rh, melody, stretch, window))
       }
-      if (!written?.lh) notes.push(...playFigure(lh, stretch, 'lh', window, barMeter))
+      if (!written?.lh) {
+        const left = playFigure(lh, stretch, 'lh', window, barMeter)
+        for (const n of left) leftFigure.add(n)
+        notes.push(...left)
+      }
       at += length
     }
   })
@@ -474,6 +523,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     }
   }
 
+  keepUnder(notes, leftFigure)
   notes.sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
   const barStarts = layout.bars.map((bar) => bar.startTick)
   const onsets = new Map<Tick, number[]>()
