@@ -27,7 +27,7 @@ export function Docked({ children, className }: { children: ReactNode; className
       ref={docked}
       data-slot="docked"
       className={cn(
-        'fixed inset-x-0 bottom-nav-bar z-20 border-t border-border bg-background px-gutter pt-1 pb-2 print:hidden landscape-phone:left-rail landscape-phone:pb-safe-4 lg:left-sidebar lg:pb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+        'fixed inset-x-0 bottom-nav-bar z-20 border-t border-border bg-background px-gutter pt-1 pb-2 print:hidden landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:pb-safe-4 lg:left-sidebar lg:pb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
         className,
       )}
     >

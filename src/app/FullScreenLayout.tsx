@@ -13,7 +13,7 @@ export function FullScreenLayout() {
   return (
     <main
       data-scroll-restoration-id={FULL_SCREEN_SCROLL}
-      className="flex h-dvh flex-col overflow-y-auto px-gutter pt-safe pb-safe"
+      className="flex h-dvh flex-col overflow-y-auto px-gutter-safe pt-safe pb-safe"
     >
       <Outlet />
     </main>

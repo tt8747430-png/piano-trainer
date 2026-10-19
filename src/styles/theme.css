@@ -312,6 +312,15 @@
 @utility -mx-gutter {
   margin-inline: calc(-1 * var(--gutter));
 }
+/* The same gutter clear of a notch at the side, on a phone on its side: the screen's own edges. */
+@utility px-gutter-safe {
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+/* The right edge alone, where the left is a rail's or a sidebar's, which clear the notch themselves. */
+@utility pr-gutter-safe {
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
 /* What floats at the screen's side, in from its edge by a gutter. */
 @utility right-gutter {
   right: max(var(--gutter), env(safe-area-inset-right));
