@@ -115,6 +115,13 @@ describe('isRight', () => {
     expect(isRight(keys(62, 81), fifth)).toBe(false)
   })
 
+  it('takes a slash chord only over its bass, its lowest key', () => {
+    const overB = questionAnswer({ chord: 'G/B' })
+    expect(isRight(keys(59, 62, 67), overB)).toBe(true)
+    expect(isRight(keys(47, 55, 62), overB)).toBe(true)
+    expect(isRight(keys(55, 59, 62), overB)).toBe(false)
+  })
+
   it('takes a falling answer only as its notes lie, in any octave', () => {
     const down = questionAnswer({ notes: ['G', 'F', 'E'], falling: true })
     expect(isRight(keys(67, 65, 64), down)).toBe(true)
@@ -203,5 +210,11 @@ describe('questionKeys', () => {
     const octave = questionKeys({ id: 'q', chosen: keys(52, 55, 60), stage: 'right' }, inversion)
     expect(octave.wrong).toEqual(new Set())
     expect(octave.marks.get(midi(60))).toEqual({ tone: 'scale', label: 'C' })
+  })
+
+  it('marks a slash chord’s lowest key wrong when it is not the bass', () => {
+    const overB = questionAnswer({ chord: 'G/B' })
+    const judged = questionKeys({ id: 'q', chosen: keys(55, 59, 62), stage: 'wrong' }, overB)
+    expect(judged.wrong).toEqual(new Set([55]))
   })
 })

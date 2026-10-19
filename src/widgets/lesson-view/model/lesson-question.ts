@@ -6,10 +6,12 @@ import {
   MIDDLE_C,
   midi,
   noteName,
+  parseChordSymbol,
   parseNoteName,
   pitchClass,
   pitchClassOf,
   type Midi,
+  type PitchClass,
 } from '@/shared/lib/music'
 import { chordSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark, ShownKeys } from '@/shared/ui'
@@ -18,6 +20,8 @@ import { placeExample } from './chord-example'
 /** A question's answer on the keys, and whether its notes are played as they lie, rising or falling. */
 export interface QuestionAnswer extends ShownKeys {
   readonly inOrder: boolean
+  /** A slash chord's bass, which its lowest key must be. */
+  readonly bass?: PitchClass
 }
 
 /** Where notes in no order stay: from the C below middle C to the C two octaves above it. */
@@ -40,7 +44,11 @@ function nextKey(last: number, pc: number, order: 'rising' | 'falling' | null): 
  * is a 6th), below it when falling, else the nearer, kept near middle C.
  */
 export function questionAnswer(answer: LessonAnswer): QuestionAnswer {
-  if ('chord' in answer) return { ...placeExample(answer.chord), inOrder: false }
+  if ('chord' in answer) {
+    const { bass } = parseChordSymbol(answer.chord)
+    const placed = { ...placeExample(answer.chord), inOrder: false }
+    return bass ? { ...placed, bass: pitchClassOf(bass) } : placed
+  }
   const order = answer.rising ? 'rising' : answer.falling ? 'falling' : null
   const marks = new Map<Midi, KeyMark>()
   let last: number | null = null
@@ -73,8 +81,17 @@ const pitchClasses = (keys: readonly Midi[]) => new Set(keys.map((key) => pitchC
 
 const lowFirst = (keys: readonly Midi[]) => keys.toSorted((a, b) => a - b)
 
+/** The lowest key chosen, when it is not the bass a slash chord's answer stands on. */
+function wrongBass(chosen: readonly Midi[], answer: QuestionAnswer): Midi | undefined {
+  const [lowest] = lowFirst(chosen)
+  return answer.bass !== undefined && lowest !== undefined && pitchClass(lowest) !== answer.bass
+    ? lowest
+    : undefined
+}
+
 /**
- * Right: every note of the answer chosen in some octave, and nothing else; an answer in order's notes
+ * Right: every note of the answer chosen in some octave, and nothing else, over a slash chord's bass;
+ * an answer in order's notes
  * as its keys lie, from its lowest note in any octave (D and the 5th above is A above D, not below).
  */
 export function isRight(chosen: readonly Midi[], answer: QuestionAnswer): boolean {
@@ -93,7 +110,11 @@ export function isRight(chosen: readonly Midi[], answer: QuestionAnswer): boolea
   }
   const played = pitchClasses(chosen)
   const wanted = pitchClasses(answer.keys)
-  return played.size === wanted.size && [...wanted].every((pc) => played.has(pc))
+  return (
+    played.size === wanted.size &&
+    [...wanted].every((pc) => played.has(pc)) &&
+    wrongBass(chosen, answer) === undefined
+  )
 }
 
 /**
@@ -160,7 +181,7 @@ export interface QuestionKeys {
 function placedKeys(
   chosen: readonly Midi[],
   answer: QuestionAnswer,
-): Pick<QuestionKeys, 'marks' | 'wrong'> {
+): { readonly marks: ReadonlyMap<Midi, KeyMark>; readonly wrong: ReadonlySet<Midi> } {
   const [first] = lowFirst(chosen)
   const [from] = lowFirst(answer.keys)
   const octaves = first === undefined || from === undefined ? 0 : Math.round((first - from) / 12)
@@ -177,7 +198,8 @@ function placedKeys(
 
 /**
  * Choosing: the chosen keys. Judged: the verdict on them, a wrong key marked and the missing ones
- * left for the learner to find; an answer in order's keys each judged by its place. The answer
+ * left for the learner to find; an answer in order's keys each judged by its place, and a slash
+ * chord's lowest key wrong unless it is the bass. The answer
  * shown: the answer.
  */
 export function questionKeys(
@@ -192,7 +214,11 @@ export function questionKeys(
       const { marks, wrong } = answer.inOrder
         ? placedKeys(state.chosen, answer)
         : checkedKeys(state.chosen, answer)
-      return { keys: state.chosen, marks, wrong }
+      const bass = wrongBass(state.chosen, answer)
+      if (bass === undefined) return { keys: state.chosen, marks, wrong }
+      const notBass = new Map(marks)
+      notBass.delete(bass)
+      return { keys: state.chosen, marks: notBass, wrong: new Set([...wrong, bass]) }
     }
     case 'answer':
       return { keys: answer.keys, marks: answer.marks }
