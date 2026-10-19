@@ -1,4 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
@@ -7,7 +8,13 @@ import { useViewChange } from '@/shared/lib'
 import { FloatingActions, ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from '@/shared/ui/primitives/empty'
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/primitives/tabs'
 import { PieceList } from '@/widgets/piece-list'
 import type { SongsFilter, SongsShelf } from '../model/songs-filter'
@@ -78,6 +85,23 @@ export function SongsPage() {
         </TabsList>
         {groups.length > 0 ? (
           <PieceList groups={groups} />
+        ) : search.collection === 'mine' && pieces.ownSongs.length === 0 ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyTitle>{t('mineEmpty.title')}</EmptyTitle>
+              <EmptyDescription>{t('mineEmpty.description')}</EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <NewSongSheet
+                trigger={
+                  <Button variant="soft">
+                    <Plus data-icon="inline-start" aria-hidden />
+                    {t('newSong')}
+                  </Button>
+                }
+              />
+            </EmptyContent>
+          </Empty>
         ) : (
           <Empty>
             <EmptyHeader>

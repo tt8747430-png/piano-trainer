@@ -9,6 +9,10 @@ export const songs: LocaleResources['songs'] = {
   learned: 'Выучено',
   empty: 'Ничего не найдено.',
   yours: 'Ваши песни',
+  mineEmpty: {
+    title: 'Своих песен пока нет',
+    description: 'Запишите песню аккордами или сыграйте её на клавишах.',
+  },
   newSong: 'Новая песня',
   making: {
     title: 'Новая песня',

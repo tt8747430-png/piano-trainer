@@ -121,10 +121,16 @@ describe('Songs: your own', () => {
     expect(router.state.location.pathname).toBe('/songs')
   })
 
-  it('gives Your songs a tab when chosen, before there are any', async () => {
+  it('gives Your songs a tab when chosen, before there are any, its way to make one', async () => {
+    const user = userEvent.setup()
     await renderApp('/songs?collection=mine')
-    expect(await screen.findByText('No songs match.')).toBeInTheDocument()
+    const empty = (await screen.findByText('No songs of your own yet')).closest('[data-slot=empty]')
+    if (!(empty instanceof HTMLElement)) throw new Error('an empty shelf says so')
+    expect(screen.queryByText('No songs match.')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear filters' })).not.toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Your songs' })).toHaveAttribute('aria-selected', 'true')
+    await user.click(within(empty).getByRole('button', { name: 'New song' }))
+    expect(await screen.findByRole('textbox', { name: 'Title' })).toBeInTheDocument()
   })
 
   it('has no tab for Your songs while there are none', async () => {

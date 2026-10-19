@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Mic, Plus } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useId, useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong } from '@/features/edit-piece'
@@ -20,9 +20,10 @@ const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
 
 /**
  * New song, the Songs page's floating button: its title, its key among the twelve notes and its meter, each a tap; then Make, which
- * opens it in the score editor, or Record beside it, which opens it on its takes.
+ * opens it in the score editor, or Record beside it, which opens it on its takes. Its `trigger` is
+ * the floating button unless another is given (an empty shelf's).
  */
-export function NewSongSheet() {
+export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const { t } = useTranslation('songs')
   const store = usePiecesStoreApi()
   const navigate = useNavigate()
@@ -38,7 +39,7 @@ export function NewSongSheet() {
   const untitled = songTitle(title) === null
   return (
     <Sheet>
-      <SheetTrigger render={<Fab label={t('newSong')} icon={Plus} />} />
+      <SheetTrigger render={trigger ?? <Fab label={t('newSong')} icon={Plus} />} />
       <SheetContent
         title={t('making.title')}
         footer={

@@ -9,6 +9,11 @@ export const songs = {
   withChords: 'With chords',
   clearFilters: 'Clear filters',
   yours: 'Your songs',
+  // Your songs' shelf before there are any.
+  mineEmpty: {
+    title: 'No songs of your own yet',
+    description: 'Write one by its chords, or record it at the keys.',
+  },
   newSong: 'New song',
   making: {
     title: 'New song',
