@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { useHeldKeys } from '@/features/connect-midi'
+import { useKeysDown } from '@/features/connect-midi'
 import { rememberChords, setChordFinder } from '@/features/set-preference'
 import { IN_PLACE, keyListParam, readKeyList, toggled, useWakeLock } from '@/shared/lib'
 import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
@@ -65,7 +65,7 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
   // The screen stays on while the finder is open: a phone on the stand does not lock mid-chord.
   useWakeLock()
   const navigate = useNavigate({ from: '/practice/chord-finder' })
-  const held = useHeldKeys()
+  const held = useKeysDown()
   const store = useSettingsStoreApi()
   const settings = useSettings(selectChordFinder)
   const tapped = readKeyList(view.keys)

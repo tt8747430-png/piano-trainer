@@ -232,6 +232,28 @@ describe('Practice → Chord finder', () => {
     await waitFor(() => expect(playedNames()).toEqual(['C7', 'F']))
   })
 
+  it('reads each chord played under the sustain pedal on its own', async () => {
+    const user = userEvent.setup()
+    const { midi: piano } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
+    act(() => piano.pedal(true))
+    for (const chord of [
+      [48, 52, 55],
+      [53, 57, 60],
+    ]) {
+      act(() => {
+        for (const each of chord) piano.press(midi(each))
+      })
+      act(() => {
+        for (const each of chord) piano.release(midi(each))
+      })
+      await waitFor(() => expect(screen.queryByText(/^Held/)).not.toBeInTheDocument())
+    }
+    await waitFor(() => expect(playedNames()).toEqual(['C', 'F']))
+    expect(name()).toHaveTextContent(/^F$/)
+  })
+
   it('names a 5th as its power chord', async () => {
     await renderApp('/practice/chord-finder?keys=43-50')
     expect(await screen.findByRole('heading', { level: 2, name: 'G5' })).toBeInTheDocument()

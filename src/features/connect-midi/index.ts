@@ -1,4 +1,4 @@
-export { useHeldKeys } from './use-held-keys'
+export { useHeldKeys, useKeysDown } from './use-held-keys'
 export { useMidiKeyDown } from './use-midi-key-down'
 export { useMidiSync } from './use-midi-sync'
 export { MidiButton } from './ui/MidiButton'
