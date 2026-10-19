@@ -64,9 +64,11 @@ describe('parseChart', () => {
     expect(methods(['C-G:1'])).toEqual(['1', '1'])
   })
 
-  it('spells a slash bass that is a chord tone as that tone', () => {
-    const chord = parseChart(testSong(['D#/G'])).sections[0]?.lines[0]?.[0]?.chords[0]
-    expect(chord?.bass).toEqual(note('F', 2))
+  it('spells a slash bass that is a chord tone as that tone, unless that writes it oddly', () => {
+    const bass = (symbol: string) =>
+      parseChart(testSong([symbol])).sections[0]?.lines[0]?.[0]?.chords[0]?.bass
+    expect(bass('F#m/Db')).toEqual(note('C', 1))
+    expect(bass('D#/G')).toEqual(note('G'))
   })
 
   it('keeps sections, lines and bars as written, in the piece’s key', () => {

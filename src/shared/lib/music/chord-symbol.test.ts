@@ -41,7 +41,11 @@ describe('parseChordSymbol', () => {
   it.each([
     ['D/F#', { root: note('D'), quality: 'maj', bass: note('F', 1) }],
     ['F#m/D#', { root: note('F', 1), quality: 'min', bass: note('D', 1) }],
-    ['D#/G', { root: note('D', 1), quality: 'maj', bass: note('F', 2) }],
+    ['F#m/Db', { root: note('F', 1), quality: 'min', bass: note('C', 1) }],
+    // A chord tone with a double accidental, or a B♯ for a C, stays as typed.
+    ['D#/G', { root: note('D', 1), quality: 'maj', bass: note('G') }],
+    ['Cdim7/A', { root: note('C'), quality: 'o7', bass: note('A') }],
+    ['E+/C', { root: note('E'), quality: 'aug', bass: note('C') }],
     ['C6/9', { root: note('C'), quality: 's69' }],
     ['C6/9/E', { root: note('C'), quality: 's69', bass: note('E') }],
     ['Am7/G', { root: note('A'), quality: 'm7', bass: note('G') }],
