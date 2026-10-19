@@ -355,7 +355,7 @@ describe('the score editor’s takes', () => {
     const { settingsStore } = await renderApp('/edit/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    await user.click(within(sheet).getByRole('switch', { name: 'Tune' }))
+    await user.click(within(sheet).getByRole('switch', { name: 'Melody' }))
     expect(settingsStore.getState().recorder.tune).toBe(true)
   })
 
@@ -364,8 +364,8 @@ describe('the score editor’s takes', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    expect(within(sheet).getByRole('switch', { name: 'Click' })).toBeInTheDocument()
-    expect(within(sheet).queryByRole('switch', { name: 'Tune' })).not.toBeInTheDocument()
+    expect(within(sheet).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
+    expect(within(sheet).queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
   })
 
   it('records a take to the count-in, keeps it, plays it, and writes it into both hands', async () => {
@@ -421,7 +421,7 @@ describe('the score editor’s takes', () => {
     const { audio, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    await user.click(within(sheet).getByRole('switch', { name: 'Click' }))
+    await user.click(within(sheet).getByRole('switch', { name: 'Metronome' }))
     expect(settingsStore.getState().recorder.click).toBe(false)
     await user.click(within(sheet).getByRole('button', { name: 'Connect a MIDI keyboard' }))
     await user.click(await within(sheet).findByRole('button', { name: 'Record' }))

@@ -26,7 +26,7 @@ export const editor: LocaleResources['editor'] = {
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
     pattern: 'Такт {{bar}}, доля {{beat}} · фактура',
-    end: 'Конец пьесы',
+    end: 'Конец песни',
     values: {
       whole: 'целая',
       half: 'половинная',
@@ -85,7 +85,7 @@ export const editor: LocaleResources['editor'] = {
   },
   song: {
     title: 'Название',
-    bpm: '{{tempo}} уд/мин',
+    bpm: '{{tempo}} уд/мин',
     tempo: 'Темп',
     meter: 'Размер',
   },
@@ -99,7 +99,7 @@ export const editor: LocaleResources['editor'] = {
     full: 'Дубли заняли всё место: удалите один, чтобы записать новый.',
     nothing: 'Ничего не сыграно.',
     none: 'Дублей пока нет.',
-    detail: '{{length}} · {{tempo}} уд/мин',
+    detail: '{{length}} · {{tempo}} уд/мин',
     play: 'Сыграть',
     write: 'Вписать в ноты',
     download: 'Скачать',
