@@ -5,7 +5,7 @@ const B_FLAT = { tonic: note('B', -1), minor: false }
 
 /**
  * The jazz voicings sheet: major, minor and dominant chords beyond the basic 9ths, the dominant's
- * alterations, the slash chords that write them as two simple shapes, and drop 2.
+ * alterations, the slash chords that write them as two simple shapes, and spread add9 chords.
  */
 const jazzVoicings: Lesson = {
   id: 'jazz-voicings',
@@ -74,14 +74,13 @@ const jazzVoicings: Lesson = {
       ],
     },
     {
-      heading: { en: 'Drop 2', ru: 'Drop 2' },
+      heading: { en: 'Spread add9 chords', ru: 'Аккорды add9 в широком расположении' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Drop 2', ru: 'Drop 2' },
           text: {
-            en: 'moves the chord’s 3rd an octave down into the left hand. The 2nd takes its place in the right.',
-            ru: 'переносит терцию аккорда на октаву вниз, в левую руку. Её место в правой занимает вторая ступень.',
+            en: 'A spread add9 puts the root and 3rd in the left hand. The right hand plays the 9th, 5th and root.',
+            ru: 'В широком add9 левая рука берёт основной тон и терцию. Правая играет нону, квинту и основной тон.',
           },
         },
         {
@@ -235,8 +234,8 @@ const jazzVoicings: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The root and tritone stay. G7alt alters what it can: A♭, A♯, E♭.',
-            ru: 'Основной тон и тритон остаются. В G7alt изменено всё, что можно: ля-бемоль, ля-диез, ми-бемоль.',
+            en: 'G7alt keeps the root and tritone, altering the rest: D♭, E♭, A♭, A♯.',
+            ru: 'G7alt сохраняет основной тон и тритон и альтерирует остальное: ре-бемоль, ми-бемоль, ля-бемоль, ля-диез.',
           },
         },
       ],
