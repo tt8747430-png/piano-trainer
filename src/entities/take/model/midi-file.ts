@@ -47,10 +47,14 @@ function barBeats(take: Take): { readonly ms: number; readonly beats: number }[]
   // To the nearest eighth of the meter (a third of a compound beat, half a simple one): the barlines
   // are where the click fell, in milliseconds.
   const eighths = isCompound(take.meter) ? 3 : 2
-  return take.bars.slice(0, -1).map((ms, i) => ({
-    ms,
-    beats: Math.round((((take.bars[i + 1] ?? ms) - ms) / beatMs) * eighths) / eighths,
-  }))
+  // A bar shorter than an eighth (a barline just before the take's end) is the bar before's.
+  return take.bars
+    .slice(0, -1)
+    .map((ms, i) => ({
+      ms,
+      beats: Math.round((((take.bars[i + 1] ?? ms) - ms) / beatMs) * eighths) / eighths,
+    }))
+    .filter((bar) => bar.beats > 0)
 }
 
 /**

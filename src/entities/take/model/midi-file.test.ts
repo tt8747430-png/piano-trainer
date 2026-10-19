@@ -139,6 +139,18 @@ describe('midiFile', () => {
     ])
   })
 
+  it('merges a last bar too short to be a beat’s eighth into the bar before', () => {
+    const file = midiFile({
+      ...TAKE,
+      meter: '4/4',
+      notes: [],
+      pedals: [],
+      length: 2010,
+      bars: [0, 2000, 2010],
+    })
+    expect(signaturesOf(file)).toEqual([[4, 2]])
+  })
+
   it('lets a key go before it is struck again within the same tick', () => {
     const notes = [
       { midi: midi(60), at: 0, held: 300, velocity: 90 },
