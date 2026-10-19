@@ -1,6 +1,6 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   usePieceHeadings,
@@ -61,7 +61,13 @@ export function SharedSongPage() {
       current = false
     }
   }, [data])
+  // Added once: a second press before the song's page opens adds nothing.
+  const added = useRef(false)
+  const [adding, setAdding] = useState(false)
   const add = (song: SharedSong) => {
+    if (added.current) return
+    added.current = true
+    setAdding(true)
     const id = addSong(pieces, song)
     void navigate({ to: '/songs/$pieceId', params: { pieceId: id }, replace: true })
   }
@@ -93,7 +99,12 @@ export function SharedSongPage() {
               tempo: reading.song.music.tempo,
             })}
           </p>
-          <Button size="pill" className="self-start" onClick={() => add(reading.song)}>
+          <Button
+            size="pill"
+            className="self-start"
+            disabled={adding}
+            onClick={() => add(reading.song)}
+          >
             <Plus data-icon="inline-start" aria-hidden />
             {t('shared.add')}
           </Button>

@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -36,6 +36,15 @@ describe('A shared song', () => {
     await user.click(screen.getByRole('button', { name: 'Add to Your songs' }))
     expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Morning'])
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
+  })
+
+  it('adds the song once, however quickly Add is pressed again', async () => {
+    const { router, piecesStore } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
+    const add = await screen.findByRole('button', { name: 'Add to Your songs' })
+    fireEvent.click(add)
+    fireEvent.click(add)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
+    expect(piecesStore.getState().songs.map((song) => song.id)).toEqual(['my-1'])
   })
 
   it('says so when the link holds no song', async () => {
