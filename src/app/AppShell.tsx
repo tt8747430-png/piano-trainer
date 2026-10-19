@@ -12,7 +12,8 @@ import { AppNav } from '@/widgets/app-nav'
  * gutter growing with it. Its own bar, the screen's header, hides while the page is read downwards
  * and comes back on the way up. The navigation comes first in the page, as the sidebar is drawn
  * first, after a link past it to the screen. The screen's floating actions stand in one column at its
- * foot, where the learner chose.
+ * foot, where the learner chose, or at its side over keys docked on a wide screen; the screen pads
+ * clear of the tab bar, the docked keys and the actions wherever they stand.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation('common')
@@ -38,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           id="content"
           tabIndex={-1}
           data-sidebar={sidebar}
-          className="group/main px-gutter pt-safe pb-docked-28 outline-none print:p-0 landscape-phone:pb-docked-8 landscape-phone:pl-rail landscape-phone:pr-gutter-safe lg:pb-docked-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
+          className="group/main pt-safe pr-floating pb-foot-6 pl-(--gutter) outline-none print:p-0 landscape-phone:pb-foot-4 landscape-phone:pl-rail lg:pb-foot-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed"
         >
           <FloatingHost place={floating.place} labels={floating.labels} screen={screen}>
             {children}

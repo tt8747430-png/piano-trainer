@@ -1,6 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronLeft, ChevronRight, CornerLeftUp, ListOrdered } from 'lucide-react'
-import { useMemo, useReducer, useState, type ReactElement } from 'react'
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CornerLeftUp,
+  ListOrdered,
+  type LucideIcon,
+} from 'lucide-react'
+import { useMemo, useReducer, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -116,7 +124,8 @@ const DOCK_BUTTON = 'size-12 rounded-full'
 /**
  * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
  * how many (opening the contents, and what the lesson is part of), › the next. A jump between
- * sections replaces the page's entry, as a contents link does: Back still leaves the lesson.
+ * sections replaces the page's entry, as a contents link does: Back still leaves the lesson. Standing
+ * at the side of a wide screen, the bar stands upright, its arrows up and down.
  */
 function LessonBar({
   lesson,
@@ -134,7 +143,14 @@ function LessonBar({
     lesson.sections.findIndex((_, s) => sectionId(s) === reading),
     0,
   )
-  const section = (to: number, label: string, Icon: typeof ChevronLeft) =>
+  // Its arrows point the way the bar reads: along it at the foot, up and down standing at the side.
+  const arrows = (Along: LucideIcon, Aside: LucideIcon) => (
+    <>
+      <Along aria-hidden className="aside:hidden" />
+      <Aside aria-hidden className="hidden aside:block" />
+    </>
+  )
+  const section = (to: number, label: string, icons: ReactNode) =>
     to >= 0 && to < of ? (
       <ButtonLink
         variant="ghost"
@@ -144,20 +160,20 @@ function LessonBar({
         className={DOCK_BUTTON}
         render={<Link to="." hash={sectionId(to)} replace />}
       >
-        <Icon aria-hidden />
+        {icons}
       </ButtonLink>
     ) : (
       <Button variant="ghost" size="icon" aria-label={label} disabled className={DOCK_BUTTON}>
-        <Icon aria-hidden />
+        {icons}
       </Button>
     )
   return (
     <div
       role="toolbar"
       aria-label={t('lessonBar')}
-      className="flex h-14 items-center gap-0.5 rounded-full border border-input bg-card px-1 shadow-lg shadow-foreground/15"
+      className="flex h-14 items-center gap-0.5 rounded-full border border-input bg-card px-1 shadow-lg shadow-foreground/15 aside:h-auto aside:w-14 aside:flex-col aside:px-0 aside:py-1"
     >
-      {section(at - 1, t('previousSection'), ChevronLeft)}
+      {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           render={
@@ -165,7 +181,7 @@ function LessonBar({
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
               title={t('contents')}
-              className="h-12 rounded-full px-3"
+              className="h-12 rounded-full px-3 aside:h-auto aside:w-12 aside:flex-col aside:gap-0.5 aside:px-0 aside:py-2 aside:text-xs"
             />
           }
         >
@@ -180,7 +196,7 @@ function LessonBar({
           </nav>
         </SheetContent>
       </Sheet>
-      {section(at + 1, t('nextSection'), ChevronRight)}
+      {section(at + 1, t('nextSection'), arrows(ChevronRight, ChevronDown))}
     </div>
   )
 }

@@ -16,18 +16,27 @@ import { ButtonLink } from './ButtonLink'
 import { FloatingContext, useFloatingLabels, type FloatingPlace } from './floating-context'
 import { Button } from './primitives/button'
 
-/** The actions stand in a row along the foot wherever they are, so none climbs over the page. */
+/**
+ * The actions stand in a row along the foot, so none climbs over the page; beside the page (`aside`:
+ * keys docked at the foot of a phone on its side or of a laptop) in a column at its left, or at its
+ * right for the middle, over the keys.
+ */
 const ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'flex-row items-end',
-  center: 'flex-row items-end',
-  right: 'flex-row items-end',
+  left: 'flex-row items-end aside:flex-col aside:items-start',
+  center: 'flex-row items-end aside:flex-col aside:items-end',
+  right: 'flex-row items-end aside:flex-col aside:items-end',
 }
-/** A dial's own stack stands over its button wherever the actions are. */
+/** A dial's own stack stands over its button wherever the actions are, kept on the screen. */
 const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'items-start',
-  center: 'items-center',
-  right: 'items-end',
+  left: 'left-0 items-start',
+  center:
+    'left-1/2 -translate-x-1/2 items-center aside:right-0 aside:left-auto aside:translate-x-0 aside:items-end',
+  right: 'right-0 items-end',
 }
+/** The page keeps this far clear of the actions: their row's margin over the foot. */
+const FLOATING_GAP_PX = 12
+/** The room the actions take along one side, their gap included; none while there are none. */
+const room = (px: number | undefined) => `${px ? px + FLOATING_GAP_PX : 0}px`
 
 /** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
 const CONTROLS =
@@ -36,9 +45,12 @@ const CONTROLS =
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
  * and the keys docked there, the width of the screen beside a rail or a sidebar: at its left, its
- * middle or its right, as the learner chose, each action with its name or its icon alone. A tap on
- * the page (on no control and on no key) folds them away out of the reading's way, and the next
- * brings them back; a new `screen` brings them back too.
+ * middle or its right, as the learner chose, each action with its name or its icon alone. Where keys
+ * are docked on a screen wide for its height (`aside`), they stand in a column at its side instead,
+ * so the little height left stays the page's. The page pads clear of them by the room they take,
+ * which the host measures (`--floating-block`, `--floating-inline`; `theme.css` says which counts).
+ * A tap on the page (on no control and on no key) folds them away out of the reading's way, and the
+ * next brings them back; a new `screen` brings them back too.
  */
 export function FloatingHost({
   place,
@@ -68,15 +80,32 @@ export function FloatingHost({
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
   }, [screen])
+  useEffect(() => {
+    if (!column) return
+    const root = document.documentElement.style
+    const observer = new ResizeObserver(([entry]) => {
+      const size = entry?.borderBoxSize[0]
+      root.setProperty('--floating-block', room(size?.blockSize))
+      root.setProperty('--floating-inline', room(size?.inlineSize))
+    })
+    observer.observe(column)
+    return () => {
+      observer.disconnect()
+      root.removeProperty('--floating-block')
+      root.removeProperty('--floating-inline')
+    }
+  }, [column])
   return (
     <FloatingContext.Provider value={{ column, place, labels }}>
       {children}
       <div
+        data-slot="floating-host"
+        data-place={place}
         data-hidden={hidden || undefined}
         className={cn(
           'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
           place === 'left' && 'justify-start',
-          place === 'center' && 'justify-center',
+          place === 'center' && 'justify-center aside:justify-end',
           place === 'right' && 'justify-end',
         )}
       >
@@ -238,7 +267,7 @@ export function SpeedDial({
         <div aria-hidden className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
       ) : null}
       <div
-        className={cn('flex flex-col gap-3', DIAL_ALIGN[place])}
+        className="relative flex"
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || !open) return
           event.stopPropagation()
@@ -246,7 +275,15 @@ export function SpeedDial({
         }}
       >
         {open ? (
-          <ul id={id} aria-label={name} className={cn('flex flex-col gap-1.5', DIAL_ALIGN[place])}>
+          // Over the button, out of the column's flow: opened, it moves neither the actions nor the page.
+          <ul
+            id={id}
+            aria-label={name}
+            className={cn(
+              'absolute bottom-full mb-3 flex w-max flex-col gap-1.5',
+              DIAL_ALIGN[place],
+            )}
+          >
             {children}
           </ul>
         ) : null}
