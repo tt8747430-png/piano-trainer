@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { Performance } from '@/shared/lib/arrangement'
-import { note, noteName } from '@/shared/lib/music'
+import {
+  note,
+  noteName,
+  PIANO,
+  PITCH_CLASSES,
+  SCALE_KINDS,
+  scaleRootSpelling,
+  spellScale,
+} from '@/shared/lib/music'
 import { contraryExercise, scaleExercise, sequenceExercise } from './scales'
 
 const C = note('C')
@@ -16,6 +24,29 @@ const fingers = (performance: Performance, side: 'rh' | 'lh' = 'rh') =>
     .join('')
 
 describe('scaleExercise', () => {
+  it('keeps both hands on the keyboard from any start, in every key, over up to four octaves', () => {
+    const outside: string[] = []
+    for (const kind of SCALE_KINDS) {
+      for (const pc of PITCH_CLASSES) {
+        const root = scaleRootSpelling(pc, kind)
+        for (const octaves of [1, 2, 3, 4]) {
+          for (let start = 0; start < spellScale(root, kind).length; start++) {
+            const keys = scaleExercise({
+              root,
+              kind,
+              octaves,
+              start,
+              fingering: 'scale',
+            }).notes.map((n) => n.midi)
+            if (Math.max(...keys) > PIANO.to || Math.min(...keys) < PIANO.from)
+              outside.push(`${noteName(root)} ${kind} ×${octaves} from ${start}`)
+          }
+        }
+      }
+    }
+    expect(outside).toEqual([])
+  })
+
   it('runs up an octave and back in 8ths, fingered as taught, both hands an octave apart', () => {
     const scale = scaleExercise({
       root: C,
@@ -67,7 +98,7 @@ describe('scaleExercise', () => {
     expect(fingers(scale)[0]).toBe('1')
   })
 
-  it('starts four octaves an octave lower, so the run stays on the keyboard, the left hand two below', () => {
+  it('runs four octaves from middle C to the top C, the left hand two below', () => {
     const scale = scaleExercise({
       root: C,
       kind: 'major',
@@ -76,8 +107,21 @@ describe('scaleExercise', () => {
       fingering: 'scale',
     })
     const keys = scale.notes.map((n) => n.midi)
-    expect(Math.min(...keys)).toBe(24)
-    expect(Math.max(...keys)).toBe(96)
+    expect(Math.min(...keys)).toBe(36)
+    expect(Math.max(...keys)).toBe(108)
+  })
+
+  it('starts an octave lower where the run from its start would leave the keyboard', () => {
+    const scale = scaleExercise({
+      root: note('D'),
+      kind: 'major',
+      octaves: 4,
+      start: 6,
+      fingering: 'scale',
+    })
+    const keys = scale.notes.map((n) => n.midi)
+    expect(Math.max(...keys)).toBe(97)
+    expect(Math.min(...keys)).toBe(25)
   })
 })
 

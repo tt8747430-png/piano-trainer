@@ -38,12 +38,14 @@ export interface Played {
 }
 
 /**
- * The right hand's tonic for a run of `octaves`: at or above middle C, an octave lower only when the
- * run's top would leave the keyboard.
+ * The right hand's tonic for a run of `octaves`: at or above middle C, octaves lower while the run's
+ * top would leave the keyboard. The top is `highest` semitones above the tonic's last octave: the
+ * tone the run starts and ends on, or the octave's highest tone (11) where the run goes past it.
  */
-export function tonicKey(root: SpelledNote, octaves = 1): Midi {
-  const tonic = MIDDLE_C + pitchClassOf(root)
-  return midi(tonic + 11 + 12 * octaves > PIANO.to ? tonic - 12 : tonic)
+export function tonicKey(root: SpelledNote, octaves = 1, highest = 11): Midi {
+  let tonic = MIDDLE_C + pitchClassOf(root)
+  while (tonic + highest + 12 * octaves > PIANO.to) tonic -= 12
+  return midi(tonic)
 }
 
 /**
