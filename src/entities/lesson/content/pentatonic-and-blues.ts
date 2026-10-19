@@ -74,7 +74,7 @@ const pentatonicAndBlues: Lesson = {
           },
         },
         { kind: 'scale', root: note('C'), scale: 'majorBlues' },
-        { kind: 'notes', clef: 'treble', notes: 'D#4/8 E4/8 G4/8 A4/8 C5/2' },
+        { kind: 'notes', clef: 'treble', notes: 'E♭4/8 E4/8 G4/8 A4/8 C5/2' },
       ],
     },
     {

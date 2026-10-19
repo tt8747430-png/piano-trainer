@@ -94,7 +94,10 @@ const jazzChordSymbols: Lesson = {
       ],
     },
     {
-      heading: { en: 'Two diminished 7th chords', ru: 'Два уменьшённых септаккорда' },
+      heading: {
+        en: 'Half-diminished and diminished 7ths',
+        ru: 'Полууменьшённый и уменьшённый септаккорды',
+      },
       blocks: [
         {
           kind: 'text',

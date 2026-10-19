@@ -29,7 +29,7 @@ const minorTwoFiveLevels: Lesson = {
           voicings: [
             { symbol: 'Dm7♭5', caption: 'iiø7', degrees: '1 ♭5 | ♭7 ♭3', hands: 'D3 A♭3 | C4 F4' },
             { symbol: 'G7♭13', caption: 'V7♭13', degrees: '♭7 3 | ♭13 1', hands: 'F3 B3 | E♭4 G4' },
-            { symbol: 'Cm9', caption: 'i7', degrees: '♭3 ♭7 | 9 5', hands: 'E♭3 B♭3 | D4 G4' },
+            { symbol: 'Cm9', caption: 'i9', degrees: '♭3 ♭7 | 9 5', hands: 'E♭3 B♭3 | D4 G4' },
             { symbol: 'Cm6', caption: 'i6', degrees: '♭3 6 | 1 5', hands: 'E♭3 A3 | C4 G4' },
           ],
         },
@@ -112,7 +112,12 @@ const minorTwoFiveLevels: Lesson = {
               degrees: '♭7 3 | ♭13 ♭9 ♭13',
               hands: 'F3 B3 | E♭4 A♭4 E♭5',
             },
-            { symbol: 'Cm9', caption: 'i9', degrees: '11 ♭7 | 9 5 9', hands: 'F3 B♭3 | D4 G4 D5' },
+            {
+              symbol: 'Cm11',
+              caption: 'i11',
+              degrees: '11 ♭7 | 9 5 9',
+              hands: 'F3 B♭3 | D4 G4 D5',
+            },
             { symbol: 'Cm6/9', caption: 'i6/9', degrees: '♭3 6 | 9 5', hands: 'E♭3 A3 | D4 G4' },
           ],
         },

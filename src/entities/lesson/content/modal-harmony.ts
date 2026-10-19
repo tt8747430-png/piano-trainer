@@ -68,7 +68,7 @@ const modalHarmony: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Natural minor climbs Am, F, G and back to Am. It has no major V pulling it home.',
+            en: 'Natural minor moves Am, F, G and back to Am. It has no major V pulling it home.',
             ru: 'Натуральный минор идёт Am, F, G и снова Am. В нём нет мажорной V, которая тянет к тонике.',
           },
         },
