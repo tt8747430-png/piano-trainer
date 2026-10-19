@@ -41,7 +41,8 @@ function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
 
 /**
  * The four journeys side by side, the one shown a card-paper tab on the sand track (the neutral
- * chosen), each with how much of it is learned; scrolled across where the screen is narrow.
+ * chosen), each with how many of its steps are learned, its lessons and its checks; scrolled across
+ * where the screen is narrow.
  */
 function JourneyTabs({ shown }: { shown: Journey }) {
   const { t } = useTranslation('learn')
@@ -73,7 +74,7 @@ function JourneyTabs({ shown }: { shown: Journey }) {
                 <span className="flex items-baseline gap-2">
                   <span className="font-semibold">{localText(journey.title, locale)}</span>
                   <span className="text-xs tabular-nums">
-                    {t('journey.count', { learned: progress.done, total: progress.total })}
+                    {t('journey.steps', { learned: progress.done, total: progress.total })}
                   </span>
                 </span>
                 <LearnedBar progress={progress} />

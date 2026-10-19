@@ -11,6 +11,8 @@ export const learn = {
     label: 'Journeys',
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
+    // A journey's tab: its steps learned, lessons and checks alike (a lesson's line counts lessons).
+    steps: '{{learned}}/{{total}} steps',
   },
   // The Courses, shelf by shelf.
   shelves: {

@@ -85,6 +85,16 @@ describe('Learn', () => {
       expect(first).toHaveAttribute('aria-current', 'step')
     })
 
+    it('count each journey’s steps on its tab, its lessons and its checks, and say so', async () => {
+      await renderApp('/')
+      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
+      const journey = JOURNEYS[0]!
+      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
+      expect(within(tabs).getByRole('link', { name: /^Foundations/ })).toHaveTextContent(
+        `0/${steps} steps`,
+      )
+    })
+
     it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
       const user = userEvent.setup()
       const { router, settingsStore } = await renderApp('/')
