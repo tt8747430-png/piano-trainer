@@ -19,8 +19,8 @@ function layerAt(y: number, layout: ScoreLayout, layer: Layer, chordNames: boole
 }
 
 /**
- * Over a line's staff: its labels, the bars chosen, Pattern where a hand is not written (in that
- * hand's layer), the caret, and each bar as a button that puts the caret where it is clicked.
+ * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
+ * the bars chosen, the caret, and each bar as a button that puts the caret where it is clicked.
  */
 export function LineOverlay({
   layout,
@@ -52,6 +52,9 @@ export function LineOverlay({
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand === 'lh' ? layout.staves.bass : layout.staves.treble
+  // In a hand's layer, the bars it leaves to the pattern.
+  const patterned =
+    hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
   const place = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     const placed = line.bars[index]
     const measure = layout.measures[index]
@@ -90,26 +93,8 @@ export function LineOverlay({
         music={music}
         firstBar={(line.bars[0]?.index ?? 0) + 1}
         chordNames={chordNames}
+        patterned={patterned}
       />
-      {hand && staff
-        ? layout.measures.map((measure, index) =>
-            line.bars[index]?.bar[hand] ? null : (
-              <span
-                key={`pattern-${index}`}
-                aria-hidden
-                className="absolute flex items-center justify-center text-sm text-muted-foreground"
-                style={{
-                  left: measure.x,
-                  width: measure.width,
-                  top: staff.top,
-                  height: staff.bottom - staff.top,
-                }}
-              >
-                {t('sheet.pattern')}
-              </span>
-            ),
-          )
-        : null}
       {first && first.notes > first.x ? (
         // The clef, key and time signature at the line's head: a click opens what changes them.
         <button

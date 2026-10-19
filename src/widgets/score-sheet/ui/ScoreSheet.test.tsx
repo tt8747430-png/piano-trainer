@@ -62,6 +62,14 @@ describe('ScoreSheet', () => {
     expect(screen.getAllByText('Pattern')).toHaveLength(4)
   })
 
+  it('says Pattern in the labels over the staff, clear of the notes', async () => {
+    sheet('rh')
+    await screen.findByRole('button', { name: 'Bar 1: G' })
+    for (const mark of screen.getAllByText('Pattern')) {
+      expect(mark.closest('[data-slot="line-labels"]')).not.toBeNull()
+    }
+  })
+
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()
