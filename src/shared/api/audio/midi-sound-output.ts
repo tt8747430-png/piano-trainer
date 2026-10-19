@@ -36,12 +36,16 @@ export function createMidiSoundOutput(
   const held = new Map<Midi, number>()
   let timer: ReturnType<typeof setInterval> | null = null
   const sendDue = () => {
-    const until = pageNow() + OFF_AHEAD_MS
+    const now = pageNow()
+    const until = now + OFF_AHEAD_MS
     for (const [key, off] of held) {
       if (off > until) continue
       output.noteOff(key, off)
       held.delete(key)
     }
+    // A key whose last note has ended is nothing a Stop must let go of. One whose off is only queued
+    // stays: a Stop's clear drops that off, and it must be sent again.
+    for (const [key, { off }] of sent) if (off <= now) sent.delete(key)
     if (held.size === 0 && timer !== null) {
       clearInterval(timer)
       timer = null

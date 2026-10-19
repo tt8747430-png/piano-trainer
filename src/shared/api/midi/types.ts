@@ -19,10 +19,10 @@ export interface MidiChoice {
   readonly reversedPedal: boolean
 }
 
-/** Every keyboard heard as it plays. */
 /** A keyboard's name as the app knows it, at most this long: what a setting can keep. */
 export const DEVICE_NAME_MAX = 100
 
+/** Every keyboard heard as it plays. */
 export const ANY_KEYBOARD: MidiChoice = { device: null, octaveShift: 0, reversedPedal: false }
 
 /**
