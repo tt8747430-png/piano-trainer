@@ -104,7 +104,7 @@ describe('usePractice: Listen', () => {
   it('counts in when Play starts, never when a move starts the pass again', () => {
     const { result } = renderPractice(TWO_BARS, { countIn: true })
     act(() => result.current.play())
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     expect(audio.played).toHaveLength(2)
     expect(audio.played[1]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
   })
@@ -129,7 +129,7 @@ describe('usePractice: Listen', () => {
   it('starts a new pass from where the learner jumps while playing', () => {
     const { result } = renderPractice(TWO_BARS)
     act(() => result.current.play())
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     expect(result.current.state.beatGroup).toBe(4)
     expect(audio.played).toHaveLength(2)
     const second = notesOf(audio.played[1]?.sounds ?? [])
@@ -159,7 +159,7 @@ describe('usePractice: Listen', () => {
 describe('usePractice: moving', () => {
   it('sounds every beat group moved to, in the audible hands', () => {
     const { result } = renderPractice(TWO_BARS, { hands: 'lh' })
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     act(() => result.current.jumpToBeatGroup(0))
     expect(audio.played.map((play) => keysOf(play.sounds))).toEqual([
       [31, 43],

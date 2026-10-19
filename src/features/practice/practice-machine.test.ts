@@ -43,12 +43,10 @@ describe('the practice machine', () => {
       expect(run(state, ...Array(4).fill({ type: 'next' })).beatGroup).toBe(0)
     })
 
-    it('jumps to a bar or a beat group', () => {
+    it('jumps to a beat group', () => {
       const state = initialPractice(TWO_BARS, 'listen', 'both')
-      expect(run(state, { type: 'jumpToBar', bar: 1 }).beatGroup).toBe(4)
       expect(run(state, { type: 'jumpToBeatGroup', beatGroup: 6 }).beatGroup).toBe(6)
       expect(run(state, { type: 'jumpToBeatGroup', beatGroup: 99 }).beatGroup).toBe(0)
-      expect(run(state, { type: 'jumpToBar', bar: 9 }).beatGroup).toBe(0)
     })
 
     it('ignores keys', () => {
