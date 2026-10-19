@@ -112,6 +112,17 @@ describe('touching the keys', () => {
     expect(onKeyPress.mock.calls).toEqual([[60], [60]])
   })
 
+  it('plays no key twice when two fingers press and the first one’s click comes late', () => {
+    const { onKeyPress, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerDown(key('E4'), touch(2, x(25)))
+    fireEvent.pointerUp(key('C4'), touch(1, x(23)))
+    fireEvent.click(key('C4'), { detail: 1 })
+    fireEvent.pointerUp(key('E4'), touch(2, x(25)))
+    fireEvent.click(key('E4'), { detail: 1 })
+    expect(onKeyPress.mock.calls).toEqual([[60], [64]])
+  })
+
   it.each(['scroll', 'glissando'] as const)(
     'holds the keys still under a finger, so a key that plays never scrolls (%s)',
     (swipe) => {

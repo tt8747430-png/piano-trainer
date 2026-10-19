@@ -31,8 +31,11 @@ export function useKeyPointers({
   const pointers = useRef(new Map<number, Midi | null>())
   const presses = usePresses<number>()
   const { press, release } = presses
-  /** The key a pointer went down on: the pointer's click that follows belongs to that press. */
-  const pointerKey = useRef<Midi | null>(null)
+  /**
+   * The key each pointer went down on, until its click: the click that follows belongs to that
+   * press. One for each pointer, so two fingers' late clicks are each their own press's.
+   */
+  const awaitingClick = useRef(new Map<number, Midi>())
 
   /** The pointer is on `key` (or between keys): its press moves there, letting go of the key it left. */
   const moveTo = useCallback(
@@ -56,7 +59,7 @@ export function useKeyPointers({
   const pointerDown = useCallback(
     (key: Midi, event: PointerEvent<HTMLElement>) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return
-      pointerKey.current = key
+      awaitingClick.current.set(event.pointerId, key)
       moveTo(event.pointerId, key)
       onPress(key)
     },
@@ -67,7 +70,13 @@ export function useKeyPointers({
   // and its key goes down for the shortest press, as a tap's does.
   const click = useCallback(
     (key: Midi, clickCount: number) => {
-      if (clickCount !== 0 && pointerKey.current === key) return
+      if (clickCount !== 0) {
+        for (const [pointerId, pressed] of awaitingClick.current) {
+          if (pressed !== key) continue
+          awaitingClick.current.delete(pointerId)
+          return
+        }
+      }
       press(NO_POINTER, key)
       release(NO_POINTER)
       onPress(key)
@@ -105,19 +114,17 @@ export function useKeyPointers({
     },
     onPointerUp: (event: PointerEvent<HTMLElement>) => forget(event.pointerId),
     onPointerCancel(event: PointerEvent<HTMLElement>) {
-      pointerKey.current = null
+      awaitingClick.current.delete(event.pointerId)
       forget(event.pointerId)
     },
-    // After a key's own click handler: the next click on a key is a new press.
+    // After a key's own click handler: with no pointer down, no click is still to come (a press
+    // whose click went elsewhere is over), so the next click on a key is a new press.
     onClick() {
-      pointerKey.current = null
-    },
-    onKeyDownCapture() {
-      pointerKey.current = null
+      if (pointers.current.size === 0) awaitingClick.current.clear()
     },
     // A long press opens the context menu instead of clicking: its press is over.
     onContextMenu() {
-      pointerKey.current = null
+      awaitingClick.current.clear()
     },
   }
 
