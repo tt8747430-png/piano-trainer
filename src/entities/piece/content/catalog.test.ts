@@ -1,12 +1,6 @@
 import { statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import {
-  BUILT_IN_PATTERNS,
-  METHOD_PATTERNS,
-  PATTERN_IDS,
-  PATTERNS,
-  patternNeed,
-} from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, METHOD_PATTERNS, PATTERN_IDS, patternNeed } from '@/entities/pattern'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { arrange, type Performance } from '@/shared/lib/arrangement'
 import { PRECACHE_FILE_LIMIT } from '@/shared/config'
@@ -59,7 +53,9 @@ describe('the collections', () => {
     for (const study of studies.entries) expect(study.source?.book, study.id).toBe('called-to-play')
     // A hymn opens with one of Боброва's seven types.
     for (const hymn of hymns.entries) {
-      expect(isPiece(hymn) && PATTERNS[hymn.pattern].group, hymn.id).toBe('seven-types')
+      expect(isPiece(hymn) && BUILT_IN_PATTERNS.require(hymn.pattern).group, hymn.id).toBe(
+        'seven-types',
+      )
     }
   })
 })

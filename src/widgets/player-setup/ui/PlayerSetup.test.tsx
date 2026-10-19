@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderRouted } from '@/app/testing/render-routed'
 import {
+  BUILT_IN_PATTERNS,
   LEFT_FIGURES,
-  PATTERNS,
   RIGHT_FIGURES,
   type AccompanimentChoice,
   type PatternFit,
@@ -48,11 +48,13 @@ describe('PlayerSetup', () => {
     await renderSetup()
     expect(
       screen.getByRole('button', {
-        name: `Right hand: ${RIGHT_FIGURES[PATTERNS.block.rh].name.en}`,
+        name: `Right hand: ${RIGHT_FIGURES[BUILT_IN_PATTERNS.require('block').rh].name.en}`,
       }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: `Left hand: ${LEFT_FIGURES[PATTERNS.block.lh].name.en}` }),
+      screen.getByRole('button', {
+        name: `Left hand: ${LEFT_FIGURES[BUILT_IN_PATTERNS.require('block').lh].name.en}`,
+      }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /back to the pattern’s own/ })).toBeNull()
   })
@@ -113,11 +115,12 @@ describe('PlayerSetup', () => {
   it('chooses a pattern from its group, keeping melody patterns from music without a tune', async () => {
     const { user, onFigures } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(screen.getByRole('option', { name: new RegExp(PATTERNS.r5.name.en) })).toHaveAttribute(
-      'aria-disabled',
-      'true',
+    expect(
+      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('r5').name.en) }),
+    ).toHaveAttribute('aria-disabled', 'true')
+    await user.click(
+      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('ballad').name.en) }),
     )
-    await user.click(screen.getByRole('option', { name: new RegExp(PATTERNS.ballad.name.en) }))
     expect(onFigures).toHaveBeenCalledWith({ pattern: 'ballad' })
   })
 
@@ -147,7 +150,9 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup({ key: false })
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+      screen.getByRole('option', {
+        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
+      }),
     ).toHaveAttribute('aria-disabled', 'true')
     expect(screen.getByText('Needs a key')).toBeInTheDocument()
   })
@@ -156,7 +161,9 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+      screen.getByRole('option', {
+        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
+      }),
     ).not.toHaveAttribute('aria-disabled')
   })
 
@@ -164,10 +171,14 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup({ simpleTime: false })
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.ballad.name.en) }),
+      screen.getByRole('option', {
+        name: (name) => name.includes(BUILT_IN_PATTERNS.require('ballad').name.en),
+      }),
     ).toHaveAttribute('aria-disabled', 'true')
     expect(
-      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.r1.name.en) }),
+      screen.getByRole('option', {
+        name: (name) => name.includes(BUILT_IN_PATTERNS.require('r1').name.en),
+      }),
     ).not.toHaveAttribute('aria-disabled')
     expect(screen.getAllByText('Needs simple time').length).toBeGreaterThan(0)
   })
@@ -189,7 +200,9 @@ describe('PlayerSetup', () => {
   it('opens a list on its choice, and goes back to the row that opened it', async () => {
     const { user } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
-    expect(screen.getByRole('option', { name: new RegExp(PATTERNS.block.name.en) })).toHaveFocus()
+    expect(
+      screen.getByRole('option', { name: new RegExp(BUILT_IN_PATTERNS.require('block').name.en) }),
+    ).toHaveFocus()
     await user.keyboard('{Enter}')
     expect(screen.getByRole('button', { name: /^Pattern/ })).toHaveFocus()
     await user.click(screen.getByRole('button', { name: /^Right hand/ }))

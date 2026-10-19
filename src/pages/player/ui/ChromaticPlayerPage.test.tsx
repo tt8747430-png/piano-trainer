@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { PATTERNS } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 
 describe('The chromatic walk in the Player', () => {
   it('walks the chosen chords root by root as sheet music, titled by them', async () => {
@@ -70,7 +70,9 @@ describe('The chromatic walk in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await user.click(await screen.findByRole('button', { name: /^Pattern/ }))
     expect(
-      screen.getByRole('option', { name: (name) => name.includes(PATTERNS.flow.name.en) }),
+      screen.getByRole('option', {
+        name: (name) => name.includes(BUILT_IN_PATTERNS.require('flow').name.en),
+      }),
     ).toHaveAttribute('aria-disabled', 'true')
   })
 

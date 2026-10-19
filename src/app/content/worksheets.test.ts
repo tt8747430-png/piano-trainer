@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
-import { BUILT_IN_PATTERNS, bookOfPattern, patternNeed, type PatternId } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import { isTrainerId } from '@/features/trainer'
 import {
@@ -496,8 +496,8 @@ describe('the courses', () => {
             .map((piece) => `${where}: plays ${piece}, not its song`),
           ...patternsOf(lesson)
             .filter((pattern) => {
-              const of = bookOfPattern(pattern)
-              return of !== null && !books.includes(of)
+              const of = partOfShelf(BUILT_IN_PATTERNS.require(pattern).group)
+              return isMethodBookId(of) && !books.includes(of)
             })
             .map((pattern) => `${where}: shows ${pattern}, another book’s`),
           ...lessonLinksOf(lesson).map((id) => `${where}: links lesson ${id}`),

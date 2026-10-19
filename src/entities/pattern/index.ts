@@ -51,7 +51,6 @@ export {
 } from './model/context'
 export {
   ACCOMPANIMENT_PARTS,
-  bookOfPattern,
   isAccompanimentPart,
   partOfShelf,
   partShelves,
@@ -72,7 +71,6 @@ export {
   RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURES,
 } from './content/figures'
-export { PATTERNS } from './content/patterns'
 export { METHOD_PATTERNS, METHODS } from './content/methods'
 export { useFullShelfName } from './ui/use-full-shelf-name'
 export { usePartName } from './ui/use-part-name'
