@@ -270,7 +270,7 @@ export const practice: LocaleResources['practice'] = {
         why: '{{chord}} — ♭VII7 к {{to}}. Он входит «с чёрного хода»: на целый тон снизу, а не от V.',
       },
       backdoorTwoFive: {
-        name: 'Backdoor ii–V',
+        name: 'Backdoor-оборот ii–V',
         why: '{{chord}} и {{next}} — iv и ♭VII7 к {{to}}, взятые из одноимённого минора.',
       },
       plagal: {
