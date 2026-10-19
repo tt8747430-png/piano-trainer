@@ -33,7 +33,7 @@ const chart = (...bars: string[][]): Chart => ({
   ],
 })
 
-/** One bar, C then G: beat groups at 0, 12, 24, 36; the left hand plays at 0 and 24 only. */
+/** One bar, C then G: beat groups at 0, 24, 48, 72; the left hand plays at 0 and 48 only. */
 export const ONE_BAR: Performance = arrange(chart(['C', 'G']), { tonic: note('C'), pattern: BEATS })
 
 /** Two bars, C and G: eight beat groups, four to a bar. */
@@ -42,7 +42,7 @@ export const TWO_BARS: Performance = arrange(chart(['C'], ['G']), {
   pattern: BEATS,
 })
 
-/** The same two bars in halves: four beat groups, two to a bar, at 0, 24, 48, 72. */
+/** The same two bars in halves: four beat groups, two to a bar, at 0, 48, 96, 144. */
 export const TWO_BARS_IN_HALVES: Performance = arrange(chart(['C'], ['G']), {
   tonic: note('C'),
   pattern: HALVES,

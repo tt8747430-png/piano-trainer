@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'

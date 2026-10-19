@@ -11,7 +11,7 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 48, beats: 2 },
+        { startTick: 96, beats: 2 },
       ],
       meter: '4/4',
       from: 0,
@@ -63,7 +63,7 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 1 },
-        { startTick: 12, beats: 4 },
+        { startTick: 24, beats: 4 },
       ],
       meter: '4/4',
       from: 0,
@@ -86,8 +86,8 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 48, beats: 4 },
         { startTick: 96, beats: 4 },
+        { startTick: 192, beats: 4 },
       ],
       meter: '4/4',
       from: 1,

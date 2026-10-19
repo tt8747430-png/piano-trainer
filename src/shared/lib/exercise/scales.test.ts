@@ -24,6 +24,7 @@ const fingers = (performance: Performance, side: 'rh' | 'lh' = 'rh') =>
     .join('')
 
 describe('scaleExercise', () => {
+  // Every key, start and octave span: seconds, many more under coverage's instrumenting.
   it('keeps both hands on the keyboard from any start, in every key, over up to four octaves', () => {
     const outside: string[] = []
     for (const kind of SCALE_KINDS) {
@@ -45,7 +46,7 @@ describe('scaleExercise', () => {
       }
     }
     expect(outside).toEqual([])
-  })
+  }, 60_000)
 
   it('runs up an octave and back in 8ths, fingered as taught, both hands an octave apart', () => {
     const scale = scaleExercise({

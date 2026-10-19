@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createPatternsStore, PATTERNS_STORAGE_KEY } from './store'

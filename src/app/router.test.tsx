@@ -10,6 +10,10 @@ import { testContext } from '@/app/testing/test-context'
 import { createAppRouter } from './router'
 import { renderApp } from './testing/render-app'
 
+// The storage is chosen once a page, and a file before this one in its worker may have chosen it:
+// this file loads the app's modules afresh, as a page would.
+vi.hoisted(() => vi.resetModules())
+
 const ROUTES = [
   ['/', '/'],
   ['/songs', '/songs'],

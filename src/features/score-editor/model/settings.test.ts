@@ -15,8 +15,8 @@ describe('the song’s settings', () => {
     const moved = setKey(draft, { tonic: note('E', -1), minor: false })
     expect(moved.key).toEqual({ tonic: note('E', -1), minor: false })
     expect(form(moved)).toEqual([[['E♭@0', 'B♭7/D@0']]])
-    expect(shape(moved.melody)).toEqual(['G4@0/48', 'F4@48/48'])
-    expect(shape(moved.hands.lh)).toEqual(['E♭3@0/48'])
+    expect(shape(moved.melody)).toEqual(['G4@0/96', 'F4@96/96'])
+    expect(shape(moved.hands.lh)).toEqual(['E♭3@0/96'])
   })
 
   it('changes only the key for the other mode of the same tonic', () => {
@@ -39,15 +39,15 @@ describe('the song’s settings', () => {
   it('makes each full bar the new meter’s, its notes and chords past the new end taken', () => {
     const three = setMeter(draft, '3/4')
     expect(three.meter).toBe('3/4')
-    expect(three.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([36, 36])
-    expect(shape(three.melody)).toEqual(['E4@0/36', 'D4@36/36'])
+    expect(three.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([72, 72])
+    expect(shape(three.melody)).toEqual(['E4@0/72', 'D4@72/72'])
     expect(form(three)).toEqual([[['C@0', 'G7/B@0']]])
   })
 
   it('lengthens each full bar to a longer meter, its last chord held on', () => {
     const two = setMeter(setMeter(draft, '2/4'), '4/4')
-    expect(two.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([48, 48])
-    expect(shape(two.melody)).toEqual(['E4@0/24', 'D4@48/24'])
+    expect(two.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([96, 96])
+    expect(shape(two.melody)).toEqual(['E4@0/48', 'D4@96/48'])
   })
 
   it('keeps a pickup one, cut from its start, so the beats leading into the downbeat stay', () => {
@@ -56,11 +56,11 @@ describe('the song’s settings', () => {
       melody: 'C4/1 D4/1 E4/1 | F4/4',
     })
     const two = setMeter(pickup, '2/4')
-    expect(two.sections[0]?.lines[0]?.[0]?.ticks).toBe(12)
-    expect(shape(two.melody)[0]).toBe('E4@0/12')
+    expect(two.sections[0]?.lines[0]?.[0]?.ticks).toBe(24)
+    expect(shape(two.melody)[0]).toBe('E4@0/24')
     const three = setMeter(pickup, '3/4')
-    expect(three.sections[0]?.lines[0]?.[0]?.ticks).toBe(24)
-    expect(shape(three.melody).slice(0, 2)).toEqual(['D4@0/12', 'E4@12/12'])
+    expect(three.sections[0]?.lines[0]?.[0]?.ticks).toBe(48)
+    expect(shape(three.melody).slice(0, 2)).toEqual(['D4@0/24', 'E4@24/24'])
   })
 
   it('keeps a pickup bar shorter than the meter’s as it is, and changes nothing across kinds', () => {

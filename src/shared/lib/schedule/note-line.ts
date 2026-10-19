@@ -25,9 +25,9 @@ const TOKEN = /^([^/~]+)(?:\/(\d+)(\.?))?(~?)$/
 /**
  * A line of notes as a lesson writes it, `E4 G4/2 B4/8. r/4 C5/2~ C5/4`: each note with its octave,
  * then its value after a slash (1 whole, 2 half, 4 quarter, 8 eighth, 16 sixteenth; a quarter when left
- * out) and a dot for half as long again (not a sixteenth's in a simple meter, which falls between
- * ticks); `r` a rest; `~` ties a note to the next, of the same pitch, into one note (written tied
- * where it crosses a barline). One hand's, in a key and a meter, simple or compound.
+ * out) and a dot for half as long again; `r` a rest; `~` ties a note to the next, of the same pitch,
+ * into one note (written tied where it crosses a barline). One hand's, in a key and a meter, simple
+ * or compound.
  */
 export function noteLine(
   text: string,

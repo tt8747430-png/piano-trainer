@@ -8,7 +8,7 @@ const pass = (extra: Partial<Pass>): Pass => ({
   cues: [],
   end: 60,
   fromTick: 0,
-  toTick: 864,
+  toTick: 1728,
   musicStart: 0,
   start: 100,
   tempo: 72,
@@ -22,7 +22,7 @@ describe('recordingPlay', () => {
 
   it('plays from the pass’s first tick at the pass’s tempo', () => {
     // Four beats in at 72 is 3⅓ seconds into the recording; at 36 it plays at half speed.
-    const play = recordingPlay(VOCAL, pass({ fromTick: 48, tempo: 36, end: 80 }))
+    const play = recordingPlay(VOCAL, pass({ fromTick: 96, tempo: 36, end: 80 }))
     expect(play.at).toBe(100)
     expect(play.offset).toBeCloseTo(2.74 + 10 / 3)
     expect(play.rate).toBe(0.5)

@@ -94,10 +94,10 @@ describe('the pattern catalog', () => {
 
   it('writes 3/4 and major variants where the source has them', () => {
     const r2 = RIGHT_FIGURES.r2.figure
-    expect(r2.kind === 'events' && r2.inThree?.map((event) => event.start)).toEqual([12, 24])
+    expect(r2.kind === 'events' && r2.inThree?.map((event) => event.start)).toEqual([24, 48])
     const p52 = RIGHT_FIGURES.p52.figure
     expect(p52.kind === 'events' && p52.onMajor).toHaveLength(3)
-    expect(LEFT_FIGURES.shuf.figure.events[1]?.start).toBe(8)
+    expect(LEFT_FIGURES.shuf.figure.events[1]?.start).toBe(16)
   })
 
   it('names the Chord flow by the shapes its right hand plays, I–IV–I–V–I', () => {
@@ -168,8 +168,8 @@ describe('the left hand’s own figures', () => {
 
   it('strides: the bass, then the chord an octave and more above it', () => {
     expect(lhAt('str', 0)).toEqual([36]) // C2
-    expect(lhAt('str', 12)).toEqual([52, 55, 60]) // E3 G3 C4
-    expect(lhAt('str', 24)).toEqual([43]) // G2
+    expect(lhAt('str', 24)).toEqual([52, 55, 60]) // E3 G3 C4
+    expect(lhAt('str', 48)).toEqual([43]) // G2
   })
 
   it('opens a 5th and a 10th over the bass', () => {

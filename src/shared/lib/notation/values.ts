@@ -3,7 +3,7 @@ import type { Duration, NoteValue } from './types'
 
 const NOTE_VALUES: readonly NoteValue[] = [1, 2, 4, 8, 16, 32]
 
-/** Ticks in an eighth: 6 when a quarter is the beat, 4 when a dotted quarter is (x/8). */
+/** Ticks in an eighth: half a beat when a quarter is the beat, a third when a dotted quarter is (x/8). */
 const eighthTicks = (meter: Meter): Tick =>
   isCompound(meter) ? TICKS_PER_BEAT / 3 : TICKS_PER_BEAT / 2
 

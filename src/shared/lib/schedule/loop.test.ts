@@ -19,13 +19,13 @@ const ONE_BAR = arrange(chart, { tonic: note('C'), pattern: BEATS })
 const OPTIONS = {
   tempo: 60,
   hands: audibleHands('both'),
-  range: { from: 0, to: 48 },
+  range: { from: 0, to: 96 },
   fromTick: 0,
 }
 
 describe('startLoop', () => {
   it('queues one pass from the cursor to the passage’s end, at the given time', () => {
-    const loop = startLoop(ONE_BAR, { ...OPTIONS, fromTick: 24 }, 10)
+    const loop = startLoop(ONE_BAR, { ...OPTIONS, fromTick: 48 }, 10)
     expect(loop.passes).toHaveLength(1)
     expect(loop.passes[0]).toMatchObject({ start: 10, end: 2, tempo: 60 })
     expect(beatGroupAt(loop, 10)).toBe(2)
@@ -65,7 +65,7 @@ describe('advanceLoop', () => {
   it('plays the passage again from its start, with the metronome and without the count-in', () => {
     const late = startLoop(
       ONE_BAR,
-      { ...OPTIONS, fromTick: 24, countIn: true, metronome: true },
+      { ...OPTIONS, fromTick: 48, countIn: true, metronome: true },
       10,
     )
     const again = advanceLoop(late, 15.5).passes[1]
@@ -75,7 +75,7 @@ describe('advanceLoop', () => {
   })
 
   it('loops only the passage', () => {
-    const passage = startLoop(ONE_BAR, { ...OPTIONS, range: { from: 12, to: 36 }, fromTick: 24 }, 0)
+    const passage = startLoop(ONE_BAR, { ...OPTIONS, range: { from: 24, to: 72 }, fromTick: 48 }, 0)
     const again = advanceLoop(passage, 0.5).passes[1]
     expect(again?.cues.map((cue) => cue.beatGroup)).toEqual([1, 2])
     expect(again).toMatchObject({ start: 1, end: 2 })

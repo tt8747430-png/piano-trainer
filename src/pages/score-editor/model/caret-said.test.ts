@@ -21,10 +21,10 @@ describe('caretSaid', () => {
       what: 'F#4',
       value: { value: 4, dots: 1, triplet: false },
     })
-    expect(at(18, 'melody')).toEqual({ kind: 'rest', bar: 1, beat: '2.5', what: '' })
-    expect(at(48, 'chords')).toEqual({ kind: 'at', bar: 2, beat: '1', what: 'A7' })
-    expect(at(60, 'lh')).toEqual({ kind: 'pattern', bar: 2, beat: '2', what: '' })
-    expect(at(96, 'melody')).toEqual({ kind: 'end' })
+    expect(at(36, 'melody')).toEqual({ kind: 'rest', bar: 1, beat: '2.5', what: '' })
+    expect(at(96, 'chords')).toEqual({ kind: 'at', bar: 2, beat: '1', what: 'A7' })
+    expect(at(120, 'lh')).toEqual({ kind: 'pattern', bar: 2, beat: '2', what: '' })
+    expect(at(192, 'melody')).toEqual({ kind: 'end' })
   })
 
   it('names a length no one value writes by no value', () => {
@@ -36,7 +36,7 @@ describe('caretSaid', () => {
   })
 
   it('says a note is held where it sounds on from before the caret', () => {
-    expect(at(12, 'melody')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
-    expect(at(60, 'melody')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
+    expect(at(24, 'melody')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
+    expect(at(120, 'melody')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
   })
 })

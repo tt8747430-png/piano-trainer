@@ -244,7 +244,7 @@ tempo)` sounds it and `notate(run)` writes it.
   types). A bar's written hands
   (`ChartBar.hands`) play in place of the pattern's hand there (ADR 0027). Voice
   leading, an inversion's voicing, the chord context and fingering are internal and tested through `arrange`.
-- Domain time is **ticks** (12 per beat). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
+- Domain time is **ticks** (24 per beat, ADR 0060). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
   Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`); a take's click
   is `recorderClicks`, on the Player's bar grid. A take is the one thing kept in time as played, milliseconds (ADR
   0028): `takeSounds` hears it (its pedals, through the Touch) and `quantise` snaps it to ticks, both in

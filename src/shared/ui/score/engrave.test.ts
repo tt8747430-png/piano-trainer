@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { midi, note, type Finger } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT, type Finger, type Key } from '@/shared/lib/music'
 import { notate, type TimedNote } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { engrave } from './engrave'
@@ -27,20 +28,20 @@ const score = notate({
   meter: '4/4',
   bars: [
     { startTick: 0, beats: 4 },
-    { startTick: 48, beats: 4 },
+    { startTick: 96, beats: 4 },
   ],
   notes: [
-    n(60, 'C', 0, 12, { finger: 1 }),
-    n(64, 'E', 0, 12, { finger: 3 }),
-    n(67, 'G', 12, 8),
-    n(66, 'F', 20, 4),
-    n(67, 'G', 36, 24),
-    { ...n(43, 'G', 0, 96), hand: 'lh' },
-    { ...n(48, 'C', 0, 12), hand: 'lh' },
+    n(60, 'C', 0, 24, { finger: 1 }),
+    n(64, 'E', 0, 24, { finger: 3 }),
+    n(67, 'G', 24, 16),
+    n(66, 'F', 40, 8),
+    n(67, 'G', 72, 48),
+    { ...n(43, 'G', 0, 192), hand: 'lh' },
+    { ...n(48, 'C', 0, 24), hand: 'lh' },
   ],
   chords: [
     { startTick: 0, symbol: 'C' },
-    { startTick: 48, symbol: 'G' },
+    { startTick: 96, symbol: 'G' },
   ],
 })
 
@@ -49,13 +50,13 @@ describe('engrave', () => {
     const host = document.createElement('div')
     const layout = engrave(score, host, { scale: 1, fingers: true, names: false })
     expect(host.querySelector('svg')).not.toBeNull()
-    expect(layout.measures.map((m) => m.startTick)).toEqual([0, 48])
+    expect(layout.measures.map((m) => m.startTick)).toEqual([0, 96])
     expect(layout.measures[1]?.x).toBe(
       (layout.measures[0]?.x ?? 0) + (layout.measures[0]?.width ?? 0),
     )
     const ticks = layout.onsets.map((onset) => onset.tick)
     expect(ticks).toEqual([...ticks].sort((a, b) => a - b))
-    expect(ticks).toEqual(expect.arrayContaining([0, 12, 20, 24, 36, 48]))
+    expect(ticks).toEqual(expect.arrayContaining([0, 24, 40, 48, 72, 96]))
     const xs = layout.onsets.map((onset) => onset.x)
     expect(xs).toEqual([...xs].sort((a, b) => a - b))
     expect(layout.staffTop).toBeLessThan(layout.staffBottom)
@@ -86,18 +87,44 @@ describe('engrave', () => {
     expect(changed.onsets[0]?.x).toBe(opening.onsets[0]?.x)
   })
 
+  it('prints a new key signature, cancelling the old, where a bar changes key', () => {
+    const bar = 4 * TICKS_PER_BEAT
+    const twoBars = (key?: Key) =>
+      notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: bar, beats: 4, ...(key ? { key } : {}) },
+        ],
+        notes: [n(60, 'C', 0, bar), n(60, 'C', bar, bar)],
+        chords: [],
+      })
+    const options = { scale: 1, fingers: false, names: false }
+    const plain = engrave(twoBars(), document.createElement('div'), options)
+    const changing = engrave(
+      twoBars({ tonic: note('D', -1), minor: false }),
+      document.createElement('div'),
+      options,
+    )
+    // The signature takes room: the second bar's notes begin further into it.
+    const into = (layout: typeof plain) =>
+      (layout.measures[1]?.notes ?? 0) - (layout.measures[1]?.x ?? 0)
+    expect(into(changing)).toBeGreaterThan(into(plain))
+  })
+
   it('gives a bar with nothing written its own width, its chord symbol over where its notes begin', () => {
     const blank = notate({
       key: { tonic: note('C'), minor: false },
       meter: '4/4',
       bars: [
         { startTick: 0, beats: 4, blank: ['treble', 'bass'] },
-        { startTick: 48, beats: 4, blank: ['treble', 'bass'] },
+        { startTick: 96, beats: 4, blank: ['treble', 'bass'] },
       ],
       notes: [],
       chords: [
         { startTick: 0, symbol: 'C' },
-        { startTick: 48, symbol: 'G7' },
+        { startTick: 96, symbol: 'G7' },
       ],
     })
     const layout = engrave(blank, document.createElement('div'), {
@@ -108,8 +135,8 @@ describe('engrave', () => {
     const [first, second] = layout.measures
     expect(first?.width).toBeLessThan(400)
     expect(second?.width).toBeLessThan(400)
-    expect(xAtTick(layout, 48)).toBeLessThan((second?.x ?? 0) + (second?.width ?? 0) / 2)
-    expect(xAtTick(layout, 48)).toBeGreaterThanOrEqual(second?.x ?? 0)
+    expect(xAtTick(layout, 96)).toBeLessThan((second?.x ?? 0) + (second?.width ?? 0) / 2)
+    expect(xAtTick(layout, 96)).toBeGreaterThanOrEqual(second?.x ?? 0)
   })
 
   it('draws one staff alone when asked, as tall as one staff', () => {
@@ -117,7 +144,7 @@ describe('engrave', () => {
       key: { tonic: note('C'), minor: false },
       meter: '4/4',
       bars: [{ startTick: 0, beats: 4 }],
-      notes: [n(60, 'C', 0, 24), n(64, 'E', 24, 24)],
+      notes: [n(60, 'C', 0, 48), n(64, 'E', 48, 48)],
       chords: [],
     })
     const host = document.createElement('div')
@@ -126,7 +153,7 @@ describe('engrave', () => {
     expect(host.querySelector('.vf-staff-bass')).toBeNull()
     expect(layout.height).toBe(staffHeight('treble'))
     expect(layout.staffBottom - layout.staffTop).toBe(40)
-    expect(layout.onsets.map((onset) => onset.tick)).toEqual([0, 24])
+    expect(layout.onsets.map((onset) => onset.tick)).toEqual([0, 48])
   })
 
   it('draws the grand staff as tall as the space a lazy staff keeps for it', () => {
@@ -165,9 +192,9 @@ describe('engrave', () => {
         meter: '4/4',
         bars: [
           { startTick: 0, beats: 4 },
-          { startTick: 48, beats: 4 },
+          { startTick: 96, beats: 4 },
         ],
-        notes: [n(60, 'C', 0, 48)],
+        notes: [n(60, 'C', 0, 96)],
         chords: [],
       }),
       document.createElement('div'),
@@ -179,20 +206,20 @@ describe('engrave', () => {
   it('gives each chord symbol room before the next one and before its bar ends, at any scale', () => {
     const chords = [
       { startTick: 0, symbol: 'Csus4' },
-      { startTick: 12, symbol: 'C7' },
-      { startTick: 24, symbol: 'Fm/A♭' },
-      { startTick: 36, symbol: 'B♭m7♭5' },
-      { startTick: 48, symbol: 'G7sus4' },
-      { startTick: 84, symbol: 'Cmaj7/G' },
+      { startTick: 24, symbol: 'C7' },
+      { startTick: 48, symbol: 'Fm/A♭' },
+      { startTick: 72, symbol: 'B♭m7♭5' },
+      { startTick: 96, symbol: 'G7sus4' },
+      { startTick: 168, symbol: 'Cmaj7/G' },
     ]
     const crowded = notate({
       key: { tonic: note('C'), minor: false },
       meter: '4/4',
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 48, beats: 4 },
+        { startTick: 96, beats: 4 },
       ],
-      notes: [0, 12, 24, 36, 48, 60, 72, 84].map((tick) => n(60, 'C', tick, 12)),
+      notes: [0, 24, 48, 72, 96, 120, 144, 168].map((tick) => n(60, 'C', tick, 24)),
       chords,
     })
     for (const scale of [1, 0.7]) {
@@ -204,9 +231,9 @@ describe('engrave', () => {
       const end = layout.measures.map((measure) => measure.x + measure.width)
       const rooms = chords.map((chord, i) => {
         const next = chords[i + 1]
-        const barEnd = end[chord.startTick < 48 ? 0 : 1] ?? 0
+        const barEnd = end[chord.startTick < 96 ? 0 : 1] ?? 0
         const until =
-          next && next.startTick < (chord.startTick < 48 ? 48 : 96)
+          next && next.startTick < (chord.startTick < 96 ? 96 : 192)
             ? xAtTick(layout, next.startTick)
             : barEnd
         return until - xAtTick(layout, chord.startTick)
@@ -225,7 +252,7 @@ describe('engrave', () => {
         meter: '4/4',
         bars: [{ startTick: 0, beats: 4 }],
         notes: notes.map(([key, letter, finger, hand]) =>
-          n(key, letter, 0, 48, { hand, ...(finger ? { finger } : {}) }),
+          n(key, letter, 0, 96, { hand, ...(finger ? { finger } : {}) }),
         ),
         chords: [],
       })
@@ -337,8 +364,8 @@ describe('engraveInSteps', async () => {
   const long = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
-    bars: Array.from({ length: 20 }, (_, i) => ({ startTick: i * 48, beats: 4 })),
-    notes: Array.from({ length: 20 }, (_, i) => n(60, 'C', i * 48, 48)),
+    bars: Array.from({ length: 20 }, (_, i) => ({ startTick: i * 96, beats: 4 })),
+    notes: Array.from({ length: 20 }, (_, i) => n(60, 'C', i * 96, 96)),
     chords: [],
   })
   const options = { scale: 1, fingers: false, names: false }

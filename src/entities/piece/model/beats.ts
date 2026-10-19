@@ -13,8 +13,12 @@ export function ticksIn(beats: number): Tick | null {
  */
 export const MAX_BEATS = 16
 
-/** A written count of beats above 0 and at most `MAX_BEATS` (`2`, `1.5`, `.5`), or null. */
+/** `2:3`: a fraction of beats, for what a decimal cannot write exactly (a triplet's third). */
+const FRACTION = /^(\d+):(\d+)$/
+
+/** A written count of beats above 0 and at most `MAX_BEATS` (`2`, `1.5`, `.5`, `1:3`), or null. */
 export function readBeats(text: string): number | null {
-  const beats = Number(text)
+  const fraction = FRACTION.exec(text.trim())
+  const beats = fraction ? Number(fraction[1]) / Number(fraction[2]) : Number(text)
   return text.trim() !== '' && beats > 0 && beats <= MAX_BEATS ? beats : null
 }

@@ -21,6 +21,6 @@ describe('the loop’s param', () => {
 describe('a loop in a performance', () => {
   it('spans its bars’ beat groups and ticks', () => {
     expect(loopBeatGroups(TWO_BARS, { first: 1, last: 1 })).toEqual({ first: 4, last: 7 })
-    expect(loopTicks(TWO_BARS, { first: 1, last: 1 })).toEqual({ from: 48, to: 96 })
+    expect(loopTicks(TWO_BARS, { first: 1, last: 1 })).toEqual({ from: 96, to: 192 })
   })
 })

@@ -245,7 +245,7 @@ describe('the practice machine', () => {
         beatGroup: 5,
       })
       const configured = run(state, configure(TWO_BARS_IN_HALVES, 'listen', 'both'))
-      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(48)
+      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(96)
     })
 
     it('stops playing when the mode changes, and not otherwise', () => {

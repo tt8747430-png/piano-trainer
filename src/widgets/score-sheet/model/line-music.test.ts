@@ -32,19 +32,19 @@ describe('the sheet’s lines', () => {
     const music = lineMusic(draft, second)
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4 },
-      { startTick: 48, beats: 4, blank: ['bass'] },
+      { startTick: 96, beats: 4, blank: ['bass'] },
     ])
     expect(music.chords).toEqual([
       { startTick: 0, symbol: 'C' },
-      { startTick: 24, symbol: 'D' },
-      { startTick: 48, symbol: 'G' },
+      { startTick: 48, symbol: 'D' },
+      { startTick: 96, symbol: 'G' },
     ])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
-      ['melody', 67, 0, 24],
-      ['melody', 69, 24, 12],
-      ['melody', 71, 36, 36],
-      ['melody', 72, 72, 24],
-      ['lh', 48, 0, 48],
+      ['melody', 67, 0, 48],
+      ['melody', 69, 48, 24],
+      ['melody', 71, 72, 72],
+      ['melody', 72, 144, 48],
+      ['lh', 48, 0, 96],
     ])
   })
 
@@ -54,7 +54,7 @@ describe('the sheet’s lines', () => {
     const music = lineMusic(draft, third)
     expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['bass'] }])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
-      ['rh', 55, 0, 24],
+      ['rh', 55, 0, 48],
     ])
   })
 

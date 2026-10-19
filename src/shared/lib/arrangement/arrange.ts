@@ -6,8 +6,10 @@ import {
   chordSymbol,
   isCompound,
   midi,
+  PIANO,
   pitchClass,
   pitchClassOf,
+  sameKey,
   spellChord,
   TICKS_PER_BEAT,
   transposeNote,
@@ -344,6 +346,10 @@ function playTune(
 const HANDS: readonly Hand[] = ['rh', 'lh']
 
 /** A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its onset. */
+/** A written note moved past either end of the piano, an octave back onto it. */
+const onThePiano = (key: Midi): Midi =>
+  key < PIANO.from ? midi(key + 12) : key > PIANO.to ? midi(key - 12) : key
+
 function playWritten(
   written: readonly HandNote[],
   hand: Hand,
@@ -355,7 +361,7 @@ function playWritten(
   return transposeNotes(written, from, to).map((n): PerformanceNote => {
     const startTick = barStart + n.startTick
     return {
-      midi: n.midi,
+      midi: onThePiano(n.midi),
       spelled: n.spelled,
       hand,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
@@ -419,6 +425,15 @@ function positionOf({ inversion, nearest }: ArrangeOptions, index: number): Righ
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const key: Key = { tonic: options.tonic, minor: chart.key.minor }
+  // A section written in a key of its own is played in it moved as the chart's key is.
+  const sectionKeys = chart.sections.map((section): Key | null =>
+    section.key && !sameKey(section.key, chart.key)
+      ? {
+          tonic: transposeNote(section.key.tonic, chart.key.tonic, options.tonic),
+          minor: section.key.minor,
+        }
+      : null,
+  )
   const melody = options.melody?.length
     ? transposeNotes(options.melody, chart.key.tonic, options.tonic).sort(
         (a, b) => a.startTick - b.startTick,
@@ -447,7 +462,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const context = chordContext(
       { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
-      key,
+      sectionKeys[layout.bars[placed.bar]?.section ?? 0] ?? key,
       positionOf(options, index),
     )
     previous = context.voiced
@@ -546,7 +561,10 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     key,
     meter: chart.meter,
     totalTicks: layout.totalTicks,
-    bars: layout.bars,
+    bars: layout.bars.map((bar) => {
+      const own = sectionKeys[bar.section]
+      return own ? { ...bar, key: own } : bar
+    }),
     chords,
     notes,
     beatGroups,

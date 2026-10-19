@@ -62,7 +62,13 @@ describe('Practice → Accompaniment', () => {
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
     expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
-    expect(rows('Hymns')).toEqual(['/songs/otche', '/songs/ode', '/songs/silent', '/songs/amazing'])
+    expect(rows('Hymns')).toEqual([
+      '/songs/otche',
+      '/songs/ode',
+      '/songs/silent',
+      '/songs/amazing',
+      '/songs/wonderful',
+    ])
   })
 
   it('lists on Called to Play 2 its octaves and chords, and the songs of its workbook', async () => {

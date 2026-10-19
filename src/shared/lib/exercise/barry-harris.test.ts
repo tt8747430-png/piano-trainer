@@ -25,7 +25,7 @@ describe('sixthDiminishedScale', () => {
   it('runs the major 6th-diminished scale, the 6th chord’s tones on the beats', () => {
     const scale = sixthDiminishedScale({ root: C, minor: false, octaves: 1 })
     expect(line(scale)).toBe('C D E F G A♭ A B C B A A♭ G F E D C')
-    const onBeats = scale.notes.filter((n) => n.hand === 'rh' && n.startTick % 12 === 0)
+    const onBeats = scale.notes.filter((n) => n.hand === 'rh' && n.startTick % 24 === 0)
     expect(onBeats.slice(0, 4).map((n) => noteName(n.spelled))).toEqual(['C', 'E', 'G', 'A'])
     expect(scale.chords[0]?.symbol).toBe('C6')
     expect(scale.notes.every((n) => n.finger === undefined)).toBe(true)
@@ -42,10 +42,10 @@ describe('sixthDiminishedChords', () => {
   it('harmonises each note with the 6th chord or the diminished 7th under it', () => {
     const chords = sixthDiminishedChords({ root: C, minor: false, voicing: 'close' })
     expect(onset(chords, 'rh', 0)).toBe('E G A C')
-    expect(onset(chords, 'rh', 12)).toBe('F A♭ B D')
+    expect(onset(chords, 'rh', 24)).toBe('F A♭ B D')
     expect(chords.chords.slice(0, 3).map((chord) => chord.symbol)).toEqual(['C6', 'B°7', 'C6'])
     // The left hand holds the root a bar at a time.
-    expect([0, 48, 96, 144].map((tick) => onset(chords, 'lh', tick))).toEqual(['C', 'C', 'C', 'C'])
+    expect([0, 96, 192, 288].map((tick) => onset(chords, 'lh', tick))).toEqual(['C', 'C', 'C', 'C'])
   })
 
   it('drops the second voice from the top into the left hand in drop 2', () => {
@@ -61,7 +61,7 @@ describe('dominantScale', () => {
   it('comes down the V7’s bebop scale two octaves, every chord tone on a beat', () => {
     const scale = dominantScale({ root: C, from: 'third' })
     expect(line(scale)).toBe('B A G F# F E D C B A G F# F E D C B')
-    const onBeats = scale.notes.filter((n) => n.hand === 'rh' && n.startTick % 12 === 0)
+    const onBeats = scale.notes.filter((n) => n.hand === 'rh' && n.startTick % 24 === 0)
     expect(onBeats.map((n) => noteName(n.spelled))).toEqual([
       'B',
       'G',

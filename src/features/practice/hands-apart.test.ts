@@ -43,5 +43,7 @@ describe('the hands', () => {
       }
       expect(crossed).toEqual([])
     },
+    // A long piece is hundreds of arrangements: seconds, many more under coverage's instrumenting.
+    60_000,
   )
 })

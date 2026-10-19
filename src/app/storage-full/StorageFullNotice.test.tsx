@@ -5,6 +5,10 @@ import { safeLocalStorage } from '@/shared/lib'
 import { renderRouted } from '../testing/render-routed'
 import { StorageFullNotice } from './StorageFullNotice'
 
+// The storage is chosen once a page, and a file before this one in its worker may have chosen it:
+// this file loads the app's modules afresh, as a page would.
+vi.hoisted(() => vi.resetModules())
+
 describe('StorageFullNotice', () => {
   it('says the device is out of room when a save is lost, leads to Settings, and closes', async () => {
     await renderRouted(<StorageFullNotice />)

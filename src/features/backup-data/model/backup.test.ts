@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage, onFailedWrite, safeLocalStorage } from '@/shared/lib'
 import {
@@ -8,6 +9,10 @@ import {
   writeBackup,
   type Backup,
 } from './backup'
+
+// The storage is chosen once a page, and a file before this one in its worker may have chosen it:
+// this file loads the app's modules afresh, as a page would.
+vi.hoisted(() => vi.resetModules())
 
 const NOW = new Date('2026-10-11T09:30:00Z')
 const SETTINGS = { state: { theme: 'dark' }, version: 1 }

@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
