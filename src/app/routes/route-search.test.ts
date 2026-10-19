@@ -106,6 +106,20 @@ describe('search params', () => {
     expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
   })
 
+  it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
+    for (const end of ['Cb-1', 'B#9', 'C-1', 'C9']) {
+      expect(
+        await searchAt(`/practice/quiz/reading-notes?level=custom&from=${end}&to=${end}`),
+      ).toMatchObject({ from: undefined, to: undefined })
+    }
+    expect(await searchAt('/practice/quiz/reading-notes?level=custom&from=A0&to=C8')).toMatchObject(
+      {
+        from: 'A0',
+        to: 'C8',
+      },
+    )
+  })
+
   it('drop anything stale or hand-edited back to its default, without clamping', async () => {
     expect(
       await searchAt(

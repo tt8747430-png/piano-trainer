@@ -169,6 +169,13 @@ describe('parseNoteInOctave', () => {
     expect(parseNoteInOctave('H4')).toBeNull()
     expect(parseNoteInOctave('4')).toBeNull()
   })
+
+  it('reads nothing outside MIDI’s keys, 0–127', () => {
+    expect(parseNoteInOctave('Cb-1')).toBeNull()
+    expect(parseNoteInOctave('B#9')).toBeNull()
+    expect(parseNoteInOctave('C-1')).toEqual({ note: note('C'), midi: 0 })
+    expect(parseNoteInOctave('G9')).toEqual({ note: note('G'), midi: 127 })
+  })
 })
 
 describe('plainRoot', () => {

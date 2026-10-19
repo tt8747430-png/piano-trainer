@@ -3,6 +3,7 @@ import {
   INTERVAL_GROUPS,
   midi,
   parseNoteInOctave,
+  PIANO,
   SCALE_KINDS,
   scaleSkill,
   type SkillId,
@@ -116,10 +117,16 @@ function chordTrainer(id: 'build-chord' | 'name-chord'): Trainer {
   }
 }
 
+/** An end of Reading notes' range on the piano's keys, read from the URL; one off them is none. */
+const pianoKey = (text: string | undefined) => {
+  const key = parseNoteInOctave(text ?? '')?.midi
+  return key !== undefined && key >= PIANO.from && key <= PIANO.to ? key : undefined
+}
+
 /** Reading notes' Custom range, read from the URL; one that runs backwards is turned round. */
 function customNotes(view: TrainerView) {
-  const from = parseNoteInOctave(view.from ?? '')?.midi ?? NOTE_RANGE.from
-  const to = parseNoteInOctave(view.to ?? '')?.midi ?? NOTE_RANGE.to
+  const from = pianoKey(view.from) ?? NOTE_RANGE.from
+  const to = pianoKey(view.to) ?? NOTE_RANGE.to
   const notes = rangeNotes(
     midi(Math.min(from, to)),
     midi(Math.max(from, to)),
