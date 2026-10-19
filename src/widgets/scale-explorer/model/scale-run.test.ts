@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { note, noteParam } from '@/shared/lib/music'
-import { scaleRunOf } from './scale-run'
+import { midi, note, noteParam } from '@/shared/lib/music'
+import { runShown, scaleRunOf } from './scale-run'
 
 const C = noteParam(note('C'))
 const view = { root: C, kind: 'major', start: 1, rhythm: 'even', hands: 'rh' } as const
@@ -43,5 +43,22 @@ describe('scaleRunOf', () => {
       tonic: note('C'),
       minor: false,
     })
+  })
+})
+
+describe('runShown', () => {
+  it('marks the playing hand’s keys with their degrees and that hand’s fingers', () => {
+    for (const hands of ['rh', 'lh', 'both'] as const) {
+      const run = scaleRunOf({ ...view, hands })
+      const shown = runShown(run, hands)
+      const played = new Set(run.music.notes.map((n) => n.midi))
+      expect(new Set(shown.keys)).toEqual(played)
+      expect([...shown.marks.keys()].every((key) => played.has(key))).toBe(true)
+    }
+    const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh')
+    expect(lh.marks.get(midi(48))?.finger).toBe(5)
+    expect(lh.marks.get(midi(60))?.finger).toBe(1)
+    const rh = runShown(scaleRunOf(view), 'rh')
+    expect(rh.marks.get(midi(60))?.finger).toBe(1)
   })
 })
