@@ -41,8 +41,9 @@ export function chordTypes(types: ChordTypes): ChordQuality[] {
     if (parts.triad === 'sus2' || parts.triad === 'sus4') {
       if (!types.suspended.includes(parts.triad)) return false
     }
+    // A chord adding a tone the types do not name (an added 11th) is never asked.
     const added = addedType(parts.added)
-    if (added !== null && !types.added.includes(added)) return false
+    if (added === null ? parts.added.length > 0 : !types.added.includes(added)) return false
     return parts.alterations.length === 0 || types.altered
   })
 }

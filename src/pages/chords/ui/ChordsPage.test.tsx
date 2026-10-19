@@ -270,7 +270,7 @@ describe('Practice → Chords', () => {
   it('writes the other ways the chord is written', async () => {
     await renderApp('/practice/chords?triad=min&size=7')
     const written = await screen.findByText('Also written')
-    expect(written.parentElement).toHaveTextContent(/^Also writtenC−7$/)
+    expect(written.parentElement).toHaveTextContent(/^Also writtenC−7 · Cmin7$/)
   })
 
   it('sets a long symbol a size down, so it stays on a phone’s line', async () => {

@@ -40,7 +40,7 @@ const QUALITIES = {
     aliases: ['−6'],
     intervals: ['r', 'm3', 'P5', 'M6'],
   },
-  s69: { family: 'six', suffix: '6/9', aliases: [], intervals: ['r', 'M3', 'P5', 'M6', 'M9'] },
+  s69: { family: 'six', suffix: '6/9', aliases: ['69'], intervals: ['r', 'M3', 'P5', 'M6', 'M9'] },
   m69: {
     family: 'six',
     suffix: 'm6/9',
@@ -59,6 +59,12 @@ const QUALITIES = {
     aliases: ['madd9', 'madd2', 'm(add2)', 'm2'],
     intervals: ['r', 'm3', 'P5', 'M9'],
   },
+  add11: {
+    family: 'six',
+    suffix: 'add11',
+    aliases: [],
+    intervals: ['r', 'M3', 'P5', 'P11'],
+  },
   maj7: {
     family: 'sev',
     suffix: 'Maj7',
@@ -68,14 +74,14 @@ const QUALITIES = {
   m7: {
     family: 'sev',
     suffix: 'm7',
-    aliases: ['−7'],
+    aliases: ['−7', 'min7'],
     intervals: ['r', 'm3', 'P5', 'm7'],
   },
   d7: { family: 'sev', suffix: '7', aliases: ['x'], intervals: ['r', 'M3', 'P5', 'm7'] },
   hd: {
     family: 'sev',
     suffix: 'm7♭5',
-    aliases: ['ø', 'ø7', 'm7(−5)'],
+    aliases: ['ø', 'ø7', 'm7(−5)', 'm7−5'],
     intervals: ['r', 'm3', 'd5', 'm7'],
   },
   o7: {
@@ -87,7 +93,7 @@ const QUALITIES = {
   mM7: {
     family: 'sev',
     suffix: 'm(maj7)',
-    aliases: ['−Δ', 'm(+7)'],
+    aliases: ['−Δ', 'm(+7)', 'mMaj7', 'mM7', 'm(Maj7)'],
     intervals: ['r', 'm3', 'P5', 'M7'],
   },
   sus7: {
@@ -121,6 +127,12 @@ const QUALITIES = {
     intervals: ['r', 'M3', 'P5', 'M7', 'M9'],
   },
   n9: { family: 'nin', suffix: '9', aliases: [], intervals: ['r', 'M3', 'P5', 'm7', 'M9'] },
+  sus9: {
+    family: 'nin',
+    suffix: '9sus4',
+    aliases: ['9sus'],
+    intervals: ['r', 'P4', 'P5', 'm7', 'M9'],
+  },
   mM9: {
     family: 'nin',
     suffix: 'm(maj9)',
@@ -145,6 +157,12 @@ const QUALITIES = {
     aliases: ['−11'],
     intervals: ['r', 'm3', 'P5', 'm7', 'M9', 'P11'],
   },
+  n11: {
+    family: 'nin',
+    suffix: '11',
+    aliases: [],
+    intervals: ['r', 'M3', 'P5', 'm7', 'M9', 'P11'],
+  },
   n13: {
     family: 'nin',
     suffix: '13',
@@ -154,7 +172,7 @@ const QUALITIES = {
   b9: {
     family: 'alt',
     suffix: '7♭9',
-    aliases: ['7(−9)'],
+    aliases: ['7(−9)', '7(♭9)'],
     intervals: ['r', 'M3', 'P5', 'm7', 'm9'],
   },
   b9n13: {
@@ -173,7 +191,7 @@ const QUALITIES = {
   s5: {
     family: 'alt',
     suffix: '7#5',
-    aliases: ['7(+5)', '7+', '+7'],
+    aliases: ['7(+5)', '7+', '+7', 'aug7'],
     intervals: ['r', 'M3', 'A5', 'm7'],
   },
   s11: {
@@ -204,7 +222,7 @@ const QUALITIES = {
 
 export type ChordQuality = keyof typeof QUALITIES
 
-/** All 38, in table order: family by family. */
+/** All 41, in table order: family by family. */
 export const CHORD_QUALITIES = Object.keys(QUALITIES) as readonly ChordQuality[]
 
 const entry = (quality: ChordQuality): QualityEntry => QUALITIES[quality]

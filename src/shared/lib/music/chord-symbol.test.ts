@@ -53,7 +53,7 @@ describe('parseChordSymbol', () => {
     expect(parseChordSymbol(symbol)).toEqual(chord)
   })
 
-  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C11'])(
+  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C12'])(
     'names the symbol it cannot read: %j',
     (symbol) => {
       let caught: unknown
@@ -78,6 +78,23 @@ describe('the chords Gorshkov prints', () => {
 })
 
 describe('readChordSymbol', () => {
+  it.each([
+    ['Cmin7', 'm7'],
+    ['CmMaj7', 'mM7'],
+    ['CmM7', 'mM7'],
+    ['Cm(Maj7)', 'mM7'],
+    ['C11', 'n11'],
+    ['C69', 's69'],
+    ['C9sus4', 'sus9'],
+    ['C9sus', 'sus9'],
+    ['C7(b9)', 'b9'],
+    ['Cadd11', 'add11'],
+    ['Caug7', 's5'],
+    ['Cm7-5', 'hd'],
+  ])('reads the chord %s as sheets write it', (symbol, quality) => {
+    expect(readChordSymbol(symbol)).toEqual({ root: note('C'), quality })
+  })
+
   it('reads what is typed, spaces around it left out, and nothing it cannot read', () => {
     expect(readChordSymbol(' Dm7 ')).toEqual({ root: note('D'), quality: 'm7' })
     expect(readChordSymbol('Dm7/')).toBeNull()

@@ -23,9 +23,9 @@ const names = (root: SpelledNote, quality: ChordQuality) =>
   spellChord(root, quality).map((tone) => noteName(tone.note))
 
 describe('chord qualities', () => {
-  it('are 38, in five families', () => {
-    expect(CHORD_QUALITIES).toHaveLength(38)
-    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 6, 9, 8, 9])
+  it('are 41, in five families', () => {
+    expect(CHORD_QUALITIES).toHaveLength(41)
+    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 7, 9, 10, 9])
     expect(qualitiesIn('sev').every((quality) => chordFamily(quality) === 'sev')).toBe(true)
   })
 
