@@ -112,6 +112,19 @@ describe('Learn', () => {
       expect(screen.getByRole('region', { name: 'Method books' })).toBeInTheDocument()
     })
 
+    it('stay up when Learn is opened again from the navigation', async () => {
+      const user = userEvent.setup()
+      const { router, viewsStore } = await renderApp('/?view=courses')
+      await screen.findByRole('region', { name: 'Method books' })
+      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
+      const nav = screen.getAllByRole('navigation', { name: 'Main navigation' })[0]
+      if (!nav) throw new Error('no navigation')
+      await user.click(within(nav).getByRole('link', { name: 'Learn' }))
+      expect(router.state.location.search).toEqual({ view: 'courses' })
+      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
+      expect(await screen.findByRole('region', { name: 'Method books' })).toBeInTheDocument()
+    })
+
     it('ring the course Continue is in', async () => {
       const { progressStore } = await renderApp('/?view=courses')
       await screen.findByRole('region', { name: 'Method books' })

@@ -50,18 +50,21 @@ interface RestoreContext {
 
 /**
  * A remembered route's `beforeLoad`: on entering, opens the view by the two rules, read by the
- * route's own reader, once. It redirects, replacing the entry (so Back still leaves the screen),
- * only when that changes what the screen shows: a remembered value the reader rejects opens nothing
- * new, so it never redirects again.
+ * route's own reader, once. Already on the screen, only a plain link to its bare URL (its tab in the
+ * navigation) opens the remembered view, which is the one on screen: any other link names a view the
+ * screen changes to. It redirects, replacing the entry (so Back still leaves the screen), only when
+ * that changes what the screen shows: a remembered value the reader rejects opens nothing new, so it
+ * never redirects again.
  */
 export function restoreView<S extends object>(
   read: (raw: Raw) => S,
   kept: readonly (keyof S & string)[],
 ) {
   return ({ cause, location, context, search }: RestoreContext): void => {
-    if (cause !== 'enter') return
-    const remembered = selectView(context.views.getState(), location.pathname)
     const plain = location.state.plain === true
+    const reopened = plain && Object.keys(location.search).length === 0
+    if (cause === 'preload' || (cause === 'stay' && !reopened)) return
+    const remembered = selectView(context.views.getState(), location.pathname)
     const opened = viewToOpen(location.search, remembered, kept, plain)
     if (opened === location.search || sameView(read(opened), search)) return
     throw redirect({ href: `${location.pathname}${defaultStringifySearch(opened)}`, replace: true })
