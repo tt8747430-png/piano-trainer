@@ -40,6 +40,7 @@ export default defineConfig({
       // The icons are in the precache by the glob below; listed here too, each would be there twice.
       includeManifestIcons: false,
       manifest: {
+        id: '/',
         name: 'Piano Trainer',
         short_name: 'Piano',
         description: 'Learn songs, chords and scales at the piano.',
