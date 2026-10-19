@@ -180,7 +180,7 @@ describe('Practice → Chord finder', () => {
     await renderApp('/practice/chord-finder?keys=60-64-67')
     expect(await screen.findByRole('region', { name: 'In these keys' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: 'Its keys' }))
+    await user.click(screen.getByRole('button', { name: 'Keys it is in' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })

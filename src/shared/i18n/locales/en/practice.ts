@@ -99,7 +99,7 @@ export const practice = {
     keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
     holds: '{{note}} is in {{chords}}',
     holdsNone: 'No chord of the scale holds {{note}}',
-    walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
+    walk: { title: 'Walk the chords', played: 'Played as', block: 'Block' },
     key: {
       circle: 'Circle of fifths',
       random: 'A random key',
@@ -113,7 +113,7 @@ export const practice = {
       noSongs: 'No songs are in this key.',
       harmonise: 'Harmonise a melody note',
       harmoniseAbout:
-        'Every chord that contains the melody note, played under it: chords of the key and chords borrowed from outside it.',
+        'Every chord that holds the melody note, played under it: chords of the key and chords borrowed from outside it.',
     },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
@@ -209,7 +209,7 @@ export const practice = {
     settings: 'Chord finder settings',
     remember: 'Remember',
     rememberDetail: 'The last {{count}}',
-    inKeysShown: 'Its keys',
+    inKeysShown: 'Keys it is in',
     slash: 'Over the bass',
     // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
     inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
@@ -246,7 +246,7 @@ export const practice = {
       },
       tritoneSub: {
         name: 'Tritone substitution',
-        why: '{{chord}} stands in for the V7 of {{to}} and falls a half step into it.',
+        why: '{{chord}} stands in for the V7 of {{to}} and falls a semitone into it.',
       },
       secondaryTwoFive: {
         name: 'Secondary ii–V',
@@ -254,27 +254,27 @@ export const practice = {
       },
       approachBelow: {
         name: 'Chromatic approach from below',
-        why: '{{chord}} rises a half step into {{to}}.',
+        why: '{{chord}} rises a semitone into {{to}}.',
       },
       walkUp: {
         name: 'Bass walking up',
-        why: 'The bass climbs a half step at a time into {{to}}.',
+        why: 'The bass climbs a semitone at a time into {{to}}.',
       },
       walkDown: {
         name: 'Bass walking down',
-        why: 'The bass falls a half step at a time into {{to}}.',
+        why: 'The bass falls a semitone at a time into {{to}}.',
       },
       doubleApproach: {
         name: 'Double chromatic approach',
-        why: '{{chord}} and {{next}} close in on {{to}} from a half step below and above.',
+        why: '{{chord}} and {{next}} close in on {{to}} from a semitone below and above.',
       },
       diminishedApproach: {
         name: 'Diminished approach',
-        why: '{{chord}} leads up a half step into {{to}}.',
+        why: '{{chord}} leads up a semitone into {{to}}.',
       },
       diminishedAbove: {
         name: 'Diminished approach from above',
-        why: '{{chord}} slides down a half step into {{to}}.',
+        why: '{{chord}} slides down a semitone into {{to}}.',
       },
       commonToneDiminished: {
         name: 'Common-tone diminished',
@@ -286,7 +286,7 @@ export const practice = {
       },
       backdoor: {
         name: 'Backdoor cadence',
-        why: '{{chord}} is the ♭VII7 of {{to}}. It comes in by the back door: from a whole step below, not from the V.',
+        why: '{{chord}} is the ♭VII7 of {{to}}. It comes in by the back door: from a whole tone below, not from the V.',
       },
       backdoorTwoFive: {
         name: 'Backdoor ii–V',
@@ -302,7 +302,7 @@ export const practice = {
       },
       gospelWalkUp: {
         name: 'Gospel walk-up',
-        why: '{{chord}} and {{next}} climb by whole steps into {{to}}, borrowed from its minor.',
+        why: '{{chord}} and {{next}} climb by whole tones into {{to}}, borrowed from its minor.',
       },
     },
   },
