@@ -22,4 +22,23 @@ describe('speeds', () => {
     expect(stepTempo(160, 160, 1)).toBe(160)
     expect(stepTempo(20, 100, -1)).toBe(20)
   })
+
+  it('keeps stepping until the tempo changes, down to the range’s foot and up to its top', () => {
+    const steps = (from: number, own: number, by: -1 | 1): number[] => {
+      const tempos = [from]
+      for (let i = 0; i < 60; i += 1) tempos.push(stepTempo(tempos.at(-1) ?? from, own, by))
+      return tempos
+    }
+    for (const own of [54, 56, 72, 76]) {
+      const down = steps(own, own, -1)
+      const end = down.indexOf(20)
+      expect(end).toBeGreaterThan(0)
+      down.slice(1, end + 1).forEach((tempo, i) => expect(tempo).toBeLessThan(down[i] ?? 0))
+    }
+    const up = steps(28, 56, 1)
+    expect(up.slice(1, 4)).toEqual([31, 34, 36])
+    const top = up.indexOf(160)
+    expect(top).toBeGreaterThan(0)
+    up.slice(1, top + 1).forEach((tempo, i) => expect(tempo).toBeGreaterThan(up[i] ?? 0))
+  })
 })
