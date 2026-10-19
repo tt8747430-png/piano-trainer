@@ -30,7 +30,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const progress = t('quiz:progress', { n: trainer.number, total: plan.length })
 
   return (
-    <div className="flex flex-1 flex-col gap-5 pt-2">
+    <div className="flex flex-1 flex-col gap-5 pt-2 landscape-phone:gap-3">
       <header className="flex items-center gap-3">
         <RoundButton label={t('common:close')} icon={X} onClick={close} />
         <Progress
