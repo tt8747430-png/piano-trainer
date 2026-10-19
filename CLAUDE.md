@@ -108,7 +108,7 @@ it. `@` → `src`.
   (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
   chord builder, read top to bottom: `ChordBuilder` (its choices as labelled fields), `ChordSheet`, `ChordTensions`
   (a 7th chord's twelve notes in the owner's table's four groups, each played on top), `ChordPractice` (its arpeggio
-  and chromatic walk in the Player), `viewChord`, `chordKeys` (what Find opens on), `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
+  and chromatic walk in the Player), `viewChord`, `chordKeys` (what Play sounds), `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
   `ScaleLayout`'s one flow, `RunView`, the run from any Start on note, the playing hand's fingers under the keys, on a
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
