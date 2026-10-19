@@ -182,8 +182,12 @@ export function scaleFingering(
   return Array.from({ length: 7 * octaves + 1 }, (_, i) => byDegree[(start + i) % 7] ?? 1)
 }
 
-/** The ways to finger `count` notes in groups from the thumb (1 2 3 …): every group of 2 to 4, the last of 2 to 5. */
+/**
+ * The ways to finger `count` notes in groups from the thumb (1 2 3 …): every group of 2 to 4, the
+ * last of 2 to 5; a lone note is the thumb's.
+ */
 function* groupings(count: number): Generator<number[]> {
+  if (count === 1) yield [1]
   for (let first = 2; first <= Math.min(5, count); first++) {
     if (first === count) yield [first]
     else if (first <= 4 && count - first >= 2) {
