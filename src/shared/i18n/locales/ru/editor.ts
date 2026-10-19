@@ -6,6 +6,9 @@ export const editor: LocaleResources['editor'] = {
   undo: 'Отменить',
   redo: 'Повторить',
   settings: 'Настройки песни',
+  dock: 'Правка',
+  moreTools: 'Ещё инструменты',
+  view: 'Вид',
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',
@@ -90,6 +93,7 @@ export const editor: LocaleResources['editor'] = {
     meter: 'Размер',
   },
   recorder: {
+    more: 'Действия с дублем',
     title: 'Дубли',
     open: 'Записать',
     record: 'Записать',

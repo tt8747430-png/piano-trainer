@@ -11,7 +11,7 @@ import { TakeList } from './TakeList'
 import { WriteTakePage } from './WriteTakePage'
 
 /**
- * The takes (ADR 0028): Record over the caret's bar, in the footer, in reach however long the list;
+ * The takes (ADR 0028), opened from the dock's Record: Record over the caret's bar, in the footer, in reach however long the list;
  * and the piece's takes, each heard, written into the score, downloaded or deleted; a take's form to
  * write it is a page of the sheet.
  */
@@ -28,16 +28,16 @@ export function RecorderSheet() {
       <SheetTrigger
         render={
           <Button
-            variant="surface"
+            variant="ghost"
             size="icon"
-            className="lg:w-auto lg:gap-2 lg:px-4"
+            aria-label={t('recorder.open')}
+            title={t('recorder.open')}
+            className="size-12 rounded-full"
             disabled={takes.stage !== 'idle'}
           />
         }
       >
         <CircleDot aria-hidden />
-        {/* Named on a laptop's toolbar, where there is room; its icon alone on a phone. */}
-        <span className="max-lg:sr-only">{t('recorder.open')}</span>
       </SheetTrigger>
       <SheetContent
         title={writing ? t('recorder.write') : t('recorder.title')}

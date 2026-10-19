@@ -608,13 +608,16 @@
 @utility editor-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  grid-template-areas: 'bar' 'sheet' 'tools' 'keys';
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  grid-template-areas: 'bar' 'sheet' 'dock' 'tools' 'keys';
   & > [data-area='bar'] {
     grid-area: bar;
   }
   & > [data-area='sheet'] {
     grid-area: sheet;
+  }
+  & > [data-area='dock'] {
+    grid-area: dock;
   }
   & > [data-area='tools'] {
     grid-area: tools;
@@ -622,13 +625,15 @@
   & > [data-area='keys'] {
     grid-area: keys;
   }
+  /* A phone on its side: the sheet the whole height over the keys, the dock upright at its right
+     edge, the bar and the tools (six across) in a column beside them. */
   @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) 18rem;
+    grid-template-columns: minmax(0, 1fr) auto 19rem;
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'sheet bar'
-      'sheet tools'
-      'keys keys';
+      'sheet dock bar'
+      'sheet dock tools'
+      'keys keys keys';
   }
 }
 

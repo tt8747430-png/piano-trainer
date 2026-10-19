@@ -2,13 +2,18 @@ import { ArrowLeft, ArrowRight, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { barAt, keyChords } from '@/features/score-editor'
 import { chordSymbol } from '@/shared/lib/music'
-import { ToolButton, ToolDivider } from '@/shared/ui'
+import { ToolButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarMenu } from './BarMenu'
 import { ChordField } from './ChordField'
+import { Divider } from './NoteTools'
 
-/** Writing chords, in groups parted by a hairline: the chord typed or tapped from the key's, deleting one, and the caret and the bars. */
+/**
+ * Writing chords: the chord typed, deleting one, the caret and the bars, and the key's chords to tap;
+ * on a phone the key's chords wrap in a grid of their own under the rest, on a laptop they follow the
+ * field, in groups parted by a hairline.
+ */
 export function ChordTools() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -22,7 +27,11 @@ export function ChordTools() {
   return (
     <>
       <ChordField key={`${caret} ${symbol}`} symbol={symbol} />
-      <div role="group" aria-label={t('chord.keyChords')} className="flex shrink-0 gap-1">
+      <div
+        role="group"
+        aria-label={t('chord.keyChords')}
+        className="grid-chords w-full gap-1 max-lg:order-last lg:flex lg:w-auto lg:shrink-0"
+      >
         {keyChords(key).map((chord) => (
           <Button
             key={chordSymbol(chord)}
@@ -34,11 +43,11 @@ export function ChordTools() {
           </Button>
         ))}
       </div>
-      <ToolDivider />
+      <Divider />
       <ToolButton label={t('chord.delete')} onClick={() => actions.dispatch({ type: 'delete' })}>
         <Delete aria-hidden />
       </ToolButton>
-      <ToolDivider />
+      <Divider />
       <div role="group" aria-label={t('groups.caret')} className="flex shrink-0 gap-1">
         <ToolButton
           label={t('back')}

@@ -4,6 +4,12 @@ export const editor = {
   undo: 'Undo',
   redo: 'Redo',
   settings: 'Song settings',
+  // The bar of Undo, Redo, Play and Record between the sheet and the tools.
+  dock: 'Editing',
+  // The tools a phone folds away, used less.
+  moreTools: 'More tools',
+  // The song's settings: what the sheet shows.
+  view: 'View',
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
   layers: {
     chords: 'Chords',
@@ -89,6 +95,7 @@ export const editor = {
     meter: 'Time signature',
   },
   recorder: {
+    more: 'Take actions',
     title: 'Takes',
     open: 'Record',
     record: 'Record',

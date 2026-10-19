@@ -50,10 +50,16 @@ describe('the score editor', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     await toChordRow(user)
     expect(screen.getByRole('status')).toHaveTextContent(/^Chords · /)
-    const names = screen.getByRole('button', { name: 'Chord names' })
+    // A view setting, changed rarely: in the song's settings, not the bar.
+    await user.click(screen.getByRole('button', { name: 'Song settings' }))
+    const settings = await screen.findByRole('dialog', { name: 'Song settings' })
+    const view = within(settings).getByRole('group', { name: 'View' })
+    const names = within(view).getByRole('button', { name: 'Chord names' })
     expect(names).toHaveAttribute('aria-pressed', 'true')
     await user.click(names)
     expect(names).toHaveAttribute('aria-pressed', 'false')
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(settings).not.toBeInTheDocument())
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody · /)
     await toChordRow(user)
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody · /)
@@ -185,6 +191,37 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
   })
 
+  it('keeps Undo, Redo, Play and Record in one bar between the sheet and the tools', async () => {
+    await renderApp('/edit/my-1', { storage: withSong() })
+    const dock = await screen.findByRole('toolbar', { name: 'Editing' })
+    expect(
+      within(dock)
+        .getAllByRole('button')
+        .map((button) => button.getAttribute('aria-label')),
+    ).toEqual(['Undo', 'Redo', 'Play', 'Record'])
+  })
+
+  it('folds the rare tools into More tools, each still at hand', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    fireEvent.click(await screen.findByRole('button', { name: /^Bar 1:/ }), {
+      clientY: 400,
+      detail: 1,
+    })
+    await user.click(screen.getByRole('button', { name: 'More tools' }))
+    const more = await screen.findByRole('dialog', { name: 'More tools' })
+    for (const name of [
+      'Triplet',
+      'Up a semitone',
+      'Down a semitone',
+      'Other spelling',
+      'Write out',
+    ])
+      expect(within(more).getByRole('button', { name })).toBeInTheDocument()
+    await user.click(within(more).getByRole('button', { name: 'Up a semitone' }))
+    expect(screen.getByRole('dialog', { name: 'More tools' })).toBeInTheDocument()
+  })
+
   it('undoes and redoes by button and by Cmd+Z', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
@@ -314,6 +351,17 @@ describe('the score editor’s takes', () => {
     await user.click(await within(sheet).findByRole('button', { name: 'Record' }))
   }
 
+  /** One of a take's actions, from its row's menu. */
+  async function takeAction(
+    user: ReturnType<typeof userEvent.setup>,
+    row: HTMLElement,
+    name: string,
+  ) {
+    await user.click(within(row).getByRole('button', { name: 'Take actions' }))
+    const menu = await screen.findByRole('dialog', { name: 'Take actions' })
+    await user.click(within(menu).getByRole('button', { name }))
+  }
+
   /** Plays a G major arpeggio over a held G2, a beat a note, from the downbeat. */
   function playArpeggio(
     audio: Awaited<ReturnType<typeof renderApp>>['audio'],
@@ -402,7 +450,7 @@ describe('the score editor’s takes', () => {
       audio.played.at(-1)?.sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : [])),
     ).toEqual([43, 67, 71, 74])
 
-    await user.click(within(take).getByRole('button', { name: 'Write into the score' }))
+    await takeAction(user, take, 'Write into the score')
     const form = await screen.findByRole('dialog', { name: 'Write into the score' })
     expect(within(form).getByRole('radio', { name: 'Both hands' })).toBeChecked()
     expect(within(form).getByRole('radio', { name: 'eighth' })).toBeChecked()
@@ -484,16 +532,18 @@ describe('the score editor’s takes', () => {
     ) {
       saved.push(this.download)
     })
-    await user.click(within(sheet).getByRole('button', { name: 'Download' }))
+    const [row] = within(sheet).getAllByRole('listitem')
+    if (!row) throw new Error('the take is listed')
+    await takeAction(user, row, 'Download')
     expect(saved[0]).toMatch(/^Morning \d{4}-\d\d-\d\d \d\d\.\d\d\.mid$/)
     expect(files[0]?.type).toBe('audio/midi')
 
-    await user.click(within(sheet).getByRole('button', { name: 'Delete' }))
+    await takeAction(user, row, 'Delete')
     const keeping = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
     await user.click(within(keeping).getByRole('button', { name: 'Keep it' }))
     expect(takesStore.getState().takes).toHaveLength(1)
 
-    await user.click(within(sheet).getByRole('button', { name: 'Delete' }))
+    await takeAction(user, row, 'Delete')
     const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
     await user.click(within(asking).getByRole('button', { name: 'Delete' }))
     expect(await within(sheet).findByText('No takes yet.')).toBeInTheDocument()
@@ -545,7 +595,9 @@ describe('the score editor’s takes', () => {
 
     const takes = await screen.findByRole('dialog', { name: 'Takes' })
     expect(router.state.location.search).toEqual({ record: true })
-    await user.click(within(takes).getByRole('button', { name: 'Write into the score' }))
+    const [row] = within(takes).getAllByRole('listitem')
+    if (!row) throw new Error('the take is listed')
+    await takeAction(user, row, 'Write into the score')
     const form = await screen.findByRole('dialog', { name: 'Write into the score' })
     await user.click(within(form).getByRole('button', { name: 'Write' }))
     await waitFor(() => expect(form).not.toBeInTheDocument())

@@ -113,11 +113,14 @@ export function FloatingBarPlay({
   label,
   title,
   playing,
+  disabled = false,
   onClick,
 }: {
   label: string
   title?: string
   playing: boolean
+  /** Waiting on something else first (the editor's Play while a take records). */
+  disabled?: boolean
   onClick: () => void
 }) {
   const { t } = useTranslation('common')
@@ -128,6 +131,7 @@ export function FloatingBarPlay({
       title={title ?? name}
       icon={playing ? Square : Play}
       aria-pressed={playing}
+      disabled={disabled}
       onClick={onClick}
       className="shadow-none"
     />

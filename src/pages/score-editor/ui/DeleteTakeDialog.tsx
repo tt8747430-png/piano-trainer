@@ -1,7 +1,5 @@
-import { Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
-import { RoundButton } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,18 +9,27 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
-import { useScoreEditorContext } from '../model/editor-context'
 import { TakeName } from './TakeName'
 
-/** A take's Delete, asked once more: a take cannot be brought back. */
-export function DeleteTakeButton({ take }: { take: Take }) {
+/**
+ * A take's Delete, asked once more: a take cannot be brought back. Controlled and with no trigger,
+ * so it stays open once the menu or the dial that asked has folded.
+ */
+export function DeleteTakeDialog({
+  take,
+  open,
+  onOpenChange,
+  onDelete,
+}: {
+  take: Take
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onDelete: () => void
+}) {
   const { t } = useTranslation('editor')
-  const { takes } = useScoreEditorContext()
   return (
-    <AlertDialog>
-      <AlertDialogTrigger render={<RoundButton label={t('recorder.delete')} icon={Trash2} />} />
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('recorder.deleting.title')}</AlertDialogTitle>
@@ -32,7 +39,7 @@ export function DeleteTakeButton({ take }: { take: Take }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t('recorder.deleting.cancel')}</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={() => takes.remove(take.id)}>
+          <AlertDialogAction variant="destructive" onClick={onDelete}>
             {t('recorder.deleting.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
