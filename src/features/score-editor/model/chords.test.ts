@@ -9,8 +9,8 @@ describe('setChord', () => {
   })
 
   it('splits the bar at a later beat', () => {
-    expect(form(setChord(draftOf(), 0, 24, parseChordSymbol('D7')))).toEqual([
-      [['G@0 D7@24', 'C@0']],
+    expect(form(setChord(draftOf(), 0, 48, parseChordSymbol('D7')))).toEqual([
+      [['G@0 D7@48', 'C@0']],
     ])
   })
 
@@ -18,7 +18,7 @@ describe('setChord', () => {
     const coded = draftOf({ sections: [{ kind: 'verse', lines: ['G:t1 C'] }] })
     const replaced = setChord(coded, 0, 0, parseChordSymbol('Em'))
     expect(replaced.sections[0]?.lines[0]?.[0]?.chords[0]?.method).toBe('t1')
-    const added = setChord(coded, 0, 24, parseChordSymbol('D'))
+    const added = setChord(coded, 0, 48, parseChordSymbol('D'))
     expect(added.sections[0]?.lines[0]?.[0]?.chords[1]?.method).toBe('t1')
   })
 })
@@ -27,11 +27,11 @@ describe('deleteChord', () => {
   const split = draftOf({ sections: [{ kind: 'verse', lines: ['G-D-Em@2 C'] }] })
 
   it('gives its beats to the chord before it', () => {
-    expect(form(deleteChord(split, 0, 12))).toEqual([[['G@0 Em@24', 'C@0']]])
+    expect(form(deleteChord(split, 0, 24))).toEqual([[['G@0 Em@48', 'C@0']]])
   })
 
   it('gives a bar’s first chord’s beats to the one after', () => {
-    expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@24', 'C@0']]])
+    expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@48', 'C@0']]])
   })
 
   it('keeps a bar’s only chord', () => {

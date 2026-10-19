@@ -22,9 +22,9 @@ const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature =
   render(
     <ScoreSheet
       draft={draft}
-      caret={48}
+      caret={96}
       layer={layer}
-      caretTicks={12}
+      caretTicks={24}
       selection={null}
       onPlace={onPlace}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
@@ -50,10 +50,10 @@ describe('ScoreSheet', () => {
     const onPlace = vi.fn()
     sheet('chords', onPlace)
     await user.click(await screen.findByRole('button', { name: 'Bar 3: Em' }))
-    expect(onPlace).toHaveBeenLastCalledWith(96, 'chords', false)
+    expect(onPlace).toHaveBeenLastCalledWith(192, 'chords', false)
     await user.keyboard('{Shift>}')
     await user.click(screen.getByRole('button', { name: 'Bar 4: C' }))
-    expect(onPlace).toHaveBeenLastCalledWith(144, 'chords', true)
+    expect(onPlace).toHaveBeenLastCalledWith(288, 'chords', true)
   })
 
   it('marks the bars a hand leaves to the pattern, in that hand’s layer', async () => {

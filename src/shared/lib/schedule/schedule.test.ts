@@ -35,7 +35,7 @@ const perform = (...symbols: string[]): Performance =>
   arrange(chart(...symbols), {
     tonic: note('C'),
     pattern: BLOCK,
-    melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 48 }],
+    melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }],
     doubleMelody: true,
   })
 
@@ -77,10 +77,10 @@ describe('schedule', () => {
   })
 
   it('says where the pass runs and when its music starts, after a count-in', () => {
-    const plain = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, fromTick: 12, toTick: 60 })
-    expect([plain.fromTick, plain.toTick, plain.musicStart]).toEqual([12, 60, 0])
+    const plain = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, fromTick: 24, toTick: 120 })
+    expect([plain.fromTick, plain.toTick, plain.musicStart]).toEqual([24, 120, 0])
     const counted = schedule(perform('C', 'F'), { tempo: 60, hands: ALL, countIn: true })
-    expect([counted.fromTick, counted.toTick, counted.musicStart]).toEqual([0, 96, 4])
+    expect([counted.fromTick, counted.toTick, counted.musicStart]).toEqual([0, 192, 4])
   })
 
   it('times a bar in seconds at 60 bpm', () => {
@@ -98,7 +98,7 @@ describe('schedule', () => {
 
   it('starts from a tick', () => {
     const performance = perform('C', 'F')
-    const { sounds, end } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 48 })
+    const { sounds, end } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 96 })
     const played = notes(sounds)
     expect(played.map((sound) => sound.midi % 12).sort()).toEqual([0, 5, 5, 9])
     expect(played.every((sound) => sound.at === 0)).toBe(true)
@@ -109,10 +109,10 @@ describe('schedule', () => {
     const held = arrange(chart('C', 'F'), {
       tonic: note('C'),
       pattern: BLOCK,
-      melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }],
+      melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 192 }],
       doubleMelody: true,
     })
-    const { sounds } = schedule(held, { tempo: 60, hands: ALL, fromTick: 48 })
+    const { sounds } = schedule(held, { tempo: 60, hands: ALL, fromTick: 96 })
     const tied = notes(sounds).find((sound) => sound.midi === 84)
     expect(tied?.at).toBe(0)
     expect(tied?.duration).toBeCloseTo(4 * 0.95)
@@ -135,7 +135,7 @@ describe('schedule', () => {
     const { sounds, musicStart } = schedule(perform('C', 'F'), {
       tempo: 60,
       hands: ALL,
-      fromTick: 24,
+      fromTick: 48,
       countIn: true,
       metronome: true,
     })
@@ -154,7 +154,7 @@ describe('schedule', () => {
     const { sounds, musicStart } = schedule(perform('C', 'F'), {
       tempo: 60,
       hands: ALL,
-      fromTick: 18,
+      fromTick: 36,
       countIn: true,
     })
     expect(clicks(sounds).map((click) => click.at)).toEqual([0, 1, 2, 3])
@@ -169,7 +169,7 @@ describe('schedule', () => {
       { kind: 'click', at: 2, accent: false },
       { kind: 'click', at: 3, accent: false },
     ])
-    const late = schedule(perform('C'), { tempo: 60, hands: ALL, metronome: true, fromTick: 24 })
+    const late = schedule(perform('C'), { tempo: 60, hands: ALL, metronome: true, fromTick: 48 })
     expect(clicks(late.sounds)).toEqual([
       { kind: 'click', at: 0, accent: false },
       { kind: 'click', at: 1, accent: false },
@@ -185,7 +185,7 @@ describe('schedule', () => {
 
   it('cues each beat group from the start tick', () => {
     const performance = arrange(chart('C', 'F'), { tonic: note('C'), pattern: BEATS })
-    const { cues } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 48 })
+    const { cues } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 96 })
     expect(cues).toEqual([
       { beatGroup: 4, at: 0 },
       { beatGroup: 5, at: 1 },
@@ -286,8 +286,8 @@ describe('schedule: a passage and swing', () => {
     const { sounds, cues, end } = schedule(performance, {
       tempo: 60,
       hands: ALL,
-      fromTick: 12,
-      toTick: 36,
+      fromTick: 24,
+      toTick: 72,
     })
     expect(cues.map((cue) => cue.beatGroup)).toEqual([1, 2])
     expect(end).toBe(2)
@@ -298,7 +298,7 @@ describe('schedule: a passage and swing', () => {
   })
 
   it('cuts a note that would sound past the pass’s end', () => {
-    const { sounds } = schedule(performance, { tempo: 60, hands: ALL, toTick: 36 })
+    const { sounds } = schedule(performance, { tempo: 60, hands: ALL, toTick: 72 })
     const bass = notes(sounds).find((sound) => sound.midi < 48)
     expect(bass?.duration).toBeCloseTo(3 * 0.95)
   })
@@ -332,17 +332,17 @@ describe('schedule: a passage and swing', () => {
         lh: { kind: 'events', events: parseFigure('0/16 L1') },
       },
     })
-    // The same bar after an 8th's pickup: every note 6 ticks on, its beats on 6, 18, …
+    // The same bar after an 8th's pickup: every note 12 ticks on, its beats on 12, 36, …
     const [bar] = eighths.bars
     if (!bar) throw new Error('no bar')
     const afterPickup: Performance = {
       ...eighths,
-      totalTicks: eighths.totalTicks + 6,
+      totalTicks: eighths.totalTicks + 12,
       bars: [
         { ...bar, beats: 0.5, chords: [] },
-        { ...bar, startTick: 6 },
+        { ...bar, startTick: 12 },
       ],
-      notes: eighths.notes.map((n) => ({ ...n, startTick: n.startTick + 6 })),
+      notes: eighths.notes.map((n) => ({ ...n, startTick: n.startTick + 12 })),
     }
     const rh = [
       ...new Set(

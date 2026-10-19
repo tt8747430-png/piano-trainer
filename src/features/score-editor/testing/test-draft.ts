@@ -14,7 +14,7 @@ export const draftOf = (music: Partial<PieceMusic> = {}): Draft =>
     ...music,
   })
 
-/** Notes as `F#4@12/12`: name, octave, onset and length. */
+/** Notes as `F#4@24/24`: name, octave, onset and length. */
 export const shape = (notes: readonly DraftNote[]): string[] =>
   notes.map(
     (n) => `${noteName(n.spelled)}${Math.floor(n.midi / 12) - 1}@${n.startTick}/${n.durationTicks}`,

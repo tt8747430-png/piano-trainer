@@ -84,13 +84,27 @@ export default defineConfig({
     alias: { '@': fromRoot('./src') },
   },
   test: {
-    environment: 'jsdom',
     globals: false,
+    // A worker's files share their modules, so each does not import the app again (half the time).
+    // The setup puts back what a test changes; a test must leave no state of its own behind.
+    isolate: false,
     setupFiles: ['./src/shared/test/setup.ts'],
     // A file's first app test loads every screen's chunk first (renderApp): seconds on a busy runner.
     testTimeout: 15_000,
     css: false,
-    include: ['src/**/*.test.{ts,tsx}', '*.test.ts'],
+    // Two projects, so a test of logic never pays for a DOM: `unit` runs `*.test.ts` in node,
+    // `dom` runs `*.test.tsx` in jsdom. A `*.test.ts` that needs a DOM says so on its first line
+    // (`// @vitest-environment jsdom`). `npx vitest run --project unit` runs the fast half.
+    projects: [
+      {
+        extends: true,
+        test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts', '*.test.ts'] },
+      },
+      {
+        extends: true,
+        test: { name: 'dom', environment: 'jsdom', include: ['src/**/*.test.tsx'] },
+      },
+    ],
     alias: {
       // vite-plugin-pwa's virtual module does not exist outside a Vite build.
       'virtual:pwa-register/react': fromRoot('./src/shared/test/pwa-register.ts'),

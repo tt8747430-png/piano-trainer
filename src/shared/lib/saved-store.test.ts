@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from './safe-storage'
 import { isRecord } from './saved'

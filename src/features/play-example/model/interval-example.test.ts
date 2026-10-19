@@ -17,14 +17,14 @@ describe('intervalExample', () => {
   it('writes the two notes as half notes in one bar, the upper spelled by letters', () => {
     expect(written(note('C'), 'm3')).toEqual([
       [60, 'C', 0],
-      [63, 'E♭', 24],
+      [63, 'E♭', 48],
     ])
     expect(written(note('D', -1), 'm2')).toEqual([
       [61, 'D♭', 0],
-      [62, 'E𝄫', 24],
+      [62, 'E𝄫', 48],
     ])
-    expect(written(note('D', -1), 'm3')[1]).toEqual([64, 'F♭', 24])
-    expect(written(note('F'), 'A4')[1]).toEqual([71, 'B', 24])
+    expect(written(note('D', -1), 'm3')[1]).toEqual([64, 'F♭', 48])
+    expect(written(note('F'), 'A4')[1]).toEqual([71, 'B', 48])
   })
 
   it('shows a unison’s one key as the tonic', () => {

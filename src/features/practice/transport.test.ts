@@ -38,7 +38,7 @@ describe('startTransport', () => {
     const stop = startTransport(
       audio,
       performance,
-      { hands: audibleHands('both'), tempo: 60, range: { from: 48, to: 144 }, fromTick: 96 },
+      { hands: audibleHands('both'), tempo: 60, range: { from: 96, to: 288 }, fromTick: 192 },
       { reach: () => {}, tempo: () => {} },
       VOCAL,
     )
@@ -58,7 +58,7 @@ describe('startTransport', () => {
     startTransport(
       audio,
       performance,
-      { hands: audibleHands('both'), tempo: 60, range: { from: 0, to: 192 }, fromTick: 0 },
+      { hands: audibleHands('both'), tempo: 60, range: { from: 0, to: 384 }, fromTick: 0 },
       { reach: () => {}, tempo: () => {} },
       null,
     )()

@@ -29,39 +29,39 @@ const notesOf = (event: ScoreEvent | undefined) => (event?.kind === 'notes' ? ev
 describe('notate', () => {
   it('writes a pickup under the meter’s signature, as a short first bar', () => {
     const score = notate(
-      music([n(60, note('C'), 'rh', 0, 12), n(64, note('E'), 'rh', 12, 48)], {
+      music([n(60, note('C'), 'rh', 0, 24), n(64, note('E'), 'rh', 24, 96)], {
         bars: [
           { startTick: 0, beats: 1 },
-          { startTick: 12, beats: 4 },
+          { startTick: 24, beats: 4 },
         ],
       }),
     )
     expect(score.measures.map((measure) => [measure.time, measure.ticks])).toEqual([
-      [{ count: 4, unit: 4 }, 12],
-      [{ count: 4, unit: 4 }, 48],
+      [{ count: 4, unit: 4 }, 24],
+      [{ count: 4, unit: 4 }, 96],
     ])
   })
 
   it('writes a pickup’s values on the meter’s beats: an 8th then a quarter in a beat and a half', () => {
     const score = notate(
-      music([n(60, note('C'), 'rh', 0, 6), n(64, note('E'), 'rh', 6, 12)], {
+      music([n(60, note('C'), 'rh', 0, 12), n(64, note('E'), 'rh', 12, 24)], {
         bars: [
           { startTick: 0, beats: 1.5 },
-          { startTick: 18, beats: 4 },
+          { startTick: 36, beats: 4 },
         ],
       }),
     )
     const [pickup] = score.measures
     expect(pickup?.staves.treble.map((voice) => shape(voice.events))).toEqual([
       [
-        ['notes', 0, 6],
-        ['notes', 6, 12],
+        ['notes', 0, 12],
+        ['notes', 12, 24],
       ],
     ])
     expect(pickup?.staves.bass.map((voice) => shape(voice.events))).toEqual([
       [
-        ['rest', 0, 6],
-        ['rest', 6, 12],
+        ['rest', 0, 12],
+        ['rest', 12, 24],
       ],
     ])
   })
@@ -69,15 +69,15 @@ describe('notate', () => {
   it('writes a bar of C on a grand staff, with its chord symbol and time signature', () => {
     const score = notate(
       music([
-        n(60, note('C'), 'rh', 0, 48),
-        n(64, note('E'), 'rh', 0, 48),
-        n(48, note('C'), 'lh', 0, 48),
+        n(60, note('C'), 'rh', 0, 96),
+        n(64, note('E'), 'rh', 0, 96),
+        n(48, note('C'), 'lh', 0, 96),
       ]),
     )
     const [measure] = score.measures
     expect(measure?.time).toEqual({ count: 4, unit: 4 })
     expect(measure?.chords).toEqual([{ tick: 0, symbol: 'C' }])
-    expect(measure?.staves.treble.map((voice) => shape(voice.events))).toEqual([[['notes', 0, 48]]])
+    expect(measure?.staves.treble.map((voice) => shape(voice.events))).toEqual([[['notes', 0, 96]]])
     expect(
       notesOf(measure?.staves.treble[0]?.events[0]).map((w) => [w.octave, w.accidental]),
     ).toEqual([
@@ -88,22 +88,22 @@ describe('notate', () => {
   })
 
   it('rests where a voice is silent, and writes an empty staff as a whole-bar rest', () => {
-    const score = notate(music([n(60, note('C'), 'rh', 12, 12)]))
+    const score = notate(music([n(60, note('C'), 'rh', 24, 24)]))
     const [measure] = score.measures
     expect(shape(measure?.staves.treble[0]?.events ?? [])).toEqual([
-      ['rest', 0, 12],
-      ['notes', 12, 12],
-      ['rest', 24, 24],
+      ['rest', 0, 24],
+      ['notes', 24, 24],
+      ['rest', 48, 48],
     ])
-    expect(shape(measure?.staves.bass[0]?.events ?? [])).toEqual([['rest', 0, 48]])
+    expect(shape(measure?.staves.bass[0]?.events ?? [])).toEqual([['rest', 0, 96]])
   })
 
   it('ties a note across the barline', () => {
     const score = notate(
-      music([n(48, note('C'), 'lh', 36, 24)], {
+      music([n(48, note('C'), 'lh', 72, 48)], {
         bars: [
           { startTick: 0, beats: 4 },
-          { startTick: 48, beats: 4 },
+          { startTick: 96, beats: 4 },
         ],
       }),
     )
@@ -120,15 +120,15 @@ describe('notate', () => {
     const score = notate(
       music(
         [
-          n(72, note('C'), 'melody', 0, 48),
-          n(72, note('C'), 'melody', 48, 48),
-          n(66, note('F', 1), 'rh', 24, 48),
-          n(69, note('A'), 'rh', 36, 12),
+          n(72, note('C'), 'melody', 0, 96),
+          n(72, note('C'), 'melody', 96, 96),
+          n(66, note('F', 1), 'rh', 48, 96),
+          n(69, note('A'), 'rh', 72, 24),
         ],
         {
           bars: [
             { startTick: 0, beats: 4 },
-            { startTick: 48, beats: 4 },
+            { startTick: 96, beats: 4 },
           ],
         },
       ),
@@ -171,10 +171,10 @@ describe('notate', () => {
     const score = notate(
       music(
         [
-          n(66, note('F', 1), 'rh', 0, 12),
-          n(65, note('F'), 'rh', 12, 12),
-          n(65, note('F'), 'rh', 24, 12),
-          n(66, note('F', 1), 'rh', 36, 12),
+          n(66, note('F', 1), 'rh', 0, 24),
+          n(65, note('F'), 'rh', 24, 24),
+          n(65, note('F'), 'rh', 48, 24),
+          n(66, note('F', 1), 'rh', 72, 24),
         ],
         { key: { tonic: note('G'), minor: false } },
       ),
@@ -186,8 +186,8 @@ describe('notate', () => {
   it('writes a hand’s tied pieces with one finger', () => {
     const score = notate(
       music([
-        n(60, note('C'), 'rh', 6, 12, { finger: 1 }),
-        n(64, note('E'), 'rh', 6, 12, { finger: 3 }),
+        n(60, note('C'), 'rh', 12, 24, { finger: 1 }),
+        n(64, note('E'), 'rh', 12, 24, { finger: 3 }),
       ]),
     )
     const events = (score.measures[0]?.staves.treble[0]?.events ?? []).filter(
@@ -195,14 +195,14 @@ describe('notate', () => {
     )
     expect(events.map((event) => [event.tick, event.notes.map((w) => [w.tie, w.finger])])).toEqual([
       [
-        6,
+        12,
         [
           [true, 1],
           [true, 3],
         ],
       ],
       [
-        12,
+        24,
         [
           [false, undefined],
           [false, undefined],
@@ -216,7 +216,7 @@ describe('notate', () => {
       music([], {
         bars: [
           { startTick: 0, beats: 4 },
-          { startTick: 48, beats: 2 },
+          { startTick: 96, beats: 2 },
         ],
       }),
     )
@@ -227,7 +227,7 @@ describe('notate', () => {
   })
 
   it('prints the first voice’s rests and hides the second’s', () => {
-    const score = notate(music([n(55, note('G'), 'lh', 0, 12), n(48, note('C'), 'lh', 0, 24)]))
+    const score = notate(music([n(55, note('G'), 'lh', 0, 24), n(48, note('C'), 'lh', 0, 48)]))
     const voices = score.measures[0]?.staves.bass ?? []
     expect(
       voices.map((voice) =>
@@ -237,10 +237,10 @@ describe('notate', () => {
       ),
     ).toEqual([
       [
-        [12, false],
         [24, false],
+        [48, false],
       ],
-      [[24, true]],
+      [[48, true]],
     ])
   })
 })
@@ -248,7 +248,7 @@ describe('notate', () => {
 describe('notate with a blank staff', () => {
   it('writes a staff the bar leaves blank as one hidden rest', () => {
     const score = notate(
-      music([n(60, note('C'), 'melody', 0, 48)], {
+      music([n(60, note('C'), 'melody', 0, 96)], {
         bars: [{ startTick: 0, beats: 4, blank: ['bass'] }],
       }),
     )

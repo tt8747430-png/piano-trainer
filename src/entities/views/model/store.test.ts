@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createViewsStore, VIEWS_STORAGE_KEY, VIEWS_VERSION } from './store'

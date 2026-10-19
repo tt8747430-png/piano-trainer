@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import type { PieceMusic } from './music'
@@ -45,6 +46,7 @@ describe('createPiecesStore', () => {
         { kind: 'verse', key: 'Db', lines: ['Db'] },
         { kind: 'verse', key: 'A#', lines: ['C'] },
       ],
+      hands: { lh: 'B2/4 | - | -' },
     }
     const sections = restored({ versions: { bz1: changing } }).versions.bz1?.sections
     expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])

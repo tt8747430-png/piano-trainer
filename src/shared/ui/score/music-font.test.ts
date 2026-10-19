@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { stubFonts } from '@/shared/test/fonts'
 import { CHORD_SYMBOL_FONT } from './chord-symbols'

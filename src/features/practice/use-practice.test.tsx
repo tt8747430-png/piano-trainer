@@ -144,7 +144,7 @@ describe('usePractice: Listen', () => {
     rerender({ performance: ONE_BAR, setup: { ...LISTEN, tempo: 120 } })
     expect(audio.played).toHaveLength(2)
     expect(notesOf(audio.played[1]?.sounds ?? [])).toHaveLength(
-      ONE_BAR.notes.filter((n) => n.startTick >= 24).length,
+      ONE_BAR.notes.filter((n) => n.startTick >= 48).length,
     )
   })
 
@@ -313,7 +313,7 @@ describe('usePractice: a loop and speed training', () => {
     const restarted = audio.played.at(-1)
     expect(restarted?.at).toBeCloseTo(5.3 + 0.1)
     expect(notesOf(restarted?.sounds ?? [])[0]?.at).toBe(0)
-    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(12)
+    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(24)
     clockTo(5.3 + 0.1 + 0.5)
     expect(result.current.passTempo).toBe(66)
   })

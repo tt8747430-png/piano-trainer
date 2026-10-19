@@ -20,7 +20,7 @@ describe('trailMusic', () => {
   it('leaves a staff with no key blank, and an empty trail one blank bar', () => {
     expect(trailMusic([[midi(60)], [midi(40)]], D_MAJOR, ['', '']).bars).toEqual([
       { startTick: 0, beats: 4, blank: ['bass'] },
-      { startTick: 48, beats: 4, blank: ['treble'] },
+      { startTick: 96, beats: 4, blank: ['treble'] },
     ])
     expect(trailMusic([], D_MAJOR, []).bars).toEqual([
       { startTick: 0, beats: 4, blank: ['treble', 'bass'] },

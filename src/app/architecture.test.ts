@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { resolve } from 'node:path'
 import { ESLint } from 'eslint'
 import { describe, expect, it } from 'vitest'

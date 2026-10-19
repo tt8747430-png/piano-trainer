@@ -38,17 +38,23 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
 - **New code copies the nearest slice's shape.** Writes → a feature command. Reads → selectors. Pure logic →
   `shared/lib` or `entities/*/model` with a colocated test.
 - **Complete, not placeholder.** Every UI string in both `en` and `ru`. Loading, empty, error and offline states.
-- **Verify before claiming done:** `npm run typecheck && npm run lint && npm run test`; after touching startup,
-  routing, the PWA or config, also `npm run build`.
+- **Verify before claiming done:** `npm run typecheck && npm run lint`, then **only the tests your change can
+  break**: the files you touched and their importers (`npm run test:related -- <changed source files>`, or
+  `npm run test:changed` for everything uncommitted). The full `npm run test` takes minutes: run it once before a
+  push that touches shared code (`shared/lib`, an entity's model, `app/`, the test setup or config), never after
+  each edit; CI runs it on every push anyway. After touching startup, routing, the PWA or config, also
+  `npm run build`.
 
 ## Commands
 
 Node 24 (`.nvmrc`, `nvm use`). CI (`.github/workflows/ci.yml`) runs `typecheck`, `lint`, `test:cov` and `build`
 on every push and PR; Vercel previews each PR and deploys `main`.
-`dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` / `test:watch` / `test:cov`
-(90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from
-`public/favicon.svg`).
-One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run -t "saves a new language"`.
+`dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` (everything) /
+`test:unit` (the node half, about two minutes) / `test:related -- <files>` (the tests that import them) /
+`test:changed` (the tests uncommitted changes reach) / `test:watch` / `test:cov` (90% lines on `src/shared/lib/**`
+and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from `public/favicon.svg`).
+One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run src/x.test.ts -t "saves a new
+language"` (always with its file: `-t` alone still loads every file).
 **Never `npm run format`** on the whole repo: `npx prettier --write <files you touched>`.
 
 ## Architecture — FSD (lint-enforced)
@@ -245,10 +251,15 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
 
 - Strict TS: `noUncheckedIndexedAccess`, `noUnusedLocals/Parameters`, `verbatimModuleSyntax` → `import type`.
   No `any`.
-- Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
-  Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
-  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen). Only a test the DOM gets in the way of opts into
-  `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
+- Tests colocated as `*.test.ts(x)`; Vitest with **`globals: false`** (import `describe/it/expect/vi`), in two
+  projects (`vite.config.ts`): **`unit`** runs `*.test.ts` in node, **`dom`** runs `*.test.tsx` in jsdom. A
+  `*.test.ts` that needs a DOM (localStorage, `renderHook`, `document`) opts in with `// @vitest-environment jsdom`
+  on its first line; pure logic never does. Setup: `src/shared/test/setup.ts`, and for a DOM `setup-dom.ts`
+  (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
+  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen).
+  **`isolate: false`**: a worker's files share their modules, so a test leaves no state behind (the setup puts back
+  mocks, globals, localStorage and the language); a file that needs module state fresh (`safeLocalStorage`'s choice,
+  once a page) starts with `vi.hoisted(() => vi.resetModules())`. With the settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore`, `piecesStore` and `takesStore` too); a widget that
   leads elsewhere, `await renderRouted(ui)`; which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and

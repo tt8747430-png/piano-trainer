@@ -7,8 +7,8 @@ const xOf = (tick: number) => tick * 10
 
 describe('nearestBeatGroup', () => {
   it('finds the bar’s beat group nearest an x', () => {
-    expect(nearestBeatGroup(TWO_BARS, 1, xOf, 480)).toBe(4)
-    expect(nearestBeatGroup(TWO_BARS, 1, xOf, 620)).toBe(5)
+    expect(nearestBeatGroup(TWO_BARS, 1, xOf, 960)).toBe(4)
+    expect(nearestBeatGroup(TWO_BARS, 1, xOf, 1240)).toBe(5)
     expect(nearestBeatGroup(TWO_BARS, 1, xOf, 9999)).toBe(7)
   })
 

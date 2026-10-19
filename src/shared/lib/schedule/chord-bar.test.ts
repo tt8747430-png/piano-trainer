@@ -16,11 +16,11 @@ describe('chordBar', () => {
     const placed = placeChord(DIMINISHED_7TH.tones, { inversion: 0, bothHands: true })
     const music = chordBar(placed)
     expect(music.notes.map((n) => [n.midi, n.hand, n.durationTicks])).toEqual([
-      [48, 'lh', 48],
-      [60, 'rh', 48],
-      [63, 'rh', 48],
-      [66, 'rh', 48],
-      [69, 'rh', 48],
+      [48, 'lh', 96],
+      [60, 'rh', 96],
+      [63, 'rh', 96],
+      [66, 'rh', 96],
+      [69, 'rh', 96],
     ])
     const [measure] = notate(music).measures
     const [chord] = measure?.staves.treble[0]?.events ?? []

@@ -19,11 +19,11 @@ describe('time', () => {
   })
 
   it('counts beats in whole ticks', () => {
-    expect([1, 0.5, 1 / 3, 2.25].map(beatsToTicks)).toEqual([12, 6, 4, 27])
+    expect([1, 0.5, 1 / 3, 2.25, 0.125].map(beatsToTicks)).toEqual([24, 12, 8, 54, 3])
   })
 
-  it('counts twelve ticks a beat', () => {
-    expect(TICKS_PER_BEAT).toBe(12)
+  it('counts twenty-four ticks a beat', () => {
+    expect(TICKS_PER_BEAT).toBe(24)
   })
 
   it('counts compound meters in dotted quarters', () => {

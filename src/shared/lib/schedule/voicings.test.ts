@@ -37,23 +37,23 @@ describe('voicingsMusic', () => {
     expect(music.key).toEqual(C_MINOR)
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4 },
-      { startTick: 48, beats: 4 },
+      { startTick: 96, beats: 4 },
     ])
     expect(music.chords).toEqual([
       { startTick: 0, symbol: 'Dm7♭5' },
-      { startTick: 48, symbol: 'G7♭13' },
+      { startTick: 96, symbol: 'G7♭13' },
     ])
     expect(
       music.notes.map((each) => [each.midi, each.hand, each.startTick, each.durationTicks]),
     ).toEqual([
-      [50, 'lh', 0, 48],
-      [56, 'lh', 0, 48],
-      [60, 'rh', 0, 48],
-      [65, 'rh', 0, 48],
-      [53, 'lh', 48, 48],
-      [59, 'lh', 48, 48],
-      [63, 'rh', 48, 48],
-      [67, 'rh', 48, 48],
+      [50, 'lh', 0, 96],
+      [56, 'lh', 0, 96],
+      [60, 'rh', 0, 96],
+      [65, 'rh', 0, 96],
+      [53, 'lh', 96, 96],
+      [59, 'lh', 96, 96],
+      [63, 'rh', 96, 96],
+      [67, 'rh', 96, 96],
     ])
     expect(music.notes[1]?.spelled).toEqual(note('A', -1))
   })
