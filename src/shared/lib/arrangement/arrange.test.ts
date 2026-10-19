@@ -157,6 +157,21 @@ describe('arrange', () => {
     expect(sevenths('Cmaj7 C7')).toEqual(['B', 'B♭'])
   })
 
+  it('plays a section written in its own key in it, moved as the chart is', () => {
+    const base = chart([['C']])
+    const changing: Chart = {
+      ...base,
+      sections: [
+        ...base.sections,
+        { key: { tonic: note('D', -1), minor: false }, lines: [[bar('Db', 4)]] },
+      ],
+    }
+    const inC = arrange(changing, { tonic: C, pattern: BLOCK })
+    expect(inC.bars.map((b) => b.key && noteName(b.key.tonic))).toEqual([undefined, 'D♭'])
+    const inD = arrange(changing, { tonic: note('D'), pattern: BLOCK })
+    expect(inD.bars.map((b) => b.key && noteName(b.key.tonic))).toEqual([undefined, 'E♭'])
+  })
+
   it('puts bars and chords end to end', () => {
     const performance = arrange(chart([['C', 'F@2-G@2', 'Am@2-G@1-F@1']]), {
       tonic: C,

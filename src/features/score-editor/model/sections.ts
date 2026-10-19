@@ -10,7 +10,8 @@ const sameHeading = (a: Heading, b: Heading): boolean =>
   a.label === b.label &&
   a.last === b.last &&
   a.detail?.en === b.detail?.en &&
-  a.detail?.ru === b.detail?.ru
+  a.detail?.ru === b.detail?.ru &&
+  a.key === b.key
 
 /**
  * A new section's heading as its kind and place name it: a verse the number after the verses before

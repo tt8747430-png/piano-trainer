@@ -1,5 +1,5 @@
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { midi, note, type Finger } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT, type Finger, type Key } from '@/shared/lib/music'
 import { notate, type TimedNote } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { engrave } from './engrave'
@@ -84,6 +84,32 @@ describe('engrave', () => {
       timeBefore: { count: 3, unit: 4 },
     })
     expect(changed.onsets[0]?.x).toBe(opening.onsets[0]?.x)
+  })
+
+  it('prints a new key signature, cancelling the old, where a bar changes key', () => {
+    const bar = 4 * TICKS_PER_BEAT
+    const twoBars = (key?: Key) =>
+      notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: bar, beats: 4, ...(key ? { key } : {}) },
+        ],
+        notes: [n(60, 'C', 0, bar), n(60, 'C', bar, bar)],
+        chords: [],
+      })
+    const options = { scale: 1, fingers: false, names: false }
+    const plain = engrave(twoBars(), document.createElement('div'), options)
+    const changing = engrave(
+      twoBars({ tonic: note('D', -1), minor: false }),
+      document.createElement('div'),
+      options,
+    )
+    // The signature takes room: the second bar's notes begin further into it.
+    const into = (layout: typeof plain) =>
+      (layout.measures[1]?.notes ?? 0) - (layout.measures[1]?.x ?? 0)
+    expect(into(changing)).toBeGreaterThan(into(plain))
   })
 
   it('gives a bar with nothing written its own width, its chord symbol over where its notes begin', () => {

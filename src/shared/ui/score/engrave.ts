@@ -13,6 +13,7 @@ import {
 } from 'vexflow/core'
 import {
   keySignature,
+  sameKey,
   timeSignatureText,
   type Key,
   type Tick,
@@ -96,8 +97,13 @@ function signatureOf(key: Key): string {
   return name
 }
 
+/** The key a measure is written in: its own at a key change, else the score's. */
+const keyOf = (score: Score, measure: Measure): Key => measure.key ?? score.key
+
 interface BuiltMeasure {
   readonly measure: Measure
+  /** Where the key changes at this measure, the key it leaves, whose signature is cancelled. */
+  readonly keyFrom: Key | null
   readonly staves: Readonly<Record<StaffId, readonly BuiltVoice[]>>
   readonly formatter: Formatter
   readonly clefs: boolean
@@ -115,6 +121,7 @@ function staveAt(
 ): Stave {
   const stave = new Stave(x, y, width)
   if (built.clefs) stave.addClef(staff).addKeySignature(signatureOf(key))
+  else if (built.keyFrom) stave.addKeySignature(signatureOf(key), signatureOf(built.keyFrom))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
   return stave
 }
@@ -204,14 +211,17 @@ function buildMeasure(
   const clefs = previous === undefined
   const before = previous?.time ?? timeBefore
   const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
-  const probe = { measure, staves, formatter, clefs, time, width: 0, notes: 0 }
+  const key = keyOf(score, measure)
+  const keyFrom =
+    previous && !sameKey(keyOf(score, previous), key) ? keyOf(score, previous) : null
+  const probe = { measure, keyFrom, staves, formatter, clefs, time, width: 0, notes: 0 }
   const modifiers = Math.max(
     ...shown.map((staff) => {
       const stave = staveAt(
         staff,
         { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES },
         probe,
-        score.key,
+        key,
       )
       return stave.getNoteStartX() - stave.getX()
     }),
@@ -222,7 +232,7 @@ function buildMeasure(
     const short = chordShortfall(probe, voices, {
       width: modifiers + notes,
       noteStart: modifiers,
-      key: score.key,
+      key,
       scale,
     })
     if (short <= 1) break
@@ -463,7 +473,12 @@ function* drawn(
     if (index > 0 && index % MEASURES_A_STEP === 0) yield
     const drawn = shown.map((on) => ({
       staff: on,
-      stave: staveAt(on, { x, y: places.y[on], width: measure.width }, measure, score.key),
+      stave: staveAt(
+        on,
+        { x, y: places.y[on], width: measure.width },
+        measure,
+        keyOf(score, measure.measure),
+      ),
     }))
     const [top] = drawn
     const bottom = drawn.at(-1)

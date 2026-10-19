@@ -8,6 +8,7 @@ import {
   midi,
   pitchClass,
   pitchClassOf,
+  sameKey,
   spellChord,
   TICKS_PER_BEAT,
   transposeNote,
@@ -419,6 +420,15 @@ function positionOf({ inversion, nearest }: ArrangeOptions, index: number): Righ
 /** Arranges a chart for the piano: every chord voiced, patterned, fingered and placed in ticks. */
 export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   const key: Key = { tonic: options.tonic, minor: chart.key.minor }
+  // A section written in a key of its own is played in it moved as the chart's key is.
+  const sectionKeys = chart.sections.map((section): Key | null =>
+    section.key && !sameKey(section.key, chart.key)
+      ? {
+          tonic: transposeNote(section.key.tonic, chart.key.tonic, options.tonic),
+          minor: section.key.minor,
+        }
+      : null,
+  )
   const melody = options.melody?.length
     ? transposeNotes(options.melody, chart.key.tonic, options.tonic).sort(
         (a, b) => a.startTick - b.startTick,
@@ -447,7 +457,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const context = chordContext(
       { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
-      key,
+      sectionKeys[layout.bars[placed.bar]?.section ?? 0] ?? key,
       positionOf(options, index),
     )
     previous = context.voiced
@@ -546,7 +556,10 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     key,
     meter: chart.meter,
     totalTicks: layout.totalTicks,
-    bars: layout.bars,
+    bars: layout.bars.map((bar) => {
+      const own = sectionKeys[bar.section]
+      return own ? { ...bar, key: own } : bar
+    }),
     chords,
     notes,
     beatGroups,

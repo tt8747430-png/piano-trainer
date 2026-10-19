@@ -98,6 +98,24 @@ describe('a written hand', () => {
     expect(error.message).toContain(problem)
   })
 
+  it('reads a triplet as thirds of a beat and a 32nd as an eighth of one', () => {
+    const [bar] = barsOf(['C'], {
+      rh: 'C4/1:3 D4/1:3 E4/1:3 C5/.125 B4/.125 A4/.125 G4/.125 F4/1:6 G4/5:6 C4/2',
+    })
+    expect(bar?.hands?.rh?.map((n) => [n.startTick, n.durationTicks])).toEqual([
+      [0, 8],
+      [8, 8],
+      [16, 8],
+      [24, 3],
+      [27, 3],
+      [30, 3],
+      [33, 3],
+      [36, 4],
+      [40, 20],
+      [60, 48],
+    ])
+  })
+
   it('names a note held into a bar the pattern plays', () => {
     const error = errorOf(['C G'], { lh: 'C3/6 | -' })
     expect(error.position).toEqual({ section: 1, line: 1, bar: 1 })

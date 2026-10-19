@@ -41,6 +41,8 @@ export interface Section {
   readonly last?: boolean
   /** Anything else the heading says: 'in 2/4', 'and ending'. */
   readonly detail?: LocalText
+  /** The key its bars are written in, where that is not the piece's: a key change. */
+  readonly key?: KeyText
   /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */
   readonly lines: readonly string[]
 }

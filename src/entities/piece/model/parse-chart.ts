@@ -5,8 +5,10 @@ import {
   beatsToTicks,
   ChordSymbolError,
   parseChordSymbol,
+  parseKey,
   TICKS_PER_BEAT,
   type Chord,
+  type Key,
 } from '@/shared/lib/music'
 import { MAX_BEATS, readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
@@ -82,6 +84,13 @@ function barHands(read: ReadHands, index: number): WrittenHands | undefined {
 }
 
 /** Reads a song's or study's chart, its written hands in its bars, naming the bar of any mistake in a ContentError. */
+/** A section's own key, read; one that names no key is the content's mistake. */
+function sectionKey(piece: ChartPiece, text: string, s: number): Key {
+  const key = parseKey(text)
+  if (!key) throw new ContentError(piece.id, { section: s + 1 }, `"${text}" names no key`)
+  return key
+}
+
 export function parseChart(piece: ChartPiece): Chart {
   const meterBeats = beatsPerBar(piece.meter)
   const failAt =
@@ -91,6 +100,7 @@ export function parseChart(piece: ChartPiece): Chart {
     }
   const places: HandBar[] = []
   const sections = piece.sections.map((section, s) => ({
+    key: section.key === undefined ? null : sectionKey(piece, section.key, s),
     lines: section.lines.map((line, l) => {
       const bars = line.split(/\s+/).filter(Boolean)
       if (bars.length === 0) failAt({ section: s + 1, line: l + 1 })('empty line')
@@ -108,6 +118,7 @@ export function parseChart(piece: ChartPiece): Chart {
     key: pieceKey(piece),
     meter: piece.meter,
     sections: sections.map((section) => ({
+      ...(section.key ? { key: section.key } : {}),
       lines: section.lines.map((line) =>
         line.map((bar) => {
           const written = barHands(hands, index++)

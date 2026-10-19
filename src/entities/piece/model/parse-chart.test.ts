@@ -23,6 +23,20 @@ function errorOf(lines: readonly string[]): ContentError {
 }
 
 describe('parseChart', () => {
+  it('reads a section written in a key of its own, and names a key it cannot read', () => {
+    const sections = [
+      { kind: 'verse' as const, lines: ['C'] },
+      { kind: 'verse' as const, key: 'Db' as const, lines: ['Db'] },
+    ]
+    const chart = parseChart(testSong([], { sections }))
+    expect(chart.sections.map((section) => section.key)).toEqual([
+      undefined,
+      { tonic: note('D', -1), minor: false },
+    ])
+    const wrong = [{ kind: 'verse' as const, key: 'H' as 'C', lines: ['C'] }]
+    expect(() => parseChart(testSong([], { sections: wrong }))).toThrow(ContentError)
+  })
+
   it('shares a bar equally among chords without beats', () => {
     expect(read(['C Dm G-C'])).toEqual([['C 4'], ['Dm 4'], ['G 2', 'C 2']])
   })

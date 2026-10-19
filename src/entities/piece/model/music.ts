@@ -50,6 +50,7 @@ const sameSection = (a: Section, b: Section) =>
   a.label === b.label &&
   a.last === b.last &&
   sameText(a.detail, b.detail) &&
+  a.key === b.key &&
   a.lines.length === b.lines.length &&
   a.lines.every((line, i) => line === b.lines[i])
 

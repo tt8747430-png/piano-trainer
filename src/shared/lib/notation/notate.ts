@@ -228,7 +228,7 @@ export function notate(music: TimedMusic): Score {
       ticks: from + ticks,
       from,
       meter: music.meter,
-      key: music.key,
+      key: written.key ?? music.key,
     }
     const chords = barChords(music.notes, bar, tiedOn)
     const staff = (id: StaffId) =>
@@ -239,6 +239,7 @@ export function notate(music: TimedMusic): Score {
       startTick: written.startTick,
       ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : written.beats, music.meter),
+      ...(written.key ? { key: written.key } : {}),
       staves,
       chords: music.chords
         .filter(

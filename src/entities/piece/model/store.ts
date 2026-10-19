@@ -64,7 +64,7 @@ const isTempo = (value: unknown): value is number =>
 /** A saved section whose fields read; its chart is read with the piece's. */
 function sectionOf(saved: unknown): Section | null {
   if (!isRecord(saved)) return null
-  const { kind, n, label, last, detail, lines } = saved
+  const { kind, n, label, last, detail, key, lines } = saved
   if (!isSectionKind(kind) || !Array.isArray(lines) || !lines.every(isText)) return null
   const number = typeof n === 'number' && Number.isInteger(n) && n > 0 ? n : undefined
   const en = isRecord(detail) ? detail.en : undefined
@@ -75,6 +75,7 @@ function sectionOf(saved: unknown): Section | null {
     ...(isText(label) && label !== '' ? { label } : {}),
     ...(last === true ? { last } : {}),
     ...(isText(en) && isText(ru) ? { detail: { en, ru } } : {}),
+    ...(isKeyText(key) ? { key } : {}),
     lines,
   }
 }

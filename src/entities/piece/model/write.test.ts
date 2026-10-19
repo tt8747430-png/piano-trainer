@@ -8,7 +8,7 @@ import {
   type Key,
 } from '@/shared/lib/music'
 import type { ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
-import { ticksIn } from './beats'
+import { readBeats, ticksIn } from './beats'
 import { keyText, musicOf, pitchText, sameMusic } from './music'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
@@ -29,10 +29,12 @@ const firstBar = (line: string) => parseChart(testSong([line])).sections[0]?.lin
 
 describe('beatsText', () => {
   it('writes ticks as beats in the shortest decimal that reads back as them', () => {
-    expect([24, 18, 6, 3, 27].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '2.25'])
-    expect(beatsText(4)).toBe('.3333333333')
-    expect(ticksIn(Number(beatsText(4)))).toBe(4)
-    expect(ticksIn(Number(beatsText(20)))).toBe(20)
+    expect([48, 36, 12, 6, 3, 54].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '.125', '2.25'])
+  })
+
+  it('writes thirds of a beat as a fraction in its lowest terms, which reads back as them', () => {
+    expect([8, 16, 4, 40].map(beatsText)).toEqual(['1:3', '2:3', '1:6', '5:3'])
+    for (const ticks of [8, 4, 40]) expect(ticksIn(readBeats(beatsText(ticks)) ?? 0)).toBe(ticks)
   })
 })
 

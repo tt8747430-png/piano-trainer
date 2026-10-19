@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Meter } from '@/shared/lib/music'
+import { TICKS_PER_BEAT, type Meter } from '@/shared/lib/music'
 import { spellSpan, voiceGrid, type Span } from './rhythm'
 import { ticksOf } from './values'
 
@@ -90,28 +90,39 @@ describe('triplet beats', () => {
 })
 
 describe('voiceGrid', () => {
+  const B = TICKS_PER_BEAT
+
   it('finds a voice’s triplet beats', () => {
     const grid = voiceGrid(
       [
-        { start: 0, end: 8 },
-        { start: 8, end: 24 },
+        { start: 0, end: (2 * B) / 3 },
+        { start: (2 * B) / 3, end: 2 * B },
       ],
       '4/4',
     )
-    expect(grid.isTriplet(4)).toBe(true)
-    expect(grid.isTriplet(12)).toBe(false)
+    expect(grid.isTriplet(B / 3)).toBe(true)
+    expect(grid.isTriplet(B)).toBe(false)
   })
 
-  it('moves a beat’s boundaries on neither grid to the nearest 3 ticks', () => {
+  it('writes a beat of 32nds as it is, binary', () => {
+    const grid = voiceGrid(
+      Array.from({ length: 8 }, (_, k) => ({ start: (k * B) / 8, end: ((k + 1) * B) / 8 })),
+      '4/4',
+    )
+    expect(grid.isTriplet(0)).toBe(false)
+    expect(grid.place((3 * B) / 8)).toBe((3 * B) / 8)
+  })
+
+  it('moves a beat’s boundaries on neither grid to the nearest 32nd', () => {
     const grid = voiceGrid(
       [
         { start: 0, end: 5 },
-        { start: 5, end: 12 },
+        { start: 5, end: B },
       ],
       '4/4',
     )
-    expect(grid.place(5)).toBe(6)
-    expect(grid.place(12)).toBe(12)
+    expect(grid.place(5)).toBe((B / 8) * Math.round(5 / (B / 8)))
+    expect(grid.place(B)).toBe(B)
     expect(grid.isTriplet(0)).toBe(false)
   })
 

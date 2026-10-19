@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type SpelledNote } from '@/shared/lib/music'
+import { midi, note, noteName, TICKS_PER_BEAT, type SpelledNote } from '@/shared/lib/music'
 import { notate } from './notate'
 import type { NotesEvent, RestEvent, ScoreEvent, TimedMusic, TimedNote } from './types'
 import { ticksOf } from './values'
@@ -144,6 +144,27 @@ describe('notate', () => {
       .flatMap((event) => notesOf(event))
       .find((written) => written.midi === 66)
     expect(fresh).toMatchObject({ accidental: 1, tie: false })
+  })
+
+  it('writes a bar in its own key: its measure carries it, and its signature says its flats', () => {
+    const beat = TICKS_PER_BEAT
+    const gFlat = n(66, note('G', -1), 'rh', 4 * beat, 4 * beat)
+    const score = notate(
+      music([n(66, note('G', -1), 'rh', 0, 4 * beat), gFlat], {
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: 4 * beat, beats: 4, key: { tonic: note('D', -1), minor: false } },
+        ],
+      }),
+    )
+    expect(score.measures.map((measure) => measure.key && noteName(measure.key.tonic))).toEqual([
+      undefined,
+      'D♭',
+    ])
+    const accidentals = score.measures.map(
+      (measure) => notesOf(measure.staves.treble[0]?.events[0])[0]?.accidental,
+    )
+    expect(accidentals).toEqual([-1, null])
   })
 
   it('prints the accidentals the key and the bar do not say', () => {

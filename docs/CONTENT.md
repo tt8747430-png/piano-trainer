@@ -68,11 +68,13 @@ meter, note })`. It shows in Songs and never opens in the Player; no course has 
 
 ## The chart
 
-`sections` is a list of `{ kind, n?, label?, last?, detail?, lines }`:
+`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.
 - `n` numbers a verse; `label` names a part (`'A'`); `last` marks a last chorus or last ending; `detail` is a
   `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
+- `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
+  printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
 - `lines`: each line is bars separated by spaces.
 
 A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
@@ -87,8 +89,9 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
 | `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
 
-Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (12 per beat:
-`.5`, `.25`, `1.5`, not `.3`).
+Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
+`.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,
+`1:6` (a triplet 16th) (ADR 0060).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`maj7`/`M7`/`Δ`, `m7♭5`/`m7b5`/`ø`, `°`/`dim`, `°7`/`dim7`, `sus`/`sus4`, `sus2`, `6`, `m6`, `6/9`,
@@ -130,8 +133,10 @@ of the chart in order:
 | `E4^3`                   | A finger (1–5), as the figure notation writes it                                                                                                          |
 | `r/1`                    | A rest; a bar of rests is written silence, not the pattern                                                                                                |
 | `C3/4 E3+G3/1@2 E3+G3/1` | `@beat` starts a token on a beat counted from 1 (`@2.5` the "and" of 2), so a held note and the notes over it are both written; the next token follows it |
+| `F4/1:3 D4/1:3 E4/1:3`   | A triplet: thirds of a beat as fractions; `C4/.125` a 32nd                                                                                                |
 
-Written in the piece's key, on whole ticks, every note on the piano. A note may last past its bar's end only into bars
+Written in the piece's key, its accidentals as printed (`E5` in a D♭ section is E natural), on whole ticks, every
+note on the piano. A note may last past its bar's end only into bars
 where the same hand is written: it is held across the barline.
 
 ## The recording

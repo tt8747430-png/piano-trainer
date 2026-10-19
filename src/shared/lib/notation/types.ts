@@ -39,6 +39,8 @@ export interface TimedMusic {
     readonly beats: number
     /** Staves with nothing to write in this bar: each holds the time with a rest that is not printed. */
     readonly blank?: readonly StaffId[]
+    /** The key it is written in, where that is not the music's (a key change). */
+    readonly key?: Key
   }[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
@@ -93,6 +95,8 @@ export interface Measure {
   readonly startTick: Tick
   readonly ticks: Tick
   readonly time: TimeSignature
+  /** The key it is written in, where that is not the score's (a key change). */
+  readonly key?: Key
   /** One or two voices on each staff. */
   readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
   readonly chords: readonly ChordMark[]

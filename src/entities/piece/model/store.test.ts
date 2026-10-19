@@ -37,6 +37,19 @@ describe('createPiecesStore', () => {
     expect(restored(saved)).toEqual(saved)
   })
 
+  it('keeps a section’s own key, and drops one no signature writes', () => {
+    const changing = {
+      ...MUSIC,
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'verse', key: 'Db', lines: ['Db'] },
+        { kind: 'verse', key: 'A#', lines: ['C'] },
+      ],
+    }
+    const sections = restored({ versions: { bz1: changing } }).versions.bz1?.sections
+    expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])
+  })
+
   it('drops music that does not parse, or names an unknown pattern, meter, tempo or a key no signature writes', () => {
     const versions = {
       bz1: MUSIC,
