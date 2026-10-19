@@ -13,11 +13,11 @@ const cadences: Lesson = {
   },
   sections: [
     {
-      heading: { en: 'Authentic: V to I', ru: 'Полная: V – I' },
+      heading: { en: 'Authentic: V to I', ru: 'Автентическая: V – I' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'An authentic cadence', ru: 'Полная (совершенная) каденция' },
+          lead: { en: 'An authentic cadence', ru: 'Автентическая каденция' },
           text: {
             en: 'goes from V, the dominant, to I, the tonic. It sounds finished, like a full stop.',
             ru: 'идёт от V, доминанты, к I, тонике. Она звучит законченно, как точка в конце предложения.',

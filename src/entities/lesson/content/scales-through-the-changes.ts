@@ -71,8 +71,8 @@ const scalesThroughTheChanges: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Take three notes from each scale. Play them in one short rhythm that starts off the beat, one bar per chord.',
-            ru: 'Возьмите по три звука из каждой гаммы. Играйте их одним коротким ритмом, который начинается не с доли, по такту на аккорд.',
+            en: 'Take three notes from each scale. Play them in one short rhythm that starts on the beat, one bar per chord.',
+            ru: 'Возьмите по три звука из каждой гаммы. Играйте их одним коротким ритмом, который начинается с доли, по такту на аккорд.',
           },
         },
         {

@@ -3,21 +3,21 @@ import type { Lesson } from '../model/types'
 
 const compoundMeter: Lesson = {
   id: 'compound-meter',
-  title: { en: 'Compound meter: 6/8 and 12/8', ru: 'Сложные размеры: 6/8 и 12/8' },
+  title: { en: 'Compound meter: 6/8 and 12/8', ru: 'Размеры 6/8 и 12/8' },
   summary: {
     en: 'Count and play 6/8 and 12/8, where each beat splits into three eighth notes.',
     ru: 'Считайте и играйте 6/8 и 12/8, где каждая доля делится на три восьмые.',
   },
   sections: [
     {
-      heading: { en: 'Simple and compound', ru: 'Простой и сложный размер' },
+      heading: { en: 'Simple and compound', ru: 'Доля на две и на три восьмые' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'In simple meter', ru: 'В простом размере' },
+          lead: { en: 'In simple meter', ru: 'В 2/4, 3/4 и 4/4' },
           text: {
             en: 'each beat splits into two eighth notes. In compound meter, each beat splits into three. Play two beats of each and compare.',
-            ru: 'каждая доля делится на две восьмые. В сложном размере каждая доля делится на три. Сыграйте по две доли каждого и сравните.',
+            ru: 'каждая доля делится на две восьмые. В 6/8 и 12/8 каждая доля делится на три. Сыграйте по две доли каждого и сравните.',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '2/4', notes: 'C5/8 G4/8 C5/8 G4/8' },

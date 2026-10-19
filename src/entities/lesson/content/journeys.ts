@@ -86,7 +86,7 @@ export const JOURNEYS: readonly Journey[] = [
       },
       {
         id: 'compound-time',
-        title: { en: 'Compound time and swing', ru: 'Сложные размеры и свинг' },
+        title: { en: 'Compound time and swing', ru: 'Размеры 6/8, 12/8 и свинг' },
         steps: lessons('compound-meter', 'syncopation-and-swing'),
       },
       {
