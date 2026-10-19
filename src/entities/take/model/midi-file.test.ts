@@ -22,6 +22,15 @@ const TAKE: Take = {
 
 const text = (bytes: Uint8Array) => String.fromCharCode(...bytes)
 
+/** Each time signature's count and unit (as a power of two) in a file. */
+function signaturesOf(file: Uint8Array): number[][] {
+  const bytes = [...file]
+  const signatures: number[][] = []
+  for (let i = 0; i < bytes.length - 4; i++)
+    if (bytes[i] === 0xff && bytes[i + 1] === 0x58) signatures.push(bytes.slice(i + 3, i + 5))
+  return signatures
+}
+
 describe('midiFile', () => {
   it('writes one track at 480 ticks a quarter: the tempo, the meter, the keys and the pedal', () => {
     const file = midiFile(TAKE)
@@ -108,13 +117,25 @@ describe('midiFile', () => {
       length: 3500,
       bars: [0, 500, 2000, 3500],
     })
-    const bytes = [...file]
-    const signatures: number[][] = []
-    for (let i = 0; i < bytes.length - 4; i++)
-      if (bytes[i] === 0xff && bytes[i + 1] === 0x58) signatures.push(bytes.slice(i + 3, i + 5))
-    expect(signatures).toEqual([
+    expect(signaturesOf(file)).toEqual([
       [1, 2],
       [3, 2],
+    ])
+  })
+
+  it('writes a compound meter’s short bar in eighths: a pickup of one, a bar of five', () => {
+    // 6/8 at 60: a beat (a dotted quarter) is a second, an eighth a third of it.
+    const signatures = (bars: number[]) =>
+      signaturesOf(
+        midiFile({ ...TAKE, meter: '6/8', tempo: 60, notes: [], pedals: [], length: 3333, bars }),
+      )
+    expect(signatures([0, 333, 2333, 4333])).toEqual([
+      [1, 3],
+      [6, 3],
+    ])
+    expect(signatures([0, 2000, 3667])).toEqual([
+      [6, 3],
+      [5, 3],
     ])
   })
 
