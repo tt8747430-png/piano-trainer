@@ -75,6 +75,25 @@ describe('createSavedStore', () => {
     },
   )
 
+  it.each([
+    ['without a version', { state: { count: 4 } }],
+    ['of a version that is not a number', { state: { count: 4 }, version: '2' }],
+  ])('starts from its initial state over a save %s, and saves that', (_, saved) => {
+    const storage = createMemoryStorage()
+    storage.setItem(KEY, JSON.stringify(saved))
+    expect(counter(storage).store.getState()).toEqual({ count: 0 })
+    expect(JSON.parse(storage.getItem(KEY) ?? 'null')).toEqual({
+      state: { count: 0 },
+      version: 2,
+    })
+  })
+
+  it('starts from its initial state over a save that is not JSON', () => {
+    const storage = createMemoryStorage()
+    storage.setItem(KEY, '{oops')
+    expect(counter(storage).store.getState()).toEqual({ count: 0 })
+  })
+
   it('keeps its initial state for what a save cannot give', () => {
     const storage = createMemoryStorage()
     save(storage, { count: 'four' }, 2)
