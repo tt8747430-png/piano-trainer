@@ -21,7 +21,8 @@ export function Sheet(props: ComponentProps<typeof Drawer>) {
 
 /**
  * The sheet's panel: its title beside its Close, a body that scrolls with room round it, and an
- * optional footer parted from it by a hairline, clear of the home indicator.
+ * optional footer parted from it by a hairline, clear of the home indicator. On a phone on its side
+ * it takes nearly the whole height, or its body would be a sliver.
  */
 export function SheetContent({
   title,
@@ -34,8 +35,8 @@ export function SheetContent({
 }) {
   const { t } = useTranslation('common')
   return (
-    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card text-base">
-      <DrawerHeader className="flex-row items-center justify-between gap-3 px-5 pt-1 pb-4 text-left group-data-[swipe-axis=y]/drawer-popup:text-left">
+    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card text-base landscape-phone:max-h-[calc(100dvh-1rem)]">
+      <DrawerHeader className="flex-row items-center justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">
         <DrawerTitle className="min-w-0 font-display text-2xl font-semibold">{title}</DrawerTitle>
         <DrawerClose render={<Button variant="ghost" size="icon" aria-label={t('close')} />}>
           <X aria-hidden />
