@@ -155,6 +155,7 @@ export function ChordFinderPage() {
           musicKey={finder.musicKey}
           remember={finder.remember}
           slash={finder.slash}
+          chosen={{ keys, at: finder.reading }}
         />
       </section>
       {finder.inKeys && reading ? (

@@ -46,6 +46,12 @@ describe('Practice → Chord finder', () => {
       'aria-pressed',
       'true',
     )
+    // The staff writes the chord as it is read.
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('region', { name: 'On the staff' })).getByRole('listitem'),
+      ).toHaveTextContent(/^C6\/A/),
+    )
   })
 
   it('writes only the chord down now on the staff, and nothing once it is let go', async () => {
