@@ -3,14 +3,14 @@
 The owner's source material for Piano Trainer: the books its courses follow, reference apps' screens, scores and
 links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`.
 
-| Folder                              | What it holds                                                                                      |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                      |
-| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                  |
-| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                   |
-| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                      |
-| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order |
-| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`) and images (`images/`)                          |
+| Folder                              | What it holds                                                                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                                                  |
+| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                                              |
+| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                                               |
+| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                                                  |
+| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order                             |
+| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`), images (`images/`) and screenshots of web pages (`screenshots/`, by topic) |
 
 ## Method books
 
@@ -134,10 +134,10 @@ and MIDI files and recordings. Names are the titles transliterated.
 | [`flat-score-editor/`](reference-apps/flat-score-editor) | 5       | Flat: the score editor's note toolbar, palette, keyboard input, instruments                                                                                                                               |
 | [`flowkey/`](reference-apps/flowkey)                     | 9       | Flowkey: home, continue learning, courses, the player                                                                                                                                                     |
 | [`journey-app/`](reference-apps/journey-app)             | 84      | a theory app (its name is not on its screens): its four journeys as maps of chapters and nodes, Settings, and its tools (Key Explorer, Circle of Fifths, Chord Builder, Progression Lab), one folder each |
-| [`piano-trainer/`](reference-apps/piano-trainer)         | 6       | Piano Trainer itself, as it looked: the Player's pattern sheet, Practice, Progressions, the score editor                                                                                                  |
+| [`piano-trainer/`](reference-apps/piano-trainer)         | 8       | Piano Trainer itself, as it looked: the Player's pattern sheet, Practice, Progressions, the score editor, the Player on _Thank you, God_ and its Setup                                                    |
 | [`sibelius/`](reference-apps/sibelius)                   | 3       | Sibelius: note input with its keypad, a passage chosen                                                                                                                                                    |
 | [`theory-trainer/`](reference-apps/theory-trainer)       | 3       | a theory app: home, an article (the chromatic scale), interval reference cards                                                                                                                            |
-| [`ultimate-piano/`](reference-apps/ultimate-piano)       | 18      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords                                                                                                                        |
+| [`ultimate-piano/`](reference-apps/ultimate-piano)       | 34      | The Ultimate Piano: scales on keys and staff, the circle of fifths, passing chords; then the C major scale (19–28) and its diatonic chords (29–34) played step by step                                    |
 
 ## Web references
 
@@ -174,7 +174,21 @@ and MIDI files and recordings. Names are the titles transliterated.
 - `dribbble-gismart-piano-app.png`
 - `hoffman-piano-music-theory-for-beginners-small.jpg`
 - `hoffman-piano-music-theory-for-beginners.webp`
+- `melody-lick-f-and-a-minor.png`: a two-bar melody lick over F, then over A minor, with note names
 - `minor-2-5-1-jazz-piano-voicings.png`
 - `nkoda-music-theory-cheat-sheet.jpg`
 - `piano-chords-chart.webp`
 - `piano-music-theory-poster.jpg`
+
+### Screenshots
+
+Web pages kept as screenshots, under `web-references/screenshots/`, numbered in viewing order:
+
+| Folder                                      | Shots | What they show                                                                                                 |
+| ------------------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------- |
+| `app-icon-ideas/`                           | 3     | Google Images results for piano app icons                                                                      |
+| `heart-and-harmony-accompaniment-patterns/` | 6     | heartandharmony.com on accompaniment patterns: I–IV–V, a bass line, blocked chords, arpeggiation               |
+| `instagram/`                                | 3     | Instagram reels: chord theory, 7-3-6-2-5-1-4 as a bossa nova                                                   |
+| `jon-batiste-blues-pianote/`                | 2     | Pianote's video _Jon Batiste Teaches The Blues_                                                                |
+| `mooz/`                                     | 2     | MOOZ's blog: beginner hits, live lessons with a teacher                                                        |
+| `simply-piano/`                             | 7     | Simply Piano as others describe it: its courses (pianodreamers.com), how a lesson works, reviews, alternatives |
