@@ -177,6 +177,7 @@ export const music: LocaleResources['music'] = {
   rowChords: 'Аккорды',
   intervalCard: {
     semitones: 'Полутонов: {{n}}',
+    semitone: 'Величина: полутон',
     tones_one: 'Величина: {{n}} тон',
     tones_few: 'Величина: {{n}} тона',
     tones_many: 'Величина: {{n}} тонов',

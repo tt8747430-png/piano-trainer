@@ -193,6 +193,7 @@ export const music = {
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
+    semitone: 'Size: a semitone',
     tones_one: 'Size: {{n}} tone',
     tones_other: 'Size: {{n}} tones',
     inChords: 'In chords: {{degree}}',

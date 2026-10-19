@@ -49,7 +49,12 @@ export function IntervalCard({
   const interval = INTERVALS[name]
   const size = [
     t('intervalCard.semitones', { n: interval.semitones }),
-    t('intervalCard.tones', { count: interval.semitones / 2, n: tonesText(interval.semitones) }),
+    interval.semitones === 1
+      ? t('intervalCard.semitone')
+      : t('intervalCard.tones', {
+          count: interval.semitones / 2,
+          n: tonesText(interval.semitones),
+        }),
   ]
   return (
     <article aria-labelledby={titleId} className="flex h-full flex-col gap-3 card p-4">
