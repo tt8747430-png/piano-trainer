@@ -23,15 +23,18 @@ describe('parseMelody', () => {
     expect(parseMelody(testSong(['C']))).toBeUndefined()
   })
 
-  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1'])('names the note it cannot read: %j', (token) => {
-    let caught: unknown
-    try {
-      melodyOf(`C4/1 ${token}`)
-    } catch (error) {
-      caught = error
-    }
-    expect(caught).toBeInstanceOf(ContentError)
-    expect((caught as ContentError).position).toEqual({ note: 2 })
-    expect((caught as ContentError).message).toContain(token)
-  })
+  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/17', 'E4/1e8'])(
+    'names the note it cannot read: %j',
+    (token) => {
+      let caught: unknown
+      try {
+        melodyOf(`C4/1 ${token}`)
+      } catch (error) {
+        caught = error
+      }
+      expect(caught).toBeInstanceOf(ContentError)
+      expect((caught as ContentError).position).toEqual({ note: 2 })
+      expect((caught as ContentError).message).toContain(token)
+    },
+  )
 })

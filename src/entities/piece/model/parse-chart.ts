@@ -8,12 +8,15 @@ import {
   TICKS_PER_BEAT,
   type Chord,
 } from '@/shared/lib/music'
-import { readBeats, ticksIn } from './beats'
+import { MAX_BEATS, readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
 import { HAND_IDS, parseHands, type HandBar, type ReadHands } from './parse-hands'
 import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
+
+/** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
+const BAR_LIMIT = 4
 
 interface WrittenChord {
   readonly chord: Chord
@@ -29,7 +32,7 @@ function readChord(text: string, fail: Fail): WrittenChord {
   if (method !== undefined && !isMethodCode(method)) fail(`unknown method code "${method}"`)
   const read = beatsText === undefined ? null : readBeats(beatsText)
   if (beatsText !== undefined && read === null)
-    fail(`"${beatsText}" is not a number of beats above 0`)
+    fail(`"${beatsText}" is not a number of beats above 0 and at most ${MAX_BEATS}`)
   const ticks = read === null ? null : ticksIn(read)
   if (read !== null && ticks === null) fail(`"${beatsText}" beats fall between ticks`)
   // Kept as the whole ticks they are, so `.3333333333` is a third of a beat exactly.
@@ -64,6 +67,7 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
   }))
   // Summed in ticks: six chords sharing 4/4 make 4 beats, never 3.9999999999999996 (a pickup).
   const ticks = chords.reduce((sum, chord) => sum + beatsToTicks(chord.beats), 0)
+  if (ticks > BAR_LIMIT * beatsToTicks(meterBeats)) fail(`a bar longer than four bars of its meter`)
   return { chords, beats: ticks / TICKS_PER_BEAT }
 }
 

@@ -7,8 +7,14 @@ export function ticksIn(beats: number): Tick | null {
   return Math.abs(ticks - whole) < 1e-9 ? whole : null
 }
 
-/** A written count of beats above 0 (`2`, `1.5`, `.5`), or null. */
+/**
+ * The most beats a chord or a note lasts: four bars of 4/4, twice the longest the built-in pieces
+ * write, so a song from a link can never ask for a bar of millions of beats.
+ */
+export const MAX_BEATS = 16
+
+/** A written count of beats above 0 and at most `MAX_BEATS` (`2`, `1.5`, `.5`), or null. */
 export function readBeats(text: string): number | null {
   const beats = Number(text)
-  return text.trim() !== '' && beats > 0 ? beats : null
+  return text.trim() !== '' && beats > 0 && beats <= MAX_BEATS ? beats : null
 }
