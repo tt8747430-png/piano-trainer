@@ -63,6 +63,13 @@ describe('safeLocalStorage', () => {
     expect(heard).toHaveBeenCalledOnce()
   })
 
+  it('hands the storage under its guard to a caller that reports its own failed writes', async () => {
+    const { safeLocalStorage, unguarded } = await load()
+    expect(unguarded(safeLocalStorage())).toBe(localStorage)
+    const memory = createMemoryStorage()
+    expect(unguarded(memory)).toBe(memory)
+  })
+
   it('passes every Storage operation through to localStorage while it works', async () => {
     const { safeLocalStorage } = await load()
     const storage = safeLocalStorage()

@@ -1,6 +1,13 @@
-import { describe, expect, it } from 'vitest'
-import { createMemoryStorage } from '@/shared/lib'
-import { backupName, readBackup, restoreBackup, SAVE_KEYS, writeBackup } from './backup'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { createMemoryStorage, onFailedWrite, safeLocalStorage } from '@/shared/lib'
+import {
+  backupName,
+  readBackup,
+  restoreBackup,
+  SAVE_KEYS,
+  writeBackup,
+  type Backup,
+} from './backup'
 
 const NOW = new Date('2026-10-11T09:30:00Z')
 const SETTINGS = { state: { theme: 'dark' }, version: 1 }
@@ -14,6 +21,40 @@ function saved() {
   storage.setItem('other', 'kept out')
   return storage
 }
+
+/** A save whose text is `length` characters long. */
+function saveOf(length: number) {
+  const bare = JSON.stringify({ state: '', version: 1 }).length
+  return { state: 'x'.repeat(length - bare), version: 1 }
+}
+
+/** Storage with room for `room` characters of saves, throwing as a full browser does past it. */
+function roomFor(room: number): Storage {
+  const storage = createMemoryStorage()
+  const used = (key: string) =>
+    Array.from({ length: storage.length }, (_, index) => storage.key(index))
+      .filter((other) => other !== null && other !== key)
+      .reduce((sum, other) => sum + (storage.getItem(other ?? '')?.length ?? 0), 0)
+  return {
+    get length() {
+      return storage.length
+    },
+    clear: () => storage.clear(),
+    getItem: (key) => storage.getItem(key),
+    key: (index) => storage.key(index),
+    removeItem: (key) => storage.removeItem(key),
+    setItem: (key, value) => {
+      if (used(key) + value.length > room)
+        throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
+      storage.setItem(key, value)
+    },
+  }
+}
+
+afterEach(() => {
+  vi.restoreAllMocks()
+  localStorage.clear()
+})
 
 describe('backup', () => {
   it('holds every store’s save, and nothing it cannot read', () => {
@@ -33,6 +74,36 @@ describe('backup', () => {
     expect(JSON.parse(other.getItem('pt-settings') ?? 'null')).toEqual(SETTINGS)
     expect(JSON.parse(other.getItem('pt-pieces') ?? 'null')).toEqual(PIECES)
     expect(other.getItem('pt-takes')).toBeNull()
+  })
+
+  it('puts everything back as it was where the backup does not fit, whatever order it fits in', () => {
+    const storage = roomFor(320)
+    const before = {
+      'pt-settings': saveOf(130),
+      'pt-progress': saveOf(40),
+      'pt-pieces': saveOf(130),
+    }
+    for (const [key, save] of Object.entries(before)) storage.setItem(key, JSON.stringify(save))
+    const backup: Backup = {
+      made: '',
+      saves: { 'pt-settings': saveOf(40), 'pt-progress': saveOf(140), 'pt-pieces': saveOf(150) },
+    }
+    expect(restoreBackup(storage, backup)).toBe(false)
+    for (const [key, save] of Object.entries(before))
+      expect(JSON.parse(storage.getItem(key) ?? 'null')).toEqual(save)
+  })
+
+  it('does not say a change was lost when a backup does not fit: the restore says so itself', () => {
+    const storage = safeLocalStorage()
+    storage.setItem('pt-settings', JSON.stringify(SETTINGS))
+    const heard = vi.fn()
+    const stop = onFailedWrite(heard)
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
+    })
+    expect(restoreBackup(storage, { made: '', saves: { 'pt-settings': saveOf(60) } })).toBe(false)
+    stop()
+    expect(heard).not.toHaveBeenCalled()
   })
 
   it('reads no other file as a backup', () => {

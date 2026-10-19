@@ -67,12 +67,21 @@ export function createMemoryStorage(): Storage {
   }
 }
 
+/** The storage under each guard. */
+const underGuard = new WeakMap<Storage, Storage>()
+
+/**
+ * The storage under `storage`'s guard, whose writes throw where the device is full and tell no one:
+ * for a caller that reports its own failed writes (a backup restored). Any other storage is itself.
+ */
+export const unguarded = (storage: Storage): Storage => underGuard.get(storage) ?? storage
+
 /**
  * A quota filling up, or access revoked mid-session, loses the write instead of breaking the app,
  * and says so to who listens (`onFailedWrite`): a take saved there would be gone after a reload.
  */
 function guarded(storage: Storage): Storage {
-  return {
+  const guard: Storage = {
     get length() {
       return storage.length
     },
@@ -108,4 +117,6 @@ function guarded(storage: Storage): Storage {
       }
     },
   }
+  underGuard.set(guard, storage)
+  return guard
 }
