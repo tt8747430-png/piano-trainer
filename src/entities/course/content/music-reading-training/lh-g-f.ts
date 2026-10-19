@@ -99,7 +99,7 @@ const lhGF: Lesson = {
             en: 'Play C with the thumb, then step down to F.',
             ru: 'Сыграйте до первым пальцем, затем шагами вниз до фа.',
           },
-          answer: { notes: ['C', 'B', 'A', 'G', 'F'] },
+          answer: { notes: ['C', 'B', 'A', 'G', 'F'], falling: true },
         },
         {
           kind: 'link',

@@ -26,10 +26,13 @@ export interface LessonProgression {
 
 /**
  * What a lesson's question asks to be played: a chord's notes, or notes, in any octave; notes `rising`
- * are played in their order, each the first of its name above the last (an interval up, a run).
+ * are played in their order, each the first of its name above the last (an interval up, a run), and
+ * notes `falling` each the first below the last (a line stepping down).
  */
 export type LessonAnswer =
-  { readonly chord: string } | { readonly notes: readonly string[]; readonly rising?: true }
+  | { readonly chord: string }
+  | { readonly notes: readonly string[]; readonly rising?: true; readonly falling?: never }
+  | { readonly notes: readonly string[]; readonly falling: true; readonly rising?: never }
 
 /** Where a lesson's link leads, by what it names; the lesson view makes it a route and its search. */
 export type LessonLink =

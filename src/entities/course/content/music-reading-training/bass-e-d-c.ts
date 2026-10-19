@@ -96,7 +96,7 @@ const bassEDC: Lesson = {
             en: 'Play the middle line, then skip down to the second line.',
             ru: 'Сыграйте ноту на средней линейке, затем скачком вниз — на второй.',
           },
-          answer: { notes: ['D', 'B'] },
+          answer: { notes: ['D', 'B'], falling: true },
         },
         {
           kind: 'link',

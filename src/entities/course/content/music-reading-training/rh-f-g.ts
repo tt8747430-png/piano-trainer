@@ -100,7 +100,7 @@ const rhFG: Lesson = {
             en: 'Play G with finger 5, then step down to C.',
             ru: 'Сыграйте соль пятым пальцем, затем шагами вниз до до.',
           },
-          answer: { notes: ['G', 'F', 'E', 'D', 'C'] },
+          answer: { notes: ['G', 'F', 'E', 'D', 'C'], falling: true },
         },
         {
           kind: 'link',
