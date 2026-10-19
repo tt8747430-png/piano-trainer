@@ -556,6 +556,16 @@ describe('the score editor’s takes', () => {
     expect(within(again).getByRole('button', { name: 'Record' })).toBeEnabled()
   })
 
+  it('keeps Record in the takes’ footer, in reach over the takes and their settings', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1?record=true', { storage: withSong() })
+    const sheet = await screen.findByRole('dialog', { name: 'Takes' })
+    await user.click(within(sheet).getByRole('button', { name: 'Connect a MIDI keyboard' }))
+    const record = await within(sheet).findByRole('button', { name: 'Record' })
+    expect(record.closest('[data-slot="drawer-footer"]')).not.toBeNull()
+    expect(record).toBeEnabled()
+  })
+
   it('cannot record in a browser without MIDI', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong(), webMidi: false })
