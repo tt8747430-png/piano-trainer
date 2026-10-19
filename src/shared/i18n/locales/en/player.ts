@@ -135,7 +135,7 @@ export const player = {
     voicings: { close: 'Close', drop2: 'Drop 2' },
     from: 'From',
     chordTones: { root: 'Root', third: '3rd', fifth: '5th', seventh: '7th' },
-    tonality: 'Mode',
+    tonality: 'Major or minor',
     tonalities: { major: 'Major', minor: 'Minor' },
   },
 } as const
