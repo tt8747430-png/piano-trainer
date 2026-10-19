@@ -41,6 +41,14 @@ describe('TempoButton', () => {
     expect(onTempo).toHaveBeenLastCalledWith(36)
   })
 
+  it('scrolls within the screen’s height where the screen is short (a phone on its side)', async () => {
+    const user = userEvent.setup()
+    renderTempo()
+    await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Tempo' })
+    expect(dialog).toHaveClass('max-h-(--available-height)', 'overflow-y-auto')
+  })
+
   it('offers speed training only below the piece’s tempo, in Listen', async () => {
     const user = userEvent.setup()
     renderTempo({ tempo: 54, shownTempo: 54 })

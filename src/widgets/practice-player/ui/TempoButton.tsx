@@ -51,7 +51,11 @@ export function TempoButton({
         <Gauge data-icon="inline-start" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
-      <PopoverContent aria-label={t('tempo')} align="start" className="w-80 gap-4 p-4">
+      <PopoverContent
+        aria-label={t('tempo')}
+        align="start"
+        className="max-h-(--available-height) w-80 gap-4 overflow-y-auto overscroll-contain p-4"
+      >
         <Listbox
           label={t('tempo')}
           className="gap-4"
