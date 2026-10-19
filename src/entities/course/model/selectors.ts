@@ -45,8 +45,5 @@ const COURSE_OF_PIECE = new Map(
   COURSES.flatMap((course) => course.songs.map((id): [PieceId, Course] => [id, course])),
 )
 
-/** The course a piece is a guided song of; undefined for a piece no course has. */
-export const courseOfPiece = (id: PieceId): Course | undefined => COURSE_OF_PIECE.get(id)
-
 /** A piece's level: its course's; undefined for a piece no course has. */
 export const pieceStage = (id: PieceId): Stage | undefined => COURSE_OF_PIECE.get(id)?.stage

@@ -150,7 +150,7 @@ export const common: LocaleResources['common'] = {
     app: 'Везде',
     sidebar: 'Свернуть или открыть боковую панель',
   },
-  learned: { toggle: '{{title}}: выучено', done: 'Выучено' },
+  learned: { done: 'Выучено' },
   midi: {
     label: 'MIDI-клавиатура',
     labelConnected: 'MIDI-клавиатура подключена',

@@ -157,7 +157,7 @@ export const common = {
     app: 'Anywhere',
     sidebar: 'Collapse or open the sidebar',
   },
-  learned: { toggle: '{{title}}: learned', done: 'Learned' },
+  learned: { done: 'Learned' },
   midi: {
     label: 'MIDI keyboard',
     labelConnected: 'MIDI keyboard, connected',
