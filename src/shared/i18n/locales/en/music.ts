@@ -125,7 +125,7 @@ export const music = {
     minor: '{{tonic}} minor',
     // A row that opens something in a key.
     in: 'In {{key}}',
-    mode: 'Mode',
+    mode: 'Major or minor',
     majorMode: 'Major',
     minorMode: 'Minor',
   },
@@ -193,7 +193,8 @@ export const music = {
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
-    tones: 'Tones: {{n}}',
+    tones_one: 'Size: {{n}} tone',
+    tones_other: 'Size: {{n}} tones',
     inChords: 'In chords: {{degree}}',
     up: 'Up',
     down: 'Down',

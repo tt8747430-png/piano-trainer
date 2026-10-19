@@ -33,7 +33,7 @@ describe('Practice → Intervals', () => {
     ])
     const third = screen.getByRole('article', { name: 'Minor third' })
     expect(third).toHaveTextContent('m3')
-    expect(third).toHaveTextContent('Semitones: 3 · Tones: 1½')
+    expect(third).toHaveTextContent('Semitones: 3 · Size: 1½ tones')
     expect(third).toHaveTextContent('Imperfect consonance')
     expect(screen.getByRole('article', { name: 'Tritone' })).toHaveTextContent('A4 · d5')
     const compound = screen.getByRole('region', { name: 'Past the octave' })

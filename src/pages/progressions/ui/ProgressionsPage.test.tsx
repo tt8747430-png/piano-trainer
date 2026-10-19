@@ -130,7 +130,7 @@ describe('Practice → Progressions', () => {
         '12-bar blues',
       ),
     )
-    const mode = within(screen.getByRole('radiogroup', { name: 'Mode' }))
+    const mode = within(screen.getByRole('radiogroup', { name: 'Major or minor' }))
     await user.click(mode.getByRole('radio', { name: 'Minor' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ key: 'Cm' }))
     await user.click(mode.getByRole('radio', { name: 'Major' }))
@@ -181,7 +181,7 @@ describe('Practice → Progressions', () => {
   it('shows the jazz cadence’s minor line when the key turns minor, and back', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
-    const mode = within(await screen.findByRole('radiogroup', { name: 'Mode' }))
+    const mode = within(await screen.findByRole('radiogroup', { name: 'Major or minor' }))
     await user.click(mode.getByRole('radio', { name: 'Minor' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({

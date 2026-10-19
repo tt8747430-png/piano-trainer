@@ -22,7 +22,7 @@ export const player: LocaleResources['player'] = {
   direction: 'Направление',
   directions: { up: 'Вверх', down: 'Вниз', both: 'Вверх и вниз' },
   tempo: 'Темп',
-  bpm: '{{tempo}} уд/мин',
+  bpm: '{{tempo}} уд/мин',
   hands: 'Руки',
   handsOf: 'Руки: {{hands}}',
   pattern: 'Фактура',
@@ -80,8 +80,8 @@ export const player: LocaleResources['player'] = {
   },
   pace: {
     of: 'Темп: {{value}}',
-    ownPace: 'Режим ожидания',
-    wait: 'Ждать моих нот',
+    ownPace: 'Ждёт ваших нот',
+    wait: 'Режим ожидания',
     playAlong: 'Слушать и играть вместе',
     speed: 'Скорость {{percent}}',
     own: 'Исходный темп',
@@ -127,7 +127,7 @@ export const player: LocaleResources['player'] = {
     voicings: { close: 'Тесное', drop2: 'Drop 2' },
     from: 'От',
     chordTones: { root: 'Основного тона', third: 'Терции', fifth: 'Квинты', seventh: 'Септимы' },
-    tonality: 'Лад',
+    tonality: 'Мажор или минор',
     tonalities: { major: 'Мажор', minor: 'Минор' },
   },
 }
