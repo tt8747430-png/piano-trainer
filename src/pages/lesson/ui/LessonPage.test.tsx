@@ -116,6 +116,22 @@ describe('A lesson', () => {
     expect(progressStore.getState().learned['lesson:finding-home']).toBeDefined()
   })
 
+  it('moves the focus to the next lesson’s heading, so Enter again learns nothing unread', async () => {
+    const user = userEvent.setup()
+    const { progressStore, router } = await renderApp('/lessons/finding-home')
+    ;(await screen.findByRole('link', { name: /Next lesson/ })).focus()
+    await user.keyboard('{Enter}')
+    await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/reading-notes'))
+    await waitFor(() =>
+      expect(
+        screen.getByRole('heading', { level: 1, name: 'The staff and the treble clef' }),
+      ).toHaveFocus(),
+    )
+    await user.keyboard('{Enter}')
+    expect(router.state.location.pathname).toBe('/lessons/reading-notes')
+    expect(progressStore.getState().learned['lesson:reading-notes']).toBeUndefined()
+  })
+
   it('goes on into the next chapter, and ends a journey back on its map', async () => {
     await renderApp('/lessons/bass-clef')
     expect((await screen.findByRole('link', { name: /Next lesson/ })).getAttribute('href')).toBe(

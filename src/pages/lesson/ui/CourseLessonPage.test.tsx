@@ -30,6 +30,21 @@ describe('A course’s lesson', () => {
     expect(progressStore.getState().learned['lesson:five-ways']).toBeUndefined()
   })
 
+  it('moves the focus to the next lesson’s heading, so Enter again learns nothing unread', async () => {
+    const user = userEvent.setup()
+    const { progressStore, router } = await renderApp('/courses/called-to-play/five-ways')
+    const next = book.lessons[at + 1]!
+    ;(await screen.findByRole('link', { name: /Next lesson/ })).focus()
+    await user.keyboard('{Enter}')
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe(`/courses/called-to-play/${next.id}`),
+    )
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveFocus())
+    await user.keyboard('{Enter}')
+    expect(router.state.location.pathname).toBe(`/courses/called-to-play/${next.id}`)
+    expect(progressStore.getState().learned[`course:called-to-play/${next.id}`]).toBeUndefined()
+  })
+
   it('ends its course on the way to the guided songs', async () => {
     const last = book.lessons.at(-1)!
     await renderApp(`/courses/called-to-play/${last.id}`)

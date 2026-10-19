@@ -23,8 +23,11 @@ export function LessonPage() {
   const next = lessonAt(nextLessonId(lesson.id))
   const previous = lessonAt(previousLessonId(lesson.id))
   const journeyTitle = localText(place.journey.title, locale)
+  // Keyed by its lesson: the next one is a new screen, its heading taking the focus from the way on,
+  // so Enter again does not go on (and learn) past a lesson unread.
   return (
     <LessonLayout
+      key={lesson.id}
       lesson={lesson}
       step={lessonStepId(lesson.id)}
       back={<BackButton fallback={journey} />}
