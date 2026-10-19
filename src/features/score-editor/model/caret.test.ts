@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf } from '../testing/test-draft'
-import { chordPlaces, nextCaret, snapToChord } from './caret'
+import { caretPlaces, nextCaret, snapToChord } from './caret'
 
 const tune = draftOf({
   melody: 'B4/1.5 A4/.5 G4/2 | C5/4',
@@ -24,9 +24,9 @@ describe('the caret in a voice', () => {
 
 describe('the caret in the chords', () => {
   it('stands on each beat and each chord’s start', () => {
-    expect(chordPlaces(tune)).toEqual([0, 12, 24, 36, 48, 60, 72, 84])
+    expect(caretPlaces(tune, 'chords', 12)).toEqual([0, 12, 24, 36, 48, 60, 72, 84])
     const halves = draftOf({ sections: [{ kind: 'verse', lines: ['G@1.5-D@2.5'] }] })
-    expect(chordPlaces(halves)).toEqual([0, 12, 18, 24, 36])
+    expect(caretPlaces(halves, 'chords', 12)).toEqual([0, 12, 18, 24, 36])
   })
 
   it('moves among them, and snaps down onto one', () => {

@@ -35,19 +35,19 @@ import {
   isSongCollectionId,
   SONG_COLLECTIONS,
 } from '../index'
-import { COLLECTION_IDS, isCollectionId, SONG_COLLECTION_IDS } from '../model/types'
+import { COLLECTION_IDS } from '../model/types'
 
 const ENTRIES = COLLECTIONS.flatMap((collection) => collection.entries)
 
 describe('the collections', () => {
   it('are the ones COLLECTION_IDS names, in its order', () => {
     expect(COLLECTIONS.map((collection) => collection.id)).toEqual(COLLECTION_IDS)
-    expect(isCollectionId('hymns')).toBe(true)
-    expect(isCollectionId('psalms')).toBe(false)
   })
 
-  it('put on Songs the ones SONG_COLLECTION_IDS names, with no content needed to check an id', () => {
-    expect(SONG_COLLECTIONS.map((collection) => collection.id)).toEqual(SONG_COLLECTION_IDS)
+  it('put on Songs the ones isSongCollectionId knows, with no content needed to check an id', () => {
+    expect(SONG_COLLECTIONS.map((collection) => collection.id)).toEqual(
+      COLLECTION_IDS.filter(isSongCollectionId),
+    )
     expect(isSongCollectionId('hymns')).toBe(true)
     expect(isSongCollectionId('studies')).toBe(false)
   })

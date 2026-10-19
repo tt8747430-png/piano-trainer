@@ -52,7 +52,7 @@ export interface Source {
   readonly page?: number
 }
 
-export type CreditRole =
+type CreditRole =
   'authors' | 'words-and-music' | 'words' | 'music' | 'russian-text' | 'harmony' | 'accompaniment'
 /** Names stay as printed; the role is shown through an interface string in the learner's language. */
 export type Credit =
@@ -133,13 +133,12 @@ export const COLLECTION_IDS = [
   'studies',
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]
-export const isCollectionId = isOneOf(COLLECTION_IDS)
 
 /**
  * The collections Songs lists: ids only, so a URL is checked without loading a piece (the content
  * holds `SONG_COLLECTIONS` to them).
  */
-export const SONG_COLLECTION_IDS = [
+const SONG_COLLECTION_IDS = [
   'learning-songs',
   'bozhe-spasibo',
   'called-to-play',
