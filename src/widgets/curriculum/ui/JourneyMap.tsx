@@ -122,7 +122,6 @@ function ChapterSection({
           type="button"
           aria-expanded={fold.open}
           aria-controls={bodyId}
-          aria-label={t('journey.chapter', { n, title })}
           onClick={fold.toggle}
           className="group flex w-full items-center gap-3 rounded-2xl py-2 text-left"
         >

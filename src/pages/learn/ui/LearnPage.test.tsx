@@ -120,7 +120,10 @@ describe('Learn', () => {
         'page',
       )
       const chapter = JOURNEYS[1]!.chapters[0]!
-      const heading = screen.getByRole('button', { name: `Chapter 1: ${chapter.title.en}` })
+      // Its visible words name it, its count of steps learned with them.
+      const heading = screen.getByRole('button', {
+        name: new RegExp(`^${chapter.title.en}\\s*0/${chapter.steps.length}$`),
+      })
       expect(heading).toHaveAttribute('aria-expanded', 'true')
       await user.click(heading)
       expect(heading).toHaveAttribute('aria-expanded', 'false')
