@@ -96,14 +96,17 @@ function swungOnGrid(music: BarsInMeter, tick: Tick): number {
   return origin + swingTick(tick - origin)
 }
 
+/** Where a tick sounds, in ticks: swung on its bar's beats when asked, straight in a compound meter. */
+const placement = (performance: Performance, swing: boolean | undefined) =>
+  swing && !isCompound(performance.meter)
+    ? (tick: Tick) => swungOnGrid(performance, tick)
+    : (tick: Tick) => tick
+
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  const place =
-    options.swing && !isCompound(performance.meter)
-      ? (tick: Tick) => swungOnGrid(performance, tick)
-      : (tick: Tick) => tick
+  const place = placement(performance, options.swing)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
@@ -177,13 +180,17 @@ export function beatGroupSounds(
   })
 }
 
-/** How long Wait mode gives a beat group: until the next one sounds, or one beat for the last. */
+/**
+ * How long Wait mode gives a beat group: until the next one sounds, or one beat for the last, on the
+ * grid `schedule` plays it on (swung when asked).
+ */
 export function untilNextBeatGroup(
   performance: Performance,
   beatGroup: number,
-  options: { readonly tempo: number },
+  options: { readonly tempo: number; readonly swing?: boolean },
 ): number {
+  const place = placement(performance, options.swing)
   const tick = performance.beatGroups[beatGroup]?.tick ?? 0
   const next = performance.beatGroups[beatGroup + 1]?.tick ?? tick + TICKS_PER_BEAT
-  return secondsFor(next - tick, options.tempo)
+  return secondsFor(place(next) - place(tick), options.tempo)
 }

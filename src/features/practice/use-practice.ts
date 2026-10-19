@@ -189,7 +189,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       due.current = null
       return CORRECT_PAUSE_MS
     }
-    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo })
+    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo, swing })
     return Math.max(0, (due.current - PLAY_DELAY - audio.now()) * 1000)
   })
   useEffect(() => {

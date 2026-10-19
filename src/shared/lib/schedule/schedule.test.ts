@@ -243,6 +243,27 @@ describe('untilNextBeatGroup', () => {
   it('gives the last beat group one beat', () => {
     expect(untilNextBeatGroup(performance, 7, { tempo: 120 })).toBe(0.5)
   })
+
+  it('waits on the swung grid the music is heard on', () => {
+    const eighths = arrange(chart('C'), {
+      tonic: note('C'),
+      pattern: {
+        id: 'eighths',
+        rh: { kind: 'events', events: parseFigure('0/2 C,2/2 C,4/2 C,6/2 C') },
+        lh: { kind: 'events', events: parseFigure('0/16 L1') },
+      },
+    })
+    const due = (swing: boolean) => {
+      const times = [0]
+      for (let group = 0; group < 3; group += 1) {
+        const wait = untilNextBeatGroup(eighths, group, { tempo: 60, swing })
+        times.push(Number(((times.at(-1) ?? 0) + wait).toFixed(4)))
+      }
+      return times
+    }
+    expect(due(false)).toEqual([0, 0.5, 1, 1.5])
+    expect(due(true)).toEqual([0, 0.6667, 1, 1.6667])
+  })
 })
 
 describe('a tempo', () => {

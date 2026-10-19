@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Performance } from '@/shared/lib/arrangement'
+import { arrange, parseFigure, type Performance } from '@/shared/lib/arrangement'
 import { createFakeAudio, type FakeAudio } from '@/shared/api/audio'
 import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
-import { midi } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ONE_BAR, TWO_BARS } from './testing/performances'
@@ -218,6 +218,34 @@ describe('usePractice: Wait mode', () => {
     wait(1000)
     expect(result.current.state.beatGroup).toBe(2)
     expect(audio.played.map((play) => play.at)).toEqual([0.1, 0.1, 1.1])
+  })
+
+  it('keeps a run of rests on the swung grid the music is heard on', () => {
+    const eighths = arrange(
+      {
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        sections: [{ lines: [[{ chords: [{ ...parseChordSymbol('C'), beats: 4 }], beats: 4 }]] }],
+      },
+      {
+        tonic: note('C'),
+        pattern: {
+          id: 'eighths',
+          rh: { kind: 'events', events: parseFigure('0/2 C,2/2 C,4/2 C,6/2 C') },
+          lh: { kind: 'events', events: parseFigure('0/16 L1') },
+        },
+      },
+    )
+    const { result } = renderPractice(eighths, { mode: 'wait', hands: 'lh', swing: true })
+    act(() => result.current.play())
+    act(() => keyboard.press(midi(48)))
+    wait(150)
+    wait(334)
+    // The audio clock stands still here: the wait runs from the start of the chain.
+    wait(1000)
+    expect(result.current.state.beatGroup).toBe(3)
+    // The off-beat 8th (beat group 1) is short and the 8th on the beat long: 1/3 then 2/3 of a beat.
+    expect(audio.played.map((play) => Number(play.at.toFixed(4)))).toEqual([0.1, 0.1, 0.4333, 1.1])
   })
 
   it('sounds nothing where the learner moves while it waits: the learner plays it', () => {
