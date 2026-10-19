@@ -8,7 +8,7 @@ import { chordPositions } from '../model/chord-positions'
 const NUMBER_INSET_PX = 4
 
 /**
- * Over the staff: each bar's number, a section's name at its first bar, and each chord symbol at its
+ * Over the staff: each bar's number, a section's name at its first bar (cut short to the bar), and each chord symbol at its
  * onset (spec §2.6), with Chord positions how the right hand plays it. The bars' buttons carry the
  * same words for a screen reader.
  */
@@ -36,8 +36,12 @@ export const SheetLabels = memo(function SheetLabels({
         return (
           <span
             key={index}
-            className="absolute top-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums"
-            style={{ left: measure.x + NUMBER_INSET_PX }}
+            className="absolute top-0 truncate text-xs text-muted-foreground tabular-nums"
+            // Kept to its own bar, clear of the next bar's number: a long section name is cut short.
+            style={{
+              left: measure.x + NUMBER_INSET_PX,
+              maxWidth: Math.max(0, measure.width - 2 * NUMBER_INSET_PX),
+            }}
           >
             {index + 1}
             {starts && headings[section] ? ` · ${headings[section]}` : null}
