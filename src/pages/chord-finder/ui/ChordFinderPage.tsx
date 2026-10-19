@@ -116,6 +116,9 @@ export function ChordFinderPage() {
   const playback = usePlayback<'chord'>()
   const { keys, finding } = finder
   const reading = finding.kind === 'chord' ? readingAt(finding.readings, finder.reading) : undefined
+  // Chords shows a chord over its bass only to its 3rd inversion and in four notes or fewer: a chord it
+  // would show over another bass (C9/E as C9) is not offered.
+  const opensInChords = reading !== undefined && (!reading.bass || reading.inversion !== undefined)
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
   const { folded } = useFoldKeys()
@@ -166,7 +169,7 @@ export function ChordFinderPage() {
       <FloatingActions>
         {reading || finder.canClear || finder.canForget ? (
           <SpeedDial>
-            {reading ? (
+            {reading && opensInChords ? (
               <SpeedDialAction
                 label={t('practice:chordFinder.open')}
                 icon={Music2}

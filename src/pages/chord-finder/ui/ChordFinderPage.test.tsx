@@ -297,6 +297,23 @@ describe('Practice → Chord finder', () => {
     expect(screen.getByRole('region', { name: 'In these keys' })).toBeInTheDocument()
   })
 
+  it('opens an inversion in Chords over its bass, and never a chord Chords cannot show over it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=52-60-67')
+    await user.click(await screen.findByRole('button', { name: 'More actions' }))
+    expect(screen.getByRole('link', { name: 'Open in Chords' }).getAttribute('href')).toMatch(
+      /inversion=1/,
+    )
+  })
+
+  it('offers no way into Chords for a chord of five notes over a bass it cannot keep', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=40-58-62-67-72')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9/E' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
+    expect(screen.queryByRole('link', { name: 'Open in Chords' })).not.toBeInTheDocument()
+  })
+
   it('opens from Practice', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
