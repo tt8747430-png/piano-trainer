@@ -23,7 +23,8 @@ function leadInto(chord: Numeral, lead: LeadIn, key: Key): Numeral[] {
 /**
  * A progression with each chord led into, made a key for a moment: after its own V, or its ii–V
  * (`leadInto`). A chord held from the one before and a chord already applied (`V/vi`) take none, and a
- * lead-in starts after a chord it would repeat: a chord after its own dominant is not led again.
+ * lead-in starts after a chord it would repeat: a chord after the chord that sounds as its V is not
+ * led again, and after the one that sounds as its ii takes its V alone.
  */
 export function withLeadIns(numerals: readonly Numeral[], lead: LeadIn, key: Key): Numeral[] {
   // A chord as it sounds in the key: its root, and whether its 3rd is minor.
@@ -35,9 +36,10 @@ export function withLeadIns(numerals: readonly Numeral[], lead: LeadIn, key: Key
     const held = before !== undefined && numeralText(before) === numeralText(chord)
     if (!chord.of && !held) {
       const leads = leadInto(chord, lead, key)
-      const [first, ...rest] = leads
       const last = played.at(-1)
-      played.push(...(first && last && sound(last) === sound(first) ? rest : leads))
+      // After the lead-in's V nothing more; after its ii, its V alone.
+      const from = last ? leads.findLastIndex((leading) => sound(leading) === sound(last)) : -1
+      played.push(...leads.slice(from + 1))
     }
     played.push(chord)
   })

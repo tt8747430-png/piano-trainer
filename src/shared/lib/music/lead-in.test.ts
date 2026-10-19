@@ -42,9 +42,9 @@ describe('withLeadIns', () => {
     ])
   })
 
-  it('leads round the circle in the key, each chord after its own ii–V', () => {
+  it('leads round the circle in the key, each chord after its own ii–V, IV straight after I, its V', () => {
     expect(led('I IV vii° iii vi ii V', 'ii-v')).toBe(
-      'ii V I ii/IV V/IV IV ii°/vii V/vii vii° ii°/iii V/iii iii ii°/vi V/vi vi ii°/ii V/ii ii ii/V V/V V',
+      'ii V I IV ii°/vii V/vii vii° ii°/iii V/iii iii ii°/vi V/vi vi ii°/ii V/ii ii ii/V V/V V',
     )
   })
 
@@ -65,6 +65,13 @@ describe('withLeadIns', () => {
     expect(led('ii V I', 'v')).toBe('V/ii ii V/V V I')
     expect(led('I IV', 'v')).toBe('V I IV')
     expect(led('I7 IV7', 'v')).toBe('V I7 IV7')
+  })
+
+  it('leads by the V alone after the chord that sounds as the ii, and not at all after its V', () => {
+    expect(led('ii V I', 'ii-v')).toBe('ii°/ii V/ii ii ii/V V/V V I')
+    const A_MINOR: Key = { tonic: note('A'), minor: true }
+    expect(chords('i iv V i', 'ii-v', A_MINOR, 'sevenths').slice(-2)).toEqual(['E7', 'Am7'])
+    expect(led('vi ii I', 'ii-v')).toBe('ii°/vi V/vi vi ii°/ii V/ii ii V I')
   })
 
   it('leaves a chord held and a chord already applied as they are', () => {
