@@ -170,10 +170,16 @@ export function createWebMidi(
     noteOutput() {
       const outputs = connectedOutputs()
       // The chosen keyboard's speaker by its name; where its speaker goes by another name (Windows
-      // names a keyboard's ports apart), the one speaker there is.
+      // names a keyboard's ports apart), the one speaker there is, but only while the keyboard
+      // chosen is plugged in: away, that speaker is another keyboard's.
+      const chosenHere =
+        granted !== null &&
+        [...granted.inputs.values()].some(
+          (each) => each.state === 'connected' && nameOf(each) === choice.device,
+        )
       const output =
         outputs.find((each) => choice.device === null || nameOf(each) === choice.device) ??
-        (outputs.length === 1 ? outputs[0] : undefined)
+        (chosenHere && outputs.length === 1 ? outputs[0] : undefined)
       return output ? speakerOf(output) : null
     },
     onNote: notes.add,

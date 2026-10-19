@@ -402,6 +402,17 @@ describe('the keyboards’ speakers', () => {
     expect(speaker.sent).toHaveLength(1)
   })
 
+  it('sends nothing to another keyboard’s speaker while the keyboard chosen is away', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const pads = new FakeOutput('o1', 'Pads')
+    const access = new FakeAccess(piano, pads)
+    const midi = withAccess(access)
+    await midi.connect()
+    midi.configure({ ...ANY, device: 'Piano' })
+    access.unplug(piano)
+    expect(midi.noteOutput()).toBeNull()
+  })
+
   it('names two keyboards of one name once', async () => {
     const midi = withAccess(
       new FakeAccess(new FakeInput('a', 'Piano'), new FakeInput('b', 'Piano')),
