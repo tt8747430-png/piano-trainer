@@ -1,16 +1,15 @@
-import { Link } from '@tanstack/react-router'
 import { BookOpenText, Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
-import { OPEN_PLAINLY } from '@/shared/lib'
 import { ButtonLink, FloatingActions } from '@/shared/ui'
 import { continueStep, useStepTitle } from '@/widgets/curriculum'
 
 /**
  * What to do next (ADR 0053), floating in the thumb's reach over Learn: one honey button saying
  * Continue over the step it opens: the next lesson of the journey or of the course last worked in,
- * read; its next guided song, in the Player. It always says so in words, whatever the other floating
+ * read; its next guided song, on its page, where it is played and marked learned. It always says so in words, whatever the other floating
  * actions do: a picture alone would not say where it leads. Nothing floats once everything is learned.
  */
 export function ContinueAction() {
@@ -31,7 +30,7 @@ export function ContinueAction() {
         className="h-14 max-w-[min(20rem,calc(100vw-2*var(--gutter)))] gap-3 rounded-full pr-6 pl-2 shadow-lg shadow-foreground/15"
         render={
           step.kind === 'piece' ? (
-            <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
+            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
           ) : (
             <StepLink step={step} />
           )

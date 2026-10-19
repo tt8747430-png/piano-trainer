@@ -2,10 +2,11 @@ import { Link, useParams } from '@tanstack/react-router'
 import { ArrowRight, Check, Play, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
+import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, OPEN_PLAINLY } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import { BackButton, ButtonLink, PAINT, ScreenHeader } from '@/shared/ui'
 import {
   CourseFacts,
@@ -44,7 +45,8 @@ function CourseAction({ course }: { course: Course }) {
       className="w-full sm:w-auto sm:min-w-48"
       render={
         step.kind === 'piece' ? (
-          <Link to="/play/$pieceId" params={{ pieceId: step.pieceId }} state={OPEN_PLAINLY} />
+          // A guided song's page, where it is played and marked learned.
+          <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
         ) : (
           <Link
             to="/courses/$courseId/$lessonId"

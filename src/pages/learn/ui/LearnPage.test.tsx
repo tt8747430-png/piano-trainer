@@ -31,6 +31,24 @@ describe('Learn', () => {
     ).toHaveAttribute('href', `/courses/gorshkov/${second?.id}`)
   })
 
+  it('continues onto a guided song’s page, where it is marked learned', async () => {
+    const { progressStore } = await renderApp('/')
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    const course = courseById('introduction-to-the-piano')!
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries(
+          course.lessons.map((lesson) => [`course:${course.id}/${lesson.id}`, at]),
+        ),
+      }),
+    )
+    const song = course.songs[0]
+    expect(await screen.findByRole('link', { name: /^Continue: / })).toHaveAttribute(
+      'href',
+      `/songs/${song}`,
+    )
+  })
+
   it('lists the pieces practised last, latest first, and none before the first', async () => {
     const { progressStore } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })

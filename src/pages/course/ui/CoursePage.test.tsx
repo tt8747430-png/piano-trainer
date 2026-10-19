@@ -60,7 +60,7 @@ describe('A course', () => {
     )
     expect(screen.getByRole('link', { name: /^Continue/ })).toHaveAttribute(
       'href',
-      `/play/${gorshkov.songs[0]}`,
+      `/songs/${gorshkov.songs[0]}`,
     )
     act(() =>
       progressStore.setState({
