@@ -1,4 +1,11 @@
-import { useCallback, useRef, type PointerEvent, type RefObject } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  type PointerEvent,
+  type RefObject,
+} from 'react'
 import { keyAt, PIANO_LAYOUT, usePresses, type Swipe } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 
@@ -11,7 +18,7 @@ const NO_POINTER = -1
  * pointer enters plays, once per entry, each pointer on its own. A key is down at least the
  * shortest press, so a tap as light as a trackpad's shows. No capture is needed: a touch or pen is
  * captured by the key it went down on, so its moves and its lift reach the group; a mouse released
- * outside is forgotten at its next move. A pointer's own click never plays again; any other click
+ * outside is forgotten at its next move, and every pointer as the window loses focus or hides. A pointer's own click never plays again; any other click
  * (Enter, Space, a screen reader) plays once. A key a pointer leaves or lifts from is let go
  * (`onRelease`), before the next it enters plays; a click no pointer made plays, then lets go.
  */
@@ -55,6 +62,23 @@ export function useKeyPointers({
     release(pointerId)
     if (left != null) onRelease(left)
   }
+
+  // The window losing focus or the page hidden takes the pointers' lifts away: let go of every key
+  // they hold, or a mouse held down would sound on.
+  const forgetAll = useEffectEvent(() => {
+    for (const pointerId of [...pointers.current.keys()]) forget(pointerId)
+  })
+  useEffect(() => {
+    const hidden = () => {
+      if (document.visibilityState === 'hidden') forgetAll()
+    }
+    window.addEventListener('blur', forgetAll)
+    document.addEventListener('visibilitychange', hidden)
+    return () => {
+      window.removeEventListener('blur', forgetAll)
+      document.removeEventListener('visibilitychange', hidden)
+    }
+  }, [])
 
   const pointerDown = useCallback(
     (key: Midi, event: PointerEvent<HTMLElement>) => {

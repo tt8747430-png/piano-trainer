@@ -225,6 +225,27 @@ describe('letting a key go', () => {
     expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
   })
 
+  it.each([
+    ['the window loses focus', () => fireEvent.blur(window)],
+    [
+      'the page is hidden',
+      () => {
+        vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+        fireEvent(document, new Event('visibilitychange'))
+      },
+    ],
+  ])('lets go of every key a pointer holds as %s', (_, away) => {
+    const { onKeyRelease, key } = setUp()
+    const mouse = { pointerId: 1, pointerType: 'mouse', button: 0, buttons: 1, clientX: x(23) }
+    fireEvent.pointerDown(key('C4'), mouse)
+    fireEvent.pointerDown(key('E4'), touch(2, x(25)))
+    away()
+    expect(onKeyRelease.mock.calls).toEqual([[60], [64]])
+    fireEvent.pointerUp(key('C4'), mouse)
+    expect(onKeyRelease).toHaveBeenCalledTimes(2)
+    vi.restoreAllMocks()
+  })
+
   it('plays then lets go a key pressed with no pointer (Enter, a screen reader)', async () => {
     const user = userEvent.setup()
     const { onKeyPress, onKeyRelease, key } = setUp()
