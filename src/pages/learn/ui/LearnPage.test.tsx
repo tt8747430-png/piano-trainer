@@ -95,6 +95,18 @@ describe('Learn', () => {
       )
     })
 
+    it('say a learned node is learned', async () => {
+      const { progressStore } = await renderApp('/')
+      await screen.findByRole('heading', { level: 2, name: 'Foundations' })
+      act(() => progressStore.setState({ learned: { 'lesson:finding-home': at } }))
+      expect(
+        screen.getByRole('link', { name: /^Finding your way on the keys.*, learned$/ }),
+      ).toHaveAttribute('href', '/lessons/finding-home')
+      expect(
+        screen.getByRole('link', { name: /^The staff and the treble clef/ }),
+      ).not.toHaveAccessibleName(/learned/)
+    })
+
     it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
       const user = userEvent.setup()
       const { router, settingsStore } = await renderApp('/')

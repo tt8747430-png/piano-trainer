@@ -51,6 +51,8 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                 <span className="min-w-0 flex-1 font-semibold text-pretty">
                   <span className="sr-only">{t('lessonNumber', { n: i + 1 })}: </span>
                   {localText(lesson.title, locale)}
+                  {/* The check says it to the eye alone. */}
+                  {done ? <span className="sr-only">, {t('learned')}</span> : null}
                 </span>
                 <ChevronRight
                   aria-hidden

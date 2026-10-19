@@ -49,8 +49,12 @@ describe('A course', () => {
       'href',
       `/courses/gorshkov/${second?.id}`,
     )
-    const [row] = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')
+    const [row, secondRow] = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole(
+      'link',
+    )
     expect(row).not.toHaveAttribute('aria-current')
+    expect(row).toHaveAccessibleName(/^Lesson 1:.*, learned$/)
+    expect(secondRow).not.toHaveAccessibleName(/learned/)
     act(() =>
       progressStore.setState({
         learned: Object.fromEntries(

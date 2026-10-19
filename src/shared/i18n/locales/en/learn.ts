@@ -24,6 +24,8 @@ export const learn = {
   },
   progress: '{{learned}} of {{total}} learned',
   lessonNumber: 'Lesson {{n}}',
+  // Said after a learned lesson's or check's name, whose check mark is for the eye.
+  learned: 'learned',
   current: 'You are here',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
