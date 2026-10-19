@@ -43,20 +43,10 @@ export {
   createPatternsStore,
   type PatternsStore,
 } from './model/store'
-export {
-  PatternsStoreProvider,
-  usePatternBook,
-  usePatterns,
-  usePatternsStoreApi,
-} from './model/context'
-export {
-  ACCOMPANIMENT_PARTS,
-  isAccompanimentPart,
-  partOfShelf,
-  partShelves,
-  pickerShelves,
-  type AccompanimentPart,
-} from './model/shelves'
+export { PatternsStoreProvider, usePatterns, usePatternsStoreApi } from './model/context'
+export { usePatternBook } from './model/use-pattern-book'
+export { ACCOMPANIMENT_PARTS, isAccompanimentPart, type AccompanimentPart } from './model/parts'
+export { partOfShelf, partShelves, pickerShelves } from './model/shelves'
 export { followsInversion } from './model/plays-chord'
 export {
   selectFavourites,
@@ -71,7 +61,8 @@ export {
   RIGHT_FIGURE_GROUPS,
   RIGHT_FIGURES,
 } from './content/figures'
-export { METHOD_PATTERNS, METHODS } from './content/methods'
+export { METHODS } from './content/methods'
+export { METHOD_PATTERNS } from './model/method-patterns'
 export { useFullShelfName } from './ui/use-full-shelf-name'
 export { usePartName } from './ui/use-part-name'
 export { useShelfName } from './ui/use-shelf-name'

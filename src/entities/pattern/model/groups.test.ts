@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { patternsIn } from './selectors'
+import { patternsIn } from './groups'
 
 describe('patternsIn', () => {
   it('lists a group’s patterns in catalog order', () => {

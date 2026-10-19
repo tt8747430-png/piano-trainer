@@ -4,7 +4,7 @@ import { note } from '@/shared/lib/music'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { BUILT_IN_PATTERNS } from '../model/book'
 import { patternNeed } from '../model/fit'
-import { patternsIn } from '../model/selectors'
+import { patternsIn } from '../model/groups'
 import {
   isLeftFigureId,
   isMethodCode,
@@ -15,7 +15,8 @@ import {
   PATTERN_IDS,
 } from '../model/types'
 import { LEFT_FIGURE_GROUPS, LEFT_FIGURES, RIGHT_FIGURE_GROUPS, RIGHT_FIGURES } from './figures'
-import { METHOD_PATTERNS, METHODS } from './methods'
+import { METHOD_PATTERNS } from '../model/method-patterns'
+import { METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
 
 describe('the pattern catalog', () => {
