@@ -1,6 +1,6 @@
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, followsInversion } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
-import { hasMethodCodes, PIECES, pieceById, pieceKey } from '@/entities/piece'
+import { hasMethodCodes, PIECES, pieceById, pieceFit, pieceKey } from '@/entities/piece'
 import { note } from '@/shared/lib/music'
 import { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
 
@@ -11,13 +11,17 @@ const piece = (id: string) => {
 }
 const bz5 = piece('bz5')
 
-/** The right hand's keys under a pattern with the first chord in an inversion. */
+/** The right hand's keys under a pattern with every chord in an inversion. */
 const rightHandIn = (
   played: ReturnType<typeof piece>,
   pattern: ReturnType<typeof ownChoice>['pattern'],
   inversion: 0 | 1,
 ) =>
-  arrangePiece(played, { ...ownChoice(played), pattern, inversion }, BUILT_IN_PATTERNS)
+  arrangePiece(
+    played,
+    { ...ownChoice(played), pattern, inversion, nearest: false },
+    BUILT_IN_PATTERNS,
+  )
     .notes.filter((n) => n.hand === 'rh')
     .map((n) => n.midi)
 
@@ -60,6 +64,22 @@ describe('arrangePiece', () => {
   it('moves a tune’s figuration between a line’s ends with the inversion chosen', () => {
     const lamb = piece('mary-lamb')
     expect(rightHandIn(lamb, 'r6', 1)).not.toEqual(rightHandIn(lamb, 'r6', 0))
+  })
+
+  it('From the chart, follows an inversion exactly where a pattern its chart plays does', () => {
+    const follows = (id: string) =>
+      followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: null }, pieceFit(piece(id)).chart)
+    const moves = (id: string) =>
+      JSON.stringify(rightHandIn(piece(id), 'chart', 1)) !==
+      JSON.stringify(rightHandIn(piece(id), 'chart', 0))
+    for (const id of ['zemlya', 'legenda', 'nuzhdayus', 'letom']) {
+      expect(follows(id), id).toBe(false)
+      expect(moves(id), id).toBe(false)
+    }
+    for (const id of ['buri', 'milost']) {
+      expect(follows(id), id).toBe(true)
+      expect(moves(id), id).toBe(true)
+    }
   })
 
   it('falls back to r4 for a melody pattern on a piece without a melody', () => {

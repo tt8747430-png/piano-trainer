@@ -13,8 +13,8 @@ const NOTES = 4
  */
 export function InversionField() {
   const { t } = useTranslation('player')
-  const { figures, onFigures } = useSetup()
-  const follows = followsInversion(usePatternBook(), figures)
+  const { figures, fit, onFigures } = useSetup()
+  const follows = followsInversion(usePatternBook(), figures, fit.chart)
   return (
     <div className="flex flex-col gap-2">
       <PositionField

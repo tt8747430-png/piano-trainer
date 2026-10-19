@@ -47,6 +47,7 @@ describe('pieceFit', () => {
   it('gives a pattern the piece’s methods, tune, key and meter', () => {
     expect(pieceFit(testSong(['C:t1 F'], { melody: 'C4/4' }))).toEqual({
       methodCodes: true,
+      chart: ['t1', 'r4'],
       melody: true,
       key: true,
       simpleTime: true,

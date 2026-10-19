@@ -4,7 +4,14 @@ import {
   type PatternBook,
   type PatternChoice,
 } from '@/entities/pattern'
-import { chartOf, hasMethodCodes, melodyOf, pieceKey, type Piece } from '@/entities/piece'
+import {
+  chartOf,
+  hasMethodCodes,
+  melodyOf,
+  patternsOfPiece,
+  pieceKey,
+  type Piece,
+} from '@/entities/piece'
 import { arrange, type ArrangeOptions, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
 
@@ -37,13 +44,17 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
-    ...accompanimentOptions(book, {
-      pattern: fromChart ? piece.pattern : choice.pattern,
-      rh: choice.rh,
-      lh: choice.lh,
-      inversion: choice.inversion,
-      nearest: choice.nearest,
-    }),
+    ...accompanimentOptions(
+      book,
+      {
+        pattern: fromChart ? piece.pattern : choice.pattern,
+        rh: choice.rh,
+        lh: choice.lh,
+        inversion: choice.inversion,
+        nearest: choice.nearest,
+      },
+      fromChart ? [...patternsOfPiece(piece)] : undefined,
+    ),
     ...(fromChart ? { methods: METHOD_PATTERNS } : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),
   }

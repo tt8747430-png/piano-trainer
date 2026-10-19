@@ -93,6 +93,15 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
+  it('fades the position From the chart only where no pattern the chart plays follows it', async () => {
+    const fromChart = { pattern: 'chart' } as const
+    const { unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
+    expect(screen.getByText('This pattern plays its own shapes.')).toBeInTheDocument()
+    unmount()
+    await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
+    expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
+  })
+
   it('turns Nearest back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()

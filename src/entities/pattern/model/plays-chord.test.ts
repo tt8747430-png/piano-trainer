@@ -22,12 +22,18 @@ describe('playsChord', () => {
 })
 
 describe('followsInversion', () => {
-  it('follows the right hand’s own figure first, then the pattern’s; the chart’s plan may', () => {
+  it('follows From the chart where a pattern the chart plays plays the chord', () => {
+    const fromChart = { pattern: 'chart', rh: null } as const
+    expect(followsInversion(BUILT_IN_PATTERNS, fromChart, ['flow', 'block'])).toBe(true)
+    expect(followsInversion(BUILT_IN_PATTERNS, fromChart, ['flow'])).toBe(false)
+  })
+
+  it('follows the right hand’s own figure first, then the pattern’s', () => {
     expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'block', rh: null })).toBe(true)
     expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'r6', rh: null })).toBe(true)
     expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'flow', rh: null })).toBe(false)
     expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'flow', rh: 'b1' })).toBe(true)
-    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: null })).toBe(true)
+    expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: 'b1' })).toBe(true)
     expect(followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: 'inv' })).toBe(false)
   })
 })

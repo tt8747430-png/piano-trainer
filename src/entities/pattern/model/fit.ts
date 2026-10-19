@@ -10,10 +10,13 @@ export type FigureNeed = (typeof FIGURE_NEEDS)[number]
 
 /**
  * What the music the Player plays has for its patterns and figures: a chart that names its own
- * methods (From the chart), a tune, a key, and a beat in two (not 6/8 or 12/8).
+ * methods (From the chart) and the patterns it plays then, a tune, a key, and a beat in two (not 6/8
+ * or 12/8).
  */
 export interface PatternFit extends Readonly<Record<FigureNeed, boolean>> {
   readonly methodCodes: boolean
+  /** From the chart: each method's pattern, and the music's own under a chord that names none. */
+  readonly chart?: readonly PatternRef[]
 }
 
 const NEEDS: Readonly<Record<FigureNeed, (figure: Figure) => boolean>> = {

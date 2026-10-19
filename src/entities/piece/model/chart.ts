@@ -32,9 +32,10 @@ export const barTicksOf = (piece: ChartPiece): Tick[] =>
 export const hasMethodCodes = (piece: Piece): boolean =>
   !isDegreePiece(piece) && chordsOf(parseChart(piece)).some((chord) => chord.method)
 
-/** What a piece has for a pattern: its chart's methods where it names them, its tune where it has one, a key, and its meter. */
+/** What a piece has for a pattern: its chart's methods where it names them and the patterns they play, its tune where it has one, a key, and its meter. */
 export const pieceFit = (piece: Piece): PatternFit => ({
   methodCodes: hasMethodCodes(piece),
+  ...(hasMethodCodes(piece) ? { chart: [...patternsOfPiece(piece)] } : {}),
   melody: melodyOf(piece) !== undefined,
   key: true,
   simpleTime: !isCompound(piece.meter),

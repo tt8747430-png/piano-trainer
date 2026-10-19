@@ -29,11 +29,13 @@ export interface AccompanimentChoice extends Omit<Accompaniment, 'pattern'> {
 
 /**
  * An accompaniment as `arrange` takes it: the book's pattern, each hand's own figure laid over it.
- * Its pattern was read against the book (`playablePattern`).
+ * Its pattern was read against the book (`playablePattern`). From the chart, `chart` holds the
+ * patterns the chart plays, `pattern` the one under a chord that names no method.
  */
 export function accompanimentOptions(
   book: PatternBook,
   { pattern, rh, lh, inversion, nearest }: Accompaniment,
+  chart?: readonly PatternRef[],
 ): Pick<ArrangeOptions, 'pattern' | 'rh' | 'lh' | 'inversion' | 'nearest'> {
   return {
     pattern: book.require(pattern).pattern,
@@ -41,6 +43,8 @@ export function accompanimentOptions(
     ...(lh ? { lh: LEFT_FIGURES[lh].figure } : {}),
     // A position only where the pattern follows it: one that plays its own shapes, where the
     // Setup's position is faded, plays as though none were chosen.
-    ...(followsInversion(book, { pattern, rh }) ? { inversion: inversion ?? 0, nearest } : {}),
+    ...(followsInversion(book, { pattern: chart ? 'chart' : pattern, rh }, chart)
+      ? { inversion: inversion ?? 0, nearest }
+      : {}),
   }
 }
