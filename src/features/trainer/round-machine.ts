@@ -16,7 +16,7 @@ import type { IntervalWay } from '@/shared/lib/schedule'
 
 /** A chord to build or name: its symbol (over its bass in an inversion) and its tones from the root. */
 export interface ChordQuestion {
-  /** The skill an answer is evidence on; none for a chord a level names by its place in a key. */
+  /** The skill an answer is evidence on: its quality's, whether a level or a skill asks the chord. */
   readonly skill?: SkillId
   readonly root: SpelledNote
   readonly quality: ChordQuality

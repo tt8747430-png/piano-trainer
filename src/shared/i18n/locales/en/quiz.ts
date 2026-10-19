@@ -26,7 +26,7 @@ export const quiz = {
     'progressions-by-ear': 'Hear a progression, name it',
     'reading-notes': 'Read a note on the staff, play it',
     'key-signatures': 'Name the key a signature writes',
-    'key-degrees': 'Find a degree of a key',
+    'key-degrees': 'Play a key’s degrees, I to VII',
     'chord-role': 'Say what a chord does in its key',
   },
   prompt: {

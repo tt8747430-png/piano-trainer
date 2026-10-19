@@ -50,12 +50,6 @@ export const NO_ANSWERS: readonly Answer[] = []
 export const ratingOf = (answers: ProgressState['answers'], skill: SkillId): Rating =>
   rate(answers[skill] ?? NO_ANSWERS)
 
-/** The skills a check should ask about: gaps and unknowns, in the order given. */
-export const skillsToCheck = (
-  skills: readonly SkillId[],
-  answers: ProgressState['answers'],
-): SkillId[] => skills.filter((skill) => ratingOf(answers, skill) !== 'known')
-
 export const knownCount = (skills: readonly SkillId[], answers: ProgressState['answers']): number =>
   skills.filter((skill) => ratingOf(answers, skill) === 'known').length
 

@@ -62,8 +62,6 @@ export interface Trainer {
   readonly id: TrainerId
   readonly levels: readonly string[]
   readonly custom: readonly CustomField[]
-  /** Its answers are evidence on a skill (ADR 0006). */
-  readonly rates: boolean
   asks(level: string, view: TrainerView, gaps: readonly SkillId[]): Asks
 }
 
@@ -109,7 +107,6 @@ function chordTrainer(id: 'build-chord' | 'name-chord'): Trainer {
     id,
     levels: CHORD_LEVELS,
     custom: ['chordTypes'],
-    rates: true,
     asks: (level, view) =>
       level === CUSTOM
         ? { kind: 'skills', chords: id, skills: typeSkills(view) }
@@ -142,7 +139,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'build-scale',
     levels: SCALE_LEVELS,
     custom: ['scales'],
-    rates: true,
     asks: (level, view) => ({
       kind: 'skills',
       chords: 'build-chord',
@@ -156,7 +152,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'gaps',
     levels: [],
     custom: [],
-    rates: true,
     asks: (_level, _view, gaps) => ({
       kind: 'skills',
       chords: 'build-chord',
@@ -168,7 +163,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'intervals-by-ear',
     levels: INTERVAL_LEVELS,
     custom: ['intervals', 'ways'],
-    rates: false,
     asks: (level, view) =>
       level === CUSTOM
         ? {
@@ -185,7 +179,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'chords-by-ear',
     levels: QUALITY_LEVELS,
     custom: ['qualities', 'arpeggio'],
-    rates: false,
     asks: (level, view) =>
       level === CUSTOM
         ? {
@@ -202,7 +195,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'scales-by-ear',
     levels: SCALE_EAR_LEVELS,
     custom: ['kinds', 'descending'],
-    rates: false,
     asks: (level, view) =>
       level === CUSTOM
         ? {
@@ -216,7 +208,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'reading-notes',
     levels: NOTE_LEVELS,
     custom: ['range', 'accidentals'],
-    rates: false,
     asks: (level, view) => ({
       kind: 'notes',
       notes: level === CUSTOM ? customNotes(view) : noteLevel(level as NoteLevel),
@@ -226,21 +217,18 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'key-signatures',
     levels: SIGNATURE_LEVELS,
     custom: [],
-    rates: false,
     asks: (level) => ({ kind: 'signatures', keys: SIGNATURE_LEVEL[level as SignatureLevel] }),
   },
   'key-degrees': {
     id: 'key-degrees',
     levels: DEGREE_LEVELS,
     custom: [],
-    rates: false,
     asks: (level) => ({ kind: 'degrees', keys: DEGREE_LEVEL[level as DegreeLevel] }),
   },
   'chord-role': {
     id: 'chord-role',
     levels: ROLE_LEVELS,
     custom: [],
-    rates: false,
     asks: (level) => ({ kind: 'roles', ...ROLE_LEVEL[level as RoleLevel] }),
   },
   // A progression is no skill (UBIQUITOUS_LANGUAGE): its answers rate nothing.
@@ -248,7 +236,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'progressions-by-ear',
     levels: PROGRESSION_LEVELS,
     custom: [],
-    rates: false,
     asks: (level) => ({
       kind: 'progressions',
       ...PROGRESSION_LEVEL[level as ProgressionLevel],
