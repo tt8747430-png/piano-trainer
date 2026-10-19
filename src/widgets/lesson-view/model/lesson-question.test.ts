@@ -194,4 +194,14 @@ describe('questionKeys', () => {
       64, 67, 71,
     ])
   })
+
+  it('judges an answer in order key by key, so a note in the wrong place is marked wrong', () => {
+    const inversion = questionAnswer({ notes: ['E', 'G', 'C'], rising: true })
+    const wrong = questionKeys({ id: 'q', chosen: keys(60, 64, 67), stage: 'wrong' }, inversion)
+    expect(wrong.wrong).toEqual(new Set([60]))
+    expect([...wrong.marks.keys()]).toEqual([64, 67])
+    const octave = questionKeys({ id: 'q', chosen: keys(52, 55, 60), stage: 'right' }, inversion)
+    expect(octave.wrong).toEqual(new Set())
+    expect(octave.marks.get(midi(60))).toEqual({ tone: 'scale', label: 'C' })
+  })
 })

@@ -154,16 +154,44 @@ export interface QuestionKeys {
 }
 
 /**
- * Choosing: the chosen keys. Judged: the verdict on them, a wrong key marked and the missing ones
- * left for the learner to find. The answer shown: the answer.
+ * An answer in order's keys judged by place: the chosen keys set on the answer's from its lowest note,
+ * moved by the octaves between them, so a key the answer has elsewhere is wrong where it is.
  */
-export function questionKeys(state: NonNullable<QuestionState>, answer: ShownKeys): QuestionKeys {
+function placedKeys(
+  chosen: readonly Midi[],
+  answer: QuestionAnswer,
+): Pick<QuestionKeys, 'marks' | 'wrong'> {
+  const [first] = lowFirst(chosen)
+  const [from] = lowFirst(answer.keys)
+  const octaves = first === undefined || from === undefined ? 0 : Math.round((first - from) / 12)
+  const byKey: ReadonlyMap<number, KeyMark> = answer.marks
+  const marks = new Map<Midi, KeyMark>()
+  const wrong = new Set<Midi>()
+  for (const key of chosen) {
+    const mark = byKey.get(key - octaves * 12)
+    if (mark) marks.set(key, mark)
+    else wrong.add(key)
+  }
+  return { marks, wrong }
+}
+
+/**
+ * Choosing: the chosen keys. Judged: the verdict on them, a wrong key marked and the missing ones
+ * left for the learner to find; an answer in order's keys each judged by its place. The answer
+ * shown: the answer.
+ */
+export function questionKeys(
+  state: NonNullable<QuestionState>,
+  answer: QuestionAnswer,
+): QuestionKeys {
   switch (state.stage) {
     case 'choosing':
       return { keys: state.chosen, marks: new Map(), selected: new Set(state.chosen) }
     case 'right':
     case 'wrong': {
-      const { marks, wrong } = checkedKeys(state.chosen, answer)
+      const { marks, wrong } = answer.inOrder
+        ? placedKeys(state.chosen, answer)
+        : checkedKeys(state.chosen, answer)
       return { keys: state.chosen, marks, wrong }
     }
     case 'answer':
