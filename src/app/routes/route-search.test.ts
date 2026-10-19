@@ -2,6 +2,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
 import { testContext } from '@/app/testing/test-context'
+import { keyParam, note } from '@/shared/lib/music'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
@@ -265,6 +266,39 @@ describe('search params', () => {
       nearest: false,
     })
     expect(await searchAt('/practice/progressions?inversion=7')).toMatchObject({ inversion: 0 })
+  })
+
+  it('open a minor key with no line on the default progression’s minor line', async () => {
+    expect(await searchAt('/practice/progressions?key=F%23m')).toMatchObject({
+      key: 'F#m',
+      p: 'i-VI-III-VII',
+    })
+    expect(await searchAt('/practice/progressions?key=F%23m&p=I-V-vi-IV')).toMatchObject({
+      p: 'I-V-vi-IV',
+    })
+    expect(await searchAt('/practice/progressions?key=F%23m&p=Q')).toMatchObject({
+      p: 'i-VI-III-VII',
+    })
+  })
+
+  it('leave out of the URL only the line its key opens on', async () => {
+    const F_SHARP_MINOR = keyParam({ tonic: note('F', 1), minor: true })
+    const router = createAppRouter({
+      history: createMemoryHistory({ initialEntries: ['/practice/progressions'] }),
+      ...testContext(),
+    })
+    await router.load()
+    await router.navigate({
+      to: '/practice/progressions',
+      search: { ...PROGRESSIONS_DEFAULTS, key: F_SHARP_MINOR, p: 'I-V-vi-IV' },
+    })
+    expect(router.state.location.search).toMatchObject({ key: 'F#m', p: 'I-V-vi-IV' })
+    expect(router.state.location.searchStr).toContain('p=')
+    await router.navigate({
+      to: '/practice/progressions',
+      search: { ...PROGRESSIONS_DEFAULTS, key: F_SHARP_MINOR, p: 'i-VI-III-VII' },
+    })
+    expect(router.state.location.searchStr).not.toContain('p=')
   })
 
   it('read the pair Between looks at and In the key only, and the Key view’s melody note', async () => {

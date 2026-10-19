@@ -1,3 +1,4 @@
+import { type SearchMiddleware, stripSearchParams } from '@tanstack/react-router'
 import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
 import {
@@ -21,8 +22,10 @@ import {
   fitParts,
   INVERSIONS,
   isInversion,
+  keyFromParam,
   keyMode,
   keyParam,
+  type KeyParam,
   lastInversion,
   note,
   noteParam,
@@ -40,6 +43,7 @@ import type { ProgressionsView } from '@/widgets/progression-explorer'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
 import {
   C_MAJOR_PARAM,
+  type Input,
   isChordSize,
   isHands,
   isLeadIn,
@@ -183,11 +187,15 @@ export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   inversion: 0,
   nearest: true,
 }
+/** The line a key opens on with none of its own: the default progression's line in its mode. */
+const openingLine = (key: KeyParam): string =>
+  keyFromParam(key).minor ? PROGRESSION.minorNumerals : PROGRESSION.numerals
 export function readProgressionsSearch(raw: Raw): ProgressionsView {
-  const key = readKey(raw.key)
+  const read = readKey(raw.key)
+  const key = read ? keyParam(read) : PROGRESSIONS_DEFAULTS.key
   return {
-    key: key ? keyParam(key) : PROGRESSIONS_DEFAULTS.key,
-    p: readNumerals(raw.p, PROGRESSIONS_DEFAULTS.p),
+    key,
+    p: readNumerals(raw.p, openingLine(key)),
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
     inversion: valueOr(isInversion, raw.inversion, PROGRESSIONS_DEFAULTS.inversion),
     nearest: raw.nearest !== false,
@@ -199,4 +207,19 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     inKey: raw.inKey === true ? true : undefined,
   }
 }
-export const progressionsSearch = routeSearch(readProgressionsSearch, PROGRESSIONS_DEFAULTS)
+/** Progressions' line left out of the URL only where its key opens on it. */
+const stripOpeningLine: SearchMiddleware<ProgressionsView> = (context) => {
+  const search = context.next(context.search)
+  const opening = openingLine(readProgressionsSearch({ key: search.key }).key)
+  return search.p === opening
+    ? stripSearchParams<ProgressionsView>({ p: opening })({ search, next: (each) => each })
+    : search
+}
+const { p: _line, ...PROGRESSIONS_STRIPPED } = PROGRESSIONS_DEFAULTS
+export const progressionsSearch = {
+  validateSearch: (input: Input<ProgressionsView>): ProgressionsView =>
+    readProgressionsSearch(input),
+  search: {
+    middlewares: [stripSearchParams<ProgressionsView>(PROGRESSIONS_STRIPPED), stripOpeningLine],
+  },
+}
