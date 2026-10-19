@@ -44,6 +44,14 @@ describe('useSpacePedal', () => {
     expect(audio.voice).toEqual([sustain(true), sustain(false)])
   })
 
+  it('leaves the sustain down while the MIDI foot still holds it', () => {
+    const { audio } = setUp()
+    act(() => audio.pedal('sustain', true))
+    fireEvent.keyDown(document.body, space)
+    fireEvent.keyUp(document.body, space)
+    expect(audio.pedals().sustain).toBe(true)
+  })
+
   it('leaves Space to a text field and to a focused control', () => {
     const { audio } = setUp()
     fireEvent.keyDown(screen.getByRole('textbox', { name: 'Search' }), space)

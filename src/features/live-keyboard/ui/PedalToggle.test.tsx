@@ -25,6 +25,19 @@ describe('PedalToggle', () => {
     expect(screen.getByRole('button', { name: 'Pedal' })).toHaveAttribute('aria-pressed', 'true')
   })
 
+  it('holds the sustain on its own beside the MIDI foot, lifting only its own hold', async () => {
+    const user = userEvent.setup()
+    const { audio } = setUp()
+    const pedal = screen.getByRole('button', { name: 'Pedal' })
+    act(() => audio.pedal('sustain', true))
+    await user.click(pedal)
+    expect(audio.pedals().sustain).toBe(true)
+    act(() => audio.pedal('sustain', false))
+    expect(pedal).toHaveAttribute('aria-pressed', 'true')
+    await user.click(pedal)
+    expect(pedal).toHaveAttribute('aria-pressed', 'false')
+  })
+
   it('wears the pedal mark a score prints', () => {
     setUp()
     expect(screen.getByRole('button', { name: 'Pedal' })).toHaveTextContent('\u{1D1AE}')
