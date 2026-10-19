@@ -3,12 +3,34 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { melodyOf, pieceById, PIECES } from '@/entities/piece'
+import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
+import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import { stubFonts } from '@/shared/test/fonts'
 
 describe('Player', () => {
+  it('says an own song is gone once another tab deletes it', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G G G G'] }],
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    const { piecesStore } = await renderApp('/play/my-1', { storage })
+    await screen.findByRole('button', { name: 'Play' })
+    act(() => piecesStore.setState({ songs: [] }))
+    expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
+  })
+
   it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki')
