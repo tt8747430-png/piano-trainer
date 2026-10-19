@@ -62,9 +62,11 @@ export function TrainerChoice({
   const write = (field: ListField, chosen: readonly string[]) => {
     // Unchecking the last one leaves it checked: a run always asks something.
     if (chosen.length === 0) return
-    const own = listParam(CUSTOM_OWN[field])
-    const param = listParam(CUSTOM_CHOICES[field].filter((value) => chosen.includes(value)))
-    onChange({ [field]: param === own ? undefined : param })
+    const kept: readonly string[] = CUSTOM_CHOICES[field].filter((value) => chosen.includes(value))
+    // Its own in any order is its own: the URL leaves it out.
+    const own: readonly string[] = CUSTOM_OWN[field]
+    const isOwn = kept.length === own.length && own.every((value) => kept.includes(value))
+    onChange({ [field]: isOwn ? undefined : listParam(kept) })
   }
   const fields = new Set(trainer.custom)
   return (

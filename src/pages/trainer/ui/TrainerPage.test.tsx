@@ -150,6 +150,17 @@ describe('A trainer', () => {
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
   })
 
+  it('leaves Custom’s intervals out of the URL once they are its own again', async () => {
+    const user = userEvent.setup()
+    const own = 'm2.M2.m3.M3.P4.A4.P5.m6.M6.m7.M7.P8'
+    const { router } = await renderApp(
+      `/practice/quiz/intervals-by-ear?level=custom&intervals=${own}.m9`,
+    )
+    await user.click(await screen.findByRole('combobox', { name: 'Intervals' }))
+    await user.click(await screen.findByRole('option', { name: /^Minor ninth/ }))
+    expect(router.state.location.search).not.toHaveProperty('intervals')
+  })
+
   it('asks Build chord’s types as the chord trainer’s sheet names them, each in sight', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/build-chord?level=custom')
