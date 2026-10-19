@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasMethodCodes, melodyOf, pieceFit } from './chart'
+import { chartOf, hasMethodCodes, melodyOf, patternsOfPiece, pieceFit } from './chart'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
   const chord = chartOf(...args).sections[0]?.lines[0]?.[0]?.chords[0]
@@ -56,5 +56,14 @@ describe('pieceFit', () => {
       melody: false,
       simpleTime: false,
     })
+  })
+})
+
+describe('patternsOfPiece', () => {
+  it('plays the piece’s own pattern only where a chord names no method', () => {
+    expect([...patternsOfPiece(testSong(['C:t1 F:3']))].sort()).toEqual(['M3', 't1'])
+    expect([...patternsOfPiece(testSong(['C:t1 F']))].sort()).toEqual(['r4', 't1'])
+    expect([...patternsOfPiece(testSong(['C F']))]).toEqual(['r4'])
+    expect([...patternsOfPiece(testProgression('I:maj:4'))]).toEqual(['block'])
   })
 })

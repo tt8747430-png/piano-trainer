@@ -40,12 +40,11 @@ export const pieceFit = (piece: Piece): PatternFit => ({
   simpleTime: !isCompound(piece.meter),
 })
 
-/** The built-in patterns a piece plays: its own, and those its chart's methods name. */
+/** The built-in patterns a piece plays: those its chart's methods name, and its own where a chord names none. */
 export function patternsOfPiece(piece: Piece): ReadonlySet<PatternId> {
-  const methods = isDegreePiece(piece)
-    ? []
-    : chordsOf(parseChart(piece)).flatMap((chord) =>
-        isMethodCode(chord.method) ? [METHODS[chord.method].pattern] : [],
-      )
-  return new Set([piece.pattern, ...methods])
+  if (isDegreePiece(piece)) return new Set([piece.pattern])
+  const played = chordsOf(parseChart(piece)).map(({ method }) =>
+    isMethodCode(method) ? METHODS[method].pattern : piece.pattern,
+  )
+  return new Set(played)
 }
