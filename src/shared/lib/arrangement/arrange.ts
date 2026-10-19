@@ -6,6 +6,7 @@ import {
   chordSymbol,
   isCompound,
   midi,
+  PIANO,
   pitchClass,
   pitchClassOf,
   sameKey,
@@ -345,6 +346,10 @@ function playTune(
 const HANDS: readonly Hand[] = ['rh', 'lh']
 
 /** A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its onset. */
+/** A written note moved past either end of the piano, an octave back onto it. */
+const onThePiano = (key: Midi): Midi =>
+  key < PIANO.from ? midi(key + 12) : key > PIANO.to ? midi(key - 12) : key
+
 function playWritten(
   written: readonly HandNote[],
   hand: Hand,
@@ -356,7 +361,7 @@ function playWritten(
   return transposeNotes(written, from, to).map((n): PerformanceNote => {
     const startTick = barStart + n.startTick
     return {
-      midi: n.midi,
+      midi: onThePiano(n.midi),
       spelled: n.spelled,
       hand,
       ...(n.finger === undefined ? {} : { finger: n.finger }),

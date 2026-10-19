@@ -13,6 +13,7 @@ import {
   pitchClass,
   plainSpelling,
   qualityIntervals,
+  TICKS_PER_BEAT,
   type Meter,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -774,6 +775,13 @@ describe('a hand written into a bar', () => {
       [43, 48, 48],
     ])
     expect(onsets(performance, 'rh')).toEqual([0, 12, 24, 36, 48, 60, 72, 84])
+  })
+
+  it('plays a written note moved past the end of the piano an octave back onto it', () => {
+    const bar = 4 * TICKS_PER_BEAT
+    const lowC = arrange(twoBars({ lh: hand([24, 0, bar]) }), { tonic: note('G'), pattern: BEATS })
+    // C1 a fourth down is G0, under the piano's A0: it plays G1.
+    expect(notesOf(lowC, 'lh')[0]?.midi).toBe(31)
   })
 
   it('plays the written right hand in place of the tune a melody pattern gives it', () => {

@@ -47,7 +47,7 @@ export default definePiece({
         'C G C@3-Am@1 G7',
         'G7 C G-D7 G7',
         'C G@3-G7@1 C@3-C7@1 F',
-        'Eb°7-F#°7-D7/A-D7/C C/E-C/G-F/A-Fm6 C/G-G7 C@1-C/Bb@1-Ab@1-Ab7@1',
+        'F#°7/Eb-F#°7-D7/A-D7/C C/E-C/G-F/A-Fm6 C/G-G7 C@1-C/Bb@1-Ab@1-Ab7@1',
       ],
     },
     {
@@ -55,9 +55,9 @@ export default definePiece({
       n: 3,
       key: 'Db',
       lines: [
-        'Db Db°7-Db/Ab Db@2-Fm/Ab@1-Ab7@1 Db-F',
+        'Db E°7/Db-Db/Ab Db@2-Fm/Ab@1-Ab7@1 Db-F',
         'Bbm Bbm Ab-Eb7 Ab@1-Ab7/Gb@1-Db/F@1-Ab7/Eb@1',
-        'Db Db°7-Db/Ab Db-Db7 Gb',
+        'Db E°7/Db-Db/Ab Db-Db7 Gb',
         'G°7 Db/Ab-A7 Db/Ab-Ab7 Db',
       ],
     },
