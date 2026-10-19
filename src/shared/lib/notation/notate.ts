@@ -45,8 +45,19 @@ interface DraftVoice {
 
 const staffOf = (hand: TimedNote['hand']): StaffId => (hand === 'lh' ? 'bass' : 'treble')
 
-/** The notes sounding in a bar, cut at its lines, as each staff's chords (spec §2.4 steps 1–2). */
-function barChords(notes: readonly TimedNote[], bar: Bar): Record<StaffId, BarChord[]> {
+/** A note held into the next bar, by its staff and key. */
+const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
+
+/**
+ * The notes sounding in a bar, cut at its lines, as each staff's chords (spec §2.4 steps 1–2). A note
+ * from the bar before goes on from it only where that bar's writing tied it on (`tiedOn`); one written
+ * cut short there starts afresh, its accidental printed.
+ */
+function barChords(
+  notes: readonly TimedNote[],
+  bar: Bar,
+  tiedOn: ReadonlySet<string>,
+): Record<StaffId, BarChord[]> {
   const end = bar.start + bar.ticks
   const groups = new Map<string, { staff: StaffId; chord: BarChord }>()
   for (const n of notes) {
@@ -54,7 +65,7 @@ function barChords(notes: readonly TimedNote[], bar: Bar): Record<StaffId, BarCh
     if (n.startTick >= end || noteEnd <= bar.start) continue
     const start = Math.max(n.startTick, bar.start) - bar.start
     const stop = Math.min(noteEnd, end) - bar.start
-    const tiedFrom = n.startTick < bar.start
+    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staffOf(n.hand), n.midi))
     const written: BarNote = {
       midi: n.midi,
       spelled: n.spelled,
@@ -188,11 +199,25 @@ const blankStaff = (bar: Bar): ScoreVoice[] => [
   },
 ]
 
+/** The notes a bar's last chords tie into the next bar, by staff and key. */
+function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
+  const held = new Set<string>()
+  for (const id of ['treble', 'bass'] as const) {
+    for (const voice of staves[id]) {
+      const last = voice.events.at(-1)
+      if (last?.kind !== 'notes') continue
+      for (const written of last.notes) if (written.tie) held.add(heldKey(id, written.midi))
+    }
+  }
+  return held
+}
+
 /**
  * Timed notes as a written score: bars, a grand staff, voices, values, ties and accidentals (spec
  * §2.4). A pickup is written under the meter's signature, a short first bar.
  */
 export function notate(music: TimedMusic): Score {
+  let tiedOn = new Set<string>()
   const measures = music.bars.map((written, index): Measure => {
     const before = beatsBefore(music.bars, index, music.meter)
     const pickup = before > 0
@@ -205,14 +230,16 @@ export function notate(music: TimedMusic): Score {
       meter: music.meter,
       key: music.key,
     }
-    const chords = barChords(music.notes, bar)
+    const chords = barChords(music.notes, bar, tiedOn)
     const staff = (id: StaffId) =>
       written.blank?.includes(id) ? blankStaff(bar) : writeStaff(chords[id], bar)
+    const staves = { treble: staff('treble'), bass: staff('bass') }
+    tiedOn = tiedOut(staves)
     return {
       startTick: written.startTick,
       ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : written.beats, music.meter),
-      staves: { treble: staff('treble'), bass: staff('bass') },
+      staves,
       chords: music.chords
         .filter(
           (chord) =>

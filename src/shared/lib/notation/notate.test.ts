@@ -116,6 +116,36 @@ describe('notate', () => {
     })
   })
 
+  it('writes a note cut short before the barline afresh in the next bar, its accidental printed', () => {
+    const score = notate(
+      music(
+        [
+          n(72, note('C'), 'melody', 0, 48),
+          n(72, note('C'), 'melody', 48, 48),
+          n(66, note('F', 1), 'rh', 24, 48),
+          n(69, note('A'), 'rh', 36, 12),
+        ],
+        {
+          bars: [
+            { startTick: 0, beats: 4 },
+            { startTick: 48, beats: 4 },
+          ],
+        },
+      ),
+    )
+    const [first, second] = score.measures
+    const cut = first?.staves.treble
+      .flatMap((voice) => voice.events)
+      .flatMap((event) => notesOf(event))
+      .find((written) => written.midi === 66)
+    expect(cut?.tie).toBe(false)
+    const fresh = second?.staves.treble
+      .flatMap((voice) => voice.events)
+      .flatMap((event) => notesOf(event))
+      .find((written) => written.midi === 66)
+    expect(fresh).toMatchObject({ accidental: 1, tie: false })
+  })
+
   it('prints the accidentals the key and the bar do not say', () => {
     const score = notate(
       music(
