@@ -26,13 +26,17 @@ const ALIGN: Readonly<Record<FloatingPlace, string>> = {
   center: 'flex-row items-end aside:flex-col aside:items-end',
   right: 'flex-row items-end aside:flex-col aside:items-end',
 }
-/** A dial's own stack stands over its button wherever the actions are, kept on the screen. */
+/**
+ * A dial's own stack stands over its button at the foot; beside the page, where the height is short,
+ * beside its button towards the page, level with it.
+ */
 const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'left-0 items-start',
+  left: 'left-0 items-start aside:left-full aside:ml-3',
   center:
-    'left-1/2 -translate-x-1/2 items-center aside:right-0 aside:left-auto aside:translate-x-0 aside:items-end',
-  right: 'right-0 items-end',
+    'left-1/2 -translate-x-1/2 items-center aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:items-end',
+  right: 'right-0 items-end aside:right-full aside:mr-3',
 }
+const DIAL_ASIDE = 'aside:top-1/2 aside:bottom-auto aside:mb-0 aside:-translate-y-1/2'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
 /** The room the actions take along one side, their gap included; none while there are none. */
@@ -281,6 +285,7 @@ export function SpeedDial({
             aria-label={name}
             className={cn(
               'absolute bottom-full mb-3 flex w-max flex-col gap-1.5',
+              DIAL_ASIDE,
               DIAL_ALIGN[place],
             )}
           >
