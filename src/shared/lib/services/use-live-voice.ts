@@ -12,24 +12,22 @@ interface HandVoice {
 }
 
 /**
- * The live voice for one hand's keys (spec 2026-10-09 §2.2). Each press strikes what it plays; a key
- * two presses hold (two fingers, two chords sharing a note) is let go with the last of them, and a
- * press lets go of what it played, though the screen's chords changed meanwhile. Everything still
+ * The live voice for one hand's keys (spec 2026-10-09 §2.2). Each press strikes what it plays, and
+ * its key's letting go releases exactly that, though the screen's chords changed meanwhile: one
+ * release for each key struck, so the live voice, which counts what holds each key, lets go of a key
+ * two presses hold (two fingers, two chords sharing a note) with the last of them. Everything still
  * held is let go as the screen goes.
  */
 export function useLiveVoice(): HandVoice {
   const { audio } = useServices()
   /** What each hand key's presses played, oldest first. */
   const presses = useRef(new Map<Midi, (readonly Midi[])[]>())
-  /** How many presses hold each key sounding. */
-  const holds = useRef(new Map<Midi, number>())
 
   useEffect(() => {
-    const held = holds.current
     const pressed = presses.current
     return () => {
-      for (const key of held.keys()) audio.release(key)
-      held.clear()
+      for (const played of pressed.values())
+        for (const keys of played) for (const key of keys) audio.release(key)
       pressed.clear()
     }
   }, [audio])
@@ -39,25 +37,14 @@ export function useLiveVoice(): HandVoice {
       down(key, plays, velocity = HAND_VELOCITY) {
         void audio.unlock()
         presses.current.set(key, [...(presses.current.get(key) ?? []), plays])
-        for (const played of plays) {
-          holds.current.set(played, (holds.current.get(played) ?? 0) + 1)
-          audio.press(played, velocity)
-        }
+        for (const played of plays) audio.press(played, velocity)
       },
       up(key) {
         const [played, ...later] = presses.current.get(key) ?? []
         if (!played) return
         if (later.length === 0) presses.current.delete(key)
         else presses.current.set(key, later)
-        for (const letGo of played) {
-          const left = (holds.current.get(letGo) ?? 1) - 1
-          if (left > 0) {
-            holds.current.set(letGo, left)
-            continue
-          }
-          holds.current.delete(letGo)
-          audio.release(letGo)
-        }
+        for (const letGo of played) audio.release(letGo)
       },
     }),
     [audio],

@@ -51,9 +51,9 @@ describe('useLiveVoice', () => {
     voice.down(C, [C])
     voice.down(C, [C])
     voice.up(C)
-    expect(audio.voice.filter((event) => event.kind === 'release')).toEqual([])
+    expect([...audio.live()]).toEqual([C])
     voice.up(C)
-    expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: C })
+    expect([...audio.live()]).toEqual([])
   })
 
   it('lets go of a key two chords share with the last of them', () => {
@@ -61,14 +61,20 @@ describe('useLiveVoice', () => {
     voice.down(C, [C, G])
     voice.down(E, [E, G])
     voice.up(C)
-    expect(audio.voice.filter((event) => event.kind === 'release')).toEqual([
-      { kind: 'release', midi: C },
-    ])
+    expect([...audio.live()].sort()).toEqual([E, G])
     voice.up(E)
-    expect(audio.voice.slice(-2)).toEqual([
-      { kind: 'release', midi: E },
-      { kind: 'release', midi: G },
-    ])
+    expect([...audio.live()]).toEqual([])
+  })
+
+  it('pairs each key a press strikes with one release', () => {
+    const { audio, voice } = setUp()
+    voice.down(C, [C, G])
+    voice.down(E, [E, G])
+    voice.up(C)
+    voice.up(E)
+    const count = (kind: string) => audio.voice.filter((event) => event.kind === kind).length
+    expect(count('press')).toBe(4)
+    expect(count('release')).toBe(4)
   })
 
   it('lets go of what its press played, though the hand lets go of a key it never pressed', () => {
@@ -80,10 +86,8 @@ describe('useLiveVoice', () => {
   it('lets go of every key still held as the screen goes', () => {
     const { audio, voice, hook } = setUp()
     voice.down(C, [C, E])
+    voice.down(E, [E])
     hook.unmount()
-    expect(audio.voice.slice(-2)).toEqual([
-      { kind: 'release', midi: C },
-      { kind: 'release', midi: E },
-    ])
+    expect([...audio.live()]).toEqual([])
   })
 })
