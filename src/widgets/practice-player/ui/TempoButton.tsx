@@ -95,7 +95,8 @@ export function TempoButton({
           step={1}
           value={tempo}
           onValueChange={onTempo}
-          className="flex flex-col gap-3"
+          // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
+          className="flex flex-col gap-3 pb-2.5"
         >
           <div className="flex justify-between">
             <SliderLabel>{t('tempo')}</SliderLabel>
