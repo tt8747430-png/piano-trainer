@@ -6,6 +6,7 @@ import {
   chordSymbol,
   midi,
   note,
+  noteName,
   noteParam,
   parseChordSymbol,
   parseKey,
@@ -135,6 +136,16 @@ describe('arrange', () => {
     expect(performance.bars).toEqual([{ startTick: 0, beats: 4, section: 0, line: 0, chords: [0] }])
     expect(performance.totalTicks).toBe(48)
     expect(performance.key).toEqual({ tonic: C, minor: false })
+  })
+
+  it('plays the 7th the key gives a chord written without one', () => {
+    const SEVENTH = pattern('seventh', '0/16 7', '0/16 L1')
+    const sevenths = (symbols: string) =>
+      arrange(chart([symbols.split(' ')]), { tonic: C, pattern: SEVENTH })
+        .notes.filter((n) => n.hand === 'rh')
+        .map((n) => noteName(n.spelled))
+    expect(sevenths('C C6 F G Am Dm Bdim')).toEqual(['B', 'B', 'E', 'F', 'G', 'C', 'A'])
+    expect(sevenths('Cmaj7 C7')).toEqual(['B', 'B♭'])
   })
 
   it('puts bars and chords end to end', () => {
