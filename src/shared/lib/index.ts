@@ -7,7 +7,7 @@ export {
   readAlterations,
   type PartsParams,
 } from './chord-params'
-export { foldText, matchesQuery } from './fold-text'
+export { foldText, matchesQuery, WORD_BREAK } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'

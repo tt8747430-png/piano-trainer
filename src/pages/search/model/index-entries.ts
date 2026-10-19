@@ -11,7 +11,7 @@ import {
 } from '@/entities/progression-library'
 import { TRAINER_IDS, type TrainerId } from '@/features/trainer'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
-import { foldText, matchesQuery } from '@/shared/lib'
+import { foldText, matchesQuery, WORD_BREAK } from '@/shared/lib'
 import {
   CHORD_QUALITIES,
   chordsOfLine,
@@ -273,9 +273,6 @@ export interface IndexGroup {
  * the whole index. A title, a line or another name holds the query, in either case and without
  * accents. What was typed leads: first of its kind, and its kind first of the kinds.
  */
-/** Where a word of a name starts: after a space or a mark between words. */
-const WORD_BREAK = /[\s\-–—·,.:;()/«»"“”]+/
-
 /**
  * How near an entry answers a folded query, lowest nearest: its title or another of its names itself
  * (a chord's symbol), a title starting with it, a word of its title, a word of another of its names,
