@@ -516,10 +516,10 @@ export const PATTERNS: Readonly<Record<PatternId, PatternEntry>> = {
   },
   flow: {
     group: 'genres',
-    name: { en: 'Chord flow (I–IV–V shapes)', ru: 'Смена аккордов (обороты I–IV–V)' },
+    name: { en: 'Chord flow (I–IV–I–V–I shapes)', ru: 'Смена аккордов (обороты I–IV–I–V–I)' },
     idea: {
-      en: 'Over a held root, the right hand moves through the key’s I, IV and V chords.',
-      ru: 'Над выдержанным басом правая рука движется по аккордам I, IV и V тональности.',
+      en: 'Over a held root, the right hand moves through the key’s I, IV, I, V and back to I.',
+      ru: 'Над выдержанным басом правая рука движется по аккордам тональности: I, IV, I, V и снова I.',
     },
     rh: 'flow',
     lh: 'r',

@@ -99,6 +99,11 @@ describe('the pattern catalog', () => {
     expect(LEFT_FIGURES.shuf.figure.events[1]?.start).toBe(8)
   })
 
+  it('names the Chord flow by the shapes its right hand plays, I–IV–I–V–I', () => {
+    expect(PATTERNS.flow.name.en).toContain('I–IV–I–V–I')
+    expect(PATTERNS.flow.name.ru).toContain('I–IV–I–V–I')
+  })
+
   it('recognises its ids', () => {
     expect(isPatternId('r4')).toBe(true)
     expect(isPatternId('song')).toBe(false)
