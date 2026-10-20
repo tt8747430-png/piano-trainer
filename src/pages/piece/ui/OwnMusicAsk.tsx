@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePiecesStoreApi, type OwnSongId, type PieceId } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
@@ -13,14 +12,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Button } from '@/shared/ui/primitives/button'
 
-/** The learner's music's way back: their version reset to the book's, or their song deleted; each asks first. */
-export function OwnMusicActions({
+/**
+ * The learner's music's way back, asked first: their version reset to the book's, or their song
+ * deleted. The page opens it (`open`) from its More actions; it has no trigger of its own.
+ */
+export function OwnMusicAsk({
   piece,
+  open,
+  onOpenChange,
 }: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
   piece:
     | { readonly kind: 'version'; readonly id: PieceId; readonly title: string }
     | {
@@ -33,7 +37,6 @@ export function OwnMusicActions({
   const store = usePiecesStoreApi()
   const takes = useTakesStoreApi()
   const navigate = useNavigate()
-  const [asking, setAsking] = useState(false)
   const words = piece.kind === 'version' ? 'resetting' : 'deleting'
   const act = () => {
     if (piece.kind === 'version') {
@@ -45,10 +48,7 @@ export function OwnMusicActions({
     void navigate({ to: '/songs', replace: true }).then(() => deleteSong(store, takes, id))
   }
   return (
-    <AlertDialog open={asking} onOpenChange={setAsking}>
-      <AlertDialogTrigger render={<Button variant="destructive" />}>
-        {t(piece.kind === 'version' ? 'reset' : 'delete')}
-      </AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t(`${words}.title`, { title: piece.title })}</AlertDialogTitle>
