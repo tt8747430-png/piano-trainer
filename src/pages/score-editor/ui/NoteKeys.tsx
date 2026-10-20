@@ -239,11 +239,11 @@ export function NoteColumn() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   return (
-    <section aria-label={t('palette.notes')} className="grid grid-cols-2 content-start gap-1.5">
+    <section aria-label={t('palette.notes')} className="grid grid-cols-3 content-start gap-1.5">
       <div
         role="group"
         aria-label={t('values.label')}
-        className="col-span-full grid grid-cols-2 gap-1.5"
+        className="col-span-full grid grid-cols-3 gap-1.5"
       >
         <ValueKeys />
       </div>

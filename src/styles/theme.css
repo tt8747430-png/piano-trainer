@@ -745,7 +745,7 @@
       grid-template-areas: 'bar bar' 'tools tools' 'keys keys' 'column sheet' 'status status';
     }
     & > [data-area='column'] {
-      width: 7.25rem;
+      width: 10.5rem;
       min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
