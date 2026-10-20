@@ -272,7 +272,15 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
-    for (const name of ['Quarter note', 'Dotted', 'Triplet', 'Rest', 'Chord'])
+    for (const name of [
+      'Quarter note',
+      '32nd note',
+      'Dotted',
+      'Double dotted',
+      'Triplet',
+      'Rest',
+      'Chord',
+    ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     expect(within(palette).getByRole('tab', { name: 'Hand' })).toHaveAttribute(
       'aria-disabled',
@@ -293,6 +301,30 @@ describe('the score editor', () => {
     await user.click(within(palette).getByRole('radio', { name: 'Left hand' }))
     await user.click(within(palette).getByRole('tab', { name: 'Hand' }))
     expect(within(palette).getByRole('button', { name: 'Write out' })).toBeInTheDocument()
+  })
+
+  it('marks the note at the caret from the marks’ tabs, saved with the tune', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await user.click(await screen.findByRole('radio', { name: 'Melody' }))
+    await user.keyboard('a')
+    await user.click(screen.getByRole('status'))
+    await user.keyboard('{ArrowLeft}')
+    const palette = screen.getByRole('region', { name: 'Tools' })
+    await user.click(within(palette).getByRole('tab', { name: 'Articulations and ornaments' }))
+    await user.click(within(palette).getByRole('button', { name: 'Staccato' }))
+    expect(within(palette).getByRole('button', { name: 'Staccato' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(within(palette).getByRole('tab', { name: 'Slurs, ties and lines' }))
+    await user.click(within(palette).getByRole('button', { name: '8va: an octave higher' }))
+    await user.click(within(palette).getByRole('tab', { name: 'Dynamics' }))
+    await user.click(within(palette).getByRole('button', { name: 'Forte' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1[stacc,8va,f]' }),
+    )
   })
 
   it('undoes and redoes by button and by Cmd+Z', async () => {

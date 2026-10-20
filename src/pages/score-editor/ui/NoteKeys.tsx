@@ -12,8 +12,8 @@ const GLYPH = 'font-sans text-3xl leading-none'
 const REST = '𝄽'
 
 /**
- * The Notes tab: the value the keys write, whole to sixteenth, the one chosen on; Dotted and Triplet
- * (out of reach where the meter takes neither); a Rest, wide; and Chord, the next key joining the last.
+ * The Notes tab: the value the keys write, whole to 32nd, the one chosen on; Dotted, Double dotted and
+ * Triplet (out of reach where the meter takes none); a Rest; and Chord, the next key joining the last.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
@@ -22,13 +22,16 @@ export function NoteKeys() {
   const value = useEditorState((state) => state.value)
   const chord = useEditorState((state) => state.chord)
   const dottable = useEditorState((state) => takesDot(state.value.value, state.draft.meter))
+  const doubleDottable = useEditorState((state) =>
+    takesDot(state.value.value, state.draft.meter, 2),
+  )
   const compound = useEditorState((state) => isCompound(state.draft.meter))
   return (
     <>
       <div
         role="group"
         aria-label={t('values.label')}
-        className="col-span-full grid grid-cols-5 gap-1.5"
+        className="col-span-full grid grid-cols-6 gap-1.5"
       >
         {NOTE_VALUES.map((option) => (
           <ToolKey
@@ -54,6 +57,16 @@ export function NoteKeys() {
         </span>
       </ToolKey>
       <ToolKey
+        label={t('doubleDot')}
+        pressed={value.dots === 2}
+        disabled={!doubleDottable}
+        onClick={() => dispatch({ type: 'dot', dots: 2 })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}..
+        </span>
+      </ToolKey>
+      <ToolKey
         label={t('triplet')}
         pressed={value.triplet}
         disabled={compound}
@@ -63,7 +76,7 @@ export function NoteKeys() {
           3
         </span>
       </ToolKey>
-      <ToolKey label={t('rest')} span="wide" onClick={() => dispatch({ type: 'rest' })}>
+      <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
         <span aria-hidden className={GLYPH}>
           {REST}
         </span>

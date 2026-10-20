@@ -2,15 +2,17 @@ import { setBarTicks } from './bars'
 import { moveCaret, placeCaret, placed, stepOf } from './caret-moves'
 import { deleteChord } from './chords'
 import { isHandLayer } from './draft'
-import { barsEdited, chordSet } from './form-edits'
+import { barsEdited, chordSet, selectedBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
+import { markNotes } from './marks'
 import {
   backToPattern,
   deleteNotes,
   respellNotes,
   setFinger,
   shiftNotes,
+  tieNotes,
   writeOut,
   writeRest,
 } from './notes'
@@ -18,7 +20,7 @@ import { joinSection, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt } from './timeline'
+import { barAt, barsOf } from './timeline'
 import { toggledDot, toggledTriplet, withValue } from './values'
 
 /** The editor's state after an action (spec §6). */
@@ -37,8 +39,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return { ...state, value: withValue(state.value, action.value, draft.meter), struck: null }
     case 'dot':
     case 'triplet': {
-      const toggled = action.type === 'dot' ? toggledDot : toggledTriplet
-      const value = toggled(state.value, draft.meter)
+      const value =
+        action.type === 'dot'
+          ? toggledDot(state.value, draft.meter, action.dots)
+          : toggledTriplet(state.value, draft.meter)
       return value === state.value ? state : { ...state, value }
     }
     case 'chordMode':
@@ -74,6 +78,22 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return isHandLayer(layer)
         ? commit(state, setFinger(draft, layer, caret, action.midi, action.finger))
         : state
+    case 'mark': {
+      if (layer === 'chords') return state
+      const chosen = state.selection && selectedBars(state.selection)
+      const bars = barsOf(draft)
+      const from = chosen && bars[chosen.from]
+      const to = chosen && bars[chosen.to]
+      const span = from && to ? { from: from.start, to: to.start + to.bar.ticks } : caret
+      return commit(state, markNotes(draft, layer, span, action.mark), {
+        struck: null,
+        selection: state.selection,
+      })
+    }
+    case 'tie':
+      return layer === 'chords'
+        ? state
+        : commit(state, tieNotes(draft, layer, caret), { struck: null })
     case 'chord':
       return chordSet(state, action.chord, action.advance)
     case 'writeOut':

@@ -9,6 +9,7 @@ import {
   respellNotes,
   setFinger,
   shiftNotes,
+  tieNotes,
   writeNotes,
   writeOut,
   writeRest,
@@ -174,5 +175,17 @@ describe('writing a bar out, and back to the pattern', () => {
     const back = backToPattern(held, 'rh', 1)
     expect(shape(back.hands.rh)).toEqual(['G4@48/48'])
     expect(barsOf(back).map(({ bar }) => bar.rh)).toEqual([true, false])
+  })
+})
+
+describe('tieNotes', () => {
+  it('joins the notes at the caret to the same keys after them', () => {
+    const draft = draftOf({ hands: { rh: 'C4+E4/2 C4+G4/2 | -' } })
+    expect(shape(tieNotes(draft, 'rh', 0).hands.rh)).toEqual(['C4@0/96', 'E4@0/48', 'G4@48/48'])
+  })
+
+  it('changes nothing where no same key follows', () => {
+    const draft = draftOf({ melody: 'B4/2 A4/2' })
+    expect(tieNotes(draft, 'melody', 0)).toBe(draft)
   })
 })

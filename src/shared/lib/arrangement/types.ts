@@ -53,6 +53,8 @@ export interface MelodyNote {
   readonly spelled: SpelledNote
   readonly startTick: Tick
   readonly durationTicks: Tick
+  /** What its text marks on it (ADR 0063). */
+  readonly marks?: NoteMarks
 }
 export type Melody = readonly MelodyNote[]
 

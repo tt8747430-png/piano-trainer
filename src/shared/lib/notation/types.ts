@@ -16,7 +16,8 @@ export type NoteValue = 1 | 2 | 4 | 8 | 16 | 32
 
 export interface Duration {
   readonly value: NoteValue
-  readonly dots: 0 | 1
+  /** One dot adds half the value, two add three quarters. */
+  readonly dots: 0 | 1 | 2
   /** Three in the time of two: only in a triplet beat. */
   readonly triplet: boolean
 }

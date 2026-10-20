@@ -213,6 +213,28 @@ export const setFinger = (
     return finger === null ? rest : { ...rest, finger }
   })
 
+/** The notes at `at` joined to the same keys' notes starting where they end: one note, tied as written. */
+export function tieNotes(draft: Draft, layer: NoteLayer, at: Tick): Draft {
+  const notes = notesOf(draft, layer)
+  const joined = new Set<DraftNote>()
+  const tied = notes.map((n) => {
+    if (n.startTick !== at) return n
+    const next = notes.find(
+      (m) => m.midi === n.midi && m.startTick === n.startTick + n.durationTicks,
+    )
+    if (!next) return n
+    joined.add(next)
+    return { ...n, durationTicks: n.durationTicks + next.durationTicks }
+  })
+  return joined.size === 0
+    ? draft
+    : withNotes(
+        draft,
+        layer,
+        tied.filter((n) => !joined.has(n)),
+      )
+}
+
 /** A hand's bar written out with what the pattern plays there, each note kept inside the bar. */
 export function writeOut(
   draft: Draft,

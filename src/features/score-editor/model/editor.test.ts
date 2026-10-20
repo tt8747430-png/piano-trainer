@@ -12,6 +12,31 @@ const start = (layer: EditorState['layer'] = 'melody') =>
   run(initialEditor(draftOf()), { type: 'layer', layer })
 
 describe('the editor', () => {
+  it('writes a double-dotted value and a 32nd', () => {
+    const state = run(
+      start(),
+      { type: 'value', value: 2 },
+      { type: 'dot', dots: 2 },
+      key(67, 0),
+      { type: 'value', value: 32 },
+      key(69, 500),
+    )
+    expect(shape(state.draft.melody)).toEqual(['G4@0/84', 'A4@84/3'])
+  })
+
+  it('marks the notes at the caret, or across the bars chosen, as one undo step', () => {
+    const written = run(start(), key(67, 0), key(69, 500), {
+      type: 'move',
+      by: 'end',
+      direction: -1,
+    })
+    const marked = run(written, { type: 'mark', mark: { kind: 'dynamic', dynamic: 'p' } })
+    expect(marked.draft.melody.map((n) => n.marks)).toEqual([{ dynamic: 'p' }, undefined])
+    expect(run(marked, { type: 'undo' }).draft).toBe(written.draft)
+    const tied = run(start(), key(67, 0), key(67, 500), { type: 'move', by: 'end', direction: -1 })
+    expect(shape(run(tied, { type: 'tie' }).draft.melody)).toEqual(['G4@0/48'])
+  })
+
   it('opens on the tune at the piece’s start, writing quarter notes', () => {
     const state = initialEditor(draftOf())
     expect(state).toMatchObject({

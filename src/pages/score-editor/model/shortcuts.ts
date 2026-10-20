@@ -4,13 +4,14 @@ import type { KeyPress } from '@/shared/lib/shortcuts'
 /** A shortcut: an editor action, or the Chord field to type in. */
 type Shortcut = EditorAction | { readonly type: 'chordField' }
 
-/** The value keys, by physical key so every layout chooses the same: 1 a whole note to 5 a sixteenth. */
+/** The value keys, by physical key so every layout chooses the same: 1 a whole note to 6 a 32nd. */
 const VALUES: Readonly<Record<string, ChosenValue['value']>> = {
   Digit1: 1,
   Digit2: 2,
   Digit3: 4,
   Digit4: 8,
   Digit5: 16,
+  Digit6: 32,
 }
 
 /** The bar edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */

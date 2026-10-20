@@ -113,6 +113,14 @@ describe('writeMelody', () => {
     expect(writeMelody([], bars4)).toBeUndefined()
   })
 
+  it('writes a note’s marks after its beats, and reads them back', () => {
+    const text = 'E4/1[stacc,p] r/1 E4/2[ferm]'
+    const melody = parseMelody(testSong(['C'], { melody: text }))
+    expect(melody?.[0]?.marks).toEqual({ articulations: ['staccato'], dynamic: 'p' })
+    expect(writeMelody(melody ?? [], bars4)).toBe(text)
+    expect(() => parseMelody(testSong(['C'], { melody: 'r/1[acc]' }))).toThrow()
+  })
+
   it('reads back as written', () => {
     const melody: Melody = [melodyNote(64, 0, 8), melodyNote(61, 8, 88), melodyNote(64, 120, 24)]
     const text = writeMelody(melody, bars4)

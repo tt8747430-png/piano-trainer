@@ -144,7 +144,7 @@ where the same hand is written: it is held across the barline.
 `ferm` (several may join); one ornament `tr` `mord` `lmord` `turn` `trem`; `arp` rolls the chord; `(` starts a slur
 and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` higher; a dynamic `pp` `p` `mp` `mf`
 `f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; `gr:D5+E5` grace notes struck just before. A pitch is
-always the one heard.
+always the one heard. A melody's notes take the same marks (`E4/1[stacc,p]`), a rest none.
 
 ## The recording
 

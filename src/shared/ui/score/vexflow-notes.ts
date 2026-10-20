@@ -138,7 +138,12 @@ function addMarks(note: StaveNote, marks: NoteMarks, key: Key) {
   }
 }
 
-const code = (duration: Duration) => `${VALUE_CODE[duration.value]}${duration.dots ? 'd' : ''}`
+const code = (duration: Duration) => `${VALUE_CODE[duration.value]}${'d'.repeat(duration.dots)}`
+
+/** A note's or a rest's dots, one by one. */
+const dotted = (note: StaveNote, dots: Duration['dots']) => {
+  for (let i = 0; i < dots; i++) Dot.buildAndAttach([note], { all: true })
+}
 const keyOf = (note: WrittenNote) => `${note.spelled.letter.toLowerCase()}/${note.octave}`
 
 export type VexNote = StaveNote | GhostNote
@@ -196,7 +201,7 @@ function noteOf(
       clef: staff,
       alignCenter: wholeBar,
     })
-    if (!wholeBar && event.duration.dots) Dot.buildAndAttach([rest], { all: true })
+    if (!wholeBar) dotted(rest, event.duration.dots)
     return rest
   }
   const note = new StaveNote({
@@ -212,7 +217,7 @@ function noteOf(
     if (written.accidental !== null)
       note.addModifier(new Accidental(SIGN[written.accidental]), index)
   })
-  if (event.duration.dots) Dot.buildAndAttach([note], { all: true })
+  dotted(note, event.duration.dots)
   if (event.marks) addMarks(note, event.marks, key)
   return note
 }

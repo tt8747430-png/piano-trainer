@@ -71,7 +71,7 @@ function allowed(
     return at % BEAT === 0 && endsWell && !crossesMiddle
   }
   const beatStart = beatOf(at) * BEAT
-  const undotted = duration.dots === 1 ? (length * 2) / 3 : length
+  const undotted = ticksOf({ ...duration, dots: 0 }, meter)
   return at + length <= beatStart + BEAT && (at - beatStart) % (undotted / 2) === 0
 }
 

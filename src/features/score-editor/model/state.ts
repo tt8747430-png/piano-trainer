@@ -3,7 +3,8 @@ import type { Chord, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
 import type { TakePart } from './take-edits'
-import type { ChosenValue } from './values'
+import type { MarkChoice } from './marks'
+import type { ChosenValue, Dots } from './values'
 
 /** What undo and redo bring back. */
 export interface Snapshot {
@@ -55,7 +56,7 @@ export type ChordAdvance = 'beat' | 'bar' | 'barAdding'
 export type EditorAction =
   | { readonly type: 'layer'; readonly layer: Layer }
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
-  | { readonly type: 'dot' }
+  | { readonly type: 'dot'; readonly dots?: Dots }
   | { readonly type: 'triplet' }
   | { readonly type: 'chordMode' }
   | {
@@ -76,6 +77,10 @@ export type EditorAction =
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }
+  /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
+  | { readonly type: 'mark'; readonly mark: MarkChoice }
+  /** The notes at the caret joined to the same keys' notes after them. */
+  | { readonly type: 'tie' }
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }
   | { readonly type: 'writeOut'; readonly played: readonly DraftNote[] }
   | { readonly type: 'backToPattern' }

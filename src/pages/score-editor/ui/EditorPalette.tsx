@@ -16,6 +16,7 @@ import { PALETTE_TABS, shownTab, tabOpen, type PaletteTab } from '../model/palet
 import { BarKeys } from './BarKeys'
 import { ChordKeys } from './ChordKeys'
 import { HandKeys } from './HandKeys'
+import { ArticulationKeys, DynamicKeys, LineKeys } from './MarkKeys'
 import { NoteKeys } from './NoteKeys'
 import { PaletteActions } from './PaletteActions'
 import { PitchKeys } from './PitchKeys'
@@ -28,6 +29,13 @@ const LAPTOP = '(min-width: 64rem)'
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
   notes: <span className="font-music text-2xl">𝅘𝅥𝅮</span>,
   pitch: <span className="font-music text-3xl">♯</span>,
+  articulations: <span className="text-2xl font-bold">&gt;</span>,
+  lines: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
+      <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
+    </svg>
+  ),
+  dynamics: <span className="font-serif text-lg font-bold italic">mf</span>,
   hand: <Hand />,
   chords: <span className="font-display text-lg font-semibold">C⁷</span>,
   bars: <span className="font-music text-3xl">𝄁</span>,
@@ -37,6 +45,9 @@ const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
 const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
   notes: <NoteKeys />,
   pitch: <PitchKeys />,
+  articulations: <ArticulationKeys />,
+  lines: <LineKeys />,
+  dynamics: <DynamicKeys />,
   hand: <HandKeys />,
   chords: <ChordKeys />,
   bars: <BarKeys />,

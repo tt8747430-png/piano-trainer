@@ -326,6 +326,7 @@ function playTune(
       hand: 'rh',
       velocity: VELOCITY.tune,
       ...at,
+      ...(n.marks ? { marks: n.marks } : {}),
     }
     if (figure.use !== 'harmony' || n.durationTicks < TICKS_PER_BEAT) return [tune]
     return [
@@ -545,6 +546,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         durationTicks: n.durationTicks,
         velocity: VELOCITY.doubled,
         chord,
+        ...(n.marks ? { marks: n.marks } : {}),
       })
     }
   }

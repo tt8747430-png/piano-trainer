@@ -17,6 +17,7 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('Digit1', '1'), 'melody')).toEqual({ type: 'value', value: 1 })
     expect(shortcutOf(press('Digit3', '3'), 'rh')).toEqual({ type: 'value', value: 4 })
     expect(shortcutOf(press('Digit5', '5'), 'lh')).toEqual({ type: 'value', value: 16 })
+    expect(shortcutOf(press('Digit6', '6'), 'lh')).toEqual({ type: 'value', value: 32 })
     expect(shortcutOf(press('Period', '.'), 'melody')).toEqual({ type: 'dot' })
     expect(shortcutOf(press('Digit0', '0'), 'melody')).toEqual({ type: 'rest' })
   })
