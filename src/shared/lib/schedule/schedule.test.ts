@@ -45,6 +45,23 @@ const notes = (sounds: readonly Sound[]) =>
 const clicks = (sounds: readonly Sound[]) => sounds.filter((sound) => sound.kind === 'click')
 
 describe('schedule', () => {
+  it('plays a note’s marks: a trill in 32nds, a forte loud', () => {
+    const plain = perform('C')
+    const marked: Performance = {
+      ...plain,
+      notes: plain.notes.map((n) =>
+        n.hand === 'melody' ? { ...n, marks: { ornament: 'trill', dynamic: 'f' } } : n,
+      ),
+    }
+    const tune = (performance: Performance) =>
+      notes(schedule(performance, { tempo: 60, hands: ALL }).sounds).filter((s) => s.at < 0.5)
+    const before = tune(plain).find((s) => s.midi === 84)
+    const trill = tune(marked).filter((s) => s.midi === 84 || s.midi === 86)
+    expect(trill.map((s) => s.at)).toContain(0.125)
+    expect(trill.some((s) => s.midi === 86)).toBe(true)
+    expect(trill[0]?.velocity).toBeGreaterThan(before?.velocity ?? 1)
+  })
+
   it('counts a pickup as the end of a bar: no accent on it, the next bar’s first beat accented', () => {
     const withPickup = arrange(
       {

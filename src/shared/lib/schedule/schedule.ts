@@ -8,6 +8,7 @@ import {
   secondsFor,
   type BarsInMeter,
 } from './grid'
+import { loudness, markedSounds, rollOffsets } from './marks'
 import { swingTick } from './swing'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -102,6 +103,10 @@ const placement = (performance: Performance, swing: boolean | undefined) =>
     ? (tick: Tick) => swungOnGrid(performance, tick)
     : (tick: Tick) => tick
 
+/** The key a tick is played in: its bar's, else the piece's. */
+const keyAt = (performance: Performance, tick: Tick) =>
+  performance.bars.findLast((bar) => bar.startTick <= tick)?.key ?? performance.key
+
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
@@ -120,19 +125,26 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // A note still held where the pass starts sounds from there, for what is left of it.
   const heard = (n: PerformanceNote) =>
     inPass(n.startTick) || (n.startTick < fromTick && n.startTick + n.durationTicks > fromTick)
-  const played: Sound[] = performance.notes
-    .filter((n) => heard(n) && isAudible(n, hands))
-    .map((n) => {
-      const start = Math.max(fromTick, n.startTick)
-      const end = Math.min(n.startTick + n.durationTicks, toTick)
-      return {
-        kind: 'note',
-        midi: n.midi,
-        at: at(start),
-        duration: Math.max(SHORTEST_NOTE, (at(end) - at(start)) * LEGATO),
-        velocity: n.velocity,
-      }
-    })
+  // The notes' marks (ADR 0063): their dynamics, rolls, lengths, grace notes and ornaments.
+  const levels = loudness(performance.notes)
+  const rolls = rollOffsets(performance.notes)
+  const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)
+  const played: Sound[] = performance.notes.flatMap((n, i) => {
+    if (!heard(n) || !isAudible(n, hands)) return []
+    const start = Math.max(fromTick, n.startTick)
+    const end = Math.min(n.startTick + n.durationTicks, toTick)
+    const full = at(end) - at(start)
+    const sound = {
+      kind: 'note' as const,
+      midi: n.midi,
+      at: at(start) + (rolls[i] ?? 0),
+      duration: Math.max(SHORTEST_NOTE, full * LEGATO),
+      velocity: n.velocity * (levels[i] ?? 1),
+    }
+    // A note held over from before the pass sounds plainly: its marks were where it began.
+    const marks = n.startTick >= fromTick ? n.marks : undefined
+    return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
+  })
 
   const metronome: Sound[] = options.metronome
     ? performance.bars.flatMap((_, index) =>
