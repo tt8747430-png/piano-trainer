@@ -27,6 +27,8 @@ import { useKeyboardScroll } from './use-keyboard-scroll'
 
 /** Fit's white keys: never narrower than this, so a finger finds them; past it the keyboard scrolls… */
 const MIN_WHITE_PX = 34
+/** Where the keys asked to be in sight must all fit (`fitInView`), Fit narrows them to this at most. */
+const NARROWEST_FIT_PX = 22
 /** …nor wider than this: a wide screen shows the neighbouring keys instead. */
 const MAX_WHITE_PX = 48
 /** Large keys: about an octave in view on a phone. */
@@ -52,6 +54,13 @@ const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> 
   piano: () => `calc(100cqw / ${PIANO_LAYOUT.whites})`,
 }
 
+/**
+ * Fit's white key where `whites` keys asked to be in sight must fit the width: its narrowest gives way
+ * to them, down to `NARROWEST_FIT_PX`.
+ */
+const fitWidth = (whitesInRange: number, whitesAsked: number) =>
+  `clamp(max(${NARROWEST_FIT_PX}px, min(${MIN_WHITE_PX}px, 100cqw / ${whitesAsked})), 100cqw / ${whitesInRange}, ${MAX_WHITE_PX}px)`
+
 /** Where the arrow keys, Home and End take the keyboard's tab stop. */
 const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
   ArrowLeft: (key) => midi(Math.max(PIANO.from, key - 1)),
@@ -70,6 +79,7 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
 export function PianoKeyboard({
   range,
   inView,
+  fitInView = false,
   keySize = 'fit',
   swipe = 'scroll',
   namedKeys = 'c',
@@ -88,6 +98,12 @@ export function PianoKeyboard({
   range: KeyRange
   /** Keys to keep in sight: it opens centred on them (else on its range) and scrolls to them when out of sight. */
   inView?: KeyRange | undefined
+  /**
+   * Fit narrows its keys until the widest span `inView` has asked for fits the width (the Player's:
+   * Wait mode's chord across both hands). It narrows only as a wider span is asked, never back, so
+   * the keys hold still (ADR 0059).
+   */
+  fitInView?: boolean
   keySize?: KeySize
   swipe?: Swipe
   /** Which keys carry their note's name: every C (the default), every key, or none. */
@@ -138,7 +154,6 @@ export function PianoKeyboard({
   const [tabStop, setTabStop] = useState<Midi>(range.from)
   const { from, to } = range
   const span = useMemo(() => spanOf(PIANO_LAYOUT.keys, { from, to }), [from, to])
-  useKeyboardScroll(scroller, PIANO_LAYOUT.keys, span, inView, keySize)
 
   // Keys hold one handler for good, so they re-render only when their own look changes.
   const latestPress = useRef(onKeyPress)
@@ -161,7 +176,12 @@ export function PianoKeyboard({
     [states.marks, down],
   )
   const scrolls = keySize !== 'piano'
-  const white = WHITE_WIDTH[keySize](span.whites)
+  const asked = useWidestAsked(fitInView ? inView : undefined, range)
+  const white =
+    keySize === 'fit' && asked > 0
+      ? fitWidth(span.whites, asked)
+      : WHITE_WIDTH[keySize](span.whites)
+  useKeyboardScroll(scroller, PIANO_LAYOUT.keys, span, inView, keySize, white)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const next = MOVES[event.key]?.(tabStop)
@@ -229,4 +249,20 @@ export function PianoKeyboard({
       </div>
     </div>
   )
+}
+
+/**
+ * The most white keys `inView` has asked to see at once on these keys (`range`), 0 where none is
+ * asked; a new range starts again.
+ */
+function useWidestAsked(inView: KeyRange | undefined, range: KeyRange): number {
+  const whites = inView ? spanOf(PIANO_LAYOUT.keys, inView).whites : 0
+  const of = `${range.from}-${range.to}`
+  const [widest, setWidest] = useState({ of, whites })
+  if (widest.of !== of || whites > widest.whites) {
+    const next = { of, whites: widest.of === of ? Math.max(whites, widest.whites) : whites }
+    setWidest(next)
+    return next.whites
+  }
+  return widest.whites
 }

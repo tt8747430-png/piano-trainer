@@ -54,6 +54,8 @@ export function PlayerLayout({
       <LiveKeyboard
         range={player.range}
         inView={player.inView}
+        // Wait mode's chord across both hands is all in sight, the keys narrowing to hold it.
+        fitInView
         marks={player.marks}
         wrong={player.wrong}
         onKeyPress={player.tapKey}
