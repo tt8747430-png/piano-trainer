@@ -543,29 +543,43 @@ function* drawn(
   score: Score,
   host: HTMLDivElement,
   sheet: HTMLDivElement,
-  { scale, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
+  { scale: asked, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
 ): Generator<void, ScoreLayout, void> {
   const written = score.staves.length > 0 ? score.staves : STAVES
   const shown: readonly StaffId[] = staff
     ? [staff]
     : (chosen?.filter((each) => written.includes(each)) ?? written)
   if (shown.length === 0) throw new RangeError('A score is engraved on at least one staff')
-  const natural: BuiltMeasure[] = []
-  for (const [index, measure] of score.measures.entries()) {
-    natural.push(
-      buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
-        fingers,
-        names,
-        scale,
-        shown,
-      }),
-    )
-    if ((index + 1) % MEASURES_A_STEP === 0) yield
-  }
   // The grand staff's brace stands left of its staves: room for it before the first measure.
   const lead = shown.includes('treble') && shown.includes('bass') ? BRACE_ROOM : 0
+  const lineWidth = (measures: readonly BuiltMeasure[]) =>
+    lead + measures.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
+  function* naturalAt(scale: number): Generator<void, BuiltMeasure[], void> {
+    const natural: BuiltMeasure[] = []
+    for (const [index, measure] of score.measures.entries()) {
+      natural.push(
+        buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
+          fingers,
+          names,
+          scale,
+          shown,
+        }),
+      )
+      if ((index + 1) % MEASURES_A_STEP === 0) yield
+    }
+    return natural
+  }
+  let scale = asked
+  let natural = yield* naturalAt(scale)
+  // A line wider than the width it may fill is drawn smaller to fit it, never wider than the screen:
+  // built again at that size, as its chord names keep their own size and need more of its room.
+  if (fill !== undefined && lineWidth(natural) * scale > fill) {
+    scale = fill / lineWidth(natural)
+    natural = yield* naturalAt(scale)
+    scale = Math.min(scale, fill / lineWidth(natural))
+  }
   const built = spread(natural, fill === undefined ? undefined : fill / scale - lead)
-  const width = lead + built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
+  const width = lineWidth(built)
   const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)
   renderer.resize(width * scale, places.height * scale)

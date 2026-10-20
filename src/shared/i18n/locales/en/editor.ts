@@ -12,17 +12,6 @@ export const editor = {
     open: 'Show the tools',
     close: 'Hide the tools',
     tabs: 'Kinds of tools',
-    // A laptop's ribbon names its tabs in a word.
-    short: {
-      notes: 'Notes',
-      pitch: 'Pitch',
-      articulations: 'Marks',
-      lines: 'Lines',
-      dynamics: 'Dynamics',
-      chords: 'Chords',
-      bars: 'Bars',
-      hand: 'Hand',
-    },
     notes: 'Notes',
     pitch: 'Pitch',
     articulations: 'Articulations and ornaments',

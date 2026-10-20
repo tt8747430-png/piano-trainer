@@ -30,7 +30,23 @@ export interface SheetLineBars {
   readonly start: number
 }
 
-export function linesOf(draft: Draft): SheetLineBars[] {
+/**
+ * The chart's lines, each section's as written; a line of more than `most` bars (more than a narrow
+ * screen holds) cut into as few parts as hold it, as even as they come.
+ */
+export function linesOf(draft: Draft, most = Infinity): SheetLineBars[] {
+  return chartLines(draft).flatMap((line) => {
+    const parts = Math.ceil(line.bars.length / most)
+    if (parts <= 1) return [line]
+    const size = Math.ceil(line.bars.length / parts)
+    return Array.from({ length: parts }, (_, part) => {
+      const bars = line.bars.slice(part * size, (part + 1) * size)
+      return { ...line, bars, start: bars[0]?.start ?? line.start }
+    }).filter((each) => each.bars.length > 0)
+  })
+}
+
+function chartLines(draft: Draft): SheetLineBars[] {
   const lines: SheetLineBars[] = []
   for (const placed of barsOf(draft)) {
     const current = lines.at(-1)

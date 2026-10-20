@@ -1,72 +1,75 @@
-import { useRef, type CSSProperties } from 'react'
+import { Music } from 'lucide-react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
+import { LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
+import { FabPill } from '@/shared/ui'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorHeader } from './EditorHeader'
-import { EditorKeyboard } from './EditorKeyboard'
+import { EditorKeyboard, KeysButton } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
-import { NoteColumn } from './NoteKeys'
 import { RecordingStrip } from './RecordingStrip'
 
-/** A laptop's width: the tools a ribbon over the sheet and a column beside it. */
+/** A laptop's width: the palette a column beside the sheet. */
 const LAPTOP = '(min-width: 64rem)'
 
 /**
- * The score editor (spec §6, ADR 0064), laid out as a notation app: the bar (Undo, Redo, Play,
- * Record, the view); on a laptop the tools' ribbon over the sheet and the notes' column beside it;
- * on a phone held upright the sheet over a keypad docked at its foot (Sibelius's), on its side the
- * sheet the whole screen under the keypad floating at its corner; the caret's line (under the title
- * on a phone on its side; while a take records, the recording strip); and the keys, at the foot or
- * under the bar as the keyboard settings dock them (`editor-screen`).
+ * The score editor (spec §6, ADR 0064, 0065), laid out as a notation app, one screen that never
+ * scrolls as a whole: the bar (Undo, Redo, Play, Record, the view); the sheet, the one part that
+ * scrolls; the caret's line (in the bar on a phone on its side; while a take records, the recording
+ * strip); the palette, a card of one size whatever its tab, at the foot on a phone held upright and
+ * a tablet, a column beside the sheet on a laptop and a phone on its side; and the keys, at the foot
+ * under the palette or under the bar as the keyboard settings dock them (`editor-screen`). Folded,
+ * the palette and the keys leave their room to the sheet, each a button floating over its corner.
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
+  const { t } = useTranslation('editor')
   const editor = useScoreEditor(target)
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
-  const laptop = useMediaQuery(LAPTOP)
+  const side = useMediaQuery(LAPTOP) || onSide
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const keypad = useRef<HTMLDivElement>(null)
-  const { height } = useElementSize(keypad)
-  const room = { '--palette-room': `${height}px` } as CSSProperties
+  const [palette, setPalette] = useState(true)
   return (
     <ScoreEditorContext value={editor}>
       <div
         data-keys={dock}
-        style={room}
-        className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-x-3 landscape-phone:py-1"
+        data-palette={palette ? (side ? 'side' : 'foot') : 'folded'}
+        className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-1.5 landscape-phone:py-1"
       >
         <div data-area="bar">
           <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
-        {laptop ? (
-          <>
-            <div data-area="tools">
-              <EditorTools variant="ribbon" />
-            </div>
-            <div data-area="column">
-              <NoteColumn />
-            </div>
-          </>
-        ) : null}
         <div data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
           <EditorSheet />
+        </div>
+        <div data-area="float">
+          <KeysButton />
+          {palette ? null : (
+            <FabPill
+              label={t('palette.open')}
+              icon={Music}
+              onClick={() => setPalette(true)}
+              className="ms-auto"
+            />
+          )}
         </div>
         {onSide && idle ? null : (
           <div data-area="status" className="flex min-h-6 flex-col justify-center">
             {idle ? <CaretLine /> : <RecordingStrip />}
           </div>
         )}
-        {laptop ? null : (
-          <div ref={keypad} data-area="dock">
-            <EditorTools variant="dock" />
+        {palette ? (
+          <div data-area="palette">
+            <EditorTools side={side} onFold={() => setPalette(false)} />
           </div>
-        )}
+        ) : null}
         <EditorKeyboard />
       </div>
     </ScoreEditorContext>

@@ -26,6 +26,33 @@ describe('the sheet’s lines', () => {
     ])
   })
 
+  it('cut a line longer than a screen holds into even parts, as many bars at most', () => {
+    const long = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['C F G C', 'C F G'] }],
+    })
+    const parts = (most: number) =>
+      linesOf(long, most).map((line) => [line.line, line.bars.map((b) => b.index), line.start])
+    expect(parts(3)).toEqual([
+      [0, [0, 1], 0],
+      [0, [2, 3], 192],
+      [1, [4, 5, 6], 384],
+    ])
+    expect(parts(2)).toEqual([
+      [0, [0, 1], 0],
+      [0, [2, 3], 192],
+      [1, [4, 5], 384],
+      [1, [6], 576],
+    ])
+    expect(parts(4)).toEqual([
+      [0, [0, 1, 2, 3], 0],
+      [1, [4, 5, 6], 384],
+    ])
+  })
+
   it('write a line from its own start: the melody on its staff, the written hands, and the chord symbols', () => {
     const [, second] = linesOf(draft)
     if (!second) throw new Error('a second line')

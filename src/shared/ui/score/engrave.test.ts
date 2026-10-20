@@ -420,6 +420,20 @@ describe('engrave', () => {
     })
     expect(far.width).toBe(natural.width)
   })
+
+  it('draws a line wider than the width it may fill smaller, to fit it', () => {
+    const host = () => document.createElement('div')
+    const natural = engrave(score, host(), { scale: 1, fingers: false, names: false })
+    const fitted = engrave(score, host(), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      fill: natural.width * 0.6,
+    })
+    expect(fitted.width).toBeLessThanOrEqual(natural.width * 0.6 + 0.5)
+    expect(fitted.width).toBeGreaterThan(natural.width * 0.5)
+    expect(fitted.height).toBeLessThan(natural.height)
+  })
 })
 
 describe('engraveInSteps', async () => {

@@ -12,6 +12,10 @@ import { SheetLine } from './SheetLine'
 const HEADING = 52
 const LINE_GAP = 8
 
+/** How many bars a line down a screen this wide holds at most, readable: a phone's two, a tablet's three. */
+const mostBars = (width: number) =>
+  width === 0 ? Infinity : width < 560 ? 2 : width < 860 ? 3 : Infinity
+
 type PageItem =
   | { readonly kind: 'title' }
   | { readonly kind: 'heading'; readonly section: number }
@@ -65,14 +69,15 @@ export function ScoreSheet({
   const { t } = useTranslation('editor')
   const [sheetsOf] = useState(createLineSheets)
   const across = view === 'horizontal'
-  const sheets = useMemo(() => sheetsOf(draft, across), [sheetsOf, draft, across])
-  const caretBar = barAt(draft, caret).index
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
+  const most = view === 'scroll' ? mostBars(width) : Infinity
+  const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
+  const caretBar = barAt(draft, caret).index
 
   const line = (sheet: LineSheet, scale?: number) => (
     <SheetLine
-      key={`${sheet.line.section} ${sheet.line.line}`}
+      key={`${sheet.line.section} ${sheet.line.line} ${sheet.line.start}`}
       sheet={sheet}
       layer={layer}
       caret={

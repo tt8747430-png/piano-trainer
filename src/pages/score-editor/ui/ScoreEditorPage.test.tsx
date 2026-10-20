@@ -63,16 +63,18 @@ describe('the score editor', () => {
     )
   })
 
-  it('folds its tools to their row of tabs, and opens them again', async () => {
+  it('folds its palette into a button over the sheet, and opens it again', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
-    const hide = within(palette).getByRole('button', { name: 'Hide the tools' })
-    expect(hide).toHaveAttribute('aria-expanded', 'true')
-    await user.click(hide)
-    expect(within(palette).queryByRole('group', { name: 'Note value' })).not.toBeInTheDocument()
-    await user.click(within(palette).getByRole('button', { name: 'Show the tools' }))
-    expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
+    await user.click(within(palette).getByRole('button', { name: 'Hide the tools' }))
+    expect(screen.queryByRole('region', { name: 'Tools' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Show the tools' }))
+    expect(
+      within(screen.getByRole('region', { name: 'Tools' })).getByRole('group', {
+        name: 'Note value',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('adds the tune’s staff from the view’s menu, and takes it away with its notes', async () => {

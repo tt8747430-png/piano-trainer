@@ -1,16 +1,11 @@
-import { ChevronDown, ChevronUp, Hand } from 'lucide-react'
+import { ChevronDown, Hand, PanelRightClose } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ToolPalette, ToolPalettePanel, ToolPaletteTab, ToolPaletteTabs } from '@/shared/ui'
+import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import {
-  PALETTE_TABS,
-  RIBBON_TABS,
-  shownTab,
-  tabOpen,
-  type PaletteTab,
-} from '../model/palette-tabs'
+import { PALETTE_TABS, shownTab, tabOpen, type PaletteTab } from '../model/palette-tabs'
 import { BarKeys } from './BarKeys'
 import { ChordKeys } from './ChordKeys'
 import { HandKeys } from './HandKeys'
@@ -46,92 +41,70 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
 }
 
 /**
- * The editor's tools by kind, as tabs (ADR 0064), the ones that work where the caret writes in reach
- * and the rest greyed; a tab's keys under its row, which folds away to leave the sheet its room.
- * `ribbon` is a laptop's, across the top over the sheet, its tabs named (the notes and pitch are its
- * left column's); `dock` a phone's keypad, its tabs pictures, six keys a row. While a take records,
- * the tools wait for Stop.
+ * The editor's palette (ADR 0064, 0065): its tools by kind as tabs of pictures, the ones that work
+ * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. It keeps
+ * its size whatever the tab, so the sheet never jumps: at the foot (`side` off) three rows of keys,
+ * more scrolling inside; beside the sheet (`side`), the column's height. It folds into a handle over
+ * the sheet's corner (`onFold`). While a take records, the tools wait for Stop.
  */
-export function EditorTools({ variant }: { variant: 'ribbon' | 'dock' }) {
+export function EditorTools({ side, onFold }: { side: boolean; onFold: () => void }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
-  const ribbon = variant === 'ribbon'
-  const tabs = ribbon ? RIBBON_TABS : PALETTE_TABS
-  const [chosen, choose] = useState<PaletteTab>(ribbon ? 'articulations' : 'notes')
-  const [open, setOpen] = useState(true)
+  const [chosen, choose] = useState<PaletteTab>('notes')
   // Into the chord row, the chord names' tools come up; out of it, those of the staff.
   const [lastLayer, setLastLayer] = useState(layer)
   if (layer !== lastLayer) {
     setLastLayer(layer)
     if (layer === 'chords') choose('chords')
-    else if (lastLayer === 'chords' && chosen === 'chords')
-      choose(ribbon ? 'articulations' : 'notes')
+    else if (lastLayer === 'chords' && chosen === 'chords') choose('notes')
   }
   const recording = takes.stage !== 'idle'
-  const tab = shownTab(chosen, layer, tabs)
-  const Fold = open ? (ribbon ? ChevronUp : ChevronDown) : ribbon ? ChevronDown : ChevronUp
+  const tab = shownTab(chosen, layer)
   const fold = (
     <Button
       variant="ghost"
       size="icon"
-      aria-label={open ? t('palette.close') : t('palette.open')}
-      title={open ? t('palette.close') : t('palette.open')}
-      aria-expanded={open}
+      aria-label={t('palette.close')}
+      title={t('palette.close')}
       className="size-9 shrink-0 rounded-xl"
-      onClick={() => setOpen(!open)}
+      onClick={onFold}
     >
-      <Fold aria-hidden />
+      {side ? <PanelRightClose aria-hidden /> : <ChevronDown aria-hidden />}
     </Button>
   )
   return (
     <ToolPalette
       label={t('palette.label')}
       tab={tab}
-      onTabChange={(next) => {
-        choose(next)
-        setOpen(true)
-      }}
-      className={
-        ribbon ? 'gap-1 rounded-3xl p-1.5 shadow-none' : 'gap-1 rounded-3xl p-1.5 shadow-none'
-      }
+      onTabChange={choose}
+      className={cn('gap-1 rounded-3xl p-1.5 shadow-none', side && 'h-full min-h-0')}
     >
       <fieldset disabled={recording} className="contents">
-        <ToolPaletteTabs
-          label={t('palette.tabs')}
-          end={fold}
-          className={open ? 'border-t-0' : 'border-y-0'}
-        >
-          {tabs.map((each) => (
+        <ToolPaletteTabs label={t('palette.tabs')} end={fold} className="border-t-0">
+          {PALETTE_TABS.map((each) => (
             <ToolPaletteTab
               key={each}
               value={each}
               label={t(`palette.${each}`)}
               disabled={!tabOpen(each, layer)}
-              className={ribbon ? 'min-h-9 flex-none px-3 text-sm font-semibold' : 'min-w-8'}
+              className="min-w-7 shrink"
             >
-              {ribbon ? (
-                t(`palette.short.${each}`)
-              ) : (
-                <span aria-hidden className="contents">
-                  {TAB_ICONS[each]}
-                </span>
-              )}
+              <span aria-hidden className="contents">
+                {TAB_ICONS[each]}
+              </span>
             </ToolPaletteTab>
           ))}
         </ToolPaletteTabs>
-        {open ? (
-          <ToolPalettePanel
-            value={tab}
-            className={
-              ribbon
-                ? 'flex flex-wrap items-center gap-1.5 px-1 pb-1 [&>[data-slot=button]]:w-12'
-                : 'max-h-[42dvh] grid-cols-6 overflow-y-auto overscroll-contain landscape-phone:max-h-none'
-            }
-          >
-            {TAB_KEYS[tab]}
-          </ToolPalettePanel>
-        ) : null}
+        <ToolPalettePanel
+          value={tab}
+          className={cn(
+            'grid-cols-6 content-start overflow-y-auto overscroll-contain',
+            side ? 'min-h-0 flex-1' : 'h-39',
+          )}
+        >
+          {TAB_KEYS[tab]}
+        </ToolPalettePanel>
       </fieldset>
     </ToolPalette>
   )

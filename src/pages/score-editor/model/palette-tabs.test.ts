@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PALETTE_TABS, RIBBON_TABS, shownTab, tabOpen } from './palette-tabs'
+import { PALETTE_TABS, shownTab, tabOpen } from './palette-tabs'
 
 describe('the editor’s tabs of tools', () => {
   it('lists the notes and their pitch, the marks, the chord names, the bars and a hand’s', () => {
@@ -13,7 +13,6 @@ describe('the editor’s tabs of tools', () => {
       'bars',
       'hand',
     ])
-    expect(RIBBON_TABS).toEqual(['articulations', 'lines', 'dynamics', 'chords', 'bars', 'hand'])
   })
 
   it('opens the tools of where the caret writes, and the bars’ everywhere', () => {
@@ -39,6 +38,5 @@ describe('the editor’s tabs of tools', () => {
     expect(shownTab('hand', 'melody')).toBe('notes')
     expect(shownTab('notes', 'chords')).toBe('chords')
     expect(shownTab('bars', 'chords')).toBe('bars')
-    expect(shownTab('notes', 'rh', RIBBON_TABS)).toBe('articulations')
   })
 })

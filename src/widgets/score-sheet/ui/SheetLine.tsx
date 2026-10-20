@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef } from 'react'
 import type { BarRange, Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
-import { useElementSize } from '@/shared/lib'
+import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
@@ -14,8 +14,9 @@ function topInSight(element: Element): boolean {
 }
 
 /**
- * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen,
- * the notes at the caret marked; a row of a busy sheet, drawn again only when its props change.
+ * One line of the chart as a line of grand staff, the notes at the caret marked: justified to the
+ * sheet's width, drawn smaller where it is wider than that, so it never scrolls sideways (a
+ * panorama's one line, left natural, does); a row of a busy sheet, drawn again only when its props change.
  */
 export const SheetLine = memo(function SheetLine({
   sheet,
@@ -74,7 +75,10 @@ export const SheetLine = memo(function SheetLine({
     <div
       ref={ref}
       data-slot="sheet-line"
-      className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none"
+      className={cn(
+        'relative pt-11',
+        !justify && 'overflow-x-auto overscroll-x-contain scrollbar-none',
+      )}
     >
       <LazyScoreView
         scale={scale}

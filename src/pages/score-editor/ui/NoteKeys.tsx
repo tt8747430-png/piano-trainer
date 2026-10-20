@@ -230,34 +230,3 @@ export function PitchKeys() {
     </>
   )
 }
-
-/**
- * A laptop's left column (Soundslice's): the values, then the rhythm's keys, the pitch's, and Delete
- * at its foot, two keys a row, always in sight beside the sheet.
- */
-export function NoteColumn() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  return (
-    <section aria-label={t('palette.notes')} className="grid grid-cols-3 content-start gap-1.5">
-      <div
-        role="group"
-        aria-label={t('values.label')}
-        className="col-span-full grid grid-cols-3 gap-1.5"
-      >
-        <ValueKeys />
-      </div>
-      <hr className="col-span-full my-1 border-hairline" />
-      <RhythmKeys />
-      <hr className="col-span-full my-1 border-hairline" />
-      <SemitoneKeys />
-      <OctaveKeys />
-      <ToolKey label={t('respell')} onClick={() => actions.dispatch({ type: 'respell' })}>
-        <span aria-hidden className="text-xl font-semibold tracking-tight">
-          ♯♭
-        </span>
-      </ToolKey>
-      <DeleteKey />
-    </section>
-  )
-}
