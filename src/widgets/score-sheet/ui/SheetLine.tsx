@@ -6,6 +6,12 @@ import { LazyScoreView } from '@/shared/ui'
 import type { LineSheet } from '../model/line-sheets'
 import { LineOverlay } from './LineOverlay'
 
+/** Whether an element's top is on the screen. */
+function topInSight(element: Element): boolean {
+  const { top } = element.getBoundingClientRect()
+  return top >= 0 && top < window.innerHeight
+}
+
 /**
  * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen,
  * the notes at the caret marked; a row of a busy sheet, drawn again only when its props change.
@@ -41,9 +47,17 @@ export const SheetLine = memo(function SheetLine({
     caret === null || layer === 'chords'
       ? undefined
       : { staff: layer === 'lh' ? ('bass' as const) : ('treble' as const), tick: caret }
-  // The caret's line comes into view when the caret moves onto it.
+  // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
+  // while the line is already in sight, its section's heading over it kept in view.
+  const held = useRef<boolean | null>(null)
   useEffect(() => {
-    if (holdsCaret) ref.current?.scrollIntoView({ block: 'nearest' })
+    const line = ref.current
+    const before = held.current
+    held.current = holdsCaret
+    // The effect run again with nothing changed (a strict mode's second run) moves nothing.
+    if (!holdsCaret || !line || before === true) return
+    if (before === null && topInSight(line)) return
+    line.scrollIntoView({ block: 'nearest' })
   }, [holdsCaret])
   return (
     <div

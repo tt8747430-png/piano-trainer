@@ -95,4 +95,25 @@ describe('ScoreSheet', () => {
     await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
     expect(document.querySelector('.vf-selected')).toHaveAttribute('data-staff', 'treble')
   })
+
+  it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {
+    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
+    scrolled.mockClear()
+    const props = {
+      draft,
+      layer: 'chords' as const,
+      caretTicks: 24,
+      selection: null,
+      onPlace: vi.fn(),
+      placesOf: () => [],
+      heading: () => null,
+      chordNames: true,
+      onSignature: vi.fn(),
+    }
+    const { rerender } = render(<ScoreSheet {...props} caret={96} />)
+    await screen.findByRole('button', { name: 'Bar 2: C D' })
+    expect(scrolled).not.toHaveBeenCalled()
+    rerender(<ScoreSheet {...props} caret={288} />)
+    expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
+  })
 })

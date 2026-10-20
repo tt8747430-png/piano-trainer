@@ -8,6 +8,38 @@ import { CHORD_ROW } from './chord-row'
 const LEAD = 8
 const REACH = 12
 const LEAST = 28
+/** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
+const CLEAR = 16
+
+/** The nearest box round a line that scrolls up and down: the sheet (a line itself scrolls sideways). */
+function scrollerOf(element: HTMLElement): HTMLElement | null {
+  const line = element.closest('[data-slot="sheet-line"]')
+  for (let box = line?.parentElement; box; box = box.parentElement) {
+    const { overflowY } = getComputedStyle(box)
+    if ((overflowY === 'auto' || overflowY === 'scroll') && box.scrollHeight > box.clientHeight)
+      return box
+  }
+  return null
+}
+
+/**
+ * The sheet scrolled up or down just enough to show the caret's band, clear of what stands over its
+ * foot (its `scroll-padding-bottom`: the editor's palette); in sight already, it stays where it is,
+ * and as the sheet opens, in sight in part.
+ */
+function revealUpright(band: HTMLElement, opening: boolean) {
+  const scroller = scrollerOf(band)
+  if (!scroller) return
+  const box = band.getBoundingClientRect()
+  const view = scroller.getBoundingClientRect()
+  const foot =
+    view.bottom - (Number.parseFloat(getComputedStyle(scroller).scrollPaddingBottom) || 0)
+  // As the sheet opens, a band partly in sight is left as it is: the sheet opens at its top.
+  if (opening && box.top < foot && box.bottom > view.top) return
+  if (box.top < view.top) scroller.scrollTop -= view.top - box.top + CLEAR
+  else if (box.bottom > foot)
+    scroller.scrollTop += Math.min(box.bottom - foot + CLEAR, box.top - view.top)
+}
 
 /**
  * The caret: the Player's cursor band where the next note or chord goes, on the layer's staff (or over
@@ -49,6 +81,16 @@ export function EditorCaret({
     layer === 'chords' || !staff
       ? { top: -CHORD_ROW, height: CHORD_ROW }
       : { top: staff.top - REACH, height: staff.bottom - staff.top + 2 * REACH }
+  // The sheet scrolls to the caret's staff as the caret comes onto it (a short screen shows less
+  // than a line's grand staff), leaving the sheet as it is while the staff is in sight.
+  const shown = useRef(false)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (caret.current) revealUpright(caret.current, !shown.current)
+      shown.current = true
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [box.top, box.height])
   return (
     <div
       ref={caret}
