@@ -226,6 +226,39 @@ describe('an applied numeral', () => {
   })
 })
 
+describe('a numeral over its bass', () => {
+  it('reads and writes the chord tone in the bass after a slash: its 3rd, 5th or 7th', () => {
+    expect(texts('I/5 I/3 V7/7 ii7/3 V7/3/ii')).toEqual(['I/5', 'I/3', 'V7/7', 'ii7/3', 'V7/3/ii'])
+    expect(parseNumeral('I/5')).toEqual({ degree: 0, shift: 0, quality: 'maj', bass: '5th' })
+    expect(numeralsParam(parseNumerals('IV I/5') ?? [])).toBe('IV-I/5')
+    expect(texts('I6/9')).toEqual(['I6/9'])
+  })
+
+  it('reads no bass that is no chord tone a numeral writes', () => {
+    for (const token of ['I/2', 'I/1', 'I/', 'I/5/5']) expect(parseNumeral(token), token).toBeNull()
+  })
+
+  it('plays the chord over that tone, at every chord size', () => {
+    expect(chords('IV I/5', C, 'triads')).toEqual(['F', 'C/G'])
+    expect(chords('I/3 V7/7', C, 'triads')).toEqual(['C/E', 'G7/F'])
+    expect(chords('I/5', C, 'sevenths')).toEqual(['CMaj7/G'])
+    expect(chords('V7/3/ii', C, 'triads')).toEqual(['A7/C#'])
+  })
+
+  it('plays a chord with no such tone over its root', () => {
+    expect(chords('I/7', C, 'triads')).toEqual(['C'])
+  })
+
+  it('is what a slash chord over its own tone reads as, and a bass outside it is left out', () => {
+    const written = (symbol: string) => {
+      const numeral = numeralOf(parseChordSymbol(symbol), C)
+      return numeral ? numeralText(numeral) : null
+    }
+    expect(['C/G', 'C/E', 'G7/F', 'Dm7/F'].map(written)).toEqual(['I/5', 'I/3', 'V7/7', 'ii7/3'])
+    expect(written('C/D')).toBe('I')
+  })
+})
+
 describe('numeralGrows', () => {
   it('says a plain triad grows with the chord size, and a chord written out does not', () => {
     const grows = (text: string) => (parseNumerals(text) ?? []).map(numeralGrows)

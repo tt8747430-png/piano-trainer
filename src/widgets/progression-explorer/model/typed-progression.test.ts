@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { keyParam, note, numeralText, parseNumerals, type Key } from '@/shared/lib/music'
-import { readProgression, tonicMinor } from './typed-progression'
+import { readProgression, tonicMinor, typedSearch } from './typed-progression'
 
 const C = { tonic: note('C'), minor: false }
 const read = (text: string, key: Key = C) => {
@@ -33,6 +33,11 @@ describe('readProgression', () => {
       numerals: ['I', 'V7/ii', 'ii', 'V7', 'I'],
       key: 'C',
     })
+  })
+
+  it('keeps a slash chord’s bass as the chord tone it is', () => {
+    expect(read('F C/G')).toEqual({ numerals: ['IV', 'I/5'], key: 'C' })
+    expect(typedSearch('F C/G', C)).toEqual({ key: 'C', p: 'IV-I/5' })
   })
 
   it('holds the key still while the first chords are typed', () => {

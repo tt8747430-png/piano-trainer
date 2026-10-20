@@ -64,7 +64,7 @@ describe('readInKey', () => {
   })
 
   it('names a dominant out of the key by the chord it leads to', () => {
-    expect(numerals('D D/F# Gm', D_MINOR)).toEqual(['I', 'V/iv', 'iv'])
+    expect(numerals('D D/F# Gm', D_MINOR)).toEqual(['I', 'V/3/iv', 'iv'])
     expect(numerals('C A7 Dm G7 C', { tonic: note('C'), minor: false })).toEqual([
       'I',
       'V7/ii',
