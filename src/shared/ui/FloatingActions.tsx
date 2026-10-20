@@ -28,15 +28,17 @@ const ALIGN: Readonly<Record<FloatingPlace, string>> = {
 }
 /**
  * A dial's own stack stands over its button at the foot; beside the page, where the height is short,
- * beside its button towards the page, level with it.
+ * beside its button towards the page, level with it; on a phone on its side, too short for a column
+ * of them, in a row, the nearest next to the button.
  */
 const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'left-0 items-start aside:left-full aside:ml-3',
+  left: 'left-0 items-start aside:left-full aside:ml-3 landscape-phone:flex-row-reverse',
   center:
-    'left-1/2 -translate-x-1/2 items-center aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:items-end',
-  right: 'right-0 items-end aside:right-full aside:mr-3',
+    'left-1/2 -translate-x-1/2 items-center aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:items-end landscape-phone:flex-row',
+  right: 'right-0 items-end aside:right-full aside:mr-3 landscape-phone:flex-row',
 }
-const DIAL_ASIDE = 'aside:top-1/2 aside:bottom-auto aside:mb-0 aside:-translate-y-1/2'
+const DIAL_ASIDE =
+  'aside:top-1/2 aside:bottom-auto aside:mb-0 aside:-translate-y-1/2 landscape-phone:items-center'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
 /** The room the actions take along one side, their gap included; none while there are none. */
@@ -359,7 +361,7 @@ export function SpeedDialAction({
   const close = useContext(CloseDial)
   const { place, labels } = useContext(FloatingContext)
   const look =
-    'group/action h-12 gap-2 rounded-full border-0 bg-transparent p-0 shadow-none hover:bg-transparent motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-150'
+    'group/action h-12 gap-2 rounded-full border-0 landscape-phone:h-auto landscape-phone:flex-col bg-transparent p-0 shadow-none hover:bg-transparent motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-150'
   const choose = () => {
     onClick?.()
     close()
