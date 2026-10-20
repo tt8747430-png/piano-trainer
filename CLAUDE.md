@@ -114,7 +114,7 @@ it. `@` → `src`.
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `PatternCard` (the pattern
   over its two hands, each naming its figure, with the `InversionField`: the first chord's position and Nearest, ADR 0039; the hands' figures listed under `LEFT_FIGURE_GROUPS` / `RIGHT_FIGURE_GROUPS`), `KeyWalkField` (Through the keys),
   `MelodyToggle`, `RecordingToggle`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, `usePlayerShortcuts` over `PLAYER_KEYS` (Space, the arrows, R, Home, Escape), the
-  `player-screen` areas, the tempo and hands popovers, the loop button, ‹ ▶ ›, Wait mode's line, `PlayingToggles` for the Setup's grid), `sheet-music`
+  `player-screen` areas, `PlayerDock` (the transport floating as one pill: tempo, ‹ ▶ ›, hands; upright beside the sheet on a phone on its side, ADR 0061), the loop button, Wait mode's line, `PlayingToggles` for the Setup's grid), `sheet-music`
   (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
   chord builder, read top to bottom: `ChordBuilder` (its choices as labelled fields), `ChordSheet`, `ChordTensions`
   (a 7th chord's twelve notes in the owner's table's four groups, each played on top), `ChordPractice` (its arpeggio
