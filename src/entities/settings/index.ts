@@ -7,6 +7,8 @@ export {
   defaultKeyboard,
   FLOATING_PLACES,
   type ChordFinderSettings,
+  DEFAULT_SCORE_VIEW,
+  type ScoreViewSettings,
   type FloatingPlace,
   type FloatingSettings,
   type KeyboardSettings,
@@ -25,6 +27,7 @@ export {
 } from './model/store'
 export {
   selectChordFinder,
+  selectScoreView,
   selectKeyboard,
   selectFloating,
   selectLocale,

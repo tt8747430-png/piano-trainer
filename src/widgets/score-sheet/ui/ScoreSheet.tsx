@@ -1,11 +1,10 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
-import { useElementSize, type SheetView } from '@/shared/lib'
+import { PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
-import { PAGE, paginate } from '../model/sheet-view'
 import { CHORD_ROW } from './chord-row'
 import { SheetLine } from './SheetLine'
 

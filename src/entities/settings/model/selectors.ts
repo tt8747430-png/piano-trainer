@@ -1,6 +1,7 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
   ChordFinderSettings,
+  ScoreViewSettings,
   KeyboardSettings,
   MidiSettings,
   PracticeToggles,
@@ -29,3 +30,4 @@ export const selectSectionFolded =
   (state: SettingsState): boolean =>
     state.foldedSections.includes(id)
 export const selectChordFinder = (state: SettingsState): ChordFinderSettings => state.chordFinder
+export const selectScoreView = (state: SettingsState): ScoreViewSettings => state.scoreView

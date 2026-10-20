@@ -8,17 +8,27 @@ export function LoopBand({
   layout,
   loop,
   onChange,
+  firstBar = 0,
 }: {
   layout: ScoreLayout
   loop: BarRange
   onChange: (loop: BarRange) => void
+  /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
+  firstBar?: number
 }) {
   const { t } = useTranslation('music')
-  const first = layout.measures[loop.first]
-  const last = layout.measures[loop.last]
+  const lastBar = firstBar + layout.measures.length - 1
+  // On a line, the part of the loop it holds, a grip where the loop ends there.
+  if (loop.last < firstBar || loop.first > lastBar) return null
+  const from = Math.max(loop.first, firstBar)
+  const to = Math.min(loop.last, lastBar)
+  const first = layout.measures[from - firstBar]
+  const last = layout.measures[to - firstBar]
   if (!first || !last) return null
   const left = first.x
   const right = last.x + last.width
+  // The grips move bars of this line: their measures, offset to the piece's bars.
+  const along = (bar: number) => bar - firstBar
   return (
     <>
       <div
@@ -26,24 +36,28 @@ export function LoopBand({
         className="absolute inset-y-0 z-0 bg-muted"
         style={{ left, width: right - left }}
       />
-      <LoopGrip
-        label={t('sheet.loopStart')}
-        x={left}
-        bar={loop.first}
-        min={0}
-        max={loop.last}
-        measures={layout.measures}
-        onMove={(bar) => onChange({ first: bar, last: loop.last })}
-      />
-      <LoopGrip
-        label={t('sheet.loopEnd')}
-        x={right}
-        bar={loop.last}
-        min={loop.first}
-        max={layout.measures.length - 1}
-        measures={layout.measures}
-        onMove={(bar) => onChange({ first: loop.first, last: bar })}
-      />
+      {from === loop.first ? (
+        <LoopGrip
+          label={t('sheet.loopStart')}
+          x={left}
+          bar={along(loop.first)}
+          min={0}
+          max={Math.min(loop.last, lastBar) - firstBar}
+          measures={layout.measures}
+          onMove={(bar) => onChange({ first: bar + firstBar, last: loop.last })}
+        />
+      ) : null}
+      {to === loop.last ? (
+        <LoopGrip
+          label={t('sheet.loopEnd')}
+          x={right}
+          bar={along(loop.last)}
+          min={Math.max(loop.first, firstBar) - firstBar}
+          max={layout.measures.length - 1}
+          measures={layout.measures}
+          onMove={(bar) => onChange({ first: loop.first, last: bar + firstBar })}
+        />
+      ) : null}
     </>
   )
 }

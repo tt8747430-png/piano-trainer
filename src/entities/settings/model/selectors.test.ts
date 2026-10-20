@@ -12,6 +12,7 @@ import {
 } from './selectors'
 import {
   DEFAULT_CHORD_FINDER,
+  DEFAULT_SCORE_VIEW,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -35,6 +36,7 @@ describe('settings selectors', () => {
       sidebar: 'collapsed',
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
+      scoreView: DEFAULT_SCORE_VIEW,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)

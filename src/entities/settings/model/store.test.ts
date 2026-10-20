@@ -4,6 +4,7 @@ import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
 import {
   DEFAULT_CHORD_FINDER,
+  DEFAULT_SCORE_VIEW,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -34,6 +35,7 @@ const DEFAULTS = {
   sidebar: DEFAULT_SIDEBAR,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
+  scoreView: DEFAULT_SCORE_VIEW,
   foldedSections: [],
 }
 
@@ -120,6 +122,14 @@ describe('createSettingsStore', () => {
           [53, 57, 60],
         ],
       },
+      scoreView: {
+        layout: 'scroll',
+        notation: true,
+        chordNames: false,
+        melodyStaff: false,
+        hidden: ['treble'],
+        keys: false,
+      },
       foldedSections: ['chords.tensions'],
     }
     expect(restored(saved)).toEqual(saved)
@@ -140,6 +150,27 @@ describe('createSettingsStore', () => {
     const kept = restored({ chordFinder: { chords: many } }).chordFinder.chords
     expect(kept).toHaveLength(24)
     expect(kept.at(-1)).toEqual([69])
+  })
+
+  it('keeps the Player’s view where still valid, each staff hidden once', () => {
+    expect(
+      restored({
+        scoreView: {
+          layout: 'pages',
+          notation: 'no',
+          chordNames: false,
+          hidden: ['bass', 'x', 'bass'],
+        },
+      }).scoreView,
+    ).toEqual({
+      layout: 'pages',
+      notation: true,
+      chordNames: false,
+      melodyStaff: true,
+      hidden: ['bass'],
+      keys: true,
+    })
+    expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {

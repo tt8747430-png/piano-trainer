@@ -31,6 +31,20 @@ describe('Player', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
+  it('shows the score as its View menu says, remembered for every piece', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('radio', { name: 'Pages' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('pages')
+    expect((await screen.findAllByText('1', { selector: 'span' })).length).toBeGreaterThan(0)
+    expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Notation' }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Piano keys' }))
+    expect(settingsStore.getState().scoreView).toMatchObject({ notation: false, keys: false })
+  })
+
   it('holds the tempo, ‹, Play, › and the hands in one toolbar named Playback', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })

@@ -2,6 +2,20 @@ import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
+  view: {
+    open: 'Вид',
+    staves: 'Нотоносцы',
+    melody: 'Нотоносец мелодии',
+    melodyDetail: 'Над фортепиано, пока звучит мелодия',
+    rh: 'Правая рука',
+    lh: 'Левая рука',
+    show: 'Показывать',
+    notation: 'Ноты',
+    chordNames: 'Названия аккордов',
+    keys: 'Клавиши',
+    layout: 'Вид нот',
+    layouts: { horizontal: 'В строку', scroll: 'Лента', pages: 'Страницы' },
+  },
   key: 'Тональность',
   root: 'Основной тон',
   walk: { title: 'Аккорды по ступеням: {{scale}}' },

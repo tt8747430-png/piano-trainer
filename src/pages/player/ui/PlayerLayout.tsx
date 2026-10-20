@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { selectKeyboard, useSettings } from '@/entities/settings'
+import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -17,6 +17,7 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { PlayerViewMenu } from './PlayerViewMenu'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -48,8 +49,9 @@ export function PlayerLayout({
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const shown = useSettings(selectScoreView)
   usePlayerShortcuts(player, view, onClose)
-  const keys = (
+  const keys = !shown.keys ? null : (
     <PlayerArea area="keys">
       <LiveKeyboard
         range={player.range}
@@ -71,23 +73,28 @@ export function PlayerLayout({
       </PlayerArea>
       <PlayerArea area="actions" className="flex items-center justify-end gap-2">
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
+        <PlayerViewMenu />
         <MidiButton />
         {setup}
       </PlayerArea>
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
-        <SheetMusic
-          performance={performance}
-          headings={headings}
-          current={practice.state.beatGroup}
-          loop={player.loop}
-          fingers={player.fingers}
-          names={player.names}
-          positions={player.positions}
-          muted={player.muted}
-          onJump={practice.jumpToBeatGroup}
-          onLoopChange={player.setLoop}
-        />
+        {shown.notation ? (
+          <SheetMusic
+            view={shown}
+            title={title}
+            performance={performance}
+            headings={headings}
+            current={practice.state.beatGroup}
+            loop={player.loop}
+            fingers={player.fingers}
+            names={player.names}
+            positions={player.positions}
+            muted={player.muted}
+            onJump={practice.jumpToBeatGroup}
+            onLoopChange={player.setLoop}
+          />
+        ) : null}
       </PlayerArea>
       <PlayerArea
         area="status"

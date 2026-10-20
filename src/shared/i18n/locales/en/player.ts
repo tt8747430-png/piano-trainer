@@ -1,5 +1,20 @@
 export const player = {
   setup: 'Setup',
+  // How the score is shown (ADR 0064), from the bar: remembered for every piece.
+  view: {
+    open: 'View',
+    staves: 'Staves',
+    melody: 'Melody staff',
+    melodyDetail: 'Over the piano, while the melody plays',
+    rh: 'Right hand',
+    lh: 'Left hand',
+    show: 'Show',
+    notation: 'Notation',
+    chordNames: 'Chord names',
+    keys: 'Piano keys',
+    layout: 'Layout',
+    layouts: { horizontal: 'Across', scroll: 'Scroll', pages: 'Pages' },
+  },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },

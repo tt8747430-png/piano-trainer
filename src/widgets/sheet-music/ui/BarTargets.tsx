@@ -16,7 +16,10 @@ export function BarTargets({
   positions,
   current,
   onJump,
+  firstBar = 0,
 }: {
+  /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
+  firstBar?: number
   layout: ScoreLayout
   performance: Performance
   /** Each chord named with how the right hand plays it, as the labels over the staff say. */
@@ -30,7 +33,8 @@ export function BarTargets({
   // Named once per score: the cursor's move re-renders the bars, and only the current one changes.
   const names = useMemo(() => {
     const placed = positions ? chordPositions(performance) : []
-    return layout.measures.map((_, bar) => {
+    return layout.measures.map((_, index) => {
+      const bar = firstBar + index
       const chords = (performance.bars[bar]?.chords ?? []).flatMap((index) => {
         const symbol = performance.chords[index]?.symbol
         if (!symbol) return []
@@ -39,28 +43,31 @@ export function BarTargets({
       })
       return t('sheet.barChords', { n: bar + 1, chords: chords.join(' ') })
     })
-  }, [layout, performance, positions, positionName, t])
-  return layout.measures.map((measure, bar) => (
-    <button
-      key={bar}
-      type="button"
-      aria-label={names[bar]}
-      aria-current={bar === current ? 'step' : undefined}
-      onClick={(event) => {
-        const box = event.currentTarget.getBoundingClientRect()
-        const target =
-          event.detail === 0
-            ? performance.beatGroups.findIndex((group) => group.bar === bar)
-            : nearestBeatGroup(
-                performance,
-                bar,
-                (tick) => xAtTick(layout, tick),
-                measure.x + event.clientX - box.left,
-              )
-        if (target !== null && target >= 0) onJump(target)
-      }}
-      className="absolute inset-y-0 z-20 cursor-pointer rounded-md ring-inset transition-shadow duration-200 ease-out hover:ring-1 hover:ring-input focus-visible:-outline-offset-3"
-      style={{ left: measure.x, width: measure.width }}
-    />
-  ))
+  }, [layout, performance, positions, positionName, t, firstBar])
+  return layout.measures.map((measure, index) => {
+    const bar = firstBar + index
+    return (
+      <button
+        key={bar}
+        type="button"
+        aria-label={names[index]}
+        aria-current={bar === current ? 'step' : undefined}
+        onClick={(event) => {
+          const box = event.currentTarget.getBoundingClientRect()
+          const target =
+            event.detail === 0
+              ? performance.beatGroups.findIndex((group) => group.bar === bar)
+              : nearestBeatGroup(
+                  performance,
+                  bar,
+                  (tick) => xAtTick(layout, tick),
+                  measure.x + event.clientX - box.left,
+                )
+          if (target !== null && target >= 0) onJump(target)
+        }}
+        className="absolute inset-y-0 z-20 cursor-pointer rounded-md ring-inset transition-shadow duration-200 ease-out hover:ring-1 hover:ring-input focus-visible:-outline-offset-3"
+        style={{ left: measure.x, width: measure.width }}
+      />
+    )
+  })
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { paginate } from './sheet-view'
+import { paginate } from './sheet-views'
 
 describe('paginate', () => {
   it('deals items onto pages, a new page where the next does not fit', () => {
