@@ -192,6 +192,17 @@ describe('Piece: the learner’s own music', () => {
     expect(screen.queryByText('Your version')).toBeNull()
   })
 
+  it('gives the focus back to More actions once Reset is not wanted', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/amazing', { storage: saved({ versions: { amazing: MUSIC } }) })
+    await openMore(user)
+    await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
+    expect(await screen.findByRole('alertdialog')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'More actions' })).toHaveFocus())
+  })
+
   it('shares an own song as a link that carries it, copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     const song = { id: 'my-1', title: 'Morning', ...MUSIC }

@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import type { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePiecesStoreApi, type OwnSongId, type PieceId } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
@@ -16,15 +17,19 @@ import {
 
 /**
  * The learner's music's way back, asked first: their version reset to the book's, or their song
- * deleted. The page opens it (`open`) from its More actions; it has no trigger of its own.
+ * deleted. The page opens it (`open`) from its More actions; it has no trigger of its own, so it gives
+ * the focus back to `returnTo` (More actions) as it closes: the action that opened it is gone.
  */
 export function OwnMusicAsk({
   piece,
   open,
   onOpenChange,
+  returnTo,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** What takes the focus as it closes: a part of the page holding the control that opened it. */
+  returnTo: RefObject<HTMLElement | null>
   piece:
     | { readonly kind: 'version'; readonly id: PieceId; readonly title: string }
     | {
@@ -49,7 +54,9 @@ export function OwnMusicAsk({
   }
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent
+        finalFocus={() => returnTo.current?.querySelector<HTMLElement>('button') ?? true}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>{t(`${words}.title`, { title: piece.title })}</AlertDialogTitle>
           <AlertDialogDescription>{t(`${words}.says`)}</AlertDialogDescription>

@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { PencilLine, Play, Printer, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { pieceStepId } from '@/entities/step'
@@ -50,6 +50,8 @@ export function PieceView({ piece }: { piece: Piece }) {
   const headings = usePieceHeadings(piece)
   const shared = useShareSong()
   const [asking, setAsking] = useState(false)
+  // More actions, which takes the focus back from a dialog it opened: the action chosen is folded away.
+  const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const toggleBar = (bar: number) =>
     playback.toggle(bar, () =>
@@ -80,38 +82,42 @@ export function PieceView({ piece }: { piece: Piece }) {
         />
       </section>
       <PieceAbout entry={piece} />
-      {ownMusic ? <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} /> : null}
+      {ownMusic ? (
+        <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
+      ) : null}
       <FloatingActions>
-        <SpeedDial>
-          {ownMusic ? (
+        <div ref={more} className="contents">
+          <SpeedDial>
+            {ownMusic ? (
+              <SpeedDialAction
+                label={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
+                icon={ownMusic.kind === 'song' ? Trash2 : RotateCcw}
+                onClick={() => setAsking(true)}
+              />
+            ) : null}
+            {own && !isDegreePiece(piece) ? (
+              <SpeedDialAction
+                label={t('share')}
+                icon={Share2}
+                onClick={() => shared.share({ title, music: musicOf(piece) })}
+              />
+            ) : null}
+            {/* An installed app has no browser menu to print from. */}
+            <SpeedDialAction label={t('print')} icon={Printer} onClick={() => window.print()} />
             <SpeedDialAction
-              label={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
-              icon={ownMusic.kind === 'song' ? Trash2 : RotateCcw}
-              onClick={() => setAsking(true)}
+              label={t('checkChords')}
+              icon={Target}
+              render={<Link to="/check" search={{ of: step }} />}
             />
-          ) : null}
-          {own && !isDegreePiece(piece) ? (
-            <SpeedDialAction
-              label={t('share')}
-              icon={Share2}
-              onClick={() => shared.share({ title, music: musicOf(piece) })}
-            />
-          ) : null}
-          {/* An installed app has no browser menu to print from. */}
-          <SpeedDialAction label={t('print')} icon={Printer} onClick={() => window.print()} />
-          <SpeedDialAction
-            label={t('checkChords')}
-            icon={Target}
-            render={<Link to="/check" search={{ of: step }} />}
-          />
-          {isDegreePiece(piece) ? null : (
-            <SpeedDialAction
-              label={t('edit')}
-              icon={PencilLine}
-              render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-            />
-          )}
-        </SpeedDial>
+            {isDegreePiece(piece) ? null : (
+              <SpeedDialAction
+                label={t('edit')}
+                icon={PencilLine}
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+              />
+            )}
+          </SpeedDial>
+        </div>
         <FabLink
           label={t('practise')}
           icon={Play}
