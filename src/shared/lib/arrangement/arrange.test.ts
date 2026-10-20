@@ -539,6 +539,25 @@ describe('arrange', () => {
     ])
   })
 
+  it('plays each section with its own pattern, a chord’s method code before it', () => {
+    const twoSections: Chart = {
+      ...chart([['C', 'F']]),
+      sections: [...chart([['C', 'F']]).sections, ...chart([['G:t1', 'C']]).sections],
+    }
+    const performance = arrange(twoSections, {
+      tonic: C,
+      pattern: BLOCK,
+      methods: new Map([['t1', BLOCK]]),
+      sections: [undefined, BEATS],
+    })
+    expect(performance.chords.map((chord) => chord.pattern)).toEqual([
+      'block',
+      'block',
+      'block',
+      'beats',
+    ])
+  })
+
   it('lets a hand override replace every chord’s figure', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,

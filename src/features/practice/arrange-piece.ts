@@ -1,12 +1,14 @@
 import {
   accompanimentOptions,
+  BUILT_IN_PATTERNS,
   METHOD_PATTERNS,
   type PatternBook,
   type PatternChoice,
 } from '@/entities/pattern'
 import {
   chartOf,
-  hasMethodCodes,
+  hasChartPlan,
+  isDegreePiece,
   melodyOf,
   patternsOfPiece,
   pieceKey,
@@ -15,9 +17,9 @@ import {
 import { arrange, type ArrangeOptions, type Performance } from '@/shared/lib/arrangement'
 import type { PracticeChoice } from './choice'
 
-/** The chart's own methods when it names them, else the piece's pattern. */
+/** The chart's own plan when it has one (its methods, its sections' patterns), else the piece's pattern. */
 export const defaultPattern = (piece: Piece): PatternChoice =>
-  hasMethodCodes(piece) ? 'chart' : piece.pattern
+  hasChartPlan(piece) ? 'chart' : piece.pattern
 
 /** The piece as written: its key, its default pattern and chord size, no figures swapped, no doubled melody. */
 export const ownChoice = (piece: Piece): PracticeChoice => ({
@@ -55,7 +57,16 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
       },
       fromChart ? [...patternsOfPiece(piece)] : undefined,
     ),
-    ...(fromChart ? { methods: METHOD_PATTERNS } : {}),
+    ...(fromChart
+      ? {
+          methods: METHOD_PATTERNS,
+          sections: isDegreePiece(piece)
+            ? []
+            : piece.sections.map((section) =>
+                section.pattern ? BUILT_IN_PATTERNS.require(section.pattern).pattern : undefined,
+              ),
+        }
+      : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),
   }
 }

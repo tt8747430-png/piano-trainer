@@ -1,7 +1,7 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
-import { hasMethodCodes, melodyOf, PIECES, pieceById } from '@/entities/piece'
+import { hasChartPlan, melodyOf, PIECES, pieceById } from '@/entities/piece'
 import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
 import { isCompound, note, noteParam } from '@/shared/lib/music'
@@ -38,7 +38,7 @@ describe('resolveChoice', () => {
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {
-    const plain = PIECES.find((p) => !hasMethodCodes(p))
+    const plain = PIECES.find((p) => !hasChartPlan(p))
     if (!plain) throw new Error('every piece names its methods')
     expect(resolveChoice(plain, { pattern: 'chart' }, false, BUILT_IN_PATTERNS).pattern).toBe(
       plain.pattern,
@@ -61,7 +61,7 @@ describe('resolveChoice', () => {
 
   it('plays a piece without a tune by its own pattern when the URL names one that plays it', () => {
     const tuneless = PIECES.find(
-      (p) => melodyOf(p) === undefined && !hasMethodCodes(p) && !isCompound(p.meter),
+      (p) => melodyOf(p) === undefined && !hasChartPlan(p) && !isCompound(p.meter),
     )
     if (!tuneless) throw new Error('a piece in simple time without a melody')
     expect(

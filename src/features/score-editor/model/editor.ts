@@ -18,7 +18,7 @@ import {
   writeOut,
   writeRest,
 } from './notes'
-import { joinSection, setSectionKind } from './sections'
+import { joinSection, setSectionKind, setSectionPattern } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
@@ -145,6 +145,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return commit(state, setSectionKind(draft, action.section, action.kind))
     case 'joinSection':
       return commit(state, joinSection(draft, action.section))
+    case 'sectionPattern':
+      return commit(state, setSectionPattern(draft, action.section, action.pattern))
     case 'settings': {
       let next = draft
       if (action.key) next = setKey(next, action.key)

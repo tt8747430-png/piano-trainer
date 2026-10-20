@@ -141,7 +141,7 @@ export const editor = {
   finger: 'Finger on {{note}}',
   noFinger: 'None',
   noNotes: 'No notes here',
-  writeOut: 'Write out',
+  writeOut: 'Write this bar out',
   backToPattern: 'Back to the pattern',
   chord: {
     set: 'Set the chord and go to the next bar',
@@ -171,6 +171,10 @@ export const editor = {
     newSection: 'New section here',
   },
   section: {
+    pattern: 'Pattern',
+    thisSong: 'This song',
+    songPattern: 'The song’s: {{name}}',
+    plays: 'Plays {{name}}',
     kind: 'Section',
     join: 'Join with the section before',
   },

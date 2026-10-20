@@ -42,7 +42,7 @@ export const player = {
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
   fromChart: 'From the chart',
-  fromChartDescription: 'Each chord as the song marks it.',
+  fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',

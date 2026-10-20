@@ -136,7 +136,7 @@ export const editor: LocaleResources['editor'] = {
   finger: 'Палец на {{note}}',
   noFinger: 'Нет',
   noNotes: 'Здесь нет нот',
-  writeOut: 'Выписать',
+  writeOut: 'Выписать этот такт',
   backToPattern: 'Вернуть фактуру',
   chord: {
     set: 'Поставить аккорд и перейти к следующему такту',
@@ -166,6 +166,10 @@ export const editor: LocaleResources['editor'] = {
     newSection: 'Новый раздел отсюда',
   },
   section: {
+    pattern: 'Фактура',
+    thisSong: 'Эта песня',
+    songPattern: 'Как в песне: {{name}}',
+    plays: 'Фактура: {{name}}',
     kind: 'Раздел',
     join: 'Соединить с предыдущим разделом',
   },

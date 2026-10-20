@@ -43,6 +43,8 @@ export interface Section {
   readonly detail?: LocalText
   /** The key its bars are written in, where that is not the piece's: a key change. */
   readonly key?: KeyText
+  /** The accompaniment its chords play, where it is not the piece's (a chord's method code still wins). */
+  readonly pattern?: PatternId
   /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */
   readonly lines: readonly string[]
 }

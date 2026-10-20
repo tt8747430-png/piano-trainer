@@ -242,6 +242,21 @@ describe('the score editor', () => {
     ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
   })
 
+  it('gives a section a pattern of its own from its heading’s menu, named beside it', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: /Verse/ }))
+    const menu = await screen.findByRole('dialog', { name: 'Section' })
+    await user.click(within(menu).getByRole('combobox', { name: 'Pattern' }))
+    await user.click(await screen.findByRole('option', { name: /^3 · Arpeggio/ }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ kind: 'verse', pattern: 'M3' }],
+      }),
+    )
+    expect(screen.getByText(/^Plays 3 · Arpeggio/)).toBeInTheDocument()
+  })
+
   it('opens on what another tab saved, so its next change keeps it', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
@@ -410,7 +425,7 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G G'] }] })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
     await user.click(within(palette).getByRole('tab', { name: 'Fingering' }))
-    expect(within(palette).getByRole('button', { name: 'Write out' })).toBeInTheDocument()
+    expect(within(palette).getByRole('button', { name: 'Write this bar out' })).toBeInTheDocument()
   })
 
   it('marks the note at the caret from the marks’ tabs, saved with the tune', async () => {
@@ -539,7 +554,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · /)
     expect(screen.getAllByText('Pattern').length).toBeGreaterThan(0)
     await user.click(screen.getByRole('tab', { name: 'Fingering' }))
-    await user.click(screen.getByRole('button', { name: 'Write out' }))
+    await user.click(screen.getByRole('button', { name: 'Write this bar out' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       hands: { lh: expect.stringMatching(/^G1\^5\+G2\^1\/2 /) },
     })

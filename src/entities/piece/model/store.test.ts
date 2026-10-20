@@ -52,6 +52,20 @@ describe('createPiecesStore', () => {
     expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])
   })
 
+  it('keeps a section’s own pattern, and drops one the book has not', () => {
+    const patterned = {
+      ...MUSIC,
+      sections: [
+        { kind: 'verse', pattern: 'M3', lines: ['C'] },
+        { kind: 'verse', pattern: 'my-1', lines: ['C'] },
+        { kind: 'verse', lines: ['C'] },
+      ],
+      hands: { lh: 'B2/4 | - | -' },
+    }
+    const sections = restored({ versions: { bz1: patterned } }).versions.bz1?.sections
+    expect(sections?.map((section) => section.pattern)).toEqual(['M3', undefined, undefined])
+  })
+
   it('drops music that does not parse, or names an unknown pattern, meter, tempo or a key no signature writes', () => {
     const versions = {
       bz1: MUSIC,

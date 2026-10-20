@@ -41,7 +41,7 @@ export const player: LocaleResources['player'] = {
   handsOf: 'Руки: {{hands}}',
   pattern: 'Фактура',
   fromChart: 'Как в песне',
-  fromChartDescription: 'Каждый аккорд так, как указано в песне.',
+  fromChartDescription: 'Каждый раздел и аккорд так, как указано в песне.',
   rh: 'Правая рука',
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',

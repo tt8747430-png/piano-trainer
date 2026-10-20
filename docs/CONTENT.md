@@ -55,8 +55,10 @@ export default definePiece({
 | `hands`                    | Songs and studies: optional bars of either hand [written out](#written-hands)         |
 | `progression`, `chordSize` | A song written in degrees: see [Written in degrees](#written-in-degrees)              |
 
-A chart that names method codes starts the Player on its own plan: each coded chord plays its method's pattern,
-every other chord plays `pattern`.
+A chart that names method codes, or a section with a `pattern` of its own, starts the Player on its own plan:
+each coded chord plays its method's pattern, every other chord its section's `pattern`, else the piece's. A
+section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is
+(ADR 0065).
 
 ## Add a listing, a collection
 
@@ -68,13 +70,14 @@ meter, note })`. It shows in Songs and never opens in the Player; no course has 
 
 ## The chart
 
-`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, lines }`:
+`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.
 - `n` numbers a verse; `label` names a part (`'A'`); `last` marks a last chorus or last ending; `detail` is a
   `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
 - `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
   printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
+- `pattern` is the accompaniment the section's chords play where it is not the piece's (ADR 0065).
 - `lines`: each line is bars separated by spaces.
 
 A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:

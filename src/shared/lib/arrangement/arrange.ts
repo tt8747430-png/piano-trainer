@@ -55,8 +55,10 @@ export interface ArrangeOptions {
   readonly tonic: SpelledNote
   /** Every chord's pattern… */
   readonly pattern: Pattern
-  /** …unless its method code is here: the chart's own plan. */
+  /** …unless its method code is here: the chart's own plan… */
   readonly methods?: ReadonlyMap<string, Pattern>
+  /** …or its section has a pattern of its own, by the section's index. */
+  readonly sections?: readonly (Pattern | undefined)[]
   /** Replaces every pattern's right hand. */
   readonly rh?: Figure
   /** Replaces every pattern's left hand. */
@@ -197,9 +199,14 @@ const playsVoiced = (figure: EventFigure): boolean =>
 
 const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
 
-function patternFor(method: string | undefined, options: ArrangeOptions, hasMelody: boolean) {
+function patternFor(
+  method: string | undefined,
+  section: number,
+  options: ArrangeOptions,
+  hasMelody: boolean,
+) {
   const planned = method === undefined ? undefined : options.methods?.get(method)
-  const pattern = planned ?? options.pattern
+  const pattern = planned ?? options.sections?.[section] ?? options.pattern
   return isMelodyPattern(pattern) && !hasMelody ? pattern.withoutMelody : pattern
 }
 
@@ -468,15 +475,21 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   layout.chords.forEach((placed, index) => {
     const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
     const tones = spellChord(chord.root, chord.quality)
+    const section = layout.bars[placed.bar]?.section ?? 0
     const context = chordContext(
       { root: chord.root, bass: chord.bass ?? chord.root, tones },
       previous,
-      sectionKeys[layout.bars[placed.bar]?.section ?? 0] ?? key,
+      sectionKeys[section] ?? key,
       positionOf(options, index),
     )
     previous = context.voiced
     const { method } = placed.chord
-    const pattern: EventPattern | MelodyPattern = patternFor(method, options, melody !== null)
+    const pattern: EventPattern | MelodyPattern = patternFor(
+      method,
+      section,
+      options,
+      melody !== null,
+    )
     const rh = inBar(
       playable(options.rh ?? pattern.rh, melody !== null),
       layout.lineEnds.has(placed.bar),

@@ -1,6 +1,6 @@
 import { BUILT_IN_PATTERNS, followsInversion } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
-import { hasMethodCodes, PIECES, pieceById, pieceFit, pieceKey } from '@/entities/piece'
+import { hasChartPlan, PIECES, pieceById, pieceFit, pieceKey } from '@/entities/piece'
 import { note } from '@/shared/lib/music'
 import { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
 
@@ -49,8 +49,28 @@ describe('arrangePiece', () => {
     ).toBe('A')
   })
 
+  it('plays each section with its own pattern, as written, unless the learner picks one for all', () => {
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const [first, ...rest] = bz5.sections
+    if (!first) throw new Error('a section')
+    const sectioned = { ...bz5, sections: [{ ...first, pattern: 'M3' as const }, ...rest] }
+    expect(defaultPattern(sectioned)).toBe('chart')
+    const played = arrangePiece(sectioned, ownChoice(sectioned), BUILT_IN_PATTERNS)
+    const bars = new Set(played.bars.flatMap((bar, index) => (bar.section === 0 ? [index] : [])))
+    const patternsIn = (inFirst: boolean) =>
+      new Set(played.chords.filter((c) => bars.has(c.bar) === inFirst).map((c) => c.pattern))
+    expect([...patternsIn(true)]).toEqual(['M3'])
+    if (rest.length > 0) expect(patternsIn(false).has('M3')).toBe(false)
+    const forAll = arrangePiece(
+      sectioned,
+      { ...ownChoice(sectioned), pattern: 'r1' },
+      BUILT_IN_PATTERNS,
+    )
+    expect(new Set(forAll.chords.map((c) => c.pattern))).toEqual(new Set(['r1']))
+  })
+
   it('follows the chart’s own methods when asked', () => {
-    const withCodes = PIECES.find((p) => hasMethodCodes(p))
+    const withCodes = PIECES.find((p) => hasChartPlan(p))
     if (!withCodes) throw new Error('no piece names its methods')
     expect(defaultPattern(withCodes)).toBe('chart')
     expect(ownChoice(withCodes).pattern).toBe('chart')

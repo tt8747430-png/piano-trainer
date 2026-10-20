@@ -35,6 +35,10 @@ over the palette when open and folded to a place under it.
   chord keypad (the letters, ♯ ♭, the qualities, the slash and the numbers a symbol is made of). On a touch screen
   the keypad types and the phone's own keyboard stays down, so nothing covers the chord row; on a computer the
   keyboard types too, and Enter in the chord row opens the field. ← → and Delete stay in the palette's top row.
+- **A pattern for each section.** A section may play a pattern of its own (`Section.pattern`), chosen in its
+  heading's menu and named beside it; its chords play it unless a chord's method code says otherwise, and the
+  Player's From the chart follows it. A bar written out by hand still plays its notes. Choosing one pattern in the
+  Player's Setup plays it everywhere, as before.
 - **Settings, behind the gear**, in one sheet: the song (title, key, tempo, meter), the view (layout, the tune's
   staff, the chord names) and the MIDI keyboard. Each setting wears a picture of what it does, the Player's View
   too (`SheetViewIcon` for the layouts, `SwitchRow`'s `icon`), never one eye for all.
@@ -43,5 +47,5 @@ over the palette when open and folded to a place under it.
 
 ## Consequences
 
-Nothing saved changes. The palette's Lines and Bars tabs are gone into the + menu. A phone sees two bars a line where the chart writes four; the chart's lines are still the
+A saved section reads its `pattern` (a built-in id) field by field, as ADR 0038 has it: no version changes. The palette's Lines and Bars tabs are gone into the + menu. A phone sees two bars a line where the chart writes four; the chart's lines are still the
 lines of A4 pages and of the Player.

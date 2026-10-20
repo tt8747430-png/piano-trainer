@@ -1,3 +1,4 @@
+import type { PatternId } from '@/entities/pattern'
 import type { SectionKind } from '@/entities/piece'
 import type { Chord, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
@@ -95,6 +96,11 @@ export type EditorAction =
   | { readonly type: 'barLength'; readonly ticks: Tick }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
+  | {
+      readonly type: 'sectionPattern'
+      readonly section: number
+      readonly pattern: PatternId | null
+    }
   | {
       readonly type: 'settings'
       readonly key?: Key
