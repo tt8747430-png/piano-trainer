@@ -1,7 +1,7 @@
 import type { Draft } from '@/features/score-editor'
 import type { TimeSignature } from '@/shared/lib/music'
 import { notate, type Score, type TimedMusic } from '@/shared/lib/notation'
-import { lineMusic, linesOf, timeBeforeLine, type SheetLineBars } from './line-music'
+import { lineMusic, linesOf, oneLine, timeBeforeLine, type SheetLineBars } from './line-music'
 
 /** A line as the sheet shows it: its bars, its music and that music engraved, the time before it. */
 export interface LineSheet {
@@ -28,14 +28,14 @@ function lastUsed<T>(): (key: string, make: () => T) => T {
 }
 
 /**
- * The draft's lines as the sheet shows them, a line that did not change always the same object (so its
+ * The draft's lines as the sheet shows them (or all its bars as one line, `across`), a line that did not change always the same object (so its
  * row is not drawn again) and the same music always the same score (never engraved again).
  */
-export function createLineSheets(): (draft: Draft) => LineSheet[] {
+export function createLineSheets(): (draft: Draft, across?: boolean) => LineSheet[] {
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
-  return (draft) =>
-    linesOf(draft).map((line) => {
+  return (draft, across = false) =>
+    (across ? oneLine(draft) : linesOf(draft)).map((line) => {
       const music = lineMusic(draft, line)
       const timeBefore = timeBeforeLine(draft, line)
       const written = JSON.stringify(music)

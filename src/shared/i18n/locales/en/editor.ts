@@ -25,6 +25,8 @@ export const editor = {
   },
   // The song's settings: what the sheet shows.
   view: 'View',
+  // How the score is laid out (ADR 0064).
+  layout: { label: 'Layout', scroll: 'Scroll', pages: 'Pages', horizontal: 'Horizontal' },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
   layers: {
     chords: 'Chords',
@@ -39,6 +41,7 @@ export const editor = {
   sheet: {
     signature: 'Key and time signature',
     label: 'Score',
+    page: 'Page {{n}} of {{of}}',
     bar: 'Bar {{n}}: {{chords}}',
     pattern: 'Pattern',
   },

@@ -11,7 +11,7 @@ import { TappableStaff } from './TappableStaff'
 
 /** The tempo a lesson's line of notes plays at: slow enough to read along. */
 const LINE_TEMPO = 72
-const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { treble: 'rh', bass: 'lh' }
+const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { melody: 'rh', treble: 'rh', bass: 'lh' }
 
 /**
  * A line of notes to read, on the staff it is read on, and Play beside it, which plays it on the

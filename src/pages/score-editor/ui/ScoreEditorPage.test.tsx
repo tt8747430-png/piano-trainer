@@ -35,10 +35,10 @@ const songOf = (state: { songs: readonly { id: string }[] }) =>
   state.songs.find((song) => song.id === 'my-1')
 
 describe('the score editor', () => {
-  it('opens on the tune, its palette choosing what the keys write: the chords, the tune or a hand', async () => {
+  it('opens on the right hand of a song with no tune, its palette choosing what the keys write', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
-    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · Bar 1/))
     expect(screen.queryByRole('radiogroup', { name: 'Write' })).not.toBeInTheDocument()
     const palette = screen.getByRole('region', { name: 'Tools' })
     const voice = within(palette).getByRole('radiogroup', { name: 'Voice' })
@@ -97,7 +97,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
-  it('hides the chord names, and a click over the staff then writes the tune', async () => {
+  it('hides the chord names, and a click over the staff then writes the staff under it', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     await toChordRow(user)
@@ -112,9 +112,9 @@ describe('the score editor', () => {
     expect(names).toHaveAttribute('aria-pressed', 'false')
     await user.keyboard('{Escape}')
     await waitFor(() => expect(settings).not.toBeInTheDocument())
-    expect(screen.getByRole('status')).toHaveTextContent(/^Melody · /)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · /)
     await toChordRow(user)
-    expect(screen.getByRole('status')).toHaveTextContent(/^Melody · /)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · /)
   })
 
   it('says the song is gone once another tab deletes it, keeping no take for it', async () => {
@@ -284,6 +284,7 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
+    await user.click(within(palette).getByRole('radio', { name: 'Melody' }))
     for (const name of [
       'Quarter note',
       '32nd note',

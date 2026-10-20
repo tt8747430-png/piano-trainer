@@ -46,6 +46,36 @@ const score = notate({
 })
 
 describe('engrave', () => {
+  it('engraves the tune’s staff over the grand staff, or only the staves asked for', () => {
+    const tune = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [
+        { ...n(72, 'C', 0, 96), hand: 'melody' },
+        n(60, 'C', 0, 96),
+        { ...n(48, 'C', 0, 96), hand: 'lh' },
+      ],
+      chords: [],
+      melodyStaff: true,
+    })
+    const host = document.body.appendChild(document.createElement('div'))
+    onTestFinished(() => host.remove())
+    const all = engrave(tune, host, { scale: 1, fingers: false, names: false })
+    expect(Object.keys(all.staves)).toEqual(['melody', 'treble', 'bass'])
+    expect(all.staves.melody?.top).toBeLessThan(all.staves.treble?.top ?? 0)
+    expect(all.height).toBe(staffHeight(undefined, 3))
+    expect(host.querySelectorAll('[data-staff="melody"]')).toHaveLength(1)
+    const piano = engrave(tune, host, {
+      scale: 1,
+      fingers: false,
+      names: false,
+      staves: ['treble', 'bass'],
+    })
+    expect(Object.keys(piano.staves)).toEqual(['treble', 'bass'])
+    expect(piano.height).toBe(staffHeight(undefined, 2))
+  })
+
   it('engraves a grand staff into the host and lays it out left to right', () => {
     const host = document.createElement('div')
     const layout = engrave(score, host, { scale: 1, fingers: true, names: false })

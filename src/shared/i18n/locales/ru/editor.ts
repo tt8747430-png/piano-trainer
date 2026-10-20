@@ -24,6 +24,8 @@ export const editor: LocaleResources['editor'] = {
     bars: 'Такты',
   },
   view: 'Вид',
+  // How the score is laid out (ADR 0064).
+  layout: { label: 'Вид нот', scroll: 'Лента', pages: 'Страницы', horizontal: 'В строку' },
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',
@@ -36,6 +38,7 @@ export const editor: LocaleResources['editor'] = {
   sheet: {
     signature: 'Тональность и размер',
     label: 'Ноты',
+    page: 'Страница {{n}} из {{of}}',
     bar: 'Такт {{n}}: {{chords}}',
     pattern: 'Фактура',
   },

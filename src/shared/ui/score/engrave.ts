@@ -23,18 +23,25 @@ import {
   type Tick,
   type TimeSignature,
 } from '@/shared/lib/music'
-import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/shared/lib/notation'
+import {
+  clefOf,
+  STAVES,
+  ticksOf,
+  type Measure,
+  type Score,
+  type StaffId,
+} from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
-import { ONE_STAFF_Y, SCORE_HEIGHT, STAFF_HEIGHT } from './size'
+import { ONE_STAFF_Y, STAFF_GAP, STAFF_HEIGHT, LAST_STAFF } from './size'
 import { buildVoice, type BuiltVoice, type FingerReach, type VexNote } from './vexflow-notes'
 
 export interface ScoreLayout {
   /** The engraving's size in CSS pixels. */
   readonly width: number
   readonly height: number
-  /** The treble staff's top line and the bass staff's bottom line. */
+  /** The top staff's top line and the bottom staff's bottom line. */
   readonly staffTop: number
   readonly staffBottom: number
   readonly measures: readonly {
@@ -51,7 +58,6 @@ export interface ScoreLayout {
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
 }
 
-const STAFF_Y: Readonly<Record<StaffId, number>> = { treble: 0, bass: 90 }
 /** A staff's top and bottom lines from its own top (VexFlow keeps four spaces over the staff). */
 const TOP_LINE = 40
 const BOTTOM_LINE = 80
@@ -68,6 +74,8 @@ const DYNAMIC_ROOM = 14
 /** How many times a measure is widened, at most, until its chord symbols fit. */
 const WIDEN_PASSES = 6
 const END_MARGIN = 8
+/** The room a brace takes left of the staves it joins. */
+const BRACE_ROOM = 14
 
 let setUp = false
 /** VexFlow's globals, once: our faces, and every colour `currentColor` so CSS colours the staff. */
@@ -126,7 +134,7 @@ function staveAt(
   key: Key,
 ): Stave {
   const stave = new Stave(x, y, width)
-  if (built.clefs) stave.addClef(staff).addKeySignature(signatureOf(key))
+  if (built.clefs) stave.addClef(clefOf(staff)).addKeySignature(signatureOf(key))
   else if (built.keyFrom) stave.addKeySignature(signatureOf(key), signatureOf(built.keyFrom))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
   return stave
@@ -164,9 +172,7 @@ function chordShortfall(
 ): number {
   const { chords, startTick, ticks } = built.measure
   if (chords.length === 0) return 0
-  const stave = staveAt('treble', { x: 0, y: STAFF_Y.treble, width }, built, key).setNoteStartX(
-    noteStart,
-  )
+  const stave = staveAt('treble', { x: 0, y: 0, width }, built, key).setNoteStartX(noteStart)
   built.formatter.formatToStave([...voices], stave)
   // Each note on the trial stave, so its x is read as the engraving will read it (a voice's stave
   // does not reach its notes until it is drawn).
@@ -216,7 +222,7 @@ function buildMeasure(
           }),
         )
       : []
-  const staves = { treble: build('treble'), bass: build('bass') }
+  const staves = { melody: build('melody'), treble: build('treble'), bass: build('bass') }
   const formatter = new Formatter()
   for (const staff of shown) formatter.joinVoices(staves[staff].map((built) => built.voice))
   const voices = shown.flatMap((staff) => staves[staff].map((built) => built.voice))
@@ -229,7 +235,7 @@ function buildMeasure(
   const probe = { measure, keyFrom, staves, formatter, clefs, time, width: 0, notes: 0 }
   const modifiers = Math.max(
     ...shown.map((staff) => {
-      const stave = staveAt(staff, { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES }, probe, key)
+      const stave = staveAt(staff, { x: 0, y: 0, width: LEAST_NOTES }, probe, key)
       return stave.getNoteStartX() - stave.getX()
     }),
   )
@@ -250,34 +256,41 @@ function buildMeasure(
 
 /**
  * Where the staves stand and how tall the engraving is: one staff at `ONE_STAFF_Y` in
- * `STAFF_HEIGHT`, or the grand staff of `STAFF_Y` and `SCORE_HEIGHT`; moved down where fingers stand
- * over the top staff, apart where they stand between the staves, and taller where they stand under
- * the bottom one.
+ * `STAFF_HEIGHT`, or several `STAFF_GAP` apart with `LAST_STAFF` under the last; moved down where
+ * fingers stand over the top staff, apart where they stand between two, and taller where they stand
+ * under the bottom one.
  */
 function placesOf(
   built: readonly BuiltMeasure[],
-  staff: StaffId | undefined,
+  shown: readonly StaffId[],
 ): {
-  readonly y: Readonly<Record<StaffId, number>>
+  readonly y: Readonly<Partial<Record<StaffId, number>>>
   readonly height: number
 } {
   const reach = (on: StaffId, side: keyof FingerReach) =>
     built.flatMap((measure) => measure.staves[on].flatMap((voice) => voice.fingerReach[side] ?? []))
-  if (staff) {
-    const y = Math.max(ONE_STAFF_Y, FINGER_MARGIN - Math.min(...reach(staff, 'above')))
+  const [only] = shown
+  if (shown.length === 1 && only) {
+    const y = Math.max(ONE_STAFF_Y, FINGER_MARGIN - Math.min(...reach(only, 'above')))
     const height =
-      y + Math.max(STAFF_HEIGHT - ONE_STAFF_Y, Math.max(...reach(staff, 'below')) + FINGER_MARGIN)
-    return { y: { treble: y, bass: y }, height }
+      y + Math.max(STAFF_HEIGHT - ONE_STAFF_Y, Math.max(...reach(only, 'below')) + FINGER_MARGIN)
+    return { y: { [only]: y }, height }
   }
-  const treble = Math.max(STAFF_Y.treble, FINGER_MARGIN - Math.min(...reach('treble', 'above')))
-  const trebleFloor = Math.max(BOTTOM_LINE, ...reach('treble', 'below'))
-  const bassCeiling = Math.min(TOP_LINE, ...reach('bass', 'above'))
-  const bass =
-    treble + Math.max(STAFF_Y.bass - STAFF_Y.treble, trebleFloor + FINGER_MARGIN - bassCeiling)
-  const height =
-    bass +
-    Math.max(SCORE_HEIGHT - STAFF_Y.bass, Math.max(...reach('bass', 'below')) + FINGER_MARGIN)
-  return { y: { treble, bass }, height }
+  const y: Partial<Record<StaffId, number>> = {}
+  let at = 0
+  shown.forEach((staff, index) => {
+    const above = shown[index - 1]
+    if (above === undefined) at = Math.max(0, FINGER_MARGIN - Math.min(...reach(staff, 'above')))
+    else {
+      const floor = Math.max(BOTTOM_LINE, ...reach(above, 'below'))
+      const ceiling = Math.min(TOP_LINE, ...reach(staff, 'above'))
+      at += Math.max(STAFF_GAP, floor + FINGER_MARGIN - ceiling)
+    }
+    y[staff] = at
+  })
+  const last = shown.at(-1)
+  const below = last ? Math.max(...reach(last, 'below')) + FINGER_MARGIN : 0
+  return { y, height: at + Math.max(LAST_STAFF, below) }
 }
 
 /** Every tied note joined to the note of its key where its value ends, on its staff. */
@@ -450,6 +463,8 @@ export interface EngraveOptions {
   readonly fingers: boolean
   readonly names: boolean
   readonly staff?: StaffId | undefined
+  /** The staves drawn, of the score's, top down (some hidden): all of them unless `staff` names one. */
+  readonly staves?: readonly StaffId[] | undefined
   /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
   readonly timeBefore?: TimeSignature | undefined
   /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
@@ -528,9 +543,13 @@ function* drawn(
   score: Score,
   host: HTMLDivElement,
   sheet: HTMLDivElement,
-  { scale, fingers, names, staff, timeBefore, fill }: EngraveOptions,
+  { scale, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
 ): Generator<void, ScoreLayout, void> {
-  const shown: readonly StaffId[] = staff ? [staff] : STAVES
+  const written = score.staves.length > 0 ? score.staves : STAVES
+  const shown: readonly StaffId[] = staff
+    ? [staff]
+    : (chosen?.filter((each) => written.includes(each)) ?? written)
+  if (shown.length === 0) throw new RangeError('A score is engraved on at least one staff')
   const natural: BuiltMeasure[] = []
   for (const [index, measure] of score.measures.entries()) {
     natural.push(
@@ -543,9 +562,11 @@ function* drawn(
     )
     if ((index + 1) % MEASURES_A_STEP === 0) yield
   }
-  const built = spread(natural, fill === undefined ? undefined : fill / scale)
-  const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
-  const places = placesOf(built, staff)
+  // The grand staff's brace stands left of its staves: room for it before the first measure.
+  const lead = shown.includes('treble') && shown.includes('bass') ? BRACE_ROOM : 0
+  const built = spread(natural, fill === undefined ? undefined : fill / scale - lead)
+  const width = lead + built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
+  const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)
   renderer.resize(width * scale, places.height * scale)
   const context = renderer.getContext()
@@ -562,14 +583,14 @@ function* drawn(
   let staffTop = 0
   let staffBottom = 0
   const staves: { -readonly [S in StaffId]?: { top: number; bottom: number } } = {}
-  let x = 0
+  let x = lead
   for (const [index, measure] of built.entries()) {
     if (index > 0 && index % MEASURES_A_STEP === 0) yield
     const drawn = shown.map((on) => ({
       staff: on,
       stave: staveAt(
         on,
-        { x, y: places.y[on], width: measure.width },
+        { x, y: places.y[on] ?? 0, width: measure.width },
         measure,
         keyOf(score, measure.measure),
       ),
@@ -579,14 +600,17 @@ function* drawn(
     if (!top || !bottom) throw new RangeError('A score is engraved on at least one staff')
     const start = Math.max(...drawn.map(({ stave }) => stave.getNoteStartX()))
     for (const { stave } of drawn) stave.setNoteStartX(start).setContext(context).draw()
-    // The grand staff's two staves are joined; one staff's own barlines close it.
-    if (top !== bottom) {
-      if (measure.clefs) {
-        for (const type of ['brace', 'singleLeft'] as const) {
-          new StaveConnector(top.stave, bottom.stave).setType(type).setContext(context).draw()
-        }
-      }
-      new StaveConnector(top.stave, bottom.stave).setType('singleRight').setContext(context).draw()
+    // A system's staves are joined at its left; the grand staff's two by a brace and their barlines,
+    // the tune's staff over it keeping its own, as a song's piano part is printed.
+    const treble = drawn.find((each) => each.staff === 'treble')
+    const bass = drawn.find((each) => each.staff === 'bass')
+    if (top !== bottom && measure.clefs) {
+      new StaveConnector(top.stave, bottom.stave).setType('singleLeft').setContext(context).draw()
+    }
+    if (treble && bass) {
+      if (measure.clefs)
+        new StaveConnector(treble.stave, bass.stave).setType('brace').setContext(context).draw()
+      new StaveConnector(treble.stave, bass.stave).setType('singleRight').setContext(context).draw()
     }
     measure.formatter.formatToStave(
       shown.flatMap((on) => measure.staves[on].map((voice) => voice.voice)),

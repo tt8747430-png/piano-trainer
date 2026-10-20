@@ -46,9 +46,11 @@ describe('search params', () => {
     expect(await searchAt('/practice/chord-finder?keys=x-500&key=H')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
-  it('open the score editor’s takes only when the URL says so', async () => {
-    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true })
-    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
+  it('open the score editor’s takes only when the URL says so, and lay its score out as it says', async () => {
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true, layout: 'scroll' })
+    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false, layout: 'scroll' })
+    expect(await searchAt('/edit/bz5?layout=pages')).toEqual({ record: false, layout: 'pages' })
+    expect(await searchAt('/edit/bz5?layout=paper')).toEqual({ record: false, layout: 'scroll' })
   })
 
   it('keep what is valid', async () => {

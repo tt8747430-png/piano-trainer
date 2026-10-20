@@ -1,5 +1,7 @@
 export { notate } from './notate'
 export {
+  clefOf,
+  PIANO_STAVES,
   STAVES,
   type Duration,
   type Measure,

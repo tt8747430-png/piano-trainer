@@ -2,6 +2,7 @@ import { Settings, Type } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
+import { SHEET_VIEWS } from '@/shared/lib'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
 import {
@@ -83,6 +84,14 @@ export function PieceSettings() {
               value={meter}
               options={metersFor(meter).map((each) => ({ value: each, label: each }))}
               onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
+            />
+          </Labelled>
+          <Labelled label={t('layout.label')}>
+            <Segmented
+              label={t('layout.label')}
+              value={view.layout}
+              options={SHEET_VIEWS.map((each) => ({ value: each, label: t(`layout.${each}`) }))}
+              onChange={view.setLayout}
             />
           </Labelled>
           <Labelled label={t('view')}>

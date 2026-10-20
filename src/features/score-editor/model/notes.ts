@@ -26,7 +26,7 @@ export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
 export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
   return layer === 'melody'
-    ? { ...draft, melody: sorted }
+    ? { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
     : { ...draft, hands: { ...draft.hands, [layer]: sorted } }
 }
 

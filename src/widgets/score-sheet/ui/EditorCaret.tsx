@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { staffOfLayer } from '../model/line-music'
 import { CHORD_ROW } from './chord-row'
 
 /** How far left of a notehead the band starts, how far past its staff it reaches, its least width. */
@@ -59,7 +60,7 @@ export function EditorCaret({
 }) {
   const left = xAtTick(layout, tick) - LEAD
   const right = xAtTick(layout, tick + ticks) - LEAD
-  const staff = layer === 'lh' ? layout.staves.bass : layout.staves.treble
+  const staff = staffOfLayer(layout.staves, layer)
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)
   useEffect(() => {

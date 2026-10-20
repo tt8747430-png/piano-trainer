@@ -4,19 +4,11 @@ import { isHandLayer, type BarRange, type Layer } from '@/features/score-editor'
 import { chordSymbol, type Tick } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
-import type { SheetLineBars } from '../model/line-music'
+import { layerAt, type SheetLineBars } from '../model/line-music'
 import { nearestPlace } from '../model/nearest'
 import { CHORD_ROW } from './chord-row'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
-
-/** The layer a point on a line's bar writes: the chord row (with chord names), the bass staff, or the treble's. */
-function layerAt(y: number, layout: ScoreLayout, layer: Layer, chordNames: boolean): Layer {
-  if (y < 0 && chordNames) return 'chords'
-  const { treble, bass } = layout.staves
-  if (treble && bass && y > (treble.bottom + bass.top) / 2) return 'lh'
-  return layer === 'rh' ? 'rh' : 'melody'
-}
 
 /**
  * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
@@ -51,7 +43,7 @@ export function LineOverlay({
   const { t } = useTranslation('editor')
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
-  const staff = hand === 'lh' ? layout.staves.bass : layout.staves.treble
+  const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
   // In a hand's layer, the bars it leaves to the pattern.
   const patterned =
     hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
@@ -64,7 +56,7 @@ export function LineOverlay({
       return
     }
     const box = event.currentTarget.getBoundingClientRect()
-    const target = layerAt(event.clientY - box.top - CHORD_ROW, layout, layer, chordNames)
+    const target = layerAt(event.clientY - box.top - CHORD_ROW, layout, chordNames)
     const end = placed.start + placed.bar.ticks
     const places = placesOf(target).filter((tick) => tick >= placed.start && tick < end)
     const x = measure.x + event.clientX - box.left

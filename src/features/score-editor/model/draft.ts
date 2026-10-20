@@ -72,6 +72,8 @@ export interface Draft {
   readonly tempo: number
   readonly pattern: PatternId
   readonly sections: readonly DraftSection[]
+  /** Whether the tune has its staff over the grand staff (ADR 0064): added, or written. */
+  readonly melodyStaff: boolean
   /** One line: no note starts under another. */
   readonly melody: readonly DraftNote[]
   /** Only in bars the hand writes. */
@@ -120,6 +122,7 @@ export function readDraft(music: PieceMusic): Draft {
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
+    melodyStaff: (melody ?? []).length > 0,
     melody: melody ?? [],
     hands,
   }

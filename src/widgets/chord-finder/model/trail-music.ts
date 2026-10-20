@@ -1,5 +1,5 @@
 import { pitchClass, spellInKey, TICKS_PER_BEAT, type Key, type Midi } from '@/shared/lib/music'
-import { STAVES, type StaffId, type TimedMusic } from '@/shared/lib/notation'
+import { PIANO_STAVES, type StaffId, type TimedMusic } from '@/shared/lib/notation'
 
 /** A bar's four beats: each chord is a whole note. */
 export const BAR_TICKS = 4 * TICKS_PER_BEAT
@@ -22,7 +22,7 @@ export function trailMusic(
     key,
     meter: '4/4',
     bars: written.map((keys, i) => {
-      const blank = STAVES.filter((staff) => !keys.some((each) => staffOf(each) === staff))
+      const blank = PIANO_STAVES.filter((staff) => !keys.some((each) => staffOf(each) === staff))
       return {
         startTick: i * BAR_TICKS,
         beats: 4,

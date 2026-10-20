@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
-import { linesOf, lineMusic, timeBeforeLine } from './line-music'
+import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
   key: 'G',
@@ -26,13 +26,14 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('write a line from its own start: the melody, the written hands, and the chord symbols', () => {
+  it('write a line from its own start: the melody on its staff, the written hands, and the chord symbols', () => {
     const [, second] = linesOf(draft)
     if (!second) throw new Error('a second line')
     const music = lineMusic(draft, second)
+    expect(music.melodyStaff).toBe(true)
     expect(music.bars).toEqual([
-      { startTick: 0, beats: 4 },
-      { startTick: 96, beats: 4, blank: ['bass'] },
+      { startTick: 0, beats: 4, blank: ['treble'] },
+      { startTick: 96, beats: 4, blank: ['treble', 'bass'] },
     ])
     expect(music.chords).toEqual([
       { startTick: 0, symbol: 'C' },
@@ -52,7 +53,7 @@ describe('the sheet’s lines', () => {
     const [, , third] = linesOf(draft)
     if (!third) throw new Error('a third line')
     const music = lineMusic(draft, third)
-    expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['bass'] }])
+    expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['melody', 'bass'] }])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
       ['rh', 55, 0, 48],
     ])
@@ -64,5 +65,27 @@ describe('the sheet’s lines', () => {
     expect(timeBeforeLine(draft, first)).toBeUndefined()
     expect(timeBeforeLine(draft, second)).toEqual({ count: 4, unit: 4 })
     expect(timeBeforeLine(draft, third)).toEqual({ count: 4, unit: 4 })
+  })
+})
+
+describe('layerAt', () => {
+  const layout = {
+    staves: {
+      melody: { top: 40, bottom: 80 },
+      treble: { top: 130, bottom: 170 },
+      bass: { top: 220, bottom: 260 },
+    },
+  } as unknown as Parameters<typeof layerAt>[1]
+
+  it('writes the staff nearest a point, the chord row over the staves', () => {
+    expect([-5, 60, 110, 150, 200, 300].map((y) => layerAt(y, layout, true))).toEqual([
+      'chords',
+      'melody',
+      'rh',
+      'rh',
+      'lh',
+      'lh',
+    ])
+    expect(layerAt(-5, layout, false)).toBe('melody')
   })
 })

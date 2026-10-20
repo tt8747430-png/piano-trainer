@@ -47,6 +47,8 @@ export interface TimedMusic {
   }[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
+  /** The tune on a staff of its own over the grand staff (ADR 0064); else it is the treble's upper voice. */
+  readonly melodyStaff?: boolean
 }
 
 export interface WrittenNote {
@@ -91,8 +93,13 @@ export interface ScoreVoice {
   readonly stem: Stem
 }
 
-export const STAVES = ['treble', 'bass'] as const
+/** The staves a score may write, top down: the tune's own (ADR 0064), then the piano's grand staff. */
+export const STAVES = ['melody', 'treble', 'bass'] as const
 export type StaffId = (typeof STAVES)[number]
+/** The piano's grand staff: the right hand's treble and the left hand's bass. */
+export const PIANO_STAVES = ['treble', 'bass'] as const satisfies readonly StaffId[]
+/** The clef a staff is written in: the tune's is a treble. */
+export const clefOf = (staff: StaffId): 'treble' | 'bass' => (staff === 'bass' ? 'bass' : 'treble')
 
 export interface ChordMark {
   readonly tick: Tick
@@ -105,14 +112,16 @@ export interface Measure {
   readonly time: TimeSignature
   /** The key it is written in, where that is not the score's (a key change). */
   readonly key?: Key
-  /** One or two voices on each staff. */
+  /** One or two voices on each of the score's staves; none on a staff it does not write. */
   readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
   readonly chords: readonly ChordMark[]
 }
 
-/** Music as it is written: a grand staff's measures in a key and a meter. */
+/** Music as it is written: measures on its staves (the grand staff, the tune's over it) in a key and a meter. */
 export interface Score {
   readonly key: Key
   readonly meter: Meter
+  /** The staves it writes, top down. */
+  readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]
 }

@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
   entryTitles,
@@ -18,12 +19,13 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useWakeLock } from '@/shared/lib'
+import { useGoBack, useViewChange, useWakeLock, type SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
+import type { EditSearch } from './edit-search'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf } from './shortcuts'
@@ -59,6 +61,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
   const [chordNames, setChordNames] = useState(true)
+  // How the score is laid out is what the learner looks at: the URL's.
+  const { layout } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const changeView = useViewChange<EditSearch>()
+  const setLayout = (next: SheetView) => changeView({ layout: next })
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
@@ -164,12 +170,14 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // With no chord row there is no chord to write: the caret goes to the tune, now and whenever a
-  // step undone or redone would bring it back to the chords.
+  // With no chord row there is no chord to write: the caret goes to the top staff (the tune's, or
+  // the right hand's), now and whenever a step undone or redone would bring it back to the chords.
   useEffect(() => {
     if (chordNames) return
     const toTune = () => {
-      if (store.getState().layer === 'chords') store.dispatch({ type: 'layer', layer: 'melody' })
+      const { layer, draft } = store.getState()
+      if (layer === 'chords')
+        store.dispatch({ type: 'layer', layer: draft.melodyStaff ? 'melody' : 'rh' })
     }
     toTune()
     return store.subscribe(toTune)
@@ -180,7 +188,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     store,
     takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
-    view: { chordNames, showChordNames, settingsOpen, openSettings },
+    view: { chordNames, showChordNames, settingsOpen, openSettings, layout, setLayout },
     meta: {
       title,
       hasVersion,

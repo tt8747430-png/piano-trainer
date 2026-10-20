@@ -37,6 +37,7 @@ import {
 } from '@/shared/lib/music'
 import {
   ticksOf,
+  clefOf,
   type Duration,
   type Measure,
   type ScoreEvent,
@@ -50,6 +51,7 @@ const VALUE_CODE = { 1: 'w', 2: 'h', 4: 'q', 8: '8', 16: '16', 32: '32' } as con
 const SIGN: Readonly<Record<Sign, string>> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1: '#', 2: '##' }
 /** Where a rest sits: in the middle of a staff alone, above or below it beside another voice. */
 const REST_KEY: Readonly<Record<StaffId, Readonly<Record<ScoreVoice['stem'], string>>>> = {
+  melody: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   treble: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   bass: { auto: 'd/3', up: 'g/3', down: 'a/2' },
 }
@@ -63,9 +65,9 @@ const DIGIT_HEIGHT = 9
 
 type FingerSide = keyof FingerReach
 
-/** A voice's fingers stand on its outer side: an upper voice's over it, a lower voice's under it; a lone voice's over the treble and under the bass. */
+/** A voice's fingers stand on its outer side: an upper voice's over it, a lower voice's under it; a lone voice's over a treble and under the bass. */
 const sideOf = (staff: StaffId, stem: ScoreVoice['stem']): FingerSide =>
-  stem === 'up' ? 'above' : stem === 'down' ? 'below' : staff === 'treble' ? 'above' : 'below'
+  stem === 'up' ? 'above' : stem === 'down' ? 'below' : staff === 'bass' ? 'below' : 'above'
 
 /** A staff at the origin: where VexFlow puts a note's line, from its staff's own top. */
 let origin: Stave | null = null
@@ -198,7 +200,7 @@ function noteOf(
       keys: [REST_KEY[staff][stem]],
       duration: wholeBar ? 'w' : code(event.duration),
       type: 'r',
-      clef: staff,
+      clef: clefOf(staff),
       alignCenter: wholeBar,
     })
     if (!wholeBar) dotted(rest, event.duration.dots)
@@ -207,7 +209,7 @@ function noteOf(
   const note = new StaveNote({
     keys: event.notes.map(keyOf),
     duration: code(event.duration),
-    clef: staff,
+    clef: clefOf(staff),
     ...(stem === 'auto'
       ? { autoStem: true }
       : { stemDirection: stem === 'up' ? Stem.UP : Stem.DOWN }),

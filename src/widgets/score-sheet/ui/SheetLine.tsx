@@ -3,6 +3,7 @@ import type { BarRange, Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
 import { useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
+import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
 import { LineOverlay } from './LineOverlay'
 
@@ -26,7 +27,13 @@ export const SheetLine = memo(function SheetLine({
   placesOf,
   chordNames,
   onSignature,
+  scale = 1,
+  justify = true,
 }: {
+  /** The engraving's size: a page's lines smaller on a narrow screen, as its paper is. */
+  scale?: number
+  /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
+  justify?: boolean
   sheet: LineSheet
   layer: Layer
   /** From the line's start, when the caret is on this line. */
@@ -46,7 +53,7 @@ export const SheetLine = memo(function SheetLine({
   const selected =
     caret === null || layer === 'chords'
       ? undefined
-      : { staff: layer === 'lh' ? ('bass' as const) : ('treble' as const), tick: caret }
+      : { staff: staffOfHand(layer, sheet.music.melodyStaff ?? false), tick: caret }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight, its section's heading over it kept in view.
   const held = useRef<boolean | null>(null)
@@ -66,10 +73,11 @@ export const SheetLine = memo(function SheetLine({
       className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none"
     >
       <LazyScoreView
+        scale={scale}
         score={sheet.score}
         timeBefore={sheet.timeBefore}
         selected={selected}
-        fill={width > 0 ? width : undefined}
+        fill={justify && width > 0 ? width : undefined}
       >
         {(layout) => (
           <LineOverlay

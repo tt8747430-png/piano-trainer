@@ -102,7 +102,8 @@ export type EditorAction =
 export const initialEditor = (draft: Draft): EditorState => ({
   draft,
   caret: 0,
-  layer: 'melody',
+  // The tune where the piece has a staff for it, else the right hand.
+  layer: draft.melodyStaff ? 'melody' : 'rh',
   value: { value: 4, dots: 0, triplet: false },
   chord: false,
   selection: null,

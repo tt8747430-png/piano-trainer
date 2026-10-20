@@ -27,6 +27,21 @@ const shape = (events: readonly ScoreEvent[]) =>
 const notesOf = (event: ScoreEvent | undefined) => (event?.kind === 'notes' ? event.notes : [])
 
 describe('notate', () => {
+  it('writes the tune on a staff of its own over the grand staff where the music asks', () => {
+    const notes = [n(72, note('C'), 'melody', 0, 96), n(60, note('C'), 'rh', 0, 96)]
+    const own = notate(music(notes, { melodyStaff: true }))
+    expect(own.staves).toEqual(['melody', 'treble', 'bass'])
+    const [bar] = own.measures
+    expect(bar?.staves.melody.flatMap((voice) => voice.events.flatMap(notesOf))).toMatchObject([
+      { midi: 72 },
+    ])
+    expect(bar?.staves.treble).toHaveLength(1)
+    const shared = notate(music(notes))
+    expect(shared.staves).toEqual(['treble', 'bass'])
+    expect(shared.measures[0]?.staves.treble).toHaveLength(2)
+    expect(shared.measures[0]?.staves.melody).toEqual([])
+  })
+
   it('writes a pickup under the meter’s signature, as a short first bar', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 24), n(64, note('E'), 'rh', 24, 96)], {

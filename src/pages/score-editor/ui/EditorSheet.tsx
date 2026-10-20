@@ -11,6 +11,7 @@ export function EditorSheet() {
     store,
     actions: { dispatch },
     view,
+    meta,
   } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
@@ -39,6 +40,8 @@ export function EditorSheet() {
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       onSignature={openSettings}
+      view={view.layout}
+      title={meta.title}
     />
   )
 }

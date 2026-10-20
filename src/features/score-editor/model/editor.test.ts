@@ -37,10 +37,11 @@ describe('the editor', () => {
     expect(shape(run(tied, { type: 'tie' }).draft.melody)).toEqual(['G4@0/48'])
   })
 
-  it('opens on the tune at the piece’s start, writing quarter notes', () => {
+  it('opens at the piece’s start on its top staff, the right hand with no tune, writing quarter notes', () => {
+    expect(initialEditor(draftOf({ melody: 'B4/4' })).layer).toBe('melody')
     const state = initialEditor(draftOf())
     expect(state).toMatchObject({
-      layer: 'melody',
+      layer: 'rh',
       caret: 0,
       value: { value: 4, dots: 0, triplet: false },
       chord: false,
