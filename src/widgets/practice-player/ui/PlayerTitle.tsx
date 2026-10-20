@@ -16,7 +16,10 @@ export function PlayerTitle({ title, onClose }: { title: string; onClose: () => 
         icon={X}
         onClick={onClose}
       />
-      <h1 {...heading} className="min-w-0 flex-1 truncate text-lg outline-none">
+      <h1
+        {...heading}
+        className="line-clamp-2 min-w-0 flex-1 text-lg leading-snug outline-none sm:truncate landscape-phone:truncate"
+      >
         {title}
       </h1>
     </div>

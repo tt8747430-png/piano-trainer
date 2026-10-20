@@ -105,6 +105,7 @@ export const player: LocaleResources['player'] = {
   next: 'Дальше',
   play: 'Играть',
   stop: 'Стоп',
+  transport: 'Воспроизведение',
   playThese: 'Сыграйте {{notes}}',
   right: 'Верно',
   notThat: 'Не {{note}}',

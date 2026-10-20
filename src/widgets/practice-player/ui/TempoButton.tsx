@@ -9,7 +9,12 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
+import { useDockSide } from '../model/dock-side'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
+
+/** The transport's round look: a pill along the bar, a circle saying the value upright. */
+const TRIGGER =
+  'h-12 rounded-full px-3 landscape-phone:size-10 landscape-phone:px-0 landscape-phone:text-xs'
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any
@@ -39,6 +44,7 @@ export function TempoButton({
   const { t } = useTranslation('player')
   const locale = useLocale()
   const [open, setOpen] = useState(false)
+  const side = useDockSide()
   const value =
     mode === 'wait' ? t('pace.waitShort') : formatPercent(locale, percentOf(shownTempo, ownTempo))
   const choose = (act: () => void) => {
@@ -47,12 +53,22 @@ export function TempoButton({
   }
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button variant="soft" aria-label={t('pace.of', { value })} />}>
-        <Gauge data-icon="inline-start" />
+      <PopoverTrigger
+        render={
+          <Button
+            variant="ghost"
+            aria-label={t('pace.of', { value })}
+            title={t('tempo')}
+            className={TRIGGER}
+          />
+        }
+      >
+        <Gauge data-icon="inline-start" className="landscape-phone:hidden" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
       <PopoverContent
         aria-label={t('tempo')}
+        side={side}
         align="start"
         className="max-h-(--available-height) w-80 gap-4 overflow-y-auto overscroll-contain p-4"
       >

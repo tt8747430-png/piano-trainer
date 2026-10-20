@@ -31,6 +31,29 @@ describe('Player', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
+  it('holds the tempo, ‹, Play, › and the hands in one toolbar named Playback', async () => {
+    await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const names = within(dock)
+      .getAllByRole('button')
+      .map((button) => button.getAttribute('aria-label'))
+    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Hands: Both hands'])
+    expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
+      'title',
+      'Play (Space)',
+    )
+  })
+
+  it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
+    const { settingsStore } = await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    act(() => settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, dock: 'top' } })))
+    const top = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  })
+
   it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki')
