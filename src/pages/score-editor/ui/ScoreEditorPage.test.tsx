@@ -38,7 +38,7 @@ describe('the score editor', () => {
   it('opens on the tune, its palette choosing what the keys write: the chords, the tune or a hand', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
-    expect(await screen.findByRole('status')).toHaveTextContent(/^Melody · Bar 1/)
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
     expect(screen.queryByRole('radiogroup', { name: 'Write' })).not.toBeInTheDocument()
     const palette = screen.getByRole('region', { name: 'Tools' })
     const voice = within(palette).getByRole('radiogroup', { name: 'Voice' })
@@ -501,7 +501,8 @@ describe('the score editor’s takes', () => {
       storage: withSong(),
     })
     await startTake(user)
-    expect(await screen.findByRole('status')).toHaveTextContent('Count-in')
+    // The caret's line is the status until the recording strip takes its place.
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Count-in'))
     expect(
       audio.played
         .at(-1)
