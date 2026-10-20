@@ -134,10 +134,17 @@ of the chart in order:
 | `r/1`                    | A rest; a bar of rests is written silence, not the pattern                                                                                                |
 | `C3/4 E3+G3/1@2 E3+G3/1` | `@beat` starts a token on a beat counted from 1 (`@2.5` the "and" of 2), so a held note and the notes over it are both written; the next token follows it |
 | `F4/1:3 D4/1:3 E4/1:3`   | A triplet: thirds of a beat as fractions; `C4/.125` a 32nd                                                                                                |
+| `C4+E4/1[acc,stacc]`     | Marks after a token, on each of its notes (below)                                                                                                         |
 
 Written in the piece's key, its accidentals as printed (`E5` in a D♭ section is E natural), on whole ticks, every
 note on the piano. A note may last past its bar's end only into bars
 where the same hand is written: it is held across the barline.
+
+**Marks** (ADR 0063), words joined by commas in brackets: articulations `stacc` `staccatiss` `acc` `ten` `marc`
+`ferm` (several may join); one ornament `tr` `mord` `lmord` `turn` `trem`; `arp` rolls the chord; `(` starts a slur
+and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` higher; a dynamic `pp` `p` `mp` `mf`
+`f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; `gr:D5+E5` grace notes struck just before. A pitch is
+always the one heard.
 
 ## The recording
 

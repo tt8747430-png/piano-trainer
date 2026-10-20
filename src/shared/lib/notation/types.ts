@@ -5,6 +5,7 @@ import type {
   Key,
   Meter,
   Midi,
+  NoteMarks,
   SpelledNote,
   Tick,
   TimeSignature,
@@ -28,6 +29,7 @@ export interface TimedNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
+  readonly marks?: NoteMarks
 }
 
 /** Timed notes with their bars and chord symbols: a Performance is this. */

@@ -222,3 +222,19 @@ export { keysHolding, type KeyHolding } from './keys-holding'
 export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
+export {
+  ARTICULATIONS,
+  DYNAMICS,
+  HAIRPINS,
+  OCTAVE_LINES,
+  ORNAMENTS,
+  hasMarks,
+  writtenShift,
+  type Articulation,
+  type Dynamic,
+  type GraceNote,
+  type Hairpin,
+  type NoteMarks,
+  type OctaveLine,
+  type Ornament,
+} from './marks'

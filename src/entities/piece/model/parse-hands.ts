@@ -2,6 +2,7 @@ import type { HandNote } from '@/shared/lib/arrangement'
 import { PIANO, type Finger, type Tick } from '@/shared/lib/music'
 import { readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
+import { readMarks } from './note-marks'
 import { readPitch } from './note-text'
 import type { ChartPiece, Hands } from './types'
 
@@ -28,8 +29,8 @@ const FINGERS: ReadonlyMap<string, Finger> = new Map([
   ['4', 4],
   ['5', 5],
 ])
-/** `pitches/beats` and an optional `@beat`. */
-const TOKEN = /^([^/@]+)\/([^/@]+)(?:@(.+))?$/
+/** `pitches/beats`, an optional `@beat` and optional `[marks]`. */
+const TOKEN = /^([^/@[\]]+)\/([^/@[\]]+)(?:@([^[\]]+))?(?:\[([^\]]*)\])?$/
 
 type Fail = (problem: string) => never
 
@@ -54,7 +55,8 @@ function readBar(entry: string, bar: HandBar, hand: HandId, fail: Fail): HandNot
   let running: Tick = 0
   for (const token of tokens) {
     const unreadable: () => never = () => fail(`${HAND_NAMES[hand]} cannot read "${token}"`)
-    const [, pitches = '', beatsText = '', atText] = TOKEN.exec(token) ?? unreadable()
+    const [, pitches = '', beatsText = '', atText, marksText] = TOKEN.exec(token) ?? unreadable()
+    const marks = marksText === undefined ? undefined : (readMarks(marksText) ?? unreadable())
     const beats = readBeats(beatsText)
     const durationTicks = beats === null ? null : ticksIn(beats)
     const at = atText === undefined ? null : readBeats(atText)
@@ -64,7 +66,14 @@ function readBar(entry: string, bar: HandBar, hand: HandId, fail: Fail): HandNot
     if (startTick >= bar.ticks) fail(`${HAND_NAMES[hand]}'s "${token}" starts past its bar's end`)
     if (pitches !== 'r') {
       const played = readPitches(pitches) ?? unreadable()
-      notes.push(...played.map((pitch) => ({ ...pitch, startTick, durationTicks })))
+      notes.push(
+        ...played.map((pitch) => ({
+          ...pitch,
+          startTick,
+          durationTicks,
+          ...(marks ? { marks } : {}),
+        })),
+      )
     }
     running = startTick + durationTicks
   }

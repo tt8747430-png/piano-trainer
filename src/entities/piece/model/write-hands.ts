@@ -1,15 +1,25 @@
 import type { HandNote } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
 import { pitchText } from './music'
+import { writeMarks } from './note-marks'
 import { beatsText } from './write-chart'
 
 const noteText = (n: HandNote) => `${pitchText(n)}${n.finger === undefined ? '' : `^${n.finger}`}`
 
-/** A bar's notes struck together: those sharing an onset and a length, lowest first, held ones first. */
+/** A note's marks as its token writes them: `[acc,stacc]`, or nothing. */
+const marksText = (n: HandNote): string => {
+  const written = n.marks ? writeMarks(n.marks) : ''
+  return written === '' ? '' : `[${written}]`
+}
+
+/**
+ * A bar's notes struck together: those sharing an onset, a length and their marks, lowest first,
+ * held ones first.
+ */
 function chordsOf(notes: readonly HandNote[]): HandNote[][] {
   const chords = new Map<string, HandNote[]>()
   for (const n of notes) {
-    const id = `${n.startTick} ${n.durationTicks}`
+    const id = `${n.startTick} ${n.durationTicks} ${marksText(n)}`
     chords.set(id, [...(chords.get(id) ?? []), n])
   }
   return [...chords.values()]
@@ -35,9 +45,9 @@ function barText(notes: readonly HandNote[], barTicks: Tick): string {
     const played = `${chord.map(noteText).join('+')}/${beatsText(first.durationTicks)}`
     if (first.startTick > running) tokens.push(`r/${beatsText(first.startTick - running)}`)
     tokens.push(
-      first.startTick < running
+      (first.startTick < running
         ? `${played}@${beatsText(first.startTick + TICKS_PER_BEAT)}`
-        : played,
+        : played) + marksText(first),
     )
     running = first.startTick + first.durationTicks
   }

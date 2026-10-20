@@ -21,6 +21,7 @@ import {
   type Key,
   type Meter,
   type Midi,
+  type NoteMarks,
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
@@ -40,6 +41,7 @@ export interface DraftNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
+  readonly marks?: NoteMarks
 }
 
 /** A chord from where it starts in its bar; it lasts until the next one or the barline. */

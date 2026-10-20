@@ -116,6 +116,20 @@ describe('a written hand', () => {
     ])
   })
 
+  it('reads a token’s marks onto each of its notes', () => {
+    const [bar] = barsOf(['C'], { rh: 'C4+E4/1[acc,stacc] G4/3[8va,(]' })
+    expect(bar?.hands?.rh?.map((n) => n.marks)).toEqual([
+      { articulations: ['accent', 'staccato'] },
+      { articulations: ['accent', 'staccato'] },
+      { octave: '8va', slurStart: true },
+    ])
+  })
+
+  it('names a token whose marks it cannot read', () => {
+    const error = errorOf(['C'], { rh: 'C4/4[nope]' })
+    expect(error.message).toContain('cannot read "C4/4[nope]"')
+  })
+
   it('names a note held into a bar the pattern plays', () => {
     const error = errorOf(['C G'], { lh: 'C3/6 | -' })
     expect(error.position).toEqual({ section: 1, line: 1, bar: 1 })
