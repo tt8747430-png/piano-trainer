@@ -58,6 +58,7 @@ export const quiz: LocaleResources['quiz'] = {
     act: 'Проверить, затем дальше',
     answer: 'Выбрать ответ 1–9',
     hear: 'Послушать ещё раз',
+    close: 'Закрыть проверку',
   },
   playAgain: 'Ещё раз',
   answers: 'Ответы',

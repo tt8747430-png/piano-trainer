@@ -8,6 +8,7 @@ import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/
 import { MidiButton } from '@/features/connect-midi'
 import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useGoBack } from '@/shared/lib'
+import { useShortcuts } from '@/shared/lib/shortcuts'
 import { RoundButton, usePageHeading } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
 import { useStepTitle } from '@/widgets/curriculum'
@@ -25,6 +26,10 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
     () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),
   )
   const close = useGoBack({ to: '/' })
+  // Escape closes, as it closes the Player: the Check is full screen too.
+  useShortcuts(t('quiz:shortcuts.group'), [
+    { label: t('quiz:shortcuts.close'), combo: { key: 'Escape' }, run: close },
+  ])
   const answered = trainer.run.answered.length
   const heading = usePageHeading<HTMLHeadingElement>(t('quiz:checkTitle', { title }))
   const progress = t('quiz:progress', { n: trainer.number, total: plan.length })

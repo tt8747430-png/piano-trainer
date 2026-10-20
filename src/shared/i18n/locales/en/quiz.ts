@@ -61,6 +61,7 @@ export const quiz = {
     act: 'Check, then the next round',
     answer: 'Choose answer 1–9',
     hear: 'Hear it again',
+    close: 'Close the check',
   },
   playAgain: 'Play again',
   answers: 'Answers',
