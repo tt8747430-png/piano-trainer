@@ -41,6 +41,10 @@ export const piece: LocaleResources['piece'] = {
     harmony: 'Гармонизация',
     accompaniment: 'Аккомпанемент',
     unknown: 'Автор неизвестен',
+    said: {
+      traditional: 'народная',
+      newBritain: 'New Britain (американская народная мелодия)',
+    },
   },
   source: { number: '№ {{n}}', page: 'с. {{n}}' },
   section: {

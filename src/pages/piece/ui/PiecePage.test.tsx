@@ -129,6 +129,19 @@ describe('Piece', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'Куплет' })).toBeInTheDocument()
   })
 
+  it('says a folk tune’s credit in Russian, and keeps names as printed', async () => {
+    await renderApp('/songs/hot-cross-buns', { locale: 'ru' })
+    expect(await screen.findByText('народная')).toBeInTheDocument()
+    expect(screen.queryByText('Traditional')).toBeNull()
+  })
+
+  it('says “American folk tune” in Russian beside the tune’s name', async () => {
+    await renderApp('/songs/amazing', { locale: 'ru' })
+    expect(
+      await screen.findByText('New Britain (американская народная мелодия)'),
+    ).toBeInTheDocument()
+  })
+
   it('shows a listing without a chart: its one action writes it', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalog has no listing')

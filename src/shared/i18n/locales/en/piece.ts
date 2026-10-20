@@ -41,6 +41,10 @@ export const piece = {
     harmony: 'Harmony',
     accompaniment: 'Accompaniment',
     unknown: 'Author unknown',
+    said: {
+      traditional: 'Traditional',
+      newBritain: 'New Britain (American folk tune)',
+    },
   },
   source: { number: 'No. {{n}}', page: 'p. {{n}}' },
   section: {
