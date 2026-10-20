@@ -11,7 +11,7 @@ import { TakeList } from './TakeList'
 import { WriteTakePage } from './WriteTakePage'
 
 /**
- * The takes (ADR 0028), opened from the dock's Record: Record over the caret's bar, in the footer, in reach however long the list;
+ * The takes (ADR 0028), opened from the bar's Record: Record over the caret's bar, in the footer, in reach however long the list;
  * and the piece's takes, each heard, written into the score, downloaded or deleted; a take's form to
  * write it is a page of the sheet.
  */
@@ -32,7 +32,7 @@ export function RecorderSheet() {
             size="icon"
             aria-label={t('recorder.open')}
             title={t('recorder.open')}
-            className="size-12 rounded-full"
+            className="rounded-full"
             disabled={takes.stage !== 'idle'}
           />
         }

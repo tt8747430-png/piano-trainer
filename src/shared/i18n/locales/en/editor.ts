@@ -4,10 +4,21 @@ export const editor = {
   undo: 'Undo',
   redo: 'Redo',
   settings: 'Song settings',
-  // The bar of Undo, Redo, Play and Record between the sheet and the tools.
+  // Play and Record, in the screen's bar.
   dock: 'Editing',
-  // The tools a phone folds away, used less.
-  moreTools: 'More tools',
+  // The palette of tools (a notation app's): its actions on top, its kinds of tools as tabs.
+  palette: {
+    label: 'Tools',
+    open: 'Tools',
+    close: 'Close the tools',
+    actions: 'Edit',
+    tabs: 'Kinds of tools',
+    notes: 'Notes',
+    pitch: 'Pitch',
+    hand: 'Hand',
+    chords: 'Chords',
+    bars: 'Bars',
+  },
   // The song's settings: what the sheet shows.
   view: 'View',
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
@@ -18,6 +29,8 @@ export const editor = {
     lh: 'Left hand',
   },
   voice: 'Voice',
+  // What the keys write, short under the palette's Voice.
+  voices: { chords: 'Chords', melody: 'Melody', rh: 'Right', lh: 'Left' },
   chordNames: 'Chord names',
   sheet: {
     signature: 'Key and time signature',
@@ -51,7 +64,6 @@ export const editor = {
     eighth: 'Eighth note',
     sixteenth: 'Sixteenth note',
   },
-  groups: { value: 'Value and kind', caret: 'Caret', notes: 'Notes at the caret' },
   dot: 'Dotted',
   triplet: 'Triplet',
   rest: 'Rest',
@@ -60,10 +72,13 @@ export const editor = {
   respell: 'Other spelling',
   up: 'Up a semitone',
   down: 'Down a semitone',
+  octaveUp: 'Up an octave',
+  octaveDown: 'Down an octave',
   back: 'Back a step',
   on: 'Forward a step',
   finger: 'Finger on {{note}}',
   noFinger: 'None',
+  noNotes: 'No notes here',
   writeOut: 'Write out',
   backToPattern: 'Back to the pattern',
   chord: {

@@ -35,7 +35,7 @@ export function ChordField({ symbol }: { symbol: string }) {
       error={chord ? null : t('chord.invalid')}
       onChange={setText}
       onKeyDown={onKeyDown}
-      className="min-w-28 flex-1 lg:w-40 lg:flex-none"
+      className="w-full"
     />
   )
 }

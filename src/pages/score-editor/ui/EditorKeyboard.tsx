@@ -1,8 +1,12 @@
+import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { notesAt, notesOf, type EditorState } from '@/features/score-editor'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { selectKeyboard, useSettings } from '@/entities/settings'
+import { LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { keyboardRange, midi, type KeyRange, type Midi } from '@/shared/lib/music'
+import { FabPill, RailButton, RailGroup } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** The keys a hand writes in: the treble's from C4, the left hand's from C3, grown to its notes. */
@@ -21,20 +25,45 @@ function layerSpan({ draft, layer }: EditorState): KeyRange {
 
 /**
  * The keyboard: a key played is written at the caret; the notes there are chosen keys. While a take
- * records, Space stops it rather than holding the pedal.
+ * records, Space stops it rather than holding the pedal. It folds from its rail into a Keys button
+ * floating over the sheet's corner, as every screen's keys do (ADR 0055), and the sheet takes the
+ * height; folded, it stays folded on every screen until unfolded.
  */
 export function EditorKeyboard() {
+  const { t } = useTranslation('common')
   const { actions, takes } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(layerSpan))
   const selected = useMemo(() => new Set(here), [here])
+  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const { folded, fold } = useFoldKeys('playing')
+  if (folded)
+    return (
+      <div data-area="unfold">
+        <FabPill
+          label={t('rail.unfold')}
+          icon={Piano}
+          onClick={() => fold(false)}
+          className="vt-keys"
+        />
+      </div>
+    )
   return (
-    <div className="min-w-0 shrink-0">
+    <div data-area="keys" className="vt-keys min-w-0 shrink-0">
       <LiveKeyboard
         range={range}
         selected={selected}
         onKeyPress={actions.play}
         spacePedal={takes.stage === 'idle'}
+        railEnd={
+          <RailGroup>
+            <RailButton
+              label={t('rail.fold')}
+              icon={dock === 'bottom' ? ChevronDown : ChevronUp}
+              onClick={() => fold(true)}
+            />
+          </RailGroup>
+        }
       />
     </div>
   )
