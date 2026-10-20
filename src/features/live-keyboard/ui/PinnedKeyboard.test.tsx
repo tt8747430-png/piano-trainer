@@ -88,6 +88,14 @@ describe('PinnedKeyboard', () => {
     })
   })
 
+  it('keeps Hide the keys in sight, out of the rail controls that scroll on a short rail', () => {
+    renderPinned({ onSide: false })
+    expect(foldButton()?.closest('[data-slot=rail-controls]')).toBeNull()
+    expect(
+      screen.getByRole('button', { name: 'Pedal' }).closest('[data-slot=rail-controls]'),
+    ).not.toBeNull()
+  })
+
   it('keeps the keys out on a screen played on, a phone on its side or not', () => {
     renderPinned({ onSide: true, screen: 'playing' })
     expect(foldButton()).toBeInTheDocument()

@@ -77,6 +77,7 @@ export function PianoKeyboard({
   keyLength = 'long',
   letters,
   caption,
+  railEnd,
   keyPlays,
   onKeyPress,
   onKeyRelease,
@@ -99,6 +100,8 @@ export function PianoKeyboard({
   letters?: ReadonlyMap<Midi, string> | undefined
   /** What the rail says of the keys a hand holds (their chord): nothing while its `text` is empty. */
   caption?: RailCaption | undefined
+  /** The rail's last control, always in sight (a page's Hide the keys). */
+  railEnd?: ReactNode
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
    * degree's key its chord). All of it is down while the key is held.
@@ -178,7 +181,7 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots} caption={caption}>
+        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots} caption={caption} end={railEnd}>
           {children}
         </KeyRail>
         <div
