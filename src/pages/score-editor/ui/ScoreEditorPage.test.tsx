@@ -74,6 +74,18 @@ describe('the score editor', () => {
     expect(screen.getByRole('region', { name: 'Tools' })).toBeInTheDocument()
   })
 
+  it('floats its palette on the floating buttons’ side, and moves it to the other', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const card = palette.closest('[data-area="palette"]')
+    expect(card).toHaveAttribute('data-side', 'right')
+    await user.click(
+      within(palette).getByRole('button', { name: 'Move the tools to the other side' }),
+    )
+    expect(card).toHaveAttribute('data-side', 'left')
+  })
+
   it('folds its keys into a Keys button, and back', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })

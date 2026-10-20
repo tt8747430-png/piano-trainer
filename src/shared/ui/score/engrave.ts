@@ -63,6 +63,8 @@ const SPACING = 1.4
 const NOTE_PADDING = 20
 /** The least space in CSS pixels between a chord symbol and the next, or its barline. */
 const CHORD_GAP = 8
+/** How far a hairpin keeps from a dynamic under the note it starts or ends at. */
+const DYNAMIC_ROOM = 14
 /** How many times a measure is widened, at most, until its chord symbols fit. */
 const WIDEN_PASSES = 6
 const END_MARGIN = 8
@@ -346,10 +348,19 @@ function drawSpans(
     const chords = chordsAlong(built, staff)
     context.openGroup(`staff-${staff}`)
     const slurs: (StaveNote | undefined)[] = []
-    let hairpin: { from: StaveNote; type: number } | null = null
-    const drawHairpin = (to: StaveNote) => {
+    let hairpin: { from: StaveNote; type: number; afterDynamic: boolean } | null = null
+    // A hairpin starts clear of a dynamic under its first note and stops short of one under its last.
+    const drawHairpin = (to: StaveNote, toDynamic = false) => {
       if (!hairpin || hairpin.from === to) return
       new StaveHairpin({ firstNote: hairpin.from, lastNote: to }, hairpin.type)
+        .setRenderOptions({
+          height: 10,
+          yShift: 0,
+          leftShiftPx: hairpin.afterDynamic ? DYNAMIC_ROOM : 0,
+          rightShiftPx: toDynamic ? -DYNAMIC_ROOM : 0,
+          leftShiftTicks: 0,
+          rightShiftTicks: 0,
+        })
         .setPosition(Modifier.Position.BELOW)
         .setContext(context)
         .draw()
@@ -379,10 +390,11 @@ function drawSpans(
         new Curve(slurs.pop(), note, {}).setContext(context).draw()
       }
       if (marks?.slurStart) slurs.push(note)
-      if (marks?.dynamic || marks?.hairpin) drawHairpin(note)
+      if (marks?.dynamic || marks?.hairpin) drawHairpin(note, marks.dynamic !== undefined)
       if (marks?.hairpin === 'cresc' || marks?.hairpin === 'dim') {
         hairpin = {
           from: note,
+          afterDynamic: marks.dynamic !== undefined,
           type: marks.hairpin === 'cresc' ? StaveHairpin.type.CRESC : StaveHairpin.type.DECRESC,
         }
       }

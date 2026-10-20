@@ -1,5 +1,5 @@
-import { useRef, type CSSProperties } from 'react'
-import { selectKeyboard, useSettings } from '@/entities/settings'
+import { useRef, useState, type CSSProperties } from 'react'
+import { selectFloating, selectKeyboard, useSettings } from '@/entities/settings'
 import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
@@ -7,7 +7,7 @@ import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorKeyboard } from './EditorKeyboard'
-import { EditorPalette } from './EditorPalette'
+import { EditorPalette, type PaletteSide } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
 import { EditorToolbar } from './EditorToolbar'
 import { RecordingStrip } from './RecordingStrip'
@@ -16,9 +16,10 @@ import { RecordingStrip } from './RecordingStrip'
  * The score editor (spec §6): the bar (Play and Record among its buttons), the sheet filling the
  * screen, the caret's line (under the title on a phone on its side; while a take records, the
  * recording strip) and the keys, at the foot or under the bar as the keyboard settings dock them
- * (folded at first on a phone on its side). The tools are a notation app's palette: on a
- * phone floating over the sheet's corner, the sheet scrolling clear of it; beside the sheet on a
- * phone on its side and on a laptop (`editor-screen`).
+ * (folded at first on a phone on its side). The tools are a notation app's palette: on a phone,
+ * upright or on its side, a card floating over the sheet's corner (the side the floating buttons
+ * stand, else the one it is moved to), the sheet filling the screen under it and scrolling clear of
+ * it; beside the sheet on a laptop (`editor-screen`).
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
@@ -26,6 +27,9 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const place = useSettings((state) => selectFloating(state).place)
+  const [moved, setSide] = useState<PaletteSide | null>(null)
+  const side = moved ?? (place === 'left' ? 'left' : 'right')
   const palette = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(palette)
   const room = { '--palette-room': `${height}px` } as CSSProperties
@@ -47,8 +51,8 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             {idle ? <CaretLine /> : <RecordingStrip />}
           </div>
         )}
-        <div ref={palette} data-area="palette">
-          <EditorPalette />
+        <div ref={palette} data-area="palette" data-side={side}>
+          <EditorPalette side={side} onSide={setSide} />
         </div>
         <EditorKeyboard />
       </div>

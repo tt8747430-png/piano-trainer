@@ -1,4 +1,4 @@
-import { Hand, Music2, X } from 'lucide-react'
+import { ArrowLeftRight, Hand, Music2, X } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMediaQuery } from '@/shared/lib'
@@ -24,6 +24,9 @@ import { VoiceChoice } from './VoiceChoice'
 
 /** A laptop's width, where the palette stands open beside the sheet. */
 const LAPTOP = '(min-width: 64rem)'
+
+/** Which side of the sheet the palette floats over on a phone. */
+export type PaletteSide = 'left' | 'right'
 
 /** Each tab's picture: the music font's where a symbol says it. */
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
@@ -56,10 +59,17 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
 /**
  * The editor's tools as a notation app's palette: Delete, Undo, Redo and the caret's steps on top,
  * the kinds of tools as tabs (those of what the keys write; the rest greyed), the chosen tab's keys,
- * and what the keys write at its foot. On a phone it floats over the sheet and closes into one ♪
- * button; on a laptop it stands open beside the sheet. While a take records, it waits for Stop.
+ * and what the keys write at its foot. On a phone it floats over the sheet, moves to its other side
+ * and closes into one ♪ button; on a laptop it stands open beside the sheet. While a take records,
+ * it waits for Stop.
  */
-export function EditorPalette() {
+export function EditorPalette({
+  side,
+  onSide,
+}: {
+  side: PaletteSide
+  onSide: (side: PaletteSide) => void
+}) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
@@ -81,24 +91,7 @@ export function EditorPalette() {
     <ToolPalette label={t('palette.label')} tab={tab} onTabChange={choose}>
       <fieldset disabled={recording} className="contents">
         <PaletteActions />
-        <ToolPaletteTabs
-          label={t('palette.tabs')}
-          end={
-            laptop ? null : (
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={t('palette.close')}
-                title={t('palette.close')}
-                aria-expanded
-                className="rounded-xl"
-                onClick={() => setOpen(false)}
-              >
-                <X aria-hidden />
-              </Button>
-            )
-          }
-        >
+        <ToolPaletteTabs label={t('palette.tabs')}>
           {PALETTE_TABS.map((each) => (
             <ToolPaletteTab
               key={each}
@@ -112,8 +105,39 @@ export function EditorPalette() {
             </ToolPaletteTab>
           ))}
         </ToolPaletteTabs>
-        <ToolPalettePanel value={tab}>{TAB_KEYS[tab]}</ToolPalettePanel>
-        <ToolPaletteFoot>
+        {/* Six keys a row: a tab's keys in two rows, short enough over a phone on its side. */}
+        <ToolPalettePanel value={tab} className="grid-cols-6">
+          {TAB_KEYS[tab]}
+        </ToolPalettePanel>
+        <ToolPaletteFoot
+          end={
+            laptop ? null : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t('palette.otherSide')}
+                  title={t('palette.otherSide')}
+                  className="rounded-xl"
+                  onClick={() => onSide(side === 'left' ? 'right' : 'left')}
+                >
+                  <ArrowLeftRight aria-hidden />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t('palette.close')}
+                  title={t('palette.close')}
+                  aria-expanded
+                  className="rounded-xl"
+                  onClick={() => setOpen(false)}
+                >
+                  <X aria-hidden />
+                </Button>
+              </>
+            )
+          }
+        >
           <VoiceChoice disabled={recording} />
         </ToolPaletteFoot>
       </fieldset>

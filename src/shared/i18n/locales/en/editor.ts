@@ -11,6 +11,7 @@ export const editor = {
     label: 'Tools',
     open: 'Tools',
     close: 'Close the tools',
+    otherSide: 'Move the tools to the other side',
     actions: 'Edit',
     tabs: 'Kinds of tools',
     notes: 'Notes',

@@ -9,15 +9,14 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 const MUSIC = 'font-music text-3xl leading-none'
 /** Words as a score prints them: a serif's bold italic. */
 const PRINTED = 'font-serif text-lg font-bold italic leading-none'
-/** A black notehead, under the articulation it carries. */
-const HEAD = '𝅘'
-
-/** A notehead with its mark above it, as a score draws an articulation. */
+/** A black notehead with its mark above it, as a score draws an articulation. */
 function OnHead({ mark }: { mark: string }) {
   return (
-    <span aria-hidden className="flex flex-col items-center leading-none">
-      <span className="text-base font-bold">{mark}</span>
-      <span className="font-music text-2xl leading-none">{HEAD}</span>
+    <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
+      <span className="text-sm font-bold">{mark}</span>
+      <svg viewBox="0 0 14 10" className="h-2.5 w-3.5">
+        <ellipse cx="7" cy="5" rx="6" ry="3.8" transform="rotate(-20 7 5)" fill="currentColor" />
+      </svg>
     </span>
   )
 }

@@ -67,7 +67,10 @@ export function ToolPaletteTabs({
 }) {
   return (
     <div className="flex items-center gap-1 border-y border-hairline py-1.5 landscape-phone:py-0.5">
-      <Tabs.List aria-label={label} className="flex min-w-0 flex-1 gap-1">
+      <Tabs.List
+        aria-label={label}
+        className="fade-scroll-x flex min-w-0 flex-1 gap-0.5 overflow-x-auto [scrollbar-width:none]"
+      >
         {children}
       </Tabs.List>
       {end}
@@ -93,7 +96,7 @@ export function ToolPaletteTab({
       aria-label={label}
       title={label}
       disabled={disabled}
-      className="grid min-h-11 min-w-0 flex-1 place-items-center rounded-xl text-xl leading-none text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground [&_svg]:size-5"
+      className="grid min-h-11 min-w-9 flex-1 shrink-0 place-items-center landscape-phone:min-h-9 rounded-xl text-xl leading-none text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground [&_svg]:size-5"
     >
       {children}
     </Tabs.Tab>
@@ -117,9 +120,14 @@ export function ToolPalettePanel({
   )
 }
 
-/** The palette's foot: what the keys write into (a notation app's voices). */
-export function ToolPaletteFoot({ children }: { children: ReactNode }) {
-  return <div className="border-t border-hairline pt-2">{children}</div>
+/** The palette's foot: what the keys write into (a notation app's voices); `end` after it, in its corner. */
+export function ToolPaletteFoot({ end, children }: { end?: ReactNode; children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-1 border-t border-hairline pt-2 landscape-phone:pt-1.5">
+      <div className="min-w-0 flex-1">{children}</div>
+      {end}
+    </div>
+  )
 }
 
 /** How far a key reaches in the grid: a wide key two columns, a tall one two rows, a row the whole row. */
@@ -158,7 +166,7 @@ export function ToolKey({
             aria-label={label}
             aria-pressed={pressed}
             className={cn(
-              'h-12 min-w-0 rounded-xl landscape-phone:h-11 px-1 text-2xl leading-none font-normal hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-xl landscape-phone:h-10 px-1 text-2xl leading-none font-normal hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
               SPAN[span],
               className,
             )}

@@ -690,13 +690,16 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    width: min(18rem, 100%);
+    width: min(21rem, 100%);
     max-height: 100%;
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: --spacing(1);
     & > * {
       margin-top: auto;
+    }
+    & > section {
+      width: 100%;
     }
   }
   & > [data-area='unfold'] {
@@ -710,29 +713,38 @@
     grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas: 'bar' 'keys' 'sheet' 'status';
   }
+  /* On its side the sheet takes the whole screen under a thin bar, the palette a card floating over
+     its corner as upright, the keys (folded at first) docked under it. */
   @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     grid-template-rows: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: 'bar bar unfold' 'sheet palette palette' 'status palette palette' 'keys palette palette';
+    grid-template-areas: 'bar unfold' 'sheet sheet' 'status status' 'keys keys';
+    row-gap: --spacing(1);
     &[data-keys='top'] {
       grid-template-rows: auto auto minmax(0, 1fr) auto;
-      grid-template-areas: 'bar bar unfold' 'keys palette palette' 'sheet palette palette' 'status palette palette';
+      grid-template-areas: 'bar unfold' 'keys keys' 'sheet sheet' 'status status';
     }
     & > [data-area='unfold'] {
       grid-area: unfold;
       align-self: center;
       padding: 0;
     }
+    /* The sheet scrolls clear of the card, but a caret beside it is in sight: no scroll for it. */
     & > [data-area='sheet'] {
-      padding-bottom: 0;
       scroll-padding-bottom: 0;
     }
     & > [data-area='palette'] {
-      grid-area: palette;
-      align-self: stretch;
-      width: auto;
-      max-width: 18rem;
-      padding: 0;
+      width: min(21rem, 100%);
+    }
+  }
+  /* Moved to the sheet's other side, the palette floats on the left, the Keys button then on the right. */
+  @variant max-lg {
+    & > [data-area='palette'][data-side='left'] {
+      justify-self: start;
+      align-items: flex-start;
+    }
+    &:has(> [data-area='palette'][data-side='left']) > [data-area='unfold'] {
+      justify-self: end;
     }
   }
   @variant lg {

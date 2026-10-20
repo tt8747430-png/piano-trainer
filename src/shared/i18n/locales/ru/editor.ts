@@ -11,6 +11,7 @@ export const editor: LocaleResources['editor'] = {
     label: 'Инструменты',
     open: 'Инструменты',
     close: 'Закрыть инструменты',
+    otherSide: 'Перенести инструменты на другую сторону',
     actions: 'Действия',
     tabs: 'Виды инструментов',
     notes: 'Ноты',
