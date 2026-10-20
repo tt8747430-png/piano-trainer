@@ -1,6 +1,6 @@
 import { useRef, type CSSProperties } from 'react'
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { useElementSize } from '@/shared/lib'
+import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
@@ -14,14 +14,17 @@ import { RecordingStrip } from './RecordingStrip'
 
 /**
  * The score editor (spec §6): the bar (Play and Record among its buttons), the sheet filling the
- * screen, the caret's line (while a take records, the recording strip) and the keys, at the foot or
- * under the bar as the keyboard settings dock them. The tools are a notation app's palette: on a
+ * screen, the caret's line (under the title on a phone on its side; while a take records, the
+ * recording strip) and the keys, at the foot or under the bar as the keyboard settings dock them
+ * (folded at first on a phone on its side). The tools are a notation app's palette: on a
  * phone floating over the sheet's corner, the sheet scrolling clear of it; beside the sheet on a
  * phone on its side and on a laptop (`editor-screen`).
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
   useEditorShortcutList()
+  const onSide = useMediaQuery(LANDSCAPE_PHONE)
+  const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const palette = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(palette)
@@ -34,14 +37,16 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-x-3 landscape-phone:py-1"
       >
         <div data-area="bar">
-          <EditorToolbar />
+          <EditorToolbar status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
         <div data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
           <EditorSheet />
         </div>
-        <div data-area="status" className="flex min-h-6 flex-col justify-center">
-          {editor.takes.stage === 'idle' ? <CaretLine /> : <RecordingStrip />}
-        </div>
+        {onSide && idle ? null : (
+          <div data-area="status" className="flex min-h-6 flex-col justify-center">
+            {idle ? <CaretLine /> : <RecordingStrip />}
+          </div>
+        )}
         <div ref={palette} data-area="palette">
           <EditorPalette />
         </div>

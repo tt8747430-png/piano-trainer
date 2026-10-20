@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setKeyboard } from '@/features/set-preference'
-import { createMemoryStorage } from '@/shared/lib'
+import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 
 const SONG = {
@@ -229,6 +229,28 @@ describe('the score editor', () => {
     await user.click(screen.getByRole('status'))
     await user.keyboard('{ArrowLeft}{ArrowLeft}')
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
+  })
+
+  it('opens with its keys folded on a phone on its side, its caret’s line in the bar', async () => {
+    const user = userEvent.setup()
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media === LANDSCAPE_PHONE,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    // The caret's line under the title, in the bar.
+    const title = await screen.findByRole('heading', { level: 1, name: 'Morning' })
+    expect(title.parentElement).toContainElement(screen.getByRole('status'))
+    await user.click(await screen.findByRole('button', { name: 'Keys' }))
+    expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
+    expect(settingsStore.getState().keyboard.folded).toBe(false)
+    expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
   it('keeps Play and Record in the bar, and Delete, Undo, Redo and the caret’s steps atop the palette', async () => {
