@@ -11,7 +11,8 @@ const STEP = 'landscape-phone:size-10'
 
 /**
  * The transport (ADR 0061): the tempo, ‹, Play or Stop (honey), › and the hands in one floating pill,
- * always in sight. Along the foot on a phone, upright beside the sheet on a phone on its side.
+ * always in sight. Along the foot on a phone, upright beside the sheet on a phone on its side, where
+ * ‹ › still point back and forward: turned, they would read as ↑ ↓, the tempo's keys.
  */
 export function PlayerDock({
   practice,
@@ -40,7 +41,7 @@ export function PlayerDock({
         className={STEP}
         onClick={practice.prev}
       >
-        <ChevronLeft aria-hidden className="landscape-phone:rotate-90" />
+        <ChevronLeft aria-hidden />
       </FloatingBarButton>
       <FloatingBarPlay
         label={t('play')}
@@ -54,7 +55,7 @@ export function PlayerDock({
         className={STEP}
         onClick={practice.next}
       >
-        <ChevronRight aria-hidden className="landscape-phone:rotate-90" />
+        <ChevronRight aria-hidden />
       </FloatingBarButton>
       {hands}
     </FloatingBar>

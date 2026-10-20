@@ -282,4 +282,12 @@ describe('Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.queryByRole('combobox', { name: 'Through the keys' })).not.toBeInTheDocument()
   })
+  it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
+    await renderApp('/play/bz5')
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    for (const name of ['Back', 'Next']) {
+      const icon = within(transport).getByRole('button', { name }).querySelector('svg')
+      expect(icon?.getAttribute('class')).not.toMatch(/rotate/)
+    }
+  })
 })
