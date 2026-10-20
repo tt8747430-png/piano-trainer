@@ -83,6 +83,11 @@ export interface KeyboardSettings {
   readonly dock: KeyDock
   /** A page's keys folded away to a button that brings them back. */
   readonly folded: boolean
+  /**
+   * On a phone on its side, a reading page's keys (a lesson's, an explorer's, a song's) folded away,
+   * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
+   */
+  readonly foldedLandscape: boolean
   readonly keyLength: KeyLength
   /** The controls the keys' rail holds, in its order. */
   readonly railControls: readonly RailControl[]
@@ -201,6 +206,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   typing: finePointer,
   dock: 'bottom',
   folded: false,
+  foldedLandscape: true,
   keyLength: 'long',
   railControls: RAIL_CONTROLS,
 })

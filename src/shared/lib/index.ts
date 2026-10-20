@@ -69,7 +69,7 @@ export {
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
-export { useMediaQuery } from './use-media-query'
+export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'
 export { useWakeLock } from './use-wake-lock'
 export { useElementSize } from './use-element-size'
 export { toggled } from './toggled'

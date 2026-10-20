@@ -48,7 +48,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 2
+export const SETTINGS_VERSION = 3
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -183,6 +183,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
+    foldedLandscape:
+      typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
     keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
     railControls: railControls(saved.railControls, current.railControls),
   }

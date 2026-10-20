@@ -121,7 +121,7 @@ export function ChordFinderPage() {
   const opensInChords = reading !== undefined && (!reading.bass || reading.inversion !== undefined)
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
-  const { folded } = useFoldKeys()
+  const { folded } = useFoldKeys('playing')
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -135,6 +135,7 @@ export function ChordFinderPage() {
         }
       />
       <PinnedKeyboard
+        screen="playing"
         shown={{ keys, marks: reading ? readingMarks(reading, keys) : new Map() }}
         selected={finder.tapped}
         onKeyPress={finder.tap}

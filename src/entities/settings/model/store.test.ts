@@ -97,6 +97,7 @@ describe('createSettingsStore', () => {
         typing: true,
         dock: 'top',
         folded: true,
+        foldedLandscape: false,
         keyLength: 'short',
         railControls: ['zoom', 'pedal'],
       },
@@ -149,6 +150,13 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
+  it('starts afresh over a save of the version before, which had no fold for a phone on its side', () => {
+    expect(SETTINGS_VERSION).toBe(3)
+    expect(restored({ theme: 'dark', keyboard: { folded: true } }, 2)).toEqual(
+      createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
+    )
+  })
+
   it('plays from the computer keyboard by default only where the pointer is fine', () => {
     const keyboard = (finePointer: boolean) =>
       createSettingsStore({
@@ -165,6 +173,7 @@ describe('createSettingsStore', () => {
       typing: true,
       dock: 'bottom',
       folded: false,
+      foldedLandscape: true,
       keyLength: 'long',
       railControls: [
         'zoom',
@@ -189,6 +198,7 @@ describe('createSettingsStore', () => {
       typing: 'yes',
       dock: 'top',
       folded: true,
+      foldedLandscape: 'no',
       keyLength: 'tiny',
       railControls: ['pedal', 'pedal', 'nope'],
     }
@@ -201,6 +211,7 @@ describe('createSettingsStore', () => {
       typing: false,
       dock: 'top',
       folded: true,
+      foldedLandscape: true,
       keyLength: 'long',
       railControls: ['pedal'],
     })
