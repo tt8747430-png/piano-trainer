@@ -8,10 +8,12 @@ import { keyPlayed } from './keys-played'
 import { markNotes } from './marks'
 import {
   backToPattern,
+  deleteBack,
   deleteNotes,
   respellNotes,
   setFinger,
   shiftNotes,
+  stepNotes,
   tieNotes,
   writeOut,
   writeRest,
@@ -60,11 +62,33 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     }
     case 'delete': {
       if (layer !== 'chords') {
-        return commit(state, deleteNotes(draft, layer, caret), { struck: null })
+        if (!action.back) return commit(state, deleteNotes(draft, layer, caret), { struck: null })
+        const taken = deleteBack(draft, layer, caret)
+        return commit(state, taken.draft, { caret: taken.caret, struck: null })
       }
       if (state.selection) return barsEdited(state, 'delete')
       const bar = barAt(draft, caret)
-      return commit(state, deleteChord(draft, bar.index, caret - bar.start), { struck: null })
+      const at = caret - bar.start
+      const here = bar.bar.chords.some((chord) => chord.at === at)
+      const before = bar.bar.chords.findLast((chord) => chord.at < at)
+      const target = here || !action.back || !before ? at : before.at
+      return commit(state, deleteChord(draft, bar.index, target), {
+        caret: bar.start + target,
+        struck: null,
+      })
+    }
+    case 'step':
+      return layer === 'chords'
+        ? state
+        : commit(state, stepNotes(draft, layer, caret, action.steps), { struck: null })
+    case 'melodyStaff': {
+      if (action.on === draft.melodyStaff) return state
+      if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
+      return commit(
+        state,
+        { ...draft, melodyStaff: false, melody: [] },
+        { layer: layer === 'melody' ? 'rh' : layer, struck: null },
+      )
     }
     case 'shift':
       return layer === 'chords'

@@ -48,10 +48,10 @@ export type BarEdit =
 export type CaretMove = 'step' | 'bar' | 'end'
 
 /**
- * Where the caret goes after a chord: the next beat; the next bar (staying on the last, a tapped chord);
- * or the next bar, one added past the last (a chart typed on).
+ * Where the caret goes after a chord: nowhere (a chord built part by part); the next beat; the next
+ * bar (staying on the last, a tapped chord); or the next bar, one added past the last (a chart typed on).
  */
-export type ChordAdvance = 'beat' | 'bar' | 'barAdding'
+export type ChordAdvance = 'stay' | 'beat' | 'bar' | 'barAdding'
 
 export type EditorAction =
   | { readonly type: 'layer'; readonly layer: Layer }
@@ -73,7 +73,12 @@ export type EditorAction =
     }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }
   | { readonly type: 'rest' }
-  | { readonly type: 'delete' }
+  /** The notes or chord at the caret; with `back`, else the ones before it (Backspace). */
+  | { readonly type: 'delete'; readonly back?: boolean }
+  /** The notes at the caret moved by notes of the key: a note dragged on its staff. */
+  | { readonly type: 'step'; readonly steps: number }
+  /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
+  | { readonly type: 'melodyStaff'; readonly on: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }

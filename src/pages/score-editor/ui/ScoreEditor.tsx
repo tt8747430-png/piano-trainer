@@ -1,37 +1,38 @@
-import { useRef, useState, type CSSProperties } from 'react'
-import { selectFloating, selectKeyboard, useSettings } from '@/entities/settings'
+import { useRef, type CSSProperties } from 'react'
+import { selectKeyboard, useSettings } from '@/entities/settings'
 import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
+import { EditorHeader } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
-import { EditorPalette, type PaletteSide } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
-import { EditorToolbar } from './EditorToolbar'
+import { EditorTools } from './EditorTools'
+import { NoteColumn } from './NoteKeys'
 import { RecordingStrip } from './RecordingStrip'
 
+/** A laptop's width: the tools a ribbon over the sheet and a column beside it. */
+const LAPTOP = '(min-width: 64rem)'
+
 /**
- * The score editor (spec §6): the bar (Play and Record among its buttons), the sheet filling the
- * screen, the caret's line (under the title on a phone on its side; while a take records, the
- * recording strip) and the keys, at the foot or under the bar as the keyboard settings dock them
- * (folded at first on a phone on its side). The tools are a notation app's palette: on a phone,
- * upright or on its side, a card floating over the sheet's corner (the side the floating buttons
- * stand, else the one it is moved to), the sheet filling the screen under it and scrolling clear of
- * it; beside the sheet on a laptop (`editor-screen`).
+ * The score editor (spec §6, ADR 0064), laid out as a notation app: the bar (Undo, Redo, Play,
+ * Record, the view); on a laptop the tools' ribbon over the sheet and the notes' column beside it;
+ * on a phone held upright the sheet over a keypad docked at its foot (Sibelius's), on its side the
+ * sheet the whole screen under the keypad floating at its corner; the caret's line (under the title
+ * on a phone on its side; while a take records, the recording strip); and the keys, at the foot or
+ * under the bar as the keyboard settings dock them (`editor-screen`).
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
+  const laptop = useMediaQuery(LAPTOP)
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const place = useSettings((state) => selectFloating(state).place)
-  const [moved, setSide] = useState<PaletteSide | null>(null)
-  const side = moved ?? (place === 'left' ? 'left' : 'right')
-  const palette = useRef<HTMLDivElement>(null)
-  const { height } = useElementSize(palette)
+  const keypad = useRef<HTMLDivElement>(null)
+  const { height } = useElementSize(keypad)
   const room = { '--palette-room': `${height}px` } as CSSProperties
   return (
     <ScoreEditorContext value={editor}>
@@ -41,8 +42,18 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-x-3 landscape-phone:py-1"
       >
         <div data-area="bar">
-          <EditorToolbar status={onSide && idle ? <CaretLine /> : undefined} />
+          <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
+        {laptop ? (
+          <>
+            <div data-area="tools">
+              <EditorTools variant="ribbon" />
+            </div>
+            <div data-area="column">
+              <NoteColumn />
+            </div>
+          </>
+        ) : null}
         <div data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
           <EditorSheet />
         </div>
@@ -51,9 +62,11 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             {idle ? <CaretLine /> : <RecordingStrip />}
           </div>
         )}
-        <div ref={palette} data-area="palette" data-side={side}>
-          <EditorPalette side={side} onSide={setSide} />
-        </div>
+        {laptop ? null : (
+          <div ref={keypad} data-area="dock">
+            <EditorTools variant="dock" />
+          </div>
+        )}
         <EditorKeyboard />
       </div>
     </ScoreEditorContext>

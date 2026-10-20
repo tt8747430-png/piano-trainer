@@ -9,22 +9,40 @@ export const editor = {
   // The palette of tools (a notation app's): its actions on top, its kinds of tools as tabs.
   palette: {
     label: 'Tools',
-    open: 'Tools',
-    close: 'Close the tools',
-    otherSide: 'Move the tools to the other side',
-    actions: 'Edit',
+    open: 'Show the tools',
+    close: 'Hide the tools',
     tabs: 'Kinds of tools',
+    // A laptop's ribbon names its tabs in a word.
+    short: {
+      notes: 'Notes',
+      pitch: 'Pitch',
+      articulations: 'Marks',
+      lines: 'Lines',
+      dynamics: 'Dynamics',
+      chords: 'Chords',
+      bars: 'Bars',
+      hand: 'Hand',
+    },
     notes: 'Notes',
     pitch: 'Pitch',
     articulations: 'Articulations and ornaments',
     lines: 'Slurs, ties and lines',
     dynamics: 'Dynamics',
-    hand: 'Hand',
-    chords: 'Chords',
-    bars: 'Bars',
+    hand: 'The hand’s own',
+    chords: 'Chord names',
+    bars: 'Bars, lines and sections',
   },
   // The song's settings: what the sheet shows.
   view: 'View',
+  // What the score shows and how, from the bar (ADR 0064).
+  viewMenu: {
+    open: 'Staves and layout',
+    label: 'View',
+    staves: 'Staves',
+    midi: 'MIDI keyboard',
+    melody: 'Melody staff',
+    melodyDetail: 'Over the piano, for the tune; off takes its notes away',
+  },
   // How the score is laid out (ADR 0064).
   layout: { label: 'Layout', scroll: 'Scroll', pages: 'Pages', horizontal: 'Horizontal' },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
@@ -115,6 +133,8 @@ export const editor = {
   down: 'Down a semitone',
   octaveUp: 'Up an octave',
   octaveDown: 'Down an octave',
+  stepUp: 'Up a note of the key',
+  stepDown: 'Down a note of the key',
   back: 'Back a step',
   on: 'Forward a step',
   finger: 'Finger on {{note}}',
@@ -127,6 +147,10 @@ export const editor = {
     invalid: 'Chord not recognised',
     keyChords: 'Chords in the key',
     delete: 'Delete chord',
+    root: 'Root',
+    quality: 'Quality',
+    bass: 'Bass',
+    noBass: 'Root in the bass',
   },
   bars: {
     label: 'Bar',

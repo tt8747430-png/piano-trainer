@@ -666,42 +666,30 @@
 @utility editor-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  grid-template-areas: 'bar' 'sheet' 'status' 'keys';
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  grid-template-areas: 'bar' 'sheet' 'status' 'dock' 'keys';
   & > [data-area='bar'] {
     grid-area: bar;
   }
+  & > [data-area='tools'] {
+    grid-area: tools;
+  }
+  & > [data-area='column'] {
+    grid-area: column;
+  }
   & > [data-area='sheet'] {
     grid-area: sheet;
-    padding-bottom: var(--palette-room, 0px);
-    scroll-padding-bottom: var(--palette-room, 0px);
   }
   & > [data-area='status'] {
     grid-area: status;
   }
+  & > [data-area='dock'] {
+    grid-area: dock;
+  }
   & > [data-area='keys'] {
     grid-area: keys;
   }
-  & > [data-area='palette'] {
-    grid-area: sheet;
-    z-index: 10;
-    align-self: end;
-    justify-self: end;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    width: min(21rem, 100%);
-    max-height: 100%;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: --spacing(1);
-    & > * {
-      margin-top: auto;
-    }
-    & > section {
-      width: 100%;
-    }
-  }
+  /* Folded keys: a Keys button floating over the sheet's corner. */
   & > [data-area='unfold'] {
     grid-area: sheet;
     z-index: 10;
@@ -710,11 +698,11 @@
     padding: --spacing(1);
   }
   &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-    grid-template-areas: 'bar' 'keys' 'sheet' 'status';
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'bar' 'keys' 'sheet' 'status' 'dock';
   }
-  /* On its side the sheet takes the whole screen under a thin bar, the palette a card floating over
-     its corner as upright, the keys (folded at first) docked under it. */
+  /* On its side the sheet takes the whole screen under a thin bar, the keypad a card floating over
+     its corner, the sheet scrolling clear of it; the keys (folded at first) docked under it. */
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-rows: auto minmax(0, 1fr) auto auto;
@@ -729,43 +717,38 @@
       align-self: center;
       padding: 0;
     }
-    /* The sheet scrolls clear of the card, but a caret beside it is in sight: no scroll for it. */
     & > [data-area='sheet'] {
-      scroll-padding-bottom: 0;
+      padding-bottom: var(--palette-room, 0px);
     }
-    & > [data-area='palette'] {
-      width: min(21rem, 100%);
-    }
-  }
-  /* Moved to the sheet's other side, the palette floats on the left, the Keys button then on the right. */
-  @variant max-lg {
-    & > [data-area='palette'][data-side='left'] {
-      justify-self: start;
-      align-items: flex-start;
-    }
-    &:has(> [data-area='palette'][data-side='left']) > [data-area='unfold'] {
+    & > [data-area='dock'] {
+      grid-area: sheet;
+      z-index: 10;
+      align-self: end;
       justify-self: end;
+      width: min(21rem, 100%);
+      max-height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: --spacing(1);
+      & > section {
+        box-shadow: 0 20px 25px -5px color-mix(in oklab, var(--foreground) 15%, transparent);
+      }
     }
   }
+  /* A laptop: the tools' ribbon across the top, the notes' column beside the sheet. */
   @variant lg {
-    grid-template-columns: minmax(0, 1fr) 20rem;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: 'bar bar' 'sheet palette' 'status palette' 'keys keys';
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'bar bar' 'tools tools' 'column sheet' 'status status' 'keys keys';
     &[data-keys='top'] {
-      grid-template-rows: auto auto minmax(0, 1fr) auto;
-      grid-template-areas: 'bar bar' 'keys keys' 'sheet palette' 'status palette';
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      grid-template-areas: 'bar bar' 'tools tools' 'keys keys' 'column sheet' 'status status';
     }
-    & > [data-area='sheet'] {
-      padding-bottom: 0;
-      scroll-padding-bottom: 0;
-    }
-    & > [data-area='palette'] {
-      grid-area: palette;
-      align-self: start;
-      width: auto;
-      max-width: none;
-      padding: 0;
-      align-items: stretch;
+    & > [data-area='column'] {
+      width: 7.25rem;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
   }
 }

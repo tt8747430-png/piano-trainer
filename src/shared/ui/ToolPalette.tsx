@@ -59,14 +59,21 @@ export function ToolPaletteActions({ label, children }: { label: string; childre
 export function ToolPaletteTabs({
   label,
   end,
+  className,
   children,
 }: {
   label: string
   end?: ReactNode
+  className?: string
   children: ReactNode
 }) {
   return (
-    <div className="flex items-center gap-1 border-y border-hairline py-1.5 landscape-phone:py-0.5">
+    <div
+      className={cn(
+        'flex items-center gap-1 border-y border-hairline py-1.5 landscape-phone:py-0.5',
+        className,
+      )}
+    >
       <Tabs.List
         aria-label={label}
         className="fade-scroll-x flex min-w-0 flex-1 gap-0.5 overflow-x-auto [scrollbar-width:none]"
@@ -83,11 +90,13 @@ export function ToolPaletteTab({
   value,
   label,
   disabled = false,
+  className,
   children,
 }: {
   value: string
   label: string
   disabled?: boolean
+  className?: string
   children: ReactNode
 }) {
   return (
@@ -96,7 +105,10 @@ export function ToolPaletteTab({
       aria-label={label}
       title={label}
       disabled={disabled}
-      className="grid min-h-11 min-w-9 flex-1 shrink-0 place-items-center landscape-phone:min-h-9 rounded-xl text-xl leading-none text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground [&_svg]:size-5"
+      className={cn(
+        'grid min-h-11 min-w-9 flex-1 shrink-0 place-items-center rounded-xl text-xl leading-none text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground landscape-phone:min-h-9 [&_svg]:size-5',
+        className,
+      )}
     >
       {children}
     </Tabs.Tab>

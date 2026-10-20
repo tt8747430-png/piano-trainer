@@ -28,7 +28,7 @@ import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { EditSearch } from './edit-search'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { shortcutOf } from './shortcuts'
+import { shortcutOf, staffNear } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
@@ -162,6 +162,15 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       return
     }
     event.preventDefault()
+    if (shortcut.type === 'staff') {
+      const { layer, draft } = store.getState()
+      const next = staffNear(layer, shortcut.direction, {
+        chordNames,
+        melodyStaff: draft.melodyStaff,
+      })
+      if (next !== layer) store.dispatch({ type: 'layer', layer: next })
+      return
+    }
     store.dispatch(shortcut)
   })
   useEffect(() => {

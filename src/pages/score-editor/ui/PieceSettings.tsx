@@ -1,20 +1,10 @@
-import { Settings, Type } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
-import { SHEET_VIEWS } from '@/shared/lib'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
-import {
-  KeyChoice,
-  Labelled,
-  Segmented,
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  ToggleGrid,
-  ToggleTile,
-} from '@/shared/ui'
+import { KeyChoice, Labelled, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -45,9 +35,8 @@ function SongTempo() {
 }
 
 /**
- * The piece's settings (spec §6.4): an own song's title, the key, the tempo and the meter (of its kind), and what
- * the sheet shows (Chord names, changed rarely). Opened from the toolbar, or from the sheet's clef, key and time
- * signature.
+ * The piece's settings (spec §6.4): an own song's title, the key, the tempo and the meter (of its kind).
+ * Opened from the bar (on a phone, from the view's menu), or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
   const { t } = useTranslation('editor')
@@ -61,7 +50,7 @@ export function PieceSettings() {
           <Button
             variant="surface"
             size="icon"
-            className="lg:w-auto lg:gap-2 lg:px-4"
+            className="max-lg:hidden lg:w-auto lg:gap-2 lg:px-4"
             disabled={takes.stage !== 'idle'}
           />
         }
@@ -85,24 +74,6 @@ export function PieceSettings() {
               options={metersFor(meter).map((each) => ({ value: each, label: each }))}
               onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
             />
-          </Labelled>
-          <Labelled label={t('layout.label')}>
-            <Segmented
-              label={t('layout.label')}
-              value={view.layout}
-              options={SHEET_VIEWS.map((each) => ({ value: each, label: t(`layout.${each}`) }))}
-              onChange={view.setLayout}
-            />
-          </Labelled>
-          <Labelled label={t('view')}>
-            <ToggleGrid label={t('view')}>
-              <ToggleTile
-                label={t('chordNames')}
-                icon={Type}
-                pressed={view.chordNames}
-                onPressedChange={view.showChordNames}
-              />
-            </ToggleGrid>
           </Labelled>
         </div>
       </SheetContent>

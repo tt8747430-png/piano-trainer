@@ -12,6 +12,42 @@ const start = (layer: EditorState['layer'] = 'melody') =>
   run(initialEditor(draftOf()), { type: 'layer', layer })
 
 describe('the editor', () => {
+  it('deletes back from the end, a note at a time, as Backspace does', () => {
+    const written = run(start('melody'), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
+    expect(written.caret).toBe(96)
+    const once = run(written, { type: 'delete', back: true })
+    expect(shape(once.draft.melody)).toEqual(['C4@0/24', 'D4@24/24', 'E4@48/24'])
+    expect(once.caret).toBe(72)
+    const twice = run(once, { type: 'delete', back: true })
+    expect(shape(twice.draft.melody)).toEqual(['C4@0/24', 'D4@24/24'])
+    expect(twice.caret).toBe(48)
+    // On a note, it takes that one and stays.
+    const chosen = run(
+      written,
+      { type: 'place', tick: 24, layer: 'melody' },
+      { type: 'delete', back: true },
+    )
+    expect(shape(chosen.draft.melody)).toEqual(['C4@0/24', 'E4@48/24', 'F4@72/24'])
+    expect(chosen.caret).toBe(24)
+  })
+
+  it('moves the notes at the caret by notes of the key, as a note dragged on its staff', () => {
+    const written = run(start('melody'), key(67, 0), { type: 'move', by: 'end', direction: -1 })
+    expect(shape(run(written, { type: 'step', steps: 2 }).draft.melody)).toEqual(['B4@0/24'])
+    expect(shape(run(written, { type: 'step', steps: -1 }).draft.melody)).toEqual(['F#4@0/24'])
+  })
+
+  it('adds the tune’s staff and takes it away with its notes, one undo step each', () => {
+    const added = run(start('rh'), { type: 'melodyStaff', on: true })
+    expect(added.draft.melodyStaff).toBe(true)
+    expect(added.layer).toBe('melody')
+    const written = run(added, key(67, 0))
+    const taken = run(written, { type: 'melodyStaff', on: false })
+    expect(taken.draft).toMatchObject({ melodyStaff: false, melody: [] })
+    expect(taken.layer).toBe('rh')
+    expect(run(taken, { type: 'undo' }).draft.melody).toHaveLength(1)
+  })
+
   it('writes a double-dotted value and a 32nd', () => {
     const state = run(
       start(),

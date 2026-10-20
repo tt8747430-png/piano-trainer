@@ -31,27 +31,28 @@ const withSong = () => {
 const toChordRow = async (user: ReturnType<typeof userEvent.setup>) =>
   user.click(await screen.findByRole('button', { name: /^Bar 1:/ }))
 
+/** The tune's staff added from the view's menu, the caret on it. */
+async function addMelodyStaff(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(await screen.findByRole('button', { name: 'Staves and layout' }))
+  await user.click(await screen.findByRole('switch', { name: /^Melody staff/ }))
+  await user.keyboard('{Escape}')
+}
+
 const songOf = (state: { songs: readonly { id: string }[] }) =>
   state.songs.find((song) => song.id === 'my-1')
 
 describe('the score editor', () => {
-  it('opens on the right hand of a song with no tune, its palette choosing what the keys write', async () => {
+  it('opens on the right hand of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · Bar 1/))
-    expect(screen.queryByRole('radiogroup', { name: 'Write' })).not.toBeInTheDocument()
     const palette = screen.getByRole('region', { name: 'Tools' })
-    const voice = within(palette).getByRole('radiogroup', { name: 'Voice' })
-    expect(
-      within(voice)
-        .getAllByRole('radio')
-        .map((radio) => radio.getAttribute('aria-label')),
-    ).toEqual(['Chords', 'Melody', 'Right hand', 'Left hand'])
-    await user.click(within(voice).getByRole('radio', { name: 'Right hand' }))
-    expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · Bar 1/)
-    await user.click(within(voice).getByRole('radio', { name: 'Chords' }))
+    expect(within(palette).queryByRole('radiogroup', { name: 'Voice' })).not.toBeInTheDocument()
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · Bar 1/)
+    await user.keyboard('{Alt>}{ArrowUp}{ArrowUp}{/Alt}')
     expect(screen.getByRole('status')).toHaveTextContent(/^Chords · /)
-    expect(within(palette).getByRole('tab', { name: 'Chords' })).toHaveAttribute(
+    expect(within(palette).getByRole('tab', { name: 'Chord names' })).toHaveAttribute(
       'aria-selected',
       'true',
     )
@@ -62,28 +63,29 @@ describe('the score editor', () => {
     )
   })
 
-  it('closes its palette to one floating button, which opens it again', async () => {
+  it('folds its tools to their row of tabs, and opens them again', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
-    await user.click(within(palette).getByRole('button', { name: 'Close the tools' }))
-    expect(palette).not.toBeInTheDocument()
-    const open = screen.getByRole('button', { name: 'Tools' })
-    expect(open).toHaveAttribute('aria-expanded', 'false')
-    await user.click(open)
-    expect(screen.getByRole('region', { name: 'Tools' })).toBeInTheDocument()
+    const hide = within(palette).getByRole('button', { name: 'Hide the tools' })
+    expect(hide).toHaveAttribute('aria-expanded', 'true')
+    await user.click(hide)
+    expect(within(palette).queryByRole('group', { name: 'Note value' })).not.toBeInTheDocument()
+    await user.click(within(palette).getByRole('button', { name: 'Show the tools' }))
+    expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
   })
 
-  it('floats its palette on the floating buttons’ side, and moves it to the other', async () => {
-    const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
-    const card = palette.closest('[data-area="palette"]')
-    expect(card).toHaveAttribute('data-side', 'right')
-    await user.click(
-      within(palette).getByRole('button', { name: 'Move the tools to the other side' }),
-    )
-    expect(card).toHaveAttribute('data-side', 'left')
+  it('adds the tune’s staff from the view’s menu, and takes it away with its notes', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await addMelodyStaff(user)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/)
+    await user.keyboard('a')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1' }))
+    await user.click(screen.getByRole('button', { name: 'Staves and layout' }))
+    await user.click(await screen.findByRole('switch', { name: /^Melody staff/ }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
   })
 
   it('folds its keys into a Keys button, and back', async () => {
@@ -102,16 +104,13 @@ describe('the score editor', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     await toChordRow(user)
     expect(screen.getByRole('status')).toHaveTextContent(/^Chords · /)
-    // A view setting, changed rarely: in the song's settings, not the bar.
-    await user.click(screen.getByRole('button', { name: 'Song settings' }))
-    const settings = await screen.findByRole('dialog', { name: 'Song settings' })
-    const view = within(settings).getByRole('group', { name: 'View' })
-    const names = within(view).getByRole('button', { name: 'Chord names' })
-    expect(names).toHaveAttribute('aria-pressed', 'true')
+    // What the score shows: in the view's menu in the bar.
+    await user.click(screen.getByRole('button', { name: 'Staves and layout' }))
+    const names = await screen.findByRole('switch', { name: 'Chord names' })
+    expect(names).toBeChecked()
     await user.click(names)
-    expect(names).toHaveAttribute('aria-pressed', 'false')
+    expect(names).not.toBeChecked()
     await user.keyboard('{Escape}')
-    await waitFor(() => expect(settings).not.toBeInTheDocument())
     expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · /)
     await toChordRow(user)
     expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · /)
@@ -219,7 +218,7 @@ describe('the score editor', () => {
   it('writes nothing from a MIDI keyboard behind the song’s settings', async () => {
     const user = userEvent.setup()
     const { midi: keyboard, piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('radio', { name: 'Melody' }))
+    await screen.findByRole('status')
     const before = songOf(piecesStore.getState())
     await user.click(screen.getByRole('button', { name: 'Song settings' }))
     await screen.findByRole('dialog')
@@ -231,14 +230,12 @@ describe('the score editor', () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     act(() => setKeyboard(settingsStore, { typing: true }))
-    await user.click(await screen.findByRole('radio', { name: 'Melody' }))
+    await addMelodyStaff(user)
     await user.keyboard('asd2f')
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1 D4/1 E4/1 F4/2' }),
     )
     expect(screen.getByRole('status')).toHaveTextContent('Bar 2, beat 2')
-    // Off the layer's radio group, whose arrows choose a layer.
-    await user.click(screen.getByRole('status'))
     await user.keyboard('{ArrowLeft}{ArrowLeft}')
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
   })
@@ -265,26 +262,23 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
-  it('keeps Play and Record in the bar, and Delete, Undo, Redo and the caret’s steps atop the palette', async () => {
+  it('keeps Undo, Redo, Play and Record in the bar, and Delete at the end of the notes’ keys', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const bar = await screen.findByRole('toolbar', { name: 'Editing' })
-    expect(within(bar).getByRole('button', { name: 'Play' })).toBeInTheDocument()
-    expect(within(bar).getByRole('button', { name: 'Record' })).toBeInTheDocument()
-    const actions = within(screen.getByRole('region', { name: 'Tools' })).getByRole('group', {
-      name: 'Edit',
-    })
     expect(
-      within(actions)
+      within(bar)
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(['Delete', 'Undo', 'Redo', 'Back a step', 'Forward a step'])
+    ).toEqual(['Undo', 'Redo', 'Play', 'Record'])
+    const keys = within(screen.getByRole('region', { name: 'Tools' })).getAllByRole('button')
+    expect(keys.at(-1)).toHaveAccessibleName('Delete')
   })
 
   it('keeps every tool a tab away, the hand’s own only in a hand', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
-    await user.click(within(palette).getByRole('radio', { name: 'Melody' }))
+    await addMelodyStaff(user)
     for (const name of [
       'Quarter note',
       '32nd note',
@@ -292,10 +286,12 @@ describe('the score editor', () => {
       'Double dotted',
       'Triplet',
       'Rest',
+      'Tie to the next note',
       'Chord',
+      'Delete',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
-    expect(within(palette).getByRole('tab', { name: 'Hand' })).toHaveAttribute(
+    expect(within(palette).getByRole('tab', { name: 'The hand’s own' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
@@ -305,14 +301,16 @@ describe('the score editor', () => {
       'Down a semitone',
       'Up an octave',
       'Down an octave',
+      'Up a note of the key',
+      'Down a note of the key',
       'Other spelling',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
-    await user.click(within(palette).getByRole('tab', { name: 'Bars' }))
+    await user.click(within(palette).getByRole('tab', { name: 'Bars, lines and sections' }))
     await user.click(within(palette).getByRole('button', { name: 'Add a bar after' }))
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G G'] }] })
-    await user.click(within(palette).getByRole('radio', { name: 'Left hand' }))
-    await user.click(within(palette).getByRole('tab', { name: 'Hand' }))
+    await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
+    await user.click(within(palette).getByRole('tab', { name: 'The hand’s own' }))
     expect(within(palette).getByRole('button', { name: 'Write out' })).toBeInTheDocument()
   })
 
@@ -320,9 +318,8 @@ describe('the score editor', () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     act(() => setKeyboard(settingsStore, { typing: true }))
-    await user.click(await screen.findByRole('radio', { name: 'Melody' }))
+    await addMelodyStaff(user)
     await user.keyboard('a')
-    await user.click(screen.getByRole('status'))
     await user.keyboard('{ArrowLeft}')
     const palette = screen.getByRole('region', { name: 'Tools' })
     await user.click(within(palette).getByRole('tab', { name: 'Articulations and ornaments' }))
@@ -442,7 +439,7 @@ describe('the score editor', () => {
     })
     expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · /)
     expect(screen.getAllByText('Pattern').length).toBeGreaterThan(0)
-    await user.click(screen.getByRole('tab', { name: 'Hand' }))
+    await user.click(screen.getByRole('tab', { name: 'The hand’s own' }))
     await user.click(screen.getByRole('button', { name: 'Write out' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       hands: { lh: expect.stringMatching(/^G1\^5\+G2\^1\/2 /) },
@@ -607,7 +604,7 @@ describe('the score editor’s takes', () => {
     })
     await startTake(user)
     await user.click(await screen.findByRole('button', { name: 'Stop' }))
-    expect(await screen.findByRole('radiogroup', { name: 'Voice' })).toBeInTheDocument()
+    expect(await screen.findByRole('group', { name: 'Note value' })).toBeInTheDocument()
     expect(screen.queryByRole('dialog')).toBeNull()
 
     await startTake(user)

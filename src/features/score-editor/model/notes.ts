@@ -1,10 +1,14 @@
 import {
+  keyScale,
   midi,
   otherSpelling,
   PIANO,
   pitchClass,
+  pitchClassOf,
   spellInKey,
+  spellScale,
   type Finger,
+  type Key,
   type Midi,
   type Tick,
 } from '@/shared/lib/music'
@@ -194,6 +198,44 @@ export const shiftNotes = (draft: Draft, layer: NoteLayer, at: Tick, semitones: 
       ? null
       : { ...n, ...spelledIn(draft, midi(moved)) }
   })
+
+/** The key's next note from `from`, up (1) or down (−1): a step on the staff in its key. */
+export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
+  const inKey = new Set(spellScale(key.tonic, keyScale(key)).map((tone) => pitchClassOf(tone.note)))
+  for (let m = from + direction; m >= PIANO.from && m <= PIANO.to; m += direction)
+    if (inKey.has(pitchClass(m))) return midi(m)
+  return from
+}
+
+/**
+ * The notes at `at` moved `steps` notes of the key up or down, as a note dragged on the staff moves
+ * (ADR 0064); nothing moves past the piano's ends.
+ */
+export const stepNotes = (draft: Draft, layer: NoteLayer, at: Tick, steps: number): Draft =>
+  changeAt(draft, layer, at, (n) => {
+    let moved = n.midi
+    for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(draft.key, moved, steps > 0 ? 1 : -1)
+    return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved) }
+  })
+
+/**
+ * What Delete takes, as a text field's Backspace: the notes at the caret (those chosen), else the
+ * last notes before it, the caret going back to where they started; the draft as it was where there
+ * are none. Pressed again and again, it takes the notes one by one back from the end.
+ */
+export function deleteBack(
+  draft: Draft,
+  layer: NoteLayer,
+  at: Tick,
+): { readonly draft: Draft; readonly caret: Tick } {
+  if (notesAt(draft, layer, at).length > 0)
+    return { draft: deleteNotes(draft, layer, at), caret: at }
+  const before = notesOf(draft, layer).filter((n) => n.startTick < at)
+  const last = Math.max(...before.map((n) => n.startTick))
+  return before.length === 0
+    ? { draft, caret: at }
+    : { draft: deleteNotes(draft, layer, last), caret: last }
+}
 
 /** The notes at `at` written the other way (C♯ ↔ D♭). */
 export const respellNotes = (draft: Draft, layer: NoteLayer, at: Tick): Draft =>

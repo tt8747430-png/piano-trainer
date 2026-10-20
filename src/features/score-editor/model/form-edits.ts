@@ -34,6 +34,7 @@ export function chordSet(state: EditorState, chord: Chord, advance: ChordAdvance
   const caret = snapToChord(state.draft, state.caret)
   const bar = barAt(state.draft, caret)
   const set = setChord(state.draft, bar.index, caret - bar.start, chord)
+  if (advance === 'stay') return commit(state, set, { caret, struck: null })
   if (advance === 'beat') {
     return commit(state, set, {
       caret: nextCaret(set, 'chords', caret, TICKS_PER_BEAT, 1),

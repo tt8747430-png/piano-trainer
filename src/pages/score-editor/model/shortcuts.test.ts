@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { KeyPress } from '@/shared/lib/shortcuts'
-import { shortcutOf } from './shortcuts'
+import { shortcutOf, staffNear } from './shortcuts'
 
 const press = (code: string, key: string, mods: Partial<KeyPress> = {}): KeyPress => ({
   code,
@@ -67,8 +67,12 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('ArrowUp', 'ArrowUp'), 'chords')).toBeNull()
   })
 
-  it('deletes, undoes and redoes', () => {
-    expect(shortcutOf(press('Backspace', 'Backspace'), 'chords')).toEqual({ type: 'delete' })
+  it('deletes back with Backspace and what is chosen with Delete, undoes and redoes', () => {
+    expect(shortcutOf(press('Backspace', 'Backspace'), 'chords')).toEqual({
+      type: 'delete',
+      back: true,
+    })
+    expect(shortcutOf(press('Delete', 'Delete'), 'melody')).toEqual({ type: 'delete' })
     expect(shortcutOf(press('KeyZ', 'z', { metaKey: true }), 'melody')).toEqual({ type: 'undo' })
     expect(shortcutOf(press('KeyZ', 'z', { metaKey: true, shiftKey: true }), 'melody')).toEqual({
       type: 'redo',
@@ -100,5 +104,22 @@ describe('shortcutOf', () => {
       expect(shortcutOf(press(code, code.slice(-1).toLowerCase()), 'melody')).toBeNull()
     }
     expect(shortcutOf(press('KeyR', 'r', { metaKey: true }), 'melody')).toBeNull()
+  })
+})
+
+describe('staffNear', () => {
+  it('moves to the row over or under, top down, the same row at either end', () => {
+    const all = { chordNames: true, melodyStaff: true }
+    expect(staffNear('melody', -1, all)).toBe('chords')
+    expect(staffNear('rh', 1, all)).toBe('lh')
+    expect(staffNear('lh', 1, all)).toBe('lh')
+    expect(staffNear('rh', -1, { chordNames: false, melodyStaff: false })).toBe('rh')
+  })
+
+  it('is Alt with the up or down arrow', () => {
+    expect(shortcutOf(press('ArrowUp', 'ArrowUp', { altKey: true }), 'rh')).toEqual({
+      type: 'staff',
+      direction: -1,
+    })
   })
 })

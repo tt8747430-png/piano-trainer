@@ -1,5 +1,5 @@
 export { barLengths, type BarRange } from './model/bars'
-export { keyChords } from './model/chords'
+export { keyChords, keySevenths } from './model/chords'
 export {
   isHandLayer,
   musicToSave,
@@ -11,7 +11,13 @@ export {
 } from './model/draft'
 export { caretTicks, placesIn } from './model/caret-moves'
 export { selectedBars } from './model/form-edits'
-export { type BarEdit, type CaretMove, type EditorAction, type EditorState } from './model/state'
+export {
+  type BarEdit,
+  type CaretMove,
+  type ChordAdvance,
+  type EditorAction,
+  type EditorState,
+} from './model/state'
 export { notesAt, notesOf } from './model/notes'
 export { metersFor } from './model/settings'
 export { createEditorStore, type EditorStore } from './model/store'
