@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setKeyboard } from '@/features/set-preference'
@@ -86,6 +86,39 @@ describe('the score editor', () => {
     await user.click(screen.getByRole('button', { name: 'Staves and layout' }))
     await user.click(await screen.findByRole('switch', { name: /^Melody staff/ }))
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
+  })
+
+  it('writes the note on the line double-clicked, and moves it by the key’s notes as it is dragged', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const bar = await screen.findByRole('button', { name: /^Bar 1:/ })
+    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the treble's top line (F♯5 in G).
+    fireEvent.click(bar, { clientY: 84, detail: 1 })
+    fireEvent.doubleClick(bar, { clientY: 84, detail: 2 })
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: expect.stringMatching(/^F#5\/1/) },
+      }),
+    )
+    await user.keyboard('{ArrowLeft}')
+    // jsdom has no pointer capture: the grip asks for it as a drag starts.
+    Object.defineProperty(Element.prototype, 'setPointerCapture', {
+      value: vi.fn(),
+      configurable: true,
+    })
+    onTestFinished(() => {
+      Reflect.deleteProperty(Element.prototype, 'setPointerCapture')
+    })
+    const grip = document.querySelector('[data-slot="note-grip"]')
+    if (!grip) throw new Error('the note at the caret is a grip')
+    fireEvent.pointerDown(grip, { clientY: 100, pointerId: 1 })
+    fireEvent.pointerMove(grip, { clientY: 90, pointerId: 1 })
+    fireEvent.pointerUp(grip, { clientY: 90, pointerId: 1 })
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: expect.stringMatching(/^A5\/1/) },
+      }),
+    )
   })
 
   it('folds its keys into a Keys button, and back', async () => {

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
 import { useElementSize, type SheetView } from '@/shared/lib'
-import type { Tick } from '@/shared/lib/music'
+import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
 import { PAGE, paginate } from '../model/sheet-view'
@@ -37,7 +37,13 @@ export function ScoreSheet({
   onSignature,
   view = 'scroll',
   title,
+  onWrite,
+  onDrag,
 }: {
+  /** A note written where a staff was double-clicked: its tick on the piece, its row and key. */
+  onWrite?: (tick: Tick, layer: Layer, key: Midi) => void
+  /** The notes at the caret dragged on their staff by steps of the key. */
+  onDrag?: (steps: number, joins: boolean) => void
   draft: Draft
   caret: Tick
   layer: Layer
@@ -82,6 +88,8 @@ export function ScoreSheet({
       chordNames={chordNames}
       onSignature={onSignature}
       justify={!across}
+      onWrite={onWrite}
+      onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}
     />
   )

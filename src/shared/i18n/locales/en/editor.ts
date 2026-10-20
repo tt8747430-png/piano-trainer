@@ -61,6 +61,7 @@ export const editor = {
     label: 'Score',
     page: 'Page {{n}} of {{of}}',
     bar: 'Bar {{n}}: {{chords}}',
+    drag: 'Drag up or down to move the note',
     pattern: 'Pattern',
   },
   caret: {
@@ -155,14 +156,15 @@ export const editor = {
   bars: {
     label: 'Bar',
     insert: 'Add a bar after',
-    delete: 'Delete the bars',
+    delete: 'Delete',
     copy: 'Copy',
     cut: 'Cut',
     paste: 'Paste after',
     newLine: 'New line here',
-    joinLine: 'Join with the next line',
+    joinLine: 'Join the next',
     newSection: 'New section here',
-    length: 'Length',
+    length: 'Length of this bar',
+    groups: { bar: 'Bar', line: 'Line', section: 'Section', clipboard: 'Clipboard' },
   },
   section: {
     kind: 'Section',

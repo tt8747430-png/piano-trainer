@@ -80,7 +80,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'step':
       return layer === 'chords'
         ? state
-        : commit(state, stepNotes(draft, layer, caret, action.steps), { struck: null })
+        : commit(
+            state,
+            stepNotes(draft, layer, caret, action.steps),
+            { struck: null },
+            action.joins ?? false,
+          )
     case 'melodyStaff': {
       if (action.on === draft.melodyStaff) return state
       if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })

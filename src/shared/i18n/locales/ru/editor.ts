@@ -56,6 +56,7 @@ export const editor: LocaleResources['editor'] = {
     label: 'Ноты',
     page: 'Страница {{n}} из {{of}}',
     bar: 'Такт {{n}}: {{chords}}',
+    drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
     pattern: 'Фактура',
   },
   caret: {
@@ -149,14 +150,15 @@ export const editor: LocaleResources['editor'] = {
   bars: {
     label: 'Такт',
     insert: 'Добавить такт после',
-    delete: 'Удалить такты',
+    delete: 'Удалить',
     copy: 'Копировать',
     cut: 'Вырезать',
     paste: 'Вставить после',
     newLine: 'Новая строка отсюда',
-    joinLine: 'Соединить со следующей строкой',
+    joinLine: 'Соединить со следующей',
     newSection: 'Новый раздел отсюда',
-    length: 'Длина',
+    length: 'Длина этого такта',
+    groups: { bar: 'Такт', line: 'Строка', section: 'Раздел', clipboard: 'Буфер обмена' },
   },
   section: {
     kind: 'Раздел',

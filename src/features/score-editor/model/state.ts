@@ -76,7 +76,7 @@ export type EditorAction =
   /** The notes or chord at the caret; with `back`, else the ones before it (Backspace). */
   | { readonly type: 'delete'; readonly back?: boolean }
   /** The notes at the caret moved by notes of the key: a note dragged on its staff. */
-  | { readonly type: 'step'; readonly steps: number }
+  | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
   /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
   | { readonly type: 'melodyStaff'; readonly on: boolean }
   | { readonly type: 'shift'; readonly semitones: number }

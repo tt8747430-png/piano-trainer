@@ -60,6 +60,14 @@ export function EditorTools({ variant }: { variant: 'ribbon' | 'dock' }) {
   const tabs = ribbon ? RIBBON_TABS : PALETTE_TABS
   const [chosen, choose] = useState<PaletteTab>(ribbon ? 'articulations' : 'notes')
   const [open, setOpen] = useState(true)
+  // Into the chord row, the chord names' tools come up; out of it, those of the staff.
+  const [lastLayer, setLastLayer] = useState(layer)
+  if (layer !== lastLayer) {
+    setLastLayer(layer)
+    if (layer === 'chords') choose('chords')
+    else if (lastLayer === 'chords' && chosen === 'chords')
+      choose(ribbon ? 'articulations' : 'notes')
+  }
   const recording = takes.stage !== 'idle'
   const tab = shownTab(chosen, layer, tabs)
   const Fold = open ? (ribbon ? ChevronUp : ChevronDown) : ribbon ? ChevronDown : ChevronUp

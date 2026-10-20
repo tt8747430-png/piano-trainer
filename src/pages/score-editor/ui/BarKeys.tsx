@@ -12,22 +12,45 @@ import {
 import { useTranslation } from 'react-i18next'
 import { barAt, barLengths, type BarEdit } from '@/features/score-editor'
 import { TICKS_PER_BEAT, timeSignature, timeSignatureText } from '@/shared/lib/music'
-import { Dropdown, ToolKey } from '@/shared/ui'
+import { Dropdown } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
-/** Each edit of the bars, by its picture. */
-const EDITS: readonly (readonly [BarEdit, LucideIcon])[] = [
-  ['insert', Plus],
-  ['delete', Minus],
-  ['copy', Copy],
-  ['cut', Scissors],
-  ['paste', ClipboardPaste],
-  ['newLine', WrapText],
-  ['joinLine', Merge],
-  ['newSection', Heading],
+/** The edits of the form by what they act on: the bars, the line, the section, the clipboard. */
+const GROUPS: readonly (readonly [
+  'bar' | 'line' | 'section' | 'clipboard',
+  readonly (readonly [BarEdit, LucideIcon])[],
+])[] = [
+  [
+    'bar',
+    [
+      ['insert', Plus],
+      ['delete', Minus],
+    ],
+  ],
+  [
+    'line',
+    [
+      ['newLine', WrapText],
+      ['joinLine', Merge],
+    ],
+  ],
+  ['section', [['newSection', Heading]]],
+  [
+    'clipboard',
+    [
+      ['copy', Copy],
+      ['cut', Scissors],
+      ['paste', ClipboardPaste],
+    ],
+  ],
 ]
 
-/** The Bars tab: add, delete, copy, cut and paste bars, lines and sections, and the caret's bar's length. */
+/**
+ * The Bars tab, as a notation app's: each edit named by what it does and grouped by what it acts on
+ * (the bars chosen, else the caret's; its line; its section; the clipboard), and the caret's bar's
+ * length as its time signature.
+ */
 export function BarKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -35,18 +58,34 @@ export function BarKeys() {
   const ticks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
   const hasClip = useEditorState((state) => state.clip !== null)
   return (
-    <>
-      {EDITS.map(([edit, Icon]) => (
-        <ToolKey
-          key={edit}
-          label={t(`bars.${edit}`)}
-          disabled={edit === 'paste' && !hasClip}
-          onClick={() => actions.dispatch({ type: 'bars', edit })}
+    <div className="col-span-full flex flex-wrap items-end gap-x-4 gap-y-3">
+      {GROUPS.map(([group, edits]) => (
+        <div
+          key={group}
+          role="group"
+          aria-label={t(`bars.groups.${group}`)}
+          className="flex flex-col gap-1"
         >
-          <Icon aria-hidden />
-        </ToolKey>
+          <span aria-hidden className="text-xs font-semibold text-muted-foreground">
+            {t(`bars.groups.${group}`)}
+          </span>
+          <div className="flex gap-1">
+            {edits.map(([edit, Icon]) => (
+              <Button
+                key={edit}
+                variant="outline"
+                className="h-10 rounded-xl px-3 text-sm"
+                disabled={edit === 'paste' && !hasClip}
+                onClick={() => actions.dispatch({ type: 'bars', edit })}
+              >
+                <Icon data-icon="inline-start" aria-hidden />
+                {t(`bars.${edit}`)}
+              </Button>
+            ))}
+          </div>
+        </div>
       ))}
-      <div className="col-span-full">
+      <div className="min-w-40">
         <Dropdown<number>
           label={t('bars.length')}
           value={ticks}
@@ -57,6 +96,6 @@ export function BarKeys() {
           onChange={(length) => actions.dispatch({ type: 'barLength', ticks: length })}
         />
       </div>
-    </>
+    </div>
   )
 }

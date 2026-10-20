@@ -1,11 +1,18 @@
 import { useCallback, useMemo } from 'react'
-import { caretTicks, placesIn, selectedBars, type Layer } from '@/features/score-editor'
-import type { Tick } from '@/shared/lib/music'
+import { caretTicks, notesAt, placesIn, selectedBars, type Layer } from '@/features/score-editor'
+import type { Midi, Tick } from '@/shared/lib/music'
+import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SectionHeading } from './SectionHeading'
 
-/** The sheet the editor writes on: the caret where the next note or chord goes. */
+/** How a note moved on its staff is heard: short and soft, as a notation app sounds it. */
+const HEARD = { duration: 0.35, velocity: 0.15 } as const
+
+/**
+ * The sheet the editor writes on: the caret where the next note or chord goes; a double click on a
+ * staff writes the note there, and a note dragged up or down moves by the key's notes, heard as it goes.
+ */
 export function EditorSheet() {
   const {
     store,
@@ -28,6 +35,30 @@ export function EditorSheet() {
   const openSettings = useCallback(() => open(true), [open])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
+  const play = usePlay()
+  const onWrite = useCallback(
+    (tick: Tick, to: Layer, key: Midi) => {
+      dispatch({ type: 'place', tick, layer: to })
+      dispatch({ type: 'key', key, time: performance.now() })
+    },
+    [dispatch],
+  )
+  const onDrag = useCallback(
+    (steps: number, joins: boolean) => {
+      dispatch({ type: 'step', steps, joins })
+      const state = store.getState()
+      if (state.layer === 'chords') return
+      play(
+        notesAt(state.draft, state.layer, state.caret).map((n) => ({
+          kind: 'note' as const,
+          midi: n.midi,
+          at: 0,
+          ...HEARD,
+        })),
+      )
+    },
+    [dispatch, store, play],
+  )
   return (
     <ScoreSheet
       draft={draft}
@@ -42,6 +73,8 @@ export function EditorSheet() {
       onSignature={openSettings}
       view={view.layout}
       title={meta.title}
+      onWrite={onWrite}
+      onDrag={onDrag}
     />
   )
 }

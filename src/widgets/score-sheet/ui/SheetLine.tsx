@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef } from 'react'
 import type { BarRange, Layer } from '@/features/score-editor'
-import type { Tick } from '@/shared/lib/music'
+import type { Midi, Tick } from '@/shared/lib/music'
 import { useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
@@ -29,7 +29,11 @@ export const SheetLine = memo(function SheetLine({
   onSignature,
   scale = 1,
   justify = true,
+  onWrite,
+  onDrag,
 }: {
+  onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
+  onDrag?: ((steps: number, joins: boolean) => void) | undefined
   /** The engraving's size: a page's lines smaller on a narrow screen, as its paper is. */
   scale?: number
   /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
@@ -92,6 +96,8 @@ export const SheetLine = memo(function SheetLine({
             placesOf={placesOf}
             chordNames={chordNames}
             onSignature={onSignature}
+            onWrite={onWrite}
+            onDrag={onDrag}
           />
         )}
       </LazyScoreView>
