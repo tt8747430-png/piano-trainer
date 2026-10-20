@@ -38,7 +38,7 @@ export function ToolPalette<Tab extends string>({
       <Tabs.Root
         value={tab}
         onValueChange={(next: Tab) => onTabChange(next)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 landscape-phone:gap-1.5"
       >
         {children}
       </Tabs.Root>
@@ -66,7 +66,7 @@ export function ToolPaletteTabs({
   children: ReactNode
 }) {
   return (
-    <div className="flex items-center gap-1 border-y border-hairline py-1.5">
+    <div className="flex items-center gap-1 border-y border-hairline py-1.5 landscape-phone:py-0.5">
       <Tabs.List aria-label={label} className="flex min-w-0 flex-1 gap-1">
         {children}
       </Tabs.List>
@@ -126,7 +126,7 @@ export function ToolPaletteFoot({ children }: { children: ReactNode }) {
 const SPAN = {
   one: '',
   wide: 'col-span-2',
-  tall: 'row-span-2 h-auto',
+  tall: 'row-span-2 h-auto landscape-phone:h-auto',
   row: 'col-span-full',
 } as const satisfies Record<string, string>
 
@@ -158,7 +158,7 @@ export function ToolKey({
             aria-label={label}
             aria-pressed={pressed}
             className={cn(
-              'h-12 min-w-0 rounded-xl px-1 text-2xl leading-none font-normal hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-xl landscape-phone:h-11 px-1 text-2xl leading-none font-normal hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
               SPAN[span],
               className,
             )}

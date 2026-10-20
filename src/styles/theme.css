@@ -660,8 +660,8 @@
    bar where the keyboard settings dock them at the top, `data-keys='top'`); the palette floats over
    the sheet's right corner and the folded keys' button over its left, and the sheet pads its foot by
    the palette's height (`--palette-room`), so the caret's line scrolls clear of it. On a phone on its
-   side and on a laptop the palette stands in a column of its own at the right, the whole height, so
-   it never covers the caret; on a phone on its side the caret's line joins the bar's title and the
+   side and on a laptop the palette stands in a column of its own at the right, under the bar, so it
+   never covers the caret; on a phone on its side the caret's line joins the bar's title and the
    folded keys' button stands at the bar's end, so the sheet keeps the height for a grand staff. */
 @utility editor-screen {
   display: grid;
@@ -713,10 +713,10 @@
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-rows: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: 'bar unfold palette' 'sheet sheet palette' 'status status palette' 'keys keys palette';
+    grid-template-areas: 'bar bar unfold' 'sheet palette palette' 'status palette palette' 'keys palette palette';
     &[data-keys='top'] {
       grid-template-rows: auto auto minmax(0, 1fr) auto;
-      grid-template-areas: 'bar unfold palette' 'keys keys palette' 'sheet sheet palette' 'status status palette';
+      grid-template-areas: 'bar bar unfold' 'keys palette palette' 'sheet palette palette' 'status palette palette';
     }
     & > [data-area='unfold'] {
       grid-area: unfold;
@@ -731,7 +731,7 @@
       grid-area: palette;
       align-self: stretch;
       width: auto;
-      max-width: min(18rem, 40vw);
+      max-width: 18rem;
       padding: 0;
     }
   }

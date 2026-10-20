@@ -27,8 +27,9 @@ function layerSpan({ draft, layer }: EditorState): KeyRange {
 /**
  * The keyboard: a key played is written at the caret; the notes there are chosen keys. While a take
  * records, Space stops it rather than holding the pedal. It folds from its rail into a Keys button
- * floating over the sheet's corner (at the bar's end on a phone on its side), as every screen's keys do (ADR 0055), and the sheet takes the
- * height; folded, it stays folded on every screen until unfolded. On a phone on its side, too short
+ * floating over the sheet's corner (at the bar's end on a phone on its side), as every screen's keys
+ * do (ADR 0055), and the sheet takes the height; folded, it stays folded on every screen until
+ * unfolded. On a phone on its side, too short
  * for the keys and a grand staff, it opens folded, its fold kept apart there (ADR 0062).
  */
 export function EditorKeyboard() {
