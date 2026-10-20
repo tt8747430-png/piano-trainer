@@ -15,7 +15,8 @@ import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { readSongLink } from '@/features/share-song'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { BackButton, ButtonLink, Fab, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ChordChart } from '@/widgets/chord-chart'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
@@ -113,14 +114,19 @@ export function SharedSongPage() {
               tempo: reading.song.music.tempo,
             })}
           </p>
+          <p>{t('shared.says')}</p>
           <SharedChart song={reading.song} />
           <FloatingActions>
-            <Fab
-              label={t('shared.add')}
-              icon={Plus}
+            {/* The page's one action, named in words: a lone + would not say what it adds to. */}
+            <Button
+              size="lg"
               disabled={adding}
               onClick={() => add(reading.song)}
-            />
+              className="h-14 rounded-full px-5 shadow-lg shadow-foreground/15"
+            >
+              <Plus data-icon="inline-start" aria-hidden />
+              {t('shared.add')}
+            </Button>
           </FloatingActions>
         </>
       )}

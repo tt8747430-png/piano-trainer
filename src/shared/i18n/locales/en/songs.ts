@@ -28,6 +28,7 @@ export const songs = {
     reading: 'Reading the song…',
     facts: '{{key}} · {{meter}} · {{tempo}} BPM',
     add: 'Add to Your songs',
+    says: 'Add it to Your songs to practise it.',
     none: 'This link holds no song: it may be cut short.',
     toSongs: 'To Songs',
   },

@@ -50,6 +50,14 @@ describe('A shared song', () => {
     expect(bar).toHaveAttribute('aria-pressed', 'true')
   })
 
+  it('says what the song is for, and names Add in words', async () => {
+    await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
+    expect(await screen.findByText('Add it to Your songs to practise it.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add to Your songs' })).toHaveTextContent(
+      'Add to Your songs',
+    )
+  })
+
   it('adds the song once, however quickly Add is pressed again', async () => {
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
     const add = await screen.findByRole('button', { name: 'Add to Your songs' })
