@@ -198,7 +198,10 @@ describe('Piece: the learner’s own music', () => {
     await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
     await openMore(user)
     await user.click(await screen.findByRole('button', { name: 'Share' }))
-    expect(await screen.findByRole('status', { name: '' })).toHaveTextContent('Link copied.')
+    // The status line is always there, empty until the song is deflated and copied.
+    await waitFor(() =>
+      expect(screen.getByRole('status', { name: '' })).toHaveTextContent('Link copied.'),
+    )
     const link = new URL(await navigator.clipboard.readText())
     expect(link.pathname).toBe('/songs/shared')
     expect(await readSongLink(link.searchParams.get('song') ?? '')).toEqual({
