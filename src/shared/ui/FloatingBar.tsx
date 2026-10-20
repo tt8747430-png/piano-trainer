@@ -4,7 +4,6 @@ import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
-import { Fab } from './FloatingActions'
 import { Button } from './primitives/button'
 
 /**
@@ -44,7 +43,7 @@ export function FloatingBar({
       aria-label={label}
       aria-orientation={orientation === 'column' ? 'vertical' : 'horizontal'}
       className={cn(
-        'flex items-center gap-0.5 rounded-full border border-input bg-card shadow-lg shadow-foreground/15',
+        'flex items-center gap-0.5 rounded-full border border-border bg-raised elevation-2',
         ORIENTATION[orientation],
         className,
       )}
@@ -54,7 +53,12 @@ export function FloatingBar({
   )
 }
 
-const BAR_BUTTON = 'size-12 rounded-full'
+/** A bar's control gives under the finger as a floating button does. */
+const BAR_BUTTON =
+  'size-12 rounded-full transition-[scale,background-color] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
+/** The bar's honey Play: the main floating button's size, lifted a little off the pill. */
+const BAR_PLAY =
+  'size-14 rounded-full elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
 
 /**
  * One of a bar's controls: a round icon button named by its label (its `title` too, unless a hint
@@ -125,15 +129,18 @@ export function FloatingBarPlay({
 }) {
   const { t } = useTranslation('common')
   const name = playing ? t('stop') : label
+  const Icon = playing ? Square : Play
   return (
-    <Fab
-      label={name}
+    <Button
+      size="icon"
+      aria-label={name}
       title={title ?? name}
-      icon={playing ? Square : Play}
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className="shadow-none"
-    />
+      className={BAR_PLAY}
+    >
+      <Icon aria-hidden />
+    </Button>
   )
 }

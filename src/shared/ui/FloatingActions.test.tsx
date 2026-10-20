@@ -1,8 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import { Play } from 'lucide-react'
+import userEvent from '@testing-library/user-event'
+import { Play, Plus, Printer, Share } from 'lucide-react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { stubResizeObserver } from '@/shared/test/resize'
-import { Fab, FabLink, FloatingActions, FloatingHost } from './FloatingActions'
+import {
+  Fab,
+  FabLink,
+  FloatingActions,
+  FloatingHost,
+  SpeedDial,
+  SpeedDialAction,
+} from './FloatingActions'
 import type { FloatingPlace } from './floating-context'
 
 const root = () => document.documentElement.style
@@ -53,5 +61,63 @@ describe('FabLink', () => {
     expect(link).toHaveAttribute('href', '/play/ode')
     expect(link).toHaveAttribute('title', 'Practise')
     expect(link).toHaveClass('size-14', 'rounded-full', 'bg-primary')
+  })
+})
+
+describe('Fab', () => {
+  it('is a round icon named by its label, honey and raised', () => {
+    render(<Fab label="Play" icon={Play} />)
+    expect(screen.getByRole('button', { name: 'Play' })).toHaveClass(
+      'size-14',
+      'rounded-full',
+      'bg-primary',
+      'elevation-2',
+      'active:scale-96',
+    )
+  })
+
+  it('says its name beside its icon where it is extended', () => {
+    render(<Fab label="New song" icon={Plus} extended />)
+    const button = screen.getByRole('button', { name: 'New song' })
+    expect(button).toHaveTextContent('New song')
+    expect(button).toHaveClass('h-14', 'rounded-full')
+  })
+})
+
+describe('SpeedDial', () => {
+  beforeEach(() => stubResizeObserver({ height: 48, width: 48 }))
+
+  function renderDial() {
+    return render(
+      <FloatingHost place="right" labels={false} screen="/">
+        <FloatingActions>
+          <SpeedDial>
+            <SpeedDialAction label="Share" icon={Share} />
+            <SpeedDialAction label="Print" icon={Printer} />
+          </SpeedDial>
+        </FloatingActions>
+      </FloatingHost>,
+    )
+  }
+
+  it('is a 48px raised button, its actions each named in sight once open', async () => {
+    const user = userEvent.setup()
+    renderDial()
+    const more = await screen.findByRole('button', { name: 'More actions' })
+    expect(more).toHaveClass('size-12', 'bg-raised', 'elevation-1')
+    await user.click(more)
+    expect(more).toHaveAttribute('aria-expanded', 'true')
+    // Names are chips in sight even where the floating buttons say no names.
+    expect(screen.getByRole('button', { name: 'Print' })).toHaveTextContent('Print')
+    expect(screen.getByText('Share')).not.toHaveClass('sr-only')
+  })
+
+  it('folds once an action is chosen, its actions leaving before they go', async () => {
+    const user = userEvent.setup()
+    renderDial()
+    await user.click(await screen.findByRole('button', { name: 'More actions' }))
+    await user.click(screen.getByRole('button', { name: 'Print' }))
+    expect(screen.queryByRole('button', { name: 'Print' })).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.queryByText('Print')).not.toBeInTheDocument())
   })
 })

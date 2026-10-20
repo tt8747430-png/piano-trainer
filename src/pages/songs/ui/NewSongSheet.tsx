@@ -39,7 +39,7 @@ export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const untitled = songTitle(title) === null
   return (
     <Sheet>
-      <SheetTrigger render={trigger ?? <Fab label={t('newSong')} icon={Plus} />} />
+      <SheetTrigger render={trigger ?? <Fab label={t('newSong')} icon={Plus} extended />} />
       <SheetContent
         title={t('making.title')}
         footer={

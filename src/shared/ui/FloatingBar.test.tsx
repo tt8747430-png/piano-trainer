@@ -14,7 +14,7 @@ describe('FloatingBar', () => {
       </FloatingBar>,
     )
     const bar = screen.getByRole('toolbar', { name: 'Playback' })
-    expect(bar).toHaveClass('rounded-full', 'bg-card', 'flex-row')
+    expect(bar).toHaveClass('rounded-full', 'bg-raised', 'elevation-2', 'flex-row')
     expect(bar).toHaveAttribute('aria-orientation', 'horizontal')
   })
 
