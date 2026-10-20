@@ -61,6 +61,12 @@ describe('A take’s page', () => {
     },
   )
 
+  it('names its song under its own name', async () => {
+    await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
+    expect(await screen.findByRole('heading', { level: 1, name: 'First go' })).toBeInTheDocument()
+    expect(screen.getByText('Morning')).toBeInTheDocument()
+  })
+
   it('plays the take, or from a bar tapped on its roll', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })

@@ -51,6 +51,7 @@
   --color-on-paint-sky: var(--on-paint-sky);
   --color-on-paint-lilac: var(--on-paint-lilac);
   --color-thumb: var(--thumb);
+  --color-raised: var(--raised);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -423,6 +424,61 @@
 /* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
+}
+/* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
+   actions, the main action and the transport, a pointer over either. */
+@utility elevation-1 {
+  box-shadow: var(--elevation-1);
+}
+@utility elevation-2 {
+  box-shadow: var(--elevation-2);
+}
+@utility elevation-3 {
+  box-shadow: var(--elevation-3);
+}
+/* A dial's card grows from its button and its rows come up one after another, the nearest the
+   button first; they leave together. */
+@utility dial-card {
+  animation: dial-card-in 200ms var(--ease-out) both;
+  & > li {
+    animation: dial-row-in 220ms var(--ease-out) both;
+  }
+  & > li:nth-last-child(1) {
+    animation-delay: 40ms;
+  }
+  & > li:nth-last-child(2) {
+    animation-delay: 70ms;
+  }
+  & > li:nth-last-child(3) {
+    animation-delay: 100ms;
+  }
+  & > li:nth-last-child(n + 4) {
+    animation-delay: 130ms;
+  }
+  &[data-closing] {
+    animation: dial-card-out 120ms ease-in both;
+  }
+  &[data-closing] > li {
+    animation: none;
+  }
+}
+@keyframes dial-card-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+@keyframes dial-card-out {
+  to {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+@keyframes dial-row-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
 }
 /* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
 @utility bottom-nav-bar {

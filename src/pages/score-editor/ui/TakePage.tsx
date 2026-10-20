@@ -20,6 +20,7 @@ import { TakeRoll } from '@/widgets/take-roll'
 import { clockTime } from '../model/clock-time'
 import { wholeTake, type KeptBars } from '../model/kept-bars'
 import { useTakeDownload } from '../model/use-take-download'
+import { useSongTitle } from '../model/use-song-title'
 import { useTakePlay } from '../model/use-take-play'
 import { useTakeTitle } from '../model/use-take-title'
 import { DeleteTakeDialog } from './DeleteTakeDialog'
@@ -27,13 +28,14 @@ import { KeepBars } from './KeepBars'
 import { TakeNameField } from './TakeNameField'
 
 /**
- * A take on its own page (spec 2026-10-09 §4.3, ADR 0061): its length and tempo, its name, the take
+ * A take on its own page (spec 2026-10-09 §4.3, ADR 0061): its song, its length and tempo, its name, the take
  * drawn as a piano roll that plays from a bar tapped, and Keep bars; Play floats, Download and Delete
  * in the dial beside it; the keys go down on the keyboard as it plays.
  */
 function TakeView({ take }: { take: Take }) {
   const { t } = useTranslation('editor')
   const title = useTakeTitle(take)
+  const song = useSongTitle(take.pieceId)
   const play = useTakePlay(take)
   const download = useTakeDownload(take)
   const store = useTakesStoreApi()
@@ -52,9 +54,12 @@ function TakeView({ take }: { take: Take }) {
     <div className="flex flex-col gap-6">
       <ScreenHeader title={title} back={<BackButton fallback={takes} />} />
       <PinnedKeyboard shown={unmarked(take.notes.map((note) => note.midi))} />
-      <p className="-mt-3 text-muted-foreground tabular-nums">
-        {t('recorder.detail', { length: clockTime(take.length), tempo: take.tempo })}
-      </p>
+      <div className="-mt-3 flex flex-col gap-1">
+        <p className="text-lg font-semibold">{song}</p>
+        <p className="text-muted-foreground tabular-nums">
+          {t('recorder.detail', { length: clockTime(take.length), tempo: take.tempo })}
+        </p>
+      </div>
       <TakeNameField take={take} />
       <TakeRoll take={take} kept={kept} playing={play.playing} onPlayFrom={play.playFrom} />
       <KeepBars take={take} kept={kept} onChange={setKept} />
