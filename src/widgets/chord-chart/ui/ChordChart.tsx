@@ -64,19 +64,18 @@ export function ChordChart({
             className="flex scroll-mt-24 flex-col gap-2"
           >
             <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-              <h3
-                id={`${sectionAnchor(section)}-heading`}
-                className="flex items-baseline gap-2 text-xl"
-              >
-                {heading}
+              <div className="flex items-baseline gap-2">
+                <h3 id={`${sectionAnchor(section)}-heading`} className="text-xl">
+                  {heading}
+                </h3>
                 {all.length > 0 ? (
-                  <span className="font-sans text-sm font-normal text-muted-foreground tabular-nums">
+                  <span className="text-sm text-muted-foreground tabular-nums">
                     {bars.first === bars.last
                       ? t('barOne', { n: bars.first + 1 })
                       : t('barsFromTo', { first: bars.first + 1, last: bars.last + 1 })}
                   </span>
                 ) : null}
-              </h3>
+              </div>
               {all.length > 0 && sectionAction ? sectionAction(bars, section) : null}
             </header>
             {lines.map((bars, line) => (
