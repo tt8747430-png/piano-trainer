@@ -124,7 +124,10 @@ export function ToolPalettePanel({
 export function ToolPaletteFoot({ end, children }: { end?: ReactNode; children: ReactNode }) {
   return (
     <div className="flex items-center gap-1 border-t border-hairline pt-2 landscape-phone:pt-1.5">
-      <div className="min-w-0 flex-1">{children}</div>
+      {/* A palette is a phone's width wherever it stands: its foot's choices a size down, to fit. */}
+      <div className="min-w-0 flex-1 [&_[role=radio]]:px-1 [&_[role=radio]]:text-sm">
+        {children}
+      </div>
       {end}
     </div>
   )

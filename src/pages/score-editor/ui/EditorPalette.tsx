@@ -118,7 +118,7 @@ export function EditorPalette({
                   size="icon"
                   aria-label={t('palette.otherSide')}
                   title={t('palette.otherSide')}
-                  className="rounded-xl"
+                  className="size-9 rounded-xl"
                   onClick={() => onSide(side === 'left' ? 'right' : 'left')}
                 >
                   <ArrowLeftRight aria-hidden />
@@ -129,7 +129,7 @@ export function EditorPalette({
                   aria-label={t('palette.close')}
                   title={t('palette.close')}
                   aria-expanded
-                  className="rounded-xl"
+                  className="size-9 rounded-xl"
                   onClick={() => setOpen(false)}
                 >
                   <X aria-hidden />
