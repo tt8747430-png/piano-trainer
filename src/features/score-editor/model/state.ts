@@ -45,7 +45,7 @@ export type BarEdit =
   'insert' | 'delete' | 'copy' | 'cut' | 'paste' | 'newLine' | 'joinLine' | 'newSection'
 
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
-export type CaretMove = 'step' | 'bar' | 'end'
+export type CaretMove = 'step' | 'bar' | 'line' | 'end'
 
 /**
  * Where the caret goes after a chord: nowhere (a chord built part by part); the next beat; the next

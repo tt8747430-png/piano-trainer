@@ -63,8 +63,11 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       return mod ? null : { type: 'delete', back: true }
     case 'Delete':
       return mod ? null : { type: 'delete' }
+    // Enter goes on a line (Shift, back a line); in the chords it opens the field to type one in.
     case 'Enter':
-      return layer === 'chords' && !mod ? { type: 'chordField' } : null
+      if (mod) return null
+      if (layer === 'chords' && !press.shiftKey) return { type: 'chordField' }
+      return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
   if (mod || press.altKey) return null
   const value = VALUES[press.code]

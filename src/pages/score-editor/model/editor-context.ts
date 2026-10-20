@@ -42,6 +42,8 @@ export interface ScoreEditorValue {
     readonly kind: 'version' | 'song'
     /** The Chord field's ref: Enter in the chords puts the focus there. */
     readonly chordFieldRef: (field: HTMLInputElement | null) => void
+    /** Counts the times Enter in the chords asked for the field while it was not open: the palette opens it. */
+    readonly chordFieldAsked: number
   }
 }
 

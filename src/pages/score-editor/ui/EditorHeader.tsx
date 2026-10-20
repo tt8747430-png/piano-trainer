@@ -1,20 +1,19 @@
 import { Play, Redo2, Square, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MidiButton } from '@/features/connect-midi'
 import { RoundButton, usePageHeading } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { AddMenu } from './AddMenu'
 import { PieceSettings } from './PieceSettings'
 import { RecorderSheet } from './RecorderSheet'
-import { ViewMenu } from './ViewMenu'
 
 /**
  * The editor's bar, one row at every size, as a notation app's: Close and the title (Your version,
  * or the caret's line where the screen puts it there); Undo and Redo; Play from the caret's bar (honey,
- * Stop while it sounds) and Record, which opens the takes; then what the score shows (its staves and
- * layout), the MIDI keyboard and the song's settings (on a phone, in the view's menu). What writes is
- * the tools' (`EditorTools`), and a click on the staff it writes.
+ * Stop while it sounds) and Record, which opens the takes; then + (`AddMenu`), what is added to the
+ * score, and the gear (`PieceSettings`): the song, the view and the MIDI keyboard (ADR 0065). What
+ * writes into the notes is the palette's (`EditorTools`), and a click on the staff it writes.
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
   const { t } = useTranslation(['editor', 'common'])
@@ -28,7 +27,7 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
     <div className="flex items-center gap-1 sm:gap-2">
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
       <div className="flex min-w-0 flex-1 flex-col pl-1">
-        <h1 {...heading} className="truncate text-lg outline-none">
+        <h1 {...heading} className="truncate text-lg outline-none max-sm:sr-only">
           {meta.title}
         </h1>
         {status ??
@@ -78,12 +77,10 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
         </Button>
         <RecorderSheet />
       </div>
-      <ViewMenu />
-      {/* On a phone held upright, the view's menu holds it: the bar keeps the title room. */}
-      <div className="contents max-sm:hidden">
-        <MidiButton />
+      <div className="flex items-center gap-0.5 sm:gap-1">
+        <AddMenu />
+        <PieceSettings />
       </div>
-      <PieceSettings />
     </div>
   )
 }

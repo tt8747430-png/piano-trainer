@@ -246,6 +246,26 @@ describe('the editor', () => {
     expect(run(state, { type: 'undo' }).draft).toEqual(draftOf())
   })
 
+  it('moves the caret a line on and back, to its line’s start first', () => {
+    const lines = initialEditor(
+      draftOf({
+        sections: [
+          { kind: 'verse', lines: ['G C', 'D'] },
+          { kind: 'chorus', lines: ['Em'] },
+        ],
+      }),
+    )
+    const line = (state: EditorState, direction: -1 | 1) =>
+      run(state, { type: 'move', by: 'line', direction, extend: false })
+    const second = line(lines, 1)
+    expect(second.caret).toBe(192)
+    expect(line(second, 1).caret).toBe(288)
+    expect(line(line(second, 1), 1).caret).toBe(288)
+    const inside = run(lines, { type: 'move', by: 'bar', direction: 1, extend: false })
+    expect(line(inside, -1).caret).toBe(0)
+    expect(line(second, -1).caret).toBe(0)
+  })
+
   it('selects bars with Shift, and copies, cuts and pastes them', () => {
     const chosen = run(
       run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })), {

@@ -93,6 +93,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
     chordField.current = field
   }, [])
+  const [chordFieldAsked, askChordField] = useState(0)
   const close = useCloseTo(target)
   const hasVersion = usePieces(
     (state) => target.kind === 'version' && selectHasVersion(state, target.id),
@@ -158,7 +159,8 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     if (shortcut.type === 'chordField') {
       if (event.target.closest(PRESSED)) return
       event.preventDefault()
-      chordField.current?.focus()
+      if (chordField.current) chordField.current.focus()
+      else askChordField((asked) => asked + 1)
       return
     }
     event.preventDefault()
@@ -204,6 +206,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       playing: playback.playing === 'piece',
       kind: target.kind,
       chordFieldRef,
+      chordFieldAsked,
     },
   }
 }

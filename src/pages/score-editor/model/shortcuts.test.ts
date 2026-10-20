@@ -96,7 +96,18 @@ describe('shortcutOf', () => {
       edit: 'paste',
     })
     expect(shortcutOf(press('Enter', 'Enter'), 'chords')).toEqual({ type: 'chordField' })
-    expect(shortcutOf(press('Enter', 'Enter'), 'melody')).toBeNull()
+    expect(shortcutOf(press('Enter', 'Enter'), 'melody')).toEqual({
+      type: 'move',
+      by: 'line',
+      direction: 1,
+      extend: false,
+    })
+    expect(shortcutOf(press('Enter', 'Enter', { shiftKey: true }), 'rh')).toEqual({
+      type: 'move',
+      by: 'line',
+      direction: -1,
+      extend: false,
+    })
   })
 
   it('leaves every typing key to the piano, and a plain letter or Cmd with another key alone', () => {

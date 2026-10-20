@@ -1,13 +1,5 @@
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  ChevronsDown,
-  ChevronsUp,
-  Delete,
-  Layers,
-} from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Delete, Layers } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NOTE_VALUES, takesDot } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
@@ -114,6 +106,28 @@ function RhythmKeys() {
   )
 }
 
+/**
+ * A key's picture of a move in pitch: the sign of how far (♯ ♭ a semitone, 8 an octave, a note on a
+ * line a step of the key) with an arrow up or down beside it.
+ */
+function Raised({ mark, up = false }: { mark: ReactNode; up?: boolean }) {
+  const Arrow = up ? ArrowUp : ArrowDown
+  return (
+    <span aria-hidden className="flex items-center gap-0.5 leading-none">
+      <span className="font-music text-2xl">{mark}</span>
+      <Arrow className="size-4" />
+    </span>
+  )
+}
+
+/** A note on a staff's lines: a step of the key's picture. */
+const ON_LINES = (
+  <svg viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.2">
+    <path d="M1 6 H19 M1 10 H19 M1 14 H19" />
+    <ellipse cx="10" cy="10" rx="3.6" ry="2.6" fill="currentColor" transform="rotate(-20 10 10)" />
+  </svg>
+)
+
 /** The notes at the caret a semitone up or down, as a sharp or a flat raises or lowers them. */
 function SemitoneKeys() {
   const { t } = useTranslation('editor')
@@ -122,10 +136,10 @@ function SemitoneKeys() {
   return (
     <>
       <ToolKey label={t('up')} onClick={() => shift(1)}>
-        <ArrowUp aria-hidden />
+        <Raised mark="♯" up />
       </ToolKey>
       <ToolKey label={t('down')} onClick={() => shift(-1)}>
-        <ArrowDown aria-hidden />
+        <Raised mark="♭" />
       </ToolKey>
     </>
   )
@@ -139,10 +153,10 @@ function OctaveKeys() {
   return (
     <>
       <ToolKey label={t('octaveUp')} onClick={() => shift(12)}>
-        <ChevronsUp aria-hidden />
+        <Raised mark="8" up />
       </ToolKey>
       <ToolKey label={t('octaveDown')} onClick={() => shift(-12)}>
-        <ChevronsDown aria-hidden />
+        <Raised mark="8" />
       </ToolKey>
     </>
   )
@@ -213,14 +227,10 @@ export function PitchKeys() {
       <SemitoneKeys />
       <OctaveKeys />
       <ToolKey label={t('stepUp')} onClick={() => actions.dispatch({ type: 'step', steps: 1 })}>
-        <span aria-hidden className="text-lg font-semibold">
-          +1
-        </span>
+        <Raised mark={ON_LINES} up />
       </ToolKey>
       <ToolKey label={t('stepDown')} onClick={() => actions.dispatch({ type: 'step', steps: -1 })}>
-        <span aria-hidden className="text-lg font-semibold">
-          −1
-        </span>
+        <Raised mark={ON_LINES} />
       </ToolKey>
       <ToolKey label={t('respell')} onClick={() => actions.dispatch({ type: 'respell' })}>
         <span aria-hidden className="text-xl font-semibold tracking-tight">
