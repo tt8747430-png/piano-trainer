@@ -48,8 +48,12 @@ const practiceOne: Lesson = {
             ru: 'Каждый ключ отмечает свою ноту: скрипичный — соль, басовый — фа. До первой октавы стоит между станами и принадлежит обоим.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 E4/2 C4/2' },
-        { kind: 'notes', clef: 'bass', notes: 'C4/2 F3/2 A3/2 C4/2' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4/2 G4/2 E4/2 C4/2',
+          bass: 'C4/2 F3/2 A3/2 C4/2',
+        },
       ],
     },
     {
@@ -76,8 +80,12 @@ const practiceOne: Lesson = {
             ru: 'Здесь мелодия переходит из руки в руку. Сыграйте строку в скрипичном ключе правой рукой, затем ответьте левой по басовой строке.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4/2 F4 E4 D4/2 E4 D4 C4 D4 E4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'A2 B2 C3/2 B2 A2 G2/2 A2 G2 F2 G2 A2/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'E4 F4 G4/2 F4 E4 D4/2 E4 D4 C4 D4 E4/1',
+          bass: 'A2 B2 C3/2 B2 A2 G2/2 A2 G2 F2 G2 A2/1',
+        },
       ],
     },
     {

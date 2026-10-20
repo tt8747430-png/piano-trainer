@@ -82,8 +82,12 @@ const majorScales: Lesson = {
             { en: 'Coming down, reverse it.', ru: 'Вниз — в обратном порядке.' },
           ],
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 A3 B3 C4' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4 A4 B4 C5',
+          bass: 'C3 D3 E3 F3 G3 A3 B3 C4',
+        },
       ],
     },
     {

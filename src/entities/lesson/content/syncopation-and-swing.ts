@@ -57,8 +57,12 @@ const syncopationAndSwing: Lesson = {
             ru: '— это звук следующего такта, взятый на восьмую раньше и залигованный через тактовую черту. Здесь фа приходит на «и» после «четыре».',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C5 E5 G5 E5/8 F5/8~ F5/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3/1 F2/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C5 E5 G5 E5/8 F5/8~ F5/1',
+          bass: 'C3/1 F2/1',
+        },
         {
           kind: 'note',
           text: {

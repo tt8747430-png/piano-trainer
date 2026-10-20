@@ -108,6 +108,11 @@ export type LessonBlock =
       readonly clef: StaffId
       /** `E4 G4/2 B4/8.`: `noteLine`'s format. */
       readonly notes: string
+      /**
+       * The left hand's line under it, played together: the two on one grand staff, as a piece
+       * prints its hands (the `notes` then the right hand's, on the treble).
+       */
+      readonly bass?: string
       readonly meter?: NoteLineMeter
       /** The key its signature writes; C major (none) when left out. */
       readonly key?: Key

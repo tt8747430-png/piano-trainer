@@ -22,8 +22,12 @@ const coordinationBasics: Lesson = {
             ru: '— обе руки идут в одну сторону на октаву друг от друга. Ноты одинаковые, а пальцы зеркальные: правая играет 1 2 3 4 5, левая — 5 4 3 2 1.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 F3 E3 D3 C3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1',
+          bass: 'C3 D3 E3 F3 G3 F3 E3 D3 C3/1',
+        },
         {
           kind: 'link',
           title: {
@@ -45,8 +49,12 @@ const coordinationBasics: Lesson = {
             ru: '— руки расходятся и снова сходятся. Обе начинают с большого пальца, поэтому в каждый момент играют одинаковыми пальцами.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'G3 F3 E3 D3 C3 D3 E3 F3 G3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1',
+          bass: 'G3 F3 E3 D3 C3 D3 E3 F3 G3/1',
+        },
         {
           kind: 'link',
           title: { en: 'Contrary motion in the Player', ru: 'Противоположное движение в плеере' },
@@ -64,8 +72,12 @@ const coordinationBasics: Lesson = {
             ru: 'Теперь шаг на терцию вверх, затем на ступень назад. Руки идут строго вместе, даже на скачках.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 E4 D4 F4 E4 G4 F4 D4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 E3 D3 F3 E3 G3 F3 D3 C3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 E4 D4 F4 E4 G4 F4 D4 C4/1',
+          bass: 'C3 E3 D3 F3 E3 G3 F3 D3 C3/1',
+        },
       ],
     },
     {
@@ -78,8 +90,12 @@ const coordinationBasics: Lesson = {
             ru: 'Перенесите обе руки к соль. Фигура та же, значит, и пальцы те же.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'G4 A4 B4 C5 D5 C5 B4 A4 G4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'G2 A2 B2 C3 D3 C3 B2 A2 G2/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'G4 A4 B4 C5 D5 C5 B4 A4 G4/1',
+          bass: 'G2 A2 B2 C3 D3 C3 B2 A2 G2/1',
+        },
         {
           kind: 'link',
           title: { en: 'The five-finger position on G', ru: 'Позиция пяти пальцев от соль' },
@@ -105,8 +121,13 @@ const coordinationBasics: Lesson = {
             ru: 'В ре мажоре пять звуков: ре, ми, фа-диез, соль, ля. Третий палец берёт чёрную клавишу, поэтому ставьте его чуть глубже.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'D4 E4 F#4 G4 A4 G4 F#4 E4 D4/1', key: D_MAJOR },
-        { kind: 'notes', clef: 'bass', notes: 'D3 E3 F#3 G3 A3 G3 F#3 E3 D3/1', key: D_MAJOR },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'D4 E4 F#4 G4 A4 G4 F#4 E4 D4/1',
+          bass: 'D3 E3 F#3 G3 A3 G3 F#3 E3 D3/1',
+          key: D_MAJOR,
+        },
         {
           kind: 'link',
           title: { en: 'The five-finger position on D', ru: 'Позиция пяти пальцев от ре' },

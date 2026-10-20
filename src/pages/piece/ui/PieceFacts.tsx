@@ -7,7 +7,7 @@ import { keySymbol } from '@/shared/lib/music'
 
 /**
  * A song's or listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not
- * pressed: its second title, then its key and meter, named for a screen reader, its stage's mark, and
+ * pressed: its second title, then its key, meter and tempo, named for a screen reader, its stage's mark, and
  * Your version where the learner has one.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
@@ -27,6 +27,13 @@ export function PieceFacts({ entry }: { entry: Entry }) {
         <dd aria-hidden>·</dd>
         <dt className="sr-only">{t('meter')}</dt>
         <dd className="font-display font-semibold text-foreground tabular-nums">{entry.meter}</dd>
+        {entry.kind === 'listing' ? null : (
+          <>
+            <dd aria-hidden>·</dd>
+            <dt className="sr-only">{t('tempo')}</dt>
+            <dd className="text-foreground tabular-nums">{t('bpm', { tempo: entry.tempo })}</dd>
+          </>
+        )}
         {hasVersion ? (
           <>
             <dt className="sr-only">{t('music')}</dt>

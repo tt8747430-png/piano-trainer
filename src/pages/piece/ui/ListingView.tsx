@@ -3,7 +3,7 @@ import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Listing } from '@/entities/piece'
 import { FabLink, FloatingActions } from '@/shared/ui'
-import { PieceAbout } from './PieceAbout'
+import { PieceAbout, PieceCredits } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
 import { PieceHeader } from './PieceHeader'
 
@@ -14,6 +14,7 @@ export function ListingView({ listing }: { listing: Listing }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader entry={listing} />
       <PieceFacts entry={listing} />
+      <PieceCredits entry={listing} />
       <PieceAbout entry={listing} />
       <FloatingActions>
         <FabLink

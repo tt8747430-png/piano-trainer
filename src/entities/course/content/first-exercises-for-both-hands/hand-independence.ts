@@ -20,11 +20,11 @@ const handIndependence: Lesson = {
             ru: '— связная игра: клавиша поднимается, когда опускается следующая. Стаккато — коротко и отрывисто: клавиша сразу отскакивает.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4/1' },
         {
           kind: 'notes',
-          clef: 'bass',
-          notes: 'C3/8 r/8 D3/8 r/8 E3/8 r/8 F3/8 r/8 G3/8 r/8 r/4 r/2',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4/1',
+          bass: 'C3/8 r/8 D3/8 r/8 E3/8 r/8 F3/8 r/8 G3/8 r/8 r/4 r/2',
         },
       ],
     },
@@ -38,11 +38,11 @@ const handIndependence: Lesson = {
             ru: 'Теперь оба касания вместе. Правая рука поёт легато, а левая играет коротко и легко.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4 E4 D4 E4 C4/2' },
         {
           kind: 'notes',
-          clef: 'bass',
-          notes: 'C3/8 r/8 G3/8 r/8 C3/8 r/8 G3/8 r/8 G3/8 r/8 G3/8 r/8 C3/8 r/8 r/4',
+          clef: 'treble',
+          notes: 'E4 F4 G4 E4 D4 E4 C4/2',
+          bass: 'C3/8 r/8 G3/8 r/8 C3/8 r/8 G3/8 r/8 G3/8 r/8 G3/8 r/8 C3/8 r/8 r/4',
         },
       ],
     },
@@ -56,8 +56,7 @@ const handIndependence: Lesson = {
             ru: 'Правая рука держит долгую ноту до конца такта. Тем временем левая продолжает двигаться.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'G4/1 E4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 E3 G3 E3 C3 E3 G3 E3' },
+        { kind: 'notes', clef: 'treble', notes: 'G4/1 E4/1', bass: 'C3 E3 G3 E3 C3 E3 G3 E3' },
         {
           kind: 'question',
           ask: {
@@ -82,8 +81,8 @@ const handIndependence: Lesson = {
           kind: 'notes',
           clef: 'treble',
           notes: 'C4/8 D4/8 E4/8 F4/8 G4/8 F4/8 E4/8 D4/8 C4/1',
+          bass: 'C3 G3 C3 G3 C3/1',
         },
-        { kind: 'notes', clef: 'bass', notes: 'C3 G3 C3 G3 C3/1' },
       ],
     },
     {
@@ -101,11 +100,7 @@ const handIndependence: Lesson = {
           kind: 'notes',
           clef: 'treble',
           notes: 'C4/8 E4/8 F4/8 G4/8 A4/8 G4/8 F4/8 E4/8 D4/8 F4/8 G4/8 A4/8 B4/8 A4/8 G4/8 F4/8',
-        },
-        {
-          kind: 'notes',
-          clef: 'bass',
-          notes: 'C3/8 E3/8 F3/8 G3/8 A3/8 G3/8 F3/8 E3/8 D3/8 F3/8 G3/8 A3/8 B3/8 A3/8 G3/8 F3/8',
+          bass: 'C3/8 E3/8 F3/8 G3/8 A3/8 G3/8 F3/8 E3/8 D3/8 F3/8 G3/8 A3/8 B3/8 A3/8 G3/8 F3/8',
         },
         {
           kind: 'link',

@@ -1,25 +1,31 @@
+import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { METHODS } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
-import { chartBar, chartSections } from '../model/chart-sections'
+import { chartBar, chartSections, sectionAnchor, type SectionBars } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
 /**
- * A Chart's bars with their numbers and chords, by section, line by line; a tap plays a bar, which is
- * pressed while it sounds.
+ * A Chart's bars with their numbers and chords, by section, line by line; each section under a
+ * heading that says its bars, with what the page offers for it (`sectionAction`, Practise it); a tap
+ * plays a bar, which is pressed while it sounds.
  */
 export function ChordChart({
   performance,
   headings,
   playing,
   onBar,
+  sectionAction,
 }: {
   performance: Performance
   headings: readonly string[]
   /** The bar sounding, if any. */
   playing: number | null
   onBar: (bar: number) => void
+  sectionAction?: (bars: SectionBars, section: number) => ReactNode
 }) {
+  const { t } = useTranslation('piece')
   const locale = useLocale()
 
   const barOf = (index: number) => {
@@ -47,23 +53,47 @@ export function ChordChart({
 
   return (
     <div className="flex flex-col gap-6">
-      {sections.map(({ heading, lines }, section) => (
-        <section key={section} className="flex flex-col gap-2">
-          <h3 className="text-lg">{heading}</h3>
-          {lines.map((bars, line) => (
-            <div
-              key={line}
-              className="grid border-r border-input break-inside-avoid"
-              style={{
-                gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
-                width: `${(bars.length / longest) * 100}%`,
-              }}
-            >
-              {bars.map(barOf)}
-            </div>
-          ))}
-        </section>
-      ))}
+      {sections.map(({ heading, lines }, section) => {
+        const all = lines.flat()
+        const bars = { first: Math.min(...all), last: Math.max(...all) }
+        return (
+          <section
+            key={section}
+            id={sectionAnchor(section)}
+            aria-labelledby={`${sectionAnchor(section)}-heading`}
+            className="flex scroll-mt-24 flex-col gap-2"
+          >
+            <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+              <h3
+                id={`${sectionAnchor(section)}-heading`}
+                className="flex items-baseline gap-2 text-xl"
+              >
+                {heading}
+                {all.length > 0 ? (
+                  <span className="font-sans text-sm font-normal text-muted-foreground tabular-nums">
+                    {bars.first === bars.last
+                      ? t('barOne', { n: bars.first + 1 })
+                      : t('barsFromTo', { first: bars.first + 1, last: bars.last + 1 })}
+                  </span>
+                ) : null}
+              </h3>
+              {all.length > 0 && sectionAction ? sectionAction(bars, section) : null}
+            </header>
+            {lines.map((bars, line) => (
+              <div
+                key={line}
+                className="grid border-r border-input break-inside-avoid"
+                style={{
+                  gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
+                  width: `${(bars.length / longest) * 100}%`,
+                }}
+              >
+                {bars.map(barOf)}
+              </div>
+            ))}
+          </section>
+        )
+      })}
     </div>
   )
 }

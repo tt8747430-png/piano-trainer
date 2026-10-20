@@ -85,3 +85,16 @@ export function noteLine(
     chords: [],
   }
 }
+
+/**
+ * Two hands' lines as one passage on the grand staff, played together: the right hand's notes over
+ * the left's, as long as the longer of the two.
+ */
+export function twoHands(right: TimedMusic, left: TimedMusic): TimedMusic {
+  const longer = left.bars.length > right.bars.length ? left : right
+  return {
+    ...right,
+    bars: longer.bars,
+    notes: [...right.notes, ...left.notes].sort((a, b) => a.startTick - b.startTick),
+  }
+}

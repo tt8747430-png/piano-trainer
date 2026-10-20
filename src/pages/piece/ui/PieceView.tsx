@@ -18,22 +18,33 @@ import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
+import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
-import { FabLink, FloatingActions, NO_KEYS, SpeedDial, SpeedDialAction } from '@/shared/ui'
+import {
+  ButtonLink,
+  FabLink,
+  FloatingActions,
+  NO_KEYS,
+  SpeedDial,
+  SpeedDialAction,
+} from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceChords } from '@/widgets/piece-chords'
-import { PieceAbout } from './PieceAbout'
+import { PieceAbout, PieceCredits } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
+import { PieceForm } from './PieceForm'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
 
 /**
- * A piece with a chart, in one column: Learned in its bar, its facts, the chords it plays and its
- * chart, each to tap and hear on its keys, docked as the keyboard settings say; then what is printed
- * about it. Practise floats in the thumb's reach, the rest folded beside it in More actions: Edit,
+ * A piece with a chart, in one column, as a songbook's page reads: Learned in its bar; its facts (key,
+ * time, tempo) and who wrote it; its form, the sections in order, each a link to its place; the
+ * chords it plays and its chart by section, each section to practise on its own, every chord and bar
+ * to tap and hear on its keys, docked as the keyboard settings say; then its note and the way to its
+ * key's scale. Practise floats in the thumb's reach, the rest folded beside it in More actions: Edit,
  * Check these chords, Print, and for the learner's own music Share and its way back, asked first.
  */
 export function PieceView({ piece }: { piece: Piece }) {
@@ -67,8 +78,10 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader entry={piece} actions={own ? null : <LearnedButton step={step} round />} />
       <PieceFacts entry={piece} />
+      <PieceCredits entry={piece} />
       <ShareSaid said={shared.said} />
       <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} className="print:hidden" />
+      <PieceForm performance={performance} headings={headings} />
       <div className="print:hidden">
         <PieceChords performance={performance} />
       </div>
@@ -79,6 +92,24 @@ export function PieceView({ piece }: { piece: Piece }) {
           headings={headings}
           onBar={toggleBar}
           playing={playback.playing}
+          sectionAction={(bars, section) => (
+            <ButtonLink
+              variant="outline"
+              className="h-9 rounded-full px-3 text-sm print:hidden"
+              aria-label={t('practiseSectionOf', { section: headings[section] ?? '' })}
+              render={
+                <Link
+                  to="/play/$pieceId"
+                  params={{ pieceId: piece.id }}
+                  search={{ loop: loopParam(bars) }}
+                  state={OPEN_PLAINLY}
+                />
+              }
+            >
+              <Play data-icon="inline-start" aria-hidden />
+              {t('practiseSection')}
+            </ButtonLink>
+          )}
         />
       </section>
       <PieceAbout entry={piece} />

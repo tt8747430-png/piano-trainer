@@ -91,6 +91,7 @@ export function LessonBlock({
       return (
         <NotesExample
           notes={block.notes}
+          {...(block.bass ? { bass: block.bass } : {})}
           clef={block.clef}
           meter={block.meter ?? '4/4'}
           keyParam={keyParam(block.key ?? C_MAJOR)}

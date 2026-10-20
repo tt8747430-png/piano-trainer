@@ -35,8 +35,12 @@ const bothHandsIntro: Lesson = {
             ru: '— доля тишины. Её считают так же, как ноту.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'E4 D4 C4/2 r/1 E4 D4 C4/2 r/1' },
-        { kind: 'notes', clef: 'bass', notes: 'r/1 E3 D3 C3/2 r/1 E3 D3 C3/2' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'E4 D4 C4/2 r/1 E4 D4 C4/2 r/1',
+          bass: 'r/1 E3 D3 C3/2 r/1 E3 D3 C3/2',
+        },
         {
           kind: 'steps',
           steps: [
@@ -61,8 +65,12 @@ const bothHandsIntro: Lesson = {
             ru: '— одна рука играет фразу, другая ей отвечает. В «Лондонском мосте» спрашивает правая рука. Левая отвечает октавой ниже пальцами 4, 3, 2 и 1.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'G4/4. A4/8 G4 F4 E4 F4 G4/2 r/1 r/1' },
-        { kind: 'notes', clef: 'bass', notes: 'r/1 r/1 D3 E3 F3/2 E3 F3 G3/2' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'G4/4. A4/8 G4 F4 E4 F4 G4/2 r/1 r/1',
+          bass: 'r/1 r/1 D3 E3 F3/2 E3 F3 G3/2',
+        },
         {
           kind: 'link',
           title: { en: 'London Bridge in the Player', ru: '«Лондонский мост» в плеере' },
