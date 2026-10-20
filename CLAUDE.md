@@ -156,7 +156,7 @@ it. `@` → `src`.
   `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
   machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
   `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
-  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `fold-section` (`useFold`, a section folded as the learner left it, saved in `pt-settings`' `foldedSections`); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `ShareSongButton`).
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `fold-section` (`useFold`, a section folded as the learner left it, saved in `pt-settings`' `foldedSections`); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `useShareSong` and `ShareSaid`, what it said).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
