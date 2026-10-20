@@ -56,6 +56,7 @@ function sounding(
       startTick: n.startTick - from,
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
+      ...(n.marks ? { marks: n.marks } : {}),
     }))
 }
 

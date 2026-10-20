@@ -30,5 +30,6 @@ export function playedInBar(
       startTick: n.startTick,
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
+      ...(n.marks ? { marks: n.marks } : {}),
     }))
 }

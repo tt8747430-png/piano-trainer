@@ -784,6 +784,22 @@ describe('a hand written into a bar', () => {
     expect(notesOf(lowC, 'lh')[0]?.midi).toBe(31)
   })
 
+  it('carries a written note’s marks, its grace notes moved with the key', () => {
+    const [written] = hand([60, 0, 4 * TICKS_PER_BEAT])
+    if (!written) throw new Error('a note')
+    const marked = {
+      ...written,
+      marks: {
+        articulations: ['accent' as const],
+        grace: [{ midi: midi(62), spelled: note('D') }],
+      },
+    }
+    const performance = arrange(twoBars({ rh: [marked] }), { tonic: note('D'), pattern: BEATS })
+    const [played] = notesOf(performance, 'rh')
+    expect(played?.marks?.articulations).toEqual(['accent'])
+    expect(played?.marks?.grace?.map((g) => [g.midi, noteName(g.spelled)])).toEqual([[64, 'E']])
+  })
+
   it('plays the written right hand in place of the tune a melody pattern gives it', () => {
     const DOUBLING: MelodyPattern = {
       id: 'tune',

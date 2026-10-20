@@ -167,6 +167,33 @@ describe('notate', () => {
     expect(accidentals).toEqual([-1, null])
   })
 
+  it('puts a note’s marks on the piece it starts, its slur’s end on the piece it ends', () => {
+    const beat = TICKS_PER_BEAT
+    const marks = {
+      articulations: ['accent' as const],
+      slurStart: true as const,
+      slurEnd: true as const,
+    }
+    // A note from beat 2 to beat 4 is written as two tied quarters (spec §2.4).
+    const score = notate(music([n(72, note('C'), 'rh', beat, 2 * beat, { marks })]))
+    const events = score.measures[0]?.staves.treble[0]?.events.filter((e) => e.kind === 'notes')
+    expect(events?.map((event) => event.kind === 'notes' && event.marks)).toEqual([
+      { articulations: ['accent'], slurStart: true },
+      { slurEnd: true },
+    ])
+  })
+
+  it('writes a note under an 8va line an octave lower than it sounds, every piece marked', () => {
+    const score = notate(
+      music([n(84, note('C'), 'rh', 0, 4 * TICKS_PER_BEAT, { marks: { octave: '8va' } })]),
+    )
+    const [event] = score.measures[0]?.staves.treble[0]?.events ?? []
+    expect(event?.kind === 'notes' && [event.notes[0]?.octave, event.notes[0]?.midi]).toEqual([
+      5, 84,
+    ])
+    expect(event?.kind === 'notes' && event.marks).toEqual({ octave: '8va' })
+  })
+
   it('prints the accidentals the key and the bar do not say', () => {
     const score = notate(
       music(

@@ -1,12 +1,16 @@
 import {
+  Curve,
   Formatter,
   MetricsDefaults,
+  Modifier,
   Renderer,
   Stave,
   StaveConnector,
+  StaveHairpin,
   StaveNote,
   StaveTie,
   SVGContext,
+  TextBracket,
   VexFlow,
   type RenderContext,
   type Voice,
@@ -200,7 +204,14 @@ function buildMeasure(
   const build = (staff: StaffId) =>
     shown.includes(staff)
       ? measure.staves[staff].map((voice) =>
-          buildVoice(voice, { staff, measure, meter: score.meter, fingers, names }),
+          buildVoice(voice, {
+            staff,
+            measure,
+            meter: score.meter,
+            fingers,
+            names,
+            key: keyOf(score, measure),
+          }),
         )
       : []
   const staves = { treble: build('treble'), bass: build('bass') }
@@ -212,17 +223,11 @@ function buildMeasure(
   const before = previous?.time ?? timeBefore
   const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
   const key = keyOf(score, measure)
-  const keyFrom =
-    previous && !sameKey(keyOf(score, previous), key) ? keyOf(score, previous) : null
+  const keyFrom = previous && !sameKey(keyOf(score, previous), key) ? keyOf(score, previous) : null
   const probe = { measure, keyFrom, staves, formatter, clefs, time, width: 0, notes: 0 }
   const modifiers = Math.max(
     ...shown.map((staff) => {
-      const stave = staveAt(
-        staff,
-        { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES },
-        probe,
-        key,
-      )
+      const stave = staveAt(staff, { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES }, probe, key)
       return stave.getNoteStartX() - stave.getX()
     }),
   )
@@ -313,6 +318,83 @@ function drawTies(
         }
       }
     }
+    context.closeGroup()
+  }
+}
+
+/** The written note it is drawn as, of each of a staff's chords along the line, in time order. */
+function chordsAlong(built: readonly BuiltMeasure[], staff: StaffId) {
+  return built
+    .flatMap((measure) => measure.staves[staff].flatMap((voice) => voice.notes))
+    .flatMap(({ event, note }) =>
+      event.kind === 'notes' && note instanceof StaveNote ? [{ event, note }] : [],
+    )
+    .sort((a, b) => a.event.tick - b.event.tick)
+}
+
+/**
+ * What spans notes, on each staff (ADR 0063): a slur from the chord that starts one to the next that
+ * ends one (from or to the line's edge where it goes on past it), a hairpin to the next dynamic or
+ * hairpin's end, and an octave line over (8va) or under (8vb) each run of chords under it.
+ */
+function drawSpans(
+  context: RenderContext,
+  built: readonly BuiltMeasure[],
+  shown: readonly StaffId[],
+) {
+  for (const staff of shown) {
+    const chords = chordsAlong(built, staff)
+    context.openGroup(`staff-${staff}`)
+    const slurs: (StaveNote | undefined)[] = []
+    let hairpin: { from: StaveNote; type: number } | null = null
+    const drawHairpin = (to: StaveNote) => {
+      if (!hairpin || hairpin.from === to) return
+      new StaveHairpin({ firstNote: hairpin.from, lastNote: to }, hairpin.type)
+        .setPosition(Modifier.Position.BELOW)
+        .setContext(context)
+        .draw()
+      hairpin = null
+    }
+    // A holder, so the line drawn and the line read share one run.
+    const run: { octave: { line: '8va' | '8vb'; from: StaveNote; to: StaveNote } | null } = {
+      octave: null,
+    }
+    const drawOctave = () => {
+      const octave = run.octave
+      if (!octave) return
+      new TextBracket({
+        start: octave.from,
+        stop: octave.to,
+        text: '8',
+        superscript: octave.line === '8va' ? 'va' : 'vb',
+        position: octave.line === '8va' ? TextBracket.Position.TOP : TextBracket.Position.BOTTOM,
+      })
+        .setContext(context)
+        .draw()
+      run.octave = null
+    }
+    for (const { event, note } of chords) {
+      const marks = event.marks
+      if (marks?.slurEnd) {
+        new Curve(slurs.pop(), note, {}).setContext(context).draw()
+      }
+      if (marks?.slurStart) slurs.push(note)
+      if (marks?.dynamic || marks?.hairpin) drawHairpin(note)
+      if (marks?.hairpin === 'cresc' || marks?.hairpin === 'dim') {
+        hairpin = {
+          from: note,
+          type: marks.hairpin === 'cresc' ? StaveHairpin.type.CRESC : StaveHairpin.type.DECRESC,
+        }
+      }
+      const line = marks?.octave
+      if (run.octave && run.octave.line !== line) drawOctave()
+      if (line)
+        run.octave = run.octave ? { ...run.octave, to: note } : { line, from: note, to: note }
+    }
+    for (const from of slurs) new Curve(from, undefined, {}).setContext(context).draw()
+    const last = chords.at(-1)?.note
+    if (last) drawHairpin(last)
+    drawOctave()
     context.closeGroup()
   }
 }
@@ -524,6 +606,7 @@ function* drawn(
     x += measure.width
   }
   drawTies(context, built, score.meter, shown)
+  drawSpans(context, built, shown)
   host.replaceChildren(...sheet.childNodes)
 
   return {

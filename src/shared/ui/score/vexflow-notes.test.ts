@@ -46,6 +46,7 @@ const build = (startTick: number, count: number, voice: ScoreVoice, { names = fa
     meter: '4/4',
     fingers: false,
     names,
+    key: { tonic: note('C'), minor: false },
   })
 
 const headsOf = (built: ReturnType<typeof buildVoice>) =>
@@ -54,6 +55,40 @@ const headsOf = (built: ReturnType<typeof buildVoice>) =>
   )
 
 describe('buildVoice', () => {
+  it('draws a note’s marks on it: articulations, an ornament, a roll, grace notes and a dynamic', () => {
+    const voice: ScoreVoice = {
+      stem: 'auto',
+      events: [
+        {
+          kind: 'notes',
+          tick: 0,
+          duration: { value: 1, dots: 0, triplet: false },
+          notes: [{ midi: midi(72), spelled: note('C'), octave: 5, accidental: null, tie: false }],
+          marks: {
+            articulations: ['accent', 'fermata'],
+            ornament: 'trill',
+            arpeggio: true,
+            grace: [{ midi: midi(74), spelled: note('D') }],
+            dynamic: 'mf',
+          },
+        },
+      ],
+    }
+    const [built] = build(0, 4, voice).notes
+    const kinds = built?.note
+      .getModifiers()
+      .map((modifier) => modifier.getCategory())
+      .sort()
+    expect(kinds).toEqual([
+      'Annotation',
+      'Articulation',
+      'Articulation',
+      'GraceNoteGroup',
+      'Ornament',
+      'Stroke',
+    ])
+  })
+
   it('beams by the beat across a second voice’s hidden rest, never over it', () => {
     const voice: ScoreVoice = {
       stem: 'down',

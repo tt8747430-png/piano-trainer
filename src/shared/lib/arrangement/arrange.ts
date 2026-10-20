@@ -360,7 +360,15 @@ function playWritten(
 ): PerformanceNote[] {
   return transposeNotes(written, from, to).map((n): PerformanceNote => {
     const startTick = barStart + n.startTick
+    const grace = n.marks?.grace
+    const marks = grace
+      ? {
+          ...n.marks,
+          grace: transposeNotes(grace, from, to).map((g) => ({ ...g, midi: onThePiano(g.midi) })),
+        }
+      : n.marks
     return {
+      ...(marks ? { marks } : {}),
       midi: onThePiano(n.midi),
       spelled: n.spelled,
       hand,

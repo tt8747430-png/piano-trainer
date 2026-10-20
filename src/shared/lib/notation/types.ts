@@ -65,6 +65,11 @@ export interface NotesEvent {
   readonly tick: Tick
   readonly duration: Duration
   readonly notes: readonly WrittenNote[]
+  /**
+   * Its notes' marks (ADR 0063): those of the notes it starts, a slur's end where its notes end, and an
+   * octave line on every piece under it.
+   */
+  readonly marks?: NoteMarks
 }
 
 export interface RestEvent {

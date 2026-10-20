@@ -4,6 +4,8 @@ import {
   beatsToTicks,
   timeSignature,
   writtenOctave,
+  writtenShift,
+  type NoteMarks,
   type Key,
   type Meter,
   type Tick,
@@ -72,6 +74,7 @@ function barChords(
       tiedFrom,
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
+      ...(n.marks ? { marks: n.marks } : {}),
     }
     const id = `${n.hand} ${start} ${stop}`
     const group = groups.get(id)
@@ -101,6 +104,29 @@ function rests(span: Span, bar: Bar, grid: VoiceGrid, hidden: boolean): RestEven
   }))
 }
 
+/**
+ * A written piece's marks from its notes': all but a slur's end where a note starts, the slur's end
+ * where one ends, its octave line on every piece; none where no note has a mark.
+ */
+function pieceMarks(notes: readonly BarNote[], first: boolean, last: boolean): NoteMarks | null {
+  const marks: { -readonly [K in keyof NoteMarks]: NoteMarks[K] } = {}
+  for (const n of notes) {
+    if (!n.marks) continue
+    const { slurEnd, octave, articulations, ...rest } = n.marks
+    if (octave) marks.octave ??= octave
+    if (first && !n.tiedFrom) {
+      for (const [key, value] of Object.entries(rest)) {
+        const field = key as keyof typeof rest
+        if (marks[field] === undefined) Object.assign(marks, { [field]: value })
+      }
+      if (articulations)
+        marks.articulations = [...new Set([...(marks.articulations ?? []), ...articulations])]
+    }
+    if (slurEnd && last && !n.tiedTo) marks.slurEnd = true
+  }
+  return Object.keys(marks).length > 0 ? marks : null
+}
+
 /** A voice's chords as values end to end: gaps as rests, a chord as tied pieces (spec §2.4 steps 4–5). */
 function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
   const grid = voiceGrid(voice.chords, bar.meter)
@@ -114,14 +140,16 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
     const pieces = spellSpan({ start, end }, { meter: bar.meter, barTicks: bar.ticks, grid })
     pieces.forEach((piece, i) => {
       const last = i === pieces.length - 1
+      const marks = pieceMarks(chord.notes, i === 0, last)
       events.push({
         kind: 'notes',
         tick: bar.start + piece.tick,
         duration: piece.duration,
+        ...(marks ? { marks } : {}),
         notes: chord.notes.map((n) => ({
           midi: n.midi,
           spelled: n.spelled,
-          octave: writtenOctave(n.midi, n.spelled),
+          octave: writtenOctave(n.midi, n.spelled) + writtenShift(n.marks) / 12,
           tie: !last || n.tiedTo,
           continued: i > 0 || n.tiedFrom,
           ...(n.finger && i === 0 && !n.tiedFrom ? { finger: n.finger } : {}),

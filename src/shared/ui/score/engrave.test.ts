@@ -87,6 +87,40 @@ describe('engrave', () => {
     expect(changed.onsets[0]?.x).toBe(opening.onsets[0]?.x)
   })
 
+  it('draws a slur, a hairpin and an 8va line across the notes they span', () => {
+    const beat = TICKS_PER_BEAT
+    const line = (marked: boolean) =>
+      notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [{ startTick: 0, beats: 4 }],
+        notes: [0, 1, 2, 3].map((k) =>
+          n(72, 'C', k * beat, beat, {
+            ...(marked
+              ? {
+                  marks: {
+                    octave: '8va' as const,
+                    ...(k === 0 ? { slurStart: true as const, hairpin: 'cresc' as const } : {}),
+                    ...(k === 3 ? { slurEnd: true as const, dynamic: 'f' as const } : {}),
+                  },
+                }
+              : {}),
+          }),
+        ),
+        chords: [],
+      })
+    const options = { scale: 1, fingers: false, names: false }
+    const plainHost = document.createElement('div')
+    const markedHost = document.createElement('div')
+    engrave(line(false), plainHost, options)
+    engrave(line(true), markedHost, options)
+    expect(markedHost.textContent).toContain('va')
+    expect(markedHost.textContent).toContain('f')
+    expect(markedHost.querySelectorAll('path').length).toBeGreaterThan(
+      plainHost.querySelectorAll('path').length + 1,
+    )
+  })
+
   it('prints a new key signature, cancelling the old, where a bar changes key', () => {
     const bar = 4 * TICKS_PER_BEAT
     const twoBars = (key?: Key) =>
