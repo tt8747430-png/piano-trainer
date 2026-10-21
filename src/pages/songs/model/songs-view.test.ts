@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { pieceStage } from '@/entities/course'
 import { COLLECTIONS } from '@/entities/piece'
-import { songsView } from './songs-view'
+import { songsView, stagesIn } from './songs-view'
 
 const ids = (groups: ReturnType<typeof songsView>) =>
   groups.flatMap((g) => g.entries.map((e) => e.id))
@@ -37,13 +37,22 @@ describe('songsView', () => {
     expect(playable).toHaveLength(every.filter((entry) => entry.kind !== 'listing').length)
   })
 
-  it('keeps the songs of one level, as their courses place them (ADR 0005)', () => {
+  it('keeps the songs of one stage, as their courses place them (ADR 0005)', () => {
     const every = songsView(COLLECTIONS, ALL).flatMap((g) => g.entries)
-    for (const stage of ['beginner', 'intermediate'] as const) {
+    for (const stage of stagesIn(COLLECTIONS, ALL)) {
       const kept = songsView(COLLECTIONS, { ...ALL, stage }).flatMap((g) => g.entries)
       expect(kept.length).toBeGreaterThan(0)
       expect(kept.every((entry) => pieceStage(entry.id) === stage)).toBe(true)
       expect(kept).toHaveLength(every.filter((entry) => pieceStage(entry.id) === stage).length)
     }
+  })
+
+  it('offers only the stages the shelves shown hold, in order, whatever stage is chosen', () => {
+    const all = stagesIn(COLLECTIONS, ALL)
+    expect(all.length).toBeGreaterThan(0)
+    expect(all).not.toContain('professional')
+    expect(stagesIn(COLLECTIONS, { ...ALL, stage: 'beginner' })).toEqual(all)
+    // A shelf whose songs no course places offers none.
+    expect(stagesIn([{ id: 'none', entries: [] }], ALL)).toEqual([])
   })
 })

@@ -1,5 +1,6 @@
 import { pieceStage } from '@/entities/course'
 import type { Entry } from '@/entities/piece'
+import { STAGES, type Stage } from '@/entities/step'
 import { matchesQuery } from '@/shared/lib'
 import type { SongsFilter } from './songs-filter'
 
@@ -26,4 +27,20 @@ export function songsView<
       ),
     }))
     .filter((group) => group.entries.length > 0)
+}
+
+/**
+ * The stages Songs offers: those the songs of the shelves shown hold (search and With chords
+ * applied, the stage chosen not), in order. A choice that would show nothing is never offered.
+ */
+export function stagesIn(
+  shelves: readonly { readonly id: string; readonly entries: readonly Entry[] }[],
+  filter: SongsFilter,
+): Stage[] {
+  const held = new Set(
+    songsView(shelves, { ...filter, stage: 'any' }).flatMap((group) =>
+      group.entries.map((entry) => pieceStage(entry.id)),
+    ),
+  )
+  return STAGES.filter((stage) => held.has(stage))
 }

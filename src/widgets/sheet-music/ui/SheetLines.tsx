@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { PAGE, paginate, useElementSize, useScrollMotion } from '@/shared/lib'
+import { longestLine, PAGE, paginate, useElementSize, useScrollMotion } from '@/shared/lib'
 import type { Score, StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
@@ -60,7 +60,7 @@ export function SheetLines({
   const { width } = useElementSize(box)
   const lines = useMemo(() => scoreLines(score, performance), [score, performance])
   // Each line runs to its bars' share of the longest, so bars line up down the page as a chart's do.
-  const longest = Math.max(1, ...lines.map((each) => each.score.measures.length))
+  const { shareOf } = longestLine(lines.map((each) => each.score.measures.length))
   const paper = Math.min(width, PAGE.width)
   const scale = pages ? paper / PAGE.width : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
   const margin = pages ? PAGE.margin * scale : 0
@@ -95,7 +95,7 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         fill={inner > 0 ? inner : undefined}
-        share={each.score.measures.length / longest}
+        share={shareOf(each.score.measures.length)}
       >
         {(layout) => (
           <SheetOverlay

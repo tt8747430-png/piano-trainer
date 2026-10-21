@@ -19,25 +19,25 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/primitives/tabs'
 import { PieceList } from '@/widgets/piece-list'
 import type { SongsFilter, SongsShelf } from '../model/songs-filter'
-import { songsView } from '../model/songs-view'
+import { songsView, stagesIn } from '../model/songs-view'
 import { NewSongSheet } from './NewSongSheet'
 
 /**
  * Songs: the collections as tabs in its bar (the learner's own songs first, All before them), a
- * search, Level (a song's course's, ADR 0005) and With chords (no song whose chart is still to come),
+ * search, Stage (a song's course's, ADR 0005; only the stages its shelves hold) and With chords (no song whose chart is still to come),
  * and the songs as cards in as many
  * columns as the width holds, under their collection while All shows; New song floats.
  */
 export function SongsPage() {
   const { t } = useTranslation('songs')
-  const { t: words } = useTranslation('common')
+  const { t: common } = useTranslation('common')
   const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
   const query = useDeferredValue(search.q)
   const set = useViewChange<SongsFilter>()
-  // No search at all: the route fills its defaults.
-  const clear = () => void navigate({ search: {}, replace: true })
+  // No search, stage or With chords: the route fills its defaults; the shelf chosen stays.
+  const clear = () => void navigate({ search: { collection: search.collection }, replace: true })
   const pieces = useRepertoire()
   // The learner's songs first, then the songbooks', each entry in the learner's version.
   const shelves = [
@@ -52,6 +52,10 @@ export function SongsPage() {
   const isShelf = (value: unknown): value is SongsShelf | 'all' =>
     value === 'all' || tabs.some((shelf) => shelf.id === value)
   const searched = search.q.trim()
+  // Only the stages these shelves hold are offered (a choice that shows nothing is not), and the
+  // one chosen, which a link may carry.
+  const held = stagesIn(shelves, { ...search, q: query })
+  const stages = STAGES.filter((stage) => held.includes(stage) || stage === search.stage)
   const groups = songsView(shelves, { ...search, q: query }).map((g) => ({
     id: g.shelf.id,
     heading: search.collection === 'all' ? g.shelf.name : null,
@@ -89,18 +93,18 @@ export function SongsPage() {
             screen={t('title')}
           />
         </div>
-        {/* Its value alone ("Any level", "Beginner"): it names itself, so a phone's row keeps it whole. */}
-        <Dropdown
-          bare
-          label={t('level')}
-          value={search.stage}
-          onChange={(stage) => set({ stage })}
-          options={[
-            { value: 'any', label: t('anyLevel') },
-            ...STAGES.map((stage) => ({ value: stage, label: words(`stage.${stage}`) })),
-          ]}
-          className="max-sm:min-w-0 max-sm:flex-1"
-        />
+        {stages.length > 0 ? (
+          <Dropdown
+            label={t('stage')}
+            value={search.stage}
+            onChange={(stage) => set({ stage })}
+            options={[
+              { value: 'any', label: t('anyStage') },
+              ...stages.map((stage) => ({ value: stage, label: common(`stage.${stage}`) })),
+            ]}
+            className="max-sm:min-w-0 max-sm:flex-1"
+          />
+        ) : null}
         <Toggle
           pressed={search.withChords}
           onPressedChange={(withChords) => set({ withChords })}
@@ -134,7 +138,11 @@ export function SongsPage() {
           <EmptyHeader>
             {/* A long query breaks rather than run off the screen. */}
             <EmptyTitle className="break-words">
-              {searched ? t('emptyQuery', { query: searched }) : t('empty')}
+              {searched
+                ? t('emptyQuery', { query: searched })
+                : search.stage !== 'any'
+                  ? t('emptyStage', { stage: common(`stage.${search.stage}`) })
+                  : t('empty')}
             </EmptyTitle>
           </EmptyHeader>
           <EmptyContent>

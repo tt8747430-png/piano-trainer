@@ -1,9 +1,10 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
-import { PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
+import { longestLine, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
+import { lineFit } from '../model/line-fit'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
 import { CHORD_ROW } from './chord-row'
 import { SheetLine } from './SheetLine'
@@ -11,11 +12,6 @@ import { SheetLine } from './SheetLine'
 /** A heading's height and the room between lines, for dealing lines onto pages. */
 const HEADING = 52
 const LINE_GAP = 8
-
-/** How small a line is drawn to fit a short sheet (a phone on its side): smaller, it is not read. */
-const LEAST_FIT = 0.6
-/** The room a tempo mark over a line's first bar takes above its top staff, in VexFlow units. */
-const TEMPO_ROOM = 32
 
 /** How many bars a line down a screen this wide holds at most, readable: a phone's two, a tablet's three. */
 const mostBars = (width: number) =>
@@ -49,7 +45,7 @@ export function ScoreSheet({
   onWrite,
   onDrag,
 }: {
-  /** The height the sheet is seen in: a line down the screen or across is drawn smaller to fit it whole. */
+  /** The height the sheet is seen in, where it is short: a line down the screen or across is drawn smaller to fit it whole. */
   room?: number | undefined
   /** A note written where a staff was double-clicked: its tick on the piece, its row and key. */
   onWrite?: (tick: Tick, layer: Layer, key: Midi) => void
@@ -83,13 +79,16 @@ export function ScoreSheet({
   const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
   const caretBar = barAt(draft, caret).index
   // Each line runs to its bars' share of the longest, so bars line up down the sheet as a chart's do.
-  const longest = Math.max(1, ...sheets.map((sheet) => sheet.line.bars.length))
-  // A whole system in the height the sheet is seen in (a phone on its side): its section's heading,
-  // its labels' row and a tempo mark over it.
-  const staves = Math.max(1, ...sheets.map((sheet) => sheet.score.staves.length))
-  const system = staffHeight(undefined, staves) + TEMPO_ROOM
+  const { shareOf } = longestLine(sheets.map((sheet) => sheet.line.bars.length))
+  // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit =
-    room && room > 0 ? Math.min(1, Math.max(LEAST_FIT, (room - HEADING - CHORD_ROW) / system)) : 1
+    room && room > 0
+      ? lineFit({
+          room,
+          staves: Math.max(1, ...sheets.map((sheet) => sheet.score.staves.length)),
+          headed: !across,
+        })
+      : 1
 
   const line = (sheet: LineSheet, scale?: number) => (
     <SheetLine
@@ -108,7 +107,7 @@ export function ScoreSheet({
       chordNames={chordNames}
       onSignature={onSignature}
       justify={!across}
-      share={sheet.line.bars.length / longest}
+      share={shareOf(sheet.line.bars.length)}
       onWrite={onWrite}
       onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}

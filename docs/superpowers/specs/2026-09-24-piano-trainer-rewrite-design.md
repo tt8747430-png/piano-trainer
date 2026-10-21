@@ -271,8 +271,8 @@ Elementary, Intermediate, Advanced), an ordered list of `PathStep`s:
 `{ kind: 'piece', pieceId } | { kind: 'chords', family } | { kind: 'scale', scale }`.
 - Steps refer to content and never copy it.
 - A step's id is derived: `piece:bz5`, `chords:sev`, `scale:harmonic`.
-- Pieces carry no `level`. The Songs level filter reads a piece's level through the path selector
-  `levelOf(stepId)`.
+- Pieces carry no `level`. Songs' Stage filter reads a piece's stage through its course, `pieceStage(id)`
+  (ADR 0005, amended).
 - Every piece appears on the path exactly once; listings do not appear.
 - Phase 2 writes a first `path.ts` with everything at level 1. Phase 4 orders and levels it for real.
 

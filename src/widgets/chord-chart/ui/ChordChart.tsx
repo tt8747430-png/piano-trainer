@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { METHODS } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
+import { longestLine } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { chartBar, chartSections, sectionAnchor, type SectionBars } from '../model/chart-sections'
 import { BarButton } from './BarButton'
@@ -51,8 +52,10 @@ export function ChordChart({
 
   const bars = chartSections(performance)
   const sections = headings.map((heading, section) => ({ heading, lines: bars[section] ?? [] }))
-  /** The longest line's bars: every line's bars are as wide as its, so bars line up down the chart. */
-  const longest = Math.max(1, ...sections.flatMap(({ lines }) => lines.map((line) => line.length)))
+  // Every line's bars are as wide as the longest line's, so bars line up down the chart.
+  const { longest, shareOf } = longestLine(
+    sections.flatMap(({ lines }) => lines.map((line) => line.length)),
+  )
 
   return (
     // A bar is at most a few chords wide: on a laptop a line of two bars reads as one glance, not
@@ -89,7 +92,7 @@ export function ChordChart({
                 className="grid border-r border-input break-inside-avoid"
                 style={{
                   gridTemplateColumns: `repeat(${bars.length}, minmax(0, 1fr))`,
-                  width: `${(bars.length / longest) * 100}%`,
+                  width: `${shareOf(bars.length) * 100}%`,
                 }}
               >
                 {bars.map(barOf)}

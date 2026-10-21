@@ -9,9 +9,10 @@ export const songs = {
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
   withChords: 'With chords',
-  // A song's level, as its course places it (ADR 0005).
-  level: 'Level',
-  anyLevel: 'Any level',
+  // A song's stage, as its course places it (ADR 0005).
+  stage: 'Stage',
+  anyStage: 'Any',
+  emptyStage: 'No songs here at the “{{stage}}” stage.',
   clearFilters: 'Clear filters',
   yours: 'Your songs',
   // Your songs' shelf before there are any.

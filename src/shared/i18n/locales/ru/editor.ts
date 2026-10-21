@@ -92,7 +92,6 @@ export const editor: LocaleResources['editor'] = {
     noNotesText: 'Слова и педаль ставятся на ноты: сначала поставьте курсор на ноту.',
   },
   instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
-  // How the score is laid out (ADR 0064).
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',

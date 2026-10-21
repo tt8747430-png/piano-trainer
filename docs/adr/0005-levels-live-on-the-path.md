@@ -27,3 +27,10 @@ The Path holds four levels, each taught in order: level 1 the triads, the major 
 songs on a few triads; level 2 the 6th and 7th chords, the other minors and the blues scales, and songs in minor or
 with a dominant 7th; level 3 the 9ths, the modes and songs with slash chords; level 4 the altered chords, Locrian and
 songs with diminished passing chords and 9ths. A test requires every level to hold a step.
+
+## Amendment (2026-10-21): Songs filters by a course's stage
+
+The Path gave way to the Courses (ADR 0053): a song's level is now its course's Stage (`pieceStage`), and Songs
+filters by it (`?stage=`), offering only the stages the shelves shown hold. A song in no course (the learner's own,
+a listing, a method book's) has no stage: a stage chosen leaves it out, and where none of a shelf's songs has one,
+Stage is not offered.

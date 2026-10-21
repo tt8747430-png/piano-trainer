@@ -1,6 +1,6 @@
 /**
- * How a score is laid out (ADR 0064): lines down the screen, A4 pages as it will print, or one line
- * across, a panorama. The editor's and the Player's view, held in their URLs.
+ * How a score is laid out (ADR 0064), in the order it is offered: one line across, a panorama; lines
+ * down the screen; or A4 pages as it will print. The editor's and the Player's view, held in their URLs.
  */
 export const SHEET_VIEWS = ['horizontal', 'scroll', 'pages'] as const
 export type SheetView = (typeof SHEET_VIEWS)[number]

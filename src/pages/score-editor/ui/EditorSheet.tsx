@@ -13,7 +13,7 @@ const HEARD = { duration: 0.35, velocity: 0.15 } as const
  * The sheet the editor writes on: the caret where the next note or chord goes; a double click on a
  * staff writes the note there, and a note dragged up or down moves by the key's notes, heard as it goes.
  */
-export function EditorSheet({ room }: { room?: number }) {
+export function EditorSheet({ room }: { room?: number | undefined }) {
   const {
     store,
     actions: { dispatch },

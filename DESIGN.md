@@ -477,9 +477,9 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Level (a
-  pop-up showing its value alone: Any level, or a stage) and With chords (a labelled toggle), under the search on a
-  phone and beside it from 640px; and the songs as row cards in a grid.
+- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
+  pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
+  search on a phone and beside it from 640px; and the songs as row cards in a grid.
 - **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
   alone on a phone), the keyboard pinned, then
   Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.

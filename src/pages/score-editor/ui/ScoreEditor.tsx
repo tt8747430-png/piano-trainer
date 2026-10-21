@@ -37,7 +37,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const paletteSide = useSettings(selectPaletteSide)
   const [palette, setPalette] = useState(true)
-  // The sheet's height: a line is drawn to fit it whole, both staves in sight on a phone on its side.
+  // The sheet's height on a phone on its side, where it is short: a line is drawn to fit it whole.
   const sheet = useRef<HTMLDivElement>(null)
   const { height: room } = useElementSize(sheet)
   return (
@@ -52,7 +52,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
           <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
         <div ref={sheet} data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
-          <EditorSheet room={room} />
+          <EditorSheet room={onSide ? room : undefined} />
           {/* Room past the last line, so it scrolls clear of the buttons floating over the corners. */}
           <div aria-hidden className="h-14" />
         </div>
