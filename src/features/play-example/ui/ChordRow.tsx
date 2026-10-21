@@ -4,7 +4,7 @@ import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/li
 import { notate } from '@/shared/lib/notation'
 import { walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { useElementSize } from '@/shared/lib'
+import { useFitZoom } from '@/shared/lib'
 import {
   FloatingActions,
   PlayFab,
@@ -111,9 +111,7 @@ export function RowStaff() {
   }, [chords, voiced])
   const room = useRef<HTMLDivElement>(null)
   const first = useRef<HTMLDivElement>(null)
-  const { width: roomWidth } = useElementSize(room)
-  const { width: lineWidth } = useElementSize(first)
-  const zoom = roomWidth > 0 && lineWidth > roomWidth ? roomWidth / lineWidth : 1
+  const zoom = useFitZoom(room, first)
   return (
     <div
       ref={room}

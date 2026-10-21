@@ -590,7 +590,7 @@ function tagNotes(host: HTMLDivElement, voice: BuiltVoice, staff: StaffId) {
 }
 
 /** A line shorter than this share of the width it may fill is left as it is: a lone bar is not a page's width. */
-const LEAST_SPREAD = 0.4
+const LEAST_SPREAD = 0.3
 
 /**
  * The measures' notes given room alike, each by its share, so the line runs to `width` (VexFlow
