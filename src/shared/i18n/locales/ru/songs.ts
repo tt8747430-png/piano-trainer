@@ -26,6 +26,7 @@ export const songs: LocaleResources['songs'] = {
   stage: 'Этап',
   anyStage: 'Любой',
   emptyStage: 'Здесь нет песен этапа «{{stage}}».',
+  emptyQueryStage: 'По запросу «{{query}}» на этапе «{{stage}}» ничего не найдено.',
   clearFilters: 'Сбросить фильтры',
   shared: {
     title: 'Песня по ссылке',

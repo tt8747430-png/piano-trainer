@@ -54,7 +54,7 @@ export function SongsPage() {
   const searched = search.q.trim()
   // Only the stages these shelves hold are offered (a choice that shows nothing is not), and the
   // one chosen, which a link may carry.
-  const held = stagesIn(shelves, { ...search, q: query })
+  const held = stagesIn(shelves, search)
   const stages = STAGES.filter((stage) => held.includes(stage) || stage === search.stage)
   const groups = songsView(shelves, { ...search, q: query }).map((g) => ({
     id: g.shelf.id,
@@ -83,7 +83,8 @@ export function SongsPage() {
           </TabsList>
         }
       />
-      {/* The search its own row on a phone, the filters under it; one row from a tablet. */}
+      {/* The search its own row on a phone, the filters under it, each whole: where both do not fit
+          (a chosen stage in Russian at 360px) they wrap, never cut. One row from a tablet. */}
       <div className="flex flex-wrap items-center gap-2 lg:max-w-3xl">
         <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
           <SearchField
@@ -102,13 +103,13 @@ export function SongsPage() {
               { value: 'any', label: t('anyStage') },
               ...stages.map((stage) => ({ value: stage, label: common(`stage.${stage}`) })),
             ]}
-            className="max-sm:min-w-0 max-sm:flex-1"
+            className="flex-auto sm:flex-none"
           />
         ) : null}
         <Toggle
           pressed={search.withChords}
           onPressedChange={(withChords) => set({ withChords })}
-          className="max-sm:flex-1"
+          className="flex-auto sm:flex-none"
         >
           <ListMusic aria-hidden />
           {t('withChords')}
@@ -138,11 +139,16 @@ export function SongsPage() {
           <EmptyHeader>
             {/* A long query breaks rather than run off the screen. */}
             <EmptyTitle className="break-words">
-              {searched
-                ? t('emptyQuery', { query: searched })
-                : search.stage !== 'any'
-                  ? t('emptyStage', { stage: common(`stage.${search.stage}`) })
-                  : t('empty')}
+              {search.stage === 'any'
+                ? searched
+                  ? t('emptyQuery', { query: searched })
+                  : t('empty')
+                : searched
+                  ? t('emptyQueryStage', {
+                      query: searched,
+                      stage: common(`stage.${search.stage}`),
+                    })
+                  : t('emptyStage', { stage: common(`stage.${search.stage}`) })}
             </EmptyTitle>
           </EmptyHeader>
           <EmptyContent>

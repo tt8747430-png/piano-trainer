@@ -30,15 +30,15 @@ export function songsView<
 }
 
 /**
- * The stages Songs offers: those the songs of the shelves shown hold (search and With chords
- * applied, the stage chosen not), in order. A choice that would show nothing is never offered.
+ * The stages Songs offers: those the songs of the shelves shown hold, in order, whatever is searched
+ * or chosen (so the choice stays put while a search is typed). A stage no song holds is never offered.
  */
 export function stagesIn(
   shelves: readonly { readonly id: string; readonly entries: readonly Entry[] }[],
   filter: SongsFilter,
 ): Stage[] {
   const held = new Set(
-    songsView(shelves, { ...filter, stage: 'any' }).flatMap((group) =>
+    songsView(shelves, { ...filter, q: '', withChords: false, stage: 'any' }).flatMap((group) =>
       group.entries.map((entry) => pieceStage(entry.id)),
     ),
   )

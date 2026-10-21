@@ -47,11 +47,15 @@ describe('songsView', () => {
     }
   })
 
-  it('offers only the stages the shelves shown hold, in order, whatever stage is chosen', () => {
+  it('offers only the stages the shelves shown hold, whatever is searched or chosen', () => {
     const all = stagesIn(COLLECTIONS, ALL)
     expect(all.length).toBeGreaterThan(0)
-    expect(all).not.toContain('professional')
-    expect(stagesIn(COLLECTIONS, { ...ALL, stage: 'beginner' })).toEqual(all)
+    // Each one offered keeps a song.
+    for (const stage of all)
+      expect(songsView(COLLECTIONS, { ...ALL, stage }).length).toBeGreaterThan(0)
+    expect(
+      stagesIn(COLLECTIONS, { ...ALL, stage: 'beginner', q: 'zzzz', withChords: true }),
+    ).toEqual(all)
     // A shelf whose songs no course places offers none.
     expect(stagesIn([{ id: 'none', entries: [] }], ALL)).toEqual([])
   })

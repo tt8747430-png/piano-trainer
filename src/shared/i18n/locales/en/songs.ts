@@ -13,6 +13,7 @@ export const songs = {
   stage: 'Stage',
   anyStage: 'Any',
   emptyStage: 'No songs here at the “{{stage}}” stage.',
+  emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” stage.',
   clearFilters: 'Clear filters',
   yours: 'Your songs',
   // Your songs' shelf before there are any.

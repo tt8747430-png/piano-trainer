@@ -4,13 +4,12 @@ import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-e
 import { longestLine, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
-import { lineFit } from '../model/line-fit'
+import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
 import { CHORD_ROW } from './chord-row'
 import { SheetLine } from './SheetLine'
 
-/** A heading's height and the room between lines, for dealing lines onto pages. */
-const HEADING = 52
+/** The room between lines, for dealing lines onto pages. */
 const LINE_GAP = 8
 
 /** How many bars a line down a screen this wide holds at most, readable: a phone's two, a tablet's three. */

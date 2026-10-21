@@ -182,6 +182,14 @@ describe('Songs: your own', () => {
     cleanup()
     await renderApp('/songs?collection=hymns&stage=advanced')
     expect(await screen.findByText('No songs here at the “Advanced” stage.')).toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?q=zzzz&stage=beginner')
+    expect(
+      await screen.findByText('No songs match “zzzz” at the “Beginner” stage.'),
+    ).toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?collection=hymns&stage=advanced')
+    await screen.findByText('No songs here at the “Advanced” stage.')
     // Clear filters keeps the shelf.
     await userEvent.setup().click(screen.getByRole('button', { name: 'Clear filters' }))
     expect(await screen.findByRole('tab', { name: 'Hymns' })).toHaveAttribute(

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { longestLine } from './line-shares'
+import { longestLine } from './longest-line'
 
 describe('longestLine', () => {
   it('gives each line its bars’ share of the longest line', () => {
