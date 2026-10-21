@@ -453,6 +453,26 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
+  it('moves its palette beside the sheet to the left and back, saved', async () => {
+    const user = userEvent.setup()
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media === LANDSCAPE_PHONE,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Move the palette to the left' }))
+    expect(settingsStore.getState().paletteSide).toBe('left')
+    expect(document.querySelector('.editor-screen')).toHaveAttribute('data-side', 'left')
+    await user.click(screen.getByRole('button', { name: 'Move the palette to the right' }))
+    expect(settingsStore.getState().paletteSide).toBe('right')
+  })
+
   it('keeps Undo, Redo, Play and Record in the bar, and Delete at the end of the notes’ keys', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const bar = await screen.findByRole('toolbar', { name: 'Editing' })

@@ -8,6 +8,7 @@ export const editor = {
   dock: 'Editing',
   // The palette of tools (a notation app's): its actions on top, its kinds of tools as tabs.
   palette: {
+    move: { left: 'Move the palette to the left', right: 'Move the palette to the right' },
     label: 'Tools',
     open: 'Show the tools',
     close: 'Hide the tools',

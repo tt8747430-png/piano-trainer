@@ -1,6 +1,15 @@
-import { ChevronDown, Keyboard, PanelRightClose } from 'lucide-react'
+import {
+  ArrowLeftToLine,
+  ArrowRightToLine,
+  ChevronDown,
+  Keyboard,
+  PanelLeftClose,
+  PanelRightClose,
+} from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { selectPaletteSide, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setPaletteSide } from '@/features/set-preference'
 import { ToolPalette, ToolPalettePanel, ToolPaletteTab, ToolPaletteTabs } from '@/shared/ui'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
@@ -66,18 +75,43 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
     setFocusField(true)
   }
   const recording = takes.stage !== 'idle'
+  const settings = useSettingsStoreApi()
+  const paletteSide = useSettings(selectPaletteSide)
   const tab = shownTab(chosen, layer)
+  const left = paletteSide === 'left'
+  const other = left ? 'right' : 'left'
   const fold = (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label={t('palette.close')}
-      title={t('palette.close')}
-      className="size-9 shrink-0 rounded-xl"
-      onClick={onFold}
-    >
-      {side ? <PanelRightClose aria-hidden /> : <ChevronDown aria-hidden />}
-    </Button>
+    <>
+      {side ? (
+        // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t(`palette.move.${other}`)}
+          title={t(`palette.move.${other}`)}
+          className="size-9 shrink-0 rounded-xl"
+          onClick={() => setPaletteSide(settings, other)}
+        >
+          {left ? <ArrowRightToLine aria-hidden /> : <ArrowLeftToLine aria-hidden />}
+        </Button>
+      ) : null}
+      <Button
+        variant="ghost"
+        size="icon"
+        aria-label={t('palette.close')}
+        title={t('palette.close')}
+        className="size-9 shrink-0 rounded-xl"
+        onClick={onFold}
+      >
+        {!side ? (
+          <ChevronDown aria-hidden />
+        ) : left ? (
+          <PanelLeftClose aria-hidden />
+        ) : (
+          <PanelRightClose aria-hidden />
+        )}
+      </Button>
+    </>
   )
   const keys = cn(
     'content-start overflow-y-auto overscroll-contain',
