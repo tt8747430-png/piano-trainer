@@ -1,9 +1,8 @@
-import { Music, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
 import { MidiButton } from '@/features/connect-midi'
-import { EXTRA_VOICES } from '@/shared/lib/notation'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
 import {
@@ -14,12 +13,11 @@ import {
   SheetContent,
   SheetTrigger,
   SheetLayoutField,
-  SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { InstrumentChoice } from './InstrumentChoice'
+import { StaffList } from './StaffList'
 import { SongTitleField } from './SongTitleField'
 
 /** The tempo, moved freely and saved when let go: it starts from the piece's each time the sheet opens. */
@@ -59,16 +57,14 @@ function Part({ title, children }: { title: string; children: ReactNode }) {
 /**
  * The editor's settings, one sheet behind the gear (spec §6.4, ADR 0065): the song (an own song's
  * title, the key, the tempo, the meter of its kind); what the score shows and how (the tune's staff,
- * the chord names, the layout down the screen, on A4 pages or as one line, ADR 0064); what the tune
- * and each voice are played on (ADR 0070); and the MIDI keyboard. Opened from the bar, or from the sheet's clef, key and time signature.
+ * the layout down the screen, on A4 pages or as one line, ADR 0064); the staves, each shown or hidden
+ * and a part removed, with what it is played on (ADR 0070, 0072); and the MIDI keyboard. Opened from the bar, or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
   const { t } = useTranslation('editor')
   const { actions, meta, takes, view } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
   const meter = useEditorState((state) => state.draft.meter)
-  const melodyStaff = useEditorState((state) => state.draft.melodyStaff)
-  const voices = useEditorState((state) => state.draft.voices.length)
   return (
     <Sheet open={view.settingsOpen} onOpenChange={view.openSettings}>
       <SheetTrigger
@@ -105,40 +101,9 @@ export function PieceSettings() {
           </Part>
           <Part title={t('viewMenu.label')}>
             <SheetLayoutField value={view.layout} onChange={view.setLayout} />
-            <div className="flex flex-col">
-              <SwitchRow
-                icon={<Music />}
-                label={t('viewMenu.melody')}
-                detail={t('viewMenu.melodyDetail')}
-                checked={melodyStaff}
-                onCheckedChange={(on) => actions.dispatch({ type: 'melodyStaff', on })}
-              />
-              {EXTRA_VOICES.slice(0, voices).map((voice) => (
-                <SwitchRow
-                  key={voice}
-                  icon={<Music />}
-                  label={t(`layers.${voice}`)}
-                  detail={t('viewMenu.voiceDetail')}
-                  checked
-                  onCheckedChange={() => actions.dispatch({ type: 'voiceStaff', voice, on: false })}
-                />
-              ))}
-              <SwitchRow
-                icon={<span className="font-display text-base font-semibold">C⁷</span>}
-                label={t('chordNames')}
-                checked={view.chordNames}
-                onCheckedChange={view.showChordNames}
-                className="border-b-0"
-              />
-            </div>
           </Part>
-          <Part title={t('instruments.label')}>
-            <div className="grid-fields">
-              {melodyStaff ? <InstrumentChoice part={0} label={t('layers.melody')} /> : null}
-              {EXTRA_VOICES.slice(0, voices).map((voice, i) => (
-                <InstrumentChoice key={voice} part={i + 1} label={t(`layers.${voice}`)} />
-              ))}
-            </div>
+          <Part title={t('staves.label')}>
+            <StaffList />
           </Part>
           <Part title={t('viewMenu.midi')}>
             <div className="flex items-center justify-between gap-2">

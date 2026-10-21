@@ -29,6 +29,28 @@ export const songs = {
     make: 'Make',
     makeAndRecord: 'Record',
   },
+  // What a new song's score holds, its own sheet (ADR 0072).
+  setup: {
+    title: 'Score',
+    customize: 'Customize',
+    done: 'Done',
+    templates: 'Start from',
+    template: { chordsAndPiano: 'Chords and piano', leadSheet: 'Lead sheet', piano: 'Piano' },
+    templateDetail: {
+      chordsAndPiano: 'Chord names over the piano',
+      leadSheet: 'Chord names, the melody and the piano',
+      piano: 'The piano alone',
+    },
+    rows: 'Rows',
+    chordNames: 'Chord names',
+    melody: 'Melody',
+    melodyDetail: 'A staff for the tune over the piano',
+    piano: 'Piano',
+    parts: 'More parts',
+    part: 'Part {{n}}',
+    addPart: 'Add a part',
+    removePart: 'Remove {{part}}',
+  },
   // A song someone shared as a link.
   shared: {
     title: 'A shared song',

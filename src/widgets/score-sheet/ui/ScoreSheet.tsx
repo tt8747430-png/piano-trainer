@@ -117,7 +117,9 @@ export function ScoreSheet({
     const paper = Math.min(width, PAGE.width)
     const scale = paper > 0 ? paper / PAGE.width : 1
     const margin = PAGE.margin * scale
-    const count = draft.melodyStaff ? 3 : 2
+    // The staves a line writes: the shown sung ones over the piano's two.
+    const count =
+      (sheets[0]?.music.voiceStaves?.length ?? 0) + (sheets[0]?.music.melodyStaff ? 3 : 2)
     const lineHeight = CHORD_ROW + staffHeight(undefined, count) * scale + LINE_GAP
     const items: PageItem[] = [
       ...(title ? [{ kind: 'title' } as const] : []),

@@ -40,3 +40,11 @@ export function writeMelody(melody: Melody, bars: readonly BarSpan[]): string | 
   }
   return tokens.join(' ')
 }
+
+/**
+ * A staff the score keeps with nothing written on it yet (ADR 0072): its first bar's rest, so the
+ * staff is saved and read back as there.
+ */
+export function emptyLine(bars: readonly BarSpan[]): string {
+  return `r/${beatsText(bars[0]?.ticks ?? 0)}`
+}

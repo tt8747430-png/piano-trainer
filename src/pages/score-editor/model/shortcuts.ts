@@ -90,15 +90,22 @@ export function staffNear(
     chordNames,
     melodyStaff,
     voices = 0,
-  }: { chordNames: boolean; melodyStaff: boolean; voices?: number },
+    hidden = [],
+  }: {
+    chordNames: boolean
+    melodyStaff: boolean
+    voices?: number
+    /** The rows out of sight (ADR 0072): the caret passes them by. */
+    hidden?: readonly string[]
+  },
 ): Layer {
   const rows: Layer[] = [
     ...(chordNames ? (['chords'] as const) : []),
     ...(melodyStaff ? (['melody'] as const) : []),
     ...EXTRA_VOICES.slice(0, voices),
-    'rh',
-    'lh',
-  ]
+    'rh' as const,
+    'lh' as const,
+  ].filter((row) => !hidden.includes(row))
   const at = rows.indexOf(layer)
   return rows[Math.max(0, Math.min(rows.length - 1, at + direction))] ?? layer
 }

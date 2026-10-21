@@ -1,5 +1,6 @@
 import type { PatternId } from '@/entities/pattern'
 import {
+  emptyLine,
   HAND_IDS,
   keyText,
   readMusic,
@@ -7,6 +8,7 @@ import {
   writeHand,
   writeMelody,
   type HandId,
+  type HiddenRow,
   type PieceMusic,
   type Section,
 } from '@/entities/piece'
@@ -86,8 +88,10 @@ export interface Draft {
   readonly tempo: number
   readonly pattern: PatternId
   readonly sections: readonly DraftSection[]
-  /** Whether the tune has its staff over the grand staff (ADR 0064): added, or written. */
+  /** Whether the score has the tune's staff over the grand staff (ADR 0064): kept though empty (ADR 0072). */
   readonly melodyStaff: boolean
+  /** The rows left out of sight, their music kept (ADR 0072). */
+  readonly hidden: readonly HiddenRow[]
   /** One line: no note starts under another. */
   readonly melody: readonly DraftNote[]
   /** The more voices' notes, the second voice's first, each staff there once added (ADR 0066). */
@@ -142,7 +146,9 @@ export function readDraft(music: PieceMusic): Draft {
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
-    melodyStaff: (melody ?? []).length > 0,
+    // The tune's staff is there wherever the music writes a line for it, rests alone included.
+    melodyStaff: music.melody !== undefined,
+    hidden: music.hidden ?? [],
     melody: melody ?? [],
     voices: voices.slice(0, EXTRA_VOICES.length).map((voice) => [...voice]),
     instruments: Array.from(
@@ -185,17 +191,19 @@ function handBars(
 export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
   const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
-  const melody = writeMelody(draft.melody, timeline)
-  // A voice with no notes is not written: its staff goes with it, as the tune's does, and its instrument.
-  const written = draft.voices.flatMap((voice, i) => {
-    const text = writeMelody(voice, timeline)
-    return text === undefined ? [] : [{ text, instrument: draft.instruments[i + 1] }]
-  })
-  const voices = written.map(({ text }) => text)
+  // A staff the score has is written though empty, as a rest, so it stays (ADR 0072).
+  const line = (notes: readonly DraftNote[]) => writeMelody(notes, timeline) ?? emptyLine(timeline)
+  const melody = draft.melodyStaff ? line(draft.melody) : undefined
+  const voices = draft.voices.map(line)
   // No tune, no tune's instrument.
   const tuneInstrument = melody === undefined ? DEFAULT_INSTRUMENT : draft.instruments[0]
-  const instruments = [tuneInstrument, ...written.map(({ instrument }) => instrument)].map(
+  const instruments = [tuneInstrument, ...draft.voices.map((_, i) => draft.instruments[i + 1])].map(
     (instrument) => instrument ?? DEFAULT_INSTRUMENT,
+  )
+  const hidden = draft.hidden.filter(
+    (row) =>
+      row === 'chords' ||
+      (row === 'melody' ? draft.melodyStaff : voiceIndex(row) < draft.voices.length),
   )
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
@@ -215,6 +223,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     ...(melody === undefined ? {} : { melody }),
     ...(voices.length > 0 ? { voices } : {}),
     ...(instruments.some((instrument) => instrument !== DEFAULT_INSTRUMENT) ? { instruments } : {}),
+    ...(hidden.length > 0 ? { hidden } : {}),
     ...(rh === undefined && lh === undefined
       ? {}
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),

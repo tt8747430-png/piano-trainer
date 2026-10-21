@@ -219,6 +219,7 @@ export function AddMenu() {
       <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
     </Tile>
   )
+  const tuneShown = draft.melodyStaff && !draft.hidden.includes('melody')
   const { meters, lengths } = timeTiles(draft.meter)
   const panels: Readonly<Record<AddTab, ReactNode>> = {
     bars: (
@@ -353,8 +354,15 @@ export function AddMenu() {
         <Tiles heading={t('add.staves')}>
           <Tile
             label={t('viewMenu.melody')}
-            pressed={draft.melodyStaff}
-            onClick={done(() => actions.dispatch({ type: 'melodyStaff', on: !draft.melodyStaff }))}
+            pressed={tuneShown}
+            // Adds the tune's staff, or brings a hidden one back; taking it away is the settings' Remove.
+            onClick={done(() =>
+              actions.dispatch(
+                draft.melodyStaff
+                  ? { type: 'hide', row: 'melody', hidden: false }
+                  : { type: 'melodyStaff', on: true },
+              ),
+            )}
           >
             <span className="font-music text-4xl leading-none">𝄞</span>
           </Tile>

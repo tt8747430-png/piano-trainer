@@ -109,6 +109,29 @@ describe('Songs: your own', () => {
     ])
   })
 
+  it('makes a song with the score customized in its own sheet: a lead sheet and a cello', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
+    expect(screen.getByText('Chord names · Piano')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Customize' }))
+    const score = await screen.findByRole('dialog', { name: 'Score' })
+    await user.click(within(score).getByRole('radio', { name: /^Lead sheet/ }))
+    await user.click(within(score).getByRole('button', { name: 'Add a part' }))
+    await user.click(within(score).getByRole('combobox', { name: 'Part 1' }))
+    await user.click(await screen.findByRole('option', { name: 'Cello' }))
+    await user.click(within(score).getByRole('button', { name: 'Done' }))
+    expect(await screen.findByText('Chord names · Melody · Cello · Piano')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Make' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(piecesStore.getState().songs[0]).toMatchObject({
+      melody: 'r/4',
+      voices: ['r/4'],
+      instruments: ['voice', 'cello'],
+    })
+  })
+
   it('lists your songs first, and chooses them from their tab', async () => {
     const { router } = await renderApp('/songs', { storage: saved({ songs: [SONG], nextSong: 2 }) })
     const headings = await screen.findAllByRole('heading', { level: 2 })

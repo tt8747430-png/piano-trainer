@@ -110,9 +110,16 @@ export interface ChartPiece extends PieceCommon {
    * where none is given.
    */
   readonly instruments?: readonly Instrument[]
+  /** The rows the score leaves out of sight, their music kept (ADR 0072): hidden, not removed. */
+  readonly hidden?: readonly HiddenRow[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
 }
+
+/** The rows a score may hide: the chord names, the tune's staff and each more voice's (ADR 0072). */
+export const HIDDEN_ROWS = ['chords', 'melody', 'voice2', 'voice3', 'voice4'] as const
+export type HiddenRow = (typeof HIDDEN_ROWS)[number]
+export const isHiddenRow = isOneOf(HIDDEN_ROWS)
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the

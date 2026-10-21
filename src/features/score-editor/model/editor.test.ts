@@ -1,4 +1,4 @@
-import { musicToSave } from './draft'
+import { musicToSave, readDraft } from './draft'
 import { describe, expect, it, vi } from 'vitest'
 import { chordSymbol, midi, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
 import { ticksOf } from '@/shared/lib/notation'
@@ -261,7 +261,7 @@ describe('the editor', () => {
     expect(gone.layer).toBe('rh')
   })
 
-  it('adds a voice on an instrument, changes the tune’s, and saves only the voices written', () => {
+  it('adds a voice on an instrument, changes the tune’s, and keeps an empty part as a rest', () => {
     const added = run(initialEditor(draftOf({ melody: 'B4/1 | D5/1' })), {
       type: 'voiceStaff',
       voice: 'voice2',
@@ -271,10 +271,24 @@ describe('the editor', () => {
     expect(added.draft.instruments).toEqual(['voice', 'cello'])
     const flute = run(added, { type: 'instrument', part: 0, instrument: 'flute' })
     expect(flute.draft.instruments).toEqual(['flute', 'cello'])
-    // The cello wrote nothing: its staff and instrument are not saved.
-    expect(musicToSave(flute.draft)?.instruments).toEqual(['flute'])
+    // The cello wrote nothing yet: its staff stays, a rest, with its instrument (ADR 0072).
+    expect(musicToSave(flute.draft)).toMatchObject({
+      voices: ['r/4'],
+      instruments: ['flute', 'cello'],
+    })
     const gone = run(flute, { type: 'voiceStaff', voice: 'voice2', on: false })
     expect(gone.draft.instruments).toEqual(['flute'])
+  })
+
+  it('hides a row keeping its notes, saved and read back hidden, and shows it again', () => {
+    const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1' }))
+    const hidden = run({ ...sung, layer: 'melody' }, { type: 'hide', row: 'melody', hidden: true })
+    expect(hidden.draft.melody).toEqual(sung.draft.melody)
+    expect(hidden.layer).toBe('rh')
+    const saved = musicToSave(hidden.draft)
+    expect(saved).toMatchObject({ melody: 'B4/1 D5/1', hidden: ['melody'] })
+    expect(readDraft(saved!).hidden).toEqual(['melody'])
+    expect(run(hidden, { type: 'hide', row: 'melody', hidden: false }).draft.hidden).toEqual([])
   })
 
   it('moves the caret a line on and back, to its line’s start first', () => {

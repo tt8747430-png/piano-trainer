@@ -1,7 +1,7 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { PatternId } from '@/entities/pattern'
 import type { ExtraVoice } from '@/shared/lib/notation'
-import type { SectionKind } from '@/entities/piece'
+import type { HiddenRow, SectionKind } from '@/entities/piece'
 import type {
   Chord,
   Clef,
@@ -100,6 +100,8 @@ export type EditorAction =
       /** What the voice added is played on (ADR 0070): the voice where none. */
       readonly instrument?: Instrument
     }
+  /** A row shown or hidden, its music kept (ADR 0072). */
+  | { readonly type: 'hide'; readonly row: HiddenRow; readonly hidden: boolean }
   /** What a sung part is played on: 0 the tune, then each more voice (ADR 0070). */
   | { readonly type: 'instrument'; readonly part: number; readonly instrument: Instrument }
   | { readonly type: 'shift'; readonly semitones: number }

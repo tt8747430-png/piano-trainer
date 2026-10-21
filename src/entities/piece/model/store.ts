@@ -23,9 +23,11 @@ import {
 } from './own'
 import { parseMelody } from './parse-melody'
 import {
+  HIDDEN_ROWS,
   SECTION_KINDS,
   type ChartPiece,
   type Hands,
+  type HiddenRow,
   type KeyText,
   type PieceId,
   type Section,
@@ -124,6 +126,13 @@ function savedVoices(
     .slice(0, MOST_VOICES)
 }
 
+/** The rows a save hides, those it names once each (ADR 0072). */
+function savedHidden(saved: unknown): { hidden?: HiddenRow[] } {
+  if (!Array.isArray(saved)) return {}
+  const rows = HIDDEN_ROWS.filter((row) => saved.includes(row))
+  return rows.length > 0 ? { hidden: rows } : {}
+}
+
 /** The ticks a piece's chart lasts. */
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
@@ -131,7 +140,7 @@ const chartTicks = (piece: ChartPiece): Tick =>
 /** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, voices, instruments, hands } = saved
+  const { key, meter, tempo, pattern, sections, melody, voices, instruments, hidden, hands } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -165,6 +174,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
       ...piece,
       ...(sung.length > 0 ? { voices: sung.map(({ voice }) => voice) } : {}),
       ...(played.length > 0 && played.every(isInstrument) ? { instruments: played } : {}),
+      ...savedHidden(hidden),
     })
   } catch (error) {
     if (error instanceof ContentError) return null

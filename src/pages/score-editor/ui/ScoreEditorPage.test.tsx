@@ -94,7 +94,7 @@ describe('the score editor', () => {
     ).toBeInTheDocument()
   })
 
-  it('adds the tune’s staff from the view’s menu, and takes it away with its notes', async () => {
+  it('adds the tune’s staff, hides it keeping its notes, and removes it with them', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     act(() => setKeyboard(settingsStore, { typing: true }))
@@ -102,10 +102,21 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/)
     await user.keyboard('a')
     await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1' }))
-    await user.click(
-      within(await openSettings(user)).getByRole('switch', { name: /^Melody staff/ }),
+    const settings = await openSettings(user)
+    await user.click(within(settings).getByRole('button', { name: 'Hide Melody' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1', hidden: ['melody'] }),
     )
+    await user.click(within(settings).getByRole('button', { name: 'Show Melody' }))
+    await user.click(within(settings).getByRole('button', { name: /^Remove Melody/ }))
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
+  })
+
+  it('keeps an empty tune’s staff the song was given', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await addMelodyStaff(user)
+    await waitFor(() => expect(songOf(piecesStore.getState())).toHaveProperty('melody'))
   })
 
   it('writes the note on the line double-clicked, and moves it by the key’s notes as it is dragged', async () => {
@@ -159,10 +170,12 @@ describe('the score editor', () => {
     await toChordRow(user)
     expect(screen.getByRole('status')).toHaveTextContent(/^Chords · /)
     // What the score shows: in the settings, behind the gear.
-    const names = within(await openSettings(user)).getByRole('switch', { name: 'Chord names' })
-    expect(names).toBeChecked()
-    await user.click(names)
-    expect(names).not.toBeChecked()
+    const settings = await openSettings(user)
+    await user.click(within(settings).getByRole('button', { name: 'Hide Chord names' }))
+    expect(within(settings).getByRole('button', { name: 'Show Chord names' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
     await user.keyboard('{Escape}')
     expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · /)
     await toChordRow(user)
@@ -298,7 +311,16 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Voice 2 · Bar 1/)
     await user.keyboard('d')
     await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ voices: ['E4/1'] }))
-    await user.click(within(await openSettings(user)).getByRole('switch', { name: /^Voice 2/ }))
+    const settings = await openSettings(user)
+    // Hidden, its notes stay; removed, they go.
+    await user.click(within(settings).getByRole('button', { name: 'Hide Voice 2' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        voices: ['E4/1'],
+        hidden: ['voice2'],
+      }),
+    )
+    await user.click(within(settings).getByRole('button', { name: /^Remove Voice 2/ }))
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('voices'))
   })
 

@@ -24,12 +24,10 @@ export const editor: LocaleResources['editor'] = {
   },
   view: 'Вид',
   viewMenu: {
-    voiceDetail: 'Голос, который поётся с мелодией; выключение удаляет его ноты',
     label: 'Вид',
     midiDetail: 'Играйте в ноты с MIDI-клавиатуры',
     midi: 'MIDI-клавиатура',
     melody: 'Нотоносец мелодии',
-    melodyDetail: 'Над фортепиано, для мелодии; выключение удаляет её ноты',
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
@@ -92,6 +90,13 @@ export const editor: LocaleResources['editor'] = {
     noNotesText: 'Слова и педаль ставятся на ноты: сначала поставьте курсор на ноту.',
   },
   instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
+  staves: {
+    label: 'Нотоносцы',
+    show: 'Показать: {{name}}',
+    hide: 'Скрыть: {{name}}',
+    remove: 'Удалить «{{name}}» вместе с нотами',
+    addTune: 'Добавить нотоносец мелодии',
+  },
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',

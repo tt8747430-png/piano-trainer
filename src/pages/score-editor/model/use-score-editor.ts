@@ -1,3 +1,4 @@
+import { useStore } from 'zustand'
 import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
@@ -60,7 +61,6 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  const [chordNames, setChordNames] = useState(true)
   // How the score is laid out is what the learner looks at: the URL's.
   const { layout } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const changeView = useViewChange<EditSearch>()
@@ -104,6 +104,8 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
+  // The chord names shown unless the song hides them (ADR 0072).
+  const chordNames = useStore(store, (state) => !state.draft.hidden.includes('chords'))
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
@@ -167,9 +169,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     if (shortcut.type === 'staff') {
       const { layer, draft } = store.getState()
       const next = staffNear(layer, shortcut.direction, {
-        chordNames,
+        chordNames: !draft.hidden.includes('chords'),
         melodyStaff: draft.melodyStaff,
         voices: draft.voices.length,
+        hidden: draft.hidden,
       })
       if (next !== layer) store.dispatch({ type: 'layer', layer: next })
       return
@@ -189,12 +192,15 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     const toTune = () => {
       const { layer, draft } = store.getState()
       if (layer === 'chords')
-        store.dispatch({ type: 'layer', layer: draft.melodyStaff ? 'melody' : 'rh' })
+        store.dispatch({
+          type: 'layer',
+          layer: draft.melodyStaff && !draft.hidden.includes('melody') ? 'melody' : 'rh',
+        })
     }
     toTune()
     return store.subscribe(toTune)
   }, [store, chordNames])
-  const showChordNames = (on: boolean) => setChordNames(on)
+  const showChordNames = (on: boolean) => dispatch({ type: 'hide', row: 'chords', hidden: !on })
 
   return {
     store,

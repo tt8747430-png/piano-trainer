@@ -26,12 +26,10 @@ export const editor = {
   view: 'View',
   // What the score shows and how, from the bar (ADR 0064).
   viewMenu: {
-    voiceDetail: 'A voice sung with the tune; off takes its notes away',
     label: 'View',
     midiDetail: 'Play into the score from a keyboard',
     midi: 'MIDI keyboard',
     melody: 'Melody staff',
-    melodyDetail: 'Over the piano, for the tune; off takes its notes away',
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
@@ -95,6 +93,14 @@ export const editor = {
   },
   // What the tune and each more voice are played on (ADR 0070).
   instruments: { label: 'Instruments', add: 'Add an instrument' },
+  // The score's rows, each shown or hidden with its music kept, a part removed (ADR 0072).
+  staves: {
+    label: 'Staves',
+    show: 'Show {{name}}',
+    hide: 'Hide {{name}}',
+    remove: 'Remove {{name}} and its notes',
+    addTune: 'Add the melody staff',
+  },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
   layers: {
     chords: 'Chords',

@@ -17,12 +17,14 @@ import {
   chordSymbol,
   TICKS_PER_BEAT,
   timeSignature,
+  type Instrument,
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
   EXTRA_VOICES,
   PIANO_STAVES,
   STAVES,
+  type ExtraVoice,
   type StaffId,
   type StaffInstruments,
   type TimedMusic,
@@ -157,41 +159,57 @@ export function staffOfLayer(
   return box ? { staff, ...box } : undefined
 }
 
-/**
- * A line as the sheet writes it, from its own start: the melody on its staff (or the treble's where
- * it has none), the written right hand on the treble staff, the written left hand on the bass, the
- * chord symbols; a staff with nothing in a bar is left blank there.
- */
+/** The sung staves the sheet shows (ADR 0072): the tune's where the score has it, each voice's, none hidden. */
+function shownStaves(draft: Draft): { tune: boolean; voices: ExtraVoice[] } {
+  return {
+    tune: draft.melodyStaff && !draft.hidden.includes('melody'),
+    voices: EXTRA_VOICES.slice(0, draft.voices.length).filter(
+      (voice) => !draft.hidden.includes(voice),
+    ),
+  }
+}
+
 /** Each sung staff's instrument where one other than the voice is chosen (ADR 0070). */
 function staffInstrumentsOf(
   draft: Draft,
-  voiceStaves: readonly StaffId[],
+  tune: boolean,
+  voiceStaves: readonly ExtraVoice[],
 ): { staffInstruments?: StaffInstruments } {
-  const staves = [...(draft.melodyStaff ? (['melody'] as const) : []), ...voiceStaves]
-  const parts = draft.melodyStaff ? draft.instruments : draft.instruments.slice(1)
+  const parts: [StaffId, Instrument | undefined][] = [
+    ...(tune ? [['melody', draft.instruments[0]] as [StaffId, Instrument | undefined]] : []),
+    ...voiceStaves.map((voice): [StaffId, Instrument | undefined] => [
+      voice,
+      draft.instruments[EXTRA_VOICES.indexOf(voice) + 1],
+    ]),
+  ]
   const chosen = Object.fromEntries(
-    staves.flatMap((staff, i) => {
-      const instrument = parts[i]
-      return instrument && instrument !== DEFAULT_INSTRUMENT ? [[staff, instrument]] : []
-    }),
+    parts.filter(([, instrument]) => instrument && instrument !== DEFAULT_INSTRUMENT),
   )
   return Object.keys(chosen).length > 0 ? { staffInstruments: chosen } : {}
 }
 
+/**
+ * A line as the sheet writes it, from its own start: the melody on its staff, each voice shown on
+ * its own, the written right hand on the treble staff, the written left hand on the bass, the chord
+ * symbols; a staff with nothing in a bar is left blank there, a row hidden is not written at all.
+ */
 export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
   const from = line.start
   const to = endOf(line)
-  const voiceStaves = EXTRA_VOICES.slice(0, draft.voices.length)
+  const { tune, voices: voiceStaves } = shownStaves(draft)
   const notes = [
-    ...sounding(draft.melody, 'melody', from, to),
-    ...voiceStaves.flatMap((voice, i) =>
-      sounding(draft.voices[i] ?? [], 'melody', from, to).map((n) => ({ ...n, voice })),
+    ...(tune ? sounding(draft.melody, 'melody', from, to) : []),
+    ...voiceStaves.flatMap((voice) =>
+      sounding(draft.voices[EXTRA_VOICES.indexOf(voice)] ?? [], 'melody', from, to).map((n) => ({
+        ...n,
+        voice,
+      })),
     ),
     ...sounding(draft.hands.rh, 'rh', from, to),
     ...sounding(draft.hands.lh, 'lh', from, to),
   ]
   const staves: StaffId[] = [
-    ...(draft.melodyStaff ? (['melody'] as const) : []),
+    ...(tune ? (['melody'] as const) : []),
     ...voiceStaves,
     ...PIANO_STAVES,
   ]
@@ -205,7 +223,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
-          staffOfHand(n.voice ?? n.hand, draft.melodyStaff) === staff &&
+          staffOfHand(n.voice ?? n.hand, tune) === staff &&
           n.startTick < startTick + bar.ticks &&
           n.startTick + n.durationTicks > startTick,
       )
@@ -236,9 +254,9 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     bars,
     notes,
     chords,
-    ...(draft.melodyStaff ? { melodyStaff: true } : {}),
+    ...(tune ? { melodyStaff: true } : {}),
     ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
-    ...staffInstrumentsOf(draft, voiceStaves),
+    ...staffInstrumentsOf(draft, tune, voiceStaves),
   }
 }
 

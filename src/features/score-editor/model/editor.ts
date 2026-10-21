@@ -99,6 +99,15 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         { layer: layer === 'melody' ? 'rh' : layer, struck: null },
       )
     }
+    case 'hide': {
+      if (draft.hidden.includes(action.row) === action.hidden) return state
+      const hidden = action.hidden
+        ? [...draft.hidden, action.row]
+        : draft.hidden.filter((row) => row !== action.row)
+      // The caret leaves a row put out of sight for the right hand's.
+      const leaves = action.hidden && layer === action.row
+      return commit(state, { ...draft, hidden }, leaves ? { layer: 'rh', struck: null } : {})
+    }
     case 'instrument': {
       if (action.part > draft.voices.length) return state
       const instruments = draft.voices.map((_, i) => draft.instruments[i + 1] ?? DEFAULT_INSTRUMENT)
