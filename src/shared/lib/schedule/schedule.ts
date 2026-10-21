@@ -15,6 +15,7 @@ import {
   secondsFor,
   type BarsInMeter,
 } from './grid'
+import { joinedNotes } from './legato'
 import { loudness, markedSounds, rollOffsets } from './marks'
 import { pedalHeld } from './pedal-marks'
 import { swingTick } from './swing'
@@ -94,6 +95,8 @@ const SHORTEST_ALONE = 0.35
 const SUNG_VELOCITY = 0.09
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
+/** A joined note (under a slur, or legato) holds to the next, overlapping it as a pianist's fingers do. */
+const JOINED = 1.03
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
@@ -147,6 +150,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const levels = loudness(performance.notes)
   const rolls = rollOffsets(performance.notes)
   const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)
+  const joined = joinedNotes(performance.notes)
   const played: Sound[] = performance.notes.flatMap((n, i) => {
     if (!heard(n) || !isAudible(n, hands)) return []
     const start = Math.max(fromTick, n.startTick)
@@ -158,7 +162,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       kind: 'note' as const,
       midi: n.midi,
       at: at(start) + (rolls[i] ?? 0),
-      duration: Math.max(SHORTEST_NOTE, full * LEGATO),
+      duration: Math.max(SHORTEST_NOTE, full * (joined.has(i) ? JOINED : LEGATO)),
       velocity: n.velocity * (levels[i] ?? 1),
     }
     // A note held over from before the pass sounds plainly: its marks were where it began.

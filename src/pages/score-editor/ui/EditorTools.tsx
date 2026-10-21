@@ -2,6 +2,7 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   ChevronDown,
+  Hand,
   Keyboard,
   PanelLeftClose,
   PanelRightClose,
@@ -22,18 +23,19 @@ import {
   type ChordTab,
   type PaletteTab,
 } from '../model/palette-tabs'
-import { ChordBuilt, ChordMoves, ChordsInKey, ChordTyped } from './ChordKeys'
+import { CaretMoves } from './CaretMoves'
+import { ChordBuilt, ChordsInKey, ChordTyped } from './ChordKeys'
 import { HandKeys } from './HandKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
 
 /** Each tab's picture: the music font's where a symbol says it. */
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
-  notes: <span className="font-music text-2xl">𝅘𝅥𝅮</span>,
+  notes: <span className="font-music text-xl">𝅘𝅥𝅮</span>,
   pitch: <span className="font-music text-3xl">♯</span>,
-  articulations: <span className="text-2xl font-bold">&gt;</span>,
-  dynamics: <span className="font-serif text-lg font-bold italic">mf</span>,
-  hand: <span className="font-display text-base font-bold tracking-tight">1·5</span>,
+  articulations: <span className="text-lg font-bold">&gt;</span>,
+  dynamics: <span className="font-serif text-base font-bold italic">mf</span>,
+  hand: <Hand />,
 }
 
 /** Each way of writing a chord, drawn: the key's numerals, a chord's parts, the keypad. */
@@ -59,7 +61,16 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
  * more scrolling inside; beside the sheet (`side`), the column's height. It folds into a handle over
  * the sheet's corner (`onFold`). While a take records, the tools wait for Stop.
  */
-export function EditorTools({ side, onFold }: { side: boolean; onFold: () => void }) {
+export function EditorTools({
+  side,
+  moves = false,
+  onFold,
+}: {
+  side: boolean
+  /** The caret's moves at the palette's foot, where the screen has no status row for them (a phone on its side). */
+  moves?: boolean
+  onFold: () => void
+}) {
   const { t } = useTranslation('editor')
   const { takes, meta } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
@@ -113,6 +124,12 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
       </Button>
     </>
   )
+  // Where the screen has no status row (a phone on its side), the caret's moves at the palette's foot.
+  const foot = moves ? (
+    <div className="flex justify-end border-t border-border pt-1.5">
+      <CaretMoves />
+    </div>
+  ) : null
   const keys = cn(
     'content-start overflow-y-auto overscroll-contain',
     side ? 'min-h-0 flex-1' : 'h-39',
@@ -130,12 +147,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
         <fieldset disabled={recording} className="contents">
           <ToolPaletteTabs
             label={t('chord.tabs')}
-            end={
-              <div className="flex items-center gap-1">
-                <ChordMoves />
-                {fold}
-              </div>
-            }
+            end={<div className="flex items-center gap-1">{fold}</div>}
             className="border-t-0"
           >
             {CHORD_TABS.map((each) => (
@@ -143,6 +155,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
                 key={each}
                 value={each}
                 label={t(`chord.tab.${each}`)}
+                caption={t(`chord.tab.${each}`)}
                 className="min-w-7 shrink"
               >
                 <span aria-hidden className="contents">
@@ -160,18 +173,24 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
               <ChordTyped focus={focusField} />
             )}
           </ToolPalettePanel>
+          {foot}
         </fieldset>
       </ToolPalette>
     )
   return (
     <ToolPalette label={t('palette.label')} tab={tab} onTabChange={choose} className={card}>
       <fieldset disabled={recording} className="contents">
-        <ToolPaletteTabs label={t('palette.tabs')} end={fold} className="border-t-0">
+        <ToolPaletteTabs
+          label={t('palette.tabs')}
+          end={<div className="flex items-center gap-1">{fold}</div>}
+          className="border-t-0"
+        >
           {PALETTE_TABS.map((each) => (
             <ToolPaletteTab
               key={each}
               value={each}
               label={t(`palette.${each}`)}
+              caption={t(`palette.caption.${each}`)}
               disabled={!tabOpen(each, layer)}
               className="min-w-7 shrink"
             >
@@ -184,6 +203,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
         <ToolPalettePanel value={tab} className={cn('grid-cols-6', keys)}>
           {TAB_KEYS[tab]}
         </ToolPalettePanel>
+        {foot}
       </fieldset>
     </ToolPalette>
   )

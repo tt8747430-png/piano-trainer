@@ -60,21 +60,27 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** Each tab's picture, as the tiles under it draw their kind. */
 const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
-  bars: <span className="font-music text-2xl leading-none">𝄁</span>,
-  barlines: <span className="font-music text-2xl leading-none">𝄆</span>,
+  // A bar between its barlines, on a staff's lines.
+  bars: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="size-6">
+      <path d="M2 7 H22 M2 10.5 H22 M2 14 H22 M2 17.5 H22" strokeWidth="1" opacity="0.55" />
+      <path d="M5 6 V19 M19 6 V19" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  ),
+  barlines: <span className="font-music text-3xl leading-none">𝄆</span>,
   lines: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
       <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
     </svg>
   ),
   text: <span className="font-serif text-xl leading-none italic">dol.</span>,
-  key: <span className="font-music text-2xl leading-none">♯</span>,
+  key: <span className="font-music text-3xl leading-none">♯♭</span>,
   time: (
-    <span className="font-display text-sm leading-[0.8] font-bold">
+    <span className="font-display text-base leading-[0.8] font-bold">
       3<br />4
     </span>
   ),
-  staves: <span className="font-music text-2xl leading-none">𝄞</span>,
+  staves: <span className="font-music text-3xl leading-none">𝄞</span>,
 }
 
 const PEDAL_LABEL = {
@@ -378,33 +384,28 @@ export function AddMenu() {
           </Tile>
         </Tiles>
         {/* As a notation app adds a staff: an instrument, its part a voice sung with the tune (ADR 0070). */}
-        {INSTRUMENT_FAMILIES.map((family) => (
-          <Tiles
-            key={family}
-            heading={`${t('instruments.add')} · ${tm(`instrumentFamily.${family}`)}`}
-          >
-            {instrumentsIn(family).map((instrument) => (
-              <Tile
-                key={instrument}
-                label={tm(`instrument.${instrument}`)}
-                disabled={draft.voices.length >= EXTRA_VOICES.length}
-                onClick={done(() => {
-                  const voice = EXTRA_VOICES[draft.voices.length]
-                  if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true, instrument })
-                })}
-              >
-                <span className="flex items-center gap-1.5">
-                  <span className="font-music text-4xl leading-none">
-                    {INSTRUMENT_OF[instrument].clef === 'bass' ? '𝄢' : '𝄞'}
-                  </span>
-                  <span className="font-serif text-xl italic">
-                    {tm(`instrumentShort.${instrument}`)}
-                  </span>
+        <Tiles heading={t('instruments.add')}>
+          {INSTRUMENT_FAMILIES.flatMap(instrumentsIn).map((instrument) => (
+            <Tile
+              key={instrument}
+              label={tm(`instrument.${instrument}`)}
+              disabled={draft.voices.length >= EXTRA_VOICES.length}
+              onClick={done(() => {
+                const voice = EXTRA_VOICES[draft.voices.length]
+                if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true, instrument })
+              })}
+            >
+              <span className="flex items-center gap-1.5">
+                <span className="font-music text-4xl leading-none">
+                  {INSTRUMENT_OF[instrument].clef === 'bass' ? '𝄢' : '𝄞'}
                 </span>
-              </Tile>
-            ))}
-          </Tiles>
-        ))}
+                <span className="font-serif text-xl italic">
+                  {tm(`instrumentShort.${instrument}`)}
+                </span>
+              </span>
+            </Tile>
+          ))}
+        </Tiles>
         <Tiles heading={t('add.clefs')}>
           {HANDS.flatMap((hand) =>
             CLEFS.map((clef) => (
@@ -458,7 +459,7 @@ export function AddMenu() {
                   'aria-selected:bg-selected aria-selected:text-selected-foreground',
                 )}
               >
-                <span aria-hidden className="grid size-6 place-items-center">
+                <span aria-hidden className="grid size-7 place-items-center overflow-hidden">
                   {TAB_ICONS[each]}
                 </span>
                 {/* On a phone the pictures alone: seven names do not fit its width. */}

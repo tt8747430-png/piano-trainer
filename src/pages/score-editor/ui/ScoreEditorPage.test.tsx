@@ -495,7 +495,7 @@ describe('the score editor', () => {
     expect(settingsStore.getState().paletteSide).toBe('right')
   })
 
-  it('keeps Undo, Redo, Play and Record in the bar, and Delete at the end of the notes’ keys', async () => {
+  it('keeps Undo, Redo, Play and Record in the bar, and Delete last of the caret’s moves', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const bar = await screen.findByRole('toolbar', { name: 'Editing' })
     expect(
@@ -503,8 +503,8 @@ describe('the score editor', () => {
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
     ).toEqual(['Undo', 'Redo', 'Play', 'Record'])
-    const keys = within(screen.getByRole('region', { name: 'Tools' })).getAllByRole('button')
-    expect(keys.at(-1)).toHaveAccessibleName('Delete')
+    const moves = within(screen.getByRole('group', { name: 'Caret' })).getAllByRole('button')
+    expect(moves.at(-1)).toHaveAccessibleName('Delete')
   })
 
   it('keeps every tool a tab away, the hand’s own only in a hand', async () => {
@@ -521,9 +521,13 @@ describe('the score editor', () => {
       'Rest',
       'Tie to the next note',
       'Chord',
-      'Delete',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
+    // The caret's moves and Delete stand apart from the palette, by the caret's line.
+    expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
+    const moves = screen.getByRole('group', { name: 'Caret' })
+    for (const name of ['Back a step', 'Forward a step', 'Delete'])
+      expect(within(moves).getByRole('button', { name })).toBeInTheDocument()
     expect(within(palette).getByRole('tab', { name: 'Fingering' })).toHaveAttribute(
       'aria-disabled',
       'true',

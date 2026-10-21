@@ -1,4 +1,3 @@
-import { ArrowLeft, ArrowRight, Delete } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { barAt, keyChords, keySevenths } from '@/features/score-editor'
 import {
@@ -150,38 +149,5 @@ export function ChordBuilt() {
         />
       </div>
     </div>
-  )
-}
-
-/** Along the chord row: the caret a step back or on, and the chord before it taken back. */
-export function ChordMoves() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const dispatch = actions.dispatch
-  const key = 'size-9 rounded-xl text-base landscape-phone:size-9'
-  return (
-    <>
-      <ToolKey
-        label={t('back')}
-        className={key}
-        onClick={() => dispatch({ type: 'move', by: 'step', direction: -1 })}
-      >
-        <ArrowLeft aria-hidden />
-      </ToolKey>
-      <ToolKey
-        label={t('on')}
-        className={key}
-        onClick={() => dispatch({ type: 'move', by: 'step', direction: 1 })}
-      >
-        <ArrowRight aria-hidden />
-      </ToolKey>
-      <ToolKey
-        label={t('chord.delete')}
-        className={key}
-        onClick={() => dispatch({ type: 'delete', back: true })}
-      >
-        <Delete aria-hidden />
-      </ToolKey>
-    </>
   )
 }

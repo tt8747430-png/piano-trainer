@@ -9,6 +9,7 @@ import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
+import { CaretMoves } from './CaretMoves'
 import { EditorHeader } from './EditorHeader'
 import { EditorKeyboard, KeysButton } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
@@ -68,13 +69,16 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
           )}
         </div>
         {onSide && idle ? null : (
-          <div data-area="status" className="flex min-h-6 flex-col justify-center">
-            {idle ? <CaretLine /> : <RecordingStrip />}
+          <div data-area="status" className="flex min-h-10 items-center gap-2">
+            <div className="flex min-w-0 flex-1 flex-col justify-center">
+              {idle ? <CaretLine /> : <RecordingStrip />}
+            </div>
+            {idle ? <CaretMoves /> : null}
           </div>
         )}
         {palette ? (
           <div data-area="palette">
-            <EditorTools side={side} onFold={() => setPalette(false)} />
+            <EditorTools side={side} moves={onSide && idle} onFold={() => setPalette(false)} />
           </div>
         ) : null}
         <EditorKeyboard />

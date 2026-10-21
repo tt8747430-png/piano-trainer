@@ -89,12 +89,15 @@ export function ToolPaletteTabs({
 export function ToolPaletteTab({
   value,
   label,
+  caption,
   disabled = false,
   className,
   children,
 }: {
   value: string
   label: string
+  /** A short word under its picture: every tab's picture in one box, so the row stands level. */
+  caption?: string
   disabled?: boolean
   className?: string
   children: ReactNode
@@ -110,7 +113,18 @@ export function ToolPaletteTab({
         className,
       )}
     >
-      {children}
+      {caption === undefined ? (
+        children
+      ) : (
+        <span className="flex flex-col items-center gap-0.5">
+          <span className="grid size-6 place-items-center overflow-hidden leading-none">
+            {children}
+          </span>
+          <span className="max-w-full truncate text-[0.6875rem] leading-none font-semibold landscape-phone:sr-only">
+            {caption}
+          </span>
+        </span>
+      )}
     </Tabs.Tab>
   )
 }

@@ -121,6 +121,48 @@ describe('schedule', () => {
     expect(timbres).toEqual(['flute', 'voice'])
   })
 
+  it('holds the notes under a slur to the next, and cuts the others a little short', () => {
+    const tune = (marks: object | undefined) =>
+      arrange(
+        {
+          key: { tonic: note('C'), minor: false },
+          meter: '4/4',
+          sections: [{ lines: [[{ chords: [{ ...parseChordSymbol('C'), beats: 4 }], beats: 4 }]] }],
+        },
+        {
+          tonic: note('C'),
+          pattern: {
+            id: 'none',
+            rh: { kind: 'events', events: [] },
+            lh: { kind: 'events', events: [] },
+          },
+          melody: [
+            {
+              midi: midi(72),
+              spelled: note('C'),
+              startTick: 0,
+              durationTicks: 24,
+              ...(marks ? { marks: { slurStart: true } } : {}),
+            },
+            {
+              midi: midi(74),
+              spelled: note('D'),
+              startTick: 24,
+              durationTicks: 24,
+              ...(marks ? { marks: { slurEnd: true } } : {}),
+            },
+          ],
+          doubleMelody: true,
+        },
+      )
+    const first = (marks: object | undefined) =>
+      schedule(tune(marks), { tempo: 60, hands: ALL }).sounds.find(
+        (sound) => sound.kind === 'note' && sound.midi === 84,
+      )
+    expect(first(undefined)).toMatchObject({ duration: expect.closeTo(0.95, 3) })
+    expect(first({})).toMatchObject({ duration: expect.closeTo(1.03, 3) })
+  })
+
   it('holds a note under the pedal until it is let up, and slows at a rit.', () => {
     const plain = perform('C', 'C')
     const marked: Performance = {

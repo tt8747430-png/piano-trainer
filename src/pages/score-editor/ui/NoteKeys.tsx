@@ -1,5 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Delete, Layers } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NOTE_VALUES, takesDot } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
@@ -100,104 +99,78 @@ function RhythmKeys() {
         pressed={chord}
         onClick={() => dispatch({ type: 'chordMode' })}
       >
-        <Layers aria-hidden />
+        <StackedNotes />
       </ToolKey>
     </>
   )
 }
 
-/**
- * A key's picture of a move in pitch: the sign of how far (♯ ♭ a semitone, 8 an octave, a note on a
- * line a step of the key) with an arrow up or down beside it.
- */
-function Raised({ mark, up = false }: { mark: ReactNode; up?: boolean }) {
+/** Chord's picture: noteheads stacked on one stem, as the next notes stack onto the one at the caret. */
+function StackedNotes() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <ellipse cx="9" cy="18" rx="4" ry="2.8" transform="rotate(-20 9 18)" />
+      <ellipse cx="9" cy="12.5" rx="4" ry="2.8" transform="rotate(-20 9 12.5)" />
+      <ellipse cx="9" cy="7" rx="4" ry="2.8" opacity="0.45" transform="rotate(-20 9 7)" />
+      <rect x="12.4" y="2" width="1.4" height="16" />
+    </svg>
+  )
+}
+
+/** A move in pitch drawn as its arrow over what it moves by, in words: a half step, a step, an octave. */
+function Move({ up, by }: { up: boolean; by: string }) {
   const Arrow = up ? ArrowUp : ArrowDown
   return (
-    <span aria-hidden className="flex items-center gap-0.5 leading-none">
-      <span className="font-music text-2xl">{mark}</span>
-      <Arrow className="size-4" />
+    <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
+      <Arrow className="size-5" />
+      <span className="text-[0.6875rem] font-semibold tracking-tight">{by}</span>
     </span>
   )
 }
 
-/** A note on a staff's lines: a step of the key's picture. */
-const ON_LINES = (
-  <svg viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.2">
-    <path d="M1 6 H19 M1 10 H19 M1 14 H19" />
-    <ellipse cx="10" cy="10" rx="3.6" ry="2.6" fill="currentColor" transform="rotate(-20 10 10)" />
-  </svg>
-)
-
-/** The notes at the caret a semitone up or down, as a sharp or a flat raises or lowers them. */
-function SemitoneKeys() {
+/**
+ * The Pitch keypad, each pair up then down: a half step (sharps up, flats down), a step of the key, an
+ * octave; and Respell, the same keys written the other way (G♯ as A♭).
+ */
+export function PitchKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
+  const step = (steps: number) => actions.dispatch({ type: 'step', steps })
+  const pairs = [
+    { by: t('pitch.halfStep'), up: t('up'), down: t('down'), move: shift, size: 1 },
+    { by: t('pitch.step'), up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
+    { by: t('pitch.octave'), up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
+  ]
   return (
     <>
-      <ToolKey label={t('up')} onClick={() => shift(1)}>
-        <Raised mark="♯" up />
-      </ToolKey>
-      <ToolKey label={t('down')} onClick={() => shift(-1)}>
-        <Raised mark="♭" />
-      </ToolKey>
-    </>
-  )
-}
-
-/** The notes at the caret an octave up or down. */
-function OctaveKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
-  return (
-    <>
-      <ToolKey label={t('octaveUp')} onClick={() => shift(12)}>
-        <Raised mark="8" up />
-      </ToolKey>
-      <ToolKey label={t('octaveDown')} onClick={() => shift(-12)}>
-        <Raised mark="8" />
+      {pairs.flatMap(({ by, up, down, move, size }) => [
+        <ToolKey key={up} label={up} onClick={() => move(size)}>
+          <Move up by={by} />
+        </ToolKey>,
+        <ToolKey key={down} label={down} onClick={() => move(-size)}>
+          <Move up={false} by={by} />
+        </ToolKey>,
+      ])}
+      <ToolKey
+        label={t('respell')}
+        span="wide"
+        onClick={() => actions.dispatch({ type: 'respell' })}
+      >
+        <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
+          <span className="text-xl font-semibold tracking-tight">♯/♭</span>
+          <span className="text-[0.6875rem] font-semibold tracking-tight">
+            {t('pitch.respell')}
+          </span>
+        </span>
       </ToolKey>
     </>
-  )
-}
-
-/** The caret a step back or on. */
-function StepKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const move = (direction: -1 | 1) => actions.dispatch({ type: 'move', by: 'step', direction })
-  return (
-    <>
-      <ToolKey label={t('back')} onClick={() => move(-1)}>
-        <ArrowLeft aria-hidden />
-      </ToolKey>
-      <ToolKey label={t('on')} onClick={() => move(1)}>
-        <ArrowRight aria-hidden />
-      </ToolKey>
-    </>
-  )
-}
-
-/** Delete, as Backspace: the notes chosen, else the last before the caret, one by one back from the end. */
-function DeleteKey({ span }: { span?: 'one' | 'wide' }) {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  return (
-    <ToolKey
-      label={t('deleteNotes')}
-      {...(span ? { span } : {})}
-      onClick={() => actions.dispatch({ type: 'delete', back: true })}
-    >
-      <Delete aria-hidden />
-    </ToolKey>
   )
 }
 
 /**
- * The Notes keypad (a phone's), six keys a row: the values whole to 32nd; the dots, Triplet, Rest, Tie
- * and Chord; the caret's steps, a semitone up or down, and Delete at the row's end, where a keyboard
- * keeps it.
+ * The Notes keypad, six keys a row: the values whole to 32nd; the dots, Triplet, Rest, Tie and Chord.
+ * The caret's moves and Delete stand apart from the palette (`CaretMoves`), a note's pitch under Pitch.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
@@ -211,32 +184,6 @@ export function NoteKeys() {
         <ValueKeys />
       </div>
       <RhythmKeys />
-      <StepKeys />
-      <SemitoneKeys />
-      <DeleteKey span="wide" />
-    </>
-  )
-}
-
-/** The Pitch keypad: a semitone and an octave up or down, and the notes spelled the other way. */
-export function PitchKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  return (
-    <>
-      <SemitoneKeys />
-      <OctaveKeys />
-      <ToolKey label={t('stepUp')} onClick={() => actions.dispatch({ type: 'step', steps: 1 })}>
-        <Raised mark={ON_LINES} up />
-      </ToolKey>
-      <ToolKey label={t('stepDown')} onClick={() => actions.dispatch({ type: 'step', steps: -1 })}>
-        <Raised mark={ON_LINES} />
-      </ToolKey>
-      <ToolKey label={t('respell')} onClick={() => actions.dispatch({ type: 'respell' })}>
-        <span aria-hidden className="text-xl font-semibold tracking-tight">
-          ♯♭
-        </span>
-      </ToolKey>
     </>
   )
 }

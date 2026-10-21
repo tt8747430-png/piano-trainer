@@ -21,6 +21,14 @@ export const editor = {
     hand: 'Fingering',
     chords: 'Chord names',
     bars: 'Bars, lines and sections',
+    // Each tab's word under its picture.
+    caption: {
+      notes: 'Notes',
+      pitch: 'Pitch',
+      articulations: 'Marks',
+      dynamics: 'Dynamics',
+      hand: 'Fingers',
+    },
   },
   // The song's settings: what the sheet shows.
   view: 'View',
@@ -124,6 +132,7 @@ export const editor = {
     pattern: 'Pattern',
   },
   caret: {
+    moves: 'Caret',
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
@@ -201,6 +210,8 @@ export const editor = {
   chordMode: 'Chord',
   deleteNotes: 'Delete',
   respell: 'Other spelling',
+  // What a Pitch key moves the notes by, under its arrow.
+  pitch: { halfStep: 'Half step', step: 'Step', octave: 'Octave', respell: 'Respell' },
   up: 'Up a semitone',
   down: 'Down a semitone',
   octaveUp: 'Up an octave',
