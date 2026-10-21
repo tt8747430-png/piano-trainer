@@ -222,6 +222,7 @@ export const editor = {
   on: 'Forward a step',
   finger: 'Finger on {{note}}',
   noFinger: 'None',
+  fingers: 'A finger on each note: 1 the thumb, 5 the little finger',
   noNotes: 'No notes here',
   writeOut: 'Write this bar out',
   backToPattern: 'Back to the pattern',

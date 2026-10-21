@@ -34,7 +34,10 @@ export function HandKeys() {
         <p className="col-span-full py-2 text-center text-sm text-muted-foreground">
           {t('noNotes')}
         </p>
-      ) : null}
+      ) : (
+        // What the numbers stand for, once over the notes' rows.
+        <p className="col-span-full text-xs text-muted-foreground">{t('fingers')}</p>
+      )}
       {notes.map((n) => {
         const name = writtenName(n.midi, n.spelled)
         return (
