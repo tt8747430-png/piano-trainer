@@ -34,11 +34,27 @@ export const editor = {
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
+    barline: {
+      repeatStart: 'Start repeat',
+      repeatEnd: 'End repeat',
+      ending1: '1st ending',
+      ending2: '2nd ending',
+      double: 'Double',
+      final: 'Final',
+      plain: 'Plain',
+    },
     voice: 'Add a voice',
     open: 'Add to the score',
     label: 'Add',
     tabs: 'What to add',
-    tab: { bars: 'Bars', lines: 'Lines', key: 'Key', time: 'Time', staves: 'Staves' },
+    tab: {
+      barlines: 'Barlines',
+      bars: 'Bars',
+      lines: 'Lines',
+      key: 'Key',
+      time: 'Time',
+      staves: 'Staves',
+    },
     major: 'Major keys',
     minor: 'Minor keys',
     song: 'The song',

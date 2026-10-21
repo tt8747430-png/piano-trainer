@@ -573,6 +573,53 @@ describe('arrange', () => {
     expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK }).sung).toBeUndefined()
   })
 
+  it('engraves the barlines as written, or plays the repeats taken, the tune going round with them', () => {
+    const marked = chart([['C', 'F', 'G']])
+    const [line = []] = marked.sections[0]?.lines ?? []
+    const repeated: Chart = {
+      ...marked,
+      sections: [
+        {
+          lines: [
+            [
+              { ...line[0]!, repeatStart: true },
+              { ...line[1]!, barline: 'repeat' },
+              { ...line[2]!, barline: 'final' },
+            ],
+          ],
+        },
+      ],
+    }
+    const tune = [{ midi: midi(72), spelled: note('C'), startTick: 96, durationTicks: 96 }]
+    const written = arrange(repeated, {
+      tonic: C,
+      pattern: BLOCK,
+      melody: tune,
+      doubleMelody: true,
+    })
+    expect(written.bars.map((bar) => [bar.repeatStart, bar.barline])).toEqual([
+      [true, undefined],
+      [undefined, 'repeat'],
+      [undefined, 'final'],
+    ])
+    const played = arrange(repeated, {
+      tonic: C,
+      pattern: BLOCK,
+      melody: tune,
+      doubleMelody: true,
+      unfold: true,
+    })
+    expect(played.bars.map((bar) => [bar.written, bar.startTick, bar.barline])).toEqual([
+      [0, 0, undefined],
+      [1, 96, undefined],
+      [0, 192, undefined],
+      [1, 288, undefined],
+      [2, 384, 'final'],
+    ])
+    expect(played.chords.map((chord) => chord.symbol)).toEqual(['C', 'F', 'C', 'F', 'G'])
+    expect(notesOf(played, 'melody').map((n) => n.startTick)).toEqual([96, 288])
+  })
+
   it('lets a hand override replace every chord’s figure', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,

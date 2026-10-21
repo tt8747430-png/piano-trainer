@@ -1,3 +1,4 @@
+import type { BarMarkChoice } from './bar-marks'
 import type { PatternId } from '@/entities/pattern'
 import type { ExtraVoice } from '@/shared/lib/notation'
 import type { SectionKind } from '@/entities/piece'
@@ -97,6 +98,8 @@ export type EditorAction =
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
+  /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
+  | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
   | {

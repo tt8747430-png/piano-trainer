@@ -5,6 +5,7 @@ import {
   beatsToTicks,
   chordSymbol,
   TICKS_PER_BEAT,
+  type Barline,
   type Meter,
   type Tick,
 } from '@/shared/lib/music'
@@ -50,11 +51,20 @@ export function writeBar(bar: ChartBar, meter: Meter): string {
     beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(meter)) &&
     bar.chords.every((chord) => beatsToTicks(chord.beats) === beatsToTicks(first?.beats ?? 0))
   const oneMethod = bar.chords.every((chord) => chord.method === first?.method)
-  return bar.chords
+  const chords = bar.chords
     .map((chord, i) => {
       const beats = sharing ? '' : `@${chordBeatsText(beatsToTicks(chord.beats))}`
       const method = chord.method && (!oneMethod || i === 0) ? `:${chord.method}` : ''
       return `${chordSymbol(chord)}${beats}${method}`
     })
     .join('-')
+  return [
+    ...(bar.repeatStart ? ['|:'] : []),
+    ...(bar.ending ? [`[${bar.ending}`] : []),
+    chords,
+    ...(bar.barline ? [END_TOKEN[bar.barline]] : []),
+  ].join(' ')
 }
+
+/** A bar's end as the chart writes it after the bar. */
+const END_TOKEN: Readonly<Record<Barline, string>> = { repeat: ':|', double: '||', final: '|.' }

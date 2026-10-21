@@ -186,6 +186,19 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('combobox', { name: 'Pattern' })).not.toBeInTheDocument()
   })
 
+  it('puts a repeat round the caret’s bar from the + menu’s Barlines, saved in the chart', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('status')
+    await addFrom(user, 'Barlines', 'Start repeat')
+    await addFrom(user, 'Barlines', 'End repeat')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ lines: ['|: G :| G G G'] }],
+      }),
+    )
+  })
+
   it('adds a key signature and a bar’s own length from the + menu’s tiles', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

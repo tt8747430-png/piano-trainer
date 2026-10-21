@@ -290,6 +290,9 @@ export function notate(music: TimedMusic): Score {
       ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
       ...(placed.key ? { key: placed.key } : {}),
+      ...(placed.repeatStart ? { repeatStart: true } : {}),
+      ...(placed.barline ? { barline: placed.barline } : {}),
+      ...(placed.ending ? { ending: placed.ending } : {}),
       staves,
       chords: music.chords
         .filter(

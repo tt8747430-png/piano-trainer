@@ -1,5 +1,6 @@
 import {
   beatsBefore,
+  playOrder,
   beatsPerBar,
   beatsToTicks,
   chordBass,
@@ -32,6 +33,7 @@ import {
 import type {
   BeatGroup,
   Chart,
+  ChartBar,
   ChartChord,
   EventFigure,
   EventPattern,
@@ -76,6 +78,8 @@ export interface ArrangeOptions {
   readonly inversion?: Inversion
   /** After the first chord in `inversion`, each nearest the last. */
   readonly nearest?: boolean
+  /** Play the repeats taken (`playOrder`), the bars unrolled; else as written, the repeats' signs kept. */
+  readonly unfold?: boolean
 }
 
 const VELOCITY = {
@@ -108,7 +112,67 @@ interface Layout {
   readonly pickup: Tick
 }
 
-function layOut(chart: Chart): Layout {
+/** A chart's bar where it is written: its section, its line, and whether it opens or closes the line. */
+interface WrittenBar {
+  readonly bar: ChartBar
+  readonly section: number
+  readonly line: number
+  readonly lineEnd: boolean
+}
+
+/** The bars as written, each with its place. */
+const writtenBars = (chart: Chart): WrittenBar[] =>
+  chart.sections.flatMap((section, sectionIndex) =>
+    section.lines.flatMap((line, lineIndex) =>
+      line.map((bar, barInLine) => ({
+        bar,
+        section: sectionIndex,
+        line: lineIndex,
+        lineEnd: barInLine === 0 || barInLine === line.length - 1,
+      })),
+    ),
+  )
+
+/**
+ * The bars in the order they are played: as written, their barlines kept; or unrolled
+ * (`unfold`), the repeats taken and their signs and endings left out, a double or final barline kept.
+ */
+function playedBars(chart: Chart, unfold: boolean): { written: number; bar: WrittenBar }[] {
+  const all = writtenBars(chart)
+  const order = unfold ? playOrder(all.map(({ bar }) => bar)) : all.map((_, i) => i)
+  return order.flatMap((written) => {
+    const place = all[written]
+    if (!place) return []
+    if (!unfold) return [{ written, bar: place }]
+    const { repeatStart: _start, ending: _ending, barline, ...plain } = place.bar
+    const kept = barline === 'repeat' || barline === undefined ? plain : { ...plain, barline }
+    return [{ written, bar: { ...place, bar: kept } }]
+  })
+}
+
+/** Notes timed on the written bars, moved to wherever each of their bars is played. */
+function unrolled<N extends { readonly startTick: Tick }>(
+  notes: readonly N[],
+  chart: Chart,
+  bars: readonly PerformanceBar[],
+): N[] {
+  const starts: Tick[] = []
+  let tick = 0
+  for (const { bar } of writtenBars(chart)) {
+    starts.push(tick)
+    tick += beatsToTicks(bar.beats)
+  }
+  return bars.flatMap((bar) => {
+    if (bar.written === undefined) return []
+    const from = starts[bar.written] ?? 0
+    const to = starts[bar.written + 1] ?? Infinity
+    return notes
+      .filter((n) => n.startTick >= from && n.startTick < to)
+      .map((n) => ({ ...n, startTick: n.startTick - from + bar.startTick }))
+  })
+}
+
+function layOut(chart: Chart, unfold = false): Layout {
   const chords: PlacedChord[] = []
   const bars: PerformanceBar[] = []
   const hands: (WrittenHands | undefined)[] = []
@@ -117,36 +181,37 @@ function layOut(chart: Chart): Layout {
   // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
   const pickup = beatsToTicks(beatsBefore(written, 0, chart.meter))
   let tick = 0
-  chart.sections.forEach((section, sectionIndex) =>
-    section.lines.forEach((line, lineIndex) =>
-      line.forEach((bar, barInLine) => {
-        const index = bars.length
-        const barStart = tick
-        const gridStart = tick - (index === 0 ? pickup : 0)
-        if (barInLine === 0 || barInLine === line.length - 1) lineEnds.add(index)
-        const chordIndexes = bar.chords.map((chord) => {
-          const durationTicks = beatsToTicks(chord.beats)
-          chords.push({
-            chord,
-            startTick: tick,
-            durationTicks,
-            bar: index,
-            offsetInBar: tick - gridStart,
-          })
-          tick += durationTicks
-          return chords.length - 1
-        })
-        hands.push(bar.hands)
-        bars.push({
-          startTick: barStart,
-          beats: bar.beats,
-          section: sectionIndex,
-          line: lineIndex,
-          chords: chordIndexes,
-        })
-      }),
-    ),
-  )
+  for (const played of playedBars(chart, unfold)) {
+    const { bar, section: sectionIndex, line: lineIndex, lineEnd } = played.bar
+    const index = bars.length
+    const barStart = tick
+    const gridStart = tick - (index === 0 ? pickup : 0)
+    if (lineEnd) lineEnds.add(index)
+    const chordIndexes = bar.chords.map((chord) => {
+      const durationTicks = beatsToTicks(chord.beats)
+      chords.push({
+        chord,
+        startTick: tick,
+        durationTicks,
+        bar: index,
+        offsetInBar: tick - gridStart,
+      })
+      tick += durationTicks
+      return chords.length - 1
+    })
+    hands.push(bar.hands)
+    bars.push({
+      startTick: barStart,
+      beats: bar.beats,
+      section: sectionIndex,
+      line: lineIndex,
+      chords: chordIndexes,
+      ...(bar.repeatStart ? { repeatStart: true } : {}),
+      ...(bar.barline ? { barline: bar.barline } : {}),
+      ...(bar.ending ? { ending: bar.ending } : {}),
+      ...(unfold ? { written: played.written } : {}),
+    })
+  }
   return { chords, bars, hands, lineEnds, totalTicks: tick, pickup }
 }
 
@@ -452,12 +517,15 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         }
       : null,
   )
+  const layout = layOut(chart, options.unfold)
+  // A tune is written on the written bars: where the repeats are played, it goes round with them.
+  const played = (notes: Melody): MelodyNote[] =>
+    options.unfold ? unrolled(notes, chart, layout.bars) : [...notes]
   const melody = options.melody?.length
-    ? transposeNotes(options.melody, chart.key.tonic, options.tonic).sort(
+    ? played(transposeNotes(options.melody, chart.key.tonic, options.tonic)).sort(
         (a, b) => a.startTick - b.startTick,
       )
     : null
-  const layout = layOut(chart)
   const barBeats = beatsPerBar(chart.meter)
   const meterTicks = barBeats * TICKS_PER_BEAT
   const barMeter: BarMeter = { beats: barBeats, compound: isCompound(chart.meter) }
@@ -597,7 +665,9 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       ? {
           sung: [
             melody ?? [],
-            ...options.voices.map((voice) => transposeNotes(voice, chart.key.tonic, options.tonic)),
+            ...options.voices.map((voice) =>
+              played(transposeNotes(voice, chart.key.tonic, options.tonic)),
+            ),
           ],
         }
       : {}),

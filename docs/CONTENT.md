@@ -70,6 +70,9 @@ meter, note })`. It shows in Songs and never opens in the Player; no course has 
 
 ## The chart
 
+Between a line's bars, barlines (ADR 0067): `|:` starts a repeat at the next bar, `:|` ends one at the bar before, `||`
+is a double barline, `|.` the final one, and `[1` or `[2` before a bar puts it in that ending: `'|: G C [1 D :| [2 D7 G |.'`.
+
 `sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.

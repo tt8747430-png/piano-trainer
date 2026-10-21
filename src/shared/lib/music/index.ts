@@ -238,3 +238,11 @@ export {
   type OctaveLine,
   type Ornament,
 } from './marks'
+export {
+  BARLINES,
+  ENDINGS,
+  playOrder,
+  type BarMarks,
+  type Barline,
+  type Ending,
+} from './bar-marks'

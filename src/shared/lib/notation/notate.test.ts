@@ -63,6 +63,23 @@ describe('notate', () => {
     expect(bar?.staves.voice4).toEqual([])
   })
 
+  it('keeps each bar’s barlines: a repeat, its ending, a double or final barline', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 96)], {
+        bars: [
+          { startTick: 0, beats: 4, repeatStart: true, ending: 1, barline: 'repeat' },
+          { startTick: 96, beats: 4, barline: 'final' },
+        ],
+      }),
+    )
+    expect(
+      score.measures.map(({ repeatStart, ending, barline }) => [repeatStart, ending, barline]),
+    ).toEqual([
+      [true, 1, 'repeat'],
+      [undefined, undefined, 'final'],
+    ])
+  })
+
   it('writes a pickup under the meter’s signature, as a short first bar', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 24), n(64, note('E'), 'rh', 24, 96)], {

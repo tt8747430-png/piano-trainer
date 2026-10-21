@@ -7,6 +7,8 @@ import {
   parseChordSymbol,
   parseKey,
   TICKS_PER_BEAT,
+  type BarMarks,
+  type Barline,
   type Chord,
   type Key,
 } from '@/shared/lib/music'
@@ -16,6 +18,19 @@ import { HAND_IDS, parseHands, type HandBar, type ReadHands } from './parse-hand
 import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
+
+/** A barline written after a bar: a repeat back, a double barline, the final one. */
+const END_TOKENS: Readonly<Record<string, Barline>> = {
+  ':|': 'repeat',
+  '||': 'double',
+  '|.': 'final',
+}
+/** Marks written before a bar: a repeat starting at it, the ending it belongs to. */
+const START_TOKENS: Readonly<Record<string, BarMarks>> = {
+  '|:': { repeatStart: true },
+  '[1': { ending: 1 },
+  '[2': { ending: 2 },
+}
 
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
 const BAR_LIMIT = 4
@@ -102,14 +117,34 @@ export function parseChart(piece: ChartPiece): Chart {
   const sections = piece.sections.map((section, s) => ({
     key: section.key === undefined ? null : sectionKey(piece, section.key, s),
     lines: section.lines.map((line, l) => {
-      const bars = line.split(/\s+/).filter(Boolean)
-      if (bars.length === 0) failAt({ section: s + 1, line: l + 1 })('empty line')
-      return bars.map((bar, b) => {
-        const position = { section: s + 1, line: l + 1, bar: b + 1 }
-        const read = readBar(bar, meterBeats, failAt(position))
+      const fail: Fail = failAt({ section: s + 1, line: l + 1 })
+      const tokens = line.split(/\s+/).filter(Boolean)
+      const bars: ChartBar[] = []
+      // Marks before a bar wait for it; a barline after one is its end.
+      let before: BarMarks = {}
+      for (const token of tokens) {
+        const end = END_TOKENS[token]
+        if (end) {
+          const last = bars.at(-1)
+          if (!last || Object.keys(before).length > 0) fail(`a barline before any bar: "${token}"`)
+          if (last.barline) fail(`two barlines after one bar: "${token}"`)
+          bars[bars.length - 1] = { ...last, barline: end }
+          continue
+        }
+        const start = START_TOKENS[token]
+        if (start) {
+          before = { ...before, ...start }
+          continue
+        }
+        const position = { section: s + 1, line: l + 1, bar: bars.length + 1 }
+        const read = readBar(token, meterBeats, failAt(position))
         places.push({ ticks: beatsToTicks(read.beats), position })
-        return read
-      })
+        bars.push({ ...before, ...read })
+        before = {}
+      }
+      if (Object.keys(before).length > 0) fail('a repeat or ending with no bar after it')
+      if (bars.length === 0) fail('empty line')
+      return bars
     }),
   }))
   const hands = parseHands(piece, places)

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barAt, notesAt, type BarEdit } from '@/features/score-editor'
+import { BAR_MARK_CHOICES, barAt, notesAt, type BarEdit } from '@/features/score-editor'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
@@ -29,6 +29,7 @@ import { LazyScoreView, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   ADD_TABS,
+  BARLINE_TILES,
   emptyBar,
   keyTiles,
   LINE_TILES,
@@ -41,6 +42,7 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 /** Each tab's picture, as the tiles under it draw their kind. */
 const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
   bars: <span className="font-music text-2xl leading-none">𝄁</span>,
+  barlines: <span className="font-music text-2xl leading-none">𝄆</span>,
   lines: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
       <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
@@ -186,6 +188,19 @@ export function AddMenu() {
             onClick={done(() => actions.dispatch({ type: 'bars', edit }))}
           >
             <Icon className="size-7" />
+          </Tile>
+        ))}
+      </Tiles>
+    ),
+    barlines: (
+      <Tiles>
+        {BAR_MARK_CHOICES.map((choice) => (
+          <Tile
+            key={choice}
+            label={t(`add.barline.${choice}`)}
+            onClick={done(() => actions.dispatch({ type: 'barMarks', choice }))}
+          >
+            <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
           </Tile>
         ))}
       </Tiles>

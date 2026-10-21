@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { chordSymbol, note } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import { parseChart } from './parse-chart'
+import { writeBar } from './write-chart'
 import { testSong } from '../testing/test-pieces'
 
 /** Each bar as its chords' symbols with their beats: 'G 2'. */
@@ -35,6 +36,26 @@ describe('parseChart', () => {
     ])
     const wrong = [{ kind: 'verse' as const, key: 'H' as 'C', lines: ['C'] }]
     expect(() => parseChart(testSong([], { sections: wrong }))).toThrow(ContentError)
+  })
+
+  it('reads the barlines between bars: repeats, endings, a double and the final barline', () => {
+    const [line = []] =
+      parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []
+    expect(line.map(({ repeatStart, ending, barline }) => [repeatStart, ending, barline])).toEqual([
+      [true, undefined, undefined],
+      [undefined, 1, 'repeat'],
+      [undefined, 2, 'double'],
+      [undefined, undefined, 'final'],
+    ])
+    expect(errorOf([':| C']).message).toMatch(/barline before any bar/)
+    expect(errorOf(['C |:']).message).toMatch(/no bar after/)
+    expect(errorOf(['C || |.']).message).toMatch(/two barlines/)
+  })
+
+  it('writes a bar’s barlines back around it', () => {
+    const [line = []] =
+      parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe('|: C [1 F :| [2 G || Am |.')
   })
 
   it('shares a bar equally among chords without beats', () => {

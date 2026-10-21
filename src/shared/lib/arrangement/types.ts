@@ -1,4 +1,5 @@
 import type {
+  BarMarks,
   Chord,
   Finger,
   Hand,
@@ -31,7 +32,8 @@ export interface WrittenHands {
   readonly rh?: readonly HandNote[]
   readonly lh?: readonly HandNote[]
 }
-export interface ChartBar {
+/** A bar of a chart: its chords, its beats, its written hands and its barlines (a repeat, an ending). */
+export interface ChartBar extends BarMarks {
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
@@ -151,7 +153,9 @@ export interface PerformedChord extends Chord {
   /** The right hand's chord as voiced, where its figure plays the voiced chord (not a tune, nor its own shapes). */
   readonly hand?: readonly Midi[]
 }
-export interface PerformanceBar {
+export interface PerformanceBar extends BarMarks {
+  /** The chart's bar it plays, where the repeats are played (`unfold`): its index as written. */
+  readonly written?: number
   readonly startTick: Tick
   readonly beats: number
   readonly section: number

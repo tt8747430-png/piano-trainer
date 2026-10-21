@@ -1,4 +1,5 @@
 import {
+  BarlineType,
   Curve,
   Formatter,
   MetricsDefaults,
@@ -12,6 +13,7 @@ import {
   SVGContext,
   TextBracket,
   VexFlow,
+  VoltaType,
   type RenderContext,
   type Voice,
 } from 'vexflow/core'
@@ -19,6 +21,7 @@ import {
   keySignature,
   sameKey,
   timeSignatureText,
+  type Barline,
   type Key,
   type Tick,
   type TimeSignature,
@@ -127,6 +130,38 @@ interface BuiltMeasure {
   readonly notes: number
 }
 
+/** How a bar's end is drawn, as a score prints it. */
+const END_BARLINE: Readonly<Record<Barline, BarlineType>> = {
+  double: BarlineType.DOUBLE,
+  final: BarlineType.END,
+  repeat: BarlineType.REPEAT_END,
+}
+
+/** The grand staff's line across both staves at a bar's end, as each barline is printed. */
+const END_CONNECTOR = {
+  double: 'thinDouble',
+  final: 'boldDoubleRight',
+  repeat: 'boldDoubleRight',
+} as const
+
+/**
+ * Where an ending's bracket stands over this bar: begun, carried on or ended, by the bars beside it
+ * that are of the same ending; none outside one.
+ */
+function voltaOf(built: readonly BuiltMeasure[], index: number): VoltaType {
+  const ending = built[index]?.measure.ending
+  if (ending === undefined) return VoltaType.NONE
+  const begins = built[index - 1]?.measure.ending !== ending
+  const ends = built[index + 1]?.measure.ending !== ending
+  return begins && ends
+    ? VoltaType.BEGIN_END
+    : begins
+      ? VoltaType.BEGIN
+      : ends
+        ? VoltaType.END
+        : VoltaType.MID
+}
+
 function staveAt(
   staff: StaffId,
   { x, y, width }: { x: number; y: number; width: number },
@@ -134,6 +169,9 @@ function staveAt(
   key: Key,
 ): Stave {
   const stave = new Stave(x, y, width)
+  const { repeatStart, barline } = built.measure
+  if (repeatStart) stave.setBegBarType(BarlineType.REPEAT_BEGIN)
+  if (barline) stave.setEndBarType(END_BARLINE[barline])
   if (built.clefs) stave.addClef(clefOf(staff)).addKeySignature(signatureOf(key))
   else if (built.keyFrom) stave.addKeySignature(signatureOf(key), signatureOf(built.keyFrom))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
@@ -263,7 +301,25 @@ function buildMeasure(
  * fingers stand over the top staff, apart where they stand between two, and taller where they stand
  * under the bottom one.
  */
+/** The room an ending's bracket takes over the top staff. */
+const VOLTA_ROOM = 32
+
+/** Where each staff stands, and the height they take: an ending's bracket, where there is one, over them. */
 function placesOf(
+  built: readonly BuiltMeasure[],
+  shown: readonly StaffId[],
+): {
+  readonly y: Readonly<Partial<Record<StaffId, number>>>
+  readonly height: number
+} {
+  const placed = stavesPlaced(built, shown)
+  if (!built.some((measure) => measure.measure.ending !== undefined)) return placed
+  const y: Partial<Record<StaffId, number>> = {}
+  for (const staff of shown) y[staff] = (placed.y[staff] ?? 0) + VOLTA_ROOM
+  return { y, height: placed.height + VOLTA_ROOM }
+}
+
+function stavesPlaced(
   built: readonly BuiltMeasure[],
   shown: readonly StaffId[],
 ): {
@@ -616,6 +672,9 @@ function* drawn(
     const bottom = drawn.at(-1)
     if (!top || !bottom) throw new RangeError('A score is engraved on at least one staff')
     const start = Math.max(...drawn.map(({ stave }) => stave.getNoteStartX()))
+    // An ending's bracket over the system's top staff, numbered where it begins.
+    const volta = voltaOf(built, index)
+    if (volta !== VoltaType.NONE) top.stave.setVoltaType(volta, `${measure.measure.ending}.`, 0)
     for (const { stave } of drawn) stave.setNoteStartX(start).setContext(context).draw()
     // A system's staves are joined at its left; the grand staff's two by a brace and their barlines,
     // the tune's staff over it keeping its own, as a song's piano part is printed.
@@ -627,7 +686,16 @@ function* drawn(
     if (treble && bass) {
       if (measure.clefs)
         new StaveConnector(treble.stave, bass.stave).setType('brace').setContext(context).draw()
-      new StaveConnector(treble.stave, bass.stave).setType('singleRight').setContext(context).draw()
+      const { barline, repeatStart } = measure.measure
+      new StaveConnector(treble.stave, bass.stave)
+        .setType(barline ? END_CONNECTOR[barline] : 'singleRight')
+        .setContext(context)
+        .draw()
+      if (repeatStart)
+        new StaveConnector(treble.stave, bass.stave)
+          .setType('boldDoubleLeft')
+          .setContext(context)
+          .draw()
     }
     measure.formatter.formatToStave(
       shown.flatMap((on) => measure.staves[on].map((voice) => voice.voice)),

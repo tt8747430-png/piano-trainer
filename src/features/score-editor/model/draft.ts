@@ -17,6 +17,7 @@ import {
   beatsToTicks,
   parseKey,
   TICKS_PER_BEAT,
+  type BarMarks,
   type Chord,
   type Finger,
   type Key,
@@ -56,7 +57,8 @@ export interface DraftChord {
   readonly method?: string
 }
 
-export interface DraftBar {
+/** A bar as the editor holds it: its length, its chords, which hands write it, and its barlines. */
+export interface DraftBar extends BarMarks {
   readonly ticks: Tick
   /** In order, the first at 0. */
   readonly chords: readonly DraftChord[]
@@ -118,6 +120,9 @@ export function readDraft(music: PieceMusic): Draft {
             chords,
             rh: bar.hands?.rh !== undefined,
             lh: bar.hands?.lh !== undefined,
+            ...(bar.repeatStart ? { repeatStart: true } : {}),
+            ...(bar.barline ? { barline: bar.barline } : {}),
+            ...(bar.ending ? { ending: bar.ending } : {}),
           }
         }),
       ),
@@ -145,6 +150,9 @@ function chartBar(bar: DraftBar) {
       ...(method ? { method } : {}),
     })),
     beats: bar.ticks / TICKS_PER_BEAT,
+    ...(bar.repeatStart ? { repeatStart: true as const } : {}),
+    ...(bar.barline ? { barline: bar.barline } : {}),
+    ...(bar.ending ? { ending: bar.ending } : {}),
   }
 }
 

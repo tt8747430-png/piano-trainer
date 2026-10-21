@@ -35,10 +35,19 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
 })
 
 /**
- * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody.
+ * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody;
+ * its bars as written, or in the order they are played (`unfold`: the repeats taken, the Player's).
  */
-export function arrangePiece(piece: Piece, choice: PracticeChoice, book: PatternBook): Performance {
-  return arrange(chartOf(piece, choice.chordSize ?? undefined), arrangeOptions(piece, choice, book))
+export function arrangePiece(
+  piece: Piece,
+  choice: PracticeChoice,
+  book: PatternBook,
+  { unfold = false }: { unfold?: boolean } = {},
+): Performance {
+  return arrange(chartOf(piece, choice.chordSize ?? undefined), {
+    ...arrangeOptions(piece, choice, book),
+    ...(unfold ? { unfold } : {}),
+  })
 }
 
 /** The learner's choices as `arrange` takes them. */

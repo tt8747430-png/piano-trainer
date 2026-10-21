@@ -1,5 +1,6 @@
 import type {
   Accidental,
+  BarMarks,
   Finger,
   Hand,
   Key,
@@ -39,14 +40,14 @@ export interface TimedNote {
 export interface TimedMusic {
   readonly key: Key
   readonly meter: Meter
-  readonly bars: readonly {
+  readonly bars: readonly (BarMarks & {
     readonly startTick: Tick
     readonly beats: number
     /** Staves with nothing to write in this bar: each holds the time with a rest that is not printed. */
     readonly blank?: readonly StaffId[]
     /** The key it is written in, where that is not the music's (a key change). */
     readonly key?: Key
-  }[]
+  })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
   /** The tune on a staff of its own over the grand staff (ADR 0064); else it is the treble's upper voice. */
@@ -114,7 +115,8 @@ export interface ChordMark {
   readonly symbol: string
 }
 
-export interface Measure {
+/** A bar as written: its notes on each staff, its chords, and its barlines (a repeat, an ending). */
+export interface Measure extends BarMarks {
   readonly startTick: Tick
   readonly ticks: Tick
   readonly time: TimeSignature

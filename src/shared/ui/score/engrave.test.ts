@@ -421,6 +421,25 @@ describe('engrave', () => {
     expect(far.width).toBe(natural.width)
   })
 
+  it('draws an ending’s bracket numbered where it begins, and the repeats’ dots', () => {
+    const host = document.createElement('div')
+    const repeated = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [
+        { startTick: 0, beats: 4, repeatStart: true },
+        { startTick: 96, beats: 4, ending: 1, barline: 'repeat' },
+        { startTick: 192, beats: 4, ending: 2, barline: 'final' },
+      ],
+      notes: [],
+      chords: [],
+    })
+    engrave(repeated, host, { scale: 1, fingers: false, names: false })
+    const texts = [...host.querySelectorAll('text')].map((text) => text.textContent)
+    expect(texts).toContain('1.')
+    expect(texts).toContain('2.')
+  })
+
   it('draws a line wider than the width it may fill smaller, to fit it', () => {
     const host = () => document.createElement('div')
     const natural = engrave(score, host(), { scale: 1, fingers: false, names: false })

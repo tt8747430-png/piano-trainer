@@ -32,11 +32,27 @@ export const editor: LocaleResources['editor'] = {
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
+    barline: {
+      repeatStart: 'Начало повтора',
+      repeatEnd: 'Конец повтора',
+      ending1: '1-я вольта',
+      ending2: '2-я вольта',
+      double: 'Двойная',
+      final: 'Заключительная',
+      plain: 'Обычная',
+    },
     voice: 'Добавить голос',
     open: 'Добавить в ноты',
     label: 'Добавить',
     tabs: 'Что добавить',
-    tab: { bars: 'Такты', lines: 'Линии', key: 'Тональность', time: 'Размер', staves: 'Нотоносцы' },
+    tab: {
+      barlines: 'Черты',
+      bars: 'Такты',
+      lines: 'Линии',
+      key: 'Тональность',
+      time: 'Размер',
+      staves: 'Нотоносцы',
+    },
     major: 'Мажорные',
     minor: 'Минорные',
     song: 'Песня',

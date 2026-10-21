@@ -188,6 +188,9 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
       startTick,
       beats: bar.ticks / TICKS_PER_BEAT,
       ...(blank.length > 0 ? { blank } : {}),
+      ...(bar.repeatStart ? { repeatStart: true as const } : {}),
+      ...(bar.barline ? { barline: bar.barline } : {}),
+      ...(bar.ending ? { ending: bar.ending } : {}),
     }
   })
   const chords = line.bars.flatMap(({ start, bar }) =>

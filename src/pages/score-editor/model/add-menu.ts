@@ -1,4 +1,4 @@
-import { barLengths, metersFor, type MarkChoice } from '@/features/score-editor'
+import { barLengths, metersFor, type BarMarkChoice, type MarkChoice } from '@/features/score-editor'
 import {
   keySignature,
   LETTERS,
@@ -7,6 +7,7 @@ import {
   ROOT_ACCIDENTALS,
   TICKS_PER_BEAT,
   isWrittenKey,
+  type BarMarks,
   type Key,
   type Meter,
   type NoteMarks,
@@ -16,10 +17,10 @@ import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 
 /**
  * What the + menu adds to the score, as Sibelius's does, each kind a tab of tiles: bars, lines and
- * sections; lines over notes (slurs, hairpins, octave lines); the key signature; the time signature;
+ * sections; barlines (repeats, endings, a double or final barline); lines over notes (slurs, hairpins, octave lines); the key signature; the time signature;
  * and the staves (the tune's, the chord names' row).
  */
-export const ADD_TABS = ['bars', 'lines', 'key', 'time', 'staves'] as const
+export const ADD_TABS = ['bars', 'barlines', 'lines', 'key', 'time', 'staves'] as const
 export type AddTab = (typeof ADD_TABS)[number]
 
 /** Sharps first, fewest first, then flats: a signature's place in a chooser, as a score's index lists them. */
@@ -89,12 +90,23 @@ export type LineTile = (typeof LINE_TILES)[number]
 
 const C_MAJOR: Key = { tonic: note('C'), minor: false }
 
+/** How each of the Barlines' tiles draws its mark on a bar. */
+export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {
+  repeatStart: { repeatStart: true },
+  repeatEnd: { barline: 'repeat' },
+  ending1: { ending: 1 },
+  ending2: { ending: 2 },
+  double: { barline: 'double' },
+  final: { barline: 'final' },
+  plain: {},
+}
+
 /** A tile's empty bar of `beats`, in `key` and `meter`: what a signature's tile engraves. */
-export function emptyBar(key: Key, meter: Meter, beats: number): TimedMusic {
+export function emptyBar(key: Key, meter: Meter, beats: number, marks: BarMarks = {}): TimedMusic {
   return {
     key,
     meter,
-    bars: [{ startTick: 0, beats, blank: ['treble', 'bass'] }],
+    bars: [{ startTick: 0, beats, blank: ['treble', 'bass'], ...marks }],
     notes: [],
     chords: [],
   }

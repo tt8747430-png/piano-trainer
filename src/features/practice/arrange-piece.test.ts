@@ -69,6 +69,16 @@ describe('arrangePiece', () => {
     expect(new Set(forAll.chords.map((c) => c.pattern))).toEqual(new Set(['r1']))
   })
 
+  it('plays the repeats taken in the Player, and the bars as written elsewhere', () => {
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const { melody: _tune, hands: _hands, ...rest } = bz5
+    const plain = { ...rest, sections: [{ kind: 'verse' as const, lines: ['|: G C :| D'] }] }
+    const written = arrangePiece(plain, ownChoice(plain), BUILT_IN_PATTERNS)
+    expect(written.chords.map((c) => c.symbol)).toEqual(['G', 'C', 'D'])
+    const played = arrangePiece(plain, ownChoice(plain), BUILT_IN_PATTERNS, { unfold: true })
+    expect(played.chords.map((c) => c.symbol)).toEqual(['G', 'C', 'G', 'C', 'D'])
+  })
+
   it('follows the chart’s own methods when asked', () => {
     const withCodes = PIECES.find((p) => hasChartPlan(p))
     if (!withCodes) throw new Error('no piece names its methods')
