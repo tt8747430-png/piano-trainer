@@ -71,7 +71,7 @@ export function PlayerLayout({
       <PlayerArea area="lead">
         <PlayerTitle title={title} onClose={onClose} />
       </PlayerArea>
-      <PlayerArea area="actions" className="flex items-center justify-end gap-2">
+      <PlayerArea area="actions" className="flex items-center justify-end gap-2 max-[359px]:gap-1">
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <PlayerViewMenu />
         <MidiButton />

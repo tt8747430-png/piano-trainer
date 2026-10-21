@@ -1,4 +1,4 @@
-import { AudioLines, Hand, Layers, Metronome, Timer, Type, type LucideIcon } from 'lucide-react'
+import { AudioLines, Layers, Metronome, Timer, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   PLAYING_TOGGLES,
@@ -12,8 +12,6 @@ import { ToggleTile } from '@/shared/ui'
 
 /** What each saved toggle looks like on its tile. */
 const TOGGLE_ICON: Readonly<Record<(typeof PLAYING_TOGGLES)[number], LucideIcon>> = {
-  fingerNumbers: Hand,
-  namedNotes: Type,
   positions: Layers,
   metronome: Metronome,
   countIn: Timer,
@@ -21,7 +19,7 @@ const TOGGLE_ICON: Readonly<Record<(typeof PLAYING_TOGGLES)[number], LucideIcon>
 
 /**
  * How the Player plays, as tiles for the Setup's grid: swing (null where the meter cannot swing),
- * and the saved toggles (finger numbers, named notes, chord positions, the metronome, the count-in).
+ * and the saved toggles (chord positions, the metronome, the count-in).
  */
 export function PlayingToggles({
   swing,

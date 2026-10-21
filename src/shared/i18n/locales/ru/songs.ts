@@ -8,6 +8,7 @@ export const songs: LocaleResources['songs'] = {
   noChart: 'Аккордов пока нет',
   learned: 'Выучено',
   empty: 'Ничего не найдено.',
+  emptyQuery: 'По запросу «{{query}}» ничего не найдено.',
   yours: 'Ваши песни',
   mineEmpty: {
     title: 'Своих песен пока нет',

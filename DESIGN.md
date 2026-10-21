@@ -467,8 +467,9 @@ hands, left then right, each a row of its own on a phone and side by side where 
 whole with a chevron to that hand's list; a changed hand has a way back to the pattern's own beside it, and the
 pattern's line then reads "Left hand changed", "Right hand changed" or "Both hands changed" in ink in place of its
 idea, so a changed pattern never passes for the pattern itself), the inversion as five drawn segments (Nearest, then Root to 3rd as
-stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Finger numbers, Named
-notes, Metronome, Count-in, Swing, and a piece's Melody and Recording).
+stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Chord positions,
+Metronome, Count-in, Swing, and a piece's Melody and Recording). What the sheet shows (finger numbers, named notes,
+chord names, the staves, the layout) is the View menu's alone, behind its eye beside the Setup's sliders.
 
 A piece with a recording has a **Recording** toggle tile in its Setup, on by default; in another key it is
 disabled with "Only in D minor" (the key as `keyOf` writes it) under its name. The recording plays in Listen only;

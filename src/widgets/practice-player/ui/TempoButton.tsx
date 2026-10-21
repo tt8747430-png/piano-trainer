@@ -63,7 +63,8 @@ export function TempoButton({
           />
         }
       >
-        <Gauge data-icon="inline-start" className="landscape-phone:hidden" />
+        {/* The value alone where the pill would not fit beside it: on its side, and under 360px. */}
+        <Gauge data-icon="inline-start" className="max-[359px]:hidden landscape-phone:hidden" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
       <PopoverContent

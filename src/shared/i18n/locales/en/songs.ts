@@ -5,7 +5,9 @@ export const songs = {
   all: 'All',
   noChart: 'No chart yet',
   learned: 'Learned',
+  // Nothing to list: a search that found nothing names it.
   empty: 'No songs match.',
+  emptyQuery: 'No songs match “{{query}}”.',
   withChords: 'With chords',
   clearFilters: 'Clear filters',
   yours: 'Your songs',

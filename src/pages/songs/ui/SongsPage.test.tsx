@@ -36,10 +36,10 @@ describe('Songs', () => {
     expect(box).toHaveValue('ду')
   })
 
-  it('says so when nothing matches, and clears the filters', async () => {
+  it('names the search that found nothing, and clears the filters', async () => {
     const user = userEvent.setup()
     await renderApp('/songs?q=zzzz')
-    expect(await screen.findByText('No songs match.')).toBeInTheDocument()
+    expect(await screen.findByText('No songs match “zzzz”.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Clear filters' }))
     expect(
       await screen.findByRole('heading', { level: 2, name: '«Боже, спасибо»' }),
@@ -126,7 +126,7 @@ describe('Songs: your own', () => {
     await renderApp('/songs?collection=mine')
     const empty = (await screen.findByText('No songs of your own yet')).closest('[data-slot=empty]')
     if (!(empty instanceof HTMLElement)) throw new Error('an empty shelf says so')
-    expect(screen.queryByText('No songs match.')).not.toBeInTheDocument()
+    expect(screen.queryByText(/No songs match/)).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Clear filters' })).not.toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Your songs' })).toHaveAttribute('aria-selected', 'true')
     await user.click(within(empty).getByRole('button', { name: 'New song' }))

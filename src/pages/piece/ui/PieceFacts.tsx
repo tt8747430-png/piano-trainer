@@ -26,12 +26,15 @@ export function PieceFacts({ entry }: { entry: Entry }) {
         </dd>
         <dd aria-hidden>·</dd>
         <dt className="sr-only">{t('meter')}</dt>
-        <dd className="font-display font-semibold text-foreground tabular-nums">{entry.meter}</dd>
+        {/* The key names a chord, in the serif; the meter and tempo are numbers, read alike. */}
+        <dd className="font-medium text-foreground tabular-nums">{entry.meter}</dd>
         {entry.kind === 'listing' ? null : (
           <>
             <dd aria-hidden>·</dd>
             <dt className="sr-only">{t('tempo')}</dt>
-            <dd className="text-foreground tabular-nums">{t('bpm', { tempo: entry.tempo })}</dd>
+            <dd className="font-medium text-foreground tabular-nums">
+              {t('bpm', { tempo: entry.tempo })}
+            </dd>
           </>
         )}
         {hasVersion ? (

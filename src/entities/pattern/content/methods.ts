@@ -1,7 +1,7 @@
 import type { MethodCode, MethodEntry } from '../model/types'
 
-/** The code itself where it is a number; otherwise the source book's short label. */
-const numbered = (code: MethodCode) => ({ en: code, ru: code })
+/** One of the five ways by its number ("Way 1"), so it never reads as a bar's; otherwise the source book's short label. */
+const numbered = (code: MethodCode) => ({ en: `Way ${code}`, ru: `Способ ${code}` })
 
 export const METHODS: Readonly<Record<MethodCode, MethodEntry>> = {
   '1': { pattern: 'M1', label: numbered('1') },

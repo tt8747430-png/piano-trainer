@@ -1,4 +1,4 @@
-import { Hand, Hash, Music, Piano, SlidersHorizontal, Type } from 'lucide-react'
+import { Eye, Hand, Hash, Music, Piano, Type } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPractice,
@@ -40,7 +40,8 @@ export function PlayerViewMenu() {
           />
         }
       >
-        <SlidersHorizontal aria-hidden />
+        {/* An eye, so it never reads as the Setup's sliders beside it. */}
+        <Eye aria-hidden />
         <span className="max-lg:sr-only">{t('view.open')}</span>
       </PopoverTrigger>
       <PopoverContent

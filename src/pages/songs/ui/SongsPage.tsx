@@ -118,7 +118,9 @@ export function SongsPage() {
       ) : (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>{t('empty')}</EmptyTitle>
+            <EmptyTitle>
+              {search.q.trim() ? t('emptyQuery', { query: search.q.trim() }) : t('empty')}
+            </EmptyTitle>
           </EmptyHeader>
           <EmptyContent>
             <Button variant="soft" onClick={clear}>

@@ -42,10 +42,11 @@ export const PRACTICE_TOGGLES = [
 ] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
-/** The Setup's saved switches: how any piece plays (the melody and the recording are a piece's own: its setup shows them). */
+/**
+ * The Setup's saved switches: how any piece plays (the melody and the recording are a piece's own: its
+ * setup shows them). What the sheet shows (finger numbers, named notes) is the View menu's alone.
+ */
 export const PLAYING_TOGGLES = [
-  'fingerNumbers',
-  'namedNotes',
   'positions',
   'metronome',
   'countIn',
