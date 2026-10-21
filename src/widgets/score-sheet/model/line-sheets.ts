@@ -11,6 +11,15 @@ export interface LineSheet {
   readonly timeBefore: TimeSignature | undefined
 }
 
+/**
+ * The music as it is engraved on the sheet: its tempo marks left out, as the line's labels write
+ * them in the row over the staff (ADR 0074), so a tempo takes no row of its own over the system.
+ */
+export const untimed = (music: TimedMusic): TimedMusic => ({
+  ...music,
+  bars: music.bars.map(({ tempo: _, ...bar }) => bar),
+})
+
 /** How many are kept: a long song's lines, and the versions just written. */
 const KEPT = 400
 
@@ -27,23 +36,28 @@ function lastUsed<T>(): (key: string, make: () => T) => T {
   }
 }
 
+/** How the sheet's lines are cut: all its bars as one line (`across`), or each chart line to fit. */
+export type LineCut =
+  | { readonly across: true }
+  | { readonly across?: false; readonly room: number; readonly widths: readonly number[] }
+
 /**
- * The draft's lines as the sheet shows them (at most `most` bars each; or all its bars as one line,
- * `across`), a line that did not change always the same object (so its
+ * The draft's lines as the sheet shows them (each chart line cut to fit its room; or all its bars
+ * as one line), a line that did not change always the same object (so its
  * row is not drawn again) and the same music always the same score (never engraved again).
  */
-export function createLineSheets(): (draft: Draft, across?: boolean, most?: number) => LineSheet[] {
+export function createLineSheets(): (draft: Draft, cut?: LineCut) => LineSheet[] {
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
-  return (draft, across = false, most = Infinity) =>
-    (across ? oneLine(draft) : linesOf(draft, most)).map((line) => {
+  return (draft, cut) =>
+    (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
       const music = lineMusic(draft, line)
       const timeBefore = timeBeforeLine(draft, line)
       const written = JSON.stringify(music)
       return sheets(`${JSON.stringify(line)} ${written} ${JSON.stringify(timeBefore)}`, () => ({
         line,
         music,
-        score: scores(written, () => notate(music)),
+        score: scores(written, () => notate(untimed(music))),
         timeBefore,
       }))
     })

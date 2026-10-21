@@ -8,6 +8,7 @@ import {
   type NoteLayer,
   type PlacedBar,
 } from '@/features/score-editor'
+import { breakLine } from '@/shared/lib'
 import type { ScoreLayout } from '@/shared/ui/score'
 import {
   clefsInForce,
@@ -42,18 +43,25 @@ export interface SheetLineBars {
 }
 
 /**
- * The chart's lines, each section's as written; a line of more than `most` bars (more than a narrow
- * screen holds) cut into as few parts as hold it, as even as they come.
+ * The chart's lines, each section's as written; a line wider than `room` (a narrow screen's) cut
+ * into as few lines as hold it, as even as they come by the bars' `widths` (ADR 0074).
  */
-export function linesOf(draft: Draft, most = Infinity): SheetLineBars[] {
+export function linesOf(
+  draft: Draft,
+  fit?: { readonly room: number; readonly widths: readonly number[] },
+): SheetLineBars[] {
   return chartLines(draft).flatMap((line) => {
-    const parts = Math.ceil(line.bars.length / most)
-    if (parts <= 1) return [line]
-    const size = Math.ceil(line.bars.length / parts)
-    return Array.from({ length: parts }, (_, part) => {
-      const bars = line.bars.slice(part * size, (part + 1) * size)
+    if (!fit) return [line]
+    const sizes = breakLine(
+      line.bars.map((placed) => fit.widths[placed.index] ?? 0),
+      fit.room,
+    )
+    let at = 0
+    return sizes.map((size) => {
+      const bars = line.bars.slice(at, at + size)
+      at += size
       return { ...line, bars, start: bars[0]?.start ?? line.start }
-    }).filter((each) => each.bars.length > 0)
+    })
   })
 }
 

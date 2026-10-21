@@ -70,11 +70,12 @@ describe('ScoreSheet', () => {
     }
   })
 
-  it('numbers each line at its head, its row only as tall as what it holds', async () => {
+  it('numbers each line at its head, the tempo beside it, its row only as tall as what it holds', async () => {
     sheet('rh', vi.fn(), false)
     await screen.findByRole('button', { name: 'Bar 1: G' })
     const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
-    expect(rows.map((row) => row.textContent)).toEqual(['1', '3', '4'])
+    // The tempo in the row, not a row of its own over the staff (ADR 0074).
+    expect(rows.map((row) => row.textContent)).toEqual(['1\u{1D15F}= 90', '3', '4'])
     // No chord names: the row holds a number alone, not the chords' room (ADR 0072).
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })

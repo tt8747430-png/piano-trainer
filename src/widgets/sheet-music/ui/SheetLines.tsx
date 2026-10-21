@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { longestLine, PAGE, paginate, useElementSize, useScrollMotion } from '@/shared/lib'
-import type { Score, StaffId } from '@/shared/lib/notation'
+import { lineShare, PAGE, paginate, useElementSize, useScrollMotion } from '@/shared/lib'
+import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
@@ -17,8 +17,8 @@ const LEAST_SCALE = 0.62
 
 /**
  * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
- * its title on the first. Each line is justified to its bars' share of the longest line's width (bars
- * line up down the page, as a chart's do) and carries its labels, the loop's part
+ * its title on the first, each chart line cut by width where it is wider than the screen holds. Each
+ * line is justified to the width unless that stretches it too far, and carries its labels, the loop's part
  * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
  */
 export function SheetLines({
@@ -58,13 +58,23 @@ export function SheetLines({
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
-  const lines = useMemo(() => scoreLines(score, performance), [score, performance])
-  // Each line runs to its bars' share of the longest, so bars line up down the page as a chart's do.
-  const { shareOf } = longestLine(lines.map((each) => each.score.measures.length))
   const paper = Math.min(width, PAGE.width)
   const scale = pages ? paper / PAGE.width : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
   const margin = pages ? PAGE.margin * scale : 0
   const inner = (pages ? paper : width) - 2 * margin
+  // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
+  const widths = useMemo(() => measureWidths(score, scale), [score, scale])
+  const room = inner > 0 ? inner / scale - lineLead(score) : Infinity
+  const lines = useMemo(
+    () => scoreLines(score, performance, { room, widths }),
+    [score, performance, room, widths],
+  )
+  // Each line spread to the sheet's width unless that stretches it too far (`lineShare`).
+  const shareOf = (line: ScoreLine) =>
+    lineShare(
+      widths.slice(line.first, line.first + line.score.measures.length).reduce((a, b) => a + b, 0),
+      room,
+    )
   // The line the cursor is on comes into sight as it starts.
   const shown = useRef(new Map<number, HTMLDivElement>())
   const motion = useScrollMotion()
@@ -95,7 +105,7 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         fill={inner > 0 ? inner : undefined}
-        share={shareOf(each.score.measures.length)}
+        share={shareOf(each)}
       >
         {(layout) => (
           <SheetOverlay

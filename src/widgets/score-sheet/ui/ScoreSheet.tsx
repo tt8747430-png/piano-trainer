@@ -1,38 +1,29 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barAt, barsOf, type BarRange, type Draft, type Layer } from '@/features/score-editor'
-import { longestLine, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
+import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
+import { lineShare, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
+import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
-import { createLineSheets, type LineSheet } from '../model/line-sheets'
+import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
+import { lineMusic, oneLine } from '../model/line-music'
 import { SheetLine } from './SheetLine'
 
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
-/**
- * The least a bar takes across at full size, in CSS px, its chords and notes read: a lead sheet's four
- * bars to a tablet's line, two to a phone's.
- */
-const BAR_SPAN = 150
-/** What a chord symbol takes across at full size: a bar of many chords is drawn wider, its names apart. */
-const CHORD_SPAN = 56
 /** How small a page is drawn, and how large: smaller, a phone shows its page's music too small to read. */
 const PAGE_SCALE = { least: 0.62, most: 1.2 } as const
+/**
+ * The staff's size down the screen (ADR 0074), as LilyPond sets a staff size per paper: full from a
+ * sheet this wide, smaller on a phone, so a line holds more than a bar, never under `least`.
+ */
+const SCROLL_SCALE = { full: 600, least: 0.72 } as const
 
-/** How many bars a line this wide holds at most, each readable; any where the width is not known yet. */
-const barsAcross = (width: number, span: number, scale = 1) =>
-  width <= 0 ? Infinity : Math.max(1, Math.floor(width / (span * scale)))
-
-/** The least a bar takes across: wider where the piece's busiest bar names more chords than fit. */
-const barSpan = (draft: Draft, chordNames: boolean) =>
-  chordNames
-    ? Math.max(
-        BAR_SPAN,
-        CHORD_SPAN * Math.max(0, ...barsOf(draft).map((placed) => placed.bar.chords.length)),
-      )
-    : BAR_SPAN
+/** The staff's size on a sheet this wide, down the screen. */
+const scrollScale = (width: number) =>
+  width > 0 ? Math.min(1, Math.max(SCROLL_SCALE.least, width / SCROLL_SCALE.full)) : 1
 
 type PageItem =
   | { readonly kind: 'title' }
@@ -98,27 +89,30 @@ export function ScoreSheet({
     width > 0 ? Math.min(PAGE_SCALE.most, Math.max(PAGE_SCALE.least, width / PAGE.width)) : 1
   const paper = width > 0 ? Math.min(width, PAGE.width * pageScale) : PAGE.width
   const margin = PAGE.margin * pageScale
-  const span = useMemo(() => barSpan(draft, chordNames), [draft, chordNames])
-  const most =
-    view === 'scroll'
-      ? barsAcross(width, span)
-      : view === 'pages'
-        ? barsAcross(paper - 2 * margin, span, pageScale)
-        : Infinity
-  const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
-  const caretBar = barAt(draft, caret).index
-  // Each line runs to its bars' share of the longest, so bars line up down the sheet as a chart's do.
-  const { shareOf } = longestLine(sheets.map((sheet) => sheet.line.bars.length))
+  // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
+  const whole = useMemo(() => {
+    const [all] = oneLine(draft)
+    return all ? notate(untimed(lineMusic(draft, all))) : undefined
+  }, [draft])
+  // The staves a line writes: the shown sung ones over the piano's two.
+  const staves = whole?.staves.length ?? 2
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
-  const fit =
-    room && room > 0
-      ? lineFit({
-          room,
-          staves: Math.max(1, ...sheets.map((sheet) => sheet.score.staves.length)),
-          headed: !across,
-          chordNames,
-        })
-      : 1
+  const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames }) : 1
+  const sized = view === 'pages' ? pageScale : Math.min(fit, scrollScale(width))
+  const widths = useMemo(() => (whole ? measureWidths(whole, sized) : []), [whole, sized])
+  const lead = whole ? lineLead(whole) : 0
+  // The room a line's bars have, in the engraving's units: the sheet's or the page's, less the clef and key.
+  const roomAcross =
+    width <= 0 ? Infinity : (view === 'pages' ? paper - 2 * margin : width) / sized - lead
+  const sheets = useMemo(
+    () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }),
+    [sheetsOf, draft, across, roomAcross, widths],
+  )
+  const caretBar = barAt(draft, caret).index
+  // Each line spread to the sheet's width unless that stretches it too far (`lineShare`, ADR 0074).
+  const widthOf = (sheet: LineSheet) =>
+    sheet.line.bars.reduce((sum, placed) => sum + (widths[placed.index] ?? 0), 0)
+  const shareOf = (sheet: LineSheet) => lineShare(widthOf(sheet), roomAcross)
 
   const line = (sheet: LineSheet, scale?: number) => (
     <SheetLine
@@ -137,7 +131,7 @@ export function ScoreSheet({
       chordNames={chordNames}
       onSignature={onSignature}
       justify={!across}
-      share={shareOf(sheet.line.bars.length)}
+      share={shareOf(sheet)}
       onWrite={onWrite}
       onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}
@@ -146,11 +140,8 @@ export function ScoreSheet({
 
   if (view === 'pages') {
     const scale = pageScale
-    // The staves a line writes: the shown sung ones over the piano's two.
-    const count =
-      (sheets[0]?.music.voiceStaves?.length ?? 0) + (sheets[0]?.music.melodyStaff ? 3 : 2)
     const lineHeight =
-      labelRow(chordNames, scale) + (staffHeight(undefined, count) + LINE_GAP) * scale
+      labelRow(chordNames, scale) + (staffHeight(undefined, staves) + LINE_GAP) * scale
     const items: PageItem[] = [
       ...(title ? [{ kind: 'title' } as const] : []),
       ...draft.sections.flatMap((_, section): PageItem[] => [
@@ -224,7 +215,7 @@ export function ScoreSheet({
           {heading(section)}
           {sheets
             .filter((sheet) => sheet.line.section === section)
-            .map((sheet) => line(sheet, fit))}
+            .map((sheet) => line(sheet, sized))}
         </section>
       ))}
     </section>

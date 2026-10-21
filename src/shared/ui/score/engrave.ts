@@ -79,6 +79,11 @@ const FINGER_MARGIN = 2
 /** A measure's notes are never narrower than this, and are given this much more than their least. */
 const LEAST_NOTES = 80
 const SPACING = 1.4
+/**
+ * The tightest the notes are packed on a crowded line before it is drawn smaller (ADR 0074), as
+ * LilyPond presses a line toward its notes' least distances: a little over VexFlow's least.
+ */
+const TIGHT_SPACING = 1.2
 const NOTE_PADDING = 20
 /** The least space in CSS pixels between a chord symbol and the next, or its barline. */
 const CHORD_GAP = 8
@@ -140,6 +145,8 @@ interface BuiltMeasure {
   readonly width: number
   /** What of its width its notes have, past its clef, key and time. */
   readonly notes: number
+  /** The least its notes take, packed as tight as they read (ADR 0074): a crowded line is pressed toward it. */
+  readonly tight: number
 }
 
 /** How a bar's end is drawn, as a score prints it. */
@@ -325,6 +332,7 @@ function buildMeasure(
     time,
     width: 0,
     notes: 0,
+    tight: 0,
   }
   const modifiers = Math.max(
     ...shown.map((staff) => {
@@ -333,18 +341,26 @@ function buildMeasure(
     }),
   )
   // The notes get what they need; then the measure widens until its chord symbols fit over them.
-  let notes = Math.max(LEAST_NOTES, least * SPACING + NOTE_PADDING)
-  for (let pass = 0; pass < WIDEN_PASSES; pass++) {
-    const short = chordShortfall(probe, voices, {
-      width: modifiers + notes,
-      noteStart: modifiers,
-      key,
-      scale,
-    })
-    if (short <= 1) break
-    notes = Math.max(notes + 1, Math.ceil(notes * short))
+  const widened = (from: number) => {
+    let notes = from
+    for (let pass = 0; pass < WIDEN_PASSES; pass++) {
+      const short = chordShortfall(probe, voices, {
+        width: modifiers + notes,
+        noteStart: modifiers,
+        key,
+        scale,
+      })
+      if (short <= 1) break
+      notes = Math.max(notes + 1, Math.ceil(notes * short))
+    }
+    return notes
   }
-  return { ...probe, width: modifiers + notes, notes }
+  const natural = Math.max(LEAST_NOTES, least * SPACING + NOTE_PADDING)
+  const notes = widened(natural)
+  // Its tightest still keeps its chord symbols apart: pressed, a measure never crowds its names.
+  const packed = Math.max(LEAST_NOTES, least * TIGHT_SPACING + NOTE_PADDING)
+  const tight = packed < notes ? Math.min(notes, widened(packed)) : notes
+  return { ...probe, width: modifiers + notes, notes, tight }
 }
 
 /**
@@ -590,6 +606,23 @@ function tagNotes(host: HTMLDivElement, voice: BuiltVoice, staff: StaffId) {
 }
 
 /**
+ * A line wider than `width` (VexFlow units) pressed to it (ADR 0074): each measure's notes give up
+ * room toward their tightest, alike, as LilyPond compresses a crowded line before it ever breaks a
+ * bar off. Pressed as far as they go, the line may still be wider: then it is drawn smaller.
+ */
+function compress(built: BuiltMeasure[], width: number): BuiltMeasure[] {
+  const natural = built.reduce((sum, measure) => sum + measure.width, 0)
+  const give = built.reduce((sum, measure) => sum + Math.max(0, measure.notes - measure.tight), 0)
+  const room = width - END_MARGIN
+  if (room >= natural || give <= 0) return built
+  const part = Math.min(1, (natural - room) / give)
+  return built.map((measure) => {
+    const less = Math.max(0, measure.notes - measure.tight) * part
+    return { ...measure, width: measure.width - less, notes: measure.notes - less }
+  })
+}
+
+/**
  * The measures' notes given room alike, each by its share, so the line runs to `width` (VexFlow
  * units) as a printed system is justified; the clef, key and time keep their room. A line already as
  * wide is left as it is.
@@ -733,14 +766,26 @@ function* drawn(
   }
   let scale = asked
   let natural = yield* naturalAt(scale)
-  // A line wider than the width it may fill is drawn smaller to fit it, never wider than the screen:
-  // built again at that size, as its chord names keep their own size and need more of its room.
-  if (fill !== undefined && lineWidth(natural) * scale > fill) {
-    scale = fill / lineWidth(natural)
+  const tightest = (measures: readonly BuiltMeasure[]) =>
+    lineWidth(
+      measures.map((measure) => ({
+        ...measure,
+        width: measure.width - measure.notes + measure.tight,
+      })),
+    )
+  // A line wider than the width it may fill even pressed tight is drawn smaller to fit it, never
+  // wider than the screen: built again at that size, as its chord names keep their own size and
+  // need more of its room.
+  if (fill !== undefined && tightest(natural) * scale > fill) {
+    scale = fill / tightest(natural)
     natural = yield* naturalAt(scale)
-    scale = Math.min(scale, fill / lineWidth(natural))
+    scale = Math.min(scale, fill / tightest(natural))
   }
-  const built = spread(natural, fill === undefined ? undefined : (fill * share) / scale - lead)
+  // Too wide for the sheet, its notes pressed toward their tightest; else spread to its share of it.
+  const built =
+    fill !== undefined && lineWidth(natural) * scale > fill
+      ? compress(natural, fill / scale - lead)
+      : spread(natural, fill === undefined ? undefined : (fill * share) / scale - lead)
   const width = lineWidth(built)
   const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)

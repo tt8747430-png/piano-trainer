@@ -26,7 +26,7 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('cut a line longer than a screen holds into even parts, as many bars at most', () => {
+  it('cuts a line wider than a screen holds into as few lines as hold it, even by width', () => {
     const long = readDraft({
       key: 'C',
       meter: '4/4',
@@ -34,8 +34,12 @@ describe('the sheet’s lines', () => {
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['C F G C', 'C F G'] }],
     })
-    const parts = (most: number) =>
-      linesOf(long, most).map((line) => [line.line, line.bars.map((b) => b.index), line.start])
+    const parts = (most: number, widths: readonly number[] = Array(7).fill(100)) =>
+      linesOf(long, { room: most * 100, widths }).map((line) => [
+        line.line,
+        line.bars.map((b) => b.index),
+        line.start,
+      ])
     expect(parts(3)).toEqual([
       [0, [0, 1], 0],
       [0, [2, 3], 192],
@@ -49,6 +53,12 @@ describe('the sheet’s lines', () => {
     ])
     expect(parts(4)).toEqual([
       [0, [0, 1, 2, 3], 0],
+      [1, [4, 5, 6], 384],
+    ])
+    // A dense first bar stands alone, the light ones after it share a line.
+    expect(parts(3, [250, 60, 60, 60, 100, 100, 100])).toEqual([
+      [0, [0], 0],
+      [0, [1, 2, 3], 96],
       [1, [4, 5, 6], 384],
     ])
   })

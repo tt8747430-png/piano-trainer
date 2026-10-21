@@ -18,3 +18,4 @@ export {
   type StaffInstruments,
 } from './types'
 export { ticksOf, valuesOf } from './values'
+export { lineLead, measureWidths } from './measure-widths'
