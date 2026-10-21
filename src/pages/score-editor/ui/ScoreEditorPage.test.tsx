@@ -215,6 +215,25 @@ describe('the score editor', () => {
     )
   })
 
+  it('changes the left hand’s clef at the caret’s bar from the + menu’s Staves', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('status')
+    await addFrom(user, 'Staves', 'Left hand, treble clef')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { lh: 'clef:treble - | - | - | -' },
+      }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Add to the score' }))
+    const menu = await screen.findByRole('dialog', { name: 'Add' })
+    await user.click(within(menu).getByRole('tab', { name: 'Staves' }))
+    expect(within(menu).getByRole('button', { name: 'Left hand, treble clef' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
   it('adds a key signature and a bar’s own length from the + menu’s tiles', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

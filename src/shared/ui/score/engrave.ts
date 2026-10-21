@@ -34,7 +34,7 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
-  clefOf,
+  clefIn,
   STAVES,
   ticksOf,
   type Measure,
@@ -131,6 +131,8 @@ interface BuiltMeasure {
   readonly staves: Readonly<Record<StaffId, readonly BuiltVoice[]>>
   readonly formatter: Formatter
   readonly clefs: boolean
+  /** The staves whose clef changes at this measure, from the one before. */
+  readonly clefChanges: readonly StaffId[]
   readonly time: boolean
   readonly width: number
   /** What of its width its notes have, past its clef, key and time. */
@@ -204,7 +206,9 @@ function staveAt(
   const { repeatStart, barline } = built.measure
   if (repeatStart) stave.setBegBarType(BarlineType.REPEAT_BEGIN)
   if (barline) stave.setEndBarType(END_BARLINE[barline])
-  if (built.clefs) stave.addClef(clefOf(staff)).addKeySignature(signatureOf(key))
+  const clef = clefIn(built.measure, staff)
+  if (built.clefs) stave.addClef(clef).addKeySignature(signatureOf(key))
+  else if (built.clefChanges.includes(staff)) stave.addClef(clef, 'small')
   else if (built.keyFrom) stave.addKeySignature(signatureOf(key), signatureOf(built.keyFrom))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
   return stave
@@ -305,7 +309,20 @@ function buildMeasure(
   const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
   const key = keyOf(score, measure)
   const keyFrom = previous && !sameKey(keyOf(score, previous), key) ? keyOf(score, previous) : null
-  const probe = { measure, keyFrom, staves, formatter, clefs, time, width: 0, notes: 0 }
+  const clefChanges = previous
+    ? shown.filter((staff) => clefIn(previous, staff) !== clefIn(measure, staff))
+    : []
+  const probe = {
+    measure,
+    keyFrom,
+    staves,
+    formatter,
+    clefs,
+    clefChanges,
+    time,
+    width: 0,
+    notes: 0,
+  }
   const modifiers = Math.max(
     ...shown.map((staff) => {
       const stave = staveAt(staff, { x: 0, y: 0, width: LEAST_NOTES }, probe, key)

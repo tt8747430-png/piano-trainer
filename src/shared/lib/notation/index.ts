@@ -1,5 +1,6 @@
-export { notate } from './notate'
+export { notate, staffClefAt } from './notate'
 export {
+  clefIn,
   clefOf,
   EXTRA_VOICES,
   PIANO_STAVES,

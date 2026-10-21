@@ -1,5 +1,6 @@
 import type { HandNote } from '@/shared/lib/arrangement'
-import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import { TICKS_PER_BEAT, type Clef, type Tick } from '@/shared/lib/music'
+import { CLEF_TOKEN } from './parse-hands'
 import { pitchText } from './music'
 import { writeMarks } from './note-marks'
 import { beatsText } from './write-chart'
@@ -54,11 +55,22 @@ function barText(notes: readonly HandNote[], barTicks: Tick): string {
   return tokens.join(' ')
 }
 
-/** A hand as the piece writes it, bar by bar (`-` where the pattern plays); nothing when no bar is written. */
+/**
+ * A hand as the piece writes it, bar by bar (`-` where the pattern plays), each bar that changes its
+ * staff's clef starting `clef:` (ADR 0069); nothing when no bar is written or changes its clef.
+ */
 export function writeHand(
   bars: readonly (readonly HandNote[] | null)[],
   barTicks: readonly Tick[],
+  clefs: readonly (Clef | undefined)[] = [],
 ): string | undefined {
-  if (bars.every((bar) => bar === null)) return undefined
-  return bars.map((bar, i) => (bar === null ? '-' : barText(bar, barTicks[i] ?? 0))).join(' | ')
+  if (bars.every((bar) => bar === null) && clefs.every((clef) => clef === undefined))
+    return undefined
+  return bars
+    .map((bar, i) => {
+      const clef = clefs[i]
+      const text = bar === null ? '-' : barText(bar, barTicks[i] ?? 0)
+      return clef ? `${CLEF_TOKEN}${clef} ${text}` : text
+    })
+    .join(' | ')
 }

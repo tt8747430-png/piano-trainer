@@ -620,6 +620,33 @@ describe('arrange', () => {
     expect(notesOf(played, 'melody').map((n) => n.startTick)).toEqual([96, 288])
   })
 
+  it('keeps each bar’s clef change, and the clefs as they stand where a repeat goes back', () => {
+    const [line = []] = chart([['C', 'F', 'G']]).sections[0]?.lines ?? []
+    const changed: Chart = {
+      ...chart([['C']]),
+      sections: [
+        {
+          lines: [
+            [
+              line[0]!,
+              { ...line[1]!, clefs: { lh: 'treble' } },
+              { ...line[2]!, barline: 'repeat' },
+            ],
+          ],
+        },
+      ],
+    }
+    const played = arrange(changed, { tonic: C, pattern: BLOCK, unfold: true })
+    expect(played.bars.map((bar) => bar.clefs)).toEqual([
+      undefined,
+      { lh: 'treble' },
+      undefined,
+      { rh: 'treble', lh: 'bass' },
+      { lh: 'treble' },
+      undefined,
+    ])
+  })
+
   it('lets a hand override replace every chord’s figure', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,

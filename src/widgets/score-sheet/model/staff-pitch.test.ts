@@ -11,7 +11,7 @@ describe('noteAtStaffY', () => {
     expect(noteAtStaffY('treble', 80, lines, G_MAJOR)).toMatchObject({ midi: 64 })
     expect(noteAtStaffY('treble', 91, lines, G_MAJOR)).toMatchObject({ midi: 60 })
     expect(noteAtStaffY('bass', 40, lines, G_MAJOR)).toMatchObject({ midi: 57 })
-    expect(noteAtStaffY('melody', 60, lines, { tonic: note('F'), minor: false })).toMatchObject({
+    expect(noteAtStaffY('treble', 60, lines, { tonic: note('F'), minor: false })).toMatchObject({
       midi: 71 - 1,
       spelled: note('B', -1),
     })

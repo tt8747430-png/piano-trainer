@@ -14,6 +14,8 @@ import { isOneOf } from '@/shared/lib'
 import { EXTRA_VOICES, type ExtraVoice } from '@/shared/lib/notation'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
+  type Hand,
+  type HandClefs,
   barMarksOf,
   beatsToTicks,
   parseKey,
@@ -66,6 +68,8 @@ export interface DraftBar extends BarMarks {
   /** Whether each hand is written here, not played by the pattern. */
   readonly rh: boolean
   readonly lh: boolean
+  /** The clef a hand's staff changes to here (ADR 0069). */
+  readonly clefs?: HandClefs
 }
 
 export interface DraftSection {
@@ -122,6 +126,7 @@ export function readDraft(music: PieceMusic): Draft {
             rh: bar.hands?.rh !== undefined,
             lh: bar.hands?.lh !== undefined,
             ...barMarksOf(bar),
+            ...(bar.clefs ? { clefs: bar.clefs } : {}),
           }
         }),
       ),
@@ -176,8 +181,9 @@ export function writeDraft(draft: Draft): PieceMusic {
   // A voice with no notes is not written: its staff goes with it, as the tune's does.
   const voices = draft.voices.flatMap((voice) => writeMelody(voice, timeline) ?? [])
   const ticks = placed.map(({ bar }) => bar.ticks)
-  const rh = writeHand(handBars(draft.hands.rh, placed, 'rh'), ticks)
-  const lh = writeHand(handBars(draft.hands.lh, placed, 'lh'), ticks)
+  const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
+  const rh = writeHand(handBars(draft.hands.rh, placed, 'rh'), ticks, clefs('rh'))
+  const lh = writeHand(handBars(draft.hands.lh, placed, 'lh'), ticks, clefs('lh'))
   return {
     key: keyText(draft.key),
     meter: draft.meter,

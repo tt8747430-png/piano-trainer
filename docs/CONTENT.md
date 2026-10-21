@@ -159,6 +159,9 @@ and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` 
 `gr:D5+E5` grace notes struck just before. A pitch is
 always the one heard. A melody's notes take the same marks (`E4/1[stacc,p]`), a rest none.
 
+**Clef changes** (ADR 0069): `clef:treble` or `clef:bass` first in a hand's bar changes its staff from that bar on,
+before its notes or before `-`: `lh: '- | clef:treble C4/2 E4/2 | clef:bass G2/1'`.
+
 ## The recording
 
 `recording: { src, start, tempo }`: a performance of the piece (a singer's) that plays along in Listen, in the

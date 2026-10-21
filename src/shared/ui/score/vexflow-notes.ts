@@ -22,6 +22,7 @@ import {
   VoiceMode,
 } from 'vexflow/core'
 import {
+  type Clef,
   isCompound,
   EXPRESSION_TEXT,
   keySignature,
@@ -38,7 +39,7 @@ import {
 } from '@/shared/lib/music'
 import {
   ticksOf,
-  clefOf,
+  clefIn,
   type Duration,
   type Measure,
   type ScoreEvent,
@@ -51,11 +52,7 @@ import { namedHead } from './named-head'
 const VALUE_CODE = { 1: 'w', 2: 'h', 4: 'q', 8: '8', 16: '16', 32: '32' } as const
 const SIGN: Readonly<Record<Sign, string>> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1: '#', 2: '##' }
 /** Where a rest sits: in the middle of a staff alone, above or below it beside another voice. */
-const REST_KEY: Readonly<Record<StaffId, Readonly<Record<ScoreVoice['stem'], string>>>> = {
-  melody: { auto: 'b/4', up: 'e/5', down: 'f/4' },
-  voice2: { auto: 'b/4', up: 'e/5', down: 'f/4' },
-  voice3: { auto: 'b/4', up: 'e/5', down: 'f/4' },
-  voice4: { auto: 'b/4', up: 'e/5', down: 'f/4' },
+const REST_KEY: Readonly<Record<Clef, Readonly<Record<ScoreVoice['stem'], string>>>> = {
   treble: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   bass: { auto: 'd/3', up: 'g/3', down: 'a/2' },
 }
@@ -199,20 +196,20 @@ function nameHeads(note: StaveNote, written: readonly WrittenNote[], value: Dura
 function noteOf(
   event: ScoreEvent,
   {
-    staff,
+    clef,
     stem,
     wholeBar,
     names,
     key,
-  }: { staff: StaffId; stem: ScoreVoice['stem']; wholeBar: boolean; names: boolean; key: Key },
+  }: { clef: Clef; stem: ScoreVoice['stem']; wholeBar: boolean; names: boolean; key: Key },
 ): VexNote {
   if (event.kind === 'rest') {
     if (event.hidden) return new GhostNote({ duration: code(event.duration) })
     const rest = new StaveNote({
-      keys: [REST_KEY[staff][stem]],
+      keys: [REST_KEY[clef][stem]],
       duration: wholeBar ? 'w' : code(event.duration),
       type: 'r',
-      clef: clefOf(staff),
+      clef,
       alignCenter: wholeBar,
     })
     if (!wholeBar) dotted(rest, event.duration.dots)
@@ -221,7 +218,7 @@ function noteOf(
   const note = new StaveNote({
     keys: event.notes.map(keyOf),
     duration: code(event.duration),
-    clef: clefOf(staff),
+    clef,
     ...(stem === 'auto'
       ? { autoStem: true }
       : { stemDirection: stem === 'up' ? Stem.UP : Stem.DOWN }),
@@ -296,7 +293,7 @@ export function buildVoice(
     ticksOf(only.duration, meter) === measure.ticks
   const notes = voice.events.map((event) => ({
     event,
-    note: noteOf(event, { staff, stem: voice.stem, wholeBar, names, key }),
+    note: noteOf(event, { clef: clefIn(measure, staff), stem: voice.stem, wholeBar, names, key }),
   }))
   const side = sideOf(staff, voice.stem)
   const ends = fingers

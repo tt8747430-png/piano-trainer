@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import {
   barAt,
   BARLINE_CHOICES,
+  clefAt,
   JUMP_CHOICES,
   notesAt,
   type BarEdit,
@@ -24,6 +25,7 @@ import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   beatsPerBar,
+  CLEFS,
   EXPRESSION_TEXT,
   EXPRESSIONS,
   keyParam,
@@ -34,13 +36,15 @@ import {
   type Pedal,
   type TimeSignature,
 } from '@/shared/lib/music'
-import { EXTRA_VOICES, notate, type TimedMusic } from '@/shared/lib/notation'
+import { EXTRA_VOICES, notate, type StaffId, type TimedMusic } from '@/shared/lib/notation'
 import { LazyScoreView, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   ADD_TABS,
   BARLINE_TILES,
+  clefBar,
   emptyBar,
+  HANDS,
   keyTiles,
   LINE_TILES,
   lineMusic,
@@ -128,12 +132,15 @@ function Engraved({
   noTime = false,
   time,
   grand = false,
+  staff = 'treble',
 }: {
   music: TimedMusic
   noTime?: boolean
   time?: TimeSignature
   /** On the grand staff, its foot cut away: a hairpin stands between the hands' staves. */
   grand?: boolean
+  /** The one staff drawn, where not the grand staff. */
+  staff?: StaffId
 }) {
   const score = useMemo(() => {
     const notated = notate(music)
@@ -144,7 +151,7 @@ function Engraved({
     <div className={cn('pointer-events-none', grand && 'self-start pt-1')}>
       <LazyScoreView
         score={score}
-        staff={grand ? undefined : 'treble'}
+        staff={grand ? undefined : staff}
         scale={grand ? 0.5 : 0.72}
         timeBefore={noTime ? score.measures[0]?.time : undefined}
       />
@@ -181,6 +188,10 @@ export function AddMenu() {
       state.layer !== 'chords' && notesAt(state.draft, state.layer, state.caret).length > 0,
   )
   const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
+  const clefsHere = {
+    rh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'rh')),
+    lh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'lh')),
+  }
   const hasClip = useEditorState((state) => state.clip !== null)
   const done = (work: () => void) => () => {
     work()
@@ -335,38 +346,58 @@ export function AddMenu() {
       </div>
     ),
     staves: (
-      <Tiles>
-        <Tile
-          label={t('viewMenu.melody')}
-          pressed={draft.melodyStaff}
-          onClick={done(() => actions.dispatch({ type: 'melodyStaff', on: !draft.melodyStaff }))}
-        >
-          <span className="font-music text-4xl leading-none">𝄞</span>
-        </Tile>
-        <Tile
-          label={t('add.voice')}
-          disabled={draft.voices.length >= EXTRA_VOICES.length}
-          onClick={done(() => {
-            const voice = EXTRA_VOICES[draft.voices.length]
-            if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true })
-          })}
-        >
-          <span className="flex items-center gap-1">
+      <div className="flex flex-col gap-4">
+        <Tiles heading={t('add.staves')}>
+          <Tile
+            label={t('viewMenu.melody')}
+            pressed={draft.melodyStaff}
+            onClick={done(() => actions.dispatch({ type: 'melodyStaff', on: !draft.melodyStaff }))}
+          >
             <span className="font-music text-4xl leading-none">𝄞</span>
-            <Plus className="size-5" />
-          </span>
-        </Tile>
-        <Tile
-          label={t('chordNames')}
-          pressed={layer === 'chords'}
-          onClick={done(() => {
-            view.showChordNames(true)
-            actions.dispatch({ type: 'layer', layer: 'chords' })
-          })}
-        >
-          <span className="font-display text-2xl font-semibold">C⁷</span>
-        </Tile>
-      </Tiles>
+          </Tile>
+          <Tile
+            label={t('add.voice')}
+            disabled={draft.voices.length >= EXTRA_VOICES.length}
+            onClick={done(() => {
+              const voice = EXTRA_VOICES[draft.voices.length]
+              if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true })
+            })}
+          >
+            <span className="flex items-center gap-1">
+              <span className="font-music text-4xl leading-none">𝄞</span>
+              <Plus className="size-5" />
+            </span>
+          </Tile>
+          <Tile
+            label={t('chordNames')}
+            pressed={layer === 'chords'}
+            onClick={done(() => {
+              view.showChordNames(true)
+              actions.dispatch({ type: 'layer', layer: 'chords' })
+            })}
+          >
+            <span className="font-display text-2xl font-semibold">C⁷</span>
+          </Tile>
+        </Tiles>
+        <Tiles heading={t('add.clefs')}>
+          {HANDS.flatMap((hand) =>
+            CLEFS.map((clef) => (
+              <Tile
+                key={`${hand}-${clef}`}
+                label={t(`add.clef.${hand}.${clef}`)}
+                pressed={clefsHere[hand] === clef}
+                onClick={done(() => actions.dispatch({ type: 'clef', hand, clef }))}
+              >
+                <Engraved
+                  music={clefBar(draft.key, hand, clef)}
+                  noTime
+                  staff={hand === 'rh' ? 'treble' : 'bass'}
+                />
+              </Tile>
+            )),
+          )}
+        </Tiles>
+      </div>
     ),
   }
   return (

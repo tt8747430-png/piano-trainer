@@ -1,4 +1,8 @@
 import {
+  clefsInForce,
+  HOME_CLEF,
+  type Clef,
+  type Hand,
   barMarksOf,
   beatsBefore,
   beatsPerBar,
@@ -24,7 +28,7 @@ import type {
   TimedNote,
   WrittenNote,
 } from './types'
-import { PIANO_STAVES, STAVES } from './types'
+import { clefOf, PIANO_STAVES, STAVES } from './types'
 import { separateVoices, type BarChord, type BarNote, type VoiceChords } from './voices'
 
 /**
@@ -252,6 +256,20 @@ function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
  * music asks), voices, values, ties and accidentals (spec §2.4). A pickup is written under the
  * meter's signature, a short first bar.
  */
+/** The hands' clefs on their staves, the right's on the treble and the left's on the bass, where not their own. */
+function staffClefs(clefs: Readonly<Record<Hand, Clef>>): Pick<Measure, 'clefs'> {
+  const changed: Partial<Record<StaffId, Clef>> = {}
+  if (clefs.rh !== clefOf('treble')) changed.treble = clefs.rh
+  if (clefs.lh !== clefOf('bass')) changed.bass = clefs.lh
+  return Object.keys(changed).length > 0 ? { clefs: changed } : {}
+}
+
+/** The clef a staff is in at bar `index` of timed music: a hand's as its bars change it, else its own. */
+export function staffClefAt(bars: TimedMusic['bars'], index: number, staff: StaffId): Clef {
+  const hand = staff === 'treble' ? 'rh' : staff === 'bass' ? 'lh' : null
+  return (hand && clefsInForce(bars)[index]?.[hand]) || clefOf(staff)
+}
+
 export function notate(music: TimedMusic): Score {
   const melodyStaff = music.melodyStaff ?? false
   const voices = music.voiceStaves ?? []
@@ -262,6 +280,7 @@ export function notate(music: TimedMusic): Score {
       PIANO_STAVES.some((piano) => piano === id),
   )
   let tiedOn = new Set<string>()
+  const clefs = clefsInForce(music.bars)
   const measures = music.bars.map((placed, index): Measure => {
     const before = beatsBefore(music.bars, index, music.meter)
     const pickup = before > 0
@@ -293,6 +312,7 @@ export function notate(music: TimedMusic): Score {
       ...(placed.key ? { key: placed.key } : {}),
       ...(placed.tempo ? { tempo: placed.tempo } : {}),
       ...barMarksOf(placed),
+      ...staffClefs(clefs[index] ?? HOME_CLEF),
       staves,
       chords: music.chords
         .filter(

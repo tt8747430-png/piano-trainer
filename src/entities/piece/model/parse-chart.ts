@@ -14,7 +14,7 @@ import {
 } from '@/shared/lib/music'
 import { MAX_BEATS, readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
-import { HAND_IDS, parseHands, type HandBar, type ReadHands } from './parse-hands'
+import { HAND_IDS, parseHandClefs, parseHands, type HandBar, type ReadHands } from './parse-hands'
 import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
@@ -169,6 +169,7 @@ export function parseChart(piece: ChartPiece): Chart {
     }),
   }))
   const hands = parseHands(piece, places)
+  const clefs = parseHandClefs(piece, places)
   let index = 0
   return {
     key: pieceKey(piece),
@@ -177,8 +178,13 @@ export function parseChart(piece: ChartPiece): Chart {
       ...(section.key ? { key: section.key } : {}),
       lines: section.lines.map((line) =>
         line.map((bar) => {
+          const clef = clefs[index]
           const written = barHands(hands, index++)
-          return written ? { ...bar, hands: written } : bar
+          return {
+            ...bar,
+            ...(written ? { hands: written } : {}),
+            ...(clef ? { clefs: clef } : {}),
+          }
         }),
       ),
     })),

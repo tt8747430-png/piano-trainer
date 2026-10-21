@@ -3,6 +3,7 @@ import type {
   Chord,
   Finger,
   Hand,
+  HandClefs,
   Key,
   Meter,
   Midi,
@@ -37,6 +38,8 @@ export interface ChartBar extends BarMarks {
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
+  /** The clef a hand's staff changes to at this bar (ADR 0069). */
+  readonly clefs?: HandClefs
 }
 export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]
@@ -166,6 +169,8 @@ export interface PerformanceBar extends BarMarks {
   readonly chords: readonly number[]
   /** The key it is played in, where that is not the Performance's (a key change). */
   readonly key?: Key
+  /** The clef a hand's staff changes to at this bar. */
+  readonly clefs?: HandClefs
 }
 export interface PerformanceNote {
   readonly midi: Midi

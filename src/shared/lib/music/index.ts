@@ -255,3 +255,4 @@ export {
   type Ending,
   type Jump,
 } from './bar-marks'
+export { CLEFS, clefsInForce, HOME_CLEF, type Clef, type HandClefs } from './clef'

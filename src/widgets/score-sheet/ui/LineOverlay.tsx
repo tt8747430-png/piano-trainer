@@ -2,7 +2,7 @@ import { useRef, type MouseEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isHandLayer, type BarRange, type Layer } from '@/features/score-editor'
 import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
-import type { TimedMusic } from '@/shared/lib/notation'
+import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
 import { nearestPlace } from '../model/nearest'
@@ -87,7 +87,8 @@ export function LineOverlay({
     if (!point || !onWrite || point.target === 'chords') return
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
-    const { midi } = noteAtStaffY(lines.staff, point.y, lines, music.key)
+    const clef = staffClefAt(music.bars, index, lines.staff)
+    const { midi } = noteAtStaffY(clef, point.y, lines, music.key)
     onWrite(point.tick, point.target, midi)
   }
   // The caret's notes as a grip: a drag up or down moves them a step of the key at a time.

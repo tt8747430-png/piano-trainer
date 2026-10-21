@@ -9,6 +9,8 @@ import {
 } from '@/features/score-editor'
 import type { ScoreLayout } from '@/shared/ui/score'
 import {
+  clefsInForce,
+  HOME_CLEF,
   barMarksOf,
   beatsPerBar,
   chordSymbol,
@@ -175,6 +177,11 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     ...voiceStaves,
     ...PIANO_STAVES,
   ]
+  // A line starts in the clefs its first bar is in; its bars change them after.
+  const [first] = line.bars
+  const inForce = first
+    ? clefsInForce(barsOf(draft).map((placed) => placed.bar))[first.index]
+    : undefined
   const bars = line.bars.map(({ start, bar }, index) => {
     const startTick = start - from
     const holds = (staff: StaffId) =>
@@ -192,6 +199,11 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
       // The piece's tempo over its first bar.
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
+      ...(index === 0 && inForce && inForce !== HOME_CLEF
+        ? { clefs: inForce }
+        : bar.clefs
+          ? { clefs: bar.clefs }
+          : {}),
     }
   })
   const chords = line.bars.flatMap(({ start, bar }) =>

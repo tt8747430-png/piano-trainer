@@ -55,6 +55,12 @@ export const editor = {
     },
     barlines: 'Barlines and endings',
     jumps: 'Jumps',
+    staves: 'Staves',
+    clefs: 'Clef from this bar',
+    clef: {
+      rh: { treble: 'Right hand, treble clef', bass: 'Right hand, bass clef' },
+      lh: { treble: 'Left hand, treble clef', bass: 'Left hand, bass clef' },
+    },
     expressions: 'Expressions',
     tempo: 'Tempo',
     pedal: 'Pedal',

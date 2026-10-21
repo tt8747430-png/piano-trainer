@@ -2,7 +2,7 @@ import type { BarMarkChoice } from './bar-marks'
 import type { PatternId } from '@/entities/pattern'
 import type { ExtraVoice } from '@/shared/lib/notation'
 import type { SectionKind } from '@/entities/piece'
-import type { Chord, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
+import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
 import type { TakePart } from './take-edits'
@@ -100,6 +100,8 @@ export type EditorAction =
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
+  /** A hand's staff changes clef at the caret's bar (ADR 0069). */
+  | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
   | {

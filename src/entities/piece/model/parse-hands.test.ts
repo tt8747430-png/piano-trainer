@@ -5,6 +5,7 @@ import { ContentError } from './content-error'
 import { parseChart } from './parse-chart'
 import { testSong } from '../testing/test-pieces'
 import type { Hands } from './types'
+import { writeHand } from './write-hands'
 
 const barsOf = (lines: readonly string[], hands: Hands, meter: '4/4' | '3/4' = '4/4'): ChartBar[] =>
   parseChart(testSong(lines, { hands, meter })).sections.flatMap((section) => section.lines.flat())
@@ -29,6 +30,21 @@ describe('a written hand', () => {
       { midi: 67, spelled: note('G'), startTick: 48, durationTicks: 48 },
     ])
     expect(second?.hands?.lh).toBeUndefined()
+  })
+
+  it('reads a clef change first in a bar, written or left to the pattern, and writes it back', () => {
+    const hands = { lh: 'clef:treble C4/1 E4/1 G4/2 | - | clef:bass -' }
+    const bars = barsOf(['C G F'], hands)
+    expect(bars.map((bar) => bar.clefs)).toEqual([{ lh: 'treble' }, undefined, { lh: 'bass' }])
+    expect(bars[0]?.hands?.lh).toHaveLength(3)
+    expect(
+      writeHand(
+        bars.map((bar) => bar.hands?.lh ?? null),
+        bars.map(() => 96),
+        bars.map((bar) => bar.clefs?.lh),
+      ),
+    ).toBe(hands.lh)
+    expect(errorOf(['C'], { rh: 'clef:alto C4/4' }).message).toMatch(/no clef "alto"/)
   })
 
   it('reads notes struck together, each with its finger', () => {

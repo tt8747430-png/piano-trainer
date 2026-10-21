@@ -1,8 +1,10 @@
 import type {
   Accidental,
   BarMarks,
+  Clef,
   Finger,
   Hand,
+  HandClefs,
   Key,
   Meter,
   Midi,
@@ -49,6 +51,8 @@ export interface TimedMusic {
     readonly blank?: readonly StaffId[]
     /** The key it is written in, where that is not the music's (a key change). */
     readonly key?: Key
+    /** The clef a hand's staff changes to at this bar (ADR 0069). */
+    readonly clefs?: HandClefs
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
@@ -110,7 +114,10 @@ export type StaffId = (typeof STAVES)[number]
 /** The piano's grand staff: the right hand's treble and the left hand's bass. */
 export const PIANO_STAVES = ['treble', 'bass'] as const satisfies readonly StaffId[]
 /** The clef a staff is written in: the tune's is a treble. */
-export const clefOf = (staff: StaffId): 'treble' | 'bass' => (staff === 'bass' ? 'bass' : 'treble')
+export const clefOf = (staff: StaffId): Clef => (staff === 'bass' ? 'bass' : 'treble')
+/** The clef a staff is in at a measure: a hand's changed clef (ADR 0069), else its own. */
+export const clefIn = (measure: Pick<Measure, 'clefs'>, staff: StaffId): Clef =>
+  measure.clefs?.[staff] ?? clefOf(staff)
 
 export interface ChordMark {
   readonly tick: Tick
@@ -126,6 +133,8 @@ export interface Measure extends BarMarks {
   readonly time: TimeSignature
   /** The key it is written in, where that is not the score's (a key change). */
   readonly key?: Key
+  /** The clef each staff is in here, where that is not its own (`clefOf`): a hand's changed clef. */
+  readonly clefs?: Readonly<Partial<Record<StaffId, Clef>>>
   /** One or two voices on each of the score's staves; none on a staff it does not write. */
   readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
   readonly chords: readonly ChordMark[]

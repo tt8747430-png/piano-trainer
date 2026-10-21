@@ -8,6 +8,8 @@ import {
   TICKS_PER_BEAT,
   isWrittenKey,
   type BarMarks,
+  type Clef,
+  type Hand,
   type Key,
   type Meter,
   type NoteMarks,
@@ -149,6 +151,20 @@ export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {
   ds: { jump: 'ds' },
   'ds-fine': { jump: 'ds-fine' },
   'ds-coda': { jump: 'ds-coda' },
+}
+
+/** The hands whose staff a clef tile changes. */
+export const HANDS = ['rh', 'lh'] as const satisfies readonly Hand[]
+
+/** A clef tile's picture: an empty bar whose hand's staff is in the clef. */
+export function clefBar(key: Key, hand: Hand, clef: Clef): TimedMusic {
+  return {
+    key,
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 1, blank: ['treble', 'bass'], clefs: { [hand]: clef } }],
+    notes: [],
+    chords: [],
+  }
 }
 
 /** A tile's empty bar of `beats`, in `key` and `meter`: what a signature's tile engraves. */

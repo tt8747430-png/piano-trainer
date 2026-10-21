@@ -1,5 +1,7 @@
 import {
   barMarksOf,
+  clefsInForce,
+  HOME_CLEF,
   withoutBarMarks,
   beatsBefore,
   playOrder,
@@ -186,7 +188,12 @@ function layOut(chart: Chart, unfold = false): Layout {
   // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
   const pickup = beatsToTicks(beatsBefore(written, 0, chart.meter))
   let tick = 0
+  // Where the order goes back, each hand's clef as it stands at the bar gone back to.
+  const clefs = clefsInForce(written)
+  let previous = -1
   for (const played of playedBars(chart, unfold)) {
+    const jumped = played.written !== previous + 1
+    previous = played.written
     const { bar, section: sectionIndex, line: lineIndex, lineEnd } = played.bar
     const index = bars.length
     const barStart = tick
@@ -212,6 +219,11 @@ function layOut(chart: Chart, unfold = false): Layout {
       line: lineIndex,
       chords: chordIndexes,
       ...barMarksOf(bar),
+      ...(jumped && index > 0
+        ? { clefs: clefs[played.written] ?? HOME_CLEF }
+        : bar.clefs
+          ? { clefs: bar.clefs }
+          : {}),
       ...(unfold ? { written: played.written } : {}),
     })
   }

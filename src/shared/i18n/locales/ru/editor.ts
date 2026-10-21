@@ -53,6 +53,12 @@ export const editor: LocaleResources['editor'] = {
     },
     barlines: 'Тактовые черты и вольты',
     jumps: 'Переходы',
+    staves: 'Нотоносцы',
+    clefs: 'Ключ с этого такта',
+    clef: {
+      rh: { treble: 'Правая рука, скрипичный ключ', bass: 'Правая рука, басовый ключ' },
+      lh: { treble: 'Левая рука, скрипичный ключ', bass: 'Левая рука, басовый ключ' },
+    },
     expressions: 'Выразительность',
     tempo: 'Темп',
     pedal: 'Педаль',

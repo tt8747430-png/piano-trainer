@@ -1,4 +1,5 @@
 import { markBars } from './bar-marks'
+import { setClef } from './clefs'
 import { setBarTicks } from './bars'
 import { moveCaret, placeCaret, placed, stepOf } from './caret-moves'
 import { deleteChord } from './chords'
@@ -165,6 +166,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         : { from: barAt(draft, caret).index, to: barAt(draft, caret).index }
       return commit(state, markBars(draft, range, action.choice))
     }
+    case 'clef':
+      return commit(state, setClef(draft, barAt(draft, caret).index, action.hand, action.clef))
     case 'barLength':
       return commit(state, setBarTicks(draft, barAt(draft, caret).index, action.ticks))
     case 'sectionKind':

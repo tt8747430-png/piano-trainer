@@ -440,6 +440,26 @@ describe('engrave', () => {
     expect(texts).toContain('2.')
   })
 
+  it('draws a small clef where a hand’s staff changes clef', () => {
+    const drawn = (clefs: boolean) => {
+      const host = document.createElement('div')
+      const music = notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: 96, beats: 4, ...(clefs ? { clefs: { lh: 'treble' as const } } : {}) },
+        ],
+        notes: [{ ...n(64, 'E', 96, 96), hand: 'lh' as const }],
+        chords: [],
+      })
+      engrave(music, host, { scale: 1, fingers: false, names: false })
+      return host.querySelectorAll('.vf-clef').length
+    }
+    expect(drawn(false)).toBe(2)
+    expect(drawn(true)).toBe(3)
+  })
+
   it('writes the sign, the coda’s sign, Fine, To Coda and the jump over their bars', () => {
     const host = document.createElement('div')
     const signed = notate({
