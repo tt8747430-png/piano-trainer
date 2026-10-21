@@ -45,7 +45,7 @@ const room = (px: number | undefined) => `${px ? px + FLOATING_GAP_PX : 0}px`
 
 /** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
 const CONTROLS =
-  'a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=radio],[role=switch],[role=slider],[role=tab],[role=option],[role=checkbox],[role=dialog],[contenteditable],[data-slot=docked],[data-slot=pinned]'
+  'a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=radio],[role=switch],[role=slider],[role=tab],[role=option],[role=checkbox],[role=menuitem],[role=combobox],[role=listbox],[role=toolbar],[role=dialog],[tabindex]:not([tabindex="-1"]),[contenteditable],[data-slot=docked],[data-slot=pinned]'
 
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
@@ -70,8 +70,13 @@ export function FloatingHost({
   children: ReactNode
 }) {
   const [column, setColumn] = useState<HTMLElement | null>(null)
-  const [hiddenOn, setHiddenOn] = useState<string | null>(null)
-  const hidden = hiddenOn === screen
+  const [hidden, setHidden] = useState(false)
+  // Another screen shows them, and so does coming back to one they were folded on.
+  const [shownScreen, setShownScreen] = useState(screen)
+  if (shownScreen !== screen) {
+    setShownScreen(screen)
+    setHidden(false)
+  }
   // A tap on the screen's page, heard at the document: the page's own markup stays as it is.
   useEffect(() => {
     const tap = (event: MouseEvent) => {
@@ -80,11 +85,11 @@ export function FloatingHost({
         return
       // A word chosen to read is no tap.
       if (window.getSelection()?.toString()) return
-      setHiddenOn((was) => (was === screen ? null : screen))
+      setHidden((was) => !was)
     }
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
-  }, [screen])
+  }, [])
   useEffect(() => {
     if (!column) return
     const root = document.documentElement.style

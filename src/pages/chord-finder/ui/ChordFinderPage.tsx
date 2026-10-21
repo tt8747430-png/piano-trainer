@@ -2,8 +2,8 @@ import { Link, useSearch } from '@tanstack/react-router'
 import {
   Eraser,
   History,
-  ListX,
   KeyRound,
+  ListX,
   Music2,
   Play,
   SlidersHorizontal,

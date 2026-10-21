@@ -288,6 +288,41 @@ describe('Practice → Chord finder', () => {
     ).toHaveLength(0)
   })
 
+  it('lets the whole chord go at a tap on its root, and a key of another note alone', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chord-finder?keys=60-64-67-71')
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await user.click(key('E4'))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ keys: '60-67-71' }))
+    await user.click(key('C4'))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
+  })
+
+  it('forgets the chords played, on the device too, and keeps remembering after', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const { midi: piano } = await renderApp('/practice/chord-finder', { storage })
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
+    const play = async (chord: number[]) => {
+      act(() => {
+        for (const each of chord) piano.press(midi(each))
+      })
+      act(() => {
+        for (const each of chord) piano.release(midi(each))
+      })
+      await waitFor(() => expect(screen.queryByText(/^Held/)).not.toBeInTheDocument())
+    }
+    await play([48, 52, 55])
+    await waitFor(() => expect(playedNames()).toEqual(['C']))
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
+    await user.click(screen.getByRole('button', { name: 'Forget the chords played' }))
+    expect(within(played()).queryAllByRole('listitem')).toHaveLength(0)
+    expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
+    await play([53, 57, 60])
+    await waitFor(() => expect(playedNames()).toEqual(['F']))
+  })
+
   it('opens the chord in Chords, and the keys that hold it', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=60-64-67')

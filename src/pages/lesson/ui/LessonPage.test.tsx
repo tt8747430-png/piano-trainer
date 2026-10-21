@@ -54,9 +54,9 @@ describe('A lesson', () => {
       { name: /^Play bar \d+, G\/B$/ },
       { timeout: 5000 },
     )
-    const row = bar.closest('[role="group"]')
+    const row = bar.closest<HTMLElement>('[role="group"]')
     if (!row) throw new Error('the lesson writes its row of inversions')
-    const [first, ...others] = within(row as HTMLElement).getAllByRole('button', {
+    const [first, ...others] = within(row).getAllByRole('button', {
       name: /^Play bar \d+, C$/,
     })
     if (!first || others.length === 0) throw new Error('the row writes C twice')

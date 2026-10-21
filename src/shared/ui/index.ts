@@ -14,7 +14,6 @@ export { Labelled } from './Labelled'
 export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
-export { FitWidth } from './FitWidth'
 export {
   Fab,
   FabLink,

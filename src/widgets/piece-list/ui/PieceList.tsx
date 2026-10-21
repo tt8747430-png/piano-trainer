@@ -12,7 +12,7 @@ interface PieceGroup {
  * Whether a list's rows wear tiles: where a tile tells them apart (a number in a book, a study among
  * songs); a list of plain songs goes without, every row's tile alike.
  */
-const tiled = (entries: readonly Entry[]): boolean =>
+const rowsNeedTiles = (entries: readonly Entry[]): boolean =>
   entries.some((entry) => entry.source?.number !== undefined || entry.kind !== 'song')
 
 /**
@@ -35,7 +35,7 @@ export function PieceList({ groups }: { groups: readonly PieceGroup[] }) {
           )}
           <ul className="grid-cards gap-2 *:card">
             {group.entries.map((entry) => (
-              <EntryRow key={entry.id} entry={entry} tile={tiled(group.entries)} />
+              <EntryRow key={entry.id} entry={entry} tile={rowsNeedTiles(group.entries)} />
             ))}
           </ul>
         </section>

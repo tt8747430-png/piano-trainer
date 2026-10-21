@@ -15,16 +15,27 @@ import type { FloatingPlace } from './floating-context'
 
 const root = () => document.documentElement.style
 
-function renderActions(place: FloatingPlace = 'center') {
-  return render(
-    <FloatingHost place={place} labels={false} screen="/">
-      <p>The page</p>
+function page(place: FloatingPlace, path: string) {
+  return (
+    <FloatingHost place={place} labels={false} screen={path}>
+      <main>
+        <p>The page</p>
+        <div role="toolbar" aria-label="Its own bar">
+          <span>Its padding</span>
+        </div>
+      </main>
       <FloatingActions>
         <Fab label="Play" icon={Play} />
       </FloatingActions>
-    </FloatingHost>,
+    </FloatingHost>
   )
 }
+
+function renderActions(place: FloatingPlace = 'center', path = '/') {
+  return render(page(place, path))
+}
+
+const host = () => document.querySelector('[data-slot=floating-host]')
 
 describe('FloatingHost', () => {
   // The actions laid out 56px tall and 124px wide; the page keeps a gap of 12px clear of them.
@@ -51,6 +62,33 @@ describe('FloatingHost', () => {
     unmount()
     expect(root().getPropertyValue('--floating-block')).toBe('')
     expect(root().getPropertyValue('--floating-inline')).toBe('')
+  })
+
+  it('folds away at a tap on the page and comes back at the next', async () => {
+    const user = userEvent.setup()
+    renderActions()
+    await user.click(screen.getByText('The page'))
+    expect(host()).toHaveAttribute('data-hidden')
+    await user.click(screen.getByText('The page'))
+    expect(host()).not.toHaveAttribute('data-hidden')
+  })
+
+  it('stays at a tap on a control of the page, its bars too', async () => {
+    const user = userEvent.setup()
+    renderActions()
+    await user.click(screen.getByText('Its padding'))
+    expect(host()).not.toHaveAttribute('data-hidden')
+  })
+
+  it('comes back on another screen, and stays back on returning to the one it left', async () => {
+    const user = userEvent.setup()
+    const { rerender } = renderActions('center', '/a')
+    await user.click(screen.getByText('The page'))
+    expect(host()).toHaveAttribute('data-hidden')
+    rerender(page('center', '/b'))
+    expect(host()).not.toHaveAttribute('data-hidden')
+    rerender(page('center', '/a'))
+    expect(host()).not.toHaveAttribute('data-hidden')
   })
 })
 
