@@ -59,7 +59,8 @@ export function BarButton({
         ))}
       </span>
       {notes.length > 0 ? (
-        <span aria-hidden className="text-xs whitespace-nowrap text-muted-foreground">
+        // Ends in an ellipsis where a narrow bar cannot hold it all; its name holds it whole.
+        <span aria-hidden className="max-w-full truncate text-xs text-muted-foreground">
           {notes.join(' · ')}
         </span>
       ) : null}

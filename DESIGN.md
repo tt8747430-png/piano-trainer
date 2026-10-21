@@ -454,7 +454,7 @@ height and width, scrolling inside when their content is taller.
 the `player-screen` grid. The keyboard is as tall as its keys' proportion makes it (below), and Wait mode's line
 takes the height left, so the transport keeps the bottom:
 
-- **Upright phone:** the toolbar holds ✕, the title (truncated), the loop, MIDI and ⚙ (Setup); the tempo and hands
+- **Upright phone:** the toolbar holds ✕, the title (truncated; under 360px read, not shown), the loop, the View menu (an eye), MIDI and ⚙ (Setup); the tempo and hands
   buttons flank ‹ ▶ › at the bottom, in the thumb's reach, the transport's buttons 8px apart.
 - **A phone on its side** (a landscape screen under 500px tall, judged first): one toolbar with the tempo and hands;
   the keyboard (about 120px on a 390px-tall phone); the sheet at 0.7, with Wait mode's line and ‹ ▶ › in a column at

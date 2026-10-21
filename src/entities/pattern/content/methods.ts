@@ -1,14 +1,16 @@
 import type { MethodCode, MethodEntry } from '../model/types'
 
-/** One of the five ways by its number ("Way 1"), so it never reads as a bar's; otherwise the source book's short label. */
-const numbered = (code: MethodCode) => ({ en: `Way ${code}`, ru: `Способ ${code}` })
+/** One of the five ways by its number ("Way 1"), so it never reads as a bar's number over it. */
+const way = (code: MethodCode) => ({ en: `Way ${code}`, ru: `Способ ${code}` })
+/** A right-hand technique's code as the book prints it (5.1); otherwise the source book's short label. */
+const numbered = (code: MethodCode) => ({ en: code, ru: code })
 
 export const METHODS: Readonly<Record<MethodCode, MethodEntry>> = {
-  '1': { pattern: 'M1', label: numbered('1') },
-  '2': { pattern: 'M2', label: numbered('2') },
-  '3': { pattern: 'M3', label: numbered('3') },
-  '4': { pattern: 'M4', label: numbered('4') },
-  '5': { pattern: 'M5', label: numbered('5') },
+  '1': { pattern: 'M1', label: way('1') },
+  '2': { pattern: 'M2', label: way('2') },
+  '3': { pattern: 'M3', label: way('3') },
+  '4': { pattern: 'M4', label: way('4') },
+  '5': { pattern: 'M5', label: way('5') },
   t1: { pattern: 't1', label: { en: '♪♩', ru: '♪♩' } },
   t2: { pattern: 't2', label: { en: '♪♪♪♪', ru: '♪♪♪♪' } },
   t3: { pattern: 't3', label: { en: '♬ down', ru: '♬ вниз' } },

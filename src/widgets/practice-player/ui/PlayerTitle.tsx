@@ -9,7 +9,7 @@ export function PlayerTitle({ title, onClose }: { title: string; onClose: () => 
   const { t } = useTranslation('common')
   const heading = usePageHeading<HTMLHeadingElement>(title)
   return (
-    <div className="flex min-w-0 items-center gap-3 max-[359px]:gap-0">
+    <div className="flex min-w-0 items-center gap-3 narrow-phone:gap-0">
       <RoundButton
         label={t('close')}
         title={keyHint(t('close'), PLAYER_KEYS.close)}
@@ -19,7 +19,7 @@ export function PlayerTitle({ title, onClose }: { title: string; onClose: () => 
       <h1
         {...heading}
         // Under 360px the bar's buttons leave the title a word's width: it is read, not shown.
-        className="line-clamp-2 min-w-0 flex-1 text-lg leading-snug outline-none max-[359px]:sr-only sm:truncate landscape-phone:truncate"
+        className="line-clamp-2 min-w-0 flex-1 text-lg leading-snug outline-none narrow-phone:sr-only sm:truncate landscape-phone:truncate"
       >
         {title}
       </h1>

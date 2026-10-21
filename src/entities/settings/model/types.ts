@@ -30,7 +30,7 @@ export const TITLE_SIZES = ['large', 'small'] as const
 /** How large a screen's title is: large, or small, leaving the page more of the screen. */
 export type TitleSize = (typeof TITLE_SIZES)[number]
 
-/** The Setup's saved switches. */
+/** The Player's saved switches: the Setup's (`PLAYING_TOGGLES`), the View menu's finger numbers and named notes, a piece's melody and recording. */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
   'namedNotes',

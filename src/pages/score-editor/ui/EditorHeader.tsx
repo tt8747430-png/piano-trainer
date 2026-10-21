@@ -25,7 +25,7 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
   const play = meta.playing ? t('common:stop') : t('editor:play')
   return (
     // Under 360px its eight buttons outgrow one row: + and the gear wrap to the next, at its end.
-    <div className="flex items-center justify-end gap-1 max-[359px]:flex-wrap sm:gap-2">
+    <div className="flex items-center justify-end gap-1 narrow-phone:flex-wrap sm:gap-2">
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
       <div className="flex min-w-0 flex-1 flex-col pl-1">
         <h1 {...heading} className="truncate text-lg outline-none max-sm:sr-only">

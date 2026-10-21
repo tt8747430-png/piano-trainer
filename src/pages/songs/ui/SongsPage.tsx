@@ -48,6 +48,7 @@ export function SongsPage() {
   const tabs = shelves.filter((shelf) => shelf.entries.length > 0 || shelf.id === search.collection)
   const isShelf = (value: unknown): value is SongsShelf | 'all' =>
     value === 'all' || tabs.some((shelf) => shelf.id === value)
+  const searched = search.q.trim()
   const groups = songsView(shelves, { ...search, q: query }).map((g) => ({
     id: g.shelf.id,
     heading: search.collection === 'all' ? g.shelf.name : null,
@@ -118,8 +119,9 @@ export function SongsPage() {
       ) : (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>
-              {search.q.trim() ? t('emptyQuery', { query: search.q.trim() }) : t('empty')}
+            {/* A long query breaks rather than run off the screen. */}
+            <EmptyTitle className="break-words">
+              {searched ? t('emptyQuery', { query: searched }) : t('empty')}
             </EmptyTitle>
           </EmptyHeader>
           <EmptyContent>

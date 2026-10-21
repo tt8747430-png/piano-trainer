@@ -158,7 +158,7 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   named by its `SliderLabel`; a sheet's switch is named by the `<label>` around it, with no second `aria-label`.
 - Clear the notch and the home indicator with `pt-safe` / `pb-safe` / `bottom-safe` (`theme.css`), not arbitrary
   values. A row that scrolls sideways hides its bar with Tailwind's `scrollbar-none`. A phone on its side is the
-  `landscape-phone:` variant. A layout of named areas that changes by form factor is one `@utility` in `theme.css`
+  `landscape-phone:` variant; the narrowest phones upright (under 360px) are `narrow-phone:`. A layout of named areas that changes by form factor is one `@utility` in `theme.css`
   whose children take their place by `data-area` (the Player's `player-screen`), not a wall of arbitrary grid values.
 - Colours CSS cannot reach (the browser toolbar, the manifest) come from `THEME_COLORS` (`shared/config`), which a
   test holds to `--background`: a repaint changes `tokens.css` and `THEME_COLORS` together.

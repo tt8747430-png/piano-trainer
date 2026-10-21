@@ -23,3 +23,7 @@ down the screen.
 ## Consequences
 
 Nothing saved changes: the tune's text is as it was. The Player keeps one line until its own views follow (phase 3).
+
+**Later (2026-10-21):** what the sheet shows has one home. Finger numbers and Named notes are the View menu's
+switches alone, no longer the Setup's tiles too (the Setup keeps how it plays: chord positions, metronome,
+count-in, swing), and the View menu's button wears an eye, so it never reads as the Setup's sliders beside it.

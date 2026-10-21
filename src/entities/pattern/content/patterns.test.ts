@@ -89,6 +89,9 @@ describe('the pattern catalog', () => {
     expect(METHODS['5.2'].pattern).toBe('p52')
     expect(METHODS['6d'].pattern).toBe('s6d')
     expect(METHODS['1'].pattern).toBe('M1')
+    // A way's number says it is one, so it never reads as the bar's number over it.
+    expect(METHODS['1'].label).toEqual({ en: 'Way 1', ru: 'Способ 1' })
+    expect(METHODS['5.1'].label).toEqual({ en: '5.1', ru: '5.1' })
     expect(METHOD_PATTERNS.get('t1')).toBe(BUILT_IN_PATTERNS.require('t1').pattern)
   })
 
